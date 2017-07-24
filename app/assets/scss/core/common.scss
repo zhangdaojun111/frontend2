@@ -1,0 +1,16 @@
+/**
+   公共样式
+ */
+
+html {
+    font-family: 12px/1.5 "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    height: 0;
+    font-size: 0;
+}
