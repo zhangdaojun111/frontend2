@@ -36,6 +36,7 @@ module.exports = {
             'mediator-js',
             'handlebars',
             'moment',
+            'lodash',
             'babel-polyfill'
         ]
     },
