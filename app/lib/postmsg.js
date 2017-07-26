@@ -40,6 +40,7 @@ export const PMENUM = {
  * }
  */
 window.addEventListener('message', function(event) {
+
     let data = event.data;
 
     if (data.type !== undefined) {
