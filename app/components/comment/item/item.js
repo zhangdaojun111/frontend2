@@ -17,6 +17,7 @@ let config = {
     afterRender: function() {
         this.el.on('click', 'input', () => {
             this.actions.delete();
+
         });
     }
 }
