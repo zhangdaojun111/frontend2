@@ -35,6 +35,7 @@
     "webpack-hot-middleware": "^2.18.2"
   },
   "dependencies": {
+    "ag-grid": "^12.0.2",
     "babel-polyfill": "^6.23.0",
     "babel-runtime": "^6.23.0",
     "handlebars": "^4.0.10",
