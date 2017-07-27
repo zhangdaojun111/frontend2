@@ -14,7 +14,7 @@ function getKey() {
     return prefix + counter ++;
 }
 
-export default {
+export const HTTP = {
 
     /**
      * 缓存的get请求，必须通过flush才能发送
@@ -35,7 +35,13 @@ export default {
         return promise;
     },
 
-    post: function(url, data) {
+    /**
+     * 缓存的post请求，必须通过flush才能发送
+     * @param url
+     * @param params
+     * @returns {Promise}
+     */
+    post: function(url, params) {
         const key = getKey();
         PostSet.add({
             url: url,
@@ -54,28 +60,79 @@ export default {
     flush: function() {
 
         if (GetSet.size > 0) {
-            $.get(url, {actions: [...GetSet]})
-                .then((response) => {
-                    _dealResponse(response);
-                });
+            let array = [...GetSet];
+            $.get('/', {actions: array})
+            .then((response) => {
+                this._dealResponse(response);
+            }).fail(() => {
+                this._dealResponseError(array);
+            });
         }
 
         if (PostSet.size > 0) {
-            $.post(url, {actions: [...GetSet]})
-                .then((response) => {
-                    _dealResponse(response);
-                });
+            let array = [...PostSet];
+            $.post('/', {actions: array})
+            .then((response) => {
+                this._dealResponse(response);
+            }).fail(() => {
+                this._dealResponseError(array);
+            });
         }
-
-
     },
 
+    /**
+     * 内部方法，不允许外部调研，处理ajax返回数据
+     * @param response
+     * @private
+     */
     _dealResponse: function(response) {
-        if (response.succ === 1) {
-
-        } else {
-
+        var data = response.data || {};
+        for(let key in data) {
+            if (Hash[key]) {
+                Hash[key](data[key]);
+                delete Hash[key];
+            }
         }
+    },
+
+    /**
+     * 内部方法，不允许外部调研，处理ajax请求失败
+     * @param array
+     * @private
+     */
+    _dealResponseError: function(array) {
+        array.forEach(function(obj) {
+            if (obj.key !== undefined && Hash[obj.key]) {
+                Hash[obj.key]({
+                    succ: 0,
+                    msg: '请求失败'
+                })
+            }
+        })
+    },
+
+    /**
+     * 同$.get
+     * @returns Deffered
+     */
+    getImmediately: function() {
+        return $.get.apply($, arguments);
+    },
+
+    /**
+     * 同$.post
+     * @returns Deffered
+     */
+    postImmediately: function() {
+        return $.post.apply($, arguments);
+    },
+
+    /**
+     * 同$.ajax
+     * @returns Deffered
+     */
+    ajaxImmediately: function() {
+        return $.ajax.apply($, arguments);
     }
 
 }
