@@ -5,7 +5,7 @@ import 'jquery-ui/ui/widgets/button.js';
 import 'jquery-ui/ui/widgets/dialog.js';
 
 import Login from '../components/login/login';
-import http from '../lib/http';
+import {HTTP} from '../lib/http';
 
 $('#login').button({
     label: '点击登录'
@@ -14,7 +14,7 @@ $('#login').button({
 });
 
 async function wait() {
-    let data = await $.ajax({
+    let data = await HTTP.ajaxImmediately({
         async:false,
         url: 'https://api.asilu.com/weather/',
         type: "GET",
@@ -37,3 +37,21 @@ $('#active').button().on('click', function() {
 $('#silent').button().on('click', function() {
 
 })
+
+HTTP.get('user', {name: '123123'}).then(function() {
+    console.log(arguments);
+});
+
+HTTP.post('dept', {did: 123123}).then(function() {
+    console.log(arguments);
+});
+
+HTTP.post('dept2', {did: 123123}).then(function() {
+    console.log(arguments);
+});
+
+HTTP.get('dept3', {did: 123123}).then(function() {
+    console.log(arguments);
+});
+
+HTTP.flush();
