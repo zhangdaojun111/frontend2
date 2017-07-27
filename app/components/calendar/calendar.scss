@@ -1,3 +1,15 @@
-.calendar-container {
 
+.header {
+    padding: 5px;
+
+    span {
+        line-height: 30px;
+    }
+    .title {
+        display: inline-block;
+    }
+    .tool {
+        display: inline-block;
+        float: right;
+    }
 }
