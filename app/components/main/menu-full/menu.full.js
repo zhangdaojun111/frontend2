@@ -2,7 +2,7 @@ import Component from '../../../lib/component';
 import template from './menu.full.html';
 import './menu.full.scss';
 
-import ItemComponent from './item/item';
+import {FullMenuItem} from './item/item';
 
 let config = {
     template: template,
@@ -23,7 +23,7 @@ let config = {
     actions: {},
     afterRender: function() {
         this.data.list.forEach((data) => {
-            this.append(new ItemComponent(data), this.el.find('.root'));
+            this.append(new FullMenuItem(data), this.el.find('.root'));
         })
     },
     beforeDestory: () => {

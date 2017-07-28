@@ -27,6 +27,7 @@ class Component {
         if (config.beforeDestory) {
             this.beforeDestory = config.beforeDestory.bind(this);
         }
+
         this.componentId = componentId++;
 
     }
