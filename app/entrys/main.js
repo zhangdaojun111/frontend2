@@ -4,10 +4,9 @@ import '../assets/scss/main.scss';
 // import 'jquery-ui/ui/widgets/button.js';
 import 'jquery-ui/ui/widgets/dialog.js';
 
-import Login from './login';
-import http from '../lib/http';
-import {FullMenu} from '../components/menu-full/menu.full';
+import {FullMenu} from '../components/main/menu-full/menu.full';
 
 console.log(FullMenu);
+
 
 new FullMenu().render($('#aside .menu'));

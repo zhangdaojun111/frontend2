@@ -1,0 +1,28 @@
+@import "../../../assets/scss/core/base";
+.menu-full {
+    .list {
+        .menu-full-item {
+            .row {
+                padding: 12px 0 12px 10px;
+                line-height: 16px;
+                cursor: pointer;
+                &:hover, &.current {
+                    background-color: $aside-top-bg;
+                }
+                .icon {
+                    width: 16px;
+                    height: 16px;
+                    float: left;
+                    margin-right: 10px;
+                }
+                .name {
+                    color: #FFFFFF;
+                    font-size: 14px;
+                }
+            }
+            .list {
+                text-indent: 20px;
+            }
+        }
+    }
+}

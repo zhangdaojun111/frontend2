@@ -5,8 +5,13 @@ let map = new WeakMap();
 
 class Component {
 
-    constructor(config) {
+    constructor(config,data) {
         config = config || {};
+        if(data){
+            //合并从請求或者父組件传递进来的data
+            let tempData=JSON.parse(JSON.stringify(data));
+            config.data=Object.assign({},config.data,tempData);
+        }
         this.template = config.template || '';
         this.data = config.data || {};
 
@@ -22,6 +27,7 @@ class Component {
         if (config.beforeDestory) {
             this.beforeDestory = config.beforeDestory.bind(this);
         }
+
         this.componentId = componentId++;
 
     }
