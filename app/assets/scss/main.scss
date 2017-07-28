@@ -9,19 +9,86 @@ html, body {
     position: relative;
 }
 
-#header {
-    width: 100%;
-    height: $header-height;
-    background-color: $header-bg;
-}
+//#header {
+//    width: 100%;
+//    height: $header-height;
+//    background-color: $header-bg;
+//}
 
 #aside {
     position: absolute;
     left: 0;
-    top: $header-height;
+    top: 0;
     width: $aside-width;
-    bottom: $footer-height;
+    bottom: 0;
     background-color: $aside-bg;
+
+    .s-name {
+        padding: 22px 10px;
+        font-size: 16px;
+        color: #ffffff;
+        text-align: center;
+        background-color: $aside-top-bg;
+    }
+
+    .s-uinfo {
+        padding: 12px 10px;
+        margin-top: 1px;
+        background-color: $aside-top-bg;
+        .avatar {
+            float: left;
+            width: 32px;
+            height: 32px;
+            border-radius: 100%;
+            overflow: hidden;
+            margin-right: 10px;
+            img {
+                display: block;
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .u-name, .u-role {
+            font-size: 12px;
+            color: #ccc;
+            line-height: 16px;
+        }
+    }
+    .startwrokflow {
+        display: block;
+        border-radius: 3px;
+        cursor: pointer;
+        outline: none;
+        width: 160px;
+        height: 30px;
+        color: #fff;
+        border: 0 none;
+        background-color: rgba(0, 136, 255, 1);
+        margin: 30px auto;
+        &:active {
+            background-color: rgba(0, 122, 229, 1);
+        }
+    }
+
+    .search {
+        background-image: url("../images/search.png");
+        background-repeat: no-repeat;
+        background-position: 10px 0;
+        padding-bottom: 5px;
+        display: block;
+        border-bottom: 1px solid $aside-top-bg;
+        input {
+            background-color: transparent;
+            display: block;
+            border: 0 none;
+            outline: none;
+            display: block;
+            color: #fff;
+            float: left;
+            margin-left: 30px;
+            width: calc(100% - 40px);
+        }
+    }
 }
 
 #content {

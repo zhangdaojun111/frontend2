@@ -3,7 +3,7 @@
  */
 
 html {
-    font-family: 12px/1.5 "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+    font-family: 12px/1.5 "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
 }
 
 .clearfix:after {
@@ -13,4 +13,10 @@ html {
     visibility: hidden;
     height: 0;
     font-size: 0;
+}
+
+.ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
 }
