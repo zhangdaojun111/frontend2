@@ -5,19 +5,19 @@ let map = new WeakMap();
 
 class Component {
 
-    constructor(config,data) {
+    constructor(config, data) {
         config = config || {};
-        if(data){
+        if (data) {
             //合并从請求或者父組件传递进来的data
-            let tempData=JSON.parse(JSON.stringify(data));
-            config.data=Object.assign({},config.data,tempData);
+            let tempData = JSON.parse(JSON.stringify(data));
+            config.data = Object.assign({}, config.data, tempData);
         }
         this.template = config.template || '';
         this.data = config.data || {};
 
         if (config.actions) {
             this.actions = {};
-            for(let name in config.actions) {
+            for (let name in config.actions) {
                 this.actions[name] = config.actions[name].bind(this);
             }
         }
@@ -101,7 +101,7 @@ class Component {
             this.el.off();
             this.el.remove();
         }
-        for(let name in this) {
+        for (let name in this) {
             this[name] = null;
         }
 

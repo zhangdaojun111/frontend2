@@ -17,6 +17,8 @@ let config = {
                     {name: '进行中的工作'},
                     {name: '我的工作'}
                 ]
+            },{
+                name: '工作流2'
             }
         ]
     },
@@ -24,7 +26,7 @@ let config = {
     afterRender: function() {
         this.data.list.forEach((data) => {
             this.append(new FullMenuItem(data), this.el.find('.root'));
-        })
+        });
     },
     beforeDestory: () => {
 

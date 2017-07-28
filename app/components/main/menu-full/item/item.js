@@ -5,11 +5,13 @@ let config = {
     data: {},
     actions: {},
     afterRender: function() {
-        if (this.data.child) {
-            this.data.child.forEach((data) => {
-                debugger;
-                this.append(new FullMenuItem(data), this.el.find('> .menu-full-item > .list'));
-            })
+        if (this.data.children) {
+            console.log(this.data)
+            // console.dir(this.data.children);
+            // this.data.children.forEach((data) => {
+            //     console.log(data);
+            //     this.append(new FullMenuItem(data), this.el.find('> .menu-full-item > .list'));
+            // })
         }
     },
     beforeDestory: function() {
