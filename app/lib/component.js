@@ -22,6 +22,10 @@ let map = new WeakMap();class Component {
         if (config.afterRender) {
             this.afterRender = config.afterRender.bind(this);
         }
+        // 只在第一次运行
+        if (config.firstAfterRender) {
+            this.firstAfterRender = config.firstAfterRender.bind(this);
+        }
         if (config.beforeDestory) {
             this.beforeDestory = config.beforeDestory.bind(this);
         }
@@ -41,6 +45,10 @@ let map = new WeakMap();class Component {
         let html = compiler(this.data);
         this.el.html(html);
         this.afterRender && this.afterRender();
+        if (this.firstAfterRender && this.firstAfterRenderRunned !== true) {
+            this.firstAfterRender();
+            this.firstAfterRenderRunned = true;
+        }
         return this;
     }
 
