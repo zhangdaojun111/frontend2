@@ -1,3 +1,22 @@
 .calendar-container {
 
 }
+.left-calendar-box{}
+.right-content {
+ position:absolute;
+ background:red;
+ width:468px;
+ margin-right: auto;
+ margin-left: auto;
+ padding: 0px;
+}
+.left-content {
+ float:left;
+ width:220px;
+ border-right:1px solid #605654 ;
+ height: 100%;
+}
+.right-content-workflow {
+ float:right;
+ width:220px
+}
