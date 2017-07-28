@@ -67,6 +67,7 @@ export const HTTP = {
             }).fail(() => {
                 this._dealResponseError(array);
             });
+            GetSet.clear();
         }
 
         if (PostSet.size > 0) {
@@ -77,6 +78,7 @@ export const HTTP = {
             }).fail(() => {
                 this._dealResponseError(array);
             });
+            PostSet.clear();
         }
     },
 
