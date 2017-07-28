@@ -21,20 +21,6 @@ let dialogWaitHash = {};
 let subscriber = {};
 
 /**
- * 生成key的counter的起点
- * @type {number}
- */
-let starter = new Date().getTime();
-
-/**
- * 生成一个唯一的key，作为标志
- * @return {string}
- */
-function getKey() {
-    return 'iframedialog-' + starter++;
-};
-
-/**
  * postmessage的消息类型枚举类
  * @type {{openIframeDialog: string, closedialog: string, recievedata: string, openComponentDialog: string}}
  */
@@ -44,7 +30,6 @@ export const PMENUM = {
     recievedata: '2',
     openComponentDialog: '3'
 }
-
 
 /**
  * 本系统所有postmessage的消息体规范如下
@@ -65,7 +50,7 @@ window.addEventListener('message', function(event) {
         // 以下内容需要重新梳理逻辑，重构以下
         switch (data.type){
             case PMENUM.openComponentDialog:
-                let elementDiv =$('<div id="dialog"></div>');
+                let elementDiv =$('<div></div>');
                 dialogHash[data.key] = {
                     iframe: event.source,
                     element: elementDiv.appendTo(document.body)
@@ -75,33 +60,25 @@ window.addEventListener('message', function(event) {
                     constructor(){super(compConf);}
                 };
                 comp['key']=data.key;
-                comp.render($('#dialog'));
-                dialogHash[data.key].element.dialog({
-                    width: 500,
-                    height: 500,
-                    title: '弹出新页面'
-                });
+                comp.render(elementDiv);
+                dialogHash[data.key].element.dialog(data.frame);
                 break;
             case PMENUM.openIframeDialog:
                 let url = URL.getUrl(data.url, {key: data.key});
-                let element = $(`<iframe src="${url}" class="iframe-dialog">`);
+                let element = $(`<iframe src="${url}">`);
                 dialogHash[data.key] = {
                     iframe: event.source,
                     element: element.appendTo(document.body)
                 };
-                dialogHash[data.key].element.dialog({
-                    width: 500,
-                    height: 500,
-                    title: '弹出新页面'
-                });
+                dialogHash[data.key].element.dialog(data.frame);
                 break;
             case PMENUM.closedialog:
                 dialogHash[data.key].element.dialog('destroy').remove();
-                dialogHash[data.key].iframe.postMessage({
+                PMAPI.sendToChild(dialogHash[data.key].iframe,{
                     type: PMENUM.recievedata,
                     key: data.key,
                     data: data.data
-                }, location.origin);
+                });
                 delete dialogHash[data.key];
                 break;
             case PMENUM.recievedata:
@@ -119,6 +96,19 @@ window.addEventListener('message', function(event) {
 
 
 export const PMAPI = {
+    /**
+     * 生成key的counter的起点
+     * @type {number}
+     */
+    starter:new Date().getTime(),
+
+    /**
+     * 内部方法，生成一个唯一的key，作为标志
+     * @return {string}
+     */
+    _getKey:function() {
+        return 'iframedialog-' + PMAPI.starter++;
+    },
 
     /**
      * 自定义订阅postmessage的消息
@@ -131,6 +121,10 @@ export const PMAPI = {
         subscriber[channel] = callback;
     },
 
+    /**
+     * 将消息发送给调用的父组件
+     * @param data
+     */
     sendToParent: function(data) {
         window.parent.postMessage(data, location.origin);
     },
@@ -141,23 +135,30 @@ export const PMAPI = {
      * @param msg
      */
     sendToChild: function(iframe, msg) {
-
+        iframe.postMessage(msg,location.origin);
     },
 
     /**
      * 根据url，在父级打开一个iframe的弹出框
      * @param url
+     * @frame 对话框设置，包括大小，标题等，例：{
+     *          width: 500,
+     *          height: 200,
+     *          title: 'Iframe页面'
+     *      }
      * @return Promise
      */
-    openDialogByIframe: function(url) {
+    openDialogByIframe: function(url,frame) {
         return new Promise(function(resolve) {
-            let key = getKey();
+            let key = PMAPI._getKey();
+            console.log(key);
             dialogWaitHash[key] = resolve;
-            window.parent.postMessage({
+            PMAPI.sendToParent({
                 type: PMENUM.openIframeDialog,
                 key: key,
-                url: url
-            }, location.origin);
+                url: url,
+                frame:frame
+            });
         });
     },
 
@@ -165,16 +166,23 @@ export const PMAPI = {
      * 传入组件配置，然后在父级生成一个该组件配置的组件
      * 然后用dialog弹出,该方法性能优于iframe方式，较简单的弹出框用此方法
      * 注意：该组件配置必须为简单组件，所有用到的变量必须为内部变量
-     * @param component
+     * @param componentConfig 简单组件的配置
+     * @frame 对话框设置，包括大小，标题等，例：{
+     *          width: 500,
+     *          height: 200,
+     *          title: '组件页面'
+     *      }
      */
-    openDialogByComponent: function(component) {
+    openDialogByComponent: function(componentConfig,frame) {
         return new Promise(function(resolve) {
-            let key = getKey();
+            let key = PMAPI._getKey();
+            console.log(key);
             dialogWaitHash[key] = resolve;
             window.parent.postMessage({
                 type: PMENUM.openComponentDialog,
                 key: key,
-                component: PMAPI.serializeComponent(component)
+                component: PMAPI.serializeComponent(componentConfig),
+                frame:frame
             }, location.origin);
         });
     },
@@ -192,7 +200,7 @@ export const PMAPI = {
             return '"' + componentConfig + '"';
         } else if (componentConfig instanceof Function){
             let str = String(componentConfig);
-            let source = PMAPI.removeAllComments(str.substring(str.indexOf('{')+1,str.lastIndexOf('}')));
+            let source = PMAPI._removeAllComments(str.substring(str.indexOf('{')+1,str.lastIndexOf('}')));
             return '{"Function":"'+str.substring(str.indexOf('function ')+9,str.indexOf('('))+'", '
                 +'"Arguments":"'+str.substring(str.indexOf('(')+1,str.indexOf(')')) +'", '
                 +'"Source":"'+source.replace(/\n/g,'').replace(/\"/g,"'")+'"}';
@@ -226,7 +234,7 @@ export const PMAPI = {
      */
     deserializeComponent(componentString) {
         let obj = JSON.parse(componentString);
-        PMAPI.createFuncs(obj);
+        PMAPI._createFuncs(obj);
         return obj;
     },
 
@@ -234,7 +242,7 @@ export const PMAPI = {
      * 内部方法：从JSON中遍历找出所有function配置，生成对应function
      * @param obj 待转换为componentConfig的JSON
      */
-    createFuncs(obj){
+    _createFuncs(obj){
         let keys = Object.keys(obj);
         keys.forEach(key=>{
             if(obj[key]['Function']){
@@ -244,7 +252,7 @@ export const PMAPI = {
                 let f= new Function("return "+fstr)();
                 obj[key]=f;
             } else if(obj[key] instanceof Object){
-                PMAPI.createFuncs(obj[key]);
+                PMAPI._createFuncs(obj[key]);
             }
         })
     },
@@ -253,13 +261,13 @@ export const PMAPI = {
      * @param str 方法源代码
      * @returns {*}去除了所有注释的源代码
      */
-    removeAllComments(str){
+    _removeAllComments(str){
         let start = str.indexOf('//');
         if(start == -1){
             return str;
         }
         let end = str.indexOf('\n',start);
-        return PMAPI.removeAllComments(str.replace(str.substring(start,end),''));
+        return PMAPI._removeAllComments(str.replace(str.substring(start,end),''));
     }
 
 }
