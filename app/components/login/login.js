@@ -18,7 +18,6 @@ let config = {
                 username: this.el.find('input[name=username]').val(),
                 password: this.el.find('input[name=password]').val()
             }
-            console.log(form);
         }
     },
     afterRender: function() {
@@ -43,6 +42,7 @@ export default {
         let el = $('<div>').appendTo(document.body);
         component.render(el);
         el.dialog({
+            title: '主框架弹出',
             width: 400,
             height: 300,
             close: function() {

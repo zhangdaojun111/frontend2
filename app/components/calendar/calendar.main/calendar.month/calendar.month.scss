@@ -1,0 +1,19 @@
+@import "../../calendar";
+table {
+    width: 100%;
+    height: 100%;
+    thead {
+        
+    }
+    tbody {
+        height: 100%;
+        tr {
+            .item-td {
+                height: calc(100%/7);
+                display: inline-block;
+                width: calc(100%/7 - 1px);
+                //border-right: 1px solid $boder-color;
+            }
+        }
+    }
+}

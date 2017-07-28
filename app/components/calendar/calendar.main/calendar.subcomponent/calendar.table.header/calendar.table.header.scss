@@ -1,0 +1,12 @@
+@import "../../../calendar";
+.items-th {
+    width: 100%;
+    display: block;
+    border-bottom: 1px solid $boder-color;
+    .item-th {
+        display: inline-block;
+        width: calc(100%/7 - 1px);
+        line-height: 30px;
+        border-right: 1px solid $boder-color;
+    }
+}

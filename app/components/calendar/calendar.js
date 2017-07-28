@@ -4,6 +4,7 @@
 import Component from "../../lib/component";
 import template from './calendar.html';
 import './calendar.scss';
+import CalendarMain from './calendar.main/calendar.main';
 
 let config = {
     template: template,
@@ -13,7 +14,7 @@ let config = {
     actions: {
     },
     afterRender: function() {
-
+        this.append(new CalendarMain(), this.el.find('.main-content'));
     }
 };
 

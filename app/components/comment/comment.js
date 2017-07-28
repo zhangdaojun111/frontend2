@@ -23,7 +23,6 @@ let config = {
     actions: {
         loadMore: function() {
             [{text: '这是加载更多1'},{text: '这是加载更多2'}].forEach((row) => {
-                console.log(row);
                 this.append(new Item(row), this.el.find('.list'));
             });
         },
@@ -49,10 +48,13 @@ let config = {
             this.actions.reload();
         }).on('click', '.unsubscribe', () => {
             this.actions.removeChannel();
-        })
+        }).on('click', '.dialog', () => {
+            $('<div>123123123123</div>').appendTo(document.body).dialog({
+                title: 'iframe内弹出'
+            })
+        });
 
         Mediator.subscribe('comment:get', function(msg) {
-            console.log(msg);
         })
     }
 }

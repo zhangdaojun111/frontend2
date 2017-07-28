@@ -1,0 +1,32 @@
+@import "../../../assets/scss/core/base";
+$btn-bg-color: #4892FC;
+.tool-bar {
+    border-bottom: 1px solid #ddd;
+    height: auto;
+    div {
+        display: inline-block;
+        line-height: 48px;
+    }
+    .datepick {
+        padding: 0px 20px;
+    }
+    .date-btns {
+        //.btn {
+        //    padding: 2px 15px;
+        //    background: $btn-bg-color;
+        //}
+    }
+    .tools-right {
+        float: right;
+        padding-right: 10px;
+        .count {
+            margin-right: 20px;
+        }
+    }
+}
+.calendar-main-content {
+    height: calc(100% - 49px);
+    .month {
+        height: 100%;
+    }
+}
