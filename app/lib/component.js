@@ -24,7 +24,7 @@ class Component {
         if (config.afterRender) {
             this.afterRender = config.afterRender.bind(this);
         }
-        // 此事件只会在第一次render的时候运行，以后的reload不会执行
+        // 只在第一次运行
         if (config.firstAfterRender) {
             this.firstAfterRender = config.firstAfterRender.bind(this);
         }
@@ -47,9 +47,9 @@ class Component {
         let html = compiler(this.data);
         this.el.html(html);
         this.afterRender && this.afterRender();
-        if (this.firstAfterRender && this.firstAfterRenderRuned !== true) {
+        if (this.firstAfterRender && this.firstAfterRenderRunned !== true) {
             this.firstAfterRender();
-            this.firstAfterRenderRuned = true;
+            this.firstAfterRenderRunned = true;
         }
         return this;
     }
