@@ -1,0 +1,191 @@
+@import "core/base";
+//颜色配置
+$background_color: #0088ff;    //背景颜色
+$panel_color:#ffffff;         //面板颜色
+$input_bg_color: rgba(212, 212, 212, 0.2); //输入框背景色
+$input_color: rgb(0, 0, 0);     //输入文字颜色
+$font_size:0.8em;           //通用字体大小
+$font_family:'微软雅黑', '微软雅黑 Regular';
+
+//界面背景
+.main-window{
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: $background_color;
+  font-size: $font_size;
+  font-family: $font_family;
+}
+
+.bg-div{
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  left:calc(50% - 300px);
+  top: calc(50% - 400px);
+  border-radius:45%;
+  overflow:hidden;
+  background:url("../images/login-bg.png");
+  background-repeat: no-repeat;
+}
+
+.login-content{
+  width: 300px;
+  height: auto;
+  position: relative;
+  left: 200px;
+  top:150px;
+}
+
+.login-main-title{
+  color: white;
+  //font-family:'微软雅黑', '微软雅黑 Regular';
+  line-height:30px;
+  font-size: 1.4em;
+  text-align: center;
+}
+.login-version-title{
+  color: $panel_color;
+  //font-family:'微软雅黑', '微软雅黑 Regular';
+  //font-size: 0.8em;
+  text-align: center;
+}
+
+.white-panel{
+  position:relative;
+  background-color: #ffffff;
+  top:25px;
+  width: 300px;
+  height: 210px;
+  border-radius: 2%;
+}
+
+.company-info{
+  position: relative;
+  top:20px;
+  //font-size: 0.9em;
+  text-align: center;
+}
+
+.login-form{
+  position: relative;
+  top:40px;
+}
+
+.form-group{
+  position: relative;
+  width: 260px;
+  height: 40px;
+  left:20px;
+}
+
+.form-control{
+  width: 260px;
+  height: 28px;
+  left:10px;
+  background-color:$input_bg_color;
+  border:1px solid rgba(255,255,255,0.3);
+  text-indent:40px;
+  color: $input_color;
+}
+.form-control:focus{
+  border-style:solid;
+  border-color: #11f4ee;
+}
+//调整div位置
+.ps-group{
+  position: relative;
+  top:5px;
+}
+
+.form-user-logo,.form-pw-logo{
+  width:20px;
+  height:20px;
+  display: block;
+  position: absolute;
+  left:20px;
+  top:10px;
+}
+
+.form-user-logo{
+  background: url("../images/user.png");
+  background-repeat: no-repeat;
+}
+
+.form-pw-logo{
+  background: url("../images/password.png");
+  background-repeat: no-repeat;
+}
+
+.warn-info{
+  position: relative;
+  left: 40px;
+  color: red;
+}
+
+.check-box{
+  position: relative;
+  left: 20px;
+  color: rgba(72, 72, 72, 0.73);
+}
+.update-group{
+  top: 10px;
+  width: 300px;
+  position: relative;
+  left: 20px;
+}
+.update-logo{
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: url("../images/update-logo.png");
+  background-repeat: no-repeat;
+}
+
+.check-update-info{
+  position: absolute;
+  left: 25px;
+  margin-top: 3px;
+  color: rgba(195, 195, 195, 0.88);
+}
+
+.login-btn{
+  position: relative;
+  left: 170px;
+  width: 90px;
+  height: 30px;
+  color: white;
+  background-color: #686868;
+  border-radius: 5px;
+  top:-5px;
+}
+
+.find-pw-group{
+  width:300px;
+  position: relative;
+  top: 25px;
+}
+.vertical{
+  width: 1px;
+  height: 20px;
+}
+
+.find-pw-group{
+  margin-top: 25px;
+  color:white;
+}
+
+.register-btn{
+  position: relative;
+  left: 60px;
+}
+
+.find-pw-btn{
+  position: relative;
+  left: 160px;
+}
+
+.separator{
+  position: relative;
+  left: 110px;
+}

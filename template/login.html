@@ -1,19 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>ERDS</title>
+    <meta charset="UTF-8" content="width=device-width, initial-scale=1">
+    <title></title>
 </head>
 
 <body>
+<div class="main-window">
+    <!--登录界面标题-->
+    <div class="bg-div">
+        <div class="login-content">
+            <h1 class="login-main-title">欢迎使用 ERDS企业管理系统</h1>
+            <h2 class="login-version-title">v1.1.0.0</h2>
 
-<script>
-//     window.test = '{{url | safe}}'
-    window.config = {
-    }
+            <!--无需下载，显示表单和版本-->
+            <div class="white-panel login-container">
+                <h2 class="company-info">成都睿银信息科技有限公司</h2>
+                <!--登录表单开始-->
+                <form class="login-form" onsubmit="return false">
+                    <!--登录用户密码-->
+                    <div class="form-group">
+                        <i class="form-user-logo"></i>
+                        <input type="text" class="form-control" placeholder="" name="username" >
+                    </div>
+                    <div class="form-group ps-group">
+                        <i class="form-pw-logo"></i>
+                        <input type="password" id="myPassword" class="form-control" placeholder="" name="password">
+                    </div>
+                    <span class="check-box">
+                        <input type="checkbox" class="remember-pw-logo" id="remember-pw">
+                        <label for="remember-pw">记住密码</label>
+                    </span>
+                    <span class="warn-info">test：账号密码错误，请重试</span>
+                    <hr>
+                    <!--更新信息、登录-->
+                    <div class="update-group">
+                        <i class="update-logo"></i>
+                        <label class="check-update-info">更新信息</label>
+                        <button type="submit" class="btn btn-primary login-btn">登录</button>
+                    </div>
+                </form>
+            </div>
+            <div class="find-pw-group">
+                <span class="register-btn">注册</span>
+                <span class="separator">|</span>
+                <span class="find-pw-btn">忘记密码?</span>
+            </div>
+            <div class="version-view">
+                <table class="version-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
 
-</script>
-
-
+<script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
+<script type="text/javascript" src="http://localhost:8080/scripts/login.js"></script>
 </body>
 </html>
