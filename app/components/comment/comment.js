@@ -49,7 +49,11 @@ let config = {
             this.actions.reload();
         }).on('click', '.unsubscribe', () => {
             this.actions.removeChannel();
-        })
+        }).on('click', '.dialog', () => {
+            $('<div>123123123123</div>').appendTo(document.body).dialog({
+                title: 'iframe内弹出'
+            })
+        });
 
         Mediator.subscribe('comment:get', function(msg) {
             console.log(msg);
