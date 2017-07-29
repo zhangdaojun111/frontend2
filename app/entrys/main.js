@@ -25,6 +25,8 @@ async function wait() {
         },
         timeout: 5000
     });
+    console.log(data);
+    console.log('hello world 123123');
 }
 wait();
 
@@ -37,15 +39,19 @@ $('#silent').button().on('click', function() {
 })
 
 HTTP.get('user', {name: '123123'}).then(function() {
+    console.log(arguments);
 });
 
 HTTP.post('dept', {did: 123123}).then(function() {
+    console.log(arguments);
 });
 
 HTTP.post('dept2', {did: 123123}).then(function() {
+    console.log(arguments);
 });
 
 HTTP.get('dept3', {did: 123123}).then(function() {
+    console.log(arguments);
 });
 
 HTTP.flush();
