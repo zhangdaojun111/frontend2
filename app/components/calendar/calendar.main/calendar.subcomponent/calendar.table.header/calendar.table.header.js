@@ -8,21 +8,31 @@ import './calendar.table.header.scss';
 let config = {
     template: template,
     data: {
-
+        headData: [],
+        type: '',
     },
     actions: {
 
     },
     afterRender: function() {
-        this.data.forEach(item => {
-            $('.items-th').append('<th class="item-th">'+item.itemTitle+'</th>');
-        })
+        if(this.data.type === 'month') {
+            this.data.headData.forEach(item => {
+                $('.header-title').append('<td class="head-grid"><span class="date-head">'+item.itemTitle+'</span></td>');
+            })
+        } else if (this.data.type === 'week') {
+            this.data.headData.forEach(item => {
+                console.log(item);
+                $('.header-title').append('<td class="head-grid"><span class="date-head">'+ item.time +'</span></td>');
+            })
+        }
+
     }
 };
 
 class CalendarTableHeader extends Component {
     constructor(data) {
-        config.data = data;
+        config.data.headData = data['headTitle'];
+        config.data.type = data['type'];
         super(config);
     }
 }

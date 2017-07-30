@@ -1,40 +1,49 @@
 @import "../../assets/scss/core/base";
 $boder-color: #ddd;
 $bg-color: rgba(14, 122, 239, 0.290196);
-.header {
-    padding: 5px;
-    background: $bg-color;
-    span {
-        line-height: 28px;
-    }
-    .title {
-        display: inline-block;
-    }
-    .tool {
-        display: inline-block;
-        float: right;
-    }
-}
-.calendar-container {
+.calendar-iframe {
+    min-width: 1200px;
+    width: 100%;
+    min-height: 600px;
     height: 100%;
-    .left-content {
-        display: inline-block;
-        width: 200px;
+    .header {
+        padding: 5px;
         background: $bg-color;
+        span {
+            line-height: 28px;
+        }
+        .title {
+            display: inline-block;
+        }
+        .tool {
+            display: inline-block;
+            float: right;
+        }
     }
+    .calendar-container {
+        height: 100%;
+        .left-content {
+            display: inline-block;
+            width: 200px;
+            background: $bg-color;
+        }
 
-    .right-content {
-        display: inline-block;
-        float: right;
-        width: 200px;
-        background: $bg-color;
-    }
-    .main-content {
-        border-left: 1px solid #ddd;
-        border-right: 1px solid #ddd;
-        height: calc(100% - 40px);
-        position: absolute;
-        display: inline-block;
-        width: calc(100% - 400px);
+        .right-content {
+            display: inline-block;
+            float: right;
+            width: 200px;
+            background: $bg-color;
+        }
+        .main-content {
+            //border-left: 1px solid #ddd;
+            //border-right: 1px solid #ddd;
+            height: calc(100% - 40px);
+            position: absolute;
+            display: inline-block;
+            width: calc(100% - 400px);
+            min-width: 800px;
+            max-height: 890px;
+            overflow: auto;
+        }
     }
 }

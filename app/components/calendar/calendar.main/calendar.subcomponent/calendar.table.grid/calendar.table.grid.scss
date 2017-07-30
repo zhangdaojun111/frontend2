@@ -1,0 +1,16 @@
+@import "../../../calendar";
+.grid-content {
+    //margin: 1px;
+    height: 100%;
+    width: calc(100% - 1px);
+    display: block;
+    border-right: 1px solid $boder-color;
+    border-bottom: 1px solid $boder-color;
+    .date {
+        display: block;
+        //line-height: 22px;
+    }
+    .task-list {
+
+    }
+}
