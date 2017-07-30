@@ -9,11 +9,14 @@ html, body {
     position: relative;
 }
 
-//#header {
-//    width: 100%;
-//    height: $header-height;
-//    background-color: $header-bg;
-//}
+#header {
+    position: absolute;
+    left: $aside-width;
+    right: 0;
+    top: 0;
+    height: $header-height;
+    background-color: $header-bg;
+}
 
 #aside {
     position: absolute;
@@ -96,9 +99,8 @@ html, body {
     background-color: $content-bg;
     right: 0;
     top: $header-height;
-    bottom: $footer-height;
+    bottom: 0;
     left: $aside-width;
-
     iframe {
         width: 100%;
         height: 100%;

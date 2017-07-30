@@ -4,9 +4,10 @@ import '../assets/scss/main.scss';
 // import 'jquery-ui/ui/widgets/button.js';
 import 'jquery-ui/ui/widgets/dialog.js';
 
-import {FullMenu} from '../components/main/menu-full/menu.full';
+import {FullMenuInstance} from '../components/main/menu-full/menu.full';
+import {IframeInstance} from '../components/main/iframes/iframes';
 
-console.log(FullMenu);
 
+FullMenuInstance.render($('#aside .menu'));
 
-new FullMenu().render($('#aside .menu'));
+IframeInstance.render($('#content'));

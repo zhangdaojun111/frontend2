@@ -1,0 +1,28 @@
+#iframe-component {
+    height: 100%;
+    .tabs {
+        height: 30px;
+        line-height: 30px;
+        .item {
+            float: left;
+            background-color: #eee;
+            cursor: pointer;
+            &.focus {
+                background: #fff;
+            }
+            .close {
+                cursor: pointer;
+            }
+        }
+    }
+    .iframes {
+        width: 100%;
+        height: calc(100% - 30px);
+        .item {
+            height: 100%;
+            iframe {
+                height: 100%;
+            }
+        }
+    }
+}

@@ -11,32 +11,61 @@ let config = {
             {
                 name: '工作流',
                 children: [
-                    {name:'工作创建'},
-                    {name: '已完成的工作'},
-                    {name: '工作审批'},
-                    {name: '进行中的工作'},
-                    {name: '我的工作'}
+                    {
+                        name: '工作创建',
+                        children: [
+                            {
+                                name: '工作创建',
+                                children: [
+                                    {
+                                        name: '工作创建',
+                                        children: [
+                                            {
+                                                name: '工作创建'
+                                            }, {
+                                                name: '已完成的工作'
+                                            }
+                                        ]
+                                    }, {
+                                        name: '已完成的工作'
+                                    }
+                                ]
+                            }, {
+                                name: '已完成的工作'
+                            }
+                        ]
+                    }, {
+                        name: '已完成的工作',
+                        id: '123123',
+                        url: './iframe.html'
+                    }
                 ]
-            },{
-                name: '工作流2'
+            }, {
+                name: '工作流2',
+                id: '3333',
+                url: './iframe.html'
             }
         ]
     },
-    actions: {},
-    afterRender: function() {
+    actions: {
+        search: function() {
+
+        }
+    },
+    afterRender: function () {
         this.data.list.forEach((data) => {
-            this.append(new FullMenuItem(data), this.el.find('.root'));
+            this.append(new FullMenuItem(_.defaultsDeep({}, data, {root: true, offset: 0})), this.el.find('.root'));
         });
+
+        this.el.css({
+            height: 'calc(100% - 230px)',
+            overflow: 'auto'
+        })
     },
     beforeDestory: () => {
 
     }
 }
 
-class FullMenu extends Component {
-    constructor() {
-        super(config);
-    }
-}
 
-export { FullMenu };
+export const FullMenuInstance = new Component(config);

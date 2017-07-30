@@ -1,4 +1,4 @@
-import URL from './url';
+// import URL from './url';
 import component from '../lib/component';
 
 /**
@@ -28,7 +28,9 @@ export const PMENUM = {
     openIframeDialog: '0',
     closedialog: '1',
     recievedata: '2',
-    openComponentDialog: '3'
+    openComponentDialog: '3',
+    iframe_active: '4',
+    iframe_silent: '5'
 }
 
 /**
@@ -135,7 +137,11 @@ export const PMAPI = {
      * @param msg
      */
     sendToChild: function(iframe, msg) {
-        iframe.postMessage(msg,location.origin);
+        let w = iframe.contentWindow;
+        if (w) {
+            w.postMessage(msg,location.origin);
+        }
+
     },
 
     /**
