@@ -1,4 +1,4 @@
-// import URL from './url';
+import URL from './url';
 import component from '../lib/component';
 
 /**
@@ -22,15 +22,13 @@ let subscriber = {};
 
 /**
  * postmessage的消息类型枚举类
- * @type {{openIframeDialog: string, closedialog: string, recievedata: string, openComponentDialog: string}}
+ * @type {{open_IframeDialog: string, closedialog: string, recievedata: string, openComponentDialog: string}}
  */
 export const PMENUM = {
-    openIframeDialog: '0',
-    closedialog: '1',
-    recievedata: '2',
-    openComponentDialog: '3',
-    iframe_active: '4',
-    iframe_silent: '5'
+    open_iframe_dialog: '0',
+    close_dialog: '1',
+    recieve_data: '2',
+    open_component_dialog: '3'
 }
 
 /**
@@ -42,6 +40,7 @@ export const PMENUM = {
  * }
  */
 window.addEventListener('message', function(event) {
+
     let data = event.data;
 
     if (data.type !== undefined) {
@@ -51,7 +50,7 @@ window.addEventListener('message', function(event) {
 
         // 以下内容需要重新梳理逻辑，重构以下
         switch (data.type){
-            case PMENUM.openComponentDialog:
+            case PMENUM.open_component_dialog:
                 let elementDiv =$('<div></div>');
                 dialogHash[data.key] = {
                     iframe: event.source,
@@ -65,7 +64,7 @@ window.addEventListener('message', function(event) {
                 comp.render(elementDiv);
                 dialogHash[data.key].element.dialog(data.frame);
                 break;
-            case PMENUM.openIframeDialog:
+            case PMENUM.open_iframe_dialog:
                 let url = URL.getUrl(data.url, {key: data.key});
                 let element = $(`<iframe src="${url}">`);
                 dialogHash[data.key] = {
@@ -74,16 +73,16 @@ window.addEventListener('message', function(event) {
                 };
                 dialogHash[data.key].element.dialog(data.frame);
                 break;
-            case PMENUM.closedialog:
+            case PMENUM.close_dialog:
                 dialogHash[data.key].element.dialog('destroy').remove();
                 PMAPI.sendToChild(dialogHash[data.key].iframe,{
-                    type: PMENUM.recievedata,
+                    type: PMENUM.recieve_data,
                     key: data.key,
                     data: data.data
                 });
                 delete dialogHash[data.key];
                 break;
-            case PMENUM.recievedata:
+            case PMENUM.recieve_data:
                 dialogWaitHash[data.key](data.data);
                 delete dialogWaitHash[data.key];
                 break;
@@ -137,11 +136,7 @@ export const PMAPI = {
      * @param msg
      */
     sendToChild: function(iframe, msg) {
-        let w = iframe.contentWindow;
-        if (w) {
-            w.postMessage(msg,location.origin);
-        }
-
+        iframe.postMessage(msg,location.origin);
     },
 
     /**
@@ -157,10 +152,9 @@ export const PMAPI = {
     openDialogByIframe: function(url,frame) {
         return new Promise(function(resolve) {
             let key = PMAPI._getKey();
-            console.log(key);
             dialogWaitHash[key] = resolve;
             PMAPI.sendToParent({
-                type: PMENUM.openIframeDialog,
+                type: PMENUM.open_iframe_dialog,
                 key: key,
                 url: url,
                 frame:frame
@@ -185,7 +179,7 @@ export const PMAPI = {
             console.log(key);
             dialogWaitHash[key] = resolve;
             window.parent.postMessage({
-                type: PMENUM.openComponentDialog,
+                type: PMENUM.open_component_dialog,
                 key: key,
                 component: PMAPI.serializeComponent(componentConfig),
                 frame:frame
