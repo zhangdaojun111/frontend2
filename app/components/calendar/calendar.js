@@ -6,7 +6,7 @@ import template from './calendar.html';
 import './calendar.scss';
 import LeftContent from './left-content/left-content';
 import RightContent from './right-content/right-content';
-import CalendarMin from './calendar.min/calendar.min'
+import CalendarMin from './calendar.main/calendar.main'
 let config = {
     template: template,
     data: {
@@ -16,7 +16,8 @@ let config = {
     },
     afterRender: function() {
 		 this.append(new LeftContent, this.el.find('.left-content'));
-		 this.append(new RightContent, this.el.find('.right-content-workflow'));
+		 this.append(new RightContent, this.el.find('.right-content'));
+		 this.append(new CalendarMin, this.el.find('.main-content'));
     }
 };
 

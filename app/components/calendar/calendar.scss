@@ -5,7 +5,6 @@ $bg-color: rgba(14, 122, 239, 0.290196);
     min-width: 1200px;
     width: 100%;
     min-height: 600px;
-.calendar-container {
     height: 100%;
     .header {
         padding: 5px;
@@ -26,14 +25,15 @@ $bg-color: rgba(14, 122, 239, 0.290196);
         .left-content {
             display: inline-block;
             width: 200px;
-            background: $bg-color;
+        
+            float:left;
         }
 
         .right-content {
             display: inline-block;
             float: right;
             width: 200px;
-            background: $bg-color;
+            
         }
         .main-content {
             //border-left: 1px solid #ddd;
@@ -47,26 +47,27 @@ $bg-color: rgba(14, 122, 239, 0.290196);
             overflow: auto;
         }
     }
+
 }
-}
-html,body{height: 100%;}
-.left-calendar-box{}
-.right-content {
- position:absolute;
- background:red;
- width:468px;
- margin-right: auto;
- margin-left: auto;
- padding: 0px;
-}
-.left-content {
- float:left;
- width:220px;
- border-right:1px solid #605654 ;
- height: 100%;
- position: fixed;
-}
-.right-content-workflow {
- float:right;
- width:220px
-}
+//html,body{height: 100%;}
+//.left-calendar-box{}
+//.right-content {
+// position:absolute;
+// background:red;
+// width:468px;
+// margin-right: auto;
+// margin-left: auto;
+// padding: 0px;
+//}
+//.left-content {
+// float:left;
+// width:220px;
+// border-right:1px solid #605654 ;
+// height: 100%;
+// position: fixed;
+//}
+//.right-content{
+//   position: fixed;
+// float:right;
+// width:220px
+//}
