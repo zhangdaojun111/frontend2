@@ -102,6 +102,10 @@ let config={
             $('.select-drop').hide();
         })
         Mediator.subscribe('form:checkRequired',function(data){
+            _this.childComponent[data.dfield].data['value']=data.value;
+            if(data.showValue){
+                _this.childComponent[data.dfield].data['showValue']=data.showValue;
+            }
             if(data.value=='' || data.value.length==0 || data.value==null){
                 _this.childComponent[data.dfield].data['requiredClass']='required';
             }else{

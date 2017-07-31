@@ -34,7 +34,8 @@ let config={
             }
             let value=$(this).html();
             if($(this).hasClass('option')){
-                _this.data.value=value;
+                _this.data.showValue=value;
+                _this.data.value=$(this).data('value');
                 _this.reload();
                 if(value=='请选择'){
                     value='';
