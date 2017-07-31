@@ -228,7 +228,7 @@ let config = {
         this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
 
         this.el.on('click', '#monthView', () => {
-            //CalendarService.getCalendarListData();
+            //CalendarService.getCalendarData();
             $('.calendar-main-content').empty();
             this.data.calendarContent = 'month';
             this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));

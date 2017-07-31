@@ -4,9 +4,13 @@
 
 import { HTTP } from '../lib/http';
 
+const server = 'http://127.0.0.1:8088';
+
 const saveCalendarTableUrl = '/calendar_mgr/save_calendar/';
 
 const calendarListUrl = '/calendar_mgr/get_calendar_tree/';
+
+const calendarDataUrl = server + '/calendar_mgr/get_calendar_data/';
 
 
 export const CalendarService = {
@@ -19,9 +23,16 @@ export const CalendarService = {
         })
     },
 
-    getCalendarListData: function () {
+    getCalendarTreeData: function () {
         HTTP.get(calendarListUrl,'').then(res => {
             console.log('res',res);
         })
+    },
+
+    getCalendarData: function () {
+        HTTP.get(calendarDataUrl,'').then(res => {
+            console.log('res',res);
+        })
     }
+
 };
