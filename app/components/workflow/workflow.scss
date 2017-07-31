@@ -87,6 +87,8 @@
             flex-grow: 1;
             padding: 5px 20px;
             border-left: 1px solid rgb(201,227,255);
+            width: 100%;
+            overflow-x:auto ;
         }
         .content{
             position: relative;
