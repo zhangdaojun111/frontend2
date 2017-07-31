@@ -36,7 +36,6 @@ let config={
                 d['options']=[];
                 let set=new Set();
                 for(let key in _this.data.datalist){
-                    console.log(_this.data.datalist[key][data.index]);
                     if(_this.data.datalist[key][data.index] == data.value){
                         set.add(_this.data.datalist[key][i]);
                     }
@@ -65,11 +64,14 @@ let config={
                     }
                     if(isValue){
                         _this.data.value=key;
+                        data['value']=key;
+                        console.log(_this.data.required);
+                        console.log('dsadsadsad');
+                        if(_this.data.required){
+                            Mediator.publish('form:checkRequired',data);
+                        }
                     }
                 }
-            }
-            if(_this.data.required){
-                Mediator.publish('form:checkRequired',data);
             }
         });
         this.el.on('click','.refresh',function(){
@@ -89,23 +91,30 @@ let config={
                 let drop=_this.childDrop[i];
                 drop.data=Object.assign(drop.data,d);
                 drop.reload();
+                _this.data.value='';
+                Mediator.publish('form:changeValue',_this.data);
             }
         });
     },
     afterRender(){
-        let _this=this;
-        this.set('childDrop',[]);
+        if(!this.childDrop){
+            this.set('childDrop',[]);
+        }
+        if(this.data.be_control_condition){
+           return;
+        }
         let index;
         for(let key in this.data.datalist){
             index=this.data.datalist[key].length;
-            _this.data['index']=index;
+            this.data['index']=index;
         }
+        let isInit=this.childDrop.length;
         for (let i=0;i<index;i++){
             let d={};
             d['value']='请选择';
             d['options']=[];
             d['index']=i;
-            d['dfield']=_this.data.dfield;
+            d['dfield']=this.data.dfield;
             let set=new Set();
             for(let key in this.data.datalist){
                 set.add(this.data.datalist[key][i]);
@@ -113,9 +122,13 @@ let config={
             for(let item of set){
                 d['options'].push({label:item,value:item});
             }
-            let drop=new DropDown(d);
-            _this.childDrop[i]=drop;
-            _this.append(drop,_this.el.find('.multi-drop'));
+            if(isInit){
+                this.append(this.childDrop[i],this.el.find('.multi-drop'));
+            }else{
+                let drop=new DropDown(d);
+                this.childDrop[i]=drop;
+                this.append(drop,this.el.find('.multi-drop'));
+            }
         }
     }
 }

@@ -14,6 +14,58 @@ let config={
     data:{},
     childComponent:{},
     actions:{
+        //改变控件的disabled
+        changeControlDisabled:function(dfield){
+
+        },
+        reviseCondition:function(editConditionDict,value,isInit) {
+        // if(this.dfService.isView){return false;}
+        let arr = [];
+        for(let key in editConditionDict["edit_condition"]){
+            if( key == 'and' ){
+                let andData = editConditionDict["edit_condition"][key];
+                for( let f in andData  ){
+                    let i = 0;
+                    for( let d of andData[f] ){
+                        for( let b of value ){
+                            if( d == b ){
+                                i++;
+                            }
+                        }
+                    }
+                    _this.data[f]["is_view"] = ( i == andData[f].length )? 0 : 1;
+                    _this.actions.changeControlDisabled(f);
+                    // this.form.controls[f].updateValueAndValidity();
+                }
+            }else {
+                for(let dfield of editConditionDict["edit_condition"][key]) {
+                    if( arr.indexOf( dfield ) != -1 ){
+                        continue;
+                    }
+                    //如果有字段的负责性，再开始下面的逻辑
+                    if(_this.data[dfield]["required_perm"] == 1){
+                        //针对多选下拉框，只要包含就可以
+                        if(value instanceof Array){
+                            _this.data[dfield]["be_control_condition"] = value.indexOf(key) != -1 ? 0 : 1;
+                            _this.actions.changeControlDisabled(dfield);
+                            // this.form.controls[dfield].updateValueAndValidity();
+                        }else{
+                            _this.data[dfield]["be_control_condition"] = (key == value) ? 0 : 1;
+                            _this.actions.changeControlDisabled(dfield);
+                            // this.form.controls[dfield].updateValueAndValidity();
+                        }
+                        if( _this.data[dfield]["is_view"] == 0 ){
+                            arr.push( dfield );
+                        }
+                    }
+                }
+            }
+            if(_this.data[dfield]["be_control_condition"] == 1 && !isInit){
+                _this.childComponent[dfield].data=_this.data[dfield];
+                _this.childComponent[dfield].reload();
+            }
+        }
+    }
         // init:function(){
         //     let _this=this;
         //     console.log(_this.el);
@@ -57,6 +109,7 @@ let config={
                 data['requiredClass']=data.value==''?'required':'required2';
             }
             cache_old[data.dfield] = data.value;
+            _this.actions.reviseCondition(data.dfield,data.value,true);
             //在这里根据type创建各自的控件
             switch (type){
                 case 'radio':
@@ -101,17 +154,22 @@ let config={
         $('body').on('click.selectDrop',function(){
             $('.select-drop').hide();
         })
-        Mediator.subscribe('form:checkRequired',function(data){
+        Mediator.subscribe('form:changeValue',function(data){
+            console.log(data);
+            let originalData=data;
+            if(originalData["edit_condition"] && originalData["edit_condition"] !== "") {
+                _this.actions.reviseCondition(originalData,val,false);
+            }
             _this.childComponent[data.dfield].data['value']=data.value;
-            if(data.showValue || data.showValue==''){
-                _this.childComponent[data.dfield].data['showValue']=data.showValue;
+            if(originalData.showValue || originalData.showValue==''){
+                _this.childComponent[originalData.dfield].originalData['showValue']=originalData.showValue;
             }
-            if(data.value=='' || data.value.length==0 || data.value==null){
-                _this.childComponent[data.dfield].data['requiredClass']='required';
+            if(originalData.value=='' || originalData.value.length==0 || originalData.value==null){
+                _this.childComponent[originalData.dfield].data['requiredClass']='required';
             }else{
-                _this.childComponent[data.dfield].data['requiredClass']='required2';
+                _this.childComponent[originalData.dfield].data['requiredClass']='required2';
             }
-            _this.childComponent[data.dfield].reload();
+            _this.childComponent[originalData.dfield].reload();
             // console.log($(this));
             $('.select-drop').hide();
         })

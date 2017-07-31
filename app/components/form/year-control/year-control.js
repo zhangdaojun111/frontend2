@@ -4,13 +4,17 @@ import Mediator from '../../../lib/mediator';
 
 let config={
     template:`<div class="clearfix">
-                <div style="float: left">{{label}}</div>
-                <div class="dropdown" style="float: left"></div>
-              <div style="float: left;">
-                   {{#if required}}
-                    <span class="{{requiredClass}}" ></span>
-                   {{/if}} 
-              </div>
+                {{#if be_control_condition }}
+                    <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+                 {{else}}
+                    <div style="float: left">{{label}}</div>
+                    <div class="dropdown" style="float: left"></div>
+                    <div style="float: left;">
+                       {{#if required}}
+                        <span class="{{requiredClass}}" ></span>
+                       {{/if}} 
+                    </div>
+                 {{/if}}   
               </div>
                 `,
     data:{
@@ -19,17 +23,17 @@ let config={
     firstAfterRender:function(){
         let _this=this;
         Mediator.subscribe('form:dropDownSelect',function(data){
-            if(data.dfield !=_this.data.dfield){
+            if(data.dfield !=_this.data.dfield || !_this.data.required){
                 return;
             }
             _this.data.value=data.value;
-            if(_this.data.required){
-                Mediator.publish('form:checkRequired',data);
-            }
+            Mediator.publish('form:changeValue',_this.data);
         });
     },
     afterRender:function(){
-        this.append(new DropDown(this.data),this.el.find('.dropdown'));
+        if(!this.data.be_control_condition) {
+            this.append(new DropDown(this.data), this.el.find('.dropdown'));
+        }
     }
 }
 export default class YearControl extends Component{

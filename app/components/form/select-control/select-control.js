@@ -25,18 +25,17 @@ let config={
     firstAfterRender:function(){
         let _this=this;
         Mediator.subscribe('form:dropDownSelect',function(data){
-            if(data.dfield !=_this.data.dfield){
+            if(data.dfield !=_this.data.dfield || !_this.data.required){
                 return;
             }
             _this.data.value=data.value;
-            console.log(_this.data.value);
-            if(_this.data.required){
-                Mediator.publish('form:checkRequired',data);
-            }
+            Mediator.publish('form:changeValue',_this.data);
         });
     },
     afterRender:function(){
-        this.append(new DropDown(this.data),this.el.find('.dropdown'));
+        if(!this.data.be_control_condition){
+            this.append(new DropDown(this.data),this.el.find('.dropdown'));
+        }
     }
 }
 export default class SelectControl extends Component{

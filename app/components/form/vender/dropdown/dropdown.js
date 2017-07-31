@@ -17,9 +17,10 @@ let config={
     actions:{
 
     },
-    firstAfterRender:function(){
+    afterRender:function(){
         let _this=this;
         let timer=null;
+        this.el.off();
         this.el.on('click','.show-hide-drop',function(event){
             let $select=_this.el.find('.select-drop');
             let isShow=true;
@@ -70,7 +71,9 @@ let config={
                     });
                 }
             },500);
-        })
+        }).on('click','.search',function(event){
+            event.stopPropagation();
+        });
     }
 }
 export default class DropDown extends Component{
