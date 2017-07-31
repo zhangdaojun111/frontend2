@@ -58,7 +58,8 @@ let date = new Date(),
 	  
  }
 let config = {
-    template: template,   
+    template: template, 
+    
     actions: {
     	loadcalendarDate:function(yy,mm,dd){
     		$(".now-year").html(yy);
@@ -156,7 +157,7 @@ let config = {
     	}
     },
     afterRender: function() {
-			
+			 
     }
 };
 function test(){

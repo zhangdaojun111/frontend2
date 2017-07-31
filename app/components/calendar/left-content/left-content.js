@@ -1,15 +1,22 @@
 import Component from "../../../lib/component";
 import template from './left-content.html';
 import './left-content.scss';
+import LeftContentSelect from './leftContent.SelectLabel/leftContent.SelectLabel'
 import LeftCalendar from './left-calendar/left-calendar';
 import Mediator from '../../../lib/mediator';
 let config = {
-    template: template,   
+    template: template, 
+    data:{
+    	classifyList:[{text: '提醒'}], 	
+    },
     actions: {
     	
     },
     afterRender: function() {
        this.append(new LeftCalendar, this.el.find('.left-calendar-box'));
+       this.data.classifyList.forEach((row) => {
+            this.append(new LeftContentSelect(row), this.el.find('.test1'));
+        });
     }
 };
 
