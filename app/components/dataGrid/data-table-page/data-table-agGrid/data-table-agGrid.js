@@ -3,7 +3,9 @@ import template from './data-table-agGrid.html';
 import './data-table-agGrid.scss';
 
 import agGrid from "../../agGrid/agGrid";
-import {dataTableService} from "../../service/data-table.service";
+import {dataTableService} from "../../../../lib/service/dataGrid/data-table.service";
+import {dgcService} from "../../../../lib/service/dataGrid/data-table-control.service";
+import {fieldTypeService} from "../../../../lib/service/field-type-service";
 // import {dataTableService} from "../../service/data-table-control.service";
 
 let config = {
@@ -15,12 +17,18 @@ let config = {
         parentTableId:'',
         parentRealId:'',
         parentTempId:'',
-        parentRecordId:''
+        parentRecordId:'',
+        //定制列（固定列）
+        fixCols: {l:[],r:[]},
+        //定制列（列排序）
+        orderFields: [],
+        // 提醒颜色
+        remindColor:{remind_color_info:{},info:{}}
     },
     //原始字段数据
-    fieldsData:[],
+    fieldsData: [],
     //生成的表头数据
-    columnDefs:[],
+    columnDefs: [],
     actions: {
         //请求数据（表头，提醒，偏好）
         prepareData: function (){
@@ -77,14 +85,126 @@ let config = {
                         children: []
                     } )
                 }else{//多级表头最底层节点，作为一列
+
+                    //id列不添加多级索引不添加
+                    if (data.data["field"] == "_id" || data.data['dtype'] == 9) {
+                        return;
+                    }
+                    let headClass = fieldTypeService.numOrText(data.data["real_type"])?'header-style-r':'header-style-l';
+
+                    //解决后台配置字段之后类排序没有该字段导致该列不显示的BUG
+                    if ( this.data.orderFields.indexOf( data.data["field"] ) == -1 ) {
+                        otherCol.push(data.data["field"]);
+                    }
+
+                    let fixArr = this.data.fixCols.l.concat( this.data.fixCols.r );
+
                     let obj={
                         headerName: data.header[i],
+                        // headerCellTemplate: (params) => {
+                        //     return this.headerCellRenderer(params);
+                        // },
+                        // headerComponent:HeaderComponent,
+                        // headerComponentFramework:<{new():HeaderComponent}>HeaderComponent,
                         tableName: data.data['table_name'],
                         id: data.data["id"],
-                        field: data.data["field"]
+                        field: data.data["field"],
+                        enableCellChangeFlash: true,
+                        suppressMenu: true,
+                        // suppressToolPanel: true,
+                        // width: 160,
+                        suppressMovable: fixArr.indexOf( data.data["field"] ) == -1 ? false : true,
+                        field_content: data.data['field_content'],
+                        colId: data.data["field"],
+                        source_table_id: data.data["source_table_id"] || '',
+                        base_buildin_dfield: data.data["base_buildin_dfield"] || '',
+                        source_field_dfield: data.data["source_field_dfield"] || '',
+                        source_table_name: data.data["source_table_name"] || '',
+                        is_correspondence_num: data.data["is_correspondence_num"] || 0,
+                        dtype: data.data["dtype"],
+                        dsearch: data.data["dsearch"],
+                        child_table_id: data.data["child_table_id"],
+                        count_table_id: data.data["count_table_id"],
+                        dinput_type: data.data["dinput_type"],
+                        is_user: data.data["is_user"],
+                        main_type: data.data["main_type"],
+                        real_type: data.data["real_type"],
+                        real_accuracy:data.data["real_accuracy"],
+                        tooltipField: fieldTypeService.noToolTips(data.data["dinput_type"])? '' : data.data["field"],
+                        sortingOrder: ['desc', 'asc', null],
+                        hide: false,
+                        minWidth: 10,
+                        filter: fieldTypeService.numOrText(data.data["real_type"]) ? "number" : "text",
+                        headerClass: headClass,
+                        cellStyle: {'font-style': 'normal'},
+                        // floatingFilterComponentFramework: FloatingFilterComponent,
+                        // floatingFilterComponent: FloatingFilterComponent,
+                        // floatingFilterComponentParams:{
+                        //     suppressFilterButton: true,
+                        //     colInfo: data.data,
+                        //     searchOldValue: this.searchOldValue,
+                        //     searchValue: this.searchValue
+                        // },
+                        enableRowGroup: true,
+                        enableValue: true,
+                        // icons: {
+                        //     sortAscending: '<img src="' + img1 + '" style="width: 15px;height:15px;"/>',
+                        //     sortDescending: '<img src="' + img2 + '" style="width: 15px;height:15px;"/>'
+                        // }
+                        cellRenderer: (params) => {
+                            return this.actions.bodyCellRenderer( params );
+                        }
                     }
                     column.push(obj);
                 }
+            }
+        },
+        bodyCellRenderer: function (params){
+            console.log( params )
+            if( params.data && params.data.myfooter && params.data.myfooter == "合计" ){
+                return params.value || '';
+            }
+            let myValue = params['value'];//当前单元格数值
+            let remindColorInfo = this.remindColor['remind_color_info'];//枚举提醒颜色
+            let info = this.remindColor['info'];//数字提醒颜色
+            let colDef = params.colDef;//当前单元格数据
+            let rowId;     //当前rowId
+            let sHtml;      //要显示的html元素的字符串
+            let color = "transparent"; //颜色
+            if (params.data) {
+                rowId = params.data['_id']
+            }
+            //显示提醒颜色start---
+            //判断是否为数字类型
+            try {
+                if(info){
+                    let oInfo = JSON.parse(info);
+                    for (let i in oInfo) {
+                        if (i == rowId) {
+                            // if (oInfo[i].indexOf(colDef['colId']) != -1) {
+                            try{
+                                color = oInfo[i][colDef['colId']];
+                                // color = remindColorInfo[colDef['colId']]['color'];
+                            }catch (err){
+                                color = 'transparent';
+                            }
+                            // }
+                        }
+                    }
+                }
+                //判断是否为枚举类型
+                for (let i in remindColorInfo) {
+                    if (i == colDef['colId']&&remindColorInfo[i][myValue]) {
+                        color = remindColorInfo[i][myValue];
+                    }
+                }
+            }catch (err){
+
+            }
+
+            let opcity='0.3';
+            if(color != undefined && color != 'transparent'){
+                color= dgcService.colorRgb(color,opcity);
             }
         }
     },
@@ -462,12 +582,24 @@ let config = {
             "vNum": null
         }
         this.fieldsData = res.rows || [];
-
         //创建表头数据
         this.columnDefs = this.actions.createHeaderColumnDefs()
 
         let data = {
-            columnDefs: this.columnDefs
+            columnDefs: this.columnDefs,
+            rowData: [
+                {
+                    "f1": "2017-07-17 17:14:05",
+                    "f2": "2017-07-17 17:14:05",
+                    "_id": "596c7fddfb48a50708e231d4",
+                    "f4": "杨晓川",
+                    "f5": "2017-07-17",
+                    "f6": "杨晓川",
+                    "f7": ["开发部-北京",
+                        "前端组",
+                        "前端组-成都"]
+                }
+            ]
         }
         this.append(new agGrid(data), this.el.find('#data-agGrid'));
     }
