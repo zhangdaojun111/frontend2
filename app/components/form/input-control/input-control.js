@@ -11,7 +11,6 @@ let config={
 class InputControl extends Component {
     constructor(data){
         super(config,data);
-        console.log(this.data);
     }
 }
 

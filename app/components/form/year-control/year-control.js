@@ -8,7 +8,7 @@ let config={
                 <div class="dropdown" style="float: left"></div>
               <div style="float: left;">
                    {{#if required}}
-                    <span id="requiredLogo" class="required" ></span>
+                    <span class="{{requiredClass}}" ></span>
                    {{/if}} 
               </div>
               </div>
@@ -18,21 +18,18 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
-        console.log(this.options);
-        this.append(new DropDown(this.data),this.el.find('.dropdown'));
-        //监听dropdown值改变
-        Mediator.subscribe('form:valueChange',function(data){
+        Mediator.subscribe('form:dropDownSelect',function(data){
             if(data.dfield !=_this.data.dfield){
                 return;
             }
-           _this.data.value=data.value;
-           //重置必填样式
-           if(data.value=='' || data.value.length ==0 || data.value==null){
-               _this.el.find('#requiredLogo').get(0).className='required';
-           }else{
-               _this.el.find('#requiredLogo').get(0).className='required2';
-           }
+            _this.data.value=data.value;
+            if(_this.data.required){
+                Mediator.publish('form:checkRequired',data);
+            }
         });
+    },
+    afterRender:function(){
+        this.append(new DropDown(this.data),this.el.find('.dropdown'));
     }
 }
 export default class YearControl extends Component{

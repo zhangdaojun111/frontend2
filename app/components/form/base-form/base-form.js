@@ -7,6 +7,7 @@ import SelectControl from "../select-control/select-control";
 import YearControl from "../year-control/year-control";
 import BuildInControl from "../buildIn-control/buildIn-control";
 import MultiLinkageControl from "../multi-linkage-control/multi-linkage-control";
+import Mediator from "../../../lib/mediator";
 let config={
     template:'',
     data:{
@@ -51,6 +52,9 @@ let config={
         for(let data of _this.data.data){
             let single=_this.el.find('div[data-dfield='+data.dfield+']');
             let type=single.data('type');
+            if(data.required){
+                data['requiredClass']=data.value==''?'required':'required2';
+            }
             //在这里根据type创建各自的控件
             switch (type){
                 case 'radio':
@@ -71,7 +75,7 @@ let config={
                 case 'Select':
                     let selectControl=new SelectControl(data);
                     selectControl.render(single);
-                    _this.childComponent[data.dfield]=textArea;
+                    _this.childComponent[data.dfield]=selectControl;
                     break;
                 case 'Year':
                     let yearControl = new YearControl(data);
@@ -92,8 +96,16 @@ let config={
             }
         }
         $('body').on('click.selectDrop',function(){
-            console.log($(this));
             $('.select-drop').hide();
+        })
+        Mediator.subscribe('form:checkRequired',function(data){
+            if(data.value=='' || data.value.length==0 || data.value==null){
+                _this.childComponent[data.dfield].data['requiredClass']='required';
+            }else{
+                _this.childComponent[data.dfield].data['requiredClass']='required2';
+            }
+            console.log(_this.childComponent[data.dfield]);
+            _this.childComponent[data.dfield].reload();
         })
     },
     beforeDestory:function(){
@@ -104,7 +116,6 @@ class BaseForm extends Component{
     constructor(formData){
         config.template=formData.template;
         config.data=formData.data;
-        console.log(config);
         super(config);
     }
 }
