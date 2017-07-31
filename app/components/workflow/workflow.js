@@ -298,6 +298,41 @@ class WorkFlow extends Component {
         container.style.width = (+this.containerwidth.split('px')[0]) * (+this.nodeflowSize) + 'px';
         container.style.height = ((+this.containerheight.split('px')[0]) * (+this.nodeflowSize)) + 'px';
     }
+    //open in new window
+    maximizeNodeflow($event) {
+        let container = document.querySelector('#workflow-draw-box');
+        container.style.transform = 'scale(1)';
+        this.nodeflowSize = 1;
+        let e = document.documentElement, g = document.getElementsByTagName('body')[0], w = window.innerWidth || e.clientWidth || g.clientWidth, h = window.innerHeight || e.clientHeight || g.clientHeight;
+        container.style.position = "fixed";
+        container.style.top = "0";
+        container.style.left = "0";
+        container.style.right = "0";
+        container.style.bottom = "0";
+        container.style.backgroundColor = "#fff";
+        container.style.width = w + 'px';
+        container.style.height = h + 'px';
+        container.style.marginTop = 0;
+        container.style.margin = 0;
+        container.style.zIndex = '100';
+        container.style.overflow = 'auto';
+        let ocloseSpan = document.createElement('span');
+        ocloseSpan.className = 'closeSpan';
+        ocloseSpan.style['float'] = 'right';
+        ocloseSpan.style.cursor = 'pointer';
+        ocloseSpan.style.fontSize = '30px';
+        ocloseSpan.style.border = '1px solid #ddd';
+        ocloseSpan.innerHTML = '&nbsp;×&nbsp;';
+        ocloseSpan.addEventListener('click', (event) => {
+            container.style.height = this.containerheight;
+            container.style.width = this.containerwidth;
+            container.style.position = "relative";
+            container.style.zIndex = '0';
+            container.style.overflow = 'visible';
+            ocloseSpan.style.display = 'none';
+        });
+        container.appendChild(ocloseSpan);
+    }
 
     //获取画布中最高节点的y坐标
     getTheBestTop() {

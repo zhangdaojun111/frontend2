@@ -35,6 +35,10 @@ $('#workflow').on('click','#zoomOut',function(){
     workFlow.zoomOutNodeflow();
 })
 
+$('#workflow').on('click','#newWin',function(){
+    workFlow.maximizeNodeflow();
+})
+
 workFlowcreate.render($('#workflow-create'));
 
 workFlow.render($('#workflow'));
