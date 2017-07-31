@@ -25,7 +25,6 @@ let config={
     firstAfterRender:function(){
         let _this=this;
         Mediator.subscribe('form:dropDownSelect',function(data){
-            console.log(data);
             if(data.dfield !=_this.data.dfield){
                 return;
             }
@@ -69,7 +68,6 @@ let config={
                     }
                 }
             }
-            console.log(_this.data.value);
             if(_this.data.required){
                 Mediator.publish('form:checkRequired',data);
             }

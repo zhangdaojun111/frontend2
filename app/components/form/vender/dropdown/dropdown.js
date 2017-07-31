@@ -32,15 +32,17 @@ let config={
             }else{
                 $select.show();
             }
-            let value=$(this).html();
+            let showValue=$(this).html();
+            let value=$(this).data('value');
             if($(this).hasClass('option')){
-                _this.data.showValue=value;
-                _this.data.value=$(this).data('value');
+                _this.data.showValue=showValue;
+                _this.data.value=value;
                 _this.reload();
-                if(value=='请选择'){
+                if(showValue=='请选择' ||showValue == ''){
+                    showValue='';
                     value='';
                 }
-                let data={showValue:value,value:$(this).data('value'),dfield:_this.data.dfield};
+                let data={showValue:showValue,value:value,dfield:_this.data.dfield};
                 if(_this.data.index || _this.data.index==0){
                     data['index']= _this.data.index
                 }

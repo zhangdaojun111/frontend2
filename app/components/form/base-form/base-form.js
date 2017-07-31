@@ -103,7 +103,7 @@ let config={
         })
         Mediator.subscribe('form:checkRequired',function(data){
             _this.childComponent[data.dfield].data['value']=data.value;
-            if(data.showValue){
+            if(data.showValue || data.showValue==''){
                 _this.childComponent[data.dfield].data['showValue']=data.showValue;
             }
             if(data.value=='' || data.value.length==0 || data.value==null){
@@ -111,7 +111,6 @@ let config={
             }else{
                 _this.childComponent[data.dfield].data['requiredClass']='required2';
             }
-            console.log(_this.childComponent[data.dfield]);
             _this.childComponent[data.dfield].reload();
             // console.log($(this));
             $('.select-drop').hide();
