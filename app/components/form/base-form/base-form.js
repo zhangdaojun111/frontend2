@@ -1,10 +1,12 @@
 import Component from '../../../lib/component';
+import './base-form.scss';
 import TextArea from '../textarea-control/textarea-area'
 import Radio from '../radio-control/radio-control';
 import Input from '../input-control/input-control';
 import SelectControl from "../select-control/select-control";
 import YearControl from "../year-control/year-control";
 import BuildInControl from "../buildIn-control/buildIn-control";
+import MultiLinkageControl from "../multi-linkage-control/multi-linkage-control";
 let config={
     template:'',
     data:{
@@ -75,14 +77,27 @@ let config={
                     let yearControl = new YearControl(data);
                     yearControl.render(single);
                     _this.childComponent[data.dfield]=yearControl;
+
                     break;
                 case 'Buildin':
                     let buildInControl = new BuildInControl(data);
                     buildInControl.render(single);
                     _this.childComponent[data.dfield]=buildInControl;
                     break;
+                case 'MultiLinkage':
+                    let multiLinkageControl = new MultiLinkageControl(data);
+                    multiLinkageControl.render(single);
+                    _this.childComponent[data.dfield]=multiLinkageControl;
+                    break;
             }
         }
+        $('body').on('click.selectDrop',function(){
+            console.log($(this));
+            $('.select-drop').hide();
+        })
+    },
+    beforeDestory:function(){
+        $('body').off('.selectDrop');
     }
 }
 class BaseForm extends Component{

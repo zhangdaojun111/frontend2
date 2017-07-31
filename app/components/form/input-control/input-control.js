@@ -1,9 +1,9 @@
 import Component from '../../../lib/component';
 let config={
     template:`<div style="display: inline-block">{{label}}</div>
-<input type="text" class="{{class1}}" value="{{value}}"/>`,
+                <input type="text" value="{{value}}"/>`,
     data:{
-        class1:'required'
+
     },
     actions:{
     },

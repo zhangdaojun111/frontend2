@@ -4,8 +4,7 @@ import Mediator from '../../../lib/mediator';
 
 let config={
     template:`  <div class="clearfix">
-                    <div style="float: left">{{label}}</div>
-                    <div class="dropdown" style="float: left"></div>
+                    
                     <div style="float: left;">
                         {{#if required}}
                             <span id="requiredLogo" class="required" ></span>
@@ -30,7 +29,6 @@ let config={
             if(data.value=='' || data.value.length ==0 || data.value==null){
                 _this.el.find('#requiredLogo').get(0).className='required';
             }else{
-                console.log('111');
                 _this.el.find('#requiredLogo').get(0).className='required2';
             }
         });

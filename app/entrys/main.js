@@ -61,13 +61,16 @@ let el=$('<div style="border: 1px solid red;background:#fff;position: fixed;widt
 
 
 //在这里加对应的控件模板
-let template=`<div data-dfield="f24" data-type="textarea" data-width="500"/> 
+let template=`<div class="form">
+              <div data-dfield="f24" data-type="textarea" data-width="500"/> 
               <div data-dfield="f28" data-type="radio" data-width="300"/>
               <div data-dfield="f11" data-type="input" data-width="300"/> 
               <div data-dfield="f12" data-type="input" data-width="300"/> 
               <div data-dfield="f10" data-type="Select" data-width="300"/> 
               <div data-dfield="f6" data-type="Year" data-width="300"/> 
-              <div data-dfield="f5" data-type="Buildin" data-width="300"/> 
+              <div data-dfield="f5" data-type="Buildin" data-width="300"/>
+              <div data-dfield="f7" data-type="MultiLinkage" data-width="300"/>
+              </div> 
                 `;
 
 let data={
@@ -232,7 +235,7 @@ options:[
 ],
 real_type:"6",
 relevance_condition:{},
-required:0,
+required:1,
 required_perm:1,
 type:"Select",
 unvisible:0,
@@ -252,7 +255,7 @@ value:"",
             label: "年份框",
             real_type: "12",
             relevance_condition: {},
-            required: 0,
+            required: 1,
             required_perm: 1,
             type: "Year",
             unvisible: 0,
@@ -280,12 +283,27 @@ value:"",
             ],
 real_type:"0",
 relevance_condition:{},
-required:0,
+required:1,
 required_perm:1,
 source_table_id:"9040_HezGY74DU6jJ5hMGzwBYWh",
 type:"Buildin",
 unvisible:0,
 value:"",
+        },
+        {
+            datalist:{
+                '':["请选择", "请选择","请选择"],
+                '597694fdf2a5b7ec7266e283':["董升山", "5",'a'],
+                '5976950f2d9a07163c163eee':["董升山", "2",'b'],
+                '5976955e04830ffd904c4a0c':["于德萍", "26",'b'],
+                '59769503fc053a718afe7da7':["董升山", "4",'c'],
+                '59769514f2a5b7ec7266e286':["董升山", "1",'d'],
+                '597695395a9814e4c977e4e7':["于德萍", "28",'a'],
+                '5976954006d6e5987a65b758':["于德萍", "29",'c'],
+                '597695097804875c9bf7501b':["董升山", "3",'d'],
+                '597695587006447dd504b44f':["于德萍", "27",'b']
+            },
+            dfield:"f7"
         }
         ],
     error: "",
