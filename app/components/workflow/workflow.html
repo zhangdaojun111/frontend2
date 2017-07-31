@@ -1,4 +1,66 @@
-<div id="component-workflow">
-    <div id="container1"></div>
-    <input type="button" class="dialog" value="draw workflow" id="draw">
+
+        
+
+
+<div class="workflow-wrapper">
+    <div id="draw">发起工作流</div>
+    <div class="workflow-container">
+        <div class="workflow-main">
+            <div class="workflow-header flex">
+                <div class="tit">流程名称</div>
+                <div class="workflow-sel">
+                    <div class="sel-tit">产品要素管理流程</div>
+                </div>
+                <div class="set-comm-btn">设为常用流程</div>
+            </div>
+            <div class="workflow-form"></div>
+            <div class="workflow-foot">
+                <div class="workflow-box flex flex-start">
+                    <div class="workflow-box-l">
+                        <div class="tit">
+                            <span>关注人</span>
+                            <i></i>
+                        </div>
+                    </div>
+                    <div class="workflow-box-r">
+                        <div class="content">
+                            <div class="add-follow">添加关注人</div>
+                            <div class="follow-name-list">
+                                <span>管理员——超</span>
+                                <span>陆洋</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="workflow-box flex flex-start">
+                    <div class="workflow-box-l">
+                        <div class="tit">
+                            <span>工作流程</span>
+                            <i></i>
+                        </div>
+                    </div>
+
+                    <div class="workflow-box-r">
+                        <div class="content">
+                            <div class="flex">
+                                <div class="workflow-look">
+                                    <input type="button" id="zoomIn" value="zoomIn">
+                                    <input type="button" id="zoomOut" value="zoomOut">
+                                    <input type="button" id="newWin" value="newWin">
+                                </div>
+                                <div class="switch-node">
+                                    <i></i>
+                                    <span>节点图</span>
+                                </div>
+                            </div>
+
+                            <div id="workflow-draw-box"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
