@@ -58,7 +58,7 @@ class WorkFlow extends Component {
             //     }]
             // ],
             // Container: "container",
-            Container: $('#container1'),
+            Container: $('#workflow-draw-box'),
             ConnectionsDetachable: false //Connections是否可通过鼠标分离
         });
     }
@@ -213,7 +213,7 @@ class WorkFlow extends Component {
                     }
                     else {
                         // $("#container").append(html);
-                        $('#container1').append(html);
+                        $('#workflow-draw-box').append(html);
                     }
                     __this.AddEndpoints(id, startPoint, endPoint);
             }
