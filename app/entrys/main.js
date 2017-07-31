@@ -70,6 +70,7 @@ let template=`<div class="form">
               <div data-dfield="f6" data-type="Year" data-width="300"/> 
               <div data-dfield="f5" data-type="Buildin" data-width="300"/>
               <div data-dfield="f7" data-type="MultiLinkage" data-width="300"/>
+              <div data-dfield="f33" data-type="YearMonthControl" data-width="300"/>
               </div> 
                 `;
 
@@ -240,6 +241,30 @@ let data={
                 type:"Select",
                 unvisible:0,
                 value:"",
+            },
+            {
+                can_add_ite:0,
+                dfield: "f33",
+                dinput_type: "6",
+                dtype: "4",
+                effect: [],
+                expression: "",
+                field_content: {},
+                filterOptions:0,
+                history:0,
+                history_data:[],
+                id:"5173_sNVRLS8h3y648i7BFqohb",
+                is_view:0,
+                label:"年月选择",
+                linkage:{},
+                options:[],
+                real_type:"6",
+                relevance_condition:{},
+                required:1,
+                required_perm:1,
+                type:"YearMonthControl",
+                unvisible:0,
+                value:"2027-11",
             },
             {
                 dfield: "f6",

@@ -7,6 +7,7 @@ import SelectControl from "../select-control/select-control";
 import YearControl from "../year-control/year-control";
 import BuildInControl from "../buildIn-control/buildIn-control";
 import MultiLinkageControl from "../multi-linkage-control/multi-linkage-control";
+import YearMonthControl from "../year-month-control/year-month-control";
 import Mediator from "../../../lib/mediator";
 
 let config={
@@ -83,7 +84,11 @@ let config={
                     let yearControl = new YearControl(data);
                     yearControl.render(single);
                     _this.childComponent[data.dfield]=yearControl;
-
+                    break;
+                case 'YearMonthControl':
+                    let yearMonthControl = new YearMonthControl(data);
+                    yearMonthControl.render(single);
+                    _this.childComponent[data.dfield]=yearMonthControl;
                     break;
                 case 'Buildin':
                     let buildInControl = new BuildInControl(data);
