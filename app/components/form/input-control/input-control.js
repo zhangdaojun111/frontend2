@@ -1,9 +1,9 @@
 import Component from '../../../lib/component';
 let config={
     template:`<div style="display: inline-block">{{label}}</div>
-               <input type="text" value="{{value}}"/>{{value}}
-                `,
+<input type="text" class="{{class1}}" value="{{value}}"/>`,
     data:{
+        class1:'required'
     },
     actions:{
     },
@@ -11,6 +11,7 @@ let config={
 class InputControl extends Component {
     constructor(data){
         super(config,data);
+        console.log(this.data);
     }
 }
 
