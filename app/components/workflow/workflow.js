@@ -14,6 +14,10 @@ let config = {
         this.el.on('click', '.dialog', () => {
            
         });
+        console.log(this.el)
+        this.el.on('click', '.add-follow', () => {
+            console.log("ffsd")
+        });
     },
     beforeDestory: function(){
 

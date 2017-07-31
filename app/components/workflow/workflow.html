@@ -15,7 +15,7 @@
             </div>
             <div class="workflow-form"></div>
             <div class="workflow-foot">
-                <div class="workflow-box  flex flex-start">
+                <div class="workflow-box flex flex-start">
                     <div class="workflow-box-l">
                         <div class="tit">
                             <span>关注人</span>
@@ -32,23 +32,32 @@
                         </div>
                     </div>
                 </div>
-                <div class="workflow-box flex">
-                    <div class="tit">
-                        <span>工作流程</span>
-                        <i></i>
-                    </div>
-                    <div class="content">
-                        <div class="workflow-look">
-                            <input type="button" id="zoomIn" value="zoomIn">
-                            <input type="button" id="zoomOut" value="zoomOut">
-                            <input type="button" id="newWin" value="newWin">
-                        </div>
-                        <div class="switch-node">
+                <div class="workflow-box flex flex-start">
+                    <div class="workflow-box-l">
+                        <div class="tit">
+                            <span>工作流程</span>
                             <i></i>
-                            <span>节点图</span>
                         </div>
-                        <div id="workflow-draw-box"></div>
                     </div>
+
+                    <div class="workflow-box-r">
+                        <div class="content">
+                            <div class="flex">
+                                <div class="workflow-look">
+                                    <input type="button" id="zoomIn" value="zoomIn">
+                                    <input type="button" id="zoomOut" value="zoomOut">
+                                    <input type="button" id="newWin" value="newWin">
+                                </div>
+                                <div class="switch-node">
+                                    <i></i>
+                                    <span>节点图</span>
+                                </div>
+                            </div>
+
+                            <div id="workflow-draw-box"></div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
