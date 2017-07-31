@@ -1,12 +1,13 @@
 @import "../../../calendar";
-.items-th {
-    width: 100%;
-    display: block;
+.head-grid {
+    height: 33px;
+    width: calc((100% - 1px)/7 - 1px);
+    display: inline-block;
+    border-right: 1px solid $boder-color;
     border-bottom: 1px solid $boder-color;
-    .item-th {
-        display: inline-block;
-        width: calc(100%/7 - 1px);
-        line-height: 30px;
-        border-right: 1px solid $boder-color;
+    .date-head {
+        display: block;
+        line-height: 33px;
+        text-align: center;
     }
 }

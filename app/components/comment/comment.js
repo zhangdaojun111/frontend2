@@ -55,6 +55,7 @@ let config = {
         });
 
         Mediator.subscribe('comment:get', function(msg) {
+            console.log('msg', msg);
         })
     }
 }

@@ -6,6 +6,7 @@ import template from './calendar.html';
 import './calendar.scss';
 import LeftContent from './left-content/left-content';
 import RightContent from './right-content/right-content';
+import CalendarMin from './calendar.min/calendar.min'
 let config = {
     template: template,
     data: {

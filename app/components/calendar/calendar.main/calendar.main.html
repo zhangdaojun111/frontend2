@@ -1,11 +1,13 @@
 <div class="tool-bar">
     <div class="datepick">
-        <span>17/7/27</span>
+        <span>pre</span>
+        <span id="selected-date">{{chooseDate}}</span>
+        <span (click)="nextDate()">next</span>
     </div>
     <div class="date-btns">
-        <button class="btn">月</button>
-        <button class="btn">周</button>
-        <button class="btn">日</button>
+        <button class="btn" id="monthView">月</button>
+        <button class="btn" id="weekView">周</button>
+        <button class="btn" id="dayView">日</button>
     </div>
     <div class="date-btns">
         <a href="#">
@@ -33,7 +35,7 @@
     </div>
 </div>
 <div class="calendar-main-content">
-    <div class="month">
+    <!--<div class="month">
 
     </div>
     <div class="week">
@@ -41,5 +43,5 @@
     </div>
     <div class="today">
 
-    </div>
+    </div>-->
 </div>

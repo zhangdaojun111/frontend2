@@ -1,8 +1,7 @@
 @import "../../../assets/scss/core/base";
 $btn-bg-color: #4892FC;
 .tool-bar {
-    border-bottom: 1px solid #ddd;
-    height: auto;
+    //border-bottom: 1px solid #ddd;
     div {
         display: inline-block;
         line-height: 48px;
@@ -25,8 +24,8 @@ $btn-bg-color: #4892FC;
     }
 }
 .calendar-main-content {
-    height: calc(100% - 49px);
-    .month {
-        height: 100%;
-    }
+    height: calc(100% - 48px);
+    //.month, .week {
+    //    height: 100%;
+    //}
 }
