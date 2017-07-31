@@ -1,4 +1,4 @@
-import Componet from '../../../lib/component';
+import Component from '../../../lib/component';
 import TextArea from '../textarea-control/textarea-area'
 import Radio from '../radio-control/radio-control';
 import Input from '../input-control/input-control';
@@ -73,7 +73,7 @@ let config={
         }
     }
 }
-class BaseForm extends Componet{
+class BaseForm extends Component{
     constructor(formData){
         config.template=formData.template;
         config.data=formData.data;
