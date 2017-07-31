@@ -63,7 +63,12 @@ let el=$('<div style="border: 1px solid red;background:#fff;position: fixed;widt
 //在这里加对应的控件模板
 let template=`<div data-dfield="f24" data-type="textarea" data-width="500"/> 
               <div data-dfield="f28" data-type="radio" data-width="300"/>
-              <div data-dfield="f11" data-type="input" data-width="300"/> `;
+              <div data-dfield="f11" data-type="input" data-width="300"/> 
+              <div data-dfield="f12" data-type="input" data-width="300"/> 
+              <div data-dfield="f10" data-type="Select" data-width="300"/> 
+              <div data-dfield="f6" data-type="Year" data-width="300"/> 
+              <div data-dfield="f5" data-type="Buildin" data-width="300"/> 
+                `;
 
 let data={
     attachment: [],
@@ -108,7 +113,7 @@ let data={
         expression: "",
         field_content: {'8481_DjJrRwVzVC3HAKQujvBtZT': "需求", '392_6735kJkkiN6VNCi3DzVgGK': "Bug"},
         filterOptions:0,
-        group :[{value: "392_6735kJkkiN6VNCi3DzVgGK", label: "Bug"},{label: "需求",value: "8481_DjJrRwVzVC3HAKQujvBtZT"}],
+        group :[{value: "392_6735kJkkiN6VNCi3DzVgGK", label: "Bug",name:'f28'},{label: "需求",value: "8481_DjJrRwVzVC3HAKQujvBtZT",name:'f28'}],
         history:0,
         history_data:[],
         id:"1149_GHDQq6Guc6PkujnMBsBbwX",
@@ -141,8 +146,29 @@ let data={
         required_perm: 1,
         type: "Input",
         unvisible: 0,
-        value: ""
+        value: "哈哈",
+        class1:'required2'
     },
+        {
+            dfield: "f12",
+            dinput_type: "0",
+            dtype: "0",
+            effect: [],
+            expression: "",
+            field_content: {},
+            history: 0,
+            history_data: [],
+            id: "2300_8x6kYn9ydZ7VBUw6tLjUN4",
+            is_view: 0,
+            label: "测试component",
+            real_type: "0",
+            relevance_condition: {},
+            required: 0,
+            required_perm: 1,
+            type: "Input",
+            unvisible: 0,
+            value: "测试",
+        },
         {
         dfield: "f24",
         dinput_type: "1",
@@ -162,7 +188,106 @@ let data={
         type: "Textarea",
         unvisible: 0,
         value: ""
-    }],
+    },
+        {
+            can_add_ite:0,
+            dfield: "f10",
+            dinput_type: "6",
+            dtype: "4",
+            effect: [],
+            expression: "",
+            field_content: {
+                '1199_tD6FAqVFqjhR4x2NDh9W7A':"长期",
+'2020_dq54VMHCNydZFAgvoW8Zgi':"紧急",
+'3330_Wf9PyBsDWAwf6iQgKf5arC':"重要",
+'6720_zUBFEZHyKrUbTmwRECNfZX':"一般",
+'8817_H7UNLtjYeGXCQLMjkV5qMK':"重构"
+            },
+filterOptions:0,
+history:0,
+history_data:[],
+id:"5173_sNVRLS8h3y648i7BFqohbQ",
+is_view:0,
+label:"紧急程度",
+linkage:{},
+options:[
+    {
+        label: "",
+        value: ""
+    },{
+        label: "重构",
+        py: ["zg", "cg", "tg"],
+        value: "8817_H7UNLtjYeGXCQLMjkV5qMK",
+    },
+    {
+        label: "一般",
+        py: ["yb", "yp"],
+        value: "6720_zUBFEZHyKrUbTmwRECNfZX",
+    },
+    {
+        label: "重要",
+        py: ["zy", "cy", "ty"],
+        value: "3330_Wf9PyBsDWAwf6iQgKf5arC"
+    }
+],
+real_type:"6",
+relevance_condition:{},
+required:0,
+required_perm:1,
+type:"Select",
+unvisible:0,
+value:"",
+        },
+        {
+            dfield: "f6",
+            dinput_type: "12",
+            dtype: "0",
+            effect: [],
+            expression: "",
+            field_content: {},
+            history: 0,
+            history_data: [],
+            id: "5010_tsHN8kkQ4EwRgfYTpkSimf",
+            is_view: 0,
+            label: "年份框",
+            real_type: "12",
+            relevance_condition: {},
+            required: 0,
+            required_perm: 1,
+            type: "Year",
+            unvisible: 0,
+            value: ""
+        },
+        {
+            can_add_item: 0,
+            dfield: "f5",
+            dinput_type: "6",
+            dtype: "5",
+            effect: [],
+            expression: "",
+            field_content: {frontend_add: 0},
+            history: 0,
+            history_data: [],
+            id: "276_aKgBrrPj8nQZ5ZcJmWoCX2",
+            is_view: 0,
+            label: "内置姓名",
+            options: [
+{value: "", label: ""},
+{py: ["erdsxzs"], value: "5979d3e2d8e9e42f576b8c88", label: "erds小助手"},
+{py: ["gly","glz"], value: "5979d3e2d8e9e42f576b8c89", label: "管理员"},
+{py: ["zws"], value: "5979e48a41f77c586658e33c", label: "张文栓"},
+{py: ["ryj"], value: "5979e48a41f77c586658e33d", label: "任雨杰"},
+            ],
+real_type:"0",
+relevance_condition:{},
+required:0,
+required_perm:1,
+source_table_id:"9040_HezGY74DU6jJ5hMGzwBYWh",
+type:"Buildin",
+unvisible:0,
+value:"",
+        }
+        ],
     error: "",
     exclude_fields: [],
     field_effect_sort: ["_id", "f9", "f8", "f7", "f6", "f5", "f4", "f32", "f3", "f28", "f27", "f25", "f24", "f23", "f20"],

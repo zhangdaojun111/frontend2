@@ -2,7 +2,7 @@ import Component from '../../../lib/component';
 let config={
     template:`<div style="display: inline-block">{{label}}</div>
                {{#group}}
-                    <input type="radio" value="{{this.value}}"/>{{this.label}}
+                    <input type="radio" value="{{this.value}}" name="{{this.name}}"/>{{this.label}}
                 {{/group}}
                 `,
     data:{

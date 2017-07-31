@@ -4,10 +4,10 @@ let componentId = 10000;
 let map = new WeakMap();class Component {
 
     constructor(config,data) {
-        config = config || {};
+        config = _.defaultsDeep({},config) || {};
         if(data){
             //合并从請求或者父組件传递进来的data
-            let tempData=JSON.parse(JSON.stringify(data));
+            let tempData =JSON.parse(JSON.stringify(data));
             config.data=Object.assign({},config.data,tempData);
         }
         this.template = config.template || '';
