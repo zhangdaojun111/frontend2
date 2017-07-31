@@ -9,6 +9,5 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import Calendar from '../components/calendar/calendar';
 
 let calendar = new Calendar();
-console.log(calendar)
 
 calendar.render($('#calendar'));

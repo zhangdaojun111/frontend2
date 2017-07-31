@@ -17,6 +17,7 @@ let config = {
     afterRender: function() {
         this.el.on('click', 'input', () => {
             this.actions.delete();
+
         });
     }
 }
@@ -26,7 +27,6 @@ class Item extends Component {
         config.data = data;
         super(config);
     }
-
 
 }
 

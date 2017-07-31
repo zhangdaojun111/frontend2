@@ -6,7 +6,6 @@ let map = new WeakMap();
 class Component {
 
     constructor(config) {
-        console.log(config);
         config = config || {};
         this.template = config.template || '';
         this.data = config.data || {};
