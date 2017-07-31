@@ -8,10 +8,10 @@ import YearControl from "../year-control/year-control";
 import BuildInControl from "../buildIn-control/buildIn-control";
 import MultiLinkageControl from "../multi-linkage-control/multi-linkage-control";
 import Mediator from "../../../lib/mediator";
+
 let config={
     template:'',
-    data:{
-    },
+    data:{},
     childComponent:{},
     actions:{
         // init:function(){
@@ -48,6 +48,7 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
+        let cache_old = {};
         this.set('childComponent',{});
         for(let data of _this.data.data){
             let single=_this.el.find('div[data-dfield='+data.dfield+']');
@@ -55,6 +56,7 @@ let config={
             if(data.required){
                 data['requiredClass']=data.value==''?'required':'required2';
             }
+            cache_old[data.dfield] = data.value;
             //在这里根据type创建各自的控件
             switch (type){
                 case 'radio':
@@ -95,6 +97,7 @@ let config={
                     break;
             }
         }
+
         $('body').on('click.selectDrop',function(){
             $('.select-drop').hide();
         })
@@ -106,6 +109,16 @@ let config={
             }
             console.log(_this.childComponent[data.dfield]);
             _this.childComponent[data.dfield].reload();
+            // console.log($(this));
+            $('.select-drop').hide();
+        })
+
+        //添加提交按钮
+        _this.el.append('<div style="position: fixed;bottom: 20px;right: 20px;"><button id="save">提交</button></div>')
+
+        //提交按钮事件绑定
+        $(_this.el).find("#save").on('click',function () {
+            _this.onSubmit(_this.childComponent,cache_old);
         })
     },
     beforeDestory:function(){
@@ -117,6 +130,48 @@ class BaseForm extends Component{
         config.template=formData.template;
         config.data=formData.data;
         super(config);
+    }
+    //提交表单数据
+    onSubmit(newData,oldData){
+        //数据初始化
+        var new_data = {
+            table_id:'',
+            real_id:'',
+            temp_id:'',
+            parent_table_id:'',
+            parent_real_id:'',
+            parent_temp_id:'',
+        };
+        var old_data = {
+            table_id:'',
+            real_id:'',
+            temp_id:'',
+            parent_table_id:'',
+            parent_real_id:'',
+            parent_temp_id:'',
+        };
+        //数据获取
+        for(let i in newData){
+            new_data[i] = newData[i].data.value;
+            old_data[i] = oldData[i];
+        }
+        //数据转化成字符串
+        new_data = JSON.stringify(new_data);
+        old_data = JSON.stringify(old_data);
+        //发送数据
+        let postData = {
+            data:new_data,
+            cache_new:new_data,
+            cache_old:old_data,
+            focus_users:[],
+            table_id:'123123',
+            flow_id:'',
+            parent_table_id:'',
+            parent_real_id:'',
+            parent_temp_id:'',
+            parent_record_id:''
+        }
+        console.log(postData)
     }
 }
 export default BaseForm
