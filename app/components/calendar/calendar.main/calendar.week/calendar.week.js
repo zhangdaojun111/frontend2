@@ -20,12 +20,7 @@ let config = {
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
-        //this.append(new TableGrid({data:this.data.weekListHead, type: 'week'}), this.el.find('.week-head'));
-        // this.data.weekListHead.forEach(item => {
-        //     console.log(item.time);
-        //     this.append(new TableGrid({headTitle: item.time, type: 'head'}), this.el.find('.week-head'));
-        //
-        // });
+
         this.append(new CalendarTableHeader({headTitle: this.data.weekListHead, type: 'week'}), this.el.find('.week-head'));
 
         for(let i = 0; i<7; i++) {

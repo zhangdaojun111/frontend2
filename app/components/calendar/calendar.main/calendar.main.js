@@ -9,15 +9,18 @@ import CalendarMonth from './calendar.month/calendar.month';
 import CalendarWeek from './calendar.week/calendar.week';
 import CalendarDay from './calendar.day/calendar.day';
 
-import {DataTest} from '../../../lib/test';
+import {CalendarService} from '../../../service/calendar.service';
 
 let config = {
     template: template,
     data: {
-        chooseDate: '',
+        leftChooseDate: '',
         monthDataList: [],
         weekDataList: [],
         todayStr: '',
+        calendarContent: 'month',
+        selectData: {},
+        selectedDateShow: '2121'
     },
     actions: {
         getDayNumOfMonth: function ( year , month ) {
@@ -65,7 +68,6 @@ let config = {
                     arr  =[];
                 }
             }
-
             let pre_m = m,
                 pre_y = y;
             if( pre_m === 0 ){
@@ -118,7 +120,8 @@ let config = {
                     j++;
                 }
             }
-            console.log(this.data.monthDataList);
+
+
         },
 
         createWeekCalendar: function (){
@@ -127,7 +130,7 @@ let config = {
             for( let data of this.data.monthDataList ){
                 //console.log(this.data.monthDataList);
                 for( let d of data['weekList'] ){
-                    if( d['dataTime'] === this.data.chooseDate ){
+                    if( d['dataTime'] === this.data.leftChooseDate ){
                         weekData = data['weekList'];
                         break;
                     }
@@ -143,6 +146,68 @@ let config = {
             this.data.weekDataList.push( weekData );
         },
 
+        changeMonth: function (lr) {
+            let y = this.data.selectData['y'];
+            let m = this.data.selectData['m'];
+            if( m > 0 && lr === 'l' ){
+                this.data.selectData['m'] = m - 1;
+            }
+            if( m === 0 && lr === 'l' ){
+                this.data.selectData['y'] = y - 1;
+                this.data.selectData.m = 11;
+            }
+            if( m < 11 && lr === 'r' ){
+                this.data.selectData['m'] = m + 1;
+            }
+            if( m === 11 && lr === 'r' ){
+                this.data.selectData['y'] = y + 1;
+                this.data.selectData['m'] = 0;
+            }
+
+            if(lr === 'l') {
+                this.data.selectedDateShow = y +'年'+ m +'月';
+                $('.nowDate').html(this.data.selectedDateShow);
+                this.actions.createMonthCalendar(y, m-1);
+            } else if (lr === 'r') {
+                this.data.selectedDateShow = y +'年'+ (m+2) +'月';
+                $('.nowDate').html(this.data.selectedDateShow);
+                this.actions.createMonthCalendar(y, m+1);
+            }
+        },
+
+        changeWeek: function (lr) {
+            let slect = this.data.selectData.y + "-" + this.actions.addZero( this.data.selectData.m + 1 ) + "-" + this.actions.addZero( this.selectData.d );
+            let oldWeekDay = new Date(slect).getTime();
+            if( lr === 'l' ){
+                oldWeekDay = oldWeekDay-7*24*60*60*1000;
+            }else if( lr === 'r' ){
+                oldWeekDay = oldWeekDay+7*24*60*60*1000;
+            }
+            let nweTime = new Date(oldWeekDay);
+            let year = nweTime.getFullYear(),
+                month = nweTime.getMonth(),
+                day = nweTime.getDate(),
+                week = nweTime.getDay();
+            this.data.selectData = {'y':year, 'm':month, 'd':day, 'w':week};
+
+        },
+
+        changeDay: function (lr) {
+            let oldDate = this.data.selectData.y+'-'+this.actions.addZero(this.data.selectData.m+1)+'-'+this.actions.addZero(this.data.selectData.d);
+            let oldMyTime = new Date(oldDate).getTime();
+            if( lr === 'l' ){
+                oldMyTime = oldMyTime - 24*60*60*1000;
+            }else if( lr === 'r' ) {
+                oldMyTime = oldMyTime + 24*60*60*1000;
+            }
+            let nweTime = new Date(oldMyTime);
+            let year = nweTime.getFullYear(),
+                month = nweTime.getMonth(),
+                day = nweTime.getDate(),
+                week = nweTime.getDay();
+            this.selectData = {'y':year, 'm':month, 'd':day, 'w':week};
+        },
+
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
@@ -152,25 +217,50 @@ let config = {
             month = oDate.getMonth(),
             day = oDate.getDate(),
             week = oDate.getDay();
-        console.log(month);
-        this.todayStr = year + "-" + this.actions.addZero( month + 1 ) + "-" + this.actions.addZero( day );
-        this.data.chooseDate = '2017-07-29';
+        this.data.selectData = Object.assign({}, {'y': year, 'm':month, 'd':day, 'w':week});
+        console.log(this.data.selectData);
+        this.data.todayStr = year + "-" + this.actions.addZero( month + 1 ) + "-" + this.actions.addZero( day );
+        this.data.leftChooseDate = '2017-07-29';
+        this.data.selectedDateShow = year+'年'+(month+1) +'月';
+        $('.nowDate').html(this.data.selectedDateShow);
         this.actions.createMonthCalendar(year, month);
         this.actions.createWeekCalendar();
-
         this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
 
         this.el.on('click', '#monthView', () => {
+            //CalendarService.getCalendarListData();
             $('.calendar-main-content').empty();
+            this.data.calendarContent = 'month';
             this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
         }).on('click', '#weekView', () => {
+            this.data.calendarContent = 'week';
             $('.calendar-main-content').empty();
             this.append(new CalendarWeek(this.data.weekDataList), this.el.find(".calendar-main-content"));
         }).on('click', '#dayView', () => {
+            this.data.calendarContent = 'day';
             $('.calendar-main-content').empty();
             this.append(new CalendarDay(), this.el.find(".calendar-main-content"));
+        }).on('click', '.pre-date', () => {
+            if(this.data.calendarContent === 'month') {
+                this.actions.changeMonth('l');
+                $('.calendar-main-content').empty();
+                this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
+            } else if (this.data.calendarContent === 'week') {
+                this.actions.changeWeek('l');
+            } else if (this.data.calendarContent === 'day') {
+                this.actions.changeDay('l');
+            }
+        }).on('click', '.next-date', () => {
+            if(this.data.calendarContent === 'month') {
+                this.actions.changeMonth('r');
+                $('.calendar-main-content').empty();
+                this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
+            } else if (this.data.calendarContent === 'week') {
+                this.actions.changeWeek('r');
+            } else if (this.data.calendarContent === 'day') {
+                this.actions.changeDay('r');
+            }
         });
-
     }
 };
 

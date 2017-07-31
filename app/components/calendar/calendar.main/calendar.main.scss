@@ -1,5 +1,6 @@
 @import "../../../assets/scss/core/base";
 $btn-bg-color: #4892FC;
+
 .tool-bar {
     //border-bottom: 1px solid #ddd;
     div {
@@ -10,16 +11,38 @@ $btn-bg-color: #4892FC;
         padding: 0px 20px;
     }
     .date-btns {
-        //.btn {
-        //    padding: 2px 15px;
-        //    background: $btn-bg-color;
-        //}
+        .btn-change {
+            display: inline-block;
+            line-height: 28px;
+            padding: 0px 28px;
+            border: 1px solid $btn-bg-color;
+            border-radius: 5px;
+            margin-right: 15px;
+            &:hover {
+                background: $btn-bg-color;
+                color: #fff;
+            }
+        }
+        .btn {
+            margin-right: 15px;
+        }
     }
     .tools-right {
         float: right;
         padding-right: 10px;
         .count {
             margin-right: 20px;
+        }
+        .search-input {
+            height: 22px;
+        }
+        .search-btn {
+            display: inline-block;
+            line-height: 28px;
+            padding: 0px 20px;
+            background: $btn-bg-color;
+            color: #fff;
+            margin-top: 1px;
         }
     }
 }

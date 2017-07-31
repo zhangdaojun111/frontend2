@@ -21,7 +21,6 @@ let config = {
             })
         } else if (this.data.type === 'week') {
             this.data.headData.forEach(item => {
-                console.log(item);
                 $('.header-title').append('<td class="head-grid"><span class="date-head">'+ item.time +'</span></td>');
             })
         }
