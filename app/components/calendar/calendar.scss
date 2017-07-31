@@ -1,6 +1,7 @@
 .calendar-container {
 
 }
+html,body{height: 100%;}
 .left-calendar-box{}
 .right-content {
  position:absolute;
@@ -15,6 +16,7 @@
  width:220px;
  border-right:1px solid #605654 ;
  height: 100%;
+ position: fixed;
 }
 .right-content-workflow {
  float:right;
