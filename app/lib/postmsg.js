@@ -28,7 +28,9 @@ export const PMENUM = {
     open_iframe_dialog: '0',
     close_dialog: '1',
     recieve_data: '2',
-    open_component_dialog: '3'
+    open_component_dialog: '3',
+    iframe_active: '4',
+    iframe_silent: '5'
 }
 
 /**
@@ -136,7 +138,9 @@ export const PMAPI = {
      * @param msg
      */
     sendToChild: function(iframe, msg) {
-        iframe.postMessage(msg,location.origin);
+        if (iframe.contentWindow) {
+            iframe.contentWindow.postMessage(msg,location.origin);
+        }
     },
 
     /**
