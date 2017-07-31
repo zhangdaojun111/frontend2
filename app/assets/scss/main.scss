@@ -73,6 +73,25 @@ html, body {
         }
     }
 
+    .tabs {
+        p {
+            float: left;
+            width: 90px;
+            line-height: 18px;
+            color: #666;
+            font-size: 12px;
+            cursor: pointer;
+            text-align: center;
+            &:first-child {
+                border-right: 1px solid #666;
+            }
+            &.active {
+                color: #fff;
+            }
+        }
+        margin-bottom: 10px;
+    }
+
     .search {
         background-image: url("../images/search.png");
         background-repeat: no-repeat;

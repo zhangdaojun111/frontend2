@@ -1,53 +1,67 @@
 import Component from '../../../../lib/component';
 import template from './item.html';
-
 import Mediator from '../../../../lib/mediator';
 
 let config = {
     template: template,
-    data: {},
+    data: {
+    },
     actions: {
-        search: function() {
-
+        showChildren: function() {
+            this.el.find('> .menu-full-item > .list').show();
+            this.el.find('> .menu-full-item > .row .icon').removeClass('ui-state-focus').addClass('ui-state-active');
+            this.el.find('> .menu-full-item > .row > .icon > .ui-icon').removeClass('ui-icon-caret-1-e').addClass('ui-icon-caret-1-s');
+            this.data.display = true;
+            this.findBrothers().forEach((brother) => {
+                brother.actions.hideChildren();
+            });
+        },
+        hideChildren: function() {
+            this.el.find('> .menu-full-item > .list').hide();
+            this.el.find('> .menu-full-item > .row > .icon').removeClass('ui-state-active').addClass('ui-state-focus');
+            this.el.find('> .menu-full-item > .row > .icon > .ui-icon').removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-e');
+            this.data.display = false;
         },
         onItemClick: function() {
-            if (this.data.children && this.data.children.length) {
+            if (this.data.items && this.data.items.length) {
                 if (this.data.display === true) {
-                    this.el.find('> .menu-full-item > .list').hide();
-                    this.data.display = false;
+                    this.actions.hideChildren();
                 } else {
-                    this.el.find('> .menu-full-item > .list').show();
-                    this.data.display = true;
+                    this.actions.showChildren();
                 }
             } else {
                 Mediator.emit('menu:item:openiframe', {
-                    id: this.data.id,
-                    name: this.data.name,
+                    id: this.data.folder_id,
+                    name: this.data.label,
                     url: this.data.url
                 })
             }
-
         }
     },
     afterRender: function () {
-        if (this.data.children) {
-            this.data.children.forEach((data) => {
+        if (this.data.items) {
+            this.data.items.forEach((data) => {
                 let newData = _.defaultsDeep({}, data, {
                     root: false,
-                    offset: this.data.offset + 20
+                    offset: this.data.offset + 20,
+                    searchDisplay: true
                 });
-                this.append(new FullMenuItem(newData), this.el.find('> .menu-full-item > .list'));
+                let component = new FullMenuItem(newData);
+                this.append(component, this.el.find('> .menu-full-item > .list'));
             })
         }
         if (this.data.root !== true) {
+            let offset = this.data.offset;
+            if (this.data.items) {
+                offset = this.data.offset - 20;
+            }
             this.el.find('> .menu-full-item > .row').css({
-                'padding-left': this.data.offset + 'px'
+                'padding-left': offset + 20 + 'px'
             })
         }
         this.el.on('click', '> .menu-full-item > .row', () => {
             this.actions.onItemClick();
         })
-
     },
     beforeDestory: function () {
 

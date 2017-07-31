@@ -1,12 +1,14 @@
 @import "../../../assets/scss/core/base";
 .menu-full {
     height: 100%;
+    user-select:none;
     .list {
         .menu-full-item {
             .row {
                 padding: 12px 0 12px 10px;
-                line-height: 16px;
+                line-height: 14px;
                 cursor: pointer;
+                font-size: 14px;
                 &:hover, &.current {
                     background-color: $aside-top-bg;
                 }
@@ -15,6 +17,16 @@
                     height: 16px;
                     float: left;
                     margin-right: 10px;
+                    border: 0 none;
+                    background-color: transparent;
+                    img {
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+                    }
+                    &.arrow {
+                        margin-right: 4px;
+                    }
                 }
                 .name {
                     color: #FFFFFF;
@@ -25,6 +37,11 @@
             }
             .list {
                 display: none;
+            }
+            .menu-full-item {
+                .row {
+
+                }
             }
         }
     }

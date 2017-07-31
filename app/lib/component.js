@@ -9,7 +9,7 @@ class Component {
         config = _.defaultsDeep({},config) || {};
         if(data){
             //合并从請求或者父組件传递进来的data
-            let tempData=JSON.parse(JSON.stringify(data));
+            let tempData=_.defaultsDeep({}, data);
             config.data=_.defaultsDeep({},config.data,tempData);
         }
         this.template = config.template || '';
@@ -105,6 +105,19 @@ class Component {
         }
 
         return this;
+    }
+
+    findBrothers() {
+        let doms = this.el.parent().find('> [component]');
+        let coms = [];
+        let that = this;
+        doms.each(function() {
+            let component = map.get(this);
+            if (component !== that) {
+                coms.push(component);
+            }
+        });
+        return coms;
     }
 
 }

@@ -1,0 +1,43 @@
+@import "../../../assets/scss/core/base";
+
+#header-wrap {
+    height: $header-height;
+    padding-right: 50px;
+    .search {
+        width: 180px;
+        height: 22px;
+        float: right;
+        outline: none;
+        background: rgba(228, 232, 235, 1);
+        margin-top: 18px;
+        border: 1px solid rgba(228, 228, 228, 1);
+        border-radius: 6px;
+        color: #666;
+        text-indent: 10px;
+        font-size: 12px;
+        &:focus {
+            background: #FFFFFF;
+        }
+    }
+    .icon {
+        cursor: pointer;
+        width: 24px;
+        height: 24px;
+        margin: 18px 20px 0 0;
+        background-position: center;
+        background-repeat: no-repeat;
+        float: right;
+        &.message {
+            background-image: url("../../../assets/images/task.png");
+        }
+        &.task {
+            background-image: url("../../../assets/images/task.png");
+        }
+        &.bi {
+            background-image: url("../../../assets/images/bi.png");
+        }
+        &.calendar {
+            background-image: url("../../../assets/images/calendar.png");
+        }
+    }
+}
