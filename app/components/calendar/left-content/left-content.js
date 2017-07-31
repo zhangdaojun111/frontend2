@@ -18,16 +18,20 @@ class Leftcontent extends Component {
         super(config);
     }
 }
-let contentStatus = 0;
+let contentStatus = 1;
 function contentHide(){
 	if(contentStatus == 1){
+		$(".taskbar").animate({height:"400px"});
 		$(".item-title").animate({marginTop:"420px"});
-	 	$(".item-content").hide();
+	 	$(".item-content").hide();	 	
 	 	contentStatus = 0;
 	}
 	else if(contentStatus == 0){
+		$(".taskbar").animate({height:"150px"},1);
 		$(".item-title").animate({marginTop:"100px"});
 	 	$(".item-content").show();
+	 	
+	 	
 	 	contentStatus = 1;
 	}
 }

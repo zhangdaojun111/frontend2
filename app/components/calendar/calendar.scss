@@ -25,6 +25,7 @@ $bg-color: rgba(14, 122, 239, 0.290196);
     .calendar-container {
         height: 100%;
         .left-content {
+            border-right: 1px solid #ddd;
             display: inline-block;
             width: 200px;
             float:left;
@@ -35,8 +36,7 @@ $bg-color: rgba(14, 122, 239, 0.290196);
 
         .right-content {
             display: inline-block;
-            float: right;
-   
+            float: right; 
             display: inline-block;
             width: 200px;
             min-width: 200px;
@@ -44,12 +44,10 @@ $bg-color: rgba(14, 122, 239, 0.290196);
             overflow: auto;
         }
         .main-content {
-            //border-left: 1px solid #ddd;
-            //border-right: 1px solid #ddd;
             height: calc(100% - 40px);
             position: absolute;
             display: inline-block;
-            width: calc(100% - 400px);
+            width: calc(100% - 410px);
             min-width: 800px;
             max-height: 890px;
             overflow: auto;
@@ -71,25 +69,3 @@ $bg-color: rgba(14, 122, 239, 0.290196);
     }
 
 }
-//html,body{height: 100%;}
-//.left-calendar-box{}
-//.right-content {
-// position:absolute;
-// background:red;
-// width:468px;
-// margin-right: auto;
-// margin-left: auto;
-// padding: 0px;
-//}
-//.left-content {
-// float:left;
-// width:220px;
-// border-right:1px solid #605654 ;
-// height: 100%;
-// position: fixed;
-//}
-//.right-content{
-//   position: fixed;
-// float:right;
-// width:220px
-//}
