@@ -17,7 +17,7 @@ let config = {
         columnDefs : [],
         rowData : [],
         footerData: [],
-        cssTheme: 'ag-bootstrap',
+        cssTheme: 'ag-fresh',
         floatingFilter: false
     },
     gridOptions: GridOptions,
