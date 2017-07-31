@@ -19,4 +19,12 @@ $('#workflow').on('click','#draw',function(){
     workFlow.drawWorkFlow();
 })
 
+$('#workflow').on('click','#zoomIn',function(){
+    workFlow.zoomInNodeflow();
+})
+
+$('#workflow').on('click','#zoomOut',function(){
+    workFlow.zoomOutNodeflow();
+})
+
 workFlow.render($('#workflow'));

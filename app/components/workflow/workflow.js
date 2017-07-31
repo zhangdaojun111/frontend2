@@ -23,7 +23,8 @@ let config = {
 class WorkFlow extends Component {
     constructor(res,el){
         super(config);
-
+        this.el=document.getElementById('workflow');
+        console.log(el);
         this.nodesData=res.data[0].node;
         this.nodesWidth = res["data"][0]["node_width"];
         this.frontendid2eventname = res["data"][0]["frontendid2eventname"];
@@ -31,7 +32,7 @@ class WorkFlow extends Component {
         this.requiredfieldsNodeList = res["data"][0]["frontendid2requiredfields"];
 
 
-
+        this.nodeflowSize = 1;
         this.containerwidth = '100%';
         this.containerheight = '100px';
         this.nodesWidth='60px';
@@ -273,6 +274,25 @@ class WorkFlow extends Component {
             var targetUUID = toId + targetAnchors[j];
             allTargetEndpoints.push(this.jsPlumbInstance.addEndpoint(toId, targetEndpoint, { anchor: targetAnchors[j], uuid: targetUUID }));
         }
+    }
+    //放大工作流节点
+    zoomInNodeflow($event) {
+        console.log(1);
+        let container = document.querySelector('#container1');
+        this.nodeflowSize += 0.1;
+        container.style.width = (+this.containerwidth.split('px')[0]) * (+this.nodeflowSize) + 'px';
+        container.style.height = ((+this.containerheight.split('px')[0]) * (+this.nodeflowSize)) + 'px';
+        container.style.transformOrigin = '0 0';
+        container.style.transform = 'scale(' + this.nodeflowSize + ')';
+    }
+    //缩小工作流节点
+    zoomOutNodeflow($event) {
+        let container = document.querySelector('#container1');
+        this.nodeflowSize -= 0.1;
+        container.style.transformOrigin = '0 0';
+        container.style.transform = 'scale(' + this.nodeflowSize + ')';
+        container.style.width = (+this.containerwidth.split('px')[0]) * (+this.nodeflowSize) + 'px';
+        container.style.height = ((+this.containerheight.split('px')[0]) * (+this.nodeflowSize)) + 'px';
     }
 
     //获取画布中最高节点的y坐标
