@@ -1,1 +1,9 @@
-@import "../../../../assets/scss/core/base";
+
+$tr-fontSize: 12px;
+
+td{font-size: $tr-fontSize !important;vertical-align:middle;cursor: pointer;margin: 2px !important;}
+tr{line-height: 28px !important;}
+td{text-align: center;width: 30px;font-size: 12px;}
+.next-month-day,.last-month-day{color: rgb(165, 153, 175);}
+.now-month-day:hover,.last-month-day:hover,.next-month-day:hover{background-color:#12d8dd; border-radius: 50%;-moz-border-radius: 50%;-webkit-border-radius: 50%;}
+.now-day{background-color:#12d8dd; border-radius: 50%;-moz-border-radius: 50%;-webkit-border-radius: 50%;}

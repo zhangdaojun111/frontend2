@@ -1,12 +1,13 @@
-tr{line-height: 28px;}
-td{text-align: center;width: 30px;font-size: 12px;}
 .create{color: #FF7F50;}
 .left-content-top{padding-top: 10px;padding-bottom: 10px;margin-left: 15px;}
 .left-calendar-box{border-bottom: 1px solid #605654;padding-bottom: 30px;}
-.left-calendar-box-top{margin-left: 30px;margin-bottom: 10px;font-size: 14px;}
+.left-calendar-box-top{text-align: center;margin-bottom: 10px;font-size: 14px;}
 .set-calendar{margin-left: 50px;color: #FF7F50;}
 .parting-line{width: 200px;position: absolute;left: 5px;margin-top: 30px;color: #605654;}
-.taskbar{}
+.taskbar{   height:150px;
+            position: absolute;
+           display: inline-block;
+            overflow: auto;}
 .chk_1 { 
     display: none; 
 } 
@@ -46,7 +47,7 @@ label{font-size: 17px;}
     padding: 1px 0 0 0; 
     vertical-align: text-top; 
 } 
-.label-task{padding-top: 5px;padding-bottom: 5px;width: 200px;}
+.label-task{padding-top: 5px;padding-bottom: 5px;width: 200px - 15px;}
 .label-task:hover{background-color: #a4aaae;}
 
 //隐藏显示框样式
@@ -55,3 +56,5 @@ label{font-size: 17px;}
 .item-title{border-bottom: 1px solid #a4aaae;border-top: 1px solid #a4aaae;width: 200px;height: 22px;padding-top: 5px;margin-top: 100px; position:absoluet;top:0;left:0;}
 .cate-hide-icon{margin-left: 180px;margin-top: -12px;}
 .cate-hide-title{padding-top: 0px;margin-left: 30px;padding-left: 10px;border-left: 3px solid #205cdc;}
+.cate-hide{position: fixed;position: absolute;bottom: 5px;}
+

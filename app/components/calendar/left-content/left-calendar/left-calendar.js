@@ -34,19 +34,19 @@ let date = new Date(),
 	  let y = Number(yy.toString().substring(2,4));
 	   let d = 1;
 	  //蔡勒公式
-	  var week = y + parseInt(y/4) + parseInt(c/4) - 2*c + parseInt(26*(m+1)/10) + d - 1;
+	  let week = y + parseInt(y/4) + parseInt(c/4) - 2*c + parseInt(26*(m+1)/10) + d - 1;
 	 
 	  week = week < 0 ? (week%7+7)%7 : week%7;
-	 var calendarTable = [];
-	  for(var i=0 ;i<42;i++){
+	 let calendarTable = [];
+	  for(let i=0 ;i<42;i++){
 	     　　　calendarTable[i] = "";　//清空原来的text文本
 	  }
 	 let daysNowMonth = getdays(yy,mm);
-	  for(var i = 0;i < daysNowMonth; i++){
+	  for(let i = 0;i < daysNowMonth; i++){
 	  	calendarTable[week % 7 +i] = i+1;　　　
 	  }
 	  let daysLastMonth = getLastMonthDays(yy,mm);
-	  for(var i = 0;i < week % 7;i++){
+	  for(let i = 0;i < week % 7;i++){
 	  	calendarTable[week % 7 - i -1] = daysLastMonth - i;
 	  }
 	  for(let i = 0;i<42-week % 7-daysNowMonth;i++){
@@ -60,20 +60,75 @@ let date = new Date(),
 let config = {
     template: template,   
     actions: {
-    	loadcalendarDate:function(year,month,day){
-    		$(".now-year").html(year);
-    		$(".now-month").html(month);
+    	loadcalendarDate:function(yy,mm,dd){
+    		$(".now-year").html(yy);
+    		$(".now-month").html(mm);
     		$("#calendar-body").html();
     		let strhtml = "";
-    		var dayTables = initCal(year,month,day);
-    		for(let i = 0;i < 6;i++){
-    			strhtml +="<tr></tr><tr>";
+    		let dayTables = initCal(yy,mm,dd);
+    		for(let i = 0;i < 2;i++){
+    			strhtml +="<tr>";
     			for(let j = 0;j < 7;j++){
-    				strhtml+="<td>"+ dayTables[i*7+j] +"</td>";
+    				if(14<dayTables[i*7+j])
+    				{strhtml+="<td class='last-month-day'>"+ dayTables[i*7+j] +"</td>";}
+    				else if(dayTables[i*7+j] == day && mm == month && yy == year)
+						{
+							strhtml+="<td class='now-month-day now-day'>"+ dayTables[i*7+j] +"</td>";
+						}
+						else
+						{strhtml+="<td class='now-month-day'>"+ dayTables[i*7+j] +"</td>";}
+					}
+    			
+    			strhtml +="</tr>";
+    		}
+    		for(let i = 2;i < 4;i++){
+    			strhtml +="<tr>";
+    			for(let j = 0;j < 7;j++){    				
+    				if(dayTables[i*7+j]==day&& mm == month&&yy == year)
+						{
+							strhtml+="<td class='now-month-day now-day'>"+ dayTables[i*7+j] +"</td>";
+						}
+						else
+						{strhtml+="<td class='now-month-day'>"+ dayTables[i*7+j] +"</td>";}
+					}
+    			
+    			strhtml +="</tr>";
+    		}
+    		for(let i = 4;i < 6;i++){
+    			strhtml +="<tr>";
+    			for(let j = 0;j < 7;j++){
+    				if(dayTables[i*7+j] < 14)
+    				{strhtml+="<td class='next-month-day'>"+ dayTables[i*7+j] +"</td>";}
+    				else if(dayTables[i*7+j]==day&& mm == month&&yy == year)
+						{
+							strhtml+="<td class='now-month-day now-day'>"+ dayTables[i*7+j] +"</td>";
+						}
+						else
+						{strhtml+="<td class='now-month-day'>"+ dayTables[i*7+j] +"</td>";}
     			}
     			strhtml +="</tr>";
     		}
     		$("#calendar-body").html(strhtml);
+    		$(".now-month-day").bind("click",function(){		 				 		   
+		 		   let nowYear = $(".now-year").html(),
+		 		       nowMonth = $(".now-month").html(),
+		 		       nowDay = $(this).html();
+		 		   alert(nowYear+nowMonth+nowDay);
+		 	   });
+		 	   $(".next-month-day").bind("click",function(){		 				 		   
+		 		   let nowYear = $(".now-year").html(),
+		 		       nowMonth = $(".now-month").html(),
+		 		       nowDay = $(this).html();
+		 		       alert(nowYear+nowMonth+nowDay);
+		 		       config.actions.loadCalendarNextMonthData();
+		 	   });
+		 	   $(".last-month-day").bind("click",function(){		 				 		   
+		 		   let nowYear = $(".now-year").html(),
+		 		       nowMonth = $(".now-month").html(),
+		 		       nowDay = $(this).html();
+		 		       alert(nowYear+nowMonth+nowDay);
+		 		       config.actions.loadCalendarLastMonthData();
+		 	   });
     	},
     	loadCalendarLastMonthData:function(){
     		let nowYear = $(".now-year").html();
@@ -101,9 +156,12 @@ let config = {
     	}
     },
     afterRender: function() {
-
+			
     }
 };
+function test(){
+	alert(1);
+}
 $(function(){
 	config.actions.loadcalendarDate(year,month,day); 
 	$(".change-month-left").bind("click",function(){
@@ -112,6 +170,7 @@ $(function(){
 	 $(".change-month-right").bind("click",function(){
 	 	config.actions.loadCalendarNextMonthData();
 	 });
+	
 });
 class Leftcalendar extends Component {
     constructor() {
