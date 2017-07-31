@@ -105,5 +105,8 @@ export const fieldTypeService = {
     noToolTips: function (data) {//dataGrid中没有toolTips
         let arr = [IMAGE_TYPE,UEDITOR,TEXT_COUNT_TYPE,CYCLE_RULE,SECRET_TEXT]
         return arr.indexOf( data ) != -1
+    },
+    intOrFloat: function (data) {//整数||小数
+        return data == INT_TYPE
     }
 }

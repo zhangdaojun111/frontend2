@@ -27,7 +27,9 @@ let config = {
         //数据总数
         total:0,
         //展示的数据行数
-        rows:100
+        rows:100,
+        //头部字段属性字典{f1： info}
+        colsDict:{}
     },
     //原始字段数据
     fieldsData: [],
@@ -174,6 +176,9 @@ let config = {
             let rowId;     //当前rowId
             let sHtml;      //要显示的html元素的字符串
             let color = "transparent"; //颜色
+            let real_type = colDef["real_type"];
+            // let someStyle = 'text-align:right;margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
+            let someStyle = 'margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
             if (params.data) {
                 rowId = params.data['_id']
             }
@@ -201,9 +206,7 @@ let config = {
                         color = remindColorInfo[i][myValue];
                     }
                 }
-            }catch (err){
-
-            }
+            }catch (err){}
 
             let opcity='0.3';
             if(color != undefined && color != 'transparent'){
@@ -268,8 +271,174 @@ let config = {
             // if( this.data.tableType == 'source_data' && source_field_dfield == colDef.field ){
             //     color='rgba(255,0,0,0.5)';
             // }
-            sHtml = '<span style="min-height: 28px;text-align: center;margin: -5px;padding-left: 5px;padding-right: 5px;display: inline-block;width: calc(100% + 10px);height: 100%;">'+params.value+'</span>'
-            return sHtml
+            if (params.value == undefined) {
+                sHtml = '<span style="'+ someStyle + 'background-color:' + color + '"><span/>';
+                return sHtml;
+            }
+
+            //前端表达式值计算
+            if(colDef.dinput_type == fieldTypeService.SURFACE_EXPRESSION){
+                let exp = colDef.field_content.update_exp;
+                let row_data = params.data;
+                let reg = /\@f\d+\@/g;
+                let items = exp.match(reg);
+                for (let i in items){
+                    i = items[i].replace("@", "").replace("@", "");
+                    let is_number = (this.data.colsDict[i]&&(this.data.colsDict[i].real_type==10||this.data.colsDict[i].real_type==11));
+                    let f = i;
+                    i = "@"+i+"@";
+                    while(exp.indexOf(i)!=-1){
+                        // this.cols
+                        exp = exp.replace(i, is_number?row_data[f]:"'"+row_data[f]+"'");
+                    }
+                }
+                exp = exp.replace("#", "this.functionLib.");
+                while (exp.indexOf("#")!=-1){
+                    exp = exp.replace("#", "this.");
+                }
+                params["value"] = eval(exp);
+            }
+
+            //编辑模式下处理不能编辑数据
+            // if(this.isShowEditCancel && params.colDef && !params.colDef.editable){
+            //     color='rgba(230,230,230,0.8)';
+            // }
+
+            //处理数字类型
+            if( fieldTypeService.numOrText( real_type ) ){//数字类型
+                let numVal = fieldTypeService.intOrFloat( real_type ) ? dgcService.formatter(params.value) : dgcService.formatter(Number(params.value).toFixed(colDef.real_accuracy))
+                if( fieldTypeService.childTable( real_type ) || fieldTypeService.countTable( real_type ) ){//子表||统计类型
+                    if(viewMode == 'viewFromCorrespondence' || viewMode == 'editFromCorrespondence'){
+                        sHtml = '<span style="color:rgb(85,85,85);'+ someStyle + 'background-color:' + color + '"><span>' + numVal + '</span><span/>';
+                    } else {
+                        sHtml = '<span style="color:#337ab7;'+ someStyle + 'background-color:' + color + '"><span id="childOrCount">' + numVal + '</span><span/>';
+                    }
+                }else {
+                    if( colDef['base_buildin_dfield'] !='' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人' ){
+                        sHtml = '<a  title="查看源数据" style="'+ someStyle +'background-color:' + color + '"><span id="relatedOrBuildin">' + numVal + '</span><span/>';
+                    } else {
+                        sHtml = '<span style="'+ someStyle +'background-color:' + color + '"><span>' + numVal + '</span><span/>';
+                    }
+                }
+            }
+
+            //加密文本处理
+            else if( real_type == fieldTypeService.SECRET_TEXT ){
+                sHtml = '<span style="text-align: center;">******</span>';
+            }
+
+            //周期规则处理
+            else if( real_type == fieldTypeService.CYCLE_RULE ){
+                let val = params["data"][colDef["colId"]]["-1"] || "";
+                if(val !== "") {
+                    val = val.replace(/\n/g,"\n;\n");
+                }
+                if( colDef['base_buildin_dfield'] !='' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人' ){
+                    sHtml = '<a  title="查看源数据" style="'+ someStyle +'background-color:' + color + '"><span id="relatedOrBuildin">'+ val +'</span></a>';
+                }else {
+                    sHtml = '<span style="'+ someStyle +'background-color:' + color + '"><span>'+ val +'</span></span>';
+                }
+            }
+
+            //富文本编辑框
+            else if( real_type == fieldTypeService.UEDITOR ){
+                sHtml = '<a title="富文本" style="text-align: center;">查看详情</a>';
+            }
+
+            //大数字段处理
+            else if( real_type == fieldTypeService.DECIMAL_TYPE ){
+                if( fieldTypeService.childTable( real_type ) || fieldTypeService.countTable( real_type ) ){//子表||统计类型
+                    let bigNum = params.value > 9007199254740992 ? dgcService.formatter(params.value.toString()) + '.00' : dgcService.formatter(Number(params.value).toFixed(colDef.real_accuracy))
+                    sHtml = '<a style="float:right;color:#337ab7;" id="childOrCount">'+ bigNum +'</a>';
+                }else {
+                    let bigNum = params.value > 9007199254740992 ? dgcService.formatter(params.value.toString()) + '.00' : dgcService.formatter(Number(params.value).toFixed(colDef.real_accuracy))
+                    if( colDef['base_buildin_dfield'] !='' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人' ){
+                        sHtml = '<a  title="查看源数据" style="'+ someStyle +'background-color:' + color + '"><span id="relatedOrBuildin">'+ bigNum +'</span></a>';
+                    }else {
+                        sHtml = '<span style="'+ someStyle +'background-color:' + color + '"><span>'+ bigNum +'</span></span>';
+                    }
+                }
+            }
+
+            //地址类型
+            else if( real_type == fieldTypeService.URL_TYPE ){
+                sHtml = '<a href="'+myValue+'" style="float:left;color:#337ab7;" id="shareAddress" target="_blank">'+myValue+'</a>';
+            }
+
+            //合同编辑器
+            else if( real_type == fieldTypeService.TEXT_COUNT_TYPE ){
+                sHtml = '<a style="text-align: center;color:#337ab7;">' + "查看" + '</a>' + '<span style="color:#000">' + "丨" + '</span>' + '<a style="text-align: center;color:#337ab7;">' + '下载' + '</a>';
+            }
+
+            //表对应关系（不显示为数字）
+            else if( real_type == fieldTypeService.CORRESPONDENCE ){
+                if( viewMode == 'editFromCorrespondence'){
+                    sHtml = '<span style="color:' + color + '">' + params.value + '</span>';
+                }else{
+                    sHtml = '<a style="'+ someStyle +'background-color:' + color + ' " ><span id="correspondenceClick">' + params.value + '</span></a>';
+                }
+            }
+
+            //图片附件
+            else if( real_type == fieldTypeService.IMAGE_TYPE && colDef['field_content']['is_show_image'] == 1 ){
+                let cDiv = document.createElement('div');
+                let cImg = document.createElement('img');
+                let dImg = document.createElement('img');
+                cImg.src = params.value;
+                cImg.style.height = 'inherit';
+                cImg.style.position = 'relative';
+                cDiv.style.height = 'inherit';
+                dImg.style.position = 'absolute';
+                dImg.style.maxWidth = (window.innerWidth / 2 - 120) + 'px';
+                dImg.style.maxHeight = (window.innerHeight - 300) / 2 + 'px';
+                dImg.style.zIndex = '2';
+                cImg.addEventListener("mouseover", function (param) {
+                    dImg.src = param.target['src'];
+                    if (param.y > window.innerHeight / 2) {
+                        dImg.style.bottom = '0'
+                    }
+                    if (param.x < window.innerWidth / 2) {
+                        dImg.style.left = '100%'
+                    } else {
+                        dImg.style.right = '100%'
+                    }
+                    cDiv.appendChild(dImg);
+
+                });
+                cImg.addEventListener("mouseout", function () {
+                    cDiv.removeChild(dImg);
+                });
+                cDiv.appendChild(cImg);
+                sHtml = cDiv;
+            }
+
+            //普通附件||视频附件
+            else if( real_type == fieldTypeService.ATTACHMENT || real_type == fieldTypeService.VIDEO_TYPE ){
+                sHtml = '<a id="file_view" title="查看详情">'+ myValue.length || 0 +'个附件</a>';
+            }
+
+            //都做为文本处理
+            else {
+                if (fieldTypeService.childTable(colDef.dinput_type) || fieldTypeService.countTable(colDef.dinput_type,colDef['real_type'])) { //子表或统计类型
+                    if(viewMode == 'viewFromCorrespondence' || viewMode == 'editFromCorrespondence'){
+                        sHtml = '<span style="float:right;color:rgb(85,85,85);">' + params.value + '</span>';
+                    }else {
+                        sHtml = '<a style="color:#337ab7;'+ someStyle +'background-color:' + color + '" ><span id="childOrCount">' + params.value + '</span></a>';
+                    }
+                } else {
+                    if( colDef['base_buildin_dfield'] !='' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人' ){
+                        sHtml = '<a  title="查看源数据" style="'+ someStyle +'background-color:' + color + '"><span id="relatedOrBuildin">' + params.value + '</span></a>';
+                    }else {
+                        sHtml = '<span style="'+ someStyle +'background-color:' + color + '"><span>' + params.value + '</span></span>';
+                    }
+                }
+            }
+
+            //分组无数据时容错
+            if( params && params.colDef && params.colDef.headerName=='Group' ){
+                sHtml = sHtml = '<span>' + params.value + '</span>';
+            }
+            return sHtml;
         }
     },
     afterRender: function (){
