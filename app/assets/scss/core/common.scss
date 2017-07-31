@@ -20,3 +20,32 @@ html {
     white-space: nowrap;
     text-overflow: ellipsis
 }
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track-piece {
+}
+
+::-webkit-scrollbar-thumb {
+    height: 50px;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+    height: 6px;
+    background-color: #999999;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+    width: 6px;
+    background-color: #999999;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #ccc;
+}
+
