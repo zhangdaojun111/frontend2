@@ -23,7 +23,11 @@ let config = {
         //定制列（列排序）
         orderFields: [],
         // 提醒颜色
-        remindColor:{remind_color_info:{},info:{}}
+        remindColor:{remind_color_info:{},info:{}},
+        //数据总数
+        total:0,
+        //展示的数据行数
+        rows:100
     },
     //原始字段数据
     fieldsData: [],
@@ -160,13 +164,12 @@ let config = {
             }
         },
         bodyCellRenderer: function (params){
-            console.log( params )
             if( params.data && params.data.myfooter && params.data.myfooter == "合计" ){
                 return params.value || '';
             }
             let myValue = params['value'];//当前单元格数值
-            let remindColorInfo = this.remindColor['remind_color_info'];//枚举提醒颜色
-            let info = this.remindColor['info'];//数字提醒颜色
+            let remindColorInfo = this.data.remindColor['remind_color_info'];//枚举提醒颜色
+            let info = this.data.remindColor['info'];//数字提醒颜色
             let colDef = params.colDef;//当前单元格数据
             let rowId;     //当前rowId
             let sHtml;      //要显示的html元素的字符串
@@ -206,6 +209,67 @@ let config = {
             if(color != undefined && color != 'transparent'){
                 color= dgcService.colorRgb(color,opcity);
             }
+
+            //是否是重要字段（入库之前检测下是否为空）
+            if(colDef.main_type && colDef.main_type.id != null){
+                //兼容日期规则控件
+                if(myValue=='' || myValue==undefined ||(params.value[-1]!=undefined && params.value[-1]=='')){
+                    let conditionAll=colDef.main_type["condition"];
+                    for(let condition of conditionAll) {
+                        let conditinField = '';
+                        if (condition["optionfield"] != null) {
+                            //通过id查找field
+                            for (let col of this.cols) {
+                                if (col["id"] == condition["optionfield"]) {
+                                    conditinField = col["field"];
+                                }
+                            }
+                            //条件字段的匹配条件（==，>,<,>=,<=）
+                            switch (condition["option"]) {
+                                case '==': {
+                                    if (params.data[conditinField] == condition["context"]) {
+                                        color = 'rgba(255,0,0,1)'
+                                    }
+                                    break;
+                                }
+                                case '>': {
+                                    if (params.data.conditinField > condition["context"]) {
+                                        color = 'rgba(255,0,0,1)'
+                                    }
+                                    break;
+                                }
+                                case '<': {
+                                    if (params.data.conditinField < condition["context"]) {
+                                        color = 'rgba(255,0,0,1)'
+                                    }
+                                    break;
+                                }
+                                case '<=': {
+                                    if (params.data.conditinField <= condition["context"]) {
+                                        color = 'rgba(255,0,0,1)'
+                                    }
+                                    break;
+                                }
+                                case '>=': {
+                                    if (params.data.conditinField >= condition["context"]) {
+                                        color = 'rgba(255,0,0,1)'
+                                    }
+                                    break;
+                                }
+                            }
+                        } else {
+                            color = 'rgba(255,0,0,1)';
+                        }
+                    }
+                }
+            }
+
+            //内置相关原始数据穿透颜色提示
+            // if( this.data.tableType == 'source_data' && source_field_dfield == colDef.field ){
+            //     color='rgba(255,0,0,0.5)';
+            // }
+            sHtml = '<span style="min-height: 28px;text-align: center;margin: -5px;padding-left: 5px;padding-right: 5px;display: inline-block;width: calc(100% + 10px);height: 100%;">'+params.value+'</span>'
+            return sHtml
         }
     },
     afterRender: function (){
