@@ -25,15 +25,21 @@ $bg-color: rgba(14, 122, 239, 0.290196);
         .left-content {
             display: inline-block;
             width: 200px;
-        
             float:left;
+            min-width: 200px;
+            max-height: 890px;
+            overflow: auto;
         }
 
         .right-content {
             display: inline-block;
             float: right;
+   
+            display: inline-block;
             width: 200px;
-            
+            min-width: 200px;
+            max-height: 890px;
+            overflow: auto;
         }
         .main-content {
             //border-left: 1px solid #ddd;
