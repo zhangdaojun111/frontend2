@@ -109,6 +109,19 @@ class Component {
         return this;
     }
 
+    findBrothers() {
+        let doms = this.el.parent().find('> [component]');
+        let coms = [];
+        let that = this;
+        doms.each(function() {
+            let component = map.get(this);
+            if (component !== that) {
+                coms.push(component);
+            }
+        });
+        return coms;
+    }
+
 }
 
 export default Component;
