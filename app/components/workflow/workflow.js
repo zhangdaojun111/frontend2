@@ -14,6 +14,10 @@ let config = {
         this.el.on('click', '.dialog', () => {
            
         });
+        console.log(this.el)
+        this.el.on('click', '.add-follow', () => {
+            console.log("ffsd")
+        });
     },
     beforeDestory: function(){
 
@@ -278,7 +282,7 @@ class WorkFlow extends Component {
     //放大工作流节点
     zoomInNodeflow($event) {
         console.log(1);
-        let container = document.querySelector('#container1');
+        let container = document.querySelector('#workflow-draw-box');
         this.nodeflowSize += 0.1;
         container.style.width = (+this.containerwidth.split('px')[0]) * (+this.nodeflowSize) + 'px';
         container.style.height = ((+this.containerheight.split('px')[0]) * (+this.nodeflowSize)) + 'px';
@@ -287,7 +291,7 @@ class WorkFlow extends Component {
     }
     //缩小工作流节点
     zoomOutNodeflow($event) {
-        let container = document.querySelector('#container1');
+        let container = document.querySelector('#workflow-draw-box');
         this.nodeflowSize -= 0.1;
         container.style.transformOrigin = '0 0';
         container.style.transform = 'scale(' + this.nodeflowSize + ')';
