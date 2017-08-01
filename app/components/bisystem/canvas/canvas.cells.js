@@ -7,45 +7,101 @@ import './canvas.cells.scss';
 let config = {
     template: template,
     data: {
-        title: 'hello world',
         cells:[
             {
-                'width':550,
-                'height':533,
-                'left':50,
-                'top':50
+                'name': '王亮是sb1',
+                'assortment': 'normal',
+                'layout': {
+                    'width':550,
+                    'height':533,
+                    'left':50,
+                    'top':50,
+                }
             },
             {
-                'width':550,
-                'height':533,
-                'left':50,
-                'top':550
+                'name': '王亮是sb2',
+                'assortment': 'table',
+                'layout': {
+                    'width':550,
+                    'height':533,
+                    'left':650,
+                    'top':50,
+                }
+
             },
             {
-                'width':550,
-                'height':500,
-                'left':50,
-                'top':1050
+                'name': '王亮是sb3',
+                'assortment': 'multilist',
+                'layout': {
+                    'width':550,
+                    'height':533,
+                    'left':1250,
+                    'top':50,
+                }
             },
             {
-                'width':550,
-                'height':533,
-                'left':50,
-                'top':1550
+                'name': '王亮是sb4',
+                'assortment': 'radar',
+                'layout': {
+                    'width':550,
+                    'height':533,
+                    'left':50,
+                    'top':620,
+                }
             },
             {
-                'width':550,
-                'height':533,
-                'left':50,
-                'top':2050
+                'name': '王亮是sb5',
+                'assortment': 'nineGrid',
+                'layout': {
+                    'width':550,
+                    'height':533,
+                    'left':650,
+                    'top':620
+                }
+            },
+            {
+                'name': '王亮是sb6',
+                'assortment': 'funnel',
+                'layout': {
+                    'width':550,
+                    'height':533,
+                    'left':1250,
+                    'top':620
+                }
+            },
+            {
+                'name': '王亮是sb7',
+                'assortment': 'comment',
+                'layout': {
+                    'width':550,
+                    'height':533,
+                    'left':50,
+                    'top':1190
+                }
+
+            },
+            {
+                'name': '王亮是sb8',
+                'assortment': 'pie',
+                'layout': {
+                    'width':550,
+                    'height':533,
+                    'left':650,
+                    'top':1190
+                }
+
             }
         ]
     },
     actions: {
         loadCells() {
-            this.data.cells.forEach(val => {
-                let cell = new CanvasCellComponent('table', val);
-                this.append(cell, this.el.find('.canvas-cells-container'));
+            this.data.cells.forEach((val, index) => {
+                let cell = {
+                    val:val,
+                    cellIndex: index
+                }
+                let cellComponent = new CanvasCellComponent(cell);
+                this.append(cellComponent, this.el.find('.canvas-cells-container'));
             })
         }
     },

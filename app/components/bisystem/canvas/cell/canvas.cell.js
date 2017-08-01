@@ -5,6 +5,8 @@
 import {BiBaseComponent} from '../../bi.base.component';
 import template from './canvas.cell.html';
 import './canvas.cell.scss';
+import Handlebars from 'handlebars';
+
 
 import {CellNormalComponent} from './normal/cell.normal';
 import {CellTableComponent} from './table/cell.table';
@@ -24,37 +26,43 @@ const cellTypes = {
     'multilist' : CellMultiChartComponent,
     'nineGrid' : CellNineGridComponent,
     'funnel': CellFunnelComponent,
-    'comment': CellCommentComponent,
-    'pie': CellPieComponent
+    'pie': CellPieComponent,
+    'comment': CellCommentComponent
 };
 
 
 let config = {
     template: template,
-    actions: {
-    }
+    actions: {}
 };
 
 export class CanvasCellComponent extends BiBaseComponent {
 
-    constructor(cellType, data) {
-        config.data = data? data : null;
+    constructor(cell) {
+        config.data = cell.val? cell.val : null;
+        console.log(config);
         super(config);
-        this.cellType = cellType;
+        this.cell = cell;
     }
 
     /**
      * 动态渲染组件 通过this.cellType 决定渲染具体的图表
      */
     renderCell() {
-        let cellComponent = new cellTypes[this.cellType]();
-        cellComponent.render($('.cell-chart'));
+        let cellComponent = new cellTypes[this.cell.val.assortment]();
+        let cellContainer = this.el.find('.cell-chart');
+        cellComponent.render(cellContainer);
+    }
+
+    layoutCell() {
+        this.el.find('.cell').css(this.cell.val.layout);
     }
 
     /**
-     * 等CanvasCellComponent组件渲染完成后，在动态渲染组件
+     * 等CanvasCellComponent组件渲染完成后，在动态渲染组件+
      */
     firstAfterRender() {
-        this.renderCell()
+        this.renderCell();
+        this.layoutCell();
     }
 }
