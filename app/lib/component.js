@@ -112,6 +112,7 @@ class Component {
         let coms = [];
         let that = this;
         doms.each(function() {
+
             let component = map.get(this);
             if (component !== that) {
                 coms.push(component);
