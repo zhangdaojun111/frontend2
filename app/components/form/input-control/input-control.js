@@ -27,7 +27,7 @@ let config={
         inputClass:'dynamic-form-input',
         error_msg: ' error-msg',
         ui_error_arrow: 'ui-error-arrow',
-    },
+                // <input type="text" value="{{value}}"/>`,
     actions:{
         keyup: function() {
 
@@ -160,6 +160,7 @@ let config={
 
 
     },
+    }
 }
 class InputControl extends Component {
     constructor(data){
