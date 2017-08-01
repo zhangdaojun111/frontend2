@@ -7,18 +7,7 @@ import WorkFlowTree from './workflow-tree/workflow-tree'
 let config = {
     template: template,
     data: {
-        error:"",
-        success:1,
-        rows:[
-            {wf_name:"产品要素管理流程1",id:3},
-            {wf_name:"产品要素管理流程3",id:4},
-            {wf_name:"产品要素管理流程4",id:5},
-            {wf_name:"产品要素管理流程5",id:6},
-            {wf_name:"产品要素管理流程6",id:7}
-        ],
-        list:[
-            {"flow_icon": "", "id": 1,"label": "内置流程","children":[{   "name_py": "xxtssqlc","table_id": "1586_CcrzabMYLePTkAGDqpTgo2","id": 1,"form_id": 2,"label": "消息推送申请流程"},{   "name_py": "xxtssqlc","table_id": "1586_CcrzabMYLePTkAGDqpTgo2","id": 1,"form_id": 2,"label": "消息推送申请流程"}]}
-        ]
+
     },
     actions: {
        operate:function(){
@@ -39,6 +28,7 @@ let config = {
        }
     },
     afterRender: function() {
+        console.log(this.data);
         this.data.rows.forEach((row)=>{
             this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
         })
@@ -57,10 +47,16 @@ let config = {
 }
 
 class WorkFlowCreate extends Component{
-    constructor (res,data){
-        super(config);
+    constructor (data){
+        super(config,data);
     }
 
 }
 
-export default WorkFlowCreate;
+export default {
+    loadData(data){
+        let component = new WorkFlowCreate(data);
+        let el = $('#workflow-create');
+        component.render(el);
+    }
+};

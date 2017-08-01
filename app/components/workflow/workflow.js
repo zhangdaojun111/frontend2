@@ -207,7 +207,7 @@ let config = {
         },
         //放大工作流节点
         zoomInNodeflow($event) {
-            let container = this.el.find('workflow-draw-box')[0];
+            let container = this.el.find('#workflow-draw-box')[0];
             this.data.nodeflowSize += 0.1;
             container.style.width = (+this.data.containerwidth.split('px')[0]) * (+this.data.nodeflowSize) + 'px';
             container.style.height = ((+this.data.containerheight.split('px')[0]) * (+this.data.nodeflowSize)) + 'px';
@@ -216,7 +216,7 @@ let config = {
         },
         //缩小工作流节点
         zoomOutNodeflow($event) {
-            let container = this.el.find('workflow-draw-box')[0];
+            let container = this.el.find('#workflow-draw-box')[0];
             this.data.nodeflowSize -= 0.1;
             container.style.transformOrigin = '0 0';
             container.style.transform = 'scale(' + this.data.nodeflowSize + ')';
@@ -225,7 +225,7 @@ let config = {
         },
         //open in new window
         maximizeNodeflow($event) {
-            let container = this.el.find('workflow-draw-box')[0];
+            let container = this.el.find('#workflow-draw-box')[0];
             container.style.transform = 'scale(1)';
             this.nodeflowSize = 1;
             let e = document.documentElement, g = document.getElementsByTagName('body')[0], w = window.innerWidth || e.clientWidth || g.clientWidth, h = window.innerHeight || e.clientHeight || g.clientHeight;
@@ -309,9 +309,16 @@ let config = {
         this.actions.init();
         console.log(this.data);
         this.el.on('click', '#zoomIn', () => {
-           this.actions.zoomInNodeflow();
+            this.actions.zoomInNodeflow();
         });
-        this.el.on('click', '.add-follow', () => {
+        this.el.on('click', '#zoomOut', () => {
+            this.actions.zoomOutNodeflow();
+        });
+        this.el.on('click', '#newWin', () => {
+            this.actions.maximizeNodeflow();
+        });
+        this.el.on('click', '#addFocus', () => {
+            console.log(123);
         });
     },
     beforeDestory: function(){
