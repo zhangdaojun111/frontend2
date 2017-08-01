@@ -9,6 +9,7 @@ let config = {
     },
     actions: {
         init(){
+            //jsplumb initial config
             this.data.jsPlumbInstance = jsPlumb.getInstance({
                 DragOptions: { cursor: 'pointer', zIndex: 2000 },
                 EndpointStyles: [{ fill: 'transparent' }, { fill: 'transparent' }],
@@ -20,8 +21,9 @@ let config = {
         },
         drawWorkFlow(){
             let __this=this;
-            //画block
+            //draw block
             $.each(this.data.node, function (key, value) {
+                console.log(value);
                 if (value.hasOwnProperty("positionleft") && value.hasOwnProperty("positiontop") && value.hasOwnProperty("startPoint") && value.hasOwnProperty("endPoint")) {
                     value.startPoint=value.startPoint.split(",");
                     value.endPoint=value.endPoint.split(",");
@@ -152,7 +154,7 @@ let config = {
                 }
             });
 
-            //连线
+            //draw connecting lines
             $.each(this.data.node, function (key, value) {
                     var source2target = value["source2target"];
                     if (source2target != undefined) {
@@ -166,6 +168,7 @@ let config = {
             this.containerwidth = __this.actions.getTheBestRight() - __this.actions.getTheBestLeft() + 250 + 'px';
         },
 
+        //add mark points
         AddEndpoints(toId, sourceAnchors, targetAnchors) {
             var connectorPaintStyle = {
                 "stroke-width": 10,
@@ -205,7 +208,7 @@ let config = {
                 allTargetEndpoints.push(this.data.jsPlumbInstance.addEndpoint(toId, targetEndpoint, { anchor: targetAnchors[j], uuid: targetUUID }));
             }
         },
-        //放大工作流节点
+        //zoomIn paint
         zoomInNodeflow($event) {
             let container = this.el.find('#workflow-draw-box')[0];
             this.data.nodeflowSize += 0.1;
@@ -214,7 +217,7 @@ let config = {
             container.style.transformOrigin = '0 0';
             container.style.transform = 'scale(' + this.data.nodeflowSize + ')';
         },
-        //缩小工作流节点
+        //zoomOut paint
         zoomOutNodeflow($event) {
             let container = this.el.find('#workflow-draw-box')[0];
             this.data.nodeflowSize -= 0.1;
@@ -223,7 +226,7 @@ let config = {
             container.style.width = (+this.data.containerwidth.split('px')[0]) * (+this.data.nodeflowSize) + 'px';
             container.style.height = ((+this.data.containerheight.split('px')[0]) * (+this.data.nodeflowSize)) + 'px';
         },
-        //open in new window
+        //open paint in new window
         maximizeNodeflow($event) {
             let container = this.el.find('#workflow-draw-box')[0];
             container.style.transform = 'scale(1)';
