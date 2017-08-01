@@ -15,15 +15,17 @@
             font-weight: bold;
         }
     }
+    .wf-del{
+        display: none;
+        .workflow-del{
+            width: 12px;
+            height: 12px;
+            background: red;
+            position: absolute;
+            top: 0px;
+            right: 0px;
+        }
+    }
+    
 }
-.workflow-del{
-    width: 12px;
-    height: 12px;
-    background: red;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-}
-.wf-del{
-    display: none;
-}
+

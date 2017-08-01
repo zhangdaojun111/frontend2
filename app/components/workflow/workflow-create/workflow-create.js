@@ -18,13 +18,15 @@ let config = {
     },
     actions: {
        operate:function(){
-            let oper =  $('.J_operate').val();
-            if(oper == '取消'){
-                $('.J_operate').val("编辑");
-                $('.J_del').hide();   
+            let oper = this.el.find('.J_operate'),
+                del = this.el.find('.J_del'),
+                operVal =  oper.val();
+            if(operVal == '取消'){
+               oper.val("编辑");
+                del.hide();   
             }else{
-                $('.J_operate').val("取消");
-                $('.J_del').show();
+                oper.val("取消");
+                del.show();
             }
        },
        deloperate:function(arg){
@@ -37,7 +39,6 @@ let config = {
             console.log(row);
             this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
         })
-
         this.el.on('click','.J_operate',()=>{
             this.actions.operate();
         }).on('click','.J_del',(ev)=>{
