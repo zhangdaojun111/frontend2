@@ -54,5 +54,4 @@ HTTP.post('dept2', {did: 123123}).then(function() {
 HTTP.get('dept3', {did: 123123}).then(function() {
     console.log(arguments);
 });
-
 HTTP.flush();

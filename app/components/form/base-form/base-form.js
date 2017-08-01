@@ -3,6 +3,9 @@ import './base-form.scss';
 import TextArea from '../textarea-control/textarea-area'
 import Radio from '../radio-control/radio-control';
 import Input from '../input-control/input-control';
+import Readonly from '../readonly-control/readonly-control';
+import Password from '../encrypt-input-control/encrypt-input-control';
+import Hidden from '../hidden-control/hidden-control';
 import SelectControl from "../select-control/select-control";
 import YearControl from "../year-control/year-control";
 import BuildInControl from "../buildIn-control/buildIn-control";
@@ -97,6 +100,20 @@ let config={
                     textArea.render(single);
                     _this.childComponent[data.dfield]=textArea;
                     break;
+                case 'readonly':
+                    let readonly=new Readonly(data);
+                    readonly.render(single);
+                    _this.childComponent[data.dfield]=readonly;
+                    break;
+                case 'password':
+                    let password=new Password(data);
+                    password.render(single);
+                    _this.childComponent[data.dfield]=password;
+                    break;
+                case 'hidden':
+                    let hidden=new Hidden(data);
+                    hidden.render(single);
+                    _this.childComponent[data.dfield]=hidden;
                 case 'Select':
                     let selectControl=new SelectControl(data);
                     selectControl.render(single);
