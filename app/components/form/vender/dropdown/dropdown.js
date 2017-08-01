@@ -1,9 +1,12 @@
 import Component from '../../../../lib/component'
-import './select-control.scss'
 import Mediator from '../../../../lib/mediator';
 let config={
     template:`<div style="position: relative;">
+                {{#if is_view}}
                 <input class="search-value show-hide-drop" type="text" readonly data-value="{{value}}" value="{{showValue}}"/>
+                {{else}}
+                <input class="search-value show-hide-drop" type="text" readonly data-value="{{value}}" value="{{showValue}}" disabled/>
+                {{/if}}
                 <div class="select-drop" style="display: none;position: absolute;top:100%;z-index: 1;background: #fff;border: 1px solid #ccc" >
                     <input type="type" class="search"/>
                     {{#options}}

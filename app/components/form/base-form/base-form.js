@@ -29,10 +29,6 @@ let config={
                 this.data.data[dfield]["value"] = value[0];
                 this.childComponent[dfield].data["value"]=value[0];
                 this.childComponent[dfield].reload();
-                console.log('啥');
-                console.log(this.data.data[dfield]);
-                console.log(value[0]);
-                console.log(this.childComponent[dfield].data);
             }
         },
         //给相关赋值
@@ -122,6 +118,16 @@ let config={
             }
             cache_old[data[key].dfield] = data[key].value;
             _this.actions.reviseCondition(data[key],data[key].value,true);
+            if(type == 'Select' || type=='Buildin' ){
+                if(data[key].value){
+                    for(let obj of data[key].options){
+                        if(obj.value == data[key].value){
+                            data[key]['showValue']=obj.label;
+                            break;
+                        }
+                    }
+                }
+            }
             //在这里根据type创建各自的控件
             switch (type){
                 case 'radio':
@@ -211,11 +217,22 @@ let config={
         })
 
         //添加提交按钮
-        _this.el.append('<div style="position: fixed;bottom: 20px;right: 20px;"><button id="save">提交</button></div>')
+        _this.el.append('<div style="position: fixed;bottom: 20px;right: 20px;"><button id="save">提交</button><button id="changeEdit">转到编辑模式</button></div>')
 
         //提交按钮事件绑定
         $(_this.el).find("#save").on('click',function () {
             _this.onSubmit(_this.childComponent,cache_old);
+        })
+        $(_this.el).find("#changeEdit").on('click',function () {
+            for(let key in _this.childComponent){
+                if(_this.childComponent[key].data.type!='Readonly'){
+                    _this.childComponent[key].data.is_view='1';
+                    if(_this.childComponent[key].data.type=='MultiLinkage'){
+                        _this.childComponent[key].actions.changeView(_this.childComponent[key]);
+                    }
+                    _this.childComponent[key].reload();
+                }
+            }
         })
     },
     beforeDestory:function(){

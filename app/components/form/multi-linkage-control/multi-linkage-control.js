@@ -20,11 +20,14 @@ let config={
 
     },
     actions:{
-
+        changeView:function(_this){
+            for(let obj of _this.childDrop){
+                obj.data.is_view=1;
+            }
+        }
     },
     firstAfterRender:function(){
         let _this=this;
-        this.set('hasChoose',new Map());
         Mediator.subscribe('form:dropDownSelect',function(data){
             if(data.dfield !=_this.data.dfield){
                 return;
@@ -109,6 +112,7 @@ let config={
         });
     },
     afterRender(){
+        this.set('hasChoose',new Map());
         if(!this.childDrop){
             this.set('childDrop',[]);
         }
@@ -123,17 +127,28 @@ let config={
         let isInit=this.childDrop.length;
         for (let i=0;i<index;i++){
             let d={};
-            d['value']='请选择';
-            d['showValue']='请选择';
             d['options']=[];
             d['index']=i;
             d['dfield']=this.data.dfield;
-            let set=new Set();
-            for(let key in this.data.dataList){
-                set.add(this.data.dataList[key][i]);
-            }
-            for(let item of set){
-                d['options'].push({label:item,value:item});
+            d['is_view']=this.data.is_view;
+            console.log('怎么不变呢');
+            console.log(this.data.is_view);
+            if(this.data.value){
+                let option=this.data.dataList[this.data.value][i];
+                d['value']=option;
+                d['showValue']=option;
+                d['options'].push({label:option,value:option});
+                this.hasChoose.set(i,option);
+            }else{
+                d['value']='请选择';
+                d['showValue']='请选择';
+                let set=new Set();
+                for(let key in this.data.dataList){
+                    set.add(this.data.dataList[key][i]);
+                }
+                for(let item of set){
+                    d['options'].push({label:item,value:item});
+                }
             }
             if(isInit){
                 this.append(this.childDrop[i],this.el.find('.multi-drop'));

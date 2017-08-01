@@ -75,7 +75,8 @@ async function wait() {
             is_view:0,
             parent_table_id:'',
             parent_real_id:'',
-            parent_temp_id:''
+            parent_temp_id:'',
+            real_id:'59803341ae6ba89d68ac574e'
         }
     });
     let dynamicData = await HTTP.postImmediately({
@@ -90,6 +91,7 @@ async function wait() {
             parent_real_id:'',
             parent_temp_id:'',
             real_id:'',
+            real_id:'59803341ae6ba89d68ac574e'
         }
     });
     let data=mergeFormData(staticData,dynamicData);
@@ -101,27 +103,27 @@ async function wait() {
     form.render(el);
 }
 wait();
-
-HTTP.post( 'get_form_static_data/?seqid=yudeping&table_id=8696_yz7BRBJPyWnbud4s6ckU7e&is_extra=&form_id=',{ formId:'',
-    table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
-    is_view:0,
-    parent_table_id:'',
-    parent_real_id:'',
-    parent_temp_id:''} ).then( res=>{
-    console.log( "#############" )
-    console.log( "#############" )
-} )
-HTTP.post( 'get_form_dynamic_data/?seqid=yudeping&table_id=8696_yz7BRBJPyWnbud4s6ckU7e&is_extra=&form_id=',{ form_id:'',
-    table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
-    is_view:0,
-    parent_table_id:'',
-    parent_real_id:'',
-    parent_temp_id:'',
-    real_id:'',} ).then( res=>{
-    console.log( "ssss" )
-    console.log( "sss" )
-} )
-HTTP.flush()
+//
+// HTTP.post( 'get_form_static_data/?seqid=yudeping&table_id=8696_yz7BRBJPyWnbud4s6ckU7e&is_extra=&form_id=',{ formId:'',
+//     table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
+//     is_view:0,
+//     parent_table_id:'',
+//     parent_real_id:'',
+//     parent_temp_id:''} ).then( res=>{
+//     console.log( "#############" )
+//     console.log( "#############" )
+// } )
+// HTTP.post( 'get_form_dynamic_data/?seqid=yudeping&table_id=8696_yz7BRBJPyWnbud4s6ckU7e&is_extra=&form_id=',{ form_id:'',
+//     table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
+//     is_view:0,
+//     parent_table_id:'',
+//     parent_real_id:'',
+//     parent_temp_id:'',
+//     real_id:'',} ).then( res=>{
+//     console.log( "ssss" )
+//     console.log( "sss" )
+// } )
+// HTTP.flush()
 
 let data={
     attachment: [],

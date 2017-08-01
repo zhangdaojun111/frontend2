@@ -8,20 +8,24 @@ let config={
                     {{#if be_control_condition }}
                         <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                     {{else}}                 
-                  <div style="display: inline-block">{{label}}</div>               
-                   <input style="width: 240px"  type="text" value="{{value}}" class={{inputClass}} >{{value}}  
-                   <div style="display: inline-block">
-                           {{#if required}}
-                            <span class="{{requiredClass}}" ></span>
+                        <div style="display: inline-block">{{label}}</div>
+                            {{#if is_view}}               
+                                <input style="width: 240px"  type="text" value="{{value}}" class={{inputClass}} >
+                            {{else}}
+                                <input style="width: 240px"  type="text" value="{{value}}" class={{inputClass}} disabled>
                            {{/if}} 
-                   </div>                   
-                   {{/if}}
-                   <span style="position: relative; display:inline-block">  
-                         <div class={{error_msg}} id="error_tip"  style=" display:none">
-                                <em class={{ui_error_arrow}}></em>
-                                <pre>{{ regErrorMsg }}</pre>
-                         </div>  
-                    </span>
+                       <div style="display: inline-block">
+                               {{#if required}}
+                                <span class="{{requiredClass}}" ></span>
+                               {{/if}} 
+                       </div>                   
+                       {{/if}}
+                       <span style="position: relative; display:inline-block">  
+                             <div class={{error_msg}} id="error_tip"  style=" display:none">
+                                    <em class={{ui_error_arrow}}></em>
+                                    <pre>{{ regErrorMsg }}</pre>
+                             </div>  
+                        </span>
                </div>
                 `,
     data: {
