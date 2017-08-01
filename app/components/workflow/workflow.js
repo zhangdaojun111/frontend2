@@ -310,7 +310,7 @@ let config = {
     },
     afterRender: function() {
         this.actions.init();
-        console.log(this.data);
+       
         this.el.on('click', '#zoomIn', () => {
             this.actions.zoomInNodeflow();
         });
