@@ -30,6 +30,9 @@ let config = {
                 floatingFilter: this.data.floatingFilter,
                 animateRows: true,
                 suppressMultiSort: true,
+                enableColResize: true,
+                enableSorting: true,
+                sortingOrder: ['asc','desc','null'],
                 suppressRowClickSelection: true,
                 rowSelection: 'multiple',
                 icons: {}

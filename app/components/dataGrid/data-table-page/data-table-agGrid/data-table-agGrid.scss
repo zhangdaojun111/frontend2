@@ -14,3 +14,23 @@
 .header-style-bigfont {
   font-size:15px;
 }
+
+.header-select {
+  padding: 0px 4px;
+}
+
+.ag-grid-number {
+  font-size: 12px!important;
+}
+
+/*grid初始化按钮*/
+.table-init-logo{
+  color:rgb(51,122,183);
+  cursor:pointer;
+}
+
+.table-init-logo:hover{
+  color:rgb(195,195,195);
+  cursor:pointer;
+  text-decoration: none;
+}
