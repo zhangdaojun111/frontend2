@@ -1,6 +1,6 @@
-import Component from "../../../lib/component";
-import template from './leftContext.SelectLabel.html';
-import './leftContext.SelectLabel.scss';
+import Component from "../../../../lib/component";
+import template from './leftContent.SelectLabel.html';
+import './leftContent.SelectLabel.scss';
 
 import Mediator from '../../../../lib/mediator';
 
@@ -11,11 +11,12 @@ let config = {
     },
 
     afterRender: function() {
-        
+        let id = $(".label-id").html();
+        console.log({Text});
     }
 }
 
-class Item extends LeftContentSelect {
+class LeftContentSelect extends Component {
     constructor(data){
         config.data = data;
         super(config);

@@ -24,7 +24,6 @@ label{font-size: 17px;}
     background-color: #2398df; 
     border: 1px solid #2398df;
 }
- 
 .chk_remind:checked + label:after { 
   content: '\2714'; //勾选符号 
     position: absolute; 
