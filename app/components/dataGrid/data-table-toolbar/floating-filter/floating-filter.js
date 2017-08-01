@@ -48,7 +48,7 @@ let config = {
                     if( searchType == 'keyup' ){
                         this.eFilterInput.addEventListener( 'keydown', ($event)=> {
                             if( $event.keyCode == 229 ){
-                                That.actions.keyupSearch($event,this.eFilterInput,col_field,colInfo,searchType,searchOldValue,searchValue);
+                                That.actions.keyupSearch($event,this.eFilterInput,searchFiled,colInfo,searchType,searchOldValue,searchValue);
                             }
                         });
                     }
