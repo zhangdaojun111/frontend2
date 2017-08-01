@@ -1,7 +1,7 @@
 import Component from '../../../lib/component';
 import template from './menu.full.html';
 import './menu.full.scss';
-
+import 'jquery-ui/ui/widgets/menu';
 import {FullMenuItem} from './item/item';
 
 function searchData(menu, text, parent) {
@@ -29,7 +29,8 @@ let config = {
     template: template,
     data: {
         list: [],
-        text: ''
+        text: '',
+        type: 'full'
     },
     actions: {
         search: function (text) {
@@ -44,32 +45,54 @@ let config = {
         },
         show: function() {
             this.el.show();
+            this.actions.countHeight();
+        },
+        countHeight: function() {
+            $(window).trigger('resize.menu');
+        },
+        setSizeToFull: function () {
+            this.el.removeClass('mini');
+            this.data.type = 'full';
+            this.actions.countHeight();
+        },
+        setSizeToMini: function () {
+            this.el.addClass('mini');
+            this.data.type = 'mini';
+            this.reload();
+            this.actions.countHeight();
         }
     },
     afterRender: function () {
         this.originData = _.defaultsDeep([], this.data.list);
-        this.data.children = [];
+        let $root = this.el.find('.root');
         this.data.list.forEach((data) => {
             let component = new FullMenuItem(_.defaultsDeep({}, data, {
                 root: true,
                 offset: 0,
                 searchDisplay: true
             }));
-            this.append(component, this.el.find('.root'));
+            this.append(component, $root, 'li');
         });
+
         let that = this;
         this.el.find('#search-menu-button').on('input', _.debounce(function() {
             that.actions.search(this.value);
         }, 1000));
-        let _m = this.el.find('.menu-full');
 
+        if (this.data.type === 'mini') {
+            this.el.find('.root').menu();
+        }
+        this.actions.countHeight();
+    },
+    firstAfterRender: function() {
+        let that = this;
         $(window).on('resize.menu', function () {
-            _m.css({
-                height: (document.body.scrollHeight - _m.offset().top) + 'px',
+            let menu = that.el.find('.menu-full');
+            menu.css({
+                height: (document.body.scrollHeight - menu.offset().top) + 'px',
                 overflow: 'auto'
             });
         });
-        $(window).trigger('resize.menu');
     },
     beforeDestory: () => {
         this.el.find('#search-menu-button').off();

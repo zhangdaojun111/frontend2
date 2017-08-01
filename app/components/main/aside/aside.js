@@ -2,7 +2,7 @@ import Component from '../../../lib/component';
 import template from './aside.html';
 import './aside.scss';
 import {MenuComponent} from '../menu-full/menu.full';
-import {HTTP} from '../../../lib/http';
+import Mediator from '../../../lib/mediator';
 
 function presetMenuData(menu) {
     let res = _.defaultsDeep([], menu);
@@ -17,19 +17,25 @@ function presetMenuData(menu) {
 
 let config = {
     template: template,
-    data: {
-        // systemName: '前端重构系统',
-        // username: 'asdasd',
-        // role: '管理员',
-        // avatar: ''
+    data: {},
+    actions: {
+        setSizeToFull: function() {
+            this.el.removeClass('mini');
+            this.allMenu.actions.setSizeToFull();
+            this.commonMenu.actions.setSizeToFull();
+        },
+        setSizeToMini: function() {
+            this.el.addClass('mini');
+            this.allMenu.actions.setSizeToMini();
+            this.commonMenu.actions.setSizeToMini();
+        }
     },
-    actions: {},
     afterRender: function () {
         if (window.config && window.config.menu) {
-            let allMenu = new MenuComponent({list: presetMenuData(window.config.menu)});
-            let commonMenu = new MenuComponent({list: presetMenuData(window.config.menu)});
-            allMenu.render(this.el.find('.menu.all'));
-            commonMenu.render(this.el.find('.menu.common')).actions.hide();
+            this.allMenu = new MenuComponent({list: presetMenuData(window.config.menu)});
+            this.commonMenu = new MenuComponent({list: presetMenuData(window.config.menu)});
+            this.allMenu.render(this.el.find('.menu.all'));
+            this.commonMenu.render(this.el.find('.menu.common')).actions.hide();
             let allBtn = this.el.find('.tabs p.all');
             let commonBtn = this.el.find('.tabs p.common');
             this.el.on('click', '.tabs p', function () {
@@ -47,6 +53,18 @@ let config = {
                 }
             })
         }
+    },
+    firstAfterRender: function() {
+        Mediator.on('aside:size', (order) => {
+            if (order === 'full') {
+                this.actions.setSizeToFull();
+            } else {
+                this.actions.setSizeToMini();
+            }
+        });
+    },
+    beforeDestory: function() {
+        Mediator.removeAll('aside');
     }
 }
 

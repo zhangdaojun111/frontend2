@@ -56,6 +56,12 @@ export const IframeInstance = new Component({
             PMAPI.sendToChild(this.data.focus.iframe.find('iframe')[0], {
                 type: PMENUM.iframe_active
             })
+        },
+        setSizeToFull: function () {
+            this.el.removeClass('mini');
+        },
+        setSizeToMini: function () {
+            this.el.addClass('mini');
         }
     },
     afterRender: function () {
@@ -76,8 +82,24 @@ export const IframeInstance = new Component({
             that.actions.focusIframe(id);
         });
 
+    },
+    
+    firstAfterRender: function () {
+
         Mediator.on('menu:item:openiframe', (data) => {
             this.actions.openIframe(data.id, data.url, data.name)
         });
+
+        Mediator.on('aside:size', (order) => {
+            if (order === 'full') {
+                this.actions.setSizeToFull();
+            } else {
+                this.actions.setSizeToMini();
+            }
+        });
+    },
+
+    beforeDestory: function () {
+        Mediator.removeAll('menu');
     }
 });

@@ -1,51 +1,59 @@
 @import "../../../assets/scss/core/base";
-#iframe-component {
-    height: 100%;
-    .tabs {
-        height: 30px;
-        overflow: hidden;
-        color: #999;
-        font-size: 12px;
-        padding-left: 20px;
-        background-image: linear-gradient(rgba(228, 228, 228, 1) 1px, transparent 0);
-        background-color: $header-bg;
-        background-size: 30px 30px;
-        background-position: 0 29px;
-        .item {
-            line-height: 29px;
-            float: left;
-            cursor: pointer;
-            position: relative;
-            padding: 0 30px 0 15px;
-            margin-right: 10px;
-            border: 1px solid $header-bg;
-            border-bottom: 0 none;
-            border-radius: 6px 6px 0 0;
-            &.focus {
-                background: #fff;
-                color: #333;
-                border-color: rgba(228, 228, 228, 1);
-            }
-            .close {
+
+#content {
+
+    &.mini {
+        left: $aside-mini-width;
+    }
+
+    .iframe-component {
+        height: 100%;
+        .tabs {
+            height: 30px;
+            overflow: hidden;
+            color: #999;
+            font-size: 12px;
+            padding-left: 20px;
+            background-image: linear-gradient(rgba(228, 228, 228, 1) 1px, transparent 0);
+            background-color: $header-bg;
+            background-size: 30px 30px;
+            background-position: 0 29px;
+            .item {
+                line-height: 29px;
+                float: left;
                 cursor: pointer;
-                width: 20px;
-                height: 20px;
-                position: absolute;
-                right: 5px;
-                top: 5px;
-                background: url("../../../assets/images/close.png") no-repeat center;
+                position: relative;
+                padding: 0 30px 0 15px;
+                margin-right: 10px;
+                border: 1px solid $header-bg;
+                border-bottom: 0 none;
+                border-radius: 6px 6px 0 0;
+                &.focus {
+                    background: #fff;
+                    color: #333;
+                    border-color: rgba(228, 228, 228, 1);
+                }
+                .close {
+                    cursor: pointer;
+                    width: 20px;
+                    height: 20px;
+                    position: absolute;
+                    right: 5px;
+                    top: 5px;
+                    background: url("../../../assets/images/close.png") no-repeat center;
+                }
             }
         }
-    }
-    .iframes {
-        width: 100%;
-        height: calc(100% - 30px);
-        .item {
-            height: 100%;
-            overflow: hidden;
-            iframe {
+        .iframes {
+            width: 100%;
+            height: calc(100% - 30px);
+            .item {
                 height: 100%;
                 overflow: hidden;
+                iframe {
+                    height: 100%;
+                    overflow: hidden;
+                }
             }
         }
     }

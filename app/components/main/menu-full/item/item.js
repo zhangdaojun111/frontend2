@@ -1,14 +1,16 @@
 import Component from '../../../../lib/component';
 import template from './item.html';
 import Mediator from '../../../../lib/mediator';
+import 'jquery-ui/ui/widgets/tooltip';
 
 let config = {
     template: template,
     data: {
+        type: 'full'
     },
     actions: {
         showChildren: function() {
-            this.el.find('> .menu-full-item > .list').show();
+            this.el.find('> .list').show();
             this.el.find('> .menu-full-item > .row .icon').removeClass('ui-state-focus').addClass('ui-state-active');
             this.el.find('> .menu-full-item > .row > .icon > .ui-icon').removeClass('ui-icon-caret-1-e').addClass('ui-icon-caret-1-s');
             this.data.display = true;
@@ -17,17 +19,20 @@ let config = {
             });
         },
         hideChildren: function() {
-            this.el.find('> .menu-full-item > .list').hide();
+            this.el.find('> .list').hide();
             this.el.find('> .menu-full-item > .row > .icon').removeClass('ui-state-active').addClass('ui-state-focus');
             this.el.find('> .menu-full-item > .row > .icon > .ui-icon').removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-e');
             this.data.display = false;
         },
         onItemClick: function() {
+            debugger;
             if (this.data.items && this.data.items.length) {
-                if (this.data.display === true) {
-                    this.actions.hideChildren();
-                } else {
-                    this.actions.showChildren();
+                if (this.data.type === 'full') {
+                    if (this.data.display === true) {
+                        this.actions.hideChildren();
+                    } else {
+                        this.actions.showChildren();
+                    }
                 }
             } else {
                 Mediator.emit('menu:item:openiframe', {
@@ -47,7 +52,7 @@ let config = {
                     searchDisplay: true
                 });
                 let component = new FullMenuItem(newData);
-                this.append(component, this.el.find('> .menu-full-item > .list'));
+                this.append(component, this.el.find('> .list'), 'li');
             })
         }
         if (this.data.root !== true) {
@@ -61,7 +66,12 @@ let config = {
         }
         this.el.on('click', '> .menu-full-item > .row', () => {
             this.actions.onItemClick();
-        })
+        });
+    },
+    firstAfterRender: function () {
+        Mediator.on('aside:size', (order) => {
+            this.data.type = order;
+        });
     },
     beforeDestory: function () {
 
