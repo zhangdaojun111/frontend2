@@ -49,7 +49,7 @@ let config={
             //输入框输入时的实时函数验证
             if(val != "" && !$.isEmptyObject(func)){
                 for(let r in func){
-                   let flag = r;
+                    let flag = this[r](val);
                     console.log("flagFunc："+flag);
                     if(!flag){
                         this.el.find("#error_tip").css("display","inline-block");
@@ -66,6 +66,7 @@ let config={
             let regReg = new RegExp(reg);
             if(val != "" && reg !== ""){
                 for(let r in reg){
+                    let regReg = eval(r);
                     let flag = regReg.test(val);
                     console.log("flagReg："+flag);
                     if(!flag){
