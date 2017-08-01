@@ -24,12 +24,16 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
+        this.set('hasChoose',new Map());
         Mediator.subscribe('form:dropDownSelect',function(data){
             if(data.dfield !=_this.data.dfield){
                 return;
             }
             for (let i=0;i<_this.data.index;i++){
                 let d={};
+                if(_this.hasChoose.has(i)){
+                    continue;
+                };
                 if(i==data.index){
                     d['showValue']=data.value;
                 }
@@ -37,7 +41,15 @@ let config={
                 let set=new Set();
                 for(let key in _this.data.dataList){
                     if(_this.data.dataList[key][data.index] == data.value){
-                        set.add(_this.data.dataList[key][i]);
+                        let isCanSet=true;
+                        for(let k of _this.hasChoose.keys()){
+                            if( k != data.index && _this.hasChoose.get(k) != _this.data.dataList[key][k] ){
+                                isCanSet=false;
+                            }
+                        }
+                        if(isCanSet){
+                            set.add(_this.data.dataList[key][i]);
+                        }
                     }
                 }
                 for(let item of set){
@@ -66,13 +78,15 @@ let config={
                         _this.data.value=key;
                         data['value']=key;
                         if(_this.data.required){
-                            Mediator.publish('form:checkRequired',data);
+                            Mediator.publish('form:changeValue',data);
                         }
                     }
                 }
             }
+            _this.hasChoose.set(data.index,data.value);
         });
         this.el.on('click','.refresh',function(){
+            _this.hasChoose.clear();
             for (let i=0;i<_this.data.index;i++){
                 let d={};
                 d['showValue']='请选择';
@@ -110,6 +124,7 @@ let config={
         for (let i=0;i<index;i++){
             let d={};
             d['value']='请选择';
+            d['showValue']='请选择';
             d['options']=[];
             d['index']=i;
             d['dfield']=this.data.dfield;
@@ -133,5 +148,7 @@ let config={
 export default class MultiLinkageControl extends Component{
     constructor(data){
         super(config,data);
+        console.log('multi-linkage-control');
+        console.log(this.data);
     }
 }

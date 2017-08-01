@@ -12,6 +12,7 @@ import BuildInControl from "../buildIn-control/buildIn-control";
 import MultiLinkageControl from "../multi-linkage-control/multi-linkage-control";
 import YearMonthControl from "../year-month-control/year-month-control";
 import Mediator from "../../../lib/mediator";
+import {HTTP} from "../../../lib/http";
 
 let config={
     template:'',
@@ -21,6 +22,41 @@ let config={
         //改变控件的disabled
         changeControlDisabled:function(dfield){
 
+        },
+        //赋值
+        setFormValue(dfield,value){
+            if(this.data.data[dfield]){
+                this.data.data[dfield]["value"] = value[0];
+                this.childComponent[dfield].data["value"]=value[0];
+                this.childComponent[dfield].reload();
+                console.log('啥');
+                console.log(this.data.data[dfield]);
+                console.log(value[0]);
+                console.log(this.childComponent[dfield].data);
+            }
+        },
+        //给相关赋值
+        async setAboutData(id,value) {
+                let res=await HTTP.postImmediately({
+                    url: 'http://127.0.0.1:8081/get_about_data/',
+                    data: {
+                        buildin_field_id: id,
+                        buildin_mongo_id: value
+                    }
+                })
+
+                console.log(res);
+                //给相关的赋值
+                for(let k in res["data"]){
+                    //如果是周期规则
+                    if(this.data.data.hasOwnProperty(k) && this.data.data[k].hasOwnProperty("real_type") && this.data.data[k]["real_type"] == '27') {
+                        if(res["data"][k]["-1"]){
+                            this.actions.setFormValue.bind(this)(k,res["data"][k]["-1"]);
+                        }
+                    }else{
+                        this.actions.setFormValue.bind(this)(k,res["data"][k]);
+                    }
+                }
         },
         reviseCondition:function(editConditionDict,value,isInit) {
         // if(this.dfService.isView){return false;}
@@ -64,7 +100,7 @@ let config={
                             arr.push( dfield );
                         }
                     }
-                    if(data["be_control_condition"] == 1 && !isInit){
+                    if(data["be_control_condition"] == 0 && !isInit){
                         this.childComponent[dfield].data=data;
                         this.childComponent[dfield].reload();
                     }
@@ -78,8 +114,6 @@ let config={
         let cache_old = {};
         this.set('childComponent',{});
         let data=_this.data.data;
-        console.log('這個data');
-        console.log(data);
         for(let key in data){
             let single=_this.el.find('div[data-dfield='+data[key].dfield+']');
             let type=single.data('type');
@@ -157,18 +191,22 @@ let config={
             $('.select-drop').hide();
         })
         Mediator.subscribe('form:changeValue',function(data){
-            console.log('subscribe');
+            console.log('form:changeValue')
             console.log(data);
-            let originalData=data;
-            if(originalData["edit_condition"] && originalData["edit_condition"] !== "") {
-                _this.actions.reviseCondition(originalData,val,false);
+            if(data.type=='Buildin'){
+                let id = data["id"];
+                let value = data["value"];
+                _this.actions.setAboutData(id,value);
             }
-            if(originalData.value=='' || originalData.value.length==0 || originalData.value==null){
-                _this.childComponent[originalData.dfield].data['requiredClass']='required';
+            if(data["edit_condition"] && data["edit_condition"] !== "") {
+                _this.actions.reviseCondition(data,data.value,false);
+            }
+            if(data.value=='' || data.value.length==0 || data.value==null){
+                _this.childComponent[data.dfield].data['requiredClass']='required';
             }else{
-                _this.childComponent[originalData.dfield].data['requiredClass']='required2';
+                _this.childComponent[data.dfield].data['requiredClass']='required2';
             }
-            _this.childComponent[originalData.dfield].reload();
+            _this.childComponent[data.dfield].reload();
             $('.select-drop').hide();
         })
 

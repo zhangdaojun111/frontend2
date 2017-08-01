@@ -1,4 +1,5 @@
 import Component from '../../../lib/component';
+import Mediator from "../../../lib/mediator";
 let config={
     template:`<div class="clearfix">
                  {{#if be_control_condition }}
@@ -19,6 +20,14 @@ let config={
     },
     actions:{
     },
+    firstAfterRender:function(){
+        let _this=this;
+        this.el.on('click',function(){
+            console.log('1111111');
+            _this.data.value='943_GHYY9WLbjMimbwQrQmkJSB';
+            Mediator.publish('form:changeValue',_this.data);
+        })
+    }
 }
 class RadioControl extends Component {
     constructor(data){
