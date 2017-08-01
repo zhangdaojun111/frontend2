@@ -107,9 +107,6 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
-        Mediator.subscribe('form:changeValue',function(data){
-            Mediator.publish('form:changeValue',_this.data);
-        });
     },
     afterRender: function() {
             this.el.on( 'input', () => {

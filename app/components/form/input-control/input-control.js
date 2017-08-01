@@ -35,6 +35,8 @@ let config={
         //正则表达式的错误提示 regErrorMsg: string;
         let regErrorMsg;
         let val = this.el.find("input").val();
+        this.data.value=val;
+        Mediator.publish('form:changeValue',this.data);
         let func = this.data.func;
         let reg = this.data.reg;
         let required = this.data.required
@@ -131,9 +133,6 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
-        Mediator.subscribe('form:changeValue',function(data){
-            Mediator.publish('form:changeValue',_this.data);
-        });
     },
     afterRender: function() {
         this.el.on('keyup', 'input', () => {

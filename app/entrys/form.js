@@ -54,6 +54,13 @@ function mergeFormData(staticData,dynamicData){
     staticData["parent_table_id"] = dynamicData["parent_table_id"];
     staticData["frontend_cal_parent_2_child"] = dynamicData["frontend_cal_parent_2_child"];
     staticData["error"] = dynamicData["error"];
+    let data={
+
+    }
+    for(let obj of staticData.data){
+        data[obj.dfield]=obj;
+    }
+    staticData.data=data;
     return staticData;
 }
 
@@ -85,10 +92,6 @@ async function wait() {
             real_id:'',
         }
     });
-    console.log('staticData');
-    console.log(staticData);
-    console.log('dynamicData');
-    console.log(dynamicData);
     let data=mergeFormData(staticData,dynamicData);
     let formData={
         template:template,

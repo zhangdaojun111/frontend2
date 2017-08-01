@@ -37,8 +37,8 @@ let config={
                             }
                         }
                     }
-                    _this.data[f]["is_view"] = ( i == andData[f].length )? 0 : 1;
-                    _this.actions.changeControlDisabled(f);
+                    this.data.data[f]["is_view"] = ( i == andData[f].length )? 0 : 1;
+                    this.actions.changeControlDisabled(f);
                     // this.form.controls[f].updateValueAndValidity();
                 }
             }else {
@@ -47,26 +47,28 @@ let config={
                         continue;
                     }
                     //如果有字段的负责性，再开始下面的逻辑
-                    if(_this.data[dfield]["required_perm"] == 1){
+                    let data=this.data.data[dfield];
+                    if(this.data.data[dfield]["required_perm"] == 1){
+                        let data=this.data.data[dfield];
                         //针对多选下拉框，只要包含就可以
                         if(value instanceof Array){
-                            _this.data[dfield]["be_control_condition"] = value.indexOf(key) != -1 ? 0 : 1;
-                            _this.actions.changeControlDisabled(dfield);
+                            data["be_control_condition"] = value.indexOf(key) != -1 ? 0 : 1;
+                            this.actions.changeControlDisabled(dfield);
                             // this.form.controls[dfield].updateValueAndValidity();
                         }else{
-                            _this.data[dfield]["be_control_condition"] = (key == value) ? 0 : 1;
-                            _this.actions.changeControlDisabled(dfield);
+                            data["be_control_condition"] = (key == value) ? 0 : 1;
+                            this.actions.changeControlDisabled(dfield);
                             // this.form.controls[dfield].updateValueAndValidity();
                         }
-                        if( _this.data[dfield]["is_view"] == 0 ){
+                        if( data["is_view"] == 0 ){
                             arr.push( dfield );
                         }
                     }
+                    if(data["be_control_condition"] == 1 && !isInit){
+                        this.childComponent[dfield].data=data;
+                        this.childComponent[dfield].reload();
+                    }
                 }
-            }
-            if(_this.data[dfield]["be_control_condition"] == 1 && !isInit){
-                _this.childComponent[dfield].data=_this.data[dfield];
-                _this.childComponent[dfield].reload();
             }
         }
     }
@@ -75,72 +77,78 @@ let config={
         let _this=this;
         let cache_old = {};
         this.set('childComponent',{});
-        console.log('*********');
-        console.log(_this.data);
-        for(let data of _this.data.data){
-            let single=_this.el.find('div[data-dfield='+data.dfield+']');
+        let data=_this.data.data;
+        console.log('這個data');
+        console.log(data);
+        for(let key in data){
+            let single=_this.el.find('div[data-dfield='+data[key].dfield+']');
             let type=single.data('type');
-            if(data.required){
-                data['requiredClass']=data.value==''?'required':'required2';
+            if(data[key].required){
+                data[key]['requiredClass']=data[key].value==''?'required':'required2';
             }
-            cache_old[data.dfield] = data.value;
-            _this.actions.reviseCondition(data.dfield,data.value,true);
+            cache_old[data[key].dfield] = data[key].value;
+            _this.actions.reviseCondition(data[key],data[key].value,true);
             //在这里根据type创建各自的控件
             switch (type){
                 case 'radio':
-                    let radio=new Radio(data);
+                    console.log('group');
+                    console.log(data[key].group);
+                    for(let obj of data[key].group){
+                        obj['name']=data[key].dfield;
+                    }
+                    let radio=new Radio(data[key]);
                     radio.render(single);
-                    _this.childComponent[data.dfield]=radio;
+                    _this.childComponent[data[key].dfield]=radio;
                     break;
                 case 'input':
-                    let input=new Input(data);
+                    let input=new Input(data[key]);
                     input.render(single);
-                    _this.childComponent[data.dfield]=input;
+                    _this.childComponent[data[key].dfield]=input;
                     break;
                 case 'textarea':
-                    let textArea=new TextArea(data);
+                    let textArea=new TextArea(data[key]);
                     textArea.render(single);
-                    _this.childComponent[data.dfield]=textArea;
+                    _this.childComponent[data[key].dfield]=textArea;
                     break;
                 case 'readonly':
-                    let readonly=new Readonly(data);
+                    let readonly=new Readonly(data[key]);
                     readonly.render(single);
-                    _this.childComponent[data.dfield]=readonly;
+                    _this.childComponent[data[key].dfield]=readonly;
                     break;
                 case 'password':
-                    let password=new Password(data);
+                    let password=new Password(data[key]);
                     password.render(single);
-                    _this.childComponent[data.dfield]=password;
+                    _this.childComponent[data[key].dfield]=password;
                     break;
                 case 'hidden':
-                    let hidden=new Hidden(data);
+                    let hidden=new Hidden(data[key]);
                     hidden.render(single);
-                    _this.childComponent[data.dfield]=hidden;
+                    _this.childComponent[data[key].dfield]=hidden;
                     break;
                 case 'Select':
-                    let selectControl=new SelectControl(data);
+                    let selectControl=new SelectControl(data[key]);
                     selectControl.render(single);
-                    _this.childComponent[data.dfield]=selectControl;
+                    _this.childComponent[data[key].dfield]=selectControl;
                     break;
                 case 'Year':
-                    let yearControl = new YearControl(data);
+                    let yearControl = new YearControl(data[key]);
                     yearControl.render(single);
-                    _this.childComponent[data.dfield]=yearControl;
+                    _this.childComponent[data[key].dfield]=yearControl;
                     break;
                 case 'YearMonthControl':
-                    let yearMonthControl = new YearMonthControl(data);
+                    let yearMonthControl = new YearMonthControl(data[key]);
                     yearMonthControl.render(single);
-                    _this.childComponent[data.dfield]=yearMonthControl;
+                    _this.childComponent[data[key].dfield]=yearMonthControl;
                     break;
                 case 'Buildin':
-                    let buildInControl = new BuildInControl(data);
+                    let buildInControl = new BuildInControl(data[key]);
                     buildInControl.render(single);
-                    _this.childComponent[data.dfield]=buildInControl;
+                    _this.childComponent[data[key].dfield]=buildInControl;
                     break;
                 case 'MultiLinkage':
-                    let multiLinkageControl = new MultiLinkageControl(data);
+                    let multiLinkageControl = new MultiLinkageControl(data[key]);
                     multiLinkageControl.render(single);
-                    _this.childComponent[data.dfield]=multiLinkageControl;
+                    _this.childComponent[data[key].dfield]=multiLinkageControl;
                     break;
             }
         }
@@ -149,6 +157,8 @@ let config={
             $('.select-drop').hide();
         })
         Mediator.subscribe('form:changeValue',function(data){
+            console.log('subscribe');
+            console.log(data);
             let originalData=data;
             if(originalData["edit_condition"] && originalData["edit_condition"] !== "") {
                 _this.actions.reviseCondition(originalData,val,false);
@@ -180,6 +190,7 @@ class BaseForm extends Component{
         config.data=formData.data;
         console.log('#######')
         console.log(formData);
+        console.log('#######')
         super(config);
     }
     //提交表单数据

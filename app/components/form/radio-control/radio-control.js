@@ -15,6 +15,7 @@ let config={
                  {{/if}}
             </div>`,
     data:{
+
     },
     actions:{
     },
