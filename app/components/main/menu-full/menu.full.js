@@ -4,8 +4,6 @@ import './menu.full.scss';
 
 import {FullMenuItem} from './item/item';
 
-console.log(window.config);
-
 function searchData(menu, text, parent) {
     menu.forEach(function(item) {
         item.parent = parent;
@@ -30,17 +28,26 @@ function setSearchDisplayTrue(item) {
 let config = {
     template: template,
     data: {
-        list: window.config.menu,
+        list: [],
+        text: ''
     },
     actions: {
         search: function (text) {
-            let menu = _.defaultsDeep([], window.config.menu);
+            this.data.text = text;
+            let menu = _.defaultsDeep([], this.originData);
             searchData(menu, text, null);
             this.data.list = menu;
             this.reload();
+        },
+        hide: function() {
+            this.el.hide();
+        },
+        show: function() {
+            this.el.show();
         }
     },
     afterRender: function () {
+        this.originData = _.defaultsDeep([], this.data.list);
         this.data.children = [];
         this.data.list.forEach((data) => {
             let component = new FullMenuItem(_.defaultsDeep({}, data, {
@@ -50,18 +57,25 @@ let config = {
             }));
             this.append(component, this.el.find('.root'));
         });
+        let that = this;
+        this.el.find('#search-menu-button').on('input', _.debounce(function() {
+            that.actions.search(this.value);
+        }, 1000));
         this.el.css({
             height: 'calc(100% - 230px)',
             overflow: 'auto'
-        })
-    },
-    firstAfterRender: function () {
-
+        });
     },
     beforeDestory: () => {
+        this.el.find('#search-menu-button').off();
+    }
+}
 
+class MenuComponent extends Component {
+    constructor(data){
+        super(config, data);
     }
 }
 
 
-export const FullMenuInstance = new Component(config);
+export {MenuComponent};

@@ -31,10 +31,10 @@ let config = {
                 }
             } else {
                 Mediator.emit('menu:item:openiframe', {
-                    id: this.data.folder_id,
+                    id: this.data.mid,
                     name: this.data.label,
                     url: this.data.url
-                })
+                });
             }
         }
     },

@@ -92,25 +92,7 @@ html, body {
         margin-bottom: 10px;
     }
 
-    .search {
-        background-image: url("../images/search.png");
-        background-repeat: no-repeat;
-        background-position: 10px 0;
-        padding-bottom: 5px;
-        display: block;
-        border-bottom: 1px solid $aside-top-bg;
-        input {
-            background-color: transparent;
-            display: block;
-            border: 0 none;
-            outline: none;
-            display: block;
-            color: #fff;
-            float: left;
-            margin-left: 30px;
-            width: calc(100% - 40px);
-        }
-    }
+
 }
 
 #content {
