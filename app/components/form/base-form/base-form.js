@@ -70,37 +70,6 @@ let config={
             }
         }
     }
-        // init:function(){
-        //     let _this=this;
-        //     console.log(_this.el);
-        //     for(let data of _this.data.data){
-        //         console.log(data.dfield);
-        //         let single=_this.el.find('div[data-dfield='+data.dfield+']');
-        //         let type=single.data('type');
-        //         console.log('*********')
-        //         console.log('*********')
-        //         console.log('*********')
-        //         console.log(type);
-        //         //在这里根据type创建各自的控件
-        //         switch (type){
-        //             case 'radio':
-        //                 let radio=new Radio(data);
-        //                 radio.render(single);
-        //                 _this.childComponent[data.dfield]=radio;
-        //                 break;
-        //             case 'input':
-        //                 let input=new Input(data);
-        //                 input.render(single);
-        //                 _this.childComponent[data.dfield]=input;
-        //                 break;
-        //             case 'textarea':
-        //                 let textArea=new TextArea(data);
-        //                 textArea.render(single);
-        //                 _this.childComponent[data.dfield]=textArea;
-        //                 break;
-        //         }
-        //     }
-        // }
     },
     firstAfterRender:function(){
         let _this=this;
@@ -177,14 +146,9 @@ let config={
             $('.select-drop').hide();
         })
         Mediator.subscribe('form:changeValue',function(data){
-            console.log(data);
             let originalData=data;
             if(originalData["edit_condition"] && originalData["edit_condition"] !== "") {
                 _this.actions.reviseCondition(originalData,val,false);
-            }
-            _this.childComponent[data.dfield].data['value']=data.value;
-            if(originalData.showValue || originalData.showValue==''){
-                _this.childComponent[originalData.dfield].originalData['showValue']=originalData.showValue;
             }
             if(originalData.value=='' || originalData.value.length==0 || originalData.value==null){
                 _this.childComponent[originalData.dfield].data['requiredClass']='required';
@@ -192,7 +156,6 @@ let config={
                 _this.childComponent[originalData.dfield].data['requiredClass']='required2';
             }
             _this.childComponent[originalData.dfield].reload();
-            // console.log($(this));
             $('.select-drop').hide();
         })
 
