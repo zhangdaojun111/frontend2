@@ -70,6 +70,13 @@ let config = {
                 columnDefs.push(col);
             }
 
+            columnDefs.unshift(
+                dgcService.selectCol
+            );
+            let number = dgcService.numberCol;
+            number['headerCellTemplate'] = this.actions.resetPreference();
+            columnDefs.unshift(number);
+
             return columnDefs;
         },
         getArr: function (i,n,column,len,data,otherCol) {
@@ -164,7 +171,10 @@ let config = {
                         // icons: {
                         //     sortAscending: '<img src="' + img1 + '" style="width: 15px;height:15px;"/>',
                         //     sortDescending: '<img src="' + img2 + '" style="width: 15px;height:15px;"/>'
-                        // }
+                        // },
+                        suppressSorting: false,
+                        suppressResize: false,
+                        suppressMovable: false,
                         cellRenderer: (params) => {
                             return this.actions.bodyCellRenderer( params );
                         }
@@ -197,14 +207,11 @@ let config = {
                     let oInfo = JSON.parse(info);
                     for (let i in oInfo) {
                         if (i == rowId) {
-                            // if (oInfo[i].indexOf(colDef['colId']) != -1) {
                             try{
                                 color = oInfo[i][colDef['colId']];
-                                // color = remindColorInfo[colDef['colId']]['color'];
                             }catch (err){
                                 color = 'transparent';
                             }
-                            // }
                         }
                     }
                 }
@@ -447,6 +454,17 @@ let config = {
                 sHtml = sHtml = '<span>' + params.value + '</span>';
             }
             return sHtml;
+        },
+        //重置偏好
+        resetPreference: function () {
+            let eHeader = document.createElement('span');
+            eHeader.innerHTML = "初";
+            eHeader.className = "table-init-logo";
+
+            eHeader.addEventListener('click', ()=> {
+                alert("重置偏好")
+            });
+            return eHeader;
         }
     },
     afterRender: function (){
