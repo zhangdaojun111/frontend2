@@ -44,7 +44,6 @@ dynamic();
 let template=`<div class="form">
               <div data-dfield="f24" data-type="textarea" data-width="500"/> 
               <div data-dfield="f28" data-type="radio" data-width="300"/>
-              <div data-dfield="f11" data-type="input" data-width="300"/> 
               <div data-dfield="f12" data-type="input" data-width="300"/> 
               <div data-dfield="f10" data-type="Select" data-width="300"/> 
               <div data-dfield="f6" data-type="Year" data-width="300"/> 
@@ -52,7 +51,7 @@ let template=`<div class="form">
               <div data-dfield="f7" data-type="MultiLinkage" data-width="300"/>
                <div data-dfield="f11" data-type="input" data-width="300"/>
               <div data-dfield="f23" data-type="readonly" data-width="300"/>
-               <div data-dfield="f233" data-type="hidden" data-width="300"/>
+               <div data-dfield="f8" data-type="hidden" data-width="300"/>
               <div data-dfield="f27" data-type="password" data-width="300"/>
               </div> 
                 `;
@@ -155,11 +154,11 @@ let data={
             is_view: 0,
             label: "只读",
             real_type: "0",
-            required: 0,
+            required: 1,
             required_perm: 1,
             type: "Readonly",
             unvisible: 0,
-            value: "dddd",
+            value: "asdaff",
             reg:"^[0-9]*$",
             numArea: {
                 max: "33",
@@ -190,7 +189,7 @@ let data={
             value: "",
         },
         {
-            dfield: "f233",
+            dfield: "f8",
             dinput_type: "21",
             dtype: "8",
             effect: [],
@@ -207,27 +206,6 @@ let data={
             type: "Hidden",
             unvisible: 0,
             value: "",
-        },
-        {
-            dfield: "f11",
-            dinput_type: "0",
-            dtype: "0",
-            effect: [],
-            expression: "",
-            field_content: {},
-            history: 0,
-            history_data: [],
-            id: "2300_8x6kYn9ydZ7VBUw6tLjUN4",
-            is_view: 0,
-            label: "服务器地址",
-            real_type: "0",
-            relevance_condition: {},
-            required: 0,
-            required_perm: 1,
-            type: "Input",
-            unvisible: 0,
-            value: "哈哈",
-            class1:'required2'
         },
         {
             dfield: "f12",
