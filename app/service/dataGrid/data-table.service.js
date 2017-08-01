@@ -1,4 +1,4 @@
-import {HTTP} from "../../../lib/http"
+import {HTTP} from "../../lib/http"
 export const dataTableService = {
     getTableData: function ( param ){
         // console.log( param )

@@ -3,10 +3,11 @@ import template from './data-table-agGrid.html';
 import './data-table-agGrid.scss';
 
 import agGrid from "../../agGrid/agGrid";
-import {dataTableService} from "../../../../lib/service/dataGrid/data-table.service";
-import {dgcService} from "../../../../lib/service/dataGrid/data-table-control.service";
-import {fieldTypeService} from "../../../../lib/service/field-type-service";
+import {dataTableService} from "../../../../service/dataGrid/data-table.service";
+import {dgcService} from "../../../../service/dataGrid/data-table-control.service";
+import {fieldTypeService} from "../../../../service/field-type-service";
 import FloatingFilter from "../../data-table-toolbar/floating-filter/floating-filter";
+import dataPagination from "../../data-table-toolbar/data-pagination/data-pagination";
 
 let config = {
     template: template,
@@ -33,9 +34,9 @@ let config = {
             "开发中": "#00b500"
         }},info:''},
         //数据总数
-        total:0,
+        total: 1000,
         //展示的数据行数
-        rows:100,
+        rows: 100,
         //头部字段属性字典{f1： info}
         colsDict:{},
         //操作列
@@ -50,8 +51,14 @@ let config = {
         isFixed: false,
         //模式
         viewMode: 'normal',
-        //搜索参数
-        searchValue: []
+        //floatingFilter搜索参数
+        searchValue: [],
+        //floatingFilter搜索参数
+        searchOldValue: [],
+        //floatingFilter搜索参数
+        queryList: {},
+        //请求数据参数
+        postData: []
     },
     //原始字段数据
     fieldsData: [],
@@ -189,7 +196,8 @@ let config = {
                         filter: fieldTypeService.numOrText(data.data["real_type"]) ? "number" : "text",
                         headerClass: headClass,
                         cellStyle: {'font-style': 'normal'},
-                        floatingFilterComponent: new FloatingFilter().actions.createFilter(fieldTypeService.searchType( data.data["real_type"] ),data.data["field"],this.data.searchValue,this.data.searchOldValue),
+                        floatingFilterComponent: this.floatingFilterCom.actions.createFilter(fieldTypeService.searchType( data.data["real_type"] ),data.data["field"],this.data.searchValue,this.data.searchOldValue),
+                        floatingFilterComponentParams:{suppressFilterButton: true},
                         enableRowGroup: true,
                         // icons: {
                         //     sortAscending: '<img src="' + img1 + '" style="width: 15px;height:15px;"/>',
@@ -202,6 +210,31 @@ let config = {
                             return this.actions.bodyCellRenderer( params );
                         }
                     }
+                    // if (fieldContent) {
+                    //     if (data.data['id'] == fieldContent['child_field']||data.data['id'] == fieldContent['count_field']) {
+                    //         obj['cellStyle'] = {'font-style': 'normal'};
+                    //         obj['cellStyle']['background-color'] =  'rgb(177,215,253)';
+                    //     }
+                    // }
+                    // 图片可见单元格属性修改
+                    if (data.data["dinput_type"] == fieldTypeService.IMAGE_TYPE && data.data['field_content']['is_show_image'] == 1) {
+                        obj['cellStyle'] = { 'font-style': 'normal'};
+                        obj['cellStyle']['overflow'] = "visible";
+                    }
+                    let width = data.data["width"];
+                    if( this.colWidth && this.colWidth[data.data["field"]] ){
+                        width = this.colWidth[data.data["field"]];
+                    }
+                    obj["width"] = width;
+                    if (( fieldTypeService.childTable(data.data["dinput_type"]) || fieldTypeService.countTable(data.data["dinput_type"]) ) ) {
+                        obj['editable'] = false;
+                        obj['cellStyle'] = {'font-style': 'normal'};
+                        obj['cellStyle'] ['background']= "#ddd"
+                    }
+                    // if( editCols ){
+                    //     this.setEditableCol( obj );
+                    // }
+
                     column.push(obj);
                 }
             }
@@ -544,9 +577,51 @@ let config = {
             }
             str += '</div>';
             return str
+        },
+        //floatingFilter拼参数
+        floatingFilterPostData: function(col_field,keyWord,searchOperate) {
+            this.data.queryList[col_field] = {
+                'keyWord': keyWord,
+                'operate': dgcService.getMongoSearch(searchOperate),
+                'col_field': col_field
+            };
+            //用于去除queryList中的空值''
+            let obj = {};
+            for( let key in this.data.queryList ){
+                if( !( this.data.queryList[key]["keyWord"] == "" ) ){
+                    obj[key] = this.data.queryList[key];
+                }
+            }
+            this.data.queryList = obj;
+            this.data.postData['filter'] = [];
+            for (let attr in this.data.queryList) {
+                this.data.postData['filter'].push({
+                    "relation": "$and",
+                    "cond": {
+                        "leftBracket": 0,
+                        "searchBy": this.data.queryList[attr]['col_field'],
+                        "operate": this.data.queryList[attr]['operate'],
+                        "keyword": this.data.queryList[attr]['keyWord'],
+                        "rightBracket": 0
+                    }
+                });
+            }
+            let obj_2 = {};
+            if( this.data.postData['filter'].length == 0 ){
+                for( let key in this.data.postData ){
+                    if( key != "filter" ){
+                        obj_2[key] = this.data.postData[key];
+                    }
+                }
+            }else {
+                obj_2 = this.data.postData;
+            }
+            obj_2['is_filter'] = 1;
         }
     },
     afterRender: function (){
+        this.floatingFilterCom = new FloatingFilter();
+        this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData
         this.actions.prepareData()
         let res = {
             "rows": [
@@ -1536,7 +1611,7 @@ let config = {
         this.fieldsData = res.rows || [];
         //创建表头数据
         this.columnDefs = this.actions.createHeaderColumnDefs()
-
+        //渲染agGrid
         let data = {
             columnDefs: this.columnDefs,
             rowData: [
@@ -1604,6 +1679,12 @@ let config = {
             floatingFilter: true
         }
         this.append(new agGrid(data), this.el.find('#data-agGrid'));
+        //渲染分页
+        let paginationData = {
+            total: this.data.total,
+            rows: this.data.rows
+        }
+        this.append(new dataPagination(paginationData), this.el.find('.pagination'));
     }
 }
 

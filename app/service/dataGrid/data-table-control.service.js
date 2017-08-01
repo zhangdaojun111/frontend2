@@ -86,5 +86,28 @@ export const dgcService = {
         suppressFilter: true,
         suppressMenu: true,
         cellRenderer: (params)=>{}
+    },
+    //搜索类型
+    // 判断搜索类型
+    getMongoSearch: function(data) {
+        switch(data){
+            case "EQUALS":
+                return "exact";
+            case "NOT_EQUAL":
+            case "NOT_EQUALS":
+                return "$ne";
+            case "GREATER_THAN":
+                return "$gt";
+            case "GREATER_THAN_OR_EQUAL":
+                return "$gte";
+            case "LESS_THAN":
+                return "$lt";
+            case "LESS_THAN_OR_EQUAL":
+                return "$lte";
+            case "CONTAINS":
+            case "STARTS_WITH":
+            default:
+                return "$regex";
+        }
     }
 }

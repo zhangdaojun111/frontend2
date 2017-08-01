@@ -1,8 +1,6 @@
 import Component from "../../../../lib/component";
 import template from './floating-filter.html';
 import agGrid from "../../agGrid/agGrid";
-import fieldTypeService from "../../../../lib/service/field-type-service";
-// import dataTableService from "../../service/data-table.service";
 
 let config = {
     template: template,
@@ -12,6 +10,7 @@ let config = {
         createFilter: function(colInfo,searchFiled,searchValue,searchOldValue) {
                 let FloatingFilter = function() {
                 }
+                let That = this
                 FloatingFilter.prototype.init = function (params) {
                     // this.onFloatingFilterChanged = params.onFloatingFilterChanged;
                     this.eGui = document.createElement('div');
@@ -43,13 +42,13 @@ let config = {
                     }
                     this.eFilterInput.addEventListener(searchType,($event)=> {
                         if($event['keycode'] != 229){
-                            // this.actions.keyupSearch($event,this.eFilterInput,searchFiled,colInfo,searchType,searchOldValue,searchValue);
+                            That.actions.keyupSearch($event,this.eFilterInput,searchFiled,colInfo,searchType,searchOldValue,searchValue);
                         }
                     })
                     if( searchType == 'keyup' ){
                         this.eFilterInput.addEventListener( 'keydown', ($event)=> {
                             if( $event.keyCode == 229 ){
-                                // this.keyupSearch($event,this.eFilterInput,col_field,colInfo,searchType,searchOldValue,searchValue);
+                                That.actions.keyupSearch($event,this.eFilterInput,col_field,colInfo,searchType,searchOldValue,searchValue);
                             }
                         });
                     }
@@ -74,8 +73,8 @@ let config = {
                     }
                 }
             }
-            let keyWord = fieldTypeService.numOrText( colInfo.real_type ) ? Number(oInput.value) : oInput.value;
-            let searchOperate = fieldTypeService.numOrText( colInfo.real_type ) ? 'EQUALS' : 'CONTAINS';
+            let keyWord = colInfo == 'number' ? Number(oInput.value) : oInput.value;
+            let searchOperate = colInfo == 'number' ? 'EQUALS' : 'CONTAINS';
             if( oInput.value == "" ){
                 keyWord = oInput.value;
             }
@@ -92,15 +91,13 @@ let config = {
                 }
             }
             searchValue[col_field] = oInput.value;
-            this.dTService.dataSearch.next({
-                col_field:col_field,
-                keyWord:keyWord,
-                searchOperate:searchOperate
-            })
+
+            this.actions.floatingFilterPostData(col_field,keyWord,searchOperate);
+        },
+        floatingFilterPostData:function(col_field,keyWord,searchOperate){
         }
     },
     afterRender: function() {
-        // this.actions.agInit();
     }
 }
 class FloatingFilter extends Component {

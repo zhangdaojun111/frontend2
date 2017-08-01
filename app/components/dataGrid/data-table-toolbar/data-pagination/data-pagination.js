@@ -1,40 +1,33 @@
 import Component from "../../../../lib/component";
 import template from './data-pagination.html';
 import './data-pagination.scss';
-import {Grid,GridOptions} from 'ag-grid/main';
-
 
 let config = {
     template: template,
     data: {
         pagination:true,
         //数据总条数
-        total:1000,
-        //记录总页数
-        myPageAll:11,
-        currentPage:11,
+        total: 0,
+        //每页显示数量
+        rows: 100,
+        //当前页数
+        currentPage:1,
+        //分页总数
+        sumPage: 8,
+        //分页后第一条是总数据多少条
+        firstRow: 1,
+        //rows可选项
+        options:[100,200,300,400,500,5000]
     },
     actions: {
-        //改变页面条数大小
-        initPage:function (){
-            // this.data[pagination] =
-        },
-        changeData: function () {
+        //分页数据改变
+        paginationChanged: function ( currentPage,rows,firstRow ) {
             
         }
     },
     afterRender: function (){
-        // this.action.postData();
 
-       $(".selectSize").on("change",()=>{
-
-           }
-       )
-
-    },
-
-
-
+    }
 }
 class dataPagination extends Component {
     constructor(data) {
