@@ -9,10 +9,6 @@ import Component from '../../lib/component';
 
 export class BiBaseComponent extends Component{
     constructor(config, data) {
-        if (data) {
-            super(config, data)
-        } else {
-            super(config)
-        }
+        super(config)
     }
 }
