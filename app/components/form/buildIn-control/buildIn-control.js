@@ -28,7 +28,7 @@ let config={
             if(data.dfield !=_this.data.dfield || !_this.data.required){
                 return;
             }
-            _this.data.value=data.value;
+            _this.data=Object.assign(_this.data,data);
             Mediator.publish('form:changeValue',_this.data);
         });
     },

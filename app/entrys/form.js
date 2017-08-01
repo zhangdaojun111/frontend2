@@ -20,6 +20,26 @@ async function wait() {
 }
 wait();
 
+async function dynamic() {
+    let data = await HTTP.postImmediately({
+        url: 'http://127.0.0.1:8081/get_form_dynamic_data/?seqid=yudeping&table_id=8696_yz7BRBJPyWnbud4s6ckU7e&is_extra=&form_id=',
+        type: "POST",
+        hearder:'',
+        data: {
+            form_id:'',
+            table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
+            is_view:0,
+            parent_table_id:'',
+            parent_real_id:'',
+            parent_temp_id:'',
+            real_id:'',
+        }
+    });
+    console.log(data);
+    console.log('hello world 123123');
+}
+dynamic();
+
 //在这里加对应的控件模板
 let template=`<div class="form">
               <div data-dfield="f24" data-type="textarea" data-width="500"/> 
