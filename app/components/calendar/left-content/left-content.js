@@ -7,12 +7,13 @@ import Mediator from '../../../lib/mediator';
 let config = {
     template: template, 
     data:{
-    	classifyList:[{text: '提醒'}], 	
+    	classifyList:[{Text: '提醒'},{Text:'chanpin'}],
     },
     actions: {
     	
     },
     afterRender: function() {
+        this.el.css({"height":"100%","width":"100%"});
        this.append(new LeftCalendar, this.el.find('.left-calendar-box'));
        this.data.classifyList.forEach((row) => {
             this.append(new LeftContentSelect(row), this.el.find('.test1'));
@@ -28,14 +29,15 @@ class Leftcontent extends Component {
 let contentStatus = 1;
 function contentHide(){
 	if(contentStatus == 1){
-		$(".taskbar").animate({height:"400px"});
-		$(".item-title").animate({marginTop:"420px"});
+		$(".taskbar").animate({height:"60%"});
+		$(".cate-hide").animate({height:"4%"});
 	 	$(".item-content").hide();	 	
 	 	contentStatus = 0;
 	}
 	else if(contentStatus == 0){
-		$(".taskbar").animate({height:"150px"},1);
-		$(".item-title").animate({marginTop:"100px"});
+		$(".taskbar").animate({height:"25%"},1);
+        $(".cate-hide").animate({height:"39%"});
+		//$(".item-title").animate({marginTop:"100px"});
 	 	$(".item-content").show();
 	 	
 	 	
