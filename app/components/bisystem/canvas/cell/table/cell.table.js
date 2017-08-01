@@ -3,6 +3,7 @@
  */
 import {BiBaseComponent} from '../../../bi.base.component';
 import template from './cell.table.html';
+import "./cell.table.scss";
 
 let config = {
     template: template

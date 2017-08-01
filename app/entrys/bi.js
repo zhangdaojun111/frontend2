@@ -6,9 +6,8 @@ import ViewsComponent from "../components/bisystem/views/views";
 let CanvasCells = new CanvasCellsComponent();
 CanvasCells.render($('#bi-container'));
 
-   let Views = new ViewsComponent();
-
-   Views.render($('#views'));
+let Views = new ViewsComponent();
+Views.render($('#views'));
 
 
 

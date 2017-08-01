@@ -38,7 +38,7 @@ $active-color: #1caeff;
     }
     @media screen and (min-width: 900px) {
       .nav_white {
-        width: calc(100vw - 400px);
+        width: calc(100% - 400px);
         overflow: hidden;
       }
     }
