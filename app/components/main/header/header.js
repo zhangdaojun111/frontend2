@@ -20,7 +20,6 @@ let config = {
     afterRender: function () {
         this.el.tooltip();
         let that = this;
-        Mediator.emit('aside:size', 'mini');
         this.el.on('click', '.fold', () => {
             that.data.asideSize = that.data.asideSize === 'full' ? 'mini' : 'full';
             Mediator.emit('aside:size', that.data.asideSize);

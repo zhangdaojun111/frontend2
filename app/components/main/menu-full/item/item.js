@@ -25,7 +25,7 @@ let config = {
             this.data.display = false;
         },
         onItemClick: function() {
-            debugger;
+            console.log(this.data);
             if (this.data.items && this.data.items.length) {
                 if (this.data.type === 'full') {
                     if (this.data.display === true) {

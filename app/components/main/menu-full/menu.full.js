@@ -53,6 +53,7 @@ let config = {
         setSizeToFull: function () {
             this.el.removeClass('mini');
             this.data.type = 'full';
+            this.reload();
             this.actions.countHeight();
         },
         setSizeToMini: function () {

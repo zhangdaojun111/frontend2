@@ -4,12 +4,18 @@ import './aside.scss';
 import {MenuComponent} from '../menu-full/menu.full';
 import Mediator from '../../../lib/mediator';
 
-function presetMenuData(menu) {
-    let res = _.defaultsDeep([], menu);
+function presetMenuData(menu, leaf) {
+    let res;
+    if (leaf !== true) {
+        res = _.defaultsDeep([], menu);
+    } else {
+        res = menu;
+    }
     res.forEach((item) => {
         item.mid = item.folder_id;
+        console.log(item);
         if (item.items) {
-            presetMenuData(item.items);
+            presetMenuData(item.items, true);
         }
     });
     return res;
@@ -21,37 +27,57 @@ let config = {
     actions: {
         setSizeToFull: function() {
             this.el.removeClass('mini');
-            this.allMenu.actions.setSizeToFull();
-            this.commonMenu.actions.setSizeToFull();
+            if (this.data.menuType === 'all') {
+                this.allMenu.actions.setSizeToFull();
+            } else {
+                this.commonMenu.actions.setSizeToFull();
+            }
         },
         setSizeToMini: function() {
             this.el.addClass('mini');
-            this.allMenu.actions.setSizeToMini();
-            this.commonMenu.actions.setSizeToMini();
+            if (this.data.menuType === 'all') {
+                this.allMenu.actions.setSizeToMini();
+            } else {
+                this.commonMenu.actions.setSizeToMini();
+            }
+        },
+        showAllMenu: function () {
+            if (!this.allMenu) {
+                this.allMenu = new MenuComponent({list: presetMenuData(window.config.menu)});
+                this.allMenu.render(this.el.find('.menu.all'));
+            }
+            if (this.commonMenu) {
+                this.commonMenu.actions.hide();
+            }
+            this.allMenu.actions.show();
+            this.allBtn.addClass('active');
+            this.commonBtn.removeClass('active');
+            this.data.menuType = 'all';
+        },
+        showCommonMenu: function () {
+            if (!this.commonMenu) {
+                this.commonMenu = new MenuComponent({list: presetMenuData(window.config.menu)});
+                this.commonMenu.render(this.el.find('.menu.common'));
+            }
+            if (this.allMenu) {
+                this.allMenu.actions.hide();
+            }
+            this.commonMenu.actions.show();
+            this.allBtn.removeClass('active');
+            this.commonBtn.addClass('active');
+            this.data.menuType = 'common';
         }
     },
     afterRender: function () {
         if (window.config && window.config.menu) {
-            this.allMenu = new MenuComponent({list: presetMenuData(window.config.menu)});
-            this.commonMenu = new MenuComponent({list: presetMenuData(window.config.menu)});
-            this.allMenu.render(this.el.find('.menu.all'));
-            this.commonMenu.render(this.el.find('.menu.common')).actions.hide();
-            let allBtn = this.el.find('.tabs p.all');
-            let commonBtn = this.el.find('.tabs p.common');
-            this.el.on('click', '.tabs p', function () {
-                let me = $(this);
-                if (me.hasClass('all')) {
-                    allMenu.actions.show();
-                    commonMenu.actions.hide();
-                    allBtn.addClass('active');
-                    commonBtn.removeClass('active');
-                } else {
-                    allMenu.actions.hide();
-                    commonMenu.actions.show();
-                    allBtn.removeClass('active');
-                    commonBtn.addClass('active');
-                }
-            })
+            this.allBtn = this.el.find('.tabs p.all');
+            this.commonBtn = this.el.find('.tabs p.common');
+            this.el.on('click', '.tabs p.all', () => {
+                this.actions.showAllMenu();
+            }).on('click', '.tabs p.common', () => {
+                this.actions.showCommonMenu();
+            });
+            this.actions.showAllMenu();
         }
     },
     firstAfterRender: function() {
