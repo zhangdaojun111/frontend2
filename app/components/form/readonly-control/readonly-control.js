@@ -1,24 +1,29 @@
 import Component from '../../../lib/component';
 import '../../../assets/scss/control.scss'
+import Mediator from '../../../lib/mediator';
+
 let config={
-    template:`<div style="display: inline-block">{{label}}</div>
-               {{#if depIf}}
-               <input style="width: 240px"  type="text" value="{{value}}" >
-               {{else}}
-               <span style="position: relative; display:inline-block;">
-                     <input style="width: 240px;background: #ebebe4;"  type="text" value="{{value}}" readonly="readonly"  class={{inputClass}} >
-                     <span id="requirelogo" class={{spanClass}}> </span>
-                     
-                     <div class={{error_msg}} id="error_tip"  style="left: 240px; display:none">
-                            <em class={{ui_error_arrow}}></em>
-                            <pre>{{ regErrorMsg }}</pre>
-                     </div>                                         
-                </span>
-               {{/if}}
+    template:`<div class="clearfix">
+                    {{#if be_control_condition }}
+                        <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+                    {{else}}                 
+                  <div style="display: inline-block">{{label}}</div>               
+                   <input style="width: 240px;background: #ebebe4;"  type="text" value="{{value}}" readonly="readonly"  class={{inputClass}} > 
+                   <div style="display: inline-block">
+                           {{#if required}}
+                            <span class="{{requiredClass}}" ></span>
+                           {{/if}} 
+                   </div>                   
+                   {{/if}}
+                   <span style="position: relative; display:inline-block">  
+                         <div class={{error_msg}} id="error_tip"  style=" display:none">
+                                <em class={{ui_error_arrow}}></em>
+                                <pre>{{ regErrorMsg }}</pre>
+                         </div>  
+                    </span>
+               </div>
                 `,
     data:{
-        depIf:false,
-        spanClass: 'required',
         inputClass:'dynamic-form-input',
         error_msg: ' error-msg',
         ui_error_arrow: 'ui-error-arrow',
@@ -99,6 +104,12 @@ let config={
                 }
             }
         }
+    },
+    firstAfterRender:function(){
+        let _this=this;
+        Mediator.subscribe('form:changeValue',function(data){
+            Mediator.publish('form:changeValue',_this.data);
+        });
     },
     afterRender: function() {
             this.el.on( 'input', () => {

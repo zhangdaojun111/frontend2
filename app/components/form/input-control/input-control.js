@@ -1,33 +1,34 @@
 import Component from '../../../lib/component';
 import '../../../assets/scss/control.scss'
+import Mediator from '../../../lib/mediator';
 
 let config={
-    template:`<div style="display: inline-block">{{label}}</div>
-               {{#if depIf}}
-               <input style="width: 240px"  type="text" value="{{value}}" >
-               {{else}}
-               <span style="position: relative; display:inline-block">
-                     <input style="width: 240px"  type="text" value="{{value}}" class={{inputClass}} >{{value}}
-                     <span id="requirelogo" class={{spanClass}}> </span>
-                     
-                     <div class={{error_msg}} id="error_tip"  style="left: 240px; display:none">
-                            <em class={{ui_error_arrow}}></em>
-                            <pre>{{ regErrorMsg }}</pre>
-                     </div>
-                     
-                     <span style="display: none;">
-                         <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                     </span>
-                </span>
-               {{/if}}
+    template:`
+                <div class="clearfix">
+                    {{#if be_control_condition }}
+                        <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+                    {{else}}                 
+                  <div style="display: inline-block">{{label}}</div>               
+                   <input style="width: 240px"  type="text" value="{{value}}" class={{inputClass}} >{{value}}  
+                   <div style="display: inline-block">
+                           {{#if required}}
+                            <span class="{{requiredClass}}" ></span>
+                           {{/if}} 
+                   </div>                   
+                   {{/if}}
+                   <span style="position: relative; display:inline-block">  
+                         <div class={{error_msg}} id="error_tip"  style=" display:none">
+                                <em class={{ui_error_arrow}}></em>
+                                <pre>{{ regErrorMsg }}</pre>
+                         </div>  
+                    </span>
+               </div>
                 `,
-    data:{
-        depIf:false,
-        spanClass: 'required',
-        inputClass:'dynamic-form-input',
+    data: {
+        inputClass: 'dynamic-form-input',
         error_msg: ' error-msg',
         ui_error_arrow: 'ui-error-arrow',
-                // <input type="text" value="{{value}}"/>`,
+    },
     actions:{
         keyup: function() {
 
@@ -39,18 +40,6 @@ let config={
         let required = this.data.required
 
         console.log(" val:"+val+"  func:"+func+"  reg:"+reg);
-            //必填的样式切换
-            if(required == "1") {
-                if(val != ""){
-                    this.el.find("#requirelogo").css({"background":"url(../app/assets/images/icon_required2.png)"});
-                }else{
-                    this.el.find("#requirelogo").css("background","url(../app/assets/images/icon_required.png)");
-                }
-            }
-            if(val === "" && required!== "1"){
-                this.el.find("#error_tip").css("display","none");
-            }
-
             //输入框输入时的实时函数验证
             if(val != "" && !$.isEmptyObject(func)){
                 for(let r in func){
@@ -140,6 +129,12 @@ let config={
     }        
 
     },
+    firstAfterRender:function(){
+        let _this=this;
+        Mediator.subscribe('form:changeValue',function(data){
+            Mediator.publish('form:changeValue',_this.data);
+        });
+    },
     afterRender: function() {
         this.el.on('keyup', 'input', () => {
             this.actions.keyup();
@@ -161,7 +156,7 @@ let config={
 
     },
     }
-}
+
 class InputControl extends Component {
     constructor(data){
         super(config,data);

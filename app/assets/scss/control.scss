@@ -7,20 +7,11 @@
      opacity: 100;
      padding: 0 5px;
 }
-.required{
-  background: url("../images/icon_required.png");
-  display: inline-block;
-  color: #ff0617;
-  width: 16px;
-  height: 16px;
-  margin-left: 5px;
 
-}
  .error-msg {
    height: 30px;
-   top: -2px;
+   top: 0px;
    zoom: 1;
-   left: 290px;
    display: block;
    position: absolute;
    border: 1px solid red;
