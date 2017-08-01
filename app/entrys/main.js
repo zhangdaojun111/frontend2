@@ -63,7 +63,12 @@ let el=$('<div style="border: 1px solid red;background:#fff;position: fixed;widt
 //在这里加对应的控件模板
 let template=`<div data-dfield="f24" data-type="textarea" data-width="500"/> 
               <div data-dfield="f28" data-type="radio" data-width="300"/>
-              <div data-dfield="f11" data-type="input" data-width="300"/> `;
+              <div data-dfield="f11" data-type="input" data-width="300"/>
+              <div data-dfield="f23" data-type="readonly" data-width="300"/>
+               <div data-dfield="f233" data-type="hidden" data-width="300"/>
+              <div data-dfield="f27" data-type="password" data-width="300"/> 
+             
+                `;
 
 let data={
     attachment: [],
@@ -134,14 +139,22 @@ let data={
         history_data: [],
         id: "2300_8x6kYn9ydZ7VBUw6tLjUN4",
         is_view: 0,
-        label: "服务器地址",
+        label: "普通输入",
         real_type: "0",
         relevance_condition: {},
-        required: 0,
+        required: 1,
         required_perm: 1,
         type: "Input",
         unvisible: 0,
-        value: ""
+        value: "",
+            reg:"^[0-9]*$",
+            numArea: {
+                max: "33",
+                min : 10,
+                error: ""
+            },
+            func:'1',
+        regErrorMsg:""
     },
         {
         dfield: "f24",
@@ -162,7 +175,74 @@ let data={
         type: "Textarea",
         unvisible: 0,
         value: ""
-    }],
+    },
+        {
+            dfield: "f23",
+            dinput_type: "21",
+            dtype: "8",
+            effect: [],
+            expression: "",
+            field_content: {},
+            history: 0,
+            history_data: [],
+            id: "5496_ee3C3otL9XZ65xV3DpKShm",
+            is_view: 0,
+            label: "只读",
+            real_type: "0",
+            required: 0,
+            required_perm: 1,
+            type: "Readonly",
+            unvisible: 0,
+            value: "dddd",
+            reg:"^[0-9]*$",
+            numArea: {
+                max: "33",
+                min : 10,
+                error: ""
+            },
+            func:'1',
+            regErrorMsg:""
+        },
+        {
+            dfield: "f27",
+            dinput_type: "25",
+            dtype: "0",
+            effect: [],
+            expression: "",
+            field_content: {use_password:0, type:"md5"},
+            history: 0,
+            history_data: [],
+            id: "9268_Z42DEzpGJDQD3UZi5N8rPK",
+            is_view: 0,
+            label: "加密文本",
+            real_type: "25",
+            relevance_condition:{},
+            required: 0,
+            required_perm: 1,
+            type: "EnctyptInput",
+            unvisible: 0,
+            value: "",
+        },
+        {
+            dfield: "f233",
+            dinput_type: "21",
+            dtype: "8",
+            effect: [],
+            expression: "",
+            field_content: {},
+            history: 0,
+            history_data: [],
+            id: "5496_ee3C3otL9XZ65xV3DpKShm",
+            is_view: 0,
+            label: "隐藏",
+            real_type: "0",
+            required: 0,
+            required_perm: 1,
+            type: "Hidden",
+            unvisible: 0,
+            value: "",
+        }
+    ],
     error: "",
     exclude_fields: [],
     field_effect_sort: ["_id", "f9", "f8", "f7", "f6", "f5", "f4", "f32", "f3", "f28", "f27", "f25", "f24", "f23", "f20"],

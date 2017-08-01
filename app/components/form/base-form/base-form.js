@@ -2,6 +2,9 @@ import Componet from '../../../lib/component';
 import TextArea from '../textarea-control/textarea-area'
 import Radio from '../radio-control/radio-control';
 import Input from '../input-control/input-control';
+import Readonly from '../readonly-control/readonly-control';
+import Password from '../encrypt-input-control/encrypt-input-control';
+import Hidden from '../hidden-control/hidden-control';
 let config={
     template:'',
     data:{
@@ -68,6 +71,21 @@ let config={
                     let textArea=new TextArea(data);
                     textArea.render(single);
                     _this.childComponent[data.dfield]=textArea;
+                    break;
+                case 'readonly':
+                    let readonly=new Readonly(data);
+                    readonly.render(single);
+                    _this.childComponent[data.dfield]=readonly;
+                    break;
+                case 'password':
+                    let password=new Password(data);
+                    password.render(single);
+                    _this.childComponent[data.dfield]=password;
+                    break;
+                case 'hidden':
+                    let hidden=new Hidden(data);
+                    hidden.render(single);
+                    _this.childComponent[data.dfield]=hidden;
                     break;
             }
         }
