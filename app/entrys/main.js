@@ -1,9 +1,6 @@
 
 import '../assets/scss/main.scss';
 
-// import 'jquery-ui/ui/widgets/button.js';
-import 'jquery-ui/ui/widgets/dialog.js';
-
 import {IframeInstance} from '../components/main/iframes/iframes';
 import {HeaderInstance} from '../components/main/header/header';
 import {AsideInstance} from '../components/main/aside/aside';
