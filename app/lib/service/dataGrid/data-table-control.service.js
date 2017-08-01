@@ -74,5 +74,17 @@ export const dgcService = {
             'text-align': 'center',
             'padding': '0px'
         }
+    },
+    operationCol: {
+        headerName: '操作',
+        colId: "myOperate",
+        hide: false,
+        field: "myOperate",
+        suppressSorting: true,
+        suppressResize: false,
+        suppressMovable: false,
+        suppressFilter: true,
+        suppressMenu: true,
+        cellRenderer: (params)=>{}
     }
 }

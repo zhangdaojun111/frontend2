@@ -6,12 +6,12 @@ import agGrid from "../../agGrid/agGrid";
 import {dataTableService} from "../../../../lib/service/dataGrid/data-table.service";
 import {dgcService} from "../../../../lib/service/dataGrid/data-table-control.service";
 import {fieldTypeService} from "../../../../lib/service/field-type-service";
-// import {dataTableService} from "../../service/data-table-control.service";
+import FloatingFilter from "../../data-table-toolbar/floating-filter/floating-filter";
 
 let config = {
     template: template,
     data: {
-        tableId:'343_2mDLTzHJd9eyb6vfThtZLo',
+        tableId:'8696_yz7BRBJPyWnbud4s6ckU7e',
         formId:'',
         tableType:'',
         parentTableId:'',
@@ -37,7 +37,21 @@ let config = {
         //展示的数据行数
         rows:100,
         //头部字段属性字典{f1： info}
-        colsDict:{}
+        colsDict:{},
+        //操作列
+        menuType: false,
+        //操作列的宽度
+        operateColWidth: 0,
+        //自定义操作
+        customOperateList: [],
+        //自定义行机操作
+        rowOperation: [],
+        //是否固化
+        isFixed: false,
+        //模式
+        viewMode: 'normal',
+        //搜索参数
+        searchValue: []
     },
     //原始字段数据
     fieldsData: [],
@@ -47,9 +61,13 @@ let config = {
         //请求数据（表头，提醒，偏好）
         prepareData: function (){
             let json = {
-                tableId: this.data.tableId
+                table_id: this.data.tableId
             }
-            dataTableService.getTableData("111")
+            dataTableService.getTableData(json)
+            //     .then( res=>{
+            //     console.log( "返回数据————————" )
+            //     console.log( res )
+            // } )
         },
         createHeaderColumnDefs: function () {
             let columnDefs = [],
@@ -69,14 +87,27 @@ let config = {
             for (let col of columnArr) {
                 columnDefs.push(col);
             }
-
+            //添加选择列
             columnDefs.unshift(
                 dgcService.selectCol
             );
+            //添加序号列
             let number = dgcService.numberCol;
             number['headerCellTemplate'] = this.actions.resetPreference();
             columnDefs.unshift(number);
+            //添加操作列
+            let operate = dgcService.operationCol;
+            if( this.data.menuType ){
 
+            }else {
+                operate["width"]=this.data.operateColWidth;
+                operate["cellStyle"]={'font-style': 'normal'};
+                operate["cellRenderer"] = (params)=>{
+                    return this.actions.operateCellRenderer( params )
+                }
+
+            }
+            columnDefs.push( operate )
             return columnDefs;
         },
         getArr: function (i,n,column,len,data,otherCol) {
@@ -154,20 +185,12 @@ let config = {
                         tooltipField: fieldTypeService.noToolTips(data.data["dinput_type"])? '' : data.data["field"],
                         sortingOrder: ['desc', 'asc', null],
                         hide: false,
-                        minWidth: 10,
+                        minWidth: 20,
                         filter: fieldTypeService.numOrText(data.data["real_type"]) ? "number" : "text",
                         headerClass: headClass,
                         cellStyle: {'font-style': 'normal'},
-                        // floatingFilterComponentFramework: FloatingFilterComponent,
-                        // floatingFilterComponent: FloatingFilterComponent,
-                        // floatingFilterComponentParams:{
-                        //     suppressFilterButton: true,
-                        //     colInfo: data.data,
-                        //     searchOldValue: this.searchOldValue,
-                        //     searchValue: this.searchValue
-                        // },
+                        floatingFilterComponent: new FloatingFilter().actions.createFilter(fieldTypeService.searchType( data.data["real_type"] ),data.data["field"],this.data.searchValue,this.data.searchOldValue),
                         enableRowGroup: true,
-                        enableValue: true,
                         // icons: {
                         //     sortAscending: '<img src="' + img1 + '" style="width: 15px;height:15px;"/>',
                         //     sortDescending: '<img src="' + img2 + '" style="width: 15px;height:15px;"/>'
@@ -323,7 +346,7 @@ let config = {
             if( fieldTypeService.numOrText( real_type ) ){//数字类型
                 let numVal = fieldTypeService.intOrFloat( real_type ) ? dgcService.formatter(params.value) : dgcService.formatter(Number(params.value).toFixed(colDef.real_accuracy))
                 if( fieldTypeService.childTable( real_type ) || fieldTypeService.countTable( real_type ) ){//子表||统计类型
-                    if(viewMode == 'viewFromCorrespondence' || viewMode == 'editFromCorrespondence'){
+                    if(this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence'){
                         sHtml = '<span style="color:rgb(85,85,85);'+ someStyle + 'background-color:' + color + '"><span>' + numVal + '</span><span/>';
                     } else {
                         sHtml = '<span style="color:#337ab7;'+ someStyle + 'background-color:' + color + '"><span id="childOrCount">' + numVal + '</span><span/>';
@@ -387,7 +410,7 @@ let config = {
 
             //表对应关系（不显示为数字）
             else if( real_type == fieldTypeService.CORRESPONDENCE ){
-                if( viewMode == 'editFromCorrespondence'){
+                if( this.data.viewMode == 'editFromCorrespondence'){
                     sHtml = '<span style="color:' + color + '">' + params.value + '</span>';
                 }else{
                     sHtml = '<a style="'+ someStyle +'background-color:' + color + ' " ><span id="correspondenceClick">' + params.value + '</span></a>';
@@ -435,7 +458,7 @@ let config = {
             //都做为文本处理
             else {
                 if (fieldTypeService.childTable(colDef.dinput_type) || fieldTypeService.countTable(colDef.dinput_type,colDef['real_type'])) { //子表或统计类型
-                    if(viewMode == 'viewFromCorrespondence' || viewMode == 'editFromCorrespondence'){
+                    if(this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence'){
                         sHtml = '<span style="float:right;color:rgb(85,85,85);">' + params.value + '</span>';
                     }else {
                         sHtml = '<a style="color:#337ab7;'+ someStyle +'background-color:' + color + '" ><span id="childOrCount">' + params.value + '</span></a>';
@@ -465,6 +488,62 @@ let config = {
                 alert("重置偏好")
             });
             return eHeader;
+        },
+        //生成操作列
+        operateCellRenderer: function (params) {
+            let rowStatus = 0;
+            let operateWord=2;
+            if( !params.data || ( params.node.rowGroupIndex <= this.rowGroupIndex ) || params.data&&params.data.myfooter&&params.data.myfooter == '合计' ){
+                return '';
+            }
+            if( params.data.group||Object.is( params.data.group,'' )||Object.is( params.data.group,0 ) ){
+                return '';
+            }
+            if(params.hasOwnProperty("data") && params["data"].hasOwnProperty("status")) {
+                rowStatus = params["data"]["status"];
+            }
+            try {
+                if(params["data"]["status"]){
+                    rowStatus = params["data"]["status"];
+                }
+            }catch (e){
+                rowStatus = 0;
+            }
+            let str = '<div style="text-align:center;"><a class="gridView" style="color:#337ab7;">查看</a>';
+            if (this.data.viewMode == 'normal'||this.data.viewMode=='source_data') {
+                if (this.data.isFixed || rowStatus == 2) {
+                    str += ' | <span style="color: darkgrey;">编辑</span>';
+                    str += ' | <a style="color: darkgrey;">历史</a>';
+                } else {
+                    str += ' | <a  class="gridEdit" style="color:#337ab7;">编辑</a>';
+                    str += ' | <a  class="gridHistory" style="color:#337ab7;">历史</a>';
+                }
+                operateWord=operateWord+4;
+            }
+            if(this.data.viewMode == 'batchInApprove'){
+                str += ' | <a  class="gridEdit" style="color:#337ab7;">编辑</a>';
+                operateWord=operateWord+2;
+            }
+            if(this.data.customOperateList) {
+                for (let d of this.data.customOperateList) {
+                    str += ` | <a class="customOperate" id="${ d["id"] }" style="color:#337ab7;">${ d["name"] }</a>`;
+                    operateWord=operateWord+(d["name"]?d["name"].length : 0);
+                }
+            }
+            if(this.data.rowOperation) {
+                for (let ro of this.data.rowOperation) {
+                    if( ro.frontend_addr&&ro.frontend_addr=='export_row' ){
+                        let selectedRows = JSON.stringify( [params.data._id] )
+                        str += ` | <a class="rowOperation" id="${ ro["row_op_id"] }" href='/data/customize/ta_excel_export/?table_id=${ this.pageId }&selectedRows=${ selectedRows }' style="color:#337ab7;">${ ro["name"] }</a>`;
+                        operateWord=operateWord+(ro["name"]?ro["name"].length : 0);
+                    }else {
+                        str += ` | <a class="rowOperation" id="${ ro["row_op_id"] }" style="color:#337ab7;">${ ro["name"] }</a>`;
+                        operateWord=operateWord+(ro["name"]?ro["name"].length : 0);
+                    }
+                }
+            }
+            str += '</div>';
+            return str
         }
     },
     afterRender: function (){
@@ -1521,7 +1600,8 @@ let config = {
                     "f14": "[frontend2][BI]上下层\n需要实现的功能：针对有父子表关系的上一层和下穿功能",
                     "f15": "需求"
                 }
-            ]
+            ],
+            floatingFilter: true
         }
         this.append(new agGrid(data), this.el.find('#data-agGrid'));
     }

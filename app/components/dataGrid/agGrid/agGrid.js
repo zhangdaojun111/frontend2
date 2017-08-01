@@ -28,6 +28,7 @@ let config = {
                 rowData: this.data.rowData,
                 pinnedBottomRowData: this.data.footerData,
                 floatingFilter: this.data.floatingFilter,
+                suppressFilterButton: true,
                 animateRows: true,
                 suppressMultiSort: true,
                 enableColResize: true,

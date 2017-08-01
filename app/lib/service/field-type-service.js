@@ -108,5 +108,22 @@ export const fieldTypeService = {
     },
     intOrFloat: function (data) {//整数||小数
         return data == INT_TYPE
+    },
+    //返回搜索的类型
+    searchType: function (data) {
+        let canNotSearch = [TEXT_COUNT_TYPE]
+        if( data == DATE ){
+            return 'date'
+        }else if( data == TIME ){
+            return 'time'
+        }else if( data == DATETIME ){
+            return 'datetime'
+        }else if( this.numOrText(data) ){
+            return 'number'
+        }else if( canNotSearch.indexOf(data) != -1 ){
+            return 'none'
+        }else {
+            return 'text'
+        }
     }
 }

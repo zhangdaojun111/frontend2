@@ -3,63 +3,61 @@ import template from './floating-filter.html';
 import agGrid from "../../agGrid/agGrid";
 import fieldTypeService from "../../../../lib/service/field-type-service";
 // import dataTableService from "../../service/data-table.service";
-// import {Grid,GridOptions} from 'ag-grid/main';
-
 
 let config = {
     template: template,
-    data: {},
-    searchValue: [],
+    data: {
+    },
     actions: {
-        agInit: function(params) {
-            let colInfo = params.colInfo;
-            let searchOldValue = params.searchOldValue;
-            let searchValue = params.searchValue;
-            this.actions.createFilter(colInfo,searchOldValue,searchValue);
-        },
         createFilter: function(colInfo,searchFiled,searchValue,searchOldValue) {
-            let FloatingFilter = function() {
-            }
-            FloatingFilter.prototype.init = function (params) {
-                // this.onFloatingFilterChanged = params.onFloatingFilterChanged;
-                this.eGui = document.createElement('div');
-                this.eGui.innerHTML = '<input type="text"/>'
-                this.eFilterInput = this.eGui.querySelector('input');
-                this.eFilterInput.className = 'filter-input';
-                this.eGui.style.height = '25px';
-                this.eFilterInput.style.width = '80%';
-                this.eFilterInput.style.height = '18px';
-                this.eFilterInput.style.lineHeight = '20px';
-                this.eFilterInput.style.color = 'rgb(85,85,85)';
-                this.eFilterInput.style.border = '1px solid #55A1F3';
-                this.eFilterInput.style.marginBottom = '5px';
-                let searchType = 'keyup';
-                if( colInfo == 3 ){
-                    this.eFilterInput.type = 'date';
-                    searchType = 'change';
-                }else if( colInfo  == 4 ){
-                    this.eFilterInput.type = 'time';
-                    searchType = 'change';
-                }else {
-                    this.eFilterInput.type = 'text';
+                let FloatingFilter = function() {
                 }
-                this.eFilterInput.addEventListener(searchType,($event)=> {
-                    if($event['keycode'] != 229){
-                        // this.actions.keyupSearch($event,this.eFilterInput,col_field,colInfo,searchType,searchOldValue,searchValue);
+                FloatingFilter.prototype.init = function (params) {
+                    // this.onFloatingFilterChanged = params.onFloatingFilterChanged;
+                    this.eGui = document.createElement('div');
+                    this.eGui.innerHTML = '<input type="text"/>'
+                    this.eFilterInput = this.eGui.querySelector('input');
+                    this.eFilterInput.className = 'filter-input';
+                    this.eGui.style.height = '25px';
+                    this.eFilterInput.style.width = '80%';
+                    this.eFilterInput.style.height = '18px';
+                    this.eFilterInput.style.lineHeight = '20px';
+                    this.eFilterInput.style.color = 'rgb(85,85,85)';
+                    this.eFilterInput.style.border = '1px solid #55A1F3';
+                    this.eFilterInput.style.marginBottom = '5px';
+                    let searchType = 'keyup';
+                    if( colInfo == 'none' ){
+                        this.eGui.innerHTML = '<input disabled type="text"/>'
                     }
-                })
-                if( searchType == 'keyup' ){
-                    this.eFilterInput.addEventListener( 'keydown', ($event)=> {
-                        if( $event.keyCode == 229 ){
-                            // this.keyupSearch($event,this.eFilterInput,col_field,colInfo,searchType,searchOldValue,searchValue);
+                    if( colInfo == 'date' ){
+                        this.eFilterInput.type = 'date';
+                        searchType = 'change';
+                    }else if( colInfo  == 'time' ){
+                        this.eFilterInput.type = 'time';
+                        searchType = 'change';
+                    }else if( colInfo  == 'datetime' ){
+                        this.eFilterInput.type = 'datetime-local';
+                        searchType = 'change';
+                    }else {
+                        this.eFilterInput.type = 'text';
+                    }
+                    this.eFilterInput.addEventListener(searchType,($event)=> {
+                        if($event['keycode'] != 229){
+                            // this.actions.keyupSearch($event,this.eFilterInput,searchFiled,colInfo,searchType,searchOldValue,searchValue);
                         }
-                    });
-                }
-            };
+                    })
+                    if( searchType == 'keyup' ){
+                        this.eFilterInput.addEventListener( 'keydown', ($event)=> {
+                            if( $event.keyCode == 229 ){
+                                // this.keyupSearch($event,this.eFilterInput,col_field,colInfo,searchType,searchOldValue,searchValue);
+                            }
+                        });
+                    }
+                };
 
-            FloatingFilter.prototype.getGui = function () {
-                return this.eGui;
-            };
+                FloatingFilter.prototype.getGui = function () {
+                    return this.eGui;
+                };
             return FloatingFilter;
 
         },
