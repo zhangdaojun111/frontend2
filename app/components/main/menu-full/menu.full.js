@@ -61,13 +61,19 @@ let config = {
         this.el.find('#search-menu-button').on('input', _.debounce(function() {
             that.actions.search(this.value);
         }, 1000));
-        this.el.css({
-            height: 'calc(100% - 230px)',
-            overflow: 'auto'
+        let _m = this.el.find('.menu-full');
+
+        $(window).on('resize.menu', function () {
+            _m.css({
+                height: (document.body.scrollHeight - _m.offset().top) + 'px',
+                overflow: 'auto'
+            });
         });
+        $(window).trigger('resize.menu');
     },
     beforeDestory: () => {
         this.el.find('#search-menu-button').off();
+        $(window).off('resize.menu')
     }
 }
 
