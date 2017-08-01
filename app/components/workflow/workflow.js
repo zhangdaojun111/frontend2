@@ -207,26 +207,25 @@ let config = {
         },
         //放大工作流节点
         zoomInNodeflow($event) {
-            console.log(1);
-            let container = document.querySelector('#workflow-draw-box');
-            this.nodeflowSize += 0.1;
-            container.style.width = (+this.containerwidth.split('px')[0]) * (+this.nodeflowSize) + 'px';
-            container.style.height = ((+this.containerheight.split('px')[0]) * (+this.nodeflowSize)) + 'px';
+            let container = this.el.find('workflow-draw-box')[0];
+            this.data.nodeflowSize += 0.1;
+            container.style.width = (+this.data.containerwidth.split('px')[0]) * (+this.data.nodeflowSize) + 'px';
+            container.style.height = ((+this.data.containerheight.split('px')[0]) * (+this.data.nodeflowSize)) + 'px';
             container.style.transformOrigin = '0 0';
-            container.style.transform = 'scale(' + this.nodeflowSize + ')';
+            container.style.transform = 'scale(' + this.data.nodeflowSize + ')';
         },
         //缩小工作流节点
         zoomOutNodeflow($event) {
-            let container = document.querySelector('#workflow-draw-box');
-            this.nodeflowSize -= 0.1;
+            let container = this.el.find('workflow-draw-box')[0];
+            this.data.nodeflowSize -= 0.1;
             container.style.transformOrigin = '0 0';
-            container.style.transform = 'scale(' + this.nodeflowSize + ')';
-            container.style.width = (+this.containerwidth.split('px')[0]) * (+this.nodeflowSize) + 'px';
-            container.style.height = ((+this.containerheight.split('px')[0]) * (+this.nodeflowSize)) + 'px';
+            container.style.transform = 'scale(' + this.data.nodeflowSize + ')';
+            container.style.width = (+this.data.containerwidth.split('px')[0]) * (+this.data.nodeflowSize) + 'px';
+            container.style.height = ((+this.data.containerheight.split('px')[0]) * (+this.data.nodeflowSize)) + 'px';
         },
         //open in new window
         maximizeNodeflow($event) {
-            let container = document.querySelector('#workflow-draw-box');
+            let container = this.el.find('workflow-draw-box')[0];
             container.style.transform = 'scale(1)';
             this.nodeflowSize = 1;
             let e = document.documentElement, g = document.getElementsByTagName('body')[0], w = window.innerWidth || e.clientWidth || g.clientWidth, h = window.innerHeight || e.clientHeight || g.clientHeight;
@@ -250,8 +249,8 @@ let config = {
             ocloseSpan.style.border = '1px solid #ddd';
             ocloseSpan.innerHTML = '&nbsp;×&nbsp;';
             ocloseSpan.addEventListener('click', (event) => {
-                container.style.height = this.containerheight;
-                container.style.width = this.containerwidth;
+                container.style.height = this.data.containerheight;
+                container.style.width = this.data.containerwidth;
                 container.style.position = "relative";
                 container.style.zIndex = '0';
                 container.style.overflow = 'visible';
@@ -309,8 +308,8 @@ let config = {
     afterRender: function() {
         this.actions.init();
         console.log(this.data);
-        this.el.on('click', '.dialog', () => {
-           
+        this.el.on('click', '#zoomIn', () => {
+           this.actions.zoomInNodeflow();
         });
         this.el.on('click', '.add-follow', () => {
         });
