@@ -1,8 +1,64 @@
 import FormBase from '../components/form/base-form/base-form'
 import {HTTP} from '../lib/http';
 let el=$('<div style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">').appendTo('body');
+
+//在这里加对应的控件模板
+let template=`<div class="form">
+              <div data-dfield="f23" data-type="textarea" data-width="500"/> 
+              <div data-dfield="f8" data-type="radio" data-width="300"/>
+              <div data-dfield="f26" data-type="input" data-width="300"/> 
+              <div data-dfield="f31" data-type="input" data-width="300"/> 
+              <div data-dfield="f7" data-type="Select" data-width="300"/> 
+              <div data-dfield="f6" data-type="Year" data-width="300"/> 
+              <div data-dfield="f5" data-type="Buildin" data-width="300"/>
+              <div data-dfield="f10" data-type="MultiLinkage" data-width="300"/>
+               <div data-dfield="f24" data-type="input" data-width="300"/>
+               <div data-dfield="f30" data-type="input" data-width="300"/>
+               <div data-dfield="f14" data-type="input" data-width="300"/>
+               <div data-dfield="f29" data-type="input" data-width="300"/>
+               <div data-dfield="f25" data-type="input" data-width="300"/>
+               <div data-dfield="f15" data-type="input" data-width="300"/>
+              <div data-dfield="f11" data-type="readonly" data-width="300"/>
+               <div data-dfield="f233" data-type="hidden" data-width="300"/>
+              <div data-dfield="f27" data-type="password" data-width="300"/>
+              <div data-dfield="f28" data-type="YearMonthControl" data-width="300"/>
+              </div> 
+                `;
+
+function hasKeyInFormDataStatic(key,staticData){
+    let isExist = false;
+    for(let dict of staticData["data"]){
+        if(dict["dfield"] == key){
+            isExist = true;
+        }
+    }
+    return isExist;
+}
+//merge静态和动态数据
+function mergeFormData(staticData,dynamicData){
+    //merge数据
+    for(let dfield in dynamicData["data"]){
+        if(hasKeyInFormDataStatic(dfield,staticData)){
+            for(let dict of staticData["data"]){
+                if(dict["dfield"] == dfield){
+                    for(let k in dynamicData["data"][dfield]){
+                        dict[k] = dynamicData["data"][dfield][k];
+                    }
+                }
+            }
+        }else{
+            staticData["data"].push(dynamicData["data"][dfield]);
+        }
+    }
+    staticData["record_info"] = dynamicData["record_info"];
+    staticData["parent_table_id"] = dynamicData["parent_table_id"];
+    staticData["frontend_cal_parent_2_child"] = dynamicData["frontend_cal_parent_2_child"];
+    staticData["error"] = dynamicData["error"];
+    return staticData;
+}
+
 async function wait() {
-    let data = await HTTP.postImmediately({
+    let staticData = await HTTP.postImmediately({
         url: 'http://127.0.0.1:8081/get_form_static_data/?seqid=yudeping&table_id=8696_yz7BRBJPyWnbud4s6ckU7e&is_extra=&form_id=',
         type: "POST",
         hearder:'',
@@ -15,13 +71,7 @@ async function wait() {
             parent_temp_id:''
         }
     });
-    console.log(data);
-    console.log('hello world 123123');
-}
-wait();
-
-async function dynamic() {
-    let data = await HTTP.postImmediately({
+    let dynamicData = await HTTP.postImmediately({
         url: 'http://127.0.0.1:8081/get_form_dynamic_data/?seqid=yudeping&table_id=8696_yz7BRBJPyWnbud4s6ckU7e&is_extra=&form_id=',
         type: "POST",
         hearder:'',
@@ -35,28 +85,19 @@ async function dynamic() {
             real_id:'',
         }
     });
-    console.log(data);
-    console.log('hello world 123123');
+    console.log('staticData');
+    console.log(staticData);
+    console.log('dynamicData');
+    console.log(dynamicData);
+    let data=mergeFormData(staticData,dynamicData);
+    let formData={
+        template:template,
+        data:data,
+    }
+    let form=new FormBase(formData);
+    form.render(el);
 }
-dynamic();
-
-//在这里加对应的控件模板
-let template=`<div class="form">
-              <div data-dfield="f24" data-type="textarea" data-width="500"/> 
-              <div data-dfield="f28" data-type="radio" data-width="300"/>
-              <div data-dfield="f11" data-type="input" data-width="300"/> 
-              <div data-dfield="f12" data-type="input" data-width="300"/> 
-              <div data-dfield="f10" data-type="Select" data-width="300"/> 
-              <div data-dfield="f6" data-type="Year" data-width="300"/> 
-              <div data-dfield="f5" data-type="Buildin" data-width="300"/>
-              <div data-dfield="f7" data-type="MultiLinkage" data-width="300"/>
-               <div data-dfield="f11" data-type="input" data-width="300"/>
-              <div data-dfield="f23" data-type="readonly" data-width="300"/>
-               <div data-dfield="f233" data-type="hidden" data-width="300"/>
-              <div data-dfield="f27" data-type="password" data-width="300"/>
-              </div> 
-                `;
-
+wait();
 let data={
     attachment: [],
     base_fields: [],
@@ -399,9 +440,9 @@ let data={
     table_id: "5613_CHEUbzmZMsjDFT3AiwPB46",
     use_fields: {}
 }
-let formData={
-    template:template,
-    data:data,
-}
-let form=new FormBase(formData);
-form.render(el);
+// let formData={
+//     template:template,
+//     data:data,
+// }
+// let form=new FormBase(formData);
+// form.render(el);

@@ -75,6 +75,8 @@ let config={
         let _this=this;
         let cache_old = {};
         this.set('childComponent',{});
+        console.log('*********');
+        console.log(_this.data);
         for(let data of _this.data.data){
             let single=_this.el.find('div[data-dfield='+data.dfield+']');
             let type=single.data('type');
@@ -114,6 +116,7 @@ let config={
                     let hidden=new Hidden(data);
                     hidden.render(single);
                     _this.childComponent[data.dfield]=hidden;
+                    break;
                 case 'Select':
                     let selectControl=new SelectControl(data);
                     selectControl.render(single);
@@ -175,6 +178,8 @@ class BaseForm extends Component{
     constructor(formData){
         config.template=formData.template;
         config.data=formData.data;
+        console.log('#######')
+        console.log(formData);
         super(config);
     }
     //提交表单数据

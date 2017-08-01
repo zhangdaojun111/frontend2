@@ -12,7 +12,7 @@ let config={
                     <div style="float: left;">
                        {{#if required}}
                         <span class="{{requiredClass}}" ></span>
-                       {{/if}} 
+                       {{/if}}                     
                     </div>
                  {{/if}}   
               </div>

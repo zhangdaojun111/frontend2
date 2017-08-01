@@ -16,7 +16,7 @@ let config={
                      </div>
                      
                      <span style="display: none;">
-                         <form-be-control-condition><a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a></form-be-control-condition>
+                         <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                      </span>
                 </span>
                {{/if}}

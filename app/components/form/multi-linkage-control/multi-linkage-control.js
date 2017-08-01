@@ -7,7 +7,7 @@ let config={
                     {{#if be_control_condition }}
                     <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                     {{else}}
-                        <div class="multi-drop" style="display: flex;align-items: center"></div>
+                            <div class="multi-drop" style="display: flex;align-items: center"></div>
                             <div class="refresh">刷新</div>
                             <div style="float: left;">
                         {{#if required}}
@@ -35,9 +35,9 @@ let config={
                 }
                 d['options']=[];
                 let set=new Set();
-                for(let key in _this.data.datalist){
-                    if(_this.data.datalist[key][data.index] == data.value){
-                        set.add(_this.data.datalist[key][i]);
+                for(let key in _this.data.dataList){
+                    if(_this.data.dataList[key][data.index] == data.value){
+                        set.add(_this.data.dataList[key][i]);
                     }
                 }
                 for(let item of set){
@@ -57,7 +57,7 @@ let config={
                 for(let key in _this.data.datalist){
                     let isValue=true;
                     for(let i=0;i<_this.data.index;i++){
-                        if(_this.data.datalist[key][i]!=childSelectValue[i]){
+                        if(_this.data.dataList[key][i]!=childSelectValue[i]){
                             isValue=false;
                             break;
                         }
@@ -65,8 +65,6 @@ let config={
                     if(isValue){
                         _this.data.value=key;
                         data['value']=key;
-                        console.log(_this.data.required);
-                        console.log('dsadsadsad');
                         if(_this.data.required){
                             Mediator.publish('form:checkRequired',data);
                         }
@@ -82,8 +80,8 @@ let config={
                 d['index']=i;
                 d['dfield']=_this.data.dfield;
                 let set=new Set();
-                for(let key in _this.data.datalist){
-                    set.add(_this.data.datalist[key][i]);
+                for(let key in _this.data.dataList){
+                    set.add(_this.data.dataList[key][i]);
                 }
                 for(let item of set){
                     d['options'].push({label:item,value:item});
@@ -104,8 +102,8 @@ let config={
            return;
         }
         let index;
-        for(let key in this.data.datalist){
-            index=this.data.datalist[key].length;
+        for(let key in this.data.dataList){
+            index=this.data.dataList[key].length;
             this.data['index']=index;
         }
         let isInit=this.childDrop.length;
@@ -116,8 +114,8 @@ let config={
             d['index']=i;
             d['dfield']=this.data.dfield;
             let set=new Set();
-            for(let key in this.data.datalist){
-                set.add(this.data.datalist[key][i]);
+            for(let key in this.data.dataList){
+                set.add(this.data.dataList[key][i]);
             }
             for(let item of set){
                 d['options'].push({label:item,value:item});

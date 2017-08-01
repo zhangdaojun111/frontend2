@@ -55,6 +55,9 @@ let config={
         $.extend(true,monthData,this.data)
         let myDate = new Date();
         let myYear = myDate.getFullYear();
+        if(!yearData.options || !yearData.options.length){
+            yearData.options=[];
+        }
         yearData.options.push({ "label": String(myYear),"value": String(myYear)})
         for( let i=1;i<=5;i++ ){
             yearData.options.unshift( { "label": String(myYear - i),"value": String(myYear - i)} );
