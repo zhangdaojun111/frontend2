@@ -1,4 +1,4 @@
-import Component from '../../lib/component';
+import Component from '../../../lib/component';
 import template from './workflow.html';
 import './workflow.scss';
 
@@ -336,14 +336,14 @@ class WorkFlow extends Component {
 
 export default {
     show(data) {
-        let workFlowData = _.defaultsDeep({}, data.data[0], {
+        let workFlowData = _.defaultsDeep({}, data, {
             nodeflowSize: 1,
             containerwidth: '100%',
             containerheight: '100px',
             // nodesWidth: '60px'
         });
         let component = new WorkFlow(workFlowData);
-        let el = $('#workflow');
+        let el = $('#drowflow');
         component.render(el);
     }
 };

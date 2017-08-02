@@ -2,7 +2,9 @@ import Component from '../../../lib/component';
 import template from './workflow-create.html';
 import './workflow-create.scss';
 import WorkFlowBtn from './workflow-btn/workflow-btn';
-import WorkFlowTree from './workflow-tree/workflow-tree'
+import WorkFlowTree from './workflow-tree/workflow-tree';
+import Mediator from '../../../lib/mediator';
+import WorkFlow from '../workflow-drawflow/workflow';
 
 let config = {
     template: template,
@@ -28,7 +30,9 @@ let config = {
     },
     afterRender: function() {
         //添加常用工作流组件
+        // this.data.favList=this.data[1].rows;
         console.log(this.data);
+
         this.data[1].rows.forEach((row)=>{
             this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
         });
@@ -42,6 +46,14 @@ let config = {
             let parent = $(target).parent().parent().parent();
             this.actions.deloperate(parent);  
         })
+
+        //订阅btn click
+        Mediator.subscribe('workflow:choose', (msg)=> {
+            console.log(this.data.data[0]);
+
+            WorkFlow.show(this.data.data[0]);
+
+        })
     },
     beforeDestory: function(){
        
@@ -49,7 +61,7 @@ let config = {
 }
 
 class WorkFlowCreate extends Component{
-    constructor (data,treeNode){
+    constructor (data){
         super(config,data);
     }
 
@@ -58,9 +70,10 @@ class WorkFlowCreate extends Component{
 export default {
     
     //获取常用工作流和下拉工作流名称
-    loadData(data){
-        let component = new WorkFlowCreate(data);
-        let el = $('#workflow-create');
+    loadData(data,flowData){
+        let workFlowData = _.defaultsDeep({}, data, flowData);
+        let component = new WorkFlowCreate(workFlowData);
+        let el = $('#workflow-header');
         component.render(el);
     },
 };

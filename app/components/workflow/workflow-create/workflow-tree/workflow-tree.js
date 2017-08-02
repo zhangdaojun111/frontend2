@@ -11,7 +11,7 @@ let config = {
     },
     actions: {
         //隐藏显示下拉菜单
-        toogleTree:function(){
+        toogleTree:function(e){
             let tree = this.el.find(".J_tree");
             let tip = tree.hasClass('show');
             if(tip){
@@ -36,7 +36,11 @@ let config = {
         },
         //点击子节点
         clickChild:function(e){
-            console.log(e);
+            //get current clicked node info
+            let {formid,tableid}=$(e.target)[0].dataset;
+            console.log(formid,tableid);
+
+
             let childValue = $(e.target).text();
             let rootNode = this.el.find('.J_select-Workflow');
             let tree = this.el.find(".J_tree");
@@ -52,14 +56,13 @@ let config = {
     },
 
     afterRender: function() {
+
         
        this.data.treeArr=this.data.data;
-       console.log(this.data.treeArr);
        this.data.treeArr.forEach(function(el,index) {
-            console.log(el);
        });
-       this.el.on('click','.J_tip',()=>{
-           this.actions.toogleTree();
+       this.el.on('click','.J_tip',(e)=>{
+           this.actions.toogleTree(e);
        });
        this.el.on('click','.J_root',(event)=>{
            this.actions.toogletip(event);
