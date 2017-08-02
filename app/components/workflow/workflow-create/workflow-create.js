@@ -9,35 +9,51 @@ import WorkFlow from '../workflow-drawflow/workflow';
 let config = {
     template: template,
     data: {
-
+        favList:[]
     },
     actions: {
-       operate:function(){
+        operate:function(){
             let oper = this.el.find('.J_operate'),
                 del = this.el.find('.J_del'),
                 operVal =  oper.val();
             if(operVal == '取消'){
                oper.val("编辑");
-                del.hide();   
+                del.hide();
             }else{
                 oper.val("取消");
                 del.show();
             }
-       }, 
-       //向后台发送数据，删除该常用工作流,现在没有接口，只是在dom中删除这个
-       deloperate:function(arg){   
+        },
+        //向后台发送数据，删除该常用工作流,现在没有接口，只是在dom中删除这个
+        deloperate:function(arg){
             arg.remove();
-       }
+        },
+        init(){
+            $('#addFav').hide();
+            this.data.favList=this.data[1].rows;
+            if(this.data.id!==undefined){
+                let flag=true;
+                for (let {id} of this.data.favList) {
+                    if(parseInt(this.data.id)===id){
+                        return flag=false;
+                    }
+                    flag=true;
+                }
+                flag?$('#addFav').show():$('#addFav').hide();
+            }
+        }
     },
     afterRender: function() {
+        this.actions.init();
+        //添加流程下来菜单
+        this.append(new WorkFlowTree(this.data[0]), this.el.find('.J_select-container'));
         //添加常用工作流组件
         // this.data.favList=this.data[1].rows;
 
         this.data[1].rows.forEach((row)=>{
             this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
         });
-        //添加流程下来菜单
-        this.append(new WorkFlowTree(this.data[0]), this.el.find('.J_select-container'));
+
 
         this.el.on('click','.J_operate',()=>{
             this.actions.operate();
@@ -50,10 +66,14 @@ let config = {
         //订阅btn click
         Mediator.subscribe('workflow:choose', (msg)=> {
             this.data.id=msg.id;
+            this.actions.init();
+            this.el.find("#workflow-box").hide();
+            $("#workflow-content").show();
         })
         //addFav
-        this.el.on('click','#addFav',()=>{
+        this.el.on('click','#addFav',(e)=>{
             Mediator.publish('workflow:addFav', this.data.id);
+            $('#addFav').hide();
         });
 
         //订阅 select list click

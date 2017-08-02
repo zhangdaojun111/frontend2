@@ -73,6 +73,8 @@ let config = {
                    li.eq(i).find('.child-list').children('.child-item').removeClass('hide xixi');
                 }
             }
+
+
            
             this.data.treeArr.forEach((el,index)=> {
                 let obj = new Array();
@@ -135,6 +137,10 @@ let config = {
     },
 
     afterRender: function() {
+
+        Mediator.subscribe('workflow:choose', (msg)=> {
+            console.log(msg);
+        })
 
         
        this.data.treeArr=this.data.data; 

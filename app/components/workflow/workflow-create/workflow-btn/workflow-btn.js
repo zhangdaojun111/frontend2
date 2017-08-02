@@ -8,7 +8,7 @@ let config = {
     template: template,
     actions: {
         choose: function(e) {
-            Mediator.publish('workflow:choose', $(e.target)[0].dataset);
+            Mediator.publish('workflow:choose', _.defaultsDeep({},$(e.target)[0].dataset,{type:'btn'}));
         }
     },
     afterRender: function() {

@@ -23,7 +23,6 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             flow_id:msg.id
         }});
 
-        console.log(data);
         Mediator.publish('workflow:getInfo', data);
     })();
 });
