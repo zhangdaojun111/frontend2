@@ -6,7 +6,7 @@ import {BiBaseComponent} from '../../bi.base.component';
 import template from './canvas.cell.html';
 import './canvas.cell.scss';
 import Handlebars from 'handlebars';
-
+import Mediator from '../../../../lib/mediator';
 
 import {CellNormalComponent} from './normal/cell.normal';
 import {CellTableComponent} from './table/cell.table';
@@ -33,13 +33,14 @@ const cellTypes = {
 
 let config = {
     template: template,
-    actions: {}
+    actions: {},
+
 };
 
 export class CanvasCellComponent extends BiBaseComponent {
 
     constructor(cell) {
-        config.data = cell.val? cell.val : null;
+        config.data = cell.chart? cell.chart : null;
         super(config);
         this.cell = cell;
     }
@@ -48,23 +49,17 @@ export class CanvasCellComponent extends BiBaseComponent {
      * 动态渲染组件 通过this.cellType 决定渲染具体的图表
      */
     renderCell() {
-        let cellComponent = new cellTypes[this.cell.val.assortment]();
+        console.log(this.cell);
+        this.el.find('.cell').css(this.cell.size);
+        let cellComponent = new cellTypes[this.cell['chart']['assortment']]();
         let cellContainer = this.el.find('.cell-chart');
         cellComponent.render(cellContainer);
     }
 
     /**
-     * 渲染cell layout 布局
-     */
-    layoutCell() {
-        this.el.find('.cell').css(this.cell.val.layout);
-    }
-
-    /**
-     * 等CanvasCellComponent组件渲染完成后，在动态渲染组件+
+     * 等CanvasCellComponent组件渲染完成后，在动态渲染组件
      */
     firstAfterRender() {
         this.renderCell();
-        this.layoutCell();
     }
 }
