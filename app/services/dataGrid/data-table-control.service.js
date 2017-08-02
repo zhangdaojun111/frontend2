@@ -137,7 +137,7 @@ export const dgcService = {
         }
     },
     //创建高级查询需要字段数据
-    createHightGridSearchFields: function (rows) {
+    createExpertSearchFields: function (rows) {
         let arr = [];
         for( let r of rows ){
             if( r.field == "_id" || fieldTypeService.canNotSearch( r.real_type ) ){

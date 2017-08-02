@@ -14,7 +14,7 @@ import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 let config = {
     template: template,
     data: {
-        tableId: '5318_EHFuJD7Ae76c6GMPtzdiWH',
+        tableId: '2272_ZRNKcpYArLcMtsGvDwfSNm',
         formId: '',
         tableType: '',
         parentTableId: '',
@@ -22,19 +22,7 @@ let config = {
         parentTempId: '',
         parentRecordId: '',
         // 提醒颜色
-        remindColor: {
-            remind_color_info: {
-                "f6": {
-                    "暂停中": "#c0c0c0",
-                    "待merge": "#0bafff",
-                    "新建": "#ff0000",
-                    "反馈": "#804040",
-                    "已完成": "#4848ff",
-                    "测试中": "#ffa64d",
-                    "开发中": "#00b500"
-                }
-            }, info: ''
-        },
+        remindColor: {remind_color_info: {}, info: ''},
         //数据总数
         total: 1000,
         //展示的数据行数
@@ -76,7 +64,7 @@ let config = {
         //原始字段数据
         fieldsData: [],
         //高级查询需要的字段信息
-        hightGridSearchFields: [],
+        expertSearchFields: [],
         //搜索参数
         filterParam: [],
         //是否第一次渲染agGrid
@@ -680,7 +668,7 @@ let config = {
                 this.actions.setPreference( res[0] );
                 this.data.fieldsData = res[1].rows || [];
                 //创建高级查询需要字段数据
-                this.data.hightGridSearchFields = dgcService.createHightGridSearchFields( this.data.fieldsData );
+                this.data.expertSearchFields = dgcService.createExpertSearchFields( this.data.fieldsData );
                 //创建表头
                 this.columnDefs = this.actions.createHeaderColumnDefs();
 
@@ -768,7 +756,7 @@ let config = {
         //高级查询
         $( '.hight-search' ).click( ()=>{
             let d = {
-                fieldsData: this.data.hightGridSearchFields
+                fieldsData: this.data.expertSearchFields
             }
             expertSearch.show(d);
         } )
