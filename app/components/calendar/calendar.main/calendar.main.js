@@ -647,34 +647,34 @@ let config = {
             }
         });
 
-        CalendarService.CalendarMsgMediator.subscribe('unShowDataList', res => {
-            console.log(res);
-            if(res !== null) {
-                if(res['msg'] === 'unShowData') {
-                    this.data.isShowArr = res['data'];
-                    this.actions.getDataCount();
-                } else if(res['msg'] === 'cancelTableId') {
-                    this.data.isShowArr = res['data'];
-                    let arr = ['mission','approve','remind'];
-                    let arr_1 = [];
-                    for( let a of this.data.isShowArr ){
-                        if( arr.indexOf( a ) === -1 ){
-                            arr_1.push( a );
-                        }
-                    }
-                    this.data.cancel_fields = arr_1;
-                    this.actions.changeMainView(this.data.calendarContent);
-                } else if(res['msg'] === 'workflowData') {
-                    this.data.workflowData = res['data'];
-                    this.data.isWorkflowDataReady = true;
-                    this.actions.workflowMission();
-                } else if(res['msg'] === 'missionData') {
-                    this.data.missionData = res['data'];
-                    this.data.isMissionDataReady = true;
-                    this.actions.workflowMission();
-                }
-            }
-        });
+        // CalendarService.CalendarMsgMediator.subscribe('unShowDataList', res => {
+        //     console.log(res);
+        //     if(res !== null) {
+        //         if(res['msg'] === 'unShowData') {
+        //             this.data.isShowArr = res['data'];
+        //             this.actions.getDataCount();
+        //         } else if(res['msg'] === 'cancelTableId') {
+        //             this.data.isShowArr = res['data'];
+        //             let arr = ['mission','approve','remind'];
+        //             let arr_1 = [];
+        //             for( let a of this.data.isShowArr ){
+        //                 if( arr.indexOf( a ) === -1 ){
+        //                     arr_1.push( a );
+        //                 }
+        //             }
+        //             this.data.cancel_fields = arr_1;
+        //             this.actions.changeMainView(this.data.calendarContent);
+        //         } else if(res['msg'] === 'workflowData') {
+        //             this.data.workflowData = res['data'];
+        //             this.data.isWorkflowDataReady = true;
+        //             this.actions.workflowMission();
+        //         } else if(res['msg'] === 'missionData') {
+        //             this.data.missionData = res['data'];
+        //             this.data.isMissionDataReady = true;
+        //             this.actions.workflowMission();
+        //         }
+        //     }
+        // });
 
     }
 };

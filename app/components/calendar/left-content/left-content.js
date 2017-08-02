@@ -11,27 +11,32 @@ let config = {
     	classifyList:[{Text: '提醒1',labelId:3,tablechildren:[{Text: '提醒11',tableId:11,labelId:3},{Text: '提醒12',tableId:12,labelId:3},{Text: '提醒13',tableId:13,labelId:3},{Text: '提醒15',tableId:15,labelId:3},]},{Text:'提醒2',labelId:2,tablechildren:[{Text: '提醒21',tableId:21,labelId:2},{Text: '提醒22',tableId:22,labelId:2}]}],
     },
     actions: {
-        showHideGroup:function(){
+        getCalendarTreeData:function(){
+            console.log(1);
+            CalendarService.getCalendarTreeData().then(data => {
+                console.log('data',data);
 
+            });
         }
     },
     afterRender: function() {
+        this.actions.getCalendarTreeData();
         this.el.css({"height":"100%","width":"100%"});
-       this.append(new LeftCalendar, this.el.find('.left-calendar-box'));
-       let strhtml = "";
-       this.data.classifyList.forEach((data) => {
-           strhtml += "<div class='select-all'>" + "<input type='checkbox' id='select-all-"+data.labelId+"' class='chk_1 chk_remind label-select-all' checked='true' />" +
-               "<label class='select-label' for='select-all-"+data.labelId+"' id='label-all-"+data.labelId+"'></label><label class='select-label-show'>"+data.Text+"</label>"+
-               "<div class=\"checkbox-group\">";
-           data.tablechildren.forEach((data) =>{
-               strhtml+="<div class=\"label-task-children\">\n" +
-                   "<input type='checkbox' id='select-children-"+data.tableId+"' class='chk_1 chk_approve label-select-all checkbox-children-"+data.labelId +"' checked='true' />" +
-                   "<label class='select-label-children' for='select-children-"+data.tableId+"' id='select-children-"+data.labelId+"'></label><label>"+data.Text+"</label>"+
-                   "</div>";
-           });
-              strhtml+="</div></div>";
+        this.append(new LeftCalendar, this.el.find('.left-calendar-box'));
+        let strhtml = "";
+        this.data.classifyList.forEach((data) => {
+        strhtml += "<div class='select-all'>" + "<input type='checkbox' id='select-all-"+data.labelId+"' class='chk_1 chk_remind label-select-all' checked />" +
+           "<label class='select-label' for='select-all-"+data.labelId+"' id='label-all-"+data.labelId+"'></label><label class='select-label-show'>"+data.Text+"</label>"+
+           "<div class=\"checkbox-group\">";
+        data.tablechildren.forEach((data) =>{
+           strhtml+="<div class=\"label-task-children\">\n" +
+               "<input type='checkbox' id='select-children-"+data.tableId+"' class='chk_1 chk_approve label-select-all checkbox-children-"+data.labelId +"' checked />" +
+               "<label class='select-label-children' for='select-children-"+data.tableId+"' id='select-children-"+data.labelId+"'></label><label>"+data.Text+"</label>"+
+               "</div>";
         });
-       $(".remind-group").html(strhtml);
+          strhtml+="</div></div>";
+        });
+        $(".remind-group").html(strhtml);
         $('.select-label-show').bind('click',function(){
             if($(this).hasClass('hide-check-group'))
             {
@@ -91,9 +96,7 @@ let config = {
                     }));
             }
         });
-        CalendarService.getCalendarTreeData().then(data => {
-            console.log(data);
-        });
+
 
 
     }
