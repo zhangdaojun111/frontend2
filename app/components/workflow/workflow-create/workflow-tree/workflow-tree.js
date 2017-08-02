@@ -141,11 +141,11 @@ let config = {
             let rootNode = this.el.find('.J_select-Workflow');
             rootNode.text(msg.name);
         });
-        var workCreateDiv=$("#workflow-create");
-        workCreateDiv.on("click",function (e) {
-            var isClass=$(this).find(".J_tree").hasClass('show');
+        $(document.body).on('click',()=> {
+            let tree = this.el.find(".J_tree");
+            var isClass=tree.hasClass('show');
             if(isClass){
-                $(this).find(".J_tree").removeClass('show')
+                tree.removeClass('show');
             }
         });
        this.data.treeArr=this.data.data;
