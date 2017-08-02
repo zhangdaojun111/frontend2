@@ -103,15 +103,19 @@ export const fieldTypeService = {
         return data == this.EDIT_CONTROL
     },
     noToolTips: function (data) {//dataGrid中没有toolTips
-        let arr = [this.IMAGE_TYPE,this.UEDITOR,this.TEXT_COUNT_TYPE,this.CYCLE_RULE,this.SECRET_TEXT]
+        let arr = [this.IMAGE_TYPE,this.UEDITOR,this.TEXT_COUNT_TYPE,this.SECRET_TEXT,this.IMAGE_TYPE]
         return arr.indexOf( data ) != -1
     },
     intOrFloat: function (data) {//整数||小数
         return data == this.INT_TYPE
     },
+    //不能搜索字段
+    canNotSearch : function (data) {
+        let arr = [this.TEXT_COUNT_TYPE,this.URL_TYPE,this.CYCLE_RULE,this.TEXT_COUNT_TYPE,this.SECRET_TEXT,this.IMAGE_TYPE]
+        return arr.indexOf( data ) != -1;
+    },
     //返回搜索的类型
     searchType: function (data) {
-        let canNotSearch = [this.TEXT_COUNT_TYPE]
         if( data == this.DATE ){
             return 'date'
         }else if( data == this.TIME ){
@@ -120,7 +124,7 @@ export const fieldTypeService = {
             return 'datetime'
         }else if( this.numOrText(data) ){
             return 'number'
-        }else if( canNotSearch.indexOf(data) != -1 ){
+        }else if( this.canNotSearch(data) ){
             return 'none'
         }else {
             return 'text'
