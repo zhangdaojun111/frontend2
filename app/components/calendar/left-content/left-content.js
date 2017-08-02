@@ -11,16 +11,13 @@ let config = {
     	classifyList:[{Text: '提醒1',labelId:3,tablechildren:[{Text: '提醒11',tableId:11,labelId:3},{Text: '提醒12',tableId:12,labelId:3},{Text: '提醒13',tableId:13,labelId:3},{Text: '提醒15',tableId:15,labelId:3},]},{Text:'提醒2',labelId:2,tablechildren:[{Text: '提醒21',tableId:21,labelId:2},{Text: '提醒22',tableId:22,labelId:2}]}],
     },
     actions: {
-        getCalendarTreeData:function(){
-            console.log(1);
-            CalendarService.getCalendarTreeData().then(data => {
-                console.log('data',data);
 
-            });
-        }
     },
     afterRender: function() {
-        this.actions.getCalendarTreeData();
+        CalendarService.getCalendarTreeData().then(data => {
+            console.log('data',data);
+
+        });
         this.el.css({"height":"100%","width":"100%"});
         this.append(new LeftCalendar, this.el.find('.left-calendar-box'));
         let strhtml = "";
