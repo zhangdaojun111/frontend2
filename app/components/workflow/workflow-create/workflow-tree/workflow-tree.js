@@ -37,8 +37,10 @@ let config = {
         //点击子节点
         clickChild:function(e){
             //get current clicked node info
-            let {formid,tableid}=$(e.target)[0].dataset;
-            console.log(formid,tableid);
+
+            // let {formid,tableid}=$(e.target)[0].dataset;
+            Mediator.publish('workflow:choose', $(e.target)[0].dataset);
+
 
 
             let childValue = $(e.target).text();
@@ -52,7 +54,7 @@ let config = {
         changeTree:function(){
             console.log(this.data.treeArr);
             let keyword = $('.J_search').val();
-        }
+        },
     },
 
     afterRender: function() {

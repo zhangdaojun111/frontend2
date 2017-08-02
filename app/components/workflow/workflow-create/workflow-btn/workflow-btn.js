@@ -6,18 +6,14 @@ import Mediator from '../../../../lib/mediator';
 
 let config = {
     template: template,
-
     actions: {
         choose: function(e) {
             Mediator.publish('workflow:choose', $(e.target)[0].dataset);
-            // this.destroySelf();
         }
     },
-
     afterRender: function() {
         this.el.on('click', '.workflow-btn', (e) => {
             this.actions.choose(e);
-
         });
     }
 }

@@ -8,7 +8,8 @@ import WorkFlow from '../workflow-drawflow/workflow';
 
 let config = {
     template: template,
-    data: { 
+    data: {
+
     },
     actions: {
        operate:function(){
@@ -48,11 +49,11 @@ let config = {
         })
 
         //订阅btn click
-        Mediator.subscribe('workflow:choose', (msg)=> {
-            console.log(this.data.data[0]);
 
+        //订阅 select list click
+        Mediator.subscribe('workflow:getInfo', (msg)=> {
+            console.log(msg);
             WorkFlow.show(this.data.data[0]);
-
         })
     },
     beforeDestory: function(){
