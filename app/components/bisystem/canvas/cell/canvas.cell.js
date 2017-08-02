@@ -40,7 +40,6 @@ export class CanvasCellComponent extends BiBaseComponent {
 
     constructor(cell) {
         config.data = cell.val? cell.val : null;
-        console.log(config);
         super(config);
         this.cell = cell;
     }
@@ -54,6 +53,9 @@ export class CanvasCellComponent extends BiBaseComponent {
         cellComponent.render(cellContainer);
     }
 
+    /**
+     * 渲染cell layout 布局
+     */
     layoutCell() {
         this.el.find('.cell').css(this.cell.val.layout);
     }

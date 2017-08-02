@@ -1,4 +1,14 @@
-<div class="canvas-cells client">
-    <div class="canvas-cells-container">
+<div class="canvas-container">
+    <header class="views-header">
+        <div class="nav-tabs">
+            {{#each views}}
+            <a href="#/views/{{id}}">{{name}}</a>
+            {{/each}}
+        </div>
+    </header>
+
+    <div class="cells-container client">
+        <div class="cells">
+        </div>
     </div>
 </div>

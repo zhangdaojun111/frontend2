@@ -6,7 +6,13 @@
 </head>
 <body>
 <aside id="aside"></aside>
-<sectinon id="bi-container"></sectinon>
+<script>
+    window.config = {
+        is_admin: {{ is_admin | safe }},
+        bi_views: {{ bi_views|safe }}
+    }
+</script>
+<div id="route-outlet" class="bi-container"></div>
 <div id="views"></div>
 </body>
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
