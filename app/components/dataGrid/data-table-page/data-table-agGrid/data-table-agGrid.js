@@ -261,6 +261,7 @@ let config = {
             let real_type = colDef["real_type"];
             // let someStyle = 'text-align:right;margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
             let someStyle = 'margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
+            let someStyle_a = 'text-decoration:underline;margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
             if (params.data) {
                 rowId = params.data['_id']
             }
@@ -395,7 +396,7 @@ let config = {
                     }
                 } else {
                     if (colDef['base_buildin_dfield'] != '' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人') {
-                        sHtml = '<a  title="查看源数据" style="' + someStyle + 'background-color:' + color + '"><span id="relatedOrBuildin">' + numVal + '</span><span/>';
+                        sHtml = '<a  title="查看源数据" style="' + someStyle_a + 'background-color:' + color + '"><span id="relatedOrBuildin">' + numVal + '</span><span/>';
                     } else {
                         sHtml = '<span style="' + someStyle + 'background-color:' + color + '"><span>' + numVal + '</span><span/>';
                     }
@@ -414,7 +415,7 @@ let config = {
                     val = val.replace(/\n/g, "\n;\n");
                 }
                 if (colDef['base_buildin_dfield'] != '' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人') {
-                    sHtml = '<a  title="查看源数据" style="' + someStyle + 'background-color:' + color + '"><span id="relatedOrBuildin">' + val + '</span></a>';
+                    sHtml = '<a  title="查看源数据" style="' + someStyle_a + 'background-color:' + color + '"><span id="relatedOrBuildin">' + val + '</span></a>';
                 } else {
                     sHtml = '<span style="' + someStyle + 'background-color:' + color + '"><span>' + val + '</span></span>';
                 }
@@ -433,7 +434,7 @@ let config = {
                 } else {
                     let bigNum = params.value > 9007199254740992 ? dgcService.formatter(params.value.toString()) + '.00' : dgcService.formatter(Number(params.value).toFixed(colDef.real_accuracy))
                     if (colDef['base_buildin_dfield'] != '' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人') {
-                        sHtml = '<a  title="查看源数据" style="' + someStyle + 'background-color:' + color + '"><span id="relatedOrBuildin">' + bigNum + '</span></a>';
+                        sHtml = '<a  title="查看源数据" style="' + someStyle_a + 'background-color:' + color + '"><span id="relatedOrBuildin">' + bigNum + '</span></a>';
                     } else {
                         sHtml = '<span style="' + someStyle + 'background-color:' + color + '"><span>' + bigNum + '</span></span>';
                     }
@@ -442,7 +443,7 @@ let config = {
 
             //地址类型
             else if (real_type == fieldTypeService.URL_TYPE) {
-                sHtml = '<a href="' + myValue + '" style="float:left;color:#337ab7;" id="shareAddress" target="_blank">' + myValue + '</a>';
+                sHtml = '<a href="' + someStyle_a + '" style="float:left;color:#337ab7;" id="shareAddress" target="_blank">' + myValue + '</a>';
             }
 
             //合同编辑器
@@ -455,7 +456,7 @@ let config = {
                 if (this.data.viewMode == 'editFromCorrespondence') {
                     sHtml = '<span style="color:' + color + '">' + params.value + '</span>';
                 } else {
-                    sHtml = '<a style="' + someStyle + 'background-color:' + color + ' " ><span id="correspondenceClick">' + params.value + '</span></a>';
+                    sHtml = '<a style="' + someStyle_a + 'background-color:' + color + ' " ><span id="correspondenceClick">' + params.value + '</span></a>';
                 }
             }
 
@@ -503,11 +504,11 @@ let config = {
                     if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
                         sHtml = '<span style="float:right;color:rgb(85,85,85);">' + params.value + '</span>';
                     } else {
-                        sHtml = '<a style="color:#337ab7;' + someStyle + 'background-color:' + color + '" ><span id="childOrCount">' + params.value + '</span></a>';
+                        sHtml = '<a style="color:#337ab7;' + someStyle_a + 'background-color:' + color + '" ><span id="childOrCount">' + params.value + '</span></a>';
                     }
                 } else {
                     if (colDef['base_buildin_dfield'] != '' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人') {
-                        sHtml = '<a  title="查看源数据" style="' + someStyle + 'background-color:' + color + '"><span id="relatedOrBuildin">' + params.value + '</span></a>';
+                        sHtml = '<a  title="查看源数据" style="' + someStyle_a + 'background-color:' + color + '"><span id="relatedOrBuildin">' + params.value + '</span></a>';
                     } else {
                         sHtml = '<span style="' + someStyle + 'background-color:' + color + '"><span>' + params.value + '</span></span>';
                     }
@@ -673,14 +674,11 @@ let config = {
                 table_id: this.data.tableId
             }
             let preferenceData = dataTableService.getPreferences(obj1);
-            let remindData = dataTableService.getReminRemindsInfo(obj2);
             let headerData = dataTableService.getColumnList(obj2);
 
-            Promise.all([preferenceData, remindData, headerData]).then((res)=> {
+            Promise.all([preferenceData, headerData]).then((res)=> {
                 this.actions.setPreference( res[0] );
-                //提醒赋值
-                this.data.remindColor = res[1];
-                this.data.fieldsData = res[2].rows || [];
+                this.data.fieldsData = res[1].rows || [];
                 //创建高级查询需要字段数据
                 this.data.hightGridSearchFields = dgcService.createHightGridSearchFields( this.data.fieldsData );
                 //创建表头
@@ -695,11 +693,13 @@ let config = {
             let postData = this.actions.createPostData();
             let body = dataTableService.getTableData( postData );
             let footer = dataTableService.getFooterData( postData );
-            Promise.all([body, footer]).then((res)=> {
+            let remindData = dataTableService.getReminRemindsInfo({table_id:this.data.tableId});
+            Promise.all([body, footer, remindData]).then((res)=> {
                 this.data.rowData = res[0].rows || [];
                 this.data.total = res[0].total;
+                //提醒赋值
+                this.data.remindColor = res[2];
                 this.data.footerData = dgcService.createFooterData( res[1] );
-
                 if( this.data.firstRender ){
                     //渲染agGrid
                     this.actions.renderAgGrid();
@@ -751,14 +751,11 @@ let config = {
             }
             this.pagination = new dataPagination(paginationData);
             this.pagination.actions.paginationChanged = this.actions.refreshData;
-            this.append(new dataPagination(paginationData), this.el.find('.pagination'));
+            this.append(this.pagination, this.el.find('.pagination'));
             this.data.firstRender = false;
         },
         //分页刷新操作
         refreshData: function ( data ) {
-            console.log( "_____________" )
-            console.log( "_____________" )
-            console.log( data )
             this.data.rows = data.rows;
             this.data.first = data.firstRow;
             this.actions.getGridData();
@@ -768,6 +765,7 @@ let config = {
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();
+        //高级查询
         $( '.hight-search' ).click( ()=>{
             let d = {
                 fieldsData: this.data.hightGridSearchFields
