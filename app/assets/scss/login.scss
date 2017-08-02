@@ -32,16 +32,17 @@ $font_size:10px;           //通用字体大小
       left: 200px;
       top: 150px;
 
-      .login-main-title {
+      h1 {
         color: white;
         line-height: 30px;
-        font-size: 16px;
+        font-size: 20px;
         text-align: center;
       }
 
-      .login-version-title {
+      h2 {
         color: $panel_color;
         text-align: center;
+        font-size: 12px;
       }
 
       .white-panel {
@@ -52,16 +53,17 @@ $font_size:10px;           //通用字体大小
         height: 240px;
         border-radius: 2%;
 
-        .company-info {
+        h2 {
           position: relative;
           top:15px;
           height: 40px;
           line-height: 20px;
+          color: black;
           //font-size: 0.9em;
           text-align: center;
         }
 
-        .login-form {
+          form {
           display: block;
           position: relative;
           height: 155px;
@@ -72,7 +74,7 @@ $font_size:10px;           //通用字体大小
             height: 40px;
             left: 20px;
 
-            .form-control {
+            input {
               width: 260px;
               height: 28px;
               left: 10px;
@@ -82,12 +84,12 @@ $font_size:10px;           //通用字体大小
               color: $input_color;
             }
 
-            .form-control:focus {
+            input:focus {
               border-style: solid;
               border-color: #11f4ee;
             }
 
-            .form-user-logo, .form-pw-logo {
+            i {
               width: 20px;
               height: 20px;
               display: block;
@@ -106,7 +108,7 @@ $font_size:10px;           //通用字体大小
               background-repeat: no-repeat;
             }
           }
-          //调整div位置
+
           .ps-group {
             position: relative;
             top: 5px;
@@ -119,12 +121,13 @@ $font_size:10px;           //通用字体大小
             margin-top: 5px;
             margin-left: 20px;
             color: rgba(72, 72, 72, 0.73);
-            .remember-pw-check{
+
+            input{
               position: relative;
               top: 2px;
               cursor: pointer;
             }
-            .remember-ps-prompt{
+            label{
               cursor: pointer;
             }
           }
@@ -147,7 +150,7 @@ $font_size:10px;           //通用字体大小
             border-top: solid 1px rgba(212, 212, 212, 0.24);
             .update-group{
               margin-left: 20px;
-              .update-logo {
+              i {
                 position: absolute;
                 top:20px;
                 cursor: pointer;
@@ -156,7 +159,7 @@ $font_size:10px;           //通用字体大小
                 background: url("../images/update-logo.png");
                 background-repeat: no-repeat;
               }
-              .check-update-info {
+              label {
                 position: absolute;
                 cursor: pointer;
                 top:20px;
@@ -165,7 +168,7 @@ $font_size:10px;           //通用字体大小
                 color: rgba(195, 195, 195, 0.88);
               }
             }
-            .login-btn {
+            button {
               position: absolute;
               cursor: pointer;
               left: 190px;
@@ -242,7 +245,7 @@ $font_size:10px;           //通用字体大小
         height: auto;
         top: 20px;
 
-        .version-table{
+        table{
           display: none;
           width: 100%;
           color: rgba(255, 255, 255, 0.55);
@@ -278,12 +281,14 @@ $font_size:10px;           //通用字体大小
           top: 2px;
           text-align: center;
           background-color: #fafafa;
-          .op-title{
+          span{
             line-height: 30px;
           }
-          .close-icon{
+
+          i{
             float: right;
-            margin-right: 5px;
+            margin-right: 8px;
+            margin-top: 3px;
             font-size: 18px;
             cursor: pointer;
             color: rgba(181, 181, 181, 0.81);
@@ -291,33 +296,33 @@ $font_size:10px;           //通用字体大小
         }
         .op-content{
           position: relative;
-          height: 160px;
+          height: 155px;
           border-bottom: 1px solid rgba(180, 180, 180, 0.3);
           .account-group{
             position: relative;
             height: 60px;
             top: 15px;
             left: 20px;
-            .account-tips{
+            span{
               line-height: 30px;
               display: block;
             }
-            .account-input{
+            input{
               width: 255px;
               height: 25px;
               margin-top: 5px;
               background-color: #fafafa;
               border: 1px solid rgba(180, 180, 180, 0.3);
             }
-            .account-input:focus {
+            input:focus {
               border-style: solid;
               border-color: #11f4ee;
             }
           }
         }
         .op-submit{
-          height: 50px;
-          .submit-find-account{
+          height: 55px;
+          button{
             position:relative;
             width: 90px;
             height:30px;
@@ -325,7 +330,7 @@ $font_size:10px;           //通用字体大小
             background-color: #0089FF;
             color: white;
             border-radius:5px;
-            top: 10px;
+            top: 15px;
             left: 190px;
             border: none;
           }
@@ -340,7 +345,7 @@ $font_size:10px;           //通用字体大小
       top: calc(50% - 100px);
       left: calc(50% - 300px);
       display: none;
-      .download-prompt{
+        span{
         font-size: 20px;
         font-weight: bold;
         color: white;

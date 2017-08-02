@@ -9,14 +9,14 @@
 
 <script>
 //    window.config = {{login|safe}};
+console.time("loading end");
 </script>
 <div class="main-window">
     <!--登录界面标题-->
     <div class="bg-div">
         <div class="login-content">
-            <h1 class="login-main-title">欢迎使用 ERDS企业管理系统</h1>
+            <h1 class="login-main-title">欢迎使用 <strong>ERDS</strong>企业管理系统</h1>
             <h2 class="login-version-title">v1.1.0.0</h2>
-
             <!--无需下载，显示表单和版本-->
             <div class="white-panel login-container">
                 <h2 class="company-info"></h2>
@@ -25,7 +25,7 @@
                     <!--登录用户名和密码-->
                     <div class="form-group">
                         <i class="form-user-logo"></i>
-                        <input type="text" class="form-control" placeholder="" name="username" >
+                        <input type="text" class="form-control" placeholder="" name="username" autocomplete="off">
                     </div>
                     <div class="form-group ps-group">
                         <i class="form-pw-logo"></i>

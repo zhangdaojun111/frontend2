@@ -1,6 +1,7 @@
 //用于登录界面初始化与流程控制
-import 'jquery-ui/ui/widgets/dialog.js';
 import '../assets/scss/login.scss';
+console.timeEnd("loading end");
+import 'jquery-ui/ui/widgets/dialog.js';
 import {LoginService} from '../services/login/loginService';
 import {md5} from '../services/login/md5';
 import msgBox from '../lib/msgbox';
@@ -11,12 +12,11 @@ function getLoginController() {
         md5:md5,
         systemName:'',      //公司名称
         loginSize:"26px",
-        url:'',
         versionInfo:{},     //后台获取的公司名称和版本信息
         isRememberKey:false,    //记录是否记住密码，点击登陆后根据其状态进行处理
         username_value:'',      //记录用户名称
         password_value:'',      //记录密码
-        isOpposite:false,
+        isOpposite:false,       //记录页面状态
 
         $loginMainTitle:$(".login-main-title"),     //系统名称显示
         $companyInfo:$('.company-info'),            //公司名称显示
@@ -44,16 +44,21 @@ function getLoginController() {
                 this.resetSysName(this.systemName);
             });
 
-            //记住密码
+            //记住密码和忘记密码
             this.$rememberPwCheck.on("click", (event) => {
                 this.isRememberKey = event.target.checked;
+                if(this.isRememberKey === false){
+                    if(this.username_value !== ''){
+                        //缓存中查找并清除当前用户密码
+                        window.localStorage.removeItem(this.username_value);
+                    }
+                }
             });
 
             //展示或关闭版本信息
             this.$updateGroup.on("click", () => {
                 this.$versionTable.toggle();
             });
-
 
             //登录按钮
             this.$loginBtn.on('click', () => {
@@ -64,22 +69,24 @@ function getLoginController() {
 
             //忘记密码，找回密码入口
             this.$findPwBtn.on("click", () => {
-                setTimeout(() => {
-                    this.$whitePanel.hide();
-                    this.$oppositePanel.show();
-                    this.isOpposite = true;
-                },200);
+                this.$whitePanel.hide();
+                this.$oppositePanel.fadeIn();
+                this.isOpposite = true;
+
             });
+
             //反面面板关闭返回正面面板
             this.$closeIcon.on("click", () => {
-                this.$whitePanel.show();
+                this.$whitePanel.fadeIn();
                 this.$oppositePanel.hide();
                 this.isOpposite = false;
             });
+
             //监听用户名输出框
             this.$usernameInput.on("input",() => {
                 this.username_value = this.$usernameInput.val();
             });
+
             //监听密码输入框
             this.$passwordInput.on("input",() => {
                 this.password_value = this.$passwordInput.val();
@@ -94,6 +101,7 @@ function getLoginController() {
                     }
                 }
             });
+
             //密码找回页面提交按钮
             this.$submitFindPw.on("click", () => {
                 let userName = $(".account-input").val();
@@ -108,14 +116,17 @@ function getLoginController() {
                     console.log("提交失败",err)
                 })
             });
+
             //自助更新
             $(".update-service").click(function () {
                 // console.log("自助更新服务");
             });
+
             //移动下载
             $(".mobile-download").click(function () {
                 // console.log("打开移动下载页面");
             });
+
             //键盘绑定
             $(document).keypress((event) => {
                 if(event.keyCode === 13){
@@ -127,37 +138,37 @@ function getLoginController() {
                 }
             })
         },
+        //初始化公司名称
         sysNameInit:function () {
-           this.systemName = this.versionInfo.sap_login_system_name;
+           this.systemName = this.versionInfo.sap_login_system_name || '';
            this.resetSysName(this.systemName);
         },
+        //初始化版本信息
         versionInit:function () {
             let info = this.versionInfo.rows;
             let $table = this.$versionTable;
-            let version = this.testVersionData;
 
             for (let obj of info){
                 let $row = $("<tr></tr>");
 
                 let $module = $("<td></td>");
-                $module.html(obj["module"]);
+                $module.html(obj["module"] || '-');
                 $row.append($module);
 
                 let $codeTime = $("<td></td>");
-                $codeTime.html(obj["last_change_time"]);
+                $codeTime.html(obj["last_change_time"] || '-');
                 $row.append($codeTime);
 
                 let $updateTime = $("<td></td>");
-                $updateTime.html(obj["update_time"]);
+                $updateTime.html(obj["update_time"] || '-');
                 $row.append($updateTime);
 
                 let $runStats = $("<td></td>");
-                $runStats.html(obj["run_stats"]);
+                $runStats.html(obj["run_stats"] || '-');
                 $row.append($runStats);
 
                 $table.append($row);
             }
-            // $table.hide();
         },
         infoInit:function () {
             let storage = window.localStorage;
@@ -192,7 +203,9 @@ function getLoginController() {
             // }
             //设置系统名
             this.$companyInfo.html(systemName);
+            $(document).find("title").html(systemName);
         },
+        //用户登录
         userLogin:function (username,password) {
             let data = {
                 username:username,
