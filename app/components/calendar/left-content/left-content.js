@@ -3,7 +3,7 @@ import template from './left-content.html';
 import './left-content.scss';
 import LeftContentSelect from './leftContent.SelectLabel/leftContent.SelectLabel'
 import LeftCalendar from './left-calendar/left-calendar';
-import {CalendarService} from '../../../service/calendar.service';
+import {CalendarService} from '../../../services/calendar/calendar.service';
 import Mediator from '../../../lib/mediator';
 let config = {
     template: template, 

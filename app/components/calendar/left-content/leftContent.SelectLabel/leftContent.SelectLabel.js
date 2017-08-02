@@ -1,8 +1,7 @@
 import Component from "../../../../lib/component";
 import template from './leftContent.SelectLabel.html';
 import './leftContent.SelectLabel.scss';
-import leftContentSelectChildren from './leftContent.Select.children/leftContent.Select.children';
-import {CalendarService} from '../../../../service/calendar.service';
+import {CalendarService} from '../../../../services/calendar/calendar.service';
 import Mediator from '../../../../lib/mediator';
 
 let config = {
