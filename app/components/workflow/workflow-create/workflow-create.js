@@ -56,10 +56,8 @@ let config = {
             Mediator.publish('workflow:addFav', this.data.id);
         });
 
-
         //订阅 select list click
         Mediator.subscribe('workflow:getInfo', (msg)=> {
-            console.log(msg);
             WorkFlow.show(msg.data[0]);
         })
     },
