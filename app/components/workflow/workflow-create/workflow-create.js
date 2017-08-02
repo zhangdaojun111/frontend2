@@ -20,9 +20,9 @@ let config = {
                 oper.val("取消");
                 del.show();
             }
-       },
-       deloperate:function(arg){
-            //向后台发送数据，删除该常用工作流,现在没有接口，只是在dom中删除这个
+       }, 
+       //向后台发送数据，删除该常用工作流,现在没有接口，只是在dom中删除这个
+       deloperate:function(arg){   
             arg.remove();
        }
     },
@@ -31,7 +31,7 @@ let config = {
         this.data[0].rows.forEach((row)=>{
             this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
         });
-        
+        //添加流程下来菜单
         this.append(new WorkFlowTree(this.data[1]), this.el.find('.J_select-container'));
 
         this.el.on('click','.J_operate',()=>{

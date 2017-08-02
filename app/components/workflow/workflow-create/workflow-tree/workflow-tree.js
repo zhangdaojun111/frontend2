@@ -10,6 +10,7 @@ let config = {
         treeArr:[],
     },
     actions: {
+        //隐藏显示下拉菜单
         toogleTree:function(){
             let tree = this.el.find(".J_tree");
             let tip = tree.hasClass('show');
@@ -21,6 +22,7 @@ let config = {
                 tree.removeClass('hide');
             }
         },
+        //点击孩子的根节点隐藏子节点
         toogletip:function(e){
             let childList = $(e.target).siblings(".child-list");
             let root = this.el.find(childList);
@@ -32,6 +34,7 @@ let config = {
             }
             
         },
+        //点击子节点
         clickChild:function(e){
             let childValue = $(e.target).text();
             let rootNode = this.el.find('.J_select-Workflow');
@@ -40,17 +43,19 @@ let config = {
             tree.addClass('hide');
             tree.removeClass('show');
         },
-        //输入搜索改变
+        //输入搜索改变下拉菜单
         changeTree:function(){
+            console.log(this.data.treeArr);
             let keyword = $('.J_search').val();
         }
     },
 
     afterRender: function() {
+        
        this.data.treeArr=this.data.data;
-      
+       console.log(this.data.treeArr);
        this.data.treeArr.forEach(function(el,index) {
-        console.log(el)   
+            console.log(el);
        });
        this.el.on('click','.J_tip',()=>{
            this.actions.toogleTree();
