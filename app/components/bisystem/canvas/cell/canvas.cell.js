@@ -43,6 +43,7 @@ export class CanvasCellComponent extends BiBaseComponent {
         config.data = cell.chart? cell.chart : null;
         super(config);
         this.cell = cell;
+        console.log(this.cell);
     }
 
     /**
