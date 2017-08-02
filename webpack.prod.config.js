@@ -21,6 +21,8 @@ module.exports = {
         vendors: [
             'jquery',
             'jquery-ui',
+            'jquery-ui/themes/base/base.css',
+            'jquery-ui/themes/base/theme.css',
             'mediator-js',
             'handlebars',
             'moment',

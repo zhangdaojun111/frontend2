@@ -1,6 +1,6 @@
 
-import 'jquery-ui/themes/base/base.css';
-import 'jquery-ui/themes/base/theme.css';
+// import 'jquery-ui/themes/base/base.css';
+// import 'jquery-ui/themes/base/theme.css';
 import '../assets/scss/main.scss';
 
 import {IframeInstance} from '../components/main/iframes/iframes';
