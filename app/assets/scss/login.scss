@@ -49,7 +49,7 @@ $font_size:10px;           //通用字体大小
         background-color: #ffffff;
         top: 25px;
         width: 300px;
-        height: 210px;
+        height: 230px;
         border-radius: 2%;
 
         .company-info {
@@ -113,26 +113,37 @@ $font_size:10px;           //通用字体大小
           }
 
           .remember-pw-group {
+            width: 80px;
+            height: 40px;
             position: relative;
-            left: 20px;
+            float: left;
+            margin-top: 10px;
+            margin-left: 20px;
             color: rgba(72, 72, 72, 0.73);
-          }
-
-          .remember-pw-check{
-            position: relative;
-            top: 3px;
-            cursor: pointer;
+            .remember-pw-check{
+              position: relative;
+              top: 3px;
+              cursor: pointer;
+            }
+            .remember-ps-prompt{
+              cursor: pointer;
+            }
           }
 
           .warn-info {
+            width: 160px;
+            margin-left: 20px;
+            float: left;
+            padding-top: 15px;
+            padding-bottom: 15px;
             position: relative;
-            left: 40px;
             color: red;
+            text-align: center;
           }
-          .update-group {
+          .panel-bottom {
             width: 300px;
             height: 50px;
-            bottom: 0;
+            bottom: -20px;
             position: absolute;
             left: 20px;
             border-top: solid 1px rgba(212, 212, 212, 0.24);
@@ -149,6 +160,7 @@ $font_size:10px;           //通用字体大小
 
             .check-update-info {
               position: absolute;
+              cursor: pointer;
               top:20px;
               left: 25px;
               margin-top: 3px;
@@ -196,6 +208,35 @@ $font_size:10px;           //通用字体大小
           line-height: 25px;
         }
       }
+
+      //待实现移动下载和自助更新
+      .non-implement{
+        width: 300px;
+        height: 30px;
+        position: relative;
+        top: 10px;
+        color: red;
+
+        .update-service{
+          width:150px;
+          height:25px;
+          cursor: pointer;
+          margin-top: 20px;
+          float: left;
+          text-align: center;
+          border-right: #dcdcdc 1px solid;
+          line-height: 25px;
+        }
+        .mobile-download{
+          width:149px;
+          height:25px;
+          cursor: pointer;
+          margin-top: 20px;
+          float: left;
+          text-align: center;
+          line-height: 25px;
+        }
+      }
       //版本表格样式
       .version-view{
         width: 300px;
@@ -222,6 +263,7 @@ $font_size:10px;           //通用字体大小
           }
         }
       }
+
       //反面面板(忘记密码)样式
       .opposite_panel{
         display: none;
@@ -229,12 +271,12 @@ $font_size:10px;           //通用字体大小
         background-color: $panel_color;
         top: 25px;
         width: 300px;
-        height: 210px;
+        height: 230px;
         border-radius: 2%;
         .op-header{
           position: relative;
           height: 30px;
-          top:2px;
+          top: 2px;
           text-align: center;
           background-color: #fafafa;
           .op-title{
@@ -250,12 +292,12 @@ $font_size:10px;           //通用字体大小
         }
         .op-content{
           position: relative;
-          height: 130px;
+          height: 150px;
           border-bottom: 1px solid rgba(180, 180, 180, 0.3);
           .account-group{
             position: relative;
             height: 60px;
-            top: 10px;
+            top: 15px;
             left: 20px;
             .account-tips{
               line-height: 30px;
@@ -264,6 +306,7 @@ $font_size:10px;           //通用字体大小
             .account-input{
               width: 255px;
               height: 25px;
+              margin-top: 5px;
               background-color: #fafafa;
               border: 1px solid rgba(180, 180, 180, 0.3);
             }
@@ -288,6 +331,20 @@ $font_size:10px;           //通用字体大小
             border: none;
           }
         }
+      }
+    }
+    //needDownload时显示
+    .need-download{
+      position: fixed;
+      width: 600px;
+      height: 200px;
+      top: calc(50% - 100px);
+      left: calc(50% - 300px);
+      display: none;
+      .download-prompt{
+        font-size: 20px;
+        font-weight: bold;
+        color: white;
       }
     }
   }

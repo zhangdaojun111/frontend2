@@ -5,13 +5,31 @@ import {Utils} from "./utils"
 export const LoginService = {
     http:HTTP,
     utils:Utils,
-    isNeedDownload:false,
+    needDownload:false,
     username_value:'',
     password_value:'',
     userName:'',
 
+    //检查当前浏览器是否为chrome
     support:function () {
-        return this.isNeedDownload;     //添加浏览器检测
+        let browser = this.currentBrowser();
+        if (!browser['chrome']){
+            this.needDownload = true;
+        }
+        return this.needDownload;
+    },
+    //获取浏览器信息
+    currentBrowser:function(){
+        let Browser = {
+        };
+        let ua = navigator.userAgent.toLowerCase();
+        let s;
+        (s = ua.match(/msie ([\d.]+)/)) ? Browser['ie'] = s[1] :
+            (s = ua.match(/firefox\/([\d.]+)/)) ? Browser['firefox'] = s[1] :
+                (s = ua.match(/chrome\/([\d.]+)/)) ? Browser['chrome'] = s[1] :
+                    (s = ua.match(/opera.([\d.]+)/)) ? Browser['opera'] = s[1] :
+                        (s = ua.match(/version\/([\d.]+).*safari/)) ? Browser['safari'] = s[1] : 0;
+        return Browser;
     },
     getVersionInfo:function () {
         return this.http.postImmediately({
@@ -32,7 +50,6 @@ export const LoginService = {
         //找回密码
         let url = '/validate_username/';
         let body = this.utils.formatParams({username:username});
-        console.log(body);
         return this.http.postImmediately({
             type:'post',
             url:url,

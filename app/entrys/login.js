@@ -21,7 +21,7 @@ function getLoginController() {
         $loginMainTitle:$(".login-main-title"),     //系统名称显示
         $companyInfo:$('.company-info'),            //公司名称显示
         $rememberPwCheck:$(".remember-pw-check"),   //记住密码
-        $updateLogo:$(".update-logo"),              //显示更新信息logo
+        $updateGroup:$(".update-group"),              //显示更新信息logo
         $versionTable:$(".version-table"),          //版本信息显示表格
         $loginBtn:$("button.login-btn"),            //登录按钮
         $findPwBtn:$(".find-pw-btn"),               //忘记密码
@@ -31,12 +31,6 @@ function getLoginController() {
         $whitePanel:$(".white-panel"),              //正面面板
         $oppositePanel:$(".opposite_panel"),        //反面面板
         $submitFindPw:$(".submit-find-account"),    //查找密码提交按钮
-
-        
-        
-        
-
-        
 
         //检测浏览器是否可用
         browser_check: function (){
@@ -56,9 +50,10 @@ function getLoginController() {
             });
 
             //展示或关闭版本信息
-            this.$updateLogo.on("click", () => {
+            this.$updateGroup.on("click", () => {
                 this.$versionTable.toggle();
             });
+
 
             //登录按钮
             this.$loginBtn.on('click', () => {
@@ -104,7 +99,6 @@ function getLoginController() {
                 let userName = $(".account-input").val();
                 let result = LoginService.findPassword(userName);
                 result.done((result) => {
-                    console.log(result);
                     if(result.success === 1){
                         msgBox.alert("提交成功！我们已发送邮件至您的邮箱中，请注意查收！");
                     }else{
@@ -114,6 +108,15 @@ function getLoginController() {
                     console.log("提交失败",err)
                 })
             });
+            //自助更新
+            $(".update-service").click(function () {
+                // console.log("自助更新服务");
+            });
+            //移动下载
+            $(".mobile-download").click(function () {
+                // console.log("打开移动下载页面");
+            });
+            //键盘绑定
             $(document).keypress((event) => {
                 if(event.keyCode === 13){
                     if(this.isOpposite === false){
@@ -218,21 +221,21 @@ function getLoginController() {
 
 let controller = getLoginController();
 let isNeedDownload = controller.browser_check();
-if( isNeedDownload === false){
-    //正常显示登录表单
+if( isNeedDownload === false){      //正常显示登录表单
     LoginService.getVersionInfo()
     .done((result) => {
         controller.versionInfo = result;
-        controller.sysNameInit();//初始化公司名称
-        controller.versionInit();//初始化版本table
+        controller.sysNameInit();   //初始化公司名称
+        controller.versionInit();   //初始化版本table
     }).fail((err) => {
-        this.$versionTable.hide();
         console.log("get version info fail", err.statusText);
     });
     controller.formInit();  //初始化表单控件
     controller.infoInit();  //初始化最近访问用户和密码
 }else{
-    //显示浏览器下载提示
+    //显示浏览器下载提示,隐藏其余部分
+    $(".login-content").hide();
+    $(".need-download").show();
 }
 
 
