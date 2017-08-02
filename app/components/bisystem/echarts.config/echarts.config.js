@@ -4,7 +4,6 @@
  */
 
 import {ToolPlugin} from "../utils/tool.plugin";
-import * as echarts from 'echarts'
 
 // 图表通用颜色
 const blueColors = [
@@ -288,11 +287,12 @@ const linebar = {
 };
 
 
-export class EchartsOption {
-    constructor() {
-        [this.blue, this.green, this.grayBlue] = [blueColors,grayBlueColors,greenColors]
-    }
-    getEchartsOption(type) {
+export const EchartsOption = {
+    blue: blueColors,
+    green: greenColors,
+    grayBlue: grayBlueColors,
+
+    getEchartsConfigOption(type) {
         let option = {};
         switch (type) {
             case 'pie':

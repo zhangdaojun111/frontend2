@@ -6,6 +6,7 @@ $cellTitleSize: 14px;
     background:#ffffff;
     padding:10px;
     font-size:$cellTitleSize;
+    box-sizing: border-box;
     h3 {
         height:20px;
         .title {

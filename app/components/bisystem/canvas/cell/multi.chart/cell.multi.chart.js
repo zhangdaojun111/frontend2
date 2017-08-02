@@ -9,24 +9,21 @@ let config = {
     template: template,
     data: {
         id: 'multi-chart',
-        chart: {
-            chartType: {
-                type: 'multiChart'
-            }
-        }
+        chart: {}
     },
     actions: {
-        init() {
+        echartsInit() {
             let echartsService = new EchartsService(this.data)
         }
     },
     firstAfterRender() {
-        this.actions.init()
+        this.actions.echartsInit()
     }
 }
 
 export class CellMultiChartComponent extends BiBaseComponent {
-    constructor() {
-        super(config)
+    constructor(cellChart) {
+        config.data.cellChart = cellChart ? cellChart : null;
+        super(config);
     }
 }

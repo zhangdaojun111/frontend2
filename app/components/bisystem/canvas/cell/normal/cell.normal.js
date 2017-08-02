@@ -11,20 +11,21 @@ let config = {
     template: template,
     data: {
         id: 'normal',
-        chart: {}
+        cellChart: {}
     },
     actions: {
-        init() {
+        echartsInit() {
             let echartsService = new EchartsService(this.data)
         }
     },
     firstAfterRender() {
-        this.actions.init()
+        this.actions.echartsInit()
     }
 }
 
 export class CellNormalComponent extends BiBaseComponent {
-    constructor() {
-        super(config)
+    constructor(cellChart) {
+        config.data.cellChart = cellChart ? cellChart : null;
+        super(config);
     }
 }

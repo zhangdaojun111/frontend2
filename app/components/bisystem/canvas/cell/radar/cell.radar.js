@@ -3,14 +3,29 @@
  */
 import {BiBaseComponent} from '../../../bi.base.component';
 import template from './cell.radar.html';
+import {EchartsService} from '../../../../../services/bisystem/echart.server';
+
 
 
 let config = {
-    template: template
+    template: template,
+    data: {
+        id: 'radar',
+        cellChart: {}
+    },
+    actions: {
+        echartsInit() {
+            let echartsService = new EchartsService(this.data)
+        }
+    },
+    firstAfterRender() {
+        this.actions.echartsInit()
+    }
 }
 
 export class CellRadarComponent extends BiBaseComponent {
-    constructor() {
-        super(config)
+    constructor(cellChart) {
+        config.data.cellChart = cellChart ? cellChart : null;
+        super(config);
     }
 }
