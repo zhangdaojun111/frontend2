@@ -8,6 +8,8 @@ import LeftContent from './left-content/left-content';
 import RightContent from './right-content/right-content';
 import CalendarMin from './calendar.main/calendar.main';
 
+import {CalendarService} from '../../services/calendar/calendar.service';
+
 let config = {
     template: template,
     data: {

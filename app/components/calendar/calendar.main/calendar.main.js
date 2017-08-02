@@ -9,18 +9,47 @@ import CalendarMonth from './calendar.month/calendar.month';
 import CalendarWeek from './calendar.week/calendar.week';
 import CalendarDay from './calendar.day/calendar.day';
 
-import {CalendarService} from '../../../service/calendar.service';
+import {CalendarService} from '../../../services/calendar/calendar.service';
 
 let config = {
     template: template,
     data: {
-        leftChooseDate: '',
+        HeadList: [ '星期日','星期一', '星期二', '星期三', '星期四', '星期五', '星期六' ],
+        chooseDate: '',
         monthDataList: [],
         weekDataList: [],
+        dayDataList: [],
         todayStr: '',
         calendarContent: 'month',
         selectData: {},
-        selectedDateShow: '2121'
+        selectedDateShow: '2121',
+
+        from_date: '',
+        to_date: '',
+
+        workflowCount: 0,
+        missionCount: 0,
+        remindCount: 0,
+        isShowArr: [],
+
+        workflowData: [],
+        isWorkflowDataReady: false,
+
+        missionData: [],
+        isMissionDataReady: false,
+
+        cancel_fields: [],
+
+        // 时间对应的日历设置
+        date2settings: {},
+
+        // 对应的日历设置数据
+        calendarSettings: {},
+
+        // 字段id对应字段信息
+        fieldInfos: {},
+
+        searchText: '',
     },
     actions: {
         getDayNumOfMonth: function ( year , month ) {
@@ -32,8 +61,279 @@ let config = {
             let d = new Date( year, month, day );
             return d.getDay();
         },
-        addZero( num ){
+        addZero: function( num ){
             return ( num < 10 ) ? ( "0" + num ) : num;
+        },
+        colorRgb: function(str, opcity){
+            let sColor = str.toLowerCase();
+            if(sColor){
+                if(sColor.length === 4){
+                    let sColorNew = "#";
+                    for(let i=1; i<4; i+=1){
+                        sColorNew += sColor.slice(i,i+1).concat(sColor.slice(i,i+1));
+                    }
+                    sColor = sColorNew;
+                }
+                //处理六位的颜色值
+                let sColorChange = [];
+                for(let i=1; i<7; i+=2){
+                    sColorChange.push(parseInt("0x"+sColor.slice(i,i+2)));
+                }
+                return "rgba(" + sColorChange.join(",")+","+opcity + ")";
+            }else{
+                return sColor;
+            }
+        },
+
+        getDataCount: function (){
+            let i = 0;
+            let j = 0;
+            let w = 0;
+            let m = 0;
+            if( this.data.calendarContent === 'month' ){
+                for( let data of this.data.monthDataList ){
+                    for( let day of data['weekList'] ){
+                        for( let d of day['data'] ){
+                            if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
+                                i++;
+                            }else if( d.type === 2 ){
+                                j++;
+                            }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
+                                w++;
+                            }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
+                                m++;
+                            }
+                        }
+                    }
+                }
+            }else if( this.data.calendarContent === 'week' ){
+                if( this.data.weekDataList.length === 2 ){
+                    for( let day of this.weekDataList[1] ){
+                        for( let d of day['data'] ){
+                            if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
+                                i++;
+                            }else if( d.type === 2 ){
+                                j++;
+                            }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
+                                w++;
+                            }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
+                                m++;
+                            }
+                        }
+                    }
+                }
+            }else if( this.data.calendarContent === 'day' ){
+                for( let d of this.dayDataList[0]['data'] ){
+                    if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
+                        i++;
+                    }else if( d.type === 2 ){
+                        j++;
+                    }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
+                        w++;
+                    }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
+                        m++;
+                    }
+                }
+            }
+            // else if( this.data.calendarContent === 'schedule' ){
+            //     for( let day of this.scheduleDataList ){
+            //         for( let d of day['data'] ){
+            //             if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
+            //                 i++;
+            //             }else if( d.type === 2 ){
+            //                 j++;
+            //             }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
+            //                 w++;
+            //             }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
+            //                 m++;
+            //             }
+            //         }
+            //     }
+            // }
+
+            this.data.remindCount = i;
+            this.data.workflowCount = w;
+            this.data.missionCount = m;
+
+            // if( this.firstFlash ){
+            //     setTimeout( ()=>{
+            //         this.isShowLoading = false;
+            //         this.firstFlash = false;
+            //         this.cd.markForCheck();
+            //     },1000 )
+            // }else {
+            //     this.isShowLoading = false;
+            //     $('.ui-dialog-content').css( 'overflow','auto' );
+            //     this.cd.markForCheck();
+            // }
+            // this.returnWidthHeight();
+        },
+
+        workflowMission: function () {
+            if(this.data.isMissionDataReady && this.data.isWorkflowDataReady) {
+                this.actions.monthDataTogether();
+            }
+        },
+
+        monthDataTogether: function (){
+            for( let week of this.data.monthDataList ){
+                for( let day of week['weekList'] ){
+                    //获取当日包含的设置
+                    let calendarDate = [];
+                    for( let date in this.data.date2settings ){
+                        if( date.indexOf( day.dataTime ) !== -1 ){
+                            for( let d of this.date2settings[date] ){
+                                let i = 0;
+                                for( let c of calendarDate ){
+                                    if( c.id === d ){
+                                        i++
+                                    }
+                                }
+                                if( i === 0 ){
+                                    calendarDate.push( { id:d,date:day.dataTime } );
+                                }
+                            }
+                        }
+                    }
+                    day['data'] = [];
+                    for( let set of calendarDate ){
+                        let setDetail = this.data.calendarSettings[set.id];
+
+                        for( let select of setDetail['selectedOpts_data'] ){
+
+                            if( select['setDetail.field_id'].indexOf(day.dataTime) === -1 ){
+                                continue;
+                            }
+
+                            let arrData = {};
+
+                            if( setDetail.type === 0 ){
+                                arrData['tableId'] = setDetail.table_id;
+                                arrData['time'] = set.date;
+                                arrData['setId'] = set.id;
+                                arrData['dfield'] = setDetail.dfield;
+                                arrData['color'] = this.actions.colorRgb( setDetail.color , 0.5 );
+                                arrData['isDrag'] = setDetail.is_drag;
+                                arrData['real_ids'] = JSON.stringify( setDetail.real_ids );
+                                arrData['real_id'] = JSON.stringify( [select._id] );
+                                arrData['tableName'] = this.data.tableid2name[setDetail.table_id];
+                                arrData['fieldId'] = setDetail.field_id;
+                                arrData['fieldName'] = this.data.fieldInfos[setDetail.field_id]['dname'];
+                                arrData['type'] = 1;
+                                arrData['isShow'] = this.data.searchText === '' ? true : false;
+
+                                let selectFieldId = '';
+                                if( setDetail['selectedEnums']&&setDetail['selectedEnums'][0]&&setDetail['selectedEnums'][0]!=='' ){
+                                    selectFieldId = setDetail['selectedEnums'][0];
+                                    arrData['selectOption'] = [];
+                                    arrData['selectOption'] = setDetail['selectedEnums_options'][selectFieldId] || [];
+                                    arrData['selectFieldId'] = selectFieldId;
+                                    arrData['selectField'] = this.data.fieldInfos[selectFieldId]?this.data.fieldInfos[selectFieldId].dfield : '';
+                                    arrData['selectFieldName'] = this.data.fieldInfos[selectFieldId]?this.data.fieldInfos[selectFieldId].dname : '';
+                                    arrData['isSetSelect'] = true;
+                                }else {
+                                    arrData['isSetSelect'] = false;
+                                }
+
+                                //循环里面每一个小的数据
+                                let data2show = [];
+                                let everyData = [];
+                                for( let key in select ){
+                                    if( key === '_id' || ( !this.data.fieldInfos[key] ) ){
+                                        continue;
+                                    }
+                                    everyData.push( {
+                                        fieldId: key,
+                                        _id: select['_id'],
+                                        fieldName: this.fieldInfos[key]['dname'] || '',
+                                        fieldValue: select[key] || ''
+                                    } )
+                                }
+                                for( let d of everyData ){
+                                    if( !arrData['isShow'] && this.data.searchText !== '' && ( d.fieldName.indexOf( this.data.searchText ) !== -1 || d.fieldValue.toString().indexOf( this.data.searchText ) !== -1 ) ){
+                                        arrData['isShow'] = true;
+                                        break;
+                                    }
+                                }
+
+                                data2show.push( everyData );
+                                arrData['data2show'] = data2show;
+
+
+
+                                //循环里面每一个小的数据
+                                let data3show = [];
+                                let select_3 = setDetail['selectedRepresents_data'][setDetail['selectedOpts_data'].indexOf(select)];
+                                let everyData_3 = [];
+                                for( let key in select_3 ){
+                                    if( key === '_id' || ( !this.fieldInfos[key] ) ){
+                                        continue;
+                                    }
+                                    everyData_3.push( {
+                                        fieldId: key,
+                                        _id: select_3['_id'],
+                                        fieldName: this.fieldInfos[key]['dname'] || '',
+                                        fieldValue: select_3[key] || ''
+                                    } );
+                                    if( selectFieldId !== '' ){
+                                        everyData_3[0]['selectValue'] = '';
+                                        for( let s of setDetail['selectedEnums_data'] ){
+                                            if( s._id === select_3['_id'] ){
+                                                let selectLabel = s[selectFieldId];
+                                                for( let o of arrData['selectOption'] ){
+                                                    if( o.label === selectLabel ){
+                                                        everyData_3[0]['selectValue'] = o.value;
+                                                        everyData_3[0]['selectLabel'] = selectLabel;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                for( let d of everyData_3 ){
+                                    if( !arrData['isShow'] && this.data.searchText !== '' && ( d.fieldName.indexOf( this.data.searchText ) !== -1 || d.fieldValue.toString().indexOf( this.data.searchText ) !== -1 ) ){
+                                        arrData['isShow'] = true;
+                                        break;
+                                    }
+                                }
+                                data3show.push( everyData_3 );
+                                arrData['data3show'] = data3show;
+                                day['data'].push( arrData );
+                            }
+
+                        }
+                    }
+
+                    //工作流数据
+                    // for( let d of this.data.workflowData ){
+                    //     if( d.create_time.indexOf( day.dataTime )!=-1 ){
+                    //         day['data'].push( {
+                    //             data: d,
+                    //             color: this.colorRgb( '#64A6EF' , 0.5 ),
+                    //             srcColor: '#64A6EF',
+                    //             isDrag:0,
+                    //             isShow: true,
+                    //             type: 3
+                    //         } )
+                    //     }
+                    // }
+                    //
+                    // //任务数据
+                    // for( let d of this.data.missionData ){
+                    //     if( d.time.indexOf( day.dataTime )!=-1 ){
+                    //         day['data'].push( {
+                    //             data: d,
+                    //             color: this.colorRgb( '#FE8B67' , 0.5 ),
+                    //             srcColor: '#FE8B67',
+                    //             isDrag:0,
+                    //             isShow: true,
+                    //             type: 4
+                    //         } )
+                    //     }
+                    // }
+                    // day['dateLength'] = day['data'].length || 0;
+                }
+            }
         },
 
         createMonthCalendar: function (y,m){
@@ -121,16 +421,18 @@ let config = {
                 }
             }
 
-
+            this.data.from_date = this.data.monthDataList[0]['weekList'][0]['dataTime'];
+            this.data.to_data = this.data.monthDataList[5]['weekList'][6]['dataTime'];
+            this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date});
         },
 
         createWeekCalendar: function (){
-            this.weekDataList = [];
+            this.data.chooseDate = this.data.selectData.y + "-" + this.actions.addZero( this.data.selectData.m + 1 ) + "-" + this.actions.addZero( this.data.selectData.d );
+            this.data.weekDataList = [];
             let weekData = [];
             for( let data of this.data.monthDataList ){
-                //console.log(this.data.monthDataList);
                 for( let d of data['weekList'] ){
-                    if( d['dataTime'] === this.data.leftChooseDate ){
+                    if( d['dataTime'] === this.data.chooseDate ){
                         weekData = data['weekList'];
                         break;
                     }
@@ -144,8 +446,32 @@ let config = {
 
             this.data.weekDataList.push( arrHead );
             this.data.weekDataList.push( weekData );
+
+            this.data.selectedDateShow = arrHead[0]['time'] + ' -- ' + arrHead[6]['time'];
+            $('.nowDate').html(this.data.selectedDateShow);
+
+            this.data.from_date = arrHead[0]['time'];
+            this.data.to_data = arrHead[6]['time'];
+            this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date});
         },
 
+        createDayCalendar: function(){
+            this.data.dayDataList = [];
+            let date = this.data.selectData.y + "-" + this.actions.addZero( this.data.selectData.m + 1 ) + "-" + this.actions.addZero( this.data.selectData.d );
+            for( let data of this.data.monthDataList ){
+                for( let d of data['weekList'] ){
+                    if( d.dataTime === date ){
+                        this.data.dayDataList.push( d );
+                        break;
+                    }
+                }
+            }
+            this.data.selectedDateShow = this.data.selectData.y + "年" + ( this.data.selectData.m + 1 ) + "月" + this.data.selectData.d + "日 （"+ this.data.HeadList[this.data.selectData.w] +"）";
+            $('.nowDate').html(this.data.selectedDateShow);
+            this.data.from_date = date;
+            this.data.to_data = date;
+            this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date});
+        },
         changeMonth: function (lr) {
             let y = this.data.selectData['y'];
             let m = this.data.selectData['m'];
@@ -176,7 +502,7 @@ let config = {
         },
 
         changeWeek: function (lr) {
-            let slect = this.data.selectData.y + "-" + this.actions.addZero( this.data.selectData.m + 1 ) + "-" + this.actions.addZero( this.selectData.d );
+            let slect = this.data.selectData['y'] + "-" + this.actions.addZero( this.data.selectData.m + 1 ) + "-" + this.actions.addZero( this.data.selectData['d']);
             let oldWeekDay = new Date(slect).getTime();
             if( lr === 'l' ){
                 oldWeekDay = oldWeekDay-7*24*60*60*1000;
@@ -190,6 +516,8 @@ let config = {
                 week = nweTime.getDay();
             this.data.selectData = {'y':year, 'm':month, 'd':day, 'w':week};
 
+            this.data.chooseDate = year + "-" + this.actions.addZero( month + 1 ) + "-" + this.actions.addZero( day );
+            this.actions.createWeekCalendar();
         },
 
         changeDay: function (lr) {
@@ -205,9 +533,44 @@ let config = {
                 month = nweTime.getMonth(),
                 day = nweTime.getDate(),
                 week = nweTime.getDay();
-            this.selectData = {'y':year, 'm':month, 'd':day, 'w':week};
+            this.data.selectData = {'y':year, 'm':month, 'd':day, 'w':week};
+            // this.data.selectedDateShow = year + '年' + month + '月' + day + '日' + ' ';
+            // $('.nowDate').html(this.data.selectedDateShow);
         },
 
+        changeMainView: function (type) {
+            this.data.calendarContent = type;
+            this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
+            $('.calendar-main-content').empty();
+            if(type === 'month') {
+                this.data.selectedDateShow = this.data.selectData.y +'年'+ ( this.data.selectData.m + 1 )  +'月';
+                $('.nowDate').html(this.data.selectedDateShow);
+                this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
+            } else if (type === 'week') {
+                this.actions.createWeekCalendar();
+                this.append(new CalendarWeek(this.data.weekDataList), this.el.find(".calendar-main-content"));
+            } else if (type === 'day') {
+                this.actions.createDayCalendar();
+                this.append(new CalendarDay(), this.el.find(".calendar-main-content"));
+            }
+        },
+
+        getCalendarData: function (data){
+            CalendarService.getCalendarData(data).then( res=>{
+                console.log(res);
+                this.data.date2settings = res['date2csids'];
+                this.data.calendarSettings = res['id2data'];
+                this.data.tableid2name = res['tableid2name'];
+                this.data.fieldInfos = res['field_infos'];
+                this.actions.monthDataTogether();
+                // if( this.bigCalendarContent == 'week' ){
+                //     this.createWeekCalendar();
+                // }else if( this.bigCalendarContent == 'day' ){
+                //     this.createDayCalendar();
+                // }
+                // this.getDataCount();
+            })
+        }
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
@@ -218,52 +581,95 @@ let config = {
             day = oDate.getDate(),
             week = oDate.getDay();
         this.data.selectData = Object.assign({}, {'y': year, 'm':month, 'd':day, 'w':week});
-        console.log(this.data.selectData);
         this.data.todayStr = year + "-" + this.actions.addZero( month + 1 ) + "-" + this.actions.addZero( day );
-        this.data.leftChooseDate = '2017-07-29';
+        this.data.chooseDate = year + "-" + this.actions.addZero( month + 1 ) + "-" + this.actions.addZero( day );
         this.data.selectedDateShow = year+'年'+(month+1) +'月';
         $('.nowDate').html(this.data.selectedDateShow);
         this.actions.createMonthCalendar(year, month);
-        this.actions.createWeekCalendar();
         this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
 
-        CalendarService.CalendarMsgMediator.subscribe('now-month-day',data => {
-            console.log(data);
-        });
-
         this.el.on('click', '#monthView', () => {
-            $('.calendar-main-content').empty();
-            this.data.calendarContent = 'month';
-            this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
+            this.actions.changeMainView('month');
         }).on('click', '#weekView', () => {
-            this.data.calendarContent = 'week';
-            $('.calendar-main-content').empty();
-            this.append(new CalendarWeek(this.data.weekDataList), this.el.find(".calendar-main-content"));
+            this.actions.changeMainView('week');
         }).on('click', '#dayView', () => {
-            this.data.calendarContent = 'day';
-            $('.calendar-main-content').empty();
-            this.append(new CalendarDay(), this.el.find(".calendar-main-content"));
+            this.actions.changeMainView('day');
         }).on('click', '.pre-date', () => {
             if(this.data.calendarContent === 'month') {
                 this.actions.changeMonth('l');
-                $('.calendar-main-content').empty();
-                this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
+                this.actions.changeMainView('month');
             } else if (this.data.calendarContent === 'week') {
                 this.actions.changeWeek('l');
+                this.actions.changeMainView('week');
             } else if (this.data.calendarContent === 'day') {
                 this.actions.changeDay('l');
+                this.actions.changeMainView('day');
             }
         }).on('click', '.next-date', () => {
             if(this.data.calendarContent === 'month') {
                 this.actions.changeMonth('r');
-                $('.calendar-main-content').empty();
-                this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
+                this.actions.changeMainView('month');
             } else if (this.data.calendarContent === 'week') {
                 this.actions.changeWeek('r');
+                this.actions.changeMainView('week');
             } else if (this.data.calendarContent === 'day') {
                 this.actions.changeDay('r');
+                this.actions.changeMainView('day');
             }
         });
+
+        CalendarService.getCalendarTreeData().then(data => {
+            console.log(data);
+        });
+
+        CalendarService.CalendarMsgMediator.subscribe('leftSelectedDate',data => {
+            let y = Number(data['year']),
+                m = Number(data['month']),
+                d = Number(data['day']),
+                w = this.actions.getWeekByDay( y , m-1 , d );
+            this.data.chooseDate = y + "-" + this.actions.addZero( m ) + "-" + this.actions.addZero( d );
+            this.data.selectData = Object.assign({}, {'y': y, 'm':m-1, 'd':d, 'w':w});
+            if(this.data.calendarContent === 'month') {
+                this.data.selectedDateShow = y +'年'+ m +'月';
+                $('.nowDate').html(this.data.selectedDateShow);
+                this.actions.changeMainView('month');
+            } else if(this.data.calendarContent === 'week') {
+                this.actions.changeMainView('week');
+            } else if(this.data.calendarContent === 'day') {
+                this.actions.changeMainView('day');
+            }
+        });
+
+        ...pushlist('unShowDataList',{msg:'unShowData',data:{}});
+        CalendarService.CalendarMsgMediator.subscribe('unShowDataList', res => {
+            console.log(res);
+            if(res !== null) {
+                if(res['msg'] === 'unShowData') {
+                    this.data.isShowArr = res['data'];
+                    this.actions.getDataCount();
+                } else if(res['msg'] === 'cancelTableId') {
+                    this.data.isShowArr = res['data'];
+                    let arr = ['mission','approve','remind'];
+                    let arr_1 = [];
+                    for( let a of this.data.isShowArr ){
+                        if( arr.indexOf( a ) === -1 ){
+                            arr_1.push( a );
+                        }
+                    }
+                    this.data.cancel_fields = arr_1;
+                    this.actions.changeMainView(this.data.calendarContent);
+                } else if(res['msg'] === 'workflowData') {
+                    this.data.workflowData = res['data'];
+                    this.data.isWorkflowDataReady = true;
+                    this.actions.workflowMission();
+                } else if(res['msg'] === 'missionData') {
+                    this.data.missionData = res['data'];
+                    this.data.isMissionDataReady = true;
+                    this.actions.workflowMission();
+                }
+            }
+        });
+
     }
 };
 

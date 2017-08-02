@@ -2,7 +2,7 @@ import Component from "../../../../lib/component";
 import template from './left-calendar.html';
 import './left-calendar.scss';
 
-import {CalendarService} from '../../../../service/calendar.service';
+import {CalendarService} from '../../../../services/calendar/calendar.service';
 
 let date = new Date(),
 	year = date.getFullYear(),
@@ -110,20 +110,20 @@ let config = {
 				let nowYear = $(".now-year").html(),
 					nowMonth = $(".now-month").html(),
 					nowDay = $(this).html();
-                CalendarService.CalendarMsgMediator.publish('now-month-day', {time: [nowYear,nowMonth,nowDay]});
+                CalendarService.CalendarMsgMediator.publish('leftSelectedDate', {year: nowYear, month: nowMonth, day: nowDay});
 			});
 			$(".next-month-day").bind("click",function(){
 				let nowYear = $(".now-year").html(),
 					nowMonth = $(".now-month").html(),
 					nowDay = $(this).html();
-                CalendarService.CalendarMsgMediator.publish('next-month-day', {time: [nowYear,nowMonth,nowDay]});
+                CalendarService.CalendarMsgMediator.publish('leftSelectedDate', {year: nowYear, month: nowMonth, day: nowDay});
 				config.actions.loadCalendarNextMonthData();
 			});
 			$(".last-month-day").bind("click",function(){
 				let nowYear = $(".now-year").html(),
 					nowMonth = $(".now-month").html(),
 					nowDay = $(this).html();
-                CalendarService.CalendarMsgMediator.publish('last-month-day', {time: [nowYear,nowMonth,nowDay]});
+                CalendarService.CalendarMsgMediator.publish('leftSelectedDate', {year: nowYear, month: nowMonth, day: nowDay});
 				config.actions.loadCalendarLastMonthData();
 			});
     	},
