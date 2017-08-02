@@ -22,7 +22,7 @@ let config = {
             const chartsId = this.data.cells.map((cell) => cell.chart_id);
             const charts = await canvasCellService.getCellChart({chart_id: chartsId});
             this.data.cells.forEach((val, index) => {
-                val['chart'] = charts[0];
+                val['chart'] = charts[index];
                 let cellComponent = new CanvasCellComponent(val);
                 this.append(cellComponent, this.el.find('.cells'));
             });
