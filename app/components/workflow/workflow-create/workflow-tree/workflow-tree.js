@@ -62,7 +62,8 @@ let config = {
         changeTree:function(){
             let keyword = $('.J_search').val();
             var c;
-            let arr = {}; 
+            let arr = {};
+            let str = {}; 
             let li =  this.el.find('.tree-list li');
 
             let len = this.el.find(".tree-list").children('li').length;
@@ -83,12 +84,20 @@ let config = {
                
             });
 
+            this.data.treeArr.forEach((el,index)=>{
+                let obj = new Array();
+                el.children.forEach((al,num)=>{
+                    obj.push(al.name_py);
+                    str[index] = obj; 
+                })
+            })
+
             for(let i in arr){
                 c=i;
                 let len = arr[i].length;
                 for(let j = 0 ;j<len;j++){
                     if(keyword!=""){
-                         if(arr[i][j].indexOf(keyword)!=-1){
+                         if( arr[i][j].indexOf(keyword)!=-1 || str[i][j].indexOf(keyword)!=-1 ){
                             li.eq(i).addClass('xixi');
                             li.eq(i).find(".root").addClass('xixi');
                             li.eq(i).find('.child-list .child-item').eq(j).addClass("xixi");
@@ -97,10 +106,10 @@ let config = {
                     }
                 }
             }
-
+            //判断是否拥有标记对dom进行操作
             for(let i = 0; i<c+1;i++){
                 if(!li.eq(i).hasClass('xixi')){
-                    li.eq(i).addClass("hide");                 
+                    li.eq(i).addClass("hide");               
                 }else{
                     let j = li.eq(i).find('.child-list').children('.child-item').length;
                     for(let a =0;a<j;a++){
@@ -110,7 +119,7 @@ let config = {
                     }
                 }
             }
-
+            //如果输入信息置空，显示所有的菜单
             if(keyword.length ==0){
                 let len = this.el.find(".tree-list").children('li').length;
                 for(let i = 0; i < len;i++){
@@ -129,7 +138,7 @@ let config = {
     afterRender: function() {
 
         
-       this.data.treeArr=this.data.data;  
+       this.data.treeArr=this.data.data; 
 
        this.el.on('click','.J_tip',(e)=>{
            this.actions.toogleTree(e);
