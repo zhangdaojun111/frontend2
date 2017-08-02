@@ -159,10 +159,13 @@ let config = {
        this.el.on('click','.J_child-item',(event)=>{
             this.actions.clickChild(event);
        })
+        this.el.on("click",'.J_search',(e)=>{
+            e.stopPropagation();
+        })
        this.el.bind("input propertychange",'.J_search',(event)=>{
             this.actions.changeTree();
        })
-    }  
+    }
 }
 
 class WorkFlowTree extends Component {

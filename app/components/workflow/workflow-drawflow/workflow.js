@@ -227,6 +227,7 @@ let config = {
         },
         //open paint in new window
         maximizeNodeflow($event) {
+            this.el.find('.closeSpan').remove();
             let container = this.el.find('#workflow-draw-box')[0];
             container.style.transform = 'scale(1)';
             this.nodeflowSize = 1;
