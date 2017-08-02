@@ -61,7 +61,7 @@ export const HTTP = {
 
         if (GetSet.size > 0) {
             let array = [...GetSet];
-            $.get('/', {actions: JSON.stringify(array)})
+            $.get('/pipe/', {actions: JSON.stringify(array)})
             .then((response) => {
                 this._dealResponse(response);
             }).fail(() => {
@@ -72,7 +72,7 @@ export const HTTP = {
 
         if (PostSet.size > 0) {
             let array = [...PostSet];
-            $.post('/', {actions: JSON.stringify(array)})
+            $.post('/pipe/', {actions: JSON.stringify(array)})
             .then((response) => {
                 this._dealResponse(response);
             }).fail(() => {
