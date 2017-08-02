@@ -8,8 +8,8 @@ let config = {
     data: {},
     actions: {},
     afterRender: function (){
-        $( "#pagetabs" ).tabs();
         this.append(new dataTableAgGrid({}), this.el.find('#data-table-agGrid'));
+        $( "#pagetabs" ).tabs();
     }
 }
 

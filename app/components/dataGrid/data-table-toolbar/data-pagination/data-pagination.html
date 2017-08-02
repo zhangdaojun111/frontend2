@@ -1,0 +1,25 @@
+<div style="text-align:left;height:24px;position: relative;">
+    <!--切换每页显示数量-->
+    <select class="selectSize">
+        {{#each options}}
+        <option>{{this}}</option>
+        {{/each}}
+    </select>
+     <span class="page-details">共<span style="padding: 0 5px;font-weight:bolder;">{{total}}</span>条数据</span>
+    <!-- 刷新页面 -->
+    <span>刷新</span>
+    <!--最后一页-->
+    <span style="margin-left:5px;float: right;">》</span>
+    <!--下一页-->
+    <span style="margin-left:5px;float: right;"><span style="color: rgb(14,122,239);">下一页</span>
+    </span>
+    <!--当前页面-->
+    <span style="margin-top:-2px;float:right;"><span>{{currentPage}}</span></span>
+    <!--上一页-->
+    <span style="margin-left:4px;float:right;" style="color: rgb(14,122,239);">上一页</span></span>
+    <!--最前一页-->
+    <span style="margin-left:4px;float:right;">《</span>
+
+    <!--更改页码-->
+    <span><span>(共{{sumPage}}页)</span><input type="text"></span><a href="javascript:;">确定</a><a href="javascript:;">取消</a>
+</div>

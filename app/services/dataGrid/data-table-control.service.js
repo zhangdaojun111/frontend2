@@ -1,3 +1,4 @@
+import {fieldTypeService} from "./field-type-service";
 export const dgcService = {
     /*16进制颜色转为RGB格式*/
     colorRgb: function (str,opcity) {
@@ -86,5 +87,68 @@ export const dgcService = {
         suppressFilter: true,
         suppressMenu: true,
         cellRenderer: (params)=>{}
+    },
+    //搜索类型
+    // 判断搜索类型
+    getMongoSearch: function(data) {
+        switch(data){
+            case "EQUALS":
+                return "exact";
+            case "NOT_EQUAL":
+            case "NOT_EQUALS":
+                return "$ne";
+            case "GREATER_THAN":
+                return "$gt";
+            case "GREATER_THAN_OR_EQUAL":
+                return "$gte";
+            case "LESS_THAN":
+                return "$lt";
+            case "LESS_THAN_OR_EQUAL":
+                return "$lte";
+            case "CONTAINS":
+            case "STARTS_WITH":
+            default:
+                return "$regex";
+        }
+    },
+    //创建footer数据
+    createFooterData: function (res) {
+        let arr = [];
+        let obj = res.rows[0] || {};
+        obj["myfooter"] = '合计';
+        arr.push(obj);
+        let footerData = arr;
+        return footerData;
+    },
+    clearFooterUndefined: function (columnDefs_bottom,rowData_footer) {
+        let arr = [];
+        if(columnDefs_bottom){
+            for (let data of columnDefs_bottom) {
+                if (["myGroups", "myOperate", "mySelectAll", "myOperate_1", "number"].indexOf(data["field"]) == -1) {
+                    arr.push(data["field"]);
+                }
+            }
+            let arrLength = arr.length;
+            for (let i = 0; i < arrLength; i++) {
+                if ( rowData_footer[0][arr[i]] === undefined || rowData_footer[0][arr[i]] === NaN ) {
+                    rowData_footer[0][arr[i]] = '';
+                }
+            }
+        }
+    },
+    //创建高级查询需要字段数据
+    createHightGridSearchFields: function (rows) {
+        let arr = [];
+        for( let r of rows ){
+            if( r.field == "_id" || fieldTypeService.canNotSearch( r.real_type ) ){
+                continue;
+            }
+            let obj = {};
+            obj['name'] = r.name;
+            obj['searchField'] = r.field;
+            obj['searchType'] = fieldTypeService.searchType( r.real_type );
+            arr.push( obj )
+        }
+        return arr;
     }
 }
