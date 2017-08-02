@@ -1,10 +1,10 @@
-.select-Workflow{
-    display: inline-block;
-    height: 28px;
-    text-align: center;
-    line-height: 28px;
-    font-size: 14px;
 
+.J_select-container{
+    .J_tip{
+        width: 300px;
+        height: 30px;
+        padding-left: 10px;
+    }
 }
 .select-icon{
     display: inline-block;
@@ -20,11 +20,6 @@
     box-sizing: border-box;
     cursor: pointer;
     .fa{
-        display: inline-block;
-        font: normal normal normal 14px/1 FontAwesome;
-        font-size: inherit;
-        text-rendering: auto;
-        -webkit-font-smoothing: antialiased;
     }
 }
 .select-comp{
