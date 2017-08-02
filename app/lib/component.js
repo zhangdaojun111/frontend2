@@ -5,19 +5,16 @@ let map = new WeakMap();
 
 class Component {
 
-    constructor(config,data) {
-        config = _.defaultsDeep({},config) || {};
-        if(data){
-            //合并从請求或者父組件传递进来的data
-            let tempData=JSON.parse(JSON.stringify(data));
-            config.data=Object.assign({},config.data,tempData);
-        }
+    constructor(config, data) {
+
+        config = _.defaultsDeep({}, config || {});
+        data = _.defaultsDeep({}, data || {});
         this.template = config.template || '';
-        this.data = config.data || {};
+        this.data = _.defaultsDeep({}, config.data, data);
 
         if (config.actions) {
             this.actions = {};
-            for(let name in config.actions) {
+            for (let name in config.actions) {
                 this.actions[name] = config.actions[name].bind(this);
             }
         }
@@ -36,6 +33,11 @@ class Component {
     }
 
     render(el) {
+        if (el.length === 0) {
+            console.error('component: el必须是存在于dom内的节点');
+            console.dir(this);
+            return;
+        }
         this.el = el;
         this.el.attr('component', this.componentId);
         map.set(this.el.get(0), this);
@@ -58,9 +60,11 @@ class Component {
         this[key] = value;
     }
 
-    append(component, container) {
-        let el = $('<div>').appendTo(container);
+    append(component, container, tagName) {
+        tagName = tagName || 'div';
+        let el = $(`<${tagName}>`).appendTo(container);
         component.render(el);
+        return this;
     }
 
     destroyChildren(container) {
@@ -100,11 +104,24 @@ class Component {
             this.el.off();
             this.el.remove();
         }
-        for(let name in this) {
+        for (let name in this) {
             this[name] = null;
         }
 
         return this;
+    }
+
+    findBrothers() {
+        let doms = this.el.parent().find('> [component]');
+        let coms = [];
+        let that = this;
+        doms.each(function() {
+            let component = map.get(this);
+            if (component !== that) {
+                coms.push(component);
+            }
+        });
+        return coms;
     }
 
 }
