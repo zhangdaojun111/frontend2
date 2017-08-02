@@ -15,14 +15,15 @@ let WorkFlowList=workflowService.getWorkfLow({}),
 
 Promise.all([WorkFlowList,FavWorkFlowList]).then(res=>{
     WorkFlowCreate.loadData(res);
-})
+});
+
+HTTP.flush();
 
 Mediator.subscribe('workflow:choose', (msg)=> {
     (async function () {
         let data = await workflowService.getWorkfLowInfo({url: '/get_workflow_info/?seqid=qiumaoyun_1501661055093&record_id=',data:{
             flow_id:msg.id
         }});
-
         Mediator.publish('workflow:getInfo', data);
     })();
 });
@@ -31,8 +32,6 @@ Mediator.subscribe('workflow:choose', (msg)=> {
 Mediator.subscribe('workflow:addFav', (msg)=> {
     (async function () {
         let data = await workflowService.addWorkflowFavorite({'id': msg});
-        console.log(data);
-        // Mediator.publish('workflow:getInfo', data);
     })();
 });
 
@@ -40,14 +39,9 @@ Mediator.subscribe('workflow:addFav', (msg)=> {
 Mediator.subscribe('workflow:delFav', (msg)=> {
     (async function () {
         let data = await workflowService.delWorkflowFavorite({'id': msg});
-        console.log(data);
-        // Mediator.publish('workflow:getInfo', data);
     })();
 });
 
-
-
-HTTP.flush();
-
-
-
+$("#draw").on('click',function () {
+    location.reload();
+})

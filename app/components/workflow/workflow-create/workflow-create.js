@@ -25,8 +25,10 @@ let config = {
             }
         },
         //向后台发送数据，删除该常用工作流,现在没有接口，只是在dom中删除这个
-        deloperate:function(arg){
-            arg.remove();
+        delBtn:function(e){
+            let target = e.target;
+            let parent = $(target).parent().parent().parent();
+            parent.remove();
         },
         init(){
             $('#addFav').hide();
@@ -48,21 +50,20 @@ let config = {
         //添加流程下来菜单
         this.append(new WorkFlowTree(this.data[0]), this.el.find('.J_select-container'));
         //添加常用工作流组件
-        // this.data.favList=this.data[1].rows;
-
         this.data[1].rows.forEach((row)=>{
             this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
         });
-
-
         this.el.on('click','.J_operate',()=>{
             this.actions.operate();
-        }).on('click','.J_del',(ev)=>{
-            let target = ev.target;
-            let parent = $(target).parent().parent().parent();
-            this.actions.deloperate(parent);  
         });
-
+        this.el.on('click','.J_del',(e)=>{
+            this.actions.delBtn(e);
+        });
+        //addFav
+        this.el.on('click','#addFav',(e)=>{
+            Mediator.publish('workflow:addFav', this.data.id);
+            $('#addFav').hide();
+        });
         //订阅btn click
         Mediator.subscribe('workflow:choose', (msg)=> {
             this.data.id=msg.id;
@@ -70,12 +71,6 @@ let config = {
             this.el.find("#workflow-box").hide();
             $("#workflow-content").show();
         })
-        //addFav
-        this.el.on('click','#addFav',(e)=>{
-            Mediator.publish('workflow:addFav', this.data.id);
-            $('#addFav').hide();
-        });
-
         //订阅 select list click
         Mediator.subscribe('workflow:getInfo', (msg)=> {
             WorkFlow.show(msg.data[0]);

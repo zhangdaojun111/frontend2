@@ -3,11 +3,21 @@
     margin: 0;
     padding: 0;
 }
+body{
+    background:rgb(235,235,235);
+}
+.workflow-wrapper{
+    width: 100%;
+    position: relative;
+    .workflow-container{
+        padding: 10px;
+        background: rgb(235,235,235);
+    }
+}
 .wrap-box{
     background: #fff;
     height: 52px;
     margin-bottom: 10px;
-
 }
 .workflow-header{
     margin-bottom: 10px;
@@ -30,7 +40,76 @@
             margin-left: 6px;
         }
     }
+
+    .workflow-name{
+        width: 100px;
+        text-align: center;
+    }
+    .select-container{
+        width: 300px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        height: 30px;
+        line-height: 30px;
+        position: relative;
+    }
+    #addFav{
+        cursor: pointer;
+        margin-left: 10px;
+        line-height: 28px;
+        top: 10px;
+        background: #eee;
+        color: rgb(14, 122, 239);
+        font-size: 12px;
+        padding: 0 10px;
+    }
 }
 #workflow-content{
     display: none;
+}
+
+.workflow-form{
+    height: 200px;
+    background: #fff;
+    margin-bottom: 10px;
+}
+.workflow-foot{
+    .workflow-box{
+        background: #fff;
+        margin-bottom: 10px;
+        padding: 10px;
+        .workflow-box-l{
+            padding: 5px 0;
+            width: 100px;
+            flex-shrink: 0;
+            text-align: center;
+        }
+        .workflow-box-r{
+            flex-grow: 1;
+            padding: 5px 20px;
+            border-left: 1px solid rgb(201,227,255);
+            width: 100%;
+            overflow-x:auto ;
+        }
+
+        .follow-name-list{
+            border: 1px solid #f2dede;
+            position: relative;
+            width: 80%;
+            min-height: 65px;
+            text-indent: 110px;
+            padding: 10px 5px;
+        }
+        .add-follow{
+            color: #fff;
+            padding: 5px 10px;
+            background: rgb(17,125,237);
+            margin-right: 10px;
+            position: absolute;
+            left: 10px;
+            top: 5px;
+            z-index: 1;
+        }
+
+    }
 }
