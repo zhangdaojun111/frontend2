@@ -32,7 +32,6 @@ let config = {
     afterRender: function() {
         //添加常用工作流组件
         // this.data.favList=this.data[1].rows;
-        console.log(this.data);
 
         this.data[1].rows.forEach((row)=>{
             this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
@@ -46,14 +45,22 @@ let config = {
             let target = ev.target;
             let parent = $(target).parent().parent().parent();
             this.actions.deloperate(parent);  
-        })
+        });
 
         //订阅btn click
+        Mediator.subscribe('workflow:choose', (msg)=> {
+            this.data.id=msg.id;
+        })
+        //addFav
+        this.el.on('click','#addFav',()=>{
+            Mediator.publish('workflow:addFav', this.data.id);
+        });
+
 
         //订阅 select list click
         Mediator.subscribe('workflow:getInfo', (msg)=> {
             console.log(msg);
-            WorkFlow.show(this.data.data[0]);
+            WorkFlow.show(msg.data[0]);
         })
     },
     beforeDestory: function(){
@@ -71,9 +78,8 @@ class WorkFlowCreate extends Component{
 export default {
     
     //获取常用工作流和下拉工作流名称
-    loadData(data,flowData){
-        let workFlowData = _.defaultsDeep({}, data, flowData);
-        let component = new WorkFlowCreate(workFlowData);
+    loadData(data){
+        let component = new WorkFlowCreate(data);
         let el = $('#workflow-header');
         component.render(el);
     },

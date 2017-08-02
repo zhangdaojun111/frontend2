@@ -15,6 +15,9 @@ let config = {
         this.el.on('click', '.workflow-btn', (e) => {
             this.actions.choose(e);
         });
+        this.el.on('click', '.delFav', (e) => {
+            Mediator.publish('workflow:delFav', $(e.target)[0].dataset.id);
+        });
     }
 }
 
