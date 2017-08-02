@@ -122,6 +122,7 @@ export class EchartsService {
      */
     lineBarOption(cellChart) {
         let cellOption = cellChart['chart'];
+        console.log(cellOption);
         // 组合图采用new_name，下穿图采用name
         const nameType = (cellOption.chartAssignment && cellOption.chartAssignment.val) === 1 ? 'new_name' : 'name';
         const [legend, series] = [[], []];

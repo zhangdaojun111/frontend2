@@ -61,24 +61,13 @@
     <!--3*3九宫格-->
 
         <ul class="grid-3">
-        <li>
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>
-            <div>4</div>
-        </li>
-        <li>
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>
-            <div>4</div>
-        </li>
-        <li>
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>
-            <div>4</div>
-        </li>
+            {{#each grids}}
+            <li>
+                {{#each grids}}
+                <div>{{@index}}</div>
+                {{/each}}
+            </li>
+             {{/each}}
         <li>
             <div>1</div>
             <div>2</div>
