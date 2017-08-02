@@ -11,7 +11,7 @@ let config={
                         <div class="dropdown" style="float: left"></div>
                         <div style="float: left;">
                            {{#if required}}
-                                    <span  class="{{requiredClass}}" ></span>
+                                    <span id="requiredLogo" class="{{requiredClass}}" ></span>
                            {{/if}}  
                       </div>
                  {{/if}}
@@ -31,6 +31,11 @@ let config={
             _this.data=Object.assign(_this.data,data);
             Mediator.publish('form:changeValue',_this.data);
         });
+        Mediator.subscribe('form:changeOption',function(data){
+            if( this.data.dfield && res == this.data.dfield ){
+                this.data.value = [];
+            }
+        })
     },
     afterRender:function(){
         if(!this.data.be_control_condition){

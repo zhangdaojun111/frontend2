@@ -11,7 +11,7 @@ let config={
                    <input style="width: 240px;background: #ebebe4;"  type="text" value="{{value}}" readonly="readonly"  class={{inputClass}} > 
                    <div style="display: inline-block">
                            {{#if required}}
-                            <span class="{{requiredClass}}" ></span>
+                            <span id="requiredLogo" class="{{requiredClass}}" ></span>
                            {{/if}} 
                    </div>                   
                    {{/if}}

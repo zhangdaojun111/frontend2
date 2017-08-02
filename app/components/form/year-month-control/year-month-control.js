@@ -14,7 +14,7 @@ let config={
                         <span style="float: left;">月</span>
                         <div style="float: left;">
                            {{#if required}}
-                                    <span  class="{{requiredClass}}" ></span>
+                                    <span id="requiredLogo" class="{{requiredClass}}" ></span>
                            {{/if}}  
                       </div>
                  {{/if}}

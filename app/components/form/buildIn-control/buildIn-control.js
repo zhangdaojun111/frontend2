@@ -11,7 +11,7 @@ let config={
                     <div class="dropdown" style="float: left"></div>
                     <div style="float: left;">
                         {{#if required}}
-                            <span  class="{{requiredClass}}" ></span>
+                            <span id="requiredLogo" class="{{requiredClass}}" ></span>
                         {{/if}} 
                     </div>
                     {{/if}}
@@ -29,6 +29,7 @@ let config={
                 return;
             }
             _this.data=Object.assign(_this.data,data);
+
             Mediator.publish('form:changeValue',_this.data);
         });
     },
@@ -41,5 +42,7 @@ let config={
 export default class BuildInControl extends Component{
     constructor(data){
         super(config,data);
+        console.log('buildin')
+        console.log(this.data);
     }
 }

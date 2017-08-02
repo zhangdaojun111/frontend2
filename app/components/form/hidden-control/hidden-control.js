@@ -9,7 +9,7 @@ let config={
                    <input style="width: 240px"  type="hidden" value="{{value}}"  >{{value}}  
                    <div style="display: inline-block">
                            {{#if required}}
-                            <span class="{{requiredClass}}" ></span>
+                            <span id="requiredLogo" class="{{requiredClass}}" ></span>
                            {{/if}} 
                    </div>                   
                    {{/if}}                 

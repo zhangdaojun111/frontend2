@@ -32,6 +32,11 @@ let config={
                 _this.el.find('#requiredLogo').get(0).className='required2';
             }
         });
+        Mediator.subscribe('form:changeOption',function(data){
+            if( this.data.dfield && res == this.data.dfield ){
+                this.data.value = [];
+            }
+        })
     }
 }
 export default class BuildInControl extends Component{

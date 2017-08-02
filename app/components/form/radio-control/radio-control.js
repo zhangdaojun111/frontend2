@@ -10,7 +10,7 @@ let config={
                             <input type="radio" value="{{this.value}}" name="{{this.name}}"/>{{this.label}}
                         {{/group}}
                            {{#if required}}
-                                    <span  class="{{requiredClass}}" ></span>
+                                    <span id="requiredLogo" class="{{requiredClass}}" ></span>
                            {{/if}}  
                       </div>
                  {{/if}}
@@ -27,11 +27,18 @@ let config={
             _this.data.value='943_GHYY9WLbjMimbwQrQmkJSB';
             Mediator.publish('form:changeValue',_this.data);
         })
+        Mediator.subscribe('form:changeOption',function(data){
+            if( this.data.dfield && res == this.data.dfield ){
+                this.data.value = [];
+            }
+        })
     }
 }
 class RadioControl extends Component {
     constructor(data){
         super(config,data);
+        console.log('RadioControl');
+        console.log(this.data);
     }
 }
 

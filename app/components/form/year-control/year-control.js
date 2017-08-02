@@ -11,7 +11,7 @@ let config={
                     <div class="dropdown" style="float: left"></div>
                     <div style="float: left;">
                        {{#if required}}
-                        <span class="{{requiredClass}}" ></span>
+                        <span id="requiredLogo" class="{{requiredClass}}" ></span>
                        {{/if}}                     
                     </div>
                  {{/if}}   

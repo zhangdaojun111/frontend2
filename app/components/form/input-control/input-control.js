@@ -16,7 +16,7 @@ let config={
                            {{/if}} 
                        <div style="display: inline-block">
                                {{#if required}}
-                                <span class="{{requiredClass}}" ></span>
+                                <span id="requiredLogo" class="required" ></span>
                                {{/if}} 
                        </div>                   
                        {{/if}}
@@ -35,12 +35,18 @@ let config={
     },
     actions:{
         keyup: function() {
-
+        let _this=this;
         //正则表达式的错误提示 regErrorMsg: string;
         let regErrorMsg;
         let val = this.el.find("input").val();
         this.data.value=val;
-        Mediator.publish('form:changeValue',this.data);
+        if(_this.timer){
+            clearTimeout(_this.timer);
+            _this.timer=null;
+        }
+        _this.timer=setTimeout(function(){
+            Mediator.publish('form:changeValue',_this.data);
+        },300);
         let func = this.data.func;
         let reg = this.data.reg;
         let required = this.data.required
@@ -132,10 +138,10 @@ let config={
         if(this.data.effect !== ""){
 
         }
-    }        
-
+    }
     },
     firstAfterRender:function(){
+        this.set('timer',null);
         let _this=this;
     },
     afterRender: function() {

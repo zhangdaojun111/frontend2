@@ -9,7 +9,7 @@ let config={
                     <input type="textarea" value="{{value}}" style=" height: 100px;  color: rgb(0, 0, 0); width: 100%;"/>
                     {{#if required}}
                     <div style="float: left;">                       
-                        <span class="{{requiredClass}}" ></span>               
+                        <span id="requiredLogo" class="{{requiredClass}}" ></span>               
                     </div>
                     {{/if}}      
                  {{/if}}   
