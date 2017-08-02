@@ -10,6 +10,7 @@ import CalendarWeek from './calendar.week/calendar.week';
 import CalendarDay from './calendar.day/calendar.day';
 
 import {CalendarService} from '../../../services/calendar/calendar.service';
+import {PMAPI} from '../../../lib/postmsg';
 
 let config = {
     template: template,
@@ -568,7 +569,7 @@ let config = {
                 }else if( this.data.calendarContent === 'day' ){
                     this.createDayCalendar();
                 }
-                this.getDataCount();
+                this.actions.getDataCount();
             })
         }
     },

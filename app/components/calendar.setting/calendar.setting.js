@@ -1,7 +1,7 @@
 /**
  * Created by zj on 2017/8/2.
  */
-import Component from "../../../lib/component";
+import Component from "../../lib/component";
 import template from './calendar.setting.html';
 import './calendar.setting.scss';
 
@@ -14,7 +14,6 @@ let config = {
     actions: {
     },
     afterRender: function() {
-
     }
 };
 

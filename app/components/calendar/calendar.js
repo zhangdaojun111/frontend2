@@ -18,7 +18,6 @@ let config = {
     actions: {
     },
     afterRender: function() {
-
         this.append(new LeftContent, this.el.find('.left-content'));
         this.append(new RightContent, this.el.find('.right-content'));
         this.append(new CalendarMin, this.el.find('.main-content'));

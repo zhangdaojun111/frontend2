@@ -1,0 +1,19 @@
+@import "../calendar/calendar";
+
+.calendar-setting{
+    height:100%;
+    .header {
+        padding: 5px;
+        background: $bg-color;
+        span {
+            line-height: 28px;
+        }
+        .title {
+            display: inline-block;
+        }
+        .tool {
+            display: inline-block;
+            float: right;
+        }
+    }
+}
