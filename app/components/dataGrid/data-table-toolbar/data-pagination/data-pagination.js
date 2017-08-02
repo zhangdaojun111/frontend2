@@ -57,18 +57,31 @@ let config = {
                     //console.log(this.actions.paginationChanged());
                     $('.current-page').html(parseInt(this.data.currentPage));
                     console.log(this.data.currentPage)
+                    let obj = {
+                        currentPage: this.data.currentPage,
+                        rows: this.data.rows,
+                        firstRow: this.data.firstRow
+                    }
+                    this.actions.paginationChanged(obj);
                 }
 
             }),
             //点击上一页 当前页面数减1
             $(".goPre").click(() => {
                 this.data.rows = $(".selectSize").val();
+                console.log(this.data.rows)
+                console.log(this.data)
                 if (this.data.currentPage > 1) {
                     this.data.currentPage -= 1;
                     //this.actions.paginationChanged(this.data.currentPage,this.data.rows,this.data.firstRow);
                     this.data.firstRow = (this.data.rows * (this.data.currentPage - 1));
-                    console.log(this.actions.paginationChanged());
                     $('.current-page').html(this.data.currentPage);
+                    let obj = {
+                        currentPage: this.data.currentPage,
+                        rows: this.data.rows,
+                        firstRow: this.data.firstRow
+                    }
+                    this.actions.paginationChanged(obj);
                 }
             })
         //直接跳到第一页
@@ -77,6 +90,12 @@ let config = {
             this.data.currentPage = 1;
             this.data.firstRow = 0;
             $('.current-page').html(this.data.currentPage);
+            let obj = {
+                currentPage: this.data.currentPage,
+                rows: this.data.rows,
+                firstRow: this.data.firstRow
+            }
+            this.actions.paginationChanged(obj);
 
         })
         //直接跳到最后一页
@@ -86,6 +105,12 @@ let config = {
             this.data.currentPage = this.data.sumPage;
             this.data.firstRow = (this.data.sumPage - 1) * this.data.rows;
             $('.current-page').html(this.data.currentPage);
+            let obj = {
+                currentPage: this.data.currentPage,
+                rows: this.data.rows,
+                firstRow: this.data.firstRow
+            }
+            this.actions.paginationChanged(obj);
 
         }),
 
@@ -102,11 +127,21 @@ let config = {
         $(".confirm").click(() => {
             this.data.rows = $(".selectSize").val();
             let target = $(".enter-number").val();
+            this.data.sumPage = Math.ceil(this.data.total / this.data.rows);
+            if (target>this.data.sumPage){
+                alert("最大页面是"+this.data.sumPage+"页")
+            }
             if (target <= this.data.sumPage) {
                 this.data.currentPage = Number(target);
-                this.data.firstRow = (this.data.sumPage - 1) * this.data.rows;
+                this.data.firstRow =((this.data.currentPage - 1) * this.data.rows);
                 $('.current-page').html(parseInt(this.data.currentPage));
                 $(".selectPage").hide()
+                let obj = {
+                    currentPage: this.data.currentPage,
+                    rows: this.data.rows,
+                    firstRow: this.data.firstRow
+                }
+                this.actions.paginationChanged(obj);
             }
             console.log(target);
         }),
@@ -116,8 +151,17 @@ let config = {
             })
         //刷新
         $(".ui-icon-refresh").click(() => {
+            this.data.rows = $(".selectSize").val();
+            this.data.sumPage = Math.ceil(this.data.total / this.data.rows);
+            this.data.firstRow =((this.data.currentPage - 1) * this.data.rows);
+            this.data.currentPage;
 
-            this.actions.paginationChanged();
+            let obj = {
+                currentPage: this.data.currentPage,
+                rows: this.data.rows,
+                firstRow: this.data.firstRow
+            }
+            this.actions.paginationChanged(obj);
         })
     }
 
