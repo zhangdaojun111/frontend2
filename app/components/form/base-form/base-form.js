@@ -17,29 +17,34 @@ import {FormService} from "../../../services/formService/formService"
 
 let config={
     template:'',
-    data:{},
+    data:{
+        myUseFields:{},
+        optionsToItem:{},
+        flowId:'',
+        baseIdsLocalDict:{},
+    },
     childComponent:{},
     actions:{
 
         //检查是否是默认值的触发条件
         validDefault(originalData,val) {
-            if(this.baseIdsLocal.indexOf(originalData["dfield"]) == -1){
+            if(this.data.baseIdsLocal.indexOf(originalData["dfield"]) == -1){
                 this.baseIdsLocal.push(originalData["dfield"]);
             }
-            this.baseIdsLocalDict[originalData["dfield"]] = val;
-            if(this.baseIds.sort().toString() == this.baseIdsLocal.sort().toString()){
+            this.data.baseIdsLocalDict[originalData["dfield"]] = val;
+            if(this.data['base_fields'].sort().toString() == this.databaseIdsLocal.sort().toString()){
                 //告诉外围现在正在读取默认值
                 // this.wfService.isReadDefaultData.next(true);
                 //请求默认值
                 let json = {
-                    flow_id: this.flowId || "",
-                    base_field_2_value: JSON.stringify(this.baseIdsLocalDict),
-                    temp_id: this.temp_id["value"]
+                    flow_id: this.data.flowId || "",
+                    base_field_2_value: JSON.stringify(this.data.baseIdsLocalDict),
+                    temp_id: this.data.temp_id["value"]
                 };
                 let res=FormService.getDefaultValue(json);
                 for(let key in res["data"]) {
                     //排除例外字段
-                    if(this.data.excludeIds.indexOf(key) == -1){
+                    if(this.data['exclude_fields'].indexOf(key) == -1){
                         if(this.data.hasOwnProperty(key)){
                             let type = this.data[key]["type"];
                             let value = res["data"][key];
@@ -290,15 +295,15 @@ let config={
 
         //统计功能
         countFunc(dfield) {
-            for(let key in this.data.useFields) {
-                if(this.data.useFields[key].indexOf(dfield) != -1) {
-                    if(!this.myUseFields[key]){
-                        this.myUseFields[key] = [];
+            for(let key in this.data['use_fields']) {
+                if(this.data['use_fields'][key].indexOf(dfield) != -1) {
+                    if(!this.data.myUseFields[key]){
+                        this.data.myUseFields[key] = [];
                     }
-                    if(this.myUseFields[key].indexOf(dfield) == -1){
-                        this.myUseFields[key].push(dfield);
+                    if(this.data.myUseFields[key].indexOf(dfield) == -1){
+                        this.data.myUseFields[key].push(dfield);
                     }
-                    if(this.data.useFields[key].sort().toString() == this.myUseFields[key].sort().toString()) {
+                    if(this.data['use_fields'][key].sort().toString() == this.data.myUseFields[key].sort().toString()) {
                         let res=FormService.getCountData(this.data.data);
                             //给统计赋值
                             for(let d in res["data"]){
@@ -405,10 +410,6 @@ let config={
         let _this=this;
         let cache_old = {};
         this.set('childComponent',{});
-        this.set('myUseFields',{});
-        this.set('optionsToItem',{});
-        this.set('flowId','');
-        this.set('baseIdsLocalDict',{});
         let data=_this.data.data;
         for(let key in data){
             let single=_this.el.find('div[data-dfield='+data[key].dfield+']');
@@ -508,7 +509,7 @@ let config={
 
             //检查是否是默认值的触发条件
             // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
-            if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1) {
+            if(this.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1) {
                 this.actions.validDefault(data, data['value']);
             }
             //统计功能
@@ -581,11 +582,39 @@ let config={
 class BaseForm extends Component{
     constructor(formData){
         config.template=formData.template;
-        config.data=formData.data;
         console.log('#######')
         console.log(formData);
-        console.log('#######')
-        super(config);
+        console.log('#######');
+        config.data['temp_id']=formData.data.data['temp_id']||'';
+        config.data['real_id']=formData.data.data['real_id']||'';
+        config.data['table_id']=formData.data.data['table_id']||'';
+        config.data['parentRealId']=formData.data.data["real_id"]["value"]||'';
+        config.data['parentTableId']=formData.data.data["table_id"]["value"]||'';
+        config.data['parentTempId']=formData.data.data["temp_id"]["value"]||'';
+        config.data['recordId']=formData.data['record_info']['id']||'';
+        //默认值
+        // config.data['baseIds']=formData.data['base_fields'];
+        //默认值例外
+        // config.data['excludeIds']=formData.data['exclude_fields'];
+        //统计
+        // config.data['useFields']=formData.data['use_fields'];
+        //字段插件配置
+        // config.data['pluginFields']=formData.data['plugin_fields'];
+        //form_id
+        // config.data['formId']=formData.data['form_id'];
+        //部门节点
+        // config.data['main_departments']=formData.data['main_departments'];
+        //table_id
+        // config.data['tableId']=formData.data["table_id"]["value"];
+        //存父子表关系
+        // this.globalService.frontendRelation[this.tableId] = res["frontend_cal_parent_2_child"];
+        //存父表的newData
+        // this.globalService.frontendParentNewData[this.tableId] = this.newData;
+        //用于前端填充数据用的子表的parentTableId
+        // config.data['frontendParentTableId']=formData.data['parent_table_id'];
+        super(config,formData.data);
+        console.log('处理完的数据');
+        console.log(this);
     }
     //提交表单数据
     onSubmit(newData,oldData){

@@ -79,11 +79,59 @@ function mergeFormData(staticData,dynamicData){
     let data={
 
     }
+    parseRes(staticData);
     for(let obj of staticData.data){
         data[obj.dfield]=obj;
     }
     staticData.data=data;
     return staticData;
+}
+
+function parseRes(res){
+    if(res !== null){
+        let formData = res["data"];
+        if(formData.length != 0){
+            //年份选择设置为默认当年
+            let myDate = new Date();
+            let myYear = myDate.getFullYear();
+            let parentRealId = '';
+            let parentTableId = '';
+            let parentTempId = '';
+            for( let data of formData ){
+                if( data['id'] == 'real_id' ){
+                    parentRealId = data['value'];
+                }else if( data['id'] == 'table_id' ){
+                    parentTableId = data['value'];
+                }else if( data['id'] == 'temp_id' ){
+                    parentTempId = data['value'];
+                }
+            }
+            for( let data of formData ){
+                if( data.type == "year" ){
+                    if( data.value == "" ){
+                        data.value = String( myYear );
+                    }
+                }else if( data.type == "correspondence" ){
+                    data['parent_real_id'] = parentRealId;
+                    data['parent_table_id'] = parentTableId;
+                    data['parent_temp_id'] = parentTempId;
+                }else if(data.type == "datetime"){
+                    // if( data.value.length == 19 ){
+                    //     data.value = data.value.slice( 0,16 )
+                    // }
+                }
+            }
+
+            if(res['record_info']['id']){
+                let recordId = res['record_info']['id'];
+                for(let d of this.data){
+                    if(d['type'] == 'songrid'){
+                        d['recordId']=recordId;
+                    }
+                }
+            }
+        }
+    }
 }
 
 // async function wait() {
