@@ -12,24 +12,47 @@ let config = {
     actions: {
         setSizeToFull: function () {
             this.el.removeClass('mini');
+            this.el.find('.fold').removeClass('refold');
         },
         setSizeToMini: function () {
             this.el.addClass('mini');
+            this.el.find('.fold').addClass('refold');
+        },
+        openBiIframe: function () {
+            Mediator.emit('menu:item:openiframe', {
+                id: 'bi',
+                name: 'BI',
+                url: window.config.sysConfig.bi_index
+            });
+        },
+        openCalendarIframe: function () {
+            Mediator.emit('menu:item:openiframe', {
+                id: 'calendar',
+                name: '日历',
+                url: window.config.sysConfig.calendar_index
+            });
         }
     },
     afterRender: function () {
         this.el.tooltip();
-        let that = this;
+    },
+    firstAfterRender: function () {
         this.el.on('click', '.fold', () => {
-            that.data.asideSize = that.data.asideSize === 'full' ? 'mini' : 'full';
-            Mediator.emit('aside:size', that.data.asideSize);
-            if (that.data.asideSize === 'full') {
+            this.data.asideSize = this.data.asideSize === 'full' ? 'mini' : 'full';
+            Mediator.emit('aside:size', this.data.asideSize);
+            if (this.data.asideSize === 'full') {
                 this.actions.setSizeToFull();
             } else {
                 this.actions.setSizeToMini();
             }
+        }).on('click', '.bi', () => {
+            this.actions.openBiIframe();
+        }).on('click', '.calendar', () => {
+            this.actions.openCalendarIframe();
         });
     }
 }
 
-export const HeaderInstance = new Component(config);
+export const HeaderInstance = new Component(config, {
+
+});

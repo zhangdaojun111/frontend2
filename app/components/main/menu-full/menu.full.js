@@ -64,7 +64,7 @@ let config = {
         }
     },
     afterRender: function () {
-        this.originData = _.defaultsDeep([], this.data.list);
+
         let $root = this.el.find('.root');
         this.data.list.forEach((data) => {
             let component = new FullMenuItem(_.defaultsDeep({}, data, {
@@ -81,11 +81,13 @@ let config = {
         }, 1000));
 
         if (this.data.type === 'mini') {
-            this.el.find('.root').menu();
+            this.el.find('.root').menu({
+            });
         }
         this.actions.countHeight();
     },
     firstAfterRender: function() {
+        this.originData = _.defaultsDeep([], this.data.list);
         let that = this;
         $(window).on('resize.menu', function () {
             let menu = that.el.find('.menu-full');

@@ -13,13 +13,18 @@
             margin: 0;
         }
         .ui-menu .ui-menu-item-wrapper {
+            padding: 3px;
         }
+
         .search {
             display: none;
         }
         .menu-full {
             > .list {
                 > li > .menu-full-item {
+                    > .ui-menu-icon.ui-icon {
+                        display: none;
+                    }
                     > .row {
                         &:hover, &.current {
                             background-color: $aside-top-bg;

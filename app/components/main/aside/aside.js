@@ -13,7 +13,6 @@ function presetMenuData(menu, leaf) {
     }
     res.forEach((item) => {
         item.mid = item.folder_id;
-        console.log(item);
         if (item.items) {
             presetMenuData(item.items, true);
         }
@@ -66,6 +65,13 @@ let config = {
             this.allBtn.removeClass('active');
             this.commonBtn.addClass('active');
             this.data.menuType = 'common';
+        },
+        openWorkflowIframe: function () {
+            Mediator.emit('menu:item:openiframe', {
+                id: 'start-workflow',
+                name: '发起工作流',
+                url: window.config.sysConfig.create_wf
+            });
         }
     },
     afterRender: function () {
@@ -88,6 +94,9 @@ let config = {
                 this.actions.setSizeToMini();
             }
         });
+        this.el.on('click', '.startwrokflow', () => {
+            this.actions.openWorkflowIframe();
+        })
     },
     beforeDestory: function() {
         Mediator.removeAll('aside');

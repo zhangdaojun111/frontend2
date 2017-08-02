@@ -8,6 +8,52 @@ import Mediator from '../../../lib/mediator';
 import './iframe.scss';
 import {PMAPI, PMENUM} from '../../../lib/postmsg';
 
+// let IframeOnClick = {
+//     resolution: 200,
+//     iframes: [],
+//     interval: null,
+//     Iframe: function() {
+//         this.element = arguments[0];
+//         this.cb = arguments[1];
+//         this.hasTracked = false;
+//     },
+//     track: function(element, cb) {
+//         this.iframes.push(new this.Iframe(element, cb));
+//         console.log(this.iframes.length);
+//         if (!this.interval) {
+//             var _this = this;
+//             this.interval = setInterval(function() { _this.checkClick(); }, this.resolution);
+//         }
+//     },
+//     retrack: function (element) {
+//         this.iframes = _.remove(this.iframes, function (data) {
+//             return data.element = element;
+//         });
+//     },
+//     checkClick: function() {
+//         if (document.activeElement) {
+//             var activeElement = document.activeElement;
+//             // let index = _.findIndex(this.iframes, 'element', activeElement)
+//             // if (index === -1) {
+//             //     this.iframes.forEach()
+//             // }
+//             for (var i in this.iframes) {
+//                 if (activeElement === this.iframes[i].element) { // user is in this Iframe
+//                     if (this.iframes[i].hasTracked == false) {
+//                         this.iframes[i].cb.apply(window, []);
+//                         this.iframes[i].hasTracked = true;
+//                         console.log(this.iframes.length);
+//                     }
+//                 } else {
+//                     this.iframes[i].hasTracked = false;
+//                 }
+//             }
+//         }
+//     }
+// };
+
+let maxIframeCount = 10;
+
 export const IframeInstance = new Component({
     template: template,
     data: {
@@ -18,23 +64,41 @@ export const IframeInstance = new Component({
     },
     actions: {
         openIframe: function (id, url, name) {
+            id = id.toString();
             if (this.data.hash[id] === undefined) {
                 let tab = $(`<div class="item" iframeid="${id}">${name}<a class="close" iframeid="${id}"></a></div>`)
                     .appendTo(this.data.tabs);
                 let iframe = $(`<div class="item"><iframe id="${id}" src="${url}"></iframe></div>`).appendTo(this.data.iframes);
+
+                // IframeOnClick.track(iframe.find('iframe')[0], function () {
+                //    $('body').trigger('click')
+                // });
+
                 this.data.hash[id] = {id, url, name, tab, iframe};
+                this.data.sort.push(id);
                 this.data.count++;
             }
             this.actions.focusIframe(id);
+            if (this.data.count > maxIframeCount) {
+                this.actions.closeFirstIframe();
+            }
+        },
+        closeFirstIframe: function () {
+            let firstId = this.data.sort.shift();
+            this.actions.closeIframe(firstId);
         },
         closeIframe: function (id) {
+            if ( id === undefined) {
+                return;
+            }
             let item = this.data.hash[id];
+            // IframeOnClick.retrack(item.iframe.find('iframe')[0]);
             item.tab.remove();
             item.iframe.remove();
             delete this.data.hash[id];
             this.data.count--;
             if (this.data.focus && this.data.focus.id === id) {
-                let firstId = _.keys(this.data.hash)[0];
+                let firstId = this.data.sort[0];
                 if (firstId) {
                     this.actions.focusIframe(firstId);
                 }
