@@ -8,12 +8,15 @@ let config = {
     template: template,
     actions: {
         choose: function(e) {
-            Mediator.publish('workflow:choose', $(e.target)[0].dataset);
+            Mediator.publish('workflow:choose', _.defaultsDeep({},$(e.target)[0].dataset,{type:'btn'}));
         }
     },
     afterRender: function() {
         this.el.on('click', '.workflow-btn', (e) => {
             this.actions.choose(e);
+        });
+        this.el.on('click', '.delFav', (e) => {
+            Mediator.publish('workflow:delFav', $(e.target)[0].dataset.id);
         });
     }
 }

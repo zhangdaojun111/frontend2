@@ -48,11 +48,11 @@ class Component {
         let compiler = Handlerbar.compile(this.template);
         let html = compiler(this.data);
         this.el.html(html);
-        this.afterRender && this.afterRender();
         if (this.firstAfterRender && this.firstAfterRenderRunned !== true) {
             this.firstAfterRender();
             this.firstAfterRenderRunned = true;
         }
+        this.afterRender && this.afterRender();
         return this;
     }
 
