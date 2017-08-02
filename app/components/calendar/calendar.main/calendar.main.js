@@ -201,7 +201,7 @@ let config = {
 
                         for( let select of setDetail['selectedOpts_data'] ){
 
-                            if( select['setDetail.field_id'].indexOf(day.dataTime) === -1 ){
+                            if( select[setDetail['field_id']].indexOf(day.dataTime) === -1 ){
                                 continue;
                             }
 
@@ -304,34 +304,34 @@ let config = {
                         }
                     }
 
-                    //工作流数据
-                    // for( let d of this.data.workflowData ){
-                    //     if( d.create_time.indexOf( day.dataTime )!=-1 ){
-                    //         day['data'].push( {
-                    //             data: d,
-                    //             color: this.colorRgb( '#64A6EF' , 0.5 ),
-                    //             srcColor: '#64A6EF',
-                    //             isDrag:0,
-                    //             isShow: true,
-                    //             type: 3
-                    //         } )
-                    //     }
-                    // }
-                    //
-                    // //任务数据
-                    // for( let d of this.data.missionData ){
-                    //     if( d.time.indexOf( day.dataTime )!=-1 ){
-                    //         day['data'].push( {
-                    //             data: d,
-                    //             color: this.colorRgb( '#FE8B67' , 0.5 ),
-                    //             srcColor: '#FE8B67',
-                    //             isDrag:0,
-                    //             isShow: true,
-                    //             type: 4
-                    //         } )
-                    //     }
-                    // }
-                    // day['dateLength'] = day['data'].length || 0;
+                    // 工作流数据
+                    for( let d of this.data.workflowData ){
+                        if( d['create_time'].indexOf( day.dataTime ) !== -1 ){
+                            day['data'].push( {
+                                data: d,
+                                color: this.colorRgb( '#64A6EF' , 0.5 ),
+                                srcColor: '#64A6EF',
+                                isDrag:0,
+                                isShow: true,
+                                type: 3
+                            } )
+                        }
+                    }
+
+                    //任务数据
+                    for( let d of this.data.missionData ){
+                        if( d['time'].indexOf( day.dataTime ) !== -1 ){
+                            day['data'].push( {
+                                data: d,
+                                color: this.actions.colorRgb( '#FE8B67' , 0.5 ),
+                                srcColor: '#FE8B67',
+                                isDrag:0,
+                                isShow: true,
+                                type: 4
+                            } )
+                        }
+                    }
+                    day['dateLength'] = day['data'].length || 0;
                 }
             }
         },
@@ -563,12 +563,12 @@ let config = {
                 this.data.tableid2name = res['tableid2name'];
                 this.data.fieldInfos = res['field_infos'];
                 this.actions.monthDataTogether();
-                // if( this.bigCalendarContent == 'week' ){
-                //     this.createWeekCalendar();
-                // }else if( this.bigCalendarContent == 'day' ){
-                //     this.createDayCalendar();
-                // }
-                // this.getDataCount();
+                if( this.data.calendarContent === 'week' ){
+                    this.createWeekCalendar();
+                }else if( this.data.calendarContent === 'day' ){
+                    this.createDayCalendar();
+                }
+                this.getDataCount();
             })
         }
     },
@@ -625,10 +625,6 @@ let config = {
             }
         });
 
-        CalendarService.getCalendarTreeData().then(data => {
-            console.log(data);
-        });
-
         CalendarService.CalendarMsgMediator.subscribe('leftSelectedDate',data => {
             let y = Number(data['year']),
                 m = Number(data['month']),
@@ -647,34 +643,6 @@ let config = {
             }
         });
 
-        // CalendarService.CalendarMsgMediator.subscribe('unShowDataList', res => {
-        //     console.log(res);
-        //     if(res !== null) {
-        //         if(res['msg'] === 'unShowData') {
-        //             this.data.isShowArr = res['data'];
-        //             this.actions.getDataCount();
-        //         } else if(res['msg'] === 'cancelTableId') {
-        //             this.data.isShowArr = res['data'];
-        //             let arr = ['mission','approve','remind'];
-        //             let arr_1 = [];
-        //             for( let a of this.data.isShowArr ){
-        //                 if( arr.indexOf( a ) === -1 ){
-        //                     arr_1.push( a );
-        //                 }
-        //             }
-        //             this.data.cancel_fields = arr_1;
-        //             this.actions.changeMainView(this.data.calendarContent);
-        //         } else if(res['msg'] === 'workflowData') {
-        //             this.data.workflowData = res['data'];
-        //             this.data.isWorkflowDataReady = true;
-        //             this.actions.workflowMission();
-        //         } else if(res['msg'] === 'missionData') {
-        //             this.data.missionData = res['data'];
-        //             this.data.isMissionDataReady = true;
-        //             this.actions.workflowMission();
-        //         }
-        //     }
-        // });
 
     }
 };
