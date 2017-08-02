@@ -60,9 +60,11 @@ class Component {
         this[key] = value;
     }
 
-    append(component, container) {
-        let el = $('<div>').appendTo(container);
+    append(component, container, tagName) {
+        tagName = tagName || 'div';
+        let el = $(`<${tagName}>`).appendTo(container);
         component.render(el);
+        return this;
     }
 
     destroyChildren(container) {
