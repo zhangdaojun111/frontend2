@@ -7,6 +7,16 @@
 
 <body>
 
+{% ifequal window_type 'develop'%}
+<script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
+<script type="text/javascript" src="http://localhost:8080/scripts/dataGrid.js"></script>
+{% else %}
+<link rel="stylesheet" href="/client/static/css/vendors.css">
+<link rel="stylesheet" href="/client/static/css/dataGrid.css">
+<link rel="stylesheet" href="/client/static/css/vendors.js">
+<link rel="stylesheet" href="/client/static/css/dataGrid.js">
+{% endifequal %}
+
 <script>
 
     window.config = {
