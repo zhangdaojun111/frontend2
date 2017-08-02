@@ -137,25 +137,33 @@ let config = {
     },
 
     afterRender: function() {
+        $(document.body).on('click',()=> {
+            let tree = this.el.find(".J_tree");
+            tree.addClass('hide');
+            tree.removeClass('show');
+        })
+        this.el.on('click','.J_tip',(e)=>{
+            this.actions.toogleTree(e);
+            e.stopPropagation();
+        });
         Mediator.subscribe('workflow:choose', (msg)=> {
             let rootNode = this.el.find('.J_select-Workflow');
             rootNode.text(msg.name);
         })
-       this.data.treeArr=this.data.data;
+        this.data.treeArr=this.data.data;
 
-       this.el.on('click','.J_tip',(e)=>{
-           this.actions.toogleTree(e);
-
-       });
-       this.el.on('click','.J_root',(event)=>{
-           this.actions.toogletip(event);
-       });
-       this.el.on('click','.J_child-item',(event)=>{
-            this.actions.clickChild(event);
-       })
-       this.el.bind("input propertychange",'.J_search',(event)=>{
-            this.actions.changeTree();
-       })
+        this.el.on('click','.J_root',(e)=>{
+           this.actions.toogletip(e);
+        });
+        this.el.on('click','.J_child-item',(e)=>{
+            this.actions.clickChild(e);
+        })
+        this.el.on("click",'.J_search',(e)=>{
+            e.stopPropagation();
+        })
+        this.el.on("input propertychange",'.J_search',(e)=>{
+            this.actions.changeTree(e);
+        })
     }  
 }
 
