@@ -6,8 +6,10 @@ import template from './cell.table.html';
 import "./cell.table.scss";
 
 let config = {
-    template: template
-}
+    template: template,
+    data: {},
+    afterRender() {}
+};
 
 export class CellTableComponent extends BiBaseComponent {
     constructor(cellChart) {
