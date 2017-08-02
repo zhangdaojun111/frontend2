@@ -2,7 +2,7 @@
  * Created by dell on 2017/8/2.
  */
 import Component from "../../../../../../lib/component";
-import template from './high-grade-search-item.html'
+import template from './expert-search-item.html'
 
 
 let config = {
@@ -16,10 +16,10 @@ let config = {
 
     }
 }
-class highGradeItem extends Component {
+class expertItem extends Component {
     constructor(data) {
         config.data = data
         super(config)
     }
 }
-export default highGradeItem
+export default expertItem

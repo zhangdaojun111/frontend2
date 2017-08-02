@@ -42,6 +42,11 @@ let config = {
         createAgGrid: function (){
             var eGridDiv = document.querySelector( '#myGrid' );
             let mygrid = new Grid( eGridDiv , this.gridOptions );
+        },
+        //重新赋值
+        setGridData: function ( json ) {
+            this.gridOptions.api.setRowData( json.rowData );
+            this.gridOptions.api.setPinnedBottomRowData( json.footerData );
         }
     },
     afterRender: function (){
