@@ -6,8 +6,7 @@ import WorkFlowTree from './workflow-tree/workflow-tree'
 
 let config = {
     template: template,
-    data: {
-
+    data: { 
     },
     actions: {
        operate:function(){
@@ -21,23 +20,25 @@ let config = {
                 oper.val("取消");
                 del.show();
             }
-       },
-       deloperate:function(arg){
-            //向后台发送数据，删除该常用工作流,现在没有接口，只是在dom中删除这个
+       }, 
+       //向后台发送数据，删除该常用工作流,现在没有接口，只是在dom中删除这个
+       deloperate:function(arg){   
             arg.remove();
        }
     },
     afterRender: function() {
-        console.log(this.data);
-        this.data.rows.forEach((row)=>{
+        //添加常用工作流组件
+        this.data[0].rows.forEach((row)=>{
             this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
-        })
-        this.append(new WorkFlowTree(), this.el.find('.J_select-container'));
+        });
+        //添加流程下来菜单
+        this.append(new WorkFlowTree(this.data[1]), this.el.find('.J_select-container'));
+
         this.el.on('click','.J_operate',()=>{
             this.actions.operate();
         }).on('click','.J_del',(ev)=>{
-            var target = ev.target;
-            var parent = $(target).parent().parent().parent();
+            let target = ev.target;
+            let parent = $(target).parent().parent().parent();
             this.actions.deloperate(parent);  
         })
     },
@@ -47,16 +48,19 @@ let config = {
 }
 
 class WorkFlowCreate extends Component{
-    constructor (data){
+    constructor (data,treeNode){
         super(config,data);
     }
 
 }
 
 export default {
-    loadData(data){
-        let component = new WorkFlowCreate(data);
+    
+    //获取常用工作流和下拉工作流名称
+    loadData(data,treeNode){
+        let arr=[data,treeNode];
+        let component = new WorkFlowCreate(arr);
         let el = $('#workflow-create');
         component.render(el);
-    }
+    },
 };
