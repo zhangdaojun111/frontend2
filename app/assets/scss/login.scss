@@ -54,14 +54,18 @@ $font_size:10px;           //通用字体大小
 
         .company-info {
           position: relative;
-          top: 20px;
+          top:15px;
+          height: 40px;
+          line-height: 20px;
           //font-size: 0.9em;
           text-align: center;
         }
 
         .login-form {
+          display: block;
           position: relative;
-          top: 40px;
+          height: 155px;
+          top: 10px;
           .form-group {
             position: relative;
             width: 260px;
@@ -125,17 +129,17 @@ $font_size:10px;           //通用字体大小
             left: 40px;
             color: red;
           }
-          hr{
-            border: 1px solid rgba(206, 206, 206, 0.18);
-          }
           .update-group {
-            top: 10px;
             width: 300px;
-            position: relative;
+            height: 50px;
+            bottom: 0;
+            position: absolute;
             left: 20px;
+            border-top: solid 1px rgba(212, 212, 212, 0.24);
 
             .update-logo {
               position: absolute;
+              top:20px;
               cursor: pointer;
               width: 20px;
               height: 20px;
@@ -145,20 +149,21 @@ $font_size:10px;           //通用字体大小
 
             .check-update-info {
               position: absolute;
+              top:20px;
               left: 25px;
               margin-top: 3px;
               color: rgba(195, 195, 195, 0.88);
             }
             .login-btn {
-              position: relative;
+              position: absolute;
               cursor: pointer;
               left: 170px;
+              top:15px;
               width: 90px;
               height: 30px;
               color: white;
               background-color: #686868;
               border-radius: 5px;
-              top: -5px;
               border: 0;
             }
           }
@@ -287,39 +292,6 @@ $font_size:10px;           //通用字体大小
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

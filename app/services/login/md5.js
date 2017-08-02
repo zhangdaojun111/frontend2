@@ -1,5 +1,4 @@
 // Taken from https://github.com/killmenot/webtoolkit.md5
-
 export let md5 = (string) => {
 
     function RotateLeft(lValue, iShiftBits) {
@@ -85,6 +84,7 @@ export let md5 = (string) => {
         lWordArray[lNumberOfWords - 1] = lMessageLength >>> 29;
         return lWordArray;
     };
+
 
     function WordToHex(lValue) {
         var WordToHexValue = "",
