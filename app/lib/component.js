@@ -48,11 +48,11 @@ class Component {
         let compiler = Handlerbar.compile(this.template);
         let html = compiler(this.data);
         this.el.html(html);
-        this.afterRender && this.afterRender();
         if (this.firstAfterRender && this.firstAfterRenderRunned !== true) {
             this.firstAfterRender();
             this.firstAfterRenderRunned = true;
         }
+        this.afterRender && this.afterRender();
         return this;
     }
 
@@ -60,9 +60,11 @@ class Component {
         this[key] = value;
     }
 
-    append(component, container) {
-        let el = $('<div>').appendTo(container);
+    append(component, container, tagName) {
+        tagName = tagName || 'div';
+        let el = $(`<${tagName}>`).appendTo(container);
         component.render(el);
+        return this;
     }
 
     destroyChildren(container) {
