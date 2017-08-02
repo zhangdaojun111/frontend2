@@ -663,8 +663,12 @@ let config = {
             }
             let preferenceData = dataTableService.getPreferences(obj1);
             let headerData = dataTableService.getColumnList(obj2);
+            let sheetData = dataTableService.getSheetPage( obj2 );
 
-            Promise.all([preferenceData, headerData]).then((res)=> {
+            Promise.all([preferenceData, headerData, sheetData]).then((res)=> {
+                console.log( "_____________" )
+                console.log( "_____________" )
+                console.log( res )
                 this.actions.setPreference( res[0] );
                 this.data.fieldsData = res[1].rows || [];
                 //创建高级查询需要字段数据
@@ -728,7 +732,8 @@ let config = {
                 columnDefs: this.columnDefs,
                 rowData: this.data.rowData,
                 footerData: this.data.footerData,
-                floatingFilter: true
+                floatingFilter: true,
+                fieldsData: this.data.fieldsData
             }
             this.agGrid = new agGrid(gridData);
             this.append(this.agGrid , this.el.find('#data-agGrid'));
@@ -759,6 +764,10 @@ let config = {
                 fieldsData: this.data.expertSearchFields
             }
             expertSearch.show(d);
+        } )
+        //宽度自适应
+        $( '.auto-width' ).click( ()=>{
+            this.agGrid.actions.autoWidth();
         } )
     }
 }

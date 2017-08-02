@@ -44,3 +44,28 @@
 .dataGrid-btn-group {
   float: right;
 }
+
+#data-agGrid {
+  width: calc( 100% - 420px );
+  float: left;
+}
+
+.group-panel {
+  width: 200px;
+  height: 498px;
+  float: left;
+  border: 1px solid #cacaca;
+}
+
+.custom-columns-panel {
+  width: 200px;
+  height: 498px;
+  float: left;
+  border: 1px solid #cacaca;
+}
+
+.pagination {
+  height: 30px;
+  width: 100%;
+  clear: both;
+}
