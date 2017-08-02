@@ -91,6 +91,9 @@ let config = {
                     }));
             }
         });
+        CalendarService.getCalendarTreeData().then(data => {
+            console.log(data);
+        });
 
 
     }
