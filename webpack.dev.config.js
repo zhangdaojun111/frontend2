@@ -27,13 +27,12 @@ module.exports = {
 
     entry: {
         main: path.resolve(APP_PATH, 'entrys/main.js'),
-        form: path.resolve(APP_PATH, 'entrys/form.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         vendors: [
             'jquery',
             'jquery-ui',
-            'jquery-ui/themes/base/base.css',
-            'jquery-ui/themes/base/theme.css',
+            // 'jquery-ui/themes/base/base.css',
+            // 'jquery-ui/themes/base/theme.css',
             'mediator-js',
             'handlebars',
             'moment',

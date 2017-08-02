@@ -1,6 +1,7 @@
 //用于登录界面初始化与流程控制
+import 'jquery-ui/themes/base/base.css';
+import 'jquery-ui/themes/base/theme.css';
 import '../assets/scss/login.scss';
-console.timeEnd("loading end");
 import 'jquery-ui/ui/widgets/dialog.js';
 import {LoginService} from '../services/login/loginService';
 import {md5} from '../services/login/md5';
