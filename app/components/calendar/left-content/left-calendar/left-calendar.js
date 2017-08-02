@@ -165,11 +165,18 @@ let config = {
     },
     afterRender: function() {
         config.actions.loadcalendarDate(year,month,day);
+
         $(".change-month-left").bind("click",function(){
-            config.actions.loadCalendarLastMonthData();
+            let nowYear = $(".now-year").html(),
+				nowMonth = $(".now-month").html(),
+                day = day;
+            config.actions.loadCalendarLastMonthData(nowYear,nowMonth,day);
         });
         $(".change-month-right").bind("click",function(){
-            config.actions.loadCalendarNextMonthData();
+            let nowYear = $(".now-year").html(),
+                nowMonth = $(".now-month").html(),
+                day = day;
+            config.actions.loadCalendarNextMonthData(nowYear,nowMonth,day);
         });
     }
 };
