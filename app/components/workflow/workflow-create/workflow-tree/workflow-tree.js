@@ -140,12 +140,18 @@ let config = {
         Mediator.subscribe('workflow:choose', (msg)=> {
             let rootNode = this.el.find('.J_select-Workflow');
             rootNode.text(msg.name);
-        })
+        });
+        var workCreateDiv=$("#workflow-create");
+        workCreateDiv.on("click",function (e) {
+            var isClass=$(this).find(".J_tree").hasClass('show');
+            if(isClass){
+                $(this).find(".J_tree").removeClass('show')
+            }
+        });
        this.data.treeArr=this.data.data;
-
        this.el.on('click','.J_tip',(e)=>{
            this.actions.toogleTree(e);
-
+           e.stopPropagation();
        });
        this.el.on('click','.J_root',(event)=>{
            this.actions.toogletip(event);
