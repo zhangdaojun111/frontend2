@@ -639,8 +639,7 @@ let config = {
                 this.actions.changeMainView('day');
             }
         });
-
-        ...pushlist('unShowDataList',{msg:'unShowData',data:{}});
+        
         CalendarService.CalendarMsgMediator.subscribe('unShowDataList', res => {
             console.log(res);
             if(res !== null) {
