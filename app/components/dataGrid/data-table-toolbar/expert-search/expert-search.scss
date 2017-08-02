@@ -50,9 +50,7 @@
                         width: 50px;
                     }
                 }
-                &.first {
-                  margin-left: 95px;
-                }
+
                 .condition-search-box {
                     display: inline-block;
                     position: relative;
@@ -113,6 +111,12 @@
                     line-height: 30px;
                     margin-right: 10px;
                     padding-left: 5px;
+                }
+                .add {
+                    cursor: pointer;
+                }
+                .detele {
+                    cursor: pointer;
                 }
             }
         }

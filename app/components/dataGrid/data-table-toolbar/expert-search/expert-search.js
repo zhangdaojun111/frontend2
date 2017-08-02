@@ -7,6 +7,7 @@ import './expert-search.scss';
 let config = {
     template: template,
     ulChecked: true,
+    inputValue: null,
     data: {
         //高级查询字段信息
         fieldsData: []
@@ -19,22 +20,25 @@ let config = {
         hideList: function() {
             $('.condition-search-ul').css('display','none');
             config.ulChecked = !config.ulChecked;
-        }
+        },
     },
     afterRender: function() {
+        let epCondition = new expertCondition();
         this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search'));
-        let ulChecked = true;
-        this.el.on('click','.condition-search-box-input', ()=> {
+        $('.condition-search-item').css('marginLeft','97px');
+        $('.condition-search-radiobox').css('display','none');
+        $('.delete').css('display','none');
+        this.el.on('click','.condition-search-box-input', function() {
             if (config.ulChecked){
-                this.actions.showList();
+                $(this).next('.condition-search-ul').css('display','block');
+                config.ulChecked = !config.ulChecked;
             } else {
-                this.actions.hideList();
+                $(this).next('.condition-search-ul').css('display','none');
+                config.ulChecked = !config.ulChecked;
             }
+            epCondition.actions.setInputObject($(this),$(this).parent().parent().find('.condition-search-input'))
         }).on('click','.add',()=> {
             this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search'));
-            $('.condition-search-li').on('click', function() {
-                console.log('111111');
-            })
         })
 
     }

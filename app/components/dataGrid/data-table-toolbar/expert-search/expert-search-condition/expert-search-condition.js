@@ -8,6 +8,9 @@ import expertItem from './expert-search-item/expert-search-item';
 import expertSreach from '../expert-search';
 let config = {
     template: template,
+    inputObject: null,
+    inputNextObject: null,
+    epSreach: {},
     data: {
         expertItemData: [],
     },
@@ -19,16 +22,31 @@ let config = {
             });
             $('.condition-search-li').on('click', function() {
                 _this.actions.setInputValue($(this).find('.name').html());
+                _this.actions.setInputType($(this).find('.searchType').html());
+                config.epSreach.actions.hideList();
             })
         },
+        setInputObject: function(object,nextObject) {
+            config.inputObject = object;
+            config.inputNextObject = nextObject;
+        },
         setInputValue: function(value) {
-            $('.condition-search-box-input').val(value);
-            epSreach.actions.hideList();
+            config.inputObject.val(value);
+        },
+        setInputType: function(type) {
+            let inputType;
+            switch (type) {
+                case "datetime": inputType = 'date'; break
+                case "text": inputType = 'text'; break
+                case "number": inputType = 'number'; break
+            }
+            config.inputNextObject.attr("type",inputType);
         }
     },
     afterRender: function() {
         this.actions.rendItem();
-        let epSreach = new expertSreach.expertSearch ();
+        config.epSreach = new expertSreach.expertSearch ();
+        $('.condition-search .condition-search-item:first-child').find('.condition-search-checkbox').css('dispaly','none');
     }
 }
 class expertCondition extends Component {
