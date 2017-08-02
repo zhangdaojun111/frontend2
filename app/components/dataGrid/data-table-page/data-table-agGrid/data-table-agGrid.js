@@ -9,7 +9,7 @@ import {dgcService} from "../../../../services/dataGrid/data-table-control.servi
 import {fieldTypeService} from "../../../../services/dataGrid/field-type-service";
 import FloatingFilter from "../../data-table-toolbar/floating-filter/floating-filter";
 import dataPagination from "../../data-table-toolbar/data-pagination/data-pagination";
-import highGradeSearch from "../../data-table-toolbar/high-grade-search/high-grade-search";
+import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 
 let config = {
     template: template,
@@ -770,7 +770,7 @@ let config = {
             let d = {
                 fieldsData: this.data.hightGridSearchFields
             }
-            highGradeSearch.show(d);
+            expertSearch.show(d);
         } )
     }
 }
