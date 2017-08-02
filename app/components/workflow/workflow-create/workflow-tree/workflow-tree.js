@@ -36,6 +36,7 @@ let config = {
         },
         //点击子节点
         clickChild:function(e){
+            console.log(e);
             let childValue = $(e.target).text();
             let rootNode = this.el.find('.J_select-Workflow');
             let tree = this.el.find(".J_tree");

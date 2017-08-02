@@ -28,11 +28,12 @@ let config = {
     },
     afterRender: function() {
         //添加常用工作流组件
-        this.data[0].rows.forEach((row)=>{
+        console.log(this.data);
+        this.data[1].rows.forEach((row)=>{
             this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
         });
         //添加流程下来菜单
-        this.append(new WorkFlowTree(this.data[1]), this.el.find('.J_select-container'));
+        this.append(new WorkFlowTree(this.data[0]), this.el.find('.J_select-container'));
 
         this.el.on('click','.J_operate',()=>{
             this.actions.operate();
@@ -57,9 +58,8 @@ class WorkFlowCreate extends Component{
 export default {
     
     //获取常用工作流和下拉工作流名称
-    loadData(data,treeNode){
-        let arr=[data,treeNode];
-        let component = new WorkFlowCreate(arr);
+    loadData(data){
+        let component = new WorkFlowCreate(data);
         let el = $('#workflow-create');
         component.render(el);
     },

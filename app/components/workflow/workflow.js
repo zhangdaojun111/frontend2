@@ -23,7 +23,6 @@ let config = {
             let __this=this;
             //draw block
             $.each(this.data.node, function (key, value) {
-                console.log(value);
                 if (value.hasOwnProperty("positionleft") && value.hasOwnProperty("positiontop") && value.hasOwnProperty("startPoint") && value.hasOwnProperty("endPoint")) {
                     value.startPoint=value.startPoint.split(",");
                     value.endPoint=value.endPoint.split(",");
