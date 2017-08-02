@@ -1,4 +1,8 @@
 @import "../../../assets/scss/core/base";
+.unchecked{
+  background-color: white !important;
+}
+.select-all{font-size: 14px}
 .left-content-top{
     padding-top: 10px;padding-bottom: 10px;margin-left: 15px;
     .create{color: #FF7F50;}
