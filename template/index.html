@@ -8,26 +8,15 @@
 <body>
 
 <script>
-
-    window.config = {
-
-    }
-
+    window.config = {{window_config|safe}}
 </script>
 
-<div id="header">
-    <input type="button" id="login">
-    <input type="button" id="active" value="active1111111">
-    <input type="button" id="silent" value="silent">
-</div>
-<div id="aside"></div>
-<div id="content">
 
-    <iframe src="iframe.html"></iframe>
+<div id="aside">
 
 </div>
-<div id="footer"></div>
-
+<div id="header"></div>
+<div id="content"></div>
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
 <script type="text/javascript" src="http://localhost:8080/scripts/main.js"></script>
 </body>
