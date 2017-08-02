@@ -1,32 +1,34 @@
 /**
- * Created by dell on 2017/8/2.
+ * Created by zhaohaoran on 2017/8/2.
  */
 import Component from "../../../../../lib/component";
-import template from './expert-search-condition.html'
+import template from './expert-search-condition.html';
 import '../expert-search.scss';
-import expertItem from './expert-search-item/expert-search-item'
+import expertItem from './expert-search-item/expert-search-item';
+import expertSreach from '../expert-search';
 let config = {
     template: template,
     data: {
         expertItemData: [],
     },
     actions: {
-        getConditionData: function (data) {
-            this.data.expertItemData = data;
-            this.actions.rendItem();
-        },
         rendItem: function () {
+            let _this = this;
             this.data.expertItemData.forEach((row) => {
                 this.append(new expertItem(row), $('.expert-search').find('.condition-search-ul'));
             });
+            $('.condition-search-li').on('click', function() {
+                _this.actions.setInputValue($(this).find('.name').html());
+            })
+        },
+        setInputValue: function(value) {
+            $('.condition-search-box-input').val(value);
+            epSreach.actions.hideList();
         }
     },
     afterRender: function() {
-        console.log( "++++++++++" )
-        console.log( "++++++++++" )
-        console.log( "++++++++++" )
-        console.log( this.data.expertItemData )
-        this.actions.rendItem()
+        this.actions.rendItem();
+        let epSreach = new expertSreach.expertSearch ();
     }
 }
 class expertCondition extends Component {

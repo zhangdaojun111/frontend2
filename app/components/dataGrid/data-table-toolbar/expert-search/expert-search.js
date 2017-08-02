@@ -6,30 +6,37 @@ import './expert-search.scss';
 
 let config = {
     template: template,
+    ulChecked: true,
     data: {
         //高级查询字段信息
         fieldsData: []
     },
     actions: {
-
+        showList: function() {
+            $('.condition-search-ul').css('display','block');
+            config.ulChecked = !config.ulChecked;
+        },
+        hideList: function() {
+            $('.condition-search-ul').css('display','none');
+            config.ulChecked = !config.ulChecked;
+        }
     },
     afterRender: function() {
-        console.log( "字段信息" )
-        console.log( this.data.fieldsData );
         this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search'));
         let ulChecked = true;
-        this.el.on('click','.condition-search-box-input', function (){
-            if (ulChecked){
-                $(this).next('.condition-search-ul').css('display','block');
-                ulChecked = !ulChecked;
+        this.el.on('click','.condition-search-box-input', ()=> {
+            if (config.ulChecked){
+                this.actions.showList();
             } else {
-                $(this).next('.condition-search-ul').css('display','none');
-                ulChecked = !ulChecked;
+                this.actions.hideList();
             }
         }).on('click','.add',()=> {
-            this.append(new highGradeCondition({highGradeItemData:this.data.fieldsData}), this.el.find('.condition-search'));
-            // new highGradeCondition(this.data).actions.rendItem()
+            this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search'));
+            $('.condition-search-li').on('click', function() {
+                console.log('111111');
+            })
         })
+
     }
 
 }
@@ -42,6 +49,7 @@ class expertSearch extends Component {
     }
 }
 export default {
+    expertSearch:expertSearch,
     show: function (d) {
         let component = new expertSearch(d);
         let el = $('<div>').appendTo(document.body);
