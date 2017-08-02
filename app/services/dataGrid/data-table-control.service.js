@@ -276,5 +276,24 @@ export const dgcService = {
             }
         }
         return result;
+    },
+    //替换的图标
+    replacingIcons: {
+        checkboxChecked: '<img src="'+require('../../assets/images/dataGrid/icon_checkbox_yes.png') +'" />',
+        checkboxUnchecked: '<img src="'+require('../../assets/images/dataGrid/icon_checkbox_no.png') +'" />',
+        checkboxIndeterminate: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        columnMovePivot: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        columnMoveGroup: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        columnMovePin: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        columnMoveAdd: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        columnMoveHide: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        columnMoveMove: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        columnMoveLeft: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        columnMoveRight: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        columnMoveValue: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        dropNotAllowed: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        rowGroupPanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        pivotPanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        valuePanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />'
     }
 }

@@ -9,7 +9,7 @@ import 'ag-grid/dist/styles/theme-material.css';
 import 'ag-grid/dist/styles/theme-dark.css';
 import 'ag-grid/dist/styles/theme-fresh.css';
 
-import Mediator from '../../../lib/mediator';
+import {dgcService} from '../../../services/dataGrid/data-table-control.service';
 
 let config = {
     template: template,
@@ -18,7 +18,9 @@ let config = {
         rowData : [],
         footerData: [],
         cssTheme: 'ag-fresh',
-        floatingFilter: false
+        floatingFilter: false,
+        //原始表头数据
+        fieldsData: []
     },
     gridOptions: GridOptions,
     actions: {
@@ -36,7 +38,7 @@ let config = {
                 sortingOrder: ['asc','desc','null'],
                 suppressRowClickSelection: true,
                 rowSelection: 'multiple',
-                icons: {}
+                icons: dgcService.replacingIcons
             }
         },
         createAgGrid: function (){
@@ -47,6 +49,17 @@ let config = {
         setGridData: function ( json ) {
             this.gridOptions.api.setRowData( json.rowData );
             this.gridOptions.api.setPinnedBottomRowData( json.footerData );
+        },
+        //宽度自适应
+        autoWidth: function () {
+            let arr = [];
+            for( let d of this.data.fieldsData ){
+                let no = ['group','mySelectAll','myOperate','number'];
+                if( no.indexOf( d.field ) == -1 ){
+                    arr.push( d.field );
+                }
+            }
+            this.gridOptions.columnApi.autoSizeColumns( arr );
         }
     },
     afterRender: function (){

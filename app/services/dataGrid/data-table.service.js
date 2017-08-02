@@ -19,5 +19,9 @@ export const dataTableService = {
     //请求表格数据
     getFooterData: function ( param ) {
         return HTTP.post( 'get_footer_data',param )
+    },
+    //请求sheet分页信息
+    getSheetPage: function ( param ) {
+        return HTTP.post( 'get_tab_page',param )
     }
 }
