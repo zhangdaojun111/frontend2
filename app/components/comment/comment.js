@@ -18,7 +18,7 @@ let config = {
             {text: '大哥说得好3'},
             {text: '大哥说得好4'},
             {text: '大哥说得好5'}
-        ]
+        ],
     },
     actions: {
         loadMore: function() {

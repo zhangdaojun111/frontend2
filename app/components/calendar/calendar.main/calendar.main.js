@@ -227,8 +227,14 @@ let config = {
         this.actions.createWeekCalendar();
         this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
 
+        CalendarService.CalendarMsgMediator.subscribe('now-month-day',data => {
+            console.log(data);
+        });
+        CalendarService.CalendarMsgMediator.subscribe('next-month-day',data => {
+            console.log(data);
+        });
+
         this.el.on('click', '#monthView', () => {
-            //CalendarService.getCalendarListData();
             $('.calendar-main-content').empty();
             this.data.calendarContent = 'month';
             this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
