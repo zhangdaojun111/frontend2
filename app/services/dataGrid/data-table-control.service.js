@@ -150,5 +150,131 @@ export const dgcService = {
             arr.push( obj )
         }
         return arr;
+    },
+    //dataGrid搜索filter
+    returnQueryParams: function (queryParams) {
+        if(queryParams.filter || queryParams.childInfo || queryParams.mongo || queryParams.filter_child){
+            let temp = {};
+            if(queryParams.filter && !queryParams.filter['_id']){
+                temp = this.translateAdvancedQuery(queryParams.filter);
+            }else {
+                temp = queryParams.filter || {};
+            }
+            let obj = {};
+            if(queryParams.childInfo){
+                if( ( queryParams.filter && queryParams.filter.length == 1 ) || ( !queryParams.filter ) ){
+                    temp['section_page_'+queryParams.childInfo.parent_page_id] = queryParams.parent_temp_id || queryParams.childInfo.parent_row_id;
+                }else if( queryParams.filter && queryParams.filter.length > 1 ){
+                    if(temp['$and']) {
+                        temp['$and'][0]['section_page_'+queryParams.childInfo.parent_page_id] = queryParams.parent_temp_id || queryParams.childInfo.parent_row_id;
+                    }
+                    else{
+                        temp['$or'][0]['section_page_'+queryParams.childInfo.parent_page_id] = queryParams.parent_temp_id || queryParams.childInfo.parent_row_id;
+                    }
+                }
+                delete queryParams.childInfo
+            }
+            if(queryParams.mongo){
+                for(let k in queryParams.mongo){
+                    temp[k] = queryParams.mongo[k]
+                }
+                delete queryParams.mongo
+            }
+            queryParams.filter = JSON.stringify(temp);
+        }
+    },
+    translateAdvancedQuery: function (oldQueryList){
+        let stack1 = [];
+        let stack2 = [];
+        for(let i in oldQueryList){
+            let item = oldQueryList[i];
+            let searchBy = item["cond"]['searchBy'];
+            let tempDict = this.getMongoSearchDict(item);
+            if(i=="0"){
+                stack1.push(tempDict);
+                if(stack1[0]['undefined']){
+                    stack1[0]=stack1[0]['undefined'][0];
+                }
+                continue;
+            }
+            let relation = item["relation"];
+            let lb = item['cond']['leftBracket'] ? item['cond']['leftBracket'] : 0;
+            let rb = item['cond']['rightBracket'] ? item['cond']['rightBracket'] : 0;
+            if(lb == '('){
+                stack2.push(relation);
+                stack2.push(lb);
+                stack1.push(tempDict);
+                if(stack1[0]['undefined']){
+                    stack1[0]=stack1[0]['undefined'][0];
+                }
+            }else{
+                let o1 = stack1.pop();
+                let obj = {} ;
+                obj[relation] = [o1,tempDict];
+                stack1.push(obj);
+                if(stack1[0]['undefined']){
+                    stack1[0]=stack1[0]['undefined'][0];
+                }
+            }
+            if(rb==')'){
+                let operator1 = stack1.pop();
+                let operator2 = stack1.pop();
+                let operand = stack2.pop();
+                let obj = {}
+                if(operand == '('){
+                    operand = stack2.pop();
+                }
+                obj[operand] = [operator1,operator2];
+                stack1.push(obj);
+                if(stack1[0]['undefined']){
+                    stack1[0]=stack1[0]['undefined'][0];
+                }
+            }
+        }
+        return stack1[0];
+    },
+    getMongoSearchDict: function (searchDict){
+        let cond = searchDict["cond"];
+        let searchBy = cond["searchBy"];
+        let searchBy_P = cond["searchBy"] + '_p';
+
+        let operate = cond["operate"];
+        let keyword = cond["keyword"];
+        let tempDictAndPinyin = [];
+        let tempDict = {};
+        let tempDictPinyin = {};
+        let result;
+        if(operate=='exact') {
+            tempDict[searchBy] = keyword;
+            tempDictAndPinyin.push(tempDict);
+            tempDictPinyin[searchBy_P] = keyword;
+            tempDictAndPinyin.push(tempDictPinyin);
+        }
+        else{
+            let temp = {};
+            let tempPinyin = {};
+
+            temp[operate] = keyword;
+            tempDict[searchBy] = temp;
+            tempDictAndPinyin.push(tempDict);
+
+            tempPinyin[operate] = keyword;
+            tempDictPinyin[searchBy_P] = tempPinyin;
+            tempDictAndPinyin.push(tempDictPinyin);
+        }
+        if(typeof (cond["keyword"]) == "number" ){
+            result =  tempDict;
+        }else{
+            if(operate == '$ne'){
+                result = {
+                    $and:tempDictAndPinyin
+                }
+            }else {
+                result =  {
+                    $or:tempDictAndPinyin
+                }
+            }
+        }
+        return result;
     }
 }

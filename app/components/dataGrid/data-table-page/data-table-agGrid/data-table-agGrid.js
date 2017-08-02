@@ -9,11 +9,12 @@ import {dgcService} from "../../../../services/dataGrid/data-table-control.servi
 import {fieldTypeService} from "../../../../services/dataGrid/field-type-service";
 import FloatingFilter from "../../data-table-toolbar/floating-filter/floating-filter";
 import dataPagination from "../../data-table-toolbar/data-pagination/data-pagination";
+import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 
 let config = {
     template: template,
     data: {
-        tableId: '8696_yz7BRBJPyWnbud4s6ckU7e',
+        tableId: '5318_EHFuJD7Ae76c6GMPtzdiWH',
         formId: '',
         tableType: '',
         parentTableId: '',
@@ -75,22 +76,15 @@ let config = {
         //原始字段数据
         fieldsData: [],
         //高级查询需要的字段信息
-        hightGridSearchFields: []
+        hightGridSearchFields: [],
+        //搜索参数
+        filterParam: [],
+        //是否第一次渲染agGrid
+        firstRender: true,
     },
     //生成的表头数据
     columnDefs: [],
     actions: {
-        //请求数据（表头，提醒，偏好）
-        prepareData: function () {
-            let json = {
-                table_id: this.data.tableId
-            }
-            // dataTableService.getTableData(json)
-            //     .then( res=>{
-            //     console.log( "返回数据————————" )
-            //     console.log( res )
-            // } )
-        },
         createHeaderColumnDefs: function () {
             let columnDefs = [],
                 headerArr = [],
@@ -185,8 +179,7 @@ let config = {
                         field: data.data["field"],
                         enableCellChangeFlash: true,
                         suppressMenu: true,
-                        // suppressToolPanel: true,
-                        // width: 160,
+                        suppressToolPanel: true,
                         suppressMovable: fixArr.indexOf(data.data["field"]) == -1 ? false : true,
                         field_content: data.data['field_content'],
                         colId: data.data["field"],
@@ -240,7 +233,7 @@ let config = {
                     if (this.colWidth && this.colWidth[data.data["field"]]) {
                         width = this.colWidth[data.data["field"]];
                     }
-                    obj["width"] = width;
+                    obj["width"] = width + 17;
                     if (( fieldTypeService.childTable(data.data["dinput_type"]) || fieldTypeService.countTable(data.data["dinput_type"]) )) {
                         obj['editable'] = false;
                         obj['cellStyle'] = {'font-style': 'normal'};
@@ -268,6 +261,7 @@ let config = {
             let real_type = colDef["real_type"];
             // let someStyle = 'text-align:right;margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
             let someStyle = 'margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
+            let someStyle_a = 'text-decoration:underline;margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
             if (params.data) {
                 rowId = params.data['_id']
             }
@@ -402,7 +396,7 @@ let config = {
                     }
                 } else {
                     if (colDef['base_buildin_dfield'] != '' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人') {
-                        sHtml = '<a  title="查看源数据" style="' + someStyle + 'background-color:' + color + '"><span id="relatedOrBuildin">' + numVal + '</span><span/>';
+                        sHtml = '<a  title="查看源数据" style="' + someStyle_a + 'background-color:' + color + '"><span id="relatedOrBuildin">' + numVal + '</span><span/>';
                     } else {
                         sHtml = '<span style="' + someStyle + 'background-color:' + color + '"><span>' + numVal + '</span><span/>';
                     }
@@ -421,7 +415,7 @@ let config = {
                     val = val.replace(/\n/g, "\n;\n");
                 }
                 if (colDef['base_buildin_dfield'] != '' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人') {
-                    sHtml = '<a  title="查看源数据" style="' + someStyle + 'background-color:' + color + '"><span id="relatedOrBuildin">' + val + '</span></a>';
+                    sHtml = '<a  title="查看源数据" style="' + someStyle_a + 'background-color:' + color + '"><span id="relatedOrBuildin">' + val + '</span></a>';
                 } else {
                     sHtml = '<span style="' + someStyle + 'background-color:' + color + '"><span>' + val + '</span></span>';
                 }
@@ -440,7 +434,7 @@ let config = {
                 } else {
                     let bigNum = params.value > 9007199254740992 ? dgcService.formatter(params.value.toString()) + '.00' : dgcService.formatter(Number(params.value).toFixed(colDef.real_accuracy))
                     if (colDef['base_buildin_dfield'] != '' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人') {
-                        sHtml = '<a  title="查看源数据" style="' + someStyle + 'background-color:' + color + '"><span id="relatedOrBuildin">' + bigNum + '</span></a>';
+                        sHtml = '<a  title="查看源数据" style="' + someStyle_a + 'background-color:' + color + '"><span id="relatedOrBuildin">' + bigNum + '</span></a>';
                     } else {
                         sHtml = '<span style="' + someStyle + 'background-color:' + color + '"><span>' + bigNum + '</span></span>';
                     }
@@ -449,7 +443,7 @@ let config = {
 
             //地址类型
             else if (real_type == fieldTypeService.URL_TYPE) {
-                sHtml = '<a href="' + myValue + '" style="float:left;color:#337ab7;" id="shareAddress" target="_blank">' + myValue + '</a>';
+                sHtml = '<a href="' + someStyle_a + '" style="float:left;color:#337ab7;" id="shareAddress" target="_blank">' + myValue + '</a>';
             }
 
             //合同编辑器
@@ -462,7 +456,7 @@ let config = {
                 if (this.data.viewMode == 'editFromCorrespondence') {
                     sHtml = '<span style="color:' + color + '">' + params.value + '</span>';
                 } else {
-                    sHtml = '<a style="' + someStyle + 'background-color:' + color + ' " ><span id="correspondenceClick">' + params.value + '</span></a>';
+                    sHtml = '<a style="' + someStyle_a + 'background-color:' + color + ' " ><span id="correspondenceClick">' + params.value + '</span></a>';
                 }
             }
 
@@ -510,11 +504,11 @@ let config = {
                     if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
                         sHtml = '<span style="float:right;color:rgb(85,85,85);">' + params.value + '</span>';
                     } else {
-                        sHtml = '<a style="color:#337ab7;' + someStyle + 'background-color:' + color + '" ><span id="childOrCount">' + params.value + '</span></a>';
+                        sHtml = '<a style="color:#337ab7;' + someStyle_a + 'background-color:' + color + '" ><span id="childOrCount">' + params.value + '</span></a>';
                     }
                 } else {
                     if (colDef['base_buildin_dfield'] != '' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人') {
-                        sHtml = '<a  title="查看源数据" style="' + someStyle + 'background-color:' + color + '"><span id="relatedOrBuildin">' + params.value + '</span></a>';
+                        sHtml = '<a  title="查看源数据" style="' + someStyle_a + 'background-color:' + color + '"><span id="relatedOrBuildin">' + params.value + '</span></a>';
                     } else {
                         sHtml = '<span style="' + someStyle + 'background-color:' + color + '"><span>' + params.value + '</span></span>';
                     }
@@ -609,9 +603,9 @@ let config = {
                 }
             }
             this.data.queryList = obj;
-            this.data.postData['filter'] = [];
+            let filter = [];
             for (let attr in this.data.queryList) {
-                this.data.postData['filter'].push({
+                filter.push({
                     "relation": "$and",
                     "cond": {
                         "leftBracket": 0,
@@ -622,31 +616,11 @@ let config = {
                     }
                 });
             }
-            let obj_2 = {};
-            if (this.data.postData['filter'].length == 0) {
-                for (let key in this.data.postData) {
-                    if (key != "filter") {
-                        obj_2[key] = this.data.postData[key];
-                    }
-                }
-            } else {
-                obj_2 = this.data.postData;
+            this.data.filterParam = {
+                filter: filter,
+                is_filter: 1
             }
-            obj_2['is_filter'] = 1;
-        },
-        //请求偏好数据
-        getPreferences: function () {
-            let json = {
-                actions: JSON.stringify(['ignoreFields', 'group', 'fieldsOrder', 'pageSize', 'colWidth', 'pinned']),
-                table_id: this.data.tableId
-            }
-            dataTableService.getPreferences(json).then(res => {
-                console.log("返回偏好数据")
-                console.log(res)
-                this.actions.setPreference(res)
-                //请求提醒数据
-                this.actions.getRemindsData();
-            })
+            this.actions.getGridData();
         },
         //偏好赋值
         setPreference: function (res) {
@@ -690,21 +664,6 @@ let config = {
             // console.log("orderFields")
             // console.log(this.data.orderFields)
         },
-        //提醒数据赋值
-        setRemindData: function (res) {
-            this.data.remindColor = res || {};
-        },
-        //请求提醒数据
-        getRemindsData: function () {
-            // console.log( "________" )
-            // console.log( "________" )
-            // dataTableService.getReminRemindsInfo( this.data.tableId ).then( res=>{
-            //     console.log( "提醒数据" )
-            //     console.log( res )
-            //     //请求表头数据
-            //     this.actions.getHeaderData();
-            // } )
-        },
         //请求表头数据
         getHeaderData: function () {
             let obj1 = {
@@ -714,46 +673,45 @@ let config = {
             let obj2 = {
                 table_id: this.data.tableId
             }
-            let postData = this.actions.createPostData();
             let preferenceData = dataTableService.getPreferences(obj1);
-            let remindData = dataTableService.getReminRemindsInfo(obj2);
             let headerData = dataTableService.getColumnList(obj2);
-            let bodyData = dataTableService.getTableData(postData);
-            let footerData = dataTableService.getFooterData(postData);
 
-            Promise.all([preferenceData, remindData, headerData, bodyData, footerData]).then((res)=> {
+            Promise.all([preferenceData, headerData]).then((res)=> {
                 this.actions.setPreference( res[0] );
-                this.actions.setRemindData( res[1] );
-                this.data.fieldsData = res[2].rows || [];
+                this.data.fieldsData = res[1].rows || [];
                 //创建高级查询需要字段数据
                 this.data.hightGridSearchFields = dgcService.createHightGridSearchFields( this.data.fieldsData );
-                console.log( "高级查询字段信息" )
-                console.log( this.data.hightGridSearchFields )
                 //创建表头
                 this.columnDefs = this.actions.createHeaderColumnDefs();
-                this.data.rowData = res[3].rows || [];
-                this.data.footerData = dgcService.createFooterData( res[4] )
-                let gridData = {
-                    columnDefs: this.columnDefs,
-                    rowData: this.data.rowData,
-                    footerData: this.data.footerData
-                }
 
-                this.append(new agGrid(gridData), this.el.find('#data-agGrid'));
-                //渲染分页
-                let paginationData = {
-                    total: this.data.total,
-                    rows: this.data.rows
-                }
-                this.append(new dataPagination(paginationData), this.el.find('.pagination'));
+                this.actions.getGridData();
             })
             HTTP.flush();
         },
         //请求表格数据
-        getBodyData: function () {
+        getGridData: function () {
             let postData = this.actions.createPostData();
-            dataTableService.getTableData( postData ).then( res=>{
-            } )
+            let body = dataTableService.getTableData( postData );
+            let footer = dataTableService.getFooterData( postData );
+            let remindData = dataTableService.getReminRemindsInfo({table_id:this.data.tableId});
+            Promise.all([body, footer, remindData]).then((res)=> {
+                this.data.rowData = res[0].rows || [];
+                this.data.total = res[0].total;
+                //提醒赋值
+                this.data.remindColor = res[2];
+                this.data.footerData = dgcService.createFooterData( res[1] );
+                if( this.data.firstRender ){
+                    //渲染agGrid
+                    this.actions.renderAgGrid();
+                }else {
+                    let d = {
+                        rowData: this.data.rowData,
+                        footerData: this.data.footerData
+                    }
+                    //赋值
+                    this.agGrid.actions.setGridData(d);
+                }
+            })
             HTTP.flush();
         },
         //返回请求数据
@@ -767,13 +725,53 @@ let config = {
                 parent_temp_id: this.data.parentTempId,
                 tableType: this.data.tableType
             }
+            if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
+                json['filter'] = this.data.filterParam.filter;
+                json['is_filter'] = this.data.filterParam.is_filter;
+            }
+            dgcService.returnQueryParams( json );
+            console.log( "搜索参数" )
+            console.log( json )
             return json;
+        },
+        //渲染agGrid
+        renderAgGrid: function () {
+            let gridData = {
+                columnDefs: this.columnDefs,
+                rowData: this.data.rowData,
+                footerData: this.data.footerData,
+                floatingFilter: true
+            }
+            this.agGrid = new agGrid(gridData);
+            this.append(this.agGrid , this.el.find('#data-agGrid'));
+            //渲染分页
+            let paginationData = {
+                total: this.data.total,
+                rows: this.data.rows
+            }
+            this.pagination = new dataPagination(paginationData);
+            this.pagination.actions.paginationChanged = this.actions.refreshData;
+            this.append(this.pagination, this.el.find('.pagination'));
+            this.data.firstRender = false;
+        },
+        //分页刷新操作
+        refreshData: function ( data ) {
+            this.data.rows = data.rows;
+            this.data.first = data.firstRow;
+            this.actions.getGridData();
         }
     },
     afterRender: function () {
-        this.actions.getHeaderData();
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
+        this.actions.getHeaderData();
+        //高级查询
+        $( '.hight-search' ).click( ()=>{
+            let d = {
+                fieldsData: this.data.hightGridSearchFields
+            }
+            expertSearch.show(d);
+        } )
     }
 }
 
