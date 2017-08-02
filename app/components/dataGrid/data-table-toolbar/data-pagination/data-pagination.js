@@ -22,10 +22,7 @@ let config = {
     actions: {
         //分页数据改变
         paginationChanged: function ( obj ) {//currentPage,rows,firstRow
-            console.log( "分页" )
-            console.log( obj )
-        },
-
+        }
     },
     afterRender: function (){
         $(".selectPage").hide();

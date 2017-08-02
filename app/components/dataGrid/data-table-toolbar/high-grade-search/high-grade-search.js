@@ -7,13 +7,16 @@ import './high-grade-search.scss';
 let config = {
     template: template,
     data: {
-
+        //高级查询字段信息
+        fieldsData: []
     },
     actions: {
 
     },
     afterRender: function() {
-        this.append(new highGradeCondition(), this.el.find('.condition-search'));
+        console.log( "字段信息" )
+        console.log( this.data.fieldsData );
+        this.append(new highGradeCondition({highGradeItemData:this.data.fieldsData}), this.el.find('.condition-search'));
         let ulChecked = true;
         this.el.on('click','.condition-search-box-input', function (){
             if (ulChecked){
@@ -24,16 +27,33 @@ let config = {
                 ulChecked = !ulChecked;
             }
         }).on('click','.add',()=> {
-            this.append(new highGradeCondition(), this.el.find('.condition-search'));
-            console.log(this)
-            new highGradeCondition().actions.rendItem()
+            this.append(new highGradeCondition({highGradeItemData:this.data.fieldsData}), this.el.find('.condition-search'));
+            // new highGradeCondition(this.data).actions.rendItem()
         })
     }
 
 }
 class highGradeSearch extends Component {
-    constructor() {
+    constructor(data) {
+        for (let d in data) {
+            config.data[d] = data[d]
+        }
         super(config)
     }
 }
-export default highGradeSearch
+export default {
+    show: function (d) {
+        let component = new highGradeSearch(d);
+        let el = $('<div>').appendTo(document.body);
+        component.render(el);
+        el.dialog({
+            title: '高级查询',
+            width: 1000,
+            height: 600,
+            close: function () {
+                $(this).dialog('destroy');
+                component.destroySelf();
+            }
+        });
+    }
+}

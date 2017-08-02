@@ -14,7 +14,10 @@ let config = {
                 FloatingFilter.prototype.init = function (params) {
                     // this.onFloatingFilterChanged = params.onFloatingFilterChanged;
                     this.eGui = document.createElement('div');
-                    this.eGui.innerHTML = '<input type="text"/>'
+                    this.eGui.innerHTML = '<input type="text"/>';
+                    if( colInfo == 'none' ){
+                        this.eGui.innerHTML = '<input disabled type="text"/>';
+                    }
                     this.eFilterInput = this.eGui.querySelector('input');
                     this.eFilterInput.className = 'filter-input';
                     this.eGui.style.height = '25px';
@@ -25,9 +28,6 @@ let config = {
                     this.eFilterInput.style.border = '1px solid #55A1F3';
                     this.eFilterInput.style.marginBottom = '5px';
                     let searchType = 'keyup';
-                    if( colInfo == 'none' ){
-                        this.eGui.innerHTML = '<input disabled type="text"/>'
-                    }
                     if( colInfo == 'date' ){
                         this.eFilterInput.type = 'date';
                         searchType = 'change';
@@ -63,7 +63,7 @@ let config = {
         //解决汉字搜索第一次传空' '的问题
         keyupSearch: function($event,oInput,col_field,colInfo,searchType,searchOldValue,searchValue) {
             let keyArr = [32,37,38,39,40]
-            if($event['keycode'] && keyArr.indexOf($event['keycode'])==-1){
+            if($event['keyCode'] && keyArr.indexOf($event['keyCode'])==-1){
                 if(oInput.value[oInput.value.length-1] == ' ' || oInput.value == "" && !searchOldValue[col_field]) {
                     return;
                 }
@@ -94,7 +94,7 @@ let config = {
 
             this.actions.floatingFilterPostData(col_field,keyWord,searchOperate);
         },
-        floatingFilterPostData:function(col_field,keyWord,searchOperate){
+        floatingFilterPostData: function(col_field,keyWord,searchOperate){
         }
     },
     afterRender: function() {

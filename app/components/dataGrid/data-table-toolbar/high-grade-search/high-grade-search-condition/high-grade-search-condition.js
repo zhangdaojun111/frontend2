@@ -22,11 +22,18 @@ let config = {
         }
     },
     afterRender: function() {
-
+        console.log( "++++++++++" )
+        console.log( "++++++++++" )
+        console.log( "++++++++++" )
+        console.log( this.data.highGradeItemData )
+        this.actions.rendItem()
     }
 }
 class highGradeCondition extends Component {
-    constructor() {
+    constructor(data) {
+        for (let d in data) {
+            config.data[d] = data[d]
+        }
         super(config)
     }
 }
