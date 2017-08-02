@@ -137,13 +137,11 @@ let config = {
     },
 
     afterRender: function() {
-
         Mediator.subscribe('workflow:choose', (msg)=> {
-            console.log(msg);
+            let rootNode = this.el.find('.J_select-Workflow');
+            rootNode.text(msg.name);
         })
-
-        
-       this.data.treeArr=this.data.data; 
+       this.data.treeArr=this.data.data;
 
        this.el.on('click','.J_tip',(e)=>{
            this.actions.toogleTree(e);
