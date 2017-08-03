@@ -39,6 +39,9 @@ let config = {
             epCondition.actions.setInputObject($(this),$(this).parent().parent().find('.condition-search-input'))
         }).on('click','.add',()=> {
             this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search'));
+        }).on('click','.condition-search-radio', function() {
+            $(this).parent().find('.condition-search-radio').prop('checked',false)
+            $(this).prop('checked',true)
         })
 
     }
