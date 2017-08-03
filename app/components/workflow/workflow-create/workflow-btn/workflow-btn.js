@@ -9,6 +9,10 @@ let config = {
     actions: {
         choose: function(e) {
             Mediator.publish('workflow:choose', _.defaultsDeep({},$(e.target)[0].dataset,{type:'btn'}));
+            //检查是否有草稿
+            console.log($(e.target).attr("data-id"+".."+"后期改成form-id参数"));
+            let form_id = $(e.target).attr("data-fromid");
+            Mediator.publish('workflow:draft',form_id);
         }
     },
     afterRender: function() {

@@ -23,4 +23,7 @@ export const workflowService={
     addWorkflowFavorite(params){
         return HTTP.postImmediately('/add_workflow_favorite/', params)
     },
+    browseDraft(params){
+        return HTTP.postImmediately('/validate_draft_data/', params)
+    },
 }

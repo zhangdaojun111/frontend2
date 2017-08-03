@@ -41,6 +41,13 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
         let data = await workflowService.delWorkflowFavorite({'id': msg});
     })();
 });
+//判断是否有草稿
+Mediator.subscribe('workflow:draft', (msg)=> {
+    (async function () {
+        let data = await workflowService.browseDraft({'form_id': msg});
+    })();
+});
+
 
 $("#draw").on('click',function () {
     location.reload();
