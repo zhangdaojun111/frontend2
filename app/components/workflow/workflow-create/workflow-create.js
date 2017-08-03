@@ -58,12 +58,14 @@ let config = {
         });
         this.el.on('click','.J_del',(e)=>{
             this.actions.delBtn(e);
+            console.log(this.el);
         });
         //addFav
         this.el.on('click','#addFav',(e)=>{
             Mediator.publish('workflow:addFav', this.data.id);
             $('#addFav').hide();
         });
+
         //订阅btn click
         Mediator.subscribe('workflow:choose', (msg)=> {
             this.data.id=msg.id;

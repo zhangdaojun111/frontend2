@@ -48,13 +48,7 @@ let config = {
         clickChild:function(e){
             //get current clicked node info
             let {formid,tableid}=$(e.target)[0].dataset;
-            let form_id = $(e.target).attr("data-formid");
             Mediator.publish('workflow:choose', $(e.target)[0].dataset);
-
-            console.log(form_id);
-            Mediator.publish('workflow:draft',form_id);
-
-
             let childValue = $(e.target).text();
             let rootNode = this.el.find('.J_select-Workflow');
             let tree = this.el.find(".J_tree");
@@ -107,7 +101,6 @@ let config = {
                             li.eq(i).addClass('xixi');
                             li.eq(i).find(".root").addClass('xixi');
                             li.eq(i).find('.child-list .child-item').eq(j).addClass("xixi");
-                        }else{
                         }
                     }
                 }
