@@ -1,5 +1,5 @@
 <div class="bi-table">
-    <!--{{#unless chart.single}}-->
+    {{#unless chart.single}}
         <table class="double-list">
             <thead>
             <tr>
@@ -20,17 +20,18 @@
             {{/each}}
             </tbody>
         </table>
-    <!--{{else}}-->
-    <!--<table class="single-list">-->
-        <!--<tbody>-->
-            <!--{{#each chart.columns}}-->
-                <!--<tr>-->
-
-                    <!--<td>{{name}}</td>-->
-                <!--</tr>-->
-            <!--{{/each}}-->
-        <!--</tbody>-->
-    <!--</table>-->
-    <!--{{/unless}}-->
+    {{else}}
+    <table class="single-list">
+        <tbody>
+            {{#each rows}}
+                <tr>
+                    {{#each this}}
+                    <td>{{@this}}</td>
+                    {{/each}}
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    {{/unless}}
 
 </div>
