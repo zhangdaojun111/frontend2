@@ -65,21 +65,19 @@ let config = {
             if(node.nodes){
                 node.nodes.forEach(child=>{
                     $('#tree').treeview('uncheckNode',[child.nodeId,{silent:true}]);
-                    $('#tree').treeview('uuselectNode',[child.nodeId,{silent:true}]);
+                    $('#tree').treeview('unselectNode',[child.nodeId,{silent:true}]);
                     this.actions._uncheckAllChildren(child);
                 })
             }
         },
-        // _isSelectedChildren:function(node) {
-        //     if(node.nodes == undefined){
-        //         return node.state.selected;
-        //     }
-        //     let isSelected = node.state.selected;
-        //     node.nodes.forEach(children=>{
-        //         isSelected = isSelected || children.state.selected;
-        //     })
-        //     return isSelected;
-        // }
+        _expandAllParents:function(node){
+            let parent = $('#tree').treeview('getParent',node);
+            if(parent != undefined && parent.nodeId != undefined){
+                console.log('expand '+parent.text);
+                $('#tree').treeview('expandNode', [parent.nodeId,{silent:true}]);
+                this.actions._expandAllParents(parent);
+            }
+        }
     },
     afterRender:function() {
         let treeview = this;
@@ -128,13 +126,29 @@ let config = {
                 emptyIcon: emptyIcon,
                 backColor: backColor,
                 onNodeSelected: function (event, node) {
-                    $(this).treeview('unselectNode', [node.nodeId, { silent: false }]);
+                   $(this).treeview('getSelected').forEach(selected=>{
+                        if(selected.nodeId === node.nodeId){
+                            return;
+                        }
+                        $(this).treeview('unselectNode', [selected.nodeId, { silent: true }]);
+                    });
                     if(!node.nodes){
                         treeview.data.selectedCallback('select',node);
                     }
+                    treeview.actions._expandAllParents(node);
+                    $(this).treeview('toggleNodeExpanded',[node.nodeId]);
                 },
                 onNodeUnselected: function (event, node) {
                    $(this).treeview('selectNode', [node.nodeId, { silent: true }]);
+                   $(this).treeview('toggleNodeExpanded',[node.nodeId]);
+                },
+                onNodeExpanded: function (event, node) {
+                    let siblings = $(this).treeview('getSiblings',node);
+                    if(siblings){
+                        siblings.forEach(sibling=>{
+                            $(this).treeview('collapseNode',[sibling, { silent: true, ignoreChildren: false }]);
+                        })
+                    }
                 }
             });
         }

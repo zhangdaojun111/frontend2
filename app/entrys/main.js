@@ -31,7 +31,15 @@ var tree = [
                 ]
             },
             {
-                text: "Child 2"
+                text: "Child 2",
+                nodes: [
+                    {
+                        text: "Grandchild 1"
+                    },
+                    {
+                        text: "Grandchild 2"
+                    }
+                ]
             }
         ]
     },
