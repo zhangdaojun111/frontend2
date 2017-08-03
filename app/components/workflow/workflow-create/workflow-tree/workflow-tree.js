@@ -153,11 +153,12 @@ let config = {
            this.actions.toogleTree(e);
            e.stopPropagation();
        });
-       this.el.on('click','.J_root',(event)=>{
-           this.actions.toogletip(event);
+       this.el.on('click','.J_root',(e)=>{
+           this.actions.toogletip(e);
+           e.stopPropagation(e);
        });
-       this.el.on('click','.J_child-item',(event)=>{
-            this.actions.clickChild(event);
+       this.el.on('click','.J_child-item',(e)=>{
+            this.actions.clickChild(e);
        })
         this.el.on("click",'.J_search',(e)=>{
             e.stopPropagation();
