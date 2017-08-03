@@ -9,7 +9,7 @@ import Component from '../../lib/component';
 import "../../assets/scss/bisystem/quill.snow.css";
 
 export class BiBaseComponent extends Component{
-    constructor(config, data) {
+    constructor(config) {
         super(config)
     }
 }
