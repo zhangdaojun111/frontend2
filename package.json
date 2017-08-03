@@ -40,6 +40,7 @@
     "ag-grid": "^12.0.2",
     "babel-polyfill": "^6.23.0",
     "babel-runtime": "^6.23.0",
+    "bootstrap-treeview": "^1.2.0",
     "handlebars": "^4.0.10",
     "jquery": "^3.2.1",
     "jquery-ui": "^1.12.1",
