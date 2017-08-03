@@ -9,9 +9,9 @@ let config = {
     actions: {
         animation:function () {
             let formUp = $('.place-form');
-            let formtip = formUp.hasClass("hide");
-            console.log(formtip);
-            if(!formtip){
+            let formtip = formUp.hasClass("show");
+            console.log(formUp);
+            if(formtip){
                 formUp.addClass("hide");
                 formUp.removeClass("show");
             }else{
@@ -36,9 +36,9 @@ class WorkFlowForm extends Component {
 }
 
 export default {
-    showForm(data) {
-        let component = new WorkFlowForm(data);
+     showForm(data) {
+        let component = new WorkFlowForm();
         let el = $('#workflow-form');
         component.render(el);
-    }
+     }
 };
