@@ -42,9 +42,9 @@
         background-color: #FF7F50;
         border: 1px solid #FF7F50;
       }
-      .chk_approve:checked + label{
-        background-color: red;
-        border: 1px solid #FF7F50;
+      .workflow_checked + label{
+        background-color: red !important;
+        border: 1px solid #FF7F50 !important;
       }
       .label-select-all-checked + label:after {
         content: '\2714'; //勾选符号

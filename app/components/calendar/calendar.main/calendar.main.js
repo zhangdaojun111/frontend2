@@ -595,6 +595,9 @@ let config = {
         CalendarService.CalendarMsgMediator.subscribe('next-month-day',data => {
             console.log(data);
         });
+        CalendarService.CalendarMsgMediator.subscribe('unshowData',data => {
+            console.log(data);
+        });
 
         this.el.on('click', '#monthView', () => {
             this.actions.changeMainView('month');
