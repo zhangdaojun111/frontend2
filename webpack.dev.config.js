@@ -27,7 +27,9 @@ module.exports = {
 
     entry: {
         main: path.resolve(APP_PATH, 'entrys/main.js'),
-        // login:path.resolve(APP_PATH, 'entrys/login.js'),
+        login:path.resolve(APP_PATH, 'entrys/login.js'),
+        dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
+        bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
         vendors: [
             'jquery',

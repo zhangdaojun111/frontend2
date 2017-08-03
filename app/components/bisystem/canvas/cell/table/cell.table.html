@@ -1,0 +1,37 @@
+<div class="bi-table">
+    {{#unless chart.single}}
+        <table class="double-list">
+            <thead>
+            <tr>
+                {{#each chart.columns}}
+                <th>{{name}}</th>
+                {{/each}}
+            </tr>
+            </thead>
+            <tbody>
+            {{#each chart.data.rows}}
+            <tr>
+                {{#each @this}}
+                <td>
+                    {{this}}
+                </td>
+                {{/each}}
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    {{else}}
+    <table class="single-list">
+        <tbody>
+            {{#each rows}}
+                <tr>
+                    {{#each this}}
+                    <td>{{@this}}</td>
+                    {{/each}}
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    {{/unless}}
+
+</div>
