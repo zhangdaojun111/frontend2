@@ -28,6 +28,8 @@ module.exports = {
     entry: {
         main: path.resolve(APP_PATH, 'entrys/main.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
+        dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
+        // login:path.resolve(APP_PATH, 'entrys/login.js'),
         vendors: [
             'jquery',
             'jquery-ui',
