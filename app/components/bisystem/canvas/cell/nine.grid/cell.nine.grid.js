@@ -57,8 +57,6 @@ let config = {
                 })
             });
 
-
-
             config.data.grids = types;
             config.data.xAxis = xAxis;
             config.data.yAxis = yAxis;
