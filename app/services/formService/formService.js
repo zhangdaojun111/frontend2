@@ -16,6 +16,7 @@ export const FormService={
     },
     getAboutData:async function(json){
         let data=this.formatParams(json);
+        // return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_about_data/',data:data});
         return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_about_data/',data:data});
     },
     formatParams(params) {

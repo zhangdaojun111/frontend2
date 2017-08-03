@@ -23,6 +23,8 @@ let FormEntrys={
         //这是啥ID还不知道
         this.parentRecordId=config.parentRecordId||'';
         //查看(0)或新增(1)
+        console.log('config');
+        console.log(config);
         this.isView=config.isView||0;
         //是否是批量工作流
         this.isBatch=config.isBatch||0;
@@ -195,24 +197,28 @@ let FormEntrys={
         $('div').remove();
         let html=$('<div style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">').appendTo(this.el);
         let template='';
-        this.getFormData(html,template,this.seqId,this.tableId,this.realId,this.isView);
+        console.log('isView');
+        console.log(this.tableId);
+        this.getFormData(html,template,this.seqId,this.tableId,$('#real_id').val()||0,$('#is_view').val()||0);
     }
 }
 
 $('#toEdit').on('click',function(){
-    let real_id=$('#real_id').get(0).value||'';
-    let is_view=$('#is_view').get(0).value||0;
+    let real_id=$('#real_id').val()||'';
+    let is_view=$('#is_view').val()||0;
+    console.log('is_view');
+    console.log(is_view);
     FormEntrys.createForm({
         tableId:'8696_yz7BRBJPyWnbud4s6ckU7e',
         seqId:'yudeping',
         el:$('body'),
-        is_view:is_view,
+        is_view:+is_view,
         real_id:real_id
     });
 });
 $('#count').on('click',function(){
-    let real_id=$('#real_id').get(0).value||'';
-    let is_view=$('#is_view').get(0).value||0;
+    let real_id=$('#real_id').val()||'';
+    let is_view=$('#is_view').val()||0;
     FormEntrys.createForm({
         tableId:'7051_UoWnaxPaVSZhZcxZPbEDpG',
         seqId:'yudeping',
@@ -222,8 +228,8 @@ $('#count').on('click',function(){
     });
 });
 $('#editRequired').on('click',function(){
-    let real_id=$('#real_id').get(0).value||'';
-    let is_view=$('#is_view').get(0).value||0;
+    let real_id=$('#real_id').val()||'';
+    let is_view=$('#is_view').val()||0;
     FormEntrys.createForm({
         tableId:'3461_P28RYPGTGGE7DVXH8LBMHe',
         seqId:'yudeping',
@@ -233,8 +239,8 @@ $('#editRequired').on('click',function(){
     });
 });
 $('#defaultValue').on('click',function(){
-    let real_id=$('#real_id').get(0).value||'';
-    let is_view=$('#is_view').get(0).value||0;
+    let real_id=$('#real_id').val()||'';
+    let is_view=$('#is_view').val()||0;
     FormEntrys.createForm({
         tableId:'1160_ex7EbDsyoexufF2UbXBmSJ',
         seqId:'yudeping',
@@ -244,8 +250,8 @@ $('#defaultValue').on('click',function(){
     });
 });
 $('#exp').on('click',function(){
-    let real_id=$('#real_id').get(0).value||'';
-    let is_view=$('#is_view').get(0).value||0;
+    let real_id=$('#real_id').val()||'';
+    let is_view=$('#is_view').val()||0;
     FormEntrys.createForm({
         tableId:'7336_HkkDT7bQQfqBag4kTiFWoa',
         seqId:'yudeping',
