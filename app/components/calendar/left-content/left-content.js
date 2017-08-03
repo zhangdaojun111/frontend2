@@ -33,7 +33,7 @@ let config = {
                     console.log(objs.hide_tables.indexOf(data.table_id));
                     strhtml +="style = 'display:none'";
                 }
-                strhtml +=">" + "<input type='checkbox' id='select-all-"+data.table_id+"'";
+                strhtml +=">" + "<span class=\"ui-icon ui-icon-triangle-1-s float-button-group-show\"></span><input type='checkbox' id='select-all-"+data.table_id+"'";
                 console.log(objs.hide_tables.indexOf(data.table_id));
                 strhtml +=" class='chk_1 chk_remind label-select-all ";
                 if(objs.hide_tables.indexOf(data.table_id) == -1){
@@ -43,7 +43,7 @@ let config = {
                     strhtml +="label-select-all-checked 'checked";
                 }
                 strhtml +="/>" +
-                    "<label class='select-label' for='select-all-"+data.table_id+"' id='label-all-"+data.table_id+"'></label><label class='select-label-show'>"+data.table_name+"</label>"+
+                    "<label class='select-label' for='select-all-"+data.table_id+"' id='label-all-"+data.table_id+"'></label><label class='select-label-show'>"+data.table_name+"</label><div class='float-button-group' style='display: none'></div>"+
                     "<div class=\"checkbox-group\">";
                 data.items.forEach((items) =>{
                     strhtml+="<div class=\"label-task-children\">\n" +
@@ -94,6 +94,9 @@ let config = {
                     }
                 }
             });
+            $(".float-button-group-show").bind('hover',function(){
+                $(".float-button-group").css("display","block !");
+            })
             $(".approve-label").bind('click',function(){
                 if($("#checkbox_a2").is(".workflow_checked")){
                     $("#checkbox_a2").removeClass("workflow_checked");

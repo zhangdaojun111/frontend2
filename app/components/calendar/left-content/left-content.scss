@@ -107,4 +107,17 @@
   border-radius: 0;
   background: rgba(14, 122, 239,0.1);
 }
+.float-button-group{
+  width:30px;
+  height:30px;
+  background-color: #205cdc;
+  position: relative;
+  top: -20px;
+  z-index: 3;
+  opacity:0.5;
+}
+.float-button-group-show{
+  margin-top: -15px;
+  border: 1px solid #c6c6e0;
+}
 

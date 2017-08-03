@@ -71,7 +71,7 @@ let config = {
     				{strhtml+="<td class='last-month-day'>"+ dayTables[i*7+j] +"</td>";}
     				else if(dayTables[i*7+j] === day && mm === month && yy === year)
 						{
-							strhtml+="<td class='now-month-day now-day'>"+ dayTables[i*7+j] +"</td>";
+							strhtml+="<td class='now-month-day now-pitch-on' id ='now-day'>"+ dayTables[i*7+j] +"</td>";
 						}
 						else
 						{strhtml+="<td class='now-month-day'>"+ dayTables[i*7+j] +"</td>";}
@@ -112,6 +112,8 @@ let config = {
 					nowMonth = $(".now-month").html(),
 					nowDay = $(this).html();
                 CalendarService.CalendarMsgMediator.publish('leftSelectedDate', {year: nowYear, month: nowMonth, day: nowDay});
+                $(".now-pitch-on").removeClass("now-pitch-on");
+                $(this).addClass("now-pitch-on");
 			});
 			$(".next-month-day").bind("click",function(){
 				let nowYear = yy = $(".now-year").html(),
