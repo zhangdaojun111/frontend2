@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BI</title>
+</head>
+<body>
+<aside id="aside"></aside>
+<script>
+    window.config = {
+        is_admin: {{ is_admin | safe }},
+        bi_views: {{ bi_views|safe }}
+    }
+</script>
+<div id="route-outlet" class="bi-container"></div>
+</body>
+{% ifequal window_type 'develop'%}
+<script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
+<script type="text/javascript" src="http://localhost:8080/scripts/bi.js"></script>
+{% else %}
+<link rel="stylesheet" href="/client/static/css/vendors.css" />
+<link rel="stylesheet" href="/client/static/css/bi.css" />
+<script type="text/javascript" src="/client/static/vendors.js"></script>
+<script type="text/javascript" src="/client/static/bi.js"></script>
+{% endifequal %}
+</html>
