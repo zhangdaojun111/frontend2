@@ -19,6 +19,7 @@ module.exports = {
         // form: path.resolve(APP_PATH, 'entrys/form.js'),
         // login:path.resolve(APP_PATH, 'entrys/login.js'),
         workflow:path.resolve(APP_PATH, 'entrys/workflow'),
+        login:path.resolve(APP_PATH, 'entrys/login.js'),
         vendors: [
             'jquery',
             'jquery-ui',
