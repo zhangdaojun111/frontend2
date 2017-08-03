@@ -5,7 +5,9 @@
 const path = require('path');
 
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const ImageminPlugin = require('imagemin-webpack-plugin').default;
+const webpack = require('webpack');
 //定义了一些文件夹的路径
 const ROOT_PATH = path.resolve(__dirname);
 const APP_PATH = path.resolve(ROOT_PATH, 'app');
@@ -13,7 +15,9 @@ const BUILD_PATH = path.resolve(ROOT_PATH, 'dist');
 
 module.exports = {
     entry: {
-        bi: path.resolve(APP_PATH, 'entrys/bi.js'),
+        main: path.resolve(APP_PATH, 'entrys/main.js'),
+        // form: path.resolve(APP_PATH, 'entrys/form.js'),
+        login:path.resolve(APP_PATH, 'entrys/login.js'),
         vendors: [
             'jquery',
             'jquery-ui',
@@ -29,27 +33,94 @@ module.exports = {
 
     output: {
         path: BUILD_PATH,
-        filename: 'bundle.js'
+        filename: '[name].js'
+    },
+
+    resolve: {
+        alias: {
+            handlebars: 'handlebars/dist/handlebars.min.js'
+        }
     },
 
     module: {
         rules: [
             {
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        // 'css-loader',
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                alias: {
+                                    "core.css": "./core.css",
+                                    "accordion.css": "./accordion.css",
+                                    "autocomplete.css": "./autocomplete.css",
+                                    "button.css": "./button.css",
+                                    "checkboxradio.css": "./checkboxradio.css",
+                                    "controlgroup.css": "./controlgroup.css",
+                                    "datepicker.css": "./datepicker.css",
+                                    "dialog.css": "./dialog.css",
+                                    "draggable.css": "./draggable.css",
+                                    "menu.css": "./menu.css",
+                                    "progressbar.css": "./progressbar.css",
+                                    "resizable.css": "./resizable.css",
+                                    "selectable.css": "./selectable.css",
+                                    "selectmenu.css": "./selectmenu.css",
+                                    "sortable.css": "./sortable.css",
+                                    "slider.css": "./slider.css",
+                                    "spinner.css": "./spinner.css",
+                                    "tabs.css": "./tabs.css",
+                                    "tooltip.css": "./tooltip.css"
+                                }
+                            }
+                        },
+                        'postcss-loader'
+                    ]
+                }),
+                // include: path.join(__dirname, "app"),
+                // exclude: /node_modules/
+            }, {
                 test: /\.scss$/,
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    use: ['css-loader', 'sass-loader']
-                })
-            },
-            {
+                    use: [
+                        // 'css-loader',
+                        {loader: 'css-loader'},
+                        'postcss-loader',
+                        'sass-loader'
+                    ]
+                }),
+                // include: path.join(__dirname, "app"),
+                // exclude: /node_modules/
+            }, {
+                test: /\.(png|jpg|gif)$/,
+                use: [{
+                    loader: 'url-loader',
+                    options: {
+                        limit: 20000,
+                        publicPath: '../',
+                        name: '/images/[hash:12].[ext]'
+                    }
+                }]
+            }, {
+                test: /\.html$/,
+                use: [{
+                    loader: 'html-loader',
+                    options: {
+                        minimize: true
+                    }
+                }],
+            }, {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
                 use: [
                     {
-                        loader:"babel-loader",
-                        options:{
-                            presets:[
-                                ["es2015", 'stage-3']
+                        loader: "babel-loader",
+                        options: {
+                            presets: [
+                                ["latest"]
                             ]
                         }
                     }
@@ -59,11 +130,25 @@ module.exports = {
     },
 
     plugins: [
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery",
+            "window.jQuery": "jquery"
+        }),
+        new webpack.optimize.CommonsChunkPlugin('vendors'),
+        new webpack.optimize.UglifyJsPlugin({minimize: true}),
+
         new ExtractTextPlugin({
             filename: (getPath) => {
                 return getPath('css/[name].css');
             },
-            allChunks: true
-        })
+            allChunks: false
+        }),
+        new ImageminPlugin({
+            pngquant: {
+                quality: '60'
+            }
+        }),
+        new OptimizeCssAssetsPlugin()
     ]
 }

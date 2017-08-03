@@ -6,7 +6,7 @@ var config = require('./webpack.dev.config')
 var compiler = webpack(config)
 
 app = express()
-app.set('views', './page')
+app.set('views', './template')
 app.set('view engine', 'ejs')
 app.use(express.static(__dirname));
 
