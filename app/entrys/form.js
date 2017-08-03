@@ -192,6 +192,7 @@ let FormEntrys={
         // if(this.formBase){
         //     this.formBase.destroySelf();
         // }
+        $('div').remove();
         let html=$('<div style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">').appendTo(this.el);
         let template='';
         this.getFormData(html,template,this.seqId,this.tableId,this.realId,this.isView);

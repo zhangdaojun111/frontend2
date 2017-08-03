@@ -326,9 +326,9 @@ let config={
         //必填性改变
         requiredChange:function(_this){
             if(_this.data.value==''){
-                _this.el.find('#requiredLogo').get(0).className='required';
+                _this.el.find('#requiredLogo').removeClass().addClass('required');
             }else{
-                _this.el.find('#requiredLogo').get(0).className='required2';
+                _this.el.find('#requiredLogo').removeClass().addClass('required2');
             }
         },
         //赋值
@@ -490,8 +490,6 @@ let config={
                             _this.actions.changeControlDisabled(dfield);
                         }else{
                             data["be_control_condition"] = (key == value) ? 0 : 1;
-                            console.log('怎么没改呢');
-                            console.log(data["be_control_condition"]);
                             _this.actions.changeControlDisabled(dfield);
                         }
                         if( data["is_view"] == 0 ){
@@ -676,7 +674,6 @@ let config={
 
         //提交按钮事件绑定
         _this.el.on('click','#save',function () {
-            console.log('提交不好使了?');
             _this.actions.onSubmit(_this.childComponent,cache_old);
         })
         $(_this.el).find("#changeEdit").on('click',function () {
