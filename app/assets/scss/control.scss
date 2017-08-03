@@ -1,0 +1,37 @@
+ .dynamic-form-input {
+     color: #000000;
+     line-height: 30px;
+     border: 1px solid #ddd;
+     -webkit-appearance: none;
+     outline: none;
+     opacity: 100;
+     padding: 0 5px;
+}
+
+ .error-msg {
+   height: 30px;
+   top: 0px;
+   zoom: 1;
+   display: block;
+   position: absolute;
+   border: 1px solid red;
+   color: red;
+   padding-left: 25px;
+   padding-right: 10px;
+   background: #FFF5F5 url(../images/form/error-msg.png) no-repeat;
+   line-height: 22px;
+   white-space: normal;
+   z-index: 999;
+   width: 300px;
+ }
+
+ .ui-error-arrow {
+   position: absolute;
+   left: -7px;
+   top: 6px;
+   width: 7px;
+   height: 10px;
+   display: block;
+   background: url(../images/form/icon_error.png) no-repeat;
+   background-position: -16px -510px;
+ }

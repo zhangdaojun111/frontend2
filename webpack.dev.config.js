@@ -26,7 +26,6 @@ module.exports = {
     // ],
 
     entry: {
-        main: path.resolve(APP_PATH, 'entrys/main.js'),
         form: path.resolve(APP_PATH, 'entrys/form.js'),
         workflow: path.resolve(APP_PATH, 'entrys/workflow.js'),
         // login:path.resolve(APP_PATH, 'entrys/login.js'),
