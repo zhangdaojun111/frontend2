@@ -12,9 +12,20 @@ const APP_PATH = path.resolve(ROOT_PATH, 'app');
 const BUILD_PATH = path.resolve(ROOT_PATH, 'dist');
 
 module.exports = {
-    entry: [
-        APP_PATH
-    ],
+    entry: {
+        bi: path.resolve(APP_PATH, 'entrys/bi.js'),
+        vendors: [
+            'jquery',
+            'jquery-ui',
+            'jquery-ui/themes/base/base.css',
+            'jquery-ui/themes/base/theme.css',
+            'mediator-js',
+            'handlebars',
+            'moment',
+            'lodash',
+            'babel-polyfill'
+        ]
+    },
 
     output: {
         path: BUILD_PATH,
