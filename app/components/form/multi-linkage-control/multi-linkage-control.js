@@ -42,9 +42,9 @@ let config={
                 if(_this.hasChoose.has(i)){
                     continue;
                 };
-                if(i==data.index){
-                    d['showValue']=data.value;
-                }
+                // if(i==data.index){
+                //     d['showValue']=data.value;
+                // }
                 d['options']=[];
                 let set=new Set();
                 for(let key in _this.data.dataList){
@@ -97,7 +97,7 @@ let config={
             _this.hasChoose.clear();
             for (let i=0;i<_this.data.index;i++){
                 let d={};
-                d['showValue']='请选择';
+                d['value']='请选择';
                 d['options']=[];
                 d['index']=i;
                 d['dfield']=_this.data.dfield;
@@ -136,17 +136,13 @@ let config={
             d['index']=i;
             d['dfield']=this.data.dfield;
             d['is_view']=this.data.is_view;
-            console.log('怎么不变呢');
-            console.log(this.data.is_view);
             if(this.data.value){
                 let option=this.data.dataList[this.data.value][i];
                 d['value']=option;
-                d['showValue']=option;
                 d['options'].push({label:option,value:option});
                 this.hasChoose.set(i,option);
             }else{
                 d['value']='请选择';
-                d['showValue']='请选择';
                 let set=new Set();
                 for(let key in this.data.dataList){
                     set.add(this.data.dataList[key][i]);

@@ -44,9 +44,10 @@ let config={
                 };
                 let res=FormService.getDefaultValue(json);
                 for(let key in res["data"]) {
+
                     //排除例外字段
                     if(this.data['exclude_fields'].indexOf(key) == -1){
-                        if(this.data.hasOwnProperty(key)){
+                        if(this.data.data.hasOwnProperty(key)){
                             let type = this.data[key]["type"];
                             let value = res["data"][key];
                             //如果是对应关系,传回来的是空串，那就不对它赋值
@@ -106,11 +107,11 @@ let config={
                 }
                 let type = "";
                 let dinput_type = "";
-                if(this.data[item].hasOwnProperty("real_type")) {
-                    type = this.data[item]["real_type"];
+                if(this.data.data[item].hasOwnProperty("real_type")) {
+                    type = this.data.data[item]["real_type"];
                 }
-                if(this.data[item].hasOwnProperty("dinput_type")) {
-                    dinput_type = this.data[item]["dinput_type"];
+                if(this.data.data[item].hasOwnProperty("dinput_type")) {
+                    dinput_type = this.data.data[item]["dinput_type"];
                 }
                 if([6,7,8,30].indexOf(dinput_type) != -1) {
                     //枚举类型 or 各种内置
@@ -137,6 +138,7 @@ let config={
         },
 
         set_value_for_form(result, f){
+            let data=this.data.data[f];
             if(typeof result === 'string' ){
                 //条件表达式赋值
                 this.actions.setFormValue(f,result);
@@ -145,37 +147,37 @@ let config={
                 this.actions.setFormValue(f,"");
             }else{
                 //如果是整数
-                if(this.data[f]["real_type"] == 11) {
+                if(data["real_type"] == 11) {
                     this.actions.setFormValue(f,result);
                 }else {
-                    if([10,11,26].indexOf(this.data[f]["real_type"]) != -1){
+                    if([10,11,26].indexOf(data["real_type"]) != -1){
                         let reg = /^((-?\d+.?\d*)[Ee]{1}([+-]?\d+))$/;
-                        if(reg.test(this.data[f].value)){
-                            this.data[f].value = this.data[f].value + "(不支持科学计数法！无法保存！)"
-                            this.actions.setFormValue(f,this.data[f].value);
+                        if(reg.test(this.data.data[f].value)){
+                            data.value = data.value + "(不支持科学计数法！无法保存！)"
+                            this.actions.setFormValue(f,data.value);
                             return;
                         }
                     }
                     //如果是浮点数
                     //数据处理（如果数据已经限定了小数位数，如果不满足，四舍五入让其满足）
-                    let accuracy = this.data[f]["accuracy"];
+                    let accuracy = data["accuracy"];
                     result = result.toFixed(accuracy);
                     this.actions.setFormValue(f,result);
 
                     //数据溢出出现科学计数法时
-                    if([10,11,26].indexOf(this.data[f]["real_type"]) != -1){
+                    if([10,11,26].indexOf(data["real_type"]) != -1){
                         let reg = /^((-?\d+.?\d*)[Ee]{1}([+-]?\d+))$/;
-                        if(reg.test(this.data[f].value)){
-                            this.data[f].value = this.data[f].value + "(不支持科学计数法！无法保存！)"
-                            this.actions.setFormValue(f,this.data[f].value);
+                        if(reg.test(data.value)){
+                            data.value = data.value + "(不支持科学计数法！无法保存！)"
+                            this.actions.setFormValue(f,data.value);
                             return;
                         }
                         //浮点数数据溢出时（后台浮点数最大位数为11位，超过11位便会返回科学计数法）
-                        else if(this.data[f]["real_type"] == 10){
+                        else if(data["real_type"] == 10){
                             if(result >= 100000000000) {
-                                if(this.data[f].value.indexOf("(") == -1){
-                                    this.data[f].value = this.data[f].value + "(小数不能超过12位！无法保存！)"
-                                    this.actions.setFormValue(f, this.data[f].value);
+                                if(data.value.indexOf("(") == -1){
+                                    data.value = data.value + "(小数不能超过12位！无法保存！)"
+                                    this.actions.setFormValue(f, data.value);
                                 }
                                 return;
                             }
@@ -198,9 +200,9 @@ let config={
             for(let f of data["effect"]) {
                 //如果这个字段存在的话，再进行下面的逻辑
                 let expression;
-                if(this.data.hasOwnProperty(f)) {
-                    let expressionStr = this.data[f]["expression"];
-                    let real_type = this.data[f]["real_type"];
+                if(this.data.data.hasOwnProperty(f)) {
+                    let expressionStr = this.data.data[f]["expression"];
+                    let real_type = this.data.data[f]["real_type"];
                     if(expressionStr !== ""){
                         expression = this.actions.replaceSymbol(expressionStr);
                         try {
@@ -222,10 +224,12 @@ let config={
                 }
             }
             if (send_exps.length!=0) {
-                let res=FormService.get_exp_value(encodeURIComponent(JSON.stringify(send_exps)))
-                for (let j in res){
-                    this.actions.set_value_for_form(res[j], j);
-                }
+                let _this=this;
+                FormService.get_exp_value(encodeURIComponent(JSON.stringify(send_exps))).then(res=>{
+                    for (let j in res['data']){
+                        _this.actions.set_value_for_form(res['data'][j], j);
+                    }
+                });
             }
         },
 
@@ -330,9 +334,11 @@ let config={
         //赋值
         setFormValue(dfield,value){
             if(this.data.data[dfield]){
-                console.log('怎么没进来?');
                 this.data.data[dfield]["value"] = value;
+                console.log('value');
+                console.log(value);
                 this.childComponent[dfield].data["value"]=value;
+                this.childComponent[dfield].destroyChildren();
                 this.childComponent[dfield].reload();
             }
         },
@@ -512,16 +518,16 @@ let config={
             }
             cache_old[data[key].dfield] = data[key].value;
             setTimeout(()=>{_this.actions.reviseCondition(data[key],data[key].value,_this);},0);
-            if(type == 'Select' || type=='Buildin' ){
-                if(data[key].value){
-                    for(let obj of data[key].options){
-                        if(obj.value == data[key].value){
-                            data[key]['showValue']=obj.label;
-                            break;
-                        }
-                    }
-                }
-            }
+            // if(type == 'Select' || type=='Buildin' ){
+            //     if(data[key].value){
+            //         for(let obj of data[key].options){
+            //             if(obj.value == data[key].value){
+            //                 data[key]['showValue']=obj.label;
+            //                 break;
+            //             }
+            //         }
+            //     }
+            // }
             //在这里根据type创建各自的控件
             switch (type){
                 case 'Radio':

@@ -29,7 +29,7 @@ let config={
     firstAfterRender:function(){
         let _this=this;
         Mediator.subscribe('form:dropDownSelect',function(data){
-            if(data.dfield !=_this.data.dfield || !_this.data.required){
+            if(data.dfield !=_this.data.dfield){
                 return;
             }
             _this.data=Object.assign(_this.data,data);

@@ -79,12 +79,12 @@ let config={
             {"label": 12,"value": 12}
         ]
         if(this.data.value != ''){
-            yearData.showValue = this.data.value.split('-')[0]
-            monthData.showValue = this.data.value.split('-')[1]
+            yearData.value = this.data.value.split('-')[0]
+            monthData.value = this.data.value.split('-')[1]
         }
         else{
-            yearData.showValue = myYear;
-            monthData.showValue = myDate.getMonth() + 1;
+            yearData.value = myYear;
+            monthData.value = myDate.getMonth() + 1;
         }
         this.append(new DropDown(yearData),this.el.find('.year'));
         this.append(new DropDown(monthData),this.el.find('.month'));

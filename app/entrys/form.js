@@ -119,7 +119,7 @@ $('#toEdit').on('click',function(){
                     `;
     let real_id=$('#real_id').get(0).value||'';
     let is_view=$('#is_view').get(0).value||0;
-    wait(el,template,'wangyunfeng','8696_yz7BRBJPyWnbud4s6ckU7e',real_id,is_view);
+    wait(el,template,'yudeping','8696_yz7BRBJPyWnbud4s6ckU7e',real_id,is_view);
 });
 $('#count').on('click',function(){
     if(formBase){
@@ -133,7 +133,7 @@ $('#count').on('click',function(){
                 `;
     let real_id=$('#real_id').get(0).value||'';
     let is_view=$('#is_view').get(0).value||0;
-    wait(el,template,'wangyunfeng','7051_UoWnaxPaVSZhZcxZPbEDpG',real_id,is_view);
+    wait(el,template,'yudeping','7051_UoWnaxPaVSZhZcxZPbEDpG',real_id,is_view);
 });
 $('#editRequired').on('click',function(){
     if(formBase){
@@ -147,7 +147,7 @@ $('#editRequired').on('click',function(){
                 `;
     let real_id=$('#real_id').get(0).value||'';
     let is_view=$('#is_view').get(0).value||0;
-    wait(el,template,'wangyunfeng','3461_P28RYPGTGGE7DVXH8LBMHe',real_id,is_view);
+    wait(el,template,'yudeping','3461_P28RYPGTGGE7DVXH8LBMHe',real_id,is_view);
 });
 $('#defaultValue').on('click',function(){
     if(formBase){
@@ -163,8 +163,19 @@ $('#defaultValue').on('click',function(){
 
     let real_id=$('#real_id').get(0).value||'';
     let is_view=$('#is_view').get(0).value||0;
-    wait(el,template,'wangyunfeng','1160_ex7EbDsyoexufF2UbXBmSJ',real_id,is_view);
+    wait(el,template,'yudeping','1160_ex7EbDsyoexufF2UbXBmSJ',real_id,is_view);
 });
+
+$('#exp').on('click',function(){
+    if(formBase){
+        formBase.destroySelf();
+    }
+    let el=$('<div style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">').appendTo('body');
+    let real_id=$('#real_id').get(0).value||'';
+    let is_view=$('#is_view').get(0).value||0;
+    let template='11';
+    wait(el,template,'yudeping','7336_HkkDT7bQQfqBag4kTiFWoa',real_id,is_view);
+})
 
 async function wait(el,template,seqid,table_id,real_id,is_view) {
     let staticData = await HTTP.postImmediately({
