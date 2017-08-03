@@ -49,7 +49,6 @@ let config = {
             //get current clicked node info
             let {formid,tableid}=$(e.target)[0].dataset;
             Mediator.publish('workflow:choose', $(e.target)[0].dataset);
-
             let childValue = $(e.target).text();
             let rootNode = this.el.find('.J_select-Workflow');
             let tree = this.el.find(".J_tree");
@@ -102,7 +101,6 @@ let config = {
                             li.eq(i).addClass('xixi');
                             li.eq(i).find(".root").addClass('xixi');
                             li.eq(i).find('.child-list .child-item').eq(j).addClass("xixi");
-                        }else{
                         }
                     }
                 }

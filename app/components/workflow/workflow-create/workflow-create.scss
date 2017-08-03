@@ -81,6 +81,27 @@ body{
     height: 200px;
     background: #fff;
     margin-bottom: 10px;
+    .collapseFormDiv{
+        height:30px;
+        .collapseFormBtn{
+            height:30px;
+            line-height: 30px;
+            width:30px;
+            border-radius: 50%;
+            text-align: center;
+            color: #fff;
+            background: #ccc;
+            cursor: pointer;
+            outline: none;
+            border: none;
+        }
+        .show{
+            display: block;
+        }
+        .hide{
+            display: none;
+        }
+    }
 }
 .workflow-foot{
     .workflow-box{

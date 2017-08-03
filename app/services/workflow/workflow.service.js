@@ -29,5 +29,4 @@ export const workflowService={
     getFormDynamicData(params){
         return HTTP.post('get_form_dynamic_data', params)
     },
-
 }
