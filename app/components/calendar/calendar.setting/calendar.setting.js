@@ -5,27 +5,28 @@ import Component from "../../../lib/component";
 import template from './calendar.setting.html';
 import './calendar.setting.scss';
 
-import {MenuData} from '../testData/get_menu_data';
+import CalendarSettingItem from './calendar.setting.item/calendar.setting.item';
+
+//import {MenuData} from '../testData/get_menu_data';
+import {CalendarService} from '../../../services/calendar/calendar.service';
 
 let config = {
     template: template,
     data: {
-        testData: [1, 2, 3, 4, 5],
+        menu: []
     },
     actions: {
-
+        dosomething: function (data) {
+            console.log(data);
+        }
     },
     afterRender: function() {
-        console.log(MenuData);
-        this.el.on('click', '.test', () => {
-            this.data.testData.forEach(item => {
-                $('.setting-content').append('<span class="data-test">test' + item +'</span>');
-            });
-            $('.data-test').bind("click",function(){
-                console.log('ss');
-                let a = $(this).html();
-                console.log(a);
-            });
+        this.data.menu = CalendarService.getMenu();
+        this.data.menu.forEach(item => {
+            this.append(new CalendarSettingItem(item), this.el.find('.setting-content'));
+        });
+        $('.item-child').bind('click', function () {
+            console.log($(this).attr("id"),$(this).html());
         });
 
     }

@@ -4,6 +4,7 @@
 
 import { HTTP } from '../../lib/http';
 import Mediator from 'mediator-js';
+import {MenuData} from '../../components/calendar/testData/get_menu_data';
 
 const saveCalendarTableUrl = 'calendar_mgr/save_calendar';
 
@@ -136,5 +137,30 @@ export const CalendarService = {
         HTTP.flush();
         return res;
     },
+
+    menu: [],
+    getMenu: function () {
+        let ls_menu = MenuData;
+        if(ls_menu){
+            this.menu = ls_menu['menuList'];
+            //this.MenuData.next(ls_menu.menuList);
+            return this.menu;
+        }
+        // else {
+        //     let url = '/data/get_menu/';
+        //     this.http.get(url)
+        //         .map(this.extractNormalData)
+        //         .catch(this.handleObservableError)
+        //         .subscribe(
+        //             res => {
+        //                 if(res.success == 1){
+        //                     this.lsSet('v_menu',JSON.stringify(res));
+        //                     this.menu = res.menuList;
+        //                     this.MenuData.next(res.menuList);
+        //                 }
+        //             }
+        //         )
+        // }
+    }
 
 };
