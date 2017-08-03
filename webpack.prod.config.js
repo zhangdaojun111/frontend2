@@ -17,7 +17,6 @@ module.exports = {
     entry: {
         main: path.resolve(APP_PATH, 'entrys/main.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
-        // form: path.resolve(APP_PATH, 'entrys/form.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         vendors: [
             'jquery',
