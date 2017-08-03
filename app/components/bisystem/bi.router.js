@@ -7,6 +7,7 @@ import {CanvasCellsComponent} from './canvas/canvas.cells';
 const BiAppRouter = Backbone.Router.extend({
     routes: {
         'views/:id':'routerViewsComponent',
+        '':'routerViewsComponent',
     },
     routerViewsComponent(id) {
         let CanvasCells = new CanvasCellsComponent(id);

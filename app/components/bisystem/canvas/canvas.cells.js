@@ -62,6 +62,6 @@ let config = {
 export class CanvasCellsComponent extends BiBaseComponent{
     constructor(id) {
         super(config);
-        this.viewId = id;
+        this.viewId = id ? id : this.data.views[0]['id'];
     }
 }
