@@ -26,7 +26,7 @@
             <div class="workflow-main">
                 <div class="workflow-header" id="workflow-header"></div>
                 <div id="workflow-content">
-                    <div class="workflow-form">
+                    <div class="workflow-form" id="workflow-form">
                     </div>
                     <div class="workflow-foot">
                     <div class="workflow-box flex flex-start">
@@ -65,6 +65,8 @@
         </div>
     </div>
 </div>
+
+<button id="submit" class="ui-button ui-widget ui-corner-all">提交</button>
 
 {% ifequal window_type 'develop'%}
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>

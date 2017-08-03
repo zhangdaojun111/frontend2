@@ -8,6 +8,11 @@ import {HTTP} from '../lib/http';
 import {workflowService} from '../services/workflow/workflow.service';
 import WorkFlowCreate from '../components/workflow/workflow-create/workflow-create';
 import Mediator from '../lib/mediator';
+import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
+
+
+WorkFlowForm.showForm();
+
 
 let WorkFlowList=workflowService.getWorkfLow({}),
     FavWorkFlowList=workflowService.getWorkfLowFav({});
@@ -79,3 +84,4 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
 $("#draw").on('click',function () {
     location.reload();
 });
+
