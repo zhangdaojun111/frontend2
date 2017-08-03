@@ -106,7 +106,9 @@ let config = {
                         //     __this[style]['backgroundImage']= 'url("' + __this.imgNode2 + '")';
                         // }
                         //赋值属性
-                        // let event_name = __this.frontendid2eventname[id] || text;
+                    let event_name = __this.data.frontendid2eventname[id] || text;
+                    console.log(event_name);
+
                     let html = $("<div>").attr({
                             id: id,
                             class: styleClass,
@@ -115,7 +117,7 @@ let config = {
                             title: myTitle,
                             state: state,
                             canreject: can_reject,
-                            eventname: '',//event_name,
+                            eventname: event_name,//event_name,
                             originaltitle: myTitle,
                             originaltext: attachment + text
                     }).css(css).html(attachment + text)//.css(__this[style]);
@@ -305,6 +307,32 @@ let config = {
                 }
             }
             return theBestRight;
+        },
+        //切换流程图
+        togglePicture() {
+            if (this.data.pictureOption == '事务图') {
+                this.data.pictureOption = '节点图';
+                $("#togglePic").val('节点图');
+                $(".draged-item").each(function () {
+                    let $this = $(this);
+                    if (!$this.hasClass('draged-maodian')) {
+                        let originaltext = $this.attr("originaltext");
+                        let originaltitle = $this.attr("originaltitle");
+                        $(this).html(originaltext).attr("title", originaltitle);
+                    }
+                });
+            }
+            else {
+                this.data.pictureOption = '事务图';
+                $("#togglePic").val('事务图');
+                $(".draged-item").each(function () {
+                    let $this = $(this);
+                    if (!$this.hasClass('draged-maodian')) {
+                        let eventName = $this.attr("eventname");
+                        $this.html(eventName).attr("title", eventName);
+                    }
+                });
+            }
         }
 
     },
@@ -319,6 +347,9 @@ let config = {
         });
         this.el.on('click', '#newWin', () => {
             this.actions.maximizeNodeflow();
+        });
+        this.el.on('click', '#togglePic', () => {
+            this.actions.togglePicture();
         });
         this.el.on('click', '#addFocus', () => {
             console.log(123);
