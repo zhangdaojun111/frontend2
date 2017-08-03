@@ -72,7 +72,7 @@ let config = {
             $("#workflow-content").show();
         })
         //订阅 select list click
-        Mediator.subscribe('workflow:getInfo', (msg)=> {
+        Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             WorkFlow.show(msg.data[0]);
         })
     },

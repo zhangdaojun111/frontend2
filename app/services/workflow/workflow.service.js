@@ -8,7 +8,7 @@ export const workflowService={
     getWorkfLow(params){
         return HTTP.post('get_workflow', params)
     },
-    getWorkfLowInfo(params){
+    getWorkflowInfo(params){
         return HTTP.postImmediately( params)
     },
     createWorkflowRecord(params){
