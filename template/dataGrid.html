@@ -9,8 +9,8 @@
 
 <script>
 
-    window.config = {
-    }
+    window.config = {{window_config|safe}}
+
 
 </script>
 
@@ -22,8 +22,8 @@
 {% else %}
 <link rel="stylesheet" href="/client/static/css/vendors.css">
 <link rel="stylesheet" href="/client/static/css/dataGrid.css">
-<script src="/client/static/vendors.js"></script>
-<script src="/client/static/dataGrid.js"></script>
+<script type="text/javascript" src="/client/static/vendors.js"></script>
+<script type="text/javascript" src="/client/static/dataGrid.js"></script>
 {% endifequal %}
 
 </body>
