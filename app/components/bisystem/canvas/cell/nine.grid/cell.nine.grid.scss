@@ -98,6 +98,7 @@ $grid-color: #666;
       span{
         display: flex;
         flex-grow: 3;
+        justify-content: center;
       }
     }
     li:nth-child(odd){
