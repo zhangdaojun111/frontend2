@@ -4,17 +4,21 @@ import Mediator from '../../../lib/mediator';
 
 let config={
     template:`<div class="clearfix">
-                 {{#if be_control_condition }}
-                    <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+                 {{#if unvisible}}
+                    <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
                  {{else}}
-                        <div style="float: left">{{label}}</div>
-                        <div class="dropdown" style="float: left"></div>
-                        <div style="float: left;">
-                           {{#if required}}
-                                    <span id="requiredLogo" class="{{requiredClass}}" ></span>
-                           {{/if}}  
-                      </div>
-                 {{/if}}
+                     {{#if be_control_condition }}
+                        <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+                     {{else}}
+                            <div style="float: left">{{label}}</div>
+                            <div class="dropdown" style="float: left"></div>
+                            <div style="float: left;">
+                               {{#if required}}
+                                        <span id="requiredLogo" class="{{requiredClass}}" ></span>
+                               {{/if}}  
+                          </div>
+                     {{/if}}
+                   {{/if}}  
             </div>`,
     data:{
 
@@ -32,8 +36,10 @@ let config={
             Mediator.publish('form:changeValue',_this.data);
         });
         Mediator.subscribe('form:changeOption',function(data){
-            if( this.data.dfield && res == this.data.dfield ){
-                this.data.value = [];
+            if( _this.data.dfield && res == _this.data.dfield ){
+                _this.data.value = [];
+                _this.reload();
+
             }
         })
     },
@@ -46,5 +52,7 @@ let config={
 export default class SelectControl extends Component{
     constructor(data){
         super(config,data);
+        console.log('select');
+        console.log(this.data);
     }
 }

@@ -4,23 +4,27 @@ import Mediator from '../../../lib/mediator';
 
 let config={
     template:`<div class="clearfix">
+                 {{#if unvisible}}
+                    <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
+                 {{else}}  
                     {{#if be_control_condition }}
                         <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                     {{else}}                 
-                  <div style="display: inline-block">{{label}}</div>               
-                   <input style="width: 240px;background: #ebebe4;"  type="text" value="{{value}}" readonly="readonly"  class={{inputClass}} > 
-                   <div style="display: inline-block">
+                    <div style="display: inline-block">{{label}}</div>               
+                         <input style="width: 240px;background: #ebebe4;"  type="text" value="{{value}}" readonly="readonly"  class={{inputClass}} > 
+                    <div style="display: inline-block">
                            {{#if required}}
                             <span id="requiredLogo" class="{{requiredClass}}" ></span>
                            {{/if}} 
-                   </div>                   
-                   {{/if}}
-                   <span style="position: relative; display:inline-block">  
-                         <div class={{error_msg}} id="error_tip"  style=" display:none">
+                    </div>                   
+                    {{/if}}
+                        <span style="position: relative; display:inline-block">  
+                           <div class={{error_msg}} id="error_tip"  style=" display:none">
                                 <em class={{ui_error_arrow}}></em>
                                 <pre>{{ regErrorMsg }}</pre>
-                         </div>  
-                    </span>
+                           </div>  
+                        </span>
+                 {{/if}}       
                </div>
                 `,
     data:{

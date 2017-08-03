@@ -4,17 +4,21 @@ import Mediator from '../../../lib/mediator';
 
 let config={
     template:`  <div class="clearfix">
-                     {{#if be_control_condition }}
-                    <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+                    {{#if unvisible}}
+                        <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
                     {{else}}
-                    <div style="float: left">{{label}}</div>
-                    <div class="dropdown" style="float: left"></div>
-                    <div style="float: left;">
-                        {{#if required}}
-                            <span id="requiredLogo" class="{{requiredClass}}" ></span>
-                        {{/if}} 
-                    </div>
-                    {{/if}}
+                        {{#if be_control_condition }}
+                        <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+                        {{else}}
+                        <div style="float: left">{{label}}</div>
+                        <div class="dropdown" style="float: left"></div>
+                        <div style="float: left;">
+                            {{#if required}}
+                                <span id="requiredLogo" class="{{requiredClass}}" ></span>
+                            {{/if}} 
+                        </div>
+                        {{/if}}
+                     {{/if}}   
                 </div>`,
     data:{
 
@@ -35,6 +39,9 @@ let config={
     },
     afterRender:function(){
         if(!this.data.be_control_condition) {
+            if(this.data.options[0]['value']){
+                this.data.options.unshift({label:'',value:''});
+            }
             this.append(new DropDown(this.data), this.el.find('.dropdown'));
         }
     }

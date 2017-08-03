@@ -4,25 +4,30 @@ import Mediator from '../../../lib/mediator';
 
 let config={
     template:`  <div class="clearfix" style="display: flex;align-items: center">
-                    {{#if be_control_condition }}
-                    <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+                    {{#if unvisible}}
+                        <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
                     {{else}}
-                            <div class="multi-drop" style="display: flex;align-items: center"></div>
-                            <div class="refresh">刷新</div>
-                            <div style="float: left;">
-                        {{#if required}}
-                            <span id="requiredLogo" class="{{requiredClass}}" ></span>
-                        {{/if}} 
-                    </div>
-                    {{/if}}
+                        {{#if be_control_condition }}
+                        <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+                        {{else}}
+                                <div class="multi-drop" style="display: flex;align-items: center"></div>
+                                <div class="refresh">刷新</div>
+                                <div style="float: left;">
+                            {{#if required}}
+                                <span id="requiredLogo" class="{{requiredClass}}" ></span>
+                            {{/if}} 
+                        </div>
+                        {{/if}}
+                    {{/if}}    
                 </div>`,
     data:{
 
     },
     actions:{
-        changeView:function(_this){
+        changeView:function(_this,is_view){
             for(let obj of _this.childDrop){
-                obj.data.is_view=1;
+                obj.data.is_view=is_view;
+                obj.reload();
             }
         }
     },

@@ -5,27 +5,31 @@ import Mediator from '../../../lib/mediator';
 let config={
     template:`
                 <div class="clearfix">
-                    {{#if be_control_condition }}
-                        <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                    {{else}}                 
-                        <div style="display: inline-block">{{label}}</div>
-                            {{#if is_view}}               
-                                <input style="width: 240px"  type="text" value="{{value}}" class={{inputClass}} >
-                            {{else}}
-                                <input style="width: 240px"  type="text" value="{{value}}" class={{inputClass}} disabled>
-                           {{/if}} 
-                       <div style="display: inline-block">
-                               {{#if required}}
-                                <span id="requiredLogo" class="required" ></span>
+                    {{#if unvisible}}
+                        <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
+                    {{else}}
+                        {{#if be_control_condition }}
+                            <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+                        {{else}}                 
+                            <div style="display: inline-block">{{label}}</div>
+                                {{#if is_view}}               
+                                    <input style="width: 240px"  type="text" value="{{value}}" class={{inputClass}} disabled >
+                                {{else}}
+                                    <input style="width: 240px"  type="text" value="{{value}}" class={{inputClass}}>
                                {{/if}} 
-                       </div>                   
-                       {{/if}}
-                       <span style="position: relative; display:inline-block">  
-                             <div class={{error_msg}} id="error_tip"  style=" display:none">
-                                    <em class={{ui_error_arrow}}></em>
-                                    <pre>{{ regErrorMsg }}</pre>
-                             </div>  
-                        </span>
+                           <div style="display: inline-block">
+                                   {{#if required}}
+                                    <span id="requiredLogo" class="required" ></span>
+                                   {{/if}} 
+                           </div>                   
+                           {{/if}}
+                           <span style="position: relative; display:inline-block">  
+                                 <div class={{error_msg}} id="error_tip"  style=" display:none">
+                                        <em class={{ui_error_arrow}}></em>
+                                        <pre>{{ regErrorMsg }}</pre>
+                                 </div>  
+                           </span>
+                     {{/if}}       
                </div>
                 `,
     data: {
@@ -170,6 +174,8 @@ let config={
 class InputControl extends Component {
     constructor(data){
         super(config,data);
+        // console.log('inputControl');
+        // console.log(this.data);
     }
 }
 

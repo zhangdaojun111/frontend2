@@ -4,12 +4,20 @@ import Mediator from '../../../lib/mediator';
 
 let config={
     template:`  <div class="clearfix">
-                    
-                    <div style="float: left;">
-                        {{#if required}}
-                            <span id="requiredLogo" class="required" ></span>
-                        {{/if}} 
-                    </div>
+                    {{#if unvisible}}
+                        <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
+                    {{else}}
+                        {{#if be_control_condition }}
+                            <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+                        {{else}}
+                            <div id="MainContent_Caccey_location_ddl"></div>
+                            <div style="float: left;">
+                                {{#if required}}
+                                    <span id="requiredLogo" class="required" ></span>
+                                {{/if}} 
+                            </div>
+                        {{/if}}    
+                    {{/if}}
                 </div>`,
     data:{
 
@@ -19,7 +27,12 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
-        this.append(new DropDown(this.data),this.el.find('.dropdown'));
+        $('#MainContent_Caccey_location_ddl').multiselect({
+            includeSelectAllOption: true,
+            enableFiltering: true,
+            maxHeight: 400,
+            numberDisplayed: 1
+        });
         Mediator.subscribe('form:valueChange',function(data){
             if(data.dfield !=_this.data.dfield){
                 return;
@@ -33,13 +46,14 @@ let config={
             }
         });
         Mediator.subscribe('form:changeOption',function(data){
-            if( this.data.dfield && res == this.data.dfield ){
-                this.data.value = [];
+            if( _this.data.dfield && res == _this.data.dfield ){
+                _this.data.value = [];
+                _this.reload();
             }
         })
     }
 }
-export default class BuildInControl extends Component{
+export default class MultiSelectControl extends Component{
     constructor(data){
         super(config,data);
     }

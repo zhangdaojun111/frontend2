@@ -1,50 +1,53 @@
 import FormBase from '../components/form/base-form/base-form'
 import {HTTP} from '../lib/http';
 let el=$('<div style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">').appendTo('body');
+import '../components/form/vender/my-multiSelect/my-multiSelect'
+import '../components/form/vender/my-multiSelect/my-multiSelect.css'
 
 //在这里加对应的控件模板
-// let template=`<div class="form">
-//               <div data-dfield="f23" data-type="textarea" data-width="500"/>
-//               <div data-dfield="f8" data-type="radio" data-width="300"/>
-//               <div data-dfield="f26" data-type="input" data-width="300"/>
-//               <div data-dfield="f31" data-type="input" data-width="300"/>
-//               <div data-dfield="f7" data-type="Select" data-width="300"/>
-//               <div data-dfield="f6" data-type="Year" data-width="300"/>
-//               <div data-dfield="f5" data-type="Buildin" data-width="300"/>
-//               <div data-dfield="f10" data-type="MultiLinkage" data-width="300"/>
-//                <div data-dfield="f24" data-type="input" data-width="300"/>
-//                <div data-dfield="f30" data-type="input" data-width="300"/>
-//                <div data-dfield="f14" data-type="input" data-width="300"/>
-//                <div data-dfield="f29" data-type="input" data-width="300"/>
-//                <div data-dfield="f25" data-type="input" data-width="300"/>
-//                <div data-dfield="f15" data-type="input" data-width="300"/>
-//               <div data-dfield="f11" data-type="readonly" data-width="300"/>
-//                <div data-dfield="f233" data-type="hidden" data-width="300"/>
-//               <div data-dfield="f27" data-type="password" data-width="300"/>
-//               <div data-dfield="f28" data-type="YearMonthControl" data-width="300"/>
-//               </div>
-//                 `;
+let template=`<div class="form">
+              <div data-dfield="f23" data-type="textarea" data-width="500"/>
+              <div data-dfield="f9" data-type="MultiSelect" data-width="500"/>
+              <div data-dfield="f8" data-type="Radio" data-width="300"/>
+              <div data-dfield="f26" data-type="input" data-width="300"/>
+              <div data-dfield="f31" data-type="input" data-width="300"/>
+              <div data-dfield="f7" data-type="Select" data-width="300"/>
+              <div data-dfield="f6" data-type="Year" data-width="300"/>
+              <div data-dfield="f5" data-type="Buildin" data-width="300"/>
+              <div data-dfield="f10" data-type="MultiLinkage" data-width="300"/>
+               <div data-dfield="f24" data-type="input" data-width="300"/>
+               <div data-dfield="f30" data-type="input" data-width="300"/>
+               <div data-dfield="f14" data-type="input" data-width="300"/>
+               <div data-dfield="f29" data-type="input" data-width="300"/>
+               <div data-dfield="f25" data-type="input" data-width="300"/>
+               <div data-dfield="f15" data-type="input" data-width="300"/>
+              <div data-dfield="f11" data-type="readonly" data-width="300"/>
+               <div data-dfield="f233" data-type="hidden" data-width="300"/>
+              <div data-dfield="f27" data-type="password" data-width="300"/>
+              <div data-dfield="f28" data-type="YearMonthControl" data-width="300"/>
+              </div>
+                `;
 
 //验证表
-let template=`<div class="form">
-              <div data-dfield="f12" data-type="input" data-width="500"/> 
-              <div data-dfield="f10" data-type="input" data-width="300"/>
-              <div data-dfield="f5" data-type="input" data-width="300"/> 
-              <div data-dfield="f8" data-type="input" data-width="300"/> 
-              <div data-dfield="f20" data-type="Date" data-width="300"/> 
-              <div data-dfield="f15" data-type="Select" data-width="300"/> 
-              <div data-dfield="f13" data-type="Radio" data-width="300"/>
-              <div data-dfield="f14" data-type="Radio" data-width="300"/>
-               <div data-dfield="f17" data-type="input" data-width="300"/>
-               <div data-dfield="f18" data-type="Buildin" data-width="300"/>
-               <div data-dfield="f9" data-type="input" data-width="300"/>
-               <div data-dfield="f21" data-type="Date" data-width="300"/>
-               <div data-dfield="f16" data-type="Select" data-width="300"/>
-               <div data-dfield="f6" data-type="input" data-width="300"/>
-              <div data-dfield="f19" data-type="Date" data-width="300"/>
-               <div data-dfield="f11" data-type="input" data-width="300"/>
-              </div> 
-                `;
+// let template=`<div class="form">
+//               <div data-dfield="f12" data-type="input" data-width="500"/>
+//               <div data-dfield="f10" data-type="input" data-width="300"/>
+//               <div data-dfield="f5" data-type="input" data-width="300"/>
+//               <div data-dfield="f8" data-type="input" data-width="300"/>
+//               <div data-dfield="f20" data-type="Date" data-width="300"/>
+//               <div data-dfield="f15" data-type="Select" data-width="300"/>
+//               <div data-dfield="f13" data-type="Radio" data-width="300"/>
+//               <div data-dfield="f14" data-type="Radio" data-width="300"/>
+//                <div data-dfield="f17" data-type="input" data-width="300"/>
+//                <div data-dfield="f18" data-type="Buildin" data-width="300"/>
+//                <div data-dfield="f9" data-type="input" data-width="300"/>
+//                <div data-dfield="f21" data-type="Date" data-width="300"/>
+//                <div data-dfield="f16" data-type="Select" data-width="300"/>
+//                <div data-dfield="f6" data-type="input" data-width="300"/>
+//               <div data-dfield="f19" data-type="Date" data-width="300"/>
+//                <div data-dfield="f11" data-type="input" data-width="300"/>
+//               </div>
+//                 `;
 
 
 function hasKeyInFormDataStatic(key,staticData){
@@ -134,71 +137,33 @@ function parseRes(res){
     }
 }
 
-// async function wait() {
-//     let staticData = await HTTP.postImmediately({
-//         url: 'http://127.0.0.1:8081/get_form_static_data/?seqid=yudeping&table_id=8696_yz7BRBJPyWnbud4s6ckU7e&is_extra=&form_id=',
-//         type: "POST",
-//         hearder:'',
-//         data: {
-//             formId:'',
-//             table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
-//             is_view:1,
-//             parent_table_id:'',
-//             parent_real_id:'',
-//             parent_temp_id:'',
-//             // real_id:'59803341ae6ba89d68ac574e'
-//         }
-//     });
-//     let dynamicData = await HTTP.postImmediately({
-//         url: 'http://127.0.0.1:8081/get_form_dynamic_data/?seqid=yudeping&table_id=8696_yz7BRBJPyWnbud4s6ckU7e&is_extra=&form_id=',
-//         type: "POST",
-//         hearder:'',
-//         data: {
-//             form_id:'',
-//             table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
-//             is_view:1,
-//             parent_table_id:'',
-//             parent_real_id:'',
-//             parent_temp_id:'',
-//             // real_id:'59803341ae6ba89d68ac574e'
-//         }
-//     });
-//     let data=mergeFormData(staticData,dynamicData);
-//     let formData={
-//         template:template,
-//         data:data,
-//     }
-//     let form=new FormBase(formData);
-//     form.render(el);
-// }
-// wait();
-
-//验证的表
 async function wait() {
     let staticData = await HTTP.postImmediately({
-        url: 'http://127.0.0.1:8081/get_form_static_data/?seqid=yudeping&table_id=69_6pUaHZLMxbfEBV8s84szSf&is_extra=&form_id=',
+        url: 'http://127.0.0.1:8081/get_form_static_data/?seqid=yudeping&table_id=8696_yz7BRBJPyWnbud4s6ckU7e&is_extra=&form_id=',
         type: "POST",
+        hearder:'',
         data: {
             formId:'',
-            table_id:'69_6pUaHZLMxbfEBV8s84szSf',
-            is_view:0,
-            parent_table_id:'',
-            parent_real_id:'',
-            parent_temp_id:'',
-            real_id:''
-        }
-    });
-    let dynamicData = await HTTP.postImmediately({
-        url: 'http://127.0.0.1:8081/get_form_dynamic_data/?seqid=yudeping&table_id=69_6pUaHZLMxbfEBV8s84szSf&is_extra=&form_id=',
-        type: "POST",
-        data: {
-            form_id:'',
-            table_id:'69_6pUaHZLMxbfEBV8s84szSf',
+            table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
             is_view:1,
             parent_table_id:'',
             parent_real_id:'',
             parent_temp_id:'',
-            real_id:''
+            real_id:'59803341ae6ba89d68ac574e'
+        }
+    });
+    let dynamicData = await HTTP.postImmediately({
+        url: 'http://127.0.0.1:8081/get_form_dynamic_data/?seqid=yudeping&table_id=8696_yz7BRBJPyWnbud4s6ckU7e&is_extra=&form_id=',
+        type: "POST",
+        hearder:'',
+        data: {
+            form_id:'',
+            table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
+            is_view:1,
+            parent_table_id:'',
+            parent_real_id:'',
+            parent_temp_id:'',
+            real_id:'59803341ae6ba89d68ac574e'
         }
     });
     let data=mergeFormData(staticData,dynamicData);
@@ -210,6 +175,44 @@ async function wait() {
     form.render(el);
 }
 wait();
+
+//验证的表
+// async function wait() {
+//     let staticData = await HTTP.postImmediately({
+//         url: 'http://127.0.0.1:8081/get_form_static_data/?seqid=yudeping&table_id=69_6pUaHZLMxbfEBV8s84szSf&is_extra=&form_id=',
+//         type: "POST",
+//         data: {
+//             formId:'',
+//             table_id:'69_6pUaHZLMxbfEBV8s84szSf',
+//             is_view:0,
+//             parent_table_id:'',
+//             parent_real_id:'',
+//             parent_temp_id:'',
+//             real_id:''
+//         }
+//     });
+//     let dynamicData = await HTTP.postImmediately({
+//         url: 'http://127.0.0.1:8081/get_form_dynamic_data/?seqid=yudeping&table_id=69_6pUaHZLMxbfEBV8s84szSf&is_extra=&form_id=',
+//         type: "POST",
+//         data: {
+//             form_id:'',
+//             table_id:'69_6pUaHZLMxbfEBV8s84szSf',
+//             is_view:1,
+//             parent_table_id:'',
+//             parent_real_id:'',
+//             parent_temp_id:'',
+//             real_id:''
+//         }
+//     });
+//     let data=mergeFormData(staticData,dynamicData);
+//     let formData={
+//         template:template,
+//         data:data,
+//     }
+//     let form=new FormBase(formData);
+//     form.render(el);
+// }
+// wait();
 
 //
 // HTTP.post( 'get_form_static_data/?seqid=yudeping&table_id=8696_yz7BRBJPyWnbud4s6ckU7e&is_extra=&form_id=',{ formId:'',

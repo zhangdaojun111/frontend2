@@ -5,25 +5,29 @@ import Mediator from '../../../lib/mediator';
 let config={
     template:`
              <div class="clearfix">
-                    {{#if be_control_condition }}
-                        <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                    {{else}}                 
-                  <div style="display: inline-block">{{label}}</div>               
-                   <input style="width: 240px"  type="password"  value="{{value}}"  readonly >{{value}}  
-                   <div style="display: inline-block">
-                           {{#if required}}
-                            <span id="requiredLogo" class="{{requiredClass}}" ></span>
-                           {{/if}} 
-                   </div>                   
-                   {{/if}}
-                    <a  href="javascript:;" id="edit" >编辑</a>
-                <div style="display:none" id="editShow">
-                    <h4>请修改</h4>
-                    <input type="password" value="{{value}}">
-                    <a href="javascript:;" id="save">确定</a>
-                    <a href="javascript:;" id="cancel">取消</a>
-                </div>                 
-               </div>   
+                 {{#if unvisible}}
+                    <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
+                 {{else}}           
+                      {{#if be_control_condition }}
+                            <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+                      {{else}}                 
+                      <div style="display: inline-block">{{label}}</div>               
+                       <input style="width: 240px"  type="password"  value="{{value}}"  readonly >{{value}}  
+                       <div style="display: inline-block">
+                               {{#if required}}
+                                <span id="requiredLogo" class="{{requiredClass}}" ></span>
+                               {{/if}} 
+                       </div>                   
+                       {{/if}}
+                        <a  href="javascript:;" id="edit" >编辑</a>
+                    <div style="display:none" id="editShow">
+                        <h4>请修改</h4>
+                        <input type="password" value="{{value}}">
+                        <a href="javascript:;" id="save">确定</a>
+                        <a href="javascript:;" id="cancel">取消</a>
+                    </div>
+                 {{/if}}                    
+             </div>   
                
                 `,
     data:{
