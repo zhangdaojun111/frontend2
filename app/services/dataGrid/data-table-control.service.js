@@ -55,10 +55,13 @@ export const dgcService = {
     numberCol: {
         //生成编号
         cellRenderer: (params)=>{
+            let text = ''
             if( params.data&&params.data.myfooter&&params.data.myfooter == '合计' ){
-                return '合计';
+                text = '合计';
+            }else {
+                text = ( params.rowIndex + 1 );
             }
-            return '<span style="text-align: center;font-size: 12px;display: block;">' + ( params.rowIndex + 1 ) + '</span>';
+            return '<span style="text-align: center;font-size: 12px!important;display: block;overflow: visible;">' + text + '</span>';
         },
         headerName: '',
         colId: "number",
@@ -95,6 +98,7 @@ export const dgcService = {
             case "EQUALS":
                 return "exact";
             case "NOT_EQUAL":
+                return "$ne";
             case "NOT_EQUALS":
                 return "$ne";
             case "GREATER_THAN":
@@ -106,6 +110,7 @@ export const dgcService = {
             case "LESS_THAN_OR_EQUAL":
                 return "$lte";
             case "CONTAINS":
+                return "$regex";
             case "STARTS_WITH":
             default:
                 return "$regex";
@@ -295,5 +300,23 @@ export const dgcService = {
         rowGroupPanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
         pivotPanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
         valuePanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />'
+    },
+    //返回fieds
+    retureFields: function (id2fields,ids) {
+        let arr = [];
+        for( let i of ids ){
+            arr.push( id2fields[i] );
+        }
+        return arr;
+    },
+    //返回sheet分页HTML
+    returnSheetHtml: function ( sheets ) {
+        let html = '<ul currentId="0">'
+        for( let s of sheets ){
+            let h = "<li sheetId='"+ s.id +"' sheetValue='"+ JSON.stringify(s.value) +"'>"+s.name+"</li>"
+            html += h;
+        }
+        html += '</ul>'
+        return html;
     }
 }

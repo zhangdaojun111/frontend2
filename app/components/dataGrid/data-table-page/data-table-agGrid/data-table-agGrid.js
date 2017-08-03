@@ -33,6 +33,10 @@ let config = {
         first: 0,
         //头部字段属性字典{f1： info}
         colsDict: {},
+        //字段id对应field_id
+        id2field: {},
+        //字段field_id对应id
+        field2id: {},
         //操作列
         menuType: false,
         //操作列的宽度
@@ -103,6 +107,7 @@ let config = {
             columnDefs.unshift(number);
             //添加操作列
             let operate = dgcService.operationCol;
+            //操作展示方式
             if (this.data.menuType) {
 
             } else {
@@ -111,8 +116,11 @@ let config = {
                 operate["cellRenderer"] = (params) => {
                     return this.actions.operateCellRenderer(params)
                 }
-
             }
+
+            columnDefs.unshift(
+                { headerName: '分组', field: 'group' ,pinned:'left',hide:true,suppressSorting: true,suppressMovable:true,cellRenderer: 'group', suppressMenu: true, tooltipField:'group' }
+            )
             columnDefs.push(operate)
             return columnDefs;
         },
@@ -143,7 +151,8 @@ let config = {
                         children: []
                     })
                 } else {//多级表头最底层节点，作为一列
-
+                    this.data.id2field[data.data.id] = data.data.field;
+                    this.data.field2id[data.data.field] = data.data.id;
                     //id列不添加多级索引不添加
                     if (data.data["field"] == "_id" || data.data['dtype'] == 9) {
                         return;
@@ -220,8 +229,8 @@ let config = {
                         obj['cellStyle']['overflow'] = "visible";
                     }
                     let width = data.data["width"];
-                    if (this.colWidth && this.colWidth[data.data["field"]]) {
-                        width = this.colWidth[data.data["field"]];
+                    if (this.data.colWidth && this.data.colWidth[data.data["field"]]) {
+                        width = this.data.colWidth[data.data["field"]];
                     }
                     obj["width"] = width + 17;
                     if (( fieldTypeService.childTable(data.data["dinput_type"]) || fieldTypeService.countTable(data.data["dinput_type"]) )) {
@@ -668,15 +677,14 @@ let config = {
             let sheetData = dataTableService.getSheetPage( obj2 );
 
             Promise.all([preferenceData, headerData, sheetData]).then((res)=> {
-                console.log( "_____________" )
-                console.log( "_____________" )
-                console.log( res )
                 this.actions.setPreference( res[0] );
                 this.data.fieldsData = res[1].rows || [];
                 //创建高级查询需要字段数据
                 this.data.expertSearchFields = dgcService.createExpertSearchFields( this.data.fieldsData );
                 //创建表头
                 this.columnDefs = this.actions.createHeaderColumnDefs();
+                //创建sheet分页
+                this.actions.createSheetTabs( res[2] )
 
                 this.actions.getGridData();
             })
@@ -724,8 +732,8 @@ let config = {
                 json['is_filter'] = this.data.filterParam.is_filter;
             }
             dgcService.returnQueryParams( json );
-            console.log( "搜索参数" )
-            console.log( json )
+            // console.log( "搜索参数" )
+            // console.log( json )
             return json;
         },
         //渲染agGrid
@@ -739,6 +747,7 @@ let config = {
             }
             this.agGrid = new agGrid(gridData);
             this.append(this.agGrid , this.el.find('#data-agGrid'));
+            this.actions.calcColumnState();
             //渲染分页
             let paginationData = {
                 total: this.data.total,
@@ -754,6 +763,101 @@ let config = {
             this.data.rows = data.rows;
             this.data.first = data.firstRow;
             this.actions.getGridData();
+        },
+        //根据偏好返回agGrid sate
+        calcColumnState: function () {
+            let gridState = this.agGrid.gridOptions.columnApi.getColumnState();
+            let indexedGridState = {};
+            for(let state of gridState) {
+                indexedGridState[state['colId']] = state;
+            }
+            let numState = indexedGridState['number']||{};
+            numState['pinned']= this.data.fixCols.l.length > 0 ? 'left' : null;
+            let selectState = indexedGridState['mySelectAll']||{};
+            selectState['pinned']= this.data.fixCols.l.length > 0 ? 'left' : null;
+            let group = indexedGridState['group']||{};
+            //默认分组、序号、选择在前三个
+            let arr = [ group , numState , selectState ];
+            //左侧固定
+            for( let col of this.data.fixCols.l ){
+                let state = indexedGridState[col]||{};
+                state['hide'] = this.data.ignoreFields.indexOf( col ) != -1;
+                state['pinned'] = 'left';
+                arr.push(state);
+            }
+            //中间不固定
+            let fixArr = this.data.fixCols.l.concat( this.data.fixCols.r );
+            for( let data of this.data.orderFields ){
+                if( data == '_id'||data == 'group' ){
+                    continue;
+                }
+                if( data != 0 && fixArr.indexOf( data ) == -1 ){
+                    let state = indexedGridState[data]||{};
+                    state['hide'] = this.data.ignoreFields.indexOf( data ) != -1;
+                    state['pinned'] = null;
+                    arr.push(state);
+                }
+            }
+            if(this.data.orderFields.length == 0){
+                for(let state of gridState){
+                    let id = state['colId'];
+                    if(id != 'number' && id != 'mySelectAll'){
+                        state['hide'] = this.data.ignoreFields.indexOf(id)!=-1;
+                        state['pinned'] = null;
+                        arr.push(state);
+                    }
+                }
+            }
+            //右侧固定
+            for( let col of this.data.fixCols.r ){
+                let state = indexedGridState[col]||{};
+                state['hide'] = this.data.ignoreFields.indexOf( col ) != -1;
+                state['pinned'] = 'right';
+                arr.push(state);
+            }
+            //操作列宽度
+            for( let d of arr ){
+                if( d.colId && d.colId == 'myOperate' ){
+                    d['width'] = this.data.operateColWidth;
+                }
+            }
+            //初始化状态
+            this.agGrid.gridOptions.columnApi.setColumnState( arr )
+        },
+        //创建sheet分页数据
+        createSheetTabs: function ( res ) {
+            if( res.rows.length > 0 ){
+                console.log( "存在sheet分页" )
+                let arr = [{name:'全部数据',id:0,value:[]}];
+                for( let r of res.rows ){
+                    let obj = {
+                        name: r.name,
+                        id: r.id,
+                        value: dgcService.retureFields( this.data.id2field , r.fids )
+                    }
+                    arr.push( obj );
+                }
+                let sheetHtml = dgcService.returnSheetHtml( arr );
+                this.el.find( '.SheetPage' ).html( sheetHtml );
+                this.el.on( 'click','.SheetPage ul li',(e)=>{
+                    let gridoptions = this.agGrid.gridOptions;
+                    let ignore = ['group','number','mySelectAll','myOperate'];
+                    let id = $(e.target).attr( 'sheetId' );
+                    let currentId = $(e.target).parent().attr( 'currentId' );
+                    let arr = JSON.parse( $(e.target).attr( 'sheetValue' ) );
+                    if( id == currentId ){
+                        return;
+                    }
+                    $(e.target).parent().attr( 'currentId',id );
+                    let state = gridoptions.columnApi.getColumnState();
+                    for( let s of state ){
+                        if( ignore.indexOf( s.colId ) == -1 ){
+                            s.hide = arr.indexOf( s.colId ) == -1 && id != 0 ? true:false;
+                        }
+                    }
+                    gridoptions.columnApi.setColumnState( state );
+                } )
+            }
         }
     },
     afterRender: function () {

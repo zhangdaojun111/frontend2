@@ -69,3 +69,27 @@
   width: 100%;
   clear: both;
 }
+
+//sheet分页
+.SheetPage {
+  display: block;
+  height: 17px;
+  line-height: 17px;
+  font-size: 14px;
+  height: 19px;
+  width:100%;
+  ul {
+    display: block;
+    margin: 0;
+    padding: 0px;
+    li {
+      display: block;
+      float: left;
+      border: 1px solid #afafaf;
+      padding: 0 7px;
+    }
+    li:hover {
+      cursor: pointer;
+    }
+  }
+}
