@@ -19,6 +19,7 @@ module.exports = {
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         bi:path.resolve(APP_PATH, 'entrys/bi.js'),
+        calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
         vendors: [
             'jquery',
             'jquery-ui',

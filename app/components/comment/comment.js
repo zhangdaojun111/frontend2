@@ -18,12 +18,11 @@ let config = {
             {text: '大哥说得好3'},
             {text: '大哥说得好4'},
             {text: '大哥说得好5'}
-        ]
+        ],
     },
     actions: {
         loadMore: function() {
             [{text: '这是加载更多1'},{text: '这是加载更多2'}].forEach((row) => {
-                console.log(row);
                 this.append(new Item(row), this.el.find('.list'));
             });
         },
@@ -56,7 +55,7 @@ let config = {
         });
 
         Mediator.subscribe('comment:get', function(msg) {
-            console.log(msg);
+            console.log('msg', msg);
         })
     }
 }

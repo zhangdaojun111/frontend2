@@ -28,7 +28,6 @@ class Item extends Component {
         super(config);
     }
 
-
 }
 
 export default Item;
