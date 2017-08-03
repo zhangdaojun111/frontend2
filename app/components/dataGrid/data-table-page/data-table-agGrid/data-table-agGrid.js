@@ -8,6 +8,7 @@ import {dataTableService} from "../../../../services/dataGrid/data-table.service
 import {dgcService} from "../../../../services/dataGrid/data-table-control.service";
 import {fieldTypeService} from "../../../../services/dataGrid/field-type-service";
 import FloatingFilter from "../../data-table-toolbar/floating-filter/floating-filter";
+import customColumns from "../../data-table-toolbar/custom-columns/custom-columns";
 import dataPagination from "../../data-table-toolbar/data-pagination/data-pagination";
 
 import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
@@ -71,6 +72,8 @@ let config = {
         fieldsData: [],
         //高级查询需要的字段信息
         expertSearchFields: [],
+        //定制列需要字段信息
+        customColumnsFields: [],
         //搜索参数
         filterParam: [],
         //是否第一次渲染agGrid
@@ -680,7 +683,10 @@ let config = {
                 this.actions.setPreference( res[0] );
                 this.data.fieldsData = res[1].rows || [];
                 //创建高级查询需要字段数据
-                this.data.expertSearchFields = dgcService.createExpertSearchFields( this.data.fieldsData );
+                let r = dgcService.createNeedFields( this.data.fieldsData )
+                this.data.expertSearchFields = r.search;
+                //定制列需要字段数据
+                this.data.customColumnsFields = r.custom;
                 //创建表头
                 this.columnDefs = this.actions.createHeaderColumnDefs();
                 //创建sheet分页
@@ -753,6 +759,14 @@ let config = {
                 total: this.data.total,
                 rows: this.data.rows
             }
+            let custom = {
+                gridoptions: this.agGrid.gridOptions,
+                fields: this.data.customColumnsFields
+            }
+            //渲染定制列
+            this.customColumnsCom  = new customColumns(custom)
+            this.append(this.customColumnsCom, document.querySelector('.custom-columns-panel'));
+            //渲染分页
             this.pagination = new dataPagination(paginationData);
             this.pagination.actions.paginationChanged = this.actions.refreshData;
             this.append(this.pagination, this.el.find('.pagination'));

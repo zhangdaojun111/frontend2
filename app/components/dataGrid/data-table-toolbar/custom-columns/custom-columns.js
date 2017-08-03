@@ -4,9 +4,19 @@ import './custom-columns.scss';
 
 let config = {
     template: template,
-    data: {},
+    data: {
+        gridoptions: null,
+        fields: []
+    },
     actions: {},
-    afterRender: function (){}
+    afterRender: function (){
+        console.log( this.data.gridoptions )
+        console.log( this.data.fields )
+        $( "#dragCustom" ).sortable({
+            items: "li:not(.ui-state-disabled)"
+        });
+        $( "#dragCustom" ).disableSelection();
+    }
 }
 
 class customColumns extends Component {

@@ -3,7 +3,7 @@
  */
 
 html {
-    font-family: 12px/1.5 "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+    font: 12px/1.5 "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
 }
 
 .clearfix:after {
@@ -14,3 +14,38 @@ html {
     height: 0;
     font-size: 0;
 }
+
+.ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track-piece {
+}
+
+::-webkit-scrollbar-thumb {
+    height: 50px;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+    height: 6px;
+    background-color: #999999;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+    width: 6px;
+    background-color: #999999;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #ccc;
+}
+

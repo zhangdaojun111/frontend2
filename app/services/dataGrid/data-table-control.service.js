@@ -141,20 +141,34 @@ export const dgcService = {
             }
         }
     },
-    //创建高级查询需要字段数据
-    createExpertSearchFields: function (rows) {
-        let arr = [];
+    //创建高级查询、定制列、搜索需要字段数据
+    createNeedFields: function (rows) {
+        let search = [];
+        let custom = [{name:'序号',field:'number',canhide:'0',candrag:'0',canFix:'0'},
+            {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false},
+            {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}];
         for( let r of rows ){
-            if( r.field == "_id" || fieldTypeService.canNotSearch( r.real_type ) ){
-                continue;
+            if( r.field != "_id" && !fieldTypeService.canNotSearch( r.real_type ) ){
+                let obj = {};
+                obj['name'] = r.name;
+                obj['searchField'] = r.field;
+                obj['searchType'] = fieldTypeService.searchType( r.real_type );
+                search.push( obj );
             }
-            let obj = {};
-            obj['name'] = r.name;
-            obj['searchField'] = r.field;
-            obj['searchType'] = fieldTypeService.searchType( r.real_type );
-            arr.push( obj )
+            if( r.field != "_id" ){
+                let obj = {
+                    canhide:true,candrag:true,canFix:true
+                };
+                obj['name'] = r.name;
+                obj['field'] = r.field;
+                custom.push( obj );
+            }
         }
-        return arr;
+        let obj = {
+            search: search,
+            custom: custom
+        }
+        return obj;
     },
     //dataGrid搜索filter
     returnQueryParams: function (queryParams) {
