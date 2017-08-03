@@ -26,16 +26,20 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             flow_id:msg.id
         }});
     })().then(res=>{
-        Mediator.publish('workflow:gotWorkflowInfo', res);
-        return workflowService.validateDraftData({form_id:msg.formid});
-    })
+            Mediator.publish('workflow:gotWorkflowInfo', res);
+            return workflowService.validateDraftData({form_id:msg.formid});
+        })
         .then(res=>{
-        if(res.the_last_draft!=''){
-            alert('the_last_draft time is:'+res.the_last_draft);
-        }else{
-            alert('there is no draft');
-        }
-    });
+            if(res.the_last_draft!=''){
+                alert('the_last_draft time is:'+res.the_last_draft);
+            }else{
+                alert('there is no draft');
+            }
+
+        }).then(res=>{
+            console.log(res);
+        });
+
 });
 
 //订阅收藏常用workflow

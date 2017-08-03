@@ -29,7 +29,8 @@ module.exports = {
             'handlebars',
             'moment',
             'lodash',
-            'babel-polyfill'
+            'babel-polyfill',
+            'jsplumb'
         ]
     },
 
