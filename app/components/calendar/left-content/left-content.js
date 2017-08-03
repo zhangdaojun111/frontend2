@@ -8,6 +8,7 @@ import Mediator from '../../../lib/mediator';
 let config = {
     template: template, 
     data:{
+        cancel_fields:[],
     },
     actions: {
         logincalendarTreeData:function(objs){
@@ -64,7 +65,6 @@ let config = {
             $(".remind-group").html(strhtml);
             let isAllGroupchecked = true;
             $('.label-select-all-show').each(function(){
-                console.log('sssssssss');
                 if(!$(this).is('.label-select-all-checked')){
                     isAllGroupchecked = false;
                 }
@@ -77,11 +77,35 @@ let config = {
                     $(this).removeClass("label-select-all-checked");
                     $(".label-select-all-show").removeClass("label-select-all-checked");
                     $(".select-label-children").addClass("unchecked");
+                    config.data.cancel_fields = ['remind','workflow'];
+                    CalendarService.CalendarMsgMediator.publish('unshowData',{data:['remind','workflow']});
                 }
                 else{
                     $(this).addClass("label-select-all-checked");
                     $(".label-select-all-show").addClass("label-select-all-checked");
                     $(".select-label-children").removeClass("unchecked");
+                    if($("#checkbox_a2").is(".workflow_checked")){
+                        config.data.cancel_fields = [];
+                        CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
+                    }
+                    else{
+                        config.data.cancel_fields = ['approve'];
+                        CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
+                    }
+                }
+            });
+            $(".approve-label").bind('click',function(){
+                if($("#checkbox_a2").is(".workflow_checked")){
+                    $("#checkbox_a2").removeClass("workflow_checked");
+                    config.data.cancel_fields.unshift('approve');
+                    console.log(config.data.cancel_fields);
+                    CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
+                }
+                else{
+                    $("#checkbox_a2").addClass("workflow_checked");
+                    config.data.cancel_fields.splice($.inArray('approve',config.data.cancel_fields),1);
+                    console.log(config.data.cancel_fields);
+                    CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
                 }
             });
         }
@@ -92,6 +116,14 @@ let config = {
         this.append(new LeftCalendar, this.el.find('.left-calendar-box'));
         let objects = {};
         CalendarService.getCalendarTreeData().then(objs => {
+            config.data.cancel_fields = objs.cancel_fields;
+            if(config.data.cancel_fields.indexOf('approve')){
+                $("#checkbox_a2").addClass("workflow_checked");
+            }
+            else{
+                $("#checkbox_a2").removeClass("workflow_checked");
+            }
+            console.log(objs);
             this.actions.logincalendarTreeData(objs);
             objects = objs;
             $('.select-label-show').bind('click',function(){
@@ -171,7 +203,7 @@ let config = {
                                 return false;
                             }
                         });
-                        if(isAllGroupchecked){
+                        if(!isAllGroupchecked){
                             $("#checkbox_a3").addClass('label-select-all-checked');
                         }
                     }
