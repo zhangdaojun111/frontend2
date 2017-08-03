@@ -270,7 +270,7 @@ let config={
                                 }
                             }
                         }
-                        this.data[f]["required"] = (i == andData[f].length) ? true : false;
+                        this.data.data[f]["required"] =this.childComponent[f].data['required'] = (i == andData[f].length) ? 1 : 0;
                         this.childComponent[f].reload();
                     }
                 }else {
@@ -278,8 +278,8 @@ let config={
                         if( arr.indexOf( dfield ) != -1 ){
                             continue;
                         }
-                        this.data[dfield]["required"] = (key == value) ? true : false;
-                        this.childComponent[f].reload();
+                        this.data.data[dfield]["required"] =this.childComponent[dfield].data['required'] = (key == value) ? 1 : 0;
+                        this.childComponent[dfield].reload();
                         if( key == value ){
                             arr.push( dfield );
                         }
@@ -301,13 +301,19 @@ let config={
                     if(this.data['use_fields'][key].sort().toString() == this.data.myUseFields[key].sort().toString()) {
                         let formValue={};
                         for(let key in this.data.data){
-                            formvalue[key]=this.data.data[key].value;
+                            formValue[key]=this.data.data[key].value;
                         }
-                        let res=FormService.getCountData(formValue);
-                            //给统计赋值
+                        let _this=this;
+                        FormService.getCountData({data:formValue}).then(res=>{
+
+                            console.log('res');
+                            console.log(res);
                             for(let d in res["data"]){
-                                this.setFormValue(d,res["data"][d]);
+                                console.log('什么情况？')
+                                _this.actions.setFormValue(d,res["data"][d]);
                             }
+                        });
+                        //给统计赋值
                     }
                 }
             }
@@ -324,8 +330,9 @@ let config={
         //赋值
         setFormValue(dfield,value){
             if(this.data.data[dfield]){
-                this.data.data[dfield]["value"] = value[0];
-                this.childComponent[dfield].data["value"]=value[0];
+                console.log('怎么没进来?');
+                this.data.data[dfield]["value"] = value;
+                this.childComponent[dfield].data["value"]=value;
                 this.childComponent[dfield].reload();
             }
         },
@@ -532,17 +539,17 @@ let config={
                     radio.render(single);
                     _this.childComponent[data[key].dfield]=radio;
                     break;
-                case 'input':
+                case 'Input':
                     let input=new Input(data[key]);
                     input.render(single);
                     _this.childComponent[data[key].dfield]=input;
                     break;
-                case 'textarea':
+                case 'Textarea':
                     let textArea=new TextArea(data[key]);
                     textArea.render(single);
                     _this.childComponent[data[key].dfield]=textArea;
                     break;
-                case 'readonly':
+                case 'Readonly':
                     let readonly=new Readonly(data[key]);
                     readonly.render(single);
                     _this.childComponent[data[key].dfield]=readonly;
@@ -552,7 +559,7 @@ let config={
                     password.render(single);
                     _this.childComponent[data[key].dfield]=password;
                     break;
-                case 'hidden':
+                case 'Hidden':
                     let hidden=new Hidden(data[key]);
                     hidden.render(single);
                     _this.childComponent[data[key].dfield]=hidden;
@@ -596,6 +603,7 @@ let config={
         Mediator.subscribe('form:changeValue',function(data){
             console.log('form:changeValue')
             console.log(data);
+            _this.data.data[data.dfield]=data;
 
             if(data.type=='Buildin'){
                 let id = data["id"];
@@ -606,7 +614,7 @@ let config={
             //检查是否是默认值的触发条件
             // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
             if(_this.data.flowId != "" && _this.data['base_fields'].indexOf(data["dfield"]) != -1) {
-                this.actions.validDefault(data, data['value']);
+                _this.actions.validDefault(data, data['value']);
             }
             //统计功能
             _this.actions.countFunc(data.dfield);
@@ -622,7 +630,7 @@ let config={
                     if( value == val ){
                         j++;
                         //改变选择框的选项
-                        this.changeOptionOfSelect( originalData,originalData['linkage'][value] );
+                        _this.changeOptionOfSelect( originalData,originalData['linkage'][value] );
                     }
                 }
                 if( j == 0 ){
@@ -642,7 +650,7 @@ let config={
 
             //修改必填性功能
             if(data["required_condition"] && data["required_condition"] !== "") {
-                _this.actions.requiredCondition(data,val);
+                _this.actions.requiredCondition(data,data['value']);
             }
 
             let calcData = {

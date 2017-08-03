@@ -2,20 +2,21 @@ import {HTTP} from '../../lib/http';
 
 export const FormService={
     getCountData:async function(json){
-        let data=formatParams(json);
-        return await HTTP.postImmediately({url:'get_count_data',data:data});
+        console.log(json);
+        let data=this.formatParams(json);
+        return await HTTP.postImmediately({url:'http://127.0.0.1:8081/get_count_data/',data:data});
     },
     get_exp_value:async function(eval_exps){
-        let data=formatParams( {"eval_exps": eval_exps} );
-        return await HTTP.postImmediately({url:'eval_exp_fun',data:data});
+        let data=this.formatParams( {"eval_exps": eval_exps} );
+        return await HTTP.postImmediately({url:'http://127.0.0.1:8081/eval_exp_fun/',data:data});
     },
     getDefaultValue:async function(json){
-        let data=formatParams(json);
-        return await HTTP.postImmediately({url:'get_workflow_default_values',data:data});
+        let data=this.formatParams(json);
+        return await HTTP.postImmediately({url:'http://127.0.0.1:8081/get_workflow_default_values/',data:data});
     },
     getAboutData:async function(json){
-        let data=formatParams(json);
-        return await HTTP.postImmediately({url:'get_about_data',data:data});
+        let data=this.formatParams(json);
+        return await HTTP.postImmediately({url:'http://127.0.0.1:8081/get_about_data/',data:data});
     },
     formatParams(params) {
         let result = [];
