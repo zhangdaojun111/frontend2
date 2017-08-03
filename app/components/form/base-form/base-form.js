@@ -357,6 +357,56 @@ let config={
                     })
         },
 
+        //提交表单
+        //提交表单数据
+        onSubmit(newData,oldData){
+            //数据初始化
+            var new_data = {
+                table_id:'',
+                real_id:'',
+                temp_id:'',
+                parent_table_id:'',
+                parent_real_id:'',
+                parent_temp_id:'',
+            };
+            var old_data = {
+                table_id:'',
+                real_id:'',
+                temp_id:'',
+                parent_table_id:'',
+                parent_real_id:'',
+                parent_temp_id:'',
+            };
+            //数据获取
+            for(let i in newData){
+                new_data[i] = newData[i].data.value;
+                old_data[i] = oldData[i];
+            }
+            //数据转化成字符串
+            new_data = JSON.stringify(new_data);
+            old_data = JSON.stringify(old_data);
+            //发送数据
+            let postData = {
+                data:new_data,
+                cache_new:new_data,
+                cache_old:old_data,
+                focus_users:[],
+                table_id:'123123',
+                flow_id:'',
+                parent_table_id:'',
+                parent_real_id:'',
+                parent_temp_id:'',
+                parent_record_id:''
+            }
+            console.log('*************')
+            console.log('*************')
+            console.log('*************')
+            console.log('*************')
+            console.log('传输的数据格式')
+            console.log(postData)
+        },
+
+        //转到编辑模式
         changeToEdit(_this){
             let json={
                 tableId:'8696_yz7BRBJPyWnbud4s6ckU7e',
@@ -608,10 +658,11 @@ let config={
 
         //添加提交按钮
         _this.el.append('<div style="position: fixed;bottom: 20px;right: 20px;"><button id="save">提交</button><button id="changeEdit">转到编辑模式</button></div>')
-        console.log('咋没加上呢 ');
+
         //提交按钮事件绑定
-        $(_this.el).find("#save").on('click',function () {
-            _this.onSubmit(_this.childComponent,cache_old);
+        _this.el.on('click','#save',function () {
+            console.log('提交不好使了?');
+            _this.actions.onSubmit(_this.childComponent,cache_old);
         })
         $(_this.el).find("#changeEdit").on('click',function () {
             _this.actions.changeToEdit(_this);
@@ -658,47 +709,6 @@ class BaseForm extends Component{
         console.log('处理完的数据');
         console.log(this);
     }
-    //提交表单数据
-    onSubmit(newData,oldData){
-        //数据初始化
-        var new_data = {
-            table_id:'',
-            real_id:'',
-            temp_id:'',
-            parent_table_id:'',
-            parent_real_id:'',
-            parent_temp_id:'',
-        };
-        var old_data = {
-            table_id:'',
-            real_id:'',
-            temp_id:'',
-            parent_table_id:'',
-            parent_real_id:'',
-            parent_temp_id:'',
-        };
-        //数据获取
-        for(let i in newData){
-            new_data[i] = newData[i].data.value;
-            old_data[i] = oldData[i];
-        }
-        //数据转化成字符串
-        new_data = JSON.stringify(new_data);
-        old_data = JSON.stringify(old_data);
-        //发送数据
-        let postData = {
-            data:new_data,
-            cache_new:new_data,
-            cache_old:old_data,
-            focus_users:[],
-            table_id:'123123',
-            flow_id:'',
-            parent_table_id:'',
-            parent_real_id:'',
-            parent_temp_id:'',
-            parent_record_id:''
-        }
-        console.log(postData)
-    }
+
 }
 export default BaseForm
