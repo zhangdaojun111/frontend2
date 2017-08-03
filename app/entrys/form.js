@@ -8,31 +8,31 @@ import '../components/form/vender/my-multiSelect/my-multiSelect.css'
 let FormEntrys={
     formBase:null,
     init:function(config={}){
-        //è¡¨ID
+        //±íID
         this.tableId=config.tableId||'';
-        //çˆ¶è¡¨ID
+        //¸¸±íID
         this.parentRealId=config.parentRealId||'';
-        //çˆ¶è¡¨ä¸´æ—¶ID
+        //¸¸±íÁÙÊ±ID
         this.parentTempId=config.parentTempId||'';
-        //ç”¨æˆ·id
+        //ÓÃ»§id
         this.seqId=config.seqId||'';
-        //æ•°æ®ID
+        //Êı¾İID
         this.realId=config.realId||'';
-        //çˆ¶è¡¨ID
+        //¸¸±íID
         this.parentTableId=config.parentTableId||'';
-        //è¿™æ˜¯å•¥IDè¿˜ä¸çŸ¥é“
+        //ÕâÊÇÉ¶ID»¹²»ÖªµÀ
         this.parentRecordId=config.parentRecordId||'';
-        //æŸ¥çœ‹(0)æˆ–æ–°å¢(1)
+        //²é¿´(0)»òĞÂÔö(1)
         console.log('config');
         console.log(config);
         this.isView=config.isView||0;
-        //æ˜¯å¦æ˜¯æ‰¹é‡å·¥ä½œæµ
+        //ÊÇ·ñÊÇÅúÁ¿¹¤×÷Á÷
         this.isBatch=config.isBatch||0;
-        //è¿™ä¸ªå«å•¥å¿˜äº†
+        //Õâ¸ö½ĞÉ¶ÍüÁË
         this.recordId=config.recordId||'';
-        //è¿™ä¸ªä¹Ÿå¿˜äº†ç”¨åˆ°äº†å†æ”¹
+        //Õâ¸öÒ²ÍüÁËÓÃµ½ÁËÔÙ¸Ä
         this.action=config.action||'';
-        //å®¹å™¨dom
+        //ÈİÆ÷dom
         this.el=config.el||'';
     },
     hasKeyInFormDataStatic:function (key,staticData){
@@ -44,9 +44,9 @@ let FormEntrys={
     }
     return isExist;
 },
-//mergeé™æ€å’ŒåŠ¨æ€æ•°æ®
+//merge¾²Ì¬ºÍ¶¯Ì¬Êı¾İ
     mergeFormData:function (staticData,dynamicData){
-    //mergeæ•°æ®
+    //mergeÊı¾İ
     for(let dfield in dynamicData["data"]){
         if(this.hasKeyInFormDataStatic(dfield,staticData)){
             for(let dict of staticData["data"]){
@@ -74,12 +74,12 @@ let FormEntrys={
     staticData.data=data;
     return staticData;
 },
-//å¤„ç†æ•°æ®
+//´¦ÀíÊı¾İ
     parseRes:function (res){
     if(res !== null){
         let formData = res["data"];
         if(formData.length != 0){
-            //å¹´ä»½é€‰æ‹©è®¾ç½®ä¸ºé»˜è®¤å½“å¹´
+            //Äê·İÑ¡ÔñÉèÖÃÎªÄ¬ÈÏµ±Äê
             let myDate = new Date();
             let myYear = myDate.getFullYear();
             let parentRealId = '';
@@ -121,7 +121,7 @@ let FormEntrys={
         }
     }
 },
-//è¯·æ±‚æ•°æ®
+//ÇëÇóÊı¾İ
     getFormData:async function (el,template,seqid,table_id,real_id,is_view) {
         // let staticData = await HTTP.postImmediately({
         //     url: `/get_form_static_data/?seqid=${seqid}&table_id=${table_id}&is_extra=&form_id=`,
@@ -179,7 +179,7 @@ let FormEntrys={
         })
         HTTP.flush();
     },
-    //ç”Ÿæˆé»˜è®¤è¡¨å•
+    //Éú³ÉÄ¬ÈÏ±íµ¥
     formDefaultVersion : function (data){
     let html='<div class="form">';
     for(let obj of data){
@@ -188,7 +188,7 @@ let FormEntrys={
     html+='</div>'
     return html;
 },
-    //åˆ›å»ºè¡¨å•çš„å…¥å£
+    //´´½¨±íµ¥µÄÈë¿Ú
     createForm:function(config={}){
         this.init(config);
         // if(this.formBase){

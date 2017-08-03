@@ -18,6 +18,11 @@ module.exports = {
         form: path.resolve(APP_PATH, 'entrys/form.js'),
         // form: path.resolve(APP_PATH, 'entrys/form.js'),
         // login:path.resolve(APP_PATH, 'entrys/login.js'),
+        workflow:path.resolve(APP_PATH, 'entrys/workflow'),
+        dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
+        login:path.resolve(APP_PATH, 'entrys/login.js'),
+        bi:path.resolve(APP_PATH, 'entrys/bi.js'),
+        calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
         vendors: [
             'jquery',
             'jquery-ui',
@@ -27,7 +32,8 @@ module.exports = {
             'handlebars',
             'moment',
             'lodash',
-            'babel-polyfill'
+            'babel-polyfill',
+            'jsplumb'
         ]
     },
 

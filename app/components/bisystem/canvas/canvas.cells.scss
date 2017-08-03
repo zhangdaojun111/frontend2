@@ -1,0 +1,56 @@
+$canvasCellsBg: #f5f5f5;
+$font_size: 14px;
+$active-bg: #f5f5f5;
+$active-color: #1caeff;
+
+.canvas-container {
+    .views-header{
+        position: fixed;
+        width: 100%;
+        height: 50px;
+        left:0;
+        top:0;
+        font-size: $font_size;
+        .nav-tabs{
+            width: 100%;
+            height:50px;
+            min-width: 900px;
+            white-space: nowrap;
+            background-color: #ffffff;
+            border-bottom: solid 1px #eeeeee;
+            overflow: hidden;
+            a{
+                text-decoration: none;
+                padding: 0 25px;
+                position: relative;
+                display: inline-block;
+                outline: none;
+                color: #666666;
+                line-height: 50px;
+                height: 45px;
+                margin-right: -3px;
+            }
+            .active{
+                background-color: $active-bg;
+                color: $active-color;
+                border-bottom: solid 5px $active-color;
+            }
+        }
+    }
+}
+
+.cells-container {
+    position:fixed;
+    width:100%;
+    height: 100%;
+    top:50px;
+    overflow: auto;
+    &.client {
+        background:$canvasCellsBg;
+    }
+
+}
+.cells{
+    position:relative;
+}
+

@@ -1,0 +1,95 @@
+/* datagrid头部样式 */
+.header-style-r {
+  text-align: right;
+}
+
+.header-style-l {
+  text-align: left;
+}
+
+.header-style-midfont {
+  font-size:14px;
+}
+
+.header-style-bigfont {
+  font-size:15px;
+}
+
+.header-select {
+  padding: 0px 4px;
+}
+
+.ag-grid-number {
+  font-size: 12px!important;
+}
+
+/*grid初始化按钮*/
+.table-init-logo{
+  color:rgb(51,122,183);
+  cursor:pointer;
+}
+
+.table-init-logo:hover{
+  color:rgb(195,195,195);
+  cursor:pointer;
+  text-decoration: none;
+}
+
+.btn-nav {
+  height: 30px;
+  width:100%;
+  border: 1px solid #cacaca;
+}
+
+.dataGrid-btn-group {
+  float: right;
+}
+
+#data-agGrid {
+  width: calc( 100% - 420px );
+  float: left;
+}
+
+.group-panel {
+  width: 200px;
+  height: 498px;
+  float: left;
+  border: 1px solid #cacaca;
+}
+
+.custom-columns-panel {
+  width: 200px;
+  height: 498px;
+  float: left;
+  border: 1px solid #cacaca;
+}
+
+.pagination {
+  height: 30px;
+  width: 100%;
+  clear: both;
+}
+
+//sheet分页
+.SheetPage {
+  display: block;
+  height: 17px;
+  line-height: 17px;
+  font-size: 14px;
+  height: 19px;
+  width:100%;
+  ul {
+    display: block;
+    margin: 0;
+    padding: 0px;
+    li {
+      display: block;
+      float: left;
+      border: 1px solid #afafaf;
+      padding: 0 7px;
+    }
+    li:hover {
+      cursor: pointer;
+    }
+  }
+}
