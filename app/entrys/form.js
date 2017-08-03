@@ -3,6 +3,10 @@ import {HTTP} from '../lib/http';
 import '../components/form/vender/my-multiSelect/my-multiSelect'
 import '../components/form/vender/my-multiSelect/my-multiSelect.css'
 
+import Quill from 'quill';
+
+
+console.log(Quill);
 let formBase;
 function hasKeyInFormDataStatic(key,staticData){
     let isExist = false;
@@ -115,11 +119,12 @@ $('#toEdit').on('click',function(){
                    <div data-dfield="f233" data-type="Hidden" data-width="300"/>
                   <div data-dfield="f27" data-type="Password" data-width="300"/>
                   <div data-dfield="f28" data-type="YearMonthControl" data-width="300"/>
+                  <!--<div data-dfield="f28" data-type="YearMonthControl" data-width="300"/>-->
                   </div>
                     `;
     let real_id=$('#real_id').get(0).value||'';
     let is_view=$('#is_view').get(0).value||0;
-    wait(el,template,'yudeping','8696_yz7BRBJPyWnbud4s6ckU7e',real_id,is_view);
+    wait(el,template,'xiongxiaotao','1285_pkz2teyhHCztFrYhoc6F54',real_id,is_view);
 });
 $('#count').on('click',function(){
     if(formBase){
