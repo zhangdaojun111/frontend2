@@ -609,6 +609,7 @@ let config={
         Mediator.subscribe('form:changeValue',function(data){
             console.log('form:changeValue')
             console.log(data);
+            console.log(_this);
             _this.data.data[data.dfield]=data;
 
             if(data.type=='Buildin'){
