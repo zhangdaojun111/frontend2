@@ -28,6 +28,7 @@ module.exports = {
     entry: {
         main: path.resolve(APP_PATH, 'entrys/main.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
+        bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         vendors: [
             'jquery',
             'jquery-ui',

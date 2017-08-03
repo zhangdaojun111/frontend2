@@ -313,5 +313,4 @@ export const EchartsOption = {
         }
         return ToolPlugin.clone(option);
     }
-
 }
