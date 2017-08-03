@@ -2,20 +2,35 @@ import FormBase from '../components/form/base-form/base-form'
 import {HTTP} from '../lib/http';
 import '../components/form/vender/my-multiSelect/my-multiSelect'
 import '../components/form/vender/my-multiSelect/my-multiSelect.css'
+
+// @parma
+//
 let FormEntrys={
     formBase:null,
     init:function(config={}){
+        //表ID
         this.tableId=config.tableId||'';
+        //父表ID
         this.parentRealId=config.parentRealId||'';
+        //父表临时ID
         this.parentTempId=config.parentTempId||'';
+        //用户id
         this.seqId=config.seqId||'';
+        //数据ID
         this.realId=config.realId||'';
+        //父表ID
         this.parentTableId=config.parentTableId||'';
+        //这是啥ID还不知道
         this.parentRecordId=config.parentRecordId||'';
+        //查看(0)或新增(1)
         this.isView=config.isView||0;
+        //是否是批量工作流
         this.isBatch=config.isBatch||0;
+        //这个叫啥忘了
         this.recordId=config.recordId||'';
+        //这个也忘了用到了再改
         this.action=config.action||'';
+        //容器dom
         this.el=config.el||'';
     },
     hasKeyInFormDataStatic:function (key,staticData){
@@ -163,7 +178,6 @@ let FormEntrys={
         HTTP.flush();
     },
     //生成默认表单
-
     formDefaultVersion : function (data){
     let html='<div class="form">';
     for(let obj of data){
@@ -172,7 +186,7 @@ let FormEntrys={
     html+='</div>'
     return html;
 },
-
+    //创建表单的入口
     createForm:function(config={}){
         this.init(config);
         if(this.formBase){
@@ -240,3 +254,9 @@ $('#exp').on('click',function(){
     });
 })
 export default FormEntrys
+FormEntrys.createForm({
+    tableId:'7336_HkkDT7bQQfqBag4kTiFWoa',
+    el:$('body'),
+    is_view:is_view,
+    real_id:real_id
+});
