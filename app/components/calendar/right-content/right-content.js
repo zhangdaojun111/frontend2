@@ -1,15 +1,22 @@
 import Component from "../../../lib/component";
 import template from './right-content.html';
 import './right-content.scss';
-
+import RightContentWorkFlow from './right.content.workflowcontent/right.content.workflowcontent';
 import Mediator from '../../../lib/mediator';
 let config = {
-    template: template,   
+    template: template,
+	data:{
+    	worlkflow:[{'user':'lpf','content':'修改右侧','type':'新建','significance':'普通aaaaaaa','workflow_schedule':"20%",'workflow_Id':12},{'workflow_Id':22,'user':'lpp','content':'修改右侧','type':'新建','significance':'普通aaaaaaa','workflow_schedule':"30%"}],
+	},
     actions: {
-    	
+
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
+        this.data.worlkflow.forEach((row) =>{
+        	console.log(row);
+            this.append(new RightContentWorkFlow(row), this.el.find('.item-content-2'));
+        })
     }
 };
 
