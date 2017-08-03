@@ -255,9 +255,3 @@ $('#exp').on('click',function(){
     });
 })
 export default FormEntrys
-FormEntrys.createForm({
-    tableId:'7336_HkkDT7bQQfqBag4kTiFWoa',
-    el:$('body'),
-    is_view:is_view,
-    real_id:real_id
-});
