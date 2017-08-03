@@ -7,4 +7,4 @@ import Comment from '../components/comment/comment';
 
 let comment = new Comment();
 
-comment.render($('#comments'));
+// comment.render($('#comments'));
