@@ -4,13 +4,19 @@
 
 import {BiBaseComponent} from '../../../bi.base.component';
 import template from './cell.comment.html';
+import "./cell.comment.scss";
 
 let config = {
-    template: template
-}
+    template: template,
+    data:{
+        comment:"",
+    }
+};
 
 export class CellCommentComponent extends BiBaseComponent {
-    constructor() {
-        super(config)
+    constructor(cellChart) {
+        config.data.comment = cellChart['chart']['chart_data'];
+        super(config);
+        console.log(this.data);
     }
 }
