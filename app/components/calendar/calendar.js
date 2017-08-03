@@ -22,22 +22,6 @@ let config = {
         this.append(new LeftContent, this.el.find('.left-content'));
         this.append(new RightContent, this.el.find('.right-content'));
         this.append(new CalendarMin, this.el.find('.main-content'));
-        $('.setting').click(function () {
-            //PMAPI.openDialogByComponent()
-            let component = new CalendarSetting();
-            let el = $('<div>').appendTo(document.body);
-            component.render(el);
-            el.dialog({
-                title: '日历设置',
-                width: '99%',
-                height: '950',
-                background: '#ddd',
-                close: function() {
-                    $(this).dialog('destroy');
-                    component.destroySelf();
-                }
-            });
-        })
     }
 };
 

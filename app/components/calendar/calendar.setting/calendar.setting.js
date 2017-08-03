@@ -16,9 +16,7 @@ let config = {
         menu: []
     },
     actions: {
-        dosomething: function (data) {
-            console.log(data);
-        }
+
     },
     afterRender: function() {
         this.data.menu = CalendarService.getMenu();

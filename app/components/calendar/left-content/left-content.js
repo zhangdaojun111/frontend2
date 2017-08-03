@@ -5,6 +5,8 @@ import LeftContentSelect from './leftContent.SelectLabel/leftContent.SelectLabel
 import LeftCalendar from './left-calendar/left-calendar';
 import {CalendarService} from '../../../services/calendar/calendar.service';
 import Mediator from '../../../lib/mediator';
+import CalendarSetting from '../calendar.setting/calendar.setting';
+
 let config = {
     template: template, 
     data:{
@@ -188,6 +190,22 @@ let config = {
                 }
             });
         });
+        $('.set-calendar').click(function () {
+            //PMAPI.openDialogByComponent()
+            let component = new CalendarSetting();
+            let el = $('<div>').appendTo(document.body);
+            component.render(el);
+            el.dialog({
+                title: '日历设置',
+                width: '99%',
+                height: '950',
+                background: '#ddd',
+                close: function() {
+                    $(this).dialog('destroy');
+                    component.destroySelf();
+                }
+            });
+        })
     }
 };
 
