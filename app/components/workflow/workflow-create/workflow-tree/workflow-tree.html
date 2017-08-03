@@ -1,0 +1,28 @@
+<div class="select-comp">
+    <div class="J_tip">
+        <span class="select-Workflow J_select-Workflow"></span>
+        <span class="select-icon">∨
+            <i class="fa"></i>
+        </span>
+    </div>
+    <div class="select-tree J_tree">
+        <div class="select-head">
+            <input type="text" class="J_search" />
+        </div>
+        <div class="select-content">
+            <ul class="tree-list">
+                {{#each data}}
+                    <li>
+                        <div class="root J_root">{{this.label}}</div>
+                        <div class="child-list">
+                            {{#each this.children}}
+                            <div class="child-item J_child-item" data-id="{{this.id}}" data-formId="{{this.form_id}}" data-tableId="{{this.table_id}}">{{this.label}}</div>
+                            {{/each}}
+                        </div>
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+
+    </div>
+</div>
