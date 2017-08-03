@@ -21,6 +21,9 @@ HTTP.flush();
 
 //订阅workflow choose事件，获取工作流info并发布getInfo,获取草稿
 Mediator.subscribe('workflow:choose', (msg)=> {
+    let formData={};
+    formData.form_id=msg.formid;
+    console.log(formData);
     (async function () {
         return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=qiumaoyun_1501661055093&record_id=',data:{
             flow_id:msg.id
@@ -31,14 +34,31 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         })
         .then(res=>{
             if(res.the_last_draft!=''){
-                alert('the_last_draft time is:'+res.the_last_draft);
+                $( "#dialog-confirm" ).dialog({
+                    title:'提示',
+                    resizable: false,
+                    height: "auto",
+                    width: 400,
+                    modal: true,
+                    buttons: {
+                        "确认": function() {
+                            $( this ).dialog( "close" );
+                            //todo get draft info
+                            $("#dialog-confirm").html('');
+                        },
+                        "取消": function() {
+                            $( this ).dialog( "close" );
+                            $("#dialog-confirm").html('');
+                        }
+                    }
+                });
+                $("#dialog-confirm").append(`<p><span class="ui-icon ui-icon-alert"></span>
+                    您于${res.the_last_draft}时填写该工作表单尚未保存，是否继续编辑？
+                </p>`);
             }else{
                 alert('there is no draft');
             }
-
-        }).then(res=>{
-            console.log(res);
-        });
+        })
 
 });
 
@@ -58,4 +78,4 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
 
 $("#draw").on('click',function () {
     location.reload();
-})
+});

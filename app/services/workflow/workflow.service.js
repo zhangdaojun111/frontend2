@@ -23,4 +23,11 @@ export const workflowService={
     addWorkflowFavorite(params){
         return HTTP.postImmediately('/add_workflow_favorite/', params)
     },
+    getFormStaticData(params){
+        return HTTP.post('get_form_static_data', params)
+    },
+    getFormDynamicData(params){
+        return HTTP.post('get_form_dynamic_data', params)
+    },
+
 }
