@@ -76,8 +76,14 @@ let config = {
             });
         },
         showInfoSet:function () {
-            //打开个人设置页面
-            PersonalSettings.show();
+            //检查页面是否已创建
+            let $page = $(document).find("div#personal-setting-page");
+            if($page.length !== 0){
+                $page.focus();
+            }else{
+                //打开个人设置页面
+                PersonalSettings.show();
+            }
         }
     },
     afterRender: function () {

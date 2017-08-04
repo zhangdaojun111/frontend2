@@ -4,11 +4,12 @@ import 'jquery-ui/themes/base/theme.css';
 import 'jquery-ui/ui/widgets/dialog.js';
 import './personal-settings.scss';
 import template from './personal-settings.html';
-import {UserInfoService} from "../../../services/main/userInfoService"
+import {UserInfoService} from '../../../services/main/userInfoService';
 import msgbox from '../../../lib/msgbox';
+import SetAvatar from './set-avatar/set-avatar';
 
 function getData(component_instance) {
-    console.log(window.config.sysConfig.userInfo);
+    // console.log(window.config.sysConfig.userInfo);
     _.defaultsDeep(component_instance.data, {
     avatar: window.config.sysConfig.userInfo.avatar,
     name:window.config.sysConfig.userInfo.name,
@@ -31,6 +32,17 @@ let config = {
                 console.log(this.el.find("img"));
                 this.el.find("img").attr("src","../../../../assets/images/framework/default_avatar.png")     //属性修改成功，图片未显示
             }
+        },
+        setAvatar(){
+            //检查页面是否已创建
+            let $page = $(document).find("div#set-avatar-page");
+            if($page.length !== 0){
+                $page.focus();
+            }else{
+                //打开个人设置页面
+                SetAvatar.show();
+            }
+
         },
         showPersonalInfo:function () {
             this.el.find("div.personal-info").show();
@@ -106,14 +118,17 @@ let config = {
             }).fail((err) => {
                 console.log(err);
             })
+        },
+        clearLocalStorage:function(){
+            window.localStorage.clear();
+            $(window).attr("location","/login");
         }
     },
     afterRender:function () {
        this.actions.initInfo();
        //事件绑定
-        this.el.on("click",".user_avatar",() => {
-            //打开头像设置页面
-            console.log("set avatar");
+        this.el.on("click",".user_avatar",() => {           //打开头像设置页面
+            this.actions.setAvatar();
         }).on("click","a.set-proxy",() => {
             //设置代理
             console.log("set proxy");
@@ -123,17 +138,15 @@ let config = {
             this.actions.showModifyPassword();
         }).on("click","span.edit-info-btn",() => {            //编辑个人资料
             this.actions.editPersonalInfo();
-        }).on("click",".clear-storage-btn",() => {
-            //清除缓存
-            console.log("clear storage");
+        }).on("click",".clear-storage-btn",() => {          //清除缓存
+            this.actions.clearLocalStorage();
         }).on("click",".cancel-btn",() => {           //取消编辑
             this.actions.cancelEdit();
         }).on("click",".save-btn",() => {          //保存
             this.actions.saveEdit();
         }).on("click",".confirm-btn",() => {        //修改密码确认
             this.actions.modifyPassword();
-        }).on("input","input.new_pw",() => {
-            console.log("input la");
+        }).on("input","input.new_pw",() => {        //监听旧密码的输入
             this.actions.isLegal();
         })
     },
@@ -152,7 +165,7 @@ export default {
     show: function() {
         let component = new PersonalSetting();
         component.dataService = UserInfoService;
-        let el = $('<div>').appendTo(document.body);
+        let el = $('<div id="personal-setting-page">').appendTo(document.body);
         getData(component);
         component.render(el);
         el.dialog({
