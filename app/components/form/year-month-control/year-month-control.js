@@ -27,13 +27,10 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
-        Mediator.subscribe('form:dropDownSelect',function(data){
+        Mediator.subscribe('form:dropDownSelect'+_this.data.tableId,function(data){
             if(data.dfield !=_this.data.dfield){
                 return;
             }
-            console.log(_this.data.value)
-            console.log(data.value)
-            console.log(_this.data.value.split('-')[1])
             let val = 0;
             if( data.value > 12 ){
                 val =data.value + "-" + _this.data.value.split('-')[1];
@@ -42,7 +39,6 @@ let config={
                 val = _this.data.value.split('-')[0] + "-" + data.value;
             }
             _this.data.value = val;
-            console.log(_this.data.value);
             if(_this.data.required){
                 Mediator.publish('form:checkRequired',data);
             }
@@ -58,12 +54,11 @@ let config={
         if(!yearData.options || !yearData.options.length){
             yearData.options=[];
         }
-        yearData.options.push({ "label": String(myYear),"value": String(myYear)})
+        yearData.options.push({ "label": String(myYear),"value": String(myYear),"tableId":this.tableId})
         for( let i=1;i<=5;i++ ){
             yearData.options.unshift( { "label": String(myYear - i),"value": String(myYear - i)} );
             yearData.options.push( { "label": String(myYear + i),"value": String(myYear + i)} );
         }
-        console.log(myYear)
         monthData.options = [
             {"label": 1,"value": 1},
             {"label": 2,"value": 2},
