@@ -7,23 +7,14 @@ import Mediator from '../../../lib/mediator';
 let config = {
     template: template,
     actions: {
-        animation:function () {
-            let formUp = $('.place-form');
-            let formtip = formUp.hasClass("show");
-            console.log(formUp);
-            if(formtip){
-                formUp.addClass("hide");
-                formUp.removeClass("show");
-            }else{
-                formUp.addClass("show");
-                formUp.removeClass("hide");
-            }
+        animationToggle:function () {
+            this.el.find(".place-form").slideToggle("slow",function () {})
         },
     },
     afterRender: function() {
         this.el.on('click','.collapseFormBtn',()=>{
 
-            this.actions.animation();
+            this.actions.animationToggle();
         })
     }
 }
