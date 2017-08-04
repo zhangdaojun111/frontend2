@@ -2,7 +2,6 @@ import {HTTP} from '../../lib/http';
 
 export const FormService={
     getCountData:async function(json){
-        console.log(json);
         let data=this.formatParams(json);
         return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_count_data/',data:data});
     },
@@ -30,7 +29,7 @@ export const FormService={
         }
         return result.join('&')
     },
-    getDynamicData:async function({tableId,real_id,seqid}){
+    getDynamicDataImmediately:async function({tableId,real_id,seqid}){
         return await HTTP.postImmediately({
             url: `http://192.168.2.223:9001/get_form_dynamic_data/?seqid=${seqid}&table_id=${tableId}&is_extra=&form_id=`,
             type: "POST",
@@ -44,6 +43,18 @@ export const FormService={
                 real_id:real_id
             }
         });
-    }
+    },
 
+    getFormData(json){
+        let res=Promise.all([this.getStaticData(json),this.getDynamicData(json)]);
+        HTTP.flush();
+        return res;
+    },
+
+    getStaticData:async function (json) {
+        return HTTP.post( 'get_form_static_data',json )
+    },
+    getDynamicData:async function (json) {
+        return HTTP.post( 'get_form_dynamic_data',json )
+    }
 }

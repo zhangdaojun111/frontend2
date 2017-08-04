@@ -9,7 +9,17 @@ import {workflowService} from '../services/workflow/workflow.service';
 import WorkFlowCreate from '../components/workflow/workflow-create/workflow-create';
 import Mediator from '../lib/mediator';
 import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
+
 import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow';
+
+import FormEntrys from './form';
+
+// FormEntrys.createForm({
+//     table_id:'',
+//     el:'#workflow-form',
+//     is_view:is_view,
+//     real_id:real_id
+// });
 
 WorkFlowForm.showForm();
 
@@ -63,7 +73,9 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             }else{
                 alert('there is no draft');
             }
-        })
+        }).then(()=>{
+        console.log(msg);
+    })
 
 });
 
