@@ -7,6 +7,7 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import Login from '../components/login/login';
 import {HTTP} from '../lib/http';
 import TreeView from "../components/util/tree";
+import "../tree1.scss";
 
 $('#login').button({
     label: '点击登录'
@@ -56,10 +57,14 @@ var tree = [
         text: "Parent 5"
     }
 ];
-var treeComp = new TreeView(tree,function (event,selectedNode) {
+var treeComp = new TreeView(tree,'tree1',function (event,selectedNode) {
+    console.dir(selectedNode);
+},'SINGLE_SELECT');
+treeComp.render($('#treeTest'));
+var treeComp = new TreeView(tree,'tree2',function (event,selectedNode) {
     console.dir(selectedNode);
 },'MENU');
-treeComp.render($('#treeTest'));
+treeComp.render($('#treeTest2'));
 ///tree demo
 
 async function wait() {
