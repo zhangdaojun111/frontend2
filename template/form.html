@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>form</title>
+    <script>
+    </script>
+</head>
+<body>
+<button id="toEdit">编辑模式表单</button>
+<button id="count">统计</button>
+<button id="editRequired">修改必填性</button>
+<button id="defaultValue">默认值</button>
+<button id="exp">表达式</button>
+数据ID<input id="real_id" type="text">
+查看或编辑模式<input id="is_view" type="text">
+{% ifequal window_type 'develop'%}
+<script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
+<script type="text/javascript" src="http://localhost:8080/scripts/form.js"></script>
+<!--<link rel="stylesheet" href="/client/static/css/vendors.css"></link>-->
+<!--<link rel="stylesheet" href="/client/static/css/form.css"></link>-->
+<!--<script type="text/javascript" src="/client/static/vendors.js"></script>-->
+<!--<script type="text/javascript" src="/client/static/form.js"></script>-->
+{% else %}
+<link rel="stylesheet" href="/client/static/css/vendors.css"></link>
+<link rel="stylesheet" href="/client/static/css/form.css"></link>
+<script type="text/javascript" src="/client/static/vendors.js"></script>
+<script type="text/javascript" src="/client/static/form.js"></script>
+{% endifequal %}
+</body>
+</html>

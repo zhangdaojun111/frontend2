@@ -1,0 +1,31 @@
+.common-btn{
+    float: left;
+    height: 30px;
+    line-height: 30px;
+    position: relative;
+    button{
+        cursor: pointer;
+        border-radius: 15px;
+        height: 30px;
+        padding: 0 10px;
+        margin-right: 14px;
+        font-weight: normal;
+        span{
+            padding: .3em 1em;
+            font-weight: bold;
+        }
+    }
+    .wf-del{
+        display: none;
+        .workflow-del{
+            width: 12px;
+            height: 12px;
+            background: red;
+            position: absolute;
+            top: 0px;
+            right: 0px;
+        }
+    }
+    
+}
+

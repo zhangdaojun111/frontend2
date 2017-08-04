@@ -26,11 +26,14 @@ module.exports = {
     // ],
 
     entry: {
-        main: path.resolve(APP_PATH, 'entrys/main.js'),
+        form: path.resolve(APP_PATH, 'entrys/form.js'),
+        workflow: path.resolve(APP_PATH, 'entrys/workflow.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         biManage:path.resolve(APP_PATH, 'entrys/bimanager.js'),
+        calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
+        main: path.resolve(APP_PATH, 'entrys/main.js'),
         vendors: [
             'jquery',
             'jquery-ui',
@@ -40,7 +43,8 @@ module.exports = {
             'handlebars',
             'moment',
             'lodash',
-            'babel-polyfill'
+            'babel-polyfill',
+            'jsplumb'
         ]
     },
 
