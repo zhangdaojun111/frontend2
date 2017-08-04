@@ -1,8 +1,8 @@
 /**
  * Created by Yunxuan Yan on 2017/8/2.
  */
-import 'bootstrap-treeview/dist/bootstrap-treeview.min';
-import Component from '../../lib/component';
+import 'bootstrap-treeview/dist/bootstrap-treeview.min.js';
+import Component from '../../../lib/component';
 import template from './tree.html';
 import './tree.scss';
 
@@ -12,7 +12,7 @@ const TREETYPE = {
         multiSelect:false,
         foldIcon: 'menu_node',
         unfoldIcon: 'menu_node',
-        leafIcon: '',
+        leafIcon: 'menu_leaf_node',
         backColor: 'green'
     },
     'MULTI_SELECT':{
@@ -40,23 +40,23 @@ let config = {
     data:{
         treeNodes:{},
         treeType:'SINGLE_SELECT',
-        divId: 'tree',
+        divClass: 'default-tree',
         selectedCallback: function () {}
     },
     actions:{
         _uncheckAllAncestors:function(node){
-            let parent = $('#tree').treeview('getParent',node);
+            let parent = this.el.treeview('getParent',node);
             if(parent != undefined && parent.nodeId != undefined && parent.state.selected == true){
-                $('#tree').treeview('uncheckNode',[parent.nodeId,{silent:true}]);
-                $('#tree').treeview('unselectNode',[parent.nodeId,{silent:true}]);
+                this.el.treeview('uncheckNode',[parent.nodeId,{silent:true}]);
+                this.el.treeview('unselectNode',[parent.nodeId,{silent:true}]);
                 this.actions._uncheckAllAncestors(parent);
             }
         },
         _checkAllChildren:function(node){
             if(node.nodes){
                 node.nodes.forEach(child=>{
-                    $('#tree').treeview('checkNode',[child.nodeId,{silent:true}]);
-                    $('#tree').treeview('selectNode',[child.nodeId,{silent:true}]);
+                    this.el.treeview('checkNode',[child.nodeId,{silent:true}]);
+                    this.el.reeview('selectNode',[child.nodeId,{silent:true}]);
                     this.actions._checkAllChildren(child);
                 })
             }
@@ -64,23 +64,25 @@ let config = {
         _uncheckAllChildren:function(node) {
             if(node.nodes){
                 node.nodes.forEach(child=>{
-                    $('#tree').treeview('uncheckNode',[child.nodeId,{silent:true}]);
-                    $('#tree').treeview('unselectNode',[child.nodeId,{silent:true}]);
+                    this.el.treeview('uncheckNode',[child.nodeId,{silent:true}]);
+                    this.el.treeview('unselectNode',[child.nodeId,{silent:true}]);
                     this.actions._uncheckAllChildren(child);
                 })
             }
         },
         _expandAllParents:function(node){
-            let parent = $('#tree').treeview('getParent',node);
+            let parent = this.el.treeview('getParent',node);
             if(parent != undefined && parent.nodeId != undefined){
-                $('#tree').treeview('expandNode', [parent.nodeId,{silent:true}]);
+                this.el.treeview('expandNode', [parent.nodeId,{silent:true}]);
                 this.actions._expandAllParents(parent);
             }
         }
     },
     afterRender:function() {
-        $('#tree').attr('id',this.data.divId);
-        let tree = $('#'+this.data.divId);
+        let tree = this.el;
+        if(this.data.divClass){
+            this.el.addClass(this.data.divClass);
+        }
         let treeview = this;
         let treeType = TREETYPE[this.data.treeType];
         let collapseIcon = treeType.foldIcon;
@@ -88,7 +90,7 @@ let config = {
         let emptyIcon = treeType.leafIcon;
         let backColor = treeType.backColor;
         if(treeType.multiSelect){
-            tree.treeview({data:this.data.treeNodes,
+            this.el.treeview({data:this.data.treeNodes,
                 checkedIcon:treeType.checkedIcon,
                 uncheckedIcon:treeType.uncheckedIcon,
                 showCheckbox:true,
@@ -185,16 +187,16 @@ let config = {
  *                ]
  *            }
  *      可添加其他属性，text为必填参数，其他为可选参数，不写则适用默认值
- *  treeName: 必填，用于修改树的id，避免与其他树混淆
  *  callback：必填，选择节点和取消选择时的回调方法，包括event（‘select’，‘unselect’），node（涉及事件的节点）
  *  treeType：可选，默认值'SINGLE_SELECT'，可填'MENU', 'SINGLE_SELECT','MULTI_SELECT'三种类型，树会根据配置出对应的行为。
+ *  treeName: 可选，用于添加树的class，添加样式
  *
  *  风格化方法：定义scss文件，在调用本树的组件中import，参照示例的tree1写法
  */
 class TreeView extends Component{
-    constructor(treeNodes,treeName, callback,treeType){
+    constructor(treeNodes, callback,treeType,treeName){
         config.data.treeNodes = treeNodes;
-        config.data.divId = treeName;
+        config.data.divClass = treeName;
         config.data.selectedCallback = callback;
         if(treeType){
             config.data.treeType = treeType;

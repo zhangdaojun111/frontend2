@@ -6,8 +6,9 @@ import 'jquery-ui/ui/widgets/dialog.js';
 
 import Login from '../components/login/login';
 import {HTTP} from '../lib/http';
-import TreeView from "../components/util/tree";
+import TreeView from "../components/util/tree/tree";
 import "../tree1.scss";
+import "../tree2.scss";
 
 $('#login').button({
     label: '点击登录'
@@ -57,14 +58,22 @@ var tree = [
         text: "Parent 5"
     }
 ];
-var treeComp = new TreeView(tree,'tree1',function (event,selectedNode) {
-    console.dir(selectedNode);
-},'SINGLE_SELECT');
-treeComp.render($('#treeTest'));
-var treeComp = new TreeView(tree,'tree2',function (event,selectedNode) {
-    console.dir(selectedNode);
-},'MENU');
-treeComp.render($('#treeTest2'));
+var treeComp = new TreeView(tree,function (event,selectedNode) {
+    console.log("选中节点："+selectedNode.text);
+    // console.dir(selectedNode);
+},'SINGLE_SELECT','tree1');
+treeComp.render($('#treeSingle'));
+var treeComp1 = new TreeView(tree,function (event,selectedNode) {
+    console.log("选中节点："+selectedNode.text);
+    // console.dir(selectedNode);
+},'MENU','tree2');
+treeComp1.render($('#treeMenu'));
+var treeComp2 = new TreeView(tree,function (event,selectedNode) {
+    console.log("选中节点："+selectedNode.text);
+    // console.dir(selectedNode);
+},'MULTI_SELECT','tree3');
+treeComp2.render($('#treeMulti'));
+
 ///tree demo
 
 async function wait() {
