@@ -144,7 +144,7 @@ export const dgcService = {
     //创建高级查询、定制列、搜索需要字段数据
     createNeedFields: function (rows) {
         let search = [];
-        let custom = [{name:'序号',field:'number',canhide:'0',candrag:'0',canFix:'0'},
+        let custom = [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false},
             {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false},
             {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}];
         for( let r of rows ){
