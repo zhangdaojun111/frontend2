@@ -5096,3 +5096,89 @@ export const MenuData =
         ],
         "success": 1
     }
+
+export const table1190DataSet = {
+    "rows": [
+        {
+            "is_show_at_home_page": 0,
+            "isSelected": 0,
+            "sms": {
+                "cc_receiver": [],
+                "sms_status": 0,
+                "remind_time": "",
+                "receiver": []
+            },
+            "color": "#000000",
+            "selectedOpts": [],
+            "selectedEnums": [],
+            "field_id": "4743_dapycVCRLJrLughEqcvSGS",
+            "id": 0,
+            "selectedRepresents": [],
+            "email": {
+                "email_id": "",
+                "cc_receiver": [],
+                "email_status": 0,
+                "remind_time": "",
+                "receiver": []
+            }
+        },
+        {
+            "color": "#ff8000",
+            "field_id": "213_tsxRaXuUEMXLEFWkp4bwKL",
+            "is_show_at_home_page": 1,
+            "selectedEnums": [],
+            "id": 124,
+            "selectedRepresents": [
+                "6725_gNSy4ksbBGhVAhYdurThJL"
+            ],
+            "key_field_id": "",
+            "selectedOpts": [
+                "213_tsxRaXuUEMXLEFWkp4bwKL",
+                "6725_gNSy4ksbBGhVAhYdurThJL",
+                "5451_BMkcv5nT9XK2g6QBFjqYuH",
+                "2771_CGeEeRyBRdWWkK3ZAvGAWo",
+                "7937_Sg4nvPG7qVrwrFwoBHexcj",
+                "9166_yL68EB3pCT3DcZMD4QxR26"
+            ],
+            "sms": {
+                "cc_receiver": [],
+                "sms_status": 0,
+                "remind_time": "",
+                "receiver": []
+            },
+            "isSelected": true,
+            "email": {
+                "email_id": "",
+                "cc_receiver": [],
+                "email_status": 0,
+                "remind_time": "",
+                "receiver": []
+            }
+        },
+        {
+            "is_show_at_home_page": 0,
+            "isSelected": 0,
+            "sms": {
+                "cc_receiver": [],
+                "sms_status": 0,
+                "remind_time": "",
+                "receiver": []
+            },
+            "color": "#000000",
+            "selectedOpts": [],
+            "selectedEnums": [],
+            "field_id": "2067_KaLaVPHG8vcekX37PbyFcH",
+            "id": 0,
+            "selectedRepresents": [],
+            "email": {
+                "email_id": "",
+                "cc_receiver": [],
+                "email_status": 0,
+                "remind_time": "",
+                "receiver": []
+            }
+        }
+    ],
+    "success": 1,
+    "error": ""
+};
