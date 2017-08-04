@@ -1,25 +1,26 @@
 <aside class="aside" >
     <div class="user">
-        <a href="#"><i class="font">☲</i> 新建图标</a>
-        <a href="#"><i class="font">☶</i> 编辑图表</a>
+        <a href="#"><i class="font fa fa-bar-chart"></i> 新建图标</a>
+        <a href="#"><i class="font fa fa-table"></i> 编辑图表</a>
     </div>
     <div class="charts-container">
         <p class="filter">
             <input type="text" class="filter-match" placeholder="搜索">
-            <i class="font">※</i>
+            <i class="font fa fa-search"></i>
         </p>
         <div class="charts">
             <ul class="charts-items">
                 {{#each charts}}
-                    <li><p><span>{{name}}</span><i class="btn_ripple">0</i></p></li>
+                    <li><p><span>{{name}}</span><i class="btn_ripple fa fa-angle-double-down"></i></p></li>
                 {{/each}}
             </ul>
+            <div class="hide_meun">
+                <div class="btn_box">
+                    <button class="menuitem btn_del"><span>删除</span></button>
+                    <button class="menuitem btn_change"><span>编辑</span></button>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="hide_meun">
-        <div class="btn_box">
-            <button class="menuitem"><span>删除</span></button>
-            <button class="menuitem"><span>编辑</span></button>
-        </div>
-    </div>
+
 </aside>

@@ -12,11 +12,8 @@ let config = {
     actions:{},
 
     afterRender() {
-        // this.el.css('width:100%;height:100%');
-        //  const res = biChartService.getCharts();
 
-
-        // 图标/图标 阴影效果切换
+        // 顶部 新建图标/编辑图标 阴影效果切换
         $('.user a').each(function () {
             // console.log($(this));
             $(this).on('click',function () {
@@ -25,7 +22,7 @@ let config = {
             })
         });
 
-        //显示右侧编辑删除按钮
+        //滑过 显示编辑删除
         $('.charts-items li').each(function (index) {
             $(this).hover(
                 function () {
@@ -37,15 +34,27 @@ let config = {
             )
         });
 
-        //点击显示隐藏菜单
+        //点击 显示隐藏菜单
         $('.btn_ripple').each(function () {
             $(this).on('click',function () {
+                let top = $(this).position().top;
+                console.log(top);
+                $('.hide_meun').eq(0).css('top',top);
                 $('.hide_meun').eq(0).fadeIn('normal');
-                $('body').mousedown(function () {
-                    $('.hide_meun').eq(0).hide();
-                })
-            })
+            });
         });
+        $('.btn_del').click(function () {
+            alert(1);
+            $('.hide_meun').eq(0).hide();
+        });
+        $('.btn_change').click(function () {
+            alert(1);
+            $('.hide_meun').eq(0).hide();
+        });
+
+        // $('body').click(function () {
+        //     $('.hide_meun').eq(0).hide();
+        // })
     }
 };
 
