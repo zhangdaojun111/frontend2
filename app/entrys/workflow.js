@@ -14,12 +14,7 @@ import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflo
 
 import FormEntrys from './form';
 
-// FormEntrys.createForm({
-//     table_id:'',
-//     el:'#workflow-form',
-//     is_view:is_view,
-//     real_id:real_id
-// });
+
 
 WorkFlowForm.showForm();
 
@@ -74,7 +69,13 @@ Mediator.subscribe('workflow:choose', (msg)=> {
                 alert('there is no draft');
             }
         }).then(()=>{
-        console.log(msg);
+        console.log(msg.tableid);
+        FormEntrys.createForm({
+            table_id:msg.tableid,
+            el:'#place-form',
+            is_view:1,
+            real_id:''
+        });
     })
 
 });

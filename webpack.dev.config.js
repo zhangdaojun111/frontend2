@@ -26,23 +26,18 @@ module.exports = {
     // ],
 
     entry: {
-<<<<<<< HEAD
         form: path.resolve(APP_PATH, 'entrys/form.js'),
         workflow: path.resolve(APP_PATH, 'entrys/workflow.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
-        bi:path.resolve(APP_PATH, 'entrys/bi.js'),
+        // bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
-=======
-        main: path.resolve(APP_PATH, 'entrys/main.js'),
         // form: path.resolve(APP_PATH, 'entrys/form.js'),
-        workflow: path.resolve(APP_PATH, 'entrys/workflow.js'),
         // login:path.resolve(APP_PATH, 'entrys/login.js'),
         // login:path.resolve(APP_PATH, 'entrys/login.js'),
         // dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         // bi:path.resolve(APP_PATH, 'entrys/bi.js'),
->>>>>>> 99bf98a8cbafc9af48c9e07bae616bf9c92213dd
         vendors: [
             'jquery',
             'jquery-ui',

@@ -107,8 +107,6 @@ let config = {
                         // }
                         //赋值属性
                     let event_name = __this.data.frontendid2eventname[id] || text;
-                    console.log(event_name);
-
                     let html = $("<div>").attr({
                             id: id,
                             class: styleClass,
