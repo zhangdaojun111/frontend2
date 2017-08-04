@@ -1,16 +1,17 @@
 import {HTTP} from "../../lib/http";
 
-export const biManagerService = {
+export const biChartService = {
 
     /**
      * 获取导航栏列表数据
-     * @param data
+     * @param
      * @returns {Promise}
      */
-    async getCellLayout(data) {
-        const res = await HTTP.getImmediately('bi/get_all_bi_setting', data);
+    async getCharts() {
+        const res = await HTTP.getImmediately('/bi/get_all_bi_setting');
         return new Promise((resolve, reject) => {
             if (res['success']===1) {
+                console.log(res);
                 resolve(res['data']);
             } else {
                 reject(res);

@@ -2,15 +2,24 @@ import {BiBaseComponent} from '../bi.base.component';
 
 import template from './bisystem.nav.html';
 import './bisystem.nav.scss';
+import { biChartService } from "../../../services/bisystem/bi.chart.service";
 
-let AsideConfig = {
+let config = {
     template: template,
-
+    data:{
+        charts:{}
+    },
     actions:{
+       async init(){
+            const res = await biChartService.getCharts();
+            console.log(res);
 
+        }
     },
 
-    afterRender:function () {
+    afterRender() {
+        // this.el.css('width:100%;height:100%');
+        //  const res = biChartService.getCharts();
 
         // 图标/图标 阴影效果切换
         $('.user a').each(function () {
@@ -47,7 +56,12 @@ let AsideConfig = {
 
 class AsideNavComponent extends BiBaseComponent{
     constructor() {
-        super(AsideConfig)
+        // let charts = biChartService.getCharts();
+        // config.data.charts = charts;
+        // console.log(charts);
+        config.actions.init();
+        super(config)
+
     }
 }
 
