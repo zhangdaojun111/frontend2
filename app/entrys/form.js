@@ -2,23 +2,27 @@ import FormBase from '../components/form/base-form/base-form'
 import {HTTP} from '../lib/http';
 import '../components/form/vender/my-multiSelect/my-multiSelect'
 import '../components/form/vender/my-multiSelect/my-multiSelect.css'
+import {FormService} from "../services/formService/formService";
 
 // @parma
 //
 let FormEntrys={
     init:function(config={}){
-        this.tableId=config.tableId||'';
-        this.parentRealId=config.parentRealId||'';
-        this.parentTempId=config.parentTempId||'';
+        this.tableId=config.table_id||'';
+        this.parentRealId=config.parent_real_id||'';
+        this.parentTempId=config.parent_temp_id||'';
         this.seqId=config.seqId||'';
-        this.realId=config.realId||'';
-        this.parentTableId=config.parentTableId||'';
-        this.parentRecordId=config.parentRecordId||'';
-        this.isView=config.isView || 0;
-        this.isBatch=config.isBatch || 0;
-        this.recordId=config.recordId||'';
+        this.realId=config.real_id||'';
+        this.parentTableId=config.parent_table_id||'';
+        this.parentRecordId=config.parent_record_id||'';
+        this.isView=config.is_view || 0;
+        this.isBatch=config.is_batch || 0;
+        this.recordId=config.record_id||'';
         this.action=config.action||'';
         this.el=config.el||'';
+        this.reloadDraftData=config.reload_draft_data||0;
+        this.formId=config.form_id||'';
+        this.fromWorkFlow=config.from_workflow||0;
     },
     hasKeyInFormDataStatic:function (key,staticData){
     let isExist = false;
@@ -29,6 +33,30 @@ let FormEntrys={
     }
     return isExist;
 },
+    //拼装发送json
+    createPostJson(){
+        let json;
+        if(this.fromWorkFlow){
+            json={
+                form_id:this.formId,
+                record_id:this.recordId,
+                reload_draft_data:this.reloadDraftData,
+                from_workflow:this.fromWorkFlow,
+                table_id:this.tableId
+            }
+        }else{
+            json={
+                form_id:this.formId,
+                table_id:this.tableId,
+                is_view:this.isView,
+                parent_table_id:this.parentTableId,
+                parent_real_id:this.parentRealId,
+                real_id:this.realId,
+                parent_temp_id:this.parentTempId,
+            }
+        }
+        return json;
+    },
     //merge数据
     mergeFormData:function (staticData,dynamicData){
     for(let dfield in dynamicData["data"]){
@@ -104,37 +132,6 @@ let FormEntrys={
         }
     }
 },
-    //获取数据
-    getFormData:async function (el,template,seqid,table_id,real_id,is_view) {
-        let _this=this;
-        Promise.all([HTTP.post('get_form_dynamic_data',{
-            form_id:'',
-            table_id:table_id,
-            is_view:is_view,
-            parent_table_id:'',
-            parent_real_id:'',
-            real_id:real_id,
-            parent_temp_id:'',
-        }),HTTP.post('get_form_static_data',{
-            form_id:'',
-            table_id:table_id,
-            is_view:is_view,
-            parent_table_id:'',
-            parent_real_id:'',
-            real_id:real_id,
-            parent_temp_id:'',
-        })]).then(res=>{
-            template=_this.formDefaultVersion(res[1].data);
-            let data=_this.mergeFormData(res[1],res[0]);
-            let formData={
-                template:template,
-                data:data,
-            }
-            _this.formBase=new FormBase(formData);
-            _this.formBase.render(el);
-        })
-        HTTP.flush();
-    },
     //默认表单
     formDefaultVersion : function (data){
     let html='<div class="form">';
@@ -144,16 +141,31 @@ let FormEntrys={
     html+='</div>'
     return html;
 },
+
+    destoryForm(tableID){
+        $(`#form-${tableID}`).remove();
+    },
     //创建表单入口
     createForm:function(config={}){
+        let _this=this;
+        if(this.tableId){
+            this.destoryForm(this.tableId);
+        }
         this.init(config);
-        // if(this.formBase){
-        //     this.formBase.destroySelf();
-        // }
-        $('div').remove();
-        let html=$('<div style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">').appendTo(this.el);
+        let tableID=this.tableId;
+        let html=$(`<div id="form-${tableID}" style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">`).appendTo(this.el);
         let template='';
-        this.getFormData(html,template,this.seqId,this.tableId,this.realId,this.isView);
+        let json=this.createPostJson();
+        FormService.getFormData(json).then(res=>{
+            template=_this.formDefaultVersion(res[0].data);
+            let data=_this.mergeFormData(res[0],res[1]);
+            let formData={
+                template:template,
+                data:data,
+            }
+            _this.formBase=new FormBase(formData);
+            _this.formBase.render(html);
+        });
     }
 }
 
@@ -161,55 +173,63 @@ $('#toEdit').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
-        tableId:'8696_yz7BRBJPyWnbud4s6ckU7e',
+        table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
         seqId:'yudeping',
         el:$('body'),
-        isView:isView,
-        realId:realId
+        is_view:isView,
+        real_id:realId
     });
 });
 $('#count').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
-        tableId:'7051_UoWnaxPaVSZhZcxZPbEDpG',
+        table_id:'7051_UoWnaxPaVSZhZcxZPbEDpG',
         seqId:'yudeping',
         el:$('body'),
-        isView:isView,
-        realId:realId
+        is_view:isView,
+        real_id:realId
     });
 });
 $('#editRequired').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
-        tableId:'3461_P28RYPGTGGE7DVXH8LBMHe',
+        table_id:'3461_P28RYPGTGGE7DVXH8LBMHe',
         seqId:'yudeping',
         el:$('body'),
-        isView:isView,
-        realId:realId
+        is_view:isView,
+        real_id:realId
     });
 });
 $('#defaultValue').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
-        tableId:'1160_ex7EbDsyoexufF2UbXBmSJ',
+        table_id:'1160_ex7EbDsyoexufF2UbXBmSJ',
         seqId:'yudeping',
         el:$('body'),
-        isView:isView,
-        realId:realId
+        is_view:isView,
+        real_id:realId
     });
 });
 $('#exp').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    // FormEntrys.createForm({
+    //     tableId:'7336_HkkDT7bQQfqBag4kTiFWoa',
+    //     seqId:'yudeping',
+    //     el:$('body'),
+    //     isView:isView,
+    //     realId:realId
+    // });
     FormEntrys.createForm({
-        tableId:'7336_HkkDT7bQQfqBag4kTiFWoa',
-        seqId:'yudeping',
-        el:$('body'),
-        isView:isView,
-        realId:realId
+        form_id:206,
+        record_id:'',
+        reload_draft_data:0,
+         from_workflow:1,
+        table_id:'3277_k5JFeqSiX2iuCvM3rXay9L'
     });
+
 })
 export default FormEntrys

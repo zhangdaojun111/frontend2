@@ -432,7 +432,7 @@ let config={
                 real_id:'59803341ae6ba89d68ac574e',
                 seqid:'yudeping'
             }
-            FormService.getDynamicData(json).then(res=>{
+            FormService.getDynamicDataImmediately(json).then(res=>{
                 console.log('res');
                 console.log(res);
                 for(let key in _this.data.data){
@@ -696,7 +696,9 @@ class BaseForm extends Component{
         config.data['temp_id']=formData.data.data['temp_id']||'';
         config.data['real_id']=formData.data.data['real_id']||'';
         config.data['table_id']=formData.data.data['table_id']||'';
-        config.data['parentRealId']=formData.data.data["real_id"]["value"]||'';
+        if(formData.data.data["real_id"]){
+            config.data['parentRealId']=formData.data.data["real_id"]["value"]||'';
+        }
         config.data['parentTableId']=formData.data.data["table_id"]["value"]||'';
         config.data['parentTempId']=formData.data.data["temp_id"]["value"]||'';
         config.data['recordId']=formData.data['record_info']['id']||'';
