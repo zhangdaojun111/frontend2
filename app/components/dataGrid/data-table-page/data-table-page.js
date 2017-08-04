@@ -16,7 +16,6 @@ let config = {
             tableName: this.data.tableName
         }
         this.append(new dataTableAgGrid(json), this.el.find('#data-table-agGrid'));
-        $( "#pagetabs" ).tabs();
     }
 }
 

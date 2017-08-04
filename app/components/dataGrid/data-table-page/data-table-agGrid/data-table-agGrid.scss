@@ -1,3 +1,11 @@
+.data-table-agGrid-con {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 /* datagrid头部样式 */
 .header-style-r {
   text-align: right;
@@ -37,8 +45,7 @@
 
 .btn-nav {
   height: 30px;
-  width:100%;
-  border: 1px solid #cacaca;
+  width: 100%;
 }
 
 .dataGrid-btn-group {
@@ -46,22 +53,24 @@
 }
 
 #data-agGrid {
-  width: calc( 100% - 420px );
+  width: calc( 100% - 400px );
   float: left;
+  position: relative;
+  height: 100%;
 }
 
 .group-panel {
   width: 200px;
-  height: 498px;
+  height: 100%;
   float: left;
-  border: 1px solid #cacaca;
+  background: #f0f0f0;
 }
 
 .custom-columns-panel {
   width: 200px;
-  height: 498px;
+  height: 100%;
   float: left;
-  border: 1px solid #cacaca;
+  background: #f0f0f0;
 }
 
 .pagination {
@@ -76,7 +85,7 @@
   height: 17px;
   line-height: 17px;
   font-size: 14px;
-  height: 19px;
+  height: 20px;
   width:100%;
   ul {
     display: block;
@@ -92,4 +101,8 @@
       cursor: pointer;
     }
   }
+}
+
+.ag-grid-con {
+  height: calc( 100% - 80px );
 }
