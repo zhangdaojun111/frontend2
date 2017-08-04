@@ -65,17 +65,19 @@ Mediator.subscribe('workflow:choose', (msg)=> {
                 $("#dialog-confirm").append(`<p><span class="ui-icon ui-icon-alert"></span>
                     您于${res.the_last_draft}时填写该工作表单尚未保存，是否继续编辑？
                 </p>`);
+
             }else{
                 alert('there is no draft');
             }
+            $("#workflow-create").append(`<button id="submit" class="ui-button ui-widget ui-corner-all">提交</button>`);
         }).then(()=>{
         console.log(msg.tableid);
-        FormEntrys.createForm({
-            table_id:msg.tableid,
-            el:'#place-form',
-            is_view:1,
-            real_id:''
-        });
+        // FormEntrys.createForm({
+        //     table_id:msg.tableid,
+        //     el:'#place-form',
+        //     is_view:1,
+        //     real_id:''
+        // });
     })
 
 });
@@ -92,9 +94,5 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
     (async function () {
         let data = await workflowService.delWorkflowFavorite({'id': msg});
     })();
-});
-
-$("#draw").on('click',function () {
-    location.reload();
 });
 
