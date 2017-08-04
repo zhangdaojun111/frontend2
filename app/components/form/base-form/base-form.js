@@ -255,7 +255,7 @@ let config={
                 }else {
                     this.data[key]['value'] = '';
                 }
-                Mediator.publish('form:changeOption',this.data[key]['dfield'] );
+                Mediator.publish('form:changeOption'+_this.data.tableId,this.data[key]['dfield'] );
             }
         },
 
@@ -419,6 +419,12 @@ let config={
             console.log(postData)
         },
 
+        setTableIdToOptions(options,tableId){
+            for(let option of options){
+                options['tableId']=tableId;
+            }
+        },
+
         //转到编辑模式
         changeToEdit(_this){
             let json={
@@ -529,8 +535,6 @@ let config={
             //在这里根据type创建各自的控件
             switch (type){
                 case 'Radio':
-                    console.log('group');
-                    console.log(data[key].group);
                     for(let obj of data[key].group){
                         obj['name']=data[key].dfield;
                         if(obj.value==data.value){
@@ -569,6 +573,7 @@ let config={
                     _this.childComponent[data[key].dfield]=hidden;
                     break;
                 case 'Select':
+                    _this.actions.setTableIdToOptions(data[key]['options'],_this.data.tableId);
                     let selectControl=new SelectControl(data[key]);
                     selectControl.render(single);
                     _this.childComponent[data[key].dfield]=selectControl;
@@ -584,6 +589,7 @@ let config={
                     _this.childComponent[data[key].dfield]=yearMonthControl;
                     break;
                 case 'Buildin':
+                    _this.actions.setTableIdToOptions(data[key]['options'],_this.data.tableId)
                     let buildInControl = new BuildInControl(data[key]);
                     buildInControl.render(single);
                     _this.childComponent[data[key].dfield]=buildInControl;
@@ -604,10 +610,7 @@ let config={
         $('body').on('click.selectDrop',function(){
             $('.select-drop').hide();
         })
-        Mediator.subscribe('form:changeValue',function(data){
-            console.log('form:changeValue')
-            console.log(data);
-            console.log(_this);
+        Mediator.subscribe('form:changeValue-'+_this.data.tableId,function(data){
             _this.data.data[data.dfield]=data;
 
             if(data.type=='Buildin'){

@@ -49,7 +49,7 @@ let config={
             _this.timer=null;
         }
         _this.timer=setTimeout(function(){
-            Mediator.publish('form:changeValue',_this.data);
+            Mediator.publish('form:changeValue-'+_this.data.tableId,_this.data);
         },300);
         let func = this.data.func;
         let reg = this.data.reg;
