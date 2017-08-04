@@ -3,20 +3,23 @@ import {HTTP} from '../../lib/http';
 export const FormService={
     getCountData:async function(json){
         let data=this.formatParams(json);
-        return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_count_data/',data:data});
+        // return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_count_data/',data:data});
+        return await HTTP.postImmediately({url:'/get_count_data/',data:data});
     },
     get_exp_value:async function(eval_exps){
         let data=this.formatParams( {"eval_exps": eval_exps} );
-        return await HTTP.postImmediately({url:'http://192.168.2.223:9001/eval_exp_fun/',data:data});
+        // return await HTTP.postImmediately({url:'http://192.168.2.223:9001/eval_exp_fun/',data:data});
+        return await HTTP.postImmediately({url:'/eval_exp_fun/',data:data});
     },
     getDefaultValue:async function(json){
         let data=this.formatParams(json);
-        return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_workflow_default_values/',data:data});
+        // return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_workflow_default_values/',data:data});
+        return await HTTP.postImmediately({url:'/get_workflow_default_values/',data:data});
     },
     getAboutData:async function(json){
         let data=this.formatParams(json);
         // return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_about_data/',data:data});
-        return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_about_data/',data:data});
+        return await HTTP.postImmediately({url:'/get_about_data/',data:data});
     },
     formatParams(params) {
         let result = [];

@@ -109,7 +109,7 @@ let config={
                 drop.data=Object.assign(drop.data,d);
                 drop.reload();
                 _this.data.value='';
-                Mediator.publish('form:changeValue-'+_this.data.tableId,_this.data);
+                _.debounce(function(){Mediator.publish('form:changeValue-'+_this.data.tableId,_this.data)},200)();
             }
         });
     },

@@ -36,7 +36,7 @@ let config={
         let _this=this;
         this.el.on('click','.df-input-radio',function(event){
             _this.data.value=event.target.value;
-            Mediator.publish('form:changeValue-'+_this.data.tableId,_this.data);
+            _.debounce(function(){Mediator.publish('form:changeValue-'+_this.data.tableId,_this.data)},200)();
             for(let obj of _this.data.group){
                 if(obj.value==event.target.value){
                     obj['checked']=true;

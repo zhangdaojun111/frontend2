@@ -39,9 +39,7 @@ let config={
                 val = _this.data.value.split('-')[0] + "-" + data.value;
             }
             _this.data.value = val;
-            if(_this.data.required){
-                Mediator.publish('form:checkRequired',data);
-            }
+            _.debounce(function(){Mediator.publish('form:changeValue-'+_this.data.tableId,_this.data)},200)();
         });
     },
     afterRender:function(){

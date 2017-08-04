@@ -27,7 +27,7 @@ let config={
                 return;
             }
             _this.data.value=data.value;
-            Mediator.publish('form:changeValue-'+_this.data.tableId,_this.data);
+            _.debounce(function(){Mediator.publish('form:changeValue-'+_this.data.tableId,_this.data)},200)();
         });
     },
     afterRender:function(){

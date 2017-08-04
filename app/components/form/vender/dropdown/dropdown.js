@@ -22,7 +22,6 @@ let config={
     },
     afterRender:function(){
         let _this=this;
-        let timer=null;
         this.el.off();
         this.el.on('click','.show-hide-drop',function(event){
             let $select=_this.el.find('.select-drop');
@@ -37,6 +36,7 @@ let config={
                 $select.show();
             }
             let value=$(this).html();
+            _this.el.find('.search').focus();
             if($(this).hasClass('option')){
                 _this.data.value=value;
                 _this.reload();
@@ -50,28 +50,23 @@ let config={
                 Mediator.publish('form:dropDownSelect'+_this.data.tableId,data);
             }
             event.stopPropagation();
-        }).on('keyup','.search',function(event){
-            if(timer){
-                clearTimeout(timer);
-                timer=null;
+        })
+        this.el.find('.search').on('input',_.debounce(function(event){
+            let value=event.target.value;
+            if(value){
+                _this.el.find('.option').each(function(){
+                    if($(this).html().indexOf(value) == -1 && $(this).data('py').split(',').every(function(item){
+                            return item.indexOf(value)==-1;
+                        })){
+                        $(this).hide();
+                    }
+                });
+            }else{
+                _this.el.find('.option').each(function(){
+                    $(this).show();
+                });
             }
-            timer=setTimeout(function(){
-                let value=event.target.value;
-                if(value){
-                    _this.el.find('.option').each(function(){
-                        if($(this).html().indexOf(value) == -1 && $(this).data('py').split(',').every(function(item){
-                                return item.indexOf(value)==-1;
-                            })){
-                            $(this).hide();
-                        }
-                    });
-                }else{
-                    _this.el.find('.option').each(function(){
-                        $(this).show();
-                    });
-                }
-            },500);
-        }).on('click','.search',function(event){
+        },1000)).on('click',function(event){
             event.stopPropagation();
         });
     }
