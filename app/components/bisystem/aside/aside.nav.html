@@ -1,0 +1,25 @@
+<aside class="aside" >
+    <div class="user">
+        <a href="#"><i class="font">☲</i> 新建图标</a>
+        <a href="#"><i class="font">☶</i> 编辑图表</a>
+    </div>
+    <div class="charts-container">
+        <p class="filter">
+            <input type="text" class="filter-match" placeholder="搜索">
+            <i class="font">※</i>
+        </p>
+        <div class="charts">
+            <ul class="charts-items">
+                {{#each charts}}
+                    <li><p><span>{{name}}</span><i class="btn_ripple">0</i></p></li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+    <div class="hide_meun">
+        <div class="btn_box">
+            <button class="menuitem"><span>删除</span></button>
+            <button class="menuitem"><span>编辑</span></button>
+        </div>
+    </div>
+</aside>

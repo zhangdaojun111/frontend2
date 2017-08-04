@@ -1,25 +1,20 @@
 import {BiBaseComponent} from '../bi.base.component';
 
-import template from './bisystem.nav.html';
-import './bisystem.nav.scss';
+import template from './aside.nav.html';
+import './aside.nav.scss';
 import { biChartService } from "../../../services/bisystem/bi.chart.service";
 
 let config = {
     template: template,
     data:{
-        charts:{}
+        charts:window.config.charts
     },
-    actions:{
-       async init(){
-            const res = await biChartService.getCharts();
-            console.log(res);
-
-        }
-    },
+    actions:{},
 
     afterRender() {
         // this.el.css('width:100%;height:100%');
         //  const res = biChartService.getCharts();
+
 
         // 图标/图标 阴影效果切换
         $('.user a').each(function () {
@@ -56,12 +51,7 @@ let config = {
 
 class AsideNavComponent extends BiBaseComponent{
     constructor() {
-        // let charts = biChartService.getCharts();
-        // config.data.charts = charts;
-        // console.log(charts);
-        config.actions.init();
         super(config)
-
     }
 }
 

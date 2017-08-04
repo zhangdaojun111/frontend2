@@ -58,7 +58,7 @@ $font_size: 12px;
       padding: 20px 20px;
       background-color: $charts-container-p;
       .filter-match{
-        width: 83%;
+        width: 168px;
         background-color: $filter-match-bg;
         border: 1px solid $filter-match-bg;
         padding: 7px 15px;
@@ -66,7 +66,7 @@ $font_size: 12px;
         line-height: inherit;
       }
       i{
-        margin-left: -20px;
+        margin-left: -25px;
       }
     }
     //设置滚动条样式
@@ -84,6 +84,7 @@ $font_size: 12px;
     .charts{
       height: calc(100% - 68px);
       overflow: auto;//显示滚动条
+      font-size: 12px;
       .charts-items{
         li:nth-child(even){
           background-color: $li-even-bg;
@@ -167,10 +168,4 @@ $font_size: 12px;
        }
     }
   }
-}
-//右侧内容
-.section{
-  width: calc(100% - 250px);
-  height: 100vh;
-  background-color: $section-bg;
 }

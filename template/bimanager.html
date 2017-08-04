@@ -5,13 +5,14 @@
     <title>BI</title>
 </head>
 <body>
-    <aside id="aside">
+    <aside id="asidecontainer">
 
     </aside>
 <script>
     window.config = {
         is_admin: {{ is_admin | safe }},
-        bi_views: {{ bi_views|safe }}
+        bi_views: {{ bi_views|safe }},
+        charts: {{ bi_setting|safe }},
     }
 </script>
 <div id="route-outlet" class="bi-container"></div>

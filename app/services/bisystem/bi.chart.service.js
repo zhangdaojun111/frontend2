@@ -7,15 +7,15 @@ export const biChartService = {
      * @param
      * @returns {Promise}
      */
-    async getCharts() {
-        const res = await HTTP.getImmediately('/bi/get_all_bi_setting');
-        return new Promise((resolve, reject) => {
-            if (res['success']===1) {
-                console.log(res);
-                resolve(res['data']);
-            } else {
-                reject(res);
-            }
-        })
-    },
+    // async getCharts() {
+    //     const res = await HTTP.getImmediately('/bi/get_all_bi_setting');
+    //     return new Promise((resolve, reject) => {
+    //         if (res['success']===1) {
+    //             console.log(res);
+    //             resolve(res);
+    //         } else {
+    //             reject(res);
+    //         }
+    //     })
+    // },
 };

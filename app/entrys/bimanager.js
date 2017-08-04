@@ -1,6 +1,6 @@
-import AsideNavComponent from "../components/bisystem/aside/bisystem.nav";
+import AsideNavComponent from "../components/bisystem/aside/aside.nav";
 
 let asideNav =new AsideNavComponent();
-asideNav.render($('#aside'));
+asideNav.render($('#asidecontainer'));
 
 
