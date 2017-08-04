@@ -27,7 +27,7 @@ let config = {
                     this.eFilterInput.style.color = 'rgb(85,85,85)';
                     this.eFilterInput.style.border = '1px solid #55A1F3';
                     this.eFilterInput.style.marginBottom = '5px';
-                    let searchType = 'input';
+                    let searchType = 'keyup';
                     if( colInfo == 'date' ){
                         this.eFilterInput.type = 'date';
                         searchType = 'change';
@@ -40,9 +40,18 @@ let config = {
                     }else {
                         this.eFilterInput.type = 'text';
                     }
-                    this.eFilterInput.addEventListener( 'input', _.debounce(  ($event)=> {
-                        That.actions.keyupSearch($event,this.eFilterInput,searchFiled,colInfo,searchType,searchOldValue,searchValue)
-                    },1000 ) )
+                    this.eFilterInput.addEventListener(searchType,($event)=> {
+                        if($event['keycode'] != 229){
+                            That.actions.keyupSearch($event,this.eFilterInput,searchFiled,colInfo,searchType,searchOldValue,searchValue);
+                        }
+                    })
+                    if( searchType == 'keyup' ){
+                        this.eFilterInput.addEventListener( 'keydown', ($event)=> {
+                            if( $event.keyCode == 229 ){
+                                That.actions.keyupSearch($event,this.eFilterInput,searchFiled,colInfo,searchType,searchOldValue,searchValue);
+                            }
+                        });
+                    }
                 };
 
                 FloatingFilter.prototype.getGui = function () {
@@ -53,6 +62,17 @@ let config = {
         },
         //解决汉字搜索第一次传空' '的问题
         keyupSearch: function($event,oInput,col_field,colInfo,searchType,searchOldValue,searchValue) {
+            let keyArr = [32,37,38,39,40]
+            if($event['keyCode'] && keyArr.indexOf($event['keyCode'])==-1){
+                if(oInput.value[oInput.value.length-1] == ' ' || oInput.value == "" && !searchOldValue[col_field]) {
+                    return;
+                }
+                for(let i=0; i<oInput.value.length; i++){
+                    if( oInput.value[i]==' ' && (( searchOldValue[col_field] && searchOldValue[col_field][i] && searchOldValue[col_field][i] != ' ' )) ){
+                        return;
+                    }
+                }
+            }
             let keyWord = colInfo == 'number' ? Number(oInput.value) : oInput.value;
             let searchOperate = colInfo == 'number' ? 'EQUALS' : 'CONTAINS';
             if( oInput.value == "" ){

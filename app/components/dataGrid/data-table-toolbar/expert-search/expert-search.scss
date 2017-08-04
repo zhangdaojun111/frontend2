@@ -49,6 +49,9 @@
                     &.left-select {
                         width: 50px;
                     }
+                    &.right-select {
+                        width: 50px;
+                    }
                 }
 
                 .condition-search-box {
@@ -115,7 +118,7 @@
                 .add {
                     cursor: pointer;
                 }
-                .detele {
+                .delete {
                     cursor: pointer;
                 }
             }
