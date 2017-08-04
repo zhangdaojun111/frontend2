@@ -12,7 +12,7 @@ export const workflowService={
         return HTTP.postImmediately( params)
     },
     createWorkflowRecord(params){
-        return HTTP.post('create_workflow_record', params)
+        return HTTP.postImmediately('create_workflow_record', params)
     },
     validateDraftData(params){
         return HTTP.postImmediately('/validate_draft_data/', params)
@@ -22,11 +22,5 @@ export const workflowService={
     },
     addWorkflowFavorite(params){
         return HTTP.postImmediately('/add_workflow_favorite/', params)
-    },
-    getFormStaticData(params){
-        return HTTP.post('get_form_static_data', params)
-    },
-    getFormDynamicData(params){
-        return HTTP.post('get_form_dynamic_data', params)
     },
 }
