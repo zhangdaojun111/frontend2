@@ -10,9 +10,10 @@
     .set-calendar{margin-left: 50px;color: #FF7F50;}
 }
 .label-task-children{
-  padding-top: 5px;padding-bottom: 5px;
+  padding-top: 5px;padding-bottom: 5px;word-break: keep-all;
+  white-space: nowrap;
 }
-.checkbox-group{margin-left: 15px;}
+.checkbox-group{margin-left: 35px;}
 .left-calendar-box{border-bottom: 1px solid #605654;padding-bottom: 30px;}
   .taskbar{
     width: 200px;
@@ -75,7 +76,7 @@
   }
   .cate-hide{
     width: 200px;
-    height:calc(37%);
+    height:calc(40%);
     display: inline-block;
     overflow: auto;
     max-width: 200px;
@@ -89,7 +90,7 @@
           border-bottom: 1px solid #a4aaae;border-top: 1px solid #a4aaae;width: 200px;height: 22px;padding-top: 4px;margin-top: 0px !important; position:absoluet;top:0;left:0;
           .cate-hide-icon{margin-left: 180px;margin-top: -12px;}
         }
-        .item-content{width: 200px;border-bottom:2px solid blue;height: 88%;}
+        .item-content{width: 200px;height: 88%;}
       }
     }
   }
@@ -108,16 +109,18 @@
   background: rgba(14, 122, 239,0.1);
 }
 .float-button-group{
-  width:30px;
+  width:100px;
   height:30px;
-  background-color: #205cdc;
-  position: relative;
-  top: -20px;
+  margin-top: -10px;
+  position: absolute;
   z-index: 3;
-  opacity:0.5;
+  opacity:0.8;
 }
 .float-button-group-show{
   margin-top: -15px;
   border: 1px solid #c6c6e0;
+}
+.float-button-group-hide{
+  display: inline-block;
 }
 

@@ -6,17 +6,15 @@ import Mediator from '../../../lib/mediator';
 let config = {
     template: template,
 	data:{
-    	worlkflow:[{'user':'lpf','content':'修改右侧','type':'新建','significance':'普通aaaaaaa','workflow_schedule':"20%",'workflow_Id':12},{'workflow_Id':22,'user':'lpp','content':'修改右侧','type':'新建','significance':'普通aaaaaaa','workflow_schedule':"30%"}],
 	},
     actions: {
-
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
-        this.data.worlkflow.forEach((row) =>{
-        	console.log(row);
-            this.append(new RightContentWorkFlow(row), this.el.find('.item-content-2'));
-        })
+		let worlkflow = [{"name": "王云峰 【Sarah审批的工作流】新建（普通）",'record_progress':"20%",'table_id':"59802e0105b1e5e0ed6d9b60"},{"name": "王云峰 【Sarah审批的工作流】新建（普通）",'record_progress':"30%",'table_id':"54_qCvzfx6SaPB34vAUa6ZpfB"}];
+		worlkflow.forEach((row) =>{
+			this.append(new RightContentWorkFlow(row), this.el.find('.item-content-2'));
+		})
     }
 };
 

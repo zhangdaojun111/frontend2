@@ -7,7 +7,7 @@ import {CalendarService} from '../../../../services/calendar/calendar.service';
 let date = new Date(),
 	year = date.getFullYear(),
 	month = date.getMonth() + 1,
-	day = date.getDate(),days;
+	day = date.getDate();
 function getdays(yy,mm){
 	if(mm ===2 && yy%4 === 0 && yy%100 !==0 ){
 		return 29;
@@ -128,6 +128,12 @@ let config = {
                 }
                 CalendarService.CalendarMsgMediator.publish('next-month-day', {time: [yy,mm,dd]});
 				config.actions.loadCalendarNextMonthData(nowYear,nowMonth,nowDay);
+                let nowclickday = $(this).html();
+                $(".now-month-day").each(function(){
+                    if($(this).html() == nowclickday){
+                        $(this).addClass("now-pitch-on");
+                    }
+                });
 			});
 			$(".last-month-day").bind("click",function(){
                 let nowYear = yy = $(".now-year").html(),
@@ -142,9 +148,15 @@ let config = {
                 }
                 CalendarService.CalendarMsgMediator.publish('last-month-day', {time: [yy,mm,dd]});
 				config.actions.loadCalendarLastMonthData(nowYear,nowMonth,nowDay);
+				let nowclickday = $(this).html();
+				$(".now-month-day").each(function(){
+					if($(this).html() == nowclickday){
+						$(this).addClass("now-pitch-on");
+					}
+				});
 			});
     	},
-    	loadCalendarLastMonthData:function(nowYear,nowMonth,day){
+    	loadCalendarLastMonthData:function(nowYear,nowMonth,dd){
     		if(nowMonth == 1){
     			nowMonth = 12;
     			nowYear = nowYear -1;
@@ -152,9 +164,9 @@ let config = {
     		else{
     			nowMonth = nowMonth - 1;
     		}
-    		config.actions.loadcalendarDate(nowYear,nowMonth,day);
+    		config.actions.loadcalendarDate(nowYear,nowMonth,dd);
     	},
-    	loadCalendarNextMonthData:function(nowYear,nowMonth,day){
+    	loadCalendarNextMonthData:function(nowYear,nowMonth,dd){
     		if(nowMonth == 12){
     			nowMonth = 1;
     			nowYear = parseInt(nowYear)+1;
@@ -162,7 +174,7 @@ let config = {
     		else{
     			nowMonth = parseInt(nowMonth)+1;
     		}
-    		config.actions.loadcalendarDate(nowYear,nowMonth,day);
+    		config.actions.loadcalendarDate(nowYear,nowMonth,dd);
     	}
     },
     afterRender: function() {

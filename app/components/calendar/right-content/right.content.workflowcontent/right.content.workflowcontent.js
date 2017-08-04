@@ -13,10 +13,10 @@ let config = {
     },
     afterRender: function() {
         this.el.css("height","30px");
-        let workflow_Id = "#workflow-"+config.data.workflow_Id;
-        $("#workflow").attr("id","workflow-"+config.data.workflow_Id);
-        $(workflow_Id).css({"width":config.data.workflow_schedule});
-        console.log(config.data.workflow_schedule);
+        let workflow_Id = "#workflow-"+config.data.table_id;
+        $("#workflow").attr("id","workflow-"+config.data.table_id);
+        $(workflow_Id).css({"width":config.data.record_progress});
+        console.log(config.data);
     },
 }
 class RightContentWorkFlow extends Component {

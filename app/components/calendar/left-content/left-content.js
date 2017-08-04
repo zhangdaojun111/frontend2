@@ -3,14 +3,22 @@ import template from './left-content.html';
 import './left-content.scss';
 import LeftContentSelect from './leftContent.SelectLabel/leftContent.SelectLabel'
 import LeftCalendar from './left-calendar/left-calendar';
+import LeftContentHide from './leftContent.hideContent/leftContent.hideContent';
 import {CalendarService} from '../../../services/calendar/calendar.service';
 import Mediator from '../../../lib/mediator';
 let config = {
     template: template, 
     data:{
         cancel_fields:[],
+        hide_table:{'table_Id':'','tableName':''},
+        hide_tables:[],
+        Add_hideTable:[],
+
     },
     actions: {
+        selectAll:function(){
+
+        },
         logincalendarTreeData:function(objs){
             $(".remind-group").html("");
             let strhtml = "";
@@ -28,12 +36,13 @@ let config = {
                     IsChecked = true;
                 }
                 console.log(IsChecked);
-                strhtml += "<div class='select-all'";
+                strhtml += "<div class='select-all' id = 'select-all-block-"+data.table_id+"'";
                 if(objs.hide_tables.indexOf(data.table_id) != -1){
                     console.log(objs.hide_tables.indexOf(data.table_id));
                     strhtml +="style = 'display:none'";
                 }
-                strhtml +=">" + "<span class=\"ui-icon ui-icon-triangle-1-s float-button-group-show\"></span><input type='checkbox' id='select-all-"+data.table_id+"'";
+                strhtml +=">" + "<div class='float-button-group-hide'><span class=\"ui-icon ui-icon-triangle-1-s float-button-group-show\"></span><div class='float-button-group' style='display: none'><button class='hide-type-group' id='hide-type-"+ data.table_id+"'>隐藏</button><button>常用功能查询</button></div></div>" +
+                    "<input type='checkbox' id='select-all-"+data.table_id+"'";
                 console.log(objs.hide_tables.indexOf(data.table_id));
                 strhtml +=" class='chk_1 chk_remind label-select-all ";
                 if(objs.hide_tables.indexOf(data.table_id) == -1){
@@ -42,8 +51,11 @@ let config = {
                 if(IsChecked){
                     strhtml +="label-select-all-checked 'checked";
                 }
+                else{
+                    strhtml +="'";
+                }
                 strhtml +="/>" +
-                    "<label class='select-label' for='select-all-"+data.table_id+"' id='label-all-"+data.table_id+"'></label><label class='select-label-show'>"+data.table_name+"</label><div class='float-button-group' style='display: none'></div>"+
+                    "<label class='select-label' for='select-all-"+data.table_id+"' id='label-all-"+data.table_id+"'></label><label class='select-label-show'>"+data.table_name+"</label>"+
                     "<div class=\"checkbox-group\">";
                 data.items.forEach((items) =>{
                     strhtml+="<div class=\"label-task-children\">\n" +
@@ -84,19 +96,17 @@ let config = {
                     $(this).addClass("label-select-all-checked");
                     $(".label-select-all-show").addClass("label-select-all-checked");
                     $(".select-label-children").removeClass("unchecked");
-                    if($("#checkbox_a2").is(".workflow_checked")){
-                        config.data.cancel_fields = [];
-                        CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
-                    }
-                    else{
-                        config.data.cancel_fields = ['approve'];
-                        CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
-                    }
+                    config.actions.removeRemindType();
                 }
             });
-            $(".float-button-group-show").bind('hover',function(){
-                $(".float-button-group").css("display","block !");
-            })
+            $(".float-button-group-show").hover(function(){
+                console.log(1);
+                $(this).nextAll(".float-button-group").css("display","block");
+            });
+            $(".float-button-group-hide").mouseleave(function(){
+                console.log(1);
+                $(this).children(".float-button-group").css("display","none");
+            });
             $(".approve-label").bind('click',function(){
                 if($("#checkbox_a2").is(".workflow_checked")){
                     $("#checkbox_a2").removeClass("workflow_checked");
@@ -111,15 +121,63 @@ let config = {
                     CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
                 }
             });
-        }
 
+        },
+        removeRemindType:function(){
+            if($("#checkbox_a2").is(".workflow_checked")){
+                config.data.cancel_fields = [];
+                CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
+            }
+            else{
+                config.data.cancel_fields = ['approve'];
+                CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
+            }
+        }
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
+        console.log(this);
         this.append(new LeftCalendar, this.el.find('.left-calendar-box'));
         let objects = {};
+        CalendarService.CalendarMsgMediator.subscribe('hideRemindType',data => {
+            config.data.Add_hideTable[0] = data.data;
+            config.data.Add_hideTable.forEach((row) =>{
+                console.log(row);
+                this.append(new LeftContentHide(row), this.el.find('.item-content'));
+            });
+            config.data.Add_hideTable = [];
+        });
+        CalendarService.CalendarMsgMediator.subscribe('showRemindType',data => {
+            console.log(data.data);
+            let select_all_Id = "#select-all-block-"+data.data;
+            let select_checkbox_Id = "#select-all-"+data.data;
+            let select_checkbox_class = ".select-children-"+data.data;
+            $(select_checkbox_Id).addClass("label-select-all-show label-select-all-checked");
+            $(select_all_Id).show();
+            $(select_checkbox_class).removeClass("unchecked");
+
+        });
         CalendarService.getCalendarTreeData().then(objs => {
             config.data.cancel_fields = objs.cancel_fields;
+            for(let i = 0;i<objs.hide_tables.length;i++){
+                let hide_table_name = "";
+                let hide_table_id = objs.hide_tables[i];
+                for(let j = 0;j < objs.rows.length;j++){
+                    if(hide_table_id == objs.rows[j].table_id){
+                        hide_table_name = objs.rows[j].table_name;
+                    }
+                }
+                config.data.hide_table.tableName = hide_table_name;
+                config.data.hide_table.table_Id = hide_table_id;
+                config.data.hide_tables[i] = config.data.hide_table;
+                config.data.hide_table = {'tableName':"",'table_Id':''}
+            }
+            console.log(objs);
+            console.log(config.data.hide_tables);
+            config.data.hide_tables.forEach((row) =>{
+                console.log(row);
+                this.append(new LeftContentHide(row), this.el.find('.item-content'));
+            })
             if(config.data.cancel_fields.indexOf('approve')){
                 $("#checkbox_a2").addClass("workflow_checked");
             }
@@ -200,13 +258,13 @@ let config = {
                     if(isAllchecked){
                         $(checkboxId).addClass('label-select-all-checked');
                         let isAllGroupchecked = true;
-                        $('.label-select-all').each(function(){
+                        $('.label-select-all-show').each(function(){
+                            console.log($(this).is('.label-select-all-checked'));
                             if(!$(this).is('.label-select-all-checked')){
                                 isAllGroupchecked = false;
-                                return false;
                             }
                         });
-                        if(!isAllGroupchecked){
+                        if(isAllGroupchecked){
                             $("#checkbox_a3").addClass('label-select-all-checked');
                         }
                     }
@@ -222,10 +280,41 @@ let config = {
                     $("#checkbox_a3").removeClass('label-select-all-checked');
                 }
             });
+            $(".hide-type-group").bind("click",function(){
+                let hide_type_id = $(this).attr("id");
+                hide_type_id = hide_type_id.split('-');
+                let hide_table_id = "";
+                let hide_table_name = "";
+                hide_table_id = hide_type_id[2];
+                let select_checkbox_Id = "#select-all-"+hide_type_id[2];
+                hide_type_id = "#select-all-block-"+ hide_type_id[2];
+                $(select_checkbox_Id).removeClass("label-select-all-show");
+                $(hide_type_id).hide();
+                let isAllGroupchecked = true;
+                $('.label-select-all-show').each(function(){
+                    console.log($(this).is('.label-select-all-checked'));
+                    if(!$(this).is('.label-select-all-checked')){
+                        isAllGroupchecked = false;
+                    }
+                });
+                if(isAllGroupchecked){
+                    $("#checkbox_a3").addClass('label-select-all-checked');
+                }
+                for(let j = 0;j < objs.rows.length;j++) {
+                    if (hide_table_id == objs.rows[j].table_id) {
+                        hide_table_name = objs.rows[j].table_name;
+                    }
+                }
+                config.data.hide_table.tableName = hide_table_name;
+                config.data.hide_table.table_Id = hide_table_id;
+                // config.actions.removeRemindType(config.data.hide_table);
+                CalendarService.CalendarMsgMediator.publish('hideRemindType',{data:config.data.hide_table});
+                config.data.hide_table = {'tableName':"",'table_Id':''}
+
+            })
         });
     }
 };
-
 class Leftcontent extends Component {
     constructor() {
         super(config);
@@ -234,14 +323,14 @@ class Leftcontent extends Component {
 let contentStatus = 1;
 function contentHide(){
 	if(contentStatus == 1){
-		$(".taskbar").animate({height:"58%"},300);
+		$(".taskbar").animate({height:"61%"},300);
 		$(".cate-hide").animate({height:"4%"},100);
 	 	$(".item-content").hide();	 	
 	 	contentStatus = 0;
 	}
 	else if(contentStatus == 0){
 		$(".taskbar").animate({height:"25%"},1);
-        $(".cate-hide").animate({height:"37%"});
+        $(".cate-hide").animate({height:"40%"});
 		//$(".item-title").animate({marginTop:"100px"});
 	 	$(".item-content").show();
 	 	
