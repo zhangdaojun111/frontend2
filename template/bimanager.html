@@ -5,7 +5,9 @@
     <title>BI</title>
 </head>
 <body>
-<aside id="aside"></aside>
+    <aside id="aside">
+
+    </aside>
 <script>
     window.config = {
         is_admin: {{ is_admin | safe }},
@@ -16,7 +18,7 @@
 </body>
 {% ifequal config.window_type 'develop'%}
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
-<script type="text/javascript" src="http://localhost:8080/scripts/bi.js"></script>
+<script type="text/javascript" src="http://localhost:8080/scripts/bimanager.js"></script>
 {% else %}
 <link rel="stylesheet" href="/client/static/css/vendors.css" />
 <link rel="stylesheet" href="/client/static/css/bi.css" />
