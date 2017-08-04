@@ -23,8 +23,8 @@ let config = {
             });
             config.rendItemNum ++ ;
             $('.condition-search-li').on('click', function() {
-                _this.actions.setInputValue($(this).find('.name').html());
-                _this.actions.setSelectValue($(this).find('.searchType').html(),$(this).find('.searchField').html());
+                _this.actions.setInputValue($(this).find('.name').html(),$(this).find('.searchField').html());
+                _this.actions.setSelectValue($(this).find('.searchType').html());
                 _this.actions.setInputType($(this).find('.searchType').html());
                 config.epSreach.actions.hideList();
             })
@@ -36,7 +36,6 @@ let config = {
         setInputValue: function(value,name) {
             config.inputObject.val(value);
             config.inputObject.attr('name',name);
-            de
         },
         setInputType: function(type) {
             let inputType;

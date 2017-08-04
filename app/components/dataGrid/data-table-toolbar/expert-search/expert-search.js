@@ -8,6 +8,7 @@ let config = {
     template: template,
     ulChecked: true,
     inputValue: null,
+    radioId: 0,
     searchInputList:[],
     optionHtmlOne : `<option value="$regex">包含</option>
                     <option value="exact">等于</option>
@@ -41,7 +42,7 @@ let config = {
                 "searchByName":"姓名",
                 "searchByNew":"f5"
             },
-            "relation":"or"
+            "relation":"$or"
         }],
     },
     actions: {
@@ -60,6 +61,7 @@ let config = {
             config.ulChecked = !config.ulChecked;
         },
         submitData: function (){
+            config.searchInputList = [];
             let itemList = document.querySelectorAll('.condition-search-item');
             if (itemList.length <= 1) {
                 let obj = {
@@ -87,8 +89,9 @@ let config = {
                     obj['cond']['searchBy'] = document.querySelectorAll('.condition-search-box-input')[i].name;
                     obj['cond']['searchByName'] = document.querySelectorAll('.condition-search-box-input')[i].value;
                     obj['cond']['searchByNew'] = document.querySelectorAll('.condition-search-box-input')[i].name;
-                    if($('.condition-search-radio.or:eq(i)').prop(checked) == true) {
-                        obj[relation] = '$or';
+                    debugger
+                    if($('.condition-search-radio.or').eq(i).prop('checked') == true) {
+                        obj['relation'] = '$or';
                     }
                     config.searchInputList.push(obj);
                 }
@@ -97,11 +100,9 @@ let config = {
         },
         showSearchData: function(data) {
             let searchData = data;
-            // let epCondition = new expertCondition();
-            // epCondition.actions.delete();
-            // $('.condition-search-container').html('');
-            // debugger
-            this.actions.rendSearchItem()
+            $('.condition-search-container').find('div').remove();
+            debugger
+            this.actions.rendSearchItem();
             for(let i = 0; i<searchData.length-1; i++) {
                 this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
             }
@@ -115,6 +116,10 @@ let config = {
                 document.querySelectorAll('.condition-search-box-input')[j].name = searchData[j]['cond']['searchBy'];
                 document.querySelectorAll('.condition-search-box-input')[j].value = searchData[j]['cond']['searchByName'];
                 document.querySelectorAll('.condition-search-box-input')[j].name = searchData[j]['cond']['searchByNew'];
+                if(searchData[j]['relation'] == "$or") {
+                    $('.condition-search-radio.or').eq(j).prop('checked',true);
+                    $('.condition-search-radio.and').eq(j).prop('checked',false);
+                }
             }
         },
         checkedRelationType: function(value){
@@ -146,7 +151,8 @@ let config = {
         }).on('click','.add',()=> {
             this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
         }).on('click','.condition-search-radio', function() {
-            $(this).parent().find('.condition-search-radio').prop('checked',false)
+            debugger
+            $(this).parent().parent('.condition-search-radiobox').find('.condition-search-radio').prop('checked',false);
             $(this).prop('checked',true)
         }).on('click','.searchButton', ()=> {
             this.actions.submitData()
