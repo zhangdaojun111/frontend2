@@ -1,6 +1,8 @@
 @import "../../assets/scss/core/base";
 $boder-color: #ddd;
 $bg-color: rgba(14, 122, 239, 0.290196);
+$btn-bg-color: #4892FC;
+$grid-hover: rgba(14, 122, 239, 0.090196);
 html,body
 {
     height: 100%;
@@ -13,22 +15,22 @@ html,body
     min-height: 600px;
     height: 100%;
     font-size: 12px;
-    .header {
-        padding: 5px;
-        background: $bg-color;
-        span {
-            line-height: 28px;
-        }
-        .title {
-            display: inline-block;
-        }
-        .tool {
-            display: inline-block;
-            float: right;
-        }
-    }
+    //.header {
+    //    padding: 5px;
+    //    background: $bg-color;
+    //    span {
+    //        line-height: 28px;
+    //    }
+    //    .title {
+    //        display: inline-block;
+    //    }
+    //    .tool {
+    //        display: inline-block;
+    //        float: right;
+    //    }
+    //}
     .calendar-container {
-        height:  calc(100% - 45px);
+        height:  100%;
         .left-content {
             border-right: 1px solid #ddd;
             display: inline-block;

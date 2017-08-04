@@ -4,8 +4,11 @@
 
 import { HTTP } from '../../lib/http';
 import Mediator from 'mediator-js';
+import {MenuData, table1190DataSet} from '../../components/calendar/testData/get_menu_data';
 
 const saveCalendarTableUrl = 'calendar_mgr/save_calendar';
+
+const getcalendarTableUrl = 'calendar_mgr/get_calendar';
 
 const calendarTreeUrl = 'calendar_mgr/get_calendar_tree';
 
@@ -31,6 +34,21 @@ export const CalendarService = {
             console.log(res);
             //return data;
         })
+    },
+
+    getCalendarTableById: function (data) {
+        let params = {
+            table_id: data['table_id'],
+            isSelected: data['isSelected']
+        };
+        // HTTP.post(getcalendarTableUrl,params).then(res => {
+        //     if(res['code'] === CodeEnum.SUCCESS) {
+        //         return res;
+        //     } else {
+        //         alert('获取数据失败');
+        //     }
+        // });
+        return table1190DataSet;
     },
 
     getCalendarTreeData: function () {
@@ -136,5 +154,30 @@ export const CalendarService = {
         HTTP.flush();
         return res;
     },
+
+    menu: [],
+    getMenu: function () {
+        let ls_menu = MenuData;
+        if(ls_menu){
+            this.menu = ls_menu['menuList'];
+            //this.MenuData.next(ls_menu.menuList);
+            return this.menu;
+        }
+        // else {
+        //     let url = '/data/get_menu/';
+        //     this.http.get(url)
+        //         .map(this.extractNormalData)
+        //         .catch(this.handleObservableError)
+        //         .subscribe(
+        //             res => {
+        //                 if(res.success == 1){
+        //                     this.lsSet('v_menu',JSON.stringify(res));
+        //                     this.menu = res.menuList;
+        //                     this.MenuData.next(res.menuList);
+        //                 }
+        //             }
+        //         )
+        // }
+    }
 
 };
