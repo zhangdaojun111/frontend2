@@ -11,7 +11,7 @@ import YearControl from "../year-control/year-control";
 import BuildInControl from "../buildIn-control/buildIn-control";
 import MultiLinkageControl from "../multi-linkage-control/multi-linkage-control";
 import YearMonthControl from "../year-month-control/year-month-control";
-import {EditorControl} from '../editor/editor';
+import {EditorControl} from '../editor-control/editor';
 import Mediator from "../../../lib/mediator";
 import {HTTP} from "../../../lib/http";
 import {FormService} from "../../../services/formService/formService"
