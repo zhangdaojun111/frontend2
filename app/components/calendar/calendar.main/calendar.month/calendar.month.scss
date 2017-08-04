@@ -1,0 +1,13 @@
+@import "../../calendar";
+.month-table {
+    height: calc( 100% - 1px );
+    width: 100%;
+    border-top: 1px solid $boder-color;
+    thead {
+
+    }
+    tbody {
+        height: 100%;
+        text-align: left!important;
+    }
+}

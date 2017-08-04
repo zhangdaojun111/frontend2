@@ -1,0 +1,176 @@
+$aside-bg: #374157;
+$section-bg: #60a998;
+$aside-a: #f8645c;
+$aside-a-last: #3b8cff;
+$charts-container-p: #4c576f;
+$active: #6b758a;
+$filter-match-bg: #eef0f5;
+$li-bg: #424e67;
+$li-even-bg: #353D53;
+$li-odd-bg: #374157;
+$li-hover: #424e67;
+$btn_width: 16px;
+$font_size: 12px;
+
+.bi_view{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  font-size: $font_size;
+  .font{
+    display: inline-block;
+    width: $font_size;
+    height: $font_size;
+  }
+}
+//左侧导航
+.aside{
+  width: 250px;
+  height: 100vh;
+  background-color: $aside-bg;
+  //新建编辑按钮
+  .user{
+    padding: 20px 20px 30px ;
+    overflow: hidden;
+    a{
+      display: block;
+      width: 210px;
+      height: 17px;
+      line-height: 17px;
+      text-align: center;
+      margin-top: 10px;
+      color: #ffffff;
+      padding: 8px 0;
+      background-color: $aside-a;
+      text-decoration: none;
+    }
+    .active{
+      box-shadow: 0 0 20px $active inset;
+    }
+    a:last-child{
+      background-color: $aside-a-last;
+    }
+  }
+  //搜索框及以下
+  .charts-container{
+    height: calc(100% - 144px);
+    .filter{
+      padding: 20px 20px;
+      background-color: $charts-container-p;
+      .filter-match{
+        width: 83%;
+        background-color: $filter-match-bg;
+        border: 1px solid $filter-match-bg;
+        padding: 7px 15px;
+        outline: none;
+        line-height: inherit;
+      }
+      i{
+        margin-left: -20px;
+      }
+    }
+    //设置滚动条样式
+    .charts::-webkit-scrollbar{
+      width: 5px;
+      height: 8px;
+    }
+    .charts::-webkit-scrollbar-thumb{
+      background-color: rgba(187, 220, 255, 1);
+    }
+    .charts::-webkit-scrollbar-track{
+      background-color: rgba(240, 247, 255, 1);
+    }
+
+    .charts{
+      height: calc(100% - 68px);
+      overflow: auto;//显示滚动条
+      .charts-items{
+        li:nth-child(even){
+          background-color: $li-even-bg;
+        }
+        li:nth-child(odd){
+          background-color: $li-odd-bg;
+        }
+        li:hover{
+          background-color: $li-hover;
+        }
+        li{
+          display: inline-block;
+          width: 100%;
+          color: $li-bg;
+          cursor: move;
+          transition: all .3s;//hover时 过度
+          p{
+            display: inline-block;
+            padding: 10px 15px;
+            overflow: hidden;
+            span{
+              float: left;
+              width: 160px;
+              margin-left: 3px;
+              color: #fff;
+              line-height: 20px;
+              height: 20px;
+              word-break: break-all;
+            }
+          }
+        }
+        .btn_ripple{
+          overflow: hidden;
+          text-align: center;
+          display: inline-block;
+          width: $btn_width;
+          height: $btn_width;
+          line-height: $btn_width;
+          padding: 2px;
+          color: #ffffff;
+          border-radius: 50%;
+          cursor: pointer;
+          font-weight: 900;
+          font-size: 14px;
+          float: left;
+          margin-left: 30px;
+          display: none;
+        }
+        .btn_ripple:hover{
+          background-color: #353D53;
+        }
+      }
+    }
+  }
+  .hide_meun{
+    position: absolute;
+    left: 210px;
+    top: 220px;
+    z-index: 9999;
+    width: 112px;
+    box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+    display: none;
+    .btn_box{
+      padding: 8px 0;
+      background-color: #ffffff;
+      .menuitem{
+        width: 100%;
+        cursor: pointer;
+        outline: none;
+        border: none;
+        white-space: nowrap;
+        line-height: 48px;
+        padding: 0 16px;
+        font-size: $btn_width;
+        text-align: start;
+        transition: all .3s;
+        background-color: #ffffff;
+      }
+      .menuitem:hover{
+         background-color: rgba(240, 240, 240, 0.87);
+       }
+    }
+  }
+}
+//右侧内容
+.section{
+  width: calc(100% - 250px);
+  height: 100vh;
+  background-color: $section-bg;
+}
