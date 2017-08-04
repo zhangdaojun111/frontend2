@@ -2,19 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BI</title>
-</head>
-<body>
-    <aside id="asidecontainer">
-
-    </aside>
-<script>
-    window.config = {
-        is_admin: {{ is_admin | safe }},
+    <title>BI管理界面</title>
+    <script>
+        window.config = {
+            is_admin: {{ is_admin | safe }},
         bi_views: {{ bi_views|safe }},
         charts: {{ bi_setting|safe }},
-    }
-</script>
+        }
+    </script>
+</head>
+<body>
+<div id="aside-container"></div>
 <div id="route-outlet" class="bi-container"></div>
 </body>
 {% ifequal config.window_type 'develop'%}
@@ -27,3 +25,4 @@
 <script type="text/javascript" src="/client/static/bi.js"></script>
 {% endifequal %}
 </html>
+

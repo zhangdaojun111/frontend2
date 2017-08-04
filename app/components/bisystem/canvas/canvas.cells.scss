@@ -5,16 +5,12 @@ $active-color: #1caeff;
 
 .canvas-container {
     .views-header{
-        position: fixed;
         width: 100%;
         height: 50px;
-        left:0;
-        top:0;
         font-size: $font_size;
         .nav-tabs{
             width: 100%;
             height:50px;
-            min-width: 900px;
             white-space: nowrap;
             background-color: #ffffff;
             border-bottom: solid 1px #eeeeee;
@@ -37,13 +33,15 @@ $active-color: #1caeff;
             }
         }
     }
+    &.manage{
+        margin: 0px 0 0 250px;
+    }
 }
 
 .cells-container {
-    position:fixed;
+    position: absolute;
     width:100%;
-    height: 100%;
-    top:50px;
+    height: calc(100% - 51px);
     overflow: auto;
     &.client {
         background:$canvasCellsBg;
