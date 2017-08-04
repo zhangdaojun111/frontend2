@@ -30,13 +30,13 @@
         <div class="email-group">
             <i class="email-icon"></i>
             <span>邮箱</span>
-            <input type="text" class="email-info" disabled="disabled" value="{{user_email}}">
+            <input type="email" class="email-info" disabled="disabled" value="{{user_email}}">
         </div>
 
         <div class="phone-group">
             <i class="phone-icon"></i>
             <span>电话</span>
-            <input type="text" class="phone-info" disabled="disabled" value="{{user_phone}}">
+            <input type="tel" class="phone-info" disabled="disabled" value="{{user_phone}}">
         </div>
         <div class="personal-foot">
             <span class="edit-info-btn">编辑</span>
@@ -51,7 +51,7 @@
     <div class="modify-password">
         <div>
             <span>旧密码</span>
-            <input class="old_pw" type="password">
+            <input class="origin_pw" type="password">
         </div>
 
         <div>
@@ -63,7 +63,7 @@
             <span>确认新密码</span>
             <input class="confirm_new_pw" type="password">
         </div>
-        <span>*新密码不能为空</span>
-        <div class="confirm-btn">确定</div>
+        <span class="ps-warn">* 新密码不能为空</span>
+        <button class="confirm-btn" disabled="disabled">确定</button>
     </div>
 </div>

@@ -22,9 +22,14 @@
 
   //个人信息面板
   .personal-info{
-      input:disabled{
-        background: transparent;
-      }
+    input:disabled{
+      background: transparent;
+    }
+
+
+    .cancel-save{
+      display: none;
+    }
   }
 
 
@@ -34,6 +39,10 @@
   .modify-password{
     display: none;
 
+
+    .ps-warn{
+      color: red;
+    }
 
 
 
