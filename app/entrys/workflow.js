@@ -9,7 +9,7 @@ import {workflowService} from '../services/workflow/workflow.service';
 import WorkFlowCreate from '../components/workflow/workflow-create/workflow-create';
 import Mediator from '../lib/mediator';
 import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
-
+import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow';
 
 WorkFlowForm.showForm();
 
