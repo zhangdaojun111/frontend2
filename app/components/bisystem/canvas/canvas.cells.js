@@ -7,6 +7,7 @@ import {canvasCellService} from '../../../services/bisystem/canvas.cell.service'
 import {router} from '../bi.router';
 import Mediator from '../../../lib/mediator';
 
+
 let config = {
     template: template,
     data: {
