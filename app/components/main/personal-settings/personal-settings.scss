@@ -1,0 +1,44 @@
+.main-window{
+  width: 100%;
+  //个人设置头部样式
+  .personal-setting-header{
+    .avatar-box {
+      width: 64px;
+      height: 64px;
+      //border-radius: 100%;
+      overflow: hidden;
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  
+  //面板控制按钮
+  .view-control{
+
+  }
+
+  //个人信息面板
+  .personal-info{
+      input:disabled{
+        background: transparent;
+      }
+  }
+
+
+
+
+  //修改密码面板
+  .modify-password{
+    display: none;
+
+
+
+
+  }
+}
+
+
+

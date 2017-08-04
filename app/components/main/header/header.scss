@@ -31,16 +31,16 @@
             background-repeat: no-repeat;
             float: right;
             &.message {
-                background-image: url("../../../assets/images/task.png");
+                background-image: url("../../../assets/images/framework/task.png");
             }
             &.task {
-                background-image: url("../../../assets/images/task.png");
+                background-image: url("../../../assets/images/framework/task.png");
             }
             &.bi {
-                background-image: url("../../../assets/images/bi.png");
+                background-image: url("../../../assets/images/framework/bi.png");
             }
             &.calendar {
-                background-image: url("../../../assets/images/calendar.png");
+                background-image: url("../../../assets/images/framework/calendar.png");
             }
         }
 
@@ -52,9 +52,9 @@
             background-position: center;
             background-repeat: no-repeat;
             float: left;
-            background-image: url("../../../assets/images/fold.png");
+            background-image: url("../../../assets/images/framework/fold.png");
             &.refold {
-                background-image: url("../../../assets/images/refold.png");
+                background-image: url("../../../assets/images/framework/refold.png");
             }
         }
     }

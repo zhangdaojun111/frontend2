@@ -3,6 +3,8 @@ import template from './aside.html';
 import './aside.scss';
 import {MenuComponent} from '../menu-full/menu.full';
 import Mediator from '../../../lib/mediator';
+import PersonalSettings from "../personal-settings/personal-settings"
+
 
 function presetMenuData(menu, leaf) {
     let res;
@@ -72,6 +74,10 @@ let config = {
                 name: '发起工作流',
                 url: window.config.sysConfig.create_wf
             });
+        },
+        showInfoSet:function () {
+            //打开个人设置页面
+            PersonalSettings.show();
         }
     },
     afterRender: function () {
@@ -82,6 +88,8 @@ let config = {
                 this.actions.showAllMenu();
             }).on('click', '.tabs p.common', () => {
                 this.actions.showCommonMenu();
+            }).on('click','.set-info', () => {
+                this.actions.showInfoSet();
             });
             this.actions.showAllMenu();
         }
