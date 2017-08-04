@@ -61,17 +61,17 @@ var tree = [
 var treeComp = new TreeView(tree,function (event,selectedNode) {
     console.log("选中节点："+selectedNode.text);
     // console.dir(selectedNode);
-},'SINGLE_SELECT','tree1');
+},'SINGLE_SELECT',false,'tree1');
 treeComp.render($('#treeSingle'));
 var treeComp1 = new TreeView(tree,function (event,selectedNode) {
     console.log("选中节点："+selectedNode.text);
     // console.dir(selectedNode);
-},'MENU','tree2');
+},'MENU',false,'tree2');
 treeComp1.render($('#treeMenu'));
 var treeComp2 = new TreeView(tree,function (event,selectedNode) {
     console.log("选中节点："+selectedNode.text);
     // console.dir(selectedNode);
-},'MULTI_SELECT','tree3');
+},'MULTI_SELECT',true,'tree3');
 treeComp2.render($('#treeMulti'));
 
 ///tree demo

@@ -41,45 +41,65 @@ let config = {
         treeNodes:{},
         treeType:'SINGLE_SELECT',
         divClass: 'default-tree',
+        isSearch: false,
         selectedCallback: function () {}
     },
     actions:{
-        _uncheckAllAncestors:function(node){
-            let parent = this.el.treeview('getParent',node);
+        searchTreeNode:function(inputComp,tree){
+            var keyword = inputComp.val();
+            tree.treeview('clearSearch');
+            if(keyword && keyword != '' && keyword != ' '){
+                tree.treeview('search',[keyword,{
+                    ignoreCase:true,
+                    exactMatch:false,
+                    revealResults:true
+                }])
+            }
+        },
+        _delay:function (callback,ms) {
+            var timer = 0;
+            return function (callback,ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback,ms);
+            };
+        },
+        _uncheckAllAncestors:function(node,treeEle){
+            let parent = treeEle.treeview('getParent',node);
             if(parent != undefined && parent.nodeId != undefined && parent.state.selected == true){
-                this.el.treeview('uncheckNode',[parent.nodeId,{silent:true}]);
-                this.el.treeview('unselectNode',[parent.nodeId,{silent:true}]);
-                this.actions._uncheckAllAncestors(parent);
+                treeEle.treeview('uncheckNode',[parent.nodeId,{silent:true}]);
+                treeEle.treeview('unselectNode',[parent.nodeId,{silent:true}]);
+                this.actions._uncheckAllAncestors(parent,treeEle);
             }
         },
-        _checkAllChildren:function(node){
+        _checkAllChildren:function(node,treeEle){
             if(node.nodes){
                 node.nodes.forEach(child=>{
-                    this.el.treeview('checkNode',[child.nodeId,{silent:true}]);
-                    this.el.reeview('selectNode',[child.nodeId,{silent:true}]);
-                    this.actions._checkAllChildren(child);
+                    treeEle.treeview('checkNode',[child.nodeId,{silent:true}]);
+                    treeEle.reeview('selectNode',[child.nodeId,{silent:true}]);
+                    this.actions._checkAllChildren(child,treeEle);
                 })
             }
         },
-        _uncheckAllChildren:function(node) {
+        _uncheckAllChildren:function(node,treeEle) {
             if(node.nodes){
                 node.nodes.forEach(child=>{
-                    this.el.treeview('uncheckNode',[child.nodeId,{silent:true}]);
-                    this.el.treeview('unselectNode',[child.nodeId,{silent:true}]);
-                    this.actions._uncheckAllChildren(child);
+                    treeEle.treeview('uncheckNode',[child.nodeId,{silent:true}]);
+                    treeEle.treeview('unselectNode',[child.nodeId,{silent:true}]);
+                    this.actions._uncheckAllChildren(child,treeEle);
                 })
             }
         },
-        _expandAllParents:function(node){
-            let parent = this.el.treeview('getParent',node);
+        _expandAllParents:function(node,treeEle){
+            let parent = treeEle.treeview('getParent',node);
             if(parent != undefined && parent.nodeId != undefined){
-                this.el.treeview('expandNode', [parent.nodeId,{silent:true}]);
-                this.actions._expandAllParents(parent);
+                treeEle.treeview('expandNode', [parent.nodeId,{silent:true}]);
+                this.actions._expandAllParents(parent,treeEle);
             }
         }
     },
     afterRender:function() {
-        let tree = this.el;
+        //树
+        let tree = this.el.find('#tree');
         if(this.data.divClass){
             this.el.addClass(this.data.divClass);
         }
@@ -90,7 +110,7 @@ let config = {
         let emptyIcon = treeType.leafIcon;
         let backColor = treeType.backColor;
         if(treeType.multiSelect){
-            this.el.treeview({data:this.data.treeNodes,
+            tree.treeview({data:this.data.treeNodes,
                 checkedIcon:treeType.checkedIcon,
                 uncheckedIcon:treeType.uncheckedIcon,
                 showCheckbox:true,
@@ -102,7 +122,7 @@ let config = {
                 onNodeChecked: function (event, data) {
                     tree.treeview('selectNode',[data.nodeId,{silent:false}]);
                     //没有采用silent：false的方法在树的上下级传递checked状态是为了减少事件发生
-                    treeview.actions._checkAllChildren(data);
+                    treeview.actions._checkAllChildren(data,tree);
                     // if(data.nodes){
                     //     data.nodes.forEach(child=>{
                     //         $('#tree').treeview('checkNode',[child.nodeId,{silent:false}]);
@@ -112,13 +132,13 @@ let config = {
                 },
                 onNodeUnchecked: function (event, data) {
                     tree.treeview('unselectNode',[data.nodeId,{silent:false}]);
-                    treeview.actions._uncheckAllChildren(data);
+                    treeview.actions._uncheckAllChildren(data,tree);
                     // if(data.nodes){
                     //     data.nodes.forEach(child=>{
                     //         $('#tree').treeview('uncheckNode',[child.nodeId,{silent:false}]);
                     //     })
                     // }
-                    treeview.actions._uncheckAllAncestors(data);
+                    treeview.actions._uncheckAllAncestors(data,tree);
                     treeview.data.selectedCallback('unselect',data);
                 },
             });
@@ -138,7 +158,7 @@ let config = {
                     if(!node.nodes){
                         treeview.data.selectedCallback('select',node);
                     }
-                    treeview.actions._expandAllParents(node);
+                    treeview.actions._expandAllParents(node,tree);
                     tree.treeview('toggleNodeExpanded',[node.nodeId]);
                 },
                 onNodeUnselected: function (event, node) {
@@ -159,7 +179,27 @@ let config = {
         }
         if(TREETYPE[this.data.treeType].collapsed){
             tree.treeview('collapseAll', { silent: true });
+        } else {
+            tree.treeview('expandAll', { level: 2, silent: true });
         }
+
+        //搜索框
+        if(!this.data.isSearch){
+            this.el.find("#search-in-tree").hide();
+        } else {
+            var timeout = null;
+            var inputComp = this.el.find('#search-in-tree');
+            this.el.on('keyup','#search-in-tree',()=>{
+                //500ms的延迟，减少事件处理
+                if(timeout !=null) {
+                    clearTimeout(timeout);
+                }
+                timeout = setTimeout(function(){
+                    timeout = null;
+                    treeview.actions.searchTreeNode(inputComp,tree)},500);
+            })
+        }
+
     }
 }
 
@@ -194,12 +234,18 @@ let config = {
  *  风格化方法：定义scss文件，在调用本树的组件中import，参照示例的tree1写法
  */
 class TreeView extends Component{
-    constructor(treeNodes, callback,treeType,treeName){
+    constructor(treeNodes, callback,treeType,isSearch,treeName){
         config.data.treeNodes = treeNodes;
-        config.data.divClass = treeName;
         config.data.selectedCallback = callback;
+        if(isSearch){
+            console.log(isSearch);
+            config.data.isSearch = isSearch;
+        }
         if(treeType){
             config.data.treeType = treeType;
+        }
+        if(treeName){
+            config.data.divClass = treeName;
         }
         super(config);
     }
