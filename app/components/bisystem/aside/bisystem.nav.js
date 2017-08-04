@@ -45,10 +45,10 @@ let AsideConfig = {
     }
 };
 
-class AsideNav extends BiBaseComponent{
+class AsideNavComponent extends BiBaseComponent{
     constructor() {
         super(AsideConfig)
     }
 }
 
-export default AsideNav;
+export default AsideNavComponent;

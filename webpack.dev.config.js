@@ -31,7 +31,7 @@ module.exports = {
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         bi:path.resolve(APP_PATH, 'entrys/bi.js'),
-        biManage:path.resolve(APP_PATH, 'entrys/bimanager.js'),
+        bimanager:path.resolve(APP_PATH, 'entrys/bimanager.js'),
         calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
         vendors: [

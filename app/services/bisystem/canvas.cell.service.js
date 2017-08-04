@@ -20,6 +20,9 @@ export const canvasCellService = {
             }
         })
     },
+    /**
+     *
+     */
 
     /**
      * 获取画布块图表数据
