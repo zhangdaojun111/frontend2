@@ -33,7 +33,7 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
-        Mediator.subscribe('form:dropDownSelect',function(data){
+        Mediator.subscribe('form:dropDownSelect'+_this.data.tableId,function(data){
             if(data.dfield !=_this.data.dfield){
                 return;
             }
@@ -42,9 +42,6 @@ let config={
                 if(_this.hasChoose.has(i)){
                     continue;
                 };
-                // if(i==data.index){
-                //     d['showValue']=data.value;
-                // }
                 d['options']=[];
                 let set=new Set();
                 for(let key in _this.data.dataList){
@@ -61,7 +58,7 @@ let config={
                     }
                 }
                 for(let item of set){
-                    d['options'].push({label:item,value:item});
+                    d['options'].push({label:item,value:item,tableId:_this.data.tableId});
                 }
                 let drop=_this.childDrop[i];
                 drop.data=Object.assign(drop.data,d);
@@ -86,7 +83,7 @@ let config={
                         _this.data.value=key;
                         data['value']=key;
                         if(_this.data.required){
-                            Mediator.publish('form:changeValue',data);
+                            Mediator.publish('form:changeValue-'+_this.data.tableId,data);
                         }
                     }
                 }
@@ -106,13 +103,13 @@ let config={
                     set.add(_this.data.dataList[key][i]);
                 }
                 for(let item of set){
-                    d['options'].push({label:item,value:item});
+                    d['options'].push({label:item,value:item,"tableId":_this.data.tableId});
                 }
                 let drop=_this.childDrop[i];
                 drop.data=Object.assign(drop.data,d);
                 drop.reload();
                 _this.data.value='';
-                Mediator.publish('form:changeValue',_this.data);
+                _.debounce(function(){Mediator.publish('form:changeValue-'+_this.data.tableId,_this.data)},200)();
             }
         });
     },
@@ -139,7 +136,7 @@ let config={
             if(this.data.value){
                 let option=this.data.dataList[this.data.value][i];
                 d['value']=option;
-                d['options'].push({label:option,value:option});
+                d['options'].push({label:option,value:option,tableId:this.data.tableId});
                 this.hasChoose.set(i,option);
             }else{
                 d['value']='请选择';
@@ -148,7 +145,7 @@ let config={
                     set.add(this.data.dataList[key][i]);
                 }
                 for(let item of set){
-                    d['options'].push({label:item,value:item});
+                    d['options'].push({label:item,value:item,tableId:this.data.tableId});
                 }
             }
             if(isInit){
@@ -164,7 +161,5 @@ let config={
 export default class MultiLinkageControl extends Component{
     constructor(data){
         super(config,data);
-        console.log('multi-linkage-control');
-        console.log(this.data);
     }
 }

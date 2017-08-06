@@ -23,10 +23,10 @@ let config = {
 }
 
 class Item extends Component {
-    constructor(data) {
         config.data = data;
         super(config);
     }
+
 }
 
 export default Item;

@@ -44,13 +44,7 @@ let config={
         let regErrorMsg;
         let val = this.el.find("input").val();
         this.data.value=val;
-        if(_this.timer){
-            clearTimeout(_this.timer);
-            _this.timer=null;
-        }
-        _this.timer=setTimeout(function(){
-            Mediator.publish('form:changeValue',_this.data);
-        },300);
+        _.debounce(function(){Mediator.publish('form:changeValue-'+_this.data.tableId,_this.data)},200)();
         let func = this.data.func;
         let reg = this.data.reg;
         let required = this.data.required
@@ -146,8 +140,6 @@ let config={
     }
     },
     firstAfterRender:function(){
-        this.set('timer',null);
-        let _this=this;
     },
     afterRender: function() {
         this.el.on('keyup', 'input', () => {

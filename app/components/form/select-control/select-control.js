@@ -28,14 +28,14 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
-        Mediator.subscribe('form:dropDownSelect',function(data){
+        Mediator.subscribe('form:dropDownSelect'+_this.data.tableId,function(data){
             if(data.dfield !=_this.data.dfield){
                 return;
             }
             _this.data=Object.assign(_this.data,data);
-            Mediator.publish('form:changeValue',_this.data);
+            _.debounce(function(){Mediator.publish('form:changeValue-'+_this.data.tableId,_this.data)},200)();
         });
-        Mediator.subscribe('form:changeOption',function(data){
+        Mediator.subscribe('form:changeOption'+_this.data.tableId,function(data){
             if( _this.data.dfield && res == _this.data.dfield ){
                 _this.data.value = [];
                 _this.reload();

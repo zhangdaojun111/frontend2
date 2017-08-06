@@ -2,12 +2,29 @@ import FormBase from '../components/form/base-form/base-form'
 import {HTTP} from '../lib/http';
 import '../components/form/vender/my-multiSelect/my-multiSelect'
 import '../components/form/vender/my-multiSelect/my-multiSelect.css'
+import {FormService} from "../services/formService/formService";
 
-import Quill from 'quill';
-
-
-let formBase;
-function hasKeyInFormDataStatic(key,staticData){
+// @parma
+//
+let FormEntrys={
+    init:function(config={}){
+        this.tableId=config.table_id||'';
+        this.parentRealId=config.parent_real_id||'';
+        this.parentTempId=config.parent_temp_id||'';
+        this.seqId=config.seqId||'';
+        this.realId=config.real_id||'';
+        this.parentTableId=config.parent_table_id||'';
+        this.parentRecordId=config.parent_record_id||'';
+        this.isView=config.is_view || 0;
+        this.isBatch=config.is_batch || 0;
+        this.recordId=config.record_id||'';
+        this.action=config.action||'';
+        this.el=config.el||'';
+        this.reloadDraftData=config.reload_draft_data||0;
+        this.formId=config.form_id||'';
+        this.fromWorkFlow=config.from_workflow||0;
+    },
+    hasKeyInFormDataStatic:function (key,staticData){
     let isExist = false;
     for(let dict of staticData["data"]){
         if(dict["dfield"] == key){
@@ -15,12 +32,35 @@ function hasKeyInFormDataStatic(key,staticData){
         }
     }
     return isExist;
-}
-//merge静态和动态数据
-function mergeFormData(staticData,dynamicData){
+},
+    //拼装发送json
+    createPostJson(){
+        let json;
+        if(this.fromWorkFlow){
+            json={
+                form_id:this.formId,
+                record_id:this.recordId,
+                reload_draft_data:this.reloadDraftData,
+                from_workflow:this.fromWorkFlow,
+                table_id:this.tableId
+            }
+        }else{
+            json={
+                form_id:this.formId,
+                table_id:this.tableId,
+                is_view:this.isView,
+                parent_table_id:this.parentTableId,
+                parent_real_id:this.parentRealId,
+                real_id:this.realId,
+                parent_temp_id:this.parentTempId,
+            }
+        }
+        return json;
+    },
     //merge数据
+    mergeFormData:function (staticData,dynamicData){
     for(let dfield in dynamicData["data"]){
-        if(hasKeyInFormDataStatic(dfield,staticData)){
+        if(this.hasKeyInFormDataStatic(dfield,staticData)){
             for(let dict of staticData["data"]){
                 if(dict["dfield"] == dfield){
                     for(let k in dynamicData["data"][dfield]){
@@ -36,22 +76,20 @@ function mergeFormData(staticData,dynamicData){
     staticData["parent_table_id"] = dynamicData["parent_table_id"];
     staticData["frontend_cal_parent_2_child"] = dynamicData["frontend_cal_parent_2_child"];
     staticData["error"] = dynamicData["error"];
-    let data={
-
-    }
-    parseRes(staticData);
+    let data={};
+    this.parseRes(staticData);
     for(let obj of staticData.data){
         data[obj.dfield]=obj;
     }
     staticData.data=data;
+    staticData.tableId=this.tableId;
     return staticData;
-}
-
-function parseRes(res){
+},
+    //处理字段数据
+    parseRes:function (res){
     if(res !== null){
         let formData = res["data"];
         if(formData.length != 0){
-            //年份选择设置为默认当年
             let myDate = new Date();
             let myYear = myDate.getFullYear();
             let parentRealId = '';
@@ -67,6 +105,7 @@ function parseRes(res){
                 }
             }
             for( let data of formData ){
+                data['tableId']=this.tableId;
                 if( data.type == "year" ){
                     if( data.value == "" ){
                         data.value = String( myYear );
@@ -92,138 +131,105 @@ function parseRes(res){
             }
         }
     }
-}
-
-$('#toEdit').on('click',function(){
-    if(formBase){
-        formBase.destroySelf();
-    }
-    let el=$('<div style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">').appendTo('body');
-    let template=`<div class="form">
-                  <div data-dfield="f23" data-type="Textarea" data-width="500"/>
-                  <div data-dfield="f8" data-type="Radio" data-width="300"/>
-                  <div data-dfield="f26" data-type="Input" data-width="300"/>
-                  <div data-dfield="f31" data-type="Input" data-width="300"/>
-                  <div data-dfield="f7" data-type="Select" data-width="300"/>
-                  <div data-dfield="f6" data-type="Year" data-width="300"/>
-                  <div data-dfield="f5" data-type="Buildin" data-width="300"/>
-                  <div data-dfield="f10" data-type="MultiLinkage" data-width="300"/>
-                   <div data-dfield="f24" data-type="Input" data-width="300"/>
-                   <div data-dfield="f30" data-type="Input" data-width="300"/>
-                   <div data-dfield="f14" data-type="Input" data-width="300"/>
-                   <div data-dfield="f29" data-type="Input" data-width="300"/>
-                   <div data-dfield="f25" data-type="Input" data-width="300"/>
-                   <div data-dfield="f15" data-type="Input" data-width="300"/>
-                  <div data-dfield="f11" data-type="Readonly" data-width="300"/>
-                   <div data-dfield="f233" data-type="Hidden" data-width="300"/>
-                  <div data-dfield="f27" data-type="Password" data-width="300"/>
-                  <div data-dfield="f28" data-type="YearMonthControl" data-width="300"/>
-                  <!--<div data-dfield="f28" data-type="YearMonthControl" data-width="300"/>-->
-                  </div>
-                    `;
-    let real_id=$('#real_id').get(0).value||'';
-    let is_view=$('#is_view').get(0).value||0;
-    wait(el,template,'xiongxiaotao','1285_pkz2teyhHCztFrYhoc6F54',real_id,is_view);
-});
-$('#count').on('click',function(){
-    if(formBase){
-        formBase.destroySelf();
-    }
-    let el=$('<div style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">').appendTo('body');
-    let template=`<div class="form">
-              <div data-dfield="f5" data-type="Input" data-width="300"/>
-              <div data-dfield="f6" data-type="Readonly" data-width="300"/>
-              </div>
-                `;
-    let real_id=$('#real_id').get(0).value||'';
-    let is_view=$('#is_view').get(0).value||0;
-    wait(el,template,'yudeping','7051_UoWnaxPaVSZhZcxZPbEDpG',real_id,is_view);
-});
-$('#editRequired').on('click',function(){
-    if(formBase){
-        formBase.destroySelf();
-    }
-    let el=$('<div style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">').appendTo('body');
-    let template=`<div class="form">
-              <div data-dfield="f5" data-type="Input" data-width="300"/>
-              <div data-dfield="f6" data-type="Radio" data-width="300"/>
-              </div>
-                `;
-    let real_id=$('#real_id').get(0).value||'';
-    let is_view=$('#is_view').get(0).value||0;
-    wait(el,template,'yudeping','3461_P28RYPGTGGE7DVXH8LBMHe',real_id,is_view);
-});
-$('#defaultValue').on('click',function(){
-    if(formBase){
-        formBase.destroySelf();
-    }
-    let el=$('<div style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">').appendTo('body');
-    //默认值
-    let template=`<div class="form">
-              <div data-dfield="f5" data-type="Input" data-width="300"/>
-              <div data-dfield="f6" data-type="Input" data-width="300"/>
-              </div>
-                `;
-
-    let real_id=$('#real_id').get(0).value||'';
-    let is_view=$('#is_view').get(0).value||0;
-    wait(el,template,'yudeping','1160_ex7EbDsyoexufF2UbXBmSJ',real_id,is_view);
-});
-
-$('#exp').on('click',function(){
-    if(formBase){
-        formBase.destroySelf();
-    }
-    let el=$('<div style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">').appendTo('body');
-    let real_id=$('#real_id').get(0).value||'';
-    let is_view=$('#is_view').get(0).value||0;
-    let template='11';
-    wait(el,template,'yudeping','7336_HkkDT7bQQfqBag4kTiFWoa',real_id,is_view);
-})
-
-async function wait(el,template,seqid,table_id,real_id,is_view) {
-    let staticData = await HTTP.postImmediately({
-        url: `/get_form_static_data/?seqid=${seqid}&table_id=${table_id}&is_extra=&form_id=`,
-        type: "POST",
-        data: {
-            form_id:'',
-            table_id:table_id,
-            is_view:is_view,
-            parent_table_id:'',
-            parent_real_id:'',
-            real_id:real_id,
-            parent_temp_id:'',
-        }
-    });
-    let dynamicData = await HTTP.postImmediately({
-        url: `/get_form_dynamic_data/?seqid=${seqid}&table_id=${table_id}&is_extra=&form_id=`,
-        type: "POST",
-        hearder:'',
-        data: {
-            form_id:'',
-            table_id:table_id,
-            is_view:is_view,
-            parent_table_id:'',
-            parent_real_id:'',
-            parent_temp_id:'',
-            real_id:real_id,
-        }
-    });
-    template=formDefaultVersion(staticData.data);
-    let data=mergeFormData(staticData,dynamicData);
-    let formData={
-        template:template,
-        data:data,
-    }
-    formBase=new FormBase(formData);
-    formBase.render(el);
-}
-
-function formDefaultVersion(data){
+},
+    //默认表单
+    formDefaultVersion : function (data){
     let html='<div class="form">';
     for(let obj of data){
         html+=`<div data-dfield="${obj.dfield}" data-type="${obj.type}"></div>`;
     }
     html+='</div>'
     return html;
+},
+
+    destoryForm(tableID){
+        $(`#form-${tableID}`).remove();
+    },
+    //创建表单入口
+    createForm:function(config={}){
+        let _this=this;
+        if(this.tableId){
+            this.destoryForm(this.tableId);
+        }
+        this.init(config);
+        let tableID=this.tableId;
+        let html=$(`<div id="form-${tableID}" style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">`).appendTo(this.el);
+        let template='';
+        let json=this.createPostJson();
+        FormService.getFormData(json).then(res=>{
+            template=_this.formDefaultVersion(res[0].data);
+            let data=_this.mergeFormData(res[0],res[1]);
+            let formData={
+                template:template,
+                data:data,
+            }
+            _this.formBase=new FormBase(formData);
+            _this.formBase.render(html);
+        });
+    }
 }
+
+$('#toEdit').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.createForm({
+        table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
+    });
+});
+$('#count').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.createForm({
+        table_id:'7051_UoWnaxPaVSZhZcxZPbEDpG',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
+    });
+});
+$('#editRequired').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.createForm({
+        table_id:'3461_P28RYPGTGGE7DVXH8LBMHe',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
+    });
+});
+$('#defaultValue').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.createForm({
+        table_id:'1160_ex7EbDsyoexufF2UbXBmSJ',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
+    });
+});
+$('#exp').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    // FormEntrys.createForm({
+    //     tableId:'7336_HkkDT7bQQfqBag4kTiFWoa',
+    //     seqId:'yudeping',
+    //     el:$('body'),
+    //     isView:isView,
+    //     realId:realId
+    // });
+    FormEntrys.createForm({
+        form_id:206,
+        record_id:'',
+        reload_draft_data:0,
+         from_workflow:1,
+        table_id:'3277_k5JFeqSiX2iuCvM3rXay9L'
+    });
+
+})
+export default FormEntrys
