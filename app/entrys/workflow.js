@@ -1,20 +1,20 @@
 
 import '../assets/scss/main.scss';
-
 import 'jquery-ui/ui/widgets/button.js';
 import 'jquery-ui/ui/widgets/dialog.js';
 
 import {HTTP} from '../lib/http';
+import Mediator from '../lib/mediator';
 import {workflowService} from '../services/workflow/workflow.service';
 import WorkFlowCreate from '../components/workflow/workflow-create/workflow-create';
-import Mediator from '../lib/mediator';
-import WorkflowDivFramework from '../components/workflow/workflow-divFramework';
+import WorkflowInitial from '../components/workflow/workflow-initial';
 import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
+import ApprovalHeader from '../components/workflow/approval-header/approval-header';
+import ApprovalWorkflow from '../components/workflow/approval-workflow';
 
 import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow';
 
 import FormEntrys from './form';
-
 
 
 WorkFlowForm.showForm();
@@ -96,4 +96,10 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
         let data = await workflowService.delWorkflowFavorite({'id': msg});
     })();
 });
+
+
+//审批工作流
+
+ApprovalHeader.showheader();
+
 

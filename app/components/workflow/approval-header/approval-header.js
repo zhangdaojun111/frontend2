@@ -29,9 +29,7 @@ class ApprovalHeader extends Component{
 }
 
 export default {
-
-    //获取常用工作流和下拉工作流名称
-    loadData(data){
+    showheader(data){
         let component = new ApprovalHeader(data);
         let el = $('#approval-header');
         component.render(el);

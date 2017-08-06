@@ -1,6 +1,6 @@
 import Component from '../../lib/component';
-import template from './workflow-divFramework.html';
-import './workflow-divFramework.scss';
+import template from './workflow-initial.html';
+import './workflow-initial.scss';
 
 let config={
     template: template,
@@ -12,12 +12,12 @@ let config={
 
     }
 };
-class WorkflowDivFramework extends Component{
+class WorkflowInitial extends Component{
     constructor (data){
         super(config,data);
     }
 }
 
-let component = new WorkflowDivFramework();
-let el = $('#WorkflowDivFramework');
+let component = new WorkflowInitial();
+let el = $('#WorkflowInitial');
 component.render(el);
