@@ -5,3 +5,4 @@ node_modules
 /.idea/vcs.xml
 /.project
 /package-lock.json
+/npm-debug.log

@@ -15,6 +15,8 @@ import Mediator from "../../../lib/mediator";
 import {HTTP} from "../../../lib/http";
 import {FormService} from "../../../services/formService/formService"
 import MultiSelectControl from "../multi-select-control/multi-select-control";
+import EditorControl from "../editor-control/editor";
+import SettingTextareaControl from "../setting-textarea-control/setting-textarea";
 
 let config={
     template:'',
