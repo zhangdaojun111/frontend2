@@ -42,15 +42,15 @@
     "webpack-hot-middleware": "^2.18.2"
   },
   "dependencies": {
-//    "ag-grid": "^12.0.2",
-//    "babel-polyfill": "^6.23.0",
-//    "babel-runtime": "^6.23.0",
-//    "echarts": "^3.6.2",
-//    "handlebars": "^4.0.10",
-//    "jquery": "^3.2.1",
-//    "jquery-ui": "^1.12.1",
-//    "lodash": "^4.17.4",
-//    "mediator-js": "^0.9.9",
-//    "moment": "^2.18.1"
+    "ag-grid": "^12.0.2",
+    "babel-polyfill": "^6.23.0",
+    "babel-runtime": "^6.23.0",
+    "echarts": "^3.6.2",
+    "handlebars": "^4.0.10",
+    "jquery": "^3.2.1",
+    "jquery-ui": "^1.12.1",
+    "lodash": "^4.17.4",
+    "mediator-js": "^0.9.9",
+    "moment": "^2.18.1"
   }
 }
