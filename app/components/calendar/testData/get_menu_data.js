@@ -5182,3 +5182,1614 @@ export const table1190DataSet = {
     "success": 1,
     "error": ""
 };
+
+export const calendarData =
+    {
+        "date2csids": {
+            "2017-08-03 21:07:12": [
+                5
+            ],
+            "2017-07-31 21:14:23": [
+                5
+            ],
+            "2017-08-04 18:09:03": [
+                5
+            ],
+            "2017-08-02 21:17:52": [
+                5
+            ],
+            "2017-08-03": [
+                6
+            ],
+            "2017-08-01 21:12:55": [
+                5
+            ]
+        },
+        "user_is_admin": 0,
+        "success": 1,
+        "id2data": {
+            "5": {
+                "selectedRepresents_data": [
+                    {
+                        "_id": "597f2d2f551044f6050763d3",
+                        "7_NKMW6X5ZXXHoXNaCBAx9qg": "曾晶"
+                    },
+                    {
+                        "_id": "59807e58e88289eae60073d6",
+                        "7_NKMW6X5ZXXHoXNaCBAx9qg": "曾晶"
+                    },
+                    {
+                        "_id": "5981d101296e5b0255def941",
+                        "7_NKMW6X5ZXXHoXNaCBAx9qg": "曾晶"
+                    },
+                    {
+                        "_id": "59832000e96410adc4275765",
+                        "7_NKMW6X5ZXXHoXNaCBAx9qg": "曾晶"
+                    },
+                    {
+                        "_id": "598447c09fab8b83d98574b7",
+                        "7_NKMW6X5ZXXHoXNaCBAx9qg": "曾晶"
+                    }
+                ],
+                "sms": {
+                    "cc_receiver": [],
+                    "sms_status": 0,
+                    "remind_time": "",
+                    "receiver": []
+                },
+                "is_drag": 0,
+                "selectedEnums_options": {},
+                "dfield": "f1",
+                "real_ids": [
+                    "597f2d2f551044f6050763d3",
+                    "59807e58e88289eae60073d6",
+                    "5981d101296e5b0255def941",
+                    "59832000e96410adc4275765",
+                    "598447c09fab8b83d98574b7"
+                ],
+                "color": "#00ff00",
+                "selectedOpts": [
+                    "7_NKMW6X5ZXXHoXNaCBAx9qg",
+                    "2067_KaLaVPHG8vcekX37PbyFcH"
+                ],
+                "field_id": "4743_dapycVCRLJrLughEqcvSGS",
+                "email": {
+                    "email_id": "",
+                    "cc_receiver": [],
+                    "email_status": 0,
+                    "remind_time": "",
+                    "receiver": []
+                },
+                "is_show_at_home_page": 1,
+                "isSelected": true,
+                "table_id": "1190_WsuRDjEJ9R6vHcHuR8hMzZ",
+                "key_field_id": "",
+                "selectedEnums_data": [],
+                "is_admin": 0,
+                "selectedOpts_data": [
+                    {
+                        "2067_KaLaVPHG8vcekX37PbyFcH": "2017-07-31 21:14:23",
+                        "_id": "597f2d2f551044f6050763d3",
+                        "4743_dapycVCRLJrLughEqcvSGS": "2017-07-31 21:14:23",
+                        "7_NKMW6X5ZXXHoXNaCBAx9qg": "曾晶"
+                    },
+                    {
+                        "2067_KaLaVPHG8vcekX37PbyFcH": "2017-08-01 21:12:55",
+                        "_id": "59807e58e88289eae60073d6",
+                        "4743_dapycVCRLJrLughEqcvSGS": "2017-08-01 21:12:55",
+                        "7_NKMW6X5ZXXHoXNaCBAx9qg": "曾晶"
+                    },
+                    {
+                        "2067_KaLaVPHG8vcekX37PbyFcH": "2017-08-02 21:17:52",
+                        "_id": "5981d101296e5b0255def941",
+                        "4743_dapycVCRLJrLughEqcvSGS": "2017-08-02 21:17:52",
+                        "7_NKMW6X5ZXXHoXNaCBAx9qg": "曾晶"
+                    },
+                    {
+                        "2067_KaLaVPHG8vcekX37PbyFcH": "2017-08-03 21:07:12",
+                        "_id": "59832000e96410adc4275765",
+                        "4743_dapycVCRLJrLughEqcvSGS": "2017-08-03 21:07:12",
+                        "7_NKMW6X5ZXXHoXNaCBAx9qg": "曾晶"
+                    },
+                    {
+                        "2067_KaLaVPHG8vcekX37PbyFcH": "2017-08-04 18:09:03",
+                        "_id": "598447c09fab8b83d98574b7",
+                        "4743_dapycVCRLJrLughEqcvSGS": "2017-08-04 18:09:03",
+                        "7_NKMW6X5ZXXHoXNaCBAx9qg": "曾晶"
+                    }
+                ],
+                "selectedEnums": [],
+                "type": 0,
+                "id": 5,
+                "selectedRepresents": [
+                    "7_NKMW6X5ZXXHoXNaCBAx9qg"
+                ]
+            },
+            "6": {
+                "selectedRepresents_data": [
+                    {
+                        "_id": "597ad71e1e3159e5fe408190",
+                        "8479_6KQr5Zx5BRQvLPmUyGyMiQ": "[frontend2][calendar]日历设置"
+                    },
+                    {
+                        "_id": "598298180ded76d0c580ac61",
+                        "8479_6KQr5Zx5BRQvLPmUyGyMiQ": "[frontend2][calendar]日历创建"
+                    }
+                ],
+                "sms": {
+                    "cc_receiver": [],
+                    "sms_status": 0,
+                    "remind_time": "",
+                    "receiver": []
+                },
+                "is_drag": 1,
+                "selectedEnums_options": {
+                    "": []
+                },
+                "dfield": "f18",
+                "real_ids": [
+                    "597ad71e1e3159e5fe408190",
+                    "598298180ded76d0c580ac61"
+                ],
+                "color": "#ff8040",
+                "selectedOpts": [
+                    "2570_DnNcGyE6J7UUnmHKXaBDvg",
+                    "8087_qzs8CdeWM6GjHntRJRfCXo",
+                    "7170_QT8H36TdYqvjMNvSffs32J",
+                    "1194_m3bZCfmnQWSdU3n7wouW4A",
+                    "9659_KvWwK6BhFTgMrTYkiN9SuJ",
+                    "9849_zVGcPUfR2w3ASAus8ahEgf",
+                    "6120_kNtpUbHBtX6F4GLv5bRiyn",
+                    "5173_sNVRLS8h3y648i7BFqohbQ",
+                    "3520_AvqFTbctahKgLSwh5CXrzJ",
+                    "442_FgeqoxizzeveRiwbWkGx3W",
+                    "8479_6KQr5Zx5BRQvLPmUyGyMiQ",
+                    "8193_SkvdpxYNTceTCzmUKX4G3C",
+                    "5549_CGYnvEDxxrTFAHKnjFk3E9",
+                    "2890_qRpWPM73PwuuqL7CDZKXHa",
+                    "1149_GHDQq6Guc6PkujnMBsBbwX",
+                    "8477_giNSX3CRV36kktVAaRpqqd"
+                ],
+                "field_id": "5093_hWHDF37u2M5HD4n5hdMy8L",
+                "email": {
+                    "email_id": "",
+                    "cc_receiver": [],
+                    "email_status": 0,
+                    "remind_time": "",
+                    "receiver": []
+                },
+                "is_show_at_home_page": 1,
+                "isSelected": true,
+                "table_id": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "key_field_id": "",
+                "selectedEnums_data": [
+                    {
+                        "": "",
+                        "_id": "597ad71e1e3159e5fe408190"
+                    },
+                    {
+                        "": "",
+                        "_id": "598298180ded76d0c580ac61"
+                    }
+                ],
+                "is_admin": 1,
+                "selectedOpts_data": [
+                    {
+                        "2570_DnNcGyE6J7UUnmHKXaBDvg": "2017-07-28 14:18:06",
+                        "1149_GHDQq6Guc6PkujnMBsBbwX": "需求",
+                        "8479_6KQr5Zx5BRQvLPmUyGyMiQ": "[frontend2][calendar]日历设置",
+                        "1194_m3bZCfmnQWSdU3n7wouW4A": "周仕超",
+                        "7170_QT8H36TdYqvjMNvSffs32J": "周仕超",
+                        "2890_qRpWPM73PwuuqL7CDZKXHa": "不适用",
+                        "8477_giNSX3CRV36kktVAaRpqqd": "",
+                        "8087_qzs8CdeWM6GjHntRJRfCXo": "2017-08-03 14:03:11",
+                        "8193_SkvdpxYNTceTCzmUKX4G3C": "[frontend2][calendar]\n日历创建和日历设置\n1.点击左上角【创建】，弹出日历表表单（见附件）\n2.点击【设置】，弹出系统中所有表，点击表名称，进行日历设置",
+                        "5173_sNVRLS8h3y648i7BFqohbQ": "重构",
+                        "5549_CGYnvEDxxrTFAHKnjFk3E9": "很严重",
+                        "9849_zVGcPUfR2w3ASAus8ahEgf": "开发中",
+                        "3520_AvqFTbctahKgLSwh5CXrzJ": "李术娟",
+                        "9659_KvWwK6BhFTgMrTYkiN9SuJ": "SAPQX_20170728_35934",
+                        "5093_hWHDF37u2M5HD4n5hdMy8L": "2017-08-03",
+                        "_id": "597ad71e1e3159e5fe408190",
+                        "6120_kNtpUbHBtX6F4GLv5bRiyn": "曾晶",
+                        "442_FgeqoxizzeveRiwbWkGx3W": "需求"
+                    },
+                    {
+                        "2570_DnNcGyE6J7UUnmHKXaBDvg": "2017-08-03 11:27:20",
+                        "1149_GHDQq6Guc6PkujnMBsBbwX": "需求",
+                        "8479_6KQr5Zx5BRQvLPmUyGyMiQ": "[frontend2][calendar]日历创建",
+                        "1194_m3bZCfmnQWSdU3n7wouW4A": "李鹏飞",
+                        "7170_QT8H36TdYqvjMNvSffs32J": "曾晶",
+                        "2890_qRpWPM73PwuuqL7CDZKXHa": "总是",
+                        "8477_giNSX3CRV36kktVAaRpqqd": "",
+                        "8087_qzs8CdeWM6GjHntRJRfCXo": "2017-08-03 11:38:20",
+                        "8193_SkvdpxYNTceTCzmUKX4G3C": "见对应关系",
+                        "5173_sNVRLS8h3y648i7BFqohbQ": "重构",
+                        "5549_CGYnvEDxxrTFAHKnjFk3E9": "很严重",
+                        "9849_zVGcPUfR2w3ASAus8ahEgf": "开发中",
+                        "3520_AvqFTbctahKgLSwh5CXrzJ": "文晶晶",
+                        "9659_KvWwK6BhFTgMrTYkiN9SuJ": "SAPQX_20170803_36049",
+                        "5093_hWHDF37u2M5HD4n5hdMy8L": "2017-08-03",
+                        "_id": "598298180ded76d0c580ac61",
+                        "6120_kNtpUbHBtX6F4GLv5bRiyn": "李鹏飞",
+                        "442_FgeqoxizzeveRiwbWkGx3W": "需求"
+                    }
+                ],
+                "selectedEnums": [
+                    ""
+                ],
+                "type": 0,
+                "id": 6,
+                "selectedRepresents": [
+                    "8479_6KQr5Zx5BRQvLPmUyGyMiQ"
+                ]
+            }
+        },
+        "tableid2name": {
+            "5613_CHEUbzmZMsjDFT3AiwPB46": "ERDS开发任务",
+            "1190_WsuRDjEJ9R6vHcHuR8hMzZ": "个人日报"
+        },
+        "error": "",
+        "field_infos": {
+            "2570_DnNcGyE6J7UUnmHKXaBDvg": {
+                "is_offer_index": 0,
+                "use_fields": {},
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "5",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "id": "2570_DnNcGyE6J7UUnmHKXaBDvg",
+                "default_value": "",
+                "dfield": "f1",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                    "real_field_dfield": "f1",
+                    "real_field_id": "2570_DnNcGyE6J7UUnmHKXaBDvg"
+                },
+                "real_dtype": "0",
+                "width": 130,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "0",
+                "edit_condition": {},
+                "dinput_type": "5",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "2570_DnNcGyE6J7UUnmHKXaBDvg",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": null,
+                "regular": {},
+                "about_field": null,
+                "drequired": 0,
+                "is_offer_py": 0,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {},
+                "dname": "创建时间",
+                "buildin_field": null,
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1
+            },
+            "1149_GHDQq6Guc6PkujnMBsBbwX": {
+                "is_offer_index": 0,
+                "use_fields": {},
+                "enum_py_dict": {
+                    "8481_DjJrRwVzVC3HAKQujvBtZT": [
+                        "xq",
+                        "nq",
+                        "rq"
+                    ],
+                    "392_6735kJkkiN6VNCi3DzVgGK": [
+                        "Bug"
+                    ]
+                },
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "7",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "enum_frontend_add": 0,
+                "id": "1149_GHDQq6Guc6PkujnMBsBbwX",
+                "default_value": "",
+                "dfield": "f28",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                    "real_field_dfield": "f28",
+                    "real_field_id": "1149_GHDQq6Guc6PkujnMBsBbwX"
+                },
+                "real_dtype": "4",
+                "width": 60,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "4",
+                "edit_condition": {},
+                "dinput_type": "7",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "1149_GHDQq6Guc6PkujnMBsBbwX",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": "",
+                "regular": {},
+                "about_field": null,
+                "enum_linkage": {},
+                "drequired": 1,
+                "is_offer_py": 0,
+                "enum_frontend_filter": 0,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {
+                    "392_6735kJkkiN6VNCi3DzVgGK": "Bug",
+                    "8481_DjJrRwVzVC3HAKQujvBtZT": "需求"
+                },
+                "dname": "问题类型",
+                "buildin_field": null,
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1,
+                "enum_info": {
+                    "392_6735kJkkiN6VNCi3DzVgGK": "Bug",
+                    "8481_DjJrRwVzVC3HAKQujvBtZT": "需求"
+                }
+            },
+            "4743_dapycVCRLJrLughEqcvSGS": {
+                "is_offer_index": 0,
+                "use_fields": {},
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "5",
+                "is_show": 1,
+                "dtable": "1190_WsuRDjEJ9R6vHcHuR8hMzZ",
+                "dcount": 0,
+                "id": "4743_dapycVCRLJrLughEqcvSGS",
+                "default_value": "",
+                "dfield": "f1",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "1190_WsuRDjEJ9R6vHcHuR8hMzZ",
+                    "real_field_dfield": "f1",
+                    "real_field_id": "4743_dapycVCRLJrLughEqcvSGS"
+                },
+                "real_dtype": "0",
+                "width": 130,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "0",
+                "edit_condition": {},
+                "dinput_type": "5",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "4743_dapycVCRLJrLughEqcvSGS",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": null,
+                "regular": {},
+                "about_field": null,
+                "drequired": 0,
+                "is_offer_py": 0,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {},
+                "dname": "创建时间",
+                "buildin_field": null,
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1
+            },
+            "1194_m3bZCfmnQWSdU3n7wouW4A": {
+                "is_offer_index": 0,
+                "use_fields": {
+                    "253_qBwHCWgRRDUwpA65sLA3Ri": {
+                        "real_type": "0",
+                        "dtable": "9040_HezGY74DU6jJ5hMGzwBYWh",
+                        "dfield": "f7",
+                        "dname": "姓名",
+                        "dtype": "0",
+                        "dinput_type": "0",
+                        "real_accuracy": 0,
+                        "is_external": 0
+                    }
+                },
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "0",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "id": "1194_m3bZCfmnQWSdU3n7wouW4A",
+                "default_value": "",
+                "dfield": "f4",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "9040_HezGY74DU6jJ5hMGzwBYWh",
+                    "real_field_dfield": "f7",
+                    "real_field_id": "253_qBwHCWgRRDUwpA65sLA3Ri"
+                },
+                "real_dtype": "0",
+                "width": 70,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "5",
+                "edit_condition": {},
+                "dinput_type": "6",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "1194_m3bZCfmnQWSdU3n7wouW4A",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": null,
+                "regular": {},
+                "about_field": null,
+                "buildin_frontend_add": 0,
+                "drequired": 0,
+                "is_offer_py": 0,
+                "is_user": 1,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {},
+                "dname": "最后修改人",
+                "buildin_field": {
+                    "source_table_is_parent": 0,
+                    "source_table_id": "9040_HezGY74DU6jJ5hMGzwBYWh",
+                    "source_field_dfield": "f7",
+                    "source_field_is_stand": 1,
+                    "source_field_id": "253_qBwHCWgRRDUwpA65sLA3Ri"
+                },
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1
+            },
+            "5549_CGYnvEDxxrTFAHKnjFk3E9": {
+                "is_offer_index": 0,
+                "use_fields": {},
+                "enum_py_dict": {
+                    "2725_iUMCHgdrmKCECueRXMxMmV": [
+                        "dj",
+                        "dw"
+                    ],
+                    "2845_yu9ShhhGhnV3hC4PiPE4pb": [
+                        "xj"
+                    ],
+                    "5244_aMetNYTDNTnAESXKYqes3D": [
+                        "bk",
+                        "bh"
+                    ],
+                    "5047_rDGWDpUYfcW8xCUUFKt2M4": [
+                        "hyz",
+                        "hyc",
+                        "hyt"
+                    ]
+                },
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "6",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "enum_frontend_add": 0,
+                "id": "5549_CGYnvEDxxrTFAHKnjFk3E9",
+                "default_value": "",
+                "dfield": "f17",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                    "real_field_dfield": "f17",
+                    "real_field_id": "5549_CGYnvEDxxrTFAHKnjFk3E9"
+                },
+                "real_dtype": "4",
+                "width": 60,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "4",
+                "edit_condition": {},
+                "dinput_type": "6",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "5549_CGYnvEDxxrTFAHKnjFk3E9",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": "",
+                "regular": {},
+                "about_field": null,
+                "enum_linkage": {},
+                "drequired": 1,
+                "is_offer_py": 0,
+                "enum_frontend_filter": 0,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {
+                    "2845_yu9ShhhGhnV3hC4PiPE4pb": "细节",
+                    "5047_rDGWDpUYfcW8xCUUFKt2M4": "很严重",
+                    "5244_aMetNYTDNTnAESXKYqes3D": "崩溃",
+                    "2725_iUMCHgdrmKCECueRXMxMmV": "宕机"
+                },
+                "dname": "严重性",
+                "buildin_field": null,
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1,
+                "enum_info": {
+                    "2845_yu9ShhhGhnV3hC4PiPE4pb": "细节",
+                    "5047_rDGWDpUYfcW8xCUUFKt2M4": "很严重",
+                    "5244_aMetNYTDNTnAESXKYqes3D": "崩溃",
+                    "2725_iUMCHgdrmKCECueRXMxMmV": "宕机"
+                }
+            },
+            "2890_qRpWPM73PwuuqL7CDZKXHa": {
+                "is_offer_index": 0,
+                "use_fields": {},
+                "enum_py_dict": {
+                    "7112_pnk6sjGmPfPbC4WY25tTM4": [
+                        "zs",
+                        "zt"
+                    ],
+                    "2451_idqvyGy8oMKPWRxATkL4HM": [
+                        "sj",
+                        "sw"
+                    ],
+                    "2935_qTdSaFTNo8ZfPwp7KYWyxL": [
+                        "mysy",
+                        "mwsy"
+                    ],
+                    "6334_SsJ2U46NSNeZoEMM5BHkVf": [
+                        "bsy",
+                        "fsy",
+                        "bky",
+                        "fky"
+                    ],
+                    "1286_QDFTcpm8yqo8xWfg9BDz7j": [
+                        "wfzx",
+                        "mfzx",
+                        "wfcx",
+                        "mfcx",
+                        "wftx",
+                        "mftx"
+                    ]
+                },
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "6",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "enum_frontend_add": 0,
+                "id": "2890_qRpWPM73PwuuqL7CDZKXHa",
+                "default_value": "",
+                "dfield": "f16",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                    "real_field_dfield": "f16",
+                    "real_field_id": "2890_qRpWPM73PwuuqL7CDZKXHa"
+                },
+                "real_dtype": "4",
+                "width": 60,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "4",
+                "edit_condition": {},
+                "dinput_type": "6",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "2890_qRpWPM73PwuuqL7CDZKXHa",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": "",
+                "regular": {},
+                "about_field": null,
+                "enum_linkage": {},
+                "drequired": 1,
+                "is_offer_py": 0,
+                "enum_frontend_filter": 0,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {
+                    "7112_pnk6sjGmPfPbC4WY25tTM4": "总是",
+                    "2451_idqvyGy8oMKPWRxATkL4HM": "随机",
+                    "2935_qTdSaFTNo8ZfPwp7KYWyxL": "没有实验",
+                    "1286_QDFTcpm8yqo8xWfg9BDz7j": "无法重现",
+                    "6334_SsJ2U46NSNeZoEMM5BHkVf": "不适用"
+                },
+                "dname": "出现频率",
+                "buildin_field": null,
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1,
+                "enum_info": {
+                    "7112_pnk6sjGmPfPbC4WY25tTM4": "总是",
+                    "2451_idqvyGy8oMKPWRxATkL4HM": "随机",
+                    "2935_qTdSaFTNo8ZfPwp7KYWyxL": "没有实验",
+                    "1286_QDFTcpm8yqo8xWfg9BDz7j": "无法重现",
+                    "6334_SsJ2U46NSNeZoEMM5BHkVf": "不适用"
+                }
+            },
+            "8477_giNSX3CRV36kktVAaRpqqd": {
+                "is_offer_index": 0,
+                "use_fields": {},
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "1",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "id": "8477_giNSX3CRV36kktVAaRpqqd",
+                "default_value": "",
+                "dfield": "f24",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                    "real_field_dfield": "f24",
+                    "real_field_id": "8477_giNSX3CRV36kktVAaRpqqd"
+                },
+                "real_dtype": "0",
+                "width": 60,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "0",
+                "edit_condition": {},
+                "dinput_type": "1",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "8477_giNSX3CRV36kktVAaRpqqd",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": "",
+                "regular": {},
+                "about_field": null,
+                "drequired": 0,
+                "is_offer_py": 0,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {},
+                "dname": "备注",
+                "buildin_field": null,
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1
+            },
+            "7170_QT8H36TdYqvjMNvSffs32J": {
+                "is_offer_index": 0,
+                "use_fields": {
+                    "253_qBwHCWgRRDUwpA65sLA3Ri": {
+                        "real_type": "0",
+                        "dtable": "9040_HezGY74DU6jJ5hMGzwBYWh",
+                        "dfield": "f7",
+                        "dname": "姓名",
+                        "dtype": "0",
+                        "dinput_type": "0",
+                        "real_accuracy": 0,
+                        "is_external": 0
+                    }
+                },
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "0",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "id": "7170_QT8H36TdYqvjMNvSffs32J",
+                "default_value": "",
+                "dfield": "f3",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "9040_HezGY74DU6jJ5hMGzwBYWh",
+                    "real_field_dfield": "f7",
+                    "real_field_id": "253_qBwHCWgRRDUwpA65sLA3Ri"
+                },
+                "real_dtype": "0",
+                "width": 60,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "5",
+                "edit_condition": {},
+                "dinput_type": "6",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "7170_QT8H36TdYqvjMNvSffs32J",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": null,
+                "regular": {},
+                "about_field": null,
+                "buildin_frontend_add": 0,
+                "drequired": 0,
+                "is_offer_py": 0,
+                "is_user": 1,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {},
+                "dname": "创建人",
+                "buildin_field": {
+                    "source_table_is_parent": 0,
+                    "source_table_id": "9040_HezGY74DU6jJ5hMGzwBYWh",
+                    "source_field_dfield": "f7",
+                    "source_field_is_stand": 1,
+                    "source_field_id": "253_qBwHCWgRRDUwpA65sLA3Ri"
+                },
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1
+            },
+            "9659_KvWwK6BhFTgMrTYkiN9SuJ": {
+                "is_offer_index": 0,
+                "use_fields": {},
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "14",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "id": "9659_KvWwK6BhFTgMrTYkiN9SuJ",
+                "default_value": "",
+                "dfield": "f5",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                    "real_field_dfield": "f5",
+                    "real_field_id": "9659_KvWwK6BhFTgMrTYkiN9SuJ"
+                },
+                "real_dtype": "0",
+                "width": 60,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "0",
+                "edit_condition": {},
+                "dinput_type": "14",
+                "is_offer_data": 1,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "9659_KvWwK6BhFTgMrTYkiN9SuJ",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": "",
+                "regular": {},
+                "about_field": null,
+                "drequired": 0,
+                "is_offer_py": 0,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {
+                    "digit": 2,
+                    "start_num": 1,
+                    "hyphen": "_",
+                    "date_rule": 2,
+                    "prefix_str": "SAPQX",
+                    "is_reset": 0,
+                    "date_hyphen": ""
+                },
+                "dname": "编号",
+                "buildin_field": null,
+                "has_count_mapping": 0,
+                "dunique": 1,
+                "need_to_update": 1
+            },
+            "8087_qzs8CdeWM6GjHntRJRfCXo": {
+                "is_offer_index": 1,
+                "use_fields": {},
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "5",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "id": "8087_qzs8CdeWM6GjHntRJRfCXo",
+                "default_value": "",
+                "dfield": "f2",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                    "real_field_dfield": "f2",
+                    "real_field_id": "8087_qzs8CdeWM6GjHntRJRfCXo"
+                },
+                "real_dtype": "0",
+                "width": 130,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "0",
+                "edit_condition": {},
+                "dinput_type": "5",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "8087_qzs8CdeWM6GjHntRJRfCXo",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": null,
+                "regular": {},
+                "about_field": null,
+                "drequired": 0,
+                "is_offer_py": 0,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {},
+                "dname": "更新时间",
+                "buildin_field": null,
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1
+            },
+            "2067_KaLaVPHG8vcekX37PbyFcH": {
+                "is_offer_index": 1,
+                "use_fields": {},
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "5",
+                "is_show": 1,
+                "dtable": "1190_WsuRDjEJ9R6vHcHuR8hMzZ",
+                "dcount": 0,
+                "id": "2067_KaLaVPHG8vcekX37PbyFcH",
+                "default_value": "",
+                "dfield": "f2",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "1190_WsuRDjEJ9R6vHcHuR8hMzZ",
+                    "real_field_dfield": "f2",
+                    "real_field_id": "2067_KaLaVPHG8vcekX37PbyFcH"
+                },
+                "real_dtype": "0",
+                "width": 130,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "0",
+                "edit_condition": {},
+                "dinput_type": "5",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "2067_KaLaVPHG8vcekX37PbyFcH",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": null,
+                "regular": {},
+                "about_field": null,
+                "drequired": 0,
+                "is_offer_py": 0,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {},
+                "dname": "更新时间",
+                "buildin_field": null,
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1
+            },
+            "8193_SkvdpxYNTceTCzmUKX4G3C": {
+                "is_offer_index": 0,
+                "use_fields": {},
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "1",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "id": "8193_SkvdpxYNTceTCzmUKX4G3C",
+                "default_value": "",
+                "dfield": "f14",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                    "real_field_dfield": "f14",
+                    "real_field_id": "8193_SkvdpxYNTceTCzmUKX4G3C"
+                },
+                "real_dtype": "0",
+                "width": 60,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "0",
+                "edit_condition": {},
+                "dinput_type": "1",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "8193_SkvdpxYNTceTCzmUKX4G3C",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": "",
+                "regular": {},
+                "about_field": null,
+                "drequired": 1,
+                "is_offer_py": 0,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {},
+                "dname": "问题描述",
+                "buildin_field": null,
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1
+            },
+            "442_FgeqoxizzeveRiwbWkGx3W": {
+                "is_offer_index": 0,
+                "use_fields": {},
+                "enum_py_dict": {
+                    "5281_WztdCghLYS8SNQjstsupv3": [
+                        "cachewt"
+                    ],
+                    "320_a4FoHAaaPm24GirZW9iaLe": [
+                        "pzwt"
+                    ],
+                    "2506_dtAeJuqrBDdvoZaWpPrbHB": [
+                        "fBug"
+                    ],
+                    "9835_ZrLVUkifND3AZVj8cd58e4": [
+                        "jmwt"
+                    ],
+                    "2237_XKy5tV7qzk6vHyH2v4RKTZ": [
+                        "sjwt"
+                    ],
+                    "3695_qvjUT2wmj5yNEWwUwSaV9c": [
+                        "fwqwt",
+                        "bwqwt"
+                    ],
+                    "9440_oEz6aoSZbhNUEHgY9CKi8c": [
+                        "xnpj",
+                        "xtpj",
+                        "xxpj",
+                        "xnpg",
+                        "xtpg",
+                        "xxpg"
+                    ],
+                    "6122_AGRwK3UZfM4Sy8HiDvdRY8": [
+                        "gnwt",
+                        "gtwt",
+                        "gxwt"
+                    ],
+                    "2662_TCGxpNFZ5T4cLtwWYo3fPa": [
+                        "xq",
+                        "nq",
+                        "rq"
+                    ],
+                    "3402_NcYGbWGt6HCmehbxD4Y4xU": [
+                        "sjqx",
+                        "sjkx"
+                    ]
+                },
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "6",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "enum_frontend_add": 0,
+                "id": "442_FgeqoxizzeveRiwbWkGx3W",
+                "default_value": "",
+                "dfield": "f15",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                    "real_field_dfield": "f15",
+                    "real_field_id": "442_FgeqoxizzeveRiwbWkGx3W"
+                },
+                "real_dtype": "4",
+                "width": 70,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "4",
+                "edit_condition": {},
+                "dinput_type": "6",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "442_FgeqoxizzeveRiwbWkGx3W",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": "",
+                "regular": {},
+                "about_field": null,
+                "enum_linkage": {},
+                "drequired": 1,
+                "is_offer_py": 0,
+                "enum_frontend_filter": 0,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {
+                    "2662_TCGxpNFZ5T4cLtwWYo3fPa": "需求",
+                    "9835_ZrLVUkifND3AZVj8cd58e4": "界面问题",
+                    "3402_NcYGbWGt6HCmehbxD4Y4xU": "设计缺陷",
+                    "9440_oEz6aoSZbhNUEHgY9CKi8c": "性能瓶颈",
+                    "3695_qvjUT2wmj5yNEWwUwSaV9c": "服务器问题",
+                    "2506_dtAeJuqrBDdvoZaWpPrbHB": "非Bug",
+                    "6122_AGRwK3UZfM4Sy8HiDvdRY8": "功能问题",
+                    "2237_XKy5tV7qzk6vHyH2v4RKTZ": "数据问题",
+                    "320_a4FoHAaaPm24GirZW9iaLe": "配置问题",
+                    "5281_WztdCghLYS8SNQjstsupv3": "cache问题"
+                },
+                "dname": "Bug类型",
+                "buildin_field": null,
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1,
+                "enum_info": {
+                    "2662_TCGxpNFZ5T4cLtwWYo3fPa": "需求",
+                    "9835_ZrLVUkifND3AZVj8cd58e4": "界面问题",
+                    "3402_NcYGbWGt6HCmehbxD4Y4xU": "设计缺陷",
+                    "9440_oEz6aoSZbhNUEHgY9CKi8c": "性能瓶颈",
+                    "3695_qvjUT2wmj5yNEWwUwSaV9c": "服务器问题",
+                    "2506_dtAeJuqrBDdvoZaWpPrbHB": "非Bug",
+                    "6122_AGRwK3UZfM4Sy8HiDvdRY8": "功能问题",
+                    "2237_XKy5tV7qzk6vHyH2v4RKTZ": "数据问题",
+                    "320_a4FoHAaaPm24GirZW9iaLe": "配置问题",
+                    "5281_WztdCghLYS8SNQjstsupv3": "cache问题"
+                }
+            },
+            "7_NKMW6X5ZXXHoXNaCBAx9qg": {
+                "is_offer_index": 0,
+                "use_fields": {
+                    "253_qBwHCWgRRDUwpA65sLA3Ri": {
+                        "real_type": "0",
+                        "dtable": "9040_HezGY74DU6jJ5hMGzwBYWh",
+                        "dfield": "f7",
+                        "dname": "姓名",
+                        "dtype": "0",
+                        "dinput_type": "0",
+                        "real_accuracy": 0,
+                        "is_external": 0
+                    }
+                },
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "0",
+                "is_show": 1,
+                "dtable": "1190_WsuRDjEJ9R6vHcHuR8hMzZ",
+                "dcount": 0,
+                "id": "7_NKMW6X5ZXXHoXNaCBAx9qg",
+                "default_value": "",
+                "dfield": "f3",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "9040_HezGY74DU6jJ5hMGzwBYWh",
+                    "real_field_dfield": "f7",
+                    "real_field_id": "253_qBwHCWgRRDUwpA65sLA3Ri"
+                },
+                "real_dtype": "0",
+                "width": 60,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "5",
+                "edit_condition": {},
+                "dinput_type": "6",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "7_NKMW6X5ZXXHoXNaCBAx9qg",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": null,
+                "regular": {},
+                "about_field": null,
+                "buildin_frontend_add": 0,
+                "drequired": 0,
+                "is_offer_py": 0,
+                "is_user": 1,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {},
+                "dname": "创建人",
+                "buildin_field": {
+                    "source_table_is_parent": 0,
+                    "source_table_id": "9040_HezGY74DU6jJ5hMGzwBYWh",
+                    "source_field_dfield": "f7",
+                    "source_field_is_stand": 1,
+                    "source_field_id": "253_qBwHCWgRRDUwpA65sLA3Ri"
+                },
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1
+            },
+            "3520_AvqFTbctahKgLSwh5CXrzJ": {
+                "is_offer_index": 0,
+                "use_fields": {
+                    "253_qBwHCWgRRDUwpA65sLA3Ri": {
+                        "real_type": "0",
+                        "dtable": "9040_HezGY74DU6jJ5hMGzwBYWh",
+                        "dfield": "f7",
+                        "dname": "姓名",
+                        "dtype": "0",
+                        "dinput_type": "0",
+                        "real_accuracy": 0,
+                        "is_external": 0
+                    }
+                },
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "0",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "id": "3520_AvqFTbctahKgLSwh5CXrzJ",
+                "default_value": "",
+                "dfield": "f13",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "9040_HezGY74DU6jJ5hMGzwBYWh",
+                    "real_field_dfield": "f7",
+                    "real_field_id": "253_qBwHCWgRRDUwpA65sLA3Ri"
+                },
+                "real_dtype": "0",
+                "width": 60,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "5",
+                "edit_condition": {},
+                "dinput_type": "6",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "3520_AvqFTbctahKgLSwh5CXrzJ",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": "",
+                "regular": {},
+                "about_field": null,
+                "buildin_frontend_add": 0,
+                "drequired": 1,
+                "is_offer_py": 0,
+                "is_user": 1,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {},
+                "dname": "测试人",
+                "buildin_field": {
+                    "source_table_is_parent": 0,
+                    "source_table_id": "9040_HezGY74DU6jJ5hMGzwBYWh",
+                    "source_field_dfield": "f7",
+                    "source_field_is_stand": 1,
+                    "source_field_id": "253_qBwHCWgRRDUwpA65sLA3Ri"
+                },
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1
+            },
+            "6120_kNtpUbHBtX6F4GLv5bRiyn": {
+                "is_offer_index": 0,
+                "use_fields": {
+                    "253_qBwHCWgRRDUwpA65sLA3Ri": {
+                        "real_type": "0",
+                        "dtable": "9040_HezGY74DU6jJ5hMGzwBYWh",
+                        "dfield": "f7",
+                        "dname": "姓名",
+                        "dtype": "0",
+                        "dinput_type": "0",
+                        "real_accuracy": 0,
+                        "is_external": 0
+                    }
+                },
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "0",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "id": "6120_kNtpUbHBtX6F4GLv5bRiyn",
+                "default_value": "",
+                "dfield": "f9",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "9040_HezGY74DU6jJ5hMGzwBYWh",
+                    "real_field_dfield": "f7",
+                    "real_field_id": "253_qBwHCWgRRDUwpA65sLA3Ri"
+                },
+                "real_dtype": "0",
+                "width": 60,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "5",
+                "edit_condition": {},
+                "dinput_type": "6",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "6120_kNtpUbHBtX6F4GLv5bRiyn",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": "",
+                "regular": {},
+                "about_field": null,
+                "buildin_frontend_add": 0,
+                "drequired": 1,
+                "is_offer_py": 0,
+                "is_user": 1,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {},
+                "dname": "处理人",
+                "buildin_field": {
+                    "source_table_is_parent": 0,
+                    "source_table_id": "9040_HezGY74DU6jJ5hMGzwBYWh",
+                    "source_field_dfield": "f7",
+                    "source_field_is_stand": 1,
+                    "source_field_id": "253_qBwHCWgRRDUwpA65sLA3Ri"
+                },
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1
+            },
+            "5093_hWHDF37u2M5HD4n5hdMy8L": {
+                "is_offer_index": 0,
+                "use_fields": {},
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "3",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "id": "5093_hWHDF37u2M5HD4n5hdMy8L",
+                "default_value": "{\"type\":0,\"value\":\"time_now\"}",
+                "dfield": "f18",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                    "real_field_dfield": "f18",
+                    "real_field_id": "5093_hWHDF37u2M5HD4n5hdMy8L"
+                },
+                "real_dtype": "0",
+                "width": 60,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "0",
+                "edit_condition": {},
+                "dinput_type": "3",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "5093_hWHDF37u2M5HD4n5hdMy8L",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": "",
+                "regular": {},
+                "about_field": null,
+                "drequired": 0,
+                "is_offer_py": 0,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {},
+                "dname": "开始时间",
+                "buildin_field": null,
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1
+            },
+            "8479_6KQr5Zx5BRQvLPmUyGyMiQ": {
+                "is_offer_index": 0,
+                "use_fields": {},
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "0",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "id": "8479_6KQr5Zx5BRQvLPmUyGyMiQ",
+                "default_value": "",
+                "dfield": "f12",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                    "real_field_dfield": "f12",
+                    "real_field_id": "8479_6KQr5Zx5BRQvLPmUyGyMiQ"
+                },
+                "real_dtype": "0",
+                "width": 70,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "0",
+                "edit_condition": {},
+                "dinput_type": "0",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "8479_6KQr5Zx5BRQvLPmUyGyMiQ",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": "",
+                "regular": {},
+                "about_field": null,
+                "drequired": 1,
+                "is_offer_py": 0,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {},
+                "dname": "问题关键字",
+                "buildin_field": null,
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1
+            },
+            "9849_zVGcPUfR2w3ASAus8ahEgf": {
+                "is_offer_index": 0,
+                "use_fields": {},
+                "enum_py_dict": {
+                    "7624_M4WxYExmY2oMj9AJPxyKjU": [
+                        "gb"
+                    ],
+                    "7042_m7Pg7KQqNaAD8NafY676ad": [
+                        "csz"
+                    ],
+                    "3172_iW6icMXdKvcYbinttTWeFS": [
+                        "dmerge"
+                    ],
+                    "5089_b8rxPDWDKZSt7tUZCPQHr6": [
+                        "fk"
+                    ],
+                    "8049_r9uf2bqHV57EY33S8i3QAm": [
+                        "kfz"
+                    ],
+                    "4369_vebrwLtQM5dj2sagptVkuT": [
+                        "ztz"
+                    ],
+                    "2175_fPcbM98wbmhMM3yfRnjcie": [
+                        "xj"
+                    ],
+                    "9405_J5CMVbVSS4StGFLSrSMxmN": [
+                        "ywc",
+                        "swc",
+                        "ykc",
+                        "skc"
+                    ]
+                },
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "6",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "enum_frontend_add": 0,
+                "id": "9849_zVGcPUfR2w3ASAus8ahEgf",
+                "default_value": "",
+                "dfield": "f6",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                    "real_field_dfield": "f6",
+                    "real_field_id": "9849_zVGcPUfR2w3ASAus8ahEgf"
+                },
+                "real_dtype": "4",
+                "width": 60,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "4",
+                "edit_condition": {},
+                "dinput_type": "6",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "9849_zVGcPUfR2w3ASAus8ahEgf",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": "",
+                "regular": {},
+                "about_field": null,
+                "enum_linkage": {},
+                "drequired": 1,
+                "is_offer_py": 0,
+                "enum_frontend_filter": 0,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {
+                    "3172_iW6icMXdKvcYbinttTWeFS": "待merge",
+                    "2175_fPcbM98wbmhMM3yfRnjcie": "新建",
+                    "8049_r9uf2bqHV57EY33S8i3QAm": "开发中",
+                    "7042_m7Pg7KQqNaAD8NafY676ad": "测试中",
+                    "9405_J5CMVbVSS4StGFLSrSMxmN": "已完成",
+                    "4369_vebrwLtQM5dj2sagptVkuT": "暂停中",
+                    "7624_M4WxYExmY2oMj9AJPxyKjU": "关闭",
+                    "5089_b8rxPDWDKZSt7tUZCPQHr6": "反馈"
+                },
+                "dname": "状态",
+                "buildin_field": null,
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1,
+                "enum_info": {
+                    "3172_iW6icMXdKvcYbinttTWeFS": "待merge",
+                    "2175_fPcbM98wbmhMM3yfRnjcie": "新建",
+                    "8049_r9uf2bqHV57EY33S8i3QAm": "开发中",
+                    "7042_m7Pg7KQqNaAD8NafY676ad": "测试中",
+                    "9405_J5CMVbVSS4StGFLSrSMxmN": "已完成",
+                    "4369_vebrwLtQM5dj2sagptVkuT": "暂停中",
+                    "7624_M4WxYExmY2oMj9AJPxyKjU": "关闭",
+                    "5089_b8rxPDWDKZSt7tUZCPQHr6": "反馈"
+                }
+            },
+            "5173_sNVRLS8h3y648i7BFqohbQ": {
+                "is_offer_index": 0,
+                "use_fields": {},
+                "enum_py_dict": {
+                    "1199_tD6FAqVFqjhR4x2NDh9W7A": [
+                        "zq",
+                        "cq",
+                        "zj",
+                        "cj"
+                    ],
+                    "2020_dq54VMHCNydZFAgvoW8Zgi": [
+                        "jj"
+                    ],
+                    "6720_zUBFEZHyKrUbTmwRECNfZX": [
+                        "yb",
+                        "yp"
+                    ],
+                    "8817_H7UNLtjYeGXCQLMjkV5qMK": [
+                        "zg",
+                        "cg",
+                        "tg"
+                    ],
+                    "3330_Wf9PyBsDWAwf6iQgKf5arC": [
+                        "zy",
+                        "cy",
+                        "ty"
+                    ]
+                },
+                "dcondition": {
+                    "num_condition": 0
+                },
+                "is_stand": 0,
+                "has_index": 0,
+                "real_type": "6",
+                "is_show": 1,
+                "dtable": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                "dcount": 0,
+                "enum_frontend_add": 0,
+                "id": "5173_sNVRLS8h3y648i7BFqohbQ",
+                "default_value": "",
+                "dfield": "f10",
+                "dsearch": 0,
+                "real_source": {
+                    "real_table": "5613_CHEUbzmZMsjDFT3AiwPB46",
+                    "real_field_dfield": "f10",
+                    "real_field_id": "5173_sNVRLS8h3y648i7BFqohbQ"
+                },
+                "real_dtype": "4",
+                "width": 60,
+                "edit_attr": 1,
+                "use_stand_field": {
+                    "is_use": 0
+                },
+                "dtype": "4",
+                "edit_condition": {},
+                "dinput_type": "6",
+                "is_offer_data": 0,
+                "sort": 0,
+                "edit_data": 1,
+                "update_regulation": null,
+                "field_id": "5173_sNVRLS8h3y648i7BFqohbQ",
+                "app_key": "127.0.0.1_sap_logic",
+                "no_edit_cause": "",
+                "regular": {},
+                "about_field": null,
+                "enum_linkage": {},
+                "drequired": 0,
+                "is_offer_py": 0,
+                "enum_frontend_filter": 0,
+                "real_accuracy": 0,
+                "is_external": 0,
+                "field_content": {
+                    "8817_H7UNLtjYeGXCQLMjkV5qMK": "重构",
+                    "6720_zUBFEZHyKrUbTmwRECNfZX": "一般",
+                    "3330_Wf9PyBsDWAwf6iQgKf5arC": "重要",
+                    "2020_dq54VMHCNydZFAgvoW8Zgi": "紧急",
+                    "1199_tD6FAqVFqjhR4x2NDh9W7A": "长期"
+                },
+                "dname": "紧急程度",
+                "buildin_field": null,
+                "has_count_mapping": 0,
+                "dunique": 0,
+                "need_to_update": 1,
+                "enum_info": {
+                    "8817_H7UNLtjYeGXCQLMjkV5qMK": "重构",
+                    "6720_zUBFEZHyKrUbTmwRECNfZX": "一般",
+                    "3330_Wf9PyBsDWAwf6iQgKf5arC": "重要",
+                    "2020_dq54VMHCNydZFAgvoW8Zgi": "紧急",
+                    "1199_tD6FAqVFqjhR4x2NDh9W7A": "长期"
+                }
+            }
+        }
+    }
