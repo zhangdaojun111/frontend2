@@ -6,7 +6,6 @@ import '../components/form/vender/my-multiSelect/my-multiSelect.css'
 import Quill from 'quill';
 
 
-console.log(Quill);
 let formBase;
 function hasKeyInFormDataStatic(key,staticData){
     let isExist = false;

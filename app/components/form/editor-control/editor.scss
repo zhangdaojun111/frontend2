@@ -1,21 +1,5 @@
 .form-rich-editor {
-    padding: 20px;
-    .wrap {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: center;
-        .label {
-            width: 200px;
-            text-align: center;
-        }
-        .content {
-            height: 100%;
-            flex-grow: 1;
-            .editor {
-                height: 350px;
-            }
-        }
+    .editor {
+        height: 300px;
     }
-
 }

@@ -11,11 +11,12 @@ import YearControl from "../year-control/year-control";
 import BuildInControl from "../buildIn-control/buildIn-control";
 import MultiLinkageControl from "../multi-linkage-control/multi-linkage-control";
 import YearMonthControl from "../year-month-control/year-month-control";
-import {EditorControl} from '../editor-control/editor';
+import EditorControl from '../editor-control/editor';
 import Mediator from "../../../lib/mediator";
 import {HTTP} from "../../../lib/http";
 import {FormService} from "../../../services/formService/formService"
 import MultiSelectControl from "../multi-select-control/multi-select-control";
+import SettingTextareaControl from "../setting-textarea-control/setting-textarea";
 
 let config = {
     template: '',
@@ -604,9 +605,15 @@ let config = {
                     _this.childComponent[data[key].dfield] = multiSelectControl;
                     break;
                 case 'Editor':
-                    let control = new EditorControl(data[key]);
-                    control.render(single);
-                    _this.childComponent[data[key].dfield] = control;
+                    let editorControl = new EditorControl(data[key]);
+                    editorControl.render(single);
+                    _this.childComponent[data[key].dfield] = editorControl;
+                    break;
+                case 'SettingTextarea':
+                    let settingTextareaControl = new SettingTextareaControl(data[key]);
+                    settingTextareaControl.render(single);
+                    _this.childComponent[data[key].dfield] = settingTextareaControl;
+                    break;
             }
         }
 
