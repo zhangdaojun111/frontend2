@@ -33,7 +33,40 @@ let config = {
                 return this.data.status;
             }
             console.log(file);
+            let reader=new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e)=>{
+                this._picSrc=e.target['result'];
+                this._img=new Image();
+                this._img.src=this._picSrc;
+                this._img.onload=(e)=>{
+                    if(this._img.height>this._img.width){
+                        if(this._img.width<=350){
+                            this.imgH=this._img.height;
+                            this.imgW=this._img.width;
+                            this.scale=1
+                        }else{
+                            this.imgW=350;
+                            this.scale=parseFloat((350/this._img.width).toFixed(3));
+                            this.imgH=(this._img.height*350/this._img.width).toFixed(1);
+                        }
+                    }else if(this._img.width>this._img.height){
+                        if(this._img.height<=350){
+                            this.imgH=this._img.height;
+                            this.imgW=this._img.width;
+                            this.scale=1
+                        }else{
+                            this.imgH=350;
+                            this.scale=parseFloat((350/this._img.height).toFixed(3));
+                            this.imgW=parseFloat((this._img.width*350/this._img.height).toFixed(1));
+                        }
+                    }
+                };
+                //手动修改当前显示的图片信息
 
+
+            };
+            this.err=false;
 
         },
     },
