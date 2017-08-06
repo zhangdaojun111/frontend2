@@ -75,7 +75,7 @@ let config = {
             if(node.nodes){
                 node.nodes.forEach(child=>{
                     treeEle.treeview('checkNode',[child.nodeId,{silent:true}]);
-                    treeEle.reeview('selectNode',[child.nodeId,{silent:true}]);
+                    treeEle.treeview('selectNode',[child.nodeId,{silent:true}]);
                     this.actions._checkAllChildren(child,treeEle);
                 })
             }
