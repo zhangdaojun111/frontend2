@@ -9,6 +9,7 @@ import {dgcService} from "../../../../services/dataGrid/data-table-control.servi
 import {fieldTypeService} from "../../../../services/dataGrid/field-type-service";
 import FloatingFilter from "../../data-table-toolbar/floating-filter/floating-filter";
 import customColumns from "../../data-table-toolbar/custom-columns/custom-columns";
+import groupGrid from "../../data-table-toolbar/data-table-group/data-table-group";
 import dataPagination from "../../data-table-toolbar/data-pagination/data-pagination";
 
 import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
@@ -773,11 +774,34 @@ let config = {
             //渲染定制列
             this.customColumnsCom  = new customColumns(custom)
             this.append(this.customColumnsCom, document.querySelector('.custom-columns-panel'));
+            //渲染分组
+            let groupLit = {
+                tableId: this.data.tableId,
+                gridoptions: this.agGrid.gridOptions,
+                fields: this.data.customColumnsFields,
+                myGroup: this.actions.setMyGroup(this.data.myGroup)
+            }
+            this.groupGridCom = new groupGrid(groupLit);
+            this.append(this.groupGridCom,document.querySelector('.group-panel'));
             //渲染分页
             this.pagination = new dataPagination(paginationData);
             this.pagination.actions.paginationChanged = this.actions.refreshData;
             this.append(this.pagination, this.el.find('.pagination'));
             this.data.firstRender = false;
+        },
+        //组装分组偏好设置
+        setMyGroup:function(myGroup) {
+            let myGroupList = myGroup, myGroupAry = [],myGroupObj = {};
+            this.data.customColumnsFields.forEach((item)=> {
+                for(let i = 0; i < myGroupList.length; i++) {
+                    if(item.field == myGroupList[i]) {
+                        myGroupObj['field'] = item.field;
+                        myGroupObj['name'] = item.name;
+                        myGroupAry.push(myGroupObj);
+                    }
+                }
+            });
+            return myGroupAry;
         },
         //分页刷新操作
         refreshData: function ( data ) {
