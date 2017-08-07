@@ -50,6 +50,13 @@ let config = {
         }).on('click', '.calendar', () => {
             this.actions.openCalendarIframe();
         });
+        Mediator.on('socket:online_user_num', function (data) {
+            console.log(data);
+        });
+    },
+    
+    beforeDestory: function () {
+        Mediator.removeAll('socket:online_user_num');
     }
 }
 
