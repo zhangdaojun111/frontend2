@@ -9,7 +9,9 @@ let config={
 
     },
     afterRender(){
-
+        this.el.on('click','#addFollower',()=>{
+            console.log(1);
+        })
     }
 };
 class WorkflowAddFollow extends Component{

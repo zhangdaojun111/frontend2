@@ -1,0 +1,32 @@
+btn-div{
+  height: 30px;
+  background: #159951;
+  text-align: center;
+  padding: 0 10px;
+  line-height: 30px;
+  margin-right: 10px;
+  cursor: pointer;
+  color: #fff;
+}
+#approval-workflow{
+  position: relative;
+  #wf-btn-box{
+    position: fixed;
+    bottom: 100px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .left{
+    display: flex;
+    div{
+      @extend btn-div;
+    }
+  }
+  .right{
+    display: flex;
+    div{
+      @extend btn-div;
+    }
+  }
+}
