@@ -121,6 +121,7 @@ let config = {
                 this.data.firstRow = (this.data.sumPage - 1) * this.data.rows;
                 $(".sumPage").html("共" + this.data.sumPage + "页");
                 $(".selectPage").show();
+                $(".page").hide();
 
             })
         //点击确定按钮跳转到目标页面
@@ -135,7 +136,8 @@ let config = {
                 this.data.currentPage = Number(target);
                 this.data.firstRow =((this.data.currentPage - 1) * this.data.rows);
                 $('.current-page').html(parseInt(this.data.currentPage));
-                $(".selectPage").hide()
+                $(".selectPage").hide();
+                $(".page").show();
                 let obj = {
                     currentPage: this.data.currentPage,
                     rows: this.data.rows,
@@ -147,7 +149,8 @@ let config = {
         }),
             //点击取消
             $(".cancel").click(() => {
-                $(".selectPage").hide()
+                $(".selectPage").hide();
+                $(".page").show();
             })
         //刷新
         $(".ui-icon-refresh").click(() => {

@@ -39,7 +39,7 @@ let config={
             console.log("ddddd")
             console.log(val)
             this.data.value=val;
-            Mediator.publish('form:changeValue',this.data);
+            Mediator.publish('form:changeValue-'+_this.data.tableId,this.data);
 
         }    
 

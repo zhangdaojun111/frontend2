@@ -2,38 +2,27 @@ import FormBase from '../components/form/base-form/base-form'
 import {HTTP} from '../lib/http';
 import '../components/form/vender/my-multiSelect/my-multiSelect'
 import '../components/form/vender/my-multiSelect/my-multiSelect.css'
+import {FormService} from "../services/formService/formService";
 
 // @parma
 //
 let FormEntrys={
-    formBase:null,
     init:function(config={}){
-        //表ID
-        this.tableId=config.tableId||'';
-        //父表ID
-        this.parentRealId=config.parentRealId||'';
-        //父表临时ID
-        this.parentTempId=config.parentTempId||'';
-        //用户id
+        this.tableId=config.table_id||'';
+        this.parentRealId=config.parent_real_id||'';
+        this.parentTempId=config.parent_temp_id||'';
         this.seqId=config.seqId||'';
-        //数据ID
-        this.realId=config.realId||'';
-        //父表ID
-        this.parentTableId=config.parentTableId||'';
-        //这是啥ID还不知道
-        this.parentRecordId=config.parentRecordId||'';
-        //查看(0)或新增(1)
-        console.log('config');
-        console.log(config);
-        this.isView=config.isView||0;
-        //是否是批量工作流
-        this.isBatch=config.isBatch||0;
-        //这个叫啥忘了
-        this.recordId=config.recordId||'';
-        //这个也忘了用到了再改
+        this.realId=config.real_id||'';
+        this.parentTableId=config.parent_table_id||'';
+        this.parentRecordId=config.parent_record_id||'';
+        this.isView=config.is_view || 0;
+        this.isBatch=config.is_batch || 0;
+        this.recordId=config.record_id||'';
         this.action=config.action||'';
-        //容器dom
         this.el=config.el||'';
+        this.reloadDraftData=config.reload_draft_data||0;
+        this.formId=config.form_id||'';
+        this.fromWorkFlow=config.from_workflow||0;
     },
     hasKeyInFormDataStatic:function (key,staticData){
     let isExist = false;
@@ -44,9 +33,32 @@ let FormEntrys={
     }
     return isExist;
 },
-//merge静态和动态数据
+    //鎷艰鍙戦�乯son
+    createPostJson(){
+        let json;
+        if(this.fromWorkFlow){
+            json={
+                form_id:this.formId,
+                record_id:this.recordId,
+                reload_draft_data:this.reloadDraftData,
+                from_workflow:this.fromWorkFlow,
+                table_id:this.tableId
+            }
+        }else{
+            json={
+                form_id:this.formId,
+                table_id:this.tableId,
+                is_view:this.isView,
+                parent_table_id:this.parentTableId,
+                parent_real_id:this.parentRealId,
+                real_id:this.realId,
+                parent_temp_id:this.parentTempId,
+            }
+        }
+        return json;
+    },
+    //merge鏁版嵁
     mergeFormData:function (staticData,dynamicData){
-    //merge数据
     for(let dfield in dynamicData["data"]){
         if(this.hasKeyInFormDataStatic(dfield,staticData)){
             for(let dict of staticData["data"]){
@@ -64,22 +76,20 @@ let FormEntrys={
     staticData["parent_table_id"] = dynamicData["parent_table_id"];
     staticData["frontend_cal_parent_2_child"] = dynamicData["frontend_cal_parent_2_child"];
     staticData["error"] = dynamicData["error"];
-    let data={
-
-    }
+    let data={};
     this.parseRes(staticData);
     for(let obj of staticData.data){
         data[obj.dfield]=obj;
     }
     staticData.data=data;
+    staticData.tableId=this.tableId;
     return staticData;
 },
-//处理数据
+    //澶勭悊瀛楁鏁版嵁
     parseRes:function (res){
     if(res !== null){
         let formData = res["data"];
         if(formData.length != 0){
-            //年份选择设置为默认当年
             let myDate = new Date();
             let myYear = myDate.getFullYear();
             let parentRealId = '';
@@ -95,6 +105,7 @@ let FormEntrys={
                 }
             }
             for( let data of formData ){
+                data['tableId']=this.tableId;
                 if( data.type == "year" ){
                     if( data.value == "" ){
                         data.value = String( myYear );
@@ -121,65 +132,7 @@ let FormEntrys={
         }
     }
 },
-//请求数据
-    getFormData:async function (el,template,seqid,table_id,real_id,is_view) {
-        // let staticData = await HTTP.postImmediately({
-        //     url: `/get_form_static_data/?seqid=${seqid}&table_id=${table_id}&is_extra=&form_id=`,
-        //     type: "POST",
-        //     data: {
-        //         form_id:'',
-        //         table_id:table_id,
-        //         is_view:is_view,
-        //         parent_table_id:'',
-        //         parent_real_id:'',
-        //         real_id:real_id,
-        //         parent_temp_id:'',
-        //     }
-        // });
-        // let dynamicData = await HTTP.postImmediately({
-        //     url: `/get_form_dynamic_data/?seqid=${seqid}&table_id=${table_id}&is_extra=&form_id=`,
-        //     type: "POST",
-        //     hearder:'',
-        //     data: {
-        //         form_id:'',
-        //         table_id:table_id,
-        //         is_view:is_view,
-        //         parent_table_id:'',
-        //         parent_real_id:'',
-        //         parent_temp_id:'',
-        //         real_id:real_id,
-        //     }
-        // });
-        let _this=this;
-        Promise.all([HTTP.post('get_form_dynamic_data',{
-            form_id:'',
-            table_id:table_id,
-            is_view:is_view,
-            parent_table_id:'',
-            parent_real_id:'',
-            real_id:real_id,
-            parent_temp_id:'',
-        }),HTTP.post('get_form_static_data',{
-            form_id:'',
-            table_id:table_id,
-            is_view:is_view,
-            parent_table_id:'',
-            parent_real_id:'',
-            real_id:real_id,
-            parent_temp_id:'',
-        })]).then(res=>{
-            template=_this.formDefaultVersion(res[1].data);
-            let data=_this.mergeFormData(res[1],res[0]);
-            let formData={
-                template:template,
-                data:data,
-            }
-            _this.formBase=new FormBase(formData);
-            _this.formBase.render(el);
-        })
-        HTTP.flush();
-    },
-    //生成默认表单
+    //榛樿琛ㄥ崟
     formDefaultVersion : function (data){
     let html='<div class="form">';
     for(let obj of data){
@@ -188,76 +141,95 @@ let FormEntrys={
     html+='</div>'
     return html;
 },
-    //创建表单的入口
+
+    destoryForm(tableID){
+        $(`#form-${tableID}`).remove();
+    },
+    //鍒涘缓琛ㄥ崟鍏ュ彛
     createForm:function(config={}){
+        let _this=this;
+        if(this.tableId){
+            this.destoryForm(this.tableId);
+        }
         this.init(config);
-        // if(this.formBase){
-        //     this.formBase.destroySelf();
-        // }
-        $('div').remove();
-        let html=$('<div style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">').appendTo(this.el);
+        let tableID=this.tableId;
+        let html=$(`<div id="form-${tableID}" style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">`).appendTo(this.el);
         let template='';
-        console.log('isView');
-        console.log(this.tableId);
-        this.getFormData(html,template,this.seqId,this.tableId,$('#real_id').val()||0,$('#is_view').val()||0);
+        let json=this.createPostJson();
+        FormService.getFormData(json).then(res=>{
+            template=_this.formDefaultVersion(res[0].data);
+            let data=_this.mergeFormData(res[0],res[1]);
+            let formData={
+                template:template,
+                data:data,
+            }
+            _this.formBase=new FormBase(formData);
+            _this.formBase.render(html);
+        });
     }
 }
 
 $('#toEdit').on('click',function(){
-    let real_id=$('#real_id').val()||'';
-    let is_view=$('#is_view').val()||0;
-    console.log('is_view');
-    console.log(is_view);
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
-        tableId:'8696_yz7BRBJPyWnbud4s6ckU7e',
+        table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
         seqId:'yudeping',
         el:$('body'),
-        is_view:+is_view,
-        real_id:real_id
+        is_view:isView,
+        real_id:realId
     });
 });
 $('#count').on('click',function(){
-    let real_id=$('#real_id').val()||'';
-    let is_view=$('#is_view').val()||0;
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
-        tableId:'7051_UoWnaxPaVSZhZcxZPbEDpG',
+        table_id:'7051_UoWnaxPaVSZhZcxZPbEDpG',
         seqId:'yudeping',
         el:$('body'),
-        is_view:is_view,
-        real_id:real_id
+        is_view:isView,
+        real_id:realId
     });
 });
 $('#editRequired').on('click',function(){
-    let real_id=$('#real_id').val()||'';
-    let is_view=$('#is_view').val()||0;
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
-        tableId:'3461_P28RYPGTGGE7DVXH8LBMHe',
+        table_id:'3461_P28RYPGTGGE7DVXH8LBMHe',
         seqId:'yudeping',
         el:$('body'),
-        is_view:is_view,
-        real_id:real_id
+        is_view:isView,
+        real_id:realId
     });
 });
 $('#defaultValue').on('click',function(){
-    let real_id=$('#real_id').val()||'';
-    let is_view=$('#is_view').val()||0;
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
-        tableId:'1160_ex7EbDsyoexufF2UbXBmSJ',
+        table_id:'1160_ex7EbDsyoexufF2UbXBmSJ',
         seqId:'yudeping',
         el:$('body'),
-        is_view:is_view,
-        real_id:real_id
+        is_view:isView,
+        real_id:realId
     });
 });
 $('#exp').on('click',function(){
-    let real_id=$('#real_id').val()||'';
-    let is_view=$('#is_view').val()||0;
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    // FormEntrys.createForm({
+    //     tableId:'7336_HkkDT7bQQfqBag4kTiFWoa',
+    //     seqId:'yudeping',
+    //     el:$('body'),
+    //     isView:isView,
+    //     realId:realId
+    // });
     FormEntrys.createForm({
-        tableId:'7336_HkkDT7bQQfqBag4kTiFWoa',
-        seqId:'yudeping',
-        el:$('body'),
-        is_view:is_view,
-        real_id:real_id
+        form_id:206,
+        record_id:'',
+        reload_draft_data:0,
+         from_workflow:1,
+        table_id:'3277_k5JFeqSiX2iuCvM3rXay9L'
     });
+
 })
 export default FormEntrys
