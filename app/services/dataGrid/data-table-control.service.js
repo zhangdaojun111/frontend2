@@ -147,6 +147,7 @@ export const dgcService = {
         let custom = [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false},
             {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false},
             {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}];
+        let group = [];
         for( let r of rows ){
             if( r.field != "_id" && !fieldTypeService.canNotSearch( r.real_type ) ){
                 let obj = {};
@@ -163,10 +164,19 @@ export const dgcService = {
                 obj['field'] = r.field;
                 custom.push( obj );
             }
+            let groupIgnore = ['number','mySelectAll','myOperate','group','_id'];
+            if( groupIgnore.indexOf( r.field ) == -1 && fieldTypeService.cantGroup( r.real_type ) ){
+                let obj = {
+                    name: r.name,
+                    field: r.field
+                };
+                group.push( obj );
+            }
         }
         let obj = {
             search: search,
-            custom: custom
+            custom: custom,
+            group: group
         }
         return obj;
     },

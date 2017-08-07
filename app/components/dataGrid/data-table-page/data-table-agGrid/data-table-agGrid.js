@@ -68,6 +68,8 @@ let config = {
         ignoreFields: [],
         //分组
         myGroup: [],
+        //分组列数据
+        groupFields: [],
         //原始字段数据
         fieldsData: [],
         //高级查询需要的字段信息
@@ -687,6 +689,11 @@ let config = {
                 this.data.expertSearchFields = r.search;
                 //定制列需要字段数据
                 this.data.customColumnsFields = r.custom;
+                //分组需要字段数据
+                this.data.groupFields = r.group;
+                console.log( "____________________" )
+                console.log( "____________________" )
+                console.log( this.data.groupFields )
                 //创建表头
                 this.columnDefs = this.actions.createHeaderColumnDefs();
                 //创建sheet分页

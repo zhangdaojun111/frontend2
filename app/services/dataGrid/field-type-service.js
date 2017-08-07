@@ -129,5 +129,10 @@ export const fieldTypeService = {
         }else {
             return 'text'
         }
+    },
+    //不能分组字段
+    cantGroup: function (data) {
+        let arr = [this.SECRET_TEXT,this.TEXT_COUNT_TYPE,this.URL_TYPE]
+        return arr.indexOf( data ) == -1
     }
 }
