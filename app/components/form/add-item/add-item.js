@@ -1,10 +1,12 @@
 import template from './add-item.html';
 let css = ``;
+css = css.replace(/(\n)/g, '')
 let AddItem={
+    template:template.replace(/\"/g, '\''),
     data:{
-        css: css.replace(/(\n)/g, '')
+        css: css
     },
-    template:template,
+
     actions:{
 
     },
