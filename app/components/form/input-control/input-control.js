@@ -53,7 +53,7 @@ let config={
         let reg = this.data.reg;
         let required = this.data.required
 
-            console.log(" val:"+val+"  func:"+func+"  reg:"+reg);
+            //console.log(" val:"+val+"  func:"+func+"  reg:"+reg);
             //输入框输入时的实时函数验证
             if(val != "" && !$.isEmptyObject(func)){
                 for( let r in func){
@@ -115,7 +115,7 @@ let config={
                 for(let r in reg){
                     let regReg = eval(r);
                     let flag = regReg.test(val);
-                    console.log("flagReg："+flag);
+                    console.log(flag);
                     if(!flag){
                         this.el.find("#error_tip").css("display","inline-block");
                         regErrorMsg = reg[r];
