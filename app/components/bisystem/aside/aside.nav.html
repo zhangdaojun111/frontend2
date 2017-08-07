@@ -11,7 +11,7 @@
         <div class="charts">
             <ul class="charts-items">
                 {{#each charts}}
-                    <li data-index="{{@index}}"><p><span>{{name}}</span><i class="btn_ripple fa fa-angle-double-down"></i></p></li>
+                    <li class="charts-item"><p><span>{{name}}</span><i class="btn_ripple fa fa-ellipsis-v"></i></p></li>
                 {{/each}}
             </ul>
             <div class="hide_meun">
@@ -22,4 +22,6 @@
             </div>
         </div>
     </div>
+    <div class="switch-button singlepage"><a class="mat-fab" title="单页" href="#">单页</a></div>
+    <div class="switch-button multiplepage"><a class="mat-fab" title="多页" href="/bi/index/">多页</a></div>
 </aside>

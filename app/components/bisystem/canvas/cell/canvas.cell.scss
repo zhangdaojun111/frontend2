@@ -9,12 +9,30 @@ $cellTitleSize: 14px;
     box-sizing: border-box;
     h3 {
         height:20px;
+        line-height: 20px;
+        margin-top: 5px;
+        margin-bottom: 7px;
         .title {
             border-left:#5b95e8 4px solid;
             padding-left:5px;
             line-height: 1;
-            display:inline-block;
+            //display:inline-block;
             height:15px;
+        }
+        a{
+            display: inline-block;
+            margin-left: 5px;
+            font-size: 16px;
+            outline: none;
+            color: #dddddd;
+        }
+        .icon-back{
+            display: none;
+        }
+        .icon-group{
+            position: absolute;
+            right: 10px;
+            //top: 7px;
         }
     }
     .cell-chart {

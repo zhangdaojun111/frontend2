@@ -5,6 +5,7 @@
 import {BiBaseComponent} from '../../bi.base.component';
 import template from './canvas.cell.html';
 import './canvas.cell.scss';
+import Handlebars from 'handlebars';
 import Mediator from '../../../../lib/mediator';
 
 import {CellNormalComponent} from './normal/cell.normal';
@@ -16,7 +17,6 @@ import {CellMultiChartComponent} from './multi.chart/cell.multi.chart';
 import {CellFunnelComponent} from './funnel/cell.funnel';
 import {CellCommentComponent} from './comment/cell.comment';
 
-import {canvasCellService} from '../../../../services/bisystem/canvas.cell.service';
 
 // cell 组件类型，通过匹配assortment渲染不同的组件
 const cellTypes = {
@@ -33,10 +33,11 @@ const cellTypes = {
 
 let config = {
     template: template,
-    actions: {
-    },
-    afterRender() {
+    actions: {},
+    afterRender(){
+
     }
+
 };
 
 export class CanvasCellComponent extends BiBaseComponent {
@@ -62,15 +63,5 @@ export class CanvasCellComponent extends BiBaseComponent {
      */
     firstAfterRender() {
         this.renderCell();
-        Mediator.subscribe("chart:drag", (data) => {
-            if (data['componentId'] && Number(data['componentId']) === this.componentId) {
-                let chartId = [data.id];
-                canvasCellService.getCellChart({chart_id: chartId}).then(res => {
-                    this.cell.chart = this.data.chart = res[0];
-                    // this.reload();
-                    this.renderCell();
-                })
-            }
-        })
     }
 }

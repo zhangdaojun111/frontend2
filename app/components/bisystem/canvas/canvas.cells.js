@@ -27,7 +27,6 @@ let config = {
                 let cellComponent = new CanvasCellComponent(val);
                 this.append(cellComponent, this.el.find('.cells'));
             });
-            Mediator.publish('hello', chartsId);
         },
     },
 

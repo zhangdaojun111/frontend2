@@ -12,9 +12,7 @@ $li-hover: #424e67;
 $btn_width: 16px;
 $font_size: 12px;
 
-@import "../../../assets/scss/bisystem/dragula.css";
 
-//
 .bi-container {
   position: fixed;
   left:250px;
@@ -25,11 +23,13 @@ $font_size: 12px;
 
 //左侧导航
 .aside{
+  z-index: 99999;
   position: fixed;
   left:0;
   top:0;
   width: 250px;
   height: 100%;
+  //height: 100vh;
   background-color: $aside-bg;
   //新建编辑按钮
   .user{
@@ -132,7 +132,6 @@ $font_size: 12px;
           color: #ffffff;
           border-radius: 50%;
           cursor: pointer;
-          font-weight: 900;
           font-size: 14px;
           float: left;
           margin-left: 30px;
@@ -173,5 +172,31 @@ $font_size: 12px;
       }
       }
     }
-
+  //单页 多页 按钮跳转
+  .switch-button{
+    position: fixed;
+    bottom: 10px;
+    z-index: 999999;
+    text-align: center;
+    right: 25px;
+    .mat-fab{
+      text-decoration: none;
+      min-width: 0;
+      border-radius: 50%;
+      border: none;
+      background-color: #ffd740;
+      color: rgba(0, 0, 0, .87);
+      width: 56px;
+      height: 56px;
+      line-height: 56px;
+      display: inline-block;
+      box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+    }
+    .mat-fab:hover{
+      color: #337ab7;
+    }
+  }
+  .singlepage{
+    right: 90px;
+  }
 }
