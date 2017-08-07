@@ -19,7 +19,8 @@ let config = {
         rendItem: function () {
             let _this = this;
             this.data.expertItemData.forEach((row) => {
-                this.append(new expertItem(row), $('.expert-search').find('.condition-search-ul')[config.rendItemNum]);
+                // this.append(new expertItem(row), $('.expert-search').find('.condition-search-ul')[config.rendItemNum]);
+                this.append(new expertItem(row), this.el.find('.condition-search-ul'));
             });
             config.rendItemNum ++ ;
             $('.condition-search-li').on('click', function() {
@@ -70,7 +71,7 @@ let config = {
         config.epSreach = new expertSreach.expertSearch ();
         this.el.on('click','.delete',()=>{
             this.actions.delete();
-        })
+        });
     }
 }
 class expertCondition extends Component {
