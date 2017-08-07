@@ -2,8 +2,14 @@
     <div class="wrap">
         <div class="label">{{label}}</div>
         <div class="content">
-            <textarea disabled></textarea>
-            <input type="button" value="设置" class="button">
+            {{#if unvisible}}
+                <p class="info">权限受限</p>
+            {{else if be_control_condition}}
+                <p class="info">被修改条件限制</p>
+            {{else}}
+                <textarea disabled></textarea>
+                <input type="button" value="设置" class="button">
+            {{/if}}
         </div>
     </div>
 </div>
