@@ -39,10 +39,12 @@ let config = {
     template:template,
     data:{
         treeNodes:{},
-        treeType:'SINGLE_SELECT',
-        divClass: 'default-tree',
-        isSearch: false,
-        selectedCallback: function () {}
+        options: {
+            callback: function (event,data) {},
+            treeType: 'SINGLE_SELECT',
+            isSearch: false,
+            treeName: ''
+        }
     },
     actions:{
         searchTreeNode:function(inputComp,tree){
@@ -100,11 +102,11 @@ let config = {
     afterRender:function() {
         //树
         let tree = this.el.find('#tree');
-        if(this.data.divClass){
-            this.el.addClass(this.data.divClass);
+        if(this.data.options.treeName){
+            this.el.addClass(this.data.options.treeName);
         }
         let treeview = this;
-        let treeType = TREETYPE[this.data.treeType];
+        let treeType = TREETYPE[this.data.options.treeType];
         let collapseIcon = treeType.foldIcon;
         let expandIcon = treeType.unfoldIcon;
         let emptyIcon = treeType.leafIcon;
@@ -128,7 +130,7 @@ let config = {
                     //         $('#tree').treeview('checkNode',[child.nodeId,{silent:false}]);
                     //     });
                     // }
-                    treeview.data.selectedCallback('select',data);
+                    treeview.data.options.callback('select',data);
                 },
                 onNodeUnchecked: function (event, data) {
                     tree.treeview('unselectNode',[data.nodeId,{silent:false}]);
@@ -139,7 +141,7 @@ let config = {
                     //     })
                     // }
                     treeview.actions._uncheckAllAncestors(data,tree);
-                    treeview.data.selectedCallback('unselect',data);
+                    treeview.data.options.callback('unselect',data);
                 },
             });
         } else {
@@ -156,7 +158,7 @@ let config = {
                         tree.treeview('unselectNode', [selected.nodeId, { silent: true }]);
                     });
                     if(!node.nodes){
-                        treeview.data.selectedCallback('select',node);
+                        treeview.data.options.callback('select',node);
                     }
                     treeview.actions._expandAllParents(node,tree);
                     tree.treeview('toggleNodeExpanded',[node.nodeId]);
@@ -177,30 +179,31 @@ let config = {
                 }
             });
         }
-        if(TREETYPE[this.data.treeType].collapsed){
+        if(treeType.collapsed){
             tree.treeview('collapseAll', { silent: true });
         } else {
             tree.treeview('expandAll', { level: 2, silent: true });
         }
 
         //搜索框
-        if(!this.data.isSearch){
+        if(!this.data.options.isSearch){
             this.el.find("#search-in-tree").hide();
         } else {
             var timeout = null;
             var inputComp = this.el.find('#search-in-tree');
-            this.el.on('keyup','#search-in-tree',()=>{
-                //500ms的延迟，减少事件处理
-                if(timeout !=null) {
-                    clearTimeout(timeout);
-                }
-                timeout = setTimeout(function(){
-                    timeout = null;
-                    treeview.actions.searchTreeNode(inputComp,tree)},500);
-            })
+            this.el.on('keyup','#search-in-tree',_.debounce(()=>{
+                treeview.actions.searchTreeNode(inputComp,tree)
+            },500));//500ms的延迟，减少事件处理
         }
 
     }
+}
+
+let defaultOptions = {
+    callback: function (event,data) {},
+    treeType: 'SINGLE_SELECT',
+    isSearch: false,
+    treeName: ''
 }
 
 /**
@@ -227,26 +230,20 @@ let config = {
  *                ]
  *            }
  *      可添加其他属性，text为必填参数，其他为可选参数，不写则适用默认值
- *  callback：必填，选择节点和取消选择时的回调方法，包括event（‘select’，‘unselect’），node（涉及事件的节点）
- *  treeType：可选，默认值'SINGLE_SELECT'，可填'MENU', 'SINGLE_SELECT','MULTI_SELECT'三种类型，树会根据配置出对应的行为。
- *  treeName: 可选，用于添加树的class，添加样式
+ *  Options：包含一下四个属性：
+ *      callback：必填，选择节点和取消选择时的回调方法，包括event（‘select’，‘unselect’），node（涉及事件的节点）
+ *      treeType：可选，默认值'SINGLE_SELECT'，可填'MENU', 'SINGLE_SELECT','MULTI_SELECT'三种类型，树会根据配置出对应的行为。
+ *      isSearch：可选，是否显示输入框
+ *      treeName: 可选，用于添加树的class，添加样式
  *
  *  风格化方法：定义scss文件，在调用本树的组件中import，参照示例的tree1写法
  */
 class TreeView extends Component{
-    constructor(treeNodes, callback,treeType,isSearch,treeName){
+    constructor(treeNodes, options){
         config.data.treeNodes = treeNodes;
-        config.data.selectedCallback = callback;
-        if(isSearch){
-            console.log(isSearch);
-            config.data.isSearch = isSearch;
-        }
-        if(treeType){
-            config.data.treeType = treeType;
-        }
-        if(treeName){
-            config.data.divClass = treeName;
-        }
+        options = _.defaultsDeep(options,defaultOptions);
+        console.dir(options);
+        config.data.options = options;
         super(config);
     }
 }
