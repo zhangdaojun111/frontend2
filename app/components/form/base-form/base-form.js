@@ -720,15 +720,15 @@ let config={
             // }else {
             //     postData = this.approvedFormData;
             // }
-            this.changeValueForChildTable(data);
+            this.actions.changeValueForChildTable(data);
             let json = {
                 // data: JSON.stringify(data),
                 data: encodeURIComponent( JSON.stringify(data) ),
                 focus_users: this.focus_users,
                 cache_new: encodeURIComponent( JSON.stringify( obj_new ) ),
                 cache_old: encodeURIComponent( JSON.stringify( obj_old ) ),
-                table_id: this.tableId,
-                flow_id: this.flowId,
+                table_id: this.data.tableId,
+                flow_id: this.data.flowId,
                 parent_table_id: this.parentTableId || "",
                 parent_real_id: this.parentRealId || "",
                 parent_temp_id: this.parentTempId || "",
@@ -1087,9 +1087,9 @@ let config={
 class BaseForm extends Component{
     constructor(formData){
         config.template=formData.template;
-        config.data['temp_id']=formData.data.data['temp_id']||'';
-        config.data['real_id']=formData.data.data['real_id']||'';
-        config.data['table_id']=formData.data.data['table_id']||'';
+        config.data['tempId']=formData.data.data['temp_id']||'';
+        config.data['realId']=formData.data.data['real_id']||'';
+        config.data['tableId']=formData.data.data['table_id']||'';
         if(formData.data.data["real_id"]){
             config.data['parentRealId']=formData.data.data["real_id"]["value"]||'';
         }

@@ -6,7 +6,7 @@ let config={
     template:`  <div class="clearfix" style="display: flex;align-items: center">
                     {{#if unvisible}}
                         <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                    {{else}}
+                    {{else }}
                         {{#if be_control_condition }}
                         <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                         {{else}}
