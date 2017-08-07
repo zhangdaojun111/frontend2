@@ -4,7 +4,6 @@
 
 import { HTTP } from '../../lib/http';
 import Mediator from 'mediator-js';
-import {MenuData, table1190DataSet, calendarData} from '../../components/calendar/testData/get_menu_data';
 
 const saveCalendarTableUrl = 'calendar_mgr/save_calendar';
 
@@ -19,6 +18,8 @@ const workflowRecordsUrl = 'get_workflow_records';
 const missionRecordUrl = 'get_mission_record';
 
 const calendarPreferenceUrl = 'calendar_mgr/calendar_preference';
+
+const menuUrl = 'data/get_menu';
 
 export const CodeEnum = {
         SUCCESS: 200,
@@ -41,14 +42,13 @@ export const CalendarService = {
             table_id: data['table_id'],
             isSelected: data['isSelected']
         };
-        // HTTP.post(getcalendarTableUrl,params).then(res => {
-        //     if(res['code'] === CodeEnum.SUCCESS) {
-        //         return res;
-        //     } else {
-        //         alert('获取数据失败');
-        //     }
-        // });
-        return table1190DataSet;
+        HTTP.post(getcalendarTableUrl,params).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                alert('获取数据失败');
+            }
+        });
     },
 
     getCalendarTreeData: function () {
@@ -68,21 +68,20 @@ export const CalendarService = {
      * @param data
      */
     getCalendarData: function (data) {
-        // let params = {
-        //     from_date: data['from_date'],
-        //     to_date: data['to_date'],
-        //     cancel_fields: JSON.stringify([]),
-        // };
-        // let res = HTTP.post(calendarDataUrl, params).then(res => {
-        //     if(res['code'] === CodeEnum.SUCCESS) {
-        //         return res;
-        //     } else {
-        //         //alert('获取数据失败');
-        //     }
-        // });
-        // HTTP.flush();
-        // return res;
-        return calendarData;
+        let params = {
+            from_date: data['from_date'],
+            to_date: data['to_date'],
+            cancel_fields: JSON.stringify([]),
+        };
+        let res = HTTP.post(calendarDataUrl, params).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                //alert('获取数据失败');
+            }
+        });
+        HTTP.flush();
+        return res;
     },
 
     /**
@@ -156,29 +155,17 @@ export const CalendarService = {
         return res;
     },
 
-    menu: [],
     getMenu: function () {
-        let ls_menu = MenuData;
-        if(ls_menu){
-            this.menu = ls_menu['menuList'];
-            //this.MenuData.next(ls_menu.menuList);
-            return this.menu;
-        }
-        // else {
-        //     let url = '/data/get_menu/';
-        //     this.http.get(url)
-        //         .map(this.extractNormalData)
-        //         .catch(this.handleObservableError)
-        //         .subscribe(
-        //             res => {
-        //                 if(res.success == 1){
-        //                     this.lsSet('v_menu',JSON.stringify(res));
-        //                     this.menu = res.menuList;
-        //                     this.MenuData.next(res.menuList);
-        //                 }
-        //             }
-        //         )
-        // }
+        let res = HTTP.get(menuUrl).then(res => {
+            console.log(res);
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                //alert('获取数据失败');
+            }
+        });
+        HTTP.flush();
+        return res;
     }
 
 };
