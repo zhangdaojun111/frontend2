@@ -3,9 +3,9 @@ import Mediator from '../../../../lib/mediator';
 let config={
     template:`<div style="position: relative;">
                 {{#if is_view}}
-                <input class="search-value show-hide-drop" type="text" readonly data-value="{{value}}" value="{{value}}" disabled/>
+                <input class="search-value show-hide-drop" type="text" readonly data-value="{{value}}" value="{{showValue}}" disabled/>
                 {{else}}
-                <input class="search-value show-hide-drop" type="text" readonly data-value="{{value}}" value="{{value}}"/>
+                <input class="search-value show-hide-drop" type="text" readonly data-value="{{value}}" value="{{showValue}}"/>
                 {{/if}}
                 <div class="select-drop" style="display: none;position: absolute;top:100%;z-index: 1;background: #fff;border: 1px solid #ccc" >
                     <input type="type" class="search"/>
@@ -35,15 +35,18 @@ let config={
             }else{
                 $select.show();
             }
-            let value=$(this).html();
+            let showValue=$(this).html();
+            let value=$(this).data('value');
             _this.el.find('.search').focus();
             if($(this).hasClass('option')){
                 _this.data.value=value;
+                _this.data.showValue=showValue;
                 _this.reload();
                 if(value=='请选择' ||value == ''){
+                    showValue='';
                     value='';
                 }
-                let data={value:value,dfield:_this.data.dfield};
+                let data={value:value,dfield:_this.data.dfield,showValue:showValue};
                 if(_this.data.index || _this.data.index==0){
                     data['index']= _this.data.index
                 }

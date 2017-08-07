@@ -23,6 +23,8 @@ let FormEntrys={
         this.reloadDraftData=config.reload_draft_data||0;
         this.formId=config.form_id||'';
         this.fromWorkFlow=config.from_workflow||0;
+        this.flowId=config.flow_id||'';
+        this.fieldId=config.field_Id||'';
     },
     hasKeyInFormDataStatic:function (key,staticData){
     let isExist = false;
@@ -57,6 +59,47 @@ let FormEntrys={
         }
         return json;
     },
+    pickJson() {
+        let json = {};
+        if(this.fieldId !== ""){
+            //加载单元格数据
+            json = {
+                field_id: this.fieldId,
+                is_view: this.isView,
+                parent_table_id: this.parentTableId || "",
+                parent_real_id: this.parentRealId || "",
+                parent_temp_id: this.parentTempId ||""
+            }
+        }else{
+            //加载表单中所有数据，当有form_id时，不要为table_id赋值，保证缓存的可复用性
+            if(this.formId){
+                json = {
+                    form_id: this.formId,
+                    table_id: this.tableId,
+                    is_view: this.isView,
+                    parent_table_id: this.parentTableId || "",
+                    parent_real_id: this.parentRealId || "",
+                    parent_temp_id: this.parentTempId ||""
+                }
+            }else {
+                json = {
+                    form_id: "",
+                    table_id: this.tableId,
+                    is_view: this.isView,
+                    parent_table_id: this.parentTableId || "",
+                    parent_real_id: this.parentRealId || "",
+                    parent_temp_id: this.parentTempId || ""
+                }
+            }
+        }
+        //如果是临时表，传temp_id，否则是real_id
+        if(!this.action){
+            json["real_id"] = this.realId;
+        }else{
+            json["temp_id"] = this.realId;
+        }
+        return json;
+    },
     //merge数据
     mergeFormData:function (staticData,dynamicData){
     for(let dfield in dynamicData["data"]){
@@ -77,12 +120,16 @@ let FormEntrys={
     staticData["frontend_cal_parent_2_child"] = dynamicData["frontend_cal_parent_2_child"];
     staticData["error"] = dynamicData["error"];
     let data={};
-    this.parseRes(staticData);
+    if(!this.formId || staticData['form_id'] == this.formId){
+        this.parseRes(staticData);
+    }
+    staticData.formData=staticData.data;
     for(let obj of staticData.data){
         data[obj.dfield]=obj;
     }
     staticData.data=data;
     staticData.tableId=this.tableId;
+    staticData.formId=this.formId;
     return staticData;
 },
     //处理字段数据
@@ -166,6 +213,10 @@ let FormEntrys={
             _this.formBase=new FormBase(formData);
             _this.formBase.render(html);
         });
+    },
+    //审批删除时重置表单可编辑性
+    editDelWorkFlow(formId){
+        this.formBase.actions.editDelWork(formId);
     }
 }
 
@@ -216,20 +267,20 @@ $('#defaultValue').on('click',function(){
 $('#exp').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
-    // FormEntrys.createForm({
-    //     tableId:'7336_HkkDT7bQQfqBag4kTiFWoa',
-    //     seqId:'yudeping',
-    //     el:$('body'),
-    //     isView:isView,
-    //     realId:realId
-    // });
     FormEntrys.createForm({
-        form_id:206,
-        record_id:'',
-        reload_draft_data:0,
-         from_workflow:1,
-        table_id:'3277_k5JFeqSiX2iuCvM3rXay9L'
+        table_id:'7336_HkkDT7bQQfqBag4kTiFWoa',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
     });
+    // FormEntrys.createForm({
+    //     form_id:206,
+    //     record_id:'',
+    //     reload_draft_data:0,
+    //      from_workflow:1,
+    //     table_id:'3277_k5JFeqSiX2iuCvM3rXay9L'
+    // });
 
 })
 export default FormEntrys
