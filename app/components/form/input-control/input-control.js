@@ -40,21 +40,18 @@ let config={
     },
     actions:{
         keyup: function() {
-            let _this=this;
-            //正则表达式的错误提示 regErrorMsg: string;
-            let regErrorMsg;
-            let val = this.el.find("input").val();
-            this.data.value=val;
-            if(_this.timer){
-                clearTimeout(_this.timer);
-                _this.timer=null;
-            }
-            _this.timer=setTimeout(function(){
-                Mediator.publish('form:changeValue',_this.data);
-            },300);
-            let func = this.data.func;
-            let reg = this.data.reg;
-            let required = this.data.required;
+        let _this=this;
+        //正则表达式的错误提示 regErrorMsg: string;
+        let regErrorMsg;
+        let val = this.el.find("input").val();
+        this.data.value=val;
+        _.debounce(function(){
+            console.log('发出了么');
+            console.log('form:changeValue:'+_this.data.tableId);
+            Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+        let func = this.data.func;
+        let reg = this.data.reg;
+        let required = this.data.required
 
             console.log(" val:"+val+"  func:"+func+"  reg:"+reg);
             //输入框输入时的实时函数验证
@@ -98,11 +95,6 @@ let config={
                         default:
                             console.log("怎么错了呢(；′⌒`)");
                     }
-                    // if(r == "checkCard"){
-                    //     var a = FormService.checkCard(val);
-                    // }else{
-                    //     console.log("怎么错了呢(；′⌒`)")
-                    // }
                     let flag = a;
                     console.log(flag);
                     if(!flag){
@@ -215,7 +207,10 @@ let config={
 
 
     },
-}
+    beforeDestory:function(){
+        Mediator.removeAll('form:changeValue:'+this.data.tableId);
+    }
+    }
 
 class InputControl extends Component {
     constructor(data){

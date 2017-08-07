@@ -28,14 +28,14 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
-        Mediator.subscribe('form:dropDownSelect'+_this.data.tableId,function(data){
+        Mediator.subscribe('form:dropDownSelect:'+_this.data.tableId,function(data){
             if(data.dfield !=_this.data.dfield){
                 return;
             }
             _this.data=Object.assign(_this.data,data);
-            _.debounce(function(){Mediator.publish('form:changeValue-'+_this.data.tableId,_this.data)},200)();
+            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
         });
-        Mediator.subscribe('form:changeOption'+_this.data.tableId,function(data){
+        Mediator.subscribe('form:changeOption:'+_this.data.tableId,function(data){
             if( _this.data.dfield && res == _this.data.dfield ){
                 _this.data.value = [];
                 _this.reload();
@@ -47,6 +47,10 @@ let config={
         if(!this.data.be_control_condition){
             this.append(new DropDown(this.data),this.el.find('.dropdown'));
         }
+    },
+    beforeDestory:function(){
+        Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
+        Mediator.removeAll('form:changeValue:'+this.data.tableId);
     }
 }
 export default class SelectControl extends Component{

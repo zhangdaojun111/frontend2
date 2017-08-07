@@ -50,7 +50,7 @@ let config={
                 if(_this.data.index || _this.data.index==0){
                     data['index']= _this.data.index
                 }
-                Mediator.publish('form:dropDownSelect'+_this.data.tableId,data);
+                Mediator.publish('form:dropDownSelect:'+_this.data.tableId,data);
             }
             event.stopPropagation();
         })
@@ -72,6 +72,10 @@ let config={
         },1000)).on('click',function(event){
             event.stopPropagation();
         });
+    },
+    beforeDestory:function(){
+        Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
+        Mediator.removeAll('form:changeValue:'+this.data.tableId);
     }
 }
 export default class DropDown extends Component{

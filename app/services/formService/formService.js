@@ -21,6 +21,11 @@ export const FormService={
         // return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_about_data/',data:data});
         return await HTTP.postImmediately({url:'/get_about_data/',data:data});
     },
+    getPrepareParmas:async function(json){
+        let data=this.formatParams(json);
+        // return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_about_data/',data:data});
+        return await HTTP.postImmediately({url:'/prepare_params/',data:data});
+    },
     formatParams(params) {
         let result = [];
         for(let k in params){

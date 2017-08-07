@@ -23,7 +23,7 @@ let config={
                         <a  href="javascript:;" id="edit" >编辑</a>
                     <div style="display:none" id="editShow">
                         <h4>请修改</h4>
-                        <input type="password" value="{{value}}">
+                        <input type="password" value="{{value}}" id="inputVal">
                         <a href="javascript:;" id="save">确定</a>
                         <a href="javascript:;" id="cancel">取消</a>
                     </div>
@@ -39,11 +39,9 @@ let config={
             let val = this.el.find("input").siblings("#editShow").children("input").val();
             console.log(val);
             this.data.value=md5(val);
-            Mediator.publish('form:changeValue-'+_this.data.tableId,this.data);
-
-        }    
-
-
+            this.data.value=val;
+            Mediator.publish('form:changeValue:'+_this.data.tableId,this.data);
+        }
     },
     afterRender: function() {
         this.el.on('click', ("#edit"), ()=> {
@@ -59,6 +57,7 @@ let config={
 //this.reload();
 
     },
+
 }
 class PasswordControl extends Component {
     constructor(data){

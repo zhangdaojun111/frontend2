@@ -28,7 +28,7 @@ let config = {
         onSettingDataReturn: function (choosedData) {
             choosedData['-1'] = choosedData['-1'].join('\n');
             this.data.value = choosedData;
-            Mediator.publish('form:changeValue', this.data);
+            Mediator.publish('form:changeValue:'+this.data.tableId, this.data);
             this.actions.fillData();
         },
         fillData: function () {

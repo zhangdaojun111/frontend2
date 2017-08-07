@@ -36,7 +36,7 @@ let config={
         let _this=this;
         this.el.on('click','.df-input-radio',function(event){
             _this.data.value=event.target.value;
-            _.debounce(function(){Mediator.publish('form:changeValue-'+_this.data.tableId,_this.data)},200)();
+            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
             for(let obj of _this.data.group){
                 if(obj.value==event.target.value){
                     obj['checked']=true;
@@ -46,12 +46,16 @@ let config={
             }
             _this.reload();
         })
-        Mediator.subscribe('form:changeOption'+_this.data.tableId,function(data){
+        Mediator.subscribe('form:changeOption:'+_this.data.tableId,function(data){
             if( _this.data.dfield && res == _this.data.dfield ){
                 _this.data.value = [];
                 _this.reload();
             }
         })
+    },
+    beforeDestory:function(){
+        Mediator.removeAll('form:changeValue:'+this.data.tableId);
+        Mediator.removeAll('form:changeOption:'+this.data.tableId);
     }
 }
 class RadioControl extends Component {
