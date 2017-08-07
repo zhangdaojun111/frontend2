@@ -1148,6 +1148,7 @@ let config={
                 title: '添加新选项'
             }).then((data) => {
                 console.log('看看关闭回调');
+                console.log(data);
             });
         })
 

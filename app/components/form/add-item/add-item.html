@@ -2,7 +2,7 @@
     <tr>
         <td style="width:100px;">新增选项：</td>
         <td>
-            <input type="text">
+            <input type="text" class="addValue">
             <button class="btn btn-primary add">添加</button>
             <button class="btn btn-primary save">保存</button>
         </td>
@@ -11,16 +11,16 @@
         <td>原始选项：</td>
         <td>
             <table>
-                {{#originalOptions}}
+                {{#each originalOptions}}
                 <tr><td>{{ this.label }}</td></tr>
-                {{/originalOptions}}
+                {{/each}}
             </table>
         </td>
     </tr>
     <tr>
         <td>添加结果：</td>
         <td>
-            <table >
+            <table class="result">
             </table>
         </td>
     </tr>

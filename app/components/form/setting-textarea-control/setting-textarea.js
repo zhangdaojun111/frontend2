@@ -16,6 +16,7 @@ let config = {
             let choosedData = _.defaultsDeep({}, this.data.value);
             delete choosedData['-1'];
             popupSetting.data.choosedData = choosedData;
+
             PMAPI.openDialogByComponent(popupSetting, {
                 width: 800,
                 height: 600,
@@ -28,11 +29,11 @@ let config = {
         onSettingDataReturn: function (choosedData) {
             choosedData['-1'] = choosedData['-1'].join('\n');
             this.data.value = choosedData;
-            Mediator.publish('form:changeValue:'+this.data.tableId, this.data);
+            Mediator.publish('form:changeValue:' + this.data.tableId, this.data);
             this.actions.fillData();
         },
         fillData: function () {
-            this.el.find('textarea').val(this.data.value['-1']||'');
+            this.el.find('textarea').val(this.data.value['-1'] || '');
         }
     },
     afterRender: function () {
