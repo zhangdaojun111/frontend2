@@ -70,15 +70,7 @@ let FormEntrys={
                 table_id:this.tableId
             }
         }else{
-            json={
-                form_id:this.formId,
-                table_id:this.tableId,
-                is_view:this.isView,
-                parent_table_id:this.parentTableId,
-                parent_real_id:this.parentRealId,
-                real_id:this.realId,
-                parent_temp_id:this.parentTempId,
-            }
+            json=this.pickJson();
         }
         return json;
     },

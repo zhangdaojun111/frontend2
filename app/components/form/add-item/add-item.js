@@ -17,17 +17,6 @@ let AddItem = {
             }
             return isExist;
         },
-        formatParams:function(params) {
-            let result = [];
-            for(let k in params){
-                if(typeof(params[k]) == 'object'){
-                    result.push(k + '=' + JSON.stringify(params[k]));
-                }else{
-                    result.push(k + '=' + params[k]);
-                }
-            }
-            return result.join('&')
-        },
     },
     firstAfterRender:function(){
         let _this=this;
@@ -49,25 +38,20 @@ let AddItem = {
                 }
             }
         }).on('click', '.save', function () {
-            console.log('111111');
-            console.log(HTTP);
-            // async function addItem(json){
-            //     let data=_this.actions.formatParams(json);
-            //     return await HTTP.postImmediately({url:'/add_select_item/',data:data});
-            // }
-            // console.log('111111');
-            // let res=addItem({
-            //     field_id: _this.data.data["id"],
-            //     content_list: JSON.stringify(_this.data.newItems)
-            // })
-            // console.log(res);
-            PMAPI.sendToParent({
-                type: PMENUM.close_dialog,
-                key: _this.key,
-                data: {
-                    newItems:_this.data.newItems
+            HTTP.postImmediately({url:'/add_select_item/',data:{
+                field_id: _this.data.data["id"],
+                content_list: JSON.stringify(_this.data.newItems)
+            }}).then(res=>{
+                if(res.success == 1){
+                    PMAPI.sendToParent({
+                        type: PMENUM.close_dialog,
+                        key: _this.key,
+                        data: {
+                            newItems:res['data'],
+                        }
+                    })
                 }
-            })
+            });
         });
     },
 }

@@ -676,7 +676,17 @@ let config={
                     })
         },
 
-        //提交表单
+        //快捷添加后回显
+        addNewItem(data){
+            let dfield=this.data.quikAddDfield;
+            if(this.data.data[dfield]["options"]){
+                this.childComponent[dfield]['data']['options']=this.data.data[dfield]["options"] = data['newItems'];
+            }else {
+                this.childComponent[dfield]['data']['group']=this.data.data[dfield]["group"] = data['newItems'];
+            }
+            this.childComponent[dfield].reload();
+        },
+
         //提交表单数据
         onSubmit(newData,oldData){
             let formValue=this.actions.createFormValue(this.data.data);
@@ -1131,9 +1141,7 @@ let config={
             _this.actions.checkValue(data,_this);
         })
         Mediator.subscribe('form:addItem:'+_this.data.tableId,function(data){
-            console.log('快捷添加');
-            console.log('快捷添加');
-            console.log('快捷添加');
+            _this.data.quikAddDfield=data.dfield;
             let originalOptions;
             if(data.hasOwnProperty("options")){
                 originalOptions = data["options"];
@@ -1142,14 +1150,13 @@ let config={
             }
             AddItem.data.originalOptions=_.defaultsDeep({},originalOptions);
             AddItem.data.data=_.defaultsDeep({},data);
-            console.log(AddItem);
             PMAPI.openDialogByComponent(AddItem, {
                 width: 800,
                 height: 600,
                 title: '添加新选项'
             }).then((data) => {
-                console.log('看看关闭回调');
-                console.log(data);
+                console.log('快捷添加回显');
+                _this.actions.addNewItem(data);
             });
         })
 
