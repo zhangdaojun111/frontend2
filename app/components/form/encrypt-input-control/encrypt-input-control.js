@@ -1,6 +1,7 @@
 import Component from '../../../lib/component';
 import '../../../assets/scss/control.scss'
 import 'jquery-ui/ui/widgets/dialog.js';
+import md5 from "../../../services/login/md5";
 import Mediator from '../../../lib/mediator';
 let config={
     template:`
@@ -22,7 +23,7 @@ let config={
                         <a  href="javascript:;" id="edit" >编辑</a>
                     <div style="display:none" id="editShow">
                         <h4>请修改</h4>
-                        <input type="password" value="{{value}}">
+                        <input type="password" value="{{value}}" id="inputVal">
                         <a href="javascript:;" id="save">确定</a>
                         <a href="javascript:;" id="cancel">取消</a>
                     </div>
@@ -36,14 +37,11 @@ let config={
     actions:{
         save: function () {
             let val = this.el.find("input").siblings("#editShow").children("input").val();
-            console.log("ddddd")
-            console.log(val)
+            console.log(val);
+            this.data.value=md5(val);
             this.data.value=val;
             Mediator.publish('form:changeValue:'+_this.data.tableId,this.data);
-
-        }    
-
-
+        }
     },
     afterRender: function() {
         this.el.on('click', ("#edit"), ()=> {
