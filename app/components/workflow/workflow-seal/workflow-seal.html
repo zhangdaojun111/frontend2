@@ -1,4 +1,4 @@
-<div>
+<div class="signature">
     <div class="seal">
         <div  class="add-seal">
             <div class="add ">
@@ -7,16 +7,18 @@
             <p>仅支持png格式，请上传透明低的图片</p>
         </div>
         <div class="seal-img">
-            <ul class="ul-img">
+            <ul class="ul-img J_ul-img">
                 {{#each file_ids}}
                     {{url}}
                     <li class="li-img">
                         <span>X</span>
-                        <img src="../../../assets/images/bg.png" class="add-img" data-id="{{this}}" />
+                        <img src="/../download_attachment/?file_id={{this}}&download={{this}}" class="add-img" data-id="{{this}}" />
                     </li>
                 {{/each}}
             </ul>
         </div>
     </div>
-    
+    <div class="signatureMock">
+        <img src="" class="dragimg J_dragimg"/>
+    </div>
 </div>
