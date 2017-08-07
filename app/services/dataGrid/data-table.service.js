@@ -23,5 +23,9 @@ export const dataTableService = {
     //请求sheet分页信息
     getSheetPage: function ( param ) {
         return HTTP.post( 'get_tab_page',param )
+    },
+    // 保存偏好
+    savePreference: function ( param ) {
+        return HTTP.post( 'save_preferences',param )
     }
 }
