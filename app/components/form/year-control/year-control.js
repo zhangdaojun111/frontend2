@@ -34,6 +34,10 @@ let config={
         if(!this.data.be_control_condition) {
             this.append(new DropDown(this.data), this.el.find('.dropdown'));
         }
+    },
+    beforeDestory:function(){
+        Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
+        Mediator.removeAll('form:changeValue:'+this.data.tableId);
     }
 }
 export default class YearControl extends Component{

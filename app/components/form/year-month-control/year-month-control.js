@@ -81,6 +81,10 @@ let config={
         }
         this.append(new DropDown(yearData),this.el.find('.year'));
         this.append(new DropDown(monthData),this.el.find('.month'));
+    },
+    beforeDestory:function(){
+        Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
+        Mediator.removeAll('form:changeValue:'+this.data.tableId);
     }
 }
 export default class YearMonthControl extends Component{

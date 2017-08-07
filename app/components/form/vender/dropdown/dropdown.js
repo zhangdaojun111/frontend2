@@ -72,6 +72,10 @@ let config={
         },1000)).on('click',function(event){
             event.stopPropagation();
         });
+    },
+    beforeDestory:function(){
+        Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
+        Mediator.removeAll('form:changeValue:'+this.data.tableId);
     }
 }
 export default class DropDown extends Component{

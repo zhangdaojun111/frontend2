@@ -59,6 +59,7 @@ let config={
 //this.reload();
 
     },
+
 }
 class PasswordControl extends Component {
     constructor(data){

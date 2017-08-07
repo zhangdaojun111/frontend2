@@ -52,6 +52,10 @@ let config={
                 _this.reload();
             }
         })
+    },
+    beforeDestory:function(){
+        Mediator.removeAll('form:changeValue:'+this.data.tableId);
+        Mediator.removeAll('form:changeOption:'+this.data.tableId);
     }
 }
 class RadioControl extends Component {

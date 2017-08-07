@@ -205,6 +205,9 @@ let config={
 
 
     },
+    beforeDestory:function(){
+        Mediator.removeAll('form:changeValue:'+this.data.tableId);
+    }
     }
 
 class InputControl extends Component {

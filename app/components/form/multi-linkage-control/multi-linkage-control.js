@@ -156,6 +156,10 @@ let config={
                 this.append(drop,this.el.find('.multi-drop'));
             }
         }
+    },
+    beforeDestory:function(){
+        Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
+        Mediator.removeAll('form:changeValue:'+this.data.tableId);
     }
 }
 export default class MultiLinkageControl extends Component{

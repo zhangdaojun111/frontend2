@@ -51,6 +51,10 @@ let config={
                 _this.reload();
             }
         })
+    },
+    beforeDestory:function(){
+        Mediator.removeAll('form:changeOption:'+this.data.tableId);
+        Mediator.removeAll('form:changeValue:'+this.data.tableId);
     }
 }
 export default class MultiSelectControl extends Component{
