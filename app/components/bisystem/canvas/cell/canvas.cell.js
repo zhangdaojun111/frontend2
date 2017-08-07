@@ -5,7 +5,6 @@
 import {BiBaseComponent} from '../../bi.base.component';
 import template from './canvas.cell.html';
 import './canvas.cell.scss';
-import Handlebars from 'handlebars';
 import Mediator from '../../../../lib/mediator';
 
 import {CellNormalComponent} from './normal/cell.normal';
@@ -67,7 +66,8 @@ export class CanvasCellComponent extends BiBaseComponent {
             if (data['componentId'] && Number(data['componentId']) === this.componentId) {
                 let chartId = [data.id];
                 canvasCellService.getCellChart({chart_id: chartId}).then(res => {
-                    this.cell.chart = res[0];
+                    this.cell.chart = this.data.chart = res[0];
+                    // this.reload();
                     this.renderCell();
                 })
             }
