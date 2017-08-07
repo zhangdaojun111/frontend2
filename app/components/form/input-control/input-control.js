@@ -45,7 +45,10 @@ let config={
         let regErrorMsg;
         let val = this.el.find("input").val();
         this.data.value=val;
-        _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+        _.debounce(function(){
+            console.log('发出了么');
+            console.log('form:changeValue:'+_this.data.tableId);
+            Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
         let func = this.data.func;
         let reg = this.data.reg;
         let required = this.data.required

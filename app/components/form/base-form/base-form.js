@@ -336,8 +336,6 @@ let config={
                     data: data[key],
                     value: val
                 };
-                console.log('dd');
-                console.log(d);
                 if(val != "" || !$.isEmptyObject(val)) {
                     if($.isArray(val)){
                         if(val.length != 0){
@@ -1127,6 +1125,7 @@ let config={
         $('body').on('click.selectDrop',function(){
             $('.select-drop').hide();
         })
+        console.log('form:changeValue:'+_this.data.tableId);
         Mediator.subscribe('form:changeValue:'+_this.data.tableId,function(data){
             _this.actions.checkValue(data,_this);
         })
@@ -1152,7 +1151,7 @@ class BaseForm extends Component{
         config.template=formData.template;
         config.data['tempId']=formData.data.data['temp_id']||'';
         config.data['realId']=formData.data.data['real_id']||'';
-        config.data['tableId']=formData.data.data['table_id']||'';
+        // config.data['tableId']=formData.data.data['table_id']||'';
         if(formData.data.data["real_id"]){
             config.data['parentRealId']=formData.data.data["real_id"]["value"]||'';
         }
