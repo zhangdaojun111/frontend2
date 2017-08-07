@@ -4,10 +4,11 @@ import Mediator from '../../../lib/mediator';
 
 let config={
     template:`<div class="clearfix">
-                 {{#if be_control_condition }}
+                {{#if unvisible}}
+                    <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
+                 {{else if be_control_condition }}
                     <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                  {{else}}
-                        <div style="float: left">{{label}}</div>
                         <div class="year" style="float: left"></div>
                         <span style="float: left;">年</span>
                         <div class="month" style="float: left"></div>

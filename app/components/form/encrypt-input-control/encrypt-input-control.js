@@ -8,20 +8,17 @@ let config={
              <div class="clearfix">
                  {{#if unvisible}}
                     <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                 {{else}}           
-                      {{#if be_control_condition }}
-                            <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                      {{else}}                 
-                      <div style="display: inline-block">{{label}}</div>               
+                 {{else if be_control_condition}}     
+                       <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+                 {{else}}                              
                        <input style="width: 240px"  type="password"  value="{{value}}"  readonly >{{value}}  
                        <div style="display: inline-block">
                                {{#if required}}
                                 <span id="requiredLogo" class="{{requiredClass}}" ></span>
                                {{/if}} 
                        </div>                   
-                       {{/if}}
                         <a  href="javascript:;" id="edit" >编辑</a>
-                    <div style="display:none" id="editShow">
+                        <div style="display:none" id="editShow">
                         <h4>请修改</h4>
                         <input type="password" value="{{value}}" id="inputVal">
                         <a href="javascript:;" id="save">确定</a>

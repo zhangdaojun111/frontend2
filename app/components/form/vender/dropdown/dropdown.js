@@ -1,16 +1,17 @@
 import Component from '../../../../lib/component'
 import Mediator from '../../../../lib/mediator';
+import './dropdown.scss'
 let config={
     template:`<div style="position: relative;">
                 {{#if is_view}}
-                <input class="search-value show-hide-drop" type="text" readonly data-value="{{value}}" value="{{showValue}}" disabled/>
+                <input class="search-value show-hide-drop width100" type="text" readonly data-value="{{value}}" value="{{showValue}}" disabled/>
                 {{else}}
-                <input class="search-value show-hide-drop" type="text" readonly data-value="{{value}}" value="{{showValue}}"/>
+                <input class="search-value show-hide-drop width100" type="text" readonly data-value="{{value}}" value="{{showValue}}"/>
                 {{/if}}
-                <div class="select-drop" style="display: none;position: absolute;top:100%;z-index: 1;background: #fff;border: 1px solid #ccc" >
-                    <input type="type" class="search"/>
+                <div class="select-drop width100" style="display: none;position: absolute;top:100%;z-index: 1;background: #fff;border: 1px solid #ccc" >
+                    <input type="type" class="search width100"/>
                     {{#options}}
-                        <div style="height: 20px" class="option show-hide-drop" data-py="{{this.py}}" data-value="{{this.value}}">{{this.label}}</div>
+                        <div style="height: 20px " class="option show-hide-drop width100" data-py="{{this.py}}" data-value="{{this.value}}">{{this.label}}</div>
                     {{/options}}
                 </div>
               </div>`,

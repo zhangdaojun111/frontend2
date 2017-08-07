@@ -6,18 +6,15 @@ let config={
     template:`  <div class="clearfix">
                     {{#if unvisible}}
                         <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                    {{else}}
-                        {{#if be_control_condition }}
+                    {{else if be_control_condition}}
                         <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                        {{else}}
-                        <div style="float: left">{{label}}</div>
+                    {{else}}
                         <div class="dropdown" style="float: left"></div>
                         <div style="float: left;">
                             {{#if required}}
                                 <span id="requiredLogo" class="{{requiredClass}}" ></span>
                             {{/if}} 
                         </div>
-                        {{/if}}
                      {{/if}}   
                 </div>`,
     data:{

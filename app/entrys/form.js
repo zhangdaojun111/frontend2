@@ -1,8 +1,7 @@
 import FormBase from '../components/form/base-form/base-form'
 import {HTTP} from '../lib/http';
-import '../components/form/vender/my-multiSelect/my-multiSelect'
-import '../components/form/vender/my-multiSelect/my-multiSelect.css'
 import {FormService} from "../services/formService/formService";
+import '../assets/scss/form.scss'
 
 // @parma
 //
@@ -197,11 +196,21 @@ let FormEntrys={
 },
     //默认表单
     formDefaultVersion : function (data){
-    let html='<div class="form">';
+    let html=`<table class="form table table-striped table-bordered table-hover ">
+            <tbody>
+                `;
     for(let obj of data){
-        html+=`<div data-dfield="${obj.dfield}" data-type="${obj.type}"></div>`;
+        if(data.type==='hidden'){
+            html+=`<div data-dfield="${obj.dfield}" data-type="${obj.type}"></div>`;
+        }else{
+            html+=`<tr>
+                        <td style="width: 150px;white-space: nowrap;">${ obj.label }</td>
+                        <td><div data-dfield="${obj.dfield}" data-type="${obj.type}"></div></td>
+                </tr>`;
+        }
     }
-    html+='</div>'
+    html+=`</tbody>
+        </table>`
     return html;
 },
 
