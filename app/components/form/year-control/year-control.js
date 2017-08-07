@@ -3,12 +3,13 @@ import DropDown from '../vender/dropdown/dropdown'
 import Mediator from '../../../lib/mediator';
 
 let config={
-    template:`<div class="clearfix">
-                {{#if be_control_condition }}
+    template:`<div style="dispaly:inline">
+                {{#if unvisible}}
+                        <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
+                {{else if be_control_condition }}
                     <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                  {{else}}
-                    <div style="float: left">{{label}}</div>
-                    <div class="dropdown" style="float: left"></div>
+                    <div class="dropdown" style="width:{{width}}"></div>
                     <div style="float: left;">
                        {{#if required}}
                         <span id="requiredLogo" class="{{requiredClass}}" ></span>
@@ -18,6 +19,7 @@ let config={
               </div>
                 `,
     data:{
+        width:'240px',
         options:[],
     },
     firstAfterRender:function(){

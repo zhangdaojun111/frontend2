@@ -17,6 +17,8 @@ import {FormService} from "../../../services/formService/formService"
 import MultiSelectControl from "../multi-select-control/multi-select-control";
 import EditorControl from "../editor-control/editor";
 import SettingTextareaControl from "../setting-textarea-control/setting-textarea";
+import AddItem from '../add-item/add-item';
+import {PMAPI} from '../../../lib/postmsg';
 
 let config={
     template:'',
@@ -328,7 +330,7 @@ let config={
         },
 
         //主动触发一遍所有事件
-        triggerControl() {
+        triggerControl:function(){
             let data=this.data.data;
             for(let key in data) {
                 let val = data[key]["value"];
@@ -674,7 +676,17 @@ let config={
                     })
         },
 
-        //提交表单
+        //快捷添加后回显
+        addNewItem(data){
+            let dfield=this.data.quikAddDfield;
+            if(this.data.data[dfield]["options"]){
+                this.childComponent[dfield]['data']['options']=this.data.data[dfield]["options"] = data['newItems'];
+            }else {
+                this.childComponent[dfield]['data']['group']=this.data.data[dfield]["group"] = data['newItems'];
+            }
+            this.childComponent[dfield].reload();
+        },
+
         //提交表单数据
         onSubmit(newData,oldData){
             let formValue=this.actions.createFormValue(this.data.data);
@@ -1125,9 +1137,27 @@ let config={
         $('body').on('click.selectDrop',function(){
             $('.select-drop').hide();
         })
-        console.log('form:changeValue:'+_this.data.tableId);
         Mediator.subscribe('form:changeValue:'+_this.data.tableId,function(data){
             _this.actions.checkValue(data,_this);
+        })
+        Mediator.subscribe('form:addItem:'+_this.data.tableId,function(data){
+            _this.data.quikAddDfield=data.dfield;
+            let originalOptions;
+            if(data.hasOwnProperty("options")){
+                originalOptions = data["options"];
+            }else{
+                originalOptions = data["group"];
+            }
+            AddItem.data.originalOptions=_.defaultsDeep({},originalOptions);
+            AddItem.data.data=_.defaultsDeep({},data);
+            PMAPI.openDialogByComponent(AddItem, {
+                width: 800,
+                height: 600,
+                title: '添加新选项'
+            }).then((data) => {
+                console.log('快捷添加回显');
+                _this.actions.addNewItem(data);
+            });
         })
 
         //添加提交按钮
@@ -1143,6 +1173,7 @@ let config={
     },
     beforeDestory:function(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
+        Mediator.removeAll('form:addItem:'+this.data.tableId);
         $('body').off('.selectDrop');
     }
 }

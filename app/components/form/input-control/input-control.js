@@ -8,22 +8,19 @@ let config={
                 <div class="clearfix">
                     {{#if unvisible}}
                         <p class="info">权限受限</p>
+                    {{else if be_control_condition}}
+                        <p class="info">被修改条件限制</p>
                     {{else}}
-                        {{#if be_control_condition }}
-                            <p class="info">被修改条件限制</p>
-                        {{else}}                 
-                            <div style="display: inline-block">{{label}}</div>
-                                {{#if is_view}}               
-                                    <input type="text" value="{{value}}" class={{inputClass}} disabled >
-                                {{else}}
-                                    <input type="text" value="{{value}}" class='{{inputClass}} search'>
-                               {{/if}} 
+                            {{#if is_view}}               
+                                <input style="width:{{width}}" type="text" value="{{value}}" class='dynamic-form-input' disabled >
+                            {{else}}
+                                <input style="width:{{width}}" type="text" value="{{value}}" class='search dynamic-form-input'>
+                           {{/if}} 
                            <div style="display: inline-block">
                                    {{#if required}}
                                     <span id="requiredLogo" class="required" ></span>
                                    {{/if}} 
-                           </div>                   
-                           {{/if}}
+                           </div>
                            <span style="position: relative; display:inline-block">  
                                  <div class={{error_msg}} id="error_tip"  style=" display:none">
                                         <em class={{ui_error_arrow}}></em>
@@ -34,7 +31,7 @@ let config={
                </div>
                 `,
     data: {
-        inputClass: 'dynamic-form-input',
+        width:'240px',
         error_msg: ' error-msg',
         ui_error_arrow: 'ui-error-arrow',
     },
@@ -53,7 +50,7 @@ let config={
         let reg = this.data.reg;
         let required = this.data.required
 
-            console.log(" val:"+val+"  func:"+func+"  reg:"+reg);
+            //console.log(" val:"+val+"  func:"+func+"  reg:"+reg);
             //输入框输入时的实时函数验证
             if(val != "" && !$.isEmptyObject(func)){
                 for( let r in func){
@@ -115,7 +112,7 @@ let config={
                 for(let r in reg){
                     let regReg = eval(r);
                     let flag = regReg.test(val);
-                    console.log("flagReg："+flag);
+                    console.log(flag);
                     if(!flag){
                         this.el.find("#error_tip").css("display","inline-block");
                         regErrorMsg = reg[r];

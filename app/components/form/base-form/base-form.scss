@@ -1,5 +1,5 @@
 .form {
-    .required {
+    span.required {
         display: inline-block;
         color: #ff0617;
         width: 16px;
@@ -8,7 +8,7 @@
         background: url("../../../assets/images/form/icon_bitian.png");
         vertical-align: middle;
     }
-    .required2 {
+    span.required2 {
         display: inline-block;
         color: #ff0617;
         width: 16px;
@@ -39,5 +39,21 @@
                 }
             }
         }
+    }
+    .dynamic-form-input {
+        color: #000000;
+        line-height: 30px;
+        border: 1px solid #ddd;
+        -webkit-appearance: none;
+        outline: none;
+        opacity: 100;
+        padding: 0 5px;
+    }
+    .dropdown{
+        border-radius:0px;
+        height:30px;
+        padding:2px 0px;
+        margin-bottom:-3px;
+        vertical-align:middle;
     }
 }

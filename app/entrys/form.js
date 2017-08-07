@@ -1,8 +1,7 @@
 import FormBase from '../components/form/base-form/base-form'
 import {HTTP} from '../lib/http';
-import '../components/form/vender/my-multiSelect/my-multiSelect'
-import '../components/form/vender/my-multiSelect/my-multiSelect.css'
 import {FormService} from "../services/formService/formService";
+import '../assets/scss/form.scss'
 
 // @parma
 //
@@ -70,15 +69,7 @@ let FormEntrys={
                 table_id:this.tableId
             }
         }else{
-            json={
-                form_id:this.formId,
-                table_id:this.tableId,
-                is_view:this.isView,
-                parent_table_id:this.parentTableId,
-                parent_real_id:this.parentRealId,
-                real_id:this.realId,
-                parent_temp_id:this.parentTempId,
-            }
+            json=this.pickJson();
         }
         return json;
     },
@@ -205,11 +196,21 @@ let FormEntrys={
 },
     //默认表单
     formDefaultVersion : function (data){
-    let html='<div class="form">';
+    let html=`<table class="form table table-striped table-bordered table-hover ">
+            <tbody>
+                `;
     for(let obj of data){
-        html+=`<div data-dfield="${obj.dfield}" data-type="${obj.type}"></div>`;
+        if(data.type==='hidden'){
+            html+=`<div data-dfield="${obj.dfield}" data-type="${obj.type}"></div>`;
+        }else{
+            html+=`<tr>
+                        <td style="width: 150px;white-space: nowrap;">${ obj.label }</td>
+                        <td><div data-dfield="${obj.dfield}" data-type="${obj.type}"></div></td>
+                </tr>`;
+        }
     }
-    html+='</div>'
+    html+=`</tbody>
+        </table>`
     return html;
 },
 
@@ -244,6 +245,11 @@ let FormEntrys={
     //审批删除时重置表单可编辑性
     editDelWorkFlow(formId){
         this.formBase.actions.editDelWork(formId);
+    },
+
+    //接收关注人信息
+    setUserIdList(data){
+        this.formBase.data.focus_users=data;
     }
 }
 
@@ -252,6 +258,17 @@ $('#toEdit').on('click',function(){
     let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
         table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
+    });
+});
+$('#text').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.createForm({
+        table_id:'1285_pkz2teyhHCztFrYhoc6F54',
         seqId:'yudeping',
         el:$('body'),
         is_view:isView,

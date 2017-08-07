@@ -1,5 +1,7 @@
 import URL from './url';
 import component from '../lib/component';
+import 'jquery-ui/ui/widgets/dialog';
+import {HTTP} from './http';
 
 /**
  * 父级页面，需要根据key来保存消息来源iframe或component的对象和打开的iframe或component的dom
@@ -65,6 +67,7 @@ window.addEventListener('message', function(event) {
                 comp['key']=data.key;
                 comp.render(elementDiv);
                 dialogHash[data.key].element.dialog(_.defaultsDeep(data.frame, {
+                    modal: true,
                     close: function () {
                         comp.destroySelf();
                     }
@@ -77,7 +80,12 @@ window.addEventListener('message', function(event) {
                     iframe: event.source,
                     element: element.appendTo(document.body)
                 };
-                dialogHash[data.key].element.dialog(data.frame);
+                dialogHash[data.key].element.dialog(_.defaultsDeep(data.frame, {
+                    modal: true,
+                    close: function () {
+                        dialogHash[data.key].element.remove();
+                    }
+                }));
                 break;
             case PMENUM.close_dialog:
                 dialogHash[data.key].element.dialog('destroy').remove();
@@ -260,7 +268,7 @@ export const PMAPI = {
                 let args = obj[key]['Arguments']||"";
                 let source = obj[key]['Source'];
                 let fstr = "function "+obj[key]['Function']+"("+args+"){"+source+"}";
-                let f= new Function('$', '_', 'PMAPI', 'PMENUM', "return "+fstr)($, _, PMAPI, PMENUM);
+                let f= new Function('$', '_', 'PMAPI', 'PMENUM', 'HTTP', "return "+fstr)($, _, PMAPI, PMENUM, HTTP);
                 obj[key]=f;
             } else if(obj[key] instanceof Object){
                 PMAPI._createFuncs(obj[key]);

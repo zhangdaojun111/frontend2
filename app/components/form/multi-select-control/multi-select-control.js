@@ -6,17 +6,15 @@ let config={
     template:`  <div class="clearfix">
                     {{#if unvisible}}
                         <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                    {{else}}
-                        {{#if be_control_condition }}
+                    {{else if be_control_condition}}
                             <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                        {{else}}
-                            <div id="MainContent_Caccey_location_ddl"></div>
-                            <div style="float: left;">
-                                {{#if required}}
-                                    <span id="requiredLogo" class="required" ></span>
-                                {{/if}} 
-                            </div>
-                        {{/if}}    
+                    {{else}}
+                        <div id="MainContent_Caccey_location_ddl"></div>
+                        <div style="float: left;">
+                            {{#if required}}
+                                <span id="requiredLogo" class="required" ></span>
+                            {{/if}} 
+                        </div>   
                     {{/if}}
                 </div>`,
     data:{
@@ -27,12 +25,12 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
-        $('#MainContent_Caccey_location_ddl').multiselect({
-            includeSelectAllOption: true,
-            enableFiltering: true,
-            maxHeight: 400,
-            numberDisplayed: 1
-        });
+        // $('#MainContent_Caccey_location_ddl').multiselect({
+        //     includeSelectAllOption: true,
+        //     enableFiltering: true,
+        //     maxHeight: 400,
+        //     numberDisplayed: 1
+        // });
         Mediator.subscribe('form:valueChange',function(data){
             if(data.dfield !=_this.data.dfield){
                 return;

@@ -5,25 +5,22 @@ let config={
     template:`<div class="clearfix">
                  {{#if unvisible}}
                     <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                 {{else}}                
-                     {{#if be_control_condition }}
+                 {{else if be_control_condition}}
                         <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                     {{else}}
-                            <div style="display: inline-block">{{label}}</div>
-                            {{#group}}
-                                <label class="df-input-label">
-                                    <div class="df-input-radio-wrapper noprint" style="display: inline">
-                                       {{#if checked}} 
-                                        <div  class="df-input-radio-status"  style="display: inline"></div>
-                                       {{/if}} 
-                                    </div>
-                                    <input class="df-input-radio print" type="radio"  value="{{value}}"  readonly >{{ label }}
-                                </label>
-                            {{/group}}
-                            {{#if required}}
-                                        <span id="requiredLogo" class="{{requiredClass}}" ></span>
-                            {{/if}}  
-                     {{/if}}
+                 {{else}}
+                        {{#group}}
+                            <label class="df-input-label">
+                                <div class="df-input-radio-wrapper noprint" style="display: inline">
+                                   {{#if checked}} 
+                                    <div  class="df-input-radio-status"  style="display: inline"></div>
+                                   {{/if}} 
+                                </div>
+                                <input class="df-input-radio print" type="radio"  value="{{value}}"  readonly >{{ label }}
+                            </label>
+                        {{/group}}
+                        {{#if required}}
+                                    <span id="requiredLogo" class="{{requiredClass}}" ></span>
+                        {{/if}}
                  {{/if}}    
               </div>   
                 `,

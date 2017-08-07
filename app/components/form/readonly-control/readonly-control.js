@@ -6,18 +6,15 @@ let config={
     template:`<div class="clearfix">
                  {{#if unvisible}}
                     <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                 {{else}}  
-                    {{#if be_control_condition }}
+                 {{else if be_control_condition}}
                         <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                    {{else}}                 
-                    <div style="display: inline-block">{{label}}</div>               
-                         <input style="width: 240px;background: #ebebe4;"  type="text" value="{{value}}" readonly="readonly"  class={{inputClass}} > 
+                {{else}}            
+                    <input style="width:{{width}};background: #ebebe4;"  type="text" value="{{value}}" readonly="readonly"  class='dynamic-form-input' > 
                     <div style="display: inline-block">
                            {{#if required}}
                             <span id="requiredLogo" class="{{requiredClass}}" ></span>
                            {{/if}} 
-                    </div>                   
-                    {{/if}}
+                    </div>
                         <span style="position: relative; display:inline-block">  
                            <div class={{error_msg}} id="error_tip"  style=" display:none">
                                 <em class={{ui_error_arrow}}></em>
@@ -28,7 +25,7 @@ let config={
                </div>
                 `,
     data:{
-        inputClass:'dynamic-form-input',
+        width:'240px',
         error_msg: ' error-msg',
         ui_error_arrow: 'ui-error-arrow',
     },

@@ -35,7 +35,7 @@ let config = {
     actions: {
         publishMessage: function () {
             this.data.value = this.quill.root.innerHTML;
-            Mediator.publish('form:changeValue:'+this.data.tableId, this.data);
+            Mediator.publish('form:changeValue:' + this.data.tableId, this.data);
         }
     },
     afterRender: function () {
