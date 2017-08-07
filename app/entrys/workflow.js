@@ -15,6 +15,7 @@ import ApprovalWorkflow from '../components/workflow/approval-workflow';
 import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow';
 
 import FormEntrys from './form';
+import TreeView from  '../components/util/tree/tree';
 
 
 WorkFlowForm.showForm();
@@ -108,3 +109,60 @@ ApprovalHeader.showheader();
 });
 
 
+
+var tree = [
+    {
+        text: "Parent 1",
+        nodes: [
+            {
+                text: "Child 1",
+                nodes: [
+                    {
+                        text: "Grandchild 1"
+                    },
+                    {
+                        text: "Grandchild 2"
+                    }
+                ]
+            },
+            {
+                text: "Child 2",
+                nodes: [
+                    {
+                        text: "Grandchild 1"
+                    },
+                    {
+                        text: "Grandchild 2"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        text: "Parent 2"
+    },
+    {
+        text: "Parent 3"
+    },
+    {
+        text: "Parent 4"
+    },
+    {
+        text: "Parent 5"
+    }
+];
+var treeComp = new TreeView(tree,function (event,selectedNode) {
+    console.log("选中节点："+selectedNode.text);
+    // console.dir(selectedNode);
+},'SINGLE_SELECT',false,'tree1');
+treeComp.render($('#treeSingle'));
+var treeComp1 = new TreeView(tree,function (event,selectedNode) {
+    console.log("选中节点："+selectedNode.text);
+    // console.dir(selectedNode);
+},'MENU',false,'tree2');
+treeComp1.render($('#treeMenu'));
+var treeComp2 = new TreeView(tree,function (event,selectedNode) {
+    console.log("选中节点："+selectedNode.text);
+    // console.dir(selectedNode);
+},'MULTI_SELECT',true,'tree3');
+treeComp2.render($('#treeMulti'));
