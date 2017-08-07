@@ -16,8 +16,8 @@ const BUILD_PATH = path.resolve(ROOT_PATH, 'dist');
 module.exports = {
     entry: {
         main: path.resolve(APP_PATH, 'entrys/main.js'),
-        dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
-        login:path.resolve(APP_PATH, 'entrys/login.js'),
+        //dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
+        //login:path.resolve(APP_PATH, 'entrys/login.js'),
         //bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
         set: path.resolve(APP_PATH, 'entrys/calendar.set.js'),

@@ -28,6 +28,7 @@ let config = {
             //     this.append(new TableGrid({bodyData:item, type: 'body'}), this.el.find('#weekNum'+this.data.index));
             // }
         });
+
     }
 };
 

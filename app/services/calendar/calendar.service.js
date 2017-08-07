@@ -4,7 +4,7 @@
 
 import { HTTP } from '../../lib/http';
 import Mediator from 'mediator-js';
-import {MenuData, table1190DataSet} from '../../components/calendar/testData/get_menu_data';
+import {MenuData, table1190DataSet, calendarData} from '../../components/calendar/testData/get_menu_data';
 
 const saveCalendarTableUrl = 'calendar_mgr/save_calendar';
 
@@ -56,7 +56,7 @@ export const CalendarService = {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                alert('获取数据失败');
+                //alert('获取数据失败');
             }
         });
         HTTP.flush();
@@ -68,20 +68,21 @@ export const CalendarService = {
      * @param data
      */
     getCalendarData: function (data) {
-        let params = {
-            from_date: data['from_date'],
-            to_date: data['to_date'],
-            cancel_fields: JSON.stringify([]),
-        };
-        let res = HTTP.post(calendarDataUrl, params).then(res => {
-            if(res['code'] === CodeEnum.SUCCESS) {
-                return res;
-            } else {
-                //alert('获取数据失败');
-            }
-        });
-        HTTP.flush();
-        return res;
+        // let params = {
+        //     from_date: data['from_date'],
+        //     to_date: data['to_date'],
+        //     cancel_fields: JSON.stringify([]),
+        // };
+        // let res = HTTP.post(calendarDataUrl, params).then(res => {
+        //     if(res['code'] === CodeEnum.SUCCESS) {
+        //         return res;
+        //     } else {
+        //         //alert('获取数据失败');
+        //     }
+        // });
+        // HTTP.flush();
+        // return res;
+        return calendarData;
     },
 
     /**

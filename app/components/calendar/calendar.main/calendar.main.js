@@ -17,9 +17,11 @@ let config = {
     data: {
         HeadList: [ '星期日','星期一', '星期二', '星期三', '星期四', '星期五', '星期六' ],
         chooseDate: '',
+
         monthDataList: [],
         weekDataList: [],
         dayDataList: [],
+
         todayStr: '',
         calendarContent: 'month',
         selectData: {},
@@ -46,6 +48,9 @@ let config = {
 
         // 对应的日历设置数据
         calendarSettings: {},
+
+        // 表id对应的表名
+        tableid2name: {},
 
         // 字段id对应字段信息
         fieldInfos: {},
@@ -109,7 +114,7 @@ let config = {
                 }
             }else if( this.data.calendarContent === 'week' ){
                 if( this.data.weekDataList.length === 2 ){
-                    for( let day of this.weekDataList[1] ){
+                    for( let day of this.data.weekDataList[1] ){
                         for( let d of day['data'] ){
                             if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
                                 i++;
@@ -124,7 +129,7 @@ let config = {
                     }
                 }
             }else if( this.data.calendarContent === 'day' ){
-                for( let d of this.dayDataList[0]['data'] ){
+                for( let d of this.data.dayDataList[0]['data'] ){
                     if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
                         i++;
                     }else if( d.type === 2 ){
@@ -182,8 +187,8 @@ let config = {
                     //获取当日包含的设置
                     let calendarDate = [];
                     for( let date in this.data.date2settings ){
-                        if( date.indexOf( day.dataTime ) !== -1 ){
-                            for( let d of this.date2settings[date] ){
+                        if( date.indexOf( day['dataTime'] ) !== -1 ){
+                            for( let d of this.data.date2settings[date] ){
                                 let i = 0;
                                 for( let c of calendarDate ){
                                     if( c.id === d ){
@@ -246,7 +251,7 @@ let config = {
                                     everyData.push( {
                                         fieldId: key,
                                         _id: select['_id'],
-                                        fieldName: this.fieldInfos[key]['dname'] || '',
+                                        fieldName: this.data.fieldInfos[key]['dname'] || '',
                                         fieldValue: select[key] || ''
                                     } )
                                 }
@@ -267,13 +272,13 @@ let config = {
                                 let select_3 = setDetail['selectedRepresents_data'][setDetail['selectedOpts_data'].indexOf(select)];
                                 let everyData_3 = [];
                                 for( let key in select_3 ){
-                                    if( key === '_id' || ( !this.fieldInfos[key] ) ){
+                                    if( key === '_id' || ( !this.data.fieldInfos[key] ) ){
                                         continue;
                                     }
                                     everyData_3.push( {
                                         fieldId: key,
                                         _id: select_3['_id'],
-                                        fieldName: this.fieldInfos[key]['dname'] || '',
+                                        fieldName: this.data.fieldInfos[key]['dname'] || '',
                                         fieldValue: select_3[key] || ''
                                     } );
                                     if( selectFieldId !== '' ){
@@ -453,7 +458,7 @@ let config = {
 
             this.data.from_date = arrHead[0]['time'];
             this.data.to_data = arrHead[6]['time'];
-            this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date});
+            //this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date});
         },
 
         createDayCalendar: function(){
@@ -471,7 +476,7 @@ let config = {
             $('.nowDate').html(this.data.selectedDateShow);
             this.data.from_date = date;
             this.data.to_data = date;
-            this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date});
+            //this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date});
         },
         changeMonth: function (lr) {
             let y = this.data.selectData['y'];
@@ -557,20 +562,32 @@ let config = {
         },
 
         getCalendarData: function (data){
-            CalendarService.getCalendarData(data).then( res=>{
-                console.log(res);
-                this.data.date2settings = res['date2csids'];
-                this.data.calendarSettings = res['id2data'];
-                this.data.tableid2name = res['tableid2name'];
-                this.data.fieldInfos = res['field_infos'];
-                this.actions.monthDataTogether();
-                if( this.data.calendarContent === 'week' ){
-                    this.createWeekCalendar();
-                }else if( this.data.calendarContent === 'day' ){
-                    this.createDayCalendar();
-                }
-                this.actions.getDataCount();
-            })
+            let res = CalendarService.getCalendarData();
+            this.data.date2settings = res['date2csids'];
+            this.data.calendarSettings = res['id2data'];
+            this.data.tableid2name = res['tableid2name'];
+            this.data.fieldInfos = res['field_infos'];
+            this.actions.monthDataTogether();
+            if( this.data.calendarContent === 'week' ){
+                this.actions.createWeekCalendar();
+            }else if( this.data.calendarContent === 'day' ){
+                this.actions.createDayCalendar();
+            }
+            this.actions.getDataCount();
+            // CalendarService.getCalendarData(data).then( res=>{
+            //     console.log(res);
+            //     this.data.date2settings = res['date2csids'];
+            //     this.data.calendarSettings = res['id2data'];
+            //     this.data.tableid2name = res['tableid2name'];
+            //     this.data.fieldInfos = res['field_infos'];
+            //     this.actions.monthDataTogether();
+            //     if( this.data.calendarContent === 'week' ){
+            //         this.createWeekCalendar();
+            //     }else if( this.data.calendarContent === 'day' ){
+            //         this.createDayCalendar();
+            //     }
+            //     this.actions.getDataCount();
+            // })
         }
     },
     afterRender: function() {
@@ -587,6 +604,7 @@ let config = {
         this.data.selectedDateShow = year+'年'+(month+1) +'月';
         $('.nowDate').html(this.data.selectedDateShow);
         this.actions.createMonthCalendar(year, month);
+
         this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
 
         CalendarService.CalendarMsgMediator.subscribe('now-month-day',data => {

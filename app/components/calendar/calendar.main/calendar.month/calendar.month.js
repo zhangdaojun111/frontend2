@@ -36,7 +36,10 @@ let config = {
 
         this.data.monthDataList.forEach((item,index) => {
             this.append(new CalendarTableBody({item,index}), this.el.find('.month-body'));
-        })
+        });
+        // $('#task-item').bind('click', function () {
+        //     console.log($(this).html());
+        // })
     }
 };
 
