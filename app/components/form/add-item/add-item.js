@@ -4,11 +4,7 @@ css = css.replace(/(\n)/g, '')
 let AddItem={
     template:template.replace(/\"/g, '\''),
     data:{
-        css: css
-    },
-
-    actions:{
-
+        text:'哈哈'
     },
     firstAfterRender:function(){
         let _this=this;
@@ -27,6 +23,6 @@ let AddItem={
                 }
             })
         });
-    }
+    },
 }
 export default AddItem
