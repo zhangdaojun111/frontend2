@@ -17,6 +17,8 @@ import {FormService} from "../../../services/formService/formService"
 import MultiSelectControl from "../multi-select-control/multi-select-control";
 import EditorControl from "../editor-control/editor";
 import SettingTextareaControl from "../setting-textarea-control/setting-textarea";
+import AddItem from '../add-item/add-item';
+import {PMAPI} from '../../../lib/postmsg';
 
 let config={
     template:'',
@@ -327,6 +329,46 @@ let config={
 
         },
 
+        //主动触发一遍所有事件
+        triggerControl:function(){
+            let data=this.data.data;
+            for(let key in data) {
+                let val = data[key]["value"];
+                let d = {
+                    data: data[key],
+                    value: val
+                };
+                if(val != "" || !$.isEmptyObject(val)) {
+                    if($.isArray(val)){
+                        if(val.length != 0){
+                            this.actions.checkValue(d,this);
+                        }
+                    }else{
+                        this.actions.checkValue(d,this);
+                    }
+                }
+            }
+        },
+
+        //通过枚举选项的id，寻找对应的text
+        getTextByOptionID(dfield,value) {
+            let text = '';
+            let options;
+            let data=this.data.data;
+            if(data[dfield].hasOwnProperty("options")) {
+                options = data[dfield]["options"];
+            }
+            if(data[dfield].hasOwnProperty("group")) {
+                options = data[dfield]["group"];
+            }
+            for(let key in options) {
+                if(options[key]["value"] == value) {
+                    text = options[key]["label"];
+                }
+            }
+            return `${ text}`;
+        },
+
         //替换表达式中的字段
         replaceSymbol(data) {
             let reg = /\@f\d+\@/g;
@@ -349,7 +391,7 @@ let config={
                 }
                 if([6,7,8,30].indexOf(dinput_type) != -1) {
                     //枚举类型 or 各种内置
-                    v = this.getTextByOptionID(item,this.data.data[item]['value']);
+                    v = this.actions.getTextByOptionID(item,this.data.data[item]['value']);
                 }
                 if([10,11,26].indexOf(type) != -1) {
                     //整数或者小数
@@ -431,6 +473,9 @@ let config={
          */
         calcExpression(data) {
             let send_exps = [];
+            if(!data["effect"] || !data["effect"].length>0){
+                return;
+            }
             for(let f of data["effect"]) {
                 //如果这个字段存在的话，再进行下面的逻辑
                 let expression;
@@ -489,7 +534,7 @@ let config={
                 }else {
                     this.data[key]['value'] = '';
                 }
-                Mediator.publish('form:changeOption'+_this.data.tableId,this.data[key]['dfield'] );
+                Mediator.publish('form:changeOption:'+_this.data.tableId,this.data[key]['dfield'] );
             }
         },
 
@@ -722,15 +767,15 @@ let config={
             // }else {
             //     postData = this.approvedFormData;
             // }
-            this.changeValueForChildTable(data);
+            this.actions.changeValueForChildTable(data);
             let json = {
                 // data: JSON.stringify(data),
                 data: encodeURIComponent( JSON.stringify(data) ),
                 focus_users: this.focus_users,
                 cache_new: encodeURIComponent( JSON.stringify( obj_new ) ),
                 cache_old: encodeURIComponent( JSON.stringify( obj_old ) ),
-                table_id: this.tableId,
-                flow_id: this.flowId,
+                table_id: this.data.tableId,
+                flow_id: this.data.flowId,
                 parent_table_id: this.parentTableId || "",
                 parent_real_id: this.parentRealId || "",
                 parent_temp_id: this.parentTempId || "",
@@ -904,7 +949,69 @@ let config={
                 }
             }
         }
-    }
+    },
+
+    checkValue:function(data,_this){
+            _this.data.data[data.dfield]=data;
+
+            if(data.type=='Buildin'){
+                let id = data["id"];
+                let value = data["value"];
+                _this.actions.setAboutData(id,value);
+            }
+
+            //检查是否是默认值的触发条件
+            // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
+            if(_this.data.flowId != "" && _this.data['base_fields'].indexOf(data["dfield"]) != -1) {
+                _this.actions.validDefault(data, data['value']);
+            }
+            //统计功能
+            _this.actions.countFunc(data.dfield);
+
+            //改变选择框的选项
+            if( data['linkage']!={} ){
+                let j = 0;
+                let arr = [];
+                for( let value in data['linkage'] ){
+                    for( let k in data['linkage'][value] ){
+                        arr.push( k );
+                    }
+                    if( value == val ){
+                        j++;
+                        //改变选择框的选项
+                        _this.changeOptionOfSelect( originalData,originalData['linkage'][value] );
+                    }
+                }
+                if( j == 0 ){
+                    let obj = {'select':'options','radio':'group','multi-select':'options'};
+                    for( let field of arr ){
+                        _this.data[field][obj[_this.data[field]['type']]] = _this.optionsToItem[field];
+                    }
+                }
+            }
+
+            //修改负责
+            if(data["edit_condition"] && data["edit_condition"] !== "") {
+                setTimeout(()=>{
+                    _this.actions.reviseCondition(data,data.value,_this);
+                },0);
+            }
+
+            //修改必填性功能
+            if(data["required_condition"] && data["required_condition"] !== "") {
+                _this.actions.requiredCondition(data,data['value']);
+            }
+
+            let calcData = {
+                val: data['value'],
+                effect: data["effect"]
+            };
+            _this.actions.calcExpression(calcData,data['value']);
+            if(data.required){
+                _this.actions.requiredChange(_this.childComponent[data.dfield]);
+            }
+            $('.select-drop').hide();
+        }
     },
     firstAfterRender:function(){
         let _this=this;
@@ -912,6 +1019,7 @@ let config={
         this.set('childComponent',{});
         let data=_this.data.data;
         this.set('oldData',_.defaultsDeep({},data));
+        this.actions.triggerControl();
         for(let key in data){
             let single=_this.el.find('div[data-dfield='+data[key].dfield+']');
             let type=single.data('type');
@@ -1019,66 +1127,28 @@ let config={
         $('body').on('click.selectDrop',function(){
             $('.select-drop').hide();
         })
-        Mediator.subscribe('form:changeValue-'+_this.data.tableId,function(data){
-            _this.data.data[data.dfield]=data;
-
-            if(data.type=='Buildin'){
-                let id = data["id"];
-                let value = data["value"];
-                _this.actions.setAboutData(id,value);
+        Mediator.subscribe('form:changeValue:'+_this.data.tableId,function(data){
+            _this.actions.checkValue(data,_this);
+        })
+        Mediator.subscribe('form:addItem:'+_this.data.tableId,function(data){
+            console.log('快捷添加');
+            console.log('快捷添加');
+            console.log('快捷添加');
+            let originalOptions;
+            if(data.hasOwnProperty("options")){
+                originalOptions = data["options"];
+            }else{
+                originalOptions = data["group"];
             }
-
-            //检查是否是默认值的触发条件
-            // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
-            if(_this.data.flowId != "" && _this.data['base_fields'].indexOf(data["dfield"]) != -1) {
-                _this.actions.validDefault(data, data['value']);
-            }
-            //统计功能
-            _this.actions.countFunc(data.dfield);
-
-            //改变选择框的选项
-            if( data['linkage']!={} ){
-                let j = 0;
-                let arr = [];
-                for( let value in data['linkage'] ){
-                    for( let k in data['linkage'][value] ){
-                        arr.push( k );
-                    }
-                    if( value == val ){
-                        j++;
-                        //改变选择框的选项
-                        _this.changeOptionOfSelect( originalData,originalData['linkage'][value] );
-                    }
-                }
-                if( j == 0 ){
-                    let obj = {'select':'options','radio':'group','multi-select':'options'};
-                    for( let field of arr ){
-                        _this.data[field][obj[_this.data[field]['type']]] = _this.optionsToItem[field];
-                    }
-                }
-            }
-
-            //修改负责
-            if(data["edit_condition"] && data["edit_condition"] !== "") {
-                setTimeout(()=>{
-                    _this.actions.reviseCondition(data,data.value,_this);
-                },0);
-            }
-
-            //修改必填性功能
-            if(data["required_condition"] && data["required_condition"] !== "") {
-                _this.actions.requiredCondition(data,data['value']);
-            }
-
-            let calcData = {
-                val: data['value'],
-                effect: data["effect"]
-            };
-            _this.actions.calcExpression(calcData,data['value']);
-            if(data.required){
-                _this.actions.requiredChange(_this.childComponent[data.dfield]);
-            }
-            $('.select-drop').hide();
+            AddItem.data.originalOptions=_.defaultsDeep({},originalOptions);
+            console.log(AddItem);
+            PMAPI.openDialogByComponent(AddItem, {
+                width: 800,
+                height: 600,
+                title: '添加新选项'
+            }).then((data) => {
+                console.log('看看关闭回调');
+            });
         })
 
         //添加提交按钮
@@ -1093,15 +1163,17 @@ let config={
         })
     },
     beforeDestory:function(){
+        Mediator.removeAll('form:changeValue:'+this.data.tableId);
+        Mediator.removeAll('form:addItem:'+this.data.tableId);
         $('body').off('.selectDrop');
     }
 }
 class BaseForm extends Component{
     constructor(formData){
         config.template=formData.template;
-        config.data['temp_id']=formData.data.data['temp_id']||'';
-        config.data['real_id']=formData.data.data['real_id']||'';
-        config.data['table_id']=formData.data.data['table_id']||'';
+        config.data['tempId']=formData.data.data['temp_id']||'';
+        config.data['realId']=formData.data.data['real_id']||'';
+        // config.data['tableId']=formData.data.data['table_id']||'';
         if(formData.data.data["real_id"]){
             config.data['parentRealId']=formData.data.data["real_id"]["value"]||'';
         }

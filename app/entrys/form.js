@@ -35,6 +35,29 @@ let FormEntrys={
     }
     return isExist;
 },
+    //找到加载表单数据的formId和加载节点的flowId
+    findFormIdAndFlowId(res) {
+        if(res["data"] && res["data"]["flow_data"].length != 0) {
+            //给选择节点视图的下拉框赋值
+            this.selectItems = res["data"]["flow_data"];
+            //默认的form_id和flow_id取第一个select
+            this.formId = res["data"]["flow_data"][0]["form_id"];
+            this.flowId = res["data"]["flow_data"][0]["flow_id"];
+            //循环一遍，查看是否有默认值，如果有，则form_id和flow_id改变
+            for (let d of res["data"]["flow_data"]) {
+                if (d["selected"] == 1) {
+                    this.formId = d["form_id"];
+                    this.flowId = d["flow_id"];
+                }
+            }
+        }
+        if(res["data"] && res["data"]["form_id"] != 0){
+            this.formId = res["data"]["form_id"];
+            this.isloadCustomTableForm = true;
+        }else {
+            this.isloadWorkflow = true;
+        }
+    },
     //拼装发送json
     createPostJson(){
         let json;
@@ -130,6 +153,7 @@ let FormEntrys={
     staticData.data=data;
     staticData.tableId=this.tableId;
     staticData.formId=this.formId;
+    staticData.flowId=this.flowId;
     return staticData;
 },
     //处理字段数据
@@ -195,28 +219,36 @@ let FormEntrys={
     //创建表单入口
     createForm:function(config={}){
         let _this=this;
+        this.init(config);
+        let tableID=this.tableId;
         if(this.tableId){
             this.destoryForm(this.tableId);
         }
-        this.init(config);
-        let tableID=this.tableId;
         let html=$(`<div id="form-${tableID}" style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">`).appendTo(this.el);
         let template='';
-        let json=this.createPostJson();
-        FormService.getFormData(json).then(res=>{
-            template=_this.formDefaultVersion(res[0].data);
-            let data=_this.mergeFormData(res[0],res[1]);
-            let formData={
-                template:template,
-                data:data,
-            }
-            _this.formBase=new FormBase(formData);
-            _this.formBase.render(html);
-        });
+        FormService.getPrepareParmas({table_id:this.tableId}).then(res=>{
+            _this.findFormIdAndFlowId(res);
+            let json=_this.createPostJson();
+            FormService.getFormData(json).then(res=>{
+                template=_this.formDefaultVersion(res[0].data);
+                let data=_this.mergeFormData(res[0],res[1]);
+                let formData={
+                    template:template,
+                    data:data,
+                }
+                _this.formBase=new FormBase(formData);
+                _this.formBase.render(html);
+            });
+        })
     },
     //审批删除时重置表单可编辑性
     editDelWorkFlow(formId){
         this.formBase.actions.editDelWork(formId);
+    },
+
+    //接收关注人信息
+    setUserIdList(data){
+        this.formBase.data.focus_users=data;
     }
 }
 
@@ -225,6 +257,17 @@ $('#toEdit').on('click',function(){
     let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
         table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
+    });
+});
+$('#text').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.createForm({
+        table_id:'1285_pkz2teyhHCztFrYhoc6F54',
         seqId:'yudeping',
         el:$('body'),
         is_view:isView,
@@ -258,6 +301,17 @@ $('#defaultValue').on('click',function(){
     let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
         table_id:'1160_ex7EbDsyoexufF2UbXBmSJ',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
+    });
+});
+$('#valid').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.createForm({
+        table_id:'2638_urGGDDp75VvymeqWj3eo6F',
         seqId:'yudeping',
         el:$('body'),
         is_view:isView,

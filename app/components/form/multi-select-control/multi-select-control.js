@@ -45,12 +45,16 @@ let config={
                 _this.el.find('#requiredLogo').get(0).className='required2';
             }
         });
-        Mediator.subscribe('form:changeOption'+_this.data.tableId,function(data){
+        Mediator.subscribe('form:changeOption:'+_this.data.tableId,function(data){
             if( _this.data.dfield && res == _this.data.dfield ){
                 _this.data.value = [];
                 _this.reload();
             }
         })
+    },
+    beforeDestory:function(){
+        Mediator.removeAll('form:changeOption:'+this.data.tableId);
+        Mediator.removeAll('form:changeValue:'+this.data.tableId);
     }
 }
 export default class MultiSelectControl extends Component{
