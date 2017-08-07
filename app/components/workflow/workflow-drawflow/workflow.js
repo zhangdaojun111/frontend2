@@ -5,7 +5,7 @@ import './workflow.scss';
 let config = {
     template: template,
     data: {
-        title:'this is workflow',
+        title:'this is workflow'
     },
     actions: {
         init(){
@@ -20,6 +20,7 @@ let config = {
             this.actions.drawWorkFlow();
         },
         drawWorkFlow(){
+            this.requiredfieldsNodeList=this.data["frontendid2requiredfields"];
             let __this=this;
             //draw block
             $.each(this.data.node, function (key, value) {
@@ -155,13 +156,66 @@ let config = {
 
             //draw connecting lines
             $.each(this.data.node, function (key, value) {
-                    var source2target = value["source2target"];
-                    if (source2target != undefined) {
-                        $.each(source2target, function (key, value) {
-                            __this.data.jsPlumbInstance.connect({ uuids: value, editable: false });
-                        });
+                var source2target = value["source2target"];
+                if (source2target != undefined) {
+                    $.each(source2target, function (key, value) {
+                        __this.data.jsPlumbInstance.connect({ uuids: value, editable: false });
+                    });
+                }
+            });
+            //第一次进入时默认选中自己的节点
+            let haveState1 = false;
+            $.each(this.data.node, function (key, value) {
+                let is_add_handler = value["is_add_handler"] || 0;
+                let add_handler_info = value["add_handler_info"] || [];
+                if (value['state'] == 1) {
+                    haveState1 = true;
+                    //判断当前节点是否包含登陆人
+                    if (value["text"].indexOf(user_service_1.UserService.userInfo.name) != -1) {
+                        // for(let a of __this.requiredfieldsNodeList['frontendid2field'][value.id]){
+                        //     $('*[requiredField='+a+']').css({border:'1px solid transparent',boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px',transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out'});
+                        // }
+                        for (let b of __this.requiredfieldsNodeList['frontendid2fieldid'][value.id]) {
+                            $('span[data-id=' + b + ']').css({ color: 'rgb(14,122,239)' });
+                        }
+                        return;
+                    }
+                }
+                else if (is_add_handler == 1) {
+                    haveState1 = true;
+                    let haveAddUser = false;
+                    //判断被加签人是否包含登陆人
+                    for (let dict of add_handler_info) {
+                        if (dict["add_handler_name"].indexOf(user_service_1.UserService.userInfo.name) != -1) {
+                            haveAddUser = true;
+                            break;
+                        }
+                    }
+                    //判断当前加签节点（节点和被加签人）是否包含登陆人
+                    if (value["text"].indexOf(user_service_1.UserService.userInfo.name) != -1 || haveAddUser == true) {
+                        for (let a of __this.requiredfieldsNodeList['frontendid2field'][value.id]) {
+                            $('*[requiredField=' + a + ']').css({ border: '1px solid transparent', boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px', transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out' });
+                        }
+                        for (let b of __this.requiredfieldsNodeList['frontendid2fieldid'][value.id]) {
+                            $('span[data-id=' + b + ']').css({ color: 'rgb(14,122,239)' });
+                        }
+                        return;
+                    }
+                }
+            });
+            if (haveState1 == false) {
+                $.each(this.nodesData, function (key, value) {
+                    if (value.id.indexOf('start') != -1) {
+                        // for(let a of __this.requiredfieldsNodeList['frontendid2field'][value.id]){
+                        //     $('*[requiredField='+a+']').css({border:'1px solid transparent',boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px',transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out'});
+                        // }
+                        for (let b of __this.requiredfieldsNodeList['frontendid2fieldid'][value.id]) {
+                            $('span[data-id=' + b + ']').css({ color: 'rgb(14,122,239)' });
+                        }
+                        return;
                     }
                 });
+            }
 
             this.containerheight = __this.actions.getTheBestBottom() - __this.actions.getTheBestTop() + 100 + 'px';
             this.containerwidth = __this.actions.getTheBestRight() - __this.actions.getTheBestLeft() + 250 + 'px';

@@ -18,6 +18,10 @@ import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflo
 
 import FormEntrys from './form';
 import TreeView from  '../components/util/tree/tree';
+<<<<<<< HEAD
+
+=======
+>>>>>>> c1d1eca89e5501d6166c794210749560c3bbd644
 
 WorkFlowForm.showForm();
 
@@ -125,5 +129,84 @@ let tree=[];
 //审批工作流
 
 ApprovalHeader.showheader();
+<<<<<<< HEAD
+
+(async function () {
+    return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=qiumaoyun_1501661055093&record_id=',data:{
+        flow_id:30
+    }});
+})().then(res=>{
+    Mediator.publish('workflow:gotWorkflowInfo', res);
+});
+
+let tree=[];
+(async function () {
+    return workflowService.getStuffInfo({url: '/save_perm/?perm_id=0'});
+})().then(res=>{
+    tree=res.data.department_tree;
+
+    function recur(data) {
+        console.log(data);
+        for (let item of data){
+            console.log(item);
+            item.nodes=item.children;
+            if(item.children.length!==0){
+                recur(item.children);
+            }
+        }
+    }
+    recur(tree);
+
+
+    var treeComp2 = new TreeView(tree,function (event,selectedNode) {
+        console.log("选中节点："+selectedNode.text);
+        // console.dir(selectedNode);
+    },'MULTI_SELECT',true,'tree3');
+    treeComp2.render($('#treeMulti'));
+});
+
+// var tree = [
+//     {
+//         text: "Parent 1",
+//         nodes: [
+//             {
+//                 text: "Child 1",
+//                 nodes: [
+//                     {
+//                         text: "Grandchild 1"
+//                     },
+//                     {
+//                         text: "Grandchild 2"
+//                     }
+//                 ]
+//             },
+//             {
+//                 text: "Child 2",
+//                 nodes: [
+//                     {
+//                         text: "Grandchild 1"
+//                     },
+//                     {
+//                         text: "Grandchild 2"
+//                     }
+//                 ]
+//             }
+//         ]
+//     },
+//     {
+//         text: "Parent 2"
+//     },
+//     {
+//         text: "Parent 3"
+//     },
+//     {
+//         text: "Parent 4"
+//     },
+//     {
+//         text: "Parent 5"
+//     }
+// ];
+=======
 WorkflowRecord.showRecord();
+>>>>>>> c1d1eca89e5501d6166c794210749560c3bbd644
 
