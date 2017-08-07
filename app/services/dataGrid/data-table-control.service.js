@@ -184,10 +184,12 @@ export const dgcService = {
     returnQueryParams: function (queryParams) {
         if(queryParams.filter || queryParams.childInfo || queryParams.mongo || queryParams.filter_child){
             let temp = {};
-            if(queryParams.filter && !queryParams.filter['_id']){
+            if(queryParams.filter.length != 0 && !queryParams.filter['_id']){
                 temp = this.translateAdvancedQuery(queryParams.filter);
+            }else if( queryParams.filter['_id'] ) {
+                temp = queryParams.filter;
             }else {
-                temp = queryParams.filter || {};
+                temp = {};
             }
             let obj = {};
             if(queryParams.childInfo){
@@ -210,6 +212,10 @@ export const dgcService = {
                 delete queryParams.mongo
             }
             queryParams.filter = JSON.stringify(temp);
+            if( queryParams.filter == '{}' ){
+                delete queryParams.filter;
+            }
+            return queryParams;
         }
     },
     translateAdvancedQuery: function (oldQueryList){
