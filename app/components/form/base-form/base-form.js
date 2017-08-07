@@ -1141,6 +1141,7 @@ let config={
                 originalOptions = data["group"];
             }
             AddItem.data.originalOptions=_.defaultsDeep({},originalOptions);
+            AddItem.data.data=_.defaultsDeep({},data);
             console.log(AddItem);
             PMAPI.openDialogByComponent(AddItem, {
                 width: 800,
