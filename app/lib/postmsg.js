@@ -65,7 +65,11 @@ window.addEventListener('message', function(event) {
                 };
                 comp['key']=data.key;
                 comp.render(elementDiv);
-                dialogHash[data.key].element.dialog(data.frame);
+                dialogHash[data.key].element.dialog(_.defaultsDeep(data.frame, {
+                    close: function () {
+                        comp.destroySelf();
+                    }
+                }));
                 break;
             case PMENUM.open_iframe_dialog:
                 let url = URL.getUrl(data.url, {key: data.key});
@@ -139,6 +143,9 @@ export const PMAPI = {
      * @param msg
      */
     sendToChild: function(iframe, msg) {
+        if (iframe.postMessage) {
+            iframe.postMessage(msg,location.origin);
+        }
         if (iframe.contentWindow) {
             iframe.contentWindow.postMessage(msg,location.origin);
         }
@@ -181,7 +188,6 @@ export const PMAPI = {
     openDialogByComponent: function(componentConfig,frame) {
         return new Promise(function(resolve) {
             let key = PMAPI._getKey();
-            console.log(key);
             dialogWaitHash[key] = resolve;
             window.parent.postMessage({
                 type: PMENUM.open_component_dialog,
@@ -206,9 +212,10 @@ export const PMAPI = {
         } else if (componentConfig instanceof Function){
             let str = String(componentConfig);
             let source = PMAPI._removeAllComments(str.substring(str.indexOf('{')+1,str.lastIndexOf('}')));
-            return '{"Function":"'+str.substring(str.indexOf('function ')+9,str.indexOf('('))+'", '
+            let func =  '{"Function":"'+str.substring(str.indexOf('function ')+9,str.indexOf('('))+'", '
                 +'"Arguments":"'+str.substring(str.indexOf('(')+1,str.indexOf(')')) +'", '
                 +'"Source":"'+source.replace(/\n/g,'').replace(/\"/g,"'")+'"}';
+            return func;
         } else if (Array.isArray(componentConfig)) {
             if (componentConfig[0] === undefined){
                 return '[]';
@@ -254,7 +261,7 @@ export const PMAPI = {
                 let args = obj[key]['Arguments']||"";
                 let source = obj[key]['Source'];
                 let fstr = "function "+obj[key]['Function']+"("+args+"){"+source+"}";
-                let f= new Function("return "+fstr)();
+                let f= new Function('$', '_', 'PMAPI', 'PMENUM', "return "+fstr)($, _, PMAPI, PMENUM);
                 obj[key]=f;
             } else if(obj[key] instanceof Object){
                 PMAPI._createFuncs(obj[key]);
