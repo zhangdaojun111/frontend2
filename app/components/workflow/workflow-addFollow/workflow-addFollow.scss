@@ -2,7 +2,7 @@
 	cursor: pointer;
 }
 #follower-select{
-	display: flex;
+	display: none;
 	background: #666;
 	position: absolute;
 	border: 1px solid rgb(240, 240, 240);
@@ -18,5 +18,15 @@
 		width: 33.3333%;
 		flex-shrink: 0;
 		border: 1px solid #000000;
+	}
+	.close{
+		cursor: pointer;
+		width: 30px;
+		height: 30px;
+		position: absolute;
+		right: 0;
+		top: 0;
+		background: #fff;
+		display: block;
 	}
 }

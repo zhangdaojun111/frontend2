@@ -10,8 +10,11 @@ let config={
     },
     afterRender(){
         this.el.on('click','#addFollower',()=>{
-            console.log(1);
+            this.el.find('#follower-select').show();
         })
+        this.el.on('click','.close',()=>{
+            this.el.find('#follower-select').hide();
+        });
     }
 };
 class WorkflowAddFollow extends Component{
