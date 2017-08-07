@@ -1,69 +1,76 @@
 <div class="main-window">
     <div class="personal-setting-header">
-        <div class="avatar-box">
+        <div class="login-group " >
+            <i class="login-icon"></i>
+            <span class="other-login">他人登录</span>
+        </div>
+        <div class="proxy-group ">
+            <i class="proxy-icon"></i>
+            <span class="set-proxy">设置代理</span>
+        </div>
+
+        <div class="avatar-box" >
             <img class="user_avatar" src="{{avatar}}">
         </div>
-        <span class="name">{{name}}</span>
-        <span class="username">{{username}}</span>
-        <a class="set-proxy">设置代理</a>
-        <div class="proxy-status"></div>
+        <div class="name-group ">
+            <span class="name " >{{name}}</span>
+            <span class="username " >{{username}}</span>
+        </div>
     </div>
 
-    <div class="view-control">
-        <div class="show-personal-info">个人资料</div>
+    <div class="view-control" >
+        <div class="show-personal-info active">个人资料</div>
         <div class="show-modify-password">修改密码</div>
     </div>
     <!--个人信息面板-->
     <div class="personal-info">
         <div class="department-group">
-            <i class="department-icon"></i>
-            <span>部门</span>
+            <span>部门：</span>
             <input type="text" class="department-info" disabled="disabled" value="{{user_department}}" >
         </div>
 
+        <div class="email-group">
+            <span>邮箱：</span>
+            <input type="email" class="email-info" disabled="disabled" value="{{user_email}}">
+            <i class="edit-email"></i>
+        </div>
+
         <div class="position-group">
-            <i class="position-icon"></i>
-            <span>职位</span>
+            <span>职位：</span>
             <input type="text" class="position-info" disabled="disabled" value="{{user_position}}">
         </div>
 
-        <div class="email-group">
-            <i class="email-icon"></i>
-            <span>邮箱</span>
-            <input type="email" class="email-info" disabled="disabled" value="{{user_email}}">
-        </div>
-
         <div class="phone-group">
-            <i class="phone-icon"></i>
-            <span>电话</span>
+            <span>电话：</span>
             <input type="tel" class="phone-info" disabled="disabled" value="{{user_phone}}">
+            <i class="edit-tel"></i>
         </div>
-        <div class="personal-foot">
-            <span class="edit-info-btn">编辑</span>
-            <span class="clear-storage-btn">清除缓存</span>
-        </div>
-        <div class="cancel-save">
-            <button class="cancel-btn">取消</button>
-            <button class="save-btn">保存</button>
-        </div>
+        <!--<div class="personal-foot">-->
+            <!--<span class="edit-info-btn">编辑</span>-->
+            <!--<span class="clear-storage-btn">清除缓存</span>-->
+        <!--</div>-->
+        <!--<div class="cancel-save">-->
+            <!--<button class="cancel-btn">取消</button>-->
+            <!--<button class="save-btn">保存</button>-->
+        <!--</div>-->
     </div>
 
     <div class="modify-password">
-        <div>
-            <span>旧密码</span>
+        <div class="first-div">
+            <span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp旧密码：</span>
             <input class="origin_pw" type="password">
         </div>
 
         <div>
-            <span>新密码</span>
+            <span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp新密码：</span>
             <input class="new_pw" type="password">
         </div>
 
         <div>
-            <span>确认新密码</span>
+            <span>确认新密码：</span>
             <input class="confirm_new_pw" type="password">
         </div>
-        <span class="ps-warn">* 新密码不能为空</span>
-        <button class="confirm-btn" disabled="disabled">确定</button>
+        <!--<span class="ps-warn">* 新密码不能为空</span>-->
+        <button class="confirm-btn" disabled="disabled">保存</button>
     </div>
 </div>

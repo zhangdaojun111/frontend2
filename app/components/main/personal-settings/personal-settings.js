@@ -14,7 +14,7 @@ function getData(component_instance) {
     avatar: window.config.sysConfig.userInfo.avatar,
     name:window.config.sysConfig.userInfo.name,
     username: window.config.sysConfig.userInfo.username,
-    user_department:"test",
+    user_department:"开发部",
     user_position:"manager",
     user_email:window.config.sysConfig.userInfo.email,
     user_phone:window.config.sysConfig.userInfo.tel,
@@ -47,17 +47,30 @@ let config = {
         showPersonalInfo:function () {
             this.el.find("div.personal-info").show();
             this.el.find("div.modify-password").hide();
+            this.el.find("div.show-personal-info").addClass("active");
+            this.el.find("div.show-modify-password").removeClass("active");
         },
         showModifyPassword:function () {
             this.el.find("div.personal-info").hide();
             this.el.find("div.modify-password").show();
+            this.el.find("div.show-personal-info").removeClass("active");
+            this.el.find("div.show-modify-password").addClass("active");
         },
-        editPersonalInfo:function () {
-            this.el.find("input.email-info").removeAttr("disabled");
-            this.el.find("input.phone-info").removeAttr("disabled");
-            this.el.find("div.personal-foot").hide();
-            this.el.find("div.cancel-save").show();
+        // editPersonalInfo:function () {
+        //     this.el.find("input.email-info").removeAttr("disabled");
+        //     this.el.find("input.phone-info").removeAttr("disabled");
+        //     this.el.find("div.personal-foot").hide();
+        //     this.el.find("div.cancel-save").show();
+        // },
+        editEmail:function () {
+            this.el.find("input.email-info").removeAttr("disabled").focus();
         },
+        editTel:function () {
+            this.el.find("input.phone-info").removeAttr("disabled").focus();
+        },
+        // saveEmail:function () {
+        //
+        // },
         cancelEdit:function () {
             this.el.find("input.email-info").val(this.data.user_email);
             this.el.find("input.phone-info").val(this.data.user_phone);
@@ -80,7 +93,8 @@ let config = {
                 usertel: this.data.user_phone
             };
             this.dataService.saveInfo(data).done((result) => {
-                msgbox.alert("保存成功");
+                // msgbox.alert("保存成功");
+                console.log("保存成功");
             }).fail((err) => {
                 msgbox.alert("保存失败");
                 console.log(err);
@@ -127,17 +141,26 @@ let config = {
     afterRender:function () {
        this.actions.initInfo();
        //事件绑定
-        this.el.on("click",".user_avatar",() => {           //打开头像设置页面
+        this.el.on("click","div.avatar-box",() => {           //打开头像设置页面
             this.actions.setAvatar();
-        }).on("click","a.set-proxy",() => {
+        }).on("click","div.proxy-group",() => {
             //设置代理
             console.log("set proxy");
+        }).on("click","div.login-group",() => {
+            //他人登录
+            console.log("login by other");
         }).on("click",".show-personal-info",() => {          //切换至个人资料
             this.actions.showPersonalInfo();
         }).on("click",".show-modify-password",() => {        //切换至修改密码
             this.actions.showModifyPassword();
-        }).on("click","span.edit-info-btn",() => {            //编辑个人资料
-            this.actions.editPersonalInfo();
+        }).on("click","i.edit-email",() => {            //编辑邮箱
+            this.actions.editEmail();
+        }).on("blur","input.email-info",() => {            //保存邮箱
+            this.actions.saveEdit();
+        }).on("click","i.edit-tel",() => {            //编辑电话
+            this.actions.editTel();
+        }).on("blur","input.phone-info",() => {            //保存电话
+            this.actions.saveEdit();
         }).on("click",".clear-storage-btn",() => {          //清除缓存
             this.actions.clearLocalStorage();
         }).on("click",".cancel-btn",() => {           //取消编辑
@@ -170,7 +193,7 @@ export default {
         component.render(el);
         el.dialog({
             title: '个人设置',
-            width: 400,
+            width: 540,
             height: 600,
             close: function() {
                 component.destroySelf();
