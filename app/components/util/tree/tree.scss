@@ -1,0 +1,26 @@
+.checked_box::before {
+  content: url('../../../assets/images/util/tree/icon_checkbox_yes.png')
+}
+
+.unchecked_box::before {
+  content: url('../../../assets/images/util/tree/icon_checkbox_no.png')
+}
+
+.collapsed_node::before {
+  content: url("../../../assets/images/util/tree/icon_fold.png")
+}
+
+.expanded_node::before {
+  content: url("../../../assets/images/util/tree/icon_unfold.png")
+}
+
+.leaf_node::before {
+  content: url("../../../assets/images/util/tree/icon_leaf.png")
+}
+
+.menu_node::before {
+  content: url("../../../assets/images/util/tree/icon_menu.png")
+}
+.menu_leaf_node::before {
+  content: " ";
+}
