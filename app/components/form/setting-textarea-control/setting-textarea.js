@@ -16,6 +16,7 @@ let config = {
             let choosedData = _.defaultsDeep({}, this.data.value);
             delete choosedData['-1'];
             popupSetting.data.choosedData = choosedData;
+
             PMAPI.openDialogByComponent(popupSetting, {
                 width: 800,
                 height: 600,
