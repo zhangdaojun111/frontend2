@@ -15,6 +15,8 @@ import Mediator from "../../../lib/mediator";
 import {HTTP} from "../../../lib/http";
 import {FormService} from "../../../services/formService/formService"
 import MultiSelectControl from "../multi-select-control/multi-select-control";
+import EditorControl from "../editor-control/editor";
+import SettingTextareaControl from "../setting-textarea-control/setting-textarea";
 
 let config={
     template:'',
@@ -1000,6 +1002,16 @@ let config={
                     let multiSelectControl = new MultiSelectControl(data[key]);
                     multiSelectControl.render(single);
                     _this.childComponent[data[key].dfield]=multiSelectControl;
+                    break;
+                case 'Editor':
+                    let editorControl = new EditorControl(data[key]);
+                    editorControl.render(single);
+                    _this.childComponent[data[key].dfield] = editorControl;
+                    break;
+                case 'SettingTextarea':
+                    let settingTextareaControl = new SettingTextareaControl(data[key]);
+                    settingTextareaControl.render(single);
+                    _this.childComponent[data[key].dfield] = settingTextareaControl;
                     break;
             }
         }
