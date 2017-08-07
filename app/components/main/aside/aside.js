@@ -78,6 +78,7 @@ let config = {
         showInfoSet:function () {
             //检查页面是否已创建
             let $page = $(document).find("div#personal-setting-page");
+            console.log($page);
             if($page.length !== 0){
                 $page.focus();
             }else{

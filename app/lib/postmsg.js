@@ -33,6 +33,7 @@ export const PMENUM = {
     iframe_silent: '5'
 }
 
+
 /**
  * 本系统所有postmessage的消息体规范如下
  * {

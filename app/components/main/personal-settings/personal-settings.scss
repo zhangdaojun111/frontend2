@@ -67,17 +67,32 @@ $sub_color: #0088ff;
             .avatar-box{
                 width: 60px;
                 height: 60px;
-                margin-top: 10px;
-                margin-left: 40px;
+                //margin-top: 10px;
+                //margin-left: 40px;
+                top:40px;
+                left: 40px;
                 float: left;
                 clear: both;
                 cursor: pointer;
+                border: 1px solid black;
+                border-radius: 50%;
+                overflow: hidden;
+                position: absolute;
+                img{
+                    width: 350px;
+                    height: 350px;
+                    top:0;
+                    left:0;
+                    position: absolute;
+                }
             }
             .name-group{
                 height: 60px;
-                margin-top: 15px;
-                margin-left: 20px;
-                float: left;
+                //margin-top: 15px;
+                //margin-left: 20px;
+                position: absolute;
+                top: 50px;
+                left: 120px;
                 .name{
                     height: 30px;
                     line-height: 30px;
@@ -185,6 +200,12 @@ $sub_color: #0088ff;
 
             .first-div{
                 margin-top: 30px;
+            }
+            .ps-warn{
+                color: red;
+                display: block;
+                margin-top: 40px;
+                margin-left: 265px;
             }
             button{
                 width: 100px;
