@@ -17,6 +17,8 @@ import {FormService} from "../../../services/formService/formService"
 import MultiSelectControl from "../multi-select-control/multi-select-control";
 import EditorControl from "../editor-control/editor";
 import SettingTextareaControl from "../setting-textarea-control/setting-textarea";
+import AddItem from '../add-item/add-item';
+import {PMAPI} from '../../../lib/postmsg';
 
 let config={
     template:'',
@@ -328,7 +330,7 @@ let config={
         },
 
         //主动触发一遍所有事件
-        triggerControl() {
+        triggerControl:function(){
             let data=this.data.data;
             for(let key in data) {
                 let val = data[key]["value"];
@@ -1125,9 +1127,27 @@ let config={
         $('body').on('click.selectDrop',function(){
             $('.select-drop').hide();
         })
-        console.log('form:changeValue:'+_this.data.tableId);
         Mediator.subscribe('form:changeValue:'+_this.data.tableId,function(data){
             _this.actions.checkValue(data,_this);
+        })
+        Mediator.subscribe('form:addItem:'+_this.data.tableId,function(data){
+            console.log('快捷添加');
+            console.log('快捷添加');
+            console.log('快捷添加');
+            let originalOptions;
+            if(data.hasOwnProperty("options")){
+                originalOptions = data["options"];
+            }else{
+                originalOptions = data["group"];
+            }
+            AddItem.data.originalOptions=_.defaultsDeep({},originalOptions);
+            PMAPI.openDialogByComponent(AddItem, {
+                width: 800,
+                height: 600,
+                title: '添加新选项'
+            }).then((data) => {
+                console.log('看看关闭回调');
+            });
         })
 
         //添加提交按钮
@@ -1143,6 +1163,7 @@ let config={
     },
     beforeDestory:function(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
+        Mediator.removeAll('form:addItem:'+this.data.tableId);
         $('body').off('.selectDrop');
     }
 }

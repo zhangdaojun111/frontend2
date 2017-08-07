@@ -244,6 +244,11 @@ let FormEntrys={
     //审批删除时重置表单可编辑性
     editDelWorkFlow(formId){
         this.formBase.actions.editDelWork(formId);
+    },
+
+    //接收关注人信息
+    setUserIdList(data){
+        this.formBase.data.focus_users=data;
     }
 }
 
@@ -252,6 +257,17 @@ $('#toEdit').on('click',function(){
     let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
         table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
+    });
+});
+$('#text').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.createForm({
+        table_id:'1285_pkz2teyhHCztFrYhoc6F54',
         seqId:'yudeping',
         el:$('body'),
         is_view:isView,
