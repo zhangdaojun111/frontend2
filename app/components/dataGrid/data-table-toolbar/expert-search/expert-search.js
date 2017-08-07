@@ -96,7 +96,8 @@ let config = {
                     config.searchInputList.push(obj);
                 }
             }
-            console.log(config.searchInputList)
+            console.log(config.searchInputList);
+            this.actions.checkedSubmitData()
         },
         showSearchData: function(data) {
             let searchData = data;
@@ -134,6 +135,35 @@ let config = {
                 }
             })
             return htmlStr;
+        },
+        checkedSubmitData: function() {
+            let checkedPost = true,
+                leftBracketNum = 0,
+                rightBracketNum = 0;
+            config.searchInputList.forEach((item)=> {
+                if(item['cond']['keyword'] == ''){
+                    alert('查询值不能为空！');
+                    checkedPost = true;
+                    return false
+                } else if (item['cond']['searchByName'] == '') {
+                    alert('查询条件不能为空！');
+                    checkedPost = true;
+                    return false
+                }
+                if(item['cond']['leftBracket'] == '(') {
+                    leftBracketNum ++;
+                }
+                if(item['cond']['rightBracket'] == ')') {
+                    rightBracketNum ++;
+                }
+            })
+            if (checkedPost) {
+                if (leftBracketNum == rightBracketNum) {
+
+                } else {
+                    alert('运算括号出错')
+                }
+            }
         }
     },
     afterRender: function() {
