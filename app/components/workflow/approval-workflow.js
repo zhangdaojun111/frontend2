@@ -2,14 +2,8 @@ import Component from '../../lib/component';
 import template from './approval-workflow.html';
 import './approval-workflow.scss';
 import Mediator from '../../lib/mediator';
-import ApprovalHeader from './workflow-seal/workflow-seal';
 import WorkFlow from './workflow-drawflow/workflow';
-
-<<<<<<< .mine
-
-=======
 import WorkflowSeal from './workflow-seal/workflow-seal'
->>>>>>> .theirs
 
 let config={
     template: template,
