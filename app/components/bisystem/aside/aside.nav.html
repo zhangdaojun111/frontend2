@@ -11,7 +11,7 @@
         <div class="charts">
             <ul class="charts-items">
                 {{#each charts}}
-                    <li><p><span>{{name}}</span><i class="btn_ripple fa fa-angle-double-down"></i></p></li>
+                    <li data-index="{{@index}}"><p><span>{{name}}</span><i class="btn_ripple fa fa-angle-double-down"></i></p></li>
                 {{/each}}
             </ul>
             <div class="hide_meun">
@@ -22,5 +22,4 @@
             </div>
         </div>
     </div>
-
 </aside>

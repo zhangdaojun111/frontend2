@@ -12,6 +12,8 @@ $li-hover: #424e67;
 $btn_width: 16px;
 $font_size: 12px;
 
+@import "../../../assets/scss/bisystem/dragula.css";
+
 //
 .bi-container {
   position: fixed;
