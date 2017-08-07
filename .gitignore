@@ -1,3 +1,8 @@
 .idea
 dist
 node_modules
+/.idea/codeStyleSettings.xml
+/.idea/vcs.xml
+/.project
+/package-lock.json
+/npm-debug.log
