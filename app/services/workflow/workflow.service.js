@@ -23,4 +23,12 @@ export const workflowService={
     addWorkflowFavorite(params){
         return HTTP.postImmediately('/add_workflow_favorite/', params)
     },
+    //审批工作流
+    //
+    approveWorkflowRecord(params){
+        return HTTP.postImmediately( params)
+    },
+    getStuffInfo(params){
+        return HTTP.getImmediately( params)
+    }
 }

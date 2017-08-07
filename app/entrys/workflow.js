@@ -17,7 +17,7 @@ import ApprovalWorkflow from '../components/workflow/approval-workflow';
 import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow';
 
 import FormEntrys from './form';
-
+import TreeView from  '../components/util/tree/tree';
 
 WorkFlowForm.showForm();
 
@@ -96,6 +96,31 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
     })();
 });
 
+let tree=[];
+(async function () {
+    return workflowService.getStuffInfo({url: '/save_perm/?perm_id=0'});
+})().then(res=>{
+    tree=res.data.department_tree;
+
+    function recur(data) {
+        console.log(data);
+        for (let item of data){
+            console.log(item);
+            item.nodes=item.children;
+            if(item.children.length!==0){
+                recur(item.children);
+            }
+        }
+    }
+    recur(tree);
+
+
+    var treeComp2 = new TreeView(tree,function (event,selectedNode) {
+        console.log("选中节点："+selectedNode.text);
+        // console.dir(selectedNode);
+    },'MULTI_SELECT',true,'tree3');
+    treeComp2.render($('#treeMulti'));
+});
 
 //审批工作流
 
