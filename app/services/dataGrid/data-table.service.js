@@ -26,6 +26,6 @@ export const dataTableService = {
     },
     // 保存偏好
     savePreference: function ( param ) {
-        return HTTP.post( 'save_preferences',param )
+        return HTTP.post( 'save_preference',param )
     }
 }

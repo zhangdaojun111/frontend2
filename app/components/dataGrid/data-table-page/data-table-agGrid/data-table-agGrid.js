@@ -691,9 +691,6 @@ let config = {
                 this.data.customColumnsFields = r.custom;
                 //分组需要字段数据
                 this.data.groupFields = r.group;
-                console.log( "____________________" )
-                console.log( "____________________" )
-                console.log( this.data.groupFields )
                 //创建表头
                 this.columnDefs = this.actions.createHeaderColumnDefs();
                 //创建sheet分页
@@ -768,7 +765,9 @@ let config = {
             }
             let custom = {
                 gridoptions: this.agGrid.gridOptions,
-                fields: this.data.customColumnsFields
+                fields: this.data.customColumnsFields,
+                fixCols: this.data.fixCols,
+                tableId: this.data.tableId
             }
             //渲染定制列
             this.customColumnsCom  = new customColumns(custom)
@@ -797,6 +796,7 @@ let config = {
             let selectState = indexedGridState['mySelectAll']||{};
             selectState['pinned']= this.data.fixCols.l.length > 0 ? 'left' : null;
             let group = indexedGridState['group']||{};
+            group['hide'] = true;
             //默认分组、序号、选择在前三个
             let arr = [ group , numState , selectState ];
             //左侧固定
@@ -822,7 +822,7 @@ let config = {
             if(this.data.orderFields.length == 0){
                 for(let state of gridState){
                     let id = state['colId'];
-                    if(id != 'number' && id != 'mySelectAll'){
+                    if(id != 'number' && id != 'mySelectAll' && id != 'group'){
                         state['hide'] = this.data.ignoreFields.indexOf(id)!=-1;
                         state['pinned'] = null;
                         arr.push(state);
@@ -843,7 +843,7 @@ let config = {
                 }
             }
             //初始化状态
-            this.agGrid.gridOptions.columnApi.setColumnState( arr )
+            this.agGrid.gridOptions.columnApi.setColumnState( arr );
         },
         //创建sheet分页数据
         createSheetTabs: function ( res ) {
