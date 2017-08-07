@@ -27,5 +27,6 @@ export class CellPieComponent extends BiBaseComponent {
     constructor(cellChart) {
         config.data.cellChart = cellChart ? cellChart : null;
         super(config);
+        this.data.id += this.componentId
     }
 }
