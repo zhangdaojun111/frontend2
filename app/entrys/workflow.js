@@ -7,16 +7,21 @@ import {HTTP} from '../lib/http';
 import Mediator from '../lib/mediator';
 import {workflowService} from '../services/workflow/workflow.service';
 import WorkFlowCreate from '../components/workflow/workflow-create/workflow-create';
+import WorkflowRecord from '../components/workflow/approval-record/approval-record';
 import WorkflowInitial from '../components/workflow/workflow-initial';
 import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
 import ApprovalHeader from '../components/workflow/approval-header/approval-header';
+
 import ApprovalWorkflow from '../components/workflow/approval-workflow';
 
 import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow';
 
 import FormEntrys from './form';
 import TreeView from  '../components/util/tree/tree';
+<<<<<<< HEAD
 
+=======
+>>>>>>> c1d1eca89e5501d6166c794210749560c3bbd644
 
 WorkFlowForm.showForm();
 
@@ -95,10 +100,36 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
     })();
 });
 
+let tree=[];
+(async function () {
+    return workflowService.getStuffInfo({url: '/save_perm/?perm_id=0'});
+})().then(res=>{
+    tree=res.data.department_tree;
+
+    function recur(data) {
+        console.log(data);
+        for (let item of data){
+            console.log(item);
+            item.nodes=item.children;
+            if(item.children.length!==0){
+                recur(item.children);
+            }
+        }
+    }
+    recur(tree);
+
+
+    var treeComp2 = new TreeView(tree,function (event,selectedNode) {
+        console.log("选中节点："+selectedNode.text);
+        // console.dir(selectedNode);
+    },'MULTI_SELECT',true,'tree3');
+    treeComp2.render($('#treeMulti'));
+});
 
 //审批工作流
 
 ApprovalHeader.showheader();
+<<<<<<< HEAD
 
 (async function () {
     return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=qiumaoyun_1501661055093&record_id=',data:{
@@ -175,4 +206,7 @@ let tree=[];
 //         text: "Parent 5"
 //     }
 // ];
+=======
+WorkflowRecord.showRecord();
+>>>>>>> c1d1eca89e5501d6166c794210749560c3bbd644
 
