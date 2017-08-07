@@ -22,6 +22,8 @@ let config = {
         //原始表头数据
         fieldsData: [],
         onColumnResized:function ($event) {
+        },
+        onDragStopped:function ($event) {
         }
     },
     gridOptions: GridOptions,
@@ -42,7 +44,9 @@ let config = {
                 rowSelection: 'multiple',
                 icons: dgcService.replacingIcons,
                 //列宽改变
-                onColumnResized: this.data.onColumnResized
+                onColumnResized: this.data.onColumnResized,
+                //拖动结束
+                onDragStopped: this.data.onDragStopped
             }
         },
         createAgGrid: function (){

@@ -754,7 +754,8 @@ let config = {
                 footerData: this.data.footerData,
                 floatingFilter: true,
                 fieldsData: this.data.fieldsData,
-                onColumnResized: this.actions.onColumnResized
+                onColumnResized: this.actions.onColumnResized,
+                onDragStopped: this.actions.onDragStopped
             }
             this.agGrid = new agGrid(gridData);
             this.append(this.agGrid , this.el.find('#data-agGrid'));
@@ -780,8 +781,14 @@ let config = {
             this.append(this.pagination, this.el.find('.pagination'));
             this.data.firstRender = false;
         },
+        //列宽改变
         onColumnResized: function ($event) {
             this.customColumnsCom.actions.onColumnResized( this.customColumnsCom );
+        },
+        //拖动结束
+        onDragStopped: function ($event) {
+            this.customColumnsCom.actions.onFix();
+            this.customColumnsCom.actions.dragAction();
         },
         //分页刷新操作
         refreshData: function ( data ) {
