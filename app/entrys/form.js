@@ -295,7 +295,7 @@ $('#valid').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
-        table_id:'2638_urGGDDp75VvymeqWj3eo6F',
+        table_id:'3497_GvF6BKdDWCfWVMAoxudt8N',
         seqId:'yudeping',
         el:$('body'),
         is_view:isView,

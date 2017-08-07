@@ -1067,7 +1067,7 @@ let config={
                     readonly.render(single);
                     _this.childComponent[data[key].dfield]=readonly;
                     break;
-                case 'password':
+                case 'EnctyptInput':
                     let password=new Password(data[key]);
                     password.render(single);
                     _this.childComponent[data[key].dfield]=password;

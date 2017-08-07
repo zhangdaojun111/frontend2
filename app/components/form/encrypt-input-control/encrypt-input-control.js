@@ -1,19 +1,21 @@
 import Component from '../../../lib/component';
 import '../../../assets/scss/control.scss'
 import 'jquery-ui/ui/widgets/dialog.js';
-import md5 from "../../../services/login/md5";
+import {md5} from "../../../services/login/md5";
 import Mediator from '../../../lib/mediator';
+import {PMAPI} from '../../../lib/postmsg';
+
 let config={
     template:`
              <div class="clearfix">
                  {{#if unvisible}}
-                    <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
+                    <p class="info">权限受限</p>
                  {{else}}           
                       {{#if be_control_condition }}
-                            <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+                            <p class="info">被修改条件限制</p>
                       {{else}}                 
                       <div style="display: inline-block">{{label}}</div>               
-                       <input style="width: 240px"  type="password"  value="{{value}}"  readonly >{{value}}  
+                       <input type="text"  value="{{value}}"  id="inputShow" readonly>{{value}}  
                        <div style="display: inline-block">
                                {{#if required}}
                                 <span id="requiredLogo" class="{{requiredClass}}" ></span>
@@ -23,7 +25,7 @@ let config={
                         <a  href="javascript:;" id="edit" >编辑</a>
                     <div style="display:none" id="editShow">
                         <h4>请修改</h4>
-                        <input type="password" value="{{value}}" id="inputVal">
+                        <input type="text" value="{{value}}" id="inputHide">
                         <a href="javascript:;" id="save">确定</a>
                         <a href="javascript:;" id="cancel">取消</a>
                     </div>
@@ -36,25 +38,26 @@ let config={
     },
     actions:{
         save: function () {
-            let val = this.el.find("input").siblings("#editShow").children("input").val();
-            console.log(val);
-            this.data.value=md5(val);
-            this.data.value=val;
-            Mediator.publish('form:changeValue:'+_this.data.tableId,this.data);
+            let _this=this;
+            let val = this.el.find("#inputShow").val($("#inputHide").val());
+            this.data.value =val;
+            _.debounce(function(){
+                console.log('发出了么');
+                console.log('form:changeValue:'+_this.data.tableId);
+                Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
         }
     },
     afterRender: function() {
         this.el.on('click', ("#edit"), ()=> {
             this.el.find("#editShow").show();
         });
-        this.el.on('click', ("#cancel"), ()=> {
+        this.el.on('click', ("#cancel,#save"), ()=> {
             this.el.find("#editShow").hide();
         });
-        this.el.on('click', '#save', () => {
-            this.actions.save();
-        });
-
-//this.reload();
+        let _this=this;
+        this.el.on( 'input', _.debounce(function () {
+            _this.actions.save();
+        }, 1000));
 
     },
 
