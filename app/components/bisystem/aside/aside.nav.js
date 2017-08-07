@@ -72,8 +72,13 @@ let config = {
             $(this).on('click',function (event) {
                 let flag = true;
                 let top = $(this).position().top;
+                const hideMenuHeight = $('.hide_meun').height();
                 $('.hide_meun').eq(0).css('top',top);
                 $('.hide_meun').eq(0).fadeIn('normal');
+                //底部显示 不超过底部
+                if (top>625){
+                    $('.hide_meun').eq(0).css('top',top-hideMenuHeight);
+                }
                 event.stopPropagation();
                 //点击消失
                 $(document).bind('click',function () {

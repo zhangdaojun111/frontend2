@@ -35,8 +35,7 @@ let config = {
     template: template,
     actions: {
     },
-    afterRender() {
-    }
+    afterRender() {}
 };
 
 export class CanvasCellComponent extends BiBaseComponent {
