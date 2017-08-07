@@ -7,9 +7,11 @@ import {HTTP} from '../lib/http';
 import Mediator from '../lib/mediator';
 import {workflowService} from '../services/workflow/workflow.service';
 import WorkFlowCreate from '../components/workflow/workflow-create/workflow-create';
+import WorkflowRecord from '../components/workflow/approval-record/approval-record';
 import WorkflowInitial from '../components/workflow/workflow-initial';
 import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
 import ApprovalHeader from '../components/workflow/approval-header/approval-header';
+
 import ApprovalWorkflow from '../components/workflow/approval-workflow';
 
 import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow';
@@ -98,5 +100,5 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
 //审批工作流
 
 ApprovalHeader.showheader();
-
+WorkflowRecord.showRecord();
 

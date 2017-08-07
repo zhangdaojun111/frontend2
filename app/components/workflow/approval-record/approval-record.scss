@@ -1,0 +1,51 @@
+.workflow-record-box{
+  .workflow-record-tit{
+    border: 1px solid #ddd;
+
+    .tit-col{
+      border-right: 1px solid #ddd;
+      height: 35px;
+      line-height: 35px;
+      padding-left: 10px;
+      &:last-child{
+        border-right: none;
+      }
+      &:nth-child(1),&:nth-child(2),&:nth-child(3){
+        flex-grow: 1;
+        width: 80px;
+
+      }
+      &:nth-child(4){
+        flex-grow: 2;
+      }
+    }
+  }
+  .workflow-record-list{
+    border: 1px solid #ddd;
+    .workflow-record-item{
+      border-bottom: 1px solid #ddd;
+      .txt-item{
+        border-right: 1px solid #ddd;
+        height: 35px;
+        line-height: 35px;
+        padding-left: 10px;
+        &:last-child{
+          border-right: none;
+        }
+        &:nth-child(1),&:nth-child(2),&:nth-child(3){
+          flex-grow: 1;
+          width: 80px;
+
+        }
+        &:nth-child(4){
+          flex-grow: 2;
+        }
+      }
+      &:last-child{
+        border-bottom: none;
+      }
+
+    }
+
+  }
+}

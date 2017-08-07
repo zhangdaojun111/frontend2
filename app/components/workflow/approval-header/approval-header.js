@@ -31,7 +31,7 @@ class ApprovalHeader extends Component{
 export default {
     showheader(data){
         let component = new ApprovalHeader(data);
-        let el = $('#approval-header');
+        let el = $('#approval-info');
         component.render(el);
     },
 };
