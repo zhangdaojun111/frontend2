@@ -27,5 +27,8 @@ export const workflowService={
     //
     approveWorkflowRecord(params){
         return HTTP.postImmediately( params)
+    },
+    getStuffInfo(params){
+        return HTTP.getImmediately( params)
     }
 }

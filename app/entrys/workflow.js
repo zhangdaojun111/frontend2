@@ -108,61 +108,71 @@ ApprovalHeader.showheader();
     Mediator.publish('workflow:gotWorkflowInfo', res);
 });
 
+let tree=[];
+(async function () {
+    return workflowService.getStuffInfo({url: '/save_perm/?perm_id=0'});
+})().then(res=>{
+    tree=res.data.department_tree;
 
-
-var tree = [
-    {
-        text: "Parent 1",
-        nodes: [
-            {
-                text: "Child 1",
-                nodes: [
-                    {
-                        text: "Grandchild 1"
-                    },
-                    {
-                        text: "Grandchild 2"
-                    }
-                ]
-            },
-            {
-                text: "Child 2",
-                nodes: [
-                    {
-                        text: "Grandchild 1"
-                    },
-                    {
-                        text: "Grandchild 2"
-                    }
-                ]
+    function recur(data) {
+        console.log(data);
+        for (let item of data){
+            console.log(item);
+            item.nodes=item.children;
+            if(item.children.length!==0){
+                recur(item.children);
             }
-        ]
-    },
-    {
-        text: "Parent 2"
-    },
-    {
-        text: "Parent 3"
-    },
-    {
-        text: "Parent 4"
-    },
-    {
-        text: "Parent 5"
+        }
     }
-];
-var treeComp = new TreeView(tree,function (event,selectedNode) {
-    console.log("选中节点："+selectedNode.text);
-    // console.dir(selectedNode);
-},'SINGLE_SELECT',false,'tree1');
-treeComp.render($('#treeSingle'));
-var treeComp1 = new TreeView(tree,function (event,selectedNode) {
-    console.log("选中节点："+selectedNode.text);
-    // console.dir(selectedNode);
-},'MENU',false,'tree2');
-treeComp1.render($('#treeMenu'));
-var treeComp2 = new TreeView(tree,function (event,selectedNode) {
-    console.log("选中节点："+selectedNode.text);
-    // console.dir(selectedNode);
-},'MULTI_SELECT',true,'tree3');
-treeComp2.render($('#treeMulti'));
+    recur(tree);
+
+
+    var treeComp2 = new TreeView(tree,function (event,selectedNode) {
+        console.log("选中节点："+selectedNode.text);
+        // console.dir(selectedNode);
+    },'MULTI_SELECT',true,'tree3');
+    treeComp2.render($('#treeMulti'));
+});
+
+// var tree = [
+//     {
+//         text: "Parent 1",
+//         nodes: [
+//             {
+//                 text: "Child 1",
+//                 nodes: [
+//                     {
+//                         text: "Grandchild 1"
+//                     },
+//                     {
+//                         text: "Grandchild 2"
+//                     }
+//                 ]
+//             },
+//             {
+//                 text: "Child 2",
+//                 nodes: [
+//                     {
+//                         text: "Grandchild 1"
+//                     },
+//                     {
+//                         text: "Grandchild 2"
+//                     }
+//                 ]
+//             }
+//         ]
+//     },
+//     {
+//         text: "Parent 2"
+//     },
+//     {
+//         text: "Parent 3"
+//     },
+//     {
+//         text: "Parent 4"
+//     },
+//     {
+//         text: "Parent 5"
+//     }
+// ];
+
