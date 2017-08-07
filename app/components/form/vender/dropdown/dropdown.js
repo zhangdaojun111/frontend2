@@ -50,7 +50,7 @@ let config={
                 if(_this.data.index || _this.data.index==0){
                     data['index']= _this.data.index
                 }
-                Mediator.publish('form:dropDownSelect'+_this.data.tableId,data);
+                Mediator.publish('form:dropDownSelect:'+_this.data.tableId,data);
             }
             event.stopPropagation();
         })

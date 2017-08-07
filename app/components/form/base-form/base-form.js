@@ -489,7 +489,7 @@ let config={
                 }else {
                     this.data[key]['value'] = '';
                 }
-                Mediator.publish('form:changeOption'+_this.data.tableId,this.data[key]['dfield'] );
+                Mediator.publish('form:changeOption:'+_this.data.tableId,this.data[key]['dfield'] );
             }
         },
 
@@ -1019,7 +1019,7 @@ let config={
         $('body').on('click.selectDrop',function(){
             $('.select-drop').hide();
         })
-        Mediator.subscribe('form:changeValue-'+_this.data.tableId,function(data){
+        Mediator.subscribe('form:changeValue:'+_this.data.tableId,function(data){
             _this.data.data[data.dfield]=data;
 
             if(data.type=='Buildin'){

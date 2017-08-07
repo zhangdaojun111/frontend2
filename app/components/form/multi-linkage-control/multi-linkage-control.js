@@ -6,7 +6,7 @@ let config={
     template:`  <div class="clearfix" style="display: flex;align-items: center">
                     {{#if unvisible}}
                         <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                    {{else }}
+                    {{else}}
                         {{#if be_control_condition }}
                         <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                         {{else}}
@@ -33,7 +33,7 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
-        Mediator.subscribe('form:dropDownSelect'+_this.data.tableId,function(data){
+        Mediator.subscribe('form:dropDownSelect:'+_this.data.tableId,function(data){
             if(data.dfield !=_this.data.dfield){
                 return;
             }
@@ -83,7 +83,7 @@ let config={
                         _this.data.value=key;
                         data['value']=key;
                         if(_this.data.required){
-                            Mediator.publish('form:changeValue-'+_this.data.tableId,data);
+                            Mediator.publish('form:changeValue:'+_this.data.tableId,data);
                         }
                     }
                 }
@@ -109,7 +109,7 @@ let config={
                 drop.data=Object.assign(drop.data,d);
                 drop.reload();
                 _this.data.value='';
-                _.debounce(function(){Mediator.publish('form:changeValue-'+_this.data.tableId,_this.data)},200)();
+                _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
             }
         });
     },
