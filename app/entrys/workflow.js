@@ -99,4 +99,12 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
 
 ApprovalHeader.showheader();
 
+(async function () {
+    return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=qiumaoyun_1501661055093&record_id=',data:{
+        flow_id:30
+    }});
+})().then(res=>{
+    Mediator.publish('workflow:gotWorkflowInfo', res);
+});
+
 

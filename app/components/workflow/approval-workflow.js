@@ -1,9 +1,9 @@
 import Component from '../../lib/component';
 import template from './approval-workflow.html';
 import './approval-workflow.scss';
-
-import ApprovalHeader from './workflow-seal/workflow-seal'
-
+import Mediator from '../../lib/mediator';
+import ApprovalHeader from './workflow-seal/workflow-seal';
+import WorkFlow from './workflow-drawflow/workflow';
 
 
 let config={
@@ -13,6 +13,9 @@ let config={
 
     },
     afterRender(){
+        Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
+            WorkFlow.show(msg.data[0]);
+        })
     }
 };
 class ApprovalWorkflow extends Component{
