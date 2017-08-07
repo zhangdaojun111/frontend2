@@ -14,10 +14,17 @@ let config = {
         let json = {
             tableId: this.data.tableId,
             tableName: this.data.tableName
-        }
+        };
         this.append(new dataTableAgGrid(json), this.el.find('#data-table-agGrid'));
+        $('.tabContent').eq(0).show();
+        $('.tabTitle li').click(function() {
+            let i = $('.tabTitle li').index(this);
+            $('.tabContent').hide();
+            $('.tabContent').eq(i).show().siblings().hide();
+        });
     }
-}
+};
+
 
 class dataTablePage extends Component {
     constructor(data) {

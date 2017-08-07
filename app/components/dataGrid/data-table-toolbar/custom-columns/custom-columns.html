@@ -1,17 +1,17 @@
 <div class="dragCustom">
     <div class="custom-search">
-
+        <img class="custom-select-all" src=''><input id="custom-search-input" type="text" placeholder="搜索关键字">
     </div>
     <div class="custom-data">
         <ul id="dragCustom">
             {{#fields}}
             {{#if candrag}}
-            <li field="{{field}}" class="ui-state-default">
+            <li field="{{field}}" name="{{name}}" class="ui-state-default">
                 <img class="custom-checkbox" src=''><span title="{{name}}" class="custom-name">{{name}}</span>
                 <img class="custom-fix-l" src='../../../../assets/images/dataGrid/icon_right_shi.png'><img class="custom-fix-r" src='../../../../assets/images/dataGrid/icon_right_shi.png'>
             </li>
             {{else}}
-            <li field="{{field}}" class="custom-disabled">
+            <li field="{{field}}" name="{{name}}" class="custom-disabled">
                 <img class="custom-checkbox" src=''><span title="{{name}}" class="custom-name">{{name}}</span>
                 <img style="display: none;" class="custom-fix-l" src=''><img style="display: none;" class="custom-fix-r" src=''>
             </li>

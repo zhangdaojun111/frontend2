@@ -20,7 +20,11 @@ let config = {
         cssTheme: 'ag-blue',
         floatingFilter: false,
         //原始表头数据
-        fieldsData: []
+        fieldsData: [],
+        onColumnResized:function ($event) {
+        },
+        onDragStopped:function ($event) {
+        }
     },
     gridOptions: GridOptions,
     actions: {
@@ -38,7 +42,11 @@ let config = {
                 sortingOrder: ['asc','desc','null'],
                 suppressRowClickSelection: true,
                 rowSelection: 'multiple',
-                icons: dgcService.replacingIcons
+                icons: dgcService.replacingIcons,
+                //列宽改变
+                onColumnResized: this.data.onColumnResized,
+                //拖动结束
+                onDragStopped: this.data.onDragStopped
             }
         },
         createAgGrid: function (){
