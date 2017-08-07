@@ -1,6 +1,7 @@
 import Component from '../../../lib/component';
 import '../../../assets/scss/control.scss'
 import Mediator from '../../../lib/mediator';
+import {FormService} from "../../../services/formService/formService"
 
 let config={
     template:`
@@ -52,9 +53,52 @@ let config={
         console.log(" val:"+val+"  func:"+func+"  reg:"+reg);
             //输入框输入时的实时函数验证
             if(val != "" && !$.isEmptyObject(func)){
-                for(let r in func){
-                    let flag = this[r](val);
-                    console.log("flagFunc："+flag);
+                for( let r in func){
+                    console.log('formService');
+                    console.log(FormService);
+                    //var a = FormService.r(val)
+                    switch (r)
+                    {
+                        case "checkCard":
+                            var a = FormService.checkCard(val);
+                            break;
+                        case "orgcodevalidate":
+                            var a = FormService.orgcodevalidate(val);
+                            break;
+                        case "xxzdx":
+                            var a = FormService.xxzdx(val);
+                            break;
+                        case "tjbds":
+                            var a = FormService.tjbds(val);
+                            break;
+                        case "jssj":
+                            var a = FormService.jssj(val);
+                            break;
+                        case "dqsj":
+                            var a = FormService.dqsj(val);
+                            break;
+                        case "getNowDate":
+                            var a = FormService.getNowDate(val);
+                            break;
+                        case "fun_ghl_dqrq":
+                            var a = FormService.fun_ghl_dqrq(val);
+                            break;
+                        case "fun_ghl_xxzdx":
+                            var a = FormService.fun_ghl_xxzdx(val);
+                            break;
+                        case " fun_ghl_dqsj":
+                            var a = FormService. fun_ghl_dqsj(val);
+                            break;
+                        default:
+                            console.log("怎么错了呢(；′⌒`)");
+                    }
+                    // if(r == "checkCard"){
+                    //     var a = FormService.checkCard(val);
+                    // }else{
+                    //     console.log("怎么错了呢(；′⌒`)")
+                    // }
+                    let flag = a;
+                    console.log(flag);
                     if(!flag){
                         this.el.find("#error_tip").css("display","inline-block");
                         regErrorMsg = func[r];

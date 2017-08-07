@@ -291,6 +291,17 @@ $('#defaultValue').on('click',function(){
         real_id:realId
     });
 });
+$('#valid').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.createForm({
+        table_id:'3497_GvF6BKdDWCfWVMAoxudt8N',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
+    });
+});
 $('#exp').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
