@@ -1,4 +1,12 @@
 .form {
+    .ui-history {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-left: 5px;
+        background: url("../../../assets/images/form/icon_history.png");
+        vertical-align: middle;
+    }
     span.required {
         display: inline-block;
         color: #ff0617;

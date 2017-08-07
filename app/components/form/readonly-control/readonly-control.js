@@ -13,7 +13,10 @@ let config={
                     <div style="display: inline-block">
                            {{#if required}}
                             <span id="requiredLogo" class="{{requiredClass}}" ></span>
-                           {{/if}} 
+                           {{/if}}
+                            {{#if history}}
+                               <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>     
+                            {{/if}} 
                     </div>
                         <span style="position: relative; display:inline-block">  
                            <div class={{error_msg}} id="error_tip"  style=" display:none">
@@ -108,6 +111,9 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
+        this.el.on('click','.ui-history',function(){
+            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
+        });
     },
     afterRender: function() {
             this.el.on( 'input', () => {

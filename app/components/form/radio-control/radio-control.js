@@ -21,6 +21,9 @@ let config={
                         {{#if required}}
                                     <span id="requiredLogo" class="{{requiredClass}}" ></span>
                         {{/if}}
+                        {{#if history}}
+                           <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>     
+                        {{/if}} 
                  {{/if}}    
               </div>   
                 `,
@@ -49,6 +52,9 @@ let config={
                 _this.reload();
             }
         })
+        this.el.on('click','.ui-history',function(){
+            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
+        });
     },
     beforeDestory:function(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);

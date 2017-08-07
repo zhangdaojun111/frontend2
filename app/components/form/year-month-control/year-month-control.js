@@ -16,7 +16,10 @@ let config={
                         <div style="float: left;">
                            {{#if required}}
                                     <span id="requiredLogo" class="{{requiredClass}}" ></span>
-                           {{/if}}  
+                           {{/if}}
+                           {{#if history}}
+                                <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>     
+                            {{/if}}       
                       </div>
                  {{/if}}
             </div>`,
@@ -41,6 +44,9 @@ let config={
             }
             _this.data.value = val;
             _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+        });
+        this.el.on('click','.ui-history',function(){
+            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
     },
     afterRender:function(){

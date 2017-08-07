@@ -1,6 +1,7 @@
 import Component from '../../../lib/component'
 import DropDown from "../vender/dropdown/dropdown";
 import Mediator from '../../../lib/mediator';
+import './buildin-control.scss'
 
 let config={
     template:`  <div class="clearfix">
@@ -13,7 +14,13 @@ let config={
                         <div style="float: left;">
                             {{#if required}}
                                 <span id="requiredLogo" class="{{requiredClass}}" ></span>
+                            {{/if}}
+                            {{#if history}}
+                                       <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>     
                             {{/if}} 
+                            {{#unless is_view}}
+                                <a href="javascript:void(0);" class="ui-selector" ></a>
+                            {{/unless}} 
                         </div>
                      {{/if}}   
                 </div>`,
@@ -31,6 +38,12 @@ let config={
             }
             _this.data=Object.assign(_this.data,data);
             _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+        });
+        _this.el.on('click','.ui-selector',function(){
+
+        });
+        _this.el.on('click','.ui-history',function(){
+            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
     },
     afterRender:function(){

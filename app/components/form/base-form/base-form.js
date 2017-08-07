@@ -19,6 +19,7 @@ import EditorControl from "../editor-control/editor";
 import SettingTextareaControl from "../setting-textarea-control/setting-textarea";
 import AddItem from '../add-item/add-item';
 import {PMAPI} from '../../../lib/postmsg';
+import History from'../history/history'
 
 let config={
     template:'',
@@ -1139,6 +1140,19 @@ let config={
         })
         Mediator.subscribe('form:changeValue:'+_this.data.tableId,function(data){
             _this.actions.checkValue(data,_this);
+        })
+        Mediator.subscribe('form:history:'+_this.data.tableId,function(data){
+            let history=_.defaultsDeep({},data.history_data);
+            let i=1;
+            for(let k in history){
+                history[k]['index']=i++;
+            }
+            History.data.history_data=history;
+            PMAPI.openDialogByComponent(History,{
+                width:800,
+                height:600,
+                title:`${data.label}历史修改记录`
+            })
         })
         Mediator.subscribe('form:addItem:'+_this.data.tableId,function(data){
             _this.data.quikAddDfield=data.dfield;

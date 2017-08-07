@@ -44,6 +44,9 @@ let config = {
         this.el.on('click', '.button', () => {
             this.actions.openSettingDialog();
         })
+        this.el.on('click','.ui-history',function(){
+            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
+        });
     },
     beforeDestory: function () {
 

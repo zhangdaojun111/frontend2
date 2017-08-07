@@ -19,6 +19,9 @@ let config={
                            <div style="display: inline-block">
                                    {{#if required}}
                                     <span id="requiredLogo" class="required" ></span>
+                                   {{/if}}
+                                   {{#if history}}
+                                       <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>     
                                    {{/if}} 
                            </div>
                            <span style="position: relative; display:inline-block">  
@@ -182,6 +185,9 @@ let config={
     firstAfterRender:function(){
         this.set('timer',null);
         let _this=this;
+        _this.el.on('click','.ui-history',function(){
+            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
+        });
     },
     afterRender: function() {
         let _this=this;
