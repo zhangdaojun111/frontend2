@@ -753,7 +753,8 @@ let config = {
                 rowData: this.data.rowData,
                 footerData: this.data.footerData,
                 floatingFilter: true,
-                fieldsData: this.data.fieldsData
+                fieldsData: this.data.fieldsData,
+                onColumnResized: this.actions.onColumnResized
             }
             this.agGrid = new agGrid(gridData);
             this.append(this.agGrid , this.el.find('#data-agGrid'));
@@ -767,7 +768,8 @@ let config = {
                 gridoptions: this.agGrid.gridOptions,
                 fields: this.data.customColumnsFields,
                 fixCols: this.data.fixCols,
-                tableId: this.data.tableId
+                tableId: this.data.tableId,
+                agGrid: this.agGrid
             }
             //渲染定制列
             this.customColumnsCom  = new customColumns(custom)
@@ -777,6 +779,9 @@ let config = {
             this.pagination.actions.paginationChanged = this.actions.refreshData;
             this.append(this.pagination, this.el.find('.pagination'));
             this.data.firstRender = false;
+        },
+        onColumnResized: function ($event) {
+            this.customColumnsCom.actions.onColumnResized( this.customColumnsCom );
         },
         //分页刷新操作
         refreshData: function ( data ) {

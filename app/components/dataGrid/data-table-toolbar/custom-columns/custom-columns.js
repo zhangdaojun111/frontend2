@@ -19,7 +19,9 @@ let config = {
         },
         fixCols: {l: [], r: []},
         tableId: '',
-        dragFields: []
+        dragFields: [],
+        hideFields: [],
+        agGrid:null
     },
     actions: {
         //使状态同步
@@ -47,6 +49,7 @@ let config = {
             this.actions.addHideClick();
             //固定事件触发
             this.actions.fixClick();
+            this.actions.selectAllState();
         },
         //返回agGrid状态
         returnState: function () {
@@ -79,7 +82,7 @@ let config = {
                     //保存固定列数据
                     dataTableService.savePreference({
                         action: 'ignoreFields',
-                        table_id: this.tableId,
+                        table_id: That.data.tableId,
                         ignoreFields: JSON.stringify( arr )
                     });
                     HTTP.flush();
@@ -116,10 +119,11 @@ let config = {
             console.log( save )
             //保存固定列数据
             dataTableService.savePreference({
-                action: 'ignoreFields',
-                table_id: this.tableId,
-                ignoreFields: JSON.stringify( save )
+                action: 'fieldsOrder',
+                table_id: this.data.tableId,
+                fieldsOrder: JSON.stringify( save )
             });
+            HTTP.flush();
             this.actions.setState( arr );
         },
         //固定列事件触发
@@ -164,7 +168,7 @@ let config = {
             //保存固定列数据
             dataTableService.savePreference({
                 action: 'pinned',
-                table_id: this.tableId,
+                table_id: this.data.tableId,
                 pinned: JSON.stringify( this.data.fixCols )
             });
             HTTP.flush();
@@ -207,10 +211,75 @@ let config = {
         },
         //搜索事件
         inputSearch: function () {
-            this.el.find( '#custom-search-input' ).on( 'input',()=>{
-
+            this.el.find( '#custom-search-input' ).on( 'input',_.debounce( ()=>{
+                let val = this.el.find( '#custom-search-input' )[0].value;
+                let lis = this.el.find( '#dragCustom' ).find( 'li' );
+                for( let li of lis ){
+                    li.style.display = li.attributes.name.value.indexOf( val ) == -1 && val!='' ? 'none':'block'
+                }
+            },1000 ) )
+        },
+        //全选事件
+        selectAllClick: function () {
+            this.el.find( '.custom-select-all' ).on( 'click',()=>{
+                let state = this.actions.returnState();
+                let i = 0;
+                for( let s of state ){
+                    if( !s.hide&&this.data.hideFields.indexOf( s.colId )!=-1 ){
+                        i++;
+                    }
+                }
+                let save = [];
+                for( let s of state ){
+                    if( this.data.hideFields.indexOf( s.colId )!=-1 ){
+                        s.hide = i==this.data.hideFields.length?true:false;
+                    }
+                    if( this.data.dragFields.indexOf( s.colId )!=-1 && s.hide ){
+                        save.push( s.colId );
+                    }
+                }
+                console.log( "隐藏列数据保存" )
+                console.log( save )
+                //保存固定列数据
+                dataTableService.savePreference({
+                    action: 'ignoreFields',
+                    table_id: this.data.tableId,
+                    ignoreFields: JSON.stringify( save )
+                });
+                HTTP.flush();
+                this.actions.setState( state );
+                this.actions.makeSameSate();
             } )
-        }
+        },
+        //判断选择情况
+        selectAllState: function () {
+            let state = this.actions.returnState();
+            let i = 0;
+            for( let s of state ){
+                if( !s.hide&&this.data.hideFields.indexOf( s.colId )!=-1 ){
+                    i++;
+                }
+            }
+            this.el.find( '.custom-select-all' )[0].src = i==this.data.hideFields.length?this.data.icons.check:this.data.icons.uncheck;
+        },
+        //列宽改变
+        onColumnResized: _.debounce( (custom)=>{
+            let state = custom.actions.returnState();
+            let obj = {};
+            for( let s of state ){
+                if( custom.data.dragFields.indexOf( s.colId )!=-1 ){
+                    obj[s.colId] = s.width;
+                }
+            }
+            console.log( '列宽数据保存' );
+            console.log( obj );
+            dataTableService.savePreference({
+                'action': 'colWidth',
+                'table_id': custom.data.tableId,
+                'colWidth': JSON.stringify(obj)
+            });
+            HTTP.flush();
+            },2000 )
     },
     afterRender: function (){
         //初始化拖拽
@@ -223,17 +292,20 @@ let config = {
         $('#dragCustom').bind('sortstop', (event)=> {
             this.actions.dragAction();
         });
-        //初始化状态
-        this.actions.onFix();
 
         for( let f of this.data.fields ){
             if( f.candrag ){
                 this.data.dragFields.push( f.field );
             }
+            this.data.hideFields.push( f.field )
         }
+        //初始化状态
+        this.actions.onFix();
 
         //添加搜索事件
         this.actions.inputSearch();
+        //添加全选事件
+        this.actions.selectAllClick();
     }
 }
 
