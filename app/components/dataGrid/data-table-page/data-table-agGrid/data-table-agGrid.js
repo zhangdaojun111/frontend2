@@ -1072,6 +1072,11 @@ let config = {
         //排序方式
         sortWay: function () {
             this.data.frontendSort = this.data.total < this.data.rows?true:false;
+            for( let d of this.data.fieldsData ){
+                if( fieldTypeService.backSortField( d.real_type ) ){
+                    this.data.frontendSort = false;
+                }
+            }
             console.log( '排序方式：' + (this.data.frontendSort ? '前端排序' : '后端排序') );
             this.agGrid.gridOptions["enableServerSideSorting"] = !this.data.frontendSort;
             this.agGrid.gridOptions["enableSorting"] = this.data.frontendSort;
