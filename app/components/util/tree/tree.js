@@ -236,7 +236,7 @@ class TreeView extends Component{
     constructor(treeNodes, options){
         config.data.treeNodes = treeNodes;
         options = _.defaultsDeep(options,defaultOptions);
-        console.dir(options);
+        // console.dir(options);
         config.data.options = options;
         super(config);
     }

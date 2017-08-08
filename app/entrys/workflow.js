@@ -10,17 +10,17 @@ import WorkFlowCreate from '../components/workflow/workflow-create/workflow-crea
 import WorkflowRecord from '../components/workflow/approval-record/approval-record';
 import WorkflowInitial from '../components/workflow/workflow-initial';
 import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
+import WorkFlowGrid from '../components/workflow/workflow-grid/workflow-grid';
 import ApprovalHeader from '../components/workflow/approval-header/approval-header';
 import ApprovalWorkflow from '../components/workflow/approval-workflow';
 import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow';
 import FormEntrys from './form';
 import TreeView from  '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
-import SelectStaff from '../components/workflow/workflow-addFollow/select-staff/select-staff';
 
 
 WorkFlowForm.showForm();
-
+WorkFlowGrid.showGrid();
 
 let WorkFlowList=workflowService.getWorkfLow({}),
     FavWorkFlowList=workflowService.getWorkfLowFav({});
@@ -49,7 +49,9 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         }else{
             return 0;
         }
-    }).then((is_draft)=>{
+    })
+    .then((is_draft)=>{
+        //auto saving draft  草稿自动保存
         is_draft=is_draft==true?1:0;
         $('#place-form').html('');
         FormEntrys.createForm({
@@ -74,14 +76,39 @@ Mediator.subscribe('workflow:choose', (msg)=> {
                 msgBox.alert('自动保存成功！');
             }
         };
-        
-
-        setInterval(()=>{
-            let formData=FormEntrys.getFormValue();
-            intervalSave(formData);
-        },2000);
+        var timer;
+        const autoSaving=function(){
+            timer=setInterval(()=>{
+                intervalSave(FormEntrys.getFormValue());
+            },2*60*1000);
+        };
+        // autoSaving();
+        Mediator.subscribe('workflow:autoSaveOpen', (msg)=> {
+            clearInterval(timer);
+            if(msg===1){
+                autoSaving();
+            }else{
+                clearInterval(timer);
+            }
+        })
+    })
+    .then(res=>{
+        Mediator.subscribe('workflow:submit', ()=> {
+            let formData=FormEntrys.getFormValue(),
+                postData={
+                    flow_id:msg.id,
+                    is_draft:1,
+                    data:JSON.stringify(formData)
+                };
+            (async function () {
+                let data = await workflowService.createWorkflowRecord(postData);
+                alert(`error:${data.error}`);
+            })();
+        });
     })
 });
+
+
 
 //订阅收藏常用workflow
 Mediator.subscribe('workflow:addFav', (msg)=> {
@@ -130,16 +157,15 @@ let staff=[];
 
     var treeComp2 = new TreeView(tree,{
         callback: function (event,selectedNode) {
-            if(event==='select'){
                 for(var k in staff){
                     if(k==selectedNode.id){
-                        console.log(staff[k]);
+                        if(event==='select'){
+                            Mediator.publish('workflow:checkDept', staff[k]);
+                        }else{
+                            Mediator.publish('workflow:unCheckDept', staff[k]);
+                        }
                     }
                 }
-            }
-            
-          
-            // console.dir(selectedNode);
         },
         treeType:'MULTI_SELECT',
         isSearch: true
@@ -187,3 +213,30 @@ FormEntrys.createForm({
 
 
 
+//获取盖章图片
+Mediator.subscribe("workflow:getStampImg",(msg)=>{
+    (async function () {
+        let data = await workflowService.getStmpImg(msg);
+    })();
+});
+
+Mediator.subscribe("workflow:seal",(msg)=>{
+    (async function () {
+        let data = await workflowService.addStmpImg(msg);
+    })();
+});
+
+//删除或添加盖章图片之后重新加载图片
+Mediator.subscribe("workflow:getStamp",(msg)=>{
+    (async function () {
+        return workflowService.getStmpImg();
+    })().then(res=>{
+        Mediator.publish("workflow:changeImg",res);
+    });
+})
+//删除图片
+Mediator.subscribe("workflow:delImg",(msg)=>{
+    (async function () {
+        let data = await workflowService.delStmpImg(msg);
+    })();
+});
