@@ -827,6 +827,8 @@ let config = {
             this.pagination.actions.paginationChanged = this.actions.refreshData;
             this.append(this.pagination, this.el.find('.pagination'));
             this.data.firstRender = false;
+            //高级查询
+            this.actions.getExpertSearchData();
         },
         //分组触发
         onGroupChange: function (group) {
@@ -988,6 +990,17 @@ let config = {
         onBtnClick: function () {
             this.actions.customColumnClick();
             this.actions.groupBtnClick();
+            //高级查询
+            $('.expert-search-btn').click( ()=>{
+                let d = {
+                    fieldsData: this.data.expertSearchFields
+                }
+                expertSearch.show(d);
+            } )
+            //宽度自适应
+            $( '.grid-auto-width' ).click( ()=>{
+                this.agGrid.actions.autoWidth();
+            } )
         },
         //定制列
         customColumnClick: function () {
@@ -1028,23 +1041,20 @@ let config = {
             }
             let grid = this.el.find( '#data-agGrid' )
             grid.width( 'calc(100% - ' + num + 'px)' );
+        },
+        //获取高级查询数据
+        getExpertSearchData: function () {
+            let obj = {'actions':['queryParams'],'table_id':this.data.tableId}
+            dataTableService.getPreferences( obj ).then( res=>{
+
+            } );
+            HTTP.flush();
         }
     },
     afterRender: function () {
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();
-        //高级查询
-        $( '.expert-search-btn' ).click( ()=>{
-            let d = {
-                fieldsData: this.data.expertSearchFields
-            }
-            expertSearch.show(d);
-        } )
-        //宽度自适应
-        $( '.auto-width' ).click( ()=>{
-            this.agGrid.actions.autoWidth();
-        } )
     }
 }
 
