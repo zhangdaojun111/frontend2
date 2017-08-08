@@ -14,11 +14,4 @@ export class BiBaseComponent extends Component{
     constructor(config) {
         super(config)
     }
-
-    reloadHtml() {
-        alert('hello world');
-    //     let compiler = Handlerbar.compile(this.template);
-    //     let html = compiler(this.data);
-    //     this.el.html(html);
-    }
 }

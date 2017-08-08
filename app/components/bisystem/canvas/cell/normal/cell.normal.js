@@ -18,6 +18,7 @@ let config = {
             let echartsService = new EchartsService(this.data)
         }
     },
+    afterRender() {},
     firstAfterRender() {
         this.actions.echartsInit()
     }

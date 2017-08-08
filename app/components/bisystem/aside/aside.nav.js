@@ -31,11 +31,12 @@ let config = {
                 },
                 removeOnSpill: true
             }).on('drop',(el, target, elContainer) => {
+                debugger;
                 let chartIndex = $(el).attr('data-index');
                 let chart = this.getChart(chartIndex);
                 chart['componentId'] = $(target).parent('div').attr('component');
                 // chart render
-                Mediator.publish('chart:drag', chart);
+                Mediator.publish('chart:drag:' + chart['componentId'], chart);
                 el.remove();
             });
             return drake;
