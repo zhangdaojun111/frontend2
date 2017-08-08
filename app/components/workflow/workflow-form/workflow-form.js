@@ -7,11 +7,26 @@ import Mediator from '../../../lib/mediator';
 let config = {
     template: template,
     actions: {
-      
+        showImgDel(e){
+            let ev = $(e.target).children('i');
+            console.log(e.target);
+            ev.css("display","block");
+        },
+        hideImgDel(e){
+            let ev = $(e.target).children('i');
+            console.log(e.target);
+            ev.css("display","none");
+        }
     },
     afterRender: function() {
         this.el.on('click','.collapseFormBtn',()=>{
             this.el.find(".place-form").toggle();
+        })
+        this.el.on("mouseover",".imgseal",(e)=>{
+            this.actions.showImgDel(e);
+        }),
+        this.el.on("mouseleave",'.imgseal',(e)=>{
+            this.actions.hideImgDel(e);
         })
     }
 }

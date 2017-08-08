@@ -36,6 +36,7 @@ let config = {
             }
             this.el.find('.J_ul-img').html(html);
         },
+
         dragimg(e){
             let imgLeft = $(e.target).offset().left;
             let imgTop = $(e.target).offset().top;
@@ -51,11 +52,17 @@ let config = {
                 "disX":disX,
                 "disY":disY
             })
-            console.log(disX+".."+disY);
-            let fromClone = $("#place-form").clone();
-            this.el.find(".fromClone").children().remove()
+            console.log(disX+".."+disY); 
+            let fromPlace =  $("#place-form").children(":first");
+            let fromClone = fromPlace.clone();
+            let left =  parseInt(fromPlace.offset().left);
+            let top = parseInt(fromPlace.offset().top);
+            this.el.find(".fromClone").css({
+                "top":top,
+                "left":left
+            })
+            this.el.find(".fromClone").children().remove();
             this.el.find(".fromClone").append(fromClone);
-            
         },
         Imgcoordinate(e){
             let offsetLeft = this.el.find(".signatureMock").attr("disX");
@@ -93,19 +100,34 @@ let config = {
             let mouseTop = e.clientY;
 
             if(mouseLeft-offsetLeft>fromOffleft&&mouseTop-offsetTop>fromOfftop&&mouseLeft+imgWidth-offsetLeft<fromWidth+fromOffleft&&mouseTop+imgHeight-offsetTop<fromHeight+fromOfftop){
-                let top = "12%";
-                let left = "15%";
+                let top = (mouseLeft-fromOffleft)/fromWidth;
+                let left = (mouseTop-fromOfftop)/fromHeight;
                 let imgId = "5989234a8d3aab4dbd0a7582";
+                top= top.toFixed(6)*100;
+                left= left.toFixed(6)*100;
+                console.log(top);
                 console.log(top,left,imgId);
+                
                 this.actions.createImg(top,left,imgId);
                 //传递给后台的图片的信息
             }
+            // let top = (mouseLeft-fromOffleft-offsetLeft)/fromWidth;
+                // let left = (mouseTop-fromOfftop-offsetTop)/fromHeight;
+                
             this.el.find(".signatureMock").css('visibility','hidden');
         },
         createImg(top,left,id){
+            top = top+"%";
+            left = left+"%";
             let host = window.location.host;
-            let html = "<div style='top:"+top+";left:"+left+";z-index:"+1002+";position:absolute'><img  width=228 height=148 src="+host+"/download_attachment/?file_id="+id+"/><i style='display: none;position: absolute;right: -23px;top: -10px;width: 23px;height: 23px;background: url(assets/icon_del.png) no-repeat;'></i></div>";
-            $('#approval-workflow').html(html);
+            let html = "<div class='imgseal' style='top:"+top+";left:"+left+";z-index:"+1002+";position:absolute'><img  width=50 height=50 src="+host+"/download_attachment/?file_id="+id+"/><i style='display: none;position: absolute;right: -23px;top: -10px;width: 23px;height: 23px;background: url(assets/icon_del.png) no-repeat;'>X</i></div>";
+            console.log($("#place-form"))
+            $('#place-form').children(":first").append(html);
+        },
+        showImgDel(e){
+            console.log(1454);
+            let ev = $(e.target).children('i');
+            ev.css("display","block");
         }
     },
     afterRender: function() {
@@ -125,7 +147,11 @@ let config = {
         this.el.on("mousemove",'.signatureMock',(e)=>{
             this.actions.Imgcoordinate(e);
         }),
-        
+        // $(".approval-info-item").on("click",(e)=>{
+        //     console.log(13265);
+        //     this.actions.showImgDel(e);
+        // })
+        console.log($("#place-form"))
         Mediator.subscribe('workflow:changeImg',(msg)=>{
             console.log(msg.file_ids);
             this.actions.changeImg(msg);
