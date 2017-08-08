@@ -20,10 +20,35 @@ let config = {
     },
     afterRender: function() {
         console.log(this.data.rowSetData);
-        //$('.set-color').value = this.data.rowSetData['color'];
-        //$('.set-color').val('#fff000');
+        console.log(this.data.rowSetData.color);
+        $("#set-color-id").attr("id","set-color-"+this.data.rowSetData.field_id);
+        let set_color_id = "#set-color-"+this.data.rowSetData.field_id;
+        $(set_color_id).attr("value",this.data.rowSetData.color);
         this.data.dropdownForRes.forEach(item => {
             this.el.find('.res-text').append("<option value='"+item+"'>"+item+"</option>");
+        });
+        console.log($(set_color_id).val());
+        let Isshow = false;
+        $(".head-select").bind("click",function(){
+            event.stopPropagation();
+            console.log($(this).next().is(":hidden"));
+            if(!$(this).next().is(":hidden")){
+                $(this).next().hide();
+                Isshow = false;
+            }
+            else{
+                $(".select-multi-content").hide();
+                $(this).next().show();
+                console.log($(this));
+                Isshow = true;
+            }
+        });
+        $(document).click(function(){
+            $(".select-multi-content").hide();
+                Isshow = false;
+        })
+        $(".select-multi-content").bind("click",function(){
+            event.stopPropagation();
         });
     }
 };
