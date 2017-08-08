@@ -11,6 +11,8 @@ let SocketMgr = {
                 'user_id': window.config.sysConfig.userInfo.ID,
                 'session_id': window.config.sysConfig.userInfo.sessionid
             }));
+
+
         };
         this.socket.onmessage = function (event) {
             let data = JSON.parse(event.data);
@@ -31,5 +33,12 @@ let SocketMgr = {
 }
 
 SocketMgr.connect();
+
+window.setTimeout(function () {
+    SocketMgr.socket.send(JSON.stringify({
+        "test": 1,
+        'msg_type': 1
+    }))
+}, 2000)
 
 

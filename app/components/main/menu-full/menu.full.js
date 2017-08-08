@@ -76,9 +76,9 @@ let config = {
         });
 
         let that = this;
-        this.el.find('#search-menu-button').on('input', _.debounce(function() {
+        this.el.on('input', '#search-menu-button', _.debounce(function() {
             that.actions.search(this.value);
-        }, 1000));
+        }, 500));
 
         if (this.data.type === 'mini') {
             this.el.find('.root').menu({
@@ -98,7 +98,6 @@ let config = {
         });
     },
     beforeDestory: () => {
-        this.el.find('#search-menu-button').off();
         $(window).off('resize.menu')
     }
 }
