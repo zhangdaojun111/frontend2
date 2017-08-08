@@ -30,5 +30,17 @@ export const workflowService={
     },
     getStuffInfo(params){
         return HTTP.getImmediately( params)
-    }
+    },
+    //获取盖章图片
+    getStmpImg(params){
+        return HTTP.postImmediately('/get_user_stamp/', params);
+    },
+    //删除盖章图片
+     delStmpImg(params){
+        return HTTP.postImmediately('/delete_user_stamp/', params);
+    },
+    //添加盖章图片
+    addStmpImg(params){
+        return HTTP.postImmediately('/upload_user_stamp/', params);
+    },
 }

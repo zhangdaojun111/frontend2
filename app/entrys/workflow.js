@@ -137,3 +137,30 @@ let tree=[];
 
 WorkflowRecord.showRecord();
 
+//获取盖章图片
+Mediator.subscribe("workflow:getStampImg",(msg)=>{
+    (async function () {
+        let data = await workflowService.getStmpImg(msg);
+    })();
+});
+
+Mediator.subscribe("workflow:seal",(msg)=>{
+    (async function () {
+        let data = await workflowService.addStmpImg(msg);
+    })();
+});
+
+//删除或添加盖章图片之后重新加载图片
+Mediator.subscribe("workflow:getStamp",(msg)=>{
+    (async function () {
+        return workflowService.getStmpImg();
+    })().then(res=>{
+        Mediator.publish("workflow:changeImg",res);
+    });
+})
+//删除图片
+Mediator.subscribe("workflow:delImg",(msg)=>{
+    (async function () {
+        let data = await workflowService.delStmpImg(msg);
+    })();
+});
