@@ -1,6 +1,8 @@
 import Component from "../../../../lib/component";
 import template from './data-pagination.html';
 import './data-pagination.scss';
+import {dataTableService} from "../../../../services/dataGrid/data-table.service";
+import {HTTP} from "../../../../lib/http"
 
 let config = {
     template: template,
@@ -18,6 +20,7 @@ let config = {
         firstRow: 1,
         //rows可选项
         options: [100, 200, 300, 400, 500, 5000],
+        tableId:''
     },
     actions: {
         //分页数据改变
@@ -34,6 +37,8 @@ let config = {
         }
     },
     afterRender: function () {
+        let select = this.el.find( '.selectSize' )
+        select[0].value = this.data.rows;
         if (this.data.currentPage===1){
             $(".goFirst").css({
                 "opacity": "0.3",
@@ -86,6 +91,13 @@ let config = {
                 firstRow: this.data.firstRow
             };
             this.actions.paginationChanged(obj);
+            console.log( "pageSize数据保存：" + Number(this.data.rows) );
+            dataTableService.savePreference({
+                'action': 'pageSize',
+                table_id: this.data.tableId,
+                pageSize: Number(this.data.rows)
+            });
+            HTTP.flush();
         });
             //点击下一页 当前页面数加1
             $(".goNext").click(() => {

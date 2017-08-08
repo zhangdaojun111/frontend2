@@ -801,7 +801,8 @@ let config = {
             //渲染分页
             let paginationData = {
                 total: this.data.total,
-                rows: this.data.rows
+                rows: this.data.rows,
+                tableId: this.data.tableId
             }
             let custom = {
                 gridoptions: this.agGrid.gridOptions,
