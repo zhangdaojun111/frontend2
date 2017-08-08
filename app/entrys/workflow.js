@@ -38,17 +38,18 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=qiumaoyun_1501661055093&record_id=',data:{
             flow_id:msg.id
         }});
-    })().then(res=>{
-            Mediator.publish('workflow:gotWorkflowInfo', res);
-            return workflowService.validateDraftData({form_id:msg.formid});
-        })
-        .then(res=>{
-            if(res.the_last_draft!=''){
-                return msgBox.confirm(`您于${res.the_last_draft}时填写该工作表单尚未保存，是否继续编辑？`)
-            }else{
-                return 0;
-            }
-        }).then((is_draft)=>{
+    })()
+    .then(res=>{
+        Mediator.publish('workflow:gotWorkflowInfo', res);
+        return workflowService.validateDraftData({form_id:msg.formid});
+    })
+    .then(res=>{
+        if(res.the_last_draft!=''){
+            return msgBox.confirm(`您于${res.the_last_draft}时填写该工作表单尚未保存，是否继续编辑？`)
+        }else{
+            return 0;
+        }
+    }).then((is_draft)=>{
         is_draft=is_draft==true?1:0;
         $('#place-form').html('');
         FormEntrys.createForm({
@@ -59,6 +60,26 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             from_workflow:1,
             form_id:msg.formid
         });
+
+        const intervalSave= async function (data) {
+            let postData={
+                flow_id:msg.id,
+                is_draft:1,
+                data:{}
+            };
+            postData.data=JSON.stringify(data);
+            let res = await workflowService.createWorkflowRecord(postData);
+            console.log(res);
+            if(res.success===1){
+                msgBox.alert('自动保存成功！');
+            }
+        };
+        
+
+        setInterval(()=>{
+            let formData=FormEntrys.getFormValue();
+            intervalSave(formData);
+        },2000);
     })
 });
 
