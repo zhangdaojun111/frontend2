@@ -52,6 +52,9 @@ let config = {
                 "disY":disY
             })
             console.log(disX+".."+disY);
+            let fromClone = $("#place-form").clone();
+            this.el.find(".fromClone").children().remove()
+            this.el.find(".fromClone").append(fromClone);
             
         },
         Imgcoordinate(e){
@@ -71,7 +74,7 @@ let config = {
         },
         //松开鼠标
         closeSeal(e){
-            let from = $('#place');
+            let from = this.el.find('.fromClone');
             //from的宽高
             console.log(from);
             let fromWidth = parseInt(from.outerWidth());
