@@ -13,55 +13,16 @@
                 <div class="tit-col">动作</div>
                 <div class="tit-col">审批意见</div>
             </div>
+
             <div class="workflow-record-list">
-                <div class="workflow-record-item flex">
-                    <div class="txt-item">erds小助手</div>
-                    <div class="txt-item">2017-08-07 11:07:23</div>
-                    <div class="txt-item">加签</div>
-                    <div class="txt-item">审批意见</div>
-                </div>
-
-                <div class="workflow-record-item flex">
-                    <div class="txt-item">erds小助手</div>
-                    <div class="txt-item">2017-08-07 11:07:23</div>
-                    <div class="txt-item">加签</div>
-                    <div class="txt-item">审批意见</div>
-                </div>
-
-                <div class="workflow-record-item flex">
-                    <div class="txt-item">erds小助手</div>
-                    <div class="txt-item">2017-08-07 11:07:23</div>
-                    <div class="txt-item">加签</div>
-                    <div class="txt-item">审批意见</div>
-                </div>
-
-                <div class="workflow-record-item flex">
-                    <div class="txt-item">erds小助手</div>
-                    <div class="txt-item">2017-08-07 11:07:23</div>
-                    <div class="txt-item">加签</div>
-                    <div class="txt-item">审批意见</div>
-                </div>
-
-                <div class="workflow-record-item flex">
-                    <div class="txt-item">erds小助手</div>
-                    <div class="txt-item">2017-08-07 11:07:23</div>
-                    <div class="txt-item">加签</div>
-                    <div class="txt-item">审批意见</div>
-                </div>
-
-                <div class="workflow-record-item flex">
-                    <div class="txt-item">erds小助手</div>
-                    <div class="txt-item">2017-08-07 11:07:23</div>
-                    <div class="txt-item">加签</div>
-                    <div class="txt-item">审批意见</div>
-                </div>
-
-                <div class="workflow-record-item flex">
-                    <div class="txt-item">erds小助手</div>
-                    <div class="txt-item">2017-08-07 11:07:23</div>
-                    <div class="txt-item">加签</div>
-                    <div class="txt-item">审批意见</div>
-                </div>
+                {{#each approve_tips}}
+                    <div class="workflow-record-item flex">
+                        <div class="txt-item">{{this.handler_name}}</div>
+                        <div class="txt-item">{{this.handler_time}}</div>
+                        <div class="txt-item"></div>
+                        <div class="txt-item">{{this.approve_result}}</div>
+                    </div>
+                {{/each}}
             </div>
         </div>
     </div>

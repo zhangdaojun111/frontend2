@@ -27,6 +27,7 @@ let FormEntrys={
         this.key=config.key||'';
         this.fromApprove=config.from_approve||'';
         this.formFocus=this.from_focus||'';
+
     },
     hasKeyInFormDataStatic:function (key,staticData){
     let isExist = false;
@@ -199,7 +200,7 @@ let FormEntrys={
 
             if(res['record_info']['id']){
                 let recordId = res['record_info']['id'];
-                for(let d of this.data){
+                for(let d of res.data){
                     if(d['type'] == 'songrid'){
                         d['recordId']=recordId;
                     }
@@ -233,29 +234,36 @@ let FormEntrys={
     },
     //创建表单入口
     createForm:function(config={}){
-        let _this=this;
-        this.init(config);
-        let tableID=this.tableId;
-        if(this.tableId){
-            this.destoryForm(this.tableId);
-        }
-        let html=$(`<div id="form-${tableID}" style="border: 1px solid red;background:#fff;width: 100%;height:100%;overflow: auto">`).appendTo(this.el);
-        let template='';
-        FormService.getPrepareParmas({table_id:this.tableId}).then(res=>{
-            _this.findFormIdAndFlowId(res);
-            let json=_this.createPostJson();
-            FormService.getFormData(json).then(res=>{
-                template=_this.formDefaultVersion(res[0].data);
-                let data=_this.mergeFormData(res[0],res[1]);
-                let formData={
-                    template:template,
-                    data:data,
-                }
-                _this.formBase=new FormBase(formData);
-                _this.formBase.render(html);
-            });
+        return new Promise((resolve,rej)=>{
+            let _this=this;
+            this.init(config);
+            let tableID=this.tableId;
+            if(this.tableId){
+                this.destoryForm(this.tableId);
+            }
+            let html=$(`<div id="form-${tableID}" style="border: 1px solid red;background:#fff;width: 100%;height:100%;overflow: auto">`).appendTo(this.el);
+            let template='';
+            FormService.getPrepareParmas({table_id:this.tableId}).then(res=>{
+                _this.findFormIdAndFlowId(res);
+                let json=_this.createPostJson();
+                FormService.getFormData(json).then(res=>{
+                    template=_this.formDefaultVersion(res[0].data);
+                    let data=_this.mergeFormData(res[0],res[1]);
+                    let formData={
+                        template:template,
+                        data:data,
+                    }
+                    _this.formBase=new FormBase(formData);
+                    // console.log(_this.formBase.data.record_info)
+                    _this.data=_this.formBase.data.record_info;
+                    _this.formBase.render(html);
+                    resolve(_this.formBase.data.record_info);
+                });
+            })
         })
+
     },
+
     //审批删除时重置表单可编辑性
     editDelWorkFlow(formId){
         this.formBase.actions.editDelWork(formId);
@@ -268,7 +276,9 @@ let FormEntrys={
 
     getFormValue(){
         return this.formBase.actions.getFormValue();
-    }
+    },
+
+
 }
 
 $('#toEdit').on('click',function(){

@@ -9,9 +9,8 @@
         <div class="seal-img">
             <ul class="ul-img J_ul-img">
                 {{#each file_ids}}
-                    {{url}}
                     <li class="li-img">
-                        <span>X</span>
+                        <span class="J_delImg" id="{{this}}">X</span>
                         <img src="/../download_attachment/?file_id={{this}}&download={{this}}" class="add-img" data-id="{{this}}" />
                     </li>
                 {{/each}}
@@ -20,5 +19,6 @@
     </div>
     <div class="signatureMock">
         <img src="" class="dragimg J_dragimg"/>
+        <div class="fromClone"></div>
     </div>
 </div>

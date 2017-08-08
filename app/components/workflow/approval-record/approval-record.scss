@@ -17,6 +17,7 @@
       }
       &:nth-child(4){
         flex-grow: 2;
+        width: 100px;
       }
     }
   }
@@ -39,6 +40,7 @@
         }
         &:nth-child(4){
           flex-grow: 2;
+          width: 100px;
         }
       }
       &:last-child{

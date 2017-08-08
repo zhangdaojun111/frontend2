@@ -130,7 +130,7 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
 
 //审批工作流
 
-ApprovalHeader.showheader();
+
 
 (async function () {
     return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=qiumaoyun_1501661055093&record_id=',data:{
@@ -176,5 +176,70 @@ let staff=[];
     treeComp2.render($('#treeMulti'));
 });
 
-WorkflowRecord.showRecord();
 
+
+FormEntrys.createForm({
+    el:"#place-form",
+    form_id:181,
+    record_id:'59897efb53930b8ca98a3446',
+    is_view:0,
+    from_approve:1,
+    from_focus:0,
+    table_id:'5318_EHFuJD7Ae76c6GMPtzdiWH'
+}).then((res)=>{
+        ApprovalHeader.showheader(res);
+        WorkflowRecord.showRecord(res);
+});
+// function getRecordObj () {
+//     return new Promise(function (resolve, reject) {
+//         setTimeout(()=>{
+//             resolve(FormEntrys.ReturnRecordInfo());
+//         },1000)
+//     });
+// }
+// getRecordObj().then(function (res) {
+//     ApprovalHeader.showheader(res);
+//     WorkflowRecord.showRecord(res);
+//
+// })
+
+// let data = new Promise(function (resolve) {
+//     setTimeout(function () {
+//        resolve(FormEntrys.ReturnRecordInfo())
+//     }, 2000);
+// });
+//
+// Promise.all([data]).then((res)=>{
+//        console.log(res)
+// })
+
+
+
+
+//获取盖章图片
+Mediator.subscribe("workflow:getStampImg",(msg)=>{
+    (async function () {
+        let data = await workflowService.getStmpImg(msg);
+    })();
+});
+
+Mediator.subscribe("workflow:seal",(msg)=>{
+    (async function () {
+        let data = await workflowService.addStmpImg(msg);
+    })();
+});
+
+//删除或添加盖章图片之后重新加载图片
+Mediator.subscribe("workflow:getStamp",(msg)=>{
+    (async function () {
+        return workflowService.getStmpImg();
+    })().then(res=>{
+        Mediator.publish("workflow:changeImg",res);
+    });
+})
+//删除图片
+Mediator.subscribe("workflow:delImg",(msg)=>{
+    (async function () {
+        let data = await workflowService.delStmpImg(msg);
+    })();
+});

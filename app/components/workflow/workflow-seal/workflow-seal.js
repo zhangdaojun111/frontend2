@@ -32,32 +32,100 @@ let config = {
             let len = msg.file_ids.length;
             let html = " ";
             for (let i=0;i<len;i++){
-                html += "<li class='li-img'><span>X</span><img src='/../download_attachment/?file_id="+msg.file_ids[i]+"&download={{this}}' class='add-img'/></li>";
+                html += "<li class='li-img'><span class='J_delImg' id="+msg.file_ids[i]+">X</span><img src='/../download_attachment/?file_id="+msg.file_ids[i]+"&download={{this}}' class='add-img'/></li>";
             }
             this.el.find('.J_ul-img').html(html);
         },
         dragimg(e){
             let imgLeft = $(e.target).offset().left;
             let imgTop = $(e.target).offset().top;
-            console.log(imgLeft);
             this.el.find(".signatureMock").css('visibility','visible');
-            $('#place-form').css({'z-index':'101'});
+            // $('#place-form').css({'z-index':'101'});
             this.el.find(".J_dragimg").css({
                 "left":imgLeft,
                 "top":imgTop
             })
+            let disX = e.clientX - $(e.target).offset().left;
+            let disY = e.clientY - imgTop;
+            this.el.find(".signatureMock").attr({
+                "disX":disX,
+                "disY":disY
+            })
+            console.log(disX+".."+disY);
+            let fromClone = $("#place-form").clone();
+            this.el.find(".fromClone").children().remove()
+            this.el.find(".fromClone").append(fromClone);
+            
+        },
+        Imgcoordinate(e){
+            let offsetLeft = this.el.find(".signatureMock").attr("disX");
+            let offsetTop = this.el.find(".signatureMock").attr("disY");
+            let ox =  e.clientX - offsetLeft;
+            let oy = e.clientY - offsetTop;
+            $('.J_dragimg ').css({
+                "left":ox,
+                "top":oy
+            })
+        },
+        delImg(e){
+            let msg = $(e.target).attr("id");
+            Mediator.publish("workflow:delImg",msg);
+            Mediator.publish("workflow:getStamp");
+        },
+        //松开鼠标
+        closeSeal(e){
+            let from = this.el.find('.fromClone');
+            //from的宽高
+            console.log(from);
+            let fromWidth = parseInt(from.outerWidth());
+            let fromHeight = parseInt(from.outerHeight());
+            //from表单距左上角的距离
+            let fromOffleft = parseInt(from.offset().left);
+            let fromOfftop = parseInt(from.offset().top);
+            //点击时鼠标相对图片偏差
+            let offsetLeft = parseInt(this.el.find(".signatureMock").attr("disX"));
+            let offsetTop = parseInt(this.el.find(".signatureMock").attr("disY"));
+            //图片的宽高
+            let imgWidth = parseInt(this.el.find(".li-img").css('width'));
+            let imgHeight = parseInt(this.el.find(".li-img").css("height"));
+            //鼠标释放的位置
+            let mouseLeft = e.clientX;
+            let mouseTop = e.clientY;
+
+            if(mouseLeft-offsetLeft>fromOffleft&&mouseTop-offsetTop>fromOfftop&&mouseLeft+imgWidth-offsetLeft<fromWidth+fromOffleft&&mouseTop+imgHeight-offsetTop<fromHeight+fromOfftop){
+                let top = "12%";
+                let left = "15%";
+                let imgId = "5989234a8d3aab4dbd0a7582";
+                console.log(top,left,imgId);
+                this.actions.createImg(top,left,imgId);
+                //传递给后台的图片的信息
+            }
+            this.el.find(".signatureMock").css('visibility','hidden');
+        },
+        createImg(top,left,id){
+            let host = window.location.host;
+            let html = "<div style='top:"+top+";left:"+left+";z-index:"+1002+";position:absolute'><img  width=228 height=148 src="+host+"/download_attachment/?file_id="+id+"/><i style='display: none;position: absolute;right: -23px;top: -10px;width: 23px;height: 23px;background: url(assets/icon_del.png) no-repeat;'></i></div>";
+            $('#approval-workflow').html(html);
         }
     },
     afterRender: function() {
         this.el.on('change','.J_add',(e)=>{
             this.actions.addImg(e);
         }),
-            this.el.on('click','.add-img',(e)=>{
-                this.actions.dragimg(e);
-            })
-        $('.dragimg').draggable({
-            // snap:true,
-        });
+        this.el.on('mousedown','.add-img',(e)=>{
+            this.actions.dragimg(e);
+        }),
+        this.el.on("mouseup",'.signatureMock',(e)=>{
+            this.actions.closeSeal(e);
+            //  this.actions.createImg(e);
+        }),
+        this.el.on("click",'.J_delImg',(e)=>{
+            this.actions.delImg(e);
+        }),
+        this.el.on("mousemove",'.signatureMock',(e)=>{
+            this.actions.Imgcoordinate(e);
+        }),
+        
         Mediator.subscribe('workflow:changeImg',(msg)=>{
             console.log(msg.file_ids);
             this.actions.changeImg(msg);
