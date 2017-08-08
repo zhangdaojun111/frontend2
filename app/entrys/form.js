@@ -25,6 +25,8 @@ let FormEntrys={
         this.flowId=config.flow_id||'';
         this.fieldId=config.field_Id||'';
         this.key=config.key||'';
+        this.fromApprove=config.from_approve||'';
+        this.formFocus=this.from_focus||'';
     },
     hasKeyInFormDataStatic:function (key,staticData){
     let isExist = false;
@@ -69,7 +71,17 @@ let FormEntrys={
                 from_workflow:this.fromWorkFlow,
                 table_id:this.tableId
             }
-        }else{
+        }else if(this.fromApprove){
+            json={
+                form_id: this.formId,
+                record_id: this.recordId,
+                is_view: this.isView,
+                from_approve: this.fromApprove,
+                from_focus: this.fromFocus,
+                table_id: this.tableId
+            }
+        }
+        else{
             json=this.pickJson();
         }
         return json;
