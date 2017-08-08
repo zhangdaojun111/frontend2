@@ -743,7 +743,7 @@ let config = {
                 is_filter: 1,
                 filter: []
             }
-            if( this.data.viewMode == 'ViewChild' ){
+            if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild' ){
                 json["childInfo"]= {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
             }
             if( this.data.viewMode == 'count' ){
@@ -907,7 +907,7 @@ let config = {
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();
         //高级查询
-        $( '.hight-search' ).click( ()=>{
+        $( '.expert-search-btn' ).click( ()=>{
             let d = {
                 fieldsData: this.data.expertSearchFields
             }
