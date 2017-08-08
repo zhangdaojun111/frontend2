@@ -20,7 +20,8 @@ $sub_color: #0088ff;
                 width: 80px;
                 height: 30px;
                 float: right;
-                margin-top: 5px;
+                margin-top: 10px;
+                margin-right: 15px;
                 position: relative;
                 i{
                     width: 20px;
@@ -43,7 +44,7 @@ $sub_color: #0088ff;
                 width: 80px;
                 height: 30px;
                 float: right;
-                margin-top: 5px;
+                margin-top: 10px;
                 margin-right: 15px;
                 position: relative;
                 clear: left;
@@ -116,6 +117,7 @@ $sub_color: #0088ff;
                 height: 40px;
                 line-height: 40px;
                 float: left;
+                margin-left: 20px;
                 border-bottom: solid 1px #e4e4e4;
                 text-align: center;
                 cursor: pointer;
@@ -142,7 +144,7 @@ $sub_color: #0088ff;
                 width: 210px;
                 height: 50px;
                 float: left;
-                margin-left: 20px;
+                margin-left: 50px;
                 line-height:50px;
                 position: relative;
                 input{
@@ -181,7 +183,6 @@ $sub_color: #0088ff;
             display: none;
 
             div{
-                width: 400px;
                 height: 50px;
                 line-height: 50px;
                 margin-left: 30px;
@@ -198,14 +199,21 @@ $sub_color: #0088ff;
 
             }
 
-            .first-div{
+            .old-pw-group{
                 margin-top: 30px;
+                margin-left: 77px;
+            }
+            .new-pw-group{
+                margin-left: 77px;
+            }
+            .confirm-new-pw-group{
+                margin-left: 50px;
             }
             .ps-warn{
                 color: red;
                 display: block;
                 margin-top: 40px;
-                margin-left: 265px;
+                margin-left: 285px;
             }
             button{
                 width: 100px;

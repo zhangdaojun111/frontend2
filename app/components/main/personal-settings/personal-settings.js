@@ -112,7 +112,7 @@ let config = {
             })
         },
         isLegal:function () {
-            let newPw = this.el.find("input.new_pw").val();
+            let newPw = this.el.find("input.new-pw").val();
             if(newPw !== ''){
               this.el.find("button.confirm-btn").removeAttr("disabled");
               this.el.find("span.ps-warn").hide();
@@ -122,9 +122,9 @@ let config = {
             }
         },
         modifyPassword:function () {
-            let originPw = this.el.find("input.origin_pw").val();
-            let newPw = this.el.find("input.new_pw").val();
-            let confirmNewPw = this.el.find("input.confirm_new_pw").val();
+            let originPw = this.el.find("input.origin-pw").val();
+            let newPw = this.el.find("input.new-pw").val();
+            let confirmNewPw = this.el.find("input.confirm-new-pw").val();
 
             let data = {
                 username:this.data.username,
@@ -179,13 +179,13 @@ let config = {
             this.actions.saveEdit();
         }).on("click",".confirm-btn",() => {        //修改密码确认
             this.actions.modifyPassword();
-        }).on("input","input.new_pw",() => {        //监听旧密码的输入
+        }).on("input","input.new-pw",() => {        //监听旧密码的输入
             this.actions.isLegal();
         });
         //窗口监听来自子窗口的设置头像的消息
         Mediator.on("personal:setAvatar",(data) => {
             console.log(data);
-            this.el.find("img.user_avatar")
+            this.el.find("img.user-avatar")
                 .attr("src",data.picSrc)
                 .css("left",data.left)
                 .css("top",data.top)
@@ -210,7 +210,7 @@ export default {
         getData(component);
         component.render(el);
         el.dialog({
-            title: '个人设置',
+            title: '账号设置',
             width: 540,
             height: 600,
             modal: true,

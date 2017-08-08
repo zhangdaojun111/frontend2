@@ -3,7 +3,6 @@
 .set-proxy-window {
     border: solid 1px #e4e4e4;
     padding: 5px;
-    margin-top: 5px;
     color: #999999;
     .select-proxy-process {
         width: 220px;
@@ -11,11 +10,12 @@
         border: solid 1px #ddd;
         float: left;
         .left-header {
-            width: 220px;
+            width: 210px;
             height: 30px;
             background-color: #f2f2f2;
             line-height: 30px;
             border-bottom: solid 1px #d7d7d7;
+            padding-left: 10px;
         }
         .work-tree-wrap {
             height: 469px;
@@ -39,11 +39,12 @@
         border: solid 1px #d7d7d7;
         float: left;
         .right-header {
-            width: 650px;
+            width: 640px;
             height: 30px;
             background-color: #f2f2f2;
             line-height: 30px;
             border-bottom: solid 1px #d7d7d7;
+            padding-left: 10px;
         }
         .proxy-set {
             width: 650px;

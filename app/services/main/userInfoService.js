@@ -50,5 +50,16 @@ export const UserInfoService = {
             type:"get",
             url:url
         })
+    },
+    saveAgentData:function (data) {
+        let url = '/set_agent/';
+        return this.http.postImmediately({
+            type:'post',
+            url:url,
+            data:data
+        })
+    },
+    getSysConfig:function () {
+        console.log("do getSysConfig");
     }
 };

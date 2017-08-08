@@ -18,9 +18,9 @@ let config = {
     workflowTree:null,          //工作流数据
     agentList:null,             //代理人数据
 
-    selectWorkflow:null,        //记录被选中的工作流的id
+    selectedWorkflow:null,        //记录被选中的工作流的id
     selectedAgent:'',           //记录被选中的代理人
-    isOpen:false,               //是否开启代理，默认否
+    isOpen:0,               //是否开启代理，默认否    1是开，0是关
 
     actions:{
         initData:function () {
@@ -29,9 +29,9 @@ let config = {
                     if(result.success === 1){
                         this.originData = result;
                         this.formatData = [];
-                        this.selectWorkflow = new Set();
+                        this.selectedWorkflow = new Set();
                         this.selectedAgent = '';
-                        this.isOpen = false;
+                        this.isOpen = 0;
                         $.extend(true,this.formatData,this.originData.data.workflow_list);
                     }else{
                         msgbox.alert("数据加载失败");
@@ -60,7 +60,6 @@ let config = {
         formatOriginData:function (nodes) {
             for(let i = 0; i < nodes.length; i++){
                 const node = nodes[i];
-                console.log(node.id);
                 node.text = node.label;
                 node.icon = '';
                 node.selectedIcon = '';
@@ -74,7 +73,6 @@ let config = {
                 };
                 node.tags = ['available'];
                 node.nodes = node.children;
-                // console.log(node);
                 const children = node.children;
                 if ( children && children.length > 0){
                     this.actions.formatOriginData(children);
@@ -93,25 +91,24 @@ let config = {
         },
         //仅保存被选中的具体工作流（叶子）节点的id，以是否具备group属性判断该节点是否为叶子节点
         selectNode:function (event,node) {
-            console.log(event,node);
             if(event === 'select'){
                 if(node.group && node.nodes && node.nodes.length > 0){
                     this.actions.addNodes(node.nodes);
                 }else{
-                    this.selectWorkflow.add(node.id);
+                    this.selectedWorkflow.add(node.id);
                 }
             }else{
                 if(node.group && node.nodes && node.nodes.length > 0){
                     this.actions.removeNodes(node.nodes);
                 }else{
-                    this.selectWorkflow.delete(node.id);
+                    this.selectedWorkflow.delete(node.id);
                 }
             }
         },
         addNodes:function (nodes) {
             for(let i=0; i<nodes.length; i++){
                 if(!nodes[i].group){
-                    this.selectWorkflow.add(nodes[i].id);
+                    this.selectedWorkflow.add(nodes[i].id);
                 }else{
                     let children = nodes[i].nodes;
                     if(children && children.length > 0){
@@ -120,10 +117,10 @@ let config = {
                 }
             }
         },
-        removeNodes:function () {
+        removeNodes:function (nodes) {
             for(let i=0; i<nodes.length; i++){
                 if(!nodes[i].group){
-                    this.selectWorkflow.delete(nodes[i].id);
+                    this.selectedWorkflow.delete(nodes[i].id);
                 }else{
                     let children = nodes[i].nodes;
                     if(children && children.length > 0){
@@ -133,21 +130,54 @@ let config = {
             }
         },
         setAgentId:function (event) {
-            console.log(this.originData);
+            console.log("set input id");
+            this.selectedAgent = '';
             let user_name = this.el.find("input[name=name_input]").val();
-            for (let agent of this.originData.data.user_list) {
-                if ( user_name === agent.name){
-                    this.selectedAgent = agent.id;
+            console.log(user_name);
+            if(user_name !== ''){
+                for (let agent of this.originData.data.user_list) {
+                    if ( user_name === agent.name){
+                        this.selectedAgent = agent.id;
+                    }
                 }
             }
+            console.log(this.selectedAgent);
         },
-        setSwitch:function (event) {
-
+        closeSwitch:function (event) {
+            this.isOpen = 0;
+        },
+        openSwitch:function (event) {
+            this.isOpen = 1;
         },
         saveAgent:function (event) {
-            // console.log(this.selectWorkflow);
-            console.log(this.selectedAgent);
-
+            //保存代理前进行逻辑判断
+            if(this.isOpen === 1 && this.selectedAgent === ''){
+                msgbox.alert("请选择一个代理人");
+                return false;
+            }
+            if(this.isOpen === 1 && this.selectedWorkflow.size === 0){
+                msgbox.alert("请选择至少一个流程");
+                return false;
+            }
+            let data = {
+                workflow_names:this.selectedWorkflow,
+                agent_id:this.selectedAgent,
+                is_apply:this.isOpen
+            };
+            console.log(data);
+            UserInfoService.saveAgentData(data)
+                .done((result) => {
+                    if(result.success === 1){
+                        if(res.agent_state === 0){
+                            msgbox.alert("您所选择的代理人已离职，请重新选择");
+                        }else{
+                            msgbox.alert("选择代理成功");
+                            UserInfoService.getSysConfig();
+                        }
+                    }else{
+                        msgbox.alert("选择代理失败")
+                    }
+                });
         }
     },
     afterRender:function () {
@@ -157,9 +187,9 @@ let config = {
         }).on("input","input[name=name_input]",(event) => {
             this.actions.setAgentId(event);
         }).on("click","input.close-radio",(event) => {
-            this.actions.setSwitch(event);
+            this.actions.closeSwitch(event);
         }).on("click","input.open-radio",(event) => {
-            this.actions.setSwitch(event);
+            this.actions.openSwitch(event);
         });
     },
     beforeDestory:function () {
