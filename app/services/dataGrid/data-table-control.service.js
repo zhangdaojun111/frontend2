@@ -184,10 +184,12 @@ export const dgcService = {
     returnQueryParams: function (queryParams) {
         if(queryParams.filter || queryParams.childInfo || queryParams.mongo || queryParams.filter_child){
             let temp = {};
-            if(queryParams.filter && !queryParams.filter['_id']){
+            if(queryParams.filter.length != 0 && !queryParams.filter['_id']){
                 temp = this.translateAdvancedQuery(queryParams.filter);
+            }else if( queryParams.filter['_id'] ) {
+                temp = queryParams.filter;
             }else {
-                temp = queryParams.filter || {};
+                temp = {};
             }
             let obj = {};
             if(queryParams.childInfo){
@@ -210,6 +212,10 @@ export const dgcService = {
                 delete queryParams.mongo
             }
             queryParams.filter = JSON.stringify(temp);
+            if( queryParams.filter == '{}' ){
+                delete queryParams.filter;
+            }
+            return queryParams;
         }
     },
     translateAdvancedQuery: function (oldQueryList){
@@ -342,5 +348,13 @@ export const dgcService = {
         }
         html += '</ul>'
         return html;
+    },
+    //按钮组
+    gridBtn: function (viewMode) {
+        let obj = {
+            normal:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width','grid-new-window'],
+            ViewChild:['float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width']
+        }
     }
+
 }

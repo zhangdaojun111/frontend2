@@ -25,6 +25,8 @@ let config = {
         parentRealId: '',
         parentTempId: '',
         parentRecordId: '',
+        rowId: '',
+        fieldId: '',
         // 提醒颜色
         remindColor: {remind_color_info: {}, info: ''},
         //数据总数
@@ -78,7 +80,7 @@ let config = {
         //定制列需要字段信息
         customColumnsFields: [],
         //搜索参数
-        filterParam: [],
+        filterParam: {},
         //是否第一次渲染agGrid
         firstRender: true,
     },
@@ -736,15 +738,23 @@ let config = {
                 parent_table_id: this.data.parentTableId,
                 parent_real_id: this.data.parentRealId,
                 parent_temp_id: this.data.parentTempId,
-                tableType: this.data.tableType
+                tableType: this.data.tableType,
+                fieldId: this.data.fieldId,
+                rowId: this.data.rowId,
+                is_filter: 1,
+                filter: []
+            }
+            if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild' ){
+                json["childInfo"]= {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
+            }
+            if( this.data.viewMode == 'count' ){
+                json["tableType"]='count';
             }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
-                json['filter'] = this.data.filterParam.filter;
+                json['filter'] = this.data.filterParam.filter || [];
                 json['is_filter'] = this.data.filterParam.is_filter;
             }
-            dgcService.returnQueryParams( json );
-            // console.log( "搜索参数" )
-            // console.log( json )
+            json = dgcService.returnQueryParams( json );
             return json;
         },
         //渲染agGrid
@@ -907,7 +917,6 @@ let config = {
         //创建sheet分页数据
         createSheetTabs: function ( res ) {
             if( res.rows.length > 0 ){
-                console.log( "存在sheet分页" )
                 let arr = [{name:'全部数据',id:0,value:[]}];
                 for( let r of res.rows ){
                     let obj = {
@@ -945,7 +954,7 @@ let config = {
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();
         //高级查询
-        $( '.hight-search' ).click( ()=>{
+        $( '.expert-search-btn' ).click( ()=>{
             let d = {
                 fieldsData: this.data.expertSearchFields
             }
