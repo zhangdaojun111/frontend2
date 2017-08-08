@@ -25,10 +25,23 @@
       font-size: 14px;
       line-height: 30px;
       cursor: pointer;
+      a{
+        height: 26px;
+        line-height: 26px;
+        width: auto;
+        text-decoration: none;
+        color: #666666;
+        border-bottom: #0E7AEF;
+      }
+      a:hover{
+        background-color: rgba(187, 220, 255, 1);
+      }
+      .active{
+        color: #004DC2;
+        border-bottom: 1px solid #004DC2;
+      }
     }
-    li:hover{
-      background:rgba(187, 220, 255, 1);
-    }
+
   }
 }
 
