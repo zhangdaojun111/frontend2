@@ -17,10 +17,17 @@ let config = {
         columnDefs : [],
         rowData : [],
         footerData: [],
-        cssTheme: 'ag-blue',
+        cssTheme: 'ag-bootstrap',
         floatingFilter: false,
         //原始表头数据
         fieldsData: [],
+        localeText:{
+            copy: '复制',
+            ctrlC: 'ctrl + C',
+            paste: '粘贴',
+            ctrlV: 'ctrl + V',
+            noRowsToShow: '<img src='+ require( "../../../assets/images/dataGrid/icon_shuju_no.png" ) +'>'
+        },
         onColumnResized:function ($event) {
         },
         onDragStopped:function ($event) {
@@ -47,6 +54,7 @@ let config = {
                 headerHeight: 25,
                 floatingFiltersHeight: 0,
                 icons: dgcService.replacingIcons,
+                localeText: this.data.localeText,
                 //列宽改变
                 onColumnResized: this.data.onColumnResized,
                 //拖动结束
