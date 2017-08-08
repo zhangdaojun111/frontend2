@@ -25,6 +25,26 @@ let config={
                 console.log(res);
             })
         },
+        previewView:function (el,appendDiv) {
+            let type=$(el).data("preview");
+            let addFollow=this.el.find("#add-follow").clone();
+            let flowNode=this.el.find("#flow-node").clone();
+            let workflowRecord=this.el.find("#workflow-record").clone();
+            appendDiv.find(".preview-node1").html(addFollow);
+            appendDiv.find(".preview-node2").html(flowNode);
+            appendDiv.find(".preview-node3").html(workflowRecord);
+            switch (type){
+                case 'follow-view' :
+                    appendDiv.find(".preview-node1").toggle().siblings().hide();
+                    break;
+                case 'flow-view' :
+                    appendDiv.find(".preview-node2").toggle().siblings().hide();
+                    break;
+                case 'record-view' :
+                    appendDiv.find(".preview-node3").toggle().siblings().hide();
+                    break;
+            }
+        }
 
     },
     afterRender(){
@@ -35,6 +55,11 @@ let config={
         this.el.on('click','#app-pass',()=>{
             this.actions.approveWorkflow(__this);
         });
+
+        this.el.on('click',".preview-btn",function () {
+            let appendDiv=__this.el.find("#preview-node");
+            __this.actions.previewView($(this),appendDiv)
+        })
 
 
     }
