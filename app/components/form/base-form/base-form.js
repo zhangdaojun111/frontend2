@@ -580,7 +580,7 @@ let config={
         //创建表单数据格式
         createFormValue(data){
             let formValue={};
-            console.log(data);
+            // console.log(data);
             for(let key in data){
                 if(!data[key].value || !data[key].value.length || data[key].value.length == 0){
                     continue;
