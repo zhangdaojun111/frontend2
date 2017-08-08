@@ -31,7 +31,7 @@
             background-repeat: no-repeat;
             float: right;
             &.message {
-                background-image: url("../../../assets/images/framework/task.png");
+                background-image: url("../../../assets/images/framework/message.png");
             }
             &.task {
                 background-image: url("../../../assets/images/framework/task.png");
@@ -42,7 +42,52 @@
             &.calendar {
                 background-image: url("../../../assets/images/framework/calendar.png");
             }
+            &.unread {
+                position: relative;
+                &:after {
+                    content: ' ';
+                    position: absolute;
+                    right: 0px;
+                    top: 0px;
+                    width: 8px;
+                    height: 8px;
+                    background-color: red;
+                    border-radius: 4px;
+                }
+            }
         }
+        .setting {
+            float: right;
+            position: relative;
+            .icon {
+                background-image: url("../../../assets/images/framework/setting.png");
+            }
+            .slide {
+                display: none;
+                position: absolute;
+                z-index: 1;
+                background: #fff;
+                border: 1px solid #ddd;
+                border-bottom: 0 none;
+                width: 120px;
+                right: 0;
+                top: 100%;
+                line-height: 40px;
+                height: 80px;
+                text-align: center;
+                li {
+                    cursor: pointer;
+                    border-bottom: 1px solid #ddd;
+                    height: 40px;
+                }
+            }
+            &:hover {
+                .slide {
+                    display: block;
+                }
+            }
+        }
+
 
         .fold {
             cursor: pointer;
