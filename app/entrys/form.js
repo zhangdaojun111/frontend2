@@ -24,6 +24,9 @@ let FormEntrys={
         this.fromWorkFlow=config.from_workflow||0;
         this.flowId=config.flow_id||'';
         this.fieldId=config.field_Id||'';
+        this.key=config.key||'';
+        this.fromApprove=config.from_approve||'';
+        this.formFocus=this.from_focus||'';
     },
     hasKeyInFormDataStatic:function (key,staticData){
     let isExist = false;
@@ -68,7 +71,17 @@ let FormEntrys={
                 from_workflow:this.fromWorkFlow,
                 table_id:this.tableId
             }
-        }else{
+        }else if(this.fromApprove){
+            json={
+                form_id: this.formId,
+                record_id: this.recordId,
+                is_view: this.isView,
+                from_approve: this.fromApprove,
+                from_focus: this.fromFocus,
+                table_id: this.tableId
+            }
+        }
+        else{
             json=this.pickJson();
         }
         return json;
@@ -145,6 +158,7 @@ let FormEntrys={
     staticData.tableId=this.tableId;
     staticData.formId=this.formId;
     staticData.flowId=this.flowId;
+    staticData.key=this.key;
     return staticData;
 },
     //处理字段数据
@@ -250,6 +264,10 @@ let FormEntrys={
     //接收关注人信息
     setUserIdList(data){
         this.formBase.data.focus_users=data;
+    },
+
+    getFormValue(){
+        return this.formBase.actions.getFormValue();
     }
 }
 
@@ -337,5 +355,18 @@ $('#exp').on('click',function(){
     //     table_id:'3277_k5JFeqSiX2iuCvM3rXay9L'
     // });
 
+})
+$('#workflow').on('click',function(){
+    console.log(FormEntrys.getFormValue());
+    // let realId=$('#real_id').val()||'';
+    // let isView=$('#is_view').val()||0;
+    // FormEntrys.createForm({
+    //     table_id:'1586_CcrzabMYLePTkAGDqpTgo2',
+    //     form_id:2,
+    //     el:$('body'),
+    //     record_id:'',
+    //     reload_draft_data:0,
+    //     from_workflow:1,
+    // });
 })
 export default FormEntrys

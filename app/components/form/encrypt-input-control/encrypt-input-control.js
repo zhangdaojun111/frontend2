@@ -9,18 +9,11 @@ let config={
     template:`
              <div class="clearfix">
                  {{#if unvisible}}
-                    <p class="info">权限受限</p>
-                 {{else}}           
-                      {{#if be_control_condition }}
-                            <p class="info">被修改条件限制</p>
-                      {{else}}                 
-                      <div style="display: inline-block">{{label}}</div>               
-                       <input type="text"  value="{{value}}"  id="inputShow" readonly>{{value}}  
                     <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
                  {{else if be_control_condition}}     
                        <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                  {{else}}                              
-                       <input style="width: 240px"  type="password"  value="{{value}}"  readonly >{{value}}  
+                       <input style="width:{{width}}"  type="password"  value="{{value}}"  readonly >{{value}}  
                        <div style="display: inline-block">
                                {{#if required}}
                                 <span id="requiredLogo" class="{{requiredClass}}" ></span>
@@ -38,7 +31,7 @@ let config={
                
                 `,
     data:{
-     
+        width:'240px',
     },
     actions:{
         save: function () {
@@ -46,8 +39,6 @@ let config={
             let val = this.el.find("#inputShow").val($("#inputHide").val());
             this.data.value =val;
             _.debounce(function(){
-                console.log('发出了么');
-                console.log('form:changeValue:'+_this.data.tableId);
                 Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
         }
     },

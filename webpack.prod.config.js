@@ -16,6 +16,7 @@ const BUILD_PATH = path.resolve(ROOT_PATH, 'dist');
 module.exports = {
     entry: {
         form: path.resolve(APP_PATH, 'entrys/form.js'),
+        addNewBuild: path.resolve(APP_PATH, 'entrys/popup/addNewBuild.js'),
         workflow:path.resolve(APP_PATH, 'entrys/workflow'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
