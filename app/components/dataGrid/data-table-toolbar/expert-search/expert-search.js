@@ -1,7 +1,7 @@
 import Component from "../../../../lib/component";
 import template from './expert-search.html';
 import expertCondition from './expert-search-condition/expert-search-condition'
-
+import agGrid from '../../data-table-page/data-table-agGrid/data-table-agGrid'
 import './expert-search.scss';
 
 let config = {
@@ -44,6 +44,9 @@ let config = {
             },
             "relation":"$or"
         }],
+        postExpertEearch: function(data){
+
+        }
     },
     actions: {
         rendSearchItem: function(){
@@ -102,7 +105,6 @@ let config = {
         showSearchData: function(data) {
             let searchData = data;
             $('.condition-search-container').find('div').remove();
-            debugger
             this.actions.rendSearchItem();
             for(let i = 0; i<searchData.length-1; i++) {
                 this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
@@ -159,12 +161,13 @@ let config = {
             })
             if (checkedPost) {
                 if (leftBracketNum == rightBracketNum) {
-
+                    this.data.postExpertEearch(config.searchInputList);
                 } else {
                     alert('运算括号出错')
                 }
             }
-        }
+        },
+
     },
     afterRender: function() {
         let epCondition = new expertCondition();
@@ -181,7 +184,6 @@ let config = {
         }).on('click','.add',()=> {
             this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
         }).on('click','.condition-search-radio', function() {
-            debugger
             $(this).parent().parent('.condition-search-radiobox').find('.condition-search-radio').prop('checked',false);
             $(this).prop('checked',true)
         }).on('click','.searchButton', ()=> {
