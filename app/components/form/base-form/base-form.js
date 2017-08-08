@@ -1051,11 +1051,13 @@ let config={
                 }
             }
             //在这里根据type创建各自的控件
+            console.log('到谁了该');
+            console.log(data[key].type)
             switch (type){
                 case 'Radio':
                     for(let obj of data[key].group){
                         obj['name']=data[key].dfield;
-                        if(obj.value==data.value){
+                        if(obj.value==data[key].value){
                             obj['checked']=true;
                         }else{
                             obj['checked']=false;
@@ -1194,15 +1196,15 @@ let config={
 class BaseForm extends Component{
     constructor(formData){
         config.template=formData.template;
-        config.data['tempId']=formData.data.data['temp_id']||'';
-        config.data['realId']=formData.data.data['real_id']||'';
+        // config.data['tempId']=formData.data.data['temp_id']||'';
+        // config.data['realId']=formData.data.data['real_id']||'';
         // config.data['tableId']=formData.data.data['table_id']||'';
-        if(formData.data.data["real_id"]){
-            config.data['parentRealId']=formData.data.data["real_id"]["value"]||'';
-        }
-        config.data['parentTableId']=formData.data.data["table_id"]["value"]||'';
-        config.data['parentTempId']=formData.data.data["temp_id"]["value"]||'';
-        config.data['recordId']=formData.data['record_info']['id']||'';
+        // if(formData.data.data["real_id"]){
+        //     config.data['parentRealId']=formData.data.data["real_id"]["value"]||'';
+        // }
+        // config.data['parentTableId']=formData.data.data["table_id"]["value"]||'';
+        // config.data['parentTempId']=formData.data.data["temp_id"]["value"]||'';
+        // config.data['recordId']=formData.data['record_info']['id']||'';
         //默认值
         // config.data['baseIds']=formData.data['base_fields'];
         //默认值例外
