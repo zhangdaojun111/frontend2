@@ -43,7 +43,7 @@ let config={
             _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
         });
         _this.el.on('click','.ui-selector',function(){
-
+            _.debounce(function(){Mediator.publish('form:selectChoose:'+_this.data.tableId,_this.data)},200)();
         });
         _this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();

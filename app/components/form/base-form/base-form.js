@@ -1205,6 +1205,15 @@ let config={
                 _this.childComponent[_this.data.quikAddDfield].reload();
             });
         })
+        Mediator.subscribe('form:selectChoose:'+_this.data.tableId,function(data){
+            PMAPI.openDialogByIframe(`/form/choose?fieldId=${data.id}`,{
+                width:800,
+                height:600,
+                title:`选择器`
+            }).then((data) => {
+
+            });
+        })
 
         //添加提交按钮
         _this.el.append('<div style="position: fixed;bottom: 20px;right: 20px;"><button id="save">提交</button><button id="changeEdit">转到编辑模式</button></div>')
