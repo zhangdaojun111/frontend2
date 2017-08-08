@@ -1,6 +1,7 @@
 import Component from "../../../lib/component";
 import './searchBar.scss';
 import {FormService} from "../../../services/formService/formService";
+import DropDown from "../../form/vender/dropdown/dropdown";
 let config={
     template:`<div class="wrap">
                 <div class="ui-box-1">
@@ -31,8 +32,24 @@ let config={
         FormService.getColumnList(_this.data.tableId).then(res=>{
             _this.data.rows=res.rows;
             let d={
-                options:_this.data.rows,
+                options:[],
+                index:1,
+                showValue:'请选择',
             }
+            d.options.push({
+                label: "请选择",
+                value: "0"
+            });
+            for(let i of res['rows']) {
+                d.options.push({
+                    label: i["name"],
+                    value: i["name"]
+                });
+            }
+            let dropDown=new DropDown(d);
+            let dropDown2=new DropDown(_this.data.searchTerms);
+            _this.append(dropDown,_this.el.find('.ui-box-1'));
+            _this.append(dropDown2,_this.el.find('.ui-box-1'));
         })
     }
 }

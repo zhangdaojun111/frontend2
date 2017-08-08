@@ -65,6 +65,18 @@ let config={
             _this.append(searchBar,_this.el.find('.search-bar'));
         });
         HTTP.flush();
+        _this.el.on('click','a',function(){
+            FormEntry.createForm({
+                table_id:_this.data.source_table_id,
+                form_id:'',
+                is_view:1,
+                parent_table_id:'',
+                parent_real_id:'',
+                parent_temp_id:'',
+                real_id:_this.data['options'][$(this).index()]['value'],
+                el:_this.el.find('.ui-section'),
+            });
+        })
     }
 }
 
