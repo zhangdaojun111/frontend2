@@ -46,7 +46,6 @@ let config = {
         },
         initWorkflow:function () {
             this.actions.formatOriginData(this.formatData);
-            console.log(this.formatData);
             let treeView = new TreeView(this.formatData,{
                 callback:this.actions.selectNode,
                 treeType:"MULTI_SELECT",
@@ -117,6 +116,7 @@ export default {
             title: '设置代理',
             width: 893,
             height: 620,
+            modal: true,
             close: function() {
                 component.destroySelf();
             }

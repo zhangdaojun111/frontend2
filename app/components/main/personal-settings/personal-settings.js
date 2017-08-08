@@ -213,6 +213,7 @@ export default {
             title: '个人设置',
             width: 540,
             height: 600,
+            modal: true,
             close: function() {
                 component.destroySelf();
             }

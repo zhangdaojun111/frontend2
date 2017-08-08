@@ -1,26 +1,36 @@
-.checked_box::before {
-  content: url('../../../assets/images/util/tree/icon_checkbox_yes.png')
-}
 
-.unchecked_box::before {
-  content: url('../../../assets/images/util/tree/icon_checkbox_no.png')
-}
 
-.collapsed_node::before {
-  content: url("../../../assets/images/util/tree/icon_fold.png")
-}
+.treeview {
+    .checked_box::before {
+        content: url('../../../assets/images/util/tree/icon_checkbox_yes.png')
+    }
 
-.expanded_node::before {
-  content: url("../../../assets/images/util/tree/icon_unfold.png")
-}
+    .unchecked_box::before {
+        content: url('../../../assets/images/util/tree/icon_checkbox_no.png')
+    }
 
-.leaf_node::before {
-  content: url("../../../assets/images/util/tree/icon_leaf.png")
-}
+    .collapsed_node::before {
+        content: url("../../../assets/images/util/tree/icon_fold.png")
+    }
 
-.menu_node::before {
-  content: url("../../../assets/images/util/tree/icon_menu.png")
-}
-.menu_leaf_node::before {
-  content: " ";
+    .expanded_node::before {
+        content: url("../../../assets/images/util/tree/icon_fold.png")
+    }
+
+    .leaf_node::before {
+        content: url("../../../assets/images/util/tree/icon_leaf.png")
+    }
+
+    .menu_node::before {
+        content: url("../../../assets/images/util/tree/icon_fold.png")
+    }
+
+    .menu_leaf_node::before {
+        content: " ";
+    }
+    span.icon {
+        &:before {
+            vertical-align: sub;
+        }
+    }
 }
