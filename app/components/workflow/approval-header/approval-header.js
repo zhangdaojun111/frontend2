@@ -23,6 +23,7 @@ let config = {
 
 class ApprovalHeader extends Component{
     constructor (data){
+        console.log(data)
         super(config,data);
     }
 

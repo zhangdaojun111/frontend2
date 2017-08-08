@@ -12,15 +12,7 @@ let config={
         focus_users:[],
         action:0,
         comment:'',
-        node_id:null,
-        recordData:{
-            form_id:181,
-            record_id:'59882e8e802289933b1ddf0d',
-            is_view:0,
-            from_approve:1,
-            from_focus:0,
-            table_id:'5318_EHFuJD7Ae76c6GMPtzdiWH',
-        }
+        node_id:null
     },
     actions:{
         approveWorkflow (__this){
@@ -33,16 +25,7 @@ let config={
                 console.log(res);
             })
         },
-        getRecordInfos(__this){
-            (async function () {
-                return workflowService.getRecordInfo({
-                    url:'/data/get_form_dynamic_data',
-                    data:__this.data.recordData
-                })
-            })().then(res=>{
-                console.log(res)
-            })
-        }
+
     },
     afterRender(){
         let __this=this;
@@ -52,7 +35,7 @@ let config={
         this.el.on('click','#app-pass',()=>{
             this.actions.approveWorkflow(__this);
         });
-        this.actions.getRecordInfos(__this);
+
 
     }
 };
