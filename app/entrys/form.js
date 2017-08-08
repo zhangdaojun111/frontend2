@@ -1,39 +1,32 @@
 import FormBase from '../components/form/base-form/base-form'
 import {HTTP} from '../lib/http';
-import '../components/form/vender/my-multiSelect/my-multiSelect'
-import '../components/form/vender/my-multiSelect/my-multiSelect.css'
+import {FormService} from "../services/formService/formService";
+import '../assets/scss/form.scss'
 
 // @parma
 //
 let FormEntrys={
-    formBase:null,
     init:function(config={}){
-        //±ÌID
-        this.tableId=config.tableId||'';
-        //∏∏±ÌID
-        this.parentRealId=config.parentRealId||'';
-        //∏∏±Ì¡Ÿ ±ID
-        this.parentTempId=config.parentTempId||'';
-        //”√ªßid
+        this.tableId=config.table_id||'';
+        this.parentRealId=config.parent_real_id||'';
+        this.parentTempId=config.parent_temp_id||'';
         this.seqId=config.seqId||'';
-        // ˝æ›ID
-        this.realId=config.realId||'';
-        //∏∏±ÌID
-        this.parentTableId=config.parentTableId||'';
-        //’‚ «…∂IDªπ≤ª÷™µ¿
-        this.parentRecordId=config.parentRecordId||'';
-        //≤Èø¥(0)ªÚ–¬‘ˆ(1)
-        console.log('config');
-        console.log(config);
-        this.isView=config.isView||0;
-        // «∑Ò «≈˙¡øπ§◊˜¡˜
-        this.isBatch=config.isBatch||0;
-        //’‚∏ˆΩ–…∂Õ¸¡À
-        this.recordId=config.recordId||'';
-        //’‚∏ˆ“≤Õ¸¡À”√µΩ¡À‘Ÿ∏ƒ
+        this.realId=config.real_id||'';
+        this.parentTableId=config.parent_table_id||'';
+        this.parentRecordId=config.parent_record_id||'';
+        this.isView=config.is_view || 0;
+        this.isBatch=config.is_batch || 0;
+        this.recordId=config.record_id||'';
         this.action=config.action||'';
-        //»›∆˜dom
         this.el=config.el||'';
+        this.reloadDraftData=config.reload_draft_data||0;
+        this.formId=config.form_id||'';
+        this.fromWorkFlow=config.from_workflow||0;
+        this.flowId=config.flow_id||'';
+        this.fieldId=config.field_Id||'';
+        this.key=config.key||'';
+        this.fromApprove=config.from_approve||'';
+        this.formFocus=this.from_focus||'';
     },
     hasKeyInFormDataStatic:function (key,staticData){
     let isExist = false;
@@ -44,9 +37,98 @@ let FormEntrys={
     }
     return isExist;
 },
-//mergeæ≤Ã¨∫Õ∂ØÃ¨ ˝æ›
+    //ÊâæÂà∞Âä†ËΩΩË°®ÂçïÊï∞ÊçÆÁöÑformIdÂíåÂä†ËΩΩËäÇÁÇπÁöÑflowId
+    findFormIdAndFlowId(res) {
+        if(res["data"] && res["data"]["flow_data"].length != 0) {
+            //ÁªôÈÄâÊã©ËäÇÁÇπËßÜÂõæÁöÑ‰∏ãÊãâÊ°ÜËµãÂÄº
+            this.selectItems = res["data"]["flow_data"];
+            //ÈªòËÆ§ÁöÑform_idÂíåflow_idÂèñÁ¨¨‰∏Ä‰∏™select
+            this.formId = res["data"]["flow_data"][0]["form_id"];
+            this.flowId = res["data"]["flow_data"][0]["flow_id"];
+            //Âæ™ÁéØ‰∏ÄÈÅçÔºåÊü•ÁúãÊòØÂê¶ÊúâÈªòËÆ§ÂÄºÔºåÂ¶ÇÊûúÊúâÔºåÂàôform_idÂíåflow_idÊîπÂèò
+            for (let d of res["data"]["flow_data"]) {
+                if (d["selected"] == 1) {
+                    this.formId = d["form_id"];
+                    this.flowId = d["flow_id"];
+                }
+            }
+        }
+        if(res["data"] && res["data"]["form_id"] != 0){
+            this.formId = res["data"]["form_id"];
+            this.isloadCustomTableForm = true;
+        }else {
+            this.isloadWorkflow = true;
+        }
+    },
+    //ÊãºË£ÖÂèëÈÄÅjson
+    createPostJson(){
+        let json;
+        if(this.fromWorkFlow){
+            json={
+                form_id:this.formId,
+                record_id:this.recordId,
+                reload_draft_data:this.reloadDraftData,
+                from_workflow:this.fromWorkFlow,
+                table_id:this.tableId
+            }
+        }else if(this.fromApprove){
+            json={
+                form_id: this.formId,
+                record_id: this.recordId,
+                is_view: this.isView,
+                from_approve: this.fromApprove,
+                from_focus: this.fromFocus,
+                table_id: this.tableId
+            }
+        }
+        else{
+            json=this.pickJson();
+        }
+        return json;
+    },
+    pickJson() {
+        let json = {};
+        if(this.fieldId !== ""){
+            //Âä†ËΩΩÂçïÂÖÉÊ†ºÊï∞ÊçÆ
+            json = {
+                field_id: this.fieldId,
+                is_view: this.isView,
+                parent_table_id: this.parentTableId || "",
+                parent_real_id: this.parentRealId || "",
+                parent_temp_id: this.parentTempId ||""
+            }
+        }else{
+            //Âä†ËΩΩË°®Âçï‰∏≠ÊâÄÊúâÊï∞ÊçÆÔºåÂΩìÊúâform_idÊó∂Ôºå‰∏çË¶Å‰∏∫table_idËµãÂÄºÔºå‰øùËØÅÁºìÂ≠òÁöÑÂèØÂ§çÁî®ÊÄß
+            if(this.formId){
+                json = {
+                    form_id: this.formId,
+                    table_id: this.tableId,
+                    is_view: this.isView,
+                    parent_table_id: this.parentTableId || "",
+                    parent_real_id: this.parentRealId || "",
+                    parent_temp_id: this.parentTempId ||""
+                }
+            }else {
+                json = {
+                    form_id: "",
+                    table_id: this.tableId,
+                    is_view: this.isView,
+                    parent_table_id: this.parentTableId || "",
+                    parent_real_id: this.parentRealId || "",
+                    parent_temp_id: this.parentTempId || ""
+                }
+            }
+        }
+        //Â¶ÇÊûúÊòØ‰∏¥Êó∂Ë°®Ôºå‰º†temp_idÔºåÂê¶ÂàôÊòØreal_id
+        if(!this.action){
+            json["real_id"] = this.realId;
+        }else{
+            json["temp_id"] = this.realId;
+        }
+        return json;
+    },
+    //mergeÊï∞ÊçÆ
     mergeFormData:function (staticData,dynamicData){
-    //merge ˝æ›
     for(let dfield in dynamicData["data"]){
         if(this.hasKeyInFormDataStatic(dfield,staticData)){
             for(let dict of staticData["data"]){
@@ -64,22 +146,26 @@ let FormEntrys={
     staticData["parent_table_id"] = dynamicData["parent_table_id"];
     staticData["frontend_cal_parent_2_child"] = dynamicData["frontend_cal_parent_2_child"];
     staticData["error"] = dynamicData["error"];
-    let data={
-
+    let data={};
+    if(!this.formId || staticData['form_id'] == this.formId){
+        this.parseRes(staticData);
     }
-    this.parseRes(staticData);
+    staticData.formData=staticData.data;
     for(let obj of staticData.data){
         data[obj.dfield]=obj;
     }
     staticData.data=data;
+    staticData.tableId=this.tableId;
+    staticData.formId=this.formId;
+    staticData.flowId=this.flowId;
+    staticData.key=this.key;
     return staticData;
 },
-//¥¶¿Ì ˝æ›
+    //Â§ÑÁêÜÂ≠óÊÆµÊï∞ÊçÆ
     parseRes:function (res){
     if(res !== null){
         let formData = res["data"];
         if(formData.length != 0){
-            //ƒÍ∑›—°‘Ò…Ë÷√Œ™ƒ¨»œµ±ƒÍ
             let myDate = new Date();
             let myYear = myDate.getFullYear();
             let parentRealId = '';
@@ -95,6 +181,7 @@ let FormEntrys={
                 }
             }
             for( let data of formData ){
+                data['tableId']=this.tableId;
                 if( data.type == "year" ){
                     if( data.value == "" ){
                         data.value = String( myYear );
@@ -121,143 +208,165 @@ let FormEntrys={
         }
     }
 },
-//«Î«Û ˝æ›
-    getFormData:async function (el,template,seqid,table_id,real_id,is_view) {
-        // let staticData = await HTTP.postImmediately({
-        //     url: `/get_form_static_data/?seqid=${seqid}&table_id=${table_id}&is_extra=&form_id=`,
-        //     type: "POST",
-        //     data: {
-        //         form_id:'',
-        //         table_id:table_id,
-        //         is_view:is_view,
-        //         parent_table_id:'',
-        //         parent_real_id:'',
-        //         real_id:real_id,
-        //         parent_temp_id:'',
-        //     }
-        // });
-        // let dynamicData = await HTTP.postImmediately({
-        //     url: `/get_form_dynamic_data/?seqid=${seqid}&table_id=${table_id}&is_extra=&form_id=`,
-        //     type: "POST",
-        //     hearder:'',
-        //     data: {
-        //         form_id:'',
-        //         table_id:table_id,
-        //         is_view:is_view,
-        //         parent_table_id:'',
-        //         parent_real_id:'',
-        //         parent_temp_id:'',
-        //         real_id:real_id,
-        //     }
-        // });
-        let _this=this;
-        Promise.all([HTTP.post('get_form_dynamic_data',{
-            form_id:'',
-            table_id:table_id,
-            is_view:is_view,
-            parent_table_id:'',
-            parent_real_id:'',
-            real_id:real_id,
-            parent_temp_id:'',
-        }),HTTP.post('get_form_static_data',{
-            form_id:'',
-            table_id:table_id,
-            is_view:is_view,
-            parent_table_id:'',
-            parent_real_id:'',
-            real_id:real_id,
-            parent_temp_id:'',
-        })]).then(res=>{
-            template=_this.formDefaultVersion(res[1].data);
-            let data=_this.mergeFormData(res[1],res[0]);
-            let formData={
-                template:template,
-                data:data,
-            }
-            _this.formBase=new FormBase(formData);
-            _this.formBase.render(el);
-        })
-        HTTP.flush();
-    },
-    //…˙≥…ƒ¨»œ±Ìµ•
+    //ÈªòËÆ§Ë°®Âçï
     formDefaultVersion : function (data){
-    let html='<div class="form">';
+    let html=`<table class="form table table-striped table-bordered table-hover ">
+            <tbody>
+                `;
     for(let obj of data){
-        html+=`<div data-dfield="${obj.dfield}" data-type="${obj.type}"></div>`;
+        if(data.type==='hidden'){
+            html+=`<div data-dfield="${obj.dfield}" data-type="${obj.type}"></div>`;
+        }else{
+            html+=`<tr>
+                        <td style="width: 150px;white-space: nowrap;">${ obj.label }</td>
+                        <td><div data-dfield="${obj.dfield}" data-type="${obj.type}"></div></td>
+                </tr>`;
+        }
     }
-    html+='</div>'
+    html+=`</tbody>
+        </table>`
     return html;
 },
-    //¥¥Ω®±Ìµ•µƒ»Îø⁄
+
+    destoryForm(tableID){
+        $(`#form-${tableID}`).remove();
+    },
+    //ÂàõÂª∫Ë°®ÂçïÂÖ•Âè£
     createForm:function(config={}){
+        let _this=this;
         this.init(config);
-        // if(this.formBase){
-        //     this.formBase.destroySelf();
-        // }
-        $('div').remove();
-        let html=$('<div style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">').appendTo(this.el);
+        let tableID=this.tableId;
+        if(this.tableId){
+            this.destoryForm(this.tableId);
+        }
+        let html=$(`<div id="form-${tableID}" style="border: 1px solid red;background:#fff;width: 100%;height:100%;overflow: auto">`).appendTo(this.el);
         let template='';
-        console.log('isView');
-        console.log(this.tableId);
-        this.getFormData(html,template,this.seqId,this.tableId,$('#real_id').val()||0,$('#is_view').val()||0);
+        FormService.getPrepareParmas({table_id:this.tableId}).then(res=>{
+            _this.findFormIdAndFlowId(res);
+            let json=_this.createPostJson();
+            FormService.getFormData(json).then(res=>{
+                template=_this.formDefaultVersion(res[0].data);
+                let data=_this.mergeFormData(res[0],res[1]);
+                let formData={
+                    template:template,
+                    data:data,
+                }
+                _this.formBase=new FormBase(formData);
+                _this.formBase.render(html);
+            });
+        })
+    },
+    //ÂÆ°ÊâπÂà†Èô§Êó∂ÈáçÁΩÆË°®ÂçïÂèØÁºñËæëÊÄß
+    editDelWorkFlow(formId){
+        this.formBase.actions.editDelWork(formId);
+    },
+
+    //Êé•Êî∂ÂÖ≥Ê≥®‰∫∫‰ø°ÊÅØ
+    setUserIdList(data){
+        this.formBase.data.focus_users=data;
+    },
+
+    getFormValue(){
+        return this.formBase.actions.getFormValue();
     }
 }
 
 $('#toEdit').on('click',function(){
-    let real_id=$('#real_id').val()||'';
-    let is_view=$('#is_view').val()||0;
-    console.log('is_view');
-    console.log(is_view);
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
-        tableId:'8696_yz7BRBJPyWnbud4s6ckU7e',
+        table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
         seqId:'yudeping',
         el:$('body'),
-        is_view:+is_view,
-        real_id:real_id
+        is_view:isView,
+        real_id:realId
+    });
+});
+$('#text').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.createForm({
+        table_id:'1285_pkz2teyhHCztFrYhoc6F54',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
     });
 });
 $('#count').on('click',function(){
-    let real_id=$('#real_id').val()||'';
-    let is_view=$('#is_view').val()||0;
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
-        tableId:'7051_UoWnaxPaVSZhZcxZPbEDpG',
+        table_id:'7051_UoWnaxPaVSZhZcxZPbEDpG',
         seqId:'yudeping',
         el:$('body'),
-        is_view:is_view,
-        real_id:real_id
+        is_view:isView,
+        real_id:realId
     });
 });
 $('#editRequired').on('click',function(){
-    let real_id=$('#real_id').val()||'';
-    let is_view=$('#is_view').val()||0;
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
-        tableId:'3461_P28RYPGTGGE7DVXH8LBMHe',
+        table_id:'3461_P28RYPGTGGE7DVXH8LBMHe',
         seqId:'yudeping',
         el:$('body'),
-        is_view:is_view,
-        real_id:real_id
+        is_view:isView,
+        real_id:realId
     });
 });
 $('#defaultValue').on('click',function(){
-    let real_id=$('#real_id').val()||'';
-    let is_view=$('#is_view').val()||0;
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
-        tableId:'1160_ex7EbDsyoexufF2UbXBmSJ',
+        table_id:'1160_ex7EbDsyoexufF2UbXBmSJ',
         seqId:'yudeping',
         el:$('body'),
-        is_view:is_view,
-        real_id:real_id
+        is_view:isView,
+        real_id:realId
+    });
+});
+$('#valid').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.createForm({
+        table_id:'3497_GvF6BKdDWCfWVMAoxudt8N',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
     });
 });
 $('#exp').on('click',function(){
-    let real_id=$('#real_id').val()||'';
-    let is_view=$('#is_view').val()||0;
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
-        tableId:'7336_HkkDT7bQQfqBag4kTiFWoa',
+        table_id:'7336_HkkDT7bQQfqBag4kTiFWoa',
         seqId:'yudeping',
         el:$('body'),
-        is_view:is_view,
-        real_id:real_id
+        is_view:isView,
+        real_id:realId
     });
+    // FormEntrys.createForm({
+    //     form_id:206,
+    //     record_id:'',
+    //     reload_draft_data:0,
+    //      from_workflow:1,
+    //     table_id:'3277_k5JFeqSiX2iuCvM3rXay9L'
+    // });
+
+})
+$('#workflow').on('click',function(){
+    console.log(FormEntrys.getFormValue());
+    // let realId=$('#real_id').val()||'';
+    // let isView=$('#is_view').val()||0;
+    // FormEntrys.createForm({
+    //     table_id:'1586_CcrzabMYLePTkAGDqpTgo2',
+    //     form_id:2,
+    //     el:$('body'),
+    //     record_id:'',
+    //     reload_draft_data:0,
+    //     from_workflow:1,
+    // });
 })
 export default FormEntrys

@@ -2,7 +2,9 @@ import Component from '../../../lib/component';
 let config={
     template:`
               <div class="clearfix">
-                {{#if be_control_condition }}
+                {{#if unvisible}}
+                        <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
+                {{else if be_control_condition }}
                     <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                  {{else}}
                    <div style="display: inline-block">{{label}}</div>
@@ -25,7 +27,7 @@ let config={
 class TextAreaControl extends Component {
     constructor(data){
         super(config,data);
-        console.log(this.data);
+        // console.log(this.data);
     }
 }
 

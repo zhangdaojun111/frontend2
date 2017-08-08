@@ -10,17 +10,17 @@ import WorkFlowCreate from '../components/workflow/workflow-create/workflow-crea
 import WorkflowRecord from '../components/workflow/approval-record/approval-record';
 import WorkflowInitial from '../components/workflow/workflow-initial';
 import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
+import WorkFlowGrid from '../components/workflow/workflow-grid/workflow-grid';
 import ApprovalHeader from '../components/workflow/approval-header/approval-header';
-
 import ApprovalWorkflow from '../components/workflow/approval-workflow';
-
 import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow';
-
 import FormEntrys from './form';
 import TreeView from  '../components/util/tree/tree';
+import msgBox from '../lib/msgbox';
+
 
 WorkFlowForm.showForm();
-
+WorkFlowGrid.showGrid();
 
 let WorkFlowList=workflowService.getWorkfLow({}),
     FavWorkFlowList=workflowService.getWorkfLowFav({});
@@ -38,49 +38,77 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=qiumaoyun_1501661055093&record_id=',data:{
             flow_id:msg.id
         }});
-    })().then(res=>{
-            Mediator.publish('workflow:gotWorkflowInfo', res);
-            return workflowService.validateDraftData({form_id:msg.formid});
-        })
-        .then(res=>{
-            if(res.the_last_draft!=''){
-                $( "#dialog-confirm" ).dialog({
-                    title:'提示',
-                    resizable: false,
-                    height: "auto",
-                    width: 400,
-                    modal: true,
-                    buttons: {
-                        "确认": function() {
-                            $( this ).dialog( "close" );
-                            //todo get draft info
-                            $("#dialog-confirm").html('');
-                        },
-                        "取消": function() {
-                            $( this ).dialog( "close" );
-                            $("#dialog-confirm").html('');
-                        }
-                    }
-                });
-                $("#dialog-confirm").append(`<p><span class="ui-icon ui-icon-alert"></span>
-                    您于${res.the_last_draft}时填写该工作表单尚未保存，是否继续编辑？
-                </p>`);
-
-            }else{
-                alert('there is no draft');
-            }
-            $("#workflow-create").append(`<button id="submit" class="ui-button ui-widget ui-corner-all">提交</button>`);
-        }).then(()=>{
-        console.log(`tableid:${msg.tableid}`);
-        // FormEntrys.createForm({
-        //     table_id:msg.tableid,
-        //     el:'#place-form',
-        //     is_view:1,
-        //     real_id:''
-        // });
+    })()
+    .then(res=>{
+        Mediator.publish('workflow:gotWorkflowInfo', res);
+        return workflowService.validateDraftData({form_id:msg.formid});
     })
+    .then(res=>{
+        if(res.the_last_draft!=''){
+            return msgBox.confirm(`您于${res.the_last_draft}时填写该工作表单尚未保存，是否继续编辑？`)
+        }else{
+            return 0;
+        }
+    })
+    .then((is_draft)=>{
+        //auto saving draft  草稿自动保存
+        is_draft=is_draft==true?1:0;
+        $('#place-form').html('');
+        FormEntrys.createForm({
+            reload_draft_data:is_draft,
+            table_id:msg.tableid,
+            el:'#place-form',
+            real_id:'',
+            from_workflow:1,
+            form_id:msg.formid
+        });
 
+        const intervalSave= async function (data) {
+            let postData={
+                flow_id:msg.id,
+                is_draft:1,
+                data:{}
+            };
+            postData.data=JSON.stringify(data);
+            let res = await workflowService.createWorkflowRecord(postData);
+            console.log(res);
+            if(res.success===1){
+                msgBox.alert('自动保存成功！');
+            }
+        };
+        var timer;
+        const autoSaving=function(){
+            timer=setInterval(()=>{
+                intervalSave(FormEntrys.getFormValue());
+            },2*60*1000);
+        };
+        // autoSaving();
+        Mediator.subscribe('workflow:autoSaveOpen', (msg)=> {
+            clearInterval(timer);
+            if(msg===1){
+                autoSaving();
+            }else{
+                clearInterval(timer);
+            }
+        })
+    })
+    .then(res=>{
+        Mediator.subscribe('workflow:submit', ()=> {
+            let formData=FormEntrys.getFormValue(),
+                postData={
+                    flow_id:msg.id,
+                    is_draft:1,
+                    data:JSON.stringify(formData)
+                };
+            (async function () {
+                let data = await workflowService.createWorkflowRecord(postData);
+                alert(`error:${data.error}`);
+            })();
+        });
+    })
 });
+
+
 
 //订阅收藏常用workflow
 Mediator.subscribe('workflow:addFav', (msg)=> {
@@ -110,15 +138,14 @@ ApprovalHeader.showheader();
 });
 
 let tree=[];
+let staff=[];
 (async function () {
     return workflowService.getStuffInfo({url: '/save_perm/?perm_id=0'});
 })().then(res=>{
     tree=res.data.department_tree;
-
+    staff=res.data.department2user;
     function recur(data) {
-        console.log(data);
         for (let item of data){
-            console.log(item);
             item.nodes=item.children;
             if(item.children.length!==0){
                 recur(item.children);
@@ -126,12 +153,23 @@ let tree=[];
         }
     }
     recur(tree);
+    console.log(staff);
 
-
-    var treeComp2 = new TreeView(tree,function (event,selectedNode) {
-        console.log("选中节点："+selectedNode.text);
-        // console.dir(selectedNode);
-    },'MULTI_SELECT',true,'tree3');
+    var treeComp2 = new TreeView(tree,{
+        callback: function (event,selectedNode) {
+                for(var k in staff){
+                    if(k==selectedNode.id){
+                        if(event==='select'){
+                            Mediator.publish('workflow:checkDept', staff[k]);
+                        }else{
+                            Mediator.publish('workflow:unCheckDept', staff[k]);
+                        }
+                    }
+                }
+        },
+        treeType:'MULTI_SELECT',
+        isSearch: true
+        });
     treeComp2.render($('#treeMulti'));
 });
 
