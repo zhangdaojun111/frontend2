@@ -23,7 +23,7 @@ let config = {
                 config.group = [];
                 let dom = $('.grouping-data-list').find('.group-data-item');
                 for (let i = 0; i < dom.length; i++) {
-                    console.log(dom[i].attributes['field'].nodeValue)
+                    config.group.push(dom[i].attributes['field'].nodeValue);
                 }
                 dataTableService.savePreference({
                     action: 'group',
@@ -33,6 +33,7 @@ let config = {
                 HTTP.flush();
             }
         }).disableSelection();
+
         console.log(this.data)
     }
 }
