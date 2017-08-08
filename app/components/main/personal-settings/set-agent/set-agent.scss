@@ -44,14 +44,22 @@
         .proxy-set{
             width: 650px;
             height: 40px;
-            border-bottom: solid 1px red;
-            select{
+            //border-bottom: solid 1px red;
+            .agent-select{
                 width: 240px;
                 height: 24px;
+                text-indent: 5px;
                 display: inline-block;
                 margin-top: 10px;
                 margin-left: 10px;
+                //border-radius: 7px;
+                border: solid 1px #e4e4e4;
+                //&:focus{
+                //    border: solid 1px #0088ff;
+                //    border-radius: 7px;
+                //}
             }
+
             span{
                 display: inline-block;
                 margin-left: 20px;

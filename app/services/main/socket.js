@@ -30,6 +30,6 @@ let SocketMgr = {
 
 }
 
-SocketMgr.connect();
+// SocketMgr.connect();
 
 
