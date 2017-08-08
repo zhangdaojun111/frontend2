@@ -360,7 +360,16 @@ export const dgcService = {
     },
     //权限对应按钮
     permission2btn: {
-
+        'float-search-btn':'search',
+        'expert-search-btn':'complex_search',
+        'group-btn':'group',
+        'new-form-btn':'add',
+        'grid-del-btn':'delete',
+        'grid-import-btn':'upload',
+        'grid-export-btn':'download',
+        'custom-column-btn':'custom_field',
+        'grid-auto-width':'custom_width',
+        'grid-new-window':'new_window'
     }
 
 }

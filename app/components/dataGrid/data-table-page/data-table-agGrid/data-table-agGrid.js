@@ -675,6 +675,21 @@ let config = {
             // console.log("orderFields")
             // console.log(this.data.orderFields)
         },
+        //初始化按钮
+        renderBtn: function () {
+            let btnGroup = dgcService.gridBtn( this.data.viewMode );
+            let btns = this.el.find( '.dataGrid-btn-group' )[0].querySelectorAll('a');
+            let html = ''
+            for( let btn of btns ){
+                let name = btn.className;
+                if( btnGroup.indexOf( name )!=-1 && this.data.permission[dgcService.permission2btn[name]] ){
+                    html+=btn.outerHTML;
+                }
+            }
+            let con = this.el.find( '.dataGrid-btn-group' )[0];
+            con.innerHTML = html;
+            con.style.display = 'block';
+        },
         //请求表头数据
         getHeaderData: function () {
             let obj1 = {
@@ -691,6 +706,9 @@ let config = {
             Promise.all([preferenceData, headerData, sheetData]).then((res)=> {
                 this.actions.setPreference( res[0] );
                 this.data.fieldsData = res[1].rows || [];
+                this.data.permission = res[1].permission;
+                //初始化按钮
+                this.actions.renderBtn();
                 //创建高级查询需要字段数据
                 let r = dgcService.createNeedFields( this.data.fieldsData )
                 this.data.expertSearchFields = r.search;
