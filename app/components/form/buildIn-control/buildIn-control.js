@@ -20,6 +20,9 @@ let config={
                             {{/if}} 
                             {{#unless is_view}}
                                 <a href="javascript:void(0);" class="ui-selector" ></a>
+                                {{#if can_add_item}}
+                                    <a href="javascript:void(0);" class="add-item noprint"> + </a>
+                                {{/if}}
                             {{/unless}} 
                         </div>
                      {{/if}}   
@@ -44,6 +47,9 @@ let config={
         });
         _this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
+        });
+        _this.el.on('click','.add-item',function(){
+            _.debounce(function(){Mediator.publish('form:addNewBuildIn:'+_this.data.tableId,_this.data)},300)();
         });
     },
     afterRender:function(){
