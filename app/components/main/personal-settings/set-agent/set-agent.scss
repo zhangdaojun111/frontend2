@@ -35,9 +35,8 @@
     .select-agent {
         width: 650px;
         height: 500px;
-        margin-left: 5px;
-        border: solid 1px #d7d7d7;
-        float: left;
+        border: solid 1px #ddd;
+        float: right;
         .right-header {
             width: 640px;
             height: 30px;
@@ -73,6 +72,15 @@
             .single-select-group {
                 display: inline-block;
             }
+
+            .name-list {
+                height: 449px;
+                width: 240px;
+                margin: 10px 0 0 10px;
+                box-sizing: border-box;
+                float: left;
+            }
+
         }
     }
 }

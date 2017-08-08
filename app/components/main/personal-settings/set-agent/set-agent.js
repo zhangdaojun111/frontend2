@@ -6,7 +6,8 @@ import './set-agent.scss';
 import template from './set-agent.html';
 import {UserInfoService} from "../../../../services/main/userInfoService"
 import msgbox from "../../../../lib/msgbox";
-import TreeView from "../../../../components/util/tree/tree"
+import TreeView from "../../../../components/util/tree/tree";
+import {AutoSelect} from '../../../../components/util/autoSelect/autoSelect';
 
 
 let config = {
@@ -80,6 +81,20 @@ let config = {
             }
         },
         initAgentList:function () {
+            console.log(this.originData.data.user_list);
+            let $wrap = this.el.find('.name-list');
+            let autoSelect = new AutoSelect({
+                list: this.originData.data.user_list
+            });
+            autoSelect.render($wrap);
+            // this.agentList = this.originData.data.user_list;
+            // let $nameList = this.el.find("#name_list");
+            // for(let agent of this.agentList){
+            //     let newAgent = $("<option class='agentRow'>");
+            //     newAgent.agentData = agent;
+            //     newAgent.html(agent.name);
+            //     $nameList.append(newAgent);
+            // }
             this.agentList = this.originData.data.user_list;
             let $nameList = this.el.find("#name_list");
             for(let agent of this.agentList){
