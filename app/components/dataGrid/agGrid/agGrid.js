@@ -17,7 +17,7 @@ let config = {
         columnDefs : [],
         rowData : [],
         footerData: [],
-        cssTheme: 'ag-fresh',
+        cssTheme: 'ag-blue',
         floatingFilter: false,
         //原始表头数据
         fieldsData: [],
