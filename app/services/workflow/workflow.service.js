@@ -12,7 +12,7 @@ export const workflowService={
         return HTTP.postImmediately( params)
     },
     createWorkflowRecord(params){
-        return HTTP.postImmediately('create_workflow_record', params)
+        return HTTP.postImmediately('/create_workflow_record/', params)
     },
     validateDraftData(params){
         return HTTP.postImmediately('/validate_draft_data/', params)

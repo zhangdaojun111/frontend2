@@ -7,13 +7,12 @@ import {IframeInstance} from '../components/main/iframes/iframes';
 import {HeaderInstance} from '../components/main/header/header';
 import {AsideInstance} from '../components/main/aside/aside';
 
-<<<<<<< HEAD
 _.defaultsDeep(AsideInstance.data, {
     systemName: window.config.sysConfig.logic_config.sap_login_system_name,
     avatar: window.config.sysConfig.userInfo.avatar,
     username: window.config.sysConfig.userInfo.username,
     role: window.config.sysConfig.userInfo.is_superuser === 1 ? '管理员' : '普通用户'
-=======
+})
 import Login from '../components/login/login';
 import {HTTP} from '../lib/http';
 import TreeView from "../components/util/tree/tree";
@@ -125,13 +124,9 @@ HTTP.post('dept2', {did: 123123}).then(function() {
 
 HTTP.get('dept3', {did: 123123}).then(function() {
     console.log(arguments);
->>>>>>> master_tree_demo
 });
 AsideInstance.render($('#aside'));
 IframeInstance.render($('#content'));
 HeaderInstance.render($('#header'));
 
-<<<<<<< HEAD
-=======
 HTTP.flush();
->>>>>>> master_tree_demo

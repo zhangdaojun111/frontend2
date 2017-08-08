@@ -7,14 +7,11 @@ import Mediator from '../../../lib/mediator';
 let config = {
     template: template,
     actions: {
-        animationToggle:function () {
-            this.el.find(".place-form").slideToggle("slow",function () {})
-        },
+      
     },
     afterRender: function() {
         this.el.on('click','.collapseFormBtn',()=>{
-
-            this.actions.animationToggle();
+            this.el.find(".place-form").toggle();
         })
     }
 }
