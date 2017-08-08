@@ -1,52 +1,55 @@
 @import "../../../../assets/scss/core/base";
 
-.set-proxy-window{
+.set-proxy-window {
     border: solid 1px #e4e4e4;
     padding: 5px;
     margin-top: 5px;
     color: #999999;
-    .select-proxy-process{
+    .select-proxy-process {
         width: 220px;
         height: 500px;
-        border: solid 1px #d7d7d7;
+        border: solid 1px #ddd;
         float: left;
-        .left-header{
+        .left-header {
             width: 220px;
             height: 30px;
             background-color: #f2f2f2;
             line-height: 30px;
             border-bottom: solid 1px #d7d7d7;
         }
-        .work-tree{
-            width: 200px;
-            height: 90%;
-            margin-top: 10px;
-            margin-left: 10px;
-            overflow: auto;
-            li{
-                height: 25px;
-                line-height: 25px;
+        .work-tree-wrap {
+            height: 469px;
+            padding: 10px 0 10px 10px;
+            box-sizing: border-box;
+            .work-tree {
+                height: 100%;
+                overflow: auto;
+                li {
+                    height: 25px;
+                    line-height: 25px;
+                }
             }
         }
+
     }
-    .select-agent{
+    .select-agent {
         width: 650px;
         height: 500px;
         margin-left: 5px;
         border: solid 1px #d7d7d7;
         float: left;
-        .right-header{
+        .right-header {
             width: 650px;
             height: 30px;
             background-color: #f2f2f2;
             line-height: 30px;
             border-bottom: solid 1px #d7d7d7;
         }
-        .proxy-set{
+        .proxy-set {
             width: 650px;
             height: 40px;
             //border-bottom: solid 1px red;
-            .agent-select{
+            .agent-select {
                 width: 240px;
                 height: 24px;
                 text-indent: 5px;
@@ -61,23 +64,23 @@
                 //}
             }
 
-            span{
+            span {
                 display: inline-block;
                 margin-left: 20px;
                 color: black;
             }
-            .single-select-group{
+            .single-select-group {
                 display: inline-block;
             }
         }
     }
 }
 
-.agent-footer{
+.agent-footer {
     margin-top: 13px;
-    .save-proxy{
+    .save-proxy {
         display: block;
-        width:100px;
+        width: 100px;
         height: 35px;
         background-color: #0088ff;
         line-height: 35px;
@@ -91,10 +94,7 @@
 }
 
 .workflow-tree {
-    span.icon.expand-icon{
+    span.icon.expand-icon {
         display: none;
-    }
-    .node-selected {
-        background-color: #FFFFFF;
     }
 }

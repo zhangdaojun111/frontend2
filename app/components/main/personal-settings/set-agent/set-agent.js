@@ -183,6 +183,7 @@ export default {
             title: '设置代理',
             width: 893,
             height: 620,
+            modal: true,
             close: function() {
                 component.destroySelf();
             }
