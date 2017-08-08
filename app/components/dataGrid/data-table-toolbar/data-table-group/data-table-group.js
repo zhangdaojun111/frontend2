@@ -20,9 +20,10 @@ let config = {
         $('.group-data-list, .grouping-data-list').sortable({
             connectWith: ".connectedSortable",
             stop: function() {
+                config.group = [];
                 let dom = $('.grouping-data-list').find('.group-data-item');
                 for (let i = 0; i < dom.length; i++) {
-                    config.group.push(dom[i].attributes['field'].nodeValue);
+                    console.log(dom[i].attributes['field'].nodeValue)
                 }
                 dataTableService.savePreference({
                     action: 'group',
@@ -32,9 +33,6 @@ let config = {
                 HTTP.flush();
             }
         }).disableSelection();
-        // $('.grouping-data-list').bind('.sortstop',function(event) {
-        //     console.log('11111')
-        // })
         console.log(this.data)
     }
 }

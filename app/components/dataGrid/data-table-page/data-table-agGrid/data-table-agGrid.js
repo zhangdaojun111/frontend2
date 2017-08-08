@@ -780,8 +780,8 @@ let config = {
             let groupLit = {
                 tableId: this.data.tableId,
                 gridoptions: this.agGrid.gridOptions,
-                fields: this.data.customColumnsFields,
-                myGroup: this.actions.setMyGroup(this.data.myGroup)
+                fields: this.actions.deleteGroup(this.data.customColumnsFields),
+                myGroup: this.actions.setMyGroup(this.data.myGroup.fields)
             }
             this.groupGridCom = new groupGrid(groupLit);
             this.append(this.groupGridCom,document.querySelector('.group-panel'));
@@ -800,18 +800,41 @@ let config = {
             this.customColumnsCom.actions.onFix();
             this.customColumnsCom.actions.dragAction();
         },
+        //剔除已经保存的分组
+        deleteGroup: function(data) {
+            let field = [];
+            for(let j = 0; j < data.length; j++){
+                field.push(data[j]);
+            }
+            console.log(this.data.customColumnsFields)
+            for (let k = 0; k < this.data.myGroup.fields.length;k++ ){
+                for (let i = 0; i < field.length; i++) {
+                    if (this.data.myGroup.fields[k] == field[i].field) {
+                        field.splice(i, 1);
+                    }
+                }
+            }
+            console.log(this.data.customColumnsFields)
+            return field;
+
+        },
         //组装分组偏好设置
         setMyGroup:function(myGroup) {
-            let myGroupList = myGroup, myGroupAry = [],myGroupObj = {};
-            this.data.customColumnsFields.forEach((item)=> {
-                for(let i = 0; i < myGroupList.length; i++) {
+            let myGroupList = [], myGroupAry = [];
+            for(let j = 0; j < myGroup.length; j++){
+                myGroupList.push(myGroup[j]);
+            }
+            for(let i = 0; i < myGroupList.length; i++) {
+                this.data.customColumnsFields.forEach((item)=> {
                     if(item.field == myGroupList[i]) {
+                        let myGroupObj = {};
                         myGroupObj['field'] = item.field;
                         myGroupObj['name'] = item.name;
                         myGroupAry.push(myGroupObj);
                     }
-                }
-            });
+                });
+            }
+
             return myGroupAry;
         },
         //分页刷新操作
