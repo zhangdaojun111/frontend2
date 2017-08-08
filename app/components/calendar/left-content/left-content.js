@@ -17,6 +17,7 @@ let config = {
         Add_hideTable:[],
         contentStatus:1,
         rows:[],
+        hide_item_table:[],
     },
     actions: {
         logincalendarTreeData:function(objs){
@@ -81,16 +82,6 @@ let config = {
                 $("#checkbox_a3").addClass('label-select-all-checked');
             }
         },
-        removeRemindType:function(){
-            if($("#checkbox_a2").is(".workflow_checked")){
-                config.data.cancel_fields = [];
-                CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
-            }
-            else{
-                config.data.cancel_fields = ['approve'];
-                CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
-            }
-        },
         contentHide:function(){
             if(this.data.contentStatus === 1){
                 this.el.find(".taskbar").animate({height:"61%"},300);
@@ -125,7 +116,7 @@ let config = {
                 that.el.find(class_Name).each(function(){
                     $(this).addClass('unchecked');
                     $(this).prev('input').removeAttr('checked');
-                    let filedId = temp.attr("id").split("-")[2];
+                    let filedId =$(this).attr("id").split("-")[2];
                     if(config.data.cancel_fields.indexOf(filedId) == -1){
                         config.data.cancel_fields.push(filedId);
                     }
@@ -199,19 +190,38 @@ let config = {
                 that.el.find("#checkbox_a3").removeClass('label-select-all-checked');
             }
         },
-        checkbox_a3:function(temp,label_select_all_show,select_label_children){
+        checkbox_a3:function(temp,label_select_all_show,select_label_children,that){
+            config.data.cancel_fields = that.el.find("#checkbox_a2").is(".workflow_checked")? []:['approve'];
+            console.log(config.data.cancel_fields);
             if(temp.is(".label-select-all-checked")){
                 temp.removeClass("label-select-all-checked");
                 label_select_all_show.removeClass("label-select-all-checked");
                 select_label_children.addClass("unchecked");
-                config.data.cancel_fields = ['remind','workflow'];
-                CalendarService.CalendarMsgMediator.publish('unshowData',{data:['remind','workflow']});
+                for(let i = 0;i < config.data.rows.length;i++){
+                    for(let j = 0;j < config.data.rows[i].items.length;j++){
+                        if(config.data.cancel_fields.indexOf(config.data.rows[i].items[j].field_id) == -1){
+                            config.data.cancel_fields.push(config.data.rows[i].items[j].field_id);
+                        }
+                    }
+                }
+                 CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
             }
             else{
                 temp.addClass("label-select-all-checked");
                 label_select_all_show.addClass("label-select-all-checked");
                 select_label_children.removeClass("unchecked");
-                config.actions.removeRemindType();
+                console.log(config.data.hide_item_table,config.data.rows);
+                for(let i = 0;i < config.data.rows.length;i++){
+                    if(config.data.hide_item_table.indexOf(config.data.rows[i].table_id) != -1)
+                    {
+                        for(let j = 0;j < config.data.rows[i].items.length;j++){
+                            if(config.data.cancel_fields.indexOf(config.data.rows[i].items[j].field_id) == -1){
+                                config.data.cancel_fields.push(config.data.rows[i].items[j].field_id);
+                            }
+                        }
+                    }
+                }
+                CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
             }
         },
         approve_label:function(checkbox_a2){
@@ -233,9 +243,10 @@ let config = {
             let select_checkbox_Id = "#select-all-"+hide_type_id[2];
             hide_type_id = "#select-all-block-"+ hide_type_id[2];
             that.el.find(select_checkbox_Id).removeClass("label-select-all-show");
-            let class_Name = ".select-children-"+$('.hide-type-group').attr("id").split("-")[2];
+            let class_Name = ".select-children-"+temp.attr("id").split("-")[2];
             that.el.find(class_Name).each(function(){
                 let filedId = $(this).attr("id").split("-")[2];
+                console.log(filedId);
                 if(config.data.cancel_fields.indexOf(filedId) == -1){
                     config.data.cancel_fields.push(filedId);
                 }
@@ -257,11 +268,17 @@ let config = {
             }
             config.data.hide_table.tableName = hide_table_name;
             config.data.hide_table.table_Id = hide_table_id;
+            config.data.hide_item_table.push(hide_table_id);
+            config.data.hide_tables.push(config.data.hide_table);
             CalendarService.CalendarMsgMediator.publish('hideRemindType',{data:config.data.hide_table});
+            CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
             config.data.hide_table = {'tableName':"",'table_Id':''}
         }
     },
     afterRender: function() {
+        CalendarService.CalendarMsgMediator.subscribe('unshowData',data =>{
+            console.log(data);
+        });
         this.el.css({"height":"100%","width":"100%"});
         this.append(new LeftCalendar, this.el.find('.left-calendar-box'));
         let objects = {};
@@ -277,10 +294,27 @@ let config = {
             that.el.find("#select-all-"+data.data).addClass("label-select-all-show label-select-all-checked");
             that.el.find("#select-all-block-"+data.data).show();
             that.el.find(".select-children-"+data.data).removeClass("unchecked");
-
+            for(let i = 0;i < config.data.hide_tables.length;i++){
+                if(config.data.hide_tables[i].table_Id == data.data){
+                    config.data.hide_tables.splice(i,1);
+                    config.data.hide_item_table.splice(i,1);
+                    break;
+                }
+            }
+            for(let i = 0;i < config.data.rows.length;i++){
+                if(config.data.rows[i].table_id == data.data){
+                    for(let j = 0;j < config.data.rows[i].items.length;j++){
+                        console.log(44444);
+                        config.data.cancel_fields.splice($.inArray(config.data.rows[i].items[j].field_id,config.data.cancel_fields),1);
+                    }
+                    break;
+                }
+            }
+            CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
         });
         CalendarService.getCalendarTreeData().then(objs => {
             config.data.cancel_fields = objs.cancel_fields;
+            config.data.hide_item_table = objs.hide_tables;
             config.data.rows = objs.rows;
             for(let i = 0;i<objs.hide_tables.length;i++){
                 let hide_table_name = "";
@@ -316,12 +350,20 @@ let config = {
         that.el.on('click',"#checkbox_a3",function(){
             let label_select_all_show = that.el.find(".label-select-all-show");
             let select_label_children = that.el.find(".select-label-children");
-             config.actions.checkbox_a3($(this),label_select_all_show,select_label_children);
+            config.actions.checkbox_a3($(this),label_select_all_show,select_label_children,that);
         }).on('click',".approve-label",function(){
             let checkbox_a2 = that.el.find("#checkbox_a2");
             config.actions.approve_label(checkbox_a2);
         }).on('click', '.item-title', () => {
             this.actions.contentHide();
+        }).on('click',".hide-type-group",function(){
+            config.actions.hide_group($(this),that);
+        }).on('click','.select-label-show',function(){
+            config.actions.selectlabelshow($(this));
+        }).on('click',".select-label",function(){
+            config.actions.selectlabel($(this),that);
+        }).on('click','.select-label-children',function () {
+            config.actions.selectlabelchildren($(this),that);
         }).on('click','.set-calendar',() =>{
             let component = new CalendarSetting();
             let el = $('<div>').appendTo(document.body);
@@ -336,14 +378,6 @@ let config = {
                     component.destroySelf();
                 }
             });
-        }).on('click',".hide-type-group",function(){
-            config.actions.hide_group($(this),that);
-        }).on('click','.select-label-show',function(){
-            config.actions.selectlabelshow($(this));
-        }).on('click',".select-label",function(){
-            config.actions.selectlabel($(this),that);
-        }).on('click','.select-label-children',function () {
-            config.actions.selectlabelchildren($(this),that);
         });
     }
 };

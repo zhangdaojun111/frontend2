@@ -55,14 +55,14 @@ let config = {
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
-        let data = {from_date: "2016-05-01", to_date: "2017-05-31"};
+        let data = {"from_date": "2017-07-30", "to_date": "2017-09-09"};
         CalendarService.getWorkflowRecords(data).then(res => {
-            console.log('res', res);
+            console.log(res);
+            res.rows.forEach((row) =>{
+                console.log(row);
+                this.append(new RightContentWorkFlow(row), this.el.find('.item-content-2'));
+            });
         });
-		let worlkflow = [{"name": "王云峰 【Sarah审批的工作流】新建（普通）",'record_progress':"20%",'table_id':"59802e0105b1e5e0ed6d9b60"},{"name": "王云峰 【Sarah审批的工作流】新建（普通）",'record_progress':"30%",'table_id':"54_qCvzfx6SaPB34vAUa6ZpfB"}];
-		worlkflow.forEach((row) =>{
-			this.append(new RightContentWorkFlow(row), this.el.find('.item-content-2'));
-		});
         this.el.on("click",".item-title-1",()=>{
             let temp1 = this.el.find(".item-content-1");
             let temp2 = this.el.find(".item-content-2");
