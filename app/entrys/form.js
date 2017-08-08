@@ -1,10 +1,235 @@
-import '../assets/scss/form.scss';
+import FormBase from '../components/form/base-form/base-form'
+import {HTTP} from '../lib/http';
+import '../components/form/vender/my-multiSelect/my-multiSelect'
+import '../components/form/vender/my-multiSelect/my-multiSelect.css'
+import {FormService} from "../services/formService/formService";
 
-import 'jquery-ui/ui/widgets/button.js';
-import 'jquery-ui/ui/widgets/dialog.js';
+// @parma
+//
+let FormEntrys={
+    init:function(config={}){
+        this.tableId=config.table_id||'';
+        this.parentRealId=config.parent_real_id||'';
+        this.parentTempId=config.parent_temp_id||'';
+        this.seqId=config.seqId||'';
+        this.realId=config.real_id||'';
+        this.parentTableId=config.parent_table_id||'';
+        this.parentRecordId=config.parent_record_id||'';
+        this.isView=config.is_view || 0;
+        this.isBatch=config.is_batch || 0;
+        this.recordId=config.record_id||'';
+        this.action=config.action||'';
+        this.el=config.el||'';
+        this.reloadDraftData=config.reload_draft_data||0;
+        this.formId=config.form_id||'';
+        this.fromWorkFlow=config.from_workflow||0;
+    },
+    hasKeyInFormDataStatic:function (key,staticData){
+    let isExist = false;
+    for(let dict of staticData["data"]){
+        if(dict["dfield"] == key){
+            isExist = true;
+        }
+    }
+    return isExist;
+},
+    //拼装发送json
+    createPostJson(){
+        let json;
+        if(this.fromWorkFlow){
+            json={
+                form_id:this.formId,
+                record_id:this.recordId,
+                reload_draft_data:this.reloadDraftData,
+                from_workflow:this.fromWorkFlow,
+                table_id:this.tableId
+            }
+        }else{
+            json={
+                form_id:this.formId,
+                table_id:this.tableId,
+                is_view:this.isView,
+                parent_table_id:this.parentTableId,
+                parent_real_id:this.parentRealId,
+                real_id:this.realId,
+                parent_temp_id:this.parentTempId,
+            }
+        }
+        return json;
+    },
+    //merge数据
+    mergeFormData:function (staticData,dynamicData){
+    for(let dfield in dynamicData["data"]){
+        if(this.hasKeyInFormDataStatic(dfield,staticData)){
+            for(let dict of staticData["data"]){
+                if(dict["dfield"] == dfield){
+                    for(let k in dynamicData["data"][dfield]){
+                        dict[k] = dynamicData["data"][dfield][k];
+                    }
+                }
+            }
+        }else{
+            staticData["data"].push(dynamicData["data"][dfield]);
+        }
+    }
+    staticData["record_info"] = dynamicData["record_info"];
+    staticData["parent_table_id"] = dynamicData["parent_table_id"];
+    staticData["frontend_cal_parent_2_child"] = dynamicData["frontend_cal_parent_2_child"];
+    staticData["error"] = dynamicData["error"];
+    let data={};
+    this.parseRes(staticData);
+    for(let obj of staticData.data){
+        data[obj.dfield]=obj;
+    }
+    staticData.data=data;
+    staticData.tableId=this.tableId;
+    return staticData;
+},
+    //处理字段数据
+    parseRes:function (res){
+    if(res !== null){
+        let formData = res["data"];
+        if(formData.length != 0){
+            let myDate = new Date();
+            let myYear = myDate.getFullYear();
+            let parentRealId = '';
+            let parentTableId = '';
+            let parentTempId = '';
+            for( let data of formData ){
+                if( data['id'] == 'real_id' ){
+                    parentRealId = data['value'];
+                }else if( data['id'] == 'table_id' ){
+                    parentTableId = data['value'];
+                }else if( data['id'] == 'temp_id' ){
+                    parentTempId = data['value'];
+                }
+            }
+            for( let data of formData ){
+                data['tableId']=this.tableId;
+                if( data.type == "year" ){
+                    if( data.value == "" ){
+                        data.value = String( myYear );
+                    }
+                }else if( data.type == "correspondence" ){
+                    data['parent_real_id'] = parentRealId;
+                    data['parent_table_id'] = parentTableId;
+                    data['parent_temp_id'] = parentTempId;
+                }else if(data.type == "datetime"){
+                    // if( data.value.length == 19 ){
+                    //     data.value = data.value.slice( 0,16 )
+                    // }
+                }
+            }
 
-import Comment from '../components/comment/comment';
+            if(res['record_info']['id']){
+                let recordId = res['record_info']['id'];
+                for(let d of this.data){
+                    if(d['type'] == 'songrid'){
+                        d['recordId']=recordId;
+                    }
+                }
+            }
+        }
+    }
+},
+    //默认表单
+    formDefaultVersion : function (data){
+    let html='<div class="form">';
+    for(let obj of data){
+        html+=`<div data-dfield="${obj.dfield}" data-type="${obj.type}"></div>`;
+    }
+    html+='</div>'
+    return html;
+},
 
-let comment = new Comment();
+    destoryForm(tableID){
+        $(`#form-${tableID}`).remove();
+    },
+    //创建表单入口
+    createForm:function(config={}){
+        let _this=this;
+        if(this.tableId){
+            this.destoryForm(this.tableId);
+        }
+        this.init(config);
+        let tableID=this.tableId;
+        let html=$(`<div id="form-${tableID}" style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">`).appendTo(this.el);
+        let template='';
+        let json=this.createPostJson();
+        FormService.getFormData(json).then(res=>{
+            template=_this.formDefaultVersion(res[0].data);
+            let data=_this.mergeFormData(res[0],res[1]);
+            let formData={
+                template:template,
+                data:data,
+            }
+            _this.formBase=new FormBase(formData);
+            _this.formBase.render(html);
+        });
+    }
+}
 
-// comment.render($('#comments'));
+$('#toEdit').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.createForm({
+        table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
+    });
+});
+$('#count').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.createForm({
+        table_id:'7051_UoWnaxPaVSZhZcxZPbEDpG',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
+    });
+});
+$('#editRequired').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.createForm({
+        table_id:'3461_P28RYPGTGGE7DVXH8LBMHe',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
+    });
+});
+$('#defaultValue').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.createForm({
+        table_id:'1160_ex7EbDsyoexufF2UbXBmSJ',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
+    });
+});
+$('#exp').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    // FormEntrys.createForm({
+    //     tableId:'7336_HkkDT7bQQfqBag4kTiFWoa',
+    //     seqId:'yudeping',
+    //     el:$('body'),
+    //     isView:isView,
+    //     realId:realId
+    // });
+    FormEntrys.createForm({
+        form_id:206,
+        record_id:'',
+        reload_draft_data:0,
+         from_workflow:1,
+        table_id:'3277_k5JFeqSiX2iuCvM3rXay9L'
+    });
+
+})
+export default FormEntrys

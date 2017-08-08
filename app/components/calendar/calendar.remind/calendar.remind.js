@@ -21,12 +21,14 @@ let config = {
     },
     afterRender: function() {
         console.log(this.data.remindDetail);
-        this.data.remindDetail[0].forEach(item => {
-            console.log(item);
-            $('.detail').prepend('<tr><td class="detail-title">'+ item['fieldName'] +'</td><td class="detail-content">'+ item['fieldValue'] +'</td></tr>')
-        });
-        $('.open-form').on('click', function () {
-            console.log('ss');
+        this.data.remindDetail.forEach(items => {
+            items.forEach(item => {
+                console.log(item);
+                $('.detail').prepend('<tr><td class="detail-title">'+ item['fieldName'] +'</td><td class="detail-content">'+ item['fieldValue'] +'</td></tr>')
+            });
+            $('.open-form').on('click', function () {
+
+            });
         });
     }
 };

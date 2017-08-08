@@ -8,6 +8,7 @@ import './calendar.main.scss';
 import CalendarMonth from './calendar.month/calendar.month';
 import CalendarWeek from './calendar.week/calendar.week';
 import CalendarDay from './calendar.day/calendar.day';
+import CalendarSchedule from './calendar.schedule/calendar.schedule';
 
 import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
@@ -56,6 +57,10 @@ let config = {
         fieldInfos: {},
 
         searchText: '',
+
+        scheduleStart: '',
+        scheduleEnd: '',
+        scheduleDataList: [],
     },
     actions: {
         getDayNumOfMonth: function ( year , month ) {
@@ -66,6 +71,16 @@ let config = {
         getWeekByDay: function( year, month, day ){
             let d = new Date( year, month, day );
             return d.getDay();
+        },
+        addOneDay: function( oldDay ){
+            let oMyTime = new Date( oldDay ).getTime();
+            oMyTime = oMyTime + 24*60*60*1000;
+            let nweTime = new Date(oMyTime);
+            let year = nweTime.getFullYear(),
+                month = nweTime.getMonth(),
+                day = nweTime.getDate(),
+                week = nweTime.getDay();
+            return year+'-'+this.actions.addZero(month+1)+'-'+this.actions.addZero(day);
         },
         addZero: function( num ){
             return ( num < 10 ) ? ( "0" + num ) : num;
@@ -89,6 +104,24 @@ let config = {
             }else{
                 return sColor;
             }
+        },
+
+        getCalendarData: function (data,type){
+            CalendarService.getCalendarData(data).then( res=>{
+                this.data.date2settings = res['date2csids'];
+                this.data.calendarSettings = res['id2data'];
+                this.data.tableid2name = res['tableid2name'];
+                this.data.fieldInfos = res['field_infos']
+                if(type === 'month') {
+                    this.actions.monthDataTogether();
+                }else {
+                    this.actions.makeScheduleData(data.from_date, data.to_date);
+                }
+                this.actions.getDataCount();
+            });
+            CalendarService.getWorkflowRecords(data).then(res => {
+                console.log(res);
+            })
         },
 
         getDataCount: function (){
@@ -264,14 +297,15 @@ let config = {
                     j++;
                 }
             }
-            console.log(this.data.monthDataList[0]['weekList'][0]['data']);
+
             this.data.from_date = this.data.monthDataList[0]['weekList'][0]['dataTime'];
             this.data.to_date = this.data.monthDataList[5]['weekList'][6]['dataTime'];
-            this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date});
+            this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date},'month');
         },
 
 
         createWeekCalendar: function (){
+            console.log(this.data.selectData);
             this.data.chooseDate = this.data.selectData.y + "-" + this.actions.addZero( this.data.selectData.m + 1 ) + "-" + this.actions.addZero( this.data.selectData.d );
             this.data.weekDataList = [];
             let weekData = [];
@@ -292,12 +326,14 @@ let config = {
             this.data.weekDataList.push( arrHead );
             this.data.weekDataList.push( weekData );
 
-            console.log(arrHead);
-            this.data.selectedDateShow = arrHead[0]['time'] + ' -- ' + arrHead[6]['time'];
-            $('.nowDate').html(this.data.selectedDateShow);
+            if(arrHead.length !== 0) {
+                this.data.selectedDateShow = arrHead[0]['time'] + ' -- ' + arrHead[6]['time'];
+                $('.nowDate').html(this.data.selectedDateShow);
 
-            this.data.from_date = arrHead[0]['time'];
-            this.data.to_date = arrHead[6]['time'];
+                this.data.from_date = arrHead[0]['time'];
+                this.data.to_date = arrHead[6]['time'];
+            }
+
         },
 
         createDayCalendar: function(){
@@ -316,6 +352,20 @@ let config = {
             this.data.from_date = date;
             this.data.to_date = date;
         },
+
+        makeScheduleData: function (startDate, endDate) {
+            this.data.scheduleStart = startDate;
+            this.data.scheduleEnd = endDate;
+            this.data.scheduleDataList = [];
+            for( let s_date = this.data.scheduleStart;s_date <= this.data.scheduleEnd; s_date = this.actions.addOneDay( s_date ) ){
+                let day = {dataTime: s_date};
+                this.actions.getDayData(day);
+                this.data.scheduleDataList.push(day);
+            }
+            this.el.find('.calendar-main-content').empty();
+            this.append(new CalendarSchedule({startDate: startDate, endDate: endDate, scheduleDataList: this.data.scheduleDataList}), this.el.find(".calendar-main-content"));
+        },
+
         changeMonth: function (lr) {
             let y = this.data.selectData['y'];
             let m = this.data.selectData['m'];
@@ -386,197 +436,186 @@ let config = {
 
         changeMainView: function (type) {
             this.data.calendarContent = type;
-            //$('.calendar-main-content').empty();
             this.el.find('.calendar-main-content').empty();
-            this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
 
             if(type === 'month') {
                 this.data.selectedDateShow = this.data.selectData.y +'年'+ ( this.data.selectData.m + 1 )  +'月';
                 $('.nowDate').html(this.data.selectedDateShow);
                 this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
             } else if (type === 'week') {
+                this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
                 this.actions.createWeekCalendar();
                 this.append(new CalendarWeek(this.data.weekDataList), this.el.find(".calendar-main-content"));
             } else if (type === 'day') {
+                this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
                 this.actions.createDayCalendar();
                 this.append(new CalendarDay(this.data.dayDataList), this.el.find(".calendar-main-content"));
-            } else if(type === 'schedule') {
-
             }
         },
 
-        getCalendarData: function (data){
-            CalendarService.getCalendarData(data).then( res=>{
-                console.log(res);
-                this.data.date2settings = res['date2csids'];
-                this.data.calendarSettings = res['id2data'];
-                this.data.tableid2name = res['tableid2name'];
-                this.data.fieldInfos = res['field_infos']
-                this.actions.monthDataTogether();
-                this.actions.getDataCount();
-            });
+        getDayData: function (day) {
+            //获取当日包含的设置
+            let calendarDate = [];
+            for( let date in this.data.date2settings ){
+                if( date.indexOf( day['dataTime'] ) !== -1 ){
+                    for( let d of this.data.date2settings[date] ){
+                        let i = 0;
+                        for( let c of calendarDate ){
+                            if( c.id === d ){
+                                i++
+                            }
+                        }
+                        if( i === 0 ){
+                            calendarDate.push( { id:d,date:day.dataTime } );
+                        }
+                    }
+                }
+            }
+            day['data'] = [];
+            for( let set of calendarDate ){
+                let setDetail = this.data.calendarSettings[set.id];
+                // console.log(setDetail);
+                // debugger;
+                for( let select of setDetail['selectedOpts_data'] ){
+
+                    if( select[setDetail['field_id']].indexOf(day.dataTime) === -1 ){
+                        continue;
+                    }
+
+                    let arrData = {};
+
+                    if( setDetail.type === 0 ){
+                        arrData['tableId'] = setDetail.table_id;
+                        arrData['time'] = set.date;
+                        arrData['setId'] = set.id;
+                        arrData['dfield'] = setDetail.dfield;
+                        arrData['color'] = this.actions.colorRgb( setDetail.color , 0.5 );
+                        arrData['isDrag'] = setDetail.is_drag;
+                        arrData['real_ids'] = JSON.stringify( setDetail.real_ids );
+                        arrData['real_id'] = JSON.stringify( [select._id] );
+                        arrData['tableName'] = this.data.tableid2name[setDetail.table_id];
+                        arrData['fieldId'] = setDetail.field_id;
+                        arrData['fieldName'] = this.data.fieldInfos[setDetail.field_id]['dname'];
+                        arrData['type'] = 1;
+                        arrData['isShow'] = this.data.searchText === '' ? true : false;
+
+                        let selectFieldId = '';
+                        if( setDetail['selectedEnums']&&setDetail['selectedEnums'][0]&&setDetail['selectedEnums'][0]!=='' ){
+                            selectFieldId = setDetail['selectedEnums'][0];
+                            arrData['selectOption'] = [];
+                            arrData['selectOption'] = setDetail['selectedEnums_options'][selectFieldId] || [];
+                            arrData['selectFieldId'] = selectFieldId;
+                            arrData['selectField'] = this.data.fieldInfos[selectFieldId]?this.data.fieldInfos[selectFieldId].dfield : '';
+                            arrData['selectFieldName'] = this.data.fieldInfos[selectFieldId]?this.data.fieldInfos[selectFieldId].dname : '';
+                            arrData['isSetSelect'] = true;
+                        }else {
+                            arrData['isSetSelect'] = false;
+                        }
+
+                        //循环里面每一个小的数据
+                        let data2show = [];
+                        let everyData = [];
+                        for( let key in select ){
+                            if( key === '_id' || ( !this.data.fieldInfos[key] ) ){
+                                continue;
+                            }
+                            everyData.push( {
+                                fieldId: key,
+                                _id: select['_id'],
+                                fieldName: this.data.fieldInfos[key]['dname'] || '',
+                                fieldValue: select[key] || ''
+                            } )
+                        }
+                        for( let d of everyData ){
+                            if( !arrData['isShow'] && this.data.searchText !== '' && ( d.fieldName.indexOf( this.data.searchText ) !== -1 || d.fieldValue.toString().indexOf( this.data.searchText ) !== -1 ) ){
+                                arrData['isShow'] = true;
+                                break;
+                            }
+                        }
+
+                        data2show.push( everyData );
+                        arrData['data2show'] = data2show;
+
+
+
+                        //循环里面每一个小的数据
+                        let data3show = [];
+                        let select_3 = setDetail['selectedRepresents_data'][setDetail['selectedOpts_data'].indexOf(select)];
+                        let everyData_3 = [];
+                        for( let key in select_3 ){
+                            if( key === '_id' || ( !this.data.fieldInfos[key] ) ){
+                                continue;
+                            }
+                            everyData_3.push( {
+                                fieldId: key,
+                                _id: select_3['_id'],
+                                fieldName: this.data.fieldInfos[key]['dname'] || '',
+                                fieldValue: select_3[key] || ''
+                            } );
+                            if( selectFieldId !== '' ){
+                                everyData_3[0]['selectValue'] = '';
+                                for( let s of setDetail['selectedEnums_data'] ){
+                                    if( s._id === select_3['_id'] ){
+                                        let selectLabel = s[selectFieldId];
+                                        for( let o of arrData['selectOption'] ){
+                                            if( o.label === selectLabel ){
+                                                everyData_3[0]['selectValue'] = o.value;
+                                                everyData_3[0]['selectLabel'] = selectLabel;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        for( let d of everyData_3 ){
+                            if( !arrData['isShow'] && this.data.searchText !== '' && ( d.fieldName.indexOf( this.data.searchText ) !== -1 || d.fieldValue.toString().indexOf( this.data.searchText ) !== -1 ) ){
+                                arrData['isShow'] = true;
+                                break;
+                            }
+                        }
+                        data3show.push( everyData_3 );
+                        arrData['data3show'] = data3show;
+                        day['data'].push( arrData );
+                    }
+
+                }
+            }
+            // 工作流数据
+            for( let d of this.data.workflowData ){
+                if( d['create_time'].indexOf( day.dataTime ) !== -1 ){
+                    day['data'].push( {
+                        data: d,
+                        color: this.colorRgb( '#64A6EF' , 0.5 ),
+                        srcColor: '#64A6EF',
+                        isDrag:0,
+                        isShow: true,
+                        type: 3
+                    } )
+                }
+            }
+
+            //任务数据
+            for( let d of this.data.missionData ){
+                if( d['time'].indexOf( day.dataTime ) !== -1 ){
+                    day['data'].push( {
+                        data: d,
+                        color: this.actions.colorRgb( '#FE8B67' , 0.5 ),
+                        srcColor: '#FE8B67',
+                        isDrag:0,
+                        isShow: true,
+                        type: 4
+                    } )
+                }
+            }
+            day['dateLength'] = day['data'].length || 0;
         },
 
         monthDataTogether: function (){
             for( let week of this.data.monthDataList ){
                 for( let day of week['weekList'] ){
-                    //获取当日包含的设置
-                    let calendarDate = [];
-                    for( let date in this.data.date2settings ){
-                        if( date.indexOf( day['dataTime'] ) !== -1 ){
-                            for( let d of this.data.date2settings[date] ){
-                                let i = 0;
-                                for( let c of calendarDate ){
-                                    if( c.id === d ){
-                                        i++
-                                    }
-                                }
-                                if( i === 0 ){
-                                    calendarDate.push( { id:d,date:day.dataTime } );
-                                }
-                            }
-                        }
-                    }
-                    day['data'] = [];
-                    for( let set of calendarDate ){
-                        let setDetail = this.data.calendarSettings[set.id];
-                        // console.log(setDetail);
-                        // debugger;
-                        for( let select of setDetail['selectedOpts_data'] ){
-
-                            if( select[setDetail.field_id].indexOf(day.dataTime) === -1 ){
-                                continue;
-                            }
-
-                            let arrData = {};
-
-                            if( setDetail.type === 0 ){
-                                arrData['tableId'] = setDetail.table_id;
-                                arrData['time'] = set.date;
-                                arrData['setId'] = set.id;
-                                arrData['dfield'] = setDetail.dfield;
-                                arrData['color'] = this.actions.colorRgb( setDetail.color , 0.5 );
-                                arrData['isDrag'] = setDetail.is_drag;
-                                arrData['real_ids'] = JSON.stringify( setDetail.real_ids );
-                                arrData['real_id'] = JSON.stringify( [select._id] );
-                                arrData['tableName'] = this.data.tableid2name[setDetail.table_id];
-                                arrData['fieldId'] = setDetail.field_id;
-                                arrData['fieldName'] = this.data.fieldInfos[setDetail.field_id]['dname'];
-                                arrData['type'] = 1;
-                                arrData['isShow'] = this.data.searchText === '' ? true : false;
-
-                                let selectFieldId = '';
-                                if( setDetail['selectedEnums']&&setDetail['selectedEnums'][0]&&setDetail['selectedEnums'][0]!=='' ){
-                                    selectFieldId = setDetail['selectedEnums'][0];
-                                    arrData['selectOption'] = [];
-                                    arrData['selectOption'] = setDetail['selectedEnums_options'][selectFieldId] || [];
-                                    arrData['selectFieldId'] = selectFieldId;
-                                    arrData['selectField'] = this.data.fieldInfos[selectFieldId]?this.data.fieldInfos[selectFieldId].dfield : '';
-                                    arrData['selectFieldName'] = this.data.fieldInfos[selectFieldId]?this.data.fieldInfos[selectFieldId].dname : '';
-                                    arrData['isSetSelect'] = true;
-                                }else {
-                                    arrData['isSetSelect'] = false;
-                                }
-
-                                //循环里面每一个小的数据
-                                let data2show = [];
-                                let everyData = [];
-                                for( let key in select ){
-                                    if( key === '_id' || ( !this.data.fieldInfos[key] ) ){
-                                        continue;
-                                    }
-                                    everyData.push( {
-                                        fieldId: key,
-                                        _id: select['_id'],
-                                        fieldName: this.data.fieldInfos[key]['dname'] || '',
-                                        fieldValue: select[key] || ''
-                                    } )
-                                }
-                                for( let d of everyData ){
-                                    if( !arrData['isShow'] && this.data.searchText !== '' && ( d.fieldName.indexOf( this.data.searchText ) !== -1 || d.fieldValue.toString().indexOf( this.data.searchText ) !== -1 ) ){
-                                        arrData['isShow'] = true;
-                                        break;
-                                    }
-                                }
-
-                                data2show.push( everyData );
-                                arrData['data2show'] = data2show;
-
-
-
-                                //循环里面每一个小的数据
-                                let data3show = [];
-                                let select_3 = setDetail['selectedRepresents_data'][setDetail['selectedOpts_data'].indexOf(select)];
-                                let everyData_3 = [];
-                                for( let key in select_3 ){
-                                    if( key === '_id' || ( !this.data.fieldInfos[key] ) ){
-                                        continue;
-                                    }
-                                    everyData_3.push( {
-                                        fieldId: key,
-                                        _id: select_3['_id'],
-                                        fieldName: this.data.fieldInfos[key]['dname'] || '',
-                                        fieldValue: select_3[key] || ''
-                                    } );
-                                    if( selectFieldId !== '' ){
-                                        everyData_3[0]['selectValue'] = '';
-                                        for( let s of setDetail['selectedEnums_data'] ){
-                                            if( s._id === select_3['_id'] ){
-                                                let selectLabel = s[selectFieldId];
-                                                for( let o of arrData['selectOption'] ){
-                                                    if( o.label === selectLabel ){
-                                                        everyData_3[0]['selectValue'] = o.value;
-                                                        everyData_3[0]['selectLabel'] = selectLabel;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                for( let d of everyData_3 ){
-                                    if( !arrData['isShow'] && this.data.searchText !== '' && ( d.fieldName.indexOf( this.data.searchText ) !== -1 || d.fieldValue.toString().indexOf( this.data.searchText ) !== -1 ) ){
-                                        arrData['isShow'] = true;
-                                        break;
-                                    }
-                                }
-                                data3show.push( everyData_3 );
-                                arrData['data3show'] = data3show;
-                                day['data'].push( arrData );
-                            }
-
-                        }
-                    }
-                    // 工作流数据
-                    for( let d of this.data.workflowData ){
-                        if( d['create_time'].indexOf( day.dataTime ) !== -1 ){
-                            day['data'].push( {
-                                data: d,
-                                color: this.colorRgb( '#64A6EF' , 0.5 ),
-                                srcColor: '#64A6EF',
-                                isDrag:0,
-                                isShow: true,
-                                type: 3
-                            } )
-                        }
-                    }
-
-                    //任务数据
-                    for( let d of this.data.missionData ){
-                        if( d['time'].indexOf( day.dataTime ) !== -1 ){
-                            day['data'].push( {
-                                data: d,
-                                color: this.actions.colorRgb( '#FE8B67' , 0.5 ),
-                                srcColor: '#FE8B67',
-                                isDrag:0,
-                                isShow: true,
-                                type: 4
-                            } )
-                        }
-                    }
-                    day['dateLength'] = day['data'].length || 0;
+                    this.actions.getDayData(day);
                 }
             }
-            //$('.calendar-main-content').empty();
             this.el.find('.calendar-main-content').empty();
             if(this.data.calendarContent === 'month') {
                 this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
@@ -632,8 +671,11 @@ let config = {
             }
         }).on('click', '.update-icon', () => {
 
-        }).on('click', '.schedule', () => {
-            this.actions.changeMainView('schedule');
+        }).on('click', '#schedule', () => {
+            console.log(this.data.from_date, this.data.to_date);
+            this.el.find('.calendar-main-content').empty();
+            this.actions.makeScheduleData(this.data.from_date, this.data.to_date);
+
         });
         CalendarService.CalendarMsgMediator.subscribe('leftSelectedDate',data => {
             let y = Number(data['year']),
@@ -652,10 +694,17 @@ let config = {
                 this.actions.changeMainView('day');
             }
         });
+        let that = this;
+        window.addEventListener('message', function (e) {
+            console.log('e',e.data);
+            that.actions.getCalendarData(e.data,'schedule');
+            that.data.scheduleStart = e.data.from_date;
+            that.data.scheduleEnd = e.data.to_date;
+        });
 
-        CalendarService.CalendarMsgMediator.subscribe('unshowData', data => {
-            console.log(data);
-        })
+        // CalendarService.CalendarMsgMediator.subscribe('unshowData', data => {
+        //     console.log(data);
+        // })
 
     }
 };

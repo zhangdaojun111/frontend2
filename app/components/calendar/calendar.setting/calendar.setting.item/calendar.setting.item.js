@@ -6,6 +6,7 @@ import template from './calendar.setting.item.html';
 import './calendar.setting.item.scss';
 
 import CalendarSet from '../../../calendar.set/calendar.set';
+import {PMAPI} from '../../../../lib/postmsg';
 
 
 let config = {
@@ -25,19 +26,26 @@ let config = {
             this.el.find('.menu-item').append(menuItem);
             menuItem.onclick = function () {
                 console.log(item);
-                let component = new CalendarSet();
-                let el = $('<div>').appendTo(document.body);
-                component.render(el);
-                el.dialog({
-                    title: '日历设置',
-                    width: '99%',
-                    height: '950',
-                    background: '#ddd',
-                    close: function() {
-                        $(this).dialog('destroy');
-                        component.destroySelf();
-                    }
-                });
+                // let component = new CalendarSet();
+                // let el = $('<div>').appendTo(document.body);
+                // component.render(el);
+                // el.dialog({
+                //     title: '日历设置',
+                //     width: '99%',
+                //     height: '950',
+                //     background: '#ddd',
+                //     close: function() {
+                //         $(this).dialog('destroy');
+                //         component.destroySelf();
+                //     }
+                // });
+                PMAPI.openDialogByIframe(
+                    'http://127.0.0.1:8088/calendar_mgr/set/&table_id='+item['tableId'],
+                    {
+                        width: "100%",
+                        height: '900',
+                        title: '设置'
+                    })
             }
         });
     }
