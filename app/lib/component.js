@@ -1,9 +1,7 @@
 import Handlerbar from 'handlebars';
 
 let componentId = 10000;
-let map = new WeakMap();
-
-class Component {
+let map = new WeakMap();class Component {
 
     constructor(config, data) {
 

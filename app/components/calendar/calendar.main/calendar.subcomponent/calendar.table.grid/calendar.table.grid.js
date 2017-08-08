@@ -56,11 +56,11 @@ let config = {
                             component.destroySelf();
                         }
                     });
-                }
+                };
+
             });
 
         }
-
     }
 };
 

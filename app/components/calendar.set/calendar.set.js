@@ -18,10 +18,12 @@ let config = {
     actions: {
     },
     afterRender: function() {
-        let tableSettingData = CalendarService.getCalendarTableById({table_id:'1', isSelected: 1});
-        tableSettingData['rows'].forEach(setItem => {
-            this.append(new CalendarSetItem(setItem), this.el.find('.set-items'));
-        });
+        console.log(window.config.table_id);
+
+        // let tableSettingData = CalendarService.getCalendarTableById({table_id:'1', isSelected: 1});
+        // tableSettingData['rows'].forEach(setItem => {
+        //     this.append(new CalendarSetItem(setItem), this.el.find('.set-items'));
+        // });
     }
 };
 
