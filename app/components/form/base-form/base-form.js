@@ -1063,11 +1063,8 @@ let config={
                 }
             }
             //在这里根据type创建各自的控件
-<<<<<<< HEAD
             // console.log('到谁了该');
             // console.log(data[key].type)
-=======
->>>>>>> d914937d64dfc4f59569efb04c6ae2d30f19a489
             switch (type){
                 case 'Radio':
                     for(let obj of data[key].group){
