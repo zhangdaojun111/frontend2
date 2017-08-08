@@ -11,11 +11,8 @@ import WorkflowRecord from '../components/workflow/approval-record/approval-reco
 import WorkflowInitial from '../components/workflow/workflow-initial';
 import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
 import ApprovalHeader from '../components/workflow/approval-header/approval-header';
-
 import ApprovalWorkflow from '../components/workflow/approval-workflow';
-
 import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow';
-
 import FormEntrys from './form';
 import TreeView from  '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
@@ -44,58 +41,23 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             return workflowService.validateDraftData({form_id:msg.formid});
         })
         .then(res=>{
-            let is_draft=0;
             if(res.the_last_draft!=''){
-                var a=msgBox.confirm('asdasd')
-                a.then(res=>{
-                    console.log("res:"+res);
-                },rej=>{
-                    console.log("rej:"+rej);
-                })
-                // $( "#dialog-confirm" ).dialog({
-                //     title:'提示',
-                //     resizable: false,
-                //     height: "auto",
-                //     width: 400,
-                //     modal: true,
-                //     buttons: {
-                //         "确认": function() {
-                //             $( this ).dialog( "close" );
-                //             //todo get draft info
-                //             is_draft=1;
-                //         },
-                //         "取消": function() {
-                //             $( this ).dialog( "close" );
-                //             is_draft=0;
-                //         }
-                //     }
-                // });
-                // $("#dialog-confirm").html('');
-                
-                // $("#dialog-confirm").append(`<p><span class="ui-icon ui-icon-alert"></span>
-                //     您于${res.the_last_draft}时填写该工作表单尚未保存，是否继续编辑？
-                // </p>`);
-
-
+                return msgBox.confirm(`您于${res.the_last_draft}时填写该工作表单尚未保存，是否继续编辑？`)
             }else{
-                is_draft=0;
-                alert('there is no draft,没有草稿');
+                return 0;
             }
         }).then((is_draft)=>{
-        console.log(`tableid:${msg.tableid}`);
+        is_draft=is_draft==true?1:0;
         $('#place-form').html('');
         FormEntrys.createForm({
             reload_draft_data:is_draft,
             table_id:msg.tableid,
             el:'#place-form',
-            is_view:1,
-            real_id:''
+            real_id:'',
+            from_workflow:1,
+            form_id:msg.formid
         });
-        
-        $("#workflow-create").append(`<button id="submitWF" class="ui-button ui-widget ui-corner-all">提交</button>`);
-        
     })
-
 });
 
 //订阅收藏常用workflow
