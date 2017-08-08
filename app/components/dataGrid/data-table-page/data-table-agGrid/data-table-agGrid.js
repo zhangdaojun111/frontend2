@@ -30,7 +30,7 @@ let config = {
         // 提醒颜色
         remindColor: {remind_color_info: {}, info: ''},
         //数据总数
-        total: 1000,
+        total: 0,
         //展示的数据行数
         rows: 100,
         //第一条数据位置
@@ -88,7 +88,9 @@ let config = {
         //是否分组
         groupCheck: false,
         //是否显示定制列panel
-        isShowCustomPanel: false
+        isShowCustomPanel: false,
+        //排序方式
+        frontendSort: true
     },
     //生成的表头数据
     columnDefs: [],
@@ -746,6 +748,7 @@ let config = {
                     //赋值
                     this.agGrid.actions.setGridData(d);
                 }
+                this.actions.sortWay();
             })
             HTTP.flush();
         },
@@ -1044,11 +1047,16 @@ let config = {
         },
         //获取高级查询数据
         getExpertSearchData: function () {
-            let obj = {'actions':['queryParams'],'table_id':this.data.tableId}
+            let obj = {'actions':JSON.stringify( ['queryParams'] ),'table_id':this.data.tableId};
             dataTableService.getPreferences( obj ).then( res=>{
 
             } );
             HTTP.flush();
+        },
+        //排序方式
+        sortWay: function () {
+            this.data.frontendSort = this.data.total <= this.data.rows;
+            console.log( '排序方式：' + this.data.frontendSort?'前端排序':'后端排序' );
         }
     },
     afterRender: function () {
