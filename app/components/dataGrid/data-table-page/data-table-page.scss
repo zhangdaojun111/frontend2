@@ -8,7 +8,12 @@
 
 .page-tab {
   height: 30px;
+  line-height: 30px;
+  background-color: #eeeeee;
   ul {
+    width: 100%;
+    height: 100%;
+    line-height: 30px;
     display: block;
     margin: 0;
     padding: 0;
@@ -16,6 +21,12 @@
       display: block;
       float: left;
       margin: 0 5px;
+      font-size: 14px;
+      line-height: 30px;
+      cursor: pointer;
+    }
+    li:hover{
+      background:rgba(187, 220, 255, 1);
     }
   }
 }
