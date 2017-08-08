@@ -5,6 +5,8 @@ import Component from "../../../../lib/component";
 import template from './calendar.schedule.html';
 import './calendar.schedule.scss';
 
+import CalendarScheduleItem from './calendar.schedule.item/calendar.schedule.item';
+
 import {PMAPI} from '../../../../lib/postmsg';
 
 
@@ -33,9 +35,13 @@ let config = {
     afterRender: function() {
         $('.start-date').val(this.data.scheduleStart);
         $('.end-date').val(this.data.scheduleEnd);
-        let that = this;
         this.el.css({"height":"100%","width":"100%"});
 
+        this.data.scheduleDataList.forEach(item => {
+            this.append(new CalendarScheduleItem({dayDate: item['dataTime'], dayScheduleList: item['data']}), this.el.find('.schedule-content'));
+        });
+
+        let that = this;
         this.el.on('input propertychange', '.start-date', function () {
 
         }).on('input propertychange', '.end-date', function () {

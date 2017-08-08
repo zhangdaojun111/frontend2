@@ -1,7 +1,7 @@
 /**
  * Created by zj on 2017/8/7.
  */
-import Component from "../../../lib/component";
+import Component from "../../../../lib/component";
 import template from './calendar.remind.html';
 import './calendar.remind.scss';
 

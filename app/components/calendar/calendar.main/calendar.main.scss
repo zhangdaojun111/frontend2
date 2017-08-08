@@ -8,6 +8,9 @@
     }
     .datepick {
         padding: 0px 20px;
+        .pre-date, .next-date {
+            cursor: pointer;
+        }
     }
     .date-btns {
         .btn-change {
@@ -17,6 +20,7 @@
             border: 1px solid $btn-bg-color;
             border-radius: 5px;
             margin-right: 15px;
+            cursor: pointer;
             &:hover {
                 background: $btn-bg-color;
                 color: #fff;
@@ -24,6 +28,7 @@
         }
         .btn {
             margin-right: 15px;
+            cursor: pointer;
         }
     }
     .tools-right {
@@ -42,6 +47,7 @@
             background: $btn-bg-color;
             color: #fff;
             margin-top: 1px;
+            cursor: pointer;
         }
     }
 }

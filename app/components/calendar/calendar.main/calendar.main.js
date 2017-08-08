@@ -9,6 +9,7 @@ import CalendarMonth from './calendar.month/calendar.month';
 import CalendarWeek from './calendar.week/calendar.week';
 import CalendarDay from './calendar.day/calendar.day';
 import CalendarSchedule from './calendar.schedule/calendar.schedule';
+import CalendarExport from './calendar.export/calendar.export';
 
 import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
@@ -19,6 +20,7 @@ let config = {
         HeadList: [ '星期日','星期一', '星期二', '星期三', '星期四', '星期五', '星期六' ],
         chooseDate: '',
 
+
         monthDataList: [],
         weekDataList: [],
         dayDataList: [],
@@ -26,7 +28,8 @@ let config = {
         todayStr: '',
         calendarContent: 'month',
         selectData: {},
-        selectedDateShow: '2121',
+        selectedDateShow: '',
+        today: {},
 
         from_date: '',
         to_date: '',
@@ -106,6 +109,15 @@ let config = {
             }
         },
 
+        refresh: function () {
+            this.el.find('.calendar-main-content').empty();
+            if(this.data.calendarContent !== 'schedule') {
+
+            } else {
+                this.actions.makeScheduleData(this.data.from_date, this.data.to_date);
+            }
+        },
+
         getCalendarData: function (data,type){
             CalendarService.getCalendarData(data).then( res=>{
                 this.data.date2settings = res['date2csids'];
@@ -162,33 +174,33 @@ let config = {
                     }
                 }
             }else if( this.data.calendarContent === 'day' ){
-                // for( let d of this.data.dayDataList[0]['data'] ){
-                //     if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
-                //         i++;
-                //     }else if( d.type === 2 ){
-                //         j++;
-                //     }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
-                //         w++;
-                //     }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
-                //         m++;
-                //     }
-                // }
+                for( let d of this.data.dayDataList[0]['data'] ){
+                    if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
+                        i++;
+                    }else if( d.type === 2 ){
+                        j++;
+                    }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
+                        w++;
+                    }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
+                        m++;
+                    }
+                }
             }
-            // else if( this.data.calendarContent === 'schedule' ){
-            //     for( let day of this.scheduleDataList ){
-            //         for( let d of day['data'] ){
-            //             if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
-            //                 i++;
-            //             }else if( d.type === 2 ){
-            //                 j++;
-            //             }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
-            //                 w++;
-            //             }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
-            //                 m++;
-            //             }
-            //         }
-            //     }
-            // }
+            else if( this.data.calendarContent === 'schedule' ){
+                for( let day of this.scheduleDataList ){
+                    for( let d of day['data'] ){
+                        if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
+                            i++;
+                        }else if( d.type === 2 ){
+                            j++;
+                        }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
+                            w++;
+                        }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
+                            m++;
+                        }
+                    }
+                }
+            }
 
             this.data.remindCount = i;
             this.data.workflowCount = w;
@@ -474,7 +486,6 @@ let config = {
             day['data'] = [];
             for( let set of calendarDate ){
                 let setDetail = this.data.calendarSettings[set.id];
-                // console.log(setDetail);
                 // debugger;
                 for( let select of setDetail['selectedOpts_data'] ){
 
@@ -576,6 +587,7 @@ let config = {
                         data3show.push( everyData_3 );
                         arrData['data3show'] = data3show;
                         day['data'].push( arrData );
+
                     }
 
                 }
@@ -608,6 +620,7 @@ let config = {
                 }
             }
             day['dateLength'] = day['data'].length || 0;
+            //console.log(day);
         },
 
         monthDataTogether: function (){
@@ -616,6 +629,7 @@ let config = {
                     this.actions.getDayData(day);
                 }
             }
+
             this.el.find('.calendar-main-content').empty();
             if(this.data.calendarContent === 'month') {
                 this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
@@ -634,7 +648,8 @@ let config = {
             month = oDate.getMonth(),
             day = oDate.getDate(),
             week = oDate.getDay();
-        this.data.selectData = Object.assign({}, {'y': year, 'm':month, 'd':day, 'w':week});
+        this.data.today = Object.assign({}, {'y': year, 'm':month, 'd':day, 'w':week});
+        this.data.selectData = this.data.today;
         this.data.todayStr = year + "-" + this.actions.addZero( month + 1 ) + "-" + this.actions.addZero( day );
         this.data.chooseDate = year + "-" + this.actions.addZero( month + 1 ) + "-" + this.actions.addZero( day );
         this.data.selectedDateShow = year+'年'+(month+1) +'月';
@@ -672,10 +687,26 @@ let config = {
         }).on('click', '.update-icon', () => {
 
         }).on('click', '#schedule', () => {
-            console.log(this.data.from_date, this.data.to_date);
+            this.data.calendarContent = 'schedule';
             this.el.find('.calendar-main-content').empty();
             this.actions.makeScheduleData(this.data.from_date, this.data.to_date);
-
+        }).on('click', '#export', () => {
+            let component = new CalendarExport();
+            let el = $('<div>').appendTo(document.body);
+            component.render(el);
+            el.dialog({
+                title: '导出',
+                width: '350',
+                height: '150',
+                background: '#ddd',
+                close: function() {
+                    $(this).dialog('destroy');
+                    component.destroySelf();
+                }
+            });
+        }).on('click', '#todayView', () => {
+            this.data.selectData = this.data.today;
+            this.actions.changeMainView('day');
         });
 
         CalendarService.CalendarMsgMediator.subscribe('leftSelectedDate',data => {

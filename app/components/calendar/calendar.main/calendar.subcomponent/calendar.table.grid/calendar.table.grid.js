@@ -5,7 +5,7 @@ import Component from "../../../../../lib/component";
 import template from './calendar.table.grid.html';
 import './calendar.table.grid.scss';
 
-import CalendarRemind from '../../../calendar.remind/calendar.remind';
+import CalendarRemind from '../../calendar.remind/calendar.remind';
 
 import {PMAPI} from '../../../../../lib/postmsg';
 
