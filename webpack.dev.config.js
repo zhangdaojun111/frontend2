@@ -27,6 +27,7 @@ module.exports = {
 
     entry: {
         form: path.resolve(APP_PATH, 'entrys/form.js'),
+        addNewBuild: path.resolve(APP_PATH, 'entrys/popup/addNewBuild.js'),
         workflow: path.resolve(APP_PATH, 'entrys/workflow.js'),
         // login:path.resolve(APP_PATH, 'entrys/login.js'),
         // dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),

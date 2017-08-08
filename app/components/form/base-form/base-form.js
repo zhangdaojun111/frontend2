@@ -18,7 +18,7 @@ import MultiSelectControl from "../multi-select-control/multi-select-control";
 import EditorControl from "../editor-control/editor";
 import SettingTextareaControl from "../setting-textarea-control/setting-textarea";
 import AddItem from '../add-item/add-item';
-import {PMAPI} from '../../../lib/postmsg';
+import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import History from'../history/history'
 
 let config={
@@ -40,6 +40,11 @@ let config={
     },
     childComponent:{},
     actions:{
+
+        //返回formValue格式数据
+        getFormValue(){
+            return this.actions.createFormValue(this.data.data);
+        },
 
         //根据dfield查找类型
         findTypeByDfield(dfield) {
@@ -575,7 +580,11 @@ let config={
         //创建表单数据格式
         createFormValue(data){
             let formValue={};
+            console.log(data);
             for(let key in data){
+                if(!data[key].value || !data[key].value.length || data[key].value.length == 0){
+                    continue;
+                }
                 formValue[key]=data[key].value;
             }
             return formValue;
@@ -690,6 +699,18 @@ let config={
 
         //提交表单数据
         onSubmit(newData,oldData){
+            if(1){
+                let data={new_option:{
+                    py: "213213(lz)",
+                    value: "59892cbeca8b367dfbcff98d",
+                    label: "213213(离职)"}}
+                PMAPI.sendToParent({
+                    type: PMENUM.close_dialog,
+                    key:this.data.key,
+                    data:data
+                });
+                return;
+            }
             let formValue=this.actions.createFormValue(this.data.data);
             let {error,errorMsg} = this.actions.validForm(this.data.data,formValue);
             if(error){
@@ -770,17 +791,8 @@ let config={
             }
             let obj_new = this.actions.createCacheData( formDataNew  , data , true, this);
             let obj_old = this.actions.createCacheData( formDataNew  , data , false, this);
-            //只传改动过的key
-            // let postData = {};
-            // if( this.isJustChange ){
-            //     let list = this.filterKeys(obj_new,obj_old,formDataNew);
-            //     postData = this.postChangedData(list,data);
-            // }else {
-            //     postData = this.approvedFormData;
-            // }
             this.actions.changeValueForChildTable(data);
             let json = {
-                // data: JSON.stringify(data),
                 data: encodeURIComponent( JSON.stringify(data) ),
                 focus_users: this.focus_users,
                 cache_new: encodeURIComponent( JSON.stringify( obj_new ) ),
@@ -1173,6 +1185,26 @@ let config={
             }).then((data) => {
                 console.log('快捷添加回显');
                 _this.actions.addNewItem(data);
+            });
+        })
+        Mediator.subscribe('form:addNewBuildIn:'+_this.data.tableId,function(data){
+            _this.data.quikAddDfield=data.dfield;
+            console.log(data);
+            PMAPI.openDialogByIframe(`/form/add_buildin?table_id=${data.source_table_id}`,{
+                width:800,
+                height:600,
+                title:`快捷添加内置字段`
+            }).then((data) => {
+                let options=_this.childComponent[_this.data.quikAddDfield].data['options'];
+                if(options[0]['label'] == '请选择' || options[0]['label']==''){
+                    options.splice(1,0,data.new_option);
+                }else{
+                    options.splice(0,0,data.new_option);
+                }
+                _this.childComponent[_this.data.quikAddDfield].data.value=data.new_option.value;
+                _this.childComponent[_this.data.quikAddDfield].data.showValue=data.new_option.label;
+                _this.data.data[_this.data.quikAddDfield]=_this.childComponent[_this.data.quikAddDfield].data;
+                _this.childComponent[_this.data.quikAddDfield].reload();
             });
         })
 
