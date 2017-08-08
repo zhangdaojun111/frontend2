@@ -24,6 +24,8 @@ let config = {
         onColumnResized:function ($event) {
         },
         onDragStopped:function ($event) {
+        },
+        onSortChanged:function ($event) {
         }
     },
     gridOptions: GridOptions,
@@ -35,7 +37,7 @@ let config = {
                 pinnedBottomRowData: this.data.footerData,
                 floatingFilter: this.data.floatingFilter,
                 suppressFilterButton: true,
-                animateRows: true,
+                animateRows: false,
                 suppressMultiSort: true,
                 enableColResize: true,
                 enableSorting: true,
@@ -71,7 +73,9 @@ let config = {
                             group: false
                         };
                     }
-                }
+                },
+                //排序
+                onSortChanged: this.data.onSortChanged
             }
         },
         createAgGrid: function (){
