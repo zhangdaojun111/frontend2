@@ -55,7 +55,7 @@ let config = {
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
-        let data = {from_date: "2017-05-01", to_date: "2017-05-31"};
+        let data = {from_date: "2016-05-01", to_date: "2017-05-31"};
         CalendarService.getWorkflowRecords(data).then(res => {
             console.log('res', res);
         });

@@ -14,8 +14,8 @@ let config = {
     afterRender: function() {
         this.el.css("height","30px");
         let workflow_Id = "#workflow-"+config.data.table_id;
-        $("#workflow").attr("id","workflow-"+config.data.table_id);
-        $(workflow_Id).css({"width":config.data.record_progress});
+        this.el.find("#workflow").attr("id","workflow-"+config.data.table_id);
+        this.el.find(workflow_Id).css({"width":config.data.record_progress});
         console.log(config.data);
     },
 }

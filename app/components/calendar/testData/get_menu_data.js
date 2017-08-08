@@ -5108,7 +5108,7 @@ export const table1190DataSet = {
                 "remind_time": "",
                 "receiver": []
             },
-            "color": "#000000",
+            "color": "#8FF000",
             "selectedOpts": [],
             "selectedEnums": [],
             "field_id": "4743_dapycVCRLJrLughEqcvSGS",
@@ -5123,7 +5123,7 @@ export const table1190DataSet = {
             }
         },
         {
-            "color": "#ff8000",
+            "color": "#3FF666",
             "field_id": "213_tsxRaXuUEMXLEFWkp4bwKL",
             "is_show_at_home_page": 1,
             "selectedEnums": [],
@@ -5164,7 +5164,7 @@ export const table1190DataSet = {
                 "remind_time": "",
                 "receiver": []
             },
-            "color": "#000000",
+            "color": "#FFD444",
             "selectedOpts": [],
             "selectedEnums": [],
             "field_id": "2067_KaLaVPHG8vcekX37PbyFcH",

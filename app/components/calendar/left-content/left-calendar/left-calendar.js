@@ -29,7 +29,7 @@ let config = {
             console.log(week);
             let calendarTable = [];
             for(let i=0 ;i<42;i++){
-                calendarTable[i] = "";　//清空原来的text文本
+                calendarTable[i] = "";　
             }
             let daysNowMonth = config.actions.getdays(yy,mm);
             for(let i = 0;i < daysNowMonth; i++){
@@ -88,62 +88,22 @@ let config = {
             }
             return strhtml;
         },
-        loadcalendarDate:function(yy,mm,dd){
-            $(".now-year").html(yy);
-            $(".now-month").html(mm);
-            $("#calendar-body").html();
+        loadcalendarDate:function(yy,mm,dd,that){
+            that.el.find(".now-year").html(yy);
+            that.el.find(".now-month").html(mm);
+            that.el.find("#calendar-body").html();
             let strhtml = config.actions.loadcalendarHtml(yy,mm,dd);
-            $("#calendar-body").html(strhtml);
-            $(".now-month-day").bind("click",function(){
-                let nowYear = $(".now-year").html(),
-                    nowMonth = $(".now-month").html(),
-                    nowDay = $(this).html();
+            that.el.find("#calendar-body").html(strhtml);
+            that.el.find(".now-month-day").bind("click",function(){
+                let nowYear = that.el.find(".now-year").html(),
+                    nowMonth = that.el.find(".now-month").html(),
+                    nowDay = that.el.find(this).html();
                 CalendarService.CalendarMsgMediator.publish('leftSelectedDate', {year: nowYear, month: nowMonth, day: nowDay});
-                $(".now-pitch-on").removeClass("now-pitch-on");
-                $(this).addClass("now-pitch-on");
-            });
-            $(".last-month-day").on("click",function(){
-                let nowYear = yy = $(".now-year").html(),
-                    nowMonth = mm = $(".now-month").html(),
-                    nowDay = dd = $(this).html();
-                if(mm == 1){
-                    mm = 12;
-                    yy = parseInt(yy)-1;
-                }
-                else{
-                    mm = parseInt(mm)-1;
-                }
-                CalendarService.CalendarMsgMediator.publish('last-month-day', {time: [yy,mm,dd]});
-                config.actions.loadCalendarLastMonthData(nowYear,nowMonth,nowDay);
-                let nowclickday = $(this).html();
-                $(".now-month-day").each(function(){
-                    if($(this).html() == nowclickday){
-                        $(this).addClass("now-pitch-on");
-                    }
-                });
-            });
-            $(".next-month-day").on("click",function(yy,mm,dd){
-                let nowYear = yy = $(".now-year").html(),
-                    nowMonth = mm = $(".now-month").html(),
-                    nowDay = dd = $(this).html();
-                if(mm == 12){
-                    mm = 1;
-                    yy = parseInt(yy)+1;
-                }
-                else{
-                    mm = parseInt(mm)+1;
-                }
-                CalendarService.CalendarMsgMediator.publish('next-month-day', {time: [yy,mm,dd]});
-                config.actions.loadCalendarNextMonthData(nowYear,nowMonth,nowDay);
-                let nowclickday = $(this).html();
-                $(".now-month-day").each(function(){
-                    if($(this).html() == nowclickday){
-                        $(this).addClass("now-pitch-on");
-                    }
-                });
+                that.el.find(".now-pitch-on").removeClass("now-pitch-on");
+                that.el.find(this).addClass("now-pitch-on");
             });
         },
-        loadCalendarLastMonthData:function(nowYear,nowMonth,dd){
+        loadCalendarLastMonthData:function(nowYear,nowMonth,dd,that){
             if(nowMonth == 1){
                 nowMonth = 12;
                 nowYear = nowYear -1;
@@ -151,9 +111,9 @@ let config = {
             else{
                 nowMonth = nowMonth - 1;
             }
-            config.actions.loadcalendarDate(nowYear,nowMonth,dd);
+            config.actions.loadcalendarDate(nowYear,nowMonth,dd,that);
         },
-        loadCalendarNextMonthData:function(nowYear,nowMonth,dd){
+        loadCalendarNextMonthData:function(nowYear,nowMonth,dd,that){
             if(nowMonth == 12){
                 nowMonth = 1;
                 nowYear = parseInt(nowYear)+1;
@@ -161,22 +121,60 @@ let config = {
             else{
                 nowMonth = parseInt(nowMonth)+1;
             }
-            config.actions.loadcalendarDate(nowYear,nowMonth,dd);
+            config.actions.loadcalendarDate(nowYear,nowMonth,dd,that);
         },
     },
     afterRender: function() {
-        config.actions.loadcalendarDate(year,month,day);
+        let that = this;
+        config.actions.loadcalendarDate(year,month,day,that);
         this.el.on("click",".change-month-left",function(){
-            let nowYear = $(".now-year").html(),
-                nowMonth = $(".now-month").html(), day = day;
-            config.actions.loadCalendarLastMonthData(nowYear,nowMonth,day);
+            let nowYear = that.el.find(".now-year").html(),
+                nowMonth = that.el.find(".now-month").html(), day = day;
+            config.actions.loadCalendarLastMonthData(nowYear,nowMonth,day,that);
         }).on("click",".change-month-right",function(){
-            let nowYear = $(".now-year").html(),
-                nowMonth = $(".now-month").html(),
+            let nowYear = that.el.find(".now-year").html(),
+                nowMonth = that.el.find(".now-month").html(),
                 day = day;
-            config.actions.loadCalendarNextMonthData(nowYear,nowMonth,day);
+            config.actions.loadCalendarNextMonthData(nowYear,nowMonth,day,that);
+        }).on("click",".last-month-day",function(yy,mm,dd){
+            let nowYear = yy = that.el.find(".now-year").html(),
+                nowMonth = mm = that.el.find(".now-month").html(),
+                nowDay = dd = $(this).html();
+            if(mm == 1){
+                mm = 12;
+                yy = parseInt(yy)-1;
+            }
+            else{
+                mm = parseInt(mm)-1;
+            }
+            CalendarService.CalendarMsgMediator.publish('last-month-day', {time: [yy,mm,dd]});
+            config.actions.loadCalendarLastMonthData(nowYear,nowMonth,nowDay,that);
+            let nowclickday = $(this).html();
+            that.el.find(".now-month-day").each(function(){
+                if($(this).html() == nowclickday){
+                    $(this).addClass("now-pitch-on");
+                }
+            });
+        }).on("click",".next-month-day",function(yy,mm,dd){
+            let nowYear = yy = that.el.find(".now-year").html(),
+                nowMonth = mm = that.el.find(".now-month").html(),
+                nowDay = dd = $(this).html();
+            if(mm == 12){
+                mm = 1;
+                yy = parseInt(yy)+1;
+            }
+            else{
+                mm = parseInt(mm)+1;
+            }
+            CalendarService.CalendarMsgMediator.publish('next-month-day', {time: [yy,mm,dd]});
+            config.actions.loadCalendarNextMonthData(nowYear,nowMonth,nowDay,that);
+            let nowclickday = $(this).html();
+            that.el.find(".now-month-day").each(function(){
+                if($(this).html() == nowclickday){
+                    $(this).addClass("now-pitch-on");
+                }
+            });
         });
-
     }
 };
 class Leftcalendar extends Component {

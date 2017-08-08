@@ -93,16 +93,16 @@ let config = {
         },
         contentHide:function(){
             if(this.data.contentStatus === 1){
-                $(".taskbar").animate({height:"61%"},300);
-                $(".cate-hide").animate({height:"4%"},100);
-                $(".item-content").hide();
+                this.el.find(".taskbar").animate({height:"61%"},300);
+                this.el.find(".cate-hide").animate({height:"4%"},100);
+                this.el.find(".item-content").hide();
                 this.data.contentStatus = 0;
             }
             else if(this.data.contentStatus === 0){
-                $(".taskbar").animate({height:"25%"},1);
-                $(".cate-hide").animate({height:"40%"});
+                this.el.find(".taskbar").animate({height:"25%"},1);
+                this.el.find(".cate-hide").animate({height:"40%"});
                 //$(".item-title").animate({marginTop:"100px"});
-                $(".item-content").show();
+                this.el.find(".item-content").show();
                 this.data.contentStatus = 1;
             }
         },
@@ -117,12 +117,12 @@ let config = {
                 temp.nextAll('.checkbox-group').show();
             }
         },
-        selectlabel:function(temp){
+        selectlabel:function(temp,that){
             let class_Name = ".select-children-"+temp.attr("id").split("-")[2];
             if(temp.prev('input').is(".label-select-all-checked"))
             {
                 temp.prev('input').removeClass("label-select-all-checked");
-                $(class_Name).each(function(){
+                that.el.find(class_Name).each(function(){
                     $(this).addClass('unchecked');
                     $(this).prev('input').removeAttr('checked');
                     let filedId = temp.attr("id").split("-")[2];
@@ -131,12 +131,11 @@ let config = {
                     }
                 });
                 CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
-                $("#checkbox_a3").removeClass('label-select-all-checked');
-            }
-            else {
+                that.el.find("#checkbox_a3").removeClass('label-select-all-checked');
+            } else {
                 temp.prev('input').addClass("label-select-all-checked");
-                $(class_Name).removeClass('unchecked');
-                $(class_Name).each(function(){
+                that.el.find(class_Name).removeClass('unchecked');
+                that.el.find(class_Name).each(function(){
                     let filedId = $(this).attr("id").split("-")[2];
                     if(config.data.cancel_fields.indexOf(filedId) != -1){
                         config.data.cancel_fields.splice($.inArray(filedId,config.data.cancel_fields),1);
@@ -144,27 +143,23 @@ let config = {
                 });
                 CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
                 let isAllGroupchecked = true;
-                $('.label-select-all-show').each(function(){
+                that.el.find('.label-select-all-show').each(function(){
                     if(!$(this).is('.label-select-all-checked')){
                         isAllGroupchecked = false;
                     }
                 });
                 if(isAllGroupchecked){
-                    $("#checkbox_a3").addClass('label-select-all-checked');
+                    that.el.find("#checkbox_a3").addClass('label-select-all-checked');
                 }
             }
         },
-        selectlabelchildren:function(temp){
-            var val1=temp.prevAll('input').attr('class');
-            var className1 = val1.split(" ");
-            let class_Name1 = "";
-            class_Name1 += className1[3];
-            var checkboxId = class_Name1.split("-");
+        selectlabelchildren:function(temp,that){
+            let checkboxId = temp.prevAll('input').attr('class').split(" ")[3].split("-");
             let fileId = checkboxId[2];
             let label_class = '.select-children-' +checkboxId[2];
             checkboxId = '#select-all-'+checkboxId[2];
-            $(checkboxId).attr('checked',false);
-            $(checkboxId).removeAttr('checked');
+            that.el.find(checkboxId).attr('checked',false);
+            that.el.find(checkboxId).removeAttr('checked');
             if(temp.is(".unchecked"))
             {
                 temp.removeClass('unchecked');
@@ -173,22 +168,22 @@ let config = {
                 config.data.cancel_fields.splice($.inArray(filedId,config.data.cancel_fields),1);
                 CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
                 let isAllchecked = true;
-                $(label_class).each(function(){
+                that.el.find(label_class).each(function(){
                     if($(this).is('.unchecked')){
                         isAllchecked = false;
                         return false;
                     }
                 });
                 if(isAllchecked){
-                    $(checkboxId).addClass('label-select-all-checked');
+                    that.el.find(checkboxId).addClass('label-select-all-checked');
                     let isAllGroupchecked = true;
-                    $('.label-select-all-show').each(function(){
+                    that.el.find('.label-select-all-show').each(function(){
                         if(!$(this).is('.label-select-all-checked')){
                             isAllGroupchecked = false;
                         }
                     });
                     if(isAllGroupchecked){
-                        $("#checkbox_a3").addClass('label-select-all-checked');
+                        that.el.find("#checkbox_a3").addClass('label-select-all-checked');
                     }
                 }
             }
@@ -200,60 +195,60 @@ let config = {
                     config.data.cancel_fields.push(filedId);
                 }
                 CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
-                $(checkboxId).removeClass('label-select-all-checked');
-                $("#checkbox_a3").removeClass('label-select-all-checked');
+                that.el.find(checkboxId).removeClass('label-select-all-checked');
+                that.el.find("#checkbox_a3").removeClass('label-select-all-checked');
             }
         },
-        checkbox_a3:function(temp){
+        checkbox_a3:function(temp,label_select_all_show,select_label_children){
             if(temp.is(".label-select-all-checked")){
                 temp.removeClass("label-select-all-checked");
-                $(".label-select-all-show").removeClass("label-select-all-checked");
-                $(".select-label-children").addClass("unchecked");
+                label_select_all_show.removeClass("label-select-all-checked");
+                select_label_children.addClass("unchecked");
                 config.data.cancel_fields = ['remind','workflow'];
                 CalendarService.CalendarMsgMediator.publish('unshowData',{data:['remind','workflow']});
             }
             else{
                 temp.addClass("label-select-all-checked");
-                $(".label-select-all-show").addClass("label-select-all-checked");
-                $(".select-label-children").removeClass("unchecked");
+                label_select_all_show.addClass("label-select-all-checked");
+                select_label_children.removeClass("unchecked");
                 config.actions.removeRemindType();
             }
         },
-        approve_label:function(){
-            if($("#checkbox_a2").is(".workflow_checked")){
-                $("#checkbox_a2").removeClass("workflow_checked");
+        approve_label:function(checkbox_a2){
+            if(checkbox_a2.is(".workflow_checked")){
+                checkbox_a2.removeClass("workflow_checked");
                 config.data.cancel_fields.unshift('approve');
                 CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
             }
             else{
-                $("#checkbox_a2").addClass("workflow_checked");
+                checkbox_a2.addClass("workflow_checked");
                 config.data.cancel_fields.splice($.inArray('approve',config.data.cancel_fields),1);
                 CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
             }
         },
-        hide_group:function(temp){
+        hide_group:function(temp,that){
             let hide_type_id = temp.attr("id").split('-');
             let hide_table_name = "";
             let hide_table_id = hide_type_id[2];
             let select_checkbox_Id = "#select-all-"+hide_type_id[2];
             hide_type_id = "#select-all-block-"+ hide_type_id[2];
-            $(select_checkbox_Id).removeClass("label-select-all-show");
+            that.el.find(select_checkbox_Id).removeClass("label-select-all-show");
             let class_Name = ".select-children-"+$('.hide-type-group').attr("id").split("-")[2];
-            $(class_Name).each(function(){
+            that.el.find(class_Name).each(function(){
                 let filedId = $(this).attr("id").split("-")[2];
                 if(config.data.cancel_fields.indexOf(filedId) == -1){
                     config.data.cancel_fields.push(filedId);
                 }
             });
-            $(hide_type_id).hide();
+            that.el.find(hide_type_id).hide();
             let isAllGroupchecked = true;
-            $('.label-select-all-show').each(function(){
+            that.el.find('.label-select-all-show').each(function(){
                 if(!$(this).is('.label-select-all-checked')){
                     isAllGroupchecked = false;
                 }
             });
             if(isAllGroupchecked){
-                $("#checkbox_a3").addClass('label-select-all-checked');
+                that.el.find("#checkbox_a3").addClass('label-select-all-checked');
             }
             for(let j = 0;j < config.data.rows.length;j++) {
                 if (hide_table_id == config.data.rows[j].table_id) {
@@ -270,17 +265,18 @@ let config = {
         this.el.css({"height":"100%","width":"100%"});
         this.append(new LeftCalendar, this.el.find('.left-calendar-box'));
         let objects = {};
+        let that = this;
         CalendarService.CalendarMsgMediator.subscribe('hideRemindType',data => {
             config.data.Add_hideTable[0] = data.data;
             config.data.Add_hideTable.forEach((row) =>{
-                this.append(new LeftContentHide(row), this.el.find('.item-content'));
+                that.append(new LeftContentHide(row), this.el.find('.item-content'));
             });
             config.data.Add_hideTable = [];
         });
         CalendarService.CalendarMsgMediator.subscribe('showRemindType',data => {
-            this.el.find("#select-all-"+data.data).addClass("label-select-all-show label-select-all-checked");
-            this.el.find("#select-all-block-"+data.data).show();
-            this.el.find(".select-children-"+data.data).removeClass("unchecked");
+            that.el.find("#select-all-"+data.data).addClass("label-select-all-show label-select-all-checked");
+            that.el.find("#select-all-block-"+data.data).show();
+            that.el.find(".select-children-"+data.data).removeClass("unchecked");
 
         });
         CalendarService.getCalendarTreeData().then(objs => {
@@ -300,27 +296,30 @@ let config = {
                 config.data.hide_table = {'tableName':"",'table_Id':''}
             }
             config.data.hide_tables.forEach((row) =>{
-                this.append(new LeftContentHide(row), this.el.find('.item-content'));
-            })
+                that.append(new LeftContentHide(row), that.el.find('.item-content'));
+            });
             if(config.data.cancel_fields.indexOf('approve')){
-                $("#checkbox_a2").addClass("workflow_checked");
+                that.el.find($("#checkbox_a2").addClass("workflow_checked"));
             }
             else{
-                $("#checkbox_a2").removeClass("workflow_checked");
+                that.el.find($("#checkbox_a2").removeClass("workflow_checked"));
             }
-            this.actions.logincalendarTreeData(objs);
+            that.actions.logincalendarTreeData(objs);
             objects = objs;
-            this.el.find(".float-button-group-show").hover(function(){
+            that.el.find(".float-button-group-show").hover(function(){
                 $(this).nextAll(".float-button-group").css("display","block");
             });
-            this.el.find(".float-button-group-hide").mouseleave(function(){
+            that.el.find(".float-button-group-hide").mouseleave(function(){
                 $(this).children(".float-button-group").css("display","none");
             });
         });
-        this.el.on('click',"#checkbox_a3",function(){
-             config.actions.checkbox_a3($(this));
+        that.el.on('click',"#checkbox_a3",function(){
+            let label_select_all_show = that.el.find(".label-select-all-show");
+            let select_label_children = that.el.find(".select-label-children");
+             config.actions.checkbox_a3($(this),label_select_all_show,select_label_children);
         }).on('click',".approve-label",function(){
-            config.actions.approve_label();
+            let checkbox_a2 = that.el.find("#checkbox_a2");
+            config.actions.approve_label(checkbox_a2);
         }).on('click', '.item-title', () => {
             this.actions.contentHide();
         }).on('click','.set-calendar',() =>{
@@ -338,13 +337,13 @@ let config = {
                 }
             });
         }).on('click',".hide-type-group",function(){
-            config.actions.hide_group($(this));
+            config.actions.hide_group($(this),that);
         }).on('click','.select-label-show',function(){
             config.actions.selectlabelshow($(this));
         }).on('click',".select-label",function(){
-            config.actions.selectlabel($(this));
+            config.actions.selectlabel($(this),that);
         }).on('click','.select-label-children',function () {
-            config.actions.selectlabelchildren($(this));
+            config.actions.selectlabelchildren($(this),that);
         });
     }
 };
