@@ -1,3 +1,36 @@
 /**
 在这里覆盖jquery ui的样式
  */
+
+.ui-widget-overlay {
+    background: rgb(51,51,51);
+    opacity: 0.6;
+}
+.ui-widget.ui-widget-content {
+    border: 0 none;
+    border-radius: 5px;
+}
+.ui-dialog {
+    padding: 0;
+    .ui-dialog-titlebar {
+        padding: 0;
+        height: 30px;
+        line-height: 30px;
+        border: 0 none;
+        border-radius: 5px 5px 0 0;
+        text-align: center;
+        .ui-dialog-title {
+            margin: 0;
+            float: none;
+            color: #666;
+            font-weight: normal;
+        }
+        .ui-dialog-titlebar-close {
+            outline: none;
+        }
+    }
+    .ui-dialog-content {
+        width: 100%!important;
+        padding: 0;
+    }
+}
