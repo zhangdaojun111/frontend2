@@ -1,6 +1,7 @@
 import Component from '../../../lib/component';
 import template from './workflow-addFollow.html';
 import './workflow-addFollow.scss';
+import SelectStaff from './select-staff/select-staff';
 
 let config={
     template: template,

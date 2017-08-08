@@ -16,6 +16,8 @@ import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflo
 import FormEntrys from './form';
 import TreeView from  '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
+import SelectStaff from '../components/workflow/workflow-addFollow/select-staff/select-staff';
+
 
 WorkFlowForm.showForm();
 
@@ -88,11 +90,12 @@ ApprovalHeader.showheader();
 });
 
 let tree=[];
+let staff=[];
 (async function () {
     return workflowService.getStuffInfo({url: '/save_perm/?perm_id=0'});
 })().then(res=>{
     tree=res.data.department_tree;
-
+    staff=res.data.department2user;
     function recur(data) {
         for (let item of data){
             item.nodes=item.children;
@@ -102,11 +105,19 @@ let tree=[];
         }
     }
     recur(tree);
-
+    console.log(staff);
 
     var treeComp2 = new TreeView(tree,{
         callback: function (event,selectedNode) {
-            console.log(selectedNode.id);
+            if(event==='select'){
+                for(var k in staff){
+                    if(k==selectedNode.id){
+                        console.log(staff[k]);
+                    }
+                }
+            }
+            
+          
             // console.dir(selectedNode);
         },
         treeType:'MULTI_SELECT',
