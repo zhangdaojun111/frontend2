@@ -37,6 +37,7 @@
 		text-align: center;
 		height: 30px;
 		line-height: 30px;
+		white-space: nowrap;
 	}
 	.close{
 		cursor: pointer;
@@ -48,5 +49,22 @@
 		background: #000;
 		color: #fff;
 		display: block;
+	}
+	#selected{
+		padding: 10px;
+		&>div{
+			display: inline-block;
+			&>span{
+				display: inline-block;
+				background: #eee;
+				padding: 5px 10px;
+				margin: 0 10px 10px 0;
+			}	
+		}
+	}
+	#saveFollower{
+		position: absolute;
+		right: 0;
+		bottom: 0;
 	}
 }

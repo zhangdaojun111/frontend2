@@ -33,7 +33,9 @@ Promise.all([WorkFlowList,FavWorkFlowList]).then(res=>{
 HTTP.flush();
 
 //订阅workflow choose事件，获取工作流info并发布getInfo,获取草稿
+let wfObj;
 Mediator.subscribe('workflow:choose', (msg)=> {
+    wfObj=msg;
     (async function () {
         return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=qiumaoyun_1501661055093&record_id=',data:{
             flow_id:msg.id
@@ -92,20 +94,21 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             }
         })
     })
-    .then(res=>{
-        Mediator.subscribe('workflow:submit', ()=> {
-            let formData=FormEntrys.getFormValue(),
-                postData={
-                    flow_id:msg.id,
-                    is_draft:1,
-                    data:JSON.stringify(formData)
-                };
-            (async function () {
-                let data = await workflowService.createWorkflowRecord(postData);
-                alert(`error:${data.error}`);
-            })();
-        });
-    })
+    
+});
+
+Mediator.subscribe('workflow:submit', (res)=> {
+    let formData=FormEntrys.getFormValue(),
+        postData={
+        flow_id:wfObj.id,
+        is_draft:1,
+        focus_users:JSON.stringify(res)||[],
+        data:JSON.stringify(formData)
+    };
+    (async function () {
+        let data = await workflowService.createWorkflowRecord(postData);
+        alert(`error:${data.error}`);
+    })();
 });
 
 

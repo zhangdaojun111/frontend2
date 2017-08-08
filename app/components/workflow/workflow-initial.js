@@ -5,7 +5,9 @@ import Mediator from '../../lib/mediator';
 
 let config={
     template: template,
-    data:{},
+    data:{
+        user:[]
+    },
     action:{
 
     },
@@ -21,7 +23,12 @@ let config={
             this.el.find('#workflow-form').hide();
         });
         this.el.on('click','#submit',()=>{
-            Mediator.publish('workflow:submit');
+            let user=[];
+            Mediator.subscribe('workflow:focus-users', (res)=> {
+                this.data.user=res;
+            })
+            Mediator.publish('workflow:submit',this.data.user);
+            
         });
     }
 };
