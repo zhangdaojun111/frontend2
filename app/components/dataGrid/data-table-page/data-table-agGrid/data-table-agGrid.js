@@ -86,7 +86,9 @@ let config = {
         //权限
         permission:{add: 1, calendar: 1, complex_search: 1, custom_field: 1, custom_width: 1, delete: 1, download: 1, edit: 1, group: 1, in_work: 1, search: 1, upload: 1, view: 1 ,setting: 1,cell_edit:1,new_window:1},
         //是否分组
-        groupCheck: false
+        groupCheck: false,
+        //是否显示定制列panel
+        isShowCustomPanel: false
     },
     //生成的表头数据
     columnDefs: [],
@@ -130,9 +132,7 @@ let config = {
                 }
             }
 
-            columnDefs.unshift(
-                { headerName: '分组', field: 'group' ,pinned:'left',hide:true,suppressSorting: true,suppressMovable:true,cellRenderer: 'group', suppressMenu: true, tooltipField:'group' }
-            )
+            columnDefs.unshift( dgcService.groupCol );
             columnDefs.push(operate)
             return columnDefs;
         },
@@ -218,10 +218,6 @@ let config = {
                         floatingFilterComponent: this.floatingFilterCom.actions.createFilter(fieldTypeService.searchType(data.data["real_type"]), data.data["field"], this.data.searchValue, this.data.searchOldValue),
                         floatingFilterComponentParams: {suppressFilterButton: true},
                         enableRowGroup: true,
-                        // icons: {
-                        //     sortAscending: '<img src="' + img1 + '" style="width: 15px;height:15px;"/>',
-                        //     sortDescending: '<img src="' + img2 + '" style="width: 15px;height:15px;"/>'
-                        // },
                         suppressSorting: false,
                         suppressResize: false,
                         suppressMovable: false,
@@ -722,6 +718,8 @@ let config = {
                 this.actions.createSheetTabs( res[2] )
 
                 this.actions.getGridData();
+                //按钮点击事件
+                this.actions.onBtnClick();
             })
             HTTP.flush();
         },
@@ -778,7 +776,7 @@ let config = {
             }
             if( this.data.groupCheck ){
                 json['is_group'] = 1;
-                json['group_fields'] = JSON.stringify( this.data.myGroup );
+                json['group_fields'] = JSON.stringify( this.data.myGroup.fields );
                 json['tableType'] = 'group';
             }
             json = dgcService.returnQueryParams( json );
@@ -801,7 +799,8 @@ let config = {
             //渲染分页
             let paginationData = {
                 total: this.data.total,
-                rows: this.data.rows
+                rows: this.data.rows,
+                tableId: this.data.tableId
             }
             let custom = {
                 gridoptions: this.agGrid.gridOptions,
@@ -828,11 +827,13 @@ let config = {
             this.pagination.actions.paginationChanged = this.actions.refreshData;
             this.append(this.pagination, this.el.find('.pagination'));
             this.data.firstRender = false;
+            //高级查询
+            this.actions.getExpertSearchData();
         },
         //分组触发
         onGroupChange: function (group) {
             this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , true)
-            this.data.myGroup = group;
+            this.data.myGroup.fields = group;
             this.actions.getGridData();
         },
         //列宽改变
@@ -981,37 +982,79 @@ let config = {
                     }
                     gridoptions.columnApi.setColumnState( state );
                 } )
+                this.el.find( '.ag-grid-con' ).height( 'calc( 100% - 80px )' );
+                $( '.SheetPage' ).show();
             }
+        },
+        //按钮点击事件
+        onBtnClick: function () {
+            this.actions.customColumnClick();
+            this.actions.groupBtnClick();
+            //高级查询
+            $('.expert-search-btn').click( ()=>{
+                let d = {
+                    fieldsData: this.data.expertSearchFields
+                }
+                expertSearch.show(d);
+            } )
+            //宽度自适应
+            $( '.grid-auto-width' ).click( ()=>{
+                this.agGrid.actions.autoWidth();
+            } )
+        },
+        //定制列
+        customColumnClick: function () {
+            this.el.find( '.custom-column-btn' ).on( 'click',()=>{
+                this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
+                this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
+                this.actions.changeAgGridWidth();
+            } )
+        },
+        //分组点击
+        groupBtnClick: function () {
+            this.el.on('click','.group-btn',()=> {
+                if(!this.data.groupCheck) {
+                    $('.group-btn').find('span').html('数据');
+                    $('.group-panel').show();
+                    this.data.groupCheck = !this.data.groupCheck;
+                    // if(this.data.myGroup.fields) {
+                        this.actions.onGroupChange(this.data.myGroup.fields)
+                    // }
+                } else {
+                    $('.group-btn').find('span').html('分组');
+                    $('.group-panel').hide();
+                    this.data.groupCheck = !this.data.groupCheck;
+                    this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , false);
+                    this.actions.getGridData();
+                }
+                this.actions.changeAgGridWidth();
+            })
+        },
+        //改变agGrid宽度
+        changeAgGridWidth: function () {
+            let num = 0;
+            if( this.data.groupCheck ){
+                num+=200;
+            }
+            if( this.data.isShowCustomPanel ){
+                num+=200;
+            }
+            let grid = this.el.find( '#data-agGrid' )
+            grid.width( 'calc(100% - ' + num + 'px)' );
+        },
+        //获取高级查询数据
+        getExpertSearchData: function () {
+            let obj = {'actions':['queryParams'],'table_id':this.data.tableId}
+            dataTableService.getPreferences( obj ).then( res=>{
+
+            } );
+            HTTP.flush();
         }
     },
     afterRender: function () {
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();
-        this.el.on('click','.group-btn',()=> {
-            if(!this.data.groupCheck) {
-                $('.group-btn').find('span').html('数据');
-                this.data.groupCheck = !this.data.groupCheck;
-                if(this.data.myGroup.fields) {
-                    debugger
-                    this.actions.onGroupChange(this.data.myGroup.fields)
-                }
-            } else {
-                $('.group-btn').find('span').html('分组');
-                this.data.groupCheck = !this.data.groupCheck;
-            }
-        })
-        //高级查询
-        $( '.expert-search-btn' ).click( ()=>{
-            let d = {
-                fieldsData: this.data.expertSearchFields
-            }
-            expertSearch.show(d);
-        } )
-        //宽度自适应
-        $( '.auto-width' ).click( ()=>{
-            this.agGrid.actions.autoWidth();
-        } )
     }
 }
 

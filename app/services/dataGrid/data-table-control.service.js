@@ -91,6 +91,8 @@ export const dgcService = {
         suppressMenu: true,
         cellRenderer: (params)=>{}
     },
+    //分组列
+    groupCol: { headerName: '分组', field: 'group' ,pinned:'left',hide:true,suppressSorting: true,suppressMovable:true,cellRenderer: 'group', suppressMenu: true, tooltipField:'group',suppressFilter: true},
     //搜索类型
     // 判断搜索类型
     getMongoSearch: function(data) {
@@ -329,7 +331,9 @@ export const dgcService = {
         dropNotAllowed: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
         rowGroupPanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
         pivotPanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
-        valuePanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />'
+        valuePanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        sortAscending: '<img src="'+require('../../assets/images/dataGrid/icon_paixu_1.png') +'" />',
+        sortDescending: '<img src="'+require('../../assets/images/dataGrid/icon_paixu_2.png') +'" />'
     },
     //返回fieds
     retureFields: function (id2fields,ids) {
