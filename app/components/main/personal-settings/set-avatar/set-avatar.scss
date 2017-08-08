@@ -1,0 +1,113 @@
+$sub_color:#0088ff;
+
+#set-avatar-page{
+    .get-file{
+        margin-top: 10px;
+        span{
+            display: inline-block;
+            margin-left: 10px;
+            height: 35px;
+            line-height: 35px;
+        }
+
+        a{
+            display: inline-block;
+            width: 100px;
+            height: 35px;
+            background-color: $sub_color;
+            position: relative;
+            border: none;
+            border-radius: 5px;
+            overflow: hidden;
+            color: white;
+            line-height: 35px;
+            text-align: center;
+            top:10px;
+
+            input{
+                width: 100px;
+                height: 35px;
+                position: absolute;
+                right: 0;
+                top: 0;
+                opacity: 0;
+            }
+        }
+    }
+    .avatar-container{
+        width: 350px;
+        height: 350px;
+        position: relative;
+        margin-top: 10px;
+        margin-left: 10px;
+        img{
+            width: 350px;
+            height: 350px;
+            position: absolute;
+            left: 0;
+            top:0;
+            z-index: 1;
+        }
+        .drag-able{
+            width: 60px;
+            height: 60px;
+            border: solid 1px black;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0);
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 2;
+        }
+    }
+
+    .drag-result{
+        width: 60px;
+        height: 60px;
+        margin-top: 10px;
+        margin-left: 155px;
+        overflow: hidden;
+        border: solid 1px black;
+        border-radius: 50%;
+        position: absolute;
+        .result-img{
+            width: 350px;
+            height: 350px;
+            top:0;
+            left:0;
+            position: absolute;
+        }
+    }
+
+    .bottom-box{
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        color: white;
+
+        .save-avatar{
+            display: inline-block;
+            width: 100px;
+            height: 35px;
+            background-color: $sub_color;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            line-height: 35px;
+            text-align: center;
+        }
+
+        .set-cancel{
+            display: inline-block;
+            width: 100px;
+            height: 35px;
+            background-color: $sub_color;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            line-height: 35px;
+            text-align: center;
+        }
+    }
+}
+

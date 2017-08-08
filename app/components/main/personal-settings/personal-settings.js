@@ -7,6 +7,8 @@ import template from './personal-settings.html';
 import {UserInfoService} from '../../../services/main/userInfoService';
 import msgbox from '../../../lib/msgbox';
 import SetAvatar from './set-avatar/set-avatar';
+import SetProxy from './set-proxy/set-proxy';
+import Mediator from "../../../lib/mediator";
 
 function getData(component_instance) {
     // console.log(window.config.sysConfig.userInfo);
@@ -42,7 +44,16 @@ let config = {
                 //打开个人设置页面
                 SetAvatar.show();
             }
-
+        },
+        setProxy(){
+            //检查页面是否已创建
+            let $page = $(document).find("div#set-proxy-page");
+            if($page.length !== 0){
+                $page.focus();
+            }else{
+                //打开个人设置页面
+                SetProxy.show();
+            }
         },
         showPersonalInfo:function () {
             this.el.find("div.personal-info").show();
@@ -143,9 +154,8 @@ let config = {
        //事件绑定
         this.el.on("click","div.avatar-box",() => {           //打开头像设置页面
             this.actions.setAvatar();
-        }).on("click","div.proxy-group",() => {
-            //设置代理
-            console.log("set proxy");
+        }).on("click","div.proxy-group",() => {                 //设置代理
+            this.actions.setProxy();
         }).on("click","div.login-group",() => {
             //他人登录
             console.log("login by other");
@@ -171,10 +181,18 @@ let config = {
             this.actions.modifyPassword();
         }).on("input","input.new_pw",() => {        //监听旧密码的输入
             this.actions.isLegal();
+        });
+        //窗口监听来自子窗口的设置头像的消息
+        Mediator.on("personal:setAvatar",(data) => {
+            console.log(data);
+            this.el.find("img.user_avatar")
+                .attr("src",data.picSrc)
+                .css("left",data.left)
+                .css("top",data.top)
         })
     },
     beforeDestory:function () {
-
+        // Mediator.removeAll();
     }
 };
 

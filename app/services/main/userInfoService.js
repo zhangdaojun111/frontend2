@@ -27,5 +27,20 @@ export const UserInfoService = {
             type:"post",
             data:body
         });
+    },
+    //向后台发送存储头像数据
+    saveAvatar:function (data) {
+        let url='/data/user_preference/';
+        let body = {
+            action:"save",
+            content:encodeURIComponent(data),
+            pre_type:3
+        };
+
+        return this.http.postImmediately({
+            url:url,
+            type:"post",
+            data:body
+        });
     }
 };
