@@ -44,6 +44,8 @@ let config = {
                 sortingOrder: ['asc','desc','null'],
                 suppressRowClickSelection: true,
                 rowSelection: 'multiple',
+                headerHeight: 25,
+                floatingFiltersHeight: 0,
                 icons: dgcService.replacingIcons,
                 //列宽改变
                 onColumnResized: this.data.onColumnResized,
@@ -86,6 +88,7 @@ let config = {
         setGridData: function ( json ) {
             this.gridOptions.api.setRowData( json.rowData );
             this.gridOptions.api.setPinnedBottomRowData( json.footerData );
+            // this.agGrid.gridOptions.api.redrawRows();
         },
         //宽度自适应
         autoWidth: function () {

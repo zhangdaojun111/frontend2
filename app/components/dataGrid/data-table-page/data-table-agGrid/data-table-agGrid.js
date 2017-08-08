@@ -92,7 +92,9 @@ let config = {
         //排序方式
         frontendSort: true,
         //排序参数
-        sortParam: {sortOrder:'',sortField:'',sort_real_type:''}
+        sortParam: {sortOrder:'',sortField:'',sort_real_type:''},
+        //是否显示floatingFilter
+        isShowFloatingFilter: false
     },
     //生成的表头数据
     columnDefs: [],
@@ -1019,6 +1021,12 @@ let config = {
             //宽度自适应
             $( '.grid-auto-width' ).click( ()=>{
                 this.agGrid.actions.autoWidth();
+            } )
+            //搜索
+            $( '.float-search-btn' ).click( ()=>{
+                let height = this.data.isShowFloatingFilter ? 0:30;
+                this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
+                this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
             } )
         },
         //定制列
