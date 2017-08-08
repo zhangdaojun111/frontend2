@@ -29,7 +29,6 @@ let config = {
                     "opacity": "0.3",
                     "filter": "alpha(opacity=30)"
             });
-            console.log('sss')
         }
     },
     afterRender: function () {
@@ -54,48 +53,44 @@ let config = {
             };
             this.actions.paginationChanged(obj);
         });
-            //点击下一页 当前页面数加1
-            $(".goNext").click(() => {
-                if (this.data.currentPage < this.data.sumPage) {
-                    console.log(this.data.currentPage)
-                    console.log(this.data.currentPage.type)
-                    this.data.currentPage += 1;
-                    this.data.firstRow = this.data.rows * (this.data.currentPage - 1);
-                    //this.actions.paginationChanged(this.data.currentPage,this.data.rows,this.data.firstRow);
-                    //console.log(this.actions.paginationChanged());
-                    $('.current-page').html(parseInt(this.data.currentPage));
-                    console.log(this.data.currentPage)
-                    let obj = {
-                        currentPage: this.data.currentPage,
-                        rows: this.data.rows,
-                        firstRow: this.data.firstRow
-                    };
-                    this.actions.paginationChanged(obj);
-                }
+        //点击下一页 当前页面数加1
+        $(".goNext").click(() => {
+            if (this.data.currentPage < this.data.sumPage) {
+                this.data.currentPage += 1;
+                this.data.firstRow = this.data.rows * (this.data.currentPage - 1);
+                //this.actions.paginationChanged(this.data.currentPage,this.data.rows,this.data.firstRow);
+                //console.log(this.actions.paginationChanged());
+                $('.current-page').html(parseInt(this.data.currentPage));
+                let obj = {
+                    currentPage: this.data.currentPage,
+                    rows: this.data.rows,
+                    firstRow: this.data.firstRow
+                };
+                this.actions.paginationChanged(obj);
+            }
 
-            });
-            //点击上一页 当前页面数减1
-            $(".goPre").click(() => {
-                if (this.data.currentPage > 1) {
-                    this.data.currentPage -= 1;
-                    //this.actions.paginationChanged(this.data.currentPage,this.data.rows,this.data.firstRow);
-                    this.data.firstRow = (this.data.rows * (this.data.currentPage - 1));
-                    $('.current-page').html(this.data.currentPage);
-                    let obj = {
-                        currentPage: this.data.currentPage,
-                        rows: this.data.rows,
-                        firstRow: this.data.firstRow
-                    }
-                    this.actions.paginationChanged(obj);
+        });
+        //点击上一页 当前页面数减1
+        $(".goPre").click(() => {
+            if (this.data.currentPage > 1) {
+                this.data.currentPage -= 1;
+                //this.actions.paginationChanged(this.data.currentPage,this.data.rows,this.data.firstRow);
+                this.data.firstRow = (this.data.rows * (this.data.currentPage - 1));
+                $('.current-page').html(this.data.currentPage);
+                let obj = {
+                    currentPage: this.data.currentPage,
+                    rows: this.data.rows,
+                    firstRow: this.data.firstRow
                 }
-            });
+                this.actions.paginationChanged(obj);
+            }
+        });
         //直接跳到第一页
         $(".goFirst").click(() => {
             //如果页面小于1 禁止点击
             if (this.data.currentPage===1){
                 this.actions.disableClick();
-            }
-               else {
+            }else {
                 this.data.rows = $(".selectSize").val();
                 this.data.currentPage = 1;
                 this.data.firstRow = 0;
@@ -112,8 +107,7 @@ let config = {
         $(".goLast").click(() => {
         if (this.data.currentPage===this.data.sumPage){
              this.actions.disableClick();
-        }
-        else {
+        }else {
             this.data.currentPage = this.data.sumPage;
             this.data.firstRow = (this.data.sumPage - 1) * this.data.rows;
             $('.current-page').html(this.data.currentPage);
@@ -126,13 +120,13 @@ let config = {
         }
         });
 
-            //点击当前得页码  跳出可选择页码的文本框
-            $(".current-page").click(() => {
-                this.data.firstRow = (this.data.sumPage - 1) * this.data.rows;
-                $(".sumPage").html("共" + this.data.sumPage + "页");
-                $(".selectPage").show();
-                $(".page").hide();
-            });
+        //点击当前得页码  跳出可选择页码的文本框
+        $(".current-page").click(() => {
+            this.data.firstRow = (this.data.sumPage - 1) * this.data.rows;
+            $(".sumPage").html("共" + this.data.sumPage + "页");
+            $(".selectPage").show();
+            $(".page").hide();
+        });
 
         //点击确定按钮跳转到目标页面
         $(".confirm").click(() => {
@@ -156,7 +150,6 @@ let config = {
                 };
                 this.actions.paginationChanged(obj);
             }
-            console.log(target);
         });
             //点击取消
             $(".cancel").click(() => {
