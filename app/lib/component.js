@@ -1,7 +1,10 @@
 import Handlerbar from 'handlebars';
 
 let componentId = 10000;
-let map = new WeakMap();class Component {
+let map = new WeakMap();
+
+let count = 0;
+class Component {
 
     constructor(config, data) {
 
@@ -28,6 +31,9 @@ let map = new WeakMap();class Component {
         }
         this.componentId = componentId++;
 
+        count ++;
+        console.log('ERDS:组件总数:' + count);
+
     }
 
     render(el) {
@@ -43,6 +49,7 @@ let map = new WeakMap();class Component {
     }
 
     reload() {
+        this.destroyChildren();
         let compiler = Handlerbar.compile(this.template);
         let html = compiler(this.data);
         this.el.html(html);
@@ -96,6 +103,8 @@ let map = new WeakMap();class Component {
 
     _destroy() {
 
+        count--;
+
         this.beforeDestory && this.beforeDestory();
 
         if (this.el) {
@@ -113,7 +122,7 @@ let map = new WeakMap();class Component {
         let doms = this.el.parent().find('> [component]');
         let coms = [];
         let that = this;
-        doms.each(function() {
+        doms.each(function () {
             let component = map.get(this);
             if (component !== that) {
                 coms.push(component);

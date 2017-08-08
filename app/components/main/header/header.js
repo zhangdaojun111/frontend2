@@ -3,6 +3,7 @@ import template from './header.html';
 import './header.scss';
 import 'jquery-ui/ui/widgets/tooltip';
 import Mediator from '../../../lib/mediator';
+import msgbox from '../../../lib/msgbox';
 
 let config = {
     template: template,
@@ -49,6 +50,16 @@ let config = {
             this.actions.openBiIframe();
         }).on('click', '.calendar', () => {
             this.actions.openCalendarIframe();
+        }).on('click', '.task', () => {
+            // $(`<div>12123</div>`).appendTo('body').dialog({
+            //     width: 400,
+            //     height: 400,
+            //     modal: true,
+            //     title: '提示'
+            // })
+            msgbox.confirm('xxxxxxxxxxxxx').then((res) => {
+                console.log(res);
+            });
         });
         Mediator.on('socket:online_user_num', function (data) {
             console.log(data);
