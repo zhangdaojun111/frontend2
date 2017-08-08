@@ -629,6 +629,14 @@ let config = {
             }
             this.actions.getGridData();
         },
+        postExpertEearch:function(data) {
+            console.log( "+++++" )
+            this.data.filterParam = {
+                filter: data,
+                is_filter: 1
+            }
+            this.actions.getGridData();
+        },
         //偏好赋值
         setPreference: function (res) {
             if (res['colWidth']) {
@@ -993,7 +1001,8 @@ let config = {
             //高级查询
             $('.expert-search-btn').click( ()=>{
                 let d = {
-                    fieldsData: this.data.expertSearchFields
+                    fieldsData: this.data.expertSearchFields,
+                    postExpertEearch:this.actions.postExpertEearch
                 }
                 expertSearch.show(d);
             } )
