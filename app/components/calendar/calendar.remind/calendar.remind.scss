@@ -1,0 +1,57 @@
+@import "../calendar";
+.remind-wrap {
+    width: 640px;
+    span {
+        display: inline-block;
+        height: 20px;
+        border: 1px solid $boder-color;
+        width: 560px;
+        padding: 5px;
+    }
+    .remind-row {
+        width: 100%;
+        border-top: 1px solid $boder-color;
+        padding: 10px 0px;
+        .start, .end {
+            display: inline-block;
+            width: 272px;
+        }
+        .end {
+            float: right;
+            margin-left: 4px;
+        }
+    }
+    .title {
+        width: 68px;
+    }
+    .detail {
+        //width: 572px;
+        padding: 5px;
+        //border: 1px solid $boder-color;
+        border-top: 1px solid $boder-color;
+        border-left: 1px solid $boder-color;
+        max-height: 600px;
+        overflow: auto;
+        .detail-title {
+            width: 150px;
+
+        }
+        .detail-content {
+            width: 410px;
+            .open-form {
+                text-underline: black;
+            }
+        }
+        tr {
+            width: 100%;
+            border-bottom: 1px solid $boder-color;
+        }
+        td{
+            padding-left: 4px;
+            line-height: 32px;
+            border-right: 1px solid $boder-color;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    }
+}

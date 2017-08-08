@@ -21,31 +21,24 @@ let config = {
             {itemTitle:'星期五'},
             {itemTitle:'星期六'},
         ],
-        monthDataList: [],
+        monthBodyDataList: [],
     },
     actions: {
 
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
-        // this.data.HeadList.forEach(item => {
-        //     this.append(new TableGrid({headTitle: item.itemTitle, type:'head'}), this.el.find('.month-head'));
-        // });
-
         this.append(new CalendarTableHeader({headTitle: this.data.HeadList, type:'month'}), this.el.find('.month-head'));
 
-        this.data.monthDataList.forEach((item,index) => {
+        this.data.monthBodyDataList.forEach((item,index) => {
             this.append(new CalendarTableBody({item,index}), this.el.find('.month-body'));
         });
-        // $('#task-item').bind('click', function () {
-        //     console.log($(this).html());
-        // })
     }
 };
 
 class CalendarMonth extends Component {
     constructor(data) {
-        config.data.monthDataList = data;
+        config.data.monthBodyDataList = data;
         super(config);
     }
 }

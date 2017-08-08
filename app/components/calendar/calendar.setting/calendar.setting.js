@@ -19,7 +19,9 @@ let config = {
 
     },
     afterRender: function() {
-        this.data.menu = CalendarService.getMenu();
+        CalendarService.getMenu().then(res => {
+            console.log(res);
+        });
         this.data.menu.forEach(item => {
             this.append(new CalendarSettingItem(item), this.el.find('.setting-content'));
         });
