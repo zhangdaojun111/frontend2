@@ -6,6 +6,7 @@ import './set-agent.scss';
 import template from './set-agent.html';
 import {UserInfoService} from "../../../../services/main/userInfoService"
 import msgbox from "../../../../lib/msgbox";
+
 import treeView from "../../../../components/util/tree/tree"
 
 
@@ -41,6 +42,7 @@ let config = {
                 });
         },
         initWorkflow:function () {
+            let iframe
 
         },
         initAgentList:function () {
