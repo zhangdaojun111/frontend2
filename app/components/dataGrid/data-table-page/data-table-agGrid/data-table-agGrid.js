@@ -84,7 +84,9 @@ let config = {
         //是否第一次渲染agGrid
         firstRender: true,
         //权限
-        permission:{add: 1, calendar: 1, complex_search: 1, custom_field: 1, custom_width: 1, delete: 1, download: 1, edit: 1, group: 1, in_work: 1, search: 1, upload: 1, view: 1 ,setting: 1,cell_edit:1,new_window:1}
+        permission:{add: 1, calendar: 1, complex_search: 1, custom_field: 1, custom_width: 1, delete: 1, download: 1, edit: 1, group: 1, in_work: 1, search: 1, upload: 1, view: 1 ,setting: 1,cell_edit:1,new_window:1},
+        //是否分组
+        groupCheck: false
     },
     //生成的表头数据
     columnDefs: [],
@@ -756,6 +758,11 @@ let config = {
                 json['filter'] = this.data.filterParam.filter || [];
                 json['is_filter'] = this.data.filterParam.is_filter;
             }
+            if( this.data.groupCheck ){
+                json['is_group'] = 1;
+                json['group_fields'] = JSON.stringify( this.data.myGroup );
+                json['tableType'] = 'group';
+            }
             json = dgcService.returnQueryParams( json );
             return json;
         },
@@ -797,11 +804,19 @@ let config = {
             }
             this.groupGridCom = new groupGrid(groupLit);
             this.append(this.groupGridCom,document.querySelector('.group-panel'));
+            this.groupGridCom.actions.onGroupChange = this.actions.onGroupChange;
             //渲染分页
             this.pagination = new dataPagination(paginationData);
             this.pagination.actions.paginationChanged = this.actions.refreshData;
             this.append(this.pagination, this.el.find('.pagination'));
             this.data.firstRender = false;
+        },
+        //分组触发
+        onGroupChange: function (group) {
+            this.data.groupCheck = true;
+            this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , true)
+            this.data.myGroup = group||this.data.myGroup;
+            this.actions.getGridData();
         },
         //列宽改变
         onColumnResized: function ($event) {

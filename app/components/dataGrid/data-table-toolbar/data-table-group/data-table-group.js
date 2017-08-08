@@ -14,23 +14,25 @@ let config = {
     },
     group:[],
     actions: {
-
+        onGroupChange: function (group) {
+        }
     },
     afterRender: function (){
         $('.group-data-list, .grouping-data-list').sortable({
             connectWith: ".connectedSortable",
-            stop: function() {
-                config.group = [];
+            stop: ()=> {
+                this.data.group = [];
                 let dom = $('.grouping-data-list').find('.group-data-item');
                 for (let i = 0; i < dom.length; i++) {
-                    config.group.push(dom[i].attributes['field'].nodeValue);
+                    this.data.group.push(dom[i].attributes['field'].nodeValue);
                 }
                 dataTableService.savePreference({
                     action: 'group',
-                    table_id: config.data.tableId,
-                    group: JSON.stringify(config.group)
+                    table_id: this.data.tableId,
+                    group: JSON.stringify(this.data.group)
                 });
                 HTTP.flush();
+                this.actions.onGroupChange( this.data.group );
             }
         }).disableSelection();
 
