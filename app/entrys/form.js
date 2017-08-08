@@ -364,4 +364,16 @@ $('#workflow').on('click',function(){
         real_id:realId
     });
 })
+$('#lalala').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    let tableId=$('#tableId').val()||0;
+    FormEntrys.createForm({
+        table_id:tableId,
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId
+    });
+})
 export default FormEntrys

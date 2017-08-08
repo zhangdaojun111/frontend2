@@ -338,11 +338,13 @@ export const FormService={
     //@function(fun_ghl_dqsj) end
 
     getColumnList:async function (id){
-        console.log(`get_column_list/${id}/`);
       return HTTP.get(`get_column_list`,{table_id:id});
     },
     getFormContent:async function (json) {
         return HTTP.post('get_form_content',json);
+    },
+    searchByChooser:async function (json) {
+        return HTTP.post('selector',json);
     },
 
     getFormData(json){

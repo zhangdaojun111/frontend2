@@ -1,4 +1,5 @@
 import Component from "../../../lib/component";
+import {HTTP} from "../../../lib/http";
 import './searchBar.scss';
 import {FormService} from "../../../services/formService/formService";
 import DropDown from "../../form/vender/dropdown/dropdown";
@@ -7,7 +8,7 @@ let config={
                 <div class="ui-box-1">
                     
                 </div>
-                <input type="text">
+                <input type="text" class="search">
                 <button class="select">查询</button>
                 <button class="confirm" >确定</button>
             </div>`,
@@ -22,6 +23,7 @@ let config={
             ],
             showValue:'包含',
             index:2,
+            value:'regex'
         }
     },
     actions:{
@@ -29,12 +31,14 @@ let config={
     },
     firstAfterRender(){
         let _this=this;
+        _this.set('childDropDown',[]);
         FormService.getColumnList(_this.data.tableId).then(res=>{
             _this.data.rows=res.rows;
             let d={
                 options:[],
                 index:1,
                 showValue:'请选择',
+                value:'',
             }
             d.options.push({
                 label: "请选择",
@@ -48,8 +52,38 @@ let config={
             }
             let dropDown=new DropDown(d);
             let dropDown2=new DropDown(_this.data.searchTerms);
+            _this.childDropDown.push(dropDown);
+            _this.childDropDown.push(dropDown2);
             _this.append(dropDown,_this.el.find('.ui-box-1'));
             _this.append(dropDown2,_this.el.find('.ui-box-1'));
+        })
+        _this.el.on('click','.select',function(){
+            let selectedTerm =_this.childDropDown[1]['data'].value;
+            let selectedField =_this.childDropDown[0]['data'].value;
+            let keyword=_this.el.find('.search').val();
+            let queryParams = [{
+                "relation": "and",
+                "cond": {
+                    searchBy: selectedField || "",
+                    operate: selectedTerm || "",
+                    keyword: keyword || ""
+                }
+            }];
+            let json = {
+                table_id: _this.data.tableId,
+                queryParams: JSON.stringify(queryParams)
+            };
+            console.log('************');
+            console.log('************');
+            console.log('************');
+            FormService.searchByChooser(json).then(res=>{
+                console.log(res);
+                console.log('************');
+                console.log('************');
+                console.log('************');
+                console.log('************');
+            });
+            HTTP.flush();
         })
     }
 }
