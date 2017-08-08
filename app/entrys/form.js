@@ -334,7 +334,7 @@ $('#valid').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
-        table_id:'3497_GvF6BKdDWCfWVMAoxudt8N',
+        table_id:'2638_urGGDDp75VvymeqWj3eo6F',
         seqId:'yudeping',
         el:$('body'),
         is_view:isView,
@@ -345,15 +345,12 @@ $('#exp').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
     FormEntrys.createForm({
-        field_Id:'276_aKgBrrPj8nQZ5ZcJmWoCX2'
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId,
+        table_id:'7336_HkkDT7bQQfqBag4kTiFWoa'
     });
-    // FormEntrys.createForm({
-    //     form_id:206,
-    //     record_id:'',
-    //     reload_draft_data:0,
-    //      from_workflow:1,
-    //     table_id:'3277_k5JFeqSiX2iuCvM3rXay9L'
-    // });
 
 })
 $('#workflow').on('click',function(){

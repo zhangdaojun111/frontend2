@@ -336,10 +336,12 @@ export const FormService={
         return y+'-'+m+'-'+d+" "+H+':'+M+':'+S;
     },
     //@function(fun_ghl_dqsj) end
+
+    getColumnList:async function (id){
+        console.log(`get_column_list/${id}/`);
+      return HTTP.get(`get_column_list`,{table_id:id});
+    },
     getFormContent:async function (json) {
-        // let res=HTTP.post( 'get_form_content',json );
-        // HTTP.flush();
-        // return res;
         return HTTP.post('get_form_content',json);
     },
 

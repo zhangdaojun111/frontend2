@@ -1163,7 +1163,8 @@ let config={
             PMAPI.openDialogByComponent(History,{
                 width:800,
                 height:600,
-                title:`${data.label}历史修改记录`
+                title:`${data.label}历史修改记录`,
+                modal:true
             })
         })
         Mediator.subscribe('form:addItem:'+_this.data.tableId,function(data){
@@ -1179,7 +1180,8 @@ let config={
             PMAPI.openDialogByComponent(AddItem, {
                 width: 800,
                 height: 600,
-                title: '添加新选项'
+                title: '添加新选项',
+                modal:true
             }).then((data) => {
                 console.log('快捷添加回显');
                 _this.actions.addNewItem(data);
@@ -1191,7 +1193,8 @@ let config={
             PMAPI.openDialogByIframe(`/form/add_buildin?table_id=${data.source_table_id}`,{
                 width:800,
                 height:600,
-                title:`快捷添加内置字段`
+                title:`快捷添加内置字段`,
+                modal:true
             }).then((data) => {
                 let options=_this.childComponent[_this.data.quikAddDfield].data['options'];
                 if(options[0]['label'] == '请选择' || options[0]['label']==''){
@@ -1207,9 +1210,10 @@ let config={
         })
         Mediator.subscribe('form:selectChoose:'+_this.data.tableId,function(data){
             PMAPI.openDialogByIframe(`/form/choose?fieldId=${data.id}`,{
-                width:800,
-                height:600,
-                title:`选择器`
+                width:1500,
+                height:1000,
+                title:`选择器`,
+                modal:true
             }).then((data) => {
 
             });
