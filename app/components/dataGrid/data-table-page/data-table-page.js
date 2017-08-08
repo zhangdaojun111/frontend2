@@ -21,6 +21,15 @@ let config = {
             let i = $('.tabTitle li').index(this);
             $('.tabContent').hide();
             $('.tabContent').eq(i).show().siblings().hide();
+
+        });
+        $('.left-active').click(function () {
+            $(this).addClass('active');
+            $('.right-active').removeClass('active');
+        });
+        $('.right-active').click(function () {
+            $(this).addClass('active');
+            $('.left-active').removeClass('active');
         });
     }
 };
