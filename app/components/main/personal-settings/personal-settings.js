@@ -7,7 +7,7 @@ import template from './personal-settings.html';
 import {UserInfoService} from '../../../services/main/userInfoService';
 import msgbox from '../../../lib/msgbox';
 import SetAvatar from './set-avatar/set-avatar';
-import SetProxy from './set-proxy/set-proxy';
+import SetAgent from './set-agent/set-agent';
 import Mediator from "../../../lib/mediator";
 
 function getData(component_instance) {
@@ -45,14 +45,14 @@ let config = {
                 SetAvatar.show();
             }
         },
-        setProxy(){
+        setAgent(){
             //检查页面是否已创建
-            let $page = $(document).find("div#set-proxy-page");
+            let $page = $(document).find("div#set-agent-page");
             if($page.length !== 0){
                 $page.focus();
             }else{
                 //打开个人设置页面
-                SetProxy.show();
+                SetAgent.show();
             }
         },
         showPersonalInfo:function () {
@@ -154,8 +154,8 @@ let config = {
        //事件绑定
         this.el.on("click","div.avatar-box",() => {           //打开头像设置页面
             this.actions.setAvatar();
-        }).on("click","div.proxy-group",() => {                 //设置代理
-            this.actions.setProxy();
+        }).on("click","div.agent-group",() => {                 //设置代理
+            this.actions.setAgent();
         }).on("click","div.login-group",() => {
             //他人登录
             console.log("login by other");

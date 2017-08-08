@@ -42,5 +42,13 @@ export const UserInfoService = {
             type:"post",
             data:body
         });
+    },
+    //请求agent界面信息
+    getAgentData:function () {
+        let url = '/get_agent/';
+        return this.http.getImmediately({
+            type:"get",
+            url:url
+        })
     }
 };

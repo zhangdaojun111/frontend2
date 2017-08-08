@@ -2,11 +2,11 @@ $background_color: #ffffff;
 $sub_color: #0088ff;
 
 
-.clearfix:after {
-  display: block;
-  content: '';
-  clear: both;
-  zoom: 1;
+.clearfix{ zoom:1;}
+.clearfix:after{
+    display: table;
+    content: "";
+    clear: both;
 }
 
 #personal-setting-page{
@@ -39,7 +39,7 @@ $sub_color: #0088ff;
                 }
             }
 
-            .proxy-group{
+            .agent-group{
                 width: 80px;
                 height: 30px;
                 float: right;
@@ -50,7 +50,7 @@ $sub_color: #0088ff;
                 i{
                     width: 20px;
                     height: 20px;
-                    background: url("../../../assets/images/framework/proxy.png");
+                    background: url("../../../assets/images/framework/agent.png");
                     position: absolute;
                     margin-top: 7px;
                     background-repeat: no-repeat;

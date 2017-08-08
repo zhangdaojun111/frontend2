@@ -32,7 +32,7 @@ let SocketMgr = {
 
 }
 
-SocketMgr.connect();
+// SocketMgr.connect();
 
 window.setTimeout(function () {
     SocketMgr.socket.send(JSON.stringify({
