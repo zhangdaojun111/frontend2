@@ -340,14 +340,12 @@ let config = {
             }
             that.actions.logincalendarTreeData(objs);
             objects = objs;
-            that.el.find(".float-button-group-show").hover(function(){
-                $(this).nextAll(".float-button-group").css("display","block");
-            });
-            that.el.find(".float-button-group-hide").mouseleave(function(){
-                $(this).children(".float-button-group").css("display","none");
-            });
         });
-        that.el.on('click',"#checkbox_a3",function(){
+        that.el.on("mouseleave",".float-button-group-hide",function(){
+            $(this).children(".float-button-group").css("display","none");
+        }).on("mouseover",".float-button-group-show",function(){
+            $(this).nextAll(".float-button-group").css("display","block");
+        }).on('click',"#checkbox_a3",function(){
             let label_select_all_show = that.el.find(".label-select-all-show");
             let select_label_children = that.el.find(".select-label-children");
             config.actions.checkbox_a3($(this),label_select_all_show,select_label_children,that);
