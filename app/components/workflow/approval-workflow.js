@@ -5,7 +5,6 @@ import Mediator from '../../lib/mediator';
 import WorkFlow from './workflow-drawflow/workflow';
 import WorkflowSeal from './workflow-seal/workflow-seal';
 import {workflowService} from '../../services/workflow/workflow.service';
-
 let config={
     template: template,
     data:{
@@ -37,7 +36,7 @@ let config={
         getRecordInfos(__this){
             (async function () {
                 return workflowService.getRecordInfo({
-                    url:'/get_form_dynamic_data',
+                    url:'/data/get_form_dynamic_data',
                     data:__this.data.recordData
                 })
             })().then(res=>{
@@ -47,7 +46,6 @@ let config={
     },
     afterRender(){
         let __this=this;
-        console.log(data);
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             WorkFlow.show(msg.data[0]);
         });
@@ -55,6 +53,7 @@ let config={
             this.actions.approveWorkflow(__this);
         });
         this.actions.getRecordInfos(__this);
+
     }
 };
 class ApprovalWorkflow extends Component{

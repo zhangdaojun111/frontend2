@@ -1226,8 +1226,8 @@ class BaseForm extends Component{
         //用于前端填充数据用的子表的parentTableId
         // config.data['frontendParentTableId']=formData.data['parent_table_id'];
         super(config,formData.data);
-        console.log('处理完的数据');
-        console.log(this);
+        // console.log('处理完的数据');
+        // console.log(this);
     }
 
 }

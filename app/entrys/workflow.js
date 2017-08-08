@@ -41,6 +41,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         }});
     })().then(res=>{
             Mediator.publish('workflow:gotWorkflowInfo', res);
+            console.log(msg)
             return workflowService.validateDraftData({form_id:msg.formid});
         })
         .then(res=>{
@@ -151,7 +152,18 @@ let tree=[];
         isSearch: true
         });
     treeComp2.render($('#treeMulti'));
+
 });
 
 WorkflowRecord.showRecord();
 
+FormEntrys.createForm({
+    el:'#place-form',
+    form_id:76,
+    record_id:'597dbabe47b2c3e3ac6f9faa',
+    is_view:1,
+    from_approve:1,
+    from_focus:0,
+    table_id:'9348_HKpCmw87sFjKagr7NyM3sF',
+
+});
