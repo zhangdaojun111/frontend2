@@ -338,4 +338,16 @@ $('#exp').on('click',function(){
     // });
 
 })
+$('#workflow').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.createForm({
+        table_id:'1586_CcrzabMYLePTkAGDqpTgo2',
+        form_id:2,
+        el:$('body'),
+        record_id:'',
+        reload_draft_data:0,
+        from_workflow:1,
+    });
+})
 export default FormEntrys
