@@ -336,9 +336,20 @@ export const FormService={
         return y+'-'+m+'-'+d+" "+H+':'+M+':'+S;
     },
     //@function(fun_ghl_dqsj) end
+    getFormContent:async function (json) {
+        // let res=HTTP.post( 'get_form_content',json );
+        // HTTP.flush();
+        // return res;
+        return HTTP.post('get_form_content',json);
+    },
 
     getFormData(json){
-        let res=Promise.all([this.getStaticData(json),this.getDynamicData(json)]);
+        let res;
+        if(json['form_id']){
+            res=Promise.all([this.getStaticData(json),this.getDynamicData(json),this.getFormContent({form_id:json['form_id']})]);
+        }else{
+            res=Promise.all([this.getStaticData(json),this.getDynamicData(json)]);
+        }
         HTTP.flush();
         return res;
     },
