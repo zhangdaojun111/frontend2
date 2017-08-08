@@ -1,12 +1,5 @@
 @import "../../../../assets/scss/core/base";
 
-.clearfix{ zoom:1;}
-.clearfix:after{
-  display: table;
-  content: "";
-  clear: both;
-}
-
 .set-proxy-window{
     border: solid 1px #e4e4e4;
     padding: 5px;
@@ -24,8 +17,16 @@
             line-height: 30px;
             border-bottom: solid 1px #d7d7d7;
         }
-        .process-tree{
-
+        .work-tree{
+            width: 200px;
+            height: 90%;
+            margin-top: 10px;
+            margin-left: 10px;
+            overflow: auto;
+            li{
+                height: 25px;
+                line-height: 25px;
+            }
         }
     }
     .select-agent{
@@ -72,7 +73,7 @@
     }
 }
 
-.footer{
+.agent-footer{
     margin-top: 13px;
     .save-proxy{
         display: block;
@@ -86,5 +87,14 @@
         border: none;
         border-radius: 5px;
         text-align: center;
+    }
+}
+
+.workflow-tree {
+    span.icon.expand-icon{
+        display: none;
+    }
+    .node-selected {
+        background-color: #FFFFFF;
     }
 }
