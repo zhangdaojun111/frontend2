@@ -83,6 +83,8 @@ let config = {
         filterParam: {},
         //是否第一次渲染agGrid
         firstRender: true,
+        //权限
+        permission:{add: 1, calendar: 1, complex_search: 1, custom_field: 1, custom_width: 1, delete: 1, download: 1, edit: 1, group: 1, in_work: 1, search: 1, upload: 1, view: 1 ,setting: 1,cell_edit:1,new_window:1}
     },
     //生成的表头数据
     columnDefs: [],
