@@ -1,20 +1,67 @@
 .form {
-  .required{
-    display: inline-block;
-    color: #ff0617;
-    width: 16px;
-    height: 16px;
-    margin-left:5px;
-    background: url("../../../assets/images/form/icon_bitian.png");
-    vertical-align: middle;
-  }
-  .required2{
-    display: inline-block;
-    color: #ff0617;
-    width: 16px;
-    height: 16px;
-    margin-left:5px;
-    background: url("../../../assets/images/form/icon_bitian_yes.png");
-    vertical-align: middle;
-  }
+    .ui-history {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-left: 5px;
+        background: url("../../../assets/images/form/icon_history.png");
+        vertical-align: middle;
+    }
+    span.required {
+        display: inline-block;
+        color: #ff0617;
+        width: 16px;
+        height: 16px;
+        margin-left: 5px;
+        background: url("../../../assets/images/form/icon_bitian.png");
+        vertical-align: middle;
+    }
+    span.required2 {
+        display: inline-block;
+        color: #ff0617;
+        width: 16px;
+        height: 16px;
+        margin-left: 5px;
+        background: url("../../../assets/images/form/icon_bitian_yes.png");
+        vertical-align: middle;
+    }
+    .form-cell {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        .wrap {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            .label {
+                width: 200px;
+                text-align: center;
+            }
+            .content {
+                flex-grow: 1;
+                .error {
+                    color: red;
+                }
+                .info {
+                    color: blue;
+                }
+            }
+        }
+    }
+    .dynamic-form-input {
+        color: #000000;
+        line-height: 30px;
+        border: 1px solid #ddd;
+        -webkit-appearance: none;
+        outline: none;
+        opacity: 100;
+        padding: 0 5px;
+    }
+    .dropdown{
+        border-radius:0px;
+        height:30px;
+        padding:2px 0px;
+        margin-bottom:-3px;
+        vertical-align:middle;
+    }
 }

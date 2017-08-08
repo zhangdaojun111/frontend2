@@ -18,6 +18,7 @@ import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflo
 
 import FormEntrys from './form';
 import TreeView from  '../components/util/tree/tree';
+import msgBox from '../lib/msgbox';
 
 WorkFlowForm.showForm();
 
@@ -43,41 +44,56 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             return workflowService.validateDraftData({form_id:msg.formid});
         })
         .then(res=>{
+            let is_draft=0;
             if(res.the_last_draft!=''){
-                $( "#dialog-confirm" ).dialog({
-                    title:'提示',
-                    resizable: false,
-                    height: "auto",
-                    width: 400,
-                    modal: true,
-                    buttons: {
-                        "确认": function() {
-                            $( this ).dialog( "close" );
-                            //todo get draft info
-                            $("#dialog-confirm").html('');
-                        },
-                        "取消": function() {
-                            $( this ).dialog( "close" );
-                            $("#dialog-confirm").html('');
-                        }
-                    }
-                });
-                $("#dialog-confirm").append(`<p><span class="ui-icon ui-icon-alert"></span>
-                    您于${res.the_last_draft}时填写该工作表单尚未保存，是否继续编辑？
-                </p>`);
+                var a=msgBox.confirm('asdasd')
+                a.then(res=>{
+                    console.log("res:"+res);
+                },rej=>{
+                    console.log("rej:"+rej);
+                })
+                // $( "#dialog-confirm" ).dialog({
+                //     title:'提示',
+                //     resizable: false,
+                //     height: "auto",
+                //     width: 400,
+                //     modal: true,
+                //     buttons: {
+                //         "确认": function() {
+                //             $( this ).dialog( "close" );
+                //             //todo get draft info
+                //             is_draft=1;
+                //         },
+                //         "取消": function() {
+                //             $( this ).dialog( "close" );
+                //             is_draft=0;
+                //         }
+                //     }
+                // });
+                // $("#dialog-confirm").html('');
+                
+                // $("#dialog-confirm").append(`<p><span class="ui-icon ui-icon-alert"></span>
+                //     您于${res.the_last_draft}时填写该工作表单尚未保存，是否继续编辑？
+                // </p>`);
+
 
             }else{
-                alert('there is no draft');
+                is_draft=0;
+                alert('there is no draft,没有草稿');
             }
-            $("#workflow-create").append(`<button id="submit" class="ui-button ui-widget ui-corner-all">提交</button>`);
-        }).then(()=>{
+        }).then((is_draft)=>{
         console.log(`tableid:${msg.tableid}`);
-        // FormEntrys.createForm({
-        //     table_id:msg.tableid,
-        //     el:'#place-form',
-        //     is_view:1,
-        //     real_id:''
-        // });
+        $('#place-form').html('');
+        FormEntrys.createForm({
+            reload_draft_data:is_draft,
+            table_id:msg.tableid,
+            el:'#place-form',
+            is_view:1,
+            real_id:''
+        });
+        
+        $("#workflow-create").append(`<button id="submitWF" class="ui-button ui-widget ui-corner-all">提交</button>`);
+        
     })
 
 });
@@ -116,9 +132,7 @@ let tree=[];
     tree=res.data.department_tree;
 
     function recur(data) {
-        console.log(data);
         for (let item of data){
-            console.log(item);
             item.nodes=item.children;
             if(item.children.length!==0){
                 recur(item.children);
@@ -128,10 +142,14 @@ let tree=[];
     recur(tree);
 
 
-    var treeComp2 = new TreeView(tree,function (event,selectedNode) {
-        console.log("选中节点："+selectedNode.text);
-        // console.dir(selectedNode);
-    },'MULTI_SELECT',true,'tree3');
+    var treeComp2 = new TreeView(tree,{
+        callback: function (event,selectedNode) {
+            console.log(selectedNode.id);
+            // console.dir(selectedNode);
+        },
+        treeType:'MULTI_SELECT',
+        isSearch: true
+        });
     treeComp2.render($('#treeMulti'));
 });
 
