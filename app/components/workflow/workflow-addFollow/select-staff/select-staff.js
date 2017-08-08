@@ -1,6 +1,7 @@
 import Component from '../../../../lib/component';
 import template from './select-staff.html';
 // import './workflow-addFollow.scss';
+import Mediator from '../../../../lib/mediator';
 
 let config={
     template: template,
@@ -9,7 +10,9 @@ let config={
 
     },
     afterRender(){
-    
+        Mediator.subscribe('workflow:delUserArr', (msg)=> {
+            console.log(msg);
+        });
     }
 };
 class SelectStaff extends Component{
@@ -18,6 +21,4 @@ class SelectStaff extends Component{
     }
 }
 
-let component = new SelectStaff();
-let el = $('#staffMulti');
-component.render(el);
+export default SelectStaff;

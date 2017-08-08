@@ -157,16 +157,15 @@ let staff=[];
 
     var treeComp2 = new TreeView(tree,{
         callback: function (event,selectedNode) {
-            if(event==='select'){
                 for(var k in staff){
                     if(k==selectedNode.id){
-                        console.log(staff[k]);
+                        if(event==='select'){
+                            Mediator.publish('workflow:checkDept', staff[k]);
+                        }else{
+                            Mediator.publish('workflow:unCheckDept', staff[k]);
+                        }
                     }
                 }
-            }
-            
-          
-            // console.dir(selectedNode);
         },
         treeType:'MULTI_SELECT',
         isSearch: true

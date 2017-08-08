@@ -23,6 +23,7 @@
 			width: 33.3333%;
 			flex-shrink: 0;
 			height: 100%;
+			overflow: scroll;
 			border: 1px solid #000000;
 			.flex{
 				display: flex;
@@ -33,6 +34,9 @@
 	.w33{
 		width: 33.3333%;
 		flex-shrink: 0;
+		text-align: center;
+		height: 30px;
+		line-height: 30px;
 	}
 	.close{
 		cursor: pointer;
