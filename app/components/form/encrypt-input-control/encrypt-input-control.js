@@ -1,5 +1,4 @@
 import Component from '../../../lib/component';
-import '../../../assets/scss/control.scss'
 import 'jquery-ui/ui/widgets/dialog.js';
 import {md5} from "../../../services/login/md5";
 import Mediator from '../../../lib/mediator';

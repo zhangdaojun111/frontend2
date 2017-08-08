@@ -10,7 +10,7 @@ let config={
                     {{else if be_control_condition}}
                         <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                     {{else}}
-                        <div class="dropdown" style="float: left"></div>
+                        <div class="dropdown" style="width:{{width}};float: left"></div>
                         <div style="float: left;">
                             {{#if required}}
                                 <span id="requiredLogo" class="{{requiredClass}}" ></span>
@@ -28,7 +28,7 @@ let config={
                      {{/if}}   
                 </div>`,
     data:{
-
+        width:'240px',
     },
     actions:{
 
