@@ -30,5 +30,8 @@ export const workflowService={
     },
     getStuffInfo(params){
         return HTTP.getImmediately( params)
+    },
+    getRecordInfo(params){
+        return HTTP.postImmediately( params)
     }
 }
