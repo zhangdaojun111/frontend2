@@ -20,9 +20,29 @@ export const canvasCellService = {
             }
         })
     },
+
     /**
-     *
+     *保存视图画布数据
+     * @param {cells: 当前视图所有画布块}
+     * @returns {Promise}
      */
+    async saveCellLayout(data) {
+        const res = await HTTP.ajaxImmediately({
+            url: '/bi/set_view_layout/',
+            data: data,
+            // contentType: "application/json; charset=utf-8",
+            method:'post',
+            traditional: true
+        });
+
+        return new Promise((resolve, reject) => {
+            if (res['success']===1) {
+                resolve(res);
+            } else {
+                reject(res);
+            }
+        })
+    },
 
     /**
      * 获取画布块图表数据

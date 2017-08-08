@@ -5,44 +5,13 @@ import './aside.nav.scss';
 import { biChartService } from "../../../services/bisystem/bi.chart.service";
 import dragula from 'dragula';
 import Mediator from '../../../lib/mediator';
-import {ChartsComponent} from './charts/charts';
 
 let config = {
     template: template,
     data:{
         charts:window.config.charts
     },
-    actions:{
-        /**
-         * 初始化拖拽drag容器 && 设置drag options
-         */
-        chartDrag() {
-            let cells = $('.cell');
-            let container = [$('#aside-container .charts-items')[0], ...cells];
-            let drake = dragula(container,{
-                moves(el, container, handle) {
-                    return container.className !== 'cells-container';
-                },
-                copy(el, source) {
-                    return true;
-                },
-
-                invalid(el, handle) {
-                    return $(el).closest('.canvas-container')[0]
-                },
-                removeOnSpill: true
-            }).on('drop',(el, target, elContainer) => {
-                debugger;
-                let chartIndex = $(el).attr('data-index');
-                let chart = this.getChart(chartIndex);
-                chart['componentId'] = $(target).parent('div').attr('component');
-                // chart render
-                Mediator.publish('chart:drag:' + chart['componentId'], chart);
-                el.remove();
-            });
-            return drake;
-        },
-    },
+    actions:{},
 
     afterRender() {
         //加载左侧导航
@@ -129,6 +98,8 @@ let config = {
                 }
             })
         })
+    },
+    firstAfterRender() {
     }
 };
 
@@ -146,6 +117,8 @@ class AsideNavComponent extends BiBaseComponent{
         let chart = this.data.charts[index];
         return chart
     }
+
+
 }
 
 export default AsideNavComponent;

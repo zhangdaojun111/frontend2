@@ -5,15 +5,15 @@ import {CanvasHeaderlComponent} from "../canvas/header/canvas.header";
 import template from './canvas.cells.html';
 import './canvas.cells.scss';
 import {canvasCellService} from '../../../services/bisystem/canvas.cell.service';
-import {router} from '../bi.router';
 import Mediator from '../../../lib/mediator';
-
+import  {ToolPlugin} from '../utils/tool.plugin';
 
 let config = {
     template: template,
     data: {
         views: window.config.bi_views,
-        cells:[]
+        cells:[],
+        componentIds: []
     },
     actions: {
         /**
@@ -27,10 +27,8 @@ let config = {
                 val['chart'] = charts[index];
                 let cellComponent = new CanvasCellComponent(val);
                 this.append(cellComponent, this.el.find('.cells'));
+                this.data.componentIds.push(cellComponent.componentId);
             });
-            Mediator.publish('init:drag', chartsId);
-
-
         },
     },
 
@@ -42,6 +40,7 @@ let config = {
         });
 
         let self = this;
+
         // 匹配导航的视图id
         if (self.viewId) {
             for(let [index,view] of self.data.views.entries()) {
@@ -52,6 +51,35 @@ let config = {
         } else {
             $('.nav-tabs a').eq(0).addClass('active');
         };
+
+        //子组件删除时 更新this.data.cells
+        Mediator.subscribe("bi:cell:remove", componentId => {
+            for (let [index,id] of this.data.componentIds.entries()) {
+                if (id == componentId) {
+                    this.data.cells.splice(index,1);
+                    break;
+                };
+            }
+        })
+
+        // 保存视图画布
+        this.el.on('click', '.view-save-btn', (event) => {
+            let cells = ToolPlugin.clone(this.data.cells);
+            const data = {
+                view_id: this.viewId,
+                canvasType: "pc",
+                data: cells.map((cell) => {
+                    delete cell['chart']
+                    return JSON.stringify(cell);
+                })
+            };
+            canvasCellService.saveCellLayout(data).then(res => {
+                if (res['success'] === 1) {
+                    alert('保存成功')
+                }
+            })
+        })
+
     },
 
     /**

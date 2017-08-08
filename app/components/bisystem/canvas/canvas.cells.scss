@@ -13,7 +13,7 @@ $active-color: #1caeff;
         height: 50px;
         font-size: $font_size;
         .nav-tabs{
-            width: 100%;
+            float:left;
             height:50px;
             white-space: nowrap;
             background-color: #ffffff;
@@ -38,6 +38,20 @@ $active-color: #1caeff;
                 color: $active-color;
                 border-bottom: solid 5px $active-color;
             }
+        }
+    }
+    .views-btn-group{
+        float:right;
+        a{
+            text-decoration: none;
+            padding: 0 25px;
+            position: relative;
+            display: inline-block;
+            outline: none;
+            color: #666666;
+            line-height: 50px;
+            height: 45px;
+            margin-right: -3px;
         }
     }
     &.manage{
