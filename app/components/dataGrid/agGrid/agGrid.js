@@ -42,41 +42,37 @@ let config = {
                 sortingOrder: ['asc','desc','null'],
                 suppressRowClickSelection: true,
                 rowSelection: 'multiple',
-                // icons: dgcService.replacingIcons,
+                icons: dgcService.replacingIcons,
                 //列宽改变
                 onColumnResized: this.data.onColumnResized,
                 //拖动结束
                 onDragStopped: this.data.onDragStopped,
                 //分组
                 getNodeChildDetails: (rowItem)=>{
-                    this.actions.getNodeChildDetails(rowItem)
+                    if ( rowItem.group||Object.is(rowItem.group,'')||Object.is(rowItem.group,0) ) {
+                        return {
+                            group: true,
+                            // open C be default
+                            // expanded: rowItem.group === 'Group C',
+                            // expanded: rowItem.children&&rowItem.children[0]&&rowItem.children[0].group?true:false,
+                            expanded: rowItem.children&&rowItem.children[0]&&rowItem.children[0].group?true:false,
+                            // provide ag-Grid with the children of this group
+                            children: rowItem.children,
+                            // this is not used, however it is available to the cellRenderers,
+                            // if you provide a custom cellRenderer, you might use it. it's more
+                            // relavent if you are doing multi levels of groupings, not just one
+                            // as in this example.
+                            field: 'group',
+                            // the key is used by the default group cellRenderer
+                            key: rowItem.group
+                        };
+                    } else {
+                        return {
+                            group: false
+                        };
+                    }
                 }
             }
-        },
-        //返回nodeChildDetails
-        getNodeChildDetails: ( rowItem )=>{
-            if ( rowItem.group||Object.is(rowItem.group,'')||Object.is(rowItem.group,0) ) {
-                return {
-                    group: true,
-                    // open C be default
-                    // expanded: rowItem.group === 'Group C',
-                    expanded: rowItem.children&&rowItem.children[0]&&rowItem.children[0].group?true:false,
-                    // provide ag-Grid with the children of this group
-                    children: rowItem.children,
-                    // this is not used, however it is available to the cellRenderers,
-                    // if you provide a custom cellRenderer, you might use it. it's more
-                    // relavent if you are doing multi levels of groupings, not just one
-                    // as in this example.
-                    field: 'group',
-                    // the key is used by the default group cellRenderer
-                    key: rowItem.group
-                };
-            } else {
-                return {
-                    group: false
-                };
-            }
-
         },
         createAgGrid: function (){
             var eGridDiv = document.querySelector( '#myGrid' );

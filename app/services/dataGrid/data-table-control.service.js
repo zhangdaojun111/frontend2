@@ -331,7 +331,9 @@ export const dgcService = {
         dropNotAllowed: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
         rowGroupPanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
         pivotPanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
-        valuePanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />'
+        valuePanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        sortAscending: '<img src="'+require('../../assets/images/dataGrid/icon_paixu_1.png') +'" />',
+        sortDescending: '<img src="'+require('../../assets/images/dataGrid/icon_paixu_2.png') +'" />'
     },
     //返回fieds
     retureFields: function (id2fields,ids) {

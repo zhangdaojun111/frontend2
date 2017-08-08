@@ -218,10 +218,6 @@ let config = {
                         floatingFilterComponent: this.floatingFilterCom.actions.createFilter(fieldTypeService.searchType(data.data["real_type"]), data.data["field"], this.data.searchValue, this.data.searchOldValue),
                         floatingFilterComponentParams: {suppressFilterButton: true},
                         enableRowGroup: true,
-                        // icons: {
-                        //     sortAscending: '<img src="' + img1 + '" style="width: 15px;height:15px;"/>',
-                        //     sortDescending: '<img src="' + img2 + '" style="width: 15px;height:15px;"/>'
-                        // },
                         suppressSorting: false,
                         suppressResize: false,
                         suppressMovable: false,
