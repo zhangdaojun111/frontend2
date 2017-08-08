@@ -325,8 +325,8 @@ let config={
                         }
                     }
                 }
-                    //告诉外围现在正在读取默认值
-                    // this.wfService.isReadDefaultData.next(false);
+                //告诉外围现在正在读取默认值
+                // this.wfService.isReadDefaultData.next(false);
             }
         },
 
@@ -660,30 +660,30 @@ let config={
         },
         //给相关赋值
         async setAboutData(id,value) {
-                // let res=await HTTP.postImmediately({
-                //     url: 'http://127.0.0.1:8081/get_about_data/',
-                //     data: {
-                //         buildin_field_id: id,
-                //         buildin_mongo_id: value
-                //     }
-                // })
-                //
-                FormService.getAboutData({
-                            buildin_field_id: id,
-                            buildin_mongo_id: value
-                    }).then(res=>{
-                    //给相关的赋值
-                        for(let k in res["data"]){
-                            //如果是周期规则
-                            if(this.data.data.hasOwnProperty(k) && this.data.data[k].hasOwnProperty("real_type") && this.data.data[k]["real_type"] == '27') {
-                                if(res["data"][k]["-1"]){
-                                    this.actions.setFormValue.bind(this)(k,res["data"][k]["-1"]);
-                                }
-                            }else{
-                                this.actions.setFormValue.bind(this)(k,res["data"][k]);
-                            }
+            // let res=await HTTP.postImmediately({
+            //     url: 'http://127.0.0.1:8081/get_about_data/',
+            //     data: {
+            //         buildin_field_id: id,
+            //         buildin_mongo_id: value
+            //     }
+            // })
+            //
+            FormService.getAboutData({
+                buildin_field_id: id,
+                buildin_mongo_id: value
+            }).then(res=>{
+                //给相关的赋值
+                for(let k in res["data"]){
+                    //如果是周期规则
+                    if(this.data.data.hasOwnProperty(k) && this.data.data[k].hasOwnProperty("real_type") && this.data.data[k]["real_type"] == '27') {
+                        if(res["data"][k]["-1"]){
+                            this.actions.setFormValue.bind(this)(k,res["data"][k]["-1"]);
                         }
-                    })
+                    }else{
+                        this.actions.setFormValue.bind(this)(k,res["data"][k]);
+                    }
+                }
+            })
         },
 
         //快捷添加后回显
@@ -927,54 +927,54 @@ let config={
         },
 
         reviseCondition:function(editConditionDict,value,_this) {
-        // if(this.dfService.isView){return false;}
-        let arr = [];
-        for(let key in editConditionDict["edit_condition"]){
-            if( key == 'and' ){
-                let andData = editConditionDict["edit_condition"][key];
-                for( let f in andData  ){
-                    let i = 0;
-                    for( let d of andData[f] ){
-                        for( let b of value ){
-                            if( d == b ){
-                                i++;
+            // if(this.dfService.isView){return false;}
+            let arr = [];
+            for(let key in editConditionDict["edit_condition"]){
+                if( key == 'and' ){
+                    let andData = editConditionDict["edit_condition"][key];
+                    for( let f in andData  ){
+                        let i = 0;
+                        for( let d of andData[f] ){
+                            for( let b of value ){
+                                if( d == b ){
+                                    i++;
+                                }
                             }
                         }
+                        _this.data.data[f]["is_view"] = ( i == andData[f].length )? 0 : 1;
+                        _this.actions.changeControlDisabled(f);
+                        _this.childComponent[f].data=_this.data.data[f];
+                        _this.childComponent[f].reload();
                     }
-                    _this.data.data[f]["is_view"] = ( i == andData[f].length )? 0 : 1;
-                    _this.actions.changeControlDisabled(f);
-                    _this.childComponent[f].data=_this.data.data[f];
-                    _this.childComponent[f].reload();
-                }
-            }else {
-                for(let dfield of editConditionDict["edit_condition"][key]) {
-                    if( arr.indexOf( dfield ) != -1 ){
-                        continue;
-                    }
-                    //如果有字段的负责性，再开始下面的逻辑
-                    let data=_this.data.data[dfield];
-                    if(_this.data.data[dfield]["required_perm"] == 1){
+                }else {
+                    for(let dfield of editConditionDict["edit_condition"][key]) {
+                        if( arr.indexOf( dfield ) != -1 ){
+                            continue;
+                        }
+                        //如果有字段的负责性，再开始下面的逻辑
                         let data=_this.data.data[dfield];
-                        //针对多选下拉框，只要包含就可以
-                        if(value instanceof Array){
-                            data["be_control_condition"] = value.indexOf(key) != -1 ? 0 : 1;
-                            _this.actions.changeControlDisabled(dfield);
-                        }else{
-                            data["be_control_condition"] = (key == value) ? 0 : 1;
-                            _this.actions.changeControlDisabled(dfield);
+                        if(_this.data.data[dfield]["required_perm"] == 1){
+                            let data=_this.data.data[dfield];
+                            //针对多选下拉框，只要包含就可以
+                            if(value instanceof Array){
+                                data["be_control_condition"] = value.indexOf(key) != -1 ? 0 : 1;
+                                _this.actions.changeControlDisabled(dfield);
+                            }else{
+                                data["be_control_condition"] = (key == value) ? 0 : 1;
+                                _this.actions.changeControlDisabled(dfield);
+                            }
+                            if( data["is_view"] == 0 ){
+                                arr.push( dfield );
+                            }
                         }
-                        if( data["is_view"] == 0 ){
-                            arr.push( dfield );
-                        }
+                        _this.childComponent[dfield].data=data;
+                        _this.childComponent[dfield].reload();
                     }
-                    _this.childComponent[dfield].data=data;
-                    _this.childComponent[dfield].reload();
                 }
             }
-        }
-    },
+        },
 
-    checkValue:function(data,_this){
+        checkValue:function(data,_this){
             _this.data.data[data.dfield]=data;
 
             if(data.type=='Buildin'){
