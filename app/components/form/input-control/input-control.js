@@ -1,5 +1,6 @@
 import Component from '../../../lib/component';
-import '../../../assets/scss/form.scss'
+// import '../../../assets/scss/form.scss'
+import '../base-form/base-form.scss';
 import Mediator from '../../../lib/mediator';
 import {FormService} from "../../../services/formService/formService"
 

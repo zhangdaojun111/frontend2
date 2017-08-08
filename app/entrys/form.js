@@ -1,7 +1,9 @@
 import FormBase from '../components/form/base-form/base-form'
 import {HTTP} from '../lib/http';
 import {FormService} from "../services/formService/formService";
+import '../components/form/base-form/base-form.scss'
 import '../assets/scss/form.scss'
+
 
 // @parma
 //

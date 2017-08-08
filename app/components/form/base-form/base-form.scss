@@ -48,15 +48,6 @@
             }
         }
     }
-    .dynamic-form-input {
-        color: #000000;
-        line-height: 30px;
-        border: 1px solid #ddd;
-        -webkit-appearance: none;
-        outline: none;
-        opacity: 100;
-        padding: 0 5px;
-    }
     .dropdown{
         border-radius:0px;
         height:30px;
@@ -65,3 +56,68 @@
         vertical-align:middle;
     }
 }
+/*table*/
+tbody > tr > td{
+  line-height: 1.42857143;
+  padding: 8px;
+  vertical-align: middle;
+  border: 1px solid rgb(240,240,240);
+  white-space: nowrap;
+  width: auto;
+}
+/*input*/
+.dynamic-form-input {
+  color: #000000;
+  line-height: 30px;
+  border: 1px solid #ddd;
+  -webkit-appearance: none;
+  outline: none;
+  opacity: 100;
+  padding: 0 5px;
+}
+ .dynamic-form-input-a, .dynamic-form-input-ac {
+    display: inline-block;
+    width: 50px;
+    line-height: 25px;
+    text-align: center;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 0 5px;
+}
+.dynamic-form-input-a{
+    color: #ffffff;
+    background-color: #197DEB;
+}
+ .dynamic-form-input-ac {
+    color: #197DEB;
+    background-color: #ffffff;
+    border: 1px solid #197DEB;
+}
+/*errorTips*/
+.error-msg {
+  height: 30px;
+  top: 0px;
+  zoom: 1;
+  display: block;
+  position: absolute;
+  border: 1px solid red;
+  color: red;
+  padding-left: 25px;
+  padding-right: 10px;
+  background: #FFF5F5 url(../../../assets/images/form/error-msg.png) no-repeat;
+  line-height: 22px;
+  white-space: normal;
+  z-index: 999;
+  width: 300px;
+}
+.ui-error-arrow {
+  position: absolute;
+  left: -7px;
+  top: 6px;
+  width: 7px;
+  height: 10px;
+  display: block;
+  background: url(../../../assets/images/form/icon_error.png) no-repeat;
+  background-position: -16px -510px;
+}
+
