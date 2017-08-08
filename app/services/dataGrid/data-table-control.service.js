@@ -91,6 +91,8 @@ export const dgcService = {
         suppressMenu: true,
         cellRenderer: (params)=>{}
     },
+    //分组列
+    groupCol: { headerName: '分组', field: 'group' ,pinned:'left',hide:true,suppressSorting: true,suppressMovable:true,cellRenderer: 'group', suppressMenu: true, tooltipField:'group',suppressFilter: true},
     //搜索类型
     // 判断搜索类型
     getMongoSearch: function(data) {
