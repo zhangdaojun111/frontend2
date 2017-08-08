@@ -5,6 +5,7 @@ import './aside.nav.scss';
 import { biChartService } from "../../../services/bisystem/bi.chart.service";
 import dragula from 'dragula';
 import Mediator from '../../../lib/mediator';
+import {ChartsComponent} from './charts/charts';
 
 let config = {
     template: template,
@@ -44,9 +45,16 @@ let config = {
     },
 
     afterRender() {
+        //加载左侧导航
+        this.data.charts.forEach((val,index) => {
+            let chartsComponent = new ChartsComponent(val);
+            this.append(chartsComponent,this.el.find('.charts-items'));
+        });
+
         Mediator.subscribe('init:drag', (data) => {
             let drake = this.actions.chartDrag();
-        })
+        });
+
         // 顶部 新建图标/编辑图标 阴影效果切换
         $('.user a').each(function () {
             // console.log($(this));
@@ -72,7 +80,7 @@ let config = {
         $('.btn_ripple').each(function () {
             $(this).on('click',function (event) {
                 let flag = true;
-                let top = $(this).position().top;
+                let top = $(this).offset().top - $('.charts-container').offset().top - 81;
                 const hideMenuHeight = $('.hide_meun').height();
                 $('.hide_meun').eq(0).css('top',top);
                 $('.hide_meun').eq(0).fadeIn('normal');
@@ -106,18 +114,18 @@ let config = {
         //模糊搜索
         $('.filter-match').on('input',function () {
             //值改变时 隐藏
-            $('.charts-item').css('display','none');
+            $('.charts-items li').css('display','none');
 
             //填空值时 仍显示
             if($('.filter-match').val().length<=0){
-                $('.charts-item').css('display','block');
+                $('.charts-items li').css('display','block');
                 return;
             }
 
-            //模糊匹配 遍历所有 将匹配的显示出来
-            $('.charts-item').each(function (index) {
-                if ($('.charts-item').eq(index).text().substr(0,$('.filter-match').val().length) == $('.filter-match').val()){
-                    $('.charts-item').eq(index).css('display','block');
+            // 模糊匹配 遍历所有 将匹配的显示出来
+            $('.charts-items li').each(function (index) {
+                if ($('.charts-items li').eq(index).text().substr(0,$('.filter-match').val().length) == $('.filter-match').val()){
+                    $('.charts-items li').eq(index).css('display','block');
                 }
             })
         })

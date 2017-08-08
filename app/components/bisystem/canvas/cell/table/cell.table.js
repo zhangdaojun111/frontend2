@@ -64,7 +64,9 @@ let config = {
 
         }
     },
-    afterRender() {}
+    afterRender() {
+
+    }
 };
 export class CellTableComponent extends BiBaseComponent {
     constructor(cellChart) {

@@ -1,5 +1,6 @@
 import {BiBaseComponent} from '../bi.base.component';
 import {CanvasCellComponent} from './cell/canvas.cell';
+import {CanvasHeaderlComponent} from "../canvas/header/canvas.header";
 
 import template from './canvas.cells.html';
 import './canvas.cells.scss';
@@ -28,10 +29,18 @@ let config = {
                 this.append(cellComponent, this.el.find('.cells'));
             });
             Mediator.publish('init:drag', chartsId);
+
+
         },
     },
 
     afterRender() {
+        //加载头部导航
+        this.data.views.forEach((val,index) => {
+            let canvasHeaderlComponent = new CanvasHeaderlComponent(val);
+            this.append(canvasHeaderlComponent,this.el.find('.nav-tabs'));
+        });
+
         let self = this;
         // 匹配导航的视图id
         if (self.viewId) {
@@ -61,5 +70,5 @@ export class CanvasCellsComponent extends BiBaseComponent{
     constructor(id) {
         super(config);
         this.viewId = id ? id : this.data.views[0]['id'];
-    }
+    };
 }
