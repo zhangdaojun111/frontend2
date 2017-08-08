@@ -5,7 +5,7 @@ import './aside.nav.scss';
 import { biChartService } from "../../../services/bisystem/bi.chart.service";
 import dragula from 'dragula';
 import Mediator from '../../../lib/mediator';
-
+import {ChartsComponent} from './charts/charts';
 let config = {
     template: template,
     data:{
