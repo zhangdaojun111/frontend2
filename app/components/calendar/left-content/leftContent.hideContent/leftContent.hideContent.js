@@ -12,8 +12,8 @@ let config = {
     },
     afterRender: function() {
         this.el.css("padding","2px 10px 5px 10px");
-        $("#show-type").attr("id","show-type-"+config.data.table_Id);
-        $(".show-type-button").bind('click',function () {
+        this.el.find("#show-type").attr("id","show-type-"+config.data.table_Id);
+        this.el.find(".show-type-button").on('click',function () {
             $(this).parent().parent("div").remove();
             config.data.show_type_ID = $(this).attr("id").split('-')[2];
             CalendarService.CalendarMsgMediator.publish('showRemindType',{data:config.data.show_type_ID});

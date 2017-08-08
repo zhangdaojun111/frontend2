@@ -9,13 +9,18 @@ let config = {
         workflow_schedule: "'20%'",
     },
     actions:{
-
+        toPercent:function(point){
+            var str=Number(point*100).toFixed(1);
+            str+="%";
+            return str;
+        },
     },
     afterRender: function() {
         this.el.css("height","30px");
         let workflow_Id = "#workflow-"+config.data.table_id;
-        $("#workflow").attr("id","workflow-"+config.data.table_id);
-        $(workflow_Id).css({"width":config.data.record_progress});
+        this.el.find("#workflow").attr("id","workflow-"+config.data.table_id);
+        let record_progress = config.actions.toPercent(config.data.record_progress);
+        this.el.find(workflow_Id).css({"width":record_progress});
         console.log(config.data);
     },
 }

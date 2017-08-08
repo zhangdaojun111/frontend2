@@ -708,7 +708,6 @@ let config = {
             this.data.selectData = this.data.today;
             this.actions.changeMainView('day');
         });
-
         CalendarService.CalendarMsgMediator.subscribe('leftSelectedDate',data => {
             let y = Number(data['year']),
                 m = Number(data['month']),
