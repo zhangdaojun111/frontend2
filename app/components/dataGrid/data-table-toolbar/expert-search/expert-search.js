@@ -33,6 +33,9 @@ let config = {
         },
         getExpertSearchData:function(data){
 
+        },
+        saveTemporaryCommonQuery:function(data){
+
         }
     },
     actions: {
@@ -155,7 +158,8 @@ let config = {
                     if(name == 'save'){
                         this.actions.openSaveQuery(name);
                     } else {
-                        this.actions.saveTemporaryCommonQuery();
+                        $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时常用查询">临时常用查询</option>`)
+                        this.data.saveTemporaryCommonQuery(this.data.searchInputList);
                         this.data.postExpertSearch(this.data.searchInputList);
                     }
                 } else {
@@ -182,21 +186,21 @@ let config = {
             })
         },
         //保存临时常用查询
-        saveTemporaryCommonQuery:function() {
-            $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="00" value="临时常用查询">临时常用查询</option>`)
-            this.data.commonQuery.push({
-                id: '00',
-                name:'临时常用查询',
-                queryParams: JSON.stringify(this.data.searchInputList)
-            })
-        },
+        // saveTemporaryCommonQuery:function() {
+        //     this.data.commonQuery.push({
+        //         id: '00',
+        //         name:'临时常用查询',
+        //         queryParams: JSON.stringify(this.data.searchInputList)
+        //     })
+        //     debugger
+        // },
         //保存常用查询
         saveCommonQuery: function(name) {
             let obj = {
                 'action': 'queryParams',
                 'table_id': this.data.tableId,
                 'name': name,
-                'qyueryParams': JSON.stringify(this.data.searchInputList)
+                'queryParams': JSON.stringify(this.data.searchInputList)
             };
             dataTableService.savePreference(obj).then( res=>{
                 if(res.succ == 0) {
@@ -249,7 +253,7 @@ let config = {
             })
         }
         this.actions.rendSearchItem();
-        let _this = this;
+        let _this = this,itemDeleteChecked=true;
         this.el.on('click','.condition-search-box-input', function() {
             if (config.ulChecked){
                 $(this).next('.condition-search-ul').css('display','block');
@@ -266,8 +270,10 @@ let config = {
             $(this).prop('checked',true)
         }).on('click','.searchButton', ()=> {
             this.actions.submitData()
+        }).on('click','.resetButton',function(){
+            $('.condition-search-container').find('div').remove();
+            _this.actions.rendSearchItem();
         }).on('click','.common-search-item',function() {
-            debugger
             _this.data.commonQuery.forEach((item) => {
                 if(item.id == this.attributes['fieldId'].nodeValue){
                     _this.actions.showSearchData(JSON.parse(item.queryParams));
@@ -279,7 +285,17 @@ let config = {
             event.stopPropagation();
             _this.actions.deleteCommonQuery($(this).parent('.common-search-item').attr('fieldId'))
         }).on('click','.common-search-compile',function(){
-            $('.common-search-list').find('.item-delete').css('display','block')
+            if(itemDeleteChecked){
+                $('.common-search-list').find('.item-delete').css('display','block');
+                $('.common-search-compile').html('取消');
+                itemDeleteChecked = !itemDeleteChecked;
+            } else {
+                $('.common-search-list').find('.item-delete').css('display','none');
+                $('.common-search-compile').html('编辑');
+                itemDeleteChecked = !itemDeleteChecked;
+            }
+
+
         })
 
     }

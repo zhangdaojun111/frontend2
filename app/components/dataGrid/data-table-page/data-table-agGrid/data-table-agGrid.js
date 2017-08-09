@@ -81,6 +81,8 @@ let config = {
         groupFields: [],
         //原始字段数据
         fieldsData: [],
+        //临时查询数据
+        temporaryCommonQuery:[],
         //高级查询需要的字段信息
         expertSearchFields: [],
         //定制列需要字段信息
@@ -1058,7 +1060,8 @@ let config = {
                     fieldsData: this.data.expertSearchFields,
                     commonQuery: this.data.commonQueryData,
                     getExpertSearchData:this.actions.getExpertSearchData,
-                    postExpertSearch:this.actions.postExpertSearch
+                    postExpertSearch:this.actions.postExpertSearch,
+                    saveTemporaryCommonQuery:this.actions.saveTemporaryCommonQuery
 
                 }
                 expertSearch.show(d);
@@ -1164,6 +1167,11 @@ let config = {
                 }
             }
             return ary
+        },
+        //获取临时常用查询数据
+        saveTemporaryCommonQuery: function(data) {
+            $('.dataGrid-commonQuery-select').val('临时常用查询');
+            this.data.saveTemporaryCommonQuery  = data;
         },
         //获取高级查询数据
         getExpertSearchData: function () {
@@ -1341,7 +1349,10 @@ let config = {
         $('.dataGrid-commonQuery-select').bind('change', function() {
             if($(this).val() == '常用查询') {
                 _this.actions.postExpertSearch([]);
+            } else if($(this).val() == '临时常用查询') {
+                _this.actions.postExpertSearch(_this.data.saveTemporaryCommonQuery);
             } else {
+                $(this).find('.Temporary').remove();
                 _this.data.commonQueryData.forEach((item) => {
                     if(item.name == $(this).val()){
                         _this.actions.postExpertSearch(JSON.parse(item.queryParams));
