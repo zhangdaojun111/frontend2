@@ -1,4 +1,5 @@
 import Component from '../../../lib/component';
+import MSG from '../../../lib/msgbox';
 import './base-form.scss';
 import TextArea from '../textarea-control/textarea-area'
 import Radio from '../radio-control/radio-control';
@@ -712,7 +713,7 @@ let config={
             let formValue=this.actions.createFormValue(this.data.data);
             let {error,errorMsg} = this.actions.validForm(this.data.data,formValue);
             if(error){
-                alert(errorMsg);
+                MSG.alert(errorMsg);
                 return;
             }
 
