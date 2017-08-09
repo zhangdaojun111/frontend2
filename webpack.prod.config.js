@@ -19,8 +19,9 @@ module.exports = {
         workflow:path.resolve(APP_PATH, 'entrys/workflow'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
-        bi:path.resolve(APP_PATH, 'entrys/bi.js'),
+        //bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
+        calendarSet: path.resolve(APP_PATH, 'entrys/calendar.set.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
         vendors: [
             'jquery',
