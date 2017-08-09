@@ -12,6 +12,7 @@ import FloatingFilter from "../../data-table-toolbar/floating-filter/floating-fi
 import customColumns from "../../data-table-toolbar/custom-columns/custom-columns";
 import groupGrid from "../../data-table-toolbar/data-table-group/data-table-group";
 import dataPagination from "../../data-table-toolbar/data-pagination/data-pagination";
+import delSetting from '../../data-table-toolbar/data-table-delete/data-table-delete';
 
 import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 
@@ -1049,6 +1050,17 @@ let config = {
                 let height = this.data.isShowFloatingFilter ? 0:30;
                 this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
                 this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
+            } )
+            //删除
+            $( '.grid-del-btn' ).click( ()=>{
+                PMAPI.openDialogByComponent(delSetting, {
+                    width: 800,
+                    height: 600,
+                    title: '删除'
+                }).then((data) => {
+                    let choosedData = data.choosedData;
+                    this.actions.onSettingDataReturn(choosedData);
+                });
             } )
         },
         //定制列
