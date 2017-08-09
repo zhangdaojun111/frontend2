@@ -36,7 +36,6 @@ let config = {
         let taskData = this.data.bodyData['data'];
 
         if(taskData && taskData.length > 0) {
-            console.log(taskData);
             taskData.forEach(item => {
                 let taskItemHtml = document.createElement('div');
                 taskItemHtml.id = 'task-item';

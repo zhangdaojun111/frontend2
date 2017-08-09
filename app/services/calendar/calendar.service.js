@@ -21,6 +21,10 @@ const calendarPreferenceUrl = 'calendar_mgr/calendar_preference';
 
 const menuUrl = 'get_menu';
 
+const columnListUrl = 'get_column_list';
+
+const keyFieldDictUrl = 'calendar_mgr/key_field_dict';
+
 export const CodeEnum = {
         SUCCESS: 200,
 };
@@ -168,7 +172,20 @@ export const CalendarService = {
         return res;
     },
 
-    nextUnShowData: function (unShowData) {
-        Mediator.emit('calendar-service: unshowData', unShowData);
+    getReplace: function (tableId) {
+        let params = {
+            table_id: tableId,
+        };
+
+        let res = HTTP.get(keyFieldDictUrl, params).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                alert('获取数据失败');
+            }
+        });
+        HTTP.flush();
+        return res;
     }
+
 };

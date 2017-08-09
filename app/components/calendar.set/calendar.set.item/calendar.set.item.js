@@ -27,8 +27,7 @@ let config = {
         this.data.dropdownForRes.forEach(item => {
             this.el.find('.res-text').append("<option value='"+item+"'>"+item+"</option>");
         });
-        // this.append(new CalendarSetItemMulitSelect, this.el.find('.multi-select-item'));
-        // console.log($(set_color_id).val());
+
     }
 };
 

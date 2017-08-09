@@ -25,20 +25,6 @@ let config = {
             menuItem.innerHTML = item['label'];
             this.el.find('.menu-item').append(menuItem);
             menuItem.onclick = function () {
-                console.log(item);
-                // let component = new CalendarSet();
-                // let el = $('<div>').appendTo(document.body);
-                // component.render(el);
-                // el.dialog({
-                //     title: '日历设置',
-                //     width: '99%',
-                //     height: '950',
-                //     background: '#ddd',
-                //     close: function() {
-                //         $(this).dialog('destroy');
-                //         component.destroySelf();
-                //     }
-                // });
                 PMAPI.openDialogByIframe(
                     '/calendar_mgr/set/?table_id='+item['table_id'],
                     {
