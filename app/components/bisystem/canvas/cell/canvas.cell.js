@@ -53,9 +53,11 @@ export class CanvasCellComponent extends BiBaseComponent {
      */
     renderCell() {
         this.el.find('.cell').css(this.cell.size);
-        let cellComponent = new cellTypes[this.cell['chart']['assortment']](this.cell);
-        let cellContainer = this.el.find('.cell-chart');
-        cellComponent.render(cellContainer);
+        if (this.cell['chart']['assortment']) {
+            let cellComponent = new cellTypes[this.cell['chart']['assortment']](this.cell);
+            let cellContainer = this.el.find('.cell-chart');
+            cellComponent.render(cellContainer);
+        }
     }
 
     afterRender() {

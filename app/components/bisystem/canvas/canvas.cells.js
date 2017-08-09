@@ -21,7 +21,8 @@ let config = {
          */
         async loadCells() {
             // 获取画布块数据
-            const chartsId = this.data.cells.map((cell) => cell.chart_id);
+            const chartsId = this.data.cells.map((cell) => cell.chart_id ? cell.chart_id : 0);
+            console.log(chartsId);
             const charts = await canvasCellService.getCellChart({chart_id: chartsId});
             this.data.cells.forEach((val, index) => {
                 val['chart'] = charts[index];
@@ -30,6 +31,30 @@ let config = {
                 this.data.componentIds.push(cellComponent.componentId);
             });
         },
+
+        /**
+         * 添加画布块
+         */
+        addCell() {
+            console.log(this.data.cells);
+            const cell = {
+                layout_id: '',
+                chart_id: '',
+                name:'',
+                size: {
+                    left: 100,
+                    top: 100,
+                    width: 300,
+                    height: 300,
+                    zIndex: 100
+                }
+            };
+            cell.chart = {};
+            let cellComponent = new CanvasCellComponent(cell);
+            this.append(cellComponent, this.el.find('.cells'));
+            this.data.cells.push(cell);
+        }
+
     },
 
     afterRender() {
@@ -78,6 +103,11 @@ let config = {
                     alert('保存成功')
                 }
             })
+        })
+
+        //
+        this.el.on('click', '.add-cell-btn', (event) => {
+            this.actions.addCell();
         })
 
     },
