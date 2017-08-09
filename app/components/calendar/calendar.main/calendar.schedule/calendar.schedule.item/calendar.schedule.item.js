@@ -30,7 +30,6 @@ let config = {
     },
     afterRender: function() {
         this.data.dayScheduleList.forEach(item => {
-            console.log(item);
             let taskItemHtml = document.createElement('div');
             taskItemHtml.id = 'schedule-item';
             taskItemHtml.style.backgroundColor = item['color'];

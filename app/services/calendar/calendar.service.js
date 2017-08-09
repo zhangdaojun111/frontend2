@@ -3,7 +3,7 @@
  */
 
 import { HTTP } from '../../lib/http';
-import Mediator from 'mediator-js';
+import Mediator from '../../lib/mediator';
 
 const saveCalendarTableUrl = 'calendar_mgr/save_calendar';
 
@@ -19,7 +19,7 @@ const missionRecordUrl = 'get_mission_record';
 
 const calendarPreferenceUrl = 'calendar_mgr/calendar_preference';
 
-const menuUrl = 'data/get_menu';
+const menuUrl = 'get_menu';
 
 export const CodeEnum = {
         SUCCESS: 200,
@@ -27,8 +27,6 @@ export const CodeEnum = {
 
 
 export const CalendarService = {
-
-    CalendarMsgMediator: new Mediator(),
 
     saveCalendarTable: function (table_id, param_list) {
         HTTP.post(saveCalendarTableUrl, {table_id: table_id, param_list:param_list}).then(res => {
@@ -157,15 +155,17 @@ export const CalendarService = {
 
     getMenu: function () {
         let res = HTTP.get(menuUrl).then(res => {
-            console.log(res);
-            if(res['code'] === CodeEnum.SUCCESS) {
+            if(res['success'] === 1) {
                 return res;
             } else {
-                //alert('获取数据失败');
+                alert('获取数据失败');
             }
         });
         HTTP.flush();
         return res;
-    }
+    },
 
+    nextUnShowData: function (unShowData) {
+        Mediator.emit('calendar-service: unshowData', unShowData);
+    }
 };

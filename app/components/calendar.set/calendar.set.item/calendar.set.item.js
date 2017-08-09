@@ -4,7 +4,7 @@
 import Component from "../../../lib/component";
 import template from './calendar.set.item.html';
 import './calendar.set.item.scss';
-import CalendarSetItemMulitSelect from "./calendar.set.item.multiselect/calendar.set.item.multiselect"
+//import CalendarSetItemMulitSelect from "./calendar.set.item/calendar.set.item."
 import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
 
@@ -14,7 +14,7 @@ let config = {
         rowSetData:{},
         //首页可修改字段
         dropdownForCalendarChange: [],
-        dropdownForRes: [1,2,3],
+        dropdownForRes: [],
     },
     actions: {
     },
@@ -27,8 +27,8 @@ let config = {
         this.data.dropdownForRes.forEach(item => {
             this.el.find('.res-text').append("<option value='"+item+"'>"+item+"</option>");
         });
-        this.append(new CalendarSetItemMulitSelect, this.el.find('.multi-select-item'));
-        console.log($(set_color_id).val());
+        // this.append(new CalendarSetItemMulitSelect, this.el.find('.multi-select-item'));
+        // console.log($(set_color_id).val());
     }
 };
 

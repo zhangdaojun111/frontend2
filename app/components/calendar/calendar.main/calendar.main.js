@@ -13,6 +13,7 @@ import CalendarExport from './calendar.export/calendar.export';
 
 import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
+import Mediator from '../../../lib/mediator';
 
 let config = {
     template: template,
@@ -133,7 +134,10 @@ let config = {
             });
             CalendarService.getWorkflowRecords(data).then(res => {
                 console.log(res);
-            })
+            });
+            // CalendarService.getMenu().then(res => {
+            //     console.log(res);
+            // })
         },
 
         getDataCount: function (){
@@ -186,21 +190,21 @@ let config = {
                     }
                 }
             }
-            else if( this.data.calendarContent === 'schedule' ){
-                for( let day of this.scheduleDataList ){
-                    for( let d of day['data'] ){
-                        if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
-                            i++;
-                        }else if( d.type === 2 ){
-                            j++;
-                        }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
-                            w++;
-                        }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
-                            m++;
-                        }
-                    }
-                }
-            }
+            // else if( this.data.calendarContent === 'schedule' ){
+            //     for( let day of this.scheduleDataList ){
+            //         for( let d of day['data'] ){
+            //             if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
+            //                 i++;
+            //             }else if( d.type === 2 ){
+            //                 j++;
+            //             }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
+            //                 w++;
+            //             }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
+            //                 m++;
+            //             }
+            //         }
+            //     }
+            // }
 
             this.data.remindCount = i;
             this.data.workflowCount = w;
@@ -708,7 +712,7 @@ let config = {
             this.data.selectData = this.data.today;
             this.actions.changeMainView('day');
         });
-        CalendarService.CalendarMsgMediator.subscribe('leftSelectedDate',data => {
+        Mediator.on('leftSelectedDate',data => {
             let y = Number(data['year']),
                 m = Number(data['month']),
                 d = Number(data['day']),
@@ -736,6 +740,9 @@ let config = {
         // CalendarService.CalendarMsgMediator.subscribe('unshowData', data => {
         //     console.log(data);
         // })
+        Mediator.on('calendar-left: unshowData', data => {
+            console.log('data',data);
+        })
 
     }
 };
