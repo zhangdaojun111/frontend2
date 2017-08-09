@@ -96,8 +96,8 @@ export const fieldTypeService = {
     childTable: function (data) {//子表
         return data == this.NORMAL_CHILD
     },
-    countTable: function (data) {//统计
-        return data == this.QUERY_COUNT || data == this.TABLE_COUNT
+    countTable: function (dinput_type,real_type) {//统计
+        return dinput_type == this.QUERY_COUNT || dinput_type == this.TABLE_COUNT || real_type == this.EDIT_CONTROL
     },
     editControlTable: function (data) {//高级跳转字段
         return data == this.EDIT_CONTROL

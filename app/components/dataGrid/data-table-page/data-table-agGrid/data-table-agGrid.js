@@ -240,7 +240,7 @@ let config = {
                         suppressResize: false,
                         suppressMovable: false,
                         cellRenderer: (params) => {
-                            return this.actions.bodyCellRenderer(params);
+                            return this.actions.bodyCellRender(params);
                         }
                     }
                     // if (fieldContent) {
@@ -272,7 +272,7 @@ let config = {
                 }
             }
         },
-        bodyCellRenderer: function (params) {
+        bodyCellRender: function (params) {
             if (params.data && params.data.myfooter && params.data.myfooter == "合计") {
                 return params.value || '';
             }
@@ -284,6 +284,7 @@ let config = {
             let sHtml;      //要显示的html元素的字符串
             let color = "transparent"; //颜色
             let real_type = colDef["real_type"];
+            let dinput_type = colDef["dinput_type"];
             // let someStyle = 'text-align:right;margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
             let someStyle = 'margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
             let someStyle_a = 'text-decoration:underline;margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
@@ -413,7 +414,7 @@ let config = {
             //处理数字类型
             if (fieldTypeService.numOrText(real_type)) {//数字类型
                 let numVal = fieldTypeService.intOrFloat(real_type) ? dgcService.formatter(params.value) : dgcService.formatter(Number(params.value).toFixed(colDef.real_accuracy))
-                if (fieldTypeService.childTable(real_type) || fieldTypeService.countTable(real_type)) {//子表||统计类型
+                if (fieldTypeService.childTable(dinput_type) || fieldTypeService.countTable(dinput_type)) {//子表||统计类型
                     if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
                         sHtml = '<span style="color:rgb(85,85,85);' + someStyle + 'background-color:' + color + '"><span>' + numVal + '</span><span/>';
                     } else {
@@ -453,7 +454,7 @@ let config = {
 
             //大数字段处理
             else if (real_type == fieldTypeService.DECIMAL_TYPE) {
-                if (fieldTypeService.childTable(real_type) || fieldTypeService.countTable(real_type)) {//子表||统计类型
+                if (fieldTypeService.childTable(dinput_type) || fieldTypeService.countTable(dinput_type)) {//子表||统计类型
                     let bigNum = params.value > 9007199254740992 ? dgcService.formatter(params.value.toString()) + '.00' : dgcService.formatter(Number(params.value).toFixed(colDef.real_accuracy))
                     sHtml = '<a style="float:right;color:#337ab7;" id="childOrCount">' + bigNum + '</a>';
                 } else {
@@ -525,7 +526,7 @@ let config = {
 
             //都做为文本处理
             else {
-                if (fieldTypeService.childTable(colDef.dinput_type) || fieldTypeService.countTable(colDef.dinput_type, colDef['real_type'])) { //子表或统计类型
+                if (fieldTypeService.childTable(dinput_type) || fieldTypeService.countTable(dinput_type,real_type)) { //子表或统计类型
                     if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
                         sHtml = '<span style="float:right;color:rgb(85,85,85);">' + params.value + '</span>';
                     } else {
@@ -1250,7 +1251,7 @@ let config = {
                     viewMode: 'source_data'
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
-                let winTitle = this.data.tableName + '->' + data.colDef.source_table_name;
+                let winTitle = this.data.tableName + '->' + obj.tableName;
                 PMAPI.openDialogByIframe( url,{
                     width: 1300,
                     height: 800,
@@ -1263,7 +1264,27 @@ let config = {
             if(data.colDef.real_type == fieldTypeService.CORRESPONDENCE && data.value.toString().length && data.event.target.id == "correspondenceClick"){
             }
             //统计
-
+            if( fieldTypeService.countTable(data.colDef.dinput_type,data.colDef.real_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
+                let obj = {
+                    tableId: data.colDef.field_content.count_table,
+                    tableName: data.colDef.field_content.count_table_name,
+                    parentTableId: this.data.tableId,
+                    tableType: 'count',
+                    viewMode: 'count',
+                    rowId: data.data._id,
+                    parentRealId: data.data._id,
+                    fieldId: data.colDef.id
+                }
+                let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
+                let winTitle = this.data.tableName + '->' + obj.tableName;
+                PMAPI.openDialogByIframe( url,{
+                    width: 1300,
+                    height: 800,
+                    title: winTitle,
+                    modal:true
+                } ).then( (data)=>{
+                } )
+            }
             // 子表
         }
     },
