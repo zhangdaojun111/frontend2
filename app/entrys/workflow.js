@@ -38,7 +38,7 @@ let wfObj;
 Mediator.subscribe('workflow:choose', (msg)=> {
     wfObj=msg;
     (async function () {
-        return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=qiumaoyun_1501661055093&record_id=',data:{
+        return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=wenjingjing_1502270451650&record_id=',data:{
             flow_id:msg.id
         }});
     })()
@@ -134,7 +134,7 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
 var mockFlowData;
 
 (async function () {
-    return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=qiumaoyun_1501661055093&record_id=',data:{
+    return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=wenjingjing_1502270451650&record_id=',data:{
         flow_id:30
     }});
 })().then(res=>{
@@ -223,11 +223,13 @@ FormEntrys.createForm({
 
 
 //获取盖章图片
-Mediator.subscribe("workflow:getStampImg",(msg)=>{
-    (async function () {
-        let data = await workflowService.getStmpImg(msg);
-    })();
+(async function () {
+    return workflowService.getStmpImg();
+})().then(res=>{
+    console.log(res);
+     Mediator.publish("workflow:getStampImg",res);
 });
+
 
 Mediator.subscribe("workflow:seal",(msg)=>{
     (async function () {

@@ -46,6 +46,14 @@ let config={
                     appendDiv.find(".preview-node3").toggle().siblings().hide();
                     break;
             }
+        },
+        toogz(e){
+            let ev = this.el.find(".signature");
+            if(ev.css("display")=="none"){
+                ev.css("display","block");
+            }else{
+                ev.css("display","none");
+            }
         }
 
     },
@@ -57,7 +65,9 @@ let config={
         this.el.on('click','#app-pass',()=>{
             this.actions.approveWorkflow(__this);
         });
-
+        this.el.on('click','.gz',(e)=>{
+            this.actions.toogz(e);
+        })
         this.el.on('click',".preview-btn",function () {
             let appendDiv=__this.el.find("#preview-node");
             __this.actions.previewView($(this),appendDiv);
@@ -75,6 +85,7 @@ class ApprovalWorkflow extends Component{
 let component = new ApprovalWorkflow();
 let el = $('#approval-workflow');
 component.render(el);
-
-let data = {"file_ids": ["5987de19c3ec2134050ee679", "5987de3244543b4d1226c977", "5987fe3e8e368f5747b1722c"]}
-WorkflowSeal.showheader(data);
+Mediator.subscribe("workflow:getStampImg",(msg)=>{
+    console.log(msg);
+    WorkflowSeal.showheader(msg);
+})
