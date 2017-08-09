@@ -38,7 +38,7 @@ let wfObj;
 Mediator.subscribe('workflow:choose', (msg)=> {
     wfObj=msg;
     (async function () {
-        return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=qiumaoyun_1501661055093&record_id=',data:{
+        return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=wenjingjing_1502270451650&record_id=',data:{
             flow_id:msg.id
         }});
     })()
@@ -173,7 +173,7 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
 var mockFlowData;
 
 (async function () {
-    return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=qiumaoyun_1501661055093&record_id=',data:{
+    return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=wenjingjing_1502270451650&record_id=',data:{
         flow_id:30
     }});
 })().then(res=>{
@@ -248,7 +248,7 @@ let staff=[];
 });
 
 FormEntrys.createForm({
-    el:"#place-form",
+    el:$("#place-form"),
     form_id:181,
     record_id:'59897efb53930b8ca98a3446',
     is_view:0,
@@ -261,14 +261,24 @@ FormEntrys.createForm({
     Mediator.subscribe('approval:recordPass', (ispass)=> {
        if(ispass){
            (async function () {
+
                 return workflowService.approveWorkflowRecord({
-                    url: '/approve_workflow_record',
+                    url: '/approve_workflow_record/',
+                    data:{
+                        record_id:'59897f1591461c15d279023a',
+                        focus_users:[],
+                        action:0,// 0：通过 1：驳回上一级 2:驳回发起人 3：作废 4：取消 5：撤回 6：驳回任意节点 7：撤回审批 8：自动拨回到发起人 9：加签
+                        comment:null,
+                        node_id:null,//驳回节点id
+                        sigh_type:0,//加签类型  0：前 1：后
+                        sigh_user_id:'5979e48a41f77c586658e346',
+                        data:{}
+                    }
                 });
               })().then(res=>{
-
-               console.log(res);
+                 console.log('审批通过',res)
            })
-           console.log(ispass,res)
+
        }
 
     })
@@ -277,11 +287,13 @@ FormEntrys.createForm({
 
 
 //获取盖章图片
-Mediator.subscribe("workflow:getStampImg",(msg)=>{
-    (async function () {
-        let data = await workflowService.getStmpImg(msg);
-    })();
+(async function () {
+    return workflowService.getStmpImg();
+})().then(res=>{
+    console.log(res);
+     Mediator.publish("workflow:getStampImg",res);
 });
+
 
 Mediator.subscribe("workflow:seal",(msg)=>{
     (async function () {
@@ -310,18 +322,18 @@ Mediator.subscribe("workflow:delImg",(msg)=>{
 
 
 //审批操作
-
-(async function () {
-    return workflowService.approveWorkflowRecord({url: '/approve_workflow_record/?seqid=xuyan_1502264078519&record_id=59897f1591461c15d279023a',data:{
-        record_id:'59897f1591461c15d279023a',
-        focus_users:[],
-        action:0,// 0：通过 1：驳回上一级 2:驳回发起人 3：作废 4：取消 5：撤回 6：驳回任意节点 7：撤回审批 8：自动拨回到发起人 9：加签
-        comment:null,
-        node_id:null,//驳回节点id
-        sigh_type:0,//加签类型  0：前 1：后
-        sigh_user_id:'5979e48a41f77c586658e346',
-        data:{}
-    }});
-})().then(res=>{
-    console.log(res);
-});
+//
+// (async function () {
+//     return workflowService.approveWorkflowRecord({url: '/approve_workflow_record/?seqid=xuyan_1502264078519&record_id=59897f1591461c15d279023a',data:{
+//         record_id:'59897f1591461c15d279023a',
+//         focus_users:[],
+//         action:0,// 0：通过 1：驳回上一级 2:驳回发起人 3：作废 4：取消 5：撤回 6：驳回任意节点 7：撤回审批 8：自动拨回到发起人 9：加签
+//         comment:null,
+//         node_id:null,//驳回节点id
+//         sigh_type:0,//加签类型  0：前 1：后
+//         sigh_user_id:'5979e48a41f77c586658e346',
+//         data:{}
+//     }});
+// })().then(res=>{
+//     console.log(res);
+// });
