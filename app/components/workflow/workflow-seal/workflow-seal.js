@@ -31,8 +31,9 @@ let config = {
             this.el.find(".J_ul-img").empty();
             let len = msg.file_ids.length;
             let html = " ";
+            let host = "http://"+window.location.host;
             for (let i=0;i<len;i++){
-                html += "<li class='li-img'><span class='J_delImg' id="+msg.file_ids[i]+">X</span><img src='/../download_attachment/?file_id="+msg.file_ids[i]+"&download={{this}}' class='add-img'/></li>";
+                html += "<li class='li-img'><span class='J_delImg' id="+msg.file_ids[i]+">X</span><img src='"+host+"/download_attachment/?file_id="+msg.file_ids[i]+"&download=0' class='add-img'/></li>";
             }
             this.el.find('.J_ul-img').html(html);
         },
@@ -40,8 +41,11 @@ let config = {
         dragimg(e){
             let imgLeft = $(e.target).offset().left;
             let imgTop = $(e.target).offset().top;
+            let imgId =  $(e.target).attr("data-id");
+            console.log(imgId);
+            let url = "http://"+window.location.host+"/data/download_attachment/?file_id="+imgId+"&download=0";
             this.el.find(".signatureMock").css('visibility','visible');
-            // $('#place-form').css({'z-index':'101'});
+            this.el.find(".J_dragimg").attr("src",url);
             this.el.find(".J_dragimg").css({
                 "left":imgLeft,
                 "top":imgTop
@@ -54,15 +58,19 @@ let config = {
             })
             console.log(disX+".."+disY); 
             let fromPlace =  $("#place-form").children(":first");
-            let fromClone = fromPlace.clone();
-            let left =  parseInt(fromPlace.offset().left);
-            let top = parseInt(fromPlace.offset().top);
-            this.el.find(".fromClone").css({
-                "top":top,
-                "left":left
-            })
-            this.el.find(".fromClone").children().remove();
-            this.el.find(".fromClone").append(fromClone);
+            console.log(fromPlace);
+            if(fromPlace.length!=0){
+                let fromClone = fromPlace.clone();
+                let left =  parseInt(fromPlace.offset().left);
+                let top = parseInt(fromPlace.offset().top);
+                this.el.find(".fromClone").css({
+                    "top":top,
+                    "left":left
+                })
+                this.el.find(".fromClone").children().remove();
+                this.el.find(".fromClone").append(fromClone);
+            }
+            
         },
         Imgcoordinate(e){
             let offsetLeft = this.el.find(".signatureMock").attr("disX");
@@ -76,7 +84,7 @@ let config = {
         },
         delImg(e){
             let msg = $(e.target).attr("id");
-            Mediator.publish("workflow:delImg",msg);
+            Mediator.publish("workflow:delImg",{"file_id":msg});
             Mediator.publish("workflow:getStamp");
         },
         //松开鼠标
@@ -116,11 +124,13 @@ let config = {
                 
             this.el.find(".signatureMock").css('visibility','hidden');
         },
-        createImg(top,left,id){
-            top = top+"%";
-            left = left+"%";
-            let host = window.location.host;
-            let html = "<div class='imgseal' style='top:"+top+";left:"+left+";z-index:"+1002+";position:absolute'><img  width=50 height=50 src="+host+"/download_attachment/?file_id="+id+"/><i style='display: none;position: absolute;right: -23px;top: -10px;width: 23px;height: 23px;background: url(assets/icon_del.png) no-repeat;'>X</i></div>";
+        createImg(top,left,width,height,id){
+            let viewLeft = left;
+            let viewTop = top;
+            let top1 = top+"%";
+            let left1 = left+"%";
+            let host = "http://"+window.location.host;
+            let html = "<div class='imgseal' data-height="+height+" data-width="+width+" data-viewLeft="+viewLeft+" data-viewTop="+viewTop+" data-imgid="+id+" style='top:"+top1+";left:"+left1+";z-index:"+1002+";position:absolute'><img  width=50 height=50 src="+host+"/download_attachment/?file_id="+id+"/><i class='J_del'  style='display: none;position: absolute;right: -23px;top: -10px;width: 23px;height: 23px;background: url(assets/icon_del.png) no-repeat;'>X</i></div>";
             console.log($("#place-form"))
             $('#place-form').children(":first").append(html);
         },
@@ -128,6 +138,18 @@ let config = {
             console.log(1454);
             let ev = $(e.target).children('i');
             ev.css("display","block");
+        },
+        toggImg(e){
+            let ev =$(e.target);
+            if(ev.hasClass("imgshow")){
+                ev.removeClass('imgshow');
+                ev.addClass('imghide');
+                Mediator.publish("workflow:hideImg");
+            }else{
+                 ev.removeClass('imghide');
+                ev.addClass('imgshow');
+                Mediator.publish("workflow:showImg");
+            }
         }
     },
     afterRender: function() {
@@ -147,6 +169,9 @@ let config = {
         this.el.on("mousemove",'.signatureMock',(e)=>{
             this.actions.Imgcoordinate(e);
         }),
+        this.el.on("click",".J_toggImg",(e)=>{
+            this.actions.toggImg(e);
+        })
         // $(".approval-info-item").on("click",(e)=>{
         //     console.log(13265);
         //     this.actions.showImgDel(e);
