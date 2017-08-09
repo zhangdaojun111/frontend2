@@ -226,7 +226,7 @@ export default {
         component.render(el);
         el.dialog({
             title: '设置代理',
-            width: 893,
+            width: 915,
             height: 620,
             modal: true,
             close: function() {
