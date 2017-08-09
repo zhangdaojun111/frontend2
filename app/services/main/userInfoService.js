@@ -31,9 +31,12 @@ export const UserInfoService = {
     //向后台发送存储头像数据
     saveAvatar:function (data) {
         let url= '/user_preference/';
+        console.log(data.src);
+        // data.src = encodeURIComponent(data.src);
+        let formatData = JSON.stringify(data);
         let body = {
             action:"save",
-            content:encodeURIComponent(data),
+            content:formatData,
             pre_type:3
         };
 
@@ -61,6 +64,7 @@ export const UserInfoService = {
     },
     getSysConfig:function () {
         console.log("do getSysConfig");
+
     },
     getAllUsersInfo:function () {
         let url = '/get_all_userInfo/';

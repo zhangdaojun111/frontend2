@@ -8,18 +8,21 @@ import {UserInfoService} from '../../../services/main/userInfoService';
 import msgbox from '../../../lib/msgbox';
 import SetAvatar from './set-avatar/set-avatar';
 import SetAgent from './set-agent/set-agent';
+import OtherLogin from "../login-by-other/login-by-other";
 import Mediator from "../../../lib/mediator";
 
 function getData(component_instance) {
     // console.log(window.config.sysConfig.userInfo);
     _.defaultsDeep(component_instance.data, {
     avatar: window.config.sysConfig.userInfo.avatar,
+    avatar_content:window.config.sysConfig.userInfo.avatar_content,
     name:window.config.sysConfig.userInfo.name,
     username: window.config.sysConfig.userInfo.username,
-    user_department:"开发部",
-    user_position:"manager",
+    user_department:window.config.sysConfig.userInfo.user_department,
+    user_position:window.config.sysConfig.userInfo.user_job,
     user_email:window.config.sysConfig.userInfo.email,
     user_phone:window.config.sysConfig.userInfo.tel,
+    otherLoginVisible:window.config.sysConfig.logic_config.use_register
     });
 }
 
@@ -142,6 +145,19 @@ let config = {
                 console.log(err);
             })
         },
+        otherLogin:function () {
+            OtherLogin.show();
+        },
+        initAvatar:function () {
+            let src = this.data.avatar;
+            let para = this.data.avatar_content;
+            this.el.find("img.user-avatar")
+                .attr("src",src)
+                .css("width",para.width)
+                .css("height",para.height)
+                .css("left",para.left)
+                .css("top",para.top)
+        },
         clearLocalStorage:function(){
             window.localStorage.clear();
             $(window).attr("location","/login");
@@ -149,14 +165,14 @@ let config = {
     },
     afterRender:function () {
        this.actions.initInfo();
+       this.actions.initAvatar();
        //事件绑定
         this.el.on("click","div.avatar-box",() => {           //打开头像设置页面
             this.actions.setAvatar();
         }).on("click","div.agent-group",() => {                 //设置代理
             this.actions.setAgent();
         }).on("click","div.login-group",() => {
-            //他人登录
-            console.log("login by other");
+            this.actions.otherLogin();
         }).on("click",".show-personal-info",() => {          //切换至个人资料
             this.actions.showPersonalInfo();
         }).on("click",".show-modify-password",() => {        //切换至修改密码

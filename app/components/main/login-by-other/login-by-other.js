@@ -35,18 +35,6 @@ let config = {
             });
             autoSelect.render($wrap);
             this._autoSelect = autoSelect;
-
-            let $nameList = this.el.find("#user_list");
-            for(let User of this.data.userData) {
-                let temp = User.name.trim();
-                console.log(User.name);
-                if(User.name && temp !== ''){
-                    let newAgent = $("<option>");
-                    newAgent.use_id = User.id;
-                    newAgent.html(User.name);
-                    $nameList.append(newAgent);
-                }
-            }
         },
         loginOtherAccount:function () {
             let userId = this._autoSelect.actions.getId();

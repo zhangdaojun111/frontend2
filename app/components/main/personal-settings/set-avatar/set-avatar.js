@@ -120,6 +120,7 @@ let config = {
             //向后台传递头像数据
             UserInfoService.saveAvatar(data).done((result) => {
                 //根据结果处理后续工作
+                console.log(result);
                 if(result.success === 1){
                     //向父窗口传递头像数据并设置
                     Mediator.emit("personal:setAvatar",data);

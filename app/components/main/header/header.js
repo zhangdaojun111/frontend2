@@ -10,7 +10,7 @@ let config = {
     template: template,
     data: {
         asideSize: 'full',
-        otherLoginVisible:window.config.sysConfig.logic_config.use_register,
+
         homeVisible:true,
         calendarVisible: window.config.sysConfig.logic_config.use_canlendar,
         biVisible: window.config.sysConfig.logic_config.use_bi,
@@ -97,8 +97,8 @@ let config = {
         }).on('click', '.system-setting', () => {
             that.actions.goSystemSetting();
 
-        }).on('click','a.other-login', () => {   //他人登录
-            this.actions.otherLogin();
+        // }).on('click','a.other-login', () => {   //他人登录
+        //     this.actions.otherLogin();
         }).on('click','icon.home', () => {
             this.actions.openHome();
         });

@@ -1,9 +1,12 @@
 <div class="main-window">
     <div class="personal-setting-header">
+        {{#if otherLoginVisible}}
         <div class="login-group " >
             <i class="login-icon"></i>
             <span class="other-login">他人登录</span>
         </div>
+        {{/if}}
+
         <div class="agent-group ">
             <i class="agent-icon"></i>
             <span class="set-agent">设置代理</span>

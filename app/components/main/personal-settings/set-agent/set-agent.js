@@ -83,10 +83,15 @@ let config = {
             }
         },
         initAgentList:function () {
-            console.log(this.originData.data.user_list);
             let $wrap = this.el.find('.name-list');
+            let tempData = [];
+            for(let row of this.originData.data.user_list){
+                if(row.name && row.name.trim() !== ''){
+                    tempData.push(row);
+                }
+            }
             let autoSelect = new AutoSelect({
-                list: this.originData.data.user_list
+                list: tempData
             });
             this.atSelect = autoSelect;
             autoSelect.render($wrap);
@@ -98,14 +103,14 @@ let config = {
             //     newAgent.html(agent.name);
             //     $nameList.append(newAgent);
             // }
-            this.agentList = this.originData.data.user_list;
-            let $nameList = this.el.find("#name_list");
-            for(let agent of this.agentList){
-                let newAgent = $("<option class='agentRow'>");
-                newAgent.agentData = agent;
-                newAgent.html(agent.name);
-                $nameList.append(newAgent);
-            }
+            // this.agentList = this.originData.data.user_list;
+            // let $nameList = this.el.find("#name_list");
+            // for(let agent of this.agentList){
+            //     let newAgent = $("<option class='agentRow'>");
+            //     newAgent.agentData = agent;
+            //     newAgent.html(agent.name);
+            //     $nameList.append(newAgent);
+            // }
         },
         //仅保存被选中的具体工作流（叶子）节点的id，以是否具备group属性判断该节点是否为叶子节点
         selectNode:function (event,node) {
@@ -166,19 +171,20 @@ let config = {
         openSwitch:function (event) {
             this.isOpen = 1;
         },
-        saveAgent:function (event) {
+        saveAgent:function () {
             this.selectedAgent = this.atSelect.actions.getId();
             //保存代理前进行逻辑判断
             if(this.isOpen === 1 && this.selectedAgent === ''){
                 msgbox.alert("请选择一个代理人");
-                return false;
+                return;
             }
             if(this.isOpen === 1 && this.selectedWorkflow.size === 0){
                 msgbox.alert("请选择至少一个流程");
-                return false;
+                return;
             }
+            let workflow_temp = Array.from(this.selectedWorkflow);
             let data = {
-                workflow_names:this.selectedWorkflow,
+                workflow_names:workflow_temp,
                 agent_id:this.selectedAgent,
                 is_apply:this.isOpen
             };
@@ -200,8 +206,8 @@ let config = {
     },
     afterRender:function () {
         this.actions.initData();
-        this.el.on("click","span.save-proxy",(event) => {
-            this.actions.saveAgent(event);
+        this.el.on("click","span.save-proxy",() => {
+            this.actions.saveAgent();
         // }).on("input","input[name=name_input]",(event) => {
         //     this.actions.setAgentId(event);
         }).on("click","input.close-radio",(event) => {

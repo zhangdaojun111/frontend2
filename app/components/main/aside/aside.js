@@ -151,6 +151,16 @@ let config = {
                 PersonalSettings.show();
             }
         },
+        initAvatar:function () {
+            let src = this.data.avatar;
+            let para = this.data.avatar_content;
+            this.el.find("img.set-info")
+                .attr("src",src)
+                .css("width",para.width)
+                .css("height",para.height)
+                .css("left",para.left)
+                .css("top",para.top)
+        },
         logout: function () {
             HTTP.getImmediately('/logout/').then((res) => {
                 if (res.success === 1) {
@@ -170,6 +180,7 @@ let config = {
             }).on('click','div.personal-setting',() => {
                 this.actions.showInfoSet();
             });
+            this.actions.initAvatar();
             if (window.config.isCommon === "0") {
                 this.actions.showAllMenu();
             } else {

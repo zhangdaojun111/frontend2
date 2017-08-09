@@ -11,6 +11,7 @@ import {AsideInstance} from '../components/main/aside/aside';
 _.defaultsDeep(AsideInstance.data, {
     systemName: window.config.sysConfig.logic_config.sap_login_system_name,
     avatar: window.config.sysConfig.userInfo.avatar,
+    avatar_content:window.config.sysConfig.userInfo.avatar_content,
     username: window.config.sysConfig.userInfo.username,
     role: window.config.sysConfig.userInfo.is_superuser === 1 ? '管理员' : '普通用户'
 });
