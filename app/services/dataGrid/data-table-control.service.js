@@ -91,6 +91,8 @@ export const dgcService = {
         suppressMenu: true,
         cellRenderer: (params)=>{}
     },
+    //分组列
+    groupCol: { headerName: '分组', field: 'group' ,pinned:'left',hide:true,suppressSorting: true,suppressMovable:true,cellRenderer: 'group', suppressMenu: true, tooltipField:'group',suppressFilter: true},
     //搜索类型
     // 判断搜索类型
     getMongoSearch: function(data) {
@@ -144,9 +146,10 @@ export const dgcService = {
     //创建高级查询、定制列、搜索需要字段数据
     createNeedFields: function (rows) {
         let search = [];
-        let custom = [{name:'序号',field:'number',canhide:'0',candrag:'0',canFix:'0'},
+        let custom = [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false},
             {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false},
             {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}];
+        let group = [];
         for( let r of rows ){
             if( r.field != "_id" && !fieldTypeService.canNotSearch( r.real_type ) ){
                 let obj = {};
@@ -163,10 +166,19 @@ export const dgcService = {
                 obj['field'] = r.field;
                 custom.push( obj );
             }
+            let groupIgnore = ['number','mySelectAll','myOperate','group','_id'];
+            if( groupIgnore.indexOf( r.field ) == -1 && fieldTypeService.cantGroup( r.real_type ) ){
+                let obj = {
+                    name: r.name,
+                    field: r.field
+                };
+                group.push( obj );
+            }
         }
         let obj = {
             search: search,
-            custom: custom
+            custom: custom,
+            group: group
         }
         return obj;
     },
@@ -174,10 +186,12 @@ export const dgcService = {
     returnQueryParams: function (queryParams) {
         if(queryParams.filter || queryParams.childInfo || queryParams.mongo || queryParams.filter_child){
             let temp = {};
-            if(queryParams.filter && !queryParams.filter['_id']){
+            if(queryParams.filter.length != 0 && !queryParams.filter['_id']){
                 temp = this.translateAdvancedQuery(queryParams.filter);
+            }else if( queryParams.filter['_id'] ) {
+                temp = queryParams.filter;
             }else {
-                temp = queryParams.filter || {};
+                temp = {};
             }
             let obj = {};
             if(queryParams.childInfo){
@@ -200,6 +214,10 @@ export const dgcService = {
                 delete queryParams.mongo
             }
             queryParams.filter = JSON.stringify(temp);
+            if( queryParams.filter == '{}' ){
+                delete queryParams.filter;
+            }
+            return queryParams;
         }
     },
     translateAdvancedQuery: function (oldQueryList){
@@ -313,7 +331,9 @@ export const dgcService = {
         dropNotAllowed: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
         rowGroupPanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
         pivotPanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
-        valuePanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />'
+        valuePanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        sortAscending: '<img src="'+require('../../assets/images/dataGrid/icon_paixu_1.png') +'" />',
+        sortDescending: '<img src="'+require('../../assets/images/dataGrid/icon_paixu_2.png') +'" />'
     },
     //返回fieds
     retureFields: function (id2fields,ids) {
@@ -332,5 +352,29 @@ export const dgcService = {
         }
         html += '</ul>'
         return html;
+    },
+    //按钮组
+    gridBtn: function (viewMode) {
+        let obj = {
+            normal:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width','grid-new-window'],
+            ViewChild:['float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
+            EditChild:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
+            createBatch: ['grid-del-btn','grid-import-btn','custom-column-btn']
+        }
+        return obj[viewMode];
+    },
+    //权限对应按钮
+    permission2btn: {
+        'float-search-btn':'search',
+        'expert-search-btn':'complex_search',
+        'group-btn':'group',
+        'new-form-btn':'add',
+        'grid-del-btn':'delete',
+        'grid-import-btn':'upload',
+        'grid-export-btn':'download',
+        'custom-column-btn':'custom_field',
+        'grid-auto-width':'custom_width',
+        'grid-new-window':'new_window'
     }
+
 }

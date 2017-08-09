@@ -129,5 +129,15 @@ export const fieldTypeService = {
         }else {
             return 'text'
         }
+    },
+    //不能分组字段
+    cantGroup: function (data) {
+        let arr = [this.SECRET_TEXT,this.TEXT_COUNT_TYPE,this.URL_TYPE]
+        return arr.indexOf( data ) == -1
+    },
+    //后端排序字段
+    backSortField: function (data) {
+        let arr = [this.DECIMAL_TYPE];
+        return arr.indexOf( data ) != -1;
     }
 }
