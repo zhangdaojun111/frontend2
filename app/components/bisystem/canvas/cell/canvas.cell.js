@@ -46,7 +46,7 @@ export class CanvasCellComponent extends BiBaseComponent {
         config.data = cell.chart? cell.chart : null;
         super(config);
         this.cell = cell;
-
+        console.log(this.cell);
     }
 
     /**
@@ -152,9 +152,9 @@ export class CanvasCellComponent extends BiBaseComponent {
         const res = await canvasCellService.getCellChart({chart_id: chartId});
         this.cell['chart'] = res[0];
         this.data = res[0];
-        console.log(this.data);
-        this.reload();
         this.cell.chart_id = chartId[0];
+        this.reload();
+
     }
 
 }
