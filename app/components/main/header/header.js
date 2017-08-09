@@ -32,6 +32,12 @@ let config = {
                 name: '日历',
                 url: window.config.sysConfig.calendar_index
             });
+        },
+        goOnlineNumber: function () {
+            
+        },
+        goSystemSetting: function () {
+            
         }
     },
     afterRender: function () {
@@ -50,16 +56,26 @@ let config = {
             this.actions.openBiIframe();
         }).on('click', '.calendar', () => {
             this.actions.openCalendarIframe();
-        }).on('click', '.task', () => {
+        }).on('click', '.task', function () {
             // $(`<div>12123</div>`).appendTo('body').dialog({
             //     width: 400,
             //     height: 400,
             //     modal: true,
             //     title: '提示'
             // })
-            msgbox.confirm('xxxxxxxxxxxxx').then((res) => {
-                console.log(res);
-            });
+            // msgbox.confirm('xxxxxxxxxxxxx').then((res) => {
+            //     console.log(res);
+            // });
+            // $(this).disableClick();
+            //
+            // console.log('click');
+
+            // _.delay(function () {
+            //     $(this).enableClick();
+            // }.bind(this), 1000);
+
+        }).on('click', '.online-num', () => {
+
         });
         Mediator.on('socket:online_user_num', function (data) {
             console.log(data);

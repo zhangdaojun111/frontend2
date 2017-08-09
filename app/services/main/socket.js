@@ -7,10 +7,10 @@ let SocketMgr = {
     connect: function () {
         this.socket = new WebSocket(window.config.sysConfig.websocket_addr);
         this.socket.onopen = function (e) {
-            // this.send(JSON.stringify({
-            //     'user_id': window.config.sysConfig.userInfo.ID,
-            //     'session_id': window.config.sysConfig.userInfo.sessionid
-            // }));
+            this.send(JSON.stringify({
+                'user_id': window.config.sysConfig.userInfo.ID,
+                'session_id': window.config.sysConfig.userInfo.sessionid
+            }));
         };
         this.socket.onmessage = function (event) {
             let data = JSON.parse(event.data);
@@ -30,13 +30,13 @@ let SocketMgr = {
 
 }
 
-// SocketMgr.connect();
+SocketMgr.connect();
 
-// window.setTimeout(function () {
-//     SocketMgr.socket.send(JSON.stringify({
-//         "test": 1,
-//         'msg_type': 1
-//     }))
-// }, 2000)
+window.setTimeout(function () {
+    SocketMgr.socket.send(JSON.stringify({
+        "test": 1,
+        'msg_type': 1
+    }))
+}, 2000)
 
 
