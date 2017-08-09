@@ -185,7 +185,7 @@ var mockFlowData;
 let tree=[];
 let staff=[];
 (async function () {
-    return workflowService.getStuffInfo({url: '/get_department_tree/'});
+    return workflowService.getStuffInfo({url: '/save_perm/?perm_id=0'});
 })().then(res=>{
     tree=res.data.department_tree;
     staff=res.data.department2user;
@@ -255,10 +255,49 @@ FormEntrys.createForm({
     from_approve:1,
     from_focus:0,
     table_id:'5318_EHFuJD7Ae76c6GMPtzdiWH'
-}).then((res)=>{
-        ApprovalHeader.showheader(res);
-        WorkflowRecord.showRecord(res);
+}).then(res=>{
+    ApprovalHeader.showheader(res);
+    WorkflowRecord.showRecord(res);
+    Mediator.subscribe('approval:recordPass', (ispass)=> {
+       if(ispass){
+           (async function () {
+                return workflowService.approveWorkflowRecord({
+                    url: '/approve_workflow_record',
+                });
+              })().then(res=>{
+
+               console.log(res);
+           })
+           console.log(ispass,res)
+       }
+
+    })
+
 });
+// function getRecordObj () {
+//     return new Promise(function (resolve, reject) {
+//         setTimeout(()=>{
+//             resolve(FormEntrys.ReturnRecordInfo());
+//         },1000)
+//     });
+// }
+// getRecordObj().then(function (res) {
+//     ApprovalHeader.showheader(res);
+//     WorkflowRecord.showRecord(res);
+//
+// })
+
+// let data = new Promise(function (resolve) {
+//     setTimeout(function () {
+//        resolve(FormEntrys.ReturnRecordInfo())
+//     }, 2000);
+// });
+//
+// Promise.all([data]).then((res)=>{
+//        console.log(res)
+// })
+
+
 
 
 //获取盖章图片
