@@ -34,16 +34,20 @@ let config = {
             });
         },
         goOnlineNumber: function () {
-            
+            msgbox.alert('go online number');
         },
         goSystemSetting: function () {
-            
+            msgbox.alert('go system setting');
+        },
+        refreshOnlineNum: function (number) {
+            this.el.find('.online-num span').text(number);
         }
     },
     afterRender: function () {
         this.el.tooltip();
     },
     firstAfterRender: function () {
+        let that = this;
         this.el.on('click', '.fold', () => {
             this.data.asideSize = this.data.asideSize === 'full' ? 'mini' : 'full';
             Mediator.emit('aside:size', this.data.asideSize);
@@ -75,10 +79,12 @@ let config = {
             // }.bind(this), 1000);
 
         }).on('click', '.online-num', () => {
-
+            that.actions.goOnlineNumber();
+        }).on('click', '.system-setting', () => {
+            that.actions.goSystemSetting();
         });
         Mediator.on('socket:online_user_num', function (data) {
-            console.log(data);
+            that.actions.refreshOnlineNum(data.online_user_num);
         });
     },
     

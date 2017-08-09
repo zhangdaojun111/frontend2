@@ -19,6 +19,7 @@
                     width: 40px;
                     overflow: hidden;
                 }
+
             }
             .tabs {
                 display: none;
@@ -61,6 +62,11 @@
                 font-size: 12px;
                 color: #ccc;
                 line-height: 16px;
+            }
+            .logout {
+                color: #0088FF;
+                cursor: pointer;
+                padding: 0 4px;
             }
             .startwrokflow {
                 display: block;

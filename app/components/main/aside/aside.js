@@ -3,7 +3,9 @@ import template from './aside.html';
 import './aside.scss';
 import {MenuComponent} from '../menu-full/menu.full';
 import Mediator from '../../../lib/mediator';
-import PersonalSettings from "../personal-settings/personal-settings"
+import PersonalSettings from "../personal-settings/personal-settings";
+import {cookie} from '../../../lib/cookie';
+import {HTTP} from '../../../lib/http';
 
 
 function presetMenuData(menu, leaf) {
@@ -85,6 +87,13 @@ let config = {
                 //打开个人设置页面
                 PersonalSettings.show();
             }
+        },
+        logout: function () {
+            HTTP.getImmediately('/logout/').then((res) => {
+                if (res.success === 1) {
+                    location.href = '/login';
+                }
+            })
         }
     },
     afterRender: function () {
@@ -111,7 +120,9 @@ let config = {
         });
         this.el.on('click', '.startwrokflow', () => {
             this.actions.openWorkflowIframe();
-        })
+        }).on('click', '.logout', () => {
+            this.actions.logout();
+        });
     },
     beforeDestory: function() {
         Mediator.removeAll('aside');
