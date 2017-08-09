@@ -43,6 +43,7 @@ let map = new WeakMap();class Component {
     }
 
     reload() {
+        this.destroyChildren();
         let compiler = Handlerbar.compile(this.template);
         let html = compiler(this.data);
         this.el.html(html);

@@ -131,3 +131,25 @@ body{
 #workflow-grid{
   display: none;
 }
+#import{
+  z-index: 55;
+  left: calc(50% - 400px);
+  top:calc(50% - 300px);
+  position: absolute;
+  width: 800px;
+  height: 600px;
+  background: #fff;
+  &>div{
+    display: flex;
+    height: 100px;
+    .text{
+      width: 40%;
+    }
+    .cont{
+      width: 60%;
+    }
+  }
+  #dwf{
+    overflow: scroll;
+  }
+}

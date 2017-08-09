@@ -30,7 +30,6 @@ let AddItem = {
         }).on('click', '.add', function () {
             let val=_this.el.find('.addValue').val();
             if (val != '') {
-                console.log(_this.actions.hasExistInOriginal(val));
                 if(!_this.actions.hasExistInOriginal(val)){
                     _this.data.newItems.push(val);
                     _this.el.find('.result').append(`<tr><td>${val}<span class=ui-del>X</span></td></tr>`);

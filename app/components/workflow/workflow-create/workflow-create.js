@@ -74,7 +74,7 @@ let config = {
         })
         //订阅 select list click
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
-            WorkFlow.show(msg.data[0]);
+            WorkFlow.show(msg.data[0],'#drawflow');
         })
     },
     beforeDestory: function(){

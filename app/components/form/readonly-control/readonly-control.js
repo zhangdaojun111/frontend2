@@ -1,5 +1,5 @@
 import Component from '../../../lib/component';
-import '../../../assets/scss/control.scss'
+import '../base-form/base-form.scss';
 import Mediator from '../../../lib/mediator';
 
 let config={
