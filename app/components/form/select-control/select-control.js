@@ -1,16 +1,16 @@
 import Component from '../../../lib/component'
 import DropDown from "../vender/dropdown/dropdown";
 import Mediator from '../../../lib/mediator';
-
+import '../base-form/base-form.scss';
 let config={
-    template:`<div class="display:inline">
+    template:`<div class="display:block">
                  {{#if unvisible}}
                     <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
                  {{else if be_control_condition}}
                         <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                  {{else}}
-                        <div class="dropdown" style="width:{{width}}"></div>
-                        <div style="float: left;">
+                        <div class="dropdown " style="width:{{width}}; float: left"></div>
+                        <div style="float: left; ">
                            {{#if required}}
                                     <span id="requiredLogo" class="{{requiredClass}}" ></span>
                            {{/if}}
@@ -21,7 +21,7 @@ let config={
                         {{#if is_view}}
                         {{else}}
                             {{#if can_add_item}}
-                                <a  href="javascript:void(0);" class="add-item noprint"> + </a>
+                                <a  href="javascript:void(0);" class="add-item noprint" style="margin-left: 15px"> + </a>
                             {{/if}}
                         {{/if}}               
                  {{/if}}  
