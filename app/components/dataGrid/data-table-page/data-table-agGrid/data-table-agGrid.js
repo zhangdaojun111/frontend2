@@ -90,7 +90,13 @@ let config = {
         //是否显示定制列panel
         isShowCustomPanel: false,
         //排序方式
-        frontendSort: true
+        frontendSort: true,
+        //排序参数
+        sortParam: {sortOrder:'',sortField:'',sort_real_type:''},
+        //是否显示floatingFilter
+        isShowFloatingFilter: false,
+        //批量工作流ids
+        batchIdList: []
     },
     //生成的表头数据
     columnDefs: [],
@@ -781,6 +787,12 @@ let config = {
             if( this.data.viewMode == 'count' ){
                 json["tableType"]='count';
             }
+            if( this.data.viewMode == 'createBatch' ){
+                json["is_batch"] = 1;
+                json['mongo'] = {
+                    _id: { $in: this.data.batchIdList }
+                }
+            }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
                 json['is_filter'] = this.data.filterParam.is_filter;
@@ -789,6 +801,10 @@ let config = {
                 json['is_group'] = 1;
                 json['group_fields'] = JSON.stringify( this.data.myGroup.fields );
                 json['tableType'] = 'group';
+            }
+            //排序
+            if( this.data.sortParam.sortField ){
+                json = _.defaultsDeep( json,this.data.sortParam )
             }
             json = dgcService.returnQueryParams( json );
             return json;
@@ -802,6 +818,7 @@ let config = {
                 floatingFilter: true,
                 fieldsData: this.data.fieldsData,
                 onColumnResized: this.actions.onColumnResized,
+                onSortChanged: this.actions.onSortChanged,
                 onDragStopped: this.actions.onDragStopped
             }
             this.agGrid = new agGrid(gridData);
@@ -1014,6 +1031,12 @@ let config = {
             $( '.grid-auto-width' ).click( ()=>{
                 this.agGrid.actions.autoWidth();
             } )
+            //搜索
+            $( '.float-search-btn' ).click( ()=>{
+                let height = this.data.isShowFloatingFilter ? 0:30;
+                this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
+                this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
+            } )
         },
         //定制列
         customColumnClick: function () {
@@ -1069,8 +1092,34 @@ let config = {
         },
         //排序方式
         sortWay: function () {
-            this.data.frontendSort = this.data.total <= this.data.rows;
-            console.log( '排序方式：' + this.data.frontendSort?'前端排序':'后端排序' );
+            this.data.frontendSort = this.data.total < this.data.rows?true:false;
+            for( let d of this.data.fieldsData ){
+                if( fieldTypeService.backSortField( d.real_type ) ){
+                    this.data.frontendSort = false;
+                }
+            }
+            console.log( '排序方式：' + (this.data.frontendSort ? '前端排序' : '后端排序') );
+            this.agGrid.gridOptions["enableServerSideSorting"] = !this.data.frontendSort;
+            this.agGrid.gridOptions["enableSorting"] = this.data.frontendSort;
+        },
+        //触发排序事件
+        onSortChanged: function ($event) {
+            if( this.viewMode == 'viewFromCorrespondence' || this.viewMode == 'editFromCorrespondence' ){
+                return;
+            }
+            let data = this.agGrid.gridOptions.api.getSortModel()[0];
+            if (data) {
+                this.data.sortParam['sortOrder']= (data.sort == "desc" ? -1 : 1);
+                this.data.sortParam['sortField']=data.colId;
+                for( let d of this.data.fieldsData ){
+                    if( d['field'] == data.colId ){
+                        this.data.sortParam['sort_real_type']=d['real_type'];
+                    }
+                }
+            }else {
+                this.data.sortParam = {sortOrder:'',sortField:'',sort_real_type:''}
+            }
+            this.actions.getGridData();
         }
     },
     afterRender: function () {
