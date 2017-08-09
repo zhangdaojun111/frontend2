@@ -274,30 +274,6 @@ FormEntrys.createForm({
     })
 
 });
-// function getRecordObj () {
-//     return new Promise(function (resolve, reject) {
-//         setTimeout(()=>{
-//             resolve(FormEntrys.ReturnRecordInfo());
-//         },1000)
-//     });
-// }
-// getRecordObj().then(function (res) {
-//     ApprovalHeader.showheader(res);
-//     WorkflowRecord.showRecord(res);
-//
-// })
-
-// let data = new Promise(function (resolve) {
-//     setTimeout(function () {
-//        resolve(FormEntrys.ReturnRecordInfo())
-//     }, 2000);
-// });
-//
-// Promise.all([data]).then((res)=>{
-//        console.log(res)
-// })
-
-
 
 
 //获取盖章图片
