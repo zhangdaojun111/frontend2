@@ -1,7 +1,8 @@
 import Component from "../../../../lib/component";
 import template from './data-table-agGrid.html';
 import './data-table-agGrid.scss';
-import {HTTP} from "../../../../lib/http"
+import {HTTP} from "../../../../lib/http";
+import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 
 import agGrid from "../../agGrid/agGrid";
 import {dataTableService} from "../../../../services/dataGrid/data-table.service";

@@ -359,7 +359,7 @@ export const dgcService = {
             normal:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width','grid-new-window'],
             ViewChild:['float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
             EditChild:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
-            createBatch: ['grid-del-btn','grid-import-btn']
+            createBatch: ['grid-del-btn','grid-import-btn','custom-column-btn']
         }
         return obj[viewMode];
     },
