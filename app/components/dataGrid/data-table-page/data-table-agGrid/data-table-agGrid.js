@@ -62,6 +62,7 @@ let config = {
         //floatingFilter搜索参数
         queryList: {},
         //请求数据参数
+        commonQueryData:[],
         postData: [],
         //定制列（列宽）
         colWidth: {},
@@ -639,8 +640,7 @@ let config = {
             }
             this.actions.getGridData();
         },
-        postExpertEearch:function(data) {
-            console.log( "+++++" )
+        postExpertSearch:function(data) {
             this.data.filterParam = {
                 filter: data,
                 is_filter: 1
@@ -1037,7 +1037,8 @@ let config = {
             $('.expert-search-btn').click( ()=>{
                 let d = {
                     fieldsData: this.data.expertSearchFields,
-                    postExpertEearch:this.actions.postExpertEearch
+                    commonQuery: this.data.commonQueryData,
+                    postExpertSearch:this.actions.postExpertSearch
                 }
                 expertSearch.show(d);
             } )
@@ -1107,7 +1108,11 @@ let config = {
         getExpertSearchData: function () {
             let obj = {'actions':JSON.stringify( ['queryParams'] ),'table_id':this.data.tableId};
             dataTableService.getPreferences( obj ).then( res=>{
-
+                this.data.commonQueryData = res.rows;
+                res.rows.forEach((row) => {
+                    $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
+                });
+                // this.append(new commonQuery({commonQueryData:res.rows}), this.el.find('.dataGrid-commonQuery-select'));
             } );
             HTTP.flush();
         },
@@ -1147,6 +1152,18 @@ let config = {
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();
+        let _this = this
+        $('.dataGrid-commonQuery-select').bind('change', function() {
+            if($(this).val() == '常用查询') {
+                _this.actions.postExpertSearch([]);
+            } else {
+                _this.data.commonQueryData.forEach((item) => {
+                    if(item.name == $(this).val()){
+                        _this.actions.postExpertSearch(JSON.parse(item.queryParams));
+                    }
+                })
+            }
+        })
     }
 }
 

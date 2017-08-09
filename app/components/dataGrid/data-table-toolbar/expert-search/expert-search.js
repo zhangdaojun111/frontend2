@@ -21,30 +21,9 @@ let config = {
     data: {
         //高级查询字段信息
         fieldsData: [],
-        queryParams:[{
-            "cond":{
-                "keyword":"暂停中",
-                "leftBracket":"(",
-                "operate":"$ne",
-                "rightBracket":")",
-                "searchBy":"f6",
-                "searchByName":"创建时间",
-                "searchByNew":"f6"
-            },
-            "relation":"$and"
-        },{
-            "cond":{
-                "keyword":"关闭",
-                "leftBracket":"(",
-                "operate":"$ne",
-                "rightBracket":")",
-                "searchBy":"f5",
-                "searchByName":"姓名",
-                "searchByNew":"f5"
-            },
-            "relation":"$or"
-        }],
-        postExpertEearch: function(data){
+        commonQuery: [],
+        queryParams:[],
+        postExpertSearch: function(data){
 
         }
     },
@@ -99,7 +78,6 @@ let config = {
                     config.searchInputList.push(obj);
                 }
             }
-            console.log(config.searchInputList);
             this.actions.checkedSubmitData()
         },
         showSearchData: function(data) {
@@ -161,7 +139,7 @@ let config = {
             })
             if (checkedPost) {
                 if (leftBracketNum == rightBracketNum) {
-                    this.data.postExpertEearch(config.searchInputList);
+                    this.actions.postExpertEearch(config.searchInputList);
                 } else {
                     alert('运算括号出错')
                 }
@@ -171,7 +149,11 @@ let config = {
     },
     afterRender: function() {
         let epCondition = new expertCondition();
+        this.data.commonQuery.forEach((item)=> {
+            $('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}</li>`);
+        })
         this.actions.rendSearchItem();
+        let _this = this;
         this.el.on('click','.condition-search-box-input', function() {
             if (config.ulChecked){
                 $(this).next('.condition-search-ul').css('display','block');
@@ -188,8 +170,12 @@ let config = {
             $(this).prop('checked',true)
         }).on('click','.searchButton', ()=> {
             this.actions.submitData()
-        }).on('click','.common-search-item',()=> {
-            this.actions.showSearchData(this.data.queryParams);
+        }).on('click','.common-search-item',function() {
+            _this.data.commonQuery.forEach((item) => {
+                if(item.id == this.attributes['fieldId'].nodeValue){
+                    _this.actions.showSearchData(JSON.parse(item.queryParams));
+                }
+            })
         })
 
     }
