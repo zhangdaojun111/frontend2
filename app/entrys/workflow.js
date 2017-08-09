@@ -220,6 +220,7 @@ FormEntrys.createForm({
 Mediator.subscribe("workflow:getStampImg",(msg)=>{
     (async function () {
         let data = await workflowService.getStmpImg(msg);
+        console.log(msg)
     })();
 });
 
