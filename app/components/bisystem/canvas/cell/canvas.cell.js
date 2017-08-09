@@ -70,6 +70,17 @@ export class CanvasCellComponent extends BiBaseComponent {
             return false;
         });
 
+        this.el.on('dragover',function(event){
+            let ev = event.originalEvent;
+            ev.preventDefault();
+        });
+
+        this.el.on('drop',async (event) => {
+            let ev = event.originalEvent;
+            let data = JSON.parse(ev.dataTransfer.getData("Text"));
+            this.loadChartData([data.id]);
+        });
+
         // 设置cell zindex 为最大
         let self = this;
         this.el.on('mousedown', '.cell',function(){
@@ -79,6 +90,13 @@ export class CanvasCellComponent extends BiBaseComponent {
         }).on('mouseup', '.cell', function(){
             self.cell.size.zIndex = self.cell.canvas.data.cellMaxZindex;
         });
+
+        // 返回(下穿)上一层
+        this.el.on('click', '.back-floor-btn', (event) => {
+            let deepComponentId = this.el.find('.cell-chart').attr('component');
+            Mediator.publish(`bi:deep${deepComponentId}:cell`, true);
+            return false;
+        })
 
     }
 
@@ -122,6 +140,19 @@ export class CanvasCellComponent extends BiBaseComponent {
             Mediator.publish('bi:cell:remove', this.componentId);
             this.destroySelf();
         }
+    }
+
+    /**
+     *加载chart数据
+     * @param id 传递chart_id，从服务器获取chart 数据
+     */
+    async loadChartData(chartId) {
+        const res = await canvasCellService.getCellChart({chart_id: chartId});
+        this.cell['chart'] = res[0];
+        this.data = res[0];
+        console.log(this.data);
+        this.reload();
+        this.cell.chart_id = chartId[0];
     }
 
 }

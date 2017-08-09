@@ -5,7 +5,7 @@
 import * as echarts from 'echarts';
 import {EchartsOption} from '../../components/bisystem/echarts.config/echarts.config';
 import {ToolPlugin} from "../../components/bisystem/utils/tool.plugin";
-
+import {HTTP} from '../../lib/http';
 
 
 export class EchartsService {
@@ -237,6 +237,7 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     pieOption(cellChart) {
+        console.log(cellChart);
         let cellOption = cellChart['chart'];
         let [legend, series] = [[], []];
         const [xAxis, yAxis, title] = [cellOption.data['xAxis'], cellOption.data['yAxis'], cellOption.chartName['name']];
@@ -407,5 +408,26 @@ export class EchartsService {
         });
         funnelOption['color'] = cellOption['theme'] ? EchartsOption[cellOption['theme']] : EchartsOption['blue'];
         return funnelOption;
+    }
+
+
+    /**
+     * 获取下穿数据
+     * @param data 需要发送给服务器的参数
+     */
+    async getDeepData(data) {
+        const res = await HTTP.getImmediately('/bi/get_deep_bi_data/',data);
+        if (res['success']) {
+
+        } else {
+            alert(res['error'])
+        }
+        return new Promise((resolve, reject) => {
+            if (res['success']=== 1) {
+                resolve(res);
+            } else {
+                reject(res);
+            }
+        })
     }
 }

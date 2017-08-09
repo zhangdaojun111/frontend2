@@ -5,6 +5,12 @@ import "./charts.scss";
 
 let config = {
     template:template,
+    afterRender() {
+        this.el.on('dragstart',(ev) =>{
+            let event = ev.originalEvent;
+            event.dataTransfer.setData("Text",JSON.stringify(this.data));
+        })
+    }
 };
 
 
