@@ -1,5 +1,6 @@
 import Component from "../../../lib/component";
 import {HTTP} from "../../../lib/http";
+import Mediator from "../../../lib/mediator";
 import './searchBar.scss';
 import {FormService} from "../../../services/formService/formService";
 import DropDown from "../../form/vender/dropdown/dropdown";
@@ -8,7 +9,7 @@ let config={
                 <div class="ui-box-1">
                     
                 </div>
-                <input type="text" class="search">
+                <input type="text" class="searchBar"/>
                 <button class="select">查询</button>
                 <button class="confirm" >确定</button>
             </div>`,
@@ -60,7 +61,7 @@ let config={
         _this.el.on('click','.select',function(){
             let selectedTerm =_this.childDropDown[1]['data'].value;
             let selectedField =_this.childDropDown[0]['data'].value;
-            let keyword=_this.el.find('.search').val();
+            let keyword=_this.el.find('.searchBar').val();
             let queryParams = [{
                 "relation": "and",
                 "cond": {
@@ -73,18 +74,15 @@ let config={
                 table_id: _this.data.tableId,
                 queryParams: JSON.stringify(queryParams)
             };
-            console.log('************');
-            console.log('************');
-            console.log('************');
             FormService.searchByChooser(json).then(res=>{
-                console.log(res);
-                console.log('************');
-                console.log('************');
-                console.log('************');
-                console.log('************');
+                _.debounce(function(){Mediator.publish('form:chooseSelect',res['data'])},300)();
             });
             HTTP.flush();
         })
+        _this.el.on('click','.confirm',function(){
+            console.log('11111111');
+           _.debounce(function(){Mediator.publish('form:chooseConfirm','isConfirm')},300)();
+        });
     }
 }
 export default class SearchBar extends Component{

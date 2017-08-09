@@ -648,12 +648,12 @@ let config={
             }
         },
         //赋值
-        setFormValue(dfield,value){
+        setFormValue(dfield,value,label){
             if(this.data.data[dfield]){
-                this.data.data[dfield]["value"] = value;
-                console.log('value');
-                console.log(value);
-                this.childComponent[dfield].data["value"]=value;
+                this.childComponent[dfield].data["value"] = this.data.data[dfield]["value"] = value;
+                if(this.data.data[dfield]['type'] == 'Select' || this.data.data[dfield]['type']=='Buildin'){
+                    this.childComponent[dfield].data["showValue"] = this.data.data[dfield]["showValue"] = label;
+                }
                 this.childComponent[dfield].destroyChildren();
                 this.childComponent[dfield].reload();
             }
@@ -1214,8 +1214,8 @@ let config={
                 height:1000,
                 title:`选择器`,
                 modal:true
-            }).then((data) => {
-
+            }).then((res) => {
+                _this.actions.setFormValue(data.dfield,res.value,res.label);
             });
         })
 
