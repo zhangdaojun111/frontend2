@@ -63,6 +63,14 @@ let config={
                 }
             };
             return kind;
+        },
+        toogz(e){
+            let ev = this.el.find(".signature");
+            if(ev.css("display")=="none"){
+                ev.css("display","block");
+            }else{
+                ev.css("display","none");
+            }
         }
 
     },
