@@ -8,6 +8,7 @@ import '../assets/scss/form.scss'
 // @parma
 //
 let FormEntrys={
+    childForm:{},
     init:function(config={}){
         this.tableId=config.table_id||'';
         this.parentRealId=config.parent_real_id||'';
@@ -229,18 +230,23 @@ let FormEntrys={
         </table>`
     return html;
 },
-
+    destoryAll(){
+        for(let key in this.childForm){
+            this.childForm[key].destroySelf();
+            delete this.childForm[key];
+        }
+    },
     destoryForm(tableID){
-        $(`#form-${tableID}`).remove();
+        if(this.childForm[tableID]){
+            this.childForm[tableID].destroySelf();
+            delete this.childForm[tableID];
+        }
     },
     //创建表单入口
     createForm:function(config={}){
         let _this=this;
         this.init(config);
         let tableID=this.tableId;
-        if(this.tableId){
-            this.destoryForm(this.tableId);
-        }
         let html=$(`<div id="form-${tableID}" style="" class="table-wrap">`).appendTo(this.el);
         let template='<table><tbody><tr class="firstRow"><td width="244" valign="top"><span data-id="2562_nLNdMCPYogJJ4py4AHqDum" style="border:2px">名称</span></td><td width="244" valign="top"><label id="2562_nLNdMCPYogJJ4py4AHqDum" style="border:2px"><input type="text" data-fill-in="0" style="box-sizing:border-box;width:240px;height:34px;line-height:34px;border-radius:5px;padding:6px 12px;border:1px solid #ccc;" name="2562_nLNdMCPYogJJ4py4AHqDum" data-required="0"/></label></td><td width="244" valign="top" style="word-break: break-all;"><br/></td><td width="244" valign="top" style="word-break: break-all;"><br/></td></tr><tr><td width="244" valign="top" style="word-break: break-all;"><span data-id="7949_yaq4qmVjgatey4xAi2UCT9" style="border:2px">年份</span></td><td width="244" valign="top" style="word-break: break-all;"><label id="7949_yaq4qmVjgatey4xAi2UCT9" style="border:2px"><select data-fill-in="1" style="box-sizing:border-box;width:240px;height:34px;line-height:34px;border-radius:5px;border:1px solid #ccc;" name="7949_yaq4qmVjgatey4xAi2UCT9" data-required="0" data-year="1" class="normalSelect"></select></label></td><td width="244" valign="top"><span data-id="4207_jUwup8ziqYyTyeMivJJ2JL" style="border:2px">所在地</span></td><td width="244" valign="top"><label id="4207_jUwup8ziqYyTyeMivJJ2JL" style="border:2px"><input type="radio" data-required="0" data-fill-in="2" name="4207_jUwup8ziqYyTyeMivJJ2JL" value="6971_oargmg9mnTxZTU2Qqo6uge"/>北京<input type="radio" data-required="0" data-fill-in="2" name="4207_jUwup8ziqYyTyeMivJJ2JL" value="9398_ysjjqkNsbkf8A6yRar8Fsg"/>深圳<input type="radio" data-required="0" data-fill-in="2" name="4207_jUwup8ziqYyTyeMivJJ2JL" value="4253_5eN7tuKuBL2tLgiVPMhxAj"/>上海<input type="radio" data-required="0" data-fill-in="2" name="4207_jUwup8ziqYyTyeMivJJ2JL" value="1197_gP79KY5yjLLXFGvWF4JkBB"/>成都</label></td></tr></tbody></table><p><br/></p>';
         FormService.getPrepareParmas({table_id:this.tableId}).then(res=>{
@@ -257,29 +263,37 @@ let FormEntrys={
                     template:template,
                     data:data,
                 }
-                _this.formBase=new FormBase(formData);
-                _this.formBase.render(html);
+                let formBase=new FormBase(formData);
+                _this.childForm[_this.tableId]=formBase;
+                formBase.render(html);
             });
         })
     },
     //审批删除时重置表单可编辑性
-    editDelWorkFlow(formId){
-        this.formBase.actions.editDelWork(formId);
+    editDelWorkFlow(tableId,formId){
+        this.childForm[tableId].actions.editDelWork(formId);
     },
 
     //接收关注人信息
-    setUserIdList(data){
-        this.formBase.data.focus_users=data;
+    setUserIdList(tableId,data){
+        if(!this.childForm[tableId]){
+            return;
+        }
+        this.childForm[tableId].data.focus_users=data;
     },
 
-    getFormValue(){
-        return this.formBase.actions.getFormValue();
+    getFormValue(tableId){
+        if(!this.childForm[tableId]){
+            return;
+        }
+        return this.childForm[tableId].actions.getFormValue();
     }
 }
 
 $('#toEdit').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
         seqId:'yudeping',
@@ -291,6 +305,7 @@ $('#toEdit').on('click',function(){
 $('#text').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'1285_pkz2teyhHCztFrYhoc6F54',
         seqId:'yudeping',
@@ -302,6 +317,7 @@ $('#text').on('click',function(){
 $('#count').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'7051_UoWnaxPaVSZhZcxZPbEDpG',
         seqId:'yudeping',
@@ -313,6 +329,7 @@ $('#count').on('click',function(){
 $('#editRequired').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'3461_P28RYPGTGGE7DVXH8LBMHe',
         seqId:'yudeping',
@@ -324,6 +341,7 @@ $('#editRequired').on('click',function(){
 $('#defaultValue').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'1160_ex7EbDsyoexufF2UbXBmSJ',
         seqId:'yudeping',
@@ -335,6 +353,7 @@ $('#defaultValue').on('click',function(){
 $('#valid').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'2638_urGGDDp75VvymeqWj3eo6F',
         seqId:'yudeping',
@@ -346,6 +365,7 @@ $('#valid').on('click',function(){
 $('#exp').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         seqId:'yudeping',
         el:$('body'),
@@ -358,6 +378,7 @@ $('#exp').on('click',function(){
 $('#workflow').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'449_6k2VdLn4ArCfgFPuAjFrNQ',
         seqId:'yudeping',
@@ -370,6 +391,7 @@ $('#lalala').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
     let tableId=$('#tableId').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:tableId,
         seqId:'yudeping',
