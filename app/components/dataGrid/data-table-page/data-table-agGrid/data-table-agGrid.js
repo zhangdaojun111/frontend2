@@ -1,7 +1,8 @@
 import Component from "../../../../lib/component";
 import template from './data-table-agGrid.html';
 import './data-table-agGrid.scss';
-import {HTTP} from "../../../../lib/http"
+import {HTTP} from "../../../../lib/http";
+import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 
 import agGrid from "../../agGrid/agGrid";
 import {dataTableService} from "../../../../services/dataGrid/data-table.service";
@@ -991,12 +992,16 @@ let config = {
                 }
                 let sheetHtml = dgcService.returnSheetHtml( arr );
                 this.el.find( '.SheetPage' ).html( sheetHtml );
+                // console.log('this.el')
                 this.el.on( 'click','.SheetPage ul li',(e)=>{
                     let gridoptions = this.agGrid.gridOptions;
                     let ignore = ['group','number','mySelectAll','myOperate'];
                     let id = $(e.target).attr( 'sheetId' );
                     let currentId = $(e.target).parent().attr( 'currentId' );
                     let arr = JSON.parse( $(e.target).attr( 'sheetValue' ) );
+                    // let i=$('.SheetPage ul li').index();
+                    // console.log(i);
+                    // $('.SheetPage ul li').eq(i).addClass('active').siblings().removeClass('active');
                     if( id == currentId ){
                         return;
                     }
@@ -1008,9 +1013,18 @@ let config = {
                         }
                     }
                     gridoptions.columnApi.setColumnState( state );
-                } )
+                } );
+                $('.SheetPage ul li:first').addClass('active1');
+                $('.SheetPage ul li').on('click',function () {
+                   $(this).addClass('active1');
+                   $(this).siblings().removeClass('active1');
+                }) ;
+                // console.log($('.SheetPage ul li'));
+                // $('.SheetPage ul li').addClass('active1');
+
                 this.el.find( '.ag-grid-con' ).height( 'calc( 100% - 80px )' );
                 $( '.SheetPage' ).show();
+
             }
         },
         //按钮点击事件
