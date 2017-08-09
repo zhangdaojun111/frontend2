@@ -97,7 +97,16 @@ let config = {
                     $('.charts-items li').eq(index).css('display','block');
                 }
             })
-        })
+        });
+
+
+        // //单页跳转指定路由
+        // $('.btn-single').click(function () {
+        //     let pathname = '/bi/index/';
+        //     let hash = window.location.hash;
+        //     let url = `${pathname}${hash}`;
+        //     $(this).attr('href',url);
+        // })
     },
     firstAfterRender() {
     }

@@ -14,7 +14,8 @@ let config = {
         views: window.config.bi_views,
         cells:[],
         componentIds: [],
-        cellMaxZindex: 0
+        cellMaxZindex: 0,
+        canvasSingle:true
     },
     actions: {
         /**
@@ -64,12 +65,14 @@ let config = {
     },
 
     afterRender() {
-        //加载头部导航
-        this.data.views.forEach((val,index) => {
-            let canvasHeaderlComponent = new CanvasHeaderlComponent(val);
-            this.append(canvasHeaderlComponent,this.el.find('.nav-tabs'));
-        });
 
+        //加载头部导航
+        if(config.data.canvasSingle){
+            this.data.views.forEach((val,index) => {
+                let canvasHeaderlComponent = new CanvasHeaderlComponent(val);
+                this.append(canvasHeaderlComponent,this.el.find('.nav-tabs'));
+            });
+         }
         let self = this;
 
         // 匹配导航的视图id
@@ -91,7 +94,7 @@ let config = {
                     break;
                 };
             }
-        })
+        });
 
         // 保存视图画布
         this.el.on('click', '.view-save-btn', (event) => {
@@ -100,8 +103,8 @@ let config = {
                 view_id: this.viewId,
                 canvasType: "pc",
                 data: cells.map((cell) => {
-                    delete cell['chart']
-                    delete cell['canvas']
+                    delete cell['chart'];
+                    delete cell['canvas'];
                     return JSON.stringify(cell);
                 })
             };
@@ -111,14 +114,28 @@ let config = {
                 }
             });
             return false;
-        })
+        });
 
         //
         this.el.on('click', '.add-cell-btn', (event) => {
             this.actions.addCell();
             return false;
-        })
+        });
 
+        //单页跳转指定路由
+        $('.btn-single').click(function () {
+            let pathname = '/bi/index/';
+            let hash = window.location.hash;
+            let url = `${pathname}${hash}?single`;
+            window.location.href = url;
+            // $(this).attr('href',url);
+        });
+
+        //多页跳转隐藏
+        // $('.btn-multip').click(function () {
+        //     $(this).hide();
+        //     $('.btn-single').hide();
+        // })
     },
 
     /**
@@ -135,8 +152,16 @@ let config = {
 
 export class CanvasCellsComponent extends BiBaseComponent{
     constructor(id) {
+
+        if(window.location.search!==""){
+            config.data.canvasSingle = false;
+        } else {
+            config.data.canvasSingle = true;
+        }
+
         super(config);
         this.viewId = id ? id : this.data.views[0]['id'];
+
     };
 
     /**

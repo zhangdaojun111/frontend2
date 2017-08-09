@@ -62,6 +62,8 @@ export class CanvasCellComponent extends BiBaseComponent {
     }
 
     afterRender() {
+
+
         this.renderCell();
         this.cellDragandResize();
 
