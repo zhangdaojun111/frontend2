@@ -210,18 +210,18 @@ export const PMAPI = {
      * @param componentConfig ComponentConfig，注意该配置中的function不能使用配置外部的其他方法和常量
      * @returns string
      */
-    serializeComponent: function(componentConfig) {
+    serializeComponent: function(componentConfig, key) {
         if (typeof componentConfig === 'number'
             || typeof componentConfig === 'boolean'){
             return '' + componentConfig;
         }else if (typeof componentConfig === 'string'){
             return '"' + componentConfig + '"';
         } else if (componentConfig instanceof Function){
+            console.log(key);
             let str = String(componentConfig);
             let source = PMAPI._removeAllComments(str.substring(str.indexOf('{')+1,str.lastIndexOf('}')));
-            let func =  '{"Function":"'+str.substring(str.indexOf('function ')+9,str.indexOf('('))+'", '
-                +'"Arguments":"'+str.substring(str.indexOf('(')+1,str.indexOf(')')) +'", '
-                +'"Source":"'+source.replace(/\n/g,'').replace(/\"/g,"'")+'"}';
+            //str.substring(str.indexOf('function ')+9,str.indexOf('('))
+            let func = `{"Function":"${key}", "Arguments":"${str.substring(str.indexOf('(')+1,str.indexOf(')'))}", "Source": "${source.replace(/\n/g,'').replace(/\"/g,"'")}"}`
             return func;
         } else if (Array.isArray(componentConfig)) {
             if (componentConfig[0] === undefined){
@@ -240,7 +240,7 @@ export const PMAPI = {
                 if(componentConfig[key]==undefined){
                     return;
                 }
-                arrOfKeyVals.push('"' + key + '":'+PMAPI.serializeComponent(componentConfig[key]));
+                arrOfKeyVals.push('"' + key + '":'+PMAPI.serializeComponent(componentConfig[key], key));
             });
             return '{' + arrOfKeyVals + '}';
         }
