@@ -250,7 +250,7 @@ let staff=[];
 FormEntrys.createForm({
     el:$("#place-form"),
     form_id:181,
-    record_id:'59897efb53930b8ca98a3446',
+    record_id:'59897f02c3ec2134050ee6a7',
     is_view:0,
     from_approve:1,
     from_focus:0,
