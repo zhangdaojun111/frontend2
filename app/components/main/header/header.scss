@@ -55,6 +55,15 @@
                     border-radius: 4px;
                 }
             }
+            &.home {
+                background-image: url("../../../assets/images/framework/home.png");
+            }
+            &.other-login {
+                background-image: url("../../../assets/images/framework/other-login.png");
+            }
+            &.im {
+                background-image: url("../../../assets/images/framework/im.png");
+            }
         }
         .setting {
             float: right;

@@ -61,5 +61,19 @@ export const UserInfoService = {
     },
     getSysConfig:function () {
         console.log("do getSysConfig");
+    },
+    getAllUsersInfo:function () {
+        let url = '/get_all_userInfo/';
+        return HTTP.getImmediately({
+            url:url,
+            type:"get"
+        })
+    },
+    change_login_user:function (user_id) {
+        return HTTP.getImmediately('/change_login_user/?user_id='+ user_id).done((result) => {
+            if(result.success === 1){
+                return result;
+            }
+        });
     }
 };

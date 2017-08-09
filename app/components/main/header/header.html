@@ -9,9 +9,22 @@
             </ul>
         </div>
     </div>
+    {{#if otherLoginVisible}}
+    <a class="icon other-login" title="他人登录"></a>
+    {{/if}}
     <a class="icon message unread" title="消息提醒"></a>
     <a class="icon task" title="任务列表"></a>
+    {{#if calendarVisible}}
     <a class="icon calendar" title="日历"></a>
+    {{/if}}
+    <!--{{#if imVisible}}-->
+    <!--<a class="icon im" title="IM"></a>-->
+    <!--{{/if}}-->
+    {{#if biVisible}}
     <a class="icon bi" title="BI"></a>
+    {{/if}}
+    {{#if homeVisible}}
+    <a class="icon home" title="首页"></a>
+    {{/if}}
     <a class="fold" title="折叠菜单栏"></a>
 </div>

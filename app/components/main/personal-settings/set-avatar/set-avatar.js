@@ -117,7 +117,6 @@ let config = {
         },
         saveAvatar:function () {
             let data = this.data.imgData;
-            console.log(data);
             //向后台传递头像数据
             UserInfoService.saveAvatar(data).done((result) => {
                 //根据结果处理后续工作

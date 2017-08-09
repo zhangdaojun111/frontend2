@@ -3,7 +3,8 @@ import template from './aside.html';
 import './aside.scss';
 import {MenuComponent} from '../menu-full/menu.full';
 import Mediator from '../../../lib/mediator';
-import PersonalSettings from "../personal-settings/personal-settings"
+import PersonalSettings from "../personal-settings/personal-settings";
+
 
 
 function presetMenuData(menu, leaf) {
@@ -95,7 +96,7 @@ let config = {
                 this.actions.showAllMenu();
             }).on('click', '.tabs p.common', () => {
                 this.actions.showCommonMenu();
-            }).on('click','.set-info', () => {
+            }).on('click','div.personal-setting',() => {
                 this.actions.showInfoSet();
             });
             this.actions.showAllMenu();
