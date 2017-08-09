@@ -106,6 +106,12 @@ let config = {
             this.allBtn.addClass('active');
             this.commonBtn.removeClass('active');
             this.data.menuType = 'all';
+
+            HTTP.postImmediately('/user_preference/', {
+                action: "save",
+                pre_type: "8",
+                content: "0"
+            });
         },
         showCommonMenu: function () {
             if (!this.commonMenu) {
@@ -119,6 +125,13 @@ let config = {
             this.allBtn.removeClass('active');
             this.commonBtn.addClass('active');
             this.data.menuType = 'common';
+
+            HTTP.postImmediately('/user_preference/', {
+                action: "save",
+                pre_type: "8",
+                content: "1"
+            });
+
         },
         openWorkflowIframe: function () {
             Mediator.emit('menu:item:openiframe', {
