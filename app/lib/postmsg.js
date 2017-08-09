@@ -217,7 +217,6 @@ export const PMAPI = {
         }else if (typeof componentConfig === 'string'){
             return '"' + componentConfig + '"';
         } else if (componentConfig instanceof Function){
-            console.log(key);
             let str = String(componentConfig);
             let source = PMAPI._removeAllComments(str.substring(str.indexOf('{')+1,str.lastIndexOf('}')));
             //str.substring(str.indexOf('function ')+9,str.indexOf('('))
