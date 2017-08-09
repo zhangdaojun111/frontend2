@@ -5,6 +5,7 @@ import Mediator from '../../lib/mediator';
 import WorkFlow from './workflow-drawflow/workflow';
 import WorkflowSeal from './workflow-seal/workflow-seal';
 import {workflowService} from '../../services/workflow/workflow.service';
+import msgBox from '../../lib/msgbox';
 let config={
     template: template,
     data:{
@@ -82,9 +83,6 @@ let config={
         //     this.actions.approveWorkflow(__this);
         // });
 
-        this.el.on('click','#app-pass',()=>{
-            this.actions.approveWorkflow(__this);
-        });
         this.el.on('click','.gz',(e)=>{
             this.actions.toogz(e);
         })
