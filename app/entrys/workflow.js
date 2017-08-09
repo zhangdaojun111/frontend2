@@ -17,6 +17,7 @@ import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflo
 import FormEntrys from './form';
 import TreeView from  '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
+import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 
 
 WorkFlowForm.showForm();
@@ -130,7 +131,7 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
 
 //审批工作流
 
-
+var mockFlowData;
 
 (async function () {
     return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=qiumaoyun_1501661055093&record_id=',data:{
@@ -138,6 +139,7 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
     }});
 })().then(res=>{
     Mediator.publish('workflow:gotWorkflowInfo', res);
+    mockFlowData=res;
 });
 
 let tree=[];
@@ -157,18 +159,49 @@ let staff=[];
     }
     recur(tree);
     console.log(staff);
+    
 
     var treeComp2 = new TreeView(tree,{
         callback: function (event,selectedNode) {
+            if(event==='select'){
                 for(var k in staff){
                     if(k==selectedNode.id){
-                        if(event==='select'){
-                            Mediator.publish('workflow:checkDept', staff[k]);
-                        }else{
-                            Mediator.publish('workflow:unCheckDept', staff[k]);
+                        Mediator.publish('workflow:checkDept', staff[k]);
+                        function recursion(arr,slnds){
+                            if(slnds.nodes.length!==0){
+                                for(var j in arr){
+                                    slnds.nodes.forEach(child=>{
+                                        if(j==child.id){
+                                            Mediator.publish('workflow:checkDept', arr[j]);
+                                            recursion(arr,child)
+                                        }
+                                    });
+                                }
+                            }
                         }
+                        recursion(staff,selectedNode);
                     }
                 }
+            }else{
+                for(var k in staff){
+                    if(k==selectedNode.id){
+                        Mediator.publish('workflow:unCheckDept', staff[k]);
+                        function recursion(arr,slnds){
+                            if(slnds.nodes.length!==0){
+                                for(var j in arr){
+                                    slnds.nodes.forEach(child=>{
+                                        if(j==child.id){
+                                            Mediator.publish('workflow:unCheckDept', arr[j]);
+                                            recursion(arr,child)
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                        recursion(staff,selectedNode);
+                    }
+                }
+            }
         },
         treeType:'MULTI_SELECT',
         isSearch: true
@@ -243,3 +276,42 @@ Mediator.subscribe("workflow:delImg",(msg)=>{
         let data = await workflowService.delStmpImg(msg);
     })();
 });
+
+
+$('#importBtn').on('click',()=>{
+    if($("#import")[0]!=undefined){
+        $("#import").show();
+    }else{
+        $('body').append(`
+            <div id="import">
+                <div>
+                    <div class="text">   
+                        <span>工作流选项</span>
+                    </div>
+                    <div class="cont">
+                        <select>
+                            <option value="">批量工作流</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div class="text">   
+                        <span>审批流程</span>
+                    </div>
+                    <div class="cont">选择流程
+                        <select>
+                            <option value="">批量工作流</option>
+                        </select>
+                        <div id="dwf"></div>
+                    </div>
+                </div>
+                <span class=" ui-button ui-widget ui-corner-all" id="importClose">关闭</span>
+            </div>`
+        );
+    }
+    WorkFlow.show(mockFlowData.data[0],'#dwf');
+    
+})
+$('body').on('click','#importClose',()=>{
+    $("#import").hide();
+})

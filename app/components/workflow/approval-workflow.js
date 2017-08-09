@@ -50,7 +50,7 @@ let config={
     afterRender(){
         let __this=this;
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
-            WorkFlow.show(msg.data[0]);
+            WorkFlow.show(msg.data[0],'#drawflow');
         });
         this.el.on('click','#app-pass',()=>{
             this.actions.approveWorkflow(__this);

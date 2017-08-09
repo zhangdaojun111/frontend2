@@ -14,7 +14,7 @@ let config = {
                 DragOptions: { cursor: 'pointer', zIndex: 2000 },
                 EndpointStyles: [{ fill: 'transparent' }, { fill: 'transparent' }],
                 Endpoints: [["Dot", { radius: 4 }], ["Dot", { radius: 4 }]],
-                Container: $('#workflow-draw-box'),
+                Container: this.el.find('.workflow-draw-box'),
                 ConnectionsDetachable: false
             });
             this.actions.drawWorkFlow();
@@ -148,7 +148,7 @@ let config = {
                     }
                     else {
                             // $("#container").append(html);
-                        $('#workflow-draw-box').append(html);
+                        __this.el.find('.workflow-draw-box').append(html);
                     }
                     __this.actions.AddEndpoints(id, startPoint, endPoint);
                 }
@@ -263,7 +263,7 @@ let config = {
         },
         //zoomIn paint
         zoomInNodeflow($event) {
-            let container = this.el.find('#workflow-draw-box')[0];
+            let container = this.el.find('.workflow-draw-box')[0];
             this.data.nodeflowSize += 0.1;
             container.style.width = (+this.data.containerwidth.split('px')[0]) * (+this.data.nodeflowSize) + 'px';
             container.style.height = ((+this.data.containerheight.split('px')[0]) * (+this.data.nodeflowSize)) + 'px';
@@ -272,7 +272,7 @@ let config = {
         },
         //zoomOut paint
         zoomOutNodeflow($event) {
-            let container = this.el.find('#workflow-draw-box')[0];
+            let container = this.el.find('.workflow-draw-box')[0];
             this.data.nodeflowSize -= 0.1;
             container.style.transformOrigin = '0 0';
             container.style.transform = 'scale(' + this.data.nodeflowSize + ')';
@@ -282,7 +282,7 @@ let config = {
         //open paint in new window
         maximizeNodeflow($event) {
             this.el.find('.closeSpan').remove();
-            let container = this.el.find('#workflow-draw-box')[0];
+            let container = this.el.find('.workflow-draw-box')[0];
             container.style.transform = 'scale(1)';
             this.nodeflowSize = 1;
             let e = document.documentElement, g = document.getElementsByTagName('body')[0], w = window.innerWidth || e.clientWidth || g.clientWidth, h = window.innerHeight || e.clientHeight || g.clientHeight;
@@ -419,7 +419,7 @@ class WorkFlow extends Component {
 }
 
 export default {
-    show(data) {
+    show(data,elem) {
         let workFlowData = _.defaultsDeep({}, data, {
             nodeflowSize: 1,
             containerwidth: '100%',
@@ -427,7 +427,7 @@ export default {
             // nodesWidth: '60px'
         });
         let component = new WorkFlow(workFlowData);
-        let el = $('#drowflow');
+        let el = $(elem);
         component.render(el);
     }
 };
