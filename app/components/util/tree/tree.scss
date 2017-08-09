@@ -1,6 +1,11 @@
 
 
 .treeview {
+    .list-group {
+        .list-group-item {
+            padding-left: 10px;
+        }
+    }
     .checked_box::before {
         content: url('../../../assets/images/util/tree/icon_checkbox_yes.png')
     }

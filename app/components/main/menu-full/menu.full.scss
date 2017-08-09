@@ -127,10 +127,8 @@
                         margin-right: 10px;
                         border: 0 none;
                         background-color: transparent;
-                        img {
-                            display: block;
-                            width: 100%;
-                            height: 100%;
+                        &.lv1 {
+                            background: url("../../../assets/images/framework/default_menu_icon.png");
                         }
                         &.arrow {
                             margin-right: 4px;

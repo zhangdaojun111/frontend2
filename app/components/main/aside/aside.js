@@ -5,6 +5,7 @@ import {MenuComponent} from '../menu-full/menu.full';
 import Mediator from '../../../lib/mediator';
 import PersonalSettings from "../personal-settings/personal-settings";
 import {HTTP} from '../../../lib/http';
+import {commonuse} from '../commonuse/commonuse';
 
 
 function presetMenuData(menu, leaf) {
@@ -113,10 +114,14 @@ let config = {
                 content: "0"
             });
         },
-        showCommonMenu: function () {
+        showCommonMenu: function (reload) {
             if (!this.commonMenu) {
                 this.commonMenu = new MenuComponent({list: presetCommonMenuData(window.config.menu, window.config.commonUse)});
                 this.commonMenu.render(this.el.find('.menu.common'));
+            }
+            if (reload) {
+                this.commonMenu.data.list = presetCommonMenuData(window.config.menu, window.config.commonUse);
+                this.commonMenu.reload();
             }
             if (this.allMenu) {
                 this.allMenu.actions.hide();
@@ -157,6 +162,12 @@ let config = {
                     location.href = '/login';
                 }
             })
+        },
+        /**
+         * 编辑常用菜单
+         */
+        editCommonUse: function () {
+            commonuse.show();
         }
     },
     afterRender: function () {
@@ -185,10 +196,15 @@ let config = {
                 this.actions.setSizeToMini();
             }
         });
+        Mediator.on('commonuse:change', () => {
+            this.actions.showCommonMenu(true);
+        });
         this.el.on('click', '.startwrokflow', () => {
             this.actions.openWorkflowIframe();
         }).on('click', '.logout', () => {
             this.actions.logout();
+        }).on('click', '.tabs .edit', () => {
+            this.actions.editCommonUse();
         });
     },
     beforeDestory: function() {

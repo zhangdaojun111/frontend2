@@ -70,7 +70,9 @@ let config = {
     },
     firstAfterRender: function () {
         Mediator.on('aside:size', (order) => {
-            this.data.type = order;
+            if (this.data) {
+                this.data.type = order;
+            }
         });
     },
     beforeDestory: function () {
