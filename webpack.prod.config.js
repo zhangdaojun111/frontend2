@@ -24,6 +24,7 @@ module.exports = {
         //bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
         calendarSet: path.resolve(APP_PATH, 'entrys/calendar.set.js'),
+        calendarCreate: path.resolve(APP_PATH, 'entrys/calendar.create.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
         vendors: [
             'jquery',
