@@ -83,9 +83,9 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         const autoSaving=function(){
             timer=setInterval(()=>{
                 intervalSave(FormEntrys.getFormValue());
-            },1000);
+            },2*60*1000);
         };
-        // autoSaving();
+        autoSaving();
         Mediator.subscribe('workflow:autoSaveOpen', (msg)=> {
             clearInterval(timer);
             if(msg===1){
@@ -95,6 +95,46 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             }
         })
     })
+
+
+    //default wf
+    $('#importBtn').on('click',()=>{
+        if($("#import")[0]!=undefined){
+            $("#import").show();
+        }else{
+            $('body').append(`
+                <div id="import">
+                    <div>
+                        <div class="text">   
+                            <span>工作流选项</span>
+                        </div>
+                        <div class="cont">
+                            <select>
+                                <option value="">批量工作流</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text">   
+                            <span>审批流程</span>
+                        </div>
+                        <div class="cont">选择流程
+                            <select>
+                                <option value="">批量工作流</option>
+                            </select>
+                            <div id="dwf"></div>
+                        </div>
+                    </div>
+                    <span class=" ui-button ui-widget ui-corner-all" id="importClose">关闭</span>
+                </div>`
+            );
+        }
+        WorkFlow.show(mockFlowData.data[0],'#dwf');
+        
+    })
+    $('body').on('click','#importClose',()=>{
+        $("#import").hide();
+    });
     
 });
 
@@ -252,43 +292,7 @@ Mediator.subscribe("workflow:delImg",(msg)=>{
 
 
 
-$('#importBtn').on('click',()=>{
-    if($("#import")[0]!=undefined){
-        $("#import").show();
-    }else{
-        $('body').append(`
-            <div id="import">
-                <div>
-                    <div class="text">   
-                        <span>工作流选项</span>
-                    </div>
-                    <div class="cont">
-                        <select>
-                            <option value="">批量工作流</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <div class="text">   
-                        <span>审批流程</span>
-                    </div>
-                    <div class="cont">选择流程
-                        <select>
-                            <option value="">批量工作流</option>
-                        </select>
-                        <div id="dwf"></div>
-                    </div>
-                </div>
-                <span class=" ui-button ui-widget ui-corner-all" id="importClose">关闭</span>
-            </div>`
-        );
-    }
-    WorkFlow.show(mockFlowData.data[0],'#dwf');
-    
-})
-$('body').on('click','#importClose',()=>{
-    $("#import").hide();
-});
+
 
 
 //审批操作
