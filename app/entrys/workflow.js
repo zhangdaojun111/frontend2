@@ -106,7 +106,7 @@ ApprovalHeader.showheader();
         flow_id:30
     }});
 })().then(res=>{
-    console.log(res);
+    // console.log(res);
     Mediator.publish('workflow:gotImgInfo', res);
     Mediator.publish('workflow:gotWorkflowInfo', res);
 });
@@ -118,9 +118,9 @@ let tree=[];
     tree=res.data.department_tree;
 
     function recur(data) {
-        console.log(data);
+        // console.log(data);
         for (let item of data){
-            console.log(item);
+            // console.log(item);
             item.nodes=item.children;
             if(item.children.length!==0){
                 recur(item.children);
@@ -136,7 +136,6 @@ let tree=[];
     },'MULTI_SELECT',true,'tree3');
     treeComp2.render($('#treeMulti'));
 });
-
 FormEntrys.createForm({
     el:"#place-form",
     form_id:181,
@@ -145,10 +144,28 @@ FormEntrys.createForm({
     from_approve:1,
     from_focus:0,
     table_id:'5318_EHFuJD7Ae76c6GMPtzdiWH'
-}).then((res)=>{
+}).then(res=>{
     ApprovalHeader.showheader(res);
     WorkflowRecord.showRecord(res);
+    Mediator.subscribe('approval:recordPass', (ispass)=> {
+       if(ispass){
+           (async function () {
+                return workflowService.approveWorkflowRecord({
+                    url: '/approve_workflow_record',
+                });
+              })().then(res=>{
+
+               console.log(res);
+           })
+           console.log(ispass,res)
+       }
+
+    })
+
 });
+
+
+
 // function getRecordObj () {
 //     return new Promise(function (resolve, reject) {
 //         setTimeout(()=>{
