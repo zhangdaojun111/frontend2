@@ -94,7 +94,9 @@ let config = {
         //排序参数
         sortParam: {sortOrder:'',sortField:'',sort_real_type:''},
         //是否显示floatingFilter
-        isShowFloatingFilter: false
+        isShowFloatingFilter: false,
+        //批量工作流ids
+        batchIdList: []
     },
     //生成的表头数据
     columnDefs: [],
@@ -784,6 +786,12 @@ let config = {
             }
             if( this.data.viewMode == 'count' ){
                 json["tableType"]='count';
+            }
+            if( this.data.viewMode == 'createBatch' ){
+                json["is_batch"] = 1;
+                json['mongo'] = {
+                    _id: { $in: this.data.batchIdList }
+                }
             }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
