@@ -13,7 +13,8 @@ let config = {
     data: {
         views: window.config.bi_views,
         cells:[],
-        componentIds: []
+        componentIds: [],
+        cellMaxZindex: 0
     },
     actions: {
         /**
@@ -21,14 +22,20 @@ let config = {
          */
         async loadCells() {
             // 获取画布块数据
-            const chartsId = this.data.cells.map((cell) => cell.chart_id ? cell.chart_id : 0);
-            console.log(chartsId);
+            let zIndex = [];
+            const chartsId = this.data.cells.map((cell) => {
+               zIndex.push(cell.size.zIndex);
+               return cell.chart_id ? cell.chart_id : 0
+            });
+
+            // 获取画布块最大zindex
+            this.data.cellMaxZindex = Math.max(...zIndex);
+
             const charts = await canvasCellService.getCellChart({chart_id: chartsId});
             this.data.cells.forEach((val, index) => {
                 val['chart'] = charts[index];
-                let cellComponent = new CanvasCellComponent(val);
-                this.append(cellComponent, this.el.find('.cells'));
-                this.data.componentIds.push(cellComponent.componentId);
+                val['canvas'] = this;
+                this.instantiationCell(val);
             });
         },
 
@@ -36,7 +43,6 @@ let config = {
          * 添加画布块
          */
         addCell() {
-            console.log(this.data.cells);
             const cell = {
                 layout_id: '',
                 chart_id: '',
@@ -46,12 +52,11 @@ let config = {
                     top: 100,
                     width: 300,
                     height: 300,
-                    zIndex: 100
+                    zIndex: this.cell.canvas.data.cellMaxZindex
                 }
             };
             cell.chart = {};
-            let cellComponent = new CanvasCellComponent(cell);
-            this.append(cellComponent, this.el.find('.cells'));
+            this.instantiationCell(cell);
             this.data.cells.push(cell);
         }
 
@@ -95,6 +100,7 @@ let config = {
                 canvasType: "pc",
                 data: cells.map((cell) => {
                     delete cell['chart']
+                    delete cell['canvas']
                     return JSON.stringify(cell);
                 })
             };
@@ -129,4 +135,14 @@ export class CanvasCellsComponent extends BiBaseComponent{
         super(config);
         this.viewId = id ? id : this.data.views[0]['id'];
     };
+
+    /**
+     * 实例化cell
+     * @param data cell实例化初始数据
+     */
+    instantiationCell(data) {
+        let cellComponent = new CanvasCellComponent(data);
+        this.append(cellComponent, this.el.find('.cells'));
+        this.data.componentIds.push(cellComponent.componentId);
+    }
 }

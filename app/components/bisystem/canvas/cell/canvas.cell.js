@@ -46,6 +46,7 @@ export class CanvasCellComponent extends BiBaseComponent {
         config.data = cell.chart? cell.chart : null;
         super(config);
         this.cell = cell;
+
     }
 
     /**
@@ -63,9 +64,21 @@ export class CanvasCellComponent extends BiBaseComponent {
     afterRender() {
         this.renderCell();
         this.cellDragandResize();
+
         this.el.on('click', '.del-cell-btn', (event) => {
             this.delCellLayout();
-        })
+        });
+
+        // 设置cell zindex 为最大
+        let self = this;
+        this.el.on('mousedown', '.cell',function(){
+            self.cell.canvas.data.cellMaxZindex++;
+            let zIndex = self.cell.canvas.data.cellMaxZindex ;
+            $(this).css('zIndex', zIndex);
+        }).on('mouseup', '.cell', function(){
+            self.cell.size.zIndex = self.cell.canvas.data.cellMaxZindex;
+        });
+
     }
 
     /**
@@ -78,14 +91,10 @@ export class CanvasCellComponent extends BiBaseComponent {
      *画布块拖拽，缩放
      */
     cellDragandResize() {
-        let z = 1000;
         let dragCell = $(this.el).find('.cell');
         const dragOption = {
             cursor: "crosshair",
             containment: '.cells-container',
-            drag: (event, ui) => {
-                dragCell.draggable('option', 'zIndex', 1001)
-            },
             stop: (event, ui) => {
                 this.cell.size.left = ui.position.left;
                 this.cell.size.top = ui.position.top;
@@ -95,6 +104,9 @@ export class CanvasCellComponent extends BiBaseComponent {
             stop: (event, ui) => {
                 this.cell.size.width = ui.size.width;
                 this.cell.size.height = ui.size.height;
+                let myChartComponentId = dragCell.find('.cell-chart').attr('component');
+                //通知echarts resize更新
+                Mediator.publish(`bi:cell${myChartComponentId}:resize`, this.cell.size);
             }
         }
         dragCell.draggable(dragOption).resizable(resizeOption);

@@ -4,8 +4,7 @@
 import {BiBaseComponent} from '../../../bi.base.component';
 import template from './cell.radar.html';
 import {EchartsService} from '../../../../../services/bisystem/echart.server';
-
-
+import Mediator from '../../../../../lib/mediator';
 
 let config = {
     template: template,
@@ -15,8 +14,15 @@ let config = {
     },
     actions: {
         echartsInit() {
-            let echartsService = new EchartsService(this.data)
+            let echartsService = new EchartsService(this.data);
+            this.myChart = echartsService.myChart;
         }
+    },
+    afterRender() {
+
+        Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
+            this.myChart.resize();
+        })
     },
     firstAfterRender() {
         this.actions.echartsInit()
