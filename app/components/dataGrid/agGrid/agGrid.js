@@ -17,13 +17,22 @@ let config = {
         columnDefs : [],
         rowData : [],
         footerData: [],
-        cssTheme: 'ag-blue',
+        cssTheme: 'ag-bootstrap',
         floatingFilter: false,
         //原始表头数据
         fieldsData: [],
+        localeText:{
+            copy: '复制',
+            ctrlC: 'ctrl + C',
+            paste: '粘贴',
+            ctrlV: 'ctrl + V',
+            noRowsToShow: '<img src='+ require( "../../../assets/images/dataGrid/icon_shuju_no.png" ) +'>'
+        },
         onColumnResized:function ($event) {
         },
         onDragStopped:function ($event) {
+        },
+        onSortChanged:function ($event) {
         }
     },
     gridOptions: GridOptions,
@@ -35,14 +44,17 @@ let config = {
                 pinnedBottomRowData: this.data.footerData,
                 floatingFilter: this.data.floatingFilter,
                 suppressFilterButton: true,
-                animateRows: true,
+                animateRows: false,
                 suppressMultiSort: true,
                 enableColResize: true,
                 enableSorting: true,
                 sortingOrder: ['asc','desc','null'],
                 suppressRowClickSelection: true,
                 rowSelection: 'multiple',
+                headerHeight: 25,
+                floatingFiltersHeight: 0,
                 icons: dgcService.replacingIcons,
+                localeText: this.data.localeText,
                 //列宽改变
                 onColumnResized: this.data.onColumnResized,
                 //拖动结束
@@ -71,7 +83,9 @@ let config = {
                             group: false
                         };
                     }
-                }
+                },
+                //排序
+                onSortChanged: this.data.onSortChanged
             }
         },
         createAgGrid: function (){
@@ -82,6 +96,7 @@ let config = {
         setGridData: function ( json ) {
             this.gridOptions.api.setRowData( json.rowData );
             this.gridOptions.api.setPinnedBottomRowData( json.footerData );
+            // this.agGrid.gridOptions.api.redrawRows();
         },
         //宽度自适应
         autoWidth: function () {
