@@ -287,7 +287,6 @@ Mediator.subscribe("workflow:delImg",(msg)=>{
     })();
 });
 
-
 $('#importBtn').on('click',()=>{
     if($("#import")[0]!=undefined){
         $("#import").show();
