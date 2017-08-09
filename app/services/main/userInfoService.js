@@ -30,7 +30,7 @@ export const UserInfoService = {
     },
     //向后台发送存储头像数据
     saveAvatar:function (data) {
-        let url='/data/user_preference/';
+        let url= '/user_preference/';
         let body = {
             action:"save",
             content:encodeURIComponent(data),
