@@ -16,12 +16,15 @@ const BUILD_PATH = path.resolve(ROOT_PATH, 'dist');
 module.exports = {
     entry: {
         form: path.resolve(APP_PATH, 'entrys/form.js'),
+        addNewBuild: path.resolve(APP_PATH, 'entrys/popup/addNewBuild.js'),
+        choose: path.resolve(APP_PATH, 'entrys/popup/choose.js'),
         workflow:path.resolve(APP_PATH, 'entrys/workflow'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         //bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
         calendarSet: path.resolve(APP_PATH, 'entrys/calendar.set.js'),
+        calendarCreate: path.resolve(APP_PATH, 'entrys/calendar.create.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
         vendors: [
             'jquery',
@@ -141,7 +144,12 @@ module.exports = {
             "window.jQuery": "jquery"
         }),
         new webpack.optimize.CommonsChunkPlugin('vendors'),
-        new webpack.optimize.UglifyJsPlugin({minimize: true}),
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true,
+            mangle: {
+                except: ['$']
+            }
+        }),
 
         new ExtractTextPlugin({
             filename: (getPath) => {
