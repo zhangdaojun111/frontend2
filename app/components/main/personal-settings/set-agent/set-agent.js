@@ -50,6 +50,7 @@ let config = {
         },
         initWorkflow:function () {
             this.actions.formatOriginData(this.formatData);
+            console.log(this.formatData);
             let treeView = new TreeView(this.formatData,{
                 callback:(event,node) => {
                     this.actions.selectNode(event,node);
