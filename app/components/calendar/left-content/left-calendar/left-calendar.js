@@ -139,7 +139,7 @@ let config = {
             else{
                 mm = parseInt(mm)-1;
             }
-            Mediator.emit('calendar-left:last-month-day',{time: [yy,mm,dd]});
+            Mediator.emit('calendar-left:leftSelectedDate',{year: yy, month: mm, day: dd});
             config.actions.loadCalendarLastMonthData(nowYear,nowMonth,nowDay,that);
             let nowclickday = $(this).html();
             that.el.find(".now-month-day").each(function(){
@@ -158,7 +158,7 @@ let config = {
             else{
                 mm = parseInt(mm)+1;
             }
-            Mediator.emit('calendar-left:next-month-day',{time: [yy,mm,dd]});
+            Mediator.emit('calendar-left:leftSelectedDate',{year: yy, month: mm, day: dd});
             config.actions.loadCalendarNextMonthData(nowYear,nowMonth,nowDay,that);
             let nowclickday = $(this).html();
             that.el.find(".now-month-day").each(function(){

@@ -20,7 +20,7 @@ let config = {
     afterRender: function() {
         this.el.css({width: '100%'});
         console.log(window.config.table_id);
-
+        this.el.find('iframe').css("width","100%");
         CalendarService.getCalendarTableById({table_id:window.config.table_id, isSelected: 1}).then(res => {
             console.log(res);
             res['rows'].forEach(setItem => {
