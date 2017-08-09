@@ -67,6 +67,7 @@ export class CanvasCellComponent extends BiBaseComponent {
 
         this.el.on('click', '.del-cell-btn', (event) => {
             this.delCellLayout();
+            return false;
         });
 
         // 设置cell zindex 为最大

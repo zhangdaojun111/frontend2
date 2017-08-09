@@ -52,10 +52,11 @@ let config = {
                     top: 100,
                     width: 300,
                     height: 300,
-                    zIndex: this.cell.canvas.data.cellMaxZindex
+                    zIndex: this.data.cellMaxZindex
                 }
             };
             cell.chart = {};
+            cell['canvas'] = this;
             this.instantiationCell(cell);
             this.data.cells.push(cell);
         }
@@ -108,12 +109,14 @@ let config = {
                 if (res['success'] === 1) {
                     alert('保存成功')
                 }
-            })
+            });
+            return false;
         })
 
         //
         this.el.on('click', '.add-cell-btn', (event) => {
             this.actions.addCell();
+            return false;
         })
 
     },
