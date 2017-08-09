@@ -33,7 +33,7 @@ let config = {
         this.el.find('.export-btn').attr('disabled', true);
         let that = this;
         this.el.on('click', '.export-btn', function () {
-            window.open('/data/calendar_mgr/export_calendar_data/?from_date=' + that.data.fromDate +'&to_date=' + that.data.toDate);
+            window.open('/calendar_mgr/export_calendar_data/?from_date=' + that.data.fromDate +'&to_date=' + that.data.toDate);
         }).on('input propertychange', '.start-date', function () {
             that.actions.getSchedule();
         }).on('input propertychange', '.end-date', function () {

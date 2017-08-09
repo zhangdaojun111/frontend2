@@ -8,7 +8,6 @@ import './calendar.setting.scss';
 import CalendarSettingItem from './calendar.setting.item/calendar.setting.item';
 
 import {CalendarService} from '../../../services/calendar/calendar.service';
-import {PMAPI} from '../../../lib/postmsg';
 
 let config = {
     template: template,
@@ -21,11 +20,10 @@ let config = {
     afterRender: function() {
         CalendarService.getMenu().then(res => {
             console.log(res);
+            res['menuList'].forEach(item => {
+                this.append(new CalendarSettingItem(item), this.el.find('.setting-content'));
+            });
         });
-        this.data.menu.forEach(item => {
-            this.append(new CalendarSettingItem(item), this.el.find('.setting-content'));
-        });
-
     }
 };
 
