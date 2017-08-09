@@ -60,13 +60,27 @@ a{
   text-decoration: none;
 }
 /*table*/
-tbody > tr > td{
-  line-height: 1.42857143;
-  padding: 8px;
-  vertical-align: middle;
-  border: 1px solid rgb(240,240,240);
-  white-space: nowrap;
-  width: auto;
+tbody{
+  tr{
+    td{
+      line-height: 1.42857143;
+      padding: 8px;
+      vertical-align: middle;
+      border: 1px solid rgb(240,240,240);
+      white-space: nowrap;
+      width: auto;
+    }
+  }
+}
+.table-wrap {
+  position: relative;
+  //width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding-top:40px ;
+  padding-bottom: 70px;
+  display: table;
+  margin: 0 auto;
 }
 /*input*/
 .dynamic-form-input {
@@ -98,8 +112,8 @@ tbody > tr > td{
 }
 /*errorTips*/
 .error-msg {
-  height: 30px;
-  top: 0px;
+ // height: 30px;
+  top: -20px;
   zoom: 1;
   display: block;
   position: absolute;
@@ -112,28 +126,29 @@ tbody > tr > td{
   white-space: normal;
   z-index: 999;
   width: 300px;
-}
-.ui-error-arrow {
-  position: absolute;
-  left: -7px;
-  top: 6px;
-  width: 7px;
-  height: 10px;
-  display: block;
-  background: url(../../../assets/images/form/icon_error.png) no-repeat;
-  background-position: -16px -510px;
+  .ui-error-arrow {
+    position: absolute;
+    left: -7px;
+    top: 6px;
+    width: 7px;
+    height: 10px;
+    display: block;
+    background: url(../../../assets/images/form/icon_error.png) no-repeat;
+    background-position: -16px -510px;
+  }
+  pre{
+    padding: 0;
+    margin: 3px 0;
+    color: red;
+    background-color: transparent;
+    border: none;
+    white-space: pre-line;
+    word-wrap: break-word;
+    -moz-tab-size: 4;
+    tab-size: 4;
+  }
 }
 
-.table-wrap {
-  position: relative;
-  //width: 100%;
-  height: 100%;
-  overflow: auto;
-  padding-top:40px;
-  padding-bottom: 70px;
-  display: table;
-  margin: 0 auto;
-}
  .add-item {
   vertical-align: middle;
   display: inline-block;
