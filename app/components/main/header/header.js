@@ -4,11 +4,17 @@ import './header.scss';
 import 'jquery-ui/ui/widgets/tooltip';
 import Mediator from '../../../lib/mediator';
 import msgbox from '../../../lib/msgbox';
+import OtherLogin from "../login-by-other/login-by-other";
 
 let config = {
     template: template,
     data: {
-        asideSize: 'full'
+        asideSize: 'full',
+        otherLoginVisible:window.config.sysConfig.logic_config.use_register,
+        homeVisible:true,
+        calendarVisible: window.config.sysConfig.logic_config.use_canlendar,
+        biVisible: window.config.sysConfig.logic_config.use_bi,
+        // imVisible: window.config.sysConfig.logic_config.use_im,
     },
     actions: {
         setSizeToFull: function () {
@@ -33,6 +39,9 @@ let config = {
                 url: window.config.sysConfig.calendar_index
             });
         },
+        otherLogin:function () {
+            OtherLogin.show();
+        },
         goOnlineNumber: function () {
             msgbox.alert('go online number');
         },
@@ -42,7 +51,12 @@ let config = {
         refreshOnlineNum: function (number) {
             this.el.find('.online-num span').text(number);
         }
-    },
+
+        },
+        openHome:function () {
+
+        },
+
     afterRender: function () {
         this.el.tooltip();
     },
@@ -82,6 +96,11 @@ let config = {
             that.actions.goOnlineNumber();
         }).on('click', '.system-setting', () => {
             that.actions.goSystemSetting();
+
+        }).on('click','a.other-login', () => {   //他人登录
+            this.actions.otherLogin();
+        }).on('click','icon.home', () => {
+            this.actions.openHome();
         });
         Mediator.on('socket:online_user_num', function (data) {
             that.actions.refreshOnlineNum(data.online_user_num);

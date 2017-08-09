@@ -27,7 +27,7 @@ function presetMenuData(menu, leaf) {
 function presetCommonMenuData(menu, commonData) {
     let menuData = _.defaultsDeep([], menu);
     let commonKeys = commonData.data;
-    
+
     function plusParentNumber(item) {
         if (item) {
             item.childrenIsCommonUseNumber += 1;
@@ -36,7 +36,7 @@ function presetCommonMenuData(menu, commonData) {
             }
         }
     }
-    
+
     function preset_one(_menu, parent) {
         _menu.forEach((item) => {
             let key = item.ts_name || item.table_id;
@@ -55,7 +55,7 @@ function presetCommonMenuData(menu, commonData) {
         });
     }
     preset_one(menuData);
-    
+
     function preset_two (_menu, parent) {
         let res = [];
         _menu.forEach((item) => {
@@ -178,7 +178,7 @@ let config = {
                 this.actions.showAllMenu();
             }).on('click', '.tabs p.common', () => {
                 this.actions.showCommonMenu();
-            }).on('click','.set-info', () => {
+            }).on('click','div.personal-setting',() => {
                 this.actions.showInfoSet();
             });
             if (window.config.isCommon === "0") {

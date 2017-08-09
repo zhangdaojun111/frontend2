@@ -31,7 +31,6 @@ let config = {
         initInfo:function () {
             // 初始化，检测用户头像路径返回值，没有则显示默认头像
             if(this.data.avatar === ''){
-                console.log(this.el.find("img"));
                 this.el.find("img").attr("src","../../../../assets/images/framework/default_avatar.png")     //属性修改成功，图片未显示
             }
         },
@@ -107,8 +106,8 @@ let config = {
                 // msgbox.alert("保存成功");
                 console.log("保存成功");
             }).fail((err) => {
-                msgbox.alert("保存失败");
-                console.log(err);
+                // msgbox.alert("修改失败");
+                console.log("修改失败",err);
             })
         },
         isLegal:function () {
@@ -134,7 +133,6 @@ let config = {
             };
 
             this.dataService.modifyPassword(data).done((result) => {
-                console.log(result);
                 if(result.success === 1){
                     msgbox.alert("密码修改成功！")
                 }else{
@@ -184,11 +182,14 @@ let config = {
         });
         //窗口监听来自子窗口的设置头像的消息
         Mediator.on("personal:setAvatar",(data) => {
-            console.log(data);
+            // console.log("on mess",this,this.el);
             this.el.find("img.user-avatar")
-                .attr("src",data.picSrc)
+                .attr("src",data.src)
+                .css("width",data.width)
+                .css("height",data.height)
                 .css("left",data.left)
-                .css("top",data.top)
+                .css("top",data.top);
+            msgbox.alert("头像设置成功!");
         })
     },
     beforeDestory:function () {

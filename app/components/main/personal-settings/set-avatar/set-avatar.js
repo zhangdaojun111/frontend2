@@ -7,8 +7,10 @@ import template from './set-avatar.html';
 import {UserInfoService} from "../../../../services/main/userInfoService"
 import Mediator from "../../../../lib/mediator"
 // import msgbox from '../../../../lib/msgbox';
+import "../../../../lib/jcrop";
+import msgbox from "../../../../lib/msgbox";
 
-
+let jcropApi = undefined;       //保存Jcrop的接口
 
 let config = {
     template:template,
@@ -17,20 +19,30 @@ let config = {
         imageArr:["image/png","image/jpg","image/jpeg","image/gif","image/tiff"],
         avatar:null,        //当前图片数据，包含picSrc，left，top
         picSrc:'',         //记录当前图片
-        _picSrc:'',         //记录新图片
+        _picSrc:'',         //记录新上传图片
         _img:'',            //新图片对象
         imgW:350,           //图片显示宽度
         imgH:350,
-        imgX:0,             //图片横向位移量
-        imgY:0,             //图片纵向位移量
+        imgX:0,
+        imgY:0,
         component:null,
+        dragResult:{            //拖动结束后和数据
+            coords:null,
+            proportion:1,
+        },
+        imgData:{               //根据比例计算后的结果，用于设置最终图片位置
+            src:"",
+            width:"",
+            height:"",
+            left:"",
+            top:"",
+        },
     },
 
     actions:{
         getPic(event){
             this.data.status = true;
             let file = event.target.files[0];
-
             if(file.size > 1024000){       //检查文件大小
                 // msgbox.alert("文件大小要小于1MB");
                 this.el.find("div.img_tips").attr("html","文件大小要小于1MB");
@@ -47,85 +59,81 @@ let config = {
 
             let reader = new FileReader();
             reader.readAsDataURL(file);
+            if(jcropApi !== undefined){
+                jcropApi.destroy();
+            }
             reader.onload = (e) => {
-                this.data._picSrc = e.target['result'];
-                this.data._img = new Image();
-                this.data._img.src = this._picSrc;
-                //自适应图片大小
-                // this.data._img.onload = (e) => {
-                //     if(this.data._img.height > this.data._img.width){
-                //         if(this.data._img.width <= 350){
-                //             this.data.imgH = this.data._img.height;
-                //             this.data.imgW = this.data._img.width;
-                //             this.data.scale = 1
-                //         }else{
-                //             this.data.imgW = 350;
-                //             this.data.scale = parseFloat((350/this.data._img.width).toFixed(3));
-                //             this.data.imgH = (this._img.height*350/this.data._img.width).toFixed(1);
-                //         }
-                //     }else if(this.data._img.width > this.data._img.height){
-                //         if(this.data._img.height <= 350){
-                //             this.data.imgH = this.data._img.height;
-                //             this.data.imgW = this.data._img.width;
-                //             this.data.scale = 1
-                //         }else{
-                //             this.data.imgH = 350;
-                //             this.data.scale = parseFloat((350/this.data._img.height).toFixed(3));
-                //             this.data.imgW = parseFloat((this.data._img.width*350/this.data._img.height).toFixed(1));
-                //         }
-                //     }
-                // };
-
-                //手动显示上传的图片
+                let picSrc = e.target['result'];
+                // 手动显示上传的图片(350*350)
                 this.el.find("img.pic_set")
-                    .attr("src",this.data._picSrc)
+                    .attr("src",picSrc)
                     .attr("width",this.data.imgW)
                     .attr("height",this.data.imgH)
                     .attr("left",this.data.imgX)
-                    .attr("top",this.data.imgY)
+                    .attr("top",this.data.imgY);
+                this.actions.initImgData(picSrc);
+                //上传图片后，开启裁剪功能
+                this.el.find("img.pic_set").Jcrop({
+                    aspectRatio:1,
+                    bgColor:"black",
+                    bgOpacity:0.4,
+                    bgFade: true,
+                    onSelect:this.actions.updateCoords
+                },function () {
+                    jcropApi = this;
+                    jcropApi.setSelect([145,145,205,205]);
+                });
             };
         },
-        dragStart:function () {
-            //拖动起始事件
+        initImgData:function (src) {
+            this.data.imgData.src = src;
+            this.data._picSrc = src;
+            this.data.imgData.width =  "350px";
+            this.data.imgData.height = "350px";
+            this.data.imgData.left = "-145px";
+            this.data.imgData.top = "-145px";
         },
-        drag:function () {
-            //拖动事件
+        updateCoords:function (c) {
+            this.data.dragResult.coords = c;
+            this.data.dragResult.proportion = (c.x2 - c.x)/60;
+            this.actions.resizeImg(c,this.data.dragResult.proportion);
         },
-        dragStop:function () {
-            //拖动完成，记录拖动框坐标
-            this.data.imgX = (0 - parseInt(this.el.find("div.drag-able").css("left"))) + "px";
-            this.data.imgY = (0 - parseInt(this.el.find("div.drag-able").css("top"))) + "px";
-            this.el.find(".result-img")
-                .attr("src",this.data._picSrc)
-                .css("left",this.data.imgX)
-                .css("top",this.data.imgY)
+        resizeImg:function (c,p) {
+            //根据比例缩放图片，作为最终使用图片
+            this.data.imgData.src = this.data._picSrc;
+            this.data.imgData.width =  350/p + "px";
+            this.data.imgData.height = 350/p + "px";
+            this.data.imgData.left = 0 - c.x/p + "px";
+            this.data.imgData.top = 0 - c.y/p + "px";
+            this.actions.displayAvatar();
         },
-
+        displayAvatar:function () {
+            this.el.find("img.result-img")
+                .attr("src",this.data.imgData.src)
+                .css("width",this.data.imgData.width)
+                .css("height",this.data.imgData.height)
+                .css("left",this.data.imgData.left)
+                .css("top",this.data.imgData.top);
+        },
         saveAvatar:function () {
-            let data = {
-                picSrc:this.data._picSrc,
-                left:this.data.imgX,
-                top:this.data.imgY
-            };
-            //向父窗口传递头像数据
-            Mediator.emit("personal:setAvatar",data);
+            let data = this.data.imgData;
             //向后台传递头像数据
             UserInfoService.saveAvatar(data).done((result) => {
                 //根据结果处理后续工作
-                console.log(result)
+                if(result.success === 1){
+                    //向父窗口传递头像数据并设置
+                    Mediator.emit("personal:setAvatar",data);
+                }else{
+                    msgbox.alert("头像设置失败！");
+                }
             }).fail((err) => {
+                msgbox.alert("头像设置失败！");
                 console.log("err",err)
             })
         }
     },
 
     afterRender:function () {
-        //设置可拖动的圆形div
-        this.el.find("div.drag-able").draggable({
-            start:this.actions.dragStart,
-            drag:this.actions.drag,
-            stop:this.actions.dragStop,
-        });
         //设置监听
         this.el.on("change","input.select-pic",(event) => {   //监听上传图片
             this.actions.getPic(event);
@@ -154,7 +162,7 @@ export default {
         component.render(el);
         el.dialog({
             title: '设置头像',
-            width: 400,
+            width: 500,
             height: 600,
             close: function() {
                 component.destroySelf();

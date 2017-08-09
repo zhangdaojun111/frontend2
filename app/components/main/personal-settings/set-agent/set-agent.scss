@@ -1,6 +1,9 @@
 @import "../../../../assets/scss/core/base";
 
 .set-proxy-window {
+    margin:10px;
+
+
     border: solid 1px #e4e4e4;
     padding: 5px;
     color: #999999;
@@ -66,7 +69,8 @@
 
             span {
                 display: inline-block;
-                margin-left: 20px;
+                margin-top: 20px;
+                margin-left: 25px;
                 color: black;
             }
             .single-select-group {

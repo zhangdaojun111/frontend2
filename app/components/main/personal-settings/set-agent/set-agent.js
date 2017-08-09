@@ -22,6 +22,7 @@ let config = {
     selectedWorkflow:null,        //记录被选中的工作流的id
     selectedAgent:'',           //记录被选中的代理人
     isOpen:0,               //是否开启代理，默认否    1是开，0是关
+    atSelect:null,
 
     actions:{
         initData:function () {
@@ -33,6 +34,7 @@ let config = {
                         this.selectedWorkflow = new Set();
                         this.selectedAgent = '';
                         this.isOpen = 0;
+                        this.atSelect = null;
                         $.extend(true,this.formatData,this.originData.data.workflow_list);
                     }else{
                         msgbox.alert("数据加载失败");
@@ -87,6 +89,7 @@ let config = {
             let autoSelect = new AutoSelect({
                 list: this.originData.data.user_list
             });
+            this.atSelect = autoSelect;
             autoSelect.render($wrap);
             // this.agentList = this.originData.data.user_list;
             // let $nameList = this.el.find("#name_list");
@@ -145,20 +148,19 @@ let config = {
                 }
             }
         },
-        setAgentId:function (event) {
-            console.log("set input id");
-            this.selectedAgent = '';
-            let user_name = this.el.find("input[name=name_input]").val();
-            console.log(user_name);
-            if(user_name !== ''){
-                for (let agent of this.originData.data.user_list) {
-                    if ( user_name === agent.name){
-                        this.selectedAgent = agent.id;
-                    }
-                }
-            }
-            console.log(this.selectedAgent);
-        },
+        // setAgentId:function (event) {
+        //     this.selectedAgent = '';
+        //     let user_name = this.el.find("input[name=name_input]").val();
+        //     console.log(user_name);
+        //     if(user_name !== ''){
+        //         for (let agent of this.originData.data.user_list) {
+        //             if ( user_name === agent.name){
+        //                 this.selectedAgent = agent.id;
+        //             }
+        //         }
+        //     }
+        //     console.log(this.selectedAgent);
+        // },
         closeSwitch:function (event) {
             this.isOpen = 0;
         },
@@ -166,6 +168,7 @@ let config = {
             this.isOpen = 1;
         },
         saveAgent:function (event) {
+            this.selectedAgent = this.atSelect.actions.getId();
             //保存代理前进行逻辑判断
             if(this.isOpen === 1 && this.selectedAgent === ''){
                 msgbox.alert("请选择一个代理人");
@@ -200,8 +203,8 @@ let config = {
         this.actions.initData();
         this.el.on("click","span.save-proxy",(event) => {
             this.actions.saveAgent(event);
-        }).on("input","input[name=name_input]",(event) => {
-            this.actions.setAgentId(event);
+        // }).on("input","input[name=name_input]",(event) => {
+        //     this.actions.setAgentId(event);
         }).on("click","input.close-radio",(event) => {
             this.actions.closeSwitch(event);
         }).on("click","input.open-radio",(event) => {
@@ -227,7 +230,7 @@ export default {
         component.render(el);
         el.dialog({
             title: '设置代理',
-            width: 893,
+            width: 915,
             height: 620,
             modal: true,
             close: function() {
