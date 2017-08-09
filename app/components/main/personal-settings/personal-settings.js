@@ -102,14 +102,15 @@ let config = {
             //修改结果传给后台
             let data = {
                 username:this.data.username,
-                useremail: this.user_email,
+                useremail: this.data.user_email,
                 usertel: this.data.user_phone
             };
             this.dataService.saveInfo(data).done((result) => {
-                // msgbox.alert("保存成功");
-                console.log("保存成功");
+                //修改window.config中的数据
+                window.config.sysConfig.userInfo.email = this.data.user_email;
+                window.config.sysConfig.userInfo.tel = this.data.user_phone;
             }).fail((err) => {
-                // msgbox.alert("修改失败");
+                msgbox.alert("修改失败");
                 console.log("修改失败",err);
             })
         },
@@ -161,6 +162,15 @@ let config = {
         clearLocalStorage:function(){
             window.localStorage.clear();
             $(window).attr("location","/login");
+        },
+        resetAvatar:function () {
+            this.el.find("img.user-avatar")
+                .attr("src",window.config.sysConfig.userInfo.avatar)
+                .css("width",window.config.sysConfig.userInfo.avatar_content.width)
+                .css("height",window.config.sysConfig.userInfo.avatar_content.height)
+                .css("left",window.config.sysConfig.userInfo.avatar_content.left)
+                .css("top",window.config.sysConfig.userInfo.avatar_content.top);
+            msgbox.alert("头像设置成功!");
         }
     },
     afterRender:function () {
@@ -197,15 +207,8 @@ let config = {
             this.actions.isLegal();
         });
         //窗口监听来自子窗口的设置头像的消息
-        Mediator.on("personal:setAvatar",(data) => {
-            // console.log("on mess",this,this.el);
-            this.el.find("img.user-avatar")
-                .attr("src",data.src)
-                .css("width",data.width)
-                .css("height",data.height)
-                .css("left",data.left)
-                .css("top",data.top);
-            msgbox.alert("头像设置成功!");
+        Mediator.on("personal:setAvatar",() => {
+           this.actions.resetAvatar();
         })
     },
     beforeDestory:function () {
@@ -232,6 +235,7 @@ export default {
             height: 600,
             modal: true,
             close: function() {
+                $(this).dialog('destroy');
                 component.destroySelf();
             }
         });

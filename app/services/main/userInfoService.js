@@ -31,7 +31,7 @@ export const UserInfoService = {
     //向后台发送存储头像数据
     saveAvatar:function (data) {
         let url= '/user_preference/';
-        console.log(data.src);
+        // console.log(data.src);
         // data.src = encodeURIComponent(data.src);
         let formatData = JSON.stringify(data);
         let body = {

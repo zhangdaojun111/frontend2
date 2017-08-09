@@ -131,7 +131,6 @@ let config = {
                 pre_type: "8",
                 content: "1"
             });
-
         },
         openWorkflowIframe: function () {
             Mediator.emit('menu:item:openiframe', {
@@ -167,6 +166,14 @@ let config = {
                     location.href = '/login';
                 }
             })
+        },
+        resetAvatar:function(){
+            this.el.find("img.set-info")
+                .attr("src",window.config.sysConfig.userInfo.avatar)
+                .css("width",window.config.sysConfig.userInfo.avatar_content.width)
+                .css("height",window.config.sysConfig.userInfo.avatar_content.height)
+                .css("left",window.config.sysConfig.userInfo.avatar_content.left)
+                .css("top",window.config.sysConfig.userInfo.avatar_content.top);
         }
     },
     afterRender: function () {
@@ -187,6 +194,9 @@ let config = {
                 this.actions.showCommonMenu();
             }
         }
+        Mediator.on("personal:setAvatar",() => {
+            this.actions.resetAvatar();
+        })
     },
     firstAfterRender: function() {
         Mediator.on('aside:size', (order) => {

@@ -188,7 +188,7 @@ let config = {
                 agent_id:this.selectedAgent,
                 is_apply:this.isOpen
             };
-            console.log(data);
+
             UserInfoService.saveAgentData(data)
                 .done((result) => {
                     if(result.success === 1){
@@ -239,6 +239,7 @@ export default {
             height: 620,
             modal: true,
             close: function() {
+                $(this).dialog('destroy');
                 component.destroySelf();
             }
         });

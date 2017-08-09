@@ -120,10 +120,16 @@ let config = {
             //向后台传递头像数据
             UserInfoService.saveAvatar(data).done((result) => {
                 //根据结果处理后续工作
-                console.log(result);
                 if(result.success === 1){
                     //向父窗口传递头像数据并设置
-                    Mediator.emit("personal:setAvatar",data);
+                    window.config.sysConfig.userInfo.avatar = data.src;
+                    window.config.sysConfig.userInfo.avatar_content = {
+                        width:data.width,
+                        height:data.height,
+                        left:data.left,
+                        top:data.top
+                    };
+                    Mediator.emit("personal:setAvatar");
                 }else{
                     msgbox.alert("头像设置失败！");
                 }
@@ -164,8 +170,10 @@ export default {
         el.dialog({
             title: '设置头像',
             width: 500,
+            modal:true,
             height: 600,
             close: function() {
+                $(this).dialog('destroy');
                 component.destroySelf();
             }
         });

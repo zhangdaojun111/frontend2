@@ -12,8 +12,11 @@ let config = {
         asideSize: 'full',
 
         homeVisible:true,
-        calendarVisible: window.config.sysConfig.logic_config.use_canlendar,
-        biVisible: window.config.sysConfig.logic_config.use_bi,
+        calendarVisible:true,
+        biVisible:true,
+
+        // calendarVisible: window.config.sysConfig.logic_config.use_canlendar,
+        // biVisible: window.config.sysConfig.logic_config.use_bi,
         // imVisible: window.config.sysConfig.logic_config.use_im,
     },
     actions: {
@@ -39,6 +42,9 @@ let config = {
                 url: window.config.sysConfig.calendar_index
             });
         },
+        openHome:function () {
+            msgbox.alert("打开首页按钮预留");
+        },
         otherLogin:function () {
             OtherLogin.show();
         },
@@ -51,9 +57,6 @@ let config = {
         refreshOnlineNum: function (number) {
             this.el.find('.online-num span').text(number);
         }
-
-        },
-        openHome:function () {
 
         },
 
@@ -99,7 +102,7 @@ let config = {
 
         // }).on('click','a.other-login', () => {   //他人登录
         //     this.actions.otherLogin();
-        }).on('click','icon.home', () => {
+        }).on('click','.home', () => {
             this.actions.openHome();
         });
         Mediator.on('socket:online_user_num', function (data) {
