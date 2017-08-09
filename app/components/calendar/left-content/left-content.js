@@ -7,7 +7,7 @@ import LeftContentHide from './leftContent.hideContent/leftContent.hideContent';
 import {CalendarService} from '../../../services/calendar/calendar.service';
 import Mediator from '../../../lib/mediator';
 import CalendarSetting from '../calendar.setting/calendar.setting';
-import PMAPI from '../../../lib/postmsg';
+import {PMAPI} from '../../../lib/postmsg';
 
 let config = {
     template: template,
@@ -378,7 +378,7 @@ let config = {
                 }
             });
         }).on('click', '.create-calendar', () => {
-            PMAPI.openDialogByIframe('/calendar_mgr/create/', {width: "100%", height: '100%',});
+            PMAPI.openDialogByIframe('/calendar_mgr/create/', {width: "1000", height: '550', title: '日历表'});
         });
     }
 };
