@@ -47,6 +47,22 @@ let config={
                     appendDiv.find(".preview-node3").toggle().siblings().hide();
                     break;
             }
+        },
+        recordFn:function () {
+            let kind={
+                pass:function () {
+                    msgBox.confirm("你确定审核通过吗").then((res)=>{
+                        if(res){
+                            Mediator.publish('approval:recordPass',res);
+                            // console.log('提交成功')
+                        }else {
+                            // console.log('未提交')
+                            return;
+                        }
+                    })
+                }
+            };
+            return kind;
         }
 
     },
@@ -72,8 +88,10 @@ let config={
         this.el.on('click',".preview-btn",function () {
             let appendDiv=__this.el.find("#preview-node");
             __this.actions.previewView($(this),appendDiv);
+        });
+        this.el.on('click','#app-pass',function () {
+            __this.actions.recordFn().pass()
         })
-
 
     }
 };
@@ -87,5 +105,7 @@ let component = new ApprovalWorkflow();
 let el = $('#approval-workflow');
 component.render(el);
 
-let data = {"file_ids": ["5987de19c3ec2134050ee679", "5987de3244543b4d1226c977", "5987fe3e8e368f5747b1722c"]}
-WorkflowSeal.showheader(data);
+Mediator.subscribe("workflow:getStampImg",(msg)=>{
+    console.log(msg);
+    WorkflowSeal.showheader(msg);
+})
