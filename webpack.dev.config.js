@@ -33,6 +33,7 @@ module.exports = {
         //bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
+        calendarSet: path.resolve(APP_PATH, 'entrys/calendar.set.js'),
         vendors: [
             'jquery',
             'jquery-ui',

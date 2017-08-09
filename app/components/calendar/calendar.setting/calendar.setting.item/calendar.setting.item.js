@@ -40,7 +40,7 @@ let config = {
                 //     }
                 // });
                 PMAPI.openDialogByIframe(
-                    'http://127.0.0.1:8088/calendar_mgr/set/&table_id='+item['tableId'],
+                    'http://127.0.0.1:8088/calendar_mgr/set/?table_id='+item['table_id'],
                     {
                         width: "100%",
                         height: '900',

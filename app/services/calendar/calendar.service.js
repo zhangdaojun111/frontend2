@@ -40,13 +40,16 @@ export const CalendarService = {
             table_id: data['table_id'],
             isSelected: data['isSelected']
         };
-        HTTP.post(getcalendarTableUrl,params).then(res => {
+
+        let res = HTTP.post(getcalendarTableUrl, params).then(res => {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                alert('获取数据失败');
+                //alert('获取数据失败');
             }
         });
+        HTTP.flush();
+        return res;
     },
 
     getCalendarTreeData: function () {
