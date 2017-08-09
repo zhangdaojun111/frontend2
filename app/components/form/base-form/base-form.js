@@ -486,40 +486,71 @@ let config={
             if(!data["effect"] || !data["effect"].length>0){
                 return;
             }
-            for(let f of data["effect"]) {
-                //如果这个字段存在的话，再进行下面的逻辑
-                let expression;
-                if(this.data.data.hasOwnProperty(f)) {
-                    let expressionStr = this.data.data[f]["expression"];
-                    let real_type = this.data.data[f]["real_type"];
-                    if(expressionStr !== ""){
-                        expression = this.actions.replaceSymbol(expressionStr);
-                        try {
-                            if (expression.indexOf("$^$")==-1){
-                                try {
-                                    if(this.data[expressionStr.split("@")[1]]["is_view"] != 1){
-                                        this.actions.set_value_for_form(eval(expression), f);
-                                    }
-                                } catch (e) {
-                                    send_exps.push({"f": f, "expression": expression,"real_type":real_type});
-                                }
-                            }else{
-                                send_exps.push({"f": f, "expression": expression,"real_type":real_type});
-                            }
-                        } catch (e) {
-                            console.error("没有解析成功，1,解析错误2，可能是没有此函数"+e);
-                        }
-                    }
+            let fields = {};
+            let continue_key = ["parent_real_id", "parent_table_id", "parent_temp_id", "real_id", "table_id", "temp_id"];
+            let need_key = ["id", "dfield", "effect", "expression", "dinput_type", "real_type"];
+            for (let f in this.data.data){
+                if (continue_key.indexOf(f)!=-1){
+                    continue
+                }
+                let temp_field = this.data.data[f];
+                fields[f] = {}
+                for (let i in need_key){
+                    fields[f][need_key[i]] = temp_field[need_key[i]];
                 }
             }
-            if (send_exps.length!=0) {
-                let _this=this;
-                FormService.get_exp_value(encodeURIComponent(JSON.stringify(send_exps))).then(res=>{
-                    for (let j in res['data']){
-                        _this.actions.set_value_for_form(res['data'][j], j);
-                    }
-                });
+            let new_data = {};
+            let old_data = this.actions.createFormValue(this.data.data);
+            for (let d in old_data){
+                if (continue_key.indexOf(d)!=-1){
+                    continue
+                }
+                new_data[d] = old_data[d];
             }
+            FormService.expEffect({
+                data:new_data,
+                fields: fields,
+                change_fields:[data.id]
+            }).then(res=>{
+                for (let j in res['data']){
+                   this.actions.set_value_for_form(res['data'][j], j);
+                }
+            });
+            HTTP.flush();
+            // for(let f of data["effect"]) {
+            //     //如果这个字段存在的话，再进行下面的逻辑
+            //     let expression;
+            //     if(this.data.data.hasOwnProperty(f)) {
+            //         let expressionStr = this.data.data[f]["expression"];
+            //         let real_type = this.data.data[f]["real_type"];
+            //         if(expressionStr !== ""){
+            //             expression = this.actions.replaceSymbol(expressionStr);
+            //             try {
+            //                 if (expression.indexOf("$^$")==-1){
+            //                     try {
+            //                         if(this.data[expressionStr.split("@")[1]]["is_view"] != 1){
+            //                             this.actions.set_value_for_form(eval(expression), f);
+            //                         }
+            //                     } catch (e) {
+            //                         send_exps.push({"f": f, "expression": expression,"real_type":real_type});
+            //                     }
+            //                 }else{
+            //                     send_exps.push({"f": f, "expression": expression,"real_type":real_type});
+            //                 }
+            //             } catch (e) {
+            //                 console.error("没有解析成功，1,解析错误2，可能是没有此函数"+e);
+            //             }
+            //         }
+            //     }
+            // }
+            // if (send_exps.length!=0) {
+            //     let _this=this;
+            //     FormService.get_exp_value(encodeURIComponent(JSON.stringify(send_exps))).then(res=>{
+            //         for (let j in res['data']){
+            //             _this.actions.set_value_for_form(res['data'][j], j);
+            //         }
+            //     });
+            // }
         },
 
         //改变选择框的选项
@@ -973,7 +1004,9 @@ let config={
     },
 
     checkValue:function(data,_this){
-            // _this.data.data[data.dfield]=data;
+            if(_this.data.data[data.dfield]){
+                _this.data.data[data.dfield]=data;
+            }
             if(data.type=='Buildin'){
                 let id = data["id"];
                 let value = data["value"];
@@ -1022,7 +1055,8 @@ let config={
 
             let calcData = {
                 val: data['value'],
-                effect: data["effect"]
+                effect: data["effect"],
+                id:data['id']
             };
             _this.actions.calcExpression(calcData,data['value']);
             if(data.required){

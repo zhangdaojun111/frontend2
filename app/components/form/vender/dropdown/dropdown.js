@@ -13,7 +13,7 @@ let config={
                 <div class="select-drop width100" style="display: none;position: absolute;top:100%;z-index: 1;background: #fff;border: 1px solid #ccc" >
                     <input type="type" class="search width100"/>
                     {{#options}}
-                        <div style="height: 20px " class="option show-hide-drop width100" data-py="{{this.py}}" data-value="{{this.value}}">{{this.label}}</div>
+                        <div style="height: 20px " class="option show-hide-drop width100" data-py="{{this.py}}" data-value="{{this.label}}">{{this.label}}</div>
                     {{/options}}
                 </div>
               </div>`,

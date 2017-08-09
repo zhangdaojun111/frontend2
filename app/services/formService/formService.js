@@ -349,6 +349,9 @@ export const FormService={
     saveAddpageData:async function (json) {
         return HTTP.post('add_update_table_data',json);
     },
+    expEffect:async function (json) {
+        return HTTP.post('eval_exp_fun',json);
+    },
 
     getFormData(json){
         let res;
