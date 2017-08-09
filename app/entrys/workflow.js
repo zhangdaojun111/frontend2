@@ -74,7 +74,6 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             };
             postData.data=JSON.stringify(data);
             let res = await workflowService.createWorkflowRecord(postData);
-            console.log(res);
             if(res.success===1){
                 msgBox.alert('自动保存成功！');
             }
@@ -83,9 +82,9 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         const autoSaving=function(){
             timer=setInterval(()=>{
                 intervalSave(FormEntrys.getFormValue());
-            },1000);
+            },2*60*1000);
         };
-        // autoSaving();
+        autoSaving();
         Mediator.subscribe('workflow:autoSaveOpen', (msg)=> {
             clearInterval(timer);
             if(msg===1){
@@ -95,6 +94,46 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             }
         })
     })
+
+
+    //default wf
+    $('#importBtn').on('click',()=>{
+        if($("#import")[0]!=undefined){
+            $("#import").show();
+        }else{
+            $('body').append(`
+                <div id="import">
+                    <div>
+                        <div class="text">   
+                            <span>工作流选项</span>
+                        </div>
+                        <div class="cont">
+                            <select>
+                                <option value="">批量工作流</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text">   
+                            <span>审批流程</span>
+                        </div>
+                        <div class="cont">选择流程
+                            <select>
+                                <option value="">批量工作流</option>
+                            </select>
+                            <div id="dwf"></div>
+                        </div>
+                    </div>
+                    <span class=" ui-button ui-widget ui-corner-all" id="importClose">关闭</span>
+                </div>`
+            );
+        }
+        WorkFlow.show(mockFlowData.data[0],'#dwf');
+        
+    })
+    $('body').on('click','#importClose',()=>{
+        $("#import").hide();
+    });
     
 });
 
@@ -146,7 +185,7 @@ var mockFlowData;
 let tree=[];
 let staff=[];
 (async function () {
-    return workflowService.getStuffInfo({url: '/get_department_tree/'});
+    return workflowService.getStuffInfo({url: '/save_perm/?perm_id=0'});
 })().then(res=>{
     tree=res.data.department_tree;
     staff=res.data.department2user;
@@ -209,16 +248,41 @@ let staff=[];
 });
 
 FormEntrys.createForm({
-    el:"#place-form",
+    el:$("#place-form"),
     form_id:181,
     record_id:'59897efb53930b8ca98a3446',
     is_view:0,
     from_approve:1,
     from_focus:0,
     table_id:'5318_EHFuJD7Ae76c6GMPtzdiWH'
-}).then((res)=>{
-        ApprovalHeader.showheader(res);
-        WorkflowRecord.showRecord(res);
+}).then(res=>{
+    ApprovalHeader.showheader(res);
+    WorkflowRecord.showRecord(res);
+    Mediator.subscribe('approval:recordPass', (ispass)=> {
+       if(ispass){
+           (async function () {
+
+                return workflowService.approveWorkflowRecord({
+                    url: '/approve_workflow_record/',
+                    data:{
+                        record_id:'59897f1591461c15d279023a',
+                        focus_users:[],
+                        action:0,// 0：通过 1：驳回上一级 2:驳回发起人 3：作废 4：取消 5：撤回 6：驳回任意节点 7：撤回审批 8：自动拨回到发起人 9：加签
+                        comment:null,
+                        node_id:null,//驳回节点id
+                        sigh_type:0,//加签类型  0：前 1：后
+                        sigh_user_id:'5979e48a41f77c586658e346',
+                        data:{}
+                    }
+                });
+              })().then(res=>{
+                 console.log('审批通过',res)
+           })
+
+       }
+
+    })
+
 });
 
 
@@ -254,58 +318,22 @@ Mediator.subscribe("workflow:delImg",(msg)=>{
 
 
 
-$('#importBtn').on('click',()=>{
-    if($("#import")[0]!=undefined){
-        $("#import").show();
-    }else{
-        $('body').append(`
-            <div id="import">
-                <div>
-                    <div class="text">   
-                        <span>工作流选项</span>
-                    </div>
-                    <div class="cont">
-                        <select>
-                            <option value="">批量工作流</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <div class="text">   
-                        <span>审批流程</span>
-                    </div>
-                    <div class="cont">选择流程
-                        <select>
-                            <option value="">批量工作流</option>
-                        </select>
-                        <div id="dwf"></div>
-                    </div>
-                </div>
-                <span class=" ui-button ui-widget ui-corner-all" id="importClose">关闭</span>
-            </div>`
-        );
-    }
-    WorkFlow.show(mockFlowData.data[0],'#dwf');
-    
-})
-$('body').on('click','#importClose',()=>{
-    $("#import").hide();
-});
+
 
 
 //审批操作
-
-(async function () {
-    return workflowService.approveWorkflowRecord({url: '/approve_workflow_record/?seqid=xuyan_1502264078519&record_id=59897f1591461c15d279023a',data:{
-        record_id:'59897f1591461c15d279023a',
-        focus_users:[],
-        action:0,// 0：通过 1：驳回上一级 2:驳回发起人 3：作废 4：取消 5：撤回 6：驳回任意节点 7：撤回审批 8：自动拨回到发起人 9：加签
-        comment:null,
-        node_id:null,//驳回节点id
-        sigh_type:0,//加签类型  0：前 1：后
-        sigh_user_id:'5979e48a41f77c586658e346',
-        data:{}
-    }});
-})().then(res=>{
-    console.log(res);
-});
+//
+// (async function () {
+//     return workflowService.approveWorkflowRecord({url: '/approve_workflow_record/?seqid=xuyan_1502264078519&record_id=59897f1591461c15d279023a',data:{
+//         record_id:'59897f1591461c15d279023a',
+//         focus_users:[],
+//         action:0,// 0：通过 1：驳回上一级 2:驳回发起人 3：作废 4：取消 5：撤回 6：驳回任意节点 7：撤回审批 8：自动拨回到发起人 9：加签
+//         comment:null,
+//         node_id:null,//驳回节点id
+//         sigh_type:0,//加签类型  0：前 1：后
+//         sigh_user_id:'5979e48a41f77c586658e346',
+//         data:{}
+//     }});
+// })().then(res=>{
+//     console.log(res);
+// });
