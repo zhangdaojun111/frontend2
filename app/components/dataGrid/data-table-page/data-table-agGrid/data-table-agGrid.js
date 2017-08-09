@@ -29,6 +29,9 @@ let config = {
         parentRecordId: '',
         rowId: '',
         fieldId: '',
+        source_field_dfield: '',
+        //iframe弹窗key
+        key: '',
         // 提醒颜色
         remindColor: {remind_color_info: {}, info: ''},
         //数据总数
@@ -101,7 +104,9 @@ let config = {
         //批量工作流ids
         batchIdList: [],
         //选择的数据
-        selectIds: []
+        selectIds: [],
+        //编辑模式
+        isEditable: false
     },
     //生成的表头数据
     columnDefs: [],
@@ -369,9 +374,9 @@ let config = {
             }
 
             //内置相关原始数据穿透颜色提示
-            // if( this.data.tableType == 'source_data' && source_field_dfield == colDef.field ){
-            //     color='rgba(255,0,0,0.5)';
-            // }
+            if( this.data.viewMode == 'source_data' && this.data.base_buildin_dfield == colDef.field ){
+                color='rgba(255,0,0,0.5)';
+            }
             if (params.value == undefined) {
                 sHtml = '<span style="' + someStyle + 'background-color:' + color + '"><span/>';
                 return sHtml;
@@ -797,6 +802,15 @@ let config = {
                     _id: { $in: this.data.batchIdList }
                 }
             }
+            if( this.data.viewMode == 'source_data' ){
+                //要注意tableId和source_table_id与平常不同
+                json["source_table_id"] = this.data.tableId;
+                json["table_id"] = this.data.parentTableId;
+                json["base_buildin_dfield"] = this.data.base_buildin_dfield;
+                json['mongo'] = {
+                    _id: this.data.rowId
+                }
+            }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
                 json['is_filter'] = this.data.filterParam.is_filter;
@@ -823,7 +837,8 @@ let config = {
                 fieldsData: this.data.fieldsData,
                 onColumnResized: this.actions.onColumnResized,
                 onSortChanged: this.actions.onSortChanged,
-                onDragStopped: this.actions.onDragStopped
+                onDragStopped: this.actions.onDragStopped,
+                onCellClicked: this.actions.onCellClicked
             }
             this.agGrid = new agGrid(gridData);
             this.append(this.agGrid , this.el.find('#data-agGrid'));
@@ -1061,8 +1076,7 @@ let config = {
                 PMAPI.openDialogByComponent(delSetting, {
                     width: 300,
                     height: 200,
-                    title: '删除',
-                    modal: true
+                    title: '删除'
                 }).then((data) => {
                     if( data.type == 'del' ){
                         this.actions.delTableTable();
@@ -1179,6 +1193,78 @@ let config = {
                 this.data.sortParam = {sortOrder:'',sortField:'',sort_real_type:''}
             }
             this.actions.getGridData();
+        },
+        //点击cell
+        onCellClicked: function (data) {
+            console.log( "______data_______" )
+            console.log( data )
+            if( !data.data || this.data.isEditable ){
+                return;
+            }
+            //分组重新渲染序号
+            let groupValue = data.data.group;
+            if( (groupValue||Object.is( groupValue,'' )||Object.is( groupValue,0 ))&&data.colDef.field=='group' ){
+                this.agGrid.gridOptions.api.redrawRows();
+            }
+            let arr=[];
+            for(let obj of data.columnApi._columnController.primaryColumns){
+                if(obj['colDef']['count_table_id']){
+                    arr.push(obj);
+                }
+            }
+
+            this.col_id=data.data._id;
+            this.colDef=arr;
+            //行选择
+            if(data.colDef.headerName != "操作"){
+                dgcService.rowClickSelect( data )
+            }
+
+            //数据计算cache不可操作
+            if( data["data"]["data_status"] &&  data["data"]["data_status"]=='0'){
+                msgBox.alert("数据计算中，请稍候");
+                return;
+            }
+
+            //图片查看
+            if( data.colDef.real_type == fieldTypeService.IMAGE_TYPE ){
+            }
+            //富文本字段
+            if( data.colDef.real_type == fieldTypeService.UEDITOR ){
+            }
+            //合同编辑器
+            if( data.colDef.real_type == fieldTypeService.TEXT_COUNT_TYPE ){
+            }
+            //附件字段
+            if( data.event.srcElement.id == 'file_view' && fieldTypeService.attachment(data.colDef.real_type) ){
+            }
+            //内置相关查看原始数据用
+            if( data.event.srcElement.id == 'relatedOrBuildin' ){
+                let obj = {
+                    tableId: data.colDef.source_table_id,
+                    tableName: data.colDef.source_table_name,
+                    parentTableId: this.data.tableId,
+                    rowId: data.data._id,
+                    base_buildin_dfield: data.colDef.base_buildin_dfield,
+                    tableType: 'source_data',
+                    viewMode: 'source_data'
+                }
+                let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
+                let winTitle = this.data.tableName + '->' + data.colDef.source_table_name;
+                PMAPI.openDialogByIframe( url,{
+                    width: 1300,
+                    height: 800,
+                    title: winTitle,
+                    modal:true
+                } ).then( (data)=>{
+                } )
+            }
+            //对应关系查看
+            if(data.colDef.real_type == fieldTypeService.CORRESPONDENCE && data.value.toString().length && data.event.target.id == "correspondenceClick"){
+            }
+            //统计
+
+            // 子表
         }
     },
     afterRender: function () {

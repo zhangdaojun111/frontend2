@@ -139,5 +139,10 @@ export const fieldTypeService = {
     backSortField: function (data) {
         let arr = [this.DECIMAL_TYPE];
         return arr.indexOf( data ) != -1;
+    },
+    //附件
+    attachment: function( data ){
+        let arr = [this.ATTACHMENT,this.VIDEO_TYPE,this.IMAGE_TYPE];
+        return arr.indexOf( data ) != -1;
     }
 }
