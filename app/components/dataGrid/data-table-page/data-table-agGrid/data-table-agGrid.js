@@ -3,7 +3,7 @@ import template from './data-table-agGrid.html';
 import './data-table-agGrid.scss';
 import {HTTP} from "../../../../lib/http";
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
-
+import msgBox from '../../../../lib/msgbox';
 import agGrid from "../../agGrid/agGrid";
 import {dataTableService} from "../../../../services/dataGrid/data-table.service";
 import {dgcService} from "../../../../services/dataGrid/data-table-control.service";
@@ -29,6 +29,9 @@ let config = {
         parentRecordId: '',
         rowId: '',
         fieldId: '',
+        source_field_dfield: '',
+        //iframe弹窗key
+        key: '',
         // 提醒颜色
         remindColor: {remind_color_info: {}, info: ''},
         //数据总数
@@ -101,7 +104,9 @@ let config = {
         //批量工作流ids
         batchIdList: [],
         //选择的数据
-        selectIds: []
+        selectIds: [],
+        //编辑模式
+        isEditable: false
     },
     //生成的表头数据
     columnDefs: [],
@@ -235,7 +240,7 @@ let config = {
                         suppressResize: false,
                         suppressMovable: false,
                         cellRenderer: (params) => {
-                            return this.actions.bodyCellRenderer(params);
+                            return this.actions.bodyCellRender(params);
                         }
                     }
                     // if (fieldContent) {
@@ -267,7 +272,7 @@ let config = {
                 }
             }
         },
-        bodyCellRenderer: function (params) {
+        bodyCellRender: function (params) {
             if (params.data && params.data.myfooter && params.data.myfooter == "合计") {
                 return params.value || '';
             }
@@ -279,6 +284,7 @@ let config = {
             let sHtml;      //要显示的html元素的字符串
             let color = "transparent"; //颜色
             let real_type = colDef["real_type"];
+            let dinput_type = colDef["dinput_type"];
             // let someStyle = 'text-align:right;margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
             let someStyle = 'margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
             let someStyle_a = 'text-decoration:underline;margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
@@ -369,9 +375,9 @@ let config = {
             }
 
             //内置相关原始数据穿透颜色提示
-            // if( this.data.tableType == 'source_data' && source_field_dfield == colDef.field ){
-            //     color='rgba(255,0,0,0.5)';
-            // }
+            if( this.data.viewMode == 'source_data' && this.data.base_buildin_dfield == colDef.field ){
+                color='rgba(255,0,0,0.5)';
+            }
             if (params.value == undefined) {
                 sHtml = '<span style="' + someStyle + 'background-color:' + color + '"><span/>';
                 return sHtml;
@@ -408,7 +414,7 @@ let config = {
             //处理数字类型
             if (fieldTypeService.numOrText(real_type)) {//数字类型
                 let numVal = fieldTypeService.intOrFloat(real_type) ? dgcService.formatter(params.value) : dgcService.formatter(Number(params.value).toFixed(colDef.real_accuracy))
-                if (fieldTypeService.childTable(real_type) || fieldTypeService.countTable(real_type)) {//子表||统计类型
+                if (fieldTypeService.childTable(dinput_type) || fieldTypeService.countTable(dinput_type)) {//子表||统计类型
                     if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
                         sHtml = '<span style="color:rgb(85,85,85);' + someStyle + 'background-color:' + color + '"><span>' + numVal + '</span><span/>';
                     } else {
@@ -448,7 +454,7 @@ let config = {
 
             //大数字段处理
             else if (real_type == fieldTypeService.DECIMAL_TYPE) {
-                if (fieldTypeService.childTable(real_type) || fieldTypeService.countTable(real_type)) {//子表||统计类型
+                if (fieldTypeService.childTable(dinput_type) || fieldTypeService.countTable(dinput_type)) {//子表||统计类型
                     let bigNum = params.value > 9007199254740992 ? dgcService.formatter(params.value.toString()) + '.00' : dgcService.formatter(Number(params.value).toFixed(colDef.real_accuracy))
                     sHtml = '<a style="float:right;color:#337ab7;" id="childOrCount">' + bigNum + '</a>';
                 } else {
@@ -520,7 +526,7 @@ let config = {
 
             //都做为文本处理
             else {
-                if (fieldTypeService.childTable(colDef.dinput_type) || fieldTypeService.countTable(colDef.dinput_type, colDef['real_type'])) { //子表或统计类型
+                if (fieldTypeService.childTable(dinput_type) || fieldTypeService.countTable(dinput_type,real_type)) { //子表或统计类型
                     if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
                         sHtml = '<span style="float:right;color:rgb(85,85,85);">' + params.value + '</span>';
                     } else {
@@ -797,6 +803,15 @@ let config = {
                     _id: { $in: this.data.batchIdList }
                 }
             }
+            if( this.data.viewMode == 'source_data' ){
+                //要注意tableId和source_table_id与平常不同
+                json["source_table_id"] = this.data.tableId;
+                json["table_id"] = this.data.parentTableId;
+                json["base_buildin_dfield"] = this.data.base_buildin_dfield;
+                json['mongo'] = {
+                    _id: this.data.rowId
+                }
+            }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
                 json['is_filter'] = this.data.filterParam.is_filter;
@@ -823,7 +838,8 @@ let config = {
                 fieldsData: this.data.fieldsData,
                 onColumnResized: this.actions.onColumnResized,
                 onSortChanged: this.actions.onSortChanged,
-                onDragStopped: this.actions.onDragStopped
+                onDragStopped: this.actions.onDragStopped,
+                onCellClicked: this.actions.onCellClicked
             }
             this.agGrid = new agGrid(gridData);
             this.append(this.agGrid , this.el.find('#data-agGrid'));
@@ -1067,14 +1083,27 @@ let config = {
                     title: '删除'
                 }).then((data) => {
                     if( data.type == 'del' ){
-                        
+                        this.actions.delTableTable();
                     }
                 });
             } )
         },
         //删除数据
         delTableTable: function () {
-            
+            let json = {
+                table_id:this.data.tableId,
+                temp_ids:JSON.stringify([]),
+                real_ids:JSON.stringify( this.data.deletedIds ),
+                is_batch: this.viewMode == 'createBatch'?1:0
+            }
+            dataTableService.delTableData( json ).then( res=>{
+                if( res.success ){
+                    msgBox.alert( '删除成功' )
+                }else {
+                    msgBox.alert( res.error )
+                }
+            } )
+            HTTP.flush();
         },
         //定制列
         customColumnClick: function () {
@@ -1185,6 +1214,98 @@ let config = {
                 this.data.sortParam = {sortOrder:'',sortField:'',sort_real_type:''}
             }
             this.actions.getGridData();
+        },
+        //点击cell
+        onCellClicked: function (data) {
+            console.log( "______data_______" )
+            console.log( data )
+            if( !data.data || this.data.isEditable ){
+                return;
+            }
+            //分组重新渲染序号
+            let groupValue = data.data.group;
+            if( (groupValue||Object.is( groupValue,'' )||Object.is( groupValue,0 ))&&data.colDef.field=='group' ){
+                this.agGrid.gridOptions.api.redrawRows();
+            }
+            let arr=[];
+            for(let obj of data.columnApi._columnController.primaryColumns){
+                if(obj['colDef']['count_table_id']){
+                    arr.push(obj);
+                }
+            }
+
+            this.col_id=data.data._id;
+            this.colDef=arr;
+            //行选择
+            if(data.colDef.headerName != "操作"){
+                dgcService.rowClickSelect( data )
+            }
+
+            //数据计算cache不可操作
+            if( data["data"]["data_status"] &&  data["data"]["data_status"]=='0'){
+                msgBox.alert("数据计算中，请稍候");
+                return;
+            }
+
+            //图片查看
+            if( data.colDef.real_type == fieldTypeService.IMAGE_TYPE ){
+            }
+            //富文本字段
+            if( data.colDef.real_type == fieldTypeService.UEDITOR ){
+            }
+            //合同编辑器
+            if( data.colDef.real_type == fieldTypeService.TEXT_COUNT_TYPE ){
+            }
+            //附件字段
+            if( data.event.srcElement.id == 'file_view' && fieldTypeService.attachment(data.colDef.real_type) ){
+            }
+            //内置相关查看原始数据用
+            if( data.event.srcElement.id == 'relatedOrBuildin' ){
+                let obj = {
+                    tableId: data.colDef.source_table_id,
+                    tableName: data.colDef.source_table_name,
+                    parentTableId: this.data.tableId,
+                    rowId: data.data._id,
+                    base_buildin_dfield: data.colDef.base_buildin_dfield,
+                    tableType: 'source_data',
+                    viewMode: 'source_data'
+                }
+                let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
+                let winTitle = this.data.tableName + '->' + obj.tableName;
+                PMAPI.openDialogByIframe( url,{
+                    width: 1300,
+                    height: 800,
+                    title: winTitle,
+                    modal:true
+                } ).then( (data)=>{
+                } )
+            }
+            //对应关系查看
+            if(data.colDef.real_type == fieldTypeService.CORRESPONDENCE && data.value.toString().length && data.event.target.id == "correspondenceClick"){
+            }
+            //统计
+            if( fieldTypeService.countTable(data.colDef.dinput_type,data.colDef.real_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
+                let obj = {
+                    tableId: data.colDef.field_content.count_table,
+                    tableName: data.colDef.field_content.count_table_name,
+                    parentTableId: this.data.tableId,
+                    tableType: 'count',
+                    viewMode: 'count',
+                    rowId: data.data._id,
+                    parentRealId: data.data._id,
+                    fieldId: data.colDef.id
+                }
+                let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
+                let winTitle = this.data.tableName + '->' + obj.tableName;
+                PMAPI.openDialogByIframe( url,{
+                    width: 1300,
+                    height: 800,
+                    title: winTitle,
+                    modal:true
+                } ).then( (data)=>{
+                } )
+            }
+            // 子表
         }
     },
     afterRender: function () {

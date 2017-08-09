@@ -1,4 +1,5 @@
 import template from './data-table-delete.html';
+// import './data-table-delete.scss';
 let css = `
 .del-ids-no {
     display: none;
@@ -7,12 +8,12 @@ let css = `
 .del-ids-yes {
     display: none;
 }
-`;
+`
 let delSetting = {
     template: template,
     data: {
-        css: css.replace(/(\n)/g, ''),
-        deletedIds: []
+        deletedIds: [],
+        css: css.replace(/(\n)/g, '')
     },
     actions: {
         delType: function () {
