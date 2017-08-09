@@ -1,7 +1,7 @@
 import Component from "../../../../lib/component";
 import template from './left-calendar.html';
 import './left-calendar.scss';
-
+import Mediator from '../../../../lib/mediator';
 import {CalendarService} from '../../../../services/calendar/calendar.service';
 
 let date = new Date(),
@@ -98,7 +98,7 @@ let config = {
                 let nowYear = that.el.find(".now-year").html(),
                     nowMonth = that.el.find(".now-month").html(),
                     nowDay = that.el.find(this).html();
-                CalendarService.CalendarMsgMediator.publish('leftSelectedDate', {year: nowYear, month: nowMonth, day: nowDay});
+                Mediator.emit('calendar-left:leftSelectedDate',{year: nowYear, month: nowMonth, day: nowDay});
                 that.el.find(".now-pitch-on").removeClass("now-pitch-on");
                 that.el.find(this).addClass("now-pitch-on");
             });
@@ -147,7 +147,7 @@ let config = {
             else{
                 mm = parseInt(mm)-1;
             }
-            CalendarService.CalendarMsgMediator.publish('last-month-day', {time: [yy,mm,dd]});
+            Mediator.emit('calendar-left:last-month-day',{time: [yy,mm,dd]});
             config.actions.loadCalendarLastMonthData(nowYear,nowMonth,nowDay,that);
             let nowclickday = $(this).html();
             that.el.find(".now-month-day").each(function(){
@@ -166,7 +166,7 @@ let config = {
             else{
                 mm = parseInt(mm)+1;
             }
-            CalendarService.CalendarMsgMediator.publish('next-month-day', {time: [yy,mm,dd]});
+            Mediator.emit('calendar-left:next-month-day',{time: [yy,mm,dd]});
             config.actions.loadCalendarNextMonthData(nowYear,nowMonth,nowDay,that);
             let nowclickday = $(this).html();
             that.el.find(".now-month-day").each(function(){

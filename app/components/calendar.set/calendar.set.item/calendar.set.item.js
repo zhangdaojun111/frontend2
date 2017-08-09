@@ -4,7 +4,7 @@
 import Component from "../../../lib/component";
 import template from './calendar.set.item.html';
 import './calendar.set.item.scss';
-
+import CalendarSetItemMulitSelect from "./calendar.set.item.multiselect/calendar.set.item.multiselect"
 import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
 
@@ -27,29 +27,8 @@ let config = {
         this.data.dropdownForRes.forEach(item => {
             this.el.find('.res-text').append("<option value='"+item+"'>"+item+"</option>");
         });
+        this.append(new CalendarSetItemMulitSelect, this.el.find('.multi-select-item'));
         console.log($(set_color_id).val());
-        let Isshow = false;
-        $(".head-select").bind("click",function(){
-            event.stopPropagation();
-            console.log($(this).next().is(":hidden"));
-            if(!$(this).next().is(":hidden")){
-                $(this).next().hide();
-                Isshow = false;
-            }
-            else{
-                $(".select-multi-content").hide();
-                $(this).next().show();
-                console.log($(this));
-                Isshow = true;
-            }
-        });
-        $(document).click(function(){
-            $(".select-multi-content").hide();
-                Isshow = false;
-        })
-        $(".select-multi-content").bind("click",function(){
-            event.stopPropagation();
-        });
     }
 };
 

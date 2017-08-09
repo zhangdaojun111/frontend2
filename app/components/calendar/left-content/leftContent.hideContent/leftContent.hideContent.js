@@ -2,6 +2,7 @@ import Component from "../../../../lib/component";
 import template from './leftContent.hideContent.html';
 import './leftContent.hideContent.scss';
 import {CalendarService} from '../../../../services/calendar/calendar.service';
+import Mediator from '../../../../lib/mediator';
 let config = {
     template:template,
     data:{
@@ -16,7 +17,7 @@ let config = {
         this.el.find(".show-type-button").on('click',function () {
             $(this).parent().parent("div").remove();
             config.data.show_type_ID = $(this).attr("id").split('-')[2];
-            CalendarService.CalendarMsgMediator.publish('showRemindType',{data:config.data.show_type_ID});
+            Mediator.emit('calendar-left:showRemindType',{data:config.data.show_type_ID});
             config.data.show_type_ID = "";
         });
     },

@@ -40,7 +40,6 @@ let config = {
         this.data.scheduleDataList.forEach(item => {
             this.append(new CalendarScheduleItem({dayDate: item['dataTime'], dayScheduleList: item['data']}), this.el.find('.schedule-content'));
         });
-
         let that = this;
         this.el.on('input propertychange', '.start-date', function () {
 
