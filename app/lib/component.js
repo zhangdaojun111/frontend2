@@ -32,7 +32,7 @@ class Component {
         this.componentId = componentId++;
 
         count ++;
-        console.log('ERDS:组件总数:' + count);
+        // console.log('ERDS:组件数量:' + count);
 
     }
 
