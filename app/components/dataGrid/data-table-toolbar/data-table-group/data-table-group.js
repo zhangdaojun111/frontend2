@@ -15,7 +15,17 @@ let config = {
     group:[],
     actions: {
         onGroupChange: function (group) {
-        }
+        },
+        //搜索事件
+        inputSearch: function () {
+            this.el.find( '.group-search-input' ).on( 'input',_.debounce( ()=>{
+                let val = this.el.find( '.group-search-input' )[0].value;
+                let lis = this.el.find( '.group-data-list' ).find( 'li' );
+                for( let li of lis ){
+                    li.style.display = li.attributes.name.value.indexOf( val ) == -1 && val!='' ? 'none':'block'
+                }
+            },1000 ) )
+        },
     },
     afterRender: function (){
         $('.group-data-list, .grouping-data-list').sortable({
@@ -35,8 +45,7 @@ let config = {
                 this.actions.onGroupChange( this.data.group );
             }
         }).disableSelection();
-
-        console.log(this.data)
+        this.actions.inputSearch();
     }
 }
 

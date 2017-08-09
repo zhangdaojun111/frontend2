@@ -848,7 +848,7 @@ let config = {
             let groupLit = {
                 tableId: this.data.tableId,
                 gridoptions: this.agGrid.gridOptions,
-                fields: this.actions.deleteGroup(this.data.customColumnsFields),
+                fields: this.actions.deleteGroup(this.data.groupFields),
                 myGroup: this.actions.setMyGroup(this.data.myGroup.fields)
             }
             this.groupGridCom = new groupGrid(groupLit);
@@ -1038,9 +1038,12 @@ let config = {
             //高级查询
             $('.expert-search-btn').click( ()=>{
                 let d = {
+                    tableId: this.data.tableId,
                     fieldsData: this.data.expertSearchFields,
                     commonQuery: this.data.commonQueryData,
+                    getExpertSearchData:this.actions.getExpertSearchData,
                     postExpertSearch:this.actions.postExpertSearch
+
                 }
                 expertSearch.show(d);
             } )
@@ -1123,15 +1126,32 @@ let config = {
             let grid = this.el.find( '#data-agGrid' )
             grid.width( 'calc(100% - ' + num + 'px)' );
         },
+        //筛选增加删除后常用查询
+        getDiffereceQuery: function(data) {
+            let ary = [];
+            for (let i = 0; i < data.length; i++) {
+                if(i >= this.data.commonQueryData.length) {
+                    ary.push(data[i]);
+                }
+            }
+            return ary
+        },
         //获取高级查询数据
         getExpertSearchData: function () {
             let obj = {'actions':JSON.stringify( ['queryParams'] ),'table_id':this.data.tableId};
             dataTableService.getPreferences( obj ).then( res=>{
+                let ary= [];
+                if(this.data.commonQueryData.length == 0) {
+                    ary = res.rows;
+                }else {
+                    ary = this.actions.getDiffereceQuery(res.rows);
+                }
                 this.data.commonQueryData = res.rows;
-                res.rows.forEach((row) => {
+                let epSearch = new expertSearch.expertSearch ();
+                epSearch.actions.renderQueryItem(ary)
+                ary.forEach((row) => {
                     $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
                 });
-                // this.append(new commonQuery({commonQueryData:res.rows}), this.el.find('.dataGrid-commonQuery-select'));
             } );
             HTTP.flush();
         },
