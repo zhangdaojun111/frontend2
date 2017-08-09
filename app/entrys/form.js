@@ -5,11 +5,9 @@ import '../components/form/base-form/base-form.scss'
 import '../assets/scss/form.scss'
 
 
-// @parma
-//
 let FormEntrys={
     childForm:{},
-    init:function(config={}){
+    init(config={}){
         this.tableId=config.table_id||'';
         this.parentRealId=config.parent_real_id||'';
         this.parentTempId=config.parent_temp_id||'';
@@ -30,6 +28,8 @@ let FormEntrys={
         this.key=config.key||'';
         this.fromApprove=config.from_approve||'';
         this.formFocus=this.from_focus||'';
+        this.isAddBuild=this.isAddBuild || 0;
+        this.buildId=this.buildId || '';
     },
     hasKeyInFormDataStatic:function (key,staticData){
     let isExist = false;
@@ -165,7 +165,7 @@ let FormEntrys={
     return staticData;
 },
     //处理字段数据
-    parseRes:function (res){
+    parseRes (res){
     if(res !== null){
         let formData = res["data"];
         if(formData.length != 0){
@@ -243,7 +243,7 @@ let FormEntrys={
         }
     },
     //创建表单入口
-    createForm:function(config={}){
+    createForm(config={}){
         let _this=this;
         this.init(config);
         let tableID=this.tableId;
@@ -394,10 +394,8 @@ $('#lalala').on('click',function(){
     FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:tableId,
-        seqId:'yudeping',
+        seqId:'zengjing',
         el:$('body'),
-        is_view:isView,
-        real_id:realId
     });
 })
 export default FormEntrys

@@ -346,6 +346,9 @@ export const FormService={
     searchByChooser:async function (json) {
         return HTTP.post('selector',json);
     },
+    saveAddpageData:async function (json) {
+        return HTTP.post('add_update_table_data',json);
+    },
 
     getFormData(json){
         let res;

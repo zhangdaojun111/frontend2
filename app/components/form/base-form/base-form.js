@@ -49,7 +49,7 @@ let config={
         //根据dfield查找类型
         findTypeByDfield(dfield) {
             let type = '';
-            for(let obj of this.formData) {
+            for(let obj of this.data.formData) {
                 if(obj["dfield"] == dfield) {
                     type = obj["type"];
                 }
@@ -63,17 +63,18 @@ let config={
                 let type = this.actions.findTypeByDfield(key);
                 let val = data[key];
                 let parentTempId = data["parent_temp_id"];
-                if((this.globalService.idsInChildTableToParent[this.tableId] && this.globalService.idsInChildTableToParent[this.tableId].indexOf(key) != -1 ) && val != "" && parentTempId != "" && (type == 'Buildin' || type == 'Select')) {
-                    data[key] = data["parent_temp_id"];
-                }
+                // if((this.globalService.idsInChildTableToParent[this.tableId] && this.globalService.idsInChildTableToParent[this.tableId].indexOf(key) != -1 ) && val != "" && parentTempId != "" && (type == 'Buildin' || type == 'Select')) {
+                //     data[key] = data["parent_temp_id"];
+                // }
             }
         },
 
         //创建cache数据
         createCacheData ( formData , val , isNew , com){
             let obj = {};
-            for( let data of formData ){
+            for( let key in formData ){
                 //自增编号old_cache置为空
+                let data=formData[key];
                 if( data.dinput_type && data.dinput_type == '14' && !isNew ){
                     obj[data.dfield] = "";
                 }
@@ -162,9 +163,9 @@ let config={
             let errorMsg = "";
             for(let key in formValue) {
                 //如果该dfield是父表填充子表的，那就不验证
-                if(this.idsOfSonDataByParent.indexOf(key) != -1){
-                    continue;
-                }
+                // if(this.idsOfSonDataByParent.indexOf(key) != -1){
+                //     continue;
+                // }
                 let type = allData[key]["type"];
                 if( type == 'songrid' ){
                     continue;
@@ -188,10 +189,10 @@ let config={
                         }
                     }
                 }
-                if(val.toString() != "" && allData[key]["numArea"] !== ""){
+                if(val.toString() != "" && allData[key]["numArea"]){
                     let label = allData[key]["label"];
-                    let minNum = allData[key]["numArea"]["min"];
-                    let maxNum = allData[key]["numArea"]["max"];
+                    let minNum = allData[key]["numArea"]["min"]||'';
+                    let maxNum = allData[key]["numArea"]["max"]||'';
                     let errorInfo = allData[key]["numArea"]["error"];
                     if(minNum !== "" && maxNum === ""){
                         if(val < minNum){
@@ -227,7 +228,9 @@ let config={
                 }
                 if(val != "" && !$.isEmptyObject(allData[key]["func"])){
                     for(let r in allData[key]["func"]) {
-                        let flag = this[r](val);
+                        console.log('rrr');
+                        console.log(r);
+                        let flag = FormService[r](val);
                         if(!flag){
                             error = true;
                             errorMsg = allData[key]["func"][r];
@@ -235,7 +238,7 @@ let config={
                         }
                     }
                 }
-                if(allData[key]["real_type"] == this.globalService.FLOAT_TYPE){
+                if(allData[key]["real_type"] == 10){
                     if(formValue[key] >= 100000000000) {
                         error = true;
                         errorMsg = "小数不能超过12位！无法保存！";
@@ -580,11 +583,7 @@ let config={
         //创建表单数据格式
         createFormValue(data){
             let formValue={};
-            console.log(data);
             for(let key in data){
-                if(!data[key].value || !data[key].value.length || data[key].value.length == 0){
-                    continue;
-                }
                 formValue[key]=data[key].value;
             }
             return formValue;
@@ -617,8 +616,8 @@ let config={
         //处理表单数据，根据real_type转换数据
         handleFormData(formData) {
             for(let dfield in formData){
-                if(this.newData[dfield]["real_type"]){
-                    if(this.newData[dfield]["real_type"] == 10 || this.newData[dfield]["real_type"] == 11){
+                if(this.data.data[dfield]["real_type"]){
+                    if(this.data.data[dfield]["real_type"] == 10 || this.data.data[dfield]["real_type"] == 11){
                         try {
                             let result;
                             if(formData[dfield] != ""){
@@ -628,10 +627,10 @@ let config={
                                 formData[dfield] = Number(formData[dfield]);
                             }
                         } catch (e) {
-                            console.error("转换数字类型失败",this.selector);
+                            console.error("转换数字类型失败");
                         }
                     }
-                    if(this.newData[dfield]["real_type"] == 5&& !!formData[dfield] ){
+                    if(this.data.data[dfield]["real_type"] == 5&& !!formData[dfield] ){
                         formData[dfield] = formData[dfield].replace("T"," ");
                     }
                 }
@@ -698,8 +697,8 @@ let config={
         },
 
         //提交表单数据
-        onSubmit(newData,oldData){
-            if(1){
+        onSubmit(){
+            if(this.data.isAddBuild){
                 let data={new_option:{
                     py: "213213(lz)",
                     value: "59892cbeca8b367dfbcff98d",
@@ -709,7 +708,6 @@ let config={
                     key:this.data.key,
                     data:data
                 });
-                return;
             }
             let formValue=this.actions.createFormValue(this.data.data);
             let {error,errorMsg} = this.actions.validForm(this.data.data,formValue);
@@ -793,49 +791,48 @@ let config={
             let obj_old = this.actions.createCacheData( formDataNew  , data , false, this);
             this.actions.changeValueForChildTable(data);
             let json = {
-                data: encodeURIComponent( JSON.stringify(data) ),
-                focus_users: this.focus_users,
-                cache_new: encodeURIComponent( JSON.stringify( obj_new ) ),
-                cache_old: encodeURIComponent( JSON.stringify( obj_old ) ),
+                // data: encodeURIComponent( JSON.stringify(data) ),
+                data:JSON.stringify(data) ,
+                // cache_new: encodeURIComponent( JSON.stringify( obj_new ) ),
+                cache_new:JSON.stringify( obj_new ),
+                // cache_old: encodeURIComponent( JSON.stringify( obj_old ) ),
+                cache_old:JSON.stringify( obj_old ),
                 table_id: this.data.tableId,
                 flow_id: this.data.flowId,
-                parent_table_id: this.parentTableId || "",
-                parent_real_id: this.parentRealId || "",
-                parent_temp_id: this.parentTempId || "",
-                parent_record_id: this.parentRecordId  || ""
+                focus_users: this.data.focusUsers||'[]',
+                parent_table_id: this.data.parentTableId || "",
+                parent_real_id: this.data.parentRealId || "",
+                parent_temp_id: this.data.parentTempId || "",
+                parent_record_id: this.data.parentRecordId  || ""
             };
             //如果是批量审批，删除flow_id
-            if(this.isBatch == 1){
+            if(this.data.isBatch == 1){
                 delete json["flow_id"];
             }
-            this.loadingAlert('正在提交请稍后');
-            if(this.isAddBuild == true){
-                json['buildin_id']=this.buildIn;
+            // this.loadingAlert('正在提交请稍后');
+            if(this.data.isAddBuild){
+                json['buildin_id']=this.data.buildId;
             }
             FormService.saveAddpageData(json)
                 .then(res => {
-                    this.alertVisible=false;
-                    this.wfService.promiseCallBack(res, () => {
                         console.log('*******************');
                         console.log(res);
-                        this.successAlert(res["error"]);
+                        // this.successAlert(res["error"]);
                         //自己操作的新增和编辑收到失效推送自己刷新
-                        this.isSuccessSubmit();
+                        // this.isSuccessSubmit();
                         //清空子表内置父表的ids
-                        delete this.globalService.idsInChildTableToParent[this.tableId];
+                        // delete this.globalService.idsInChildTableToParent[this.tableId];
                         setTimeout(() => {
                             //如果不是工作流表单 回显
                             if(this.flowId == ''){
-                                this.newBuildItem.emit(res);
+                                // this.newBuildItem.emit(res);
                             }else{
-                                this.newBuildItem.emit();
+                                // this.newBuildItem.emit();
                             }
-                            this.isSuccess.emit(true);
+                            // this.isSuccess.emit(true);
                         },1000)
-                    },() => {
-                        this.errorAlert(res.error);
-                    });
                 })
+            HTTP.flush();
 
             //
             // //数据初始化
@@ -975,14 +972,12 @@ let config={
     },
 
     checkValue:function(data,_this){
-            _this.data.data[data.dfield]=data;
-
+            // _this.data.data[data.dfield]=data;
             if(data.type=='Buildin'){
                 let id = data["id"];
                 let value = data["value"];
                 _this.actions.setAboutData(id,value);
             }
-
             //检查是否是默认值的触发条件
             // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
             if(_this.data.flowId != "" && _this.data['base_fields'].indexOf(data["dfield"]) != -1) {
@@ -990,7 +985,6 @@ let config={
             }
             //统计功能
             _this.actions.countFunc(data.dfield);
-
             //改变选择框的选项
             if( data['linkage']!={} ){
                 let j = 0;
@@ -1038,7 +1032,6 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
-        let cache_old = {};
         this.set('childComponent',{});
         let data=_this.data.data;
         this.set('oldData',_.defaultsDeep({},data));
@@ -1049,7 +1042,6 @@ let config={
             if(data[key].required){
                 data[key]['requiredClass']=data[key].value==''?'required':'required2';
             }
-            cache_old[data[key].dfield] = data[key].value;
             //数据填充后，根据修改条件对不同框进行只读操作
             setTimeout(()=>{_this.actions.reviseCondition(data[key],data[key].value,_this);},0);
             if(type == 'Select' || type=='Buildin' ){
@@ -1189,8 +1181,7 @@ let config={
         })
         Mediator.subscribe('form:addNewBuildIn:'+_this.data.tableId,function(data){
             _this.data.quikAddDfield=data.dfield;
-            console.log(data);
-            PMAPI.openDialogByIframe(`/form/add_buildin?table_id=${data.source_table_id}`,{
+            PMAPI.openDialogByIframe(`/form/add_buildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
                 width:800,
                 height:600,
                 title:`快捷添加内置字段`,
@@ -1224,7 +1215,7 @@ let config={
 
         //提交按钮事件绑定
         _this.el.on('click','#save',function () {
-            _this.actions.onSubmit(_this.childComponent,cache_old);
+            _this.actions.onSubmit();
         })
         $(_this.el).find("#changeEdit").on('click',function () {
             _this.actions.changeToEdit(_this);
@@ -1269,8 +1260,6 @@ class BaseForm extends Component{
         //用于前端填充数据用的子表的parentTableId
         // config.data['frontendParentTableId']=formData.data['parent_table_id'];
         super(config,formData.data);
-        console.log('处理完的数据');
-        console.log(this);
     }
 
 }
