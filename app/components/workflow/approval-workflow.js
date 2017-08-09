@@ -32,7 +32,7 @@ let config={
 
             switch (type){
                 case 'follow-view' :
-                    let addFollow=this.el.find(".workflow-foot #add-follow").clone();
+                    let addFollow=this.el.find(".workflow-foot #add-follow").clone(true);
                     appendDiv.find(".preview-node1").html(addFollow);
                     appendDiv.find(".preview-node1").toggle().siblings().hide();
                     break;
@@ -42,7 +42,7 @@ let config={
                     appendDiv.find(".preview-node2").toggle().siblings().hide();
                     break;
                 case 'record-view' :
-                    let workflowRecord=this.el.find(".workflow-foot #workflow-record").clone();
+                    let workflowRecord=this.el.find(".workflow-record #workflow-record").clone();
                     appendDiv.find(".preview-node3").html(workflowRecord);
                     appendDiv.find(".preview-node3").toggle().siblings().hide();
                     break;
@@ -54,9 +54,9 @@ let config={
                     msgBox.confirm("你确定审核通过吗").then((res)=>{
                          if(res){
                              Mediator.publish('approval:recordPass',res);
-                             console.log('提交成功')
+                             // console.log('提交成功')
                          }else {
-                             console.log('未提交')
+                             // console.log('未提交')
                              return;
                         }
                     })
