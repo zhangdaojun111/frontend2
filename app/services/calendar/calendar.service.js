@@ -186,6 +186,22 @@ export const CalendarService = {
         });
         HTTP.flush();
         return res;
+    },
+
+    getColumnList: function (tableId) {
+        let params = {
+            table_id: tableId,
+        };
+
+        let res = HTTP.get(columnListUrl, params).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                alert('获取数据失败');
+            }
+        });
+        HTTP.flush();
+        return res;
     }
 
 };
