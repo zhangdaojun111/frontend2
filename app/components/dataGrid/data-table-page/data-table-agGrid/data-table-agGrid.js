@@ -791,7 +791,7 @@ let config = {
                 is_filter: 1,
                 filter: []
             }
-            if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild' ){
+            if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild'||this.data.viewMode == 'child' ){
                 json["childInfo"]= {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
             }
             if( this.data.viewMode == 'count' ){
@@ -1305,7 +1305,32 @@ let config = {
                 } ).then( (data)=>{
                 } )
             }
+            console.log( "++++++++++++++++++++++" )
+            console.log( "++++++++++++++++++++++" )
+            console.log( data.colDef.dinput_type )
             // 子表
+            if( fieldTypeService.childTable(data.colDef.dinput_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
+                console.log( "子表穿透" )
+                let obj = {
+                    tableId: data.colDef.field_content.child_table,
+                    tableName: data.colDef.field_content.child_table_name,
+                    parentTableId: this.data.tableId,
+                    tableType: 'child',
+                    viewMode: 'child',
+                    rowId: data.data._id,
+                    parentRealId: data.data._id,
+                    fieldId: data.colDef.id
+                }
+                let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
+                let winTitle = this.data.tableName + '->' + obj.tableName;
+                PMAPI.openDialogByIframe( url,{
+                    width: 1300,
+                    height: 800,
+                    title: winTitle,
+                    modal:true
+                } ).then( (data)=>{
+                } )
+            }
         }
     },
     afterRender: function () {
