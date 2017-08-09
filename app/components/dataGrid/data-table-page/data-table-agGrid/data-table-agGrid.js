@@ -879,6 +879,12 @@ let config = {
             this.data.firstRender = false;
             //高级查询
             this.actions.getExpertSearchData();
+            //点击关掉定制列panel
+            $( '.ag-body' ).click( ()=>{
+                this.el.find( '.custom-columns-panel' )[0].style.display = 'none';
+                this.data.isShowCustomPanel = false;
+                this.actions.changeAgGridWidth();
+            } )
         },
         //分组触发
         onGroupChange: function (group) {
@@ -1313,9 +1319,6 @@ let config = {
                 } ).then( (data)=>{
                 } )
             }
-            console.log( "++++++++++++++++++++++" )
-            console.log( "++++++++++++++++++++++" )
-            console.log( data.colDef.dinput_type )
             // 子表
             if( fieldTypeService.childTable(data.colDef.dinput_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
                 console.log( "子表穿透" )
