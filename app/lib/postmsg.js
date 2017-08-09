@@ -35,7 +35,6 @@ export const PMENUM = {
     iframe_silent: '5'
 }
 
-
 /**
  * 本系统所有postmessage的消息体规范如下
  * {
@@ -44,7 +43,7 @@ export const PMENUM = {
  *    data: {},     消息所带的数据，可有可无，json格式
  * }
  */
-window.addEventListener('message', function (event) {
+window.addEventListener('message', function(event) {
 
     let data = event.data;
 
@@ -54,34 +53,23 @@ window.addEventListener('message', function (event) {
         subscriber[data.type] && subscriber[data.type](data);
 
         // 以下内容需要重新梳理逻辑，重构以下
-        switch (data.type) {
+        switch (data.type){
             case PMENUM.open_component_dialog:
-                let elementDiv = $('<div></div>');
+                let elementDiv =$('<div></div>');
                 dialogHash[data.key] = {
                     iframe: event.source,
                     element: elementDiv.appendTo(document.body)
                 };
                 let compConf = PMAPI.deserializeComponent(data.component);
-                let comp = new class extends component {
-                    constructor() {
-                        super(compConf);
-                    }
+                let comp = new class extends component{
+                    constructor(){super(compConf);}
                 };
-                comp['key'] = data.key;
+                comp['key']=data.key;
                 comp.render(elementDiv);
-                dialogHash[data.key].comp = comp;
                 dialogHash[data.key].element.dialog(_.defaultsDeep(data.frame, {
                     modal: true,
                     close: function () {
-                        if (dialogHash[data.key]) {
-                            PMAPI.sendToParent({
-                                type: PMENUM.close_dialog,
-                                key: data.key,
-                                data: {
-                                    onlyclose: true
-                                }
-                            })
-                        }
+                        comp.destroySelf();
                     }
                 }));
                 break;
@@ -95,24 +83,13 @@ window.addEventListener('message', function (event) {
                 dialogHash[data.key].element.dialog(_.defaultsDeep(data.frame, {
                     modal: true,
                     close: function () {
-                        if (dialogHash[data.key]) {
-                            PMAPI.sendToParent({
-                                type: PMENUM.close_dialog,
-                                key: data.key,
-                                data: {
-                                    onlyclose: true
-                                }
-                            })
-                        }
+                        dialogHash[data.key].element.remove();
                     }
                 }));
                 break;
             case PMENUM.close_dialog:
                 dialogHash[data.key].element.dialog('destroy').remove();
-                if (dialogHash[data.key].comp) {
-                    dialogHash[data.key].comp.destroySelf();
-                }
-                PMAPI.sendToChild(dialogHash[data.key].iframe, {
+                PMAPI.sendToChild(dialogHash[data.key].iframe,{
                     type: PMENUM.recieve_data,
                     key: data.key,
                     data: data.data
@@ -138,13 +115,13 @@ export const PMAPI = {
      * 生成key的counter的起点
      * @type {number}
      */
-    starter: new Date().getTime(),
+    starter:new Date().getTime(),
 
     /**
      * 内部方法，生成一个唯一的key，作为标志
      * @return {string}
      */
-    _getKey: function () {
+    _getKey:function() {
         return 'iframedialog-' + PMAPI.starter++;
     },
 
@@ -155,7 +132,7 @@ export const PMAPI = {
      * @param channel
      * @param callback
      */
-    subscribe: function (channel, callback) {
+    subscribe: function(channel, callback) {
         subscriber[channel] = callback;
     },
 
@@ -163,7 +140,7 @@ export const PMAPI = {
      * 将消息发送给调用的父组件
      * @param data
      */
-    sendToParent: function (data) {
+    sendToParent: function(data) {
         window.parent.postMessage(data, location.origin);
     },
 
@@ -172,12 +149,12 @@ export const PMAPI = {
      * @param iframe
      * @param msg
      */
-    sendToChild: function (iframe, msg) {
+    sendToChild: function(iframe, msg) {
         if (iframe.postMessage) {
-            iframe.postMessage(msg, location.origin);
+            iframe.postMessage(msg,location.origin);
         }
         if (iframe.contentWindow) {
-            iframe.contentWindow.postMessage(msg, location.origin);
+            iframe.contentWindow.postMessage(msg,location.origin);
         }
     },
 
@@ -191,15 +168,15 @@ export const PMAPI = {
      *      }
      * @return Promise
      */
-    openDialogByIframe: function (url, frame) {
-        return new Promise(function (resolve) {
+    openDialogByIframe: function(url,frame) {
+        return new Promise(function(resolve) {
             let key = PMAPI._getKey();
             dialogWaitHash[key] = resolve;
             PMAPI.sendToParent({
                 type: PMENUM.open_iframe_dialog,
                 key: key,
                 url: url,
-                frame: frame
+                frame:frame
             });
         });
     },
@@ -215,15 +192,15 @@ export const PMAPI = {
      *          title: '组件页面'
      *      }
      */
-    openDialogByComponent: function (componentConfig, frame) {
-        return new Promise(function (resolve) {
+    openDialogByComponent: function(componentConfig,frame) {
+        return new Promise(function(resolve) {
             let key = PMAPI._getKey();
             dialogWaitHash[key] = resolve;
             window.parent.postMessage({
                 type: PMENUM.open_component_dialog,
                 key: key,
                 component: PMAPI.serializeComponent(componentConfig),
-                frame: frame
+                frame:frame
             }, location.origin);
         });
     },
@@ -233,21 +210,20 @@ export const PMAPI = {
      * @param componentConfig ComponentConfig，注意该配置中的function不能使用配置外部的其他方法和常量
      * @returns string
      */
-    serializeComponent: function (componentConfig) {
+    serializeComponent: function(componentConfig) {
         if (typeof componentConfig === 'number'
-            || typeof componentConfig === 'boolean') {
+            || typeof componentConfig === 'boolean'){
             return '' + componentConfig;
-        } else if (typeof componentConfig === 'string') {
+        }else if (typeof componentConfig === 'string'){
             return '"' + componentConfig + '"';
-        } else if (componentConfig instanceof Function) {
+        } else if (componentConfig instanceof Function){
             let str = String(componentConfig);
-            let source = PMAPI._removeAllComments(str.substring(str.indexOf('{') + 1, str.lastIndexOf('}')));
-            let func = '{"Function":"' + str.substring(str.indexOf('function ') + 9, str.indexOf('(')) + '", '
-                + '"Arguments":"' + str.substring(str.indexOf('(') + 1, str.indexOf(')')) + '", '
-                + '"Source":"' + source.replace(/\n/g, '').replace(/\"/g, "'") + '"}';
+            let source = PMAPI._removeAllComments(str.substring(str.indexOf('{')+1,str.lastIndexOf('}')));
+            //str.substring(str.indexOf('function ')+9,str.indexOf('('))
+            let func = `{"Function":"${key}", "Arguments":"${str.substring(str.indexOf('(')+1,str.indexOf(')'))}", "Source": "${source.replace(/\n/g,'').replace(/\"/g,"'")}"}`
             return func;
         } else if (Array.isArray(componentConfig)) {
-            if (componentConfig[0] === undefined) {
+            if (componentConfig[0] === undefined){
                 return '[]';
             } else {
                 let arrVals = [];
@@ -259,11 +235,11 @@ export const PMAPI = {
         } else if (componentConfig instanceof Object) {
             let objKeys = Object.keys(componentConfig);
             let arrOfKeyVals = [];
-            objKeys.forEach((key) => {
-                if (componentConfig[key] == undefined) {
+            objKeys.forEach((key)=> {
+                if(componentConfig[key]==undefined){
                     return;
                 }
-                arrOfKeyVals.push('"' + key + '":' + PMAPI.serializeComponent(componentConfig[key]));
+                arrOfKeyVals.push('"' + key + '":'+PMAPI.serializeComponent(componentConfig[key]));
             });
             return '{' + arrOfKeyVals + '}';
         }
@@ -286,9 +262,9 @@ export const PMAPI = {
      */
     _createFuncs(obj){
         let keys = Object.keys(obj);
-        keys.forEach(key => {
-            if (obj[key]['Function']) {
-                let args = obj[key]['Arguments'] || "";
+        keys.forEach(key=>{
+            if(obj[key]['Function']){
+                let args = obj[key]['Arguments']||"";
                 let source = obj[key]['Source'];
                 let fstr = "function "+obj[key]['Function']+"("+args+"){"+source+"}";
                 let f= new Function('$', '_', 'PMAPI', 'PMENUM', 'HTTP', "return "+fstr)($, _, PMAPI, PMENUM, HTTP);
@@ -305,11 +281,11 @@ export const PMAPI = {
      */
     _removeAllComments(str){
         let start = str.indexOf('//');
-        if (start == -1) {
+        if(start == -1){
             return str;
         }
-        let end = str.indexOf('\n', start);
-        return PMAPI._removeAllComments(str.replace(str.substring(start, end), ''));
+        let end = str.indexOf('\n',start);
+        return PMAPI._removeAllComments(str.replace(str.substring(start,end),''));
     }
 
 }
