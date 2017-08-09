@@ -319,7 +319,7 @@ $('#count').on('click',function(){
     let isView=$('#is_view').val()||0;
     FormEntrys.destoryAll();
     FormEntrys.createForm({
-        table_id:'7051_UoWnaxPaVSZhZcxZPbEDpG',
+        table_id:'8390_35R9y7J5uVULgczYyZvqvB',
         seqId:'yudeping',
         el:$('body'),
         is_view:isView,

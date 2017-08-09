@@ -1001,15 +1001,21 @@ let config={
                 }
             }
         }
-    },
+         },
 
-    checkValue:function(data,_this){
+         checkValue:function(data,_this){
             if(_this.data.data[data.dfield]){
                 _this.data.data[data.dfield]=data;
             }
             if(data.type=='Buildin'){
                 let id = data["id"];
-                let value = data["value"];
+                let value;
+                for(let obj of data['options']){
+                    if(obj.label == data.value){
+                        value=obj.value;
+                        break;
+                    }
+                }
                 _this.actions.setAboutData(id,value);
             }
             //检查是否是默认值的触发条件
