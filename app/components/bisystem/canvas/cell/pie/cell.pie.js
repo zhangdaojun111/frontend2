@@ -33,12 +33,9 @@ let config = {
 
         // 下穿数据
         this.pieChart.myChart.on('click', (params) => {
-            console.log(params);
             let deepX =params.name;
             this.CanvasDeep(deepX);
         });
-
-
     },
     firstAfterRender() {
         this.actions.echartsInit();
@@ -70,6 +67,7 @@ export class CellPieComponent extends BiBaseComponent {
         if (next) {
             if (deeps === floor) {
                 this.data.floor = deeps - 1;
+                return false;
             };
             this.data.floor++;
         } else {
@@ -79,7 +77,7 @@ export class CellPieComponent extends BiBaseComponent {
             this.data.floor--;
         }
         // 判断是否到最大下穿层数
-        if (deeps >= floor) {
+        if (deeps >= floor ) {
             // 组装deep_info
             let deep_info = {};
             if (next) {

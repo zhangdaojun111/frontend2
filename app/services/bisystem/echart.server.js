@@ -237,7 +237,6 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     pieOption(cellChart) {
-        console.log(cellChart);
         let cellOption = cellChart['chart'];
         let [legend, series] = [[], []];
         const [xAxis, yAxis, title] = [cellOption.data['xAxis'], cellOption.data['yAxis'], cellOption.chartName['name']];
