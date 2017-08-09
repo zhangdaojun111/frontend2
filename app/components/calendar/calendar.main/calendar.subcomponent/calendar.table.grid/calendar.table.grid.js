@@ -34,7 +34,9 @@ let config = {
         }
 
         let taskData = this.data.bodyData['data'];
+
         if(taskData && taskData.length > 0) {
+            console.log(taskData);
             taskData.forEach(item => {
                 let taskItemHtml = document.createElement('div');
                 taskItemHtml.id = 'task-item';
@@ -42,7 +44,6 @@ let config = {
                 taskItemHtml.innerHTML = item['data3show'][0][0]['fieldName'] + ':' + item['data3show'][0][0]['fieldValue'];
                 this.el.find('.task-list').append(taskItemHtml);
                 taskItemHtml.onclick = function () {
-                    console.log(item);
                     let component = new CalendarRemind(item);
                     let el = $('<div>').appendTo(document.body);
                     component.render(el);

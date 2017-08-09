@@ -72,7 +72,7 @@ export const CalendarService = {
         let params = {
             from_date: data['from_date'],
             to_date: data['to_date'],
-            cancel_fields: JSON.stringify([]),
+            cancel_fields: JSON.stringify(data['cancel_fields']),
         };
         let res = HTTP.post(calendarDataUrl, params).then(res => {
             if(res['code'] === CodeEnum.SUCCESS) {

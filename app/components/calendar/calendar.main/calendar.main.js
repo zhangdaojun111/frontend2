@@ -132,9 +132,9 @@ let config = {
                 }
                 this.actions.getDataCount();
             });
-            CalendarService.getWorkflowRecords(data).then(res => {
-                console.log(res);
-            });
+            // CalendarService.getWorkflowRecords(data).then(res => {
+            //     console.log(res);
+            // });
             // CalendarService.getMenu().then(res => {
             //     console.log(res);
             // })
@@ -316,7 +316,7 @@ let config = {
 
             this.data.from_date = this.data.monthDataList[0]['weekList'][0]['dataTime'];
             this.data.to_date = this.data.monthDataList[5]['weekList'][6]['dataTime'];
-            this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date},'month');
+            this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date, cancel_fields: this.data.cancel_fields},'month');
         },
 
 
@@ -712,7 +712,7 @@ let config = {
             this.data.selectData = this.data.today;
             this.actions.changeMainView('day');
         });
-        Mediator.on('leftSelectedDate',data => {
+        Mediator.on('calendar-left:leftSelectedDate',data => {
             let y = Number(data['year']),
                 m = Number(data['month']),
                 d = Number(data['day']),
@@ -740,9 +740,27 @@ let config = {
         // CalendarService.CalendarMsgMediator.subscribe('unshowData', data => {
         //     console.log(data);
         // })
-        Mediator.on('calendar-left: unshowData', data => {
-            console.log('data',data);
-        })
+        Mediator.on('calendar-left:unshowData', data => {
+            if(data['data']) {
+                console.log(data['data']);
+                this.data.isShowArr = data['data'];
+                let arr = ['mission','approve','remind']
+                let arr_1 = [];
+                for( let a of this.data.isShowArr ){
+                    if( arr.indexOf( a ) === -1 ){
+                        arr_1.push( a );
+                    }
+                }
+                this.data.cancel_fields = arr_1;
+                console.log(this.data.cancel_fields);
+                if(this.data.calendarContent === 'month') {
+                    this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
+                }
+                this.actions.changeMainView(this.data.calendarContent);
+            }
+
+
+        });
 
     }
 };
