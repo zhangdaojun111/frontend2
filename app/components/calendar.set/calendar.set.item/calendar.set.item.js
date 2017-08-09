@@ -7,7 +7,7 @@ import './calendar.set.item.scss';
 import CalendarSetItemMulitSelect from "./calendar.set.item.multiselect/calendar.set.item.multiselect"
 import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
-
+import Mediator from '../../../lib/mediator';
 let config = {
     template: template,
     data: {
@@ -19,8 +19,13 @@ let config = {
     actions: {
     },
     afterRender: function() {
-        console.log(this.data.rowSetData);
-        console.log(this.data.rowSetData.color);
+        Mediator.on('calendar-set:editor',data =>{
+            if(data.data ===1){
+                this.el.find(".editor-items").attr("disabled",false);
+            }else{
+                this.el.find(".editor-items").attr("disabled",true);
+            }
+        });
         $("#set-color-id").attr("id","set-color-"+this.data.rowSetData.field_id);
         let set_color_id = "#set-color-"+this.data.rowSetData.field_id;
         $(set_color_id).attr("value",this.data.rowSetData.color);
