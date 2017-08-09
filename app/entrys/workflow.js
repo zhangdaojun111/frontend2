@@ -74,7 +74,6 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             };
             postData.data=JSON.stringify(data);
             let res = await workflowService.createWorkflowRecord(postData);
-            console.log(res);
             if(res.success===1){
                 msgBox.alert('自动保存成功！');
             }
