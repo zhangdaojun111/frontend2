@@ -83,7 +83,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         const autoSaving=function(){
             timer=setInterval(()=>{
                 intervalSave(FormEntrys.getFormValue());
-            },2*60*1000);
+            },1000);
         };
         // autoSaving();
         Mediator.subscribe('workflow:autoSaveOpen', (msg)=> {
@@ -95,7 +95,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             }
         })
     })
-
+    
 });
 
 Mediator.subscribe('workflow:submit', (res)=> {
@@ -142,6 +142,7 @@ var mockFlowData;
     mockFlowData=res;
 });
 
+//请求部门员工信息，加载树
 let tree=[];
 let staff=[];
 (async function () {
@@ -158,8 +159,6 @@ let staff=[];
         }
     }
     recur(tree);
-    console.log(staff);
-
 
     var treeComp2 = new TreeView(tree,{
         callback: function (event,selectedNode) {
@@ -259,6 +258,9 @@ FormEntrys.createForm({
 //        console.log(res)
 // })
 
+
+
+
 //获取盖章图片
 Mediator.subscribe("workflow:getStampImg",(msg)=>{
     (async function () {
@@ -286,6 +288,8 @@ Mediator.subscribe("workflow:delImg",(msg)=>{
         let data = await workflowService.delStmpImg(msg);
     })();
 });
+
+
 
 $('#importBtn').on('click',()=>{
     if($("#import")[0]!=undefined){
@@ -319,8 +323,26 @@ $('#importBtn').on('click',()=>{
         );
     }
     WorkFlow.show(mockFlowData.data[0],'#dwf');
-
+    
 })
 $('body').on('click','#importClose',()=>{
     $("#import").hide();
-})
+});
+
+
+//审批操作
+
+(async function () {
+    return workflowService.approveWorkflowRecord({url: '/approve_workflow_record/?seqid=xuyan_1502264078519&record_id=59897f1591461c15d279023a',data:{
+        record_id:'59897f1591461c15d279023a',
+        focus_users:[],
+        action:0,// 0：通过 1：驳回上一级 2:驳回发起人 3：作废 4：取消 5：撤回 6：驳回任意节点 7：撤回审批 8：自动拨回到发起人 9：加签
+        comment:null,
+        node_id:null,//驳回节点id
+        sigh_type:0,//加签类型  0：前 1：后
+        sigh_user_id:'5979e48a41f77c586658e346',
+        data:{}
+    }});
+})().then(res=>{
+    console.log(res);
+});
