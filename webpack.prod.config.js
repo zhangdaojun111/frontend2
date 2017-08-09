@@ -142,7 +142,12 @@ module.exports = {
             "window.jQuery": "jquery"
         }),
         new webpack.optimize.CommonsChunkPlugin('vendors'),
-        new webpack.optimize.UglifyJsPlugin({minimize: true}),
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true,
+            mangle: {
+                except: ['$']
+            }
+        }),
 
         new ExtractTextPlugin({
             filename: (getPath) => {
