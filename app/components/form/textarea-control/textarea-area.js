@@ -8,7 +8,7 @@ let config={
                     <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                  {{else}}
                    <div style="display: inline-block">{{label}}</div>
-                    <input type="textarea" value="{{value}}" style=" height: 100px;  color: rgb(0, 0, 0); width: 100%;"/>
+                    <input type="textarea" value="{{value}}" style=" height: 100px;  color: rgb(0, 0, 0); width: 240px;"/>
                     {{#if required}}
                     <div style="float: left;">                       
                         <span id="requiredLogo" class="{{requiredClass}}" ></span>               
