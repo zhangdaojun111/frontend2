@@ -3,7 +3,7 @@ import template from './data-table-agGrid.html';
 import './data-table-agGrid.scss';
 import {HTTP} from "../../../../lib/http";
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
-
+import msgBox from '../../../../lib/msgbox';
 import agGrid from "../../agGrid/agGrid";
 import {dataTableService} from "../../../../services/dataGrid/data-table.service";
 import {dgcService} from "../../../../services/dataGrid/data-table-control.service";
@@ -1061,17 +1061,31 @@ let config = {
                 PMAPI.openDialogByComponent(delSetting, {
                     width: 300,
                     height: 200,
-                    title: '删除'
+                    title: '删除',
+                    modal: true
                 }).then((data) => {
                     if( data.type == 'del' ){
-                        
+                        this.actions.delTableTable();
                     }
                 });
             } )
         },
         //删除数据
         delTableTable: function () {
-            
+            let json = {
+                table_id:this.data.tableId,
+                temp_ids:JSON.stringify([]),
+                real_ids:JSON.stringify( this.data.deletedIds ),
+                is_batch: this.viewMode == 'createBatch'?1:0
+            }
+            dataTableService.delTableData( json ).then( res=>{
+                if( res.success ){
+                    msgBox.alert( '删除成功' )
+                }else {
+                    msgBox.alert( res.error )
+                }
+            } )
+            HTTP.flush();
         },
         //定制列
         customColumnClick: function () {
