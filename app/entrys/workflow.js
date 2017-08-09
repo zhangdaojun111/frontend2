@@ -74,7 +74,6 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             };
             postData.data=JSON.stringify(data);
             let res = await workflowService.createWorkflowRecord(postData);
-            console.log(res);
             if(res.success===1){
                 msgBox.alert('自动保存成功！');
             }
@@ -83,9 +82,9 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         const autoSaving=function(){
             timer=setInterval(()=>{
                 intervalSave(FormEntrys.getFormValue());
-            },1000);
+            },2*60*1000);
         };
-        // autoSaving();
+        autoSaving();
         Mediator.subscribe('workflow:autoSaveOpen', (msg)=> {
             clearInterval(timer);
             if(msg===1){
@@ -95,6 +94,46 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             }
         })
     })
+
+
+    //default wf
+    $('#importBtn').on('click',()=>{
+        if($("#import")[0]!=undefined){
+            $("#import").show();
+        }else{
+            $('body').append(`
+                <div id="import">
+                    <div>
+                        <div class="text">   
+                            <span>工作流选项</span>
+                        </div>
+                        <div class="cont">
+                            <select>
+                                <option value="">批量工作流</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text">   
+                            <span>审批流程</span>
+                        </div>
+                        <div class="cont">选择流程
+                            <select>
+                                <option value="">批量工作流</option>
+                            </select>
+                            <div id="dwf"></div>
+                        </div>
+                    </div>
+                    <span class=" ui-button ui-widget ui-corner-all" id="importClose">关闭</span>
+                </div>`
+            );
+        }
+        WorkFlow.show(mockFlowData.data[0],'#dwf');
+        
+    })
+    $('body').on('click','#importClose',()=>{
+        $("#import").hide();
+    });
     
 });
 
@@ -245,30 +284,6 @@ FormEntrys.createForm({
     })
 
 });
-// function getRecordObj () {
-//     return new Promise(function (resolve, reject) {
-//         setTimeout(()=>{
-//             resolve(FormEntrys.ReturnRecordInfo());
-//         },1000)
-//     });
-// }
-// getRecordObj().then(function (res) {
-//     ApprovalHeader.showheader(res);
-//     WorkflowRecord.showRecord(res);
-//
-// })
-
-// let data = new Promise(function (resolve) {
-//     setTimeout(function () {
-//        resolve(FormEntrys.ReturnRecordInfo())
-//     }, 2000);
-// });
-//
-// Promise.all([data]).then((res)=>{
-//        console.log(res)
-// })
-
-
 
 
 //获取盖章图片
@@ -301,43 +316,7 @@ Mediator.subscribe("workflow:delImg",(msg)=>{
 
 
 
-$('#importBtn').on('click',()=>{
-    if($("#import")[0]!=undefined){
-        $("#import").show();
-    }else{
-        $('body').append(`
-            <div id="import">
-                <div>
-                    <div class="text">   
-                        <span>工作流选项</span>
-                    </div>
-                    <div class="cont">
-                        <select>
-                            <option value="">批量工作流</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <div class="text">   
-                        <span>审批流程</span>
-                    </div>
-                    <div class="cont">选择流程
-                        <select>
-                            <option value="">批量工作流</option>
-                        </select>
-                        <div id="dwf"></div>
-                    </div>
-                </div>
-                <span class=" ui-button ui-widget ui-corner-all" id="importClose">关闭</span>
-            </div>`
-        );
-    }
-    WorkFlow.show(mockFlowData.data[0],'#dwf');
-    
-})
-$('body').on('click','#importClose',()=>{
-    $("#import").hide();
-});
+
 
 
 //审批操作
