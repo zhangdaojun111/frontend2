@@ -210,7 +210,7 @@ export const PMAPI = {
      * @param componentConfig ComponentConfig，注意该配置中的function不能使用配置外部的其他方法和常量
      * @returns string
      */
-    serializeComponent: function(componentConfig) {
+    serializeComponent: function(componentConfig, key) {
         if (typeof componentConfig === 'number'
             || typeof componentConfig === 'boolean'){
             return '' + componentConfig;
@@ -239,7 +239,7 @@ export const PMAPI = {
                 if(componentConfig[key]==undefined){
                     return;
                 }
-                arrOfKeyVals.push('"' + key + '":'+PMAPI.serializeComponent(componentConfig[key]));
+                arrOfKeyVals.push('"' + key + '":'+PMAPI.serializeComponent(componentConfig[key], key));
             });
             return '{' + arrOfKeyVals + '}';
         }
