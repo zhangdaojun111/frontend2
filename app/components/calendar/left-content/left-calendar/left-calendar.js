@@ -94,14 +94,6 @@ let config = {
             that.el.find("#calendar-body").html();
             let strhtml = config.actions.loadcalendarHtml(yy,mm,dd);
             that.el.find("#calendar-body").html(strhtml);
-            that.el.find(".now-month-day").bind("click",function(){
-                let nowYear = that.el.find(".now-year").html(),
-                    nowMonth = that.el.find(".now-month").html(),
-                    nowDay = that.el.find(this).html();
-                Mediator.emit('calendar-left:leftSelectedDate',{year: nowYear, month: nowMonth, day: nowDay});
-                that.el.find(".now-pitch-on").removeClass("now-pitch-on");
-                that.el.find(this).addClass("now-pitch-on");
-            });
         },
         loadCalendarLastMonthData:function(nowYear,nowMonth,dd,that){
             if(nowMonth == 1){
@@ -174,6 +166,13 @@ let config = {
                     $(this).addClass("now-pitch-on");
                 }
             });
+        }).on("click",".now-month-day",function(){
+            let nowYear = that.el.find(".now-year").html(),
+                nowMonth = that.el.find(".now-month").html(),
+                nowDay = that.el.find(this).html();
+            Mediator.emit('calendar-left:leftSelectedDate',{year: nowYear, month: nowMonth, day: nowDay});
+            that.el.find(".now-pitch-on").removeClass("now-pitch-on");
+            that.el.find(this).addClass("now-pitch-on");
         });
     }
 };
