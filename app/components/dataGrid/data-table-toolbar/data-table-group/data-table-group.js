@@ -24,7 +24,7 @@ let config = {
                 for( let li of lis ){
                     li.style.display = li.attributes.name.value.indexOf( val ) == -1 && val!='' ? 'none':'block'
                 }
-            },1000 ) )
+            },1000))
         },
     },
     afterRender: function (){
