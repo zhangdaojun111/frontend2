@@ -4,7 +4,6 @@ import './aside.scss';
 import {MenuComponent} from '../menu-full/menu.full';
 import Mediator from '../../../lib/mediator';
 import PersonalSettings from "../personal-settings/personal-settings";
-import {cookie} from '../../../lib/cookie';
 import {HTTP} from '../../../lib/http';
 
 
@@ -22,6 +21,57 @@ function presetMenuData(menu, leaf) {
         }
     });
     return res;
+}
+
+function presetCommonMenuData(menu, commonData) {
+    let menuData = _.defaultsDeep([], menu);
+    let commonKeys = commonData.data;
+    
+    function plusParentNumber(item) {
+        if (item) {
+            item.childrenIsCommonUseNumber += 1;
+            if (item.parent) {
+                plusParentNumber(item.parent);
+            }
+        }
+    }
+    
+    function preset_one(_menu, parent) {
+        _menu.forEach((item) => {
+            let key = item.ts_name || item.table_id;
+            if (item.commonUseNum === undefined) {
+                item.childrenIsCommonUseNumber = 0;
+            }
+            if (commonKeys.indexOf(key) !== -1) {
+                plusParentNumber(parent);
+                item.isCommonUse = true;
+            } else {
+                item.isCommonUse = false;
+            }
+            if (item.items) {
+                preset_one(item.items, item);
+            }
+        });
+    }
+    preset_one(menuData);
+    
+    function preset_two (_menu, parent) {
+        let res = [];
+        _menu.forEach((item) => {
+            if (item.childrenIsCommonUseNumber > 0) {
+                item.isCommonUse = true;
+                preset_two(item.items, item);
+            }
+            if (item.isCommonUse === true) {
+                res.push(item);
+            }
+        });
+        if (parent !== null) {
+            parent.items = res;
+        }
+        return res;
+    }
+    return preset_two(menuData, null);
 }
 
 let config = {
@@ -59,7 +109,7 @@ let config = {
         },
         showCommonMenu: function () {
             if (!this.commonMenu) {
-                this.commonMenu = new MenuComponent({list: presetMenuData(window.config.menu)});
+                this.commonMenu = new MenuComponent({list: presetCommonMenuData(window.config.menu, window.config.commonUse)});
                 this.commonMenu.render(this.el.find('.menu.common'));
             }
             if (this.allMenu) {
@@ -107,7 +157,11 @@ let config = {
             }).on('click','.set-info', () => {
                 this.actions.showInfoSet();
             });
-            this.actions.showAllMenu();
+            if (window.config.isCommon === "0") {
+                this.actions.showAllMenu();
+            } else {
+                this.actions.showCommonMenu();
+            }
         }
     },
     firstAfterRender: function() {
