@@ -31,5 +31,9 @@ export const dataTableService = {
     //删除偏好
     delPreference: function ( param ) {
         return HTTP.post( 'delete_preference',param )
+    },
+    //删除数据
+    delTableData: function ( param ) {
+        return HTTP.post( 'delete_table_data',param )
     }
 }

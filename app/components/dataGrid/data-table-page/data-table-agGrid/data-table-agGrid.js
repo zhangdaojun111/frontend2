@@ -99,7 +99,9 @@ let config = {
         //是否显示floatingFilter
         isShowFloatingFilter: false,
         //批量工作流ids
-        batchIdList: []
+        batchIdList: [],
+        //选择的数据
+        selectIds: []
     },
     //生成的表头数据
     columnDefs: [],
@@ -1054,15 +1056,22 @@ let config = {
             } )
             //删除
             $( '.grid-del-btn' ).click( ()=>{
+                this.actions.retureSelectData();
+                delSetting.data['deletedIds'] = this.data.deletedIds;
                 PMAPI.openDialogByComponent(delSetting, {
-                    width: 800,
-                    height: 600,
+                    width: 300,
+                    height: 200,
                     title: '删除'
                 }).then((data) => {
-                    let choosedData = data.choosedData;
-                    this.actions.onSettingDataReturn(choosedData);
+                    if( data.type == 'del' ){
+                        
+                    }
                 });
             } )
+        },
+        //删除数据
+        delTableTable: function () {
+            
         },
         //定制列
         customColumnClick: function () {
@@ -1091,6 +1100,16 @@ let config = {
                 }
                 this.actions.changeAgGridWidth();
             })
+        },
+        //返回选择数据
+        retureSelectData: function () {
+            this.data.deletedIds = [];
+            let rows = this.agGrid.gridOptions.api.getSelectedRows();
+            for( let r of rows ){
+                if( r._id ){
+                    this.data.deletedIds.push( r._id );
+                }
+            }
         },
         //改变agGrid宽度
         changeAgGridWidth: function () {
