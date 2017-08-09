@@ -78,7 +78,6 @@ let config = {
                     config.searchInputList.push(obj);
                 }
             }
-            console.log(config.searchInputList);
             this.actions.checkedSubmitData()
         },
         showSearchData: function(data) {

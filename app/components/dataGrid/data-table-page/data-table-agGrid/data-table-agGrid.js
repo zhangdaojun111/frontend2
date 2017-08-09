@@ -638,7 +638,6 @@ let config = {
             this.actions.getGridData();
         },
         postExpertSearch:function(data) {
-            console.log( "+++++" )
             this.data.filterParam = {
                 filter: data,
                 is_filter: 1
@@ -1084,7 +1083,7 @@ let config = {
             dataTableService.getPreferences( obj ).then( res=>{
                 this.data.commonQueryData = res.rows;
                 res.rows.forEach((row) => {
-                    $('.dataGrid-commonQuery-select').append(`<option class="" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
+                    $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
                 });
                 // this.append(new commonQuery({commonQueryData:res.rows}), this.el.find('.dataGrid-commonQuery-select'));
             } );
@@ -1127,7 +1126,17 @@ let config = {
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();
         let _this = this
-        this.el.on('.')
+        $('.dataGrid-commonQuery-select').bind('change', function() {
+            if($(this).val() == '常用查询') {
+                _this.actions.postExpertSearch([]);
+            } else {
+                _this.data.commonQueryData.forEach((item) => {
+                    if(item.name == $(this).val()){
+                        _this.actions.postExpertSearch(JSON.parse(item.queryParams));
+                    }
+                })
+            }
+        })
     }
 }
 
