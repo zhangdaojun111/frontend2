@@ -109,7 +109,8 @@
         }
 
         .tabs {
-            padding-top: 20px;
+            padding: 20px 0 10px;
+            position: relative;
             p {
                 float: left;
                 width: 90px;
@@ -125,7 +126,15 @@
                     color: #fff;
                 }
             }
-            margin-bottom: 10px;
+            .edit {
+                width: 16px;
+                height: 16px;
+                position: absolute;
+                right: 10px;
+                top: 20px;
+                cursor: pointer;
+                background: url("../../../assets/images/framework/edit.png");
+            }
         }
     }
 }
