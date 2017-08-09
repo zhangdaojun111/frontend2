@@ -158,7 +158,7 @@ let config = {
                     if(name == 'save'){
                         this.actions.openSaveQuery(name);
                     } else {
-                        $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时常用查询">临时常用查询</option>`)
+                        $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
                         this.data.saveTemporaryCommonQuery(this.data.searchInputList);
                         this.data.postExpertSearch(this.data.searchInputList);
                     }

@@ -88,7 +88,7 @@ let config = {
         //定制列需要字段信息
         customColumnsFields: [],
         //搜索参数
-        filterParam: {},
+        filterParam: {filter: [],is_filter:0},
         //是否第一次渲染agGrid
         firstRender: true,
         //权限
@@ -790,7 +790,7 @@ let config = {
                 tableType: this.data.tableType,
                 fieldId: this.data.fieldId,
                 rowId: this.data.rowId,
-                is_filter: 1,
+                is_filter: this.data.filterParam.is_filter,
                 filter: []
             }
             if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild'||this.data.viewMode == 'child' ){
@@ -816,7 +816,6 @@ let config = {
             }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
-                json['is_filter'] = this.data.filterParam.is_filter;
             }
             if( this.data.groupCheck ){
                 json['is_group'] = 1;
@@ -828,6 +827,7 @@ let config = {
                 json = _.defaultsDeep( json,this.data.sortParam )
             }
             json = dgcService.returnQueryParams( json );
+            this.data.filterParam.is_filter = 1;
             return json;
         },
         //渲染agGrid
@@ -1170,7 +1170,7 @@ let config = {
         },
         //获取临时常用查询数据
         saveTemporaryCommonQuery: function(data) {
-            $('.dataGrid-commonQuery-select').val('临时常用查询');
+            $('.dataGrid-commonQuery-select').val('临时高级查询');
             this.data.saveTemporaryCommonQuery  = data;
         },
         //获取高级查询数据
@@ -1206,7 +1206,7 @@ let config = {
         },
         //触发排序事件
         onSortChanged: function ($event) {
-            if( this.viewMode == 'viewFromCorrespondence' || this.viewMode == 'editFromCorrespondence' ){
+            if( this.viewMode == 'viewFromCorrespondence' || this.viewMode == 'editFromCorrespondence' || this.data.frontendSort ){
                 return;
             }
             let data = this.agGrid.gridOptions.api.getSortModel()[0];
@@ -1349,7 +1349,7 @@ let config = {
         $('.dataGrid-commonQuery-select').bind('change', function() {
             if($(this).val() == '常用查询') {
                 _this.actions.postExpertSearch([]);
-            } else if($(this).val() == '临时常用查询') {
+            } else if($(this).val() == '临时高级查询') {
                 _this.actions.postExpertSearch(_this.data.saveTemporaryCommonQuery);
             } else {
                 $(this).find('.Temporary').remove();
