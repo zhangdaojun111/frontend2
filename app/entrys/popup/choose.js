@@ -7,6 +7,7 @@ function GetQueryString(name)
 }
 $(document).ready(function(){
     let fieldId=GetQueryString('fieldId');
-    let buildChoose=new BuildChoose({fieldId:fieldId});
+    let key=GetQueryString('key');
+    let buildChoose=new BuildChoose({fieldId:fieldId,key:key});
     buildChoose.render($('body'));
 });
