@@ -230,6 +230,7 @@ let config = {
         //     }
         // },
         createMonthCalendar: function (y,m){
+            Mediator.emit('CalendarMain: date',{from_date: this.data.from_date, to_date: this.data.to_date});
             let monthDayNum = this.actions.getDayNumOfMonth( y , m ),
                 firstDayWeek = this.actions.getWeekByDay( y , m , 1 );
             let endNum = ( monthDayNum + firstDayWeek ) > 35 ? 42 : 35;
@@ -462,10 +463,12 @@ let config = {
                 this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
                 this.actions.createWeekCalendar();
                 this.append(new CalendarWeek(this.data.weekDataList), this.el.find(".calendar-main-content"));
+                Mediator.emit('CalendarMain: date',{from_date: this.data.from_date, to_date: this.data.to_date});
             } else if (type === 'day') {
                 this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
                 this.actions.createDayCalendar();
                 this.append(new CalendarDay(this.data.dayDataList), this.el.find(".calendar-main-content"));
+                Mediator.emit('CalendarMain: date',{from_date: this.data.from_date, to_date: this.data.to_date});
             }
         },
 
@@ -688,8 +691,12 @@ let config = {
                 this.actions.changeDay('r');
                 this.actions.changeMainView('day');
             }
-        }).on('click', '.update-icon', () => {
-
+        }).on('click', '#refresh', () => {
+            if(this.data.calendarContent) {
+                this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
+            }
+            this.actions.changeMainView(this.data.calendarContent);
+            //this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date},this.data.calendarContent);
         }).on('click', '#schedule', () => {
             this.data.calendarContent = 'schedule';
             this.el.find('.calendar-main-content').empty();

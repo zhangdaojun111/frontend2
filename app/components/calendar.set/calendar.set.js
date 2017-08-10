@@ -25,6 +25,7 @@ let config = {
         dropdownForRes: [],
         replaceDropDown: [],
         dropdownForCalendarChange: [],
+        isConfigField: false,
     },
     actions: {
         getMultiSelectDropdown: function(){
@@ -65,8 +66,8 @@ let config = {
                 }
                 for(let key in res.data){
                     let obj={
-                        label:res.data[key].dname,
-                        value:res.data[key].field_id
+                        name: res.data[key].dname,
+                        id: res.data[key].field_id
                     };
                     this.data.replaceDropDown.push(obj);
                 }
@@ -103,13 +104,18 @@ let config = {
                         })
                     }
                 }
-                this.data.allRows.forEach(row => {
+                this.data.allRows.forEach((row, index) => {
+                    if(this.data.rowTitle[index]['id'] && this.data.rowTitle[index]['dtype'] === '8' && this.data.replaceDropDown.length !== 0){
+                        this.data.isConfigField = true;
+                    }
                     this.append(new CalendarSetItem({
                         rowData: row,
                         dropdown: this.data.dropdown,
                         dropdownForRes: this.data.dropdownForRes,
                         dropdownForCalendarChange: this.data.dropdownForCalendarChange,
                         replaceDropDown: this.data.replaceDropDown,
+                        isConfigField: this.data.isConfigField,
+                        rowTitle: this.data.rowTitle,
                     }), this.el.find('.set-items'));
                 })
             }).catch(err=>{
@@ -137,26 +143,27 @@ let config = {
                     }
                 }
                 this.actions.getMultiSelectDropdown();
-                // res['rows'].forEach(setItem => {
-                //     this.append(new CalendarSetItem(setItem), this.el.find('.set-items'));
-                // })
             });
 
         });
 
 
         let that = this;
-        this.el.on("click",".editor-btn",function(){
+        this.el.on("click",".editor-btn", () => {
             if(!$(this).is("disabled")){
                 that.el.find(".hide-btns").css("visibility","visible");
                 $(this).addClass("disabled");
                 $(this).next('span').addClass("disabled");
                 Mediator.emit('calendar-set:editor',{data:1});
             }
-        }).on("click",".cancel-btn",function(){
+            $(this).attr('disabled', 'true')
+        }).on("click",".cancel-btn", () => {
             that.el.find(".hide-btns").css("visibility","hidden");
             that.el.find(".set-btn").removeClass("disabled");
             Mediator.emit('calendar-set:editor',{data:-1});
+            $('.editor-btn').attr('disabled', 'false');
+        }).on('click', '.set-btn', () => {
+
         });
 
     }

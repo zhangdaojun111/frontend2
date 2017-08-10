@@ -5,6 +5,8 @@ import Component from "../../../../lib/component";
 import template from './calendar.remind.html';
 import './calendar.remind.scss';
 
+import {PMAPI} from '../../../../lib/postmsg';
+
 let config = {
     template: template,
     data: {
@@ -29,6 +31,9 @@ let config = {
 
             });
         });
+        this.el.on('click', '.open-form', () => {
+            PMAPI.openDialogByIframe('/calendar_mgr/create/', {width: "1700", height: '800', title: '日历表'});
+        })
     }
 };
 

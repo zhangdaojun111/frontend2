@@ -10,7 +10,8 @@ $boder-color: #ddd;
             border: 1px solid #c5dbec;
             background: #0F79EF;
             color: #fff;
-            border-radius: 4px
+            border-radius: 4px;
+            cursor: pointer;
         }
         .disabled {
             pointer-events: none;

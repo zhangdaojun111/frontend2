@@ -230,11 +230,13 @@ let config = {
                 checkbox_a2.removeClass("workflow_checked");
                 config.data.cancel_fields.unshift('approve');
                 Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
+                Mediator.emit('calendar-left:approve',0);
             }
             else{
                 checkbox_a2.addClass("workflow_checked");
                 config.data.cancel_fields.splice($.inArray('approve',config.data.cancel_fields),1);
                 Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
+                Mediator.emit('calendar-left:approve',1);
             }
         },
         hide_group:function(temp,that){
