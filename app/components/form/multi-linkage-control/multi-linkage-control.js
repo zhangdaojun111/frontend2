@@ -6,18 +6,19 @@ let config={
     template:`  <div class="clearfix" style="display: flex;align-items: center">
                     {{#if unvisible}}
                         <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                    {{else}}
-                        {{#if be_control_condition }}
+                    {{else if be_control_condition}}
                         <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                        {{else}}
-                                <div class="multi-drop" style="display: flex;align-items: center"></div>
-                                <div class="refresh">刷新</div>
-                                <div style="float: left;">
+                    {{else}}
+                            <div class="multi-drop" style="display: flex;align-items: center"></div>
+                            <div class="refresh">刷新</div>
+                            <div style="float: left;">
                             {{#if required}}
                                 <span id="requiredLogo" class="{{requiredClass}}" ></span>
                             {{/if}} 
+                            {{#if history}}
+                                       <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>     
+                            {{/if}} 
                         </div>
-                        {{/if}}
                     {{/if}}    
                 </div>`,
     data:{
@@ -33,7 +34,7 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
-        Mediator.subscribe('form:dropDownSelect'+_this.data.tableId,function(data){
+        Mediator.subscribe('form:dropDownSelect:'+_this.data.tableId,function(data){
             if(data.dfield !=_this.data.dfield){
                 return;
             }
@@ -83,7 +84,7 @@ let config={
                         _this.data.value=key;
                         data['value']=key;
                         if(_this.data.required){
-                            Mediator.publish('form:changeValue-'+_this.data.tableId,data);
+                            Mediator.publish('form:changeValue:'+_this.data.tableId,data);
                         }
                     }
                 }
@@ -93,8 +94,10 @@ let config={
         this.el.on('click','.refresh',function(){
             _this.hasChoose.clear();
             for (let i=0;i<_this.data.index;i++){
+                console.log('what');
                 let d={};
                 d['value']='请选择';
+                d['showValue']='请选择';
                 d['options']=[];
                 d['index']=i;
                 d['dfield']=_this.data.dfield;
@@ -107,10 +110,14 @@ let config={
                 }
                 let drop=_this.childDrop[i];
                 drop.data=Object.assign(drop.data,d);
+                console.log(drop);
                 drop.reload();
-                _this.data.value='';
-                Mediator.publish('form:changeValue-'+_this.data.tableId,_this.data);
             }
+            _this.data.value='';
+            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+        });
+        this.el.on('click','.ui-history',function(){
+            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
     },
     afterRender(){
@@ -136,10 +143,12 @@ let config={
             if(this.data.value){
                 let option=this.data.dataList[this.data.value][i];
                 d['value']=option;
+                d['showValue']=option;
                 d['options'].push({label:option,value:option,tableId:this.data.tableId});
                 this.hasChoose.set(i,option);
             }else{
                 d['value']='请选择';
+                d['showValue']='请选择';
                 let set=new Set();
                 for(let key in this.data.dataList){
                     set.add(this.data.dataList[key][i]);
@@ -156,6 +165,10 @@ let config={
                 this.append(drop,this.el.find('.multi-drop'));
             }
         }
+    },
+    beforeDestory:function(){
+        Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
+        Mediator.removeAll('form:changeValue:'+this.data.tableId);
     }
 }
 export default class MultiLinkageControl extends Component{
