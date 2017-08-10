@@ -11,7 +11,7 @@ let config={
                  {{else if be_control_condition}}     
                        <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                  {{else}}                              
-                       <input style="width:{{width}}"  type="password"  value="{{value}}"  readonly id="inputShow"  class="dynamic-form-input">{{value}}  
+                       <input style="width:{{width}}"  type="password"  value="{{value}}"  readonly id="inputShow"  class="dynamic-form-input"> 
                        <div style="display: inline-block">
                                {{#if required}}
                                 <span id="requiredLogo" class="{{requiredClass}}" ></span>
