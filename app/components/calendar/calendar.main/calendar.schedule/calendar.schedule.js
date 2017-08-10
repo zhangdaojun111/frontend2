@@ -6,6 +6,7 @@ import template from './calendar.schedule.html';
 import './calendar.schedule.scss';
 
 import CalendarScheduleItem from './calendar.schedule.item/calendar.schedule.item';
+import Mediator from '../../../../lib/mediator';
 
 import {PMAPI} from '../../../../lib/postmsg';
 
@@ -28,7 +29,7 @@ let config = {
                 alert( '起始时间不能大于结束时间。' );
                 return
             }
-            PMAPI.sendToParent({from_date: startDate, to_date: endDate});
+            Mediator.emit('calendarSchedule: date', {from_date: startDate, to_date: endDate});
         }
 
     },

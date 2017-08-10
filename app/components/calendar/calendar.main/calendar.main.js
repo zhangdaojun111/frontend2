@@ -132,12 +132,6 @@ let config = {
                 }
                 this.actions.getDataCount();
             });
-            // CalendarService.getWorkflowRecords(data).then(res => {
-            //     console.log(res);
-            // });
-            // CalendarService.getMenu().then(res => {
-            //     console.log(res);
-            // })
         },
 
         getDataCount: function (){
@@ -737,11 +731,11 @@ let config = {
             }
         });
         let that = this;
-        window.addEventListener('message', function (e) {
-            console.log('e',e.data);
-            that.actions.getCalendarData(e.data,'schedule');
-            that.data.scheduleStart = e.data.from_date;
-            that.data.scheduleEnd = e.data.to_date;
+
+        Mediator.on('calendarSchedule: date', data => {
+            that.actions.getCalendarData(data,'schedule');
+            that.data.scheduleStart = data.from_date;
+            that.data.scheduleEnd = data.to_date;
         });
 
         // CalendarService.CalendarMsgMediator.subscribe('unshowData', data => {
