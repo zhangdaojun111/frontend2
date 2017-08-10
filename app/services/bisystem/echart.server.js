@@ -5,78 +5,13 @@
 import * as echarts from 'echarts';
 import {EchartsOption} from '../../components/bisystem/echarts.config/echarts.config';
 import {ToolPlugin} from "../../components/bisystem/utils/tool.plugin";
+import {HTTP} from '../../lib/http';
 
-let defaultOption = {
-    title: {
-        text: '漏斗图',
-        subtext: '纯属虚构'
-    },
-    tooltip: {
-        trigger: 'item',
-        formatter: "{a} <br/>{b} : {c}%"
-    },
-    toolbox: {
-        feature: {
-            dataView: {readOnly: false},
-            restore: {},
-            saveAsImage: {}
-        }
-    },
-    legend: {
-        data: ['展现','点击','访问','咨询','订单']
-    },
-    calculable: true,
-    series: [
-        {
-            name:'漏斗图',
-            type:'funnel',
-            left: '10%',
-            top: 60,
-            //x2: 80,
-            bottom: 60,
-            width: '80%',
-            // height: {totalHeight} - y - y2,
-            min: 0,
-            max: 100,
-            minSize: '0%',
-            maxSize: '100%',
-            sort: 'descending',
-            gap: 2,
-            label: {
-                normal: {
-                    show: true,
-                    position: 'inside'
-                },
-                emphasis: {
-                    textStyle: {
-                        fontSize: 20
-                    }
-                }
-            },
-            labelLine: {
-                normal: {
-                    length: 10,
-                    lineStyle: {
-                        width: 1,
-                        type: 'solid'
-                    }
-                }
-            },
-            itemStyle: {
-                normal: {
-                    borderColor: '#fff',
-                    borderWidth: 1
-                }
-            },
-            data: [
-                {value: 60, name: '访问'},
-                {value: 40, name: '咨询'},
-                {value: 20, name: '订单'},
-                {value: 80, name: '点击'},
-                {value: 100, name: '展现'}
-            ]
-        }
-    ]
+const defaultOption = {
+    grid: {},
+    xAxis : [],
+    yAxis : [],
+    series : []
 };
 
 
@@ -84,6 +19,7 @@ export class EchartsService {
     constructor(cellChart) {
         let myChart = echarts.init(document.getElementById(cellChart['id']));
         let option = this.getEchartsOption(cellChart['cellChart']);
+        this.myChart = myChart;
         myChart.setOption(option);
     }
 
@@ -110,8 +46,6 @@ export class EchartsService {
             case 'funnel':
                 option = this.funnelOption(cellChart); // 折线柱状混合图
                 break;
-            default:
-                option = defaultOption
         }
         return option;
     }
@@ -122,7 +56,10 @@ export class EchartsService {
      */
     lineBarOption(cellChart) {
         let cellOption = cellChart['chart'];
-        console.log(cellOption);
+        if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
+            return defaultOption;
+        };
+        // console.log(cellOption);
         // 组合图采用new_name，下穿图采用name
         const nameType = (cellOption.chartAssignment && cellOption.chartAssignment.val) === 1 ? 'new_name' : 'name';
         const [legend, series] = [[], []];
@@ -302,6 +239,7 @@ export class EchartsService {
         if (cellOption['yHorizontalColumns']) {
             linebarOption['yAxis'][0]['axisLabel']['interval'] = 0;
         };
+        console.log(linebarOption);
         return linebarOption;
     }
 
@@ -311,6 +249,9 @@ export class EchartsService {
      */
     pieOption(cellChart) {
         let cellOption = cellChart['chart'];
+        if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
+            return defaultOption;
+        };
         let [legend, series] = [[], []];
         const [xAxis, yAxis, title] = [cellOption.data['xAxis'], cellOption.data['yAxis'], cellOption.chartName['name']];
         yAxis[0]['data'].forEach((data, i) => {
@@ -480,5 +421,26 @@ export class EchartsService {
         });
         funnelOption['color'] = cellOption['theme'] ? EchartsOption[cellOption['theme']] : EchartsOption['blue'];
         return funnelOption;
+    }
+
+
+    /**
+     * 获取下穿数据
+     * @param data 需要发送给服务器的参数
+     */
+    async getDeepData(data) {
+        const res = await HTTP.getImmediately('/bi/get_deep_bi_data/',data);
+        if (res['success']) {
+
+        } else {
+            alert(res['error'])
+        }
+        return new Promise((resolve, reject) => {
+            if (res['success']=== 1) {
+                resolve(res);
+            } else {
+                reject(res);
+            }
+        })
     }
 }
