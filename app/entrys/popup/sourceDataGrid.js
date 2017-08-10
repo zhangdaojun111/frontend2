@@ -15,5 +15,5 @@ $(document).ready(function(){
         base_buildin_dfield: window.config.base_buildin_dfield || '',
     }
     let DataTableAgGrid=new dataTableAgGrid( json );
-    DataTableAgGrid.render($('body'));
+    DataTableAgGrid.render($('#sourceDataGrid'));
 });
