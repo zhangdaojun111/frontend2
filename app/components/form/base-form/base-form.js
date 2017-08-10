@@ -1005,7 +1005,7 @@ let config={
                 let id = data["id"];
                 let value;
                 for(let obj of data['options']){
-                    if(obj.label == data.value){
+                    if(obj.value == data.value){
                         value=obj.value;
                         break;
                     }
@@ -1178,8 +1178,6 @@ let config={
             $('.select-drop').hide();
         })
         Mediator.subscribe('form:changeValue:'+_this.data.tableId,function(data){
-            console.log('值改变时间');
-            console.log(data);
             _this.actions.checkValue(data,_this);
         })
         Mediator.subscribe('form:history:'+_this.data.tableId,function(data){
