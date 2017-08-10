@@ -57,13 +57,28 @@ let config = {
         this.el.css({"height":"100%","width":"100%"});
         Mediator.on('CalendarMain: date', date => {
             this.el.find('.item-content-2').empty();
-            CalendarService.getWorkflowRecords(date).then(res => {
-                console.log(res);
+            // CalendarService.getWorkflowRecords(date).then(res => {
+            //     console.log(res);
+            //     res['rows'].forEach(row =>{
+            //         this.append(new RightContentWorkFlow(row), this.el.find('.item-content-2'));
+            //     })
+            // }).catch(err=>{
+            //     console.log('error',err);
+            // });
+            CalendarService.getWorkflowRecords( {type: 5,'from_date':date.from_date,'to_date':date.to_date} ).then( res=>{//approve
                 res['rows'].forEach(row =>{
                     this.append(new RightContentWorkFlow(row), this.el.find('.item-content-2'));
                 })
-            }).catch(err=>{
-                console.log('error',err);
+            });
+            CalendarService.getWorkflowRecords( {type: 2,'from_date':date.from_date,'to_date':date.to_date} ).then( res=>{//approving
+                res['rows'].forEach(row =>{
+                    this.append(new RightContentWorkFlow(row), this.el.find('.item-content-2'));
+                })
+            });
+            CalendarService.getWorkflowRecords( {type: 6,'from_date':date.from_date,'to_date':date.to_date} ).then( res=>{//focus
+                res['rows'].forEach(row =>{
+                    this.append(new RightContentWorkFlow(row), this.el.find('.item-content-2'));
+                })
             });
         });
         this.el.on("click",".item-title-1",()=>{
