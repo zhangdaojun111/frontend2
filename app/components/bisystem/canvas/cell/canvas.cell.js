@@ -96,7 +96,6 @@ export class CanvasCellComponent extends BiBaseComponent {
         // 设置cell zindex 为最大
         let self = this;
 
-
         // 返回(下穿)上一层
         this.el.on('click', '.back-floor-btn', (event) => {
             let deepComponentId = this.el.find('.cell-chart').attr('component');
@@ -163,6 +162,7 @@ export class CanvasCellComponent extends BiBaseComponent {
         this.cell['chart'] = res[0];
         this.data = res[0];
         this.cell.chart_id = chartId[0];
+        this.data.biUser = window.config.bi_user === 'client' ? false : true;
         this.reload();
     }
 

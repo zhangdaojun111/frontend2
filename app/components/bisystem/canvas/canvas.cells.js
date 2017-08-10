@@ -106,8 +106,8 @@ let config = {
         });
 
         // 保存视图画布
-        const saveBtn = this.el.find('.views-btn-group');
-        saveBtn.on('click', '.view-save-btn', (event) => {
+        const toolBtns = this.el.find('.views-btn-group');
+        toolBtns.on('click', '.view-save-btn', (event) => {
             let cells = ToolPlugin.clone(this.data.cells);
             const data = {
                 view_id: this.viewId,
@@ -127,7 +127,7 @@ let config = {
         });
 
         //
-        this.el.on('click', '.add-cell-btn', (event) => {
+        toolBtns.on('click', '.add-cell-btn', (event) => {
             this.actions.addCell();
             return false;
         });
