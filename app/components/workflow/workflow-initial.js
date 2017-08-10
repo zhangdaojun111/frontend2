@@ -3,6 +3,7 @@ import template from './workflow-initial.html';
 import './workflow-initial.scss';
 import Mediator from '../../lib/mediator';
 
+
 let config={
     template: template,
     data:{
