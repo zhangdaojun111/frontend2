@@ -2,7 +2,7 @@ import Component from '../../lib/component';
 import template from './workflow-initial.html';
 import './workflow-initial.scss';
 import Mediator from '../../lib/mediator';
-import dataGrid from '../../components/dataGrid/data-table-page/data-table-page'
+
 
 let config={
     template: template,
@@ -10,12 +10,7 @@ let config={
         user:[]
     },
     actions:{
-        myGrid:function () {
-            if(this.el.find("#dataGrid").html()===''){
-                let Grid=new dataGrid();
-                this.append(Grid,"#dataGrid")
-            }
-        }
+
     },
     afterRender(){
         this.el.on('click','#singleFlow',()=>{
@@ -25,7 +20,6 @@ let config={
         });
         this.el.on('click','#multiFlow',()=>{
             Mediator.publish('workflow:autoSaveOpen', 0);
-            this.actions.myGrid()
             this.el.find('#workflow-grid').show();
             this.el.find('#workflow-form').hide();
         });

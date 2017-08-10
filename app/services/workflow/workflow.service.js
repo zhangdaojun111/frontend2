@@ -43,4 +43,9 @@ export const workflowService={
     addStmpImg(params){
         return HTTP.postImmediately('/upload_user_stamp/', params);
     },
+
+    //Grid
+    getGridinfo(params){
+        return HTTP.postImmediately('/get_form_static_data/',params)
+    }
 }

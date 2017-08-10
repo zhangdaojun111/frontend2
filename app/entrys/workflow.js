@@ -18,7 +18,7 @@ import FormEntrys from './form';
 import TreeView from  '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
-import dataGrid from '../components/dataGrid/data-table-page/data-table-page';
+import Grid from '../components/dataGrid/data-table-page/data-table-page';
 
 
 WorkFlowForm.showForm();
@@ -348,4 +348,29 @@ Mediator.subscribe("workflow:delImg",(msg)=>{
         let data = await workflowService.delStmpImg(msg);
     })();
 });
+
+//Grid
+
+Mediator.subscribe('workflow:choose', function (info) {
+    (async function () {
+        return workflowService.getGridinfo({
+            table_id:info.tableid,
+            formId:info.formid,
+            is_view:0,
+            parent_table_id:null,
+            parent_real_id:null,
+            parent_temp_id:null,
+
+        });
+    })().then(function (res) {
+        let AgGrid=new Grid({
+            parentTempId:'',
+            tableId:res.table_id,
+            viewMode:"createBatch"
+        });
+        AgGrid.render($("#J-aggrid"));
+    })
+
+});
+
 

@@ -12,7 +12,7 @@ let config = {
       
     },
     afterRender: function() {
-       // this.append(new dataGrid(),$("#dataGrid") )
+
     }
 }
 
@@ -25,6 +25,7 @@ class WorkFlowGrid extends Component {
 
 export default {
      showGrid(data) {
+
         let component = new WorkFlowGrid();
         let el = $('#workflow-grid');
         component.render(el);
