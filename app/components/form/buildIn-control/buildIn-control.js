@@ -36,7 +36,7 @@ let config={
     firstAfterRender:function(){
         let _this=this;
         Mediator.subscribe('form:dropDownSelect:'+_this.data.tableId,function(data){
-            if(data.dfield !=_this.data.dfield || !_this.data.required){
+            if(data.dfield !=_this.data.dfield){
                 return;
             }
             _this.data=Object.assign(_this.data,data);
@@ -68,7 +68,10 @@ let config={
 export default class BuildInControl extends Component{
     constructor(data){
         super(config,data);
+<<<<<<< HEAD
         // console.log('buildin')
         // console.log(this.data);
+=======
+>>>>>>> 18f2fa878988a16facc1264bdeb7f3827eaaee9d
     }
 }

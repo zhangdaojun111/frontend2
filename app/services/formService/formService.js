@@ -1,4 +1,5 @@
 import {HTTP} from '../../lib/http';
+import alert from '../../lib/msgbox';
 
 export const FormService={
     getCountData:async function(json){
@@ -346,6 +347,12 @@ export const FormService={
     searchByChooser:async function (json) {
         return HTTP.post('selector',json);
     },
+    saveAddpageData:async function (json) {
+        return HTTP.post('add_update_table_data',json);
+    },
+    expEffect:async function (json) {
+        return HTTP.post('eval_exp_fun',json);
+    },
 
     getFormData(json){
         let res;
@@ -363,5 +370,33 @@ export const FormService={
     },
     getDynamicData:async function (json) {
         return HTTP.post( 'get_form_dynamic_data',json )
+    },
+    uploadAttachment:function (url,json,processCallback,successCallback) {
+        HTTP.ajaxImmediately({
+            type:"POST",
+            url: url,
+            data: json,
+            xhr: function () {
+                var myXhr = $.ajaxSettings.xhr();
+                if(myXhr.upload){
+                    myXhr.upload.addEventListener('progress',processCallback,false);
+                }
+                return myXhr;
+            },
+            success: function (data) {
+                successCallback(data);
+            },
+            error: function (error) {
+                alert(error);
+            },
+            async:true,
+            cache:false,
+            contentType:false,
+            processData:false,
+            timeout:60000
+        })
+    },
+    deleteUploaded:function (json) {
+        return HTTP.postImmediately('/delete_attachment/',json);
     }
 }

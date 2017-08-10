@@ -30,7 +30,7 @@ function getLoginController() {
         $usernameInput:$("input[name=username]"),   //用户名输入框
         $passwordInput:$("input[name=password]"),   //密码输入框
         $whitePanel:$(".white-panel"),              //正面面板
-        $oppositePanel:$(".opposite_panel"),        //反面面板
+        $oppositePanel:$(".opposite-panel"),        //反面面板
         $submitFindPw:$(".submit-find-account"),    //查找密码提交按钮
 
         //检测浏览器是否可用
@@ -148,7 +148,7 @@ function getLoginController() {
         versionInit:function () {
             let info = this.versionInfo.rows;
             let $table = this.$versionTable;
-
+            console.log(info);
             for (let obj of info){
                 let $row = $("<tr></tr>");
 
@@ -164,12 +164,27 @@ function getLoginController() {
                 $updateTime.html(obj["update_time"] || '-');
                 $row.append($updateTime);
 
-                let $runStats = $("<td></td>");
+                let $runStats = $("<td class='run-btn'></td>");
                 $runStats.html(obj["run_stats"] || '-');
                 $row.append($runStats);
 
+                let $branch = $("<td class='default-hide'></td>");
+                $branch.html(obj["branch"] || '-');
+                $row.append($branch);
+
+                let $revision = $("<td class='default-hide'></td>");
+                $revision.html(obj["revision"] || '-');
+                $row.append($revision);
+
+                let $message = $("<td class='default-hide'></td>");
+                $message.html(obj["run_message"] || '-');
+                $row.append($message);
+
                 $table.append($row);
             }
+            $(".run-btn").on("click", () => {
+                    $(".default-hide").toggle();
+            })
         },
         infoInit:function () {
             let storage = window.localStorage;

@@ -2,6 +2,7 @@
 // import 'jquery-ui/themes/base/base.css';
 // import 'jquery-ui/themes/base/theme.css';
 import '../assets/scss/main.scss';
+import '../services/main/socket';
 
 import {IframeInstance} from '../components/main/iframes/iframes';
 import {HeaderInstance} from '../components/main/header/header';
@@ -10,6 +11,7 @@ import {AsideInstance} from '../components/main/aside/aside';
 _.defaultsDeep(AsideInstance.data, {
     systemName: window.config.sysConfig.logic_config.sap_login_system_name,
     avatar: window.config.sysConfig.userInfo.avatar,
+    avatar_content:window.config.sysConfig.userInfo.avatar_content,
     username: window.config.sysConfig.userInfo.username,
     role: window.config.sysConfig.userInfo.is_superuser === 1 ? '管理员' : '普通用户'
 })
@@ -125,8 +127,20 @@ HTTP.post('dept2', {did: 123123}).then(function() {
 HTTP.get('dept3', {did: 123123}).then(function() {
     console.log(arguments);
 });
+
 AsideInstance.render($('#aside'));
 IframeInstance.render($('#content'));
 HeaderInstance.render($('#header'));
 
+<<<<<<< HEAD
 HTTP.flush();
+=======
+
+
+// window.setTimeout(function () {
+//     socket.close()
+// }, 1000)
+
+// socket.close()
+
+>>>>>>> 18f2fa878988a16facc1264bdeb7f3827eaaee9d
