@@ -45,6 +45,7 @@ export class CanvasCellComponent extends BiBaseComponent {
         config.data = cell.chart ? cell.chart : null;
         super(config);
         this.cell = cell;
+        this.loadData = false;
     }
 
     /**
@@ -77,8 +78,8 @@ export class CanvasCellComponent extends BiBaseComponent {
             let ev = event.originalEvent;
             let data = JSON.parse(ev.dataTransfer.getData("Text"));
             ev.dataTransfer.clearData("Text");
-            const res = await this.loadChartData([data.id]);
-            console.log(data);
+            this.loadChartData([data.id]);
+            this.loadData = true;
             return false;
         });
 
@@ -150,12 +151,15 @@ export class CanvasCellComponent extends BiBaseComponent {
      * @param id 传递chart_id，从服务器获取chart 数据
      */
     async loadChartData(chartId) {
+        if (this.loadData) {
+            return false;
+        };
         const res = await canvasCellService.getCellChart({chart_id: chartId});
+        this.loadData = false;
         this.cell['chart'] = res[0];
         this.data = res[0];
         this.cell.chart_id = chartId[0];
         this.reload();
-
     }
 
 }
