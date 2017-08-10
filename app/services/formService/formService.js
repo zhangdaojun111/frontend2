@@ -40,7 +40,7 @@ export const FormService={
     },
     getDynamicDataImmediately:async function({tableId,real_id,seqid}){
         return await HTTP.postImmediately({
-            url: `/get_form_dynamic_data/?seqid=${seqid}&table_id=${tableId}&is_extra=&form_id=`,
+            url: `http://192.168.2.223:9001/get_form_dynamic_data/?seqid=${seqid}&table_id=${tableId}&is_extra=&form_id=`,
             type: "POST",
             data: {
                 form_id:'',
