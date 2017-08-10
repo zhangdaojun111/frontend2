@@ -6,6 +6,8 @@ import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import msgBox from '../../../../lib/msgbox';
 import agGrid from "../../agGrid/agGrid";
 import {dataTableService} from "../../../../services/dataGrid/data-table.service";
+import {workflowService} from "../../../../services/workflow/workflow.service";
+import {FormService} from "../../../../services/formService/formService";
 import {dgcService} from "../../../../services/dataGrid/data-table-control.service";
 import {fieldTypeService} from "../../../../services/dataGrid/field-type-service";
 import FloatingFilter from "../../data-table-toolbar/floating-filter/floating-filter";
@@ -1325,6 +1327,7 @@ let config = {
             }
             //内置相关查看原始数据用
             if( data.event.srcElement.id == 'relatedOrBuildin' ){
+                console.log( "内置相关穿透" )
                 let obj = {
                     tableId: data.colDef.source_table_id,
                     tableName: data.colDef.source_table_name,
@@ -1336,19 +1339,41 @@ let config = {
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
                 let winTitle = this.data.tableName + '->' + obj.tableName;
-                PMAPI.openDialogByIframe( url,{
-                    width: 1300,
-                    height: 800,
-                    title: winTitle,
-                    modal:true
-                } ).then( (data)=>{
-                } )
+                this.actions.openSourceDataGrid( url,winTitle );
             }
             //对应关系查看
             if(data.colDef.real_type == fieldTypeService.CORRESPONDENCE && data.value.toString().length && data.event.target.id == "correspondenceClick"){
+                console.log( '对应关系穿透' )
+                let json = {
+                    form_id:'',
+                    table_id:this.data.tableId,
+                    is_view:1,
+                    parent_table_id:'',
+                    parent_real_id:'',
+                    parent_temp_id:'',
+                    real_id: data['data']['_id']
+                }
+
+                FormService.getDynamicData( json ).then( res=>{
+                    let obj = {
+                        tableId: data.colDef.field_content.correspondence_table_id,
+                        tableName: data.colDef.field_content.table_name,
+                        parentTableId: this.data.tableId,
+                        parentTempId: res.data.temp_id.value,
+                        tableType: '',
+                        viewMode: 'viewFromCorrespondence',
+                        rowId: data.data._id,
+                        parentRealId: data.data._id
+                    }
+                    let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
+                    let winTitle = this.data.tableName + '->' + obj.tableName;
+                    this.actions.openSourceDataGrid( url,winTitle );
+                } )
+                HTTP.flush();
             }
             //统计
             if( fieldTypeService.countTable(data.colDef.dinput_type,data.colDef.real_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
+                console.log( '统计穿透' )
                 let obj = {
                     tableId: data.colDef.field_content.count_table,
                     tableName: data.colDef.field_content.count_table_name,
@@ -1361,13 +1386,7 @@ let config = {
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
                 let winTitle = this.data.tableName + '->' + obj.tableName;
-                PMAPI.openDialogByIframe( url,{
-                    width: 1300,
-                    height: 800,
-                    title: winTitle,
-                    modal:true
-                } ).then( (data)=>{
-                } )
+                this.actions.openSourceDataGrid( url,winTitle );
             }
             // 子表
             if( fieldTypeService.childTable(data.colDef.dinput_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
@@ -1384,14 +1403,18 @@ let config = {
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
                 let winTitle = this.data.tableName + '->' + obj.tableName;
-                PMAPI.openDialogByIframe( url,{
-                    width: 1300,
-                    height: 800,
-                    title: winTitle,
-                    modal:true
-                } ).then( (data)=>{
-                } )
+                this.actions.openSourceDataGrid( url,winTitle );
             }
+        },
+        //打开穿透数据弹窗
+        openSourceDataGrid: function ( url,title ) {
+            PMAPI.openDialogByIframe( url,{
+                width: 1300,
+                height: 800,
+                title: title,
+                modal:true
+            } ).then( (data)=>{
+            } )
         }
     },
     afterRender: function () {
