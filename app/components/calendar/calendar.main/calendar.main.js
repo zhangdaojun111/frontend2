@@ -190,6 +190,7 @@ let config = {
                     }
                 }
             }
+
             // else if( this.data.calendarContent === 'schedule' ){
             //     for( let day of this.scheduleDataList ){
             //         for( let d of day['data'] ){
@@ -205,11 +206,10 @@ let config = {
             //         }
             //     }
             // }
-
             this.data.remindCount = i;
             this.data.workflowCount = w;
-            this.data.missionCount = m;
-
+            this.el.find('.remind-num').html(this.data.remindCount);
+            this.el.find('.approval-num').html(this.data.workflowCount);
             // if( this.firstFlash ){
             //     setTimeout( ()=>{
             //         this.isShowLoading = false;
