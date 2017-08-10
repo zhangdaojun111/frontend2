@@ -60,8 +60,6 @@ export class CanvasCellComponent extends BiBaseComponent {
     }
 
     afterRender() {
-
-
         this.renderCell();
         this.cellDragandResize();
 
@@ -70,17 +68,17 @@ export class CanvasCellComponent extends BiBaseComponent {
             return false;
         });
 
-        this.el.on('dragover', function (event) {
+        this.el.on('dragover', (event) => {
             let ev = event.originalEvent;
             ev.preventDefault();
             return true;
         });
-
         this.el.on('drop', async (event) => {
             let ev = event.originalEvent;
             let data = JSON.parse(ev.dataTransfer.getData("Text"));
             ev.dataTransfer.clearData("Text");
-            this.loadChartData([data.id]);
+            const res = await this.loadChartData([data.id]);
+            console.log(data);
             return false;
         });
 
