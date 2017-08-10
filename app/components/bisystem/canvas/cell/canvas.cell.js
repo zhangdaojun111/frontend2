@@ -74,6 +74,7 @@ export class CanvasCellComponent extends BiBaseComponent {
             ev.preventDefault();
             return true;
         });
+
         this.el.on('drop', async (event) => {
             let ev = event.originalEvent;
             let data = JSON.parse(ev.dataTransfer.getData("Text"));
