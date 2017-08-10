@@ -20,6 +20,7 @@ import SettingTextareaControl from "../setting-textarea-control/setting-textarea
 import AddItem from '../add-item/add-item';
 import {PMAPI} from '../../../lib/postmsg';
 import History from'../history/history'
+import AttachmentControl from "../attachment-control/attachment-control";
 
 let config={
     template:'',
@@ -1131,6 +1132,11 @@ let config={
                     let settingTextareaControl = new SettingTextareaControl(data[key]);
                     settingTextareaControl.render(single);
                     _this.childComponent[data[key].dfield] = settingTextareaControl;
+                    break;
+                case 'Attachment':
+                    let attachmentControl = new AttachmentControl(data[key]);
+                    attachmentControl.render(single);
+                    _this.childComponent[data[key].dfield] = attachmentControl;
                     break;
             }
         }
