@@ -178,8 +178,9 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
 var mockFlowData;
 
 (async function () {
-    return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=wenjingjing_1502270451650&record_id=',data:{
-        flow_id:30
+    return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
+        flow_id:32,
+        record_id:'59897f02c3ec2134050ee6a7'
     }});
 })().then(res=>{
     Mediator.publish('workflow:gotWorkflowInfo', res);
