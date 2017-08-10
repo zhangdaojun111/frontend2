@@ -43,6 +43,7 @@ export class CanvasCellComponent extends BiBaseComponent {
 
     constructor(cell) {
         config.data = cell.chart ? cell.chart : null;
+        config.data.biUser = window.config.bi_user === 'client' ? false : true;
         super(config);
         this.cell = cell;
         this.loadData = false;
@@ -62,8 +63,16 @@ export class CanvasCellComponent extends BiBaseComponent {
 
     afterRender() {
         this.renderCell();
-        this.cellDragandResize();
-
+        if (window.config.bi_user !== 'client') {
+            this.cellDragandResize();
+            this.el.on('mousedown', '.cell', function () {
+                self.cell.canvas.data.cellMaxZindex++;
+                let zIndex = self.cell.canvas.data.cellMaxZindex;
+                $(this).css('zIndex', zIndex);
+            }).on('mouseup', '.cell', function () {
+                self.cell.size.zIndex = self.cell.canvas.data.cellMaxZindex;
+            });
+        };
         this.el.on('click', '.del-cell-btn', (event) => {
             this.delCellLayout();
             return false;
@@ -86,13 +95,7 @@ export class CanvasCellComponent extends BiBaseComponent {
 
         // 设置cell zindex 为最大
         let self = this;
-        this.el.on('mousedown', '.cell', function () {
-            self.cell.canvas.data.cellMaxZindex++;
-            let zIndex = self.cell.canvas.data.cellMaxZindex;
-            $(this).css('zIndex', zIndex);
-        }).on('mouseup', '.cell', function () {
-            self.cell.size.zIndex = self.cell.canvas.data.cellMaxZindex;
-        });
+
 
         // 返回(下穿)上一层
         this.el.on('click', '.back-floor-btn', (event) => {

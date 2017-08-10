@@ -61,12 +61,20 @@ let config = {
             cell['canvas'] = this;
             this.instantiationCell(cell);
             this.data.cells.push(cell);
+        },
+
+        /**
+         * 初始化加载cell(仅加载一次)
+         */
+        async getCellLayout() {
+            const cells = await canvasCellService.getCellLayout({view_id: this.viewId});
+            this.data.cells = cells['data'];
+            this.actions.loadCells();
         }
 
     },
 
     afterRender() {
-
         //加载头部导航
         if(config.data.canvasSingle){
             this.data.views.forEach((val,index) => {
@@ -95,10 +103,11 @@ let config = {
                     break;
                 };
             }
-        });
+        });``
 
         // 保存视图画布
-        this.el.on('click', '.view-save-btn', (event) => {
+        const saveBtn = this.el.find('.views-btn-group');
+        saveBtn.on('click', '.view-save-btn', (event) => {
             let cells = ToolPlugin.clone(this.data.cells);
             const data = {
                 view_id: this.viewId,
@@ -138,39 +147,26 @@ let config = {
         }).on('click', '.btn-multip', function(){
             let url = window.location.hash;
             window.location.href = `/bi/index/${url}`;
-        })
+        });
 
+        this.actions.getCellLayout()
         //多页跳转隐藏
         // $('.btn-multip').click(function () {
         //     $(this).hide();
         //     $('.btn-single').hide();
         // })
     },
-
-    /**
-     * 初始化加载cell(仅加载一次)
-     */
-    async firstAfterRender() {
-        const cells = await canvasCellService.getCellLayout({view_id: this.viewId});
-        this.data.cells = cells['data'];
-        this.actions.loadCells();
-    },
-
-
 };
 
 export class CanvasCellsComponent extends BiBaseComponent{
     constructor(id) {
-
         if(window.location.search!==""){
             config.data.canvasSingle = false;
         } else {
             config.data.canvasSingle = true;
-        }
-
+        };
         super(config);
         this.viewId = id ? id : this.data.views[0] ? this.data.views[0]['id'] : [] ;
-
     };
 
     /**

@@ -5,6 +5,7 @@ import {Router} from 'backbone';
 import {CanvasCellsComponent} from './canvas/canvas.cells';
 import {ViewsEditComponent} from "./views/views.edit";
 
+let component;
 const BiAppRouter = Backbone.Router.extend({
     routes: {
         'views/edit':"routerViewsEditComponent",
@@ -12,8 +13,15 @@ const BiAppRouter = Backbone.Router.extend({
         '':'routerViewsComponent',
     },
     routerViewsComponent(id) {
-        let CanvasCells = new CanvasCellsComponent(id);
-        CanvasCells.render($('#route-outlet'));
+        if (component) {
+            component.destroyChildren();
+            component.viewId = id;
+            component.reload();
+        } else {
+            let CanvasCells = new CanvasCellsComponent(id);
+            component = CanvasCells;
+            CanvasCells.render($('#route-outlet'));
+        }
     },
     routerViewsEditComponent() {
         let ViewsEdit = new ViewsEditComponent();
