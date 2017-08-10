@@ -1,0 +1,46 @@
+$boder-color: #ddd;
+.calendar-set-container {
+    width: 100%;
+    padding: 0px 10px;
+    .set-tool {
+        margin: 8px 0px;
+        .set-btn {
+            padding: 5px 12px;
+            display: inline-block;
+            border: 1px solid #c5dbec;
+            background: #0F79EF;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .disabled {
+            pointer-events: none;
+            cursor: default;
+            opacity: 0.6;
+        }
+        .hide-btns {
+            display: inline-block;
+            visibility: hidden;
+            .cancel-btn {
+                background-color: #ff0000;
+            }
+        }
+    }
+    .calendar-set-content {
+        //border-top: 1px solid $boder-color;
+        table{
+            width:100%;
+            tr {
+                //width: calc(100% - 40px);
+                border-top: 1px solid $boder-color;
+                display: block;
+                padding: 0px 20px;
+            }
+            td {
+                padding: 8px 0px;
+                text-align: center;
+            }
+        }
+
+    }
+}
