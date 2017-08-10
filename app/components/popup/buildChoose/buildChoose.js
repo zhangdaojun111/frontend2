@@ -70,6 +70,7 @@ let config={
         HTTP.flush();
         _this.el.on('click','a',function(){
             _this.data.selected={value:$(this).data('value'),label:$(this).html()};
+            FormEntry.destoryAll();
             FormEntry.createForm({
                 table_id:_this.data.source_table_id,
                 form_id:'',

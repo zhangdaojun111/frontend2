@@ -8,6 +8,7 @@ function GetQueryString(name)
 $(document).ready(function(){
     let fieldId=GetQueryString('fieldId');
     let key=GetQueryString('key');
+    let el=$('<div></div>').appendTo($('body'));
     let buildChoose=new BuildChoose({fieldId:fieldId,key:key});
-    buildChoose.render($('body'));
+    buildChoose.render(el);
 });

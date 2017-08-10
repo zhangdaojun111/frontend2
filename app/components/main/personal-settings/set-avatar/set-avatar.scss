@@ -40,6 +40,8 @@ $sub_color:#0088ff;
         overflow: hidden;
         margin-top: 10px;
         margin-left: 75px;
+        background-repeat: no-repeat;
+
         img{
             width: 350px;
             height: 350px;
@@ -59,8 +61,8 @@ $sub_color:#0088ff;
     }
 
     .drag-result{
-        width: 60px;
-        height: 60px;
+        width: 64px;
+        height: 64px;
         margin-top: 20px;
         margin-left: 230px;
         overflow: hidden;

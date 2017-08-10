@@ -26,7 +26,6 @@ let config = {
             this.data.display = false;
         },
         onItemClick: function() {
-            console.log(this.data);
             if (this.data.items && this.data.items.length) {
                 if (this.data.type === 'full') {
                     if (this.data.display === true) {
@@ -36,8 +35,9 @@ let config = {
                     }
                 }
             } else {
+                let key = this.data.ts_name || this.data.table_id;
                 Mediator.emit('menu:item:openiframe', {
-                    id: this.data.mid,
+                    id: key,
                     name: this.data.label,
                     url: this.data.url
                 });

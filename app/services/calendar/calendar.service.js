@@ -95,7 +95,7 @@ export const CalendarService = {
      */
     getWorkflowRecords: function (data) {
         let params = {
-            type: 5,
+            type: data['type'],
             rows: 9999,
             page: 1,
             rate_data: 1,

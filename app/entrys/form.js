@@ -4,11 +4,32 @@ import {FormService} from "../services/formService/formService";
 import '../components/form/base-form/base-form.scss'
 import '../assets/scss/form.scss'
 
+let FormEntrys = {
+    childForm:{},
+    init(config={}){
+        this.tableId='';
+        this.parentRealId='';
+        this.parentTempId='';
+        this.seqId='';
+        this.realId='';
+        this.parentTableId='';
+        this.parentRecordId='';
+        this.isView= 0;
+        this.isBatch= 0;
+        this.recordId='';
+        this.action='';
+        this.el='';
+        this.reloadDraftData=0;
+        this.formId='';
+        this.fromWorkFlow=0;
+        this.flowId='';
+        this.fieldId='';
+        this.key='';
+        this.fromApprove='';
+        this.formFocus='';
+        this.isAddBuild=0;
+        this.buildId='';
 
-// @parma
-//
-let FormEntrys={
-    init:function(config={}){
         this.tableId=config.table_id||'';
         this.parentRealId=config.parent_real_id||'';
         this.parentTempId=config.parent_temp_id||'';
@@ -29,7 +50,8 @@ let FormEntrys={
         this.key=config.key||'';
         this.fromApprove=config.from_approve||'';
         this.formFocus=this.from_focus||'';
-
+        this.isAddBuild=this.isAddBuild || 0;
+        this.buildId=this.buildId || '';
     },
     hasKeyInFormDataStatic:function (key,staticData){
     let isExist = false;
@@ -161,11 +183,12 @@ let FormEntrys={
     staticData.tableId=this.tableId;
     staticData.formId=this.formId;
     staticData.flowId=this.flowId;
+    staticData.isBatch=this.isBatch;
     staticData.key=this.key;
     return staticData;
 },
     //处理字段数据
-    parseRes:function (res){
+    parseRes (res){
     if(res !== null){
         let formData = res["data"];
         if(formData.length != 0){
@@ -230,9 +253,17 @@ let FormEntrys={
         </table>`
     return html;
 },
-
+    destoryAll(){
+        for(let key in this.childForm){
+            this.childForm[key].destroySelf();
+            delete this.childForm[key];
+        }
+    },
     destoryForm(tableID){
-        $(`#form-${tableID}`).remove();
+        if(this.childForm[tableID]){
+            this.childForm[tableID].destroySelf();
+            delete this.childForm[tableID];
+        }
     },
     //创建表单入口
     createForm:function(config={}){
@@ -269,25 +300,30 @@ let FormEntrys={
     },
 
     //审批删除时重置表单可编辑性
-    editDelWorkFlow(formId){
-        this.formBase.actions.editDelWork(formId);
+    editDelWorkFlow(tableId,formId){
+        this.childForm[tableId].actions.editDelWork(formId);
     },
 
     //接收关注人信息
-    setUserIdList(data){
-        this.formBase.data.focus_users=data;
+    setUserIdList(tableId,data){
+        if(!this.childForm[tableId]){
+            return;
+        }
+        this.childForm[tableId].data.focus_users=data;
     },
 
-    getFormValue(){
-        return this.formBase.actions.getFormValue();
-    },
-
-
+    getFormValue(tableId){
+        if(!this.childForm[tableId]){
+            return;
+        }
+        return this.childForm[tableId].actions.getFormValue();
+    }
 }
 
 $('#toEdit').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
         seqId:'yudeping',
@@ -299,6 +335,7 @@ $('#toEdit').on('click',function(){
 $('#text').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'1285_pkz2teyhHCztFrYhoc6F54',
         seqId:'yudeping',
@@ -310,8 +347,9 @@ $('#text').on('click',function(){
 $('#count').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
-        table_id:'7051_UoWnaxPaVSZhZcxZPbEDpG',
+        table_id:'8390_35R9y7J5uVULgczYyZvqvB',
         seqId:'yudeping',
         el:$('body'),
         is_view:isView,
@@ -321,6 +359,7 @@ $('#count').on('click',function(){
 $('#editRequired').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'3461_P28RYPGTGGE7DVXH8LBMHe',
         seqId:'yudeping',
@@ -332,6 +371,7 @@ $('#editRequired').on('click',function(){
 $('#defaultValue').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'1160_ex7EbDsyoexufF2UbXBmSJ',
         seqId:'yudeping',
@@ -343,6 +383,7 @@ $('#defaultValue').on('click',function(){
 $('#valid').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'2638_urGGDDp75VvymeqWj3eo6F',
         seqId:'yudeping',
@@ -354,6 +395,7 @@ $('#valid').on('click',function(){
 $('#exp').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         seqId:'yudeping',
         el:$('body'),
@@ -366,6 +408,7 @@ $('#exp').on('click',function(){
 $('#workflow').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'449_6k2VdLn4ArCfgFPuAjFrNQ',
         seqId:'yudeping',
@@ -378,12 +421,11 @@ $('#lalala').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
     let tableId=$('#tableId').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:tableId,
-        seqId:'yudeping',
+        seqId:'zengjing',
         el:$('body'),
-        is_view:isView,
-        real_id:realId
     });
 })
 export default FormEntrys

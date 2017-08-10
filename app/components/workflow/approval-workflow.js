@@ -6,6 +6,8 @@ import WorkFlow from './workflow-drawflow/workflow';
 import WorkflowSeal from './workflow-seal/workflow-seal';
 import {workflowService} from '../../services/workflow/workflow.service';
 import msgBox from '../../lib/msgbox';
+import AddSigner from './add-signer';
+
 let config={
     template: template,
     data:{
@@ -14,7 +16,8 @@ let config={
         action:0,
         comment:'',
         node_id:null,
-        workflowData:null
+        workflowData:null,
+        sigh_user_id:'',
     },
     actions:{
         approveWorkflow (__this){
@@ -154,13 +157,50 @@ let config={
         this.el.on('click','#rej .draged-item',function(){
             WorkFlow.rejectNode(this);
         });
+        this.el.on('click','#app-add',()=>{
+            this.el.find('.addUser').show();
+        });
+        this.el.on('click','.addUser .close',()=>{
+            this.el.find('.addUser').hide();
+        });
 
         Mediator.subscribe("workflow:sendImgInfo",(e)=>{
             this.data.imgInfo=e;
         })
 
+        Mediator.subscribe('workflow:checkAdder', (res)=> {
+            $.each(res,(i,val)=>{
+                val.id=i;
+                this.append(new AddSigner(val), this.el.find('#addUsercheck'));
+            });
+        });
 
-
+        Mediator.subscribe('workflow:unCheckAdder', (res)=> {
+            let userArr=[];
+            for(var id in res){
+                userArr.push(id);
+            }
+            let domDiv=this.el.find('#addUsercheck').find('.flex');
+            for(var i=0;i<domDiv.length;i++){
+                for(var j=0;j<userArr.length;j++){
+                    if($(domDiv[i]).data('id')===userArr[j]){
+                        $(domDiv[i]).parent().remove();
+                    }
+                }
+            }
+            
+        });
+        this.el.on('click','[name="addUser"]',function(){
+            __this.data.sigh_user_id=this.value;
+            __this.el.find('#subAdder').removeAttr('disabled');
+        });
+        this.el.on('click','#subAdder',function(){
+            let sigh_type=__this.el.find('[name="addHandlerType"]:checked').val();
+            Mediator.publish("approval:signUser",{
+                sigh_type,
+                sigh_user_id:__this.data.sigh_user_id
+            });
+        });
 
     }
 };
@@ -175,6 +215,5 @@ let el = $('#approval-workflow');
 component.render(el);
 
 Mediator.subscribe("workflow:getStampImg",(msg)=>{
-    console.log(msg);
     WorkflowSeal.showheader(msg);
 })

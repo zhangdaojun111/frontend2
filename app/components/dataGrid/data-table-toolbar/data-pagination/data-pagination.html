@@ -1,25 +1,29 @@
-<div style="text-align:left;height:24px;position: relative;">
+<div style="text-align:left;height:30px;position: relative;line-height: 30px;">
     <!--切换每页显示数量-->
-    <select class="selectSize">
+    <div class="left">
+    <select class="selectSize" style="font-size: 12px">
         {{#each options}}
         <option>{{this}}</option>
         {{/each}}
     </select>
-     <span class="page-details">共<span style="padding: 0 5px;font-weight:bolder;">{{total}}</span>条数据</span>
+     <span class="page-details">共<span style="padding: 0 4px;">{{total}}</span>条数据</span>
     <!-- 刷新页面 -->
-    <span class="ui-icon-refresh">刷新</span>
+    <span class="ui-icon-refresh"><img src="../../../../assets/images/dataGrid/icon_shuaxin_blue.png"/> </span>
+    </div>
+    <div class="page">
     <!--最后一页-->
-    <span  class="goLast" style="margin-left:5px;float: right;">》</span>
+    <span  class="goLast" style="margin-left:5px;margin-right: 20px;float: right;"><img src="../../../../assets/images/dataGrid/icon_xiayiye.png" height="16" width="16"/></span>
     <!--下一页-->
-    <span class="goNext" style="margin-left:5px;float: right;"><span style="color: rgb(14,122,239);">下一页</span>
+    <span class="goNext" style="margin-left:5px;float: right;"><span>下一页</span>
     </span>
     <!--当前页面-->
     <span style="margin-top:-2px;float:right;"><span class="current-page">{{currentPage}}</span></span>
     <!--上一页-->
-    <span  class="goPre" style="margin-left:4px;float:right;" style="color: rgb(14,122,239);">上一页</span></span>
+    <span  class="goPre" style="margin-left:4px;float:right;"> <span>上一页</span></span>
     <!--最前一页-->
-    <span class="goFirst" style="margin-left:4px;float:right;">《</span>
-
+    <span class="goFirst" style="margin-left:4px;float:right;"><img class="ui-icon-goFirst"
+            src="../../../../assets/images/dataGrid/icon_shangyiye.png" height="16" width="16"/></span>
+    </div>
     <!--更改页码-->
     <span class="selectPage">
         <span>

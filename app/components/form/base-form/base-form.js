@@ -1,4 +1,5 @@
 import Component from '../../../lib/component';
+import MSG from '../../../lib/msgbox';
 import './base-form.scss';
 import TextArea from '../textarea-control/textarea-area'
 import Radio from '../radio-control/radio-control';
@@ -20,6 +21,9 @@ import SettingTextareaControl from "../setting-textarea-control/setting-textarea
 import AddItem from '../add-item/add-item';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import History from'../history/history'
+import AddEnrypt from '../encrypt-input-control/add-enrypt'
+import {md5} from '../../../services/login/md5';
+import AttachmentControl from "../attachment-control/attachment-control";
 
 let config={
     template:'',
@@ -40,7 +44,7 @@ let config={
     },
     childComponent:{},
     actions:{
-
+        md5:md5,
         //返回formValue格式数据
         getFormValue(){
             return this.actions.createFormValue(this.data.data);
@@ -49,7 +53,7 @@ let config={
         //根据dfield查找类型
         findTypeByDfield(dfield) {
             let type = '';
-            for(let obj of this.formData) {
+            for(let obj of this.data.formData) {
                 if(obj["dfield"] == dfield) {
                     type = obj["type"];
                 }
@@ -63,17 +67,18 @@ let config={
                 let type = this.actions.findTypeByDfield(key);
                 let val = data[key];
                 let parentTempId = data["parent_temp_id"];
-                if((this.globalService.idsInChildTableToParent[this.tableId] && this.globalService.idsInChildTableToParent[this.tableId].indexOf(key) != -1 ) && val != "" && parentTempId != "" && (type == 'Buildin' || type == 'Select')) {
-                    data[key] = data["parent_temp_id"];
-                }
+                // if((this.globalService.idsInChildTableToParent[this.tableId] && this.globalService.idsInChildTableToParent[this.tableId].indexOf(key) != -1 ) && val != "" && parentTempId != "" && (type == 'Buildin' || type == 'Select')) {
+                //     data[key] = data["parent_temp_id"];
+                // }
             }
         },
 
         //创建cache数据
         createCacheData ( formData , val , isNew , com){
             let obj = {};
-            for( let data of formData ){
+            for( let key in formData ){
                 //自增编号old_cache置为空
+                let data=formData[key];
                 if( data.dinput_type && data.dinput_type == '14' && !isNew ){
                     obj[data.dfield] = "";
                 }
@@ -162,9 +167,9 @@ let config={
             let errorMsg = "";
             for(let key in formValue) {
                 //如果该dfield是父表填充子表的，那就不验证
-                if(this.idsOfSonDataByParent.indexOf(key) != -1){
-                    continue;
-                }
+                // if(this.idsOfSonDataByParent.indexOf(key) != -1){
+                //     continue;
+                // }
                 let type = allData[key]["type"];
                 if( type == 'songrid' ){
                     continue;
@@ -188,10 +193,10 @@ let config={
                         }
                     }
                 }
-                if(val.toString() != "" && allData[key]["numArea"] !== ""){
+                if(val.toString() != "" && allData[key]["numArea"]){
                     let label = allData[key]["label"];
-                    let minNum = allData[key]["numArea"]["min"];
-                    let maxNum = allData[key]["numArea"]["max"];
+                    let minNum = allData[key]["numArea"]["min"]||'';
+                    let maxNum = allData[key]["numArea"]["max"]||'';
                     let errorInfo = allData[key]["numArea"]["error"];
                     if(minNum !== "" && maxNum === ""){
                         if(val < minNum){
@@ -227,7 +232,9 @@ let config={
                 }
                 if(val != "" && !$.isEmptyObject(allData[key]["func"])){
                     for(let r in allData[key]["func"]) {
-                        let flag = this[r](val);
+                        console.log('rrr');
+                        console.log(r);
+                        let flag = FormService[r](val);
                         if(!flag){
                             error = true;
                             errorMsg = allData[key]["func"][r];
@@ -235,7 +242,7 @@ let config={
                         }
                     }
                 }
-                if(allData[key]["real_type"] == this.globalService.FLOAT_TYPE){
+                if(allData[key]["real_type"] == 10){
                     if(formValue[key] >= 100000000000) {
                         error = true;
                         errorMsg = "小数不能超过12位！无法保存！";
@@ -325,8 +332,8 @@ let config={
                         }
                     }
                 }
-                //告诉外围现在正在读取默认值
-                // this.wfService.isReadDefaultData.next(false);
+                    //告诉外围现在正在读取默认值
+                    // this.wfService.isReadDefaultData.next(false);
             }
         },
 
@@ -482,40 +489,71 @@ let config={
             if(!data["effect"] || !data["effect"].length>0){
                 return;
             }
-            for(let f of data["effect"]) {
-                //如果这个字段存在的话，再进行下面的逻辑
-                let expression;
-                if(this.data.data.hasOwnProperty(f)) {
-                    let expressionStr = this.data.data[f]["expression"];
-                    let real_type = this.data.data[f]["real_type"];
-                    if(expressionStr !== ""){
-                        expression = this.actions.replaceSymbol(expressionStr);
-                        try {
-                            if (expression.indexOf("$^$")==-1){
-                                try {
-                                    if(this.data[expressionStr.split("@")[1]]["is_view"] != 1){
-                                        this.actions.set_value_for_form(eval(expression), f);
-                                    }
-                                } catch (e) {
-                                    send_exps.push({"f": f, "expression": expression,"real_type":real_type});
-                                }
-                            }else{
-                                send_exps.push({"f": f, "expression": expression,"real_type":real_type});
-                            }
-                        } catch (e) {
-                            console.error("没有解析成功，1,解析错误2，可能是没有此函数"+e);
-                        }
-                    }
+            let fields = {};
+            let continue_key = ["parent_real_id", "parent_table_id", "parent_temp_id", "real_id", "table_id", "temp_id"];
+            let need_key = ["id", "dfield", "effect", "expression", "dinput_type", "real_type"];
+            for (let f in this.data.data){
+                if (continue_key.indexOf(f)!=-1){
+                    continue
+                }
+                let temp_field = this.data.data[f];
+                fields[f] = {}
+                for (let i in need_key){
+                    fields[f][need_key[i]] = temp_field[need_key[i]];
                 }
             }
-            if (send_exps.length!=0) {
-                let _this=this;
-                FormService.get_exp_value(encodeURIComponent(JSON.stringify(send_exps))).then(res=>{
-                    for (let j in res['data']){
-                        _this.actions.set_value_for_form(res['data'][j], j);
-                    }
-                });
+            let new_data = {};
+            let old_data = this.actions.createFormValue(this.data.data);
+            for (let d in old_data){
+                if (continue_key.indexOf(d)!=-1){
+                    continue
+                }
+                new_data[d] = old_data[d];
             }
+            FormService.expEffect({
+                data:new_data,
+                fields: fields,
+                change_fields:[data.id]
+            }).then(res=>{
+                for (let j in res['data']){
+                   this.actions.set_value_for_form(res['data'][j], j);
+                }
+            });
+            HTTP.flush();
+            // for(let f of data["effect"]) {
+            //     //如果这个字段存在的话，再进行下面的逻辑
+            //     let expression;
+            //     if(this.data.data.hasOwnProperty(f)) {
+            //         let expressionStr = this.data.data[f]["expression"];
+            //         let real_type = this.data.data[f]["real_type"];
+            //         if(expressionStr !== ""){
+            //             expression = this.actions.replaceSymbol(expressionStr);
+            //             try {
+            //                 if (expression.indexOf("$^$")==-1){
+            //                     try {
+            //                         if(this.data[expressionStr.split("@")[1]]["is_view"] != 1){
+            //                             this.actions.set_value_for_form(eval(expression), f);
+            //                         }
+            //                     } catch (e) {
+            //                         send_exps.push({"f": f, "expression": expression,"real_type":real_type});
+            //                     }
+            //                 }else{
+            //                     send_exps.push({"f": f, "expression": expression,"real_type":real_type});
+            //                 }
+            //             } catch (e) {
+            //                 console.error("没有解析成功，1,解析错误2，可能是没有此函数"+e);
+            //             }
+            //         }
+            //     }
+            // }
+            // if (send_exps.length!=0) {
+            //     let _this=this;
+            //     FormService.get_exp_value(encodeURIComponent(JSON.stringify(send_exps))).then(res=>{
+            //         for (let j in res['data']){
+            //             _this.actions.set_value_for_form(res['data'][j], j);
+            //         }
+            //     });
+            // }
         },
 
         //改变选择框的选项
@@ -580,11 +618,7 @@ let config={
         //创建表单数据格式
         createFormValue(data){
             let formValue={};
-            // console.log(data);
             for(let key in data){
-                if(!data[key].value || !data[key].value.length || data[key].value.length == 0){
-                    continue;
-                }
                 formValue[key]=data[key].value;
             }
             return formValue;
@@ -617,8 +651,8 @@ let config={
         //处理表单数据，根据real_type转换数据
         handleFormData(formData) {
             for(let dfield in formData){
-                if(this.newData[dfield]["real_type"]){
-                    if(this.newData[dfield]["real_type"] == 10 || this.newData[dfield]["real_type"] == 11){
+                if(this.data.data[dfield]["real_type"]){
+                    if(this.data.data[dfield]["real_type"] == 10 || this.data.data[dfield]["real_type"] == 11){
                         try {
                             let result;
                             if(formData[dfield] != ""){
@@ -628,10 +662,10 @@ let config={
                                 formData[dfield] = Number(formData[dfield]);
                             }
                         } catch (e) {
-                            console.error("转换数字类型失败",this.selector);
+                            console.error("转换数字类型失败");
                         }
                     }
-                    if(this.newData[dfield]["real_type"] == 5&& !!formData[dfield] ){
+                    if(this.data.data[dfield]["real_type"] == 5&& !!formData[dfield] ){
                         formData[dfield] = formData[dfield].replace("T"," ");
                     }
                 }
@@ -660,35 +694,35 @@ let config={
         },
         //给相关赋值
         async setAboutData(id,value) {
-            // let res=await HTTP.postImmediately({
-            //     url: 'http://127.0.0.1:8081/get_about_data/',
-            //     data: {
-            //         buildin_field_id: id,
-            //         buildin_mongo_id: value
-            //     }
-            // })
-            //
-            FormService.getAboutData({
-                buildin_field_id: id,
-                buildin_mongo_id: value
-            }).then(res=>{
-                //给相关的赋值
-                for(let k in res["data"]){
-                    //如果是周期规则
-                    if(this.data.data.hasOwnProperty(k) && this.data.data[k].hasOwnProperty("real_type") && this.data.data[k]["real_type"] == '27') {
-                        if(res["data"][k]["-1"]){
-                            this.actions.setFormValue.bind(this)(k,res["data"][k]["-1"]);
+                // let res=await HTTP.postImmediately({
+                //     url: 'http://127.0.0.1:8081/get_about_data/',
+                //     data: {
+                //         buildin_field_id: id,
+                //         buildin_mongo_id: value
+                //     }
+                // })
+                //
+                FormService.getAboutData({
+                            buildin_field_id: id,
+                            buildin_mongo_id: value
+                    }).then(res=>{
+                    //给相关的赋值
+                        for(let k in res["data"]){
+                            //如果是周期规则
+                            if(this.data.data.hasOwnProperty(k) && this.data.data[k].hasOwnProperty("real_type") && this.data.data[k]["real_type"] == '27') {
+                                if(res["data"][k]["-1"]){
+                                    this.actions.setFormValue.bind(this)(k,res["data"][k]["-1"]);
+                                }
+                            }else{
+                                this.actions.setFormValue.bind(this)(k,res["data"][k]);
+                            }
                         }
-                    }else{
-                        this.actions.setFormValue.bind(this)(k,res["data"][k]);
-                    }
-                }
-            })
+                    })
         },
 
         //快捷添加后回显
         addNewItem(data){
-            let dfield=this.data.quikAddDfield;
+            let dfield=this.data['quikAddDfield'];
             if(this.data.data[dfield]["options"]){
                 this.childComponent[dfield]['data']['options']=this.data.data[dfield]["options"] = data['newItems'];
             }else {
@@ -696,25 +730,18 @@ let config={
             }
             this.childComponent[dfield].reload();
         },
-
+        addEnrypt(data){
+            let value=this.actions.md5(data.newItems);
+            this.data.data[this.data['addPassWordField']].value=value;
+            this.childComponent[this.data['addPassWordField']].actions.hasChangeValue(this.data.data[this.data['addPassWordField']]);
+            console.log(this.data.data[this.data['addPassWordField']]);
+        },
         //提交表单数据
-        onSubmit(newData,oldData){
-            if(1){
-                let data={new_option:{
-                    py: "213213(lz)",
-                    value: "59892cbeca8b367dfbcff98d",
-                    label: "213213(离职)"}}
-                PMAPI.sendToParent({
-                    type: PMENUM.close_dialog,
-                    key:this.data.key,
-                    data:data
-                });
-                return;
-            }
+        onSubmit(){
             let formValue=this.actions.createFormValue(this.data.data);
             let {error,errorMsg} = this.actions.validForm(this.data.data,formValue);
             if(error){
-                alert(errorMsg);
+                MSG.alert(errorMsg);
                 return;
             }
 
@@ -793,49 +820,53 @@ let config={
             let obj_old = this.actions.createCacheData( formDataNew  , data , false, this);
             this.actions.changeValueForChildTable(data);
             let json = {
-                data: encodeURIComponent( JSON.stringify(data) ),
-                focus_users: this.focus_users,
-                cache_new: encodeURIComponent( JSON.stringify( obj_new ) ),
-                cache_old: encodeURIComponent( JSON.stringify( obj_old ) ),
+                // data: encodeURIComponent( JSON.stringify(data) ),
+                data:JSON.stringify(data) ,
+                // cache_new: encodeURIComponent( JSON.stringify( obj_new ) ),
+                cache_new:JSON.stringify( obj_new ),
+                // cache_old: encodeURIComponent( JSON.stringify( obj_old ) ),
+                cache_old:JSON.stringify( obj_old ),
                 table_id: this.data.tableId,
                 flow_id: this.data.flowId,
-                parent_table_id: this.parentTableId || "",
-                parent_real_id: this.parentRealId || "",
-                parent_temp_id: this.parentTempId || "",
-                parent_record_id: this.parentRecordId  || ""
+                focus_users: this.data.focusUsers||'[]',
+                parent_table_id: this.data.parentTableId || "",
+                parent_real_id: this.data.parentRealId || "",
+                parent_temp_id: this.data.parentTempId || "",
+                parent_record_id: this.data.parentRecordId  || ""
             };
             //如果是批量审批，删除flow_id
-            if(this.isBatch == 1){
+            if(this.data.isBatch == 1){
                 delete json["flow_id"];
             }
-            this.loadingAlert('正在提交请稍后');
-            if(this.isAddBuild == true){
-                json['buildin_id']=this.buildIn;
+            // this.loadingAlert('正在提交请稍后');
+            if(this.data.isAddBuild){
+                json['buildin_id']=this.data.buildId;
             }
             FormService.saveAddpageData(json)
                 .then(res => {
-                    this.alertVisible=false;
-                    this.wfService.promiseCallBack(res, () => {
-                        console.log('*******************');
-                        console.log(res);
-                        this.successAlert(res["error"]);
-                        //自己操作的新增和编辑收到失效推送自己刷新
-                        this.isSuccessSubmit();
-                        //清空子表内置父表的ids
-                        delete this.globalService.idsInChildTableToParent[this.tableId];
-                        setTimeout(() => {
-                            //如果不是工作流表单 回显
-                            if(this.flowId == ''){
-                                this.newBuildItem.emit(res);
-                            }else{
-                                this.newBuildItem.emit();
-                            }
-                            this.isSuccess.emit(true);
-                        },1000)
-                    },() => {
-                        this.errorAlert(res.error);
-                    });
+                    console.log('*******************');
+                    console.log(res);
+                    if(res.succ == 1){
+                        if(this.data.isAddBuild && !this.flowId){
+                            let data={new_option:{
+                                py: "213213(lz)",
+                                value: "59892cbeca8b367dfbcff98d",
+                                label: "213213(离职)"}}
+                            PMAPI.sendToParent({
+                                type: PMENUM.close_dialog,
+                                key:this.data.key,
+                                data:data
+                            });
+                        }
+                        MSG.alert('保存成功');
+                    }
+                    // this.successAlert(res["error"]);
+                    //自己操作的新增和编辑收到失效推送自己刷新
+                    // this.isSuccessSubmit();
+                    //清空子表内置父表的ids
+                    // delete this.globalService.idsInChildTableToParent[this.tableId];
                 })
+            HTTP.flush();
 
             //
             // //数据初始化
@@ -927,62 +958,68 @@ let config={
         },
 
         reviseCondition:function(editConditionDict,value,_this) {
-            // if(this.dfService.isView){return false;}
-            let arr = [];
-            for(let key in editConditionDict["edit_condition"]){
-                if( key == 'and' ){
-                    let andData = editConditionDict["edit_condition"][key];
-                    for( let f in andData  ){
-                        let i = 0;
-                        for( let d of andData[f] ){
-                            for( let b of value ){
-                                if( d == b ){
-                                    i++;
-                                }
+        // if(this.dfService.isView){return false;}
+        let arr = [];
+        for(let key in editConditionDict["edit_condition"]){
+            if( key == 'and' ){
+                let andData = editConditionDict["edit_condition"][key];
+                for( let f in andData  ){
+                    let i = 0;
+                    for( let d of andData[f] ){
+                        for( let b of value ){
+                            if( d == b ){
+                                i++;
                             }
                         }
-                        _this.data.data[f]["is_view"] = ( i == andData[f].length )? 0 : 1;
-                        _this.actions.changeControlDisabled(f);
-                        _this.childComponent[f].data=_this.data.data[f];
-                        _this.childComponent[f].reload();
                     }
-                }else {
-                    for(let dfield of editConditionDict["edit_condition"][key]) {
-                        if( arr.indexOf( dfield ) != -1 ){
-                            continue;
-                        }
-                        //如果有字段的负责性，再开始下面的逻辑
+                    _this.data.data[f]["is_view"] = ( i == andData[f].length )? 0 : 1;
+                    _this.actions.changeControlDisabled(f);
+                    _this.childComponent[f].data=_this.data.data[f];
+                    _this.childComponent[f].reload();
+                }
+            }else {
+                for(let dfield of editConditionDict["edit_condition"][key]) {
+                    if( arr.indexOf( dfield ) != -1 ){
+                        continue;
+                    }
+                    //如果有字段的负责性，再开始下面的逻辑
+                    let data=_this.data.data[dfield];
+                    if(_this.data.data[dfield]["required_perm"] == 1){
                         let data=_this.data.data[dfield];
-                        if(_this.data.data[dfield]["required_perm"] == 1){
-                            let data=_this.data.data[dfield];
-                            //针对多选下拉框，只要包含就可以
-                            if(value instanceof Array){
-                                data["be_control_condition"] = value.indexOf(key) != -1 ? 0 : 1;
-                                _this.actions.changeControlDisabled(dfield);
-                            }else{
-                                data["be_control_condition"] = (key == value) ? 0 : 1;
-                                _this.actions.changeControlDisabled(dfield);
-                            }
-                            if( data["is_view"] == 0 ){
-                                arr.push( dfield );
-                            }
+                        //针对多选下拉框，只要包含就可以
+                        if(value instanceof Array){
+                            data["be_control_condition"] = value.indexOf(key) != -1 ? 0 : 1;
+                            _this.actions.changeControlDisabled(dfield);
+                        }else{
+                            data["be_control_condition"] = (key == value) ? 0 : 1;
+                            _this.actions.changeControlDisabled(dfield);
                         }
-                        _this.childComponent[dfield].data=data;
-                        _this.childComponent[dfield].reload();
+                        if( data["is_view"] == 0 ){
+                            arr.push( dfield );
+                        }
                     }
+                    _this.childComponent[dfield].data=data;
+                    _this.childComponent[dfield].reload();
                 }
             }
-        },
+        }
+         },
 
-        checkValue:function(data,_this){
-            _this.data.data[data.dfield]=data;
-
+         checkValue:function(data,_this){
+            if(_this.data.data[data.dfield]){
+                _this.data.data[data.dfield]=data;
+            }
             if(data.type=='Buildin'){
                 let id = data["id"];
-                let value = data["value"];
+                let value;
+                for(let obj of data['options']){
+                    if(obj.value == data.value){
+                        value=obj.value;
+                        break;
+                    }
+                }
                 _this.actions.setAboutData(id,value);
             }
-
             //检查是否是默认值的触发条件
             // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
             if(_this.data.flowId != "" && _this.data['base_fields'].indexOf(data["dfield"]) != -1) {
@@ -990,7 +1027,6 @@ let config={
             }
             //统计功能
             _this.actions.countFunc(data.dfield);
-
             //改变选择框的选项
             if( data['linkage']!={} ){
                 let j = 0;
@@ -1027,7 +1063,8 @@ let config={
 
             let calcData = {
                 val: data['value'],
-                effect: data["effect"]
+                effect: data["effect"],
+                id:data['id']
             };
             _this.actions.calcExpression(calcData,data['value']);
             if(data.required){
@@ -1038,7 +1075,6 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
-        let cache_old = {};
         this.set('childComponent',{});
         let data=_this.data.data;
         this.set('oldData',_.defaultsDeep({},data));
@@ -1049,7 +1085,6 @@ let config={
             if(data[key].required){
                 data[key]['requiredClass']=data[key].value==''?'required':'required2';
             }
-            cache_old[data[key].dfield] = data[key].value;
             //数据填充后，根据修改条件对不同框进行只读操作
             setTimeout(()=>{_this.actions.reviseCondition(data[key],data[key].value,_this);},0);
             if(type == 'Select' || type=='Buildin' ){
@@ -1063,8 +1098,6 @@ let config={
                 }
             }
             //在这里根据type创建各自的控件
-            // console.log('到谁了该');
-            // console.log(data[key].type)
             switch (type){
                 case 'Radio':
                     for(let obj of data[key].group){
@@ -1146,6 +1179,11 @@ let config={
                     settingTextareaControl.render(single);
                     _this.childComponent[data[key].dfield] = settingTextareaControl;
                     break;
+                case 'Attachment':
+                    let attachmentControl = new AttachmentControl(data[key]);
+                    attachmentControl.render(single);
+                    _this.childComponent[data[key].dfield] = attachmentControl;
+                    break;
             }
         }
 
@@ -1161,6 +1199,17 @@ let config={
             for(let k in history){
                 history[k]['index']=i++;
             }
+            if(data.type == 'SettingTextarea'){
+                for(let key in history){
+                    if(_.isObject(history[key]['new_value'])){
+                        history[key]['new_value']=history[key]['new_value']['-1'].replace(/\n/g,";");
+                    }
+                    if(_.isObject(history[key]['old_value'])){
+                        history[key]['old_value']=history[key]['old_value']['-1'].replace(/\n/g,";");
+                    }
+                }
+            }
+            console.log(history);
             History.data.history_data=history;
             PMAPI.openDialogByComponent(History,{
                 width:800,
@@ -1170,7 +1219,7 @@ let config={
             })
         })
         Mediator.subscribe('form:addItem:'+_this.data.tableId,function(data){
-            _this.data.quikAddDfield=data.dfield;
+            _this.data['quikAddDfield']=data.dfield;
             let originalOptions;
             if(data.hasOwnProperty("options")){
                 originalOptions = data["options"];
@@ -1188,26 +1237,42 @@ let config={
                 console.log('快捷添加回显');
                 _this.actions.addNewItem(data);
             });
-        })
+
+        });
+       // 密码弹出
+        Mediator.subscribe('form:addPassword:'+_this.data.tableId,function(data){
+            _this.data['addPassWordField']=data.dfield;
+            PMAPI.openDialogByComponent(AddEnrypt , {
+                width: 800,
+                height: 600,
+                title: '添加新选项',
+                modal:true
+            }).then((data) => {
+                if(!data.cancel){
+                    console.log('快捷添加回显');
+                    _this.actions.addEnrypt(data);
+                }
+            });
+        }),
+
         Mediator.subscribe('form:addNewBuildIn:'+_this.data.tableId,function(data){
-            _this.data.quikAddDfield=data.dfield;
-            console.log(data);
-            PMAPI.openDialogByIframe(`/form/add_buildin?table_id=${data.source_table_id}`,{
+            _this.data['quikAddDfield']=data.dfield;
+            PMAPI.openDialogByIframe(`/form/add_buildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
                 width:800,
                 height:600,
                 title:`快捷添加内置字段`,
                 modal:true
             }).then((data) => {
-                let options=_this.childComponent[_this.data.quikAddDfield].data['options'];
+                let options=_this.childComponent[_this.data['quikAddDfield']].data['options'];
                 if(options[0]['label'] == '请选择' || options[0]['label']==''){
                     options.splice(1,0,data.new_option);
                 }else{
                     options.splice(0,0,data.new_option);
                 }
-                _this.childComponent[_this.data.quikAddDfield].data.value=data.new_option.value;
-                _this.childComponent[_this.data.quikAddDfield].data.showValue=data.new_option.label;
-                _this.data.data[_this.data.quikAddDfield]=_this.childComponent[_this.data.quikAddDfield].data;
-                _this.childComponent[_this.data.quikAddDfield].reload();
+                _this.childComponent[_this.data['quikAddDfield']].data.value=data.new_option.value;
+                _this.childComponent[_this.data['quikAddDfield']].data.showValue=data.new_option.label;
+                _this.data.data[_this.data['quikAddDfield']]=_this.childComponent[_this.data['quikAddDfield']].data;
+                _this.childComponent[_this.data['quikAddDfield']].reload();
             });
         })
         Mediator.subscribe('form:selectChoose:'+_this.data.tableId,function(data){
@@ -1222,11 +1287,11 @@ let config={
         })
 
         //添加提交按钮
-        _this.el.append('<div style="position: absolute;bottom: 20px;right: 20px;"><button id="save">提交</button><button id="changeEdit">转到编辑模式</button></div>')
+        _this.el.append('<div style="position: fixed;bottom: 20px;right: 20px;"><button id="save">提交</button><button id="changeEdit">转到编辑模式</button></div>')
 
         //提交按钮事件绑定
         _this.el.on('click','#save',function () {
-            _this.actions.onSubmit(_this.childComponent,cache_old);
+            _this.actions.onSubmit();
         })
         $(_this.el).find("#changeEdit").on('click',function () {
             _this.actions.changeToEdit(_this);
@@ -1271,8 +1336,6 @@ class BaseForm extends Component{
         //用于前端填充数据用的子表的parentTableId
         // config.data['frontendParentTableId']=formData.data['parent_table_id'];
         super(config,formData.data);
-        // console.log('处理完的数据');
-        // console.log(this);
     }
 
 }

@@ -37,6 +37,7 @@ let config = {
         }
     },
     afterRender: function () {
+        let _this=this;
         this.actions.fillData();
         this.el.find('.button').button({
             // disabled: true
@@ -45,6 +46,7 @@ let config = {
             this.actions.openSettingDialog();
         })
         this.el.on('click','.ui-history',function(){
+            console.log(_this.data);
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
     },

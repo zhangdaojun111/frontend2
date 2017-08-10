@@ -68,7 +68,7 @@ let config={
 export default class SelectControl extends Component{
     constructor(data){
         super(config,data);
-        // console.log('select');
-        // console.log(this.data);
+        console.log('select');
+        console.log(this.data);
     }
 }

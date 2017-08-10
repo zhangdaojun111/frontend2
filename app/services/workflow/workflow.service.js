@@ -43,4 +43,8 @@ export const workflowService={
     addStmpImg(params){
         return HTTP.postImmediately('/upload_user_stamp/', params);
     },
+    //get用户信息
+    getUserInfo(params){
+        return HTTP.postImmediately('/get_user_info/', params);
+    },
 }

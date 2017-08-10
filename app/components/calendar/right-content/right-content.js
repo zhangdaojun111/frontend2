@@ -55,25 +55,33 @@ let config = {
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
+
         Mediator.on('CalendarMain: date', date => {
-            console.log(date);
             this.el.find('.item-content-2').empty();
-            CalendarService.getWorkflowRecords(date).then(res => {
+            // CalendarService.getWorkflowRecords(date).then(res => {
+            //     console.log(res);
+            //     res['rows'].forEach(row =>{
+            //         this.append(new RightContentWorkFlow(row), this.el.find('.item-content-2'));
+            //     })
+            // }).catch(err=>{
+            //     console.log('error',err);
+            // });
+            CalendarService.getWorkflowRecords( {type: 5,'from_date':date.from_date,'to_date':date.to_date} ).then( res=>{//approve
                 console.log(res);
                 res['rows'].forEach(row =>{
-                    console.log(row);
                     this.append(new RightContentWorkFlow(row), this.el.find('.item-content-2'));
                 })
-            }).catch(err=>{
-                console.log('error',err);
             });
-        });
-        Mediator.on('calendar-left:approve',data =>{
-            if(data ===0){
-                this.el.find(".item-content-2").hide();
-            }else{
-                this.el.find(".item-content-2").show();
-            }
+            CalendarService.getWorkflowRecords( {type: 2,'from_date':date.from_date,'to_date':date.to_date} ).then( res=>{//approving
+                res['rows'].forEach(row =>{
+                    this.append(new RightContentWorkFlow(row), this.el.find('.item-content-2'));
+                })
+            });
+            CalendarService.getWorkflowRecords( {type: 6,'from_date':date.from_date,'to_date':date.to_date} ).then( res=>{//focus
+                res['rows'].forEach(row =>{
+                    this.append(new RightContentWorkFlow(row), this.el.find('.item-content-2'));
+                })
+            });
         });
         this.el.on("click",".item-title-1",()=>{
             let temp1 = this.el.find(".item-content-1");
