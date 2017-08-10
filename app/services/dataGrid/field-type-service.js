@@ -91,13 +91,13 @@ export const fieldTypeService = {
     TEXT_COUNT_TYPE : "34",//合同编辑器
     EDIT_CONTROL : "35",
     numOrText: function (data) {//(数字或者文本)用real_type判断
-        return data == this.FLOAT_TYPE || data == this.INT_TYPE || data == this.CORRESPONDENCE
+        return data == this.FLOAT_TYPE || data == this.INT_TYPE
     },
     childTable: function (data) {//子表
         return data == this.NORMAL_CHILD
     },
-    countTable: function (data) {//统计
-        return data == this.QUERY_COUNT || data == this.TABLE_COUNT
+    countTable: function (dinput_type,real_type) {//统计
+        return dinput_type == this.QUERY_COUNT || dinput_type == this.TABLE_COUNT || real_type == this.EDIT_CONTROL
     },
     editControlTable: function (data) {//高级跳转字段
         return data == this.EDIT_CONTROL
@@ -132,12 +132,17 @@ export const fieldTypeService = {
     },
     //不能分组字段
     cantGroup: function (data) {
-        let arr = [this.SECRET_TEXT,this.TEXT_COUNT_TYPE,this.URL_TYPE]
+        let arr = [this.SECRET_TEXT,this.TEXT_COUNT_TYPE,this.URL_TYPE,this.IMAGE_TYPE,this.ATTACHMENT,this.VIDEO_TYPE,this.MULTI_SELECT];
         return arr.indexOf( data ) == -1
     },
     //后端排序字段
     backSortField: function (data) {
         let arr = [this.DECIMAL_TYPE];
+        return arr.indexOf( data ) != -1;
+    },
+    //附件
+    attachment: function( data ){
+        let arr = [this.ATTACHMENT,this.VIDEO_TYPE,this.IMAGE_TYPE];
         return arr.indexOf( data ) != -1;
     }
 }

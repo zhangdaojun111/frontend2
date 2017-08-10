@@ -5,13 +5,13 @@ import Component from "../../../../../lib/component";
 import template from './expert-search-condition.html';
 import '../expert-search.scss';
 import expertItem from './expert-search-item/expert-search-item';
-import expertSreach from '../expert-search';
+import expertSearch from '../expert-search';
 let config = {
     template: template,
     inputObject: null,
     inputNextObject: null,
     rendItemNum:0,
-    epSreach: {},
+    epSearch: {},
     data: {
         expertItemData: [],
     },
@@ -27,7 +27,7 @@ let config = {
                 _this.actions.setInputValue($(this).find('.name').html(),$(this).find('.searchField').html());
                 _this.actions.setSelectValue($(this).find('.searchType').html());
                 _this.actions.setInputType($(this).find('.searchType').html());
-                config.epSreach.actions.hideList();
+                config.epSearch.actions.hideList();
             })
         },
         setInputObject: function(object,nextObject) {
@@ -68,7 +68,7 @@ let config = {
     },
     afterRender: function() {
         this.actions.rendItem();
-        config.epSreach = new expertSreach.expertSearch ();
+        config.epSearch = new expertSearch.expertSearch ();
         this.el.on('click','.delete',()=>{
             this.actions.delete();
         });

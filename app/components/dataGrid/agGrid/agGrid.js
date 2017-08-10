@@ -33,6 +33,8 @@ let config = {
         onDragStopped:function ($event) {
         },
         onSortChanged:function ($event) {
+        },
+        onCellClicked:function ($event) {
         }
     },
     gridOptions: GridOptions,
@@ -59,6 +61,8 @@ let config = {
                 onColumnResized: this.data.onColumnResized,
                 //拖动结束
                 onDragStopped: this.data.onDragStopped,
+                //双击查看
+                onCellClicked: this.data.onCellClicked,
                 //分组
                 getNodeChildDetails: (rowItem)=>{
                     if ( rowItem.group||Object.is(rowItem.group,'')||Object.is(rowItem.group,0) ) {
@@ -94,8 +98,12 @@ let config = {
         },
         //重新赋值
         setGridData: function ( json ) {
-            this.gridOptions.api.setRowData( json.rowData );
-            this.gridOptions.api.setPinnedBottomRowData( json.footerData );
+            if( json.rowData ){
+                this.gridOptions.api.setRowData( json.rowData );
+            }
+            if( json.footerData ){
+                this.gridOptions.api.setPinnedBottomRowData( json.footerData );
+            }
             // this.agGrid.gridOptions.api.redrawRows();
         },
         //宽度自适应

@@ -12,20 +12,35 @@
         padding: 5px 15px;
         border-bottom: 10px solid #EBEBEB;
             .common-search-list {
-              padding: 0;
-              list-style: none;
-              display: inline-block;
+                padding: 0;
+                list-style: none;
+                display: inline-block;
                 .common-search-item {
-                  padding: 5px 15px;
-                  display: inline-block;
-                  background-color: #0F79EF;
-                  color: #fff;
-                  cursor: pointer;
-                  margin-right: 5px;
+                    padding: 0px 15px;
+                    height: 25px;
+                    line-height: 25px;
+                    margin-bottom: 15px;
+                    display: inline-block;
+                    background-color: #0F79EF;
+                    color: #fff;
+                    cursor: pointer;
+                    margin-right: 15px;
+                    position: relative;
+                    .item-delete {
+                        position: absolute;
+                        display: none;
+                        z-index: 100;
+                        top: -10px;
+                        right: -10px;
+                        width: 20px;
+                        height: 20px;
+                        background: url(../../../../assets/images/form/error-msg.png) no-repeat scroll right center transparent;
+                    }
                 }
             }
       .common-search-compile {
-        color: #0F79EF;
+          color: #0F79EF;
+          cursor: pointer;
       }
     }
     .condition-search {
@@ -143,6 +158,10 @@
     }
     .save-button-box {
         padding: 15px 10px;
+        .save-button {
+            color: #0F79EF;
+            cursor: pointer;
+        }
     }
 }
 .saveQueryName {

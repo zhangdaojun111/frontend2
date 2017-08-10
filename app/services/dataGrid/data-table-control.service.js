@@ -195,7 +195,8 @@ export const dgcService = {
             }
             let obj = {};
             if(queryParams.childInfo){
-                if( ( queryParams.filter && queryParams.filter.length == 1 ) || ( !queryParams.filter ) ){
+                console.log( queryParams.childInfo )
+                if( ( queryParams.filter && queryParams.filter.length == 1 ) || ( queryParams.filter.length == 0 ) || !queryParams.filter ){
                     temp['section_page_'+queryParams.childInfo.parent_page_id] = queryParams.parent_temp_id || queryParams.childInfo.parent_row_id;
                 }else if( queryParams.filter && queryParams.filter.length > 1 ){
                     if(temp['$and']) {
@@ -359,7 +360,12 @@ export const dgcService = {
             normal:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width','grid-new-window'],
             ViewChild:['float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
             EditChild:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
-            createBatch: ['grid-del-btn','grid-import-btn','custom-column-btn']
+            child:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
+            createBatch: ['grid-del-btn','grid-import-btn','custom-column-btn'],
+            source_data: ['custom-column-btn','grid-auto-width'],
+            count: ['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
+            viewFromCorrespondence: ['correspondence-check','float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
+            editFromCorrespondence: ['float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width']
         }
         return obj[viewMode];
     },
@@ -374,7 +380,30 @@ export const dgcService = {
         'grid-export-btn':'download',
         'custom-column-btn':'custom_field',
         'grid-auto-width':'custom_width',
-        'grid-new-window':'new_window'
+        'grid-new-window':'new_window',
+        'correspondence-check':'especial'
+    },
+    //行选择
+    rowClickSelect: function (data) {
+        let ele= data.event.target;
+        let node = data.node;
+        if(ele.className.indexOf( "my-ag-cell-focus2" )!=-1){//第三次点击
+            node.setSelected(false, false);
+            ele.className = '';
+        }else if(ele.className.indexOf( "my-ag-cell-focus1" )!=-1){//第二次点击
+            node.setSelected(true, false);
+            ele.className = 'my-ag-cell-focus1 my-ag-cell-focus2';
+        }else{//第一次点击
+            ele.className = 'my-ag-cell-focus1';
+        }
+    },
+    //返回数据url
+    returnIframeUrl( u,obj ){
+        let str = '?'
+        for( let o in obj ){
+            str += (o + '=' + obj[o] + '&')
+        }
+        str = str.substring( 0,str.length - 1 );
+        return u + str;
     }
-
 }
