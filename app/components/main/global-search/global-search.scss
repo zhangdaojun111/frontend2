@@ -34,6 +34,24 @@
         position: relative;
         z-index: 5;
         display: none;
+        background-color: white;
+        border: solid 1px red;
+        li{
+            padding: 4px;
+            text-indent: 6px;
+            cursor: pointer;
+
+            &.clear-record{
+                color: #0089FF;
+            }
+            &:hover{
+                background-color: rgba(0, 183, 238, 0.51);
+            }
+            &.clear-record:hover{
+                background-color: rgba(15, 121, 239, 0.51);
+            }
+
+        }
 
     }
 }
