@@ -159,11 +159,11 @@ let config = {
             let src = this.data.avatar;
             let para = this.data.avatar_content;
             this.el.find("img.set-info")
-                .attr("src",src)
-                .css("width",para.width)
-                .css("height",para.height)
-                .css("left",para.left)
-                .css("top",para.top)
+                .attr("src",src);
+                // .css("width",para.width)
+                // .css("height",para.height)
+                // .css("left",para.left)
+                // .css("top",para.top)
         },
         logout: function () {
             HTTP.getImmediately('/logout/').then((res) => {
@@ -180,11 +180,11 @@ let config = {
         },
         resetAvatar:function(){
             this.el.find("img.set-info")
-                .attr("src",window.config.sysConfig.userInfo.avatar)
-                .css("width",window.config.sysConfig.userInfo.avatar_content.width)
-                .css("height",window.config.sysConfig.userInfo.avatar_content.height)
-                .css("left",window.config.sysConfig.userInfo.avatar_content.left)
-                .css("top",window.config.sysConfig.userInfo.avatar_content.top);
+                .attr("src",window.config.sysConfig.userInfo.avatar);
+                // .css("width",window.config.sysConfig.userInfo.avatar_content.width)
+                // .css("height",window.config.sysConfig.userInfo.avatar_content.height)
+                // .css("left",window.config.sysConfig.userInfo.avatar_content.left)
+                // .css("top",window.config.sysConfig.userInfo.avatar_content.top);
         }
     },
     afterRender: function () {

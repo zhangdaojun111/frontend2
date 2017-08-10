@@ -154,10 +154,10 @@ let config = {
             let para = this.data.avatar_content;
             this.el.find("img.user-avatar")
                 .attr("src",src)
-                .css("width",para.width)
-                .css("height",para.height)
-                .css("left",para.left)
-                .css("top",para.top)
+                // .css("width",para.width)
+                // .css("height",para.height)
+                // .css("left",para.left)
+                // .css("top",para.top)
         },
         clearLocalStorage:function(){
             window.localStorage.clear();
@@ -165,11 +165,11 @@ let config = {
         },
         resetAvatar:function () {
             this.el.find("img.user-avatar")
-                .attr("src",window.config.sysConfig.userInfo.avatar)
-                .css("width",window.config.sysConfig.userInfo.avatar_content.width)
-                .css("height",window.config.sysConfig.userInfo.avatar_content.height)
-                .css("left",window.config.sysConfig.userInfo.avatar_content.left)
-                .css("top",window.config.sysConfig.userInfo.avatar_content.top);
+                .attr("src",window.config.sysConfig.userInfo.avatar);
+                // .css("width",window.config.sysConfig.userInfo.avatar_content.width)
+                // .css("height",window.config.sysConfig.userInfo.avatar_content.height)
+                // .css("left",window.config.sysConfig.userInfo.avatar_content.left)
+                // .css("top",window.config.sysConfig.userInfo.avatar_content.top);
             msgbox.alert("头像设置成功!");
         }
     },
