@@ -3,7 +3,7 @@ import template from './aside.html';
 import './aside.scss';
 import {MenuComponent} from '../menu-full/menu.full';
 import Mediator from '../../../lib/mediator';
-import PersonalSettings from "../personal-settings/personal-settings";
+import {PersonSetting} from "../personal-settings/personal-settings";
 import {HTTP} from '../../../lib/http';
 import {commonuse} from '../commonuse/commonuse';
 
@@ -152,7 +152,7 @@ let config = {
                 $page.focus();
             }else{
                 //打开个人设置页面
-                PersonalSettings.show();
+                PersonSetting.show();
             }
         },
         initAvatar:function () {

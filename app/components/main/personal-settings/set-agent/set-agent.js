@@ -229,7 +229,6 @@ class SetAgent extends Component{
     }
 }
 
-
 export const agentSetting = {
     el: null,
     show: function() {

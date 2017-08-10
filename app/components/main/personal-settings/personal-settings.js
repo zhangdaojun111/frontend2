@@ -223,14 +223,15 @@ class PersonalSetting extends Component{
     }
 }
 
-export default {
+export const PersonSetting  = {
+    el:null,
     show: function() {
         let component = new PersonalSetting();
         component.dataService = UserInfoService;
-        let el = $('<div id="personal-setting-page">').appendTo(document.body);
+        this.el = $('<div id="personal-setting-page">').appendTo(document.body);
         getData(component);
-        component.render(el);
-        el.dialog({
+        component.render(this.el);
+        this.el.dialog({
             title: '账号设置',
             width: 540,
             height: 600,
@@ -240,5 +241,8 @@ export default {
                 component.destroySelf();
             }
         });
+    },
+    hide:function () {
+        this.el.dialog('close');
     }
-}
+};
