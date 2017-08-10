@@ -7,7 +7,6 @@ export const UserInfoService = {
     utils:Utils,
     // 向后台发送编辑的用户信息
     saveInfo:function (data) {
-        console.log("do saveInfo");
         let url = '/save_person_info/';
         let body = this.utils.formatParams(data);
 
@@ -31,8 +30,6 @@ export const UserInfoService = {
     //向后台发送存储头像数据
     saveAvatar:function (data) {
         let url= '/user_preference/';
-        // console.log(data.src);
-        // data.src = encodeURIComponent(data.src);
         let formatData = JSON.stringify(data);
         let body = {
             action:"save",
@@ -56,6 +53,7 @@ export const UserInfoService = {
     },
     saveAgentData:function (data) {
         let url = '/set_agent/';
+        data.workflow_names = JSON.stringify(data.workflow_names);
         return this.http.postImmediately({
             type:'post',
             url:url,
@@ -63,7 +61,6 @@ export const UserInfoService = {
         })
     },
     getSysConfig:function () {
-        console.log("do getSysConfig");
 
     },
     getAllUsersInfo:function () {

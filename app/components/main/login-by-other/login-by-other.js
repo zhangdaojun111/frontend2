@@ -58,6 +58,8 @@ let config = {
         this.actions.getData();
         this.el.on("click",".confirm-btn",() => {
             this.actions.loginOtherAccount();
+        }).el.on("click",".cancel-btn", () => {
+
         })
     },
     beforeDestory:function () {
@@ -82,6 +84,7 @@ export default {
             height: 500,
             modal: true,
             close: function() {
+                $(this).dialog('destroy');
                 component.destroySelf();
             }
         });

@@ -32,7 +32,7 @@ let config = {
                 this.el.find('li').hide();
                 this.el.find(`li[data-name*=${value}]`).show();
             }
-            this.clearValue();
+            this.actions.clearValue();
         },
         getId: function () {
             return this.data.id;

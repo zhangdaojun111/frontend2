@@ -7,7 +7,7 @@ import template from './personal-settings.html';
 import {UserInfoService} from '../../../services/main/userInfoService';
 import msgbox from '../../../lib/msgbox';
 import SetAvatar from './set-avatar/set-avatar';
-import SetAgent from './set-agent/set-agent';
+import {agentSetting} from './set-agent/set-agent';
 import OtherLogin from "../login-by-other/login-by-other";
 import Mediator from "../../../lib/mediator";
 
@@ -54,7 +54,7 @@ let config = {
                 $page.focus();
             }else{
                 //打开个人设置页面
-                SetAgent.show();
+                agentSetting.show();
             }
         },
         showPersonalInfo:function () {

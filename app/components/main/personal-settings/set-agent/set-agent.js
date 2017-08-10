@@ -193,11 +193,12 @@ let config = {
             UserInfoService.saveAgentData(data)
                 .done((result) => {
                     if(result.success === 1){
-                        if(res.agent_state === 0){
+                        if(result.agent_state === 0){
                             msgbox.alert("您所选择的代理人已离职，请重新选择");
                         }else{
                             msgbox.alert("选择代理成功");
                             UserInfoService.getSysConfig();
+                            agentSetting.hide();
                         }
                     }else{
                         msgbox.alert("选择代理失败")
@@ -228,13 +229,15 @@ class SetAgent extends Component{
     }
 }
 
-export default {
+
+export const agentSetting = {
+    el: null,
     show: function() {
         let component = new SetAgent();
         component.dataService = UserInfoService;
-        let el = $('<div id="set-agent-page">').appendTo(document.body);
-        component.render(el);
-        el.dialog({
+        this.el = $('<div id="set-agent-page">').appendTo(document.body);
+        component.render(this.el);
+        this.el.dialog({
             title: '设置代理',
             width: 915,
             height: 620,
@@ -244,5 +247,8 @@ export default {
                 component.destroySelf();
             }
         });
+    },
+    hide: function () {
+        this.el.dialog('close');
     }
 }
