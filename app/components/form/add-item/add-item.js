@@ -20,9 +20,9 @@ let AddItem = {
     },
     firstAfterRender:function(){
         let _this=this;
-        this.el.on('click','span',function(){
+        this.el.on('click','.ui-del',function(){
             for(let i = 0,len = _this.data.newItems.length;i < len;i++){
-                if(_this.data.newItems.items[i] == $(this).val()){
+                if(_this.data.newItems[i] == $(this).val()){
                     _this.data.newItems.splice(i,1);
                 }
             }
@@ -51,7 +51,7 @@ let AddItem = {
                     })
                 }
             });
-        });
+        })
     },
 }
 export default AddItem

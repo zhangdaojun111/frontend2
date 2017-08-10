@@ -1,7 +1,6 @@
 $background_color: #ffffff;
 $sub_color: #0088ff;
 
-
 .clearfix{ zoom:1;}
 .clearfix:after{
     display: table;
@@ -66,10 +65,9 @@ $sub_color: #0088ff;
             }
 
             .avatar-box{
-                width: 60px;
-                height: 60px;
-                //margin-top: 10px;
-                //margin-left: 40px;
+                width: 64px;
+                height: 64px;
+                background-image: url("../../../assets/images/framework/default_avatar_64.png");
                 top:40px;
                 left: 40px;
                 float: left;

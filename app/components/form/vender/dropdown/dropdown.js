@@ -5,9 +5,10 @@ import '../../base-form/base-form.scss';
 let config={
     template:`<div style="position: relative;">
                 {{#if is_view}}
-                <input class="search-value show-hide-drop width100 dynamic-form-input" type="text" readonly data-value="{{value}}" value="{{showValue}}" style="width: {{width}};; margin-right: 5px" disabled/>
+                <input class="search-value show-hide-drop width100 dynamic-form-input" type="text" readonly data-value="{{value}}" value="{{showValue}}" style="width: {{width}}; margin-right: 5px;" disabled/>
                 {{else}}
-                <input class="search-value show-hide-drop width100 dynamic-form-input" type="text" readonly data-value="{{value}}" value="{{showValue}}" style="width: {{width}}; margin-right: 5px"/>
+                <input class="search-value show-hide-drop width100 dynamic-form-input" type="text" readonly data-value="{{value}}" value="{{showValue}}" style="width: {{width}}; margin-right: 5px;cursor: pointer
+"/>
                 {{/if}}
                 <div class="select-drop width100" style="display: none;position: absolute;top:100%;z-index: 1;background: #fff;border: 1px solid #ccc" >
                     <input type="type" class="search width100"/>

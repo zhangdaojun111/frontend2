@@ -8,7 +8,7 @@ let config={
     data:{
         user:[]
     },
-    action:{
+    actions:{
 
     },
     afterRender(){

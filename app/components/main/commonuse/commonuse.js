@@ -6,37 +6,10 @@ import TreeView from '../../util/tree/tree';
 import {HTTP} from '../../../lib/http';
 import Mediator from '../../../lib/mediator';
 
-let menu = _.defaultsDeep([], window.config.menu);
-let commonUse = _.defaultsDeep([], window.config.commonUse.data);
-function formatOriginData(nodes) {
-    for (let i = 0; i < nodes.length; i++) {
-        const node = nodes[i];
-        let key = node.ts_name || node.table_id;
-        node.text = node.label;
-        node.icon = '';
-        node.selectedIcon = '';
-        node.backColor = "#FFFFFF";
-        node.selectable = false;
-        node.state = {
-            checked: commonUse.indexOf(key) !== -1,
-            disabled: false,
-            expanded: true,
-            selected: commonUse.indexOf(key) !== -1,
-        };
-        node.tags = ['available'];
-        node.nodes = node.items;
-        const children = node.items;
-        if (children && children.length > 0) {
-            formatOriginData(children);
-        }
-    }
-}
-formatOriginData(menu);
-
 let config = {
     template: template,
     data: {
-        selected: commonUse
+        selected: []
     },
     actions: {
         handle: function (event, node) {
@@ -100,10 +73,48 @@ let config = {
             //         pre_type: "7"
             //     });
             // }
+        },
+        formatOriginData: function () {
+            let menu = _.defaultsDeep([], window.config.menu);
+            let commonUse = _.defaultsDeep([], window.config.commonUse.data);
+
+            function func(nodes) {
+                for (let i = 0; i < nodes.length; i++) {
+                    const node = nodes[i];
+                    let key = node.ts_name || node.table_id;
+                    node.text = node.label;
+                    node.icon = '';
+                    node.selectedIcon = '';
+                    node.backColor = "#FFFFFF";
+                    node.selectable = false;
+                    node.state = {
+                        checked: commonUse.indexOf(key) !== -1,
+                        disabled: false,
+                        expanded: true,
+                        selected: commonUse.indexOf(key) !== -1,
+                    };
+                    node.tags = ['available'];
+                    node.nodes = node.items;
+                    const children = node.items;
+                    if (children && children.length > 0) {
+                        func(children);
+                    }
+                }
+            }
+            func(menu);
+            return {
+                menu: menu,
+                commonUse: commonUse
+            };
         }
     },
     firstAfterRender: function () {
-        let treeView = new TreeView(menu, {
+
+        let originData = this.actions.formatOriginData();
+        this.data.selected = originData.commonUse;
+        this.data.menu = originData.menu;
+
+        let treeView = new TreeView(this.data.menu, {
             callback: (event, node) => {
                 this.actions.handle(event, node);
                 console.log(this.data.selected)

@@ -88,16 +88,16 @@ let config={
                 idArr.push($(domSpan[i]).data('id'));
                 nameArr.push($(domSpan[i]).text());
             }
-            this.el.find('#follower-select').hide();
+            this.el.find('.follower-select').hide();
             this.el.find('#addFollowerList').text(nameArr);
             Mediator.publish('workflow:focus-users',idArr);
         })
 
         this.el.on('click','#addFollower',()=>{
-            this.el.find('#follower-select').show();
+            this.el.find('.follower-select').show();
         });
         this.el.on('click','.close',()=>{
-            this.el.find('#follower-select').hide();
+            this.el.find('.follower-select').hide();
         });
     }
 };

@@ -45,7 +45,6 @@ let config = {
         },
         addImg(e){
             let imgInfo = e.data[0].stamps;
-            console.log(imgInfo[0]);
             let len =imgInfo.length;
             var html = " ";
             let host = window.location.host;
@@ -54,7 +53,6 @@ let config = {
                 let top = imgInfo[i].viewTop+"%";
                 html += '<img class="oldImg" class="" src="http://'+host+'/download_attachment/?file_id='+imgInfo[i].file_id+'&download=0" style="position:absolute;z-index:100;left:'+left+';top:'+top+';height:'+imgInfo[i].height+'px;width:'+imgInfo[i].width+'px " />'
             }
-            console.log(this.el.find("#place-form"));
             this.el.find("#place-form").append(html);
         },
         hideImg(e){

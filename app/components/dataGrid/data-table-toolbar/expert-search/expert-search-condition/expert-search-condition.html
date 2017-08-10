@@ -1,8 +1,8 @@
 <div class="condition-search-choice">
     <div class="condition-search-item">
         <span class="condition-search-radiobox">
-            并且<input class="condition-search-radio and" type="radio" checked="checked">
-            或者<input class="condition-search-radio or" type="radio">
+            <label><input class="condition-search-radio and" type="radio" value="$and" checked="checked">并且</label>
+            <label><input class="condition-search-radio or" type="radio" value="$or" >或者</label>
         </span>
 
         <select class="condition-search-select left-select">
@@ -16,14 +16,13 @@
 
             </ul>
         </div>
-        <select class="condition-search-select">
-            <option value="">11111</option>
-            <option value="">222222</option>
+        <select class="condition-search-select relation">
+
         </select>
         <input class="condition-search-input">
-        <select class="condition-search-select left-select">
+        <select class="condition-search-select right-select">
             <option value="0">--</option>
-            <option value="(">)</option>
+            <option value=")">)</option>
         </select>
         <span class="add">新增</span>
         <span class="delete">删除</span>

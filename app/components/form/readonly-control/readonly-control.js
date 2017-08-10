@@ -124,8 +124,8 @@ let config={
 class ReadonlyControl extends Component {
     constructor(data){
         super(config,data);
-        // console.log('readonly-control');
-        // console.log(this.data);
+        console.log('readonly-control');
+        console.log(this.data);
     }
 }
 

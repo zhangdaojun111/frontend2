@@ -5,9 +5,9 @@
 const path = require('path');
 var express = require('express');
 var webpack = require('webpack');
-// var WebpackDevMiddleware = require('webpack-dev-middleware');
-// var WebpackHotMiddleware = require('webpack-hot-middleware');
-// var HtmlWebpackPlugin = require('html-webpack-plugin');
+var WebpackDevMiddleware = require('webpack-dev-middleware');
+var WebpackHotMiddleware = require('webpack-hot-middleware');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 require("babel-polyfill");
 
@@ -29,14 +29,13 @@ module.exports = {
         form: path.resolve(APP_PATH, 'entrys/form.js'),
         addNewBuild: path.resolve(APP_PATH, 'entrys/popup/addNewBuild.js'),
         choose: path.resolve(APP_PATH, 'entrys/popup/choose.js'),
-        //workflow: path.resolve(APP_PATH, 'entrys/workflow.js'),
+        workflow: path.resolve(APP_PATH, 'entrys/workflow.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
-        //bi:path.resolve(APP_PATH, 'entrys/bi.js'),
+        sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
+        bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
-        //main: path.resolve(APP_PATH, 'entrys/main.js'),
-        calendarSet: path.resolve(APP_PATH, 'entrys/calendar.set.js'),
-        calendarCreate: path.resolve(APP_PATH, 'entrys/calendar.create.js'),
+        main: path.resolve(APP_PATH, 'entrys/main.js'),
         vendors: [
             'jquery',
             'jquery-ui',
@@ -46,7 +45,8 @@ module.exports = {
             'handlebars',
             'moment',
             'lodash',
-            'babel-polyfill'
+            'babel-polyfill',
+            'jsplumb'
         ]
     },
 

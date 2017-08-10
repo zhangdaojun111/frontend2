@@ -33,9 +33,19 @@ let config = {
     actions:{
         initInfo:function () {
             // 初始化，检测用户头像路径返回值，没有则显示默认头像
-            if(this.data.avatar === ''){
-                this.el.find("img").attr("src","../../../../assets/images/framework/default_avatar.png")     //属性修改成功，图片未显示
+            let src = this.data.avatar;
+            if(src !== ''){
+                let $img = $("<img>").addClass("user-avatar");
+                $img.attr('src', src);
+                this.el.find("div.avatar-box").append($img);
+                $img.on('error', function () {
+                    $img.remove();
+                });
             }
+
+        },
+        onImageError: function () {
+
         },
         setAvatar(){
             //检查页面是否已创建
@@ -164,12 +174,14 @@ let config = {
             $(window).attr("location","/login");
         },
         resetAvatar:function () {
-            this.el.find("img.user-avatar")
-                .attr("src",window.config.sysConfig.userInfo.avatar);
-                // .css("width",window.config.sysConfig.userInfo.avatar_content.width)
-                // .css("height",window.config.sysConfig.userInfo.avatar_content.height)
-                // .css("left",window.config.sysConfig.userInfo.avatar_content.left)
-                // .css("top",window.config.sysConfig.userInfo.avatar_content.top);
+            let $img = this.el.find("img.user-avatar");
+            if($img.length === 0){
+                $img = $("<img>").addClass("user-avatar");
+                $img.attr("src",window.config.sysConfig.userInfo.avatar);
+                this.el.find(".avatar-box").append($img);
+            }else{
+                $img.attr("src",window.config.sysConfig.userInfo.avatar);
+            }
             msgbox.alert("头像设置成功!");
         }
     },
@@ -208,7 +220,6 @@ let config = {
         });
         //窗口监听来自子窗口的设置头像的消息
         Mediator.on("personal:setAvatar",() => {
-            console.log(this);
            this.actions.resetAvatar();
         })
     },

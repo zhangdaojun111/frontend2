@@ -11,6 +11,8 @@ function GetQueryString(name)
 $(document).ready(function(){
     let table_id=GetQueryString('table_id');
     let key=GetQueryString('key');
+    let isAddBuild=GetQueryString('isAddBuild');
+    let id=GetQueryString('id');
     FormEntry.createForm({
         table_id:table_id,
         seqId:'yudeping',
@@ -18,5 +20,7 @@ $(document).ready(function(){
         is_view:0,
         real_id:'',
         key:key,
+        isAddBuild:isAddBuild,
+        id:id
     })
 });
