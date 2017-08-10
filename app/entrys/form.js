@@ -4,7 +4,6 @@ import {FormService} from "../services/formService/formService";
 import '../components/form/base-form/base-form.scss'
 import '../assets/scss/form.scss'
 
-
 let FormEntrys={
     childForm:{},
     init(config={}){
