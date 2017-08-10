@@ -23,11 +23,11 @@ import "jquery-ui/ui/widgets/droppable";
 
 // cell 组件类型，通过匹配assortment渲染不同的组件
 const cellTypes = {
-    'radar' : CellRadarComponent,
-    'table' : CellTableComponent,
-    'normal' : CellNormalComponent,
-    'multilist' : CellMultiChartComponent,
-    'nineGrid' : CellNineGridComponent,
+    'radar': CellRadarComponent,
+    'table': CellTableComponent,
+    'normal': CellNormalComponent,
+    'multilist': CellMultiChartComponent,
+    'nineGrid': CellNineGridComponent,
     'funnel': CellFunnelComponent,
     'pie': CellPieComponent,
     'comment': CellCommentComponent
@@ -36,14 +36,13 @@ const cellTypes = {
 
 let config = {
     template: template,
-    actions: {
-    },
+    actions: {},
 };
 
 export class CanvasCellComponent extends BiBaseComponent {
 
     constructor(cell) {
-        config.data = cell.chart? cell.chart : null;
+        config.data = cell.chart ? cell.chart : null;
         super(config);
         this.cell = cell;
         console.log(this.cell);
@@ -72,12 +71,12 @@ export class CanvasCellComponent extends BiBaseComponent {
             return false;
         });
 
-        this.el.on('dragover',function(event){
+        this.el.on('dragover', function (event) {
             let ev = event.originalEvent;
             ev.preventDefault();
         });
 
-        this.el.on('drop',async (event) => {
+        this.el.on('drop', async (event) => {
             let ev = event.originalEvent;
             let data = JSON.parse(ev.dataTransfer.getData("Text"));
             this.loadChartData([data.id]);
@@ -85,11 +84,11 @@ export class CanvasCellComponent extends BiBaseComponent {
 
         // 设置cell zindex 为最大
         let self = this;
-        this.el.on('mousedown', '.cell',function(){
+        this.el.on('mousedown', '.cell', function () {
             self.cell.canvas.data.cellMaxZindex++;
-            let zIndex = self.cell.canvas.data.cellMaxZindex ;
+            let zIndex = self.cell.canvas.data.cellMaxZindex;
             $(this).css('zIndex', zIndex);
-        }).on('mouseup', '.cell', function(){
+        }).on('mouseup', '.cell', function () {
             self.cell.size.zIndex = self.cell.canvas.data.cellMaxZindex;
         });
 
@@ -116,12 +115,14 @@ export class CanvasCellComponent extends BiBaseComponent {
         const dragOption = {
             cursor: "crosshair",
             containment: '.cells-container',
+            grid: [10, 10],
             stop: (event, ui) => {
                 this.cell.size.left = ui.position.left;
                 this.cell.size.top = ui.position.top;
             }
         };
         const resizeOption = {
+            grid: [10, 10],
             stop: (event, ui) => {
                 this.cell.size.width = ui.size.width;
                 this.cell.size.height = ui.size.height;

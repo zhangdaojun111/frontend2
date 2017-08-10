@@ -15,7 +15,8 @@ let config = {
         cells:[],
         componentIds: [],
         cellMaxZindex: 0,
-        canvasSingle:true
+        canvasSingle:true,
+        biUser:window.config.bi_user === 'client' ? true : false,
     },
     actions: {
         /**
@@ -130,6 +131,14 @@ let config = {
             window.location.href = url;
             // $(this).attr('href',url);
         });
+
+        this.el.on('click', '.bi-manage-btn', function(event){
+            let url = window.location.hash;
+            window.location.href = `/bi/manager/${url}`;
+        }).on('click', '.btn-multip', function(){
+            let url = window.location.hash;
+            window.location.href = `/bi/index/${url}`;
+        })
 
         //多页跳转隐藏
         // $('.btn-multip').click(function () {

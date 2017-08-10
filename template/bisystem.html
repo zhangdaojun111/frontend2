@@ -9,7 +9,8 @@
 <script>
     window.config = {
         is_admin: {{ is_admin | safe }},
-        bi_views: {{ bi_views|safe }}
+        bi_views: {{ bi_views|safe }},
+        bi_user: '{{bi_user|safe}}',
     }
 </script>
 <div id="route-outlet" class="bi-container"></div>

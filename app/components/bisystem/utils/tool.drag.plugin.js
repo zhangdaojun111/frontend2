@@ -3,6 +3,3 @@
  * html5 拖拽
  */
 
-export ToolDragPlugin {
-
-}

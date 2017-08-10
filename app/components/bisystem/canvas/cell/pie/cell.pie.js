@@ -62,22 +62,17 @@ export class CellPieComponent extends BiBaseComponent {
      * @param deepX= 下穿的x轴字段，next ？ 下穿 ： 上传
      */
     async CanvasDeep(deepX, next=true) {
-        let [deeps, floor] = [this.data.deeps, this.data.floor];
-
+        let deeps = this.data.deeps;
         if (next) {
-            if (deeps === floor) {
-                this.data.floor = deeps - 1;
-                return false;
-            };
             this.data.floor++;
         } else {
             if (this.data.floor===0) {
                 return false;
             };
             this.data.floor--;
-        }
+        };
         // 判断是否到最大下穿层数
-        if (deeps >= floor ) {
+        if (deeps > this.data.floor-1 ) {
             // 组装deep_info
             let deep_info = {};
             if (next) {
@@ -106,6 +101,9 @@ export class CellPieComponent extends BiBaseComponent {
                 this.pieChart.myChart.resize();
             }
         } else {
+            if (next) {
+                this.data.floor = deeps;
+            };
             return false;
         }
     }
