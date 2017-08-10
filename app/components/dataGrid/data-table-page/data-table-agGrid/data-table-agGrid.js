@@ -1151,7 +1151,9 @@ let config = {
                     height: 600,
                     title: '导入数据'
                 }).then((data) => {
-
+                    console.log( "############" )
+                    console.log( "############" )
+                    console.log( data )
                 });
             } )
             //导出
