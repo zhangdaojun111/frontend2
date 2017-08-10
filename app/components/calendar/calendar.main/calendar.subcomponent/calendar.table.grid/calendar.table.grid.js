@@ -59,6 +59,16 @@ let config = {
                     };
                 }else {
                     taskItemHtml.innerHTML = item['data']['name'];
+                    taskItemHtml.onclick = function () {
+                        PMAPI.openDialogByIframe(
+                            '/wf/approval/',
+                            {
+                                width: "100%",
+                                height: '900',
+                                title: '审批',
+                            })
+                    };
+
                 }
                 this.el.find('.task-list').append(taskItemHtml);
 
