@@ -9,7 +9,10 @@ let alertConfig = {
         close: function () {
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
-                key: this.key
+                key: this.key,
+                data: {
+                    confirm: true
+                }
             });
         }
     },

@@ -6,12 +6,12 @@ export default {
     alert: function(msg) {
         let config = _.defaultsDeep({}, alertConfig);
         config.data.text = msg;
-        PMAPI.openDialogByComponent(config, {
+        return PMAPI.openDialogByComponent(config, {
             width: 300,
             height: 170,
             title: '提示',
             modal: true
-        })
+        });
     },
 
     confirm: function(msg) {
