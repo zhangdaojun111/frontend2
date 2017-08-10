@@ -1,12 +1,36 @@
 import FormBase from '../components/form/base-form/base-form'
 import {HTTP} from '../lib/http';
 import {FormService} from "../services/formService/formService";
+import '../components/form/base-form/base-form.scss'
 import '../assets/scss/form.scss'
 
-// @parma
-//
+
 let FormEntrys={
-    init:function(config={}){
+    childForm:{},
+    init(config={}){
+        this.tableId='';
+        this.parentRealId='';
+        this.parentTempId='';
+        this.seqId='';
+        this.realId='';
+        this.parentTableId='';
+        this.parentRecordId='';
+        this.isView= 0;
+        this.isBatch= 0;
+        this.recordId='';
+        this.action='';
+        this.el='';
+        this.reloadDraftData=0;
+        this.formId='';
+        this.fromWorkFlow=0;
+        this.flowId='';
+        this.fieldId='';
+        this.key='';
+        this.fromApprove='';
+        this.formFocus='';
+        this.isAddBuild=0;
+        this.buildId='';
+
         this.tableId=config.table_id||'';
         this.parentRealId=config.parent_real_id||'';
         this.parentTempId=config.parent_temp_id||'';
@@ -24,6 +48,11 @@ let FormEntrys={
         this.fromWorkFlow=config.from_workflow||0;
         this.flowId=config.flow_id||'';
         this.fieldId=config.field_Id||'';
+        this.key=config.key||'';
+        this.fromApprove=config.from_approve||'';
+        this.formFocus=this.from_focus||'';
+        this.isAddBuild=this.isAddBuild || 0;
+        this.buildId=this.buildId || '';
     },
     hasKeyInFormDataStatic:function (key,staticData){
     let isExist = false;
@@ -68,7 +97,17 @@ let FormEntrys={
                 from_workflow:this.fromWorkFlow,
                 table_id:this.tableId
             }
-        }else{
+        }else if(this.fromApprove){
+            json={
+                form_id: this.formId,
+                record_id: this.recordId,
+                is_view: this.isView,
+                from_approve: this.fromApprove,
+                from_focus: this.fromFocus,
+                table_id: this.tableId
+            }
+        }
+        else{
             json=this.pickJson();
         }
         return json;
@@ -145,10 +184,12 @@ let FormEntrys={
     staticData.tableId=this.tableId;
     staticData.formId=this.formId;
     staticData.flowId=this.flowId;
+    staticData.isBatch=this.isBatch;
+    staticData.key=this.key;
     return staticData;
 },
     //处理字段数据
-    parseRes:function (res){
+    parseRes (res){
     if(res !== null){
         let formData = res["data"];
         if(formData.length != 0){
@@ -185,7 +226,7 @@ let FormEntrys={
 
             if(res['record_info']['id']){
                 let recordId = res['record_info']['id'];
-                for(let d of this.data){
+                for(let d of res.data){
                     if(d['type'] == 'songrid'){
                         d['recordId']=recordId;
                     }
@@ -213,49 +254,72 @@ let FormEntrys={
         </table>`
     return html;
 },
-
+    destoryAll(){
+        for(let key in this.childForm){
+            this.childForm[key].destroySelf();
+            delete this.childForm[key];
+        }
+    },
     destoryForm(tableID){
-        $(`#form-${tableID}`).remove();
+        if(this.childForm[tableID]){
+            this.childForm[tableID].destroySelf();
+            delete this.childForm[tableID];
+        }
     },
     //创建表单入口
-    createForm:function(config={}){
+    createForm(config={}){
         let _this=this;
         this.init(config);
         let tableID=this.tableId;
-        if(this.tableId){
-            this.destoryForm(this.tableId);
-        }
-        let html=$(`<div id="form-${tableID}" style="border: 1px solid red;background:#fff;position: fixed;width: 100%;height:100%;overflow: auto">`).appendTo(this.el);
-        let template='';
+        let html=$(`<div id="form-${tableID}" style="" class="table-wrap">`).appendTo(this.el);
+        let template='<table><tbody><tr class="firstRow"><td width="244" valign="top"><span data-id="2562_nLNdMCPYogJJ4py4AHqDum" style="border:2px">名称</span></td><td width="244" valign="top"><label id="2562_nLNdMCPYogJJ4py4AHqDum" style="border:2px"><input type="text" data-fill-in="0" style="box-sizing:border-box;width:240px;height:34px;line-height:34px;border-radius:5px;padding:6px 12px;border:1px solid #ccc;" name="2562_nLNdMCPYogJJ4py4AHqDum" data-required="0"/></label></td><td width="244" valign="top" style="word-break: break-all;"><br/></td><td width="244" valign="top" style="word-break: break-all;"><br/></td></tr><tr><td width="244" valign="top" style="word-break: break-all;"><span data-id="7949_yaq4qmVjgatey4xAi2UCT9" style="border:2px">年份</span></td><td width="244" valign="top" style="word-break: break-all;"><label id="7949_yaq4qmVjgatey4xAi2UCT9" style="border:2px"><select data-fill-in="1" style="box-sizing:border-box;width:240px;height:34px;line-height:34px;border-radius:5px;border:1px solid #ccc;" name="7949_yaq4qmVjgatey4xAi2UCT9" data-required="0" data-year="1" class="normalSelect"></select></label></td><td width="244" valign="top"><span data-id="4207_jUwup8ziqYyTyeMivJJ2JL" style="border:2px">所在地</span></td><td width="244" valign="top"><label id="4207_jUwup8ziqYyTyeMivJJ2JL" style="border:2px"><input type="radio" data-required="0" data-fill-in="2" name="4207_jUwup8ziqYyTyeMivJJ2JL" value="6971_oargmg9mnTxZTU2Qqo6uge"/>北京<input type="radio" data-required="0" data-fill-in="2" name="4207_jUwup8ziqYyTyeMivJJ2JL" value="9398_ysjjqkNsbkf8A6yRar8Fsg"/>深圳<input type="radio" data-required="0" data-fill-in="2" name="4207_jUwup8ziqYyTyeMivJJ2JL" value="4253_5eN7tuKuBL2tLgiVPMhxAj"/>上海<input type="radio" data-required="0" data-fill-in="2" name="4207_jUwup8ziqYyTyeMivJJ2JL" value="1197_gP79KY5yjLLXFGvWF4JkBB"/>成都</label></td></tr></tbody></table><p><br/></p>';
         FormService.getPrepareParmas({table_id:this.tableId}).then(res=>{
             _this.findFormIdAndFlowId(res);
             let json=_this.createPostJson();
             FormService.getFormData(json).then(res=>{
-                template=_this.formDefaultVersion(res[0].data);
+                console.time('form创建时间');
+                if(this.formId){
+                    template=res[2]['data']['content'];
+                }else{
+                    template=_this.formDefaultVersion(res[0].data);
+                }
                 let data=_this.mergeFormData(res[0],res[1]);
                 let formData={
                     template:template,
                     data:data,
                 }
-                _this.formBase=new FormBase(formData);
-                _this.formBase.render(html);
+                let formBase=new FormBase(formData);
+                _this.childForm[_this.tableId]=formBase;
+                formBase.render(html);
+                console.timeEnd('form创建时间');
             });
         })
     },
     //审批删除时重置表单可编辑性
-    editDelWorkFlow(formId){
-        this.formBase.actions.editDelWork(formId);
+    editDelWorkFlow(tableId,formId){
+        this.childForm[tableId].actions.editDelWork(formId);
     },
 
     //接收关注人信息
-    setUserIdList(data){
-        this.formBase.data.focus_users=data;
+    setUserIdList(tableId,data){
+        if(!this.childForm[tableId]){
+            return;
+        }
+        this.childForm[tableId].data.focus_users=data;
+    },
+
+    getFormValue(tableId){
+        if(!this.childForm[tableId]){
+            return;
+        }
+        return this.childForm[tableId].actions.getFormValue();
     }
 }
 
 $('#toEdit').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
         seqId:'yudeping',
@@ -267,6 +331,7 @@ $('#toEdit').on('click',function(){
 $('#text').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'1285_pkz2teyhHCztFrYhoc6F54',
         seqId:'yudeping',
@@ -278,8 +343,9 @@ $('#text').on('click',function(){
 $('#count').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
-        table_id:'7051_UoWnaxPaVSZhZcxZPbEDpG',
+        table_id:'8390_35R9y7J5uVULgczYyZvqvB',
         seqId:'yudeping',
         el:$('body'),
         is_view:isView,
@@ -289,6 +355,7 @@ $('#count').on('click',function(){
 $('#editRequired').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'3461_P28RYPGTGGE7DVXH8LBMHe',
         seqId:'yudeping',
@@ -300,6 +367,7 @@ $('#editRequired').on('click',function(){
 $('#defaultValue').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
         table_id:'1160_ex7EbDsyoexufF2UbXBmSJ',
         seqId:'yudeping',
@@ -311,8 +379,9 @@ $('#defaultValue').on('click',function(){
 $('#valid').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
-        table_id:'3497_GvF6BKdDWCfWVMAoxudt8N',
+        table_id:'2638_urGGDDp75VvymeqWj3eo6F',
         seqId:'yudeping',
         el:$('body'),
         is_view:isView,
@@ -322,20 +391,37 @@ $('#valid').on('click',function(){
 $('#exp').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
     FormEntrys.createForm({
-        table_id:'7336_HkkDT7bQQfqBag4kTiFWoa',
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId,
+        table_id:'7336_HkkDT7bQQfqBag4kTiFWoa'
+    });
+
+})
+$('#workflow').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
+    FormEntrys.createForm({
+        table_id:'449_6k2VdLn4ArCfgFPuAjFrNQ',
         seqId:'yudeping',
         el:$('body'),
         is_view:isView,
         real_id:realId
     });
-    // FormEntrys.createForm({
-    //     form_id:206,
-    //     record_id:'',
-    //     reload_draft_data:0,
-    //      from_workflow:1,
-    //     table_id:'3277_k5JFeqSiX2iuCvM3rXay9L'
-    // });
-
+})
+$('#lalala').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    let tableId=$('#tableId').val()||0;
+    FormEntrys.destoryAll();
+    FormEntrys.createForm({
+        table_id:tableId,
+        seqId:'zengjing',
+        el:$('body'),
+    });
 })
 export default FormEntrys

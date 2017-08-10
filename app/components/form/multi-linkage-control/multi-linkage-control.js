@@ -94,8 +94,10 @@ let config={
         this.el.on('click','.refresh',function(){
             _this.hasChoose.clear();
             for (let i=0;i<_this.data.index;i++){
+                console.log('what');
                 let d={};
                 d['value']='请选择';
+                d['showValue']='请选择';
                 d['options']=[];
                 d['index']=i;
                 d['dfield']=_this.data.dfield;
@@ -108,10 +110,11 @@ let config={
                 }
                 let drop=_this.childDrop[i];
                 drop.data=Object.assign(drop.data,d);
+                console.log(drop);
                 drop.reload();
-                _this.data.value='';
-                _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
             }
+            _this.data.value='';
+            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
         });
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
@@ -140,10 +143,12 @@ let config={
             if(this.data.value){
                 let option=this.data.dataList[this.data.value][i];
                 d['value']=option;
+                d['showValue']=option;
                 d['options'].push({label:option,value:option,tableId:this.data.tableId});
                 this.hasChoose.set(i,option);
             }else{
                 d['value']='请选择';
+                d['showValue']='请选择';
                 let set=new Set();
                 for(let key in this.data.dataList){
                     set.add(this.data.dataList[key][i]);

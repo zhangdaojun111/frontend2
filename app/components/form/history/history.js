@@ -9,7 +9,6 @@ let History = {
 
     },
     firstAfterRender:function(){
-        console.log(this.data);
     },
 }
 export default History
