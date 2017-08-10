@@ -4,9 +4,12 @@
         width: $aside-mini-width;
         .aside-wrap {
             .s-name {
-                display: none;
+                .text {
+                    display: none;
+                }
             }
             .s-uinfo {
+                background-color: transparent;
                 padding: 10px 0;
                 .avatar {
                     float: none;
@@ -15,16 +18,12 @@
                 .u-name, .u-role {
                     display: none;
                 }
-                .personal-setting{
-                    width: 20px;
-                    height: 20px;
-                    display: block;
-                    float: right;
-                    margin-right: 15px;
-                    background-image: url("../../../assets/images/framework/personal-setting.png");
+                .personal-setting {
+                    display: none;
                 }
                 .startwrokflow {
                     width: 40px;
+                    margin-top: 20px;
                     overflow: hidden;
                 }
 
@@ -41,8 +40,12 @@
             padding: 22px 10px;
             font-size: 16px;
             color: #ffffff;
-            text-align: center;
             background-color: $aside-top-bg;
+            span {
+                color: #0088FF;
+                font-weight: bold;
+                padding-right: 5px;
+            }
         }
 
         .wrap {
