@@ -17,7 +17,7 @@ let config = {
                 "<input type=\"checkbox\" id='"+item.id+"' class=\"chk_1 chk_remind \" checked /><label for=\"checkbox_all\"></label>" +
                 "<label class=\"content-item\">"+item.name+"</label></div></li>";
             return strhtml;
-        }
+        },
     },
     afterRender: function () {
         let that = this;
@@ -30,16 +30,18 @@ let config = {
         that.el.find(".search-items").html("");
         console.log(li_strhtml);
         that.el.find(".search-items").html(li_strhtml);
-        that.el.on("click",".head-select",function(){
-            event.stopPropagation();
-            {
-                if(!$(this).next('.select-multi-content').is(":hidden")){
-                    $(".select-multi-content").hide();
-                }else{
-                    $(".select-multi-content").hide();
-                    $(this).next().show();
+        Mediator.on('calendar-set:editor',data =>{
+            that.el.on("click",".head-select",function(){
+                event.stopPropagation();
+                {
+                    if($(this).next('.select-multi-content').is(":hidden") && data.data == 1){
+                        $(".select-multi-content").hide();
+                        $(this).next().show();
+                    }else{
+                        $(".select-multi-content").hide();
+                    }
                 }
-            }
+            });
         });
         that.el.on("click",".select-multi-content",function(){
             event.stopPropagation();
@@ -55,8 +57,6 @@ let config = {
                 $(this).children("div").find("input").addClass("checkbox_all_checked");
                 all_content_value.push(content_item);
             }
-            console.log(all_content_value);
-            console.log(all_content_value.indexOf(content_item));
             all_content.val(all_content_value);
         }).on("click",".checked-all-content",function(){
             let all_content = $(this).parent().parent().prev().find("input");
@@ -75,6 +75,7 @@ let config = {
             }
             all_content.val(all_content_value);
         });
+        $
         $(document).click(function(){
             that.el.find(".select-multi-content").hide();
         })
