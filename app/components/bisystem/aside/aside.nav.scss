@@ -45,15 +45,17 @@ $font_size: 12px;
       margin-top: 10px;
       color: #ffffff;
       padding: 8px 0;
-      background-color: $aside-a;
       text-decoration: none;
       font-size: 12px;
+      &.add-chart-btn{
+        background-color: $aside-a;
+      }
+      &.edit-view-btn{
+        background-color: $aside-a-last;
+      }
     }
     .active{
       box-shadow: 0 0 20px $active inset;
-    }
-    a:last-child{
-      background-color: $aside-a-last;
     }
   }
   //搜索框及以下

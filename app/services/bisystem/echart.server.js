@@ -7,6 +7,13 @@ import {EchartsOption} from '../../components/bisystem/echarts.config/echarts.co
 import {ToolPlugin} from "../../components/bisystem/utils/tool.plugin";
 import {HTTP} from '../../lib/http';
 
+const defaultOption = {
+    grid: {},
+    xAxis : [],
+    yAxis : [],
+    series : []
+};
+
 
 export class EchartsService {
     constructor(cellChart) {
@@ -49,9 +56,9 @@ export class EchartsService {
      */
     lineBarOption(cellChart) {
         let cellOption = cellChart['chart'];
-        // if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
-        //     return false;
-        // };
+        if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
+            return defaultOption;
+        };
         // console.log(cellOption);
         // 组合图采用new_name，下穿图采用name
         const nameType = (cellOption.chartAssignment && cellOption.chartAssignment.val) === 1 ? 'new_name' : 'name';
@@ -232,6 +239,7 @@ export class EchartsService {
         if (cellOption['yHorizontalColumns']) {
             linebarOption['yAxis'][0]['axisLabel']['interval'] = 0;
         };
+        console.log(linebarOption);
         return linebarOption;
     }
 
@@ -242,7 +250,7 @@ export class EchartsService {
     pieOption(cellChart) {
         let cellOption = cellChart['chart'];
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
-            return false;
+            return defaultOption;
         };
         let [legend, series] = [[], []];
         const [xAxis, yAxis, title] = [cellOption.data['xAxis'], cellOption.data['yAxis'], cellOption.chartName['name']];

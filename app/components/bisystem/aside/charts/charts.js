@@ -9,6 +9,7 @@ let config = {
         this.el.on('dragstart',(ev) =>{
             let event = ev.originalEvent;
             event.dataTransfer.setData("Text",JSON.stringify(this.data));
+            return true;
         })
     }
 };

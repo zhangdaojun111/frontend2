@@ -3,7 +3,6 @@ import {BiBaseComponent} from '../bi.base.component';
 import template from './aside.nav.html';
 import './aside.nav.scss';
 import { biChartService } from "../../../services/bisystem/bi.chart.service";
-import dragula from 'dragula';
 import Mediator from '../../../lib/mediator';
 import {ChartsComponent} from './charts/charts';
 let config = {
@@ -18,19 +17,6 @@ let config = {
         this.data.charts.forEach((val,index) => {
             let chartsComponent = new ChartsComponent(val);
             this.append(chartsComponent,this.el.find('.charts-items'));
-        });
-
-        Mediator.subscribe('init:drag', (data) => {
-            let drake = this.actions.chartDrag();
-        });
-
-        // 顶部 新建图标/编辑图标 阴影效果切换
-        $('.user a').each(function () {
-            // console.log($(this));
-            $(this).on('click',function () {
-                $(this).addClass('active');
-                $(this).siblings().removeClass('active');
-            })
         });
 
         //滑过 显示编辑删除

@@ -45,7 +45,6 @@ export class CanvasCellComponent extends BiBaseComponent {
         config.data = cell.chart ? cell.chart : null;
         super(config);
         this.cell = cell;
-        console.log(this.cell);
     }
 
     /**
@@ -74,12 +73,15 @@ export class CanvasCellComponent extends BiBaseComponent {
         this.el.on('dragover', function (event) {
             let ev = event.originalEvent;
             ev.preventDefault();
+            return true;
         });
 
         this.el.on('drop', async (event) => {
             let ev = event.originalEvent;
             let data = JSON.parse(ev.dataTransfer.getData("Text"));
+            ev.dataTransfer.clearData("Text");
             this.loadChartData([data.id]);
+            return false;
         });
 
         // 设置cell zindex 为最大
