@@ -10,7 +10,7 @@
 <script>
 
     window.config = {
-        
+
     }
 
 </script>
@@ -24,8 +24,12 @@
 
 
 {% ifequal window_type 'develop'%}
-<script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
-<script type="text/javascript" src="http://localhost:8080/scripts/workflow.js"></script>
+<link rel="stylesheet" href="/client/static/css/vendors.css">
+<link rel="stylesheet" href="/client/static/css/workflow.css">
+<script type="text/javascript" src="/client/static/vendors.js"></script>
+<script type="text/javascript" src="/client/static/workflow.js"></script>
+<!--<script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>-->
+<!--<script type="text/javascript" src="http://localhost:8080/scripts/workflow.js"></script>-->
 {% else %}
 <link rel="stylesheet" href="/client/static/css/vendors.css">
 <link rel="stylesheet" href="/client/static/css/workflow.css">

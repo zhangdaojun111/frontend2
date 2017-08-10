@@ -79,10 +79,17 @@ var treeComp1 = new TreeView(tree,function (event,selectedNode) {
     // console.dir(selectedNode);
 },'MENU',false,'tree2');
 treeComp1.render($('#treeMenu'));
-var treeComp2 = new TreeView(tree,function (event,selectedNode) {
-    console.log("选中节点："+selectedNode.text);
-    // console.dir(selectedNode);
-},'MULTI_SELECT',true,'tree3');
+
+//多选树
+var treeComp2 = new TreeView(tree,{
+    callback: function (event,selectedNode) {
+        console.log(event +"："+selectedNode.text);
+        // console.dir(selectedNode);
+    },
+    treeType:'MULTI_SELECT',
+    isSearch: true,
+    withButtons:true
+});
 treeComp2.render($('#treeMulti'));
 
 ///tree demo

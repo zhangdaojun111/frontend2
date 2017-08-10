@@ -134,12 +134,12 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             );
         }
         WorkFlow.show(mockFlowData.data[0],'#dwf');
-        
+
     })
     $('body').on('click','#importClose',()=>{
         $("#import").hide();
     });
-    
+
 });
 //submit workflow data 提交工作流
 Mediator.subscribe('workflow:submit', (res)=> {
@@ -226,20 +226,21 @@ function recursion(arr,slnds,pubInfo){
                 for(var k in staff){
                     if(k==selectedNode.id){
                         Mediator.publish('workflow:checkDept', staff[k]);
-                        recursion(staff,selectedNode,'checkDept');
+                        // recursion(staff,selectedNode,'checkDept');
                     }
                 }
             }else{
                 for(var k in staff){
                     if(k==selectedNode.id){
                         Mediator.publish('workflow:unCheckDept', staff[k]);
-                        recursion(staff,selectedNode,'unCheckDept');
+                        // recursion(staff,selectedNode,'unCheckDept');
                     }
                 }
             }
         },
         treeType:'MULTI_SELECT',
-        isSearch: true
+        isSearch: true,
+        withButtons:true
         });
     treeComp2.render($('#treeMulti'));
 
@@ -262,7 +263,8 @@ function recursion(arr,slnds,pubInfo){
             }
         },
         treeType:'MULTI_SELECT',
-        isSearch: true
+        isSearch: true,
+        withButtons:true
         });
     treeComp3.render($('#addUser'));
 
@@ -348,7 +350,7 @@ FormEntrys.createForm({
                 data:{}
         });
     })
-    
+
 });
 
 
