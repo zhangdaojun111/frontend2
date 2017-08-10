@@ -6,7 +6,7 @@ import template from './canvas.cells.html';
 import './canvas.cells.scss';
 import {canvasCellService} from '../../../services/bisystem/canvas.cell.service';
 import Mediator from '../../../lib/mediator';
-import  {ToolPlugin} from '../utils/tool.plugin';
+import {ToolPlugin} from '../utils/tool.plugin';
 
 let config = {
     template: template,
@@ -15,7 +15,7 @@ let config = {
         cells:[],
         componentIds: [],
         cellMaxZindex: 0,
-        canvasSingle:true,
+        canvasSingle:false,
         biUser:window.config.bi_user === 'client' ? true : false,
     },
     actions: {
@@ -103,7 +103,7 @@ let config = {
                     break;
                 };
             }
-        });``
+        });
 
         // 保存视图画布
         const saveBtn = this.el.find('.views-btn-group');
@@ -138,12 +138,12 @@ let config = {
             let hash = window.location.hash;
             let url = `${pathname}${hash}?single`;
             window.location.href = url;
-            // $(this).attr('href',url);
         });
 
         this.el.on('click', '.bi-manage-btn', function(event){
             let url = window.location.hash;
-            window.location.href = `/bi/manager/${url}`;
+            let reg = url.replace(/\?single/, "");
+            window.location.href = `/bi/manager/${reg}`;
         }).on('click', '.btn-multip', function(){
             let url = window.location.hash;
             window.location.href = `/bi/index/${url}`;
@@ -155,19 +155,20 @@ let config = {
         //     $(this).hide();
         //     $('.btn-single').hide();
         // })
-    },
+    }
 };
 
 export class CanvasCellsComponent extends BiBaseComponent{
     constructor(id) {
-        if(window.location.search!==""){
-            config.data.canvasSingle = false;
-        } else {
-            config.data.canvasSingle = true;
-        };
+        let hash = window.location.href.indexOf('single');
+            if(hash>0){
+                config.data.canvasSingle = false;
+            } else {
+                config.data.canvasSingle = true;
+            }
         super(config);
         this.viewId = id ? id : this.data.views[0] ? this.data.views[0]['id'] : [] ;
-    };
+    }
 
     /**
      * 实例化cell
