@@ -15,6 +15,7 @@ import customColumns from "../../data-table-toolbar/custom-columns/custom-column
 import groupGrid from "../../data-table-toolbar/data-table-group/data-table-group";
 import dataPagination from "../../data-table-toolbar/data-pagination/data-pagination";
 import delSetting from '../../data-table-toolbar/data-table-delete/data-table-delete';
+import importSetting from '../../data-table-toolbar/data-table-import/data-table-import';
 import girdExport from '../../data-table-toolbar/data-table-export/data-table-export';
 
 import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
@@ -336,7 +337,7 @@ let config = {
                         let conditinField = '';
                         if (condition["optionfield"] != null) {
                             //通过id查找field
-                            for (let col of this.cols) {
+                            for (let col of this.data.fieldsData) {
                                 if (col["id"] == condition["optionfield"]) {
                                     conditinField = col["field"];
                                 }
@@ -1139,6 +1140,18 @@ let config = {
                     if( data.type == 'del' ){
                         this.actions.delTableTable();
                     }
+                });
+            } )
+            //导入数据
+            $('.grid-import-btn').click( function () {
+                console.log( "###" )
+                console.log( "###" )
+                PMAPI.openDialogByComponent(importSetting, {
+                    width: 400,
+                    height: 600,
+                    title: '导入数据'
+                }).then((data) => {
+
                 });
             } )
             //导出
