@@ -34,7 +34,6 @@ let config = {
         });
         // 下穿数据
         this.normalChart.myChart.on('click', (params) => {
-            console.log(params);
             let deepX =params.name;
             this.CanvasDeep(deepX);
         });
