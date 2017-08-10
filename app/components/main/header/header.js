@@ -5,6 +5,7 @@ import 'jquery-ui/ui/widgets/tooltip';
 import Mediator from '../../../lib/mediator';
 import msgbox from '../../../lib/msgbox';
 import OtherLogin from "../login-by-other/login-by-other";
+import {GlobalSearch} from "../global-search/global-search"
 
 let config = {
     template: template,
@@ -108,6 +109,7 @@ let config = {
         Mediator.on('socket:online_user_num', function (data) {
             that.actions.refreshOnlineNum(data.online_user_num);
         });
+
     },
     
     beforeDestory: function () {
