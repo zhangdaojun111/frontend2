@@ -380,7 +380,14 @@ let config = {
                 }
             });
         }).on('click', '.create-calendar', () => {
-            PMAPI.openDialogByIframe('/calendar_mgr/create/', {width: "1000", height: '550', title: '日历表'});
+            //PMAPI.openDialogByIframe('/calendar_mgr/create/', {width: "1000", height: '550', title: '日历表'});
+            PMAPI.openDialogByIframe(
+                '/calendar_mgr/create/?table_id=1639_8QvxFmFvVpK33bVPXdk8hD',
+                {
+                    width: "1000",
+                    height: '550',
+                    title: '日历表'
+                })
         });
     }
 };

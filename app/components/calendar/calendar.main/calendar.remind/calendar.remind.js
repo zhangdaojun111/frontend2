@@ -22,7 +22,6 @@ let config = {
 
     },
     afterRender: function() {
-        console.log(this.data.remindDetail);
         this.data.remindDetail.forEach(items => {
             items.forEach(item => {
                 $('.detail').prepend('<tr><td class="detail-title">'+ item['fieldName'] +'</td><td class="detail-content">'+ item['fieldValue'] +'</td></tr>')
@@ -31,8 +30,15 @@ let config = {
 
             });
         });
+        console.log(this.data.remindTableId);
         this.el.on('click', '.open-form', () => {
-            PMAPI.openDialogByIframe('/calendar_mgr/create/', {width: "1700", height: '800', title: '日历表'});
+            PMAPI.openDialogByIframe(
+                '/calendar_mgr/create/?table_id='+ this.data.remindTableId,
+                {
+                    width: "1700",
+                    height: '800',
+                    title: '表单'
+                });
         })
     }
 };

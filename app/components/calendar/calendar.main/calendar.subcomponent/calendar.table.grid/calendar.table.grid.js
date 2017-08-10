@@ -43,6 +43,7 @@ let config = {
                 taskItemHtml.innerHTML = item['data3show'][0][0]['fieldName'] + ':' + item['data3show'][0][0]['fieldValue'];
                 this.el.find('.task-list').append(taskItemHtml);
                 taskItemHtml.onclick = function () {
+                    console.log(item);
                     let component = new CalendarRemind(item);
                     let el = $('<div>').appendTo(document.body);
                     component.render(el);

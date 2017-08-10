@@ -9,8 +9,9 @@ import 'jquery-ui/ui/widgets/dialog.js';
 
 import FormEntrys from './form';
 
+console.log(window.config.table_id);
 FormEntrys.createForm({
-    table_id:'1639_8QvxFmFvVpK33bVPXdk8hD',
+    table_id: window.config.table_id,
     seqId:'',
     form_id: 200,
     el:$('body'),
