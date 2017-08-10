@@ -1,11 +1,12 @@
 import Component from '../../../lib/component';
 import template from './workflow.html';
 import './workflow.scss';
+import msgBox from '../../../lib/msgbox';
 
 let config = {
     template: template,
     data: {
-        title:'this is workflow',
+        title:'this is workflow'
     },
     actions: {
         init(){
@@ -14,12 +15,13 @@ let config = {
                 DragOptions: { cursor: 'pointer', zIndex: 2000 },
                 EndpointStyles: [{ fill: 'transparent' }, { fill: 'transparent' }],
                 Endpoints: [["Dot", { radius: 4 }], ["Dot", { radius: 4 }]],
-                Container: $('#workflow-draw-box'),
+                Container: this.el.find('.workflow-draw-box'),
                 ConnectionsDetachable: false
             });
             this.actions.drawWorkFlow();
         },
         drawWorkFlow(){
+            this.requiredfieldsNodeList=this.data["frontendid2requiredfields"];
             let __this=this;
             //draw block
             $.each(this.data.node, function (key, value) {
@@ -107,8 +109,6 @@ let config = {
                         // }
                         //赋值属性
                     let event_name = __this.data.frontendid2eventname[id] || text;
-                    console.log(event_name);
-
                     let html = $("<div>").attr({
                             id: id,
                             class: styleClass,
@@ -123,23 +123,23 @@ let config = {
                     }).css(css).html(attachment + text)//.css(__this[style]);
                         //如果有加签
                     if (is_add_handler == 1) {
-                            // let addHandlerInfo = "";
-                            // for (let dict of add_handler_info) {
-                            //     addHandlerInfo += `${dict["add_handler_type"]}：${dict["add_handler_name"]}\n`;
-                            // }
-                            // let span = $("<span>")
-                            //     .attr({ title: addHandlerInfo })
-                            //     .css({
-                            //     display: 'inline-block',
-                            //     width: '10px',
-                            //     height: '10px',
-                            //     borderRadius: '50%',
-                            //     border: '1px solid #ddd',
-                            //     verticalAlign: 'middle',
-                            //     margin: '0 5px',
-                            //     background: 'rgb(14, 122, 239)'
-                            // });
-                            // $(html).prepend(span);
+                            let addHandlerInfo = "";
+                            for (let dict of add_handler_info) {
+                                addHandlerInfo += `${dict["add_handler_type"]}：${dict["add_handler_name"]}\n`;
+                            }
+                            let span = $("<span>")
+                                .attr({ title: addHandlerInfo })
+                                .css({
+                                display: 'inline-block',
+                                width: '10px',
+                                height: '10px',
+                                borderRadius: '50%',
+                                border: '1px solid #ddd',
+                                verticalAlign: 'middle',
+                                margin: '0 5px',
+                                background: 'rgb(14, 122, 239)'
+                            });
+                            $(html).prepend(span);
                     }
                         //如果是驳回任意节点模式
                     if (__this.rejectMode) {
@@ -149,7 +149,7 @@ let config = {
                     }
                     else {
                             // $("#container").append(html);
-                        $('#workflow-draw-box').append(html);
+                        __this.el.find('.workflow-draw-box').append(html);
                     }
                     __this.actions.AddEndpoints(id, startPoint, endPoint);
                 }
@@ -157,13 +157,66 @@ let config = {
 
             //draw connecting lines
             $.each(this.data.node, function (key, value) {
-                    var source2target = value["source2target"];
-                    if (source2target != undefined) {
-                        $.each(source2target, function (key, value) {
-                            __this.data.jsPlumbInstance.connect({ uuids: value, editable: false });
-                        });
+                var source2target = value["source2target"];
+                if (source2target != undefined) {
+                    $.each(source2target, function (key, value) {
+                        __this.data.jsPlumbInstance.connect({ uuids: value, editable: false });
+                    });
+                }
+            });
+            //第一次进入时默认选中自己的节点
+            let haveState1 = false;
+            $.each(this.data.node, function (key, value) {
+                let is_add_handler = value["is_add_handler"] || 0;
+                let add_handler_info = value["add_handler_info"] || [];
+                if (value['state'] == 1) {
+                    haveState1 = true;
+                    //判断当前节点是否包含登陆人
+                    if (value["text"].indexOf('邱茂耘') != -1) {
+                        // for(let a of __this.requiredfieldsNodeList['frontendid2field'][value.id]){
+                        //     $('*[requiredField='+a+']').css({border:'1px solid transparent',boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px',transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out'});
+                        // }
+                        for (let b of __this.requiredfieldsNodeList['frontendid2fieldid'][value.id]) {
+                            $('span[data-id=' + b + ']').css({ color: 'rgb(14,122,239)' });
+                        }
+                        return;
+                    }
+                }
+                else if (is_add_handler == 1) {
+                    haveState1 = true;
+                    let haveAddUser = false;
+                    //判断被加签人是否包含登陆人
+                    for (let dict of add_handler_info) {
+                        if (dict["add_handler_name"].indexOf('邱茂耘') != -1) {
+                            haveAddUser = true;
+                            break;
+                        }
+                    }
+                    //判断当前加签节点（节点和被加签人）是否包含登陆人
+                    if (value["text"].indexOf('邱茂耘') != -1 || haveAddUser == true) {
+                        for (let a of __this.requiredfieldsNodeList['frontendid2field'][value.id]) {
+                            $('*[requiredField=' + a + ']').css({ border: '1px solid transparent', boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px', transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out' });
+                        }
+                        for (let b of __this.requiredfieldsNodeList['frontendid2fieldid'][value.id]) {
+                            $('span[data-id=' + b + ']').css({ color: 'rgb(14,122,239)' });
+                        }
+                        return;
+                    }
+                }
+            });
+            if (haveState1 == false) {
+                $.each(this.nodesData, function (key, value) {
+                    if (value.id.indexOf('start') != -1) {
+                        // for(let a of __this.requiredfieldsNodeList['frontendid2field'][value.id]){
+                        //     $('*[requiredField='+a+']').css({border:'1px solid transparent',boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px',transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out'});
+                        // }
+                        for (let b of __this.requiredfieldsNodeList['frontendid2fieldid'][value.id]) {
+                            $('span[data-id=' + b + ']').css({ color: 'rgb(14,122,239)' });
+                        }
+                        return;
                     }
                 });
+            }
 
             this.containerheight = __this.actions.getTheBestBottom() - __this.actions.getTheBestTop() + 100 + 'px';
             this.containerwidth = __this.actions.getTheBestRight() - __this.actions.getTheBestLeft() + 250 + 'px';
@@ -209,9 +262,45 @@ let config = {
                 allTargetEndpoints.push(this.data.jsPlumbInstance.addEndpoint(toId, targetEndpoint, { anchor: targetAnchors[j], uuid: targetUUID }));
             }
         },
+        //驳回节点
+        rejectNode(e) {
+            // if (this.rejectMode) {
+                let can_reject = e.getAttribute("canreject");
+                let text = e.getAttribute("title");
+                this.rejectId = e.getAttribute("id");
+                if (can_reject == 1) {
+                    msgBox.confirm(`您确定要驳回到【${text}】么？`).then(res=>{
+                        if(res){
+                            console.log(1);
+                        }
+                    })
+                }
+            // }
+        },
+        //工作流节点负责性字段变色
+        requiredFields(e) {
+            let thisDom = $(e.target);
+            if (thisDom.hasClass("draged-item")) {
+                e.stopPropagation();
+                for (let key in this.requiredfieldsNodeList['frontendid2field']) {
+                    if (thisDom[0].id == key) {
+                        for (let a of this.requiredfieldsNodeList['frontendid2field'][key]) {
+                            $('*[requiredField=' + a + ']').css({ border: '1px solid transparent', boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px', transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out' });
+                        }
+                    }
+                }
+                for (let key in this.requiredfieldsNodeList['frontendid2fieldid']) {
+                    if (thisDom[0].id == key) {
+                        for (let b of this.requiredfieldsNodeList['frontendid2fieldid'][key]) {
+                            $('span[data-id=' + b + ']').css({ color: 'rgb(14,122,239)' });
+                        }
+                    }
+                }
+            }
+        },
         //zoomIn paint
         zoomInNodeflow($event) {
-            let container = this.el.find('#workflow-draw-box')[0];
+            let container = this.el.find('.workflow-draw-box')[0];
             this.data.nodeflowSize += 0.1;
             container.style.width = (+this.data.containerwidth.split('px')[0]) * (+this.data.nodeflowSize) + 'px';
             container.style.height = ((+this.data.containerheight.split('px')[0]) * (+this.data.nodeflowSize)) + 'px';
@@ -220,7 +309,7 @@ let config = {
         },
         //zoomOut paint
         zoomOutNodeflow($event) {
-            let container = this.el.find('#workflow-draw-box')[0];
+            let container = this.el.find('.workflow-draw-box')[0];
             this.data.nodeflowSize -= 0.1;
             container.style.transformOrigin = '0 0';
             container.style.transform = 'scale(' + this.data.nodeflowSize + ')';
@@ -230,7 +319,7 @@ let config = {
         //open paint in new window
         maximizeNodeflow($event) {
             this.el.find('.closeSpan').remove();
-            let container = this.el.find('#workflow-draw-box')[0];
+            let container = this.el.find('.workflow-draw-box')[0];
             container.style.transform = 'scale(1)';
             this.nodeflowSize = 1;
             let e = document.documentElement, g = document.getElementsByTagName('body')[0], w = window.innerWidth || e.clientWidth || g.clientWidth, h = window.innerHeight || e.clientHeight || g.clientHeight;
@@ -360,22 +449,32 @@ let config = {
     }
 }
 
-class WorkFlow extends Component {
+class WF extends Component {
     constructor(data){
         super(config, data);
     }
 }
 
-export default {
-    show(data) {
+
+
+let WorkFlow={
+    show(data,elem){
         let workFlowData = _.defaultsDeep({}, data, {
             nodeflowSize: 1,
             containerwidth: '100%',
             containerheight: '100px',
             // nodesWidth: '60px'
         });
-        let component = new WorkFlow(workFlowData);
-        let el = $('#drowflow');
+        let component = new WF(workFlowData);
+        this.WorkFlow=component;
+        let el = $(elem);
         component.render(el);
+    },
+    rejectNode(e){
+        this.WorkFlow.actions.rejectNode(e);
+    },
+    requiredFields(e){
+        this.WorkFlow.actions.requiredFields(e);
     }
 };
+export default WorkFlow;
