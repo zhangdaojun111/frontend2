@@ -714,7 +714,7 @@ let config = {
             let html = ''
             for( let btn of btns ){
                 let name = btn.className;
-                if( btnGroup.indexOf( name )!=-1 && this.data.permission[dgcService.permission2btn[name]] ){
+                if( btnGroup.indexOf( name )!=-1 && ( this.data.permission[dgcService.permission2btn[name]] || dgcService.permission2btn[name] == 'especial' ) ){
                     html+=btn.outerHTML;
                 }
             }
