@@ -17,7 +17,7 @@ var APP_PATH = path.resolve(ROOT_PATH, 'app');
 
 module.exports = {
 
-    devtool: 'eval-source-map',
+    // devtool: 'eval-source-map',
 
     // entry: [
     //     // 'webpack/hot/dev-server',
