@@ -719,7 +719,7 @@ let config={
 
         //快捷添加后回显
         addNewItem(data){
-            let dfield=this.data.quikAddDfield;
+            let dfield=this.data['quikAddDfield'];
             if(this.data.data[dfield]["options"]){
                 this.childComponent[dfield]['data']['options']=this.data.data[dfield]["options"] = data['newItems'];
             }else {
@@ -1195,7 +1195,7 @@ let config={
             })
         })
         Mediator.subscribe('form:addItem:'+_this.data.tableId,function(data){
-            _this.data.quikAddDfield=data.dfield;
+            _this.data['quikAddDfield']=data.dfield;
             let originalOptions;
             if(data.hasOwnProperty("options")){
                 originalOptions = data["options"];
@@ -1215,23 +1215,23 @@ let config={
             });
         })
         Mediator.subscribe('form:addNewBuildIn:'+_this.data.tableId,function(data){
-            _this.data.quikAddDfield=data.dfield;
+            _this.data['quikAddDfield']=data.dfield;
             PMAPI.openDialogByIframe(`/form/add_buildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
                 width:800,
                 height:600,
                 title:`快捷添加内置字段`,
                 modal:true
             }).then((data) => {
-                let options=_this.childComponent[_this.data.quikAddDfield].data['options'];
+                let options=_this.childComponent[_this.data['quikAddDfield']].data['options'];
                 if(options[0]['label'] == '请选择' || options[0]['label']==''){
                     options.splice(1,0,data.new_option);
                 }else{
                     options.splice(0,0,data.new_option);
                 }
-                _this.childComponent[_this.data.quikAddDfield].data.value=data.new_option.value;
-                _this.childComponent[_this.data.quikAddDfield].data.showValue=data.new_option.label;
-                _this.data.data[_this.data.quikAddDfield]=_this.childComponent[_this.data.quikAddDfield].data;
-                _this.childComponent[_this.data.quikAddDfield].reload();
+                _this.childComponent[_this.data['quikAddDfield']].data.value=data.new_option.value;
+                _this.childComponent[_this.data['quikAddDfield']].data.showValue=data.new_option.label;
+                _this.data.data[_this.data['quikAddDfield']]=_this.childComponent[_this.data['quikAddDfield']].data;
+                _this.childComponent[_this.data['quikAddDfield']].reload();
             });
         })
         Mediator.subscribe('form:selectChoose:'+_this.data.tableId,function(data){
