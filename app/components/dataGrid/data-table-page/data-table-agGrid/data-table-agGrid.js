@@ -901,8 +901,8 @@ let config = {
             let groupLit = {
                 tableId: this.data.tableId,
                 gridoptions: this.agGrid.gridOptions,
-                fields: this.actions.deleteGroup(this.data.groupFields),
-                myGroup: this.actions.setMyGroup(this.data.myGroup.fields)
+                fields: this.data.myGroup.length == 0 ? this.data.groupFields : this.actions.deleteGroup(this.data.groupFields),
+                myGroup:  this.actions.setMyGroup(this.data.myGroup.fields)
             }
             this.groupGridCom = new groupGrid(groupLit);
             this.append(this.groupGridCom,document.querySelector('.group-panel'));
