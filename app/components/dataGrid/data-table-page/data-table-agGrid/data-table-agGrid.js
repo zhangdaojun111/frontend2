@@ -108,7 +108,9 @@ let config = {
         //选择的数据
         selectIds: [],
         //编辑模式
-        isEditable: false
+        isEditable: false,
+        //第一次进入加载footer数据
+        firstGetFooterData: true,
     },
     //生成的表头数据
     columnDefs: [],
@@ -646,14 +648,16 @@ let config = {
             }
             this.data.filterParam = {
                 filter: filter,
-                is_filter: 1
+                is_filter: 1,
+                common_filter_id: ''
             }
             this.actions.getGridData();
         },
-        postExpertSearch:function(data) {
+        postExpertSearch:function(data,id) {
             this.data.filterParam = {
                 filter: data,
-                is_filter: 1
+                is_filter: 1,
+                common_filter_id: id
             }
             this.actions.getGridData();
         },
@@ -754,15 +758,23 @@ let config = {
         //请求表格数据
         getGridData: function () {
             let postData = this.actions.createPostData();
+            let post_arr = [];
             let body = dataTableService.getTableData( postData );
-            let footer = dataTableService.getFooterData( postData );
             let remindData = dataTableService.getReminRemindsInfo({table_id:this.data.tableId});
-            Promise.all([body, footer, remindData]).then((res)=> {
+            post_arr = [body,remindData]
+            if( !this.data.firstGetFooterData ){
+                let footer = dataTableService.getFooterData( postData );
+                post_arr.push( footer )
+            }
+            Promise.all(post_arr).then((res)=> {
                 this.data.rowData = res[0].rows || [];
                 this.data.total = res[0].total;
                 //提醒赋值
-                this.data.remindColor = res[2];
-                this.data.footerData = dgcService.createFooterData( res[1] );
+                this.data.remindColor = res[1];
+                this.data.common_filter_id = res[0].common_filter_id || '';
+                if( !this.data.firstGetFooterData ){
+                    this.data.footerData = dgcService.createFooterData( res[2] );
+                }
                 if( this.data.firstRender ){
                     //渲染agGrid
                     this.actions.renderAgGrid();
@@ -776,6 +788,19 @@ let config = {
                 }
                 this.actions.sortWay();
             })
+            HTTP.flush();
+        },
+        //请求footer数据
+        getFooterData: function () {
+            let postData = this.actions.createPostData();
+            dataTableService.getFooterData( postData ).then( res=>{
+                this.data.footerData = dgcService.createFooterData( res );
+                let d = {
+                    footerData: this.data.footerData
+                }
+                //赋值
+                this.agGrid.actions.setGridData(d);
+            } )
             HTTP.flush();
         },
         //返回请求数据
@@ -816,6 +841,7 @@ let config = {
             }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
+                json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
             }
             if( this.data.groupCheck ){
                 json['is_group'] = 1;
@@ -1195,6 +1221,24 @@ let config = {
                 ary.forEach((row) => {
                     $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
                 });
+                //第一次请求footer数据
+                if( this.data.firstGetFooterData ){
+                    if( this.data.common_filter_id ){
+                        for( let r of res.rows ){
+                            if( r.id == this.data.common_filter_id ){
+                                this.data.filterParam = {
+                                    filter: JSON.parse(r.queryParams),
+                                    is_filter: 1,
+                                    common_filter_id: this.data.common_filter_id
+                                }
+                                msgBox.alert('第一次加载乘用查询' + '<'+r.name+'>' );
+                                $('.dataGrid-commonQuery-select').val(r.name);
+                            }
+                        }
+                    }
+                    this.data.firstGetFooterData = false;
+                    this.actions.getFooterData();
+                }
             } );
             HTTP.flush();
         },
@@ -1351,14 +1395,14 @@ let config = {
         let _this = this
         $('.dataGrid-commonQuery-select').bind('change', function() {
             if($(this).val() == '常用查询') {
-                _this.actions.postExpertSearch([]);
+                _this.actions.postExpertSearch([],'');
             } else if($(this).val() == '临时高级查询') {
-                _this.actions.postExpertSearch(_this.data.saveTemporaryCommonQuery);
+                _this.actions.postExpertSearch(_this.data.saveTemporaryCommonQuery,'');
             } else {
                 $(this).find('.Temporary').remove();
                 _this.data.commonQueryData.forEach((item) => {
                     if(item.name == $(this).val()){
-                        _this.actions.postExpertSearch(JSON.parse(item.queryParams));
+                        _this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id);
                     }
                 })
             }
