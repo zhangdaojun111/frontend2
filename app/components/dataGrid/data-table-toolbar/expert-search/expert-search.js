@@ -168,9 +168,30 @@ let config = {
                     if(name == 'save'){
                         this.actions.openSaveQuery(name);
                     } else {
-                        $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
                         this.data.saveTemporaryCommonQuery(this.data.searchInputList);
-                        this.data.postExpertSearch(this.data.searchInputList);
+                        let searchId = '临时高级查询',searchName = '临时高级查询',appendChecked = true,existChecked = true;
+                        this.data.commonQuery.forEach((item) => {
+                            if(item.queryParams == JSON.stringify(this.data.searchInputList)) {
+                                searchId = item.id;
+                                searchName = item.name;
+                                appendChecked = false;
+                                $('.dataGrid-commonQuery-select').val(item.name);
+                            }
+                        })
+                        if(appendChecked) {
+                            let length = $('.dataGrid-commonQuery-select').find('option').length;
+                            for(let i = 0; i < length; i++) {
+                                if($('.dataGrid-commonQuery-select').find('option').eq(i).html() == '临时高级查询'){
+                                    existChecked = false;
+                                }
+                            }
+                            if(existChecked) {
+                                $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
+                                $('.dataGrid-commonQuery-select').val('临时高级查询');
+                            }
+                        }
+                        debugger
+                        this.data.postExpertSearch(this.data.searchInputList,searchId,searchName);
                     }
                 } else {
                     msgBox.alert('运算括号出错')
@@ -241,7 +262,7 @@ let config = {
                 if(res.succ == 0) {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
-                    this.data.postExpertSearch();
+                    // this.data.postExpertSearch();
                     this.actions.removeQueryItem(id);
                 }
             } );
