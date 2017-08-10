@@ -123,6 +123,7 @@ export class CanvasCellComponent extends BiBaseComponent {
             stop: (event, ui) => {
                 this.cell.size.left = ui.position.left;
                 this.cell.size.top = ui.position.top;
+                this.cell.size.zIndex = this.cell.canvas.data.cellMaxZindex
             }
         };
         const resizeOption = {
