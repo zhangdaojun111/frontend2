@@ -1186,6 +1186,17 @@ let config={
             for(let k in history){
                 history[k]['index']=i++;
             }
+            if(data.type == 'SettingTextarea'){
+                for(let key in history){
+                    if(_.isObject(history[key]['new_value'])){
+                        history[key]['new_value']=history[key]['new_value']['-1'].replace(/\n/g,";");
+                    }
+                    if(_.isObject(history[key]['old_value'])){
+                        history[key]['old_value']=history[key]['old_value']['-1'].replace(/\n/g,";");
+                    }
+                }
+            }
+            console.log(history);
             History.data.history_data=history;
             PMAPI.openDialogByComponent(History,{
                 width:800,
