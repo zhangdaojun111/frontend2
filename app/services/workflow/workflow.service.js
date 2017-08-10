@@ -12,7 +12,7 @@ export const workflowService={
         return HTTP.postImmediately( params)
     },
     createWorkflowRecord(params){
-        return HTTP.post('create_workflow_record', params)
+        return HTTP.postImmediately('/create_workflow_record/', params)
     },
     validateDraftData(params){
         return HTTP.postImmediately('/validate_draft_data/', params)
@@ -23,10 +23,24 @@ export const workflowService={
     addWorkflowFavorite(params){
         return HTTP.postImmediately('/add_workflow_favorite/', params)
     },
-    getFormStaticData(params){
-        return HTTP.post('get_form_static_data', params)
+    //审批工作流
+    //
+    approveWorkflowRecord(params){
+        return HTTP.postImmediately( params)
     },
-    getFormDynamicData(params){
-        return HTTP.post('get_form_dynamic_data', params)
+    getStuffInfo(params){
+        return HTTP.getImmediately( params)
+    },
+    //获取盖章图片
+    getStmpImg(params){
+        return HTTP.postImmediately('/get_user_stamp/', params);
+    },
+    //删除盖章图片
+     delStmpImg(params){
+        return HTTP.postImmediately('/delete_user_stamp/', params);
+    },
+    //添加盖章图片
+    addStmpImg(params){
+        return HTTP.postImmediately('/upload_user_stamp/', params);
     },
 }

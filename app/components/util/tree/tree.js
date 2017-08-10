@@ -5,7 +5,6 @@ import 'bootstrap-treeview/dist/bootstrap-treeview.min.js';
 import Component from '../../../lib/component';
 import template from './tree.html';
 import './tree.scss';
-
 const TREETYPE = {
     'MENU':{
         collapsed:true,
@@ -34,7 +33,6 @@ const TREETYPE = {
         backColor: 'white'
     }
 };
-
 let config = {
     template:template,
     data:{
@@ -184,7 +182,6 @@ let config = {
         } else {
             tree.treeview('expandAll', { level: 2, silent: true });
         }
-
         //搜索框
         if(!this.data.options.isSearch){
             this.el.find("#search-in-tree").hide();
@@ -195,17 +192,14 @@ let config = {
                 treeview.actions.searchTreeNode(inputComp,tree)
             },500));//500ms的延迟，减少事件处理
         }
-
     }
 }
-
 let defaultOptions = {
     callback: function (event,data) {},
     treeType: 'SINGLE_SELECT',
     isSearch: false,
     treeName: ''
 }
-
 /**
  * treeNode:必填，节点树的对象
  *      形如：
@@ -242,10 +236,9 @@ class TreeView extends Component{
     constructor(treeNodes, options){
         config.data.treeNodes = treeNodes;
         options = _.defaultsDeep(options,defaultOptions);
-        console.dir(options);
+        // console.dir(options);
         config.data.options = options;
         super(config);
     }
 }
-
 export default TreeView;
