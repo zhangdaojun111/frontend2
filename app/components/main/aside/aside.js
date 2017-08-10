@@ -131,11 +131,13 @@ let config = {
             this.commonBtn.addClass('active');
             this.data.menuType = 'common';
 
-            HTTP.postImmediately('/user_preference/', {
-                action: "save",
-                pre_type: "8",
-                content: "1"
-            });
+            if (window.config.commonUse.data.length > 0) {
+                HTTP.postImmediately('/user_preference/', {
+                    action: "save",
+                    pre_type: "8",
+                    content: "1"
+                });
+            }
         },
         openWorkflowIframe: function () {
             Mediator.emit('menu:item:openiframe', {
@@ -206,7 +208,7 @@ let config = {
                 this.actions.showInfoSet();
             });
             this.actions.initAvatar();
-            if (window.config.isCommon === "0") {
+            if (window.config.isCommon === "0" || window.config.commonUse.data.length === 0) {
                 this.actions.showAllMenu();
             } else {
                 this.actions.showCommonMenu();
