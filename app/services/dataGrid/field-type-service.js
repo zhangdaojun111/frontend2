@@ -132,7 +132,7 @@ export const fieldTypeService = {
     },
     //不能分组字段
     cantGroup: function (data) {
-        let arr = [this.SECRET_TEXT,this.TEXT_COUNT_TYPE,this.URL_TYPE]
+        let arr = [this.SECRET_TEXT,this.TEXT_COUNT_TYPE,this.URL_TYPE,this.IMAGE_TYPE,this.ATTACHMENT,this.VIDEO_TYPE,this.MULTI_SELECT];
         return arr.indexOf( data ) == -1
     },
     //后端排序字段

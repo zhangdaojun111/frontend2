@@ -15,6 +15,7 @@ import customColumns from "../../data-table-toolbar/custom-columns/custom-column
 import groupGrid from "../../data-table-toolbar/data-table-group/data-table-group";
 import dataPagination from "../../data-table-toolbar/data-pagination/data-pagination";
 import delSetting from '../../data-table-toolbar/data-table-delete/data-table-delete';
+import importSetting from '../../data-table-toolbar/data-table-import/data-table-import';
 import girdExport from '../../data-table-toolbar/data-table-export/data-table-export';
 
 import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
@@ -33,6 +34,7 @@ let config = {
         rowId: '',
         fieldId: '',
         source_field_dfield: '',
+        base_buildin_dfield: '',
         //iframe弹窗key
         key: '',
         // 提醒颜色
@@ -91,7 +93,7 @@ let config = {
         //定制列需要字段信息
         customColumnsFields: [],
         //搜索参数
-        filterParam: {filter: [],is_filter:0},
+        filterParam: {expertFilter:[], filter: [], is_filter: 0, common_filter_id: '', common_filter_name: ''},
         //是否第一次渲染agGrid
         firstRender: true,
         //权限
@@ -336,7 +338,7 @@ let config = {
                         let conditinField = '';
                         if (condition["optionfield"] != null) {
                             //通过id查找field
-                            for (let col of this.cols) {
+                            for (let col of this.data.fieldsData) {
                                 if (col["id"] == condition["optionfield"]) {
                                     conditinField = col["field"];
                                 }
@@ -715,7 +717,7 @@ let config = {
             let html = ''
             for( let btn of btns ){
                 let name = btn.className;
-                if( btnGroup.indexOf( name )!=-1 && this.data.permission[dgcService.permission2btn[name]] ){
+                if( btnGroup.indexOf( name )!=-1 && ( this.data.permission[dgcService.permission2btn[name]] || dgcService.permission2btn[name] == 'especial' ) ){
                     html+=btn.outerHTML;
                 }
             }
@@ -839,7 +841,7 @@ let config = {
                 //要注意tableId和source_table_id与平常不同
                 json["source_table_id"] = this.data.tableId;
                 json["table_id"] = this.data.parentTableId;
-                json["base_buildin_dfield"] = this.data.base_buildin_dfield;
+                json["base_buildin_dfield"] = this.data.source_field_dfield;
                 json['mongo'] = {
                     _id: this.data.rowId
                 }
@@ -1141,6 +1143,18 @@ let config = {
                     }
                 });
             } )
+            //导入数据
+            $('.grid-import-btn').click( function () {
+                console.log( "###" )
+                console.log( "###" )
+                PMAPI.openDialogByComponent(importSetting, {
+                    width: 400,
+                    height: 600,
+                    title: '导入数据'
+                }).then((data) => {
+
+                });
+            } )
             //导出
             $('.grid-export-btn').click(()=> {
                 this.actions.onExport()
@@ -1345,10 +1359,11 @@ let config = {
                 console.log( "内置相关穿透" )
                 let obj = {
                     tableId: data.colDef.source_table_id,
-                    tableName: data.colDef.source_table_name,
+                    tableName: data.colDef.source_table_name||'',
                     parentTableId: this.data.tableId,
                     rowId: data.data._id,
-                    base_buildin_dfield: data.colDef.base_buildin_dfield,
+                    base_buildin_dfield: data.colDef.source_field_dfield,
+                    source_field_dfield: data.colDef.base_buildin_dfield,
                     tableType: 'source_data',
                     viewMode: 'source_data'
                 }
@@ -1372,7 +1387,7 @@ let config = {
                 FormService.getDynamicData( json ).then( res=>{
                     let obj = {
                         tableId: data.colDef.field_content.correspondence_table_id,
-                        tableName: data.colDef.field_content.table_name,
+                        tableName: data.colDef.source_table_name||'',
                         parentTableId: this.data.tableId,
                         parentTempId: res.data.temp_id.value,
                         tableType: '',
@@ -1391,7 +1406,7 @@ let config = {
                 console.log( '统计穿透' )
                 let obj = {
                     tableId: data.colDef.field_content.count_table,
-                    tableName: data.colDef.field_content.count_table_name,
+                    tableName: data.colDef.field_content.count_table_name||'',
                     parentTableId: this.data.tableId,
                     tableType: 'count',
                     viewMode: 'count',
@@ -1408,7 +1423,7 @@ let config = {
                 console.log( "子表穿透" )
                 let obj = {
                     tableId: data.colDef.field_content.child_table,
-                    tableName: data.colDef.field_content.child_table_name,
+                    tableName: data.colDef.field_content.child_table_name||'',
                     parentTableId: this.data.tableId,
                     tableType: 'child',
                     viewMode: 'child',

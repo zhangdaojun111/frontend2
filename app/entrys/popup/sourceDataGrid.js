@@ -13,7 +13,8 @@ $(document).ready(function(){
         viewMode: window.config.viewMode || 'normal',
         key: window.config.key || '',
         base_buildin_dfield: window.config.base_buildin_dfield || '',
+        source_field_dfield: window.config.source_field_dfield || '',
     }
     let DataTableAgGrid=new dataTableAgGrid( json );
-    DataTableAgGrid.render($('body'));
+    DataTableAgGrid.render($('#sourceDataGrid'));
 });
