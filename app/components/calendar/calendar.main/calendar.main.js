@@ -788,7 +788,7 @@ let config = {
         Mediator.on('calendar-left: approve', data => {
             this.data.isShowWorkflowData = data;
             console.log(this.data.isShowWorkflowData);
-            if(this.data.calendarContent === 'month') {
+            if(this.data.calendarContent !== 'month') {
                 this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
             }
             this.actions.changeMainView(this.data.calendarContent);

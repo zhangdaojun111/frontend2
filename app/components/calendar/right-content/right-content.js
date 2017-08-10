@@ -55,6 +55,7 @@ let config = {
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
+
         Mediator.on('CalendarMain: date', date => {
             this.el.find('.item-content-2').empty();
             // CalendarService.getWorkflowRecords(date).then(res => {
@@ -66,6 +67,7 @@ let config = {
             //     console.log('error',err);
             // });
             CalendarService.getWorkflowRecords( {type: 5,'from_date':date.from_date,'to_date':date.to_date} ).then( res=>{//approve
+                console.log(res);
                 res['rows'].forEach(row =>{
                     this.append(new RightContentWorkFlow(row), this.el.find('.item-content-2'));
                 })
