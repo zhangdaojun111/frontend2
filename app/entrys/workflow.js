@@ -178,9 +178,12 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
 var mockFlowData;
 
 (async function () {
-    return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=wenjingjing_1502270451650',data:{
-        flow_id:10,
-        record_id:"598ac7a1c57ccd4d472bd31d"
+    return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
+        flow_id:32,
+        record_id:'59897f02c3ec2134050ee6a7'
+    // return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=wenjingjing_1502270451650',data:{
+    //     flow_id:10,
+    //     record_id:"598ac7a1c57ccd4d472bd31d"
     }});
 })().then(res=>{
     Mediator.publish('workflow:getImgInfo',res);

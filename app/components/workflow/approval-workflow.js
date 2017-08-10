@@ -13,7 +13,8 @@ let config={
         focus_users:[],
         action:0,
         comment:'',
-        node_id:null
+        node_id:null,
+        workflowData:null
     },
     actions:{
         approveWorkflow (__this){
@@ -78,12 +79,18 @@ let config={
                     Mediator.publish('approval:appRejUp',res);
                 }
             })
+        },
+        appRejAny(){
+            this.el.find('.rejContainer').show();
+            WorkFlow.show(this.data.workflowData,'#rejWf');
         }
 
     },
     afterRender(){
+        
         let __this=this;
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
+            this.data.workflowData=msg.data[0];
             WorkFlow.show(msg.data[0],'#drawflow');
         });
       
@@ -91,6 +98,10 @@ let config={
             this.actions.toogz(e);
         })
 
+
+        this.el.on('click','.close',function () {
+            __this.el.find('.rejContainer').hide();
+        });
         this.el.on('click',".preview-btn",function () {
             let appendDiv=__this.el.find("#preview-node");
             __this.actions.previewView($(this),appendDiv);
@@ -103,6 +114,12 @@ let config={
         });
         this.el.on('click','#app-rej-up',function () {
             __this.actions.appRejUp();
+        });
+        this.el.on('click','#app-rej-any',function () {
+            __this.actions.appRejAny();
+        });
+        this.el.on('click','#rejWf .draged-item',function(){
+            WorkFlow.rejectNode(this);
         });
 
         Mediator.subscribe("workflow:sendImgInfo",(e)=>{
