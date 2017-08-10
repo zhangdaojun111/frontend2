@@ -280,7 +280,7 @@ FormEntrys.createForm({
                 sigh_type:0,//加签类型  0：前 1：后
                 sigh_user_id:'',
                 data:{},
-                sign:data
+                sign:JSON.stringify(data),
             });
 
     })
