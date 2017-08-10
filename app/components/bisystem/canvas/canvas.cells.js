@@ -26,8 +26,8 @@ let config = {
             // 获取画布块数据
             let zIndex = [];
             const chartsId = this.data.cells.map((cell) => {
-               zIndex.push(cell.size.zIndex);
-               return cell.chart_id ? cell.chart_id : 0
+                zIndex.push(cell.size.zIndex);
+                return cell.chart_id ? cell.chart_id : 0
             });
 
             // 获取画布块最大zindex
@@ -81,7 +81,7 @@ let config = {
                 let canvasHeaderlComponent = new CanvasHeaderlComponent(val);
                 this.append(canvasHeaderlComponent,this.el.find('.nav-tabs'));
             });
-         }
+        }
         let self = this;
 
         // 匹配导航的视图id
@@ -161,11 +161,11 @@ let config = {
 export class CanvasCellsComponent extends BiBaseComponent{
     constructor(id) {
         let hash = window.location.href.indexOf('single');
-            if(hash>0){
-                config.data.canvasSingle = false;
-            } else {
-                config.data.canvasSingle = true;
-            }
+        if(hash>0){
+            config.data.canvasSingle = false;
+        } else {
+            config.data.canvasSingle = true;
+        }
         super(config);
         this.viewId = id ? id : this.data.views[0] ? this.data.views[0]['id'] : [] ;
     }
