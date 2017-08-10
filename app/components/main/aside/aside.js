@@ -157,13 +157,15 @@ let config = {
         },
         initAvatar:function () {
             let src = this.data.avatar;
-            let para = this.data.avatar_content;
-            this.el.find("img.set-info")
-                .attr("src",src);
-                // .css("width",para.width)
-                // .css("height",para.height)
-                // .css("left",para.left)
-                // .css("top",para.top)
+            // let para = this.data.avatar_content;
+            if(src !== ''){
+                let $img = $("<img>").addClass("set-info");
+                $img.attr('src', src);
+                this.el.find("div.avatar").append($img);
+                $img.on('error', function () {
+                    $img.remove();
+                });
+            }
         },
         logout: function () {
             HTTP.getImmediately('/logout/').then((res) => {
@@ -179,12 +181,17 @@ let config = {
             commonuse.show();
         },
         resetAvatar:function(){
-            this.el.find("img.set-info")
-                .attr("src",window.config.sysConfig.userInfo.avatar);
-                // .css("width",window.config.sysConfig.userInfo.avatar_content.width)
-                // .css("height",window.config.sysConfig.userInfo.avatar_content.height)
-                // .css("left",window.config.sysConfig.userInfo.avatar_content.left)
-                // .css("top",window.config.sysConfig.userInfo.avatar_content.top);
+            let $img = this.el.find("img.set-info");
+            if($img.length === 0){
+                $img = $("<img>").addClass("set-info");
+                $img.attr("src",window.config.sysConfig.userInfo.avatar);
+                this.el.find("div.avatar").append($img);
+            }else{
+                $img.attr("src",window.config.sysConfig.userInfo.avatar);
+            }
+        },
+        onImageError: function () {
+            
         }
     },
     afterRender: function () {
