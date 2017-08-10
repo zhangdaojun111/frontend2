@@ -269,8 +269,8 @@ FormEntrys.createForm({
 }).then(res=>{
     ApprovalHeader.showheader(res);
     WorkflowRecord.showRecord(res);
-    Mediator.subscribe('approval:recordPass', (ispass)=> {
-       if(ispass){
+    Mediator.subscribe('approval:recordPass', (data)=> {
+        console.log(data);
            approveWorkflow({
                 record_id:'59897f1591461c15d279023a',
                 focus_users:[],
@@ -279,9 +279,10 @@ FormEntrys.createForm({
                 node_id:null,//驳回节点id
                 sigh_type:0,//加签类型  0：前 1：后
                 sigh_user_id:'',
-                data:{}
+                data:{},
+                sign:data
             });
-        }
+
     })
     Mediator.subscribe('approval:appRejUp', (ispass)=> {
        if(ispass){

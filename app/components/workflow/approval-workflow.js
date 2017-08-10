@@ -58,9 +58,11 @@ let config={
             }
         },
         appPass() {
+
+            Mediator.publish('workflow:appPass');
             msgBox.confirm("你确定审核通过吗").then((res)=>{
                 if(res===true){
-                    Mediator.publish('approval:recordPass',res);
+                    Mediator.publish("approval:recordPass",this.data.imgInfo);
                 }
             })
         },
@@ -79,8 +81,41 @@ let config={
             })
         },
         appRejAny(){
-            this.el.find('.rejContainer').show();
-            WorkFlow.show(this.data.workflowData,'#rejWf');
+            // this.el.find('.rejContainer').show();
+            this.el.find('.closeSpan').remove();
+            let container = this.el.find('.workflow-draw-box')[0];
+            container.style.transform = 'scale(1)';
+            container.id = "rej";
+            let e = document.documentElement, g = document.getElementsByTagName('body')[0], w = window.innerWidth || e.clientWidth || g.clientWidth, h = window.innerHeight || e.clientHeight || g.clientHeight;
+            container.style.position = "fixed";
+            container.style.top = "0";
+            container.style.left = "0";
+            container.style.right = "0";
+            container.style.bottom = "0";
+            container.style.backgroundColor = "#fff";
+            container.style.width = w + 'px';
+            container.style.height = h + 'px';
+            container.style.marginTop = 0;
+            container.style.margin = 0;
+            container.style.zIndex = '100';
+            container.style.overflow = 'auto';
+            let ocloseSpan = document.createElement('span');
+            ocloseSpan.className = 'closeSpan';
+            ocloseSpan.style['float'] = 'right';
+            ocloseSpan.style.cursor = 'pointer';
+            ocloseSpan.style.fontSize = '30px';
+            ocloseSpan.style.border = '1px solid #ddd';
+            ocloseSpan.innerHTML = '&nbsp;×&nbsp;';
+            ocloseSpan.addEventListener('click', (event) => {
+                container.id = "";
+                container.style.height ='100px';
+                container.style.width = '100%';
+                container.style.position = "relative";
+                container.style.zIndex = '0';
+                container.style.overflow = 'visible';
+                ocloseSpan.style.display = 'none';
+            });
+            container.appendChild(ocloseSpan);
         }
 
     },
@@ -116,9 +151,16 @@ let config={
         this.el.on('click','#app-rej-any',function () {
             __this.actions.appRejAny();
         });
-        this.el.on('click','#rejWf .draged-item',function(){
+        this.el.on('click','#rej .draged-item',function(){
             WorkFlow.rejectNode(this);
         });
+
+        Mediator.subscribe("workflow:sendImgInfo",(e)=>{
+            this.data.imgInfo=e;
+        })
+
+
+
 
     }
 };
