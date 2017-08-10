@@ -22,7 +22,7 @@ let config = {
         //收集上传的信息给后台
         collectImg(){
             let imgNode = this.el.find('.imgseal');
-            console.log(imgNode);
+            // console.log(imgNode);
             let len = imgNode.length;
             let arr = new Array();
             for (let i=0;i<len;i++){
@@ -40,7 +40,7 @@ let config = {
                 };
                 arr.push(obj);
             }
-            console.log(arr);
+            // console.log(arr);
             return arr;
         },
         addImg(e){
@@ -80,7 +80,7 @@ let config = {
         })
         this.el.on("click",'.J_del',(e)=>{
             this.actions.delimg(e);
-            // this.actions.collectImg();
+            this.actions.collectImg();
         })
         Mediator.subscribe('workflow:getImgInfo',(e)=>{
             this.actions.addImg(e);
@@ -91,7 +91,9 @@ let config = {
         Mediator.subscribe('workflow:showImg',(e)=>{
             this.actions.showImg(e);
         });
-        Mediator.publish('workflow:sendImgInfo',this.actions.collectImg());
+        Mediator.subscribe("workflow:appPass",(e)=>{
+            Mediator.publish('workflow:sendImgInfo',this.actions.collectImg());
+        })
     }
 }
 
