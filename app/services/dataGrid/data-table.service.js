@@ -35,5 +35,10 @@ export const dataTableService = {
     //删除数据
     delTableData: function ( param ) {
         return HTTP.post( 'delete_table_data',param )
+    },
+    //导入数据
+    importData: function ( data ) {
+        // let headers = new Headers({'Content-Type': 'application/vnd.ms-excel; charset=UTF-8'});
+        return HTTP.post( 'delete_table_data',data )
     }
 }
