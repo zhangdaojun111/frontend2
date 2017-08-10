@@ -23,6 +23,7 @@ import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import History from'../history/history'
 import AddEnrypt from '../encrypt-input-control/add-enrypt'
 import {md5} from '../../../services/login/md5';
+import AttachmentControl from "../attachment-control/attachment-control";
 
 let config={
     template:'',
@@ -721,7 +722,7 @@ let config={
 
         //快捷添加后回显
         addNewItem(data){
-            let dfield=this.data.quikAddDfield;
+            let dfield=this.data['quikAddDfield'];
             if(this.data.data[dfield]["options"]){
                 this.childComponent[dfield]['data']['options']=this.data.data[dfield]["options"] = data['newItems'];
             }else {
@@ -737,17 +738,6 @@ let config={
         },
         //提交表单数据
         onSubmit(){
-            if(this.data.isAddBuild){
-                let data={new_option:{
-                    py: "213213(lz)",
-                    value: "59892cbeca8b367dfbcff98d",
-                    label: "213213(离职)"}}
-                PMAPI.sendToParent({
-                    type: PMENUM.close_dialog,
-                    key:this.data.key,
-                    data:data
-                });
-            }
             let formValue=this.actions.createFormValue(this.data.data);
             let {error,errorMsg} = this.actions.validForm(this.data.data,formValue);
             if(error){
@@ -854,22 +844,27 @@ let config={
             }
             FormService.saveAddpageData(json)
                 .then(res => {
-                        console.log('*******************');
-                        console.log(res);
-                        // this.successAlert(res["error"]);
-                        //自己操作的新增和编辑收到失效推送自己刷新
-                        // this.isSuccessSubmit();
-                        //清空子表内置父表的ids
-                        // delete this.globalService.idsInChildTableToParent[this.tableId];
-                        setTimeout(() => {
-                            //如果不是工作流表单 回显
-                            if(this.flowId == ''){
-                                // this.newBuildItem.emit(res);
-                            }else{
-                                // this.newBuildItem.emit();
-                            }
-                            // this.isSuccess.emit(true);
-                        },1000)
+                    console.log('*******************');
+                    console.log(res);
+                    if(res.succ == 1){
+                        if(this.data.isAddBuild && !this.flowId){
+                            let data={new_option:{
+                                py: "213213(lz)",
+                                value: "59892cbeca8b367dfbcff98d",
+                                label: "213213(离职)"}}
+                            PMAPI.sendToParent({
+                                type: PMENUM.close_dialog,
+                                key:this.data.key,
+                                data:data
+                            });
+                        }
+                        MSG.alert('保存成功');
+                    }
+                    // this.successAlert(res["error"]);
+                    //自己操作的新增和编辑收到失效推送自己刷新
+                    // this.isSuccessSubmit();
+                    //清空子表内置父表的ids
+                    // delete this.globalService.idsInChildTableToParent[this.tableId];
                 })
             HTTP.flush();
 
@@ -1018,7 +1013,7 @@ let config={
                 let id = data["id"];
                 let value;
                 for(let obj of data['options']){
-                    if(obj.label == data.value){
+                    if(obj.value == data.value){
                         value=obj.value;
                         break;
                     }
@@ -1184,6 +1179,11 @@ let config={
                     settingTextareaControl.render(single);
                     _this.childComponent[data[key].dfield] = settingTextareaControl;
                     break;
+                case 'Attachment':
+                    let attachmentControl = new AttachmentControl(data[key]);
+                    attachmentControl.render(single);
+                    _this.childComponent[data[key].dfield] = attachmentControl;
+                    break;
             }
         }
 
@@ -1208,7 +1208,7 @@ let config={
             })
         })
         Mediator.subscribe('form:addItem:'+_this.data.tableId,function(data){
-            _this.data.quikAddDfield=data.dfield;
+            _this.data['quikAddDfield']=data.dfield;
             let originalOptions;
             if(data.hasOwnProperty("options")){
                 originalOptions = data["options"];
@@ -1245,23 +1245,23 @@ let config={
         }),
 
         Mediator.subscribe('form:addNewBuildIn:'+_this.data.tableId,function(data){
-            _this.data.quikAddDfield=data.dfield;
+            _this.data['quikAddDfield']=data.dfield;
             PMAPI.openDialogByIframe(`/form/add_buildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
                 width:800,
                 height:600,
                 title:`快捷添加内置字段`,
                 modal:true
             }).then((data) => {
-                let options=_this.childComponent[_this.data.quikAddDfield].data['options'];
+                let options=_this.childComponent[_this.data['quikAddDfield']].data['options'];
                 if(options[0]['label'] == '请选择' || options[0]['label']==''){
                     options.splice(1,0,data.new_option);
                 }else{
                     options.splice(0,0,data.new_option);
                 }
-                _this.childComponent[_this.data.quikAddDfield].data.value=data.new_option.value;
-                _this.childComponent[_this.data.quikAddDfield].data.showValue=data.new_option.label;
-                _this.data.data[_this.data.quikAddDfield]=_this.childComponent[_this.data.quikAddDfield].data;
-                _this.childComponent[_this.data.quikAddDfield].reload();
+                _this.childComponent[_this.data['quikAddDfield']].data.value=data.new_option.value;
+                _this.childComponent[_this.data['quikAddDfield']].data.showValue=data.new_option.label;
+                _this.data.data[_this.data['quikAddDfield']]=_this.childComponent[_this.data['quikAddDfield']].data;
+                _this.childComponent[_this.data['quikAddDfield']].reload();
             });
         })
         Mediator.subscribe('form:selectChoose:'+_this.data.tableId,function(data){

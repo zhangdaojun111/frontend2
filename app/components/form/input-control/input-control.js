@@ -222,8 +222,10 @@ let config={
 class InputControl extends Component {
     constructor(data){
         super(config,data);
-        // console.log('inputControl');
-        // console.log(this.data);
+        if(this.data.dfield == 'f26'){
+            console.log('inputControl');
+            console.log(this.data);
+        }
     }
 }
 

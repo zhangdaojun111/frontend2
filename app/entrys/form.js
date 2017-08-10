@@ -8,6 +8,29 @@ import '../assets/scss/form.scss'
 let FormEntrys={
     childForm:{},
     init(config={}){
+        this.tableId='';
+        this.parentRealId='';
+        this.parentTempId='';
+        this.seqId='';
+        this.realId='';
+        this.parentTableId='';
+        this.parentRecordId='';
+        this.isView= 0;
+        this.isBatch= 0;
+        this.recordId='';
+        this.action='';
+        this.el='';
+        this.reloadDraftData=0;
+        this.formId='';
+        this.fromWorkFlow=0;
+        this.flowId='';
+        this.fieldId='';
+        this.key='';
+        this.fromApprove='';
+        this.formFocus='';
+        this.isAddBuild=0;
+        this.buildId='';
+
         this.tableId=config.table_id||'';
         this.parentRealId=config.parent_real_id||'';
         this.parentTempId=config.parent_temp_id||'';
@@ -161,6 +184,7 @@ let FormEntrys={
     staticData.tableId=this.tableId;
     staticData.formId=this.formId;
     staticData.flowId=this.flowId;
+    staticData.isBatch=this.isBatch;
     staticData.key=this.key;
     return staticData;
 },
@@ -253,6 +277,7 @@ let FormEntrys={
             _this.findFormIdAndFlowId(res);
             let json=_this.createPostJson();
             FormService.getFormData(json).then(res=>{
+                console.time('form创建时间');
                 if(this.formId){
                     template=res[2]['data']['content'];
                 }else{
@@ -266,6 +291,7 @@ let FormEntrys={
                 let formBase=new FormBase(formData);
                 _this.childForm[_this.tableId]=formBase;
                 formBase.render(html);
+                console.timeEnd('form创建时间');
             });
         })
     },

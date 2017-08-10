@@ -1,4 +1,5 @@
 import Component from '../../../lib/component';
+import Mediator from '../../../lib/mediator';
 let config={
     template:`
               <div class="clearfix">
@@ -18,16 +19,20 @@ let config={
               </div>
                 `,
     data:{
-        label:'',
-        vale:'',
     },
     actions:{
     },
+    firstAfterRender(){
+        let _this=this;
+        _this.el.on('input','input',_.debounce(function(){
+            _this.data.value=$(this).val();
+            Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data);
+        },300));
+    }
 }
 class TextAreaControl extends Component {
     constructor(data){
         super(config,data);
-        console.log(this.data);
     }
 }
 
