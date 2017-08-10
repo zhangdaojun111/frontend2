@@ -32,7 +32,7 @@ let config={
 
             switch (type){
                 case 'follow-view' :
-                    let addFollow=this.el.find(".workflow-foot #add-follow").clone();
+                    let addFollow=this.el.find(".workflow-foot #add-follow").clone(true);
                     appendDiv.find(".preview-node1").html(addFollow);
                     appendDiv.find(".preview-node1").toggle().siblings().hide();
                     break;
@@ -42,27 +42,11 @@ let config={
                     appendDiv.find(".preview-node2").toggle().siblings().hide();
                     break;
                 case 'record-view' :
-                    let workflowRecord=this.el.find(".workflow-foot #workflow-record").clone();
+                    let workflowRecord=this.el.find(".workflow-record #workflow-record").clone();
                     appendDiv.find(".preview-node3").html(workflowRecord);
                     appendDiv.find(".preview-node3").toggle().siblings().hide();
                     break;
             }
-        },
-        recordFn:function () {
-            let kind={
-                pass:function () {
-                    msgBox.confirm("你确定审核通过吗").then((res)=>{
-                        if(res){
-                            Mediator.publish('approval:recordPass',res);
-                            // console.log('提交成功')
-                        }else {
-                            // console.log('未提交')
-                            return;
-                        }
-                    })
-                }
-            };
-            return kind;
         },
         toogz(e){
             let ev = this.el.find(".signature");
@@ -71,6 +55,27 @@ let config={
             }else{
                 ev.css("display","none");
             }
+        },
+        appPass() {
+            msgBox.confirm("你确定审核通过吗").then((res)=>{
+                if(res===true){
+                    Mediator.publish('approval:recordPass',res);
+                }
+            })
+        },
+        appRejStart(){
+            msgBox.confirm("你确定驳回发起人吗").then((res)=>{
+                if(res===true){
+                    Mediator.publish('approval:recordRejStart',res);
+                }
+            })
+        },
+        appRejUp(){
+            msgBox.confirm("你确定驳回上一级吗").then((res)=>{
+                if(res===true){
+                    Mediator.publish('approval:appRejUp',res);
+                }
+            })
         }
 
     },
@@ -79,27 +84,24 @@ let config={
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             WorkFlow.show(msg.data[0],'#drawflow');
         });
-
-        // this.el.on('click','#app-pass',()=>{
-        //     this.actions.approveWorkflow(__this);
-        // });
-
+      
         this.el.on('click','.gz',(e)=>{
             this.actions.toogz(e);
         })
-
-        this.el.on('click','#app-pass',()=>{
-            this.actions.approveWorkflow(__this);
-        });
-
 
         this.el.on('click',".preview-btn",function () {
             let appendDiv=__this.el.find("#preview-node");
             __this.actions.previewView($(this),appendDiv);
         });
         this.el.on('click','#app-pass',function () {
-            __this.actions.recordFn().pass()
-        })
+            __this.actions.appPass();
+        });
+        this.el.on('click','#app-rej-start',function () {
+            __this.actions.appRejStart();
+        });
+        this.el.on('click','#app-rej-up',function () {
+            __this.actions.appRejUp();
+        });
 
     }
 };
