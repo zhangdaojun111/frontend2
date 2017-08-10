@@ -24,7 +24,7 @@ let config = {
             });
             config.rendItemNum ++ ;
             $('.condition-search-li').on('click', function() {
-                _this.actions.setInputValue($(this).find('.name').html(),$(this).find('.searchField').html());
+                _this.actions.setInputValue($(this).find('.name').html(),$(this).find('.searchField').html(),$(this).find('.searchType').html());
                 _this.actions.setSelectValue($(this).find('.searchType').html());
                 _this.actions.setInputType($(this).find('.searchType').html());
                 config.epSearch.actions.hideList();
@@ -34,9 +34,10 @@ let config = {
             config.inputObject = object;
             config.inputNextObject = nextObject;
         },
-        setInputValue: function(value,name) {
+        setInputValue: function(value,name,type) {
             config.inputObject.val(value);
             config.inputObject.attr('name',name);
+            config.inputObject.attr('title',type);
         },
         setInputType: function(type) {
             let inputType;
@@ -59,7 +60,7 @@ let config = {
             switch (type) {
                 case "datetime": config.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlTwo); break;
                 case "text": config.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlOne); break;
-                case "number": config.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlOne); break
+                case "number": config.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlTwo); break
             }
         },
         delete: function() {

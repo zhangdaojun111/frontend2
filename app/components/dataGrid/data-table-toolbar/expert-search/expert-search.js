@@ -11,8 +11,12 @@ import './expert-search.scss';
 let config = {
     template: template,
     ulChecked: true,
+    id: null,
+    name:'',
     inputValue: null,
     radioId: 0,
+    isEdit: false,
+    itemDeleteChecked:false,
     searchInputList:[],
     optionHtmlOne : `<option value="$regex">包含</option>
                     <option value="exact">等于</option>
@@ -63,7 +67,11 @@ let config = {
                     cond: {},
                     relation:'$and'
                 }
-                obj['cond']['keyword'] = document.querySelector('.condition-search-input').value;
+                if(document.querySelector('.condition-search-box-input').title == 'number') {
+                    obj['cond']['keyword'] = parseInt(document.querySelector('.condition-search-input').value);
+                } else {
+                    obj['cond']['keyword'] = document.querySelector('.condition-search-input').value;
+                }
                 obj['cond']['leftBracket'] = document.querySelector('.condition-search-select.left-select').value;
                 obj['cond']['operate'] = document.querySelector('.condition-search-select.relation').value;
                 obj['cond']['rightBracket'] = document.querySelector('.condition-search-select.right-select').value;
@@ -84,7 +92,6 @@ let config = {
                     obj['cond']['searchBy'] = document.querySelectorAll('.condition-search-box-input')[i].name;
                     obj['cond']['searchByName'] = document.querySelectorAll('.condition-search-box-input')[i].value;
                     obj['cond']['searchByNew'] = document.querySelectorAll('.condition-search-box-input')[i].name;
-                    debugger
                     if($('.condition-search-radio.or').eq(i).prop('checked') == true) {
                         obj['relation'] = '$or';
                     }
@@ -92,6 +99,9 @@ let config = {
                 }
             }
             this.actions.checkedSubmitData(name)
+        },
+        intData:function(data,item) {
+
         },
         //展示常用查询
         showSearchData: function(data) {
@@ -125,7 +135,7 @@ let config = {
                     switch (item.searchType) {
                         case "datetime": htmlStr = config.optionHtmlTwo; break;
                         case "text": htmlStr = config.optionHtmlOne; break;
-                        case "number": htmlStr = config.optionHtmlOne; break
+                        case "number": htmlStr = config.optionHtmlTwo; break;
                     }
                 }
             })
@@ -169,13 +179,32 @@ let config = {
         },
         //打开保存常用查询
         openSaveQuery: function(){
+            if(this.isEdit) {
+                addQuery.data.name = this.name
+            }
             PMAPI.openDialogByComponent(addQuery, {
                 width: 380,
                 height: 220,
                 title: '保存为常用查询'
             }).then((data) => {
                 if(data) {
-                    this.actions.saveCommonQuery(data.value);
+                    if(!this.isEdit) {
+                        this.actions.saveCommonQuery(data.value);
+                    } else {
+                        this.actions.deleteCommonQuery(this.id);
+                        this.actions.saveCommonQuery(data.value);
+                        $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${this.id}" value="${this.name}">${this.name}</option>`)
+                        $('.common-search-list').append(`<li class="common-search-item" fieldId="${this.id}">${this.name}<span class="item-delete"></span></li>`);
+                        $('.common-search-list').find('.item-delete').css('display','none');
+                        $('.common-search-compile').html('编辑');
+                        this.itemDeleteChecked = !this.itemDeleteChecked;
+                        this.isEdit = false;
+                        this.data.commonQuery.forEach((item) => {
+                            if(item.id == this.id) {
+                                item.queryParams = JSON.stringify(this.data.searchInputList)
+                            }
+                        })
+                    }
                 }
             });
         },
@@ -185,15 +214,6 @@ let config = {
                 $('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
             })
         },
-        //保存临时常用查询
-        // saveTemporaryCommonQuery:function() {
-        //     this.data.commonQuery.push({
-        //         id: '00',
-        //         name:'临时常用查询',
-        //         queryParams: JSON.stringify(this.data.searchInputList)
-        //     })
-        //     debugger
-        // },
         //保存常用查询
         saveCommonQuery: function(name) {
             let obj = {
@@ -221,8 +241,8 @@ let config = {
                 if(res.succ == 0) {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
-                    this.data.postExpertSearch()
-                    this.actions.removeQueryItem(id)
+                    this.data.postExpertSearch();
+                    this.actions.removeQueryItem(id);
                 }
             } );
             HTTP.flush();
@@ -244,6 +264,8 @@ let config = {
         }
     },
     afterRender: function() {
+        this.itemDeleteChecked = false;
+        this.isEdit = false;
         let epCondition = new expertCondition();
         if(this.data.commonQuery.length == 0){
             $('.common-search-compile').css('display','none')
@@ -253,7 +275,7 @@ let config = {
             })
         }
         this.actions.rendSearchItem();
-        let _this = this,itemDeleteChecked=true;
+        let _this = this;
         this.el.on('click','.condition-search-box-input', function() {
             if (config.ulChecked){
                 $(this).next('.condition-search-ul').css('display','block');
@@ -276,7 +298,12 @@ let config = {
         }).on('click','.common-search-item',function() {
             _this.data.commonQuery.forEach((item) => {
                 if(item.id == this.attributes['fieldId'].nodeValue){
+                    _this.name = item.name;
+                    _this.id = item.id;
                     _this.actions.showSearchData(JSON.parse(item.queryParams));
+                    if(_this.itemDeleteChecked) {
+                        _this.isEdit = true;
+                    }
                 }
             })
         }).on('click','.save-button',()=> {
@@ -285,14 +312,15 @@ let config = {
             event.stopPropagation();
             _this.actions.deleteCommonQuery($(this).parent('.common-search-item').attr('fieldId'))
         }).on('click','.common-search-compile',function(){
-            if(itemDeleteChecked){
+            if(!_this.itemDeleteChecked){
                 $('.common-search-list').find('.item-delete').css('display','block');
                 $('.common-search-compile').html('取消');
-                itemDeleteChecked = !itemDeleteChecked;
+                _this.itemDeleteChecked = !_this.itemDeleteChecked;
             } else {
                 $('.common-search-list').find('.item-delete').css('display','none');
                 $('.common-search-compile').html('编辑');
-                itemDeleteChecked = !itemDeleteChecked;
+                _this.itemDeleteChecked = !_this.itemDeleteChecked;
+                _this.isEdit = false;
             }
 
 
