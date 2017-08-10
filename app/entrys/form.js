@@ -266,34 +266,39 @@ let FormEntrys = {
         }
     },
     //创建表单入口
-    createForm(config={}){
-        let _this=this;
-        this.init(config);
-        let tableID=this.tableId;
-        let html=$(`<div id="form-${tableID}" style="" class="table-wrap">`).appendTo(this.el);
-        let template='<table><tbody><tr class="firstRow"><td width="244" valign="top"><span data-id="2562_nLNdMCPYogJJ4py4AHqDum" style="border:2px">名称</span></td><td width="244" valign="top"><label id="2562_nLNdMCPYogJJ4py4AHqDum" style="border:2px"><input type="text" data-fill-in="0" style="box-sizing:border-box;width:240px;height:34px;line-height:34px;border-radius:5px;padding:6px 12px;border:1px solid #ccc;" name="2562_nLNdMCPYogJJ4py4AHqDum" data-required="0"/></label></td><td width="244" valign="top" style="word-break: break-all;"><br/></td><td width="244" valign="top" style="word-break: break-all;"><br/></td></tr><tr><td width="244" valign="top" style="word-break: break-all;"><span data-id="7949_yaq4qmVjgatey4xAi2UCT9" style="border:2px">年份</span></td><td width="244" valign="top" style="word-break: break-all;"><label id="7949_yaq4qmVjgatey4xAi2UCT9" style="border:2px"><select data-fill-in="1" style="box-sizing:border-box;width:240px;height:34px;line-height:34px;border-radius:5px;border:1px solid #ccc;" name="7949_yaq4qmVjgatey4xAi2UCT9" data-required="0" data-year="1" class="normalSelect"></select></label></td><td width="244" valign="top"><span data-id="4207_jUwup8ziqYyTyeMivJJ2JL" style="border:2px">所在地</span></td><td width="244" valign="top"><label id="4207_jUwup8ziqYyTyeMivJJ2JL" style="border:2px"><input type="radio" data-required="0" data-fill-in="2" name="4207_jUwup8ziqYyTyeMivJJ2JL" value="6971_oargmg9mnTxZTU2Qqo6uge"/>北京<input type="radio" data-required="0" data-fill-in="2" name="4207_jUwup8ziqYyTyeMivJJ2JL" value="9398_ysjjqkNsbkf8A6yRar8Fsg"/>深圳<input type="radio" data-required="0" data-fill-in="2" name="4207_jUwup8ziqYyTyeMivJJ2JL" value="4253_5eN7tuKuBL2tLgiVPMhxAj"/>上海<input type="radio" data-required="0" data-fill-in="2" name="4207_jUwup8ziqYyTyeMivJJ2JL" value="1197_gP79KY5yjLLXFGvWF4JkBB"/>成都</label></td></tr></tbody></table><p><br/></p>';
-        FormService.getPrepareParmas({table_id:this.tableId}).then(res=>{
-            _this.findFormIdAndFlowId(res);
-            let json=_this.createPostJson();
-            FormService.getFormData(json).then(res=>{
-                console.time('form创建时间');
-                if(this.formId){
-                    template=res[2]['data']['content'];
-                }else{
-                    template=_this.formDefaultVersion(res[0].data);
-                }
-                let data=_this.mergeFormData(res[0],res[1]);
-                let formData={
-                    template:template,
-                    data:data,
-                }
-                let formBase=new FormBase(formData);
-                _this.childForm[_this.tableId]=formBase;
-                formBase.render(html);
-                console.timeEnd('form创建时间');
-            });
+    createForm:function(config={}){
+        return new Promise((resolve,rej)=>{
+            
+            let _this=this;
+            this.init(config);
+            let tableID=this.tableId;
+            if(this.tableId){
+                this.destoryForm(this.tableId);
+            }
+            let html=$(`<div id="form-${tableID}" style="" class="table-wrap">`).appendTo(this.el);
+            let template='<table><tbody><tr class="firstRow"><td width="244" valign="top"><span data-id="2562_nLNdMCPYogJJ4py4AHqDum" style="border:2px">名称</span></td><td width="244" valign="top"><label id="2562_nLNdMCPYogJJ4py4AHqDum" style="border:2px"><input type="text" data-fill-in="0" style="box-sizing:border-box;width:240px;height:34px;line-height:34px;border-radius:5px;padding:6px 12px;border:1px solid #ccc;" name="2562_nLNdMCPYogJJ4py4AHqDum" data-required="0"/></label></td><td width="244" valign="top" style="word-break: break-all;"><br/></td><td width="244" valign="top" style="word-break: break-all;"><br/></td></tr><tr><td width="244" valign="top" style="word-break: break-all;"><span data-id="7949_yaq4qmVjgatey4xAi2UCT9" style="border:2px">年份</span></td><td width="244" valign="top" style="word-break: break-all;"><label id="7949_yaq4qmVjgatey4xAi2UCT9" style="border:2px"><select data-fill-in="1" style="box-sizing:border-box;width:240px;height:34px;line-height:34px;border-radius:5px;border:1px solid #ccc;" name="7949_yaq4qmVjgatey4xAi2UCT9" data-required="0" data-year="1" class="normalSelect"></select></label></td><td width="244" valign="top"><span data-id="4207_jUwup8ziqYyTyeMivJJ2JL" style="border:2px">所在地</span></td><td width="244" valign="top"><label id="4207_jUwup8ziqYyTyeMivJJ2JL" style="border:2px"><input type="radio" data-required="0" data-fill-in="2" name="4207_jUwup8ziqYyTyeMivJJ2JL" value="6971_oargmg9mnTxZTU2Qqo6uge"/>北京<input type="radio" data-required="0" data-fill-in="2" name="4207_jUwup8ziqYyTyeMivJJ2JL" value="9398_ysjjqkNsbkf8A6yRar8Fsg"/>深圳<input type="radio" data-required="0" data-fill-in="2" name="4207_jUwup8ziqYyTyeMivJJ2JL" value="4253_5eN7tuKuBL2tLgiVPMhxAj"/>上海<input type="radio" data-required="0" data-fill-in="2" name="4207_jUwup8ziqYyTyeMivJJ2JL" value="1197_gP79KY5yjLLXFGvWF4JkBB"/>成都</label></td></tr></tbody></table><p><br/></p>';
+            FormService.getPrepareParmas({table_id:this.tableId}).then(res=>{
+                _this.findFormIdAndFlowId(res);
+                let json=_this.createPostJson();
+                FormService.getFormData(json).then(res=>{
+                    if(this.formId){
+                        template=res[2]['data']['content'];
+                    }else{
+                        template=_this.formDefaultVersion(res[0].data);
+                    }
+                    let data=_this.mergeFormData(res[0],res[1]);
+                    let formData={
+                        template:template,
+                        data:data,
+                    }
+                    _this.formBase=new FormBase(formData);
+                    _this.formBase.render(html);
+                    resolve(_this.formBase.data.record_info);
+                });
+            })
         })
     },
+
     //审批删除时重置表单可编辑性
     editDelWorkFlow(tableId,formId){
         this.childForm[tableId].actions.editDelWork(formId);

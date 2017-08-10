@@ -1,6 +1,102 @@
-.ag-header {
-  height: 50px!important;
+//滚动条
+.ag-body-viewport::-webkit-scrollbar {
+  width: 4px;
+  height: 6px;
 }
+.ag-body-viewport::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 5px rgba(14, 122, 239, 0.290196);
+  background: rgba(14, 122, 239,0.2);
+}
+.ag-body-viewport::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 5px rgba(14, 122, 239, 0.290196);
+  border-radius: 0;
+  background: rgba(14, 122, 239,0.1);
+}
+//隐藏提示框
+.ag-overlay-no-rows-center {
+  border-color: transparent!important;
+  background-color: transparent!important;
+}
+
+/*表格*/
+.ag-root {
+  line-height: 1.4;
+  font-family: SimSun, Helvetica, Arial, sans-serif;
+  color: #000;
+  border: none;
+}
+
+.ag-cell-not-inline-editing {
+  padding: 0px!important;
+}
+
+.ag-cell-no-focus {
+  padding-left:5px;
+  padding-right:5px;
+  border-right:1px dotted #cccccc!important;
+  border-left: none!important;
+  border-top: none;
+  border-bottom: none;
+}
+
+.ag-header-cell {
+  border-right: 1px dotted rgb(204,204,204)!important;
+  border-left: none!important;
+}
+.ag-root .ag-header-cell-moving .ag-header-cell-label {
+  opacity: 0.5;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  filter: alpha(opacity=50);
+}
+.ag-header-cell-label {
+  color: #666666;
+  font-weight: bolder;
+  line-height: 15px;
+}
+
+.ag-header-group-cell {
+  border-left: 1px dotted rgb(204,204,204);
+}
+.ag-header-group-cell-with-group {
+  border-bottom: 1px solid rgb(240,240,240);
+  text-align: center;
+}
+.ag-header-cell-label {
+  padding-left:5px;
+  padding-right:1px;
+}
+.ag-header-cell-text {
+  padding-left: 2px;
+}
+.ag-header-group-cell-label {
+  padding: 4px;
+  padding-left: 10px;
+}
+.ag-header-group-text {
+  margin-right: 2px;
+}
+
+.ag-root .ag-pinned-right-header {
+  border-left: none;
+}
+
+.ag-header-select-all {
+  padding: 5px 0px 0px 3px!important;
+}
+
+.ag-header-container {
+  border-bottom: 1px dotted rgb(204,204,204);
+  border-top: 1px dotted rgb(204,204,204);
+}
+
+.ag-cell-focus {
+  background-color: rgba(120,120,120,0.3);
+  border: none!important;
+}
+
 .ag-body {
-  top: 50px!important;
+  background-color: #ffffff!important;
 }
+
+
