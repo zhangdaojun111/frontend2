@@ -35,8 +35,8 @@ let config = {
         init(cellChart) {
             if (
                 cellChart['chart']['data']['rows'].length === 0 ||
-                cellChart['chart']['data']['rows']['xAxis'].length === 0 ||
-                cellChart['chart']['data']['rows']['yAxis'].length === 0) {
+                cellChart['chart']['data']['xAxis'].length === 0 ||
+                cellChart['chart']['data']['yAxis'].length === 0) {
                 return false;
             }
             let nineType = cellChart['chart']['type'];

@@ -169,7 +169,7 @@ export class CanvasCellsComponent extends BiBaseComponent{
         }
 
         super(config);
-        this.viewId = id ? id : this.data.views[0]['id'];
+        this.viewId = id ? id : this.data.views[0] ? this.data.views[0]['id'] : [] ;
 
     };
 
