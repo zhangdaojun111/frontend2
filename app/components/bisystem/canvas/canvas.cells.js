@@ -15,7 +15,7 @@ let config = {
         cells:[],
         componentIds: [],
         cellMaxZindex: 0,
-        canvasSingle:true,
+        canvasSingle:false,
         biUser:window.config.bi_user === 'client' ? true : false,
     },
     actions: {
@@ -129,22 +129,17 @@ let config = {
             let hash = window.location.hash;
             let url = `${pathname}${hash}?single`;
             window.location.href = url;
-            // $(this).attr('href',url);
         });
 
         this.el.on('click', '.bi-manage-btn', function(event){
             let url = window.location.hash;
-            window.location.href = `/bi/manager/${url}`;
+            let reg = url.replace(/\?single/, "");
+            window.location.href = `/bi/manager/${reg}`;
         }).on('click', '.btn-multip', function(){
             let url = window.location.hash;
             window.location.href = `/bi/index/${url}`;
         })
 
-        //多页跳转隐藏
-        // $('.btn-multip').click(function () {
-        //     $(this).hide();
-        //     $('.btn-single').hide();
-        // })
     },
 
     /**
@@ -161,8 +156,8 @@ let config = {
 
 export class CanvasCellsComponent extends BiBaseComponent{
     constructor(id) {
-
-        if(window.location.search!==""){
+        let hash = window.location.href.indexOf('single');
+        if(hash>0){
             config.data.canvasSingle = false;
         } else {
             config.data.canvasSingle = true;
