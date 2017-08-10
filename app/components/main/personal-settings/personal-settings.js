@@ -14,15 +14,16 @@ import Mediator from "../../../lib/mediator";
 function getData(component_instance) {
     // console.log(window.config.sysConfig.userInfo);
     _.defaultsDeep(component_instance.data, {
-    avatar: window.config.sysConfig.userInfo.avatar,
-    avatar_content:window.config.sysConfig.userInfo.avatar_content,
-    name:window.config.sysConfig.userInfo.name,
-    username: window.config.sysConfig.userInfo.username,
-    user_department:window.config.sysConfig.userInfo.user_department,
-    user_position:window.config.sysConfig.userInfo.user_job,
-    user_email:window.config.sysConfig.userInfo.email,
-    user_phone:window.config.sysConfig.userInfo.tel,
-    otherLoginVisible:window.config.sysConfig.logic_config.use_register
+        avatar: window.config.sysConfig.userInfo.avatar,
+        avatar_content:window.config.sysConfig.userInfo.avatar_content,
+        name:window.config.sysConfig.userInfo.name,
+        username: window.config.sysConfig.userInfo.username,
+        user_department:window.config.sysConfig.userInfo.user_department,
+        user_position:window.config.sysConfig.userInfo.user_job,
+        user_email:window.config.sysConfig.userInfo.email,
+        user_phone:window.config.sysConfig.userInfo.tel,
+        otherLoginVisible:window.config.sysConfig.userInfo.is_superuser
+        // otherLoginVisible:1,
     });
 }
 

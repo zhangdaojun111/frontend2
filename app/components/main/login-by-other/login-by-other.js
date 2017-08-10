@@ -44,7 +44,7 @@ let config = {
                 return UserInfoService.change_login_user(userId).done((result) => {
                     console.log(result);
                     if(result.success === 0){
-                        msgbox.alert("切换用户失败，原因是" + res.error);
+                        msgbox.alert("切换用户失败，原因是" + result.error);
                     }
                     if(result.success === 1){
                         location.reload(false);
