@@ -93,7 +93,7 @@ let config = {
         //定制列需要字段信息
         customColumnsFields: [],
         //搜索参数
-        filterParam: {filter: [],is_filter:0},
+        filterParam: {expertFilter:[], filter: [], is_filter: 0, common_filter_id: '', common_filter_name: ''},
         //是否第一次渲染agGrid
         firstRender: true,
         //权限
