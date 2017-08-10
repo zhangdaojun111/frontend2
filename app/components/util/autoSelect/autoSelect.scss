@@ -1,0 +1,25 @@
+.auto-select-component {
+    border: 1px solid #ddd;
+    input {
+        border: 0 none;
+        width: 100%;
+        border-bottom: 1px solid #dddddd;
+        height: 30px;
+        line-height: 30px;
+        padding: 0;
+        outline: none;
+        text-indent: 10px;
+    }
+    ul {
+        overflow: auto;
+        text-align: center;
+        li {
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+            &:hover {
+                background: #ddd;
+            }
+        }
+    }
+}

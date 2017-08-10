@@ -1,0 +1,8 @@
+<div class="auto-select-component">
+    <input type="text" placeholder="选择或者输入查找" />
+    <ul>
+        {{#each list}}
+        <li data-id="{{id}}" data-name="{{name}}">{{name}}</li>
+        {{/each}}
+    </ul>
+</div>

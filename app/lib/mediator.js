@@ -13,6 +13,6 @@ Mediator.removeAll = function(channelName) {
 
     Mediator.remove(channelName);
 
-}
+};
 
 export default Mediator;

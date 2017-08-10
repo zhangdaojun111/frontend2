@@ -49,3 +49,43 @@ html {
     background-color: #ccc;
 }
 
+.alert-box {
+    padding: 20px;
+    .text {
+        overflow: auto;
+        font-size: 14px;
+        line-height: 30px;
+        height: 60px;
+        text-align: center;
+    }
+    .button {
+        height: 30px;
+        padding-top: 10px;
+        text-align: center;
+        button {
+            width: 80px;
+            height: 30px;
+        }
+    }
+}
+
+.confirm-box {
+    padding: 20px;
+    .text {
+        overflow: auto;
+        font-size: 14px;
+        line-height: 30px;
+        height: 60px;
+        text-align: center;
+    }
+    .button {
+        height: 30px;
+        padding-top: 10px;
+        text-align: center;
+        button {
+            width: 80px;
+            height: 30px;
+        }
+    }
+}
+

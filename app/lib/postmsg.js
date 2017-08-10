@@ -66,10 +66,19 @@ window.addEventListener('message', function(event) {
                 };
                 comp['key']=data.key;
                 comp.render(elementDiv);
+                dialogHash[data.key].comp = comp;
                 dialogHash[data.key].element.dialog(_.defaultsDeep(data.frame, {
                     modal: true,
                     close: function () {
-                        comp.destroySelf();
+                        if (dialogHash[data.key]) {
+                            PMAPI.sendToParent({
+                                type: PMENUM.close_dialog,
+                                key: data.key,
+                                data: {
+                                    onlyclose: true
+                                }
+                            });
+                        }
                     }
                 }));
                 break;
@@ -83,12 +92,26 @@ window.addEventListener('message', function(event) {
                 dialogHash[data.key].element.dialog(_.defaultsDeep(data.frame, {
                     modal: true,
                     close: function () {
-                        dialogHash[data.key].element.remove();
+                        if (dialogHash[data.key]) {
+                            PMAPI.sendToParent({
+                                type: PMENUM.close_dialog,
+                                key: data.key,
+                                data: {
+                                    onlyclose: true
+                                }
+                            });
+                        }
                     }
                 }));
                 break;
             case PMENUM.close_dialog:
                 dialogHash[data.key].element.dialog('destroy').remove();
+                if (dialogHash[data.key].comp) {
+                    dialogHash[data.key].comp.destroySelf();
+                }
+                if (dialogHash[data.key].element) {
+                    dialogHash[data.key].element.remove();
+                }
                 PMAPI.sendToChild(dialogHash[data.key].iframe,{
                     type: PMENUM.recieve_data,
                     key: data.key,
