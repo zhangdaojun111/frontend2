@@ -65,12 +65,13 @@ let config = {
             reader.onload = (e) => {
                 let picSrc = e.target['result'];
                 // 手动显示上传的图片(350*350)
-                this.el.find("img.pic_set")
-                    .attr("src",picSrc)
-                    .attr("width",this.data.imgW)
-                    .attr("height",this.data.imgH)
-                    .attr("left",this.data.imgX)
-                    .attr("top",this.data.imgY);
+                let $img = $("<img>").addClass('pic_set');
+                    $img.attr("src",picSrc)
+                        .css({
+                            "width": this.data.imgW,
+                            "height": this.data.imgH
+                        });
+                this.el.find(".avatar-container").append($img);
                 this.actions.initImgData(picSrc);
                 //上传图片后，开启裁剪功能
                 this.el.find("img.pic_set").Jcrop({
@@ -108,12 +109,18 @@ let config = {
             this.actions.displayAvatar();
         },
         displayAvatar:function () {
-            this.el.find("img.result-img")
-                .attr("src",this.data.imgData.src)
+            let $img = this.el.find("img.result-img");
+            if( $img.length === 0){
+                $img = $("<img>").addClass('result-img');
+            }
+
+            $img.attr("src",this.data.imgData.src)
                 .css("width",this.data.imgData.width)
                 .css("height",this.data.imgData.height)
                 .css("left",this.data.imgData.left)
                 .css("top",this.data.imgData.top);
+
+            this.el.find(".drag-result").append($img);
         },
         saveAvatar:function () {
             let data = this.data.imgData;
