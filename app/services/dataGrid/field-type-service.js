@@ -91,7 +91,7 @@ export const fieldTypeService = {
     TEXT_COUNT_TYPE : "34",//合同编辑器
     EDIT_CONTROL : "35",
     numOrText: function (data) {//(数字或者文本)用real_type判断
-        return data == this.FLOAT_TYPE || data == this.INT_TYPE || data == this.CORRESPONDENCE
+        return data == this.FLOAT_TYPE || data == this.INT_TYPE
     },
     childTable: function (data) {//子表
         return data == this.NORMAL_CHILD

@@ -98,8 +98,12 @@ let config = {
         },
         //重新赋值
         setGridData: function ( json ) {
-            this.gridOptions.api.setRowData( json.rowData );
-            this.gridOptions.api.setPinnedBottomRowData( json.footerData );
+            if( json.rowData ){
+                this.gridOptions.api.setRowData( json.rowData );
+            }
+            if( json.footerData ){
+                this.gridOptions.api.setPinnedBottomRowData( json.footerData );
+            }
             // this.agGrid.gridOptions.api.redrawRows();
         },
         //宽度自适应

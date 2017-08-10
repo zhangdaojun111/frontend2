@@ -195,7 +195,8 @@ export const dgcService = {
             }
             let obj = {};
             if(queryParams.childInfo){
-                if( ( queryParams.filter && queryParams.filter.length == 1 ) || ( !queryParams.filter ) ){
+                console.log( queryParams.childInfo )
+                if( ( queryParams.filter && queryParams.filter.length == 1 ) || ( queryParams.filter.length == 0 ) || !queryParams.filter ){
                     temp['section_page_'+queryParams.childInfo.parent_page_id] = queryParams.parent_temp_id || queryParams.childInfo.parent_row_id;
                 }else if( queryParams.filter && queryParams.filter.length > 1 ){
                     if(temp['$and']) {
@@ -359,9 +360,12 @@ export const dgcService = {
             normal:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width','grid-new-window'],
             ViewChild:['float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
             EditChild:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
+            child:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
             createBatch: ['grid-del-btn','grid-import-btn','custom-column-btn'],
             source_data: ['custom-column-btn','grid-auto-width'],
-            count: ['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width']
+            count: ['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
+            viewFromCorrespondence: ['float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
+            editFromCorrespondence: ['float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width']
         }
         return obj[viewMode];
     },

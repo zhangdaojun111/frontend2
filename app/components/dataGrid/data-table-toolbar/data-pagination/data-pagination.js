@@ -3,7 +3,6 @@ import template from './data-pagination.html';
 import './data-pagination.scss';
 import {dataTableService} from "../../../../services/dataGrid/data-table.service";
 import {HTTP} from "../../../../lib/http"
-
 let config = {
     template: template,
     data: {
@@ -59,13 +58,6 @@ let config = {
             this.data.currentPage=1;
             this.actions.disableClick();
 
-        // }
-        // if(this.data.currentPage<=1){
-        //     $(".goFirst").css({
-        //         "opacity": "0.3",
-        //         "filter": "alpha(opacity=30)"
-        //     });
-        // }
         this.data.rows = $(".selectSize").val();
         this.data.sumPage = Math.ceil(this.data.total / this.data.rows);
         // console.log(this.data.sumPage+"SSS"+this.data.currentPage)
@@ -103,23 +95,16 @@ let config = {
             $(".goNext").click(() => {
                 this.data.rows = $(".selectSize").val();
                 this.data.sumPage = Math.ceil(this.data.total / this.data.rows);
-                // if(this.data.currentPage===1){
-                //     $(".goFirst").css({
-                //         "opacity": "0.3",
-                //         "filter": "alpha(opacity=30)"
-                //     });
-                // }
+
                 if (this.data.currentPage < this.data.sumPage) {
                     $(".goFirst").css({
                         "opacity": "1",
                         "filter": "alpha(opacity=100)"
                     });
-                    // console.log(this.data.currentPage);
-                    // console.log(this.data.currentPage.type);
+
                     this.data.currentPage += 1;
                     this.data.firstRow = this.data.rows * (this.data.currentPage - 1);
-                    //this.actions.paginationChanged(this.data.currentPage,this.data.rows,this.data.firstRow);
-                    //console.log(this.actions.paginationChanged());
+
                     $('.current-page').html(parseInt(this.data.currentPage));
                     // console.log(this.data.currentPage);
                     let obj = {
@@ -222,10 +207,7 @@ let config = {
                 });
             }
 
-            // console.log('sss',this.data.total);
-            // if (this.data.total===0){
-            //     this.actions.disableClick();
-            // }
+
             if (this.data.currentPage===this.data.sumPage){
                 this.actions.disableClick();
             }
@@ -239,7 +221,7 @@ let config = {
                 $(".goLast").css({
                     "opacity": "0.3",
                     "filter": "alpha(opacity=30)"
-                })
+                });
 
 
                 $('.current-page').html(this.data.currentPage);
@@ -255,40 +237,85 @@ let config = {
 
             //点击当前得页码  跳出可选择页码的文本框
             $(".current-page").click(() => {
+                if (this.data.total<=0){
+
+                    this.data.currentPage=1;
+                    this.data.sumPage=1;
+                    $(".sumPage").html("共" + this.data.sumPage + "页");
+                    $(".selectPage").show();
+                    $(".page").hide();
+                }
+                else {
                 this.data.rows = $(".selectSize").val();
                 this.data.sumPage = Math.ceil(this.data.total / this.data.rows);
                 this.data.firstRow = (this.data.sumPage - 1) * this.data.rows;
+                console.log(this.data.currentPage);
                 $(".sumPage").html("共" + this.data.sumPage + "页");
                 $(".selectPage").show();
                 $(".page").hide();
+                }
             });
 
         //点击确定按钮跳转到目标页面
-        $(".confirm").click(() => {
-            this.data.rows = $(".selectSize").val();
-            let target = $(".enter-number").val();
-            this.data.sumPage = Math.ceil(this.data.total / this.data.rows);
 
-            if (target>this.data.sumPage){
-                alert("最大页面是"+this.data.sumPage+"页")
+        $(".confirm").click(() => {
+
+            this.data.rows = $(".selectSize").val();
+            let target = Number($(".enter-number").val());
+
+            if (this.data.total>0){
+                this.data.sumPage = Math.ceil(this.data.total / this.data.rows);
+                if (target===0){
+                    $('.current-page').html(parseInt(this.data.currentPage));
+                    $(".selectPage").hide();
+                    $(".page").show();
+                    let obj = {
+                        currentPage: this.data.currentPage,
+                        rows: Number(this.data.rows),
+                        firstRow: this.data.firstRow
+                    };
+                    this.actions.paginationChanged(obj);
+                }
+                if (target <= this.data.sumPage&&target!==0) {
+                    this.data.currentPage = target;
+                    this.data.firstRow =((this.data.currentPage - 1) * this.data.rows);
+                    $('.current-page').html(parseInt(this.data.currentPage));
+                    $(".selectPage").hide();
+                    $(".page").show();
+                    let obj = {
+                        currentPage: this.data.currentPage,
+                        rows: Number(this.data.rows),
+                        firstRow: this.data.firstRow
+                    };
+                    this.actions.paginationChanged(obj);
+                }
             }
-            if (target <= this.data.sumPage) {
-                // let acc=$('.current-page').html();
-                this.data.currentPage = Number(target);
-                this.data.firstRow =((this.data.currentPage - 1) * this.data.rows);
-                $('.current-page').html(parseInt(this.data.currentPage));
-                // if(target===""||target===0){
-                //     $('.current-page').html(acc);
-                // }
-                $(".selectPage").hide();
-                $(".page").show();
-                let obj = {
-                    currentPage: this.data.currentPage,
-                    rows: Number(this.data.rows),
-                    firstRow: this.data.firstRow
-                };
-                this.actions.paginationChanged(obj);
+            // this.data.sumPage = Math.ceil(this.data.total / this.data.rows);
+            if(this.data.total===0) {
+                this.data.sumPage=1;
+
+                if (target===0){
+                    this.data.currentPage=1;
+                console.log(this.data.currentPage);
+                    $('.current-page').html(parseInt(this.data.currentPage));
+                    $(".selectPage").hide();
+                    $(".page").show();
+
+                }
+                if (target <= this.data.sumPage&&target!==0) {
+                    this.data.currentPage = target;
+                    this.data.firstRow =((this.data.currentPage - 1) * this.data.rows);
+                    $('.current-page').html(parseInt(this.data.currentPage));
+                    $(".selectPage").hide();
+                    $(".page").show();
+                }
+
+
+            if (target>this.data.sumPage) {
+                alert("最大页面是" + this.data.sumPage + "页")
             }
+            }
+
             // console.log(target);
         });
             //点击取消
@@ -298,7 +325,12 @@ let config = {
             });
         //刷新
         $(".ui-icon-refresh").click(() => {
+            console.log($(this),1111);
 
+            $(".ui-icon-refresh").addClass('rotate');
+            setTimeout(()=>{
+                $(".ui-icon-refresh").removeClass('rotate');
+            },2000);
             this.data.rows = $(".selectSize").val();
             this.data.sumPage = Math.ceil(this.data.total / this.data.rows);
             this.data.firstRow =((this.data.currentPage - 1) * this.data.rows);

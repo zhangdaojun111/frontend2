@@ -78,10 +78,28 @@ $fon-sise:24px;
     left: 2px;
   }
 }
+  @keyframes  go{
+   0% {
+
+     transform: rotateZ(0);
+   }
+   100% {transform: rotateZ(360deg);
+   }
+ }
+  .rotate{
+    animation-name:go;
+    animation-duration:2s;
+    -webkit-animation-duration: 2s;
+    animation-iteration-count:  infinite;
+    //animation-play-state: paused
+  }
+
 .ui-icon-refresh{
+
   cursor: pointer;
   top: 6px;
   left: 2px;
+
 }
 .sumPage{
   display: inline-block;
