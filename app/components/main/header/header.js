@@ -57,9 +57,13 @@ let config = {
         },
         refreshOnlineNum: function (number) {
             this.el.find('.online-num span').text(number);
-        }
-
         },
+        initGlobalSearch:function () {
+            let component = new GlobalSearch();
+            let $container = this.el.find(".global-search");
+            component.render($container);
+        }
+    },
 
     afterRender: function () {
         this.el.tooltip();
@@ -109,7 +113,8 @@ let config = {
         Mediator.on('socket:online_user_num', function (data) {
             that.actions.refreshOnlineNum(data.online_user_num);
         });
-
+        //加载全局搜索窗口
+        this.actions.initGlobalSearch();
     },
     
     beforeDestory: function () {
