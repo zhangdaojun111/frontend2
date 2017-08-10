@@ -141,7 +141,7 @@ $font_size: 12px;
         }
       .hide_meun{
         position: absolute;
-        left: 210px;
+        left: 200px;
         top: 0px;
         z-index: 9999;
         width: 112px;
@@ -156,19 +156,18 @@ $font_size: 12px;
             outline: none;
             border: none;
             white-space: nowrap;
-            line-height: 48px;
+            line-height: 40px;
             padding: 0 16px;
             font-size: $btn_width;
             text-align: start;
             transition: all .3s;
             background-color: #ffffff;
-
           }
           .menuitem:hover{
             background-color: rgba(240, 240, 240, 0.87);
           }
         }
-      }
+       }
       }
     }
 }
