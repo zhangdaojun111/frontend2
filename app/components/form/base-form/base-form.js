@@ -1287,7 +1287,7 @@ let config={
         })
 
         //添加提交按钮
-        _this.el.append('<div style="position: fixed;bottom: 20px;right: 20px;"><button id="save">提交</button><button id="changeEdit">转到编辑模式</button></div>')
+        _this.el.append('<div style="bottom: 20px;right: 20px;"><button id="save">提交</button><button id="changeEdit">转到编辑模式</button></div>')
 
         //提交按钮事件绑定
         _this.el.on('click','#save',function () {
