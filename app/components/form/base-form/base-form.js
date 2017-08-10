@@ -21,6 +21,8 @@ import SettingTextareaControl from "../setting-textarea-control/setting-textarea
 import AddItem from '../add-item/add-item';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import History from'../history/history'
+import AddEnrypt from '../encrypt-input-control/add-enrypt'
+import {md5} from '../../../services/login/md5';
 
 let config={
     template:'',
@@ -41,7 +43,7 @@ let config={
     },
     childComponent:{},
     actions:{
-
+        md5:md5,
         //返回formValue格式数据
         getFormValue(){
             return this.actions.createFormValue(this.data.data);
@@ -727,7 +729,12 @@ let config={
             }
             this.childComponent[dfield].reload();
         },
-
+        addEnrypt(data){
+            let value=this.actions.md5(data.newItems);
+            this.data.data[this.data['addPassWordField']].value=value;
+            this.childComponent[this.data['addPassWordField']].actions.hasChangeValue(this.data.data[this.data['addPassWordField']]);
+            console.log(this.data.data[this.data['addPassWordField']]);
+        },
         //提交表单数据
         onSubmit(){
             if(this.data.isAddBuild){
@@ -1219,7 +1226,24 @@ let config={
                 console.log('快捷添加回显');
                 _this.actions.addNewItem(data);
             });
-        })
+
+        });
+       // 密码弹出
+        Mediator.subscribe('form:addPassword:'+_this.data.tableId,function(data){
+            _this.data['addPassWordField']=data.dfield;
+            PMAPI.openDialogByComponent(AddEnrypt , {
+                width: 800,
+                height: 600,
+                title: '添加新选项',
+                modal:true
+            }).then((data) => {
+                if(!data.cancel){
+                    console.log('快捷添加回显');
+                    _this.actions.addEnrypt(data);
+                }
+            });
+        }),
+
         Mediator.subscribe('form:addNewBuildIn:'+_this.data.tableId,function(data){
             _this.data.quikAddDfield=data.dfield;
             PMAPI.openDialogByIframe(`/form/add_buildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
