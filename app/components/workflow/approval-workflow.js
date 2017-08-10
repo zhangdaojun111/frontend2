@@ -57,9 +57,11 @@ let config={
             }
         },
         appPass() {
+
+            Mediator.publish('workflow:appPass');
             msgBox.confirm("你确定审核通过吗").then((res)=>{
                 if(res===true){
-                    Mediator.publish('approval:recordPass',res);
+                    Mediator.publish("approval:recordPass",this.data.imgInfo);
                 }
             })
         },
@@ -102,6 +104,13 @@ let config={
         this.el.on('click','#app-rej-up',function () {
             __this.actions.appRejUp();
         });
+
+        Mediator.subscribe("workflow:sendImgInfo",(e)=>{
+            this.data.imgInfo=e;
+        })
+
+
+
 
     }
 };
