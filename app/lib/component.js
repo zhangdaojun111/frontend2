@@ -38,8 +38,8 @@ class Component {
 
     render(el) {
         if (el.length === 0) {
-            // console.error('component: el必须是存在于dom内的节点');
-            // console.dir(this);
+            console.error('component: el必须是存在于dom内的节点');
+            console.dir(this);
             return;
         }
         this.el = el;

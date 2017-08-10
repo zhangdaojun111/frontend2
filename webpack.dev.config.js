@@ -5,9 +5,9 @@
 const path = require('path');
 var express = require('express');
 var webpack = require('webpack');
-// var WebpackDevMiddleware = require('webpack-dev-middleware');
-// var WebpackHotMiddleware = require('webpack-hot-middleware');
-// var HtmlWebpackPlugin = require('html-webpack-plugin');
+var WebpackDevMiddleware = require('webpack-dev-middleware');
+var WebpackHotMiddleware = require('webpack-hot-middleware');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 require("babel-polyfill");
 
@@ -17,7 +17,7 @@ var APP_PATH = path.resolve(ROOT_PATH, 'app');
 
 module.exports = {
 
-    // devtool: 'eval-source-map',
+    devtool: 'eval-source-map',
 
     // entry: [
     //     // 'webpack/hot/dev-server',
@@ -43,7 +43,7 @@ module.exports = {
             'jquery-ui/themes/base/theme.css',
             'mediator-js',
             'handlebars',
-            // 'moment',
+            'moment',
             'lodash',
             'babel-polyfill',
             'jsplumb'
