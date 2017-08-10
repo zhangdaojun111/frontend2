@@ -126,6 +126,7 @@ export class CanvasCellComponent extends BiBaseComponent {
                 this.cell.size.zIndex = this.cell.canvas.data.cellMaxZindex
             }
         };
+
         const resizeOption = {
             grid: [10, 10],
             stop: (event, ui) => {
