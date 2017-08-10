@@ -730,17 +730,6 @@ let config={
 
         //提交表单数据
         onSubmit(){
-            if(this.data.isAddBuild){
-                let data={new_option:{
-                    py: "213213(lz)",
-                    value: "59892cbeca8b367dfbcff98d",
-                    label: "213213(离职)"}}
-                PMAPI.sendToParent({
-                    type: PMENUM.close_dialog,
-                    key:this.data.key,
-                    data:data
-                });
-            }
             let formValue=this.actions.createFormValue(this.data.data);
             let {error,errorMsg} = this.actions.validForm(this.data.data,formValue);
             if(error){
@@ -847,22 +836,27 @@ let config={
             }
             FormService.saveAddpageData(json)
                 .then(res => {
-                        console.log('*******************');
-                        console.log(res);
-                        // this.successAlert(res["error"]);
-                        //自己操作的新增和编辑收到失效推送自己刷新
-                        // this.isSuccessSubmit();
-                        //清空子表内置父表的ids
-                        // delete this.globalService.idsInChildTableToParent[this.tableId];
-                        setTimeout(() => {
-                            //如果不是工作流表单 回显
-                            if(this.flowId == ''){
-                                // this.newBuildItem.emit(res);
-                            }else{
-                                // this.newBuildItem.emit();
-                            }
-                            // this.isSuccess.emit(true);
-                        },1000)
+                    console.log('*******************');
+                    console.log(res);
+                    if(res.succ == 1){
+                        if(this.data.isAddBuild && !this.flowId){
+                            let data={new_option:{
+                                py: "213213(lz)",
+                                value: "59892cbeca8b367dfbcff98d",
+                                label: "213213(离职)"}}
+                            PMAPI.sendToParent({
+                                type: PMENUM.close_dialog,
+                                key:this.data.key,
+                                data:data
+                            });
+                        }
+                        MSG.alert('保存成功');
+                    }
+                    // this.successAlert(res["error"]);
+                    //自己操作的新增和编辑收到失效推送自己刷新
+                    // this.isSuccessSubmit();
+                    //清空子表内置父表的ids
+                    // delete this.globalService.idsInChildTableToParent[this.tableId];
                 })
             HTTP.flush();
 
@@ -1184,6 +1178,8 @@ let config={
             $('.select-drop').hide();
         })
         Mediator.subscribe('form:changeValue:'+_this.data.tableId,function(data){
+            console.log('值改变时间');
+            console.log(data);
             _this.actions.checkValue(data,_this);
         })
         Mediator.subscribe('form:history:'+_this.data.tableId,function(data){
