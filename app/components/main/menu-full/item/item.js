@@ -8,6 +8,7 @@ let config = {
     data: {
         type: 'full'
     },
+
     actions: {
         showChildren: function() {
             this.el.find('> .list').show();
@@ -70,7 +71,9 @@ let config = {
     },
     firstAfterRender: function () {
         Mediator.on('aside:size', (order) => {
-            this.data.type = order;
+            if (this.data) {
+                this.data.type = order;
+            }
         });
     },
     beforeDestory: function () {

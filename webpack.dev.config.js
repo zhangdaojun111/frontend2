@@ -34,7 +34,7 @@ module.exports = {
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         //bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
-        main: path.resolve(APP_PATH, 'entrys/main.js'),
+        //main: path.resolve(APP_PATH, 'entrys/main.js'),
         calendarSet: path.resolve(APP_PATH, 'entrys/calendar.set.js'),
         calendarCreate: path.resolve(APP_PATH, 'entrys/calendar.create.js'),
         vendors: [

@@ -3,10 +3,13 @@
     <div class="s-uinfo">
         <div class="wrap">
             <div class="avatar">
-                <img src="{{avatar}}">
+                <img class="set-info" src="">
+            </div>
+            <div class="personal-setting">
+                <i class="icon p-setting"></i>
             </div>
             <p class="u-name ellipsis">{{username}}</p>
-            <p class="u-role ellipsis">{{role}}</p>
+            <p class="u-role ellipsis">{{role}}<span class="logout">[退出]</span></p>
         </div>
         <button class="startwrokflow">发起工作</button>
     </div>
@@ -14,6 +17,7 @@
     <div class="tabs clearfix">
         <p class="active all">全部</p>
         <p class="common">常用</p>
+        <a class="edit"></a>
     </div>
 
     <div class="menu all"></div>
