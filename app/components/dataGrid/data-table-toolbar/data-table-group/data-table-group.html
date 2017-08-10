@@ -1,0 +1,40 @@
+<div class="group-container">
+    <div class="group-search">
+        <input placeholder="搜索关键字"  class="group-search-input" type="text">
+    </div>
+    <div class="group-data">
+        <ul class="group-data-list connectedSortable">
+            {{#fields}}
+            <li field="{{field}}" name="{{name}}" class="group-data-item">
+                <span title="{{name}}" class="custom-name">{{name}}</span>
+                <!--<select class="group-data-item-select">-->
+                    <!--<option value="平均">平均</option>-->
+                    <!--<option value="统计">统计</option>-->
+                    <!--<option value="first">first</option>-->
+                    <!--<option value="last">last</option>-->
+                    <!--<option value="最大值">最大值</option>-->
+                    <!--<option value="最小值">最小值</option>-->
+                    <!--<option value="总数">总数</option>-->
+                <!--</select>-->
+            </li>
+            {{/fields}}
+        </ul>
+        <div class="title">分组</div>
+        <ul class="grouping-data-list connectedSortable">
+            {{#myGroup}}
+            <li field="{{field}}" name="{{name}}" class="group-data-item">
+                <span title="{{name}}" class="custom-name">{{name}}</span>
+                <!--<select class="group-data-item-select">-->
+                    <!--<option value="平均">平均</option>-->
+                    <!--<option value="统计">统计</option>-->
+                    <!--<option value="first">first</option>-->
+                    <!--<option value="last">last</option>-->
+                    <!--<option value="最大值">最大值</option>-->
+                    <!--<option value="最小值">最小值</option>-->
+                    <!--<option value="总数">总数</option>-->
+                <!--</select>-->
+            </li>
+            {{/myGroup}}
+        </ul>
+    </div>
+</div>

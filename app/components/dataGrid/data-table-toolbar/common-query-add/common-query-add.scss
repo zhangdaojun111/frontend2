@@ -1,0 +1,39 @@
+.add-container{
+    padding: 20px;
+    overflow: hidden;
+    .input-box {
+        text-align: center;
+        .title{
+            display: inline-block;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        .input{
+            width: 250px;
+            height: 25px;
+        }
+    }
+    .button-box {
+        position: absolute;
+        bottom: 30px;
+        right: 35px;
+        .save-btn{
+            color: #fff;
+            background: #0F79EF;
+            padding: 6px 17px;
+            border: none;
+            font-size: 12px;
+            padding: 6px 17px;
+            margin-right: 15px;
+        }
+        .cancel-btn {
+            color: #fff;
+            background: #0F79EF;
+            padding: 6px 17px;
+            border: none;
+            font-size: 12px;
+            padding: 6px 17px;
+        }
+    }
+}
