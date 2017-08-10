@@ -28,6 +28,10 @@ function presetCommonMenuData(menu, commonData) {
     let menuData = _.defaultsDeep([], menu);
     let commonKeys = commonData.data;
 
+    if (commonKeys.length === 0) {
+        return menuData;
+    }
+
     function plusParentNumber(item) {
         if (item) {
             item.childrenIsCommonUseNumber += 1;
