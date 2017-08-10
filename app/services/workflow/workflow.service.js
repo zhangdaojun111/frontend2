@@ -47,4 +47,8 @@ export const workflowService={
     getUserInfo(params){
         return HTTP.postImmediately('/get_user_info/', params);
     },
+    //Grid
+    getGridinfo(params){
+        return HTTP.postImmediately('/get_form_static_data/',params)
+    }
 }

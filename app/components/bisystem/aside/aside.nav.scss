@@ -12,26 +12,29 @@ $li-hover: #424e67;
 $btn_width: 16px;
 $font_size: 12px;
 
-.bi_view{
-  width: 100%;
-  height: 100%;
-  display: flex;
-  font-size: $font_size;
-  .font{
-    display: inline-block;
-    width: $font_size;
-    height: $font_size;
-  }
+@import "../../../assets/scss/bisystem/dragula.css";
+
+.bi-container {
+  position: fixed;
+  left:250px;
+  top:0;
+  height:100%;
+  width: calc(100% - 250px);
 }
+
 //左侧导航
 .aside{
+  z-index: 99999;
+  position: fixed;
+  left:0;
+  top:0;
   width: 250px;
-  height: 100vh;
+  height: 100%;
+  //height: 100vh;
   background-color: $aside-bg;
   //新建编辑按钮
   .user{
     padding: 20px 20px 30px ;
-    overflow: hidden;
     a{
       display: block;
       width: 210px;
@@ -41,24 +44,27 @@ $font_size: 12px;
       margin-top: 10px;
       color: #ffffff;
       padding: 8px 0;
-      background-color: $aside-a;
       text-decoration: none;
+      font-size: 12px;
+      &.add-chart-btn{
+        background-color: $aside-a;
+      }
+      &.edit-view-btn{
+        background-color: $aside-a-last;
+      }
     }
     .active{
       box-shadow: 0 0 20px $active inset;
     }
-    a:last-child{
-      background-color: $aside-a-last;
-    }
   }
   //搜索框及以下
   .charts-container{
-    height: calc(100% - 144px);
+    height: calc(100% - 139px);
     .filter{
       padding: 20px 20px;
       background-color: $charts-container-p;
       .filter-match{
-        width: 83%;
+        width: 168px;
         background-color: $filter-match-bg;
         border: 1px solid $filter-match-bg;
         padding: 7px 15px;
@@ -66,30 +72,27 @@ $font_size: 12px;
         line-height: inherit;
       }
       i{
-        margin-left: -20px;
+        margin-left: -25px;
+        font-size: 12px;
       }
     }
-    //设置滚动条样式
-    .charts::-webkit-scrollbar{
-      width: 5px;
-      height: 8px;
-    }
-    .charts::-webkit-scrollbar-thumb{
-      background-color: rgba(187, 220, 255, 1);
-    }
-    .charts::-webkit-scrollbar-track{
-      background-color: rgba(240, 247, 255, 1);
-    }
-
     .charts{
       height: calc(100% - 68px);
-      overflow: auto;//显示滚动条
+      position: relative;
       .charts-items{
-        li:nth-child(even){
-          background-color: $li-even-bg;
+        width: 100%;
+        height: 100%;
+        overflow: auto;//显示滚动条
+        font-size: 12px;
+        div:nth-child(even){
+          li{
+            background-color: $li-even-bg;
+          }
         }
-        li:nth-child(odd){
-          background-color: $li-odd-bg;
+        div:nth-child(odd){
+          li{
+            background-color: $li-odd-bg;
+          }
         }
         li:hover{
           background-color: $li-hover;
@@ -99,11 +102,11 @@ $font_size: 12px;
           width: 100%;
           color: $li-bg;
           cursor: move;
-          transition: all .3s;//hover时 过度
+          transition: all .3s;//hover时 过渡
           p{
-            display: inline-block;
             padding: 10px 15px;
             overflow: hidden;
+            position: relative;
             span{
               float: left;
               width: 160px;
@@ -116,6 +119,8 @@ $font_size: 12px;
           }
         }
         .btn_ripple{
+          position: absolute;
+          right: 16px;
           overflow: hidden;
           text-align: center;
           display: inline-block;
@@ -126,7 +131,6 @@ $font_size: 12px;
           color: #ffffff;
           border-radius: 50%;
           cursor: pointer;
-          font-weight: 900;
           font-size: 14px;
           float: left;
           margin-left: 30px;
@@ -134,43 +138,37 @@ $font_size: 12px;
         }
         .btn_ripple:hover{
           background-color: #353D53;
+          }
         }
-      }
-    }
-  }
-  .hide_meun{
-    position: absolute;
-    left: 210px;
-    top: 220px;
-    z-index: 9999;
-    width: 112px;
-    box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
-    display: none;
-    .btn_box{
-      padding: 8px 0;
-      background-color: #ffffff;
-      .menuitem{
-        width: 100%;
-        cursor: pointer;
-        outline: none;
-        border: none;
-        white-space: nowrap;
-        line-height: 48px;
-        padding: 0 16px;
-        font-size: $btn_width;
-        text-align: start;
-        transition: all .3s;
-        background-color: #ffffff;
-      }
-      .menuitem:hover{
-         background-color: rgba(240, 240, 240, 0.87);
+      .hide_meun{
+        position: absolute;
+        left: 200px;
+        top: 0px;
+        z-index: 9999;
+        width: 112px;
+        display: none;
+        .btn_box{
+          padding: 8px 0;
+          background-color: #ffffff;
+          box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+          .menuitem{
+            width: 100%;
+            cursor: pointer;
+            outline: none;
+            border: none;
+            white-space: nowrap;
+            line-height: 40px;
+            padding: 0 16px;
+            font-size: $btn_width;
+            text-align: start;
+            transition: all .3s;
+            background-color: #ffffff;
+          }
+          .menuitem:hover{
+            background-color: rgba(240, 240, 240, 0.87);
+          }
+        }
        }
+      }
     }
-  }
-}
-//右侧内容
-.section{
-  width: calc(100% - 250px);
-  height: 100vh;
-  background-color: $section-bg;
 }
