@@ -68,10 +68,7 @@ let config={
 export default class BuildInControl extends Component{
     constructor(data){
         super(config,data);
-<<<<<<< HEAD
         // console.log('buildin')
         // console.log(this.data);
-=======
->>>>>>> 18f2fa878988a16facc1264bdeb7f3827eaaee9d
     }
 }

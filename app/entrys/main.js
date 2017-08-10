@@ -132,9 +132,7 @@ AsideInstance.render($('#aside'));
 IframeInstance.render($('#content'));
 HeaderInstance.render($('#header'));
 
-<<<<<<< HEAD
 HTTP.flush();
-=======
 
 
 // window.setTimeout(function () {
@@ -143,4 +141,3 @@ HTTP.flush();
 
 // socket.close()
 
->>>>>>> 18f2fa878988a16facc1264bdeb7f3827eaaee9d

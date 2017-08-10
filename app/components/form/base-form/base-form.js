@@ -618,10 +618,7 @@ let config={
         //创建表单数据格式
         createFormValue(data){
             let formValue={};
-<<<<<<< HEAD
             // console.log(data);
-=======
->>>>>>> 18f2fa878988a16facc1264bdeb7f3827eaaee9d
             for(let key in data){
                 formValue[key]=data[key].value;
             }
@@ -1007,15 +1004,11 @@ let config={
                     }
                 }
             }
-<<<<<<< HEAD
         },
 
         checkValue:function(data,_this){
             _this.data.data[data.dfield]=data;
-=======
-        }
          },
->>>>>>> 18f2fa878988a16facc1264bdeb7f3827eaaee9d
 
          checkValue:function(data,_this){
             if(_this.data.data[data.dfield]){
@@ -1350,11 +1343,8 @@ class BaseForm extends Component{
         //用于前端填充数据用的子表的parentTableId
         // config.data['frontendParentTableId']=formData.data['parent_table_id'];
         super(config,formData.data);
-<<<<<<< HEAD
         // console.log('处理完的数据');
         // console.log(this);
-=======
->>>>>>> 18f2fa878988a16facc1264bdeb7f3827eaaee9d
     }
 
 }

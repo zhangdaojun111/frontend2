@@ -224,12 +224,8 @@ let defaultOptions = {
 class TreeView extends Component {
     constructor(treeNodes, options) {
         config.data.treeNodes = treeNodes;
-<<<<<<< HEAD
         options = _.defaultsDeep(options,defaultOptions);
         // console.dir(options);
-=======
-        options = _.defaultsDeep(options, defaultOptions);
->>>>>>> 18f2fa878988a16facc1264bdeb7f3827eaaee9d
         config.data.options = options;
         super(config);
     }
