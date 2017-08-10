@@ -56,24 +56,15 @@ let config = {
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
         Mediator.on('CalendarMain: date', date => {
-            console.log(date);
             this.el.find('.item-content-2').empty();
             CalendarService.getWorkflowRecords(date).then(res => {
                 console.log(res);
                 res['rows'].forEach(row =>{
-                    console.log(row);
                     this.append(new RightContentWorkFlow(row), this.el.find('.item-content-2'));
                 })
             }).catch(err=>{
                 console.log('error',err);
             });
-        });
-        Mediator.on('calendar-left:approve',data =>{
-            if(data ===0){
-                this.el.find(".item-content-2").hide();
-            }else{
-                this.el.find(".item-content-2").show();
-            }
         });
         this.el.on("click",".item-title-1",()=>{
             let temp1 = this.el.find(".item-content-1");

@@ -226,17 +226,17 @@ let config = {
             }
         },
         approve_label:function(checkbox_a2){
-            if(checkbox_a2.is(".workflow_checked")){
+            if(checkbox_a2.is(".workflow_checked")) {
                 checkbox_a2.removeClass("workflow_checked");
                 config.data.cancel_fields.unshift('approve');
-                Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
-                Mediator.emit('calendar-left:approve',0);
+                Mediator.emit('calendar-left:unshowData', {data: config.data.cancel_fields});
+                Mediator.emit('calendar-left: approve', false);
             }
             else{
                 checkbox_a2.addClass("workflow_checked");
                 config.data.cancel_fields.splice($.inArray('approve',config.data.cancel_fields),1);
                 Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
-                Mediator.emit('calendar-left:approve',1);
+                Mediator.emit('calendar-left: approve',true);
             }
         },
         hide_group:function(temp,that){
