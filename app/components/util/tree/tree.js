@@ -1,206 +1,195 @@
 /**
  * Created by Yunxuan Yan on 2017/8/2.
  */
-import 'bootstrap-treeview/dist/bootstrap-treeview.min.js';
+import 'bootstrap-treeview/src/js/bootstrap-treeview';
 import Component from '../../../lib/component';
 import template from './tree.html';
 import './tree.scss';
 
 const TREETYPE = {
-    'MENU':{
-        collapsed:true,
-        multiSelect:false,
-        foldIcon: 'menu_node',
-        unfoldIcon: 'menu_node',
-        leafIcon: 'menu_leaf_node',
+    'MENU': {
+        collapsed: true,
+        multiSelect: false,
+        collapseIcon: 'menu_node',
+        expandIcon: 'menu_node',
+        emptyIcon: 'menu_leaf_node',
         backColor: 'green'
     },
-    'MULTI_SELECT':{
-        collapsed:false,
-        multiSelect:true,
-        checkedIcon:'checked_box',
-        uncheckedIcon:'unchecked_box',
-        foldIcon: 'collapsed_node',
-        unfoldIcon: 'expanded_node',
-        leafIcon: 'leaf_node',
-        backColor: 'white'
+    'MULTI_SELECT': {
+        collapsed: false,
+        multiSelect: true,
+        checkedIcon: 'checked_box',
+        uncheckedIcon: 'unchecked_box',
+        collapseIcon: 'expanded_node',
+        expandIcon: 'expanded_node',
+        emptyIcon: 'leaf_node',
+        backColor: 'white',
+        showBorder: true,
+        showIcon: false,
+        showCheckbox: true,
+        color: '#666',
+        selectedBackColor: '#f5f5f5',
+        selectedColor: '#666',
+        onhoverColor: '#ddd'
+
     },
-    'SINGLE_SELECT':{
-        collapsed:false,
-        multiSelect:false,
-        foldIcon: 'collapsed_node',
-        unfoldIcon: 'expanded_node',
-        leafIcon: 'leaf_node',
+    'SINGLE_SELECT': {
+        collapsed: false,
+        multiSelect: false,
+        collapseIcon: 'collapsed_node',
+        expandIcon: 'expanded_node',
+        emptyIcon: 'leaf_node',
         backColor: 'white'
     }
 };
 
 let config = {
-    template:template,
-    data:{
-        treeNodes:{},
+    template: template,
+    data: {
+        treeNodes: {},
         options: {
-            callback: function (event,data) {},
+            callback: function (event, data) {
+            },
             treeType: 'SINGLE_SELECT',
             isSearch: false,
             treeName: ''
         }
     },
-    actions:{
-        searchTreeNode:function(inputComp,tree){
+    actions: {
+        searchTreeNode: function (inputComp, tree) {
             var keyword = inputComp.val();
             tree.treeview('clearSearch');
-            if(keyword && keyword != '' && keyword != ' '){
-                tree.treeview('search',[keyword,{
-                    ignoreCase:true,
-                    exactMatch:false,
-                    revealResults:true
+            if (keyword && keyword != '' && keyword != ' ') {
+                tree.treeview('search', [keyword, {
+                    ignoreCase: true,
+                    exactMatch: false,
+                    revealResults: true
                 }])
             }
         },
-        _delay:function (callback,ms) {
+        _delay: function (callback, ms) {
             var timer = 0;
-            return function (callback,ms) {
+            return function (callback, ms) {
                 clearTimeout(timer);
-                timer = setTimeout(callback,ms);
+                timer = setTimeout(callback, ms);
             };
         },
-        _uncheckAllAncestors:function(node,treeEle){
-            let parent = treeEle.treeview('getParent',node);
-            if(parent != undefined && parent.nodeId != undefined && parent.state.selected == true){
-                treeEle.treeview('uncheckNode',[parent.nodeId,{silent:true}]);
-                treeEle.treeview('unselectNode',[parent.nodeId,{silent:true}]);
-                this.actions._uncheckAllAncestors(parent,treeEle);
+        _uncheckAllAncestors: function (node, treeEle) {
+            let parent = treeEle.treeview('getParent', node);
+            if (parent != undefined && parent.nodeId != undefined && parent.state.selected == true) {
+                treeEle.treeview('uncheckNode', [parent.nodeId, {silent: true}]);
+                treeEle.treeview('unselectNode', [parent.nodeId, {silent: true}]);
+                this.actions._uncheckAllAncestors(parent, treeEle);
             }
         },
-        _checkAllChildren:function(node,treeEle){
-            if(node.nodes){
-                node.nodes.forEach(child=>{
-                    treeEle.treeview('checkNode',[child.nodeId,{silent:true}]);
-                    treeEle.treeview('selectNode',[child.nodeId,{silent:true}]);
-                    this.actions._checkAllChildren(child,treeEle);
+        _checkAllChildren: function (node, treeEle) {
+            if (node.nodes) {
+                node.nodes.forEach(child => {
+                    treeEle.treeview('checkNode', [child.nodeId, {silent: true}]);
+                    treeEle.treeview('selectNode', [child.nodeId, {silent: true}]);
+                    this.actions._checkAllChildren(child, treeEle);
                 })
             }
         },
-        _uncheckAllChildren:function(node,treeEle) {
-            if(node.nodes){
-                node.nodes.forEach(child=>{
-                    treeEle.treeview('uncheckNode',[child.nodeId,{silent:true}]);
-                    treeEle.treeview('unselectNode',[child.nodeId,{silent:true}]);
-                    this.actions._uncheckAllChildren(child,treeEle);
+        _uncheckAllChildren: function (node, treeEle) {
+            if (node.nodes) {
+                node.nodes.forEach(child => {
+                    treeEle.treeview('uncheckNode', [child.nodeId, {silent: true}]);
+                    treeEle.treeview('unselectNode', [child.nodeId, {silent: true}]);
+                    this.actions._uncheckAllChildren(child, treeEle);
                 })
             }
         },
-        _expandAllParents:function(node,treeEle){
-            let parent = treeEle.treeview('getParent',node);
-            if(parent != undefined && parent.nodeId != undefined){
-                treeEle.treeview('expandNode', [parent.nodeId,{silent:true}]);
-                this.actions._expandAllParents(parent,treeEle);
+        _expandAllParents: function (node, treeEle) {
+            let parent = treeEle.treeview('getParent', node);
+            if (parent != undefined && parent.nodeId != undefined) {
+                treeEle.treeview('expandNode', [parent.nodeId, {silent: true}]);
+                this.actions._expandAllParents(parent, treeEle);
             }
         }
     },
-    afterRender:function() {
+    afterRender: function () {
         //树
         let tree = this.el.find('#tree');
-        if(this.data.options.treeName){
+        if (this.data.options.treeName) {
             this.el.addClass(this.data.options.treeName);
         }
         let treeview = this;
         let treeType = TREETYPE[this.data.options.treeType];
-        let collapseIcon = treeType.foldIcon;
-        let expandIcon = treeType.unfoldIcon;
-        let emptyIcon = treeType.leafIcon;
-        let backColor = treeType.backColor;
-        if(treeType.multiSelect){
-            tree.treeview({data:this.data.treeNodes,
-                checkedIcon:treeType.checkedIcon,
-                uncheckedIcon:treeType.uncheckedIcon,
-                showCheckbox:true,
-                multiSelect:true,
-                selectedBackColor: 'grey',
-                collapseIcon: collapseIcon,
-                expandIcon: expandIcon,
-                emptyIcon: emptyIcon,
+        if (treeType.multiSelect) {
+
+            let options = _.defaultsDeep({}, TREETYPE.MULTI_SELECT, {
+                data: this.data.treeNodes,
                 onNodeChecked: function (event, data) {
-                    tree.treeview('selectNode',[data.nodeId,{silent:false}]);
+                    tree.treeview('selectNode', [data.nodeId, {silent: false}]);
                     //没有采用silent：false的方法在树的上下级传递checked状态是为了减少事件发生
-                    treeview.actions._checkAllChildren(data,tree);
-                    // if(data.nodes){
-                    //     data.nodes.forEach(child=>{
-                    //         $('#tree').treeview('checkNode',[child.nodeId,{silent:false}]);
-                    //     });
-                    // }
-                    treeview.data.options.callback('select',data);
+                    treeview.actions._checkAllChildren(data, tree);
+                    treeview.data.options.callback('select', data);
                 },
                 onNodeUnchecked: function (event, data) {
-                    tree.treeview('unselectNode',[data.nodeId,{silent:false}]);
-                    treeview.actions._uncheckAllChildren(data,tree);
-                    // if(data.nodes){
-                    //     data.nodes.forEach(child=>{
-                    //         $('#tree').treeview('uncheckNode',[child.nodeId,{silent:false}]);
-                    //     })
-                    // }
-                    treeview.actions._uncheckAllAncestors(data,tree);
-                    treeview.data.options.callback('unselect',data);
+                    tree.treeview('unselectNode', [data.nodeId, {silent: false}]);
+                    treeview.actions._uncheckAllChildren(data, tree);
+                    treeview.actions._uncheckAllAncestors(data, tree);
+                    treeview.data.options.callback('unselect', data);
                 },
             });
+            tree.treeview(options);
         } else {
-            tree.treeview({data:this.data.treeNodes,
-                collapseIcon: collapseIcon,
-                expandIcon: expandIcon,
-                emptyIcon: emptyIcon,
-                backColor: backColor,
+            let options = _.defaultsDeep({}, TREETYPE.SINGLE_SELECT, {
+                data: this.data.treeNodes,
                 onNodeSelected: function (event, node) {
-                    tree.treeview('getSelected').forEach(selected=>{
-                        if(selected.nodeId === node.nodeId){
+                    tree.treeview('getSelected').forEach(selected => {
+                        if (selected.nodeId === node.nodeId) {
                             return;
                         }
-                        tree.treeview('unselectNode', [selected.nodeId, { silent: true }]);
+                        tree.treeview('unselectNode', [selected.nodeId, {silent: true}]);
                     });
-                    if(!node.nodes){
-                        treeview.data.options.callback('select',node);
+                    if (!node.nodes) {
+                        treeview.data.options.callback('select', node);
                     }
-                    treeview.actions._expandAllParents(node,tree);
-                    tree.treeview('toggleNodeExpanded',[node.nodeId]);
+                    treeview.actions._expandAllParents(node, tree);
+                    tree.treeview('toggleNodeExpanded', [node.nodeId]);
                 },
                 onNodeUnselected: function (event, node) {
-                    tree.treeview('selectNode', [node.nodeId, { silent: true }]);
-                    tree.treeview('toggleNodeExpanded',[node.nodeId]);
+                    tree.treeview('selectNode', [node.nodeId, {silent: true}]);
+                    tree.treeview('toggleNodeExpanded', [node.nodeId]);
                 },
                 onNodeExpanded: function (event, node) {
-                    let siblings = tree.treeview('getSiblings',node);
-                    if(siblings){
-                        siblings.forEach(sibling=>{
-                            if(sibling.state.expanded){
-                                tree.treeview('collapseNode',[sibling, { silent: true, ignoreChildren: false }]);
+                    let siblings = tree.treeview('getSiblings', node);
+                    if (siblings) {
+                        siblings.forEach(sibling => {
+                            if (sibling.state.expanded) {
+                                tree.treeview('collapseNode', [sibling, {silent: true, ignoreChildren: false}]);
                             }
                         })
                     }
                 }
-            });
+            })
+            tree.treeview(options);
         }
-        if(treeType.collapsed){
-            tree.treeview('collapseAll', { silent: true });
+        if (treeType.collapsed) {
+            tree.treeview('collapseAll', {silent: true});
         } else {
-            tree.treeview('expandAll', { level: 2, silent: true });
+            tree.treeview('expandAll', {level: 10, silent: true});
         }
 
         //搜索框
-        if(!this.data.options.isSearch){
+        if (!this.data.options.isSearch) {
             this.el.find("#search-in-tree").hide();
         } else {
             var timeout = null;
             var inputComp = this.el.find('#search-in-tree');
-            this.el.on('keyup','#search-in-tree',_.debounce(()=>{
-                treeview.actions.searchTreeNode(inputComp,tree)
-            },500));//500ms的延迟，减少事件处理
+            this.el.on('input', '#search-in-tree', _.debounce(() => {
+                treeview.actions.searchTreeNode(inputComp, tree)
+            }, 500));//500ms的延迟，减少事件处理
         }
 
     }
 }
 
 let defaultOptions = {
-    callback: function (event,data) {},
+    callback: function (event, data) {
+    },
     treeType: 'SINGLE_SELECT',
     isSearch: false,
     treeName: ''
@@ -238,11 +227,10 @@ let defaultOptions = {
  *
  *  风格化方法：定义scss文件，在调用本树的组件中import，参照示例的tree1写法
  */
-class TreeView extends Component{
-    constructor(treeNodes, options){
+class TreeView extends Component {
+    constructor(treeNodes, options) {
         config.data.treeNodes = treeNodes;
-        options = _.defaultsDeep(options,defaultOptions);
-        console.dir(options);
+        options = _.defaultsDeep(options, defaultOptions);
         config.data.options = options;
         super(config);
     }

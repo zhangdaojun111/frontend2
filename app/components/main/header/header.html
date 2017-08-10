@@ -1,9 +1,30 @@
 <div class="header-wrap">
     <input type="text" class="search" placeholder="请输入要搜索的内容...">
-    <a class="icon message" title="系统消息"></a>
-    <a class="icon task" title="任务列表"></a>
+    <div class="setting clearfix">
+        <a class="icon"></a>
+        <div class="slide">
+            <ul>
+                <li class="online-num">在线人数(<span>59</span>)</li>
+                <li class="system-setting">系统设置</li>
+            </ul>
+        </div>
+    </div>
+    <!--{{#if otherLoginVisible}}-->
+    <!--<a class="icon other-login" title="他人登录"></a>-->
+    <!--{{/if}}-->
+    <a class="icon message unread" title="消息提醒"></a>
+    <a class="icon message-push" title="消息推送"></a>
+    {{#if calendarVisible}}
     <a class="icon calendar" title="日历"></a>
+    {{/if}}
+    <!--{{#if imVisible}}-->
+    <!--<a class="icon im" title="IM"></a>-->
+    <!--{{/if}}-->
+    {{#if biVisible}}
     <a class="icon bi" title="BI"></a>
-
+    {{/if}}
+    {{#if homeVisible}}
+    <!--<a class="icon home" title="首页"></a>-->
+    {{/if}}
     <a class="fold" title="折叠菜单栏"></a>
 </div>

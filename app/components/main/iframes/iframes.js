@@ -67,7 +67,7 @@ export const IframeInstance = new Component({
             id = id.toString();
             if (this.data.hash[id] === undefined) {
                 let tab = $(`<div class="item" iframeid="${id}">${name}<a class="close" iframeid="${id}"></a></div>`)
-                    .appendTo(this.data.tabs);
+                    .prependTo(this.data.tabs);
                 let iframe = $(`<div class="item"><iframe id="${id}" src="${url}"></iframe></div>`).appendTo(this.data.iframes);
 
                 // IframeOnClick.track(iframe.find('iframe')[0], function () {
@@ -95,12 +95,15 @@ export const IframeInstance = new Component({
             // IframeOnClick.retrack(item.iframe.find('iframe')[0]);
             item.tab.remove();
             item.iframe.remove();
+            _.remove(this.data.sort, (v) => {
+                return v === id;
+            })
             delete this.data.hash[id];
             this.data.count--;
             if (this.data.focus && this.data.focus.id === id) {
-                let firstId = this.data.sort[0];
-                if (firstId) {
-                    this.actions.focusIframe(firstId);
+                let lastId = _.last(this.data.sort);
+                if (lastId) {
+                    this.actions.focusIframe(lastId);
                 }
             }
         },
