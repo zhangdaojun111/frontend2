@@ -15,6 +15,7 @@ import customColumns from "../../data-table-toolbar/custom-columns/custom-column
 import groupGrid from "../../data-table-toolbar/data-table-group/data-table-group";
 import dataPagination from "../../data-table-toolbar/data-pagination/data-pagination";
 import delSetting from '../../data-table-toolbar/data-table-delete/data-table-delete';
+import girdExport from '../../data-table-toolbar/data-table-export/data-table-export';
 
 import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 
@@ -920,6 +921,16 @@ let config = {
                 this.actions.changeAgGridWidth();
             } )
         },
+        //触发导出
+        onExport: function () {
+            PMAPI.openDialogByComponent(girdExport, {
+                width: 380,
+                height: 220,
+                title: '导出数据'
+            }).then((data) => {
+
+            });
+        },
         //分组触发
         onGroupChange: function (group) {
             this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , true)
@@ -1130,6 +1141,10 @@ let config = {
                     }
                 });
             } )
+            //导出
+            $('.grid-export-btn').click(()=> {
+                this.actions.onExport()
+            })
         },
         //删除数据
         delTableTable: function () {
