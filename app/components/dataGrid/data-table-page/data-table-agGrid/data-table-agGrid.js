@@ -649,15 +649,17 @@ let config = {
             this.data.filterParam = {
                 filter: filter,
                 is_filter: 1,
-                common_filter_id: ''
+                common_filter_id: '',
+                common_filter_name: ''
             }
             this.actions.getGridData();
         },
-        postExpertSearch:function(data,id) {
+        postExpertSearch:function(data,id,name) {
             this.data.filterParam = {
                 filter: data,
                 is_filter: 1,
-                common_filter_id: id
+                common_filter_id: id,
+                common_filter_name: name
             }
             this.actions.getGridData();
         },
@@ -841,7 +843,11 @@ let config = {
             }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
-                json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
+                //高级查询
+                if( this.data.filterParam['common_filter_id'] ){
+                    json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
+                    msgBox.alert( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
+                }
             }
             if( this.data.groupCheck ){
                 json['is_group'] = 1;
@@ -1229,9 +1235,9 @@ let config = {
                                 this.data.filterParam = {
                                     filter: JSON.parse(r.queryParams),
                                     is_filter: 1,
-                                    common_filter_id: this.data.common_filter_id
+                                    common_filter_id: this.data.common_filter_id,
+                                    common_filter_name: r.name
                                 }
-                                msgBox.alert('第一次加载乘用查询' + '<'+r.name+'>' );
                                 $('.dataGrid-commonQuery-select').val(r.name);
                             }
                         }
@@ -1402,7 +1408,7 @@ let config = {
                 $(this).find('.Temporary').remove();
                 _this.data.commonQueryData.forEach((item) => {
                     if(item.name == $(this).val()){
-                        _this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id);
+                        _this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
                     }
                 })
             }
