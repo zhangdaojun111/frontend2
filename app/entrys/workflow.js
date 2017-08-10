@@ -173,10 +173,12 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
 var mockFlowData;
 
 (async function () {
-    return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=wenjingjing_1502270451650&record_id=',data:{
-        flow_id:30
+    return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=wenjingjing_1502270451650',data:{
+        flow_id:10,
+        record_id:"598ac7a1c57ccd4d472bd31d"
     }});
 })().then(res=>{
+    Mediator.publish('workflow:getImgInfo',res);
     Mediator.publish('workflow:gotWorkflowInfo', res);
     mockFlowData=res;
 });
@@ -298,7 +300,9 @@ FormEntrys.createForm({
 Mediator.subscribe("workflow:seal",(msg)=>{
     (async function () {
         let data = await workflowService.addStmpImg(msg);
-    })();
+    })().then(res=>{
+        Mediator.publish("workflow:getStamp");
+    });
 });
 
 //删除或添加盖章图片之后重新加载图片

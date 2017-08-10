@@ -19,14 +19,9 @@ let config = {
                     let FR = new FileReader();
                     FR.onload = function (event){
                         var imgstr = event.target.result;
-                        let myImgDataArr=[];
-                        let imgDataTemp=event.target['result'].split(',')[1];
-                        for(let i=0;i<Math.ceil(event.target['result'].split(',')[1].length/1000);i++){
-                            myImgDataArr.push(encodeURIComponent(imgDataTemp.substring(0,1000)));
-                            imgDataTemp=imgDataTemp.substring(1000);
-                        }
-                        Mediator.publish("workflow:seal",{"base64":myImgDataArr.join('')});
-                        Mediator.publish("workflow:getStamp");
+                        let imgstr2 = imgstr.substring(22,imgstr.length);
+                        Mediator.publish("workflow:seal",{"base64":imgstr2});
+                        // Mediator.publish("workflow:getStamp");
                     };
                     FR.readAsDataURL(imgFile);
                 }
@@ -38,7 +33,7 @@ let config = {
             let html = " ";
             let host = "http://"+window.location.host;
             for (let i=0;i<len;i++){
-                html += "<li class='li-img'><span class='J_delImg' id="+msg.file_ids[i]+">X</span><img src='"+host+"/download_attachment/?file_id="+msg.file_ids[i]+"&download=0' class='add-img'/></li>";
+                html += "<li class='li-img'><span class='J_delImg' id="+msg.file_ids[i]+">X</span><img src='"+host+"/download_attachment/?file_id="+msg.file_ids[i]+"&download=0' data-id="+msg.file_ids[i]+" class='add-img'/></li>";
             }
             this.el.find('.J_ul-img').html(html);
         },
@@ -48,7 +43,6 @@ let config = {
             let imgTop = $(e.target).offset().top;
             let imgId =  $(e.target).attr("data-id");
             this.el.find('.J_dragimg').attr("data-id",imgId);
-            console.log(imgId);
             let url = "http://"+window.location.host+"/download_attachment/?file_id="+imgId+"&download=0";
             this.el.find(".signatureMock").css('visibility','visible');
             this.el.find(".J_dragimg").attr("src",url);
@@ -64,14 +58,20 @@ let config = {
             })
             console.log(disX+".."+disY); 
             let fromPlace =  $("#place-form").children(":first");
+            // let fromPlace =  $("#place-form");
             console.log(fromPlace);
             if(fromPlace.length!=0){
                 let fromClone = fromPlace.clone();
                 let left =  parseInt(fromPlace.offset().left);
                 let top = parseInt(fromPlace.offset().top);
+                let width= fromPlace.css("width");
+                let height= fromPlace.css("height");
                 this.el.find(".fromClone").css({
                     "top":top,
-                    "left":left
+                    "left":left,
+                    "width":width,
+                    "height":height,
+                    "background": "#000"
                 })
                 this.el.find(".fromClone").children().remove();
                 this.el.find(".fromClone").append(fromClone);
@@ -99,6 +99,7 @@ let config = {
             //from的宽高
             console.log(from);
             let fromWidth = parseInt(from.outerWidth());
+            console.log(fromWidth);
             let fromHeight = parseInt(from.outerHeight());
             //from表单距左上角的距离
             let fromOffleft = parseInt(from.offset().left);
@@ -113,9 +114,10 @@ let config = {
             let mouseLeft = e.clientX;
             let mouseTop = e.clientY;
             let imgId =$(e.target).attr("data-id");
+            console.log(mouseLeft-fromOffleft);
             if(mouseLeft-offsetLeft>fromOffleft&&mouseTop-offsetTop>fromOfftop&&mouseLeft+imgWidth-offsetLeft<fromWidth+fromOffleft&&mouseTop+imgHeight-offsetTop<fromHeight+fromOfftop){
-                let top = (mouseLeft-fromOffleft)/fromWidth;
-                let left = (mouseTop-fromOfftop)/fromHeight;
+                let left = (mouseLeft-fromOffleft)/fromWidth;
+                let top = (mouseTop-fromOfftop)/fromHeight;
                 top= top.toFixed(6)*100;
                 left= left.toFixed(6)*100;
                 this.actions.createImg(top,left,280,140,imgId);
@@ -129,7 +131,7 @@ let config = {
             let top1 = top+"%";
             let left1 = left+"%";
             let host = "http://"+window.location.host;
-            let html = "<div class='imgseal' data-height="+height+" data-width="+width+" data-viewLeft="+viewLeft+" data-viewTop="+viewTop+" data-imgid="+id+" style='top:"+top1+";left:"+left1+";z-index:"+1002+";position:absolute'><img  width=50 height=50 src='"+host+"/download_attachment/?file_id="+id+"&download=0'/><i class='J_del'  style='display: none;position: absolute;right: -23px;top: -10px;width: 23px;height: 23px;background: url(assets/icon_del.png) no-repeat;'>X</i></div>";
+            let html = "<div class='imgseal' data-height="+height+" data-width="+width+" data-viewLeft="+viewLeft+" data-viewTop="+viewTop+" data-imgid="+id+" style='top:"+top1+";left:"+left1+";z-index:"+1002+";position:absolute;padding-top:15px;'><img  width=50 height=50 src='"+host+"/download_attachment/?file_id="+id+"&download=0'/><i class='J_del'  style='display: none;position: absolute;right: -22px;top: 0;width: 23px;height: 23px;background: url(assets/icon_del.png) no-repeat;'>X</i></div>";
             $('#place-form').children(":first").append(html);
         },
         showImgDel(e){
@@ -145,6 +147,7 @@ let config = {
             }else{
                 ev.removeClass('imghide');
                 ev.addClass('imgshow');
+                console.log(6496);
                 Mediator.publish("workflow:showImg");
             }
         }
