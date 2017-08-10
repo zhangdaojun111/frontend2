@@ -34,6 +34,7 @@ let config = {
         rowId: '',
         fieldId: '',
         source_field_dfield: '',
+        base_buildin_dfield: '',
         //iframe弹窗key
         key: '',
         // 提醒颜色
@@ -840,7 +841,7 @@ let config = {
                 //要注意tableId和source_table_id与平常不同
                 json["source_table_id"] = this.data.tableId;
                 json["table_id"] = this.data.parentTableId;
-                json["base_buildin_dfield"] = this.data.base_buildin_dfield;
+                json["base_buildin_dfield"] = this.data.source_field_dfield;
                 json['mongo'] = {
                     _id: this.data.rowId
                 }
@@ -1151,9 +1152,7 @@ let config = {
                     height: 600,
                     title: '导入数据'
                 }).then((data) => {
-                    console.log( "############" )
-                    console.log( "############" )
-                    console.log( data )
+
                 });
             } )
             //导出
@@ -1360,10 +1359,11 @@ let config = {
                 console.log( "内置相关穿透" )
                 let obj = {
                     tableId: data.colDef.source_table_id,
-                    tableName: data.colDef.source_table_name,
+                    tableName: data.colDef.source_table_name||'',
                     parentTableId: this.data.tableId,
                     rowId: data.data._id,
-                    base_buildin_dfield: data.colDef.base_buildin_dfield,
+                    base_buildin_dfield: data.colDef.source_field_dfield,
+                    source_field_dfield: data.colDef.base_buildin_dfield,
                     tableType: 'source_data',
                     viewMode: 'source_data'
                 }
@@ -1387,7 +1387,7 @@ let config = {
                 FormService.getDynamicData( json ).then( res=>{
                     let obj = {
                         tableId: data.colDef.field_content.correspondence_table_id,
-                        tableName: data.colDef.field_content.table_name,
+                        tableName: data.colDef.source_table_name||'',
                         parentTableId: this.data.tableId,
                         parentTempId: res.data.temp_id.value,
                         tableType: '',
@@ -1406,7 +1406,7 @@ let config = {
                 console.log( '统计穿透' )
                 let obj = {
                     tableId: data.colDef.field_content.count_table,
-                    tableName: data.colDef.field_content.count_table_name,
+                    tableName: data.colDef.field_content.count_table_name||'',
                     parentTableId: this.data.tableId,
                     tableType: 'count',
                     viewMode: 'count',
@@ -1423,7 +1423,7 @@ let config = {
                 console.log( "子表穿透" )
                 let obj = {
                     tableId: data.colDef.field_content.child_table,
-                    tableName: data.colDef.field_content.child_table_name,
+                    tableName: data.colDef.field_content.child_table_name||'',
                     parentTableId: this.data.tableId,
                     tableType: 'child',
                     viewMode: 'child',
