@@ -242,6 +242,30 @@ function recursion(arr,slnds,pubInfo){
         isSearch: true
         });
     treeComp2.render($('#treeMulti'));
+
+    var treeComp3 = new TreeView(tree,{
+        callback: function (event,selectedNode) {
+            if(event==='select'){
+                for(var k in staff){
+                    if(k==selectedNode.id){
+                        Mediator.publish('workflow:checkAdder', staff[k]);
+                        recursion(staff,selectedNode,'checkAdder');
+                    }
+                }
+            }else{
+                for(var k in staff){
+                    if(k==selectedNode.id){
+                        Mediator.publish('workflow:unCheckAdder', staff[k]);
+                        recursion(staff,selectedNode,'unCheckAdder');
+                    }
+                }
+            }
+        },
+        treeType:'MULTI_SELECT',
+        isSearch: true
+        });
+    treeComp3.render($('#addUser'));
+
 });
 
 
@@ -312,6 +336,18 @@ FormEntrys.createForm({
             });
         }
     })
+    Mediator.subscribe('approval:signUser', (signObj)=> {
+        approveWorkflow({
+                record_id:'59897f1591461c15d279023a',
+                focus_users:[],
+                action:2,
+                comment:null,
+                node_id:null,
+                sigh_type:signObj.sigh_type,
+                sigh_user_id:signObj.sigh_user_id,
+                data:{}
+        });
+    })
     
 });
 
@@ -320,8 +356,7 @@ FormEntrys.createForm({
 (async function () {
     return workflowService.getStmpImg();
 })().then(res=>{
-    console.log(res);
-     Mediator.publish("workflow:getStampImg",res);
+    Mediator.publish("workflow:getStampImg",res);
 });
 
 

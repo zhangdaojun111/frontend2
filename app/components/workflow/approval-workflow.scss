@@ -9,7 +9,6 @@ btn-div{
   color: #fff;
 }
 #approval-workflow{
-  position: relative;
   .wf-btn-box{
     position: fixed;
     bottom: 100px;
@@ -30,21 +29,7 @@ btn-div{
     }
   }
 }
-#app-workflow{
-  height: 100%;
-  .workflow-wrapper{
-    height: 100%;
-    .workflow-container{
-      height: 100%;
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      padding: 0;
-    }
-  }
-}
+
 .workflow-container{
   .approval-bar-f {
     position: absolute;
@@ -90,7 +75,16 @@ btn-div{
   }
 }
 
+
 #app-workflow{
+  height: 100%;
+  position: relative;
+  .workflow-wrapper{
+    height: 100%;
+    .workflow-container{
+      
+    }
+  }
   .workflow-main{
     position: absolute;
     width: 100%;
@@ -99,8 +93,6 @@ btn-div{
     overflow: auto;
     top:0;
   }
-}
-#app-workflow{
   .workflow-record,.workflow-foot,#preview-node .preview-node {
     .workflow-box {
       background: #fff;
@@ -157,4 +149,14 @@ btn-div{
 [canreject="1"]{
   background: #0E7AEF;
   color: #fff;
+}
+.addUser{
+  .flexBox{
+    display: flex;
+    #addUsercheck{
+      overflow: scroll;
+      height: 500px;
+      width: 300px;
+    }
+  }
 }

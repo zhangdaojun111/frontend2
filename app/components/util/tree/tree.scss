@@ -24,3 +24,13 @@
 .menu_leaf_node::before {
   content: " ";
 }
+.treeBtn{
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  background: #159951;
+  color: #fff;
+  cursor: pointer;
+}

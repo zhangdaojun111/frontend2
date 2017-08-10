@@ -203,8 +203,6 @@ export default {
             obj.push(url);
         }
         data.url = obj;
-        console.log(data);
-        console.log(data.url);
         let component = new WorkflowSeal(data);
         let el = $('#workflow-seal');
         component.render(el);
