@@ -208,11 +208,12 @@ let config = {
         });
         //窗口监听来自子窗口的设置头像的消息
         Mediator.on("personal:setAvatar",() => {
+            console.log(this);
            this.actions.resetAvatar();
         })
     },
     beforeDestory:function () {
-        // Mediator.removeAll();
+        Mediator.removeAll("personal:setAvatar");
     }
 };
 

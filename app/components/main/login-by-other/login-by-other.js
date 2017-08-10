@@ -51,6 +51,9 @@ let config = {
                     }
                 })
             }
+        },
+        cancel:function () {
+            this.el.dialog('close');
         }
         
     },
@@ -58,8 +61,8 @@ let config = {
         this.actions.getData();
         this.el.on("click",".confirm-btn",() => {
             this.actions.loginOtherAccount();
-        }).el.on("click",".cancel-btn", () => {
-
+        }).on("click",".cancel-btn", () => {
+            this.actions.cancel();
         })
     },
     beforeDestory:function () {
