@@ -37,7 +37,8 @@ let config = {
             this.data.cells.forEach((val, index) => {
                 val['chart'] = charts[index];
                 val['canvas'] = this;
-                this.instantiationCell(val);
+                let id = this.instantiationCell(val);
+                val['componentId'] = id;
             });
         },
 
@@ -59,7 +60,8 @@ let config = {
             };
             cell.chart = {};
             cell['canvas'] = this;
-            this.instantiationCell(cell);
+            let id = this.instantiationCell(cell);
+            cell['componentId'] = id;
             this.data.cells.push(cell);
         },
 
@@ -75,6 +77,7 @@ let config = {
     },
 
     afterRender() {
+        this.cells = [];
         //加载头部导航
         if(config.data.canvasSingle){
             this.data.views.forEach((val,index) => {
@@ -97,12 +100,9 @@ let config = {
 
         //子组件删除时 更新this.data.cells
         Mediator.subscribe("bi:cell:remove", componentId => {
-            for (let [index,id] of this.data.componentIds.entries()) {
-                if (id == componentId) {
-                    this.data.cells.splice(index,1);
-                    break;
-                };
-            }
+            _.remove(this.data.cells, function (cell) {
+                return cell.componentId === componentId;
+            });
         });
 
         // 保存视图画布
@@ -115,6 +115,7 @@ let config = {
                 data: cells.map((cell) => {
                     delete cell['chart'];
                     delete cell['canvas'];
+                    delete cell['componentId'];
                     return JSON.stringify(cell);
                 })
             };
@@ -178,5 +179,6 @@ export class CanvasCellsComponent extends BiBaseComponent{
         let cellComponent = new CanvasCellComponent(data);
         this.append(cellComponent, this.el.find('.cells'));
         this.data.componentIds.push(cellComponent.componentId);
+        return cellComponent.componentId;
     }
 }
