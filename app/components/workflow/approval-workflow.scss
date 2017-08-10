@@ -62,10 +62,11 @@ btn-div{
       padding: 0 10px;
     }
   }
+  
   #preview-node{
    .preview-node{
      position: absolute;
-     top:0;
+     top:31px;
      left: 0;
      width: 100%;
      min-width: 980px;
@@ -88,6 +89,22 @@ btn-div{
     background-color: rgba(240, 247, 255, 1);
   }
 }
+.rejContainer{
+  display: none;
+    position: fixed;
+    width: 800px;
+    height: 600px;
+    background: #fff;
+    left: calc(50% - 400px);
+    top:calc(50% - 300px);
+    z-index: 55;
+    #rejWf{
+      position: relative;
+    }
+    input{
+      display: none;
+    }
+  }
 #app-workflow{
   .workflow-main{
     position: absolute;
@@ -97,13 +114,6 @@ btn-div{
     overflow: auto;
     top:0;
   }
-  #approval-header{
-
-    #approval-info{
-
-    }
-  }
-
 }
 #app-workflow{
   .workflow-record,.workflow-foot,#preview-node .preview-node {
@@ -159,4 +169,7 @@ btn-div{
   }
 }
 
-
+[canreject="1"]{
+  background: #0E7AEF;
+  color: #fff;
+}

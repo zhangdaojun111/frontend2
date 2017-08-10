@@ -20,7 +20,6 @@ class workflowRecord extends Component{
 
 export default {
     showRecord(data){
-        console.log(data)
         let component = new workflowRecord(data);
         let el = $('#workflow-record');
         component.render(el);

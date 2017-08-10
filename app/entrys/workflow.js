@@ -38,7 +38,7 @@ let wfObj;
 Mediator.subscribe('workflow:choose', (msg)=> {
     wfObj=msg;
     (async function () {
-        return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=qiumaoyun_1501661055093&record_id=',data:{
+        return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=wenjingjing_1502270451650&record_id=',data:{
             flow_id:msg.id
         }});
     })()
@@ -89,10 +89,15 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             clearInterval(timer);
             if(msg===1){
                 autoSaving();
-            }else{
-                clearInterval(timer);
             }
         })
+        $(window).on('focus',function(){
+            clearInterval(timer);
+            autoSaving();
+        });
+        $(window).on('blur',function(){
+            clearInterval(timer);
+        });
     })
 
 
@@ -136,7 +141,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
     });
     
 });
-
+//submit workflow data 提交工作流
 Mediator.subscribe('workflow:submit', (res)=> {
     let formData=FormEntrys.getFormValue(),
         postData={
@@ -173,10 +178,15 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
 var mockFlowData;
 
 (async function () {
-    return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=qiumaoyun_1501661055093&record_id=',data:{
-        flow_id:30
+    return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
+        flow_id:32,
+        record_id:'59897f02c3ec2134050ee6a7'
+    // return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=wenjingjing_1502270451650',data:{
+    //     flow_id:10,
+    //     record_id:"598ac7a1c57ccd4d472bd31d"
     }});
 })().then(res=>{
+    Mediator.publish('workflow:getImgInfo',res);
     Mediator.publish('workflow:gotWorkflowInfo', res);
     mockFlowData=res;
 });
@@ -184,6 +194,18 @@ var mockFlowData;
 //请求部门员工信息，加载树
 let tree=[];
 let staff=[];
+function recursion(arr,slnds,pubInfo){
+    if(slnds.nodes.length!==0){
+        for(var j in arr){
+            slnds.nodes.forEach(child=>{
+                if(j==child.id){
+                    Mediator.publish(`workflow:${pubInfo}`, arr[j]);
+                    recursion(arr,child,pubInfo)
+                }
+            });
+        }
+    }
+}
 (async function () {
     return workflowService.getStuffInfo({url: '/save_perm/?perm_id=0'});
 })().then(res=>{
@@ -198,45 +220,20 @@ let staff=[];
         }
     }
     recur(tree);
-
     var treeComp2 = new TreeView(tree,{
         callback: function (event,selectedNode) {
             if(event==='select'){
                 for(var k in staff){
                     if(k==selectedNode.id){
                         Mediator.publish('workflow:checkDept', staff[k]);
-                        function recursion(arr,slnds){
-                            if(slnds.nodes.length!==0){
-                                for(var j in arr){
-                                    slnds.nodes.forEach(child=>{
-                                        if(j==child.id){
-                                            Mediator.publish('workflow:checkDept', arr[j]);
-                                            recursion(arr,child)
-                                        }
-                                    });
-                                }
-                            }
-                        }
-                        recursion(staff,selectedNode);
+                        recursion(staff,selectedNode,'checkDept');
                     }
                 }
             }else{
                 for(var k in staff){
                     if(k==selectedNode.id){
                         Mediator.publish('workflow:unCheckDept', staff[k]);
-                        function recursion(arr,slnds){
-                            if(slnds.nodes.length!==0){
-                                for(var j in arr){
-                                    slnds.nodes.forEach(child=>{
-                                        if(j==child.id){
-                                            Mediator.publish('workflow:unCheckDept', arr[j]);
-                                            recursion(arr,child)
-                                        }
-                                    });
-                                }
-                            }
-                        }
-                        recursion(staff,selectedNode);
+                        recursion(staff,selectedNode,'unCheckDept');
                     }
                 }
             }
@@ -247,10 +244,24 @@ let staff=[];
     treeComp2.render($('#treeMulti'));
 });
 
+
+
+const approveWorkflow=(para)=>{
+    (async function () {
+        return workflowService.approveWorkflowRecord({
+            url: '/approve_workflow_record/',
+            data:para
+        });
+    })().then(res=>{
+        alert(`${res.error}`)
+    })
+}
+
+//审批操作
 FormEntrys.createForm({
-    el:"#place-form",
+    el:$("#place-form"),
     form_id:181,
-    record_id:'59897efb53930b8ca98a3446',
+    record_id:'59897f02c3ec2134050ee6a7',
     is_view:0,
     from_approve:1,
     from_focus:0,
@@ -260,33 +271,65 @@ FormEntrys.createForm({
     WorkflowRecord.showRecord(res);
     Mediator.subscribe('approval:recordPass', (ispass)=> {
        if(ispass){
-           (async function () {
-                return workflowService.approveWorkflowRecord({
-                    url: '/approve_workflow_record',
-                });
-              })().then(res=>{
-
-               console.log(res);
-           })
-           console.log(ispass,res)
-       }
-
+           approveWorkflow({
+                record_id:'59897f1591461c15d279023a',
+                focus_users:[],
+                action:0,// 0：通过 1：驳回上一级 2:驳回发起人 3：作废 4：取消 5：撤回 6：驳回任意节点 7：撤回审批 8：自动拨回到发起人 9：加签
+                comment:null,
+                node_id:null,//驳回节点id
+                sigh_type:0,//加签类型  0：前 1：后
+                sigh_user_id:'',
+                data:{}
+            });
+        }
     })
-
+    Mediator.subscribe('approval:appRejUp', (ispass)=> {
+       if(ispass){
+           approveWorkflow({
+                record_id:'59897f1591461c15d279023a',
+                focus_users:[],
+                action:1,
+                comment:null,
+                node_id:null,
+                sigh_type:0,
+                sigh_user_id:'',
+                data:{}
+            });
+        }
+    })
+    Mediator.subscribe('approval:recordRejStart', (ispass)=> {
+       if(ispass){
+           approveWorkflow({
+                record_id:'59897f1591461c15d279023a',
+                focus_users:[],
+                action:2,
+                comment:null,
+                node_id:null,
+                sigh_type:0,
+                sigh_user_id:'',
+                data:{}
+            });
+        }
+    })
+    
 });
 
 
 //获取盖章图片
-Mediator.subscribe("workflow:getStampImg",(msg)=>{
-    (async function () {
-        let data = await workflowService.getStmpImg(msg);
-    })();
+(async function () {
+    return workflowService.getStmpImg();
+})().then(res=>{
+    console.log(res);
+     Mediator.publish("workflow:getStampImg",res);
 });
+
 
 Mediator.subscribe("workflow:seal",(msg)=>{
     (async function () {
         let data = await workflowService.addStmpImg(msg);
-    })();
+    })().then(res=>{
+        Mediator.publish("workflow:getStamp");
+    });
 });
 
 //删除或添加盖章图片之后重新加载图片
@@ -304,24 +347,3 @@ Mediator.subscribe("workflow:delImg",(msg)=>{
     })();
 });
 
-
-
-
-
-
-//审批操作
-
-(async function () {
-    return workflowService.approveWorkflowRecord({url: '/approve_workflow_record/?seqid=xuyan_1502264078519&record_id=59897f1591461c15d279023a',data:{
-        record_id:'59897f1591461c15d279023a',
-        focus_users:[],
-        action:0,// 0：通过 1：驳回上一级 2:驳回发起人 3：作废 4：取消 5：撤回 6：驳回任意节点 7：撤回审批 8：自动拨回到发起人 9：加签
-        comment:null,
-        node_id:null,//驳回节点id
-        sigh_type:0,//加签类型  0：前 1：后
-        sigh_user_id:'5979e48a41f77c586658e346',
-        data:{}
-    }});
-})().then(res=>{
-    console.log(res);
-});

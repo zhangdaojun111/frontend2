@@ -1,6 +1,7 @@
 import Component from '../../../lib/component';
 import template from './workflow.html';
 import './workflow.scss';
+import msgBox from '../../../lib/msgbox';
 
 let config = {
     template: template,
@@ -122,23 +123,23 @@ let config = {
                     }).css(css).html(attachment + text)//.css(__this[style]);
                         //如果有加签
                     if (is_add_handler == 1) {
-                            // let addHandlerInfo = "";
-                            // for (let dict of add_handler_info) {
-                            //     addHandlerInfo += `${dict["add_handler_type"]}：${dict["add_handler_name"]}\n`;
-                            // }
-                            // let span = $("<span>")
-                            //     .attr({ title: addHandlerInfo })
-                            //     .css({
-                            //     display: 'inline-block',
-                            //     width: '10px',
-                            //     height: '10px',
-                            //     borderRadius: '50%',
-                            //     border: '1px solid #ddd',
-                            //     verticalAlign: 'middle',
-                            //     margin: '0 5px',
-                            //     background: 'rgb(14, 122, 239)'
-                            // });
-                            // $(html).prepend(span);
+                            let addHandlerInfo = "";
+                            for (let dict of add_handler_info) {
+                                addHandlerInfo += `${dict["add_handler_type"]}：${dict["add_handler_name"]}\n`;
+                            }
+                            let span = $("<span>")
+                                .attr({ title: addHandlerInfo })
+                                .css({
+                                display: 'inline-block',
+                                width: '10px',
+                                height: '10px',
+                                borderRadius: '50%',
+                                border: '1px solid #ddd',
+                                verticalAlign: 'middle',
+                                margin: '0 5px',
+                                background: 'rgb(14, 122, 239)'
+                            });
+                            $(html).prepend(span);
                     }
                         //如果是驳回任意节点模式
                     if (__this.rejectMode) {
@@ -171,7 +172,7 @@ let config = {
                 if (value['state'] == 1) {
                     haveState1 = true;
                     //判断当前节点是否包含登陆人
-                    if (value["text"].indexOf(user_service_1.UserService.userInfo.name) != -1) {
+                    if (value["text"].indexOf('邱茂耘') != -1) {
                         // for(let a of __this.requiredfieldsNodeList['frontendid2field'][value.id]){
                         //     $('*[requiredField='+a+']').css({border:'1px solid transparent',boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px',transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out'});
                         // }
@@ -186,13 +187,13 @@ let config = {
                     let haveAddUser = false;
                     //判断被加签人是否包含登陆人
                     for (let dict of add_handler_info) {
-                        if (dict["add_handler_name"].indexOf(user_service_1.UserService.userInfo.name) != -1) {
+                        if (dict["add_handler_name"].indexOf('邱茂耘') != -1) {
                             haveAddUser = true;
                             break;
                         }
                     }
                     //判断当前加签节点（节点和被加签人）是否包含登陆人
-                    if (value["text"].indexOf(user_service_1.UserService.userInfo.name) != -1 || haveAddUser == true) {
+                    if (value["text"].indexOf('邱茂耘') != -1 || haveAddUser == true) {
                         for (let a of __this.requiredfieldsNodeList['frontendid2field'][value.id]) {
                             $('*[requiredField=' + a + ']').css({ border: '1px solid transparent', boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px', transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out' });
                         }
@@ -259,6 +260,42 @@ let config = {
             for (var j = 0; j < targetAnchors.length; j++) {
                 var targetUUID = toId + targetAnchors[j];
                 allTargetEndpoints.push(this.data.jsPlumbInstance.addEndpoint(toId, targetEndpoint, { anchor: targetAnchors[j], uuid: targetUUID }));
+            }
+        },
+        //驳回节点
+        rejectNode(e) {
+            // if (this.rejectMode) {
+                let can_reject = e.getAttribute("canreject");
+                let text = e.getAttribute("title");
+                this.rejectId = e.getAttribute("id");
+                if (can_reject == 1) {
+                    msgBox.confirm(`您确定要驳回到【${text}】么？`).then(res=>{
+                        if(res){
+                            console.log(1);
+                        }
+                    })
+                }
+            // }
+        },
+        //工作流节点负责性字段变色
+        requiredFields(e) {
+            let thisDom = $(e.target);
+            if (thisDom.hasClass("draged-item")) {
+                e.stopPropagation();
+                for (let key in this.requiredfieldsNodeList['frontendid2field']) {
+                    if (thisDom[0].id == key) {
+                        for (let a of this.requiredfieldsNodeList['frontendid2field'][key]) {
+                            $('*[requiredField=' + a + ']').css({ border: '1px solid transparent', boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px', transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out' });
+                        }
+                    }
+                }
+                for (let key in this.requiredfieldsNodeList['frontendid2fieldid']) {
+                    if (thisDom[0].id == key) {
+                        for (let b of this.requiredfieldsNodeList['frontendid2fieldid'][key]) {
+                            $('span[data-id=' + b + ']').css({ color: 'rgb(14,122,239)' });
+                        }
+                    }
+                }
             }
         },
         //zoomIn paint
@@ -412,22 +449,32 @@ let config = {
     }
 }
 
-class WorkFlow extends Component {
+class WF extends Component {
     constructor(data){
         super(config, data);
     }
 }
 
-export default {
-    show(data,elem) {
+
+
+let WorkFlow={
+    show(data,elem){
         let workFlowData = _.defaultsDeep({}, data, {
             nodeflowSize: 1,
             containerwidth: '100%',
             containerheight: '100px',
             // nodesWidth: '60px'
         });
-        let component = new WorkFlow(workFlowData);
+        let component = new WF(workFlowData);
+        this.WorkFlow=component;
         let el = $(elem);
         component.render(el);
+    },
+    rejectNode(e){
+        this.WorkFlow.actions.rejectNode(e);
+    },
+    requiredFields(e){
+        this.WorkFlow.actions.requiredFields(e);
     }
 };
+export default WorkFlow;
