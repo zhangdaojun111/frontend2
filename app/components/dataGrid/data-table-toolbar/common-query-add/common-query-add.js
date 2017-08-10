@@ -1,19 +1,18 @@
-import template from './data-table-export.html';
-import './data-table-export.scss';
-let girdExport = {
+import template from './common-query-add.html';
+import './common-query-add.scss';
+let addQuery = {
     template: template,
     data: {
 
     },
     actions: {
         btnClick: function () {
-            this.actions.getCheckBoxValue()
             $( '.save-btn' ).click( ()=>{
                 PMAPI.sendToParent( {
                     key: this.key,
                     type: PMENUM.close_dialog,
                     data: {
-                        // value: $('.input').val()
+                        value: $('.input').val()
                     }
                 } )
             } )
@@ -26,10 +25,6 @@ let girdExport = {
                     }
                 } )
             } )
-        },
-        getCheckBoxValue: function(){
-            debugger
-            // $('.ecport-input')
         }
     },
     afterRender: function () {
@@ -39,4 +34,4 @@ let girdExport = {
 
     }
 };
-export default girdExport;
+export default addQuery;

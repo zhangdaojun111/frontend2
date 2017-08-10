@@ -1,9 +1,22 @@
-<ul id="dragCustom">
-    <!--{{#fields}}-->
-    <!--<li field="{{field}}" class="{{#if }}{{/}}">{{name}}</li>-->
-    <!--{{/fields}}-->
-    <!--<li class="ui-state-default">Item 1</li>-->
-    <!--<li class="ui-state-default ui-state-disabled">（我不是 sortable 或者一个放置目标）</li>-->
-    <!--<li class="ui-state-default ui-state-disabled">（我不是 sortable 或者一个放置目标）</li>-->
-    <!--<li class="ui-state-default">Item 4</li>-->
-</ul>
+<div class="dragCustom">
+    <div class="custom-search">
+        <img class="custom-select-all" src=''><input id="custom-search-input" type="text" placeholder="搜索关键字">
+    </div>
+    <div class="custom-data">
+        <ul id="dragCustom">
+            {{#fields}}
+            {{#if candrag}}
+            <li field="{{field}}" name="{{name}}" class="ui-state-default">
+                <img class="custom-checkbox" src=''><span title="{{name}}" class="custom-name">{{name}}</span>
+                <img class="custom-fix-l" src='../../../../assets/images/dataGrid/icon_right_shi.png'><img class="custom-fix-r" src='../../../../assets/images/dataGrid/icon_right_shi.png'>
+            </li>
+            {{else}}
+            <li field="{{field}}" name="{{name}}" class="custom-disabled">
+                <img class="custom-checkbox" src=''><span title="{{name}}" class="custom-name">{{name}}</span>
+                <img style="display: none;" class="custom-fix-l" src=''><img style="display: none;" class="custom-fix-r" src=''>
+            </li>
+            {{/if}}
+            {{/fields}}
+        </ul>
+    </div>
+</div>
