@@ -22,20 +22,22 @@ import Grid from '../components/dataGrid/data-table-page/data-table-page';
 
 WorkFlowForm.showForm();
 
-console.log(window.config.name);
+let serchStr=location.search.slice(1);
+let obj={}
+serchStr.split('&').forEach(res=>{
+    var arr=res.split('=');
+    obj[arr[0]]=arr[1];
+});
+console.log(obj);
 //审批工作流
-
-var mockFlowData;
-
 (async function () {
     return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
-        flow_id:43,
-        record_id:'598d26f3803df8f6e2600dfd'
+        flow_id:obj.flow_id,
+        record_id:obj.record_id
     }});
 })().then(res=>{
     Mediator.publish('workflow:getImgInfo',res);
     Mediator.publish('workflow:gotWorkflowInfo', res);
-    mockFlowData=res;
 });
 
 //请求部门员工信息，加载树
@@ -131,15 +133,16 @@ const approveWorkflow=(para)=>{
 //审批操作
 FormEntrys.createForm({
     el:$("#place-form"),
-    form_id:181,
-    record_id:'598d26f3803df8f6e2600dfd',
+    form_id:obj.form_id,
+    record_id:obj.record_id,
     is_view:0,
     from_approve:1,
     from_focus:0,
-    table_id:'5318_EHFuJD7Ae76c6GMPtzdiWH'
+    table_id:obj.table_id
 }).then(res=>{
     ApprovalHeader.showheader(res);
     WorkflowRecord.showRecord(res);
+    console.log(11111111);
     Mediator.subscribe('approval:recordPass', (data)=> {
         console.log(data);
            approveWorkflow({
@@ -158,7 +161,7 @@ FormEntrys.createForm({
     Mediator.subscribe('approval:appRejUp', (ispass)=> {
        if(ispass){
            approveWorkflow({
-                record_id:'59897f1591461c15d279023a',
+                record_id:obj.record_id,
                 focus_users:[],
                 action:1,
                 comment:null,
@@ -172,7 +175,7 @@ FormEntrys.createForm({
     Mediator.subscribe('approval:recordRejStart', (ispass)=> {
        if(ispass){
            approveWorkflow({
-                record_id:'59897f1591461c15d279023a',
+                record_id:obj.record_id,
                 focus_users:[],
                 action:2,
                 comment:null,
@@ -185,7 +188,7 @@ FormEntrys.createForm({
     })
     Mediator.subscribe('approval:signUser', (signObj)=> {
         approveWorkflow({
-                record_id:'59897f1591461c15d279023a',
+                record_id:obj.record_id,
                 focus_users:[],
                 action:2,
                 comment:null,

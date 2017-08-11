@@ -36,7 +36,7 @@ let wfObj;
 Mediator.subscribe('workflow:choose', (msg)=> {
     wfObj=msg;
     (async function () {
-        return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=wenjingjing_1502270451650&record_id=',data:{
+        return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
             flow_id:msg.id
         }});
     })()
@@ -101,19 +101,33 @@ Mediator.subscribe('workflow:choose', (msg)=> {
 });
 //submit workflow data 提交工作流
 Mediator.subscribe('workflow:submit', (res)=> {
+    $("#submit").hide();
     let formData=FormEntrys.getFormValue(wfObj.tableid),
         postData={
         flow_id:wfObj.id,
-        is_draft:1,
         focus_users:JSON.stringify(res)||[],
         data:JSON.stringify(formData)
     };
-    console.log(formData);
-    
     (async function () {
-        let data = await workflowService.createWorkflowRecord(postData);
-        msgBox.alert(`error:${data.error}`);
-    })();
+        return await workflowService.createWorkflowRecord(postData);
+    })().then(res=>{
+        if(res.success===1){
+            msgBox.alert(`${res.error}`);
+            $("#startNew").show().on('click',()=>{
+                Mediator.publish('workflow:choose',wfObj);
+                $("#startNew").hide();
+                $("#submit").show();
+            });
+            (async function () {
+                return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
+                    flow_id:wfObj.id,
+                    record_id:res.record_id
+                }});
+            })().then(data=>{
+                Mediator.publish('workflow:gotWorkflowInfo', data);
+            });
+        };
+    })
 });
 
 
