@@ -200,7 +200,7 @@ let config = {
         //打开保存常用查询
         openSaveQuery: function(){
             if(this.isEdit) {
-                addQuery.data.name = this.name
+                addQuery.data.name = this.name;
             }
             PMAPI.openDialogByComponent(addQuery, {
                 width: 380,
@@ -232,7 +232,13 @@ let config = {
         renderQueryItem: function(data){
             data.forEach((item)=> {
                 $('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
+                this.data.commonQuery.push({
+                    id:item.id,
+                    name: item.name,
+                    queryParams: item.queryParams
+                })
             })
+
         },
         //保存常用查询
         saveCommonQuery: function(name) {
@@ -243,10 +249,12 @@ let config = {
                 'queryParams': JSON.stringify(this.data.searchInputList)
             };
             dataTableService.savePreference(obj).then( res=>{
+
                 if(res.succ == 0) {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
                     this.data.getExpertSearchData();
+
                 }
             });
             HTTP.flush();
