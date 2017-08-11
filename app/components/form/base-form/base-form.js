@@ -1360,8 +1360,42 @@ let config={
             });
         })
 
+
+        console.log('按鈕組');
+        console.log(_this.data.btnType);
         //添加提交按钮
-        _this.el.append('<div style="position: fixed;bottom: 20px;right: 20px;" class="noprint"><button id="save">提交</button><button id="changeEdit">转到编辑模式</button><button id="print">打印</button></div>')
+        if(_this.data.btnType == 'new'){
+            _this.el.append(`<div class="noprint ui-btn-box"><div>
+                    <button class="btn btn-normal mrgr" id="print">
+                        <span>打印</span>
+                        <div class="btn-ripple ripple"></div>
+                    </button>
+                    <button class="btn btn-normal ceshi" id="save" >
+                        <span>提交</span>
+                        <div class="btn-ripple ripple"></div>
+                    </button>
+                </div></div>`)
+        }else if(_this.data.btnType == 'edit'){
+            _this.el.append(`<div class="noprint ui-btn-box"><div >
+                    <button class="btn btn-normal mrgr" id="print" >
+                        <span>打印</span>
+                        <div class="btn-ripple ripple"></div>
+                    </button>
+                    <button class="btn btn-normal" id="changeEdit" >
+                        <span>转到编辑模式</span>
+                        <div class="btn-ripple ripple"></div>
+                    </button>
+                </div></div>`)
+        }else if(_this.data.btnType == 'none'){
+
+        }else if(_this.data.btnType == 'confirm'){
+            _this.el.append(`<div class="noprint ui-btn-box"><div >
+                    <button class="btn btn-normal" [style.background]="myColor._baseColor">
+                        <span>确定</span>
+                        <div class="btn-ripple ripple"></div>
+                    </button>
+                </div></div>`)
+        }
 
         //提交按钮事件绑定
         _this.el.on('click','#save',function () {
