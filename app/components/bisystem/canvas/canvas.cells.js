@@ -151,11 +151,6 @@ let config = {
         });
 
         this.actions.getCellLayout()
-        //多页跳转隐藏
-        // $('.btn-multip').click(function () {
-        //     $(this).hide();
-        //     $('.btn-single').hide();
-        // })
     }
 };
 
