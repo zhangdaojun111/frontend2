@@ -1282,14 +1282,14 @@ let config={
             }else{
                 _this.data.sonTableId = data["value"];
                 if(isView == '0'){
-                    _this.data.actions.setCountData();
+                    _this.actions.setCountData();
                 }
             }
             // 保存父表数据
-            _this.FormService.frontendParentFormValue[_this.tableId] = _this.actions.createFormValue(_this.data.data);
+            FormService.frontendParentFormValue[_this.tableId] = _this.actions.createFormValue(_this.data.data);
         });
         //对应关系弹窗
-        Mediator.subscribe('form:openSongGrid:'+_this.data.tableId,function(data){
+        Mediator.subscribe('form:openCorrespondence:'+_this.data.tableId,function(data){
             let isView = data["is_view"];
                 _this.data.sonTableId = data["value"];
                 if(isView == '0'){
