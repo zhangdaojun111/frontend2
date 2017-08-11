@@ -1,7 +1,7 @@
 /**
  * Created by Yunxuan Yan on 2017/8/2.
  */
-import 'bootstrap-treeview/src/js/bootstrap-treeview';
+// import 'bootstrap-treeview/src/js/bootstrap-treeview';
 import Component from '../../../lib/component';
 import template from './tree.html';
 import './tree.scss';
