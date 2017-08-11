@@ -116,6 +116,10 @@ let config = {
         isEditable: false,
         //第一次进入加载footer数据
         firstGetFooterData: true,
+        //是否宽度自适应状态
+        isAutoWidth: false,
+        //宽度自适应上一次状态
+        lastGridState: null,
     },
     //生成的表头数据
     columnDefs: [],
@@ -1129,7 +1133,14 @@ let config = {
             } )
             //宽度自适应
             $( '.grid-auto-width' ).click( ()=>{
-                this.agGrid.actions.autoWidth();
+                if( !this.data.isAutoWidth ){
+                    this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
+                    this.agGrid.actions.autoWidth();
+                }else {
+                    this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
+                }
+                $( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
+                this.data.isAutoWidth = !this.data.isAutoWidth;
             } )
             //搜索
             $( '.float-search-btn' ).click( ()=>{

@@ -27,4 +27,3 @@ HeaderInstance.render($('#header'));
 // }, 1000)
 
 // socket.close()
-
