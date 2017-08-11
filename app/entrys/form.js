@@ -49,9 +49,9 @@ let FormEntrys = {
         this.fieldId=config.field_Id||'';
         this.key=config.key||'';
         this.fromApprove=config.from_approve||'';
-        this.formFocus=this.from_focus||'';
-        this.isAddBuild=this.isAddBuild || 0;
-        this.buildId=this.buildId || '';
+        this.formFocus=config.from_focus||'';
+        this.isAddBuild=config.isAddBuild || 0;
+        this.buildId=config.buildId || '';
     },
     hasKeyInFormDataStatic:function (key,staticData){
     let isExist = false;
@@ -315,113 +315,4 @@ let FormEntrys = {
         return this.childForm[tableId].actions.getFormValue();
     }
 }
-
-$('#toEdit').on('click',function(){
-    let realId=$('#real_id').val()||'';
-    let isView=$('#is_view').val()||0;
-    FormEntrys.destoryAll();
-    FormEntrys.createForm({
-        table_id:'8696_yz7BRBJPyWnbud4s6ckU7e',
-        seqId:'yudeping',
-        el:$('body'),
-        is_view:isView,
-        real_id:realId
-    });
-});
-$('#text').on('click',function(){
-    let realId=$('#real_id').val()||'';
-    let isView=$('#is_view').val()||0;
-    FormEntrys.destoryAll();
-    FormEntrys.createForm({
-        table_id:'1285_pkz2teyhHCztFrYhoc6F54',
-        seqId:'yudeping',
-        el:$('body'),
-        is_view:isView,
-        real_id:realId
-    });
-});
-$('#count').on('click',function(){
-    let realId=$('#real_id').val()||'';
-    let isView=$('#is_view').val()||0;
-    FormEntrys.destoryAll();
-    FormEntrys.createForm({
-        table_id:'8390_35R9y7J5uVULgczYyZvqvB',
-        seqId:'yudeping',
-        el:$('body'),
-        is_view:isView,
-        real_id:realId
-    });
-});
-$('#editRequired').on('click',function(){
-    let realId=$('#real_id').val()||'';
-    let isView=$('#is_view').val()||0;
-    FormEntrys.destoryAll();
-    FormEntrys.createForm({
-        table_id:'3461_P28RYPGTGGE7DVXH8LBMHe',
-        seqId:'yudeping',
-        el:$('body'),
-        is_view:isView,
-        real_id:realId
-    });
-});
-$('#defaultValue').on('click',function(){
-    let realId=$('#real_id').val()||'';
-    let isView=$('#is_view').val()||0;
-    FormEntrys.destoryAll();
-    FormEntrys.createForm({
-        table_id:'1160_ex7EbDsyoexufF2UbXBmSJ',
-        seqId:'yudeping',
-        el:$('body'),
-        is_view:isView,
-        real_id:realId
-    });
-});
-$('#valid').on('click',function(){
-    let realId=$('#real_id').val()||'';
-    let isView=$('#is_view').val()||0;
-    FormEntrys.destoryAll();
-    FormEntrys.createForm({
-        table_id:'2638_urGGDDp75VvymeqWj3eo6F',
-        seqId:'yudeping',
-        el:$('body'),
-        is_view:isView,
-        real_id:realId
-    });
-});
-$('#exp').on('click',function(){
-    let realId=$('#real_id').val()||'';
-    let isView=$('#is_view').val()||0;
-    FormEntrys.destoryAll();
-    FormEntrys.createForm({
-        seqId:'yudeping',
-        el:$('body'),
-        is_view:isView,
-        real_id:realId,
-        table_id:'7336_HkkDT7bQQfqBag4kTiFWoa'
-    });
-
-})
-$('#workflow').on('click',function(){
-    let realId=$('#real_id').val()||'';
-    let isView=$('#is_view').val()||0;
-    FormEntrys.destoryAll();
-    FormEntrys.createForm({
-        table_id:'449_6k2VdLn4ArCfgFPuAjFrNQ',
-        seqId:'yudeping',
-        el:$('body'),
-        is_view:isView,
-        real_id:realId
-    });
-})
-$('#lalala').on('click',function(){
-    let realId=$('#real_id').val()||'';
-    let isView=$('#is_view').val()||0;
-    let tableId=$('#tableId').val()||0;
-    FormEntrys.destoryAll();
-    FormEntrys.createForm({
-        table_id:tableId,
-        seqId:'zengjing',
-        el:$('body'),
-    });
-})
 export default FormEntrys

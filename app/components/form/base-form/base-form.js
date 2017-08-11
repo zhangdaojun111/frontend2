@@ -1257,10 +1257,6 @@ let config={
         });
         //子表弹窗
         Mediator.subscribe('form:openSongGrid:'+_this.data.tableId,function(data){
-           console.log('子表弹窗');
-           console.log(data);
-           console.log('我这里有这些ID么');
-           console.log(_this.data);
             _this.data.can_not_open_form=data.can_not_open_form;
             let type = data["type"];
             let isView = data["is_view"];
@@ -1269,9 +1265,9 @@ let config={
                 if(isView == '0'){
                     _this.data.viewMode = 'normal';
                 }else{
-                    _this.data.viewMode = 'viewFromSongrid';
+                    _this.data.viewMode = 'ViewChild';
                 }
-                PMAPI.openDialogByIframe(`/datagrid/source_data_grid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parentTableId}&parentTempId=${data.parentTempId}&rowId=${data.parentTempId}&tableType=child&viewMode=${_this.data.viewMode}`,{
+                PMAPI.openDialogByIframe(`/datagrid/source_data_grid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.parent_temp_id}&rowId=${data.parent_temp_id}&tableType=child&viewMode=${_this.data.viewMode}`,{
                     width:800,
                     height:600,
                     title:`子表`,
@@ -1305,6 +1301,8 @@ let config={
         }),
 
         Mediator.subscribe('form:addNewBuildIn:'+_this.data.tableId,function(data){
+            console.log('快捷添加内置');
+            console.log(data);
             _this.data['quikAddDfield']=data.dfield;
             PMAPI.openDialogByIframe(`/form/add_buildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
                 width:800,
