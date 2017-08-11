@@ -24,6 +24,7 @@ import History from'../history/history'
 import AddEnrypt from '../encrypt-input-control/add-enrypt'
 import {md5} from '../../../services/login/md5';
 import AttachmentControl from "../attachment-control/attachment-control";
+import SettingPrint from '../setting-print/setting-print'
 
 let config={
     template:'',
@@ -928,9 +929,7 @@ let config={
                 real_id:'59803341ae6ba89d68ac574e',
                 seqid:'yudeping'
             }
-            FormService.getDynamicDataImmediately(json).then(res=>{
-                console.log('res');
-                console.log(res);
+            FormService.getDynamicData(json).then(res=>{
                 for(let key in _this.data.data){
                     _this.data.data[key]['is_view']=res['data'][key]['is_view'];
                     if(!_this.childComponent[key]){
@@ -939,9 +938,6 @@ let config={
                     if(_this.childComponent[key].data.type=='MultiLinkage'){
                         _this.childComponent[key].actions.changeView(_this.childComponent[key],res['data'][key]['is_view']);
                     }
-                    console.log('is_view');
-                    console.log(res['data'][key]['is_view']);
-                    console.log(_this.childComponent[key]['data']['is_view']);
                     _this.childComponent[key]['data']['is_view']=_this.data.data[key]['is_view'];
                     _this.childComponent[key].reload();
                 }
@@ -1287,7 +1283,7 @@ let config={
         })
 
         //添加提交按钮
-        _this.el.append('<div style="position: fixed;bottom: 20px;right: 20px;"><button id="save">提交</button><button id="changeEdit">转到编辑模式</button></div>')
+        _this.el.append('<div style="position: fixed;bottom: 20px;right: 20px;" class="noprint"><button id="save">提交</button><button id="changeEdit">转到编辑模式</button><button id="print">打印</button></div>')
 
         //提交按钮事件绑定
         _this.el.on('click','#save',function () {
@@ -1295,6 +1291,25 @@ let config={
         })
         $(_this.el).find("#changeEdit").on('click',function () {
             _this.actions.changeToEdit(_this);
+        })
+        _this.el.on('click','#print',function(){
+            FormService.getPrintSetting().then(res=>{
+                // if(res.succ == 1){
+                    if(res.data && res.data.length && res.data.length!=0){
+                        SettingPrint.data['printTitles']=res['data'];
+                        SettingPrint.data['myContent']=res['data'][0]['content'] || '';
+                        SettingPrint.data['selectNum']=parseInt(res['data']['index']) || 1;
+                    }
+                    console.log('怎么打不开了？');
+                    PMAPI.openDialogByComponent(SettingPrint,{
+                        width: 500,
+                        height: 300,
+                        title: '自定义页眉',
+                        modal:true
+                    })
+                // }
+            })
+            HTTP.flush();
         })
     },
     beforeDestory:function(){
