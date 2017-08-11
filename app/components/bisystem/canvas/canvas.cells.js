@@ -5,6 +5,7 @@ import {CanvasHeaderlComponent} from "../canvas/header/canvas.header";
 import template from './canvas.cells.html';
 import './canvas.cells.scss';
 import {canvasCellService} from '../../../services/bisystem/canvas.cell.service';
+import {router} from '../bi.router';
 import Mediator from '../../../lib/mediator';
 import {ToolPlugin} from '../utils/tool.plugin';
 
@@ -150,13 +151,18 @@ let config = {
             window.location.href = `/bi/index/${url}`;
         });
 
-        this.actions.getCellLayout()
-        //多页跳转隐藏
-        // $('.btn-multip').click(function () {
-        //     $(this).hide();
-        //     $('.btn-single').hide();
-        // })
-    }
+    },
+
+    /**
+     * 初始化加载cell(仅加载一次)
+     */
+    async firstAfterRender() {
+        const cells = await canvasCellService.getCellLayout({view_id: this.viewId});
+        this.data.cells = cells['data'];
+        this.actions.loadCells();
+    },
+
+
 };
 
 export class CanvasCellsComponent extends BiBaseComponent{

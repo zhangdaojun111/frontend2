@@ -5,6 +5,7 @@
 import {BiBaseComponent} from '../../bi.base.component';
 import template from './canvas.cell.html';
 import './canvas.cell.scss';
+import Handlebars from 'handlebars';
 import Mediator from '../../../../lib/mediator';
 
 import {CellNormalComponent} from './normal/cell.normal';
@@ -37,6 +38,7 @@ const cellTypes = {
 let config = {
     template: template,
     actions: {},
+
 };
 
 export class CanvasCellComponent extends BiBaseComponent {
@@ -73,7 +75,7 @@ export class CanvasCellComponent extends BiBaseComponent {
                 self.cell.size.zIndex = self.cell.canvas.data.cellMaxZindex;
             });
         };
-        this.el.on('click', '.icon-group .del-cell-btn', (event) => {
+        this.el.on('click', '.del-cell-btn', (event) => {
             this.delCellLayout();
             return false;
         });
@@ -95,6 +97,7 @@ export class CanvasCellComponent extends BiBaseComponent {
 
         // 设置cell zindex 为最大
         let self = this;
+
 
         // 返回(下穿)上一层
         this.el.on('click', '.back-floor-btn', (event) => {
@@ -123,7 +126,6 @@ export class CanvasCellComponent extends BiBaseComponent {
             stop: (event, ui) => {
                 this.cell.size.left = ui.position.left;
                 this.cell.size.top = ui.position.top;
-                this.cell.size.zIndex = this.cell.canvas.data.cellMaxZindex
             }
         };
         const resizeOption = {
@@ -143,8 +145,11 @@ export class CanvasCellComponent extends BiBaseComponent {
      *删除画布layout
      */
     delCellLayout() {
-        Mediator.publish('bi:cell:remove', this.componentId);
-        this.destroySelf();
+        let ok = confirm('确定删除');
+        if (ok) {
+            Mediator.publish('bi:cell:remove', this.componentId);
+            this.destroySelf();
+        }
     }
 
     /**
@@ -160,7 +165,6 @@ export class CanvasCellComponent extends BiBaseComponent {
         this.cell['chart'] = res[0];
         this.data = res[0];
         this.cell.chart_id = chartId[0];
-        this.data.biUser = window.config.bi_user === 'client' ? false : true;
         this.reload();
     }
 
