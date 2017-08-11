@@ -17,9 +17,9 @@ import dataPagination from "../../data-table-toolbar/data-pagination/data-pagina
 import delSetting from '../../data-table-toolbar/data-table-delete/data-table-delete';
 import importSetting from '../../data-table-toolbar/data-table-import/data-table-import';
 import girdExport from '../../data-table-toolbar/data-table-export/data-table-export';
-
 import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
-
+import 'jquery-ui/ui/widgets/dialog.js';
+import 'jquery-ui/ui/widgets/sortable.js';
 
 let config = {
     template: template,
@@ -707,18 +707,18 @@ let config = {
                 this.data.fixCols = JSON.parse(res['pinned']['pinned']);
             }
             this.data.myGroup = (res['group'] != undefined) ? JSON.parse(res['group'].group) : [];
-            // console.log("rows")
-            // console.log(this.data.rows)
-            // console.log("colWidth")
-            // console.log(this.data.colWidth)
-            // console.log("ignoreFields")
-            // console.log(this.data.ignoreFields)
-            // console.log("fixCols")
-            // console.log(this.data.fixCols)
-            // console.log("myGroup")
-            // console.log(this.data.myGroup)
-            // console.log("orderFields")
-            // console.log(this.data.orderFields)
+            console.log("rows")
+            console.log(this.data.rows)
+            console.log("colWidth")
+            console.log(this.data.colWidth)
+            console.log("ignoreFields")
+            console.log(this.data.ignoreFields)
+            console.log("fixCols")
+            console.log(this.data.fixCols)
+            console.log("myGroup")
+            console.log(this.data.myGroup)
+            console.log("orderFields")
+            console.log(this.data.orderFields)
         },
         //初始化按钮
         renderBtn: function () {
@@ -1576,6 +1576,11 @@ let config = {
                     }
                 })
             }
+        });
+
+        // Mediator.on
+        PMAPI.subscribe(PMENUM.table_invalid, () => {
+            console.log('invalid');
         })
     }
 }
