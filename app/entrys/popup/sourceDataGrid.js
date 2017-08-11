@@ -14,6 +14,7 @@ $(document).ready(function(){
         key: window.config.key || '',
         base_buildin_dfield: window.config.base_buildin_dfield || '',
         source_field_dfield: window.config.source_field_dfield || '',
+        fieldContent: window.config.fieldContent || null,
     }
     let DataTableAgGrid=new dataTableAgGrid( json );
     DataTableAgGrid.render($('#sourceDataGrid'));
