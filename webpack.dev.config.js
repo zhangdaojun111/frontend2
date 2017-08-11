@@ -27,6 +27,7 @@ module.exports = {
 
     entry: {
         form: path.resolve(APP_PATH, 'entrys/form.js'),
+        openForm: path.resolve(APP_PATH, 'entrys/popup/openForm.js'),
         addNewBuild: path.resolve(APP_PATH, 'entrys/popup/addNewBuild.js'),
         choose: path.resolve(APP_PATH, 'entrys/popup/choose.js'),
         createWorkflow: path.resolve(APP_PATH, 'entrys/createWorkflow.js'),
@@ -34,7 +35,7 @@ module.exports = {
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
-        bi:path.resolve(APP_PATH, 'entrys/bi.js'),
+        // bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         bimanager:path.resolve(APP_PATH, 'entrys/bimanager.js'),
         calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
