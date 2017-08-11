@@ -805,6 +805,8 @@ let config = {
                     this.agGrid.actions.setGridData(d);
                 }
                 this.actions.sortWay();
+                //重新设置分页
+                this.pagination.actions.setPagination();
             })
             HTTP.flush();
         },
