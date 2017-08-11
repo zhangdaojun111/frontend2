@@ -24,6 +24,9 @@ import History from'../history/history'
 import AddEnrypt from '../encrypt-input-control/add-enrypt'
 import {md5} from '../../../services/login/md5';
 import AttachmentControl from "../attachment-control/attachment-control";
+import SettingPrint from '../setting-print/setting-print'
+import Songrid from '../songrid-control/songrid-control';
+import Correspondence from '../Correspondence-control/Correspondence-control';
 
 let config={
     template:'',
@@ -45,6 +48,20 @@ let config={
     childComponent:{},
     actions:{
         md5:md5,
+
+        //给子表统计赋值
+        setCountData(){
+            FormService.getCountData({
+                data: this.actions.createFormValue(this.data.data),
+                child_table_id: this.data.sonTableId
+            }).then(res => {
+                //给统计赋值
+                for(let d in res["data"]){
+                    this.actions.setFormValue(d,res["data"][d]);
+                }
+            });
+        },
+
         //返回formValue格式数据
         getFormValue(){
             return this.actions.createFormValue(this.data.data);
@@ -928,9 +945,7 @@ let config={
                 real_id:'59803341ae6ba89d68ac574e',
                 seqid:'yudeping'
             }
-            FormService.getDynamicDataImmediately(json).then(res=>{
-                console.log('res');
-                console.log(res);
+            FormService.getDynamicData(json).then(res=>{
                 for(let key in _this.data.data){
                     _this.data.data[key]['is_view']=res['data'][key]['is_view'];
                     if(!_this.childComponent[key]){
@@ -939,9 +954,6 @@ let config={
                     if(_this.childComponent[key].data.type=='MultiLinkage'){
                         _this.childComponent[key].actions.changeView(_this.childComponent[key],res['data'][key]['is_view']);
                     }
-                    console.log('is_view');
-                    console.log(res['data'][key]['is_view']);
-                    console.log(_this.childComponent[key]['data']['is_view']);
                     _this.childComponent[key]['data']['is_view']=_this.data.data[key]['is_view'];
                     _this.childComponent[key].reload();
                 }
@@ -1099,6 +1111,18 @@ let config={
             }
             //在这里根据type创建各自的控件
             switch (type){
+                case 'Correspondence':
+                    let correspondence=new Correspondence(data[key]);
+                    correspondence.render(single);
+                    _this.childComponent[data[key].dfield]=correspondence;
+                    break;
+                case 'Songrid':
+                    // let popupType=single.data('popupType');
+                    let popupType=0;
+                    let songrid=new Songrid(Object.assign(data[key],{popupType:popupType}));
+                    songrid.render(single);
+                    _this.childComponent[data[key].dfield]=songrid;
+                    break;
                 case 'Radio':
                     for(let obj of data[key].group){
                         obj['name']=data[key].dfield;
@@ -1239,6 +1263,54 @@ let config={
             });
 
         });
+        //子表弹窗
+        Mediator.subscribe('form:openSongGrid:'+_this.data.tableId,function(data){
+            _this.data.can_not_open_form=data.can_not_open_form;
+            let type = data["popup"];
+            let isView = data["is_view"];
+            if(type == 1){
+                _this.data.sonTableId = data["value"];
+                if(isView == '0'){
+                    _this.data.viewMode = 'normal';
+                }else{
+                    _this.data.viewMode = 'ViewChild';
+                }
+                PMAPI.openDialogByIframe(`/datagrid/source_data_grid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.parent_temp_id}&rowId=${data.parent_temp_id}&tableType=child&viewMode=${_this.data.viewMode}`,{
+                    width:800,
+                    height:600,
+                    title:`子表`,
+                    modal:true
+                }).then(data=>{
+                    if(_this.viewMode == 'normal'){
+                        _this.actions.setCountData();
+                    }
+                })
+            }else{
+                _this.data.sonTableId = data["value"];
+                if(isView == '0'){
+                    _this.actions.setCountData();
+                }
+            }
+            // 保存父表数据
+            FormService.frontendParentFormValue[_this.tableId] = _this.actions.createFormValue(_this.data.data);
+        });
+        //对应关系弹窗
+        Mediator.subscribe('form:openCorrespondence:'+_this.data.tableId,function(data){
+            let isView = data["is_view"];
+                _this.data.sonTableId = data["value"];
+                if(isView == '0'){
+                    _this.data.viewMode = 'editFromCorrespondence';
+                }else{
+                    _this.data.viewMode = 'viewFromCorrespondence';
+                }
+                PMAPI.openDialogByIframe(`/datagrid/source_data_grid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.parent_temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true`,{
+                    width:800,
+                    height:600,
+                    title:`对应关系`,
+                    modal:true
+                }).then(data=>{
+                })
+        });
        // 密码弹出
         Mediator.subscribe('form:addPassword:'+_this.data.tableId,function(data){
             _this.data['addPassWordField']=data.dfield;
@@ -1256,6 +1328,8 @@ let config={
         }),
 
         Mediator.subscribe('form:addNewBuildIn:'+_this.data.tableId,function(data){
+            console.log('快捷添加内置');
+            console.log(data);
             _this.data['quikAddDfield']=data.dfield;
             PMAPI.openDialogByIframe(`/form/add_buildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
                 width:800,
@@ -1287,7 +1361,7 @@ let config={
         })
 
         //添加提交按钮
-        _this.el.append('<div style="position: fixed;bottom: 20px;right: 20px;"><button id="save">提交</button><button id="changeEdit">转到编辑模式</button></div>')
+        _this.el.append('<div style=";bottom: 20px;right: 20px;" class="noprint"><button id="save">提交</button><button id="changeEdit">转到编辑模式</button><button id="print">打印</button></div>')
 
         //提交按钮事件绑定
         _this.el.on('click','#save',function () {
@@ -1295,6 +1369,25 @@ let config={
         })
         $(_this.el).find("#changeEdit").on('click',function () {
             _this.actions.changeToEdit(_this);
+        })
+        _this.el.on('click','#print',function(){
+            FormService.getPrintSetting().then(res=>{
+                // if(res.succ == 1){
+                    if(res.data && res.data.length && res.data.length!=0){
+                        SettingPrint.data['printTitles']=res['data'];
+                        SettingPrint.data['myContent']=res['data'][0]['content'] || '';
+                        SettingPrint.data['selectNum']=parseInt(res['data']['index']) || 1;
+                    }
+                    console.log('怎么打不开了？');
+                    PMAPI.openDialogByComponent(SettingPrint,{
+                        width: 500,
+                        height: 300,
+                        title: '自定义页眉',
+                        modal:true
+                    })
+                // }
+            })
+            HTTP.flush();
         })
     },
     beforeDestory:function(){

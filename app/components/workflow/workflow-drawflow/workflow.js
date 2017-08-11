@@ -2,6 +2,7 @@ import Component from '../../../lib/component';
 import template from './workflow.html';
 import './workflow.scss';
 import msgBox from '../../../lib/msgbox';
+import Mediator from '../../../lib/mediator';
 
 let config = {
     template: template,
@@ -172,7 +173,7 @@ let config = {
                 if (value['state'] == 1) {
                     haveState1 = true;
                     //判断当前节点是否包含登陆人
-                    if (value["text"].indexOf('邱茂耘') != -1) {
+                    if (value["text"].indexOf(window.config.name) != -1) {
                         // for(let a of __this.requiredfieldsNodeList['frontendid2field'][value.id]){
                         //     $('*[requiredField='+a+']').css({border:'1px solid transparent',boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px',transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out'});
                         // }
@@ -187,13 +188,13 @@ let config = {
                     let haveAddUser = false;
                     //判断被加签人是否包含登陆人
                     for (let dict of add_handler_info) {
-                        if (dict["add_handler_name"].indexOf('邱茂耘') != -1) {
+                        if (dict["add_handler_name"].indexOf(window.config.name) != -1) {
                             haveAddUser = true;
                             break;
                         }
                     }
                     //判断当前加签节点（节点和被加签人）是否包含登陆人
-                    if (value["text"].indexOf('邱茂耘') != -1 || haveAddUser == true) {
+                    if (value["text"].indexOf(window.config.name) != -1 || haveAddUser == true) {
                         for (let a of __this.requiredfieldsNodeList['frontendid2field'][value.id]) {
                             $('*[requiredField=' + a + ']').css({ border: '1px solid transparent', boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px', transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out' });
                         }
@@ -217,6 +218,8 @@ let config = {
                     }
                 });
             }
+            // __this.actions.requiredFields();
+            
 
             this.containerheight = __this.actions.getTheBestBottom() - __this.actions.getTheBestTop() + 100 + 'px';
             this.containerwidth = __this.actions.getTheBestRight() - __this.actions.getTheBestLeft() + 250 + 'px';
@@ -271,7 +274,7 @@ let config = {
                 if (can_reject == 1) {
                     msgBox.confirm(`您确定要驳回到【${text}】么？`).then(res=>{
                         if(res){
-                            console.log(1);
+                            Mediator.publish('approval:rejToAny',this.rejectId);
                         }
                     })
                 }
@@ -279,24 +282,26 @@ let config = {
         },
         //工作流节点负责性字段变色
         requiredFields(e) {
-            let thisDom = $(e.target);
-            if (thisDom.hasClass("draged-item")) {
-                e.stopPropagation();
+            let items = this.el.find('.draged-item');
+            items=Array.prototype.slice.call(items);
+            items.forEach((thisDom)=> {
+            if (thisDom.className.match("draged-item")) {
                 for (let key in this.requiredfieldsNodeList['frontendid2field']) {
-                    if (thisDom[0].id == key) {
+                    if (thisDom.id == key) {
                         for (let a of this.requiredfieldsNodeList['frontendid2field'][key]) {
                             $('*[requiredField=' + a + ']').css({ border: '1px solid transparent', boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px', transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out' });
                         }
                     }
                 }
                 for (let key in this.requiredfieldsNodeList['frontendid2fieldid']) {
-                    if (thisDom[0].id == key) {
+                    if (thisDom.id == key) {
                         for (let b of this.requiredfieldsNodeList['frontendid2fieldid'][key]) {
                             $('span[data-id=' + b + ']').css({ color: 'rgb(14,122,239)' });
                         }
                     }
                 }
             }
+            }, this);
         },
         //zoomIn paint
         zoomInNodeflow($event) {

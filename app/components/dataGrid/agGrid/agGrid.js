@@ -35,6 +35,8 @@ let config = {
         onSortChanged:function ($event) {
         },
         onCellClicked:function ($event) {
+        },
+        onRowDoubleClicked:function ($event) {
         }
     },
     gridOptions: GridOptions,
@@ -63,6 +65,8 @@ let config = {
                 onDragStopped: this.data.onDragStopped,
                 //双击查看
                 onCellClicked: this.data.onCellClicked,
+                //行双击
+                onRowDoubleClicked: this.data.onRowDoubleClicked,
                 //分组
                 getNodeChildDetails: (rowItem)=>{
                     if ( rowItem.group||Object.is(rowItem.group,'')||Object.is(rowItem.group,0) ) {

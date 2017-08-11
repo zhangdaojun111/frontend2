@@ -4,6 +4,7 @@
 import {Router} from 'backbone';
 import {CanvasCellsComponent} from './canvas/canvas.cells';
 
+
 const BiAppRouter = Backbone.Router.extend({
     routes: {
         'views/:id':'routerViewsComponent',
