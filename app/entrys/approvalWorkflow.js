@@ -56,7 +56,7 @@ function recursion(arr,slnds,pubInfo){
     }
 }
 (async function () {
-    return workflowService.getStuffInfo({url: '/save_perm/?perm_id=0'});
+    return workflowService.getStuffInfo({url: '/get_department_tree/'});
 })().then(res=>{
     tree=res.data.department_tree;
     staff=res.data.department2user;
@@ -126,7 +126,7 @@ const approveWorkflow=(para)=>{
             data:para
         });
     })().then(res=>{
-        alert(`${res.error}`)
+        msgBox.alert(`${res.error}`)
     })
 }
 

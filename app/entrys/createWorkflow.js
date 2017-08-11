@@ -98,46 +98,6 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         });
     })
 
-
-    //default wf
-    $('#importBtn').on('click',()=>{
-        if($("#import")[0]!=undefined){
-            $("#import").show();
-        }else{
-            $('body').append(`
-                <div id="import">
-                    <div>
-                        <div class="text">   
-                            <span>工作流选项</span>
-                        </div>
-                        <div class="cont">
-                            <select>
-                                <option value="">批量工作流</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="text">   
-                            <span>审批流程</span>
-                        </div>
-                        <div class="cont">选择流程
-                            <select>
-                                <option value="">批量工作流</option>
-                            </select>
-                            <div id="dwf"></div>
-                        </div>
-                    </div>
-                    <span class=" ui-button ui-widget ui-corner-all" id="importClose">关闭</span>
-                </div>`
-            );
-        }
-        WorkFlow.show(mockFlowData.data[0],'#dwf');
-
-    })
-    $('body').on('click','#importClose',()=>{
-        $("#import").hide();
-    });
-
 });
 //submit workflow data 提交工作流
 Mediator.subscribe('workflow:submit', (res)=> {
@@ -150,7 +110,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
     };
     (async function () {
         let data = await workflowService.createWorkflowRecord(postData);
-        alert(`error:${data.error}`);
+        msgBox.alert(`error:${data.error}`);
     })();
 });
 
@@ -188,7 +148,7 @@ function recursion(arr,slnds,pubInfo){
     }
 }
 (async function () {
-    return workflowService.getStuffInfo({url: '/save_perm/?perm_id=0'});
+    return workflowService.getStuffInfo({url: '/get_department_tree/'});
 })().then(res=>{
     tree=res.data.department_tree;
     staff=res.data.department2user;
@@ -235,7 +195,7 @@ const approveWorkflow=(para)=>{
             data:para
         });
     })().then(res=>{
-        alert(`${res.error}`)
+        msgBox.alert(`${res.error}`)
     })
 }
 
@@ -264,3 +224,4 @@ Mediator.subscribe('workflow:choose', function (info) {
 });
 
 
+console.log(window.config);

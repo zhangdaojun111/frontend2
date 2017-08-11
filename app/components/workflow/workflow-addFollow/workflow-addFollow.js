@@ -4,6 +4,8 @@ import './workflow-addFollow.scss';
 import Mediator from '../../../lib/mediator';
 import SelectStaff from './select-staff/select-staff';
 import SelectedStaff from './selected-staff/selected-staff';
+import {PMAPI,PMENUM} from '../../../lib/postmsg';
+import selTemplate from './select-template';
 
 let config={
     template: template,
@@ -95,6 +97,21 @@ let config={
 
         this.el.on('click','#addFollower',()=>{
             this.el.find('.follower-select').show();
+            
+            // PMAPI.openDialogByComponent(selTemplate,{
+            //     width:800,
+            //     height:600,
+            //     title:`添加关注人`,
+            //     modal:true
+            // }).then((res)=>{
+            //     console.log(res);
+                
+            // })
+            // Mediator.subscribe('workflow:pubTree',  (tree)=> {
+            //     console.log(tree);
+            //         tree.render($('#treeMulti'));
+            //     })
+
         });
         this.el.on('click','.close',()=>{
             this.el.find('.follower-select').hide();
