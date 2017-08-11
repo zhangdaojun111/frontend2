@@ -125,12 +125,10 @@ let config = {
     },
     afterRender: function() {
         this.el.css({width: '100%'});
-        this.data.tableId = window.config.table_id;
+        // this.data.tableId = window.config.table_id;
         this.el.find('iframe').css("width","100%");
-
         CalendarService.getColumnList(this.data.tableId).then(res => {
             this.data.filedHead = res['rows'];
-
             CalendarService.getCalendarTableById({table_id: this.data.tableId, isSelected: 1}).then(res => {
                 this.data.colorInfoFields = res;
                 this.data.dropdownForCalendarChange = [{id:'',name:''}];
@@ -146,22 +144,18 @@ let config = {
             });
 
         });
-
-
         let that = this;
-        this.el.on("click",".editor-btn", () => {
-            if(!$(this).is("disabled")){
-                that.el.find(".hide-btns").css("visibility","visible");
-                $(this).addClass("disabled");
-                $(this).next('span').addClass("disabled");
-                Mediator.emit('calendar-set:editor',{data:1});
-            }
+        this.el.on("click",".editor-btn", function() {
+            console.log(0);
+            that.el.find(".hide-btns").css("visibility","visible");
+            $(this).addClass("disabled");
+            $(this).next('span').addClass("disabled");
+            Mediator.emit('calendar-set:editor',{data:1});
             $(this).attr('disabled', 'true')
         }).on("click",".cancel-btn", () => {
             that.el.find(".hide-btns").css("visibility","hidden");
             that.el.find(".set-btn").removeClass("disabled");
             Mediator.emit('calendar-set:editor',{data:-1});
-            $('.editor-btn').attr('disabled', 'false');
         }).on('click', '.set-btn', () => {
 
         });
@@ -170,7 +164,8 @@ let config = {
 };
 
 class CalendarSet extends Component {
-    constructor() {
+    constructor(data) {
+        config.data.tableId = data;
         super(config);
     }
 }

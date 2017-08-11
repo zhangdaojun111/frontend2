@@ -32,7 +32,7 @@ let config = {
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
                 temp.next(".item-content").show();
-                temp.next().animate({height:"85%"},"fast");
+                temp.next().animate({height:"84%"},"fast");
             }
         },
         hideclass:function(that,temp){
@@ -48,7 +48,7 @@ let config = {
                 temp.addClass("display-all-content");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").show();
-                that.el.find(".item-content-2").animate({height:"85%"},"fast");
+                that.el.find(".item-content-2").animate({height:"8%"},"fast");
             }
         }
     },
@@ -89,8 +89,8 @@ let config = {
             component.render(el);
             el.dialog({
                 title: '日历设置',
-                width: '99%',
-                height: '950',
+                width: '80%',
+                height: '750',
                 background: '#ddd',
                 close: function() {
                     $(this).dialog('destroy');

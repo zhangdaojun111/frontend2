@@ -8,8 +8,8 @@ $btn-bg-color: #4892FC;
 $grid-hover: rgba(14, 122, 239, 0.090196);
 
 .calendar-iframe {
-    min-width: 1200px;
-    width: 100%;
+    //min-width: 1200px;
+    width:calc(100% - 10px);
     min-height: 600px;
     height: 100%;
     font-size: 12px;
@@ -104,18 +104,22 @@ $grid-hover: rgba(14, 122, 239, 0.090196);
 
     }
     .calendar-container {
-        height:  100%;
+        height: calc(100% - 90px);
+        position: absolute;
+        width:calc(100% - 5px);
         .left-content {
+            height: calc(100%);
             border-right: 2px solid #6ed2f3;
+            position: relative;
             display: inline-block;
             width: 200px;
             float:left;
-            height: calc(100% - 40px);
             min-width: 200px;
+            max-height: 890px;
+            overflow: auto;
         }
         .main-content {
-            height: calc(100% - 40px);
-            position: absolute;
+            height: calc(100%);
             display: inline-block;
             width: calc(100% - 202px);
             min-width: 800px;
