@@ -50,13 +50,13 @@ let config={
 
         //给子表统计赋值
         setCountData(){
-            this.wfService.getCountData({
-                data: this.form.value,
-                child_table_id: this.sonTableId
+            FormService.getCountData({
+                data: this.actions.createFormValue(this.data.data),
+                child_table_id: this.data.sonTableId
             }).then(res => {
                 //给统计赋值
                 for(let d in res["data"]){
-                    this.setFormValue(d,res["data"][d]);
+                    this.actions.setFormValue(d,res["data"][d]);
                 }
             });
         },
@@ -1260,9 +1260,9 @@ let config={
         //子表弹窗
         Mediator.subscribe('form:openSongGrid:'+_this.data.tableId,function(data){
             _this.data.can_not_open_form=data.can_not_open_form;
-            let type = data["type"];
+            let type = data["popup"];
             let isView = data["is_view"];
-            // if(type == 'popup'){
+            if(type == 1){
                 _this.data.sonTableId = data["value"];
                 if(isView == '0'){
                     _this.data.viewMode = 'normal';
@@ -1275,16 +1275,35 @@ let config={
                     title:`子表`,
                     modal:true
                 }).then(data=>{
-
+                    if(_this.viewMode == 'normal'){
+                        _this.actions.setCountData();
+                    }
                 })
-            // }else{
-            //     _this.data.sonTableId = data["value"];
-            //     if(isView == '0'){
-            //         _this.data.actions.setCountData();
-            //     }
-            // }
-            //保存父表数据
-            // this.globalService.frontendParentFormValue[this.tableId] = this.form.value;
+            }else{
+                _this.data.sonTableId = data["value"];
+                if(isView == '0'){
+                    _this.data.actions.setCountData();
+                }
+            }
+            // 保存父表数据
+            _this.FormService.frontendParentFormValue[_this.tableId] = _this.actions.createFormValue(_this.data.data);
+        });
+        //对应关系弹窗
+        Mediator.subscribe('form:openSongGrid:'+_this.data.tableId,function(data){
+            let isView = data["is_view"];
+                _this.data.sonTableId = data["value"];
+                if(isView == '0'){
+                    _this.data.viewMode = 'editFromCorrespondence';
+                }else{
+                    _this.data.viewMode = 'viewFromCorrespondence';
+                }
+                PMAPI.openDialogByIframe(`/datagrid/source_data_grid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.parent_temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true`,{
+                    width:800,
+                    height:600,
+                    title:`对应关系`,
+                    modal:true
+                }).then(data=>{
+                })
         });
        // 密码弹出
         Mediator.subscribe('form:addPassword:'+_this.data.tableId,function(data){
