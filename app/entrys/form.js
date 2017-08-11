@@ -1,5 +1,6 @@
 import FormBase from '../components/form/base-form/base-form'
 import {HTTP} from '../lib/http';
+import Mediator from '../lib/mediator';
 import {FormService} from "../services/formService/formService";
 import '../components/form/base-form/base-form.scss'
 import '../assets/scss/form.scss'
@@ -280,12 +281,12 @@ let FormEntrys = {
             let json=_this.createPostJson();
             FormService.getFormData(json).then(res=>{
                 console.time('form创建时间');
-                if(this.fromWorkFlow){
+                if(_this.fromApprove){
                     if(res[1]['record_info']){
                         Mediator.publish('workFlow:record_info',res[1]['record_info']);
                     }
                 }
-                if(this.formId){
+                if(_this.formId){
                     template=res[2]['data']['content'];
                 }else{
                     template=_this.formDefaultVersion(res[0].data);
