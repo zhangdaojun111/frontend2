@@ -38,21 +38,7 @@ export const FormService={
         }
         return result.join('&')
     },
-    getDynamicDataImmediately:async function({tableId,real_id,seqid}){
-        return await HTTP.postImmediately({
-            url: `/get_form_dynamic_data/?seqid=${seqid}&table_id=${tableId}&is_extra=&form_id=`,
-            type: "POST",
-            data: {
-                form_id:'',
-                table_id:tableId,
-                is_view:0,
-                parent_table_id:'',
-                parent_real_id:'',
-                parent_temp_id:'',
-                real_id:real_id
-            }
-        });
-    },
+  
     //身份证验证
     checkCard (card) {
         let result = true;
