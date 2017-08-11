@@ -3,6 +3,7 @@ import template from './workflow-initial.html';
 import './workflow-initial.scss';
 import Mediator from '../../lib/mediator';
 
+import WorkFlowCatalog from './workflow-catalog/workflow-catalog'
 
 let config={
     template: template,
@@ -42,3 +43,5 @@ class WorkflowInitial extends Component{
 let component = new WorkflowInitial();
 let el = $('#WorkflowInitial');
 component.render(el);
+
+WorkFlowCatalog.showCatalog();

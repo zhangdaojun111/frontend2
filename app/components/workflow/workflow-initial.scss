@@ -67,8 +67,10 @@ body{
   .divBtn{
     display: flex;
     margin-bottom: 10px;
-    div{
-      width: 80px;
+  }
+}
+.blueBtn{
+      padding: 0 10px;
       text-align: center;
       line-height: 30px;
       height: 30px;
@@ -77,10 +79,6 @@ body{
       margin-right: 20px;
       cursor: pointer;
     }
-  }
-
-}
-
 
 .workflow-foot{
   .workflow-box{

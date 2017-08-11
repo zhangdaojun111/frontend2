@@ -1,18 +1,18 @@
 .common-btn{
     float: left;
-    height: 30px;
     line-height: 30px;
     position: relative;
-    button{
+    margin: 0 20px 20px 0;
+    div{
         cursor: pointer;
-        border-radius: 15px;
-        height: 30px;
-        padding: 0 10px;
-        margin-right: 14px;
-        font-weight: normal;
         span{
-            padding: .3em 1em;
-            font-weight: bold;
+            display: block;
+            padding: 0 10px;
+            text-align: center;
+            line-height: 30px;
+            height: 30px;
+            background: #117DED;
+            color: #fff;
         }
     }
     .wf-del{
