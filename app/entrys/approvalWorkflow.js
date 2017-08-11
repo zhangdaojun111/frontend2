@@ -216,8 +216,6 @@ Mediator.subscribe('approval:rejToAny', (id) => {
 });
 
 
-
-
 //获取盖章图片
 (async function () {
     return workflowService.getStmpImg();
