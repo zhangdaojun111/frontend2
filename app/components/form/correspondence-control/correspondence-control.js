@@ -1,7 +1,6 @@
 import Component from '../../../lib/component'
 import Mediator from '../../../lib/mediator';
 import DataTableAgGrid from '../../dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
-import './songridControl.scss'
 
 let config={
     template:`   <div class="clearfix">
@@ -10,19 +9,12 @@ let config={
                     {{else if be_control_condition}}
                         <p class="info">被修改条件限制</p>
                     {{else}}
-                        {{#if popupType}}
-                             <a href="javascript:void(0);" class="ui-forms-a">查看详情</a>
-                             {{#if required}}
-                                    <span id="requiredLogo" class="required" ></span>
-                             {{/if}}
-                             <input type="hidden">
-                        {{else}}
-                            <div class="ui-songrid-box">
-                                 <div style="width: 100%; height: 100%;text-align: left;position: relative" class="songGrid">
-                                    
-                                 </div>
-                            </div>    
-                        {{/if}}    
+                        <a href="javascript:void(0);" (click)="click(data)" class="ui-forms-a">对应关系</a>
+                        <input type="hidden" [formControlName]="data.dfield" [value]="data.value">
+                        <div class="ui-correspondence-box" style="position: relative;height: 450px;width: 1000px;">
+                            <div class="correspondence-box" style="width: 100%; height: 100%;">
+                            </div>
+                        </div>
                      {{/if}}       
                </div>`,
     data:{
@@ -34,23 +26,24 @@ let config={
     firstAfterRender:function(){
         let _this=this;
         _this.el.on('click','.ui-forms-a',_.debounce(function(){
-            Mediator.publish('form:openSongGrid:'+_this.data.tableId,_this.data);
+            Mediator.publish('form:openCorrespondence:'+_this.data.tableId,_this.data);
         },300));
         let config={
             tableId:this.data.value,
             parentTableId:this.data.parent_table_id,
             parentTempId:this.data.parent_temp_id,
             rowId:this.data.parent_temp_id,
-            tableType:'child',
-            viewMode:this.data.isView=='0'?'normal':'ViewChild',
+            showCorrespondenceSelect:true,
+            viewMode:'viewFromCorrespondence',
+            recordId:this.data.recordId,
         }
         let dataGrid=new DataTableAgGrid(config);
-        this.append(dataGrid,this.el.find('.songGrid'));
+        this.append(dataGrid,this.el.find('.correspondence-box'));
     },
     beforeDestory:function(){
     }
 }
-export default class Songrid extends Component{
+export default class Correspondence extends Component{
     constructor(data){
         super(config,data);
     }

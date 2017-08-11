@@ -1,9 +1,9 @@
 import FormBase from '../components/form/base-form/base-form'
 import {HTTP} from '../lib/http';
+import Mediator from '../lib/mediator';
 import {FormService} from "../services/formService/formService";
 import '../components/form/base-form/base-form.scss'
 import '../assets/scss/form.scss'
-
 let FormEntrys = {
     childForm:{},
     init(config={}){
@@ -30,7 +30,6 @@ let FormEntrys = {
         this.isAddBuild=0;
         this.buildId='';
         this.btnType='new';
-
         this.tableId=config.table_id||'';
         this.parentRealId=config.parent_real_id||'';
         this.parentTempId=config.parent_temp_id||'';
@@ -56,14 +55,14 @@ let FormEntrys = {
         this.btnType=config.btnType||'new';
     },
     hasKeyInFormDataStatic:function (key,staticData){
-    let isExist = false;
-    for(let dict of staticData["data"]){
-        if(dict["dfield"] == key){
-            isExist = true;
+        let isExist = false;
+        for(let dict of staticData["data"]){
+            if(dict["dfield"] == key){
+                isExist = true;
+            }
         }
-    }
-    return isExist;
-},
+        return isExist;
+    },
     //找到加载表单数据的formId和加载节点的flowId
     findFormIdAndFlowId(res) {
         if(res["data"] && res["data"]["flow_data"].length != 0) {
@@ -156,106 +155,105 @@ let FormEntrys = {
     },
     //merge数据
     mergeFormData:function (staticData,dynamicData){
-    for(let dfield in dynamicData["data"]){
-        if(this.hasKeyInFormDataStatic(dfield,staticData)){
-            for(let dict of staticData["data"]){
-                if(dict["dfield"] == dfield){
-                    for(let k in dynamicData["data"][dfield]){
-                        dict[k] = dynamicData["data"][dfield][k];
+        for(let dfield in dynamicData["data"]){
+            if(this.hasKeyInFormDataStatic(dfield,staticData)){
+                for(let dict of staticData["data"]){
+                    if(dict["dfield"] == dfield){
+                        for(let k in dynamicData["data"][dfield]){
+                            dict[k] = dynamicData["data"][dfield][k];
+                        }
                     }
                 }
+            }else{
+                staticData["data"].push(dynamicData["data"][dfield]);
             }
-        }else{
-            staticData["data"].push(dynamicData["data"][dfield]);
         }
-    }
-    staticData["record_info"] = dynamicData["record_info"];
-    staticData["parent_table_id"] = dynamicData["parent_table_id"];
-    staticData["frontend_cal_parent_2_child"] = dynamicData["frontend_cal_parent_2_child"];
-    staticData["error"] = dynamicData["error"];
-    let data={};
-    if(!this.formId || staticData['form_id'] == this.formId){
-        this.parseRes(staticData);
-    }
-    staticData.formData=staticData.data;
-    for(let obj of staticData.data){
-        data[obj.dfield]=obj;
-    }
-    staticData.data=data;
-    staticData.tableId=this.tableId;
-    staticData.formId=this.formId;
-    staticData.flowId=this.flowId;
-    staticData.isBatch=this.isBatch;
-    staticData.key=this.key;
-    staticData.btnType=this.btnType;
-    return staticData;
-},
+        staticData["record_info"] = dynamicData["record_info"];
+        staticData["parent_table_id"] = dynamicData["parent_table_id"];
+        staticData["frontend_cal_parent_2_child"] = dynamicData["frontend_cal_parent_2_child"];
+        staticData["error"] = dynamicData["error"];
+        let data={};
+        if(!this.formId || staticData['form_id'] == this.formId){
+            this.parseRes(staticData);
+        }
+        staticData.formData=staticData.data;
+        for(let obj of staticData.data){
+            data[obj.dfield]=obj;
+        }
+        staticData.data=data;
+        staticData.tableId=this.tableId;
+        staticData.formId=this.formId;
+        staticData.flowId=this.flowId;
+        staticData.isBatch=this.isBatch;
+        staticData.key=this.key;
+        staticData.btnType=this.btnType;
+        return staticData;
+    },
     //处理字段数据
     parseRes (res){
-    if(res !== null){
-        let formData = res["data"];
-        if(formData.length != 0){
-            let myDate = new Date();
-            let myYear = myDate.getFullYear();
-            let parentRealId = '';
-            let parentTableId = '';
-            let parentTempId = '';
-            for( let data of formData ){
-                if( data['id'] == 'real_id' ){
-                    parentRealId = data['value'];
-                }else if( data['id'] == 'table_id' ){
-                    parentTableId = data['value'];
-                }else if( data['id'] == 'temp_id' ){
-                    parentTempId = data['value'];
-                }
-            }
-            for( let data of formData ){
-                data['tableId']=this.tableId;
-                if( data.type == "year" ){
-                    if( data.value == "" ){
-                        data.value = String( myYear );
+        if(res !== null){
+            let formData = res["data"];
+            if(formData.length != 0){
+                let myDate = new Date();
+                let myYear = myDate.getFullYear();
+                let parentRealId = '';
+                let parentTableId = '';
+                let parentTempId = '';
+                for( let data of formData ){
+                    if( data['id'] == 'real_id' ){
+                        parentRealId = data['value'];
+                    }else if( data['id'] == 'table_id' ){
+                        parentTableId = data['value'];
+                    }else if( data['id'] == 'temp_id' ){
+                        parentTempId = data['value'];
                     }
-                }else if( data.type == "correspondence" ){
-                    data['parent_real_id'] = parentRealId;
-                    data['parent_table_id'] = parentTableId;
-                    data['parent_temp_id'] = parentTempId;
-                }else if(data.type == "datetime"){
-                    // if( data.value.length == 19 ){
-                    //     data.value = data.value.slice( 0,16 )
-                    // }
                 }
-            }
-
-            if(res['record_info']['id']){
-                let recordId = res['record_info']['id'];
-                for(let d of res.data){
-                    if(d['type'] == 'songrid'){
-                        d['recordId']=recordId;
+                for( let data of formData ){
+                    data['tableId']=this.tableId;
+                    if( data.type == "year" ){
+                        if( data.value == "" ){
+                            data.value = String( myYear );
+                        }
+                    }else if( data.type == "correspondence" ){
+                        data['parent_real_id'] = parentRealId;
+                        data['parent_table_id'] = parentTableId;
+                        data['parent_temp_id'] = parentTempId;
+                    }else if(data.type == "datetime"){
+                        // if( data.value.length == 19 ){
+                        //     data.value = data.value.slice( 0,16 )
+                        // }
+                    }
+                }
+                if(res['record_info']['id']){
+                    let recordId = res['record_info']['id'];
+                    for(let d of res.data){
+                        if(d['type'] == 'songrid'){
+                            d['recordId']=recordId;
+                        }
                     }
                 }
             }
         }
-    }
-},
+    },
     //默认表单
     formDefaultVersion : function (data){
-    let html=`<table class="form table table-striped table-bordered table-hover ">
+        let html=`<table class="form table table-striped table-bordered table-hover ">
             <tbody>
                 `;
-    for(let obj of data){
-        if(data.type==='hidden'){
-            html+=`<div data-dfield="${obj.dfield}" data-type="${obj.type}"></div>`;
-        }else{
-            html+=`<tr>
+        for(let obj of data){
+            if(data.type==='hidden'){
+                html+=`<div data-dfield="${obj.dfield}" data-type="${obj.type}"></div>`;
+            }else{
+                html+=`<tr>
                         <td style="width: 150px;white-space: nowrap;">${ obj.label }</td>
                         <td><div data-dfield="${obj.dfield}" data-type="${obj.type}"></div></td>
                 </tr>`;
+            }
         }
-    }
-    html+=`</tbody>
+        html+=`</tbody>
         </table>`
-    return html;
-},
+        return html;
+    },
     destoryAll(){
         for(let key in this.childForm){
             this.childForm[key].destroySelf();
@@ -280,11 +278,9 @@ let FormEntrys = {
             let json=_this.createPostJson();
             FormService.getFormData(json).then(res=>{
                 console.time('form创建时间');
-                console.log(_this.fromApprove);
                 if(_this.fromApprove){
-                    console.time(1231);
                     if(res[1]['record_info']){
-                        console.log(res[1]['record_info']);
+                        console.log()
                         Mediator.publish('workFlow:record_info',res[1]['record_info']);
                     }
                 }
@@ -305,12 +301,10 @@ let FormEntrys = {
             });
         })
     },
-
     //审批删除时重置表单可编辑性
     editDelWorkFlow(tableId,formId){
         this.childForm[tableId].actions.editDelWork(formId);
     },
-
     //接收关注人信息
     setUserIdList(tableId,data){
         if(!this.childForm[tableId]){
@@ -318,7 +312,6 @@ let FormEntrys = {
         }
         this.childForm[tableId].data.focus_users=data;
     },
-
     getFormValue(tableId){
         if(!this.childForm[tableId]){
             return;
