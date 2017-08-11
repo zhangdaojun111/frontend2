@@ -22,17 +22,15 @@ import Grid from '../components/dataGrid/data-table-page/data-table-page';
 
 WorkFlowForm.showForm();
 
+console.log(window.config.name);
 //审批工作流
 
 var mockFlowData;
 
 (async function () {
     return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
-        flow_id:32,
-        record_id:'59897f02c3ec2134050ee6a7'
-    // return workflowService.getWorkflowInfo({url: '/get_workflow_info/?seqid=wenjingjing_1502270451650',data:{
-    //     flow_id:10,
-    //     record_id:"598ac7a1c57ccd4d472bd31d"
+        flow_id:43,
+        record_id:'598d26f3803df8f6e2600dfd'
     }});
 })().then(res=>{
     Mediator.publish('workflow:getImgInfo',res);
@@ -134,7 +132,7 @@ const approveWorkflow=(para)=>{
 FormEntrys.createForm({
     el:$("#place-form"),
     form_id:181,
-    record_id:'59897f02c3ec2134050ee6a7',
+    record_id:'598d26f3803df8f6e2600dfd',
     is_view:0,
     from_approve:1,
     from_focus:0,
@@ -231,29 +229,3 @@ Mediator.subscribe("workflow:delImg",(msg)=>{
         let data = await workflowService.delStmpImg(msg);
     })();
 });
-
-//Grid
-
-Mediator.subscribe('workflow:choose', function (info) {
-    (async function () {
-        return workflowService.getGridinfo({
-            table_id:info.tableid,
-            formId:info.formid,
-            is_view:0,
-            parent_table_id:null,
-            parent_real_id:null,
-            parent_temp_id:null,
-
-        });
-    })().then(function (res) {
-        let AgGrid=new Grid({
-            parentTempId:'',
-            tableId:res.table_id,
-            viewMode:"createBatch"
-        });
-        AgGrid.render($("#J-aggrid"));
-    })
-
-});
-
-

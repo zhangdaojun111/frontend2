@@ -172,7 +172,7 @@ let config = {
                 if (value['state'] == 1) {
                     haveState1 = true;
                     //判断当前节点是否包含登陆人
-                    if (value["text"].indexOf('邱茂耘') != -1) {
+                    if (value["text"].indexOf(window.config.name) != -1) {
                         // for(let a of __this.requiredfieldsNodeList['frontendid2field'][value.id]){
                         //     $('*[requiredField='+a+']').css({border:'1px solid transparent',boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px',transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out'});
                         // }
@@ -187,13 +187,13 @@ let config = {
                     let haveAddUser = false;
                     //判断被加签人是否包含登陆人
                     for (let dict of add_handler_info) {
-                        if (dict["add_handler_name"].indexOf('邱茂耘') != -1) {
+                        if (dict["add_handler_name"].indexOf(window.config.name) != -1) {
                             haveAddUser = true;
                             break;
                         }
                     }
                     //判断当前加签节点（节点和被加签人）是否包含登陆人
-                    if (value["text"].indexOf('邱茂耘') != -1 || haveAddUser == true) {
+                    if (value["text"].indexOf(window.config.name) != -1 || haveAddUser == true) {
                         for (let a of __this.requiredfieldsNodeList['frontendid2field'][value.id]) {
                             $('*[requiredField=' + a + ']').css({ border: '1px solid transparent', boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px', transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out' });
                         }
