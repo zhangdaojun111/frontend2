@@ -280,12 +280,15 @@ let FormEntrys = {
             let json=_this.createPostJson();
             FormService.getFormData(json).then(res=>{
                 console.time('form创建时间');
-                if(this.fromWorkFlow){
+                console.log(_this.fromApprove);
+                if(_this.fromApprove){
+                    console.time(1231);
                     if(res[1]['record_info']){
+                        console.log(res[1]['record_info']);
                         Mediator.publish('workFlow:record_info',res[1]['record_info']);
                     }
                 }
-                if(this.formId){
+                if(_this.formId){
                     template=res[2]['data']['content'];
                 }else{
                     template=_this.formDefaultVersion(res[0].data);
