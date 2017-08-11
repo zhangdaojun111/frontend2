@@ -33,24 +33,27 @@ let config = {
             let taskItemHtml = document.createElement('div');
             taskItemHtml.id = 'schedule-item';
             taskItemHtml.style.backgroundColor = item['color'];
-            taskItemHtml.innerHTML = item['data3show'][0][0]['fieldName'] + ':' + item['data3show'][0][0]['fieldValue'];
-            this.el.find('.day-schedule-list').append(taskItemHtml);
-            taskItemHtml.onclick = function () {
-                console.log(item);
-                let component = new CalendarRemind(item);
-                let el = $('<div>').appendTo(document.body);
-                component.render(el);
-                el.dialog({
-                    title: '查看',
-                    width: '80%',
-                    height: '800',
-                    background: '#ddd',
-                    close: function() {
-                        $(this).dialog('destroy');
-                        component.destroySelf();
-                    }
-                });
-            };
+            if(taskItemHtml['data3show']) {
+                taskItemHtml.innerHTML = item['data3show'][0][0]['fieldName'] + ':' + item['data3show'][0][0]['fieldValue'];
+                this.el.find('.day-schedule-list').append(taskItemHtml);
+                taskItemHtml.onclick = function () {
+                    console.log(item);
+                    let component = new CalendarRemind(item);
+                    let el = $('<div>').appendTo(document.body);
+                    component.render(el);
+                    el.dialog({
+                        title: '查看',
+                        width: '80%',
+                        height: '800',
+                        background: '#ddd',
+                        close: function() {
+                            $(this).dialog('destroy');
+                            component.destroySelf();
+                        }
+                    });
+                };
+            }
+
         })
 
     },

@@ -5,7 +5,8 @@ $calendar-font: #666666;
 $calendar-blue: #0088FF;
 $bg-color: rgba(14, 122, 239, 0.290196);
 $btn-bg-color: #4892FC;
-$grid-hover: rgba(14, 122, 239, 0.090196);
+$grid-hover: rgba(255, 255, 255, 1);
+$grid-bg-color: rgba(248, 248, 248, 1);
 
 .calendar-iframe {
     //min-width: 1200px;
@@ -36,10 +37,10 @@ $grid-hover: rgba(14, 122, 239, 0.090196);
             color: $calendar-font;
             margin-right: 15px;
             cursor: pointer;
-            &:checked {
-                color: $calendar-blue;
-                border-bottom: 2px solid $calendar-blue;
-            }
+        }
+        .btn-checked {
+            color: $calendar-blue;
+            border-bottom: 2px solid $calendar-blue;
         }
         .today-btn {
             display: inline-block;
@@ -54,6 +55,9 @@ $grid-hover: rgba(14, 122, 239, 0.090196);
             &:hover{
                 background-color: $boder-color;
             }
+        }
+        .today-btn-checked {
+            border: 1px solid $calendar-blue;
         }
         .calendar-search {
             display: inline-block;

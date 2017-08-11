@@ -2,13 +2,13 @@
     <table style="width: 100%">
         <tr class="remind-row">
             <td class="title">所属表：</td>
-            <td>
+            <td class="calendar-form-content">
                 <span class="res-form">{{remindTable}}</span>
             </td>
         </tr>
         <tr class="remind-row">
             <td class="title">日期属性：</td>
-            <td>
+            <td class="calendar-form-content">
                 <span class="date-attr">{{remindDateProp}}</span>
             </td>
         </tr>
@@ -23,10 +23,22 @@
             <td class="title">详情：</td>
             <td>
                 <table class="detail">
-                    <tr>
-                        <td class="detail-title">表单：</td>
-                        <td class="detail-content">
-                            <a href="javascript:void(0);" class="open-form">打开表单</a>
+                    {{#each remindDetail}}
+                        {{#each this}}
+                        <tr class="remind-row">
+                            <td class="title">{{this.fieldName}}</td>
+                            <td class="calendar-form-content">
+                                <span>{{this.fieldValue}}</span>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    {{/each}}
+                    <tr class="remind-row">
+                        <td class="title">表单：</td>
+                        <td class="calendar-form-content">
+                            <span>
+                                <a href="javascript:void(0);" class="open-form">打开表单</a>
+                            </span>
                         </td>
                     </tr>
                 </table>
