@@ -1,5 +1,3 @@
-@import "../../../assets/scss/core/base";
-
 .label-task-children{
   font-size: 13px !important;
 }
@@ -23,7 +21,7 @@
 .cate-hide::-webkit-scrollbar-thumb,.taskbar::-webkit-scrollbar-thumb {
   border-radius: 5px;
   -webkit-box-shadow: inset 0 0 5px rgba(14, 122, 239, 0.290196);
-  background: rgba(14, 122, 239,0.2);
+  background:  rgba(242, 242, 242, 1);
 }
 .cate-hide::-webkit-scrollbar-track,.taskbar::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 5px rgba(14, 122, 239, 0.290196);
@@ -37,7 +35,7 @@
   height: 30px;
   padding: 0px 10px 0px 10px;
   background-color:rgba(228, 228, 228, 1);
-  margin-bottom: 5px;
+  margin-bottom: 2px;
   line-height: 30px;
 }
 .item-title-2{
@@ -45,7 +43,7 @@
   width: calc(100% - 22px);
   height: 30px;
   padding: 0px 10px 0px 10px;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
   line-height: 30px;
 }
 .item-content-1,.item-content-4,.item-content-3

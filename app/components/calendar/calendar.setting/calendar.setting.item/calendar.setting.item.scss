@@ -1,16 +1,17 @@
 @import "../../calendar";
 .setting-menu {
-    .menu-label {
-        border-bottom: 1px solid $boder-color;
-        display: block;
-        line-height: 28px;
-        padding-left: 8px;
+    .menu-item-title{
+        padding-left: 10px;
+        padding-top: 10px;
+        color:#999999;
+        .menu-label {
+            display: inline-block;
+            line-height: 28px;
+            padding-left: 2px;
+        }
     }
     .item-child {
-        margin: 5px;
-        border: 1px solid #60C1F6;
-        padding: 3px 5px;
-        border-radius: 3px;
-        display: inline-block;
+        margin-left: 30px;
+        margin-top: 10px;
     }
 }
