@@ -400,7 +400,20 @@ $('#exp').on('click',function(){
         table_id:'7336_HkkDT7bQQfqBag4kTiFWoa'
     });
 
-})
+});
+$('#date').on('click',function(){
+    let realId=$('#real_id').val()||'';
+    let isView=$('#is_view').val()||0;
+    FormEntrys.destoryAll();
+    FormEntrys.createForm({
+        seqId:'yudeping',
+        el:$('body'),
+        is_view:isView,
+        real_id:realId,
+        table_id:'9890_AbtdVuR9umBCSwtjaRTu6D'
+    });
+
+});
 $('#workflow').on('click',function(){
     let realId=$('#real_id').val()||'';
     let isView=$('#is_view').val()||0;
