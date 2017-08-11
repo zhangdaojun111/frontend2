@@ -38,7 +38,7 @@ let config={
             recordId:this.data.recordId,
         }
         let dataGrid=new DataTableAgGrid(config);
-        this.append(dataGrid,this.el.find('.songGrid'));
+        this.append(dataGrid,this.el.find('.correspondence-box'));
     },
     beforeDestory:function(){
     }

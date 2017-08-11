@@ -26,6 +26,7 @@ import {md5} from '../../../services/login/md5';
 import AttachmentControl from "../attachment-control/attachment-control";
 import SettingPrint from '../setting-print/setting-print'
 import Songrid from '../songrid-control/songrid-control';
+import Correspondence from '../Correspondence-control/Correspondence-control';
 
 let config={
     template:'',
@@ -1110,9 +1111,14 @@ let config={
             }
             //在这里根据type创建各自的控件
             switch (type){
+                case 'Correspondence':
+                    let correspondence=new Correspondence(data[key]);
+                    correspondence.render(single);
+                    _this.childComponent[data[key].dfield]=correspondence;
+                    break;
                 case 'Songrid':
                     // let popupType=single.data('popupType');
-                    let popupType=1;
+                    let popupType=0;
                     let songrid=new Songrid(Object.assign(data[key],{popupType:popupType}));
                     songrid.render(single);
                     _this.childComponent[data[key].dfield]=songrid;

@@ -17,7 +17,7 @@ let config={
                              <input type="hidden">
                         {{else}}
                             <div class="ui-songrid-box">
-                                 <div style="width: 100%; height: 100%;text-align: left;" class="songGrid">
+                                 <div style="width: 100%; height: 100%;text-align: left;position: relative" class="songGrid">
                                     
                                  </div>
                             </div>    
