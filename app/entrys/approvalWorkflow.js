@@ -144,7 +144,6 @@ const approveWorkflow=(para)=>{
 Mediator.subscribe('workFlow:record_info',(res)=>{
     ApprovalHeader.showheader(res);
     WorkflowRecord.showRecord(res);
-    console.log("sdffsd")
 });
 //审批操作
 FormEntrys.createForm({
