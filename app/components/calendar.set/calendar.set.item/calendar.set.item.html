@@ -1,46 +1,41 @@
-<tr class="singleRow" disabled>
+<tr class="singleRow">
     <td colspan="1" style="width: calc(100%/18 *1 - 2px)">
+        <input type="checkbox" disabled class="editor-items">
+    </td>
+    <td colspan="1" style="width: calc(100%/18 *1 - 2px)">
+        <input type="checkbox" class="editor-items" disabled>
+    </td>
+    <td colspan="2" style="width: calc(100%/18 *2 - 2px)">
 
-        <input type="checkbox"  class="editor-items isShowText" >
     </td>
     <td colspan="1" style="width: calc(100%/18 *1 - 2px)">
-        <input type="checkbox" class="editor-items isShowFirst">
-    </td>
-    <td colspan="2" style="width: calc(100%/18 *2 - 2px)" class="promoting-msg">
-
-    </td>
-    <td colspan="1" style="width: calc(100%/18 *1 - 2px)">
-        <input class="set-color editor-items" id="set-color-id" type="color" value="#8FF000" >
+        <input class="set-color editor-items" id="set-color-id" type="color" value="#8FF000" disabled>
     </td>
     <td colspan="2" style="width: calc(100%/18 *2 - 2px)" class="multi-select-item">
 
     </td>
 
-    <td colspan="2" style="width: calc(100%/18 *2 - 4px)" class="res-text editor-items">
+    <td colspan="2" style="width: calc(100%/18 *2 - 4px)">
+        <select class="res-text editor-items" disabled>
 
+        </select>
     </td>
-    <td colspan="3" style="width: calc(100%/18 *3 - 4px)" class="change-text editor-items">
+    <td colspan="3" style="width: calc(100%/18 *3 - 4px)">
+        <select class="page-change-text editor-items" disabled>
 
+        </select>
     </td>
-    <td colspan="3" style="width: calc(100%/18 *3 - 4px)" class="preview">
+    <td colspan="3" style="width: calc(100%/18 *3 - 4px)">
 
     </td>
     <td colspan="1" style="width: calc(100%/18 *1 - 4px)">
-        {{#if msgEmail}}
-        <span class="set-email">邮件</span>
-        {{/if}}
-        {{#if msgPhone}}
-        <span class="set-msg">短信</span>
-        {{/if}}
+        <span >邮件</span>&nbsp;&nbsp;&nbsp;<span>短信</span>
     </td>
     <td colspan="1" style="width: calc(100%/18 *1 - 4px)">
-        <a class="editor-method">编辑提醒方式</a>
+        <a class="remind-type-editor" aria-disabled="true">编辑提醒方式</a>
     </td>
     <td colspan="1" style="width: calc(100%/18 *1 - 4px)">
-        {{#if isConfigField}}
-        <div class="replace-dropdown"></div>
-        {{else}}
         <span>不可配置</span>
-        {{/if}}
+        <p-dropdown ></p-dropdown>
     </td>
 </tr>

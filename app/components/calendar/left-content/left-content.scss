@@ -1,99 +1,21 @@
 @import "../../../assets/scss/core/base";
-.unchecked{
-  background-color: white !important;
-}
-.select-all label{font-size: 15px !important;}
-.label-task-children{font-size: 13px !important;}
-.left-content-top{
-    padding-top: 10px;padding-bottom: 10px;margin-left: 15px;
-    .create{color: #FF7F50;}
-    .set-calendar{margin-left: 50px;color: #FF7F50;}
+
+.label-task-children{
+  font-size: 13px !important;
 }
 .label-task-children{
-  padding-top: 5px;padding-bottom: 5px;word-break: keep-all;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  word-break: keep-all;
   white-space: nowrap;
 }
-.checkbox-group{margin-left: 35px;}
-.left-calendar-box{border-bottom: 1px solid #605654;padding-bottom: 30px;}
-  .taskbar{
-    width: 200px;
-    height:25%;
-    max-width: 200px;
-    display: inline-block;
-    overflow: auto;
-    .label-task{
-      padding-top: 5px;padding-bottom: 5px;width: 200px - 15px;
-      .chk_1{display: none;}
-      .chk_1 + label {
-        background-color: #FFF;
-        border: 1px solid #C1CACA;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
-        padding: 8px;
-        border-radius: 5px;
-        display: inline-block;
-        position: relative;
-        margin-right: 5px;
-        margin-left: 10px;
-      }
-      .chk_1 + label:active {
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
-      }
-      label{font-size: 17px;}
-      .chk_task:checked + label {
-        background-color: #FF7F50;
-        border: 1px solid #FF7F50;
-      }
-      .workflow_checked + label{
-        background-color: red !important;
-        border: 1px solid #FF7F50 !important;
-      }
-      .label-select-all-checked + label:after {
-        content: '\2714'; //勾选符号
-        position: absolute;
-        top: -5px;
-        left: 0px;
-        color: #2398df;
-        width: 100%;
-        text-align: center;
-        font-size: 1.4em;
-        padding: 1px 0 0 0;
-        vertical-align: text-top;
-      }
-      //.chk_remind:checked + label:after {
-      //  content: '\2714'; //勾选符号
-      //  position: absolute;
-      //  top: -5px;
-      //  left: 0px;
-      //  color: #2398df;
-      //  width: 100%;
-      //  text-align: center;
-      //  font-size: 1.4em;
-      //  padding: 1px 0 0 0;
-      //  vertical-align: text-top;
-      //}
-    }
-    .label-task:hover{background-color: #a4aaae;}
-  }
-  .cate-hide{
-    width: 200px;
-    height:calc(40%);
-    display: inline-block;
-    overflow: auto;
-    max-width: 200px;
-    bottom: 5px;
-    margin-top: 0px;
-    #menu{
-      height: calc(100%);
-      .menu-item{
-        height: 100%;
-        .item-title{
-          border-bottom: 1px solid #a4aaae;border-top: 1px solid #a4aaae;width: 200px;height: 22px;padding-top: 4px;margin-top: 0px !important; position:absoluet;top:0;left:0;
-          .cate-hide-icon{margin-left: 180px;margin-top: -12px;}
-        }
-        .item-content{width: 200px;height: 88%;}
-      }
-    }
-  }
+.cate-hide-icon{
+  display: inline-block;
+  float: right;
+}
+.cate-hide-icon-style{
+  cursor: pointer;
+}
 .cate-hide::-webkit-scrollbar,.taskbar::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -108,19 +30,38 @@
   border-radius: 0;
   background: rgba(14, 122, 239,0.1);
 }
-.float-button-group{
-  width:100px;
-  height:30px;
-  margin-top: -10px;
-  position: absolute;
-  z-index: 3;
-  opacity:0.8;
+.item-title-1,.item-title-4,.item-title-3
+{
+  border: 1px solid rgba(228, 228, 228, 1);
+  width: calc(100% - 22px);
+  height: 30px;
+  padding: 0px 10px 0px 10px;
+  background-color:rgba(228, 228, 228, 1);
+  margin-bottom: 5px;
+  line-height: 30px;
 }
-.float-button-group-show{
-  margin-top: -15px;
-  border: 1px solid #c6c6e0;
+.item-title-2{
+  border: 1px solid rgba(228, 228, 228, 1);
+  width: calc(100% - 22px);
+  height: 30px;
+  padding: 0px 10px 0px 10px;
+  margin-bottom: 5px;
+  line-height: 30px;
 }
-.float-button-group-hide{
-  display: inline-block;
+.item-content-1,.item-content-4,.item-content-3
+{
+  height:27%;
+  overflow: auto;
+  padding: 0px 0px 3px 10px;
+  width: calc(100% - 20px);
 }
+.item-content-2
+{
+  display: none;
+  height:27%;
+  overflow: auto;
+  padding: 10px 0px 3px 10px;
+  width: calc(100% - 20px);
+}
+
 
