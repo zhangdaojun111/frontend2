@@ -25,6 +25,7 @@ import AddEnrypt from '../encrypt-input-control/add-enrypt'
 import {md5} from '../../../services/login/md5';
 import AttachmentControl from "../attachment-control/attachment-control";
 import SettingPrint from '../setting-print/setting-print'
+import Songrid from '../songrid-control/songrid-control';
 
 let config={
     template:'',
@@ -46,6 +47,20 @@ let config={
     childComponent:{},
     actions:{
         md5:md5,
+
+        //给子表统计赋值
+        setCountData(){
+            this.wfService.getCountData({
+                data: this.form.value,
+                child_table_id: this.sonTableId
+            }).then(res => {
+                //给统计赋值
+                for(let d in res["data"]){
+                    this.setFormValue(d,res["data"][d]);
+                }
+            });
+        },
+
         //返回formValue格式数据
         getFormValue(){
             return this.actions.createFormValue(this.data.data);
@@ -1095,6 +1110,11 @@ let config={
             }
             //在这里根据type创建各自的控件
             switch (type){
+                case 'Songrid':
+                    let songrid=new Songrid(data[key]);
+                    songrid.render(single);
+                    _this.childComponent[data[key].dfield]=songrid;
+                    break;
                 case 'Radio':
                     for(let obj of data[key].group){
                         obj['name']=data[key].dfield;
@@ -1234,6 +1254,39 @@ let config={
                 _this.actions.addNewItem(data);
             });
 
+        });
+        //子表弹窗
+        Mediator.subscribe('form:openSongGrid:'+_this.data.tableId,function(data){
+           console.log('子表弹窗');
+           console.log(data);
+           console.log('我这里有这些ID么');
+           console.log(_this.data);
+            _this.data.can_not_open_form=data.can_not_open_form;
+            let type = data["type"];
+            let isView = data["is_view"];
+            // if(type == 'popup'){
+                _this.data.sonTableId = data["value"];
+                if(isView == '0'){
+                    _this.data.viewMode = 'normal';
+                }else{
+                    _this.data.viewMode = 'viewFromSongrid';
+                }
+                PMAPI.openDialogByIframe(`/datagrid/source_data_grid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parentTableId}&parentTempId=${data.parentTempId}&rowId=${data.parentTempId}&tableType=child&viewMode=${_this.data.viewMode}`,{
+                    width:800,
+                    height:600,
+                    title:`子表`,
+                    modal:true
+                }).then(data=>{
+
+                })
+            // }else{
+            //     _this.data.sonTableId = data["value"];
+            //     if(isView == '0'){
+            //         _this.data.actions.setCountData();
+            //     }
+            // }
+            //保存父表数据
+            // this.globalService.frontendParentFormValue[this.tableId] = this.form.value;
         });
        // 密码弹出
         Mediator.subscribe('form:addPassword:'+_this.data.tableId,function(data){
