@@ -29,6 +29,7 @@ let FormEntrys = {
         this.formFocus='';
         this.isAddBuild=0;
         this.buildId='';
+        this.btnType='new';
 
         this.tableId=config.table_id||'';
         this.parentRealId=config.parent_real_id||'';
@@ -52,6 +53,7 @@ let FormEntrys = {
         this.formFocus=config.from_focus||'';
         this.isAddBuild=config.isAddBuild || 0;
         this.buildId=config.buildId || '';
+        this.btnType=config.btnType||'new';
     },
     hasKeyInFormDataStatic:function (key,staticData){
     let isExist = false;
@@ -185,6 +187,7 @@ let FormEntrys = {
     staticData.flowId=this.flowId;
     staticData.isBatch=this.isBatch;
     staticData.key=this.key;
+    staticData.btnType=this.btnType;
     return staticData;
 },
     //处理字段数据
@@ -277,6 +280,11 @@ let FormEntrys = {
             let json=_this.createPostJson();
             FormService.getFormData(json).then(res=>{
                 console.time('form创建时间');
+                if(this.fromWorkFlow){
+                    if(res[1]['record_info']){
+                        Mediator.publish('workFlow:record_info',res[1]['record_info']);
+                    }
+                }
                 if(this.formId){
                     template=res[2]['data']['content'];
                 }else{
