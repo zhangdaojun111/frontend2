@@ -681,81 +681,66 @@ let config = {
         this.el.find('.nowDate').html(this.data.selectedDateShow);
         this.actions.createMonthCalendar(year, month);
 
-        this.el.on('click', '#monthView', () => {
-            this.actions.changeMainView('month');
-        }).on('click', '#weekView', () => {
-            this.actions.changeMainView('week');
-        }).on('click', '#dayView', () => {
-            this.actions.changeMainView('day');
-        }).on('click', '.pre-date', () => {
-            if(this.data.calendarContent === 'month') {
-                this.actions.changeMonth('l');
-                this.actions.changeMainView('month');
-            } else if (this.data.calendarContent === 'week') {
-                this.actions.changeWeek('l');
-                this.actions.changeMainView('week');
-            } else if (this.data.calendarContent === 'day') {
-                this.actions.changeDay('l');
-                this.actions.changeMainView('day');
+        Mediator.on('Calendar: changeMainView', data => {
+            this.data.calendarContent = data.calendarContent;
+            if(this.data.calendarContent === 'today') {
+                this.data.selectData = this.data.today;
+                this.data.calendarContent = 'day';
+                this.actions.changeMainView(this.data.calendarContent);
+            } else if(this.data.calendarContent === 'schedule') {
+                this.el.find('.calendar-main-content').empty();
+                this.actions.makeScheduleData(this.data.from_date, this.data.to_date);
+            }else {
+                this.actions.changeMainView(this.data.calendarContent);
             }
-        }).on('click', '.next-date', () => {
-            if(this.data.calendarContent === 'month') {
-                this.actions.changeMonth('r');
-                this.actions.changeMainView('month');
-            } else if (this.data.calendarContent === 'week') {
-                this.actions.changeWeek('r');
-                this.actions.changeMainView('week');
-            } else if (this.data.calendarContent === 'day') {
-                this.actions.changeDay('r');
-                this.actions.changeMainView('day');
-            }
-        }).on('click', '#refresh', () => {
-            if(this.data.calendarContent) {
-                this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
-            }
-            this.actions.changeMainView(this.data.calendarContent);
-            //this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date},this.data.calendarContent);
-        }).on('click', '#schedule', () => {
-            this.data.calendarContent = 'schedule';
-            this.el.find('.calendar-main-content').empty();
-            this.actions.makeScheduleData(this.data.from_date, this.data.to_date);
-        }).on('click', '#export', () => {
-            let component = new CalendarExport();
-            let el = $('<div>').appendTo(document.body);
-            component.render(el);
-            el.dialog({
-                title: '导出',
-                width: '350',
-                height: '150',
-                background: '#ddd',
-                close: function() {
-                    $(this).dialog('destroy');
-                    component.destroySelf();
-                }
-            });
-        }).on('click', '#todayView', () => {
-            this.data.selectData = this.data.today;
-            this.actions.changeMainView('day');
-        });
-        Mediator.on('calendar-left:leftSelectedDate',data => {
-            let y = Number(data['year']),
-                m = Number(data['month']),
-                d = Number(data['day']),
-                w = this.actions.getWeekByDay( y , m-1 , d );
-            this.data.chooseDate = y + "-" + this.actions.addZero( m ) + "-" + this.actions.addZero( d );
-            this.data.selectData = Object.assign({}, {'y': y, 'm':m-1, 'd':d, 'w':w});
-            if(this.data.calendarContent === 'month') {
-                this.data.selectedDateShow = y +'年'+ m +'月';
-                $('.nowDate').html(this.data.selectedDateShow);
-                this.actions.changeMainView('month');
-            } else if(this.data.calendarContent === 'week') {
-                this.actions.changeMainView('week');
-            } else if(this.data.calendarContent === 'day') {
-                this.actions.changeMainView('day');
-            }
-        });
-        let that = this;
 
+        });
+
+        Mediator.on('Calendar: tool', data => {
+            if(data.toolMethod === 'refresh') {
+                if(this.data.calendarContent) {
+                    this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
+                }
+                this.actions.changeMainView(this.data.calendarContent);
+            }else if(data.toolMethod === 'export') {
+                PMAPI.openDialogByComponent(CalendarExport, {
+                    width: '350',
+                    height: '150',
+                    title: '导出',
+                }).then(data => {
+                    console.log(data);
+                });
+            }
+
+        });
+
+        Mediator.on('Calendar: changeDate', data => {
+            if(data === 'pre') {
+                if(this.data.calendarContent === 'month') {
+                    this.actions.changeMonth('l');
+                    this.actions.changeMainView('month');
+                } else if (this.data.calendarContent === 'week') {
+                    this.actions.changeWeek('l');
+                    this.actions.changeMainView('week');
+                } else if (this.data.calendarContent === 'day') {
+                    this.actions.changeDay('l');
+                    this.actions.changeMainView('day');
+                }
+            } else {
+                if(this.data.calendarContent === 'month') {
+                    this.actions.changeMonth('r');
+                    this.actions.changeMainView('month');
+                } else if (this.data.calendarContent === 'week') {
+                    this.actions.changeWeek('r');
+                    this.actions.changeMainView('week');
+                } else if (this.data.calendarContent === 'day') {
+                    this.actions.changeDay('r');
+                    this.actions.changeMainView('day');
+                }
+            }
+        });
+
+        let that = this;
         Mediator.on('calendarSchedule: date', data => {
             that.actions.getCalendarData(data,'schedule');
             that.data.scheduleStart = data.from_date;
