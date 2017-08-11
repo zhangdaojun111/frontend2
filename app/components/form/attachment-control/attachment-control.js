@@ -5,6 +5,7 @@ import template from './attachment-control.html';
 import Component from "../../../lib/component";
 import '../../../lib/msgbox'
 import AttachmentQueueItem from "./attachment-queue-item/attachment-queue-item";
+import ScreenShotReceiver from "./screenshot-receiver/screenshot-receiver";
 
 let config={
     template: template,
@@ -19,7 +20,9 @@ let config={
             this.el.find('.selecting-file').click();
         },
         shotScreen:function () {
-            alert('shotScreen');
+            let ele = this.el.find('.get-screenshot');
+            let comp = new ScreenShotReceiver();
+            comp.render(ele);
         }
     },
     afterRender: function () {
