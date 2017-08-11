@@ -38,10 +38,10 @@
 }
 .float-button-group{
   width:100px;
-  height:25px;
+  height:20px;
   margin-top: -10px;
   margin-right: 80px;
-  z-index: 3;
+  z-index: 5555;
   position: relative;
   float: right;
   font-size: 12px !important;
@@ -57,8 +57,8 @@
   }
   .search-function{
     display: none;
-    margin-left: 120px;
-    margin-top: -25px;
+    margin-left: 50px;
+    margin-top:0px;
     .search-function-children{
       width:100px;
       display:block ;

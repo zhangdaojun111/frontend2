@@ -20,7 +20,7 @@ let config = {
     afterRender: function() {
         this.el.find('.menu-label').html(this.data.menuItem['label']);
         this.data.menuItem['items'].forEach(item => {
-            let menuItem = document.createElement('span');
+            let menuItem = document.createElement('div');
             menuItem.className = 'item-child';
             menuItem.innerHTML = item['label'];
             this.el.find('.menu-item').append(menuItem);

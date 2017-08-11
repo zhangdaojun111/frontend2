@@ -32,7 +32,7 @@ let config = {
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
                 temp.next(".item-content").show();
-                temp.next().animate({height:"80%"},"fast");
+                temp.next().animate({height:"85%"},"fast");
             }
         },
         hideclass:function(that,temp){
@@ -48,7 +48,7 @@ let config = {
                 temp.addClass("display-all-content");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").show();
-                that.el.find(".item-content-2").animate({height:"80%"},"fast");
+                that.el.find(".item-content-2").animate({height:"85%"},"fast");
             }
         }
     },
