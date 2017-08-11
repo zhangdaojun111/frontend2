@@ -354,6 +354,10 @@ export const FormService={
         return HTTP.post('eval_exp_fun',json);
     },
 
+    getPrintSetting:async function(){
+        return HTTP.post('user_preference',{action:'get'});
+    },
+
     getFormData(json){
         let res;
         if(json['form_id']){
