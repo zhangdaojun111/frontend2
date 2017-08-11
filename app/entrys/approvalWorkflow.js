@@ -88,7 +88,8 @@ function recursion(arr,slnds,pubInfo){
             }
         },
         treeType:'MULTI_SELECT',
-        isSearch: true
+        isSearch: true,
+        withButtons:true
         });
     treeComp2.render($('#treeMulti'));
 
@@ -111,7 +112,8 @@ function recursion(arr,slnds,pubInfo){
             }
         },
         treeType:'MULTI_SELECT',
-        isSearch: true
+        isSearch: true,
+        withButtons:true
         });
     treeComp3.render($('#addUser'));
 
