@@ -35,7 +35,6 @@ let config={
         _this.el.on('click','.ui-forms-a',_.debounce(function(){
             Mediator.publish('form:openSongGrid:'+_this.data.tableId,_this.data);
         },300));
-        console.log(this.data.isView=='0'?'normal':'ViewChild');
         let config={
             tableId:this.data.value,
             parentTableId:this.data.parent_table_id,

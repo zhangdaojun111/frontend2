@@ -1111,7 +1111,9 @@ let config={
             //在这里根据type创建各自的控件
             switch (type){
                 case 'Songrid':
-                    let songrid=new Songrid(data[key]);
+                    // let popupType=single.data('popupType');
+                    let popupType=1;
+                    let songrid=new Songrid(Object.assign(data[key],{popupType:popupType}));
                     songrid.render(single);
                     _this.childComponent[data[key].dfield]=songrid;
                     break;
