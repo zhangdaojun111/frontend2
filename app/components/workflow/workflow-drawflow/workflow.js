@@ -2,6 +2,7 @@ import Component from '../../../lib/component';
 import template from './workflow.html';
 import './workflow.scss';
 import msgBox from '../../../lib/msgbox';
+import Mediator from '../../../lib/mediator';
 
 let config = {
     template: template,
@@ -273,7 +274,7 @@ let config = {
                 if (can_reject == 1) {
                     msgBox.confirm(`您确定要驳回到【${text}】么？`).then(res=>{
                         if(res){
-                            console.log(1);
+                            Mediator.publish('approval:rejToAny',this.rejectId);
                         }
                     })
                 }

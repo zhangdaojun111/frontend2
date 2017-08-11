@@ -63,9 +63,7 @@ let config={
         appPass() {
             Mediator.publish('workflow:appPass');
             msgBox.confirm("你确定审核通过吗").then((res)=>{
-                console.log(1);
                 if(res===true){
-                    console.log(2);
                     Mediator.publish("approval:recordPass",this.data.imgInfo);
                 }
             })
@@ -101,7 +99,7 @@ let config={
             container.style.height = h + 'px';
             container.style.marginTop = 0;
             container.style.margin = 0;
-            container.style.zIndex = '100';
+            container.style.zIndex = '99';
             container.style.overflow = 'auto';
             let ocloseSpan = document.createElement('span');
             ocloseSpan.className = 'closeSpan';
