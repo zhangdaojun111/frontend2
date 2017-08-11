@@ -1,34 +1,108 @@
 @import "../../assets/scss/core/base";
-$boder-color: #ddd;
+$boder-color: rgba(228, 228, 228, 1);
+$background_color: rgba(242, 242, 242, 1);
+$calendar-font: #666666;
+$calendar-blue: #0088FF;
 $bg-color: rgba(14, 122, 239, 0.290196);
 $btn-bg-color: #4892FC;
 $grid-hover: rgba(14, 122, 239, 0.090196);
-html,body
-{
-    height: 100%;
-}
-#calendar{
-    height:100%;}
+
 .calendar-iframe {
     min-width: 1200px;
     width: 100%;
     min-height: 600px;
     height: 100%;
     font-size: 12px;
-    //.header {
-    //    padding: 5px;
-    //    background: $bg-color;
-    //    span {
-    //        line-height: 28px;
-    //    }
-    //    .title {
-    //        display: inline-block;
-    //    }
-    //    .tool {
-    //        display: inline-block;
-    //        float: right;
-    //    }
-    //}
+    .header-icon {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 2px;
+    }
+    .calendar-header {
+        height: 60px;
+        width: 100%;
+        padding-left: 10px;
+        border-bottom: 1px solid $boder-color;
+        .tool-icon {
+            display: inline-block;
+            line-height: 60px;
+            margin-right: 10px;
+        }
+        .tool-btn {
+            display: inline-block;
+            width: 40px;
+            text-align: center;
+            line-height: 60px;
+            color: $calendar-font;
+            margin-right: 15px;
+            cursor: pointer;
+            &:checked {
+                color: $calendar-blue;
+                border-bottom: 2px solid $calendar-blue;
+            }
+        }
+        .today-btn {
+            display: inline-block;
+            width: 40px;
+            line-height: 30px;
+            text-align: center;
+            margin-right: 15px;
+            border-radius: 4px;
+            color: $calendar-font;
+            background-color: $background_color;
+            cursor: pointer;
+            &:hover{
+                background-color: $boder-color;
+            }
+        }
+        .calendar-search {
+            display: inline-block;
+            border: 1px solid $boder-color;
+            border-radius: 4px;
+            .search-box {
+                border: none;
+                height: 16px;
+                padding: 4px;
+            }
+
+        }
+        .right-tool {
+            display: inline-block;
+            float: right;
+            .right-tool-btn {
+                cursor: pointer;
+                line-height: 60px;
+                margin-right: 20px;
+            }
+        }
+    }
+    .calendar-remind {
+        height: 30px;
+        width: 100%;
+        padding-left: 10px;
+        border-bottom: 1px solid $boder-color;
+        .calendar-date {
+            display: inline-block;
+            margin-right: 15px;
+            .datepick {
+                display: inline-block;
+                line-height: 30px;
+                cursor: pointer;
+            }
+        }
+        .remind-count {
+            display: inline-block;
+            .count-title {
+                margin-right: 15px;
+                .count {
+                    color: $calendar-blue;
+                    font-weight: bold;
+                    font-size: 12px;
+                }
+            }
+        }
+
+    }
     .calendar-container {
         height:  100%;
         .left-content {
