@@ -864,7 +864,9 @@ let config = {
                     json['filter'].push( a );
                 }
                 json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
-                msgBox.alert( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
+                if( this.data.filterParam.filter.length == 0 ){
+                    msgBox.alert( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
+                }
             }
             if( this.data.groupCheck ){
                 json['is_group'] = 1;
@@ -1278,7 +1280,7 @@ let config = {
                     $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
                 });
                 //第一次请求footer数据
-                if( this.data.firstGetFooterData ){
+                if( this.data.firstGetFooterData && this.data.viewMode == 'normal' ){
                     if( this.data.common_filter_id ){
                         for( let r of res.rows ){
                             if( r.id == this.data.common_filter_id ){
