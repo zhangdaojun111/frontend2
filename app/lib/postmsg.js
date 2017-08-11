@@ -33,7 +33,8 @@ export const PMENUM = {
     open_component_dialog: '3',
     iframe_active: '4',
     iframe_silent: '5',
-    aggrid_table_invalid: '6'
+    table_invalid: '6',             // 表格数据失效
+    on_the_way_invalid: '7'         // 在途数据失效
 }
 
 /**

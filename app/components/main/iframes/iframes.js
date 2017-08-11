@@ -170,7 +170,7 @@ export const IframeInstance = new Component({
             if (!_.isUndefined(item)) {
                 let iframe = item.iframe[0];
                 PMAPI.sendToChild(iframe, {
-                    type: PMENUM.aggrid_table_invalid,
+                    type: PMENUM.table_invalid,
                     data: info
                 });
             }
