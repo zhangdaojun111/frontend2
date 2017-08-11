@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <title>form</title>
     <script>
+        window.config = {{window_config|safe}};
     </script>
 </head>
 <body>
+<<<<<<< HEAD
 <button id="toEdit">编辑模式表单</button>
 <button id="count">统计</button>
 <button id="editRequired">修改必填性</button>
@@ -27,15 +29,20 @@
 {% ifequal window_type 'develop'%}
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
 <script type="text/javascript" src="http://localhost:8080/scripts/form.js"></script>
+=======
+{% ifequal window_type 'develop'%}
+<script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
+<script type="text/javascript" src="http://localhost:8080/scripts/openForm.js"></script>
+>>>>>>> fc90293df356717e66fbc3ea1c98ea7d9dd6400b
 <!--<link rel="stylesheet" href="/client/static/css/vendors.css">-->
 <!--<link rel="stylesheet" href="/client/static/css/form.css">-->
 <!--<script type="text/javascript" src="/client/static/vendors.js"></script>-->
 <!--<script type="text/javascript" src="/client/static/form.js"></script>-->
 {% else %}
 <link rel="stylesheet" href="/client/static/css/vendors.css">
-<link rel="stylesheet" href="/client/static/css/form.css">
+<link rel="stylesheet" href="/client/static/css/openForm.css">
 <script type="text/javascript" src="/client/static/vendors.js"></script>
-<script type="text/javascript" src="/client/static/form.js"></script>
+<script type="text/javascript" src="/client/static/openForm.js"></script>
 {% endifequal %}
 </body>
 </html>

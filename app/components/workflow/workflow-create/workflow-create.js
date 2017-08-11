@@ -58,7 +58,6 @@ let config = {
         });
         this.el.on('click','.J_del',(e)=>{
             this.actions.delBtn(e);
-            console.log(this.el);
         });
         //addFav
         this.el.on('click','#addFav',(e)=>{
@@ -75,7 +74,7 @@ let config = {
         })
         //订阅 select list click
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
-            WorkFlow.show(msg.data[0]);
+            WorkFlow.show(msg.data[0],'#drawflow');
         })
     },
     beforeDestory: function(){

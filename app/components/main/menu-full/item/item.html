@@ -3,11 +3,15 @@
     {{#if searchDisplay}}
     <div class="row clearfix" title={{label}}>
         {{#if root}}
-        <div class="icon"><img src="../../../../assets/images/default_menu_icon.png"></div>
+            {{#if folder_icon}}
+            <div class="icon lv1" style="background: url({{folder_icon}})"></div>
+            {{else}}
+            <div class="icon lv1"></div>
+            {{/if}}
         {{else if items}}
-        <div class="ui-state-focus icon arrow">
-            <div class="ui-icon ui-icon-caret-1-e"></div>
-        </div>
+            <div class="ui-state-focus icon arrow">
+                <div class="ui-icon ui-icon-caret-1-e"></div>
+            </div>
         {{/if}}
         <p class="name">{{label}}</p>
     </div>

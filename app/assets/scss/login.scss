@@ -22,7 +22,7 @@ $font_size:10px;           //通用字体大小
     top: calc(50% - 400px);
     border-radius: 45%;
     overflow: hidden;
-    background: url("../images/login-bg.png");
+    background: url("../images/login/background.png");
     background-repeat: no-repeat;
 
     .login-content {
@@ -99,12 +99,12 @@ $font_size:10px;           //通用字体大小
             }
 
             .form-user-logo {
-              background: url("../images/user.png");
+              background: url("../images/login/icon_user.png");
               background-repeat: no-repeat;
             }
 
             .form-pw-logo {
-              background: url("../images/password.png");
+              background: url("../images/login/icon_password.png");
               background-repeat: no-repeat;
             }
           }
@@ -156,7 +156,7 @@ $font_size:10px;           //通用字体大小
                 cursor: pointer;
                 width: 20px;
                 height: 20px;
-                background: url("../images/update-logo.png");
+                background: url("../images/login/icon_version_info.png");
                 background-repeat: no-repeat;
               }
               label {
@@ -190,7 +190,7 @@ $font_size:10px;           //通用字体大小
         margin-top: 25px;
         color: white;
         .register-btn {
-          width:150px;
+          width:149px;
           height:25px;
           cursor: pointer;
           margin-top: 20px;
@@ -244,30 +244,43 @@ $font_size:10px;           //通用字体大小
         width: 300px;
         height: auto;
         top: 20px;
+        overflow: auto;
 
         table{
           display: none;
           width: 100%;
           color: rgba(255, 255, 255, 0.55);
           text-align: center;
+          border-collapse: collapse;
 
           th{
             font-weight: bold;
             height:30px;
-            vertical-align:bottom;
+            line-height: 30px;
+            white-space: nowrap;
+            text-align: left;
           }
 
           td{
             height:30px;
-            vertical-align:bottom;
+            line-height: 30px;
             white-space: nowrap;
             overflow: hidden;
+            text-align: left;
+            padding-right: 17px;
+            &.run-btn{
+              cursor: pointer;
+              padding-right: 18px;
+            }
+          }
+          .default-hide{
+            display: none;
           }
         }
       }
 
       //反面面板(忘记密码)样式
-      .opposite_panel{
+      .opposite-panel{
         display: none;
         position: relative;
         background-color: $panel_color;

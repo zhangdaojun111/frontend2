@@ -5,12 +5,13 @@ import Component from "../../../../../lib/component";
 import template from './expert-search-condition.html';
 import '../expert-search.scss';
 import expertItem from './expert-search-item/expert-search-item';
-import expertSreach from '../expert-search';
+import expertSearch from '../expert-search';
 let config = {
     template: template,
     inputObject: null,
     inputNextObject: null,
-    epSreach: {},
+    rendItemNum:0,
+    epSearch: {},
     data: {
         expertItemData: [],
     },
@@ -18,35 +19,60 @@ let config = {
         rendItem: function () {
             let _this = this;
             this.data.expertItemData.forEach((row) => {
-                this.append(new expertItem(row), $('.expert-search').find('.condition-search-ul'));
+                // this.append(new expertItem(row), $('.expert-search').find('.condition-search-ul')[config.rendItemNum]);
+                this.append(new expertItem(row), this.el.find('.condition-search-ul'));
             });
+            config.rendItemNum ++ ;
             $('.condition-search-li').on('click', function() {
-                _this.actions.setInputValue($(this).find('.name').html());
+                _this.actions.setInputValue($(this).find('.name').html(),$(this).find('.searchField').html(),$(this).find('.searchType').html());
+                _this.actions.setSelectValue($(this).find('.searchType').html());
                 _this.actions.setInputType($(this).find('.searchType').html());
-                config.epSreach.actions.hideList();
+                config.epSearch.actions.hideList();
             })
         },
         setInputObject: function(object,nextObject) {
             config.inputObject = object;
             config.inputNextObject = nextObject;
         },
-        setInputValue: function(value) {
+        setInputValue: function(value,name,type) {
             config.inputObject.val(value);
+            config.inputObject.attr('name',name);
+            config.inputObject.attr('title',type);
         },
         setInputType: function(type) {
             let inputType;
             switch (type) {
-                case "datetime": inputType = 'date'; break
-                case "text": inputType = 'text'; break
+                case "datetime": inputType = 'date'; break;
+                case "text": inputType = 'text'; break;
                 case "number": inputType = 'number'; break
             }
             config.inputNextObject.attr("type",inputType);
+        },
+        setSelectValue: function(type) {
+            let optionHtmlOne = `<option value="$regex">包含</option>
+                                <option value="exact">等于</option>
+                                <option value="$ne">不等于</option>`;
+            let optionHtmlTwo = `<option value="$regex">包含</option>
+                                <option value="exact">等于</option>
+                                <option value="$gt">大于</option>
+                                <option value="$lt">小于</option>
+                                <option value="$ne">不等于</option>`
+            switch (type) {
+                case "datetime": config.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlTwo); break;
+                case "text": config.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlOne); break;
+                case "number": config.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlTwo); break
+            }
+        },
+        delete: function() {
+            this.destroySelf();
         }
     },
     afterRender: function() {
         this.actions.rendItem();
-        config.epSreach = new expertSreach.expertSearch ();
-        $('.condition-search .condition-search-item:first-child').find('.condition-search-checkbox').css('dispaly','none');
+        config.epSearch = new expertSearch.expertSearch ();
+        this.el.on('click','.delete',()=>{
+            this.actions.delete();
+        });
     }
 }
 class expertCondition extends Component {

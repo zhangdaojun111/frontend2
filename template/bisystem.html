@@ -9,12 +9,13 @@
 <script>
     window.config = {
         is_admin: {{ is_admin | safe }},
-        bi_views: {{ bi_views|safe }}
+        bi_views: {{ bi_views|safe }},
+        bi_user: '{{bi_user|safe}}',
     }
 </script>
 <div id="route-outlet" class="bi-container"></div>
 </body>
-{% ifequal window_type 'develop'%}
+{% ifequal config.window_type 'develop'%}
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
 <script type="text/javascript" src="http://localhost:8080/scripts/bi.js"></script>
 {% else %}
