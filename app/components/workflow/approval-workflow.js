@@ -61,10 +61,11 @@ let config={
             }
         },
         appPass() {
-
             Mediator.publish('workflow:appPass');
             msgBox.confirm("你确定审核通过吗").then((res)=>{
+                console.log(1);
                 if(res===true){
+                    console.log(2);
                     Mediator.publish("approval:recordPass",this.data.imgInfo);
                 }
             })

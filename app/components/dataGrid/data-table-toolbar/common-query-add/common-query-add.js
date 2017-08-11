@@ -3,7 +3,7 @@ import './common-query-add.scss';
 let addQuery = {
     template: template,
     data: {
-
+        name:null
     },
     actions: {
         btnClick: function () {
@@ -28,6 +28,9 @@ let addQuery = {
         }
     },
     afterRender: function () {
+        if (this.data.name) {
+            $('.input').val(this.data.name);
+        }
         this.actions.btnClick();
     },
     beforeDestory: function () {

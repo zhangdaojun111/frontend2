@@ -24,7 +24,7 @@ import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 let config = {
     template: template,
     data: {
-        tableId: '5318_EHFuJD7Ae76c6GMPtzdiWH',
+        tableId: '',
         formId: '',
         tableType: '',
         parentTableId: '',
@@ -116,6 +116,12 @@ let config = {
         isEditable: false,
         //第一次进入加载footer数据
         firstGetFooterData: true,
+        //是否宽度自适应状态
+        isAutoWidth: false,
+        //宽度自适应上一次状态
+        lastGridState: null,
+        //表头提醒颜色
+        headerColor: {}
     },
     //生成的表头数据
     columnDefs: [],
@@ -197,7 +203,10 @@ let config = {
                         return;
                     }
                     let headClass = fieldTypeService.numOrText(data.data["real_type"]) ? 'header-style-r' : 'header-style-l';
-
+                    //添加表头提醒
+                    if( this.data.headerColor[data.data["field"]] != undefined ){
+                        headClass+=(' '+this.data.headerColor[data.data["field"]])
+                    }
                     //解决后台配置字段之后类排序没有该字段导致该列不显示的BUG
                     if (this.data.orderFields.indexOf(data.data["field"]) == -1) {
                         otherCol.push(data.data["field"]);
@@ -651,21 +660,26 @@ let config = {
                     }
                 });
             }
-            this.data.filterParam = {
-                filter: filter,
-                is_filter: 1,
-                common_filter_id: '',
-                common_filter_name: ''
-            }
+            // this.data.filterParam = {
+            //     filter: filter,
+            //     is_filter: 1,
+            //     common_filter_id: '',
+            //     common_filter_name: ''
+            // }
+            this.data.filterParam['filter'] = filter;
+            this.data.filterParam['is_filter'] = 1;
             this.actions.getGridData();
         },
         postExpertSearch:function(data,id,name) {
-            this.data.filterParam = {
-                filter: data,
-                is_filter: 1,
-                common_filter_id: id,
-                common_filter_name: name
-            }
+            // this.data.filterParam = {
+            //     filter: data,
+            //     is_filter: 1,
+            //     common_filter_id: id,
+            //     common_filter_name: name
+            // }
+            this.data.filterParam.expertFilter = data;
+            this.data.filterParam.common_filter_id = id;
+            this.data.filterParam.common_filter_name = name;
             this.actions.getGridData();
         },
         //偏好赋值
@@ -742,6 +756,7 @@ let config = {
                 this.actions.setPreference( res[0] );
                 this.data.fieldsData = res[1].rows || [];
                 this.data.permission = res[1].permission;
+                this.data.headerColor = dgcService.createHeaderStyle( this.data.tableId,res[1].field_color );
                 //初始化按钮
                 this.actions.renderBtn();
                 //创建高级查询需要字段数据
@@ -848,9 +863,14 @@ let config = {
             }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
-                //高级查询
-                if( this.data.filterParam['common_filter_id'] ){
-                    json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
+            }
+            if( this.data.filterParam['common_filter_id'] ){
+                json['filter'] = json['filter'] || [];
+                for( let a of this.data.filterParam.expertFilter ){
+                    json['filter'].push( a );
+                }
+                json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
+                if( this.data.filterParam.filter.length == 0 ){
                     msgBox.alert( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
                 }
             }
@@ -903,8 +923,8 @@ let config = {
             let groupLit = {
                 tableId: this.data.tableId,
                 gridoptions: this.agGrid.gridOptions,
-                fields: this.actions.deleteGroup(this.data.groupFields),
-                myGroup: this.actions.setMyGroup(this.data.myGroup.fields)
+                fields: this.data.myGroup.length == 0 ? this.data.groupFields : this.actions.deleteGroup(this.data.groupFields),
+                myGroup:  this.actions.setMyGroup(this.data.myGroup.fields)
             }
             this.groupGridCom = new groupGrid(groupLit);
             this.append(this.groupGridCom,document.querySelector('.group-panel'));
@@ -1121,7 +1141,14 @@ let config = {
             } )
             //宽度自适应
             $( '.grid-auto-width' ).click( ()=>{
-                this.agGrid.actions.autoWidth();
+                if( !this.data.isAutoWidth ){
+                    this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
+                    this.agGrid.actions.autoWidth();
+                }else {
+                    this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
+                }
+                $( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
+                this.data.isAutoWidth = !this.data.isAutoWidth;
             } )
             //搜索
             $( '.float-search-btn' ).click( ()=>{
@@ -1159,6 +1186,22 @@ let config = {
             $('.grid-export-btn').click(()=> {
                 this.actions.onExport()
             })
+            //全屏
+            let url_obj = {
+                tableId: this.data.tableId,
+                formId: this.data.formId,
+                tableType: this.data.tableType,
+                parentTableId: this.data.parentTableId,
+                parentRealId: this.data.parentRealId,
+                parentTempId: this.data.parentTempId,
+                parentRecordId: this.data.parentRecordId,
+                rowId: this.data.rowId,
+                fieldId: this.data.fieldId,
+                source_field_dfield: this.data.source_field_dfield,
+                base_buildin_dfield: this.data.base_buildin_dfield
+            }
+            let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',url_obj );
+            $( '.grid-new-window' ).attr( 'href',url );
         },
         //删除数据
         delTableTable: function () {
@@ -1259,15 +1302,16 @@ let config = {
                     $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
                 });
                 //第一次请求footer数据
-                if( this.data.firstGetFooterData ){
+                if( this.data.firstGetFooterData && this.data.viewMode == 'normal' ){
                     if( this.data.common_filter_id ){
                         for( let r of res.rows ){
                             if( r.id == this.data.common_filter_id ){
                                 this.data.filterParam = {
-                                    filter: JSON.parse(r.queryParams),
+                                    expertFilter: JSON.parse( r.queryParams ),
                                     is_filter: 1,
                                     common_filter_id: this.data.common_filter_id,
-                                    common_filter_name: r.name
+                                    common_filter_name: r.name,
+                                    filter: []
                                 }
                                 $('.dataGrid-commonQuery-select').val(r.name);
                             }
@@ -1312,7 +1356,7 @@ let config = {
         },
         //点击cell
         onCellClicked: function (data) {
-            console.log( "______data_______" )
+            console.log( "onCellClicked数据" )
             console.log( data )
             if( !data.data || this.data.isEditable ){
                 return;
@@ -1454,9 +1498,9 @@ let config = {
         let _this = this
         $('.dataGrid-commonQuery-select').bind('change', function() {
             if($(this).val() == '常用查询') {
-                _this.actions.postExpertSearch([],'');
+                _this.actions.postExpertSearch([],'','');
             } else if($(this).val() == '临时高级查询') {
-                _this.actions.postExpertSearch(_this.data.saveTemporaryCommonQuery,'');
+                _this.actions.postExpertSearch(_this.data.saveTemporaryCommonQuery,'临时高级查询','临时高级查询');
             } else {
                 $(this).find('.Temporary').remove();
                 _this.data.commonQueryData.forEach((item) => {

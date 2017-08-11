@@ -31,14 +31,17 @@ let importSetting = {
                     xhr: function () {
                         var myXhr = $.ajaxSettings.xhr();
                         if(myXhr.upload){
-                            myXhr.upload.addEventListener('progress',processCallback,false);
+                            myXhr.upload.addEventListener('progress',function () {
+                                console.log(arguments);
+                            },false);
                         }
                         return myXhr;
                     },
                     success: function (data) {
-                        successCallback(data);
+                        // successCallback(data);
                     },
                     error: function (error) {
+                        debugger;
                         alert(error);
                     },
                     async:true,
