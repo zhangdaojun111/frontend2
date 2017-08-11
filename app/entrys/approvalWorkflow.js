@@ -127,9 +127,12 @@ const approveWorkflow=(para)=>{
         msgBox.alert(`${res.error}`)
     })
 }
+Mediator.subscribe('workFlow:record_info', function (info) {
+
+});
 
 //审批操作
-FormEntrys.createForm({
+/*FormEntrys.createForm({
     el:$("#place-form"),
     form_id:181,
     record_id:'598d26f3803df8f6e2600dfd',
@@ -196,7 +199,7 @@ FormEntrys.createForm({
         });
     })
     
-});
+});*/
 
 
 //获取盖章图片
