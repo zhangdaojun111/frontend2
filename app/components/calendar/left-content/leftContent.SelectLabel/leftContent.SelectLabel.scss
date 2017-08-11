@@ -1,45 +1,77 @@
 .select-all{
+  .float-button-group-hide{
+    display: inline-block;
+    .float-button-group-show{
+      margin-top: -15px;
+      cursor: pointer;
+    }
+
+  }
+  .clear{
+    clear: both;
+  }
   padding-top: 5px;padding-bottom: 5px;
-  margin-left:20px;
   .chk_1 {
     display: none;
   }
   .chk_1 + label {
     background-color: #FFF;
     border: 1px solid #C1CACA;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
-    padding: 8px;
-    border-radius: 5px;
+    padding: 6px;
     display: inline-block;
     position: relative;
     margin-right: 5px;
-    margin-left: 10px;
-  }
-  .chk_1 + label:active {
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
-  }
-  .workflow_checked{
-    background-color: red !important;
-    border: 1px solid #FF7F50 !important;
-  }
-  label{font-size: 17px;}
-  .checked + label{
-    background-color: #FF7F50 !important;
-    border: 1px solid #FF7F50;
+    cursor: pointer;
   }
   .label-select-all-checked + label:after {
     content: '\2714' !important; //勾选符号
     position: absolute !important;
-    top: -5px !important;
+    top: -2px !important;
     left: 0px !important;
     color: #2398df !important;
     width: 100% !important;
     text-align: center !important;
-    font-size: 1.4em !important;
+    font-size: 14px !important;
     padding: 1px 0 0 0 !important;
     vertical-align: text-top !important;
   }
 }
+.float-button-group{
+  width:100px;
+  height:25px;
+  margin-top: -10px;
+  margin-right: 80px;
+  z-index: 3;
+  position: relative;
+  float: right;
+  font-size: 12px !important;
+  .hide-span{
+    width:110px;
+    display:block ;
+    background-color: #e4e4e4;
+    line-height: 25px;
+    margin-left: 10px;
+    padding-left: 10px;
+    font-size: 14px;
+    border: 1px solid #C1CACA;
+  }
+  .search-function{
+    display: none;
+    margin-left: 120px;
+    margin-top: -25px;
+    .search-function-children{
+      width:100px;
+      display:block ;
+      background-color: #efefef;
+      line-height: 25px;
+      margin-left: 10px;
+      padding-left: 10px;
+      font-size: 14px;
+      border: 1px solid #C1CACA;
+    }
+  }
+}
+
 
 
 

@@ -25,7 +25,6 @@ let config = {
         let li_strhtml = "";
         data_list.forEach(function(item){
             li_strhtml += that.actions.addli_html(that,item)
-            console.log(li_strhtml);
         });
         that.el.find(".search-items").html("");
         console.log(li_strhtml);

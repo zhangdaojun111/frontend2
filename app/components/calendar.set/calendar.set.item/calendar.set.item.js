@@ -8,6 +8,7 @@ import CalendarSetItemMulitSelect from "./calendar.set.item.multiselect/calendar
 import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
 import Mediator from '../../../lib/mediator';
+import CalendarSetItemremindtype from "./calendar.set.item.remindtype/calendar.set.item.remindtype"
 let config = {
     template: template,
     data: {
@@ -19,12 +20,32 @@ let config = {
     actions: {
     },
     afterRender: function() {
+        let staus = false;
         Mediator.on('calendar-set:editor',data =>{
             if(data.data ===1){
                 this.el.find(".editor-items").attr("disabled",false);
+                staus = true;
             }else{
                 this.el.find(".editor-items").attr("disabled",true);
+                staus = false;
             }
+        });
+        this.el.on("click",".remind-type-editor",function(){
+            if(staus){
+                let component = new CalendarSetItemremindtype();
+                let el = $('<div>').appendTo(document.body);
+                component.render(el);
+                el.dialog({
+                    title: '编辑提醒方式',
+                    width: '80%',
+                    height: '600',
+                    background: '#ddd',
+                    close: function() {
+                        $(this).dialog('destroy');
+                        component.destroySelf();
+                    }
+                });
+                }
         });
         $("#set-color-id").attr("id","set-color-"+this.data.rowSetData.field_id);
         let set_color_id = "#set-color-"+this.data.rowSetData.field_id;
@@ -33,7 +54,6 @@ let config = {
             this.el.find('.res-text').append("<option value='"+item+"'>"+item+"</option>");
         });
         this.append(new CalendarSetItemMulitSelect, this.el.find('.multi-select-item'));
-        // console.log($(set_color_id).val());
     }
 };
 

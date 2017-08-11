@@ -21,16 +21,14 @@ let config = {
     },
     actions: {
         contentHide:function(that,temp){
-            console.log(temp.is(".display-all-content"));
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
-                that.el.find(".item-content").animate({height:"27%"},"fast");
-                that.el.find(".item-content").show(50);
+                that.el.find(".item-content").css("height","27%");
+                that.el.find(".item-content").show();
             }else{
                 that.el.find(".item-title").removeClass("display-all-content");
                 that.el.find(".item-title-2").removeClass("display-all-content");
                 temp.addClass("display-all-content");
-                //console.log($(this).next(".item-content"));
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
                 temp.next(".item-content").show();
@@ -40,13 +38,14 @@ let config = {
         hideclass:function(that,temp){
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
-                that.el.find(".item-content").animate({height:"27%"},"fast");
-                that.el.find(".item-content-2").hide(100);
-                that.el.find(".item-content").show(80);
+                that.el.find(".item-content").css("height","27%");
+                that.el.find(".item-content-2").hide();
+                that.el.find(".item-content-1").show();
+                that.el.find(".item-content-3").show();
+                that.el.find(".item-content-4").show();
             }else{
                 that.el.find(".item-title").removeClass("display-all-content");
                 temp.addClass("display-all-content");
-                //console.log($(this).next(".item-content"));
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").show();
                 that.el.find(".item-content-2").animate({height:"80%"},"fast");
@@ -62,16 +61,14 @@ let config = {
                 that.append(new LeftContentHide(data.data), this.el.find('.left-calendar-hide'));
         });
         CalendarService.getWorkflowRecords(data).then(res => {
-            console.log(res);
             res.rows.forEach((row) =>{
-                console.log(row);
-                this.append(new RightContentWorkFlow(row), this.el.find('.item-content-4'));
+                this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
             });
         });
         Mediator.on('calendar-left:calendar-class-hide',data =>{
             data.data.forEach((row) =>{
                    that.append(new LeftContentHide(row), that.el.find('.left-calendar-hide'));
-                 });
+            });
         });
         Mediator.on('calendar-left:showRemindType',()=>{
             that.el.find(".item-title-2").removeClass("display-all-content");

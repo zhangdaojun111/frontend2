@@ -149,16 +149,20 @@ let config = {
         Mediator.on('calendar-left:checkbox3-check',data =>{
             config.data.cancel_fields = data.data;
         });
-        that.el.on("mouseleave",".float-button-group-hide",function(){
-            $(this).children(".float-button-group").css("display","none");
+        that.el.on("mouseleave",".float-button-group",function(){
+            $(this).css("display","none");
         }).on("mouseover",".float-button-group-show",function(){
-            $(this).nextAll(".float-button-group").css("display","block");
+            $(this).parent().nextAll(".float-button-group").css("display","block");
         }).on('click','.select-label-show',function(){
             config.actions.selectlabelshow($(this));
         }).on('click',".select-label",function(){
             config.actions.selectlabel($(this),that);
         }).on('click','.select-label-children',function () {
             config.actions.selectlabelchildren($(this),that);
+        }).on('mouseover',".hide-span-function",function () {
+            that.el.find(".search-function").css("display","block");
+        }).on("mouseover",".hide-type-group",function(){
+            that.el.find(".search-function").css("display","none");
         });
     }
 }
