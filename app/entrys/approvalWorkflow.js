@@ -127,9 +127,18 @@ const approveWorkflow=(para)=>{
         msgBox.alert(`${res.error}`)
     })
 }
-Mediator.subscribe('workFlow:record_info', function (info) {
 
-});
+
+
+// FormEntrys.createForm({
+//     el:"#place-form",
+//     form_id:181,
+//     record_id:'598d26f3803df8f6e2600dfd',
+//     is_view:0,
+//     from_approve:1,
+//     from_focus:0,
+//     table_id:'5318_EHFuJD7Ae76c6GMPtzdiWH'
+// })
 
 //审批操作
 /*FormEntrys.createForm({
@@ -201,7 +210,30 @@ Mediator.subscribe('workFlow:record_info', function (info) {
     
 });*/
 
+(async function () {
+    return workflowService.getRecordInfo({
+        form_id:181,
+        record_id:'598d52f523155099fb36c2c5',
+        is_view:0,
+        from_approve:1,
+        from_focus:0,
+        table_id:'5318_EHFuJD7Ae76c6GMPtzdiWH',
+    })
+})().then(res=>{
+    console.log(res)
+    FormEntrys.createForm({
 
+        table_id:res.tableid,
+        el:'#place-form',
+        real_id:'',
+        form_workflow:1,
+        form_id:res.form_id
+    });
+}).then(res=>{
+    Mediator.subscribe('workFlow:record_info', function (info) {
+        console.log(info)
+    })
+});
 //获取盖章图片
 (async function () {
     return workflowService.getStmpImg();
