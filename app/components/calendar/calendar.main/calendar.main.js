@@ -483,7 +483,6 @@ let config = {
         changeMainView: function (type) {
             this.data.calendarContent = type;
             this.el.find('.calendar-main-content').empty();
-
             if(type === 'month') {
                 this.data.selectedDateShow = this.data.selectData.y +'年'+ ( this.data.selectData.m + 1 )  +'月';
                 $('.nowDate').html(this.data.selectedDateShow);
@@ -763,9 +762,6 @@ let config = {
             that.data.scheduleEnd = data.to_date;
         });
 
-        // CalendarService.CalendarMsgMediator.subscribe('unshowData', data => {
-        //     console.log(data);
-        // })
         Mediator.on('calendar-left:unshowData', data => {
             if(data['data']) {
                 console.log(data['data']);
