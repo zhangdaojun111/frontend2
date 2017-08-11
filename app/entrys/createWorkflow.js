@@ -60,7 +60,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             table_id:msg.tableid,
             el:'#place-form',
             real_id:'',
-            from_workflow:1,
+            form_workflow:1,
             form_id:msg.formid
         });
 
@@ -101,13 +101,15 @@ Mediator.subscribe('workflow:choose', (msg)=> {
 });
 //submit workflow data 提交工作流
 Mediator.subscribe('workflow:submit', (res)=> {
-    let formData=FormEntrys.getFormValue(),
+    let formData=FormEntrys.getFormValue(wfObj.tableid),
         postData={
         flow_id:wfObj.id,
         is_draft:1,
         focus_users:JSON.stringify(res)||[],
         data:JSON.stringify(formData)
     };
+    console.log(formData);
+    
     (async function () {
         let data = await workflowService.createWorkflowRecord(postData);
         msgBox.alert(`error:${data.error}`);
