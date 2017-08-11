@@ -1,0 +1,26 @@
+.workflow-catalog{
+    width: 45%;
+    height: calc(100% - 230px);
+    margin:20px 2%;
+    border:1px solid #ddd;
+    vertical-align: top;
+    display: inline-block;
+    overflow: scroll;
+    .workflow-ul{
+        display: flex;
+        justify-content: flex-start;
+        border:1px solid #ddd;
+        li{
+            text-align: center;
+            .selected{
+                border:1px solid #ddd;
+                border-bottom: 1px solid #fff;
+                display: block;
+                padding: 5px 10px;
+            }
+            .tipcolor{
+                color:red;
+            }
+        }
+    }
+}
