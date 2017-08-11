@@ -142,9 +142,9 @@ const approveWorkflow=(para)=>{
 //     table_id:'5318_EHFuJD7Ae76c6GMPtzdiWH'
 // })
 Mediator.subscribe('workFlow:record_info',(res)=>{
-    console.log(res)
     ApprovalHeader.showheader(res);
     WorkflowRecord.showRecord(res);
+    console.log("sdffsd")
 });
 //审批操作
 FormEntrys.createForm({

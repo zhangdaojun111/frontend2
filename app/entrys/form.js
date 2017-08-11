@@ -280,7 +280,6 @@ let FormEntrys = {
                 console.time('form创建时间');
                 if(_this.fromApprove){
                     if(res[1]['record_info']){
-                        console.log()
                         Mediator.publish('workFlow:record_info',res[1]['record_info']);
                     }
                 }
