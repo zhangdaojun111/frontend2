@@ -1,3 +1,4 @@
+
 import '../assets/scss/main.scss';
 import 'jquery-ui/ui/widgets/button.js';
 import 'jquery-ui/ui/widgets/dialog.js';
@@ -124,6 +125,7 @@ function recursion(arr, slnds, pubInfo) {
         withButtons: true
     });
     treeComp3.render($('#addUser'));
+
 });
 
 //订阅form data
