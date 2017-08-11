@@ -35,6 +35,7 @@ let config = {
         fieldId: '',
         source_field_dfield: '',
         base_buildin_dfield: '',
+        fieldContent: null,
         //iframe弹窗key
         key: '',
         // 提醒颜色
@@ -216,11 +217,6 @@ let config = {
 
                     let obj = {
                         headerName: data.header[i],
-                        // headerCellTemplate: (params) => {
-                        //     return this.headerCellRenderer(params);
-                        // },
-                        // headerComponent:HeaderComponent,
-                        // headerComponentFramework:<{new():HeaderComponent}>HeaderComponent,
                         tableName: data.data['table_name'],
                         id: data.data["id"],
                         field: data.data["field"],
@@ -261,8 +257,8 @@ let config = {
                             return this.actions.bodyCellRender(params);
                         }
                     }
-                    // if (fieldContent) {
-                    //     if (data.data['id'] == fieldContent['child_field']||data.data['id'] == fieldContent['count_field']) {
+                    // if (this.data.fieldContent) {
+                    //     if (data.data['id'] == this.data.fieldContent['child_field']||data.data['id'] == this.data.fieldContent['count_field']) {
                     //         obj['cellStyle'] = {'font-style': 'normal'};
                     //         obj['cellStyle']['background-color'] =  'rgb(177,215,253)';
                     //     }
@@ -760,7 +756,7 @@ let config = {
                 //初始化按钮
                 this.actions.renderBtn();
                 //创建高级查询需要字段数据
-                let r = dgcService.createNeedFields( this.data.fieldsData )
+                let r = dgcService.createNeedFields( this.data.fieldsData );
                 this.data.expertSearchFields = r.search;
                 //定制列需要字段数据
                 this.data.customColumnsFields = r.custom;
@@ -898,7 +894,8 @@ let config = {
                 onColumnResized: this.actions.onColumnResized,
                 onSortChanged: this.actions.onSortChanged,
                 onDragStopped: this.actions.onDragStopped,
-                onCellClicked: this.actions.onCellClicked
+                onCellClicked: this.actions.onCellClicked,
+                onRowDoubleClicked: this.actions.onRowDoubleClicked
             }
             this.agGrid = new agGrid(gridData);
             this.append(this.agGrid , this.el.find('#data-agGrid'));
@@ -917,18 +914,22 @@ let config = {
                 agGrid: this.agGrid
             }
             //渲染定制列
-            this.customColumnsCom  = new customColumns(custom)
-            this.append(this.customColumnsCom, document.querySelector('.custom-columns-panel'));
-            //渲染分组
-            let groupLit = {
-                tableId: this.data.tableId,
-                gridoptions: this.agGrid.gridOptions,
-                fields: this.data.myGroup.length == 0 ? this.data.groupFields : this.actions.deleteGroup(this.data.groupFields),
-                myGroup:  this.actions.setMyGroup(this.data.myGroup.fields)
+            if( $('.custom-column-btn')[0] ){
+                this.customColumnsCom  = new customColumns(custom);
+                this.append(this.customColumnsCom, document.querySelector('.custom-columns-panel'));
             }
-            this.groupGridCom = new groupGrid(groupLit);
-            this.append(this.groupGridCom,document.querySelector('.group-panel'));
-            this.groupGridCom.actions.onGroupChange = this.actions.onGroupChange;
+            //渲染分组
+            if( $('.group-btn')[0] ){
+                let groupLit = {
+                    tableId: this.data.tableId,
+                    gridoptions: this.agGrid.gridOptions,
+                    fields: this.data.myGroup.length == 0 ? this.data.groupFields : this.actions.deleteGroup(this.data.groupFields),
+                    myGroup:  this.actions.setMyGroup(this.data.myGroup.fields)
+                }
+                this.groupGridCom = new groupGrid(groupLit);
+                this.append(this.groupGridCom,document.querySelector('.group-panel'));
+                this.groupGridCom.actions.onGroupChange = this.actions.onGroupChange;
+            }
             //渲染分页
             this.pagination = new dataPagination(paginationData);
             this.pagination.actions.paginationChanged = this.actions.refreshData;
@@ -1127,81 +1128,104 @@ let config = {
             this.actions.customColumnClick();
             this.actions.groupBtnClick();
             //高级查询
-            $('.expert-search-btn').click( ()=>{
-                let d = {
-                    tableId: this.data.tableId,
-                    fieldsData: this.data.expertSearchFields,
-                    commonQuery: this.data.commonQueryData,
-                    getExpertSearchData:this.actions.getExpertSearchData,
-                    postExpertSearch:this.actions.postExpertSearch,
-                    saveTemporaryCommonQuery:this.actions.saveTemporaryCommonQuery
+            if( $('.expert-search-btn')[0] ){
+                $('.expert-search-btn').click( ()=>{
+                    let d = {
+                        tableId: this.data.tableId,
+                        fieldsData: this.data.expertSearchFields,
+                        commonQuery: this.data.commonQueryData,
+                        getExpertSearchData:this.actions.getExpertSearchData,
+                        postExpertSearch:this.actions.postExpertSearch,
+                        saveTemporaryCommonQuery:this.actions.saveTemporaryCommonQuery
 
-                }
-                expertSearch.show(d);
-            } )
-            //宽度自适应
-            $( '.grid-auto-width' ).click( ()=>{
-                if( !this.data.isAutoWidth ){
-                    this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
-                    this.agGrid.actions.autoWidth();
-                }else {
-                    this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
-                }
-                $( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
-                this.data.isAutoWidth = !this.data.isAutoWidth;
-            } )
-            //搜索
-            $( '.float-search-btn' ).click( ()=>{
-                let height = this.data.isShowFloatingFilter ? 0:30;
-                this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
-                this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
-            } )
-            //删除
-            $( '.grid-del-btn' ).click( ()=>{
-                this.actions.retureSelectData();
-                delSetting.data['deletedIds'] = this.data.deletedIds;
-                PMAPI.openDialogByComponent(delSetting, {
-                    width: 300,
-                    height: 200,
-                    title: '删除'
-                }).then((data) => {
-                    if( data.type == 'del' ){
-                        this.actions.delTableTable();
                     }
-                });
-            } )
-            //导入数据
-            $('.grid-import-btn').click( function () {
-                console.log( "###" )
-                console.log( "###" )
-                PMAPI.openDialogByComponent(importSetting, {
-                    width: 400,
-                    height: 600,
-                    title: '导入数据'
-                }).then((data) => {
-
-                });
-            } )
-            //导出
-            $('.grid-export-btn').click(()=> {
-                this.actions.onExport()
-            })
-            //全屏
-            let url_obj = {
-                tableId: this.data.tableId,
-                formId: this.data.formId,
-                tableType: this.data.tableType,
-                parentTableId: this.data.parentTableId,
-                parentRealId: this.data.parentRealId,
-                parentTempId: this.data.parentTempId,
-                parentRecordId: this.data.parentRecordId,
-                rowId: this.data.rowId,
-                fieldId: this.data.fieldId,
-                source_field_dfield: this.data.source_field_dfield,
-                base_buildin_dfield: this.data.base_buildin_dfield
+                    expertSearch.show(d);
+                } )
             }
-            let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',url_obj );
-            $( '.grid-new-window' ).attr( 'href',url );
+            //宽度自适应
+            if( $( '.grid-auto-width' )[0] ){
+                $( '.grid-auto-width' ).click( ()=>{
+                    if( !this.data.isAutoWidth ){
+                        this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
+                        this.agGrid.actions.autoWidth();
+                    }else {
+                        this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
+                    }
+                    $( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
+                    this.data.isAutoWidth = !this.data.isAutoWidth;
+                } )
+            }
+            //搜索
+            if( $( '.float-search-btn' )[0] ){
+                $( '.float-search-btn' ).click( ()=>{
+                    let height = this.data.isShowFloatingFilter ? 0:30;
+                    this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
+                    this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
+                } )
+            }
+            //删除
+            if( $('.grid-del-btn')[0] ){
+                $( '.grid-del-btn' ).click( ()=>{
+                    this.actions.retureSelectData();
+                    delSetting.data['deletedIds'] = this.data.deletedIds;
+                    PMAPI.openDialogByComponent(delSetting, {
+                        width: 300,
+                        height: 200,
+                        title: '删除'
+                    }).then((data) => {
+                        if( data.type == 'del' ){
+                            this.actions.delTableTable();
+                        }
+                    });
+                } )
+            }
+            //导入数据
+            if( $( '.grid-import-btn' )[0] ){
+                $('.grid-import-btn').click( function () {
+                    console.log( "###" )
+                    console.log( "###" )
+                    PMAPI.openDialogByComponent(importSetting, {
+                        width: 400,
+                        height: 600,
+                        title: '导入数据'
+                    }).then((data) => {
+
+                    });
+                } )
+            }
+            //导出
+            if( $('.grid-export-btn')[0] ){
+                $('.grid-export-btn').click(()=> {
+                    this.actions.onExport()
+                })
+            }
+            //全屏
+            if( $('.grid-new-window')[0] ){
+                let url_obj = {
+                    tableId: this.data.tableId,
+                    formId: this.data.formId,
+                    tableType: this.data.tableType,
+                    parentTableId: this.data.parentTableId,
+                    parentRealId: this.data.parentRealId,
+                    parentTempId: this.data.parentTempId,
+                    parentRecordId: this.data.parentRecordId,
+                    rowId: this.data.rowId,
+                    fieldId: this.data.fieldId,
+                    source_field_dfield: this.data.source_field_dfield,
+                    base_buildin_dfield: this.data.base_buildin_dfield
+                }
+                let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',url_obj );
+                $( '.grid-new-window' ).attr( 'href',url );
+            }
+            //新增数据
+            if( $( '.new-form-btn' )[0] ){
+                $( '.new-form-btn' ).click( ()=>{
+                    let obj = { table_id: this.data.tableId,btnType: 'new' };
+                    let url = dgcService.returnIframeUrl( '/form/index/',obj );
+                    let title = '新增'
+                    this.actions.openSourceDataGrid( url,title );
+                } )
+            }
         },
         //删除数据
         delTableTable: function () {
@@ -1222,14 +1246,19 @@ let config = {
         },
         //定制列
         customColumnClick: function () {
-            this.el.find( '.custom-column-btn' ).on( 'click',()=>{
-                this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
-                this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
-                this.actions.changeAgGridWidth();
-            } )
+            if( $('.custom-column-btn')[0] ){
+                this.el.find( '.custom-column-btn' ).on( 'click',()=>{
+                    this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
+                    this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
+                    this.actions.changeAgGridWidth();
+                } )
+            }
         },
         //分组点击
         groupBtnClick: function () {
+            if( !$('.group-btn')[0] ){
+                return;
+            }
             this.el.on('click','.group-btn',()=> {
                 if(!this.data.groupCheck) {
                     $('.group-btn').find('span').html('数据');
@@ -1474,11 +1503,47 @@ let config = {
                     rowId: data.data._id,
                     parentRealId: data.data._id,
                     fieldId: data.colDef.id
+                    // fieldContent: data.colDef.field_content
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
                 let winTitle = this.data.tableName + '->' + obj.tableName;
                 this.actions.openSourceDataGrid( url,winTitle );
             }
+            //点击操作列
+            if( data.colDef.headerName == "操作" ){
+                this.actions.gridHandle( data )
+            }
+        },
+        //操作列点击事件
+        gridHandle: function ( data ) {
+            console.log( "操作" )
+            console.log( data )
+            if( data.event.srcElement.className == 'gridView' ){
+                console.log( '查看' )
+                let obj = { table_id: this.data.tableId,real_id: data.data._id,btnType: 'view' };
+                let url = dgcService.returnIframeUrl( '/form/index/',obj );
+                let title = '查看'
+                this.actions.openSourceDataGrid( url,title );
+            }
+            if( data.event.srcElement.className == 'gridEdit' ){
+                console.log( '编辑' )
+                let obj = { table_id: this.data.tableId,real_id: data.data._id,btnType: 'edit' };
+                let url = dgcService.returnIframeUrl( '/form/index/',obj );
+                let title = '编辑'
+                this.actions.openSourceDataGrid( url,title );
+            }
+            if( data.event.srcElement.className == 'gridHistory' ){
+                console.log( '历史' )
+            }
+        },
+        //行双击
+        onRowDoubleClicked: function (data) {
+            console.log( "行双击查看" )
+            console.log( data )
+            let obj = { table_id: this.data.tableId,real_id: data.data._id,btnType: 'view' };
+            let url = dgcService.returnIframeUrl( '/form/index/',obj );
+            let title = '查看'
+            this.actions.openSourceDataGrid( url,title );
         },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title ) {
