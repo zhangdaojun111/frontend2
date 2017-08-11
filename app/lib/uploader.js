@@ -44,7 +44,9 @@ class Uploader {
 
     }
 
-    appendData(){}
+    appendData(){
+
+    }
 
     upload(url, options, onprogress){
         let defaultOptions = {
@@ -52,7 +54,6 @@ class Uploader {
             cache: false,
             processData: false,
             contentType: false,
-            be
         }
         return $.ajax({
             url: '/upload',
@@ -61,6 +62,10 @@ class Uploader {
             processData: false,
             contentType: false
         });
+    }
+
+    destroy() {
+
     }
 
 }
