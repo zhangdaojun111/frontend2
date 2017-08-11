@@ -24,7 +24,7 @@ import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 let config = {
     template: template,
     data: {
-        tableId: '5318_EHFuJD7Ae76c6GMPtzdiWH',
+        tableId: '',
         formId: '',
         tableType: '',
         parentTableId: '',
@@ -1180,6 +1180,22 @@ let config = {
             $('.grid-export-btn').click(()=> {
                 this.actions.onExport()
             })
+            //全屏
+            let url_obj = {
+                tableId: this.data.tableId,
+                formId: this.data.formId,
+                tableType: this.data.tableType,
+                parentTableId: this.data.parentTableId,
+                parentRealId: this.data.parentRealId,
+                parentTempId: this.data.parentTempId,
+                parentRecordId: this.data.parentRecordId,
+                rowId: this.data.rowId,
+                fieldId: this.data.fieldId,
+                source_field_dfield: this.data.source_field_dfield,
+                base_buildin_dfield: this.data.base_buildin_dfield
+            }
+            let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',url_obj );
+            $( '.grid-new-window' ).attr( 'href',url );
         },
         //删除数据
         delTableTable: function () {
@@ -1334,7 +1350,7 @@ let config = {
         },
         //点击cell
         onCellClicked: function (data) {
-            console.log( "______data_______" )
+            console.log( "onCellClicked数据" )
             console.log( data )
             if( !data.data || this.data.isEditable ){
                 return;
