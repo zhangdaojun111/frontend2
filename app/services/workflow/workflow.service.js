@@ -50,5 +50,8 @@ export const workflowService={
     //Grid
     getGridinfo(params){
         return HTTP.postImmediately('/get_form_static_data/',params)
+    },
+    getRecordInfo(params){
+        return HTTP.postImmediately('/get_form_dynamic_data/',params)
     }
 }

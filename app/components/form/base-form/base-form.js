@@ -25,6 +25,8 @@ import AddEnrypt from '../encrypt-input-control/add-enrypt'
 import {md5} from '../../../services/login/md5';
 import AttachmentControl from "../attachment-control/attachment-control";
 import SettingPrint from '../setting-print/setting-print'
+import Songrid from '../songrid-control/songrid-control';
+import Correspondence from '../Correspondence-control/Correspondence-control';
 
 let config={
     template:'',
@@ -46,6 +48,20 @@ let config={
     childComponent:{},
     actions:{
         md5:md5,
+
+        //给子表统计赋值
+        setCountData(){
+            FormService.getCountData({
+                data: this.actions.createFormValue(this.data.data),
+                child_table_id: this.data.sonTableId
+            }).then(res => {
+                //给统计赋值
+                for(let d in res["data"]){
+                    this.actions.setFormValue(d,res["data"][d]);
+                }
+            });
+        },
+
         //返回formValue格式数据
         getFormValue(){
             return this.actions.createFormValue(this.data.data);
@@ -1095,6 +1111,18 @@ let config={
             }
             //在这里根据type创建各自的控件
             switch (type){
+                case 'Correspondence':
+                    let correspondence=new Correspondence(data[key]);
+                    correspondence.render(single);
+                    _this.childComponent[data[key].dfield]=correspondence;
+                    break;
+                case 'Songrid':
+                    // let popupType=single.data('popupType');
+                    let popupType=0;
+                    let songrid=new Songrid(Object.assign(data[key],{popupType:popupType}));
+                    songrid.render(single);
+                    _this.childComponent[data[key].dfield]=songrid;
+                    break;
                 case 'Radio':
                     for(let obj of data[key].group){
                         obj['name']=data[key].dfield;
@@ -1235,6 +1263,54 @@ let config={
             });
 
         });
+        //子表弹窗
+        Mediator.subscribe('form:openSongGrid:'+_this.data.tableId,function(data){
+            _this.data.can_not_open_form=data.can_not_open_form;
+            let type = data["popup"];
+            let isView = data["is_view"];
+            if(type == 1){
+                _this.data.sonTableId = data["value"];
+                if(isView == '0'){
+                    _this.data.viewMode = 'normal';
+                }else{
+                    _this.data.viewMode = 'ViewChild';
+                }
+                PMAPI.openDialogByIframe(`/datagrid/source_data_grid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.parent_temp_id}&rowId=${data.parent_temp_id}&tableType=child&viewMode=${_this.data.viewMode}`,{
+                    width:800,
+                    height:600,
+                    title:`子表`,
+                    modal:true
+                }).then(data=>{
+                    if(_this.viewMode == 'normal'){
+                        _this.actions.setCountData();
+                    }
+                })
+            }else{
+                _this.data.sonTableId = data["value"];
+                if(isView == '0'){
+                    _this.actions.setCountData();
+                }
+            }
+            // 保存父表数据
+            FormService.frontendParentFormValue[_this.tableId] = _this.actions.createFormValue(_this.data.data);
+        });
+        //对应关系弹窗
+        Mediator.subscribe('form:openCorrespondence:'+_this.data.tableId,function(data){
+            let isView = data["is_view"];
+                _this.data.sonTableId = data["value"];
+                if(isView == '0'){
+                    _this.data.viewMode = 'editFromCorrespondence';
+                }else{
+                    _this.data.viewMode = 'viewFromCorrespondence';
+                }
+                PMAPI.openDialogByIframe(`/datagrid/source_data_grid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.parent_temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true`,{
+                    width:800,
+                    height:600,
+                    title:`对应关系`,
+                    modal:true
+                }).then(data=>{
+                })
+        });
        // 密码弹出
         Mediator.subscribe('form:addPassword:'+_this.data.tableId,function(data){
             _this.data['addPassWordField']=data.dfield;
@@ -1252,6 +1328,8 @@ let config={
         }),
 
         Mediator.subscribe('form:addNewBuildIn:'+_this.data.tableId,function(data){
+            console.log('快捷添加内置');
+            console.log(data);
             _this.data['quikAddDfield']=data.dfield;
             PMAPI.openDialogByIframe(`/form/add_buildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
                 width:800,

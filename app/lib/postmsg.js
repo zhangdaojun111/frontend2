@@ -32,7 +32,9 @@ export const PMENUM = {
     recieve_data: '2',
     open_component_dialog: '3',
     iframe_active: '4',
-    iframe_silent: '5'
+    iframe_silent: '5',
+    table_invalid: '6',             // 表格数据失效
+    on_the_way_invalid: '7'         // 在途数据失效
 }
 
 /**

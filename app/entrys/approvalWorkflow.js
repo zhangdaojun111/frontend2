@@ -132,78 +132,121 @@ const approveWorkflow=(para)=>{
     })
 }
 
+
+
+// FormEntrys.createForm({
+//     el:"#place-form",
+//     form_id:181,
+//     record_id:'598d26f3803df8f6e2600dfd',
+//     is_view:0,
+//     from_approve:1,
+//     from_focus:0,
+//     table_id:'5318_EHFuJD7Ae76c6GMPtzdiWH'
+// })
+Mediator.subscribe('workFlow:record_info',(res)=>{
+    ApprovalHeader.showheader(res);
+    WorkflowRecord.showRecord(res);
+});
 //审批操作
 FormEntrys.createForm({
-    el:$("#place-form"),
+    el:'#place-form',
     form_id:obj.form_id,
     record_id:obj.record_id,
     is_view:0,
     from_approve:1,
     from_focus:0,
     table_id:obj.table_id
-}).then(res=>{
-    ApprovalHeader.showheader(res);
-    WorkflowRecord.showRecord(res);
-    console.log(11111111);
-    Mediator.subscribe('approval:recordPass', (data)=> {
-        console.log(data);
-           approveWorkflow({
-                record_id:'59897f1591461c15d279023a',
-                focus_users:[],
-                action:0,// 0：通过 1：驳回上一级 2:驳回发起人 3：作废 4：取消 5：撤回 6：驳回任意节点 7：撤回审批 8：自动拨回到发起人 9：加签
-                comment:null,
-                node_id:null,//驳回节点id
-                sigh_type:0,//加签类型  0：前 1：后
-                sigh_user_id:'',
-                data:{},
-                sign:JSON.stringify(data),
-            });
-
-    })
-    Mediator.subscribe('approval:appRejUp', (ispass)=> {
-       if(ispass){
-           approveWorkflow({
-                record_id:obj.record_id,
-                focus_users:[],
-                action:1,
-                comment:null,
-                node_id:null,
-                sigh_type:0,
-                sigh_user_id:'',
-                data:{}
-            });
-        }
-    })
-    Mediator.subscribe('approval:recordRejStart', (ispass)=> {
-       if(ispass){
-           approveWorkflow({
-                record_id:obj.record_id,
-                focus_users:[],
-                action:2,
-                comment:null,
-                node_id:null,
-                sigh_type:0,
-                sigh_user_id:'',
-                data:{}
-            });
-        }
-    })
-    Mediator.subscribe('approval:signUser', (signObj)=> {
-        approveWorkflow({
-                record_id:obj.record_id,
-                focus_users:[],
-                action:2,
-                comment:null,
-                node_id:null,
-                sigh_type:signObj.sigh_type,
-                sigh_user_id:signObj.sigh_user_id,
-                data:{}
-        });
-    })
-    
 });
 
 
+
+
+//     .then(res=>{
+//     ApprovalHeader.showheader(res);
+//     WorkflowRecord.showRecord(res);
+//     console.log(11111111);
+//     Mediator.subscribe('approval:recordPass', (data)=> {
+//         console.log(data);
+//            approveWorkflow({
+//                 record_id:'59897f1591461c15d279023a',
+//                 focus_users:[],
+//                 action:0,// 0：通过 1：驳回上一级 2:驳回发起人 3：作废 4：取消 5：撤回 6：驳回任意节点 7：撤回审批 8：自动拨回到发起人 9：加签
+//                 comment:null,
+//                 node_id:null,//驳回节点id
+//                 sigh_type:0,//加签类型  0：前 1：后
+//                 sigh_user_id:'',
+//                 data:{},
+//                 sign:JSON.stringify(data),
+//             });
+//
+//     })
+//     Mediator.subscribe('approval:appRejUp', (ispass)=> {
+//        if(ispass){
+//            approveWorkflow({
+//                 record_id:obj.record_id,
+//                 focus_users:[],
+//                 action:1,
+//                 comment:null,
+//                 node_id:null,
+//                 sigh_type:0,
+//                 sigh_user_id:'',
+//                 data:{}
+//             });
+//         }
+//     })
+//     Mediator.subscribe('approval:recordRejStart', (ispass)=> {
+//        if(ispass){
+//            approveWorkflow({
+//                 record_id:obj.record_id,
+//                 focus_users:[],
+//                 action:2,
+//                 comment:null,
+//                 node_id:null,
+//                 sigh_type:0,
+//                 sigh_user_id:'',
+//                 data:{}
+//             });
+//         }
+//     })
+//     Mediator.subscribe('approval:signUser', (signObj)=> {
+//         approveWorkflow({
+//                 record_id:obj.record_id,
+//                 focus_users:[],
+//                 action:2,
+//                 comment:null,
+//                 node_id:null,
+//                 sigh_type:signObj.sigh_type,
+//                 sigh_user_id:signObj.sigh_user_id,
+//                 data:{}
+//         });
+//     })
+//
+// });
+
+// (async function () {
+//     return workflowService.getRecordInfo({
+//         form_id:181,
+//         record_id:'598d52f523155099fb36c2c5',
+//         is_view:0,
+//         from_approve:1,
+//         from_focus:0,
+//         table_id:'5318_EHFuJD7Ae76c6GMPtzdiWH',
+//     })
+// })().then(res=>{
+//     console.log(res)
+//     FormEntrys.createForm({
+//
+//         table_id:res.tableid,
+//         el:'#place-form',
+//         real_id:'',
+//         form_workflow:1,
+//         form_id:res.form_id
+//     });
+// }).then(res=>{
+//     Mediator.subscribe('workFlow:record_info', function (info) {
+//         console.log(info)
+//     })
+// });
 //获取盖章图片
 (async function () {
     return workflowService.getStmpImg();
