@@ -1,0 +1,29 @@
+<div class="flex">
+    <div class="workflow-box-l">
+        <div class="tit">
+            <span>审批记录</span>
+            <i></i>
+        </div>
+    </div>
+    <div class="workflow-box-r">
+        <div class="workflow-record-box">
+            <div class="workflow-record-tit flex">
+                <div class="tit-col">节点</div>
+                <div class="tit-col">时间</div>
+                <div class="tit-col">动作</div>
+                <div class="tit-col">审批意见</div>
+            </div>
+
+            <div class="workflow-record-list">
+                {{#each approve_tips}}
+                    <div class="workflow-record-item flex">
+                        <div class="txt-item">{{this.handler_name}}</div>
+                        <div class="txt-item">{{this.handler_time}}</div>
+                        <div class="txt-item"></div>
+                        <div class="txt-item">{{this.approve_result}}</div>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>

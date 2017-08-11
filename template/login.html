@@ -10,11 +10,6 @@
 </head>
 
 <body>
-
-<script>
-//    window.config = {{login|safe}};
-console.time("loading end");
-</script>
 <div class="main-window">
     <!--登录界面标题-->
     <div class="bg-div">
@@ -39,6 +34,7 @@ console.time("loading end");
                         <input type="checkbox" class="remember-pw-check" id="remember-pw">
                         <label class="remember-ps-prompt" for="remember-pw" >记住密码</label>
                     </div>
+
                     <div class="warn-info"></div>
                     <!--更新信息、登录-->
                     <div class="panel-bottom">
@@ -52,7 +48,7 @@ console.time("loading end");
             </div>
 
             <!--反面面板，两面板互斥展示-->
-            <div class="opposite_panel">
+            <div class="opposite-panel">
                 <div class="op-header">
                     <span class="op-title">找回密码</span>
                     <i class="close-icon">×</i>
@@ -80,6 +76,9 @@ console.time("loading end");
                         <th>code_time</th>
                         <th>update_time</th>
                         <th>run</th>
+                        <th class="default-hide">branch</th>
+                        <th class="default-hide">revision</th>
+                        <th class="default-hide">message</th>
                     </tr>
                 </table>
             </div>
@@ -94,10 +93,11 @@ console.time("loading end");
     </div>
 </div>
 
-
 {% ifequal window_type 'develop'%}
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
 <script type="text/javascript" src="http://localhost:8080/scripts/login.js"></script>
+
+
 <!--<link rel="stylesheet" href="/client/static/css/vendors.css">-->
 <!--<link rel="stylesheet" href="/client/static/css/login.css">-->
 <!--<script type="text/javascript" src="/client/static/vendors.js"></script>-->
@@ -107,6 +107,10 @@ console.time("loading end");
 <link rel="stylesheet" href="/client/static/css/login.css">
 <script type="text/javascript" src="/client/static/vendors.js"></script>
 <script type="text/javascript" src="/client/static/login.js"></script>
+<!--<link rel="stylesheet" href="/client/static/css/vendors.css">-->
+<!--<link rel="stylesheet" href="/client/static/css/login.css">-->
+<!--<script type="text/javascript" src="/client/static/vendors.js"></script>-->
+<!--<script type="text/javascript" src="/client/static/login.js"></script>-->
 {% endifequal %}
 
 </body>

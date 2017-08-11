@@ -1,0 +1,20 @@
+@import "../calendar.set";
+.singleRow {
+    width: calc(100% - 40px);
+    border-top: 1px solid $boder-color;
+    display: block;
+    //padding: 0px 20px;
+    td {
+        padding: 8px 0px;
+        text-align: center;
+        display: inline-block;
+        vertical-align: middle;
+        height:30px;
+        select {
+            width: 85%;
+            height: 26px;
+            border-radius: 5px;
+        }
+
+    }
+}

@@ -4,8 +4,7 @@ import {FormService} from "../services/formService/formService";
 import '../components/form/base-form/base-form.scss'
 import '../assets/scss/form.scss'
 
-
-let FormEntrys={
+let FormEntrys = {
     childForm:{},
     init(config={}){
         this.tableId='';
@@ -295,6 +294,7 @@ let FormEntrys={
             });
         })
     },
+
     //审批删除时重置表单可编辑性
     editDelWorkFlow(tableId,formId){
         this.childForm[tableId].actions.editDelWork(formId);
