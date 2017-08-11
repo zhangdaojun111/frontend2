@@ -26,7 +26,7 @@ import {md5} from '../../../services/login/md5';
 import AttachmentControl from "../attachment-control/attachment-control";
 import SettingPrint from '../setting-print/setting-print'
 import Songrid from '../songrid-control/songrid-control';
-import Correspondence from '../Correspondence-control/Correspondence-control';
+import Correspondence from '../correspondence-control/correspondence-control';
 
 let config={
     template:'',
@@ -1214,9 +1214,11 @@ let config={
         $('body').on('click.selectDrop',function(){
             $('.select-drop').hide();
         })
+
         Mediator.subscribe('form:changeValue:'+_this.data.tableId,function(data){
             _this.actions.checkValue(data,_this);
         })
+
         Mediator.subscribe('form:history:'+_this.data.tableId,function(data){
             let history=_.defaultsDeep({},data.history_data);
             let i=1;
@@ -1242,6 +1244,7 @@ let config={
                 modal:true
             })
         })
+
         Mediator.subscribe('form:addItem:'+_this.data.tableId,function(data){
             _this.data['quikAddDfield']=data.dfield;
             let originalOptions;
@@ -1349,6 +1352,7 @@ let config={
                 _this.childComponent[_this.data['quikAddDfield']].reload();
             });
         })
+
         Mediator.subscribe('form:selectChoose:'+_this.data.tableId,function(data){
             PMAPI.openDialogByIframe(`/form/choose?fieldId=${data.id}`,{
                 width:1500,
@@ -1360,9 +1364,6 @@ let config={
             });
         })
 
-
-        console.log('按鈕組');
-        console.log(_this.data.btnType);
         //添加提交按钮
         if(_this.data.btnType == 'new'){
             _this.el.append(`<div class="noprint ui-btn-box"><div>
@@ -1397,6 +1398,7 @@ let config={
                 </div></div>`)
         }
 
+
         //提交按钮事件绑定
         _this.el.on('click','#save',function () {
             _this.actions.onSubmit();
@@ -1422,6 +1424,12 @@ let config={
                 // }
             })
             HTTP.flush();
+        })
+
+        //固定按钮
+        _this.el.on('scroll','.wrap',function(){
+            console.log('scroll');
+            _this.el.find('.ui-btn-box').css({'bottom':(-1*$('.wrap').get(0).scrollTop +' px'),'width':'calc(100% + '+$('.wrap').get(0).scrollLeft+'px)'});
         })
     },
     beforeDestory:function(){
