@@ -55,30 +55,13 @@ let config = {
             Mediator.emit('Calendar: tool', {toolMethod: 'export'});
         }).on('click', '.pre-date', () => {
             Mediator.emit('Calendar: changeDate', 'pre');
-            // if(this.data.calendarContent === 'month') {
-            //     this.actions.changeMonth('l');
-            //     this.actions.changeMainView('month');
-            // } else if (this.data.calendarContent === 'week') {
-            //     this.actions.changeWeek('l');
-            //     this.actions.changeMainView('week');
-            // } else if (this.data.calendarContent === 'day') {
-            //     this.actions.changeDay('l');
-            //     this.actions.changeMainView('day');
-            // }
         }).on('click', '.next-date', () => {
             Mediator.emit('Calendar: changeDate', 'next');
-            // if(this.data.calendarContent === 'month') {
-            //     this.actions.changeMonth('r');
-            //     this.actions.changeMainView('month');
-            // } else if (this.data.calendarContent === 'week') {
-            //     this.actions.changeWeek('r');
-            //     this.actions.changeMainView('week');
-            // } else if (this.data.calendarContent === 'day') {
-            //     this.actions.changeDay('r');
-            //     this.actions.changeMainView('day');
-            // }
         });
 
+        Mediator.on('CalendarMain: remindCount', data => {
+
+        });
         this.append(new LeftContent, this.el.find('.left-content'));
         this.append(new CalendarMin, this.el.find('.main-content'));
     }

@@ -476,8 +476,6 @@ let config = {
                 day = nweTime.getDate(),
                 week = nweTime.getDay();
             this.data.selectData = {'y':year, 'm':month, 'd':day, 'w':week};
-            // this.data.selectedDateShow = year + '年' + month + '月' + day + '日' + ' ';
-            // $('.nowDate').html(this.data.selectedDateShow);
         },
 
         changeMainView: function (type) {
