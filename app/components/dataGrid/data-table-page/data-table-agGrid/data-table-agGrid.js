@@ -707,18 +707,18 @@ let config = {
                 this.data.fixCols = JSON.parse(res['pinned']['pinned']);
             }
             this.data.myGroup = (res['group'] != undefined) ? JSON.parse(res['group'].group) : [];
-            console.log("rows")
-            console.log(this.data.rows)
-            console.log("colWidth")
-            console.log(this.data.colWidth)
-            console.log("ignoreFields")
-            console.log(this.data.ignoreFields)
-            console.log("fixCols")
-            console.log(this.data.fixCols)
-            console.log("myGroup")
-            console.log(this.data.myGroup)
-            console.log("orderFields")
-            console.log(this.data.orderFields)
+            // console.log("rows")
+            // console.log(this.data.rows)
+            // console.log("colWidth")
+            // console.log(this.data.colWidth)
+            // console.log("ignoreFields")
+            // console.log(this.data.ignoreFields)
+            // console.log("fixCols")
+            // console.log(this.data.fixCols)
+            // console.log("myGroup")
+            // console.log(this.data.myGroup)
+            // console.log("orderFields")
+            // console.log(this.data.orderFields)
         },
         //初始化按钮
         renderBtn: function () {
