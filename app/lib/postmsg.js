@@ -32,7 +32,8 @@ export const PMENUM = {
     recieve_data: '2',
     open_component_dialog: '3',
     iframe_active: '4',
-    iframe_silent: '5'
+    iframe_silent: '5',
+    aggrid_table_invalid: '6'
 }
 
 /**

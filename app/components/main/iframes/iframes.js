@@ -164,6 +164,17 @@ export const IframeInstance = new Component({
                 this.actions.setSizeToMini();
             }
         });
+
+        Mediator.on('socket:table_invalid', (info) => {
+            let item = this.data.hash[info.table_id];
+            if (!_.isUndefined(item)) {
+                let iframe = item.iframe[0];
+                PMAPI.sendToChild(iframe, {
+                    type: PMENUM.aggrid_table_invalid,
+                    data: info
+                });
+            }
+        });
     },
 
     beforeDestory: function () {
