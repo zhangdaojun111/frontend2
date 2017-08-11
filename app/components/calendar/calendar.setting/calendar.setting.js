@@ -7,7 +7,6 @@ import './calendar.setting.scss';
 
 import CalendarSettingItem from './calendar.setting.item/calendar.setting.item';
 
-//import {MenuData} from '../testData/get_menu_data';
 import {CalendarService} from '../../../services/calendar/calendar.service';
 
 let config = {
@@ -19,14 +18,12 @@ let config = {
 
     },
     afterRender: function() {
-        this.data.menu = CalendarService.getMenu();
-        this.data.menu.forEach(item => {
-            this.append(new CalendarSettingItem(item), this.el.find('.setting-content'));
+        CalendarService.getMenu().then(res => {
+            console.log(res);
+            res['menuList'].forEach(item => {
+                this.append(new CalendarSettingItem(item), this.el.find('.setting-content'));
+            });
         });
-        $('.item-child').bind('click', function () {
-            console.log($(this).attr("id"),$(this).html());
-        });
-
     }
 };
 

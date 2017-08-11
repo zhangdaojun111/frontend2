@@ -18,12 +18,14 @@ let config = {
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
-        this.append(new TableGrid({type: 'day'}), this.el.find('.day-content'));
+
+        this.append(new TableGrid({bodyData: this.data[0], type: 'day'}), this.el.find('.day-content'));
     }
 };
 
 class CalendarDay extends Component {
     constructor(data) {
+        config.data = data;
         super(config);
     }
 }
