@@ -190,7 +190,6 @@ let config = {
                                 $('.dataGrid-commonQuery-select').val('临时高级查询');
                             }
                         }
-                        debugger
                         this.data.postExpertSearch(this.data.searchInputList,searchId,searchName);
                     }
                 } else {
