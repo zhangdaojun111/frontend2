@@ -3,10 +3,11 @@
  */
 
 import { HTTP } from '../../lib/http';
-import Mediator from 'mediator-js';
-import {MenuData} from '../../components/calendar/testData/get_menu_data';
+import Mediator from '../../lib/mediator';
 
 const saveCalendarTableUrl = 'calendar_mgr/save_calendar';
+
+const getcalendarTableUrl = 'calendar_mgr/get_calendar';
 
 const calendarTreeUrl = 'calendar_mgr/get_calendar_tree';
 
@@ -18,14 +19,18 @@ const missionRecordUrl = 'get_mission_record';
 
 const calendarPreferenceUrl = 'calendar_mgr/calendar_preference';
 
+const menuUrl = 'get_menu';
+
+const columnListUrl = 'get_column_list';
+
+const keyFieldDictUrl = 'calendar_mgr/key_field_dict';
+
 export const CodeEnum = {
         SUCCESS: 200,
 };
 
 
 export const CalendarService = {
-
-    CalendarMsgMediator: new Mediator(),
 
     saveCalendarTable: function (table_id, param_list) {
         HTTP.post(saveCalendarTableUrl, {table_id: table_id, param_list:param_list}).then(res => {
@@ -34,12 +39,29 @@ export const CalendarService = {
         })
     },
 
+    getCalendarTableById: function (data) {
+        let params = {
+            table_id: data['table_id'],
+            isSelected: data['isSelected']
+        };
+
+        let res = HTTP.post(getcalendarTableUrl, params).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                //alert('获取数据失败');
+            }
+        });
+        HTTP.flush();
+        return res;
+    },
+
     getCalendarTreeData: function () {
         let res = HTTP.get(calendarTreeUrl).then(res => {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                alert('获取数据失败');
+                //alert('获取数据失败');
             }
         });
         HTTP.flush();
@@ -54,7 +76,7 @@ export const CalendarService = {
         let params = {
             from_date: data['from_date'],
             to_date: data['to_date'],
-            cancel_fields: JSON.stringify([]),
+            cancel_fields: JSON.stringify(data['cancel_fields']),
         };
         let res = HTTP.post(calendarDataUrl, params).then(res => {
             if(res['code'] === CodeEnum.SUCCESS) {
@@ -73,7 +95,7 @@ export const CalendarService = {
      */
     getWorkflowRecords: function (data) {
         let params = {
-            type: 5,
+            type: data['type'],
             rows: 9999,
             page: 1,
             rate_data: 1,
@@ -138,29 +160,48 @@ export const CalendarService = {
         return res;
     },
 
-    menu: [],
     getMenu: function () {
-        let ls_menu = MenuData;
-        if(ls_menu){
-            this.menu = ls_menu['menuList'];
-            //this.MenuData.next(ls_menu.menuList);
-            return this.menu;
-        }
-        // else {
-        //     let url = '/data/get_menu/';
-        //     this.http.get(url)
-        //         .map(this.extractNormalData)
-        //         .catch(this.handleObservableError)
-        //         .subscribe(
-        //             res => {
-        //                 if(res.success == 1){
-        //                     this.lsSet('v_menu',JSON.stringify(res));
-        //                     this.menu = res.menuList;
-        //                     this.MenuData.next(res.menuList);
-        //                 }
-        //             }
-        //         )
-        // }
+        let res = HTTP.get(menuUrl).then(res => {
+            if(res['success'] === 1) {
+                return res;
+            } else {
+                alert('获取数据失败');
+            }
+        });
+        HTTP.flush();
+        return res;
+    },
+
+    getReplace: function (tableId) {
+        let params = {
+            table_id: tableId,
+        };
+
+        let res = HTTP.get(keyFieldDictUrl, params).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                alert('获取数据失败');
+            }
+        });
+        HTTP.flush();
+        return res;
+    },
+
+    getColumnList: function (tableId) {
+        let params = {
+            table_id: tableId,
+        };
+
+        let res = HTTP.get(columnListUrl, params).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                alert('获取数据失败');
+            }
+        });
+        HTTP.flush();
+        return res;
     }
 
 };

@@ -23,6 +23,7 @@ module.exports = {
         sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         bi:path.resolve(APP_PATH, 'entrys/bi.js'),
+        bimanager:path.resolve(APP_PATH, 'entrys/bimanager.js'),
         calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
         vendors: [
@@ -133,6 +134,11 @@ module.exports = {
                         }
                     }
                 ]
+            },
+            {
+                test: /\.(jpe|jpg|woff|woff2|eot|ttf|svg)(\?.*$|$)/,
+                exclude: /node_modules/,
+                loader: 'url-loader'
             }
         ]
     },

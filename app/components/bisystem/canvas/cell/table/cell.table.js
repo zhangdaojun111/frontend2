@@ -63,6 +63,9 @@ let config = {
             config.data.rows = tableRows;
 
         }
+    },
+    afterRender() {
+
     }
 };
 export class CellTableComponent extends BiBaseComponent {

@@ -33,6 +33,7 @@ let config={
 class TextAreaControl extends Component {
     constructor(data){
         super(config,data);
+        // console.log(this.data);
     }
 }
 
