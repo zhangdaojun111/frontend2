@@ -34,10 +34,10 @@ module.exports = {
         approvalWorkflow: path.resolve(APP_PATH, 'entrys/approvalWorkflow.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
-        sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
+        // sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
         // bi:path.resolve(APP_PATH, 'entrys/bi.js'),
-        bimanager:path.resolve(APP_PATH, 'entrys/bimanager.js'),
-        calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
+        // bimanager:path.resolve(APP_PATH, 'entrys/bimanager.js'),
+        // calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
         vendors: [
             'jquery',

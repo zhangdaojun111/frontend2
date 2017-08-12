@@ -21,15 +21,17 @@ import Grid from '../components/dataGrid/data-table-page/data-table-page';
 WorkFlowForm.showForm();
 WorkFlowGrid.showGrid();
 
-let WorkFlowList=workflowService.getWorkfLow({}),
-    FavWorkFlowList=workflowService.getWorkfLowFav({});
+let get_workflow_info=()=>{
+    let WorkFlowList=workflowService.getWorkfLow({}),
+        FavWorkFlowList=workflowService.getWorkfLowFav({});
 
+    Promise.all([WorkFlowList,FavWorkFlowList]).then(res=>{
+        WorkFlowCreate.loadData(res);
+    });
 
-Promise.all([WorkFlowList,FavWorkFlowList]).then(res=>{
-    WorkFlowCreate.loadData(res);
-});
-
-HTTP.flush();
+    HTTP.flush();
+}
+get_workflow_info();
 
 //订阅workflow choose事件，获取工作流info并发布getInfo,获取草稿
 let wfObj;
