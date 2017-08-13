@@ -14,6 +14,7 @@ import CalendarExport from './calendar.export/calendar.export';
 import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
 import Mediator from '../../../lib/mediator';
+import {CalendarWorkflowData} from './calendar.workflow/calendar.workflow';
 
 let config = {
     template: template,
@@ -62,15 +63,6 @@ let config = {
 
         workflowData: [],
         isWorkflowDataReady: false,
-
-        workflow_approve_data: [],
-        is_approve_workflow: false,
-
-        workflow_approving_data: [],
-        is_approving_workflow: false,
-
-        workflow_focus_data: [],
-        is_focus_workflow: false,
 
         isShowWorkflowData: true,
     },
@@ -127,40 +119,7 @@ let config = {
             }
         },
 
-        getWorkflowData: function () {
-            CalendarService.getWorkflowRecords( {type: 5,'from_date':this.data.from_date,'to_date':this.data.to_date} ).then( res=>{//approve
-                this.data.workflow_approve_data = res.rows;
-                this.data.is_approve_workflow = true;
-                this.actions.getWorkflowDataTogether();
-            });
-            CalendarService.getWorkflowRecords( {type: 2,'from_date':this.data.from_date,'to_date':this.data.to_date} ).then( res=>{//approving
-                this.data.workflow_approving_data = res.rows;
-                this.data.is_approving_workflow = true;
-                this.actions.getWorkflowDataTogether();
-            });
-            CalendarService.getWorkflowRecords( {type: 6,'from_date':this.data.from_date,'to_date':this.data.to_date} ).then( res=>{//focus
-                this.data.workflow_focus_data = res.rows;
-                this.data.is_focus_workflow = true;
-                this.actions.getWorkflowDataTogether();
-            });
-        },
-        getWorkflowDataTogether: function () {
-            if( this.data.is_approve_workflow && this.data.is_approving_workflow && this.data.is_focus_workflow ){
-                let arr = [];
-                try{
-                    arr = this.data.workflow_approve_data.concat( this.data.workflow_approving_data );
-                    arr = arr.concat( this.data.workflow_focus_data );
-                }catch(e){}
-                this.data.workflowData = arr;
-                this.actions.monthDataTogether();
-            }
-        },
-
         getCalendarData: function (data,type){
-            // if(this.data.isShowWorkflowData) {
-            //     this.actions.getWorkflowData();
-            // }
-            this.actions.getWorkflowData();
             CalendarService.getCalendarData(data).then( res=>{
                 this.data.date2settings = res['date2csids'];
                 this.data.calendarSettings = res['id2data'];
@@ -260,7 +219,6 @@ let config = {
         },
 
         createMonthCalendar: function (y,m){
-            Mediator.emit('CalendarMain: date',{from_date: this.data.from_date, to_date: this.data.to_date});
             let monthDayNum = this.actions.getDayNumOfMonth( y , m ),
                 firstDayWeek = this.actions.getWeekByDay( y , m , 1 );
             let endNum = ( monthDayNum + firstDayWeek ) > 35 ? 42 : 35;
@@ -364,7 +322,6 @@ let config = {
                     }
                 }
             }
-            // let arrHead = [{time:'',isTime:true,isHead: true}];
             let arrHead = [];
             for( let d of weekData ){
                 arrHead.push( {time:d.dataTime,isTime:false,isHead: true} );
@@ -626,6 +583,7 @@ let config = {
                 }
             }
             // 工作流数据
+
             if(this.data.isShowWorkflowData) {
                 for( let d of this.data.workflowData ){
                     if( d['create_time'].indexOf( day.dataTime ) !== -1 ){
@@ -640,10 +598,7 @@ let config = {
                     }
                 }
             }
-
-
             day['dateLength'] = day['data'].length || 0;
-            //console.log(day);
         },
 
         monthDataTogether: function (){
@@ -662,6 +617,12 @@ let config = {
                 this.append(new CalendarDay(this.data.dayDataList), this.el.find(".calendar-main-content"));
             }
         },
+
+        workflowMission: function(){
+            if( this.data.isWorkflowDataReady ){
+                this.actions.monthDataTogether();
+            }
+        }
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
@@ -678,6 +639,14 @@ let config = {
         this.data.selectedDateShow = year+'年'+(month+1) +'月';
         this.el.find('.nowDate').html(this.data.selectedDateShow);
         this.actions.createMonthCalendar(year, month);
+
+        CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+        Mediator.on('CalendarWorkflowData: workflowData', data => {
+            console.log(data);
+            this.data.workflowData = data;
+            this.data.isWorkflowDataReady = true;
+            this.actions.workflowMission();
+        });
 
         Mediator.on('Calendar: changeMainView', data => {
             this.data.calendarContent = data.calendarContent;
@@ -747,7 +716,6 @@ let config = {
 
         Mediator.on('calendar-left:unshowData', data => {
             if(data['data']) {
-                console.log(data['data']);
                 this.data.isShowArr = data['data'];
                 let arr = ['approve','remind'];
                 let arr_1 = [];
@@ -756,6 +724,7 @@ let config = {
                         arr_1.push( a );
                     }
                 }
+
                 this.data.cancel_fields = arr_1;
                 console.log(this.data.cancel_fields);
                 if(this.data.calendarContent === 'month') {
@@ -764,13 +733,13 @@ let config = {
                 this.actions.changeMainView(this.data.calendarContent);
             }
         });
-        Mediator.on('calendar-left: approve', data => {
-            this.data.isShowWorkflowData = data;
-            console.log(this.data.isShowWorkflowData);
-            if(this.data.calendarContent !== 'month') {
-                this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
+        Mediator.on('calendar-left:approveData', data => {
+            console.log(data);
+            if(data.data) {
+                this.data.isShowWorkflowData = true;
+            }else {
+                this.data.isShowWorkflowData = false;
             }
-            this.actions.changeMainView(this.data.calendarContent);
         })
 
     }
