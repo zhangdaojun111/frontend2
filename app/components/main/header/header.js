@@ -30,6 +30,7 @@ let config = {
             this.el.find('.fold').addClass('refold');
         },
         openBiIframe: function () {
+            console.log(window.config.sysConfig.bi_index);
             Mediator.emit('menu:item:openiframe', {
                 id: 'bi',
                 name: 'BI',

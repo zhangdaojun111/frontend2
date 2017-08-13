@@ -1,5 +1,5 @@
 import {HTTP} from "../../lib/http"
-import {Utils} from "../login/utils"
+import {Utils} from "./utils"
 
 
 export const UserInfoService = {
@@ -70,11 +70,32 @@ export const UserInfoService = {
             type:"get"
         })
     },
+    getSearchHistory:function () {
+        let url = '/search_history/';
+        return HTTP.getImmediately({
+            url:url,
+            type:"get"
+        })
+    },
+    saveGlobalSearchHistory:function (data) {
+        let url = '/search_history/';
+        let body = {
+            action:"save",
+            content:data
+        };
+        body = Utils.formatParams(body);
+
+        return this.http.postImmediately({
+            url:url,
+            data:body,
+            type:"post"
+        })
+    },
     change_login_user:function (user_id) {
         return HTTP.getImmediately('/change_login_user/?user_id='+ user_id).done((result) => {
             if(result.success === 1){
                 return result;
             }
         });
-    }
+    },
 };

@@ -152,7 +152,6 @@ export const IframeInstance = new Component({
     },
     
     firstAfterRender: function () {
-
         Mediator.on('menu:item:openiframe', (data) => {
             this.actions.openIframe(data.id, data.url, data.name)
         });

@@ -26,6 +26,7 @@ module.exports = {
         bimanager:path.resolve(APP_PATH, 'entrys/bimanager.js'),
         calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
+        resultDisplay:path.resolve(APP_PATH,'entrys/resultDisplay.js'),
         vendors: [
             'jquery',
             'jquery-ui',
