@@ -9,6 +9,8 @@ import CalendarSetItem from './calendar.set.item/calendar.set.item';
 import Mediator from '../../lib/mediator';
 import {CalendarService} from "../../services/calendar/calendar.service"
 import {CalendarSetService} from "../../services/calendar/calendar.set.service"
+import {UserInfoService} from '../../services/main/userInfoService';
+import MSG from '../../lib/msgbox';
 
 import {PMAPI} from '../../lib/postmsg';
 
@@ -27,6 +29,19 @@ let config = {
         dropdownForCalendarChange: [],
         isConfigField: false,
         isEdit: false,
+
+        //收信人
+        recipients: [],
+        recipients_per: [],
+
+        //抄送人
+        copypeople: [],
+
+        //发信箱数据
+        emailAddressList: [],
+
+        //默认选择的
+        emailAddress: '',
     },
     actions: {
         getMultiSelectDropdown: function(){
@@ -56,7 +71,7 @@ let config = {
             let res = this.data.colorInfoFields;
             this.data.initAllRows = [];
             this.data.initAllRows = res;
-            //this.actions.makeRows(this.data.initAllRows);
+            this.actions.makeRows(this.data.initAllRows);
         },
         makeRows: function(param){
             console.log(param);
@@ -122,45 +137,150 @@ let config = {
             }).catch(err=>{
                 console.log('error',err);
             });
+        },
+        representChange: function(a,a_selectedRepresent){
+            if( a_selectedRepresent === '' ){
+                return;
+            }
+            if(a.selectedOpts.indexOf(a_selectedRepresent) === -1){
+                a.selectedOpts.push(a_selectedRepresent);
+            }
+        },
+
+        despReset: function(tableId){
+            this.data.tableId=tableId;
+            MSG.alert("确定要重置吗？重置后会清空所有设置").then(res => {
+                if(res['confirm']) {
+                    console.log('reset');
+                    this.actions.reset(tableId);
+                }
+            });
+        },
+
+        reset: function(tableId){
+            for(let a of this.data.allRows){
+                a['isSelected']=false;
+                a['is_show_at_home_page']=false;
+                a['color']="#000000";
+                a['selectedOpts']=[];
+                a['selectedRepresents'] = [];
+                a['selectedEnums'] = [];
+                a['email']= {
+                    receiver: [],
+                    cc_receiver: [],
+                    email_id: this.data.emailAddress,
+                    remind_time: '',
+                    email_status: 0
+                };
+                a['sms'] = {
+                    receiver: [],
+                    cc_receiver: [],
+                    remind_time: '',
+                    sms_status: 0
+                };
+            }
+
+            for(let eachRow of this.data.allRows){
+                if(eachRow['isSelected'] === false){
+                    eachRow['isSelected']=0;
+                }else if(eachRow['isSelected'] === true){
+                    eachRow['isSelected']=1;
+                }
+            }
+            CalendarSetService.resetCalendar(tableId,this.data.allRows).then(res=>{
+                console.log(res);
+                if(res['succ'] === "1"){
+                    MSG.showTips('重置成功');
+                    this.data.isEdit=false;
+                    //this.saveStatus.emit( res['success'] === "1" );
+                    setTimeout( ()=>{
+                        CalendarSetService.getColumnList(this.data.tableId)
+                    },100 )
+                }else  if(res['succ'] === 0){
+                    MSG.showTips('重置失敗');
+                    //MSG.alert(res['error']);
+                    // this.saveStatus.emit( res['success'] === "0" );
+                }
+            });
+        },
+
+        getColumnListData: function (tableId) {
+            CalendarSetService.getColumnList(tableId).then(res => {
+                console.log(res);
+                this.data.filedHead = res['rows'];
+                CalendarService.getCalendarTableById(tableId).then(res => {
+                    this.data.colorInfoFields = res;
+                    this.data.dropdownForCalendarChange = [{id:'',name:''}];
+                    for( let d of this.data.filedHead ){
+                        if( d.dtype === '4' && ( d.dinput_type === '6' || d.dinput_type === '7' ) ){
+                            this.data.dropdownForCalendarChange.push({
+                                name: d['name'],
+                                id: d['id']
+                            })
+                        }
+                    }
+                    this.actions.getMultiSelectDropdown();
+                });
+                CalendarSetService.getCalendarPeople(tableId).then(res => {
+                    console.log(res);
+                    this.data.recipients = [];
+                    for( let data of res['rows'] ){
+                        if( data['type'] && data['type'] === 'email' ){
+                            this.data.recipients.push( { label:data.dname,value:data.id } )
+                        }else {
+                            this.data.recipients.push( { label:data.dname,value:data.id } )
+                            this.data.recipients_per.push( { label:data.dname,value:data.id } )
+                        }
+                    }
+                });
+                UserInfoService.getAllUsersInfo().then(user => {
+                    this.data.copypeople = [];
+                    for( let data of user.rows ){
+                        this.data.copypeople.push( {label:data.name,value:data.id} );
+                    }
+                });
+
+                CalendarSetService.getEmailSetting().then(res => {
+                    this.data.emailAddressList = [];
+                    for(let x in res['data']){
+                        this.data.emailAddressList.push({
+                            label:res['data'][x]['host']+'('+res['data'][x]['user']+')',
+                            value:res['data'][x]['id']?res['data'][x]['id']:''
+                        })
+                        if(res['data'][x]['is_default'] === 1){
+                            this.data.emailAddress = res['data'][x]['id'];
+                        }
+                    }
+                });
+
+            });
         }
     },
     afterRender: function() {
         this.el.css({width: '100%'});
-        // this.data.tableId = window.config.table_id;
+        this.data.tableId = window.config.table_id;
         this.el.find('iframe').css("width","100%");
-        console.log(this.data.tableId);
-        CalendarSetService.getColumnList(this.data.tableId).then(res => {
-            console.log(res);
-            this.data.filedHead = res['rows'];
-            CalendarService.getCalendarTableById(this.data.tableId).then(res => {
-                this.data.colorInfoFields = res;
-                this.data.dropdownForCalendarChange = [{id:'',name:''}];
-                for( let d of this.data.filedHead ){
-                    if( d.dtype === '4' && ( d.dinput_type === '6' || d.dinput_type === '7' ) ){
-                        this.data.dropdownForCalendarChange.push({
-                            name: d['name'],
-                            id: d['id']
-                        })
-                    }
-                }
-                this.actions.getMultiSelectDropdown();
-            });
-
+        if(this.data.tableId) {
+            this.actions.getColumnListData(this.data.tableId);
+        }
+        Mediator.on('calendar-set-left:calendar-set', data => {
+            this.actions.getColumnListData(data.table_id);
         });
-        let that = this;
+
+        let _this = this;
         this.el.on("click",".editor-btn", function() {
             console.log(0);
-            that.el.find(".hide-btns").css("visibility","visible");
+            _this.el.find(".hide-btns").css("visibility","visible");
             $(this).addClass("disabled");
             $(this).next('span').addClass("disabled");
             Mediator.emit('calendar-set:editor',{data:1});
             $(this).attr('disabled', 'true')
         }).on("click",".cancel-btn", () => {
-            that.el.find(".hide-btns").css("visibility","hidden");
-            that.el.find(".set-btn").removeClass("disabled");
+            _this.el.find(".hide-btns").css("visibility","hidden");
+            _this.el.find(".set-btn").removeClass("disabled");
             Mediator.emit('calendar-set:editor',{data:-1});
-        }).on('click', '.set-btn', () => {
-
+        }).on('click', '.reset-btn', () => {
+            _this.actions.despReset(this.data.tableId);
         });
 
     }

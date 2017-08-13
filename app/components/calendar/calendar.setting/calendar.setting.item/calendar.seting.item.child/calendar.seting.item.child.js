@@ -15,9 +15,9 @@ let config = {
         let that = this;
         this.el.on('click',".item-child",function(){
             console.log(that.data.menuItem);
-            Mediator.emit('calendar-left:calendar-set',{data:that.data.menuItemID});
+            Mediator.emit('calendar-set-left:calendar-set',{table_id:that.data.menuItem['table_id']});
             // PMAPI.openDialogByIframe(
-            //     '/calendar_mgr/set/?table_id='+that.data.menuItemID,
+            //     '/calendar_mgr/set/?table_id='+that.data.menuItem['table_id'],
             //     {
             //         width: "100%",
             //         height: '900',
