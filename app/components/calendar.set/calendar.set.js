@@ -7,8 +7,8 @@ import './calendar.set.scss';
 
 import CalendarSetItem from './calendar.set.item/calendar.set.item';
 import Mediator from '../../lib/mediator';
-import {CalendarService} from '../../services/calendar/calendar.service';
-import {dataTableService} from '../../services/dataGrid/data-table.service';
+import {CalendarService} from "../../services/calendar/calendar.service"
+import {CalendarSetService} from "../../services/calendar/calendar.set.service"
 
 import {PMAPI} from '../../lib/postmsg';
 
@@ -26,6 +26,7 @@ let config = {
         replaceDropDown: [],
         dropdownForCalendarChange: [],
         isConfigField: false,
+        isEdit: false,
     },
     actions: {
         getMultiSelectDropdown: function(){
@@ -55,7 +56,7 @@ let config = {
             let res = this.data.colorInfoFields;
             this.data.initAllRows = [];
             this.data.initAllRows = res;
-            this.actions.makeRows(this.data.initAllRows);
+            //this.actions.makeRows(this.data.initAllRows);
         },
         makeRows: function(param){
             console.log(param);
@@ -127,9 +128,10 @@ let config = {
         this.el.css({width: '100%'});
         // this.data.tableId = window.config.table_id;
         this.el.find('iframe').css("width","100%");
-        CalendarService.getColumnList(this.data.tableId).then(res => {
+        CalendarSetService.getColumnList(this.data.tableId).then(res => {
+            console.log(res);
             this.data.filedHead = res['rows'];
-            CalendarService.getCalendarTableById({table_id: this.data.tableId, isSelected: 1}).then(res => {
+            CalendarService.getCalendarTableById(this.data.tableId).then(res => {
                 this.data.colorInfoFields = res;
                 this.data.dropdownForCalendarChange = [{id:'',name:''}];
                 for( let d of this.data.filedHead ){

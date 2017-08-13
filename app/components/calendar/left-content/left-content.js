@@ -8,6 +8,8 @@ import CalendarSetting from '../calendar.setting/calendar.setting';
 import {PMAPI} from '../../../lib/postmsg';
 import LeftcontentCalendarset from'./leftContent.calendarSet/leftContent.calendarSet'
 import RightContentWorkFlow from '../right-content/right.content.workflowcontent/right.content.workflowcontent';
+import {CalendarSetService} from "../../../services/calendar/calendar.set.service"
+
 let config = {
     template: template,
     data:{
@@ -84,22 +86,28 @@ let config = {
         }).on("click",".item-title-2",function(){
             that.actions.hideclass(that,$(this));
         }).on('click','.set-calendar',() =>{
-            let component = new CalendarSetting();
-            let el = $('<div>').appendTo(document.body);
-            component.render(el);
-            el.dialog({
-                title: '日历设置',
-                width: '80%',
-                height: '750',
-                background: '#ddd',
-                close: function() {
-                    $(this).dialog('destroy');
-                    component.destroySelf();
-                }
+            CalendarSetService.getMenu().then(res => {
+                let component = new CalendarSetting(res['menuList']);
+                let el = $('<div>').appendTo(document.body);
+                component.render(el);
+                el.dialog({
+                    title: '日历设置',
+                    width: '80%',
+                    height: '750',
+                    background: '#ddd',
+                    close: function() {
+                        $(this).dialog('destroy');
+                        component.destroySelf();
+                    }
+                });
             });
+
         }).on('click', '.create-calendar', () => {
             PMAPI.openDialogByIframe('/calendar_mgr/create/', {width: "1000", height: '550', title: '日历表'});
         });
+    },
+    beforeDestory: function () {
+        Mediator.removeAll('calendar-left');
     }
 };
 class Leftcontent extends Component {
