@@ -99,7 +99,7 @@ let config = {
             console.log(hide_type_id);
             that.el.find(hide_type_id).hide();
             let isAllGroupchecked = true;
-            that.el.parent().find('.label-select-all-show').each(function(){
+            that.el.find('.label-select-all-show').each(function(){
                 if(!$(this).is('.label-select-all-checked')){
                     isAllGroupchecked = false;
                 }
