@@ -20,6 +20,7 @@ let config = {
     actions: {
     },
     afterRender: function() {
+        this.el.css({width: '100%'});
         let staus = false;
         Mediator.on('calendar-set:editor',data =>{
             if(data.data ===1){

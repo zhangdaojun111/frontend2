@@ -71,7 +71,7 @@ let config = {
             let res = this.data.colorInfoFields;
             this.data.initAllRows = [];
             this.data.initAllRows = res;
-            //this.actions.makeRows(this.data.initAllRows);
+            this.actions.makeRows(this.data.initAllRows);
         },
         makeRows: function(param){
             console.log(param);
@@ -138,6 +138,14 @@ let config = {
                 console.log('error',err);
             });
         },
+        representChange: function(a,a_selectedRepresent){
+            if( a_selectedRepresent === '' ){
+                return;
+            }
+            if(a.selectedOpts.indexOf(a_selectedRepresent) === -1){
+                a.selectedOpts.push(a_selectedRepresent);
+            }
+        },
 
         despReset: function(tableId){
             this.data.tableId=tableId;
@@ -182,18 +190,15 @@ let config = {
             CalendarSetService.resetCalendar(tableId,this.data.allRows).then(res=>{
                 console.log(res);
                 if(res['succ'] === "1"){
-                    //this.successAlert(this.saveOrEditAlertString+"成功");
+                    MSG.showTips('重置成功');
                     this.data.isEdit=false;
                     //this.saveStatus.emit( res['success'] === "1" );
-                    MSG.confirm().then(res => {
-                        console.log(res);
-                    });
                     setTimeout( ()=>{
                         CalendarSetService.getColumnList(this.data.tableId)
                     },100 )
                 }else  if(res['succ'] === 0){
-                    // this.errorAlert(res['error']);
-                    MSG.alert(res['error']);
+                    MSG.showTips('重置失敗');
+                    //MSG.alert(res['error']);
                     // this.saveStatus.emit( res['success'] === "0" );
                 }
             });
