@@ -20,7 +20,7 @@ export default {
             resolveFunc = resolve;
         });
         let config = _.defaultsDeep({}, confirmConfig);
-        confirmConfig.data.text = msg;
+        config.data.text = msg;
         PMAPI.openDialogByComponent(config, {
             width: 300,
             height: 170,
@@ -34,5 +34,9 @@ export default {
             }
         });
         return promise;
+    },
+    
+    showTips: function (msg) {
+        return this.alert(msg);
     }
 }
