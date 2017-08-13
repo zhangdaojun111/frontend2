@@ -2,12 +2,13 @@
  * Created by zj on 2017/7/31.
  */
 
-// import {CalendarData} from "../../components/calendar/testData/calendar-data"
-// import {CalendarTree} from "../../components/calendar/testData/calendar-tree"
-// import {WorkFlowType2} from "../../components/calendar/testData/workflow-type2"
-// import {WorkFlowType5} from "../../components/calendar/testData/workflow-type5"
-// import {WorkFlowType6} from "../../components/calendar/testData/workflow-type6"
-// import {getCalendar2926} from "../../components/calendar/testData/get-calendar2926"
+/*import {CalendarData} from "../../components/calendar/testData/calendar-data"
+import {CalendarTree} from "../../components/calendar/testData/calendar-tree"
+import {WorkFlowType2} from "../../components/calendar/testData/workflow-type2"
+import {WorkFlowType5} from "../../components/calendar/testData/workflow-type5"
+import {WorkFlowType6} from "../../components/calendar/testData/workflow-type6"
+import {getCalendar2926} from "../../components/calendar/testData/get-calendar2926"
+import {KeyFiled2926} from "../../components/calendar/testData/2926key-filed"*/
 
 import { HTTP } from '../../lib/http';
 
@@ -192,6 +193,10 @@ export const CalendarService = {
         });
         HTTP.flush();
         return res;
+        // const res = new Promise((resolve) => {
+        //     resolve(KeyFiled2926);
+        // });
+        // return res;
     },
 
 };

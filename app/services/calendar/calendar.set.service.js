@@ -4,9 +4,10 @@
 //import {GetMenu} from "../../components/calendar/testData/menu"
 import {HTTP} from "../../lib/http"
 
-//import {columnList2926} from "../../components/calendar/testData/2926table-column-list"
+import {columnList2926} from "../../components/calendar/testData/2926table-column-list"
 import {systemFieldIn} from '../../components/calendar/testData/2926SystemFieldin'
 import {getEmail} from '../../components/calendar/testData/getEmail';
+import {GetMenu} from "../../components/calendar/testData/menu"
 
 const menuUrl = 'get_menu';
 const columnListUrl = 'get_column_list';
@@ -100,42 +101,42 @@ export const CalendarSetService = {
 
     //获得日历提醒字段数据
     getCalendarPeople: function( tableId ){
-        // let params = {
-        //     table_id: tableId,
-        // };
-        //
-        // let res = HTTP.get(systemBuildInFieldUrl, params).then(res => {
-        //     console.log(res);
-        //     if(res['code'] === CodeEnum.SUCCESS) {
-        //         return res;
-        //     } else {
-        //         alert('获取数据失败');
-        //     }
-        // });
-        // HTTP.flush();
-        // return res;
-        const res = new Promise((resolve) => {
-            resolve(systemFieldIn);
+        let params = {
+            table_id: tableId,
+        };
+
+        let res = HTTP.get(systemBuildInFieldUrl, params).then(res => {
+            console.log(res);
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                alert('获取数据失败');
+            }
         });
+        HTTP.flush();
         return res;
+        // const res = new Promise((resolve) => {
+        //     resolve(systemFieldIn);
+        // });
+        // return res;
     },
 
     getEmailSetting: function(){
-        // let res = HTTP.get(emailSettingUrl).then(res => {
-        //     console.log(res);
-        //     if(res['code'] === CodeEnum.SUCCESS) {
-        //         return res;
-        //     } else {
-        //         alert('获取数据失败');
-        //     }
-        // });
-        // HTTP.flush();
-        // return res;
-
-        const res = new Promise((resolve) => {
-            resolve(getEmail);
+        let res = HTTP.get(emailSettingUrl).then(res => {
+            console.log(res);
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                alert('获取数据失败');
+            }
         });
+        HTTP.flush();
         return res;
+
+        // const res = new Promise((resolve) => {
+        //     resolve(getEmail);
+        // });
+        // return res;
     },
 
     resetCalendar: function(table_id,param_list){

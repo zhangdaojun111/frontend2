@@ -1,6 +1,7 @@
 import {HTTP} from "../../lib/http"
 import {Utils} from "../login/utils"
 
+import {AllUserInfo} from "../../components/calendar/testData/allUserInfo"
 
 export const UserInfoService = {
     http:HTTP,
@@ -64,11 +65,15 @@ export const UserInfoService = {
 
     },
     getAllUsersInfo:function () {
-        let url = '/get_all_userInfo/';
-        return HTTP.getImmediately({
-            url:url,
-            type:"get"
-        })
+        // let url = '/get_all_userInfo/';
+        // return HTTP.getImmediately({
+        //     url:url,
+        //     type:"get"
+        // })
+        const res = new Promise((resolve) => {
+            resolve(AllUserInfo);
+        });
+        return res;
     },
     change_login_user:function (user_id) {
         return HTTP.getImmediately('/change_login_user/?user_id='+ user_id).done((result) => {

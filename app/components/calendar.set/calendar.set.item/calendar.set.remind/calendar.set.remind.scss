@@ -16,5 +16,16 @@
     .remind-table-content {
         border: 1px solid #dddddd;
         padding: 5px;
+        .remind-table-row {
+            height: 34px;
+            display: block;
+            width: 100%;
+            .change-state-btn {
+                display: inline-block;
+                line-height: 16px;
+                width: 24px;
+
+            }
+        }
     }
 }

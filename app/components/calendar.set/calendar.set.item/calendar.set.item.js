@@ -8,7 +8,6 @@ import CalendarSetItemMulitSelect from "./calendar.set.item.multiselect/calendar
 import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
 import Mediator from '../../../lib/mediator';
-import CalendarSetItemremindtype from "./calendar.set.item.remindtype/calendar.set.item.remindtype"
 import CalendarSetRemindMethod from './calendar.set.remind/calendar.set.remind';
 
 let config = {
@@ -25,6 +24,19 @@ let config = {
         selectedOpts: [],
         allRows: [],
         initAllRows: [],
+
+        //收信人
+        recipients: [],
+        recipients_per: [],
+
+        //抄送人
+        copypeople: [],
+
+        //发信箱数据
+        emailAddressList: [],
+
+        //默认选择的
+        emailAddress: '',
     },
     actions: {
     },
@@ -40,38 +52,43 @@ let config = {
                 staus = false;
             }
         });
-        this.el.on("click",".remind-type-editor",function(){
-            if(staus){
-                let component = new CalendarSetItemremindtype();
-                let el = $('<div>').appendTo(document.body);
-                component.render(el);
-                el.dialog({
-                    title: '编辑提醒方式',
-                    width: '80%',
-                    height: '600',
-                    background: '#ddd',
-                    close: function() {
-                        $(this).dialog('destroy');
-                        component.destroySelf();
-                    }
-                });
-                }
-        }).on('change', '.res-text', () => {
+        this.el.on('change', '.res-text', () => {
             let valueForRes = $('.res-text option:selected').text();
 
         }).on('change', '.page-change-text', () => {
             let valueForCalendarChange = $('.page-change-text option:selected').text();
         }).on('click', '.set-remind-method', () => {
-            //CalendarSetRemindMethod.emailStatus = this.data.rowSetData.email.email_status;
-            //CalendarSetRemindMethod.smsStatus = this.data.rowSetData.sms.sms_status;
-            PMAPI.openDialogByComponent(CalendarSetRemindMethod, {
+            // CalendarSetRemindMethod.emailStatus = this.data.rowSetData.email.email_status;
+            // CalendarSetRemindMethod.smsStatus = this.data.rowSetData.sms.sms_status;
+            // PMAPI.openDialogByComponent(CalendarSetRemindMethod, {
+            //     width: 800,
+            //     height: 400,
+            //     title: '【'+ this.data.rowTitle.name + '】'+'的提醒'
+            // }).then(res => {
+            //     console.log(res);
+            // })
+            let component = new CalendarSetRemindMethod({
+                emailStatus: this.data.rowSetData.email.email_status,
+                smsStatus: this.data.rowSetData.sms.sms_status,
+                recipients: this.data.recipients,
+                recipients_per: this.data.recipients_per,
+                copypeople: this.data.copypeople,
+                emailAddressList: this.data.emailAddressList,
+                emailAddress: this.data.emailAddress,
+            });
+            let el = $('<div>').appendTo(document.body);
+            component.render(el);
+            el.dialog({
+                title: '主框架弹出',
                 width: 800,
                 height: 400,
-                title: '【'+ this.data.rowTitle.name + '】'+'的提醒'
-            }).then(res => {
-                console.log(res);
-            })
+                close: function() {
+                    $(this).dialog('destroy');
+                    component.destroySelf();
+                }
+            });
         });
+        console.log(this.data.recipients);
 
         $("#set-color-id").attr("id","set-color-"+this.data.rowSetData.field_id);
         let set_color_id = "#set-color-"+this.data.rowSetData.field_id;
@@ -90,6 +107,13 @@ class CalendarSetItem extends Component {
         config.data.dropdownForCalendarChange = data.dropdownForCalendarChange;
         config.data.rowTitle = data.rowTitle;
         config.data.replaceDropDown = data.replaceDropDown;
+
+        config.data.recipients = data.recipients;
+        config.data.recipients_per = data.recipients_per;
+        config.data.copypeople = data.copypeople;
+        config.data.emailAddressList = data.emailAddressList;
+        config.data.emailAddress = data.emailAddress;
+
         super(config);
     }
 }
