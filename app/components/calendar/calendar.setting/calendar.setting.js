@@ -51,7 +51,7 @@ let config = {
 
         });
 
-        Mediator.on('calendar-left:calendar-set',data =>{
+        Mediator.on('calendar-set-left:calendar-set',data =>{
             this.el.find(".calendar-setting-item-content").empty();
             this.append(new CalendarSet(data.data), this.el.find('.calendar-setting-item-content'));
         });
