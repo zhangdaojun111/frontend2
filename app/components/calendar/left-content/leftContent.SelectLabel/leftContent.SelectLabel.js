@@ -151,8 +151,9 @@ let config = {
         });
         that.el.on("mouseleave",".float-button-group",function(){
             $(this).css("display","none");
-        }).on("mouseover",".float-button-group-show",function(){
+        }).on("click",".float-button-group-show",function(){
             $(this).parent().nextAll(".float-button-group").css("display","block");
+            $(this).parent().nextAll(".float-button-group").css("top", document.body.scrollLeft + event.clientY - 87);
         }).on('click','.select-label-show',function(){
             config.actions.selectlabelshow($(this));
         }).on('click',".select-label",function(){
@@ -161,7 +162,7 @@ let config = {
             config.actions.selectlabelchildren($(this),that);
         }).on('mouseover',".hide-span-function",function () {
             that.el.find(".search-function").css("display","block");
-        }).on("mouseover",".hide-type-group",function(){
+        }).on("mouseover",".float-button-group-hide",function(){
             that.el.find(".search-function").css("display","none");
         });
     }

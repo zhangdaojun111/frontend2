@@ -35,7 +35,7 @@ let config = {
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
                 temp.next(".item-content").show();
-                temp.next().animate({height:"84%"},"fast");
+                temp.next().animate({height:"83%"},"fast");
             }
         },
         hideclass:function(that,temp){
@@ -51,7 +51,7 @@ let config = {
                 temp.addClass("display-all-content");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").show();
-                that.el.find(".item-content-2").animate({height:"8%"},"fast");
+                that.el.find(".item-content-2").animate({height:"82%"},"fast");
             }
         }
     },
@@ -82,11 +82,11 @@ let config = {
             that.el.find(".item-content-1").show();
             that.el.find(".item-content-1").animate({height:"80%"},"fast");
         });
-        that.el.on('click', '.item-title',function(){
-            let temp = $(this);
+        that.el.on('click', '.hide-con',function(){
+            let temp = $(this).parent().parent();
             that.actions.contentHide(that,temp);
-        }).on("click",".item-title-2",function(){
-            that.actions.hideclass(that,$(this));
+        }).on("click",".hide-con-2",function(){
+            that.actions.hideclass(that,$(this).parent().parent());
         }).on('click','.set-calendar',() =>{
             CalendarSetService.getMenu().then(res => {
                 let component = new CalendarSetting(res['menuList']);
@@ -94,7 +94,7 @@ let config = {
                 component.render(el);
                 el.dialog({
                     title: '日历设置',
-                    width: '80%',
+                    width: '90%',
                     height: '750',
                     background: '#ddd',
                     close: function() {
