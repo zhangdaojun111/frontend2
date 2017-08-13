@@ -12,10 +12,16 @@ import CalendarSetItemremindtype from "./calendar.set.item.remindtype/calendar.s
 let config = {
     template: template,
     data: {
-        rowSetData:{},
-        //首页可修改字段
-        dropdownForCalendarChange: [],
+        rowSetData: {},
+        rowTitle: '',
+        dropdown: [],
         dropdownForRes: [],
+        dropdownForCalendarChange: [],
+
+        isConfigField: false,
+        selectedOpts: [],
+        allRows: [],
+        initAllRows: [],
     },
     actions: {
     },
@@ -47,20 +53,36 @@ let config = {
                     }
                 });
                 }
+        }).on('change', '.res-text', () => {
+            let valueForRes = $('.res-text option:selected').text();
+
+        }).on('change', '.page-change-text', () => {
+            let valueForCalendarChange = $('.page-change-text option:selected').text();
         });
         $("#set-color-id").attr("id","set-color-"+this.data.rowSetData.field_id);
         let set_color_id = "#set-color-"+this.data.rowSetData.field_id;
         $(set_color_id).attr("value",this.data.rowSetData.color);
-        this.data.dropdownForRes.forEach(item => {
-            this.el.find('.res-text').append("<option value='"+item+"'>"+item+"</option>");
-        });
-        this.append(new CalendarSetItemMulitSelect, this.el.find('.multi-select-item'));
+
+        console.log(config.data.dropdownForRes);
+        //this.append(new CalendarSetItemMulitSelect(this.data.dropdown), this.el.find('.multi-select-item'));
+
     }
 };
 
 class CalendarSetItem extends Component {
     constructor(data) {
-        config.data.rowSetData = data;
+        // rowData: row;
+        // dropdown: this.data.dropdown;
+        // dropdownForRes: this.data.dropdownForRes;
+        // dropdownForCalendarChange: this.data.dropdownForCalendarChange;
+        // replaceDropDown: this.data.replaceDropDown;
+        // isConfigField: this.data.isConfigField,
+        // rowTitle: this.data.rowTitle,
+        config.data.rowSetData = data.rowData;
+        config.data.dropdown = data.dropdown;
+        config.data.dropdownForRes = data.dropdownForRes;
+        config.data.dropdownForCalendarChange = data.dropdownForCalendarChange;
+        config.data.rowTitle = data.rowTitle;
         super(config);
     }
 }

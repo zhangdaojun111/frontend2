@@ -6,7 +6,7 @@
         <input type="checkbox" class="editor-items" disabled>
     </td>
     <td class="set-table-item">
-
+        {{rowTitle}}
     </td>
     <td class="set-table-item">
         <input class="set-color editor-items" id="set-color-id" type="color" value="#8FF000" disabled>
@@ -16,13 +16,17 @@
     </td>
 
     <td class="set-table-item">
-        <select class="res-text editor-items" disabled>
-
+        <select class="res-text editor-items"  disabled>
+            {{#each dropdownForRes}}
+            <option class="testoption" value="{{this.id}}">{{this.name}}</option>
+            {{/each}}
         </select>
     </td>
     <td class="set-table-item">
         <select class="page-change-text editor-items" disabled>
-
+            {{#each dropdownForCalendarChange}}
+            <option class="testoption" value="{{this.id}}">{{this.name}}</option>
+            {{/each}}
         </select>
     </td>
     <td class="set-table-item">
