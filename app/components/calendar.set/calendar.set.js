@@ -128,6 +128,7 @@ let config = {
         this.el.css({width: '100%'});
         // this.data.tableId = window.config.table_id;
         this.el.find('iframe').css("width","100%");
+        console.log(this.data.tableId);
         CalendarSetService.getColumnList(this.data.tableId).then(res => {
             console.log(res);
             this.data.filedHead = res['rows'];

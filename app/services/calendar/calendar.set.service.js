@@ -5,7 +5,10 @@
 import {HTTP} from "../../lib/http"
 //import {columnList2926} from "../../components/calendar/testData/2926table-column-list"
 
+
+const menuUrl = 'get_menu'
 const columnListUrl = 'get_column_list';
+
 
 export const CodeEnum = {
     SUCCESS: 200,
