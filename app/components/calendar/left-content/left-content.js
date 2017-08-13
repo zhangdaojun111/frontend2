@@ -92,7 +92,7 @@ let config = {
                 component.render(el);
                 el.dialog({
                     title: '日历设置',
-                    width: '80%',
+                    width: '90%',
                     height: '750',
                     background: '#ddd',
                     close: function() {
