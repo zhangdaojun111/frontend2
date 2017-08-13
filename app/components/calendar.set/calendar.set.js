@@ -131,7 +131,7 @@ let config = {
                         dropdownForCalendarChange: this.data.dropdownForCalendarChange,
                         replaceDropDown: this.data.replaceDropDown,
                         isConfigField: this.data.isConfigField,
-                        rowTitle: this.data.rowTitle,
+                        rowTitle: this.data.rowTitle[index],
                     }), this.el.find('.set-items'));
                 })
             }).catch(err=>{

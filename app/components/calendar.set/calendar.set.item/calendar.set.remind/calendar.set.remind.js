@@ -7,23 +7,24 @@ import './calendar.set.remind.scss';
 
 import {CalendarService} from '../../../../services/calendar/calendar.service';
 
-let config = {
+let CalendarSetRemindMethod = {
     template: template,
     data: {
-        menu: []
+        emailStatus: 0,
+        smsStatus: 0
     },
     actions: {
 
     },
     afterRender: function() {
-
+        console.log(this.data);
     }
 };
 
-class CalendarSetRemind extends Component {
-    constructor() {
-        super(config);
-    }
-}
+// class CalendarSetRemindMethod extends Component {
+//     constructor() {
+//         super(config);
+//     }
+// }
 
-export default CalendarSetRemind;
+export default CalendarSetRemindMethod;

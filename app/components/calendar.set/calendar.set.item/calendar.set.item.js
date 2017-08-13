@@ -9,6 +9,8 @@ import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
 import Mediator from '../../../lib/mediator';
 import CalendarSetItemremindtype from "./calendar.set.item.remindtype/calendar.set.item.remindtype"
+import CalendarSetRemindMethod from './calendar.set.remind/calendar.set.remind';
+
 let config = {
     template: template,
     data: {
@@ -17,6 +19,7 @@ let config = {
         dropdown: [],
         dropdownForRes: [],
         dropdownForCalendarChange: [],
+        replaceDropDown: [],
 
         isConfigField: false,
         selectedOpts: [],
@@ -58,31 +61,35 @@ let config = {
 
         }).on('change', '.page-change-text', () => {
             let valueForCalendarChange = $('.page-change-text option:selected').text();
+        }).on('click', '.set-remind-method', () => {
+            //CalendarSetRemindMethod.emailStatus = this.data.rowSetData.email.email_status;
+            //CalendarSetRemindMethod.smsStatus = this.data.rowSetData.sms.sms_status;
+            PMAPI.openDialogByComponent(CalendarSetRemindMethod, {
+                width: 800,
+                height: 400,
+                title: '【'+ this.data.rowTitle.name + '】'+'的提醒'
+            }).then(res => {
+                console.log(res);
+            })
         });
+
         $("#set-color-id").attr("id","set-color-"+this.data.rowSetData.field_id);
         let set_color_id = "#set-color-"+this.data.rowSetData.field_id;
         $(set_color_id).attr("value",this.data.rowSetData.color);
 
-        console.log(config.data.dropdownForRes);
-        //this.append(new CalendarSetItemMulitSelect(this.data.dropdown), this.el.find('.multi-select-item'));
-
+        console.log(this.data.rowSetData);
+        this.append(new CalendarSetItemMulitSelect(this.data.dropdown), this.el.find('.multi-select-item'));
     }
 };
 
 class CalendarSetItem extends Component {
     constructor(data) {
-        // rowData: row;
-        // dropdown: this.data.dropdown;
-        // dropdownForRes: this.data.dropdownForRes;
-        // dropdownForCalendarChange: this.data.dropdownForCalendarChange;
-        // replaceDropDown: this.data.replaceDropDown;
-        // isConfigField: this.data.isConfigField,
-        // rowTitle: this.data.rowTitle,
         config.data.rowSetData = data.rowData;
         config.data.dropdown = data.dropdown;
         config.data.dropdownForRes = data.dropdownForRes;
         config.data.dropdownForCalendarChange = data.dropdownForCalendarChange;
         config.data.rowTitle = data.rowTitle;
+        config.data.replaceDropDown = data.replaceDropDown;
         super(config);
     }
 }

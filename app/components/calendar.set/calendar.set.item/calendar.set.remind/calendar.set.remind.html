@@ -1,16 +1,24 @@
-<table>
-    <tr>
-        <td>短信提醒</td>
-        <td>邮件提醒</td>
+<table class="set-remind-container">
+    <tr class="set-row-title">
+        <td class="remind-method-title middle-border">短信提醒</td>
+        <td class="remind-method-title">邮件提醒</td>
     </tr>
-    <tr>
+    <!--<tr>
+        {{#if sms}}
         <span class="remind-method"></span>
+        {{else}}
+        <span class="remind-method"></span>
+        {{/if}}
         <button>开启</button>
         <button>关闭</button>
-    </tr>
-    {{#if sms}}
-    <table>
+    </tr>-->
 
+    <!--<table class="remind-table-content">
+        <tr class="remind-state">
+            <span>短信提醒状态：</span>
+            <span>开启</span>
+            <span>关闭</span>
+        </tr>
         <tr>
             <td>收信人：</td>
             <td></td>
@@ -25,9 +33,9 @@
                 <input type="date">
             </td>
         </tr>
-    </table>
-    {{else}}
-    <table>
+    </table>-->
+
+    <!--<table>
         <tr>
             <td>发信箱：</td>
             <td></td>
@@ -46,7 +54,7 @@
                 <input type="time">
             </td>
         </tr>
-    </table>
-    {{/if}}
+    </table>-->
+
 
 </table>

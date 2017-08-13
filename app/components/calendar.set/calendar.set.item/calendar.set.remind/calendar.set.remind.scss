@@ -1,0 +1,20 @@
+.set-remind-container {
+    width: 90%;
+    padding: 10px 30px;
+    border: 1px solid #dddddd;
+    .set-row-title {
+        width: 100%;
+        .remind-method-title {
+            width: 50%;
+            line-height: 34px;
+            text-align: center;
+        }
+        .middle-border {
+            border-right: 1px solid #dddddd;
+        }
+    }
+    .remind-table-content {
+        border: 1px solid #dddddd;
+        padding: 5px;
+    }
+}

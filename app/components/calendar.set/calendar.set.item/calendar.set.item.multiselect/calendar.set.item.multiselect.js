@@ -45,7 +45,6 @@ let config = {
                 all_content_value.push(content_item);
             }
             all_content.val(all_content_value);
-
         }).on("click",".checked-all-content",function(){
             let all_content = $(this).parent().parent().prev().find("input");
             let all_content_value = all_content.val();
@@ -61,7 +60,6 @@ let config = {
                     all_content_value.push($(this).html());
                 });
             }
-            all_content.val(all_content_value);
         });
 
         $(document).click(function(){
