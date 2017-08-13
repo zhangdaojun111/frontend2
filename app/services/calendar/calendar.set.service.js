@@ -15,21 +15,21 @@ export const CalendarSetService = {
     menu: [],
 
     getMenu: function () {
-        // let res = HTTP.get(menuUrl).then(res => {
-        //     if(res['success'] === 1) {
-        //         return res;
-        //     } else {
-        //         alert('获取数据失败');
-        //     }
-        // });
-        // HTTP.flush();
-        // return res;
-
-        const res = new Promise((resolve) => {
-            resolve(GetMenu);
+        let res = HTTP.get(menuUrl).then(res => {
+            if(res['success'] === 1) {
+                return res;
+            } else {
+                alert('获取数据失败');
+            }
         });
-        this.menu = GetMenu['menuList'];
+        HTTP.flush();
         return res;
+
+        // const res = new Promise((resolve) => {
+        //     resolve(GetMenu);
+        // });
+        // this.menu = GetMenu['menuList'];
+        // return res;
     },
     filterMenu: function (filter, subMenu) {
         let result = [];
