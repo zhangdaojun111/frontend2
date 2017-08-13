@@ -53,6 +53,7 @@ export const CalendarWorkflowData = {
                 arr = arr.concat( this.workflow_focus_data );
             }catch(e){}
             Mediator.emit('CalendarWorkflowData: workflowData', arr);
+            return arr;
         }
     }
 };

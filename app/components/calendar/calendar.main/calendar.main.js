@@ -10,6 +10,7 @@ import CalendarWeek from './calendar.week/calendar.week';
 import CalendarDay from './calendar.day/calendar.day';
 import CalendarSchedule from './calendar.schedule/calendar.schedule';
 import CalendarExport from './calendar.export/calendar.export';
+import RightContentWorkFlow from '../right-content/right.content.workflowcontent/right.content.workflowcontent';
 
 import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
@@ -305,12 +306,12 @@ let config = {
 
             this.data.from_date = this.data.monthDataList[0]['weekList'][0]['dataTime'];
             this.data.to_date = this.data.monthDataList[5]['weekList'][6]['dataTime'];
+            CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+            Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
             this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date, cancel_fields: this.data.cancel_fields},'month');
         },
 
-
         createWeekCalendar: function (){
-            console.log(this.data.selectData);
             this.data.chooseDate = this.data.selectData.y + "-" + this.actions.addZero( this.data.selectData.m + 1 ) + "-" + this.actions.addZero( this.data.selectData.d );
             this.data.weekDataList = [];
             let weekData = [];
@@ -337,7 +338,7 @@ let config = {
                 this.data.from_date = arrHead[0]['time'];
                 this.data.to_date = arrHead[6]['time'];
             }
-
+            Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
         },
 
         createDayCalendar: function(){
@@ -355,6 +356,7 @@ let config = {
             $('.nowDate').html(this.data.selectedDateShow);
             this.data.from_date = date;
             this.data.to_date = date;
+            Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
         },
 
         makeScheduleData: function (startDate, endDate) {
@@ -640,7 +642,7 @@ let config = {
         this.el.find('.nowDate').html(this.data.selectedDateShow);
         this.actions.createMonthCalendar(year, month);
 
-        CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             console.log(data);
             this.data.workflowData = data;
