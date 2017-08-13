@@ -36,6 +36,10 @@ export default {
         return promise;
     },
     
+    /**
+     *  后期会改进为5秒关闭
+
+     * /
     showTips: function (msg) {
         return this.alert(msg);
     }
