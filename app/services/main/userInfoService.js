@@ -98,4 +98,14 @@ export const UserInfoService = {
             }
         });
     },
+    register:function (json) {
+        let url = '/register/';
+        let body = this.utils.formatParams(json);
+
+        return this.http.postImmediately({
+            url:url,
+            data:body,
+            type:'post'
+        })
+    }
 };

@@ -55,5 +55,5 @@ export const LoginService = {
             url:url,
             data:body
         })
-    }
+    },
 };

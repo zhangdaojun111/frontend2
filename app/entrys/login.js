@@ -6,7 +6,7 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import {LoginService} from '../services/login/loginService';
 import {md5} from '../services/login/md5';
 import msgBox from '../lib/msgbox';
-import {RegisterComponent} from '../components/register/register';
+import {RegisterComponent} from '../entrys/register';
 
 function getLoginController() {
     return {
@@ -71,7 +71,7 @@ function getLoginController() {
             });
             //注册按钮
             this.$registerBtn.on('click', () => {
-                console.log("register");
+                // $(window).attr('location','/register');
                 RegisterComponent.show();
             });
             //忘记密码，找回密码入口
