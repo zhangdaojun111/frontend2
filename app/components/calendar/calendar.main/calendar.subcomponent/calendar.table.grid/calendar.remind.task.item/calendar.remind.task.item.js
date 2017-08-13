@@ -48,17 +48,6 @@ let config = {
                         title: '审批',
                     });
             })
-            // taskItemHtml.innerHTML = item['data']['name'];
-            // taskItemHtml.onclick = function () {
-            //     PMAPI.openDialogByIframe(
-            //         '/wf/approval/',
-            //         {
-            //             width: "100%",
-            //             height: '900',
-            //             title: '审批',
-            //         })
-            // };
-
         }
     }
 };

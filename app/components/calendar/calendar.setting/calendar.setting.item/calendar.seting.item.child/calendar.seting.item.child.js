@@ -6,8 +6,7 @@ import {PMAPI} from '../../../../../lib/postmsg';
 let config = {
     template: template,
     data: {
-        menuItem: {},
-        menuItemID:{},
+        menuItem: {}
     },
     actions: {
 
@@ -15,6 +14,7 @@ let config = {
     afterRender: function() {
         let that = this;
         this.el.on('click',".item-child",function(){
+            console.log(that.data.menuItem);
             Mediator.emit('calendar-left:calendar-set',{data:that.data.menuItemID});
             // PMAPI.openDialogByIframe(
             //     '/calendar_mgr/set/?table_id='+that.data.menuItemID,
@@ -29,9 +29,8 @@ let config = {
 };
 
 class CalendarSetingItemChild extends Component {
-    constructor(menuItem,menuItemID) {
-        config.data.menuItem = menuItem;
-        config.data.menuItemID = menuItemID;
+    constructor(data) {
+        config.data.menuItem = data;
         super(config);
     }
 }

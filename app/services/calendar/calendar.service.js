@@ -2,8 +2,14 @@
  * Created by zj on 2017/7/31.
  */
 
+// import {CalendarData} from "../../components/calendar/testData/calendar-data"
+// import {CalendarTree} from "../../components/calendar/testData/calendar-tree"
+// import {WorkFlowType2} from "../../components/calendar/testData/workflow-type2"
+// import {WorkFlowType5} from "../../components/calendar/testData/workflow-type5"
+// import {WorkFlowType6} from "../../components/calendar/testData/workflow-type6"
+// import {getCalendar2926} from "../../components/calendar/testData/get-calendar2926"
+
 import { HTTP } from '../../lib/http';
-import Mediator from '../../lib/mediator';
 
 const saveCalendarTableUrl = 'calendar_mgr/save_calendar';
 
@@ -18,10 +24,6 @@ const workflowRecordsUrl = 'get_workflow_records';
 const missionRecordUrl = 'get_mission_record';
 
 const calendarPreferenceUrl = 'calendar_mgr/calendar_preference';
-
-const menuUrl = 'get_menu';
-
-const columnListUrl = 'get_column_list';
 
 const keyFieldDictUrl = 'calendar_mgr/key_field_dict';
 
@@ -39,10 +41,10 @@ export const CalendarService = {
         })
     },
 
-    getCalendarTableById: function (data) {
+    getCalendarTableById: function (table_id) {
         let params = {
-            table_id: data['table_id'],
-            isSelected: data['isSelected']
+            table_id: table_id,
+            isSelected: 0
         };
 
         let res = HTTP.post(getcalendarTableUrl, params).then(res => {
@@ -54,6 +56,10 @@ export const CalendarService = {
         });
         HTTP.flush();
         return res;
+        // const res = new Promise((resolve) => {
+        //     resolve(getCalendar2926);
+        // });
+        // return res;
     },
 
     getCalendarTreeData: function () {
@@ -66,6 +72,10 @@ export const CalendarService = {
         });
         HTTP.flush();
         return res;
+        // const res = new Promise((resolve) => {
+        //     resolve(CalendarTree);
+        // });
+        // return res;
     },
 
     /**
@@ -87,6 +97,10 @@ export const CalendarService = {
         });
         HTTP.flush();
         return res;
+        // const res = new Promise((resolve) => {
+        //     resolve(CalendarData);
+        // });
+        // return res;
     },
 
     /**
@@ -111,6 +125,10 @@ export const CalendarService = {
         });
         HTTP.flush();
         return res;
+        // const res = new Promise((resolve) => {
+        //     resolve(WorkFlowType2);
+        // });
+        // return res;
     },
 
     /**
@@ -160,18 +178,6 @@ export const CalendarService = {
         return res;
     },
 
-    getMenu: function () {
-        let res = HTTP.get(menuUrl).then(res => {
-            if(res['success'] === 1) {
-                return res;
-            } else {
-                alert('获取数据失败');
-            }
-        });
-        HTTP.flush();
-        return res;
-    },
-
     getReplace: function (tableId) {
         let params = {
             table_id: tableId,
@@ -187,21 +193,5 @@ export const CalendarService = {
         HTTP.flush();
         return res;
     },
-
-    getColumnList: function (tableId) {
-        let params = {
-            table_id: tableId,
-        };
-
-        let res = HTTP.get(columnListUrl, params).then(res => {
-            if(res['code'] === CodeEnum.SUCCESS) {
-                return res;
-            } else {
-                alert('获取数据失败');
-            }
-        });
-        HTTP.flush();
-        return res;
-    }
 
 };
