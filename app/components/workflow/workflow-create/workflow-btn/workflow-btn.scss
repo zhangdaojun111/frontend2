@@ -18,12 +18,14 @@
     .wf-del{
         display: none;
         .workflow-del{
-            width: 12px;
-            height: 12px;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
             background: red;
             position: absolute;
-            top: 0px;
-            right: 0px;
+            top: -6px;
+            right: -6px;
         }
     }
     

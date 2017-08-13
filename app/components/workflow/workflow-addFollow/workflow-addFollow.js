@@ -68,18 +68,21 @@ let config={
 
         //全选，反选btn
         this.el.on('click','#allSelector',function(){
-            // var inputs=_this.el.find('#staffMulti').find('input');
-            // console.log(inputs);
-            // if($(this).prop('checked')){
-            //     inputs.each(function(i,item){
-            //         console.log(item);
-            //         $(item).attr('checked',true);
-            //     })
-            // }else{
-            //     inputs.each(function(i,item){
-            //         $(item).removeAttr("checked");
-            //     })
-            // }
+            var inputs=_this.el.find('#staffMulti').find('.checkbox');
+            if($(this).prop('checked')){
+                inputs.each(function(i,item){
+                    $(item).addClass('checked');
+                    Mediator.publish('workflow:pubCheckSingle',{
+                        id:$(item).attr('value'),
+                        name:$(item).attr('name')
+                    });
+                })
+            }else{
+                inputs.each(function(i,item){
+                    $(item).removeClass("checked");
+                    Mediator.publish('workflow:pubUncheckSingle',$(item).attr('value'));
+                })
+            }
         });
 
         //saving follower
