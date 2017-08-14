@@ -64,6 +64,9 @@ let config = {
             this.listWrap.find('input:checkbox:checked').each(function () {
                 this.checked = false;
             });
+            if (this.data.onSelect) {
+                this.data.onSelect(this.data.choosed);
+            }
             if (this.data.choosed.length) {
                 this.choosedWrap.show();
                 let html = [];
