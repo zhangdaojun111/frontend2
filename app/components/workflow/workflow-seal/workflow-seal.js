@@ -99,7 +99,7 @@ let config = {
                 "disX":disX,
                 "disY":disY
             })
-            console.log(disX+".."+disY); 
+            console.log(disX+".."+disY);
             let fromPlace =  $("#place-form").children(":first");
             // let fromPlace =  $("#place-form");
             console.log(fromPlace);
@@ -119,7 +119,7 @@ let config = {
                 this.el.find(".fromClone").children().remove();
                 this.el.find(".fromClone").append(fromClone);
             }
-            
+
         },
         Imgcoordinate(e){
             let offsetLeft = this.el.find(".signatureMock").attr("disX");
@@ -200,28 +200,28 @@ let config = {
         this.el.on('change','.J_add',(e)=>{
             this.actions.addImg(e);
         }),
-        this.el.on('mousedown','.add-img',(e)=>{
-            this.ifDrag = true;
-            this.actions.dragimg(e);
-        }),
-        this.el.on("mouseup",'.signatureMock',(e)=>{
-            if(this.ifDrag){
-                this.actions.closeSeal(e);
-                this.ifDrag = false;
-            }
-            // e.stopPropagation(e);
-        }),
-        this.el.on("click",'.J_delImg',(e)=>{
-            this.actions.delImg(e);
-        }),
-        this.el.on("mousemove",'.signatureMock',(e)=>{
-            this.ifDrag = true;
-            this.actions.Imgcoordinate(e);
-            // e.stopPropagation(e);
-        }),
-        this.el.on("click",".J_toggImg",(e)=>{
-            this.actions.toggImg(e);
-        });
+            this.el.on('mousedown','.add-img',(e)=>{
+                this.ifDrag = true;
+                this.actions.dragimg(e);
+            }),
+            this.el.on("mouseup",'.signatureMock',(e)=>{
+                if(this.ifDrag){
+                    this.actions.closeSeal(e);
+                    this.ifDrag = false;
+                }
+                // e.stopPropagation(e);
+            }),
+            this.el.on("click",'.J_delImg',(e)=>{
+                this.actions.delImg(e);
+            }),
+            this.el.on("mousemove",'.signatureMock',(e)=>{
+                this.ifDrag = true;
+                this.actions.Imgcoordinate(e);
+                // e.stopPropagation(e);
+            }),
+            this.el.on("click",".J_toggImg",(e)=>{
+                this.actions.toggImg(e);
+            });
         // $(".approval-info-item").on("click",(e)=>{
         //     console.log(13265);
         //     this.actions.showImgDel(e);
@@ -262,7 +262,7 @@ export default {
         for(let i=0;i<len;i++){
             let url = {};
             url['url']= "http://"+host+"/download_attachment/?file_id="+data.file_ids[i]+"&download=0",
-            url["id"]=data.file_ids[i];
+                url["id"]=data.file_ids[i];
             obj.push(url);
         }
         data.url = obj;
