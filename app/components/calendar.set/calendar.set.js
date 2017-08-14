@@ -217,7 +217,7 @@ let config = {
         },
 
         saveSetting(tableId,param){
-            //判断提醒开启时收件人不为空
+            // 判断提醒开启时收件人不为空
             for( let data of param ){
                 if( ( data.email.email_status === '1' && data.email.receiver.length === 0 ) || ( data.sms.sms_status === '1' && data.sms.receiver.length === 0 ) ){
                     MSG.alert( "已开启提醒的收件人不能为空" );
@@ -234,14 +234,14 @@ let config = {
             }
             for(let eachRow of param){
                 if(eachRow['isSelected'] === false){
-                    eachRow['isSelected']=0;
+                    eachRow['isSelected'] = 0;
                 }else if(eachRow['isSelected'] === true){
-                    eachRow['isSelected']=1;
+                    eachRow['isSelected'] = 1;
                 }
                 if(eachRow['is_show_at_home_page'] === false){
-                    eachRow['is_show_at_home_page']=0;
+                    eachRow['is_show_at_home_page'] = 0;
                 }else if(eachRow['is_show_at_home_page'] === true){
-                    eachRow['is_show_at_home_page']=1;
+                    eachRow['is_show_at_home_page'] = 1;
                 }
                 eachRow['selectedRepresents'] = [eachRow['selectedRepresents']];
                 eachRow['selectedEnums'] = [eachRow['selectedEnums']];
@@ -260,12 +260,14 @@ let config = {
                     }
                 }
             }
+            console.log(tableId, param);
             CalendarService.saveCalendarTable(tableId,param).then(res=>{
-                if(res['succ'] === "1"){
+                console.log(res);
+                if(res['succ'] === 1){
+                    console.log('success');
                     MSG.showTips("保存成功");
-                    this.isEdit=false;
                     setTimeout( ()=>{
-                        CalendarSetService.getColumnList(this.tableId)
+                        CalendarSetService.getColumnList(this.data.tableId)
                     },100 );
 
                 }else  if(res['succ'] === 0){
@@ -358,7 +360,6 @@ let config = {
             for(let obj of this.data.childComponents) {
                 newAllRowsData.push(obj.data.rowSetData);
             }
-            console.log(newAllRowsData);
             _this.actions.saveSetting(this.data.tableId, newAllRowsData);
         });
 
