@@ -19,8 +19,8 @@ export default {
         let promise = new Promise((resolve) => {
             resolveFunc = resolve;
         });
-        let config = _.defaultsDeep({}, confirmConfig);
-        confirmConfig.data.text = msg;
+        let config = _.defaultsDeep({},confirmConfig);
+        config.data.text = msg;
         PMAPI.openDialogByComponent(config, {
             width: 300,
             height: 170,
