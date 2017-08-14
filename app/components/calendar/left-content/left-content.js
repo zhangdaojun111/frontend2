@@ -9,6 +9,7 @@ import {PMAPI} from '../../../lib/postmsg';
 import LeftcontentCalendarset from'./leftContent.calendarSet/leftContent.calendarSet'
 import RightContentWorkFlow from '../right-content/right.content.workflowcontent/right.content.workflowcontent';
 import {CalendarSetService} from "../../../services/calendar/calendar.set.service"
+import {CalendarWorkflowData} from '../calendar.main/calendar.workflow/calendar.workflow';
 
 let config = {
     template: template,
@@ -62,11 +63,12 @@ let config = {
         Mediator.on('calendar-left:hideRemindType',data =>{
                 that.append(new LeftContentHide(data.data), this.el.find('.left-calendar-hide'));
         });
-        CalendarService.getWorkflowRecords(data).then(res => {
-            res.rows.forEach((row) =>{
-                this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
-            });
-        });
+        // CalendarService.getWorkflowRecords(data).then(res => {
+        //     res.rows.forEach((row) =>{
+        //         this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
+        //     });
+        // });
+
         Mediator.on('calendar-left:calendar-class-hide',data =>{
             data.data.forEach((row) =>{
                    that.append(new LeftContentHide(row), that.el.find('.left-calendar-hide'));

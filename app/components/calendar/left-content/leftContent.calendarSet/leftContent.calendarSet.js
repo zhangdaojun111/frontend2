@@ -60,11 +60,13 @@ let config = {
                 checkbox_a2.removeClass("workflow_checked");
                 config.data.cancel_fields.unshift('approve');
                 Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
+                Mediator.emit('calendar-left:approveData',{data:false});
             }
             else{
                 checkbox_a2.addClass("workflow_checked");
                 config.data.cancel_fields.splice($.inArray('approve',config.data.cancel_fields),1);
                 Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
+                Mediator.emit('calendar-left:approveData',{data:true});
             }
         },
         contentHide:function(){
