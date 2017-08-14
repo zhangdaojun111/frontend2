@@ -4,7 +4,7 @@ $(document).ready(function(){
     let ts_name = window.config.ts_name;
     let com = null;
     let json = {};
-    let workflowPages = ['approve-workflow','approving-workflow','finished-workflow']
+    let workflowPages = ['approve-workflow','approving-workflow','finished-workflow'];
     if( workflowPages.indexOf( ts_name ) != -1 ){
         json = {
             tableId: ts_name
@@ -14,7 +14,5 @@ $(document).ready(function(){
     if( ts_name == 'my-workflow' ){
         com = new myWorkflow(json);
     }
-    console.log( "加载定制页面" )
-    console.log( json )
     com.render($('#customDataGrid'));
 })

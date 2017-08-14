@@ -82,7 +82,6 @@ let config = {
                 this.data.customColumnsFields.push( {name:col.headerName,field:col["field"],canhide:true,candrag:true,canFix:true} );
                 this.data.columnDefs.push( obj );
             }
-            console.log( this.data.columnDefs )
         },
         //返回搜索类型
         searchType: function ( data ) {
@@ -323,22 +322,28 @@ let config = {
                     let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
                     this.actions.openSourceDataGrid( url,winTitle );
                 }else if( type === 'cancel'){
-                    msgBox.confirm( '确定取消？' ).then((res)=>{
-                        if(res===true){
-                            let json = {
-                                record_id: $event["data"]["id"],
-                                action: 4
-                            };
-                            workflowService.approve( json )
-                                .then(res => {
-                                    if( res.success ){
-                                        msgBox.showTips( '取消成功' );
-                                    }else {
-                                        msgBox.alert( '取消失败：' + res.error );
-                                    }
-                                })
-                        }
-                    })
+                    this.actions.approveWorkflow( $event["data"]["id"],4,'确定取消？' )
+                }
+            }
+            if( this.data.pageType == 2||this.data.pageType == 3||this.data.pageType == 4||this.data.pageType == 6 ){
+                if(type === 'view'){
+                    winTitle = '查看工作';
+                    let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
+                    this.actions.openSourceDataGrid( url,winTitle );
+                }else if(type === 'cancel'){
+                    this.actions.approveWorkflow( $event["data"]["id"],4,'确定取消？' )
+                }else if(type === 'withdraw'){
+                    this.actions.approveWorkflow( $event["data"]["id"],5,'确定撤回？' )
+                }else if(type === 'edit'){
+                    winTitle = '编辑工作';
+                    let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
+                    this.actions.openSourceDataGrid( url,winTitle );
+                }else if(type === 'drawApproval'){
+                    this.actions.approveWorkflow( $event["data"]["id"],7,'确定撤回？' )
+                }else if( type === 'focusWorkflow' ){
+                    winTitle = '查看工作';
+                    let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
+                    this.actions.openSourceDataGrid( url,winTitle );
                 }
             }
             if( this.data.pageType == 5 ){
@@ -362,6 +367,25 @@ let config = {
                 modal:true
             } ).then( (data)=>{
             } )
+        },
+        //操作工作流
+        approveWorkflow: function (id,action,mes) {
+            msgBox.confirm( mes ).then((res)=>{
+                if(res===true){
+                    let json = {
+                        record_id: id,
+                        action: action
+                    };
+                    workflowService.approve( json )
+                        .then(res => {
+                            if( res.success ){
+                                msgBox.showTips( '取消成功' );
+                            }else {
+                                msgBox.alert( '取消失败：' + res.error );
+                            }
+                        })
+                }
+            })
         }
     },
     afterRender: function (){
