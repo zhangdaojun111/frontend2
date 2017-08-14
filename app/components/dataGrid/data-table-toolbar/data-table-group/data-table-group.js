@@ -3,6 +3,7 @@ import template from './data-table-group.html';
 import {HTTP} from "../../../../lib/http"
 import {dataTableService} from "../../../../services/dataGrid/data-table.service";
 import './data-table-group.scss';
+import 'jquery-ui/ui/widgets/sortable.js';
 
 let config = {
     template: template,
