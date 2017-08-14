@@ -29,6 +29,7 @@ let FormEntrys = {
         this.isAddBuild=0;
         this.buildId='';
         this.btnType='new';
+
         this.tableId=config.table_id||'';
         this.parentRealId=config.parent_real_id||'';
         this.parentTempId=config.parent_temp_id||'';
@@ -54,14 +55,14 @@ let FormEntrys = {
     },
     //静态数据里是否有这个key
     hasKeyInFormDataStatic(key,staticData){
-        let isExist = false;
-        for(let dict of staticData["data"]){
-            if(dict["dfield"] == key){
-                isExist = true;
-            }
+    let isExist = false;
+    for(let dict of staticData["data"]){
+        if(dict["dfield"] == key){
+            isExist = true;
         }
-        return isExist;
-    },
+    }
+    return isExist;
+},
     //找到加载表单数据的formId和加载节点的flowId
     findFormIdAndFlowId(res) {
         if(res["data"] && res["data"]["flow_data"].length != 0) {
@@ -253,16 +254,17 @@ let FormEntrys = {
                         // }
                     }
                 }
-                if(res['record_info']['id']){
-                    let recordId = res['record_info']['id'];
+
+            if(res['record_info']['id']){
+                let recordId = res['record_info']['id'];
                 res.recordId = res['record_info']['id'];
-                    for(let d of res.data){
-                        if(d['type'] == 'songrid'){
-                            d['recordId']=recordId;
-                        }
+                for(let d of res.data){
+                    if(d['type'] == 'songrid'){
+                        d['recordId']=recordId;
                     }
                 }
             }
+        }
         }
     },
     //创建默认表单
@@ -331,10 +333,12 @@ let FormEntrys = {
                 formBase.render(html);
                 console.timeEnd('form创建时间');
     },
+
     //审批删除时重置表单可编辑性
     editDelWorkFlow(tableId,formId){
         this.childForm[tableId].actions.editDelWork(formId);
     },
+
     //接收关注人信息
     setUserIdList(tableId,data){
         if(!this.childForm[tableId]){
@@ -342,6 +346,7 @@ let FormEntrys = {
         }
         this.childForm[tableId].data.focus_users=data;
     },
+
     //获取表单数据
     getFormValue(tableId){
         if(!this.childForm[tableId]){
