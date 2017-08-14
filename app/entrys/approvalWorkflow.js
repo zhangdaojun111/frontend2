@@ -16,7 +16,8 @@ import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
 import WorkFlowGrid from '../components/workflow/workflow-grid/workflow-grid';
 import ApprovalHeader from '../components/workflow/approval-header/approval-header';
 import ApprovalWorkflow from '../components/workflow/approval-workflow';
-import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow';
+import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addHome';
+import WorkflowAddSigner from '../components/workflow/workflow-addFollow/workflow-addSigner';
 import FormEntrys from './form';
 import TreeView from '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
@@ -45,88 +46,6 @@ serchStr.split('&').forEach(res => {
     Mediator.publish('workflow:gotWorkflowInfo', res);
 });
 
-//请求部门员工信息，加载树
-let tree = [];
-let staff = [];
-
-function recursion(arr, slnds, pubInfo) {
-    if (slnds.nodes.length !== 0) {
-        for (var j in arr) {
-            slnds.nodes.forEach(child => {
-                if (j == child.id) {
-                    Mediator.publish(`workflow:${pubInfo}`, arr[j]);
-                    recursion(arr, child, pubInfo)
-                }
-            });
-        }
-    }
-}
-(async function () {
-    return workflowService.getStuffInfo({
-        url: '/get_department_tree/'
-    });
-})().then(res => {
-    tree = res.data.department_tree;
-    staff = res.data.department2user;
-
-    function recur(data) {
-        for (let item of data) {
-            item.nodes = item.children;
-            if (item.children.length !== 0) {
-                recur(item.children);
-            }
-        }
-    }
-    recur(tree);
-    var treeComp2 = new TreeView(tree, {
-        callback: function (event, selectedNode) {
-            if (event === 'select') {
-                for (var k in staff) {
-                    if (k == selectedNode.id) {
-                        Mediator.publish('workflow:checkDept', staff[k]);
-                        recursion(staff, selectedNode, 'checkDept');
-                    }
-                }
-            } else {
-                for (var k in staff) {
-                    if (k == selectedNode.id) {
-                        Mediator.publish('workflow:unCheckDept', staff[k]);
-                        recursion(staff, selectedNode, 'unCheckDept');
-                    }
-                }
-            }
-        },
-        treeType: 'MULTI_SELECT',
-        isSearch: true,
-        withButtons: true
-    });
-    treeComp2.render($('#treeMulti'));
-
-    var treeComp3 = new TreeView(tree, {
-        callback: function (event, selectedNode) {
-            if (event === 'select') {
-                for (var k in staff) {
-                    if (k == selectedNode.id) {
-                        Mediator.publish('workflow:checkAdder', staff[k]);
-                        recursion(staff, selectedNode, 'checkAdder');
-                    }
-                }
-            } else {
-                for (var k in staff) {
-                    if (k == selectedNode.id) {
-                        Mediator.publish('workflow:unCheckAdder', staff[k]);
-                        recursion(staff, selectedNode, 'unCheckAdder');
-                    }
-                }
-            }
-        },
-        treeType: 'MULTI_SELECT',
-        isSearch: true,
-        withButtons: true
-    });
-    treeComp3.render($('#addUser'));
-
-});
 
 //订阅form data
 Mediator.subscribe('workFlow:record_info', (res) => {
@@ -163,7 +82,7 @@ const approveWorkflow = (para) => {
     })().then(res => {
         if(res.success===1){
             msgBox.alert(`操作成功`);
-            // history.go(0);
+            history.go(0);
         }else{
             msgBox.alert(`失败：${res.error}`);
         }
