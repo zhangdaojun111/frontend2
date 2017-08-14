@@ -2,7 +2,63 @@ import {HTTP} from '../../lib/http';
 import alert from '../../lib/msgbox';
 
 export const FormService={
+    idsInChildTableToParent : {},
+
     frontendParentFormValue:[],
+
+    frontendRelation : [] ,
+    //父表的this.newData
+    frontendParentNewData : {},
+
+    packageParentDataForChildData(kvDict,formDataFromParent,frontendParentTableId) {
+        let result = {};
+        for(let key in kvDict){
+            //父表dfield已经填写的value
+            let val;
+            //父表的this.newData
+            let newDataFromParent = this.frontendParentNewData[frontendParentTableId];
+            //父表类型
+            if(newDataFromParent.hasOwnProperty(key)){
+                let type = newDataFromParent[key]["type"];
+                if(key != "temp_id" && key != "real_id"){
+                    //要填充的value
+                    val = formDataFromParent[key];
+                    //判断父表类型
+                    if(type == 'select' || type == 'buildin'){
+                        for(var k in newDataFromParent[key]["options"]){
+                            if(newDataFromParent[key]["options"][k]["value"] == val){
+                                val = newDataFromParent[key]["options"][k]["label"];
+                                break;
+                            }
+                        }
+                    }else if(type == 'radio'){
+                        for(var k in newDataFromParent[key]["group"]){
+                            if(newDataFromParent[key]["group"][k]["value"] == val){
+                                val = newDataFromParent[key]["group"][k]["label"];
+                                break;
+                            }
+                        }
+                    }else if(type == 'multi-select'){
+                        let resultVal = '';
+                        for(let v of val) {
+                            for(var k in newDataFromParent[key]["options"]){
+                                if(newDataFromParent[key]["options"][k]["value"] == v){
+                                    resultVal = resultVal + newDataFromParent[key]["options"][k]["label"] + '，';
+                                    break;
+                                }
+                            }
+                        }
+                        val = resultVal.substr(0,resultVal.length - 1);
+                    }
+                }else{
+                    val = formDataFromParent[key];
+                }
+                result[key] = val;
+            }
+        }
+        return result;
+    },
+
     getCountData:async function(json){
         let data=this.formatParams(json);
         // return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_count_data/',data:data});
@@ -360,6 +416,7 @@ export const FormService={
         return HTTP.post( 'get_form_static_data',json )
     },
     getDynamicData:async function (json) {
+        console.log(json);
         return HTTP.post( 'get_form_dynamic_data',json )
     },
     uploadAttachment:function (url,json,processCallback,successCallback) {

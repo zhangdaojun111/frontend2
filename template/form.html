@@ -9,27 +9,6 @@
 </head>
 <body>
 
-<button id="toEdit">编辑模式表单</button>
-<button id="count">统计</button>
-<button id="editRequired">修改必填性</button>
-<button id="defaultValue">默认值</button>
-<button id="valid">验证</button>
-<button id="exp">表达式</button>
-<button id="text">文本</button>
-<button id="date">日期时间</button>
-<button id="workflow">工作流</button>
-<button id="lalala">打开某表单</button>
-
-
-数据ID<input id="real_id" type="text">
-查看或编辑模式<input id="is_view" type="text">
-表ID<input id="tableId" type="text">
-
-
-{% ifequal window_type 'develop'%}
-<script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
-<script type="text/javascript" src="http://localhost:8080/scripts/form.js"></script>
-
 {% ifequal window_type 'develop'%}
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
 <script type="text/javascript" src="http://localhost:8080/scripts/openForm.js"></script>

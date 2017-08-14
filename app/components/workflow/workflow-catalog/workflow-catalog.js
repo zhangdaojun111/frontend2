@@ -24,7 +24,7 @@ let config={
         //生成编号
          handleCellRendererNumber (params){
             let data = params["data"];
-            return '<span class="J_number" style="text-align: center;" data-tableId="'+data['table_id']+'" data-recordid="'+data['id']+'" data-formid="'+data['form_id']+'">' + (params.rowIndex + 1) + '</span>';
+            return '<span class="J_number" style="text-align: center;" data-flowid="'+data['flow_id']+'" data-tableId="'+data['table_id']+'" data-recordid="'+data['id']+'" data-formid="'+data['form_id']+'">' + (params.rowIndex + 1) + '</span>';
         },
         //紧急程度
         handleCellRendererColor_5(params){
@@ -75,8 +75,9 @@ let config={
         openWorkFlow(ev){
             let record_id = $(ev).attr('data-recordid');
             let form_id = $(ev).attr('data-formid');
-            let table_id = $(ev).attr('data-table_id');
-            PMAPI.openDialogByIframe(`/wf/approval/?record_id=${record_id}&form_id=${form_id}&table_id=${table_id}`,{
+            let table_id = $(ev).attr('data-tableid');
+            let flow_id = $(ev).attr('data-flowid');
+            PMAPI.openDialogByIframe(`/wf/approval/?record_id=${record_id}&form_id=${form_id}&table_id=${table_id}&flow_id=${flow_id}`,{
                 width:1500,
                 height:1000,
                 title:"审批工作流",
