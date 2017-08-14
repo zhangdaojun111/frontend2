@@ -121,6 +121,9 @@ let config = {
         let set_color_id = "#set-color-"+this.data.rowSetData.field_id;
         $(set_color_id).attr("value",this.data.rowSetData.color);
         //this.append(new CalendarSetItemMulitSelect(this.data.dropdown), this.el.find('.multi-select-item'));
+    },
+    beforeDestory: function () {
+        Mediator.removeAll('calendar-set:editor');
     }
 };
 
