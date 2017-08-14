@@ -1,21 +1,30 @@
 import {BiBaseComponent} from '../../../bi.base.component';
 
-import template from "./dialog.edit.html";
-import "./dialog.edit.scss";
+import template from './dialog.edit.html';
+// import "./dialog.edit.scss";
 
+let css =`
+    body {
+        background:red;
+    }
+`
 export let config = {
     template:template,
+    data: {},
     afterRender() {
         console.log($('.inp-val').val());
+    },
+    beforeDestory: function () {
+        alert('hello 我要销毁了');
     }
 };
 
 
-class DialogEditComponent extends BiBaseComponent{
-    constructor() {
-        super(config);
-    }
-}
+// class DialogEditComponent extends BiBaseComponent{
+//     constructor() {
+//         super(config);
+//     }
+// }
 //
 // export const dialogEditSetting = {
 //     el: null,

@@ -4,12 +4,14 @@
 import {Router} from 'backbone';
 import {CanvasCellsComponent} from './canvas/canvas.cells';
 import {ViewsEditComponent} from "./views/views.edit";
+import {FormBaseComponent} from './forms/base/base';
 
 let component;
 const BiAppRouter = Backbone.Router.extend({
     routes: {
         'views/edit':"routerViewsEditComponent",
         'views/:id':'routerViewsComponent',
+        'forms/home':'routerFormsBaseComponent',
         '':'routerViewsComponent',
     },
     routerViewsComponent(id) {
@@ -26,6 +28,11 @@ const BiAppRouter = Backbone.Router.extend({
     routerViewsEditComponent() {
         let ViewsEdit = new ViewsEditComponent();
         ViewsEdit.render($('#route-outlet'));
+    },
+    routerFormsBaseComponent() {
+        let form = new FormBaseComponent();
+        console.log(form);
+        form.render($('#route-outlet'));
     }
 });
 

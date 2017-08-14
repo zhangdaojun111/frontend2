@@ -21,6 +21,7 @@ export const dialogCreateSetting = {
     show: function() {
         let component = new DialogCreateComponent();
         this.el = $('<div id="dialog-create">').appendTo(document.body);
+        console.log(this.el);
         component.render(this.el);
         this.el.dialog({
             title: '新建视图',
