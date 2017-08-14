@@ -14,6 +14,7 @@
     ul {
         overflow: auto;
         box-sizing: border-box;
+        border: 1px solid #ddd;
         li {
             height: 30px;
             line-height: 30px;
@@ -38,16 +39,32 @@
             position: absolute;
             width: 100%;
             height: 300px;
-            border: 1px solid #ddd;
+
             left: 0;
             top: calc(100% - 1px);
             display: none;
         }
     }
     .choosed {
-        min-height: 30px;
+        font-size: 0;
+        padding-bottom: 5px;
         .item {
-
+            display: inline-block;
+            background-color: #ccc;
+            color: #fff;
+            height: 20px;
+            line-height: 20px;
+            padding: 0 5px;
+            margin: 5px 5px 0 0;
+            font-size: 12px;
+            cursor: pointer;
+        }
+    }
+    &.single-select {
+        .choosed {
+            position: absolute;
+            right: 0;
+            top: 0;
         }
     }
 }
