@@ -134,6 +134,7 @@ let config = {
                         replaceDropDown: this.data.replaceDropDown,
                         isConfigField: this.data.isConfigField,
                         rowTitle: this.data.rowTitle[index],
+                        //previewText: this.actions.returnShow(row['selectedOpts']),
 
                         recipients: this.data.recipients,
                         recipients_per: this.data.recipients_per,
@@ -260,13 +261,14 @@ let config = {
                 }
             }
             CalendarService.saveCalendarTable(tableId,param).then(res=>{
-                if(res['success'] === "1"){
+                if(res['succ'] === "1"){
                     MSG.showTips("保存成功");
                     this.isEdit=false;
                     setTimeout( ()=>{
                         CalendarSetService.getColumnList(this.tableId)
-                    },100 )
-                }else  if(res['success'] === 0){
+                    },100 );
+
+                }else  if(res['succ'] === 0){
                     MSG.alert(res['error']);
                 }
             });
@@ -334,6 +336,7 @@ let config = {
             this.actions.getColumnListData(this.data.tableId);
         }
         Mediator.on('calendar-set-left:calendar-set', data => {
+            this.data.tableId = data.table_id;
             this.actions.getColumnListData(data.table_id);
         });
 

@@ -42,10 +42,10 @@ export const CalendarService = {
         };
 
         let res = HTTP.post(saveCalendarTableUrl, params).then(res => {
-            if(res['success'] === 1) {
+            if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                //alert('获取数据失败');
+                alert('获取数据失败');
             }
         });
         HTTP.flush();

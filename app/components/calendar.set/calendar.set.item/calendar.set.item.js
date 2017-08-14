@@ -40,6 +40,18 @@ let config = {
         preViewText: [],
     },
     actions: {
+        returnShow: function(param){
+            console.log(param);
+            let res = [];
+            for(let a of param){
+                for(let b in this.data.dropdown){
+                    if(a === this.data.dropdown[b]['id']){
+                        res.push(this.data.dropdown[b]['name']);
+                    }
+                }
+            }
+            return res;
+        },
 
     },
     afterRender: function() {
@@ -66,14 +78,15 @@ let config = {
         }).on('change', '.add-show-text', () => {
             let addShowTextValue = this.el.find('.add-show-text option:selected').val();
             let addShowText = this.el.find('.add-show-text option:selected').text();
-            this.data.preViewText.push(addShowText);
+            //this.data.preViewText.push(addShowText);
             this.el.find('.preview-text').text(this.data.preViewText);
-            this.data.rowSetData['selectedOpts'] = addShowTextValue;
+            this.data.rowSetData['selectedOpts'].push(addShowTextValue);
         }).on('change', '.res-text', () => {
             let valueForResValue = this.el.find('.res-text option:selected').val();
             for( let a of this.data.preViewText ){
                 if( valueForResValue.indexOf( a ) === -1 ){
                     this.data.preViewText.push(valueForResValue);
+
                 }
             }
             this.data.rowSetData['selectedRepresents'] = valueForResValue;
@@ -117,6 +130,9 @@ let config = {
             });
         });
 
+        this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']);
+        this.el.find('.preview-text').text(this.data.preViewText);
+
         $("#set-color-id").attr("id","set-color-"+this.data.rowSetData.field_id);
         let set_color_id = "#set-color-"+this.data.rowSetData.field_id;
         $(set_color_id).attr("value",this.data.rowSetData.color);
@@ -135,7 +151,6 @@ class CalendarSetItem extends Component {
         config.data.dropdownForCalendarChange = data.dropdownForCalendarChange;
         config.data.rowTitle = data.rowTitle;
         config.data.replaceDropDown = data.replaceDropDown;
-        config.data.preViewText = data.rowData['selectedOpts'];
 
         config.data.recipients = data.recipients;
         config.data.recipients_per = data.recipients_per;
