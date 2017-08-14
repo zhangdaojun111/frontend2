@@ -416,6 +416,7 @@ export const FormService={
         return HTTP.post( 'get_form_static_data',json )
     },
     getDynamicData:async function (json) {
+        console.log(json);
         return HTTP.post( 'get_form_dynamic_data',json )
     },
     uploadAttachment:function (url,json,processCallback,successCallback) {
