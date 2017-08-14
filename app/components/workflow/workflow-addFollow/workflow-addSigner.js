@@ -1,11 +1,13 @@
 import Component from '../../../lib/component';
-import template from './workflow-addFollow.html';
+import template from './workflow-addSigner.html';
 import './workflow-addFollow.scss';
+import './workflow-addSigner.scss';
 import Mediator from '../../../lib/mediator';
 import SelectStaff from './select-staff/select-staff';
-import SelectedStaff from './selected-staff/selected-staff';
+// import SelectedStaff from './selected-staff/selected-staff';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import selTemplate from './select-template';
+import AddSigner from './add-signer';
 
 let config={
     template: template,
@@ -14,7 +16,7 @@ let config={
 
     },
     afterRender(){
-        const _this=this;
+        const __this=this;
         this.el.find('#staffMulti').html('');
         //部门选择
         Mediator.subscribe('workflow:checkDept', (res)=> {
@@ -47,41 +49,26 @@ let config={
             }
         });
 
-        //注册SelectedStaff组件
-        Mediator.subscribe('workflow:pubCheck', (res)=> {
-            this.append(new SelectedStaff(res), this.el.find('#selected'));
+
+        Mediator.subscribe('workflow:checkAdder', (res)=> {
+            $.each(res,(i,val)=>{
+                val.id=i;
+                this.append(new AddSigner(val), this.el.find('#addUsercheck'));
+            });
         });
 
-        //注册SelectedStaff组件
-        Mediator.subscribe('workflow:pubCheckSingle', (res)=> {
-            this.append(new SelectedStaff(res), this.el.find('#selected'));
-        });
-        //删除SelectedStaff组件
-        Mediator.subscribe('workflow:pubUncheckSingle', (res)=> {
-            let domSpan=this.el.find('#selected').find('span');
-            for(var i=0;i<domSpan.length;i++){
-                if($(domSpan[i]).data('id')===res){
-                    $(domSpan[i]).parent().remove();
-                }
+        Mediator.subscribe('workflow:unCheckAdder', (res)=> {
+            let userArr=[];
+            for(var id in res){
+                userArr.push(id);
             }
-        });
-
-        //全选，反选btn
-        this.el.on('click','#allSelector',function(){
-            var inputs=_this.el.find('#staffMulti').find('.checkbox');
-            if($(this).prop('checked')){
-                inputs.each(function(i,item){
-                    $(item).addClass('checked');
-                    Mediator.publish('workflow:pubCheckSingle',{
-                        id:$(item).attr('value'),
-                        name:$(item).attr('name')
-                    });
-                })
-            }else{
-                inputs.each(function(i,item){
-                    $(item).removeClass("checked");
-                    Mediator.publish('workflow:pubUncheckSingle',$(item).attr('value'));
-                })
+            let domDiv=this.el.find('#addUsercheck').find('.flex');
+            for(var i=0;i<domDiv.length;i++){
+                for(var j=0;j<userArr.length;j++){
+                    if($(domDiv[i]).data('id')===userArr[j]){
+                        $(domDiv[i]).parent().remove();
+                    }
+                }
             }
         });
 
@@ -92,26 +79,34 @@ let config={
             for(var i=0;i<domSpan.length;i++){
                 o[$(domSpan[i]).data('id')]=$(domSpan[i]).text();
             }
+            
+        })
+        this.el.on('click','[name="addUser"]',function(){
+            __this.data.sigh_user_id=this.value;
+            __this.el.find('#subAdder').removeAttr('disabled');
+        });
+        this.el.on('click','#subAdder',function(){
+            let o={};
+            o.sigh_type=__this.el.find('[name="addHandlerType"]:checked').val();
+            o.sigh_user_id=__this.data.sigh_user_id;
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
-                key:this.data.key,
+                key:__this.data.key,
                 data:o
             })
-        })
+        });
     }
 };
-class WorkflowAddFollow extends Component{
+class WorkflowAddSigner extends Component{
     constructor (data){
         super(config,data);
     }
 }
 
-
-
 export default {
-    showAdd(data) {
-        let component = new WorkflowAddFollow(data);
-        let el = $('#add-follow');
+    showAddSigner(data) {
+        let component = new WorkflowAddSigner(data);
+        let el = $('#add-signer');
         component.render(el);
     }
 };

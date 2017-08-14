@@ -1,6 +1,6 @@
-import Component from '../../lib/component';
+import Component from '../../../lib/component';
 // import './workflow-addFollow.scss';
-import Mediator from '../../lib/mediator';
+import Mediator from '../../../lib/mediator';
 
 let config={
     template: `<div class="flex" data-id="{{id}}">

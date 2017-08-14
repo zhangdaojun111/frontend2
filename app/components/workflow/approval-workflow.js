@@ -6,7 +6,8 @@ import WorkFlow from './workflow-drawflow/workflow';
 import WorkflowSeal from './workflow-seal/workflow-seal';
 import {workflowService} from '../../services/workflow/workflow.service';
 import msgBox from '../../lib/msgbox';
-import AddSigner from './add-signer';
+// import AddSigner from './add-signer';
+import {PMAPI,PMENUM} from '../../lib/postmsg';
 
 let config={
     template: template,
@@ -158,49 +159,26 @@ let config={
         });
         this.el.on('click','#app-add',()=>{
             this.el.find('.addUser').show();
-        });
-        this.el.on('click','.addUser .close',()=>{
-            this.el.find('.addUser').hide();
+
+            PMAPI.openDialogByIframe(`/iframe/addSigner/`,{
+                width:1000,
+                height:800,
+                title:`加签节点`,
+                modal:true
+            }).then(res=>{
+                if(!res.onlyclose){
+                    console.log(res);
+                    Mediator.publish("approval:signUser",{
+                        sigh_type:res.sigh_type,
+                        sigh_user_id:res.sigh_user_id
+                    });
+                }
+            })
         });
 
         Mediator.subscribe("workflow:sendImgInfo",(e)=>{
             this.data.imgInfo=e;
         })
-
-        Mediator.subscribe('workflow:checkAdder', (res)=> {
-            $.each(res,(i,val)=>{
-                val.id=i;
-                this.append(new AddSigner(val), this.el.find('#addUsercheck'));
-            });
-        });
-
-        Mediator.subscribe('workflow:unCheckAdder', (res)=> {
-            let userArr=[];
-            for(var id in res){
-                userArr.push(id);
-            }
-            let domDiv=this.el.find('#addUsercheck').find('.flex');
-            for(var i=0;i<domDiv.length;i++){
-                for(var j=0;j<userArr.length;j++){
-                    if($(domDiv[i]).data('id')===userArr[j]){
-                        $(domDiv[i]).parent().remove();
-                    }
-                }
-            }
-            
-        });
-        this.el.on('click','[name="addUser"]',function(){
-            __this.data.sigh_user_id=this.value;
-            __this.el.find('#subAdder').removeAttr('disabled');
-        });
-        this.el.on('click','#subAdder',function(){
-            let sigh_type=__this.el.find('[name="addHandlerType"]:checked').val();
-            Mediator.publish("approval:signUser",{
-                sigh_type,
-                sigh_user_id:__this.data.sigh_user_id
-            });
-        });
-
     }
 };
 class ApprovalWorkflow extends Component{

@@ -32,6 +32,8 @@ module.exports = {
         choose: path.resolve(APP_PATH, 'entrys/popup/choose.js'),
         createWorkflow: path.resolve(APP_PATH, 'entrys/createWorkflow.js'),
         approvalWorkflow: path.resolve(APP_PATH, 'entrys/approvalWorkflow.js'),
+        addFocus: path.resolve(APP_PATH, 'entrys/popup/addFocus.js'),
+        addSigner: path.resolve(APP_PATH, 'entrys/popup/addSigner.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         // sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
