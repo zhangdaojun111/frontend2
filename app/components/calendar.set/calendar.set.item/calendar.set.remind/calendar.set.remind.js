@@ -32,6 +32,8 @@ let config = {
         // this.append(new CalendarSetItemMulitSelect(this.data.emailAddressList), this.el.find('.remind-send-email-address'));
         // this.append(new CalendarSetItemMulitSelect(this.data.recipients), this.el.find('.remind-receiver-email'));
         // this.append(new CalendarSetItemMulitSelect(this.data.copypeople), this.el.find('.remind-copy-for-email'));
+
+        Mediator.emit('calendar-set:editor',1);
         this.el.on('click', '.sms-remind', () => {
             this.el.find('.sms-remind').addClass("unchecked");
             this.el.find(".email-remind").removeClass("unchecked");
