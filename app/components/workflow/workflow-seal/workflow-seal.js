@@ -1,7 +1,7 @@
 import Component from '../../../lib/component';
 import template from './workflow-seal.html';
 import './workflow-seal.scss';
-
+import msgBox from '../../../lib/msgbox';
 
 import Mediator from '../../../lib/mediator';
 
@@ -13,7 +13,7 @@ let config = {
     actions: {
         addImg(e){
             let imgFile = this.el.find('.J_add')[0].files[0];
-            //    console.log(imgFile.name);
+            // this.el.find('.J_add').val("");
             if(/\.(png|PNG)$/.test(imgFile.name)){
                 if(imgFile){
                     let FR = new FileReader();
@@ -22,9 +22,12 @@ let config = {
                         let imgstr2 = imgstr.substring(22,imgstr.length);
                         Mediator.publish("workflow:seal",{"base64":imgstr2});
                         // Mediator.publish("workflow:getStamp");
+
                     };
                     FR.readAsDataURL(imgFile);
                 }
+            }else{
+                msgBox.showTips("图片类型错误");
             }
         },
         changeImg(msg){

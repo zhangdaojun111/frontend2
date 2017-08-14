@@ -24,6 +24,7 @@ module.exports = {
         addFocus: path.resolve(APP_PATH, 'entrys/popup/addFocus.js'),
         addSigner: path.resolve(APP_PATH, 'entrys/popup/addSigner.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
+        customDataGrid: path.resolve(APP_PATH, 'entrys/popup/customDataGrid.js'),
         sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         bi:path.resolve(APP_PATH, 'entrys/bi.js'),
