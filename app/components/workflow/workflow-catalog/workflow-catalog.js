@@ -224,11 +224,11 @@ let config={
         Mediator.subscribe("getApprove",(e)=>{
             if(this.code==4){
                 if(e.success==1){
-                    msgBox.alert("取消成功");
+                    msgBox.showTips("取消成功");
                 }
             }else if(this.code==5){
                 if(e.success==1){
-                    msgBox.alert("撤回成功");
+                    msgBox.showTips("撤回成功");
                 }
             }
             this.el.find('.sq').click();
