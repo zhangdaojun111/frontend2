@@ -6,9 +6,8 @@ import Component from '../../../lib/component';
 let config = {
     template: template,
     data: {
-        id: '',
-        name: '',
-        choosed: [],
+        list: [],                       // 全部列表
+        choosed: [],                    // 已经选择的数据
         displayType: 'popup',           // popup或者static popup为弹出的形式 static 为静态显示
         multiSelect: true,
         selectBoxHeight: 300            // select 框的高度
@@ -26,8 +25,6 @@ let config = {
                 });
                 this.data.choosed = choosed;
             } else {
-                let id = item.data('id');
-                let name = item.data('name');
                 this.data.choosed = [{
                     id: item.data('id'),
                     name: item.data('name')
@@ -42,18 +39,17 @@ let config = {
             this.actions.renderChoosed();
         },
         clearValue: function () {
-            this.data.id = '';
-            this.data.name = '';
+            this.data.choosed = [];
+            this.actions.renderChoosed();
         },
         onInput: function (input) {
             let value = input.val();
             if (value === '') {
-                this.el.find('li').show();
+                this.listWrap.find('li').show();
             } else {
-                this.el.find('li').hide();
-                this.el.find(`li[data-name*=${value}]`).show();
+                this.listWrap.find('li').hide();
+                this.listWrap.find(`li[data-name*=${value}]`).show();
             }
-            this.actions.clearValue();
         },
         showSelectBox: function () {
             this.listWrap.show();
@@ -103,6 +99,9 @@ let config = {
 
         if (this.data.displayType === 'popup') {
             this.listWrap.addClass('popup');
+        }
+        if (this.data.multiSelect === false) {
+            this.el.find('.auto-select-component').addClass('single-select');
         }
     }
 }
