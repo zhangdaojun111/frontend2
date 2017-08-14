@@ -81,7 +81,7 @@ let config = {
     },
     afterRender: function() {
         this.actions.rendItem();
-        this.epSearch = new expertSearch.expertSearch ();
+        // this.epSearch = new expertSearch.expertSearch ();
         this.ulChecked = true;
         // this.data.inputList = this.el.find('.condition-search-input').val();
         // debugger

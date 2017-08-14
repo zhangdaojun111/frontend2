@@ -228,6 +228,13 @@ let config = {
         }
     },
     afterRender: function() {
+        console.log( this )
+        console.log( this.data )
+        PMAPI.subscribe(PMENUM.open_iframe_params, (res)=>{
+            console.log( "%%%%%%%%%%" )
+            console.log( "%%%%%%%%%%" )
+            console.log( res )
+        })
         if(this.data.commonQuery.length == 0){
             this.el.find('.common-search-compile').css('display','none')
         } else {

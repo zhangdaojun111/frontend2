@@ -1123,7 +1123,7 @@ let config = {
                     height:600,
                     title:`高级查询`,
                     modal:true
-                }).then(res=>{
+                },{data1:[111]}).then(res=>{
                 })
 
             } )
@@ -1262,7 +1262,7 @@ let config = {
                     ary = this.actions.getDiffereceQuery(res.rows);
                 }
                 this.data.commonQueryData = res.rows;
-                let epSearch = new expertSearch.expertSearch ();
+                // let epSearch = new expertSearch.expertSearch ();
                 // epSearch.actions.renderQueryItem(ary)
                 Mediator.emit('renderQueryItem:itemData',{data:ary});
                 ary.forEach((row) => {
