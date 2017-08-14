@@ -5,7 +5,7 @@ import Component from "../../../../lib/component";
 import template from './calendar.export.html';
 import './calendar.export.scss';
 
-let config = {
+let CalendarExport = {
     template: template,
     data: {
         fromDate: '',
@@ -29,7 +29,7 @@ let config = {
         },
     },
     afterRender: function() {
-        //this.el.find('.export-btn').attr("disabled", true);
+        this.el.find('.export-btn').attr("disabled", true);
         this.el.find('.export-btn').attr('disabled', true);
         let that = this;
         this.el.on('click', '.export-btn', function () {
@@ -39,13 +39,7 @@ let config = {
         }).on('input propertychange', '.end-date', function () {
             that.actions.getSchedule();
         })
-
     },
 };
 
-class CalendarExport extends Component {
-    constructor() {
-        super(config);
-    }
-}
 export default CalendarExport;

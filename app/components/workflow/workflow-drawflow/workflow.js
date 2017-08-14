@@ -404,10 +404,11 @@ let config = {
         },
         //切换流程图
         togglePicture() {
+
             if (this.data.pictureOption == '事务图') {
                 this.data.pictureOption = '节点图';
-                $("#togglePic").val('节点图');
-                $(".draged-item").each(function () {
+                this.el.find("#togglePic").val('节点图');
+                this.el.find(".draged-item").each(function () {
                     let $this = $(this);
                     if (!$this.hasClass('draged-maodian')) {
                         let originaltext = $this.attr("originaltext");
@@ -418,8 +419,8 @@ let config = {
             }
             else {
                 this.data.pictureOption = '事务图';
-                $("#togglePic").val('事务图');
-                $(".draged-item").each(function () {
+                this.el.find("#togglePic").val('事务图');
+                this.el.find(".draged-item").each(function () {
                     let $this = $(this);
                     if (!$this.hasClass('draged-maodian')) {
                         let eventName = $this.attr("eventname");
