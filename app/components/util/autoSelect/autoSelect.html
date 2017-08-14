@@ -1,8 +1,19 @@
 <div class="auto-select-component">
-    <input type="text" placeholder="选择或者输入查找" />
+    <input class="text" type="text" placeholder="选择或者输入查找" />
+    <div class="choosed">
+        <div class="item">管理员<i class="bg-close"></i></div>
+        <div class="item">管理员<i class="bg-close"></i></div>
+        <div class="item">管理员<i class="bg-close"></i></div>
+        <div class="item">管理员<i class="bg-close"></i></div>
+    </div>
     <ul>
         {{#each list}}
-        <li data-id="{{id}}" data-name="{{name}}">{{name}}</li>
+        <li data-id="{{id}}" data-name="{{name}}">
+            <label>
+                <input type="checkbox" class="checkbox" name="" data-id="{{id}}" data-name="{{name}}"/>
+                <span>{{name}}</span>
+            </label>
+        </li>
         {{/each}}
     </ul>
 </div>
