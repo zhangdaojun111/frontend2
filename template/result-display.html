@@ -11,14 +11,7 @@
     window.config = {{window_config|safe}}
 </script>
 
-<div class="research-result">
-    <div class="data-annex-switch">
-        <span class="active">数据</span>
-        <span>附件</span>
-    </div>
-    <div class="result-display"></div>
-    <div class="page-control-component"></div>
-</div>
+<div id="search-display-window"></div>
 
 {% ifequal window_type 'develop'%}
 <!--<link rel="stylesheet" href="/client/static/css/vendors.css">-->
@@ -26,12 +19,12 @@
 <!--<script type="text/javascript" src="/client/static/vendors.js"></script>-->
 <!--<script type="text/javascript" src="/client/static/main.js"></script>-->
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
-<script type="text/javascript" src="http://localhost:8080/scripts/resultdisplay.js"></script>
+<script type="text/javascript" src="http://localhost:8080/scripts/resultDisplay.js"></script>
 {% else %}
 <link rel="stylesheet" href="/client/static/css/vendors.css">
-<link rel="stylesheet" href="/client/static/css/resultdisplay.css">
+<link rel="stylesheet" href="/client/static/css/resultDisplay.css">
 <script type="text/javascript" src="/client/static/vendors.js"></script>
-<script type="text/javascript" src="/client/static/resultdisplay.js"></script>
+<script type="text/javascript" src="/client/static/resultDisplay.js"></script>
 {% endifequal %}
 
 </body>

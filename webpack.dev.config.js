@@ -26,6 +26,7 @@ module.exports = {
     // ],
 
     entry: {
+
         form: path.resolve(APP_PATH, 'entrys/form.js'),
         addNewBuild: path.resolve(APP_PATH, 'entrys/popup/addNewBuild.js'),
         choose: path.resolve(APP_PATH, 'entrys/popup/choose.js'),
@@ -37,8 +38,8 @@ module.exports = {
         bimanager:path.resolve(APP_PATH, 'entrys/bimanager.js'),
         calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
-        register_index:path.resolve(APP_PATH, 'entrys/popup/register.js'),
-        search_result:path.resolve(APP_PATH,'entrys/resultdisplay.js'),
+        register:path.resolve(APP_PATH, 'entrys/register.js'),
+        resultDisplay:path.resolve(APP_PATH,'entrys/resultDisplay.js'),
         vendors: [
             'jquery',
             'jquery-ui',

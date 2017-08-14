@@ -2,8 +2,8 @@ import Component from '../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
 import 'jquery-ui/ui/widgets/dialog.js';
-import '../../assets/scss/popups/register.scss';
-import template from '../../../template/popup/register.html';
+import './register-page.scss';
+import template from './register-page.html';
 import {UserInfoService} from '../../services/main/userInfoService';
 import msgbox from '../../lib/msgbox';
 
@@ -114,6 +114,7 @@ let config ={
         }
     },
     afterRender:function () {
+        console.log("init register.js");
         this.data.status = 0;       //默认状态为0，投资人注册
         this.el.on('click','div.investors-btn',() => {
             this.actions.showInvestorsLogin();

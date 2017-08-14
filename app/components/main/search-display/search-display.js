@@ -1,10 +1,10 @@
-import Component from '../lib/component';
+import Component from '../../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
 import 'jquery-ui/ui/widgets/dialog.js';
-import '../assets/scss/resultdisplay.scss';
-import template from '../../template/result-display.html';
-import Mediator from '../lib/mediator';
+import './search-display.scss';
+import template from './search-display.html';
+import Mediator from '../../../lib/mediator';
 
 let config = {
     template:template,

@@ -6,7 +6,7 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import {LoginService} from '../services/login/loginService';
 import {md5} from '../services/login/md5';
 import msgBox from '../lib/msgbox';
-import {RegisterComponent} from './popup/register';
+import {RegisterComponent} from './register';
 
 function getLoginController() {
     return {
