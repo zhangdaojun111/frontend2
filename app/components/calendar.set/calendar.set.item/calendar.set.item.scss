@@ -4,8 +4,8 @@
     .set-table-item{
         border-top: 1px solid #C1CACA;
         padding: 10px 0px;
-        width: 148px;
-        min-width: 90px;
+        width: 138px;
+        min-width: 30px;
         text-align: center;
         line-height: 30px;
         margin: 0px !important;
@@ -14,6 +14,9 @@
             height: 26px;
             border-radius: 5px;
         }
+    }
+    .multi-select-item{
+        width:200px !important;
     }
     .set-remind-method {
         cursor: pointer;
