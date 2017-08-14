@@ -3,6 +3,7 @@
  */
 //import {GetMenu} from "../../components/calendar/testData/menu"
 import {HTTP} from "../../lib/http"
+import Mediator from '../../lib/mediator';
 
 const menuUrl = 'get_menu';
 const columnListUrl = 'get_column_list';
@@ -21,6 +22,7 @@ export const CalendarSetService = {
     getMenu: function () {
         let res = HTTP.get(menuUrl).then(res => {
             if(res['success'] === 1) {
+                this.menu = res['menuList'];
                 return res;
             } else {
                 alert('获取数据失败');
@@ -76,6 +78,8 @@ export const CalendarSetService = {
 
         let res = HTTP.get(columnListUrl, params).then(res => {
             if(res['code'] === CodeEnum.SUCCESS) {
+                console.log(res);
+                Mediator.emit('CalendarSetService: getColumnList', res['rows']);
                 return res;
             } else {
                 alert('获取数据失败');

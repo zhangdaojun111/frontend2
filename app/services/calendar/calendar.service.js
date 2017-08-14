@@ -32,14 +32,23 @@ export const CodeEnum = {
         SUCCESS: 200,
 };
 
-
 export const CalendarService = {
 
     saveCalendarTable: function (table_id, param_list) {
-        HTTP.post(saveCalendarTableUrl, {table_id: table_id, param_list:param_list}).then(res => {
-            console.log(res);
-            //return data;
-        })
+        let params = {
+            table_id: table_id,
+            param_list: JSON.stringify(param_list),
+        };
+
+        let res = HTTP.post(saveCalendarTableUrl, params).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                alert('获取数据失败');
+            }
+        });
+        HTTP.flush();
+        return res;
     },
 
     getCalendarTableById: function (table_id) {
@@ -165,12 +174,32 @@ export const CalendarService = {
      */
     getCalendarPreference: function (data) {
         let params = {
-            type: 6,
+            pre_type: 6,
             content: JSON.stringify(data['content']),
         };
         let res = HTTP.post(calendarPreferenceUrl, params).then(res => {
             if(res['code'] === CodeEnum.SUCCESS) {
-                alert('获取数据chngg');
+                return res;
+            } else {
+                alert('获取数据失败');
+            }
+        });
+        HTTP.flush();
+        return res;
+    },
+
+    /**
+     * data = {content: [隐藏项]}
+     * @param data
+     */
+    getCalendarhidePreference: function (data) {
+        let params = {
+            type: 6,
+            content: JSON.stringify(data['content']),
+        };
+        console.log(data);
+        let res = HTTP.post(calendarPreferenceUrl, params).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
                 alert('获取数据失败');
