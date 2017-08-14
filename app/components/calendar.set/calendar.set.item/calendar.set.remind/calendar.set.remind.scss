@@ -56,6 +56,10 @@
                 line-height: 55px;
                 text-align: center;
             }
+            .select-input {
+                width: 100%;
+            }
+
         }
     }
     .set-ok{
@@ -66,11 +70,5 @@
         background-color: #3d83cc;
         border: 0px;
         color: white;
-    }
-}
-.multi-select-dom{
-    .multi-select{
-        width:200px;
-        display: block;
     }
 }

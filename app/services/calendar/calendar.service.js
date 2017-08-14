@@ -35,10 +35,20 @@ export const CodeEnum = {
 export const CalendarService = {
 
     saveCalendarTable: function (table_id, param_list) {
-        HTTP.post(saveCalendarTableUrl, {table_id: table_id, param_list:param_list}).then(res => {
-            console.log(res);
-            //return data;
-        })
+        let params = {
+            table_id: table_id,
+            param_list: JSON.stringify(param_list),
+        };
+
+        let res = HTTP.post(saveCalendarTableUrl, params).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                alert('获取数据失败');
+            }
+        });
+        HTTP.flush();
+        return res;
     },
 
     getCalendarTableById: function (table_id) {

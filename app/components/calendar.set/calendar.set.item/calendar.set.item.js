@@ -9,6 +9,7 @@ import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
 import Mediator from '../../../lib/mediator';
 import CalendarSetRemindMethod from './calendar.set.remind/calendar.set.remind';
+import {AutoSelect} from '../../util/autoSelect/autoSelect';
 
 let config = {
     template: template,
@@ -22,7 +23,6 @@ let config = {
 
         isConfigField: false,
         selectedOpts: [],
-        allRows: [],
         initAllRows: [],
 
         //收信人
@@ -37,8 +37,23 @@ let config = {
 
         //默认选择的
         emailAddress: '',
+
+        preViewText: [],
     },
     actions: {
+        returnShow: function(param){
+            console.log(param);
+            let res = [];
+            for(let a of param){
+                for(let b in this.data.dropdown){
+                    if(a === this.data.dropdown[b]['id']){
+                        res.push(this.data.dropdown[b]['name']);
+                    }
+                }
+            }
+            return res;
+        },
+
     },
     afterRender: function() {
         // this.el.css({width: '100%'});
@@ -52,14 +67,41 @@ let config = {
                 staus = false;
             }
         });
-        this.el.on('change', '.res-text', () => {
-            let valueForRes = $('.res-text option:selected').text();
+        this.el.on('click', '.set-show-text-input', () => {
+            let setShowText = this.el.find('.set-show-text-input').is(':checked');
+            this.data.rowSetData['isSelected'] = setShowText;
+        }).on('click', '.set-calendar-page-show-text', () => {
+            let isShowHomePage = this.el.find('.set-calendar-page-show-text').is(':checked');
+            this.data.rowSetData['is_show_at_home_page'] = isShowHomePage;
+        }).on('change', '.set-color', () => {
+            let setColor = this.el.find('.set-color').val();
+            this.data.rowSetData['color'] = setColor;
+        }).on('change', '.add-show-text', () => {
+            let addShowTextValue = this.el.find('.add-show-text option:selected').val();
+            let addShowText = this.el.find('.add-show-text option:selected').text();
+            //this.data.preViewText.push(addShowText);
+            this.el.find('.preview-text').text(this.data.preViewText);
+            this.data.rowSetData['selectedOpts'].push(addShowTextValue);
+        }).on('change', '.res-text', () => {
+            let valueForResValue = this.el.find('.res-text option:selected').val();
+            for( let a of this.data.preViewText ){
+                if( valueForResValue.indexOf( a ) === -1 ){
+                    this.data.preViewText.push(valueForResValue);
 
+                }
+            }
+            this.data.rowSetData['selectedRepresents'] = valueForResValue;
         }).on('change', '.page-change-text', () => {
-            let valueForCalendarChange = $('.page-change-text option:selected').text();
+            let valueForCalendarChangeValue = this.el.find('.page-change-text option:selected').val();
+            this.data.rowSetData['selectedEnums'] = valueForCalendarChangeValue;
+            //this.data.allRows[this.data.index]['selectedEnums'] = valueForCalendarChange;
         }).on('click', '.set-remind-method', () => {
             // CalendarSetRemindMethod.emailStatus = this.data.rowSetData.email.email_status;
             // CalendarSetRemindMethod.smsStatus = this.data.rowSetData.sms.sms_status;
+            // CalendarSetRemindMethod.data.emailAddressList = this.data.emailAddressList;
+            // CalendarSetRemindMethod.data.recipients = this.data.recipients;
+            // CalendarSetRemindMethod.data.copypeople = this.data.copypeople;
+            // CalendarSetRemindMethod.data.recipients_per = this.data.recipients_per;
             // PMAPI.openDialogByComponent(CalendarSetRemindMethod, {
             //     width: 800,
             //     height: 400,
@@ -88,11 +130,17 @@ let config = {
                 }
             });
         });
-        this.el.find("#set-color-id").attr("id","set-color-"+this.data.rowSetData.field_id);
+
+        this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']);
+        this.el.find('.preview-text').text(this.data.preViewText);
+
+        $("#set-color-id").attr("id","set-color-"+this.data.rowSetData.field_id);
         let set_color_id = "#set-color-"+this.data.rowSetData.field_id;
-        this.el.find(set_color_id).attr("value",this.data.rowSetData.color);
-        console.log(this.data.rowSetData);
-        this.append(new CalendarSetItemMulitSelect(this.data.dropdown), this.el.find('.multi-select-item'));
+        $(set_color_id).attr("value",this.data.rowSetData.color);
+        //this.append(new CalendarSetItemMulitSelect(this.data.dropdown), this.el.find('.multi-select-item'));
+    },
+    beforeDestory: function () {
+        Mediator.removeAll('calendar-set:editor');
     }
 };
 

@@ -52,11 +52,13 @@ let config = {
         });
 
         Mediator.on('calendar-set-left:calendar-set',data =>{
-            $(".calendar-setting-item-content").empty();
-            this.append(new CalendarSet(data.data), $('.calendar-setting-item-content'));
+            this.el.find(".calendar-setting-item-content").empty();
+            console.log(data);
+            this.append(new CalendarSet(data.data), this.el.find('.calendar-setting-item-content'));
         });
 
         let that = this;
+
         this.el.on('click',".hide-con",function(){
             if(!$(this).is(".is-hide")){
                 $(this).addClass("is-hide");
@@ -74,6 +76,9 @@ let config = {
 
         });
 
+    },
+    beforeDestory: function () {
+        Mediator.removeAll('calendar-set-left:calendar-set');
     }
 };
 

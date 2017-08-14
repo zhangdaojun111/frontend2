@@ -40,13 +40,20 @@ let config = {
         }else {
             this.el.find('.task-show-text').html(this.data['data']['name']);
             this.el.on('click', '.task-item', () => {
-                PMAPI.openDialogByIframe(
-                    '/wf/approval/',
-                    {
-                        width: "100%",
-                        height: '900',
-                        title: '审批',
-                    });
+                // PMAPI.openDialogByIframe(
+                //     '/wf/approval/',
+                //     {
+                //         width: "100%",
+                //         height: '900',
+                //         title: '审批',
+                //     });
+                console.log(this.data);
+                PMAPI.openDialogByIframe(`/wf/approval/?record_id=${this.data['data']['id']}&form_id=${this.data['data']['form_id']}&table_id=${this.data['data']['table_id']}`,{
+                    width:1500,
+                    height:1000,
+                    title:"审批工作流",
+                    modal:true
+                })
             })
         }
     }
