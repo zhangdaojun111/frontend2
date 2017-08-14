@@ -112,10 +112,10 @@ let config={
                 data: this.actions.createFormValue(this.data.data),
                 child_table_id: this.data.sonTableId
             });
-            //给统计赋值
-            for(let d in res["data"]){
-                this.actions.setFormValue(d,res["data"][d]);
-            }
+                //给统计赋值
+                for(let d in res["data"]){
+                    this.actions.setFormValue(d,res["data"][d]);
+                }
         },
 
         //给外部提供formValue格式数据
@@ -142,7 +142,7 @@ let config={
                 let parentTempId = data["parent_temp_id"];
                 if((FormService.idsInChildTableToParent[this.data.tableId] && FormService.idsInChildTableToParent[this.data.tableId].indexOf(key) != -1 ) && val != "" && parentTempId != "" && (type == 'Buildin' || type == 'Select')) {
                     data[key] = data["parent_temp_id"];
-                }
+            }
             }
         },
 
@@ -240,7 +240,7 @@ let config={
             let errorMsg = "";
             for(let key in formValue) {
                 let data=allData[key];
-                // 如果该dfield是父表填充子表的，那就不验证
+                //如果该dfield是父表填充子表的，那就不验证
                 if(this.data.idsOfSonDataByParent.indexOf(key) != -1){
                     continue;
                 }
@@ -617,9 +617,9 @@ let config={
                 fields: fields,
                 change_fields:[data.id]
             });
-            for (let j in res['data']){
-               this.actions.set_value_for_form(res['data'][j], j);
-            }
+                for (let j in res['data']){
+                   this.actions.set_value_for_form(res['data'][j], j);
+                }
             // for(let f of data["effect"]) {
             //     //如果这个字段存在的话，再进行下面的逻辑
             //     let expression;
@@ -778,9 +778,9 @@ let config={
                         let _this=this;
                         let res=await FormService.getCountData({data:formValue})
                             //给统计赋值
-                        for(let d in res["data"]){
-                            _this.actions.setFormValue(d,res["data"][d]);
-                        }
+                            for(let d in res["data"]){
+                                _this.actions.setFormValue(d,res["data"][d]);
+                            }
                     }
                 }
             }
@@ -837,20 +837,20 @@ let config={
         //给相关赋值
         async setAboutData(id,value) {
             let res=await FormService.getAboutData({
-                        buildin_field_id: id,
-                        buildin_mongo_id: value
+                            buildin_field_id: id,
+                            buildin_mongo_id: value
                     });
-            for(let k in res["data"]){
-                //如果是周期规则
+                        for(let k in res["data"]){
+                            //如果是周期规则
                 let data=this.data.data;
                 if(data.hasOwnProperty(k) && data[k].hasOwnProperty("real_type") && data[k]["real_type"] == '27') {
-                    if(res["data"][k]["-1"]){
-                        this.actions.setFormValue.bind(this)(k,res["data"][k]["-1"]);
-                    }
-                }else{
-                    this.actions.setFormValue.bind(this)(k,res["data"][k]);
-                }
-            }
+                                if(res["data"][k]["-1"]){
+                                    this.actions.setFormValue.bind(this)(k,res["data"][k]["-1"]);
+                                }
+                            }else{
+                                this.actions.setFormValue.bind(this)(k,res["data"][k]);
+                            }
+                        }
         },
 
         //快捷添加后回显
@@ -974,29 +974,29 @@ let config={
                 json['buildin_id']=this.data.buildId;
             }
             let res= await FormService.saveAddpageData(json)
-            if(res.succ == 1){
-                if(this.data.isAddBuild && !this.flowId){
-                    let data={new_option:{
-                        py: "213213(lz)",
-                        value: "59892cbeca8b367dfbcff98d",
-                        label: "213213(离职)"}}
-                    PMAPI.sendToParent({
-                        type: PMENUM.close_dialog,
-                        key:this.data.key,
-                        data:data
-                    });
-                }
-                MSG.alert('保存成功');
-            }
-            // this.successAlert(res["error"]);
-            //自己操作的新增和编辑收到失效推送自己刷新
-            // this.isSuccessSubmit();
-            //清空子表内置父表的ids
-            // delete this.globalService.idsInChildTableToParent[this.tableId];
+                    if(res.succ == 1){
+                        if(this.data.isAddBuild && !this.flowId){
+                            let data={new_option:{
+                                py: "213213(lz)",
+                                value: "59892cbeca8b367dfbcff98d",
+                                label: "213213(离职)"}}
+                            PMAPI.sendToParent({
+                                type: PMENUM.close_dialog,
+                                key:this.data.key,
+                                data:data
+                            });
+                        }
+                        MSG.alert('保存成功');
+                    }
+                    // this.successAlert(res["error"]);
+                    //自己操作的新增和编辑收到失效推送自己刷新
+                    // this.isSuccessSubmit();
+                    //清空子表内置父表的ids
+                    // delete this.globalService.idsInChildTableToParent[this.tableId];
         },
 
         setTableIdToOptions(options,tableId){
-            options['tableId']=tableId;
+                options['tableId']=tableId;
         },
 
         //转到编辑模式
@@ -1016,8 +1016,8 @@ let config={
                     if(_this.childComponent[key].data.type=='MultiLinkage'){
                         _this.childComponent[key].actions.changeView(_this.childComponent[key],res['data'][key]['is_view']);
                     }else{
-                        _this.childComponent[key].reload();
-                    }
+                    _this.childComponent[key].reload();
+                }
                 }
                 _this.data.btnType='new';
                 _this.actions.addBtn();
@@ -1077,7 +1077,7 @@ let config={
         }
          },
 
-        checkValue:function(data,_this){
+         checkValue:function(data,_this){
             if(_this.data.data[data.dfield]){
                 _this.data.data[data.dfield]=data;
             }
@@ -1179,7 +1179,7 @@ let config={
                         <div class="btn-ripple ripple"></div>
                     </button>
                 </div></div>`)
-            }
+        }
         }
     },
     firstAfterRender(){
@@ -1478,20 +1478,20 @@ let config={
         })
         _this.el.on('click','#print',async function(){
             let res = await FormService.getPrintSetting()
-            // if(res.succ == 1){
-            if(res.data && res.data.length && res.data.length!=0){
-                SettingPrint.data['printTitles']=res['data'];
-                SettingPrint.data['myContent']=res['data'][0]['content'] || '';
-                SettingPrint.data['selectNum']=parseInt(res['data']['index']) || 1;
-            }
-            PMAPI.openDialogByComponent(SettingPrint,{
-                width: 500,
-                height: 300,
-                title: '自定义页眉',
-                modal:true
+                // if(res.succ == 1){
+                    if(res.data && res.data.length && res.data.length!=0){
+                        SettingPrint.data['printTitles']=res['data'];
+                        SettingPrint.data['myContent']=res['data'][0]['content'] || '';
+                        SettingPrint.data['selectNum']=parseInt(res['data']['index']) || 1;
+                    }
+                    PMAPI.openDialogByComponent(SettingPrint,{
+                        width: 500,
+                        height: 300,
+                        title: '自定义页眉',
+                        modal:true
+                    })
+                // }
             })
-            // }
-        })
 
         //固定按钮
         _this.el.on('scroll','.wrap',function(){

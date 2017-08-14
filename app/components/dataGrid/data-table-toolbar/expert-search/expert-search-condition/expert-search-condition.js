@@ -1,6 +1,4 @@
-/**
- * Created by zhaohaoran on 2017/8/2.
- */
+
 import Component from "../../../../../lib/component";
 import template from './expert-search-condition.html';
 import '../expert-search.scss';
@@ -11,9 +9,16 @@ let config = {
     inputObject: null,
     inputNextObject: null,
     rendItemNum:0,
+    ulChecked: true,
     epSearch: {},
     data: {
         expertItemData: [],
+        inputValue:'',
+        leftSelect:'0',
+        rightSelect:'0',
+        relationSelect:'',
+        inputBoxName:'',
+        inputBoxValue:'',
     },
     actions: {
         rendItem: function () {
@@ -22,22 +27,29 @@ let config = {
                 // this.append(new expertItem(row), $('.expert-search').find('.condition-search-ul')[config.rendItemNum]);
                 this.append(new expertItem(row), this.el.find('.condition-search-ul'));
             });
-            config.rendItemNum ++ ;
-            $('.condition-search-li').on('click', function() {
-                _this.actions.setInputValue($(this).find('.name').html(),$(this).find('.searchField').html(),$(this).find('.searchType').html());
-                _this.actions.setSelectValue($(this).find('.searchType').html());
-                _this.actions.setInputType($(this).find('.searchType').html());
-                config.epSearch.actions.hideList();
-            })
+            this.rendItemNum ++ ;
+            // this.el.find('.condition-search-li').on('click', function() {
+            //     _this.actions.setInputValue($(this).find('.name').html(),$(this).find('.searchField').html());
+            //     _this.actions.setSelectValue($(this).find('.searchType').html());
+            //     _this.actions.setInputType($(this).find('.searchType').html());
+            //     _this.actions.hideList();
+            // })
+        },
+        showList: function() {
+            this.el.find('.condition-search-ul').css('display','block');
+            this.ulChecked = !this.ulChecked;
+        },
+        hideList: function() {
+            this.el.find('.condition-search-ul').css('display','none');
+            this.ulChecked = !this.ulChecked;
         },
         setInputObject: function(object,nextObject) {
-            config.inputObject = object;
-            config.inputNextObject = nextObject;
+            this.inputObject = object;
+            this.inputNextObject = nextObject;
         },
-        setInputValue: function(value,name,type) {
-            config.inputObject.val(value);
-            config.inputObject.attr('name',name);
-            config.inputObject.attr('title',type);
+        setInputValue: function(value,name) {
+            this.inputObject.val(value);
+            this.inputObject.attr('name',name);
         },
         setInputType: function(type) {
             let inputType;
@@ -46,7 +58,7 @@ let config = {
                 case "text": inputType = 'text'; break;
                 case "number": inputType = 'number'; break
             }
-            config.inputNextObject.attr("type",inputType);
+            this.inputNextObject.attr("type",inputType);
         },
         setSelectValue: function(type) {
             let optionHtmlOne = `<option value="$regex">包含</option>
@@ -58,9 +70,9 @@ let config = {
                                 <option value="$lt">小于</option>
                                 <option value="$ne">不等于</option>`
             switch (type) {
-                case "datetime": config.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlTwo); break;
-                case "text": config.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlOne); break;
-                case "number": config.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlTwo); break
+                case "datetime": this.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlTwo); break;
+                case "text": this.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlOne); break;
+                case "number": this.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlOne); break
             }
         },
         delete: function() {
@@ -69,8 +81,35 @@ let config = {
     },
     afterRender: function() {
         this.actions.rendItem();
-        config.epSearch = new expertSearch.expertSearch ();
-        this.el.on('click','.delete',()=>{
+        // this.epSearch = new expertSearch.expertSearch ();
+        this.ulChecked = true;
+        // this.data.inputList = this.el.find('.condition-search-input').val();
+        // debugger
+        let _this = this;
+        this.el.on('click','.condition-search-li', function() {
+            _this.actions.setInputValue($(this).find('.name').html(),$(this).find('.searchField').html());
+            _this.actions.setSelectValue($(this).find('.searchType').html());
+            _this.actions.setInputType($(this).find('.searchType').html());
+            _this.data.inputBoxName = $(this).find('.name').html();
+            _this.data.inputBoxValue = $(this).find('.searchField').html();
+            _this.data.relationSelect = _this.el.find('.condition-search-select.relation').val();
+            _this.actions.hideList();
+        }).on('change','.condition-search-select.relation',function(){
+            _this.data.relationSelect = $(this).val();
+        }).on('change','.condition-search-select.left-select',function(){
+            _this.data.leftSelect = $(this).val();
+        }).on('change','.condition-search-select.right-select',function(){
+            _this.data.rightSelect = $(this).val();
+        }).on('change','.condition-search-input',function(){
+            _this.data.inputValue = $(this).val();
+        }).on('click','.condition-search-box-input', function() {
+            if (_this.ulChecked){
+                _this.actions.showList();
+            } else {
+                _this.actions.hideList();
+            }
+            _this.actions.setInputObject($(this),$(this).parent().parent().find('.condition-search-input'))
+        }).on('click','.delete',()=>{
             this.actions.delete();
         });
     }
