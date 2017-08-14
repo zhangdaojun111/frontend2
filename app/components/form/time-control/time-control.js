@@ -51,6 +51,7 @@ let config={
         });
     },
     afterRender:function(){
+        let _this=this;
         $(".ui-calendar").val("时:分:秒");
         //增加0
         function p(s) {
@@ -62,9 +63,6 @@ let config={
         var m=myDate.getMinutes();
         var s=myDate.getSeconds();
         var now=p(h)+':'+p(m)+":"+p(s);
-        let _this=this;
-
-         $("#timeInput").on("click", function () {
 
              this.el.find("input").on("click", function () {
                  $('.time,.cancel-x').css('display', 'block');
@@ -74,9 +72,6 @@ let config={
                  $(".second").children("span").text(p(s));
                  event.stopPropagation();
              })
-
-        $("#timeInput").mousemove(function(){
-
         this.el.find("input").mousemove(function(){
 
             $('.cancel-x').css('display','block');
@@ -92,12 +87,13 @@ let config={
         $(".cancel-x").on("click", function () {
             $('.time').css('display','none');
             $("#timeInput").val("时:分:秒");
-
+        })
         this.el.find(".cancel-x").on("click", function () {
             _this.el.find('.time').css('display','none');
             _this.el.find(".ui-calendar").val("时:分:秒");
 
         })
+
         this.el.find(".plus").on("click", function () {
                 //当前时间+1
                 var myDate2 = new Date();
@@ -106,31 +102,17 @@ let config={
                 myDate2.setSeconds(s + 1);
                 if($(this).parents().hasClass("hour")){
                     h = myDate2.getHours();
-
-                    $(".hour").children("span").text(p(h));
+                    _this.el.find(".hour").children("span").text(p(h));
                 }else if($(this).parents().hasClass("minute")){
                     m = myDate2.getMinutes();
-                    $(".minute").children("span").text(p(m));
+                    _this.el.find(".minute").children("span").text(p(m));
                 }else{
                     s =myDate2.getSeconds();
-                    $(".second").children("span").text(p(s));
+                    _this.el.find(".second").children("span").text(p(s));
                 }
                 var now2=p(h)+':'+p(m)+":"+p(s);
                 now = now2
-               $("#timeInput").val(now);
-
-                _this.el.find(".hour").children("span").text(h);
-                }else if($(this).parents().hasClass("minute")){
-                    m = myDate2.getMinutes();
-                    _this.el.find(".minute").children("span").text(m);
-                }else{
-                    s =myDate2.getSeconds();
-                    _this.el.find(".second").children("span").text(s);
-                }
-                var now2=p(h)+':'+p(m)+":"+p(s);
-                now = now2
-                _this.el.find(".ui-calendar").val(now);
-
+            _this.el.find("#timeInput").val(now);
             });
 
             _this.el.find(".reduce").on("click", function () {
@@ -142,34 +124,18 @@ let config={
                 if($(this).parents().hasClass("hour")){
                     h = myDate3.getHours();
 
-                    $(".hour").children("span").text(p(h));
+                    _this.el.find(".hour").children("span").text(p(h));
                 }else if($(this).parents().hasClass("minute")){
                     m= myDate3.getMinutes();
-                    $(".minute").children("span").text(p(m));
+                    _this.el.find(".minute").children("span").text(p(m));
                 }else{
                     s =myDate3.getSeconds();
-                    $(".second").children("span").text(p(s));
+                    _this.el.find(".second").children("span").text(p(s));
                 }
                 var now3=p(h)+':'+p(m)+":"+p(s);
                 now = now3;
-                $("#timeInput").val(now);
+                _this.el.find("#timeInput").val(now);
             });
-        let _this=this;
-
-            _this.el.find(".hour").children("span").text(h);
-
-                }else if($(this).parents().hasClass("minute")){
-                    m= myDate3.getMinutes();
-                    _this.el.find(".minute").children("span").text(m);
-                }else{
-                    s =myDate3.getSeconds();
-                    _this.el.find(".second").children("span").text(s);
-                }
-                var now3=p(h)+':'+p(m)+":"+p(s);
-                now = now3;
-                _this.el.find(".ui-calendar").val(now);
-            });
-
         _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
 
     },
