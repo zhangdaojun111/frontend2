@@ -197,39 +197,39 @@ let FormEntrys = {
     },
     //处理字段数据
     parseRes (res){
-    if(res !== null){
-        let formData = res["data"];
-        if(formData.length != 0){
-            let myDate = new Date();
-            let myYear = myDate.getFullYear();
-            let parentRealId = '';
-            let parentTableId = '';
-            let parentTempId = '';
-            for( let data of formData ){
-                if( data['id'] == 'real_id' ){
-                    parentRealId = data['value'];
-                }else if( data['id'] == 'table_id' ){
-                    parentTableId = data['value'];
-                }else if( data['id'] == 'temp_id' ){
-                    parentTempId = data['value'];
-                }
-            }
-            for( let data of formData ){
-                data['tableId']=this.tableId;
-                if( data.type == "year" ){
-                    if( data.value == "" ){
-                        data.value = String( myYear );
+        if(res !== null){
+            let formData = res["data"];
+            if(formData.length != 0){
+                let myDate = new Date();
+                let myYear = myDate.getFullYear();
+                let parentRealId = '';
+                let parentTableId = '';
+                let parentTempId = '';
+                for( let data of formData ){
+                    if( data['id'] == 'real_id' ){
+                        parentRealId = data['value'];
+                    }else if( data['id'] == 'table_id' ){
+                        parentTableId = data['value'];
+                    }else if( data['id'] == 'temp_id' ){
+                        parentTempId = data['value'];
                     }
-                }else if( data.type == "correspondence" ){
-                    data['parent_real_id'] = parentRealId;
-                    data['parent_table_id'] = parentTableId;
-                    data['parent_temp_id'] = parentTempId;
-                }else if(data.type == "datetime"){
-                    // if( data.value.length == 19 ){
-                    //     data.value = data.value.slice( 0,16 )
-                    // }
                 }
-            }
+                for( let data of formData ){
+                    data['tableId']=this.tableId;
+                    if( data.type == "year" ){
+                        if( data.value == "" ){
+                            data.value = String( myYear );
+                        }
+                    }else if( data.type == "correspondence" ){
+                        data['parent_real_id'] = parentRealId;
+                        data['parent_table_id'] = parentTableId;
+                        data['parent_temp_id'] = parentTempId;
+                    }else if(data.type == "datetime"){
+                        // if( data.value.length == 19 ){
+                        //     data.value = data.value.slice( 0,16 )
+                        // }
+                    }
+                }
 
             if(res['record_info']['id']){
                 let recordId = res['record_info']['id'];
@@ -241,26 +241,26 @@ let FormEntrys = {
                 }
             }
         }
-    }
-},
+        }
+    },
     //创建默认表单
     formDefaultVersion : function (data){
         let html=`<table class="form table table-striped table-bordered table-hover ">
-                <tbody>
-                    `;
+            <tbody>
+                `;
         for(let obj of data){
             if(data.type==='hidden'){
                 html+=`<div data-dfield="${obj.dfield}" data-type="${obj.type}"></div>`;
             }else{
                 html+=`<tr>
-                            <td style="width: 150px;white-space: nowrap;">${ obj.label }</td>
-                            <td><div data-dfield="${obj.dfield}" data-type="${obj.type}"></div></td>
-                    </tr>`;
+                        <td style="width: 150px;white-space: nowrap;">${ obj.label }</td>
+                        <td><div data-dfield="${obj.dfield}" data-type="${obj.type}"></div></td>
+                </tr>`;
             }
         }
         html+=`</tbody>
-            </table>`
-    return html;
+        </table>`
+        return html;
     },
     //清除所有已建form
     destoryAll(){
@@ -282,32 +282,32 @@ let FormEntrys = {
         this.init(config);
         let html=$(`<div id="detail-form" style="" class="table-wrap wrap">`).prependTo(this.el);
         let res=await  FormService.getPrepareParmas({table_id:this.tableId});
-        _this.findFormIdAndFlowId(res);
-        let json=_this.createPostJson();
+            _this.findFormIdAndFlowId(res);
+            let json=_this.createPostJson();
         res =await FormService.getFormData(json);
-        console.time('form创建时间');
+                console.time('form创建时间');
         //发送审批记录
-        if(_this.fromApprove){
-            if(res[1]['record_info']){
-                Mediator.publish('workFlow:record_info',res[1]['record_info']);
-            }
-        }
+                if(_this.fromApprove){
+                    if(res[1]['record_info']){
+                        Mediator.publish('workFlow:record_info',res[1]['record_info']);
+                    }
+                }
         let template;
-        if(_this.formId){
+                if(_this.formId){
             //手绘表单
-            template=res[2]['data']['content'];
-        }else{
-            template=_this.formDefaultVersion(res[0].data);
-        }
-        let data=_this.mergeFormData(res[0],res[1]);
-        let formData={
-            template:template,
-            data:data,
-        }
-        let formBase=new FormBase(formData);
-        _this.childForm[_this.tableId]=formBase;
-        formBase.render(html);
-        console.timeEnd('form创建时间');
+                    template=res[2]['data']['content'];
+                }else{
+                    template=_this.formDefaultVersion(res[0].data);
+                }
+                let data=_this.mergeFormData(res[0],res[1]);
+                let formData={
+                    template:template,
+                    data:data,
+                }
+                let formBase=new FormBase(formData);
+                _this.childForm[_this.tableId]=formBase;
+                formBase.render(html);
+                console.timeEnd('form创建时间');
     },
 
     //审批删除时重置表单可编辑性

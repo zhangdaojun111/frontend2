@@ -100,6 +100,7 @@ export const FormService={
         HTTP.flush();
         return res;
     },
+  
     //身份证验证
     checkCard (card) {
         let result = true;

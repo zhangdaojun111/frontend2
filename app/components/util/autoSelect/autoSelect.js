@@ -6,9 +6,8 @@ import Component from '../../../lib/component';
 let config = {
     template: template,
     data: {
-        id: '',
-        name: '',
-        choosed: [],
+        list: [],                       // 全部列表
+        choosed: [],                    // 已经选择的数据
         displayType: 'popup',           // popup或者static popup为弹出的形式 static 为静态显示
         multiSelect: true,
         selectBoxHeight: 300            // select 框的高度
@@ -25,51 +24,66 @@ let config = {
                     }
                 });
                 this.data.choosed = choosed;
-                this.actions.setValue();
             } else {
-                let id = item.data('id');
-                let name = item.data('name');
                 this.data.choosed = [{
                     id: item.data('id'),
                     name: item.data('name')
                 }];
-                this.actions.setValue();
             }
+            this.actions.renderChoosed();
         },
-        setValue: function () {
-            let names = this.data.choosed.map((item) => {
-                return item.name;
+        unSelectItem: function (id) {
+            _.remove(this.data.choosed, function (item) {
+                return item.id === id;
             });
-            this.el.find('input').val(names.join(','));
+            this.actions.renderChoosed();
         },
         clearValue: function () {
-            this.data.id = '';
-            this.data.name = '';
+            this.data.choosed = [];
+            this.actions.renderChoosed();
         },
         onInput: function (input) {
             let value = input.val();
             if (value === '') {
-                this.el.find('li').show();
+                this.listWrap.find('li').show();
             } else {
-                this.el.find('li').hide();
-                this.el.find(`li[data-name*=${value}]`).show();
+                this.listWrap.find('li').hide();
+                this.listWrap.find(`li[data-name*=${value}]`).show();
             }
-            this.actions.clearValue();
         },
         showSelectBox: function () {
-            this.el.find('ul').show();
+            this.listWrap.show();
         },
         hideSelectBox: function () {
-            // this.el.find('ul').hide();
+            this.listWrap.hide();
         },
-        getId: function () {
-            return this.data.id;
+        getValue: function () {
+            return this.data.choosed;
+        },
+        renderChoosed: function () {
+            this.listWrap.find('input:checkbox:checked').each(function () {
+                this.checked = false;
+            });
+            if (this.data.choosed.length) {
+                this.choosedWrap.show();
+                let html = [];
+                this.data.choosed.forEach((item) => {
+                    let checkbox = this.listWrap.find(`input:checkbox[data-id=${item.id}]`);
+                    checkbox[0].checked = true;
+                    html.push(`<div class="item" title="点击删除" data-id="${item.id}">${item.name}</div>`)
+                });
+                this.choosedWrap.html(html.join(''));
+            } else {
+                this.choosedWrap.hide();
+            }
         }
     },
     afterRender: function () {
-        let $wrap = this.el.find('ul');
+        this.listWrap = this.el.find('ul');
+        this.choosedWrap = this.el.find('.choosed');
         let that = this;
-        $wrap.height(this.data.selectBoxHeight);
+        this.actions.renderChoosed();
+        this.listWrap.height(this.data.selectBoxHeight);
         this.el.on('click', 'li', function () {
             that.actions.selectItem($(this));
         }).on('input', 'input', _.debounce(function () {
@@ -78,10 +92,16 @@ let config = {
             that.actions.showSelectBox();
         }).on('mouseleave', () => {
             that.actions.hideSelectBox();
+        }).on('click', '.choosed .item', function () {
+            let id = $(this).data('id');
+            that.actions.unSelectItem(id);
         });
 
         if (this.data.displayType === 'popup') {
-            this.el.find('ul').addClass('popup');
+            this.listWrap.addClass('popup');
+        }
+        if (this.data.multiSelect === false) {
+            this.el.find('.auto-select-component').addClass('single-select');
         }
     }
 }
