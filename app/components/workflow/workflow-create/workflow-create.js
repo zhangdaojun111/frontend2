@@ -71,10 +71,9 @@ let config = {
         //addFav
         this.el.on('click','#addFav',(e)=>{
             Mediator.publish('workflow:addFav', this.data.id);
-            console.log(this.data[1].rows);
             for(let i = 0;i<this.data[0].data.length;i++){
                 for(let j = 0;j<this.data[0].data[i].children.length;j++){
-                    if(this.data[0].data[i].children[j].id==this.data.id){
+                    if(this.data[0].data[i].children[j].id == this.data.id){
                         this.data[1].rows.push(this.data[0].data[i].children[j]);
                     };
                 }

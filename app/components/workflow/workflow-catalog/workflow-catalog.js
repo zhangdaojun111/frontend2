@@ -73,7 +73,6 @@ let config={
         },
         //打开新的工作流
         openWorkFlow(ev){
-            console.log(ev);
             let record_id = $(ev).attr('data-recordid');
             let form_id = $(ev).attr('data-formid');
             let table_id = $(ev).attr('data-table_id');
@@ -159,18 +158,7 @@ let config={
                 }
             })
         },
-
-    },
-    afterRender:function(){
-        this.actions.init();
-        //获取的申请和关注的总数
-        Mediator.subscribe("workflow:getRecordTotal",(msg)=>{
-            if(msg.success == 1) {
-                this.el.find(".process").text(msg.in_process_total);
-                this.el.find(".gzsl").text(msg.focus_total);
-            }
-        });
-        Mediator.subscribe("workflow:getRecords",(msg)=>{
+        getRecords(msg){
             this.data = msg;
             console.log(this.currentTab["type"]);
             if(this.currentTab["type"]=="approve"){
@@ -187,6 +175,20 @@ let config={
             }
             console.log(this.data);
             this.append(new agGrid(this.data),$("#home-page-workflow"));
+        }
+
+    },
+    afterRender:function(){
+        this.actions.init();
+        //获取的申请和关注的总数
+        Mediator.subscribe("workflow:getRecordTotal",(msg)=>{
+            if(msg.success == 1) {
+                this.el.find(".process").text(msg.in_process_total);
+                this.el.find(".gzsl").text(msg.focus_total);
+            }
+        });
+        Mediator.subscribe("workflow:getRecords",(msg)=>{
+            this.actions.getRecords(msg);
         })
         //切换不同的列头
         //进展中的工作，1已完成的工作，2当前用户申请中的工作，3当前用户已完成的工作，4当前用户审批过的工作,5待审批的工作,6关注的工作
