@@ -66,6 +66,7 @@ export const CalendarService = {
     getCalendarTreeData: function () {
         let res = HTTP.get(calendarTreeUrl).then(res => {
             if(res['code'] === CodeEnum.SUCCESS) {
+                console.log(res);
                 return res;
             } else {
                 //alert('获取数据失败');
@@ -167,12 +168,12 @@ export const CalendarService = {
             type: 6,
             content: JSON.stringify(data['content']),
         };
-
         let res = HTTP.post(calendarPreferenceUrl, params).then(res => {
             if(res['code'] === CodeEnum.SUCCESS) {
+                alert('获取数据chngg');
                 return res;
             } else {
-                //alert('获取数据失败');
+                alert('获取数据失败');
             }
         });
         HTTP.flush();

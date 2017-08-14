@@ -6,7 +6,7 @@ import template from './calendar.set.remind.html';
 import './calendar.set.remind.scss';
 import CalendarSetItemMulitSelect from '../calendar.set.item.multiselect/calendar.set.item.multiselect';
 import {CalendarService} from '../../../../services/calendar/calendar.service';
-
+import Mediator from '../../../../lib/mediator';
 let config = {
     template: template,
     data: {
@@ -27,6 +27,7 @@ let config = {
     },
     afterRender: function() {
         console.log(this.data.recipients_per);
+        Mediator.emit('calendar-set:editor',1);
         this.append(new CalendarSetItemMulitSelect(this.data.recipients_per), this.el.find('.remind-receiver-sms'));
         this.append(new CalendarSetItemMulitSelect(this.data.copypeople), this.el.find('.remind-copy-for-sms'));
         this.append(new CalendarSetItemMulitSelect(this.data.emailAddressList), this.el.find('.remind-send-email-address'));
@@ -34,13 +35,21 @@ let config = {
         this.append(new CalendarSetItemMulitSelect(this.data.copypeople), this.el.find('.remind-copy-for-email'));
 
         this.el.on('click', '.sms-remind', () => {
-
+            this.el.find('.sms-remind').addClass("unchecked");
+            this.el.find(".email-remind").removeClass("unchecked");
+            this.el.find(".sms").show();
+            this.el.find(".email").hide();
         }).on('click', '.email-remind', () => {
-
+            this.el.find('.email-remind').addClass("unchecked");
+            this.el.find(".sms-remind").removeClass("unchecked");
+            this.el.find(".email").show();
+            this.el.find(".sms").hide();
         }).on('click', '.open-sms-remind', () => {
-
+            this.el.find('.open-sms-remind').addClass("checked");
+            this.el.find(".close-sms-remind").removeClass("checked");
         }).on('click', '.close-sms-remind', () => {
-
+            this.el.find('.close-sms-remind').addClass("checked");
+            this.el.find(".open-sms-remind").removeClass("checked");
         }).on('click', '.open-email-remind', () => {
 
         }).on('click', '.close-email-remind', () => {

@@ -22,7 +22,10 @@ let config = {
                 strhtml+="<div class=\"label-task-children\">\n" +
                     "<input type='checkbox' id='select-children-"+items.field_id+"' class='chk_1 chk_approve label-select-all checkbox-children-"+data.table_id +"'";
                 strhtml+="/>" +
-                    "<label class='select-label-children select-children-"+data.table_id+" ";
+                    "<label class='select-label-children select-children-"+data.table_id;
+                if(config.data.cancel_fields.indexOf(items.field_id) != -1){
+                    strhtml+=" unchecked"
+                }
                 strhtml+="'style='background-color:"+ items.color+"' for='select-children-"+items.field_id+"' id='select-children-"+items.field_id+"'>" +
                     "</label><label>"+items.field_name+"</label>"+
                     "</div>";
@@ -135,6 +138,7 @@ let config = {
         that.data.dataitem.items.forEach((itemsid) =>{
             items_Id.push(itemsid.field_id);
         });
+        console.log(items_Id,config.data.cancel_fields);
         for(let i = 0;i< items_Id.length;i++){
             if(config.data.cancel_fields.indexOf(items_Id[i]) != -1){
                 IsChecked = false;
@@ -143,8 +147,10 @@ let config = {
             IsChecked = true;
         }
         if(IsChecked){
+            console.log(IsChecked);
             this.el.find(".select-head").addClass("label-select-all-checked");
         }
+
         config.actions.loaddatahtml(that,config.data.dataitem);
         Mediator.on('calendar-left:checkbox3-check',data =>{
             config.data.cancel_fields = data.data;
@@ -161,8 +167,16 @@ let config = {
         }).on('click','.select-label-children',function () {
             config.actions.selectlabelchildren($(this),that);
         }).on('mouseover',".hide-span-function",function () {
-            that.el.find(".search-function").css("display","block");
-        }).on("mouseover",".float-button-group-hide",function(){
+            event.stopPropagation();
+            that.el.find(".search-function").show();
+        }).on('mouseover',".float-button-group", () =>{
+            event.stopPropagation();
+            this.el.find(".float-button-group").show();
+        }).on('mouseover',".hide-type-group", () => {
+            that.el.find(".search-function").css("display","none");
+        });
+        $(document).mouseover(function(){
+            that.el.find(".float-button-group").hide();
             that.el.find(".search-function").css("display","none");
         });
     }
