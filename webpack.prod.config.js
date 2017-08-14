@@ -21,7 +21,7 @@ module.exports = {
         choose: path.resolve(APP_PATH, 'entrys/popup/choose.js'),
         workflow:path.resolve(APP_PATH, 'entrys/workflow'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
-        customDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
+        customDataGrid: path.resolve(APP_PATH, 'entrys/popup/customDataGrid.js'),
         sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         bi:path.resolve(APP_PATH, 'entrys/bi.js'),

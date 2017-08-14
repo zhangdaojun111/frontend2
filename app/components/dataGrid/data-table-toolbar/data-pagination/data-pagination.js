@@ -64,7 +64,7 @@ let config = {
                 });
             }
         },
-        refreshPagination: function () {
+        refreshPagination: function (data) {
             
         }
     },
