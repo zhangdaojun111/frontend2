@@ -38,6 +38,7 @@ module.exports = {
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         // sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
         customDataGrid: path.resolve(APP_PATH, 'entrys/popup/customDataGrid.js'),
+        expertSearch: path.resolve(APP_PATH, 'entrys/popup/expertSearch.js'),
         sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
         // bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         // bimanager:path.resolve(APP_PATH, 'entrys/bimanager.js'),

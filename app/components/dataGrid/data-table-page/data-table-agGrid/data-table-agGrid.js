@@ -867,7 +867,7 @@ let config = {
                 }
                 json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 if( this.data.filterParam.filter.length == 0 ){
-                    msgBox.alert( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
+                    msgBox.showTips( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
                 }
             }
             if( this.data.groupCheck ){
@@ -1244,7 +1244,7 @@ let config = {
             }
             dataTableService.delTableData( json ).then( res=>{
                 if( res.success ){
-                    msgBox.alert( '删除成功' )
+                    msgBox.showTips( '删除成功' )
                 }else {
                     msgBox.alert( res.error )
                 }
