@@ -23,6 +23,7 @@ import TreeView from '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import Grid from '../components/dataGrid/data-table-page/data-table-page';
+import {PMAPI,PMENUM} from '../lib/postmsg';
 
 WorkFlowForm.showForm();
 
@@ -67,8 +68,17 @@ Mediator.subscribe('workflow:focus-users', (res)=> {
     obj.user=res;
 })
 
+function GetQueryString(name)
+{
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r!=null)return  unescape(r[2]); return null;
+}
+
+
 //审批操作
 const approveWorkflow = (para) => {
+    let key=GetQueryString('key');
     let formData=FormEntrys.getFormValue(obj.table_id),
         comment=$('#comment').val();
     para.data=JSON.stringify(formData);
@@ -82,10 +92,14 @@ const approveWorkflow = (para) => {
     })().then(res => {
         if(res.success===1){
             msgBox.alert(`操作成功`);
-            history.go(0);
         }else{
             msgBox.alert(`失败：${res.error}`);
         }
+        PMAPI.sendToParent({
+            type: PMENUM.close_dialog,
+            key:key,
+            data:{}
+        })
     })
 };
 
