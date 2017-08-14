@@ -42,6 +42,8 @@ let config = {
 
         //默认选择的
         emailAddress: '',
+
+        childComponents: [],
     },
     actions: {
         getMultiSelectDropdown: function(){
@@ -119,11 +121,12 @@ let config = {
                         })
                     }
                 }
+                console.log(this.data.allRows);
                 this.data.allRows.forEach((row, index) => {
                     if(this.data.rowTitle[index]['id'] && this.data.rowTitle[index]['dtype'] === '8' && this.data.replaceDropDown.length !== 0){
                         this.data.isConfigField = true;
                     }
-                    this.append(new CalendarSetItem({
+                    let calendarSetItem = new CalendarSetItem({
                         rowData: row,
                         dropdown: this.data.dropdown,
                         dropdownForRes: this.data.dropdownForRes,
@@ -137,7 +140,26 @@ let config = {
                         copypeople: this.data.copypeople,
                         emailAddressList: this.data.emailAddressList,
                         emailAddress: this.data.emailAddress,
-                    }), this.el.find('.set-items'));
+                    });
+                    this.data.childComponents.push(calendarSetItem);
+                    this.append(calendarSetItem, this.el.find('.set-items'));
+                    // this.append(new CalendarSetItem({
+                    //     allRows: this.data.allRows,
+                    //     index: index,
+                    //     rowData: row,
+                    //     dropdown: this.data.dropdown,
+                    //     dropdownForRes: this.data.dropdownForRes,
+                    //     dropdownForCalendarChange: this.data.dropdownForCalendarChange,
+                    //     replaceDropDown: this.data.replaceDropDown,
+                    //     isConfigField: this.data.isConfigField,
+                    //     rowTitle: this.data.rowTitle[index],
+                    //
+                    //     recipients: this.data.recipients,
+                    //     recipients_per: this.data.recipients_per,
+                    //     copypeople: this.data.copypeople,
+                    //     emailAddressList: this.data.emailAddressList,
+                    //     emailAddress: this.data.emailAddress,
+                    // }), this.el.find('.set-items'));
                 })
             }).catch(err=>{
                 console.log('error',err);
@@ -236,14 +258,12 @@ let config = {
                             this.data.recipients_per.push( { name:data.dname,id:data.id } )
                         }
                     }
-                    console.log(this.data.recipients, this.data.recipients_per);
                 });
                 UserInfoService.getAllUsersInfo().then(user => {
                     this.data.copypeople = [];
                     for( let data of user.rows ){
                         this.data.copypeople.push( {name:data.name,id:data.id} );
                     }
-                    console.log(this.data.copypeople);
                 });
 
                 CalendarSetService.getEmailSetting().then(res => {
@@ -257,7 +277,6 @@ let config = {
                             this.data.emailAddress = res['data'][x]['id'];
                         }
                     }
-                    console.log(this.data.emailAddressList, this.data.emailAddress);
                 });
 
             });
@@ -287,6 +306,12 @@ let config = {
             Mediator.emit('calendar-set:editor',{data:-1});
         }).on('click', '.reset-btn', () => {
             _this.actions.despReset(this.data.tableId);
+        }).on('click', '.save-btn', () => {
+            let newAllRowsData = [];
+            for(let obj of this.data.childComponents) {
+                newAllRowsData.push(obj.data.rowSetData);
+            }
+            console.log(newAllRowsData);
         });
 
     }

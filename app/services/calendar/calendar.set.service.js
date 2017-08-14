@@ -106,7 +106,7 @@ export const CalendarSetService = {
     getEmailSetting: function(){
         let res = HTTP.get(emailSettingUrl).then(res => {
             console.log(res);
-            if(res['code'] === CodeEnum.SUCCESS) {
+            if(res['success'] === 1) {
                 return res;
             } else {
                 alert('获取数据失败');
