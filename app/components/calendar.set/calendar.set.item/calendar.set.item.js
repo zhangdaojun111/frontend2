@@ -6,7 +6,7 @@ import template from './calendar.set.item.html';
 import './calendar.set.item.scss';
 import CalendarSetItemMulitSelect from "./calendar.set.item.multiselect/calendar.set.item.multiselect"
 import {CalendarService} from '../../../services/calendar/calendar.service';
-import {PMAPI} from '../../../lib/postmsg';
+//import {PMAPI} from '../../../lib/postmsg';
 import Mediator from '../../../lib/mediator';
 import CalendarSetRemindMethod from './calendar.set.remind/calendar.set.remind';
 import {AutoSelect} from '../../util/autoSelect/autoSelect';
@@ -79,7 +79,8 @@ let config = {
         }).on('change', '.add-show-text', () => {
             let addShowTextValue = this.el.find('.add-show-text option:selected').val();
             let addShowText = this.el.find('.add-show-text option:selected').text();
-            //this.data.preViewText.push(addShowText);
+            this.data.preViewText.push(addShowText);
+            
             this.el.find('.preview-text').text(this.data.preViewText);
             this.data.rowSetData['selectedOpts'].push(addShowTextValue);
         }).on('change', '.res-text', () => {
@@ -87,7 +88,7 @@ let config = {
             for( let a of this.data.preViewText ){
                 if( valueForResValue.indexOf( a ) === -1 ){
                     this.data.preViewText.push(valueForResValue);
-
+                    console.log(this.data.preViewText);
                 }
             }
             this.data.rowSetData['selectedRepresents'] = valueForResValue;

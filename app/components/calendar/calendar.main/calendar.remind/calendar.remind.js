@@ -14,31 +14,31 @@ let css = `
 .remind-row {
         border: 1px solid rgba(228, 228, 228, 1);
         background-color: rgba(250, 250, 250, 1);
-    }
-    .title {
-        padding-left: 5px;
-        width: 35%;
-        height: 40px;
-        vertical-align: middle;
-    }
-    span {
-        background-color: #ffffff;
-        border: 1px solid rgba(228, 228, 228, 1);
-        vertical-align: middle;
-        line-height: 30px;
-        display: inline-block;
-        margin: 5px 0px;
-        width: 96%;
-        padding: 0px 5px;
-    }
-    .start, .end {
-        width: 46.7%;
-        height: 30px;
-    }
-    .detail {
-        width: 598px;
-        margin: 5px 5px 5px 0px;
-    }
+}
+.title {
+    padding-left: 5px;
+    width: 35%;
+    height: 40px;
+    vertical-align: middle;
+}
+.remind-span, .res-form, .date-attr, .start, .end {
+    background-color: #ffffff;
+    border: 1px solid rgba(228, 228, 228, 1);
+    vertical-align: middle;
+    line-height: 30px;
+    display: inline-block;
+    margin: 5px 0px;
+    width: 96%;
+    padding: 0px 5px;
+}
+.start, .end {
+    width: 46.7%;
+    height: 30px;
+}
+.detail {
+    width: 598px;
+    margin: 5px 5px 5px 0px;
+}
 `
 
 let CalendarRemind = {
