@@ -190,40 +190,40 @@ Mediator.subscribe('workflow:choose', function (info) {
 });
 
 //首页workflow的初始化
-(async function () {
-    return workflowService.getRecordTotal()
-})().then(res=>{
-    Mediator.publish('workflow:getRecordTotal',res);
-    return workflowService.getRecords({
-        "type":5,
-        "rows":9999,
-        "page":1
-    })
-}).then((res)=>{
-    Mediator.publish("workflow:getRecords",res)
-});
+// (async function () {
+//     return workflowService.getRecordTotal()
+// })().then(res=>{
+//     Mediator.publish('workflow:getRecordTotal',res);
+//     return workflowService.getRecords({
+//         "type":5,
+//         "rows":9999,
+//         "page":1
+//     })
+// }).then((res)=>{
+//     Mediator.publish("workflow:getRecords",res)
+// });
 
-//首页workflow的点击出现相应的数据
-Mediator.subscribe('workflow:Record',(e)=>{
-    (async function () {
-        return workflowService.getRecordTotal();
-    })().then(res=>{
-        Mediator.publish('workflow:getRecordTotal',res);
-        return workflowService.getRecords(e);
-    }).then(res=>{
-        Mediator.publish("workflow:getRecords",res);
-    })
-});
+// //首页workflow的点击出现相应的数据
+// Mediator.subscribe('workflow:Record',(e)=>{
+//     (async function () {
+//         return workflowService.getRecordTotal();
+//     })().then(res=>{
+//         Mediator.publish('workflow:getRecordTotal',res);
+//         return workflowService.getRecords(e);
+//     }).then(res=>{
+//         Mediator.publish("workflow:getRecords",res);
+//     })
+// });
 
 
-// console.log(workflowService.getRecordTotal());
-//workflow 取消申请
-Mediator.subscribe("workflow:approve",(e)=>{
-    (async function (e) {
-        console.log(e);
-        return workflowService.approve(e);
-    })(e).then(res=>{
-        console.log(3);
-        Mediator.publish("getApprove",res);
-    })
-});
+// // console.log(workflowService.getRecordTotal());
+// //workflow 取消申请
+// Mediator.subscribe("workflow:approve",(e)=>{
+//     (async function (e) {
+//         console.log(e);
+//         return workflowService.approve(e);
+//     })(e).then(res=>{
+//         console.log(3);
+//         Mediator.publish("getApprove",res);
+//     })
+// });
