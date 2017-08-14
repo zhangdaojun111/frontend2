@@ -104,9 +104,12 @@ let config = {
                     isAllGroupchecked = false;
                 }
             });
-            if(isAllGroupchecked){
-                Mediator.emit('calendar-left:remind-checkbox',1);
+            console.log(that.el.find('.label-select-all-show').length);
+            if(isAllGroupchecked && that.el.find('.label-select-all-show').length > 0){
                 that.el.find("#checkbox_a3").addClass('label-select-all-checked');
+            }
+            if(that.el.find('.label-select-all-show').length ==0){
+                that.el.find("#checkbox_a3").removeClass('label-select-all-checked');
             }
             for(let j = 0;j < config.data.rows.length;j++) {
                 if (hide_table_id == config.data.rows[j].table_id) {
@@ -131,6 +134,7 @@ let config = {
             config.data.cancel_fields = objs.cancel_fields;
             config.data.hide_item_table = objs.hide_tables;
             config.data.rows = objs.rows;
+            console.log(objs.cancel_fields);
             for(let i = 0;i<objs.hide_tables.length;i++){
                 let hide_table_name = "";
                 let hide_table_id = objs.hide_tables[i];
@@ -153,18 +157,16 @@ let config = {
             objs.rows.forEach((data) =>{
                 that.append(new LeftContentSelect(data,objs.cancel_fields,config.data.hide_item_table,config.data.hide_tables,config.data.rows), that.el.find('.remind-group'));
             });
+            let isAllGroupchecked = true;
+            this.el.find('.label-select-all-show').each(function(){
+                console.log(isAllGroupchecked);
+                if(!$(this).is('.label-select-all-checked')){
+                    isAllGroupchecked = false;
+                }
+            });
             Mediator.emit('calendar-left:calendar-class-hide',{data:config.data.hide_tables});
             objects = objs;
         });
-        let isAllGroupchecked = true;
-        this.el.find('.label-select-all-show').each(function(){
-            if(!$(this).is('.label-select-all-checked')){
-                isAllGroupchecked = false;
-            }
-        });
-        if(isAllGroupchecked){
-            $("#checkbox_a3").addClass('label-select-all-checked');
-        }
         Mediator.on('calendar-left:remind-checkbox',data =>{
             if(data === 1){
                 that.el.find("#checkbox_a3").addClass('label-select-all-checked');
