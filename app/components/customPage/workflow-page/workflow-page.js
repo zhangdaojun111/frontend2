@@ -2,10 +2,13 @@ import Component from "../../../lib/component";
 import template from './workflow-page.html';
 import './workflow-page.scss';
 import {HTTP} from "../../../lib/http";
+import msgBox from '../../../lib/msgbox';
+import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import agGrid from '../../../components/dataGrid/agGrid/agGrid';
 import {wchService} from '../../../services/dataGrid/workflow-config-header.service';
 import {dataTableService} from '../../../services/dataGrid/data-table.service';
 import {dgcService} from "../../../services/dataGrid/data-table-control.service";
+import {workflowService} from "../../../services/workflow/workflow.service";
 import dataPagination from "../../dataGrid/data-table-toolbar/data-pagination/data-pagination";
 import FloatingFilter from "../../dataGrid/data-table-toolbar/floating-filter/floating-filter";
 import customColumns from "../../dataGrid/data-table-toolbar/custom-columns/custom-columns";
@@ -21,7 +24,7 @@ let config = {
         pageNum: 1,
         //pageType{0:'进展中的工作',1:'已完成的工作',2:'我的工作申请中的工作',3:'我的工作已完成的工作',4:'我的工作审批过的工作',5:'工作审批',6:'我的工作已关注的工作'}
         pageType: 5,
-        tableId2pageType: {'approve-workflow':5},
+        tableId2pageType: {'approve-workflow':5,'approving-workflow':0,'finished-workflow':1,'my-workflow':2,'finish-workflow':3,'focus-workflow':6,'approved-workflow':4},
         //定制列（列宽）
         colWidth: {},
         //定制列（固定列）
@@ -38,6 +41,8 @@ let config = {
         searchValue: [],
         //floatingFilter搜索参数
         searchOldValue: [],
+        //选择的数据
+        selectRows: [],
         //定制列数据
         customColumnsFields: [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false}, {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false}, {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
     },
@@ -79,7 +84,6 @@ let config = {
                 this.data.customColumnsFields.push( {name:col.headerName,field:col["field"],canhide:true,candrag:true,canFix:true} );
                 this.data.columnDefs.push( obj );
             }
-            console.log( this.data.columnDefs )
         },
         //返回搜索类型
         searchType: function ( data ) {
@@ -102,6 +106,9 @@ let config = {
                 onRowDoubleClicked: this.actions.onRowDoubleClicked
             }
             this.agGrid = new agGrid(gridData);
+            console.log( "______________" )
+            console.log( "______________" )
+            console.log( this.el )
             this.append(this.agGrid , this.el.find('#workflow-agGrid'));
             this.actions.calcColumnState();
             //渲染分页
@@ -128,12 +135,28 @@ let config = {
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
             }
         },
+        //返回选择数据
+        retureSelectData: function () {
+            this.data.selectRows = [];
+            let rows = this.agGrid.gridOptions.api.getSelectedRows();
+            for( let r of rows ){
+                if( r._id ){
+                    this.data.selectRows.push( r._id );
+                }
+            }
+        },
         //分页刷新
         refreshData: function () {
 
         },
         //渲染按钮
         renderBtn: function () {
+            if( this.data.tableId == 'my-workflow' ){
+                this.el.find( '.batch-cancel' )[0].style.display = 'inline-block';
+                this.el.find( '.batch-cancel' ).on( 'click',()=>{
+
+                } );
+            }
             //floatingFilter
             let floatSearch = this.el.find( '.float-search-btn' );
             if( floatSearch[0] ){
@@ -306,10 +329,85 @@ let config = {
         onRowDoubleClicked: function ($event) {
         },
         onCellClicked: function ($event) {
-            console.log( "____________________" )
-            console.log( "____________________" )
-            console.log( $event )
+            let type = $event["event"]["target"]["dataset"]["type"];
+            let obj = {
+                form_id: $event["data"]["form_id"],
+                record_id: $event["data"]["id"],
+                flow_id: $event["data"]["flow_id"],
+                table_id: $event["data"]["table_id"]
+            }
+            let winTitle = '';
+            if( this.data.pageType == 0 || this.data.pageType == 1 ){
+                if(type === 'view'){
+                    winTitle = '查看工作';
+                    let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
+                    this.actions.openSourceDataGrid( url,winTitle );
+                }else if( type === 'cancel'){
+                    this.actions.approveWorkflow( $event["data"]["id"],4,'确定取消？' )
+                }
+            }
+            if( this.data.pageType == 2||this.data.pageType == 3||this.data.pageType == 4||this.data.pageType == 6 ){
+                if(type === 'view'){
+                    winTitle = '查看工作';
+                    let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
+                    this.actions.openSourceDataGrid( url,winTitle );
+                }else if(type === 'cancel'){
+                    this.actions.approveWorkflow( $event["data"]["id"],4,'确定取消？' )
+                }else if(type === 'withdraw'){
+                    this.actions.approveWorkflow( $event["data"]["id"],5,'确定撤回？' )
+                }else if(type === 'edit'){
+                    winTitle = '编辑工作';
+                    let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
+                    this.actions.openSourceDataGrid( url,winTitle );
+                }else if(type === 'drawApproval'){
+                    this.actions.approveWorkflow( $event["data"]["id"],7,'确定撤回？' )
+                }else if( type === 'focusWorkflow' ){
+                    winTitle = '查看工作';
+                    let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
+                    this.actions.openSourceDataGrid( url,winTitle );
+                }
+            }
+            if( this.data.pageType == 5 ){
+                if(type === 'approve'){
+                    winTitle = '审批工作';
+                }else if(type === 'view'){
+                    winTitle = '查看工作';
+                }else{
+                    return false;
+                }
+                let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
+                this.actions.openSourceDataGrid( url,winTitle );
+            }
         },
+        //打开穿透数据弹窗
+        openSourceDataGrid: function ( url,title ) {
+            PMAPI.openDialogByIframe( url,{
+                width: 1300,
+                height: 800,
+                title: title,
+                modal:true
+            } ).then( (data)=>{
+            } )
+        },
+        //操作工作流
+        approveWorkflow: function (id,action,mes) {
+            msgBox.confirm( mes ).then((res)=>{
+                if(res===true){
+                    let json = {
+                        record_id: id,
+                        action: action
+                    };
+                    workflowService.approve( json )
+                        .then(res => {
+                            if( res.success ){
+                                msgBox.showTips( '取消成功' );
+                            }else {
+                                msgBox.alert( '取消失败：' + res.error );
+                            }
+                        })
+                }
+            })
+        }
     },
     afterRender: function (){
         this.floatingFilterCom = new FloatingFilter();
