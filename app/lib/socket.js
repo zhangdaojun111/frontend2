@@ -1,4 +1,4 @@
-import Mediator from '../../lib/mediator';
+import Mediator from './mediator';
 
 let SocketMgr = {
 
@@ -30,10 +30,10 @@ let SocketMgr = {
 
 }
 SocketMgr.connect();
-// window.setTimeout(function () {
-//     SocketMgr.socket.send(JSON.stringify({
-//         "test": 1,
-//         'msg_type': 4
-//     }))
-// }, 2000)
+window.setTimeout(function () {
+    SocketMgr.socket.send(JSON.stringify({
+        "test": 1,
+        'msg_type': 5
+    }))
+}, 2000)
 

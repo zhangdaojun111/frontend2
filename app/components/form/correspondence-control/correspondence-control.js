@@ -39,6 +39,11 @@ let config={
         }
         let dataGrid=new DataTableAgGrid(config);
         this.append(dataGrid,this.el.find('.correspondence-box'));
+        Mediator.subscribe('form:correspondenceDefaultData:'+this.data.tableId,()=>{
+            if(res == this.data.value){
+                dataGrid.reload();
+            }
+        })
     },
     beforeDestory:function(){
     }

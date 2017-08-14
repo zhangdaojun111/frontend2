@@ -114,7 +114,8 @@ let SettingPrint = {
            HTTP.post('user_preference',{action:'save',content:JSON.stringify(_this.data.printTitles)}).then(res=>{
                    if(res.succ == 1){
                        $('title').text(_this.data.myContent);
-                       window.print();
+                       $('iframe:eq(1)').get(0).focus();
+                       $('iframe:eq(1)').get(0).contentWindow.print();
                    }else{
                        _this.data.printTitles=tempPrintTitles;
                    }

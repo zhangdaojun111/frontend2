@@ -41,6 +41,8 @@ let config = {
         searchValue: [],
         //floatingFilter搜索参数
         searchOldValue: [],
+        //选择的数据
+        selectRows: [],
         //定制列数据
         customColumnsFields: [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false}, {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false}, {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
     },
@@ -133,12 +135,28 @@ let config = {
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
             }
         },
+        //返回选择数据
+        retureSelectData: function () {
+            this.data.selectRows = [];
+            let rows = this.agGrid.gridOptions.api.getSelectedRows();
+            for( let r of rows ){
+                if( r._id ){
+                    this.data.selectRows.push( r._id );
+                }
+            }
+        },
         //分页刷新
         refreshData: function () {
 
         },
         //渲染按钮
         renderBtn: function () {
+            if( this.data.tableId == 'my-workflow' ){
+                this.el.find( '.batch-cancel' )[0].style.display = 'inline-block';
+                this.el.find( '.batch-cancel' ).on( 'click',()=>{
+
+                } );
+            }
             //floatingFilter
             let floatSearch = this.el.find( '.float-search-btn' );
             if( floatSearch[0] ){

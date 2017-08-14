@@ -1446,6 +1446,37 @@ let config = {
                 this.actions.openSourceDataGrid( url,winTitle );
             }
         },
+        //操作列点击事件
+        gridHandle: function ( data ) {
+            console.log( "操作" )
+            console.log( data )
+            if( data.event.srcElement.className == 'gridView' ){
+                console.log( '查看' )
+                let obj = { table_id: this.data.tableId,real_id: data.data._id,btnType: 'view',is_view:1 };
+                let url = dgcService.returnIframeUrl( '/form/index/',obj );
+                let title = '查看'
+                this.actions.openSourceDataGrid( url,title );
+            }
+            if( data.event.srcElement.className == 'gridEdit' ){
+                console.log( '编辑' )
+                let obj = { table_id: this.data.tableId,real_id: data.data._id,btnType: 'edit' };
+                let url = dgcService.returnIframeUrl( '/form/index/',obj );
+                let title = '编辑'
+                this.actions.openSourceDataGrid( url,title );
+            }
+            if( data.event.srcElement.className == 'gridHistory' ){
+                console.log( '历史' )
+            }
+        },
+        //行双击
+        onRowDoubleClicked: function (data) {
+            console.log( "行双击查看" )
+            console.log( data )
+            let obj = { table_id: this.data.tableId,real_id: data.data._id,btnType: 'view' };
+            let url = dgcService.returnIframeUrl( '/form/index/',obj );
+            let title = '查看'
+            this.actions.openSourceDataGrid( url,title );
+        },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title ) {
             PMAPI.openDialogByIframe( url,{
