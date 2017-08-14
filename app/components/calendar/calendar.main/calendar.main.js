@@ -63,7 +63,7 @@ let config = {
         scheduleDataList: [],
 
         workflowData: [],
-        isWorkflowDataReady: false,
+        isWorkflowDataReady: true,
 
         isShowWorkflowData: true,
     },
@@ -312,7 +312,10 @@ let config = {
             this.data.from_date = this.data.monthDataList[0]['weekList'][0]['dataTime'];
             this.data.to_date = this.data.monthDataList[5]['weekList'][6]['dataTime'];
             CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
-            //Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
+            if(this.data.calendarContent === 'month') {
+                CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+                Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
+            }
             this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date, cancel_fields: this.data.cancel_fields},'month');
         },
 
@@ -344,7 +347,7 @@ let config = {
                 this.data.to_date = arrHead[6]['time'];
             }
             //Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
-            CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+            //CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
         },
 
         createDayCalendar: function(){
@@ -363,7 +366,7 @@ let config = {
             this.data.from_date = date;
             this.data.to_date = date;
             //Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
-            CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+            //CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
         },
 
         makeScheduleData: function (startDate, endDate) {
@@ -461,6 +464,9 @@ let config = {
                 this.actions.createDayCalendar();
                 this.append(new CalendarDay(this.data.dayDataList), this.el.find(".calendar-main-content"));
                 Mediator.emit('CalendarMain: date',{from_date: this.data.from_date, to_date: this.data.to_date});
+            }
+            if(this.data.calendarContent !== 'month') {
+                Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
             }
         },
 
@@ -651,7 +657,6 @@ let config = {
 
 
         Mediator.on('CalendarWorkflowData: workflowData', data => {
-            console.log(data);
             this.data.workflowData = data;
             this.data.isWorkflowDataReady = true;
             this.actions.workflowMission();
@@ -736,15 +741,14 @@ let config = {
                 }
                 this.data.cancel_fields = arr_1;
                 console.log(this.data.cancel_fields);
-                if(this.data.calendarContent === 'month') {
-                    this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
-                }
-                //this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
+                // if(this.data.calendarContent === 'month') {
+                //     this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
+                // }
+                this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
                 this.actions.changeMainView(this.data.calendarContent);
             }
         });
         Mediator.on('calendar-left:approveData', data => {
-            console.log(data);
             if(data.data) {
                 this.data.isShowWorkflowData = true;
             }else {

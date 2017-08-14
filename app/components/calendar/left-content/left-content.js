@@ -55,6 +55,14 @@ let config = {
             }
         }
     },
+    firstAfterRender: function () {
+        Mediator.on('CalendarWorkflowData: workflowData', data => {
+            this.el.find('.item-content-3').empty();
+            data.forEach((row) =>{
+                this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
+            });
+        });
+    },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
         this.append(new LeftcontentCalendarset, this.el.find('.left-calendar-set'));
@@ -63,6 +71,10 @@ let config = {
         Mediator.on('calendar-left:hideRemindType',data =>{
                 that.append(new LeftContentHide(data.data), this.el.find('.left-calendar-hide'));
         });
+        Mediator.on('CalendarWorkflowData: changeWorkflowData', data => {
+            console.log(data);
+        });
+
         // CalendarService.getWorkflowRecords(data).then(res => {
         //     res.rows.forEach((row) =>{
         //         this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
