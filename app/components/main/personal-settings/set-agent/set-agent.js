@@ -252,4 +252,4 @@ export const agentSetting = {
     }
 }
 
-agentSetting.show();
+//agentSetting.show();
