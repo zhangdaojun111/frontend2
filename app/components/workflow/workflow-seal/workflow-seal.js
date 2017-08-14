@@ -158,9 +158,13 @@ let config = {
             let mouseTop = e.clientY;
             let imgId =$(e.target).attr("data-id");
             console.log(mouseLeft-fromOffleft);
-            if(mouseLeft-offsetLeft>fromOffleft&&mouseTop-offsetTop>fromOfftop&&mouseLeft+imgWidth-offsetLeft<fromWidth+fromOffleft&&mouseTop+imgHeight-offsetTop<fromHeight+fromOfftop){
-                let left = (mouseLeft-fromOffleft)/fromWidth;
-                let top = (mouseTop-fromOfftop)/fromHeight;
+            let leftout = mouseLeft-offsetLeft>fromOffleft;
+            let rightout = mouseTop-offsetTop>fromOfftop;
+            let topout = mouseTop+imgHeight-offsetTop<fromHeight+fromOfftop;
+            let bottomout = mouseLeft+imgWidth-offsetLeft<fromWidth+fromOffleft;
+            if(leftout&&rightout&&topout&&bottomout){
+                let left = (mouseLeft-fromOffleft-offsetLeft)/fromWidth;
+                let top = (mouseTop-fromOfftop-offsetTop)/fromHeight;
                 top= top.toFixed(6)*100;
                 left= left.toFixed(6)*100;
                 this.actions.createImg(top,left,280,140,imgId);
@@ -174,7 +178,8 @@ let config = {
             let top1 = top+"%";
             let left1 = left+"%";
             let host = "http://"+window.location.host;
-            let html = "<div class='imgseal' data-height="+height+" data-width="+width+" data-viewLeft="+viewLeft+" data-viewTop="+viewTop+" data-imgid="+id+" style='top:"+top1+";left:"+left1+";z-index:"+1002+";position:absolute;padding-top:15px;'><img  width=50 height=50 src='"+host+"/download_attachment/?file_id="+id+"&download=0'/><i class='J_del'  style='display: none;position: absolute;right: -22px;top: 0;width: 23px;height: 23px;background: url(assets/icon_del.png) no-repeat;'>X</i></div>";
+            let html = "<div class='imgseal noprint' data-height="+height+" data-width="+width+" data-viewLeft="+viewLeft+" data-viewTop="+viewTop+" data-imgid="+id+" style='top:"+top1+";left:"+left1+";z-index:"+1002+";position:absolute;padding-top:15px;'><img  width=50 height=50 src='"+host+"/download_attachment/?file_id="+id+"&download=0'/><i class='J_del'  style='display: none;position: absolute;right: -22px;top: 0;width: 23px;height: 23px;background: url(assets/icon_del.png) no-repeat;'>X</i></div>";
+            html += `<img class="printS" style="top:${top1};left:${left1};position: absolute;margin-top: 17px;" width=50 height=50 src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
             $('#place-form').children(":first").append(html);
         },
         showImgDel(e){
@@ -196,32 +201,26 @@ let config = {
         }
     },
     afterRender: function() {
-        let self=this;
         this.el.on('change','.J_add',(e)=>{
             this.actions.addImg(e);
         }),
-            this.el.on('mousedown','.add-img',(e)=>{
-                this.ifDrag = true;
-                this.actions.dragimg(e);
-            }),
-            this.el.on("mouseup",'.signatureMock',(e)=>{
-                if(this.ifDrag){
-                    this.actions.closeSeal(e);
-                    this.ifDrag = false;
-                }
-                // e.stopPropagation(e);
-            }),
-            this.el.on("click",'.J_delImg',(e)=>{
-                this.actions.delImg(e);
-            }),
-            this.el.on("mousemove",'.signatureMock',(e)=>{
-                this.ifDrag = true;
-                this.actions.Imgcoordinate(e);
-                // e.stopPropagation(e);
-            }),
-            this.el.on("click",".J_toggImg",(e)=>{
-                this.actions.toggImg(e);
-            });
+        this.el.on('mousedown','.add-img',(e)=>{
+            this.actions.dragimg(e);
+        }),
+        this.el.on("mouseup",'.signatureMock',(e)=>{
+            this.actions.closeSeal(e);
+            // e.stopPropagation(e);
+        }),
+        this.el.on("click",'.J_delImg',(e)=>{
+            this.actions.delImg(e);
+        }),
+        this.el.on("mousemove",'.signatureMock',(e)=>{
+            this.actions.Imgcoordinate(e);
+            // e.stopPropagation(e);
+        }),
+        this.el.on("click",".J_toggImg",(e)=>{
+            this.actions.toggImg(e);
+        });
         // $(".approval-info-item").on("click",(e)=>{
         //     console.log(13265);
         //     this.actions.showImgDel(e);
