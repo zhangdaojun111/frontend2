@@ -7,7 +7,7 @@ import './calendar.set.remind.scss';
 import CalendarSetItemMulitSelect from '../calendar.set.item.multiselect/calendar.set.item.multiselect';
 import {CalendarService} from '../../../../services/calendar/calendar.service';
 import Mediator from '../../../../lib/mediator';
-let CalendarSetRemindMethod = {
+let config = {
     template: template,
     data: {
         emailStatus: 0,
@@ -54,16 +54,16 @@ let CalendarSetRemindMethod = {
     }
 };
 
-// class CalendarSetRemindMethod extends Component {
-//     constructor(data) {
-//         config.data.emailStatus = data.emailStatus;
-//         config.data.smsStatus = data.smsStatus;
-//         config.data.emailAddressList = data.emailAddressList;
-//         config.data.recipients = data.recipients;
-//         config.data.copypeople = data.copypeople;
-//         config.data.recipients_per = data.recipients_per;
-//         super(config);
-//     }
-// }
+class CalendarSetRemindMethod extends Component {
+    constructor(data) {
+        config.data.emailStatus = data.emailStatus;
+        config.data.smsStatus = data.smsStatus;
+        config.data.emailAddressList = data.emailAddressList;
+        config.data.recipients = data.recipients;
+        config.data.copypeople = data.copypeople;
+        config.data.recipients_per = data.recipients_per;
+        super(config);
+    }
+}
 
 export default CalendarSetRemindMethod;
