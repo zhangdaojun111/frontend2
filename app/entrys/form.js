@@ -193,30 +193,6 @@ let FormEntrys = {
         staticData.isBatch=this.isBatch;
         staticData.key=this.key;
         staticData.btnType=this.btnType;
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
-        console.log('有我才叫更了');
         return staticData;
     },
     //处理字段数据
