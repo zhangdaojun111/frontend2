@@ -23,9 +23,13 @@ let config = {
                 this.data.pageArr.push( select );
                 let div = document.createElement( 'div' );
                 div.className = select;
-                // div.innerHTML = '<iframe frameborder="0" src="/datagrid/custom_index/?table_id=0&folder_id=2&my_workflow='+select+'"></iframe>';
-                div.innerHTML = '<iframe frameborder="0" src="/iframe/myWorkflow/?tableId='+select+'"></iframe>';
+                let json = {tableId:select};
+                let work = new workflowPage(json);
+                console.log( "______________" )
+                console.log( "______________" )
+                console.log( work )
                 this.el.find( '#page-contener' ).append( div );
+                work.render( this.el.find( '.' + select ) );
             }
             for( let a of this.data.pageArr ){
                 let aaa = this.el.find( '.' + a );

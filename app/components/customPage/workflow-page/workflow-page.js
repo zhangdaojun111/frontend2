@@ -104,6 +104,9 @@ let config = {
                 onRowDoubleClicked: this.actions.onRowDoubleClicked
             }
             this.agGrid = new agGrid(gridData);
+            console.log( "______________" )
+            console.log( "______________" )
+            console.log( this.el )
             this.append(this.agGrid , this.el.find('#workflow-agGrid'));
             this.actions.calcColumnState();
             //渲染分页
