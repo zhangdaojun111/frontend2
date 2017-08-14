@@ -11,24 +11,30 @@ let config = {
         data_list:[],
     },
     actions: {
-
+        onInput: function (input) {
+            let value = input.val();
+            if (value === '') {
+                this.el.find('li').show();
+            } else {
+                this.el.find('li').hide();
+                this.el.find(`li[data-name*=${value}]`).show();
+            }
+            this.actions.clearValue();
+        },
     },
     afterRender: function () {
         console.log(this.data.data_list);
         let that = this;
-
-        Mediator.on('calendar-set:editor',data =>{
-            that.el.on("click",".head-select",function(){
-                event.stopPropagation();
-                {
-                    if($(this).next('.select-multi-content').is(":hidden") && data.data == 1){
-                        $(".select-multi-content").hide();
-                        $(this).next().show();
-                    }else{
-                        $(".select-multi-content").hide();
-                    }
+        that.el.on("click",".head-select",function(){
+            event.stopPropagation();
+            {
+                if($(this).next('.select-multi-content').is(":hidden")){
+                    $(".select-multi-content").hide();
+                    $(this).next().show();
+                }else{
+                    $(".select-multi-content").hide();
                 }
-            });
+            }
         });
         that.el.on("click",".select-multi-content",function(){
             event.stopPropagation();
@@ -60,7 +66,9 @@ let config = {
                     all_content_value.push($(this).html());
                 });
             }
-        });
+        }).on('input', '.select-search-content', _.debounce(function () {
+            that.actions.onInput($(this));
+        }, 1000));
 
         $(document).click(function(){
             that.el.find(".select-multi-content").hide();

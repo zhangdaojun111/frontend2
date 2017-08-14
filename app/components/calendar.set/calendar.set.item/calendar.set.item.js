@@ -88,12 +88,9 @@ let config = {
                 }
             });
         });
-
-
-        $("#set-color-id").attr("id","set-color-"+this.data.rowSetData.field_id);
+        this.el.find("#set-color-id").attr("id","set-color-"+this.data.rowSetData.field_id);
         let set_color_id = "#set-color-"+this.data.rowSetData.field_id;
-        $(set_color_id).attr("value",this.data.rowSetData.color);
-
+        this.el.find(set_color_id).attr("value",this.data.rowSetData.color);
         console.log(this.data.rowSetData);
         this.append(new CalendarSetItemMulitSelect(this.data.dropdown), this.el.find('.multi-select-item'));
     }

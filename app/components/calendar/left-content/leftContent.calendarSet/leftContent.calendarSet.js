@@ -122,6 +122,10 @@ let config = {
             config.data.hide_table.table_Id = hide_table_id;
             config.data.hide_item_table.push(hide_table_id);
             config.data.hide_tables.push(config.data.hide_table);
+            let preference = {"content":config.data.cancel_fields};
+            CalendarService.getCalendarPreference(preference);
+            preference = {"content":config.data.hide_item_table};
+            CalendarService.getCalendarhidePreference(preference);
             Mediator.emit('calendar-left:hideRemindType',{data:config.data.hide_table});
             Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
             Mediator.emit('calendar-left:checkbox3-check',{data:config.data.cancel_fields});
@@ -150,7 +154,7 @@ let config = {
                 config.data.hide_tables[i] = config.data.hide_table;
                 config.data.hide_table = {'tableName':"",'table_Id':''}
             }
-            if(config.data.cancel_fields.indexOf('approve')){
+            if(config.data.cancel_fields.indexOf('approve') ===-1){
                 that.el.find($("#checkbox_a2").addClass("workflow_checked"));
             }
             else{
@@ -166,6 +170,9 @@ let config = {
                     isAllGroupchecked = false;
                 }
             });
+            if(isAllGroupchecked){
+                this.el.find("#checkbox_a3").addClass('label-select-all-checked');
+            }
             Mediator.emit('calendar-left:calendar-class-hide',{data:config.data.hide_tables});
             objects = objs;
         });
@@ -179,6 +186,8 @@ let config = {
         });
         Mediator.on('calendar-left:unshowData',data =>{
             config.data.cancel_fields = data.data;
+            let preference = {"content":data.data};
+            CalendarService.getCalendarPreference(preference);
         });
         Mediator.on('calendar-left:showRemindType',data =>{
             that.el.find("#select-all-"+data.data).addClass("label-select-all-show label-select-all-checked");
@@ -201,6 +210,10 @@ let config = {
                     break;
                 }
             }
+            let preference = {"content":config.data.cancel_fields};
+            CalendarService.getCalendarPreference(preference);
+            preference = {"content":config.data.hide_item_table};
+            CalendarService.getCalendarhidePreference(preference);
             Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
             Mediator.emit('calendar-left:showRenmindclass',{data:config.data.cancel_fields,hide_tables:config.data.hide_tables});
         });

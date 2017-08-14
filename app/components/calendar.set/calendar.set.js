@@ -265,16 +265,12 @@ let config = {
     },
     afterRender: function() {
         this.el.css({width: '100%'});
-        //this.data.tableId = window.config.table_id;
         this.el.find('iframe').css("width","100%");
-        // if(this.data.tableId) {
-        //     this.actions.getColumnListData(this.data.tableId);
-        // }
-        Mediator.on('calendar-set-left:calendar-set', data => {
-            this.actions.getColumnListData(data.table_id);
-        });
-
         let _this = this;
+        Mediator.on('calendar-set-left:calendar-set', data => {
+            console.log(_this);
+            _this.actions.getColumnListData(data.table_id);
+        });
         this.el.on("click",".editor-btn", function() {
             _this.el.find(".hide-btns").css("visibility","visible");
             $(this).addClass("disabled");
