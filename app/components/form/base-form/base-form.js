@@ -1481,6 +1481,7 @@ let config={
             // if(res.succ == 1){
             if(res.data && res.data.length && res.data.length!=0){
                 SettingPrint.data['printTitles']=res['data'];
+                SettingPrint.data['key']=_this.data.key;
                 SettingPrint.data['myContent']=res['data'][0]['content'] || '';
                 SettingPrint.data['selectNum']=parseInt(res['data']['index']) || 1;
             }
