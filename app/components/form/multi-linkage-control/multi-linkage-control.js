@@ -30,6 +30,41 @@ let config={
                 obj.data.is_view=is_view;
                 obj.reload();
             }
+        },
+        refresh(_this){
+            if(_this.hasChoose){
+                _this.hasChoose.clear();
+            }
+            for (let i=0;i<_this.data.index;i++){
+                console.log('what');
+                let d={};
+                d['value']='请选择';
+                d['showValue']='请选择';
+                d['options']=[];
+                d['index']=i;
+                d['dfield']=_this.data.dfield;
+                let set=new Set();
+                for(let key in _this.data.dataList){
+                    set.add(_this.data.dataList[key][i]);
+                }
+                for(let item of set){
+                    d['options'].push({label:item,value:item,"tableId":_this.data.tableId});
+                }
+                let drop=_this.childDrop[i];
+                drop.data=Object.assign(drop.data,d);
+                console.log(drop);
+                drop.reload();
+            }
+            _this.data.value='';
+            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+        },
+        //回显
+        echoData4Control(value) {
+            let list = [];
+            if(value !== ""){
+                list = this.data.dataList[value];
+                //默认值回显没写完
+            }
         }
     },
     firstAfterRender:function(){
@@ -91,30 +126,18 @@ let config={
             }
             _this.hasChoose.set(data.index,data.value);
         });
-        this.el.on('click','.refresh',function(){
-            _this.hasChoose.clear();
-            for (let i=0;i<_this.data.index;i++){
-                console.log('what');
-                let d={};
-                d['value']='请选择';
-                d['showValue']='请选择';
-                d['options']=[];
-                d['index']=i;
-                d['dfield']=_this.data.dfield;
-                let set=new Set();
-                for(let key in _this.data.dataList){
-                    set.add(_this.data.dataList[key][i]);
+        Mediator.subscribe('form:multiLinkageDefaultData:'+this.data.tableId,()=>{
+            if(res != null){
+                //如果默认值为空
+                if(res == 'none'){
+                    _this.actions.refresh(_this);
+                }else{
+                    _this.actions.echoData4Control(res);
                 }
-                for(let item of set){
-                    d['options'].push({label:item,value:item,"tableId":_this.data.tableId});
-                }
-                let drop=_this.childDrop[i];
-                drop.data=Object.assign(drop.data,d);
-                console.log(drop);
-                drop.reload();
             }
-            _this.data.value='';
-            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+        });
+        this.el.on('click','.refresh',function(){
+            _this.actions.refresh(_this)
         });
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();

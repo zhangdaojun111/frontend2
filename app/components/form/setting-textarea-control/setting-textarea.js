@@ -49,6 +49,10 @@ let config = {
             console.log(_this.data);
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
+        //周期规则默认值填充
+        Mediator.subscribe('form:loadSettingtextarea:'+this.data.tableId,()=>{
+
+        });
     },
     beforeDestory: function () {
 
