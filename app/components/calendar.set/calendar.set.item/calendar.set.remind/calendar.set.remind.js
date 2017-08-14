@@ -26,23 +26,14 @@ let config = {
 
     },
     afterRender: function() {
-<<<<<<< HEAD
         // Mediator.emit('calendar-set:editor',1);
         // this.append(new CalendarSetItemMulitSelect(this.data.recipients_per), this.el.find('.remind-receiver-sms'));
         // this.append(new CalendarSetItemMulitSelect(this.data.copypeople), this.el.find('.remind-copy-for-sms'));
         // this.append(new CalendarSetItemMulitSelect(this.data.emailAddressList), this.el.find('.remind-send-email-address'));
         // this.append(new CalendarSetItemMulitSelect(this.data.recipients), this.el.find('.remind-receiver-email'));
         // this.append(new CalendarSetItemMulitSelect(this.data.copypeople), this.el.find('.remind-copy-for-email'));
-=======
-        console.log(this.data.recipients_per);
-        console.log(this.el.find("#sms-op-send-address"));
-        this.append(new CalendarSetItemMulitSelect(this.data.recipients_per), this.el.find('.remind-receiver-sms'));
-        this.append(new CalendarSetItemMulitSelect(this.data.copypeople), this.el.find('.remind-copy-for-sms'));
-        this.append(new CalendarSetItemMulitSelect(this.data.emailAddressList), this.el.find('.remind-send-email-address'));
-        this.append(new CalendarSetItemMulitSelect(this.data.recipients), this.el.find('.remind-receiver-email'));
-        this.append(new CalendarSetItemMulitSelect(this.data.copypeople), this.el.find('.remind-copy-for-email'));
+
         Mediator.emit('calendar-set:editor',1);
->>>>>>> 2b3b9240a9d7fa1a6f2b2c7c1c4e82a2ee106443
         this.el.on('click', '.sms-remind', () => {
             this.el.find('.sms-remind').addClass("unchecked");
             this.el.find(".email-remind").removeClass("unchecked");
