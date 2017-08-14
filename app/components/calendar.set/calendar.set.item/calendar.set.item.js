@@ -42,7 +42,6 @@ let config = {
     },
     actions: {
         returnShow: function(param){
-            console.log(param);
             let res = [];
             for(let a of param){
                 for(let b in this.data.dropdown){
@@ -68,8 +67,9 @@ let config = {
             }
         });
         this.el.on('click', '.set-show-text-input', () => {
-            let setShowText = this.el.find('.set-show-text-input').is(':checked');
-            this.data.rowSetData['isSelected'] = setShowText;
+            let isSetShowText = this.el.find('.set-show-text-input').is(':checked');
+            console.log(isSetShowText);
+            this.data.rowSetData['isSelected'] = isSetShowText;
         }).on('click', '.set-calendar-page-show-text', () => {
             let isShowHomePage = this.el.find('.set-calendar-page-show-text').is(':checked');
             this.data.rowSetData['is_show_at_home_page'] = isShowHomePage;

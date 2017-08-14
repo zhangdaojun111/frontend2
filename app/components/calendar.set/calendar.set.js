@@ -358,7 +358,7 @@ let config = {
             for(let obj of this.data.childComponents) {
                 newAllRowsData.push(obj.data.rowSetData);
             }
-            console.log(this.data.tableId);
+            console.log(newAllRowsData);
             _this.actions.saveSetting(this.data.tableId, newAllRowsData);
         });
 
