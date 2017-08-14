@@ -14,18 +14,21 @@ let config = {
         chart_id:"",
     },
     actions:{
-        reload: function () {
-            this.destroyChildren();
-            this.data.charts.forEach((val,index) => {
-                let chartsComponent = new ChartsComponent(val);
-                this.append(chartsComponent,this.el.find('.charts-items'));
-            });
+        reload() {
+            this.reload();
+            // this.destroyChildren();
+            // this.data.charts.forEach((val,index) => {
+            //     let chartsComponent = new ChartsComponent(val);
+            //     this.append(chartsComponent,this.el.find('.charts-items'));
+            // });
         }
     },
 
     afterRender() {
         //加载左侧导航
         this.data.charts.forEach((val,index) => {
+            // console.log('======================');
+            // console.log(this.data.charts);
             let chartsComponent = new ChartsComponent(val);
             this.append(chartsComponent,this.el.find('.charts-items'));
         });
@@ -100,10 +103,11 @@ let config = {
         });
 
         //删除del_id
-        this.el.on('click','.btn_del', function() {
-           let chart_id = config.data.chart_id;
-            biChartDelService.getCharts(chart_id);
-            // config.actions.reload();
+        this.el.on('click','.btn_del', () => {
+           // let chart_id = config.data.chart_id;
+           //  biChartDelService.getCharts(chart_id);
+           //  console.log(this.data.charts);
+            this.actions.reload();
             // console.log(123);
         });
 
