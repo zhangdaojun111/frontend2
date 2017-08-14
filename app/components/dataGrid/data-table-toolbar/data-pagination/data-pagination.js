@@ -63,6 +63,9 @@ let config = {
                     "filter": "alpha(opacity=30)"
                 });
             }
+        },
+        refreshPagination: function (data) {
+            
         }
     },
     afterRender: function () {
