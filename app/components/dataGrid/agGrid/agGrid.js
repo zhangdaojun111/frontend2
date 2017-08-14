@@ -19,6 +19,8 @@ let config = {
         footerData: [],
         cssTheme: 'ag-bootstrap',
         floatingFilter: false,
+        //不需要分页
+        noFooter: false,
         //原始表头数据
         fieldsData: [],
         localeText:{
@@ -45,7 +47,6 @@ let config = {
             this.gridOptions = {
                 columnDefs: this.data.columnDefs,
                 rowData: this.data.rowData,
-                pinnedBottomRowData: this.data.footerData,
                 floatingFilter: this.data.floatingFilter,
                 suppressFilterButton: true,
                 animateRows: false,
@@ -95,10 +96,14 @@ let config = {
                 //排序
                 onSortChanged: this.data.onSortChanged
             }
+            //是否需要footer
+            if( !this.data.noFooter ){
+                this.gridOptions['pinnedBottomRowData'] = this.data.footerData;
+            }
         },
         createAgGrid: function (){
-            var eGridDiv = document.querySelector( '#myGrid' );
-            let mygrid = new Grid( eGridDiv , this.gridOptions );
+            var eGridDiv = this.el.find( '#myGrid' );
+            let mygrid = new Grid( eGridDiv[0] , this.gridOptions );
         },
         //重新赋值
         setGridData: function ( json ) {
