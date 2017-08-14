@@ -183,7 +183,14 @@ let FormEntrys = {
         data[obj.dfield]=obj;
     }
     staticData.data=data;
-    staticData.tableId=this.tableId;
+
+    staticData['temp_id']=staticData.data['temp_id']||'';
+    staticData['real_id']=staticData.data['real_id']||'';
+    staticData['table_id']=staticData.data['table_id']||'';
+    staticData['parentRealId']=staticData["real_id"]["value"]||'';
+    staticData['parentTableId']=staticData["table_id"]["value"]||'';
+    staticData['parentTempId']=staticData["temp_id"]["value"]||'';
+    staticData.tableId=staticData['table_id']["value"];
     staticData.formId=this.formId;
     staticData.flowId=this.flowId;
     staticData.isBatch=this.isBatch;
@@ -229,6 +236,7 @@ let FormEntrys = {
 
             if(res['record_info']['id']){
                 let recordId = res['record_info']['id'];
+                res.recordId = res['record_info']['id'];
                 for(let d of res.data){
                     if(d['type'] == 'songrid'){
                         d['recordId']=recordId;
