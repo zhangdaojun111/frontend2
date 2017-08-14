@@ -36,7 +36,6 @@ let config={
                 _this.hasChoose.clear();
             }
             for (let i=0;i<_this.data.index;i++){
-                console.log('what');
                 let d={};
                 d['value']='请选择';
                 d['showValue']='请选择';
@@ -52,7 +51,6 @@ let config={
                 }
                 let drop=_this.childDrop[i];
                 drop.data=Object.assign(drop.data,d);
-                console.log(drop);
                 drop.reload();
             }
             _this.data.value='';
@@ -144,50 +142,54 @@ let config={
         });
     },
     afterRender(){
-        this.set('hasChoose',new Map());
-        if(!this.childDrop){
-            this.set('childDrop',[]);
-        }
-        if(this.data.be_control_condition){
-           return;
-        }
-        let index;
-        for(let key in this.data.dataList){
-            index=this.data.dataList[key].length;
-            this.data['index']=index;
-        }
-        let isInit=this.childDrop.length;
-        for (let i=0;i<index;i++){
-            let d={};
-            d['options']=[];
-            d['index']=i;
-            d['dfield']=this.data.dfield;
-            d['is_view']=this.data.is_view;
-            if(this.data.value){
-                let option=this.data.dataList[this.data.value][i];
-                d['value']=option;
-                d['showValue']=option;
-                d['options'].push({label:option,value:option,tableId:this.data.tableId});
-                this.hasChoose.set(i,option);
-            }else{
-                d['value']='请选择';
-                d['showValue']='请选择';
-                let set=new Set();
-                for(let key in this.data.dataList){
-                    set.add(this.data.dataList[key][i]);
+            this.set('hasChoose', new Map());
+            if (!this.childDrop) {
+                this.set('childDrop', []);
+            }
+            console.log('初始化的时候出错了？');
+            console.log(this.childDrop);
+            if (this.data.be_control_condition) {
+                return;
+            }
+            let index;
+            for (let key in this.data.dataList) {
+                index = this.data.dataList[key].length;
+                this.data['index'] = index;
+            }
+            let isInit = this.childDrop.length;
+            for (let i = 0; i < index; i++) {
+                let d = {};
+                d['options'] = [];
+                d['index'] = i;
+                d['dfield'] = this.data.dfield;
+                d['is_view'] = this.data.is_view;
+                if (this.data.value) {
+                    let option = this.data.dataList[this.data.value][i];
+                    d['value'] = option;
+                    d['showValue'] = option;
+                    d['options'].push({label: option, value: option, tableId: this.data.tableId});
+                    this.hasChoose.set(i, option);
+                } else {
+                    d['value'] = '请选择';
+                    d['showValue'] = '请选择';
+                    let set = new Set();
+                    for (let key in this.data.dataList) {
+                        set.add(this.data.dataList[key][i]);
+                    }
+                    for (let item of set) {
+                        d['options'].push({label: item, value: item, tableId: this.data.tableId});
+                    }
                 }
-                for(let item of set){
-                    d['options'].push({label:item,value:item,tableId:this.data.tableId});
+                if (isInit) {
+                    this.append(this.childDrop[i], this.el.find('.multi-drop'));
+                } else {
+                    let drop = new DropDown(d);
+                    this.childDrop[i] = drop;
+                    this.append(drop, this.el.find('.multi-drop'));
                 }
             }
-            if(isInit){
-                this.append(this.childDrop[i],this.el.find('.multi-drop'));
-            }else{
-                let drop=new DropDown(d);
-                this.childDrop[i]=drop;
-                this.append(drop,this.el.find('.multi-drop'));
-            }
-        }
+            console.log('初始化的时候出错了？');
+            console.log(this.childDrop);
     },
     beforeDestory:function(){
         Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
