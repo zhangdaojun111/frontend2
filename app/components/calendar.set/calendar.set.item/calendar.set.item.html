@@ -1,9 +1,9 @@
 <tr class="singleRow">
     <td class="set-table-item">
-        <input type="checkbox" disabled class="editor-items">
+        <input type="checkbox" disabled class="editor-items set-show-text-input">
     </td>
     <td class="set-table-item">
-        <input type="checkbox" class="editor-items" disabled>
+        <input type="checkbox" class="editor-items set-calendar-page-show-text" disabled>
     </td>
     <td class="set-table-item">
         {{rowTitle.name}}
@@ -12,7 +12,11 @@
         <input class="set-color editor-items" id="set-color-id" type="color" value="#8FF000" disabled>
     </td>
     <td class="set-table-item multi-select-item">
-
+        <select class="add-show-text editor-items"  disabled>
+            {{#each dropdownForRes}}
+            <option class="testoption" value="{{this.id}}">{{this.name}}</option>
+            {{/each}}
+        </select>
     </td>
 
     <td class="set-table-item">

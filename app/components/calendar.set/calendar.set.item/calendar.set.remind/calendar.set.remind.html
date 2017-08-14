@@ -26,23 +26,23 @@
         <tr class="remind-table-row">
             <td class="remind-row-label">收信人：</td>
             <td class="remind-receiver-sms">
-                <!--<select name="sms-op-receiver" id="sms-op-receiver">
-                    <option value={{defaultSmsReceiver.value}} id="default-sms-receiver">{{defaultSmsReceiver.label}}</option>
+                <select class="select-input" name="sms-op-receiver" id="sms-op-receiver">
+                    <option value={{defaultSmsReceiver.id}} id="default-sms-receiver">{{defaultSmsReceiver.name}}</option>
                     {{#each recipients_per}}
-                    <option value={{this.value}}>{{this.label}}</option>
+                    <option value={{this.id}}>{{this.name}}</option>
                     {{/each}}
-                </select>-->
+                </select>
             </td>
         </tr>
         <tr class="remind-table-row">
             <td class="remind-row-label">抄送人：</td>
             <td class="remind-copy-for-sms">
-                <!--<select name="sms-op-receiver" id="sms-op-copypeople">
-                    <option value={{defaultCopyPeople.value}} id="default-sms-copypeople">{{defaultCopyPeople.label}}</option>
+                <select class="select-input" name="sms-op-receiver" id="sms-op-copypeople">
+                    <option value={{defaultCopyPeople.id}} id="default-sms-copypeople">{{defaultCopyPeople.name}}</option>
                     {{#each copypeople}}
-                    <option value={{this.value}}>{{this.label}}</option>
+                    <option value={{this.id}}>{{this.name}}</option>
                     {{/each}}
-                </select>-->
+                </select>
             </td>
         </tr>
         <tr class="remind-table-row">
@@ -63,34 +63,34 @@
         <tr class="remind-table-row">
             <td class="remind-row-label">发信箱：</td>
             <td class="remind-send-email-address">
-                <!--<select name="sms-op-receiver" id="sms-op-send-address">
-                    <option value={{defaultEmailSendAddress.value}} id="default-email-send-address">{{defaultEmailSendAddress.label}}</option>
+                <select class="select-input" name="sms-op-receiver" id="sms-op-send-address">
+                    <option value={{defaultEmailSendAddress.id}} id="default-email-send-address">{{defaultEmailSendAddress.name}}</option>
                     {{#each emailAddressList}}
-                    <option value={{this.value}}>{{this.label}}</option>
+                    <option value={{this.id}}>{{this.name}}</option>
                     {{/each}}
-                </select>-->
+                </select>
             </td>
         </tr>
         <tr class="remind-table-row">
             <td class="remind-row-label">收件人：</td>
             <td class="remind-receiver-email">
-                <!--<select name="sms-op-receiver" id="sms-op-receiver-email">
-                    <option value={{defaultEmailReceiver.value}} id="default-email-receiver">{{defaultEmailReceiver.label}}</option>
+                <select class="select-input" name="sms-op-receiver" id="sms-op-receiver-email">
+                    <option value={{defaultEmailReceiver.id}} id="default-email-receiver">{{defaultEmailReceiver.name}}</option>
                     {{#each recipients}}
-                    <option value={{this.value}}>{{this.label}}</option>
+                    <option value={{this.id}}>{{this.name}}</option>
                     {{/each}}
-                </select>-->
+                </select>
             </td>
         </tr>
         <tr class="remind-table-row">
             <td class="remind-row-label">抄送人：</td>
             <td class="remind-copy-for-email">
-                <!--<select name="sms-op-receiver" id="sms-op-copypeople-email">
-                    <option value={{defaultCopyPeople.value}} id="default-email-copypeople">{{defaultCopyPeople.label}}</option>
+                <select class="select-input" name="sms-op-receiver" id="sms-op-copypeople-email">
+                    <option value={{defaultCopyPeople.id}} id="default-email-copypeople">{{defaultCopyPeople.name}}</option>
                     {{#each copypeople}}
-                    <option value={{this.value}}>{{this.label}}</option>
+                    <option value={{this.id}}>{{this.name}}</option>
                     {{/each}}
-                </select>-->
+                </select>
             </td>
         </tr>
         <tr class="remind-table-row">
