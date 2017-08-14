@@ -441,6 +441,13 @@ export const FormService={
     getDynamicData(json) {
         return HTTP.post( 'get_form_dynamic_data',json )
     },
+    //立即获得表单动态数据
+    //获取表单动态数据
+    getDynamicDataImmediately(json) {
+        let res=HTTP.post( 'get_form_dynamic_data',json )
+        HTTP.flush();
+        return res;
+    },
     uploadAttachment(url,json,processCallback,successCallback) {
         HTTP.ajaxImmediately({
             type:"POST",
