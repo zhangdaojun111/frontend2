@@ -192,6 +192,7 @@ let FormEntrys = {
     staticData['parentTempId']=staticData["temp_id"]["value"]||'';
     staticData.tableId=staticData['table_id']["value"];
     staticData.formId=this.formId;
+    staticData.realId=this.realId;
     staticData.flowId=this.flowId;
     staticData.isBatch=this.isBatch;
     staticData.key=this.key;

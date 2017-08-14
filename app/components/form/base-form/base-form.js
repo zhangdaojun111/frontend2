@@ -980,8 +980,9 @@ let config={
         //转到编辑模式
         changeToEdit(_this){
             let json={
-                tableId:_this.tableId,
-                real_id:_this.realId,
+                table_id:_this.data.tableId,
+                real_id:_this.data.realId,
+                is_view:0,
             }
             FormService.getDynamicData(json).then(res=>{
                 for(let key in _this.data.data){
@@ -1007,6 +1008,7 @@ let config={
                 //     }
                 // }
             });
+            HTTP.flush();
         },
 
         reviseCondition:function(editConditionDict,value,_this) {
@@ -1453,6 +1455,7 @@ let config={
             _this.actions.onSubmit();
         })
         $(_this.el).find("#changeEdit").on('click',function () {
+            console.log('转到编辑模式啊');
             _this.actions.changeToEdit(_this);
         })
         _this.el.on('click','#print',function(){
