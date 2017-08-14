@@ -7,18 +7,39 @@ let config = {
     template: template,
     data: {
         id: '',
-        name: ''
+        name: '',
+        choosed: [],
+        displayType: 'popup',           // popup或者static popup为弹出的形式 static 为静态显示
+        multiSelect: true,
+        selectBoxHeight: 300            // select 框的高度
     },
     actions: {
         selectItem: function (item) {
-            let id = item.data('id');
-            let name = item.data('name');
-            this.actions.setValue(id, name);
+            if (this.data.multiSelect === true) {
+                let choosed = this.el.find('input:checked');
+                choosed = Array.from(choosed).map((item) => {
+                    let $item = $(item);
+                    return {
+                        id: $item.data('id'),
+                        name: $item.data('name')
+                    }
+                });
+                this.data.choosed = choosed;
+            } else {
+                let id = item.data('id');
+                let name = item.data('name');
+                this.data.choosed = [{
+                    id: item.data('id'),
+                    name: item.data('name')
+                }];
+            }
+            this.actions.renderChoosed();
         },
-        setValue: function (id, name) {
-            this.data.id = id;
-            this.data.name = name;
-            this.el.find('input').val(name);
+        unSelectItem: function (id) {
+            _.remove(this.data.choosed, function (item) {
+                return item.id === id;
+            });
+            this.actions.renderChoosed();
         },
         clearValue: function () {
             this.data.id = '';
@@ -34,19 +55,55 @@ let config = {
             }
             this.actions.clearValue();
         },
-        getId: function () {
-            return this.data.id;
+        showSelectBox: function () {
+            this.listWrap.show();
+        },
+        hideSelectBox: function () {
+            this.listWrap.hide();
+        },
+        getValue: function () {
+            return this.data.choosed;
+        },
+        renderChoosed: function () {
+            this.listWrap.find('input:checkbox:checked').each(function () {
+                this.checked = false;
+            });
+            if (this.data.choosed.length) {
+                this.choosedWrap.show();
+                let html = [];
+                this.data.choosed.forEach((item) => {
+                    let checkbox = this.listWrap.find(`input:checkbox[data-id=${item.id}]`);
+                    checkbox[0].checked = true;
+                    html.push(`<div class="item" title="点击删除" data-id="${item.id}">${item.name}</div>`)
+                });
+                this.choosedWrap.html(html.join(''));
+            } else {
+                this.choosedWrap.hide();
+            }
         }
     },
     afterRender: function () {
-        let $wrap = this.el.find('ul');
+        this.listWrap = this.el.find('ul');
+        this.choosedWrap = this.el.find('.choosed');
         let that = this;
-        $wrap.height(this.el.height() - 31);
+        this.actions.renderChoosed();
+        this.listWrap.height(this.data.selectBoxHeight);
         this.el.on('click', 'li', function () {
             that.actions.selectItem($(this));
         }).on('input', 'input', _.debounce(function () {
             that.actions.onInput($(this));
-        }, 1000));
+        }, 1000)).on('mouseenter', () => {
+            that.actions.showSelectBox();
+        }).on('mouseleave', () => {
+            that.actions.hideSelectBox();
+        }).on('click', '.choosed .item', function () {
+            let id = $(this).data('id');
+            that.actions.unSelectItem(id);
+        });
+
+        if (this.data.displayType === 'popup') {
+            this.listWrap.addClass('popup');
+        }
     }
 }
 
