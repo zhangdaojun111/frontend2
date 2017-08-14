@@ -75,7 +75,10 @@ let config = {
                 staus = false;
             }
         });
-        this.el.on('click', '.set-show-text-input', () => {
+        let temp = this.el.find(".popup").children('li');
+        this.el.on("click",temp,function(){
+            console.log(multi_select_item.data.choosed);
+        }).on('click', '.set-show-text-input', () => {
             let isSetShowText = this.el.find('.set-show-text-input').is(':checked');
             console.log(isSetShowText);
             this.data.rowSetData['isSelected'] = isSetShowText;

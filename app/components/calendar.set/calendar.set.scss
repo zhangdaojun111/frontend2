@@ -28,9 +28,14 @@ $boder-color: #ddd;
     .calendar-set-content {
         table{
             width:100%;
+            .table-set-checkbox{
+                width: 100px !important;
+            }
+            .table-set-multile{
+                width:300px !important;
+            }
             .set-table-head{
-                width: calc(9.5%);
-                min-width: 90px;
+                width: 138px;
                 text-align: center;
                 line-height: 30px;
                 border: 1px solid #C1CACA;
