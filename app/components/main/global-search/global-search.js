@@ -107,7 +107,7 @@ let config ={
                         };
                         //发布数据查询结果
                         Mediator.emit("main:global-search:data",tempData);      //正式使用
-                        console.log("emit",this.data.test_data_result);
+                        console.log("emit",tempData);
                         this.actions.addSearchHistory();
                     }else{
                         console.log("查询失败",result);

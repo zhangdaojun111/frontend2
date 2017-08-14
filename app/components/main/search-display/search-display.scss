@@ -1,11 +1,32 @@
 @import "../../../assets/scss/core/base";
 
 .research-result{
-    .data-annex-switch{
+    .data-attachment-switch{
+        padding-top: 10px;
+        margin-bottom: 20px;
         text-align: center;
-        .active{
+        font-size: 20px;
+        .attachment-btn{
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .data-btn{
+            cursor: pointer;
+        }
+        .btn-active{
           color: blue;
           border-bottom: solid 3px blue;
         }
+    }
+
+    .data-result-display{
+        width: 100%;
+        height: auto;
+
+    }
+
+    .attachment-result-display{
+
+
     }
 }
