@@ -1000,23 +1000,24 @@ let config={
         },
 
         //转到编辑模式
-        changeToEdit(_this){
+        async changeToEdit(_this){
             let json={
                 table_id:_this.data.tableId,
                 real_id:_this.data.realId,
                 is_view:0,
             }
-            FormService.getDynamicData(json).then(res=>{
+            let res=await FormService.getDynamicDataImmediately(json)
                 for(let key in _this.data.data){
                     _this.data.data[key]['is_view']=res['data'][key]['is_view'];
                     if(!_this.childComponent[key]){
                         continue;
                     }
+                    _this.childComponent[key]['data']['is_view']=_this.data.data[key]['is_view'];
                     if(_this.childComponent[key].data.type=='MultiLinkage'){
                         _this.childComponent[key].actions.changeView(_this.childComponent[key],res['data'][key]['is_view']);
+                    }else{
+                        _this.childComponent[key].reload();
                     }
-                    _this.childComponent[key]['data']['is_view']=_this.data.data[key]['is_view'];
-                    _this.childComponent[key].reload();
                 }
                 _this.data.btnType='new';
                 _this.actions.addBtn();
@@ -1029,8 +1030,6 @@ let config={
                 //         this.childComponent[key].reload();
                 //     }
                 // }
-            });
-            HTTP.flush();
         },
 
         reviseCondition:function(editConditionDict,value,_this) {

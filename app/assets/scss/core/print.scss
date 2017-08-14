@@ -1,6 +1,6 @@
 @media print {
-  body * {
-    visibility: hidden !important;
+  *{
+    visibility: hidden;
     overflow: visible !important;
     position: static !important;
   }
