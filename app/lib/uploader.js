@@ -126,6 +126,9 @@ class Uploader {
         if(params['content_type']){
             this.fileList['settings']['content_type']=params['content_type'];
         }
+        if(params['upload_file']){
+            this.fileList['settings']['upload_file']=params['upload_file'];
+        }
     }
 
     /**
@@ -229,9 +232,13 @@ class Uploader {
         this.formData.delete('state');
         let packSize = this.fileList['settings']['per_size'];
         let startIndex = fileItem['index']*packSize;
+        let fileField = 'file';
+        if(this.fileList['settings']['upload_file']){
+            fileField = 'upload_file';
+        }
         if(packSize){
             this.formData.delete('file');
-            this.formData.append('file',
+            this.formData.append(fileField,
                 fileItem.file.slice(startIndex, startIndex + packSize));
             let t = this;
             this.fileList['settings']['options']['xhr']=function () {
@@ -260,6 +267,8 @@ class Uploader {
                 }
             };
         } else {
+            this.formData.delete('file');
+            this.formData.append(fileField,fileItem.file);
             this.fileList['settings']['options']['xhr']=function () {
                 var myXhr = $.ajaxSettings.xhr();
                 if(myXhr.upload){
