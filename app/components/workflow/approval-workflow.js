@@ -129,7 +129,7 @@ let config={
         },
         previewView:function (el,appendDiv) {
             let type=$(el).data("preview");
-            let addFollow=this.el.find("#add-follow").clone(true).attr('id','cloneId1');
+            let addFollow=this.el.find("#add-home").clone(true).attr('id','cloneId1');
             let flowNode=this.el.find("#flow-node").clone().attr('id','cloneId2');
             let workflowRecord=this.el.find("#workflow-record").clone().attr('id','cloneId3');
             switch (type){
