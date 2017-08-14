@@ -1,5 +1,6 @@
 .auto-select-component {
     border: 1px solid #ddd;
+    position: relative;
     input {
         border: 0 none;
         width: 100%;
@@ -20,6 +21,11 @@
             &:hover {
                 background: #ddd;
             }
+        }
+        &.popup {
+            display: none;
+            position: absolute;
+            z-index: 1;
         }
     }
 }

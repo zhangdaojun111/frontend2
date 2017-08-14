@@ -203,8 +203,13 @@ let config = {
             // }
             this.data.remindCount = i;
             this.data.workflowCount = w;
-            this.el.find('.remind-num').html(this.data.remindCount);
-            this.el.find('.approval-num').html(this.data.workflowCount);
+
+            // $('.remind-num').html(this.data.remindCount);
+            // $('.approval-num').html(this.data.workflowCount);
+            console.log(i,w);
+            $('body').find('.remind-num').html(this.data.remindCount);
+            $('body').find('.approval-num').html(this.data.workflowCount);
+
             // if( this.firstFlash ){
             //     setTimeout( ()=>{
             //         this.isShowLoading = false;
@@ -307,7 +312,7 @@ let config = {
             this.data.from_date = this.data.monthDataList[0]['weekList'][0]['dataTime'];
             this.data.to_date = this.data.monthDataList[5]['weekList'][6]['dataTime'];
             CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
-            Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
+            //Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
             this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date, cancel_fields: this.data.cancel_fields},'month');
         },
 
@@ -338,7 +343,8 @@ let config = {
                 this.data.from_date = arrHead[0]['time'];
                 this.data.to_date = arrHead[6]['time'];
             }
-            Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
+            //Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
+            CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
         },
 
         createDayCalendar: function(){
@@ -356,7 +362,8 @@ let config = {
             $('.nowDate').html(this.data.selectedDateShow);
             this.data.from_date = date;
             this.data.to_date = date;
-            Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
+            //Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
+            CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
         },
 
         makeScheduleData: function (startDate, endDate) {
@@ -718,6 +725,7 @@ let config = {
 
         Mediator.on('calendar-left:unshowData', data => {
             if(data['data']) {
+                console.log(data['data']);
                 this.data.isShowArr = data['data'];
                 let arr = ['approve','remind'];
                 let arr_1 = [];
@@ -726,12 +734,12 @@ let config = {
                         arr_1.push( a );
                     }
                 }
-
                 this.data.cancel_fields = arr_1;
                 console.log(this.data.cancel_fields);
                 if(this.data.calendarContent === 'month') {
                     this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
                 }
+                //this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
                 this.actions.changeMainView(this.data.calendarContent);
             }
         });

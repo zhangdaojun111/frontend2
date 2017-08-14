@@ -7,7 +7,8 @@ let config = {
     template: template,
     data: {
         id: '',
-        name: ''
+        name: '',
+        displayTpe: 'popup'  // static
     },
     actions: {
         selectItem: function (item) {
@@ -36,7 +37,8 @@ let config = {
         },
         getId: function () {
             return this.data.id;
-        }
+        },
+
     },
     afterRender: function () {
         let $wrap = this.el.find('ul');
@@ -47,6 +49,7 @@ let config = {
         }).on('input', 'input', _.debounce(function () {
             that.actions.onInput($(this));
         }, 1000));
+        // if () {}
     }
 }
 

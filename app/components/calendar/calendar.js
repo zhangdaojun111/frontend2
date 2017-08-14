@@ -58,12 +58,11 @@ let config = {
         }).on('click', '.next-date', () => {
             Mediator.emit('Calendar: changeDate', 'next');
         });
-
-        Mediator.on('CalendarMain: remindCount', data => {
-
-        });
         this.append(new LeftContent, this.el.find('.left-content'));
         this.append(new CalendarMin, this.el.find('.main-content'));
+        Mediator.on('CalendarMain: remindCount', data => {
+            console.log(data);
+        });
     }
 };
 
