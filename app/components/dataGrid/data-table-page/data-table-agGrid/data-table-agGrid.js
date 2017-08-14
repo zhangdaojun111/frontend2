@@ -1127,7 +1127,9 @@ let config = {
         },
         //按钮点击事件
         onBtnClick: function () {
+            //定制列
             this.actions.customColumnClick();
+            //分组
             this.actions.groupBtnClick();
             //高级查询
             if( $('.expert-search-btn')[0] ){
@@ -1158,16 +1160,18 @@ let config = {
                 } )
             }
             //搜索
-            if( $( '.float-search-btn' )[0] ){
-                $( '.float-search-btn' ).click( ()=>{
+            let floatSearch = this.el.find( '.float-search-btn' );
+            if( floatSearch[0] ){
+                floatSearch.on( 'click',()=>{
                     let height = this.data.isShowFloatingFilter ? 0:30;
                     this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
                     this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
                 } )
             }
             //删除
-            if( $('.grid-del-btn')[0] ){
-                $( '.grid-del-btn' ).click( ()=>{
+            let del = this.el.find( '.grid-del-btn' );
+            if( del[0] ){
+                del.on( 'click',()=>{
                     this.actions.retureSelectData();
                     delSetting.data['deletedIds'] = this.data.deletedIds;
                     PMAPI.openDialogByComponent(delSetting, {
@@ -1182,8 +1186,9 @@ let config = {
                 } )
             }
             //导入数据
-            if( $( '.grid-import-btn' )[0] ){
-                $('.grid-import-btn').click( function () {
+            let importBtn = this.el.find( '.grid-import-btn' );
+            if( importBtn[0] ){
+                importBtn.on( 'click',()=>{
                     console.log( "###" )
                     console.log( "###" )
                     PMAPI.openDialogByComponent(importSetting, {
@@ -1202,7 +1207,8 @@ let config = {
                 })
             }
             //全屏
-            if( $('.grid-new-window')[0] ){
+            let newWin = this.el.find( '.grid-new-window' );
+            if( newWin[0] ){
                 let url_obj = {
                     tableId: this.data.tableId,
                     formId: this.data.formId,
@@ -1217,11 +1223,12 @@ let config = {
                     base_buildin_dfield: this.data.base_buildin_dfield
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',url_obj );
-                $( '.grid-new-window' ).attr( 'href',url );
+                newWin.attr( 'href',url );
             }
             //新增数据
-            if( $( '.new-form-btn' )[0] ){
-                $( '.new-form-btn' ).click( ()=>{
+            let newForm = this.el.find( '.new-form-btn' );
+            if( newForm[0] ){
+                newForm.on( 'click',()=>{
                     let obj = { table_id: this.data.tableId,btnType: 'new' };
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
                     let title = '新增'
@@ -1248,8 +1255,9 @@ let config = {
         },
         //定制列
         customColumnClick: function () {
-            if( $('.custom-column-btn')[0] ){
-                this.el.find( '.custom-column-btn' ).on( 'click',()=>{
+            let customCol = this.el.find( '.custom-column-btn' )
+            if( customCol[0] ){
+                customCol.on( 'click',()=>{
                     this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
                     this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
                     this.actions.changeAgGridWidth();
@@ -1258,7 +1266,8 @@ let config = {
         },
         //分组点击
         groupBtnClick: function () {
-            if( !$('.group-btn')[0] ){
+            let group = this.el.find( '.group-btn' );
+            if( !group[0] ){
                 return;
             }
             this.el.on('click','.group-btn',()=> {

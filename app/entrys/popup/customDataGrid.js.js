@@ -10,5 +10,7 @@ $(document).ready(function(){
         }
         com = new workflowPage(json);
     }
+    console.log( "加载定制页面" )
+    console.log( json )
     com.render($('#customDataGrid'));
 })
