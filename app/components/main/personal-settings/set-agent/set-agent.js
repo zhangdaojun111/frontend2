@@ -92,8 +92,7 @@ let config = {
                 }
             }
             let autoSelect = new AutoSelect({
-                list: tempData,
-                multiSelect: false
+                list: tempData
             });
             this.atSelect = autoSelect;
             autoSelect.render($wrap);
@@ -253,3 +252,4 @@ export const agentSetting = {
     }
 }
 
+//agentSetting.show();

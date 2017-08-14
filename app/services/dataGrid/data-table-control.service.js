@@ -405,5 +405,25 @@ export const dgcService = {
         }
         str = str.substring( 0,str.length - 1 );
         return u + str;
+    },
+    //创建表头提醒class
+    createHeaderStyle: function (tableId,obj) {
+        let style = document.createElement('style'),
+            head = document.head || document.getElementsByTagName('head')[0];
+        style.type = 'text/css';
+        let html = '.header-style-r {text-align: right;}.header-style-l {text-align: left;}';
+        let classObj = {};
+        let i = 1;
+        for( let k in obj ){
+            let css = ('.hrader-bgColor-'+ i + '{background-color:'+ k +';}');
+            for( let f of obj[k] ){
+                classObj[f] = ('hrader-bgColor-'+i);
+            }
+            html = html + css;
+            i++;
+        }
+        style.innerHTML = html;
+        head.appendChild(style);
+        return classObj;
     }
 }
