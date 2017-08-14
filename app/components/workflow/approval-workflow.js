@@ -18,7 +18,10 @@ let config={
         node_id:null,
         workflowData:null,
         sigh_user_id:'',
+        nodeflowSize:1,
+
     },
+
     actions:{
         approveWorkflow (__this){
             (async function () {
@@ -30,23 +33,116 @@ let config={
                 console.log(res);
             })
         },
-        previewView:function (el,appendDiv,addFollow) {
+
+        previewViewBtn:function (el) {
+            let type=$(el).attr('id');
+            let container = this.el.find('#cloneId2').find('.workflow-draw-box');
+            let container2 = this.el.find('#cloneId2').find('#drawflow').find('.content');
+            let closeDiv=$('<div class="screenClose-btn">X</div>');
+            let nodeCssObj={
+                height:100,
+                transformOrigin:'0% 0%'
+            };
+            let screenCssObj={
+                transform: 'scale(1)',
+                position:'fixed',
+                top: '0',
+                left: '0',
+                right: '0',
+                bottom: '0',
+                backgroundColor: 'rgb(255, 255, 255)',
+                width: '100%',
+                height: '100%',
+                overflow: 'auto',
+            }
+            switch (type){
+
+                case 'zoomIn' :
+
+                    var  nodeflowSize=this.data.nodeflowSize+= 0.1;
+                    container.css({
+                        height:`${nodeCssObj.height*nodeflowSize+'px'}`,
+                        transform:`scale(${nodeflowSize})`,
+                        transformOrigin:`${nodeCssObj.transformOrigin}`
+                    });
+
+                    break;
+                case 'zoomOut' :
+                    var  nodeflowSize=this.data.nodeflowSize-= 0.1;
+                    container.css({
+                        height:`${nodeCssObj.height*nodeflowSize+'px'}`,
+                        transform:`scale(${nodeflowSize})`,
+                        transformOrigin:`${nodeCssObj.transformOrigin}`
+                    });
+                    break;
+                case 'newWin' :
+
+                    let screenBtn=$('.screenClose-btn');
+                    if(!screenBtn.length){
+                        container2.append(closeDiv);
+                    }else {
+                        container.css({
+                            transform: 'scale(1)',
+                            position:'fixed',
+                            top: '0',
+                            left: '0',
+                            right: '0',
+                            bottom: '0',
+                            backgroundColor: 'rgb(255, 255, 255)',
+                            width: '100%',
+                            height: '100%',
+                            overflow: 'auto',
+                        });
+                        screenBtn.show();
+                    }
+                    container.css({
+                        transform: 'scale(1)',
+                        position:'fixed',
+                        top: '0',
+                        left: '0',
+                        right: '0',
+                        bottom: '0',
+                        backgroundColor: 'rgb(255, 255, 255)',
+                        width: '100%',
+                        height: '100%',
+                        overflow: 'auto',
+                    });
+                    screenBtn.show();
+                    this.el.on("click",'.screenClose-btn',function (e) {
+                        e.stopPropagation();
+                        container.css({
+                            height:'100px',
+                            position:'relative',
+                            top: '0',
+                            left: '0',
+                            right: '0',
+                            bottom: '0',
+                            backgroundColor: '#fff',
+                            width: '100%',
+                            overflow: 'auto',
+                        }) ;
+                        $(this).hide();
+                    });
+                    break;
+            }
+        },
+        previewView:function (el,appendDiv) {
             let type=$(el).data("preview");
-
-
+            let addFollow=this.el.find("#add-follow").clone(true).attr('id','cloneId1');
+            let flowNode=this.el.find("#flow-node").clone().attr('id','cloneId2');
+            let workflowRecord=this.el.find("#workflow-record").clone().attr('id','cloneId3');
             switch (type){
                 case 'follow-view' :
-                    let addFollow=this.el.find(".workflow-foot #add-follow").clone(true);
                     appendDiv.find(".preview-node1").html(addFollow);
                     appendDiv.find(".preview-node1").toggle().siblings().hide();
                     break;
                 case 'flow-view' :
-                    let flowNode=this.el.find(".workflow-foot #flow-node").clone();
+
                     appendDiv.find(".preview-node2").html(flowNode);
+                    $("#cloneId2").find('#togglePic').remove();
                     appendDiv.find(".preview-node2").toggle().siblings().hide();
                     break;
                 case 'record-view' :
-                    let workflowRecord=this.el.find(".workflow-record #workflow-record").clone();
                     appendDiv.find(".preview-node3").html(workflowRecord);
                     appendDiv.find(".preview-node3").toggle().siblings().hide();
                     break;
@@ -131,15 +227,16 @@ let config={
       
         this.el.on('click','.gz',(e)=>{
             this.actions.toogz(e);
-        })
-
-
+        });
         this.el.on('click','.close',function () {
             __this.el.find('.rejContainer').hide();
         });
         this.el.on('click',".preview-btn",function () {
             let appendDiv=__this.el.find("#preview-node");
             __this.actions.previewView($(this),appendDiv);
+        });
+        this.el.on("click",'.preview-node2 .previewBtn',function () {
+            __this.actions.previewViewBtn($(this))
         });
         this.el.on('click','#app-pass',function () {
             __this.actions.appPass();

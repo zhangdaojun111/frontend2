@@ -77,10 +77,36 @@ body{
      width: 100%;
      min-width: 980px;
      font-size: 14px;
-     z-index: 11;
+     z-index: 51;
      box-shadow:0px 5px 20px 1px #888;
      background: #fff;
      display: none;
+     #cloneId2 .workflow-draw-box{
+       transition: transform 0.5s ease-out;
+       transform: scale(1);
+     }
+     #cloneId2 .screen-fixed{
+       transform: scale(1);
+       position:fixed;
+       top: 0;
+       left: 0;
+       right: 0;
+       bottom: 0;
+       background-color: rgb(255, 255, 255);
+       width: 100%;
+       height: 100% !important;
+       overflow: auto;
+     }
+     #cloneId2 .screenClose-btn{
+       cursor: pointer;
+       font-size: 30px;
+       border: 1px solid rgb(221, 221, 221);
+       position: fixed;
+       right: 0;
+       top: 0;
+       padding: 10px;
+
+     }
    }
 
   }
