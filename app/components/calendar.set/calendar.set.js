@@ -330,6 +330,7 @@ let config = {
     afterRender: function() {
         this.el.css({width: '100%'});
         this.el.find('iframe').css("width","100%");
+<<<<<<< HEAD
 
         if(window.config.table_id) {
             this.data.tableId = window.config.table_id;
@@ -338,9 +339,13 @@ let config = {
         Mediator.on('calendar-set-left:calendar-set', data => {
             this.data.tableId = data.table_id;
             this.actions.getColumnListData(data.table_id);
-        });
-
+=======
         let _this = this;
+        Mediator.on('calendar-set-left:calendar-set', data => {
+            console.log(_this);
+            _this.actions.getColumnListData(data.table_id);
+>>>>>>> 2b3b9240a9d7fa1a6f2b2c7c1c4e82a2ee106443
+        });
         this.el.on("click",".editor-btn", function() {
             _this.el.find(".hide-btns").css("visibility","visible");
             $(this).addClass("disabled");

@@ -32,7 +32,6 @@ export const CodeEnum = {
         SUCCESS: 200,
 };
 
-
 export const CalendarService = {
 
     saveCalendarTable: function (table_id, param_list) {
@@ -175,12 +174,32 @@ export const CalendarService = {
      */
     getCalendarPreference: function (data) {
         let params = {
-            type: 6,
+            pre_type: 6,
             content: JSON.stringify(data['content']),
         };
         let res = HTTP.post(calendarPreferenceUrl, params).then(res => {
             if(res['code'] === CodeEnum.SUCCESS) {
-                alert('获取数据chngg');
+                return res;
+            } else {
+                alert('获取数据失败');
+            }
+        });
+        HTTP.flush();
+        return res;
+    },
+
+    /**
+     * data = {content: [隐藏项]}
+     * @param data
+     */
+    getCalendarhidePreference: function (data) {
+        let params = {
+            type: 6,
+            content: JSON.stringify(data['content']),
+        };
+        console.log(data);
+        let res = HTTP.post(calendarPreferenceUrl, params).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
                 alert('获取数据失败');

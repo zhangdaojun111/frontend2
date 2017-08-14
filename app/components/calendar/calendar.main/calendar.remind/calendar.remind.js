@@ -22,9 +22,8 @@ let CalendarRemind = {
 
     },
     afterRender: function() {
-        console.log(this.data.remindTableId);
+
         this.el.on('click', '.open-form', () => {
-            console.log('ss');
             // PMAPI.sendToParent({
             //     type: PMENUM.close_dialog,
             //     data: {

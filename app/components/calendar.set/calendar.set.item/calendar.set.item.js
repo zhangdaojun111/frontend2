@@ -130,6 +130,7 @@ let config = {
                 }
             });
         });
+<<<<<<< HEAD
 
         this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']);
         this.el.find('.preview-text').text(this.data.preViewText);
@@ -141,6 +142,13 @@ let config = {
     },
     beforeDestory: function () {
         Mediator.removeAll('calendar-set:editor');
+=======
+        this.el.find("#set-color-id").attr("id","set-color-"+this.data.rowSetData.field_id);
+        let set_color_id = "#set-color-"+this.data.rowSetData.field_id;
+        this.el.find(set_color_id).attr("value",this.data.rowSetData.color);
+        console.log(this.data.rowSetData);
+        this.append(new CalendarSetItemMulitSelect(this.data.dropdown), this.el.find('.multi-select-item'));
+>>>>>>> 2b3b9240a9d7fa1a6f2b2c7c1c4e82a2ee106443
     }
 };
 

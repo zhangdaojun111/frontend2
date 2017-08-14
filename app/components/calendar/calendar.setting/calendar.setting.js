@@ -52,13 +52,15 @@ let config = {
         });
 
         Mediator.on('calendar-set-left:calendar-set',data =>{
-            this.el.find(".calendar-setting-item-content").empty();
-            console.log(data);
-            this.append(new CalendarSet(data.data), this.el.find('.calendar-setting-item-content'));
+            $(".calendar-setting-item-content").empty();
+            this.append(new CalendarSet(data.data), $('.calendar-setting-item-content'));
         });
 
         let that = this;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2b3b9240a9d7fa1a6f2b2c7c1c4e82a2ee106443
         this.el.on('click',".hide-con",function(){
             if(!$(this).is(".is-hide")){
                 $(this).addClass("is-hide");

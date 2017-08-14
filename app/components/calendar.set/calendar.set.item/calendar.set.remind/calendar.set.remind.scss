@@ -56,10 +56,13 @@
                 line-height: 55px;
                 text-align: center;
             }
+<<<<<<< HEAD
             .select-input {
                 width: 100%;
             }
 
+=======
+>>>>>>> 2b3b9240a9d7fa1a6f2b2c7c1c4e82a2ee106443
         }
     }
     .set-ok{
@@ -70,5 +73,11 @@
         background-color: #3d83cc;
         border: 0px;
         color: white;
+    }
+}
+.multi-select-dom{
+    .multi-select{
+        width:200px;
+        display: block;
     }
 }
