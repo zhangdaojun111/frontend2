@@ -13,7 +13,7 @@ let config = {
     actions: {
         addImg(e){
             let imgFile = this.el.find('.J_add')[0].files[0];
-            this.el.find('.J_add').val("");
+            // this.el.find('.J_add').val("");
             if(/\.(png|PNG)$/.test(imgFile.name)){
                 if(imgFile){
                     let FR = new FileReader();
