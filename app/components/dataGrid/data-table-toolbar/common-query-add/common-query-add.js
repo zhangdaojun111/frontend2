@@ -12,7 +12,7 @@ let addQuery = {
                     key: this.key,
                     type: PMENUM.close_dialog,
                     data: {
-                        value: $('.input').val()
+                        value: $('.query-name-input').val()
                     }
                 } )
             } )

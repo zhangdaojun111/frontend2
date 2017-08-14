@@ -54,11 +54,6 @@ let config = {
         // 获取查询数据
         submitData: function (name){
             this.data.searchInputList = [];
-            let obj = {
-                cond: {},
-                relation:'$and'
-            }
-
             for(let i = 0; i < this.data.searchInputAry.length; i++) {
                 let obj = {
                     cond: {},
@@ -144,7 +139,7 @@ let config = {
                     if(name == 'save'){
                         this.actions.openSaveQuery(name);
                     } else {
-                        $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
+                        this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
                         this.data.saveTemporaryCommonQuery(this.data.searchInputList);
                         this.data.postExpertSearch(this.data.searchInputList);
                     }
@@ -291,20 +286,21 @@ class expertSearch extends Component {
         super(config)
     }
 }
-export default {
-    expertSearch:expertSearch,
-    show: function (d) {
-        let component = new expertSearch(d);
-        let el = $('<div>').appendTo(document.body);
-        component.render(el);
-        el.dialog({
-            title: '高级查询',
-            width: 1000,
-            height: 600,
-            close: function () {
-                $(this).dialog('destroy');
-                component.destroySelf();
-            }
-        });
-    }
-}
+// export default {
+//     expertSearch:expertSearch,
+//     show: function (d) {
+//         let component = new expertSearch(d);
+//         let el = $('<div>').appendTo(document.body);
+//         component.render(el);
+//         el.dialog({
+//             title: '高级查询',
+//             width: 1000,
+//             height: 600,
+//             close: function () {
+//                 $(this).dialog('destroy');
+//                 component.destroySelf();
+//             }
+//         });
+//     }
+// }
+export default expertSearch
