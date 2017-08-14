@@ -100,6 +100,9 @@ let config = {
         if (this.data.displayType === 'popup') {
             this.listWrap.addClass('popup');
         }
+        if (this.data.multiSelect === false) {
+            this.el.find('.auto-select-component').addClass('single-select');
+        }
     }
 }
 

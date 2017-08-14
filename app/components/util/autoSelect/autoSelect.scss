@@ -60,4 +60,11 @@
             cursor: pointer;
         }
     }
+    &.single-select {
+        .choosed {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+    }
 }
