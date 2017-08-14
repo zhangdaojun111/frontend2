@@ -1471,35 +1471,34 @@ let config={
         //提交按钮事件绑定
         _this.el.on('click','#save',function () {
             _this.actions.onSubmit();
-        })
+        });
         $(_this.el).find("#changeEdit").on('click',function () {
             console.log('转到编辑模式啊');
             _this.actions.changeToEdit(_this);
-        })
-        _this.el.on('click','#print',async function(){
+        });
+        _this.el.on('click','#print',async function() {
             let res = await FormService.getPrintSetting()
-                // if(res.succ == 1){
-                    if(res.data && res.data.length && res.data.length!=0){
-                        SettingPrint.data['printTitles']=res['data'];
-                        SettingPrint.data['myContent']=res['data'][0]['content'] || '';
-                        SettingPrint.data['selectNum']=parseInt(res['data']['index']) || 1;
-                    }
-                    PMAPI.openDialogByComponent(SettingPrint,{
-                        width: 500,
-                        height: 300,
-                        title: '自定义页眉',
-                        modal:true
-                    })
-                // }
+            // if(res.succ == 1){
+            if (res.data && res.data.length && res.data.length != 0) {
+                SettingPrint.data['printTitles'] = res['data'];
+                SettingPrint.data['key'] = _this.data.key;
+                SettingPrint.data['myContent'] = res['data'][0]['content'] || '';
+                SettingPrint.data['selectNum'] = parseInt(res['data']['index']) || 1;
+            }
+            PMAPI.openDialogByComponent(SettingPrint, {
+                width: 500,
+                height: 300,
+                title: '自定义页眉',
+                modal: true
             })
-
+        })
         //固定按钮
         _this.el.on('scroll','.wrap',function(){
             console.log('scroll');
             _this.el.find('.ui-btn-box').css({'bottom':(-1*$('.wrap').get(0).scrollTop +' px'),'width':'calc(100% + '+$('.wrap').get(0).scrollLeft+'px)'});
         })
     },
-    beforeDestory:function(){
+    beforeDestory(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
         Mediator.removeAll('form:addItem:'+this.data.tableId);
         $('body').off('.selectDrop');
