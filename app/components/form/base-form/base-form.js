@@ -13,6 +13,8 @@ import BuildInControl from "../buildIn-control/buildIn-control";
 import MultiLinkageControl from "../multi-linkage-control/multi-linkage-control";
 import YearMonthControl from "../year-month-control/year-month-control";
 import TimeControl from "../time-control/time-control";
+import DateControl from "../date-control/date-control";
+import DateTimeControl from "../datetime-control/datetime-control";
 import Mediator from "../../../lib/mediator";
 import {HTTP} from "../../../lib/http";
 import {FormService} from "../../../services/formService/formService"
@@ -1213,6 +1215,16 @@ let config={
                     let timeControl = new TimeControl(data[key]);
                     timeControl.render(single);
                     _this.childComponent[data[key].dfield] = timeControl;
+                    break;
+                case 'Date':
+                    let dateControl = new DateControl(data[key]);
+                    dateControl.render(single);
+                    _this.childComponent[data[key].dfield] = dateControl;
+                    break;
+                case 'Datetime':
+                    let dateTimeControl = new DateTimeControl(data[key]);
+                    dateTimeControl.render(single);
+                    _this.childComponent[data[key].dfield] =  dateTimeControl;
                     break;
             }
         }

@@ -1,5 +1,4 @@
 import Component from '../../../lib/component'
-import DropDown from "../vender/dropdown/dropdown";
 import Mediator from '../../../lib/mediator';
 
 let config={
@@ -9,7 +8,7 @@ let config={
                  {{else if be_control_condition }}
                     <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                  {{else}}
-                    <input type="text" style="width: 240px" value="时:分:秒" class="ui-calendar"> <span class="cancel-x" style="display: none">X</span>
+                    <input type="text" style="width: 240px" value="{{value}}" class="ui-calendar" id="timeInput"> <span class="cancel-x" style="display: none;cursor: pointer">X</span>
                  <div class="ui-timepicker ui-widget-header ui-corner-all time" style="border:1px solid #000000;background: none;display: none">
                        <!--时-->
                     <div class="ui-hour-picker hour">
@@ -44,7 +43,6 @@ let config={
     },
     actions:{
 
-
     },
     firstAfterRender:function(){
         let _this=this;
@@ -53,38 +51,39 @@ let config={
         });
     },
     afterRender:function(){
+        $(".ui-calendar").val("时:分:秒");
+        //增加0
         function p(s) {
             return s < 10 ? '0' + s: s;
         }
         //获取当前时间
         var myDate = new Date();
-        var date=myDate.getDate();
         var h=myDate.getHours();
         var m=myDate.getMinutes();
         var s=myDate.getSeconds();
         var now=p(h)+':'+p(m)+":"+p(s);
 
-        $("input").on("click", function () {
+         $("#timeInput").on("click", function () {
            $('.time,.cancel-x').css('display','block');
-           var  nowTime = $(".ui-calendar").val(now);
-           $(".hour").children("span").text(h);
-           $(".minute").children("span").text(m);
-           $(".second").children("span").text(s);
+           var  nowTime = $("#timeInput").val(now);
+           $(".hour").children("span").text(p(h));
+           $(".minute").children("span").text(p(m));
+           $(".second").children("span").text(p(s));
            event.stopPropagation();
         })
-        $("input").mousemove(function(){
+        $("#timeInput").mousemove(function(){
             $('.cancel-x').css('display','block');
         })
         $(".time").on('click',function(){
             event.stopPropagation();
         });
         $(document).on('click',function(){
-            $('.time').css('display','none');
+            $('.time,.cancel-x').css('display','none');
         });
 
         $(".cancel-x").on("click", function () {
             $('.time').css('display','none');
-            $(".ui-calendar").val("时:分:秒");
+            $("#timeInput").val("时:分:秒");
         })
         $(".plus").on("click", function () {
                 //当前时间+1
@@ -94,17 +93,17 @@ let config={
                 myDate2.setSeconds(s + 1);
                 if($(this).parents().hasClass("hour")){
                     h = myDate2.getHours();
-                    $(".hour").children("span").text(h);
+                    $(".hour").children("span").text(p(h));
                 }else if($(this).parents().hasClass("minute")){
                     m = myDate2.getMinutes();
-                    $(".minute").children("span").text(m);
+                    $(".minute").children("span").text(p(m));
                 }else{
                     s =myDate2.getSeconds();
-                    $(".second").children("span").text(s);
+                    $(".second").children("span").text(p(s));
                 }
                 var now2=p(h)+':'+p(m)+":"+p(s);
                 now = now2
-               $(".ui-calendar").val(now);
+               $("#timeInput").val(now);
             });
 
             $(".reduce").on("click", function () {
@@ -115,19 +114,19 @@ let config={
                 myDate3.setSeconds(s - 1);
                 if($(this).parents().hasClass("hour")){
                     h = myDate3.getHours();
-                    $(".hour").children("span").text(h);
+                    $(".hour").children("span").text(p(h));
                 }else if($(this).parents().hasClass("minute")){
                     m= myDate3.getMinutes();
-                    $(".minute").children("span").text(m);
+                    $(".minute").children("span").text(p(m));
                 }else{
                     s =myDate3.getSeconds();
-                    $(".second").children("span").text(s);
+                    $(".second").children("span").text(p(s));
                 }
                 var now3=p(h)+':'+p(m)+":"+p(s);
                 now = now3;
-                $(".ui-calendar").val(now);
+                $("#timeInput").val(now);
             });
-        let _this = this
+        let _this=this;
         _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
 
     },
