@@ -25,7 +25,6 @@ let config = {
                     }
                 });
                 this.data.choosed = choosed;
-                this.actions.setValue();
             } else {
                 let id = item.data('id');
                 let name = item.data('name');
@@ -33,14 +32,14 @@ let config = {
                     id: item.data('id'),
                     name: item.data('name')
                 }];
-                this.actions.setValue();
             }
+            this.actions.renderChoosed();
         },
-        setValue: function () {
-            let names = this.data.choosed.map((item) => {
-                return item.name;
+        unSelectItem: function (id) {
+            _.remove(this.data.choosed, function (item) {
+                return item.id === id;
             });
-            this.el.find('input').val(names.join(','));
+            this.actions.renderChoosed();
         },
         clearValue: function () {
             this.data.id = '';
@@ -57,19 +56,38 @@ let config = {
             this.actions.clearValue();
         },
         showSelectBox: function () {
-            this.el.find('ul').show();
+            this.listWrap.show();
         },
         hideSelectBox: function () {
-            // this.el.find('ul').hide();
+            this.listWrap.hide();
         },
-        getId: function () {
-            return this.data.id;
+        getValue: function () {
+            return this.data.choosed;
+        },
+        renderChoosed: function () {
+            this.listWrap.find('input:checkbox:checked').each(function () {
+                this.checked = false;
+            });
+            if (this.data.choosed.length) {
+                this.choosedWrap.show();
+                let html = [];
+                this.data.choosed.forEach((item) => {
+                    let checkbox = this.listWrap.find(`input:checkbox[data-id=${item.id}]`);
+                    checkbox[0].checked = true;
+                    html.push(`<div class="item" title="点击删除" data-id="${item.id}">${item.name}</div>`)
+                });
+                this.choosedWrap.html(html.join(''));
+            } else {
+                this.choosedWrap.hide();
+            }
         }
     },
     afterRender: function () {
-        let $wrap = this.el.find('ul');
+        this.listWrap = this.el.find('ul');
+        this.choosedWrap = this.el.find('.choosed');
         let that = this;
-        $wrap.height(this.data.selectBoxHeight);
+        this.actions.renderChoosed();
+        this.listWrap.height(this.data.selectBoxHeight);
         this.el.on('click', 'li', function () {
             that.actions.selectItem($(this));
         }).on('input', 'input', _.debounce(function () {
@@ -78,10 +96,13 @@ let config = {
             that.actions.showSelectBox();
         }).on('mouseleave', () => {
             that.actions.hideSelectBox();
+        }).on('click', '.choosed .item', function () {
+            let id = $(this).data('id');
+            that.actions.unSelectItem(id);
         });
 
         if (this.data.displayType === 'popup') {
-            this.el.find('ul').addClass('popup');
+            this.listWrap.addClass('popup');
         }
     }
 }
