@@ -8,6 +8,7 @@ import CalendarSetItemMulitSelect from "./calendar.set.item.multiselect/calendar
 import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
 import Mediator from '../../../lib/mediator';
+import {AutoSelect} from '../../util/autoSelect/autoSelect';
 import CalendarSetRemindMethod from './calendar.set.remind/calendar.set.remind';
 
 let config = {
@@ -56,7 +57,15 @@ let config = {
     afterRender: function() {
         // this.el.css({width: '100%'});
         let staus = false;
-        // this.append(new AutoSelect(this.data.dropdownForRes), this.el.find('.multi-select-item'));
+        let select_item_data = {'list':this.data.dropdownForRes};
+        let multi_select_item = new AutoSelect(select_item_data);
+        this.append(multi_select_item, this.el.find('.multi-select-item'));
+        this.el.find(".popup").css('z-index',100,'background-color',"white");
+        this.el.find(".popup").css('background-color',"white");
+        this.el.find(".popup").css('height',"auto");
+        this.el.find(".popup").css('max-height',"300px");
+        this.el.find(".popup").children('li').children('label').css('text-align',"left");
+        this.el.find(".popup").children('li').children('label').css('overflow',"hidden");
         Mediator.on('calendar-set:editor',data =>{
             if(data.data ===1){
                 this.el.find(".editor-items").attr("disabled",false);

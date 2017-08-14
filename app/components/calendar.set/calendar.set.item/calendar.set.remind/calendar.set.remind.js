@@ -29,7 +29,6 @@ let config = {
         }
 
         }
-
     ,
     afterRender: function() {
         this.data.emailAddressList[0].id = "1";
