@@ -96,39 +96,39 @@ let config = {
             this.data.rowSetData['selectedEnums'] = valueForCalendarChangeValue;
             //this.data.allRows[this.data.index]['selectedEnums'] = valueForCalendarChange;
         }).on('click', '.set-remind-method', () => {
-            // CalendarSetRemindMethod.emailStatus = this.data.rowSetData.email.email_status;
-            // CalendarSetRemindMethod.smsStatus = this.data.rowSetData.sms.sms_status;
-            // CalendarSetRemindMethod.data.emailAddressList = this.data.emailAddressList;
-            // CalendarSetRemindMethod.data.recipients = this.data.recipients;
-            // CalendarSetRemindMethod.data.copypeople = this.data.copypeople;
-            // CalendarSetRemindMethod.data.recipients_per = this.data.recipients_per;
-            // PMAPI.openDialogByComponent(CalendarSetRemindMethod, {
-            //     width: 800,
-            //     height: 400,
-            //     title: '【'+ this.data.rowTitle.name + '】'+'的提醒'
-            // }).then(res => {
-            //     console.log(res);
-            // })
-            let component = new CalendarSetRemindMethod({
-                emailStatus: this.data.rowSetData.email.email_status,
-                smsStatus: this.data.rowSetData.sms.sms_status,
-                recipients: this.data.recipients,
-                recipients_per: this.data.recipients_per,
-                copypeople: this.data.copypeople,
-                emailAddressList: this.data.emailAddressList,
-                emailAddress: this.data.emailAddress,
-            });
-            let el = $('<div>').appendTo(document.body);
-            component.render(el);
-            el.dialog({
-                title: '主框架弹出',
+            CalendarSetRemindMethod.emailStatus = this.data.rowSetData.email.email_status;
+            CalendarSetRemindMethod.smsStatus = this.data.rowSetData.sms.sms_status;
+            CalendarSetRemindMethod.data.emailAddressList = this.data.emailAddressList;
+            CalendarSetRemindMethod.data.recipients = this.data.recipients;
+            CalendarSetRemindMethod.data.copypeople = this.data.copypeople;
+            CalendarSetRemindMethod.data.recipients_per = this.data.recipients_per;
+            PMAPI.openDialogByComponent(CalendarSetRemindMethod, {
                 width: 800,
-                height: 500,
-                close: function() {
-                    $(this).dialog('destroy');
-                    component.destroySelf();
-                }
+                height: 400,
+                title: '【'+ this.data.rowTitle.name + '】'+'的提醒'
+            }).then(res => {
+                console.log(res);
             });
+            // let component = new CalendarSetRemindMethod({
+            //     emailStatus: this.data.rowSetData.email.email_status,
+            //     smsStatus: this.data.rowSetData.sms.sms_status,
+            //     recipients: this.data.recipients,
+            //     recipients_per: this.data.recipients_per,
+            //     copypeople: this.data.copypeople,
+            //     emailAddressList: this.data.emailAddressList,
+            //     emailAddress: this.data.emailAddress,
+            // });
+            // let el = $('<div>').appendTo(document.body);
+            // component.render(el);
+            // el.dialog({
+            //     title: '主框架弹出',
+            //     width: 800,
+            //     height: 500,
+            //     close: function() {
+            //         $(this).dialog('destroy');
+            //         component.destroySelf();
+            //     }
+            // });
         });
 
         this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']);
@@ -137,7 +137,6 @@ let config = {
         $("#set-color-id").attr("id","set-color-"+this.data.rowSetData.field_id);
         let set_color_id = "#set-color-"+this.data.rowSetData.field_id;
         $(set_color_id).attr("value",this.data.rowSetData.color);
-        //this.append(new CalendarSetItemMulitSelect(this.data.dropdown), this.el.find('.multi-select-item'));
     },
     beforeDestory: function () {
         Mediator.removeAll('calendar-set:editor');

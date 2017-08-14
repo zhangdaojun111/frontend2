@@ -21,6 +21,7 @@ export const CalendarSetService = {
     getMenu: function () {
         let res = HTTP.get(menuUrl).then(res => {
             if(res['success'] === 1) {
+                this.menu = res['menuList'];
                 return res;
             } else {
                 alert('获取数据失败');
