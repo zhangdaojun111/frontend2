@@ -1522,7 +1522,7 @@ let config = {
             console.log( data )
             if( data.event.srcElement.className == 'gridView' ){
                 console.log( '查看' )
-                let obj = { table_id: this.data.tableId,real_id: data.data._id,btnType: 'view' };
+                let obj = { table_id: this.data.tableId,real_id: data.data._id,btnType: 'view',is_view:1 };
                 let url = dgcService.returnIframeUrl( '/form/index/',obj );
                 let title = '查看'
                 this.actions.openSourceDataGrid( url,title );

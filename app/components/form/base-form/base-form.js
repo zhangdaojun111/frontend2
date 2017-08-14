@@ -980,9 +980,8 @@ let config={
         //转到编辑模式
         changeToEdit(_this){
             let json={
-                tableId:'8696_yz7BRBJPyWnbud4s6ckU7e',
-                real_id:'59803341ae6ba89d68ac574e',
-                seqid:'yudeping'
+                tableId:_this.tableId,
+                real_id:_this.realId,
             }
             FormService.getDynamicData(json).then(res=>{
                 for(let key in _this.data.data){
@@ -996,6 +995,8 @@ let config={
                     _this.childComponent[key]['data']['is_view']=_this.data.data[key]['is_view'];
                     _this.childComponent[key].reload();
                 }
+                _this.data.btnType='new';
+                _this.actions.addBtn();
                 // for(let key in this.childComponent){
                 //     if(this.childComponent[key].data.type!='Readonly'){
                 //         this.childComponent[key].data.is_view='1';
@@ -1056,7 +1057,7 @@ let config={
         }
          },
 
-         checkValue:function(data,_this){
+        checkValue:function(data,_this){
             if(_this.data.data[data.dfield]){
                 _this.data.data[data.dfield]=data;
             }
@@ -1122,6 +1123,43 @@ let config={
                 _this.actions.requiredChange(_this.childComponent[data.dfield]);
             }
             $('.select-drop').hide();
+        },
+
+        addBtn(){
+            this.el.find('.ui-btn-box').remove();
+            //添加提交按钮
+            if(this.data.btnType == 'new' || this.data.btnType == 'edit'){
+                this.el.append(`<div class="noprint ui-btn-box"><div>
+                    <button class="btn btn-normal mrgr" id="print">
+                        <span>打印</span>
+                        <div class="btn-ripple ripple"></div>
+                    </button>
+                    <button class="btn btn-normal ceshi" id="save" >
+                        <span>提交</span>
+                        <div class="btn-ripple ripple"></div>
+                    </button>
+                </div></div>`)
+            }else if(this.data.btnType == 'view'){
+                this.el.append(`<div class="noprint ui-btn-box"><div >
+                    <button class="btn btn-normal mrgr" id="print" >
+                        <span>打印</span>
+                        <div class="btn-ripple ripple"></div>
+                    </button>
+                    <button class="btn btn-normal" id="changeEdit" >
+                        <span>转到编辑模式</span>
+                        <div class="btn-ripple ripple"></div>
+                    </button>
+                </div></div>`)
+            }else if(this.data.btnType == 'none'){
+
+            }else if(this.data.btnType == 'confirm'){
+                this.el.append(`<div class="noprint ui-btn-box"><div >
+                    <button class="btn btn-normal">
+                        <span>确定</span>
+                        <div class="btn-ripple ripple"></div>
+                    </button>
+                </div></div>`)
+            }
         }
     },
     firstAfterRender:function(){
@@ -1377,8 +1415,6 @@ let config={
         }),
 
         Mediator.subscribe('form:addNewBuildIn:'+_this.data.tableId,function(data){
-            console.log('快捷添加内置');
-            console.log(data);
             _this.data['quikAddDfield']=data.dfield;
             PMAPI.openDialogByIframe(`/iframe/add_buildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
                 width:800,
@@ -1410,40 +1446,7 @@ let config={
             });
         })
 
-        //添加提交按钮
-        if(_this.data.btnType == 'new'){
-            _this.el.append(`<div class="noprint ui-btn-box"><div>
-                    <button class="btn btn-normal mrgr" id="print">
-                        <span>打印</span>
-                        <div class="btn-ripple ripple"></div>
-                    </button>
-                    <button class="btn btn-normal ceshi" id="save" >
-                        <span>提交</span>
-                        <div class="btn-ripple ripple"></div>
-                    </button>
-                </div></div>`)
-        }else if(_this.data.btnType == 'edit'){
-            _this.el.append(`<div class="noprint ui-btn-box"><div >
-                    <button class="btn btn-normal mrgr" id="print" >
-                        <span>打印</span>
-                        <div class="btn-ripple ripple"></div>
-                    </button>
-                    <button class="btn btn-normal" id="changeEdit" >
-                        <span>转到编辑模式</span>
-                        <div class="btn-ripple ripple"></div>
-                    </button>
-                </div></div>`)
-        }else if(_this.data.btnType == 'none'){
-
-        }else if(_this.data.btnType == 'confirm'){
-            _this.el.append(`<div class="noprint ui-btn-box"><div >
-                    <button class="btn btn-normal" [style.background]="myColor._baseColor">
-                        <span>确定</span>
-                        <div class="btn-ripple ripple"></div>
-                    </button>
-                </div></div>`)
-        }
-
+        _this.actions.addBtn();
 
         //提交按钮事件绑定
         _this.el.on('click','#save',function () {
