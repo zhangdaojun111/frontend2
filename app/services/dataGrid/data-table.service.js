@@ -44,5 +44,9 @@ export const dataTableService = {
     //获取工作流表数据
     getWorkflowData: function ( data ) {
         return HTTP.post( 'get_workflow_records',data )
+    },
+    //工作流操作
+    approveWorkflow: function ( data ) {
+        
     }
 }
