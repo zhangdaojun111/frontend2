@@ -1,14 +1,14 @@
 import {HTTP} from "../../lib/http";
 
-export const ViewsService = {
+export const ViewsDelService = {
 
     /**
-     * 新建视图
-     * @param data{id:"",name:""} 传送name,id为空
+     * 删除数据
+     * @param data{id:""}
      * @returns {Promise}
      */
-    async update(data) {
-        const res = await HTTP.getImmediately('/bi/set_new_view_data',data);
+    async delData(data) {
+        const res = await HTTP.getImmediately('/bi/del_new_view_data',data);
         return new Promise((resolve, reject) => {
             if (res['success']===1) {
                 resolve(res);

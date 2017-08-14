@@ -1,7 +1,7 @@
 import {BiBaseComponent} from '../bi.base.component';
 
 import {ViewItemComponent} from "./item/item";
-import {ViewsEditService} from "../../../services/bisystem/views.edit.service";
+
 import {ViewsService} from "../../../services/bisystem/views.service";
 import {config as viewDialogConfig} from "./dialog/edit/dialog.edit";
 import {PMAPI} from "../../../lib/postmsg";
@@ -21,36 +21,41 @@ let config = {
       }
     },
     afterRender(){
-        // Mediator.subscribe('bi:views:add',(data) => {
-        //     console.log(data);
-        // });
-
-
         //渲染列表数据
         this.data.views.forEach((val,index) => {
             let viewItemComponent = new ViewItemComponent(val);
             this.append(viewItemComponent,this.el.find('.view-list'));
         });
-
-        //获取新建数图数据
-        ViewsEditService.getCharts().then(res => {
-            // console.log(res);
-        });
-
-        // console.log(this.data.views);
     },
     firstAfterRender() {
+        Mediator.subscribe("bi:views:update", (val) => {
+            let views = this.data.views;
+            for(let view of views) {
+                if (val.id === view.id) {
+                    view.name = val.name;
+                    break;
+                };
+            };
+        });
+
         //弹出框
         this.el.on('click','.create', async()=> {
+            viewDialogConfig.data.view = null;
             const res = await PMAPI.openDialogByComponent(viewDialogConfig,{
                 width: 348,
                 height: 217,
                 title: '新建视图'
             });
             if (res['name']) {
-                // this.data.views.push(res);
-                // this.reload();
-            };
+                ViewsService.update(res).then((res) => {
+                    if(res['success']===1){
+                        this.data.views.push(res.data);
+                        this.reload();
+                    }else{
+                        alert(res['error']);
+                    }
+                });
+            }
             return false;
         })
     }

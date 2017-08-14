@@ -3,41 +3,53 @@ import {BiBaseComponent} from '../../bi.base.component';
 import template from "./item.html";
 import "./item.scss";
 import {ViewsService} from "../../../../services/bisystem/views.service";
+import {ViewsDelService} from "../../../../services/bisystem/views.del.service";
 import {config as viewDialogConfig} from "../dialog/edit/dialog.edit";
 import msgbox from "../../../../lib/msgbox";
+import Mediator from '../../../../lib/mediator';
 
 import {PMAPI} from "../../../../lib/postmsg";
 
 let config = {
     template:template,
     data:{},
-    afterRender(){
-        this.el.on('click','.create', async()=> {
-            // dialogCreateSetting.show();
-            PMAPI.openDialogByComponent(viewDialogConfig,{
+    afterRender(){},
+    firstAfterRender(){
+        this.el.on('click','.btn-edit', async ()=> {
+            viewDialogConfig.data.view = this.data;
+            const res = await PMAPI.openDialogByComponent(viewDialogConfig,{
                 width: 348,
                 height: 217,
-                title: '新建页面'
+                title: '编辑视图'
             });
-
-
-        }).on('click','.btn-edit', async ()=> {
-            // dialogEditSetting.show();
-
-            // console.log(viewDialogConfig);
-            // PMAPI.openDialogByComponent(viewDialogConfig,{
-            //     width: 348,
-            //     height: 217,
-            //     title: '编辑页面'
-            // });
-            // console.log('////////////////////////////');
-            // console.log(this.data.name);
-
+            if (res['name']) {
+                ViewsService.update(res).then((val) => {
+                    if(val['success']===1){
+                        this.data = res;
+                        Mediator.publish("bi:views:update", this.data);
+                        this.reload();
+                    }else{
+                        alert(val['error'])
+                    }
+                });
+            }
+            return false;
         }).on('click','.btn-del', async()=> {
-           const ok = await msgbox.confirm("是否删除？");
-           if(ok){
-               this.destroySelf();
-           }
+            const ok = await msgbox.confirm("是否删除？");
+            let data = {
+                view_id:''
+            };
+            if(ok){
+                data.view_id = this.data.id;
+                ViewsDelService.delData(data).then((res)=>{
+                    if(res['success']===1){
+                        this.destroySelf();
+                    }else{
+                        alert(res['error']);
+                    }
+                });
+            }
+
         }).on('click','.save', ()=> {
             msgbox.alert("保存成功");
         });
@@ -47,6 +59,7 @@ let config = {
 
 export class ViewItemComponent extends BiBaseComponent{
     constructor(item) {
+        // console.log(config.data);
         config.data = item? item : null;
         super(config);
     }
