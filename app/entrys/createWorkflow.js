@@ -268,11 +268,15 @@ Mediator.subscribe('workflow:Record',(e)=>{
         Mediator.publish("workflow:getRecords",res);
     })
 });
+
+
+// console.log(workflowService.getRecordTotal());
 //workflow 取消申请
 Mediator.subscribe("workflow:approve",(e)=>{
-    (async function () {
+    (async function (e) {
+        console.log(e);
         return workflowService.approve(e);
-    })().then(res=>{
+    })(e).then(res=>{
         console.log(3);
         Mediator.publish("getApprove",res);
     })
