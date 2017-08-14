@@ -8,6 +8,7 @@ import {canvasCellService} from '../../../services/bisystem/canvas.cell.service'
 import Mediator from '../../../lib/mediator';
 import {ToolPlugin} from '../utils/tool.plugin';
 
+
 let config = {
     template: template,
     data: {
