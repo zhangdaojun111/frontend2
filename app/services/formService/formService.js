@@ -2,14 +2,21 @@ import {HTTP} from '../../lib/http';
 import alert from '../../lib/msgbox';
 
 export const FormService={
+    //子表内置父表的id集合（前端填充）tableid : ids
     idsInChildTableToParent : {},
-
+    //父表的this.form.value
     frontendParentFormValue:[],
-
+    //父表子表关系
     frontendRelation : [] ,
     //父表的this.newData
     frontendParentNewData : {},
 
+    /**
+     *  组装子表所需列表或表单中内置或相关的父表中数据
+     *  @param kvDict 父子数据字段对应的关系 {f1: f2 ,temp_id:section_page_id }
+     *  @param formDataFromParent 父表中填写的数据
+     *  @param frontendParentTableId父表id
+     */
     packageParentDataForChildData(kvDict,formDataFromParent,frontendParentTableId) {
         let result = {};
         for(let key in kvDict){
@@ -59,41 +66,39 @@ export const FormService={
         return result;
     },
 
-    getCountData:async function(json){
-        let data=this.formatParams(json);
-        // return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_count_data/',data:data});
-        return await HTTP.postImmediately({url:'/get_count_data/',data:data});
+    //获取统计数据
+    getCountData(json){
+        let res=HTTP.post('get_count_data',json);
+        HTTP.flush();
+        return res;
     },
-    get_exp_value:async function(eval_exps){
-        let data=this.formatParams( {"eval_exps": eval_exps} );
-        // return await HTTP.postImmediately({url:'http://192.168.2.223:9001/eval_exp_fun/',data:data});
-        return await HTTP.postImmediately({url:'/eval_exp_fun/',data:data});
+    get_exp_value(eval_exps){
+        let res=HTTP.post('eval_exp_fun',eval_exps);
+        HTTP.flush();
+        return res;
     },
-    getDefaultValue:async function(json){
-        let data=this.formatParams(json);
-        // return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_workflow_default_values/',data:data});
-        return await HTTP.postImmediately({url:'/get_workflow_default_values/',data:data});
+    //获取默认值数据
+    getDefaultValue(json){
+        let res=HTTP.post('get_workflow_default_values',json);
+        HTTP.flush();
+        return res;
     },
-    getAboutData:async function(json){
-        let data=this.formatParams(json);
-        // return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_about_data/',data:data});
-        return await HTTP.postImmediately({url:'/get_about_data/',data:data});
+    //获取相关数据
+    getAboutData(json){
+        let res=HTTP.post('get_about_data',json);
+        HTTP.flush();
+        return res;
     },
-    getPrepareParmas:async function(json){
-        let data=this.formatParams(json);
-        // return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_about_data/',data:data});
-        return await HTTP.postImmediately({url:'/prepare_params/',data:data});
+    execFieldPlugin(json){
+        let res=HTTP.post('exec_field_plugin',json);
+        HTTP.flush();
+        return res;
     },
-    formatParams(params) {
-        let result = [];
-        for(let k in params){
-            if(typeof(params[k]) == 'object'){
-                result.push(k + '=' + JSON.stringify(params[k]));
-            }else{
-                result.push(k + '=' + params[k]);
-            }
-        }
-        return result.join('&')
+    //获取表单参数
+    getPrepareParmas(json){
+        let res=HTTP.post('prepare_params',json);
+        HTTP.flush();
+        return res;
     },
   
     //身份证验证
@@ -381,26 +386,43 @@ export const FormService={
     },
     //@function(fun_ghl_dqsj) end
 
-    getColumnList:async function (id){
-      return HTTP.get(`get_column_list`,{table_id:id});
+    //获取列头信息待删除
+    getColumnList(id){
+        let res=HTTP.get('get_column_list',{table_id:id});
+        HTTP.flush();
+        return res;
     },
-    getFormContent:async function (json) {
-        return HTTP.post('get_form_content',json);
+    //获取手绘表单str
+    getFormContent(json) {
+        let res=HTTP.post('get_form_content',json);
+        HTTP.flush();
+        return res;
     },
-    searchByChooser:async function (json) {
-        return HTTP.post('selector',json);
+    //获取选择器数据
+    searchByChooser(json) {
+        let res=HTTP.post('selector',json);
+        HTTP.flush();
+        return res;
     },
-    saveAddpageData:async function (json) {
-        return HTTP.post('add_update_table_data',json);
+    //保存表单
+    saveAddpageData(json) {
+        let res=HTTP.post('add_update_table_data',json);
+        HTTP.flush();
+        return res;
     },
-    expEffect:async function (json) {
-        return HTTP.post('eval_exp_fun',json);
+    //表达书后台计算
+    expEffect(json) {
+        let res=HTTP.post('eval_exp_fun',json);
+        HTTP.flush();
+        return res;
     },
-
-    getPrintSetting:async function(){
-        return HTTP.post('user_preference',{action:'get'});
+    //获取用户打印页眉偏好
+    getPrintSetting(){
+        let res=HTTP.post('user_preference',{action:'get'});
+        HTTP.flush();
+        return res;
     },
-
+    //获取表单数据
     getFormData(json){
         let res;
         if(json['form_id']){
@@ -411,15 +433,22 @@ export const FormService={
         HTTP.flush();
         return res;
     },
-
-    getStaticData:async function (json) {
+    //获取表单静态数据
+    getStaticData(json) {
         return HTTP.post( 'get_form_static_data',json )
     },
-    getDynamicData:async function (json) {
-        console.log(json);
+    //获取表单动态数据
+    getDynamicData(json) {
         return HTTP.post( 'get_form_dynamic_data',json )
     },
-    uploadAttachment:function (url,json,processCallback,successCallback) {
+    //立即获得表单动态数据
+    //获取表单动态数据
+    getDynamicDataImmediately(json) {
+        let res=HTTP.post( 'get_form_dynamic_data',json )
+        HTTP.flush();
+        return res;
+    },
+    uploadAttachment(url,json,processCallback,successCallback) {
         HTTP.ajaxImmediately({
             type:"POST",
             url: url,
@@ -444,7 +473,7 @@ export const FormService={
             timeout:60000
         })
     },
-    deleteUploaded:function (json) {
+    deleteUploaded(json) {
         return HTTP.postImmediately('/delete_attachment/',json);
     }
 }

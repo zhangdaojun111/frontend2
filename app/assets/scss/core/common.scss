@@ -89,3 +89,15 @@ html {
     }
 }
 
+.grid-cell-info {
+    text-align: center;
+    &.red {
+        color: #ff4f4a;
+    }
+}
+.grid-header-info {
+
+}
+.pointer {
+    cursor: pointer;
+}
