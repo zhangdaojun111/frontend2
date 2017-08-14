@@ -20,7 +20,7 @@ let SocketMgr = {
             SocketMgr.connect();
         };
         this.socket.onerror = function (event) {
-            console.log('socket error:' + event);
+            console.log(event);
         };
     },
 

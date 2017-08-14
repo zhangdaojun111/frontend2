@@ -26,13 +26,22 @@ let config = {
         },
         //向后台发送数据，删除该常用工作流,现在没有接口，只是在dom中删除这个
         delBtn:function(e){
+            let el = $(e.target);
+            let id = el.attr('data-id');
+            for(let i=0;i<this.data[1].rows.length;i++){
+                if(this.data[1].rows[i].id == id){
+                    this.data[1].rows.splice(i,i+1);
+                }
+            }
             let target = e.target;
             let parent = $(target).parent().parent().parent();
             parent.remove();
+            this.actions.init();
         },
         init(){
             $('#addFav').hide();
             this.data.favList=this.data[1].rows;
+            console.log(this.data.favList);
             if(this.data.id!==undefined){
                 let flag=true;
                 for (let {id} of this.data.favList) {
@@ -62,6 +71,14 @@ let config = {
         //addFav
         this.el.on('click','#addFav',(e)=>{
             Mediator.publish('workflow:addFav', this.data.id);
+            for(let i = 0;i<this.data[0].data.length;i++){
+                for(let j = 0;j<this.data[0].data[i].children.length;j++){
+                    if(this.data[0].data[i].children[j].id == this.data.id){
+                        this.data[1].rows.push(this.data[0].data[i].children[j]);
+                    };
+                }
+            }
+            this.actions.init();
             $('#addFav').hide();
         });
 
@@ -76,6 +93,7 @@ let config = {
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             WorkFlow.show(msg.data[0],'#drawflow');
         })
+
     },
     beforeDestory: function(){
        

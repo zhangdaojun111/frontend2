@@ -67,6 +67,20 @@
             padding-left: 18px;
             height: 30px;
             line-height: 30px;
+            position:relative;
+            &:after{
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                background: url(../../../../assets/images/util/tree/icon_unfold.png) no-repeat;
+                width: 16px;
+                height: 16px;
+                background-size: contain;
+                transform: translateY(-50%);
+
+            }
+
         }
         .child-list{
             padding-left: 36px;
@@ -76,6 +90,19 @@
         .child-item{
             height: 30px;
             line-height: 30px;
+            position: relative;
+            &:after{
+                content: '';
+                position: absolute;
+                left: -18px;
+                top: 50%;
+                background: url(../../../../assets/images/util/tree/icon_leaf.png) no-repeat;
+                width: 16px;
+                height: 16px;
+                background-size: contain;
+                transform: translateY(-50%);
+
+            }
         }
         .child-hide{
             max-height: 0;
