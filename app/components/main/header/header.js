@@ -5,15 +5,16 @@ import 'jquery-ui/ui/widgets/tooltip';
 import Mediator from '../../../lib/mediator';
 import msgbox from '../../../lib/msgbox';
 import OtherLogin from "../login-by-other/login-by-other";
+import {systemMessageUtil} from '../system-message/system-message';
 
 let config = {
     template: template,
     data: {
         asideSize: 'full',
 
-        homeVisible:true,
-        calendarVisible:true,
-        biVisible:true,
+        homeVisible: true,
+        calendarVisible: true,
+        biVisible: true,
 
         // calendarVisible: window.config.sysConfig.logic_config.use_canlendar,
         // biVisible: window.config.sysConfig.logic_config.use_bi,
@@ -42,10 +43,10 @@ let config = {
                 url: window.config.sysConfig.calendar_index
             });
         },
-        openHome:function () {
+        openHome: function () {
             msgbox.alert("打开首页按钮预留");
         },
-        otherLogin:function () {
+        otherLogin: function () {
             OtherLogin.show();
         },
         goOnlineNumber: function () {
@@ -54,11 +55,25 @@ let config = {
         goSystemSetting: function () {
             msgbox.alert('go system setting');
         },
-        refreshOnlineNum: function (number) {
-            this.el.find('.online-num span').text(number);
+        refreshOnlineNum: function (data) {
+            this.el.find('.online-num span').text(data.online_user_num);
+        },
+
+        showMessageUnread: function () {
+            this.el.find('.icon.message').addClass('unread');
+        },
+
+        hideMessageUnread: function () {
+            this.el.find('.icon.message').removeClass('unread');
+        },
+
+        openMessageDialog: function () {
+            this.actions.hideMessageUnread();
+            // $("<div></div>").appendTo
+            systemMessageUtil.show();
         }
 
-        },
+    },
 
     afterRender: function () {
         this.el.tooltip();
@@ -95,26 +110,35 @@ let config = {
             //     $(this).enableClick();
             // }.bind(this), 1000);
 
+            msgbox.confirm('这是提示123123')
+
         }).on('click', '.online-num', () => {
+            // msgbox.confirm('这是提示123123123')
             that.actions.goOnlineNumber();
         }).on('click', '.system-setting', () => {
             that.actions.goSystemSetting();
 
-        // }).on('click','a.other-login', () => {   //他人登录
-        //     this.actions.otherLogin();
-        }).on('click','.home', () => {
+            // }).on('click','a.other-login', () => {   //他人登录
+            //     this.actions.otherLogin();
+        }).on('click', '.home', () => {
             this.actions.openHome();
+        }).on('click', '.message', () => {
+            this.actions.openMessageDialog();
         });
-        Mediator.on('socket:online_user_num', function (data) {
-            that.actions.refreshOnlineNum(data.online_user_num);
-        });
+        Mediator.on('socket:online_user_num', that.actions.refreshOnlineNum);
+        Mediator.on('socket:personal_message', this.actions.showMessageUnread);
+        Mediator.on('socket:notice', this.actions.showMessageUnread);
+        Mediator.on('socket:voice_message', this.actions.showMessageUnread);
+        Mediator.on('socket:workflow_approve_msg', this.actions.showMessageUnread);
     },
-    
+
     beforeDestory: function () {
         Mediator.removeAll('socket:online_user_num');
+        Mediator.removeAll('socket:personal_message');
+        Mediator.removeAll('socket:notice');
+        Mediator.removeAll('socket:voice_message');
+        Mediator.removeAll('socket:workflow_approve_msg');
     }
 }
 
-export const HeaderInstance = new Component(config, {
-
-});
+export const HeaderInstance = new Component(config, {});

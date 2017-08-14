@@ -60,9 +60,9 @@
         left: 0;
         top: 0;
         z-index: 100;
-        background: #ccc;
+        background: rgba(204,204,204,0.7);
         visibility: hidden;
-        opacity: .7;
+        //opacity: .7;
         .dragimg{
             position: absolute;
             z-index: 10200;

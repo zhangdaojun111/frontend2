@@ -63,8 +63,9 @@ let config={
         var m=myDate.getMinutes();
         var s=myDate.getSeconds();
         var now=p(h)+':'+p(m)+":"+p(s);
+        let _this=this;
 
-        $("input").on("click", function () {
+        this.el.find("input").on("click", function () {
            $('.time,.cancel-x').css('display','block');
            var  nowTime = $(".ui-calendar").val(now);
            $(".hour").children("span").text(h);
@@ -72,21 +73,21 @@ let config={
            $(".second").children("span").text(s);
            event.stopPropagation();
         })
-        $("input").mousemove(function(){
+        this.el.find("input").mousemove(function(){
             $('.cancel-x').css('display','block');
         })
-        $(".time").on('click',function(){
+        this.el.find(".time").on('click',function(){
             event.stopPropagation();
         });
         $(document).on('click',function(){
             $('.time').css('display','none');
         });
 
-        $(".cancel-x").on("click", function () {
-            $('.time').css('display','none');
-            $(".ui-calendar").val("时:分:秒");
+        this.el.find(".cancel-x").on("click", function () {
+            _this.el.find('.time').css('display','none');
+            _this.el.find(".ui-calendar").val("时:分:秒");
         })
-        $(".plus").on("click", function () {
+        this.el.find(".plus").on("click", function () {
                 //当前时间+1
                 var myDate2 = new Date();
                 myDate2.setHours(h + 1);
@@ -94,20 +95,20 @@ let config={
                 myDate2.setSeconds(s + 1);
                 if($(this).parents().hasClass("hour")){
                     h = myDate2.getHours();
-                    $(".hour").children("span").text(h);
+                    _this.el.find(".hour").children("span").text(h);
                 }else if($(this).parents().hasClass("minute")){
                     m = myDate2.getMinutes();
-                    $(".minute").children("span").text(m);
+                    _this.el.find(".minute").children("span").text(m);
                 }else{
                     s =myDate2.getSeconds();
-                    $(".second").children("span").text(s);
+                    _this.el.find(".second").children("span").text(s);
                 }
                 var now2=p(h)+':'+p(m)+":"+p(s);
                 now = now2
-               $(".ui-calendar").val(now);
+                _this.el.find(".ui-calendar").val(now);
             });
 
-            $(".reduce").on("click", function () {
+            _this.el.find(".reduce").on("click", function () {
                 //当前时间-1
                 var myDate3 = new Date();
                 myDate3.setHours(h - 1);
@@ -115,19 +116,18 @@ let config={
                 myDate3.setSeconds(s - 1);
                 if($(this).parents().hasClass("hour")){
                     h = myDate3.getHours();
-                    $(".hour").children("span").text(h);
+                    _this.el.find(".hour").children("span").text(h);
                 }else if($(this).parents().hasClass("minute")){
                     m= myDate3.getMinutes();
-                    $(".minute").children("span").text(m);
+                    _this.el.find(".minute").children("span").text(m);
                 }else{
                     s =myDate3.getSeconds();
-                    $(".second").children("span").text(s);
+                    _this.el.find(".second").children("span").text(s);
                 }
                 var now3=p(h)+':'+p(m)+":"+p(s);
                 now = now3;
-                $(".ui-calendar").val(now);
+                _this.el.find(".ui-calendar").val(now);
             });
-        let _this = this
         _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
 
     },

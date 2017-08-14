@@ -4,13 +4,13 @@ import './workflow-seal.scss';
 import msgBox from '../../../lib/msgbox';
 
 import Mediator from '../../../lib/mediator';
-
+import Uploader from '../../../lib/uploader'
 
 let config = {
     template: template,
     data: {
-        cloneImgId:0,
-        isClone:true,
+        // cloneImgId:0,
+        // isClone:true,
     },
     actions: {
 
@@ -21,11 +21,10 @@ let config = {
                 if(imgFile){
                     let FR = new FileReader();
                     FR.onload = function (event){
-                        var imgstr = event.target.result;
+                        let imgstr = event.target.result;
                         let imgstr2 = imgstr.substring(22,imgstr.length);
                         Mediator.publish("workflow:seal",{"base64":imgstr2});
                         // Mediator.publish("workflow:getStamp");
-
                     };
                     FR.readAsDataURL(imgFile);
                 }
@@ -86,18 +85,21 @@ let config = {
             this.el.find('.J_dragimg').attr("data-id",imgId);
             let url = "http://"+window.location.host+"/download_attachment/?file_id="+imgId+"&download=0";
             this.el.find(".signatureMock").css('visibility','visible');
-            this.el.find(".J_dragimg").attr("src",url);
+            // this.el.find(".J_dragimg").attr("src",url);
+            console.log(url);
             this.el.find(".J_dragimg").css({
                 "left":imgLeft,
-                "top":imgTop
+                "top":imgTop,
+                "background-image":  `url(${url})`,
+                "background-repeat":"no-repeat"
             })
-            let disX = e.clientX - $(e.target).offset().left;
+            let disX = e.clientX - imgLeft;
             let disY = e.clientY - imgTop;
             this.el.find(".signatureMock").attr({
                 "disX":disX,
                 "disY":disY
             })
-            console.log(disX+".."+disY);
+            console.log(disX+".."+disY); 
             let fromPlace =  $("#place-form").children(":first");
             // let fromPlace =  $("#place-form");
             console.log(fromPlace);
@@ -112,7 +114,7 @@ let config = {
                     "left":left,
                     "width":width,
                     "height":height,
-                    "background": "#000"
+                    "background": "#fff"
                 })
                 this.el.find(".fromClone").children().remove();
                 this.el.find(".fromClone").append(fromClone);
@@ -199,19 +201,31 @@ let config = {
             this.actions.addImg(e);
         }),
         this.el.on('mousedown','.add-img',(e)=>{
+            this.ifDrag = true;
             this.actions.dragimg(e);
         }),
         this.el.on("mouseup",'.signatureMock',(e)=>{
-            this.actions.closeSeal(e);
+            if(this.ifDrag){
+                this.actions.closeSeal(e);
+                this.ifDrag = false;
+            }
+            // e.stopPropagation(e);
         }),
         this.el.on("click",'.J_delImg',(e)=>{
             this.actions.delImg(e);
         }),
         this.el.on("mousemove",'.signatureMock',(e)=>{
+            this.ifDrag = true;
             this.actions.Imgcoordinate(e);
+            // e.stopPropagation(e);
         }),
         this.el.on("click",".J_toggImg",(e)=>{
             this.actions.toggImg(e);
+        });
+        // $(".approval-info-item").on("click",(e)=>{
+        //     console.log(13265);
+        //     this.actions.showImgDel(e);
+        // })
         });
         // this.el.on("click",'.li-img',function () {
         //     self.actions.cloneImg($(this));
