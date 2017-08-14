@@ -18,8 +18,6 @@ import delSetting from '../../data-table-toolbar/data-table-delete/data-table-de
 import importSetting from '../../data-table-toolbar/data-table-import/data-table-import';
 import girdExport from '../../data-table-toolbar/data-table-export/data-table-export';
 import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
-import 'jquery-ui/ui/widgets/dialog.js';
-import 'jquery-ui/ui/widgets/sortable.js';
 
 let config = {
     template: template,
@@ -918,7 +916,7 @@ let config = {
             //渲染定制列
             if( $('.custom-column-btn')[0] ){
                 this.customColumnsCom  = new customColumns(custom);
-                this.append(this.customColumnsCom, document.querySelector('.custom-columns-panel'));
+                this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
             }
             //渲染分组
             if( $('.group-btn')[0] ){

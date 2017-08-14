@@ -38,14 +38,15 @@ let config = {
         searchValue: [],
         //floatingFilter搜索参数
         searchOldValue: [],
-
+        //定制列数据
+        customColumnsFields: [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false}, {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false}, {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
     },
     actions: {
         //创建表头
         createColumnDefs: function () {
             this.data.pageType = this.data.tableId2pageType[this.data.tableId];
             let cols = wchService.getWorkflowHeader( this.data.pageType );
-            this.data.columnDefs = [dgcService.numberCol];
+            this.data.columnDefs = [dgcService.numberCol,dgcService.selectCol];
             let fixArr = this.data.fixCols.l.concat(this.data.fixCols.r);
             for( let col of cols ){
                 if( col.field == 'myOperate' ){
@@ -74,6 +75,8 @@ let config = {
                     suppressResize: false,
                     suppressMovable: false
                 }
+                //定制列数据
+                this.data.customColumnsFields.push( {name:col.headerName,field:col["field"],canhide:true,candrag:true,canFix:true} );
                 this.data.columnDefs.push( obj );
             }
             console.log( this.data.columnDefs )
@@ -91,10 +94,16 @@ let config = {
             let gridData = {
                 columnDefs: this.data.columnDefs,
                 rowData: this.data.rowData,
-                floatingFilter: true
+                floatingFilter: true,
+                onColumnResized: this.actions.onColumnResized,
+                onSortChanged: this.actions.onSortChanged,
+                onDragStopped: this.actions.onDragStopped,
+                onCellClicked: this.actions.onCellClicked,
+                onRowDoubleClicked: this.actions.onRowDoubleClicked
             }
             this.agGrid = new agGrid(gridData);
             this.append(this.agGrid , this.el.find('#workflow-agGrid'));
+            this.actions.calcColumnState();
             //渲染分页
             let paginationData = {
                 total: this.data.total,
@@ -105,6 +114,19 @@ let config = {
             this.pagination = new dataPagination(paginationData);
             this.pagination.actions.paginationChanged = this.actions.refreshData;
             this.append(this.pagination, this.el.find('.pagination'));
+
+            let custom = {
+                gridoptions: this.agGrid.gridOptions,
+                fields: this.data.customColumnsFields,
+                fixCols: this.data.fixCols,
+                tableId: this.data.tableId,
+                agGrid: this.agGrid
+            }
+            //渲染定制列
+            if( $('.custom-column-btn')[0] ){
+                this.customColumnsCom  = new customColumns(custom);
+                this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
+            }
         },
         //分页刷新
         refreshData: function () {
@@ -112,12 +134,27 @@ let config = {
         },
         //渲染按钮
         renderBtn: function () {
+            //floatingFilter
             let floatSearch = this.el.find( '.float-search-btn' );
             if( floatSearch[0] ){
                 floatSearch.on( 'click',()=>{
                     let height = this.data.isShowFloatingFilter ? 0:30;
                     this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
                     this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
+                } )
+            }
+            //定制列
+            let customCol = this.el.find( '.custom-column-btn' )
+            if( customCol[0] ){
+                customCol.on( 'click',()=>{
+                    this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
+                    this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
+                    let num = 0;
+                    if( this.data.isShowCustomPanel ){
+                        num+=200;
+                    }
+                    let grid = this.el.find( '#workflow-agGrid' )
+                    grid.width( 'calc(100% - ' + num + 'px)' );
                 } )
             }
         },
@@ -135,9 +172,6 @@ let config = {
                 arr = [gridData,preferenceData];
             }
             Promise.all(arr).then((res)=> {
-                console.log( "_______________" )
-                console.log( "_______________" )
-                console.log( res )
                 this.data.rowData = res[0].rows;
                 this.data.total = res[0].total;
                 if( this.data.firstRender ){
@@ -185,21 +219,97 @@ let config = {
             if (res['pinned'] && res['pinned']['pinned']) {
                 this.data.fixCols = JSON.parse(res['pinned']['pinned']);
             }
-            console.log("rows")
-            console.log(this.data.rows)
-            console.log("colWidth")
-            console.log(this.data.colWidth)
-            console.log("ignoreFields")
-            console.log(this.data.ignoreFields)
-            console.log("fixCols")
-            console.log(this.data.fixCols)
-            console.log("orderFields")
-            console.log(this.data.orderFields)
+            // console.log("rows")
+            // console.log(this.data.rows)
+            // console.log("colWidth")
+            // console.log(this.data.colWidth)
+            // console.log("ignoreFields")
+            // console.log(this.data.ignoreFields)
+            // console.log("fixCols")
+            // console.log(this.data.fixCols)
+            // console.log("orderFields")
+            // console.log(this.data.orderFields)
+        },
+        //根据偏好返回agGrid sate
+        calcColumnState: function () {
+            let gridState = this.agGrid.gridOptions.columnApi.getColumnState();
+            let indexedGridState = {};
+            for(let state of gridState) {
+                indexedGridState[state['colId']] = state;
+            }
+            let numState = indexedGridState['number']||{};
+            numState['pinned']= this.data.fixCols.l.length > 0 ? 'left' : null;
+            let selectState = indexedGridState['mySelectAll']||{};
+            selectState['pinned']= this.data.fixCols.l.length > 0 ? 'left' : null;
+            //默认分组、序号、选择在前三个
+            let arr = [ numState , selectState ];
+            //左侧固定
+            for( let col of this.data.fixCols.l ){
+                let state = indexedGridState[col]||{};
+                state['hide'] = this.data.ignoreFields.indexOf( col ) != -1;
+                state['pinned'] = 'left';
+                arr.push(state);
+            }
+            //中间不固定
+            let fixArr = this.data.fixCols.l.concat( this.data.fixCols.r );
+            for( let data of this.data.orderFields ){
+                if( data == '_id'||data == 'group' ){
+                    continue;
+                }
+                if( data != 0 && fixArr.indexOf( data ) == -1 ){
+                    let state = indexedGridState[data]||{};
+                    state['hide'] = this.data.ignoreFields.indexOf( data ) != -1;
+                    state['pinned'] = null;
+                    arr.push(state);
+                }
+            }
+            if(this.data.orderFields.length == 0){
+                for(let state of gridState){
+                    let id = state['colId'];
+                    if(id != 'number' && id != 'mySelectAll' && id != 'group'){
+                        state['hide'] = this.data.ignoreFields.indexOf(id)!=-1;
+                        state['pinned'] = null;
+                        arr.push(state);
+                    }
+                }
+            }
+            //右侧固定
+            for( let col of this.data.fixCols.r ){
+                let state = indexedGridState[col]||{};
+                state['hide'] = this.data.ignoreFields.indexOf( col ) != -1;
+                state['pinned'] = 'right';
+                arr.push(state);
+            }
+            //操作列宽度
+            for( let d of arr ){
+                if( d.colId && d.colId == 'myOperate' ){
+                    d['width'] = this.data.operateColWidth;
+                }
+            }
+            //初始化状态
+            this.agGrid.gridOptions.columnApi.setColumnState( arr );
         },
         //floatingFilter
         floatingFilterPostData: function (col_field, keyWord, searchOperate) {
 
-        }
+        },
+        onColumnResized: function ($event) {
+            this.customColumnsCom.actions.onColumnResized( this.customColumnsCom );
+        },
+        onDragStopped: function ($event) {
+            this.customColumnsCom.actions.onFix();
+            this.customColumnsCom.actions.dragAction();
+        },
+        onSortChanged: function ($event) {
+            
+        },
+        onRowDoubleClicked: function ($event) {
+        },
+        onCellClicked: function ($event) {
+            console.log( "____________________" )
+            console.log( "____________________" )
+            console.log( $event )
+        },
     },
     afterRender: function (){
         this.floatingFilterCom = new FloatingFilter();
