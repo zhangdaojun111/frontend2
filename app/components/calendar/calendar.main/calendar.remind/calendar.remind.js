@@ -25,19 +25,19 @@ let CalendarRemind = {
         console.log(this.data.remindTableId);
         this.el.on('click', '.open-form', () => {
             console.log('ss');
-            PMAPI.sendToParent({
-                type: PMENUM.close_dialog,
-                data: {
-                    table_id: this.data.remindTableId,
-                }
-            });
-            // PMAPI.openDialogByIframe(
-            //     '/calendar_mgr/create/?table_id='+ this.data.remindTableId,
-            //     {
-            //         width: "1700",
-            //         height: '800',
-            //         title: '表单'
-            //     });
+            // PMAPI.sendToParent({
+            //     type: PMENUM.close_dialog,
+            //     data: {
+            //         table_id: this.data.remindTableId,
+            //     }
+            // });
+            PMAPI.openDialogByIframe(
+                '/calendar_mgr/create/?table_id='+ this.data.remindTableId,
+                {
+                    width: "1700",
+                    height: '800',
+                    title: '表单'
+                });
         })
     }
 };

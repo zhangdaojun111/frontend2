@@ -9,6 +9,7 @@ import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
 import Mediator from '../../../lib/mediator';
 import CalendarSetRemindMethod from './calendar.set.remind/calendar.set.remind';
+import {AutoSelect} from '../../util/autoSelect/autoSelect';
 
 let config = {
     template: template,
