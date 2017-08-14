@@ -1,8 +1,8 @@
 import FormBase from '../components/form/base-form/base-form'
 import Mediator from '../lib/mediator';
 import {FormService} from "../services/formService/formService";
-import '../components/form/base-form/base-form.scss'
 import '../assets/scss/form.scss'
+import '../assets/scss/core/print.scss'
 
 let FormEntrys = {
     childForm:{},
@@ -180,9 +180,12 @@ let FormEntrys = {
         staticData['temp_id']=staticData.data['temp_id']||'';
         staticData['real_id']=staticData.data['real_id']||'';
         staticData['table_id']=staticData.data['table_id']||'';
-        staticData['parentRealId']=staticData["real_id"]["value"]||'';
-        staticData['parentTableId']=staticData["table_id"]["value"]||'';
-        staticData['parentTempId']=staticData["temp_id"]["value"]||'';
+        // staticData['parentRealId']=staticData["real_id"]["value"]||'';
+        // staticData['parentTableId']=staticData["table_id"]["value"]||'';
+        // staticData['parentTempId']=staticData["temp_id"]["value"]||'';
+        staticData.parentTableId=this.parentTableId;
+        staticData.parentRealId=this.parentRealId;
+        staticData.parentTempId=this.parentTempId;
         staticData.tableId=staticData['table_id']["value"];
         staticData.formId=this.formId;
         staticData.realId=this.realId;
@@ -190,6 +193,30 @@ let FormEntrys = {
         staticData.isBatch=this.isBatch;
         staticData.key=this.key;
         staticData.btnType=this.btnType;
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
+        console.log('有我才叫更了');
         return staticData;
     },
     //处理字段数据

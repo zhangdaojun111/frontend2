@@ -80,18 +80,20 @@ let config = {
             let addShowTextValue = this.el.find('.add-show-text option:selected').val();
             let addShowText = this.el.find('.add-show-text option:selected').text();
             this.data.preViewText.push(addShowText);
-            
+            console.log(this.data.preViewText);
             this.el.find('.preview-text').text(this.data.preViewText);
             this.data.rowSetData['selectedOpts'].push(addShowTextValue);
         }).on('change', '.res-text', () => {
-            let valueForResValue = this.el.find('.res-text option:selected').val();
+            let textForResValue = this.el.find('.res-text option:selected').val();
+            let textForResText = this.el.find('.res-text option:selected').text();
+            console.log(this.data.preViewText, textForResText);
             for( let a of this.data.preViewText ){
-                if( valueForResValue.indexOf( a ) === -1 ){
-                    this.data.preViewText.push(valueForResValue);
+                if( textForResText.indexOf( a ) === -1 ){
+                    this.data.preViewText.push(textForResText);
                     console.log(this.data.preViewText);
                 }
             }
-            this.data.rowSetData['selectedRepresents'] = valueForResValue;
+            this.data.rowSetData['selectedRepresents'] = textForResValue;
         }).on('change', '.page-change-text', () => {
             let valueForCalendarChangeValue = this.el.find('.page-change-text option:selected').val();
             this.data.rowSetData['selectedEnums'] = valueForCalendarChangeValue;
