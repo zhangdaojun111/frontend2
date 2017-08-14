@@ -1,9 +1,8 @@
 import {BiBaseComponent} from '../../bi.base.component';
 
-import template from "./view.list.html";
-import "./view.list.scss";
-
-// import {config as viewDialogConfig} from "../dialog/create/dialog.create";
+import template from "./item.html";
+import "./item.scss";
+import {ViewsService} from "../../../../services/bisystem/views.service";
 import {config as viewDialogConfig} from "../dialog/edit/dialog.edit";
 import msgbox from "../../../../lib/msgbox";
 
@@ -11,27 +10,28 @@ import {PMAPI} from "../../../../lib/postmsg";
 
 let config = {
     template:template,
-    data:{
-
-    },
+    data:{},
     afterRender(){
-        this.el.on('click','.create', ()=> {
+        this.el.on('click','.create', async()=> {
             // dialogCreateSetting.show();
-        }).on('click','.btn-edit', async ()=> {
-            let val = this.data.name;
-            // console.log(this.el.find('h4 span').html());
-            // console.log(this.data.name);
-            // $('.inp-val').val(val);
-            // console.log($('.inp-val').val());
-
-            // dialogEditSetting.show();
-            console.log(viewDialogConfig);
             PMAPI.openDialogByComponent(viewDialogConfig,{
-                width: 500,
-                height: 200,
-                title: '组件页面'
+                width: 348,
+                height: 217,
+                title: '新建页面'
             });
-            console.log(a);
+
+
+        }).on('click','.btn-edit', async ()=> {
+            // dialogEditSetting.show();
+
+            // console.log(viewDialogConfig);
+            // PMAPI.openDialogByComponent(viewDialogConfig,{
+            //     width: 348,
+            //     height: 217,
+            //     title: '编辑页面'
+            // });
+            // console.log('////////////////////////////');
+            // console.log(this.data.name);
 
         }).on('click','.btn-del', async()=> {
            const ok = await msgbox.confirm("是否删除？");
@@ -45,7 +45,7 @@ let config = {
 };
 
 
-export class ViewListComponent extends BiBaseComponent{
+export class ViewItemComponent extends BiBaseComponent{
     constructor(item) {
         config.data = item? item : null;
         super(config);

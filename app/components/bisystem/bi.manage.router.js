@@ -3,7 +3,7 @@
  */
 import {Router} from 'backbone';
 import {CanvasCellsComponent} from './canvas/canvas.cells';
-import {ViewsEditComponent} from "./views/views.edit";
+import {ViewsEditComponent} from "./views/views";
 import {FormBaseComponent} from './forms/base/base';
 
 let component;
