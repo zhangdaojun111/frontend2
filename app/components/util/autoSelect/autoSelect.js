@@ -7,18 +7,40 @@ let config = {
     template: template,
     data: {
         id: '',
-        name: ''
+        name: '',
+        choosed: [],
+        displayType: 'popup',           // popup或者static popup为弹出的形式 static 为静态显示
+        multiSelect: true,
+        selectBoxHeight: 300            // select 框的高度
     },
     actions: {
         selectItem: function (item) {
-            let id = item.data('id');
-            let name = item.data('name');
-            this.actions.setValue(id, name);
+            if (this.data.multiSelect === true) {
+                let choosed = this.el.find('input:checked');
+                choosed = Array.from(choosed).map((item) => {
+                    let $item = $(item);
+                    return {
+                        id: $item.data('id'),
+                        name: $item.data('name')
+                    }
+                });
+                this.data.choosed = choosed;
+                this.actions.setValue();
+            } else {
+                let id = item.data('id');
+                let name = item.data('name');
+                this.data.choosed = [{
+                    id: item.data('id'),
+                    name: item.data('name')
+                }];
+                this.actions.setValue();
+            }
         },
-        setValue: function (id, name) {
-            this.data.id = id;
-            this.data.name = name;
-            this.el.find('input').val(name);
+        setValue: function () {
+            let names = this.data.choosed.map((item) => {
+                return item.name;
+            });
+            this.el.find('input').val(names.join(','));
         },
         clearValue: function () {
             this.data.id = '';
@@ -34,6 +56,12 @@ let config = {
             }
             this.actions.clearValue();
         },
+        showSelectBox: function () {
+            this.el.find('ul').show();
+        },
+        hideSelectBox: function () {
+            // this.el.find('ul').hide();
+        },
         getId: function () {
             return this.data.id;
         }
@@ -41,12 +69,20 @@ let config = {
     afterRender: function () {
         let $wrap = this.el.find('ul');
         let that = this;
-        $wrap.height(this.el.height() - 31);
+        $wrap.height(this.data.selectBoxHeight);
         this.el.on('click', 'li', function () {
             that.actions.selectItem($(this));
         }).on('input', 'input', _.debounce(function () {
             that.actions.onInput($(this));
-        }, 1000));
+        }, 1000)).on('mouseenter', () => {
+            that.actions.showSelectBox();
+        }).on('mouseleave', () => {
+            that.actions.hideSelectBox();
+        });
+
+        if (this.data.displayType === 'popup') {
+            this.el.find('ul').addClass('popup');
+        }
     }
 }
 

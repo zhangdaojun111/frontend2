@@ -1,7 +1,6 @@
 import {HTTP} from "../../lib/http"
 import {Utils} from "./utils"
 
-
 export const UserInfoService = {
     http:HTTP,
     utils:Utils,

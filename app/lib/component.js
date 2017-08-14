@@ -11,7 +11,7 @@ class Component {
         config = _.defaultsDeep({}, config || {});
         data = _.defaultsDeep({}, data || {});
         this.template = config.template || '';
-        this.data = _.defaultsDeep({}, config.data, data);
+        this.data = _.defaultsDeep({}, data, config.data);
 
         if (config.actions) {
             this.actions = {};
