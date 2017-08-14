@@ -1,11 +1,11 @@
-import Component from '../lib/component';
+import Component from '../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
 import 'jquery-ui/ui/widgets/dialog.js';
-import '../assets/scss/register.scss';
-import template from '../../template/register.html';
-import {UserInfoService} from '../services/main/userInfoService';
-import msgbox from '../lib/msgbox';
+import '../../assets/scss/popups/register.scss';
+import template from '../../../template/popup/register.html';
+import {UserInfoService} from '../../services/main/userInfoService';
+import msgbox from '../../lib/msgbox';
 
 
 let config ={
@@ -135,32 +135,32 @@ let config ={
 };
 
 
-class Register extends  Component{
+class RegisterComponent extends  Component{
     constructor(){
         super(config);
     }
 }
 
-// export {Register};
+export {RegisterComponent};
 
-export const RegisterComponent = {
-    el: null,
-    show: function() {
-        let component = new Register();
-        this.el = $('<div id="register-page">').appendTo(document.body);
-        component.render(this.el);
-        this.el.dialog({
-            title: '注册界面',
-            width: "100%",
-            height: 1800,
-            modal: true,
-            close: function() {
-                $(this).dialog('destroy');
-                component.destroySelf();
-            }
-        });
-    },
-    hide: function () {
-        this.el.dialog('close');
-    }
-};
+// export const RegisterComponent = {
+//     el: null,
+//     show: function() {
+//         let component = new Register();
+//         this.el = $('<div id="register-page">').appendTo(document.body);
+//         component.render(this.el);
+//         this.el.dialog({
+//             title: '注册界面',
+//             width: "100%",
+//             height: 1800,
+//             modal: true,
+//             close: function() {
+//                 $(this).dialog('destroy');
+//                 component.destroySelf();
+//             }
+//         });
+//     },
+//     hide: function () {
+//         this.el.dialog('close');
+//     }
+// };
