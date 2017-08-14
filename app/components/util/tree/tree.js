@@ -52,6 +52,7 @@ let config = {
             },
             treeType: 'SINGLE_SELECT',
             isSearch: false,
+            withButtons:false, //此按钮只有在多选时有效
             treeName: ''
         }
     },
@@ -67,36 +68,70 @@ let config = {
                 }])
             }
         },
-        _delay: function (callback, ms) {
-            var timer = 0;
-            return function (callback, ms) {
-                clearTimeout(timer);
-                timer = setTimeout(callback, ms);
-            };
+        selectAll:function(tree){
+           this.actions._cruiseWholeTree(tree,(node,tree)=>{
+               this.actions._cruiseSelectNode(node,tree);
+            })
         },
-        _uncheckAllAncestors: function (node, treeEle) {
-            let parent = treeEle.treeview('getParent', node);
-            if (parent != undefined && parent.nodeId != undefined && parent.state.selected == true) {
-                treeEle.treeview('uncheckNode', [parent.nodeId, {silent: true}]);
-                treeEle.treeview('unselectNode', [parent.nodeId, {silent: true}]);
-                this.actions._uncheckAllAncestors(parent, treeEle);
+        _cruiseSelectNode:function(node,tree){
+            if(node){
+                tree.treeview('checkNode',[node,{silent:false}]);
+                if(node.nodes){
+                    node.nodes.forEach(child=>{
+                        this.actions._cruiseSelectNode(child,tree);
+                    })
+                }
             }
         },
-        _checkAllChildren: function (node, treeEle) {
-            if (node.nodes) {
-                node.nodes.forEach(child => {
-                    treeEle.treeview('checkNode', [child.nodeId, {silent: true}]);
-                    treeEle.treeview('selectNode', [child.nodeId, {silent: true}]);
-                    this.actions._checkAllChildren(child, treeEle);
+        reverseAll:function (tree) {
+            this.actions._cruiseWholeTree(tree,(node,tree)=>{
+                this.actions._toggleCheckNode(node,tree);
+            });
+        },
+        _cruiseWholeTree: function (tree,func) {
+            let start = tree.treeview('getNode',0);
+            func(start,tree);
+            let siblings = tree.treeview('getSiblings',start);
+            if(siblings){
+                siblings.forEach(sibling=>{
+                    func(sibling,tree);
+                })
+            }
+
+        },
+        _toggleCheckNode:function (node, tree) {
+            if(node){
+                tree.treeview('toggleNodeChecked',[node,{silent:true}]);
+                tree.treeview('toggleNodeSelected',[node,{silent:true}]);
+                let event = node.state.selected?'select':'unselect';
+                this.data.options.callback(event,node);
+                if(node.nodes){
+                    node.nodes.forEach(child=>{
+                        this.actions._toggleCheckNode(child,tree);
+                    })
+                }
+            }
+        },
+        reset:function (tree) {
+            tree.treeview('uncheckAll');
+        },
+        _checkAllChildren:function(node,treeEle){
+            if(node.nodes){
+                node.nodes.forEach(child=>{
+                    treeEle.treeview('checkNode',[child.nodeId,{silent:true}]);
+                    treeEle.treeview('selectNode',[child.nodeId,{silent:true}]);
+                    this.data.options.callback('select',child);
+                    this.actions._checkAllChildren(child,treeEle);
                 })
             }
         },
-        _uncheckAllChildren: function (node, treeEle) {
-            if (node.nodes) {
-                node.nodes.forEach(child => {
-                    treeEle.treeview('uncheckNode', [child.nodeId, {silent: true}]);
-                    treeEle.treeview('unselectNode', [child.nodeId, {silent: true}]);
-                    this.actions._uncheckAllChildren(child, treeEle);
+        _uncheckAllChildren:function(node,treeEle) {
+            if(node.nodes){
+                node.nodes.forEach(child=>{
+                    treeEle.treeview('uncheckNode',[child.nodeId,{silent:true}]);
+                    treeEle.treeview('unselectNode',[child.nodeId,{silent:true}]);
+                    this.data.options.callback('unselect',child);
+                    this.actions._uncheckAllChildren(child,treeEle);
                 })
             }
         },
@@ -122,19 +157,29 @@ let config = {
                 data: this.data.treeNodes,
                 onNodeChecked: function (event, data) {
                     tree.treeview('selectNode', [data.nodeId, {silent: false}]);
-                    //没有采用silent：false的方法在树的上下级传递checked状态是为了减少事件发生
                     treeview.actions._checkAllChildren(data, tree);
                     treeview.data.options.callback('select', data);
                 },
                 onNodeUnchecked: function (event, data) {
-                    tree.treeview('unselectNode', [data.nodeId, {silent: false}]);
-                    treeview.actions._uncheckAllChildren(data, tree);
-                    treeview.actions._uncheckAllAncestors(data, tree);
-                    treeview.data.options.callback('unselect', data);
+                    tree.treeview('unselectNode',[data.nodeId,{silent:false}]);
+                    treeview.actions._uncheckAllChildren(data,tree);
+                    treeview.data.options.callback('unselect',data);
                 },
             });
             tree.treeview(options);
+            if(!this.data.options.withButtons){
+                this.el.find('.buttons-in-tree').hide();
+            } else {
+                this.el.on('click','.select-all-nodes',()=>{
+                    this.actions.selectAll(tree);
+                }).on('click','.reverse-all-nodes',()=>{
+                    this.actions.reverseAll(tree);
+                }).on('click','.reset',()=>{
+                    this.actions.reset(tree);
+                })
+            }
         } else {
+            this.el.find('.buttons-in-tree').hide();
             let options = _.defaultsDeep({}, TREETYPE.SINGLE_SELECT, {
                 data: this.data.treeNodes,
                 onNodeSelected: function (event, node) {

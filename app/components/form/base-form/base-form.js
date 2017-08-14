@@ -12,6 +12,7 @@ import YearControl from "../year-control/year-control";
 import BuildInControl from "../buildIn-control/buildIn-control";
 import MultiLinkageControl from "../multi-linkage-control/multi-linkage-control";
 import YearMonthControl from "../year-month-control/year-month-control";
+import TimeControl from "../time-control/time-control";
 import Mediator from "../../../lib/mediator";
 import {HTTP} from "../../../lib/http";
 import {FormService} from "../../../services/formService/formService"
@@ -26,6 +27,7 @@ import {md5} from '../../../services/login/md5';
 import AttachmentControl from "../attachment-control/attachment-control";
 import SettingPrint from '../setting-print/setting-print'
 import Songrid from '../songrid-control/songrid-control';
+import Correspondence from '../correspondence-control/correspondence-control';
 
 let config={
     template:'',
@@ -50,13 +52,13 @@ let config={
 
         //给子表统计赋值
         setCountData(){
-            this.wfService.getCountData({
-                data: this.form.value,
-                child_table_id: this.sonTableId
+            FormService.getCountData({
+                data: this.actions.createFormValue(this.data.data),
+                child_table_id: this.data.sonTableId
             }).then(res => {
                 //给统计赋值
                 for(let d in res["data"]){
-                    this.setFormValue(d,res["data"][d]);
+                    this.actions.setFormValue(d,res["data"][d]);
                 }
             });
         },
@@ -1110,8 +1112,15 @@ let config={
             }
             //在这里根据type创建各自的控件
             switch (type){
+                case 'Correspondence':
+                    let correspondence=new Correspondence(data[key]);
+                    correspondence.render(single);
+                    _this.childComponent[data[key].dfield]=correspondence;
+                    break;
                 case 'Songrid':
-                    let songrid=new Songrid(data[key]);
+                    // let popupType=single.data('popupType');
+                    let popupType=0;
+                    let songrid=new Songrid(Object.assign(data[key],{popupType:popupType}));
                     songrid.render(single);
                     _this.childComponent[data[key].dfield]=songrid;
                     break;
@@ -1200,15 +1209,22 @@ let config={
                     attachmentControl.render(single);
                     _this.childComponent[data[key].dfield] = attachmentControl;
                     break;
+                case 'Time':
+                    let timeControl = new TimeControl(data[key]);
+                    timeControl.render(single);
+                    _this.childComponent[data[key].dfield] = timeControl;
+                    break;
             }
         }
 
         $('body').on('click.selectDrop',function(){
             $('.select-drop').hide();
         })
+
         Mediator.subscribe('form:changeValue:'+_this.data.tableId,function(data){
             _this.actions.checkValue(data,_this);
         })
+
         Mediator.subscribe('form:history:'+_this.data.tableId,function(data){
             let history=_.defaultsDeep({},data.history_data);
             let i=1;
@@ -1234,6 +1250,7 @@ let config={
                 modal:true
             })
         })
+
         Mediator.subscribe('form:addItem:'+_this.data.tableId,function(data){
             _this.data['quikAddDfield']=data.dfield;
             let originalOptions;
@@ -1258,9 +1275,9 @@ let config={
         //子表弹窗
         Mediator.subscribe('form:openSongGrid:'+_this.data.tableId,function(data){
             _this.data.can_not_open_form=data.can_not_open_form;
-            let type = data["type"];
+            let type = data["popup"];
             let isView = data["is_view"];
-            // if(type == 'popup'){
+            if(type == 1){
                 _this.data.sonTableId = data["value"];
                 if(isView == '0'){
                     _this.data.viewMode = 'normal';
@@ -1273,16 +1290,35 @@ let config={
                     title:`子表`,
                     modal:true
                 }).then(data=>{
-
+                    if(_this.viewMode == 'normal'){
+                        _this.actions.setCountData();
+                    }
                 })
-            // }else{
-            //     _this.data.sonTableId = data["value"];
-            //     if(isView == '0'){
-            //         _this.data.actions.setCountData();
-            //     }
-            // }
-            //保存父表数据
-            // this.globalService.frontendParentFormValue[this.tableId] = this.form.value;
+            }else{
+                _this.data.sonTableId = data["value"];
+                if(isView == '0'){
+                    _this.actions.setCountData();
+                }
+            }
+            // 保存父表数据
+            FormService.frontendParentFormValue[_this.tableId] = _this.actions.createFormValue(_this.data.data);
+        });
+        //对应关系弹窗
+        Mediator.subscribe('form:openCorrespondence:'+_this.data.tableId,function(data){
+            let isView = data["is_view"];
+                _this.data.sonTableId = data["value"];
+                if(isView == '0'){
+                    _this.data.viewMode = 'editFromCorrespondence';
+                }else{
+                    _this.data.viewMode = 'viewFromCorrespondence';
+                }
+                PMAPI.openDialogByIframe(`/datagrid/source_data_grid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.parent_temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true`,{
+                    width:800,
+                    height:600,
+                    title:`对应关系`,
+                    modal:true
+                }).then(data=>{
+                })
         });
        // 密码弹出
         Mediator.subscribe('form:addPassword:'+_this.data.tableId,function(data){
@@ -1322,6 +1358,7 @@ let config={
                 _this.childComponent[_this.data['quikAddDfield']].reload();
             });
         })
+
         Mediator.subscribe('form:selectChoose:'+_this.data.tableId,function(data){
             PMAPI.openDialogByIframe(`/form/choose?fieldId=${data.id}`,{
                 width:1500,
@@ -1334,7 +1371,40 @@ let config={
         })
 
         //添加提交按钮
-        _this.el.append('<div style="position: fixed;bottom: 20px;right: 20px;" class="noprint"><button id="save">提交</button><button id="changeEdit">转到编辑模式</button><button id="print">打印</button></div>')
+        _this.el.append('<div style=";bottom: 20px;right: 20px;" class="noprint"><button id="save">提交</button><button id="changeEdit">转到编辑模式</button><button id="print">打印</button></div>')
+        if(_this.data.btnType == 'new'){
+            _this.el.append(`<div class="noprint ui-btn-box"><div>
+                    <button class="btn btn-normal mrgr" id="print">
+                        <span>打印</span>
+                        <div class="btn-ripple ripple"></div>
+                    </button>
+                    <button class="btn btn-normal ceshi" id="save" >
+                        <span>提交</span>
+                        <div class="btn-ripple ripple"></div>
+                    </button>
+                </div></div>`)
+        }else if(_this.data.btnType == 'edit'){
+            _this.el.append(`<div class="noprint ui-btn-box"><div >
+                    <button class="btn btn-normal mrgr" id="print" >
+                        <span>打印</span>
+                        <div class="btn-ripple ripple"></div>
+                    </button>
+                    <button class="btn btn-normal" id="changeEdit" >
+                        <span>转到编辑模式</span>
+                        <div class="btn-ripple ripple"></div>
+                    </button>
+                </div></div>`)
+        }else if(_this.data.btnType == 'none'){
+
+        }else if(_this.data.btnType == 'confirm'){
+            _this.el.append(`<div class="noprint ui-btn-box"><div >
+                    <button class="btn btn-normal" [style.background]="myColor._baseColor">
+                        <span>确定</span>
+                        <div class="btn-ripple ripple"></div>
+                    </button>
+                </div></div>`)
+        }
+
 
         //提交按钮事件绑定
         _this.el.on('click','#save',function () {
@@ -1361,6 +1431,12 @@ let config={
                 // }
             })
             HTTP.flush();
+        })
+
+        //固定按钮
+        _this.el.on('scroll','.wrap',function(){
+            console.log('scroll');
+            _this.el.find('.ui-btn-box').css({'bottom':(-1*$('.wrap').get(0).scrollTop +' px'),'width':'calc(100% + '+$('.wrap').get(0).scrollLeft+'px)'});
         })
     },
     beforeDestory:function(){

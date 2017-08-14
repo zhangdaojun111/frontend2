@@ -2,6 +2,7 @@ import {HTTP} from '../../lib/http';
 import alert from '../../lib/msgbox';
 
 export const FormService={
+    frontendParentFormValue:[],
     getCountData:async function(json){
         let data=this.formatParams(json);
         // return await HTTP.postImmediately({url:'http://192.168.2.223:9001/get_count_data/',data:data});
@@ -38,6 +39,7 @@ export const FormService={
         }
         return result.join('&')
     },
+  
     //身份证验证
     checkCard (card) {
         let result = true;
