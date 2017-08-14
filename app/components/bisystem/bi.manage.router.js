@@ -6,17 +6,19 @@ import {CanvasCellsComponent} from './canvas/canvas.cells';
 import {ViewsEditComponent} from "./views/views";
 import {FormBaseComponent} from './forms/base/base';
 import {FormEntryComponent} from './forms/entry';
-
+import {componentsJson} from './forms/loadFormChart.json';
 let component;
 const BiAppRouter = Backbone.Router.extend({
     routes: {
         'views/edit':"routerViewsEditComponent",
         'views/:id':'routerViewsComponent',
         'forms/home':'routerFormEntryComponent',
+        'forms/:component':'routerFormDynamicComponent',
         '':'routerViewsComponent',
     },
     routerViewsComponent(id) {
         if (component) {
+            console.log(component.data);
             component.destroyChildren();
             component.viewId = id;
             component.reload();
@@ -33,6 +35,12 @@ const BiAppRouter = Backbone.Router.extend({
     routerFormEntryComponent() {
         let form = new FormEntryComponent();
         form.render($('#route-outlet'));
+    },
+    routerFormDynamicComponent(type) {
+       let component = new componentsJson[type]['component'];
+       if(component) {
+           component.render($('#route-outlet'));
+       };
     }
 });
 

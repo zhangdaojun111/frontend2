@@ -4,9 +4,9 @@ import {ViewItemComponent} from "./item/item";
 
 import {ViewsService} from "../../../services/bisystem/views.service";
 import {config as viewDialogConfig} from "./dialog/edit/dialog.edit";
-import {PMAPI} from "../../../lib/postmsg";
+import {PMAPI} from '../../../lib/postmsg';
 import template from "./views.html";
-import "./views.scss";
+import  './views.scss';
 import Mediator from '../../../lib/mediator';
 
 let config = {
@@ -15,11 +15,7 @@ let config = {
         views:window.config.bi_views,
         chart_id:"",
     },
-    actions:{
-      reload(){
-          this.reload();
-      }
-    },
+    actions:{},
     afterRender(){
         //渲染列表数据
         this.data.views.forEach((val,index) => {
@@ -28,15 +24,15 @@ let config = {
         });
     },
     firstAfterRender() {
-        Mediator.subscribe("bi:views:update", (val) => {
-            let views = this.data.views;
-            for(let view of views) {
-                if (val.id === view.id) {
-                    view.name = val.name;
-                    break;
-                };
-            };
-        });
+        // Mediator.subscribe("bi:views:update", (val) => {
+        //     let views = this.data.views;
+        //     for(let view of views) {
+        //         if (val.id === view.id) {
+        //             view.name = val.name;
+        //             break;
+        //         };
+        //     };
+        // });
 
         //弹出框
         this.el.on('click','.create', async()=> {

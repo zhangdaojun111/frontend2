@@ -3,8 +3,7 @@
  */
 
 import {BiBaseComponent} from '../../bi.base.component';
-import template from './normal.html';
-import {FormBaseComponent} from '../base/base';
+import template from './nine.grid.html';
 
 let config = {
     template:template,
@@ -13,7 +12,7 @@ let config = {
     afterRender() {},
     firstAfterRender() {}
 }
-export class FormNormalComponent extends FormBaseComponent{
+export class FormNineGridComponent extends BiBaseComponent{
     constructor() {
         super(config)
     }

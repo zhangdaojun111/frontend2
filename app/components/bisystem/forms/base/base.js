@@ -15,6 +15,7 @@ let config = {
     },
     actions: {},
     afterRender() {
+        // console.log(this.name);
     },
     firstAfterRender() {
         this.renderFittings();
@@ -22,18 +23,21 @@ let config = {
 }
 
 export class FormBaseComponent extends BiBaseComponent {
-    constructor() {
+    constructor(data = {}) {
         super(config);
-        this.groupFittings();
+        // const fittingsGrop = Object.assign(data, fittings);
+        // this.groupFittings(fittingsGrop);
     }
 
     /**
      * 组装配件 from base.config,
+     * fittings 通过base.config + 初始化data获取
      */
-    groupFittings() {
-        Object.keys(fittings).map(key => {
-            this.data.fittings[key] = new fittings[key];
-        });
+    groupFittings(fittings) {
+        console.log(fittings);
+        // Object.keys(fittings).map(key => {
+        //     this.data.fittings[key] = new fittings[key];
+        // });
     }
 
     /**

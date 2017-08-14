@@ -3,14 +3,22 @@
  */
 import {BiBaseComponent} from '../bi.base.component';
 import template from './entry.html';
+import './entry.scss';
+import {componentsJson} from './loadFormChart.json';
 
+// 将对象转化为数组
+let components = [];
+Object.keys(componentsJson).map(key => {components.push(componentsJson[key])})
+console.log(components);
 let config = {
     template: template,
     data: {
-        components: ['雷达图', '表格', '柱状,折线图表','多表应用', '九宫图', '漏斗图', '图表注释', '饼图']
+        components:components
     },
     actions: {},
-    afterRender() {},
+    afterRender() {
+        console.log(this.data.components);
+    },
     firstRender() {}
 };
 

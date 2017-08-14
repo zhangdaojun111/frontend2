@@ -119,7 +119,6 @@ let config = {
 
 class AsideNavComponent extends BiBaseComponent{
     constructor() {
-        console.log(config.data.charts);
         super(config)
     }
 
