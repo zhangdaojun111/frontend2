@@ -226,7 +226,7 @@ let config = {
         //     console.log(13265);
         //     this.actions.showImgDel(e);
         // })
-        });
+
         // this.el.on("click",'.li-img',function () {
         //     self.actions.cloneImg($(this));
         // });
