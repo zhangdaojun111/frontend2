@@ -4,11 +4,6 @@
 //import {GetMenu} from "../../components/calendar/testData/menu"
 import {HTTP} from "../../lib/http"
 
-import {columnList2926} from "../../components/calendar/testData/2926table-column-list"
-import {systemFieldIn} from '../../components/calendar/testData/2926SystemFieldin'
-import {getEmail} from '../../components/calendar/testData/getEmail';
-import {GetMenu} from "../../components/calendar/testData/menu"
-
 const menuUrl = 'get_menu';
 const columnListUrl = 'get_column_list';
 const systemBuildInFieldUrl = 'get_system_buildin_field';
@@ -34,11 +29,6 @@ export const CalendarSetService = {
         HTTP.flush();
         return res;
 
-        // const res = new Promise((resolve) => {
-        //     resolve(GetMenu);
-        // });
-        // this.menu = GetMenu['menuList'];
-        // return res;
     },
     filterMenu: function (filter, subMenu) {
         let result = [];
@@ -93,10 +83,6 @@ export const CalendarSetService = {
         });
         HTTP.flush();
         return res;
-        // const res = new Promise((resolve) => {
-        //     resolve(columnList2926);
-        // });
-        // return res;
     },
 
     //获得日历提醒字段数据
@@ -115,10 +101,6 @@ export const CalendarSetService = {
         });
         HTTP.flush();
         return res;
-        // const res = new Promise((resolve) => {
-        //     resolve(systemFieldIn);
-        // });
-        // return res;
     },
 
     getEmailSetting: function(){
@@ -132,11 +114,6 @@ export const CalendarSetService = {
         });
         HTTP.flush();
         return res;
-
-        // const res = new Promise((resolve) => {
-        //     resolve(getEmail);
-        // });
-        // return res;
     },
 
     resetCalendar: function(table_id,param_list){

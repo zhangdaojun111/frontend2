@@ -88,7 +88,7 @@ let config = {
                 }
             });
         });
-        console.log(this.data.recipients);
+
 
         $("#set-color-id").attr("id","set-color-"+this.data.rowSetData.field_id);
         let set_color_id = "#set-color-"+this.data.rowSetData.field_id;
