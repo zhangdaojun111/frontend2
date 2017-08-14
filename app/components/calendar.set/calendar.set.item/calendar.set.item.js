@@ -56,7 +56,7 @@ let config = {
     afterRender: function() {
         // this.el.css({width: '100%'});
         let staus = false;
-        this.append(new AutoSelect(this.data.dropdownForRes), this.el.find('.multi-select-item'));
+        // this.append(new AutoSelect(this.data.dropdownForRes), this.el.find('.multi-select-item'));
         Mediator.on('calendar-set:editor',data =>{
             if(data.data ===1){
                 this.el.find(".editor-items").attr("disabled",false);
