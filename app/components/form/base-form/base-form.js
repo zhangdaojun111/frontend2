@@ -1211,7 +1211,7 @@ let config={
                     yearControl.render(single);
                     _this.childComponent[data[key].dfield]=yearControl;
                     break;
-                case 'YearMonthControl':
+                case 'Yearmonthtime':
                     let yearMonthControl = new YearMonthControl(data[key]);
                     yearMonthControl.render(single);
                     _this.childComponent[data[key].dfield]=yearMonthControl;
