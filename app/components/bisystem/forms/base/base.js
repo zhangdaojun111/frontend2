@@ -7,16 +7,41 @@
 
 import {BiBaseComponent} from '../../bi.base.component';
 import template from './base.html';
-
+import {fittings} from './base.config';
 let config = {
     template: template,
-    data: {},
+    data: {
+        fittings: {}
+    },
     actions: {},
-    afterRender() {}
+    afterRender() {
+    },
+    firstAfterRender() {
+        this.renderFittings();
+    }
 }
 
 export class FormBaseComponent extends BiBaseComponent {
     constructor() {
-        super(config)
+        super(config);
+        this.groupFittings();
+    }
+
+    /**
+     * 组装配件 from base.config,
+     */
+    groupFittings() {
+        Object.keys(fittings).map(key => {
+            this.data.fittings[key] = new fittings[key];
+        });
+    }
+
+    /**
+     * 渲染配件 fittings
+     */
+    renderFittings() {
+        Object.values(this.data.fittings).map(fitting => {
+            this.append(fitting,this.el.find('.base'))
+        });
     }
 }

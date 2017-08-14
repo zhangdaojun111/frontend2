@@ -21,7 +21,6 @@ let config = {
       }
     },
     afterRender(){
-        // Mediator.subscribe
         // Mediator.subscribe('bi:views:add',(data) => {
         //     console.log(data);
         // });
@@ -39,14 +38,20 @@ let config = {
         });
 
         // console.log(this.data.views);
+    },
+    firstAfterRender() {
         //弹出框
         this.el.on('click','.create', async()=> {
             const res = await PMAPI.openDialogByComponent(viewDialogConfig,{
                 width: 348,
                 height: 217,
-                title: '新建页面'
+                title: '新建视图'
             });
-            console.log(res);
+            if (res['name']) {
+                // this.data.views.push(res);
+                // this.reload();
+            };
+            return false;
         })
     }
 };

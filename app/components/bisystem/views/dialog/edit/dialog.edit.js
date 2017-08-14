@@ -1,8 +1,4 @@
-import {BiBaseComponent} from '../../../bi.base.component';
-
 import template from './dialog.edit.html';
-import {ViewsService} from "../../../../../services/bisystem/views.service";
-import Mediator from '../../../../../lib/mediator';
 
 let css =`
 .msg{
@@ -60,11 +56,16 @@ export let config = {
                 id: '',
                 name: this.data.name,
             };
-            console.log(Mediator);
-            //Mediator.publish('bi:views:add',data);
+            // this.data.m.publish('bi:views:add',data);
             // ViewsService.getItemName(data).then(res => {
             //
             // });
+
+            PMAPI.sendToParent({
+                type: PMENUM.close_dialog,
+                key: this.key,
+                data: data
+            })
         });
     },
     beforeDestory: function () {
