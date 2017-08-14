@@ -23,13 +23,13 @@ let config = {
         copypeople: [],
 
     },
+
     actions: {
         getselectContect:function () {
 
         }
+    },
 
-        }
-    ,
     afterRender: function() {
         this.data.emailAddressList[0].id = "1";
         let listdata = {'list':this.data.emailAddressList};

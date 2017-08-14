@@ -60,12 +60,15 @@ let config = {
         let select_item_data = {'list':this.data.dropdownForRes};
         let multi_select_item = new AutoSelect(select_item_data);
         this.append(multi_select_item, this.el.find('.multi-select-item'));
+
+
         this.el.find(".popup").css('z-index',100,'background-color',"white");
         this.el.find(".popup").css('background-color',"white");
         this.el.find(".popup").css('height',"auto");
         this.el.find(".popup").css('max-height',"300px");
         this.el.find(".popup").children('li').children('label').css('text-align',"left");
         this.el.find(".popup").children('li').children('label').css('overflow',"hidden");
+
         Mediator.on('calendar-set:editor',data =>{
             if(data.data ===1){
                 this.el.find(".editor-items").attr("disabled",false);
@@ -86,12 +89,12 @@ let config = {
             let setColor = this.el.find('.set-color').val();
             this.data.rowSetData['color'] = setColor;
         }).on('change', '.add-show-text', () => {
-            let addShowTextValue = this.el.find('.add-show-text option:selected').val();
-            let addShowText = this.el.find('.add-show-text option:selected').text();
-            this.data.preViewText.push(addShowText);
-            console.log(this.data.preViewText);
-            this.el.find('.preview-text').text(this.data.preViewText);
-            this.data.rowSetData['selectedOpts'].push(addShowTextValue);
+            // let addShowTextValue = this.el.find('.add-show-text option:selected').val();
+            // let addShowText = this.el.find('.add-show-text option:selected').text();
+            // this.data.preViewText.push(addShowText);
+            // console.log(this.data.preViewText);
+            // this.el.find('.preview-text').text(this.data.preViewText);
+            // this.data.rowSetData['selectedOpts'].push(addShowTextValue);
         }).on('change', '.res-text', () => {
             let textForResValue = this.el.find('.res-text option:selected').val();
             let textForResText = this.el.find('.res-text option:selected').text();
