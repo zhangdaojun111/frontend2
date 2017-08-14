@@ -1,25 +1,27 @@
-<table class="set-remind-container">
-    <tr class="set-row-title">
-        <td class="remind-method-title sms-remind middle-border">短信提醒</td>
-        <td class="remind-method-title email-remind">邮件提醒</td>
-    </tr>
-    <!--<tr>
-        {{#if sms}}
-        <span class="remind-method"></span>
-        {{else}}
-        <span class="remind-method"></span>
-        {{/if}}
-        <button>开启</button>
-        <button>关闭</button>
-    </tr>-->
-
+<div class="remind-dom-content">
+    <table class="set-remind-container">
+        <tr class="set-row-title">
+            <td class="remind-method-title sms-remind middle-border unchecked">短信提醒</td>
+            <td class="remind-method-title email-remind">邮件提醒</td>
+        </tr>
+        <!--<tr>
+            {{#if sms}}
+            <span class="remind-method"></span>
+            {{else}}
+            <span class="remind-method"></span>
+            {{/if}}
+            <button>开启</button>
+            <button>关闭</button>
+        </tr>-->
+    </table>
     <table class="remind-table-content sms">
         <tr class="remind-table-row remind-state">
-            <td>
+            <td class="remind-state-td"  colspan='2'>
                 <span>短信提醒状态：</span>
-                <span class="change-state-btn open-sms-remind">开启</span>
+                <span class="change-state-btn open-sms-remind checked">开启</span>
                 <span class="change-state-btn close-sms-remind">关闭</span>
             </td>
+
         </tr>
         <tr class="remind-table-row">
             <td class="remind-row-label">收信人：</td>
@@ -50,12 +52,11 @@
             </td>
         </tr>
     </table>
-
-    <table class="remind-table-content email">
+    <table class="remind-table-content email" style="display: none">
         <tr class="remind-table-row remind-state">
-            <td>
+            <td class="remind-state-td"  colspan='2'>
                 <span>邮件提醒状态：</span>
-                <span class="change-state-btn open-sms-remind">开启</span>
+                <span class="change-state-btn open-sms-remind checked">开启</span>
                 <span class="change-state-btn close-sms-remind">关闭</span>
             </td>
         </tr>
@@ -99,7 +100,5 @@
             </td>
         </tr>
     </table>
-
     <button class="set-ok">确定</button>
-
-</table>
+</div>>

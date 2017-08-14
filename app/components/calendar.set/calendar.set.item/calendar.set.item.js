@@ -81,7 +81,7 @@ let config = {
             el.dialog({
                 title: '主框架弹出',
                 width: 800,
-                height: 400,
+                height: 500,
                 close: function() {
                     $(this).dialog('destroy');
                     component.destroySelf();
