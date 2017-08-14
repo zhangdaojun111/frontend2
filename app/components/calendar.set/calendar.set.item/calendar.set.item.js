@@ -36,6 +36,8 @@ let config = {
 
         //默认选择的
         emailAddress: '',
+
+        preViewText: [],
     },
     actions: {
 
@@ -55,27 +57,29 @@ let config = {
         this.el.on('click', '.set-show-text-input', () => {
             let setShowText = this.el.find('.set-show-text-input').is(':checked');
             this.data.rowSetData['isSelected'] = setShowText;
-            //this.data.allRows[this.data.index]['isSelected'] = setShowText;
         }).on('click', '.set-calendar-page-show-text', () => {
             let isShowHomePage = this.el.find('.set-calendar-page-show-text').is(':checked');
             this.data.rowSetData['is_show_at_home_page'] = isShowHomePage;
-            //this.data.allRows[this.data.index]['is_show_at_home_page'] = isShowHomePage;
         }).on('change', '.set-color', () => {
             let setColor = this.el.find('.set-color').val();
-            console.log(setColor);
             this.data.rowSetData['color'] = setColor;
-            //this.data.allRows[this.data.index]['color'] = setColor;
         }).on('change', '.add-show-text', () => {
-            let addShowText = this.el.find('.add-show-text option:selected').val();
-            this.data.rowSetData['selectedOpts'] = addShowText;
-            //this.data.allRows[this.data.index]['selectedOpts'].push(addShowText);
+            let addShowTextValue = this.el.find('.add-show-text option:selected').val();
+            let addShowText = this.el.find('.add-show-text option:selected').text();
+            this.data.preViewText.push(addShowText);
+            this.el.find('.preview-text').text(this.data.preViewText);
+            this.data.rowSetData['selectedOpts'] = addShowTextValue;
         }).on('change', '.res-text', () => {
-            let valueForRes = this.el.find('.res-text option:selected').val();
-            this.data.rowSetData['selectedRepresents'] = valueForRes;
-            //this.data.allRows[this.data.index]['selectedRepresents'] = valueForRes;
+            let valueForResValue = this.el.find('.res-text option:selected').val();
+            for( let a of this.data.preViewText ){
+                if( valueForResValue.indexOf( a ) === -1 ){
+                    this.data.preViewText.push(valueForResValue);
+                }
+            }
+            this.data.rowSetData['selectedRepresents'] = valueForResValue;
         }).on('change', '.page-change-text', () => {
-            let valueForCalendarChange = this.el.find('.page-change-text option:selected').val();
-            this.data.rowSetData['selectedEnums'] = valueForCalendarChange;
+            let valueForCalendarChangeValue = this.el.find('.page-change-text option:selected').val();
+            this.data.rowSetData['selectedEnums'] = valueForCalendarChangeValue;
             //this.data.allRows[this.data.index]['selectedEnums'] = valueForCalendarChange;
         }).on('click', '.set-remind-method', () => {
             // CalendarSetRemindMethod.emailStatus = this.data.rowSetData.email.email_status;
@@ -128,6 +132,7 @@ class CalendarSetItem extends Component {
         config.data.dropdownForCalendarChange = data.dropdownForCalendarChange;
         config.data.rowTitle = data.rowTitle;
         config.data.replaceDropDown = data.replaceDropDown;
+        config.data.preViewText = data.rowData['selectedOpts'];
 
         config.data.recipients = data.recipients;
         config.data.recipients_per = data.recipients_per;

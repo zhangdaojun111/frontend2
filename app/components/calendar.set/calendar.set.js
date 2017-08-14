@@ -143,28 +143,12 @@ let config = {
                     });
                     this.data.childComponents.push(calendarSetItem);
                     this.append(calendarSetItem, this.el.find('.set-items'));
-                    // this.append(new CalendarSetItem({
-                    //     allRows: this.data.allRows,
-                    //     index: index,
-                    //     rowData: row,
-                    //     dropdown: this.data.dropdown,
-                    //     dropdownForRes: this.data.dropdownForRes,
-                    //     dropdownForCalendarChange: this.data.dropdownForCalendarChange,
-                    //     replaceDropDown: this.data.replaceDropDown,
-                    //     isConfigField: this.data.isConfigField,
-                    //     rowTitle: this.data.rowTitle[index],
-                    //
-                    //     recipients: this.data.recipients,
-                    //     recipients_per: this.data.recipients_per,
-                    //     copypeople: this.data.copypeople,
-                    //     emailAddressList: this.data.emailAddressList,
-                    //     emailAddress: this.data.emailAddress,
-                    // }), this.el.find('.set-items'));
                 })
             }).catch(err=>{
                 console.log('error',err);
             });
         },
+
         representChange: function(a,a_selectedRepresent){
             if( a_selectedRepresent === '' ){
                 return;
@@ -231,6 +215,65 @@ let config = {
             });
         },
 
+        saveSetting(tableId,param){
+            //判断提醒开启时收件人不为空
+            for( let data of param ){
+                if( ( data.email.email_status === '1' && data.email.receiver.length === 0 ) || ( data.sms.sms_status === '1' && data.sms.receiver.length === 0 ) ){
+                    MSG.alert( "已开启提醒的收件人不能为空" );
+                    return;
+                }
+                if( ( data.email.email_status === '1' && data.email.remind_time.length === 0 ) || ( data.sms.sms_status === '1' && data.sms.remind_time.length === 0 ) ){
+                    MSG.alert( "已开启提醒的提醒时间不能为空" );
+                    return;
+                }
+                if( data.is_show_at_home_page && !data.selectedRepresents ){
+                    MSG.alert( "如果首页显示勾选需要选择代表字段。" );
+                    return;
+                }
+            }
+            for(let eachRow of param){
+                if(eachRow['isSelected'] === false){
+                    eachRow['isSelected']=0;
+                }else if(eachRow['isSelected'] === true){
+                    eachRow['isSelected']=1;
+                }
+                if(eachRow['is_show_at_home_page'] === false){
+                    eachRow['is_show_at_home_page']=0;
+                }else if(eachRow['is_show_at_home_page'] === true){
+                    eachRow['is_show_at_home_page']=1;
+                }
+                eachRow['selectedRepresents'] = [eachRow['selectedRepresents']];
+                eachRow['selectedEnums'] = [eachRow['selectedEnums']];
+            }
+            for( let data of param ){
+                for( let i=0;i<data['selectedRepresents'].length;i++ ){
+                    if( data['selectedRepresents'][i] === undefined ){
+                        data['selectedRepresents'].splice( i,1 );
+                    }
+                }
+            }
+            for( let data of param ){
+                for( let i=0;i<data['selectedEnums'].length;i++ ){
+                    if( data['selectedEnums'][i] === undefined ){
+                        data['selectedEnums'].splice( i,1 );
+                    }
+                }
+            }
+            CalendarService.saveCalendarTable(tableId,param).then(res=>{
+                if(res['success'] === "1"){
+                    MSG.showTips("保存成功");
+                    this.isEdit=false;
+                    setTimeout( ()=>{
+                        CalendarSetService.getColumnList(this.tableId)
+                    },100 )
+                }else  if(res['success'] === 0){
+                    MSG.alert(res['error']);
+                }
+            });
+
+        },
+
+
         getColumnListData: function (tableId) {
             CalendarSetService.getColumnList(tableId).then(res => {
 
@@ -284,11 +327,12 @@ let config = {
     },
     afterRender: function() {
         this.el.css({width: '100%'});
-        //this.data.tableId = window.config.table_id;
         this.el.find('iframe').css("width","100%");
-        // if(this.data.tableId) {
-        //     this.actions.getColumnListData(this.data.tableId);
-        // }
+
+        if(window.config.table_id) {
+            this.data.tableId = window.config.table_id;
+            this.actions.getColumnListData(this.data.tableId);
+        }
         Mediator.on('calendar-set-left:calendar-set', data => {
             this.actions.getColumnListData(data.table_id);
         });
@@ -311,7 +355,7 @@ let config = {
             for(let obj of this.data.childComponents) {
                 newAllRowsData.push(obj.data.rowSetData);
             }
-            console.log(newAllRowsData);
+            _this.actions.saveSetting(this.data.tableId, newAllRowsData);
         });
 
     }

@@ -33,10 +33,10 @@
             {{/each}}
         </select>
     </td>
-    <td class="set-table-item">
-
+    <td class="set-table-item preview-text">
+        {{preViewText}}
     </td>
-    <td class="set-table-item set-remind-method">
+    <td class="set-table-item set-remind-method" disabled>
         {{#if rowSetData.email.email_status}}
         <span>邮件</span>
         {{/if}}
