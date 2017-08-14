@@ -7,7 +7,7 @@ import './calendar.set.remind.scss';
 import CalendarSetItemMulitSelect from '../calendar.set.item.multiselect/calendar.set.item.multiselect';
 import {CalendarService} from '../../../../services/calendar/calendar.service';
 import Mediator from '../../../../lib/mediator';
-let config = {
+let CalendarSetRemindMethod = {
     template: template,
     data: {
         emailStatus: 0,
@@ -26,12 +26,6 @@ let config = {
 
     },
     afterRender: function() {
-        // Mediator.emit('calendar-set:editor',1);
-        // this.append(new CalendarSetItemMulitSelect(this.data.recipients_per), this.el.find('.remind-receiver-sms'));
-        // this.append(new CalendarSetItemMulitSelect(this.data.copypeople), this.el.find('.remind-copy-for-sms'));
-        // this.append(new CalendarSetItemMulitSelect(this.data.emailAddressList), this.el.find('.remind-send-email-address'));
-        // this.append(new CalendarSetItemMulitSelect(this.data.recipients), this.el.find('.remind-receiver-email'));
-        // this.append(new CalendarSetItemMulitSelect(this.data.copypeople), this.el.find('.remind-copy-for-email'));
 
         Mediator.emit('calendar-set:editor',1);
         this.el.on('click', '.sms-remind', () => {
@@ -60,16 +54,16 @@ let config = {
     }
 };
 
-class CalendarSetRemindMethod extends Component {
-    constructor(data) {
-        config.data.emailStatus = data.emailStatus;
-        config.data.smsStatus = data.smsStatus;
-        config.data.emailAddressList = data.emailAddressList;
-        config.data.recipients = data.recipients;
-        config.data.copypeople = data.copypeople;
-        config.data.recipients_per = data.recipients_per;
-        super(config);
-    }
-}
+// class CalendarSetRemindMethod extends Component {
+//     constructor(data) {
+//         config.data.emailStatus = data.emailStatus;
+//         config.data.smsStatus = data.smsStatus;
+//         config.data.emailAddressList = data.emailAddressList;
+//         config.data.recipients = data.recipients;
+//         config.data.copypeople = data.copypeople;
+//         config.data.recipients_per = data.recipients_per;
+//         super(config);
+//     }
+// }
 
 export default CalendarSetRemindMethod;
