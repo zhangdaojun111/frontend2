@@ -92,6 +92,35 @@ let config = {
             this.el.find('.preview-text').html(selectedOptsText + this.data.forResPreviewText);
             this.data.rowSetData['selectedOpts'] = selectedOptsId;
             //console.log(selectedOptsText, selectedOptsId);
+        },
+
+        openSetRemind: function () {
+            PMAPI.openDialogByIframe(
+                '/iframe/calendarSetRemind/',
+                {
+                    width: "800",
+                    height: '800',
+                    title: '【'+ this.data.rowTitle.name + '】'+'的提醒'
+                },{
+                    emailStatus: this.data.rowSetData.email.email_status,
+                    smsStatus: this.data.rowSetData.sms.sms_status,
+                    recipients: this.data.recipients,
+                    recipients_per: this.data.recipients_per,
+                    copypeople: this.data.copypeople,
+                    emailAddressList: this.data.emailAddressList,
+                    emailAddress: this.data.emailAddress,
+                }).then(data => {
+                console.log(data);
+                let showMethod = '';
+                if(data['sms']['sms_status'] === '1') {
+                    showMethod = '短信';
+                    this.el.find('.set-remind-method').html(showMethod);
+                }
+                if (data['email']['email_status'] === '1') {
+                    showMethod = showMethod + ' ' + '邮件';
+                    this.el.find('.set-remind-method').html(showMethod);
+                }
+            });
         }
 
     },
@@ -102,6 +131,7 @@ let config = {
         let _this = this;
         let select_item_data = {
             'list': this.data.dropdownForRes,
+            //choosed: this.data.rowSetData['selectedOpts'],
             onSelect: function () {
                 _this.data.newSelectedOpts = _this.data.multiSelectMenu.data.choosed;
                 _this.actions.checkSelectedOpts(_this.data.newSelectedOpts);
@@ -155,58 +185,7 @@ let config = {
 
             this.data.rowSetData['selectedEnums'] = valueForCalendarChangeValue;
         }).on('click', '.set-remind-method', () => {
-            // CalendarSetRemindMethod.emailStatus = this.data.rowSetData.email.email_status;
-            // CalendarSetRemindMethod.smsStatus = this.data.rowSetData.sms.sms_status;
-            // CalendarSetRemindMethod.data.emailAddressList = this.data.emailAddressList;
-            // CalendarSetRemindMethod.data.recipients = this.data.recipients;
-            // CalendarSetRemindMethod.data.copypeople = this.data.copypeople;
-            // CalendarSetRemindMethod.data.recipients_per = this.data.recipients_per;
-            // PMAPI.openDialogByComponent(CalendarSetRemindMethod, {
-            //     width: 800,
-            //     height: 400,
-            //     title: '【'+ this.data.rowTitle.name + '】'+'的提醒'
-            // }).then(res => {
-            //     console.log(res);
-            // });
-
-            PMAPI.openDialogByIframe(
-                '/iframe/calendarSetRemind/',
-                {
-                    width: "800",
-                    height: '400',
-                    title: '【'+ this.data.rowTitle.name + '】'+'的提醒'
-                },{
-                    emailStatus: this.data.rowSetData.email.email_status,
-                    smsStatus: this.data.rowSetData.sms.sms_status,
-                    recipients: this.data.recipients,
-                    recipients_per: this.data.recipients_per,
-                    copypeople: this.data.copypeople,
-                    emailAddressList: this.data.emailAddressList,
-                    emailAddress: this.data.emailAddress,
-            }).then(data => {
-
-            });
-
-            // let component = new CalendarSetRemindMethod({
-            //     emailStatus: this.data.rowSetData.email.email_status,
-            //     smsStatus: this.data.rowSetData.sms.sms_status,
-            //     recipients: this.data.recipients,
-            //     recipients_per: this.data.recipients_per,
-            //     copypeople: this.data.copypeople,
-            //     emailAddressList: this.data.emailAddressList,
-            //     emailAddress: this.data.emailAddress,
-            // });
-            // let el = $('<div>').appendTo(document.body);
-            // component.render(el);
-            // el.dialog({
-            //     title: '主框架弹出',
-            //     width: 800,
-            //     height: 500,
-            //     close: function () {
-            //         $(this).dialog('destroy');
-            //         component.destroySelf();
-            //     }
-            // });
+            this.actions.openSetRemind();
         });
 
         //this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']);

@@ -8,6 +8,7 @@ import CalendarSetItemMulitSelect from '../calendar.set.item.multiselect/calenda
 import {CalendarService} from '../../../../services/calendar/calendar.service';
 import {AutoSelect} from '../../../util/autoSelect/autoSelect';
 import {PMAPI, PMENUM} from '../../../../lib/postmsg';
+import MSG from '../../../../lib/msgbox';
 
 let config = {
     template: template,
@@ -19,84 +20,166 @@ let config = {
         recipients_per: [],
         copypeople: [],
 
+        smsReciver: [],
+        emailReciver: [],
+
+        smsCopyPeople: [],
+        emailCopyPeople: [],
+
+        smsRemindTime: '',
+        emailRemindTime: '',
+
+        sms:{},
+        email: {},
+
+        smsReceiverAutoSelect: {},
+        smsCopyPeopleAutoSelect: {},
+
+        emailAutoSelect: {},
+        emailReceiverAutoSelect: {},
+        emailCopyPeopleAutoSelect: {},
+
+        sendEmailAddressId: ''
     },
 
     actions: {
-        getselectContect:function () {
+        checkRemindStatus:function () {
+            if( ( this.data.smsStatus === '1' && this.data.smsReciver.length === 0 ) || ( this.data.emailStatus === '1' && this.data.emailReciver.length === 0 ) ){
+                console.log('error');
+                MSG.alert( "已开启提醒的收件人不能为空" );
+                return;
+            } else if( ( this.data.smsStatus === '1' && this.data.smsRemindTime.length === 0 ) || ( this.data.emailStatus === '1' && this.data.emailRemindTime.length === 0 ) ){
+                MSG.alert( "已开启提醒的提醒时间不能为空" );
+                return;
+            } else {
+                this.data.sms = {
+                    cc_receiver: this.data.smsCopyPeople,
+                    receiver: this.data.smsReciver,
+                    remind_time: this.data.smsRemindTime,
+                    sms_status: this.data.smsStatus,
+                };
+                this.data.email = {
+                    email_id: this.data.sendEmailAddressId,
+                    cc_receiver: this.data.emailCopyPeople,
+                    receiver: this.data.emailReciver,
+                    email_status: this.data.emailStatus,
+                    remind_time: this.data.emailRemindTime,
+                };
+                PMAPI.sendToParent({
+                    type: PMENUM.close_dialog,
+                    key: window.config.key,
+                    data: {sms: this.data.sms, email: this.data.email},
+                });
 
+            }
         }
     },
 
     afterRender: function() {
-        // PMAPI.subscribe(PMENUM.open_iframe_params, params => {
-        //     console.log(params);
-        //     this.data.emailStatus = params.data.emailStatus;
-        //     this.data.smsStatus = params.data.smsStatus;
-        //     this.data.emailAddressList = params.data.emailAddressList;
-        //     this.data.recipients = params.data.recipients;
-        //     this.data.copypeople = params.data.copypeople;
-        //     this.data.recipients_per = params.data.recipients_per;
-        // })
-        // this.data.emailAddressList[0].id = "1";
-        // let listdata = {'list':this.data.emailAddressList};
-        // let email_address_content = new AutoSelect(listdata);
-        // console.log(this.data.emailAddressList);
-        // this.append(email_address_content, this.el.find('.remind-send-email-address'));
-        // listdata = {'list':this.data.recipients_per};
-        // let receiver_sms_content = new AutoSelect(listdata);
-        // this.append(receiver_sms_content, this.el.find('.remind-receiver-sms'));
-        // listdata = {'list':this.data.copypeople};
-        // let copy_for_sms_content = new AutoSelect(listdata);
-        // this.append(copy_for_sms_content, this.el.find('.remind-copy-for-sms'));
-        // listdata = {'list':this.data.recipients};
-        // let receiver_email = new AutoSelect(listdata);
-        // this.append(receiver_email, this.el.find('.remind-receiver-email'));
-        // listdata = {'list':this.data.copypeople};
-        // let copy_for_email = new AutoSelect(listdata);
-        // this.append(copy_for_email, this.el.find('.remind-copy-for-email'));
-        // this.el.find(".popup").css('z-index',100,'background-color',"white");
-        // this.el.find(".popup").css('background-color',"white");
-        // this.el.find(".popup").css('height',"auto");
-        // this.el.find(".popup").css('max-height',"300px");
+
+        PMAPI.subscribe(PMENUM.open_iframe_params, params => {
+            this.data.emailStatus = params.data.emailStatus;
+            this.data.smsStatus = params.data.smsStatus;
+            this.data.emailAddressList = params.data.emailAddressList;
+            this.data.recipients = params.data.recipients;
+            this.data.copypeople = params.data.copypeople;
+            this.data.recipients_per = params.data.recipients_per;
+
+            if (this.data.smsStatus === '1') {
+                this.el.find('.open-sms-remind').addClass('checked');
+            } else {
+                this.el.find('.close-sms-remind').addClass('checked');
+            }
+            if (this.data.emailStatus === '1') {
+                this.el.find('.open-email-remind').addClass('checked');
+            } else {
+                this.el.find('.close-email-remind').addClass('checked');
+            }
+
+            // 短信收件人
+            this.data.smsReceiverAutoSelect = new AutoSelect({
+                list: this.data.recipients_per,
+            });
+            this.append(this.data.smsReceiverAutoSelect, this.el.find('.remind-receiver-sms'));
+
+            // 短信抄送人
+            this.data.smsCopyPeopleAutoSelect = new AutoSelect({
+                list: this.data.copypeople,
+            });
+            this.append(this.data.smsCopyPeopleAutoSelect, this.el.find('.remind-copy-for-sms'));
+
+            // 发件箱
+            this.data.emailAddressList.forEach(item => {
+                this.el.find('#send-email-address').append('<option value="'+ item.id +'">'+ item.name +'</option>');
+            });
+            //this.el.find('.send-email-address').option(this.data.emailAddressList);
+            // this.data.emailAutoSelect = new AutoSelect({
+            //     list: this.data.emailAddressList,
+            // });
+            // this.append(this.data.emailAutoSelect, this.el.find('.remind-send-email-address'));
+
+            // 邮件收件人
+            this.data.emailReceiverAutoSelect = new AutoSelect({
+                list: this.data.recipients,
+            });
+            this.append(this.data.emailReceiverAutoSelect, this.el.find('.remind-receiver-email'));
+
+            // 邮件抄送人
+            this.data.emailCopyPeopleAutoSelect = new AutoSelect({
+                list: this.data.copypeople,
+            });
+            this.append(this.data.emailCopyPeopleAutoSelect, this.el.find('.remind-copy-for-email'));
+        });
+
+        let _this = this;
         // Mediator.emit('calendar-set:editor',1);
-        // this.el.on('click', '.sms-remind', () => {
-        //     this.el.find('.sms-remind').addClass("unchecked");
-        //     this.el.find(".email-remind").removeClass("unchecked");
-        //     this.el.find(".sms").show();
-        //     this.el.find(".email").hide();
-        // }).on('click', '.email-remind', () => {
-        //     console.log(receiver_sms_content.data.choosed);
-        //     this.el.find('.email-remind').addClass("unchecked");
-        //     this.el.find(".sms-remind").removeClass("unchecked");
-        //     this.el.find(".email").show();
-        //     this.el.find(".sms").hide();
-        // }).on('click', '.open-sms-remind', () => {
-        //     this.el.find('.open-sms-remind').addClass("checked");
-        //     this.el.find(".close-sms-remind").removeClass("checked");
-        // }).on('click', '.close-sms-remind', () => {
-        //     this.el.find('.close-sms-remind').addClass("checked");
-        //     this.el.find(".open-sms-remind").removeClass("checked");
-        // }).on('click', '.open-email-remind', () => {
-        //
-        // }).on('click', '.close-email-remind', () => {
-        //
-        // }).on('click', '.set-ok', () => {
-        //     console.log("receiver_sms_content:",receiver_sms_content.data.choosed,"email_address_content",email_address_content.data.choosed,
-        //        "copy_for_sms_content",copy_for_sms_content.data.choosed,"receiver_email",receiver_email.data.choosed,"copy_for_email",copy_for_email.data.choosed);
-        // })
+        this.el.on('click', '.sms-remind', () => {
+            _this.el.find('.sms-remind').addClass("unchecked");
+            _this.el.find(".email-remind").removeClass("unchecked");
+            _this.el.find(".sms").show();
+            _this.el.find(".email").hide();
+        }).on('click', '.email-remind', () => {
+            _this.el.find('.email-remind').addClass("unchecked");
+            _this.el.find(".sms-remind").removeClass("unchecked");
+            _this.el.find(".email").show();
+            _this.el.find(".sms").hide();
+        }).on('click', '.open-sms-remind', () => {
+            _this.el.find('.open-sms-remind').addClass("checked");
+            _this.el.find(".close-sms-remind").removeClass("checked");
+            _this.data.smsStatus = '1';
+        }).on('click', '.close-sms-remind', () => {
+            _this.el.find('.close-sms-remind').addClass("checked");
+            _this.el.find(".open-sms-remind").removeClass("checked");
+            _this.data.smsStatus = '0';
+        }).on('click', '.open-email-remind', () => {
+            _this.el.find('.open-email-remind').addClass("checked");
+            _this.el.find(".close-email-remind").removeClass("checked");
+            _this.data.emailStatus = '1';
+        }).on('click', '.close-email-remind', () => {
+            _this.el.find('.close-email-remind').addClass("checked");
+            _this.el.find(".open-email-remind").removeClass("checked");
+            _this.data.emailStatus = '0';
+        }).on('change', '#send-email-address', () => {
+            _this.data.emailAddressList = [];
+            let sendEmailAddressValue = this.el.find('#send-email-address option:selected').text();
+            _this.data.sendEmailAddressId = this.el.find('#send-email-address option:selected').val();
+            _this.data.emailAddressList.push({id: this.data.sendEmailAddressId, name: sendEmailAddressValue});
+        }).on('click', '.set-ok', () => {
+            _this.data.smsRemindTime = this.el.find('.remind-time-sms').val();
+            _this.data.emailRemindTime = this.el.find('.remind-time-email').val();
+
+            _this.data.smsReciver = this.data.smsReceiverAutoSelect.data.choosed;
+            _this.data.smsCopyPeople = this.data.smsCopyPeopleAutoSelect.data.choosed;
+
+            _this.data.emailReciver = this.data.emailReceiverAutoSelect.data.choosed;
+            _this.data.emailCopyPeople = this.data.emailCopyPeopleAutoSelect.data.choosed;
+            _this.actions.checkRemindStatus();
+        })
     }
 };
 
 class CalendarSetRemindMethod extends Component {
     constructor() {
-        PMAPI.subscribe(PMENUM.open_iframe_params, params => {
-            config.data.emailStatus = params.data.emailStatus;
-            config.data.smsStatus = params.data.smsStatus;
-            config.data.emailAddressList = params.data.emailAddressList;
-            config.data.recipients = params.data.recipients;
-            config.data.copypeople = params.data.copypeople;
-            config.data.recipients_per = params.data.recipients_per;
-        });
         super(config);
     }
 }

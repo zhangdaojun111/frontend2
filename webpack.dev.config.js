@@ -54,8 +54,7 @@ module.exports = {
             'handlebars',
             'moment',
             'lodash',
-            'babel-polyfill',
-            'jsplumb'
+            'babel-polyfill'
         ]
     },
 
@@ -129,7 +128,10 @@ module.exports = {
     plugins: [
         // new webpack.HotModuleReplacementPlugin()
         new webpack.optimize.UglifyJsPlugin({minimize: true}),
-        new webpack.optimize.CommonsChunkPlugin('vendors'),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendors',
+            minChunks: 3
+        }),
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery",

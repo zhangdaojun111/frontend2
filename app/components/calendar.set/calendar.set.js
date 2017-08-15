@@ -122,7 +122,7 @@ let config = {
                         })
                     }
                 }
-                console.log(this.data.allRows);
+
                 this.data.allRows.forEach((row, index) => {
                     if(this.data.rowTitle[index]['id'] && this.data.rowTitle[index]['dtype'] === '8' && this.data.replaceDropDown.length !== 0){
                         this.data.isConfigField = true;
@@ -136,7 +136,6 @@ let config = {
                         replaceDropDown: this.data.replaceDropDown,
                         isConfigField: this.data.isConfigField,
                         rowTitle: this.data.rowTitle[index],
-                        //previewText: this.actions.returnShow(row['selectedOpts']),
 
                         recipients: this.data.recipients,
                         recipients_per: this.data.recipients_per,
@@ -221,14 +220,6 @@ let config = {
         saveSetting(tableId,param){
             // 判断提醒开启时收件人不为空
             for( let data of param ){
-                if( ( data.email.email_status === '1' && data.email.receiver.length === 0 ) || ( data.sms.sms_status === '1' && data.sms.receiver.length === 0 ) ){
-                    MSG.alert( "已开启提醒的收件人不能为空" );
-                    return;
-                }
-                if( ( data.email.email_status === '1' && data.email.remind_time.length === 0 ) || ( data.sms.sms_status === '1' && data.sms.remind_time.length === 0 ) ){
-                    MSG.alert( "已开启提醒的提醒时间不能为空" );
-                    return;
-                }
                 if( data.is_show_at_home_page && !data.selectedRepresents ){
                     MSG.alert( "如果首页显示勾选需要选择代表字段。" );
                     return;
