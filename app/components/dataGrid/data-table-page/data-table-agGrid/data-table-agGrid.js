@@ -1156,7 +1156,6 @@ let config = {
                     this.actions.retureSelectData();
                     delSetting.data['deletedIds'] = this.data.deletedIds;
                     PMAPI.openDialogByComponent(delSetting, {
-
                         width: 300,
                         height: 200,
                         title: '删除'
@@ -1170,13 +1169,16 @@ let config = {
             //导入数据
             if( this.el.find( '.grid-import-btn' )[0] ){
                 this.el.find('.grid-import-btn').on( 'click',()=>{
-                    PMAPI.openDialogByComponent(importSetting, {
-                        width: 400,
-                        height: 600,
-                        title: '导入数据'
-                    }).then((data) => {
-
-                    });
+                    let json = {
+                        tableId: this.data.tableId,
+                        parentTableId: this.data.parentTableId,
+                        parentRealId: this.data.parentRealId,
+                        parentTempId: this.data.parentTempId,
+                        isBatch: this.data.viewMode == 'createBatch'?1:0
+                    }
+                    let url = dgcService.returnIframeUrl( '/iframe/dataImport/',json );
+                    let winTitle = '导入数据';
+                    this.actions.openSourceDataGrid( url,winTitle,600,800 );
                 } )
             }
             //导出
@@ -1532,10 +1534,10 @@ let config = {
             this.actions.openSourceDataGrid( url,title );
         },
         //打开穿透数据弹窗
-        openSourceDataGrid: function ( url,title ) {
+        openSourceDataGrid: function ( url,title,w,h ) {
             PMAPI.openDialogByIframe( url,{
-                width: 1300,
-                height: 800,
+                width: w || 1300,
+                height: h || 800,
                 title: title,
                 modal:true
             } ).then( (data)=>{
