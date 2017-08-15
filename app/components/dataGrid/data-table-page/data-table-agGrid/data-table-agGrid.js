@@ -17,7 +17,7 @@ import groupGrid from "../../data-table-toolbar/data-table-group/data-table-grou
 import dataPagination from "../../data-table-toolbar/data-pagination/data-pagination";
 import delSetting from '../../data-table-toolbar/data-table-delete/data-table-delete';
 import importSetting from '../../data-table-toolbar/data-table-import/data-table-import';
-import girdExport from '../../data-table-toolbar/data-table-export/data-table-export';
+import exportSetting from '../../data-table-toolbar/data-table-export/data-table-export';
 
 import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 
@@ -934,7 +934,28 @@ let config = {
         },
         //触发导出
         onExport: function () {
-            PMAPI.openDialogByComponent(girdExport, {
+            let filer = [];
+            if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
+                filer = this.data.filterParam.filter || [];
+            }
+            if( this.data.filterParam['common_filter_id'] ){
+                for( let a of this.data.filterParam.expertFilter ){
+                    filer.push( a );
+                }
+            }
+            let obj = {
+                tableId: this.data.tableId,
+                groupCheck: this.data.groupCheck,
+                rowId: this.data.rowId,
+                parentRealId: this.data.parentRealId,
+                fieldId: this.data.fieldId,
+                tableType: this.data.tableType,
+                filterParam: JSON.stringify( filer )
+            }
+            for( let o in obj ){
+                exportSetting.data[o] = obj[o];
+            }
+            PMAPI.openDialogByComponent(exportSetting, {
                 width: 380,
                 height: 220,
                 title: '导出数据'

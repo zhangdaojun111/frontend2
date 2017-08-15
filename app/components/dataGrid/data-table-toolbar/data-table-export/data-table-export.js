@@ -1,62 +1,59 @@
 import template from './data-table-export.html';
-import './data-table-export.scss';
-let girdExport = {
+let css = `
+`
+let exportSetting = {
     template: template,
     data: {
-
+        css: css.replace(/(\n)/g, ''),
+        isFilter: true,
+        custom: true,
+        attachment: true
     },
     actions: {
-        btnClick: function () {
-            $( '.save-btn' ).click( ()=>{
-                this.actions.getCheckBoxValue()
-                PMAPI.sendToParent( {
-                    key: this.key,
-                    type: PMENUM.close_dialog,
-                    data: {
-                        // value: $('.input').val()
-                    }
-                } )
-            } )
-            $( '.cancel-btn' ).click( ()=>{
-                PMAPI.sendToParent( {
-                    key: this.key,
-                    type: PMENUM.close_dialog,
-                    data: {
-
-                    }
-                } )
-            } )
+        createUrl: function () {
+            let json = {
+                table_id: this.data.tableId,
+                isFilter: this.data.isFilter,
+                custom: this.data.custom,
+                filter: this.data.filterParam,
+                is_group: this.data.groupCheck?1:0,
+                attachment: this.data.attachment
+            }
+            if( this.data.tableType == 'count' ){
+                json['parent_real_id'] = this.data.parentRealId;
+                json['fieldId'] = this.data.fieldId;
+                json['rowId'] = this.data.rowId;
+                json['tableType'] = this.data.tableType;
+            }
+            let url = this.actions.returnIframeUrl( '/export/',json );
+            this.el.find( '.export-btn' )[0].href = url;
         },
-        getCheckBoxValue: function(){
-            if(this.el.find('#condition').is(':checked') == true) {
-
-                if(this.data.expertFilter.length != 0) {
-                    this.data.Filter.push({
-                        queryParams: JSON.stringify(this.data.expertFilter[0])
-                    })
-                }
-                if(this.data.filter.length != 0) {
-                    this.data.Filter.push({
-                        queryParams: JSON.stringify(this.data.filter[0])
-                    })
-                }
+        changeState: function ( d ) {
+            this.data[d] = !this.data[d];
+            this.actions.createUrl();
+        },
+        //返回数据url
+        returnIframeUrl( u,obj ){
+            let str = '?'
+            for( let o in obj ){
+                str += (o + '=' + obj[o] + '&')
             }
-            if(this.el.find('#columns').is(':checked') == true) {
-                this.data.columns = true;
-            }
-            if(this.el.find('#accessory').is(':checked') == true) {
-                this.data.attachment = true;
-            }
-            let href = `/data/export/?table_id=${this.data.tableId}&isFilter=${(this.data.isFilter)}&custom=${this.data.columns}&filter=${JSON.stringify(this.data.Filter)}&parent_real_id=${this.data.parentRealId}&fieldId=${this.data.fieldId}&rowId=${this.data.rowId}&tableType=count&is_group=${this.data.isGroup}&attachment=${this.data.attachment}`
-            this.el.find('.save-btn').attr('href',href)
+            str = str.substring( 0,str.length - 1 );
+            return u + str;
         }
     },
     afterRender: function () {
-        this.actions.getCheckBoxValue();
-        this.actions.btnClick();
+        this.el.on( 'click','#isFilter',()=>{
+            this.actions.changeState( 'isFilter' );
+        } ).on( 'click','#columns',()=>{
+            this.actions.changeState( 'columns' );
+        } ).on( 'click','#attachment',()=>{
+            this.actions.changeState( 'attachment' );
+        } )
+        this.actions.createUrl();
     },
     beforeDestory: function () {
 
     }
 };
-export default girdExport;
+export default exportSetting;
