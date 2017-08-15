@@ -1330,11 +1330,20 @@ let config = {
         //筛选增加删除后常用查询
         getDiffereceQuery: function(data) {
             let ary = [];
-            for (let i = 0; i < data.length; i++) {
-                if(i >= this.data.commonQueryData.length) {
-                    ary.push(data[i]);
+            if(this.data.commonQueryData.length < data.length){
+                for (let i = 0; i < data.length; i++) {
+                    if(i >= this.data.commonQueryData.length) {
+                        ary.push(data[i]);
+                    }
+                }
+            } else if(this.data.commonQueryData.length < data.length){
+                for (let i = 0; i < this.data.commonQueryData.length; i++) {
+                    if(i >= data.length) {
+                        ary.push(data[i]);
+                    }
                 }
             }
+
             return ary
         },
         //获取临时常用查询数据
@@ -1346,17 +1355,12 @@ let config = {
         getExpertSearchData: function () {
             let obj = {'actions':JSON.stringify( ['queryParams'] ),'table_id':this.data.tableId};
             dataTableService.getPreferences( obj ).then( res=>{
-                let ary= [];
-                if(this.data.commonQueryData.length == 0) {
-                    ary = res.rows;
-                }else {
-                    ary = this.actions.getDiffereceQuery(res.rows);
-                }
-                this.data.commonQueryData = res.rows;
-                // Mediator.emit('renderQueryItem:itemData',{data:ary});
-                ary.forEach((row) => {
+                this.el.find('.dataGrid-commonQuery-option').remove();
+                this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="100" value="常用查询">常用查询</option>`)
+                res.rows.forEach((row) => {
                     this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
                 });
+                this.data.commonQueryData = res.rows;
                 //第一次请求footer数据
                 if( this.data.firstGetFooterData ){
                     if( this.data.common_filter_id ){

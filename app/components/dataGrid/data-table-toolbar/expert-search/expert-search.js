@@ -29,6 +29,10 @@ let config = {
                     <option value="$gt">大于</option>
                     <option value="$lt">小于</option>
                     <option value="$ne">不等于</option>`,
+    optionHtmlThree : `<option value="exact">等于</option>
+                    <option value="$gt">大于</option>
+                    <option value="$lt">小于</option>
+                    <option value="$ne">不等于</option>`,
     data: {
         tableId: null,
         key:'',
@@ -62,26 +66,46 @@ let config = {
         },
         // 获取查询数据
         submitData: function (name){
-            if(!this.itemChecked){
-                this.data.searchInputList = [];
-                for(let i = 0; i < this.data.searchInputAry.length; i++) {
-                    let obj = {
-                        cond: {},
-                        relation:'$and'
-                    }
-                    obj['cond']['keyword'] = this.data.searchInputAry[i].inputValue;
-                    obj['cond']['leftBracket'] = this.data.searchInputAry[i].leftSelect;
-                    obj['cond']['operate'] = this.data.searchInputAry[i].relationSelect;
-                    obj['cond']['rightBracket'] = this.data.searchInputAry[i].rightSelect;
-                    obj['cond']['searchBy'] = this.data.searchInputAry[i].inputBoxValue
-                    obj['cond']['searchByName'] = this.data.searchInputAry[i].inputBoxName
-                    obj['cond']['searchByNew'] = this.data.searchInputAry[i].inputBoxValue
-                    if(this.el.find('.condition-search-radio.or').eq(i).prop('checked') == true) {
-                        obj['relation'] = '$or';
-                    }
-                    this.data.searchInputList.push(obj);
+            this.data.searchInputList = [];
+            for(let i = 0; i < this.data.searchInputAry.length; i++) {
+                let obj = {
+                    cond: {},
+                    relation:'$and'
                 }
+                // if(this.data.searchInputAry[i].inputBoxTitle == 'number') {
+                //     obj['cond']['keyword'] = parseInt(this.data.searchInputAry[i].inputValue);
+                // } else {
+                //     obj['cond']['keyword'] = this.data.searchInputAry[i].inputValue;
+                // }
+                // obj['cond']['leftBracket'] = this.data.searchInputAry[i].leftSelect;
+                // obj['cond']['operate'] = this.data.searchInputAry[i].relationSelect;
+                // obj['cond']['rightBracket'] = this.data.searchInputAry[i].rightSelect;
+                // obj['cond']['searchBy'] = this.data.searchInputAry[i].inputBoxValue;
+                // obj['cond']['searchByName'] = this.data.searchInputAry[i].inputBoxName;
+                // obj['cond']['searchByNew'] = this.data.searchInputAry[i].inputBoxValue;
+                // if(this.el.find('.condition-search-radio.or').eq(i).prop('checked') == true) {
+                //     obj['relation'] = '$or';
+                // }
+
+                //由于选择一个常用查询后 改变其查询值 new一个组件时push到数组的值是不会发生变化的
+
+                if(this.el.find('.condition-search-box-input').eq(i).attr('title') == 'number') {
+                    obj['cond']['keyword'] = parseInt(this.el.find('.condition-search-input').eq(i).val());
+                } else {
+                    obj['cond']['keyword'] = this.el.find('.condition-search-input').eq(i).val();
+                }
+                obj['cond']['leftBracket'] = this.el.find('.condition-search-select.left-select').eq(i).val();
+                obj['cond']['operate'] = this.el.find('.condition-search-select.relation').eq(i).val()
+                obj['cond']['rightBracket'] = this.el.find('.condition-search-select.right-select').eq(i).val();
+                obj['cond']['searchBy'] = this.el.find('.condition-search-box-input').eq(i).attr('name');
+                obj['cond']['searchByName'] = this.el.find('.condition-search-box-input').eq(i).val();
+                obj['cond']['searchByNew'] = this.el.find('.condition-search-box-input').eq(i).attr('name');
+                if(this.el.find('.condition-search-radio.or').eq(i).prop('checked') == true) {
+                    obj['relation'] = '$or';
+                }
+                this.data.searchInputList.push(obj);
             }
+            debugger
             this.actions.checkedSubmitData(name)
         },
         //展示常用查询
@@ -116,7 +140,7 @@ let config = {
                     switch (item.searchType) {
                         case "datetime": htmlStr = config.optionHtmlTwo; break;
                         case "text": htmlStr = config.optionHtmlOne; break;
-                        case "number": htmlStr = config.optionHtmlOne; break
+                        case "number": htmlStr = config.optionHtmlThree; break
                     }
                 }
             })
@@ -152,7 +176,7 @@ let config = {
                         // this.data.saveTemporaryCommonQuery(this.data.searchInputList);
                         let searchId = '临时高级查询',searchName = '临时高级查询',appendChecked = true;
                         this.data.commonQuery.forEach((item) => {
-                            if(item.id == this.data.id) {
+                            if(item.id == this.id) {
                                 searchId = item.id;
                                 searchName = item.name;
                                 appendChecked = false;
@@ -179,6 +203,7 @@ let config = {
         //打开保存常用查询
         openSaveQuery: function(){
             if(this.isEdit) {
+                debugger
                 addQuery.data.name = this.name;
             }
             PMAPI.openDialogByComponent(addQuery, {
@@ -187,7 +212,13 @@ let config = {
                 title: '保存为常用查询'
             }).then((data) => {
                 if(data) {
-                    this.actions.saveCommonQuery(data.value);
+                    if(!this.isEdit) {
+                        this.actions.saveCommonQuery(data.value);
+                    } else {
+                        debugger
+                        this.actions.deleteCommonQuery(this.id);
+                        this.actions.saveCommonQuery(data.value);
+                    }
                 }
             });
         },
@@ -264,7 +295,6 @@ let config = {
                 if(this.el.find('.common-search-item').eq(i).attr('fieldId') == id){
                     this.el.find('.common-search-item').eq(i).remove();
                 }
-
             }
             for(let i = 0; i < optionLength; i++) {
                 if(this.el.find('.dataGrid-commonQuery-option').eq(i).attr('fieldId') == id){
@@ -304,7 +334,7 @@ let config = {
                         _this.name = item.name;
                         _this.id = item.id;
                         _this.itemChecked = true;
-                        _this.searchInputList = JSON.parse(item.queryParams);
+                        _this.data.searchInputList = JSON.parse(item.queryParams);
                         _this.actions.showSearchData(JSON.parse(item.queryParams));
                         if(_this.itemDeleteChecked) {
                             _this.isEdit = true;
