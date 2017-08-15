@@ -20,12 +20,13 @@ let config = {
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
-
         this.append(new CalendarTableHeader({headTitle: this.data.weekListHead, type: 'week'}), this.el.find('.week-head'));
-
-        for(let i = 0; i<7; i++) {
-            this.append(new TableGrid({type: 'week'}), this.el.find('.week-body'));
-        }
+        this.data.weekData.forEach(item => {
+            this.append(new TableGrid({bodyData: item, type: 'week'}), this.el.find('.week-body'));
+        });
+        // for(let i = 0; i<7; i++) {
+        //     this.append(new TableGrid({bodyData: this.data.weekData, type: 'week'}), this.el.find('.week-body'));
+        // }
 
     }
 };

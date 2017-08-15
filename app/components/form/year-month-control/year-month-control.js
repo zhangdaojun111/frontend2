@@ -4,10 +4,11 @@ import Mediator from '../../../lib/mediator';
 
 let config={
     template:`<div class="clearfix">
-                 {{#if be_control_condition }}
+                {{#if unvisible}}
+                    <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
+                 {{else if be_control_condition }}
                     <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                  {{else}}
-                        <div style="float: left">{{label}}</div>
                         <div class="year" style="float: left"></div>
                         <span style="float: left;">年</span>
                         <div class="month" style="float: left"></div>
@@ -15,7 +16,10 @@ let config={
                         <div style="float: left;">
                            {{#if required}}
                                     <span id="requiredLogo" class="{{requiredClass}}" ></span>
-                           {{/if}}  
+                           {{/if}}
+                           {{#if history}}
+                                <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>     
+                            {{/if}}       
                       </div>
                  {{/if}}
             </div>`,
@@ -27,7 +31,7 @@ let config={
     },
     firstAfterRender:function(){
         let _this=this;
-        Mediator.subscribe('form:dropDownSelect'+_this.data.tableId,function(data){
+        Mediator.subscribe('form:dropDownSelect:'+_this.data.tableId,function(data){
             if(data.dfield !=_this.data.dfield){
                 return;
             }
@@ -39,9 +43,10 @@ let config={
                 val = _this.data.value.split('-')[0] + "-" + data.value;
             }
             _this.data.value = val;
-            if(_this.data.required){
-                Mediator.publish('form:checkRequired',data);
-            }
+            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+        });
+        this.el.on('click','.ui-history',function(){
+            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
     },
     afterRender:function(){
@@ -83,6 +88,11 @@ let config={
         }
         this.append(new DropDown(yearData),this.el.find('.year'));
         this.append(new DropDown(monthData),this.el.find('.month'));
+        console.log('怎么回事呢');
+    },
+    beforeDestory:function(){
+        Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
+        Mediator.removeAll('form:changeValue:'+this.data.tableId);
     }
 }
 export default class YearMonthControl extends Component{

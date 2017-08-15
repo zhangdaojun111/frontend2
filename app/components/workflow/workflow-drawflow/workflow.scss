@@ -2,7 +2,7 @@
 .content{
     position: relative;
 }
-#workflow-draw-box{
+.workflow-draw-box{
     position: relative;
     height: 100px;
     font-size: 12px;
@@ -30,4 +30,12 @@
 .switch-node{
     font-size: 12px;
     margin-left: 10px;
+}
+.workflow-draw-box .draged-item[state="2"]{
+    background: #117DED;
+    color: #fff;
+}
+.workflow-draw-box .draged-item[state="1"]{
+    border: 1px solid currentColor;
+    color: #117DED;
 }

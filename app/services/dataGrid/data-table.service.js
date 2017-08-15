@@ -23,5 +23,30 @@ export const dataTableService = {
     //请求sheet分页信息
     getSheetPage: function ( param ) {
         return HTTP.post( 'get_tab_page',param )
+    },
+    // 保存偏好
+    savePreference: function ( param ) {
+        return HTTP.post( 'save_preference',param )
+    },
+    //删除偏好
+    delPreference: function ( param ) {
+        return HTTP.post( 'delete_preference',param )
+    },
+    //删除数据
+    delTableData: function ( param ) {
+        return HTTP.post( 'delete_table_data',param )
+    },
+    //导入数据
+    importData: function ( data ) {
+        // let headers = new Headers({'Content-Type': 'application/vnd.ms-excel; charset=UTF-8'});
+        return HTTP.post( 'delete_table_data',data )
+    },
+    //获取工作流表数据
+    getWorkflowData: function ( data ) {
+        return HTTP.post( 'get_workflow_records',data )
+    },
+    //工作流操作
+    approveWorkflow: function ( data ) {
+        
     }
 }
