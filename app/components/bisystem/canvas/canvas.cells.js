@@ -162,7 +162,8 @@ export class CanvasCellsComponent extends BiBaseComponent{
             config.data.canvasSingle = false;
         } else {
             config.data.canvasSingle = true;
-        }
+        };
+        config.data.views = window.config.bi_views;
         super(config);
         this.viewId = id ? id : this.data.views[0] ? this.data.views[0]['id'] : [] ;
     }

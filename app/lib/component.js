@@ -68,7 +68,6 @@ class Component {
     append(component, container, tagName) {
         tagName = tagName || 'div';
         let el = $(`<${tagName}>`).appendTo(container);
-        console.log(component);
         component.render(el);
         return this;
     }

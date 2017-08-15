@@ -59,6 +59,7 @@ let config = {
                     if(res['success']===1){
                         this.data.views.push(res.data);
                         window.config.bi_views = this.data.views;
+                        console.log(window.config.bi_views);
                         this.reload();
                     }else{
                         alert(res['error']);
