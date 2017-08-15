@@ -11,10 +11,20 @@ let config = {
 
     },
     actions: {
-
+        approvalBtnToggle:function (el) {
+            if(el.parent().hasClass('active')){
+                el.parent().removeClass('active')
+            }else {
+                el.parent().addClass('active')
+            }
+        }
     },
     afterRender: function() {
-
+        let self=this;
+        this.el.on("click",".approval-curr-txt",function (e) {
+            e.stopPropagation();
+            self.actions.approvalBtnToggle($(this))
+        })
     },
     beforeDestory: function(){
 

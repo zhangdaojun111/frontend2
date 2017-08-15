@@ -4,11 +4,11 @@ import Mediator from '../../../lib/mediator';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 
 let config={
-    template: `<div class="flex flex-start">
+    template: `<div class="flex flex-column flex-start">
     <div class="workflow-box-l">
         <div class="tit">
+            <i class="workflow-icon icon-workflow-icon3"></i>
             <span>关注人</span>
-            <i></i>
         </div>
     </div>
     <div class="workflow-box-r">
