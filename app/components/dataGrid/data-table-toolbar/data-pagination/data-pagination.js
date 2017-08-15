@@ -50,7 +50,6 @@ let config = {
             this.el.find('.sumPage').html("共" + this.data.sumPage + "页");
             if(this.data.currentPage<this.data.sumPage){
                 this.el.find('.goLast').addClass('custom');
-                debugger
             }
             let obj = {
                 currentPage: this.data.currentPage,
@@ -128,7 +127,6 @@ let config = {
                 this.el.find('.goLast').addClass('custom');
                 this.el.find('.goFirst').removeClass('custom');
                 this.el.find('.goFirst').addClass('custom-disabled');
-                debugger;
                 this.el.find('.current-page').html(this.data.currentPage);
                 let obj = {
                     currentPage: this.data.currentPage,

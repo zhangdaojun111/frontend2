@@ -1,55 +1,67 @@
-<form id="importForm" name="importForm" enctype="multipart/form-data" method="post">
-    <table>
-        <tr>
-            <td>文件上传(.xls，.xlsx，.wwzip)</td>
-            <td>
-                <input type="file" class="form-file" name="upload_file" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.wwzip">
-            </td>
-        </tr>
-
-        <tr>
-            <td>是否含创建人</td>
-            <td>
-                <select name="has_create_user" class="has_create_user">
-                    <option value="0" selected="selected">无</option>
-                    <option value="1">有</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>是否检查唯一</td>
-            <td>
-                <select name="unique_check" class="unique_check">
-                    <option value="1" selected="selected">是</option>
-                    <option value="0">否</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>是否使用文件中的自增编号</td>
-            <td>
-                <select name="use_increment_data" class="use_increment_data">
-                    <option value="0" selected="selected">否</option>
-                    <option value="1">是</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>是否给未导入字段添加默认值</td>
-            <td>
-                <select name="use_default_value" class="use_default_value">
-                    <option value="0" selected="selected">否</option>
-                    <option value="1">是</option>
-                </select>
-            </td>
-        </tr>
-    </table>
-    <a href="javascript:;">更多</a>
-    <a class="import-submit-btn" href="javascript:;">导入</a>
-    <!--<input type="hidden" name="table_id">-->
-    <!--<input type="hidden" name="parent_table_id">-->
-    <!--<input type="hidden" name="parent_real_id">-->
-    <!--<input type="hidden" name="parent_temp_id">-->
-    <!--<input type="hidden" name="is_batch">-->
-    <!--<input type="hidden" name="warning_msg">-->
-</form>
+<table>
+    <tr>
+        <td>文件上传(.xls，.xlsx，.wwzip)</td>
+        <td>
+            <button class='uploader-button' type="button">上传文件</button>
+        </td>
+    </tr>
+    <tr class="workflow">
+        <td>工作流选项</td>
+        <td>
+            <select class="record_type">
+                <option value="1" selected="selected">批量工作流</option>
+                <!--<option value="0">拆分为单条工作流</option>-->
+            </select>
+        </td>
+    </tr>
+    <tr class="workflow">
+        <td>审批流程</td>
+        <td>
+            <select class="chooseFlow">
+            </select>
+        </td>
+    </tr>
+    <tr class="uploadRemark">
+        <td>执行脚本说明</td>
+        <td>
+            <span class="uploadRemark-con"></span>
+        </td>
+    </tr>
+    <tr>
+        <td>是否含创建人</td>
+        <td>
+            <select class="has_create_user">
+                <option value="0" selected="selected">无</option>
+                <option value="1">有</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>是否检查唯一</td>
+        <td>
+            <select class="unique_check">
+                <option value="1" selected="selected">是</option>
+                <option value="0">否</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>是否使用文件中的自增编号</td>
+        <td>
+            <select class="use_increment_data">
+                <option value="0" selected="selected">否</option>
+                <option value="1">是</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>是否给未导入字段添加默认值</td>
+        <td>
+            <select class="use_default_value">
+                <option value="0" selected="selected">否</option>
+                <option value="1">是</option>
+            </select>
+        </td>
+    </tr>
+</table>
+<a class="import-submit-btn" href="javascript:;">导入</a>

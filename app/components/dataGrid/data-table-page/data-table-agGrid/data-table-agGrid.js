@@ -653,21 +653,16 @@ let config = {
                     }
                 });
             }
-            this.data.filterParam = {
-                filter: filter,
-                is_filter: 1,
-                common_filter_id: '',
-                common_filter_name: ''
-            }
+            this.data.filterParam['filter'] = filter;
+            this.data.filterParam['is_filter'] = 1;
+            this.actions.getGridData();
             this.actions.getGridData();
         },
         postExpertSearch:function(data,id,name) {
-            this.data.filterParam = {
-                filter: data,
-                is_filter: 1,
-                common_filter_id: id,
-                common_filter_name: name
-            }
+            this.data.filterParam.expertFilter = data;
+            this.data.filterParam.common_filter_id = id;
+            this.data.filterParam.common_filter_name = name;
+            this.actions.getGridData();
             this.actions.getGridData();
         },
         //偏好赋值
@@ -850,11 +845,16 @@ let config = {
             }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
-                //高级查询
-                if( this.data.filterParam['common_filter_id'] ){
-                    if( this.data.filterParam['common_filter_id']!='临时高级查询' ){
-                        json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
-                    }
+            }
+            if( this.data.filterParam['common_filter_id'] ){
+                json['filter'] = json['filter'] || [];
+                for( let a of this.data.filterParam.expertFilter ){
+                    json['filter'].push( a );
+                }
+                if( this.data.filterParam['common_filter_id'] != '临时高级查询' ){
+                    json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
+                }
+                if( this.data.filterParam.filter.length == 0 ){
                     msgBox.alert( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
                 }
             }
@@ -1128,7 +1128,6 @@ let config = {
                     modal:true
                 },{d}).then(res=>{
                     if(res.type == 'temporaryQuery') {
-                        debugger
                         this.actions.postExpertSearch(res.value,res.id,res.name);
                     }
                 })
@@ -1162,7 +1161,6 @@ let config = {
                     this.actions.retureSelectData();
                     delSetting.data['deletedIds'] = this.data.deletedIds;
                     PMAPI.openDialogByComponent(delSetting, {
-
                         width: 300,
                         height: 200,
                         title: '删除'
@@ -1176,13 +1174,16 @@ let config = {
             //导入数据
             if( this.el.find( '.grid-import-btn' )[0] ){
                 this.el.find('.grid-import-btn').on( 'click',()=>{
-                    PMAPI.openDialogByComponent(importSetting, {
-                        width: 400,
-                        height: 600,
-                        title: '导入数据'
-                    }).then((data) => {
-
-                    });
+                    let json = {
+                        tableId: this.data.tableId,
+                        parentTableId: this.data.parentTableId,
+                        parentRealId: this.data.parentRealId,
+                        parentTempId: this.data.parentTempId,
+                        isBatch: this.data.viewMode == 'createBatch'?1:0
+                    }
+                    let url = dgcService.returnIframeUrl( '/iframe/dataImport/',json );
+                    let winTitle = '导入数据';
+                    this.actions.openSourceDataGrid( url,winTitle,600,800 );
                 } )
             }
             //导出
@@ -1544,10 +1545,10 @@ let config = {
             this.actions.openSourceDataGrid( url,title );
         },
         //打开穿透数据弹窗
-        openSourceDataGrid: function ( url,title ) {
+        openSourceDataGrid: function ( url,title,w,h ) {
             PMAPI.openDialogByIframe( url,{
-                width: 1300,
-                height: 800,
+                width: w || 1300,
+                height: h || 800,
                 title: title,
                 modal:true
             } ).then( (data)=>{
