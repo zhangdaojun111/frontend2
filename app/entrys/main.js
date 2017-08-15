@@ -2,7 +2,7 @@
 // import 'jquery-ui/themes/base/base.css';
 // import 'jquery-ui/themes/base/theme.css';
 import '../assets/scss/main.scss';
-import '../services/main/socket';
+import '../lib/socket';
 
 import {IframeInstance} from '../components/main/iframes/iframes';
 import {HeaderInstance} from '../components/main/header/header';
@@ -19,7 +19,6 @@ _.defaultsDeep(AsideInstance.data, {
 AsideInstance.render($('#aside'));
 IframeInstance.render($('#content'));
 HeaderInstance.render($('#header'));
-
 
 
 // window.setTimeout(function () {

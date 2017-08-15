@@ -1,4 +1,4 @@
-import Mediator from '../../lib/mediator';
+import Mediator from './mediator';
 
 let SocketMgr = {
 
@@ -20,7 +20,7 @@ let SocketMgr = {
             SocketMgr.connect();
         };
         this.socket.onerror = function (event) {
-            console.log('socket error:' + event);
+            console.log(event);
         };
     },
 

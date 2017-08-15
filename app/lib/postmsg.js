@@ -171,13 +171,28 @@ export const PMAPI = {
     subscribe: function (channel, callback) {
         subscriber[channel] = callback;
     },
-
+    
+    /**
+     * 获取根框架的window
+     * @returns {*}
+     */
+    getRoot: function () {
+        function func(win) {
+            if (win.parent === win) {
+                return win;
+            } else {
+                return func(win.parent);
+            }
+        }
+        return func(window);
+    },
+    
     /**
      * 将消息发送给调用的父组件
      * @param data
      */
     sendToParent: function (data) {
-        window.parent.postMessage(data, location.origin);
+        this.getRoot().postMessage(data, location.origin);
     },
 
     /**
