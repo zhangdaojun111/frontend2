@@ -86,6 +86,11 @@ let config = {
         getValue: function () {
             return this.data.choosed;
         },
+        setChoosed: function (choosed) {
+            console.log(choosed);
+            this.data.choosed = choosed;
+            this.actions.renderChoosed();
+        },
         renderChoosed: function () {
             this.listWrap.find('input:checkbox:checked').each(function () {
                 this.checked = false;

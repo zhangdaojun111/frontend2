@@ -49,14 +49,16 @@ let config = {
     actions: {
         returnShow: function (param) {
             let res = [];
+            let text = [];
             for(let a of param){
                 for(let b in this.data.dropdown){
-                    if(a['id'] === this.data.dropdown[b]['id']){
+                    if(a === this.data.dropdown[b]['id']){
                         res.push(this.data.dropdown[b]);
+                        text.push(this.data.dropdown[b]['name']);
                     }
                 }
             }
-            return res;
+            return {res: res, text: text};
         },
 
         getSelectedValue: function () {
@@ -64,21 +66,19 @@ let config = {
         },
 
         checkForResSelected: function (forResText, forResId) {
-            console.log(forResText, forResId);
-            if(this.data.newSelectedOpts.length === 0) {
-                this.data.forResPreviewText = forResText;
-                this.el.find('.preview-text').html(this.data.preViewText + this.data.forResPreviewText);
-            } else{
-                for(let item of this.data.newSelectedOpts) {
-                    if(item['id'] === forResId) {
-                        return;
-                    } else {
-                        //this.data.multiSelectMenu.choosed.push({id: forResId, name: forResText});
-                        this.data.forResPreviewText = forResText;
-                        this.el.find('.preview-text').html(this.data.preViewText + this.data.forResPreviewText);
-                    }
+            let selectedOpts = this.data.multiSelectMenu.data.choosed;
+            let isInSelectedOpts = false;
+            for(let item of selectedOpts) {
+                if(forResId === item['id']) {
+                    isInSelectedOpts = true;
                 }
             }
+            if(!isInSelectedOpts) {
+                selectedOpts.push({id: forResId, name: forResText});
+                this.data.multiSelectMenu.actions.setChoosed(selectedOpts);
+                this.actions.checkSelectedOpts(selectedOpts);
+            }
+
         },
 
         checkSelectedOpts: function (newSelectedOpts) {
@@ -89,9 +89,7 @@ let config = {
                 selectedOptsId.push(newItem['id']);
             }
             this.data.preViewText = selectedOptsText;
-            this.el.find('.preview-text').html(selectedOptsText + this.data.forResPreviewText);
-            this.data.rowSetData['selectedOpts'] = selectedOptsId;
-            //console.log(selectedOptsText, selectedOptsId);
+            this.el.find('.preview-text').html(this.data.preViewText);
         },
 
         openSetRemind: function () {
@@ -104,6 +102,8 @@ let config = {
                 },{
                     emailStatus: this.data.rowSetData.email.email_status,
                     smsStatus: this.data.rowSetData.sms.sms_status,
+                    sms: this.data.rowSetData.sms,
+                    email: this.data.rowSetData.email,
                     recipients: this.data.recipients,
                     recipients_per: this.data.recipients_per,
                     copypeople: this.data.copypeople,
@@ -111,6 +111,8 @@ let config = {
                     emailAddress: this.data.emailAddress,
                 }).then(data => {
                 console.log(data);
+                this.data.rowSetData.email = data['email'];
+                this.data.rowSetData.sms = data['sms'];
                 let showMethod = '';
                 if(data['sms']['sms_status'] === '1') {
                     showMethod = '短信';
@@ -120,25 +122,36 @@ let config = {
                     showMethod = showMethod + ' ' + '邮件';
                     this.el.find('.set-remind-method').html(showMethod);
                 }
+                if(data['sms']['sms_status'] === '0' && data['email']['email_status'] === '0') {
+                    showMethod = '设置提醒方式';
+                    this.el.find('.set-remind-method').html(showMethod);
+                }
             });
-        }
+        },
+
 
     },
     afterRender: function () {
         // this.el.css({width: '100%'});
-        console.log(this.data.rowSetData);
+        console.log(this.actions.returnShow(this.data.rowSetData['selectedOpts']));
+
         let staus = false;
         let _this = this;
         let select_item_data = {
-            'list': this.data.dropdownForRes,
-            //choosed: this.data.rowSetData['selectedOpts'],
-            onSelect: function () {
-                _this.data.newSelectedOpts = _this.data.multiSelectMenu.data.choosed;
-                _this.actions.checkSelectedOpts(_this.data.newSelectedOpts);
+            'list': this.data.dropdown,
+            choosed: this.actions.returnShow(this.data.rowSetData['selectedOpts']).res,
+            onSelect: function (choosed) {
+                let choosedList = [];
+                for(let choosedItem of choosed) {
+                    choosedList.push(choosedItem['id']);
+                }
+                _this.data.rowSetData['selectedOpts'] = choosedList;
+                _this.actions.checkSelectedOpts(choosed);
             },
         };
         this.data.multiSelectMenu = new AutoSelect(select_item_data);
         this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
+
 
         this.el.find(".popup").css('z-index', 100, 'background-color', "white");
         this.el.find(".popup").css('background-color', "white");
@@ -157,6 +170,7 @@ let config = {
                 staus = false;
             }
         });
+
         this.el.on('click', '.set-show-text-input', () => {
 
             let isSetShowText = this.el.find('.set-show-text-input').is(':checked');
@@ -177,7 +191,6 @@ let config = {
             let textForResValue = this.el.find('.res-text option:selected').val();
             let textForResText = this.el.find('.res-text option:selected').text();
             this.actions.checkForResSelected(textForResText, textForResValue);
-
             this.data.rowSetData['selectedRepresents'] = textForResValue;
         }).on('change', '.page-change-text', () => {
             let valueForCalendarChangeValue = this.el.find('.page-change-text option:selected').val();
@@ -188,7 +201,7 @@ let config = {
             this.actions.openSetRemind();
         });
 
-        //this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']);
+        this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text;
         this.el.find('.preview-text').text(this.data.preViewText);
 
         $("#set-color-id").attr("id", "set-color-" + this.data.rowSetData.field_id);

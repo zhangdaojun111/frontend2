@@ -52,19 +52,39 @@ let config = {
                 MSG.alert( "已开启提醒的提醒时间不能为空" );
                 return;
             } else {
-                this.data.sms = {
-                    cc_receiver: this.data.smsCopyPeople,
-                    receiver: this.data.smsReciver,
-                    remind_time: this.data.smsRemindTime,
-                    sms_status: this.data.smsStatus,
-                };
-                this.data.email = {
-                    email_id: this.data.sendEmailAddressId,
-                    cc_receiver: this.data.emailCopyPeople,
-                    receiver: this.data.emailReciver,
-                    email_status: this.data.emailStatus,
-                    remind_time: this.data.emailRemindTime,
-                };
+                if(this.data.smsStatus === 0) {
+                    this.data.sms = {
+                        cc_receiver: [],
+                        receiver: [],
+                        remind_time: [],
+                        sms_status: this.data.smsStatus,
+                    };
+                } else {
+                    this.data.sms = {
+                        cc_receiver: this.data.smsCopyPeople,
+                        receiver: this.data.smsReciver,
+                        remind_time: this.data.smsRemindTime,
+                        sms_status: this.data.smsStatus,
+                    };
+                }
+                if(this.data.emailStatus === 0) {
+                    this.data.email = {
+                        email_id: '',
+                        cc_receiver: [],
+                        receiver: [],
+                        email_status: this.data.emailStatus,
+                        remind_time: '',
+                    };
+                } else {
+                    this.data.email = {
+                        email_id: this.data.sendEmailAddressId,
+                        cc_receiver: this.data.emailCopyPeople,
+                        receiver: this.data.emailReciver,
+                        email_status: this.data.emailStatus,
+                        remind_time: this.data.emailRemindTime,
+                    };
+                }
+
                 PMAPI.sendToParent({
                     type: PMENUM.close_dialog,
                     key: window.config.key,
@@ -84,6 +104,9 @@ let config = {
             this.data.recipients = params.data.recipients;
             this.data.copypeople = params.data.copypeople;
             this.data.recipients_per = params.data.recipients_per;
+            this.data.sms = params.data.sms;
+            this.data.email = params.data.email;
+            console.log(this.data.sms, this.data.email);
 
             if (this.data.smsStatus === '1') {
                 this.el.find('.open-sms-remind').addClass('checked');
@@ -99,12 +122,14 @@ let config = {
             // 短信收件人
             this.data.smsReceiverAutoSelect = new AutoSelect({
                 list: this.data.recipients_per,
+                choosed: this.data.sms.receiver,
             });
             this.append(this.data.smsReceiverAutoSelect, this.el.find('.remind-receiver-sms'));
 
             // 短信抄送人
             this.data.smsCopyPeopleAutoSelect = new AutoSelect({
                 list: this.data.copypeople,
+                choosed: this.data.sms.cc_receiver,
             });
             this.append(this.data.smsCopyPeopleAutoSelect, this.el.find('.remind-copy-for-sms'));
 
@@ -121,14 +146,19 @@ let config = {
             // 邮件收件人
             this.data.emailReceiverAutoSelect = new AutoSelect({
                 list: this.data.recipients,
+                choosed: this.data.email.receiver,
             });
             this.append(this.data.emailReceiverAutoSelect, this.el.find('.remind-receiver-email'));
 
             // 邮件抄送人
             this.data.emailCopyPeopleAutoSelect = new AutoSelect({
                 list: this.data.copypeople,
+                choosed: this.data.cc_receiver,
             });
             this.append(this.data.emailCopyPeopleAutoSelect, this.el.find('.remind-copy-for-email'));
+
+            this.el.find('.remind-time-sms').val(this.data.sms.remind_time);
+            this.el.find('.remind-time-email').val(this.data.email.remind_time);
         });
 
         let _this = this;

@@ -147,7 +147,7 @@ let config = {
                     this.append(calendarSetItem, this.el.find('.set-items'));
                 })
             }).catch(err=>{
-                console.log('error',err);
+                //console.log('error',err);
             });
         },
 
@@ -171,6 +171,7 @@ let config = {
         },
 
         reset: function(tableId){
+            console.log(tableId);
             for(let a of this.data.allRows){
                 a['isSelected']=false;
                 a['is_show_at_home_page']=false;
@@ -201,16 +202,16 @@ let config = {
                 }
             }
             CalendarSetService.resetCalendar(tableId,this.data.allRows).then(res=>{
-
+                console.log(this.data.allRows);
                 if(res['succ'] === "1"){
-                    MSG.showTips('重置成功');
+                    MSG.alert('重置成功');
                     this.data.isEdit=false;
                     //this.saveStatus.emit( res['success'] === "1" );
                     setTimeout( ()=>{
                         CalendarSetService.getColumnList(this.data.tableId)
                     },100 )
                 }else  if(res['succ'] === 0){
-                    MSG.showTips('重置失敗');
+                    MSG.alert('重置失敗');
                     //MSG.alert(res['error']);
                     // this.saveStatus.emit( res['success'] === "0" );
                 }
@@ -351,11 +352,11 @@ let config = {
         }).on('click', '.save-btn', () => {
             let newAllRowsData = [];
             for(let obj of this.data.childComponents) {
-                let a = obj.actions.getSelectedValue();
-                console.log(a);
+                console.log(obj.data.rowSetData);
                 newAllRowsData.push(obj.data.rowSetData);
             }
-            //_this.actions.saveSetting(this.data.tableId, newAllRowsData);
+            console.log(newAllRowsData);
+            _this.actions.saveSetting(this.data.tableId, newAllRowsData);
         });
 
     }
