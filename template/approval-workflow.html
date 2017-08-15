@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>审批说工作流</title>
+    <style>
+        #approval-workflow{
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+<script>
+
+        window.config = {{window_config|safe}};
+
+</script>
+<!-- <a href="/wf/index">发起工作流</a> -->
+<div id="approval-workflow"></div>
+
+{% ifequal window_type 'develop'%}
+<script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
+<script type="text/javascript" src="http://localhost:8080/scripts/approvalWorkflow.js"></script>
+{% else %}
+<link rel="stylesheet" href="/client/static/css/vendors.css">
+<link rel="stylesheet" href="/client/static/css/approvalWorkflow.css">
+<script type="text/javascript" src="/client/static/vendors.js"></script>
+<script type="text/javascript" src="/client/static/approvalWorkflow.js"></script>
+
+{% endifequal %}
+</body>
+</html>
