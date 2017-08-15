@@ -93,8 +93,7 @@ body{
   width: 100%;
   position: relative;
   .workflow-container{
-    padding: 10px;
-    background: rgb(235,235,235);
+    // padding: 10px;
   }
 }
 .wrap-box{
@@ -106,33 +105,34 @@ body{
   margin-bottom: 10px;
   .workflow-header-hd{
     background: #fff;
-    height: 52px;
+    height: 59px;
   }
   .workflow-header-bd{
-    background: #fff;
-    padding: 10px 0px 0 100px;
+    padding: 30px 0px 0 20px;
     .workflow-btn-list{
       margin-top: 20px;
     }
     .comm-operate{
-      background-color: #fff;
+      cursor: pointer;
       color: rgb(14, 122, 239);
       font-size: 12px;
       border: none;
       outline: none;
+      width: 24px;
       margin-left: 6px;
     }
   }
 
   .workflow-name{
-    width: 100px;
+    width: 121px;
     text-align: center;
+    padding-left: 20px;
   }
   .select-container{
     width: 300px;
     border: 1px solid #ddd;
     border-radius: 3px;
-    height: 30px;
+    height: 25px;
     line-height: 30px;
     position: relative;
   }
