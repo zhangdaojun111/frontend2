@@ -77,10 +77,10 @@
                 position: absolute;
                 left: 0;
                 top: 50%;
-                background: url(../../../../assets/images/util/tree/icon_unfold.png) no-repeat;
+                background: url(../../../../assets/images/workflow/workflow-icon.png) no-repeat -102px 0px;
                 width: 16px;
                 height: 16px;
-                background-size: contain;
+                //background-size: contain;
                 transform: translateY(-50%);
 
             }
@@ -100,10 +100,10 @@
                 position: absolute;
                 left: -18px;
                 top: 50%;
-                background: url(../../../../assets/images/util/tree/icon_leaf.png) no-repeat;
+                background: url(../../../../assets/images/workflow/workflow-icon.png) no-repeat -26px 0;
                 width: 16px;
                 height: 16px;
-                background-size: contain;
+                //background-size: contain;
                 transform: translateY(-50%);
 
             }

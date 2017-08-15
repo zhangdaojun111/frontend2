@@ -102,7 +102,6 @@ body{
   margin-bottom: 10px;
 }
 .workflow-header{
-  border-bottom: 1px solid rgba(228,228,228,1);
   .workflow-header-hd{
     background: #fff;
     height: 59px;
@@ -148,23 +147,27 @@ body{
 }
 #workflow-content{
   display: none;
-  .divBtn{
-    display: flex;
-    // margin-bottom: 10px;
-    height: 50px;
-    line-height: 50px;
-    background: rgba(250,250,250,1);
-    .Flow{
-      height: inherit;
-      padding: 0 15px;
-      margin-left: 10px;
-      cursor: pointer;
-    }
-    .selected{
-      color:rgba(0,136,255,1);
-      border-bottom: 1px solid rgba(0,136,255,1);
+  .workflow-btn{
+    margin-bottom: 10px;
+    .divBtn{
+      display: flex;
+      // margin-bottom: 10px;
+      height: 50px;
+      line-height: 50px;
+      background: rgba(250,250,250,1);
+      .Flow{
+        height: inherit;
+        padding: 0 15px;
+        margin-left: 10px;
+        cursor: pointer;
+      }
+      .selected{
+        color:rgba(0,136,255,1);
+        border-bottom: 1px solid rgba(0,136,255,1);
+      }
     }
   }
+
 }
 .blueBtn{
       padding: 0 10px;
@@ -220,6 +223,7 @@ body{
 }
 #workflow-form{
   display: block;
+  margin: 0 10px;
 }
 #workflow-grid{
   display: none;
