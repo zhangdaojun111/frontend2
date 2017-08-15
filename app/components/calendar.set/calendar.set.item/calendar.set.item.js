@@ -6,7 +6,7 @@ import template from './calendar.set.item.html';
 import './calendar.set.item.scss';
 import CalendarSetItemMulitSelect from "./calendar.set.item.multiselect/calendar.set.item.multiselect"
 import {CalendarService} from '../../../services/calendar/calendar.service';
-//import {PMAPI} from '../../../lib/postmsg';
+import {PMAPI} from '../../../lib/postmsg';
 import Mediator from '../../../lib/mediator';
 import {AutoSelect} from '../../util/autoSelect/autoSelect';
 import CalendarSetRemindMethod from './calendar.set.remind/calendar.set.remind';
@@ -40,7 +40,9 @@ let config = {
 
         preViewText: [],
 
-        addSelectedOpts: [],
+        forResPreviewText: '',
+
+        newSelectedOpts: [],
 
         multiSelectMenu: {},
     },
@@ -59,6 +61,37 @@ let config = {
 
         getSelectedValue: function () {
             //return this.data.multiSelectMenu.data.choosed;
+        },
+
+        checkForResSelected: function (forResText, forResId) {
+            console.log(forResText, forResId);
+            if(this.data.newSelectedOpts.length === 0) {
+                this.data.forResPreviewText = forResText;
+                this.el.find('.preview-text').html(this.data.preViewText + this.data.forResPreviewText);
+            } else{
+                for(let item of this.data.newSelectedOpts) {
+                    if(item['id'] === forResId) {
+                        return;
+                    } else {
+                        //this.data.multiSelectMenu.choosed.push({id: forResId, name: forResText});
+                        this.data.forResPreviewText = forResText;
+                        this.el.find('.preview-text').html(this.data.preViewText + this.data.forResPreviewText);
+                    }
+                }
+            }
+        },
+
+        checkSelectedOpts: function (newSelectedOpts) {
+            let selectedOptsId = [];
+            let selectedOptsText  = [];
+            for(let newItem of newSelectedOpts) {
+                selectedOptsText.push(newItem['name']);
+                selectedOptsId.push(newItem['id']);
+            }
+            this.data.preViewText = selectedOptsText;
+            this.el.find('.preview-text').html(selectedOptsText + this.data.forResPreviewText);
+            this.data.rowSetData['selectedOpts'] = selectedOptsId;
+            //console.log(selectedOptsText, selectedOptsId);
         }
 
     },
@@ -70,17 +103,8 @@ let config = {
         let select_item_data = {
             'list': this.data.dropdownForRes,
             onSelect: function () {
-                _this.data.addSelectedOpts = _this.data.multiSelectMenu.data.choosed;
-                let newSelectedOpts = _this.actions.returnShow(_this.data.addSelectedOpts);
-                let selectedOptsId = [];
-                let selectedOptsText  = [];
-                for(let newItem of newSelectedOpts) {
-                    console.log(newItem);
-                    selectedOptsText.push(newItem['name']);
-                    selectedOptsId.push(newItem['id']);
-                }
-                _this.el.find('.preview-text').html(selectedOptsText);
-                _this.data.rowSetData['selectedOpts'] = selectedOptsId;
+                _this.data.newSelectedOpts = _this.data.multiSelectMenu.data.choosed;
+                _this.actions.checkSelectedOpts(_this.data.newSelectedOpts);
             },
         };
         this.data.multiSelectMenu = new AutoSelect(select_item_data);
@@ -122,11 +146,13 @@ let config = {
         }).on('change', '.res-text', () => {
             let textForResValue = this.el.find('.res-text option:selected').val();
             let textForResText = this.el.find('.res-text option:selected').text();
-
+            this.actions.checkForResSelected(textForResText, textForResValue);
 
             this.data.rowSetData['selectedRepresents'] = textForResValue;
         }).on('change', '.page-change-text', () => {
             let valueForCalendarChangeValue = this.el.find('.page-change-text option:selected').val();
+            let textForCalendarChangeValue = this.el.find('.page-change-text option:selected').text();
+
             this.data.rowSetData['selectedEnums'] = valueForCalendarChangeValue;
         }).on('click', '.set-remind-method', () => {
             // CalendarSetRemindMethod.emailStatus = this.data.rowSetData.email.email_status;
@@ -142,26 +168,45 @@ let config = {
             // }).then(res => {
             //     console.log(res);
             // });
-            let component = new CalendarSetRemindMethod({
-                emailStatus: this.data.rowSetData.email.email_status,
-                smsStatus: this.data.rowSetData.sms.sms_status,
-                recipients: this.data.recipients,
-                recipients_per: this.data.recipients_per,
-                copypeople: this.data.copypeople,
-                emailAddressList: this.data.emailAddressList,
-                emailAddress: this.data.emailAddress,
+
+            PMAPI.openDialogByIframe(
+                '/iframe/calendarSetRemind/',
+                {
+                    width: "800",
+                    height: '400',
+                    title: '【'+ this.data.rowTitle.name + '】'+'的提醒'
+                },{
+                    emailStatus: this.data.rowSetData.email.email_status,
+                    smsStatus: this.data.rowSetData.sms.sms_status,
+                    recipients: this.data.recipients,
+                    recipients_per: this.data.recipients_per,
+                    copypeople: this.data.copypeople,
+                    emailAddressList: this.data.emailAddressList,
+                    emailAddress: this.data.emailAddress,
+            }).then(data => {
+
             });
-            let el = $('<div>').appendTo(document.body);
-            component.render(el);
-            el.dialog({
-                title: '主框架弹出',
-                width: 800,
-                height: 500,
-                close: function () {
-                    $(this).dialog('destroy');
-                    component.destroySelf();
-                }
-            });
+
+            // let component = new CalendarSetRemindMethod({
+            //     emailStatus: this.data.rowSetData.email.email_status,
+            //     smsStatus: this.data.rowSetData.sms.sms_status,
+            //     recipients: this.data.recipients,
+            //     recipients_per: this.data.recipients_per,
+            //     copypeople: this.data.copypeople,
+            //     emailAddressList: this.data.emailAddressList,
+            //     emailAddress: this.data.emailAddress,
+            // });
+            // let el = $('<div>').appendTo(document.body);
+            // component.render(el);
+            // el.dialog({
+            //     title: '主框架弹出',
+            //     width: 800,
+            //     height: 500,
+            //     close: function () {
+            //         $(this).dialog('destroy');
+            //         component.destroySelf();
+            //     }
+            // });
         });
 
         //this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']);
