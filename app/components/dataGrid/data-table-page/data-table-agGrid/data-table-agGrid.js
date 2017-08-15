@@ -656,13 +656,11 @@ let config = {
             this.data.filterParam['filter'] = filter;
             this.data.filterParam['is_filter'] = 1;
             this.actions.getGridData();
-            this.actions.getGridData();
         },
         postExpertSearch:function(data,id,name) {
             this.data.filterParam.expertFilter = data;
             this.data.filterParam.common_filter_id = id;
             this.data.filterParam.common_filter_name = name;
-            this.actions.getGridData();
             this.actions.getGridData();
         },
         //偏好赋值
@@ -790,6 +788,7 @@ let config = {
                     //赋值
                     this.agGrid.actions.setGridData(d);
                 }
+                this.pagination.actions.resetPagination( this.data.total )
                 this.actions.sortWay();
             })
             HTTP.flush();

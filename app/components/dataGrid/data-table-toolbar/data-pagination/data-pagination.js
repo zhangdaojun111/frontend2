@@ -17,7 +17,7 @@ let config = {
         //分页总数
         sumPage: 8,
         //分页后第一条是总数据多少条
-        firstRow: 1,
+        firstRow: 0,
         //rows可选项
         options: [100, 200, 300, 400, 500, 5000],
         tableId: ''
@@ -28,10 +28,13 @@ let config = {
 
         },
         //接受rows值和total值
-        getData:function () {
-            let totals=this.data.total;
-            let rows = this.actions.selectSize();
-            return [totals,rows];
+        resetPagination:function ( total ) {
+            console.log( "***********" )
+            console.log( "***********" )
+            console.log( total )
+            // let totals=this.data.total;
+            // let rows = this.actions.selectSize();
+            // return [totals,rows];
         },
 
         disableClick: function () {
