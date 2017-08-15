@@ -3,26 +3,12 @@ import Mediator from '../../../lib/mediator';
 import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui-timepicker-addon';
 import 'jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css';
+import template from  './date-control.html';
+import './date-control.scss';
 let config={
-    template:`<div class="clearfix">
-                {{#if unvisible}}
-                    <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                 {{else if be_control_condition }}
-                    <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                 {{else}}
-                <input type="text" style="width: 240px" value="{{value}}" class="ui-calendar" id="date_yy-mm-dd">                           
-                <span class="date-close">X</span>
-                <span style="" id="icon_rili">日历</span>
-                           {{#if required}}
-                                    <span id="requiredLogo" class="{{requiredClass}}" ></span>
-                           {{/if}}
-                           {{#if history}}
-                                <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>     
-                            {{/if}}       
-                      </div>
-                 {{/if}}
-            </div>`,
+    template:template,
     data:{
+        width:'240px'
     },
     actions:{
     },
@@ -34,6 +20,12 @@ let config={
     },
     afterRender:function(){
         let _this=this;
+        this.el.find('.ui-width').css('width',this.data.width);
+        if(this.data.is_view){
+            this.el.find('.ui-width').attr('disabled',true);
+        }else{
+            this.el.find('.ui-width').attr('disabled',false);
+        }
         //控制到年月日
         _this.el.find("#date_yy-mm-dd").val("年/月/日");
         _this.el.find("#date_yy-mm-dd").datepicker({
@@ -67,6 +59,7 @@ let config={
     },
     beforeDestory:function(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
+        Mediator.removeAll('form:history:'+this.data.tableId);
     }
 }
 export default class DateControl extends Component{
