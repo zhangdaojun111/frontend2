@@ -24,15 +24,20 @@ let config = {
         });
     },
     firstAfterRender() {
-        // Mediator.subscribe("bi:views:update", (val) => {
-        //     let views = this.data.views;
-        //     for(let view of views) {
-        //         if (val.id === view.id) {
-        //             view.name = val.name;
-        //             break;
-        //         };
-        //     };
-        // });
+        Mediator.subscribe("bi:views:update", (res) => {
+            let views = this.data.views;
+            if (res.view === 'remove') {
+                console.log('xxxxxxxxxxxxxxxxxxxxxxx');
+                for(let [index,view] of views.entries()) {
+                    if (res.data.id == view.id) {
+                        views.splice(index,1);
+                        break;
+                    }
+                };
+            }
+            window.config.bi_views = views;
+
+        });
 
         //弹出框
         this.el.on('click','.create', async()=> {

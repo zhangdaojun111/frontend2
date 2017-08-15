@@ -43,6 +43,7 @@ let config = {
                 data.view_id = this.data.id;
                 ViewsDelService.delData(data).then((res)=>{
                     if(res['success']===1){
+                        Mediator.publish('bi:views:update', {'view': 'remove', data: this.data});
                         this.destroySelf();
                     }else{
                         alert(res['error']);

@@ -8,6 +8,7 @@ import {FormBaseComponent} from './forms/base/base';
 import {FormEntryComponent} from './forms/entry';
 import {componentsJson} from './forms/loadFormChart.json';
 let component;
+let viewComponent;
 const BiAppRouter = Backbone.Router.extend({
     routes: {
         'views/edit':"routerViewsEditComponent",
@@ -18,7 +19,7 @@ const BiAppRouter = Backbone.Router.extend({
     },
     routerViewsComponent(id) {
         if (component) {
-            console.log(component.data);
+            component.data.views = window.config.bi_views
             component.destroyChildren();
             component.viewId = id;
             component.reload();
@@ -29,8 +30,15 @@ const BiAppRouter = Backbone.Router.extend({
         }
     },
     routerViewsEditComponent() {
-        let ViewsEdit = new ViewsEditComponent();
-        ViewsEdit.render($('#route-outlet'));
+        if (viewComponent) {
+            viewComponent.destroyChildren();
+            viewComponent.reload();
+        } else {
+            let ViewsEdit = new ViewsEditComponent();
+            viewComponent = ViewsEdit;
+            ViewsEdit.render($('#route-outlet'));
+        }
+
     },
     routerFormEntryComponent() {
         let form = new FormEntryComponent();
