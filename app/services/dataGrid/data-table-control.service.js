@@ -365,7 +365,8 @@ export const dgcService = {
             source_data: ['custom-column-btn','grid-auto-width'],
             count: ['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
             viewFromCorrespondence: ['correspondence-check','float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
-            editFromCorrespondence: ['float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width']
+            editFromCorrespondence: ['float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
+            in_process: ['float-search-btn','refresh-btn','grid-new-window']
         }
         return obj[viewMode];
     },

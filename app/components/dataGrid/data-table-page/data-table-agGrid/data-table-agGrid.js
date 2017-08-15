@@ -1131,32 +1131,35 @@ let config = {
             this.actions.customColumnClick();
             this.actions.groupBtnClick();
             //高级查询
-            $('.expert-search-btn').click( ()=>{
-                let d = {
-                    tableId: this.data.tableId,
-                    fieldsData: this.data.expertSearchFields,
-                    commonQuery: this.data.commonQueryData,
-                    commonQuerySelectLength:this.el.find('.dataGrid-commonQuery-select option').length
-                    // getExpertSearchData:this.actions.getExpertSearchData,
-                    // postExpertSearch:this.actions.postExpertSearch,
-                    // saveTemporaryCommonQuery:this.actions.saveTemporaryCommonQuery
-                }
-                PMAPI.openDialogByIframe(`/iframe/expertSearch/`,{
-                    width:1200,
-                    height:600,
-                    title:`高级查询`,
-                    modal:true
-                },{d}).then(res=>{
-                    if(res.type == 'temporaryQuery') {
-                        this.actions.postExpertSearch(res.value,res.id,res.name);
-                        this.el.find('.dataGrid-commonQuery-select').val(res.name);
-                    } if(res.appendChecked) {
-                        this.actions.appendQuerySelect()
-                    } if(res.saveCommonQuery || res.onlyclose == true) {
-                        this.actions.getExpertSearchData()
+            if( this.el.find( '.expert-search-btn' )[0] ){
+                this.el.find( '.dataGrid-commonQuery' )[0].style.display = 'block';
+                this.el.find( '.expert-search-btn' ).on( 'click',()=>{
+                    let d = {
+                        tableId: this.data.tableId,
+                        fieldsData: this.data.expertSearchFields,
+                        commonQuery: this.data.commonQueryData,
+                        commonQuerySelectLength:this.el.find('.dataGrid-commonQuery-select option').length
+                        // getExpertSearchData:this.actions.getExpertSearchData,
+                        // postExpertSearch:this.actions.postExpertSearch,
+                        // saveTemporaryCommonQuery:this.actions.saveTemporaryCommonQuery
                     }
-                })
-            } )
+                    PMAPI.openDialogByIframe(`/iframe/expertSearch/`,{
+                        width:1200,
+                        height:600,
+                        title:`高级查询`,
+                        modal:true
+                    },{d}).then(res=>{
+                        if(res.type == 'temporaryQuery') {
+                            this.actions.postExpertSearch(res.value,res.id,res.name);
+                            this.el.find('.dataGrid-commonQuery-select').val(res.name);
+                        } if(res.appendChecked) {
+                            this.actions.appendQuerySelect()
+                        } if(res.saveCommonQuery || res.onlyclose == true) {
+                            this.actions.getExpertSearchData()
+                        }
+                    })
+                } )
+            }
 
             //宽度自适应
             if( this.el.find( '.grid-auto-width' )[0] ){
