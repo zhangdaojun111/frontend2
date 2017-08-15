@@ -29,7 +29,7 @@ let config = {
             let views = this.data.views;
             if (res.view === 'remove') {
                 for(let [index,view] of views.entries()) {
-                    if (res.data.id == view.id) {
+                    if (res.data.id === view.id) {
                         views.splice(index,1);
                         break;
                     }

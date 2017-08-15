@@ -1,0 +1,107 @@
+$aside-bg: #374157;
+$section-bg: #60a998;
+$aside-a: #f8645c;
+$aside-a-last: #3b8cff;
+$charts-container-p: #4c576f;
+$active: #6b758a;
+$filter-match-bg: #eef0f5;
+$li-bg: #424e67;
+$li-even-bg: #353D53;
+$li-odd-bg: #374157;
+$li-hover: #0c6759;
+$btn_width: 16px;
+$font_size: 12px;
+
+.charts-items{
+  width: 100%;
+  height: 100%;
+  overflow: auto;//显示滚动条
+  font-size: 12px;
+  li{
+    position: relative;
+  }
+  li:hover{
+    background-color: $li-hover;
+  }
+  div:nth-child(even){
+    li{
+      background-color: $li-even-bg;
+    }
+  }
+  div:nth-child(odd){
+    li{
+      background-color: $li-odd-bg;
+    }
+  }
+  li{
+    display: inline-block;
+    width: 100%;
+    color: $li-bg;
+    cursor: move;
+    transition: all .3s;//hover时 过渡
+    p{
+      padding: 10px 15px;
+      overflow: hidden;
+      position: relative;
+      span{
+        float: left;
+        width: 160px;
+        margin-left: 3px;
+        color: #fff;
+        line-height: 20px;
+        height: 20px;
+        word-break: break-all;
+      }
+    }
+  }
+  .btn_ripple{
+    position: absolute;
+    right: 16px;
+    overflow: hidden;
+    text-align: center;
+    display: inline-block;
+    width: $btn_width;
+    height: $btn_width;
+    line-height: $btn_width;
+    padding: 2px;
+    color: #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    float: left;
+    margin-left: 30px;
+    display: none;
+  }
+  .btn_ripple:hover{
+    background-color: #353D53;
+  }
+}
+.hide_meun{
+  position: absolute;
+  left: 132px;
+  top: 0px;
+  z-index: 99;
+  width: 112px;
+  display: none;
+  .btn_box{
+    padding: 8px 0;
+    background-color: #ffffff;
+    box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+    .menuitem{
+      width: 100%;
+      cursor: pointer;
+      outline: none;
+      border: none;
+      white-space: nowrap;
+      line-height: 40px;
+      padding: 0 16px;
+      font-size: 16px;
+      text-align: start;
+      transition: all .3s;
+      background-color: #ffffff;
+    }
+    .menuitem:hover{
+      background-color: rgba(240, 240, 240, 0.87);
+    }
+  }
+}
