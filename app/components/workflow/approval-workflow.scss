@@ -1,0 +1,204 @@
+btn-div{
+  height: 30px;
+  background: #159951;
+  text-align: center;
+  padding: 0 10px;
+  line-height: 30px;
+  margin-right: 10px;
+  cursor: pointer;
+  color: #fff;
+  flex-shrink: 0;
+}
+#approval-workflow{
+  .wf-btn-box{
+    position: fixed;
+    bottom: 100px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .left{
+    display: flex;
+    div{
+      @extend btn-div;
+    }
+  }
+  .right{
+    display: flex;
+    div{
+      @extend btn-div;
+    }
+  }
+}
+*{
+  box-sizing: border-box;
+}
+body{
+  overflow: hidden;
+}
+#app-workflow{
+
+  .workflow-wrapper{
+
+  }
+  .workflow-container{
+    background: #ebebeb;
+    position: absolute;
+    width: 100%;
+    top: 30px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
+.workflow-container{
+  .approval-bar-f {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    min-width: 980px;
+    color: #000;
+    font-size: 14px;
+    z-index: 50;
+    .approval-bar {
+      background: rgba(14, 122, 239,0.4);
+      height: 30px;
+      margin: 0 10px;
+      padding: 0 10px;
+    }
+  }
+  
+  #preview-node{
+   .preview-node{
+     position: absolute;
+     top:31px;
+     left: 0;
+     width: 100%;
+     min-width: 980px;
+     font-size: 14px;
+     z-index: 51;
+     box-shadow:0px 5px 20px 1px #888;
+     background: #fff;
+     display: none;
+     #cloneId2 .workflow-draw-box{
+       transition: transform 0.5s ease-out;
+       transform: scale(1);
+     }
+     #cloneId2 .screen-fixed{
+       transform: scale(1);
+       position:fixed;
+       top: 0;
+       left: 0;
+       right: 0;
+       bottom: 0;
+       background-color: rgb(255, 255, 255);
+       width: 100%;
+       height: 100% !important;
+       overflow: auto;
+     }
+     #cloneId2 .screenClose-btn{
+       cursor: pointer;
+       font-size: 30px;
+       border: 1px solid rgb(221, 221, 221);
+       position: fixed;
+       right: 0;
+       top: 0;
+       padding: 10px;
+
+     }
+   }
+
+  }
+  ::-webkit-scrollbar{
+    width: 5px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb{
+    background-color: rgba(187, 220, 255, 1) !important;
+  }
+  ::-webkit-scrollbar-track{
+    background-color: rgba(240, 247, 255, 1) !important;
+  }
+}
+
+
+#app-workflow{
+  height: 100%;
+  position: relative;
+  .workflow-wrapper{
+    height: 100%;
+    .workflow-container{
+      
+    }
+  }
+  .workflow-main{
+    position: absolute;
+    width: 100%;
+    padding: 10px;
+    height: 100%;
+    overflow: auto;
+    top:0;
+  }
+  .workflow-record,.workflow-foot,#preview-node .preview-node {
+    .workflow-box {
+      background: #fff;
+      margin-bottom: 10px;
+      padding: 10px;
+      .workflow-box-l {
+        padding: 5px 0;
+        width: 100px;
+        flex-shrink: 0;
+        text-align: center;
+      }
+      .workflow-box-r {
+        flex-grow: 1;
+        padding: 5px 20px;
+        border-left: 1px solid rgb(201, 227, 255);
+        width: 100%;
+        overflow-x: auto;
+        .follow-name-list{
+          border: 1px solid #f2dede;
+          position: relative;
+          width: 80%;
+          min-height: 65px;
+          text-indent: 110px;
+          padding: 10px 5px;
+        }
+        .add-follow{
+          color: #fff;
+          padding: 5px 10px;
+          background: rgb(17,125,237);
+          margin-right: 10px;
+          position: absolute;
+          left: 10px;
+          top: 5px;
+          z-index: 1;
+        }
+        .approve-textarea{
+          width: 100%;
+          height: 66px;
+          border: 1px solid #f2dede;
+          textarea{
+            border: none;
+            outline: none;
+            width: 100%;
+            height: 100%;
+            resize: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+.addUser{
+  .flexBox{
+    display: flex;
+    #addUsercheck{
+      overflow: scroll;
+      height: 500px;
+      width: 300px;
+    }
+  }
+}
