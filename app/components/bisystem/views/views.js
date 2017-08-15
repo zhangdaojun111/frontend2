@@ -3,9 +3,11 @@ import {BiBaseComponent} from '../bi.base.component';
 import {ViewItemComponent} from "./item/item";
 
 import {ViewsService} from "../../../services/bisystem/views.service";
+import {ViewsSaveService} from "../../../services/bisystem/views.save.service";
 import {config as viewDialogConfig} from "./dialog/edit/dialog.edit";
 import {PMAPI} from '../../../lib/postmsg';
 import template from "./views.html";
+import msgbox from "../../../lib/msgbox";
 import  './views.scss';
 import Mediator from '../../../lib/mediator';
 
@@ -27,16 +29,21 @@ let config = {
         Mediator.subscribe("bi:views:update", (res) => {
             let views = this.data.views;
             if (res.view === 'remove') {
-                console.log('xxxxxxxxxxxxxxxxxxxxxxx');
                 for(let [index,view] of views.entries()) {
                     if (res.data.id == view.id) {
                         views.splice(index,1);
                         break;
                     }
-                };
+                }
+            }else{
+                for(let [index,view] of views.entries()) {
+                    if (res.id === view.id) {
+                        view.name = res.name;
+                        break;
+                    }
+                }
             }
             window.config.bi_views = views;
-
         });
 
         //弹出框
@@ -55,10 +62,19 @@ let config = {
                     }else{
                         alert(res['error']);
                     }
-                });
+                })
             }
             return false;
-        })
+        }).on('click','.save',()=> {
+           let views = this.data.views;
+           ViewsSaveService.saveData({data:views}).then((res)=>{
+               if(res['success']===1){
+                   alert('保存成功');
+               }else{
+                   alert(res['error']);
+               }
+           })
+        });
     }
 };
 

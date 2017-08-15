@@ -51,9 +51,7 @@ let config = {
                 });
             }
 
-        }).on('click','.save', ()=> {
-            msgbox.alert("保存成功");
-        });
+        })
     }
 };
 
