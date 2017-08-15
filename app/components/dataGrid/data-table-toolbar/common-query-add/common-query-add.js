@@ -3,7 +3,7 @@ import './common-query-add.scss';
 let addQuery = {
     template: template,
     data: {
-
+        name:null
     },
     actions: {
         btnClick: function () {
@@ -12,7 +12,7 @@ let addQuery = {
                     key: this.key,
                     type: PMENUM.close_dialog,
                     data: {
-                        value: $('.input').val()
+                        value: $('.query-name-input').val()
                     }
                 } )
             } )
@@ -28,6 +28,9 @@ let addQuery = {
         }
     },
     afterRender: function () {
+        if (this.data.name) {
+            $('.input').val(this.data.name);
+        }
         this.actions.btnClick();
     },
     beforeDestory: function () {

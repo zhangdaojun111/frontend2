@@ -31,18 +31,6 @@ let config={
         //     maxHeight: 400,
         //     numberDisplayed: 1
         // });
-        Mediator.subscribe('form:valueChange',function(data){
-            if(data.dfield !=_this.data.dfield){
-                return;
-            }
-            _this.data.value=data.value;
-            //重置必填样式
-            if(data.value=='' || data.value.length ==0 || data.value==null){
-                _this.el.find('#requiredLogo').get(0).className='required';
-            }else{
-                _this.el.find('#requiredLogo').get(0).className='required2';
-            }
-        });
         Mediator.subscribe('form:changeOption:'+_this.data.tableId,function(data){
             if( _this.data.dfield && res == _this.data.dfield ){
                 _this.data.value = [];
@@ -52,7 +40,6 @@ let config={
     },
     beforeDestory:function(){
         Mediator.removeAll('form:changeOption:'+this.data.tableId);
-        Mediator.removeAll('form:changeValue:'+this.data.tableId);
     }
 }
 export default class MultiSelectControl extends Component{
