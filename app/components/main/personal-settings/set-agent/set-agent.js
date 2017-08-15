@@ -88,11 +88,17 @@ let config = {
             let tempData = [];
             for(let row of this.originData.data.user_list){
                 if(row.name && row.name.trim() !== ''){
+                    row.py = row.f7_p.join(',');
                     tempData.push(row);
                 }
             }
             let autoSelect = new AutoSelect({
-                list: tempData
+                list: tempData,
+                multiSelect: true,
+                editable: false,
+                onSelect: function (choosed) {
+                    console.log(choosed);
+                }
             });
             this.atSelect = autoSelect;
             autoSelect.render($wrap);
@@ -252,5 +258,4 @@ export const agentSetting = {
     }
 }
 
-
-//agentSetting.show();
+// agentSetting.show();
