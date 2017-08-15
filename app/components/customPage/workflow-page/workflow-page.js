@@ -43,13 +43,16 @@ let config = {
         searchOldValue: [],
         //选择的数据
         selectRows: [],
+        //排序方式
+        frontendSort: true,
+        //排序参数
+        sortParam: {sortOrder:'',sortField:''},
         //定制列数据
         customColumnsFields: [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false}, {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false}, {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
     },
     actions: {
         //创建表头
         createColumnDefs: function () {
-            this.data.pageType = this.data.tableId2pageType[this.data.tableId];
             let cols = wchService.getWorkflowHeader( this.data.pageType );
             this.data.columnDefs = [dgcService.numberCol,dgcService.selectCol];
             let fixArr = this.data.fixCols.l.concat(this.data.fixCols.r);
@@ -106,9 +109,6 @@ let config = {
                 onRowDoubleClicked: this.actions.onRowDoubleClicked
             }
             this.agGrid = new agGrid(gridData);
-            console.log( "______________" )
-            console.log( "______________" )
-            console.log( this.el )
             this.append(this.agGrid , this.el.find('#workflow-agGrid'));
             this.actions.calcColumnState();
             //渲染分页
@@ -135,16 +135,6 @@ let config = {
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
             }
         },
-        //返回选择数据
-        retureSelectData: function () {
-            this.data.selectRows = [];
-            let rows = this.agGrid.gridOptions.api.getSelectedRows();
-            for( let r of rows ){
-                if( r._id ){
-                    this.data.selectRows.push( r._id );
-                }
-            }
-        },
         //分页刷新
         refreshData: function () {
 
@@ -154,7 +144,32 @@ let config = {
             if( this.data.tableId == 'my-workflow' ){
                 this.el.find( '.batch-cancel' )[0].style.display = 'inline-block';
                 this.el.find( '.batch-cancel' ).on( 'click',()=>{
-
+                    this.data.selectRows = [];
+                    let rows = this.agGrid.gridOptions.api.getSelectedRows();
+                    for( let r of rows ){
+                        this.data.selectRows.push( r.id );
+                    }
+                    if( this.data.selectRows.length == 0 ){
+                        msgBox.alert( '请选择要取消的数据！' )
+                    }else {
+                        msgBox.confirm( '确定取消？' ).then( res=>{
+                            if( res ){
+                                let json = {
+                                    checkIds: JSON.stringify(this.data.selectRows),
+                                    action:4,
+                                    type:1
+                                }
+                                workflowService.approveMany( json )
+                                    .then(data => {
+                                        if( data.success ){
+                                            msgBox.showTips( '取消成功' );
+                                        }else {
+                                            msgBox.alert( '取消失败：' + data.error );
+                                        }
+                                    })
+                            }
+                        } )
+                    }
                 } );
             }
             //floatingFilter
@@ -183,6 +198,7 @@ let config = {
         },
         //获取数据
         getData: function () {
+            this.data.pageType = this.data.tableId2pageType[this.data.tableId];
             let json = this.actions.createPostData();
             let obj1 = {
                 actions: JSON.stringify(['ignoreFields', 'fieldsOrder', 'pageSize', 'colWidth', 'pinned']),
@@ -204,6 +220,7 @@ let config = {
                     this.actions.setPreference( res[1] );
                     this.actions.renderGrid();
                 }
+                this.actions.sortWay();
             });
             HTTP.flush();
         },
@@ -323,8 +340,25 @@ let config = {
             this.customColumnsCom.actions.onFix();
             this.customColumnsCom.actions.dragAction();
         },
+        //排序方式
+        sortWay: function () {
+            this.data.frontendSort = this.data.total < this.data.rows?true:false;
+            console.log( '排序方式：' + (this.data.frontendSort ? '前端排序' : '后端排序') );
+            this.agGrid.gridOptions["enableServerSideSorting"] = !this.data.frontendSort;
+            this.agGrid.gridOptions["enableSorting"] = this.data.frontendSort;
+        },
         onSortChanged: function ($event) {
-            
+            if( this.data.frontendSort ){
+                return;
+            }
+            let data = this.agGrid.gridOptions.api.getSortModel()[0];
+            if (data) {
+                this.data.sortParam['sortOrder']= (data.sort == "desc" ? -1 : 1);
+                this.data.sortParam['sortField']=data.colId;
+            }else {
+                this.data.sortParam = {sortOrder:'',sortField:'',sort_real_type:''}
+            }
+            this.actions.getData();
         },
         onRowDoubleClicked: function ($event) {
         },

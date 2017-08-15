@@ -60,6 +60,7 @@ let config = {
             }
             let json = {};
             json = {
+                file:'upload_file',
                 table_id: this.data.tableId,
                 parent_table_id: this.data.parentTableId,
                 parent_real_id: this.data.parentRealId,
@@ -73,15 +74,9 @@ let config = {
                 json['use_increment_data'] = this.el.find( '.use_increment_data' )[0].value;
                 json['use_default_value'] = this.el.find( '.use_default_value' )[0].value;
             }
-            console.log( "___________" )
-            console.log( "___________" )
-            console.log( json )
             this.uploader.appendData( json )
 
             this.uploader.upload('/upload_data/',{},(event)=>{
-                console.log( "###########" )
-                console.log( "###########" )
-                console.log( event )
                 console.log('name:'+event.name+',code:'+event.code);
                 console.log(' position:'+(event.loaded||event.position) +",total:"+event.total);
             })
