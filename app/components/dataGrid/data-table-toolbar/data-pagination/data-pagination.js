@@ -31,6 +31,7 @@ let config = {
         getData:function () {
             let totals=this.data.total;
             let rows = this.actions.selectSize();
+            return [totals,rows];
         },
 
         disableClick: function () {
@@ -89,7 +90,6 @@ let config = {
             console.log(this.data.sumPage);
             if (this.data.currentPage===this.data.sumPage) {
                 this.el.find('.goLast').addClass('custom-disabled');
-                debugger
             }
         },
         //点击上一页
@@ -97,11 +97,13 @@ let config = {
             this.data.rows = this.el.find('.selectSize').val();
             this.data.sumPage = Math.ceil(this.data.total / this.data.rows);
             if (this.data.currentPage <= 2) {
+                this.el.find('.goFirst').removeClass('custom');
              this.el.find('.goFirst').addClass('custom-disabled');
             }
             if (this.data.currentPage > 1) {
                 this.data.currentPage -= 1;
                 this.el.find('.goLast').addClass('custom');
+
                 //this.actions.paginationChanged(this.data.currentPage,this.data.rows,this.data.firstRow);
                 this.data.firstRow = (this.data.rows * (this.data.currentPage - 1));
                 this.el.find('.current-page').html(this.data.currentPage);
@@ -115,16 +117,18 @@ let config = {
         },
         //点击第一页
         goFirst: function () {
-            this.el.find('.goFirst').addClass('custom-disabled');
-
             if (this.data.currentPage === 1) {
                 this.actions.disableClick();
+                this.el.find('.goFirst').addClass('custom-disabled');
             }
             else {
                 this.data.rows = this.el.find('.selectSize').val();
                 this.data.currentPage = 1;
                 this.data.firstRow = 0;
                 this.el.find('.goLast').addClass('custom');
+                this.el.find('.goFirst').removeClass('custom');
+                this.el.find('.goFirst').addClass('custom-disabled');
+                debugger;
                 this.el.find('.current-page').html(this.data.currentPage);
                 let obj = {
                     currentPage: this.data.currentPage,
@@ -151,6 +155,7 @@ let config = {
                 this.data.currentPage = this.data.sumPage;
                 this.data.firstRow = (this.data.sumPage - 1) * this.data.rows;
                 this.el.find('.goFirst').addClass('custom');
+                this.el.find('.goLast').removeClass('custom');
                 this.el.find('.goLast').addClass('custom-disabled');
                 this.el.find('.current-page').html(this.data.currentPage);
                 let obj = {
@@ -294,7 +299,7 @@ let config = {
         });
 
         this.el.on('click', '.current-page', () => {
-            debugger
+
             this.actions.clickCurrentPage();
         });
 
