@@ -18,6 +18,8 @@ let config = {
     id: null,
     name:'',
     isEdit: false,
+    saveCommonQuery: false,
+    itemChecked:false,
     itemDeleteChecked:false,
     optionHtmlOne : `<option value="$regex">包含</option>
                     <option value="exact">等于</option>
@@ -60,23 +62,25 @@ let config = {
         },
         // 获取查询数据
         submitData: function (name){
-            this.data.searchInputList = [];
-            for(let i = 0; i < this.data.searchInputAry.length; i++) {
-                let obj = {
-                    cond: {},
-                    relation:'$and'
+            if(!this.itemChecked){
+                this.data.searchInputList = [];
+                for(let i = 0; i < this.data.searchInputAry.length; i++) {
+                    let obj = {
+                        cond: {},
+                        relation:'$and'
+                    }
+                    obj['cond']['keyword'] = this.data.searchInputAry[i].inputValue;
+                    obj['cond']['leftBracket'] = this.data.searchInputAry[i].leftSelect;
+                    obj['cond']['operate'] = this.data.searchInputAry[i].relationSelect;
+                    obj['cond']['rightBracket'] = this.data.searchInputAry[i].rightSelect;
+                    obj['cond']['searchBy'] = this.data.searchInputAry[i].inputBoxValue
+                    obj['cond']['searchByName'] = this.data.searchInputAry[i].inputBoxName
+                    obj['cond']['searchByNew'] = this.data.searchInputAry[i].inputBoxValue
+                    if(this.el.find('.condition-search-radio.or').eq(i).prop('checked') == true) {
+                        obj['relation'] = '$or';
+                    }
+                    this.data.searchInputList.push(obj);
                 }
-                obj['cond']['keyword'] = this.data.searchInputAry[i].inputValue;
-                obj['cond']['leftBracket'] = this.data.searchInputAry[i].leftSelect;
-                obj['cond']['operate'] = this.data.searchInputAry[i].relationSelect;
-                obj['cond']['rightBracket'] = this.data.searchInputAry[i].rightSelect;
-                obj['cond']['searchBy'] = this.data.searchInputAry[i].inputBoxValue
-                obj['cond']['searchByName'] = this.data.searchInputAry[i].inputBoxName
-                obj['cond']['searchByNew'] = this.data.searchInputAry[i].inputBoxValue
-                if(this.el.find('.condition-search-radio.or').eq(i).prop('checked') == true) {
-                    obj['relation'] = '$or';
-                }
-                this.data.searchInputList.push(obj);
             }
             this.actions.checkedSubmitData(name)
         },
@@ -145,35 +149,22 @@ let config = {
                     if(name == 'save'){
                         this.actions.openSaveQuery(name);
                     } else {
-                        let agGrid = new dataTableAgGrid();
                         // this.data.saveTemporaryCommonQuery(this.data.searchInputList);
-                        let searchId = '临时高级查询',searchName = '临时高级查询',appendChecked = true,existChecked = true;
+                        let searchId = '临时高级查询',searchName = '临时高级查询',appendChecked = true;
                         this.data.commonQuery.forEach((item) => {
                             if(item.id == this.data.id) {
                                 searchId = item.id;
                                 searchName = item.name;
                                 appendChecked = false;
-                                agGrid.actions.setQuerySelectValue('item.value')
                             }
                         })
-                        if(appendChecked) {
-                            for(let i = 0; i < this.data.commonQuerySelectLength; i++) {
-                                if($('.dataGrid-commonQuery-select option').eq(i).html() == '临时高级查询'){
-                                    existChecked = false;
-                                    return false
-                                }
-                            }
-                            if(existChecked) {
-                                agGrid.actions.appendQuerySelect();
-                                agGrid.actions.setQuerySelectValue('临时高级查询');
-                            }
-                        }
-                        // this.data.postExpertSearch(this.data.searchInputList,searchId,searchName);
                         PMAPI.sendToParent( {
                             key: this.data.key,
                             type: PMENUM.close_dialog,
                             data: {
                                 type:'temporaryQuery',
+                                appendChecked:appendChecked,
+                                saveCommonQuery:this.saveCommonQuery,
                                 id:searchId,
                                 name:searchName,
                                 value: this.data.searchInputList
@@ -202,7 +193,7 @@ let config = {
         },
         //渲染常用查询按钮
         renderQueryItem: function(data){
-            data.data.forEach((item)=> {
+            data.forEach((item)=> {
                 this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
             })
         },
@@ -227,10 +218,20 @@ let config = {
                 if(res.succ == 0) {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
-                    this.data.getExpertSearchData();
-                    Mediator.on('renderQueryItem:itemData',data =>{
-                        this.actions.renderQueryItem(data);
-                    });
+                    this.actions.renderQueryItem(this.data.searchInputList)
+                    this.saveCommonQuery = true
+                    this.data.commonQuery.push({
+                        id:0,
+                        name:name,
+                        queryParams:JSON.stringify(this.data.searchInputList)
+                    })
+                    this.el.find('.common-search-item').remove();
+                    this.data.commonQuery.forEach((item)=> {
+                        this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
+                    })
+                    // Mediator.on('renderQueryItem:itemData',data =>{
+                    //     this.actions.renderQueryItem(data);
+                    // });
                 }
             });
             HTTP.flush();
@@ -246,10 +247,16 @@ let config = {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
                     this.actions.removeQueryItem(id)
+                    for(let i = 0; i <this.data.commonQuery.length; i++) {
+                        if (this.data.commonQuery[i].id == id){
+                            this.data.commonQuery.splice(i,1);
+                        }
+                    }
                 }
             } );
             HTTP.flush();
         },
+        //移除常用查询按钮
         removeQueryItem: function(id) {
             let itemLength = this.el.find('.common-search-item').length;
             let optionLength = this.el.find('.dataGrid-commonQuery-option').length;
@@ -265,6 +272,7 @@ let config = {
                 }
             }
         },
+        // 接受父组件传数据过来后
         afterGetMsg:function() {
             if(this.data.commonQuery.length == 0){
                 this.el.find('.common-search-compile').css('display','none')
@@ -295,6 +303,8 @@ let config = {
                     if(item.id == this.attributes['fieldId'].nodeValue){
                         _this.name = item.name;
                         _this.id = item.id;
+                        _this.itemChecked = true;
+                        _this.searchInputList = JSON.parse(item.queryParams);
                         _this.actions.showSearchData(JSON.parse(item.queryParams));
                         if(_this.itemDeleteChecked) {
                             _this.isEdit = true;

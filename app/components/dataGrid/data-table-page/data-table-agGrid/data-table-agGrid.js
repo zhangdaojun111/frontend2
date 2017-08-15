@@ -663,7 +663,6 @@ let config = {
             this.data.filterParam.common_filter_id = id;
             this.data.filterParam.common_filter_name = name;
             this.actions.getGridData();
-            this.actions.getGridData();
         },
         //偏好赋值
         setPreference: function (res) {
@@ -1129,9 +1128,13 @@ let config = {
                 },{d}).then(res=>{
                     if(res.type == 'temporaryQuery') {
                         this.actions.postExpertSearch(res.value,res.id,res.name);
+                        this.el.find('.dataGrid-commonQuery-select').val(res.name);
+                    } if(res.appendChecked) {
+                        this.actions.appendQuerySelect()
+                    } if(res.saveCommonQuery || res.onlyclose == true) {
+                        this.actions.getExpertSearchData()
                     }
                 })
-
             } )
 
             //宽度自适应
@@ -1223,10 +1226,14 @@ let config = {
             }
         },
         appendQuerySelect: function() {
-            $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
-        },
-        setQuerySelectValue: function(value) {
-            $('.dataGrid-commonQuery-select').val(value);
+            let length = this.el.find('.dataGrid-commonQuery-select option').length
+            for (let i = 0; i< length ;i++) {
+                if(this.el.find('.dataGrid-commonQuery-select option').eq(i).val() == '临时高级查询'){
+                    this.el.find('.dataGrid-commonQuery-select option').eq(i).remove()
+                }
+            }
+            this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
+            this.el.find('.dataGrid-commonQuery-select').val('临时高级查询');
         },
         //删除数据
         delTableData: function () {
@@ -1325,11 +1332,9 @@ let config = {
                     ary = this.actions.getDiffereceQuery(res.rows);
                 }
                 this.data.commonQueryData = res.rows;
-                // let epSearch = new expertSearch.expertSearch ();
-                // epSearch.actions.renderQueryItem(ary)
-                Mediator.emit('renderQueryItem:itemData',{data:ary});
+                // Mediator.emit('renderQueryItem:itemData',{data:ary});
                 ary.forEach((row) => {
-                    $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
+                    this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
                 });
                 //第一次请求footer数据
                 if( this.data.firstGetFooterData ){
