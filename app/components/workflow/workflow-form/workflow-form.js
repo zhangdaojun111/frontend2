@@ -26,7 +26,7 @@ let config = {
             let imgNode = this.el.find('.imgseal');
             // console.log(imgNode);
             let len = imgNode.length;
-            let arr = new Array();
+            let arr =[];
             for (let i=0;i<len;i++){
                 let id = imgNode[i].dataset.imgid;
                 let viewTop = imgNode[i].dataset.viewtop;
