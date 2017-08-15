@@ -1,24 +1,32 @@
 btn-div{
-  height: 30px;
-  background: #159951;
+  height: 24px;
+  background: #fff;
   text-align: center;
   padding: 0 10px;
-  line-height: 30px;
+  line-height: 24px;
   margin-right: 10px;
   cursor: pointer;
-  color: #fff;
+  color: #666;
   flex-shrink: 0;
+  border-radius: 4px;
 }
 #approval-workflow{
   .wf-btn-box{
-    position: fixed;
-    bottom: 100px;
+    position: absolute;
+    bottom: 0;
     display: flex;
     width: 100%;
     justify-content: space-between;
+    height: 40px;
+    align-items: center;
+    background: #e4e4e4;
+    z-index: 50;
   }
   .left{
     display: flex;
+    height: 24px;
+    line-height: 24px;
+    padding-left: 20px;
     div{
       @extend btn-div;
     }
