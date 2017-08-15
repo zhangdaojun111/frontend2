@@ -8,25 +8,23 @@
 import {BiBaseComponent} from '../../bi.base.component';
 import template from './base.html';
 import {fittings} from './base.config';
+
 let config = {
     template: template,
     data: {
         fittings: {}
     },
     actions: {},
-    afterRender() {
-        // console.log(this.name);
-    },
+    afterRender() {},
     firstAfterRender() {
         this.renderFittings();
     }
 }
 
 export class FormBaseComponent extends BiBaseComponent {
-    constructor(data = {}) {
+    constructor() {
         super(config);
-        // const fittingsGrop = Object.assign(data, fittings);
-        // this.groupFittings(fittingsGrop);
+        this.groupFittings(fittings);
     }
 
     /**
@@ -34,10 +32,9 @@ export class FormBaseComponent extends BiBaseComponent {
      * fittings 通过base.config + 初始化data获取
      */
     groupFittings(fittings) {
-        console.log(fittings);
-        // Object.keys(fittings).map(key => {
-        //     this.data.fittings[key] = new fittings[key];
-        // });
+        Object.keys(fittings).map(key => {
+            this.data.fittings[key] = new fittings[key];
+        });
     }
 
     /**

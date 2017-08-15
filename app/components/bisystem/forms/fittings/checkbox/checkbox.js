@@ -3,7 +3,7 @@
  * name checkbox组件
  */
 
-import {BiBaseComponent} from '../../../bi.base.component';
+import {FormFittingAbstract} from '../formAbstract'
 import template from './checkbox.html';
 import './checkbox.scss';
 
@@ -12,7 +12,7 @@ let config = {
     data: {},
 }
 
-export class CheckboxComponent extends BiBaseComponent {
+export class CheckboxComponent extends FormFittingAbstract{
     constructor() {
         super(config)
     }
