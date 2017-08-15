@@ -1,7 +1,6 @@
 import {BiBaseComponent} from '../../bi.base.component';
 
 import template from "./item.html";
-import "./item.scss";
 import {ViewsService} from "../../../../services/bisystem/views.service";
 import {ViewsDelService} from "../../../../services/bisystem/views.del.service";
 import {config as viewDialogConfig} from "../dialog/edit/dialog.edit";
