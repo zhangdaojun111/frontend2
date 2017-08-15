@@ -27,18 +27,23 @@ let config = {
         paginationChanged: function (obj) {//currentPage,rows,firstRow
 
         },
-
+        //接受rows值和total值
+        getData:function () {
+            let totals=this.data.total;
+            let rows = this.actions.selectSize();
+            return [totals,rows];
+        },
 
         disableClick: function () {
             $(this).unbind("click");
             $(this).addClass('custom-disabled');
-            // console.log(this.data.total)
         },
-
+        //监听下拉框
         selectSize: function () {
             this.data.currentPage = 1;
             this.data.firstRow = 0;
             this.data.rows=Number(this.el.find('.selectSize').val());
+            let selectedRows=this.data.rows;
             this.data.sumPage = Math.ceil(this.data.total / this.data.rows);
             console.log(this.data.sumPage);
             this.el.find('.current-page').html(this.data.currentPage);
@@ -60,8 +65,10 @@ let config = {
                 pageSize: Number(this.data.rows)
             });
             HTTP.flush();
+            return selectedRows;
         },
 
+        //点击下一页
         goNext:function () {
             this.data.rows = this.el.find('.selectSize').val();
             this.data.sumPage = Math.ceil(this.data.total/ this.data.rows);
@@ -81,20 +88,22 @@ let config = {
             }
             console.log(this.data.currentPage);
             console.log(this.data.sumPage);
-            if (this.data.currentPage===this.data.sumPage-2) {
+            if (this.data.currentPage===this.data.sumPage) {
                 this.el.find('.goLast').addClass('custom-disabled');
-                debugger
             }
         },
+        //点击上一页
         goPre: function () {
             this.data.rows = this.el.find('.selectSize').val();
             this.data.sumPage = Math.ceil(this.data.total / this.data.rows);
             if (this.data.currentPage <= 2) {
+                this.el.find('.goFirst').removeClass('custom');
              this.el.find('.goFirst').addClass('custom-disabled');
             }
             if (this.data.currentPage > 1) {
                 this.data.currentPage -= 1;
                 this.el.find('.goLast').addClass('custom');
+
                 //this.actions.paginationChanged(this.data.currentPage,this.data.rows,this.data.firstRow);
                 this.data.firstRow = (this.data.rows * (this.data.currentPage - 1));
                 this.el.find('.current-page').html(this.data.currentPage);
@@ -106,17 +115,20 @@ let config = {
                 this.actions.paginationChanged(obj);
             }
         },
+        //点击第一页
         goFirst: function () {
-            this.el.find('.goFirst').addClass('custom-disabled');
-
             if (this.data.currentPage === 1) {
                 this.actions.disableClick();
+                this.el.find('.goFirst').addClass('custom-disabled');
             }
             else {
                 this.data.rows = this.el.find('.selectSize').val();
                 this.data.currentPage = 1;
                 this.data.firstRow = 0;
                 this.el.find('.goLast').addClass('custom');
+                this.el.find('.goFirst').removeClass('custom');
+                this.el.find('.goFirst').addClass('custom-disabled');
+                debugger;
                 this.el.find('.current-page').html(this.data.currentPage);
                 let obj = {
                     currentPage: this.data.currentPage,
@@ -126,6 +138,7 @@ let config = {
                 this.actions.paginationChanged(obj);
             }
         },
+        //点击最后一页
         goLast: function () {
 
             if (this.data.total === 0) {
@@ -142,6 +155,7 @@ let config = {
                 this.data.currentPage = this.data.sumPage;
                 this.data.firstRow = (this.data.sumPage - 1) * this.data.rows;
                 this.el.find('.goFirst').addClass('custom');
+                this.el.find('.goLast').removeClass('custom');
                 this.el.find('.goLast').addClass('custom-disabled');
                 this.el.find('.current-page').html(this.data.currentPage);
                 let obj = {
@@ -152,6 +166,7 @@ let config = {
                 this.actions.paginationChanged(obj);
             }
         },
+        //点击当前页码
         clickCurrentPage: function () {
             if (this.data.total <= 0) {
                 this.data.currentPage = 1;
@@ -169,6 +184,7 @@ let config = {
                 this.el.find('.page').hide();
             }
         },
+        //点击确定
         confirm: function () {
             this.data.rows = this.el.find('.selectSize').val();
             let target = Number(this.el.find('.enter-number').val());
@@ -216,16 +232,17 @@ let config = {
                     this.el.find('.page').show();
                 }
 
-
                 if (target > this.data.sumPage) {
                     alert("最大页面是" + this.data.sumPage + "页")
                 }
             }
         },
+        //点击取消
         cancel: function () {
             this.el.find('.selectPage').hide();
             this.el.find('.page').show();
         },
+        //点击刷新
         refresh: function () {
             this.el.find('.ui-icon-refresh').addClass('rotate');
             setTimeout(() => {
@@ -258,54 +275,47 @@ let config = {
             this.actions.disableClick();
             this.el.find('.goLast').addClass('custom-disabled');
         }
-       
         this.data.currentPage = 1;
         this.actions.disableClick();
-
         this.data.rows = this.el.find('.selectSize').val();
         this.data.sumPage = Math.ceil(this.data.total / this.data.rows);
-        // console.log(this.data.sumPage+"SSS"+this.data.currentPage)
         if (this.data.currentPage === this.data.sumPage) {
             this.el.find('.goLast').addClass('custom-disabled');
-            this.el.find('.selectPage').hide();
-
-            this.el.on('click', '.goNext', () => {
-                this.actions.goNext();
-            });
-            this.el.on('click', '.goPre', () => {
-                this.actions.goPre();
-            });
-
-            this.el.on('click', '.goFirst', () => {
-                this.actions.goFirst();
-            });
-
-            this.el.on('click', '.goLast', () => {
-                this.actions.goLast();
-            });
-
-            this.el.on('click', '.current-page', () => {
-                debugger
-                this.actions.clickCurrentPage();
-            });
-
-            this.el.on('click', '.confirm', () => {
-                this.actions.confirm();
-            });
-            this.el.on('click', '.cancel', () => {
-                this.actions.cancel();
-            });
-            //刷新
-            this.el.on('click', '.ui-icon-refresh', () => {
-
-                this.actions.refresh();
-            });
-            this.el.on('change', '.selectSize', () => {
-                this.actions.selectSize();
-            });
-
-
         }
+
+        this.el.on('click', '.goNext', () => {
+            this.actions.goNext();
+        });
+        this.el.on('click', '.goPre', () => {
+            this.actions.goPre();
+        });
+
+        this.el.on('click', '.goFirst', () => {
+            this.actions.goFirst();
+        });
+
+        this.el.on('click', '.goLast', () => {
+            this.actions.goLast();
+        });
+
+        this.el.on('click', '.current-page', () => {
+
+            this.actions.clickCurrentPage();
+        });
+
+        this.el.on('click', '.confirm', () => {
+            this.actions.confirm();
+        });
+        this.el.on('click', '.cancel', () => {
+            this.actions.cancel();
+        });
+        this.el.on('click', '.ui-icon-refresh', () => {
+
+            this.actions.refresh();
+        });
+        this.el.on('change', '.selectSize', () => {
+            this.actions.selectSize();
+        });
     }
 };
 class dataPagination extends Component {
