@@ -113,7 +113,6 @@ let SettingPrint = {
            }
            HTTP.post('user_preference',{action:'save',content:JSON.stringify(_this.data.printTitles)}).then(res=>{
                    if(res.succ == 1){
-                       $('title').text(_this.data.myContent);
                        let isFrame=false;
                        $('iframe').each((index,obj)=>{
                            if(obj.src.indexOf(_this.data.key) != -1){
@@ -125,12 +124,13 @@ let SettingPrint = {
                            };
                        })
                        if(!isFrame){
+                           $('title').text(_this.data.myContent);
                            window.print();
+                           $('title').text(t);
                        }
                    }else{
                        _this.data.printTitles=tempPrintTitles;
                    }
-                   $('title').text(t);
                    PMAPI.sendToParent({
                        type: PMENUM.close_dialog,
                        key: _this.key,
