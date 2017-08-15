@@ -1,0 +1,84 @@
+.select-all{
+  .float-button-group-hide{
+    display: inline-block;
+    .float-button-group-show{
+      margin-top: -15px;
+      cursor: pointer;
+    }
+
+  }
+  .clear{
+    clear: both;
+  }
+  padding-top: 5px;padding-bottom: 5px;
+  .chk_1 {
+    display: none;
+  }
+  .chk_1 + label {
+    background-color: #FFF;
+    border: 1px solid #C1CACA;
+    padding: 6px;
+    display: inline-block;
+    position: relative;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  .label-select-all-checked + label:after {
+    content: '\2714' !important; //勾选符号
+    position: absolute !important;
+    top: -2px !important;
+    left: 0px !important;
+    color: #2398df !important;
+    width: 100% !important;
+    text-align: center !important;
+    font-size: 14px !important;
+    padding: 1px 0 0 0 !important;
+    vertical-align: text-top !important;
+  }
+}
+.float-button-group{
+  width:200px;
+  height:20px;
+  margin-right: 90px;
+  z-index: 5555;
+  position: absolute;
+  float: right;
+  font-size: 12px !important;
+  .hide-span:hover{
+    background-color: rgba(228, 228, 228, 1);
+  }
+  .hide-span{
+    width:130px;
+    display:block ;
+    background-color: rgb(255, 255, 255);
+    line-height: 30px;
+    margin-left: 10px;
+    padding-left: 30px;
+    font-size: 14px;
+    border: 1px solid #C1CACA;
+  }
+  .search-function{
+    display: none;
+    margin-left: 160px;
+    position: absolute;
+    margin-top:-30px;
+    z-index: 1000;
+    .search-function-children{
+      width:150px;
+      display:block ;
+      background-color: rgb(255, 255, 255);
+      line-height: 30px;
+      margin-left: 10px;
+      padding-left: 10px;
+      font-size: 14px;
+      border: 1px solid #C1CACA;
+    }
+    .search-function-children:hover{
+      background-color: rgba(228, 228, 228, 1);
+    }
+  }
+}
+
+
+
+
