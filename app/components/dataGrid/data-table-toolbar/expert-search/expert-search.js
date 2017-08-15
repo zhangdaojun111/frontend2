@@ -4,6 +4,7 @@ import expertCondition from './expert-search-condition/expert-search-condition';
 import {dataTableService} from '../../../../services/dataGrid/data-table.service';
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import {HTTP} from "../../../../lib/http";
+import Mediator from "../../../../lib/mediator"
 import addQuery from '../common-query-add/common-query-add.js';
 import msgBox from '../../../../lib/msgbox';
 import './expert-search.scss';
@@ -13,7 +14,6 @@ let config = {
     ulChecked: true,
     inputValue: null,
     radioId: 0,
-    searchInputList:[],
     optionHtmlOne : `<option value="$regex">包含</option>
                     <option value="exact">等于</option>
                     <option value="$ne">不等于</option>`,
@@ -25,6 +25,8 @@ let config = {
     data: {
         tableId: null,
         //高级查询字段信息
+        searchInputAry:[],
+        searchInputList:[],
         fieldsData: [],
         commonQuery: [],
         queryParams:[],
@@ -41,79 +43,58 @@ let config = {
     actions: {
         //渲染第一个查询条
         rendSearchItem: function(){
-            this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
-            $('.condition-search-item').css('marginLeft','97px');
-            $('.condition-search-radiobox').css('display','none');
-            $('.delete').css('display','none');
-        },
-        showList: function() {
-            $('.condition-search-ul').css('display','block');
-            config.ulChecked = !config.ulChecked;
-        },
-        hideList: function() {
-            $('.condition-search-ul').css('display','none');
-            config.ulChecked = !config.ulChecked;
+            this.data.searchInputAry = [];
+            let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
+            this.append(epCondition, this.el.find('.condition-search-container'));
+            this.data.searchInputAry.push(epCondition.data);
+            this.el.find('.condition-search-item').css('marginLeft','97px');
+            this.el.find('.condition-search-radiobox').css('display','none');
+            this.el.find('.delete').css('display','none');
         },
         // 获取查询数据
         submitData: function (name){
             this.data.searchInputList = [];
-            let itemList = document.querySelectorAll('.condition-search-item');
-            if (itemList.length <= 1) {
+            for(let i = 0; i < this.data.searchInputAry.length; i++) {
                 let obj = {
                     cond: {},
                     relation:'$and'
                 }
-                obj['cond']['keyword'] = document.querySelector('.condition-search-input').value;
-                obj['cond']['leftBracket'] = document.querySelector('.condition-search-select.left-select').value;
-                obj['cond']['operate'] = document.querySelector('.condition-search-select.relation').value;
-                obj['cond']['rightBracket'] = document.querySelector('.condition-search-select.right-select').value;
-                obj['cond']['searchBy'] = document.querySelector('.condition-search-box-input').name;
-                obj['cond']['searchByName'] = document.querySelector('.condition-search-box-input').value;
-                obj['cond']['searchByNew'] = document.querySelector('.condition-search-box-input').name;
-                this.data.searchInputList.push(obj);
-            } else {
-                for(let i = 0; i < itemList.length; i++) {
-                    let obj = {
-                        cond: {},
-                        relation:'$and'
-                    }
-                    obj['cond']['keyword'] = document.querySelectorAll('.condition-search-input')[i].value;
-                    obj['cond']['leftBracket'] = document.querySelectorAll('.condition-search-select.left-select')[i].value;
-                    obj['cond']['operate'] = document.querySelectorAll('.condition-search-select.relation')[i].value;
-                    obj['cond']['rightBracket'] = document.querySelectorAll('.condition-search-select.right-select')[i].value;
-                    obj['cond']['searchBy'] = document.querySelectorAll('.condition-search-box-input')[i].name;
-                    obj['cond']['searchByName'] = document.querySelectorAll('.condition-search-box-input')[i].value;
-                    obj['cond']['searchByNew'] = document.querySelectorAll('.condition-search-box-input')[i].name;
-                    debugger
-                    if($('.condition-search-radio.or').eq(i).prop('checked') == true) {
-                        obj['relation'] = '$or';
-                    }
-                    this.data.searchInputList.push(obj);
+                obj['cond']['keyword'] = this.data.searchInputAry[i].inputValue;
+                obj['cond']['leftBracket'] = this.data.searchInputAry[i].leftSelect;
+                obj['cond']['operate'] = this.data.searchInputAry[i].relationSelect;
+                obj['cond']['rightBracket'] = this.data.searchInputAry[i].rightSelect;
+                obj['cond']['searchBy'] = this.data.searchInputAry[i].inputBoxName
+                obj['cond']['searchByName'] = this.data.searchInputAry[i].inputBoxValue
+                obj['cond']['searchByNew'] = this.data.searchInputAry[i].inputBoxName
+                if(this.el.find('.condition-search-radio.or').eq(i).prop('checked') == true) {
+                    obj['relation'] = '$or';
                 }
+                this.data.searchInputList.push(obj);
             }
+            console.log(this.data.searchInputList);
             this.actions.checkedSubmitData(name)
         },
         //展示常用查询
         showSearchData: function(data) {
             let searchData = data;
-            $('.condition-search-container').find('div').remove();
+            this.el.find('.condition-search-container').find('div').remove();
             this.actions.rendSearchItem();
             for(let i = 0; i<searchData.length-1; i++) {
                 this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
             }
             for(let j = 0;j<searchData.length;j++) {
                 let html = this.actions.checkedRelationType(searchData[j]['cond']['searchByName']);
-                document.querySelectorAll('.condition-search-select.relation')[j].innerHTML = html
-                document.querySelectorAll('.condition-search-input')[j].value = searchData[j]['cond']['keyword'];
-                document.querySelectorAll('.condition-search-select.left-select')[j].value = searchData[j]['cond']['leftBracket'];
-                document.querySelectorAll('.condition-search-select.relation')[j].value = searchData[j]['cond']['operate'];
-                document.querySelectorAll('.condition-search-select.right-select')[j].value = searchData[j]['cond']['rightBracket'];
-                document.querySelectorAll('.condition-search-box-input')[j].name = searchData[j]['cond']['searchBy'];
-                document.querySelectorAll('.condition-search-box-input')[j].value = searchData[j]['cond']['searchByName'];
-                document.querySelectorAll('.condition-search-box-input')[j].name = searchData[j]['cond']['searchByNew'];
+                this.el.find('.condition-search-select.relation').eq(j).html(html)
+                this.el.find('.condition-search-input').eq(j).val(searchData[j]['cond']['keyword']);
+                this.el.find('.condition-search-select.left-select').eq(j).val(searchData[j]['cond']['leftBracket']);
+                this.el.find('.condition-search-select.relation').eq(j).val(searchData[j]['cond']['operate']);
+                this.el.find('.condition-search-select.right-select').eq(j).val(searchData[j]['cond']['rightBracket']);
+                this.el.find('.condition-search-box-input').eq(j).attr('name',searchData[j]['cond']['searchBy']);
+                this.el.find('.condition-search-box-input').eq(j).val(searchData[j]['cond']['searchByName']);
+                this.el.find('.condition-search-box-input').eq(j).attr('name',searchData[j]['cond']['searchByNew']);
                 if(searchData[j]['relation'] == "$or") {
-                    $('.condition-search-radio.or').eq(j).prop('checked',true);
-                    $('.condition-search-radio.and').eq(j).prop('checked',false);
+                    this.el.find('.condition-search-radio.or').eq(j).prop('checked',true);
+                    this.el.find('.condition-search-radio.and').eq(j).prop('checked',false);
                 }
             }
         },
@@ -158,7 +139,7 @@ let config = {
                     if(name == 'save'){
                         this.actions.openSaveQuery(name);
                     } else {
-                        $('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
+                        this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
                         this.data.saveTemporaryCommonQuery(this.data.searchInputList);
                         this.data.postExpertSearch(this.data.searchInputList);
                     }
@@ -181,8 +162,8 @@ let config = {
         },
         //渲染常用查询按钮
         renderQueryItem: function(data){
-            data.forEach((item)=> {
-                $('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
+            data.data.forEach((item)=> {
+                this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
             })
         },
         //保存临时常用查询
@@ -207,6 +188,9 @@ let config = {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
                     this.data.getExpertSearchData();
+                    Mediator.on('renderQueryItem:itemData',data =>{
+                        this.actions.renderQueryItem(data);
+                    });
                 }
             });
             HTTP.flush();
@@ -228,50 +212,50 @@ let config = {
             HTTP.flush();
         },
         removeQueryItem: function(id) {
-            let itemLength = $('.common-search-item').length;
-            let optionLength = $('.dataGrid-commonQuery-option').length;
+            let itemLength = this.el.find('.common-search-item').length;
+            let optionLength = this.el.find('.dataGrid-commonQuery-option').length;
             for(let i = 0; i < itemLength; i++) {
-                if($('.common-search-item').eq(i).attr('fieldId') == id){
-                    $('.common-search-item').eq(i).remove();
+                if(this.el.find('.common-search-item').eq(i).attr('fieldId') == id){
+                    this.el.find('.common-search-item').eq(i).remove();
                 }
 
             }
             for(let i = 0; i < optionLength; i++) {
-                if($('.dataGrid-commonQuery-option').eq(i).attr('fieldId') == id){
-                    $('.dataGrid-commonQuery-option').eq(i).remove();
+                if(this.el.find('.dataGrid-commonQuery-option').eq(i).attr('fieldId') == id){
+                    this.el.find('.dataGrid-commonQuery-option').eq(i).remove();
                 }
             }
         }
     },
     afterRender: function() {
-        let epCondition = new expertCondition();
+        console.log( this )
+        console.log( this.data )
+        PMAPI.subscribe(PMENUM.open_iframe_params, (res)=>{
+            console.log( "%%%%%%%%%%" )
+            console.log( "%%%%%%%%%%" )
+            console.log( res )
+        })
         if(this.data.commonQuery.length == 0){
-            $('.common-search-compile').css('display','none')
+            this.el.find('.common-search-compile').css('display','none')
         } else {
             this.data.commonQuery.forEach((item)=> {
-                $('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
+                this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
             })
         }
         this.actions.rendSearchItem();
         let _this = this,itemDeleteChecked=true;
-        this.el.on('click','.condition-search-box-input', function() {
-            if (config.ulChecked){
-                $(this).next('.condition-search-ul').css('display','block');
-                config.ulChecked = !config.ulChecked;
-            } else {
-                $(this).next('.condition-search-ul').css('display','none');
-                config.ulChecked = !config.ulChecked;
-            }
-            epCondition.actions.setInputObject($(this),$(this).parent().parent().find('.condition-search-input'))
-        }).on('click','.add',()=> {
-            this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
+        this.el.on('click','.add',()=> {
+            // this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
+            let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
+            this.append(epCondition, this.el.find('.condition-search-container'));
+            this.data.searchInputAry.push(epCondition.data);
         }).on('click','.condition-search-radio', function() {
             $(this).parent().parent('.condition-search-radiobox').find('.condition-search-radio').prop('checked',false);
             $(this).prop('checked',true)
         }).on('click','.searchButton', ()=> {
             this.actions.submitData()
         }).on('click','.resetButton',function(){
-            $('.condition-search-container').find('div').remove();
+            _this.el.find('.condition-search-container').find('div').remove();
             _this.actions.rendSearchItem();
         }).on('click','.common-search-item',function() {
             _this.data.commonQuery.forEach((item) => {
@@ -286,12 +270,12 @@ let config = {
             _this.actions.deleteCommonQuery($(this).parent('.common-search-item').attr('fieldId'))
         }).on('click','.common-search-compile',function(){
             if(itemDeleteChecked){
-                $('.common-search-list').find('.item-delete').css('display','block');
+                _this.el.find('.common-search-list').find('.item-delete').css('display','block');
                 $('.common-search-compile').html('取消');
                 itemDeleteChecked = !itemDeleteChecked;
             } else {
-                $('.common-search-list').find('.item-delete').css('display','none');
-                $('.common-search-compile').html('编辑');
+                _this.el.find('.common-search-list').find('.item-delete').css('display','none');
+                _this.el.find('.common-search-compile').html('编辑');
                 itemDeleteChecked = !itemDeleteChecked;
             }
 
@@ -309,20 +293,21 @@ class expertSearch extends Component {
         super(config)
     }
 }
-export default {
-    expertSearch:expertSearch,
-    show: function (d) {
-        let component = new expertSearch(d);
-        let el = $('<div>').appendTo(document.body);
-        component.render(el);
-        el.dialog({
-            title: '高级查询',
-            width: 1000,
-            height: 600,
-            close: function () {
-                $(this).dialog('destroy');
-                component.destroySelf();
-            }
-        });
-    }
-}
+// export default {
+//     expertSearch:expertSearch,
+//     show: function (d) {
+//         let component = new expertSearch(d);
+//         let el = $('<div>').appendTo(document.body);
+//         component.render(el);
+//         el.dialog({
+//             title: '高级查询',
+//             width: 1000,
+//             height: 600,
+//             close: function () {
+//                 $(this).dialog('destroy');
+//                 component.destroySelf();
+//             }
+//         });
+//     }
+// }
+export default expertSearch

@@ -22,10 +22,10 @@ let AddItem = {
         let _this=this;
         this.el.on('click', '#save', function () {
             let valPw = $(this).siblings("input").val();
-            if (valPw != '') {
-                    _this.data.newItems.push(valPw);
-                    _this.el.find('#inputShow').val(`${valPw}`);
-            }
+            // if (valPw != '') {
+            //         _this.data.newItems.push(valPw);
+            //         _this.el.find('#inputShow').val(`${valPw}`);
+            // }
             console.log(valPw)
                     PMAPI.sendToParent({
                         type: PMENUM.close_dialog,

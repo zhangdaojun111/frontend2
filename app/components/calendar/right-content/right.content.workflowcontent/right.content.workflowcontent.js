@@ -25,11 +25,11 @@ let config = {
         this.el.find(workflow_Id).css({"width":record_progress});
         this.el.on('click', '.workflow-content', () => {
             PMAPI.openDialogByIframe(
-                '/wf/approval/',
+                `/wf/approval/?record_id=${this.data['id']}&form_id=${this.data['form_id']}&table_id=${this.data['table_id']}&flow_id=${this.data['flow_id']}`,
                 {
                     width: "100%",
                     height: '900',
-                    title: '审批',
+                    modal: true
                 })
         })
     },

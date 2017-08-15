@@ -6,7 +6,8 @@ import WorkFlow from './workflow-drawflow/workflow';
 import WorkflowSeal from './workflow-seal/workflow-seal';
 import {workflowService} from '../../services/workflow/workflow.service';
 import msgBox from '../../lib/msgbox';
-import AddSigner from './add-signer';
+// import AddSigner from './add-signer';
+import {PMAPI,PMENUM} from '../../lib/postmsg';
 
 let config={
     template: template,
@@ -18,7 +19,10 @@ let config={
         node_id:null,
         workflowData:null,
         sigh_user_id:'',
+        nodeflowSize:1,
+
     },
+
     actions:{
         approveWorkflow (__this){
             (async function () {
@@ -30,23 +34,116 @@ let config={
                 console.log(res);
             })
         },
-        previewView:function (el,appendDiv,addFollow) {
+
+        previewViewBtn:function (el) {
+            let type=$(el).attr('id');
+            let container = this.el.find('#cloneId2').find('.workflow-draw-box');
+            let container2 = this.el.find('#cloneId2').find('#drawflow').find('.content');
+            let closeDiv=$('<div class="screenClose-btn">X</div>');
+            let nodeCssObj={
+                height:100,
+                transformOrigin:'0% 0%'
+            };
+            let screenCssObj={
+                transform: 'scale(1)',
+                position:'fixed',
+                top: '0',
+                left: '0',
+                right: '0',
+                bottom: '0',
+                backgroundColor: 'rgb(255, 255, 255)',
+                width: '100%',
+                height: '100%',
+                overflow: 'auto',
+            }
+            switch (type){
+
+                case 'zoomIn' :
+
+                    var  nodeflowSize=this.data.nodeflowSize+= 0.1;
+                    container.css({
+                        height:`${nodeCssObj.height*nodeflowSize+'px'}`,
+                        transform:`scale(${nodeflowSize})`,
+                        transformOrigin:`${nodeCssObj.transformOrigin}`
+                    });
+
+                    break;
+                case 'zoomOut' :
+                    var  nodeflowSize=this.data.nodeflowSize-= 0.1;
+                    container.css({
+                        height:`${nodeCssObj.height*nodeflowSize+'px'}`,
+                        transform:`scale(${nodeflowSize})`,
+                        transformOrigin:`${nodeCssObj.transformOrigin}`
+                    });
+                    break;
+                case 'newWin' :
+
+                    let screenBtn=$('.screenClose-btn');
+                    if(!screenBtn.length){
+                        container2.append(closeDiv);
+                    }else {
+                        container.css({
+                            transform: 'scale(1)',
+                            position:'fixed',
+                            top: '0',
+                            left: '0',
+                            right: '0',
+                            bottom: '0',
+                            backgroundColor: 'rgb(255, 255, 255)',
+                            width: '100%',
+                            height: '100%',
+                            overflow: 'auto',
+                        });
+                        screenBtn.show();
+                    }
+                    container.css({
+                        transform: 'scale(1)',
+                        position:'fixed',
+                        top: '0',
+                        left: '0',
+                        right: '0',
+                        bottom: '0',
+                        backgroundColor: 'rgb(255, 255, 255)',
+                        width: '100%',
+                        height: '100%',
+                        overflow: 'auto',
+                    });
+                    screenBtn.show();
+                    this.el.on("click",'.screenClose-btn',function (e) {
+                        e.stopPropagation();
+                        container.css({
+                            height:'100px',
+                            position:'relative',
+                            top: '0',
+                            left: '0',
+                            right: '0',
+                            bottom: '0',
+                            backgroundColor: '#fff',
+                            width: '100%',
+                            overflow: 'auto',
+                        }) ;
+                        $(this).hide();
+                    });
+                    break;
+            }
+        },
+        previewView:function (el,appendDiv) {
             let type=$(el).data("preview");
-
-
+            let addFollow=this.el.find("#add-home").clone(true).attr('id','cloneId1');
+            let flowNode=this.el.find("#flow-node").clone().attr('id','cloneId2');
+            let workflowRecord=this.el.find("#workflow-record").clone().attr('id','cloneId3');
             switch (type){
                 case 'follow-view' :
-                    let addFollow=this.el.find(".workflow-foot #add-follow").clone(true);
                     appendDiv.find(".preview-node1").html(addFollow);
                     appendDiv.find(".preview-node1").toggle().siblings().hide();
                     break;
                 case 'flow-view' :
-                    let flowNode=this.el.find(".workflow-foot #flow-node").clone();
+
                     appendDiv.find(".preview-node2").html(flowNode);
+                    $("#cloneId2").find('#togglePic').remove();
                     appendDiv.find(".preview-node2").toggle().siblings().hide();
                     break;
                 case 'record-view' :
-                    let workflowRecord=this.el.find(".workflow-record #workflow-record").clone();
                     appendDiv.find(".preview-node3").html(workflowRecord);
                     appendDiv.find(".preview-node3").toggle().siblings().hide();
                     break;
@@ -61,7 +158,6 @@ let config={
             }
         },
         appPass() {
-
             Mediator.publish('workflow:appPass');
             msgBox.confirm("你确定审核通过吗").then((res)=>{
                 if(res===true){
@@ -100,7 +196,7 @@ let config={
             container.style.height = h + 'px';
             container.style.marginTop = 0;
             container.style.margin = 0;
-            container.style.zIndex = '100';
+            container.style.zIndex = '99';
             container.style.overflow = 'auto';
             let ocloseSpan = document.createElement('span');
             ocloseSpan.className = 'closeSpan';
@@ -132,15 +228,16 @@ let config={
       
         this.el.on('click','.gz',(e)=>{
             this.actions.toogz(e);
-        })
-
-
+        });
         this.el.on('click','.close',function () {
             __this.el.find('.rejContainer').hide();
         });
         this.el.on('click',".preview-btn",function () {
             let appendDiv=__this.el.find("#preview-node");
             __this.actions.previewView($(this),appendDiv);
+        });
+        this.el.on("click",'.preview-node2 .previewBtn',function () {
+            __this.actions.previewViewBtn($(this))
         });
         this.el.on('click','#app-pass',function () {
             __this.actions.appPass();
@@ -159,49 +256,26 @@ let config={
         });
         this.el.on('click','#app-add',()=>{
             this.el.find('.addUser').show();
-        });
-        this.el.on('click','.addUser .close',()=>{
-            this.el.find('.addUser').hide();
+
+            PMAPI.openDialogByIframe(`/iframe/addSigner/`,{
+                width:1000,
+                height:800,
+                title:`加签节点`,
+                modal:true
+            }).then(res=>{
+                if(!res.onlyclose){
+                    console.log(res);
+                    Mediator.publish("approval:signUser",{
+                        sigh_type:res.sigh_type,
+                        sigh_user_id:res.sigh_user_id
+                    });
+                }
+            })
         });
 
         Mediator.subscribe("workflow:sendImgInfo",(e)=>{
             this.data.imgInfo=e;
         })
-
-        Mediator.subscribe('workflow:checkAdder', (res)=> {
-            $.each(res,(i,val)=>{
-                val.id=i;
-                this.append(new AddSigner(val), this.el.find('#addUsercheck'));
-            });
-        });
-
-        Mediator.subscribe('workflow:unCheckAdder', (res)=> {
-            let userArr=[];
-            for(var id in res){
-                userArr.push(id);
-            }
-            let domDiv=this.el.find('#addUsercheck').find('.flex');
-            for(var i=0;i<domDiv.length;i++){
-                for(var j=0;j<userArr.length;j++){
-                    if($(domDiv[i]).data('id')===userArr[j]){
-                        $(domDiv[i]).parent().remove();
-                    }
-                }
-            }
-            
-        });
-        this.el.on('click','[name="addUser"]',function(){
-            __this.data.sigh_user_id=this.value;
-            __this.el.find('#subAdder').removeAttr('disabled');
-        });
-        this.el.on('click','#subAdder',function(){
-            let sigh_type=__this.el.find('[name="addHandlerType"]:checked').val();
-            Mediator.publish("approval:signUser",{
-                sigh_type,
-                sigh_user_id:__this.data.sigh_user_id
-            });
-        });
-
     }
 };
 class ApprovalWorkflow extends Component{

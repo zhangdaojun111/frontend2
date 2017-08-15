@@ -69,10 +69,16 @@ export const IframeInstance = new Component({
                 let tab = $(`<div class="item" iframeid="${id}">${name}<a class="close" iframeid="${id}"></a></div>`)
                     .prependTo(this.data.tabs);
                 let iframe = $(`<div class="item"><iframe id="${id}" src="${url}"></iframe></div>`).appendTo(this.data.iframes);
+                let originIframe = iframe.find('iframe');
 
-                // IframeOnClick.track(iframe.find('iframe')[0], function () {
-                //    $('body').trigger('click')
-                // });
+                originIframe.on('load', function () {
+                    PMAPI.sendToChild(originIframe[0], {
+                        type: PMENUM.open_iframe_data,
+                        data: {
+                            iframe: 'load'
+                        }
+                    });
+                });
 
                 this.data.hash[id] = {id, url, name, tab, iframe};
                 this.data.sort.push(id);
@@ -162,6 +168,17 @@ export const IframeInstance = new Component({
                 this.actions.setSizeToFull();
             } else {
                 this.actions.setSizeToMini();
+            }
+        });
+
+        Mediator.on('socket:table_invalid', (info) => {
+            let item = this.data.hash[info.table_id];
+            if (!_.isUndefined(item)) {
+                let iframe = item.iframe[0];
+                PMAPI.sendToChild(iframe, {
+                    type: PMENUM.table_invalid,
+                    data: info
+                });
             }
         });
     },
