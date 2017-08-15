@@ -399,9 +399,9 @@ export const dgcService = {
     },
     //返回数据url
     returnIframeUrl( u,obj ){
-        let str = '?'
+        let str = '?';
         for( let o in obj ){
-            str += (o + '=' + obj[o] + '&')
+            str += (o + '=' + obj[o] + '&');
         }
         str = str.substring( 0,str.length - 1 );
         return u + str;

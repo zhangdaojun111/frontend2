@@ -34,9 +34,9 @@ let exportSetting = {
         },
         //返回数据url
         returnIframeUrl( u,obj ){
-            let str = '?'
+            let str = '?';
             for( let o in obj ){
-                str += (o + '=' + obj[o] + '&')
+                str += (o + '=' + obj[o] + '&');
             }
             str = str.substring( 0,str.length - 1 );
             return u + str;
@@ -49,6 +49,14 @@ let exportSetting = {
             this.actions.changeState( 'columns' );
         } ).on( 'click','#attachment',()=>{
             this.actions.changeState( 'attachment' );
+        } ).on( 'click','.export-btn',()=>{
+            PMAPI.sendToParent( {
+                key: this.key,
+                type: PMENUM.close_dialog,
+                data: {
+                    type: 'export'
+                }
+            } )
         } )
         this.actions.createUrl();
     },
