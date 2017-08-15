@@ -101,6 +101,7 @@ export class CanvasCellComponent extends BiBaseComponent {
 
         // 返回(下穿)上一层
         this.el.on('click', '.back-floor-btn', (event) => {
+            console.log('xxxxxxxxxxxxxxxxxxxxxxxxxx');
             let deepComponentId = this.el.find('.cell-chart').attr('component');
             Mediator.publish(`bi:deep${deepComponentId}:cell`, true);
             return false;
@@ -165,7 +166,9 @@ export class CanvasCellComponent extends BiBaseComponent {
         this.loadData = false;
         this.cell['chart'] = res[0];
         this.data = res[0];
+        this.data.biUser = window.config.bi
         this.cell.chart_id = chartId[0];
+        this.data.biUser = true;
         this.reload();
     }
 

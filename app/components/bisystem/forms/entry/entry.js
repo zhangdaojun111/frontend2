@@ -17,9 +17,7 @@ let config = {
         components:components
     },
     actions: {},
-    afterRender() {
-        console.log(this.data.components);
-    },
+    afterRender() {},
     firstRender() {}
 };
 

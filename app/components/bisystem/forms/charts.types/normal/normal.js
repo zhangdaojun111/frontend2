@@ -12,10 +12,14 @@ let config = {
         name: 'caihua'
     },
     actions: {},
-    afterRender() {},
+    afterRender() {
+        let base = new FormBaseComponent();
+        console.log('xxxxxxxxxxxxxxxxxxxxxxxx');
+        console.log(base);
+        this.append(base, this.el.find('.field'))
+    },
     firstAfterRender() {
-        this.base = new FormBaseComponent();
-        this.append(this.base, this.el.find('.field'))
+
     }
 }
 export class FormNormalComponent extends BiBaseComponent{
