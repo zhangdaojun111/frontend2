@@ -57,12 +57,12 @@ let config={
         let boolean = true;
         if(boolean){
             _this.el.on('click','#icon_rili',function(){
-                _this.el.find("input").datepicker('show');
+                _this.el.find("input").datetimepicker('show');
             });
             boolean = false;
         }else{
             _this.el.on('click','#icon_rili',function(){
-                _this.el.find("input").datepicker('hide');
+                _this.el.find("input").datetimepicker('hide');
             });
             boolean = true;
         }

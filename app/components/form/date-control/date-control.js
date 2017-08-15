@@ -3,6 +3,7 @@ import Mediator from '../../../lib/mediator';
 import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui-timepicker-addon';
 import 'jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css';
+import '../base-form/base-form.scss'
 let config={
     template:`<div class="clearfix">
                 {{#if unvisible}}
