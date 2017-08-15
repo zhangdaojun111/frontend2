@@ -58,7 +58,8 @@ let config = {
                 msgBox.alert( '请选择导入文件！' );
                 return;
             }
-            let json = {
+            let json = {};
+            json = {
                 table_id: this.data.tableId,
                 parent_table_id: this.data.parentTableId,
                 parent_real_id: this.data.parentRealId,
@@ -90,7 +91,7 @@ let config = {
             this.data.needMore = !this.data.needMore;
             let more = this.el.find( '.need-more' );
             for( let m of more ){
-                m.style.display = this.data.needMore?'inherit':'block';
+                m.style.display = this.data.needMore?'inherit':'none';
             }
         }
     },
@@ -104,17 +105,9 @@ let config = {
             //上传文件
             this.uploader.addFile( this.data.key ).then(res=>{
                 this.data.fileData = res;
-                //暂停传输
-                // setTimeout(()=>{
-                //     let codes = Object.keys(res);
-                //     uploader.pause('test1',codes[0]);
-                //     console.log('paused');
-                //     state = 'paused,test1,'+codes[0];
-                // },3000);
-                // this.uploader.upload('/upload_attachment/?is_image_type=0',{},(event)=>{
-                //     console.log('name:'+event.name+',code:'+event.code);
-                //     console.log(' position:'+(event.loaded||event.position) +",total:"+event.total);
-                // })
+                console.log( "_____________" )
+                console.log( "_____________" )
+                console.log( this.data.fileData )
             });
         } )
         this.el.on( 'click','.import-submit-btn',()=>{
