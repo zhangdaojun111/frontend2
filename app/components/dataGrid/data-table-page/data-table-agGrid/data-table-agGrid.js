@@ -1136,8 +1136,8 @@ let config = {
             } )
 
             //宽度自适应
-            if( $( '.grid-auto-width' )[0] ){
-                $( '.grid-auto-width' ).click( ()=>{
+            if( this.el.find( '.grid-auto-width' )[0] ){
+                this.el.find( '.grid-auto-width' ).on( 'click',()=>{
                     if( !this.data.isAutoWidth ){
                         this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
                         this.agGrid.actions.autoWidth();
@@ -1149,17 +1149,16 @@ let config = {
                 } )
             }
             //搜索
-            if( $( '.float-search-btn' )[0] ){
-                $( '.float-search-btn' ).click( ()=>{
-
+            if( this.el.find( '.float-search-btn' )[0] ){
+                this.el.find( '.float-search-btn' ).on( 'click',()=>{
                     let height = this.data.isShowFloatingFilter ? 0:30;
                     this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
                     this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
                 } )
             }
             //删除
-            if( $('.grid-del-btn')[0] ){
-                $( '.grid-del-btn' ).click( ()=>{
+            if( this.el.find('.grid-del-btn')[0] ){
+                this.el.find( '.grid-del-btn' ).on( 'click',()=>{
                     this.actions.retureSelectData();
                     delSetting.data['deletedIds'] = this.data.deletedIds;
                     PMAPI.openDialogByComponent(delSetting, {
@@ -1169,16 +1168,14 @@ let config = {
                         title: '删除'
                     }).then((data) => {
                         if( data.type == 'del' ){
-                            this.actions.delTableTable();
+                            this.actions.delTableData();
                         }
                     });
                 } )
             }
             //导入数据
-            if( $( '.grid-import-btn' )[0] ){
-                $('.grid-import-btn').click( function () {
-                    console.log( "###" )
-                    console.log( "###" )
+            if( this.el.find( '.grid-import-btn' )[0] ){
+                this.el.find('.grid-import-btn').on( 'click',()=>{
                     PMAPI.openDialogByComponent(importSetting, {
                         width: 400,
                         height: 600,
@@ -1186,17 +1183,16 @@ let config = {
                     }).then((data) => {
 
                     });
-                })
+                } )
             }
             //导出
-            if( $('.grid-export-btn')[0] ){
-                $('.grid-export-btn').click(()=> {
-
+            if( this.el.find('.grid-export-btn')[0] ){
+                this.el.find('.grid-export-btn').on( 'click',()=>{
                     this.actions.onExport()
-                })
+                } )
             }
             //全屏
-            if( $('.grid-new-window')[0] ) {
+            if( this.el.find('.grid-new-window')[0] ){
                 let url_obj = {
                     tableId: this.data.tableId,
                     formId: this.data.formId,
@@ -1212,11 +1208,11 @@ let config = {
                     base_buildin_dfield: this.data.base_buildin_dfield
                 }
                 let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', url_obj);
-                $('.grid-new-window').attr('href', url);
+                this.el.find('.grid-new-window').attr('href', url);
             }
             //新增数据
-            if( $( '.new-form-btn' )[0] ){
-                $( '.new-form-btn' ).click( ()=>{
+            if( this.el.find( '.new-form-btn' )[0] ){
+                this.el.find( '.new-form-btn' ).on( 'click',()=>{
                     let obj = { table_id: this.data.tableId,btnType: 'new' };
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
 
@@ -1226,7 +1222,7 @@ let config = {
             }
         },
         //删除数据
-        delTableTable: function () {
+        delTableData: function () {
             let json = {
                 table_id:this.data.tableId,
                 temp_ids:JSON.stringify([]),
@@ -1244,7 +1240,7 @@ let config = {
         },
         //定制列
         customColumnClick: function () {
-            if( $('.custom-column-btn')[0] ){
+            if( this.el.find('.custom-column-btn')[0] ){
                 this.el.find( '.custom-column-btn' ).on( 'click',()=>{
                     this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
                     this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
@@ -1255,7 +1251,7 @@ let config = {
         },
         //分组点击
         groupBtnClick: function () {
-            if( !$('.group-btn')[0] ){
+            if( !this.el.find('.group-btn')[0] ){
                 return;
             }
             this.el.on('click','.group-btn',()=> {
