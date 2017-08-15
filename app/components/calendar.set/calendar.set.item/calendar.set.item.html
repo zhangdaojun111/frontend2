@@ -1,0 +1,67 @@
+<tr class="singleRow">
+    <td class="set-table-item">
+        {{#if rowSetData.isSelected}}
+        <input type="checkbox" disabled class="editor-items set-show-text-input" checked>
+        {{else}}
+        <input type="checkbox" disabled class="editor-items set-show-text-input" >
+        {{/if}}
+    </td>
+    <td class="set-table-item">
+        {{#if rowSetData.is_show_at_home_page}}
+        <input type="checkbox" class="editor-items set-calendar-page-show-text" disabled checked>
+        {{else}}
+        <input type="checkbox" class="editor-items set-calendar-page-show-text" disabled >
+        {{/if}}
+    </td>
+    <td class="set-table-item">
+        {{rowTitle.name}}
+    </td>
+    <td class="set-table-item">
+        <input class="set-color editor-items" id="set-color-id" type="color" value="#8FF000" disabled>
+    </td>
+    <td class="set-table-item multi-select-item">
+
+    </td>
+
+    <td class="set-table-item">
+        <select class="res-text editor-items"  disabled>
+            {{#each dropdownForRes}}
+            <option class="testoption" value="{{this.id}}">{{this.name}}</option>
+            {{/each}}
+        </select>
+    </td>
+    <td class="set-table-item">
+        <select class="page-change-text editor-items" disabled>
+            {{#each dropdownForCalendarChange}}
+            <option class="testoption" value="{{this.id}}">{{this.name}}</option>
+            {{/each}}
+        </select>
+    </td>
+    <td class="set-table-item preview-text">
+        {{preViewText}}
+    </td>
+    <td class="set-table-item set-remind-method" disabled>
+        {{#if rowSetData.email.email_status}}
+        <span>邮件</span>
+        {{/if}}
+        {{#if rowSetData.sms.sms_status}}
+        <span>短信</span>
+        {{else}}
+        <span>设置提醒方式</span>
+        {{/if}}
+    </td>
+    <!--<td class="set-table-item">-->
+        <!--<a class="remind-type-editor" aria-disabled="true">编辑提醒方式</a>-->
+    <!--</td>-->
+    <td class="set-table-item">
+        {{#if isConfigField}}
+        <select class="config-text" disabled>
+            {{#each replaceDropDown}}
+            <option class="testoption" value="{{this.id}}">{{this.name}}</option>
+            {{/each}}
+        </select>
+        {{else}}
+        <span>不可配置</span>
+        {{/if}}
+    </td>
+</tr>
