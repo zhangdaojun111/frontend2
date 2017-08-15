@@ -7,6 +7,7 @@ import {HTTP} from "../../../../lib/http";
 import Mediator from "../../../../lib/mediator"
 import addQuery from '../common-query-add/common-query-add.js';
 import msgBox from '../../../../lib/msgbox';
+import dataTableAgGrid from '../../data-table-page/data-table-agGrid/data-table-agGrid'
 import './expert-search.scss';
 
 let config = {
@@ -14,6 +15,10 @@ let config = {
     ulChecked: true,
     inputValue: null,
     radioId: 0,
+    id: null,
+    name:'',
+    isEdit: false,
+    itemDeleteChecked:false,
     optionHtmlOne : `<option value="$regex">包含</option>
                     <option value="exact">等于</option>
                     <option value="$ne">不等于</option>`,
@@ -24,21 +29,23 @@ let config = {
                     <option value="$ne">不等于</option>`,
     data: {
         tableId: null,
+        key:'',
+        commonQuerySelectLength:null,
         //高级查询字段信息
         searchInputAry:[],
         searchInputList:[],
         fieldsData: [],
         commonQuery: [],
         queryParams:[],
-        postExpertSearch: function(data){
-
-        },
-        getExpertSearchData:function(data){
-
-        },
-        saveTemporaryCommonQuery:function(data){
-
-        }
+        // postExpertSearch: function(data){
+        //
+        // },
+        // getExpertSearchData:function(data){
+        //
+        // },
+        // saveTemporaryCommonQuery:function(data){
+        //
+        // }
     },
     actions: {
         //渲染第一个查询条
@@ -71,7 +78,6 @@ let config = {
                 }
                 this.data.searchInputList.push(obj);
             }
-            console.log(this.data.searchInputList);
             this.actions.checkedSubmitData(name)
         },
         //展示常用查询
@@ -139,9 +145,40 @@ let config = {
                     if(name == 'save'){
                         this.actions.openSaveQuery(name);
                     } else {
-                        this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
-                        this.data.saveTemporaryCommonQuery(this.data.searchInputList);
-                        this.data.postExpertSearch(this.data.searchInputList);
+                        let agGrid = new dataTableAgGrid();
+                        // this.data.saveTemporaryCommonQuery(this.data.searchInputList);
+                        let searchId = '临时高级查询',searchName = '临时高级查询',appendChecked = true,existChecked = true;
+                        this.data.commonQuery.forEach((item) => {
+                            if(item.id == this.data.id) {
+                                searchId = item.id;
+                                searchName = item.name;
+                                appendChecked = false;
+                                agGrid.actions.setQuerySelectValue('item.value')
+                            }
+                        })
+                        if(appendChecked) {
+                            for(let i = 0; i < this.data.commonQuerySelectLength; i++) {
+                                if($('.dataGrid-commonQuery-select option').eq(i).html() == '临时高级查询'){
+                                    existChecked = false;
+                                    return false
+                                }
+                            }
+                            if(existChecked) {
+                                agGrid.actions.appendQuerySelect();
+                                agGrid.actions.setQuerySelectValue('临时高级查询');
+                            }
+                        }
+                        // this.data.postExpertSearch(this.data.searchInputList,searchId,searchName);
+                        PMAPI.sendToParent( {
+                            key: this.data.key,
+                            type: PMENUM.close_dialog,
+                            data: {
+                                type:'temporaryQuery',
+                                id:searchId,
+                                name:searchName,
+                                value: this.data.searchInputList
+                            }
+                        })
                     }
                 } else {
                     msgBox.alert('运算括号出错')
@@ -150,6 +187,9 @@ let config = {
         },
         //打开保存常用查询
         openSaveQuery: function(){
+            if(this.isEdit) {
+                addQuery.data.name = this.name;
+            }
             PMAPI.openDialogByComponent(addQuery, {
                 width: 380,
                 height: 220,
@@ -205,7 +245,6 @@ let config = {
                 if(res.succ == 0) {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
-                    this.data.postExpertSearch()
                     this.actions.removeQueryItem(id)
                 }
             } );
@@ -225,62 +264,71 @@ let config = {
                     this.el.find('.dataGrid-commonQuery-option').eq(i).remove();
                 }
             }
-        }
-    },
-    afterRender: function() {
-        console.log( this )
-        console.log( this.data )
-        PMAPI.subscribe(PMENUM.open_iframe_params, (res)=>{
-            console.log( "%%%%%%%%%%" )
-            console.log( "%%%%%%%%%%" )
-            console.log( res )
-        })
-        if(this.data.commonQuery.length == 0){
-            this.el.find('.common-search-compile').css('display','none')
-        } else {
-            this.data.commonQuery.forEach((item)=> {
-                this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
-            })
-        }
-        this.actions.rendSearchItem();
-        let _this = this,itemDeleteChecked=true;
-        this.el.on('click','.add',()=> {
-            // this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
-            let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
-            this.append(epCondition, this.el.find('.condition-search-container'));
-            this.data.searchInputAry.push(epCondition.data);
-        }).on('click','.condition-search-radio', function() {
-            $(this).parent().parent('.condition-search-radiobox').find('.condition-search-radio').prop('checked',false);
-            $(this).prop('checked',true)
-        }).on('click','.searchButton', ()=> {
-            this.actions.submitData()
-        }).on('click','.resetButton',function(){
-            _this.el.find('.condition-search-container').find('div').remove();
-            _this.actions.rendSearchItem();
-        }).on('click','.common-search-item',function() {
-            _this.data.commonQuery.forEach((item) => {
-                if(item.id == this.attributes['fieldId'].nodeValue){
-                    _this.actions.showSearchData(JSON.parse(item.queryParams));
+        },
+        afterGetMsg:function() {
+            if(this.data.commonQuery.length == 0){
+                this.el.find('.common-search-compile').css('display','none')
+            } else {
+                this.data.commonQuery.forEach((item)=> {
+                    this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
+                })
+            }
+            this.actions.rendSearchItem();
+            this.itemDeleteChecked = false;
+            this.isEdit = false;
+            let _this = this;
+            this.el.on('click','.add',()=> {
+                // this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
+                let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
+                this.append(epCondition, this.el.find('.condition-search-container'));
+                this.data.searchInputAry.push(epCondition.data);
+            }).on('click','.condition-search-radio', function() {
+                $(this).parent().parent('.condition-search-radiobox').find('.condition-search-radio').prop('checked',false);
+                $(this).prop('checked',true)
+            }).on('click','.searchButton', ()=> {
+                this.actions.submitData()
+            }).on('click','.resetButton',function(){
+                _this.el.find('.condition-search-container').find('div').remove();
+                _this.actions.rendSearchItem();
+            }).on('click','.common-search-item',function() {
+                _this.data.commonQuery.forEach((item) => {
+                    if(item.id == this.attributes['fieldId'].nodeValue){
+                        _this.name = item.name;
+                        _this.id = item.id;
+                        _this.actions.showSearchData(JSON.parse(item.queryParams));
+                        if(_this.itemDeleteChecked) {
+                            _this.isEdit = true;
+                        }
+                    }
+                })
+            }).on('click','.save-button',()=> {
+                this.actions.submitData('save');
+            }).on('click','.item-delete',function(event) {
+                event.stopPropagation();
+                _this.actions.deleteCommonQuery($(this).parent('.common-search-item').attr('fieldId'))
+            }).on('click','.common-search-compile',function(){
+                if(!_this.itemDeleteChecked){
+                    _this.el.find('.common-search-list').find('.item-delete').css('display','block');
+                    $('.common-search-compile').html('取消');
+                    _this.itemDeleteChecked = !_this.itemDeleteChecked;
+                } else {
+                    _this.el.find('.common-search-list').find('.item-delete').css('display','none');
+                    _this.el.find('.common-search-compile').html('编辑');
+                    _this.itemDeleteChecked = !_this.itemDeleteChecked;
+                    _this.isEdit = false;
                 }
             })
-        }).on('click','.save-button',()=> {
-            this.actions.submitData('save');
-        }).on('click','.item-delete',function(event) {
-            event.stopPropagation();
-            _this.actions.deleteCommonQuery($(this).parent('.common-search-item').attr('fieldId'))
-        }).on('click','.common-search-compile',function(){
-            if(itemDeleteChecked){
-                _this.el.find('.common-search-list').find('.item-delete').css('display','block');
-                $('.common-search-compile').html('取消');
-                itemDeleteChecked = !itemDeleteChecked;
-            } else {
-                _this.el.find('.common-search-list').find('.item-delete').css('display','none');
-                _this.el.find('.common-search-compile').html('编辑');
-                itemDeleteChecked = !itemDeleteChecked;
+        }
+
+    },
+    afterRender: function() {
+        PMAPI.subscribe(PMENUM.open_iframe_params, (res)=>{
+            for (let item in res.data.d) {
+                this.data[item] = res.data.d[item]
             }
-
-
+            this.actions.afterGetMsg();
         })
+
 
     }
 
