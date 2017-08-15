@@ -39,6 +39,8 @@ let config = {
         emailAddress: '',
 
         preViewText: [],
+
+        multiSelectMenu: {},
     },
     actions: {
         returnShow: function(param){
@@ -52,14 +54,17 @@ let config = {
             }
             return res;
         },
+        getSelectedValue: function () {
+            //return this.data.multiSelectMenu.data.choosed;
+        }
 
     },
     afterRender: function() {
         // this.el.css({width: '100%'});
         let staus = false;
         let select_item_data = {'list':this.data.dropdownForRes};
-        let multi_select_item = new AutoSelect(select_item_data);
-        this.append(multi_select_item, this.el.find('.multi-select-item'));
+        this.data.multiSelectMenu = new AutoSelect(select_item_data);
+        this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
 
 
         this.el.find(".popup").css('z-index',100,'background-color',"white");
@@ -88,7 +93,8 @@ let config = {
         }).on('change', '.set-color', () => {
             let setColor = this.el.find('.set-color').val();
             this.data.rowSetData['color'] = setColor;
-        }).on('change', '.add-show-text', () => {
+        }).on('click', '.add-show-text', () => {
+
             // let addShowTextValue = this.el.find('.add-show-text option:selected').val();
             // let addShowText = this.el.find('.add-show-text option:selected').text();
             // this.data.preViewText.push(addShowText);

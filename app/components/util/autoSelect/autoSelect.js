@@ -25,10 +25,15 @@ let config = {
                 });
                 this.data.choosed = choosed;
             } else {
-                this.data.choosed = [{
-                    id: item.data('id'),
-                    name: item.data('name')
-                }];
+                let checked = item.find('input:checkbox')[0].checked;
+                if (checked) {
+                    this.data.choosed = [{
+                        id: item.data('id'),
+                        name: item.data('name')
+                    }];
+                } else {
+                    this.data.choosed = [];
+                }
             }
             this.actions.renderChoosed();
         },
@@ -51,6 +56,7 @@ let config = {
                 this.listWrap.find(`li[data-name*=${value}]`).show();
             }
         },
+
         showSelectBox: function () {
             this.listWrap.show();
         },

@@ -265,7 +265,7 @@ let config = {
                 console.log(res);
                 if(res['succ'] === 1){
                     console.log('success');
-                    MSG.showTips("保存成功");
+                    MSG.alert("保存成功");
                     setTimeout( ()=>{
                         CalendarSetService.getColumnList(this.data.tableId)
                     },100 );
@@ -358,9 +358,11 @@ let config = {
         }).on('click', '.save-btn', () => {
             let newAllRowsData = [];
             for(let obj of this.data.childComponents) {
+                let a = obj.actions.getSelectedValue();
+                console.log(a);
                 newAllRowsData.push(obj.data.rowSetData);
             }
-            _this.actions.saveSetting(this.data.tableId, newAllRowsData);
+            //_this.actions.saveSetting(this.data.tableId, newAllRowsData);
         });
 
     }
