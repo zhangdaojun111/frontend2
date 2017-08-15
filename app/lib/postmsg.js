@@ -89,7 +89,7 @@ window.addEventListener('message', function (event) {
                 break;
             case PMENUM.open_iframe_dialog:
                 let url = URL.getUrl(data.url, {key: data.key});
-                let element = $(`<iframe src="${url}">`);
+                let element = $(`<iframe data-key="${data.key}" src="${url}">`);
                 dialogHash[data.key] = {
                     iframe: event.source,
                     element: element.appendTo(document.body)

@@ -7,8 +7,8 @@ let girdExport = {
     },
     actions: {
         btnClick: function () {
-            this.actions.getCheckBoxValue()
             $( '.save-btn' ).click( ()=>{
+                this.actions.getCheckBoxValue()
                 PMAPI.sendToParent( {
                     key: this.key,
                     type: PMENUM.close_dialog,
@@ -28,8 +28,9 @@ let girdExport = {
             } )
         },
         getCheckBoxValue: function(){
-            debugger
-            // $('.ecport-input')
+            console.log($('#condition').is(':checked'))
+            console.log($('#columns').is(':checked'))
+            console.log($('#accessory').is(':checked'))
         }
     },
     afterRender: function () {

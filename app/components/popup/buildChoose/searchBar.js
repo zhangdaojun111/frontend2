@@ -1,5 +1,4 @@
 import Component from "../../../lib/component";
-import {HTTP} from "../../../lib/http";
 import Mediator from "../../../lib/mediator";
 import './searchBar.scss';
 import {FormService} from "../../../services/formService/formService";
@@ -30,35 +29,34 @@ let config={
     actions:{
 
     },
-    firstAfterRender(){
+    async firstAfterRender(){
         let _this=this;
         _this.set('childDropDown',[]);
-        FormService.getColumnList(_this.data.tableId).then(res=>{
-            _this.data.rows=res.rows;
-            let d={
-                options:[],
-                index:1,
-                showValue:'请选择',
-                value:'',
-            }
+        let res=await FormService.getColumnList(_this.data.tableId)
+        _this.data.rows=res.rows;
+        let d={
+            options:[],
+            index:1,
+            showValue:'请选择',
+            value:'',
+        }
+        d.options.push({
+            label: "请选择",
+            value: "0"
+        });
+        for(let i of res['rows']) {
             d.options.push({
-                label: "请选择",
-                value: "0"
+                label: i["name"],
+                value: i["name"]
             });
-            for(let i of res['rows']) {
-                d.options.push({
-                    label: i["name"],
-                    value: i["name"]
-                });
-            }
-            let dropDown=new DropDown(d);
-            let dropDown2=new DropDown(_this.data.searchTerms);
-            _this.childDropDown.push(dropDown);
-            _this.childDropDown.push(dropDown2);
-            _this.append(dropDown,_this.el.find('.ui-box-1'));
-            _this.append(dropDown2,_this.el.find('.ui-box-1'));
-        })
-        _this.el.on('click','.select',function(){
+        }
+        let dropDown=new DropDown(d);
+        let dropDown2=new DropDown(_this.data.searchTerms);
+        _this.childDropDown.push(dropDown);
+        _this.childDropDown.push(dropDown2);
+        _this.append(dropDown,_this.el.find('.ui-box-1'));
+        _this.append(dropDown2,_this.el.find('.ui-box-1'));
+        _this.el.on('click','.select',async function(){
             let selectedTerm =_this.childDropDown[1]['data'].value;
             let selectedField =_this.childDropDown[0]['data'].value;
             let keyword=_this.el.find('.searchBar').val();
@@ -74,13 +72,10 @@ let config={
                 table_id: _this.data.tableId,
                 queryParams: JSON.stringify(queryParams)
             };
-            FormService.searchByChooser(json).then(res=>{
-                _.debounce(function(){Mediator.publish('form:chooseSelect',res['data'])},300)();
-            });
-            HTTP.flush();
+            let res=FormService.searchByChooser(json)
+            _.debounce(function(){Mediator.publish('form:chooseSelect',res['data'])},300)();
         })
         _this.el.on('click','.confirm',function(){
-            console.log('11111111');
            _.debounce(function(){Mediator.publish('form:chooseConfirm','isConfirm')},300)();
         });
     }

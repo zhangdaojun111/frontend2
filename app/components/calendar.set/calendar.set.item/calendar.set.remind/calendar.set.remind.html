@@ -1,52 +1,104 @@
-<table>
-    <tr>
-        <td>短信提醒</td>
-        <td>邮件提醒</td>
-    </tr>
-    <tr>
-        <span class="remind-method"></span>
-        <button>开启</button>
-        <button>关闭</button>
-    </tr>
-    {{#if sms}}
-    <table>
+<div class="remind-dom-content">
+    <table class="set-remind-container">
+        <tr class="set-row-title">
+            <td class="remind-method-title sms-remind middle-border unchecked">短信提醒</td>
+            <td class="remind-method-title email-remind">邮件提醒</td>
+        </tr>
+        <!--<tr>
+            {{#if sms}}
+            <span class="remind-method"></span>
+            {{else}}
+            <span class="remind-method"></span>
+            {{/if}}
+            <button>开启</button>
+            <button>关闭</button>
+        </tr>-->
+    </table>
+    <table class="remind-table-content sms">
+        <tr class="remind-table-row remind-state">
+            <td class="remind-state-td"  colspan='2'>
+                <span>短信提醒状态：</span>
+                <span class="change-state-btn open-sms-remind checked">开启</span>
+                <span class="change-state-btn close-sms-remind">关闭</span>
+            </td>
 
-        <tr>
-            <td>收信人：</td>
-            <td></td>
         </tr>
-        <tr>
-            <td>抄送人：</td>
-            <td></td>
+        <tr class="remind-table-row">
+            <td class="remind-row-label">收信人：</td>
+            <td class="remind-receiver-sms">
+                <!--<select class="select-input" name="sms-op-receiver" id="sms-op-receiver">-->
+                    <!--<option value={{defaultSmsReceiver.id}} id="default-sms-receiver">{{defaultSmsReceiver.name}}</option>-->
+                    <!--{{#each recipients_per}}-->
+                    <!--<option value={{this.id}}>{{this.name}}</option>-->
+                    <!--{{/each}}-->
+                <!--</select>-->
+            </td>
         </tr>
-        <tr>
-            <td>提醒时间</td>
+        <tr class="remind-table-row">
+            <td class="remind-row-label">抄送人：</td>
+            <td class="remind-copy-for-sms">
+                <!--<select class="select-input" name="sms-op-receiver" id="sms-op-copypeople">-->
+                    <!--<option value={{defaultCopyPeople.id}} id="default-sms-copypeople">{{defaultCopyPeople.name}}</option>-->
+                    <!--{{#each copypeople}}-->
+                    <!--<option value={{this.id}}>{{this.name}}</option>-->
+                    <!--{{/each}}-->
+                <!--</select>-->
+            </td>
+        </tr>
+        <tr class="remind-table-row">
+            <td class="remind-row-label">提醒时间</td>
             <td>
-                <input type="date">
+                <input type="time" class="remind-time-sms">
             </td>
         </tr>
     </table>
-    {{else}}
-    <table>
-        <tr>
-            <td>发信箱：</td>
-            <td></td>
+    <table class="remind-table-content email" style="display: none">
+        <tr class="remind-table-row remind-state">
+            <td class="remind-state-td"  colspan='2'>
+                <span>邮件提醒状态：</span>
+                <span class="change-state-btn open-sms-remind checked">开启</span>
+                <span class="change-state-btn close-sms-remind">关闭</span>
+            </td>
         </tr>
-        <tr>
-            <td>收件人：</td>
-            <td></td>
+        <tr class="remind-table-row">
+            <td class="remind-row-label">发信箱：</td>
+            <td class="remind-send-email-address">
+                <!--<select class="select-input" name="sms-op-receiver" id="sms-op-send-address">-->
+                    <!--<option value={{defaultEmailSendAddress.id}} id="default-email-send-address">{{defaultEmailSendAddress.name}}</option>-->
+                    <!--{{#each emailAddressList}}-->
+                    <!--<option value={{this.id}}>{{this.name}}</option>-->
+                    <!--{{/each}}-->
+                <!--</select>-->
+            </td>
         </tr>
-        <tr>
-            <td>抄送人：</td>
-            <td></td>
+        <tr class="remind-table-row">
+            <td class="remind-row-label">收件人：</td>
+            <td class="remind-receiver-email">
+                <!--<select class="select-input" name="sms-op-receiver" id="sms-op-receiver-email">-->
+                    <!--<option value={{defaultEmailReceiver.id}} id="default-email-receiver">{{defaultEmailReceiver.name}}</option>-->
+                    <!--{{#each recipients}}-->
+                    <!--<option value={{this.id}}>{{this.name}}</option>-->
+                    <!--{{/each}}-->
+                <!--</select>-->
+            </td>
         </tr>
-        <tr>
-            <td>提醒时间</td>
+        <tr class="remind-table-row">
+            <td class="remind-row-label">抄送人：</td>
+            <td class="remind-copy-for-email">
+                <!--<select class="select-input" name="sms-op-receiver" id="sms-op-copypeople-email">-->
+                    <!--<option value={{defaultCopyPeople.id}} id="default-email-copypeople">{{defaultCopyPeople.name}}</option>-->
+                    <!--{{#each copypeople}}-->
+                    <!--<option value={{this.id}}>{{this.name}}</option>-->
+                    <!--{{/each}}-->
+                <!--</select>-->
+            </td>
+        </tr>
+        <tr class="remind-table-row">
+            <td class="remind-row-label">提醒时间</td>
             <td>
-                <input type="time">
+                <input type="time" class="remind-time-email">
             </td>
         </tr>
     </table>
-    {{/if}}
-
-</table>
+    <button class="set-ok">确定</button>
+</div>>

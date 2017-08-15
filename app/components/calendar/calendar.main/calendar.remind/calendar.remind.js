@@ -3,11 +3,45 @@
  */
 import Component from "../../../../lib/component";
 import template from './calendar.remind.html';
-import './calendar.remind.scss';
+//import './calendar.remind.scss';
 
-import {PMAPI} from '../../../../lib/postmsg';
+let css = `
+.remind-wrap {
+    width: calc(100% - 60px);
+    padding: 30px;
+    overflow: auto;
+}
+.remind-row {
+        border: 1px solid rgba(228, 228, 228, 1);
+        background-color: rgba(250, 250, 250, 1);
+}
+.title {
+    padding-left: 5px;
+    width: 35%;
+    height: 40px;
+    vertical-align: middle;
+}
+.remind-span, .res-form, .date-attr, .start, .end {
+    background-color: #ffffff;
+    border: 1px solid rgba(228, 228, 228, 1);
+    vertical-align: middle;
+    line-height: 30px;
+    display: inline-block;
+    margin: 5px 0px;
+    width: 96%;
+    padding: 0px 5px;
+}
+.start, .end {
+    width: 46.7%;
+    height: 30px;
+}
+.detail {
+    width: 598px;
+    margin: 5px 5px 5px 0px;
+}
+`
 
-let config = {
+let CalendarRemind = {
     template: template,
     data: {
         remindTable: '',
@@ -16,21 +50,14 @@ let config = {
         remindDateTime: '',
         remindTableId: '',
         remindDate: '',
-        remindTime: ''
+        remindTime: '',
+        css: css.replace(/(\n)/g, '')
     },
     actions: {
 
     },
     afterRender: function() {
-        this.data.remindDetail.forEach(items => {
-            items.forEach(item => {
-                $('.detail').prepend('<tr><td class="detail-title">'+ item['fieldName'] +'</td><td class="detail-content">'+ item['fieldValue'] +'</td></tr>')
-            });
-            $('.open-form').on('click', function () {
-
-            });
-        });
-        console.log(this.data.remindTableId);
+        this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
         this.el.on('click', '.open-form', () => {
             PMAPI.openDialogByIframe(
                 '/calendar_mgr/create/?table_id='+ this.data.remindTableId,
@@ -40,20 +67,10 @@ let config = {
                     title: '表单'
                 });
         })
+    },
+    beforeDestory: function () {
+        this.data.style.remove();
     }
 };
-
-class CalendarRemind extends Component {
-    constructor(data) {
-        config.data.remindTable = data.tableName;
-        config.data.remindDateProp = data.fieldName;
-        config.data.remindDetail = data.data2show;
-        config.data.remindDateTime = data.time;
-        config.data.remindTableId = data.tableId;
-        config.data.remindDate = data.time.substr(0,10);
-        config.data.remindTime = data.time.substr(11,5);
-        super(config);
-    }
-}
 
 export default CalendarRemind;
