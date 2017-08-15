@@ -653,21 +653,16 @@ let config = {
                     }
                 });
             }
-            this.data.filterParam = {
-                filter: filter,
-                is_filter: 1,
-                common_filter_id: '',
-                common_filter_name: ''
-            }
+            this.data.filterParam['filter'] = filter;
+            this.data.filterParam['is_filter'] = 1;
+            this.actions.getGridData();
             this.actions.getGridData();
         },
         postExpertSearch:function(data,id,name) {
-            this.data.filterParam = {
-                filter: data,
-                is_filter: 1,
-                common_filter_id: id,
-                common_filter_name: name
-            }
+            this.data.filterParam.expertFilter = data;
+            this.data.filterParam.common_filter_id = id;
+            this.data.filterParam.common_filter_name = name;
+            this.actions.getGridData();
             this.actions.getGridData();
         },
         //偏好赋值
@@ -850,11 +845,16 @@ let config = {
             }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
-                //高级查询
-                if( this.data.filterParam['common_filter_id'] ){
-                    if( this.data.filterParam['common_filter_id']!='临时高级查询' ){
-                        json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
-                    }
+            }
+            if( this.data.filterParam['common_filter_id'] ){
+                json['filter'] = json['filter'] || [];
+                for( let a of this.data.filterParam.expertFilter ){
+                    json['filter'].push( a );
+                }
+                if( this.data.filterParam['common_filter_id'] != '临时高级查询' ){
+                    json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
+                }
+                if( this.data.filterParam.filter.length == 0 ){
                     msgBox.alert( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
                 }
             }
@@ -1128,7 +1128,6 @@ let config = {
                     modal:true
                 },{d}).then(res=>{
                     if(res.type == 'temporaryQuery') {
-                        debugger
                         this.actions.postExpertSearch(res.value,res.id,res.name);
                     }
                 })
