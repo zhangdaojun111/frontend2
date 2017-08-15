@@ -36,12 +36,13 @@ let config={
     beforeDestory:function(){
         Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
+        Mediator.removeAll('form:history:'+this.data.tableId);
+        Mediator.removeAll('form:addNewBuildIn:'+this.data.tableId);
+        Mediator.removeAll('form:selectChoose:'+this.data.tableId);
     }
 }
 export default class BuildInControl extends Component{
     constructor(data){
         super(config,data);
-        // console.log('buildin')
-        // console.log(this.data);
     }
 }
