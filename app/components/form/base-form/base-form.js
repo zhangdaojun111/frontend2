@@ -1337,6 +1337,8 @@ let config={
         })
 
         Mediator.subscribe('form:changeValue:'+_this.data.tableId,function(data){
+            console.log('值改变事件');
+            console.log(data);
             _this.actions.checkValue(data,_this);
         })
 
