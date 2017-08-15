@@ -9,7 +9,9 @@ import './screenshot-receiver.scss';
 let config={
     template:template,
     data:{
-        file:''
+        file:'',
+        imageEle:undefined,
+        callback:function () {}
     },
     actions:{
 
@@ -25,25 +27,38 @@ let config={
                 var item = items[index];
                 if (item.kind === 'file') {
                     var blob = item.getAsFile();
+                    t.data.file = blob;
                     var reader = new FileReader();
                     reader.onload = function (event) {
-                        console.log(event.target.result);
-                        t.data.file = event.target.result;
                         let ele = $('<img src="'+event.target.result+'" style="height: 100%;width: 100%">');
                         t.el.find('.img-anchor').append(ele);
+                        t.data.imageEle = ele;
                         t.el.find('.paste-tip').css('display','none');
                     }; // data url!
                     reader.readAsDataURL(blob);
                 }
             }
-        }).on('click','.comfirm-n-save'.()=>{
-
+        }).on('click','.comfirm-n-save',()=>{
+            if(this.data.file == ''){
+                return;
+            }
+            this.data.callback(this.data.file);
+        }).on('click','.cancel-to-rechoose',()=>{
+            if(!this.data.imageEle){
+                return;
+            }
+            this.data.imageEle.remove();
+            t.el.find('.paste-tip').css('display','block');
+            this.data.file = '';
         })
     }
 }
 
 export default class ScreenShotReceiver extends Component{
-    constructor(){
+    constructor(func){
+        if(func){
+            config.data.callback = func;
+        }
         super(config);
     }
 }

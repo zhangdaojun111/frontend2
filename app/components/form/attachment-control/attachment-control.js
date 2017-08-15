@@ -21,8 +21,31 @@ let config={
         },
         shotScreen:function () {
             let ele = this.el.find('.get-screenshot');
-            let comp = new ScreenShotReceiver();
+            let comp = new ScreenShotReceiver((file)=>{
+                this.actions.controlUploadingForFile(file);
+            });
             comp.render(ele);
+        },
+        controlUploadingForFile:function (file) {
+            if(file.size>100*1024*1024){
+                alert(file.name + ' 文件过大，无法上传，请确保上传文件大小小于100MB');
+                return;
+            }
+            let ele = $('<div></div>');
+            let item = new AttachmentQueueItem(file,this.data.real_type,(event,data)=>{
+                if(event == 'delete'){
+                    ele.remove();
+                    if(data !=undefined){
+                        this.data.queue.slice(this.data.queue.indexOf(data),1);
+                    }
+                }
+                if(event == 'finished'){
+                    this.data.queue.push(data);
+                }
+            });
+            this.el.find('.upload-process-queue').append(ele);
+            item.render(ele);
+
         }
     },
     afterRender: function () {
@@ -35,25 +58,7 @@ let config={
         }).on('change','.selecting-file',(event)=>{
             let files = event.target.files;
             for(let file of files){
-                if(file.size>100*1024*1024){
-                    alert(file.name + ' 文件过大，无法上传，请确保上传文件大小小于100MB');
-                    continue;
-                }
-                let ele = $('<div></div>');
-                let item = new AttachmentQueueItem(file,this.data.real_type,(event,data)=>{
-                    if(event == 'delete'){
-                        ele.remove();
-                        if(data !=undefined){
-                            this.data.queue.slice(this.data.queue.indexOf(data),1);
-                        }
-                    }
-                    if(event == 'finished'){
-                        console.log("here");
-                        this.data.queue.push(data);
-                    }
-                });
-                this.el.find('.upload-process-queue').append(ele);
-                item.render(ele);
+                this.actions.controlUploadingForFile(file);
             }
         })
     }
