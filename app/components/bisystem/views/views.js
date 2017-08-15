@@ -58,10 +58,9 @@ let config = {
                     if(res['success']===1){
                         this.data.views.push(res.data);
                         window.config.bi_views = this.data.views;
-                        console.log(window.config.bi_views);
                         this.reload();
                     }else{
-                        alert(res['error']);
+                        msgbox.alert(res['error']);
                     }
                 })
             }
@@ -70,9 +69,9 @@ let config = {
            let views = this.data.views;
             ViewsService.saveData({data:views}).then((res)=>{
                if(res['success']===1){
-                   alert('保存成功');
+                   msgbox.alert('保存成功');
                }else{
-                   alert(res['error']);
+                   msgbox.alert(res['error']);
                }
            })
         });
