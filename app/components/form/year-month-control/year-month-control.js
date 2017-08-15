@@ -1,35 +1,11 @@
 import Component from '../../../lib/component'
 import DropDown from "../vender/dropdown/dropdown";
 import Mediator from '../../../lib/mediator';
+import template from './year-month-control.html'
 
 let config={
-    template:`<div class="clearfix">
-                {{#if unvisible}}
-                    <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                 {{else if be_control_condition }}
-                    <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                 {{else}}
-                        <div class="year" style="float: left"></div>
-                        <span style="float: left;">年</span>
-                        <div class="month" style="float: left"></div>
-                        <span style="float: left;">月</span>
-                        <div style="float: left;">
-                           {{#if required}}
-                                    <span id="requiredLogo" class="{{requiredClass}}" ></span>
-                           {{/if}}
-                           {{#if history}}
-                                <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>     
-                            {{/if}}       
-                      </div>
-                 {{/if}}
-            </div>`,
-    data:{
-
-    },
-    actions:{
-
-    },
-    firstAfterRender:function(){
+    template:template,
+    firstAfterRender(){
         let _this=this;
         Mediator.subscribe('form:dropDownSelect:'+_this.data.tableId,function(data){
             if(data.dfield !=_this.data.dfield){
@@ -49,7 +25,7 @@ let config={
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
     },
-    afterRender:function(){
+    afterRender(){
         let yearData = {} ;
         let monthData = {} ;
         $.extend(true,yearData,this.data)
@@ -86,13 +62,14 @@ let config={
             yearData.value = myYear;
             monthData.value = myDate.getMonth() + 1;
         }
+        this.destroyChildren();
         this.append(new DropDown(yearData),this.el.find('.year'));
         this.append(new DropDown(monthData),this.el.find('.month'));
-        console.log('怎么回事呢');
     },
-    beforeDestory:function(){
+    beforeDestory(){
         Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
+        Mediator.removeAll('form:history:'+this.data.tableId);
     }
 }
 export default class YearMonthControl extends Component{

@@ -1196,6 +1196,11 @@ let config={
             if(data[key].required){
                 data[key]['requiredClass']=data[key].value==''?'required':'required2';
             }
+            if(single.data('width')){
+                data[key]['width']=single.data('width')+'px';
+            }else{
+                data[key]['width']='240px';
+            }
             //数据填充后，根据修改条件对不同框进行只读操作
             setTimeout(()=>{_this.actions.reviseCondition(data[key],data[key].value,_this);},0);
             if(type == 'Select' || type=='Buildin' ){

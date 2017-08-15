@@ -6,7 +6,7 @@ import template from './buildIn-control.html';
 
 let config={
     template:template,
-    firstAfterRender:function(){
+    firstAfterRender(){
         let _this=this;
         Mediator.subscribe('form:dropDownSelect:'+_this.data.tableId,function(data){
             if(data.dfield !=_this.data.dfield){
@@ -25,7 +25,7 @@ let config={
             _.debounce(function(){Mediator.publish('form:addNewBuildIn:'+_this.data.tableId,_this.data)},300)();
         });
     },
-    afterRender:function(){
+    afterRender(){
         if(!this.data.be_control_condition) {
             if(this.data.options[0]['value']){
                 this.data.options.unshift({label:'',value:''});
@@ -33,7 +33,7 @@ let config={
             this.append(new DropDown(this.data), this.el.find('.dropdown'));
         }
     },
-    beforeDestory:function(){
+    beforeDestory(){
         Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
         Mediator.removeAll('form:history:'+this.data.tableId);

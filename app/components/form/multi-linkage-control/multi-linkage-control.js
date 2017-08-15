@@ -1,31 +1,12 @@
 import Component from '../../../lib/component'
 import DropDown from "../vender/dropdown/dropdown";
 import Mediator from '../../../lib/mediator';
+import template from './multi-linkage-control.html'
 
 let config={
-    template:`  <div class="clearfix" style="display: flex;align-items: center">
-                    {{#if unvisible}}
-                        <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                    {{else if be_control_condition}}
-                        <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                    {{else}}
-                            <div class="multi-drop" style="display: flex;align-items: center"></div>
-                            <div class="refresh">刷新</div>
-                            <div style="float: left;">
-                            {{#if required}}
-                                <span id="requiredLogo" class="{{requiredClass}}" ></span>
-                            {{/if}} 
-                            {{#if history}}
-                                       <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>     
-                            {{/if}} 
-                        </div>
-                    {{/if}}    
-                </div>`,
-    data:{
-
-    },
+    template:template,
     actions:{
-        changeView:function(_this,is_view){
+        changeView(_this,is_view){
             for(let obj of _this.childDrop){
                 obj.data.is_view=is_view;
                 obj.reload();
@@ -65,7 +46,7 @@ let config={
             }
         }
     },
-    firstAfterRender:function(){
+    firstAfterRender(){
         let _this=this;
         Mediator.subscribe('form:dropDownSelect:'+_this.data.tableId,function(data){
             if(data.dfield !=_this.data.dfield){
@@ -146,8 +127,6 @@ let config={
             if (!this.childDrop) {
                 this.set('childDrop', []);
             }
-            console.log('初始化的时候出错了？');
-            console.log(this.childDrop);
             if (this.data.be_control_condition) {
                 return;
             }
@@ -188,12 +167,11 @@ let config={
                     this.append(drop, this.el.find('.multi-drop'));
                 }
             }
-            console.log('初始化的时候出错了？');
-            console.log(this.childDrop);
     },
-    beforeDestory:function(){
+    beforeDestory(){
         Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
+        Mediator.removeAll('form:multiLinkageDefaultData:'+this.data.tableId);
     }
 }
 export default class MultiLinkageControl extends Component{

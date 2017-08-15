@@ -1,6 +1,6 @@
 import Component from '../../../lib/component'
-import DropDown from "../vender/dropdown/dropdown";
 import Mediator from '../../../lib/mediator';
+import {AutoSelect} from '../../util/autoSelect/autoSelect'
 
 let config={
     template:`  <div class="clearfix">
@@ -9,7 +9,7 @@ let config={
                     {{else if be_control_condition}}
                             <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
                     {{else}}
-                        <div id="MainContent_Caccey_location_ddl"></div>
+                        <div id="multi-select"></div>
                         <div style="float: left;">
                             {{#if required}}
                                 <span id="requiredLogo" class="required" ></span>
@@ -17,20 +17,19 @@ let config={
                         </div>   
                     {{/if}}
                 </div>`,
-    data:{
-
-    },
-    actions:{
-
-    },
     firstAfterRender:function(){
         let _this=this;
-        // $('#MainContent_Caccey_location_ddl').multiselect({
-        //     includeSelectAllOption: true,
-        //     enableFiltering: true,
-        //     maxHeight: 400,
-        //     numberDisplayed: 1
-        // });
+        let $wrap = this.el.find('#multi-select');
+        let list=[];
+        for(let key in this.data.options){
+            console.log(this.data.options[key]);
+            list.push({
+                name:this.data.options[key].label,
+                id:this.data.options[key].value,
+            });
+        }
+        let autoSelect = new AutoSelect({list:list});
+        autoSelect.render($wrap);
         Mediator.subscribe('form:changeOption:'+_this.data.tableId,function(data){
             if( _this.data.dfield && res == _this.data.dfield ){
                 _this.data.value = [];

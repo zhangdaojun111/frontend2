@@ -7,10 +7,11 @@
         <input type="text" value="{{value}}" class="ui-calendar ui-width dynamic-form-input" id="date_yy-mm-dd">
         <span class="date-close">X</span>
         <span style="" id="icon_rili">日历</span>
-    {{#if required}}
-        <span id="requiredLogo" class="{{requiredClass}}" ></span>
-    {{/if}}
-    {{#if history}}
-        <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>
+        {{#if required}}
+            <span id="requiredLogo" class="{{requiredClass}}" ></span>
+        {{/if}}
+        {{#if history}}
+            <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>
+        {{/if}}
     {{/if}}
 </div>

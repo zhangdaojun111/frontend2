@@ -1,31 +1,14 @@
 import Component from '../../../lib/component'
 import DropDown from '../vender/dropdown/dropdown'
-import Mediator from '../../../lib/mediator';
+import Mediator from '../../../lib/mediator'
+import template from './year-control.html'
 
 let config={
-    template:`<div style="dispaly:inline">
-                {{#if unvisible}}
-                        <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                {{else if be_control_condition }}
-                    <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                 {{else}}
-                    <div class="dropdown" style="width:{{width}}"></div>
-                    <div style="float: left;">
-                       {{#if required}}
-                        <span id="requiredLogo" class="{{requiredClass}}" ></span>
-                       {{/if}}
-                       {{#if history}}
-                            <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>     
-                        {{/if}}                         
-                    </div>
-                 {{/if}}   
-              </div>
-                `,
+    template:template,
     data:{
-        width:'240px',
         options:[],
     },
-    firstAfterRender:function(){
+    firstAfterRender(){
         let _this=this;
         Mediator.subscribe('form:dropDownSelect:'+_this.data.tableId,function(data){
             if(data.dfield !=_this.data.dfield || !_this.data.required){
@@ -38,14 +21,16 @@ let config={
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
     },
-    afterRender:function(){
+    afterRender(){
         if(!this.data.be_control_condition) {
+            this.destroyChildren();
             this.append(new DropDown(this.data), this.el.find('.dropdown'));
         }
     },
-    beforeDestory:function(){
+    beforeDestory(){
         Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
+        Mediator.removeAll('form:history:'+this.data.tableId);
     }
 }
 export default class YearControl extends Component{

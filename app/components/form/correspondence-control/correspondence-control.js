@@ -6,7 +6,7 @@ import template from './correspondence-control.html';
 
 let config={
     template:template,
-    firstAfterRender:function(){
+    firstAfterRender(){
         let _this=this;
         _this.el.on('click','.ui-forms-a',_.debounce(function(){
             Mediator.publish('form:openCorrespondence:'+_this.data.tableId,_this.data);
@@ -29,8 +29,9 @@ let config={
             }
         })
     },
-    beforeDestory:function(){
+    beforeDestory(){
         Mediator.removeAll('form:correspondenceDefaultData:'+this.data.tableId);
+        Mediator.removeAll('form:openCorrespondence:'+this.data.tableId);
     }
 }
 export default class Correspondence extends Component{

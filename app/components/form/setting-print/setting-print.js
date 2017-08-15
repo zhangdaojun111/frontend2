@@ -1,5 +1,11 @@
 import template from './setting-print.html';
 let css = `
+.wrap{
+    display: inline-block;
+    margin-top: 6px;
+    margin-left: 10px;
+    position: relative;
+}
 .global-search-history {
     padding: 0;
     margin: 0;
@@ -40,10 +46,7 @@ let SettingPrint = {
         printTitles:[],
         myContent:'',
     },
-    actions:{
-
-    },
-    firstAfterRender:function(){
+    firstAfterRender(){
         let _this=this;
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
        _this.el.on('click','li',function(){
@@ -166,7 +169,7 @@ let SettingPrint = {
         }))
     },
     beforeDestory: function () {
-        this.data.style.remove();
+        this.el.find('.global-search-input').off();
     }
 }
 export default SettingPrint

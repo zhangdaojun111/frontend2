@@ -1,0 +1,17 @@
+<div class="clearfix">
+    {{#if unvisible}}
+    <a href="javascript:void(0);" class="info">权限受限</a>
+    {{else if be_control_condition }}
+    <a href="javascript:void(0);" class="info">被修改条件限制</a>
+    {{else}}
+        <input type="textarea" class="ui-width textArea" value={{value}} />
+        {{#if required}}
+            <div>
+                <span id="requiredLogo" class="{{requiredClass}}" ></span>
+            </div>
+        {{/if}}
+        {{#if history}}
+            <a href="javascript:void(0);" class="ui-history"></a>
+        {{/if}}
+    {{/if}}
+</div>
