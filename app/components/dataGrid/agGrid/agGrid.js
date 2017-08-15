@@ -102,8 +102,8 @@ let config = {
             }
         },
         createAgGrid: function (){
-            var eGridDiv = document.querySelector( '#myGrid' );
-            let mygrid = new Grid( eGridDiv , this.gridOptions );
+            var eGridDiv = this.el.find( '#myGrid' );
+            let mygrid = new Grid( eGridDiv[0] , this.gridOptions );
         },
         //重新赋值
         setGridData: function ( json ) {
