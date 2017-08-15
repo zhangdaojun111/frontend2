@@ -14,12 +14,18 @@ let config={
 
     },
     afterRender(){
-        this.el.on('click','#singleFlow',()=>{
+        this.el.on('click','#singleFlow',(e)=>{
+            let ev =$(e.target);
+            ev.addClass("selected");
+            this.el.find("#multiFlow").removeClass("selected");
             Mediator.publish('workflow:autoSaveOpen', 1);
             this.el.find('#workflow-form').show();
             this.el.find('#workflow-grid').hide();
         });
-        this.el.on('click','#multiFlow',()=>{
+        this.el.on('click','#multiFlow',(e)=>{
+            let ev =$(e.target);
+            ev.addClass("selected");
+            this.el.find("#singleFlow").removeClass("selected");
             Mediator.publish('workflow:autoSaveOpen', 0);
             this.el.find('#workflow-grid').show();
             this.el.find('#workflow-form').hide();
