@@ -2,8 +2,12 @@
 .J_select-container{
     .J_tip{
         width: 300px;
-        height: 30px;
+        height: 25px;
+        line-height: 25px;
         padding-left: 10px;
+        .select-Workflow{
+            color: rgba(153,153,153,1);
+        }
     }
 }
 .select-icon{
