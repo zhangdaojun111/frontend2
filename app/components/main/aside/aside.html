@@ -1,19 +1,30 @@
 <div class="aside-wrap">
-    <div class="s-name">{{systemName}}</div>
+    <div class="s-name">
+        <span class="erds-logo">ERDS</span>
+        <span class="text">{{systemName}}</span>
+    </div>
     <div class="s-uinfo">
         <div class="wrap">
             <div class="avatar">
-                <img src="{{avatar}}">
+                <!--{{#if avatar}}-->
+                <!--<img class="set-info" src="{{avatar}}">-->
+                <!--{{/if}}-->
+            </div>
+            <div class="personal-setting">
+                <i class="icon p-setting"></i>
             </div>
             <p class="u-name ellipsis">{{username}}</p>
-            <p class="u-role ellipsis">{{role}}</p>
+            <p class="u-role ellipsis">{{role}}<span class="logout">[退出]</span></p>
         </div>
         <button class="startwrokflow">发起工作</button>
+        <button class='uploader-button' type="button">上传文件</button>
+        <button class='delete-button' type="button">删除文件</button>
     </div>
 
     <div class="tabs clearfix">
         <p class="active all">全部</p>
         <p class="common">常用</p>
+        <a class="edit"></a>
     </div>
 
     <div class="menu all"></div>

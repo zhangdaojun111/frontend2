@@ -1,37 +1,3 @@
-
-
-// FIELD_TYPE_MAPPING = {
-//     TEXT_TYPE: [this.TEXT, this.TEXTAREA, this.UEDITOR, this.DATE, this.TIME, this.DATETIME, this.YEAR, this.INCREMENT_NUMBER, this.SECRET_TEXT, this.CYCLE_RULE],
-//     NUMBER_TYPE: [this.FLOAT_TYPE,this.INT_TYPE,this.DECIMAL_TYPE],
-//     ATTACHMENT_TYPE: [this.ATTACHMENT, this.IMAGE_TYPE],
-//     ABOUT_TYPE: [this.TEXT],
-//     SELECT_TYPE: [this.SELECT, this.SINGLE_SELECT, this.MULTI_SELECT, this.YEAR_MONTH_TYPE],
-//     BUILD_IN: [this.SELECT],
-//     MULTI_BUILD_IN: [this.SELECT],
-//     CHILD_TABLE_TYPE: [this.NORMAL_CHILD, this.CHILD_TABLE],
-//     EXPRESSION_TYPE: [this.NORMAL_EXPRESSION, this.TERM_EXPRESSION, this.SURFACE_EXPRESSION],
-//     MULTI_INDEX_TYPE: [this.TEXT],
-//     QUERY_COUNT_TYPE: [this.QUERY_COUNT],
-//     CORRESPONDENCE_TYPE: [this.CORRESPconst ONDENCE],
-//     ABOUT_RELATION_TYPE: [this.ABOUT_RELATION],
-//     MULTI_CHOICE_BUILD_IN: [this.MULTI_SELECT],
-//     TABLE_COUNT_TYPE: [this.TABLE_COUNT],
-//     EDIT_CONTROL_TYPE:[this.EDIT_CONTROL]
-// }
-
-// //数字类型的list
-// const NUMBER_TYPE_LIST = [this.FLOAT_TYPE, this.INT_TYPE, this.DECIMAL_TYPE];
-//
-// //枚举字段类型
-// const SELECT_LIST = this.FIELD_TYPE_MAPPING["SELECT_TYPE"];
-//
-// //时间字段类型
-// const TIME_FIELD_LIST = [this.DATE, this.TIME, this.DATETIME, this.YEAR];
-//
-// //不能分组
-// const CANT_GROUP = [this.UEDITOR,this.MULTI_SELECT,this.ATTACHMENT,this.TERM_EXPRESSION,
-//     this.NORMAL_EXPRESSION,this.SURFACE_EXPRESSION,this.IMAGE_TYPE,this.CYCLE_RULE,this.URL_TYPE];
-
 export const fieldTypeService = {
     //与后台数据的字段类型对应
     //dtype
@@ -90,14 +56,15 @@ export const fieldTypeService = {
     VIDEO_TYPE : "33",
     TEXT_COUNT_TYPE : "34",//合同编辑器
     EDIT_CONTROL : "35",
+
     numOrText: function (data) {//(数字或者文本)用real_type判断
-        return data == this.FLOAT_TYPE || data == this.INT_TYPE || data == this.CORRESPONDENCE
+        return data == this.FLOAT_TYPE || data == this.INT_TYPE
     },
     childTable: function (data) {//子表
         return data == this.NORMAL_CHILD
     },
-    countTable: function (data) {//统计
-        return data == this.QUERY_COUNT || data == this.TABLE_COUNT
+    countTable: function (dinput_type,real_type) {//统计
+        return dinput_type == this.QUERY_COUNT || dinput_type == this.TABLE_COUNT || real_type == this.EDIT_CONTROL
     },
     editControlTable: function (data) {//高级跳转字段
         return data == this.EDIT_CONTROL
@@ -129,5 +96,38 @@ export const fieldTypeService = {
         }else {
             return 'text'
         }
+    },
+    //不能分组字段
+    cantGroup: function (data) {
+        let arr = [this.SECRET_TEXT,this.TEXT_COUNT_TYPE,this.URL_TYPE,this.IMAGE_TYPE,this.ATTACHMENT,this.VIDEO_TYPE,this.MULTI_SELECT];
+        return arr.indexOf( data ) == -1
+    },
+    //后端排序字段
+    backSortField: function (data) {
+        let arr = [this.DECIMAL_TYPE];
+        return arr.indexOf( data ) != -1;
+    },
+    //附件
+    attachment: function( data ){
+        let arr = [this.ATTACHMENT,this.VIDEO_TYPE,this.IMAGE_TYPE];
+        return arr.indexOf( data ) != -1;
     }
+}
+export let FIELD_TYPE_MAPPING = {
+    TEXT_TYPE: [fieldTypeService.TEXT, fieldTypeService.TEXTAREA, fieldTypeService.UEDITOR, fieldTypeService.DATE, fieldTypeService.TIME, fieldTypeService.DATETIME, fieldTypeService.YEAR, fieldTypeService.INCREMENT_NUMBER, fieldTypeService.SECRET_TEXT, fieldTypeService.CYCLE_RULE],
+    NUMBER_TYPE: [fieldTypeService.FLOAT_TYPE,fieldTypeService.INT_TYPE,fieldTypeService.DECIMAL_TYPE],
+    ATTACHMENT_TYPE: [fieldTypeService.ATTACHMENT, fieldTypeService.IMAGE_TYPE],
+    ABOUT_TYPE: [fieldTypeService.TEXT],
+    SELECT_TYPE: [fieldTypeService.SELECT, fieldTypeService.SINGLE_SELECT, fieldTypeService.MULTI_SELECT, fieldTypeService.YEAR_MONTH_TYPE],
+    BUILD_IN: [fieldTypeService.SELECT],
+    MULTI_BUILD_IN: [fieldTypeService.SELECT],
+    CHILD_TABLE_TYPE: [fieldTypeService.NORMAL_CHILD, fieldTypeService.CHILD_TABLE],
+    EXPRESSION_TYPE: [fieldTypeService.NORMAL_EXPRESSION, fieldTypeService.TERM_EXPRESSION, fieldTypeService.SURFACE_EXPRESSION],
+    MULTI_INDEX_TYPE: [fieldTypeService.TEXT],
+    QUERY_COUNT_TYPE: [fieldTypeService.QUERY_COUNT],
+    CORRESPONDENCE_TYPE: [fieldTypeService.CORRESPconst],
+    ABOUT_RELATION_TYPE: [fieldTypeService.ABOUT_RELATION],
+    MULTI_CHOICE_BUILD_IN: [fieldTypeService.MULTI_SELECT],
+    TABLE_COUNT_TYPE: [fieldTypeService.TABLE_COUNT],
+    EDIT_CONTROL_TYPE:[fieldTypeService.EDIT_CONTROL]
 }

@@ -88,6 +88,7 @@ let config={
         }
         this.append(new DropDown(yearData),this.el.find('.year'));
         this.append(new DropDown(monthData),this.el.find('.month'));
+        console.log('怎么回事呢');
     },
     beforeDestory:function(){
         Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);

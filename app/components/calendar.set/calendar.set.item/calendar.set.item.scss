@@ -1,0 +1,26 @@
+@import "../calendar.set";
+.singleRow {
+    width: 100%;
+    .set-table-item{
+        border-top: 1px solid #C1CACA;
+        padding: 10px 0px;
+        width: 148px;
+        min-width: 90px;
+        text-align: center;
+        line-height: 30px;
+        margin: 0px !important;
+        select {
+            width: 85%;
+            height: 26px;
+            border-radius: 5px;
+        }
+    }
+    .set-remind-method {
+        cursor: pointer;
+    }
+    .preview-text {
+        width: 148px;
+        word-break: break-all;
+        word-wrap: break-word;
+    }
+}

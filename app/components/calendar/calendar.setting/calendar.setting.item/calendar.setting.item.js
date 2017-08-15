@@ -4,29 +4,29 @@
 import Component from "../../../../lib/component";
 import template from './calendar.setting.item.html';
 import './calendar.setting.item.scss';
+import CalendarSetingItemChild from"./calendar.seting.item.child/calendar.seting.item.child";
+import CalendarSet from '../../../calendar.set/calendar.set';
+import {PMAPI} from '../../../../lib/postmsg';
 
 
 let config = {
     template: template,
     data: {
+
         menuItem: {}
     },
     actions: {
 
     },
     afterRender: function() {
-        this.el.find('.menu-label').html(this.data.menuItem['label']);
         this.data.menuItem['items'].forEach(item => {
-            this.el.find('.menu-item').append('<span class="item-child" id ='+ item['table_id'] +' >'+ item['label'] + '</span>');
+            this.append(new CalendarSetingItemChild(item), this.el.find('.menu-item'));
         });
-
-        //console.log(this.el.append(this.data.menuItem['label']));
     }
 };
 
 class CalendarSettingItem extends Component {
-    constructor(data) {
-        config.data.menuItem = data;
+    constructor() {
         super(config);
     }
 }

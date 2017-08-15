@@ -1,278 +1,132 @@
 import Component from "../../../lib/component";
 import template from './left-content.html';
 import './left-content.scss';
-import LeftContentSelect from './leftContent.SelectLabel/leftContent.SelectLabel'
-import LeftCalendar from './left-calendar/left-calendar';
+import LeftContentHide from './leftContent.hideContent/leftContent.hideContent';
 import {CalendarService} from '../../../services/calendar/calendar.service';
 import Mediator from '../../../lib/mediator';
 import CalendarSetting from '../calendar.setting/calendar.setting';
-
+import {PMAPI} from '../../../lib/postmsg';
+import LeftcontentCalendarset from'./leftContent.calendarSet/leftContent.calendarSet'
+import RightContentWorkFlow from '../right-content/right.content.workflowcontent/right.content.workflowcontent';
+import {CalendarSetService} from "../../../services/calendar/calendar.set.service"
+import {CalendarWorkflowData} from '../calendar.main/calendar.workflow/calendar.workflow';
 let config = {
-    template: template, 
+    template: template,
     data:{
         cancel_fields:[],
+        hide_table:{'table_Id':'','tableName':''},
+        hide_tables:[],
+        Add_hideTable:[],
+        contentStatus:1,
+        rows:[],
+        hide_item_table:[],
     },
     actions: {
-        logincalendarTreeData:function(objs){
-            $(".remind-group").html("");
-            let strhtml = "";
-            let IsChecked = true;
-            objs.rows.forEach((data) =>{
-                let items_Id = [];
-                data.items.forEach((itemsid) =>{
-                    items_Id.push(itemsid.field_id);
-                });
-                for(let i = 0;i< items_Id.length;i++){
-                    if(objs.cancel_fields.indexOf(items_Id[i]) != -1){
-                        IsChecked = false;
-                        break;
-                    }
-                    IsChecked = true;
-                }
-                console.log(IsChecked);
-                strhtml += "<div class='select-all'";
-                if(objs.hide_tables.indexOf(data.table_id) != -1){
-                    console.log(objs.hide_tables.indexOf(data.table_id));
-                    strhtml +="style = 'display:none'";
-                }
-                strhtml +=">" + "<span class=\"ui-icon ui-icon-triangle-1-s float-button-group-show\"></span><input type='checkbox' id='select-all-"+data.table_id+"'";
-                console.log(objs.hide_tables.indexOf(data.table_id));
-                strhtml +=" class='chk_1 chk_remind label-select-all ";
-                if(objs.hide_tables.indexOf(data.table_id) == -1){
-                    strhtml +="label-select-all-show ";
-                }
-                if(IsChecked){
-                    strhtml +="label-select-all-checked 'checked";
-                }
-                strhtml +="/>" +
-                    "<label class='select-label' for='select-all-"+data.table_id+"' id='label-all-"+data.table_id+"'></label><label class='select-label-show'>"+data.table_name+"</label><div class='float-button-group' style='display: none'></div>"+
-                    "<div class=\"checkbox-group\">";
-                data.items.forEach((items) =>{
-                    strhtml+="<div class=\"label-task-children\">\n" +
-                        "<input type='checkbox' id='select-children-"+items.field_id+"' class='chk_1 chk_approve label-select-all checkbox-children-"+data.table_id +"'";
-                    if(objs.cancel_fields.indexOf(items.field_id) == -1){
-                        strhtml+="checked ;";
-                    }
-                    strhtml+="/>" +
-                        "<label class='select-label-children select-children-"+data.table_id+" ";
-                    console.log(objs.cancel_fields.indexOf(items.field_id));
-                    if(objs.cancel_fields.indexOf(items.field_id) != -1){
-                        strhtml+="unchecked";
-                    }
-                    strhtml+="'style='background-color:"+ items.color+"' for='select-children-"+items.field_id+"' id='select-children-"+items.field_id+"'></label><label>"+items.field_name+"</label>"+
-                        "</div>";
-                });
-                strhtml+="</div></div>";
-            });
-            $(".remind-group").html(strhtml);
-            let isAllGroupchecked = true;
-            $('.label-select-all-show').each(function(){
-                if(!$(this).is('.label-select-all-checked')){
-                    isAllGroupchecked = false;
-                }
-            });
-            if(isAllGroupchecked){
-                $("#checkbox_a3").addClass('label-select-all-checked');
+        contentHide:function(that,temp){
+            if(temp.is(".display-all-content")){
+                temp.removeClass("display-all-content");
+                that.el.find(".item-content").css("height","27%");
+                that.el.find(".item-content").show();
+            }else{
+                that.el.find(".item-title").removeClass("display-all-content");
+                that.el.find(".item-title-2").removeClass("display-all-content");
+                temp.addClass("display-all-content");
+                that.el.find(".item-content").hide();
+                that.el.find(".item-content-2").hide();
+                temp.next(".item-content").show();
+                temp.next().animate({height:"83%"},"fast");
             }
-            $("#checkbox_a3").bind('click',function(){
-                if($(this).is(".label-select-all-checked")){
-                    $(this).removeClass("label-select-all-checked");
-                    $(".label-select-all-show").removeClass("label-select-all-checked");
-                    $(".select-label-children").addClass("unchecked");
-                    config.data.cancel_fields = ['remind','workflow'];
-                    CalendarService.CalendarMsgMediator.publish('unshowData',{data:['remind','workflow']});
-                }
-                else{
-                    $(this).addClass("label-select-all-checked");
-                    $(".label-select-all-show").addClass("label-select-all-checked");
-                    $(".select-label-children").removeClass("unchecked");
-                    if($("#checkbox_a2").is(".workflow_checked")){
-                        config.data.cancel_fields = [];
-                        CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
-                    }
-                    else{
-                        config.data.cancel_fields = ['approve'];
-                        CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
-                    }
-                }
-            });
-            $(".float-button-group-show").bind('hover',function(){
-                $(".float-button-group").css("display","block !");
-            })
-            $(".approve-label").bind('click',function(){
-                if($("#checkbox_a2").is(".workflow_checked")){
-                    $("#checkbox_a2").removeClass("workflow_checked");
-                    config.data.cancel_fields.unshift('approve');
-                    console.log(config.data.cancel_fields);
-                    CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
-                }
-                else{
-                    $("#checkbox_a2").addClass("workflow_checked");
-                    config.data.cancel_fields.splice($.inArray('approve',config.data.cancel_fields),1);
-                    console.log(config.data.cancel_fields);
-                    CalendarService.CalendarMsgMediator.publish('unshowData',{data:config.data.cancel_fields});
-                }
-            });
+        },
+        hideclass:function(that,temp){
+            if(temp.is(".display-all-content")){
+                temp.removeClass("display-all-content");
+                that.el.find(".item-content").css("height","27%");
+                that.el.find(".item-content-2").hide();
+                that.el.find(".item-content-1").show();
+                that.el.find(".item-content-3").show();
+                that.el.find(".item-content-4").show();
+            }else{
+                that.el.find(".item-title").removeClass("display-all-content");
+                temp.addClass("display-all-content");
+                that.el.find(".item-content").hide();
+                that.el.find(".item-content-2").show();
+                that.el.find(".item-content-2").animate({height:"82%"},"fast");
+            }
         }
-
+    },
+    firstAfterRender: function () {
+        Mediator.on('CalendarWorkflowData: workflowData', data => {
+            this.el.find('.item-content-3').empty();
+            data.forEach((row) =>{
+                this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
+            });
+        });
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
-        this.append(new LeftCalendar, this.el.find('.left-calendar-box'));
-        let objects = {};
-        CalendarService.getCalendarTreeData().then(objs => {
-            config.data.cancel_fields = objs.cancel_fields;
-            if(config.data.cancel_fields.indexOf('approve')){
-                $("#checkbox_a2").addClass("workflow_checked");
-            }
-            else{
-                $("#checkbox_a2").removeClass("workflow_checked");
-            }
-            console.log(objs);
-            this.actions.logincalendarTreeData(objs);
-            objects = objs;
-            $('.select-label-show').bind('click',function(){
-                if(!$(this).hasClass('hide-check-group'))
-                {
-                    $(this).addClass("hide-check-group");
-                    console.log($(this));
-                    $(this).nextAll('.checkbox-group').hide();
-                    console.log(1);
-                }
-                else{
-                    $(this).removeClass("hide-check-group");
-                    $(this).nextAll('.checkbox-group').show();
-                    console.log(0);
-                }
-            });
-            $(".select-label").bind('click',function(){
-                var val=$(this).attr("id");
-                var id = val.split("-");
-                let class_Name = ".select-children-"+id[2];
-                console.log(class_Name);
-                if($(this).prev('input').is(".label-select-all-checked"))
-                {
-                    $(this).prev('input').removeClass("label-select-all-checked");
-                    $(class_Name).each(function(){
-                            $(this).addClass('unchecked');
-                            $(this).prev('input').removeAttr('checked');
-                    });
-                    $("#checkbox_a3").removeClass('label-select-all-checked');
-                }
-                else
-                {
-                    $(this).prev('input').addClass("label-select-all-checked");
-                    $(class_Name).removeClass('unchecked');
-                    let isAllGroupchecked = true;
-                    $('.label-select-all-show').each(function(){
-                        console.log($(this).is('.label-select-all-checked'));
-                        if(!$(this).is('.label-select-all-checked')){
-                            isAllGroupchecked = false;
-                        }
-                    });
-                    if(isAllGroupchecked){
-                        $("#checkbox_a3").addClass('label-select-all-checked');
-                    }
-                }
+        this.append(new LeftcontentCalendarset, this.el.find('.left-calendar-set'));
+        // let data = [{'name':"abc",'id':'11'},{'name':"ddff",'id':'12'}];
+        // this.append(new AutoSelect(data),this.el.find('.item-content-4'));
+        let that = this;
+        Mediator.on('calendar-left:hideRemindType',data =>{
+                that.append(new LeftContentHide(data.data), this.el.find('.left-calendar-hide'));
+        });
+        Mediator.on('CalendarWorkflowData: changeWorkflowData', data => {
+            console.log(data);
+        });
 
-            });
-            $('.select-label-children').bind('click',function () {
-                var val1=$(this).prevAll('input').attr('class');
-                var className1 = val1.split(" ");
-                console.log(className1);
-                let class_Name1 = "";
-                class_Name1 += className1[3];
-                var checkboxId = class_Name1.split("-");
-                let fileId = checkboxId[2];
-                let label_class = '.select-children-' +checkboxId[2];
-                checkboxId = '#select-all-'+checkboxId[2];
-                $(checkboxId).attr('checked',false);
-                $(checkboxId).removeAttr('checked');
-                if($(this).is(".unchecked"))
-                {
-                    $(this).removeClass('unchecked');
-                    $(this).prevAll('input').attr('checked',false);
-                    let isAllchecked = true;
-                    $(label_class).each(function(){
-                        if($(this).is('.unchecked')){
-                            isAllchecked = false;
-                            return false;
-                        }
-                    });
-                    if(isAllchecked){
-                        $(checkboxId).addClass('label-select-all-checked');
-                        let isAllGroupchecked = true;
-                        $('.label-select-all').each(function(){
-                            if(!$(this).is('.label-select-all-checked')){
-                                isAllGroupchecked = false;
-                                return false;
-                            }
-                        });
-                        if(!isAllGroupchecked){
-                            $("#checkbox_a3").addClass('label-select-all-checked');
-                        }
-                    }
+        // CalendarService.getWorkflowRecords(data).then(res => {
+        //     res.rows.forEach((row) =>{
+        //         this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
+        //     });
+        // });
 
-                }
-                else {
-                    $(this).addClass('unchecked');
-                    $(this).prevAll('input').attr('checked',true);
-                    console.log(fileId);
-                    objs.cancel_fields.push(fileId);
-                    console.log(objs.cancel_fields);
-                    $(checkboxId).removeClass('label-select-all-checked');
-                    $("#checkbox_a3").removeClass('label-select-all-checked');
-                }
+        Mediator.on('calendar-left:calendar-class-hide',data =>{
+            data.data.forEach((row) =>{
+                   that.append(new LeftContentHide(row), that.el.find('.left-calendar-hide'));
             });
         });
-        $('.set-calendar').click(function () {
-            //PMAPI.openDialogByComponent()
-            let component = new CalendarSetting();
-            let el = $('<div>').appendTo(document.body);
-            component.render(el);
-            el.dialog({
-                title: '日历设置',
-                width: '99%',
-                height: '950',
-                background: '#ddd',
-                close: function() {
-                    $(this).dialog('destroy');
-                    component.destroySelf();
-                }
+        Mediator.on('calendar-left:showRemindType',()=>{
+            that.el.find(".item-title-2").removeClass("display-all-content");
+            that.el.find(".item-title-1").addClass("display-all-content");
+            that.el.find(".item-content").hide();
+            that.el.find(".item-content-2").hide();
+            that.el.find(".item-content-1").show();
+            that.el.find(".item-content-1").animate({height:"80%"},"fast");
+        });
+        that.el.on('click', '.hide-con',function(){
+            let temp = $(this).parent().parent();
+            that.actions.contentHide(that,temp);
+        }).on("click",".hide-con-2",function(){
+            that.actions.hideclass(that,$(this).parent().parent());
+        }).on('click','.set-calendar',() =>{
+            CalendarSetService.getMenu().then(res => {
+                let component = new CalendarSetting(res['menuList']);
+                let el = $('<div>').appendTo(document.body);
+                component.render(el);
+                el.dialog({
+                    title: '日历设置',
+                    width: '90%',
+                    height: '750',
+                    background: '#ddd',
+                    close: function() {
+                        $(this).dialog('destroy');
+                        component.destroySelf();
+                    }
+                });
             });
-        })
+
+        }).on('click', '.create-calendar', () => {
+            PMAPI.openDialogByIframe('/calendar_mgr/create/', {width: "1000", height: '550', title: '日历表'});
+        });
+    },
+    beforeDestory: function () {
+        Mediator.removeAll('calendar-left');
     }
 };
-
 class Leftcontent extends Component {
     constructor() {
         super(config);
     }
 }
-let contentStatus = 1;
-function contentHide(){
-	if(contentStatus == 1){
-		$(".taskbar").animate({height:"58%"},300);
-		$(".cate-hide").animate({height:"4%"},100);
-	 	$(".item-content").hide();	 	
-	 	contentStatus = 0;
-	}
-	else if(contentStatus == 0){
-		$(".taskbar").animate({height:"25%"},1);
-        $(".cate-hide").animate({height:"37%"});
-		//$(".item-title").animate({marginTop:"100px"});
-	 	$(".item-content").show();
-	 	
-	 	
-	 	contentStatus = 1;
-	}
-}
-
-
-$(function(){
-	 $(".item-title").bind("click",function(){
-	 	contentHide();
-	 });
-    
-});
 export default Leftcontent;
