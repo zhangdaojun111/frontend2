@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    window.config = {{window_config|safe}}
+</script>
+
+<div id="customDataGrid"></div>
+
+{% ifequal window_type 'develop'%}
+<script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
+<script type="text/javascript" src="http://localhost:8080/scripts/customDataGrid.js"></script>
+{% else %}
+<link rel="stylesheet" href="/client/static/css/vendors.css">
+<link rel="stylesheet" href="/client/static/css/customDataGrid.css">
+<script type="text/javascript" src="/client/static/vendors.js"></script>
+<script type="text/javascript" src="/client/static/customDataGrid.js"></script>
+{% endifequal %}
+</body>
+</html>
