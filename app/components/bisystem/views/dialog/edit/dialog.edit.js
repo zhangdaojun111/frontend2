@@ -13,6 +13,11 @@ let css =`
       margin-left: 20px;
       border-bottom: 2px solid #00bcd4;
 }
+.msg-border .lab{
+    display:block;
+    margin-left:20px;
+    margin-bottom:10px;
+}
 .btns{
   text-align: right;
   padding: 0 20px;
@@ -46,6 +51,7 @@ let css =`
     box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
     background-color: #2e8ded;
     color: #ffffff;
+    margin-right: 10px;
   }
 `;
 export let config = {
@@ -59,7 +65,6 @@ export let config = {
         $(`<style>${this.data.css}</style>`).appendTo(this.el);
         this.el.on('click','.ok',()=>{
             this.data.name = this.el.find('.inp-val').val();
-            console.log(this.data.view);
             let data = {
                 folder_id:'',
                 parent_table_id:'',

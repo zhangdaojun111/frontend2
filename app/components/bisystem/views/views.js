@@ -46,7 +46,7 @@ let config = {
             window.config.bi_views = views;
         });
 
-        //弹出框
+        //弹出框 新建视图
         this.el.on('click','.create', async()=> {
             viewDialogConfig.data.view = null;
             const res = await PMAPI.openDialogByComponent(viewDialogConfig,{
@@ -58,6 +58,7 @@ let config = {
                 ViewsService.update(res).then((res) => {
                     if(res['success']===1){
                         this.data.views.push(res.data);
+                        window.config.bi_views = this.data.views;
                         this.reload();
                     }else{
                         alert(res['error']);
