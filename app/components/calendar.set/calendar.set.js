@@ -143,6 +143,7 @@ let config = {
                         emailAddress: this.data.emailAddress,
                     });
                     this.data.childComponents.push(calendarSetItem);
+                    Mediator.emit('calendar-set:editor',{data:0});
                     this.append(calendarSetItem, this.el.find('.set-items'));
                 })
             }).catch(err=>{

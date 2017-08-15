@@ -6,7 +6,8 @@ import {CalendarService} from '../../../services/calendar/calendar.service';
 import Mediator from '../../../lib/mediator';
 import CalendarSetting from '../calendar.setting/calendar.setting';
 import {PMAPI} from '../../../lib/postmsg';
-import LeftcontentCalendarset from'./leftContent.calendarSet/leftContent.calendarSet'
+import LeftcontentCalendarset from'./leftContent.calendarSet/leftContent.calendarSet';
+import leftContentFinished from './leftContent.finished/leftContent.finished';
 import RightContentWorkFlow from '../right-content/right.content.workflowcontent/right.content.workflowcontent';
 import {CalendarSetService} from "../../../services/calendar/calendar.set.service"
 import {CalendarWorkflowData} from '../calendar.main/calendar.workflow/calendar.workflow';
@@ -52,53 +53,49 @@ let config = {
                 that.el.find(".item-content-2").show();
                 that.el.find(".item-content-2").animate({height:"82%"},"fast");
             }
-        }
-    },
-    firstAfterRender: function () {
-        Mediator.on('CalendarWorkflowData: workflowData', data => {
-            this.el.find('.item-content-3').empty();
-            data.forEach((row) =>{
-                this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
-            });
-        });
-    },
-    afterRender: function() {
-        this.el.css({"height":"100%","width":"100%"});
-        this.append(new LeftcontentCalendarset, this.el.find('.left-calendar-set'));
-        // let data = [{'name':"abc",'id':'11'},{'name':"ddff",'id':'12'}];
-        // this.append(new AutoSelect(data),this.el.find('.item-content-4'));
-        let that = this;
-        Mediator.on('calendar-left:hideRemindType',data =>{
-                that.append(new LeftContentHide(data.data), this.el.find('.left-calendar-hide'));
-        });
-        Mediator.on('CalendarWorkflowData: changeWorkflowData', data => {
-            console.log(data);
-        });
-
-        // CalendarService.getWorkflowRecords(data).then(res => {
-        //     res.rows.forEach((row) =>{
-        //         this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
-        //     });
-        // });
-
-        Mediator.on('calendar-left:calendar-class-hide',data =>{
-            data.data.forEach((row) =>{
-                   that.append(new LeftContentHide(row), that.el.find('.left-calendar-hide'));
-            });
-        });
-        Mediator.on('calendar-left:showRemindType',()=>{
+        },
+        showRemindType:function(that){
             that.el.find(".item-title-2").removeClass("display-all-content");
             that.el.find(".item-title-1").addClass("display-all-content");
             that.el.find(".item-content").hide();
             that.el.find(".item-content-2").hide();
             that.el.find(".item-content-1").show();
-            that.el.find(".item-content-1").animate({height:"80%"},"fast");
+            that.el.find(".item-content-1").css({height:"80%"});
+        },
+    },
+    afterRender: function() {
+        this.el.css({"height":"100%","width":"100%"});
+        this.append(new LeftcontentCalendarset, this.el.find('.left-calendar-set'));
+        this.append(new leftContentFinished(),this.el.find('.item-content-4'));
+        Mediator.on('CalendarWorkflowData: workflowData', data => {
+            this.el.find('.item-content-3').empty();
+            console.log(data);
+            data.forEach((row) =>{
+                this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
+            });
         });
+        let that = this;
+        Mediator.on('calendar-left:hideRemindType',data =>{
+                that.append(new LeftContentHide(data.data), this.el.find('.left-calendar-hide'));
+        });
+        Mediator.on('calendar-left:calendar-class-hide',data =>{
+            data.data.forEach((row) =>{
+                that.append(new LeftContentHide(row), that.el.find('.left-calendar-hide'));
+            });
+        });
+        Mediator.on('calendar-left:showRemindType',()=>{
+            that.actions.showRemindType(that);
+        });
+        // CalendarService.getWorkflowRecords(data).then(res => {
+        //     res.rows.forEach((row) =>{
+        //         this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
+        //     });
+        // });
         that.el.on('click', '.hide-con',function(){
-            let temp = $(this).parent().parent();
+            let temp = $(this).parents('.item-title');
             that.actions.contentHide(that,temp);
         }).on("click",".hide-con-2",function(){
-            that.actions.hideclass(that,$(this).parent().parent());
+            that.actions.hideclass(that,$(this).parents('.item-title'));
         }).on('click','.set-calendar',() =>{
             CalendarSetService.getMenu().then(res => {
                 let component = new CalendarSetting(res['menuList']);
@@ -115,7 +112,6 @@ let config = {
                     }
                 });
             });
-
         }).on('click', '.create-calendar', () => {
             PMAPI.openDialogByIframe('/calendar_mgr/create/', {width: "1000", height: '550', title: '日历表'});
         });

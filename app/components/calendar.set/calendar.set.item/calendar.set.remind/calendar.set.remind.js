@@ -48,11 +48,8 @@ let config = {
         listdata = {'list':this.data.copypeople};
         let copy_for_email = new AutoSelect(listdata);
         this.append(copy_for_email, this.el.find('.remind-copy-for-email'));
-        this.el.find(".popup").css('z-index',100,'background-color',"white");
-        this.el.find(".popup").css('background-color',"white");
-        this.el.find(".popup").css('height',"auto");
-        this.el.find(".popup").css('max-height',"300px");
-        Mediator.emit('calendar-set:editor',1);
+        this.el.find(".popup").css({'z-index':100,'background-color':"white",'height':"auto",'max-height':"300px"});
+        this.el.find(".popup li label").css({'text-align':"left",'overflow':"hidden", 'word-break':'keep-all','white-space':'nowrap'});
         this.el.on('click', '.sms-remind', () => {
             this.el.find('.sms-remind').addClass("unchecked");
             this.el.find(".email-remind").removeClass("unchecked");

@@ -57,24 +57,32 @@ let config = {
     afterRender: function() {
         // this.el.css({width: '100%'});
         let staus = false;
+        let that = this;
         let select_item_data = {'list':this.data.dropdownForRes};
         let multi_select_item = new AutoSelect(select_item_data);
         this.append(multi_select_item, this.el.find('.multi-select-item'));
-        this.el.find(".popup").css('z-index',100,'background-color',"white");
-        this.el.find(".popup").css('background-color',"white");
-        this.el.find(".popup").css('height',"auto");
-        this.el.find(".popup").css('max-height',"300px");
-        this.el.find(".popup").children('li').children('label').css('text-align',"left");
-        this.el.find(".popup").children('li').children('label').css('overflow',"hidden");
+        this.el.find(".popup").css({'z-index':100,'background-color':"white",'height':"auto",'max-height':"300px"});
+        this.el.find(".popup li label").css({'text-align':"left",'overflow':"hidden", 'word-break':'keep-all','white-space':'nowrap'});
         Mediator.on('calendar-set:editor',data =>{
             if(data.data ===1){
                 this.el.find(".editor-items").attr("disabled",false);
+                this.el.find(".auto-select-component").children('input').attr("disabled",false);
+                this.el.on("mouseenter",".auto-select-component input",function(){
+                    multi_select_item.actions.showSelectBox();
+                });
                 staus = true;
             }else{
+                console.log(data.data);
                 this.el.find(".editor-items").attr("disabled",true);
+                this.el.find(".auto-select-component").children('input').attr("disabled",true);
+                console.log(this.el.find(".auto-select-component input"));
+                this.el.on("mouseover",".auto-select-component input",function(){
+                    that.el.find('ul').hide();
+                });
                 staus = false;
             }
         });
+        this.el.find(".auto-select-component").children('input').attr("disabled",true);
         let temp = this.el.find(".popup").children('li');
         this.el.on("click",temp,function(){
             console.log(multi_select_item.data.choosed);
@@ -99,7 +107,6 @@ let config = {
             for( let a of this.data.preViewText ){
                 if( valueForResValue.indexOf( a ) === -1 ){
                     this.data.preViewText.push(valueForResValue);
-
                 }
             }
             this.data.rowSetData['selectedRepresents'] = valueForResValue;

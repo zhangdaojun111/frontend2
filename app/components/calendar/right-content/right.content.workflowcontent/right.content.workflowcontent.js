@@ -16,13 +16,16 @@ let config = {
             str+="%";
             return str;
         },
+        showfirst(){
+            let workflow_Id = "#workflow-"+config.data.table_id;
+            this.el.find("#workflow").attr("id","workflow-"+config.data.table_id);
+            let record_progress = config.actions.toPercent(config.data.record_progress);
+            this.el.find(workflow_Id).css({"width":record_progress});
+        }
     },
     afterRender: function() {
         this.el.css("height","30px");
-        let workflow_Id = "#workflow-"+config.data.table_id;
-        this.el.find("#workflow").attr("id","workflow-"+config.data.table_id);
-        let record_progress = config.actions.toPercent(config.data.record_progress);
-        this.el.find(workflow_Id).css({"width":record_progress});
+        config.actions.showfirst();
         this.el.on('click', '.workflow-content', () => {
             PMAPI.openDialogByIframe(
                 '/wf/approval/',
