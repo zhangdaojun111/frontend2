@@ -17,6 +17,8 @@ let config = {
         },
         delimg(e){
             let el = $(e.target).parent();
+            let em = el.next();
+            em.remove();
             el.remove();
         },
         //收集上传的信息给后台
