@@ -4,9 +4,19 @@ import {HTTP} from "./http";
 
 class Uploader {
 
-    constructor(){
+    constructor(options){
         this.formData = new FormData();
-        this.fileInput = $("<input type='file' style='visibility:hidden;' multiple='true'>");
+        let selectMode = " multiple='true'";
+        let accept = "";
+        if(options){
+            if(options['select_mode']=='single'){
+                selectMode = "";
+            }
+            if(options['file_filter']){
+                accept = " accept='"+options['file_filter']+"'";
+            }
+        }
+        this.fileInput = $("<input type='file' style='visibility:hidden;'"+accept+selectMode+">");
         this.fileInput.appendTo('body');
         this.fileList = {};
         this.settings={};
@@ -155,9 +165,10 @@ class Uploader {
      * @param url 上传地址
      * @param options 上传请求选项
      * @param onprogress 进程回调
-     *              function(event){} event.name,event.code
+     *              function(event){} event.name,event.code,event.loaded,event.total
+     * @param onCompleted 结束回调
      */
-    upload(url, options, onprogress){
+    upload(url, options, onprogress,onCompleted){
         let defaultOptions = {
             type: 'POST',
             url: url,
@@ -167,7 +178,7 @@ class Uploader {
             processData: false,
             contentType: false,
             timeout: 60000,
-            success:function (data) {},
+            success:onCompleted,
             error: function (error) {
                 console.dir(error);
             }
@@ -259,7 +270,9 @@ class Uploader {
                 } else {
                     fileItem['state']='finished';
                     fileItem['fileId'] = res['file_id'];
-                    fileItem['thumbnail'] = res['thumbnail'];
+                    if(res['thumbnail']){
+                        fileItem['thumbnail'] = res['thumbnail'];
+                    }
                 }
             } else {
                 fileItem['state']='failed';
