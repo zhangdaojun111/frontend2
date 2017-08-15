@@ -66,7 +66,17 @@ let config = {
     },
     afterRender: function() {
         let __this=this;
+        this.formTrans = false;
         this.el.on('click','.collapseFormBtn',()=>{
+            let ev = this.el.find('.collapseFormBtn');
+            if(this.formTrans){
+                ev.css("transform","rotateZ(360deg)");
+                this.formTrans = false;
+            }else{
+                ev.css("transform","rotateZ(180deg)");
+                this.formTrans = true;
+            }
+
             this.el.find(".place-form").toggle();
         })
         this.el.on("mouseenter",".imgseal",function(e){

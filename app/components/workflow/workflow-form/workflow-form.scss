@@ -3,21 +3,20 @@
   background: #fff;
   margin-bottom: 10px;
   .collapseFormDiv{
-    height:30px;
+    height:40px;
     padding-left: 10px;
+    border-bottom:1px solid rgba(228,228,228,1);
+    justify-content: space-between;
     .collapseFormBtn{
-      height:30px;
-      line-height: 30px;
-      width:30px;
-      border-radius: 50%;
-      text-align: center;
-      color: #fff;
-      background: #ccc;
       cursor: pointer;
-      outline: none;
-      border: none;
+      margin-right: 10px;
     }
-
+    .wf-icon{
+      margin-right: 10px;
+    }
+    .wfName{
+      font-weight: bold;
+    }
   }
   .place-form{
     position: relative;
