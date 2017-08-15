@@ -122,7 +122,6 @@ let config = {
             that.actions.goOnlineNumber();
         }).on('click', '.system-setting', () => {
             that.actions.goSystemSetting();
-
             // }).on('click','a.other-login', () => {   //他人登录
             //     this.actions.otherLogin();
         }).on('click', '.home', () => {

@@ -13,7 +13,9 @@ export const GlobalService = {
             data:body,
             type:'post'
         })
-    }
+    },
+
+
 
 
 };
