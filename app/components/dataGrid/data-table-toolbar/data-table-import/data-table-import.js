@@ -26,7 +26,7 @@ let config = {
         prepareWorkflowData: function () {
             FormService.getPrepareParmas({table_id: this.data.tableId}).then( res=>{
                 let workflow = this.el.find( '.workflow' );
-                if( this.data.workflowList.length != 0 ){
+                if( res.data.flow_data.length != 0 ){
                     this.data.formId = res.data.form_id;
                     this.data.workflowList = res.data.flow_data;
                     let html = '';
@@ -86,18 +86,18 @@ let config = {
                     msgBox.alert( res.error );
                     if( this.data.isBatch ){
                         let ids = res.ids || [];
-                        PMAPI.sendToParent({
-                            type: PMENUM.close_dialog,
-                            key: this.key,
-                            data: {
-                                type: 'batch',
-                                ids: ids
-                            }
-                        })
+                        // PMAPI.sendToParent({
+                        //     type: PMENUM.close_dialog,
+                        //     key: this.key,
+                        //     data: {
+                        //         type: 'batch',
+                        //         ids: ids
+                        //     }
+                        // })
                     }
                     PMAPI.sendToParent({
                         type: PMENUM.close_dialog,
-                        key: this.key,
+                        key: this.data.key,
                         data: {
                             type: 'batch',
                             ids: []
@@ -118,7 +118,7 @@ let config = {
         }
     },
     afterRender: function (){
-        if( !this.data.isBatch ){
+        if( this.data.isBatch == '0' ){
             this.actions.prepareWorkflowData();
         }
         //上传初始化

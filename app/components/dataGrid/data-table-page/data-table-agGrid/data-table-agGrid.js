@@ -1557,10 +1557,13 @@ let config = {
                 title: title,
                 modal:true
             } ).then( (data)=>{
-                console.log( "__________" )
-                console.log( "__________" )
-                console.log( data )
+                if( data.type == "batch" ){
+                    this.actions.returnBatchData( data.ids );
+                }
             } )
+        },
+        //返回批量工作流导入后数据
+        returnBatchData: function (ids) {
         }
     },
     afterRender: function () {
