@@ -10,7 +10,8 @@ let config = {
         choosed: [],                    // 已经选择的数据
         displayType: 'popup',           // popup或者static popup为弹出的形式 static 为静态显示
         multiSelect: true,
-        selectBoxHeight: 300            // select 框的高度
+        selectBoxHeight: 300,            // select 框的高度
+        onSelect: null
     },
     actions: {
         selectItem: function (item) {
@@ -70,6 +71,9 @@ let config = {
             this.listWrap.find('input:checkbox:checked').each(function () {
                 this.checked = false;
             });
+            if (this.data.onSelect) {
+                this.data.onSelect(this.actions.getValue());
+            }
             if (this.data.choosed.length) {
                 this.choosedWrap.show();
                 let html = [];

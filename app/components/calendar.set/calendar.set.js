@@ -11,6 +11,7 @@ import {CalendarService} from "../../services/calendar/calendar.service"
 import {CalendarSetService} from "../../services/calendar/calendar.set.service"
 import {UserInfoService} from '../../services/main/userInfoService';
 import MSG from '../../lib/msgbox';
+import {AutoSelect} from '../util/autoSelect/autoSelect';
 
 import {PMAPI} from '../../lib/postmsg';
 
@@ -126,6 +127,7 @@ let config = {
                     if(this.data.rowTitle[index]['id'] && this.data.rowTitle[index]['dtype'] === '8' && this.data.replaceDropDown.length !== 0){
                         this.data.isConfigField = true;
                     }
+
                     let calendarSetItem = new CalendarSetItem({
                         rowData: row,
                         dropdown: this.data.dropdown,

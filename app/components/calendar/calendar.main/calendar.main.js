@@ -756,6 +756,15 @@ let config = {
             }
         })
 
+    },
+    beforeDestory: function () {
+        Mediator.removeAll('calendar-left');
+        Mediator.removeAll('CalendarWorkflowData: workflowData');
+        Mediator.removeAll('Calendar: changeMainView');
+        Mediator.removeAll('Calendar: tool');
+        Mediator.removeAll('Calendar: changeDate');
+        Mediator.removeAll('calendarSchedule: date');
+        Mediator.removeAll('calendar-left:unshowData');
     }
 };
 

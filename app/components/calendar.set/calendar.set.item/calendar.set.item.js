@@ -40,82 +40,94 @@ let config = {
 
         preViewText: [],
 
+        addSelectedOpts: [],
+
         multiSelectMenu: {},
     },
     actions: {
-        returnShow: function(param){
+        returnShow: function (param) {
             let res = [];
             for(let a of param){
                 for(let b in this.data.dropdown){
-                    if(a === this.data.dropdown[b]['id']){
-                        res.push(this.data.dropdown[b]['name']);
+                    if(a['id'] === this.data.dropdown[b]['id']){
+                        res.push(this.data.dropdown[b]);
                     }
                 }
             }
             return res;
         },
+
         getSelectedValue: function () {
             //return this.data.multiSelectMenu.data.choosed;
         }
 
     },
-    afterRender: function() {
+    afterRender: function () {
         // this.el.css({width: '100%'});
+        console.log(this.data.rowSetData);
         let staus = false;
-        let select_item_data = {'list':this.data.dropdownForRes};
+        let _this = this;
+        let select_item_data = {
+            'list': this.data.dropdownForRes,
+            onSelect: function () {
+                _this.data.addSelectedOpts = _this.data.multiSelectMenu.data.choosed;
+                let newSelectedOpts = _this.actions.returnShow(_this.data.addSelectedOpts);
+                let selectedOptsId = [];
+                let selectedOptsText  = [];
+                for(let newItem of newSelectedOpts) {
+                    console.log(newItem);
+                    selectedOptsText.push(newItem['name']);
+                    selectedOptsId.push(newItem['id']);
+                }
+                _this.el.find('.preview-text').html(selectedOptsText);
+                _this.data.rowSetData['selectedOpts'] = selectedOptsId;
+            },
+        };
         this.data.multiSelectMenu = new AutoSelect(select_item_data);
         this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
 
+        this.el.find(".popup").css('z-index', 100, 'background-color', "white");
+        this.el.find(".popup").css('background-color', "white");
+        this.el.find(".popup").css('height', "auto");
+        this.el.find(".popup").css('max-height', "300px");
 
-        this.el.find(".popup").css('z-index',100,'background-color',"white");
-        this.el.find(".popup").css('background-color',"white");
-        this.el.find(".popup").css('height',"auto");
-        this.el.find(".popup").css('max-height',"300px");
-        this.el.find(".popup").children('li').children('label').css('text-align',"left");
-        this.el.find(".popup").children('li').children('label').css('overflow',"hidden");
+        this.el.find(".popup").children('li').children('label').css('text-align', "left");
+        this.el.find(".popup").children('li').children('label').css('overflow', "hidden");
 
-        Mediator.on('calendar-set:editor',data =>{
-            if(data.data ===1){
-                this.el.find(".editor-items").attr("disabled",false);
+        Mediator.on('calendar-set:editor', data => {
+            if (data.data === 1) {
+                this.el.find(".editor-items").attr("disabled", false);
                 staus = true;
-            }else{
-                this.el.find(".editor-items").attr("disabled",true);
+            } else {
+                this.el.find(".editor-items").attr("disabled", true);
                 staus = false;
             }
         });
         this.el.on('click', '.set-show-text-input', () => {
+
             let isSetShowText = this.el.find('.set-show-text-input').is(':checked');
             console.log(isSetShowText);
             this.data.rowSetData['isSelected'] = isSetShowText;
+
         }).on('click', '.set-calendar-page-show-text', () => {
+
             let isShowHomePage = this.el.find('.set-calendar-page-show-text').is(':checked');
             this.data.rowSetData['is_show_at_home_page'] = isShowHomePage;
+
         }).on('change', '.set-color', () => {
+
             let setColor = this.el.find('.set-color').val();
             this.data.rowSetData['color'] = setColor;
-        }).on('click', '.add-show-text', () => {
 
-            // let addShowTextValue = this.el.find('.add-show-text option:selected').val();
-            // let addShowText = this.el.find('.add-show-text option:selected').text();
-            // this.data.preViewText.push(addShowText);
-            // console.log(this.data.preViewText);
-            // this.el.find('.preview-text').text(this.data.preViewText);
-            // this.data.rowSetData['selectedOpts'].push(addShowTextValue);
         }).on('change', '.res-text', () => {
             let textForResValue = this.el.find('.res-text option:selected').val();
             let textForResText = this.el.find('.res-text option:selected').text();
-            console.log(this.data.preViewText, textForResText);
-            for( let a of this.data.preViewText ){
-                if( textForResText.indexOf( a ) === -1 ){
-                    this.data.preViewText.push(textForResText);
-                    console.log(this.data.preViewText);
-                }
-            }
+
+
             this.data.rowSetData['selectedRepresents'] = textForResValue;
         }).on('change', '.page-change-text', () => {
             let valueForCalendarChangeValue = this.el.find('.page-change-text option:selected').val();
             this.data.rowSetData['selectedEnums'] = valueForCalendarChangeValue;
-            //this.data.allRows[this.data.index]['selectedEnums'] = valueForCalendarChange;
         }).on('click', '.set-remind-method', () => {
             // CalendarSetRemindMethod.emailStatus = this.data.rowSetData.email.email_status;
             // CalendarSetRemindMethod.smsStatus = this.data.rowSetData.sms.sms_status;
@@ -145,19 +157,19 @@ let config = {
                 title: '主框架弹出',
                 width: 800,
                 height: 500,
-                close: function() {
+                close: function () {
                     $(this).dialog('destroy');
                     component.destroySelf();
                 }
             });
         });
 
-        this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']);
+        //this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']);
         this.el.find('.preview-text').text(this.data.preViewText);
 
-        $("#set-color-id").attr("id","set-color-"+this.data.rowSetData.field_id);
-        let set_color_id = "#set-color-"+this.data.rowSetData.field_id;
-        $(set_color_id).attr("value",this.data.rowSetData.color);
+        $("#set-color-id").attr("id", "set-color-" + this.data.rowSetData.field_id);
+        let set_color_id = "#set-color-" + this.data.rowSetData.field_id;
+        $(set_color_id).attr("value", this.data.rowSetData.color);
     },
     beforeDestory: function () {
         Mediator.removeAll('calendar-set:editor');
