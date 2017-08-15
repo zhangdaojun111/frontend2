@@ -47,9 +47,10 @@ let config = {
             this.inputObject = object;
             this.inputNextObject = nextObject;
         },
-        setInputValue: function(value,name) {
+        setInputValue: function(value,name,type) {
             this.inputObject.val(value);
             this.inputObject.attr('name',name);
+            this.inputObject.attr('title',type);
         },
         setInputType: function(type) {
             let inputType;
@@ -86,7 +87,7 @@ let config = {
         // debugger
         let _this = this;
         this.el.on('click','.condition-search-li', function() {
-            _this.actions.setInputValue($(this).find('.name').html(),$(this).find('.searchField').html());
+            _this.actions.setInputValue($(this).find('.name').html(),$(this).find('.searchField').html(),$(this).find('.searchType').html());
             _this.actions.setSelectValue($(this).find('.searchType').html());
             _this.actions.setInputType($(this).find('.searchType').html());
             _this.data.inputBoxName = $(this).find('.name').html();

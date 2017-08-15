@@ -70,9 +70,9 @@ let config = {
                 obj['cond']['leftBracket'] = this.data.searchInputAry[i].leftSelect;
                 obj['cond']['operate'] = this.data.searchInputAry[i].relationSelect;
                 obj['cond']['rightBracket'] = this.data.searchInputAry[i].rightSelect;
-                obj['cond']['searchBy'] = this.data.searchInputAry[i].inputBoxName
-                obj['cond']['searchByName'] = this.data.searchInputAry[i].inputBoxValue
-                obj['cond']['searchByNew'] = this.data.searchInputAry[i].inputBoxName
+                obj['cond']['searchBy'] = this.data.searchInputAry[i].inputBoxValue
+                obj['cond']['searchByName'] = this.data.searchInputAry[i].inputBoxName
+                obj['cond']['searchByNew'] = this.data.searchInputAry[i].inputBoxValue
                 if(this.el.find('.condition-search-radio.or').eq(i).prop('checked') == true) {
                     obj['relation'] = '$or';
                 }
