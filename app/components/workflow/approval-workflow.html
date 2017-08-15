@@ -3,12 +3,17 @@
         <div class="workflow-container">
             <div class="approval-bar-f">
                 <div class="approval-bar flex flex-between">
-                    <div class="tit">工作审批</div>
-                    <div class="">
-                        <button class="gz">盖章</button>
-                        <button class="" onclick="window.print();">打印</button>
+                    <div class="nullDiv approval-bar-col"></div>
+                    <div class="tit approval-bar-col">工作审批</div>
+                    <div class="window flex approval-bar-col">
+                        <div class="window-icon-box flex"><i class="workflow-icon icon-workflow-icon12"></i></div>
+                        <div class="window-icon-box flex"><i class="workflow-icon icon-workflow-icon13"></i></div>
+                        <!--<button class="gz">盖章</button>-->
                     </div>
                 </div>
+            </div>
+            <div id="approval-header">
+                <div id="approval-info"></div>
             </div>
             <div id="preview-node">
                 <div class="preview-node preview-node1"></div>
@@ -17,23 +22,19 @@
             </div>
             <div class="workflow-main">
                 <div id="workflow-seal" style="width: 50px;height: 50px;"></div>
-                <div id="approval-header">
-                    <div id="approval-info"></div>
-                </div>
                 <div class="workflow-form" id="workflow-form"></div>
                 <div class="workflow-record">
                      <div class="workflow-box" id="workflow-record"></div>
                 </div>
 
                 <div class="workflow-foot">
-                    <div class="workflow-box flex flex-start">
+                    <div class="workflow-box  flex flex-column flex-start">
                         <div class="workflow-box-l">
                             <div class="tit">
                                 <span>审批意见</span>
                                 <i></i>
                             </div>
                         </div>
-
                         <div class="workflow-box-r">
                             <div class="approve-textarea">
                                 <textarea id="comment"></textarea>
@@ -41,12 +42,26 @@
                         </div>
                     </div>
                     <div class="workflow-box" id="add-home"></div>
-
-                    <div class="workflow-box flex flex-start" id="flow-node">
-                        <div class="workflow-box-l">
+                    <div class="workflow-box flex flex-column flex-start" id="flow-node">
+                        <div class="workflow-box-l flex">
                             <div class="tit">
+                                <i class="workflow-icon icon-workflow-icon5"></i>
                                 <span>节点流程</span>
-                                <i></i>
+                            </div>
+                            <div class="workflow-look flex">
+                                <div class="previewBtn"  id="zoomIn">
+                                    <i class="workflow-icon icon-workflow-icon8"></i>
+                                </div>
+                                <div class="previewBtn" id="zoomOut">
+                                    <i class="workflow-icon icon-workflow-icon7"></i>
+                                </div>
+                                <div class="previewBtn" id="newWin">
+                                    <i class="workflow-icon icon-workflow-icon9"></i>
+                                </div>
+                                <div class="previewBtn flex" id="togglePic">
+                                    <i class="workflow-icon icon-workflow-icon4"></i>
+                                    <div class="togglePic-text">节点图</div>
+                                </div>
                             </div>
                         </div>
 
@@ -69,11 +84,11 @@
         <div class="preview-btn" data-preview="flow-view">流程节点</div>
         <div class="preview-btn" data-preview="record-view">审批记录</div>
     </div>
-    <div class="right">
-        <div id="app-pass">审批通过</div>
-        <div id="app-rej-start">驳回到发起人</div>
-        <div id="app-rej-any">驳回任意节点</div>
-        <div id="app-rej-up">驳回到上一级</div>
-        <div id="app-add">加签</div>
-    </div>
+    <!--<div class="right">-->
+        <!--<div id="app-pass">审批通过</div>-->
+        <!--<div id="app-rej-start">驳回到发起人</div>-->
+        <!--<div id="app-rej-any">驳回任意节点</div>-->
+        <!--<div id="app-rej-up">驳回到上一级</div>-->
+        <!--<div id="app-add">加签</div>-->
+    <!--</div>-->
 </div>
