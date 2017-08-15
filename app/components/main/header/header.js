@@ -7,6 +7,7 @@ import msgbox from '../../../lib/msgbox';
 import OtherLogin from "../login-by-other/login-by-other";
 import {GlobalSearch} from "../global-search/global-search"
 import {systemMessageUtil} from '../system-message/system-message';
+import {SysSetting} from "../system-setting/system-setting"
 
 let config = {
     template: template,
@@ -54,7 +55,7 @@ let config = {
             msgbox.alert('go online number');
         },
         goSystemSetting: function () {
-            msgbox.alert('go system setting');
+            SysSetting.show();
         },
         refreshOnlineNum: function (data) {
             this.el.find('.online-num span').text(data.online_user_num);
