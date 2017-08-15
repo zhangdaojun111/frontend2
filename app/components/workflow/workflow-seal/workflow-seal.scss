@@ -1,5 +1,4 @@
 .seal{
-    overflow: scroll;
     display: flex;
     width: 280px;
     flex-direction: column;
@@ -8,7 +7,7 @@
     top: 10px;
     right: 2px;
     height: 500px;
-    z-index: 10;
+    z-index: 62;
     background: #fff;
     .add-seal{
         width: 250px;
@@ -45,7 +44,8 @@
         height: 50px;
         display: block;
         margin-top: 15px;
-        overflow: hidden;
+
+        position: relative;
         .add-img{
             width: 100%;
             height: 100%;
@@ -60,9 +60,9 @@
         left: 0;
         top: 0;
         z-index: 100;
-        background: #ccc;
+        background: rgba(204,204,204,0.7);
         visibility: hidden;
-        opacity: .7;
+        //opacity: .7;
         .dragimg{
             position: absolute;
             z-index: 10200;
@@ -77,4 +77,22 @@
             z-index: 102;
         }
     }
+
 }
+//.cloneMask{
+//     background: rgba(0,0,0,0.7);
+//     width: 100%;
+//     height: 100%;
+//     position: fixed;
+//     left: 0;
+//     top: 0;
+//     right: 0;
+//     bottom: 0;
+//     z-index: 60;
+//     display: none;
+//
+// }
+//#workflow-form #detail-form{
+//    z-index: 61;
+//    background: #fff;
+//}

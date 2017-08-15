@@ -251,3 +251,6 @@ export const agentSetting = {
         this.el.dialog('close');
     }
 }
+
+
+//agentSetting.show();
