@@ -6,9 +6,9 @@ import template from './correspondence-control.html';
 
 let config={
     template:template,
-    firstAfterRender:function(){
+    firstAfterRender(){
         let _this=this;
-        _this.el.on('click','.ui-forms-a',_.debounce(function(){
+        this.el.on('click','.ui-forms-a',_.debounce(function(){
             Mediator.publish('form:openCorrespondence:'+_this.data.tableId,_this.data);
         },300));
         let config={
@@ -21,6 +21,7 @@ let config={
             recordId:this.data.recordId,
         }
         let dataGrid=new DataTableAgGrid(config);
+        this.data.dataGrid=dataGrid;
         this.append(dataGrid,this.el.find('.correspondence-box'));
         Mediator.subscribe('form:correspondenceDefaultData:'+this.data.tableId,()=>{
             if(res == _this.data.value){
@@ -29,8 +30,13 @@ let config={
             }
         })
     },
-    beforeDestory:function(){
+    afterRender(){
+        this.append(this.data.dataGrid,this.el.find('.correspondence-box'));
+    },
+
+    beforeDestory(){
         Mediator.removeAll('form:correspondenceDefaultData:'+this.data.tableId);
+        Mediator.removeAll('form:openCorrespondence:'+this.data.tableId);
     }
 }
 export default class Correspondence extends Component{

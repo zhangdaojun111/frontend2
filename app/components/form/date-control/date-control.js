@@ -12,13 +12,13 @@ let config={
     },
     actions:{
     },
-    firstAfterRender:function(){
+    firstAfterRender(){
         let _this=this;
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
     },
-    afterRender:function(){
+    afterRender(){
         let _this=this;
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
@@ -57,7 +57,7 @@ let config={
         _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
 
     },
-    beforeDestory:function(){
+    beforeDestory(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
         Mediator.removeAll('form:history:'+this.data.tableId);
     }

@@ -7,7 +7,6 @@ import template from './input-control.html'
 let config={
     template:template,
     data: {
-        width:'240px',
         error_msg: ' error-msg',
         ui_error_arrow: 'ui-error-arrow',
     },
@@ -147,7 +146,7 @@ let config={
             }
         }
     },
-    firstAfterRender:function(){
+    firstAfterRender(){
         let _this=this;
         _this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
@@ -169,7 +168,7 @@ let config={
             this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
         });
     },
-    afterRender: function() {
+    afterRender() {
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
             this.el.find('.ui-width').attr('disabled',true);
@@ -177,7 +176,7 @@ let config={
             this.el.find('.ui-width').attr('disabled',false);
         }
     },
-    beforeDestory:function(){
+    beforeDestory(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
         Mediator.removeAll('form:history:'+this.data.tableId);
     }

@@ -997,10 +997,6 @@ let config={
                     // delete this.globalService.idsInChildTableToParent[this.tableId];
         },
 
-        setTableIdToOptions(options,tableId){
-                options['tableId']=tableId;
-        },
-
         //转到编辑模式
         async changeToEdit(_this){
             let json={
@@ -1196,18 +1192,13 @@ let config={
             if(data[key].required){
                 data[key]['requiredClass']=data[key].value==''?'required':'required2';
             }
+            if(single.data('width')){
+                data[key]['width']=single.data('width')+'px';
+            }else{
+                data[key]['width']='240px';
+            }
             //数据填充后，根据修改条件对不同框进行只读操作
             setTimeout(()=>{_this.actions.reviseCondition(data[key],data[key].value,_this);},0);
-            if(type == 'Select' || type=='Buildin' ){
-                if(data[key].value){
-                    for(let obj of data[key].options){
-                        if(obj.value == data[key].value){
-                            data[key]['showValue']=obj.label;
-                            break;
-                        }
-                    }
-                }
-            }
             //在这里根据type创建各自的控件
             switch (type){
                 case 'Correspondence':
@@ -1261,7 +1252,6 @@ let config={
                     _this.childComponent[data[key].dfield]=hidden;
                     break;
                 case 'Select':
-                    _this.actions.setTableIdToOptions(data[key]['options'],_this.data.tableId);
                     let selectControl=new SelectControl(data[key]);
                     selectControl.render(single);
                     _this.childComponent[data[key].dfield]=selectControl;
@@ -1277,7 +1267,6 @@ let config={
                     _this.childComponent[data[key].dfield]=yearMonthControl;
                     break;
                 case 'Buildin':
-                    _this.actions.setTableIdToOptions(data[key]['options'],_this.data.tableId)
                     let buildInControl = new BuildInControl(data[key]);
                     buildInControl.render(single);
                     _this.childComponent[data[key].dfield]=buildInControl;
@@ -1327,11 +1316,9 @@ let config={
         this.actions.changeOptions();
         this.actions.setDataFromParent();
 
-        $('body').on('click.selectDrop',function(){
-            $('.select-drop').hide();
-        })
-
         Mediator.subscribe('form:changeValue:'+_this.data.tableId,function(data){
+            console.log('值改变事件');
+            console.log(data);
             _this.actions.checkValue(data,_this);
         })
 
@@ -1351,7 +1338,6 @@ let config={
                     }
                 }
             }
-            console.log(history);
             History.data.history_data=history;
             PMAPI.openDialogByComponent(History,{
                 width:800,
@@ -1390,17 +1376,17 @@ let config={
             if(type == 1){
                 _this.data.sonTableId = data["value"];
                 if(isView == '0'){
-                    _this.data.viewMode = 'normal';
+                    _this.data.viewMode = 'EditChild';
                 }else{
                     _this.data.viewMode = 'ViewChild';
                 }
-                PMAPI.openDialogByIframe(`/iframe/source_data_grid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.parent_temp_id}&rowId=${data.parent_temp_id}&tableType=child&viewMode=${_this.data.viewMode}`,{
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.parent_temp_id}&rowId=${data.parent_temp_id}&tableType=child&viewMode=${_this.data.viewMode}`,{
                     width:800,
                     height:600,
                     title:`子表`,
                     modal:true
                 }).then(data=>{
-                    if(_this.viewMode == 'normal'){
+                    if(_this.viewMode == 'EditChild'){
                         _this.actions.setCountData();
                     }
                 })
@@ -1422,7 +1408,7 @@ let config={
                 }else{
                     _this.data.viewMode = 'viewFromCorrespondence';
                 }
-                PMAPI.openDialogByIframe(`/iframe/source_data_grid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.parent_temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true`,{
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.parent_temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true`,{
                     width:800,
                     height:600,
                     title:`对应关系`,
@@ -1440,7 +1426,6 @@ let config={
                 modal:true
             }).then((data) => {
                 if(!data.cancel){
-                    console.log('快捷添加回显');
                     _this.actions.addEnrypt(data);
                 }
             });
@@ -1448,12 +1433,15 @@ let config={
 
         Mediator.subscribe('form:addNewBuildIn:'+_this.data.tableId,function(data){
             _this.data['quikAddDfield']=data.dfield;
-            PMAPI.openDialogByIframe(`/iframe/add_buildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
+            PMAPI.openDialogByIframe(`/iframe/addBuildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
                 width:800,
                 height:600,
                 title:`快捷添加内置字段`,
                 modal:true
             }).then((data) => {
+                if(!data.new_option){
+                    return;
+                }
                 let options=_this.childComponent[_this.data['quikAddDfield']].data['options'];
                 if(options[0]['label'] == '请选择' || options[0]['label']==''){
                     options.splice(1,0,data.new_option);
@@ -1513,7 +1501,6 @@ let config={
     beforeDestory(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
         Mediator.removeAll('form:addItem:'+this.data.tableId);
-        $('body').off('.selectDrop');
     }
 }
 class BaseForm extends Component{
@@ -1524,10 +1511,6 @@ class BaseForm extends Component{
         //存父表的newData
         FormService.frontendParentNewData[formData.data.tableId] = formData.data.data;
         super(config,formData.data);
-        console.log('baseForm');
-        console.log('baseForm');
-        console.log('baseForm');
-        console.log(this);
     }
 
 }
