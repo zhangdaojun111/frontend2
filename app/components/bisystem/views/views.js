@@ -3,7 +3,6 @@ import {BiBaseComponent} from '../bi.base.component';
 import {ViewItemComponent} from "./item/item";
 
 import {ViewsService} from "../../../services/bisystem/views.service";
-import {ViewsSaveService} from "../../../services/bisystem/views.save.service";
 import {config as viewDialogConfig} from "./dialog/edit/dialog.edit";
 import {PMAPI} from '../../../lib/postmsg';
 import template from "./views.html";
@@ -69,7 +68,7 @@ let config = {
             return false;
         }).on('click','.save',()=> {
            let views = this.data.views;
-           ViewsSaveService.saveData({data:views}).then((res)=>{
+            ViewsService.saveData({data:views}).then((res)=>{
                if(res['success']===1){
                    alert('保存成功');
                }else{

@@ -2,7 +2,6 @@ import {BiBaseComponent} from '../../bi.base.component';
 
 import template from "./item.html";
 import {ViewsService} from "../../../../services/bisystem/views.service";
-import {ViewsDelService} from "../../../../services/bisystem/views.del.service";
 import {config as viewDialogConfig} from "../dialog/edit/dialog.edit";
 import msgbox from "../../../../lib/msgbox";
 import Mediator from '../../../../lib/mediator';
@@ -40,7 +39,7 @@ let config = {
             };
             if(ok){
                 data.view_id = this.data.id;
-                ViewsDelService.delData(data).then((res)=>{
+                ViewsService.delData(data).then((res)=>{
                     if(res['success']===1){
                         Mediator.publish('bi:views:update', {'view': 'remove', data: this.data});
                         this.destroySelf();

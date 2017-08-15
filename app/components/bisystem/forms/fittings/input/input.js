@@ -3,7 +3,7 @@
  * name input输入组件
  */
 
-import {FormFittingAbstract} from '../formAbstract'
+import {BiBaseComponent} from '../../../bi.base.component';
 import template from './input.html';
 import './input.scss';
 
@@ -12,7 +12,7 @@ let config = {
     data: {},
 }
 
-export class InputComponent extends FormFittingAbstract {
+export class InputComponent extends BiBaseComponent {
     constructor() {
         super(config)
     }

@@ -75,7 +75,7 @@ export class CanvasCellComponent extends BiBaseComponent {
                 self.cell.size.zIndex = self.cell.canvas.data.cellMaxZindex;
             });
         };
-        this.el.on('click', '.icon-group .del-cell-btn', (event) => {
+        this.el.on('click', '.del-cell-btn', (event) => {
             this.delCellLayout();
             return false;
         });
@@ -146,8 +146,11 @@ export class CanvasCellComponent extends BiBaseComponent {
      *删除画布layout
      */
     delCellLayout() {
-        Mediator.publish('bi:cell:remove', this.componentId);
-        this.destroySelf();
+        let ok = confirm('确定删除');
+        if (ok) {
+            Mediator.publish('bi:cell:remove', this.componentId);
+            this.destroySelf();
+        }
     }
 
     /**

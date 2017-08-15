@@ -142,11 +142,6 @@ module.exports = {
                         }
                     }
                 ]
-            },
-            {
-                test: /\.(jpe|jpg|woff|woff2|eot|ttf|svg)(\?.*$|$)/,
-                exclude: /node_modules/,
-                loader: 'url-loader'
             }
         ]
     },
