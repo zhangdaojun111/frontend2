@@ -656,7 +656,6 @@ let config = {
             this.data.filterParam['filter'] = filter;
             this.data.filterParam['is_filter'] = 1;
             this.actions.getGridData();
-            this.actions.getGridData();
         },
         postExpertSearch:function(data,id,name) {
             this.data.filterParam.expertFilter = data;
@@ -789,6 +788,7 @@ let config = {
                     //赋值
                     this.agGrid.actions.setGridData(d);
                 }
+                this.pagination.actions.resetPagination( this.data.total )
                 this.actions.sortWay();
             })
             HTTP.flush();
