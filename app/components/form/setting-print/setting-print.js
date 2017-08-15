@@ -170,6 +170,7 @@ let SettingPrint = {
     },
     beforeDestory: function () {
         this.el.find('.global-search-input').off();
+        this.data.style.remove();
     }
 }
 export default SettingPrint

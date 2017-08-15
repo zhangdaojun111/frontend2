@@ -1426,7 +1426,6 @@ let config={
                 modal:true
             }).then((data) => {
                 if(!data.cancel){
-                    console.log('快捷添加回显');
                     _this.actions.addEnrypt(data);
                 }
             });
@@ -1440,6 +1439,9 @@ let config={
                 title:`快捷添加内置字段`,
                 modal:true
             }).then((data) => {
+                if(!data.new_option){
+                    return;
+                }
                 let options=_this.childComponent[_this.data['quikAddDfield']].data['options'];
                 if(options[0]['label'] == '请选择' || options[0]['label']==''){
                     options.splice(1,0,data.new_option);

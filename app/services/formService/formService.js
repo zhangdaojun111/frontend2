@@ -479,6 +479,8 @@ export const FormService={
 
     //重新拼装下拉框格式
     createSelectJson(json,multi){
+        console.log('multi');
+        console.log(json);
         let data={list:[],choosed:[]};
         if(json.is_view){
             data['editable']=false;
@@ -487,7 +489,7 @@ export const FormService={
         }
         data['width']=json['width'];
         for(let key in json['options']){
-            if(json['value'] && (json['value']==json['options'][key]['value'] || (multi && json['value'].indexOf(json['options'][key]['value'])))){
+            if(json['value'] && ((!multi && json['value']==json['options'][key]['value']) || (multi && json['value'].length > 0 && json['value'].indexOf(json['options'][key]['value'] != -1)))){
                 data.choosed.push({
                     id:json['options'][key]['value'],
                     name:json['options'][key]['label'],

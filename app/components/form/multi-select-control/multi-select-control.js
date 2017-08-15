@@ -6,6 +6,9 @@ import template from './multi-select-control.html'
 
 let config={
     template:template,
+    data:{
+        isInit:true,
+    },
     actions:{
         setValue(){
             let values=[];
@@ -40,7 +43,7 @@ let config={
             }else{
                 let data=FormService.createSelectJson(this.data,'multi');
                 data.onSelect=function(data){
-                    if(!_this._autoSelect || _this._autoSelect.data.choosed.length == 0){
+                    if(!_this._autoSelect || _this._autoSelect.data.choosed.length == 0 || _this.data.isInit){
                         return;
                     }
                     _this.actions.setValue();
@@ -52,6 +55,7 @@ let config={
                 autoSelect.render(el);
             }
         }
+        this.data.isInit=false;
     },
     beforeDestory:function(){
         Mediator.removeAll('form:changeOption:'+this.data.tableId);
