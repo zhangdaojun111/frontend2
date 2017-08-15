@@ -17,7 +17,7 @@ let config={
             parentTempId:this.data.parent_temp_id,
             rowId:this.data.parent_temp_id,
             tableType:'child',
-            viewMode:this.data.isView=='0'?'normal':'ViewChild',
+            viewMode:this.data.is_view==0?'EditChild':'ViewChild',
         }
         let dataGrid=new DataTableAgGrid(config);
         this.append(dataGrid,this.el.find('.songGrid'));

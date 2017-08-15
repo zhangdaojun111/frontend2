@@ -2,57 +2,72 @@ import Component from '../../../lib/component'
 import DropDown from "../vender/dropdown/dropdown";
 import Mediator from '../../../lib/mediator';
 import template from './year-month-control.html'
+import {AutoSelect} from "../../util/autoSelect/autoSelect"
 
 let config={
     template:template,
+    actions:{
+      changeValue(value){
+          let val = 0;
+          if( value > 12 ){
+              val =value + "-" + this.data.value.split('-')[1];
+          }
+          else{
+              val = this.data.value.split('-')[0] + "-" + value;
+          }
+          _this.data.value = val;
+          _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+      }
+    },
     firstAfterRender(){
         let _this=this;
-        Mediator.subscribe('form:dropDownSelect:'+_this.data.tableId,function(data){
-            if(data.dfield !=_this.data.dfield){
-                return;
-            }
-            let val = 0;
-            if( data.value > 12 ){
-                val =data.value + "-" + _this.data.value.split('-')[1];
-            }
-            else{
-                val = _this.data.value.split('-')[0] + "-" + data.value;
-            }
-            _this.data.value = val;
-            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
-        });
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
     },
     afterRender(){
-        let yearData = {} ;
-        let monthData = {} ;
-        $.extend(true,yearData,this.data)
-        $.extend(true,monthData,this.data)
+        let _this=this;
+        let yearData = {
+            multiSelect:false,
+            onSelect:function(data){
+                if(data.length==0){
+                    return;
+                }
+                _this.actions.changeValue(data[0]['id']);
+            }
+        } ;
+        let monthData = {
+            multiSelect:false,
+            onSelect:function(data){
+                if(data.length==0){
+                    return;
+                }
+                _this.actions.changeValue(data[0]['id']);
+            }
+        } ;
         let myDate = new Date();
         let myYear = myDate.getFullYear();
-        if(!yearData.options || !yearData.options.length){
-            yearData.options=[];
+        if(!yearData.list || !yearData.list.length){
+            yearData.list=[];
         }
-        yearData.options.push({ "label": String(myYear),"value": String(myYear),"tableId":this.tableId})
+        yearData.list.push({ "name": String(myYear),"id": String(myYear)})
         for( let i=1;i<=5;i++ ){
-            yearData.options.unshift( { "label": String(myYear - i),"value": String(myYear - i)} );
-            yearData.options.push( { "label": String(myYear + i),"value": String(myYear + i)} );
+            yearData.list.unshift( { "name": String(myYear - i),"id": String(myYear - i)} );
+            yearData.list.push( { "name": String(myYear + i),"id": String(myYear + i)} );
         }
-        monthData.options = [
-            {"label": 1,"value": 1},
-            {"label": 2,"value": 2},
-            {"label": 3,"value": 3},
-            {"label": 4,"value": 4},
-            {"label": 5,"value": 5},
-            {"label": 6,"value": 6},
-            {"label": 7,"value": 7},
-            {"label": 8,"value": 8},
-            {"label": 9,"value": 9},
-            {"label": 10,"value": 10},
-            {"label": 11,"value": 11},
-            {"label": 12,"value": 12}
+        monthData.list = [
+            {"name": 1,"id": 1},
+            {"name": 2,"id": 2},
+            {"name": 3,"id": 3},
+            {"name": 4,"id": 4},
+            {"name": 5,"id": 5},
+            {"name": 6,"id": 6},
+            {"name": 7,"id": 7},
+            {"name": 8,"id": 8},
+            {"name": 9,"id": 9},
+            {"name": 10,"id": 10},
+            {"name": 11,"id": 11},
+            {"name": 12,"id": 12}
         ]
         if(this.data.value != ''){
             yearData.value = this.data.value.split('-')[0]
@@ -63,11 +78,10 @@ let config={
             monthData.value = myDate.getMonth() + 1;
         }
         this.destroyChildren();
-        this.append(new DropDown(yearData),this.el.find('.year'));
-        this.append(new DropDown(monthData),this.el.find('.month'));
+        this.append(new AutoSelect(yearData),this.el.find('.year'));
+        this.append(new AutoSelect(monthData),this.el.find('.month'));
     },
     beforeDestory(){
-        Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
         Mediator.removeAll('form:history:'+this.data.tableId);
     }

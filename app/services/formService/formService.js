@@ -475,5 +475,34 @@ export const FormService={
     },
     deleteUploaded(json) {
         return HTTP.postImmediately('/delete_attachment/',json);
+    },
+
+    //重新拼装下拉框格式
+    createSelectJson(json,multi){
+        let data={list:[],choosed:[]};
+        if(json.is_view){
+            data['editable']=false;
+        }else{
+            data['editable']=true;
+        }
+        data['width']=json['width'];
+        for(let key in json['options']){
+            if(json['value'] && (json['value']==json['options'][key]['value'] || (multi && json['value'].indexOf(json['options'][key]['value'])))){
+                data.choosed.push({
+                    id:json['options'][key]['value'],
+                    name:json['options'][key]['label'],
+                });
+            }
+            data.list.push({
+                id:json['options'][key]['value'],
+                name:json['options'][key]['label'],
+                // py:json['options'][key]['py'].join(','),
+            });
+        }
+        if(data.list[0]['id'] && data.list[0]['id'] != '请选择' && !multi){
+            data.list.unshift({id:'',name:''});
+        }
+        data.multiSelect=multi?true:false;
+        return data;
     }
 }

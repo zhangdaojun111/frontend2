@@ -1,41 +1,57 @@
 import Component from '../../../lib/component'
-import Mediator from '../../../lib/mediator';
+import Mediator from '../../../lib/mediator'
 import {AutoSelect} from '../../util/autoSelect/autoSelect'
+import {FormService} from '../../../services/formService/formService'
+import template from './multi-select-control.html'
 
 let config={
-    template:`  <div class="clearfix">
-                    {{#if unvisible}}
-                        <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                    {{else if be_control_condition}}
-                            <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                    {{else}}
-                        <div id="multi-select"></div>
-                        <div style="float: left;">
-                            {{#if required}}
-                                <span id="requiredLogo" class="required" ></span>
-                            {{/if}} 
-                        </div>   
-                    {{/if}}
-                </div>`,
+    template:template,
+    actions:{
+        setValue(){
+            let values=[];
+            for(let key in this._autoSelect.data.choosed){
+                values.push(this._autoSelect.data.choosed[key]['id']);
+            }
+            this.data.value=values;
+        }
+    },
     firstAfterRender:function(){
         let _this=this;
-        let $wrap = this.el.find('#multi-select');
-        let list=[];
-        for(let key in this.data.options){
-            console.log(this.data.options[key]);
-            list.push({
-                name:this.data.options[key].label,
-                id:this.data.options[key].value,
-            });
-        }
-        let autoSelect = new AutoSelect({list:list});
-        autoSelect.render($wrap);
         Mediator.subscribe('form:changeOption:'+_this.data.tableId,function(data){
             if( _this.data.dfield && res == _this.data.dfield ){
                 _this.data.value = [];
+                _this.data._autoSelect.data.choosed=[];
                 _this.reload();
             }
         })
+        this.el.on('click','.add-item',function(){
+            _.debounce(function(){Mediator.publish('form:addItem:'+_this.data.tableId,_this.data)},200)();
+        })
+        this.el.on('click','.ui-history',function(){
+            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
+        });
+    },
+    afterRender(){
+        let _this=this;
+        if(!this.data.be_control_condition){
+            let el=this.el.find('#multi-select');
+            if(this._autoSelect){
+                this._autoSelect.render(el);
+            }else{
+                let data=FormService.createSelectJson(this.data,'multi');
+                data.onSelect=function(data){
+                    if(!_this._autoSelect || _this._autoSelect.data.choosed.length == 0){
+                        return;
+                    }
+                    _this.actions.setValue();
+                    _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                };
+                let autoSelect=new AutoSelect(data);
+                this._autoSelect=autoSelect;
+                this.destroyChildren();
+                autoSelect.render(el);
+            }
+        }
     },
     beforeDestory:function(){
         Mediator.removeAll('form:changeOption:'+this.data.tableId);
