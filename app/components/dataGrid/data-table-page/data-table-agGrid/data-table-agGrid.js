@@ -1557,6 +1557,9 @@ let config = {
                 title: title,
                 modal:true
             } ).then( (data)=>{
+                console.log( "__________" )
+                console.log( "__________" )
+                console.log( data )
             } )
         }
     },

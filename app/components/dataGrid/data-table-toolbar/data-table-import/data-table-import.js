@@ -2,6 +2,7 @@ import Component from "../../../../lib/component";
 import template from './data-table-import.html';
 import './data-table-import.scss';
 import msgBox from '../../../../lib/msgbox';
+import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import {Uploader} from "../../../../lib/uploader";
 import {FormService} from "../../../../services/formService/formService";
 
@@ -58,8 +59,7 @@ let config = {
                 msgBox.alert( '请选择导入文件！' );
                 return;
             }
-            let json = {};
-            json = {
+            let json = {
                 file:'upload_file',
                 table_id: this.data.tableId,
                 parent_table_id: this.data.parentTableId,
@@ -75,10 +75,37 @@ let config = {
                 json['use_default_value'] = this.el.find( '.use_default_value' )[0].value;
             }
             this.uploader.appendData( json )
+            console.log( "_________________" )
+            console.log( json )
 
             this.uploader.upload('/upload_data/',{},(event)=>{
                 console.log('name:'+event.name+',code:'+event.code);
                 console.log(' position:'+(event.loaded||event.position) +",total:"+event.total);
+            },(res)=>{
+                if( res.success == 1 ){
+                    msgBox.alert( res.error );
+                    if( this.data.isBatch ){
+                        let ids = res.ids || [];
+                        PMAPI.sendToParent({
+                            type: PMENUM.close_dialog,
+                            key: this.key,
+                            data: {
+                                type: 'batch',
+                                ids: ids
+                            }
+                        })
+                    }
+                    PMAPI.sendToParent({
+                        type: PMENUM.close_dialog,
+                        key: this.key,
+                        data: {
+                            type: 'batch',
+                            ids: []
+                        }
+                    })
+                }else {
+                    msgBox.alert( res.error );
+                }
             })
         },
         //加载更多
@@ -95,7 +122,11 @@ let config = {
             this.actions.prepareWorkflowData();
         }
         //上传初始化
-        this.uploader = new Uploader();
+        let obj = {
+            selectMode:'single',
+            file_filter:'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.wwzip'
+        }
+        this.uploader = new Uploader(obj);
         this.el.on( 'click','.uploader-button',()=>{
             //上传文件
             this.uploader.addFile( this.data.key ).then(res=>{
