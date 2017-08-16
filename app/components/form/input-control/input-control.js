@@ -2,46 +2,15 @@ import Component from '../../../lib/component';
 import '../base-form/base-form.scss';
 import Mediator from '../../../lib/mediator';
 import {FormService} from "../../../services/formService/formService"
+import template from './input-control.html'
 
 let config={
-    template:`
-                <div class="clearfix">
-                    {{#if unvisible}}
-                        <p class="info">权限受限</p>
-                    {{else if be_control_condition}}
-                        <p class="info">被修改条件限制</p>
-                    {{else}}
-                            {{#if is_view}}               
-                                <input style="width:{{width}}" type="text" value="{{value}}" class='dynamic-form-input' disabled >
-                            {{else}}
-                                <input style="width:{{width}}" type="text" value="{{value}}" class='search dynamic-form-input'>
-                           {{/if}} 
-                           <div style="display: inline-block">
-                                   {{#if required}}
-                                    <span id="requiredLogo" class="required" ></span>
-                                   {{/if}}
-                                   {{#if history}}
-                                       <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>     
-                                   {{/if}} 
-                           </div>
-                           <span style="position: relative; display:inline-block; left:-6px">  
-                                 <div class={{error_msg}} id="error_tip"  style=" display:none">
-                                        <em class={{ui_error_arrow}}></em>
-                                        <pre>{{ regErrorMsg }}</pre>
-                                 </div>  
-                           </span>
-                     {{/if}}       
-               </div>
-                `,
+    template:template,
     data: {
-        width:'240px',
         error_msg: ' error-msg',
         ui_error_arrow: 'ui-error-arrow',
     },
     actions:{
-
-
-
         keyup: function() {
         try{
             let _this=this;
@@ -49,10 +18,7 @@ let config={
             let regErrorMsg;
             let val = this.el.find("input").val();
             this.data.value=val;
-            _.debounce(function(){
-                console.log('发出了么');
-                console.log('form:changeValue:'+_this.data.tableId);
-                Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
             let func = this.data.func;
             let reg = this.data.reg;
             let required = this.data.required
@@ -61,8 +27,6 @@ let config={
                 //输入框输入时的实时函数验证
                 if(val != "" && !$.isEmptyObject(func)){
                     for( let r in func){
-                        console.log('formService');
-                        console.log(FormService);
                         //var a = FormService.r(val)
                         switch (r)
                         {
@@ -100,11 +64,9 @@ let config={
                                 console.log("怎么错了呢(；′⌒`)");
                         }
                         let flag = a;
-                        console.log(flag);
                         if(!flag){
                             this.el.find("#error_tip").css("display","inline-block");
                             regErrorMsg = func[r];
-                            console.log(func[r])
                             this.el.find("#error_tip").children("pre").text(regErrorMsg);
                             return false;
                         }else{
@@ -119,7 +81,6 @@ let config={
                     for(let r in reg){
                         let regReg = eval(r);
                         let flag = regReg.test(val);
-                        console.log(flag);
                         if(!flag){
                             this.el.find("#error_tip").css("display","inline-block");
                             regErrorMsg = reg[r];
@@ -132,7 +93,7 @@ let config={
                     //this.reload();
                 }
 
-                if(val != "" && this.data.numArea !== ""){
+                if(val != "" && this.data.numArea && this.data.numArea !== ""){
                     let label = this.data.label;
                     let minNum = this.data.numArea.min;
                     let maxNum = this.data.numArea.max;
@@ -185,18 +146,14 @@ let config={
             }
         }
     },
-    firstAfterRender:function(){
-        this.set('timer',null);
+    firstAfterRender(){
         let _this=this;
         _this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
-    },
-    afterRender: function() {
-        let _this=this;
         this.el.find('.search').on( 'input', _.debounce(function () {
-            window.onerror =_this.actions.keyup();
-        }, 1000));
+            _this.actions.keyup();
+        }, 200));
         /* setBorderColor*/
         this.el.on('mouseenter', 'input', () => {
             this.el.find("input").css({"border":"1px solid rgb(169, 210, 255)","background-color":"rgb(255, 255, 255)"});
@@ -210,21 +167,24 @@ let config={
         this.el.on('mouseleave', 'input', () => {
             this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
         });
-
-
     },
-    beforeDestory:function(){
+    afterRender() {
+        this.el.find('.ui-width').css('width',this.data.width);
+        if(this.data.is_view){
+            this.el.find('.ui-width').attr('disabled',true);
+        }else{
+            this.el.find('.ui-width').attr('disabled',false);
+        }
+    },
+    beforeDestory(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
+        Mediator.removeAll('form:history:'+this.data.tableId);
     }
-    }
+}
 
 class InputControl extends Component {
     constructor(data){
         super(config,data);
-        if(this.data.dfield == 'f26'){
-            console.log('inputControl');
-            console.log(this.data);
-        }
     }
 }
 

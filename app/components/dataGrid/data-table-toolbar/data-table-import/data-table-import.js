@@ -75,8 +75,6 @@ let config = {
                 json['use_default_value'] = this.el.find( '.use_default_value' )[0].value;
             }
             this.uploader.appendData( json )
-            console.log( "_________________" )
-            console.log( json )
 
             this.uploader.upload('/upload_data/',{},(event)=>{
                 console.log('name:'+event.name+',code:'+event.code);
@@ -86,27 +84,37 @@ let config = {
                     msgBox.alert( res.error );
                     if( this.data.isBatch ){
                         let ids = res.ids || [];
-                        // PMAPI.sendToParent({
-                        //     type: PMENUM.close_dialog,
-                        //     key: this.key,
-                        //     data: {
-                        //         type: 'batch',
-                        //         ids: ids
-                        //     }
-                        // })
+                        PMAPI.sendToParent({
+                            type: PMENUM.close_dialog,
+                            key: this.key,
+                            data: {
+                                type: 'batch',
+                                ids: ids
+                            }
+                        })
+                    }else {
+                        let ids = res.ids || [];
+                        PMAPI.sendToParent({
+                            type: PMENUM.close_dialog,
+                            key: this.key,
+                            data: {
+                                type: 'export'
+                            }
+                        })
                     }
-                    PMAPI.sendToParent({
-                        type: PMENUM.close_dialog,
-                        key: this.data.key,
-                        data: {
-                            type: 'batch',
-                            ids: []
-                        }
-                    })
                 }else {
                     msgBox.alert( res.error );
                 }
+                this.actions.fileTip();
             })
+        },
+        //改变文件提示
+        fileTip: function () {
+            let name = '请选择文件';
+            for( let k in this.data.fileData ){
+                name = this.data.fileData[k].filename;
+            }
+            this.el.find( '.file-name' )[0].innerHTML = name;
         },
         //加载更多
         addMore: function () {
@@ -131,9 +139,7 @@ let config = {
             //上传文件
             this.uploader.addFile( this.data.key ).then(res=>{
                 this.data.fileData = res;
-                console.log( "_____________" )
-                console.log( "_____________" )
-                console.log( this.data.fileData )
+                this.actions.fileTip();
             });
         } )
         this.el.on( 'click','.import-submit-btn',()=>{
