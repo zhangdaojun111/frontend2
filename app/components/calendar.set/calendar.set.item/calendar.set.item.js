@@ -171,7 +171,6 @@ let config = {
                 staus = true;
             } else {
                 this.el.find(".editor-items").attr("disabled", true);
-                console.log(this.el.find(".auto-select-component"));
 
                 _this.el.find(".set-remind-method").addClass('unclick');
                 _this.el.find('input').addClass('unclick');
@@ -205,11 +204,6 @@ let config = {
                 _this.el.find("ul").hide();
             }
         });
-        // this.el.find(".set-remind-method").click(function(){
-        //     if(staus){
-        //         _this.actions.openSetRemind();
-        //     }
-        // });
         this.el.on('click', '.set-show-text-input', () => {
 
             let isSetShowText = this.el.find('.set-show-text-input').is(':checked');
