@@ -26,28 +26,30 @@ let config={
 
     },
     afterRender(){
-        this.el.on('click','#addFollower',()=>{
-            PMAPI.openDialogByIframe(`/iframe/addFocus/`,{
-                width:1000,
-                height:800,
-                title:`添加关注人`,
-                modal:true
-            }).then(res=>{
-                if(!res.onlyclose){
-                    let nameArr=[],idArr=[];
-                    for(var k in res){
-                        nameArr.push(res[k]);
-                        idArr.push(k);
-                    }
-                    this.el.find('#addFollowerList').text(nameArr);
-                    Mediator.publish('workflow:focus-users',idArr);
-                }
-            })
-        });
+        
         Mediator.subscribe("workflow:focused", (res) => {
             if(res.length>0){
                 this.el.on('click','#addFollower',()=>{
                     PMAPI.openDialogByIframe(`/iframe/addFocus/?${res}`,{
+                        width:1000,
+                        height:800,
+                        title:`添加关注人`,
+                        modal:true
+                    }).then(res=>{
+                        if(!res.onlyclose){
+                            let nameArr=[],idArr=[];
+                            for(var k in res){
+                                nameArr.push(res[k]);
+                                idArr.push(k);
+                            }
+                            this.el.find('#addFollowerList').text(nameArr);
+                            Mediator.publish('workflow:focus-users',idArr);
+                        }
+                    })
+                });
+            }else{
+                this.el.on('click','#addFollower',()=>{
+                    PMAPI.openDialogByIframe(`/iframe/addFocus/`,{
                         width:1000,
                         height:800,
                         title:`添加关注人`,

@@ -46,6 +46,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
     })()
     .then(res=>{
         Mediator.publish('workflow:gotWorkflowInfo', res);
+        Mediator.publish('workflow:focused', []);
         return workflowService.validateDraftData({form_id:msg.formid});
     })
     .then(res=>{
