@@ -93,6 +93,19 @@ export const dgcService = {
     },
     //分组列
     groupCol: { headerName: '分组', field: 'group' ,pinned:'left',hide:true,suppressSorting: true,suppressMovable:true,cellRenderer: 'group', suppressMenu: true, tooltipField:'group',suppressFilter: true},
+    //在途状态
+    in_process_state: { headerName: '状态',field:'operation', width: 120,  suppressSorting: true,suppressMenu: true,minWidth: 50,cellRenderer: (param)=>{
+        if( param.data['isFooter'] ){
+            return '';
+        }
+        let type = param.data.type;
+        let obj = {
+            is_add: "添加",
+            is_del: "删除",
+            is_edit: "编辑"
+        }
+        return '<div style="text-align:center;"><span>'+ obj[type] +'</span></div>';
+    }},
     //搜索类型
     // 判断搜索类型
     getMongoSearch: function(data) {
