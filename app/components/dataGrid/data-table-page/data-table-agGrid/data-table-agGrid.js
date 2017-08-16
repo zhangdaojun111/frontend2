@@ -1121,7 +1121,7 @@ let config = {
                     // saveTemporaryCommonQuery:this.actions.saveTemporaryCommonQuery
                 }
                 PMAPI.openDialogByIframe(`/iframe/expertSearch/`,{
-                    width:1200,
+                    width:950,
                     height:600,
                     title:`高级查询`,
                     modal:true
@@ -1130,6 +1130,7 @@ let config = {
                         this.actions.postExpertSearch(res.value,res.id,res.name);
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);
                     } if(res.appendChecked) {
+                        this.data.saveTemporaryCommonQuery == res.value
                         this.actions.appendQuerySelect()
                     } if(res.saveCommonQuery || res.onlyclose == true) {
                         this.actions.getExpertSearchData()
@@ -1234,6 +1235,7 @@ let config = {
             }
             this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
             this.el.find('.dataGrid-commonQuery-select').val('临时高级查询');
+
         },
         //删除数据
         delTableData: function () {
@@ -1581,7 +1583,7 @@ let config = {
             } else if($(this).val() == '临时高级查询') {
                 _this.actions.postExpertSearch(_this.data.saveTemporaryCommonQuery,'');
             } else {
-                $(this).find('.Temporary').remove();
+                // $(this).find('.Temporary').remove();
                 _this.data.commonQueryData.forEach((item) => {
                     if(item.name == $(this).val()){
                         _this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
