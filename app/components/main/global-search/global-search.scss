@@ -1,33 +1,8 @@
-
+@import "../../../assets/scss/core/base";
 
 .global-search-main{
-    .search-group{
-        position: relative;
-        z-index: 10;
-        background-color: white;
-        a{
-            width: 20px;
-            height: 20px;
-            background-image: url("../../../assets/images/framework/search.png");
-            position: absolute;
-            left: 175px;
-            top:8px;
-            background-repeat: no-repeat;
-            cursor: pointer;
-        }
-
-        li{
-            padding-left: 15px;
-            text-align: left;
-            &:last-child{
-                padding-left: 0;
-                text-align: center;
-            }
-        }
-    }
-
-
-
+    width: 220px;
+    height: 40px;
 }
 
 
