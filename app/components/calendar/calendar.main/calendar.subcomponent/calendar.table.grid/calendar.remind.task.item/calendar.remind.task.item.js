@@ -17,9 +17,10 @@ let config = {
     afterRender: function() {
 
         this.el.find('.task-bg-color').css({backgroundColor: this.data['color']});
+        
         if(this.data['data3show']) {
             this.el.find('.task-show-text').html(this.data['data3show'][0][0]['fieldName'] + ':' + this.data['data3show'][0][0]['fieldValue']);
-            this.el.on('click', '.task-item', () => {
+            this.el.on('click', '.task-show-text', () => {
                 console.log(this.data);
                 CalendarRemind.data.remindTable = this.data.tableName;
                 CalendarRemind.data.remindDateProp = this.data.fieldName;
@@ -39,14 +40,7 @@ let config = {
 
         }else {
             this.el.find('.task-show-text').html(this.data['data']['name']);
-            this.el.on('click', '.task-item', () => {
-                // PMAPI.openDialogByIframe(
-                //     '/wf/approval/',
-                //     {
-                //         width: "100%",
-                //         height: '900',
-                //         title: '审批',
-                //     });
+            this.el.on('click', '.task-show-text', () => {
                 console.log(this.data);
                 PMAPI.openDialogByIframe(`/wf/approval/?record_id=${this.data['data']['id']}&form_id=${this.data['data']['form_id']}&table_id=${this.data['data']['table_id']}&flow_id=${this.data['data']['flow_id']}`,{
                     width:1500,

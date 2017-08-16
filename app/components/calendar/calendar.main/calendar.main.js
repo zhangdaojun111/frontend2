@@ -79,12 +79,16 @@ let config = {
                 week = nweTime.getDay();
             return CalendarTimeService.formatDate(year,month,day);
         },
-        addZero: function( num ){
-            return ( num < 10 ) ? ( "0" + num ) : num;
-        },
-        colorRgb: function(str, opcity){
-            return CalendarToolService.handleColorRGB(str, opcity);
-        },
+        // search: function( key ){
+        //     if( this.data.calendarContent === 'schedule' ){
+        //         //this.getSchedule();
+        //
+        //     }else {
+        //         this.monthDataTogether();
+        //         this.getDataCount();
+        //     }
+        //     this.cd.markForCheck();
+        // },
 
         refresh: function () {
             this.el.find('.calendar-main-content').empty();

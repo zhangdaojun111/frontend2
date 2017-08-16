@@ -13,6 +13,5 @@ console.log(window.config.table_id);
 FormEntrys.createForm({
     table_id: window.config.table_id,
     seqId:'',
-    form_id: 200,
     el:$('body'),
 });
