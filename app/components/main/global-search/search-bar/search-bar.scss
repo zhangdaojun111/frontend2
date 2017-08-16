@@ -1,0 +1,59 @@
+@import "../../../../assets/scss/core/base";
+
+.search-group{
+    input.search-content{
+        width: 200px;
+        height: 24px;
+        border: 0;
+        text-indent: 15px;
+    }
+
+    .search-icon{
+        width: 16px;
+        height: 16px;
+        background-image: url("../../../../assets/images/framework/search.png");
+        background-repeat: no-repeat;
+        margin-left: 170px;
+        margin-top: 8px;
+        position: absolute;
+    }
+
+}
+
+.history-display{
+    width: 198px;
+    background-color: white;
+    position: relative;
+    z-index:10;
+    border: solid 1px #c5e1ff;
+
+    .history-list{
+        .record-item{
+            padding: 5px;
+            cursor: pointer;
+            .record-content{
+
+            }
+
+            .delete-icon{
+                display: inline-block;
+                float: right;
+                cursor: pointer;
+                margin-right: 10px;
+            }
+
+            &:hover{
+                background-color: #c5e1ff;
+            }
+        }
+
+        .delete-all-history{
+            padding: 5px;
+            text-align: center;
+
+            &:hover{
+                background-color: #00b7ee;
+            }
+        }
+    }
+}

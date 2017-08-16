@@ -9,76 +9,117 @@
       list-style: none;
     }
     .common-search {
-        padding: 5px 15px;
-        border-bottom: 10px solid #EBEBEB;
-            .common-search-list {
-                padding: 0;
-                list-style: none;
+        padding: 10px 15px;
+        border-bottom: 10px solid #ffffff;
+        background: #f2f2f2;
+        .common-search-title {
+            color:#666666;
+            margin-bottom:10px;
+            height:25px;
+            .text {
                 display: inline-block;
-                .common-search-item {
-                    padding: 0px 15px;
-                    height: 25px;
-                    line-height: 25px;
-                    margin-bottom: 15px;
+                height: 25px;
+                line-height: 30px;
+            }
+            .action {
+                margin-left: 10px;
+                display: inline-block;
+                .common-search-compile {
                     display: inline-block;
-                    background-color: #0F79EF;
-                    color: #fff;
+                    height: 25px;
+                    line-height: 30px;
+                    color: #0F79EF;
                     cursor: pointer;
-                    margin-right: 15px;
-                    position: relative;
-                    .item-delete {
-                        position: absolute;
-                        display: none;
-                        z-index: 100;
-                        top: -10px;
-                        right: -10px;
+                    .img{
+                        position: relative;
+                        top:5px;
+                        display: inline-block;
                         width: 20px;
                         height: 20px;
-                        background: url(../../../../assets/images/form/error-msg.png) no-repeat scroll right center transparent;
+                        background: url(../../../../assets/images/dataGrid/icon_bianjimoshi.png) no-repeat scroll right center transparent;
                     }
                 }
             }
-      .common-search-compile {
-          color: #0F79EF;
-          cursor: pointer;
-      }
+        }
+        .common-search-list {
+            padding: 0;
+            margin:0;
+            list-style: none;
+            display: inline-block;
+            .common-search-item {
+                padding: 0px 15px;
+                height: 25px;
+                line-height: 25px;
+                margin-bottom: 5px;
+                display: inline-block;
+                background-color: #ffffff;
+                color: #fff;
+                cursor: pointer;
+                margin-right: 15px;
+                position: relative;
+                border:1px solid #d7d7d7;
+                border-radius: 4px;
+                color: #666666;
+                .item-delete {
+                    position: absolute;
+                    display: none;
+                    z-index: 100;
+                    top: -10px;
+                    right: -10px;
+                    width: 20px;
+                    height: 20px;
+                    background: url(../../../../assets/images/form/error-msg.png) no-repeat scroll right center transparent;
+                }
+            }
+        }
+
     }
     .condition-search {
-        padding: 5px 10px;
+        padding: 5px;
+        border: 1px solid #f2f2f2;
         .condition-search-choice {
-            padding: 5px 0px;
             .condition-search-item {
+                padding:5px;
+                background-color: #fafafa;
+                border: 1px solid #e4e4e4;
+                border-top: none;
                 .condition-search-select {
                     font-size: 12px;
                     height: 30px;
-                    border: 1px solid rgb(201, 201, 201);
+                    background-color: #fafafa;
+                    background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll right center transparent;
+                    border: none;
                     appearance: none;
                     -moz-appearance: none;
                     -webkit-appearance: none;
+                    outline: none;
                     padding-right: 14px;
-                    width: 150px;
+                    width: 90px;
                     height: 30px;
                     color: rgb(85, 85, 85);
                     line-height: 30px;
                     margin-right: 10px;
-                    padding-left: 5px;
-
-
+                    &.radio {
+                        width: 65px;
+                    }
                     &.left-select {
                         width: 50px;
                     }
                     &.right-select {
                         width: 50px;
                     }
+                    option:hover{
+                        background-color: #f2f2f2;
+                    }
                 }
 
                 .condition-search-box {
                     display: inline-block;
                     position: relative;
-                    width: 165px;
-                    height: 32px;
-                    top: 13px;
+                    width: 185px;
+                    top: -18px;
                     .condition-search-box-input {
+                        background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll right center transparent;
                         position: absolute;
                         top:-1px;
                         font-size: 12px;
@@ -87,7 +128,7 @@
                         -moz-appearance: none;
                         -webkit-appearance: none;
                         padding-right: 14px;
-                        width: 131px;
+                        width: 151px;
                         height: 26px;
                         color: rgb(85, 85, 85);
                         line-height: 30px;
@@ -102,7 +143,7 @@
                         position: absolute;
                         top: 28px;
                         max-height: 210px;
-                        width: 150px;
+                        width: 170px;
                         overflow: auto;
                         line-height: 30px;
                         border: 1px solid rgb(201, 201, 201);
@@ -110,9 +151,7 @@
                         .condition-search-li {
                             padding: 0 8px;
                             &:hover {
-                               background: rgb(60, 144, 255);
-                               color: #fff;
-
+                               background: #f2f2f2;
                             }
                         }
                     }
@@ -122,18 +161,17 @@
                     }
                     .condition-search-ul::-webkit-scrollbar-thumb {
                         border-radius: 5px;
-                        -webkit-box-shadow: inset 0 0 5px rgba(14, 122, 239, 0.290196);
-                        background: rgba(14, 122, 239,0.2);
+                        -webkit-box-shadow: inset 0 0 5px rgba(242,242,242,0.290196);
+                        background: rgba(242,242,242,0.2);
                     }
                     .condition-search-ul::-webkit-scrollbar-track {
-                        -webkit-box-shadow: inset 0 0 5px rgba(14, 122, 239, 0.290196);
+                        -webkit-box-shadow: inset 0 0 5px rgba(242,242,242,0.290196);
                         border-radius: 0;
-                        background: rgba(14, 122, 239,0.1);
+                        background: rgba(242,242,242,0.2);
                     }
                 }
                 .condition-search-input {
                     position: relative;
-                    top: -1px;
                     font-size: 12px;
                     border: 1px solid rgb(201, 201, 201);
                     appearance: none;
@@ -148,19 +186,65 @@
                     padding-left: 5px;
                 }
                 .add {
+                    float: right;
+                    margin-right: 10px;
+                    display: inline-block;
                     cursor: pointer;
+                    width: 14px;
+                    height: 30px;
+                    background: url(../../../../assets/images/dataGrid/icon_add_1.png) no-repeat scroll right center transparent;
                 }
                 .delete {
+                    float: right;
+                    margin-right: 10px;
+                    display: inline-block;
                     cursor: pointer;
+                    width: 14px;
+                    height: 30px;
+                    background: url(../../../../assets/images/dataGrid/icon_delete_1.png) no-repeat scroll right center transparent;
                 }
             }
         }
     }
-    .save-button-box {
-        padding: 15px 10px;
+    .button-box {
+        position: absolute;
+        bottom: 10px;
+        right: 20px;
+
+        .save-img{
+            position: relative;
+            top:11px;
+            display: inline-block;
+            width: 14px;
+            height: 30px;
+            background: url(../../../../assets/images/dataGrid/icon_save2.png) no-repeat scroll right center transparent;
+        }
         .save-button {
             color: #0F79EF;
             cursor: pointer;
+            display: inline-block;
+            height: 30px;
+            line-height: 30px;
+            margin-right: 8px;
+        }
+        .search-button{
+            cursor: pointer;
+            width: 91px;
+            height: 30px;
+            background-color: #fff;
+            border: 1px solid #d7d7d7;
+            border-radius: 4px;
+            color: #666;
+            margin-right: 8px;
+        }
+        .reset-button {
+            cursor: pointer;
+            width: 91px;
+            height: 30px;
+            background-color: #0088ff;
+            color: #fff;
+            border: 1px solid #0088ff;
+            border-radius: 4px;
         }
     }
 }

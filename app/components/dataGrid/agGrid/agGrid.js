@@ -39,6 +39,8 @@ let config = {
         onCellClicked:function ($event) {
         },
         onRowDoubleClicked:function ($event) {
+        },
+        setRowStyle:function (param) {
         }
     },
     gridOptions: GridOptions,
@@ -94,7 +96,11 @@ let config = {
                     }
                 },
                 //排序
-                onSortChanged: this.data.onSortChanged
+                onSortChanged: this.data.onSortChanged,
+                //设置颜色
+                getRowStyle: (param)=>{
+                    return this.data.setRowStyle( param )
+                }
             }
             //是否需要footer
             if( !this.data.noFooter ){

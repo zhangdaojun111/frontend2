@@ -25,6 +25,7 @@ let config = {
         //pageType{0:'进展中的工作',1:'已完成的工作',2:'我的工作申请中的工作',3:'我的工作已完成的工作',4:'我的工作审批过的工作',5:'工作审批',6:'我的工作已关注的工作'}
         pageType: 5,
         tableId2pageType: {'approve-workflow':5,'approving-workflow':0,'finished-workflow':1,'my-workflow':2,'finish-workflow':3,'focus-workflow':6,'approved-workflow':4},
+        tableId2Name: {'approve-workflow':'工作审批','approving-workflow':'进展中的工作','finished-workflow':'已完成的工作','my-workflow':'我的工作->申请中的工作','finish-workflow':'我的工作->已完成的工作','focus-workflow':'我的工作->已关注的工作','approved-workflow':'我的工作->审批过的工作'},
         //定制列（列宽）
         colWidth: {},
         //定制列（固定列）
@@ -198,10 +199,11 @@ let config = {
             //全屏
             if( this.el.find( '.grid-new-window' )[0] ){
                 let obj = {
-                    tableId:this.data.tableId
+                    tableId: this.data.tableId,
+                    tableName: this.data.tableId2Name[this.data.tableId]
                 }
                 let url = this.actions.returnIframeUrl( '/iframe/workflowPage/',obj )
-                this.el.find('.grid-new-window').attr('href', url);
+                this.el.find('.grid-new-window')[0].href = url;
             }
         },
         //返回数据url

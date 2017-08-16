@@ -5,10 +5,9 @@ import '../../base-form/base-form.scss';
 let config={
     template:`<div style="position: relative;">
                 {{#if is_view}}
-                <input class="search-value show-hide-drop width100 dynamic-form-input" type="text" readonly data-value="{{value}}" value="{{showValue}}" style="width: {{width}}; margin-right: 5px;" disabled/>
+                    <input class="search-value show-hide-drop width100 dynamic-form-input" type="text" readonly data-value="{{value}}" value="{{showValue}}" style="width: {{width}}; margin-right: 5px;" disabled/>
                 {{else}}
-                <input class="search-value show-hide-drop width100 dynamic-form-input" type="text" readonly data-value="{{value}}" value="{{showValue}}" style="width: {{width}}; margin-right: 5px;cursor: pointer
-"/>
+                    <input class="search-value show-hide-drop width100 dynamic-form-input" type="text" readonly data-value="{{value}}" value="{{showValue}}" style="width: {{width}}; margin-right: 5px;cursor: pointer"/>
                 {{/if}}
                 <div class="select-drop width100" style="display: none;position: absolute;top:100%;z-index: 1;background: #fff;border: 1px solid #ccc" >
                     <input type="type" class="search width100"/>
@@ -26,7 +25,6 @@ let config={
     firstAfterRender(){
         let _this=this;
         this.el.on('click','.show-hide-drop',function(event){
-            console.log('怎么回事啊 到底');
             let $select=_this.el.find('.select-drop');
             let isShow=true;
             if($select.is(':hidden')){
@@ -73,7 +71,6 @@ let config={
                 });
             }
         },1000)).on('click',function(event){
-            console.log('难道是他?');
             event.stopPropagation();
         });
     },
