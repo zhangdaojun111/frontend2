@@ -7,35 +7,30 @@ import './multi-linkage-control.scss'
 let config={
     template:template,
     actions:{
-        changeView(_this,is_view){
-            for(let obj of _this.childDrop){
-                obj.data.editable=is_view?false:true;
-                obj.reload();
-            }
-        },
         refresh(_this){
             if(_this.hasChoose){
                 _this.hasChoose.clear();
             }
-            for (let i=0;i<_this.data.index;i++){
-                let d={};
-                d['list']=[];
-                d['index']=i;
-                d['multiSelect']=false;
-                d['editable']=_this.data.is_view?false:true;
-                let set=new Set();
-                for(let key in _this.data.dataList){
-                    set.add(_this.data.dataList[key][i]);
-                }
-                for(let item of set){
-                    d['list'].push({label:item,value:item});
-                }
-                let drop=_this.childDrop[i];
-                drop.data=Object.assign(drop.data,d);
-                drop.reload();
-            }
+            // for (let i=0;i<_this.data.index;i++){
+            //     let d={};
+            //     d['list']=[];
+            //     d['index']=i;
+            //     d['multiSelect']=false;
+            //     d['editable']=_this.data.is_view?false:true;
+            //     let set=new Set();
+            //     for(let key in _this.data.dataList){
+            //         set.add(_this.data.dataList[key][i]);
+            //     }
+            //     for(let item of set){
+            //         d['list'].push({label:item,value:item});
+            //     }
+            //     let drop=_this.childDrop[i];
+            //     drop.data=Object.assign(drop.data,d);
+            //     drop.reload();
+            // }
             _this.data.value='';
             _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+            _this.reload();
         },
 
         //改变值
@@ -46,6 +41,13 @@ let config={
                     continue;
                 };
                 d['list']=[];
+                if(i == index){
+                    d['choosed']=[{name:data,id:data}];
+                }
+                if(this.childDrop[i].data.choosed[0]['id'] == '请选择'){
+                    d['list'].push({name:'请选择',id:'请选择'})
+                }
+
                 let set=new Set();
                 for(let key in this.data.dataList){
                     if(this.data.dataList[key][index] == data){
@@ -91,6 +93,7 @@ let config={
                 }
             }
             this.hasChoose.set(index,data);
+            this.data.isReolad=false;
         },
         //回显
         echoData4Control(value) {
@@ -122,6 +125,7 @@ let config={
     },
     afterRender(){
         let _this=this;
+        this.data.isInit=true;
         this.set('hasChoose', new Map());
         if (!this.childDrop) {
             this.set('childDrop', []);
@@ -134,7 +138,6 @@ let config={
             index = this.data.dataList[key].length;
             this.data['index'] = index;
         }
-        let isInit = this.childDrop.length;
         for (let i = 0; i < index; i++) {
             let d = {};
             d['index'] = i;
@@ -144,9 +147,10 @@ let config={
             d['editable']=this.data.is_view?false:true;
             d['width']=this.data.width;
             d.onSelect=function(data){
-                if(!_this.childDrop[i] || _this.childDrop[i].data.choosed.length == 0){
+                if( _this.data.isInit || _this.data.isReolad || !_this.childDrop[i] || _this.childDrop[i].data.choosed.length == 0){
                     return;
                 }
+                _this.data.isReolad=true;
                 _this.actions.changeValue(data[0]['id'],i);
                 _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
             };
@@ -156,6 +160,7 @@ let config={
                 this.hasChoose.set(i, value);
             } else {
                 let set = new Set();
+                d['choosed']=[{name:'请选择',id:'请选择'}];
                 for (let key in this.data.dataList) {
                     set.add(this.data.dataList[key][i]);
                 }
@@ -163,14 +168,11 @@ let config={
                     d['list'].push({name: item, id: item});
                 }
             }
-            if (isInit) {
-                this.append(this.childDrop[i], this.el.find('.multi-drop'));
-            } else {
-                let autoSelect = new AutoSelect(d);
-                this.childDrop[i] = autoSelect;
-                this.append(autoSelect, this.el.find('.multi-drop'));
-            }
+            let autoSelect = new AutoSelect(d);
+            this.childDrop[i] = autoSelect;
+            this.append(autoSelect, this.el.find('.multi-drop'));
         }
+        this.data.isInit=false;
     },
     beforeDestory(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);

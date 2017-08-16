@@ -17,25 +17,21 @@ let config={
     },
     afterRender(){
         let _this=this;
+        this.data.isInit=true;
         if(!this.data.be_control_condition) {
             let el=this.el.find('.dropdown');
-            if(this._autoSelect){
-                this._autoSelect.render(el);
-            }else{
-                let data=FormService.createSelectJson(this.data);
-                data.onSelect=function(){
-                    if(!_this._autoSelect || _this._autoSelect.data.choosed.length == 0){
-                        return;
-                    }
-                    _this.data.value=_this._autoSelect.data.choosed[0]['id'];
-                    _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
-                };
-                let autoSelect=new AutoSelect(data);
-                this._autoSelect=autoSelect;
-                this.destroyChildren();
-                autoSelect.render(el);
-            }
+            let data=FormService.createSelectJson(this.data);
+            data.onSelect=function(data){
+                if(_this.data.isInit || !data || data.length == 0 ){
+                    return;
+                }
+                _this.data.value=data[0]['id'];
+                _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+            };
+            let autoSelect=new AutoSelect(data);
+            this.append(autoSelect,el);
         }
+        this.data.isInit=false;
     },
     beforeDestory(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);

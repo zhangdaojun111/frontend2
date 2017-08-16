@@ -37,6 +37,8 @@ module.exports = {
         calendarSet: path.resolve(APP_PATH, 'entrys/calendar.set.js'),
         calendarCreate: path.resolve(APP_PATH, 'entrys/calendar.create.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
+        register:path.resolve(APP_PATH, 'entrys/register.js'),
+        resultDisplay:path.resolve(APP_PATH,'entrys/resultDisplay.js'),
         vendors: [
             'jquery',
             'jquery-ui',
@@ -46,7 +48,8 @@ module.exports = {
             'handlebars',
             'moment',
             'lodash',
-            'babel-polyfill'
+            'babel-polyfill',
+            'jsplumb'
         ]
     },
 
