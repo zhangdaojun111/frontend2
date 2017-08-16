@@ -77,6 +77,7 @@ let config = {
             this.actions.makeRows(this.data.initAllRows);
         },
         makeRows: function(param){
+            console.log(param);
             this.data.allRows = [];
             CalendarService.getReplace(this.data.tableId).then(res => {
                 if(res.error !== ''){
@@ -277,7 +278,6 @@ let config = {
 
 
         getColumnListData: function (tableId) {
-            console.log('ss');
             CalendarSetService.getColumnList(tableId).then(res => {
 
                 this.data.filedHead = res['rows'];

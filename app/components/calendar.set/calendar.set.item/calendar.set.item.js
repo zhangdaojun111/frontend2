@@ -112,6 +112,7 @@ let config = {
                     emailAddress: this.data.emailAddress,
                 }).then(data => {
                 if(!data.onlyclose) {
+                    console.log(data);
                     this.data.rowSetData.email = data['email'];
                     this.data.rowSetData.sms = data['sms'];
                     let showMethod = '';
@@ -179,6 +180,7 @@ let config = {
                 this.el.find('.res-text option')[item].selected  = 'selected';
             }
         });
+        console.log(this.data.rowSetData);
 
 
         this.el.on('click', '.set-show-text-input', () => {

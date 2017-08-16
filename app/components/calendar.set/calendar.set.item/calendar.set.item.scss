@@ -1,6 +1,9 @@
 @import "../calendar.set";
 .singleRow {
     width: 100%;
+    .table-item-checkbox{
+        width:100px !important;
+    }
     .set-table-item{
         border-top: 1px solid #C1CACA;
         padding: 10px 0px;
@@ -12,11 +15,10 @@
         select {
             width: 85%;
             height: 26px;
-            border-radius: 5px;
         }
     }
     .multi-select-item{
-        width:200px !important;
+        width:300px !important;
     }
     .set-remind-method {
         cursor: pointer;
