@@ -161,21 +161,21 @@ let config = {
                 }
             }
 
-            // else if( this.data.calendarContent === 'schedule' ){
-            //     for( let day of this.scheduleDataList ){
-            //         for( let d of day['data'] ){
-            //             if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
-            //                 i++;
-            //             }else if( d.type === 2 ){
-            //                 j++;
-            //             }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
-            //                 w++;
-            //             }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
-            //                 m++;
-            //             }
-            //         }
-            //     }
-            // }
+            else if( this.data.calendarContent === 'schedule' ){
+                for( let day of this.data.scheduleDataList ){
+                    for( let d of day['data'] ){
+                        if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
+                            i++;
+                        }else if( d.type === 2 ){
+                            j++;
+                        }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
+                            w++;
+                        }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
+                            m++;
+                        }
+                    }
+                }
+            }
             this.data.remindCount = i;
             this.data.workflowCount = w;
             console.log(i,w);
@@ -246,6 +246,7 @@ let config = {
                 this.actions.getDayData(day);
                 this.data.scheduleDataList.push(day);
             }
+            console.log(this.data.scheduleDataList);
             this.el.find('.calendar-main-content').empty();
             this.append(new CalendarSchedule({startDate: startDate, endDate: endDate, scheduleDataList: this.data.scheduleDataList}), this.el.find(".calendar-main-content"));
         },
@@ -540,7 +541,8 @@ let config = {
                     this.actions.changeMainView(this.data.calendarContent);
                 } else if(this.data.calendarContent === 'schedule') {
                     this.el.find('.calendar-main-content').empty();
-                    this.actions.makeScheduleData(this.data.from_date, this.data.to_date);
+                    this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date});
+                    //this.actions.makeScheduleData(this.data.from_date, this.data.to_date);
                 }else {
                     this.actions.changeMainView(this.data.calendarContent);
                 }

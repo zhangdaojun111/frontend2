@@ -6,6 +6,7 @@ import template from './calendar.schedule.item.html';
 import './calendar.schedule.item.scss';
 
 import CalendarRemind from '../../calendar.remind/calendar.remind';
+import {PMAPI} from '../../../../../lib/postmsg';
 
 let config = {
     template: template,
@@ -33,23 +34,37 @@ let config = {
             let taskItemHtml = document.createElement('div');
             taskItemHtml.id = 'schedule-item';
             taskItemHtml.style.backgroundColor = item['color'];
-            if(taskItemHtml['data3show']) {
+            if(item['data3show']) {
                 taskItemHtml.innerHTML = item['data3show'][0][0]['fieldName'] + ':' + item['data3show'][0][0]['fieldValue'];
                 this.el.find('.day-schedule-list').append(taskItemHtml);
                 taskItemHtml.onclick = function () {
                     console.log(item);
-                    let component = new CalendarRemind(item);
-                    let el = $('<div>').appendTo(document.body);
-                    component.render(el);
-                    el.dialog({
+                    // let component = new CalendarRemind(item);
+                    // let el = $('<div>').appendTo(document.body);
+                    // component.render(el);
+                    // el.dialog({
+                    //     title: '查看',
+                    //     width: '80%',
+                    //     height: '800',
+                    //     background: '#ddd',
+                    //     close: function() {
+                    //         $(this).dialog('destroy');
+                    //         component.destroySelf();
+                    //     }
+                    // });
+                    CalendarRemind.data.remindTable = item.tableName;
+                    CalendarRemind.data.remindDateProp = item.fieldName;
+                    CalendarRemind.data.remindDetail = item.data2show;
+                    CalendarRemind.data.remindDateTime = item.time;
+                    CalendarRemind.data.remindTableId = item.tableId;
+                    CalendarRemind.data.remindDate = item.time.substr(0,10);
+                    CalendarRemind.data.remindTime = item.time.substr(11,5);
+                    PMAPI.openDialogByComponent(CalendarRemind, {
+                        width: '1000',
+                        height: '600',
                         title: '查看',
-                        width: '80%',
-                        height: '800',
-                        background: '#ddd',
-                        close: function() {
-                            $(this).dialog('destroy');
-                            component.destroySelf();
-                        }
+                    }).then(data => {
+                        console.log(data);
                     });
                 };
             }
