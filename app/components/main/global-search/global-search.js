@@ -4,12 +4,11 @@ import 'jquery-ui/themes/base/theme.css';
 import 'jquery-ui/ui/widgets/dialog.js';
 import './global-search.scss';
 import template from './global-search.html';
-import {AutoSelect} from '../../../components/util/autoSelect/autoSelect';
 import {GlobalService} from  '../../../services/main/globalService';
 import Mediator from '../../../lib/mediator';
 import {UserInfoService} from "../../../services/main/userInfoService"
 import msgbox from "../../../lib/msgbox";
-
+import {SearchBar} from './search-bar/search-bar';
 
 
 let config ={
@@ -41,7 +40,7 @@ let config ={
         searchContent:"",
         maxHistory:10,
     },
-    autoSelectRef:null,
+    searchBarRef:null,
     actions:{
         getData:function () {
             // UserInfoService.getSearchHistory().done((result) => {
@@ -65,22 +64,38 @@ let config ={
                 }
                 tempData.push(item);
             }
-            let destroyItem = {
-                name : "清除历史搜索记录",
-                id : "destroy-record"
-            };
-            tempData.push(destroyItem);
-            let autoSelectComponent = new AutoSelect({list:tempData});
-            this.autoSelectRef = autoSelectComponent;
-            let $container = this.el.find("div.search-group");
-            autoSelectComponent.render($container);
-            let $a = $("<a class='icon-search'>");
-            $container.prepend($a);
+
+            let $parent = this.el.find(".global-search-main");
+            let searchBar = new SearchBar(tempData);
+            searchBar.render($parent);
+            this.searchBarRef = searchBar;
+
+
+            // let autoSelectComponent = new AutoSelect({
+            //     list: tempData,
+            //     multiSelect: false,
+            //     editable: true,
+            //     onSelect: function (choosed) {
+            //         that.actions.setSearchContent(choosed);
+            //     }
+            // });
+            // this.autoSelectRef = autoSelectComponent;
+            // let $container = this.el.find("div.search-group");
+            // autoSelectComponent.render($container);
+            // let $a = $("<a class='icon-search'>");
+            // $container.prepend($a);
+
+        },
+        setSearchContent:function (content) {
+            if(content.length > 0){
+                console.log(content[0]);
+                // this.data.searchContent =
+            }else{
+                this.data.searchContent = '';
+            }
         },
         doSearch:function () {
-            let content = this.el.find("input").val();
-            this.data.searchContent = content;
-
+            let content = this.data.searchContent;
             if(content && content !== ''){
                 //调用search服务
                 // let id = this.actions.getNewId();
@@ -137,6 +152,8 @@ let config ={
                     this.el.find("a.icon-search").show();
                     console.log("查询失败",err);
                 });
+            }else{
+                msgbox.alert("搜索内容不能为空");
             }
         },
         addSearchHistory(){
@@ -194,12 +211,27 @@ let config ={
                 }
             }
         },
-        showResearchResult(){
+        showResearchResult:function(){
             Mediator.emit('menu:item:openiframe', {
                 id: "search-result",
                 name: "搜索结果",
                 url: "/search_result/"
             });
+        },
+        deleteOneRecord:function (event) {
+
+        },
+        dealRecordClick:function (event) {
+            console.log(event);
+            let operate = event.target.attributes.operate.value;
+            let content = event.currentTarget.attributes.data_content.value;
+
+
+            // if(operate === 'search'){
+            //     this.actions.searchContent(content);
+            // }else{
+            //     this.actions.deleteOneRecord(content);
+            // }
         }
         // initRecordList:function () {
         //     let $ul = this.el.find("ul.record-list");
@@ -230,8 +262,10 @@ let config ={
         this.actions.getData();
         this.el.on("click","a.icon-search", () => {
             this.actions.doSearch();
-        }).on("click","ul li:last-child", (event) => {
+        }).on("click",".delete-all-history", (event) => {
             this.actions.isDeleteAllHistory();
+        }).on('click','.record-item',(event) => {
+            this.actions.dealRecordClick(event);
         })
     },
     beforeDestroy:function () {
