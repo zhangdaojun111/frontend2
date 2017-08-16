@@ -1,39 +1,34 @@
 import Component from '../../../lib/component';
 import Mediator from '../../../lib/mediator';
+import template from './textarea-control.html'
 let config={
-    template:`
-              <div class="clearfix">
-                {{#if unvisible}}
-                        <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                {{else if be_control_condition }}
-                    <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                 {{else}}
-                   <div style="display: inline-block">{{label}}</div>
-                    <input type="textarea" value="{{value}}" style=" height: 100px;  color: rgb(0, 0, 0); width: 240px;"/>
-                    {{#if required}}
-                    <div style="float: left;">                       
-                        <span id="requiredLogo" class="{{requiredClass}}" ></span>               
-                    </div>
-                    {{/if}}      
-                 {{/if}}   
-              </div>
-                `,
-    data:{
-    },
-    actions:{
-    },
+    template:template,
     firstAfterRender(){
         let _this=this;
         _this.el.on('input','input',_.debounce(function(){
             _this.data.value=$(this).val();
             Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data);
         },300));
+        _this.el.on('click','.ui-history',function(){
+            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
+        });
+    },
+    afterRender(){
+        this.el.find('.ui-width').css('width',this.data.width);
+        if(this.data.is_view){
+            this.el.find('.ui-width').attr('disabled',true);
+        }else{
+            this.el.find('.ui-width').attr('disabled',false);
+        }
+    },
+    beforeDestory(){
+      Mediator.removeAll('form:history:'+_this.data.tableId);
+      Mediator.removeAll('form:changeValue:'+_this.data.tableId);
     }
 }
 class TextAreaControl extends Component {
     constructor(data){
         super(config,data);
-        // console.log(this.data);
     }
 }
 
