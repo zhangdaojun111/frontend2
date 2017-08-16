@@ -1312,6 +1312,7 @@ let config = {
                     tableId: this.data.tableId,
                     formId: this.data.formId,
                     tableType: this.data.tableType,
+                    viewMode: this.data.viewMode,
                     parentTableId: this.data.parentTableId,
 
                     parentRealId: this.data.parentRealId,

@@ -4,7 +4,7 @@ import Mediator from '../../../../lib/mediator';
 
 let config={
     template: `<div class="flex" data-id="{{id}}">
-    <div class="w33"><span class=" checkbox checked" name="{{name}}" value="{{id}}"></span></div>
+    <div class="w33"><span class="remove checkbox checked" name="{{name}}" value="{{id}}"></span></div>
         <div class="w33">{{name}}</div>
         <div class="w33">{{username}}</div>
     </div>`,

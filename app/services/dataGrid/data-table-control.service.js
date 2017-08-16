@@ -223,7 +223,13 @@ export const dgcService = {
             }
             if(queryParams.mongo){
                 for(let k in queryParams.mongo){
-                    temp[k] = queryParams.mongo[k]
+                    if( temp['$and'] ){
+                        temp['$and'].push( queryParams.mongo[k] );
+                    }else if( temp['$or'] ){
+                        temp['$or'].push( queryParams.mongo[k] );
+                    }else {
+                        temp[k] = queryParams.mongo[k];
+                    }
                 }
                 delete queryParams.mongo
             }
