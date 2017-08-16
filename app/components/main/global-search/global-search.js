@@ -69,30 +69,11 @@ let config ={
             let searchBar = new SearchBar(tempData);
             searchBar.render($parent);
             this.searchBarRef = searchBar;
-
-
-            // let autoSelectComponent = new AutoSelect({
-            //     list: tempData,
-            //     multiSelect: false,
-            //     editable: true,
-            //     onSelect: function (choosed) {
-            //         that.actions.setSearchContent(choosed);
-            //     }
-            // });
-            // this.autoSelectRef = autoSelectComponent;
-            // let $container = this.el.find("div.search-group");
-            // autoSelectComponent.render($container);
-            // let $a = $("<a class='icon-search'>");
-            // $container.prepend($a);
-
         },
-        setSearchContent:function (content) {
-            if(content.length > 0){
-                console.log(content[0]);
-                // this.data.searchContent =
-            }else{
-                this.data.searchContent = '';
-            }
+        setSearchContent:function (event) {
+            console.log(event);
+            this.data.searchContent = event.target.value;
+            console.log(this.data.searchContent)
         },
         doSearch:function () {
             let content = this.data.searchContent;
@@ -225,26 +206,14 @@ let config ={
             console.log(event);
             let operate = event.target.attributes.operate.value;
             let content = event.currentTarget.attributes.data_content.value;
-
-
-            // if(operate === 'search'){
-            //     this.actions.searchContent(content);
-            // }else{
-            //     this.actions.deleteOneRecord(content);
-            // }
-        }
-        // initRecordList:function () {
-        //     let $ul = this.el.find("ul.record-list");
-        //     for (let item of this.data.historyList){
-        //         let $li = $("<li class='record-item'>").html(item);
-        //         let $a = $("<a class='close-icon'>").html("x");
-        //         $li.append($a);
-        //         $ul.append($li);
-        //         this.data.record_count++;
-        //     }
-        //     let $li =  $("<li class='clear-record'>").html("清除历史记录");
-        //     $ul.append($li);
-        // },
+            console.log(operate,content);
+            if(operate === 'search'){
+                this.data.searchContent = content;
+                this.actions.doSearch();
+            }else{
+                this.actions.deleteOneRecord(content);
+            }
+        },
         // getFocus:function () {
         //     console.log("get focus");
         //     this.el.find("div.record-container").show();
@@ -266,6 +235,8 @@ let config ={
             this.actions.isDeleteAllHistory();
         }).on('click','.record-item',(event) => {
             this.actions.dealRecordClick(event);
+        }).on('input','.search-content',(event) => {
+            this.actions.setSearchContent(event);
         })
     },
     beforeDestroy:function () {
