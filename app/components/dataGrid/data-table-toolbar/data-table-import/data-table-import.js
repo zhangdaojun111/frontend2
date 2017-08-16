@@ -107,6 +107,14 @@ let config = {
                 }
             })
         },
+        //改变文件提示
+        fileTip: function () {
+            let name = '请选择文件';
+            for( let k in this.data.fileData ){
+                name = this.data.fileData[k].filename;
+            }
+            this.el.find( '.file-name' )[0].innerHTML = name;
+        },
         //加载更多
         addMore: function () {
             this.data.needMore = !this.data.needMore;
@@ -130,13 +138,7 @@ let config = {
             //上传文件
             this.uploader.addFile( this.data.key ).then(res=>{
                 this.data.fileData = res;
-                console.log( "__________________" )
-                console.log( "__________________" )
-                console.log( this.data.fileData )
-                let name = '';
-                for( let k in this.data.fileData ){
-                    name = this.data.fileData[k].filename
-                }
+                this.actions.fileTip();
             });
         } )
         this.el.on( 'click','.import-submit-btn',()=>{
