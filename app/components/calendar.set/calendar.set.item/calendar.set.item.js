@@ -137,7 +137,6 @@ let config = {
     },
     afterRender: function () {
         // this.el.css({width: '100%'});
-
         let staus = false;
         let _this = this;
         let select_item_data = {

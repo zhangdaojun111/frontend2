@@ -107,6 +107,7 @@ let config = {
                     }
                 }else {
                     for(let singleSetting of param['rows']){
+
                         this.data.allRows.push({
                             isSelected: singleSetting['isSelected']||false,
                             is_show_at_home_page: singleSetting['is_show_at_home_page'] === 1 ? true : false,
@@ -123,7 +124,7 @@ let config = {
                         })
                     }
                 }
-
+                console.log(this.data.allRows);
                 this.data.allRows.forEach((row, index) => {
                     if(this.data.rowTitle[index]['id'] && this.data.rowTitle[index]['dtype'] === '8' && this.data.replaceDropDown.length !== 0){
                         this.data.isConfigField = true;
@@ -172,7 +173,7 @@ let config = {
         },
 
         reset: function(tableId){
-            console.log(tableId);
+            console.log(tableId, this.data.allRows);
             for(let a of this.data.allRows){
                 a['isSelected']=false;
                 a['is_show_at_home_page']=false;
@@ -204,15 +205,16 @@ let config = {
             }
             CalendarSetService.resetCalendar(tableId,this.data.allRows).then(res=>{
                 console.log(this.data.allRows, res);
-                if(res['success'] === "1"){
+                if(res['success'] === 1){
                     MSG.alert('重置成功');
-                    this.data.isEdit=false;
+                    //this.data.isEdit=false;
                     //this.saveStatus.emit( res['success'] === "1" );
                     setTimeout( ()=>{
                         console.log('sss');
                         // CalendarSetService.getColumnList(this.data.tableId).then(res => {
                         //     console.log(res);
                         // })
+                        this.el.find('.set-items').empty();
                         this.actions.getColumnListData(this.data.tableId);
                     },100 )
                 }else  if(res['success'] === 0){
@@ -266,7 +268,9 @@ let config = {
                     console.log('success');
                     MSG.alert("保存成功");
                     setTimeout( ()=>{
-                        CalendarSetService.getColumnList(this.data.tableId)
+                        //CalendarSetService.getColumnList(this.data.tableId)
+                        this.el.find('.set-items').empty();
+                        this.actions.getColumnListData(this.data.tableId);
                     },100 );
 
                 }else  if(res['succ'] === 0){
