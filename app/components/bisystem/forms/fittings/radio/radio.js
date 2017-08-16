@@ -18,7 +18,7 @@ let config = {
         let me = this;
         this.el.on('change', 'input', function(event){
             me.data.value = $(this).val();
-            alert(me.data.value);
+            // alert(me.data.value);
         })
     }
 }
