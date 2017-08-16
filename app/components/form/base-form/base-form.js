@@ -822,15 +822,11 @@ let config={
             }
         },
         //赋值
-        setFormValue(dfield,value,label){
+        setFormValue(dfield,value){
             let data=this.data.data[dfield];
             if(data){
                 let childComponet=this.childComponent[dfield];
                 childComponet.data["value"] = data["value"] = value;
-                if(data['type'] == 'Select' || data['type']=='Buildin'){
-                    childComponet.data["showValue"] = data["showValue"] = label;
-                }
-                childComponet.destroyChildren();
                 childComponet.reload();
             }
         },
@@ -1315,28 +1311,25 @@ let config={
         //改变人员信息表主岗选项
         changeMainDepart(isClick,_this){
             let arr = [{value:'',label:'请选择'}];
-            console.log('进来了么');
             //判断是否需要将主岗部门置为请选择
             if( isClick ){
                 let arr_1 = [];
                 for( let i = 1;i<_this.department["options"].length;i++ ){
                     arr_1.push(_this.department["options"][i]["value"]);
                 }
-                if( arr_1.length != _this.department_whole.value.length ){
-                    this.setFormValue( _this.form_department,'' );
+                if( arr_1.length != _this.value.length ){
+                    this.actions.setFormValue( _this.form_department,'' );
                 }
             }
             //改变主岗部门option
-            for( let i=0;i<_this.department_whole.value.length;i++ ){
-                for( let j=0;j<_this.main_depart.length;j++ ){
-                    if( _this.main_depart[j]["value"] === _this.department_whole.value[i] ){
+            for( let i=0;i<_this.value.length;i++ ){
+                for( let j in _this.main_depart){
+                    console.log()
+                    if( _this.main_depart[j]["value"] === _this.value[i] ){
                         arr.push( _this.main_depart[j] );
                     }
                 }
             }
-            console.log('_this.department.dfield_this.department.dfield_this.department.dfield');
-            console.log(_this.department.dfield);
-            console.log(arr);
             this.data.data[_this.department.dfield]["options"]=arr;
             this.childComponent[_this.department.dfield].data["options"]=arr;
             this.childComponent[_this.department.dfield].reload();

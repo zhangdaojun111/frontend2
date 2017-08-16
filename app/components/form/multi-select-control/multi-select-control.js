@@ -45,12 +45,10 @@ let config={
                 if(_this.data.isInit || !_this.childSelect || _this.childSelect.data.choosed.length == 0 ){
                     return;
                 }
-                console.log('频道');
-                console.log('form:userSysOptions:'+_this.data.tableId);
+                _this.actions.setValue();
                 if(_this.data.isSys){
                     _.debounce(function(){Mediator.publish('form:userSysOptions:'+_this.data.tableId,_this.data)},200)();
                 }
-                _this.actions.setValue();
                 _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
             };
             let autoSelect=new AutoSelect(data);
