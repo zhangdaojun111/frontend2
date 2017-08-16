@@ -130,6 +130,13 @@ let config = {
             //上传文件
             this.uploader.addFile( this.data.key ).then(res=>{
                 this.data.fileData = res;
+                console.log( "__________________" )
+                console.log( "__________________" )
+                console.log( this.data.fileData )
+                let name = '';
+                for( let k in this.data.fileData ){
+                    name = this.data.fileData[k].filename
+                }
             });
         } )
         this.el.on( 'click','.import-submit-btn',()=>{
