@@ -8,10 +8,9 @@ $filter-match-bg: #eef0f5;
 $li-bg: #424e67;
 $li-even-bg: #353D53;
 $li-odd-bg: #374157;
-$li-hover: #0c6759;
+$li-hover: #424e67;
 $btn_width: 16px;
 $font_size: 12px;
-
 .charts-items{
   width: 100%;
   height: 100%;
@@ -19,9 +18,6 @@ $font_size: 12px;
   font-size: 12px;
   li{
     position: relative;
-  }
-  li:hover{
-    background-color: $li-hover;
   }
   div:nth-child(even){
     li{
@@ -31,6 +27,11 @@ $font_size: 12px;
   div:nth-child(odd){
     li{
       background-color: $li-odd-bg;
+    }
+  }
+  div{
+    li:hover{
+      background-color: $li-hover;
     }
   }
   li{
