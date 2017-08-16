@@ -131,6 +131,8 @@ let config = {
         correspondenceRemoveList: [],
         //对应关系选择的数据
         correspondenceSelectedList: [],
+        //对应关系选择的数据
+        correspondenceSelectedData: []
     },
     //生成的表头数据
     columnDefs: [],
@@ -919,19 +921,27 @@ let config = {
         },
         //对应关系勾选
         setCorrespondenceSelect: function () {
+            this.data.correspondenceSelectedData = [];
             this.agGrid.gridOptions.api.forEachNode( (node) => {
                 if( !node["data"] ){//处理在group中，报错
                     return;
                 }
                 let id = node["data"]["_id"];
                 if(this.data.correspondenceSelectedList.indexOf(id) != -1){
+                    this.data.correspondenceSelectedData.push( node["data"] );
                     node.setSelected(true);
                 }
             });
         },
         //显示勾选项
         checkCorrespondence: function () {
-
+            let title = this.el.find( '.correspondence-check span' )[0].innerHTML;
+            let obj = {
+                rowData: title == '仅显示勾选项'?this.data.correspondenceSelectedData:this.data.rowData
+            }
+            this.agGrid.actions.setGridData( obj );
+            this.el.find( '.correspondence-check span' )[0].innerHTML = title == '仅显示勾选项'?'显示全部':'仅显示勾选项';
+            this.actions.setCorrespondenceSelect();
         },
         //行选择时触发
         onRowSelected: function ($event) {
