@@ -51,7 +51,6 @@ module.exports = {
             'jquery-ui/themes/base/theme.css',
             'mediator-js',
             'handlebars',
-            'moment',
             'lodash',
             'babel-polyfill'
         ]
