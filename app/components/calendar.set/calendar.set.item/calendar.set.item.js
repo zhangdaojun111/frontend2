@@ -184,8 +184,9 @@ let config = {
                 this.el.find('.res-text option')[item].selected  = 'selected';
             }
         });
-        console.log(this.data.rowSetData);
-
+        if(!this.data.rowSetData['email']['email_status'] && !this.data.rowSetData['sms']['sms_status']) {
+            this.el.find('.set-remind-method').html('设置提醒方式');
+        }
 
         if(staus){
             _this.el.find(".set-remind-method").removeClass('unclick');

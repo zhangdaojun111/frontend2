@@ -16,6 +16,7 @@ import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
 import Mediator from '../../../lib/mediator';
 import {CalendarWorkflowData} from './calendar.workflow/calendar.workflow';
+import {CalendarTimeService, CalendarToolService} from '../../../services/calendar/calendar.tool.service';
 
 let config = {
     template: template,
@@ -91,24 +92,7 @@ let config = {
             return ( num < 10 ) ? ( "0" + num ) : num;
         },
         colorRgb: function(str, opcity){
-            let sColor = str.toLowerCase();
-            if(sColor){
-                if(sColor.length === 4){
-                    let sColorNew = "#";
-                    for(let i=1; i<4; i+=1){
-                        sColorNew += sColor.slice(i,i+1).concat(sColor.slice(i,i+1));
-                    }
-                    sColor = sColorNew;
-                }
-                //处理六位的颜色值
-                let sColorChange = [];
-                for(let i=1; i<7; i+=2){
-                    sColorChange.push(parseInt("0x"+sColor.slice(i,i+2)));
-                }
-                return "rgba(" + sColorChange.join(",")+","+opcity + ")";
-            }else{
-                return sColor;
-            }
+            return CalendarToolService.handleColorRGB(str, opcity);
         },
 
         refresh: function () {
@@ -203,25 +187,10 @@ let config = {
             // }
             this.data.remindCount = i;
             this.data.workflowCount = w;
-
-            // $('.remind-num').html(this.data.remindCount);
-            // $('.approval-num').html(this.data.workflowCount);
             console.log(i,w);
             $('body').find('.remind-num').html(this.data.remindCount);
             $('body').find('.approval-num').html(this.data.workflowCount);
 
-            // if( this.firstFlash ){
-            //     setTimeout( ()=>{
-            //         this.isShowLoading = false;
-            //         this.firstFlash = false;
-            //         this.cd.markForCheck();
-            //     },1000 )
-            // }else {
-            //     this.isShowLoading = false;
-            //     $('.ui-dialog-content').css( 'overflow','auto' );
-            //     this.cd.markForCheck();
-            // }
-            // this.returnWidthHeight();
         },
 
         createMonthCalendar: function (y,m){
@@ -229,7 +198,6 @@ let config = {
                 firstDayWeek = this.actions.getWeekByDay( y , m , 1 );
             let endNum = ( monthDayNum + firstDayWeek ) > 35 ? 42 : 35;
             let startNum = 1 - firstDayWeek;
-
             //组成数据
             this.data.monthDataList.length = 0;
             let arr = [];
@@ -239,7 +207,8 @@ let config = {
                 if( startNum<1 || startNum>monthDayNum){
                     obj['isPartOfMonth'] = false;
                 }else {
-                    let dateTime = y + "-" + this.actions.addZero( m + 1 ) + "-" + this.actions.addZero( startNum );
+                    //let dateTime = y + "-" + this.actions.addZero( m + 1 ) + "-" + this.actions.addZero( startNum );
+                    let dateTime = CalendarTimeService.formatDate(y,m,startNum);
                     obj['isToday'] = dateTime === this.data.todayStr ? true : false;
                     obj['dataTime'] = dateTime;
                     obj['dayNum'] = startNum;
@@ -256,6 +225,8 @@ let config = {
                     arr  =[];
                 }
             }
+
+
             let pre_m = m,
                 pre_y = y;
             if( pre_m === 0 ){
@@ -265,6 +236,7 @@ let config = {
                 pre_m = pre_m - 1;
             }
             let prevMonthNum = this.actions.getDayNumOfMonth( pre_y , pre_m );
+            console.log(prevMonthNum);
             for( let i=6 ;i>=0; i-- ){
                 let day = this.data.monthDataList[0]['weekList'][i];
                 if( !day['isPartOfMonth'] ){
@@ -272,7 +244,8 @@ let config = {
                     day['week'] = 6-i;
                     day['year'] = pre_y;
                     day['month'] = pre_m;
-                    day['dataTime'] = pre_y + "-" + this.actions.addZero( pre_m + 1 ) + "-" + this.actions.addZero( prevMonthNum );
+                    //day['dataTime'] = pre_y + "-" + this.actions.addZero( pre_m + 1 ) + "-" + this.actions.addZero( prevMonthNum );
+                    day['dataTime'] = CalendarTimeService.formatDate(pre_m, pre_m, prevMonthNum);
                     prevMonthNum--;
                 }
             }
@@ -294,7 +267,8 @@ let config = {
                     day['week'] = i;
                     day['year'] = next_y;
                     day['month'] = next_m;
-                    day['dataTime'] = next_y + "-" + this.actions.addZero( next_m + 1 ) + "-" + this.actions.addZero( j );
+                    //day['dataTime'] = next_y + "-" + this.actions.addZero( next_m + 1 ) + "-" + this.actions.addZero( j );
+                    day['dataTime'] = CalendarTimeService.formatDate(next_y, next_m, j);
                     j++;
                 }
             }
@@ -304,10 +278,12 @@ let config = {
                     day['dayNum'] = j;
                     day['year'] = next_y;
                     day['month'] = next_m;
-                    day['dataTime'] = next_y + "-" + this.actions.addZero( next_m + 1 ) + "-" + this.actions.addZero( j );
+                    //day['dataTime'] = next_y + "-" + this.actions.addZero( next_m + 1 ) + "-" + this.actions.addZero( j );
+                    day['dataTime'] = CalendarTimeService.formatDate(next_y, next_m, j);
                     j++;
                 }
             }
+            console.log(this.data.monthDataList);
 
             this.data.from_date = this.data.monthDataList[0]['weekList'][0]['dataTime'];
             this.data.to_date = this.data.monthDataList[5]['weekList'][6]['dataTime'];
@@ -639,22 +615,22 @@ let config = {
             }
         }
     },
+    firstAfterRender: function () {
+        let year = CalendarTimeService.getYear(),
+            month = CalendarTimeService.getMonth(),
+            week = CalendarTimeService.getWeek(),
+            day = CalendarTimeService.getDay();
+        this.data.today = Object.assign({}, {'y': year, 'm':month, 'd':day, 'w':week});
+        this.actions.createMonthCalendar(year, month);
+
+        this.data.selectData = this.data.today;
+        this.data.todayStr = CalendarTimeService.formatDate(year, month, day);
+        this.data.chooseDate = CalendarTimeService.formatDate(year, month, day);
+    },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
 
-        let oDate = new Date(),
-            year = oDate.getFullYear(),
-            month = oDate.getMonth(),
-            day = oDate.getDate(),
-            week = oDate.getDay();
-        this.data.today = Object.assign({}, {'y': year, 'm':month, 'd':day, 'w':week});
-        this.data.selectData = this.data.today;
-        this.data.todayStr = year + "-" + this.actions.addZero( month + 1 ) + "-" + this.actions.addZero( day );
-        this.data.chooseDate = year + "-" + this.actions.addZero( month + 1 ) + "-" + this.actions.addZero( day );
-        this.data.selectedDateShow = year+'年'+(month+1) +'月';
-        this.el.find('.nowDate').html(this.data.selectedDateShow);
-        this.actions.createMonthCalendar(year, month);
-
+        console.log(CalendarTimeService.getPreMonth(8));
 
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.data.workflowData = data;
