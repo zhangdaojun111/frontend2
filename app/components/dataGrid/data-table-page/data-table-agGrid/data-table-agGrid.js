@@ -860,6 +860,10 @@ let config = {
                     //赋值
                     this.agGrid.actions.setGridData(d);
                 }
+                //对应关系回显
+                if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' ){
+                    this.actions.setCorrespondenceSelect();
+                }
                 if( this.data.pagination ){
                     this.pagination.actions.resetPagination( this.data.total );
                 }
@@ -897,13 +901,59 @@ let config = {
         },
         //保存对应关系
         saveCorrespondence: function () {
-            // let json = {
-            //     from_table_id : this.data.parentTableId,
-            //     from_table_temp_id: this.data.parentTempId,
-            //     from_table_db_id: this.data.parentRealId,
-            //     correspondence_table_id: this.data.tableId,
-            //     correspondence_row_ids: JSON.stringify(this.data.correspondenceIds)
-            // };
+            let json = {
+                from_table_id : this.data.parentTableId,
+                from_table_temp_id: this.data.parentTempId,
+                from_table_db_id: this.data.parentRealId,
+                correspondence_table_id: this.data.tableId,
+                correspondence_row_ids: JSON.stringify(this.data.correspondenceSelectedList)
+            };
+            dataTableService.saveForCorrespondence( json ).then( res=>{
+                console.log( "对应关系保存" )
+                console.log( res )
+                if( res.success ){
+                    msgBox.alert( '保存成功' );
+                    this.actions.getGridData();
+                }
+            } )
+        },
+        //对应关系勾选
+        setCorrespondenceSelect: function () {
+            this.agGrid.gridOptions.api.forEachNode( (node) => {
+                if( !node["data"] ){//处理在group中，报错
+                    return;
+                }
+                let id = node["data"]["_id"];
+                if(this.data.correspondenceSelectedList.indexOf(id) != -1){
+                    node.setSelected(true);
+                }
+            });
+        },
+        //显示勾选项
+        checkCorrespondence: function () {
+
+        },
+        //行选择时触发
+        onRowSelected: function ($event) {
+            if( !$event["node"]["data"] ){
+                return;
+            }
+            let select = $event.node.selected;
+            let id = $event.node.data._id;
+            if( this.data.viewMode == 'editFromCorrespondence' ){
+                if( select && this.data.correspondenceSelectedList.indexOf( id ) == -1 ){
+                    this.data.correspondenceSelectedList.push( id );
+                }
+                if( !select && this.data.correspondenceSelectedList.indexOf( id ) != -1 ){
+                    let arr2 = [];
+                    for( let d of this.data.correspondenceSelectedList ){
+                        if( d != id ){
+                            arr2.push( d );
+                        }
+                    }
+                    this.data.correspondenceSelectedList = arr2;
+                }
+            }
         },
         //返回请求数据
         createPostData: function () {
@@ -939,7 +989,7 @@ let config = {
             if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
                 json['rows'] = 99999;
                 json['first'] = 0;
-                json['is_temp'] = 1;
+                json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
             }
             if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild'||this.data.viewMode == 'child' ){
                 json["childInfo"]= {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
@@ -1003,7 +1053,8 @@ let config = {
                 onDragStopped: this.actions.onDragStopped,
                 onCellClicked: this.actions.onCellClicked,
                 onRowDoubleClicked: this.actions.onRowDoubleClicked,
-                setRowStyle: this.actions.setRowStyle
+                setRowStyle: this.actions.setRowStyle,
+                onRowSelected: this.actions.onRowSelected
             }
             this.agGrid = new agGrid(gridData);
             this.append(this.agGrid , this.el.find('#data-agGrid'));
@@ -1423,6 +1474,12 @@ let config = {
             if( this.el.find( '.correspondence-save' )[0] ){
                 this.el.find( '.correspondence-save' ).on( 'click',()=>{
                     this.actions.saveCorrespondence();
+                } )
+            }
+            //对应关系勾选
+            if( this.el.find( '.correspondence-check' )[0] ){
+                this.el.find( '.correspondence-check' ).on( 'click',()=>{
+                    this.actions.checkCorrespondence();
                 } )
             }
         },

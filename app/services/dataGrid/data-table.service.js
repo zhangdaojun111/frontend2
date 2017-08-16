@@ -45,8 +45,8 @@ export const dataTableService = {
     getWorkflowData: function ( data ) {
         return HTTP.post( 'get_workflow_records',data )
     },
-    //工作流操作
-    approveWorkflow: function ( data ) {
-        
+    //对应关系保存
+    saveForCorrespondence: function ( param ) {
+        return HTTP.post( 'update_correspondence',data )
     }
 }

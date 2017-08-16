@@ -40,6 +40,10 @@ let config = {
         },
         onRowDoubleClicked:function ($event) {
         },
+        onRowSelected:function (param) {
+            console.log( 666 )
+            console.log( 666 )
+        },
         setRowStyle:function (param) {
         }
     },
@@ -97,6 +101,8 @@ let config = {
                 },
                 //排序
                 onSortChanged: this.data.onSortChanged,
+                //行选择
+                onRowSelected: this.data.onRowSelected,
                 //设置颜色
                 getRowStyle: (param)=>{
                     return this.data.setRowStyle( param )
