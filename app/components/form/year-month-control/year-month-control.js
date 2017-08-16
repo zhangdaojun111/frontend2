@@ -32,6 +32,7 @@ let config={
         let _this=this;
         let yearData = {
             multiSelect:false,
+            editable:this.data.is_view?false:true,
             onSelect:function(data){
                 if(data.length==0 && _this.data.isInit){
                     return;
@@ -42,6 +43,7 @@ let config={
         } ;
         let monthData = {
             multiSelect:false,
+            editable:this.data.is_view?false:true,
             onSelect:function(data){
                 if(data.length==0 && _this.data.isInit){
                     return;
@@ -79,8 +81,8 @@ let config={
             monthData['choosed'][0] = {name:this.data.value.split('-')[1],id:this.data.value.split('-')[1]};
         }
         else{
-            yearData['choosed'][0] = {name:myYear,id:myYear};
-            monthData['choosed'][0] = {name:myDate.getMonth() + 1,id:myDate.getMonth() + 1};
+            // yearData['choosed'][0] = {name:myYear,id:myYear};
+            // monthData['choosed'][0] = {name:myDate.getMonth() + 1,id:myDate.getMonth() + 1};
         }
         this.destroyChildren();
         this.append(new AutoSelect(yearData),this.el.find('.year'));
