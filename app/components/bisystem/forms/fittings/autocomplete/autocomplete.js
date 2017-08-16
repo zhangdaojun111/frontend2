@@ -21,6 +21,7 @@ let config = {
     }
 }
 
+
 export class AutoCompleteComponent extends FormFittingAbstract {
     constructor() {
         super(config)
