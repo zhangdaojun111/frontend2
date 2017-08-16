@@ -9,3 +9,5 @@ let json = {
 let DataTablePage = new dataTablePage(json);
 
 DataTablePage.render($('#DataTablePage'));
+
+
