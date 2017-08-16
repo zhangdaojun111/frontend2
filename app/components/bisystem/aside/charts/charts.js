@@ -19,6 +19,7 @@ let config = {
         this.el.on('click','.btn_ripple',function(event){
             let flag = true;
             self.el.find('.hide_meun').fadeIn('normal');
+            self.el.siblings().find('.hide_meun').fadeOut('normal');;
             let top = self.el.offset().top;
             if(top>872){
                 console.log(self.el.find('.hide_meun'));
