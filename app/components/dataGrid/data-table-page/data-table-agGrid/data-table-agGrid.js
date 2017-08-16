@@ -1538,7 +1538,7 @@ let config = {
         onRowDoubleClicked: function (data) {
             console.log( "行双击查看" )
             console.log( data )
-            let obj = { table_id: this.data.tableId,real_id: data.data._id,btnType: 'view' };
+            let obj = { table_id: this.data.tableId,real_id: data.data._id,btnType: 'view',is_view:1 };
             let url = dgcService.returnIframeUrl( '/form/index/',obj );
             let title = '查看'
             this.actions.openSourceDataGrid( url,title );

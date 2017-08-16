@@ -6,14 +6,11 @@ import template from './multi-select-control.html'
 
 let config={
     template:template,
-    data:{
-        isInit:true,
-    },
     actions:{
         setValue(){
             let values=[];
-            for(let key in this._autoSelect.data.choosed){
-                values.push(this._autoSelect.data.choosed[key]['id']);
+            for(let key in this.childSelect.data.choosed){
+                values.push(this.childSelect.data.choosed[key]['id']);
             }
             this.data.value=values;
         }
@@ -23,7 +20,7 @@ let config={
         Mediator.subscribe('form:changeOption:'+_this.data.tableId,function(data){
             if( _this.data.dfield && res == _this.data.dfield ){
                 _this.data.value = [];
-                _this.data._autoSelect.data.choosed=[];
+                _this.childSelect.data.choosed=[];
                 _this.reload();
             }
         })
@@ -36,24 +33,24 @@ let config={
     },
     afterRender(){
         let _this=this;
-        if(!this.data.be_control_condition){
+        this.data.isInit=true;
+        if(!this.data.be_control_condition) {
+            this.set('childSelect', {});
             let el=this.el.find('#multi-select');
-            if(this._autoSelect){
-                this._autoSelect.render(el);
-            }else{
-                let data=FormService.createSelectJson(this.data,'multi');
-                data.onSelect=function(data){
-                    if(!_this._autoSelect || _this._autoSelect.data.choosed.length == 0 || _this.data.isInit){
-                        return;
-                    }
-                    _this.actions.setValue();
-                    _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
-                };
-                let autoSelect=new AutoSelect(data);
-                this._autoSelect=autoSelect;
-                this.destroyChildren();
-                autoSelect.render(el);
+            if(this.data.options[0]['label'] == '-'){
+                this.data.options[0]['value']='-';
             }
+            let data=FormService.createSelectJson(this.data);
+            data.onSelect=function(){
+                if(_this.data.isInit || !_this.childSelect || _this.childSelect.data.choosed.length == 0 ){
+                    return;
+                }
+                _this.actions.setValue();
+                _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+            };
+            let autoSelect=new AutoSelect(data);
+            this.childSelect=autoSelect;
+            this.append(autoSelect,el);
         }
         this.data.isInit=false;
     },

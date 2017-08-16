@@ -7,35 +7,30 @@ import './multi-linkage-control.scss'
 let config={
     template:template,
     actions:{
-        changeView(_this,is_view){
-            for(let obj of _this.childDrop){
-                obj.data.editable=is_view?false:true;
-                obj.reload();
-            }
-        },
         refresh(_this){
             if(_this.hasChoose){
                 _this.hasChoose.clear();
             }
-            for (let i=0;i<_this.data.index;i++){
-                let d={};
-                d['list']=[];
-                d['index']=i;
-                d['multiSelect']=false;
-                d['editable']=_this.data.is_view?false:true;
-                let set=new Set();
-                for(let key in _this.data.dataList){
-                    set.add(_this.data.dataList[key][i]);
-                }
-                for(let item of set){
-                    d['list'].push({label:item,value:item});
-                }
-                let drop=_this.childDrop[i];
-                drop.data=Object.assign(drop.data,d);
-                drop.reload();
-            }
+            // for (let i=0;i<_this.data.index;i++){
+            //     let d={};
+            //     d['list']=[];
+            //     d['index']=i;
+            //     d['multiSelect']=false;
+            //     d['editable']=_this.data.is_view?false:true;
+            //     let set=new Set();
+            //     for(let key in _this.data.dataList){
+            //         set.add(_this.data.dataList[key][i]);
+            //     }
+            //     for(let item of set){
+            //         d['list'].push({label:item,value:item});
+            //     }
+            //     let drop=_this.childDrop[i];
+            //     drop.data=Object.assign(drop.data,d);
+            //     drop.reload();
+            // }
             _this.data.value='';
             _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+            _this.reload();
         },
 
         //改变值
@@ -134,7 +129,6 @@ let config={
             index = this.data.dataList[key].length;
             this.data['index'] = index;
         }
-        let isInit = this.childDrop.length;
         for (let i = 0; i < index; i++) {
             let d = {};
             d['index'] = i;
@@ -163,13 +157,9 @@ let config={
                     d['list'].push({name: item, id: item});
                 }
             }
-            if (isInit) {
-                this.append(this.childDrop[i], this.el.find('.multi-drop'));
-            } else {
-                let autoSelect = new AutoSelect(d);
-                this.childDrop[i] = autoSelect;
-                this.append(autoSelect, this.el.find('.multi-drop'));
-            }
+            let autoSelect = new AutoSelect(d);
+            this.childDrop[i] = autoSelect;
+            this.append(autoSelect, this.el.find('.multi-drop'));
         }
     },
     beforeDestory(){
