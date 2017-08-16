@@ -1,0 +1,67 @@
+.workflowGrid-con {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.btn-nav {
+  height: 30px;
+  width: 100%;
+}
+
+.workflowGrid-btn-group {
+  float: right;
+  display: none;
+  margin-right: 10px;
+  line-height: 30px;
+  height: 30px;
+  display: block;
+  a {
+    cursor: pointer;
+    margin-left: 20px;
+    position: relative;
+    color: #B399A6;
+    text-decoration: none;
+    font-size: 14px;
+    img {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      vertical-align: sub;
+      margin-right: 6px;
+    }
+  }
+}
+
+.workflow-grid-con {
+  height: calc( 100% - 60px );
+}
+
+#workflow-agGrid {
+  width: 100%;
+  float: left;
+  position: relative;
+  height: 100%;
+}
+
+.custom-columns-panel {
+  width: 200px;
+  height: 100%;
+  float: left;
+  background: #f0f0f0;
+  position: relative;
+  display: none;
+}
+
+.pagination {
+  height: 30px;
+  width: 100%;
+  clear: both;
+}
+
+.batch-cancel {
+  display: none;
+}

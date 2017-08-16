@@ -93,6 +93,19 @@ export const dgcService = {
     },
     //分组列
     groupCol: { headerName: '分组', field: 'group' ,pinned:'left',hide:true,suppressSorting: true,suppressMovable:true,cellRenderer: 'group', suppressMenu: true, tooltipField:'group',suppressFilter: true},
+    //在途状态
+    in_process_state: { headerName: '状态',field:'operation', width: 120,suppressFilter: true, suppressSorting: true,suppressMenu: true,minWidth: 50,cellRenderer: (param)=>{
+        if( param.data['isFooter'] ){
+            return '';
+        }
+        let type = param.data.type;
+        let obj = {
+            is_add: "添加",
+            is_del: "删除",
+            is_edit: "编辑"
+        }
+        return '<div style="text-align:center;"><span>'+ obj[type] +'</span></div>';
+    }},
     //搜索类型
     // 判断搜索类型
     getMongoSearch: function(data) {
@@ -365,7 +378,8 @@ export const dgcService = {
             source_data: ['custom-column-btn','grid-auto-width'],
             count: ['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
             viewFromCorrespondence: ['correspondence-check','float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
-            editFromCorrespondence: ['float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width']
+            editFromCorrespondence: ['float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
+            in_process: ['float-search-btn','refresh-btn','grid-new-window']
         }
         return obj[viewMode];
     },
@@ -381,7 +395,8 @@ export const dgcService = {
         'custom-column-btn':'custom_field',
         'grid-auto-width':'custom_width',
         'grid-new-window':'new_window',
-        'correspondence-check':'especial'
+        'correspondence-check':'especial',
+        'refresh-btn':'especial'
     },
     //行选择
     rowClickSelect: function (data) {
@@ -399,9 +414,9 @@ export const dgcService = {
     },
     //返回数据url
     returnIframeUrl( u,obj ){
-        let str = '?'
+        let str = '?';
         for( let o in obj ){
-            str += (o + '=' + obj[o] + '&')
+            str += (o + '=' + obj[o] + '&');
         }
         str = str.substring( 0,str.length - 1 );
         return u + str;
