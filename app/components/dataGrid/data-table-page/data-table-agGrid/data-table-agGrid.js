@@ -37,6 +37,7 @@ let config = {
         source_field_dfield: '',
         base_buildin_dfield: '',
         fieldContent: null,
+        rowData:[],
         //iframe弹窗key
         key: '',
         // 提醒颜色
@@ -120,6 +121,8 @@ let config = {
         isEditable: false,
         //第一次进入加载footer数据
         firstGetFooterData: true,
+        //是否返回在途footer数据
+        inProcessFooter: false,
     },
     //生成的表头数据
     columnDefs: [],
@@ -145,7 +148,7 @@ let config = {
 
             //在途添加状态
             if( this.data.viewMode == 'in_process' ){
-                columnDefs.push( dgcService.in_process_state );
+                columnDefs.unshift( dgcService.in_process_state );
             }
             //添加选择列
             columnDefs.unshift(
@@ -586,7 +589,7 @@ let config = {
                 return '';
             }
             if( this.data.viewMode == 'in_process' ){
-                return '<div style="text-align:center;"></span><a href=javascript:void(0); class="ui-link" data-type="view">查看</a></div>';
+                return '<div style="text-align:center;"></span><a href=javascript:void(0); class="ui-link" data-type="gridView">查看</a></div>';
             }
             if (params.data.group || Object.is(params.data.group, '') || Object.is(params.data.group, 0)) {
                 return '';
@@ -793,11 +796,19 @@ let config = {
                     this.agGrid.actions.setGridData(d);
                 }
                 //获取在途footer数据
+                this.data.inProcessFooter = true;
                 let footerPostData = this.actions.createPostData();
-                let ids = [];
-                for( let d of this.data.rowData ){
-                    ids.push( d._id );
-                }
+                this.data.inProcessFooter = false;
+
+                dataTableService.getFooterData( footerPostData ).then( res=>{
+                    this.data.footerData = dgcService.createFooterData( res );
+                    let d = {
+                        footerData: this.data.footerData
+                    }
+                    //赋值
+                    this.agGrid.actions.setGridData(d);
+                } );
+                HTTP.flush();
                 this.actions.sortWay();
             })
             HTTP.flush();
@@ -871,11 +882,19 @@ let config = {
                 filter: []
             }
             if( this.data.viewMode == 'in_process' ){
-                debugger;
+                let ids = [];
+                for( let d of this.data.rowData ){
+                    ids.push( d._id );
+                }
                 json = {
                     table_id: this.data.tableId,
                     tableType: 'in_process',
                     filter: []
+                }
+                if( this.data.inProcessFooter ){
+                    json['mongo'] = {
+                        _id: { $in: ids }
+                    }
                 }
             }
             if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild'||this.data.viewMode == 'child' ){
