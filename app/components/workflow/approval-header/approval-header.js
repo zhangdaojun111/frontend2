@@ -17,7 +17,15 @@ let config = {
             }else {
                 el.parent().addClass('active')
             }
-        }
+        },
+        toogz(e){
+            let ev = this.el.find(".signature");
+            if(ev.css("display")=="none"){
+                ev.css("display","block");
+            }else{
+                ev.css("display","none");
+            }
+        },
     },
     afterRender: function() {
         let self=this;
@@ -25,6 +33,15 @@ let config = {
             e.stopPropagation();
             self.actions.approvalBtnToggle($(this))
         })
+        this.el.on('click','.gz',(e)=>{
+            this.actions.toogz(e);
+        });
+        Mediator.subscribe("workflow:is_view",(e)=>{
+            if(e===1){
+                this.el.find('.approval-control').hide();
+            }
+        });
+        Mediator.publish('workflow:loaded', 1);
     },
     beforeDestory: function(){
 
