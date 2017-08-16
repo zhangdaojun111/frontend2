@@ -18,7 +18,6 @@ let config = {
     actions: {
     },
     afterRender: function() {
-        console.log(this.data.remindTaskItemData);
         this.el.find('.task-bg-color').css({backgroundColor: this.data.remindTaskItemData['color']});
         if(this.data.remindTaskData === "已完成") {
             this.data.isFinishedTask = true;

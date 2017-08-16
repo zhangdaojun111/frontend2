@@ -85,10 +85,10 @@ let config = {
         search: function( key ){
             this.data.searchText = key;
             if( this.data.calendarContent === 'schedule' ){
-                this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date});
+                this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date,cancel_fields: this.data.cancel_fields});
 
             }else {
-                this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date},'calendar');
+                this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date,cancel_fields: this.data.cancel_fields},'calendar');
                 setTimeout(() => {
                     console.log(this.data.monthDataList);
                 },500)
@@ -108,6 +108,7 @@ let config = {
 
         getCalendarData: function (data,type){
             CalendarService.getCalendarData(data).then( res=>{
+                console.log(res);
                 this.data.date2settings = res['date2csids'];
                 this.data.calendarSettings = res['id2data'];
                 this.data.tableid2name = res['tableid2name'];
@@ -553,7 +554,7 @@ let config = {
                     this.actions.changeMainView(this.data.calendarContent);
                 } else if(this.data.calendarContent === 'schedule') {
                     this.el.find('.calendar-main-content').empty();
-                    this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date});
+                    this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date,cancel_fields: this.data.cancel_fields});
                     //this.actions.makeScheduleData(this.data.from_date, this.data.to_date);
                 }else {
                     this.actions.changeMainView(this.data.calendarContent);
@@ -563,10 +564,13 @@ let config = {
 
         Mediator.on('Calendar: tool', data => {
             if(data.toolMethod === 'refresh') {
-                if(this.data.calendarContent) {
-                    this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
+                console.log('refresh');
+                if(this.data.calendarContent !== 'schedule') {
+                    this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date, cancel_fields: this.data.cancel_fields},'calendar');
+                } else {
+                    this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date, cancel_fields: this.data.cancel_fields});
                 }
-                this.actions.changeMainView(this.data.calendarContent);
+
             }else if(data.toolMethod === 'export') {
                 PMAPI.openDialogByComponent(CalendarExport, {
                     width: '350',
@@ -607,7 +611,8 @@ let config = {
 
         let that = this;
         Mediator.on('calendarSchedule: date', data => {
-            that.actions.getCalendarData(data,'schedule');
+
+            that.actions.getCalendarData({from_date: data.from_date, to_date: data.to_date, cancel_fields: this.data.cancel_fields},'schedule');
             that.data.scheduleStart = data.from_date;
             that.data.scheduleEnd = data.to_date;
         });
@@ -643,6 +648,8 @@ let config = {
         Mediator.on('Calendar: globalSearch', data => {
             if(data !== '') {
                 this.actions.search(data);
+            } else {
+                this.data.searchText = '';
             }
         })
 
@@ -655,11 +662,13 @@ let config = {
         Mediator.removeAll('Calendar: changeDate');
         Mediator.removeAll('calendarSchedule: date');
         Mediator.removeAll('calendar-left:unshowData');
+        Mediator.removeAll('Calendar: globalSearch');
     }
 };
 
 class CalendarMain extends Component {
-    constructor() {
+    constructor(data) {
+        config.data.cancel_fields = data;
         super(config);
     }
 }

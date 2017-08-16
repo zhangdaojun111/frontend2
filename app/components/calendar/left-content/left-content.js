@@ -21,6 +21,7 @@ let config = {
         contentStatus:1,
         rows:[],
         hide_item_table:[],
+        calendarTreeData: {},
     },
     actions: {
         contentHide:function(that,temp){
@@ -65,7 +66,7 @@ let config = {
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
-        this.append(new LeftcontentCalendarset, this.el.find('.left-calendar-set'));
+        this.append(new LeftcontentCalendarset(this.data.calendarTreeData), this.el.find('.left-calendar-set'));
         this.append(new leftContentFinished(),this.el.find('.item-content-4'));
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.el.find('.item-content-3').empty();
@@ -127,7 +128,8 @@ let config = {
     }
 };
 class Leftcontent extends Component {
-    constructor() {
+    constructor(data) {
+        config.data.calendarTreeData = data;
         super(config);
     }
 }
