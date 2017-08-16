@@ -40,11 +40,7 @@ let config ={
         searchContent:"",
         maxHistory:10,
     },
-<<<<<<< HEAD
-    autoSelectRef:null,
-=======
     searchBarRef:null,
->>>>>>> 89526e2c60dd70a693676a0ee92971df0bb45b97
     actions:{
         getData:function () {
             // UserInfoService.getSearchHistory().done((result) => {
@@ -68,24 +64,6 @@ let config ={
                 }
                 tempData.push(item);
             }
-<<<<<<< HEAD
-            let destroyItem = {
-                name : "清除历史搜索记录",
-                id : "destroy-record"
-            };
-            tempData.push(destroyItem);
-            let autoSelectComponent = new AutoSelect({list:tempData});
-            this.autoSelectRef = autoSelectComponent;
-            let $container = this.el.find("div.search-group");
-            autoSelectComponent.render($container);
-            let $a = $("<a class='icon-search'>");
-            $container.prepend($a);
-        },
-        doSearch:function () {
-            let content = this.el.find("input").val();
-            this.data.searchContent = content;
-
-=======
 
             let $parent = this.el.find(".global-search-main");
             let searchBar = new SearchBar(tempData);
@@ -99,7 +77,6 @@ let config ={
         },
         doSearch:function () {
             let content = this.data.searchContent;
->>>>>>> 89526e2c60dd70a693676a0ee92971df0bb45b97
             if(content && content !== ''){
                 //调用search服务
                 // let id = this.actions.getNewId();
@@ -156,11 +133,8 @@ let config ={
                     this.el.find("a.icon-search").show();
                     console.log("查询失败",err);
                 });
-<<<<<<< HEAD
-=======
             }else{
                 msgbox.alert("搜索内容不能为空");
->>>>>>> 89526e2c60dd70a693676a0ee92971df0bb45b97
             }
         },
         addSearchHistory(){
@@ -218,31 +192,12 @@ let config ={
                 }
             }
         },
-<<<<<<< HEAD
-        showResearchResult(){
-=======
         showResearchResult:function(){
->>>>>>> 89526e2c60dd70a693676a0ee92971df0bb45b97
             Mediator.emit('menu:item:openiframe', {
                 id: "search-result",
                 name: "搜索结果",
                 url: "/search_result/"
             });
-<<<<<<< HEAD
-        }
-        // initRecordList:function () {
-        //     let $ul = this.el.find("ul.record-list");
-        //     for (let item of this.data.historyList){
-        //         let $li = $("<li class='record-item'>").html(item);
-        //         let $a = $("<a class='close-icon'>").html("x");
-        //         $li.append($a);
-        //         $ul.append($li);
-        //         this.data.record_count++;
-        //     }
-        //     let $li =  $("<li class='clear-record'>").html("清除历史记录");
-        //     $ul.append($li);
-        // },
-=======
         },
         deleteOneRecord:function (event) {
 
@@ -259,7 +214,6 @@ let config ={
                 this.actions.deleteOneRecord(content);
             }
         },
->>>>>>> 89526e2c60dd70a693676a0ee92971df0bb45b97
         // getFocus:function () {
         //     console.log("get focus");
         //     this.el.find("div.record-container").show();
@@ -277,17 +231,12 @@ let config ={
         this.actions.getData();
         this.el.on("click","a.icon-search", () => {
             this.actions.doSearch();
-<<<<<<< HEAD
-        }).on("click","ul li:last-child", (event) => {
-            this.actions.isDeleteAllHistory();
-=======
         }).on("click",".delete-all-history", (event) => {
             this.actions.isDeleteAllHistory();
         }).on('click','.record-item',(event) => {
             this.actions.dealRecordClick(event);
         }).on('input','.search-content',(event) => {
             this.actions.setSearchContent(event);
->>>>>>> 89526e2c60dd70a693676a0ee92971df0bb45b97
         })
     },
     beforeDestroy:function () {
