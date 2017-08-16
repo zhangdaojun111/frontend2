@@ -9,6 +9,7 @@ import {fittings as form} from '../../fittings/export.fittings';
 
 import msgbox from "../../../../../lib/msgbox";
 import {FormMixShareComponent} from '../../mix.share/mix.share';
+import "./normal.scss";
 
 let config = {
     template:template,
