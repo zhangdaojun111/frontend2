@@ -105,6 +105,7 @@ let config = {
                 }else {
                     msgBox.alert( res.error );
                 }
+                this.actions.fileTip();
             })
         },
         //改变文件提示
