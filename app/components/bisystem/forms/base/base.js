@@ -5,15 +5,15 @@
 
 import {BiBaseComponent} from '../../bi.base.component';
 import template from './base.html';
-import {InputComponent} from '../fittings/input/input';
+import {fittings as form} from '../fittings/export.fittings';
 
 
 let config = {
     template: template,
     data: {
         formGroup: {
-            name: InputComponent,
-            source: InputComponent
+            name: form.input,
+            source: form.input
         }
     },
     actions: {},
@@ -23,7 +23,7 @@ let config = {
     firstAfterRender() {
         this.renderFitting();
     }
-}
+};
 
 export class FormBaseComponent extends BiBaseComponent {
     constructor() {

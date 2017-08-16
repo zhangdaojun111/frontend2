@@ -9,6 +9,7 @@ import {FormEntryComponent} from './forms/entry/entry';
 import {componentsJson} from './forms/entry/loadFormChart.json';
 let component;
 let viewComponent;
+let formComponent;
 const BiAppRouter = Backbone.Router.extend({
     routes: {
         'views/edit':"routerViewsEditComponent",
@@ -17,6 +18,7 @@ const BiAppRouter = Backbone.Router.extend({
         'forms/:component':'routerFormDynamicComponent',
         '':'routerViewsComponent',
     },
+
     routerViewsComponent(id) {
         if (component) {
             component.data.views = window.config.bi_views

@@ -3,6 +3,8 @@ import {BiBaseComponent} from '../bi.base.component';
 import template from './aside.nav.html';
 import './aside.nav.scss';
 
+import { AsideChartService } from "../../../services/bisystem/bi.chart.del.service";
+import { biChartService } from "../../../services/bisystem/bi.chart.service";
 import Mediator from '../../../lib/mediator';
 import {ChartsComponent} from './charts/charts';
 let config = {
@@ -25,17 +27,48 @@ let config = {
         });
 
         //滑过 显示编辑删除
+        $('.charts-items li').each(function (index) {
+            $(this).hover(
+                function () {
+                    $('.btn_ripple').eq(index).show();
+                },
+                function () {
+                    $('.btn_ripple').eq(index).hide();
+                }
+            )
+        });
+        //点击 显示隐藏菜单
+        $('.btn_ripple').each(function () {
+            $(this).on('click',function (event) {
+                //获取点击id
+                config.data.chart_id = $(this).attr("id");
 
-        // $('.charts-items li').each(function (index) {
-        //     $(this).hover(
-        //         function () {
-        //             $('.btn_ripple').eq(index).show();
-        //         },
-        //         function () {
-        //             $('.btn_ripple').eq(index).hide();
-        //         }
-        //     )
-        // });
+                let flag = true;
+                let top = $(this).offset().top - $('.charts-container').offset().top - 81;
+                const hideMenuHeight = $('.hide_meun').height();
+                $('.hide_meun').eq(0).css('top',top);
+                $('.hide_meun').eq(0).fadeIn('normal');
+                //底部显示 不超过底部
+                if (top>625){
+                    $('.hide_meun').eq(0).css('top',top-hideMenuHeight);
+                }
+                event.stopPropagation();
+                //点击消失
+                $(document).bind('click',function () {
+                    if (flag){
+                        $('.hide_meun').eq(0).fadeOut();
+                        flag = false;
+                    }else{
+                        return;
+                    }
+                })
+            });
+        });
+
+
+        $('.btn_change').click(function () {
+            alert('这里是跳转路由');
+        });
 
         //模糊搜索
         $('.filter-match').on('input',function () {
@@ -58,15 +91,17 @@ let config = {
 
     },
     firstAfterRender() {
-        Mediator.on('bi:aside:del', (res) => {
-            let charts = this.data.charts;
-            for(let [index,view] of charts.entries()) {
-                if (res.id === view.id) {
-                    charts.splice(index,1);
-                    break;
-                }
-            }
-        })
+        // Mediator.subscribe("bi:aside:del", (res) => {
+        //     let views = this.data.views;
+        //     if (res.view === 'remove') {
+        //         for (let [index, view] of views.entries()) {
+        //             if (res.data.id == view.id) {
+        //                 views.splice(index, 1);
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // })
     }
 };
 

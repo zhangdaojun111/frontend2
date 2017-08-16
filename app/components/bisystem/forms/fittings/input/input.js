@@ -5,14 +5,28 @@
 
 import template from './input.html';
 import './input.scss';
+import {FormFittingAbstract} from '../form.abstract'
 
 let config = {
     template: template,
-    data: {},
+    data: {
+        value:null
+    },
+    afterRender() {},
+    firstAfterRender() {
+        let self = this;
+        this.el.on('input', '.input',function(event) {
+            self.data.value = $(this).val();
+        })
+    }
 }
 
-export class InputComponent extends BiBaseComponent {
+export class InputComponent extends FormFittingAbstract {
     constructor() {
         super(config)
+    }
+
+    getValue() {
+        return this.data.value;
     }
 }
