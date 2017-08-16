@@ -37,10 +37,10 @@
     }
     &:nth-child(3){
       flex-grow: 3;
-      width: 200px;
+      width: 300px;
     }
     &:nth-child(4){
-      flex-grow: 3.5;
+      flex-grow: 1;
       width: 200px;
       justify-content: flex-end;
       .printBtn{
