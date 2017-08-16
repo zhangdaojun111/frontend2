@@ -37,14 +37,26 @@
     }
     &:nth-child(3){
       flex-grow: 3;
-      width: 200px;
+      width: 300px;
     }
     &:nth-child(4){
-      flex-grow: 3.5;
+      flex-grow: 1;
       width: 200px;
       justify-content: flex-end;
       .printBtn{
         margin-left: 5px;
+        cursor: pointer;
+      }
+      .gz{
+        margin-right: 15px;
+        height: 16px;
+        width: 16px;
+        border-radius: 50%;
+        color: red;
+        text-align: center;
+        line-height:16px;
+        border: 1px solid red;
+        cursor: pointer;
       }
     }
     .approval-control{

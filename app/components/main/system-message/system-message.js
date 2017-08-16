@@ -6,25 +6,78 @@ import dataPagination from '../../dataGrid/data-table-toolbar/data-pagination/da
 import {systemMessageService} from '../../../services/main/systemMessage';
 import {PMAPI, PMENUM} from '../../../lib/postmsg';
 import msgbox from '../../../lib/msgbox';
+import {HTTP} from '../../../lib/http';
 
 
 let config = {
     template: template,
     actions: {
-        loadData: function () {
-            systemMessageService.getMyMsg().then((data) => {
-                console.log(data);
+        loadData: function (_param) {
+            _param = _param || {};
+            let param = _.defaultsDeep(_param, {
+                row: this.pagination.data.rows,
+                first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows
+            });
+            systemMessageService.getMyMsg(param).then((data) => {
                 this.agGrid.actions.setGridData({
                     rowData: data.rows
                 })
-            })
+            });
         },
         markRead: function () {
-            console.log(this);
-            msgbox.confirm('是否将选中的消息标为已读？').then(() => {
-                let rows = this.agGrid.gridOptions.api.getSelectedRows();
-                console.log(rows);
+            msgbox.confirm('是否将选中的消息标为已读？').then((res) => {
+                if (res) {
+                    let rows = this.agGrid.gridOptions.api.getSelectedRows();
+                    let checkIds = rows.map((item) => {
+                        return item.id;
+                    });
+                    HTTP.postImmediately('/remark_or_del_msg/', {
+                        checkIds: JSON.stringify(checkIds)
+                    }).then((res) => {
+                        if (res.success === 1) {
+                            this.actions.loadData();
+                        }
+                    });
+                }
             });
+        },
+        batchApprove: function () {
+            msgbox.confirm('是否将选中的消息标为已审批？').then((res) => {
+                if (res) {
+                    let rows = this.agGrid.gridOptions.api.getSelectedRows();
+                    let checkIds = rows.map((item) => {
+                        return item.id;
+                    });
+                    HTTP.postImmediately('/approve_many_workflow/', {
+                        checkIds: JSON.stringify(checkIds)
+                    }).then((res) => {
+                        if (res.success === 1) {
+                            this.actions.loadData();
+                        }
+                    });
+                }
+            });
+        },
+        batchDelete: function () {
+            msgbox.confirm('是否批量删除选中的消息？').then((res) => {
+                if (res) {
+                    let rows = this.agGrid.gridOptions.api.getSelectedRows();
+                    let checkIds = rows.map((item) => {
+                        return item.id;
+                    });
+                    HTTP.postImmediately('/remark_or_del_msg/', {
+                        checkIds: JSON.stringify(checkIds),
+                        is_del: 1
+                    }).then((res) => {
+                        if (res.success === 1) {
+                            this.actions.loadData();
+                        }
+                    });
+                }
+            });
+        },
+        onPaginationChanged: function (data) {
+            this.actions.loadData();
         }
     },
     afterRender: function () {
@@ -46,6 +99,7 @@ let config = {
             rows: 100
         });
         this.pagination.render(this.el.find('.pagination'));
+        this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
         this.actions.loadData();
     },
     firstAfterRender: function () {
