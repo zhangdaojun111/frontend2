@@ -1310,7 +1310,37 @@ let config={
                         break;
                 }
             }
-        }
+        },
+
+        //改变人员信息表主岗选项
+        changeMainDepart(isClick,_this){
+            let arr = [{value:'',label:'请选择'}];
+            console.log('进来了么');
+            //判断是否需要将主岗部门置为请选择
+            if( isClick ){
+                let arr_1 = [];
+                for( let i = 1;i<_this.department["options"].length;i++ ){
+                    arr_1.push(_this.department["options"][i]["value"]);
+                }
+                if( arr_1.length != _this.department_whole.value.length ){
+                    this.setFormValue( _this.form_department,'' );
+                }
+            }
+            //改变主岗部门option
+            for( let i=0;i<_this.department_whole.value.length;i++ ){
+                for( let j=0;j<_this.main_depart.length;j++ ){
+                    if( _this.main_depart[j]["value"] === _this.department_whole.value[i] ){
+                        arr.push( _this.main_depart[j] );
+                    }
+                }
+            }
+            console.log('_this.department.dfield_this.department.dfield_this.department.dfield');
+            console.log(_this.department.dfield);
+            console.log(arr);
+            this.data.data[_this.department.dfield]["options"]=arr;
+            this.childComponent[_this.department.dfield].data["options"]=arr;
+            this.childComponent[_this.department.dfield].reload();
+        },
     },
     firstAfterRender(){
         let _this=this;
@@ -1400,6 +1430,9 @@ let config={
             }
             // 保存父表数据
             FormService.frontendParentFormValue[_this.tableId] = _this.actions.createFormValue(_this.data.data);
+        });
+        Mediator.subscribe('form:userSysOptions:'+_this.data.tableId,function(data){
+            _this.actions.changeMainDepart(true,data);
         });
         //对应关系弹窗
         Mediator.subscribe('form:openCorrespondence:'+_this.data.tableId,function(data){
