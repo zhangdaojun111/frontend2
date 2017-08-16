@@ -1231,7 +1231,7 @@ let config = {
                         // saveTemporaryCommonQuery:this.actions.saveTemporaryCommonQuery
 					}
                     PMAPI.openDialogByIframe(`/iframe/expertSearch/`,{
-                        width:1200,
+                        width:950,
                         height:600,
                         title:`高级查询`,
                         modal:true
@@ -1240,6 +1240,7 @@ let config = {
                             this.actions.postExpertSearch(res.value,res.id,res.name);
                             this.el.find('.dataGrid-commonQuery-select').val(res.name);
                         } if(res.appendChecked) {
+                            this.data.saveTemporaryCommonQuery == res.value
                             this.actions.appendQuerySelect()
                         } if(res.saveCommonQuery || res.onlyclose == true) {
                             this.actions.getExpertSearchData()
