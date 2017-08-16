@@ -35,6 +35,8 @@
                 margin-top: 20px;
                 .font-range{
                     width: 300px;
+                    border: none;
+                    outline: none;
                 }
             }
             .font-example{
@@ -49,6 +51,7 @@
                 position: absolute;
                 bottom: 30px;
                 right: 30px;
+                cursor: pointer;
             }
         }
 
@@ -88,6 +91,7 @@
                 bottom: 20px;
                 outline: none;
                 border: none;
+                cursor: pointer;
             }
         }
     }

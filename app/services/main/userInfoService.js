@@ -106,5 +106,15 @@ export const UserInfoService = {
             data:body,
             type:'post'
         })
+    },
+    saveUserConfig:function (data) {
+        let url = '/user_preference/';
+        let temp = Utils.formatParams(data);
+
+        return this.http.postImmediately({
+            url:url,
+            data:temp,
+            type:'post'
+        })
     }
 };

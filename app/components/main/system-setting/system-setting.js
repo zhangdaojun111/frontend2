@@ -5,6 +5,7 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import './system-setting.scss';
 import template from './system-setting.html';
 import msgbox from "../../../lib/msgbox";
+import {UserInfoService} from "../../../services/main/userInfoService"
 
 
 let config = {
@@ -26,8 +27,53 @@ let config = {
         clearStorage:function () {
             window.localStorage.clear();
             $(window).attr("location","/login");
+        },
+        saveSetting:function () {
+            let biflag = 0;
+            let calendarflag = 0;
+            let biValue = this.el.find('input.bi-Show').prop("checked");
+            let calendarValue = this.el.find('input.calendar-Show').prop("checked");
+            if(biValue === true){
+                biflag = 1;
+            }
+            if(calendarValue === true){
+                calendarflag = 1;
+            }
+            let json = {
+                action:'save',
+                pre_type:4,
+                content:biflag
+            };
+
+            let json2 = {
+                action:'save',
+                pre_type:5,
+                content:calendarflag
+            };
+
+            UserInfoService.saveUserConfig(json).done((result) => {
+                if(result.success === 1){
+                    console.log("json 保存成功")
+                }else{
+                    console.log("设置保存失败");
+                }
+            });
+            UserInfoService.saveUserConfig(json2).done((result) => {
+                if(result.success === 1){
+                    msgbox.alert("设置保存成功");
+                }else{
+                    msgbox.alert("设置保存失败");
+                }
+            })
+        },
+        changeFontSize:function () {
+            let fontsize = this.el.find('input.font-range').val();
+            this.el.find("span.font-size").html(fontsize);
+            fontsize = fontsize + 'px';
+            this.el.find("span.font-example").css("font-size",fontsize);
         }
     },
+
     afterRender:function () {
         this.el.on('click','.style-btn',() => {
             this.actions.showStyleSetting();
@@ -36,7 +82,9 @@ let config = {
         }).on('click','.clear-storage',() => {
             this.actions.clearStorage();
         }).on('click','.rapid-save-btn', () => {
-            
+            this.actions.saveSetting();
+        }).on('change','.font-range', () => {
+            this.actions.changeFontSize();
         })
     },
     beforeDestory:function () {
