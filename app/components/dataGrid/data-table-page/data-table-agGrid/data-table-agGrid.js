@@ -841,9 +841,7 @@ let config = {
                 this.data.total = res[0].total;
                 //对应关系特殊处理
                 if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
-                    console.log( "____________" )
-                    console.log( "____________" )
-                    console.log( res[0] )
+                    this.actions.setCorrespondence(res[0]);
                 }
                 //提醒赋值
                 this.data.remindColor = res[1];
@@ -881,6 +879,31 @@ let config = {
                 this.agGrid.actions.setGridData(d);
             } )
             HTTP.flush();
+        },
+        //设置对应关系数据
+        setCorrespondence: function ( res ) {
+            //对应关系回显的ids
+            if ( res.selectedList ) {
+                this.data.correspondenceSelectedList = res.selectedList;
+            }
+            //对应关系增加的ids
+            if ( res.addList ) {
+                this.data.correspondenceAddList = res.addList;
+            }
+            //对应关系减少的ids
+            if ( res.removeList ) {
+                this.data.correspondenceRemoveList = res.removeList;
+            }
+        },
+        //保存对应关系
+        saveCorrespondence: function () {
+            let json = {
+                from_table_id : this.parentTableId,
+                from_table_temp_id: this.parentTempId,
+                from_table_db_id: this.parentRealId,
+                correspondence_table_id: this.tableId,
+                correspondence_row_ids: JSON.stringify(this.correspondenceIds)
+            };
         },
         //返回请求数据
         createPostData: function () {
@@ -1394,6 +1417,12 @@ let config = {
             if( this.el.find( '.refresh-btn' )[0] ){
                 this.el.find( '.refresh-btn' ).on( 'click',()=>{
                     this.actions.getInprocessData();
+                } )
+            }
+            //对应关系保存
+            if( this.el.find( '.correspondence-save' )[0] ){
+                this.el.find( '.correspondence-save' ).on( 'click',()=>{
+                    this.actions.saveCorrespondence();
                 } )
             }
         },
