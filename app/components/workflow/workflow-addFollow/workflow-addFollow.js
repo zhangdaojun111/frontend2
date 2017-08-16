@@ -4,6 +4,8 @@ import './workflow-addFollow.scss';
 import Mediator from '../../../lib/mediator';
 import SelectStaff from './select-staff/select-staff';
 import SelectedStaff from './selected-staff/selected-staff';
+import {PMAPI,PMENUM} from '../../../lib/postmsg';
+import selTemplate from './select-template';
 
 let config={
     template: template,
@@ -66,39 +68,36 @@ let config={
 
         //全选，反选btn
         this.el.on('click','#allSelector',function(){
-            // var inputs=_this.el.find('#staffMulti').find('input');
-            // console.log(inputs);
-            // if($(this).prop('checked')){
-            //     inputs.each(function(i,item){
-            //         console.log(item);
-            //         $(item).attr('checked',true);
-            //     })
-            // }else{
-            //     inputs.each(function(i,item){
-            //         $(item).removeAttr("checked");
-            //     })
-            // }
+            var inputs=_this.el.find('#staffMulti').find('.checkbox');
+            if($(this).prop('checked')){
+                inputs.each(function(i,item){
+                    $(item).addClass('checked');
+                    Mediator.publish('workflow:pubCheckSingle',{
+                        id:$(item).attr('value'),
+                        name:$(item).attr('name')
+                    });
+                })
+            }else{
+                inputs.each(function(i,item){
+                    $(item).removeClass("checked");
+                    Mediator.publish('workflow:pubUncheckSingle',$(item).attr('value'));
+                })
+            }
         });
 
         //saving follower
         this.el.on('click','#saveFollower',()=>{
-            let nameArr=[],idArr=[];
+            let o={};
             let domSpan=this.el.find('#selected').find('span');
             for(var i=0;i<domSpan.length;i++){
-                idArr.push($(domSpan[i]).data('id'));
-                nameArr.push($(domSpan[i]).text());
+                o[$(domSpan[i]).data('id')]=$(domSpan[i]).text();
             }
-            this.el.find('.follower-select').hide();
-            this.el.find('#addFollowerList').text(nameArr);
-            Mediator.publish('workflow:focus-users',idArr);
+            PMAPI.sendToParent({
+                type: PMENUM.close_dialog,
+                key:this.data.key,
+                data:o
+            })
         })
-
-        this.el.on('click','#addFollower',()=>{
-            this.el.find('.follower-select').show();
-        });
-        this.el.on('click','.close',()=>{
-            this.el.find('.follower-select').hide();
-        });
     }
 };
 class WorkflowAddFollow extends Component{
@@ -107,6 +106,12 @@ class WorkflowAddFollow extends Component{
     }
 }
 
-let component = new WorkflowAddFollow();
-let el = $('#add-follow');
-component.render(el);
+
+
+export default {
+    showAdd(data) {
+        let component = new WorkflowAddFollow(data);
+        let el = $('#add-follow');
+        component.render(el);
+    }
+};

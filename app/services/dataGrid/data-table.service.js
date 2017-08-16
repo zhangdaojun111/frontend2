@@ -40,5 +40,13 @@ export const dataTableService = {
     importData: function ( data ) {
         // let headers = new Headers({'Content-Type': 'application/vnd.ms-excel; charset=UTF-8'});
         return HTTP.post( 'delete_table_data',data )
+    },
+    //获取工作流表数据
+    getWorkflowData: function ( data ) {
+        return HTTP.post( 'get_workflow_records',data )
+    },
+    //工作流操作
+    approveWorkflow: function ( data ) {
+        
     }
 }

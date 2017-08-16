@@ -48,10 +48,10 @@ let config = {
                 //         title: '审批',
                 //     });
                 console.log(this.data);
-                PMAPI.openDialogByIframe(`/wf/approval/?record_id=${this.data['data']['id']}&form_id=${this.data['data']['form_id']}&table_id=${this.data['data']['table_id']}`,{
+                PMAPI.openDialogByIframe(`/wf/approval/?record_id=${this.data['data']['id']}&form_id=${this.data['data']['form_id']}&table_id=${this.data['data']['table_id']}&flow_id=${this.data['data']['flow_id']}`,{
                     width:1500,
                     height:1000,
-                    title:"审批工作流",
+                    // title:"审批工作流",
                     modal:true
                 })
             })

@@ -6,6 +6,7 @@ import Mediator from '../../../lib/mediator';
 import {PersonSetting} from "../personal-settings/personal-settings";
 import {HTTP} from '../../../lib/http';
 import {commonuse} from '../commonuse/commonuse';
+import {Uploader} from "../../../lib/uploader";
 
 
 function presetMenuData(menu, leaf) {
@@ -193,7 +194,7 @@ let config = {
             }
         },
         onImageError: function () {
-            
+
         }
     },
     afterRender: function () {
@@ -229,13 +230,76 @@ let config = {
         Mediator.on('commonuse:change', () => {
             this.actions.showCommonMenu(true);
         });
+
+        //上传初始化
+        let state = 'on';
+        let uploader = new Uploader();
+        let temp;
+
         this.el.on('click', '.startwrokflow', () => {
             this.actions.openWorkflowIframe();
         }).on('click', '.logout', () => {
             this.actions.logout();
         }).on('click', '.tabs .edit', () => {
             this.actions.editCommonUse();
-        });
+        }).on('click','.uploader-button',()=>{
+            //upload_attachment示例
+            // //中断后续传
+            // if(state.startsWith('paused')){
+            //     let str = state.split(',');
+            //     uploader.shiftOn(str[1],str[2]);
+            //     console.log('shifton:'+str[1]+","+str[2]);
+            //     state = 'on';
+            //     return;
+            // }
+            //上传文件
+            uploader.addFile('test1').then(res=>{
+                temp = res;
+                uploader.appendData({
+                    md5:true,
+                    per_size:1024*1024,
+                    dinput_type:9,
+                    content_type:true
+                });
+                // //暂停传输
+                setTimeout(()=>{
+                    let codes = Object.keys(res);
+                    uploader.pause('test1',codes[0]);
+                    console.log('paused');
+                    state = 'paused,test1,'+codes[0];
+                },3000);
+                uploader.upload('/upload_attachment/?is_image_type=0',{},(event)=>{
+                    console.log('name:'+event.name+',code:'+event.code);
+                    console.log(' position:'+(event.loaded||event.position) +",total:"+event.total);
+                })
+            });
+
+            //upload_data
+            // uploader.addFile('test2').then(res=>{
+            //     temp = res;
+            //     uploader.appendData({
+            //         upload_file:true,
+            //         table_id:'5931_dWhWjDuongKecmfFopzdND',
+            //         parent_table_id:'',
+            //         parent_real_id:'',
+            //         parent_temp_id:'',
+            //         is_batch:0,
+            //         warning_msg:''
+            //     });
+            //     uploader.upload('/upload_data/',{},(event)=>{
+            //         console.log('name:'+event.name+',code:'+event.code);
+            //         console.log(' position:'+(event.loaded||event.position) +",total:"+event.total);
+            //     })
+            // })
+        }).on('click','.delete-button',()=>{
+            //删除文件
+            console.log('delete');
+            //deleteFileByName
+            // uploader.deleteFileByName('test1','/delete_attachment/');
+            //deleteFileByCode
+            let code = Object.keys(temp)[0];
+            uploader.deleteFileByCode(code,'/delete_attachment/');
+         });
     },
     beforeDestory: function() {
         Mediator.removeAll('aside');

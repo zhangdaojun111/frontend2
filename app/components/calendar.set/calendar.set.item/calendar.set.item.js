@@ -39,123 +39,194 @@ let config = {
         emailAddress: '',
 
         preViewText: [],
+
+        forResPreviewText: '',
+
+        newSelectedOpts: [],
+
+        multiSelectMenu: {},
     },
     actions: {
-        returnShow: function(param){
+        returnShow: function (param) {
             let res = [];
+            let text = [];
             for(let a of param){
                 for(let b in this.data.dropdown){
                     if(a === this.data.dropdown[b]['id']){
-                        res.push(this.data.dropdown[b]['name']);
+                        res.push(this.data.dropdown[b]);
+                        text.push(this.data.dropdown[b]['name']);
                     }
                 }
             }
-            return res;
+            return {res: res, text: text};
         },
 
+        getSelectedValue: function () {
+            //return this.data.multiSelectMenu.data.choosed;
+        },
+
+        checkForResSelected: function (forResText, forResId) {
+            let selectedOpts = this.data.multiSelectMenu.data.choosed;
+            let isInSelectedOpts = false;
+            for(let item of selectedOpts) {
+                if(forResId === item['id']) {
+                    isInSelectedOpts = true;
+                }
+            }
+            if(!isInSelectedOpts) {
+                selectedOpts.push({id: forResId, name: forResText});
+                this.data.multiSelectMenu.actions.setChoosed(selectedOpts);
+                this.actions.checkSelectedOpts(selectedOpts);
+            }
+
+        },
+
+        checkSelectedOpts: function (newSelectedOpts) {
+            let selectedOptsId = [];
+            let selectedOptsText  = [];
+            for(let newItem of newSelectedOpts) {
+                selectedOptsText.push(newItem['name']);
+                selectedOptsId.push(newItem['id']);
+            }
+            this.data.preViewText = selectedOptsText;
+            this.el.find('.preview-text').html(this.data.preViewText);
+        },
+
+        openSetRemind: function () {
+            PMAPI.openDialogByIframe(
+                '/iframe/calendarSetRemind/',
+                {
+                    width: "800",
+                    height: '800',
+                    title: '【'+ this.data.rowTitle.name + '】'+'的提醒'
+                },{
+                    emailStatus: this.data.rowSetData.email.email_status,
+                    smsStatus: this.data.rowSetData.sms.sms_status,
+                    sms: this.data.rowSetData.sms,
+                    email: this.data.rowSetData.email,
+                    recipients: this.data.recipients,
+                    recipients_per: this.data.recipients_per,
+                    copypeople: this.data.copypeople,
+                    emailAddressList: this.data.emailAddressList,
+                    emailAddress: this.data.emailAddress,
+                }).then(data => {
+                console.log(data);
+                this.data.rowSetData.email = data['email'];
+                this.data.rowSetData.sms = data['sms'];
+                let showMethod = '';
+                if(data['sms']['sms_status'] === '1') {
+                    showMethod = '短信';
+                    this.el.find('.set-remind-method').html(showMethod);
+                }
+                if (data['email']['email_status'] === '1') {
+                    showMethod = showMethod + ' ' + '邮件';
+                    this.el.find('.set-remind-method').html(showMethod);
+                }
+                if(data['sms']['sms_status'] === '0' && data['email']['email_status'] === '0') {
+                    showMethod = '设置提醒方式';
+                    this.el.find('.set-remind-method').html(showMethod);
+                }
+            });
+        },
+
+
     },
-    afterRender: function() {
-        // this.el.css({width: '100%'});
+    afterRender: function () {
         let staus = false;
-        let that = this;
-        let select_item_data = {'list':this.data.dropdownForRes};
-        let multi_select_item = new AutoSelect(select_item_data);
-        this.append(multi_select_item, this.el.find('.multi-select-item'));
-        this.el.find(".popup").css({'z-index':100,'background-color':"white",'height':"auto",'max-height':"300px"});
-        this.el.find(".popup li label").css({'text-align':"left",'overflow':"hidden", 'word-break':'keep-all','white-space':'nowrap'});
-        Mediator.on('calendar-set:editor',data =>{
-            if(data.data ===1){
-                this.el.find(".editor-items").attr("disabled",false);
-                this.el.find(".auto-select-component").children('input').attr("disabled",false);
-                this.el.on("mouseenter",".auto-select-component input",function(){
-                    multi_select_item.actions.showSelectBox();
-                });
+        let _this = this;
+        let select_item_data = {
+            'list': this.data.dropdown,
+            choosed: this.actions.returnShow(this.data.rowSetData['selectedOpts']).res,
+            onSelect: function (choosed) {
+                let choosedList = [];
+                for(let choosedItem of choosed) {
+                    choosedList.push(choosedItem['id']);
+                }
+                _this.data.rowSetData['selectedOpts'] = choosedList;
+                _this.actions.checkSelectedOpts(choosed);
+            },
+        };
+        this.data.multiSelectMenu = new AutoSelect(select_item_data);
+        this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
+
+
+        this.el.find(".popup").css('z-index', 100, 'background-color', "white");
+        this.el.find(".popup").css('background-color', "white");
+        this.el.find(".popup").css('height', "auto");
+        this.el.find(".popup").css('max-height', "300px");
+
+        this.el.find(".popup").children('li').children('label').css('text-align', "left");
+        this.el.find(".popup").children('li').children('label').css('overflow', "hidden");
+
+        Mediator.on('calendar-set:editor', data => {
+            if (data.data === 1) {
+                this.el.find(".editor-items").attr("disabled", false);
+                _this.el.find(".set-remind-method").removeClass('unclick');
+                _this.el.find('input').removeClass('unclick');
                 staus = true;
-            }else{
-                console.log(data.data);
-                this.el.find(".editor-items").attr("disabled",true);
-                this.el.find(".auto-select-component").children('input').attr("disabled",true);
-                console.log(this.el.find(".auto-select-component input"));
-                this.el.on("mouseover",".auto-select-component input",function(){
-                    that.el.find('ul').hide();
-                });
+            } else {
+                this.el.find(".editor-items").attr("disabled", true);
+                console.log(this.el.find(".auto-select-component"));
+
+                _this.el.find(".set-remind-method").addClass('unclick');
+                _this.el.find('input').addClass('unclick');
                 staus = false;
             }
         });
-        this.el.find(".auto-select-component").children('input').attr("disabled",true);
-        let temp = this.el.find(".popup").children('li');
-        this.el.on("click",temp,function(){
-            console.log(multi_select_item.data.choosed);
-        }).on('click', '.set-show-text-input', () => {
+        if(staus){
+            _this.el.find(".set-remind-method").removeClass('unclick');
+            _this.el.find('input').removeClass('unclick');
+        }
+        else{
+            _this.el.find(".set-remind-method").addClass('unclick');
+            _this.el.find('input').addClass('unclick');
+        }
+        this.el.on("mouseenter",".auto-select-component",function(){
+            if(staus){
+                _this.data.multiSelectMenu.actions.showSelectBox();
+            }
+            else{
+                _this.data.multiSelectMenu.actions.hideSelectBox();
+                _this.el.find("ul").hide();
+            }
+        });
+        this.el.find(".set-remind-method").click(function(){
+            if(staus){
+                _this.actions.openSetRemind();
+            }
+        });
+        this.el.on('click', '.set-show-text-input', () => {
             let isSetShowText = this.el.find('.set-show-text-input').is(':checked');
             console.log(isSetShowText);
             this.data.rowSetData['isSelected'] = isSetShowText;
+
         }).on('click', '.set-calendar-page-show-text', () => {
+
             let isShowHomePage = this.el.find('.set-calendar-page-show-text').is(':checked');
             this.data.rowSetData['is_show_at_home_page'] = isShowHomePage;
+
         }).on('change', '.set-color', () => {
+
             let setColor = this.el.find('.set-color').val();
             this.data.rowSetData['color'] = setColor;
-        }).on('change', '.add-show-text', () => {
-            let addShowTextValue = this.el.find('.add-show-text option:selected').val();
-            let addShowText = this.el.find('.add-show-text option:selected').text();
-            //this.data.preViewText.push(addShowText);
-            this.el.find('.preview-text').text(this.data.preViewText);
-            this.data.rowSetData['selectedOpts'].push(addShowTextValue);
+
         }).on('change', '.res-text', () => {
-            let valueForResValue = this.el.find('.res-text option:selected').val();
-            for( let a of this.data.preViewText ){
-                if( valueForResValue.indexOf( a ) === -1 ){
-                    this.data.preViewText.push(valueForResValue);
-                }
-            }
-            this.data.rowSetData['selectedRepresents'] = valueForResValue;
+            let textForResValue = this.el.find('.res-text option:selected').val();
+            let textForResText = this.el.find('.res-text option:selected').text();
+            this.actions.checkForResSelected(textForResText, textForResValue);
+            this.data.rowSetData['selectedRepresents'] = textForResValue;
         }).on('change', '.page-change-text', () => {
             let valueForCalendarChangeValue = this.el.find('.page-change-text option:selected').val();
+            let textForCalendarChangeValue = this.el.find('.page-change-text option:selected').text();
             this.data.rowSetData['selectedEnums'] = valueForCalendarChangeValue;
-            //this.data.allRows[this.data.index]['selectedEnums'] = valueForCalendarChange;
-        }).on('click', '.set-remind-method', () => {
-            // CalendarSetRemindMethod.emailStatus = this.data.rowSetData.email.email_status;
-            // CalendarSetRemindMethod.smsStatus = this.data.rowSetData.sms.sms_status;
-            // CalendarSetRemindMethod.data.emailAddressList = this.data.emailAddressList;
-            // CalendarSetRemindMethod.data.recipients = this.data.recipients;
-            // CalendarSetRemindMethod.data.copypeople = this.data.copypeople;
-            // CalendarSetRemindMethod.data.recipients_per = this.data.recipients_per;
-            // PMAPI.openDialogByComponent(CalendarSetRemindMethod, {
-            //     width: 800,
-            //     height: 400,
-            //     title: '【'+ this.data.rowTitle.name + '】'+'的提醒'
-            // }).then(res => {
-            //     console.log(res);
-            // });
-            let component = new CalendarSetRemindMethod({
-                emailStatus: this.data.rowSetData.email.email_status,
-                smsStatus: this.data.rowSetData.sms.sms_status,
-                recipients: this.data.recipients,
-                recipients_per: this.data.recipients_per,
-                copypeople: this.data.copypeople,
-                emailAddressList: this.data.emailAddressList,
-                emailAddress: this.data.emailAddress,
-            });
-            let el = $('<div>').appendTo(document.body);
-            component.render(el);
-            el.dialog({
-                title: '主框架弹出',
-                width: 800,
-                height: 500,
-                close: function() {
-                    $(this).dialog('destroy');
-                    component.destroySelf();
-                }
-            });
         });
 
-        this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']);
+        this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text;
         this.el.find('.preview-text').text(this.data.preViewText);
 
-        $("#set-color-id").attr("id","set-color-"+this.data.rowSetData.field_id);
-        let set_color_id = "#set-color-"+this.data.rowSetData.field_id;
-        $(set_color_id).attr("value",this.data.rowSetData.color);
+        $("#set-color-id").attr("id", "set-color-" + this.data.rowSetData.field_id);
+        let set_color_id = "#set-color-" + this.data.rowSetData.field_id;
+        $(set_color_id).attr("value", this.data.rowSetData.color);
     },
     beforeDestory: function () {
         Mediator.removeAll('calendar-set:editor');

@@ -11,6 +11,7 @@ import {CalendarService} from "../../services/calendar/calendar.service"
 import {CalendarSetService} from "../../services/calendar/calendar.set.service"
 import {UserInfoService} from '../../services/main/userInfoService';
 import MSG from '../../lib/msgbox';
+import {AutoSelect} from '../util/autoSelect/autoSelect';
 
 import {PMAPI} from '../../lib/postmsg';
 
@@ -121,11 +122,12 @@ let config = {
                         })
                     }
                 }
-                console.log(this.data.allRows);
+
                 this.data.allRows.forEach((row, index) => {
                     if(this.data.rowTitle[index]['id'] && this.data.rowTitle[index]['dtype'] === '8' && this.data.replaceDropDown.length !== 0){
                         this.data.isConfigField = true;
                     }
+
                     let calendarSetItem = new CalendarSetItem({
                         rowData: row,
                         dropdown: this.data.dropdown,
@@ -134,7 +136,6 @@ let config = {
                         replaceDropDown: this.data.replaceDropDown,
                         isConfigField: this.data.isConfigField,
                         rowTitle: this.data.rowTitle[index],
-                        //previewText: this.actions.returnShow(row['selectedOpts']),
 
                         recipients: this.data.recipients,
                         recipients_per: this.data.recipients_per,
@@ -147,7 +148,7 @@ let config = {
                     this.append(calendarSetItem, this.el.find('.set-items'));
                 })
             }).catch(err=>{
-                console.log('error',err);
+                //console.log('error',err);
             });
         },
 
@@ -171,6 +172,7 @@ let config = {
         },
 
         reset: function(tableId){
+            console.log(tableId);
             for(let a of this.data.allRows){
                 a['isSelected']=false;
                 a['is_show_at_home_page']=false;
@@ -201,16 +203,16 @@ let config = {
                 }
             }
             CalendarSetService.resetCalendar(tableId,this.data.allRows).then(res=>{
-
+                console.log(this.data.allRows);
                 if(res['succ'] === "1"){
-                    MSG.showTips('重置成功');
+                    MSG.alert('重置成功');
                     this.data.isEdit=false;
                     //this.saveStatus.emit( res['success'] === "1" );
                     setTimeout( ()=>{
                         CalendarSetService.getColumnList(this.data.tableId)
                     },100 )
                 }else  if(res['succ'] === 0){
-                    MSG.showTips('重置失敗');
+                    MSG.alert('重置失敗');
                     //MSG.alert(res['error']);
                     // this.saveStatus.emit( res['success'] === "0" );
                 }
@@ -218,16 +220,8 @@ let config = {
         },
 
         saveSetting(tableId,param){
-            //判断提醒开启时收件人不为空
+            // 判断提醒开启时收件人不为空
             for( let data of param ){
-                if( ( data.email.email_status === '1' && data.email.receiver.length === 0 ) || ( data.sms.sms_status === '1' && data.sms.receiver.length === 0 ) ){
-                    MSG.alert( "已开启提醒的收件人不能为空" );
-                    return;
-                }
-                if( ( data.email.email_status === '1' && data.email.remind_time.length === 0 ) || ( data.sms.sms_status === '1' && data.sms.remind_time.length === 0 ) ){
-                    MSG.alert( "已开启提醒的提醒时间不能为空" );
-                    return;
-                }
                 if( data.is_show_at_home_page && !data.selectedRepresents ){
                     MSG.alert( "如果首页显示勾选需要选择代表字段。" );
                     return;
@@ -235,14 +229,14 @@ let config = {
             }
             for(let eachRow of param){
                 if(eachRow['isSelected'] === false){
-                    eachRow['isSelected']=0;
+                    eachRow['isSelected'] = 0;
                 }else if(eachRow['isSelected'] === true){
-                    eachRow['isSelected']=1;
+                    eachRow['isSelected'] = 1;
                 }
                 if(eachRow['is_show_at_home_page'] === false){
-                    eachRow['is_show_at_home_page']=0;
+                    eachRow['is_show_at_home_page'] = 0;
                 }else if(eachRow['is_show_at_home_page'] === true){
-                    eachRow['is_show_at_home_page']=1;
+                    eachRow['is_show_at_home_page'] = 1;
                 }
                 eachRow['selectedRepresents'] = [eachRow['selectedRepresents']];
                 eachRow['selectedEnums'] = [eachRow['selectedEnums']];
@@ -261,19 +255,23 @@ let config = {
                     }
                 }
             }
+            console.log(tableId, param);
             CalendarService.saveCalendarTable(tableId,param).then(res=>{
-                if(res['succ'] === "1"){
-                    MSG.showTips("保存成功");
-                    this.isEdit=false;
+                console.log(res);
+                if(res['succ'] === 1){
+                    console.log('success');
+                    MSG.alert("保存成功");
                     setTimeout( ()=>{
-                        CalendarSetService.getColumnList(this.tableId)
+                        CalendarSetService.getColumnList(this.data.tableId)
                     },100 );
 
                 }else  if(res['succ'] === 0){
                     MSG.alert(res['error']);
                 }
             });
-
+            this.el.find(".hide-btns").css("visibility","hidden");
+            this.el.find(".set-btn").removeClass("disabled");
+            Mediator.emit('calendar-set:editor',{data:-1});
         },
 
 
@@ -357,6 +355,7 @@ let config = {
         }).on('click', '.save-btn', () => {
             let newAllRowsData = [];
             for(let obj of this.data.childComponents) {
+                console.log(obj.data.rowSetData);
                 newAllRowsData.push(obj.data.rowSetData);
             }
             console.log(newAllRowsData);

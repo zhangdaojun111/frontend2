@@ -1,7 +1,6 @@
 .auto-select-component {
     position: relative;
     input.text {
-        border: 0 none;
         width: 100%;
         border: 1px solid #ddd;
         height: 30px;
@@ -12,6 +11,7 @@
         box-sizing: border-box;
     }
     ul {
+        user-select: none;
         overflow: auto;
         box-sizing: border-box;
         border: 1px solid #ddd;
