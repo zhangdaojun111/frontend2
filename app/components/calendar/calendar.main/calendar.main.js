@@ -21,9 +21,12 @@ import {CalendarTimeService, CalendarToolService, CalendarHandleDataService} fro
 let config = {
     template: template,
     data: {
-        HeadList: [ '星期日','星期一', '星期二', '星期三', '星期四', '星期五', '星期六' ],
-        chooseDate: '',
+        calendarMonthComponent: {},
+        calendarWeekComponent: {},
+        calendarDayComponent: {},
 
+        headList: [ '星期日','星期一', '星期二', '星期三', '星期四', '星期五', '星期六' ],
+        chooseDate: '',
 
         monthDataList: [],
         weekDataList: [],
@@ -80,10 +83,15 @@ let config = {
             return CalendarTimeService.formatDate(year,month,day);
         },
         search: function( key ){
+            this.data.searchText = key;
             if( this.data.calendarContent === 'schedule' ){
                 this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date});
+
             }else {
-                this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date},'calendar')
+                this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date},'calendar');
+                setTimeout(() => {
+                    console.log(this.data.monthDataList);
+                },500)
                 // this.actions.monthDataTogether();
                 // this.actions.getDataCount();
             }
@@ -228,7 +236,7 @@ let config = {
                     }
                 }
             }
-            this.data.selectedDateShow = this.data.selectData.y + "年" + ( this.data.selectData.m + 1 ) + "月" + this.data.selectData.d + "日 （"+ this.data.HeadList[this.data.selectData.w] +"）";
+            this.data.selectedDateShow = this.data.selectData.y + "年" + ( this.data.selectData.m + 1 ) + "月" + this.data.selectData.d + "日 （"+ this.data.headList[this.data.selectData.w] +"）";
             $('.nowDate').html(this.data.selectedDateShow);
             this.data.from_date = date;
             this.data.to_date = date;
@@ -525,6 +533,7 @@ let config = {
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
+
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.data.workflowData = data;
             this.data.isWorkflowDataReady = true;
@@ -628,6 +637,12 @@ let config = {
                 this.data.isShowWorkflowData = true;
             }else {
                 this.data.isShowWorkflowData = false;
+            }
+        });
+
+        Mediator.on('Calendar: globalSearch', data => {
+            if(data !== '') {
+                this.actions.search(data);
             }
         })
 

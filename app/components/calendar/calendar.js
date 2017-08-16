@@ -69,8 +69,11 @@ let config = {
             Mediator.emit('Calendar: changeDate', 'pre');
         }).on('click', '.next-date', () => {
             Mediator.emit('Calendar: changeDate', 'next');
-        }).on('input propertychange', '.search-box', () => {
-            
+        }).on('click', '.header-icon', () => {
+            let keyValue = this.el.find('.search-box').val();
+            Mediator.emit('Calendar: globalSearch', keyValue);
+        }).on('keypress', 'search-box', () => {
+
         });
         this.append(new LeftContent, this.el.find('.left-content'));
         this.append(this.data.calendarMainComponent, this.el.find('.main-content'));
