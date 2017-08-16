@@ -1,7 +1,6 @@
 .auto-select-component {
     position: relative;
     input.text {
-        border: 0 none;
         width: 100%;
         border: 1px solid #ddd;
         height: 30px;
@@ -13,12 +12,13 @@
     }
     .list {
         border: 1px solid #ddd;
-
         box-sizing: border-box;
         user-select: none;
         ul {
             height: calc(100% - 30px);
             overflow: auto;
+            background: #fff;
+            z-index: 100;
             li {
                 height: 30px;
                 line-height: 30px;

@@ -38,6 +38,7 @@ let config = {
     },
     afterRender: function () {
         let _this=this;
+        this.el.find('.ui-width').css('width',this.data.width);
         this.actions.fillData();
         this.el.find('.button').button({
             // disabled: true
