@@ -1339,7 +1339,9 @@ let config = {
                         }
                     }
                     gridoptions.columnApi.setColumnState( state );
-                    this.customColumnsCom.actions.makeSameSate();
+                    if( !this.data.noNeedCustom ){
+                        this.customColumnsCom.actions.makeSameSate();
+                    }
                 } );
                 this.el.find('.SheetPage ul li:first').addClass('active1');
                 this.el.find('.SheetPage ul li').on('click',function () {
