@@ -202,15 +202,19 @@ let config = {
                 }
             }
             CalendarSetService.resetCalendar(tableId,this.data.allRows).then(res=>{
-                console.log(this.data.allRows);
-                if(res['succ'] === "1"){
+                console.log(this.data.allRows, res);
+                if(res['success'] === "1"){
                     MSG.alert('重置成功');
                     this.data.isEdit=false;
                     //this.saveStatus.emit( res['success'] === "1" );
                     setTimeout( ()=>{
-                        CalendarSetService.getColumnList(this.data.tableId)
+                        console.log('sss');
+                        // CalendarSetService.getColumnList(this.data.tableId).then(res => {
+                        //     console.log(res);
+                        // })
+                        this.actions.getColumnListData(this.data.tableId);
                     },100 )
-                }else  if(res['succ'] === 0){
+                }else  if(res['success'] === 0){
                     MSG.alert('重置失敗');
                     //MSG.alert(res['error']);
                     // this.saveStatus.emit( res['success'] === "0" );
@@ -273,6 +277,7 @@ let config = {
 
 
         getColumnListData: function (tableId) {
+            console.log('ss');
             CalendarSetService.getColumnList(tableId).then(res => {
 
                 this.data.filedHead = res['rows'];

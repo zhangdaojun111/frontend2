@@ -44,54 +44,54 @@ let config = {
 
     actions: {
         checkRemindStatus:function () {
+            console.log(this.data.smsStatus, this.data.emailStatus);
             if( ( this.data.smsStatus === '1' && this.data.smsReciver.length === 0 ) || ( this.data.emailStatus === '1' && this.data.emailReciver.length === 0 ) ){
                 console.log('error');
                 MSG.alert( "已开启提醒的收件人不能为空" );
                 return;
-            } else if( ( this.data.smsStatus === '1' && this.data.smsRemindTime.length === 0 ) || ( this.data.emailStatus === '1' && this.data.emailRemindTime.length === 0 ) ){
+            }
+            if( ( this.data.smsStatus === '1' && this.data.smsRemindTime.length === 0 ) || ( this.data.emailStatus === '1' && this.data.emailRemindTime.length === 0 ) ){
                 MSG.alert( "已开启提醒的提醒时间不能为空" );
                 return;
-            } else {
-                if(this.data.smsStatus === 0) {
-                    this.data.sms = {
-                        cc_receiver: [],
-                        receiver: [],
-                        remind_time: [],
-                        sms_status: this.data.smsStatus,
-                    };
-                } else {
-                    this.data.sms = {
-                        cc_receiver: this.data.smsCopyPeople,
-                        receiver: this.data.smsReciver,
-                        remind_time: this.data.smsRemindTime,
-                        sms_status: this.data.smsStatus,
-                    };
-                }
-                if(this.data.emailStatus === 0) {
-                    this.data.email = {
-                        email_id: '',
-                        cc_receiver: [],
-                        receiver: [],
-                        email_status: this.data.emailStatus,
-                        remind_time: '',
-                    };
-                } else {
-                    this.data.email = {
-                        email_id: this.data.sendEmailAddressId,
-                        cc_receiver: this.data.emailCopyPeople,
-                        receiver: this.data.emailReciver,
-                        email_status: this.data.emailStatus,
-                        remind_time: this.data.emailRemindTime,
-                    };
-                }
-
-                PMAPI.sendToParent({
-                    type: PMENUM.close_dialog,
-                    key: window.config.key,
-                    data: {sms: this.data.sms, email: this.data.email},
-                });
-
             }
+            if(this.data.smsStatus === 0) {
+                this.data.sms = {
+                    cc_receiver: [],
+                    receiver: [],
+                    remind_time: [],
+                    sms_status: this.data.smsStatus,
+                };
+            } else {
+                this.data.sms = {
+                    cc_receiver: this.data.smsCopyPeople,
+                    receiver: this.data.smsReciver,
+                    remind_time: this.data.smsRemindTime,
+                    sms_status: this.data.smsStatus,
+                };
+            }
+            if(this.data.emailStatus === 0) {
+                this.data.email = {
+                    email_id: '',
+                    cc_receiver: [],
+                    receiver: [],
+                    email_status: this.data.emailStatus,
+                    remind_time: '',
+                };
+            } else {
+                this.data.email = {
+                    email_id: this.data.sendEmailAddressId,
+                    cc_receiver: this.data.emailCopyPeople,
+                    receiver: this.data.emailReciver,
+                    email_status: this.data.emailStatus,
+                    remind_time: this.data.emailRemindTime,
+                };
+            }
+            console.log(window.config.key);
+            PMAPI.sendToParent({
+                type: PMENUM.close_dialog,
+                key: window.config.key,
+                data: {sms: this.data.sms, email: this.data.email},
+            });
         }
     },
 
@@ -180,7 +180,7 @@ let config = {
         }).on('click', '.close-sms-remind', () => {
             _this.el.find('.close-sms-remind').addClass("checked");
             _this.el.find(".open-sms-remind").removeClass("checked");
-            _this.data.smsStatus = '0';
+            _this.data.smsStatus = 0;
         }).on('click', '.open-email-remind', () => {
             _this.el.find('.open-email-remind').addClass("checked");
             _this.el.find(".close-email-remind").removeClass("checked");
@@ -188,7 +188,7 @@ let config = {
         }).on('click', '.close-email-remind', () => {
             _this.el.find('.close-email-remind').addClass("checked");
             _this.el.find(".open-email-remind").removeClass("checked");
-            _this.data.emailStatus = '0';
+            _this.data.emailStatus = 0;
         }).on('change', '#send-email-address', () => {
             _this.data.emailAddressList = [];
             let sendEmailAddressValue = this.el.find('#send-email-address option:selected').text();

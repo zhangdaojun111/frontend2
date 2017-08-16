@@ -45,6 +45,7 @@ let config = {
         newSelectedOpts: [],
 
         multiSelectMenu: {},
+
     },
     actions: {
         returnShow: function (param) {
@@ -110,22 +111,24 @@ let config = {
                     emailAddressList: this.data.emailAddressList,
                     emailAddress: this.data.emailAddress,
                 }).then(data => {
-                console.log(data);
-                this.data.rowSetData.email = data['email'];
-                this.data.rowSetData.sms = data['sms'];
-                let showMethod = '';
-                if(data['sms']['sms_status'] === '1') {
-                    showMethod = '短信';
-                    this.el.find('.set-remind-method').html(showMethod);
+                if(!data.onlyclose) {
+                    this.data.rowSetData.email = data['email'];
+                    this.data.rowSetData.sms = data['sms'];
+                    let showMethod = '';
+                    if(data['sms']['sms_status'] === '1') {
+                        showMethod = '短信';
+                        this.el.find('.set-remind-method').html(showMethod);
+                    }
+                    if (data['email']['email_status'] === '1') {
+                        showMethod = showMethod + ' ' + '邮件';
+                        this.el.find('.set-remind-method').html(showMethod);
+                    }
+                    if(data['sms']['sms_status'] === 0 && data['email']['email_status'] === 0) {
+                        showMethod = '设置提醒方式';
+                        this.el.find('.set-remind-method').html(showMethod);
+                    }
                 }
-                if (data['email']['email_status'] === '1') {
-                    showMethod = showMethod + ' ' + '邮件';
-                    this.el.find('.set-remind-method').html(showMethod);
-                }
-                if(data['sms']['sms_status'] === '0' && data['email']['email_status'] === '0') {
-                    showMethod = '设置提醒方式';
-                    this.el.find('.set-remind-method').html(showMethod);
-                }
+
             });
         },
 
@@ -133,7 +136,6 @@ let config = {
     },
     afterRender: function () {
         // this.el.css({width: '100%'});
-        console.log(this.actions.returnShow(this.data.rowSetData['selectedOpts']));
 
         let staus = false;
         let _this = this;
@@ -171,10 +173,17 @@ let config = {
             }
         });
 
+        this.el.find('.res-text option').each((item) => {
+            let a = $('.res-text option')[item].value;
+            if(a === this.data.rowSetData['selectedRepresents']) {
+                this.el.find('.res-text option')[item].selected  = 'selected';
+            }
+        });
+
+
         this.el.on('click', '.set-show-text-input', () => {
 
             let isSetShowText = this.el.find('.set-show-text-input').is(':checked');
-            console.log(isSetShowText);
             this.data.rowSetData['isSelected'] = isSetShowText;
 
         }).on('click', '.set-calendar-page-show-text', () => {
