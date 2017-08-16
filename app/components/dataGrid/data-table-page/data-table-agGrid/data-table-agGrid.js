@@ -897,13 +897,13 @@ let config = {
         },
         //保存对应关系
         saveCorrespondence: function () {
-            let json = {
-                from_table_id : this.parentTableId,
-                from_table_temp_id: this.parentTempId,
-                from_table_db_id: this.parentRealId,
-                correspondence_table_id: this.tableId,
-                correspondence_row_ids: JSON.stringify(this.correspondenceIds)
-            };
+            // let json = {
+            //     from_table_id : this.data.parentTableId,
+            //     from_table_temp_id: this.data.parentTempId,
+            //     from_table_db_id: this.data.parentRealId,
+            //     correspondence_table_id: this.data.tableId,
+            //     correspondence_row_ids: JSON.stringify(this.data.correspondenceIds)
+            // };
         },
         //返回请求数据
         createPostData: function () {
