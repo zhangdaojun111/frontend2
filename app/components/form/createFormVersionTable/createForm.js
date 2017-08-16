@@ -17,7 +17,6 @@ export const CreateForm={
             if(data[key].type==='Hidden'){
                 html+=`<div data-dfield="${data[key].dfield}" data-type="${data[key].type}"></div>`;
             }else{
-                console.log(data[key]);
                 html+=`<tr>
                         <td style="width: 150px;white-space: nowrap;">${ data[key].label }</td>
                         <td><div data-dfield="${data[key].dfield}" data-type="${data[key].type}"></div></td>
@@ -162,11 +161,13 @@ export const CreateForm={
             this.parent["is_view"] = 1;
         }
         for(let key in otherData){
-            html+=`<tr class="firstRow"><td valign="top" width="664"><span data-id="4"
+            if(otherData[key].type !='Hidden') {
+                html += `<tr class="firstRow"><td valign="top" width="664"><span data-id="4"
                                                    style="border: 2px currentColor; border-image: none;">${otherData[key].label}</span></td>
                 <td valign="top" width="664">
                     <div data-dfield="${otherData[key].dfield}" data-type="${otherData[key].type}"></div>
                 </td></tr>`
+            }
         }
         html+=`</tbody>
             </table>
