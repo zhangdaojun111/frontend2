@@ -28,11 +28,18 @@ import {PMAPI,PMENUM} from '../lib/postmsg';
 WorkFlowForm.showForm();
 
 let serchStr = location.search.slice(1);
-let obj = {}
+let obj = {},focus=[],is_view;
 serchStr.split('&').forEach(res => {
     var arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
+if(obj.btnType==='view'){
+    is_view=1;
+}else{
+    is_view=0;
+};
+
+
 //审批工作流
 (async function () {
     return workflowService.getWorkflowInfo({
@@ -45,6 +52,22 @@ serchStr.split('&').forEach(res => {
 })().then(res => {
     Mediator.publish('workflow:getImgInfo', res);
     Mediator.publish('workflow:gotWorkflowInfo', res);
+    let a=res.data[0].updateuser2focususer;
+    for(var i in a){
+        for(var j in a[i]){
+            focus.push(a[i][j]);
+        }
+    }
+    Mediator.publish('workflow:focused', focus);
+    (async function () {
+        return workflowService.getWorkflowInfo({url: '/get_all_users/'});
+    })().then(users => {
+        let nameArr=[];
+        for(var i in focus){
+            nameArr.push(users.rows[focus[i]].name);
+        }
+        $('#addFollowerList').text(`${nameArr}`);
+    });
 });
 
 
@@ -54,18 +77,20 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     WorkflowRecord.showRecord(res);
 });
 
+
 FormEntrys.createForm({
     el: '#place-form',
     form_id: obj.form_id,
     record_id: obj.record_id,
-    is_view: 0,
+    is_view: is_view,
     from_approve: 1,
     from_focus: 0,
     table_id: obj.table_id
 });
 
+let focusArr=[];
 Mediator.subscribe('workflow:focus-users', (res)=> {
-    obj.user=res;
+    focusArr=res;
 })
 
 function GetQueryString(name)
@@ -83,7 +108,7 @@ const approveWorkflow = (para) => {
         comment=$('#comment').val();
     para.data=JSON.stringify(formData);
     para.comment=comment;
-    para.focus_users=JSON.stringify(obj.user);
+    para.focus_users=JSON.stringify(focusArr);
     (async function () {
         return workflowService.approveWorkflowRecord({
             url: '/approve_workflow_record/',
@@ -181,3 +206,5 @@ Mediator.subscribe("workflow:delImg", (msg) => {
         let data = await workflowService.delStmpImg(msg);
     })();
 });
+
+

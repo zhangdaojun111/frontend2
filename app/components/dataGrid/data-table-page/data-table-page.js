@@ -7,7 +7,8 @@ let config = {
     template: template,
     data: {
         tableId:'',
-        tableName:''
+        tableName:'',
+        isRenderIntrain: false
     },
     actions: {},
     afterRender: function (){
@@ -31,6 +32,19 @@ let config = {
             $(this).addClass('active');
             $('.left-active').removeClass('active');
         });
+        //渲染在途
+        this.el.on( 'click','.dataTableInTransit',()=>{
+            if( !this.data.isRenderIntrain ){
+                let obj = {
+                    tableId: this.data.tableId,
+                    tableName: this.data.tableName,
+                    tableType: 'in_process',
+                    viewMode: 'in_process'
+                };
+                this.append(new dataTableAgGrid(obj), this.el.find('.dataTableInTransitCon'));
+                this.data.isRenderIntrain = true;
+            }
+        } )
     }
 };
 

@@ -51,7 +51,7 @@ const handlers = {
         return headerCell[0];
     },
     readRender: function (data) {
-        return `<div class="grid-cell-info">${data.value}<div>`
+        return `<div class="grid-cell-info">${data.value?'已读':'未读'}<div>`
     },
     statusRender: function (data) {
         return `<div class="grid-cell-info">${data.data['handle_status']}<div>`;
