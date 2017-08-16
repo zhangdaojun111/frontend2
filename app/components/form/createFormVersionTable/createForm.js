@@ -176,6 +176,7 @@ export const CreateForm={
             <div data-dfield="table_id" data-type="Hidden"></div>`
         return html;
     },
+
     async creatSysTable(systype,res){
         let html=await this[`formVersion${systype}`](res);
         return html;

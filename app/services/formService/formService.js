@@ -484,7 +484,6 @@ export const FormService={
 
     //重新拼装下拉框格式
     createSelectJson(json,multi){
-        console.log(json);
         let data={list:[],choosed:[]};
         if(json.is_view){
             data['editable']=false;

@@ -36,9 +36,9 @@ let config={
     },
     afterRender(){
         if(this.data.is_view){
-            this.el.find('.df-input-label').attr('disabled',true);
+            this.el.find('.df-input-radio').attr('disabled',true);
         }else{
-            this.el.find('.df-input-label').attr('disabled',false);
+            this.el.find('.df-input-radio').attr('disabled',false);
         }
     },
     beforeDestory(){

@@ -86,6 +86,7 @@ let config={
                 }
             }
             this.hasChoose.set(index,data);
+            this.data.isReolad=false;
         },
         //回显
         echoData4Control(value) {
@@ -117,6 +118,7 @@ let config={
     },
     afterRender(){
         let _this=this;
+        this.data.isInit=true;
         this.set('hasChoose', new Map());
         if (!this.childDrop) {
             this.set('childDrop', []);
@@ -138,9 +140,10 @@ let config={
             d['editable']=this.data.is_view?false:true;
             d['width']=this.data.width;
             d.onSelect=function(data){
-                if(!_this.childDrop[i] || _this.childDrop[i].data.choosed.length == 0){
+                if( _this.data.isInit || _this.data.isReolad || !_this.childDrop[i] || _this.childDrop[i].data.choosed.length == 0){
                     return;
                 }
+                _this.data.isReolad=true;
                 _this.actions.changeValue(data[0]['id'],i);
                 _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
             };
@@ -150,6 +153,7 @@ let config={
                 this.hasChoose.set(i, value);
             } else {
                 let set = new Set();
+                d['choosed']=[{name:'请选择',id:'请选择'}];
                 for (let key in this.data.dataList) {
                     set.add(this.data.dataList[key][i]);
                 }
@@ -161,6 +165,7 @@ let config={
             this.childDrop[i] = autoSelect;
             this.append(autoSelect, this.el.find('.multi-drop'));
         }
+        this.data.isInit=false;
     },
     beforeDestory(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);

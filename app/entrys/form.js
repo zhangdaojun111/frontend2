@@ -183,9 +183,6 @@ let FormEntrys = {
             data[obj.dfield]=obj;
         }
         staticData.data=data;
-        staticData['temp_id']=staticData.data['temp_id']||'';
-        staticData['real_id']=staticData.data['real_id']||'';
-        staticData['table_id']=staticData.data['table_id']||'';
         // staticData['parentRealId']=staticData["real_id"]["value"]||'';
         // staticData['parentTableId']=staticData["table_id"]["value"]||'';
         // staticData['parentTempId']=staticData["temp_id"]["value"]||'';

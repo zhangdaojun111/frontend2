@@ -171,10 +171,6 @@ let config={
     afterRender() {
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
-            if(this.data.label=='普通文本'){
-                console.log(this.data);
-                console.log('没触发么？');
-            }
             this.el.find('.ui-width').attr('disabled',true);
         }else{
             this.el.find('.ui-width').attr('disabled',false);
@@ -189,9 +185,6 @@ let config={
 class InputControl extends Component {
     constructor(data){
         super(config,data);
-        if(this.data.label=='普通文本'){
-            console.log(this.data);
-        }
     }
 }
 

@@ -1195,6 +1195,7 @@ let config={
                 //在这里根据type创建各自的控件
                 switch (type){
                     case 'Correspondence':
+                        data[key]['temp_id']=data['temp_id']['value'];
                         let correspondence=new Correspondence(data[key]);
                         correspondence.render(single);
                         _this.childComponent[data[key].dfield]=correspondence;
@@ -1202,6 +1203,7 @@ let config={
                     case 'Songrid':
                         // let popupType=single.data('popupType');
                         let popupType=0;
+                        data[key]['temp_id']=data['temp_id']['value'];
                         let songrid=new Songrid(Object.assign(data[key],{popupType:popupType}));
                         songrid.render(single);
                         _this.childComponent[data[key].dfield]=songrid;
