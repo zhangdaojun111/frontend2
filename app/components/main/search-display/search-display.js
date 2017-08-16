@@ -7,6 +7,8 @@ import template from './search-display.html';
 import Mediator from '../../../lib/mediator';
 import {SingleDisplay} from './single-display/single-display'
 import {FileDisplay} from './file-display/file-display'
+import {GlobalService} from "../../../services/main/globalService"
+
 
 let config = {
     template:template,
@@ -16,26 +18,16 @@ let config = {
         current_display_data:[],            //存放当前展示的数据（24个）
         current_display_attachment:[],      //存放当前展示的附件（16个）
         stats:0,                            //记录页面状态，0：数据页面 ，1：附件页面
+        searchText:'',
     },
     actions:{
-        subscribeData:function () {
-            console.log("set subscribe");
-            // //订阅数据查询结果
-            // Mediator.on("main:global-search:data",(data) => {
-            //     console.log("on",this.data.test_data_result);
-            //     this.actions.displayDataResult(data);
-            // });
-            // //订阅附件查询结果
-            // Mediator.on("main:global-search:attachment",(data) => {
-            //     this.actions.displayAttachmentResult(data);
-            // });
-            this.actions.displayDataResult(this.data.test_data_result);
-            this.actions.displayAttachmentResult(this.data.test_attachment_result);
-        },
+        // subscribeData:function () {
+        //     this.actions.displayDataResult(this.data.test_data_result);
+        //     this.actions.displayAttachmentResult(this.data.test_attachment_result);
+        // },
         displayDataResult:function (data) {
             //根据每个data创建组件，一页最多24个子组件
             let $fatherContainer = this.el.find("div.data-result-display");
-            console.log($fatherContainer,data);
             let tempData = data.result;
             for( let d of tempData){
                 SingleDisplay.create(d,$fatherContainer);
@@ -62,10 +54,59 @@ let config = {
             this.el.find('.data-btn').removeClass('btn-active');
             this.el.find('.attachment-btn').addClass('btn-active');
             this.data.stats = 1;
+        },
+        setSearchContent:function () {
+            let url = location.search;
+            console.log(url);
+            let mark = url.indexOf('=');
+            mark += 1;
+            this.data.searchText = url.substr(mark);
+            this.actions.sendSearch();
+        },
+        sendSearch:function () {
+            let searchData = {
+                keyword:this.data.searchText,                 //搜索文字
+                rows:24 ,                               //每页显示的个数
+                page:1,                               //页面分页的页数
+            };
+
+            //暂时隐藏搜索按钮
+            this.el.find("a.icon-search").hide();
+            //发起第一次搜索请求，查询数据
+            GlobalService.sendSearch(searchData).done((result) => {
+                if(result.success === 1){
+                    console.log(result);
+                    // let tempData = result;       //开全局搜索接口后使用
+                    let tempData = this.data.test_data_result;      //测试使用
+                    this.actions.displayDataResult(tempData);
+                }else{
+                    console.log("查询失败",result);
+                }
+            }).fail((err) => {
+                console.log("查询失败",err);
+            });
+
+            searchData.in_attachment = 1 ;
+            searchData.rows = 18;
+
+            //发起第二次搜索请求，搜索附件
+            GlobalService.sendSearch(searchData).done((result) => {
+                if(result.success === 1){
+                    // let tempData = result;                           //开全局搜索接口后使用
+                    let tempData = this.data.test_attachment_result;    //测试使用
+                    this.actions.displayAttachmentResult(tempData);
+                }else{
+                    // this.el.find("a.icon-search").show();
+                    console.log("查询失败",result);
+                }
+            }).fail((err) => {
+                // this.el.find("a.icon-search").show();
+                console.log("查询失败",err);
+            });
         }
     },
     afterRender:function () {
-        this.actions.subscribeData();
+        this.actions.setSearchContent();
         this.el.on('click','.data-btn',() => {
             this.actions.showDataPage();
         }).on('click','.attachment-btn',() => {
