@@ -36,6 +36,7 @@ function recursion(arr,slnds,pubInfo){
     recur(tree);
     var treeComp2 = new TreeView(tree,{
         callback: function (event,selectedNode) {
+            console.log(selectedNode);
             if(event==='select'){
                 for(var k in staff){
                     if(k==selectedNode.id){
@@ -69,5 +70,19 @@ function GetQueryString(name)
 }
 
 
+(async function () {
+    return workflowService.getWorkflowInfo({url: '/get_all_users/'});
+})().then(users => {
+    let nameArr=[];
+    let dept=[];
+    for(var i in focus){
+        nameArr.push(users.rows[focus[i]].name);
+        dept.push(users.rows[focus[i]].department);
+    }
+    console.log(nameArr);
+    console.log(_.uniq(dept));
+})
+
+let focus=location.search.slice(1).split('&')[0].split(',');
 let key=GetQueryString('key');
 WorkflowAddFollow.showAdd({key:key});
