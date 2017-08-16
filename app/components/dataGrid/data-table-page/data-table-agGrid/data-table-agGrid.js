@@ -1310,9 +1310,10 @@ let config = {
             if( this.el.find('.grid-new-window')[0] ){
                 let url_obj = {
                     tableId: this.data.tableId,
+                    tableName: this.data.tableName,
                     formId: this.data.formId,
                     tableType: this.data.tableType,
-                    viewMode: this.data.viewMode,
+                    viewMode: this.data.tableType,
                     parentTableId: this.data.parentTableId,
 
                     parentRealId: this.data.parentRealId,
@@ -1324,7 +1325,7 @@ let config = {
                     base_buildin_dfield: this.data.base_buildin_dfield
                 }
                 let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', url_obj);
-                this.el.find('.grid-new-window').attr('href', url);
+                this.el.find('.grid-new-window')[0].href = url;
             }
             //新增数据
             if( this.el.find( '.new-form-btn' )[0] ){
