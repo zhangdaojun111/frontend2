@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>搜索结果</title>
+</head>
+
+<body>
+
+<script>
+    window.config = {{window_config|safe}}
+</script>
+
+<div id="search-display-window"></div>
+
+{% ifequal window_type 'develop'%}
+<!--<link rel="stylesheet" href="/client/static/css/vendors.css">-->
+<!--<link rel="stylesheet" href="/client/static/css/main.css">-->
+<!--<script type="text/javascript" src="/client/static/vendors.js"></script>-->
+<!--<script type="text/javascript" src="/client/static/main.js"></script>-->
+<script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
+<script type="text/javascript" src="http://localhost:8080/scripts/resultDisplay.js"></script>
+{% else %}
+<link rel="stylesheet" href="/client/static/css/vendors.css">
+<link rel="stylesheet" href="/client/static/css/resultDisplay.css">
+<script type="text/javascript" src="/client/static/vendors.js"></script>
+<script type="text/javascript" src="/client/static/resultDisplay.js"></script>
+{% endifequal %}
+
+</body>
+</html>
+
+
+

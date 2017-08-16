@@ -26,6 +26,7 @@ module.exports = {
     // ],
 
     entry: {
+
         form: path.resolve(APP_PATH, 'entrys/form.js'),
         openForm: path.resolve(APP_PATH, 'entrys/popup/openForm.js'),
         addNewBuild: path.resolve(APP_PATH, 'entrys/popup/addNewBuild.js'),
@@ -37,6 +38,8 @@ module.exports = {
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
+        dataImport: path.resolve(APP_PATH, 'entrys/popup/dataImport.js'),
+        expertSearch: path.resolve(APP_PATH, 'entrys/popup/expertSearch.js'),
         customDataGrid: path.resolve(APP_PATH, 'entrys/popup/customDataGrid.js'),
         bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         bimanager:path.resolve(APP_PATH, 'entrys/bimanager.js'),
@@ -44,6 +47,8 @@ module.exports = {
         calendarSet: path.resolve(APP_PATH, 'entrys/calendar.set.js'),
         calendarCreate: path.resolve(APP_PATH, 'entrys/calendar.create.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
+        register:path.resolve(APP_PATH, 'entrys/register.js'),
+        resultDisplay:path.resolve(APP_PATH,'entrys/resultDisplay.js'),
         vendors: [
             'jquery',
             'jquery-ui',
@@ -53,8 +58,7 @@ module.exports = {
             'handlebars',
             'moment',
             'lodash',
-            'babel-polyfill',
-            'jsplumb'
+            'babel-polyfill'
         ]
     },
 
@@ -128,7 +132,10 @@ module.exports = {
     plugins: [
         // new webpack.HotModuleReplacementPlugin()
         new webpack.optimize.UglifyJsPlugin({minimize: true}),
-        new webpack.optimize.CommonsChunkPlugin('vendors'),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendors',
+            minChunks: 3
+        }),
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery",

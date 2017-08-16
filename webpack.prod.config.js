@@ -25,7 +25,9 @@ module.exports = {
         addSigner: path.resolve(APP_PATH, 'entrys/popup/addSigner.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         customDataGrid: path.resolve(APP_PATH, 'entrys/popup/customDataGrid.js'),
+        dataImport: path.resolve(APP_PATH, 'entrys/popup/dataImport.js'),
         expertSearch: path.resolve(APP_PATH, 'entrys/popup/expertSearch.js'),
+        workflowPage: path.resolve(APP_PATH, 'entrys/popup/workflowPage.js'),
         sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         bi:path.resolve(APP_PATH, 'entrys/bi.js'),
@@ -34,6 +36,8 @@ module.exports = {
         calendarSet: path.resolve(APP_PATH, 'entrys/calendar.set.js'),
         calendarCreate: path.resolve(APP_PATH, 'entrys/calendar.create.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
+        register:path.resolve(APP_PATH, 'entrys/popup/register.js'),
+        resultDisplay:path.resolve(APP_PATH,'entrys/resultDisplay.js'),
         vendors: [
             'jquery',
             'jquery-ui',
@@ -43,8 +47,7 @@ module.exports = {
             'handlebars',
             'moment',
             'lodash',
-            'babel-polyfill',
-            'jsplumb'
+            'babel-polyfill'
         ]
     },
 
@@ -157,7 +160,10 @@ module.exports = {
             jQuery: "jquery",
             "window.jQuery": "jquery"
         }),
-        new webpack.optimize.CommonsChunkPlugin('vendors'),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendors',
+            minChunks: 3
+        }),
         new webpack.optimize.UglifyJsPlugin({
             minimize: true,
             mangle: {

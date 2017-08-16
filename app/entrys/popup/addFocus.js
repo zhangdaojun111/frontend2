@@ -20,47 +20,116 @@ function recursion(arr,slnds,pubInfo){
         }
     }
 }
-(async function () {
-    return workflowService.getStuffInfo({url: '/get_department_tree/'});
-})().then(res=>{
-    tree=res.data.department_tree;
-    staff=res.data.department2user;
-    function recur(data) {
-        for (let item of data){
-            item.nodes=item.children;
-            if(item.children.length!==0){
-                recur(item.children);
+let focus=location.search.slice(1).split('&')[0].split(',');
+
+if(focus.length>1){
+    let dept=[];
+    (async function () {
+        return workflowService.getWorkflowInfo({url: '/get_all_users/'});
+    })().then(users => {
+        let idArr=[];
+        for(var i in focus){
+            idArr.push(users.rows[focus[i]].id);
+            dept.push(users.rows[focus[i]].department);
+        }
+        Mediator.publish('workflow:idArr', idArr);
+        dept=_.uniq(dept);
+    }).then(()=>{
+        (async function () {
+            return workflowService.getStuffInfo({url: '/get_department_tree/'});
+        })().then(res=>{
+            tree=res.data.department_tree;
+            staff=res.data.department2user;
+            function recur(data) {
+                for (let item of data){
+                    item.nodes=item.children;
+                    for(let i in dept){
+                        if(item.text.indexOf(dept[i])!==-1){
+                            item.state={};
+                            item.state.checked=true;
+                            item.state.selected=true;
+                            for(var k in staff){
+                                if(k==item.id){
+                                    Mediator.publish('workflow:checkDeptAlready', staff[k]);
+                                    // recursion(staff,selectedNode,'checkDept');
+                                }
+                            }
+                        }
+                    }
+                    if(item.children.length!==0){
+                        recur(item.children);
+                    }
+                }
+            }
+            recur(tree);
+            var treeComp2 = new TreeView(tree,{
+                callback: function (event,selectedNode) {
+                    if(event==='select'){
+                        for(var k in staff){
+                            if(k==selectedNode.id){
+                                Mediator.publish('workflow:checkDept', staff[k]);
+                                // recursion(staff,selectedNode,'checkDept');
+                            }
+                        }
+                    }else{
+                        for(var k in staff){
+                            if(k==selectedNode.id){
+                                Mediator.publish('workflow:unCheckDept', staff[k]);
+                                // recursion(staff,selectedNode,'unCheckDept');
+                            }
+                        }
+                    }
+                },
+                treeType:'MULTI_SELECT',
+                isSearch: true,
+                withButtons:true
+                });
+            treeComp2.render($('#treeMulti'));
+        
+         
+        });
+    
+    })
+}else{
+    (async function () {
+        return workflowService.getStuffInfo({url: '/get_department_tree/'});
+    })().then(res=>{
+        tree=res.data.department_tree;
+        staff=res.data.department2user;
+        function recur(data) {
+            for (let item of data){
+                item.nodes=item.children;
+                if(item.children.length!==0){
+                    recur(item.children);
+                }
             }
         }
-    }
-    recur(tree);
-    var treeComp2 = new TreeView(tree,{
-        callback: function (event,selectedNode) {
-            console.log(selectedNode);
-            if(event==='select'){
-                for(var k in staff){
-                    if(k==selectedNode.id){
-                        Mediator.publish('workflow:checkDept', staff[k]);
-                        // recursion(staff,selectedNode,'checkDept');
+        recur(tree);
+        var treeComp2 = new TreeView(tree,{
+            callback: function (event,selectedNode) {
+                if(event==='select'){
+                    for(var k in staff){
+                        if(k==selectedNode.id){
+                            Mediator.publish('workflow:checkDept', staff[k]);
+                            // recursion(staff,selectedNode,'checkDept');
+                        }
+                    }
+                }else{
+                    for(var k in staff){
+                        if(k==selectedNode.id){
+                            Mediator.publish('workflow:unCheckDept', staff[k]);
+                            // recursion(staff,selectedNode,'unCheckDept');
+                        }
                     }
                 }
-            }else{
-                for(var k in staff){
-                    if(k==selectedNode.id){
-                        Mediator.publish('workflow:unCheckDept', staff[k]);
-                        // recursion(staff,selectedNode,'unCheckDept');
-                    }
-                }
-            }
-        },
-        treeType:'MULTI_SELECT',
-        isSearch: true,
-        withButtons:true
-        });
-    treeComp2.render($('#treeMulti'));
-
- 
-});
+            },
+            treeType:'MULTI_SELECT',
+            isSearch: true,
+            withButtons:true
+            });
+        treeComp2.render($('#treeMulti'));
+    });
+}
 
 function GetQueryString(name)
 {
@@ -69,20 +138,5 @@ function GetQueryString(name)
     if(r!=null)return  unescape(r[2]); return null;
 }
 
-
-(async function () {
-    return workflowService.getWorkflowInfo({url: '/get_all_users/'});
-})().then(users => {
-    let nameArr=[];
-    let dept=[];
-    for(var i in focus){
-        nameArr.push(users.rows[focus[i]].name);
-        dept.push(users.rows[focus[i]].department);
-    }
-    console.log(nameArr);
-    console.log(_.uniq(dept));
-})
-
-let focus=location.search.slice(1).split('&')[0].split(',');
 let key=GetQueryString('key');
 WorkflowAddFollow.showAdd({key:key});
