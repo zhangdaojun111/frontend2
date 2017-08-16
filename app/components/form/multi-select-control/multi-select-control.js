@@ -40,7 +40,7 @@ let config={
             if(this.data.options[0]['label'] == '-'){
                 this.data.options[0]['value']='-';
             }
-            let data=FormService.createSelectJson(this.data);
+            let data=FormService.createSelectJson(this.data,true);
             data.onSelect=function(){
                 if(_this.data.isInit || !_this.childSelect || _this.childSelect.data.choosed.length == 0 ){
                     return;
