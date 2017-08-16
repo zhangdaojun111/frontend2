@@ -149,7 +149,6 @@ class AutoSelect extends Component {
     constructor(data) {
         super(config, data);
     }
-
 }
 
 export {AutoSelect}
