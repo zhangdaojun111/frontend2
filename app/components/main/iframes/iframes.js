@@ -138,15 +138,19 @@ export const IframeInstance = new Component({
         setSizeToMini: function () {
             this.el.addClass('mini');
         },
-        closeSomeIframe:function (ids) {
-            for(let k of ids){
+        closeAllIframes:function () {
+            let temp_arr = _.defaultsDeep([],this.data.sort);
+            for(let k of temp_arr){
+                console.log(k);
                 this.actions.closeIframe(k);
             }
         },
-        closeAllIframe:function () {
-            for(let k of this.data.sort){
-                console.log(k);
-                this.actions.closeIframe(k);
+        closeOtherIframes:function () {
+            let temp_arr = _.defaultsDeep([],this.data.sort);
+            for (let k of temp_arr){
+                if( k !== this.data.focus.id){
+                    this.actions.closeIframe(k);
+                }
             }
         },
         showTabsPopup:function () {
@@ -173,22 +177,14 @@ export const IframeInstance = new Component({
         closeFocusTab:function () {
             this.actions.closeIframe(this.data.focus.id);
         },
-        closeOtherIframe:function () {
-            let focusId = this.data.focus.id;
-            for (let k of this.data.sort){
-                if( k !== focusId){
-                    this.actions.closeIframe(k);
-                }
-            }
-        },
         controlTabs:function (event) {
             let name = event.target.textContent;
             if(name === '关闭标签'){
                 this.actions.closeFocusTab();
             }else if(name === '关闭全部标签'){
-                this.actions.closeAllIframe();
+                this.actions.closeAllIframes();
             }else if(name === '关闭其他标签'){
-                this.actions.closeOtherIframe();
+                this.actions.closeOtherIframes();
             }else{
                 //选中标签获得焦点
                 let id = this.actions.getTabIdByName(name,this.data.hash);
@@ -277,7 +273,7 @@ export const IframeInstance = new Component({
         });
 
         Mediator.on('saveview:displayview', (data) => {
-            this.actions.closeAllIframe();  //先关闭所有标签，再打开view中的标签
+            this.actions.closeAllIframes();  //先关闭所有标签，再打开view中的标签
             for(let k of data){
                 this.actions.openIframe(k.id,k.url,k.name);
             }
