@@ -3,7 +3,6 @@
  * name input输入组件
  */
 
-import {BiBaseComponent} from '../../../bi.base.component';
 import template from './input.html';
 import './input.scss';
 
