@@ -25,6 +25,15 @@ span.required2 {
     background: url("../../../assets/images/form/icon_bitian_yes.png");
     vertical-align: middle;
 }
+.form-control {
+    display: inline;
+    .info {
+      color: #ccc;
+    }
+    .inline{
+      display: inline;
+    }
+}
 .form-cell {
     padding: 10px;
     border-bottom: 1px solid #ddd;
@@ -33,17 +42,13 @@ span.required2 {
         flex-direction: row;
         justify-content: flex-start;
         align-items: center;
-        .label {
-            width: 200px;
-            text-align: center;
-        }
         .content {
             flex-grow: 1;
             .error {
                 color: red;
             }
             .info {
-                color: blue;
+                color: #ccc;
             }
         }
     }
