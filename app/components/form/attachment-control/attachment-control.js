@@ -5,7 +5,8 @@ import template from './attachment-control.html';
 import Component from "../../../lib/component";
 import '../../../lib/msgbox'
 import AttachmentQueueItem from "./attachment-queue-item/attachment-queue-item";
-import ScreenShotReceiver from "./screenshot-receiver/screenshot-receiver";
+import {screenShotConfig} from "./screenshot-receiver/screenshot-receiver";
+import {PMAPI} from "../../../lib/postmsg";
 
 let config={
     template: template,
@@ -21,11 +22,17 @@ let config={
         },
         shotScreen:function () {
             let ele = this.el.find('.get-screenshot');
-            let comp = new ScreenShotReceiver((file)=>{
-                this.actions.controlUploadingForFile(file);
-            });
-            comp.render(ele);
-        },
+            PMAPI.openDialogByComponent(screenShotConfig,{
+                width:500,
+                height:300,
+                title:"选择截图"
+            }).then(res=>{
+                if(!res.file){
+                    return;
+                }
+                this.actions.controlUploadingForFile(res.file);
+            })
+         },
         controlUploadingForFile:function (file) {
             if(file.size>100*1024*1024){
                 alert(file.name + ' 文件过大，无法上传，请确保上传文件大小小于100MB');

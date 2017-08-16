@@ -6,15 +6,13 @@ import template from './screenshot-receiver.html'
 import Component from "../../../../lib/component";
 import './screenshot-receiver.scss';
 
-let config={
+export const screenShotConfig={
     template:template,
     data:{
         file:'',
         imageEle:undefined,
-        callback:function () {}
     },
     actions:{
-
     },
     afterRender:function () {
         let t = this;
@@ -30,7 +28,9 @@ let config={
                     t.data.file = blob;
                     var reader = new FileReader();
                     reader.onload = function (event) {
-                        let ele = $('<img src="'+event.target.result+'" style="height: 100%;width: 100%">');
+                        let ele = $('<img>');
+                        ele.addClass('screenshot-image');
+                        ele.attr('src',event.target.result);
                         t.el.find('.img-anchor').append(ele);
                         t.data.imageEle = ele;
                         t.el.find('.paste-tip').css('display','none');
@@ -42,7 +42,13 @@ let config={
             if(this.data.file == ''){
                 return;
             }
-            this.data.callback(this.data.file);
+            window.parent.postMessage({
+                type:'1',
+                key:this.key,
+                data:{
+                    file:this.data.file
+                }
+            }, location.origin);
         }).on('click','.cancel-to-rechoose',()=>{
             if(!this.data.imageEle){
                 return;
@@ -54,11 +60,3 @@ let config={
     }
 }
 
-export default class ScreenShotReceiver extends Component{
-    constructor(func){
-        if(func){
-            config.data.callback = func;
-        }
-        super(config);
-    }
-}
