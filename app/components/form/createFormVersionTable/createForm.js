@@ -14,7 +14,7 @@ export const CreateForm={
             <tbody>
                 `;
         for(let key in data){
-            if(data.type==='hidden'){
+            if(data.type==='Hidden'){
                 html+=`<div data-dfield="${data[key].dfield}" data-type="${data[key].type}"></div>`;
             }else{
                 html+=`<tr>
