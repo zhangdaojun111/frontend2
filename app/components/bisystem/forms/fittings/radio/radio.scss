@@ -1,3 +1,29 @@
+.radio{
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    line-height: 35px;
+    text-align: center;
+    background: #f5f5f5;
+    margin: 10px 5px 5px 0;
+    padding: 5px 20px;
+
+}
 input[type="radio"] {
     display: none;
+}
+.radio-circle{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    box-sizing: border-box;
+    border: 2px solid rgba(0,0,0,.54);
+    border-radius: 50%;
+    cursor: pointer;
+}
+.radio-circle:active +.radio-val{
+    color: #06c;
+}
+.radio-val{
+    display: inline-block;
 }
