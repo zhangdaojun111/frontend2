@@ -79,16 +79,15 @@ let config = {
                 week = nweTime.getDay();
             return CalendarTimeService.formatDate(year,month,day);
         },
-        // search: function( key ){
-        //     if( this.data.calendarContent === 'schedule' ){
-        //         //this.getSchedule();
-        //
-        //     }else {
-        //         this.monthDataTogether();
-        //         this.getDataCount();
-        //     }
-        //     this.cd.markForCheck();
-        // },
+        search: function( key ){
+            if( this.data.calendarContent === 'schedule' ){
+                this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date});
+            }else {
+                this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date},'calendar')
+                // this.actions.monthDataTogether();
+                // this.actions.getDataCount();
+            }
+        },
 
         refresh: function () {
             this.el.find('.calendar-main-content').empty();
@@ -378,7 +377,7 @@ let config = {
                         arrData['time'] = set.date;
                         arrData['setId'] = set.id;
                         arrData['dfield'] = setDetail.dfield;
-                        arrData['color'] = this.actions.colorRgb( setDetail.color , 0.5 );
+                        arrData['color'] = CalendarToolService.handleColorRGB( setDetail.color , 0.5 );
                         arrData['isDrag'] = setDetail.is_drag;
                         arrData['real_ids'] = JSON.stringify( setDetail.real_ids );
                         arrData['real_id'] = JSON.stringify( [select._id] );
@@ -477,7 +476,7 @@ let config = {
                     if( d['create_time'].indexOf( day.dataTime ) !== -1 ){
                         day['data'].push( {
                             data: d,
-                            color: this.actions.colorRgb( '#64A6EF' , 0.5 ),
+                            color: CalendarToolService.handleColorRGB( '#64A6EF' , 0.5 ),
                             srcColor: '#64A6EF',
                             isDrag:0,
                             isShow: true,

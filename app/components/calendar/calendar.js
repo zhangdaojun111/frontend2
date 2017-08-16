@@ -69,6 +69,8 @@ let config = {
             Mediator.emit('Calendar: changeDate', 'pre');
         }).on('click', '.next-date', () => {
             Mediator.emit('Calendar: changeDate', 'next');
+        }).on('input propertychange', '.search-box', () => {
+            
         });
         this.append(new LeftContent, this.el.find('.left-content'));
         this.append(this.data.calendarMainComponent, this.el.find('.main-content'));
