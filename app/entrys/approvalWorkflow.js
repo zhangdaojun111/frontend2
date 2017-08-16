@@ -28,12 +28,18 @@ import {PMAPI,PMENUM} from '../lib/postmsg';
 WorkFlowForm.showForm();
 
 let serchStr = location.search.slice(1);
-let obj = {};
-let focus=[];
+let obj = {},focus=[],is_view;
 serchStr.split('&').forEach(res => {
     var arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
+if(obj.btnType==='view'){
+    is_view=1;
+}else{
+    is_view=0;
+};
+
+
 //审批工作流
 (async function () {
     return workflowService.getWorkflowInfo({
@@ -71,11 +77,12 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     WorkflowRecord.showRecord(res);
 });
 
+
 FormEntrys.createForm({
     el: '#place-form',
     form_id: obj.form_id,
     record_id: obj.record_id,
-    is_view: 0,
+    is_view: is_view,
     from_approve: 1,
     from_focus: 0,
     table_id: obj.table_id
