@@ -12,7 +12,14 @@ export const ChartFormService = {
     async getChartSource() {
             let res = await HTTP.getImmediately('/bi/get_new_table_info');
             return Promise.resolve(res);
+    },
+
+    /**
+     * 从服务器获取图表图标
+     * @return 图标promise
+     */
+    async getChartIcon() {
+        let res = await HTTP.getImmediately('/bi/get_all_icon');
+        return Promise.resolve(res);
     }
-
-
 }

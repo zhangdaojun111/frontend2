@@ -6,8 +6,9 @@ import {BiBaseComponent} from '../../../bi.base.component';
 import template from './normal.html';
 import {FormBaseComponent} from '../../base/base';
 import {fittings as form} from '../../fittings/export.fittings';
-import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
+
 import msgbox from "../../../../../lib/msgbox";
+import {FormMixShareComponent} from '../../mix.share/mix.share';
 
 let config = {
     template:template,
@@ -15,7 +16,6 @@ let config = {
     actions: {},
     afterRender() {
         this.renderFitting();
-        this.getChartSource();
     },
     firstAfterRender() {
     },
@@ -33,17 +33,20 @@ export class FormNormalComponent extends BiBaseComponent{
      */
     renderFitting() {
         let base = new FormBaseComponent();
-        this.append(base, this.el.find('.field'));
+        let share = new FormMixShareComponent();
+        this.append(base, this.el.find('.form-group-base'));
+        this.append(share, this.el.find('.form-group-share'));
+
         this.formGroup['base'] = base;
+        this.formGroup['share'] = share;
         const formGroup = {
-            source:form.autoComplete,
             x: form.input,
             y: form.input
         };
         Object.keys(formGroup).map(type => {
             let component = new formGroup[type]();
             this.formGroup[type] = component;
-            this.append(component, this.el.find('.base'))
+            this.append(component, this.el.find('.form-group'))
         })
     }
 
@@ -53,18 +56,5 @@ export class FormNormalComponent extends BiBaseComponent{
     save() {
         const data  = this.data.formGroup;
         return data;
-    }
-
-    /**
-     * 获取图表数据源
-     */
-    async getChartSource() {
-        let res = await ChartFormService.getChartSource();
-        if (res['success'] === 1) {
-            this.formGroup.source.autoSelect.data.list = res['data'];
-            this.formGroup.source.autoSelect.reload()
-        } else {
-            msgbox.alert(res['error']);
-        }
     }
 }

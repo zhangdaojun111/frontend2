@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{{#each radios}}
+<label>
+    <input type="radio"  name="radio-{{../name}}" value="{{value}}" />{{{name}}}
+</label>
+{{/each}}

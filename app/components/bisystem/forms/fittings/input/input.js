@@ -26,6 +26,9 @@ export class InputComponent extends FormFittingAbstract {
         super(config)
     }
 
+    /**
+     * input 返回值
+     */
     getValue() {
         return this.data.value;
     }
