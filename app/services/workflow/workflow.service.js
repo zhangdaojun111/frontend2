@@ -47,4 +47,21 @@ export const workflowService={
     getUserInfo(params){
         return HTTP.postImmediately('/get_user_info/', params);
     },
+    //Grid
+    getGridinfo(params){
+        return HTTP.postImmediately('/get_form_static_data/',params)
+    },
+    //记着修改到首页中的service中
+    getRecordTotal(params){
+        return HTTP.postImmediately('/get_workflow_record_total/')
+    },
+    getRecords(params){
+        return HTTP.postImmediately('/get_workflow_records/',params)
+    },
+    approve(params){
+        return HTTP.postImmediately('/approve_workflow_record/',params)
+    },
+    getRecordInfo(params){
+        return HTTP.postImmediately('/get_form_dynamic_data/',params)
+    }
 }

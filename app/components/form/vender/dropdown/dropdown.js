@@ -23,10 +23,10 @@ let config={
     actions:{
 
     },
-    afterRender:function(){
+    firstAfterRender(){
         let _this=this;
-        this.el.off();
         this.el.on('click','.show-hide-drop',function(event){
+            console.log('怎么回事啊 到底');
             let $select=_this.el.find('.select-drop');
             let isShow=true;
             if($select.is(':hidden')){
@@ -56,7 +56,7 @@ let config={
                 Mediator.publish('form:dropDownSelect:'+_this.data.tableId,data);
             }
             event.stopPropagation();
-        })
+        });
         this.el.find('.search').on('input',_.debounce(function(event){
             let value=event.target.value;
             if(value){
@@ -73,6 +73,7 @@ let config={
                 });
             }
         },1000)).on('click',function(event){
+            console.log('难道是他?');
             event.stopPropagation();
         });
     },

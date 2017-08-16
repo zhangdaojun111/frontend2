@@ -1,30 +1,35 @@
 import Component from '../../../lib/component';
 import template from './workflow-seal.html';
 import './workflow-seal.scss';
-
+import msgBox from '../../../lib/msgbox';
 
 import Mediator from '../../../lib/mediator';
-
+import Uploader from '../../../lib/uploader'
 
 let config = {
     template: template,
     data: {
+        // cloneImgId:0,
+        // isClone:true,
     },
     actions: {
+
         addImg(e){
             let imgFile = this.el.find('.J_add')[0].files[0];
-            //    console.log(imgFile.name);
+            // this.el.find('.J_add').val("");
             if(/\.(png|PNG)$/.test(imgFile.name)){
                 if(imgFile){
                     let FR = new FileReader();
                     FR.onload = function (event){
-                        var imgstr = event.target.result;
+                        let imgstr = event.target.result;
                         let imgstr2 = imgstr.substring(22,imgstr.length);
                         Mediator.publish("workflow:seal",{"base64":imgstr2});
                         // Mediator.publish("workflow:getStamp");
                     };
                     FR.readAsDataURL(imgFile);
                 }
+            }else{
+                msgBox.showTips("图片类型错误");
             }
         },
         changeImg(msg){
@@ -37,7 +42,42 @@ let config = {
             }
             this.el.find('.J_ul-img').html(html);
         },
+        /*cloneImg:function (el) {
 
+            if(this.data.isClone){
+                this.data.isClone=false;
+                $(".cloneMask").show();
+                let id=this.data.cloneImgId+=1;
+                let cloneimgId=`cloneimgId${id}`;
+                $(".cloneImgdiv").append(el.find('img').clone().addClass("cloneImg").attr('id',cloneimgId).css({
+                    position: 'absolute',
+                    zIndex: '99',
+                    top:'50%',
+                    left:'50%',
+                    width:'100px',
+                    height:'100px'
+
+                }));
+            }
+        },
+        cloneImgDrag:function (el) {
+            var self=this;
+           el.draggable({
+               containment:'#detail-form',
+               drag:function () {
+                   $(".seal").css({
+                       zIndex:60
+                   })
+               },
+               stop: function() {
+                   $(".seal").css({
+                       zIndex:62
+                   });
+                   $(".cloneMask").hide();
+                   self.data.isClone=true;
+               }
+           });
+        },*/
         dragimg(e){
             let imgLeft = $(e.target).offset().left;
             let imgTop = $(e.target).offset().top;
@@ -45,18 +85,21 @@ let config = {
             this.el.find('.J_dragimg').attr("data-id",imgId);
             let url = "http://"+window.location.host+"/download_attachment/?file_id="+imgId+"&download=0";
             this.el.find(".signatureMock").css('visibility','visible');
-            this.el.find(".J_dragimg").attr("src",url);
+            // this.el.find(".J_dragimg").attr("src",url);
+            console.log(url);
             this.el.find(".J_dragimg").css({
                 "left":imgLeft,
-                "top":imgTop
+                "top":imgTop,
+                "background-image":  `url(${url})`,
+                "background-repeat":"no-repeat"
             })
-            let disX = e.clientX - $(e.target).offset().left;
+            let disX = e.clientX - imgLeft;
             let disY = e.clientY - imgTop;
             this.el.find(".signatureMock").attr({
                 "disX":disX,
                 "disY":disY
             })
-            console.log(disX+".."+disY); 
+            console.log(disX+".."+disY);
             let fromPlace =  $("#place-form").children(":first");
             // let fromPlace =  $("#place-form");
             console.log(fromPlace);
@@ -71,12 +114,12 @@ let config = {
                     "left":left,
                     "width":width,
                     "height":height,
-                    "background": "#000"
+                    "background": "#fff"
                 })
                 this.el.find(".fromClone").children().remove();
                 this.el.find(".fromClone").append(fromClone);
             }
-            
+
         },
         Imgcoordinate(e){
             let offsetLeft = this.el.find(".signatureMock").attr("disX");
@@ -115,9 +158,13 @@ let config = {
             let mouseTop = e.clientY;
             let imgId =$(e.target).attr("data-id");
             console.log(mouseLeft-fromOffleft);
-            if(mouseLeft-offsetLeft>fromOffleft&&mouseTop-offsetTop>fromOfftop&&mouseLeft+imgWidth-offsetLeft<fromWidth+fromOffleft&&mouseTop+imgHeight-offsetTop<fromHeight+fromOfftop){
-                let left = (mouseLeft-fromOffleft)/fromWidth;
-                let top = (mouseTop-fromOfftop)/fromHeight;
+            let leftout = mouseLeft-offsetLeft>fromOffleft;
+            let rightout = mouseTop-offsetTop>fromOfftop;
+            let topout = mouseTop+imgHeight-offsetTop<fromHeight+fromOfftop;
+            let bottomout = mouseLeft+imgWidth-offsetLeft<fromWidth+fromOffleft;
+            if(leftout&&rightout&&topout&&bottomout){
+                let left = (mouseLeft-fromOffleft-offsetLeft)/fromWidth;
+                let top = (mouseTop-fromOfftop-offsetTop)/fromHeight;
                 top= top.toFixed(6)*100;
                 left= left.toFixed(6)*100;
                 this.actions.createImg(top,left,280,140,imgId);
@@ -131,7 +178,8 @@ let config = {
             let top1 = top+"%";
             let left1 = left+"%";
             let host = "http://"+window.location.host;
-            let html = "<div class='imgseal' data-height="+height+" data-width="+width+" data-viewLeft="+viewLeft+" data-viewTop="+viewTop+" data-imgid="+id+" style='top:"+top1+";left:"+left1+";z-index:"+1002+";position:absolute;padding-top:15px;'><img  width=50 height=50 src='"+host+"/download_attachment/?file_id="+id+"&download=0'/><i class='J_del'  style='display: none;position: absolute;right: -22px;top: 0;width: 23px;height: 23px;background: url(assets/icon_del.png) no-repeat;'>X</i></div>";
+            let html = "<div class='imgseal noprint' data-height="+height+" data-width="+width+" data-viewLeft="+viewLeft+" data-viewTop="+viewTop+" data-imgid="+id+" style='top:"+top1+";left:"+left1+";z-index:"+1002+";position:absolute;padding-top:15px;'><img  width=50 height=50 src='"+host+"/download_attachment/?file_id="+id+"&download=0'/><i class='J_del'  style='display: none;position: absolute;right: -22px;top: 0;width: 23px;height: 23px;background: url(assets/icon_del.png) no-repeat;'>X</i></div>";
+            html += `<img class="printS" style="top:${top1};left:${left1};position: absolute;margin-top: 17px;" width=50 height=50 src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
             $('#place-form').children(":first").append(html);
         },
         showImgDel(e){
@@ -161,20 +209,34 @@ let config = {
         }),
         this.el.on("mouseup",'.signatureMock',(e)=>{
             this.actions.closeSeal(e);
+            // e.stopPropagation(e);
         }),
         this.el.on("click",'.J_delImg',(e)=>{
             this.actions.delImg(e);
         }),
         this.el.on("mousemove",'.signatureMock',(e)=>{
             this.actions.Imgcoordinate(e);
+            // e.stopPropagation(e);
         }),
         this.el.on("click",".J_toggImg",(e)=>{
             this.actions.toggImg(e);
-        })
+        });
         // $(".approval-info-item").on("click",(e)=>{
         //     console.log(13265);
         //     this.actions.showImgDel(e);
         // })
+
+        // this.el.on("click",'.li-img',function () {
+        //     self.actions.cloneImg($(this));
+        // });
+        // this.el.parents("#approval-workflow").on('mousedown','.cloneImg',function () {
+        //     self.actions.cloneImgDrag($(this));
+        // });
+
+        $(".approval-info-item").on("click",(e)=>{
+            console.log(13265);
+            this.actions.showImgDel(e);
+        });
         Mediator.subscribe('workflow:changeImg',(msg)=>{
             console.log(msg.file_ids);
             this.actions.changeImg(msg);
@@ -199,7 +261,7 @@ export default {
         for(let i=0;i<len;i++){
             let url = {};
             url['url']= "http://"+host+"/download_attachment/?file_id="+data.file_ids[i]+"&download=0",
-            url["id"]=data.file_ids[i];
+                url["id"]=data.file_ids[i];
             obj.push(url);
         }
         data.url = obj;
