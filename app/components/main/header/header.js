@@ -6,6 +6,8 @@ import Mediator from '../../../lib/mediator';
 import msgbox from '../../../lib/msgbox';
 import OtherLogin from "../login-by-other/login-by-other";
 import {systemMessageUtil} from '../system-message/system-message';
+import {postMessageUtil} from '../post-message/post-message';
+
 
 let config = {
     template: template,
@@ -71,6 +73,10 @@ let config = {
             this.actions.hideMessageUnread();
             // $("<div></div>").appendTo
             systemMessageUtil.show();
+        },
+
+        openPostMessageDialog: function () {
+            postMessageUtil.show();
         }
 
     },
@@ -124,6 +130,8 @@ let config = {
             this.actions.openHome();
         }).on('click', '.message', () => {
             this.actions.openMessageDialog();
+        }).on('click', '.post-message', () => {
+            this.actions.openPostMessageDialog();
         });
         Mediator.on('socket:online_user_num', that.actions.refreshOnlineNum);
         Mediator.on('socket:personal_message', this.actions.showMessageUnread);
