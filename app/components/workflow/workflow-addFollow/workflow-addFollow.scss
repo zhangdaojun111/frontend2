@@ -35,7 +35,7 @@
 			flex-shrink: 0;
 			height: 100%;
 			overflow: scroll;
-			.flex{
+			.flex,.flexNoDel{
 				display: flex;
 				width: 100%;
 			}
@@ -79,4 +79,7 @@
 	.checkbox.checked{
 		background: url('../../../assets/images/util/tree/icon_checkbox_yes.png') center/20px 20px no-repeat;
 	}
+}
+[disabled]{
+	background: #eee;
 }
