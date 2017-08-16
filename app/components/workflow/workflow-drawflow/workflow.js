@@ -434,16 +434,16 @@ let config = {
     afterRender: function() {
         this.actions.init();
 
-        this.el.on('click', '#zoomIn', () => {
+        this.el.parents("#app-workflow").find("#flow-node").on('click', '#zoomIn', () => {
             this.actions.zoomInNodeflow();
         });
-        this.el.on('click', '#zoomOut', () => {
+        this.el.parents("#app-workflow").find("#flow-node").on('click', '#zoomOut', () => {
             this.actions.zoomOutNodeflow();
         });
-        this.el.on('click', '#newWin', () => {
+        this.el.parents("#app-workflow").find("#flow-node").on('click', '#newWin', () => {
             this.actions.maximizeNodeflow();
         });
-        this.el.on('click', '#togglePic', () => {
+        this.el.parents("#app-workflow").find("f#low-node").on('click', '#togglePic', () => {
             this.actions.togglePicture();
         });
         this.el.on('click', '#addFocus', () => {

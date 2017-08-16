@@ -5,15 +5,15 @@ import {PMAPI,PMENUM} from '../../../lib/postmsg';
 
 let config={
     template: `<div class="flex flex-column flex-start">
-    <div class="workflow-box-l">
+    <div class="workflow-box-l flex">
         <div class="tit">
             <i class="workflow-icon icon-workflow-icon3"></i>
             <span>关注人</span>
         </div>
+        <div class="add-follow flex" id="addFollower"><span class="workflow-icon icon-workflow-icon6 add-icon"></span><span>添加关注人</span></div>
     </div>
     <div class="workflow-box-r">
         <div class="content">
-            <div class="add-follow" id="addFollower">添加关注人</div>
             <div class="follow-name-list" id="addFollowerList">
                 
             </div>
