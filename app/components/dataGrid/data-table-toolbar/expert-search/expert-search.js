@@ -62,8 +62,8 @@ let config = {
             this.data.searchInputAry.push(epCondition.data);
             this.el.find('.condition-search-item').css({'paddingLeft':'83px','borderTop':'1px solid #e4e4e4'});
             this.el.find('.condition-search-select.radio').css('display','none');
-            this.el.find('.delete').css('visibility','hidden');
-            this.el.find('.add').css('display','inline-block');
+            this.el.find('.condition-search-delete').css('visibility','hidden');
+            this.el.find('.condition-search-add').css('display','inline-block');
         },
         // 获取查询数据
         submitData: function (name){
@@ -291,15 +291,9 @@ let config = {
         //移除常用查询按钮
         removeQueryItem: function(id) {
             let itemLength = this.el.find('.common-search-item').length;
-            let optionLength = this.el.find('.dataGrid-commonQuery-option').length;
             for(let i = 0; i < itemLength; i++) {
                 if(this.el.find('.common-search-item').eq(i).attr('fieldId') == id){
                     this.el.find('.common-search-item').eq(i).remove();
-                }
-            }
-            for(let i = 0; i < optionLength; i++) {
-                if(this.el.find('.dataGrid-commonQuery-option').eq(i).attr('fieldId') == id){
-                    this.el.find('.dataGrid-commonQuery-option').eq(i).remove();
                 }
             }
         },
@@ -316,14 +310,14 @@ let config = {
             this.itemDeleteChecked = false;
             this.isEdit = false;
             let _this = this;
-            this.el.on('click','.add',()=> {
+            this.el.on('click','.condition-search-add',()=> {
                 // this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
                 let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
                 this.append(epCondition, this.el.find('.condition-search-container'));
                 this.data.searchInputAry.push(epCondition.data);
                 let length = this.el.find('.condition-search-item').length;
-                this.el.find('.condition-search-item').find('.add').css('display','none')
-                this.el.find('.condition-search-item').eq(length-1).find('.add').css('display','inline-block')
+                this.el.find('.condition-search-item').find('.condition-search-add').css('display','none')
+                this.el.find('.condition-search-item').eq(length-1).find('.condition-search-add').css('display','inline-block')
             }).on('click','.condition-search-radio', function() {
                 $(this).parent().parent('.condition-search-radiobox').find('.condition-search-radio').prop('checked',false);
                 $(this).prop('checked',true)

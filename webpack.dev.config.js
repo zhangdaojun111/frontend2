@@ -39,6 +39,7 @@ module.exports = {
         sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
         dataImport: path.resolve(APP_PATH, 'entrys/popup/dataImport.js'),
         expertSearch: path.resolve(APP_PATH, 'entrys/popup/expertSearch.js'),
+        historyApprove: path.resolve(APP_PATH, 'entrys/popup/historyApprove.js'),
         workflowPage: path.resolve(APP_PATH, 'entrys/popup/workflowPage.js'),
         customDataGrid: path.resolve(APP_PATH, 'entrys/popup/customDataGrid.js'),
         bi:path.resolve(APP_PATH, 'entrys/bi.js'),
