@@ -171,8 +171,8 @@ export const IframeInstance = new Component({
                 $li.html(j);
                 $parent.prepend($li);
             }
-            let $downIcon = $("<li class='drop-down-icon'>");
-            $parent.append($downIcon);
+            // let $downIcon = $("<li class='drop-down-icon'>");
+            // $parent.append($downIcon);
         },
         closeFocusTab:function () {
             this.actions.closeIframe(this.data.focus.id);
@@ -237,8 +237,10 @@ export const IframeInstance = new Component({
 
         this.el.on('click','.view-save',function () {
             SaveView.show(that.data.sort);
-        }).on('click','.popup-icon',() => {
+        }).on('mouseenter','.popup-btn',() => {
             this.actions.showTabsPopup();
+        }).on('mouseleave','.popup-btn',() => {
+            this.el.find('.tab-list').slideUp();
         }).on('click','.drop-up-icon',() => {
             this.el.find('.tab-list').slideUp();
         }).on('click','.drop-down-icon',() => {

@@ -22,6 +22,10 @@ let config = {
             this.el.find('.rapid-setting').show();
             this.el.find('.style-btn').removeClass('active');
             this.el.find('.rapid-btn').addClass('active');
+        },
+        clearStorage:function () {
+            window.localStorage.clear();
+            $(window).attr("location","/login");
         }
     },
     afterRender:function () {
@@ -29,6 +33,10 @@ let config = {
             this.actions.showStyleSetting();
         }).on('click','.rapid-btn',() => {
             this.actions.showRapidSetting();
+        }).on('click','.clear-storage',() => {
+            this.actions.clearStorage();
+        }).on('click','.rapid-save-btn', () => {
+            
         })
     },
     beforeDestory:function () {
