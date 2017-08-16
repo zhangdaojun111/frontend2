@@ -33,10 +33,7 @@ let config = {
          * @param cellChart 画布块数据(通过父类初始化子类传递进来)
          */
         init(cellChart) {
-            if (
-                cellChart['chart']['data']['rows'].length === 0 ||
-                cellChart['chart']['data']['xAxis'].length === 0 ||
-                cellChart['chart']['data']['yAxis'].length === 0) {
+            if (cellChart['chart']['data']['rows'].length === 0) {
                 return false;
             }
             let nineType = cellChart['chart']['type'];

@@ -6,36 +6,26 @@ import {BiBaseComponent} from '../../../bi.base.component';
 import template from './normal.html';
 import {FormBaseComponent} from '../../base/base';
 import {fittings as form} from '../../fittings/export.fittings';
+import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
+import msgbox from "../../../../../lib/msgbox";
 
 let config = {
     template:template,
-    data: {
-        formGroup:{}
-    },
+    data: {},
     actions: {},
     afterRender() {
         this.renderFitting();
+        this.getChartSource();
     },
     firstAfterRender() {
-        this.el.on('click', '.save', () => {
-            const form = this.save();
-            // const data = {
-            //     'name': form['name'].getValue(),
-            //     'source': form['source'].getValue(),
-            //     'x': form['x'].getValue(),
-            //     'y': form['y'].getValue()
-            // }
-            console.log(form['x'].getValue());
-            console.log(form['y'].getValue());
-            return false;
-        })
     },
     beforeDestory() {}
 }
 
 export class FormNormalComponent extends BiBaseComponent{
     constructor() {
-        super(config)
+        super(config);
+        this.formGroup = {};
     }
 
     /**
@@ -44,14 +34,15 @@ export class FormNormalComponent extends BiBaseComponent{
     renderFitting() {
         let base = new FormBaseComponent();
         this.append(base, this.el.find('.field'));
-        this.data.formGroup['base'] = base;
+        this.formGroup['base'] = base;
         const formGroup = {
+            source:form.autoComplete,
             x: form.input,
             y: form.input
         };
         Object.keys(formGroup).map(type => {
             let component = new formGroup[type]();
-            this.data.formGroup[type] = component;
+            this.formGroup[type] = component;
             this.append(component, this.el.find('.base'))
         })
     }
@@ -62,5 +53,18 @@ export class FormNormalComponent extends BiBaseComponent{
     save() {
         const data  = this.data.formGroup;
         return data;
+    }
+
+    /**
+     * 获取图表数据源
+     */
+    async getChartSource() {
+        let res = await ChartFormService.getChartSource();
+        if (res['success'] === 1) {
+            this.formGroup.source.autoSelect.data.list = res['data'];
+            this.formGroup.source.autoSelect.reload()
+        } else {
+            msgbox.alert(res['error']);
+        }
     }
 }

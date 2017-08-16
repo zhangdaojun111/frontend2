@@ -6,7 +6,7 @@
 import {BiBaseComponent} from '../../bi.base.component';
 import template from './base.html';
 import {fittings as form} from '../fittings/export.fittings';
-
+import './base.scss';
 
 let config = {
     template: template,
