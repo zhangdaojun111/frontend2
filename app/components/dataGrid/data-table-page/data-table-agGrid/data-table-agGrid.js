@@ -1323,7 +1323,7 @@ let config = {
                     source_field_dfield: this.data.source_field_dfield,
                     base_buildin_dfield: this.data.base_buildin_dfield
                 }
-                let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', url_obj);
+                let url = dgcService.returnIframeUrl('/iframe/workflowPage/', url_obj);
                 this.el.find('.grid-new-window').attr('href', url);
             }
             //新增数据

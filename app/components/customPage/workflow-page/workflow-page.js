@@ -195,6 +195,23 @@ let config = {
                     grid.width( 'calc(100% - ' + num + 'px)' );
                 } )
             }
+            //全屏
+            if( this.el.find( '.grid-new-window' )[0] ){
+                let obj = {
+                    tableId:this.data.tableId
+                }
+                let url = this.actions.returnIframeUrl( '/iframe/workflowPage/',obj )
+                this.el.find('.grid-new-window').attr('href', url);
+            }
+        },
+        //返回数据url
+        returnIframeUrl( u,obj ){
+            let str = '?';
+            for( let o in obj ){
+                str += (o + '=' + obj[o] + '&');
+            }
+            str = str.substring( 0,str.length - 1 );
+            return u + str;
         },
         //获取数据
         getData: function () {
@@ -374,6 +391,7 @@ let config = {
             if( this.data.pageType == 0 || this.data.pageType == 1 ){
                 if(type === 'view'){
                     winTitle = '查看工作';
+                    obj['btnType'] = 'view';
                     let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
                     this.actions.openSourceDataGrid( url,winTitle );
                 }else if( type === 'cancel'){
@@ -383,6 +401,7 @@ let config = {
             if( this.data.pageType == 2||this.data.pageType == 3||this.data.pageType == 4||this.data.pageType == 6 ){
                 if(type === 'view'){
                     winTitle = '查看工作';
+                    obj['btnType'] = 'view';
                     let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
                     this.actions.openSourceDataGrid( url,winTitle );
                 }else if(type === 'cancel'){
@@ -391,12 +410,14 @@ let config = {
                     this.actions.approveWorkflow( $event["data"]["id"],5,'确定撤回？' )
                 }else if(type === 'edit'){
                     winTitle = '编辑工作';
+                    obj['btnType'] = 'edit';
                     let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
                     this.actions.openSourceDataGrid( url,winTitle );
                 }else if(type === 'drawApproval'){
                     this.actions.approveWorkflow( $event["data"]["id"],7,'确定撤回？' )
                 }else if( type === 'focusWorkflow' ){
                     winTitle = '查看工作';
+                    obj['btnType'] = 'view';
                     let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
                     this.actions.openSourceDataGrid( url,winTitle );
                 }
@@ -404,8 +425,10 @@ let config = {
             if( this.data.pageType == 5 ){
                 if(type === 'approve'){
                     winTitle = '审批工作';
+                    obj['btnType'] = 'edit';
                 }else if(type === 'view'){
                     winTitle = '查看工作';
+                    obj['btnType'] = 'view';
                 }else{
                     return false;
                 }
