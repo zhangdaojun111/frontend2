@@ -1,19 +1,24 @@
 <div class="auto-select-component">
     <input class="text" type="text" placeholder="选择或者输入查找" />
     <div class="choosed">
-        <div class="item">管理员<i class="bg-close"></i></div>
-        <div class="item">管理员<i class="bg-close"></i></div>
-        <div class="item">管理员<i class="bg-close"></i></div>
-        <div class="item">管理员<i class="bg-close"></i></div>
-    </div>
-    <ul>
-        {{#each list}}
-        <li data-id="{{id}}" data-name="{{name}}">
-            <label>
-                <input type="checkbox" class="checkbox" name="" data-id="{{id}}" data-name="{{name}}"/>
-                <span>{{name}}</span>
-            </label>
-        </li>
+        {{#each choosed}}
+        <div class="item" title="点击删除" data-id="{{id}}">{{name}}</div>
         {{/each}}
-    </ul>
+    </div>
+    <div class="list">
+        <ul>
+            {{#each list}}
+            <li data-id="{{id}}" data-name="{{name}}" data-py="{{py}}">
+                <label>
+                    <input type="checkbox" class="checkbox" name="" data-id="{{id}}" value="{{id}}" data-name="{{name}}"/>
+                    <span>{{name}}</span>
+                </label>
+            </li>
+            {{/each}}
+        </ul>
+        <div>
+            <button>全选</button>
+        </div>
+    </div>
+
 </div>

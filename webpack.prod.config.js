@@ -16,15 +16,23 @@ const BUILD_PATH = path.resolve(ROOT_PATH, 'dist');
 module.exports = {
     entry: {
         form: path.resolve(APP_PATH, 'entrys/form.js'),
+        openForm: path.resolve(APP_PATH, 'entrys/popup/openForm.js'),
         addNewBuild: path.resolve(APP_PATH, 'entrys/popup/addNewBuild.js'),
         choose: path.resolve(APP_PATH, 'entrys/popup/choose.js'),
-        workflow:path.resolve(APP_PATH, 'entrys/workflow'),
+        createWorkflow: path.resolve(APP_PATH, 'entrys/createWorkflow.js'),
+        approvalWorkflow: path.resolve(APP_PATH, 'entrys/approvalWorkflow.js'),
+        addFocus: path.resolve(APP_PATH, 'entrys/popup/addFocus.js'),
+        addSigner: path.resolve(APP_PATH, 'entrys/popup/addSigner.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
+        customDataGrid: path.resolve(APP_PATH, 'entrys/popup/customDataGrid.js'),
+        expertSearch: path.resolve(APP_PATH, 'entrys/popup/expertSearch.js'),
         sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         bimanager:path.resolve(APP_PATH, 'entrys/bimanager.js'),
         calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
+        calendarSet: path.resolve(APP_PATH, 'entrys/calendar.set.js'),
+        calendarCreate: path.resolve(APP_PATH, 'entrys/calendar.create.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
         vendors: [
             'jquery',
@@ -35,8 +43,7 @@ module.exports = {
             'handlebars',
             'moment',
             'lodash',
-            'babel-polyfill',
-            'jsplumb'
+            'babel-polyfill'
         ]
     },
 
@@ -149,7 +156,10 @@ module.exports = {
             jQuery: "jquery",
             "window.jQuery": "jquery"
         }),
-        new webpack.optimize.CommonsChunkPlugin('vendors'),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendors',
+            minChunks: 3
+        }),
         new webpack.optimize.UglifyJsPlugin({
             minimize: true,
             mangle: {

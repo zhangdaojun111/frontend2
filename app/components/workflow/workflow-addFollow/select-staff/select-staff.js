@@ -4,7 +4,7 @@ import Mediator from '../../../../lib/mediator';
 
 let config={
     template: `<div class="flex" data-id="{{id}}">
-        <input class="w33" type="checkbox" name="{{name}}" value="{{id}}" checked>
+    <div class="w33"><span class=" checkbox checked" name="{{name}}" value="{{id}}"></span></div>
         <div class="w33">{{name}}</div>
         <div class="w33">{{username}}</div>
     </div>`,
@@ -14,14 +14,16 @@ let config={
     },
     afterRender(){
         Mediator.publish('workflow:pubCheck',this.data);
-        this.el.on('click','input[type="checkbox"]',function(){
-            if($(this).prop('checked')){
+        this.el.on('click','.checkbox',function(){
+            if(!$(this).hasClass('checked')){
+                $(this).addClass('checked');
                 Mediator.publish('workflow:pubCheckSingle',{
-                    id:this.value,
-                    name:this.name
+                    id:this.getAttribute('value'),
+                    name:this.getAttribute('name')
                 });
             }else{
-                Mediator.publish('workflow:pubUncheckSingle',this.value);
+                $(this).removeClass('checked');
+                Mediator.publish('workflow:pubUncheckSingle',this.getAttribute('value'));
             }
         });
     }
