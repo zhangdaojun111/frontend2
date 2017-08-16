@@ -15,7 +15,7 @@ let exportSetting = {
                 table_id: this.data.tableId,
                 isFilter: this.data.isFilter,
                 custom: this.data.custom,
-                filter: this.data.filterParam,
+                filter: JSON.stringify( this.data.filterParam ),
                 is_group: this.data.groupCheck?1:0,
                 attachment: this.data.attachment
             }

@@ -73,6 +73,8 @@ let config = {
         queryList: {},
         //请求数据参数
         commonQueryData:[],
+        //没有定制列
+        noNeedCustom: false,
         postData: [],
         //定制列（列宽）
         colWidth: {},
@@ -561,12 +563,14 @@ let config = {
         //重置偏好
         resetPreference: function () {
             let eHeader = document.createElement('span');
-            eHeader.innerHTML = "初";
-            eHeader.className = "table-init-logo";
+            if( !this.data.noNeedCustom ){
+                eHeader.innerHTML = "初";
+                eHeader.className = "table-init-logo";
 
-            eHeader.addEventListener('click', () => {
-                alert("重置偏好")
-            });
+                eHeader.addEventListener('click', () => {
+                    alert("重置偏好")
+                });
+            }
             return eHeader;
         },
         //生成操作列
@@ -788,7 +792,9 @@ let config = {
                     //赋值
                     this.agGrid.actions.setGridData(d);
                 }
-                this.pagination.actions.resetPagination( this.data.total )
+                if( this.data.viewMode != 'in_process' ){
+                    this.pagination.actions.resetPagination( this.data.total );
+                }
                 this.actions.sortWay();
             })
             HTTP.flush();
@@ -820,6 +826,12 @@ let config = {
                 rowId: this.data.rowId,
                 is_filter: this.data.filterParam.is_filter,
                 filter: []
+            }
+            if( this.data.viewMode == 'in_process' ){
+                json = {
+                    table_id: this.data.tableId,
+                    tableType: 'in_process'
+                }
             }
             if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild'||this.data.viewMode == 'child' ){
                 json["childInfo"]= {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
@@ -886,7 +898,9 @@ let config = {
             }
             this.agGrid = new agGrid(gridData);
             this.append(this.agGrid , this.el.find('#data-agGrid'));
-            this.actions.calcColumnState();
+            if( this.data.viewMode != 'in_process' ){
+                this.actions.calcColumnState();
+            }
             //渲染分页
             let paginationData = {
                 total: this.data.total,
@@ -919,9 +933,11 @@ let config = {
                 this.groupGridCom.actions.onGroupChange = this.actions.onGroupChange;
             }
             //渲染分页
-            this.pagination = new dataPagination(paginationData);
-            this.pagination.actions.paginationChanged = this.actions.refreshData;
-            this.append(this.pagination, this.el.find('.pagination'));
+            if( this.data.viewMode != 'in_process' ){
+                this.pagination = new dataPagination(paginationData);
+                this.pagination.actions.paginationChanged = this.actions.refreshData;
+                this.append(this.pagination, this.el.find('.pagination'));
+            }
             this.data.firstRender = false;
             //高级查询
             this.actions.getExpertSearchData();
@@ -950,11 +966,13 @@ let config = {
                 parentRealId: this.data.parentRealId,
                 fieldId: this.data.fieldId,
                 tableType: this.data.tableType,
-                filterParam: JSON.stringify( filer )
+                filterParam: filer
             }
             for( let o in obj ){
                 exportSetting.data[o] = obj[o];
             }
+            console.log( "______________________" )
+            console.log( obj )
             PMAPI.openDialogByComponent(exportSetting, {
                 width: 380,
                 height: 220,
@@ -971,6 +989,9 @@ let config = {
         },
         //列宽改变
         onColumnResized: function ($event) {
+            if( this.data.noNeedCustom ){
+                return;
+            }
             this.customColumnsCom.actions.onColumnResized( this.customColumnsCom );
         },
         //拖动结束
@@ -1265,7 +1286,7 @@ let config = {
                 table_id:this.data.tableId,
                 temp_ids:JSON.stringify([]),
                 real_ids:JSON.stringify( this.data.deletedIds ),
-                is_batch: this.viewMode == 'createBatch'?1:0
+                is_batch: this.data.viewMode == 'createBatch'?1:0
             }
             dataTableService.delTableData( json ).then( res=>{
                 if( res.success ){
@@ -1399,7 +1420,7 @@ let config = {
         },
         //触发排序事件
         onSortChanged: function ($event) {
-            if( this.viewMode == 'viewFromCorrespondence' || this.viewMode == 'editFromCorrespondence' || this.data.frontendSort ){
+            if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' || this.data.frontendSort || this.data.noNeedCustom ){
                 return;
             }
             let data = this.agGrid.gridOptions.api.getSortModel()[0];
@@ -1595,6 +1616,9 @@ let config = {
         }
     },
     afterRender: function () {
+        if( this.data.viewMode == 'in_process' ){
+            this.data.noNeedCustom = true;
+        }
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();

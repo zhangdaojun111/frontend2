@@ -382,7 +382,8 @@ export const dgcService = {
         'custom-column-btn':'custom_field',
         'grid-auto-width':'custom_width',
         'grid-new-window':'new_window',
-        'correspondence-check':'especial'
+        'correspondence-check':'especial',
+        'refresh-btn':'especial'
     },
     //行选择
     rowClickSelect: function (data) {
