@@ -239,7 +239,7 @@ export const IframeInstance = new Component({
             SaveView.show(that.data.sort);
         }).on('mouseenter','.popup-btn',() => {
             this.actions.showTabsPopup();
-        }).on('mouseleave','.popup-btn',() => {
+        }).on('mouseleave','.view-popup',() => {
             this.el.find('.tab-list').slideUp();
         }).on('click','.drop-up-icon',() => {
             this.el.find('.tab-list').slideUp();
