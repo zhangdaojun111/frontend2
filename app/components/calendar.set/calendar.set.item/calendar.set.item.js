@@ -133,8 +133,6 @@ let config = {
 
             });
         },
-
-
     },
     afterRender: function () {
         // this.el.css({width: '100%'});
@@ -158,8 +156,7 @@ let config = {
         Mediator.on('calendar-set:editor', data => {
             if (data.data === 1) {
                 this.el.find(".editor-items").attr("disabled", false);
-                _this.el.find(".set-remind-method").removeClass('unclick');
-                _this.el.find('input').removeClass('unclick');
+                _this.el.find('.editor-items').removeClass('unclick');
                 _this.data.multiSelectMenu.destroySelf();
                 select_item_data.editable = true;
                 _this.data.multiSelectMenu = new AutoSelect(select_item_data);
@@ -167,9 +164,7 @@ let config = {
                 staus = true;
             } else {
                 this.el.find(".editor-items").attr("disabled", true);
-
-                _this.el.find(".set-remind-method").addClass('unclick');
-                _this.el.find('input').addClass('unclick');
+                _this.el.find(".editor-items").addClass('unclick');
                 _this.data.multiSelectMenu.destroySelf();
                 select_item_data.editable = false;
                 _this.data.multiSelectMenu = new AutoSelect(select_item_data);
@@ -195,15 +190,6 @@ let config = {
             _this.el.find(".set-remind-method").addClass('unclick');
             _this.el.find('input').addClass('unclick');
         }
-        // this.el.on("mouseenter",".auto-select-component",function(){
-        //     if(staus){
-        //         _this.data.multiSelectMenu.actions.showSelectBox();
-        //     }
-        //     else{
-        //         _this.data.multiSelectMenu.actions.hideSelectBox();
-        //         _this.el.find("ul").hide();
-        //     }
-        // });
         this.el.on('click', '.set-show-text-input', () => {
 
             let isSetShowText = this.el.find('.set-show-text-input').is(':checked');

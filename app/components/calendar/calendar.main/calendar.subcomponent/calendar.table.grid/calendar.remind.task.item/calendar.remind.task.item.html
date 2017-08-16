@@ -1,5 +1,16 @@
+{{#if remindTaskItemData.isShow}}
 <div class="task-item">
     <span class="task-bg-color"></span>
-    <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-pending.png" alt="">
+    <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-finished.png" alt="">
+    <!--{{#if isFinishedTask}}-->
+        <!--<img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-finished.png" alt="">-->
+    <!--{{/if}}-->
+    <!--{{#if isWaitCheck}}-->
+        <!--<img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-waitcheck.png" alt="">-->
+    <!--{{/if}}-->
+        <!--<img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-pending.png" alt="">-->
+
+
     <span class="task-show-text"></span>
 </div>
+{{/if}}
