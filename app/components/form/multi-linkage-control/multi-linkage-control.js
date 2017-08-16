@@ -41,6 +41,13 @@ let config={
                     continue;
                 };
                 d['list']=[];
+                if(i == index){
+                    d['choosed']=[{name:data,id:data}];
+                }
+                if(this.childDrop[i].data.choosed[0]['id'] == '请选择'){
+                    d['list'].push({name:'请选择',id:'请选择'})
+                }
+
                 let set=new Set();
                 for(let key in this.data.dataList){
                     if(this.data.dataList[key][index] == data){
