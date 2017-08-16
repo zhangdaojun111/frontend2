@@ -95,7 +95,7 @@ let config = {
             let temp = $(this).parents('.item-title');
             that.actions.contentHide(that,temp);
         }).on("click",".hide-con-2",function(){
-            that.actions.hideclass(that,$(this).parents('.item-title'));
+            that.actions.hideclass(that,$(this).parents('.item-title-2'));
         }).on('click','.set-calendar',() =>{
             CalendarSetService.getMenu().then(res => {
                 let component = new CalendarSetting(res['menuList']);
