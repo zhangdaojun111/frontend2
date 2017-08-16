@@ -1,37 +1,34 @@
 /**
  * Created by birdyy on 2017/8/14.
- * name radio组件
+ * name select组件
  */
-
-import template from './radio.html';
-import './radio.scss';
 import {FormFittingAbstract} from '../form.abstract';
+import template from './select.html';
+import './select.scss';
+
 
 let config = {
     template: template,
     data: {
-        radios: [],
         value: null
     },
     afterRender() {},
     firstAfterRender() {
         let me = this;
-        this.el.on('change', 'input', function(event){
+        this.el.on('change', '.select', function(event){
             me.data.value = $(this).val();
-            $(this).siblings('.radio-circle').addClass('active');
-            $(this).closest('.radio').siblings().find('.radio-circle').removeClass('active');
         })
     }
 }
 
-export class RadioComponent extends FormFittingAbstract {
+export class SelectComponent extends FormFittingAbstract {
     constructor(data) {
         config.data = data;
         super(config);
     }
 
     /**
-     * radio 返回值
+     * select 返回值
      */
     getValue() {
         return this.data.value;

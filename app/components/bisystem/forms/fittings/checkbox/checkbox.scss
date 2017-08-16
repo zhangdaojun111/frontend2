@@ -1,0 +1,17 @@
+.checkbox{
+  width: 100%;
+  margin-top: 20px;
+  input[type='checkbox']{
+    display: none;
+  }
+  .checkbox-circle{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    box-sizing: border-box;
+    border: 2px solid #676a6c;
+    border-radius: 5%;
+    cursor: pointer;
+  }
+}
+

@@ -21,7 +21,7 @@ let config = {
     firstAfterRender() {
     },
     beforeDestory() {}
-}
+};
 
 export class FormNormalComponent extends BiBaseComponent{
     constructor() {
@@ -42,7 +42,9 @@ export class FormNormalComponent extends BiBaseComponent{
         this.formGroup['share'] = share;
         const formGroup = {
             x: form.input,
-            y: form.input
+            y: form.input,
+            select: form.select,
+            checkbox: form.checkbox,
         };
         Object.keys(formGroup).map(type => {
             let component = new formGroup[type]();
