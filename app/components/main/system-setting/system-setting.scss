@@ -1,0 +1,95 @@
+
+#sys-setting-page{
+    .sys-setting-main{
+        width: 100%;
+        height: 100%;
+        .switch-part{
+            width: 80px;
+            height: 100%;
+            float: left;
+            background-color: #ecf9ff;
+            .style-btn,.rapid-btn{
+                height: 40px;
+                line-height: 40px;
+                text-align: center;
+                cursor: pointer;
+            }
+            .active{
+                background-color: #ffffff;
+            }
+
+        }
+
+        .style-setting{
+            width: 460px;
+            float: left;
+            .prompt{
+                display: inline-block;
+                margin-top: 25px;
+                margin-left: 30px;
+            }
+            .font-size-slider{
+                width: 200px;
+                height: 40px;
+                margin-left: 30px;
+                margin-top: 20px;
+                .font-range{
+                    width: 300px;
+                }
+            }
+            .font-example{
+                display: inline-block;
+                margin-left: 30px;
+                background-color: #f2f2f2;
+                padding: 10px;
+            }
+            .clear-storage{
+                display: block;
+                color: red;
+                position: absolute;
+                bottom: 30px;
+                right: 30px;
+            }
+        }
+
+
+        .rapid-setting{
+            width: 460px;
+            float: left;
+            display: none;
+            .isShow-BI{
+                height: 30px;
+                line-height: 30px;
+                margin-left: 30px;
+                margin-top: 25px;
+                .bi-Show{
+                    vertical-align: middle;
+                }
+            }
+
+            .isShow-calendar{
+                height: 30px;
+                line-height: 30px;
+                margin-left: 30px;
+                margin-top: 10px;
+                .calendar-Show{
+                    vertical-align: middle;
+                }
+            }
+
+            .rapid-save-btn{
+                width: 90px;
+                height: 30px;
+                border-radius: 5px;
+                background-color: #0088ff;
+                color: #ffffff;
+                position: absolute;
+                right: 20px;
+                bottom: 20px;
+                outline: none;
+                border: none;
+            }
+        }
+    }
+}
+

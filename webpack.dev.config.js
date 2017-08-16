@@ -26,6 +26,7 @@ module.exports = {
     // ],
 
     entry: {
+
         form: path.resolve(APP_PATH, 'entrys/form.js'),
         openForm: path.resolve(APP_PATH, 'entrys/popup/openForm.js'),
         addNewBuild: path.resolve(APP_PATH, 'entrys/popup/addNewBuild.js'),
@@ -44,6 +45,8 @@ module.exports = {
         calendarSet: path.resolve(APP_PATH, 'entrys/calendar.set.js'),
         calendarCreate: path.resolve(APP_PATH, 'entrys/calendar.create.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
+        register:path.resolve(APP_PATH, 'entrys/register.js'),
+        resultDisplay:path.resolve(APP_PATH,'entrys/resultDisplay.js'),
         vendors: [
             'jquery',
             'jquery-ui',

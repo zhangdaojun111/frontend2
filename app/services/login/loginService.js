@@ -1,6 +1,6 @@
 //具体实现登录与后台交互
 import {HTTP} from "../../lib/http"
-import {Utils} from "./utils"
+import {Utils} from "../main/utils"
 
 export const LoginService = {
     http:HTTP,
@@ -55,5 +55,5 @@ export const LoginService = {
             url:url,
             data:body
         })
-    }
+    },
 };
