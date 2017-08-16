@@ -169,10 +169,10 @@ export const IframeInstance = new Component({
             for(let j of names){
                 let $li = $("<li class='tab-item'>");
                 $li.html(j);
-                $parent.prepend($li);
+                $parent.append($li);
             }
-            // let $downIcon = $("<li class='drop-down-icon'>");
-            // $parent.append($downIcon);
+            let $li = $('<li><i class="drop-down-icon"></i></li>');
+            $parent.append($li);
         },
         closeFocusTab:function () {
             this.actions.closeIframe(this.data.focus.id);
@@ -181,10 +181,13 @@ export const IframeInstance = new Component({
             let name = event.target.textContent;
             if(name === '关闭标签'){
                 this.actions.closeFocusTab();
+                this.actions.initTabList(this.data.sort);
             }else if(name === '关闭全部标签'){
                 this.actions.closeAllIframes();
+                this.actions.initTabList(this.data.sort);
             }else if(name === '关闭其他标签'){
                 this.actions.closeOtherIframes();
+                this.actions.initTabList(this.data.sort);
             }else{
                 //选中标签获得焦点
                 let id = this.actions.getTabIdByName(name,this.data.hash);
@@ -237,16 +240,18 @@ export const IframeInstance = new Component({
 
         this.el.on('click','.view-save',function () {
             SaveView.show(that.data.sort);
-        }).on('mouseenter','.popup-btn',() => {
-            this.actions.showTabsPopup();
-        }).on('mouseleave','.view-popup',() => {
-            this.el.find('.tab-list').slideUp();
+        // }).on('mouseenter','.popup-btn',() => {
+        //     this.actions.showTabsPopup();
+        // }).on('mouseleave','.view-popup',() => {
+        //     this.el.find('.tab-list').slideUp();
         }).on('click','.drop-up-icon',() => {
             this.el.find('.tab-list').slideUp();
         }).on('click','.drop-down-icon',() => {
             this.el.find('.tab-list').slideUp();
         }).on('click','.tab-list',(event) => {
             this.actions.controlTabs(event);
+        }).on('click','.popup-btn',() => {
+            this.actions.showTabsPopup();
         })
     },
     
