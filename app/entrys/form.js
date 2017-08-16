@@ -189,7 +189,7 @@ let FormEntrys = {
         staticData.parentTableId=this.parentTableId;
         staticData.parentRealId=this.parentRealId;
         staticData.parentTempId=this.parentTempId;
-        staticData.tableId=staticData['table_id']["value"];
+        staticData.tableId=staticData['table_id'] || this.tableId;
         staticData.formId=this.formId;
         staticData.realId=this.realId;
         staticData.flowId=this.flowId;
@@ -394,7 +394,6 @@ let FormEntrys = {
         let data=this.mergeFormData(res[0],res[1]);
         //检查表单类型
         let template=await this.checkFormType(data,res);
-        console.time('form创建时间');
         //发送审批记录
         if(this.fromApprove){
             if(res[1]['record_info']){

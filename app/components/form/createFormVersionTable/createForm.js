@@ -107,6 +107,14 @@ export const CreateForm={
         this.main_depart = data[form_data.department]["options"];
 
         this.changeMainDepart(false);
+        allData.data[form_data.department]["options"]=this.department['options'];
+        allData.data[form_data.department_whole]['isSys']=true;
+        allData.data[form_data.department_whole]['department_whole']=_.defaultsDeep({},this.department_whole);
+        allData.data[form_data.department_whole]['main_depart']=_.defaultsDeep({},this.main_depart);
+        allData.data[form_data.department_whole]['department']=_.defaultsDeep({},this.department);
+        allData.data[form_data.department_whole]['form_department']=form_data['department'];
+        allData.data[form_data.department_whole]['form_data']=form_data;
+
 
         for(let key in otherData){
             if(otherData[key].type !='Hidden'){
