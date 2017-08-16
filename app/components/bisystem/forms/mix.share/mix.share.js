@@ -9,6 +9,10 @@ import {fittings as form} from '../fittings/export.fittings';
 import './mix.share.scss';
 import {ChartFormService} from '../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../lib/msgbox";
+import expertSearch from '../../../dataGrid/data-table-toolbar/expert-search/expert-search';
+
+import {FormSearchComponent} from '../search/search';
+
 
 let config = {
     template: template,
@@ -37,7 +41,8 @@ export class FormMixShareComponent extends BiBaseComponent {
         const formGroup = {
             chartSource:form.autoComplete,
             themes: form.radio,
-            icons: form.radio
+            icons: form.radio,
+            search: FormSearchComponent
         };
         Object.keys(formGroup).map(key => {
             let component;
@@ -68,6 +73,7 @@ export class FormMixShareComponent extends BiBaseComponent {
         if (res['success'] === 1) {
             this.mixForm.chartSource.autoSelect.data.list = res['data'];
             this.mixForm.chartSource.autoSelect.reload();
+            this.mixForm.chartSource.callBack = this.getChartField;
         } else {
             msgbox.alert(res['error']);
         }
