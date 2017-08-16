@@ -300,7 +300,7 @@ let config = {
         },
 
         changeDay: function (lr) {
-            let oldDate = this.data.selectData.y+'-'+this.actions.addZero(this.data.selectData.m+1)+'-'+this.actions.addZero(this.data.selectData.d);
+            let oldDate = CalendarTimeService.formatDate(this.data.selectData.y, this.data.selectData.m, this.data.selectData.d);
             let oldMyTime = new Date(oldDate).getTime();
             if( lr === 'l' ){
                 oldMyTime = oldMyTime - 24*60*60*1000;
@@ -333,9 +333,9 @@ let config = {
                 this.append(new CalendarDay(this.data.dayDataList), this.el.find(".calendar-main-content"));
                 Mediator.emit('CalendarMain: date',{from_date: this.data.from_date, to_date: this.data.to_date});
             }
-            if(this.data.calendarContent !== 'month') {
-                Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
-            }
+            // if(this.data.calendarContent !== 'month') {
+            //     Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
+            // }
         },
 
         getDayData: function (day) {
