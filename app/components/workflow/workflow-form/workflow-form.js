@@ -26,7 +26,7 @@ let config = {
             let imgNode = this.el.find('.imgseal');
             // console.log(imgNode);
             let len = imgNode.length;
-            let arr = new Array();
+            let arr =[];
             for (let i=0;i<len;i++){
                 let id = imgNode[i].dataset.imgid;
                 let viewTop = imgNode[i].dataset.viewtop;
@@ -66,7 +66,17 @@ let config = {
     },
     afterRender: function() {
         let __this=this;
+        this.formTrans = false;
         this.el.on('click','.collapseFormBtn',()=>{
+            let ev = this.el.find('.collapseFormBtn');
+            if(this.formTrans){
+                ev.css("transform","rotateZ(360deg)");
+                this.formTrans = false;
+            }else{
+                ev.css("transform","rotateZ(180deg)");
+                this.formTrans = true;
+            }
+
             this.el.find(".place-form").toggle();
         })
         this.el.on("mouseenter",".imgseal",function(e){
