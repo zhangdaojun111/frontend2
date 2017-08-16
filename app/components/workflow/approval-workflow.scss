@@ -321,13 +321,11 @@ body{
         }
         .add-follow{
           color: #fff;
-          padding: 5px 10px;
-          background: rgb(17,125,237);
-          margin-right: 10px;
-          position: absolute;
-          left: 10px;
-          top: 5px;
-          z-index: 1;
+          font-size: 12px;
+          height: 22px;
+          line-height: 22px;
+          border: 1px solid rgba(228,228,228,1);
+          padding: 0 15px;
         }
         .approve-textarea{
           width: 100%;

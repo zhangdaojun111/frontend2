@@ -15,21 +15,38 @@
                     <div class="workflow-form" id="workflow-grid"></div>
                     <div class="workflow-foot">
                         <div class="workflow-box" id="add-home"></div>
-                        <div class="workflow-box flex flex-start">
-                            <div class="workflow-box-l">
+                        <div class="workflow-box flex flex-column flex-start">
+                            <div class="workflow-box-l flex">
                                 <div class="tit">
-                                    <span>工作流程</span>
-                                    <i></i>
+                                    <i class="workflow-icon icon-workflow-icon5"></i>
+                                    <span>节点流程</span>
+                                </div>
+                                <div class="workflow-look flex">
+                                    <div class="previewBtn"  id="zoomIn">
+                                        <i class="workflow-icon icon-workflow-icon8"></i>
+                                    </div>
+                                    <div class="previewBtn" id="zoomOut">
+                                        <i class="workflow-icon icon-workflow-icon7"></i>
+                                    </div>
+                                    <div class="previewBtn" id="newWin">
+                                        <i class="workflow-icon icon-workflow-icon9"></i>
+                                    </div>
+                                    <div class="previewBtn flex" id="togglePic">
+                                        <i class="workflow-icon icon-workflow-icon4"></i>
+                                        <div class="togglePic-text">节点图</div>
+                                    </div>
                                 </div>
                             </div>
-
                             <div class="workflow-box-r">
                                 <div id="drawflow"></div>
                             </div>
                         </div>
+                        <div class="flex">
+                            <button id="submit" class="ui-button workflow-submit ui-widget ui-corner-all">提交</button>
+                            <button id="startNew" class="ui-button ui-widget ui-corner-all">发起新工作</button>
+                            <button id="" class="workflow-close">关闭</button>
+                        </div>
                     </div>
-                    <button id="submit" class="ui-button ui-widget ui-corner-all">提交</button>
-                    <button id="startNew" class="ui-button ui-widget ui-corner-all">发起新工作</button>
                 </div>
             </div>
         </div>
