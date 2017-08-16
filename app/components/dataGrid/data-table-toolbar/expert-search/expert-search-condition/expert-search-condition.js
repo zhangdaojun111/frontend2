@@ -56,7 +56,7 @@ let config = {
         setInputType: function(type) {
             let inputType;
             switch (type) {
-                case "datetime": inputType = 'date'; break;
+                case "datetime": inputType = 'datetime-local'; break;
                 case "text": inputType = 'text'; break;
                 case "number": inputType = 'number'; break
             }
@@ -115,8 +115,10 @@ let config = {
                 _this.actions.hideList();
             }
             _this.actions.setInputObject($(this),$(this).parent().parent().find('.condition-search-input'))
-        }).on('click','.delete',()=>{
+        }).on('click','.condition-search-delete',()=>{
             this.actions.delete();
+            let length = $('.condition-search-add').length;
+            $('.condition-search-add').eq(length-1).css('display','inline-block');
         });
     }
 }
