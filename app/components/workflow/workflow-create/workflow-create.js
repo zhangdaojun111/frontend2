@@ -44,7 +44,6 @@ let config = {
         init(){
             $('#addFav').hide();
             this.data.favList=this.data[1].rows;
-            console.log(this.data.favList);
             if(this.data.id!==undefined){
                 let flag=true;
                 for (let {id} of this.data.favList) {
