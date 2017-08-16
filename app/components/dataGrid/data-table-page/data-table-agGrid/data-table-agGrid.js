@@ -599,7 +599,7 @@ let config = {
                 return '';
             }
             if( this.data.viewMode == 'in_process' ){
-                return '<div style="text-align:center;"></span><a href=javascript:void(0); class="ui-link" data-type="gridView">查看</a></div>';
+                return '<div style="text-align:center;"></span><a href="javascript:;" class="gridView">查看</a></div>';
             }
             if (params.data.group || Object.is(params.data.group, '') || Object.is(params.data.group, 0)) {
                 return '';
@@ -1471,7 +1471,14 @@ let config = {
             //新增数据
             if( this.el.find( '.new-form-btn' )[0] ){
                 this.el.find( '.new-form-btn' ).on( 'click',()=>{
-                    let obj = { table_id: this.data.tableId,btnType: 'new' };
+                    let obj = {
+                        table_id: this.data.tableId,
+                        parent_table_id: this.data.parentTableId,
+                        parent_real_id: this.data.parentRealId,
+                        parent_temp_id: this.data.parentTempId,
+                        parent_record_id: this.data.parentRecordId,
+                        btnType: 'new'
+                    };
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
 
                     let title = '新增'
@@ -1804,14 +1811,29 @@ let config = {
             console.log( data )
             if( data.event.srcElement.className == 'gridView' ){
                 console.log( '查看' )
-                let obj = { table_id: this.data.tableId,real_id: data.data._id,btnType: 'view',is_view:1 };
+                let obj = {
+                    table_id: this.data.tableId,
+                    parent_table_id: this.data.parentTableId,
+                    parent_real_id: this.data.parentRealId,
+                    parent_temp_id: this.data.parentTempId,
+                    parent_record_id: this.data.parentRecordId,
+                    real_id: data.data._id,
+                    btnType: 'view',is_view:1
+                };
                 let url = dgcService.returnIframeUrl( '/form/index/',obj );
                 let title = '查看'
                 this.actions.openSourceDataGrid( url,title );
             }
             if( data.event.srcElement.className == 'gridEdit' ){
                 console.log( '编辑' )
-                let obj = { table_id: this.data.tableId,real_id: data.data._id,btnType: 'edit' };
+                let obj = {
+                    table_id: this.data.tableId,
+                    parent_table_id: this.data.parentTableId,
+                    parent_real_id: this.data.parentRealId,
+                    parent_temp_id: this.data.parentTempId,
+                    parent_record_id: this.data.parentRecordId,
+                    real_id: data.data._id,
+                    btnType: 'edit' };
                 let url = dgcService.returnIframeUrl( '/form/index/',obj );
                 let title = '编辑'
                 this.actions.openSourceDataGrid( url,title );
@@ -1824,7 +1846,15 @@ let config = {
         onRowDoubleClicked: function (data) {
             console.log( "行双击查看" )
             console.log( data )
-            let obj = { table_id: this.data.tableId,real_id: data.data._id,btnType: 'view',is_view:1 };
+            let obj = {
+                table_id: this.data.tableId,
+                parent_table_id: this.data.parentTableId,
+                parent_real_id: this.data.parentRealId,
+                parent_temp_id: this.data.parentTempId,
+                parent_record_id: this.data.parentRecordId,
+                real_id: data.data._id,
+                btnType: 'view',is_view:1
+            };
             let url = dgcService.returnIframeUrl( '/form/index/',obj );
             let title = '查看'
             this.actions.openSourceDataGrid( url,title );
