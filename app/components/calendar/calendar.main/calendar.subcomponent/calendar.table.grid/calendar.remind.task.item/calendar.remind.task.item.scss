@@ -17,6 +17,23 @@
         border-right: 1px solid rgba(228, 228, 228, 1);
         margin: 4px;
     }
+    .select-options{
+        position: absolute;
+        z-index: 1024;
+        right: 19px;
+        .select-children{
+            width: 100px;
+            display: block;
+            background-color: white;
+            line-height: 22px;
+            margin-left: 10px;
+            padding-left: 20px;
+            border: 1px solid #C1CACA;
+        }
+        .selected{
+            background-color: #205cdc;
+        }
+    }
     .task-show-text {
         width: calc(100% - 58px);
         display: inline-block;
