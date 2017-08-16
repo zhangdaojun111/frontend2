@@ -1,6 +1,8 @@
 @import "../../../assets/scss/core/base";
 
+
 .research-result{
+    height: 100%;
     .data-attachment-switch{
         padding-top: 10px;
         margin-bottom: 20px;
@@ -14,19 +16,19 @@
             cursor: pointer;
         }
         .btn-active{
-          color: blue;
-          border-bottom: solid 3px blue;
+            color: blue;
+            border-bottom: solid 3px blue;
         }
     }
 
     .data-result-display{
-        width: 100%;
-        height: auto;
-
+        height: 100%;
     }
 
     .attachment-result-display{
         display: none;
+        height: 100%;
 
     }
 }
+
