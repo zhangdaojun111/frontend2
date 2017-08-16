@@ -28,7 +28,7 @@ let config = {
 
         },
         //接受rows值和total值
-        resetPagination:function ( total ) {
+        resetPagination:function ( total,first ) {
             console.log( "***********" )
             console.log( "***********" )
             console.log( total )

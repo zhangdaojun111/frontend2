@@ -873,8 +873,9 @@ let config = {
                     this.actions.setCorrespondenceSelect();
                 }
                 if( this.data.pagination ){
-                    this.pagination.actions.resetPagination( this.data.total );
+                    this.pagination.actions.resetPagination( this.data.total,this.data.first );
                 }
+                console.log( '请求数据返回get_table_data' );
                 this.actions.sortWay();
             })
             HTTP.flush();
@@ -1056,6 +1057,10 @@ let config = {
             }
             json = dgcService.returnQueryParams( json );
             this.data.filterParam.is_filter = 1;
+            if( json.filter && json.filter != '' ){
+                this.data.first = 0;
+                json.first = 0;
+            }
             return json;
         },
         //渲染agGrid
