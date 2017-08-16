@@ -183,12 +183,15 @@ let FormEntrys = {
             data[obj.dfield]=obj;
         }
         staticData.data=data;
-        // staticData['parentRealId']=staticData["real_id"]["value"]||'';
-        // staticData['parentTableId']=staticData["table_id"]["value"]||'';
-        // staticData['parentTempId']=staticData["temp_id"]["value"]||'';
+        console.log('看看这个data');
+        console.log(staticData);
+        // staticData['parentRealId']=staticData.data["real_id"]["value"]||'';
+        // staticData['parentTableId']=staticData.data["table_id"]["value"]||'';
+        // staticData['parentTempId']=staticData.data["temp_id"]["value"]||'';
         staticData.parentTableId=this.parentTableId;
         staticData.parentRealId=this.parentRealId;
         staticData.parentTempId=this.parentTempId;
+        staticData.parentRecordId=this.parentRecordId;
         staticData.tableId=staticData['table_id'] || this.tableId;
         staticData.formId=this.formId;
         staticData.realId=this.realId;
