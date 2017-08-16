@@ -205,11 +205,11 @@ let config = {
                 _this.el.find("ul").hide();
             }
         });
-        this.el.find(".set-remind-method").click(function(){
-            if(staus){
-                _this.actions.openSetRemind();
-            }
-        });
+        // this.el.find(".set-remind-method").click(function(){
+        //     if(staus){
+        //         _this.actions.openSetRemind();
+        //     }
+        // });
         this.el.on('click', '.set-show-text-input', () => {
 
             let isSetShowText = this.el.find('.set-show-text-input').is(':checked');
@@ -236,7 +236,9 @@ let config = {
 
             this.data.rowSetData['selectedEnums'] = valueForCalendarChangeValue;
         }).on('click', '.set-remind-method', () => {
-            this.actions.openSetRemind();
+            if(staus){
+                this.actions.openSetRemind();
+                    }
         });
 
         this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text;
