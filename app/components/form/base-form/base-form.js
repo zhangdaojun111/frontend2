@@ -23,7 +23,10 @@ import MultiSelectControl from "../multi-select-control/multi-select-control";
 import EditorControl from "../editor-control/editor";
 import SettingTextareaControl from "../setting-textarea-control/setting-textarea";
 import AddItem from '../add-item/add-item';
+import  alertConfig1 from '../date-control/data-control-alert1'
+import  alertConfig2 from '../date-control/data-control-alert2'
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
+// import {}from '../../../lib/msgbox'
 import History from'../history/history'
 import AddEnrypt from '../encrypt-input-control/add-enrypt'
 import {md5} from '../../../services/login/md5';
@@ -1430,7 +1433,7 @@ let config={
                 }).then(data=>{
                 })
         });
-       // 密码弹出
+       // 密码弹窗
         Mediator.subscribe('form:addPassword:'+_this.data.tableId,function(data){
             _this.data['addPassWordField']=data.dfield;
             PMAPI.openDialogByComponent(AddEnrypt , {
@@ -1445,6 +1448,27 @@ let config={
                 }
             });
         }),
+            //日期alert弹窗
+            Mediator.subscribe('form:alertDateHistory:'+_this.data.tableId,function(msg){
+                let config = _.defaultsDeep({}, alertConfig1);
+               //config.data.text = msg;
+                PMAPI.openDialogByComponent( config,{
+                    width: 300,
+                    height: 170,
+                    title: '提示',
+                    modal: true
+                })
+            }),
+            Mediator.subscribe('form:alertDateFuture:'+_this.data.tableId,function(msg){
+                let config = _.defaultsDeep({}, alertConfig2);
+               // config.data.text= msg;
+                PMAPI.openDialogByComponent( config,{
+                    width: 300,
+                    height: 170,
+                    title: '提示',
+                    modal: true
+                })
+            }),
 
         Mediator.subscribe('form:addNewBuildIn:'+_this.data.tableId,function(data){
             _this.data['quikAddDfield']=data.dfield;
