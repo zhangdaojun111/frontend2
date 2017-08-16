@@ -75,6 +75,9 @@ let config = {
         Mediator.on('CalendarMain: remindCount', data => {
             console.log(data);
         });
+    },
+    beforeDestory: function () {
+        Mediator.removeAll('CalendarMain: remindCount');
     }
 };
 
