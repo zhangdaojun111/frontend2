@@ -913,12 +913,14 @@ let config = {
             dataTableService.saveForCorrespondence( json ).then( res=>{
                 console.log( "对应关系保存" )
                 console.log( res )
-                if( res.success ){
-                    msgBox.alert( '保存成功' );
-                    this.actions.getGridData();
-                }
+                msgBox.alert( '保存成功' );
+                this.actions.correspondenceSaved();
+                this.actions.getGridData();
             } )
+            HTTP.flush();
         },
+        //对应关系保存成功(通知表单刷新用)
+        correspondenceSaved: function () {},
         //对应关系勾选
         setCorrespondenceSelect: function () {
             this.data.correspondenceSelectedData = [];

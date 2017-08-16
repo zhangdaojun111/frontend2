@@ -47,6 +47,6 @@ export const dataTableService = {
     },
     //对应关系保存
     saveForCorrespondence: function ( param ) {
-        return HTTP.post( 'update_correspondence',data )
+        return HTTP.post( 'update_correspondence',param )
     }
 }
