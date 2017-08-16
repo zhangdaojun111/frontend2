@@ -17,9 +17,6 @@ let config = {
         rows:[],
     },
     actions: {
-         test:function(i){
-            console.log(i)
-        },
         loaddatahtml:function(that,data){
             let strhtml = "";
             data.items.forEach((items) =>{
@@ -153,7 +150,7 @@ let config = {
         showfirst:function(that){
             let items_Id = [];
             let IsChecked = true;
-            if(that.data.hide_item_table.indexOf(that.data.dataitem.table_id) != -1){
+            if(that.data.hide_item_table.indexOf(that.data.dataitem.table_id) !== -1){
                 this.el.find(".select-head").removeClass("label-select-all-show");
                 this.el.find(".select-all").hide();
             }
@@ -161,7 +158,7 @@ let config = {
                 items_Id.push(itemsid.field_id);
             });
             for(let i = 0;i< items_Id.length;i++){
-                if(config.data.cancel_fields.indexOf(items_Id[i]) != -1){
+                if(config.data.cancel_fields.indexOf(items_Id[i]) !== -1){
                     IsChecked = false;
                     break;
                 }
@@ -184,12 +181,12 @@ let config = {
             let json = {};
             for( let d of config.data.rows ){
                 console.log(d.searchValue);
-                if( d.searchValue != '0' ){
+                if( d.searchValue !== '0' ){
                     let val = d.searchValue;
                     console.log(d.table_name);
                     for( let search of d.query_params){
                         console.log(search.queryParams);
-                        if( val == search.id){
+                        if( val === search.id){
                             console.log(search.queryParams);
                             json[d.table_id] = dgcService.translateAdvancedQuery( JSON.parse(search.queryParams));
                         }
@@ -209,7 +206,7 @@ let config = {
         that.el.on("mouseleave",".float-button-group",function(){
             $(this).css("display","none");
         }).on("click",".float-button-group-show",function(){
-            $(this).parent().nextAll(".float-button-group").css({"display":"block","top":document.body.scrollLeft + event.clientY - 87});
+            that.el.find(".float-button-group").css({"display":"block","top":document.body.scrollLeft + event.clientY - 87});
         }).on('click','.select-label-show',function(){
             config.actions.selectlabelshow($(this));
         }).on('click',".select-label",function(){
