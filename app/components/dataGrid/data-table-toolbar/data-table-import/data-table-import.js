@@ -57,6 +57,9 @@ let config = {
                     this.el.find( '.uploadRemark' ).show();
                     this.el.find( '.uploadRemark-con' )[0].innerHTML = res["data"]["upload_exec_file_remark"];
                 }
+                this.el.find( '.chooseFlow' ).on( 'change',()=>{
+                    this.actions.drawFlowChart();
+                } )
             } )
         },
         //设置流程图
@@ -67,8 +70,7 @@ let config = {
                 el: this.el.find( '.flow-chart' )
             }
             let flowchart = WorkFlow.createFlow( obj );
-            // debugger;
-            // this.append( flowchart,this.el.find( '.flow-chart' ) )
+            this.el.find( '.flowCharCon' )[0].style.width = '95%';
         },
         import: function () {
             let i = 0;
