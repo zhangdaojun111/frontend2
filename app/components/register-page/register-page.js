@@ -218,6 +218,7 @@ let config ={
             let value = event.target.value.trim();
             if(value !== ''){
                 event.target.style.borderColor = 'green';
+                this.el.find('p.verification-p').html("");
             }else{
                 event.target.style.borderColor = 'red';
                 this.el.find('p.verification-p').html(tip);
