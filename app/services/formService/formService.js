@@ -100,7 +100,7 @@ export const FormService={
         HTTP.flush();
         return res;
     },
-  
+
     //身份证验证
     checkCard (card) {
         let result = true;
@@ -475,6 +475,9 @@ export const FormService={
     },
     deleteUploaded(json) {
         return HTTP.postImmediately('/delete_attachment/',json);
+    },
+    getAttachment(json){
+        return HTTP.postImmediately('/query_attachment_list/',json);
     },
 
     //重新拼装下拉框格式
