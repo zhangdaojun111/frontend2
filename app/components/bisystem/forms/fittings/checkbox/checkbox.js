@@ -10,9 +10,19 @@ import {FormFittingAbstract} from '../form.abstract';
 let config = {
     template: template,
     data: {
-        checkboxs: []
+        checkboxs: [],
+        value: null,
+        onChange: null // change后执行回调函数
     },
-    value: null
+    firstAfterRender() {
+        let me = this;
+        this.el.on('change', 'input', function(event){
+            me.data.value = $(this).is(':checked');
+            if (me.data.onChange) {
+                me.data.onChange(me.data.value);
+            }
+        })
+    }
 }
 
 export class CheckboxComponent extends FormFittingAbstract {

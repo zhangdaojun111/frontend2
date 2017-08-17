@@ -80,7 +80,9 @@ let config = {
         hideSelectBox: function () {
             window.clearTimeout(this.data.timer);
             this.data.timer = window.setTimeout(() => {
-                this.listWrap.hide();
+                if (this.listWrap) {
+                    this.listWrap.hide();
+                }
             }, 500);
         },
         getValue: function () {

@@ -20,14 +20,17 @@ let config = {
 
     firstAfterRender() {
         let me = this;
-        this.el.on('click', '.remove-y-btn', (event) => {
-            let yItems = $(this.el).siblings('div');
+        this.el.on('click', '.remove-y-btn', function(event) {
+            let yItems = $(me.el).siblings('div');
             if (yItems.length > 0) {
-                this.destroySelf();
+                Mediator.publish('bi:chart:normal:removeY', me.componentId);
+                me.destroySelf();
             };
             return false;
-        }).on('click', '.add-y-btn', (event) => {
-            Mediator.publish('bi:chart:normal:addY', true);
+        }).on('click', '.add-y-btn', function(event) {
+            let y = $(this).closest('.form-group-y').attr('class');
+            let data = y.indexOf('form-group-y0') !== -1 ? 0 : 1;
+            Mediator.publish('bi:chart:normal:addY', data);
             return false;
         })
 

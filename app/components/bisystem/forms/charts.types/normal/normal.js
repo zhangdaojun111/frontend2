@@ -33,13 +33,17 @@ let config = {
         });
 
         // 增加y轴实例
-        Mediator.subscribe('bi:chart:normal:addY', (event) => {
-            this.addYAxis();
+        Mediator.subscribe('bi:chart:normal:addY', (data) => {
+            if (data === 0) {
+                this.addYAxis();
+            } else {
+                this.showY1Axis(true);
+            }
         });
 
         // 删除y轴实例
-        Mediator.subscribe('bi:chart:normal:removeY', (event) => {
-            this.addYAxis();
+        Mediator.subscribe('bi:chart:normal:removeY', (componentId) => {
+            this.removeYAxis(componentId);
         });
 
         // 默认增加第一条y数据
@@ -53,6 +57,7 @@ export class FormNormalComponent extends BiBaseComponent{
         super(config);
         this.formGroup = {};
         this.y = [];
+        this.y1 = [];
     }
 
     /**
@@ -67,8 +72,9 @@ export class FormNormalComponent extends BiBaseComponent{
             name: 'doubleY',
             value:null,
             checkboxs:[
-                {checked:false, name:'是否展示双y轴'},
-            ]
+                {value:'', name:'是否展示双y轴'},
+            ],
+            onChange: this.showY1Axis.bind(this)
         };
 
 
@@ -105,18 +111,31 @@ export class FormNormalComponent extends BiBaseComponent{
      */
     addYAxis() {
         let y = new FormNormalYComponent();
-        this.append(y, this.el.find('.form-group-y'));
+        this.append(y, this.el.find('.form-group-y0'));
         this.y.push(y);
+    }
+
+    /**
+     * 显示双y轴
+     */
+    showY1Axis(flag) {
+        if (flag) {
+            let y = new FormNormalYComponent();
+            this.append(y, this.el.find('.form-group-y1'));
+            this.y1.push(y);
+        } else {
+            this.y1.map(y => y.destroySelf());
+            this.y1 = [];
+        };
     }
 
     /**
      * 删除y轴
      */
     removeYAxis(componentId) {
-        // let items = _remove(this.y, (event) =>{
-        //
-        // })
-        // this.y.push(y);
+        let items = _.remove(this.y, (item) =>{
+            return item.componentId == componentId;
+        });
     }
 
     /**

@@ -11,7 +11,6 @@ import {ChartFormService} from '../../../../services/bisystem/chart.form.service
 import msgbox from "../../../../lib/msgbox";
 import {FormSearchComponent} from '../search/search';
 import Mediator from '../../../../lib/mediator';
-
 let config = {
     template: template,
     data: {
@@ -45,11 +44,14 @@ export class FormMixShareComponent extends BiBaseComponent {
                 {value: 'grayBlue', name:'灰蓝色'}
             ]
         };
+        const search = new FormSearchComponent();
+        this.append(search, this.el.on('.chart-mix-share'));
+
         this.mixForm = {
             chartSource:instanceFitting({type:'autoComplete',me: this,container: 'chart-mix-share' }),
             themes: instanceFitting({type:'radio',me: this, data: themeData,container: 'chart-mix-share' }),
             icons: instanceFitting({type:'radio',me: this,container: 'chart-mix-share' }),
-            search: FormSearchComponent
+            search: search
         };
     }
 
