@@ -57,6 +57,9 @@ let config = {
                     this.data.sumPage = 1;
                     this.actions.disableClick();
                     this.el.find('.goLast').addClass('custom-disabled');
+                    this.el.find('.goLast').removeClass('custom');
+                    this.el.find('.goFirst').addClass('custom-disabled');
+                    this.el.find('.goFirst').removeClass('custom');
                 }
                 this.actions.disableClick();
 
