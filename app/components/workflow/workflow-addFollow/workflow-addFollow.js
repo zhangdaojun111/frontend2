@@ -3,7 +3,9 @@ import template from './workflow-addFollow.html';
 import './workflow-addFollow.scss';
 import Mediator from '../../../lib/mediator';
 import SelectStaff from './select-staff/select-staff';
+import SelectStaffNoDel from './select-staff-no-del/select-staff-no-del';
 import SelectedStaff from './selected-staff/selected-staff';
+import SelectedStaffNoDel from './selected-staff-no-del/selected-staff-no-del';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import selTemplate from './select-template';
 
@@ -16,6 +18,9 @@ let config={
     afterRender(){
         const _this=this;
         this.el.find('#staffMulti').html('');
+        Mediator.subscribe('workflow:idArr', (res)=> {
+            this.data.idArr=res;
+        });
         //部门选择
         Mediator.subscribe('workflow:checkDept', (res)=> {
             $.each(res,(i,val)=>{
@@ -23,6 +28,17 @@ let config={
                 this.append(new SelectStaff(val), this.el.find('#staffMulti'));
             });
         });
+        Mediator.subscribe('workflow:checkDeptAlready', (res)=> {
+            $.each(res,(i,val)=>{
+                val.id=i;
+                for(var a in this.data.idArr){
+                    if(val.id==this.data.idArr[a]){
+                        this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+                    }
+                }
+            });
+        });
+
         //部门反选，删除SelectedStaff组件
         Mediator.subscribe('workflow:unCheckDept', (res)=> {
             let userArr=[];
@@ -37,7 +53,7 @@ let config={
                     }
                 }
             }
-            let domSpan=this.el.find('#selected').find('span');
+            let domSpan=this.el.find('#selected').find('span.removeble');
             for(var i=0;i<domSpan.length;i++){
                 for(var j=0;j<userArr.length;j++){
                     if($(domSpan[i]).data('id')===userArr[j]){
@@ -52,13 +68,17 @@ let config={
             this.append(new SelectedStaff(res), this.el.find('#selected'));
         });
 
+        Mediator.subscribe('workflow:pubCheckNoDel', (res)=> {
+            this.append(new SelectedStaffNoDel(res), this.el.find('#selected'));
+        });
+
         //注册SelectedStaff组件
         Mediator.subscribe('workflow:pubCheckSingle', (res)=> {
             this.append(new SelectedStaff(res), this.el.find('#selected'));
         });
         //删除SelectedStaff组件
         Mediator.subscribe('workflow:pubUncheckSingle', (res)=> {
-            let domSpan=this.el.find('#selected').find('span');
+            let domSpan=this.el.find('#selected').find('span.removeble');
             for(var i=0;i<domSpan.length;i++){
                 if($(domSpan[i]).data('id')===res){
                     $(domSpan[i]).parent().remove();
@@ -68,7 +88,7 @@ let config={
 
         //全选，反选btn
         this.el.on('click','#allSelector',function(){
-            var inputs=_this.el.find('#staffMulti').find('.checkbox');
+            var inputs=_this.el.find('#staffMulti').find('.remove');
             if($(this).prop('checked')){
                 inputs.each(function(i,item){
                     $(item).addClass('checked');
