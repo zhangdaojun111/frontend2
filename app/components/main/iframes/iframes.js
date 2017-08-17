@@ -61,6 +61,7 @@ export const IframeInstance = new Component({
         count: 0,
         sort: [],
         focus: null,
+        hideFlag:false,
     },
     actions: {
         openIframe: function (id, url, name) {
@@ -154,7 +155,17 @@ export const IframeInstance = new Component({
         },
         showTabsPopup:function () {
             this.actions.initTabList(this.data.sort);
-            this.el.find('.tab-list').slideDown();
+            this.el.find('.tab-list').show();
+            this.hideFlag = false;
+        },
+        hideTabsPopup(){
+            let that = this;
+            this.hideFlag = true;
+            setTimeout(function () {
+                if(that.hideFlag){
+                    that.el.find('.tab-list').hide();
+                }
+            },1000);
         },
         initTabList:function (data) {
             let names = [];
@@ -170,8 +181,8 @@ export const IframeInstance = new Component({
                 $li.html(j);
                 $parent.append($li);
             }
-            let $li = $('<li><i class="drop-down-icon"></i></li>');
-            $parent.append($li);
+            // let $li = $('<li><i class="drop-down-icon"></i></li>');
+            // $parent.append($li);
         },
         closeFocusTab:function () {
             if(this.data.focus){
@@ -241,18 +252,20 @@ export const IframeInstance = new Component({
 
         this.el.on('click','.view-save',function () {
             SaveView.show(that.data.sort);
-        // }).on('mouseenter','.popup-btn',() => {
-        //     this.actions.showTabsPopup();
-        }).on('click','.view-popup',(event) => {
-            event.stopPropagation();
-        }).on('click','.drop-up-icon',() => {
-            this.el.find('.tab-list').slideUp();
-        }).on('click','.drop-down-icon',() => {
-            this.el.find('.tab-list').slideUp();
+        }).on('mouseenter','.view-popup',() => {
+            console.log("enter");
+            this.actions.showTabsPopup();
+        // }).on('click','.view-popup',(event) => {
+        //     event.stopPropagation();
+        // }).on('click','.drop-up-icon',() => {
+        //     this.el.find('.tab-list').hideTabsPopup();
+        // }).on('click','.drop-down-icon',() => {
+        //     this.el.find('.tab-list').hideTabsPopup();
         }).on('click','.tab-list',(event) => {
             this.actions.controlTabs(event);
-        }).on('click','.popup-btn',() => {
-            this.actions.showTabsPopup();
+        }).on('mouseleave','.view-popup',() => {
+            console.log("leave");
+            this.actions.hideTabsPopup();
         })
     },
     

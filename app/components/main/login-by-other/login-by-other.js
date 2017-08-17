@@ -1,3 +1,8 @@
+/**
+ * @author zhaoyan
+ * 他人登录界面
+ */
+
 import Component from '../../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';

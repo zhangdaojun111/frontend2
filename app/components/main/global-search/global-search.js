@@ -1,3 +1,8 @@
+/**
+ * @author zhaoyan
+ * 全局搜索框控制组件
+ */
+
 import Component from '../../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
@@ -33,29 +38,34 @@ let config ={
             py:"test4",
             display:"true",
         }],
+        testResult:{"data": "[{\"content\": \"sad\", \"index\": \"0\", \"py\": \"sad\", \"display\": true}, {\"index\": \"1\", \"py\": \"cz\", \"selector\": false, \"content\": \"cz\", \"display\": true, \"select\": false}, {\"index\": \"2\", \"py\": \"a b\", \"selector\": false, \"content\": \"a b\", \"display\": true, \"select\": false}, {\"index\": \"3\", \"py\": \"vvcx\", \"selector\": false, \"content\": \"vvcx\", \"display\": true, \"select\": false}, {\"index\": \"4\", \"py\": \"h\", \"selector\": false, \"content\": \"\\u534e\", \"display\": true, \"select\": false}, {\"index\": \"5\", \"py\": \"c\", \"selector\": false, \"content\": \"c\", \"display\": true, \"select\": false}, {\"index\": \"6\", \"py\": \"i\", \"selector\": false, \"content\": \"i\", \"display\": true, \"select\": false}]", "success": 1, "error": ""},
+        // historyList:[],
         searchContent:"",
         maxHistory:10,
+        selectNum: -1,      //记录键盘选中的历史搜索记录，按一次下，选中第0条（界面中第一条）记录
     },
     searchBarRef:null,
     actions:{
         getData:function () {
-            // UserInfoService.getSearchHistory().done((result) => {
-            //     if(result.success === 1){
-            //         this.data.historyList = result.data;
-            //         this.actions.initAutoSelect();
-            //     }else{
-            //         console.log("get search history failed");
-            //     }
-            // }).fail((err) => {
-            //     console.log("get search history failed",err);
-            // })
-            this.actions.initList(this.data.historyList);
+            UserInfoService.getSearchHistory().done((result) => {
+                if(result.success === 1){
+                    this.data.historyList = $.parseJSON(result.data);
+                    this.actions.initList();
+                }else{
+                    console.log("get search history failed");
+                }
+            }).fail((err) => {
+                console.log("get search history failed",err);
+            });
+            // this.actions.initList(this.data.historyList);
         },
         initList:function () {
             let $listParent = this.el.find('.history-list');
             let temp = this.data.historyList;
             $listParent.empty();
+            console.log(temp);
             for( let k of temp){
+                console.log(k)
                 let $li = $("<li class='record-item'>");
                 $li.attr('data_content',k.content);
 
@@ -79,6 +89,20 @@ let config ={
         },
         setSearchContent:function (event) {
             this.data.searchContent = event.target.value;
+            this.actions.filterHistory(event.target.value);
+        },
+        filterHistory:function (str) {
+            let $list = this.el.find('.history-list');
+            if(str !== ''){
+                $list.find('.record-item').hide();
+                $list.find('.delete-all-history').hide();
+                $list.find(`li[data_content *= ${str}]`).show();
+            }else{
+                if(this.data.historyList.length > 0){
+                    $list.find('.record-item').show();
+                    $list.find('.delete-all-history').show();
+                }
+            }
         },
         doSearch:function () {
             let content = this.data.searchContent;
@@ -88,6 +112,7 @@ let config ={
                     name: "搜索结果",
                     url: "/search_result?searchText=" + content
                 });
+                this.actions.addSearchHistory();
             }else{
                 msgbox.alert("搜索内容不能为空");
             }
@@ -174,6 +199,24 @@ let config ={
             if(this.el.find("input.search-content").val() === ''){
                 this.el.find("input.search-content").attr("placeholder","请输入要搜索的内容...");
             }
+        },
+        myKeyDown:function (event) {
+            console.log(event);
+            if(event.keyCode === 13){       //回车，进行搜索
+                //根据id设置搜索的content
+
+                selectNum = -1;
+                this.actions.doSearch();
+            }
+
+
+
+
+
+
+
+
+
         }
     },
     afterRender:function () {
@@ -193,6 +236,8 @@ let config ={
             this.actions.showHistoryList();
         }).on('blur','.search-content',() => {
             this.actions.hideHistoryList();
+        }).on('keydown','.search-content',(event) => {
+            this.actions.myKeyDown(event);
         })
     },
     beforeDestroy:function () {
