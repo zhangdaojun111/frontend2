@@ -757,7 +757,15 @@ let config={
             for(let key in data){
                 formValue[key]=data[key].value;
             }
-            return formValue;
+            let {error,errorMsg} = this.actions.validForm(this.data.data,formValue);
+            if(error){
+                return {
+                    error:error,
+                    errorMessage:errorMsg
+                }
+            }else{
+                return formValue;
+            }
         },
 
         //统计功能
