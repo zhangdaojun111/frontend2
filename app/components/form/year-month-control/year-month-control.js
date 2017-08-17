@@ -22,14 +22,12 @@ let config={
           _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
       }
     },
-    firstAfterRender(){
+    afterRender(){
         let _this=this;
+
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
-    },
-    afterRender(){
-        let _this=this;
         let yearData = {
             multiSelect:false,
             editable:this.data.is_view?false:true,

@@ -33,7 +33,24 @@ serchStr.split('&').forEach(res => {
 (async function () {
     return workflowService.getPrepareParams({table_id:obj.table_id});
 })().then(res => {
-    Mediator.publish('workflow:getParams', res.data.flow_data);
+    if(res.data.flow_data.length===0){
+        $('.workflow-foot').hide();
+        $('.workflow-flex').hide();
+        FormEntrys.createForm({
+            el: '#place-form',
+            is_view: 0,
+            from_approve: 0,
+            from_focus: 0,
+            table_id: obj.table_id,
+            parent_table_id:obj.parent_table_id,
+            parent_real_id:obj.parent_real_id,
+            parent_temp_id:obj.parent_temp_id,
+            parent_record_id:obj.parent_record_id,
+            real_id:obj.real_id
+        });
+    }else{
+        Mediator.publish('workflow:getParams', res.data.flow_data);
+    }
 });
 
 Mediator.subscribe('workflow:getflows', (res)=> {
@@ -56,33 +73,43 @@ Mediator.subscribe('workflow:getflows', (res)=> {
         is_view: 0,
         from_approve: 0,
         from_focus: 0,
-        table_id: obj.table_id
+        table_id: obj.table_id,
+        parent_table_id:obj.parent_table_id,
+        parent_real_id:obj.parent_real_id,
+        parent_temp_id:obj.parent_temp_id,
+        parent_record_id:obj.parent_record_id,
+        real_id:obj.real_id
     });
     
 });
-
 let focusArr=[];
 Mediator.subscribe('workflow:focus-users', (res)=> {
     focusArr=res;
 })
-
 Mediator.subscribe('workflow:submit', (res)=> {
-    let formData=FormEntrys.getFormValue(obj.table_id),
-        postData={
-            flow_id:obj.flow_id,
-            focus_users:JSON.stringify(focusArr)||[],
-            data:JSON.stringify(formData)
-    };
-    (async function () {
-        return await workflowService.createWorkflowRecord(postData);
-    })().then(res=>{
-        if(res.success===1){
-            msgBox.alert(`${res.error}`);
-            PMAPI.sendToParent({
-                type: PMENUM.close_dialog,
-                key:obj.key,
-                data:{}
-            });
+    let formData=FormEntrys.getFormValue(obj.table_id);
+    if(formData.error){
+        msgBox.alert(`${formData.errorMessage}`);
+    }else{
+        let postData={
+                flow_id:obj.flow_id,
+                focus_users:JSON.stringify(focusArr)||[],
+                data:JSON.stringify(formData)
         };
-    })
+        (async function () {
+            return await workflowService.createWorkflowRecord(postData);
+        })().then(res=>{
+            if(res.success===1){
+                msgBox.alert(`${res.error}`);
+                PMAPI.sendToParent({
+                    type: PMENUM.close_dialog,
+                    key:obj.key,
+                    data:{}
+                });
+            };
+        })
+    }
 })
+if(obj.btnType==='view'){
+    $('.workflow-flex').hide();
+}

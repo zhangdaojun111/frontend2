@@ -112,33 +112,37 @@ Mediator.subscribe('workflow:focus-users', (res)=> {
     focusArr=res;
 })
 Mediator.subscribe('workflow:submit', (res)=> {
-    $("#submit").hide();
-    let formData=FormEntrys.getFormValue(wfObj.tableid),
-        postData={
-        flow_id:wfObj.id,
-        focus_users:JSON.stringify(focusArr)||[],
-        data:JSON.stringify(formData)
-    };
-    (async function () {
-        return await workflowService.createWorkflowRecord(postData);
-    })().then(res=>{
-        if(res.success===1){
-            msgBox.alert(`${res.error}`);
-            $("#startNew").show().on('click',()=>{
-                Mediator.publish('workflow:choose',wfObj);
-                $("#startNew").hide();
-                $("#submit").show();
-            });
-            (async function () {
-                return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
-                    flow_id:wfObj.id,
-                    record_id:res.record_id
-                }});
-            })().then(data=>{
-                Mediator.publish('workflow:gotWorkflowInfo', data);
-            });
+    let formData=FormEntrys.getFormValue(wfObj.tableid);
+    if(formData.error){
+        msgBox.alert(`${formData.errorMessage}`);
+    }else{
+        $("#submit").hide();
+        let postData={
+            flow_id:wfObj.id,
+            focus_users:JSON.stringify(focusArr)||[],
+            data:JSON.stringify(formData)
         };
-    })
+        (async function () {
+            return await workflowService.createWorkflowRecord(postData);
+        })().then(res=>{
+            if(res.success===1){
+                msgBox.alert(`${res.error}`);
+                $("#startNew").show().on('click',()=>{
+                    Mediator.publish('workflow:choose',wfObj);
+                    $("#startNew").hide();
+                    $("#submit").show();
+                });
+                (async function () {
+                    return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
+                        flow_id:wfObj.id,
+                        record_id:res.record_id
+                    }});
+                })().then(data=>{
+                    Mediator.publish('workflow:gotWorkflowInfo', data);
+                });
+            };
+        })
+    }
 });
 
 

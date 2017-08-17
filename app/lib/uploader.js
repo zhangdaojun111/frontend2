@@ -125,7 +125,7 @@ class Uploader {
                 this.formData.set(k,val);
             }
         }
-        this.settings = params
+        this.settings = _.defaultsDeep(params,this.settings);
         if(params['md5'] || params['MD5']){
             this.settings['md5']=true;
             this.settings['per_size']=params['per_size']||(1024*768);
@@ -276,7 +276,6 @@ class Uploader {
                 }
             } else {
                 fileItem['state']='on';
-                this._transmitData(name,code);
             }
         });
 

@@ -1449,7 +1449,8 @@ let config = {
                         parentTableId: this.data.parentTableId,
                         parentRealId: this.data.parentRealId,
                         parentTempId: this.data.parentTempId,
-                        isBatch: this.data.viewMode == 'createBatch'?1:0
+                        isBatch: this.data.viewMode == 'createBatch'?1:0,
+                        isSuperUser: window.config.user.is_superuser || 0
                     }
                     let url = dgcService.returnIframeUrl( '/iframe/dataImport/',json );
                     let winTitle = '导入数据';
