@@ -1,3 +1,7 @@
+/**
+ * @author zhaoyan
+ * 视图保存组件
+ */
 import Component from '../../../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
@@ -12,8 +16,6 @@ let config = {
     template:template,
     data:{
         favoriteList:[],
-        testData:{"data": {"test2": ["8172_nrtpynET2yiXENNA5hQBAX", "5613_CHEUbzmZMsjDFT3AiwPB46", "home-page", "9707_FWguSFCnnmcbVfyPnP8vd6", "9458_PcVT5cWJJ35xP3x6kCrPhT"], "test-save-1": ["5613_CHEUbzmZMsjDFT3AiwPB46", "home-page", "8462_Zcer5GV7egyKF2TCGUfkn9", "8505_72GHqJDiGPd8rvowdmKbvX", "1557_ZNpp8ZqJEbBSYeivE32CDi"], "test5": ["home-page", "9707_FWguSFCnnmcbVfyPnP8vd6", "9458_PcVT5cWJJ35xP3x6kCrPhT", "4584_NWqiZxJzbcdvL6bFG6BZtc"]}, "success": 1, "error": ""},
-        testList:["6141_DkPExf4MCQJ75gicwKcxdS", "3017_reykKkkYHNBQwqxXoFQpYA", "approve-workflow", "create-workflow", "approving-workflow"],
         currentIframesList:[],
         newHash:[],
     },
