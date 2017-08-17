@@ -21,7 +21,7 @@ let config = {
         dropdownForCalendarChange: [],
         replaceDropDown: [],
 
-        isConfigField: false,
+        isConfigText: true,
         selectedOpts: [],
         initAllRows: [],
 
@@ -151,6 +151,9 @@ let config = {
                 _this.actions.checkSelectedOpts(choosed);
             },
         };
+        if(this.data.isConfigText) {
+            console.log(this.data.replaceDropDown);
+        }
         this.data.multiSelectMenu = new AutoSelect(select_item_data);
         this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
         Mediator.on('calendar-set:editor', data => {
@@ -219,7 +222,14 @@ let config = {
             if(staus){
                 this.actions.openSetRemind();
             }
+        }).on('change', '.config-text', () => {
+            let valueConfigTextValue = this.el.find('.config-text option:selected').val();
+            let textConfigTextValue = this.el.find('.config-text option:selected').text();
+
         });
+        if(this.data.rowTitle['dtype'] === 8) {
+            console.log(this.data.rowSetData, this.data.replaceDropDown, this.data.rowTitle);
+        }
 
         this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text;
         this.el.find('.preview-text').text(this.data.preViewText);
@@ -241,13 +251,12 @@ class CalendarSetItem extends Component {
         config.data.dropdownForCalendarChange = data.dropdownForCalendarChange;
         config.data.rowTitle = data.rowTitle;
         config.data.replaceDropDown = data.replaceDropDown;
-
+        config.data.isConfigText = data.isConfigField;
         config.data.recipients = data.recipients;
         config.data.recipients_per = data.recipients_per;
         config.data.copypeople = data.copypeople;
         config.data.emailAddressList = data.emailAddressList;
         config.data.emailAddress = data.emailAddress;
-
         super(config);
     }
 }

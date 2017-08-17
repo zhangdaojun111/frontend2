@@ -49,12 +49,9 @@
         <span>短信</span>
         {{/if}}
     </td>
-    <!--<td class="set-table-item">-->
-        <!--<a class="remind-type-editor" aria-disabled="true">编辑提醒方式</a>-->
-    <!--</td>-->
     <td class="set-table-item">
-        {{#if isConfigField}}
-        <select class="config-text" disabled>
+        {{#if isConfigText}}
+        <select class="editor-items config-text" disabled>
             {{#each replaceDropDown}}
             <option class="testoption" value="{{this.id}}">{{this.name}}</option>
             {{/each}}

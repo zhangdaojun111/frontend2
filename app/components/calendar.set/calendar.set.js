@@ -126,8 +126,9 @@ let config = {
                 }
                 console.log(this.data.allRows);
                 this.data.allRows.forEach((row, index) => {
+                    let isConfig = false;
                     if(this.data.rowTitle[index]['id'] && this.data.rowTitle[index]['dtype'] === '8' && this.data.replaceDropDown.length !== 0){
-                        this.data.isConfigField = true;
+                        isConfig = true;
                     }
 
                     let calendarSetItem = new CalendarSetItem({
@@ -136,7 +137,7 @@ let config = {
                         dropdownForRes: this.data.dropdownForRes,
                         dropdownForCalendarChange: this.data.dropdownForCalendarChange,
                         replaceDropDown: this.data.replaceDropDown,
-                        isConfigField: this.data.isConfigField,
+                        isConfigField: isConfig,
                         rowTitle: this.data.rowTitle[index],
 
                         recipients: this.data.recipients,
@@ -146,8 +147,8 @@ let config = {
                         emailAddress: this.data.emailAddress,
                     });
                     this.data.childComponents.push(calendarSetItem);
-                    Mediator.emit('calendar-set:editor',{data:0});
                     this.append(calendarSetItem, this.el.find('.set-items'));
+                    Mediator.emit('calendar-set:editor',{data:0});
                 })
             }).catch(err=>{
                 //console.log('error',err);
@@ -174,7 +175,6 @@ let config = {
         },
 
         reset: function(tableId){
-            console.log(tableId, this.data.allRows);
             for(let a of this.data.allRows){
                 a['isSelected']=false;
                 a['is_show_at_home_page']=false;
@@ -205,13 +205,11 @@ let config = {
                 }
             }
             CalendarSetService.resetCalendar(tableId,this.data.allRows).then(res=>{
-                console.log(this.data.allRows, res);
                 if(res['success'] === 1){
                     MSG.alert('重置成功');
                     //this.data.isEdit=false;
                     //this.saveStatus.emit( res['success'] === "1" );
                     setTimeout( ()=>{
-                        console.log('sss');
                         // CalendarSetService.getColumnList(this.data.tableId).then(res => {
                         //     console.log(res);
                         // })
@@ -262,9 +260,7 @@ let config = {
                     }
                 }
             }
-            console.log(tableId, param);
             CalendarService.saveCalendarTable(tableId,param).then(res=>{
-                console.log(res);
                 if(res['succ'] === 1){
                     console.log('success');
                     MSG.alert("保存成功");
