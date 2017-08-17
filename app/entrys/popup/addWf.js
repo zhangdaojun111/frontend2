@@ -24,62 +24,65 @@ import jsplumb from 'jsplumb';
 WorkFlowForm.showForm();
 
 let serchStr = location.search.slice(1);
-let obj = {},focus=[],is_view;
+let obj = {},is_view;
 serchStr.split('&').forEach(res => {
     var arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
 
-
-
-//审批工作流
 (async function () {
-    return workflowService.getWorkflowInfo({
-        url: '/get_workflow_info/',
-        data: {
-            flow_id: obj.flow_id
-        }
-    });
+    return workflowService.getPrepareParams({table_id:obj.table_id});
 })().then(res => {
-    Mediator.publish('workflow:gotWorkflowInfo', res);
-    let a=res.data[0].updateuser2focususer;
-    for(var i in a){
-        for(var j in a[i]){
-            focus.push(a[i][j]);
-        }
-    }
-    Mediator.publish('workflow:focused', []);
+    Mediator.publish('workflow:getParams', res.data.flow_data);
+});
+
+Mediator.subscribe('workflow:getflows', (res)=> {
+    obj.flow_id=res.flow_id;
+    obj.form_id=res.form_id;
     (async function () {
-        return workflowService.getWorkflowInfo({url: '/get_all_users/'});
-    })().then(users => {
-        let nameArr=[];
-        for(var i in focus){
-            nameArr.push(users.rows[focus[i]].name);
-        }
-        $('#addFollowerList').text(`${nameArr}`);
+        return workflowService.getWorkflowInfo({
+            url: '/get_workflow_info/',
+            data: {
+                flow_id: res.flow_id
+            }
+        });
+    })().then(res => {
+        Mediator.publish('workflow:gotWorkflowInfo', res);
+        Mediator.publish('workflow:focused', []);
     });
+    FormEntrys.createForm({
+        el: '#place-form',
+        form_id: res.form_id,
+        is_view: 0,
+        from_approve: 0,
+        from_focus: 0,
+        table_id: obj.table_id
+    });
+    
 });
 
+let focusArr=[];
+Mediator.subscribe('workflow:focus-users', (res)=> {
+    focusArr=res;
+})
 
-if(obj.btnType==='view'){
-    is_view=1;
-}else{
-    is_view=0;
-};
-
-Mediator.subscribe("workflow:loaded",(e)=>{
-    if(e===1){
-        Mediator.publish('workflow:is_view', is_view);
-    }
-});
-
-FormEntrys.createForm({
-    el: '#place-form',
-    form_id: obj.form_id,
-    record_id: obj.record_id,
-    is_view: is_view,
-    from_approve: 1,
-    from_focus: 0,
-    table_id: obj.table_id
-});
-
+Mediator.subscribe('workflow:submit', (res)=> {
+    let formData=FormEntrys.getFormValue(obj.table_id),
+        postData={
+            flow_id:obj.flow_id,
+            focus_users:JSON.stringify(focusArr)||[],
+            data:JSON.stringify(formData)
+    };
+    (async function () {
+        return await workflowService.createWorkflowRecord(postData);
+    })().then(res=>{
+        if(res.success===1){
+            msgBox.alert(`${res.error}`);
+            PMAPI.sendToParent({
+                type: PMENUM.close_dialog,
+                key:obj.key,
+                data:{}
+            });
+        };
+    })
+})
