@@ -17,7 +17,15 @@ let config = {
             }else {
                 el.parent().addClass('active')
             }
-        }
+        },
+        toogz(e){
+            let ev = this.el.find(".signature");
+            if(ev.css("display")=="none"){
+                ev.css("display","block");
+            }else{
+                ev.css("display","none");
+            }
+        },
     },
     afterRender: function() {
         let self=this;
@@ -25,6 +33,9 @@ let config = {
             e.stopPropagation();
             self.actions.approvalBtnToggle($(this))
         })
+        this.el.on('click','.gz',(e)=>{
+            this.actions.toogz(e);
+        });
     },
     beforeDestory: function(){
 

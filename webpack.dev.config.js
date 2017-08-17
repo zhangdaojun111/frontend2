@@ -59,8 +59,7 @@ module.exports = {
             'mediator-js',
             'handlebars',
             'lodash',
-            'babel-polyfill',
-            'jsplumb'
+            'babel-polyfill'
         ]
     },
 
