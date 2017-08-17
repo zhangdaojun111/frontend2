@@ -8,6 +8,7 @@ import OtherLogin from "../login-by-other/login-by-other";
 import {systemMessageUtil} from '../system-message/system-message';
 import {SysSetting} from "../system-setting/system-setting"
 import {postMessageUtil} from '../post-message/post-message';
+import {GlobalSearch} from '../global-search/global-search';
 
 let config = {
     template: template,
