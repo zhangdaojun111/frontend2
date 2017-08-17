@@ -4,6 +4,7 @@ import './workflow.scss';
 import msgBox from '../../../lib/msgbox';
 import Mediator from '../../../lib/mediator';
 import {workflowService} from '../../../services/workflow/workflow.service';
+import jsplumb from 'jsplumb';
 
 let config = {
     template: template,
