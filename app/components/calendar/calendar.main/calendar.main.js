@@ -695,7 +695,16 @@ let config = {
             params['to_date'] = this.data.to_date;
             console.log(params);
             CalendarService.getCalendarDrag(params).then(res => {
-                console.log(res);
+                this.data.date2settings = res['calendar_data']['date2csids'];
+                this.data.calendarSettings = res['calendar_data']['id2data'];
+                this.data.tableid2name = res['calendar_data']['tableid2name'];
+                this.data.fieldInfos = res['calendar_data']['field_infos'];
+                if(this.data.calendarContent !== 'schedule') {
+                    this.actions.monthDataTogether();
+                }else {
+                    this.actions.makeScheduleData(data.from_date, data.to_date);
+                }
+                this.actions.getDataCount();
             })
         });
 
