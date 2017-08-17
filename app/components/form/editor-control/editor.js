@@ -44,6 +44,7 @@ let config = {
             modules: {
                 toolbar: toolbarOption,
             },
+            readOnly: this.data.is_view == 1,
             theme: 'snow'
         });
         this.quill.on('text-change', _.debounce(() => {
