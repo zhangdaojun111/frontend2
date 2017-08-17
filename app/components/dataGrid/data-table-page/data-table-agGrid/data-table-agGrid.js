@@ -99,6 +99,8 @@ let config = {
         customColumnsFields: [],
         //搜索参数
         filterParam: {expertFilter:[], filter: [], is_filter: 0, common_filter_id: '', common_filter_name: ''},
+        //上传一搜索参数
+        filterText: '',
         //是否第一次渲染agGrid
         firstRender: true,
         //权限
@@ -875,7 +877,8 @@ let config = {
                     this.actions.setCorrespondenceSelect();
                 }
                 if( this.data.pagination ){
-                    this.pagination.actions.resetPagination( this.data.total,this.data.first );
+                    let currentPage = parseInt( Number( this.data.first )/Number( this.data.rows ) );
+                    this.pagination.actions.setPagination( this.data.total,currentPage + 1 );
                 }
                 console.log( '请求数据返回get_table_data' );
                 this.actions.sortWay();
@@ -1062,8 +1065,11 @@ let config = {
             json = dgcService.returnQueryParams( json );
             this.data.filterParam.is_filter = 1;
             if( json.filter && json.filter != '' ){
-                this.data.first = 0;
-                json.first = 0;
+                if( this.data.filterText != json.filter ){
+                    this.data.first = 0;
+                    json.first = 0;
+                    this.data.filterText = json.filter;
+                }
             }
             return json;
         },
@@ -1162,8 +1168,8 @@ let config = {
                 exportSetting.data[o] = obj[o];
             }
             PMAPI.openDialogByComponent(exportSetting, {
-                width: 380,
-                height: 220,
+                width: 600,
+                height: 360,
                 title: '导出数据'
             }).then((data) => {
 
@@ -1231,7 +1237,7 @@ let config = {
         //分页刷新操作
         refreshData: function ( data ) {
             this.data.rows = data.rows;
-            this.data.first = data.firstRow;
+            this.data.first = data.first;
             this.actions.getGridData();
         },
         //根据偏好返回agGrid sate
@@ -1495,7 +1501,7 @@ let config = {
                         parent_record_id: this.data.parentRecordId,
                         btnType: 'new'
                     };
-                    let url = dgcService.returnIframeUrl( '/form/index/',obj );
+                    let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
 
                     let title = '新增'
                     this.actions.openSourceDataGrid( url,title );
@@ -1836,7 +1842,7 @@ let config = {
                     real_id: data.data._id,
                     btnType: 'view',is_view:1
                 };
-                let url = dgcService.returnIframeUrl( '/form/index/',obj );
+                let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
                 this.actions.openSourceDataGrid( url,title );
             }
@@ -1850,7 +1856,7 @@ let config = {
                     parent_record_id: this.data.parentRecordId,
                     real_id: data.data._id,
                     btnType: 'edit' };
-                let url = dgcService.returnIframeUrl( '/form/index/',obj );
+                let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '编辑'
                 this.actions.openSourceDataGrid( url,title );
             }
@@ -1880,7 +1886,7 @@ let config = {
                 real_id: data.data._id,
                 btnType: 'view',is_view:1
             };
-            let url = dgcService.returnIframeUrl( '/form/index/',obj );
+            let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
             let title = '查看'
             this.actions.openSourceDataGrid( url,title );
         },
