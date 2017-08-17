@@ -191,7 +191,6 @@ let config={
                         }
                     }
                 }
-                console.log(this.data.isViewOptions);
 
                 this.set('childSelect', {});
                 let el=this.el.find('#multi-select');
@@ -256,7 +255,5 @@ let config={
 export default class MultiSelectControl extends Component{
     constructor(data){
         super(config,data);
-        console.log('1111');
-        console.log(data);
     }
 }
