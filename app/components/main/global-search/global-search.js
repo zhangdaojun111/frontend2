@@ -211,7 +211,16 @@ let config ={
 
                 selectNum = -1;
                 this.actions.doSearch();
+            }else if(event.keyCode === 40){
+                this.data.selectNum++;
+                this.el.find('')
+            }else if(event.keyCode === 38){
+
+            }else{
+
             }
+
+
 
 
 
