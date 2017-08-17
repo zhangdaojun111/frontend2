@@ -19,6 +19,7 @@ import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-
 import jsplumb from 'jsplumb';
 import {PMAPI,PMENUM} from '../lib/postmsg';
 
+WorkFlow.createFlow({flow_id:34,el:"#a"});
 
 WorkFlowForm.showForm();
 WorkFlowGrid.showGrid();
