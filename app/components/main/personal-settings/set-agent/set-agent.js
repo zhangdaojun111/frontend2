@@ -1,3 +1,8 @@
+/**
+ * @author zhaoyan
+ * 打开代理设置界面
+ */
+
 import Component from '../../../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
@@ -12,7 +17,9 @@ import {AutoSelect} from '../../../../components/util/autoSelect/autoSelect';
 
 let config = {
     template:template,
-    data:{},
+    data:{
+        selectedAgent:'',           //记录被选中的代理人
+    },
 
     originData:null,            //请求到的原始数据
     formatData:null,
@@ -20,7 +27,7 @@ let config = {
     agentList:null,             //代理人数据
 
     selectedWorkflow:null,        //记录被选中的工作流的id
-    selectedAgent:'',           //记录被选中的代理人
+
     isOpen:0,               //是否开启代理，默认否    1是开，0是关
     atSelect:null,
 
@@ -32,7 +39,6 @@ let config = {
                         this.originData = result;
                         this.formatData = [];
                         this.selectedWorkflow = new Set();
-                        this.selectedAgent = '';
                         this.isOpen = 0;
                         this.atSelect = null;
                         $.extend(true,this.formatData,this.originData.data.workflow_list);
@@ -92,12 +98,14 @@ let config = {
                     tempData.push(row);
                 }
             }
+            let that = this;
             let autoSelect = new AutoSelect({
                 list: tempData,
-                multiSelect: true,
-                editable: false,
+                multiSelect: false,
+                editable: true,
                 onSelect: function (choosed) {
                     console.log(choosed);
+                    that.actions.setAgentId(choosed);
                 }
             });
             this.atSelect = autoSelect;
@@ -159,19 +167,23 @@ let config = {
                 }
             }
         },
-        // setAgentId:function (event) {
-        //     this.selectedAgent = '';
-        //     let user_name = this.el.find("input[name=name_input]").val();
-        //     console.log(user_name);
-        //     if(user_name !== ''){
-        //         for (let agent of this.originData.data.user_list) {
-        //             if ( user_name === agent.name){
-        //                 this.selectedAgent = agent.id;
-        //             }
-        //         }
-        //     }
-        //     console.log(this.selectedAgent);
-        // },
+        setAgentId:function (agent) {
+            if(agent.length > 0){
+                this.data.selectedAgent = agent[0].id;
+            }else{
+                this.data.selectedAgent = '';
+            }
+            // let user_name = this.el.find("input[name=name_input]").val();
+            // console.log(user_name);
+            // if(user_name !== ''){
+            //     for (let agent of this.originData.data.user_list) {
+            //         if ( user_name === agent.name){
+            //             this.selectedAgent = agent.id;
+            //         }
+            //     }
+            // }
+            // console.log(this.selectedAgent);
+        },
         closeSwitch:function (event) {
             this.isOpen = 0;
         },
@@ -179,9 +191,9 @@ let config = {
             this.isOpen = 1;
         },
         saveAgent:function () {
-            this.selectedAgent = this.atSelect.actions.getId();
             //保存代理前进行逻辑判断
-            if(this.isOpen === 1 && this.selectedAgent === ''){
+            console.log(this.isOpen , this.data.selectedAgent);
+            if(this.isOpen === 1 && (this.data.selectedAgent === undefined || this.data.selectedAgent === '')){
                 msgbox.alert("请选择一个代理人");
                 return;
             }
@@ -192,12 +204,13 @@ let config = {
             let workflow_temp = Array.from(this.selectedWorkflow);
             let data = {
                 workflow_names:workflow_temp,
-                agent_id:this.selectedAgent,
+                agent_id:this.data.selectedAgent,
                 is_apply:this.isOpen
             };
 
             UserInfoService.saveAgentData(data)
                 .done((result) => {
+                console.log(result);
                     if(result.success === 1){
                         if(result.agent_state === 0){
                             msgbox.alert("您所选择的代理人已离职，请重新选择");

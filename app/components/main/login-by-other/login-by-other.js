@@ -1,3 +1,8 @@
+/**
+ * @author zhaoyan
+ * 他人登录界面
+ */
+
 import Component from '../../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
@@ -13,11 +18,13 @@ let config = {
     data:{
         userData:null,
         selectedUserName:"",
-        _autoSelect : null
+        _autoSelect : null,
+        _otherId:'',
     },
     actions:{
         getData:function () {
             UserInfoService.getAllUsersInfo().done((result) => {
+                // console.log(result);
                 if(result.success === 1){
                     this.data.userData = result.rows;
                     this.actions.initList();
@@ -30,14 +37,26 @@ let config = {
         },
         initList:function () {          //使用组件绘制下拉框
             let $wrap = this.el.find('.user-list');
+            let that = this;
             let autoSelect = new AutoSelect({
-                list: this.data.userData
+                list: this.data.userData,
+                multiSelect: false,
+                editable: true,
+                onSelect: function (choosed) {
+                    console.log(choosed);
+                    if(choosed.length > 0){
+                        that.data._otherId = choosed[0].id;
+                    }else{
+                        that.data._otherId = '';
+                    }
+                }
             });
             autoSelect.render($wrap);
             this._autoSelect = autoSelect;
         },
         loginOtherAccount:function () {
-            let userId = this._autoSelect.actions.getId();
+            // let userId = this._autoSelect.actions.getId();
+            let userId = this.data._otherId;
             userId = userId.trim();
             if(userId && userId !== ''){
                 //执行以选中人的账号登录

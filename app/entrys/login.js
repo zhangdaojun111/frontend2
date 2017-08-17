@@ -1,4 +1,7 @@
-//用于登录界面初始化与流程控制
+/**
+ * @author zhaoyan
+ * 打开登录界面
+ */
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
 import '../assets/scss/login.scss';
@@ -73,7 +76,6 @@ function getLoginController() {
                 this.$whitePanel.hide();
                 this.$oppositePanel.fadeIn();
                 this.isOpposite = true;
-
             });
 
             //反面面板关闭返回正面面板
