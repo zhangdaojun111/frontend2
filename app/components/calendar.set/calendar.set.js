@@ -332,7 +332,7 @@ let config = {
         }
     },
     afterRender: function() {
-        this.el.css({width: '100%'});
+        this.el.css({width: '100%',height:"100%"});
         this.el.find('iframe').css("width","100%");
 
         if(window.config.table_id) {

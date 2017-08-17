@@ -20,6 +20,9 @@
     .multi-select-item{
         width:300px !important;
         .popup {
+            display: none;
+            width: 200px;
+            position: absolute;
             z-index: 100 !important;
             background-color: white !important;
             padding-left: 0px !important;
@@ -31,6 +34,7 @@
                 margin-left: 0px;
                 list-style-type: none !important;
                 label{
+                    text-align: left;
                 overflow:hidden;
                 }
             }
@@ -47,20 +51,21 @@
     .unclick{
         cursor:not-allowed !important;
     }
-    .popup {
-        z-index: 100 !important;
-        background-color: white !important;
-        padding-left: 0px !important;
-        margin: 0px !important;
-        height: auto!important;
-        max-height: 300px!important;
-        overflow: auto !important;
-        li {
-            margin-left: 0px;
-            list-style-type: none !important;
-            label{
-                text-align: left;
-            }
-        }
-    }
+
 }
+//.popup {
+//    z-index: 100 !important;
+//    background-color: white !important;
+//    padding-left: 0px !important;
+//    margin: 0px !important;
+//    height: auto!important;
+//    max-height: 300px!important;
+//    overflow: auto !important;
+//    li {
+//        margin-left: 0px;
+//        list-style-type: none !important;
+//        label{
+//            text-align: left;
+//        }
+//    }
+//}

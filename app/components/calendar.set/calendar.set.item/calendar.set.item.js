@@ -135,11 +135,12 @@ let config = {
         },
     },
     afterRender: function () {
-        // this.el.css({width: '100%'});
+        this.el.css({});
         let staus = false;
         let _this = this;
         let select_item_data = {
             'list': this.data.dropdown,
+            displayType: 'popup',
             editable:this.data.editable,
             choosed: this.actions.returnShow(this.data.rowSetData['selectedOpts']).res,
             onSelect: function (choosed) {
@@ -176,6 +177,7 @@ let config = {
                 staus = false;
             }
         });
+        this.el.find(".list").hide();
         this.el.find('.res-text option').each((item) => {
             let a = $('.res-text option')[item].value;
             if(a === this.data.rowSetData['selectedRepresents']) {
