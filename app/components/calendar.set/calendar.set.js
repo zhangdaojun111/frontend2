@@ -124,7 +124,7 @@ let config = {
                         })
                     }
                 }
-                console.log(this.data.allRows);
+                //console.log(this.data.allRows);
                 this.data.allRows.forEach((row, index) => {
                     if(this.data.rowTitle[index]['id'] && this.data.rowTitle[index]['dtype'] === '8' && this.data.replaceDropDown.length !== 0){
                         this.data.isConfigField = true;

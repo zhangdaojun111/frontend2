@@ -219,7 +219,14 @@ let config = {
             if(staus){
                 this.actions.openSetRemind();
             }
+        }).on('change', '.config-text', () => {
+            let valueConfigTextValue = this.el.find('.config-text option:selected').val();
+            let textConfigTextValue = this.el.find('.config-text option:selected').text();
+
         });
+        if(this.data.rowTitle['dtype'] === 8) {
+            console.log(this.data.rowSetData, this.data.replaceDropDown, this.data.rowTitle);
+        }
 
         this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text;
         this.el.find('.preview-text').text(this.data.preViewText);

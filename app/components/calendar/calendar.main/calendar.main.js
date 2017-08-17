@@ -89,26 +89,16 @@ let config = {
 
             }else {
                 this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date,cancel_fields: this.data.cancel_fields},'calendar');
-                setTimeout(() => {
-                    console.log(this.data.monthDataList);
-                },500)
+                // setTimeout(() => {
+                //     console.log(this.data.monthDataList);
+                // },500)
                 // this.actions.monthDataTogether();
                 // this.actions.getDataCount();
             }
         },
 
-        refresh: function () {
-            this.el.find('.calendar-main-content').empty();
-            if(this.data.calendarContent !== 'schedule') {
-
-            } else {
-                this.actions.makeScheduleData(this.data.from_date, this.data.to_date);
-            }
-        },
-
         getCalendarData: function (data,type){
             CalendarService.getCalendarData(data).then( res=>{
-                console.log(res);
                 this.data.date2settings = res['date2csids'];
                 this.data.calendarSettings = res['id2data'];
                 this.data.tableid2name = res['tableid2name'];
@@ -190,7 +180,6 @@ let config = {
             }
             this.data.remindCount = i;
             this.data.workflowCount = w;
-            console.log(i,w);
             $('body').find('.remind-num').html(this.data.remindCount);
             $('body').find('.approval-num').html(this.data.workflowCount);
 
@@ -198,12 +187,10 @@ let config = {
 
         createMonthCalendar: function (y,m){
             this.data.monthDataList = CalendarHandleDataService.createMonthCalendar(y,m, this.data.todayStr);
-            console.log(this.data.monthDataList);
             this.data.from_date = this.data.monthDataList[0]['weekList'][0]['dataTime'];
             this.data.to_date = this.data.monthDataList[5]['weekList'][6]['dataTime'];
 
             if(this.data.calendarContent === 'month') {
-                console.log('month',this.data.from_date, this.data.to_date);
                 CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
                 this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date, cancel_fields: this.data.cancel_fields},'calendar');
                 Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
@@ -220,7 +207,6 @@ let config = {
             }
 
             if(this.data.calendarContent === 'week') {
-                console.log('week',this.data.from_date, this.data.to_date);
                 CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
                 this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date, cancel_fields: this.data.cancel_fields},'calendar');
             }
@@ -242,11 +228,11 @@ let config = {
             this.data.from_date = date;
             this.data.to_date = date;
             if(this.data.calendarContent === 'day') {
-                console.log('day',this.data.from_date, this.data.to_date);
                 CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
                 this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date, cancel_fields: this.data.cancel_fields},'calendar');
                 Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
             }
+            console.log(this.data.dayDataList);
         },
 
         makeScheduleData: function (startDate, endDate) {
@@ -258,7 +244,6 @@ let config = {
                 this.actions.getDayData(day);
                 this.data.scheduleDataList.push(day);
             }
-            console.log(this.data.scheduleDataList);
             this.el.find('.calendar-main-content').empty();
             this.append(new CalendarSchedule({startDate: startDate, endDate: endDate, scheduleDataList: this.data.scheduleDataList}), this.el.find(".calendar-main-content"));
         },
@@ -542,7 +527,6 @@ let config = {
         });
 
         Mediator.on('Calendar: changeMainView', data => {
-            console.log(data, this.data.selectData);
             this.data.calendarContent = data.calendarContent;
             if(data.calendarContent === 'month') {
                 this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
@@ -564,7 +548,6 @@ let config = {
 
         Mediator.on('Calendar: tool', data => {
             if(data.toolMethod === 'refresh') {
-                console.log('refresh');
                 if(this.data.calendarContent !== 'schedule') {
                     this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date, cancel_fields: this.data.cancel_fields},'calendar');
                 } else {
@@ -619,7 +602,6 @@ let config = {
 
         Mediator.on('calendar-left:unshowData', data => {
             if(data['data']) {
-                console.log(data['data']);
                 this.data.isShowArr = data['data'];
                 let arr = ['approve','remind'];
                 let arr_1 = [];
@@ -629,7 +611,6 @@ let config = {
                     }
                 }
                 this.data.cancel_fields = arr_1;
-                console.log(this.data.cancel_fields);
                 // if(this.data.calendarContent === 'month') {
                 //     this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
                 // }
