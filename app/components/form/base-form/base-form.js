@@ -1007,16 +1007,12 @@ let config={
             let res=await FormService.getDynamicDataImmediately(json);
             console.log('转到编辑模式');
             console.log(res);
-            _this.data.data['temp_id']=res.data.temp_id;
-            _this.data.data['real_id']=res.data.real_id;
-            _this.data.data['table_id']=res.data.table_id;
-            for(let key in _this.data.data){
-                _this.data.data[key]['is_view']=res['data'][key]['is_view'];
-                if(!_this.childComponent[key]){
-                    continue;
+            for(let key in res.data){
+                _this.data.data[key]=Object.assign({},_this.data.data[key],res.data[key]);
+                if(_this.childComponent[key]){
+                    _this.childComponent[key].data=Object.assign({},_this.childComponent[key].data,res.data[key]);
+                    _this.childComponent[key].reload();
                 }
-                _this.childComponent[key]['data']['is_view']=_this.data.data[key]['is_view'];
-                _this.childComponent[key].reload();
             }
             _this.data.btnType='new';
             _this.actions.addBtn();
