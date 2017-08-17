@@ -99,6 +99,8 @@ let config = {
         customColumnsFields: [],
         //搜索参数
         filterParam: {expertFilter:[], filter: [], is_filter: 0, common_filter_id: '', common_filter_name: ''},
+        //上传一搜索参数
+        filterText: '',
         //是否第一次渲染agGrid
         firstRender: true,
         //权限
@@ -875,7 +877,8 @@ let config = {
                     this.actions.setCorrespondenceSelect();
                 }
                 if( this.data.pagination ){
-                    this.pagination.actions.resetPagination( this.data.total,this.data.first );
+                    let currentPage = parseInt( Number( this.data.first )/Number( this.data.rows ) );
+                    this.pagination.actions.setPagination( this.data.total,currentPage + 1 );
                 }
                 console.log( '请求数据返回get_table_data' );
                 this.actions.sortWay();
@@ -1062,8 +1065,11 @@ let config = {
             json = dgcService.returnQueryParams( json );
             this.data.filterParam.is_filter = 1;
             if( json.filter && json.filter != '' ){
-                this.data.first = 0;
-                json.first = 0;
+                if( this.data.filterText != json.filter ){
+                    this.data.first = 0;
+                    json.first = 0;
+                    this.data.filterText = json.filter;
+                }
             }
             return json;
         },
@@ -1231,7 +1237,7 @@ let config = {
         //分页刷新操作
         refreshData: function ( data ) {
             this.data.rows = data.rows;
-            this.data.first = data.firstRow;
+            this.data.first = data.first;
             this.actions.getGridData();
         },
         //根据偏好返回agGrid sate
