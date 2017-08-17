@@ -30,13 +30,14 @@ let config = {
                 if(res['confirm']) {
                     //this.actions.reset(tableId);
                     let params = {
-                        read_ids: this.data.remindTaskItemData['real_id'],
+                        real_ids: this.data.remindTaskItemData['real_id'],
                         table_id: this.data.remindTaskItemData['tableId'],
                         calendar_id: this.data.remindTaskItemData['setId'],
                         type: 1,
                         data: {},
                     };
                     params['data'][this.data.remindTaskItemData['selectField']] = newValue;
+                    params['data'] = JSON.stringify(params['data']);
                     Mediator.emit('CalendarRemindTask: changeData', params);
                 }
             });
@@ -77,28 +78,28 @@ let config = {
     afterRender: function() {
         this.el.find('.task-bg-color').css({backgroundColor: this.data.remindTaskItemData['color']});
         let that = this;
-        if(this.data.remindTaskItemData['type'] === 1) {
-            if(this.data.remindTaskItemData.selectOption) {
-                for( let s of this.data.remindTaskItemData.selectOption ){
-                    if( s.value === this.data.remindTaskItemData['data3show'][0][0]['selectValue'] ){
-                        this.el.find('.select-options option').each((item) => {
-                            let a = $('.select-options option')[item].value;
-                            if(a === s.value) {
-                                this.el.find('.select-options option')[item].selected  = 'selected';
-                            }
-                        });
-                    }
+        if(this.data.remindTaskItemData.selectOption) {
+            for( let s of this.data.remindTaskItemData.selectOption ){
+                if( s.value === this.data.remindTaskItemData['data3show'][0][0]['selectValue'] ){
+                    this.el.find('.select-options option').each((item) => {
+                        let a = $('.select-options option')[item].value;
+                        if(a === s.value) {
+                            this.el.find('.select-options option')[item].selected  = 'selected';
+                        }
+                    });
                 }
             }
-
-            this.el.find('.task-show-text').html(this.data.remindTaskItemData['data3show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data3show'][0][0]['fieldValue']);
-            this.el.on('click', '.task-show-text', () => {
-                this.actions.openRemind();
-            });
-
-        } else if(this.data.remindTaskItemData['type'] === 2) {
-
-        } else {
+        }
+        if(this.data.remindTaskItemData['type'] === 1) {
+            if(this.data.remindTaskItemData['data3show'][0] && this.data.remindTaskItemData['data3show'][0][0]) {
+                this.el.find('.task-show-text').html(this.data.remindTaskItemData['data3show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data3show'][0][0]['fieldValue']);
+                this.el.on('click', '.task-show-text', () => {
+                    this.actions.openRemind();
+                });
+            }
+        } else if(this.data.remindTaskItemData['type'] === 2){
+            console.log(this.data.remindTaskItemData);
+        } else if(this.data.remindTaskItemData['type'] === 3 || this.data.remindTaskItemData['type'] === 4) {
             this.actions.openWorkflow();
         }
         this.el.on('click','.task-state-icon', () => {
@@ -107,11 +108,7 @@ let config = {
                 that.el.parents(".calendar-main-content").find(".select-options").hide();
                 that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
                 that.el.find(".select-options").show();
-                // that.el.find(".select-options").css("top",that.el.find(".task-item").parent().position().top + 22);
                 $(this).addClass("options-show");
-                // that.el.parents("tbody").is(".month-body"){
-                //
-                // }
                 if(that.el.find(".task-item").parent().position().top > 60){
                     let task_list = that.el.find(".task-item").parents(".task-list");
                     task_list.scrollTop(task_list.scrollTop()+25);
@@ -134,16 +131,16 @@ let config = {
             that.el.parents(".calendar-main-content").find(".select-options").hide();
             that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
         });
-        // that.el.parents(".task-list").on("scroll", function(){
-        //     that.el.find(".select-options").css("top",that.el.find(".task-item").parent().position().top + 22);
-        // });
     }
 };
 
 class CalendarRemindTaskItem extends Component {
     constructor(data) {
         config.data.remindTaskItemData = data;
-        config.data.remindTaskData = data['data3show'][0][0];
+        if(data['data3show']) {
+            config.data.remindTaskData = data['data3show'][0][0];
+        }
+
         super(config);
     }
 }
