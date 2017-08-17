@@ -3,9 +3,12 @@ import Mediator from '../lib/mediator';
 import {FormService} from "../services/formService/formService";
 import '../assets/scss/form.scss'
 import '../assets/scss/core/print.scss'
+import {CreateForm} from "../components/form/createFormVersionTable/createForm"
 
 let FormEntrys = {
     childForm:{},
+    isloadCustomTableForm:false,
+    isloadWorkflow:false,
     init(config={}){
         this.tableId='';
         this.parentRealId='';
@@ -79,6 +82,9 @@ let FormEntrys = {
         }
         if(res["data"] && res["data"]["form_id"] != 0){
             this.formId = res["data"]["form_id"];
+            this.isloadCustomTableForm = true;
+        }else {
+            this.isloadWorkflow = true;
         }
     },
     //拼装发送json
@@ -177,16 +183,14 @@ let FormEntrys = {
             data[obj.dfield]=obj;
         }
         staticData.data=data;
-        staticData['temp_id']=staticData.data['temp_id']||'';
-        staticData['real_id']=staticData.data['real_id']||'';
-        staticData['table_id']=staticData.data['table_id']||'';
-        // staticData['parentRealId']=staticData["real_id"]["value"]||'';
-        // staticData['parentTableId']=staticData["table_id"]["value"]||'';
-        // staticData['parentTempId']=staticData["temp_id"]["value"]||'';
+        // staticData['parentRealId']=staticData.data["real_id"]["value"]||'';
+        // staticData['parentTableId']=staticData.data["table_id"]["value"]||'';
+        // staticData['parentTempId']=staticData.data["temp_id"]["value"]||'';
         staticData.parentTableId=this.parentTableId;
         staticData.parentRealId=this.parentRealId;
         staticData.parentTempId=this.parentTempId;
-        staticData.tableId=staticData['table_id']["value"];
+        staticData.parentRecordId=this.parentRecordId;
+        staticData.tableId=staticData['table_id'] || this.tableId;
         staticData.formId=this.formId;
         staticData.realId=this.realId;
         staticData.flowId=this.flowId;
@@ -244,7 +248,26 @@ let FormEntrys = {
         }
     },
     //创建默认表单
-    formDefaultVersion : function (data){
+    formDefaultVersion(data){
+        let html=`<table class="form table table-striped table-bordered table-hover ">
+            <tbody>
+                `;
+        for(let obj of data){
+            if(data.type==='hidden'){
+                html+=`<div data-dfield="${obj.dfield}" data-type="${obj.type}"></div>`;
+            }else{
+                html+=`<tr>
+                        <td style="width: 150px;white-space: nowrap;">${ obj.label }</td>
+                        <td><div data-dfield="${obj.dfield}" data-type="${obj.type}"></div></td>
+                </tr>`;
+            }
+        }
+        html+=`</tbody>
+        </table>`
+        return html;
+    },
+    //创建人员信息表
+    formVersionUser(data){
         let html=`<table class="form table table-striped table-bordered table-hover ">
             <tbody>
                 `;
@@ -276,36 +299,114 @@ let FormEntrys = {
             delete this.childForm[tableID];
         }
     },
+    async checkFormType(data,res){
+        //获取公司名称
+        let company = data["company_name"];
+        //获取是否加载定制表单
+        let isloadCustom = data["custom_form_exists"] == 1;
+        //获取是否加载各个公司定制的系统表
+        let companyCustomTableFormExists = data["company_custom_table_form_exists"] == '1';
+        //是否加载系统自带的系统表
+        let customTableFormExists = data["custom_table_form_exists"] == '1';
+        //是否有其他字段
+        data.hasOtherFields = data["show_other_fields"];
+        //sys_type
+        let sys_type = data["sys_type"];
+        //如果有其他字段，则请求其他字段的数据
+        if(data.hasOtherFields == 1){
+            //如果是其他字段，temp_id用上一个表单的
+            for(let obj of data["data"]){
+                if(obj["dfield"] == "temp_id") {
+                    data.jsonOfOtherFields["temp_id"] = obj["value"];
+                }
+            }
+            data.jsonOfOtherFields["is_extra"] = 1;
+        }
+        //审批中的提示信息
+        let record_tip = data["record_tip"];
+
+        let html='';
+        //加载表单
+        if(companyCustomTableFormExists){
+            try {
+                //加载各个公司定制的系统表
+                cosnole.log('加载公司定制系统表');
+            }catch (e){
+                console.error(`加载${ company }定制的系统表，table_id为：${ this.tableId }的表单失败`);
+                console.error(e);
+            }
+        }else if(customTableFormExists){
+            try{
+                //加载系统定制的系统表
+                console.log('加载系统定制表');
+                sys_type == "normal"?sys_type = this.tableId:sys_type;
+                html=await CreateForm.creatSysTable(sys_type,data);
+            }catch (e){
+                console.error(`加载系统表，table_id为${ this.tableId }的表单失败`);
+                console.error(e);
+            }
+        } else if(this.formId !== ""){
+            if(isloadCustom){
+                try{
+                    //加载定制表单
+                    console.log('加载定制表单')
+                }catch (e){
+                    console.error(`加载${ company }的定制表单，form_id为：${ this.formId }的表单失败`);
+                    console.error(e);
+                }
+            }else if(this.isloadCustomTableForm || this.isloadWorkflow){
+                try{
+                    //加载个人制作的表单
+                    console.log('加载个人制作表单');
+                    html=res[2]['data']['content'];
+                }catch (e){
+                    console.error(`加载${ company }的个人制作的表单，form_id为：${ this.formId }的表单失败`);
+                    console.error(e);
+                }
+            }else {
+                try{
+                    console.log('加载默认表单')
+                    html= CreateForm.formDefaultVersion(res[0].data);
+                }catch (e){
+                    console.error(`加载系统自带的默认表单失败`);
+                    console.error(e);
+                }
+            }
+        }else{
+            try{
+                console.log('加载默认表单')
+                html=CreateForm.formDefaultVersion(res[0].data);
+            }catch (e){
+                console.error(`加载系统自带的默认表单失败`);
+                console.error(e);
+            }
+        }
+        return html;
+    },
     //创建表单入口
     async createForm(config={}){
-        let _this=this;
         this.init(config);
         let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap">`).prependTo(this.el);
         let res=await  FormService.getPrepareParmas({table_id:this.tableId});
-        _this.findFormIdAndFlowId(res);
-        let json=_this.createPostJson();
+        this.findFormIdAndFlowId(res);
+        let json=this.createPostJson();
         res =await FormService.getFormData(json);
-        console.time('form创建时间');
+        //处理数据
+        let data=this.mergeFormData(res[0],res[1]);
+        //检查表单类型
+        let template=await this.checkFormType(data,res);
         //发送审批记录
-        if(_this.fromApprove){
+        if(this.fromApprove){
             if(res[1]['record_info']){
                 Mediator.publish('workFlow:record_info',res[1]['record_info']);
             }
         }
-        let template;
-        if(_this.formId){
-        //手绘表单
-        template=res[2]['data']['content'];
-        }else{
-            template=_this.formDefaultVersion(res[0].data);
-        }
-        let data=_this.mergeFormData(res[0],res[1]);
         let formData={
             template:template,
             data:data,
         }
         let formBase=new FormBase(formData);
-        _this.childForm[_this.tableId]=formBase;
+        this.childForm[this.tableId]=formBase;
         formBase.render(html);
         console.timeEnd('form创建时间');
     },

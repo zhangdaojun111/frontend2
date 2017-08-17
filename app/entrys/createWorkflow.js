@@ -46,6 +46,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
     })()
     .then(res=>{
         Mediator.publish('workflow:gotWorkflowInfo', res);
+        Mediator.publish('workflow:focused', []);
         return workflowService.validateDraftData({form_id:msg.formid});
     })
     .then(res=>{
@@ -104,15 +105,16 @@ Mediator.subscribe('workflow:choose', (msg)=> {
 
 });
 //submit workflow data 提交工作流
+let focusArr=[];
 Mediator.subscribe('workflow:focus-users', (res)=> {
-    wfObj.user=res;
+    focusArr=res;
 })
 Mediator.subscribe('workflow:submit', (res)=> {
     $("#submit").hide();
     let formData=FormEntrys.getFormValue(wfObj.tableid),
         postData={
         flow_id:wfObj.id,
-        focus_users:JSON.stringify(wfObj.user)||[],
+        focus_users:JSON.stringify(focusArr)||[],
         data:JSON.stringify(formData)
     };
     (async function () {

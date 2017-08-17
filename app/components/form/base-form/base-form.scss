@@ -1,4 +1,4 @@
-
+#detail-form{
 .ui-history {
     display: inline-block;
     width: 16px;
@@ -26,7 +26,8 @@ span.required2 {
     vertical-align: middle;
 }
 .form-control {
-    display: inline;
+      display: flex;
+      align-items: center;
     .info {
       color: #ccc;
     }
@@ -180,14 +181,13 @@ tbody{
 .ui-btn-box {
   padding: 15px 0;
   bottom: 0px;
-  width: 100%;
-  background: #fff;
-  position: absolute;
-  z-index:10;
-}
-.ui-btn-box .btn{
-  float: right;
-}
+    width: 100%;
+    background: #fff;
+    position: absolute;
+  }
+  .ui-btn-box .btn{
+    float: right;
+  }
 .ui-btn-box .btn-normal{
   color: #ffffff;
 }
@@ -606,4 +606,5 @@ td.ui-datepicker-unselectable {
 
 .btnHover:hover{
   cursor: pointer;
+  }
 }

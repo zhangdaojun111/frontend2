@@ -1,18 +1,18 @@
 .seal{
+    overflow: scroll;
     display: flex;
     width: 280px;
     flex-direction: column;
     border: 1px solid rgb(14,122,239);
-    position: absolute;
+    position: fixed;
     top: 10px;
     right: 2px;
     height: 500px;
     z-index: 62;
     background: #fff;
     .add-seal{
-        width: 250px;
-        border: 1px solid black;
-        height: 200px;
+        border-bottom: 1px solid black;
+        height: 64px;
         z-index: 10;
         margin-bottom: 20px;
         .add{
@@ -33,10 +33,14 @@
     }
     .seal-img{
         width: 100%;
-        .ul-img{
-           
-        }
+        position: relative;
+
     }
+    .imgshow{
+         position: fixed;
+         top: 475px;
+         right: 22px;
+     }
 }
 .ul-img{
     .li-img{
