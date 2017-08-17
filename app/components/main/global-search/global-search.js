@@ -44,7 +44,8 @@ let config ={
             $listParent.empty();
             for( let k of temp){
                 let $li = $("<li class='record-item'>");
-                $li.attr('data_content',k.content);
+                $li.attr('data_content',k.content)
+                    .attr('data_index',k.index);
 
                 let $content = $("<span class='record-content'>");
                 $content.attr("operate","search");
@@ -83,11 +84,14 @@ let config ={
         },
         doSearch:function () {
             let content = this.data.searchContent;
+            this.el.find('.search-content').val(content).blur();
+            this.el.find("div.history-display").hide();
+            console.log("search content: ",content);
             if(content && content !== ''){
                 Mediator.emit('menu:item:openiframe', {
                     id: "search-result",
                     name: "搜索结果",
-                    url: "/search_result?searchText=" + content
+                    url: "/search_result?searchContent=" + content
                 });
                 this.actions.addSearchHistory();
             }else{
@@ -128,8 +132,6 @@ let config ={
             });
             //向后台存history
             UserInfoService.saveGlobalSearchHistory();
-
-
             this.actions.initList();
         },
         dealRecordClick:function (event) {
@@ -144,8 +146,6 @@ let config ={
             }else{
                 this.data.searchContent = content;
                 this.actions.doSearch();
-                this.el.find('.search-content').val(content);
-                this.el.find("div.history-display").hide();
             }
         },
         isDeleteAllHistory:function () {
@@ -166,6 +166,7 @@ let config ={
                 })
         },
         showHistoryList:function () {
+            this.el.find('.search-content').val('');
             if(this.data.historyList.length > 0){
                 this.el.find("div.history-display").show();
                 this.el.find("input.search-content").removeAttr("placeholder");
@@ -176,23 +177,30 @@ let config ={
             setTimeout(function () {
                 that.el.find("div.history-display").hide();
             },100);
-            // this.el.find("div.history-display").hide();
             if(this.el.find("input.search-content").val() === ''){
                 this.el.find("input.search-content").attr("placeholder","请输入要搜索的内容...");
             }
         },
         setItemHover:function (event) {
-            $(event.target).addClass('item-selected');
+            $(this).find('.record-item').removeClass('item-selected');
+            $(this).addClass('item-selected');
+            this.data.selectNum = $(this)[0].attributes.data_index.value;
         },
         resetItemHover:function (event) {
             $(event.target).removeClass('item-selected');
         },
         myKeyDown:function (event) {
             if(event.keyCode === 13){       //回车，进行搜索
-                //根据id设置搜索的content
-
-                selectNum = -1;
+                let content_first = this.el.find('.search-content').val();
+                if(content_first){
+                    this.data.searchContent = content_first
+                }else if(this.data.selectNum >= 0){
+                    this.data.searchContent = this.data.historyList[this.data.selectNum].content;
+                }else{
+                    this.data.searchContent = "";
+                }
                 this.actions.doSearch();
+                this.data.selectNum = -1;
             }else if(event.keyCode === 40){
                 this.data.selectNum++;
                 let $list = this.el.find('.history-list');
@@ -213,7 +221,6 @@ let config ={
                 $list.find(`li[data_content = ${selected_content}]`).addClass('item-selected');
             }else{
 
-
             }
         }
     },
@@ -225,9 +232,7 @@ let config ={
         }).on('input','.search-content',(event) => {
             this.actions.setSearchContent(event);
         }).on('click','.record-item',(event) => {
-            setTimeout(function () {
-                that.actions.dealRecordClick(event);
-            },100);
+            this.actions.dealRecordClick(event);
         }).on("click",".delete-all-history", (event) => {
             this.actions.isDeleteAllHistory();
         }).on('focus','.search-content',() => {
@@ -236,10 +241,10 @@ let config ={
             this.actions.hideHistoryList();
         }).on('keydown','.search-content',(event) => {
             this.actions.myKeyDown(event);
-        }).on('mouseenter','.record-item',(event) => {
-            this.actions.setItemHover(event);
-        }).on('mouseleave','.record-item',(event) => {
-            this.actions.setItemHover(event);
+        }).on('mouseenter','li.record-item',function (event) {
+            that.actions.setItemHover(event);
+        }).on('mouseleave','li.record-item',function(event) {
+            that.actions.resetItemHover();
         })
 
     },
