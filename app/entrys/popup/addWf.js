@@ -36,6 +36,7 @@ serchStr.split('&').forEach(res => {
     if(res.data.flow_data.length===0){
         $('.workflow-foot').hide();
         $('.workflow-flex').hide();
+        $('#place-form').html('');
         FormEntrys.createForm({
             el: '#place-form',
             is_view: 0,
@@ -67,6 +68,7 @@ Mediator.subscribe('workflow:getflows', (res)=> {
         Mediator.publish('workflow:gotWorkflowInfo', res);
         Mediator.publish('workflow:focused', []);
     });
+    $('#place-form').html('');
     FormEntrys.createForm({
         el: '#place-form',
         form_id: res.form_id,
