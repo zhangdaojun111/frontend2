@@ -4,9 +4,9 @@ import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui-timepicker-addon';
 import 'jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css';
 import '../base-form/base-form.scss'
-import './data-control-alert.html'
 import template from  './date-control.html';
 import './date-control.scss';
+import msgbox from '../../../lib/msgbox';
 
 let config={
     template:template,
@@ -47,13 +47,13 @@ let config={
                 if( _this.data['timeType']){
                     if( _this.data['timeType'] == 'after'){
                         if(selectTime < currentTime){
-                            _.debounce(function(){Mediator.publish('form:alertDateFuture:'+_this.data.tableId,_this.data)},200)();
+                            msgbox.alert("所选日期不能早于当前日期！");
                             _this.data.value = "请选择";
                             _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
                         }
                     }else if( _this.data['timeType'] == 'before') {
                         if(selectTime > currentTime){
-                            _.debounce(function(){Mediator.publish('form:alertDateHistory:'+_this.data.tableId,_this.data)},200)();
+                            msgbox.alert("所选日期不能晚于当前日期！");
                             _this.data.value = "请选择";
                             _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
                         }
