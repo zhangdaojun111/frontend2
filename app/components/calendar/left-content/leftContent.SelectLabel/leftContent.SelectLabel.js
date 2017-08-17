@@ -177,23 +177,19 @@ let config = {
                 }
             }
             temp.searchValue = id;
-            console.log(a);
             let json = {};
             for( let d of config.data.rows ){
-                console.log(d.searchValue);
                 if( d.searchValue !== '0' ){
                     let val = d.searchValue;
-                    console.log(d.table_name);
                     for( let search of d.query_params){
-                        console.log(search.queryParams);
                         if( val === search.id.toString()){
-                            console.log(search.queryParams);
                             json[d.table_id] = dgcService.translateAdvancedQuery( JSON.parse(search.queryParams));
                         }
                     }
                 }
             }
             console.log(json);
+            Mediator.emit('CalendarSelected: Search', json);
         }
     },
     afterRender: function() {

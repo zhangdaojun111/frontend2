@@ -232,6 +232,9 @@ let config = {
         }).on('click',".hide-type-group",function(){
             config.actions.hide_group($(this),that);
         });
+    },
+    beforeDestory: function () {
+        Mediator.removeAll('calendar-left:unshowData');
     }
 };
 class LeftcontentCalendarset extends Component {
