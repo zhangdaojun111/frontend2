@@ -69,6 +69,7 @@ let config = {
                 that.el.parents(".month-body").find(".select-options").hide();
                 that.el.parents(".month-body").find(".task-state-icon").removeClass("options-show");
                 that.el.find(".select-options").show();
+                // that.el.find(".select-options").css("top",that.el.find(".task-item").parent().position().top + 22);
                 $(this).addClass("options-show");
             }
             else{
@@ -80,6 +81,12 @@ let config = {
             that.el.parents(".month-body").find(".select-options").hide();
             that.el.parents(".month-body").find(".task-state-icon").removeClass("options-show");
         });
+        // that.el.parents(".task-list").on("scroll", function(){
+        //     that.el.find(".select-options").css("top",that.el.find(".task-item").parent().position().top + 22);
+        //     if(that.el.find(".task-item").parent().position().top > 120 || that.el.find(".task-item").parent().position().top < 10){
+        //         that.el.find(".select-options").hide();
+        //     }
+        // });
     }
 };
 

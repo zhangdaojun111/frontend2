@@ -1,15 +1,13 @@
 {{#if remindTaskItemData.isShow}}
 <div class="task-item">
     <span class="task-bg-color"></span>
+    <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-finished.png" alt="">
     {{#if remindTaskItemData.isSetSelect}}
-        <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-finished.png" alt="">
         <div class="select-options" style="display: none">
             {{#each remindTaskItemData.selectOption}}
             <span class="select-children" id="{{this.value}}">{{this.label}}</span>
             {{/each}}
         </div>
-    {{else}}
-         <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-waitcheck.png" alt="">
     {{/if}}
     <span class="task-show-text"></span>
 </div>

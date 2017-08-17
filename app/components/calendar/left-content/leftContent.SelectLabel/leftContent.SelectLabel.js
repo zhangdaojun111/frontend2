@@ -183,10 +183,10 @@ let config = {
                 console.log(d.searchValue);
                 if( d.searchValue !== '0' ){
                     let val = d.searchValue;
-                    console.log(d.table_name);
+                    console.log(d.table_name,val);
                     for( let search of d.query_params){
-                        console.log(search.queryParams);
-                        if( val === search.id){
+                        console.log(val);
+                        if( val === search.id.toString()){
                             console.log(search.queryParams);
                             json[d.table_id] = dgcService.translateAdvancedQuery( JSON.parse(search.queryParams));
                         }
