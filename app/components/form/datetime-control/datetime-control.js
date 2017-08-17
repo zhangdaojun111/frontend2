@@ -39,12 +39,10 @@ let config={
                 if(this.data['timeType'] == 'after'){
                     if(valTime < currentTime){
                         _.debounce(function(){Mediator.publish('form:alertDateFuture:'+_this.data.tableId,_this.data)},200)();
-                        //alert("所选日期不能早于当前日期！");
                     }
                 }else if(this.data['timeType'] == 'before') {
                     if(valTime > currentTime){
                         _.debounce(function(){Mediator.publish('form:alertDateHistory:'+_this.data.tableId,_this.data)},200)();
-                        //alert("所选日期不能晚于当前日期！");
                     }
                 }
             }else{
@@ -76,6 +74,14 @@ let config={
             changeMonth: true,
             dateFormat: "yy/mm/dd",
             timeFormat: 'HH:mm:ss', //格式化时间
+            onSelect: function(dateText, inst){//选中事件
+                console.log("onselect, dateText",dateText);
+                console.log("onselect, inst",inst);
+            },
+            onClose : function(dateText, inst){//当日期面板关闭后触发此事件（无论是否有选择日期）
+                console.log("onClose, dateText",dateText);
+                console.log("onClose, inst",inst);
+            }
             // controlType: 'slider',
             // stepHour: 1,
             // stepMinute: 1,
@@ -92,6 +98,7 @@ let config={
             boolean = false;
         }else{
             _this.el.on('click','#icon_rili',function(){
+                $('#ui-datepicker-div').off();
                 _this.el.find(".datetime").datetimepicker('hide');
             });
             boolean = true;
@@ -99,14 +106,21 @@ let config={
         _this.el.on('click','.date-close',function () {
             _this.el.find(".datetime").val("年/月/日 时:分:秒");
         })
+        _this.el.find('.datetime','input',function(event){
+            console.log('1111111')
+            console.log('1111111')
+            console.log('1111111')
+            console.log('1111111')
+        })
 
+        $('#ui-datepicker-div').on('click',function () {
+            console.log($('#ui-datepicker-div'));
+            _this.actions.onSelect();
+        });
         //无法绑定到当前td，暂时先绑定到input
         // _this.el.find('input').parent('div').parent('div').parent('td').parent('tr').parent('tbody').parent('table').parent('div').parent('div').siblings('div#ui-datepicker-div').on('click',function () {
         //     _this.actions.onSelect();
         // });
-        this.el.on( 'click','input',function () {
-            _this.actions.onSelect();
-        });
         _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
     },
     beforeDestory:function(){

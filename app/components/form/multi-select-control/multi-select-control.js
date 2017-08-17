@@ -49,6 +49,7 @@ let config={
                 if(_this.data.isSys){
                     _.debounce(function(){Mediator.publish('form:userSysOptions:'+_this.data.tableId,_this.data)},200)();
                 }
+
                 _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
             };
             let autoSelect=new AutoSelect(data);

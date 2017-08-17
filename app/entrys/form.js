@@ -183,8 +183,6 @@ let FormEntrys = {
             data[obj.dfield]=obj;
         }
         staticData.data=data;
-        console.log('看看这个data');
-        console.log(staticData);
         // staticData['parentRealId']=staticData.data["real_id"]["value"]||'';
         // staticData['parentTableId']=staticData.data["table_id"]["value"]||'';
         // staticData['parentTempId']=staticData.data["temp_id"]["value"]||'';
