@@ -42,6 +42,10 @@ $boder-color: #ddd;
                 margin:0px !important;
             }
         }
+        .set-items {
+            max-height: 520px;
+            overflow: auto;
+        }
         .time-calendar-set{
             width: 400px;
             line-height: 40px;
