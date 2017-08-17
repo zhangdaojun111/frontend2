@@ -3,7 +3,7 @@ import Component from '../../../../lib/component';
 import Mediator from '../../../../lib/mediator';
 
 let config={
-    template: `<span class="removeble" data-id="{{id}}">{{name}}</span>`,
+    template: `<span data-id="{{id}}" style="background:#66CCFF">{{name}}</span>`,
     data:{},
     action:{
 
@@ -11,10 +11,10 @@ let config={
     afterRender(){
     }
 };
-class SelectedStaff extends Component{
+class SelectedStaffNoDel extends Component{
     constructor (data){
         super(config,data);
     }
 }
 
-export default SelectedStaff;
+export default SelectedStaffNoDel;

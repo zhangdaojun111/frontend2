@@ -11,8 +11,11 @@
             text-align: center;
             line-height: 30px;
             height: 30px;
-            background: #117DED;
-            color: #fff;
+            background-color: rgba(255,255,255,0);
+            border: 1px solid rgba(215,215,215,1);
+            border-radius: 4px;
+            box-shadow: none;
+            color: #666;
         }
     }
     .wf-del{
@@ -20,9 +23,6 @@
         .workflow-del{
             cursor: pointer;
             border-radius: 50%;
-            width: 14px;
-            height: 14px;
-            background: red;
             position: absolute;
             top: -6px;
             right: -6px;

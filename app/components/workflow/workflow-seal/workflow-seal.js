@@ -6,10 +6,8 @@ import Component from '../../../lib/component';
 import template from './workflow-seal.html';
 import './workflow-seal.scss';
 import msgBox from '../../../lib/msgbox';
-
 import Mediator from '../../../lib/mediator';
 import Uploader from '../../../lib/uploader'
-
 let config = {
     template: template,
     data: {
@@ -17,7 +15,6 @@ let config = {
         // isClone:true,
     },
     actions: {
-
         addImg(e){
             let imgFile = this.el.find('.J_add')[0].files[0];
             // this.el.find('.J_add').val("");
@@ -47,7 +44,6 @@ let config = {
             this.el.find('.J_ul-img').html(html);
         },
         /*cloneImg:function (el) {
-
             if(this.data.isClone){
                 this.data.isClone=false;
                 $(".cloneMask").show();
@@ -60,7 +56,6 @@ let config = {
                     left:'50%',
                     width:'100px',
                     height:'100px'
-
                 }));
             }
         },
@@ -106,24 +101,25 @@ let config = {
             console.log(disX+".."+disY);
             let fromPlace =  $("#place-form").children(":first");
             // let fromPlace =  $("#place-form");
-            console.log(fromPlace);
             if(fromPlace.length!=0){
+                let fromPlase = this.el.find(".fromClone");
                 let fromClone = fromPlace.clone();
                 let left =  parseInt(fromPlace.offset().left);
                 let top = parseInt(fromPlace.offset().top);
                 let width= fromPlace.css("width");
                 let height= fromPlace.css("height");
-                this.el.find(".fromClone").css({
+                fromPlase.css({
                     "top":top,
                     "left":left,
                     "width":width,
                     "height":height,
                     "background": "#fff"
                 })
-                this.el.find(".fromClone").children().remove();
-                this.el.find(".fromClone").append(fromClone);
+                fromPlase.children().remove();
+                fromPlase.append(fromClone);
+                fromPlase.find(".imgseal").hide();
+                fromPlase.find('.printS').hide();
             }
-
         },
         Imgcoordinate(e){
             let offsetLeft = this.el.find(".signatureMock").attr("disX");
@@ -229,14 +225,12 @@ let config = {
         //     console.log(13265);
         //     this.actions.showImgDel(e);
         // })
-
         // this.el.on("click",'.li-img',function () {
         //     self.actions.cloneImg($(this));
         // });
         // this.el.parents("#approval-workflow").on('mousedown','.cloneImg',function () {
         //     self.actions.cloneImgDrag($(this));
         // });
-
         $(".approval-info-item").on("click",(e)=>{
             this.actions.showImgDel(e);
         });
@@ -245,16 +239,13 @@ let config = {
         })
     },
     beforeDestory: function(){
-
     }
 }
-
 class WorkflowSeal extends Component{
     constructor (data){
         super(config,data);
     }
 }
-
 export default {
     showheader(data){
         let host = window.location.host;
@@ -271,4 +262,4 @@ export default {
         let el = $('#workflow-seal');
         component.render(el);
     },
-};
+}
