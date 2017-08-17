@@ -6,7 +6,6 @@ import '././approval-record.scss';
 let config={
     template: template,
     data:{},
-<<<<<<< HEAD
     actions:{
         tipsMouseover:function (pos,txt,event) {
 
@@ -44,12 +43,6 @@ let config={
         this.el.on("mousemove",".tipsText",function (e) {
             self.actions.tipsMousemove(pos,$("#J_tooltip"),e)
         })
-=======
-    action:{
-
-    },
-    afterRender(){
->>>>>>> 6a731e12ceb9bca4f9123d0fe897a06bed105a08
     }
 
 };

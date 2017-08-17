@@ -26,7 +26,6 @@ let config={
 
     },
     afterRender(){
-<<<<<<< HEAD
         
         Mediator.subscribe("workflow:focused", (res) => {
             if(res.length>0){
@@ -70,25 +69,6 @@ let config={
                     })
                 });
             }
-=======
-        this.el.on('click','#addFollower',()=>{
-            PMAPI.openDialogByIframe(`/iframe/addFocus/`,{
-                width:1000,
-                height:800,
-                title:`添加关注人`,
-                modal:true
-            }).then(res=>{
-                if(!res.onlyclose){
-                    let nameArr=[],idArr=[];
-                    for(var k in res){
-                        nameArr.push(res[k]);
-                        idArr.push(k);
-                    }
-                    this.el.find('#addFollowerList').text(nameArr);
-                    Mediator.publish('workflow:focus-users',idArr);
-                }
-            })
->>>>>>> 6a731e12ceb9bca4f9123d0fe897a06bed105a08
         });
    
     }
