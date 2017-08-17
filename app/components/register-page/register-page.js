@@ -247,7 +247,7 @@ let config ={
             this.actions.showManagerLogin();
         }).on('click','.login-btn',() => {
             this.actions.toLoginPage();
-        }).on('click','.register-btn',() => {
+        }).on('click','.register-page-btn',() => {
             this.actions.postRegister();
         }).on('click','.get-code',(event) => {
             this.actions.getVerificationCode(event);

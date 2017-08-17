@@ -98,7 +98,7 @@ export const UserInfoService = {
         });
     },
     register:function (json) {
-        let url = '/register/';
+        let url = '/register-page/';
         let body = this.utils.formatParams(json);
 
         return this.http.postImmediately({
@@ -107,6 +107,7 @@ export const UserInfoService = {
             type:'post'
         })
     },
+
     saveUserConfig:function (data) {
         let url = '/user_preference/';
         let temp = Utils.formatParams(data);

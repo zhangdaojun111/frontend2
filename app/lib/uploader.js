@@ -4,11 +4,22 @@ import {HTTP} from "./http";
 
 class Uploader {
 
-    constructor(){
+    constructor(options){
         this.formData = new FormData();
-        this.fileInput = $("<input type='file' style='visibility:hidden;' multiple='true'>");
+        let selectMode = " multiple='true'";
+        let accept = "";
+        if(options){
+            if(options['select_mode']=='single'){
+                selectMode = "";
+            }
+            if(options['file_filter']){
+                accept = " accept='"+options['file_filter']+"'";
+            }
+        }
+        this.fileInput = $("<input type='file' style='visibility:hidden;'"+accept+selectMode+">");
         this.fileInput.appendTo('body');
         this.fileList = {};
+        this.settings={};
         this.code = new Date().getTime();
     }
 
@@ -35,7 +46,7 @@ class Uploader {
                     that.fileList[name][that.code++] = {
                         filename: file.name,
                         file: file,
-                        state: 'initial'
+                        state: 'on'
                     };
                 }
             // }
@@ -77,21 +88,22 @@ class Uploader {
     }
 
     _deleteFileItem(name,code,url){
-        let fileChooser = this.fileList[name];
-        let fileItem = fileChooser[code];
+        let fileItem = this.fileList[name][code];
         if(fileItem['state']=='finished'){
             let json = {
                 file_ids:JSON.stringify([fileItem['fileId']])
             };
-            if(this.fileList['dinput_type'])
-                json['dinput_type'] = this.fileList['settings']['dinput_type'];
-            delete fileChooser[code];
+            if(this.settings['dinput_type']){
+                json['dinput_type'] = this.settings['dinput_type'];
+            }
+            delete this.fileList[name][code];
             return HTTP.postImmediately(url,json);
         } else if(fileItem['state']=='on'){
             fileItem['state']='pre-delete';
         } else {
-            delete fileChooser[code];
+            delete this.fileList[name][code];
         }
+        console.dir(this.fileList);
     }
 
     /**
@@ -110,24 +122,13 @@ class Uploader {
         for(let k of keys){
             let val = params[k];
             if(val){
-                this.formData.append(k,val);
+                this.formData.set(k,val);
             }
         }
-        this.fileList['settings']={};
+        this.settings = _.defaultsDeep(params,this.settings);
         if(params['md5'] || params['MD5']){
-            this.fileList['settings']['md5']=true;
-        }
-        if(params['per_size']){
-            this.fileList['settings']['per_size']=params['per_size']==0?1024*768:params['per_size'];
-        }
-        if(params['dinput_type']){
-            this.fileList['settings']['dinput_type']=params['dinput_type'];
-        }
-        if(params['content_type']){
-            this.fileList['settings']['content_type']=params['content_type'];
-        }
-        if(params['upload_file']){
-            this.fileList['settings']['upload_file']=params['upload_file'];
+            this.settings['md5']=true;
+            this.settings['per_size']=params['per_size']||(1024*768);
         }
     }
 
@@ -164,9 +165,10 @@ class Uploader {
      * @param url 上传地址
      * @param options 上传请求选项
      * @param onprogress 进程回调
-     *              function(event){} event.name,event.code
+     *              function(event){} event.name,event.code,event.loaded,event.total
+     * @param onCompleted 结束回调
      */
-    upload(url, options, onprogress){
+    upload(url, options, onprogress,onCompleted){
         let defaultOptions = {
             type: 'POST',
             url: url,
@@ -175,33 +177,29 @@ class Uploader {
             cache: false,
             processData: false,
             contentType: false,
-            timeout:60000,
-            success:function (data) {},
+            timeout: 60000,
+            success:onCompleted,
             error: function (error) {
                 console.dir(error);
             }
         };
 
-        this.fileList['settings']['options'] = _.defaultsDeep(options,defaultOptions);
-        this.fileList['settings']['onProgress'] = onprogress;
+        this.settings['options'] = _.defaultsDeep(options,defaultOptions);
+        this.settings['onProgress'] = onprogress;
         let keys = Object.keys(this.fileList);
         //如果内存CPU开销大的话要改为一个一个文件上传的串行模式
         for(let name of keys){
-            if(name == 'settings'){
-                continue;
-            }
             let codes = Object.keys(this.fileList[name]);
             for(let code of codes){
                 let fileItem = this.fileList[name][code];
-                if(this.fileList['settings']['per_size']){
+                if(this.settings['per_size']){
                     fileItem['index'] = 0;
-                    fileItem['chunks'] = Math.ceil(fileItem.file.size/this.fileList['settings']['per_size']);
+                    fileItem['chunks'] = Math.ceil(fileItem.file.size/this.settings['per_size']);
                 }
-                if(this.fileList['settings']['content_type']){
+                if(this.settings['content_type']){
                     fileItem['content_type']==fileItem.file.type;
                 }
-                fileItem['state']='on';
-                if(this.fileList['settings']['md5']){
+                if(this.settings['md5']){
                     browserMd5File(fileItem['file'],(err, md5)=>{
                         fileItem['md5'] = md5;
                         this._transmitData(name,code);
@@ -216,7 +214,7 @@ class Uploader {
     _transmitData(name,code){
         let fileItem = this.fileList[name][code];
         if(fileItem['state']!='on'){
-            if(fileItem['state'=='pre-delete']){
+            if(fileItem['state']=='pre-delete'){
                 delete this.fileList[name][code];
             }
             return;
@@ -224,81 +222,60 @@ class Uploader {
         //准备formData和options
         let keys = Object.keys(fileItem);
         for(let k of keys){
-            if(this.formData.get(k)){
+            let key = k;
+            if(this.formData.has(k)){
+                key = this.formData.get(k);
                 this.formData.delete(k);
             }
-            this.formData.append(k,fileItem[k]);
+            this.formData.set(key,fileItem[k]);
         }
         this.formData.delete('state');
-        let packSize = this.fileList['settings']['per_size'];
+        let packSize = this.settings['per_size'];
         let startIndex = fileItem['index']*packSize;
-        let fileField = 'file';
-        if(this.fileList['settings']['upload_file']){
-            fileField = 'upload_file';
-        }
+        let fileField = this.settings['file']||'file';
+        let onprogress = this.settings['onProgress']||(function(event){});
         if(packSize){
-            this.formData.delete('file');
-            this.formData.append(fileField,
-                fileItem.file.slice(startIndex, startIndex + packSize));
-            let t = this;
-            this.fileList['settings']['options']['xhr']=function () {
+            this.formData.set(fileField, fileItem.file.slice(startIndex, startIndex + packSize));
+            this.settings['options']['xhr']=function () {
                 var myXhr = $.ajaxSettings.xhr();
                 if(myXhr.upload){
-                    let onprogress = t.fileList['settings']['onProgress'];
-                    if(onprogress==undefined){
-                        onprogress = function(event){};
-                    }
-                    let startIndex = fileItem['index']*packSize;
                     myXhr.upload.addEventListener('progress',(event)=>{
-                        let obj = {
+                        onprogress(_.defaultsDeep({
                             code:code,
                             name:name,
-                            total:startIndex+event['total']
-                        }
-                        if(event['loaded']){
-                            obj['loaded'] = event['loaded']+startIndex;
-                        } else {
-                            obj['position'] = event['position']+startIndex;
-                        }
-                        let proEvent = _.defaultsDeep(obj,event);
-                        onprogress(proEvent);
+                            total:startIndex+event['total'],
+                            loaded:startIndex+(event['loaded']||event['position'])
+                        },event));
                     },false);
                     return myXhr;
                 }
             };
         } else {
-            this.formData.delete('file');
-            this.formData.append(fileField,fileItem.file);
-            this.fileList['settings']['options']['xhr']=function () {
+            this.settings['options']['xhr']=function () {
                 var myXhr = $.ajaxSettings.xhr();
                 if(myXhr.upload){
-                    if(onprogress==undefined){
-                        onprogress = function(event){};
-                    }
                     myXhr.upload.addEventListener('progress',(event)=>{
-                        event['code']=code;
-                        event['name']=name;
-                        onprogress(event);
+                        onprogress(_.defaultsDeep({code:code,name:name},event));
                     },false);
                     return myXhr;
                 }
             };
         }
 
-        HTTP.ajaxImmediately(this.fileList['settings']['options']).then(res=>{
+        HTTP.ajaxImmediately(this.settings['options']).then(res=>{
             if(res.success){
-                if(this.fileList['settings']['per_size']
-                    && fileItem['index'] < fileItem['chunks']-1){
+                if(this.settings['per_size'] && fileItem['index'] < fileItem['chunks']-1){
                     fileItem['index']++;
                     this._transmitData(name,code);
                 } else {
                     fileItem['state']='finished';
                     fileItem['fileId'] = res['file_id'];
-                    fileItem['thumbnail'] = res['thumbnail'];
+                    if(res['thumbnail']){
+                        fileItem['thumbnail'] = res['thumbnail'];
+                    }
                 }
             } else {
-                fileItem['state']='failed';
-                //todo：重传,需确认后端在失败后是否删除本次传输包的数据
+                fileItem['state']='on';
             }
         });
 
@@ -308,6 +285,7 @@ class Uploader {
         this.formData = null;
         this.fileList = null;
         this.code = null;
+        this.settings = null;
         this.fileInput.remove();
         this.fileInput = null;
     }

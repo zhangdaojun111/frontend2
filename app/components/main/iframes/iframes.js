@@ -156,16 +156,12 @@ export const IframeInstance = new Component({
         showTabsPopup:function () {
             this.actions.initTabList(this.data.sort);
             this.el.find('.tab-list').show();
-            this.hideFlag = false;
+            window.clearTimeout(this.data.timer)
         },
         hideTabsPopup(){
-            let that = this;
-            this.hideFlag = true;
-            setTimeout(function () {
-                if(that.hideFlag){
-                    that.el.find('.tab-list').hide();
-                }
-            },1000);
+            this.data.timer = window.setTimeout(() => {
+                this.el.find('.tab-list').hide();
+            }, 500);
         },
         initTabList:function (data) {
             let names = [];
@@ -255,12 +251,12 @@ export const IframeInstance = new Component({
         }).on('mouseenter','.view-popup',() => {
             console.log("enter");
             this.actions.showTabsPopup();
-        // }).on('click','.view-popup',(event) => {
-        //     event.stopPropagation();
-        // }).on('click','.drop-up-icon',() => {
-        //     this.el.find('.tab-list').hideTabsPopup();
-        // }).on('click','.drop-down-icon',() => {
-        //     this.el.find('.tab-list').hideTabsPopup();
+            // }).on('click','.view-popup',(event) => {
+            //     event.stopPropagation();
+            // }).on('click','.drop-up-icon',() => {
+            //     this.el.find('.tab-list').hideTabsPopup();
+            // }).on('click','.drop-down-icon',() => {
+            //     this.el.find('.tab-list').hideTabsPopup();
         }).on('click','.tab-list',(event) => {
             this.actions.controlTabs(event);
         }).on('mouseleave','.view-popup',() => {
@@ -268,7 +264,7 @@ export const IframeInstance = new Component({
             this.actions.hideTabsPopup();
         })
     },
-    
+
     firstAfterRender: function () {
         Mediator.on('menu:item:openiframe', (data) => {
             this.actions.openIframe(data.id, data.url, data.name)

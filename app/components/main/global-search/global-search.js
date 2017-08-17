@@ -17,27 +17,6 @@ import msgbox from "../../../lib/msgbox";
 let config ={
     template:template,
     data:{
-        historyList:[{
-            content:"test1",
-            index:"0",
-            py:"test1",
-            display:"true",
-        },{
-            content:"test2",
-            index:"1",
-            py:"test2",
-            display:"true",
-        },{
-            content:"test3",
-            index:"2",
-            py:"test3",
-            display:"true",
-        },{
-            content:"test4",
-            index:"3",
-            py:"test4",
-            display:"true",
-        }],
         testResult:{"data": "[{\"content\": \"sad\", \"index\": \"0\", \"py\": \"sad\", \"display\": true}, {\"index\": \"1\", \"py\": \"cz\", \"selector\": false, \"content\": \"cz\", \"display\": true, \"select\": false}, {\"index\": \"2\", \"py\": \"a b\", \"selector\": false, \"content\": \"a b\", \"display\": true, \"select\": false}, {\"index\": \"3\", \"py\": \"vvcx\", \"selector\": false, \"content\": \"vvcx\", \"display\": true, \"select\": false}, {\"index\": \"4\", \"py\": \"h\", \"selector\": false, \"content\": \"\\u534e\", \"display\": true, \"select\": false}, {\"index\": \"5\", \"py\": \"c\", \"selector\": false, \"content\": \"c\", \"display\": true, \"select\": false}, {\"index\": \"6\", \"py\": \"i\", \"selector\": false, \"content\": \"i\", \"display\": true, \"select\": false}]", "success": 1, "error": ""},
         // historyList:[],
         searchContent:"",
@@ -205,18 +184,22 @@ let config ={
             }
         },
         myKeyDown:function (event) {
-            console.log(event);
             if(event.keyCode === 13){       //回车，进行搜索
                 //根据id设置搜索的content
 
                 selectNum = -1;
                 this.actions.doSearch();
+            }else if(event.keyCode === 40){
+                this.data.selectNum++;
+                this.el.find('')
+            }else if(event.keyCode === 38){
+
+            }else{
+
+
+
+
             }
-
-
-
-
-
         }
     },
     afterRender:function () {
@@ -235,7 +218,6 @@ let config ={
         }).on('focus','.search-content',() => {
             this.actions.showHistoryList();
         }).on('blur','.global-search-main',() => {
-            console.log("oooo");
             this.actions.hideHistoryList();
         }).on('keydown','.search-content',(event) => {
             this.actions.myKeyDown(event);

@@ -73,7 +73,7 @@ let config = {
         cancel:function () {
             this.el.dialog('close');
         }
-        
+
     },
     afterRender:function () {
         this.actions.getData();
