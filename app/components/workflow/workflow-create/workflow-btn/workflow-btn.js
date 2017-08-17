@@ -1,3 +1,7 @@
+/**
+ * @author hufei
+ * 生成常用工作流按钮
+ */
 import Component from "../../../../lib/component";
 import template from './workflow-btn.html';
 import './workflow-btn.scss';

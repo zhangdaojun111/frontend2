@@ -1,3 +1,9 @@
+
+/**
+ *@author hufei
+ * 对工作流表单的操作
+ */
+
 import Component from "../../../lib/component";
 import template from './workflow-form.html';
 import './workflow-form.scss';

@@ -1,3 +1,7 @@
+/**
+ * @author hufei
+ * 创建工作流初始页面
+ */
 import Component from '../../../lib/component';
 import template from './workflow-create.html';
 import './workflow-create.scss';
