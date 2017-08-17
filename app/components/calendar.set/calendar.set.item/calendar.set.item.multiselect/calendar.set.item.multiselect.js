@@ -1,3 +1,7 @@
+/**
+ * Created by lipengfei.
+ * 下拉多选搜索（已删除）
+ */
 import Component from "../../../../lib/component";
 import template from './calendar.set.item.multiselect.html';
 import './calendar.set.item.multiselect.scss';
