@@ -151,9 +151,6 @@ let config = {
                 _this.actions.checkSelectedOpts(choosed);
             },
         };
-        if(this.data.isConfigText) {
-            console.log(this.data.replaceDropDown);
-        }
         this.data.multiSelectMenu = new AutoSelect(select_item_data);
         this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
         Mediator.on('calendar-set:editor', data => {
