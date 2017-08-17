@@ -1,3 +1,26 @@
+@import "../../../../assets/scss/core/base";
+.import-table {
+  width: 100%;
+  display: block;
+  tbody {
+    width: 100%;
+    display: block;
+    tr {
+      width: 100%;
+      display: block;
+      border: 1px solid #F2F2F2;
+      td {
+        min-height: 30px;
+        padding: 7px;
+      }
+      td:first-child {
+        width: 130px;
+        background: #FAFAFA;
+      }
+    }
+  }
+}
+
 .workflow {
   display: none;
 }

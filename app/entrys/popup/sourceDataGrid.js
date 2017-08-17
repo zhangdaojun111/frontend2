@@ -6,6 +6,7 @@ $(document).ready(function(){
         tableId: window.config.tableId || '',
         tableName: window.config.tableName || '',
         parentTableId: window.config.parentTableId || '',
+        parentTempId: window.config.parentTempId || '',
         parentRealId: window.config.parentRealId || '',
         rowId: window.config.rowId || '',
         fieldId: window.config.fieldId || '',

@@ -15,10 +15,11 @@ import FormEntrys from './form';
 import TreeView from  '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
-import Grid from '../components/dataGrid/data-table-page/data-table-page';
+import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import jsplumb from 'jsplumb';
 import {PMAPI,PMENUM} from '../lib/postmsg';
 
+WorkFlow.createFlow({flow_id:34,el:"#a"});
 
 WorkFlowForm.showForm();
 WorkFlowGrid.showGrid();
@@ -35,6 +36,8 @@ let get_workflow_info=()=>{
 }
 get_workflow_info();
 
+Mediator.publish('workflow:focused', []);
+
 //订阅workflow choose事件，获取工作流info并发布getInfo,获取草稿
 let wfObj;
 Mediator.subscribe('workflow:choose', (msg)=> {
@@ -48,7 +51,6 @@ Mediator.subscribe('workflow:choose', (msg)=> {
     })()
     .then(res=>{
         Mediator.publish('workflow:gotWorkflowInfo', res);
-        Mediator.publish('workflow:focused', []);
         return workflowService.validateDraftData({form_id:msg.formid});
     })
     .then(res=>{
