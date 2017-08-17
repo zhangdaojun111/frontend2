@@ -30,6 +30,7 @@ let config = {
         //     let str = '是否将字段 “'+ set.selectFieldName +'” 的值由 “'+ oldValue + '” 改为 “' + newValue + '”';
         //     this.comfirmWin( str );
         // }
+
     },
     afterRender: function() {
         console.log(this.data.remindTaskItemData);
@@ -40,12 +41,6 @@ let config = {
         //     this.data.isWaitCheck = true;
         // }
         let that = this;
-        this.el.find(".select-children").each(function(){
-            if($(this).attr("id") === that.data.remindTaskData.selectValue){
-                $(this).addClass("selected");
-                return false;
-            }
-        });
         if(this.data.remindTaskItemData['type'] === 1) {
             this.el.find('.task-show-text').html(this.data.remindTaskItemData['data3show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data3show'][0][0]['fieldValue']);
             this.el.on('click', '.task-show-text', () => {
@@ -92,7 +87,9 @@ let config = {
                 that.el.find(".select-options").hide();
                 $(this).removeClass("options-show");
             }
-
+        });
+        this.el.on('click','.select-options',function(){
+            event.stopPropagation();
         });
         $(document).click(function(){
             that.el.parents(".month-body").find(".select-options").hide();
