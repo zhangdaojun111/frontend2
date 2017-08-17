@@ -17,13 +17,30 @@ input[type="radio"] {
     width: 16px;
     height: 16px;
     box-sizing: border-box;
-    border: 2px solid rgba(0,0,0,.54);
+    border: 2px solid #676a6c;
     border-radius: 50%;
     cursor: pointer;
+    position: relative;
+   &:after{
+        content: '';
+        display: block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #3b8cff;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+       opacity: 0;
+    }
 }
-.radio-circle:active +.radio-val{
-    color: #06c;
-}
-.radio-val{
-    display: inline-block;
-}
+.active{
+     color: #3b8cff;
+     border-color: #3b8cff;
+    &:after{
+        opacity: 1;
+    }
+ }

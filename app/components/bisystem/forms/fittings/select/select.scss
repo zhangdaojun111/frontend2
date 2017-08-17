@@ -1,0 +1,17 @@
+.select{
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  overflow: hidden;
+  background: #fff;
+  color: #555;
+  border-bottom: 1px solid #ececec;
+  width: 280px;
+  select{
+    cursor: pointer;
+    padding: 10px 40px 10px 10px;
+    width: 100%;
+    border: none;
+    //appearance: none;
+  }
+}

@@ -21,7 +21,7 @@ let config = {
     firstAfterRender() {
     },
     beforeDestory() {}
-}
+};
 
 export class FormNormalComponent extends BiBaseComponent{
     constructor() {
@@ -42,14 +42,16 @@ export class FormNormalComponent extends BiBaseComponent{
         this.formGroup['base'] = base;
         this.formGroup['share'] = share;
         const formGroup = {
-            x: form.autoComplete
+            x: form.input,
+            y: form.input,
+            select: form.select,
+            checkbox: form.checkbox,
         };
         Object.keys(formGroup).map(type => {
             let component = new formGroup[type]();
             this.formGroup[type] = component;
             this.append(component, this.el.find('.form-group'))
-        });
-        this.formGroup.x.callBack = this.getChartField;
+        })
     }
 
     /**
@@ -58,19 +60,5 @@ export class FormNormalComponent extends BiBaseComponent{
     save() {
         const data  = this.data.formGroup;
         return data;
-    }
-
-
-    /**
-     * 获取x,y轴
-     */
-    async getChartField(tableId) {
-        console.log(tableId);
-        // if (tableId) {
-        //     let res = await ChartFormService.getChartField(tableId);
-        //     console.log(res);
-        // } else {
-        //     msgbox.alert('请先选择数据源')
-        // };
     }
 }
