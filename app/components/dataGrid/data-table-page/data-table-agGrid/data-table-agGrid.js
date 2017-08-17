@@ -1501,7 +1501,7 @@ let config = {
                         parent_record_id: this.data.parentRecordId,
                         btnType: 'new'
                     };
-                    let url = dgcService.returnIframeUrl( '/form/index/',obj );
+                    let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
 
                     let title = '新增'
                     this.actions.openSourceDataGrid( url,title );
@@ -1842,7 +1842,7 @@ let config = {
                     real_id: data.data._id,
                     btnType: 'view',is_view:1
                 };
-                let url = dgcService.returnIframeUrl( '/form/index/',obj );
+                let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
                 this.actions.openSourceDataGrid( url,title );
             }
@@ -1856,7 +1856,7 @@ let config = {
                     parent_record_id: this.data.parentRecordId,
                     real_id: data.data._id,
                     btnType: 'edit' };
-                let url = dgcService.returnIframeUrl( '/form/index/',obj );
+                let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '编辑'
                 this.actions.openSourceDataGrid( url,title );
             }
@@ -1886,7 +1886,7 @@ let config = {
                 real_id: data.data._id,
                 btnType: 'view',is_view:1
             };
-            let url = dgcService.returnIframeUrl( '/form/index/',obj );
+            let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
             let title = '查看'
             this.actions.openSourceDataGrid( url,title );
         },
