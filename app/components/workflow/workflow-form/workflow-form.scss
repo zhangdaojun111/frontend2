@@ -11,6 +11,7 @@
       cursor: pointer;
       margin-right: 10px;
     }
+    
     .wf-icon{
       margin-right: 10px;
     }
@@ -24,6 +25,18 @@
   }
   .show{
     display: block;
+  }
+  .J_del{
+    display: none;
+    position: absolute;
+    right: -22px;
+    top: 0;
+    width: 23px;
+    height: 23px;
+  }
+  .printimg{
+    position: absolute;
+    margin-top: 17px;
   }
 
 }

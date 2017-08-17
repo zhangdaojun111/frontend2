@@ -1,3 +1,7 @@
+/**
+ * @author hufei
+ * 首页中工作流的展示，但是没有首页了，组长喊先留着
+ */
 import Component from '../../../lib/component';
 import template from './workflow-catalog.html';
 import './workflow-catalog.scss';
