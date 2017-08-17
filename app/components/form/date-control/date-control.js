@@ -41,14 +41,12 @@ let config={
 
         }
     },
-    firstAfterRender(){
+    afterRender(){
         let _this=this;
+
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
-    },
-    afterRender(){
-        let _this=this;
         // this.el.find(".date_yy-mm-dd").on("click", function () {
         //     _this.el.find(".date_yy-mm-dd").val("年/月/日");
         //     //增加0

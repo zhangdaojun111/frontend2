@@ -3,7 +3,7 @@ import Mediator from '../../../lib/mediator';
 import template from './textarea-control.html'
 let config={
     template:template,
-    firstAfterRender(){
+    afterRender(){
         let _this=this;
         _this.el.on('input','input',_.debounce(function(){
             _this.data.value=$(this).val();
@@ -12,8 +12,6 @@ let config={
         _this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
-    },
-    afterRender(){
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
             this.el.find('.ui-width').attr('disabled',true);

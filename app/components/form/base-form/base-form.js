@@ -1270,6 +1270,15 @@ let config={
                         _this.childComponent[data[key].dfield]=multiLinkageControl;
                         break;
                     case 'MultiSelect':
+                        if(single.data('childData')){
+                            // data[key].childData=single.data('childData');
+                            data[key].childData='#*#2638_3egFSMCwDBHgNKBo59sr6P$#$#*#6487_VjN4tR8j6uChdEb8GkajaN';
+                        }
+                        if(single.data('selectType')){
+                            // data[key].childData=single.data('selectType');
+                            data[key].selectType='1';
+                        }
+                        data[key].is_special = data[key].field_content['special_multi_choice'] == 1?true:false;
                         let multiSelectControl = new MultiSelectControl(data[key]);
                         multiSelectControl.render(single);
                         _this.childComponent[data[key].dfield]=multiSelectControl;
@@ -1344,6 +1353,8 @@ let config={
         this.actions.addBtn();
         //控件值改变频道
         Mediator.subscribe('form:changeValue:'+_this.data.tableId,function(data){
+            console.log('值改变时间');
+            console.log(data);
             _this.actions.checkValue(data,_this);
         })
         //历史值触发
@@ -1389,6 +1400,9 @@ let config={
                 modal:true
             }).then((data) => {
                 console.log('快捷添加回显');
+                if(data.onlyclose){
+                    return;
+                }
                 _this.actions.addNewItem(data);
             });
 

@@ -46,7 +46,7 @@ let SettingPrint = {
         printTitles:[],
         myContent:'',
     },
-    firstAfterRender(){
+    afterRender(){
         let _this=this;
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
        _this.el.on('click','li',function(){

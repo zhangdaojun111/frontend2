@@ -5,21 +5,6 @@ import {AutoSelect} from "../../util/autoSelect/autoSelect"
 import {FormService} from "../../../services/formService/formService";
 let config={
     template:template,
-    firstAfterRender(){
-        let _this=this;
-        Mediator.subscribe('form:changeOption:'+_this.data.tableId,function(res){
-            if( _this.data.dfield && res == _this.data.dfield ){
-                _this.data.value = [];
-                _this.reload();
-            }
-        })
-        this.el.on('click','.add-item',function(){
-            _.debounce(function(){Mediator.publish('form:addItem:'+_this.data.tableId,_this.data)},200)();
-        })
-        this.el.on('click','.ui-history',function(){
-            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
-        });
-    },
     afterRender(){
         let _this=this;
         this.data.isInit=true;
@@ -37,6 +22,19 @@ let config={
             this.append(autoSelect,el);
         }
         this.data.isInit=false;
+        let _this=this;
+        Mediator.subscribe('form:changeOption:'+_this.data.tableId,function(res){
+            if( _this.data.dfield && res == _this.data.dfield ){
+                _this.data.value = [];
+                _this.reload();
+            }
+        })
+        this.el.on('click','.add-item',function(){
+            _.debounce(function(){Mediator.publish('form:addItem:'+_this.data.tableId,_this.data)},200)();
+        })
+        this.el.on('click','.ui-history',function(){
+            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
+        });
     },
     beforeDestory(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);

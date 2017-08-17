@@ -56,7 +56,7 @@ let AddItem = {
             });
         }
     },
-    firstAfterRender(){
+    afterRender(){
         let _this=this;
         this.el.on('click','.ui-del',function(){//此处不能用箭头函数 会造成this指针丢失
             _this.actions.deleteItem($(this));

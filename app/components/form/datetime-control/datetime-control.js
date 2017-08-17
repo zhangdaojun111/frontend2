@@ -50,14 +50,11 @@ let config={
             }
         }
     },
-    firstAfterRender:function(){
+    afterRender:function(){
         let _this=this;
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
-    },
-    afterRender:function(){
-        let _this=this;
         //控制到时分秒
         _this.el.find(".datetime").val("年/月/日 时:分:秒");
         _this.el.find(".datetime").datetimepicker({
