@@ -89,6 +89,8 @@ let config = {
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
+        let that = this;
+        this.actions.getCalendarTreeData(that);
         this.append(new LeftcontentCalendarset(this.data.calendarTreeData), this.el.find('.left-calendar-set'));
         this.append(new leftContentFinished(),this.el.find('.item-content-4'));
         Mediator.on('CalendarWorkflowData: workflowData', data => {
@@ -98,26 +100,12 @@ let config = {
                 this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
             });
         });
-        let that = this;
-        this.actions.getCalendarTreeData(that);
         Mediator.on('calendar-left:hideRemindType',data =>{
                 that.append(new LeftContentHide(data.data), this.el.find('.left-calendar-hide'));
         });
-        // Mediator.on('calendar-left:calendar-class-hide',data =>{
-        //     alert(1111111);
-        //     data.data.forEach((row) =>{
-        //         console.log(row);
-        //         that.append(new LeftContentHide(row), that.el.find('.left-calendar-hide'));
-        //     });
-        // });
         Mediator.on('calendar-left:showRemindType',()=>{
             that.actions.showRemindType(that);
         });
-        // CalendarService.getWorkflowRecords(data).then(res => {
-        //     res.rows.forEach((row) =>{
-        //         this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
-        //     });
-        // });
         that.el.on('click', '.hide-con',function(){
             let temp = $(this).parents('.item-title');
             that.actions.contentHide(that,temp);
