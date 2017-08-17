@@ -59,6 +59,26 @@
             .remind-auto-select {
                 border: 1px solid #dddddd;
                 padding: 10px;
+                .popup {
+                    display: none;
+                    width: 400px;
+                    position: absolute;
+                    z-index: 100 !important;
+                    background-color: white !important;
+                    padding-left: 0px !important;
+                    margin: 0px !important;
+                    height: auto!important;
+                    max-height: 300px!important;
+                    overflow: auto !important;
+                    li {
+                        margin-left: 0px;
+                        list-style-type: none !important;
+                        label{
+                            text-align: left;
+                            overflow:hidden;
+                        }
+                    }
+                }
             }
             .select-input {
                 width: 100%;
@@ -74,18 +94,5 @@
         background-color: #3d83cc;
         border: 0px;
         color: white;
-    }
-    .popup {
-        z-index: 100 !important;
-        background-color: white !important;
-        padding-left: 0px !important;
-        margin: 0px !important;
-        height: auto!important;
-        max-height: 300px!important;
-        overflow: auto !important;
-        li {
-            margin-left: 0px;
-            list-style-type: none !important;
-        }
     }
 }
