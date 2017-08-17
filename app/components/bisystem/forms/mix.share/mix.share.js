@@ -36,7 +36,6 @@ export class FormMixShareComponent extends BiBaseComponent {
      */
     renderFitting() {
         const themeData = {
-            name: 'theme',
             value:null,
             radios:[
                 {value:'blue', name:'蓝色'},

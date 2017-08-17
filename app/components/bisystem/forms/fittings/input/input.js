@@ -11,7 +11,7 @@ let config = {
     template: template,
     data: {
         value:null,
-        name: '请输入名称'
+        label: '请输入'
     },
     afterRender() {},
     firstAfterRender() {
@@ -23,7 +23,8 @@ let config = {
 }
 
 export class InputComponent extends FormFittingAbstract {
-    constructor() {
+    constructor(data) {
+        config.data = data;
         super(config)
     }
 

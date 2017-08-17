@@ -5,21 +5,14 @@
 
 import {BiBaseComponent} from '../../bi.base.component';
 import template from './base.html';
-import {fittings as form} from '../fittings/export.fittings';
 import './base.scss';
+import {instanceFitting} from '../fittings/export.fittings';
 
 let config = {
     template: template,
-    data: {
-        formGroup: {
-            name: form.input,
-            source: form.input
-        }
-    },
+    data: {},
     actions: {},
-    afterRender() {
-        // this.renderFitting();
-    },
+    afterRender() {},
     firstAfterRender() {
         this.renderFitting();
     }
@@ -28,16 +21,21 @@ let config = {
 export class FormBaseComponent extends BiBaseComponent {
     constructor() {
         super(config);
-    }
+        this.formGroup = null;
 
+    }
 
     /**
      * 渲染chart fittings
      */
     renderFitting() {
-        Object.values(this.data.formGroup).map(fitting => {
-            let component = new fitting();
-            this.append(component, this.el.find('.base'))
-        })
+        const chartNameData = {
+            value:null,
+            label: '请输入图表名称'
+        };
+        this.formGroup = {
+            chartName: instanceFitting({type:'input',data:chartNameData, me: this,container: 'form-chart-base' }),
+        }
     }
+
 }

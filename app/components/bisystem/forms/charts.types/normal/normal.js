@@ -78,7 +78,6 @@ export class FormNormalComponent extends BiBaseComponent{
         this.append(base, this.el.find('.form-group-base'));
         this.append(share, this.el.find('.form-group-share'));
         const doubleYdata = {
-            name: 'doubleY',
             value:null,
             checkboxs:[
                 {value:'', name:'是否展示双y轴'},
@@ -86,7 +85,6 @@ export class FormNormalComponent extends BiBaseComponent{
             onChange: this.showY1Axis.bind(this)
         };
         const defaultYdata = {
-            name: 'defaultY',
             value:null,
             checkboxs:[
                 {value:'', name:'默认显示Y轴数据'},
@@ -94,20 +92,57 @@ export class FormNormalComponent extends BiBaseComponent{
             onChange: this.selectYAxis.bind(this)
         };
         const ySelectedGroup = {
-            name: 'ySelectedGroup',
             value:null,
             checkboxs:[],
             onChange: null
         };
+        const yHorizontalData = {
+            value:null,
+            checkboxs:[
+                {value:'', name:'是否横向展示y轴数据'},
+            ],
+            onChange: null
+        };
+        const yHorizontalColumnsData = {
+            value:null,
+            checkboxs:[
+                {value:'', name:'是否展示所有x轴数据(x轴45°展示)'},
+            ],
+            onChange: null
+        };
+        const xMarginBottomData = {
+            value:null,
+            label: 'x轴下边距(未选择X轴竖向展示时生效)'
+        };
+        const echartXData = {
+            value:null,
+            checkboxs:[
+                {value:'', name:'x轴竖向展示'},
+            ],
+        };
 
+        const echartXTextNumData = {
+            value:null,
+            label: 'x轴每行字数'
+        };
+        const echartXMarginBottom = {
+            value:null,
+            label: 'x轴下边距'
+        };
         this.formGroup = {
             chartName: base,
             share: share,
             x: instanceFitting({type:'autoComplete',me: this,container: 'form-group-x' }),
             y: [this.y, this.y1],
-            doubleY: instanceFitting({type:'checkbox', data: doubleYdata,me: this,container: 'form-group-doubleY' }),
+            doubleY: instanceFitting({type:'checkbox', data: doubleYdata,me: this,container: 'form-group-doubleY'}),
             defaultY: instanceFitting({type:'checkbox', data: defaultYdata,me: this,container: 'form-group-defaultY .default-y-tit' }),
             ySelectedGroup:instanceFitting({type:'checkbox', data: ySelectedGroup,me: this,container: 'form-group-defaultY .default-y-selected' }),
+            yHorizontal: instanceFitting({type:'checkbox', data: yHorizontalData,me: this,container: 'form-group-yHorizontal'}),
+            yHorizontalColumns: instanceFitting({type:'checkbox', data: yHorizontalColumnsData,me: this,container: 'form-group-yHorizontalColumns .x45'}),
+            xMarginBottom: instanceFitting({type:'input',data:xMarginBottomData,me: this,container: 'form-group-yHorizontalColumns .x-margin-bottom'}),
+            echartX: instanceFitting({type:'checkbox', data: echartXData,me: this,container: 'form-group-echartX .tit'}),
+            echartXTextNum: instanceFitting({type:'input', data: echartXTextNumData,me: this,container: 'form-group-echartX .echartX-text-num'}),
+            echartXMarginBottom: instanceFitting({type:'input', data: echartXMarginBottom,me: this,container: 'form-group-echartX .echartX-margin-bottom'})
         };
     }
 
@@ -178,6 +213,7 @@ export class FormNormalComponent extends BiBaseComponent{
             this.y1.map(y => y.destroySelf());
             this.y1 = [];
         };
+        this.selectYAxis(true);
     }
 
     /**
@@ -203,7 +239,11 @@ export class FormNormalComponent extends BiBaseComponent{
         if (flag) {
             let checkboxs = [];
             this.y.concat(this.y1).map(y => {
-                checkboxs.push(y.data.field[0]);
+                if(y.data.field) {
+                    if (y.data.field[0]) {
+                        checkboxs.push(y.data.field[0]);
+                    }
+                }
             });
             this.formGroup.ySelectedGroup.data.checkboxs = checkboxs;
             this.formGroup.ySelectedGroup.reload();

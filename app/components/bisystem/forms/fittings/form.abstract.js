@@ -6,4 +6,5 @@ import {BiBaseComponent} from '../../bi.base.component';
 export class FormFittingAbstract extends BiBaseComponent{
     getValue() {}
     setValue() {}
+    onChange() {}
 }
