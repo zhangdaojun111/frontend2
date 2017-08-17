@@ -20,7 +20,6 @@ let config = {
         // biVisible: true,
 
         postMessageVisible: window.config.sysConfig.userInfo.is_superuser === 1,
-
         calendarVisible: window.config.sysConfig.logic_config.use_canlendar,
         biVisible: window.config.sysConfig.logic_config.use_bi,
         imVisible: window.config.sysConfig.logic_config.use_im,
