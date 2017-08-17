@@ -58,10 +58,16 @@ export const workflowService={
     getRecords(params){
         return HTTP.postImmediately('/get_workflow_records/',params)
     },
+    approveMany(params){
+        return HTTP.postImmediately('/approve_many_workflow/',params)
+    },
     approve(params){
         return HTTP.postImmediately('/approve_workflow_record/',params)
     },
     getRecordInfo(params){
         return HTTP.postImmediately('/get_form_dynamic_data/',params)
-    }
+    },
+    getPrepareParams(params){
+        return HTTP.postImmediately('/prepare_params/', params)
+    },
 }

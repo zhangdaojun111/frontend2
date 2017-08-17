@@ -17,15 +17,18 @@ let config = {
     },
     actions: {
         operate:function(){
-            let oper = this.el.find('.J_operate'),
-                del = this.el.find('.J_del'),
-                operVal =  oper.val();
-            if(operVal == '取消'){
-               oper.val("编辑");
+            let oper = this.el.find('.J_operate');
+            let del = this.el.find('.J_del');
+            if(this.favoDel){
                 del.hide();
+                oper.text("");
+                 oper.addClass("workflow-icon");
+                this.favoDel = false;
             }else{
-                oper.val("取消");
+                oper.text("取消");
+                oper.removeClass("workflow-icon");
                 del.show();
+                this.favoDel = true;
             }
         },
         //向后台发送数据，删除该常用工作流,现在没有接口，只是在dom中删除这个
@@ -58,6 +61,7 @@ let config = {
         }
     },
     afterRender: function() {
+        this.favoDel = false;
         this.actions.init();
         //添加流程下来菜单
         this.append(new WorkFlowTree(this.data[0]), this.el.find('.J_select-container'));
