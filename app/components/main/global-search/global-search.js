@@ -219,17 +219,6 @@ let config ={
             }else{
 
             }
-
-
-
-
-
-
-
-
-
-
-
         }
     },
     afterRender:function () {
