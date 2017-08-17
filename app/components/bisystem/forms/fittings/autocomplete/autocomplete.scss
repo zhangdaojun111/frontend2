@@ -1,13 +1,16 @@
 .auto-select-component {
-    .popup{
-        background:#ffffff;
-        max-height:400px;
-        z-index: 10;
-    }
     border: none;
     border-bottom: 1px solid #ececec ;
-    .text{
-        border: none!important;
+    .popup{
+      background:#ffffff;
+      max-height:400px;
+      z-index: 10;
+      border: 0;
+      box-shadow: 0 2px 5px 1px rgba(0,0,0,.2)
     }
-
+    .text{
+      height: 40px!important;
+      line-height: 40px!important;
+      border: none!important;
+    }
 }

@@ -5,7 +5,7 @@
     display: block;
     font-size: 12px;
     padding: 2px 0;
-    color: #3b8cff;
+    color: #757575;
   }
   input{
     font-size: 16px;
@@ -20,9 +20,12 @@
     border-bottom-color: #3b8cff;
     animation: wid-long 1s;
   }
+  input:focus + span{
+    transform: translate(0,-55px);
+  }
   @keyframes  wid-long{
     from{
-      width: 0
+     width: 0;
     }
     to{
       width: 100%;
