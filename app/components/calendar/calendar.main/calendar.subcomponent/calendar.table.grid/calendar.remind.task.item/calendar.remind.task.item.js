@@ -19,14 +19,21 @@ let config = {
     },
     afterRender: function() {
         this.el.find('.task-bg-color').css({backgroundColor: this.data.remindTaskItemData['color']});
-        if(this.data.remindTaskData === "已完成") {
-            this.data.isFinishedTask = true;
-        }else if(this.data.remindTaskData === "待完成"){
-            this.data.isWaitCheck = true;
-        }
+        // if(this.data.remindTaskData === "已完成") {
+        //     this.data.isFinishedTask = true;
+        // }else if(this.data.remindTaskData === "待完成"){
+        //     this.data.isWaitCheck = true;
+        // }
+        let that = this;
+        this.el.find(".select-children").each(function(){
+            if($(this).attr("id") === that.data.remindTaskData.selectValue){
+                $(this).addClass("selected");
+                return false;
+            }
+        });
         if(this.data.remindTaskItemData['data3show']) {
             this.el.find('.task-show-text').html(this.data.remindTaskItemData['data3show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data3show'][0][0]['fieldValue']);
-            this.el.on('click', '.task-item', () => {
+            this.el.on('click', '.task-show-text', () => {
                 CalendarRemind.data.remindTable = this.data.remindTaskItemData.tableName;
                 CalendarRemind.data.remindDateProp = this.data.remindTaskItemData.fieldName;
                 CalendarRemind.data.remindDetail = this.data.remindTaskItemData.data2show;
@@ -45,7 +52,7 @@ let config = {
 
         }else {
             this.el.find('.task-show-text').html(this.data.remindTaskItemData['data']['name']);
-            this.el.on('click', '.task-item', () => {
+            this.el.on('click', '.task-show-text', () => {
                 console.log(this.data.remindTaskItemData);
                 PMAPI.openDialogByIframe(`/wf/approval/?record_id=${this.data.remindTaskItemData['data']['id']}&form_id=${this.data.remindTaskItemData['data']['form_id']}&table_id=${this.data.remindTaskItemData['data']['table_id']}&flow_id=${this.data.remindTaskItemData['data']['flow_id']}`,{
                     width:1500,
@@ -53,15 +60,32 @@ let config = {
                     // title:"审批工作流",
                     modal:true
                 })
-            })
+            });
         }
+        this.el.on('click','.task-state-icon',function(){
+            event.stopPropagation();
+            if(!$(this).is(".options-show")){
+                that.el.parents(".month-body").find(".select-options").hide();
+                that.el.parents(".month-body").find(".task-state-icon").removeClass("options-show");
+                that.el.find(".select-options").show();
+                $(this).addClass("options-show");
+            }
+            else{
+                that.el.find(".select-options").hide();
+                $(this).removeClass("options-show");
+            }
+        });
+        $(document).click(function(){
+            that.el.parents(".month-body").find(".select-options").hide();
+            that.el.parents(".month-body").find(".task-state-icon").removeClass("options-show");
+        })
     }
 };
 
 class CalendarRemindTaskItem extends Component {
     constructor(data) {
         config.data.remindTaskItemData = data;
-        config.data.remindTaskData = data['data3show'][0][0].fieldValue;
+        config.data.remindTaskData = data['data3show'][0][0];
         super(config);
     }
 }

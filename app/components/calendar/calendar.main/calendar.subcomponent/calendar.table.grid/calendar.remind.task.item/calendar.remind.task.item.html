@@ -2,15 +2,13 @@
 <div class="task-item">
     <span class="task-bg-color"></span>
     <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-finished.png" alt="">
-    <!--{{#if isFinishedTask}}-->
-        <!--<img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-finished.png" alt="">-->
-    <!--{{/if}}-->
-    <!--{{#if isWaitCheck}}-->
-        <!--<img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-waitcheck.png" alt="">-->
-    <!--{{/if}}-->
-        <!--<img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-pending.png" alt="">-->
-
-
+    {{#if remindTaskItemData.isSetSelect}}
+        <div class="select-options" style="display: none">
+            {{#each remindTaskItemData.selectOption}}
+            <span class="select-children" id="{{this.value}}">{{this.label}}</span>
+            {{/each}}
+        </div>
+    {{/if}}
     <span class="task-show-text"></span>
 </div>
 {{/if}}
