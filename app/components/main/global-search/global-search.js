@@ -182,8 +182,10 @@ let config ={
             }
         },
         setItemHover:function (event) {
-            console.log(event);
-            event.target.addClass('item-selected');
+            $(event.target).addClass('item-selected');
+        },
+        resetItemHover:function (event) {
+            $(event.target).removeClass('item-selected');
         },
         myKeyDown:function (event) {
             if(event.keyCode === 13){       //回车，进行搜索
@@ -234,8 +236,10 @@ let config ={
             this.actions.hideHistoryList();
         }).on('keydown','.search-content',(event) => {
             this.actions.myKeyDown(event);
-        }).on('hover','.record-item',(event) => {
-            this.actions.setItemHover();
+        }).on('mouseenter','.record-item',(event) => {
+            this.actions.setItemHover(event);
+        }).on('mouseleave','.record-item',(event) => {
+            this.actions.setItemHover(event);
         })
 
     },
