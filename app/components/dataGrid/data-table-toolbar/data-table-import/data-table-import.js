@@ -57,15 +57,20 @@ let config = {
                     this.el.find( '.uploadRemark' ).show();
                     this.el.find( '.uploadRemark-con' )[0].innerHTML = res["data"]["upload_exec_file_remark"];
                 }
+                this.el.find( '.chooseFlow' ).on( 'change',()=>{
+                    this.actions.drawFlowChart();
+                } )
             } )
         },
         //设置流程图
         //执行导入
         drawFlowChart: function () {
             let obj = {
-                flow_id: this.el.find( '.chooseFlow' )[0].value
+                flow_id: this.el.find( '.chooseFlow' )[0].value,
+                el: this.el.find( '.flow-chart' )
             }
-            // let flowchart =( obj );
+            let flowchart = WorkFlow.createFlow( obj );
+            this.el.find( '.flowCharCon' )[0].style.width = '95%';
         },
         import: function () {
             let i = 0;

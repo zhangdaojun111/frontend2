@@ -382,16 +382,6 @@ let FormEntrys = {
     },
     //创建表单入口
     async createForm(config={}){
-        console.log('更上去了么')
-        console.log('更上去了么')
-        console.log('更上去了么')
-        console.log('更上去了么')
-        console.log('更上去了么')
-        console.log('更上去了么')
-        console.log('更上去了么')
-        console.log('更上去了么')
-        console.log('更上去了么')
-        console.log('更上去了么')
         console.time('获取表单数据的时间');
         this.init(config);
         let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap">`).prependTo(this.el);
@@ -399,6 +389,8 @@ let FormEntrys = {
         this.findFormIdAndFlowId(res);
         let json=this.createPostJson();
         res =await FormService.getFormData(json);
+        console.timeEnd('获取表单数据的时间');
+        console.time('form创建时间');
         //处理数据
         let data=this.mergeFormData(res[0],res[1]);
         //检查表单类型

@@ -45,6 +45,18 @@
       display: none;
     }
 
+    .flowCharCon {
+      width: 95%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .flow-chart {
+      overflow: scroll;
+      width: 100%;
+      max-height: 300px;
+    }
+
     .need-more {
       display: none;
     }
