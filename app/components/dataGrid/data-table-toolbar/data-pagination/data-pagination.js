@@ -172,7 +172,7 @@ let config = {
             this.actions.paginationChanged(obj);
         },
         //分页变化
-        paginationChanged: function () {
+        paginationChanged: function (obj) {
         },
         //外部刷新分页
         setPagination: function ( total,currentPage ) {
