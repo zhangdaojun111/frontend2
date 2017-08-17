@@ -22,7 +22,6 @@ let config={
             this.append(autoSelect,el);
         }
         this.data.isInit=false;
-        let _this=this;
         Mediator.subscribe('form:changeOption:'+_this.data.tableId,function(res){
             if( _this.data.dfield && res == _this.data.dfield ){
                 _this.data.value = [];
