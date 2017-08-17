@@ -13,10 +13,9 @@ let config={
         },300));
         let config={
             tableId:this.data.value,
-            parentTableId:this.data.parent_table_id,
-            parentTempId:this.data.parent_temp_id,
+            parentTableId:this.data.tableId,
+            parentTempId:this.data.temp_id,
             rowId:this.data.parent_temp_id,
-            showCorrespondenceSelect:true,
             viewMode:'viewFromCorrespondence',
             recordId:this.data.recordId,
         }

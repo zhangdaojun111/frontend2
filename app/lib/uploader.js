@@ -275,8 +275,8 @@ class Uploader {
                     }
                 }
             } else {
-                fileItem['state']='failed';
-                //todo：重传,需确认后端在失败后是否删除本次传输包的数据
+                fileItem['state']='on';
+                this._transmitData(name,code);
             }
         });
 

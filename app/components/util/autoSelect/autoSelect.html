@@ -5,14 +5,20 @@
         <div class="item" title="点击删除" data-id="{{id}}">{{name}}</div>
         {{/each}}
     </div>
-    <ul>
-        {{#each list}}
-        <li data-id="{{id}}" data-name="{{name}}" data-py="{{py}}">
-            <label>
-                <input type="checkbox" class="checkbox" name="" data-id="{{id}}" data-name="{{name}}"/>
-                <span>{{name}}</span>
-            </label>
-        </li>
-        {{/each}}
-    </ul>
+    <div class="list">
+        <ul>
+            {{#each list}}
+            <li data-id="{{id}}" data-name="{{name}}" data-py="{{py}}">
+                <label>
+                    <input type="checkbox" class="checkbox" name="" data-id="{{id}}" value="{{id}}" data-name="{{name}}"/>
+                    <span>{{name}}</span>
+                </label>
+            </li>
+            {{/each}}
+        </ul>
+        <div>
+            <button>全选</button>
+        </div>
+    </div>
+
 </div>
