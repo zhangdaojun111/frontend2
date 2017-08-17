@@ -37,6 +37,4 @@ export const TabService = {
             type:'post'
         })
     }
-
-
 };

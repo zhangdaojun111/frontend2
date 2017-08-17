@@ -15,7 +15,4 @@ export const GlobalService = {
         })
     },
 
-
-
-
 };
