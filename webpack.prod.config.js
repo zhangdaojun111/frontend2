@@ -23,6 +23,7 @@ module.exports = {
         approvalWorkflow: path.resolve(APP_PATH, 'entrys/approvalWorkflow.js'),
         addFocus: path.resolve(APP_PATH, 'entrys/popup/addFocus.js'),
         addSigner: path.resolve(APP_PATH, 'entrys/popup/addSigner.js'),
+        addWf: path.resolve(APP_PATH, 'entrys/popup/addWf.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         customDataGrid: path.resolve(APP_PATH, 'entrys/popup/customDataGrid.js'),
         dataImport: path.resolve(APP_PATH, 'entrys/popup/dataImport.js'),
