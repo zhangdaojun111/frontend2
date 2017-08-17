@@ -13,6 +13,8 @@ import BuildInControl from "../buildIn-control/buildIn-control";
 import MultiLinkageControl from "../multi-linkage-control/multi-linkage-control";
 import YearMonthControl from "../year-month-control/year-month-control";
 import TimeControl from "../time-control/time-control";
+import DateControl from "../date-control/date-control";
+import DateTimeControl from "../datetime-control/datetime-control";
 import Mediator from "../../../lib/mediator";
 import {HTTP} from "../../../lib/http";
 import {FormService} from "../../../services/formService/formService"
@@ -416,17 +418,13 @@ let config={
             let data=this.data.data;
             for(let key in data) {
                 let val = data[key]["value"];
-                let d = {
-                    data: data[key],
-                    value: val
-                };
                 if(val != "" || !$.isEmptyObject(val)) {
                     if($.isArray(val)){
                         if(val.length != 0){
-                            this.actions.checkValue(d,this);
+                            this.actions.checkValue(data[key],this);
                         }
                     }else{
-                        this.actions.checkValue(d,this);
+                        this.actions.checkValue(data[key],this);
                     }
                 }
             }
@@ -759,7 +757,15 @@ let config={
             for(let key in data){
                 formValue[key]=data[key].value;
             }
-            return formValue;
+            let {error,errorMsg} = this.actions.validForm(this.data.data,formValue);
+            if(error){
+                return {
+                    error:error,
+                    errorMessage:errorMsg
+                }
+            }else{
+                return formValue;
+            }
         },
 
         //统计功能
@@ -822,15 +828,11 @@ let config={
             }
         },
         //赋值
-        setFormValue(dfield,value,label){
+        setFormValue(dfield,value){
             let data=this.data.data[dfield];
             if(data){
                 let childComponet=this.childComponent[dfield];
                 childComponet.data["value"] = data["value"] = value;
-                if(data['type'] == 'Select' || data['type']=='Buildin'){
-                    childComponet.data["showValue"] = data["showValue"] = label;
-                }
-                childComponet.destroyChildren();
                 childComponet.reload();
             }
         },
@@ -974,29 +976,25 @@ let config={
                 json['buildin_id']=this.data.buildId;
             }
             let res= await FormService.saveAddpageData(json)
-                    if(res.succ == 1){
-                        if(this.data.isAddBuild && !this.flowId){
-                            let data={new_option:{
-                                py: "213213(lz)",
-                                value: "59892cbeca8b367dfbcff98d",
-                                label: "213213(离职)"}}
-                            PMAPI.sendToParent({
-                                type: PMENUM.close_dialog,
-                                key:this.data.key,
-                                data:data
-                            });
-                        }
-                        MSG.alert('保存成功');
-                    }
-                    // this.successAlert(res["error"]);
-                    //自己操作的新增和编辑收到失效推送自己刷新
-                    // this.isSuccessSubmit();
-                    //清空子表内置父表的ids
-                    // delete this.globalService.idsInChildTableToParent[this.tableId];
-        },
-
-        setTableIdToOptions(options,tableId){
-                options['tableId']=tableId;
+            if(res.succ == 1){
+                if(this.data.isAddBuild && !this.flowId){
+                    let data={new_option:{
+                        py: "213213(lz)",
+                        value: "59892cbeca8b367dfbcff98d",
+                        label: "213213(离职)"}}
+                    PMAPI.sendToParent({
+                        type: PMENUM.close_dialog,
+                        key:this.data.key,
+                        data:data
+                    });
+                }
+                MSG.alert('保存成功');
+            }
+            // this.successAlert(res["error"]);
+            //自己操作的新增和编辑收到失效推送自己刷新
+            // this.isSuccessSubmit();
+            //清空子表内置父表的ids
+            // delete this.globalService.idsInChildTableToParent[this.tableId];
         },
 
         //转到编辑模式
@@ -1006,21 +1004,17 @@ let config={
                 real_id:_this.data.realId,
                 is_view:0,
             }
-            let res=await FormService.getDynamicDataImmediately(json)
-                for(let key in _this.data.data){
-                    _this.data.data[key]['is_view']=res['data'][key]['is_view'];
-                    if(!_this.childComponent[key]){
-                        continue;
-                    }
-                    _this.childComponent[key]['data']['is_view']=_this.data.data[key]['is_view'];
-                    if(_this.childComponent[key].data.type=='MultiLinkage'){
-                        _this.childComponent[key].actions.changeView(_this.childComponent[key],res['data'][key]['is_view']);
-                    }else{
-                    _this.childComponent[key].reload();
+            let res=await FormService.getDynamicDataImmediately(json);
+            for(let key in _this.data.data){
+                _this.data.data[key]['is_view']=res['data'][key]['is_view'];
+                if(!_this.childComponent[key]){
+                    continue;
                 }
-                }
-                _this.data.btnType='new';
-                _this.actions.addBtn();
+                _this.childComponent[key]['data']['is_view']=_this.data.data[key]['is_view'];
+                _this.childComponent[key].reload();
+            }
+            _this.data.btnType='new';
+            _this.actions.addBtn();
                 // for(let key in this.childComponent){
                 //     if(this.childComponent[key].data.type!='Readonly'){
                 //         this.childComponent[key].data.is_view='1';
@@ -1031,11 +1025,11 @@ let config={
                 //     }
                 // }
         },
-
+        //修改可修改性
         reviseCondition:function(editConditionDict,value,_this) {
         // if(this.dfService.isView){return false;}
-        let arr = [];
-        for(let key in editConditionDict["edit_condition"]){
+            let arr = [];
+            for(let key in editConditionDict["edit_condition"]){
             if( key == 'and' ){
                 let andData = editConditionDict["edit_condition"][key];
                 for( let f in andData  ){
@@ -1075,11 +1069,14 @@ let config={
                 }
             }
         }
-         },
-
-         checkValue:function(data,_this){
+        },
+        //触发事件检查
+        checkValue:function(data,_this){
+            if(!_this.childComponent[data.dfield]){
+                return;
+            }
             if(_this.data.data[data.dfield]){
-                _this.data.data[data.dfield]=data;
+                _this.data.data[data.dfield]=_.defaultsDeep({},data);
             }
             if(data.type=='Buildin'){
                 let id = data["id"];
@@ -1127,7 +1124,6 @@ let config={
                     _this.actions.reviseCondition(data,data.value,_this);
                 },0);
             }
-
             //修改必填性功能
             if(data["required_condition"] && data["required_condition"] !== "") {
                 _this.actions.requiredCondition(data,data['value']);
@@ -1144,7 +1140,7 @@ let config={
             }
             _this.el.find('.select-drop').hide();
         },
-
+        //添加按钮组
         addBtn(){
             this.el.find('.ui-btn-box').remove();
             //添加提交按钮
@@ -1179,150 +1175,195 @@ let config={
                         <div class="btn-ripple ripple"></div>
                     </button>
                 </div></div>`)
-        }
-        }
-    },
-    firstAfterRender(){
-        let _this=this;
-        this.set('childComponent',{});
-        let data=_this.data.data;
-        this.set('oldData',_.defaultsDeep({},data));
-        this.actions.triggerControl();
-        for(let key in data){
-            let single=_this.el.find('div[data-dfield='+data[key].dfield+']');
-            let type=single.data('type');
-            if(data[key].required){
-                data[key]['requiredClass']=data[key].value==''?'required':'required2';
             }
-            //数据填充后，根据修改条件对不同框进行只读操作
-            setTimeout(()=>{_this.actions.reviseCondition(data[key],data[key].value,_this);},0);
-            if(type == 'Select' || type=='Buildin' ){
-                if(data[key].value){
-                    for(let obj of data[key].options){
-                        if(obj.value == data[key].value){
-                            data[key]['showValue']=obj.label;
-                            break;
+        },
+        //动态创建组件
+        createFormControl(){
+            let _this=this;
+            this.set('childComponent',{});
+            let data=this.data.data;
+            this.set('oldData',_.defaultsDeep({},data));
+            for(let key in data){
+                let single=this.el.find('div[data-dfield='+data[key].dfield+']');
+                let type=single.data('type');
+                if(data[key].required){
+                    data[key]['requiredClass']=data[key].value==''?'required':'required2';
+                }
+                if(single.data('width')){
+                    data[key]['width']=single.data('width')+'px';
+                }else{
+                    data[key]['width']='240px';
+                }
+                //数据填充后，根据修改条件对不同框进行只读操作
+                setTimeout(()=>{_this.actions.reviseCondition(data[key],data[key].value,_this);},0);
+                //在这里根据type创建各自的控件
+                switch (type){
+                    case 'Correspondence':
+                        data[key]['temp_id']=data['temp_id']['value'];
+                        let correspondence=new Correspondence(data[key]);
+                        correspondence.render(single);
+                        _this.childComponent[data[key].dfield]=correspondence;
+                        break;
+                    case 'Songrid':
+                        // let popupType=single.data('popupType');
+                        let popupType=0;
+                        data[key]['temp_id']=data['temp_id']['value'];
+                        let songrid=new Songrid(Object.assign(data[key],{popupType:popupType}));
+                        songrid.render(single);
+                        _this.childComponent[data[key].dfield]=songrid;
+                        break;
+                    case 'Radio':
+                        for(let obj of data[key].group){
+                            obj['name']=data[key].dfield;
+                            if(obj.value==data[key].value){
+                                obj['checked']=true;
+                            }else{
+                                obj['checked']=false;
+                            }
                         }
+                        let radio=new Radio(data[key]);
+                        radio.render(single);
+                        _this.childComponent[data[key].dfield]=radio;
+                        break;
+                    case 'Input':
+                        let input=new Input(data[key]);
+                        input.render(single);
+                        _this.childComponent[data[key].dfield]=input;
+                        break;
+                    case 'Textarea':
+                        let textArea=new TextArea(data[key]);
+                        textArea.render(single);
+                        _this.childComponent[data[key].dfield]=textArea;
+                        break;
+                    case 'Readonly':
+                        let readonly=new Readonly(data[key]);
+                        readonly.render(single);
+                        _this.childComponent[data[key].dfield]=readonly;
+                        break;
+                    case 'EnctyptInput':
+                        let password=new Password(data[key]);
+                        password.render(single);
+                        _this.childComponent[data[key].dfield]=password;
+                        break;
+                    case 'Hidden':
+                        let hidden=new Hidden(data[key]);
+                        hidden.render(single);
+                        _this.childComponent[data[key].dfield]=hidden;
+                        break;
+                    case 'Select':
+                        let selectControl=new SelectControl(data[key]);
+                        selectControl.render(single);
+                        _this.childComponent[data[key].dfield]=selectControl;
+                        break;
+                    case 'Year':
+                        let yearControl = new YearControl(data[key]);
+                        yearControl.render(single);
+                        _this.childComponent[data[key].dfield]=yearControl;
+                        break;
+                    case 'Yearmonthtime':
+                        let yearMonthControl = new YearMonthControl(data[key]);
+                        yearMonthControl.render(single);
+                        _this.childComponent[data[key].dfield]=yearMonthControl;
+                        break;
+                    case 'Buildin':
+                        let buildInControl = new BuildInControl(data[key]);
+                        buildInControl.render(single);
+                        _this.childComponent[data[key].dfield]=buildInControl;
+                        break;
+                    case 'MultiLinkage':
+                        let multiLinkageControl = new MultiLinkageControl(data[key]);
+                        multiLinkageControl.render(single);
+                        _this.childComponent[data[key].dfield]=multiLinkageControl;
+                        break;
+                    case 'MultiSelect':
+                        if(single.data('childData')){
+                            // data[key].childData=single.data('childData');
+                            data[key].childData='#*#2638_3egFSMCwDBHgNKBo59sr6P$#$#*#6487_VjN4tR8j6uChdEb8GkajaN';
+                        }
+                        if(single.data('selectType')){
+                            // data[key].childData=single.data('selectType');
+                            data[key].selectType='1';
+                        }
+                        data[key].is_special = data[key].field_content['special_multi_choice'] == 1?true:false;
+                        let multiSelectControl = new MultiSelectControl(data[key]);
+                        multiSelectControl.render(single);
+                        _this.childComponent[data[key].dfield]=multiSelectControl;
+                        break;
+                    case 'Editor':
+                        let editorControl = new EditorControl(data[key]);
+                        editorControl.render(single);
+                        _this.childComponent[data[key].dfield] = editorControl;
+                        break;
+                    case 'SettingTextarea':
+                        let settingTextareaControl = new SettingTextareaControl(data[key]);
+                        settingTextareaControl.render(single);
+                        _this.childComponent[data[key].dfield] = settingTextareaControl;
+                        break;
+                    case 'Attachment':
+                        let attachmentControl = new AttachmentControl(data[key]);
+                        attachmentControl.render(single);
+                        _this.childComponent[data[key].dfield] = attachmentControl;
+                        break;
+                    case 'Time':
+                        let timeControl = new TimeControl(data[key]);
+                        timeControl.render(single);
+                        _this.childComponent[data[key].dfield] = timeControl;
+                        break;
+                    case 'Date':
+                        let dateControl = new DateControl(data[key]);
+                        dateControl.render(single);
+                        _this.childComponent[data[key].dfield] = dateControl;
+                        break;
+                    case 'Datetime':
+                        let dateTimeControl = new DateTimeControl(data[key]);
+                        dateTimeControl.render(single);
+                        _this.childComponent[data[key].dfield] =  dateTimeControl;
+                        break;
+                }
+            }
+        },
+
+        //改变人员信息表主岗选项
+        changeMainDepart(isClick,_this){
+            let arr = [{value:'',label:'请选择'}];
+            //判断是否需要将主岗部门置为请选择
+            if( isClick ){
+                let arr_1 = [];
+                for( let i = 1;i<_this.department["options"].length;i++ ){
+                    arr_1.push(_this.department["options"][i]["value"]);
+                }
+                if( arr_1.length != _this.value.length ){
+                    this.actions.setFormValue( _this.form_department,'' );
+                }
+            }
+            //改变主岗部门option
+            for( let i=0;i<_this.value.length;i++ ){
+                for( let j in _this.main_depart){
+                    console.log()
+                    if( _this.main_depart[j]["value"] === _this.value[i] ){
+                        arr.push( _this.main_depart[j] );
                     }
                 }
             }
-            //在这里根据type创建各自的控件
-            switch (type){
-                case 'Correspondence':
-                    let correspondence=new Correspondence(data[key]);
-                    correspondence.render(single);
-                    _this.childComponent[data[key].dfield]=correspondence;
-                    break;
-                case 'Songrid':
-                    // let popupType=single.data('popupType');
-                    let popupType=0;
-                    let songrid=new Songrid(Object.assign(data[key],{popupType:popupType}));
-                    songrid.render(single);
-                    _this.childComponent[data[key].dfield]=songrid;
-                    break;
-                case 'Radio':
-                    for(let obj of data[key].group){
-                        obj['name']=data[key].dfield;
-                        if(obj.value==data[key].value){
-                            obj['checked']=true;
-                        }else{
-                            obj['checked']=false;
-                        }
-                    }
-                    let radio=new Radio(data[key]);
-                    radio.render(single);
-                    _this.childComponent[data[key].dfield]=radio;
-                    break;
-                case 'Input':
-                    let input=new Input(data[key]);
-                    input.render(single);
-                    _this.childComponent[data[key].dfield]=input;
-                    break;
-                case 'Textarea':
-                    let textArea=new TextArea(data[key]);
-                    textArea.render(single);
-                    _this.childComponent[data[key].dfield]=textArea;
-                    break;
-                case 'Readonly':
-                    let readonly=new Readonly(data[key]);
-                    readonly.render(single);
-                    _this.childComponent[data[key].dfield]=readonly;
-                    break;
-                case 'EnctyptInput':
-                    let password=new Password(data[key]);
-                    password.render(single);
-                    _this.childComponent[data[key].dfield]=password;
-                    break;
-                case 'Hidden':
-                    let hidden=new Hidden(data[key]);
-                    hidden.render(single);
-                    _this.childComponent[data[key].dfield]=hidden;
-                    break;
-                case 'Select':
-                    _this.actions.setTableIdToOptions(data[key]['options'],_this.data.tableId);
-                    let selectControl=new SelectControl(data[key]);
-                    selectControl.render(single);
-                    _this.childComponent[data[key].dfield]=selectControl;
-                    break;
-                case 'Year':
-                    let yearControl = new YearControl(data[key]);
-                    yearControl.render(single);
-                    _this.childComponent[data[key].dfield]=yearControl;
-                    break;
-                case 'Yearmonthtime':
-                    let yearMonthControl = new YearMonthControl(data[key]);
-                    yearMonthControl.render(single);
-                    _this.childComponent[data[key].dfield]=yearMonthControl;
-                    break;
-                case 'Buildin':
-                    _this.actions.setTableIdToOptions(data[key]['options'],_this.data.tableId)
-                    let buildInControl = new BuildInControl(data[key]);
-                    buildInControl.render(single);
-                    _this.childComponent[data[key].dfield]=buildInControl;
-                    break;
-                case 'MultiLinkage':
-                    let multiLinkageControl = new MultiLinkageControl(data[key]);
-                    multiLinkageControl.render(single);
-                    _this.childComponent[data[key].dfield]=multiLinkageControl;
-                    break;
-                case 'MultiSelect':
-                    let multiSelectControl = new MultiSelectControl(data[key]);
-                    multiSelectControl.render(single);
-                    _this.childComponent[data[key].dfield]=multiSelectControl;
-                    break;
-                case 'Editor':
-                    let editorControl = new EditorControl(data[key]);
-                    editorControl.render(single);
-                    _this.childComponent[data[key].dfield] = editorControl;
-                    break;
-                case 'SettingTextarea':
-                    let settingTextareaControl = new SettingTextareaControl(data[key]);
-                    settingTextareaControl.render(single);
-                    _this.childComponent[data[key].dfield] = settingTextareaControl;
-                    break;
-                case 'Attachment':
-                    let attachmentControl = new AttachmentControl(data[key]);
-                    attachmentControl.render(single);
-                    _this.childComponent[data[key].dfield] = attachmentControl;
-                    break;
-                case 'Time':
-                    let timeControl = new TimeControl(data[key]);
-                    timeControl.render(single);
-                    _this.childComponent[data[key].dfield] = timeControl;
-                    break;
-            }
-        }
+            this.data.data[_this.department.dfield]["options"]=arr;
+            this.childComponent[_this.department.dfield].data["options"]=arr;
+            this.childComponent[_this.department.dfield].reload();
+        },
+    },
+    firstAfterRender(){
+        let _this=this;
+        this.actions.createFormControl();
+        this.actions.triggerControl();
         this.actions.changeOptions();
         this.actions.setDataFromParent();
-
-        $('body').on('click.selectDrop',function(){
-            $('.select-drop').hide();
-        })
-
+        this.actions.addBtn();
+        //控件值改变频道
         Mediator.subscribe('form:changeValue:'+_this.data.tableId,function(data){
+            console.log('值改变时间');
+            console.log(data);
             _this.actions.checkValue(data,_this);
         })
-
+        //历史值触发
         Mediator.subscribe('form:history:'+_this.data.tableId,function(data){
             let history=_.defaultsDeep({},data.history_data);
             let i=1;
@@ -1339,7 +1380,6 @@ let config={
                     }
                 }
             }
-            console.log(history);
             History.data.history_data=history;
             PMAPI.openDialogByComponent(History,{
                 width:800,
@@ -1348,7 +1388,7 @@ let config={
                 modal:true
             })
         })
-
+        //枚举选项快捷添加
         Mediator.subscribe('form:addItem:'+_this.data.tableId,function(data){
             _this.data['quikAddDfield']=data.dfield;
             let originalOptions;
@@ -1366,6 +1406,9 @@ let config={
                 modal:true
             }).then((data) => {
                 console.log('快捷添加回显');
+                if(data.onlyclose){
+                    return;
+                }
                 _this.actions.addNewItem(data);
             });
 
@@ -1378,17 +1421,17 @@ let config={
             if(type == 1){
                 _this.data.sonTableId = data["value"];
                 if(isView == '0'){
-                    _this.data.viewMode = 'normal';
+                    _this.data.viewMode = 'EditChild';
                 }else{
                     _this.data.viewMode = 'ViewChild';
                 }
-                PMAPI.openDialogByIframe(`/iframe/source_data_grid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.parent_temp_id}&rowId=${data.parent_temp_id}&tableType=child&viewMode=${_this.data.viewMode}`,{
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&tableType=child&viewMode=${_this.data.viewMode}`,{
                     width:800,
                     height:600,
                     title:`子表`,
                     modal:true
                 }).then(data=>{
-                    if(_this.viewMode == 'normal'){
+                    if(_this.viewMode == 'EditChild'){
                         _this.actions.setCountData();
                     }
                 })
@@ -1401,6 +1444,9 @@ let config={
             // 保存父表数据
             FormService.frontendParentFormValue[_this.tableId] = _this.actions.createFormValue(_this.data.data);
         });
+        Mediator.subscribe('form:userSysOptions:'+_this.data.tableId,function(data){
+            _this.actions.changeMainDepart(true,data);
+        });
         //对应关系弹窗
         Mediator.subscribe('form:openCorrespondence:'+_this.data.tableId,function(data){
             let isView = data["is_view"];
@@ -1410,7 +1456,7 @@ let config={
                 }else{
                     _this.data.viewMode = 'viewFromCorrespondence';
                 }
-                PMAPI.openDialogByIframe(`/iframe/source_data_grid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.parent_temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true`,{
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`,{
                     width:800,
                     height:600,
                     title:`对应关系`,
@@ -1418,7 +1464,7 @@ let config={
                 }).then(data=>{
                 })
         });
-       // 密码弹出
+       // 密码弹窗
         Mediator.subscribe('form:addPassword:'+_this.data.tableId,function(data){
             _this.data['addPassWordField']=data.dfield;
             PMAPI.openDialogByComponent(AddEnrypt , {
@@ -1428,7 +1474,6 @@ let config={
                 modal:true
             }).then((data) => {
                 if(!data.cancel){
-                    console.log('快捷添加回显');
                     _this.actions.addEnrypt(data);
                 }
             });
@@ -1436,12 +1481,15 @@ let config={
 
         Mediator.subscribe('form:addNewBuildIn:'+_this.data.tableId,function(data){
             _this.data['quikAddDfield']=data.dfield;
-            PMAPI.openDialogByIframe(`/iframe/add_buildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
+            PMAPI.openDialogByIframe(`/iframe/addBuildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
                 width:800,
                 height:600,
                 title:`快捷添加内置字段`,
                 modal:true
             }).then((data) => {
+                if(!data.new_option){
+                    return;
+                }
                 let options=_this.childComponent[_this.data['quikAddDfield']].data['options'];
                 if(options[0]['label'] == '请选择' || options[0]['label']==''){
                     options.splice(1,0,data.new_option);
@@ -1454,7 +1502,7 @@ let config={
                 _this.childComponent[_this.data['quikAddDfield']].reload();
             });
         })
-
+        //选择器
         Mediator.subscribe('form:selectChoose:'+_this.data.tableId,function(data){
             PMAPI.openDialogByIframe(`/iframe/choose?fieldId=${data.id}`,{
                 width:1500,
@@ -1466,17 +1514,17 @@ let config={
             });
         })
 
-        _this.actions.addBtn();
 
         //提交按钮事件绑定
-        _this.el.on('click','#save',function () {
+        this.el.on('click','#save',function () {
             _this.actions.onSubmit();
         });
-        $(_this.el).find("#changeEdit").on('click',function () {
-            console.log('转到编辑模式啊');
+        //转到编辑模式
+        this.el.on('click','#changeEdit',function () {
             _this.actions.changeToEdit(_this);
         });
-        _this.el.on('click','#print',async function() {
+        //打印
+        this.el.on('click','#print',async function() {
             let res = await FormService.getPrintSetting()
             // if(res.succ == 1){
             if (res.data && res.data.length && res.data.length != 0) {
@@ -1501,7 +1549,6 @@ let config={
     beforeDestory(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
         Mediator.removeAll('form:addItem:'+this.data.tableId);
-        $('body').off('.selectDrop');
     }
 }
 class BaseForm extends Component{
@@ -1512,10 +1559,6 @@ class BaseForm extends Component{
         //存父表的newData
         FormService.frontendParentNewData[formData.data.tableId] = formData.data.data;
         super(config,formData.data);
-        console.log('baseForm');
-        console.log('baseForm');
-        console.log('baseForm');
-        console.log(this);
     }
 
 }

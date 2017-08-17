@@ -42,15 +42,13 @@ let config={
                 Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
         }
     },
-    firstAfterRender:function(){
+    afterRender: function() {
         let _this=this;
         _this.el.on('click','#edit',function(){
             _.debounce(function(){Mediator.publish('form:addPassword:'+_this.data.tableId,_this.data)},200)(
 
             );
         })
-    },
-    afterRender: function() {
         // this.el.on('click', ("#edit"), ()=> {
         //     this.el.find("#editShow").show();
         // });
