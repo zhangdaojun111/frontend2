@@ -12,5 +12,4 @@ export const Utils = {
         }
         return result.join('&')
     }
-
 };
