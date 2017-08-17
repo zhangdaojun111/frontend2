@@ -189,7 +189,7 @@ Mediator.subscribe('workflow:choose', function (info) {
             viewMode:"createBatch"
         });
         AgGrid.actions.returnBatchData = function (ids) {
-            console.log( '接受导入数据' )
+            console.log('接受导入数据')
         };
         AgGrid.render($("#J-aggrid"));
     })
