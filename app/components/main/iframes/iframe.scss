@@ -41,6 +41,94 @@
                     background: url("../../../assets/images/framework/close.png") no-repeat center;
                 }
             }
+            .view-save{
+                width: 50px;
+                height: 100%;
+                border-left: solid 1px #d7d7d7;
+                background-color: #e4e4e4;
+                float: right;
+                cursor: pointer;
+                .view-icon{
+                    width: 16px;
+                    height: 16px;
+                    display: inline-block;
+                    background-image: url("../../../assets/images/framework/view-icon.png");
+                    background-repeat: no-repeat;
+                    margin:7px 0 0 17px;
+                }
+            }
+            .view-popup{
+                width: 150px;
+                border: none;
+                background-color: #e4e4e4;
+                float: right;
+                color: black;
+                .popup-btn{
+                    height: 30px;
+                    .popup-icon{
+                        width: 16px;
+                        height: 16px;
+                        display: inline-block;
+                        float: right;
+                        margin-right: 10px;
+                        margin-top: 7px;
+                        background-image: url("../../../assets/images/framework/drop-down-icon.png");
+                        cursor: pointer;
+                    }
+                }
+                .tab-list{
+                    width: 149px;
+                    height: auto;
+                    position: absolute;
+                    background: white;
+                    z-index:10;
+                    border: solid 1px #d7d7d7;
+                    border-top: none;
+                    display: none;
+                    .basic-ul{
+                        .drop-up-icon{
+                            width: 16px;
+                            height: 16px;
+                            margin-left: 67px;
+                            display: inline-block;
+                            background-image: url("./../../../assets/images/framework/drop-up-icon.png");
+                            cursor: pointer;
+                        }
+                        .close-tab,.close-all-tabs{
+                            text-align: left;
+                            text-indent: 10px;
+                            padding: 10px;
+                            cursor: pointer;
+                        }
+                        .close-other-tabs{
+                            text-align: left;
+                            text-indent: 10px;
+                            padding: 10px;
+                            margin-bottom: 10px;
+                            border-bottom: solid 1px #e4e4e4;
+                            cursor: pointer;
+                        }
+                    }
+                    .tabs-ul{
+                        .tab-item{
+                            text-align: left;
+                            text-indent: 10px;
+                            padding: 10px;
+                            cursor: pointer;
+                        }
+                        .drop-down-icon{
+                            width: 16px;
+                            height: 16px;
+                            margin-left: 67px;
+                            display: inline-block;
+                            background-image: url("./../../../assets/images/framework/drop-down-icon.png");
+                            cursor: pointer;
+                        }
+
+                    }
+
+                }
+            }
         }
         .iframes {
             width: 100%;
@@ -54,5 +142,13 @@
                 }
             }
         }
+        //.use-favorite{
+        //    width: 30px;
+        //    height: 30px;
+        //    float: right;
+        //    background: url("../../../assets/images/framework/personal-setting.png") no-repeat center;
+        //
+        //}
+
     }
 }
