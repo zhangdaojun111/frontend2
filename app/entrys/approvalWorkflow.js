@@ -24,7 +24,7 @@ import msgBox from '../lib/msgbox';
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import Grid from '../components/dataGrid/data-table-page/data-table-page';
 import {PMAPI,PMENUM} from '../lib/postmsg';
-import jsPlumb from 'jsPlumb';
+import jsplumb from 'jsplumb';
 
 
 WorkFlowForm.showForm();
@@ -35,11 +35,7 @@ serchStr.split('&').forEach(res => {
     var arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
-if(obj.btnType==='view'){
-    is_view=1;
-}else{
-    is_view=0;
-};
+
 
 
 //审批工作流
@@ -78,7 +74,17 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     ApprovalHeader.showheader(res);
     WorkflowRecord.showRecord(res);
 });
+if(obj.btnType==='view'){
+    is_view=1;
+}else{
+    is_view=0;
+};
 
+Mediator.subscribe("workflow:loaded",(e)=>{
+    if(e===1){
+        Mediator.publish('workflow:is_view', is_view);
+    }
+});
 
 FormEntrys.createForm({
     el: '#place-form',
@@ -208,5 +214,4 @@ Mediator.subscribe("workflow:delImg", (msg) => {
         let data = await workflowService.delStmpImg(msg);
     })();
 });
-
 
