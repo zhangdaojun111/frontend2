@@ -10,6 +10,7 @@ import msgBox from '../../../../lib/msgbox';
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import {Uploader} from "../../../../lib/uploader";
 import {FormService} from "../../../../services/formService/formService";
+import WorkFlow from "../../../../components/workflow/workflow-drawflow/workflow";
 
 let config = {
     template: template,
@@ -42,11 +43,14 @@ let config = {
                     let choose = this.el.find( '.chooseFlow' )
                     choose[0].innerHTML = html;
                     choose[0].value = this.data.workflowList[0]['flow_id'];
-                    workflow[0].style.display = 'inherit';
-                    workflow[1].style.display = 'inherit';
+                    workflow[0].style.display = 'block';
+                    workflow[1].style.display = 'block';
+                    workflow[2].style.display = 'block';
+                    this.actions.drawFlowChart();
                 }else {
                     workflow[0].outerHTML = '';
                     workflow[1].outerHTML = '';
+                    workflow[2].outerHTML = '';
                 }
                 //执行脚本
                 if( res["data"]["upload_exec_file_remark"] ){
@@ -55,7 +59,14 @@ let config = {
                 }
             } )
         },
+        //设置流程图
         //执行导入
+        drawFlowChart: function () {
+            let obj = {
+                flow_id: this.el.find( '.chooseFlow' )[0].value
+            }
+            // let flowchart =( obj );
+        },
         import: function () {
             let i = 0;
             for( let f in this.data.fileData ){
@@ -84,7 +95,7 @@ let config = {
                 json['warning_msg'] = JSON.stringify( this.data.warning_msg );
             }
             this.uploader.appendData( json )
-
+            let That = this;
             this.uploader.upload('/upload_data/',{},(event)=>{
                 console.log('name:'+event.name+',code:'+event.code);
                 console.log(' position:'+(event.loaded||event.position) +",total:"+event.total);
@@ -95,7 +106,7 @@ let config = {
                         let ids = res.ids || [];
                         PMAPI.sendToParent({
                             type: PMENUM.close_dialog,
-                            key: this.key,
+                            key: That.data.key,
                             data: {
                                 type: 'batch',
                                 ids: ids
@@ -104,7 +115,7 @@ let config = {
                     }else {
                         PMAPI.sendToParent({
                             type: PMENUM.close_dialog,
-                            key: this.key,
+                            key: That.data.key,
                             data: {
                                 type: 'export'
                             }
@@ -147,8 +158,9 @@ let config = {
             this.data.needMore = !this.data.needMore;
             let more = this.el.find( '.need-more' );
             for( let m of more ){
-                m.style.display = this.data.needMore?'inherit':'none';
+                m.style.display = this.data.needMore?'block':'none';
             }
+            this.el.find( '.more-btn' )[0].innerHTML = this.data.needMore?'收起':'展开更多';
         }
     },
     afterRender: function (){
@@ -171,8 +183,7 @@ let config = {
         this.el.on( 'click','.import-submit-btn',()=>{
             this.actions.import();
         } )
-        console.log( this.data.isSuperUser )
-        if( this.data.isSuperUser ){
+        if( this.data.isSuperUser == 1 ){
             this.el.on( 'click','.more-btn',()=>{
                 this.actions.addMore();
             } )
