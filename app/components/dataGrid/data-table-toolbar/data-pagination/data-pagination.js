@@ -68,9 +68,6 @@ let config = {
                     this.el.find('.goLast').addClass('custom');
                     this.el.find('.goLast').removeClass('custom-disabled');
                 }
-
-
-                debugger;
             }
         },
 
@@ -172,7 +169,6 @@ let config = {
                 this.el.find('.goLast').addClass('custom');
                 this.el.find('.goFirst').removeClass('custom');
                 this.el.find('.goFirst').addClass('custom-disabled');
-                debugger;
                 this.el.find('.current-page').html(this.data.currentPage);
                 let obj = {
                     currentPage: this.data.currentPage,
@@ -341,7 +337,6 @@ let config = {
             this.el.find('.goLast').addClass('custom-disabled');
         }
         this.data.currentPage = 1;
-        debugger;
         this.actions.disableClick();
         this.data.rows = this.el.find('.selectSize').val();
         this.data.sumPage = Math.ceil(this.data.total / this.data.rows);
