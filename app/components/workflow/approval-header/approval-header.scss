@@ -1,23 +1,137 @@
 .approval-info-list{
   .approval-info-item{
     background: #fff;
-    margin-right: 10px;
+    border-right: 1px solid #e4e4e4;
     height: 56px;
-    padding: 0 10px;
+    padding:0 10px;
+    font-size: 12px;
+    .i-block{
+      width: 6px;
+      height: 6px;
+      flex-shrink: 0;
+      &.blue{
+        background-color: #0088FF;
+      }
+      &.red{
+      background-color:#F24141;
+      }
+    }
     .tit{
-      border-left:2px solid #197CEC;
       padding: 2px 10px 2px 8px;
-      color: #797979;
+      color: #999;
+      white-space: nowrap;
+    }
+    .txt{
+      color: #333;
     }
     &:last-child{
       margin-right: 0;
     }
-    &:nth-child(1),&:nth-child(3){
-      flex-grow: 1.5;
+    &:nth-child(1){
+      flex-grow: 1;
       width: 200px;
     }
     &:nth-child(2){
-      flex-grow: 4;
+      flex-grow: 1.5;
+      width: 200px;
+    }
+    &:nth-child(3){
+      flex-grow: 3;
+      width: 300px;
+    }
+    &:nth-child(4){
+      flex-grow: 1;
+      width: 200px;
+      justify-content: flex-end;
+      .printBtn{
+        margin-left: 5px;
+      }
+    }
+    .approval-control{
+      margin-left: 10px;
+      .approval-btn{
+        border-radius: 4px;
+        height: 24px;
+        line-height: 24px;
+        color: #fff;
+        font-size: 12px;
+        padding: 0 8px;
+        flex-shrink: 0;
+        &.approval-pass{
+          background: #0088FF
+        }
+        &.approval-add{
+          background: #66CC66;
+        }
+      }
+      .approval-btn-sel{
+        width: 70px;
+        height: 24px;
+        line-height: 24px;
+        position: relative;
+        background: #ff8d30;
+        color: #fff;
+        border-radius: 4px;
+        margin: 0 10px;
+        flex-shrink: 0;
+        .approval-curr-txt{
+          padding-left: 10px;
+          position: relative;
+          &:after{
+            content:'';
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #fff;
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+        .approval-sel-down{
+          position: absolute;
+          width: 100%;
+          left: 0;
+          top: 28px;
+          visibility: hidden;
+          .approval-btn{
+            background: #666;
+            margin-bottom: 5px;
+            opacity: 0;
+          }
+        }
+        .btn-transition1{
+          transform: translateX(10px);
+          transition: all 0.3s ease-in;
+        }
+        .btn-transition2{
+          transform: translateX(15px);
+          transition: all 0.3s 0.2s ease-in;
+        }
+        .btn-transition3{
+          transform: translateX(20px);
+          transition: all 0.3s 0.3s ease-in;
+        }
+        &.active{
+          .approval-sel-down{
+            visibility: visible;
+          }
+          .approval-btn{
+            opacity: 1;
+          }
+          .btn-transition1{
+            transform: translateX(0px);
+          }
+          .btn-transition2{
+            transform: translateX(0px);
+          }
+          .btn-transition3{
+            transform: translateX(0px);
+          }
+        }
+      }
     }
   }
 }

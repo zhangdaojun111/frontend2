@@ -21,5 +21,14 @@ export const ChartFormService = {
     async getChartIcon() {
         let res = await HTTP.getImmediately('/bi/get_all_icon');
         return Promise.resolve(res);
+    },
+
+    /**
+     * 从服务器获取x,y轴数据
+     * @return x,y promise
+     */
+    async getChartField(table_id) {
+        let res = await HTTP.getImmediately('/bi/get_new_field_info', {table_id: table_id});
+        return Promise.resolve(res);
     }
 }

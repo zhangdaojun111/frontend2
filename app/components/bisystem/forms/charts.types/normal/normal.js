@@ -27,6 +27,7 @@ export class FormNormalComponent extends BiBaseComponent{
     constructor() {
         super(config);
         this.formGroup = {};
+
     }
 
     /**

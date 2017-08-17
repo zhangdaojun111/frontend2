@@ -4,10 +4,10 @@ import {Grid,GridOptions} from 'ag-grid/main';
 import './agGrid.scss';
 import 'ag-grid/dist/styles/ag-grid.css';
 import 'ag-grid/dist/styles/theme-bootstrap.css';
-import 'ag-grid/dist/styles/theme-blue.css';
-import 'ag-grid/dist/styles/theme-material.css';
-import 'ag-grid/dist/styles/theme-dark.css';
-import 'ag-grid/dist/styles/theme-fresh.css';
+// import 'ag-grid/dist/styles/theme-blue.css';
+// import 'ag-grid/dist/styles/theme-material.css';
+// import 'ag-grid/dist/styles/theme-dark.css';
+// import 'ag-grid/dist/styles/theme-fresh.css';
 
 import {dgcService} from '../../../services/dataGrid/data-table-control.service';
 
@@ -39,6 +39,8 @@ let config = {
         onCellClicked:function ($event) {
         },
         onRowDoubleClicked:function ($event) {
+        },
+        setRowStyle:function (param) {
         }
     },
     gridOptions: GridOptions,
@@ -94,7 +96,11 @@ let config = {
                     }
                 },
                 //排序
-                onSortChanged: this.data.onSortChanged
+                onSortChanged: this.data.onSortChanged,
+                //设置颜色
+                getRowStyle: (param)=>{
+                    return this.data.setRowStyle( param )
+                }
             }
             //是否需要footer
             if( !this.data.noFooter ){

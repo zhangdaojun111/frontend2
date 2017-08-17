@@ -12,10 +12,13 @@
         box-sizing: border-box;
     }
     ul {
+        user-select: none;
         overflow: auto;
         box-sizing: border-box;
         border: 1px solid #ddd;
         user-select: none;
+        background: #fff;
+        z-index: 100;
         li {
             height: 30px;
             line-height: 30px;

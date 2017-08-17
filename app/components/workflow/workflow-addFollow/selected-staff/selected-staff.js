@@ -3,7 +3,7 @@ import Component from '../../../../lib/component';
 import Mediator from '../../../../lib/mediator';
 
 let config={
-    template: `<span data-id="{{id}}">{{name}}</span>`,
+    template: `<span class="removeble" data-id="{{id}}">{{name}}</span>`,
     data:{},
     action:{
 
