@@ -218,7 +218,6 @@ let config ={
             let value = event.target.value.trim();
             if(value !== ''){
                 event.target.style.borderColor = 'green';
-                event.target.nextElementSibling.textContent = '';
             }else{
                 event.target.style.borderColor = 'red';
                 this.el.find('p.verification-p').html(tip);
@@ -264,6 +263,8 @@ let config ={
             this.actions.checkForm(event,"请填写手机号码","tel");
         }).on("blur","input.verification-code",(event) => {
             this.actions.checkVerification(event,"请填写验证码","verification-code");
+        }).on("click",".register-btn",() => {
+            this.actions.postRegister();
         })
     },
     beforeDestory:function () {
