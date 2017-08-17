@@ -6,11 +6,21 @@
     .header-wrap {
         height: $header-height;
         padding-right: 50px;
-        .global-search {
-            width: 220px;
-            height: 40px;
+        .search {
+            width: 180px;
+            height: 22px;
             float: right;
-            margin-top: 15px;
+            outline: none;
+            background: rgba(228, 232, 235, 1);
+            margin-top: 18px;
+            border: 1px solid rgba(228, 228, 228, 1);
+            border-radius: 6px;
+            color: #666;
+            text-indent: 10px;
+            font-size: 12px;
+            &:focus {
+                background: #FFFFFF;
+            }
         }
         .icon {
             cursor: pointer;

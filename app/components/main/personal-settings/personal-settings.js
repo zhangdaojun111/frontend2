@@ -174,10 +174,10 @@ let config = {
                 // .css("left",para.left)
                 // .css("top",para.top)
         },
-        // clearLocalStorage:function(){
-        //     window.localStorage.clear();
-        //     $(window).attr("location","/login");
-        // },
+        clearLocalStorage:function(){
+            window.localStorage.clear();
+            $(window).attr("location","/login");
+        },
         resetAvatar:function () {
             let $img = this.el.find("img.user-avatar");
             if($img.length === 0){
@@ -212,8 +212,8 @@ let config = {
             this.actions.editTel();
         }).on("blur","input.phone-info",() => {            //保存电话
             this.actions.saveEdit();
-        // }).on("click",".clear-storage-btn",() => {          //清除缓存
-        //     this.actions.clearLocalStorage();
+        }).on("click",".clear-storage-btn",() => {          //清除缓存
+            this.actions.clearLocalStorage();
         }).on("click",".cancel-btn",() => {           //取消编辑
             this.actions.cancelEdit();
         }).on("click",".save-btn",() => {          //保存

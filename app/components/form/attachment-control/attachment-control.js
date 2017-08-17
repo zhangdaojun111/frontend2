@@ -5,8 +5,6 @@ import template from './attachment-control.html';
 import Component from "../../../lib/component";
 import '../../../lib/msgbox'
 import AttachmentQueueItem from "./attachment-queue-item/attachment-queue-item";
-import {screenShotConfig} from "./screenshot-receiver/screenshot-receiver";
-import {PMAPI} from "../../../lib/postmsg";
 
 let config={
     template: template,
@@ -21,38 +19,7 @@ let config={
             this.el.find('.selecting-file').click();
         },
         shotScreen:function () {
-            let ele = this.el.find('.get-screenshot');
-            PMAPI.openDialogByComponent(screenShotConfig,{
-                width:500,
-                height:300,
-                title:"选择截图"
-            }).then(res=>{
-                if(!res.file){
-                    return;
-                }
-                this.actions.controlUploadingForFile(res.file);
-            })
-         },
-        controlUploadingForFile:function (file) {
-            if(file.size>100*1024*1024){
-                alert(file.name + ' 文件过大，无法上传，请确保上传文件大小小于100MB');
-                return;
-            }
-            let ele = $('<div></div>');
-            let item = new AttachmentQueueItem(file,this.data.real_type,(event,data)=>{
-                if(event == 'delete'){
-                    ele.remove();
-                    if(data !=undefined){
-                        this.data.queue.slice(this.data.queue.indexOf(data),1);
-                    }
-                }
-                if(event == 'finished'){
-                    this.data.queue.push(data);
-                }
-            });
-            this.el.find('.upload-process-queue').append(ele);
-            item.render(ele);
-
+            alert('shotScreen');
         }
     },
     afterRender: function () {
@@ -65,7 +32,25 @@ let config={
         }).on('change','.selecting-file',(event)=>{
             let files = event.target.files;
             for(let file of files){
-                this.actions.controlUploadingForFile(file);
+                if(file.size>100*1024*1024){
+                    alert(file.name + ' 文件过大，无法上传，请确保上传文件大小小于100MB');
+                    continue;
+                }
+                let ele = $('<div></div>');
+                let item = new AttachmentQueueItem(file,this.data.real_type,(event,data)=>{
+                    if(event == 'delete'){
+                        ele.remove();
+                        if(data !=undefined){
+                            this.data.queue.slice(this.data.queue.indexOf(data),1);
+                        }
+                    }
+                    if(event == 'finished'){
+                        console.log("here");
+                        this.data.queue.push(data);
+                    }
+                });
+                this.el.find('.upload-process-queue').append(ele);
+                item.render(ele);
             }
         })
     }

@@ -1,67 +1,43 @@
 import template from './data-table-export.html';
-let css = `
-`
-let exportSetting = {
+import './data-table-export.scss';
+let girdExport = {
     template: template,
     data: {
-        css: css.replace(/(\n)/g, ''),
-        isFilter: true,
-        custom: true,
-        attachment: true
+
     },
     actions: {
-        createUrl: function () {
-            let json = {
-                table_id: this.data.tableId,
-                isFilter: this.data.isFilter,
-                custom: this.data.custom,
-                filter: JSON.stringify( this.data.filterParam ),
-                is_group: this.data.groupCheck?1:0,
-                attachment: this.data.attachment
-            }
-            if( this.data.tableType == 'count' ){
-                json['parent_real_id'] = this.data.parentRealId;
-                json['fieldId'] = this.data.fieldId;
-                json['rowId'] = this.data.rowId;
-                json['tableType'] = this.data.tableType;
-            }
-            let url = this.actions.returnIframeUrl( '/export/',json );
-            this.el.find( '.export-btn' )[0].href = url;
+        btnClick: function () {
+            $( '.save-btn' ).click( ()=>{
+                this.actions.getCheckBoxValue()
+                PMAPI.sendToParent( {
+                    key: this.key,
+                    type: PMENUM.close_dialog,
+                    data: {
+                        // value: $('.input').val()
+                    }
+                } )
+            } )
+            $( '.cancel-btn' ).click( ()=>{
+                PMAPI.sendToParent( {
+                    key: this.key,
+                    type: PMENUM.close_dialog,
+                    data: {
+
+                    }
+                } )
+            } )
         },
-        changeState: function ( d ) {
-            this.data[d] = !this.data[d];
-            this.actions.createUrl();
-        },
-        //返回数据url
-        returnIframeUrl( u,obj ){
-            let str = '?';
-            for( let o in obj ){
-                str += (o + '=' + obj[o] + '&');
-            }
-            str = str.substring( 0,str.length - 1 );
-            return u + str;
+        getCheckBoxValue: function(){
+            console.log($('#condition').is(':checked'))
+            console.log($('#columns').is(':checked'))
+            console.log($('#accessory').is(':checked'))
         }
     },
     afterRender: function () {
-        this.el.on( 'click','#isFilter',()=>{
-            this.actions.changeState( 'isFilter' );
-        } ).on( 'click','#columns',()=>{
-            this.actions.changeState( 'columns' );
-        } ).on( 'click','#attachment',()=>{
-            this.actions.changeState( 'attachment' );
-        } ).on( 'click','.export-btn',()=>{
-            PMAPI.sendToParent( {
-                key: this.key,
-                type: PMENUM.close_dialog,
-                data: {
-                    type: 'export'
-                }
-            } )
-        } )
-        this.actions.createUrl();
+        this.actions.btnClick();
     },
     beforeDestory: function () {
 
     }
 };
-export default exportSetting;
+export default girdExport;

@@ -24,24 +24,15 @@ import msgBox from '../lib/msgbox';
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import Grid from '../components/dataGrid/data-table-page/data-table-page';
 import {PMAPI,PMENUM} from '../lib/postmsg';
-import jsPlumb from 'jsPlumb';
-
 
 WorkFlowForm.showForm();
 
 let serchStr = location.search.slice(1);
-let obj = {},focus=[],is_view;
+let obj = {}
 serchStr.split('&').forEach(res => {
     var arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
-if(obj.btnType==='view'){
-    is_view=1;
-}else{
-    is_view=0;
-};
-
-
 //审批工作流
 (async function () {
     return workflowService.getWorkflowInfo({
@@ -54,22 +45,6 @@ if(obj.btnType==='view'){
 })().then(res => {
     Mediator.publish('workflow:getImgInfo', res);
     Mediator.publish('workflow:gotWorkflowInfo', res);
-    let a=res.data[0].updateuser2focususer;
-    for(var i in a){
-        for(var j in a[i]){
-            focus.push(a[i][j]);
-        }
-    }
-    Mediator.publish('workflow:focused', focus);
-    (async function () {
-        return workflowService.getWorkflowInfo({url: '/get_all_users/'});
-    })().then(users => {
-        let nameArr=[];
-        for(var i in focus){
-            nameArr.push(users.rows[focus[i]].name);
-        }
-        $('#addFollowerList').text(`${nameArr}`);
-    });
 });
 
 
@@ -79,20 +54,18 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     WorkflowRecord.showRecord(res);
 });
 
-
 FormEntrys.createForm({
     el: '#place-form',
     form_id: obj.form_id,
     record_id: obj.record_id,
-    is_view: is_view,
+    is_view: 0,
     from_approve: 1,
     from_focus: 0,
     table_id: obj.table_id
 });
 
-let focusArr=[];
 Mediator.subscribe('workflow:focus-users', (res)=> {
-    focusArr=res;
+    obj.user=res;
 })
 
 function GetQueryString(name)
@@ -110,7 +83,7 @@ const approveWorkflow = (para) => {
         comment=$('#comment').val();
     para.data=JSON.stringify(formData);
     para.comment=comment;
-    para.focus_users=JSON.stringify(focusArr);
+    para.focus_users=JSON.stringify(obj.user);
     (async function () {
         return workflowService.approveWorkflowRecord({
             url: '/approve_workflow_record/',
@@ -208,5 +181,3 @@ Mediator.subscribe("workflow:delImg", (msg) => {
         let data = await workflowService.delStmpImg(msg);
     })();
 });
-
-

@@ -407,7 +407,7 @@ let config = {
 
             if (this.data.pictureOption == '事务图') {
                 this.data.pictureOption = '节点图';
-                this.el.parents(".workflow-wrapper").find(".togglePic-text").text('节点图');
+                this.el.find("#togglePic").val('节点图');
                 this.el.find(".draged-item").each(function () {
                     let $this = $(this);
                     if (!$this.hasClass('draged-maodian')) {
@@ -419,7 +419,7 @@ let config = {
             }
             else {
                 this.data.pictureOption = '事务图';
-                this.el.parents(".workflow-wrapper").find(".togglePic-text").text('事务图');
+                this.el.find("#togglePic").val('事务图');
                 this.el.find(".draged-item").each(function () {
                     let $this = $(this);
                     if (!$this.hasClass('draged-maodian')) {
@@ -434,16 +434,16 @@ let config = {
     afterRender: function() {
         this.actions.init();
 
-        this.el.parents(".workflow-wrapper").find("#flow-node").on('click', '#zoomIn', () => {
+        this.el.on('click', '#zoomIn', () => {
             this.actions.zoomInNodeflow();
         });
-        this.el.parents(".workflow-wrapper").find("#flow-node").on('click', '#zoomOut', () => {
+        this.el.on('click', '#zoomOut', () => {
             this.actions.zoomOutNodeflow();
         });
-        this.el.parents(".workflow-wrapper").find("#flow-node").on('click', '#newWin', () => {
+        this.el.on('click', '#newWin', () => {
             this.actions.maximizeNodeflow();
         });
-        this.el.parents(".workflow-wrapper").find("#flow-node").on('click', '#togglePic', () => {
+        this.el.on('click', '#togglePic', () => {
             this.actions.togglePicture();
         });
         this.el.on('click', '#addFocus', () => {

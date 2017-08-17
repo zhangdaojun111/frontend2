@@ -1,3 +1,7 @@
+/**
+ * @author xiongxiaotao
+ * 打开系统消息
+ */
 import template from './system-message.html';
 import './system-message.scss';
 import Component from '../../../lib/component';
@@ -15,13 +19,20 @@ let config = {
         loadData: function (_param) {
             _param = _param || {};
             let param = _.defaultsDeep(_param, {
-                row: this.pagination.data.rows,
-                first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows
+                rows: this.pagination.data.rows,
+                first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
+                currentPage: this.pagination.data.currentPage
             });
+            console.log(this.pagination.data.currentPage);
             systemMessageService.getMyMsg(param).then((data) => {
                 this.agGrid.actions.setGridData({
                     rowData: data.rows
-                })
+                });
+                // this.pagination
+                this.pagination.data.total = 10;
+                this.pagination.data.rows = param.rows;
+                this.pagination.data.currentPage = param.currentPage;
+                this.pagination.reload();
             });
         },
         markRead: function () {
@@ -31,13 +42,16 @@ let config = {
                     let checkIds = rows.map((item) => {
                         return item.id;
                     });
-                    HTTP.postImmediately('/remark_or_del_msg/', {
-                        checkIds: JSON.stringify(checkIds)
-                    }).then((res) => {
-                        if (res.success === 1) {
-                            this.actions.loadData();
-                        }
-                    });
+                    this.actions._postReadData(JSON.stringify(checkIds));
+                }
+            });
+        },
+        _postReadData: function (ids) {
+            HTTP.postImmediately('/remark_or_del_msg/', {
+                checkIds: ids
+            }).then((res) => {
+                if (res.success === 1) {
+                    this.actions.loadData();
                 }
             });
         },
@@ -77,26 +91,33 @@ let config = {
             });
         },
         onPaginationChanged: function (data) {
-            this.actions.loadData();
+            this.actions.loadData(data);
+        },
+        onCellClicked: function ($event) {
+            let data = $event.data;
+            if (data.msg_type === 3 || data.msg_type === 0) {
+                PMAPI.openDialogByIframe(data.url, {
+                    width: 1200,
+                    height: 800,
+                    title: data.msg_type_text
+                })
+            } else {
+                systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
+            }
+            this.actions._postReadData(JSON.stringify([data.id]));
         }
     },
     afterRender: function () {
         let gridDom = this.el.find('.grid');
+        let that = this;
         this.agGrid = new agGrid({
             columnDefs: systemMessageService.getColumnDefs(),
-            onCellClicked: function ($event) {
-                let data = $event.data;
-                PMAPI.openDialogByIframe(data.url, {
-                    width: 1200,
-                    height: 800,
-                    title: data.title
-                })
-            }
+            onCellClicked: that.actions.onCellClicked
         });
         this.agGrid.render(gridDom);
         this.pagination = new dataPagination({
             page: 1,
-            rows: 100
+            rows: 2
         });
         this.pagination.render(this.el.find('.pagination'));
         this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
@@ -140,7 +161,26 @@ let systemMessageUtil = {
     },
     hide: function () {
 
+    },
+    showMessageDetail: function (dialogTitle, msgTitle, msgContent) {
+        let html = `
+            <div class="component-msg-detail">
+                <h3>${msgTitle}</h3>
+                <div class="text">${msgContent}</div>
+            </div>
+        `;
+        this.el = $(html).appendTo('body');
+        this.el.dialog({
+            width: 800,
+            height: 600,
+            modal: true,
+            title: dialogTitle,
+            close: function () {
+                $(this).dialog('destroy');
+            }
+        })
     }
 }
 
 export {systemMessageUtil};
+systemMessageUtil.show();

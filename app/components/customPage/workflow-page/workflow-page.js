@@ -25,7 +25,6 @@ let config = {
         //pageType{0:'进展中的工作',1:'已完成的工作',2:'我的工作申请中的工作',3:'我的工作已完成的工作',4:'我的工作审批过的工作',5:'工作审批',6:'我的工作已关注的工作'}
         pageType: 5,
         tableId2pageType: {'approve-workflow':5,'approving-workflow':0,'finished-workflow':1,'my-workflow':2,'finish-workflow':3,'focus-workflow':6,'approved-workflow':4},
-        tableId2Name: {'approve-workflow':'工作审批','approving-workflow':'进展中的工作','finished-workflow':'已完成的工作','my-workflow':'我的工作->申请中的工作','finish-workflow':'我的工作->已完成的工作','focus-workflow':'我的工作->已关注的工作','approved-workflow':'我的工作->审批过的工作'},
         //定制列（列宽）
         colWidth: {},
         //定制列（固定列）
@@ -44,16 +43,13 @@ let config = {
         searchOldValue: [],
         //选择的数据
         selectRows: [],
-        //排序方式
-        frontendSort: true,
-        //排序参数
-        sortParam: {sortOrder:'',sortField:''},
         //定制列数据
         customColumnsFields: [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false}, {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false}, {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
     },
     actions: {
         //创建表头
         createColumnDefs: function () {
+            this.data.pageType = this.data.tableId2pageType[this.data.tableId];
             let cols = wchService.getWorkflowHeader( this.data.pageType );
             this.data.columnDefs = [dgcService.numberCol,dgcService.selectCol];
             let fixArr = this.data.fixCols.l.concat(this.data.fixCols.r);
@@ -110,6 +106,9 @@ let config = {
                 onRowDoubleClicked: this.actions.onRowDoubleClicked
             }
             this.agGrid = new agGrid(gridData);
+            console.log( "______________" )
+            console.log( "______________" )
+            console.log( this.el )
             this.append(this.agGrid , this.el.find('#workflow-agGrid'));
             this.actions.calcColumnState();
             //渲染分页
@@ -136,6 +135,16 @@ let config = {
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
             }
         },
+        //返回选择数据
+        retureSelectData: function () {
+            this.data.selectRows = [];
+            let rows = this.agGrid.gridOptions.api.getSelectedRows();
+            for( let r of rows ){
+                if( r._id ){
+                    this.data.selectRows.push( r._id );
+                }
+            }
+        },
         //分页刷新
         refreshData: function () {
 
@@ -145,32 +154,7 @@ let config = {
             if( this.data.tableId == 'my-workflow' ){
                 this.el.find( '.batch-cancel' )[0].style.display = 'inline-block';
                 this.el.find( '.batch-cancel' ).on( 'click',()=>{
-                    this.data.selectRows = [];
-                    let rows = this.agGrid.gridOptions.api.getSelectedRows();
-                    for( let r of rows ){
-                        this.data.selectRows.push( r.id );
-                    }
-                    if( this.data.selectRows.length == 0 ){
-                        msgBox.alert( '请选择要取消的数据！' )
-                    }else {
-                        msgBox.confirm( '确定取消？' ).then( res=>{
-                            if( res ){
-                                let json = {
-                                    checkIds: JSON.stringify(this.data.selectRows),
-                                    action:4,
-                                    type:1
-                                }
-                                workflowService.approveMany( json )
-                                    .then(data => {
-                                        if( data.success ){
-                                            msgBox.showTips( '取消成功' );
-                                        }else {
-                                            msgBox.alert( '取消失败：' + data.error );
-                                        }
-                                    })
-                            }
-                        } )
-                    }
+
                 } );
             }
             //floatingFilter
@@ -196,28 +180,9 @@ let config = {
                     grid.width( 'calc(100% - ' + num + 'px)' );
                 } )
             }
-            //全屏
-            if( this.el.find( '.grid-new-window' )[0] ){
-                let obj = {
-                    tableId: this.data.tableId,
-                    tableName: this.data.tableId2Name[this.data.tableId]
-                }
-                let url = this.actions.returnIframeUrl( '/iframe/workflowPage/',obj )
-                this.el.find('.grid-new-window')[0].href = url;
-            }
-        },
-        //返回数据url
-        returnIframeUrl( u,obj ){
-            let str = '?';
-            for( let o in obj ){
-                str += (o + '=' + obj[o] + '&');
-            }
-            str = str.substring( 0,str.length - 1 );
-            return u + str;
         },
         //获取数据
         getData: function () {
-            this.data.pageType = this.data.tableId2pageType[this.data.tableId];
             let json = this.actions.createPostData();
             let obj1 = {
                 actions: JSON.stringify(['ignoreFields', 'fieldsOrder', 'pageSize', 'colWidth', 'pinned']),
@@ -239,7 +204,6 @@ let config = {
                     this.actions.setPreference( res[1] );
                     this.actions.renderGrid();
                 }
-                this.actions.sortWay();
             });
             HTTP.flush();
         },
@@ -359,25 +323,8 @@ let config = {
             this.customColumnsCom.actions.onFix();
             this.customColumnsCom.actions.dragAction();
         },
-        //排序方式
-        sortWay: function () {
-            this.data.frontendSort = this.data.total < this.data.rows?true:false;
-            console.log( '排序方式：' + (this.data.frontendSort ? '前端排序' : '后端排序') );
-            this.agGrid.gridOptions["enableServerSideSorting"] = !this.data.frontendSort;
-            this.agGrid.gridOptions["enableSorting"] = this.data.frontendSort;
-        },
         onSortChanged: function ($event) {
-            if( this.data.frontendSort ){
-                return;
-            }
-            let data = this.agGrid.gridOptions.api.getSortModel()[0];
-            if (data) {
-                this.data.sortParam['sortOrder']= (data.sort == "desc" ? -1 : 1);
-                this.data.sortParam['sortField']=data.colId;
-            }else {
-                this.data.sortParam = {sortOrder:'',sortField:'',sort_real_type:''}
-            }
-            this.actions.getData();
+            
         },
         onRowDoubleClicked: function ($event) {
         },
@@ -393,7 +340,6 @@ let config = {
             if( this.data.pageType == 0 || this.data.pageType == 1 ){
                 if(type === 'view'){
                     winTitle = '查看工作';
-                    obj['btnType'] = 'view';
                     let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
                     this.actions.openSourceDataGrid( url,winTitle );
                 }else if( type === 'cancel'){
@@ -403,7 +349,6 @@ let config = {
             if( this.data.pageType == 2||this.data.pageType == 3||this.data.pageType == 4||this.data.pageType == 6 ){
                 if(type === 'view'){
                     winTitle = '查看工作';
-                    obj['btnType'] = 'view';
                     let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
                     this.actions.openSourceDataGrid( url,winTitle );
                 }else if(type === 'cancel'){
@@ -412,14 +357,12 @@ let config = {
                     this.actions.approveWorkflow( $event["data"]["id"],5,'确定撤回？' )
                 }else if(type === 'edit'){
                     winTitle = '编辑工作';
-                    obj['btnType'] = 'edit';
                     let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
                     this.actions.openSourceDataGrid( url,winTitle );
                 }else if(type === 'drawApproval'){
                     this.actions.approveWorkflow( $event["data"]["id"],7,'确定撤回？' )
                 }else if( type === 'focusWorkflow' ){
                     winTitle = '查看工作';
-                    obj['btnType'] = 'view';
                     let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
                     this.actions.openSourceDataGrid( url,winTitle );
                 }
@@ -427,10 +370,8 @@ let config = {
             if( this.data.pageType == 5 ){
                 if(type === 'approve'){
                     winTitle = '审批工作';
-                    obj['btnType'] = 'edit';
                 }else if(type === 'view'){
                     winTitle = '查看工作';
-                    obj['btnType'] = 'view';
                 }else{
                     return false;
                 }
