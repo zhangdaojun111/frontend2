@@ -101,7 +101,7 @@ let config = {
         } else {
             this.actions.openWorkflow();
         }
-        this.el.on('click','.task-state-icon', () => {
+        this.el.on('click','.task-state-icon', function() {
             event.stopPropagation();
             if(!$(this).is(".options-show")){
                 that.el.parents(".calendar-main-content").find(".select-options").hide();
