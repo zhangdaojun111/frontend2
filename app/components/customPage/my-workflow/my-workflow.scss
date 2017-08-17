@@ -1,75 +1,74 @@
 @import "../../../assets/scss/core/base";
 .my-workflow-con {
-    overflow: hidden;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 
 .tab-title {
-    border-bottom: 1px solid #ddd;
-    margin: 10px 0;
-    background-color: #ffffff;
-    margin-left:10px;
-    margin-right:10px;
-    font-size: 14px;
-    height: 30px;
+  border-bottom: 1px solid #ddd;
+  margin: 10px 0;
+  background-color: #ffffff;
+  margin-left:10px;
+  margin-right:10px;
+  font-size: 14px;
+  height: 30px;
 }
 
 .tab-title ul {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .tab-title li {
-    display: inline-block;
-    position: relative;
-    bottom: -1px;
+  display: inline-block;
+  position: relative;
+  bottom: -1px;
 }
 
 .tab-title li a {
-    display: block;
-    padding: 5px 10px;
-    text-align: center;
-    text-decoration: none;
+  display: block;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
 }
 
 .tab-title li a:hover {
-    background: #eee;
+  background: #eee;
 }
 
 .select {
-    background: #fcfcfc;
-    border: 1px solid #DDDDDD;
-    border-bottom: 0px;
+  background: #fcfcfc;
+  border: 1px solid #DDDDDD;
+  border-bottom: 0px;
 }
 
 #page-contener {
-    height: calc( 100% - 51px );
-    width: 100%;
-    position: relative;
+  height: calc( 100% - 51px );
+  width: 100%;
+  position: relative;
 }
 
 .my-workflow {
-    float: left;
+  float: left;
 }
 .finish-workflow {
-    float: left;
+  float: left;
 }
 .approved-workflow {
-    float: left;
+  float: left;
 }
 .focus-workflow {
-    float: left;
+  float: left;
 }
 #page-contener iframe {
-    width: 100%;
-    height: 100%;
-    position: absolute;
+  width: 100%;
+  height: 100%;
+  position: absolute;
 }
 
 .show {
-    display: block;
+  display: block;
 }

@@ -5,18 +5,6 @@
 	height: 100%;
 	width: 100%;
 }
-#add-home .add-follow,#cloneId1 .add-follow{
-	color: #000;
-	font-size: 12px;
-	height: 22px;
-	line-height: 22px;
-	border: 1px solid rgba(228,228,228,1);
-	padding: 0 5px;
-	font-weight: normal;
-	.add-icon{
-		margin-right: 5px;
-	}
-}
 .follower-select{
 	background: #fff;
 	box-shadow: none;
@@ -35,7 +23,7 @@
 			flex-shrink: 0;
 			height: 100%;
 			overflow: scroll;
-			.flex,.flexNoDel{
+			.flex{
 				display: flex;
 				width: 100%;
 			}
@@ -80,9 +68,12 @@
 		background: url('../../../assets/images/util/tree/icon_checkbox_yes.png') center/20px 20px no-repeat;
 	}
 }
+<<<<<<< HEAD
 [disabled]{
 	background: #eee;
 }
 html,body{
 	height: 100%;
 }
+=======
+>>>>>>> 6a731e12ceb9bca4f9123d0fe897a06bed105a08

@@ -52,16 +52,12 @@ const handlers = {
     },
     readRender: function (data) {
         return `<div class="grid-cell-info">${data.value?'已读':'未读'}<div>`
-    },
-    statusRender: function (data) {
-        return `<div class="grid-cell-info">${data.data['handle_status']}<div>`;
     }
 }
 
 export const systemMessageService = {
     columnDefs: [],
     getColumnDefs: function () {
-
         return [
             _.defaultsDeep({headerName: '序号', width: 60}, dgcService.numberCol),
             {
@@ -92,10 +88,10 @@ export const systemMessageService = {
                 cellStyle: {'text-align': 'center'}
             }, {
                 headerName: '消息类型',
-                field: 'msg_type',
+                field: 'msg_type_text',
                 width: 180,
                 suppressMenu: true,
-                tooltipField: 'msg_type',
+                tooltipField: 'msg_type_text',
                 cellStyle: {'text-align': 'center'},
                 suppressSorting: true
             }, {
@@ -125,8 +121,7 @@ export const systemMessageService = {
                 suppressMenu: true,
                 tooltipField: 'handle_status_text',
                 cellStyle: {'text-align': 'center'},
-                suppressSorting: true,
-                cellRenderer: handlers.statusRender
+                suppressSorting: true
             }
         ];
     },

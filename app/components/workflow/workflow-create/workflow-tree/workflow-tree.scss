@@ -2,13 +2,15 @@
 .J_select-container{
     .J_tip{
         width: 300px;
-        height: 25px;
-        line-height: 25px;
+        height: 30px;
         padding-left: 10px;
+<<<<<<< HEAD
         cursor: pointer;
         .select-Workflow{
             color: rgba(153,153,153,1);
         }
+=======
+>>>>>>> 6a731e12ceb9bca4f9123d0fe897a06bed105a08
     }
 }
 .select-icon{
@@ -78,10 +80,10 @@
                 position: absolute;
                 left: 0;
                 top: 50%;
-                background: url(../../../../assets/images/workflow/workflow-icon.png) no-repeat -102px 0px;
+                background: url(../../../../assets/images/util/tree/icon_unfold.png) no-repeat;
                 width: 16px;
                 height: 16px;
-                //background-size: contain;
+                background-size: contain;
                 transform: translateY(-50%);
 
             }
@@ -102,10 +104,10 @@
                 position: absolute;
                 left: -18px;
                 top: 50%;
-                background: url(../../../../assets/images/workflow/workflow-icon.png) no-repeat -26px 0;
+                background: url(../../../../assets/images/util/tree/icon_leaf.png) no-repeat;
                 width: 16px;
                 height: 16px;
-                //background-size: contain;
+                background-size: contain;
                 transform: translateY(-50%);
 
             }

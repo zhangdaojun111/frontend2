@@ -2,7 +2,7 @@
     <tr>
         <td>文件上传(.xls，.xlsx，.wwzip)</td>
         <td>
-            <button class='uploader-button' type="button">上传文件</button><span class="file-name">请选择文件</span>
+                <input type="file" class="form-file" name="upload_file" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.wwzip">
         </td>
     </tr>
     <tr class="workflow">
@@ -21,6 +21,13 @@
             </select>
         </td>
     </tr>
+    <tr class="workflow">
+        <td colspan="2">
+            <div class="flow-chart">
+
+            </div>
+        </td>
+    </tr>
     <tr class="uploadRemark">
         <td>执行脚本说明</td>
         <td>
@@ -30,39 +37,39 @@
     <tr class="need-more">
         <td>是否含创建人</td>
         <td>
-            <select class="has_create_user">
+                <select name="has_create_user" class="has_create_user">
                 <option value="0" selected="selected">无</option>
                 <option value="1">有</option>
             </select>
         </td>
     </tr>
-    <tr class="need-more">
+        <tr>
         <td>是否检查唯一</td>
         <td>
-            <select class="unique_check">
+                <select name="unique_check" class="unique_check">
                 <option value="1" selected="selected">是</option>
                 <option value="0">否</option>
             </select>
         </td>
     </tr>
-    <tr class="need-more">
+        <tr>
         <td>是否使用文件中的自增编号</td>
         <td>
-            <select class="use_increment_data">
+                <select name="use_increment_data" class="use_increment_data">
                 <option value="0" selected="selected">否</option>
                 <option value="1">是</option>
             </select>
         </td>
     </tr>
-    <tr class="need-more">
+        <tr>
         <td>是否给未导入字段添加默认值</td>
         <td>
-            <select class="use_default_value">
+                <select name="use_default_value" class="use_default_value">
                 <option value="0" selected="selected">否</option>
                 <option value="1">是</option>
             </select>
         </td>
     </tr>
 </table>
-<a class="more-btn" href="javascript:;">更多</a>
+<a class="more-btn" href="javascript:;">展开更多V</a>
 <a class="import-submit-btn" href="javascript:;">导入</a>
