@@ -21,7 +21,6 @@ let config = {
         getUserViewList:function () {
             let that = this;
             TabService.getFavoriteList().done((result) => {
-                console.log(result);
                 if(result.success === 1 ){
                     let tempList = result.data;
                     for (let k in tempList){
@@ -59,12 +58,14 @@ let config = {
             }
             let favorlist = {};
             let list = [];
+            let idList = [];
             let name = this.el.find('.view-name').val();
 
             for (let k in this.data.currentIframesList){
-                list.push({ 'id':this.data.currentIframesList[k],                 //只需要id
+                list.push({ 'id':this.data.currentIframesList[k],                 //只需要存id
                             'table_id':"",
                             'ts_name':""})
+                idList.push(this.data.currentIframesList[k]);
             }
             favorlist['name'] = name;
             favorlist['list'] = JSON.stringify(list);
@@ -74,7 +75,10 @@ let config = {
             TabService.saveFavoriteItem(favorlist).done((result) => {
                 if(result.success === 1){
                     msgbox.alert("保存成功");
-                    that.data.favoriteList.unshift({'name':name,'list':list});
+                    _.remove(that.data.favoriteList,function (n) {
+                        return n.name === name;
+                    });
+                    that.data.favoriteList.unshift({'name':name,'list':idList});
                     that.actions.initList();
                 }
             })
@@ -84,7 +88,6 @@ let config = {
             let name = event.currentTarget.attributes.view_id.value;
             let tabIdList = [];
             for ( let k of this.data.favoriteList){
-                console.log(k);
                 if ( k.name === name){
                     tabIdList = k.list;
                     break;
@@ -117,14 +120,9 @@ let config = {
                         return n === 'calendar'
                     })
                 }
-
                 this.actions.findTabInfo(menu,tabIdList);  //查找各tab的url和name
-
                 Mediator.emit('saveview:displayview',this.data.newHash);
-                //依次打开tabs
-                // for(let i=0; i<this.data.newHash.length; i++){
-                //     Mediator.emit('menu:item:openiframe',this.data.newHash[i]);
-                // }
+                SaveView.hide();
             }
         },
         findTabInfo:function (nodes,targetList) {

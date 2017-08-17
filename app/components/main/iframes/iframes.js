@@ -141,7 +141,6 @@ export const IframeInstance = new Component({
         closeAllIframes:function () {
             let temp_arr = _.defaultsDeep([],this.data.sort);
             for(let k of temp_arr){
-                console.log(k);
                 this.actions.closeIframe(k);
             }
         },
@@ -282,6 +281,7 @@ export const IframeInstance = new Component({
         Mediator.on('saveview:displayview', (data) => {
             this.actions.closeAllIframes();  //先关闭所有标签，再打开view中的标签
             for(let k of data){
+                console.log(k);
                 this.actions.openIframe(k.id,k.url,k.name);
             }
         })
