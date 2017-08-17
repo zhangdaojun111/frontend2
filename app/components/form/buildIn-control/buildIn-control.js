@@ -7,18 +7,6 @@ import template from './buildIn-control.html';
 
 let config={
     template:template,
-    firstAfterRender(){
-        let _this=this;
-        _this.el.on('click','.ui-selector',function(){
-            _.debounce(function(){Mediator.publish('form:selectChoose:'+_this.data.tableId,_this.data)},200)();
-        });
-        _this.el.on('click','.ui-history',function(){
-            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
-        });
-        _this.el.on('click','.add-item',function(){
-            _.debounce(function(){Mediator.publish('form:addNewBuildIn:'+_this.data.tableId,_this.data)},300)();
-        });
-    },
     afterRender(){
         let _this=this;
         this.data.isInit=true;
@@ -36,6 +24,15 @@ let config={
             this.append(autoSelect,el);
         }
         this.data.isInit=false;
+        _this.el.on('click','.ui-selector',function(){
+            _.debounce(function(){Mediator.publish('form:selectChoose:'+_this.data.tableId,_this.data)},200)();
+        });
+        _this.el.on('click','.ui-history',function(){
+            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
+        });
+        _this.el.on('click','.add-item',function(){
+            _.debounce(function(){Mediator.publish('form:addNewBuildIn:'+_this.data.tableId,_this.data)},300)();
+        });
     },
     beforeDestory(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);

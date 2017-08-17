@@ -4,66 +4,17 @@ import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui-timepicker-addon';
 import 'jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css';
 import '../base-form/base-form.scss'
-import './data-control-alert.html'
 import template from  './date-control.html';
 import './date-control.scss';
+import msgbox from '../../../lib/msgbox';
 
 let config={
     template:template,
-    data:{
-        width:'240px'
-    },
-    actions:{
-        onSelect:function(val) {
-            let _this = this;
-            let valInput = _this.el.find(".date_yy-mm-dd").val();
-            this.data.value=valInput;
-            //timeType 是否可以选择之前的日期，before:只能选择之前的日期，after：只能选择之后的，all：可以选择全部
-            let currentTime = new Date().getTime();
-            let valTime = new Date(this.data.value).getTime();
-            if(this.data['timeType']){
-                if(this.data['timeType'] == 'after'){
-                    if(valTime < currentTime){
-                        _.debounce(function(){Mediator.publish('form:alertDateFuture:'+_this.data.tableId,_this.data)},200)();
-                        //alert("所选日期不能早于当前日期！");
-                        console.log("早")
-                    }
-                }else if(this.data['timeType'] == 'before') {
-                    if(valTime > currentTime){
-                           _.debounce(function(){Mediator.publish('form:alertDateHistory:'+_this.data.tableId,_this.data)},200)();
-                        //alert("所选日期不能晚于当前日期！");
-                        console.log("晚")
-                    }
-                }
-            }else{
-                console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！',this.selector);
-            }
-
-        }
-    },
-    firstAfterRender(){
+    afterRender(){
         let _this=this;
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
-    },
-    afterRender(){
-        let _this=this;
-        // this.el.find(".date_yy-mm-dd").on("click", function () {
-        //     _this.el.find(".date_yy-mm-dd").val("年/月/日");
-        //     //增加0
-        //     function p(s) {
-        //         return s < 10 ? '0' + s: s;
-        //     }
-        //     //获取当前时间
-        //    let myDate = new Date();
-        //    let y=myDate.getFullYear();
-        //     let m=myDate.getMonth();
-        //    let d=myDate.getDate();
-        //    let now=y+'/'+p(m)+"/"+p(d);
-        //    let nowTime = $(".date_yy-mm-dd").val(now);
-        //     event.stopPropagation();
-        // })
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
             this.el.find('.ui-width').attr('disabled',true);
@@ -80,6 +31,38 @@ let config={
             dateFormat: "yy/mm/dd",
             onClose: function(selectedDate) {
             },
+            onSelect: function (selectTime, text) {
+                _this.data.value = selectTime.replace(/\//g, "-");
+                _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                if( _this.data.value.length > 10 ){
+                    _this.data.value = '';
+                }
+                let _val='';
+                if( selectTime){
+                    _val= selectTime.substring(0,10);
+                }
+                let currentTime = new Date().getTime();
+                selectTime = new Date(_val).getTime();
+
+                if( _this.data['timeType']){
+                    if( _this.data['timeType'] == 'after'){
+                        if(selectTime < currentTime){
+                            msgbox.alert("所选日期不能早于当前日期！");
+                            _this.data.value = "请选择";
+                            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                        }
+                    }else if( _this.data['timeType'] == 'before') {
+                        if(selectTime > currentTime){
+                            msgbox.alert("所选日期不能晚于当前日期！");
+                            _this.data.value = "请选择";
+                            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                        }
+                    }
+                }else{
+                    console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！',this.selector);
+                }
+
+            }
 
         });
         let boolean = true;
@@ -97,20 +80,9 @@ let config={
         _this.el.on('click','.date-close',function () {
             _this.el.find(".date_yy-mm-dd").val("年/月/日");
         })
-
         _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
-        //无法绑定到当前td,暂时先绑定到当前input
-        // _this.el.find('input').parent('div').parent('div').parent('td').parent('tr').parent('tbody').parent('table').parent('div').parent('div').siblings('div#ui-datepicker-div').find('table.ui-datepicker-calendar>tbody>tr>td').on('click',function () {
-        //    console.log('绑上了ma ')
-        //     _this.actions.onSelect();
-        // })
-        this.el.on( 'click','input',function () {
-            _this.actions.onSelect();
-        });
     },
     beforeDestory:function(){
-        //_this.el.find('input').parent('div').parent('div').parent('td').parent('tr').parent('tbody').parent('table').parent('div').parent('div').siblings('div#ui-datepicker-div').off('click')
-
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
         Mediator.removeAll('form:history:'+this.data.tableId);
     }

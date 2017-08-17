@@ -23,8 +23,6 @@ import MultiSelectControl from "../multi-select-control/multi-select-control";
 import EditorControl from "../editor-control/editor";
 import SettingTextareaControl from "../setting-textarea-control/setting-textarea";
 import AddItem from '../add-item/add-item';
-import  alertConfig1 from '../date-control/data-control-alert1'
-import  alertConfig2 from '../date-control/data-control-alert2'
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import History from'../history/history'
 import AddEnrypt from '../encrypt-input-control/add-enrypt'
@@ -759,7 +757,15 @@ let config={
             for(let key in data){
                 formValue[key]=data[key].value;
             }
-            return formValue;
+            let {error,errorMsg} = this.actions.validForm(this.data.data,formValue);
+            if(error){
+                return {
+                    error:error,
+                    errorMessage:errorMsg
+                }
+            }else{
+                return formValue;
+            }
         },
 
         //统计功能
@@ -822,15 +828,11 @@ let config={
             }
         },
         //赋值
-        setFormValue(dfield,value,label){
+        setFormValue(dfield,value){
             let data=this.data.data[dfield];
             if(data){
                 let childComponet=this.childComponent[dfield];
                 childComponet.data["value"] = data["value"] = value;
-                if(data['type'] == 'Select' || data['type']=='Buildin'){
-                    childComponet.data["showValue"] = data["showValue"] = label;
-                }
-                childComponet.destroyChildren();
                 childComponet.reload();
             }
         },
@@ -1274,6 +1276,15 @@ let config={
                         _this.childComponent[data[key].dfield]=multiLinkageControl;
                         break;
                     case 'MultiSelect':
+                        if(single.data('childData')){
+                            // data[key].childData=single.data('childData');
+                            data[key].childData='#*#2638_3egFSMCwDBHgNKBo59sr6P$#$#*#6487_VjN4tR8j6uChdEb8GkajaN';
+                        }
+                        if(single.data('selectType')){
+                            // data[key].childData=single.data('selectType');
+                            data[key].selectType='1';
+                        }
+                        data[key].is_special = data[key].field_content['special_multi_choice'] == 1?true:false;
                         let multiSelectControl = new MultiSelectControl(data[key]);
                         multiSelectControl.render(single);
                         _this.childComponent[data[key].dfield]=multiSelectControl;
@@ -1315,28 +1326,25 @@ let config={
         //改变人员信息表主岗选项
         changeMainDepart(isClick,_this){
             let arr = [{value:'',label:'请选择'}];
-            console.log('进来了么');
             //判断是否需要将主岗部门置为请选择
             if( isClick ){
                 let arr_1 = [];
                 for( let i = 1;i<_this.department["options"].length;i++ ){
                     arr_1.push(_this.department["options"][i]["value"]);
                 }
-                if( arr_1.length != _this.department_whole.value.length ){
-                    this.setFormValue( _this.form_department,'' );
+                if( arr_1.length != _this.value.length ){
+                    this.actions.setFormValue( _this.form_department,'' );
                 }
             }
             //改变主岗部门option
-            for( let i=0;i<_this.department_whole.value.length;i++ ){
-                for( let j=0;j<_this.main_depart.length;j++ ){
-                    if( _this.main_depart[j]["value"] === _this.department_whole.value[i] ){
+            for( let i=0;i<_this.value.length;i++ ){
+                for( let j in _this.main_depart){
+                    console.log()
+                    if( _this.main_depart[j]["value"] === _this.value[i] ){
                         arr.push( _this.main_depart[j] );
                     }
                 }
             }
-            console.log('_this.department.dfield_this.department.dfield_this.department.dfield');
-            console.log(_this.department.dfield);
-            console.log(arr);
             this.data.data[_this.department.dfield]["options"]=arr;
             this.childComponent[_this.department.dfield].data["options"]=arr;
             this.childComponent[_this.department.dfield].reload();
@@ -1351,6 +1359,8 @@ let config={
         this.actions.addBtn();
         //控件值改变频道
         Mediator.subscribe('form:changeValue:'+_this.data.tableId,function(data){
+            console.log('值改变时间');
+            console.log(data);
             _this.actions.checkValue(data,_this);
         })
         //历史值触发
@@ -1396,6 +1406,9 @@ let config={
                 modal:true
             }).then((data) => {
                 console.log('快捷添加回显');
+                if(data.onlyclose){
+                    return;
+                }
                 _this.actions.addNewItem(data);
             });
 
@@ -1443,7 +1456,7 @@ let config={
                 }else{
                     _this.data.viewMode = 'viewFromCorrespondence';
                 }
-                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true`,{
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`,{
                     width:800,
                     height:600,
                     title:`对应关系`,
@@ -1465,28 +1478,6 @@ let config={
                 }
             });
         }),
-
-            //日期alert弹窗
-            Mediator.subscribe('form:alertDateHistory:'+_this.data.tableId,function(msg){
-                let config = _.defaultsDeep({}, alertConfig1);
-               //config.data.text = msg;
-                PMAPI.openDialogByComponent( config,{
-                    width: 300,
-                    height: 170,
-                    title: '提示',
-                    modal: true
-                })
-            }),
-            Mediator.subscribe('form:alertDateFuture:'+_this.data.tableId,function(msg){
-                let config = _.defaultsDeep({}, alertConfig2);
-               // config.data.text= msg;
-                PMAPI.openDialogByComponent( config,{
-                    width: 300,
-                    height: 170,
-                    title: '提示',
-                    modal: true
-                })
-            }),
 
         Mediator.subscribe('form:addNewBuildIn:'+_this.data.tableId,function(data){
             _this.data['quikAddDfield']=data.dfield;
