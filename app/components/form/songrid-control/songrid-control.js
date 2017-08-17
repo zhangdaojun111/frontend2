@@ -6,7 +6,7 @@ import template from './songrid-control.html';
 
 let config={
     template:template,
-    firstAfterRender(){
+    afterRender(){
         let _this=this;
         _this.el.on('click','.ui-forms-a',_.debounce(function(){
             Mediator.publish('form:openSongGrid:'+_this.data.tableId,_this.data);

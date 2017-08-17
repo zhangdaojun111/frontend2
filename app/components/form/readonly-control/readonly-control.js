@@ -85,13 +85,12 @@ let config={
             }
         }
     },
-    firstAfterRender(){
+    afterRender() {
+
         let _this=this;
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
-    },
-    afterRender() {
         this.el.find('.ui-width').css('width',this.data.width);
     },
     beforeDestory(){

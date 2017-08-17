@@ -4,7 +4,15 @@
     {{else if be_control_condition}}
         <a href="javascript:void(0);" class="info">被修改条件限制</a>
     {{else}}
-        <div id="multi-select"></div>
+        {{#if is_special}}
+            {{#unless reset}}
+                <div id="oneSelect"></div>
+                <div id="moreSelect"></div>
+                <div style="display: none" id="noneSelect"></div>
+            {{/unless}}
+        {{else}}
+            <div id="multi-select"></div>
+        {{/if}}
         <div style="float: left;">
             {{#if required}}
                 <span id="requiredLogo" class="required" ></span>

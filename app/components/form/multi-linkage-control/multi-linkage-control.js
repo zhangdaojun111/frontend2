@@ -104,8 +104,9 @@ let config={
             }
         }
     },
-    firstAfterRender(){
+    afterRender(){
         let _this=this;
+
         Mediator.subscribe('form:multiLinkageDefaultData:'+this.data.tableId,()=>{
             if(res != null){
                 //如果默认值为空
@@ -122,9 +123,7 @@ let config={
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
-    },
-    afterRender(){
-        let _this=this;
+
         this.data.isInit=true;
         this.set('hasChoose', new Map());
         if (!this.childDrop) {
