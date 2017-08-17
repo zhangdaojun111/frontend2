@@ -1,17 +1,49 @@
-.checkbox{
+.checkbox {
   width: 100%;
   margin-top: 20px;
-  input[type='checkbox']{
-    display: none;
-  }
-  .checkbox-circle{
+  .i-check {
+    height: 20px;
+    position: relative;
     display: inline-block;
-    width: 16px;
-    height: 16px;
-    box-sizing: border-box;
-    border: 2px solid #676a6c;
-    border-radius: 5%;
+    padding-left: 26px;
+    line-height: 20px;
+    margin: 0 10px;
+  }
+  .i-check label {
+    width: 20px;
+    height: 20px;
     cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #3b8cff;
+    border-radius: 4px;
+  }
+  .i-check label:after {
+    content: '';
+    width: 9px;
+    height: 5px;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    border: 3px solid #fff;
+    border-top: none;
+    border-right: none;
+    background: transparent;
+    opacity: 0;
+    transform: rotate(-45deg);
+  }
+  .i-check input[type=checkbox]:checked + label:after {
+    opacity: 1;
+  }
+  .i-check input[type=checkbox] {
+    opacity: 0;
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
   }
 }
-
