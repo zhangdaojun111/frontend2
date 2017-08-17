@@ -42,9 +42,7 @@ let config ={
             let $listParent = this.el.find('.history-list');
             let temp = this.data.historyList;
             $listParent.empty();
-            console.log(temp);
             for( let k of temp){
-                console.log(k)
                 let $li = $("<li class='record-item'>");
                 $li.attr('data_content',k.content);
 
@@ -118,7 +116,7 @@ let config ={
             }
             this.actions.initList();
             UserInfoService.saveGlobalSearchHistory(this.data.historyList).done((result) => {
-                console.log("historyList save success",result);
+                // console.log("historyList save success",result);
                 //使用autoSelect扩展接口更新list的显示
             }).fail((err) => {
                 console.log("historyList save failed",err);
@@ -183,6 +181,10 @@ let config ={
                 this.el.find("input.search-content").attr("placeholder","请输入要搜索的内容...");
             }
         },
+        setItemHover:function (event) {
+            console.log(event);
+            event.target.addClass('item-selected');
+        },
         myKeyDown:function (event) {
             if(event.keyCode === 13){       //回车，进行搜索
                 //根据id设置搜索的content
@@ -191,12 +193,23 @@ let config ={
                 this.actions.doSearch();
             }else if(event.keyCode === 40){
                 this.data.selectNum++;
-                this.el.find('')
+                let $list = this.el.find('.history-list');
+                $list.find('.record-item').removeClass('item-selected');
+                if(this.data.selectNum === this.data.historyList.length){
+                    this.data.selectNum = 0;
+                }
+                let selected_content = this.data.historyList[this.data.selectNum].content;
+                $list.find(`li[data_content = ${selected_content}]`).addClass('item-selected');
             }else if(event.keyCode === 38){
-
+                this.data.selectNum--;
+                let $list = this.el.find('.history-list');
+                $list.find('.record-item').removeClass('item-selected');
+                if(this.data.selectNum < 0){
+                    this.data.selectNum = this.data.historyList.length - 1 ;
+                }
+                let selected_content = this.data.historyList[this.data.selectNum].content;
+                $list.find(`li[data_content = ${selected_content}]`).addClass('item-selected');
             }else{
-
-
 
 
             }
@@ -221,7 +234,10 @@ let config ={
             this.actions.hideHistoryList();
         }).on('keydown','.search-content',(event) => {
             this.actions.myKeyDown(event);
+        }).on('hover','.record-item',(event) => {
+            this.actions.setItemHover();
         })
+
     },
     beforeDestroy:function () {
 

@@ -9,7 +9,7 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import {LoginService} from '../services/login/loginService';
 import {md5} from '../services/login/md5';
 import msgBox from '../lib/msgbox';
-import {RegisterComponent} from './register';
+
 
 function getLoginController() {
     return {
@@ -75,7 +75,6 @@ function getLoginController() {
             //注册按钮
             this.$registerBtn.on('click', () => {
                 $(window).attr('location','/register_index');
-                // RegisterComponent.show();
             });
             //忘记密码，找回密码入口
             this.$findPwBtn.on("click", () => {
