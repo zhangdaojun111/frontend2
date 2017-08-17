@@ -4,11 +4,11 @@
     {{#if remindTaskItemData.isSetSelect}}
         {{#if remindTaskItemData.selectOption}}
         <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-finished.png" alt="">
-        <div class="select-options" style="display: none">
+        <select class="select-options">
             {{#each remindTaskItemData.selectOption}}
-            <span class="select-children" id="{{this.value}}">{{this.label}}</span>
+            <option class="select-children" value="{{this.value}}">{{this.label}}</option>
             {{/each}}
-        </div>
+        </select>
         {{else}}
         <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-pending.png" alt="">
         {{/if}}
