@@ -78,7 +78,7 @@ let config = {
         $(document).click(function(){
             that.el.parents(".month-body").find(".select-options").hide();
             that.el.parents(".month-body").find(".task-state-icon").removeClass("options-show");
-        })
+        });
     }
 };
 

@@ -156,19 +156,19 @@ let config = {
         Mediator.on('calendar-set:editor', data => {
             if (data.data === 1) {
                 this.el.find(".editor-items").attr("disabled", false);
-                _this.el.find('.editor-items').removeClass('unclick');
                 _this.data.multiSelectMenu.destroySelf();
                 select_item_data.editable = true;
                 _this.data.multiSelectMenu = new AutoSelect(select_item_data);
                 _this.append(_this.data.multiSelectMenu, _this.el.find('.multi-select-item'));
+                _this.el.find('td').removeClass('unclick');
                 staus = true;
             } else {
                 this.el.find(".editor-items").attr("disabled", true);
-                _this.el.find(".editor-items").addClass('unclick');
                 _this.data.multiSelectMenu.destroySelf();
                 select_item_data.editable = false;
                 _this.data.multiSelectMenu = new AutoSelect(select_item_data);
                 _this.append(_this.data.multiSelectMenu, _this.el.find('.multi-select-item'));
+                _this.el.find("td").addClass('unclick');
                 staus = false;
             }
         });
