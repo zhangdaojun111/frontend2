@@ -11,6 +11,20 @@ let config={
         this.el.on('click','.ui-forms-a',_.debounce(function(){
             Mediator.publish('form:openCorrespondence:'+_this.data.tableId,_this.data);
         },300));
+        Mediator.subscribe('form:correspondenceDefaultData:'+this.data.tableId,()=>{
+            if(res == _this.data.value){
+                //待晓川那边提供刷新接口
+                this.data.dataGrid.actions.getGridData();
+            }
+        })
+        Mediator.subscribe('correspondenceSaved:' + this.data.dfield + ':' + this.data.value,(res)=>{
+            if(res == true){
+                //待晓川那边提供刷新接口
+                _this.data.dataGrid.actions.getGridData();
+            }
+        })
+    },
+    afterRender(){
         let config={
             tableId:this.data.value,
             parentTableId:this.data.tableId,
@@ -18,19 +32,11 @@ let config={
             rowId:this.data.parent_temp_id,
             viewMode:'viewFromCorrespondence',
             recordId:this.data.recordId,
+            correspondenceField:this.data.dfield,
         }
         let dataGrid=new DataTableAgGrid(config);
         this.data.dataGrid=dataGrid;
         this.append(dataGrid,this.el.find('.correspondence-box'));
-        Mediator.subscribe('form:correspondenceDefaultData:'+this.data.tableId,()=>{
-            if(res == _this.data.value){
-                //待晓川那边提供刷新接口
-                dataGrid.reload();
-            }
-        })
-    },
-    afterRender(){
-        this.append(this.data.dataGrid,this.el.find('.correspondence-box'));
     },
 
     beforeDestory(){

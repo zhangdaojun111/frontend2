@@ -1436,7 +1436,7 @@ let config={
                 }else{
                     _this.data.viewMode = 'viewFromCorrespondence';
                 }
-                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true`,{
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`,{
                     width:800,
                     height:600,
                     title:`对应关系`,
