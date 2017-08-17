@@ -164,6 +164,8 @@ let config = {
                 _this.data.multiSelectMenu = new AutoSelect(select_item_data);
                 _this.append(_this.data.multiSelectMenu, _this.el.find('.multi-select-item'));
                 _this.el.find('td').removeClass('unclick');
+                _this.el.find(".set-remind-method").removeClass('unclick');
+                _this.el.find('input').removeClass('unclick');
                 staus = true;
             } else {
                 this.el.find(".editor-items").attr("disabled", true);
@@ -172,6 +174,8 @@ let config = {
                 _this.data.multiSelectMenu = new AutoSelect(select_item_data);
                 _this.append(_this.data.multiSelectMenu, _this.el.find('.multi-select-item'));
                 _this.el.find("td").addClass('unclick');
+                _this.el.find(".set-remind-method").addClass('unclick');
+                _this.el.find('input').addClass('unclick');
                 staus = false;
             }
         });
@@ -183,15 +187,6 @@ let config = {
         });
         if(!this.data.rowSetData['email']['email_status'] && !this.data.rowSetData['sms']['sms_status']) {
             this.el.find('.set-remind-method').html('设置提醒方式');
-        }
-
-        if(staus){
-            _this.el.find(".set-remind-method").removeClass('unclick');
-            _this.el.find('input').removeClass('unclick');
-        }
-        else{
-            _this.el.find(".set-remind-method").addClass('unclick');
-            _this.el.find('input').addClass('unclick');
         }
         this.el.on('click', '.set-show-text-input', () => {
 

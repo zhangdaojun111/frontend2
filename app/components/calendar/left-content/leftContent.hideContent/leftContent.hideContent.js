@@ -1,3 +1,7 @@
+/**
+ * Created by lipengfei.
+ * 日历隐藏表
+ */
 import Component from "../../../../lib/component";
 import template from './leftContent.hideContent.html';
 import './leftContent.hideContent.scss';
@@ -21,6 +25,7 @@ let config = {
             config.data.show_type_ID = "";
             that.destroySelf();
         });
+
     },
 }
 class RightContentWorkFlow extends Component {

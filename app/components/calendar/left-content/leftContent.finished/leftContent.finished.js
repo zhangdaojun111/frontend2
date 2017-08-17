@@ -1,3 +1,7 @@
+/**
+ * Created by lipengfei.
+ * 已完成内容
+ */
 import Component from "../../../../lib/component";
 import template from './leftContent.finished.html';
 import './leftContent.finished.scss'

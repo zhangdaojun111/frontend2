@@ -1,3 +1,7 @@
+/**
+ * Created by lipengfei.
+ * 日历树组
+ */
 import Component from "../../../../lib/component";
 import template from './leftContent.calendarSet.html';
 import './leftContent.calendarSet.scss';
@@ -169,7 +173,8 @@ let config = {
             if(isAllGroupchecked){
                 this.el.find("#checkbox_a3").addClass('label-select-all-checked');
             }
-            Mediator.emit('calendar-left:calendar-class-hide',{data:config.data.hide_tables});
+            console.log(config.data.hide_tables);
+            // Mediator.emit('calendar-left:calendar-class-hide',{data:config.data.hide_tables});
         },
         showRemindType:function (that,data) {
             that.el.find("#select-all-"+data.data).addClass("label-select-all-show label-select-all-checked");

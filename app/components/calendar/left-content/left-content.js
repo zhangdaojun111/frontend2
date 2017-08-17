@@ -1,3 +1,8 @@
+/**
+ * Created by lipengfei.
+ * 日历左侧显示
+ */
+
 import Component from "../../../lib/component";
 import template from './left-content.html';
 import './left-content.scss';
@@ -63,6 +68,24 @@ let config = {
             that.el.find(".item-content-1").show();
             that.el.find(".item-content-1").css({height:"80%"});
         },
+        getCalendarTreeData:function(that){
+            for(let i = 0;i<this.data.calendarTreeData.hide_tables.length;i++){
+                let hide_table_name = "";
+                let hide_table_id = this.data.calendarTreeData.hide_tables[i];
+                for(let j = 0;j < this.data.calendarTreeData.rows.length;j++){
+                    if(hide_table_id === this.data.calendarTreeData.rows[j].table_id){
+                        hide_table_name = this.data.calendarTreeData.rows[j]['table_name'];
+                    }
+                }
+                this.data.hide_table.tableName = hide_table_name;
+                this.data.hide_table.table_Id = hide_table_id;
+                this.data.hide_tables[i] = this.data.hide_table;
+                this.data.hide_table = {'tableName':"",'table_Id':''}
+            }
+            this.data.hide_tables.forEach((row) =>{
+                that.append(new LeftContentHide(row), that.el.find('.left-calendar-hide'));
+            })
+        },
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
@@ -76,14 +99,17 @@ let config = {
             });
         });
         let that = this;
+        this.actions.getCalendarTreeData(that);
         Mediator.on('calendar-left:hideRemindType',data =>{
                 that.append(new LeftContentHide(data.data), this.el.find('.left-calendar-hide'));
         });
-        Mediator.on('calendar-left:calendar-class-hide',data =>{
-            data.data.forEach((row) =>{
-                that.append(new LeftContentHide(row), that.el.find('.left-calendar-hide'));
-            });
-        });
+        // Mediator.on('calendar-left:calendar-class-hide',data =>{
+        //     alert(1111111);
+        //     data.data.forEach((row) =>{
+        //         console.log(row);
+        //         that.append(new LeftContentHide(row), that.el.find('.left-calendar-hide'));
+        //     });
+        // });
         Mediator.on('calendar-left:showRemindType',()=>{
             that.actions.showRemindType(that);
         });

@@ -1,3 +1,7 @@
+/**
+ * Created by lipengfei.
+ * 日历树选择
+ */
 import Component from "../../../../lib/component";
 import template from './leftContent.SelectLabel.html';
 import './leftContent.SelectLabel.scss';

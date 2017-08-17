@@ -77,11 +77,18 @@ let config = {
         this.el.on('click','.task-state-icon',function(){
             event.stopPropagation();
             if(!$(this).is(".options-show")){
-                that.el.parents(".month-body").find(".select-options").hide();
-                that.el.parents(".month-body").find(".task-state-icon").removeClass("options-show");
+                that.el.parents(".calendar-main-content").find(".select-options").hide();
+                that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
                 that.el.find(".select-options").show();
                 // that.el.find(".select-options").css("top",that.el.find(".task-item").parent().position().top + 22);
                 $(this).addClass("options-show");
+                // that.el.parents("tbody").is(".month-body"){
+                //
+                // }
+                if(that.el.find(".task-item").parent().position().top > 60){
+                    let task_list = that.el.find(".task-item").parents(".task-list");
+                    task_list.scrollTop(task_list.scrollTop()+25);
+                }
             }
             else{
                 that.el.find(".select-options").hide();
@@ -92,14 +99,11 @@ let config = {
             event.stopPropagation();
         });
         $(document).click(function(){
-            that.el.parents(".month-body").find(".select-options").hide();
-            that.el.parents(".month-body").find(".task-state-icon").removeClass("options-show");
+            that.el.parents(".calendar-main-content").find(".select-options").hide();
+            that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
         });
         // that.el.parents(".task-list").on("scroll", function(){
         //     that.el.find(".select-options").css("top",that.el.find(".task-item").parent().position().top + 22);
-        //     if(that.el.find(".task-item").parent().position().top > 120 || that.el.find(".task-item").parent().position().top < 10){
-        //         that.el.find(".select-options").hide();
-        //     }
         // });
     }
 };

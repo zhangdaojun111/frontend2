@@ -1,3 +1,7 @@
+/**
+ * Created by lipengfei.
+ * 工作流进度展示
+ */
 import Component from "../../../../lib/component";
 import template from './right.content.workflowcontent.html';
 import './right.content.workflowcontent.scss';
@@ -17,10 +21,8 @@ let config = {
             return str;
         },
         showfirst(){
-            let workflow_Id = "#workflow-"+config.data.table_id;
-            this.el.find("#workflow").attr("id","workflow-"+config.data.table_id);
-            let record_progress = config.actions.toPercent(config.data.record_progress);
-            this.el.find(workflow_Id).css({"width":record_progress});
+            let record_progress = config.actions.toPercent(this.data['record_progress']);
+            this.el.find(".workflow-schedule").css({"width":record_progress});
         }
     },
     afterRender: function() {
