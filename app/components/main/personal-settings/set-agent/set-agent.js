@@ -99,7 +99,7 @@ let config = {
                 multiSelect: false,
                 editable: true,
                 onSelect: function (choosed) {
-                    console.log(that,choosed);
+                    console.log(choosed);
                     that.actions.setAgentId(choosed);
                 }
             });
@@ -205,6 +205,7 @@ let config = {
 
             UserInfoService.saveAgentData(data)
                 .done((result) => {
+                console.log(result);
                     if(result.success === 1){
                         if(result.agent_state === 0){
                             msgbox.alert("您所选择的代理人已离职，请重新选择");
