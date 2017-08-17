@@ -17,7 +17,7 @@ import msgBox from '../lib/msgbox';
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import Grid from '../components/dataGrid/data-table-page/data-table-page';
 import jsPlumb from 'jsPlumb';
-
+import {PMAPI,PMENUM} from '../lib/postmsg';
 
 
 WorkFlowForm.showForm();
@@ -234,3 +234,15 @@ Mediator.subscribe('workflow:choose', function (info) {
 //         Mediator.publish("getApprove",res);
 //     })
 // });
+
+$('#aaa').click(()=>{
+    PMAPI.openDialogByIframe(`/iframe/addWf/?table_id=1586_CcrzabMYLePTkAGDqpTgo2&form_id=2&flow_id=34&key=iframedialog-1502880319557`,{
+        width:1000,
+        height:800,
+        title:`加签节点`,
+        modal:true
+    }).then(res=>{
+        console.log(res);
+          
+    })
+});
