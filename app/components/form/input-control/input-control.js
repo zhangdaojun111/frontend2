@@ -18,6 +18,7 @@ let config={
             let regErrorMsg;
             let val = this.el.find("input").val();
             this.data.value=val;
+            console.log('走没走这里呢');
             _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
             let func = this.data.func;
             let reg = this.data.reg;
@@ -146,7 +147,7 @@ let config={
             }
         }
     },
-    firstAfterRender(){
+    afterRender() {
         let _this=this;
         _this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
@@ -167,8 +168,6 @@ let config={
         this.el.on('mouseleave', 'input', () => {
             this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
         });
-    },
-    afterRender() {
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
             this.el.find('.ui-width').attr('disabled',true);

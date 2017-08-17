@@ -100,7 +100,7 @@ export const FormService={
         HTTP.flush();
         return res;
     },
-  
+
     //身份证验证
     checkCard (card) {
         let result = true;
@@ -481,27 +481,31 @@ export const FormService={
     deleteUploaded(json) {
         return HTTP.postImmediately('/delete_attachment/',json);
     },
+    getAttachment(json){
+        return HTTP.postImmediately('/query_attachment_list/',json);
+    },
 
     //重新拼装下拉框格式
-    createSelectJson(json,multi){
-        let data={list:[],choosed:[]};
+    createSelectJson(json,multi,isMultiBuild){
+
+        let data={list:[]};
         if(json.is_view){
             data['editable']=false;
         }else{
             data['editable']=true;
         }
         data['width']=json['width'];
-        for(let key in json['options']){
-            if(json['value'] && ((!multi && json['value']==json['options'][key]['value']) || (multi && json['value'].length > 0 && json['value'].indexOf(json['options'][key]['value'] != -1)))){
-                data.choosed.push({
-                    id:json['options'][key]['value']||'',
-                    name:json['options'][key]['label'] || '',
-                });
-            }
+        let options;
+        if(isMultiBuild){
+            options=json.is_view?json.isViewOptions:(json.options2 || json.options);
+        }else{
+            options=json['options'];
+        }
+        for(let key in options){
             data.list.push({
-                id:json['options'][key]['value']||'',
-                name:json['options'][key]['label']||'',
-                // py:json['options'][key]['py'].join(','),
+                id:options[key]['value']||'',
+                name:options[key]['label']||'',
+                // py:options[key]['py'].join(','),
             });
         }
         if(!(data.list[0]['id']=='') && data.list[0]['id'] != '请选择' && !multi){

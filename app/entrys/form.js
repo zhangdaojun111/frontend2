@@ -10,6 +10,8 @@ let FormEntrys = {
     isloadCustomTableForm:false,
     isloadWorkflow:false,
     init(config={}){
+        console.log('曉川給我tempId了?');
+        console.log(config);
         this.tableId='';
         this.parentRealId='';
         this.parentTempId='';
@@ -183,12 +185,13 @@ let FormEntrys = {
             data[obj.dfield]=obj;
         }
         staticData.data=data;
-        // staticData['parentRealId']=staticData["real_id"]["value"]||'';
-        // staticData['parentTableId']=staticData["table_id"]["value"]||'';
-        // staticData['parentTempId']=staticData["temp_id"]["value"]||'';
+        // staticData['parentRealId']=staticData.data["real_id"]["value"]||'';
+        // staticData['parentTableId']=staticData.data["table_id"]["value"]||'';
+        // staticData['parentTempId']=staticData.data["temp_id"]["value"]||'';
         staticData.parentTableId=this.parentTableId;
         staticData.parentRealId=this.parentRealId;
         staticData.parentTempId=this.parentTempId;
+        staticData.parentRecordId=this.parentRecordId;
         staticData.tableId=staticData['table_id'] || this.tableId;
         staticData.formId=this.formId;
         staticData.realId=this.realId;
@@ -196,6 +199,8 @@ let FormEntrys = {
         staticData.isBatch=this.isBatch;
         staticData.key=this.key;
         staticData.btnType=this.btnType;
+        console.log('最終的baseFormData');
+        console.log(staticData);
         return staticData;
     },
     //处理字段数据
