@@ -118,7 +118,6 @@ let SettingPrint = {
                        $('iframe').each((index,obj)=>{
                            if(obj.src.indexOf(_this.data.key) != -1){
                                obj.focus();
-                               console.log($(obj.contentDocument).find('title').text(_this.data.myContent));
                                $(obj.contentDocument).find('title').text(_this.data.myContent)
                                obj.contentWindow.print();
                                isFrame=true;

@@ -1,3 +1,7 @@
+/**
+ * author hufei
+ * 工作流审批盖章的操作
+ */
 import Component from '../../../lib/component';
 import template from './workflow-seal.html';
 import './workflow-seal.scss';
@@ -38,7 +42,7 @@ let config = {
             let html = " ";
             let host = "http://"+window.location.host;
             for (let i=0;i<len;i++){
-                html += "<li class='li-img'><span class='J_delImg' id="+msg.file_ids[i]+">X</span><img src='"+host+"/download_attachment/?file_id="+msg.file_ids[i]+"&download=0' data-id="+msg.file_ids[i]+" class='add-img'/></li>";
+                html += `<li class='li-img clearfix'><span class='J_delImg delImg' id=${msg.file_ids[i]}>X</span><img src='${host}/download_attachment/?file_id=${msg.file_ids[i]}&download=0' data-id=${msg.file_ids[i]} class='add-img'/></li>`;
             }
             this.el.find('.J_ul-img').html(html);
         },
@@ -83,7 +87,7 @@ let config = {
             let imgTop = $(e.target).offset().top;
             let imgId =  $(e.target).attr("data-id");
             this.el.find('.J_dragimg').attr("data-id",imgId);
-            let url = "http://"+window.location.host+"/download_attachment/?file_id="+imgId+"&download=0";
+            let url = `http://${window.location.host}/download_attachment/?file_id=${imgId}&download=0`;
             this.el.find(".signatureMock").css('visibility','visible');
             // this.el.find(".J_dragimg").attr("src",url);
             console.log(url);
@@ -178,29 +182,29 @@ let config = {
             let top1 = top+"%";
             let left1 = left+"%";
             let host = "http://"+window.location.host;
-            let html = "<div class='imgseal noprint' data-height="+height+" data-width="+width+" data-viewLeft="+viewLeft+" data-viewTop="+viewTop+" data-imgid="+id+" style='top:"+top1+";left:"+left1+";z-index:"+1002+";position:absolute;padding-top:15px;'><img  width=50 height=50 src='"+host+"/download_attachment/?file_id="+id+"&download=0'/><i class='J_del'  style='display: none;position: absolute;right: -22px;top: 0;width: 23px;height: 23px;background: url(assets/icon_del.png) no-repeat;'>X</i></div>";
-            html += `<img class="printS" style="top:${top1};left:${left1};position: absolute;margin-top: 17px;" width=50 height=50 src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
+            let html = `<div class='imgseal noprint' data-height=${height} data-width=${width} data-viewLeft=${viewLeft} data-viewTop=${viewTop} data-imgid=${id} style='top:${top1};left:${left1};z-index:1002;position:absolute;padding-top:15px;'>
+                            <img  width=228 height=148 src='${host}/download_attachment/?file_id=${id}&download=0'/>
+                                <i class='J_del'>X</i>
+                         </div>`;
+            html += `<img class="printS printimg" style="top:${top1};left:${left1};" width=228 height=148 src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
             $('#place-form').children(":first").append(html);
         },
         showImgDel(e){
             let ev = $(e.target).children('i');
             ev.css("display","block");
         },
-        toggImg(e){
-            let ev =$(e.target);
-            if(ev.hasClass("imgshow")){
-                ev.removeClass('imgshow');
-                ev.addClass('imghide');
+        toggImg(){
+            if(this.showImg){
+                this.showImg = false;
                 Mediator.publish("workflow:hideImg");
             }else{
-                ev.removeClass('imghide');
-                ev.addClass('imgshow');
-                console.log(6496);
+                this.showImg = true;
                 Mediator.publish("workflow:showImg");
             }
         }
     },
     afterRender: function() {
+        this.showImg = true;
         this.el.on('change','.J_add',(e)=>{
             this.actions.addImg(e);
         }),
@@ -218,8 +222,8 @@ let config = {
             this.actions.Imgcoordinate(e);
             // e.stopPropagation(e);
         }),
-        this.el.on("click",".J_toggImg",(e)=>{
-            this.actions.toggImg(e);
+        this.el.on("click",".J_toggImg",()=>{
+            this.actions.toggImg();
         });
         // $(".approval-info-item").on("click",(e)=>{
         //     console.log(13265);
@@ -234,11 +238,9 @@ let config = {
         // });
 
         $(".approval-info-item").on("click",(e)=>{
-            console.log(13265);
             this.actions.showImgDel(e);
         });
         Mediator.subscribe('workflow:changeImg',(msg)=>{
-            console.log(msg.file_ids);
             this.actions.changeImg(msg);
         })
     },

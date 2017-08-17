@@ -1,47 +1,14 @@
 import Component from '../../../lib/component'
-import DropDown from "../vender/dropdown/dropdown";
+import {AutoSelect} from "../../util/autoSelect/autoSelect"
+import {FormService} from "../../../services/formService/formService";
 import Mediator from '../../../lib/mediator';
-import './buildin-control.scss'
+import './buildin-control.scss';
+import template from './buildIn-control.html';
 
 let config={
-    template:`  <div class="clearfix">
-                    {{#if unvisible}}
-                        <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                    {{else if be_control_condition}}
-                        <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                    {{else}}
-                        <div class="dropdown" style="width:{{width}};float: left"></div>
-                        <div style="float: left;">
-                            {{#if required}}
-                                <span id="requiredLogo" class="{{requiredClass}}" ></span>
-                            {{/if}}
-                            {{#if history}}
-                                       <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>     
-                            {{/if}} 
-                            {{#unless is_view}}
-                                <a href="javascript:void(0);" class="ui-selector" ></a>
-                                {{#if can_add_item}}
-                                    <a href="javascript:void(0);" class="add-item noprint"> + </a>
-                                {{/if}}
-                            {{/unless}} 
-                        </div>
-                     {{/if}}   
-                </div>`,
-    data:{
-        width:'240px',
-    },
-    actions:{
-
-    },
-    firstAfterRender:function(){
+    template:template,
+    firstAfterRender(){
         let _this=this;
-        Mediator.subscribe('form:dropDownSelect:'+_this.data.tableId,function(data){
-            if(data.dfield !=_this.data.dfield){
-                return;
-            }
-            _this.data=Object.assign(_this.data,data);
-            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
-        });
         _this.el.on('click','.ui-selector',function(){
             _.debounce(function(){Mediator.publish('form:selectChoose:'+_this.data.tableId,_this.data)},200)();
         });
@@ -52,23 +19,33 @@ let config={
             _.debounce(function(){Mediator.publish('form:addNewBuildIn:'+_this.data.tableId,_this.data)},300)();
         });
     },
-    afterRender:function(){
+    afterRender(){
+        let _this=this;
+        this.data.isInit=true;
         if(!this.data.be_control_condition) {
-            if(this.data.options[0]['value']){
-                this.data.options.unshift({label:'',value:''});
-            }
-            this.append(new DropDown(this.data), this.el.find('.dropdown'));
+            let el=this.el.find('.dropdown');
+            let data=FormService.createSelectJson(this.data);
+            data.onSelect=function(data){
+                if(_this.data.isInit || !data || data.length == 0 ){
+                    return;
+                }
+                _this.data.value=data[0]['id'];
+                _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+            };
+            let autoSelect=new AutoSelect(data);
+            this.append(autoSelect,el);
         }
+        this.data.isInit=false;
     },
-    beforeDestory:function(){
-        Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
+    beforeDestory(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
+        Mediator.removeAll('form:history:'+this.data.tableId);
+        Mediator.removeAll('form:addNewBuildIn:'+this.data.tableId);
+        Mediator.removeAll('form:selectChoose:'+this.data.tableId);
     }
 }
 export default class BuildInControl extends Component{
     constructor(data){
         super(config,data);
-        // console.log('buildin')
-        // console.log(this.data);
     }
 }

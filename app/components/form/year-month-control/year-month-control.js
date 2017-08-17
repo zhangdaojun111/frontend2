@@ -1,98 +1,97 @@
 import Component from '../../../lib/component'
 import DropDown from "../vender/dropdown/dropdown";
 import Mediator from '../../../lib/mediator';
+import template from './year-month-control.html'
+import {AutoSelect} from "../../util/autoSelect/autoSelect"
 
 let config={
-    template:`<div class="clearfix">
-                {{#if unvisible}}
-                    <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                 {{else if be_control_condition }}
-                    <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                 {{else}}
-                        <div class="year" style="float: left"></div>
-                        <span style="float: left;">年</span>
-                        <div class="month" style="float: left"></div>
-                        <span style="float: left;">月</span>
-                        <div style="float: left;">
-                           {{#if required}}
-                                    <span id="requiredLogo" class="{{requiredClass}}" ></span>
-                           {{/if}}
-                           {{#if history}}
-                                <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>     
-                            {{/if}}       
-                      </div>
-                 {{/if}}
-            </div>`,
+    template:template,
     data:{
-
+        isInit:true,
     },
     actions:{
-
+      changeValue(value,_this){
+          let val = 0;
+          if( value > 12 ){
+              val =value + "-" + _this.data.value.split('-')[1];
+          }
+          else{
+              val = _this.data.value.split('-')[0] + "-" + value;
+          }
+          _this.data.value = val;
+          _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+      }
     },
-    firstAfterRender:function(){
+    firstAfterRender(){
         let _this=this;
-        Mediator.subscribe('form:dropDownSelect:'+_this.data.tableId,function(data){
-            if(data.dfield !=_this.data.dfield){
-                return;
-            }
-            let val = 0;
-            if( data.value > 12 ){
-                val =data.value + "-" + _this.data.value.split('-')[1];
-            }
-            else{
-                val = _this.data.value.split('-')[0] + "-" + data.value;
-            }
-            _this.data.value = val;
-            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
-        });
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
     },
-    afterRender:function(){
-        let yearData = {} ;
-        let monthData = {} ;
-        $.extend(true,yearData,this.data)
-        $.extend(true,monthData,this.data)
+    afterRender(){
+        let _this=this;
+        let yearData = {
+            multiSelect:false,
+            editable:this.data.is_view?false:true,
+            onSelect:function(data){
+                if(data.length==0 && _this.data.isInit){
+                    return;
+                }
+                _this.actions.changeValue(data[0]['id'],_this);
+            },
+            choosed:[],
+        } ;
+        let monthData = {
+            multiSelect:false,
+            editable:this.data.is_view?false:true,
+            onSelect:function(data){
+                if(data.length==0 && _this.data.isInit){
+                    return;
+                }
+                _this.actions.changeValue(data[0]['id'],_this);
+            },
+            choosed:[],
+        } ;
         let myDate = new Date();
         let myYear = myDate.getFullYear();
-        if(!yearData.options || !yearData.options.length){
-            yearData.options=[];
+        if(!yearData.list || !yearData.list.length){
+            yearData.list=[];
         }
-        yearData.options.push({ "label": String(myYear),"value": String(myYear),"tableId":this.tableId})
+        yearData.list.push({ "name": String(myYear),"id": String(myYear)})
         for( let i=1;i<=5;i++ ){
-            yearData.options.unshift( { "label": String(myYear - i),"value": String(myYear - i)} );
-            yearData.options.push( { "label": String(myYear + i),"value": String(myYear + i)} );
+            yearData.list.unshift( { "name": String(myYear - i),"id": String(myYear - i)} );
+            yearData.list.push( { "name": String(myYear + i),"id": String(myYear + i)} );
         }
-        monthData.options = [
-            {"label": 1,"value": 1},
-            {"label": 2,"value": 2},
-            {"label": 3,"value": 3},
-            {"label": 4,"value": 4},
-            {"label": 5,"value": 5},
-            {"label": 6,"value": 6},
-            {"label": 7,"value": 7},
-            {"label": 8,"value": 8},
-            {"label": 9,"value": 9},
-            {"label": 10,"value": 10},
-            {"label": 11,"value": 11},
-            {"label": 12,"value": 12}
+        monthData.list = [
+            {"name": 1,"id": '01'},
+            {"name": 2,"id": '02'},
+            {"name": 3,"id": '03'},
+            {"name": 4,"id": '04'},
+            {"name": 5,"id": '05'},
+            {"name": 6,"id": '06'},
+            {"name": 7,"id": '07'},
+            {"name": 8,"id": '08'},
+            {"name": 9,"id": '09'},
+            {"name": 10,"id": 10},
+            {"name": 11,"id": 11},
+            {"name": 12,"id": 12}
         ]
         if(this.data.value != ''){
-            yearData.value = this.data.value.split('-')[0]
-            monthData.value = this.data.value.split('-')[1]
+            yearData['choosed'][0] = {name:this.data.value.split('-')[0],id:this.data.value.split('-')[0]};
+            monthData['choosed'][0] = {name:this.data.value.split('-')[1],id:this.data.value.split('-')[1]};
         }
         else{
-            yearData.value = myYear;
-            monthData.value = myDate.getMonth() + 1;
+            // yearData['choosed'][0] = {name:myYear,id:myYear};
+            // monthData['choosed'][0] = {name:myDate.getMonth() + 1,id:myDate.getMonth() + 1};
         }
-        this.append(new DropDown(yearData),this.el.find('.year'));
-        this.append(new DropDown(monthData),this.el.find('.month'));
-        console.log('怎么回事呢');
+        this.destroyChildren();
+        this.append(new AutoSelect(yearData),this.el.find('.year'));
+        this.append(new AutoSelect(monthData),this.el.find('.month'));
+        this.data.isInit=false;
     },
-    beforeDestory:function(){
-        Mediator.removeAll('form:dropDownSelect:'+this.data.tableId);
+    beforeDestory(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
+        Mediator.removeAll('form:history:'+this.data.tableId);
     }
 }
 export default class YearMonthControl extends Component{

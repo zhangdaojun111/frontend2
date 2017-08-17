@@ -1,42 +1,63 @@
 import Component from '../../../lib/component'
-import DropDown from "../vender/dropdown/dropdown";
-import Mediator from '../../../lib/mediator';
+import Mediator from '../../../lib/mediator'
+import {AutoSelect} from '../../util/autoSelect/autoSelect'
+import {FormService} from '../../../services/formService/formService'
+import template from './multi-select-control.html'
 
 let config={
-    template:`  <div class="clearfix">
-                    {{#if unvisible}}
-                        <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                    {{else if be_control_condition}}
-                            <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                    {{else}}
-                        <div id="MainContent_Caccey_location_ddl"></div>
-                        <div style="float: left;">
-                            {{#if required}}
-                                <span id="requiredLogo" class="required" ></span>
-                            {{/if}} 
-                        </div>   
-                    {{/if}}
-                </div>`,
-    data:{
-
-    },
+    template:template,
     actions:{
-
+        setValue(){
+            let values=[];
+            for(let key in this.childSelect.data.choosed){
+                values.push(this.childSelect.data.choosed[key]['id']);
+            }
+            this.data.value=values;
+        }
     },
     firstAfterRender:function(){
         let _this=this;
-        // $('#MainContent_Caccey_location_ddl').multiselect({
-        //     includeSelectAllOption: true,
-        //     enableFiltering: true,
-        //     maxHeight: 400,
-        //     numberDisplayed: 1
-        // });
         Mediator.subscribe('form:changeOption:'+_this.data.tableId,function(data){
             if( _this.data.dfield && res == _this.data.dfield ){
                 _this.data.value = [];
+                _this.childSelect.data.choosed=[];
                 _this.reload();
             }
         })
+        this.el.on('click','.add-item',function(){
+            _.debounce(function(){Mediator.publish('form:addItem:'+_this.data.tableId,_this.data)},200)();
+        })
+        this.el.on('click','.ui-history',function(){
+            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
+        });
+    },
+    afterRender(){
+        let _this=this;
+        this.data.isInit=true;
+        if(!this.data.be_control_condition) {
+            this.set('childSelect', {});
+            let el=this.el.find('#multi-select');
+            if(this.data.options[0]['label'] == '-'){
+                this.data.options[0]['value']='-';
+            }
+            let data=FormService.createSelectJson(this.data,true);
+            data.onSelect=function(){
+                if(_this.data.isInit || !_this.childSelect || _this.childSelect.data.choosed.length == 0 ){
+                    return;
+                }
+                console.log('频道');
+                console.log('form:userSysOptions:'+_this.data.tableId);
+                if(_this.data.isSys){
+                    _.debounce(function(){Mediator.publish('form:userSysOptions:'+_this.data.tableId,_this.data)},200)();
+                }
+                _this.actions.setValue();
+                _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+            };
+            let autoSelect=new AutoSelect(data);
+            this.childSelect=autoSelect;
+            this.append(autoSelect,el);
+        }
+        this.data.isInit=false;
     },
     beforeDestory:function(){
         Mediator.removeAll('form:changeOption:'+this.data.tableId);
@@ -45,5 +66,7 @@ let config={
 export default class MultiSelectControl extends Component{
     constructor(data){
         super(config,data);
+        console.log('1111');
+        console.log(data);
     }
 }
