@@ -183,9 +183,6 @@ let FormEntrys = {
             data[obj.dfield]=obj;
         }
         staticData.data=data;
-        // staticData['parentRealId']=staticData.data["real_id"]["value"]||'';
-        // staticData['parentTableId']=staticData.data["table_id"]["value"]||'';
-        // staticData['parentTempId']=staticData.data["temp_id"]["value"]||'';
         staticData.parentTableId=this.parentTableId;
         staticData.parentRealId=this.parentRealId;
         staticData.parentTempId=this.parentTempId;
@@ -395,7 +392,6 @@ let FormEntrys = {
         console.log('更上去了么')
         console.log('更上去了么')
         console.log('更上去了么')
-        console.log('更上去了么')
         console.time('获取表单数据的时间');
         this.init(config);
         let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap">`).prependTo(this.el);
@@ -408,11 +404,7 @@ let FormEntrys = {
         //检查表单类型
         let template=await this.checkFormType(data,res);
         //发送审批记录
-        if(this.fromApprove){
-            if(res[1]['record_info']){
-                Mediator.publish('workFlow:record_info',res[1]['record_info']);
-            }
-        }
+        Mediator.publish('workFlow:record_info',data);
         let formData={
             template:template,
             data:data,
