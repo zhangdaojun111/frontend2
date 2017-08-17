@@ -1,5 +1,6 @@
 //工具函数
 
+
 export const Utils = {
     formatParams: function (params) {            //格式化用户名和密码
         let result = [];
