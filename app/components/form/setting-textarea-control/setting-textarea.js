@@ -47,7 +47,6 @@ let config = {
             this.actions.openSettingDialog();
         })
         this.el.on('click','.ui-history',function(){
-            console.log(_this.data);
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
         //周期规则默认值填充

@@ -1,30 +1,38 @@
 <div class="condition-search-choice">
     <div class="condition-search-item">
-        <span class="condition-search-radiobox">
-            <label><input class="condition-search-radio and" type="radio" value="$and" checked="checked">并且</label>
-            <label><input class="condition-search-radio or" type="radio" value="$or" >或者</label>
-        </span>
-
+        <!--<span class="condition-search-radiobox">-->
+            <!--<label><input class="condition-search-radio and" type="radio" value="$and" checked="checked">并且</label>-->
+            <!--<label><input class="condition-search-radio or" type="radio" value="$or" >或者</label>-->
+        <!--</span>-->
+        <select class="condition-search-select radio">
+            <option value="$and">并且</option>
+            <option value="$or">或者</option>
+        </select>
         <select class="condition-search-select left-select">
             <option value="0">--</option>
             <option value="(">(</option>
         </select>
 
         <div class="condition-search-box">
-            <input class="condition-search-box-input" readonly="readonly" type="text">
+            <input class="condition-search-box-input" placeholder="请选择" readonly="readonly" type="text">
             <ul class="condition-search-ul">
 
             </ul>
         </div>
         <select class="condition-search-select relation">
-
+            <option value="$regex">包含</option>
+            <option value="exact">等于</option>
+            <option value="$gt">大于</option>
+            <option value="$lt">小于</option>
+            <option value="$ne">不等于</option>
         </select>
         <input class="condition-search-input">
         <select class="condition-search-select right-select">
             <option value="0">--</option>
             <option value=")">)</option>
         </select>
-        <span class="add">新增</span>
-        <span class="delete">删除</span>
+        <span class="condition-search-delete"></span>
+        <span class="condition-search-add"></span>
+
     </div>
 </div>

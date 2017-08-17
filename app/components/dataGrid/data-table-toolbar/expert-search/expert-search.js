@@ -60,9 +60,10 @@ let config = {
             let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
             this.append(epCondition, this.el.find('.condition-search-container'));
             this.data.searchInputAry.push(epCondition.data);
-            this.el.find('.condition-search-item').css('marginLeft','97px');
-            this.el.find('.condition-search-radiobox').css('display','none');
-            this.el.find('.delete').css('display','none');
+            this.el.find('.condition-search-item').css({'paddingLeft':'83px','borderTop':'1px solid #e4e4e4'});
+            this.el.find('.condition-search-select.radio').css('display','none');
+            this.el.find('.condition-search-delete').css('visibility','hidden');
+            this.el.find('.condition-search-add').css('display','inline-block');
         },
         // 获取查询数据
         submitData: function (name){
@@ -100,12 +101,12 @@ let config = {
                 obj['cond']['searchBy'] = this.el.find('.condition-search-box-input').eq(i).attr('name');
                 obj['cond']['searchByName'] = this.el.find('.condition-search-box-input').eq(i).val();
                 obj['cond']['searchByNew'] = this.el.find('.condition-search-box-input').eq(i).attr('name');
-                if(this.el.find('.condition-search-radio.or').eq(i).prop('checked') == true) {
-                    obj['relation'] = '$or';
-                }
+                obj['relation'] = this.el.find('.condition-search-select.radio').val()
+                // if(this.el.find('.condition-search-radio.or').eq(i).prop('checked') == true) {
+                //     obj['relation'] = '$or';
+                // }
                 this.data.searchInputList.push(obj);
             }
-            debugger
             this.actions.checkedSubmitData(name)
         },
         //展示常用查询
@@ -126,10 +127,11 @@ let config = {
                 this.el.find('.condition-search-box-input').eq(j).attr('name',searchData[j]['cond']['searchBy']);
                 this.el.find('.condition-search-box-input').eq(j).val(searchData[j]['cond']['searchByName']);
                 this.el.find('.condition-search-box-input').eq(j).attr('name',searchData[j]['cond']['searchByNew']);
-                if(searchData[j]['relation'] == "$or") {
-                    this.el.find('.condition-search-radio.or').eq(j).prop('checked',true);
-                    this.el.find('.condition-search-radio.and').eq(j).prop('checked',false);
-                }
+                this.el.find('.condition-search-select.radio').val(searchData[j]['relation']);
+                // if(searchData[j]['relation'] == "$or") {
+                //     this.el.find('.condition-search-radio.or').eq(j).prop('checked',true);
+                //     this.el.find('.condition-search-radio.and').eq(j).prop('checked',false);
+                // }
             }
         },
         //加载不同查询条件的查询关系
@@ -203,7 +205,6 @@ let config = {
         //打开保存常用查询
         openSaveQuery: function(){
             if(this.isEdit) {
-                debugger
                 addQuery.data.name = this.name;
             }
             PMAPI.openDialogByComponent(addQuery, {
@@ -290,15 +291,9 @@ let config = {
         //移除常用查询按钮
         removeQueryItem: function(id) {
             let itemLength = this.el.find('.common-search-item').length;
-            let optionLength = this.el.find('.dataGrid-commonQuery-option').length;
             for(let i = 0; i < itemLength; i++) {
                 if(this.el.find('.common-search-item').eq(i).attr('fieldId') == id){
                     this.el.find('.common-search-item').eq(i).remove();
-                }
-            }
-            for(let i = 0; i < optionLength; i++) {
-                if(this.el.find('.dataGrid-commonQuery-option').eq(i).attr('fieldId') == id){
-                    this.el.find('.dataGrid-commonQuery-option').eq(i).remove();
                 }
             }
         },
@@ -315,17 +310,20 @@ let config = {
             this.itemDeleteChecked = false;
             this.isEdit = false;
             let _this = this;
-            this.el.on('click','.add',()=> {
+            this.el.on('click','.condition-search-add',()=> {
                 // this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
                 let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
                 this.append(epCondition, this.el.find('.condition-search-container'));
                 this.data.searchInputAry.push(epCondition.data);
+                let length = this.el.find('.condition-search-item').length;
+                this.el.find('.condition-search-item').find('.condition-search-add').css('display','none')
+                this.el.find('.condition-search-item').eq(length-1).find('.condition-search-add').css('display','inline-block')
             }).on('click','.condition-search-radio', function() {
                 $(this).parent().parent('.condition-search-radiobox').find('.condition-search-radio').prop('checked',false);
                 $(this).prop('checked',true)
-            }).on('click','.searchButton', ()=> {
+            }).on('click','.search-button', ()=> {
                 this.actions.submitData()
-            }).on('click','.resetButton',function(){
+            }).on('click','.reset-button',function(){
                 _this.el.find('.condition-search-container').find('div').remove();
                 _this.actions.rendSearchItem();
             }).on('click','.common-search-item',function() {
@@ -353,7 +351,7 @@ let config = {
                     _this.itemDeleteChecked = !_this.itemDeleteChecked;
                 } else {
                     _this.el.find('.common-search-list').find('.item-delete').css('display','none');
-                    _this.el.find('.common-search-compile').html('编辑');
+                    _this.el.find('.common-search-compile').html(`<span class="img"></span>`);
                     _this.itemDeleteChecked = !_this.itemDeleteChecked;
                     _this.isEdit = false;
                 }
