@@ -15,7 +15,10 @@ import "./normal.scss";
 
 let config = {
     template:template,
-    data: {},
+    data: {
+        x:[],
+        y:[]
+    },
     actions: {},
     afterRender() {
         this.renderFitting();
@@ -24,8 +27,10 @@ let config = {
 
         // 当选择数据源时渲染x,y轴字段
         Mediator.subscribe('bi:chart:form:fields', data => {
-            this.renderXField(data['x_field']);
-            this.renderYField(data['y_field']);
+            this.data.x = data['x_field'];
+            this.data.y = data['y_field'];
+            this.renderXField(this.data.x);
+            this.renderYField(this.data.y);
         });
 
         // 当删除数据源时 清除x,y轴字段
@@ -59,6 +64,7 @@ export class FormNormalComponent extends BiBaseComponent{
         this.formGroup = {};
         this.y = [];
         this.y1 = [];
+        this.doubleY = null;
     }
 
     /**
@@ -77,14 +83,29 @@ export class FormNormalComponent extends BiBaseComponent{
             ],
             onChange: this.showY1Axis.bind(this)
         };
-
+        const defaultYdata = {
+            name: 'defaultY',
+            value:null,
+            checkboxs:[
+                {value:'', name:'默认显示Y轴数据'},
+            ],
+            onChange: this.selectYAxis.bind(this)
+        };
+        const ySelectedGroup = {
+            name: 'ySelectedGroup',
+            value:null,
+            checkboxs:[],
+            onChange: null
+        };
 
         this.formGroup = {
             chartName: base,
             share: share,
             x: instanceFitting({type:'autoComplete',me: this,container: 'form-group-x' }),
             y: [this.y, this.y1],
-            doubleY: instanceFitting({type:'checkbox', data: doubleYdata,me: this,container: 'form-group-doubleY' })
+            doubleY: instanceFitting({type:'checkbox', data: doubleYdata,me: this,container: 'form-group-doubleY' }),
+            defaultY: instanceFitting({type:'checkbox', data: defaultYdata,me: this,container: 'form-group-defaultY .default-y-tit' }),
+            ySelectedGroup:instanceFitting({type:'checkbox', data: ySelectedGroup,me: this,container: 'form-group-defaultY .default-y-selected' }),
         };
     }
 
@@ -114,12 +135,14 @@ export class FormNormalComponent extends BiBaseComponent{
      */
     clearSourceRelationField() {
         this.formGroup.x.autoSelect.data.list = [];
-        this.formGroup.x.autoSelect.data.choosed=[];
+        this.formGroup.x.autoSelect.data.choosed = [];
         this.formGroup.x.autoSelect.reload();
         let yGroup = this.y.concat(this.y1);
         yGroup.forEach(y => {
             y.clearRender();
-        })
+        });
+        this.data.x = [];
+        this.data.y = [];
     }
 
     /**
@@ -128,6 +151,9 @@ export class FormNormalComponent extends BiBaseComponent{
     addYAxis() {
         let y = new FormNormalYComponent();
         this.append(y, this.el.find('.form-group-y0'));
+        if (this.data.y.length > 0) {
+            y.reloadRender(this.data.y);
+        };
         this.y.push(y);
     }
 
@@ -139,6 +165,9 @@ export class FormNormalComponent extends BiBaseComponent{
             let y = new FormNormalYComponent();
             this.el.find('.form-group-y1').addClass('group-active');
             this.append(y, this.el.find('.form-group-y1'));
+            if (this.data.y.length > 0) {
+                y.reloadRender(this.data.y);
+            };
             this.y1.push(y);
         } else {
             this.el.find('.form-group-y1').removeClass('group-active');
@@ -154,6 +183,17 @@ export class FormNormalComponent extends BiBaseComponent{
         let items = _.remove(this.y, (item) =>{
             return item.componentId == componentId;
         });
+    }
+
+    /**
+     * 默认展示Y轴数据
+     */
+    selectYAxis(flag) {
+        if (flag) {
+            console.log(this.formGroup.y);
+        } else {
+
+        };
     }
 
     /**
