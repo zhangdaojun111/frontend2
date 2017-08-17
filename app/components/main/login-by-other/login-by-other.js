@@ -24,7 +24,6 @@ let config = {
     actions:{
         getData:function () {
             UserInfoService.getAllUsersInfo().done((result) => {
-                // console.log(result);
                 if(result.success === 1){
                     this.data.userData = result.rows;
                     this.actions.initList();
@@ -74,7 +73,7 @@ let config = {
         cancel:function () {
             this.el.dialog('close');
         }
-        
+
     },
     afterRender:function () {
         this.actions.getData();
