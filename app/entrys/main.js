@@ -21,6 +21,11 @@ IframeInstance.render($('#content'));
 HeaderInstance.render($('#header'));
 
 
+$("body").on('click',() => {        //冒泡使tab控制栏收回
+    $('.tab-list').slideUp();
+});
+
+
 // window.setTimeout(function () {
 //     socket.close()
 // }, 1000)

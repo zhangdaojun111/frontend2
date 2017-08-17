@@ -79,7 +79,6 @@ function getLoginController() {
                 this.$whitePanel.hide();
                 this.$oppositePanel.fadeIn();
                 this.isOpposite = true;
-
             });
 
             //反面面板关闭返回正面面板
