@@ -35,6 +35,7 @@ module.exports = {
         approvalWorkflow: path.resolve(APP_PATH, 'entrys/approvalWorkflow.js'),
         addFocus: path.resolve(APP_PATH, 'entrys/popup/addFocus.js'),
         addSigner: path.resolve(APP_PATH, 'entrys/popup/addSigner.js'),
+        addWf: path.resolve(APP_PATH, 'entrys/popup/addWf.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
@@ -59,8 +60,7 @@ module.exports = {
             'handlebars',
             'moment',
             'lodash',
-            'babel-polyfill',
-            'jsplumb'
+            'babel-polyfill'
         ]
     },
 
