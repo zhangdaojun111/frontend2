@@ -188,7 +188,6 @@ let config = {
                     }
                 }
             }
-            console.log(json);
             Mediator.emit('CalendarSelected: Search', json);
         }
     },

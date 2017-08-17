@@ -14,10 +14,25 @@ let config = {
         remindTaskItemData:{},
         isFinishedTask:false,
         isWaitCheck:true,
+
     },
     actions: {
+        // changSelectValue: function(set){
+        //     this.data.dropdownSelectValue = set;
+        //     let oldValue = set.data3show[0][0]['selectLabel'];
+        //     let newValue = '';
+        //     let selectValue = set.data3show[0][0]['selectValue'];
+        //     for( let s of set.selectOption ){
+        //         if( s.value == selectValue ){
+        //             newValue = s.label;
+        //         }
+        //     }
+        //     let str = '是否将字段 “'+ set.selectFieldName +'” 的值由 “'+ oldValue + '” 改为 “' + newValue + '”';
+        //     this.comfirmWin( str );
+        // }
     },
     afterRender: function() {
+        console.log(this.data.remindTaskItemData);
         this.el.find('.task-bg-color').css({backgroundColor: this.data.remindTaskItemData['color']});
         // if(this.data.remindTaskData === "已完成") {
         //     this.data.isFinishedTask = true;
@@ -31,7 +46,7 @@ let config = {
                 return false;
             }
         });
-        if(this.data.remindTaskItemData['data3show']) {
+        if(this.data.remindTaskItemData['type'] === 1) {
             this.el.find('.task-show-text').html(this.data.remindTaskItemData['data3show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data3show'][0][0]['fieldValue']);
             this.el.on('click', '.task-show-text', () => {
                 CalendarRemind.data.remindTable = this.data.remindTaskItemData.tableName;
@@ -50,7 +65,9 @@ let config = {
                 });
             });
 
-        }else {
+        } else if(this.data.remindTaskItemData['type'] === 2) {
+
+        } else {
             this.el.find('.task-show-text').html(this.data.remindTaskItemData['data']['name']);
             this.el.on('click', '.task-show-text', () => {
                 console.log(this.data.remindTaskItemData);
@@ -74,6 +91,7 @@ let config = {
                 that.el.find(".select-options").hide();
                 $(this).removeClass("options-show");
             }
+
         });
         $(document).click(function(){
             that.el.parents(".month-body").find(".select-options").hide();
