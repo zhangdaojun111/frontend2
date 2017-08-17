@@ -6,7 +6,8 @@ $(document).ready(function(){
         isBatch: window.config.isBatch,
         parentRealId: window.config.parentRealId,
         parentTableId: window.config.parentTableId,
-        parentTempId: window.config.parentTempId
+        parentTempId: window.config.parentTempId,
+        isSuperUser: window.config.isSuperUser
     };
     let dataImport = new dataTableImport(obj);
     dataImport.render($('#dataImport'));
