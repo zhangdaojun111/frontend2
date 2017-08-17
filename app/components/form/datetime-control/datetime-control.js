@@ -66,6 +66,9 @@ let config={
                             _this.data.value = "请选择";
                             _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
                         }
+                    }else if(_this.data['timeType'] == 'all'){
+                        _this.data.value = selectTime.replace(/\//g, "-");
+                        _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
                     }
                 }else{
                     console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！',this.selector);
