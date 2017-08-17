@@ -488,7 +488,7 @@ export const FormService={
     //重新拼装下拉框格式
     createSelectJson(json,multi,isMultiBuild){
 
-        let data={list:[]};
+        let data={list:[],choosed:[]};
         if(json.is_view){
             data['editable']=false;
         }else{
@@ -502,10 +502,27 @@ export const FormService={
             options=json['options'];
         }
         for(let key in options){
+            if(json['value']){
+                if(multi && json['value'].length>0){
+                    for(let i in json['value']){
+                        if(json['value'][i] == options[key]['value']){
+                            data.choosed.push({
+                                id:options[key]['value']||'',
+                                name:options[key]['label']||'',
+                            });
+                        }
+                    }
+                }else if(json['value'] == options[key]['value']){
+                    data.choosed.push({
+                        id:options[key]['value']||'',
+                        name:options[key]['label']||'',
+                    });
+                }
+            }
             data.list.push({
                 id:options[key]['value']||'',
                 name:options[key]['label']||'',
-                // py:options[key]['py'].join(','),
+                py:options[key]['py']?options[key]['py'].join(','):'',
             });
         }
         if(!(data.list[0]['id']=='') && data.list[0]['id'] != '请选择' && !multi){

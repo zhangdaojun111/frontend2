@@ -10,8 +10,6 @@ let FormEntrys = {
     isloadCustomTableForm:false,
     isloadWorkflow:false,
     init(config={}){
-        console.log('曉川給我tempId了?');
-        console.log(config);
         this.tableId='';
         this.parentRealId='';
         this.parentTempId='';
@@ -199,8 +197,6 @@ let FormEntrys = {
         staticData.isBatch=this.isBatch;
         staticData.key=this.key;
         staticData.btnType=this.btnType;
-        console.log('最終的baseFormData');
-        console.log(staticData);
         return staticData;
     },
     //处理字段数据
@@ -389,6 +385,7 @@ let FormEntrys = {
     },
     //创建表单入口
     async createForm(config={}){
+        console.time('获取表单数据的时间');
         this.init(config);
         let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap">`).prependTo(this.el);
         let res=await  FormService.getPrepareParmas({table_id:this.tableId});

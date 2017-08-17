@@ -24,7 +24,6 @@ let config={
     },
     afterRender(){
         let _this=this;
-
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
@@ -32,7 +31,7 @@ let config={
             multiSelect:false,
             editable:this.data.is_view?false:true,
             onSelect:function(data){
-                if(data.length==0 && _this.data.isInit){
+                if(data.length==0 || _this.data.isInit){
                     return;
                 }
                 _this.actions.changeValue(data[0]['id'],_this);
@@ -43,7 +42,7 @@ let config={
             multiSelect:false,
             editable:this.data.is_view?false:true,
             onSelect:function(data){
-                if(data.length==0 && _this.data.isInit){
+                if(data.length==0 || _this.data.isInit){
                     return;
                 }
                 _this.actions.changeValue(data[0]['id'],_this);

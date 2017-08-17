@@ -1,6 +1,7 @@
 import Component from '../../../lib/component';
 import Mediator from '../../../lib/mediator';
-import template from './textarea-control.html'
+import template from './textarea-control.html';
+import './textarea-control.scss';
 let config={
     template:template,
     afterRender(){
