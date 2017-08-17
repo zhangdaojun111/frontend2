@@ -27,6 +27,7 @@ let config = {
         // },
         displayDataResult:function (data) {
             //根据每个data创建组件，一页最多24个子组件
+            console.log(data);
             let $fatherContainer = this.el.find("div.data-result-display");
             let tempData = data.result;
             for( let d of tempData){
@@ -57,6 +58,7 @@ let config = {
             this.data.stats = 1;
         },
         setSearchContent:function () {
+            console.log("do set search content");
             let url = location.search;
             console.log(url);
             let mark = url.indexOf('=');
@@ -75,6 +77,7 @@ let config = {
             this.el.find("a.icon-search").hide();
             //发起第一次搜索请求，查询数据
             GlobalService.sendSearch(searchData).done((result) => {
+                console.log("do search")
                 if(result.success === 1){
                     console.log(result);
                     // let tempData = result;       //开全局搜索接口后使用
@@ -107,6 +110,7 @@ let config = {
         }
     },
     afterRender:function () {
+        console.log("do after render");
         this.actions.setSearchContent();
         this.el.on('click','.data-btn',() => {
             this.actions.showDataPage();

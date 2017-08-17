@@ -184,7 +184,6 @@ let config ={
             }
         },
         myKeyDown:function (event) {
-            console.log(event);
             if(event.keyCode === 13){       //回车，进行搜索
                 //根据id设置搜索的content
 
@@ -216,7 +215,6 @@ let config ={
         }).on('focus','.search-content',() => {
             this.actions.showHistoryList();
         }).on('blur','.global-search-main',() => {
-            console.log("oooo");
             this.actions.hideHistoryList();
         }).on('keydown','.search-content',(event) => {
             this.actions.myKeyDown(event);
