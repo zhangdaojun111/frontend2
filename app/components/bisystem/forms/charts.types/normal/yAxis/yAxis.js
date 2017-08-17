@@ -17,12 +17,13 @@ let config = {
     afterRender() {
         this.renderFitting();
     },
+
     firstAfterRender() {
         let me = this;
         this.el.on('click', '.remove-y-btn', (event) => {
             let yItems = $(this.el).siblings('div');
             if (yItems.length > 0) {
-                me.destroySelf();
+                this.destroySelf();
             };
             return false;
         }).on('click', '.add-y-btn', (event) => {
