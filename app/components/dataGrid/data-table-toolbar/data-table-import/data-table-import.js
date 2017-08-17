@@ -171,8 +171,7 @@ let config = {
         this.el.on( 'click','.import-submit-btn',()=>{
             this.actions.import();
         } )
-        console.log( this.data.isSuperUser )
-        if( this.data.isSuperUser ){
+        if( this.data.isSuperUser == 1 ){
             this.el.on( 'click','.more-btn',()=>{
                 this.actions.addMore();
             } )
