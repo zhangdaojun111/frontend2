@@ -1,0 +1,18 @@
+.workflow-flex{
+    display: flex;
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    div{
+        background: #0088ff;
+        width: 91px;
+        height: 30px;
+        text-align: center;
+        border-radius: 4px;
+        box-shadow: none;
+        color: #fff;
+        margin-right: 5px;
+        line-height: 30px;
+        cursor: pointer;
+    }
+}
