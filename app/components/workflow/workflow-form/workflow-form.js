@@ -104,7 +104,7 @@ let config = {
         Mediator.subscribe("workflow:appPass",(e)=>{
             Mediator.publish('workflow:sendImgInfo',this.actions.collectImg());
         });
-        //获取表头，通过form传给我们表头
+        //获取表名，通过form传给我们表名
         Mediator.subscribe("workflow:gotWorkflowTitle",res=>{
            console.log("获取表头，通过form传给我们表头,发布为workflow:gotWorkflowTitle");
            if(res){
@@ -112,7 +112,28 @@ let config = {
            }else{
                this.el.find(".J_wfName").text("表名");
            }
-        })
+        });
+
+        // 在页面显示表名，但是有一个bug，如果表名中含有>的话，只能截取部分表名
+        // Mediator.subscribe("workflow:gotWorkflowInfo",res=>{
+        //     console.log(res.data[0].content);
+        //     let data = res.data[0].content;
+        //     // console.log(res.data[0].content.indexOf("<table"));
+        //     let len = data.indexOf("<table");
+        //     if(len){
+        //         let titledata = data.substring(0,len);
+        //         let num = titledata.indexOf('</');
+        //         let a = len -num;
+        //         let str = titledata.split('').reverse().join('');
+        //         let b = str.substring(a,num);
+        //         let c = b.indexOf(">");
+        //         let title = b.substring(0,c);
+        //         title = title.split('').reverse().join('');
+        //         this.el.find(".J_wfName").text(title);
+        //     }else{
+        //         this.el.find(".J_wfName").text("表名");
+        //     }
+        // })
     }
 }
 

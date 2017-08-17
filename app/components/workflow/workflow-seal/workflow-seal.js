@@ -225,11 +225,9 @@ let config = {
         //     self.actions.cloneImgDrag($(this));
         // });
         $(".approval-info-item").on("click",(e)=>{
-            console.log(13265);
             this.actions.showImgDel(e);
         });
         Mediator.subscribe('workflow:changeImg',(msg)=>{
-            console.log(msg.file_ids);
             this.actions.changeImg(msg);
         })
     },
