@@ -1,6 +1,7 @@
 .bi-chart-input{
   width: 100%;
   margin: 10px 0;
+  position: relative;
   span{
     display: block;
     font-size: 12px;
@@ -14,21 +15,28 @@
     border: none;
     border-bottom: 2px solid #ececec;
     padding: 10px 0;
+  }
+  .border-line{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 2px;
     transition: all .5s;
   }
-  input:focus{
-    border-bottom-color: #3b8cff;
-    animation: wid-long 1s;
-  }
-  input:focus + span{
-    transform: translate(0,-55px);
+  input:focus + .border-line{
+    transition: all .5s;
+    animation: wid-long .5s forwards;
   }
   @keyframes  wid-long{
-    from{
-     width: 0;
+    0%{
+      width: 0;
+      background-color: #fff;
     }
-    to{
+    100%{
       width: 100%;
+      background-color: #3b8cff;
     }
   }
 }

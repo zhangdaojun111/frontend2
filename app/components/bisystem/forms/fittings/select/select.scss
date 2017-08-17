@@ -20,7 +20,7 @@
   select{
     cursor: pointer;
     padding: 10px 40px 10px 10px;
-    width: 95%;
+    width: calc(100% - 15px);
     border: none;
     height: 40px;
     overflow: auto;

@@ -1,6 +1,8 @@
 $bg-color:#d7d7d7;
 
 .chart-form{
+  overflow: auto;
+  height: calc(100% - 75px);
   .save{
     margin-top: 20px;
     button{

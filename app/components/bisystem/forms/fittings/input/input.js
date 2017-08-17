@@ -11,7 +11,7 @@ let config = {
     template: template,
     data: {
         value:null,
-        name: '请输入'
+        name: '请输入名称'
     },
     afterRender() {},
     firstAfterRender() {
