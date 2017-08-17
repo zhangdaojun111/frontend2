@@ -52,7 +52,7 @@ serchStr.split('&').forEach(res => {
         Mediator.publish('workflow:getParams', res.data.flow_data);
     }
 });
-
+Mediator.publish('workflow:focused', []);
 Mediator.subscribe('workflow:getflows', (res)=> {
     obj.flow_id=res.flow_id;
     obj.form_id=res.form_id;
@@ -65,7 +65,6 @@ Mediator.subscribe('workflow:getflows', (res)=> {
         });
     })().then(res => {
         Mediator.publish('workflow:gotWorkflowInfo', res);
-        Mediator.publish('workflow:focused', []);
     });
     FormEntrys.createForm({
         el: '#place-form',
