@@ -10,8 +10,6 @@ let FormEntrys = {
     isloadCustomTableForm:false,
     isloadWorkflow:false,
     init(config={}){
-        console.log('曉川給我tempId了?');
-        console.log(config);
         this.tableId='';
         this.parentRealId='';
         this.parentTempId='';
@@ -185,9 +183,6 @@ let FormEntrys = {
             data[obj.dfield]=obj;
         }
         staticData.data=data;
-        // staticData['parentRealId']=staticData.data["real_id"]["value"]||'';
-        // staticData['parentTableId']=staticData.data["table_id"]["value"]||'';
-        // staticData['parentTempId']=staticData.data["temp_id"]["value"]||'';
         staticData.parentTableId=this.parentTableId;
         staticData.parentRealId=this.parentRealId;
         staticData.parentTempId=this.parentTempId;
@@ -199,8 +194,6 @@ let FormEntrys = {
         staticData.isBatch=this.isBatch;
         staticData.key=this.key;
         staticData.btnType=this.btnType;
-        console.log('最終的baseFormData');
-        console.log(staticData);
         return staticData;
     },
     //处理字段数据
@@ -389,22 +382,21 @@ let FormEntrys = {
     },
     //创建表单入口
     async createForm(config={}){
+        console.time('获取表单数据的时间');
         this.init(config);
         let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap">`).prependTo(this.el);
         let res=await  FormService.getPrepareParmas({table_id:this.tableId});
         this.findFormIdAndFlowId(res);
         let json=this.createPostJson();
         res =await FormService.getFormData(json);
+        console.timeEnd('获取表单数据的时间');
+        console.time('form创建时间');
         //处理数据
         let data=this.mergeFormData(res[0],res[1]);
         //检查表单类型
         let template=await this.checkFormType(data,res);
         //发送审批记录
-        if(this.fromApprove){
-            if(res[1]['record_info']){
-                Mediator.publish('workFlow:record_info',res[1]['record_info']);
-            }
-        }
+        Mediator.publish('workFlow:record_info',data);
         let formData={
             template:template,
             data:data,

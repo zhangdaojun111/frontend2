@@ -5,6 +5,7 @@
         height: 25px;
         line-height: 25px;
         padding-left: 10px;
+        cursor: pointer;
         .select-Workflow{
             color: rgba(153,153,153,1);
         }
@@ -95,6 +96,7 @@
             height: 30px;
             line-height: 30px;
             position: relative;
+            cursor: pointer;
             &:after{
                 content: '';
                 position: absolute;

@@ -206,4 +206,4 @@ let postMessageUtil = {
 }
 
 export {postMessageUtil};
-postMessageUtil.show();
+// postMessageUtil.show();

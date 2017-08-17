@@ -20,13 +20,16 @@ let addQuery = {
                 PMAPI.sendToParent( {
                     key: this.key,
                     type: PMENUM.close_dialog,
+                    data: {
+
+                    }
                 } )
             } )
         }
     },
     afterRender: function () {
         if (this.data.name) {
-            this.el.find('.query-name-input').val(this.data.name);
+            $('.input').val(this.data.name);
         }
         this.actions.btnClick();
     },

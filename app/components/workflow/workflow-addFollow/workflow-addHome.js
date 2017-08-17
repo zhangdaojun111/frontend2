@@ -36,6 +36,7 @@ let config={
                         title:`添加关注人`,
                         modal:true
                     }).then(res=>{
+                        Mediator.publish('workflow:offEvent',1);
                         if(!res.onlyclose){
                             let nameArr=[],idArr=[];
                             for(var k in res){
@@ -55,6 +56,7 @@ let config={
                         title:`添加关注人`,
                         modal:true
                     }).then(res=>{
+                        Mediator.publish('workflow:offEvent',1);
                         if(!res.onlyclose){
                             let nameArr=[],idArr=[];
                             for(var k in res){

@@ -21,6 +21,10 @@
     .ui-icon-refresh {
       vertical-align: sub;
     }
+
+    .ui-icon-refresh:hover {
+      cursor: pointer;
+    }
   }
   .page {
     float: right;
@@ -44,6 +48,18 @@
       margin: 0 7px;
     }
   }
+  .goFirst:hover {
+    cursor: pointer;
+  }
+  .goPre:hover {
+    cursor: pointer;
+  }
+  .goNext:hover {
+    cursor: pointer;
+  }
+  .goLast:hover {
+    cursor: pointer;
+  }
   .selectPage {
     margin-right: 15px;
     float: right;
@@ -51,22 +67,6 @@
       width: 50px;
     }
   }
-}
-
-.goFirst:hover {
-  cursor: pointer;
-}
-.goPre:hover {
-  cursor: pointer;
-}
-.goNext:hover {
-  cursor: pointer;
-}
-.goLast:hover {
-  cursor: pointer;
-}
-.ui-icon-refresh:hover {
-  cursor: pointer;
 }
 
 .canNotClick {
