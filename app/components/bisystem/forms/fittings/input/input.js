@@ -10,7 +10,8 @@ import {FormFittingAbstract} from '../form.abstract'
 let config = {
     template: template,
     data: {
-        value:null
+        value:null,
+        name: '请输入'
     },
     afterRender() {},
     firstAfterRender() {

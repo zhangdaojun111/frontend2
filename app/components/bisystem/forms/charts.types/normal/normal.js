@@ -47,6 +47,13 @@ let config = {
             this.removeYAxis(componentId);
         });
 
+        // 当y轴数据更新时, 更新默认显示y轴数据
+        Mediator.subscribe('bi:chart:normal:y:update', (data) => {
+            if (this.formGroup.defaultY.data.value) {
+                this.selectYAxis(true)
+            };
+        });
+
         // 默认增加第一条y数据
         this.addYAxis();
     },
@@ -176,10 +183,17 @@ export class FormNormalComponent extends BiBaseComponent{
     /**
      * 删除y轴
      */
-    removeYAxis(componentId) {
-        let items = _.remove(this.y, (item) =>{
-            return item.componentId == componentId;
-        });
+    removeYAxis(data) {
+        if (data.num === 0) {
+            let items = _.remove(this.y, (item) =>{
+                return item.componentId == data.componentId;
+            });
+        } else {
+            let items = _.remove(this.y1, (item) =>{
+                return item.componentId == data.componentId;
+            });
+        }
+
     }
 
     /**
@@ -187,10 +201,15 @@ export class FormNormalComponent extends BiBaseComponent{
      */
     selectYAxis(flag) {
         if (flag) {
-            this.formGroup.ySelectedGroup.data.checkboxs = this.y.concat(this.y1);
+            let checkboxs = [];
+            this.y.concat(this.y1).map(y => {
+                checkboxs.push(y.data.field[0]);
+            });
+            this.formGroup.ySelectedGroup.data.checkboxs = checkboxs;
             this.formGroup.ySelectedGroup.reload();
         } else {
-
+            this.formGroup.ySelectedGroup.data.checkboxs = [];
+            this.formGroup.ySelectedGroup.reload();
         };
     }
 

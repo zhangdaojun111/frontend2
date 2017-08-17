@@ -12,7 +12,9 @@ import "./yAxis.scss";
 
 let config = {
     template:template,
-    data: {},
+    data: {
+        field:null
+    },
     actions: {},
     afterRender() {
         this.renderFitting();
@@ -22,8 +24,10 @@ let config = {
         let me = this;
         this.el.on('click', '.remove-y-btn', function(event) {
             let yItems = $(me.el).siblings('div');
+            let y = $(this).closest('.form-group-y').attr('class');
+            let num = y.indexOf('form-group-y0') !== -1 ? 0 : 1;
             if (yItems.length > 0) {
-                Mediator.publish('bi:chart:normal:removeY', me.componentId);
+                Mediator.publish('bi:chart:normal:removeY', {num: num, componentId: me.componentId});
                 me.destroySelf();
             };
             return false;
@@ -52,7 +56,8 @@ export class FormNormalYComponent extends BiBaseComponent{
             {name: 'field', option: {type: 'autoComplete', me: this, container: 'y-item'}},
             {name: 'type', option: {type: 'select', me: this, container: 'y-item'}}
         ];
-        this.yAxis = groupFitting(groupYFitting)
+        this.yAxis = groupFitting(groupYFitting);
+        this.yAxis.field.autoSelect.data.onSelect = this.getValue.bind(this);
     }
 
     /**
@@ -74,8 +79,17 @@ export class FormNormalYComponent extends BiBaseComponent{
         Object.keys(this.yAxis).map(key => {
             if (key === 'field') {
                 this.yAxis[key].autoSelect.data.list = [];
+                this.yAxis[key].autoSelect.data.choosed = [];
                 this.yAxis[key].autoSelect.reload();
             }
         })
+    }
+
+    /**
+     * 获取y轴的数据
+     */
+    getValue(data) {
+        this.data.field = data;
+        Mediator.publish('bi:chart:normal:y:update', this.data);
     }
 }
