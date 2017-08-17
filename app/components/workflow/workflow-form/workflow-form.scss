@@ -26,6 +26,18 @@
   .show{
     display: block;
   }
+  .J_del{
+    display: none;
+    position: absolute;
+    right: -22px;
+    top: 0;
+    width: 23px;
+    height: 23px;
+  }
+  .pringimg{
+    position: absolute;
+    margin-top: 17px;
+  }
 
 }
 #submit,#startNew{

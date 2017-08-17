@@ -39,7 +39,7 @@ let config = {
             let html = " ";
             let host = "http://"+window.location.host;
             for (let i=0;i<len;i++){
-                html += "<li class='li-img clearfix'><span class='J_delImg delImg' id="+msg.file_ids[i]+">X</span><img src='"+host+"/download_attachment/?file_id="+msg.file_ids[i]+"&download=0' data-id="+msg.file_ids[i]+" class='add-img'/></li>";
+                html += `<li class='li-img clearfix'><span class='J_delImg delImg' id=${msg.file_ids[i]}>X</span><img src='${host}/download_attachment/?file_id=${msg.file_ids[i]}&download=0' data-id=${msg.file_ids[i]} class='add-img'/></li>`;
             }
             this.el.find('.J_ul-img').html(html);
         },
@@ -82,7 +82,7 @@ let config = {
             let imgTop = $(e.target).offset().top;
             let imgId =  $(e.target).attr("data-id");
             this.el.find('.J_dragimg').attr("data-id",imgId);
-            let url = "http://"+window.location.host+"/download_attachment/?file_id="+imgId+"&download=0";
+            let url = `http://${window.location.host}/download_attachment/?file_id=${imgId}&download=0`;
             this.el.find(".signatureMock").css('visibility','visible');
             // this.el.find(".J_dragimg").attr("src",url);
             console.log(url);
@@ -178,8 +178,11 @@ let config = {
             let top1 = top+"%";
             let left1 = left+"%";
             let host = "http://"+window.location.host;
-            let html = "<div class='imgseal noprint' data-height="+height+" data-width="+width+" data-viewLeft="+viewLeft+" data-viewTop="+viewTop+" data-imgid="+id+" style='top:"+top1+";left:"+left1+";z-index:"+1002+";position:absolute;padding-top:15px;'><img  width=228 height=148 src='"+host+"/download_attachment/?file_id="+id+"&download=0'/><i class='J_del'  style='display: none;position: absolute;right: -22px;top: 0;width: 23px;height: 23px;'>X</i></div>";
-            html += `<img class="printS" style="top:${top1};left:${left1};position: absolute;margin-top: 17px;" width=228 height=148 src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
+            let html = `<div class='imgseal noprint' data-height=${height} data-width=${width} data-viewLeft=${viewLeft} data-viewTop=${viewTop} data-imgid=${id} style='top:${top1};left:${left1};z-index:1002;position:absolute;padding-top:15px;'>
+                            <img  width=228 height=148 src='${host}/download_attachment/?file_id=${id}&download=0'/>
+                                <i class='J_del'>X</i>
+                         </div>`;
+            html += `<img class="printS printimg" style="top:${top1};left:${left1};" width=228 height=148 src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
             $('#place-form').children(":first").append(html);
         },
         showImgDel(e){
