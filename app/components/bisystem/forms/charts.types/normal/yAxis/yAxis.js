@@ -54,4 +54,28 @@ export class FormNormalYComponent extends BiBaseComponent{
         ];
         this.yAxis = groupFitting(groupYFitting)
     }
+
+    /**
+     * 当数据源改变时，重新渲染y轴
+     */
+    reloadRender(data) {
+        Object.keys(this.yAxis).map(key => {
+            if (key === 'field') {
+                this.yAxis[key].autoSelect.data.list = data;
+                this.yAxis[key].autoSelect.reload();
+            }
+        })
+    }
+
+    /**
+     * 当数据源为空时，清空y轴数据
+     */
+    clearRender() {
+        Object.keys(this.yAxis).map(key => {
+            if (key === 'field') {
+                this.yAxis[key].autoSelect.data.list = [];
+                this.yAxis[key].autoSelect.reload();
+            }
+        })
+    }
 }

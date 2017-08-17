@@ -25,6 +25,7 @@ let config = {
         // 当选择数据源时渲染x,y轴字段
         Mediator.subscribe('bi:chart:form:fields', data => {
             this.renderXField(data['x_field']);
+            this.renderYField(data['y_field']);
         });
 
         // 当删除数据源时 清除x,y轴字段
@@ -82,7 +83,7 @@ export class FormNormalComponent extends BiBaseComponent{
             chartName: base,
             share: share,
             x: instanceFitting({type:'autoComplete',me: this,container: 'form-group-x' }),
-            y: this.y,
+            y: [this.y, this.y1],
             doubleY: instanceFitting({type:'checkbox', data: doubleYdata,me: this,container: 'form-group-doubleY' })
         };
     }
@@ -98,12 +99,27 @@ export class FormNormalComponent extends BiBaseComponent{
     }
 
     /**
+     * 渲染y轴字段
+     * @param fields x轴字段列表
+     */
+    renderYField(fields) {
+        let yGroup = this.y.concat(this.y1);
+        yGroup.forEach(y => {
+            y.reloadRender(fields);
+        })
+    }
+
+    /**
      * 当数据源为空时，清空相关联的字段数据
      */
     clearSourceRelationField() {
         this.formGroup.x.autoSelect.data.list = [];
         this.formGroup.x.autoSelect.data.choosed=[];
         this.formGroup.x.autoSelect.reload();
+        let yGroup = this.y.concat(this.y1);
+        yGroup.forEach(y => {
+            y.clearRender();
+        })
     }
 
     /**
