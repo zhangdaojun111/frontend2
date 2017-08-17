@@ -822,15 +822,11 @@ let config={
             }
         },
         //赋值
-        setFormValue(dfield,value,label){
+        setFormValue(dfield,value){
             let data=this.data.data[dfield];
             if(data){
                 let childComponet=this.childComponent[dfield];
                 childComponet.data["value"] = data["value"] = value;
-                if(data['type'] == 'Select' || data['type']=='Buildin'){
-                    childComponet.data["showValue"] = data["showValue"] = label;
-                }
-                childComponet.destroyChildren();
                 childComponet.reload();
             }
         },
@@ -1197,6 +1193,7 @@ let config={
                 //在这里根据type创建各自的控件
                 switch (type){
                     case 'Correspondence':
+                        data[key]['temp_id']=data['temp_id']['value'];
                         let correspondence=new Correspondence(data[key]);
                         correspondence.render(single);
                         _this.childComponent[data[key].dfield]=correspondence;
@@ -1204,6 +1201,7 @@ let config={
                     case 'Songrid':
                         // let popupType=single.data('popupType');
                         let popupType=0;
+                        data[key]['temp_id']=data['temp_id']['value'];
                         let songrid=new Songrid(Object.assign(data[key],{popupType:popupType}));
                         songrid.render(single);
                         _this.childComponent[data[key].dfield]=songrid;
@@ -1308,7 +1306,34 @@ let config={
                         break;
                 }
             }
-        }
+        },
+
+        //改变人员信息表主岗选项
+        changeMainDepart(isClick,_this){
+            let arr = [{value:'',label:'请选择'}];
+            //判断是否需要将主岗部门置为请选择
+            if( isClick ){
+                let arr_1 = [];
+                for( let i = 1;i<_this.department["options"].length;i++ ){
+                    arr_1.push(_this.department["options"][i]["value"]);
+                }
+                if( arr_1.length != _this.value.length ){
+                    this.actions.setFormValue( _this.form_department,'' );
+                }
+            }
+            //改变主岗部门option
+            for( let i=0;i<_this.value.length;i++ ){
+                for( let j in _this.main_depart){
+                    console.log()
+                    if( _this.main_depart[j]["value"] === _this.value[i] ){
+                        arr.push( _this.main_depart[j] );
+                    }
+                }
+            }
+            this.data.data[_this.department.dfield]["options"]=arr;
+            this.childComponent[_this.department.dfield].data["options"]=arr;
+            this.childComponent[_this.department.dfield].reload();
+        },
     },
     firstAfterRender(){
         let _this=this;
@@ -1380,7 +1405,7 @@ let config={
                 }else{
                     _this.data.viewMode = 'ViewChild';
                 }
-                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.parent_temp_id}&rowId=${data.parent_temp_id}&tableType=child&viewMode=${_this.data.viewMode}`,{
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&tableType=child&viewMode=${_this.data.viewMode}`,{
                     width:800,
                     height:600,
                     title:`子表`,
@@ -1399,6 +1424,9 @@ let config={
             // 保存父表数据
             FormService.frontendParentFormValue[_this.tableId] = _this.actions.createFormValue(_this.data.data);
         });
+        Mediator.subscribe('form:userSysOptions:'+_this.data.tableId,function(data){
+            _this.actions.changeMainDepart(true,data);
+        });
         //对应关系弹窗
         Mediator.subscribe('form:openCorrespondence:'+_this.data.tableId,function(data){
             let isView = data["is_view"];
@@ -1408,7 +1436,7 @@ let config={
                 }else{
                     _this.data.viewMode = 'viewFromCorrespondence';
                 }
-                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.parent_temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true`,{
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`,{
                     width:800,
                     height:600,
                     title:`对应关系`,

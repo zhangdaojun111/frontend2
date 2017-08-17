@@ -183,16 +183,14 @@ let FormEntrys = {
             data[obj.dfield]=obj;
         }
         staticData.data=data;
-        staticData['temp_id']=staticData.data['temp_id']||'';
-        staticData['real_id']=staticData.data['real_id']||'';
-        staticData['table_id']=staticData.data['table_id']||'';
-        // staticData['parentRealId']=staticData["real_id"]["value"]||'';
-        // staticData['parentTableId']=staticData["table_id"]["value"]||'';
-        // staticData['parentTempId']=staticData["temp_id"]["value"]||'';
+        // staticData['parentRealId']=staticData.data["real_id"]["value"]||'';
+        // staticData['parentTableId']=staticData.data["table_id"]["value"]||'';
+        // staticData['parentTempId']=staticData.data["temp_id"]["value"]||'';
         staticData.parentTableId=this.parentTableId;
         staticData.parentRealId=this.parentRealId;
         staticData.parentTempId=this.parentTempId;
-        staticData.tableId=staticData['table_id']["value"];
+        staticData.parentRecordId=this.parentRecordId;
+        staticData.tableId=staticData['table_id'] || this.tableId;
         staticData.formId=this.formId;
         staticData.realId=this.realId;
         staticData.flowId=this.flowId;
@@ -397,7 +395,6 @@ let FormEntrys = {
         let data=this.mergeFormData(res[0],res[1]);
         //检查表单类型
         let template=await this.checkFormType(data,res);
-        console.time('form创建时间');
         //发送审批记录
         if(this.fromApprove){
             if(res[1]['record_info']){

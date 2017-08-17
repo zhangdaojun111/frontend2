@@ -46,6 +46,10 @@ let config={
                     return;
                 }
                 _this.actions.setValue();
+                if(_this.data.isSys){
+                    _.debounce(function(){Mediator.publish('form:userSysOptions:'+_this.data.tableId,_this.data)},200)();
+                }
+
                 _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
             };
             let autoSelect=new AutoSelect(data);
@@ -61,5 +65,7 @@ let config={
 export default class MultiSelectControl extends Component{
     constructor(data){
         super(config,data);
+        console.log('1111');
+        console.log(data);
     }
 }

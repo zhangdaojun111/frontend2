@@ -44,6 +44,7 @@ let config={
             changeMonth: true,
             dateFormat: "yy/mm/dd",
             timeFormat: 'HH:mm:ss', //格式化时间
+
             onSelect: function (selectTime, text) {
                 selectTime.replace("/", "-");
                 _this.data.value = selectTime.replace(/\//g, "-");
@@ -88,6 +89,7 @@ let config={
             boolean = false;
         }else{
             _this.el.on('click','#icon_rili',function(){
+                $('#ui-datepicker-div').off();
                 _this.el.find(".datetime").datetimepicker('hide');
             });
             boolean = true;
@@ -95,7 +97,6 @@ let config={
         _this.el.on('click','.date-close',function () {
             _this.el.find(".datetime").val("年/月/日 时:分:秒");
         })
-
         _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
     },
     beforeDestory:function(){

@@ -1,12 +1,12 @@
 /**
  * Created by xiongxiaotao on 2017/7/29.
  */
-
 import Component from '../../../lib/component';
 import template from './iframe.html';
 import Mediator from '../../../lib/mediator';
 import './iframe.scss';
 import {PMAPI, PMENUM} from '../../../lib/postmsg';
+import {SaveView} from "./save-view/save-view"
 
 // let IframeOnClick = {
 //     resolution: 200,
@@ -60,10 +60,11 @@ export const IframeInstance = new Component({
         hash: {},
         count: 0,
         sort: [],
-        focus: null
+        focus: null,
     },
     actions: {
         openIframe: function (id, url, name) {
+            console.log(id, url, name);
             id = id.toString();
             if (this.data.hash[id] === undefined) {
                 let tab = $(`<div class="item" iframeid="${id}">${name}<a class="close" iframeid="${id}"></a></div>`)
@@ -114,6 +115,7 @@ export const IframeInstance = new Component({
             }
         },
         focusIframe: function (id) {
+            console.log("focus",id);
             if (this.data.focus) {
                 this.data.focus.tab.removeClass('focus');
                 this.data.focus.iframe.hide();
@@ -135,12 +137,90 @@ export const IframeInstance = new Component({
         },
         setSizeToMini: function () {
             this.el.addClass('mini');
+        },
+        closeAllIframes:function () {
+            let temp_arr = _.defaultsDeep([],this.data.sort);
+            for(let k of temp_arr){
+                console.log(k);
+                this.actions.closeIframe(k);
+            }
+        },
+        closeOtherIframes:function () {
+            let temp_arr = _.defaultsDeep([],this.data.sort);
+            for (let k of temp_arr){
+                if( k !== this.data.focus.id){
+                    this.actions.closeIframe(k);
+                }
+            }
+        },
+        showTabsPopup:function () {
+            this.actions.initTabList(this.data.sort);
+            this.el.find('.tab-list').slideDown();
+        },
+        initTabList:function (data) {
+            let names = [];
+            for(let k of data){
+                let temp = this.actions.getTabNameById(k,this.data.hash);
+                names.unshift(temp);
+            }
+
+            let $parent = this.el.find('.tabs-ul');
+            $parent.empty();
+            for(let j of names){
+                let $li = $("<li class='tab-item'>");
+                $li.html(j);
+                $parent.prepend($li);
+            }
+            // let $downIcon = $("<li class='drop-down-icon'>");
+            // $parent.append($downIcon);
+        },
+        closeFocusTab:function () {
+            this.actions.closeIframe(this.data.focus.id);
+        },
+        controlTabs:function (event) {
+            let name = event.target.textContent;
+            if(name === '关闭标签'){
+                this.actions.closeFocusTab();
+            }else if(name === '关闭全部标签'){
+                this.actions.closeAllIframes();
+            }else if(name === '关闭其他标签'){
+                this.actions.closeOtherIframes();
+            }else{
+                //选中标签获得焦点
+                let id = this.actions.getTabIdByName(name,this.data.hash);
+                console.log(name,id);
+                if(id){
+                    this.actions.focusIframe(id);
+                }
+            }
+        },
+        getTabIdByName:function (name,nodes) {
+            let id = false;
+            if(!nodes){
+                return id;
+            }
+            for (let k in nodes){
+                if(nodes[k].name === name){
+                    id = nodes[k].id;
+                }
+            }
+            return id;
+        },
+        getTabNameById:function (id,nodes) {
+            let name = false;
+            if(!nodes){
+                return name;
+            }
+            for (let k in nodes){
+                if(nodes[k].id === id){
+                    name = nodes[k].name;
+                }
+            }
+            return name;
         }
     },
     afterRender: function () {
-
         let that = this;
-
         this.data.tabs = this.el.find('.tabs');
         this.data.iframes = this.el.find('.iframes');
 
@@ -155,10 +235,22 @@ export const IframeInstance = new Component({
             that.actions.focusIframe(id);
         });
 
+        this.el.on('click','.view-save',function () {
+            SaveView.show(that.data.sort);
+        }).on('mouseenter','.popup-btn',() => {
+            this.actions.showTabsPopup();
+        }).on('mouseleave','.popup-btn',() => {
+            this.el.find('.tab-list').slideUp();
+        }).on('click','.drop-up-icon',() => {
+            this.el.find('.tab-list').slideUp();
+        }).on('click','.drop-down-icon',() => {
+            this.el.find('.tab-list').slideUp();
+        }).on('click','.tab-list',(event) => {
+            this.actions.controlTabs(event);
+        })
     },
     
     firstAfterRender: function () {
-
         Mediator.on('menu:item:openiframe', (data) => {
             this.actions.openIframe(data.id, data.url, data.name)
         });
@@ -181,6 +273,13 @@ export const IframeInstance = new Component({
                 });
             }
         });
+
+        Mediator.on('saveview:displayview', (data) => {
+            this.actions.closeAllIframes();  //先关闭所有标签，再打开view中的标签
+            for(let k of data){
+                this.actions.openIframe(k.id,k.url,k.name);
+            }
+        })
     },
 
     beforeDestory: function () {
