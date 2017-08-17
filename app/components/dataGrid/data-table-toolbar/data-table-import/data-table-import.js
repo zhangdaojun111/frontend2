@@ -62,10 +62,12 @@ let config = {
         //设置流程图
         //执行导入
         drawFlowChart: function () {
-            // let obj = {
-            //     flow_id: this.el.find( '.chooseFlow' )[0].value
-            // }
-            // let flowchart = WorkFlow.createFlow( obj );
+            let obj = {
+                flow_id: this.el.find( '.chooseFlow' )[0].value,
+                el: this.el.find( '.flow-chart' )
+            }
+            let flowchart = WorkFlow.createFlow( obj );
+            // debugger;
             // this.append( flowchart,this.el.find( '.flow-chart' ) )
         },
         import: function () {
