@@ -159,6 +159,7 @@ export class FormNormalComponent extends BiBaseComponent{
     showY1Axis(flag) {
         if (flag) {
             let y = new FormNormalYComponent();
+            this.el.find('.form-group-y1').addClass('group-active');
             this.append(y, this.el.find('.form-group-y1'));
             if(this.y[0].yAxis.field.autoSelect.data.list) {
                 y.yAxis.field.autoSelect.data.list = this.y[0].yAxis.field.autoSelect.data.list;
@@ -166,6 +167,7 @@ export class FormNormalComponent extends BiBaseComponent{
             };
             this.y1.push(y);
         } else {
+            this.el.find('.form-group-y1').removeClass('group-active');
             this.y1.map(y => y.destroySelf());
             this.y1 = [];
         };
