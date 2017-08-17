@@ -98,7 +98,7 @@ export const UserInfoService = {
         });
     },
     register:function (json) {
-        let url = '/register-page/';
+        let url = '/register/';
         let body = this.utils.formatParams(json);
 
         return this.http.postImmediately({
