@@ -15,10 +15,11 @@ import FormEntrys from './form';
 import TreeView from  '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
-import Grid from '../components/dataGrid/data-table-page/data-table-page';
+import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import jsplumb from 'jsplumb';
 import {PMAPI,PMENUM} from '../lib/postmsg';
 
+WorkFlow.createFlow({flow_id:34,el:"#a"});
 
 WorkFlowForm.showForm();
 WorkFlowGrid.showGrid();
@@ -35,6 +36,8 @@ let get_workflow_info=()=>{
 }
 get_workflow_info();
 
+Mediator.publish('workflow:focused', []);
+
 //订阅workflow choose事件，获取工作流info并发布getInfo,获取草稿
 let wfObj;
 Mediator.subscribe('workflow:choose', (msg)=> {
@@ -48,7 +51,6 @@ Mediator.subscribe('workflow:choose', (msg)=> {
     })()
     .then(res=>{
         Mediator.publish('workflow:gotWorkflowInfo', res);
-        Mediator.publish('workflow:focused', []);
         return workflowService.validateDraftData({form_id:msg.formid});
     })
     .then(res=>{
@@ -112,33 +114,37 @@ Mediator.subscribe('workflow:focus-users', (res)=> {
     focusArr=res;
 })
 Mediator.subscribe('workflow:submit', (res)=> {
-    $("#submit").hide();
-    let formData=FormEntrys.getFormValue(wfObj.tableid),
-        postData={
-        flow_id:wfObj.id,
-        focus_users:JSON.stringify(focusArr)||[],
-        data:JSON.stringify(formData)
-    };
-    (async function () {
-        return await workflowService.createWorkflowRecord(postData);
-    })().then(res=>{
-        if(res.success===1){
-            msgBox.alert(`${res.error}`);
-            $("#startNew").show().on('click',()=>{
-                Mediator.publish('workflow:choose',wfObj);
-                $("#startNew").hide();
-                $("#submit").show();
-            });
-            (async function () {
-                return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
-                    flow_id:wfObj.id,
-                    record_id:res.record_id
-                }});
-            })().then(data=>{
-                Mediator.publish('workflow:gotWorkflowInfo', data);
-            });
+    let formData=FormEntrys.getFormValue(wfObj.tableid);
+    if(formData.error){
+        msgBox.alert(`${formData.errorMessage}`);
+    }else{
+        $("#submit").hide();
+        let postData={
+            flow_id:wfObj.id,
+            focus_users:JSON.stringify(focusArr)||[],
+            data:JSON.stringify(formData)
         };
-    })
+        (async function () {
+            return await workflowService.createWorkflowRecord(postData);
+        })().then(res=>{
+            if(res.success===1){
+                msgBox.alert(`${res.error}`);
+                $("#startNew").show().on('click',()=>{
+                    Mediator.publish('workflow:choose',wfObj);
+                    $("#startNew").hide();
+                    $("#submit").show();
+                });
+                (async function () {
+                    return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
+                        flow_id:wfObj.id,
+                        record_id:res.record_id
+                    }});
+                })().then(data=>{
+                    Mediator.publish('workflow:gotWorkflowInfo', data);
+                });
+            };
+        })
+    }
 });
 
 
