@@ -100,7 +100,7 @@ export const FormService={
         HTTP.flush();
         return res;
     },
-  
+
     //身份证验证
     checkCard (card) {
         let result = true;
@@ -416,6 +416,12 @@ export const FormService={
         HTTP.flush();
         return res;
     },
+    //获取系统表单配置
+    getSysConfig() {
+        let res=HTTP.get('sysConfig');
+        HTTP.flush();
+        return res;
+    },
     //获取用户打印页眉偏好
     getPrintSetting(){
         let res=HTTP.post('user_preference',{action:'get'});
@@ -442,9 +448,8 @@ export const FormService={
         return HTTP.post( 'get_form_dynamic_data',json )
     },
     //立即获得表单动态数据
-    //获取表单动态数据
     getDynamicDataImmediately(json) {
-        let res=HTTP.post( 'get_form_dynamic_data',json )
+        let res=HTTP.post('get_form_dynamic_data',json)
         HTTP.flush();
         return res;
     },
@@ -475,5 +480,38 @@ export const FormService={
     },
     deleteUploaded(json) {
         return HTTP.postImmediately('/delete_attachment/',json);
+    },
+    getAttachment(json){
+        return HTTP.postImmediately('/query_attachment_list/',json);
+    },
+
+    //重新拼装下拉框格式
+    createSelectJson(json,multi,isMultiBuild){
+
+        let data={list:[]};
+        if(json.is_view){
+            data['editable']=false;
+        }else{
+            data['editable']=true;
+        }
+        data['width']=json['width'];
+        let options;
+        if(isMultiBuild){
+            options=json.is_view?json.isViewOptions:(json.options2 || json.options);
+        }else{
+            options=json['options'];
+        }
+        for(let key in options){
+            data.list.push({
+                id:options[key]['value']||'',
+                name:options[key]['label']||'',
+                // py:options[key]['py'].join(','),
+            });
+        }
+        if(!(data.list[0]['id']=='') && data.list[0]['id'] != '请选择' && !multi){
+            data.list.unshift({id:'',name:''});
+        }
+        data.multiSelect=multi?true:false;
+        return data;
     }
 }

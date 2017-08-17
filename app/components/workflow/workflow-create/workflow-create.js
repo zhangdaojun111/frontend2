@@ -1,3 +1,7 @@
+/**
+ * @author hufei
+ * 创建工作流初始页面
+ */
 import Component from '../../../lib/component';
 import template from './workflow-create.html';
 import './workflow-create.scss';
@@ -41,7 +45,6 @@ let config = {
         init(){
             $('#addFav').hide();
             this.data.favList=this.data[1].rows;
-            console.log(this.data.favList);
             if(this.data.id!==undefined){
                 let flag=true;
                 for (let {id} of this.data.favList) {

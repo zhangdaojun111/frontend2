@@ -23,9 +23,13 @@ module.exports = {
         approvalWorkflow: path.resolve(APP_PATH, 'entrys/approvalWorkflow.js'),
         addFocus: path.resolve(APP_PATH, 'entrys/popup/addFocus.js'),
         addSigner: path.resolve(APP_PATH, 'entrys/popup/addSigner.js'),
+        addWf: path.resolve(APP_PATH, 'entrys/popup/addWf.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         customDataGrid: path.resolve(APP_PATH, 'entrys/popup/customDataGrid.js'),
+        dataImport: path.resolve(APP_PATH, 'entrys/popup/dataImport.js'),
         expertSearch: path.resolve(APP_PATH, 'entrys/popup/expertSearch.js'),
+        historyApprove: path.resolve(APP_PATH, 'entrys/popup/historyApprove.js'),
+        workflowPage: path.resolve(APP_PATH, 'entrys/popup/workflowPage.js'),
         sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         bi:path.resolve(APP_PATH, 'entrys/bi.js'),
@@ -43,7 +47,6 @@ module.exports = {
             'jquery-ui/themes/base/theme.css',
             'mediator-js',
             'handlebars',
-            'moment',
             'lodash',
             'babel-polyfill'
         ]
