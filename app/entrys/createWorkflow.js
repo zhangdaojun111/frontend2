@@ -16,7 +16,7 @@ import TreeView from  '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import Grid from '../components/dataGrid/data-table-page/data-table-page';
-import jsPlumb from 'jsPlumb';
+import jsplumb from 'jsplumb';
 import {PMAPI,PMENUM} from '../lib/postmsg';
 
 
