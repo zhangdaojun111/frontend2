@@ -1005,6 +1005,11 @@ let config={
                 is_view:0,
             }
             let res=await FormService.getDynamicDataImmediately(json);
+            console.log('转到编辑模式');
+            console.log(res);
+            _this.data.data['temp_id']=res.data.temp_id;
+            _this.data.data['real_id']=res.data.real_id;
+            _this.data.data['table_id']=res.data.table_id;
             for(let key in _this.data.data){
                 _this.data.data[key]['is_view']=res['data'][key]['is_view'];
                 if(!_this.childComponent[key]){
