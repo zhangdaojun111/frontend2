@@ -58,7 +58,6 @@ const handlers = {
 export const systemMessageService = {
     columnDefs: [],
     getColumnDefs: function () {
-
         return [
             _.defaultsDeep({headerName: '序号', width: 60}, dgcService.numberCol),
             {
