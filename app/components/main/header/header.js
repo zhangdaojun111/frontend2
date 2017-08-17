@@ -5,10 +5,9 @@ import 'jquery-ui/ui/widgets/tooltip';
 import Mediator from '../../../lib/mediator';
 import msgbox from '../../../lib/msgbox';
 import OtherLogin from "../login-by-other/login-by-other";
-import {GlobalSearch} from "../global-search/global-search"
 import {systemMessageUtil} from '../system-message/system-message';
 import {postMessageUtil} from '../post-message/post-message';
-import {SysSetting} from "../system-setting/system-setting"
+
 
 let config = {
     template: template,
@@ -56,35 +55,28 @@ let config = {
             msgbox.alert('go online number');
         },
         goSystemSetting: function () {
-            SysSetting.show();
+            msgbox.alert('go system setting');
         },
         refreshOnlineNum: function (data) {
             this.el.find('.online-num span').text(data.online_user_num);
         },
 
-        showMessageUnread: function () {
-            this.el.find('.icon.message').addClass('unread');
-        },
-
-        hideMessageUnread: function () {
-            this.el.find('.icon.message').removeClass('unread');
+        displayMessageUread: function (info) {
+            if (info && info.badge !== '0') {
+                this.el.find('.icon.message').addClass('unread');
+            } else {
+                this.el.find('.icon.message').removeClass('unread');
+            }
         },
 
         openMessageDialog: function () {
-            this.actions.hideMessageUnread();
-            // $("<div></div>").appendTo
             systemMessageUtil.show();
         },
 
         openPostMessageDialog: function () {
             postMessageUtil.show();
-        },
-
-        initGlobalSearch:function () {
-            let component = new GlobalSearch();
-            let $container = this.el.find(".global-search");
-            component.render($container);
         }
+
     },
 
     afterRender: function () {
@@ -129,25 +121,21 @@ let config = {
             that.actions.goOnlineNumber();
         }).on('click', '.system-setting', () => {
             that.actions.goSystemSetting();
+
             // }).on('click','a.other-login', () => {   //他人登录
             //     this.actions.otherLogin();
         }).on('click', '.home', () => {
             this.actions.openHome();
         }).on('click', '.message', () => {
             this.actions.openMessageDialog();
-        }).on('click', '.post-message', () => {
+        }).on('click', '.message-push', () => {
             this.actions.openPostMessageDialog();
         });
         Mediator.on('socket:online_user_num', that.actions.refreshOnlineNum);
-        Mediator.on('socket:personal_message', this.actions.showMessageUnread);
-        Mediator.on('socket:notice', this.actions.showMessageUnread);
-        Mediator.on('socket:voice_message', this.actions.showMessageUnread);
-        Mediator.on('socket:workflow_approve_msg', this.actions.showMessageUnread);
-        Mediator.on('socket:online_user_num', function (data) {
-            that.actions.refreshOnlineNum(data.online_user_num);
-        });
-        //加载全局搜索窗口
-        this.actions.initGlobalSearch();
+        Mediator.on('socket:personal_message', this.actions.displayMessageUread);
+        Mediator.on('socket:notice', this.actions.displayMessageUread);
+        Mediator.on('socket:voice_message', this.actions.displayMessageUread);
+        Mediator.on('socket:workflow_approve_msg', this.actions.displayMessageUread);
     },
 
     beforeDestory: function () {

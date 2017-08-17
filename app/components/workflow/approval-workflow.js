@@ -242,17 +242,13 @@ let config={
         this.el.on('click','#app-pass',function () {
             __this.actions.appPass();
         });
-        this.el.on('click','#app-rej-start',function (e) {
-            console.log('dsdfsdsfdsf')
-            e.stopPropagation();
+        this.el.on('click','#app-rej-start',function () {
             __this.actions.appRejStart();
         });
-        this.el.on('click','#app-rej-up',function (e) {
-            e.stopPropagation();
+        this.el.on('click','#app-rej-up',function () {
             __this.actions.appRejUp();
         });
-        this.el.on('click','#app-rej-any',function (e) {
-            e.stopPropagation();
+        this.el.on('click','#app-rej-any',function () {
             __this.actions.appRejAny();
         });
         this.el.on('click','#rej .draged-item',function(){

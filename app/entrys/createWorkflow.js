@@ -16,8 +16,6 @@ import TreeView from  '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import Grid from '../components/dataGrid/data-table-page/data-table-page';
-import jsPlumb from 'jsPlumb';
-
 
 
 WorkFlowForm.showForm();
@@ -48,7 +46,6 @@ Mediator.subscribe('workflow:choose', (msg)=> {
     })()
     .then(res=>{
         Mediator.publish('workflow:gotWorkflowInfo', res);
-        Mediator.publish('workflow:focused', []);
         return workflowService.validateDraftData({form_id:msg.formid});
     })
     .then(res=>{
@@ -107,16 +104,15 @@ Mediator.subscribe('workflow:choose', (msg)=> {
 
 });
 //submit workflow data 提交工作流
-let focusArr=[];
 Mediator.subscribe('workflow:focus-users', (res)=> {
-    focusArr=res;
+    wfObj.user=res;
 })
 Mediator.subscribe('workflow:submit', (res)=> {
     $("#submit").hide();
     let formData=FormEntrys.getFormValue(wfObj.tableid),
         postData={
         flow_id:wfObj.id,
-        focus_users:JSON.stringify(focusArr)||[],
+        focus_users:JSON.stringify(wfObj.user)||[],
         data:JSON.stringify(formData)
     };
     (async function () {
@@ -188,9 +184,6 @@ Mediator.subscribe('workflow:choose', function (info) {
             tableId:res.table_id,
             viewMode:"createBatch"
         });
-        AgGrid.actions.returnBatchData = function (ids) {
-            console.log( '接受导入数据' )
-        };
         AgGrid.render($("#J-aggrid"));
     })
 

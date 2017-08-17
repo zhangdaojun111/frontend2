@@ -1,11 +1,5 @@
 import template from './setting-print.html';
 let css = `
-.wrap{
-    display: inline-block;
-    margin-top: 6px;
-    margin-left: 10px;
-    position: relative;
-}
 .global-search-history {
     padding: 0;
     margin: 0;
@@ -46,7 +40,10 @@ let SettingPrint = {
         printTitles:[],
         myContent:'',
     },
-    firstAfterRender(){
+    actions:{
+
+    },
+    firstAfterRender:function(){
         let _this=this;
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
        _this.el.on('click','li',function(){
@@ -116,6 +113,7 @@ let SettingPrint = {
            }
            HTTP.post('user_preference',{action:'save',content:JSON.stringify(_this.data.printTitles)}).then(res=>{
                    if(res.succ == 1){
+                       $('title').text(_this.data.myContent);
                        let isFrame=false;
                        $('iframe').each((index,obj)=>{
                            if(obj.src.indexOf(_this.data.key) != -1){
@@ -127,13 +125,12 @@ let SettingPrint = {
                            };
                        })
                        if(!isFrame){
-                           $('title').text(_this.data.myContent);
                            window.print();
-                           $('title').text(t);
                        }
                    }else{
                        _this.data.printTitles=tempPrintTitles;
                    }
+                   $('title').text(t);
                    PMAPI.sendToParent({
                        type: PMENUM.close_dialog,
                        key: _this.key,
@@ -169,7 +166,6 @@ let SettingPrint = {
         }))
     },
     beforeDestory: function () {
-        this.el.find('.global-search-input').off();
         this.data.style.remove();
     }
 }

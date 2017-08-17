@@ -26,7 +26,7 @@ let config = {
             let imgNode = this.el.find('.imgseal');
             // console.log(imgNode);
             let len = imgNode.length;
-            let arr =[];
+            let arr = new Array();
             for (let i=0;i<len;i++){
                 let id = imgNode[i].dataset.imgid;
                 let viewTop = imgNode[i].dataset.viewtop;
@@ -66,17 +66,7 @@ let config = {
     },
     afterRender: function() {
         let __this=this;
-        this.formTrans = false;
         this.el.on('click','.collapseFormBtn',()=>{
-            let ev = this.el.find('.collapseFormBtn');
-            if(this.formTrans){
-                ev.css("transform","rotateZ(360deg)");
-                this.formTrans = false;
-            }else{
-                ev.css("transform","rotateZ(180deg)");
-                this.formTrans = true;
-            }
-
             this.el.find(".place-form").toggle();
         })
         this.el.on("mouseenter",".imgseal",function(e){
@@ -103,15 +93,6 @@ let config = {
         });
         Mediator.subscribe("workflow:appPass",(e)=>{
             Mediator.publish('workflow:sendImgInfo',this.actions.collectImg());
-        });
-        //获取表头，通过form传给我们表头
-        Mediator.subscribe("workflow:gotWorkflowTitle",res=>{
-           console.log("获取表头，通过form传给我们表头,发布为workflow:gotWorkflowTitle");
-           if(res){
-               this.el.find(".J_wfName").text(res);
-           }else{
-               this.el.find(".J_wfName").text("表名");
-           }
         })
     }
 }

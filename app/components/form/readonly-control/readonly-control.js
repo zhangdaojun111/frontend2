@@ -1,23 +1,47 @@
 import Component from '../../../lib/component';
 import '../base-form/base-form.scss';
 import Mediator from '../../../lib/mediator';
-import template from './readonly-control.html';
-import './readonly-control.scss';
 
 let config={
-    template:template,
+    template:`<div class="clearfix">
+                 {{#if unvisible}}
+                    <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
+                 {{else if be_control_condition}}
+                        <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+                {{else}}            
+                    <input style="width:{{width}};background: #ebebe4;"  type="text" value="{{value}}" readonly="readonly"  class='dynamic-form-input' > 
+                    <div style="display: inline-block">
+                           {{#if required}}
+                            <span id="requiredLogo" class="{{requiredClass}}" ></span>
+                           {{/if}}
+                            {{#if history}}
+                               <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>     
+                            {{/if}} 
+                    </div>
+                        <span style="position: relative; display:inline-block">  
+                           <div class={{error_msg}} id="error_tip"  style=" display:none">
+                                <em class={{ui_error_arrow}}></em>
+                                <pre>{{ regErrorMsg }}</pre>
+                           </div>  
+                        </span>
+                 {{/if}}       
+               </div>
+                `,
     data:{
+        width:'240px',
         error_msg: ' error-msg',
         ui_error_arrow: 'ui-error-arrow',
     },
     actions:{
-        keyup() {
+        keyup: function() {
             //正则表达式的错误提示 regErrorMsg: string;
             let regErrorMsg;
             let val = this.el.find("input").val();
             let func = this.data.func;
             let reg = this.data.reg;
             let required = this.data.required
+
+            console.log(" val:"+val+"  func:"+func+"  reg:"+reg);
 
             //输入框输入时的实时验证提示
             let regReg = new RegExp(reg);
@@ -85,22 +109,23 @@ let config={
             }
         }
     },
-    firstAfterRender(){
+    firstAfterRender:function(){
         let _this=this;
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
     },
-    afterRender() {
-        this.el.find('.ui-width').css('width',this.data.width);
+    afterRender: function() {
+            this.el.on( 'input', () => {
+                this.actions.keyup();
+            });
     },
-    beforeDestory(){
-        Mediator.removeAll('form:history:'+_this.data.tableId);
-    }
 }
 class ReadonlyControl extends Component {
     constructor(data){
         super(config,data);
+        console.log('readonly-control');
+        console.log(this.data);
     }
 }
 

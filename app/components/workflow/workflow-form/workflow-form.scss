@@ -3,20 +3,22 @@
   background: #fff;
   margin-bottom: 10px;
   .collapseFormDiv{
-    height:40px;
+    height:30px;
     padding-left: 10px;
-    border-bottom:1px solid rgba(228,228,228,1);
-    justify-content: space-between;
+    margin-top: 10px;
     .collapseFormBtn{
+      height:30px;
+      line-height: 30px;
+      width:30px;
+      border-radius: 50%;
+      text-align: center;
+      color: #fff;
+      background: #ccc;
       cursor: pointer;
-      margin-right: 10px;
+      outline: none;
+      border: none;
     }
-    .wf-icon{
-      margin-right: 10px;
-    }
-    .wfName{
-      font-weight: bold;
-    }
+
   }
   .place-form{
     position: relative;
@@ -28,7 +30,9 @@
 
 }
 #submit,#startNew{
-
+  position: fixed;
+  right: 50px;
+  bottom: 50px;
 }
 #startNew{
   display: none;
