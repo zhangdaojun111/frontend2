@@ -168,7 +168,7 @@ let config ={
                 this.data.searchContent = content;
                 this.actions.doSearch();
                 this.el.find('.search-content').val(content);
-                this.el.find("div.history-display").slideUp();
+                this.el.find("div.history-display").hide();
             }
         },
         isDeleteAllHistory:function () {
@@ -190,12 +190,16 @@ let config ={
         },
         showHistoryList:function () {
             if(this.data.historyList.length > 0){
-                this.el.find("div.history-display").slideDown();
+                this.el.find("div.history-display").show();
                 this.el.find("input.search-content").removeAttr("placeholder");
             }
         },
         hideHistoryList:function () {
-            this.el.find("div.history-display").slideUp();
+            let that = this;
+            setTimeout(function () {
+                that.el.find("div.history-display").hide();
+            },100);
+            // this.el.find("div.history-display").hide();
             if(this.el.find("input.search-content").val() === ''){
                 this.el.find("input.search-content").attr("placeholder","请输入要搜索的内容...");
             }
@@ -234,7 +238,8 @@ let config ={
             this.actions.isDeleteAllHistory();
         }).on('focus','.search-content',() => {
             this.actions.showHistoryList();
-        }).on('blur','.search-content',() => {
+        }).on('blur','.global-search-main',() => {
+            console.log("oooo");
             this.actions.hideHistoryList();
         }).on('keydown','.search-content',(event) => {
             this.actions.myKeyDown(event);
