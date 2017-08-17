@@ -27,6 +27,7 @@ let config = {
         selectBoxHeight: 300,           // select 框的高度
         width: 0,                       // 为0表示显示默认宽度240
         editable: true,                 // 是否可编辑
+        displayChoosed: true,           // 是否显示已选中的
         onSelect: null                  // 选择时的事件
     },
     actions: {
@@ -93,22 +94,35 @@ let config = {
             if (this.data.onSelect) {
                 this.data.onSelect(this.data.choosed);
             }
+
             if (this.data.choosed.length) {
-                this.choosedWrap.show();
+                if (this.data.displayChoosed === true) {
+                    this.choosedWrap.show();
+                }
                 let html = [];
                 this.data.choosed.forEach((item) => {
                     let checkbox = this.listWrap.find(`input:checkbox[data-id=${item.id}]`);
                     checkbox[0].checked = true;
-                    html.push(`<div class="item" title="点击删除" data-id="${item.id}">${item.name}</div>`)
+                    if (this.data.displayChoosed === true) {
+                        html.push(`<div class="item" title="点击删除" data-id="${item.id}">${item.name}</div>`)
+                    };
                 });
                 this.choosedWrap.html(html.join(''));
             } else {
                 this.choosedWrap.hide();
             }
+        },
+        selectAll: function () {
+            if (this.data.choosed.length === this.data.list.length) {
+                this.data.choosed = [];
+            } else {
+                this.data.choosed = this.data.list;
+            }
+            this.actions.renderChoosed();
         }
     },
     afterRender: function () {
-        this.listWrap = this.el.find('ul');
+        this.listWrap = this.el.find('.list');
         this.choosedWrap = this.el.find('.choosed');
         this.actions.renderChoosed();
         this.listWrap.height(this.data.selectBoxHeight);
@@ -124,6 +138,10 @@ let config = {
         if (this.data.editable === false) {
             this.el.find('input.text').attr('disabled', 'true');
         }
+        if (this.data.multiSelect === false) {
+            this.listWrap.find('button').hide();
+            this.listWrap.find('ul').height('100%');
+        }
     },
     firstAfterRender: function () {
         let that = this;
@@ -132,16 +150,23 @@ let config = {
                 that.actions.selectItem($(this));
             }, 50)).on('input', 'input.text', _.debounce(function () {
                 that.actions.onInput($(this));
-            }, 1000)).on('mouseenter', () => {
-                that.actions.showSelectBox();
-            }).on('mouseleave', () => {
-                that.actions.hideSelectBox();
-            }).on('click', '.choosed .item', function () {
+            }, 1000)).on('click', '.choosed .item', function () {
                 let id = $(this).data('id');
                 that.actions.unSelectItem(id);
+            }).on('click', '.list button', () => {
+                this.actions.selectAll();
             });
+            if (this.data.displayType === 'popup') {
+                this.el.on('mouseenter', () => {
+                    that.actions.showSelectBox();
+                }).on('mouseleave', () => {
+                    that.actions.hideSelectBox();
+                })
+            }
         }
+
     }
+
 }
 
 class AutoSelect extends Component {
