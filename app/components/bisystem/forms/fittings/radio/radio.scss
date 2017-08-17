@@ -20,6 +20,7 @@
     cursor: pointer;
     position: relative;
     vertical-align: middle;
+    transition: all 0.3s;
     &:after {
       content: '';
       display: block;
@@ -34,13 +35,16 @@
       bottom: 0;
       margin: auto;
       opacity: 0;
+      transition: all 0.3s;
     }
   }
   .active {
     color: #3b8cff;
     border-color: #3b8cff;
+    transition: all 0.3s;
     &:after {
       opacity: 1;
+      transition: all 0.3s;
     }
   }
   img{
