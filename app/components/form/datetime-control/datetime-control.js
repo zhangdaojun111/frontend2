@@ -6,60 +6,28 @@ import 'jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css';
 import 'jquery-ui';
 import '../base-form/base-form.scss'
 import '../date-control/data-control-alert.html'
+import template from  './datetime-control.html';
 let config={
-    template:`<div class="clearfix">
-                {{#if unvisible}}
-                    <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
-                 {{else if be_control_condition }}
-                    <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
-                 {{else}}
-                <input type="text" style="width: 240px" value="{{value}}" class="ui-calendar datetime" > 
-                <span class="date-close">X</span>
-                <span style="" id="icon_rili">日历</span>
-                           {{#if required}}
-                                    <span id="requiredLogo" class="{{requiredClass}}" ></span>
-                           {{/if}}
-                           {{#if history}}
-                                <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>     
-                            {{/if}}       
-                      </div>
-                 {{/if}}
-            </div>`,
+    template:template,
     data:{
     },
     actions:{
-        onSelect:function(val) {
-            let _this = this;
-            let valInput = _this.el.find(".datetime").val();
-            this.data.value=valInput;
-            //timeType 是否可以选择之前的日期，before:只能选择之前的日期，after：只能选择之后的，all：可以选择全部
-            let currentTime = new Date().getTime();
-            let valTime = new Date(this.data.value).getTime();
-            if(this.data['timeType']){
-                if(this.data['timeType'] == 'after'){
-                    if(valTime < currentTime){
-                        _.debounce(function(){Mediator.publish('form:alertDateFuture:'+_this.data.tableId,_this.data)},200)();
-                        //alert("所选日期不能早于当前日期！");
-                    }
-                }else if(this.data['timeType'] == 'before') {
-                    if(valTime > currentTime){
-                        _.debounce(function(){Mediator.publish('form:alertDateHistory:'+_this.data.tableId,_this.data)},200)();
-                        //alert("所选日期不能晚于当前日期！");
-                    }
-                }
-            }else{
-                console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！',this.selector);
-            }
-        }
     },
-    firstAfterRender:function(){
+    firstAfterRender(){
         let _this=this;
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
     },
-    afterRender:function(){
+    afterRender(){
         let _this=this;
+        this.el.find('.ui-width').css('width',this.data.width);
+        if(this.data.is_view){
+            this.el.find('.ui-width').attr('disabled',true);
+        }else{
+            this.el.find('.ui-width').attr('disabled',false);
+        }
+
         //控制到时分秒
         _this.el.find(".datetime").val("年/月/日 时:分:秒");
         _this.el.find(".datetime").datetimepicker({
@@ -76,12 +44,40 @@ let config={
             changeMonth: true,
             dateFormat: "yy/mm/dd",
             timeFormat: 'HH:mm:ss', //格式化时间
-            // controlType: 'slider',
-            // stepHour: 1,
-            // stepMinute: 1,
-            // stepSecond: 1,
-            // //addSliderAccess: true,
-            // closeOnDateSelect: true,
+            onSelect: function (selectTime, text) {
+                selectTime.replace("/", "-");
+                _this.data.value = selectTime.replace(/\//g, "-");
+
+                _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                if( _this.data.value.length > 19 ){
+                    _this.data.value = '';
+                }
+                let _val='';
+                if( selectTime){
+                    _val= selectTime.substring(0,10);
+                }
+                let currentTime = new Date().getTime();
+                selectTime = new Date(_val).getTime();
+
+                if( _this.data['timeType']){
+                    if( _this.data['timeType'] == 'after'){
+                        if(selectTime < currentTime){
+                            _.debounce(function(){Mediator.publish('form:alertDateFuture:'+_this.data.tableId,_this.data)},200)();
+                            _this.data.value = "请选择";
+                            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                        }
+                    }else if( _this.data['timeType'] == 'before') {
+                        if(selectTime > currentTime){
+                            _.debounce(function(){Mediator.publish('form:alertDateHistory:'+_this.data.tableId,_this.data)},200)();
+                            _this.data.value = "请选择";
+                            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                        }
+                    }
+                }else{
+                    console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！',this.selector);
+                }
+
+            }
         });
 
         let boolean = true;
@@ -100,18 +96,11 @@ let config={
             _this.el.find(".datetime").val("年/月/日 时:分:秒");
         })
 
-        //无法绑定到当前td，暂时先绑定到input
-        // _this.el.find('input').parent('div').parent('div').parent('td').parent('tr').parent('tbody').parent('table').parent('div').parent('div').siblings('div#ui-datepicker-div').on('click',function () {
-        //     _this.actions.onSelect();
-        // });
-        this.el.on( 'click','input',function () {
-            _this.actions.onSelect();
-        });
         _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
     },
     beforeDestory:function(){
-        _this.el.find('input').parent('div').parent('div').parent('td').parent('tr').parent('tbody').parent('table').parent('div').parent('div').siblings('div#ui-datepicker-div').off('click');
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
+        Mediator.removeAll('form:history:'+this.data.tableId);
     }
 }
 export default class DateTimeControl extends Component{
