@@ -3,9 +3,6 @@ import myWorkflow from '../../components/customPage/my-workflow/my-workflow.js'
 import department from '../../components/customPage/department/department'
 import personnel from '../../components/customPage/personnel/personnel'
 $(document).ready(function(){
-    console.log( "________" )
-    console.log( "________" )
-    console.log( window.config )
     let ts_name = window.config.ts_name;
     let com = null;
     let json = {};
