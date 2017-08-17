@@ -25,7 +25,7 @@ import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 let config = {
     template: template,
     data: {
-        tableId: '5318_EHFuJD7Ae76c6GMPtzdiWH',
+        tableId: '',
         formId: '',
         tableType: '',
         parentTableId: '',
