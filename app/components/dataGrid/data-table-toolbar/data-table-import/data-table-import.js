@@ -1,3 +1,8 @@
+/**
+* @author yxc
+* 导入数据
+*/
+
 import Component from "../../../../lib/component";
 import template from './data-table-import.html';
 import './data-table-import.scss';
@@ -20,7 +25,8 @@ let config = {
         formId: '',
         fileData: {},
         //是否更多
-        needMore: false
+        needMore: false,
+        warning_msg: ''
     },
     actions: {
         prepareWorkflowData: function () {
@@ -74,14 +80,17 @@ let config = {
                 json['use_increment_data'] = this.el.find( '.use_increment_data' )[0].value;
                 json['use_default_value'] = this.el.find( '.use_default_value' )[0].value;
             }
+            if( this.data.warning_msg ){
+                json['warning_msg'] = JSON.stringify( this.data.warning_msg );
+            }
             this.uploader.appendData( json )
 
             this.uploader.upload('/upload_data/',{},(event)=>{
                 console.log('name:'+event.name+',code:'+event.code);
                 console.log(' position:'+(event.loaded||event.position) +",total:"+event.total);
             },(res)=>{
-                if( res.success == 1 ){
-                    msgBox.alert( res.error );
+                if( res.success ){
+                    msgBox.showTips( res.error );
                     if( this.data.isBatch ){
                         let ids = res.ids || [];
                         PMAPI.sendToParent({
@@ -93,7 +102,6 @@ let config = {
                             }
                         })
                     }else {
-                        let ids = res.ids || [];
                         PMAPI.sendToParent({
                             type: PMENUM.close_dialog,
                             key: this.key,
@@ -103,7 +111,25 @@ let config = {
                         })
                     }
                 }else {
-                    msgBox.alert( res.error );
+                    this.data.warning_msg = '';
+                    if( res.warning_msg ){
+                        let warning_msg = res.warning_msg || {};
+                        let warning_list = res.warning_list || [];
+                        msgBox.confirm( res.error ).then( r=>{
+                            if( r ){
+                                for( let w of warning_list ){
+                                    if( warning_msg[w] == 0 ){
+                                        warning_msg[w] = 1
+                                        break;
+                                    }
+                                }
+                                this.data.warning_msg = warning_msg;
+                                this.actions.import();
+                            }
+                        } )
+                    }else {
+                        msgBox.alert( res.error );
+                    }
                 }
                 this.actions.fileTip();
             })
@@ -145,9 +171,14 @@ let config = {
         this.el.on( 'click','.import-submit-btn',()=>{
             this.actions.import();
         } )
-        this.el.on( 'click','.more-btn',()=>{
-            this.actions.addMore();
-        } )
+        console.log( this.data.isSuperUser )
+        if( this.data.isSuperUser ){
+            this.el.on( 'click','.more-btn',()=>{
+                this.actions.addMore();
+            } )
+        }else {
+            this.el.find( '.more-btn' )[0].outerHTML = '';
+        }
     }
 }
 

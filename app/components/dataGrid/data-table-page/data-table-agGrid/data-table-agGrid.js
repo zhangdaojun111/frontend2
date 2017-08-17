@@ -25,7 +25,7 @@ import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 let config = {
     template: template,
     data: {
-        tableId: '5318_EHFuJD7Ae76c6GMPtzdiWH',
+        tableId: '',
         formId: '',
         tableType: '',
         parentTableId: '',
@@ -132,7 +132,9 @@ let config = {
         //对应关系选择的数据
         correspondenceSelectedList: [],
         //对应关系选择的数据
-        correspondenceSelectedData: []
+        correspondenceSelectedData: [],
+        //表单对应关系字段
+        correspondenceField: ''
     },
     //生成的表头数据
     columnDefs: [],
@@ -927,7 +929,9 @@ let config = {
             HTTP.flush();
         },
         //对应关系保存成功(通知表单刷新用)
-        correspondenceSaved: function () {},
+        correspondenceSaved: function () {
+            Mediator.publish( 'correspondenceSaved:' + this.data.correspondenceField + ':' + this.data.tableId, true );
+        },
         //对应关系勾选
         setCorrespondenceSelect: function () {
             this.data.correspondenceSelectedData = [];
@@ -1445,7 +1449,8 @@ let config = {
                         parentTableId: this.data.parentTableId,
                         parentRealId: this.data.parentRealId,
                         parentTempId: this.data.parentTempId,
-                        isBatch: this.data.viewMode == 'createBatch'?1:0
+                        isBatch: this.data.viewMode == 'createBatch'?1:0,
+                        isSuperUser: window.config.user.is_superuser || 0
                     }
                     let url = dgcService.returnIframeUrl( '/iframe/dataImport/',json );
                     let winTitle = '导入数据';

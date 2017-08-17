@@ -16,6 +16,8 @@ import TreeView from  '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import Grid from '../components/dataGrid/data-table-page/data-table-page';
+import jsPlumb from 'jsPlumb';
+
 
 
 WorkFlowForm.showForm();
@@ -186,6 +188,9 @@ Mediator.subscribe('workflow:choose', function (info) {
             tableId:res.table_id,
             viewMode:"createBatch"
         });
+        AgGrid.actions.returnBatchData = function (ids) {
+            console.log( '接受导入数据' )
+        };
         AgGrid.render($("#J-aggrid"));
     })
 

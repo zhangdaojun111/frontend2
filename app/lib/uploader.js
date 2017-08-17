@@ -125,7 +125,7 @@ class Uploader {
                 this.formData.set(k,val);
             }
         }
-        this.settings = params
+        this.settings = _.defaultsDeep(params,this.settings);
         if(params['md5'] || params['MD5']){
             this.settings['md5']=true;
             this.settings['per_size']=params['per_size']||(1024*768);
@@ -275,8 +275,7 @@ class Uploader {
                     }
                 }
             } else {
-                fileItem['state']='failed';
-                //todo：重传,需确认后端在失败后是否删除本次传输包的数据
+                fileItem['state']='on';
             }
         });
 
