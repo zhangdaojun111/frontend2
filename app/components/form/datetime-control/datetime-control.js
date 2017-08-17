@@ -5,8 +5,8 @@ import 'jquery-ui-timepicker-addon';
 import 'jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css';
 import 'jquery-ui';
 import '../base-form/base-form.scss'
-import '../date-control/data-control-alert.html'
 import template from  './datetime-control.html';
+import msgbox from '../../../lib/msgbox';
 let config={
     template:template,
     data:{
@@ -46,7 +46,6 @@ let config={
             timeFormat: 'HH:mm:ss', //格式化时间
 
             onSelect: function (selectTime, text) {
-                selectTime.replace("/", "-");
                 _this.data.value = selectTime.replace(/\//g, "-");
 
                 _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
@@ -63,13 +62,13 @@ let config={
                 if( _this.data['timeType']){
                     if( _this.data['timeType'] == 'after'){
                         if(selectTime < currentTime){
-                            _.debounce(function(){Mediator.publish('form:alertDateFuture:'+_this.data.tableId,_this.data)},200)();
+                            msgbox.alert("所选日期不能早于当前日期！");
                             _this.data.value = "请选择";
                             _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
                         }
                     }else if( _this.data['timeType'] == 'before') {
                         if(selectTime > currentTime){
-                            _.debounce(function(){Mediator.publish('form:alertDateHistory:'+_this.data.tableId,_this.data)},200)();
+                            msgbox.alert("所选日期不能晚于当前日期！");
                             _this.data.value = "请选择";
                             _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
                         }
