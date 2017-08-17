@@ -15,10 +15,7 @@ import "./normal.scss";
 
 let config = {
     template:template,
-    data: {
-        x:[],
-        y:[]
-    },
+    data: {},
     actions: {},
     afterRender() {
         this.renderFitting();
@@ -27,10 +24,8 @@ let config = {
 
         // 当选择数据源时渲染x,y轴字段
         Mediator.subscribe('bi:chart:form:fields', data => {
-            this.data.x = data['x_field'];
-            this.data.y = data['y_field'];
-            this.renderXField(this.data.x);
-            this.renderYField(this.data.y);
+            this.renderXField(data['x_field']);
+            this.renderYField(data['y_field']);
         });
 
         // 当删除数据源时 清除x,y轴字段
@@ -141,8 +136,6 @@ export class FormNormalComponent extends BiBaseComponent{
         yGroup.forEach(y => {
             y.clearRender();
         });
-        this.data.x = [];
-        this.data.y = [];
     }
 
     /**
@@ -151,8 +144,11 @@ export class FormNormalComponent extends BiBaseComponent{
     addYAxis() {
         let y = new FormNormalYComponent();
         this.append(y, this.el.find('.form-group-y0'));
-        if (this.data.y.length > 0) {
-            y.reloadRender(this.data.y);
+        if (this.y[0]) {
+            if(this.y[0].yAxis.field.autoSelect.data.list) {
+                y.yAxis.field.autoSelect.data.list = this.y[0].yAxis.field.autoSelect.data.list;
+                y.yAxis.field.autoSelect.reload();
+            };
         };
         this.y.push(y);
     }
@@ -164,8 +160,9 @@ export class FormNormalComponent extends BiBaseComponent{
         if (flag) {
             let y = new FormNormalYComponent();
             this.append(y, this.el.find('.form-group-y1'));
-            if (this.data.y.length > 0) {
-                y.reloadRender(this.data.y);
+            if(this.y[0].yAxis.field.autoSelect.data.list) {
+                y.yAxis.field.autoSelect.data.list = this.y[0].yAxis.field.autoSelect.data.list;
+                y.yAxis.field.autoSelect.reload();
             };
             this.y1.push(y);
         } else {
@@ -188,7 +185,8 @@ export class FormNormalComponent extends BiBaseComponent{
      */
     selectYAxis(flag) {
         if (flag) {
-            console.log(this.formGroup.y);
+            this.formGroup.ySelectedGroup.data.checkboxs = this.y.concat(this.y1);
+            this.formGroup.ySelectedGroup.reload();
         } else {
 
         };
