@@ -32,6 +32,7 @@
             height: 55px;
             width: 100%;
             border-bottom: 1px solid #dddddd;
+
             .remind-state-td {
                 width: 100%;
                 line-height: 55px;
@@ -52,9 +53,32 @@
             }
             .remind-row-label {
                 width: 30%;
-                border-right: 1px solid #dddddd;
                 line-height: 55px;
                 text-align: center;
+            }
+            .remind-auto-select {
+                border: 1px solid #dddddd;
+                padding: 10px;
+                .popup {
+                    display: none;
+                    width: 400px;
+                    position: absolute;
+                    z-index: 100 !important;
+                    background-color: white !important;
+                    padding-left: 0px !important;
+                    margin: 0px !important;
+                    height: auto!important;
+                    max-height: 300px!important;
+                    overflow: auto !important;
+                    li {
+                        margin-left: 0px;
+                        list-style-type: none !important;
+                        label{
+                            text-align: left;
+                            overflow:hidden;
+                        }
+                    }
+                }
             }
             .select-input {
                 width: 100%;
