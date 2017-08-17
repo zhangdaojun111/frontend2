@@ -21,6 +21,9 @@ IframeInstance.render($('#content'));
 HeaderInstance.render($('#header'));
 
 
+
+
+
 // window.setTimeout(function () {
 //     socket.close()
 // }, 1000)

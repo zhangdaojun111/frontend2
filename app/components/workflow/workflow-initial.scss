@@ -1,113 +1,6 @@
 *{
   box-sizing: border-box;
 }
-.workflow-icon{
-  background: url(../../assets/images/workflow/workflow-icon.png) no-repeat;
-}
-.icon-workflow-icon1 {
-
-  background-position: -26px 0px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon10 {
-
-  background-position: -52px -52px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon11 {
-
-  background-position: 0px -26px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon12 {
-
-  background-position: -26px -26px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon13 {
-
-  background-position: -52px 0px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon14 {
-
-  background-position: -52px -26px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon15 {
-
-  background-position: 0px -52px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon16 {
-
-  background-position: -26px -52px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon17 {
-
-  background-position: 0px 0px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon2 {
-
-  background-position: -104px 0px;
-  width: 14px;
-  height: 14px;
-}
-.icon-workflow-icon3 {
-
-  background-position: -78px -26px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon4 {
-
-  background-position: -78px -52px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon5 {
-
-  background-position: 0px -78px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon6 {
-
-  background-position: -26px -78px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon7 {
-
-  background-position: -52px -78px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon8 {
-
-  background-position: -78px 0px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon9 {
-
-  background-position: -78px -78px;
-  width: 16px;
-  height: 16px;
-}
-
-
 body{
   background:rgb(235,235,235);
 }
@@ -115,12 +8,8 @@ body{
   width: 100%;
   position: relative;
   .workflow-container{
-    background: #ebebeb;
-    position: absolute;
-    width: 100%;
-    // top: 30px;
-    left: 0;
-    right: 0;
+    padding: 10px;
+    background: rgb(235,235,235);
   }
 }
 .wrap-box{
@@ -129,44 +18,45 @@ body{
   margin-bottom: 10px;
 }
 .workflow-header{
+  margin-bottom: 10px;
   .workflow-header-hd{
     background: #fff;
-    height: 59px;
+    height: 52px;
   }
   .workflow-header-bd{
-    padding: 30px 0px 0 20px;
+    background: #fff;
+    padding: 10px 0px 0 100px;
     .workflow-btn-list{
       margin-top: 20px;
     }
     .comm-operate{
-      cursor: pointer;
+      background-color: #fff;
       color: rgb(14, 122, 239);
       font-size: 12px;
       border: none;
       outline: none;
-      width: 24px;
       margin-left: 6px;
     }
   }
 
   .workflow-name{
-    width: 121px;
+    width: 100px;
     text-align: center;
-    padding-left: 20px;
   }
   .select-container{
     width: 300px;
     border: 1px solid #ddd;
     border-radius: 3px;
-    height: 25px;
+    height: 30px;
     line-height: 30px;
     position: relative;
   }
   #addFav{
     cursor: pointer;
-    margin-left: 25px;
+    margin-left: 10px;
     line-height: 28px;
     top: 10px;
+    background: #eee;
     color: rgb(14, 122, 239);
     font-size: 12px;
     padding: 0 10px;
@@ -174,27 +64,10 @@ body{
 }
 #workflow-content{
   display: none;
-  .workflow-btn{
+  .divBtn{
+    display: flex;
     margin-bottom: 10px;
-    .divBtn{
-      display: flex;
-      // margin-bottom: 10px;
-      height: 50px;
-      line-height: 50px;
-      background: rgba(250,250,250,1);
-      .Flow{
-        height: inherit;
-        padding: 0 15px;
-        margin-left: 10px;
-        cursor: pointer;
-      }
-      .selected{
-        color:rgba(0,136,255,1);
-        border-bottom: 1px solid rgba(0,136,255,1);
-      }
-    }
   }
-
 }
 .blueBtn{
       padding: 0 10px;
@@ -208,84 +81,51 @@ body{
     }
 
 .workflow-foot{
-  margin:10px 10px 0 10px;
   .workflow-box{
     background: #fff;
     margin-bottom: 10px;
-    .workflow-box-l {
-      height: 40px;
-      border-bottom: 1px solid #e4e4e4;
-      line-height: 40px;
-      font-weight: 700;
-      font-size: 14px;
-      width: 100%;
-      .tit{
-        padding: 0 10px;
-        display: flex;
-        align-items: center;
-        .workflow-icon{
-          margin-right: 5px;
-        }
-      }
-      .workflow-look{
-        margin-left: 40px;
-        .previewBtn{
-          padding: 0 7px;
-          height: 40px;
-          display: flex;
-          align-items: center;
-        }
-        .workflow-icon{
-          margin: 0 auto;
-        }
-      }
+    padding: 10px;
+    .workflow-box-l{
+      padding: 5px 0;
+      width: 100px;
+      flex-shrink: 0;
+      text-align: center;
     }
-    .workflow-box-r {
-      padding: 10px;
+    .workflow-box-r{
+      flex-grow: 1;
+      padding: 5px 20px;
+      border-left: 1px solid rgb(201,227,255);
       width: 100%;
-      overflow-x: auto;
-      .follow-name-list{
-        position: relative;
-        min-height: 65px;
-        padding: 10px 5px;
-      }
-
-      .approve-textarea{
-        width: 100%;
-        height: 66px;
-        border: 1px solid #f2dede;
-        textarea{
-          border: none;
-          outline: none;
-          width: 100%;
-          height: 100%;
-          resize: none;
-        }
-      }
+      overflow-x:auto ;
     }
 
+    .follow-name-list{
+      border: 1px solid #f2dede;
+      position: relative;
+      line-height: 20px;
+      width: 80%;
+      min-height: 65px;
+      text-indent: 110px;
+      padding: 10px 5px;
+    }
+    .add-follow{
+      color: #fff;
+      padding: 5px 10px;
+      background: rgb(17,125,237);
+      margin-right: 10px;
+      position: absolute;
+      left: 10px;
+      top: 5px;
+      z-index: 1;
+    }
 
-
-
-  }
-  .workflow-submit,.workflow-close{
-    background: rgba(0,136,255,1);
-    width: 91px;
-    height:30px;
-    text-align: center;
-    border-radius: 4px;
-    box-shadow: none;
-    color: #fff;
-    margin-right: 5px;
   }
 }
 #workflow-form{
   display: block;
-  margin: 0 10px;
 }
 #workflow-grid{
   display: none;
-  margin:0 10px;
 }
 #import{
   z-index: 55;

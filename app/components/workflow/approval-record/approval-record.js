@@ -6,11 +6,10 @@ import '././approval-record.scss';
 let config={
     template: template,
     data:{},
-    actions:{
+    action:{
 
     },
     afterRender(){
-
     }
 };
 class workflowRecord extends Component{

@@ -5,7 +5,6 @@
         <div class="slide">
             <ul>
                 <li class="online-num">在线人数(<span>59</span>)</li>
-                <li class="post-message">消息推送</li>
                 <li class="system-setting">系统设置</li>
             </ul>
         </div>
@@ -14,7 +13,9 @@
     <!--<a class="icon other-login" title="他人登录"></a>-->
     <!--{{/if}}-->
     <a class="icon message" title="消息提醒"></a>
+    {{#if postMessageVisible}}
     <a class="icon message-push" title="消息推送"></a>
+    {{/if}}
     {{#if calendarVisible}}
     <a class="icon calendar" title="日历"></a>
     {{/if}}
