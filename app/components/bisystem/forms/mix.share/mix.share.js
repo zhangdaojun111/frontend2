@@ -5,14 +5,12 @@
 
 import {BiBaseComponent} from '../../bi.base.component';
 import template from './mix.share.html';
-import {fittings as form} from '../fittings/export.fittings';
+import {instanceFitting} from '../fittings/export.fittings';
 import './mix.share.scss';
 import {ChartFormService} from '../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../lib/msgbox";
-import expertSearch from '../../../dataGrid/data-table-toolbar/expert-search/expert-search';
-
 import {FormSearchComponent} from '../search/search';
-
+import Mediator from '../../../../lib/mediator';
 
 let config = {
     template: template,
@@ -38,31 +36,21 @@ export class FormMixShareComponent extends BiBaseComponent {
      * 渲染chart fittings
      */
     renderFitting() {
-        const formGroup = {
-            chartSource:form.autoComplete,
-            themes: form.radio,
-            icons: form.radio,
+        const themeData = {
+            name: 'theme',
+            value:null,
+            radios:[
+                {value:'blue', name:'蓝色'},
+                {value: 'green',name: '绿色'},
+                {value: 'grayBlue', name:'灰蓝色'}
+            ]
+        };
+        this.mixForm = {
+            chartSource:instanceFitting({type:'autoComplete',me: this,container: 'chart-mix-share' }),
+            themes: instanceFitting({type:'radio',me: this, data: themeData,container: 'chart-mix-share' }),
+            icons: instanceFitting({type:'radio',me: this,container: 'chart-mix-share' }),
             search: FormSearchComponent
         };
-        Object.keys(formGroup).map(key => {
-            let component;
-            if (key === 'themes') {
-                const data = {
-                    name: 'theme',
-                    value:null,
-                    radios:[
-                        {value:'blue', name:'蓝色'},
-                        {value: 'green',name: '绿色'},
-                        {value: 'grayBlue', name:'灰蓝色'}
-                    ]
-                };
-                component = new formGroup[key](data);
-            } else {
-                component = new formGroup[key]();
-            }
-            this.mixForm[key] = component;
-            this.append(component, this.el.find('.chart-mix-share'))
-        })
     }
 
     /**
@@ -72,8 +60,8 @@ export class FormMixShareComponent extends BiBaseComponent {
         let res = await ChartFormService.getChartSource();
         if (res['success'] === 1) {
             this.mixForm.chartSource.autoSelect.data.list = res['data'];
+            this.mixForm.chartSource.autoSelect.data.onSelect = this.getChartField;
             this.mixForm.chartSource.autoSelect.reload();
-            this.mixForm.chartSource.callBack = this.getChartField;
         } else {
             msgbox.alert(res['error']);
         }
@@ -97,6 +85,23 @@ export class FormMixShareComponent extends BiBaseComponent {
         } else {
             msgbox.alert(res['error']);
         }
+    }
+    /**
+     * 获取x,y轴
+     */
+    async getChartField(tableId) {
+        const table = tableId.length > 0 ? tableId[0] : null;
+        if (table) {
+            let res = await ChartFormService.getChartField(table.id);
+            if (res['success'] === 1) {
+                Mediator.publish('bi:chart:form:fields', res['data']);
+            } else {
+                msgbox.alert(res['error']);
+            }
+        } else {
+            Mediator.publish('bi:chart:form:fields:clear', []);
+        }
+
     }
 
 }
