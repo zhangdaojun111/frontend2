@@ -174,7 +174,9 @@ export const IframeInstance = new Component({
             $parent.append($li);
         },
         closeFocusTab:function () {
-            this.actions.closeIframe(this.data.focus.id);
+            if(this.data.focus){
+                this.actions.closeIframe(this.data.focus.id);
+            }
         },
         controlTabs:function (event) {
             let name = event.target.textContent;
@@ -241,8 +243,8 @@ export const IframeInstance = new Component({
             SaveView.show(that.data.sort);
         // }).on('mouseenter','.popup-btn',() => {
         //     this.actions.showTabsPopup();
-        // }).on('mouseleave','.view-popup',() => {
-        //     this.el.find('.tab-list').slideUp();
+        }).on('click','.view-popup',(event) => {
+            event.stopPropagation();
         }).on('click','.drop-up-icon',() => {
             this.el.find('.tab-list').slideUp();
         }).on('click','.drop-down-icon',() => {
