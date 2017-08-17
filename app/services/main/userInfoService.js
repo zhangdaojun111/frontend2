@@ -107,6 +107,7 @@ export const UserInfoService = {
             type:'post'
         })
     },
+
     saveUserConfig:function (data) {
         let url = '/user_preference/';
         let temp = Utils.formatParams(data);

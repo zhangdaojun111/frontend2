@@ -7,7 +7,7 @@ const GetSet = new Set();
 const PostSet = new Set();
 const Hash = {};
 const prefix = 'erds-';
-let counter = 10000;
+let counter = _.now();
 
 
 function getKey() {

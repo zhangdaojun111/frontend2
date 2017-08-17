@@ -1,0 +1,17 @@
+<div class="form-cell form-setting-textarea">
+    <div class="wrap">
+        <div class="content">
+            {{#if unvisible}}
+                <p class="info">权限受限</p>
+            {{else if be_control_condition}}
+                <p class="info">被修改条件限制</p>
+            {{else}}
+                <textarea disabled class="ui-width"></textarea>
+                <input type="button" value="设置" class="button">
+                {{#if history}}
+                <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>
+                {{/if}}
+            {{/if}}
+        </div>
+    </div>
+</div>

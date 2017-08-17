@@ -6,21 +6,23 @@ import Mediator from '../../../lib/mediator';
 import msgbox from '../../../lib/msgbox';
 import OtherLogin from "../login-by-other/login-by-other";
 import {systemMessageUtil} from '../system-message/system-message';
+import {SysSetting} from "../system-setting/system-setting"
 import {postMessageUtil} from '../post-message/post-message';
-
+import {GlobalSearch} from '../global-search/global-search';
 
 let config = {
     template: template,
     data: {
         asideSize: 'full',
 
-        homeVisible: true,
-        calendarVisible: true,
-        biVisible: true,
+        // homeVisible: true,
+        // calendarVisible: true,
+        // biVisible: true,
 
-        // calendarVisible: window.config.sysConfig.logic_config.use_canlendar,
-        // biVisible: window.config.sysConfig.logic_config.use_bi,
-        // imVisible: window.config.sysConfig.logic_config.use_im,
+        postMessageVisible: window.config.sysConfig.userInfo.is_superuser === 1,
+        calendarVisible: window.config.sysConfig.logic_config.use_canlendar,
+        biVisible: window.config.sysConfig.logic_config.use_bi,
+        imVisible: window.config.sysConfig.logic_config.use_im,
     },
     actions: {
         setSizeToFull: function () {
@@ -74,7 +76,11 @@ let config = {
             // $("<div></div>").appendTo
             systemMessageUtil.show();
         },
-
+        initGlobalSearch:function () {
+            let component = new GlobalSearch();
+            let $container = this.el.find(".global-search");
+            component.render($container);
+        },
         openPostMessageDialog: function () {
             postMessageUtil.show();
         }
@@ -129,7 +135,7 @@ let config = {
             this.actions.openHome();
         }).on('click', '.message', () => {
             this.actions.openMessageDialog();
-        }).on('click', '.post-message', () => {
+        }).on('click', '.message-push', () => {
             this.actions.openPostMessageDialog();
         });
         Mediator.on('socket:online_user_num', that.actions.refreshOnlineNum);
