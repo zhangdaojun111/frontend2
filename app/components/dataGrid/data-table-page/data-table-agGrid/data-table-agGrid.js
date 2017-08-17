@@ -99,6 +99,8 @@ let config = {
         customColumnsFields: [],
         //搜索参数
         filterParam: {expertFilter:[], filter: [], is_filter: 0, common_filter_id: '', common_filter_name: ''},
+        //上传一搜索参数
+        filterText: '',
         //是否第一次渲染agGrid
         firstRender: true,
         //权限
@@ -1063,8 +1065,11 @@ let config = {
             json = dgcService.returnQueryParams( json );
             this.data.filterParam.is_filter = 1;
             if( json.filter && json.filter != '' ){
-                // this.data.first = 0;
-                // json.first = 0;
+                if( this.data.filterText != json.filter ){
+                    this.data.first = 0;
+                    json.first = 0;
+                    this.data.filterText = json.filter;
+                }
             }
             return json;
         },
