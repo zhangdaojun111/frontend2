@@ -21,6 +21,8 @@ const calendarPreferenceUrl = 'calendar_mgr/calendar_preference';
 
 const keyFieldDictUrl = 'calendar_mgr/key_field_dict';
 
+const dragCalendarTaskUrl = 'calendar_mgr/drag_calendar';
+
 export const CodeEnum = {
         SUCCESS: 200,
 };
@@ -197,7 +199,16 @@ export const CalendarService = {
         return res;
     },
     
-    getCalendarDrag: function () {
-
+    getCalendarDrag: function (params) {
+        let res = HTTP.get(dragCalendarTaskUrl, params).then(res => {
+            console.log(res);
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                //alert('获取数据失败');
+            }
+        });
+        HTTP.flush();
+        return res;
     }
 };

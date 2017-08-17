@@ -7,6 +7,7 @@ import './calendar.remind.task.item.scss';
 import CalendarRemind from '../../../calendar.remind/calendar.remind';
 import {PMAPI} from '../../../../../../lib/postmsg';
 import MSG from '../../../../../../lib/msgbox';
+import Mediator from '../../../../../../lib/mediator';
 
 let config = {
     template: template,
@@ -17,6 +18,7 @@ let config = {
         isWaitCheck:true,
     },
     actions: {
+
         changSelectValue: function(sValue, sLabel){
             let oldValue = this.data.remindTaskItemData['data3show'][0][0]['selectValue'];
             let oldLabel = this.data.remindTaskItemData['data3show'][0][0]['selectLabel'];
@@ -27,6 +29,15 @@ let config = {
             MSG.alert(str).then(res => {
                 if(res['confirm']) {
                     //this.actions.reset(tableId);
+                    let params = {
+                        read_ids: this.data.remindTaskItemData['real_id'],
+                        table_id: this.data.remindTaskItemData['tableId'],
+                        calendar_id: this.data.remindTaskItemData['setId'],
+                        type: 1,
+                        data: {},
+                    };
+                    params['data'][this.data.remindTaskItemData['selectField']] = newValue;
+                    Mediator.emit('CalendarRemindTask: changeData', params);
                 }
             });
 
@@ -65,7 +76,6 @@ let config = {
     },
     afterRender: function() {
         this.el.find('.task-bg-color').css({backgroundColor: this.data.remindTaskItemData['color']});
-
         let that = this;
         if(this.data.remindTaskItemData['type'] === 1) {
             if(this.data.remindTaskItemData.selectOption) {
