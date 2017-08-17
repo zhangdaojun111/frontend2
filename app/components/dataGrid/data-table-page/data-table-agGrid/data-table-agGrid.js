@@ -1162,8 +1162,8 @@ let config = {
                 exportSetting.data[o] = obj[o];
             }
             PMAPI.openDialogByComponent(exportSetting, {
-                width: 380,
-                height: 220,
+                width: 600,
+                height: 360,
                 title: '导出数据'
             }).then((data) => {
 
