@@ -15,13 +15,15 @@ let config = {
     data: {
         asideSize: 'full',
 
-        homeVisible: true,
-        calendarVisible: true,
-        biVisible: true,
+        // homeVisible: true,
+        // calendarVisible: true,
+        // biVisible: true,
 
-        // calendarVisible: window.config.sysConfig.logic_config.use_canlendar,
-        // biVisible: window.config.sysConfig.logic_config.use_bi,
-        // imVisible: window.config.sysConfig.logic_config.use_im,
+        postMessageVisible: window.config.sysConfig.userInfo.is_superuser === 1,
+
+        calendarVisible: window.config.sysConfig.logic_config.use_canlendar,
+        biVisible: window.config.sysConfig.logic_config.use_bi,
+        imVisible: window.config.sysConfig.logic_config.use_im,
     },
     actions: {
         setSizeToFull: function () {
