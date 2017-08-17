@@ -1,3 +1,7 @@
+/**
+ * author hufei
+ * 工作流审批盖章的操作
+ */
 import Component from '../../../lib/component';
 import template from './workflow-seal.html';
 import './workflow-seal.scss';
