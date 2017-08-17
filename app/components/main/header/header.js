@@ -7,6 +7,7 @@ import msgbox from '../../../lib/msgbox';
 import OtherLogin from "../login-by-other/login-by-other";
 import {GlobalSearch} from "../global-search/global-search"
 import {systemMessageUtil} from '../system-message/system-message';
+import {postMessageUtil} from '../post-message/post-message';
 import {SysSetting} from "../system-setting/system-setting"
 
 let config = {
@@ -74,6 +75,11 @@ let config = {
             // $("<div></div>").appendTo
             systemMessageUtil.show();
         },
+
+        openPostMessageDialog: function () {
+            postMessageUtil.show();
+        },
+
         initGlobalSearch:function () {
             let component = new GlobalSearch();
             let $container = this.el.find(".global-search");
@@ -129,6 +135,8 @@ let config = {
             this.actions.openHome();
         }).on('click', '.message', () => {
             this.actions.openMessageDialog();
+        }).on('click', '.post-message', () => {
+            this.actions.openPostMessageDialog();
         });
         Mediator.on('socket:online_user_num', that.actions.refreshOnlineNum);
         Mediator.on('socket:personal_message', this.actions.showMessageUnread);

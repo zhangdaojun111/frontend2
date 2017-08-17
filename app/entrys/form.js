@@ -280,34 +280,34 @@ let FormEntrys = {
     async createForm(config={}){
         let _this=this;
         this.init(config);
-        let html=$(`<div id="detail-form" style="" class="table-wrap wrap">`).prependTo(this.el);
+        let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap">`).prependTo(this.el);
         let res=await  FormService.getPrepareParmas({table_id:this.tableId});
-            _this.findFormIdAndFlowId(res);
-            let json=_this.createPostJson();
+        _this.findFormIdAndFlowId(res);
+        let json=_this.createPostJson();
         res =await FormService.getFormData(json);
-                console.time('form创建时间');
+        console.time('form创建时间');
         //发送审批记录
-                if(_this.fromApprove){
-                    if(res[1]['record_info']){
-                        Mediator.publish('workFlow:record_info',res[1]['record_info']);
-                    }
-                }
+        if(_this.fromApprove){
+            if(res[1]['record_info']){
+                Mediator.publish('workFlow:record_info',res[1]['record_info']);
+            }
+        }
         let template;
-                if(_this.formId){
-            //手绘表单
-                    template=res[2]['data']['content'];
-                }else{
-                    template=_this.formDefaultVersion(res[0].data);
-                }
-                let data=_this.mergeFormData(res[0],res[1]);
-                let formData={
-                    template:template,
-                    data:data,
-                }
-                let formBase=new FormBase(formData);
-                _this.childForm[_this.tableId]=formBase;
-                formBase.render(html);
-                console.timeEnd('form创建时间');
+        if(_this.formId){
+        //手绘表单
+        template=res[2]['data']['content'];
+        }else{
+            template=_this.formDefaultVersion(res[0].data);
+        }
+        let data=_this.mergeFormData(res[0],res[1]);
+        let formData={
+            template:template,
+            data:data,
+        }
+        let formBase=new FormBase(formData);
+        _this.childForm[_this.tableId]=formBase;
+        formBase.render(html);
+        console.timeEnd('form创建时间');
     },
 
     //审批删除时重置表单可编辑性

@@ -37,6 +37,9 @@ module.exports = {
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
+        dataImport: path.resolve(APP_PATH, 'entrys/popup/dataImport.js'),
+        expertSearch: path.resolve(APP_PATH, 'entrys/popup/expertSearch.js'),
+        workflowPage: path.resolve(APP_PATH, 'entrys/popup/workflowPage.js'),
         customDataGrid: path.resolve(APP_PATH, 'entrys/popup/customDataGrid.js'),
         bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         bimanager:path.resolve(APP_PATH, 'entrys/bimanager.js'),
@@ -53,7 +56,6 @@ module.exports = {
             'jquery-ui/themes/base/theme.css',
             'mediator-js',
             'handlebars',
-            'moment',
             'lodash',
             'babel-polyfill'
         ]
