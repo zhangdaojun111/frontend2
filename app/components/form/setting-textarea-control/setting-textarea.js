@@ -38,6 +38,7 @@ let config = {
     },
     afterRender: function () {
         let _this=this;
+        this.el.find('.ui-width').css('width',this.data.width);
         this.actions.fillData();
         this.el.find('.button').button({
             // disabled: true
@@ -46,7 +47,6 @@ let config = {
             this.actions.openSettingDialog();
         })
         this.el.on('click','.ui-history',function(){
-            console.log(_this.data);
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
         //周期规则默认值填充

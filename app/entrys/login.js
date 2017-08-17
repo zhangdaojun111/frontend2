@@ -6,6 +6,7 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import {LoginService} from '../services/login/loginService';
 import {md5} from '../services/login/md5';
 import msgBox from '../lib/msgbox';
+import {RegisterComponent} from './register';
 
 function getLoginController() {
     return {
@@ -25,6 +26,7 @@ function getLoginController() {
         $updateGroup:$(".update-group"),              //显示更新信息logo
         $versionTable:$(".version-table"),          //版本信息显示表格
         $loginBtn:$("button.login-btn"),            //登录按钮
+        $registerBtn:$("div.register-btn"),      //注册按钮
         $findPwBtn:$(".find-pw-btn"),               //忘记密码
         $closeIcon:$(".close-icon"),                //找回密码面板关闭按钮
         $usernameInput:$("input[name=username]"),   //用户名输入框
@@ -67,7 +69,11 @@ function getLoginController() {
                 // this.password = this.$passwordInput.val();
                 this.userLogin(this.username_value,this.password_value);   //根据用户名和密码登录
             });
-
+            //注册按钮
+            this.$registerBtn.on('click', () => {
+                $(window).attr('location','/register_index');
+                // RegisterComponent.show();
+            });
             //忘记密码，找回密码入口
             this.$findPwBtn.on("click", () => {
                 this.$whitePanel.hide();

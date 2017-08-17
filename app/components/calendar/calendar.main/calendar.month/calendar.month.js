@@ -27,6 +27,7 @@ let config = {
 
     },
     afterRender: function() {
+        this.data.fromDate = this.data.monthBodyDataList[0]['weekList'][0]['dataTime'];
         this.el.css({"height":"100%","width":"100%"});
         this.append(new CalendarTableHeader({headTitle: this.data.HeadList, type:'month'}), this.el.find('.month-head'));
         this.data.monthBodyDataList.forEach((item,index) => {

@@ -1,3 +1,7 @@
+/**
+ * @author hufei
+ * 生成工作流名称的下拉菜单
+ */
 import Component from "../../../../lib/component";
 import template from './workflow-tree.html';
 import './workflow-tree.scss';

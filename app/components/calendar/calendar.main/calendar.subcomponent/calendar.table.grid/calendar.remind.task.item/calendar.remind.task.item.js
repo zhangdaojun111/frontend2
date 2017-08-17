@@ -6,6 +6,8 @@ import template from './calendar.remind.task.item.html';
 import './calendar.remind.task.item.scss';
 import CalendarRemind from '../../../calendar.remind/calendar.remind';
 import {PMAPI} from '../../../../../../lib/postmsg';
+import MSG from '../../../../../../lib/msgbox';
+import Mediator from '../../../../../../lib/mediator';
 
 let config = {
     template: template,
@@ -14,55 +16,51 @@ let config = {
         remindTaskItemData:{},
         isFinishedTask:false,
         isWaitCheck:true,
-
     },
     actions: {
-        // changSelectValue: function(set){
-        //     this.data.dropdownSelectValue = set;
-        //     let oldValue = set.data3show[0][0]['selectLabel'];
-        //     let newValue = '';
-        //     let selectValue = set.data3show[0][0]['selectValue'];
-        //     for( let s of set.selectOption ){
-        //         if( s.value == selectValue ){
-        //             newValue = s.label;
-        //         }
-        //     }
-        //     let str = '是否将字段 “'+ set.selectFieldName +'” 的值由 “'+ oldValue + '” 改为 “' + newValue + '”';
-        //     this.comfirmWin( str );
-        // }
 
-    },
-    afterRender: function() {
-        console.log(this.data.remindTaskItemData);
-        this.el.find('.task-bg-color').css({backgroundColor: this.data.remindTaskItemData['color']});
-        // if(this.data.remindTaskData === "已完成") {
-        //     this.data.isFinishedTask = true;
-        // }else if(this.data.remindTaskData === "待完成"){
-        //     this.data.isWaitCheck = true;
-        // }
-        let that = this;
-        if(this.data.remindTaskItemData['type'] === 1) {
-            this.el.find('.task-show-text').html(this.data.remindTaskItemData['data3show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data3show'][0][0]['fieldValue']);
-            this.el.on('click', '.task-show-text', () => {
-                CalendarRemind.data.remindTable = this.data.remindTaskItemData.tableName;
-                CalendarRemind.data.remindDateProp = this.data.remindTaskItemData.fieldName;
-                CalendarRemind.data.remindDetail = this.data.remindTaskItemData.data2show;
-                CalendarRemind.data.remindDateTime = this.data.remindTaskItemData.time;
-                CalendarRemind.data.remindTableId = this.data.remindTaskItemData.tableId;
-                CalendarRemind.data.remindDate = this.data.remindTaskItemData.time.substr(0,10);
-                CalendarRemind.data.remindTime = this.data.remindTaskItemData.time.substr(11,5);
-                PMAPI.openDialogByComponent(CalendarRemind, {
-                    width: '1000',
-                    height: '600',
-                    title: '查看',
-                }).then(data => {
-                    console.log(data);
-                });
+        changSelectValue: function(sValue, sLabel){
+            let oldValue = this.data.remindTaskItemData['data3show'][0][0]['selectValue'];
+            let oldLabel = this.data.remindTaskItemData['data3show'][0][0]['selectLabel'];
+            let newValue = sValue;
+            let newLabel = sLabel;
+
+            let str = '是否将字段 “'+ this.data.remindTaskItemData.selectFieldName +'” 的值由 “'+ oldLabel + '” 改为 “' + newLabel + '”';
+            MSG.alert(str).then(res => {
+                if(res['confirm']) {
+                    //this.actions.reset(tableId);
+                    let params = {
+                        read_ids: this.data.remindTaskItemData['real_id'],
+                        table_id: this.data.remindTaskItemData['tableId'],
+                        calendar_id: this.data.remindTaskItemData['setId'],
+                        type: 1,
+                        data: {},
+                    };
+                    params['data'][this.data.remindTaskItemData['selectField']] = newValue;
+                    Mediator.emit('CalendarRemindTask: changeData', params);
+                }
             });
 
-        } else if(this.data.remindTaskItemData['type'] === 2) {
+        },
 
-        } else {
+        openRemind: function () {
+            CalendarRemind.data.remindTable = this.data.remindTaskItemData.tableName;
+            CalendarRemind.data.remindDateProp = this.data.remindTaskItemData.fieldName;
+            CalendarRemind.data.remindDetail = this.data.remindTaskItemData.data2show;
+            CalendarRemind.data.remindDateTime = this.data.remindTaskItemData.time;
+            CalendarRemind.data.remindTableId = this.data.remindTaskItemData.tableId;
+            CalendarRemind.data.remindDate = this.data.remindTaskItemData.time.substr(0,10);
+            CalendarRemind.data.remindTime = this.data.remindTaskItemData.time.substr(11,5);
+            PMAPI.openDialogByComponent(CalendarRemind, {
+                width: '1000',
+                height: '600',
+                title: '查看',
+            }).then(data => {
+                console.log(data);
+            });
+        },
+
+        openWorkflow: function () {
             this.el.find('.task-show-text').html(this.data.remindTaskItemData['data']['name']);
             this.el.on('click', '.task-show-text', () => {
                 console.log(this.data.remindTaskItemData);
@@ -74,7 +72,36 @@ let config = {
                 })
             });
         }
-        this.el.on('click','.task-state-icon',function(){
+
+    },
+    afterRender: function() {
+        this.el.find('.task-bg-color').css({backgroundColor: this.data.remindTaskItemData['color']});
+        let that = this;
+        if(this.data.remindTaskItemData['type'] === 1) {
+            if(this.data.remindTaskItemData.selectOption) {
+                for( let s of this.data.remindTaskItemData.selectOption ){
+                    if( s.value === this.data.remindTaskItemData['data3show'][0][0]['selectValue'] ){
+                        this.el.find('.select-options option').each((item) => {
+                            let a = $('.select-options option')[item].value;
+                            if(a === s.value) {
+                                this.el.find('.select-options option')[item].selected  = 'selected';
+                            }
+                        });
+                    }
+                }
+            }
+
+            this.el.find('.task-show-text').html(this.data.remindTaskItemData['data3show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data3show'][0][0]['fieldValue']);
+            this.el.on('click', '.task-show-text', () => {
+                this.actions.openRemind();
+            });
+
+        } else if(this.data.remindTaskItemData['type'] === 2) {
+
+        } else {
+            this.actions.openWorkflow();
+        }
+        this.el.on('click','.task-state-icon', () => {
             event.stopPropagation();
             if(!$(this).is(".options-show")){
                 that.el.parents(".calendar-main-content").find(".select-options").hide();
@@ -94,9 +121,14 @@ let config = {
                 that.el.find(".select-options").hide();
                 $(this).removeClass("options-show");
             }
-        });
-        this.el.on('click','.select-options',function(){
+        }).on('click','.select-options', () => {
             event.stopPropagation();
+
+        }).on('change', '.select-options', () => {
+            let sValue = this.el.find('.select-options option:selected').val();
+            let sLabel = this.el.find('.select-options option:selected').text();
+            console.log(sValue, sLabel);
+            this.actions.changSelectValue(sValue, sLabel);
         });
         $(document).click(function(){
             that.el.parents(".calendar-main-content").find(".select-options").hide();

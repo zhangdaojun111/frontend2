@@ -14,10 +14,6 @@
   font-size:15px;
 }
 
-.header-select {
-  padding: 0px 4px;
-}
-
 .ag-grid-number {
   font-size: 12px!important;
 }
@@ -41,6 +37,7 @@
 .dataGrid-commonQuery {
   float: left;
   padding-left: 15px;
+  display: none;
   .dataGrid-commonQuery-select {
     padding: 6px 12px;
     text-indent: 0;

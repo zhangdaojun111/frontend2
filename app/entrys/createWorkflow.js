@@ -16,6 +16,8 @@ import TreeView from  '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import Grid from '../components/dataGrid/data-table-page/data-table-page';
+import jsplumb from 'jsplumb';
+import {PMAPI,PMENUM} from '../lib/postmsg';
 
 
 WorkFlowForm.showForm();
@@ -46,6 +48,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
     })()
     .then(res=>{
         Mediator.publish('workflow:gotWorkflowInfo', res);
+        Mediator.publish('workflow:focused', []);
         return workflowService.validateDraftData({form_id:msg.formid});
     })
     .then(res=>{
@@ -104,15 +107,16 @@ Mediator.subscribe('workflow:choose', (msg)=> {
 
 });
 //submit workflow data 提交工作流
+let focusArr=[];
 Mediator.subscribe('workflow:focus-users', (res)=> {
-    wfObj.user=res;
+    focusArr=res;
 })
 Mediator.subscribe('workflow:submit', (res)=> {
     $("#submit").hide();
     let formData=FormEntrys.getFormValue(wfObj.tableid),
         postData={
         flow_id:wfObj.id,
-        focus_users:JSON.stringify(wfObj.user)||[],
+        focus_users:JSON.stringify(focusArr)||[],
         data:JSON.stringify(formData)
     };
     (async function () {
@@ -184,46 +188,10 @@ Mediator.subscribe('workflow:choose', function (info) {
             tableId:res.table_id,
             viewMode:"createBatch"
         });
+        AgGrid.actions.returnBatchData = function (ids) {
+            console.log('接受导入数据')
+        };
         AgGrid.render($("#J-aggrid"));
     })
 
 });
-
-//首页workflow的初始化
-// (async function () {
-//     return workflowService.getRecordTotal()
-// })().then(res=>{
-//     Mediator.publish('workflow:getRecordTotal',res);
-//     return workflowService.getRecords({
-//         "type":5,
-//         "rows":9999,
-//         "page":1
-//     })
-// }).then((res)=>{
-//     Mediator.publish("workflow:getRecords",res)
-// });
-
-// //首页workflow的点击出现相应的数据
-// Mediator.subscribe('workflow:Record',(e)=>{
-//     (async function () {
-//         return workflowService.getRecordTotal();
-//     })().then(res=>{
-//         Mediator.publish('workflow:getRecordTotal',res);
-//         return workflowService.getRecords(e);
-//     }).then(res=>{
-//         Mediator.publish("workflow:getRecords",res);
-//     })
-// });
-
-
-// // console.log(workflowService.getRecordTotal());
-// //workflow 取消申请
-// Mediator.subscribe("workflow:approve",(e)=>{
-//     (async function (e) {
-//         console.log(e);
-//         return workflowService.approve(e);
-//     })(e).then(res=>{
-//         console.log(3);
-//         Mediator.publish("getApprove",res);
-//     })
-// });

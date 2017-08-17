@@ -6,6 +6,8 @@ import Mediator from '../../../lib/mediator';
 import msgbox from '../../../lib/msgbox';
 import OtherLogin from "../login-by-other/login-by-other";
 import {systemMessageUtil} from '../system-message/system-message';
+import {postMessageUtil} from '../post-message/post-message';
+
 
 let config = {
     template: template,
@@ -53,7 +55,7 @@ let config = {
             msgbox.alert('go online number');
         },
         goSystemSetting: function () {
-            msgbox.alert('go system setting');
+            SysSetting.show();
         },
         refreshOnlineNum: function (data) {
             this.el.find('.online-num span').text(data.online_user_num);
@@ -71,6 +73,10 @@ let config = {
             this.actions.hideMessageUnread();
             // $("<div></div>").appendTo
             systemMessageUtil.show();
+        },
+
+        openPostMessageDialog: function () {
+            postMessageUtil.show();
         }
 
     },
@@ -117,19 +123,25 @@ let config = {
             that.actions.goOnlineNumber();
         }).on('click', '.system-setting', () => {
             that.actions.goSystemSetting();
-
             // }).on('click','a.other-login', () => {   //他人登录
             //     this.actions.otherLogin();
         }).on('click', '.home', () => {
             this.actions.openHome();
         }).on('click', '.message', () => {
             this.actions.openMessageDialog();
+        }).on('click', '.post-message', () => {
+            this.actions.openPostMessageDialog();
         });
         Mediator.on('socket:online_user_num', that.actions.refreshOnlineNum);
         Mediator.on('socket:personal_message', this.actions.showMessageUnread);
         Mediator.on('socket:notice', this.actions.showMessageUnread);
         Mediator.on('socket:voice_message', this.actions.showMessageUnread);
         Mediator.on('socket:workflow_approve_msg', this.actions.showMessageUnread);
+        Mediator.on('socket:online_user_num', function (data) {
+            that.actions.refreshOnlineNum(data.online_user_num);
+        });
+        //加载全局搜索窗口
+        this.actions.initGlobalSearch();
     },
 
     beforeDestory: function () {

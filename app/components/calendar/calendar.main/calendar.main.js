@@ -689,6 +689,16 @@ let config = {
             }
         });
 
+        Mediator.on('CalendarRemindTask: changeData', data => {
+            let params = data;
+            params['from_date'] = this.data.from_date;
+            params['to_date'] = this.data.to_date;
+            console.log(params);
+            CalendarService.getCalendarDrag(params).then(res => {
+                console.log(res);
+            })
+        });
+
     },
     beforeDestory: function () {
         Mediator.removeAll('calendar-left');

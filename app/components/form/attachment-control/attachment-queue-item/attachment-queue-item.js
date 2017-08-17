@@ -104,11 +104,6 @@ let config = {
                 this.data._controlItem.uploadedSize = item.index * item.pack_size;
                 let formData = new FormData();
                 formData.append('file', item.file.slice(item.index * item.pack_size, (item.index + 1) * item.pack_size));
-                console.log('*******')
-                console.log('*******')
-                console.log('*******')
-                console.log('*******')
-                console.log(item);
                 formData.append('fileName', item.file.name);
                 formData.append('md5', item.md5);
                 formData.append('chunks', item.chunks);

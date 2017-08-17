@@ -2,13 +2,6 @@
  * Created by zj on 2017/7/31.
  */
 
-/*import {CalendarData} from "../../components/calendar/testData/calendar-data"
-import {CalendarTree} from "../../components/calendar/testData/calendar-tree"
-import {WorkFlowType2} from "../../components/calendar/testData/workflow-type2"
-import {WorkFlowType5} from "../../components/calendar/testData/workflow-type5"
-import {WorkFlowType6} from "../../components/calendar/testData/workflow-type6"
-import {getCalendar2926} from "../../components/calendar/testData/get-calendar2926"
-import {KeyFiled2926} from "../../components/calendar/testData/2926key-filed"*/
 
 import { HTTP } from '../../lib/http';
 
@@ -27,6 +20,8 @@ const missionRecordUrl = 'get_mission_record';
 const calendarPreferenceUrl = 'calendar_mgr/calendar_preference';
 
 const keyFieldDictUrl = 'calendar_mgr/key_field_dict';
+
+const dragCalendarTaskUrl = 'calendar_mgr/drag_calendar';
 
 export const CodeEnum = {
         SUCCESS: 200,
@@ -61,15 +56,11 @@ export const CalendarService = {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                //alert('获取数据失败');
+                alert('获取数据失败');
             }
         });
         HTTP.flush();
         return res;
-        // const res = new Promise((resolve) => {
-        //     resolve(getCalendar2926);
-        // });
-        // return res;
     },
 
     getCalendarTreeData: function () {
@@ -83,10 +74,6 @@ export const CalendarService = {
         });
         HTTP.flush();
         return res;
-        // const res = new Promise((resolve) => {
-        //     resolve(CalendarTree);
-        // });
-        // return res;
     },
 
     /**
@@ -98,15 +85,11 @@ export const CalendarService = {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                //alert('获取数据失败');
+                alert('获取数据失败');
             }
         });
         HTTP.flush();
         return res;
-        // const res = new Promise((resolve) => {
-        //     resolve(CalendarData);
-        // });
-        // return res;
     },
 
     /**
@@ -131,10 +114,6 @@ export const CalendarService = {
         });
         HTTP.flush();
         return res;
-        // const res = new Promise((resolve) => {
-        //     resolve(WorkFlowType2);
-        // });
-        // return res;
     },
 
     /**
@@ -218,10 +197,18 @@ export const CalendarService = {
         });
         HTTP.flush();
         return res;
-        // const res = new Promise((resolve) => {
-        //     resolve(KeyFiled2926);
-        // });
-        // return res;
     },
-
+    
+    getCalendarDrag: function (params) {
+        let res = HTTP.get(dragCalendarTaskUrl, params).then(res => {
+            console.log(res);
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                //alert('获取数据失败');
+            }
+        });
+        HTTP.flush();
+        return res;
+    }
 };

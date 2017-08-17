@@ -1,141 +1,78 @@
-$fon-sise:24px;
-
-.selectSize {
-  width: 60px;
-  height: 16px;
-  line-height: 16px;
-  margin-left: 16px;
-
-}
-.page-details {
-  display: inline-block;
-  font-weight:bolder;
-  height:16px;
-  line-height: 16px;
-  font-size:12px;
-  font-style: normal;
-  color: #666666;
-  margin-left: 5px;
-
-}
-
-.current-page {
-  font-size: 12px;
-  font-weight: 400;
-  margin-left: 5px;
-  cursor: pointer;
-}
-
-.goNext{
-  font-size: 12px;
-  font-weight: 400;
-  color: #666666;
-  cursor: pointer;
-}
-
-.goPre{
-  font-size: 12px;
-  font-weight: 400;
-  color: #666666;
-  cursor: pointer;
-}
-
-.confirm{
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 100%;
-  color: #666666;
-  text-decoration: none;
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-.cancel{
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 100%;
-  color: #666666;
-  text-decoration: none;
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-.enter-number{
-  height: 16px;
-  width: 60px;
-  line-height: 100%;
-  display: inline-block;
-}
-
-.goFirst,.goLast,.ui-icon-refresh{
-  display: inline-block;
-  position: relative;
-  height: 24px;
-  width: 20px;
-  img{
-    position: absolute;
-    top: 4px;
-    left: 2px;
-  }
-}
-  @keyframes  go{
-   0% {
-
-     transform: rotateZ(0);
-   }
-   100% {transform: rotateZ(360deg);
-   }
- }
-  .rotate{
-    animation-name:go;
-    animation-duration:2s;
-    -webkit-animation-duration: 2s;
-    animation-iteration-count:  infinite;
-    //animation-play-state: paused
-  }
-
-.ui-icon-refresh{
-
-  cursor: pointer;
-  top: 6px;
-  left: 2px;
-
-}
-.sumPage{
-  display: inline-block;
-  font-weight:bolder;
-  height:$fon-sise;
-  line-height: $fon-sise;
-  font-size:12px;
-  font-style: normal;
-  color: #666666;
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-.enter-number{
-  display: inline-block;
-  width: 40px;
-}
-
-.selectPage{
-  margin-right: 20px;
-  height: 24px;
-  width: 170px;
-  float: right;
-}
-
-.left{
-  height: 30px;
+@import "../../../../assets/scss/core/base";
+.pagination-con {
+  height:30px;
   line-height: 30px;
-  width: 200px;
-  float: left;
+  color: #666666;
+  font-size: 14px;
+  user-select: none;
+  .left {
+    float: left;
+    margin-left: 15px;
+    .pageSize {
+      width: 50px;
+      margin: 0 5px;
+    }
+    .page-details {
+      margin: 0 16px;
+      .total {
+        margin: 0 5px;
+      }
+    }
+    .ui-icon-refresh {
+      vertical-align: sub;
+    }
+  }
+  .page {
+    float: right;
+    .goFirst {
+      vertical-align: sub;
+      margin: 0 7px;
+    }
+    .goPre {
+      margin: 0 7px;
+    }
+    .currentPage {
+      display: inline-block;
+      width: 25px;
+      text-align: center;
+    }
+    .goNext {
+      margin: 0 7px;
+    }
+    .goLast {
+      vertical-align: sub;
+      margin: 0 7px;
+    }
+  }
+  .selectPage {
+    margin-right: 15px;
+    float: right;
+    .enterPageNum {
+      width: 50px;
+    }
+  }
 }
-.page{
-  margin-top: 6px;
-  height: 24px;
-  width: 300px;
-  line-height: 24px;
-  float: right;
-  margin-right: 10px;
+
+.goFirst:hover {
+  cursor: pointer;
+}
+.goPre:hover {
+  cursor: pointer;
+}
+.goNext:hover {
+  cursor: pointer;
+}
+.goLast:hover {
+  cursor: pointer;
+}
+.ui-icon-refresh:hover {
+  cursor: pointer;
+}
+
+.canNotClick {
+  color: #ABD1F9;
+  opacity: 0.7;
+}
+.canNotClick:hover {
+  cursor: not-allowed;
 }

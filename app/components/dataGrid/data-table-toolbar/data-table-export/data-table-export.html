@@ -1,20 +1,19 @@
 <div class="export-container">
     <div class="input-box">
         <div class="input-item">
-            <input id="condition" class="export-input" type="checkbox" checked="checked">
-            <label for="condition">按查询条件导出</label>
+            <div class="left"><input id="isFilter" class="export-input" type="checkbox" checked="checked"></div>
+            <div class="right"><label class="text" for="isFilter">按查询条件导出</label></div>
         </div>
         <div class="input-item">
-            <input id="columns" class="export-input" type="checkbox" checked="checked">
-            <label for="columns">按定制列导出</label>
+            <div class="left"><input id="columns" class="export-input" type="checkbox" checked="checked"></div>
+            <div class="right"><label class="text" for="columns">按定制列导出</label></div>
         </div>
-        <div class="input-item">
-            <input id="accessory" class="export-input" type="checkbox" checked="checked">
-            <label for="accessory">附件导出</label>
+        <div  class="input-item" id="last">
+            <div class="left"><input id="attachment" class="export-input" type="checkbox" checked="checked"></div>
+            <div class="right"><label class="text" for="attachment">附件导出</label></div>
         </div>
     </div>
     <div class="button-box">
-        <button class="save-btn">保存</button>
-        <button class="cancel-btn">取消</button>
+        <p class="btn-name"><a class="export-btn" href="javascript:;">导出</a></p>
     </div>
 </div>
