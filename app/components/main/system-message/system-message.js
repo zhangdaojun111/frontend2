@@ -28,11 +28,7 @@ let config = {
                 this.agGrid.actions.setGridData({
                     rowData: data.rows
                 });
-                // this.pagination
-                this.pagination.data.total = 10;
-                this.pagination.data.rows = param.rows;
-                this.pagination.data.currentPage = param.currentPage;
-                this.pagination.reload();
+                this.pagination.actions.setPagination(data.total, param.currentPage);
             });
         },
         markRead: function () {
@@ -117,7 +113,7 @@ let config = {
         this.agGrid.render(gridDom);
         this.pagination = new dataPagination({
             page: 1,
-            rows: 2
+            rows: 10
         });
         this.pagination.render(this.el.find('.pagination'));
         this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
