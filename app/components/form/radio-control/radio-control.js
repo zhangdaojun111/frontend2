@@ -4,7 +4,7 @@ import './radio-control.scss';
 import template from './radio-control.html'
 let config={
     template:template,
-    firstAfterRender(){
+    afterRender(){
         let _this=this;
         this.el.on('click','.df-input-radio',function(event){
             _this.data.value=event.target.value;
@@ -33,8 +33,6 @@ let config={
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
-    },
-    afterRender(){
         if(this.data.is_view){
             this.el.find('.df-input-radio').attr('disabled',true);
         }else{

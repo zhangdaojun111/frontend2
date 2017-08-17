@@ -9,14 +9,11 @@ let config={
         width:'240px'
     },
     actions:{},
-    firstAfterRender(){
+    afterRender(){
         let _this=this;
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
-    },
-    afterRender(){
-        let _this=this;
         _this.el.find(".timeInput").val("时:分:秒");
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){

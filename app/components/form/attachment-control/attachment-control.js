@@ -7,6 +7,7 @@ import '../../../lib/msgbox'
 import AttachmentQueueItem from "./attachment-queue-item/attachment-queue-item";
 import {screenShotConfig} from "./screenshot-receiver/screenshot-receiver";
 import {PMAPI} from "../../../lib/postmsg";
+import {attachmentListConfig} from "./attachment-list/attachment-list";
 
 let config={
     template: template,
@@ -15,13 +16,20 @@ let config={
     },
     actions: {
         viewAttachList:function(){
-            alert('viewAttachList');
+            attachmentListConfig.data = _.defaultsDeep({
+                fileIds:this.data.value,
+                dinput_type:this.data.real_type
+            },attachmentListConfig.data);
+            PMAPI.openDialogByComponent(attachmentListConfig,{
+                width:500,
+                height:300,
+                title:"浏览上传文件"
+            });
         },
         uploadFile:function () {
             this.el.find('.selecting-file').click();
         },
         shotScreen:function () {
-            let ele = this.el.find('.get-screenshot');
             PMAPI.openDialogByComponent(screenShotConfig,{
                 width:500,
                 height:300,

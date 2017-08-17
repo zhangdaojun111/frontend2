@@ -9,18 +9,12 @@ import template from  './datetime-control.html';
 import msgbox from '../../../lib/msgbox';
 let config={
     template:template,
-    data:{
-    },
-    actions:{
-    },
-    firstAfterRender(){
+    afterRender(){
         let _this=this;
+
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
-    },
-    afterRender(){
-        let _this=this;
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
             this.el.find('.ui-width').attr('disabled',true);

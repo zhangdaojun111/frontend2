@@ -10,6 +10,8 @@ let FormEntrys = {
     isloadCustomTableForm:false,
     isloadWorkflow:false,
     init(config={}){
+        console.log('曉川給我tempId了?');
+        console.log(config);
         this.tableId='';
         this.parentRealId='';
         this.parentTempId='';
@@ -197,6 +199,8 @@ let FormEntrys = {
         staticData.isBatch=this.isBatch;
         staticData.key=this.key;
         staticData.btnType=this.btnType;
+        console.log('最終的baseFormData');
+        console.log(staticData);
         return staticData;
     },
     //处理字段数据

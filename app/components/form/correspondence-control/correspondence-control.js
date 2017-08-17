@@ -6,8 +6,20 @@ import template from './correspondence-control.html';
 
 let config={
     template:template,
-    firstAfterRender(){
-        let _this=this;
+    afterRender(){
+        let config={
+            tableId:this.data.value,
+            parentTableId:this.data.tableId,
+            parentTempId:this.data.temp_id,
+            rowId:this.data.parent_temp_id,
+            viewMode:'viewFromCorrespondence',
+            recordId:this.data.recordId,
+            correspondenceField:this.data.dfield,
+        }
+        let dataGrid=new DataTableAgGrid(config);
+        this.data.dataGrid=dataGrid;
+        this.append(dataGrid,this.el.find('.correspondence-box'));
+
         this.el.on('click','.ui-forms-a',_.debounce(function(){
             Mediator.publish('form:openCorrespondence:'+_this.data.tableId,_this.data);
         },300));
@@ -23,20 +35,6 @@ let config={
                 _this.data.dataGrid.actions.getGridData();
             }
         })
-    },
-    afterRender(){
-        let config={
-            tableId:this.data.value,
-            parentTableId:this.data.tableId,
-            parentTempId:this.data.temp_id,
-            rowId:this.data.parent_temp_id,
-            viewMode:'viewFromCorrespondence',
-            recordId:this.data.recordId,
-            correspondenceField:this.data.dfield,
-        }
-        let dataGrid=new DataTableAgGrid(config);
-        this.data.dataGrid=dataGrid;
-        this.append(dataGrid,this.el.find('.correspondence-box'));
     },
 
     beforeDestory(){

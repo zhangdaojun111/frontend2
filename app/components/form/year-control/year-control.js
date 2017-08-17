@@ -9,14 +9,11 @@ let config={
     data:{
         options:[],
     },
-    firstAfterRender(){
+    afterRender(){
         let _this=this;
         this.el.on('click','.ui-history',function(){
             _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
         });
-    },
-    afterRender(){
-        let _this=this;
         this.data.isInit=true;
         if(!this.data.be_control_condition) {
             let el=this.el.find('.dropdown');
