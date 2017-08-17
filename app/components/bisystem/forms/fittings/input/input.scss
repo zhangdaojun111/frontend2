@@ -1,4 +1,4 @@
-.input-container{
+.bi-chart-input{
   width: 100%;
   margin: 10px 0;
   span{
@@ -17,7 +17,15 @@
     transition: all .5s;
   }
   input:focus{
-    transition: all .5s;
     border-bottom-color: #3b8cff;
+    animation: wid-long 1s;
+  }
+  @keyframes  wid-long{
+    from{
+      width: 0
+    }
+    to{
+      width: 100%;
+    }
   }
 }

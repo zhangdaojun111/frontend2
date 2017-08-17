@@ -1,4 +1,4 @@
-.select{
+.bi-chart-select{
   display: inline-block;
   position: relative;
   vertical-align: middle;
@@ -12,6 +12,12 @@
     padding: 10px 40px 10px 10px;
     width: 100%;
     border: none;
+    outline-color: #ececec;
+    height: 40px;
+    overflow: auto;
     //appearance: none;
+    option{
+      border: none;
+    }
   }
 }

@@ -16,7 +16,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    background: #3b8cff;
+    background: #e1e1e1;
     border-radius: 4px;
   }
   .i-check label:after {
@@ -32,6 +32,9 @@
     background: transparent;
     opacity: 0;
     transform: rotate(-45deg);
+  }
+  .i-check input[type=checkbox]:checked + label{
+    background: #3b8cff;
   }
   .i-check input[type=checkbox]:checked + label:after {
     opacity: 1;
