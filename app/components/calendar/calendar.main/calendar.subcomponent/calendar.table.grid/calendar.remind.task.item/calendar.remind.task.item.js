@@ -93,46 +93,19 @@ let config = {
         if(this.data.remindTaskItemData['type'] === 1) {
             if(this.data.remindTaskItemData['data3show'][0] && this.data.remindTaskItemData['data3show'][0][0]) {
                 this.el.find('.task-show-text').html(this.data.remindTaskItemData['data3show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data3show'][0][0]['fieldValue']);
-                this.el.on('click', '.task-show-text', () => {
-                    this.actions.openRemind();
-                });
             }
+            else if(this.data.remindTaskItemData['data2show'][0] && this.data.remindTaskItemData['data2show'][0][0]) {
+                this.el.find('.task-show-text').html(this.data.remindTaskItemData['data2show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data2show'][0][0]['fieldValue']);
+            }
+            this.el.on('click', '.task-show-text', () => {
+                this.actions.openRemind();
+            });
         } else if(this.data.remindTaskItemData['type'] === 2){
             console.log(this.data.remindTaskItemData);
         } else if(this.data.remindTaskItemData['type'] === 3 || this.data.remindTaskItemData['type'] === 4) {
             this.actions.openWorkflow();
         }
-        // if(this.data.remindTaskItemData['data3show']) {
-        //     this.el.find('.task-show-text').html(this.data.remindTaskItemData['data3show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data3show'][0][0]['fieldValue']);
-        //     this.el.on('click', '.task-item', () => {
-        //         console.log(this.data);
-        //         CalendarRemind.data.remindTable = this.data.remindTaskItemData.tableName;
-        //         CalendarRemind.data.remindDateProp = this.data.remindTaskItemData.fieldName;
-        //         CalendarRemind.data.remindDetail = this.data.remindTaskItemData.data2show;
-        //         CalendarRemind.data.remindDateTime = this.data.remindTaskItemData.time;
-        //         CalendarRemind.data.remindTableId = this.data.remindTaskItemData.tableId;
-        //         CalendarRemind.data.remindDate = this.data.remindTaskItemData.time.substr(0,10);
-        //         CalendarRemind.data.remindTime = this.data.remindTaskItemData.time.substr(11,5);
-        //         PMAPI.openDialogByComponent(CalendarRemind, {
-        //             width: '1000',
-        //             height: '600',
-        //             title: '查看',
-        //         }).then(data => {
-        //             console.log(data);
-        //         });
-        //     });
-        //
-        // }else {
-        //     this.el.find('.task-show-text').html(this.data.remindTaskItemData['data']['name']);
-        //     this.el.on('click', '.task-item', () => {
-        //         console.log(this.data);
-        //         PMAPI.openDialogByIframe(`/wf/approval/?record_id=${this.data.remindTaskItemData['data']['id']}&form_id=${this.data.remindTaskItemData['data']['form_id']}&table_id=${this.data.remindTaskItemData['data']['table_id']}&flow_id=${this.data.remindTaskItemData['data']['flow_id']}`,{
-        //             width:1500,
-        //             height:1000,
-        //             modal:true
-        //         })
-        //     })
-        // }
+
         this.el.on('click','.task-state-icon', () => {
             event.stopPropagation();
             if(!$(this).is(".options-show")){
