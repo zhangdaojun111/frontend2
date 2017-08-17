@@ -41,7 +41,12 @@ serchStr.split('&').forEach(res => {
             is_view: 0,
             from_approve: 0,
             from_focus: 0,
-            table_id: obj.table_id
+            table_id: obj.table_id,
+            parent_table_id:obj.parent_table_id,
+            parent_real_id:obj.parent_real_id,
+            parent_temp_id:obj.parent_temp_id,
+            parent_record_id:obj.parent_record_id,
+            real_id:obj.real_id
         });
     }else{
         Mediator.publish('workflow:getParams', res.data.flow_data);
@@ -68,7 +73,12 @@ Mediator.subscribe('workflow:getflows', (res)=> {
         is_view: 0,
         from_approve: 0,
         from_focus: 0,
-        table_id: obj.table_id
+        table_id: obj.table_id,
+        parent_table_id:obj.parent_table_id,
+        parent_real_id:obj.parent_real_id,
+        parent_temp_id:obj.parent_temp_id,
+        parent_record_id:obj.parent_record_id,
+        real_id:obj.real_id
     });
     
 });
@@ -100,3 +110,6 @@ Mediator.subscribe('workflow:submit', (res)=> {
         })
     }
 })
+if(obj.btnType==='view'){
+    $('.workflow-flex').hide();
+}
