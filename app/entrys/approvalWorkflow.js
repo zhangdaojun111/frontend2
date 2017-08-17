@@ -71,8 +71,8 @@ serchStr.split('&').forEach(res => {
 
 //订阅form data
 Mediator.subscribe('workFlow:record_info', (res) => {
-    ApprovalHeader.showheader(res);
-    WorkflowRecord.showRecord(res);
+    ApprovalHeader.showheader(res.record_info);
+    WorkflowRecord.showRecord(res.record_info);
 });
 if(obj.btnType==='view'){
     is_view=1;
