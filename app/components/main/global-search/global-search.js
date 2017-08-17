@@ -217,10 +217,6 @@ let config ={
 
 
 
-
-
-
-
         }
     },
     afterRender:function () {
