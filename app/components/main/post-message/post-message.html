@@ -1,0 +1,45 @@
+<div class="component-post-message">
+    <form id="xxx" onsubmit="javascript:return false;">
+        <div class="section">
+            <label class="label-out">消息标题</label>
+            <div class="inputs">
+                <input class="text" type="text" name="title" required="required" formnovalidate="formnovalidate">
+            </div>
+        </div>
+        <div class="section">
+            <label class="label-out">消息标题</label>
+            <div class="inputs">
+                <textarea name="content" required="required"></textarea>
+            </div>
+        </div>
+        <div class="section">
+            <label class="label-out">发送人员</label>
+            <div class="inputs">
+                <div class="tree"></div>
+                <div class="users">
+                    <button>全选</button>
+                    <div class="wrap"></div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <label class="label-out">发送规则</label>
+            <div class="inputs">
+                <label>
+                    <input type="radio" name="sendType" value="1" checked>
+                    审批后立即发送
+                </label>
+                <label>
+                    <input type="radio" name="sendType" value="0">
+                    到达预计时间后发送
+                </label>
+            </div>
+        </div>
+        <div class="section prepare-time">
+
+        </div>
+        <div class="">
+            <button class="submit">提交</button>
+        </div>
+    </form>
+</div>
