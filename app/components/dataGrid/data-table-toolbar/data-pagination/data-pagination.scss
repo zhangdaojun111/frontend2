@@ -5,7 +5,7 @@
   color: #666666;
   font-size: 14px;
   user-select: none;
-  .left {
+  .p-left {
     float: left;
     margin-left: 15px;
     .pageSize {
@@ -26,7 +26,7 @@
       cursor: pointer;
     }
   }
-  .page {
+  .p-page {
     float: right;
     .goFirst {
       vertical-align: sub;
