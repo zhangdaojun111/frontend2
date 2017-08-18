@@ -650,11 +650,22 @@ let config = {
                     }
                 }
                 this.data.cancel_fields = arr_1;
-                // if(this.data.calendarContent === 'month') {
-                //     this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
-                // }
-                this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
-                this.actions.changeMainView(this.data.calendarContent);
+
+                if(this.data.calendarContent !== 'schedule') {
+                    let json = {
+                        from_date: this.data.from_date,
+                        to_date: this.data.to_date,
+                        cancel_fields: JSON.stringify(this.data.cancel_fields),
+                    };
+                    this.actions.getCalendarData(json, 'calendar');
+                } else {
+                    let json = {
+                        from_date: that.data.scheduleStart,
+                        to_date: that.data.scheduleEnd,
+                        cancel_fields: JSON.stringify(this.data.cancel_fields),
+                    };
+                    this.actions.getCalendarData(json);
+                }
             }
         });
         Mediator.on('calendar-left:approveData', data => {
@@ -678,7 +689,8 @@ let config = {
                 let json = {
                     from_date:this.data.from_date,
                     to_date:this.data.to_date,
-                    tableid2filter:JSON.stringify(data)
+                    tableid2filter:JSON.stringify(data),
+                    cancel_fields: JSON.stringify(this.data.cancel_fields),
                 };
                 if(this.data.calendarContent !== 'schedule') {
                     this.actions.getCalendarData(json, 'calendar');
@@ -689,24 +701,26 @@ let config = {
             }
         });
 
-        // Mediator.on('CalendarRemindTask: changeData', data => {
-        //     let params = data;
-        //     params['from_date'] = this.data.from_date;
-        //     params['to_date'] = this.data.to_date;
-        //     console.log(params);
-        //     CalendarService.getCalendarDrag(params).then(res => {
-        //         this.data.date2settings = res['calendar_data']['date2csids'];
-        //         this.data.calendarSettings = res['calendar_data']['id2data'];
-        //         this.data.tableid2name = res['calendar_data']['tableid2name'];
-        //         this.data.fieldInfos = res['calendar_data']['field_infos'];
-        //         if(this.data.calendarContent !== 'schedule') {
-        //             this.actions.monthDataTogether();
-        //         }else {
-        //             this.actions.makeScheduleData(data.from_date, data.to_date);
-        //         }
-        //         this.actions.getDataCount();
-        //     })
-        // });
+        Mediator.on('CalendarRemindTask: changeData', data => {
+            let params = data;
+            console.log(params);
+            params['from_date'] = this.data.from_date;
+            params['to_date'] = this.data.to_date;
+            console.log(params);
+            CalendarService.getCalendarDrag(params).then(res => {
+                console.log(res);
+                this.data.date2settings = res['calendar_data']['date2csids'];
+                this.data.calendarSettings = res['calendar_data']['id2data'];
+                this.data.tableid2name = res['calendar_data']['tableid2name'];
+                this.data.fieldInfos = res['calendar_data']['field_infos'];
+                if(this.data.calendarContent !== 'schedule') {
+                    this.actions.monthDataTogether();
+                }else {
+                    this.actions.makeScheduleData(data.from_date, data.to_date);
+                }
+                this.actions.getDataCount();
+            })
+        });
 
     },
     beforeDestory: function () {
