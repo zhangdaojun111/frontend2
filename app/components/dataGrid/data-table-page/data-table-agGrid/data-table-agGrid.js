@@ -697,48 +697,6 @@ let config = {
             this.data.filterParam.common_filter_name = name;
             this.actions.getGridData();
         },
-        //偏好赋值
-        setPreference: function (res) {
-            if (res['colWidth']) {
-                this.data.colWidth = res['colWidth'].colWidth;
-                if (typeof ( this.data.colWidth ) == 'string') {
-                    this.data.colWidth = JSON.parse(res['colWidth'].colWidth);
-                }
-            }
-            if (res['pageSize'] && res['pageSize'].pageSize) {
-                this.data.rows = res['pageSize'].pageSize;
-            }
-            if (res['ignoreFields']) {
-                this.data.ignoreFields = JSON.parse(res['ignoreFields']['ignoreFields']);
-            } else {
-                // this.data.hideColumn = ['f1','f2','f3','f4']
-                // let json = {
-                //     action:'ignoreFields',
-                //     table_id:this.pageId,
-                //     ignoreFields:JSON.stringify( this.hideColumn ),
-                // }
-                // this.dataTableService.savePreference( json );
-            }
-            if (res['fieldsOrder']) {
-                this.data.orderFields = JSON.parse(res['fieldsOrder']['fieldsOrder']);
-            }
-            if (res['pinned'] && res['pinned']['pinned']) {
-                this.data.fixCols = JSON.parse(res['pinned']['pinned']);
-            }
-            this.data.myGroup = (res['group'] != undefined) ? JSON.parse(res['group'].group) : [];
-            // console.log("rows")
-            // console.log(this.data.rows)
-            // console.log("colWidth")
-            // console.log(this.data.colWidth)
-            // console.log("ignoreFields")
-            // console.log(this.data.ignoreFields)
-            // console.log("fixCols")
-            // console.log(this.data.fixCols)
-            // console.log("myGroup")
-            // console.log(this.data.myGroup)
-            // console.log("orderFields")
-            // console.log(this.data.orderFields)
-        },
         //初始化按钮
         renderBtn: function () {
             let btnGroup = dgcService.gridBtn( this.data.viewMode );
@@ -768,7 +726,8 @@ let config = {
             let sheetData = dataTableService.getSheetPage( obj2 );
 
             Promise.all([preferenceData, headerData, sheetData]).then((res)=> {
-                this.actions.setPreference( res[0] );
+                dgcService.setPreference( res[0],this.data );
+                this.data.myGroup = (res[0]['group'] != undefined) ? JSON.parse(res[0]['group'].group) : [];
                 this.data.fieldsData = res[1].rows || [];
                 this.data.permission = res[1].permission;
                 this.data.headerColor = dgcService.createHeaderStyle( this.data.tableId,res[1].field_color );
@@ -1094,7 +1053,7 @@ let config = {
             //渲染定制列
             if( this.el.find('.custom-column-btn')[0] ){
                 //如果有定制列修改偏好状态
-                this.actions.calcColumnState();
+                dgcService.calcColumnState(this.data,this.agGrid,["group",'number',"mySelectAll"]);
                 let custom = {
                     gridoptions: this.agGrid.gridOptions,
                     fields: this.data.customColumnsFields,
@@ -1242,67 +1201,6 @@ let config = {
             this.data.rows = data.rows;
             this.data.first = data.first;
             this.actions.getGridData();
-        },
-        //根据偏好返回agGrid sate
-        calcColumnState: function () {
-            let gridState = this.agGrid.gridOptions.columnApi.getColumnState();
-            let indexedGridState = {};
-            for(let state of gridState) {
-                indexedGridState[state['colId']] = state;
-            }
-            let numState = indexedGridState['number']||{};
-            numState['pinned']= this.data.fixCols.l.length > 0 ? 'left' : null;
-            let selectState = indexedGridState['mySelectAll']||{};
-            selectState['pinned']= this.data.fixCols.l.length > 0 ? 'left' : null;
-            let group = indexedGridState['group']||{};
-            group['hide'] = true;
-            //默认分组、序号、选择在前三个
-            let arr = [ group , numState , selectState ];
-            //左侧固定
-            for( let col of this.data.fixCols.l ){
-                let state = indexedGridState[col]||{};
-                state['hide'] = this.data.ignoreFields.indexOf( col ) != -1;
-                state['pinned'] = 'left';
-                arr.push(state);
-            }
-            //中间不固定
-            let fixArr = this.data.fixCols.l.concat( this.data.fixCols.r );
-            for( let data of this.data.orderFields ){
-                if( data == '_id'||data == 'group' ){
-                    continue;
-                }
-                if( data != 0 && fixArr.indexOf( data ) == -1 ){
-                    let state = indexedGridState[data]||{};
-                    state['hide'] = this.data.ignoreFields.indexOf( data ) != -1;
-                    state['pinned'] = null;
-                    arr.push(state);
-                }
-            }
-            if(this.data.orderFields.length == 0){
-                for(let state of gridState){
-                    let id = state['colId'];
-                    if(id != 'number' && id != 'mySelectAll' && id != 'group'){
-                        state['hide'] = this.data.ignoreFields.indexOf(id)!=-1;
-                        state['pinned'] = null;
-                        arr.push(state);
-                    }
-                }
-            }
-            //右侧固定
-            for( let col of this.data.fixCols.r ){
-                let state = indexedGridState[col]||{};
-                state['hide'] = this.data.ignoreFields.indexOf( col ) != -1;
-                state['pinned'] = 'right';
-                arr.push(state);
-            }
-            //操作列宽度
-            for( let d of arr ){
-                if( d.colId && d.colId == 'myOperate' ){
-                    d['width'] = this.data.operateColWidth;
-                }
-            }
-            //初始化状态
-            this.agGrid.gridOptions.columnApi.setColumnState( arr );
         },
         //渲染颜色
         setRowStyle: function ( param ) {

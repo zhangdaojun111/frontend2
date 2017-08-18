@@ -14,6 +14,7 @@ import agGrid from '../../../components/dataGrid/agGrid/agGrid';
 import {dataTableService} from '../../../services/dataGrid/data-table.service';
 import {dgcService} from "../../../services/dataGrid/data-table-control.service";
 import exportSetting from '../../dataGrid/data-table-toolbar/data-table-export/data-table-export';
+import customColumns from "../../dataGrid/data-table-toolbar/custom-columns/custom-columns";
 
 let config = {
     template: template,
@@ -30,6 +31,9 @@ let config = {
         orderFields: [],
         //定制列（隐藏列）
         ignoreFields: [],
+        //定制列需要字段信息
+        customColumnsFields: [],
+        isShowCustomPanel: false,
     },
     actions: {
         //创建表头数据
@@ -41,6 +45,7 @@ let config = {
             let preferenceData = dataTableService.getPreferences( obj );
             let columnData = dataTableService.getColumnList( {table_id: this.data.tableId} );
             Promise.all([preferenceData,columnData]).then((res)=> {
+                dgcService.setPreference( res[0],this.data );
                 this.data.columnDefs = [
                     dgcService.numberCol,dgcService.selectCol,
                     {headerName: '操作',field: 'myOperate', width: 120,  suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
@@ -48,6 +53,9 @@ let config = {
                     }},
                     { headerName: '部门', field: 'f5',cellRenderer: 'group',suppressMenu: true, tooltipField:'f5' }
                 ]
+                this.data.customColumnsFields = [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false},
+                    {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false},
+                    {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
                 for( let col of res[1].rows ){
                     if( col.field == '_id' ){
                         continue;
@@ -61,6 +69,7 @@ let config = {
                         colId: col["field"],
                         tooltipField: col["field"],
                         sortingOrder: ['desc', 'asc', null],
+                        width: col.width,
                         hide: false,
                         minWidth: 20,
                         cellStyle: {'font-style': 'normal'},
@@ -70,6 +79,12 @@ let config = {
                         suppressMovable: false,
                         suppressFilter: true
                     }
+                    let c = {
+                        canhide:true,candrag:true,canFix:true
+                    };
+                    c['name'] = col.name;
+                    c['field'] = col.field;
+                    this.data.customColumnsFields.push(c)
                     this.data.columnDefs.push( obj );
                 }
                 let gridData = {
@@ -83,6 +98,16 @@ let config = {
                 }
                 this.agGrid = new agGrid(gridData);
                 this.append(this.agGrid , this.el.find('#data-agGrid'));
+                dgcService.calcColumnState( this.data,this.agGrid,["number","mySelectAll","myOperate","f5"] )
+                let custom = {
+                    gridoptions: this.agGrid.gridOptions,
+                    fields: this.data.customColumnsFields,
+                    fixCols: this.data.fixCols,
+                    tableId: this.data.tableId,
+                    agGrid: this.agGrid
+                }
+                this.customColumnsCom  = new customColumns(custom);
+                this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
                 this.actions.getDepartmentData(false);
                 this.actions.btnClick();
             });
@@ -164,6 +189,19 @@ let config = {
                     this.actions.openSourceDataGrid( url,winTitle,600,800 );
                 } )
             }
+            //宽度自适应
+            if( this.el.find( '.custom-column-btn' )[0] ){
+                this.el.find( '.custom-column-btn' ).on( 'click',()=>{
+                    this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
+                    this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
+                    let num = 0;
+                    if( this.data.isShowCustomPanel ){
+                        num+=200;
+                    }
+                    let grid = this.el.find( '#data-agGrid' )
+                    grid.width( 'calc(100% - ' + num + 'px)' );
+                } )
+            }
         },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title,w,h ) {
@@ -176,8 +214,11 @@ let config = {
             } )
         },
         onColumnResized: function ($event) {
+            this.customColumnsCom.actions.onColumnResized( this.customColumnsCom );
         },
         onDragStopped: function ($event) {
+            this.customColumnsCom.actions.onFix();
+            this.customColumnsCom.actions.dragAction();
         },
         onSortChanged: function ($event) {
         },
