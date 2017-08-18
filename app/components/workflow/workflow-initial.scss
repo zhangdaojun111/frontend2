@@ -333,6 +333,66 @@ body{
 .h_panghu2{
   animation: panghuAnimation2 2s both;
 }
+.h_panghu_text{
+  position: absolute;
+  left: 50%;
+  width: 300px;
+  margin-left: -150px;
+  top: 85%;
+  font-size: 26px;
+}
+.h_panghu_text p:nth-child(1){
+  animation: panghuTextAnimation 0.5s;
+}
+.h_panghu_text p:nth-child(2){
+  opacity: 1;
+  animation: panghuTextAnimation2 0.5s 0.7s backwards;
+}
+.h_panghu_text p:nth-child(3){
+  animation: panghuTextAnimation3 2s 1.2s backwards;
+  opacity: 1;
+}
+
+@keyframes panghuTextAnimation{
+  0%{
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100%{
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+@keyframes panghuTextAnimation2{
+  0%{
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100%{
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+
+@keyframes panghuTextAnimation3{
+  0% {
+    -webkit-transform: scale(1);
+    opacity: 0;
+  }
+  25% {
+    -webkit-transform: scale(2);
+  }
+  50% {
+    -webkit-transform: scale(1);
+  }
+  75% {
+    -webkit-transform: scale(2);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+  }
+}
 @keyframes panghuAnimation {
   0% {
     opacity: 0;
