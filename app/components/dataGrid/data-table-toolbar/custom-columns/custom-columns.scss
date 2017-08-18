@@ -51,12 +51,14 @@
         }
 
         .custom-checkbox {
+          box-sizing: content-box;
           display: inline-block;
           width: 16px;
           height: 16px;
           padding: 2px;
         }
         .custom-fix-l {
+          box-sizing: content-box;
           display: inline-block;
           width: 16px;
           height: 16px;
@@ -65,6 +67,7 @@
           padding-right: 5px;
         }
         .custom-fix-r {
+          box-sizing: content-box;
           display: inline-block;
           width: 16px;
           height: 16px;
