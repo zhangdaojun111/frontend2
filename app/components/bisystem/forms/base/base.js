@@ -29,12 +29,16 @@ export class FormBaseComponent extends BiBaseComponent {
      * 渲染chart fittings
      */
     renderFitting() {
-        const chartNameData = {
-            value:null,
-            label: '请输入图表名称'
-        };
         this.formGroup = {
-            chartName: instanceFitting({type:'input',data:chartNameData, me: this,container: 'form-chart-base' }),
+            chartName: instanceFitting({
+                type:'input',
+                data:{
+                   value: null,
+                    label: '请输入图标名称'
+                },
+                me: this,
+                container: 'form-chart-base'
+            }),
         }
     }
 

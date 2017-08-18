@@ -16,11 +16,10 @@ let config = {
     },
     firstAfterRender() {
         let me = this;
+        me.onChange = me.data.onChange;
         this.el.on('change', 'input', function(event){
             me.data.value = $(this).is(':checked');
-            if (me.data.onChange) {
-                me.data.onChange(me.data.value);
-            }
+            me.onChange(me.data.value);
         })
     }
 }
@@ -37,4 +36,10 @@ export class CheckboxComponent extends FormFittingAbstract {
     getValue() {
         return this.data.value;
     }
+
+    /**
+     * 当值change时，做改变
+     * 这个绑定到data的onChange事件上
+     */
+    onChange() {}
 }

@@ -11,10 +11,10 @@ import {ChartFormService} from '../../../../services/bisystem/chart.form.service
 import msgbox from "../../../../lib/msgbox";
 import {FormSearchComponent} from '../search/search';
 import Mediator from '../../../../lib/mediator';
+
 let config = {
     template: template,
-    data: {
-    },
+    data: {},
     actions: {},
     afterRender() {},
     firstAfterRender() {
@@ -35,21 +35,30 @@ export class FormMixShareComponent extends BiBaseComponent {
      * 渲染chart fittings
      */
     renderFitting() {
-        const themeData = {
-            value:null,
-            radios:[
-                {value:'blue', name:'蓝色'},
-                {value: 'green',name: '绿色'},
-                {value: 'grayBlue', name:'灰蓝色'}
-            ]
-        };
         const search = new FormSearchComponent();
         this.append(search, this.el.on('.chart-mix-share'));
 
         this.mixForm = {
-            chartSource:instanceFitting({type:'autoComplete',me: this,container: 'chart-mix-share' }),
-            themes: instanceFitting({type:'radio',me: this, data: themeData,container: 'chart-mix-share' }),
-            icons: instanceFitting({type:'radio',me: this,container: 'chart-mix-share' }),
+            chartSource:instanceFitting({
+                type:'autoComplete',
+                me: this,
+                container: 'chart-mix-share' }),
+            themes: instanceFitting({
+                type:'radio',
+                me: this,
+                data:{
+                    value:null,
+                    radios:[
+                        {value:'blue', name:'蓝色'},
+                        {value: 'green',name: '绿色'},
+                        {value: 'grayBlue', name:'灰蓝色'}
+                    ]
+                },
+                container: 'chart-mix-share' }),
+            icons: instanceFitting({
+                type:'radio',
+                me: this,
+                container: 'chart-mix-share' }),
             search: search
         };
     }
@@ -95,12 +104,12 @@ export class FormMixShareComponent extends BiBaseComponent {
         if (table) {
             let res = await ChartFormService.getChartField(table.id);
             if (res['success'] === 1) {
-                Mediator.publish('bi:chart:form:fields', res['data']);
+                Mediator.publish('bi:chart:form:update', {type:'fields', data:res['data']});
             } else {
                 msgbox.alert(res['error']);
             }
         } else {
-            Mediator.publish('bi:chart:form:fields:clear', []);
+            Mediator.publish('bi:chart:form:update', {type:'fields', data:[]});
         }
 
     }

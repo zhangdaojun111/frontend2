@@ -9,7 +9,7 @@ import {FormEntryComponent} from './forms/entry/entry';
 import {componentsJson} from './forms/entry/loadFormChart.json';
 let component;
 let viewComponent;
-let formComponent;
+let formComponent = {};
 const BiAppRouter = Backbone.Router.extend({
     routes: {
         'views/edit':"routerViewsEditComponent",
@@ -47,10 +47,16 @@ const BiAppRouter = Backbone.Router.extend({
         form.render($('#route-outlet'));
     },
     routerFormDynamicComponent(type) {
-       let component = new componentsJson[type]['component'];
-       if(component) {
-           component.render($('#route-outlet'));
-       };
+        if (formComponent[type]) {
+            formComponent[type].destroyChildren();
+            formComponent[type].reset();
+            formComponent[type].reload();
+        } else {
+            let component = new componentsJson[type]['component'];
+            component.render($('#route-outlet'));
+            formComponent[type] = component;
+        }
+
     }
 });
 

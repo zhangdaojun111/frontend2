@@ -29,41 +29,15 @@ let config = {
         })
     },
     firstAfterRender() {
-
-        // 当选择数据源时渲染x,y轴字段
-        Mediator.subscribe('bi:chart:form:fields', data => {
-            this.renderXField(data['x_field']);
-            this.renderYField(data['y_field']);
+        // 所有子组件的改变都通过
+        Mediator.subscribe('bi:chart:form:update', option => {
+            this.MediatorDistribution(option);
         });
 
         // 当删除数据源时 清除x,y轴字段
         Mediator.subscribe('bi:chart:form:fields:clear', data => {
             this.clearSourceRelationField();
         });
-
-        // 增加y轴实例
-        Mediator.subscribe('bi:chart:normal:addY', (data) => {
-            if (data === 0) {
-                this.addYAxis();
-            } else {
-                this.showY1Axis(true);
-            }
-        });
-
-        // 删除y轴实例
-        Mediator.subscribe('bi:chart:normal:removeY', (componentId) => {
-            this.removeYAxis(componentId);
-        });
-
-        // 当y轴数据更新时, 更新默认显示y轴数据
-        Mediator.subscribe('bi:chart:normal:y:update', (data) => {
-            if (this.formGroup.defaultY.data.value) {
-                this.selectYAxis(true)
-            };
-        });
-
-        // 默认增加第一条y数据
-        this.addYAxis();
     },
     beforeDestory() {}
 };
@@ -85,73 +59,118 @@ export class FormNormalComponent extends BiBaseComponent{
         let share = new FormMixShareComponent();
         this.append(base, this.el.find('.form-group-base'));
         this.append(share, this.el.find('.form-group-share'));
-        const doubleYdata = {
-            value:null,
-            checkboxs:[
-                {value:'', name:'是否展示双y轴'},
-            ],
-            onChange: this.showY1Axis.bind(this)
-        };
-        const defaultYdata = {
-            value:null,
-            checkboxs:[
-                {value:'', name:'默认显示Y轴数据'},
-            ],
-            onChange: this.selectYAxis.bind(this)
-        };
-        const ySelectedGroup = {
-            value:null,
-            checkboxs:[],
-            onChange: null
-        };
-        const yHorizontalData = {
-            value:null,
-            checkboxs:[
-                {value:'', name:'是否横向展示y轴数据'},
-            ],
-            onChange: null
-        };
-        const yHorizontalColumnsData = {
-            value:null,
-            checkboxs:[
-                {value:'', name:'是否展示所有x轴数据(x轴45°展示)'},
-            ],
-            onChange: null
-        };
-        const xMarginBottomData = {
-            value:null,
-            label: 'x轴下边距(未选择X轴竖向展示时生效)'
-        };
-        const echartXData = {
-            value:null,
-            checkboxs:[
-                {value:'', name:'x轴竖向展示'},
-            ],
-        };
 
-        const echartXTextNumData = {
-            value:null,
-            label: 'x轴每行字数'
-        };
-        const echartXMarginBottom = {
-            value:null,
-            label: 'x轴下边距'
-        };
+        // 默认增加第一条y数据
+        this.addYAxis();
         this.formGroup = {
             chartName: base,
             share: share,
-            x: instanceFitting({type:'autoComplete',me: this,container: 'form-group-x' }),
+            x: instanceFitting({
+                type:'autoComplete',
+                me: this,
+                container: 'form-group-x'
+            }),
             y: [this.y, this.y1],
-            doubleY: instanceFitting({type:'checkbox', data: doubleYdata,me: this,container: 'form-group-doubleY'}),
-            defaultY: instanceFitting({type:'checkbox', data: defaultYdata,me: this,container: 'form-group-defaultY .default-y-tit' }),
-            ySelectedGroup:instanceFitting({type:'checkbox', data: ySelectedGroup,me: this,container: 'form-group-defaultY .default-y-selected' }),
-            yHorizontal: instanceFitting({type:'checkbox', data: yHorizontalData,me: this,container: 'form-group-yHorizontal'}),
-            yHorizontalColumns: instanceFitting({type:'checkbox', data: yHorizontalColumnsData,me: this,container: 'form-group-yHorizontalColumns .x45'}),
-            xMarginBottom: instanceFitting({type:'input',data:xMarginBottomData,me: this,container: 'form-group-yHorizontalColumns .x-margin-bottom'}),
-            echartX: instanceFitting({type:'checkbox', data: echartXData,me: this,container: 'form-group-echartX .tit'}),
-            echartXTextNum: instanceFitting({type:'input', data: echartXTextNumData,me: this,container: 'form-group-echartX .echartX-text-num'}),
-            echartXMarginBottom: instanceFitting({type:'input', data: echartXMarginBottom,me: this,container: 'form-group-echartX .echartX-margin-bottom'}),
-            advanced: instanceFitting({type:'autoComplete',me: this,container: 'form-deep-auto' }),
+            doubleY: instanceFitting({
+                type:'checkbox',
+                data: {
+                    value:null,
+                    checkboxs:[
+                        {value:'', name:'是否展示双y轴'},
+                    ],
+                    onChange: this.showY1Axis.bind(this)
+                },
+                me: this,
+                container: 'form-group-doubleY'
+            }),
+            defaultY: instanceFitting({
+                type:'checkbox',
+                data: {
+                    value:null,
+                    checkboxs:[
+                        {value:'', name:'默认显示Y轴数据'},
+                    ],
+                    onChange: this.selectYAxis.bind(this)
+                },
+                me: this,
+                container: 'form-group-defaultY .default-y-tit'
+            }),
+            ySelectedGroup:instanceFitting({
+                type:'checkbox',
+                data: {
+                    value:null,
+                    checkboxs:[],
+                    onChange: null
+                },
+                me: this,
+                container: 'form-group-defaultY .default-y-selected'
+            }),
+            yHorizontal: instanceFitting({
+                type:'checkbox',
+                data: {
+                    value:null,
+                    checkboxs:[
+                        {value:'', name:'是否横向展示y轴数据'},
+                    ],
+                    onChange: null
+                },
+                me: this,
+                container: 'form-group-yHorizontal'}),
+            yHorizontalColumns: instanceFitting({
+                type:'checkbox',
+                data: {
+                    value:null,
+                    checkboxs:[
+                        {value:'', name:'是否展示所有x轴数据(x轴45°展示)'},
+                    ],
+                    onChange: null
+                },
+                me: this,
+                container: 'form-group-yHorizontalColumns .x45'
+            }),
+            xMarginBottom: instanceFitting({
+                type:'input',
+                data:{
+                    value:null,
+                    label: 'x轴下边距(未选择X轴竖向展示时生效)'
+                },
+                me: this,
+                container: 'form-group-yHorizontalColumns .x-margin-bottom'
+            }),
+            echartX: instanceFitting({
+                type:'checkbox',
+                data: {
+                    value:null,
+                    checkboxs:[
+                        {value:'', name:'x轴竖向展示'},
+                    ],
+                },
+                me: this,
+                container: 'form-group-echartX .tit'
+            }),
+            echartXTextNum: instanceFitting({
+                type:'input',
+                data: {
+                    value:null,
+                    label: 'x轴每行字数'
+                },
+                me: this,
+                container: 'form-group-echartX .echartX-text-num'
+            }),
+            echartXMarginBottom: instanceFitting({
+                type:'input',
+                data: {
+                    value:null,
+                    label: 'x轴下边距'
+                },
+                me: this,
+                container: 'form-group-echartX .echartX-margin-bottom'
+            }),
+            advanced: instanceFitting({
+                type:'autoComplete',
+                me: this,
+                container: 'form-deep-auto'
+            }),
         };
     }
 
@@ -177,16 +196,14 @@ export class FormNormalComponent extends BiBaseComponent{
     }
 
     /**
-     * 当数据源为空时，清空相关联的字段数据
+     * render数据源相关联的字段数据
+     * fields x轴列表数据，y轴列表数据
      */
-    clearSourceRelationField() {
-        this.formGroup.x.autoSelect.data.list = [];
-        this.formGroup.x.autoSelect.data.choosed = [];
-        this.formGroup.x.autoSelect.reload();
-        let yGroup = this.y.concat(this.y1);
-        yGroup.forEach(y => {
-            y.clearRender();
-        });
+    renderSourceRelationField(fields) {
+        if (fields['x_field'] || fields['y_field']) {
+            this.renderXField(fields['x_field']);
+            this.renderYField(fields['y_field']);
+        };
     }
 
     /**
@@ -262,6 +279,32 @@ export class FormNormalComponent extends BiBaseComponent{
         };
     }
 
+    /**
+     * Mediator subscribe事件分配
+     * option {type: '根据类型分配到具体的函数', data: [传过来的值]}
+     */
+    MediatorDistribution(option) {
+        switch(option.type) {
+            case 'fields':
+                this.renderSourceRelationField(option.data);
+                break;
+            case 'remove-y':
+                this.removeYAxis(option.data);
+                break;
+            case 'add-y':
+                if (option.data.num === 0) {
+                    this.addYAxis();
+                } else {
+                    this.showY1Axis(true);
+                };
+                break;
+            case 'update-y':
+                if (this.formGroup.defaultY.data.value) {
+                    this.selectYAxis(true)
+                };
+                break;
+        }
+    }
     /**
      * 保存数据
      */

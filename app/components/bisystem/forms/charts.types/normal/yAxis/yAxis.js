@@ -27,14 +27,23 @@ let config = {
             let y = $(this).closest('.form-group-y').attr('class');
             let num = y.indexOf('form-group-y0') !== -1 ? 0 : 1;
             if (yItems.length > 0) {
-                Mediator.publish('bi:chart:normal:removeY', {num: num, componentId: me.componentId});
+                Mediator.publish('bi:chart:form:update', {
+                    type: 'remove-y',
+                    data:{
+                        num: num,
+                        componentId: me.componentId
+                    }});
                 me.destroySelf();
             };
             return false;
         }).on('click', '.add-y-btn', function(event) {
             let y = $(this).closest('.form-group-y').attr('class');
-            let data = y.indexOf('form-group-y0') !== -1 ? 0 : 1;
-            Mediator.publish('bi:chart:normal:addY', data);
+            let num = y.indexOf('form-group-y0') !== -1 ? 0 : 1;
+            Mediator.publish('bi:chart:form:update', {
+                type: 'add-y',
+                data:{
+                    num: num
+                }});
             return false;
         })
 
@@ -52,6 +61,7 @@ export class FormNormalYComponent extends BiBaseComponent{
      * 渲染y轴 fittings
      */
     renderFitting() {
+
         const groupYFitting = [
             {name: 'field', option: {type: 'autoComplete', me: this, container: 'y-item'}},
             {name: 'type', option: {type: 'select', me: this, container: 'y-item'}}
@@ -66,30 +76,17 @@ export class FormNormalYComponent extends BiBaseComponent{
     reloadRender(data) {
         Object.keys(this.yAxis).map(key => {
             if (key === 'field') {
+                this.yAxis[key].autoSelect.data.choosed = [];
                 this.yAxis[key].autoSelect.data.list = data;
                 this.yAxis[key].autoSelect.reload();
             }
         })
-    }
-
-    /**
-     * 当数据源为空时，清空y轴数据
-     */
-    clearRender() {
-        Object.keys(this.yAxis).map(key => {
-            if (key === 'field') {
-                this.yAxis[key].autoSelect.data.list = [];
-                this.yAxis[key].autoSelect.data.choosed = [];
-                this.yAxis[key].autoSelect.reload();
-            }
-        })
-    }
-
+    };
     /**
      * 获取y轴的数据
      */
     getValue(data) {
         this.data.field = data;
-        Mediator.publish('bi:chart:normal:y:update', this.data);
+        Mediator.publish('bi:chart:form:update', {type:'update-y'},this.data);
     }
 }
