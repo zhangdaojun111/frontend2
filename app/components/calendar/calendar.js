@@ -92,6 +92,8 @@ let config = {
 
         }).on('input propertychange', '.search-box', () => {
             this.data.keyValue = this.el.find('.search-box').val();
+        }).on('click', '#open-new-window', () => {
+            window.open('/calendar_mgr/index/');
         });
         Mediator.on('CalendarMain: remindCount', data => {
             console.log(data);

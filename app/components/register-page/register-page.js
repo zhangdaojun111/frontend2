@@ -3,9 +3,6 @@
  * 打开注册界面
  */
 
-
-
-
 import Component from '../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
@@ -152,6 +149,8 @@ let config ={
                         case 'username':
                             json["username"] = value;
                             UserInfoService.register(json).done((result) => {
+                                console.log("post require");
+                                console.log(result);
                                 if(result.success === 1){
                                     //检测用户名未注册
                                     event.target.style.borderColor = 'green';
