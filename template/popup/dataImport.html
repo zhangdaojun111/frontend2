@@ -2,23 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ERDS</title>
+    <title>Title</title>
 </head>
 <body>
 <script>
     window.config = {{window_config|safe}}
 </script>
 
-<div id="sourceDataGrid"></div>
+<div id="dataImport"></div>
 
 {% ifequal window_type 'develop'%}
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
-<script type="text/javascript" src="http://localhost:8080/scripts/sourceDataGrid.js"></script>
+<script type="text/javascript" src="http://localhost:8080/scripts/dataImport.js"></script>
 {% else %}
 <link rel="stylesheet" href="/client/static/css/vendors.css">
-<link rel="stylesheet" href="/client/static/css/sourceDataGrid.css">
+<link rel="stylesheet" href="/client/static/css/dataImport.css">
 <script type="text/javascript" src="/client/static/vendors.js"></script>
-<script type="text/javascript" src="/client/static/sourceDataGrid.js"></script>
+<script type="text/javascript" src="/client/static/dataImport.js"></script>
 {% endifequal %}
 </body>
 </html>
