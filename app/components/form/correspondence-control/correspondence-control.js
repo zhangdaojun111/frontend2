@@ -7,6 +7,7 @@ import template from './correspondence-control.html';
 let config={
     template:template,
     afterRender(){
+        let _this=this;
         let config={
             tableId:this.data.value,
             parentTableId:this.data.tableId,
