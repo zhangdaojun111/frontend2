@@ -105,7 +105,9 @@ Mediator.subscribe('workflow:submit', (res)=> {
                     key:obj.key,
                     data:{}
                 });
-            };
+            }else{
+                msgBox.alert(`${res.error}`);
+            }
         })
     }
 })
