@@ -1881,7 +1881,10 @@ let config = {
             }
             if( data.event.srcElement.className == 'gridHistory' ){
                 console.log( '历史' )
-                let obj = {table_id: this.data.tableId,real_id: data.data._id,}
+                let obj = {
+                    table_id: this.data.tableId,
+                    real_id: data.data._id
+                }
                 PMAPI.openDialogByIframe(`/iframe/historyApprove/`,{
                     width:1000,
                     height:600,
@@ -1890,6 +1893,24 @@ let config = {
                 },{obj}).then(res=>{
 
                 })
+                // let d = {
+                //     'table_id': this.data.tableId,
+                //     'real_id': data.data._id
+                // };
+                // dataTableService.getHistoryApproveData(d).then( res=>{
+                //     console.log()
+                //     obj.res = JSON.stringify(res);
+                //     PMAPI.openDialogByIframe(`/iframe/historyApprove/`,{
+                //         width:1000,
+                //         height:600,
+                //         title:`历史`,
+                //         modal:true
+                //     },{obj}).then(res=>{
+                //
+                //     })
+                // })
+                // HTTP.flush();
+
             }
         },
         //行双击
