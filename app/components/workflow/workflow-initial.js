@@ -14,6 +14,10 @@ let config={
 
     },
     afterRender(){
+        this.el.on('click','#workflowClose',()=>{
+            this.el.find("#workflow-box").show();
+            this.el.find('#workflow-content').hide();
+        }),
         this.el.on('click','#singleFlow',(e)=>{
             let ev =$(e.target);
             ev.addClass("selected");
