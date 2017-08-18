@@ -22,8 +22,8 @@ function getData(component_instance) {
         avatar_content:window.config.sysConfig.userInfo.avatar_content,
         name:window.config.sysConfig.userInfo.name,
         username: window.config.sysConfig.userInfo.username,
-        user_department:window.config.sysConfig.userInfo.user_department,
-        user_position:window.config.sysConfig.userInfo.user_job,
+        department:window.config.sysConfig.userInfo.user_department,
+        position:window.config.sysConfig.userInfo.user_job,
         user_email:window.config.sysConfig.userInfo.email,
         user_phone:window.config.sysConfig.userInfo.tel,
         otherLoginVisible:window.config.sysConfig.userInfo.is_superuser

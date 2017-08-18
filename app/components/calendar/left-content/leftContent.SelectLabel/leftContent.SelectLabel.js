@@ -1,7 +1,12 @@
+/**
+ * Created by lipengfei.
+ * 日历树选择
+ */
 import Component from "../../../../lib/component";
 import template from './leftContent.SelectLabel.html';
 import './leftContent.SelectLabel.scss';
 import {CalendarService} from '../../../../services/calendar/calendar.service';
+import {dgcService} from '../../../../services/dataGrid/data-table-control.service';
 import Mediator from '../../../../lib/mediator';
 let config = {
     template: template,
@@ -26,12 +31,33 @@ let config = {
                 if(config.data.cancel_fields.indexOf(items.field_id) != -1){
                     strhtml+=" unchecked"
                 }
-                strhtml+="'style='background-color:"+ items.color+"' for='select-children-"+items.field_id+"' id='select-children-"+items.field_id+"'>" +
+                let color = that.actions.colorRgb(items.color,0.7);
+                strhtml+="'style='background-color:"+ color+"' for='select-children-"+items.field_id+"' id='select-children-"+items.field_id+"'>" +
                     "</label><label>"+items.field_name+"</label>"+
                     "</div>";
             });
             strhtml+="</div>";
             that.el.find(".checkbox-group").html(strhtml);
+        },
+        colorRgb: function(str, opcity){
+            let sColor = str.toLowerCase();
+            if(sColor){
+                if(sColor.length === 4){
+                    let sColorNew = "#";
+                    for(let i=1; i<4; i+=1){
+                        sColorNew += sColor.slice(i,i+1).concat(sColor.slice(i,i+1));
+                    }
+                    sColor = sColorNew;
+                }
+                //处理六位的颜色值
+                let sColorChange = [];
+                for(let i=1; i<7; i+=2){
+                    sColorChange.push(parseInt("0x"+sColor.slice(i,i+2)));
+                }
+                return "rgba(" + sColorChange.join(",")+","+opcity + ")";
+            }else{
+                return sColor;
+            }
         },
         selectlabelshow:function(temp){
             if(!temp.hasClass('hide-check-group'))
@@ -125,32 +151,53 @@ let config = {
                 that.el.find("#checkbox_a3").removeClass('label-select-all-checked');
             }
         },
-
+        showfirst:function(that){
+            let items_Id = [];
+            let IsChecked = true;
+            if(that.data.hide_item_table.indexOf(that.data.dataitem.table_id) !== -1){
+                this.el.find(".select-head").removeClass("label-select-all-show");
+                this.el.find(".select-all").hide();
+            }
+            that.data.dataitem.items.forEach((itemsid) =>{
+                items_Id.push(itemsid.field_id);
+            });
+            for(let i = 0;i< items_Id.length;i++){
+                if(config.data.cancel_fields.indexOf(items_Id[i]) !== -1){
+                    IsChecked = false;
+                    break;
+                }
+                IsChecked = true;
+            }
+            if(IsChecked){
+                console.log(IsChecked);
+                this.el.find(".select-head").addClass("label-select-all-checked");
+            }
+        },
+        goSearch:function(a,id){
+            let temp;
+            for( let d of config.data.rows ){
+                if(d.table_id === a){
+                    temp = d;
+                }
+            }
+            temp.searchValue = id;
+            let json = {};
+            for( let d of config.data.rows ){
+                if( d.searchValue !== '0' ){
+                    let val = d.searchValue;
+                    for( let search of d.query_params){
+                        if( val === search.id.toString()){
+                            json[d.table_id] = dgcService.translateAdvancedQuery( JSON.parse(search.queryParams));
+                        }
+                    }
+                }
+            }
+            Mediator.emit('CalendarSelected: Search', json);
+        }
     },
     afterRender: function() {
         let that = this;
-        let items_Id = [];
-        let IsChecked = true;
-        if(that.data.hide_item_table.indexOf(that.data.dataitem.table_id) != -1){
-            this.el.find(".select-head").removeClass("label-select-all-show");
-            this.el.find(".select-all").hide();
-        }
-        that.data.dataitem.items.forEach((itemsid) =>{
-            items_Id.push(itemsid.field_id);
-        });
-        console.log(items_Id,config.data.cancel_fields);
-        for(let i = 0;i< items_Id.length;i++){
-            if(config.data.cancel_fields.indexOf(items_Id[i]) != -1){
-                IsChecked = false;
-                break;
-            }
-            IsChecked = true;
-        }
-        if(IsChecked){
-            console.log(IsChecked);
-            this.el.find(".select-head").addClass("label-select-all-checked");
-        }
-
+        that.actions.showfirst(that);
         config.actions.loaddatahtml(that,config.data.dataitem);
         Mediator.on('calendar-left:checkbox3-check',data =>{
             config.data.cancel_fields = data.data;
@@ -158,8 +205,7 @@ let config = {
         that.el.on("mouseleave",".float-button-group",function(){
             $(this).css("display","none");
         }).on("click",".float-button-group-show",function(){
-            $(this).parent().nextAll(".float-button-group").css("display","block");
-            $(this).parent().nextAll(".float-button-group").css("top", document.body.scrollLeft + event.clientY - 87);
+            that.el.find(".float-button-group").css({"display":"block","top":document.body.scrollLeft + event.clientY - 87});
         }).on('click','.select-label-show',function(){
             config.actions.selectlabelshow($(this));
         }).on('click',".select-label",function(){
@@ -174,6 +220,8 @@ let config = {
             this.el.find(".float-button-group").show();
         }).on('mouseover',".hide-type-group", () => {
             that.el.find(".search-function").css("display","none");
+        }).on('click','.search-function-children',function () {
+            that.actions.goSearch($(this).parent(".search-function").attr("class").split(" ")[1],$(this).attr("class").split(" ")[1]);
         });
         $(document).mouseover(function(){
             that.el.find(".float-button-group").hide();
@@ -184,6 +232,7 @@ let config = {
 class LeftContentSelect extends Component {
     constructor(data,cancel_fields,hide_item_table,hide_tables,rows){
         config.data.dataitem = data;
+        config.data.dataitem.searchValue = 0;
         config.data.cancel_fields = cancel_fields;
         config.data.hide_item_table = hide_item_table;
         config.data.hide_tables = hide_tables;

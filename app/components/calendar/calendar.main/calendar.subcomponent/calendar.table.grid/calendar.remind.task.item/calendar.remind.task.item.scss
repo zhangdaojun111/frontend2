@@ -11,19 +11,31 @@
         width: 6px;
         height: 6px;
         margin: 9px;
-
     }
     .task-state-icon{
         border-right: 1px solid rgba(228, 228, 228, 1);
         margin: 4px;
+        cursor: pointer;
     }
     .task-show-text {
         width: calc(100% - 58px);
         display: inline-block;
         line-height: 24px;
-        position: absolute;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: clip;
+        cursor: pointer;
     }
+}
+.select-options{
+  position: absolute;
+  display: none;
+  z-index: 1024;
+  left: 0px;
+  margin-top: 25px;
+  width: 100px;
+  padding-left: 20px;
+  background-color: white;
+  border: 1px solid #C1CACA;
+  height: 25px;
 }
