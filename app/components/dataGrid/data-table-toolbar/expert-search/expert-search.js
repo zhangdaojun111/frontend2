@@ -12,14 +12,12 @@ import './expert-search.scss';
 
 let config = {
     template: template,
-    num:1,
     ulChecked: true,
     inputValue: null,
     radioId: 0,
     id: null,
     name:'',
     isEdit: false,
-    saveCommonQuery: false,
     itemChecked:false,
     itemDeleteChecked:false,
     optionHtmlOne : `<option value="$regex">包含</option>
@@ -36,6 +34,9 @@ let config = {
                     <option value="$ne">不等于</option>`,
     data: {
         tableId: null,
+        num:1,
+        addNameAry:[],
+        saveCommonQuery: false,
         key:'',
         commonQuerySelectLength:null,
         //高级查询字段信息
@@ -170,23 +171,29 @@ let config = {
             let checkedPost = true,
                 leftBracketNum = 0,
                 rightBracketNum = 0;
-            this.data.searchInputList.forEach((item)=> {
-                if(item['cond']['keyword'] == ''){
-                    msgBox.alert('查询值不能为空！');
-                    checkedPost = false;
-                    return false
-                } else if (item['cond']['searchByName'] == '') {
-                    msgBox.alert('查询条件不能为空！');
-                    checkedPost = false;
-                    return false
-                }
-                if(item['cond']['leftBracket'] == '(') {
-                    leftBracketNum ++;
-                }
-                if(item['cond']['rightBracket'] == ')') {
-                    rightBracketNum ++;
-                }
-            })
+            try {
+                this.data.searchInputList.forEach((item) => {
+                    if (item['cond']['keyword'] == '') {
+                        msgBox.alert('查询值不能为空！');
+                        checkedPost = false;
+                        foreach.break=new Error("StopIteration");
+                    } else if (item['cond']['searchByName'] == '') {
+                        msgBox.alert('查询条件不能为空！');
+                        checkedPost = false;
+                        foreach.break=new Error("StopIteration");
+                    }
+                    if (item['cond']['leftBracket'] == '(') {
+                        leftBracketNum++;
+                    }
+                    if (item['cond']['rightBracket'] == ')') {
+                        rightBracketNum++;
+                    }
+                })
+            } catch (e) {
+                if(e.message==="foreach is not defined") {
+                    return;
+                } else throw e;
+            }
             if (checkedPost) {
                 if (leftBracketNum == rightBracketNum) {
                     if(name == 'save'){
@@ -204,10 +211,11 @@ let config = {
                         PMAPI.closeIframeDialog(window.config.key, {
                             type:'temporaryQuery',
                             appendChecked:appendChecked,
-                            saveCommonQuery:this.saveCommonQuery,
+                            saveCommonQuery:this.data.saveCommonQuery,
                             id:searchId,
                             name:searchName,
-                            value: this.data.searchInputList
+                            value: this.data.searchInputList,
+                            addNameAry: this.data.addNameAry
                         });
                     }
                 } else {
@@ -263,15 +271,17 @@ let config = {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
                     this.actions.renderQueryItem(this.data.searchInputList)
-                    this.saveCommonQuery = true
+                    this.data.saveCommonQuery = true
+                    this.data.addNameAry.push(name)
                     this.data.commonQuery.push({
-                        id:1000+this.num,
+                        id:1000+this.data.num,
                         name:name,
                         queryParams:JSON.stringify(this.data.searchInputList)
                     })
+
                     this.num ++;
                     this.name = name;
-                    this.id = 0;
+                    this.id = 1000+this.data.num;
                     this.el.find('.common-search-item').remove();
                     this.data.commonQuery.forEach((item)=> {
                         this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);

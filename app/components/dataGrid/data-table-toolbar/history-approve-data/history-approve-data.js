@@ -57,13 +57,18 @@ let config = {
         }
     },
     afterRender: function() {
-        PMAPI.subscribe(PMENUM.open_iframe_params, (res)=>{
+        // PMAPI.subscribe(PMENUM.open_iframe_params, (res)=>{
+        //     for (let item in res.data.obj) {
+        //         this.data[item] = res.data.obj[item]
+        //     }
+        //     this.actions.afterGetMsg()
+        // })
+        PMAPI.getIframeParams(window.config.key).then((res) => {
             for (let item in res.data.obj) {
                 this.data[item] = res.data.obj[item]
             }
             this.actions.afterGetMsg()
         })
-
     }
 }
 class historyApprove extends Component {
