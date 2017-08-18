@@ -10,7 +10,9 @@ import './select.scss';
 let config = {
     template: template,
     data: {
-        value: null
+        value: null,
+        options:[],
+        label: null
     },
     afterRender() {},
     firstAfterRender() {

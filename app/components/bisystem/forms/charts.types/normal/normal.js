@@ -33,11 +33,10 @@ let config = {
         Mediator.subscribe('bi:chart:form:update', option => {
             this.MediatorDistribution(option);
         });
-
-        // 当删除数据源时 清除x,y轴字段
-        Mediator.subscribe('bi:chart:form:fields:clear', data => {
-            this.clearSourceRelationField();
-        });
+        this.el.on('click', '.save-btn', (event) => {
+            alert('hello');
+            this.save();
+        })
     },
     beforeDestory() {}
 };
@@ -112,7 +111,7 @@ export class FormNormalComponent extends BiBaseComponent{
                     checkboxs:[
                         {value:'', name:'是否横向展示y轴数据'},
                     ],
-                    onChange: null
+                    onChange: this.showXAxisVertical.bind(this)
                 },
                 me: this,
                 container: 'form-group-yHorizontal'}),
@@ -123,7 +122,7 @@ export class FormNormalComponent extends BiBaseComponent{
                     checkboxs:[
                         {value:'', name:'是否展示所有x轴数据(x轴45°展示)'},
                     ],
-                    onChange: null
+                    onChange: this.showAllXAxis.bind(this)
                 },
                 me: this,
                 container: 'form-group-yHorizontalColumns .x45'
@@ -132,6 +131,7 @@ export class FormNormalComponent extends BiBaseComponent{
                 type:'input',
                 data:{
                     value:null,
+                    show: false,
                     label: 'x轴下边距(未选择X轴竖向展示时生效)'
                 },
                 me: this,
@@ -144,6 +144,7 @@ export class FormNormalComponent extends BiBaseComponent{
                     checkboxs:[
                         {value:'', name:'x轴竖向展示'},
                     ],
+                    onChange: this.showXAxisVertical.bind(this)
                 },
                 me: this,
                 container: 'form-group-echartX .tit'
@@ -152,7 +153,8 @@ export class FormNormalComponent extends BiBaseComponent{
                 type:'input',
                 data: {
                     value:null,
-                    label: 'x轴每行字数'
+                    label: 'x轴每行字数',
+                    show:false,
                 },
                 me: this,
                 container: 'form-group-echartX .echartX-text-num'
@@ -161,10 +163,24 @@ export class FormNormalComponent extends BiBaseComponent{
                 type:'input',
                 data: {
                     value:null,
-                    label: 'x轴下边距'
+                    label: 'x轴下边距',
+                    show:false,
                 },
                 me: this,
                 container: 'form-group-echartX .echartX-margin-bottom'
+            }),
+            chartAssignment: instanceFitting({
+                type:'select',
+                data: {
+                    value:null,
+                    label: '选择分组或下拉',
+                    options:[
+                        {value: 1, name: '分组'},
+                        {value: 2, name: '下穿'}
+                    ]
+                },
+                me: this,
+                container: 'form-group-chartAssignment'
             }),
             advanced: instanceFitting({
                 type:'autoComplete',
@@ -305,11 +321,40 @@ export class FormNormalComponent extends BiBaseComponent{
                 break;
         }
     }
+
+    /**
+     * 展示所有x轴所有数据(x轴45°展示)
+     */
+    showAllXAxis(checked) {
+        if (checked) {
+            this.formGroup.xMarginBottom.data.show = true;
+        } else {
+            this.formGroup.xMarginBottom.data.show = false;
+        }
+        this.formGroup.xMarginBottom.reload();
+    }
+
+    /**
+     * x轴竖向展示（x轴每行字数，x轴下边距）
+     */
+    showXAxisVertical(checked) {
+        if (checked) {
+            this.formGroup.echartXTextNum.data.show = true;
+            this.formGroup.echartXMarginBottom.data.show = true;
+        } else {
+            this.formGroup.echartXTextNum.data.show = false;
+            this.formGroup.echartXMarginBottom.data.show = false;
+        };
+
+        this.formGroup.echartXTextNum.reload();
+        this.formGroup.echartXMarginBottom.reload();
+    }
+
     /**
      * 保存数据
      */
     save() {
-        const data  = this.data.formGroup;
-        return data;
+        const data  = this.formGroup;
+        console.log(data);
     }
 }

@@ -42,7 +42,8 @@ let config = {
 
 
 export class AutoCompleteComponent extends FormFittingAbstract {
-    constructor() {
+    constructor(data) {
+        config.data = data;
         super(config);
         this.autoSelect = {};
     }

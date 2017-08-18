@@ -207,4 +207,17 @@ $bg-color: #ccc;
       }
     }
   }
+  .form-group-yHorizontalColumns{
+    .x-margin-bottom {
+        margin-left:30px;
+        max-width:300px;
+    }
+  }
+  .form-group-echartX {
+        .echartX-text-num,.echartX-margin-bottom{
+            display: inline-block;
+            max-width:300px;
+            margin-left:30px;
+        }
+  }
 }

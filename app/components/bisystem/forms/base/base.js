@@ -33,7 +33,8 @@ export class FormBaseComponent extends BiBaseComponent {
             chartName: instanceFitting({
                 type:'input',
                 data:{
-                   value: null,
+                    show:true,
+                    value: null,
                     label: '请输入图标名称'
                 },
                 me: this,

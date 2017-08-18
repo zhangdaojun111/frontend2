@@ -12,6 +12,7 @@ let config = {
     data: {
         checkboxs: [],
         value: null,
+        checked: false,
         onChange: null // change后执行回调函数
     },
     firstAfterRender() {
@@ -19,15 +20,17 @@ let config = {
         me.onChange = me.data.onChange;
         this.el.on('change', 'input', function(event){
             me.data.value = $(this).is(':checked');
-            me.onChange(me.data.value);
+            if (me.data.onChange) {
+                me.onChange(me.data.value);
+            };
         })
     }
 }
 
 export class CheckboxComponent extends FormFittingAbstract {
     constructor(data) {
-        config.data = data
-        super(config)
+        config.data = data;
+        super(config);
     }
 
     /**

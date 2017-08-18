@@ -64,7 +64,12 @@ export class FormNormalYComponent extends BiBaseComponent{
 
         const groupYFitting = [
             {name: 'field', option: {type: 'autoComplete', me: this, container: 'y-item'}},
-            {name: 'type', option: {type: 'select', me: this, container: 'y-item'}}
+            {name: 'type', option: {type: 'select',data: {
+                options:[
+                    {value: 'line', name: '折线图'},
+                    {value: 'bar', name: '柱状图'}
+                ]
+            }, me: this, container: 'y-item'}}
         ];
         this.yAxis = groupFitting(groupYFitting);
         this.yAxis.field.autoSelect.data.onSelect = this.getValue.bind(this);
