@@ -42,11 +42,10 @@ let config ={
             let $listParent = this.el.find('.history-list');
             let temp = this.data.historyList;
             $listParent.empty();
-            console.log(temp);
             for( let k of temp){
-                console.log(k)
                 let $li = $("<li class='record-item'>");
-                $li.attr('data_content',k.content);
+                $li.attr('data_content',k.content)
+                    .attr('data_index',k.index);
 
                 let $content = $("<span class='record-content'>");
                 $content.attr("operate","search");
@@ -85,11 +84,14 @@ let config ={
         },
         doSearch:function () {
             let content = this.data.searchContent;
+            this.el.find('.search-content').val(content).blur();
+            this.el.find("div.history-display").hide();
+            console.log("search content: ",content);
             if(content && content !== ''){
                 Mediator.emit('menu:item:openiframe', {
                     id: "search-result",
                     name: "搜索结果",
-                    url: "/search_result?searchText=" + content
+                    url: "/search_result?searchContent=" + content
                 });
                 this.actions.addSearchHistory();
             }else{
@@ -118,7 +120,7 @@ let config ={
             }
             this.actions.initList();
             UserInfoService.saveGlobalSearchHistory(this.data.historyList).done((result) => {
-                console.log("historyList save success",result);
+                // console.log("historyList save success",result);
                 //使用autoSelect扩展接口更新list的显示
             }).fail((err) => {
                 console.log("historyList save failed",err);
@@ -130,8 +132,6 @@ let config ={
             });
             //向后台存history
             UserInfoService.saveGlobalSearchHistory();
-
-
             this.actions.initList();
         },
         dealRecordClick:function (event) {
@@ -146,8 +146,6 @@ let config ={
             }else{
                 this.data.searchContent = content;
                 this.actions.doSearch();
-                this.el.find('.search-content').val(content);
-                this.el.find("div.history-display").hide();
             }
         },
         isDeleteAllHistory:function () {
@@ -168,6 +166,7 @@ let config ={
                 })
         },
         showHistoryList:function () {
+            this.el.find('.search-content').val('');
             if(this.data.historyList.length > 0){
                 this.el.find("div.history-display").show();
                 this.el.find("input.search-content").removeAttr("placeholder");
@@ -178,26 +177,50 @@ let config ={
             setTimeout(function () {
                 that.el.find("div.history-display").hide();
             },100);
-            // this.el.find("div.history-display").hide();
             if(this.el.find("input.search-content").val() === ''){
                 this.el.find("input.search-content").attr("placeholder","请输入要搜索的内容...");
             }
         },
+        setItemHover:function (event) {
+            console.log(event)
+            this.el.find('.record-item').removeClass('item-selected');
+            event.currentTarget.addClass('item-selected');
+            this.data.selectNum = event.currentTarget.attributes.data_index.value;
+        },
+        setItemBlur:function (event) {
+            event.currentTarget.removeClass('item-selected');
+        },
         myKeyDown:function (event) {
             if(event.keyCode === 13){       //回车，进行搜索
-                //根据id设置搜索的content
-
-                selectNum = -1;
+                let content_first = this.el.find('.search-content').val();
+                if(content_first){
+                    this.data.searchContent = content_first
+                }else if(this.data.selectNum >= 0){
+                    this.data.searchContent = this.data.historyList[this.data.selectNum].content;
+                }else{
+                    this.data.searchContent = "";
+                }
                 this.actions.doSearch();
+                this.data.selectNum = -1;
             }else if(event.keyCode === 40){
                 this.data.selectNum++;
-                this.el.find('')
+                let $list = this.el.find('.history-list');
+                $list.find('.record-item').removeClass('item-selected');
+                if(this.data.selectNum === this.data.historyList.length){
+                    this.data.selectNum = 0;
+                }
+                let selected_content = this.data.historyList[this.data.selectNum].content;
+                $list.find(`li[data_content = ${selected_content}]`).addClass('item-selected');
             }else if(event.keyCode === 38){
-
+                this.data.selectNum--;
+                let $list = this.el.find('.history-list');
+                $list.find('.record-item').removeClass('item-selected');
+                if(this.data.selectNum < 0){
+                    this.data.selectNum = this.data.historyList.length - 1 ;
+                }
+                let selected_content = this.data.historyList[this.data.selectNum].content;
+                $list.find(`li[data_content = ${selected_content}]`).addClass('item-selected');
             }else{
-
-
-
 
             }
         }
@@ -210,9 +233,7 @@ let config ={
         }).on('input','.search-content',(event) => {
             this.actions.setSearchContent(event);
         }).on('click','.record-item',(event) => {
-            setTimeout(function () {
-                that.actions.dealRecordClick(event);
-            },100);
+            this.actions.dealRecordClick(event);
         }).on("click",".delete-all-history", (event) => {
             this.actions.isDeleteAllHistory();
         }).on('focus','.search-content',() => {
@@ -221,7 +242,12 @@ let config ={
             this.actions.hideHistoryList();
         }).on('keydown','.search-content',(event) => {
             this.actions.myKeyDown(event);
+        }).on('mouseenter','li.record-item',(event) => {
+            this.actions.setItemHover(event);
+        }).on('mouseleave','li.record-item',(event) => {
+            this.actions.setItemBlur();
         })
+
     },
     beforeDestroy:function () {
 
