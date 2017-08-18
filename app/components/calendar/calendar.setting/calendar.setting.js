@@ -8,6 +8,7 @@ import Mediator from '../../../lib/mediator';
 import CalendarSettingItem from './calendar.setting.item/calendar.setting.item';
 import CalendarSet from '../../calendar.set/calendar.set';
 import {CalendarSetService} from "../../../services/calendar/calendar.set.service"
+import {PMAPI, PMENUM} from '../../../lib/postmsg';
 
 let config = {
     template: template,
@@ -52,6 +53,7 @@ let config = {
         });
 
         Mediator.on('calendar-set-left:calendar-set',data =>{
+            this.el.find('.form-title').html('【'+ data.label +'】');
             $(".calendar-setting-item-content").empty();
             this.append(new CalendarSet(data.data), $('.calendar-setting-item-content'));
         });
