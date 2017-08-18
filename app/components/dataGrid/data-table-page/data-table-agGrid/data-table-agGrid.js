@@ -1103,7 +1103,7 @@ let config = {
                     agGrid: this.agGrid
                 }
                 this.customColumnsCom  = new customColumns(custom);
-                this.append(this.customColumnsCom, document.querySelector('.custom-columns-panel'));
+                this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
 
                 //点击关掉定制列panel
                 this.el.find( '.ag-body' ).on( 'click',()=>{
@@ -1121,7 +1121,7 @@ let config = {
                     myGroup:  this.actions.setMyGroup(this.data.myGroup.fields)
                 }
                 this.groupGridCom = new groupGrid(groupLit);
-                this.append(this.groupGridCom,document.querySelector('.group-panel'));
+                this.append(this.groupGridCom,this.el.find('.group-panel'));
 
                 this.groupGridCom.actions.onGroupChange = this.actions.onGroupChange;
             }
