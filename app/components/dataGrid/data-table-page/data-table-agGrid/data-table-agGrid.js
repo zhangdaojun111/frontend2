@@ -1137,6 +1137,9 @@ let config = {
                 this.pagination = new dataPagination(paginationData);
                 this.pagination.actions.paginationChanged = this.actions.refreshData;
                 this.append(this.pagination, this.el.find('.pagination'));
+            }else {
+                this.el.find( '.pagination' )[0].style.height = '0px';
+                this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 40px )';
             }
             //高级查询
             if( this.el.find( '.expert-search-btn' )[0] ){
