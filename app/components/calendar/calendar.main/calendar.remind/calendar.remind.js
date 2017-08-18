@@ -49,6 +49,7 @@ let CalendarRemind = {
         remindDetail: [],
         remindDateTime: '',
         remindTableId: '',
+        remindRealId: '',
         remindDate: '',
         remindTime: '',
         css: css.replace(/(\n)/g, '')
@@ -57,14 +58,17 @@ let CalendarRemind = {
 
     },
     afterRender: function() {
+        console.log(this.data.remindDetail);
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
         this.el.on('click', '.open-form', () => {
             PMAPI.openDialogByIframe(
-                '/calendar_mgr/create/?table_id='+ this.data.remindTableId,
+                `/calendar_mgr/create/?table_id=${this.data.remindTableId}&real_id=${this.data.remindRealId}`,
                 {
                     width: "1700",
                     height: '800',
                     title: '表单'
+                }, {
+                    real_id: 'sss',
                 });
         })
     },
