@@ -707,6 +707,7 @@ let config = {
             params['to_date'] = this.data.to_date;
             console.log(params);
             CalendarService.getCalendarDrag(params).then(res => {
+                console.log(res);
                 this.data.date2settings = res['calendar_data']['date2csids'];
                 this.data.calendarSettings = res['calendar_data']['id2data'];
                 this.data.tableid2name = res['calendar_data']['tableid2name'];
