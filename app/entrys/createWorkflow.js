@@ -68,7 +68,9 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             el:'#place-form',
             real_id:'',
             form_workflow:1,
-            form_id:msg.formid
+            form_id:msg.formid,
+            btnType:'edit',
+            is_view:0
         });
 
         const intervalSave= async function (data) {
