@@ -2,38 +2,44 @@ import Handlerbar from 'handlebars';
 
 let componentId = 10000;
 let map = new WeakMap();
-
 let count = 0;
+
+let defaultConfig = {
+    template: '',
+    data: {},
+    events: {},
+    actions: {},
+    /**
+     * {
+     *      event: 'click',
+     *      selector: '.name',
+     *      callback: function(){}
+     * }
+     */
+    binds: [],
+    afterRender: null,
+    firstAfterRender: null,
+    beforeDestory: null,
+    firstAfterRenderRunned: false
+}
+
 class Component {
-
-    constructor(config, data) {
-
-        config = _.defaultsDeep({}, config || {});
-        data = _.defaultsDeep({}, data || {});
-        this.template = config.template || '';
-        this.data = _.defaultsDeep({}, data, config.data);
-
-        if (config.actions) {
-            this.actions = {};
-            for (let name in config.actions) {
-                this.actions[name] = config.actions[name].bind(this);
+    constructor(config, data, events) {
+        $.extend(true, this, defaultConfig, config, {data: data||{}, events: events||{}})
+        let that = this;
+        function scan(obj) {
+            for(let name in obj) {
+                let item = obj[name];
+                if (_.isFunction(item)) {
+                    obj[name] = item.bind(that);
+                } else if (_.isPlainObject(item) || _.isArray(item)) {
+                    scan(item);
+                }
             }
         }
-        if (config.afterRender) {
-            this.afterRender = config.afterRender.bind(this);
-        }
-        // 只在第一次运行
-        if (config.firstAfterRender) {
-            this.firstAfterRender = config.firstAfterRender.bind(this);
-        }
-        if (config.beforeDestory) {
-            this.beforeDestory = config.beforeDestory.bind(this);
-        }
+        scan(this);
         this.componentId = componentId++;
-
         count ++;
-        // console.log('ERDS:组件数量:' + count);
-
     }
 
     render(el) {
@@ -53,16 +59,42 @@ class Component {
         let compiler = Handlerbar.compile(this.template);
         let html = compiler(this.data);
         this.el.html(html);
-        if (this.firstAfterRender && this.firstAfterRenderRunned !== true) {
-            this.firstAfterRender();
+        if (this.firstAfterRenderRunned === false) {
+            this.bindEvents();
+            this.firstAfterRender && this.firstAfterRender();
             this.firstAfterRenderRunned = true;
         }
         this.afterRender && this.afterRender();
         return this;
     }
 
-    set(key, value) {
-        this[key] = value;
+    bindEvents() {
+        if (this.binds && this.binds.length) {
+            let that = this;
+            this.binds.forEach((item) => {
+                this.el.on(item.event, item.selector, function () {
+                    item.callback.call(that, this);
+                });
+            })
+        }
+    }
+
+    cancelEvents() {
+        this.el.off();
+    }
+
+    trigger(eventName, params) {
+        this.events[eventName] && this.events[eventName](params);
+        return this;
+    }
+
+    addEvent(eventName, func) {
+        this.events[eventName] = func.bind(this);
+        return this;
+    }
+
+    setData(key, value) {
+        this.data[key] = value;
     }
 
     append(component, container, tagName) {
@@ -130,6 +162,20 @@ class Component {
         });
         return coms;
     }
+
+    showLoading(){
+
+    }
+
+    hideLoading(){
+
+    }
+
+    disable(){
+
+    }
+
+    enable(){}
 
 }
 
