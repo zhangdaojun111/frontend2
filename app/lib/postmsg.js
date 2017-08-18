@@ -141,12 +141,7 @@ window.addEventListener('message', function (event) {
                 break;
 
             case PMENUM.get_param_from_root:
-                dialogHash[data.key] = {
-                    iframe: event.source,
-                    element: element.appendTo(document.body),
-                    params: params
-                };
-                PMAPI.sendToChild(dialogHash[data.key].iframe[0], {
+                PMAPI.sendToChild(dialogHash[data.key].element[0], {
                     type: PMENUM.send_param_to_iframe,
                     data: dialogHash[data.key].params
                 });
