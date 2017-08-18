@@ -81,12 +81,14 @@ $font_size:10px;           //通用字体大小
               background-color: $input_bg_color;
               border: 1px solid rgba(255, 255, 255, 0.3);
               text-indent: 40px;
+              outline: none;
               color: $input_color;
             }
 
             input:focus {
               border-style: solid;
-              border-color: #11f4ee;
+              border-color: #27adf4;
+              outline: none;
             }
 
             i {

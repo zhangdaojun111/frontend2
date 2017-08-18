@@ -1,3 +1,11 @@
+/**
+ * @author zhaoyan
+ * 打开注册界面
+ */
+
+
+
+
 import Component from '../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
@@ -211,7 +219,7 @@ let config ={
             let value = event.target.value.trim();
             if(value !== ''){
                 event.target.style.borderColor = 'green';
-                event.target.nextElementSibling.textContent = '';
+                this.el.find('p.verification-p').html("");
             }else{
                 event.target.style.borderColor = 'red';
                 this.el.find('p.verification-p').html(tip);
@@ -239,7 +247,7 @@ let config ={
             this.actions.showManagerLogin();
         }).on('click','.login-btn',() => {
             this.actions.toLoginPage();
-        }).on('click','.register-btn',() => {
+        }).on('click','.register-page-btn',() => {
             this.actions.postRegister();
         }).on('click','.get-code',(event) => {
             this.actions.getVerificationCode(event);
@@ -257,6 +265,8 @@ let config ={
             this.actions.checkForm(event,"请填写手机号码","tel");
         }).on("blur","input.verification-code",(event) => {
             this.actions.checkVerification(event,"请填写验证码","verification-code");
+        }).on("click",".register-btn",() => {
+            this.actions.postRegister();
         })
     },
     beforeDestory:function () {

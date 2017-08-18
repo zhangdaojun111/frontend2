@@ -1,23 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html style="height: 100%">
 <head>
     <meta charset="UTF-8">
     <title>搜索结果</title>
 </head>
 
-<body>
+<body style="height: 100%">
 
 <script>
     window.config = {{window_config|safe}}
 </script>
 
-<div id="search-display-window"></div>
+<div id="search-display-window" style="height: 100%"></div>
 
 {% ifequal window_type 'develop'%}
-<!--<link rel="stylesheet" href="/client/static/css/vendors.css">-->
-<!--<link rel="stylesheet" href="/client/static/css/main.css">-->
-<!--<script type="text/javascript" src="/client/static/vendors.js"></script>-->
-<!--<script type="text/javascript" src="/client/static/main.js"></script>-->
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
 <script type="text/javascript" src="http://localhost:8080/scripts/resultDisplay.js"></script>
 {% else %}
