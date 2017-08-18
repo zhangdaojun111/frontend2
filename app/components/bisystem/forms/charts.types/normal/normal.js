@@ -34,7 +34,6 @@ let config = {
             this.MediatorDistribution(option);
         });
         this.el.on('click', '.save-btn', (event) => {
-            alert('hello');
             this.save();
         })
     },
@@ -294,6 +293,15 @@ export class FormNormalComponent extends BiBaseComponent{
             this.formGroup.ySelectedGroup.reload();
         };
     }
+    /**
+     * reset实例，当通过路由重新进入实例，清空所有数据
+     */
+    reset(flag) {
+        this.formGroup = {};
+        this.y = [];
+        this.y1 = [];
+        this.doubleY = null;
+    }
 
     /**
      * Mediator subscribe事件分配
@@ -354,7 +362,8 @@ export class FormNormalComponent extends BiBaseComponent{
      * 保存数据
      */
     save() {
-        const data  = this.formGroup;
+        const fields  = this.formGroup;
+        // Object.
         console.log(data);
     }
 }
