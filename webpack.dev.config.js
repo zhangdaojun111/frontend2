@@ -48,6 +48,7 @@ module.exports = {
         bimanager:path.resolve(APP_PATH, 'entrys/bimanager.js'),
         calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
         calendarSet: path.resolve(APP_PATH, 'entrys/calendar.set.js'),
+        calendarSetRemind: path.resolve(APP_PATH, 'entrys/popup/calendarSetRemind.js'),
         calendarCreate: path.resolve(APP_PATH, 'entrys/calendar.create.js'),
         main: path.resolve(APP_PATH, 'entrys/main.js'),
         register:path.resolve(APP_PATH, 'entrys/register.js'),
