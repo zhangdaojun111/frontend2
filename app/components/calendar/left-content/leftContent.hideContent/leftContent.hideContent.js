@@ -1,3 +1,7 @@
+/**
+ * Created by lipengfei.
+ * 日历隐藏表
+ */
 import Component from "../../../../lib/component";
 import template from './leftContent.hideContent.html';
 import './leftContent.hideContent.scss';
@@ -13,13 +17,15 @@ let config = {
     },
     afterRender: function() {
         this.el.css("padding","2px 10px 5px 10px");
+        let that = this;
         this.el.find("#show-type").attr("id","show-type-"+config.data.table_Id);
         this.el.find(".show-type-button").on('click',function () {
-            $(this).parent().parent("div").remove();
             config.data.show_type_ID = $(this).attr("id").split('-')[2];
             Mediator.emit('calendar-left:showRemindType',{data:config.data.show_type_ID});
             config.data.show_type_ID = "";
+            that.destroySelf();
         });
+
     },
 }
 class RightContentWorkFlow extends Component {

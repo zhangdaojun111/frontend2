@@ -1,3 +1,7 @@
+/**
+ * Created by lipengfei.
+ * 左侧小日历（已删除）
+ */
 import Component from "../../../../lib/component";
 import template from './left-calendar.html';
 import './left-calendar.scss';

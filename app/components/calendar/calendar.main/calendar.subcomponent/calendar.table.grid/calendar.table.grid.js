@@ -6,6 +6,7 @@ import template from './calendar.table.grid.html';
 import './calendar.table.grid.scss';
 
 import CalendarRemindTaskItem from './calendar.remind.task.item/calendar.remind.task.item';
+import Mediator from '../../../../../lib/mediator';
 
 let config = {
     template: template,
@@ -17,7 +18,6 @@ let config = {
 
     },
     afterRender: function() {
-
         if (this.data.type === 'day') {
             this.el.css({display: "inline-block", width: "calc(100% - 1px)", height: "100%"});
             $('.grid-content').css({'max-height': "840px", overflow: "auto"});
