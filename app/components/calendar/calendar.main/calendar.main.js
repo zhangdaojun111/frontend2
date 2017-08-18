@@ -689,24 +689,25 @@ let config = {
             }
         });
 
-        // Mediator.on('CalendarRemindTask: changeData', data => {
-        //     let params = data;
-        //     params['from_date'] = this.data.from_date;
-        //     params['to_date'] = this.data.to_date;
-        //     console.log(params);
-        //     CalendarService.getCalendarDrag(params).then(res => {
-        //         this.data.date2settings = res['calendar_data']['date2csids'];
-        //         this.data.calendarSettings = res['calendar_data']['id2data'];
-        //         this.data.tableid2name = res['calendar_data']['tableid2name'];
-        //         this.data.fieldInfos = res['calendar_data']['field_infos'];
-        //         if(this.data.calendarContent !== 'schedule') {
-        //             this.actions.monthDataTogether();
-        //         }else {
-        //             this.actions.makeScheduleData(data.from_date, data.to_date);
-        //         }
-        //         this.actions.getDataCount();
-        //     })
-        // });
+        Mediator.on('CalendarRemindTask: changeData', data => {
+            let params = data;
+            console.log(params);
+            params['from_date'] = this.data.from_date;
+            params['to_date'] = this.data.to_date;
+            console.log(params);
+            CalendarService.getCalendarDrag(params).then(res => {
+                this.data.date2settings = res['calendar_data']['date2csids'];
+                this.data.calendarSettings = res['calendar_data']['id2data'];
+                this.data.tableid2name = res['calendar_data']['tableid2name'];
+                this.data.fieldInfos = res['calendar_data']['field_infos'];
+                if(this.data.calendarContent !== 'schedule') {
+                    this.actions.monthDataTogether();
+                }else {
+                    this.actions.makeScheduleData(data.from_date, data.to_date);
+                }
+                this.actions.getDataCount();
+            })
+        });
 
     },
     beforeDestory: function () {

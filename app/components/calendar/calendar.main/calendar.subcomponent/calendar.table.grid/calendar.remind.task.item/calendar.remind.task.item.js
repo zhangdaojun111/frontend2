@@ -16,6 +16,8 @@ let config = {
         remindTaskItemData:{},
         isFinishedTask:false,
         isWaitCheck:true,
+        sValue: '',
+        sLabel: '',
     },
     actions: {
 
@@ -36,7 +38,7 @@ let config = {
                         type: 1,
                         data: {},
                     };
-                    params['data'][this.data.remindTaskItemData['selectField']] = newValue;
+                    params['data'][this.data.remindTaskItemData['selectField']] = this.data.remindTaskItemData['data3show'][0][0]['selectValue'];
                     params['data'] = JSON.stringify(params['data']);
                     Mediator.emit('CalendarRemindTask: changeData', params);
                 }
