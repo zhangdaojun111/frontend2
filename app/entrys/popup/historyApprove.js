@@ -4,6 +4,6 @@ $(document).ready(function(){
     let obj = {
         key: window.config.key
     }
-    let historyApprove = new historyApprove(obj);
-    historyApprove.render($('#historyApprove'));
+    let hyApprove = new historyApprove(obj);
+    hyApprove.render($('#historyApprove'));
 })

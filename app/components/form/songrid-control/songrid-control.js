@@ -1,3 +1,9 @@
+/**
+ *@author yudeping
+ *子表控件
+ */
+
+
 import Component from '../../../lib/component'
 import Mediator from '../../../lib/mediator';
 import DataTableAgGrid from '../../dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
@@ -13,9 +19,9 @@ let config={
         },300));
         let config={
             tableId:this.data.value,
-            parentTableId:this.data.parent_table_id,
+            parentTableId:this.data.tableId,
             parentTempId:this.data.temp_id,
-            rowId:this.data.parent_temp_id,
+            rowId:this.data.parent_temp_id || '',
             tableType:'child',
             viewMode:this.data.is_view==0?'EditChild':'ViewChild',
         }
@@ -23,7 +29,7 @@ let config={
         this.append(dataGrid,this.el.find('.songGrid'));
         Mediator.subscribe('form:songridDefaultData:'+this.data.tableId,(res)=>{
             if(res == _this.data.value){
-                dataGrid.reload();
+                dataGrid.actions.getGridData();
             }
         })
     },

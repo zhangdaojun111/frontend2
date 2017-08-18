@@ -1,3 +1,9 @@
+/**
+ *@author yudeping
+ *下拉框控件
+ */
+
+
 import Component from '../../../lib/component'
 import Mediator from '../../../lib/mediator';
 import template from './select-control.html'

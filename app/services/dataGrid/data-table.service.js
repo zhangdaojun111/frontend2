@@ -52,5 +52,9 @@ export const dataTableService = {
     //获取在途数据
     getInProcessNum: function ( param ) {
         return HTTP.post( 'get_on_passage_count',param )
+    },
+    //修改历史数据
+    getHistoryApproveData: function ( data ) {
+        return HTTP.post( 'get_update_history_data',data )
     }
 }

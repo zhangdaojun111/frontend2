@@ -1,3 +1,8 @@
+/**
+ *@author yudeping
+ *历史值
+ */
+
 import template from './history.html';
 let css = `.history td{
                   line-height: 1.42857143;

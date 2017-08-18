@@ -1,3 +1,8 @@
+/**
+ *@author yudeping
+ *创建默认表单或者定制表单
+ */
+
 import userHtml from  './talbe-form/form-version-table-user.html';
 import departmentHtml from  './talbe-form/form-version-talbe-department.html';
 import {FormService} from "../../../services/formService/formService"

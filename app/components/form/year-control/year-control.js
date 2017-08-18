@@ -1,3 +1,8 @@
+/**
+ *@author yudeping
+ *年份控件
+ */
+
 import Component from '../../../lib/component'
 import {AutoSelect} from "../../util/autoSelect/autoSelect"
 import {FormService} from "../../../services/formService/formService";

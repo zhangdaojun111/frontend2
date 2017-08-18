@@ -1,3 +1,9 @@
+/**
+ *@author yudeping
+ *多选控件
+ */
+
+
 import Component from '../../../lib/component'
 import Mediator from '../../../lib/mediator'
 import {AutoSelect} from '../../util/autoSelect/autoSelect'
