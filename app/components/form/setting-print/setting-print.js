@@ -1,3 +1,8 @@
+/**
+ *@author yudeping
+ *打印页眉定义
+ */
+
 import template from './setting-print.html';
 let css = `
 .wrap{

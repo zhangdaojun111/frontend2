@@ -1,3 +1,8 @@
+/**
+ *@author yudeping
+ *表单主要逻辑
+ */
+
 import Component from '../../../lib/component';
 import MSG from '../../../lib/msgbox';
 import './base-form.scss';
