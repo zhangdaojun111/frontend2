@@ -201,18 +201,14 @@ let config = {
                                 appendChecked = false;
                             }
                         })
-                        PMAPI.sendToParent( {
-                            key: this.data.key,
-                            type: PMENUM.close_dialog,
-                            data: {
-                                type:'temporaryQuery',
-                                appendChecked:appendChecked,
-                                saveCommonQuery:this.saveCommonQuery,
-                                id:searchId,
-                                name:searchName,
-                                value: this.data.searchInputList
-                            }
-                        })
+                        PMAPI.closeIframeDialog(window.config.key, {
+                            type:'temporaryQuery',
+                            appendChecked:appendChecked,
+                            saveCommonQuery:this.saveCommonQuery,
+                            id:searchId,
+                            name:searchName,
+                            value: this.data.searchInputList
+                        });
                     }
                 } else {
                     msgBox.alert('运算括号出错')
@@ -233,7 +229,6 @@ let config = {
                     if(!this.isEdit) {
                         this.actions.saveCommonQuery(data.value);
                     } else {
-                        debugger
                         this.actions.deleteCommonQuery(this.id);
                         this.actions.saveCommonQuery(data.value);
                     }
@@ -392,7 +387,7 @@ let config = {
 
     },
     afterRender: function() {
-        PMAPI.subscribe(PMENUM.open_iframe_params, (res)=>{
+        PMAPI.getIframeParams(window.config.key).then((res) => {
             for (let item in res.data.d) {
                 this.data[item] = res.data.d[item]
             }
@@ -409,21 +404,4 @@ class expertSearch extends Component {
         super(config)
     }
 }
-// export default {
-//     expertSearch:expertSearch,
-//     show: function (d) {
-//         let component = new expertSearch(d);
-//         let el = $('<div>').appendTo(document.body);
-//         component.render(el);
-//         el.dialog({
-//             title: '高级查询',
-//             width: 1000,
-//             height: 600,
-//             close: function () {
-//                 $(this).dialog('destroy');
-//                 component.destroySelf();
-//             }
-//         });
-//     }
-// }
 export default expertSearch
