@@ -144,7 +144,10 @@ Mediator.subscribe('workflow:submit', (res)=> {
         })
     }
 });
-
+let temp_id=``;
+Mediator.subscribe('workFlow:record_info', (res) => {
+    temp_id=res.data.temp_id.value;
+});
 
 
 //订阅收藏常用workflow
@@ -174,12 +177,11 @@ const approveWorkflow=(para)=>{
 }
 
 //Grid
-
-Mediator.subscribe('workflow:choose', function (info) {
+$('#multiFlow').on('click',()=>{
     (async function () {
         return workflowService.getGridinfo({
-            table_id:info.tableid,
-            formId:info.formid,
+            table_id:wfObj.tableid,
+            formId:wfObj.formid,
             is_view:0,
             parent_table_id:null,
             parent_real_id:null,
@@ -187,8 +189,9 @@ Mediator.subscribe('workflow:choose', function (info) {
 
         });
     })().then(function (res) {
+        console.log(temp_id);
         let AgGrid=new Grid({
-            parentTempId:'',
+            parentTempId:temp_id,
             tableId:res.table_id,
             viewMode:"createBatch"
         });
@@ -197,5 +200,4 @@ Mediator.subscribe('workflow:choose', function (info) {
         };
         AgGrid.render($("#J-aggrid"));
     })
-
-});
+})
