@@ -107,13 +107,15 @@ let config = {
                     }
                 }
             }
-            let save = [];
             for( let s of state ){
                 if( fieldArr.indexOf( s.colId )==-1 ){
                     arr.unshift( s );
                 }
-                if( this.data.dragFields.indexOf( s.colId )!=-1 ){
-                    save.push( s.colId )
+            }
+            let save = [];
+            for( let a of arr ){
+                if( this.data.dragFields.indexOf( a.colId )!=-1 ){
+                    save.push( a.colId )
                 }
             }
             console.log( "列排序数据保存" )

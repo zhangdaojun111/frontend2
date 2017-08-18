@@ -61,6 +61,7 @@ export const IframeInstance = new Component({
         count: 0,
         sort: [],
         focus: null,
+        hideFlag:false,
     },
     actions: {
         openIframe: function (id, url, name) {
@@ -141,7 +142,6 @@ export const IframeInstance = new Component({
         closeAllIframes:function () {
             let temp_arr = _.defaultsDeep([],this.data.sort);
             for(let k of temp_arr){
-                console.log(k);
                 this.actions.closeIframe(k);
             }
         },
@@ -155,7 +155,13 @@ export const IframeInstance = new Component({
         },
         showTabsPopup:function () {
             this.actions.initTabList(this.data.sort);
-            this.el.find('.tab-list').slideDown();
+            this.el.find('.tab-list').show();
+            window.clearTimeout(this.data.timer)
+        },
+        hideTabsPopup(){
+            this.data.timer = window.setTimeout(() => {
+                this.el.find('.tab-list').hide();
+            }, 500);
         },
         initTabList:function (data) {
             let names = [];
@@ -169,22 +175,27 @@ export const IframeInstance = new Component({
             for(let j of names){
                 let $li = $("<li class='tab-item'>");
                 $li.html(j);
-                $parent.prepend($li);
+                $parent.append($li);
             }
-            // let $downIcon = $("<li class='drop-down-icon'>");
-            // $parent.append($downIcon);
+            // let $li = $('<li><i class="drop-down-icon"></i></li>');
+            // $parent.append($li);
         },
         closeFocusTab:function () {
-            this.actions.closeIframe(this.data.focus.id);
+            if(this.data.focus){
+                this.actions.closeIframe(this.data.focus.id);
+            }
         },
         controlTabs:function (event) {
             let name = event.target.textContent;
             if(name === '关闭标签'){
                 this.actions.closeFocusTab();
+                this.actions.initTabList(this.data.sort);
             }else if(name === '关闭全部标签'){
                 this.actions.closeAllIframes();
+                this.actions.initTabList(this.data.sort);
             }else if(name === '关闭其他标签'){
                 this.actions.closeOtherIframes();
+                this.actions.initTabList(this.data.sort);
             }else{
                 //选中标签获得焦点
                 let id = this.actions.getTabIdByName(name,this.data.hash);
@@ -237,19 +248,23 @@ export const IframeInstance = new Component({
 
         this.el.on('click','.view-save',function () {
             SaveView.show(that.data.sort);
-        }).on('mouseenter','.popup-btn',() => {
+        }).on('mouseenter','.view-popup',() => {
+            console.log("enter");
             this.actions.showTabsPopup();
-        }).on('mouseleave','.popup-btn',() => {
-            this.el.find('.tab-list').slideUp();
-        }).on('click','.drop-up-icon',() => {
-            this.el.find('.tab-list').slideUp();
-        }).on('click','.drop-down-icon',() => {
-            this.el.find('.tab-list').slideUp();
+            // }).on('click','.view-popup',(event) => {
+            //     event.stopPropagation();
+            // }).on('click','.drop-up-icon',() => {
+            //     this.el.find('.tab-list').hideTabsPopup();
+            // }).on('click','.drop-down-icon',() => {
+            //     this.el.find('.tab-list').hideTabsPopup();
         }).on('click','.tab-list',(event) => {
             this.actions.controlTabs(event);
+        }).on('mouseleave','.view-popup',() => {
+            console.log("leave");
+            this.actions.hideTabsPopup();
         })
     },
-    
+
     firstAfterRender: function () {
         Mediator.on('menu:item:openiframe', (data) => {
             this.actions.openIframe(data.id, data.url, data.name)
@@ -277,6 +292,7 @@ export const IframeInstance = new Component({
         Mediator.on('saveview:displayview', (data) => {
             this.actions.closeAllIframes();  //先关闭所有标签，再打开view中的标签
             for(let k of data){
+                console.log(k);
                 this.actions.openIframe(k.id,k.url,k.name);
             }
         })

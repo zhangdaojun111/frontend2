@@ -3,6 +3,8 @@ import template from './workflow.html';
 import './workflow.scss';
 import msgBox from '../../../lib/msgbox';
 import Mediator from '../../../lib/mediator';
+import {workflowService} from '../../../services/workflow/workflow.service';
+import jsplumb from 'jsplumb';
 
 let config = {
     template: template,
@@ -481,6 +483,20 @@ let WorkFlow={
     },
     requiredFields(e){
         this.WorkFlow.actions.requiredFields(e);
+    },
+    createFlow(o){
+        (async function () {
+            return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
+                flow_id:o.flow_id
+            }});
+        })()
+        .then(msg=>{
+            console.log(msg.data[0]);
+            let component = new WF(msg.data[0]);
+            this.WorkFlow=component;
+            let el = $(o.el);
+            component.render(el);
+        })
     }
 };
 export default WorkFlow;

@@ -1,3 +1,8 @@
+/**
+ * @author zhaoyan
+ * 打开代理设置界面
+ */
+
 import Component from '../../../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
@@ -42,12 +47,12 @@ let config = {
                         throw error("数据加载失败");
                     }
                 }).done(() => {
-                    this.actions.initWorkflow();
-                    this.actions.initAgentList();
-                }).catch((err) => {
-                    msgbox.alert("数据加载失败");
-                    return false;
-                });
+                this.actions.initWorkflow();
+                this.actions.initAgentList();
+            }).catch((err) => {
+                msgbox.alert("数据加载失败");
+                return false;
+            });
         },
         initWorkflow:function () {
             this.actions.formatOriginData(this.formatData);
@@ -99,7 +104,7 @@ let config = {
                 multiSelect: false,
                 editable: true,
                 onSelect: function (choosed) {
-                    console.log(that,choosed);
+                    console.log(choosed);
                     that.actions.setAgentId(choosed);
                 }
             });
@@ -205,6 +210,7 @@ let config = {
 
             UserInfoService.saveAgentData(data)
                 .done((result) => {
+                    console.log(result);
                     if(result.success === 1){
                         if(result.agent_state === 0){
                             msgbox.alert("您所选择的代理人已离职，请重新选择");
@@ -223,8 +229,8 @@ let config = {
         this.actions.initData();
         this.el.on("click","span.save-proxy",() => {
             this.actions.saveAgent();
-        // }).on("input","input[name=name_input]",(event) => {
-        //     this.actions.setAgentId(event);
+            // }).on("input","input[name=name_input]",(event) => {
+            //     this.actions.setAgentId(event);
         }).on("click","input.close-radio",(event) => {
             this.actions.closeSwitch(event);
         }).on("click","input.open-radio",(event) => {

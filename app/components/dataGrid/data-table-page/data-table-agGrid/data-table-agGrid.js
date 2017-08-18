@@ -25,7 +25,7 @@ import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 let config = {
     template: template,
     data: {
-        tableId: '5318_EHFuJD7Ae76c6GMPtzdiWH',
+        tableId: '',
         formId: '',
         tableType: '',
         parentTableId: '',
@@ -99,6 +99,8 @@ let config = {
         customColumnsFields: [],
         //搜索参数
         filterParam: {expertFilter:[], filter: [], is_filter: 0, common_filter_id: '', common_filter_name: ''},
+        //上传一搜索参数
+        filterText: '',
         //是否第一次渲染agGrid
         firstRender: true,
         //权限
@@ -132,7 +134,9 @@ let config = {
         //对应关系选择的数据
         correspondenceSelectedList: [],
         //对应关系选择的数据
-        correspondenceSelectedData: []
+        correspondenceSelectedData: [],
+        //表单对应关系字段
+        correspondenceField: ''
     },
     //生成的表头数据
     columnDefs: [],
@@ -219,6 +223,11 @@ let config = {
                         return;
                     }
                     let headClass = fieldTypeService.numOrText(data.data["real_type"]) ? 'header-style-r' : 'header-style-l';
+
+                    //添加表头提醒
+                    if( this.data.headerColor[data.data["field"]] != undefined ){
+                        headClass+=(' '+this.data.headerColor[data.data["field"]])
+                    }
 
                     //解决后台配置字段之后类排序没有该字段导致该列不显示的BUG
                     if (this.data.orderFields.indexOf(data.data["field"]) == -1) {
@@ -762,6 +771,7 @@ let config = {
                 this.actions.setPreference( res[0] );
                 this.data.fieldsData = res[1].rows || [];
                 this.data.permission = res[1].permission;
+                this.data.headerColor = dgcService.createHeaderStyle( this.data.tableId,res[1].field_color );
                 //初始化按钮
                 this.actions.renderBtn();
                 //创建高级查询需要字段数据
@@ -867,8 +877,10 @@ let config = {
                     this.actions.setCorrespondenceSelect();
                 }
                 if( this.data.pagination ){
-                    this.pagination.actions.resetPagination( this.data.total );
+                    let currentPage = parseInt( Number( this.data.first )/Number( this.data.rows ) );
+                    this.pagination.actions.setPagination( this.data.total,currentPage + 1 );
                 }
+                console.log( '请求数据返回get_table_data' );
                 this.actions.sortWay();
             })
             HTTP.flush();
@@ -920,7 +932,9 @@ let config = {
             HTTP.flush();
         },
         //对应关系保存成功(通知表单刷新用)
-        correspondenceSaved: function () {},
+        correspondenceSaved: function () {
+            Mediator.publish( 'correspondenceSaved:' + this.data.correspondenceField + ':' + this.data.tableId, true );
+        },
         //对应关系勾选
         setCorrespondenceSelect: function () {
             this.data.correspondenceSelectedData = [];
@@ -1050,6 +1064,13 @@ let config = {
             }
             json = dgcService.returnQueryParams( json );
             this.data.filterParam.is_filter = 1;
+            if( json.filter && json.filter != '' ){
+                if( this.data.filterText != json.filter ){
+                    this.data.first = 0;
+                    json.first = 0;
+                    this.data.filterText = json.filter;
+                }
+            }
             return json;
         },
         //渲染agGrid
@@ -1147,8 +1168,8 @@ let config = {
                 exportSetting.data[o] = obj[o];
             }
             PMAPI.openDialogByComponent(exportSetting, {
-                width: 380,
-                height: 220,
+                width: 600,
+                height: 360,
                 title: '导出数据'
             }).then((data) => {
 
@@ -1216,7 +1237,7 @@ let config = {
         //分页刷新操作
         refreshData: function ( data ) {
             this.data.rows = data.rows;
-            this.data.first = data.firstRow;
+            this.data.first = data.first;
             this.actions.getGridData();
         },
         //根据偏好返回agGrid sate
@@ -1434,7 +1455,8 @@ let config = {
                         parentTableId: this.data.parentTableId,
                         parentRealId: this.data.parentRealId,
                         parentTempId: this.data.parentTempId,
-                        isBatch: this.data.viewMode == 'createBatch'?1:0
+                        isBatch: this.data.viewMode == 'createBatch'?1:0,
+                        isSuperUser: window.config.is_superuser || 0
                     }
                     let url = dgcService.returnIframeUrl( '/iframe/dataImport/',json );
                     let winTitle = '导入数据';
@@ -1479,7 +1501,7 @@ let config = {
                         parent_record_id: this.data.parentRecordId,
                         btnType: 'new'
                     };
-                    let url = dgcService.returnIframeUrl( '/form/index/',obj );
+                    let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
 
                     let title = '新增'
                     this.actions.openSourceDataGrid( url,title );
@@ -1820,7 +1842,7 @@ let config = {
                     real_id: data.data._id,
                     btnType: 'view',is_view:1
                 };
-                let url = dgcService.returnIframeUrl( '/form/index/',obj );
+                let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
                 this.actions.openSourceDataGrid( url,title );
             }
@@ -1834,12 +1856,21 @@ let config = {
                     parent_record_id: this.data.parentRecordId,
                     real_id: data.data._id,
                     btnType: 'edit' };
-                let url = dgcService.returnIframeUrl( '/form/index/',obj );
+                let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '编辑'
                 this.actions.openSourceDataGrid( url,title );
             }
             if( data.event.srcElement.className == 'gridHistory' ){
                 console.log( '历史' )
+                let obj = {table_id: this.data.tableId,real_id: data.data._id,}
+                PMAPI.openDialogByIframe(`/iframe/historyApprove/`,{
+                    width:1000,
+                    height:600,
+                    title:`历史`,
+                    modal:true
+                },{obj}).then(res=>{
+
+                })
             }
         },
         //行双击
@@ -1855,7 +1886,7 @@ let config = {
                 real_id: data.data._id,
                 btnType: 'view',is_view:1
             };
-            let url = dgcService.returnIframeUrl( '/form/index/',obj );
+            let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
             let title = '查看'
             this.actions.openSourceDataGrid( url,title );
         },

@@ -44,12 +44,32 @@
       width: 200px;
       justify-content: flex-end;
       .printBtn{
+        &>i{
+          display: inline-block;
+          float: left;
+          margin-right: 5px;
+        }
+        width: 52px;
+        line-height: 16px;
         margin-left: 5px;
+        cursor: pointer;
+      }
+      .gz{
+        margin-right: 15px;
+        height: 16px;
+        width: 16px;
+        border-radius: 50%;
+        color: red;
+        text-align: center;
+        line-height:16px;
+        border: 1px solid red;
+        cursor: pointer;
       }
     }
     .approval-control{
       margin-left: 10px;
       .approval-btn{
+        cursor: pointer;
         border-radius: 4px;
         height: 24px;
         line-height: 24px;
@@ -65,6 +85,7 @@
         }
       }
       .approval-btn-sel{
+        cursor: pointer;
         width: 70px;
         height: 24px;
         line-height: 24px;

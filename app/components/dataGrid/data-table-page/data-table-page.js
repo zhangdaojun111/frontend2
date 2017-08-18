@@ -1,8 +1,9 @@
 import Component from "../../../lib/component";
 import template from './data-table-page.html';
 import './data-table-page.scss';
-
+import {HTTP} from "../../../lib/http";
 import dataTableAgGrid from "../data-table-page/data-table-agGrid/data-table-agGrid"
+import {dataTableService} from "../../../services/dataGrid/data-table.service"
 let config = {
     template: template,
     data: {
@@ -10,7 +11,15 @@ let config = {
         tableName:'',
         isRenderIntrain: false
     },
-    actions: {},
+    actions: {
+        //获取在途数据
+        getInProcessNum: function () {
+            dataTableService.getInProcessNum( {table_id: this.data.tableId} ).then( res=>{
+                this.el.find( '.inProcessNum' )[0].innerHTML = res.total || 0;
+            } )
+            HTTP.flush();
+        }
+    },
     afterRender: function (){
         let json = {
             tableId: this.data.tableId,
@@ -45,6 +54,8 @@ let config = {
                 this.data.isRenderIntrain = true;
             }
         } )
+        //获取在途数据
+        this.actions.getInProcessNum();
     }
 };
 
