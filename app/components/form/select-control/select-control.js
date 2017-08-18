@@ -23,7 +23,7 @@ let config={
         }
         this.data.isInit=false;
 
-        let _this=this;
+        //let _this=this;
 
         Mediator.subscribe('form:changeOption:'+_this.data.tableId,function(res){
             if( _this.data.dfield && res == _this.data.dfield ){

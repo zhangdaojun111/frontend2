@@ -1541,10 +1541,37 @@ let config={
             })
         })
         //固定按钮
-        _this.el.on('scroll','.wrap',function(){
-            console.log('scroll');
-            _this.el.find('.ui-btn-box').css({'bottom':(-1*$('.wrap').get(0).scrollTop +' px'),'width':'calc(100% + '+$('.wrap').get(0).scrollLeft+'px)'});
-        })
+        // _this.el.on('scroll','.wrap',function(){
+        //     console.log('scroll');
+        //     _this.el.find('.ui-btn-box').css({'bottom':(-1*$('.wrap').get(0).scrollTop +' px'),'width':'calc(100% + '+$('.wrap').get(0).scrollLeft+'px)'});
+        // })
+        if( _this.el.find('table').hasClass('form-version-table-user') || _this.el.find('table').hasClass('form-version-table-department') ){
+            _this.el.find('table').parents('#detail-form').addClass('detail-form-style');
+            _this.el.find('table>tbody').append('<div class="more">展开更多</div>')
+
+
+            _this.el.find(".overflow").on("scroll",function () {
+                let overflowHight = _this.el.find('.overflow').scrollTop();
+                if(overflowHight>=50){
+                    _this.el.find('.more').show();
+                }else{
+                    _this.el.find('.more').hide();
+                }
+            })
+            _this.el.find('.more').on('click',function () {
+
+                _this.el.find('.more').hide();
+                _this.el.find('.overflow').css("overflow-y","hidden");
+                _this.el.find('table').css({'overflow-y':'auto','margin-top':'55px'});
+            })
+        }
+        //table的展示高度
+        //let tableHight = _this.el.find('table').height()+'px';
+        //table的实际高度
+        //let tableActualHight = _this.el.find('table')[0].scrollHeight+'px';
+
+
+
     },
     beforeDestory(){
         Mediator.removeAll('form:changeValue:'+this.data.tableId);
