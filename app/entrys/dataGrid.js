@@ -4,7 +4,4 @@ let json = {
     tableName:window.config.table_name
 }
 let DataTablePage = new dataTablePage(json);
-
 DataTablePage.render($('#DataTablePage'));
-
-

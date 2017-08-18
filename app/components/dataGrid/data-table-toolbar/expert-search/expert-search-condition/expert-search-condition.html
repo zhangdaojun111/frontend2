@@ -8,10 +8,9 @@
             <option value="$and">并且</option>
             <option value="$or">或者</option>
         </select>
-        <select class="condition-search-select left-select">
-            <option value="0">--</option>
-            <option value="(">(</option>
-        </select>
+        <div class="condition-search-choice left-choice">
+            <p>(</p>
+        </div>
 
         <div class="condition-search-box">
             <input class="condition-search-box-input" placeholder="请选择" readonly="readonly" type="text">
@@ -27,12 +26,15 @@
             <option value="$ne">不等于</option>
         </select>
         <input class="condition-search-input">
-        <select class="condition-search-select right-select">
-            <option value="0">--</option>
-            <option value=")">)</option>
-        </select>
-        <span class="delete"></span>
-        <span class="add"></span>
+        <!--<select class="condition-search-select right-select">-->
+            <!--<option value="0">&#45;&#45;</option>-->
+            <!--<option value=")">)</option>-->
+        <!--</select>-->
+        <div class="condition-search-choice right-choice">
+            <p>)</p>
+        </div>
+        <span class="condition-search-delete"></span>
+        <span class="condition-search-add"></span>
 
     </div>
 </div>

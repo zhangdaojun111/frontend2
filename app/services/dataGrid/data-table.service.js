@@ -48,5 +48,13 @@ export const dataTableService = {
     //对应关系保存
     saveForCorrespondence: function ( param ) {
         return HTTP.post( 'update_correspondence',param )
+    },
+    //获取在途数据
+    getInProcessNum: function ( param ) {
+        return HTTP.post( 'get_on_passage_count',param )
+    },
+    //修改历史数据
+    getHistoryApproveData: function ( data ) {
+        return HTTP.post( 'get_update_history_data',data )
     }
 }

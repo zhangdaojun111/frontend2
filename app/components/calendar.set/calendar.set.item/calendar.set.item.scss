@@ -1,6 +1,9 @@
 @import "../calendar.set";
 .singleRow {
     width: 100%;
+    .table-item-checkbox{
+        width:100px !important;
+    }
     .set-table-item{
         border-top: 1px solid #C1CACA;
         padding: 10px 0px;
@@ -12,11 +15,30 @@
         select {
             width: 85%;
             height: 26px;
-            border-radius: 5px;
         }
     }
     .multi-select-item{
-        width:200px !important;
+        width:300px !important;
+        .popup {
+            display: none;
+            width: 200px;
+            position: absolute;
+            z-index: 100 !important;
+            background-color: white !important;
+            padding-left: 0px !important;
+            margin: 0px !important;
+            height: auto!important;
+            max-height: 300px!important;
+            overflow: auto !important;
+            li {
+                margin-left: 0px;
+                list-style-type: none !important;
+                label{
+                    text-align: left;
+                overflow:hidden;
+                }
+            }
+        }
     }
     .set-remind-method {
         cursor: pointer;
@@ -26,4 +48,24 @@
         word-break: break-all;
         word-wrap: break-word;
     }
+    .unclick{
+        cursor:not-allowed !important;
+    }
+
 }
+//.popup {
+//    z-index: 100 !important;
+//    background-color: white !important;
+//    padding-left: 0px !important;
+//    margin: 0px !important;
+//    height: auto!important;
+//    max-height: 300px!important;
+//    overflow: auto !important;
+//    li {
+//        margin-left: 0px;
+//        list-style-type: none !important;
+//        label{
+//            text-align: left;
+//        }
+//    }
+//}

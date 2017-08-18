@@ -1,3 +1,7 @@
+/**
+ * @author zhaoyan
+ * 打开个人设置界面
+ */
 import Component from '../../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
@@ -18,8 +22,8 @@ function getData(component_instance) {
         avatar_content:window.config.sysConfig.userInfo.avatar_content,
         name:window.config.sysConfig.userInfo.name,
         username: window.config.sysConfig.userInfo.username,
-        user_department:window.config.sysConfig.userInfo.user_department,
-        user_position:window.config.sysConfig.userInfo.user_job,
+        department:window.config.sysConfig.userInfo.user_department,
+        position:window.config.sysConfig.userInfo.user_job,
         user_email:window.config.sysConfig.userInfo.email,
         user_phone:window.config.sysConfig.userInfo.tel,
         otherLoginVisible:window.config.sysConfig.userInfo.is_superuser
@@ -170,10 +174,10 @@ let config = {
                 // .css("left",para.left)
                 // .css("top",para.top)
         },
-        // clearLocalStorage:function(){
-        //     window.localStorage.clear();
-        //     $(window).attr("location","/login");
-        // },
+        clearLocalStorage:function(){
+            window.localStorage.clear();
+            $(window).attr("location","/login");
+        },
         resetAvatar:function () {
             let $img = this.el.find("img.user-avatar");
             if($img.length === 0){
@@ -208,8 +212,8 @@ let config = {
             this.actions.editTel();
         }).on("blur","input.phone-info",() => {            //保存电话
             this.actions.saveEdit();
-        // }).on("click",".clear-storage-btn",() => {          //清除缓存
-        //     this.actions.clearLocalStorage();
+        }).on("click",".clear-storage-btn",() => {          //清除缓存
+            this.actions.clearLocalStorage();
         }).on("click",".cancel-btn",() => {           //取消编辑
             this.actions.cancelEdit();
         }).on("click",".save-btn",() => {          //保存

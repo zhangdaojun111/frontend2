@@ -1,0 +1,36 @@
+
+.component-post-message {
+    .section {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        .label-out {
+            width: 200px;
+            display: block;
+            text-align: center;
+        }
+        .inputs {
+            flex-grow: 1;
+            display: flex;
+            .text {
+
+            }
+            .tree {
+                width: 40%;
+                height: 300px;
+                overflow: auto;
+            }
+            .users {
+                width: 40%;
+                height: 300px;
+                overflow: auto;
+            }
+        }
+        &.prepare-time {
+            display: none;
+        }
+    }
+}

@@ -1,16 +1,17 @@
 <div class="signature" style="display:none">
     <div class="seal">
         <div  class="add-seal">
-            <div class="add ">
+            <div class="add">
                  <input  type="file"  class="img-file J_add" />
             </div>
-            <p>仅支持png格式，请上传透明低的图片</p>
+            <p>添加签名</p>
+            <p class="seal-tip">(仅支持png格式，请上传透明低的图片)</p>
         </div>
         <div class="seal-img">
             <ul class="ul-img J_ul-img">
                 {{#each url}}
-                    <li class="li-img">
-                        <span class="J_delImg" id="{{this.id}}">X</span>
+                    <li class="li-img clearfix">
+                        <span class="J_delImg delImg" id="{{this.id}}">X</span>
                         <img src="{{this.url}}" class="add-img" data-id="{{this.id}}" />
                     </li>
                 {{/each}}
@@ -20,7 +21,7 @@
     </div>
     <div class="signatureMock">
         <!--<img class="dragimg J_dragimg"/>-->
-        <div class="dragimg J_dragimg" style="background-size:50px 50px;"></div>
+        <div class="dragimg J_dragimg"></div>
         <div class="fromClone"></div>
     </div>
 </div>

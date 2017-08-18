@@ -1,7 +1,7 @@
 .auto-select-component {
     position: relative;
+    background-color: #fff;
     input.text {
-        border: 0 none;
         width: 100%;
         border: 1px solid #ddd;
         height: 30px;
@@ -16,9 +16,6 @@
         overflow: auto;
         box-sizing: border-box;
         border: 1px solid #ddd;
-        user-select: none;
-        background: #fff;
-        z-index: 100;
         li {
             height: 30px;
             line-height: 30px;

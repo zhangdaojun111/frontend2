@@ -5,22 +5,24 @@ import 'jquery-ui/ui/widgets/tooltip';
 import Mediator from '../../../lib/mediator';
 import msgbox from '../../../lib/msgbox';
 import OtherLogin from "../login-by-other/login-by-other";
-import {GlobalSearch} from "../global-search/global-search"
 import {systemMessageUtil} from '../system-message/system-message';
 import {SysSetting} from "../system-setting/system-setting"
+import {postMessageUtil} from '../post-message/post-message';
+import {GlobalSearch} from '../global-search/global-search';
 
 let config = {
     template: template,
     data: {
         asideSize: 'full',
 
-        homeVisible: true,
-        calendarVisible: true,
-        biVisible: true,
+        // homeVisible: true,
+        // calendarVisible: true,
+        // biVisible: true,
 
-        // calendarVisible: window.config.sysConfig.logic_config.use_canlendar,
-        // biVisible: window.config.sysConfig.logic_config.use_bi,
-        // imVisible: window.config.sysConfig.logic_config.use_im,
+        postMessageVisible: window.config.sysConfig.userInfo.is_superuser.toString() === "1",
+        calendarVisible: window.config.sysConfig.logic_config.use_calendar.toString() === "1",
+        biVisible: window.config.sysConfig.logic_config.use_bi.toString() === "1",
+        imVisible: window.config.sysConfig.logic_config.use_im.toString() === "1",
     },
     actions: {
         setSizeToFull: function () {
@@ -78,7 +80,11 @@ let config = {
             let component = new GlobalSearch();
             let $container = this.el.find(".global-search");
             component.render($container);
+        },
+        openPostMessageDialog: function () {
+            postMessageUtil.show();
         }
+
     },
 
     afterRender: function () {
@@ -129,6 +135,8 @@ let config = {
             this.actions.openHome();
         }).on('click', '.message', () => {
             this.actions.openMessageDialog();
+        }).on('click', '.message-push', () => {
+            this.actions.openPostMessageDialog();
         });
         Mediator.on('socket:online_user_num', that.actions.refreshOnlineNum);
         Mediator.on('socket:personal_message', this.actions.showMessageUnread);

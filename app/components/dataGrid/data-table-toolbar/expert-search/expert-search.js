@@ -12,6 +12,7 @@ import './expert-search.scss';
 
 let config = {
     template: template,
+    num:1,
     ulChecked: true,
     inputValue: null,
     radioId: 0,
@@ -62,8 +63,8 @@ let config = {
             this.data.searchInputAry.push(epCondition.data);
             this.el.find('.condition-search-item').css({'paddingLeft':'83px','borderTop':'1px solid #e4e4e4'});
             this.el.find('.condition-search-select.radio').css('display','none');
-            this.el.find('.delete').css('visibility','hidden');
-            this.el.find('.add').css('display','inline-block');
+            this.el.find('.condition-search-delete').css('visibility','hidden');
+            this.el.find('.condition-search-add').css('display','inline-block');
         },
         // 获取查询数据
         submitData: function (name){
@@ -95,9 +96,17 @@ let config = {
                 } else {
                     obj['cond']['keyword'] = this.el.find('.condition-search-input').eq(i).val();
                 }
-                obj['cond']['leftBracket'] = this.el.find('.condition-search-select.left-select').eq(i).val();
+                if(this.el.find('.condition-search-choice.left-choice').eq(i).hasClass('active')){
+                    obj['cond']['leftBracket'] = '('
+                } else {
+                    obj['cond']['leftBracket'] = '0'
+                }
+                if(this.el.find('.condition-search-choice.right-choice').eq(i).hasClass('active')){
+                    obj['cond']['rightBracket'] = ')'
+                } else {
+                    obj['cond']['rightBracket'] = '0'
+                }
                 obj['cond']['operate'] = this.el.find('.condition-search-select.relation').eq(i).val()
-                obj['cond']['rightBracket'] = this.el.find('.condition-search-select.right-select').eq(i).val();
                 obj['cond']['searchBy'] = this.el.find('.condition-search-box-input').eq(i).attr('name');
                 obj['cond']['searchByName'] = this.el.find('.condition-search-box-input').eq(i).val();
                 obj['cond']['searchByNew'] = this.el.find('.condition-search-box-input').eq(i).attr('name');
@@ -119,11 +128,19 @@ let config = {
             }
             for(let j = 0;j<searchData.length;j++) {
                 let html = this.actions.checkedRelationType(searchData[j]['cond']['searchByName']);
+                if(searchData[j]['cond']['leftBracket'] == '(') {
+                    this.el.find('.condition-search-choice.left-choice').addClass('active')
+                } else {
+                    this.el.find('.condition-search-choice.left-choice').removeClass('active')
+                }
+                if(searchData[j]['cond']['rightBracket'] == '(') {
+                    this.el.find('.condition-search-choice.right-choice').addClass('active')
+                } else {
+                    this.el.find('.condition-search-choice.right-choice').removeClass('active')
+                }
                 this.el.find('.condition-search-select.relation').eq(j).html(html)
                 this.el.find('.condition-search-input').eq(j).val(searchData[j]['cond']['keyword']);
-                this.el.find('.condition-search-select.left-select').eq(j).val(searchData[j]['cond']['leftBracket']);
                 this.el.find('.condition-search-select.relation').eq(j).val(searchData[j]['cond']['operate']);
-                this.el.find('.condition-search-select.right-select').eq(j).val(searchData[j]['cond']['rightBracket']);
                 this.el.find('.condition-search-box-input').eq(j).attr('name',searchData[j]['cond']['searchBy']);
                 this.el.find('.condition-search-box-input').eq(j).val(searchData[j]['cond']['searchByName']);
                 this.el.find('.condition-search-box-input').eq(j).attr('name',searchData[j]['cond']['searchByNew']);
@@ -184,18 +201,14 @@ let config = {
                                 appendChecked = false;
                             }
                         })
-                        PMAPI.sendToParent( {
-                            key: this.data.key,
-                            type: PMENUM.close_dialog,
-                            data: {
-                                type:'temporaryQuery',
-                                appendChecked:appendChecked,
-                                saveCommonQuery:this.saveCommonQuery,
-                                id:searchId,
-                                name:searchName,
-                                value: this.data.searchInputList
-                            }
-                        })
+                        PMAPI.closeIframeDialog(window.config.key, {
+                            type:'temporaryQuery',
+                            appendChecked:appendChecked,
+                            saveCommonQuery:this.saveCommonQuery,
+                            id:searchId,
+                            name:searchName,
+                            value: this.data.searchInputList
+                        });
                     }
                 } else {
                     msgBox.alert('运算括号出错')
@@ -216,7 +229,6 @@ let config = {
                     if(!this.isEdit) {
                         this.actions.saveCommonQuery(data.value);
                     } else {
-                        debugger
                         this.actions.deleteCommonQuery(this.id);
                         this.actions.saveCommonQuery(data.value);
                     }
@@ -253,10 +265,13 @@ let config = {
                     this.actions.renderQueryItem(this.data.searchInputList)
                     this.saveCommonQuery = true
                     this.data.commonQuery.push({
-                        id:0,
+                        id:1000+this.num,
                         name:name,
                         queryParams:JSON.stringify(this.data.searchInputList)
                     })
+                    this.num ++;
+                    this.name = name;
+                    this.id = 0;
                     this.el.find('.common-search-item').remove();
                     this.data.commonQuery.forEach((item)=> {
                         this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
@@ -291,15 +306,9 @@ let config = {
         //移除常用查询按钮
         removeQueryItem: function(id) {
             let itemLength = this.el.find('.common-search-item').length;
-            let optionLength = this.el.find('.dataGrid-commonQuery-option').length;
             for(let i = 0; i < itemLength; i++) {
                 if(this.el.find('.common-search-item').eq(i).attr('fieldId') == id){
                     this.el.find('.common-search-item').eq(i).remove();
-                }
-            }
-            for(let i = 0; i < optionLength; i++) {
-                if(this.el.find('.dataGrid-commonQuery-option').eq(i).attr('fieldId') == id){
-                    this.el.find('.dataGrid-commonQuery-option').eq(i).remove();
                 }
             }
         },
@@ -316,14 +325,26 @@ let config = {
             this.itemDeleteChecked = false;
             this.isEdit = false;
             let _this = this;
-            this.el.on('click','.add',()=> {
+            this.el.on('click','.condition-search-add',()=> {
                 // this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
                 let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
                 this.append(epCondition, this.el.find('.condition-search-container'));
                 this.data.searchInputAry.push(epCondition.data);
                 let length = this.el.find('.condition-search-item').length;
-                this.el.find('.condition-search-item').find('.add').css('display','none')
-                this.el.find('.condition-search-item').eq(length-1).find('.add').css('display','inline-block')
+                this.el.find('.condition-search-item').find('.condition-search-add').css('display','none')
+                this.el.find('.condition-search-item').eq(length-1).find('.condition-search-add').css('display','inline-block')
+            }).on('click','.condition-search-choice.left-choice',function(){
+                if($(this).hasClass('active')) {
+                    $(this).removeClass('active');
+                } else {
+                    $(this).addClass('active');
+                }
+            }).on('click','.condition-search-choice.right-choice',function(){
+                if($(this).hasClass('active')) {
+                    $(this).removeClass('active');
+                } else {
+                    $(this).addClass('active');
+                }
             }).on('click','.condition-search-radio', function() {
                 $(this).parent().parent('.condition-search-radiobox').find('.condition-search-radio').prop('checked',false);
                 $(this).prop('checked',true)
@@ -366,14 +387,12 @@ let config = {
 
     },
     afterRender: function() {
-        PMAPI.subscribe(PMENUM.open_iframe_params, (res)=>{
+        PMAPI.getIframeParams(window.config.key).then((res) => {
             for (let item in res.data.d) {
                 this.data[item] = res.data.d[item]
             }
             this.actions.afterGetMsg();
         })
-
-
     }
 
 }
@@ -385,21 +404,4 @@ class expertSearch extends Component {
         super(config)
     }
 }
-// export default {
-//     expertSearch:expertSearch,
-//     show: function (d) {
-//         let component = new expertSearch(d);
-//         let el = $('<div>').appendTo(document.body);
-//         component.render(el);
-//         el.dialog({
-//             title: '高级查询',
-//             width: 1000,
-//             height: 600,
-//             close: function () {
-//                 $(this).dialog('destroy');
-//                 component.destroySelf();
-//             }
-//         });
-//     }
-// }
 export default expertSearch

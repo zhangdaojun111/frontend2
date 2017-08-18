@@ -1,3 +1,8 @@
+/**
+* @author yangxiaochuan
+* 导入数据
+*/
+
 import Component from "../../../../lib/component";
 import template from './data-table-import.html';
 import './data-table-import.scss';
@@ -5,6 +10,7 @@ import msgBox from '../../../../lib/msgbox';
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import {Uploader} from "../../../../lib/uploader";
 import {FormService} from "../../../../services/formService/formService";
+import WorkFlow from "../../../../components/workflow/workflow-drawflow/workflow";
 
 let config = {
     template: template,
@@ -20,7 +26,8 @@ let config = {
         formId: '',
         fileData: {},
         //是否更多
-        needMore: false
+        needMore: false,
+        warning_msg: ''
     },
     actions: {
         prepareWorkflowData: function () {
@@ -36,20 +43,35 @@ let config = {
                     let choose = this.el.find( '.chooseFlow' )
                     choose[0].innerHTML = html;
                     choose[0].value = this.data.workflowList[0]['flow_id'];
-                    workflow[0].style.display = 'inherit';
-                    workflow[1].style.display = 'inherit';
+                    workflow[0].style.display = 'block';
+                    workflow[1].style.display = 'block';
+                    workflow[2].style.display = 'block';
+                    this.actions.drawFlowChart();
                 }else {
                     workflow[0].outerHTML = '';
                     workflow[1].outerHTML = '';
+                    workflow[2].outerHTML = '';
                 }
                 //执行脚本
                 if( res["data"]["upload_exec_file_remark"] ){
                     this.el.find( '.uploadRemark' ).show();
                     this.el.find( '.uploadRemark-con' )[0].innerHTML = res["data"]["upload_exec_file_remark"];
                 }
+                this.el.find( '.chooseFlow' ).on( 'change',()=>{
+                    this.actions.drawFlowChart();
+                } )
             } )
         },
+        //设置流程图
         //执行导入
+        drawFlowChart: function () {
+            let obj = {
+                flow_id: this.el.find( '.chooseFlow' )[0].value,
+                el: this.el.find( '.flow-chart' )
+            }
+            let flowchart = WorkFlow.createFlow( obj );
+            this.el.find( '.flowCharCon' )[0].style.width = '95%';
+        },
         import: function () {
             let i = 0;
             for( let f in this.data.fileData ){
@@ -74,36 +96,56 @@ let config = {
                 json['use_increment_data'] = this.el.find( '.use_increment_data' )[0].value;
                 json['use_default_value'] = this.el.find( '.use_default_value' )[0].value;
             }
+            if( this.data.warning_msg ){
+                json['warning_msg'] = JSON.stringify( this.data.warning_msg );
+            }
             this.uploader.appendData( json )
-
+            let That = this;
             this.uploader.upload('/upload_data/',{},(event)=>{
                 console.log('name:'+event.name+',code:'+event.code);
                 console.log(' position:'+(event.loaded||event.position) +",total:"+event.total);
             },(res)=>{
-                if( res.success == 1 ){
-                    msgBox.alert( res.error );
+                if( res.success ){
+                    msgBox.showTips( res.error );
                     if( this.data.isBatch ){
                         let ids = res.ids || [];
                         PMAPI.sendToParent({
                             type: PMENUM.close_dialog,
-                            key: this.key,
+                            key: That.data.key,
                             data: {
                                 type: 'batch',
                                 ids: ids
                             }
                         })
                     }else {
-                        let ids = res.ids || [];
                         PMAPI.sendToParent({
                             type: PMENUM.close_dialog,
-                            key: this.key,
+                            key: That.data.key,
                             data: {
                                 type: 'export'
                             }
                         })
                     }
                 }else {
-                    msgBox.alert( res.error );
+                    this.data.warning_msg = '';
+                    if( res.warning_msg ){
+                        let warning_msg = res.warning_msg || {};
+                        let warning_list = res.warning_list || [];
+                        msgBox.confirm( res.error ).then( r=>{
+                            if( r ){
+                                for( let w of warning_list ){
+                                    if( warning_msg[w] == 0 ){
+                                        warning_msg[w] = 1
+                                        break;
+                                    }
+                                }
+                                this.data.warning_msg = warning_msg;
+                                this.actions.import();
+                            }
+                        } )
+                    }else {
+                        msgBox.alert( res.error );
+                    }
                 }
                 this.actions.fileTip();
             })
@@ -121,8 +163,9 @@ let config = {
             this.data.needMore = !this.data.needMore;
             let more = this.el.find( '.need-more' );
             for( let m of more ){
-                m.style.display = this.data.needMore?'inherit':'none';
+                m.style.display = this.data.needMore?'block':'none';
             }
+            this.el.find( '.more-btn' )[0].innerHTML = this.data.needMore?'收起':'展开更多';
         }
     },
     afterRender: function (){
@@ -145,9 +188,13 @@ let config = {
         this.el.on( 'click','.import-submit-btn',()=>{
             this.actions.import();
         } )
-        this.el.on( 'click','.more-btn',()=>{
-            this.actions.addMore();
-        } )
+        if( this.data.isSuperUser == 1 ){
+            this.el.on( 'click','.more-btn',()=>{
+                this.actions.addMore();
+            } )
+        }else {
+            this.el.find( '.more-btn' )[0].outerHTML = '';
+        }
     }
 }
 

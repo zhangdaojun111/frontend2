@@ -66,5 +66,8 @@ export const workflowService={
     },
     getRecordInfo(params){
         return HTTP.postImmediately('/get_form_dynamic_data/',params)
-    }
+    },
+    getPrepareParams(params){
+        return HTTP.postImmediately('/prepare_params/', params)
+    },
 }

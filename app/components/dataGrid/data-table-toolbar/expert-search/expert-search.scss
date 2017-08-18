@@ -1,3 +1,4 @@
+@import "../../../../assets/scss/core/base";
 .expert-search {
     font-size:12px;
     padding: 0;
@@ -112,7 +113,23 @@
                         background-color: #f2f2f2;
                     }
                 }
-
+                .condition-search-choice {
+                    display: inline-block;
+                    width: 20px;
+                    height: 12px;
+                    padding: 4px 0px;
+                    text-align: center;
+                    vertical-align: center;
+                    background-color: #f2f2f2;
+                    cursor: pointer;
+                    &.left-choice{
+                        margin-right: 10px;
+                    }
+                    &.active {
+                        background-color: #0e7aef;
+                        color: #ffffff;
+                    }
+                }
                 .condition-search-box {
                     display: inline-block;
                     position: relative;
@@ -185,7 +202,7 @@
                     margin-right: 10px;
                     padding-left: 5px;
                 }
-                .add {
+                .condition-search-add {
                     float: right;
                     margin-right: 10px;
                     display: inline-block;
@@ -194,7 +211,7 @@
                     height: 30px;
                     background: url(../../../../assets/images/dataGrid/icon_add_1.png) no-repeat scroll right center transparent;
                 }
-                .delete {
+                .condition-search-delete {
                     float: right;
                     margin-right: 10px;
                     display: inline-block;
