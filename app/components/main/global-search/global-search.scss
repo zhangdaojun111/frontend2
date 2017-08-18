@@ -35,9 +35,6 @@
             .record-item{
                 padding: 5px;
                 cursor: pointer;
-                .record-content{
-
-                }
 
                 .delete-icon{
                     display: inline-block;
@@ -46,9 +43,12 @@
                     margin-right: 10px;
                 }
 
-                &:hover{
-                    background-color: #c5e1ff;
-                }
+                //&:hover{
+                //    background-color: #c5e1ff;
+                //}
+            }
+            .item-selected{
+                background-color: #c5e1ff;
             }
 
             .delete-all-history{
