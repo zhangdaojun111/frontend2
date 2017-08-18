@@ -59,7 +59,7 @@ export class FormMixShareComponent extends BiBaseComponent {
                 type:'radio',
                 me: this,
                 container: 'chart-mix-share' }),
-            search: search
+            filter: search
         };
     }
 
@@ -112,6 +112,19 @@ export class FormMixShareComponent extends BiBaseComponent {
             Mediator.publish('bi:chart:form:update', {type:'fields', data:[]});
         }
 
+    }
+
+    /**
+     * 获取数据mix.share value
+     */
+    getValue() {
+        const data = {};
+        Object.keys(this.mixForm).map(field => {
+            if (this.mixForm[field].getValue) {
+                data[field] = this.mixForm[field].getValue();
+            }
+        });
+        return data;
     }
 
 }

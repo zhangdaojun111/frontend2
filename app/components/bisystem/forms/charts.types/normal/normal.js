@@ -13,6 +13,8 @@ import {FormNormalYComponent} from './yAxis/yAxis';
 import {config as advancedDialogConfig} from "./advanced/advanced";
 import {FormMixShareComponent} from '../../mix.share/mix.share';
 import "./normal.scss";
+import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
+
 
 let config = {
     template:template,
@@ -34,7 +36,7 @@ let config = {
             this.MediatorDistribution(option);
         });
         this.el.on('click', '.save-btn', (event) => {
-            this.save();
+            this.saveChart();
         })
     },
     beforeDestory() {}
@@ -110,7 +112,7 @@ export class FormNormalComponent extends BiBaseComponent{
                     checkboxs:[
                         {value:'', name:'是否横向展示y轴数据'},
                     ],
-                    onChange: this.showXAxisVertical.bind(this)
+                    onChange: this.showyHorizontal.bind(this)
                 },
                 me: this,
                 container: 'form-group-yHorizontal'}),
@@ -293,10 +295,11 @@ export class FormNormalComponent extends BiBaseComponent{
             this.formGroup.ySelectedGroup.reload();
         };
     }
+
     /**
      * reset实例，当通过路由重新进入实例，清空所有数据
      */
-    reset(flag) {
+    reset() {
         this.formGroup = {};
         this.y = [];
         this.y1 = [];
@@ -341,19 +344,35 @@ export class FormNormalComponent extends BiBaseComponent{
         }
         this.formGroup.xMarginBottom.reload();
     }
+    /**
+     * 横向展示数据
+     * @param checked 通过checkbox判断是否选中
+     */
+    showyHorizontal(checked) {
+        if (checked) {
+            this.formGroup.echartX.data.checked = false;
+            this.formGroup.echartXTextNum.data.show = false;
+            this.formGroup.echartXMarginBottom.data.show = false;
+        };
+        this.formGroup.echartXTextNum.reload();
+        this.formGroup.echartXMarginBottom.reload();
+        this.formGroup.echartX.reload();
+    }
 
     /**
      * x轴竖向展示（x轴每行字数，x轴下边距）
+     * @param checked 通过checkbox判断是否选中
      */
     showXAxisVertical(checked) {
         if (checked) {
+            this.formGroup.yHorizontal.data.checked = false;
             this.formGroup.echartXTextNum.data.show = true;
             this.formGroup.echartXMarginBottom.data.show = true;
         } else {
             this.formGroup.echartXTextNum.data.show = false;
             this.formGroup.echartXMarginBottom.data.show = false;
         };
-
+        this.formGroup.yHorizontal.reload();
         this.formGroup.echartXTextNum.reload();
         this.formGroup.echartXMarginBottom.reload();
     }
@@ -361,9 +380,67 @@ export class FormNormalComponent extends BiBaseComponent{
     /**
      * 保存数据
      */
-    save() {
+    async saveChart() {
         const fields  = this.formGroup;
-        // Object.
+        // const data = {
+        //
+        //         advancedDataTemplates: [],
+        //         assortment: 'normal',
+        //         chartAssignment: {name:'下穿', val:2},
+        //         chartName:{id:'',name:'hello'},
+        //         countColumn: {},
+        //         deeps:[],
+        //         double:0,
+        //         echartX: {
+        //             marginBottom:30,
+        //             textNum:3
+        //         },
+        //         filter:[],
+        //         icon:'598c2cfb1ec7e720e489866b',
+        //         relations: [],
+        //         source: {
+        //             id: '9478_gXNiKqBeGd9fnTHo7rqyzP',
+        //             name: '部门信息',
+        //             count_fields: [],
+        //         },
+        //         theme: 'blue',
+        //         xAxis: {
+        //             dfield: 'f1',
+        //             id: '8898_n3g8bsq7iNmxF6ejffiNdg',
+        //             name: '创建时间',
+        //             type:"5"
+        //         },
+        //         yAxis: [
+        //             {
+        //                 field: {
+        //                     dfield: "f6",
+        //                     id: "4972_f92J3NUuQYqEoVfzJmJDYg",
+        //                     name: "是否为管理员",
+        //                     type: "11"
+        //                 },
+        //                 type: {
+        //                     name:'折线图',
+        //                     type: 'line',
+        //                     yAxisIndex:0
+        //                 }
+        //             }
+        //         ],
+        //         yHorizontal: false,
+        //         yHorizontalColumns: {
+        //             marginBottom:0
+        //         },
+        //         ySelectedGroup: []
+        //
+        // }
+        const data = {};
+        Object.keys(fields).map(k => {
+            if (fields[k].getValue) {
+                data[k] = fields[k].getValue();
+            };
+        });
         console.log(data);
+        // let res = await ChartFormService.saveChart(JSON.stringify(data));
+        // console.log(res);
+        // console.log(data);
     }
 }

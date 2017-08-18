@@ -17,7 +17,7 @@ let config = {
     afterRender() {},
     firstAfterRender() {
         let me = this;
-        this.el.on('change', '.select', function(event){
+        this.el.on('change', 'select', function(event){
             me.data.value = $(this).val();
         })
     }

@@ -16,9 +16,9 @@ let config = {
     },
     afterRender() {},
     firstAfterRender() {
-        let self = this;
-        this.el.on('input', '.input',function(event) {
-            self.data.value = $(this).val();
+        let me = this;
+        this.el.on('input', 'input',function(event) {
+            me.data.value = $(this).val();
         })
     }
 }

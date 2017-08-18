@@ -30,5 +30,27 @@ export const ChartFormService = {
     async getChartField(table_id) {
         let res = await HTTP.getImmediately('/bi/get_new_field_info', {table_id: table_id});
         return Promise.resolve(res);
+    },
+
+    /**
+     * 保存图表数据
+     * @return promise
+     */
+    async saveChart(chart) {
+        let res = await HTTP.ajaxImmediately({
+            url: '/bi/get_new_save_bi_setting/',
+            data: {
+                folder_id: '',
+                operation_id: '',
+                parent_table_id: '',
+                query_mark: '',
+                row_id:'',
+                chart:chart
+            },
+            // contentType: "application/json; charset=utf-8",
+            method:'post',
+            traditional: true
+        });
+        return Promise.resolve(res);
     }
 }
