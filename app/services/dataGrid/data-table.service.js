@@ -56,5 +56,9 @@ export const dataTableService = {
     //修改历史数据
     getHistoryApproveData: function ( data ) {
         return HTTP.post( 'get_update_history_data',data )
+    },
+    //获取部门数据
+    getDepartmentData: function ( data ) {
+        return HTTP.post( 'query_department_list',data )
     }
 }
