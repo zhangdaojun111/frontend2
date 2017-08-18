@@ -8,8 +8,9 @@ import {FormBaseComponent} from '../../base/base';
 import {instanceFitting, groupFitting} from '../../fittings/export.fittings';
 import Mediator from '../../../../../lib/mediator';
 import msgbox from "../../../../../lib/msgbox";
+import {PMAPI} from '../../../../../lib/postmsg';
 import {FormNormalYComponent} from './yAxis/yAxis';
-
+import {config as advancedDialogConfig} from "./advanced/advanced";
 import {FormMixShareComponent} from '../../mix.share/mix.share';
 import "./normal.scss";
 
@@ -19,6 +20,13 @@ let config = {
     actions: {},
     afterRender() {
         this.renderFitting();
+        this.el.on('click','.add',async()=> {
+            const res = await PMAPI.openDialogByComponent(advancedDialogConfig,{
+                width: 600,
+                height: 630,
+                title: '高级数据'
+            })
+        })
     },
     firstAfterRender() {
 
@@ -142,7 +150,8 @@ export class FormNormalComponent extends BiBaseComponent{
             xMarginBottom: instanceFitting({type:'input',data:xMarginBottomData,me: this,container: 'form-group-yHorizontalColumns .x-margin-bottom'}),
             echartX: instanceFitting({type:'checkbox', data: echartXData,me: this,container: 'form-group-echartX .tit'}),
             echartXTextNum: instanceFitting({type:'input', data: echartXTextNumData,me: this,container: 'form-group-echartX .echartX-text-num'}),
-            echartXMarginBottom: instanceFitting({type:'input', data: echartXMarginBottom,me: this,container: 'form-group-echartX .echartX-margin-bottom'})
+            echartXMarginBottom: instanceFitting({type:'input', data: echartXMarginBottom,me: this,container: 'form-group-echartX .echartX-margin-bottom'}),
+            advanced: instanceFitting({type:'autoComplete',me: this,container: 'form-deep-auto' }),
         };
     }
 
