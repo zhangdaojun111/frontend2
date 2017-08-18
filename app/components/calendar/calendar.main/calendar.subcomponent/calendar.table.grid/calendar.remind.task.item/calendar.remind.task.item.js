@@ -41,9 +41,7 @@ let config = {
                     Mediator.emit('CalendarRemindTask: changeData', params);
                 }
             });
-
         },
-
         openRemind: function () {
             CalendarRemind.data.remindTable = this.data.remindTaskItemData.tableName;
             CalendarRemind.data.remindDateProp = this.data.remindTaskItemData.fieldName;

@@ -192,7 +192,6 @@ let config = {
                     }
                 }
             }
-            console.log(json);
             Mediator.emit('CalendarSelected: Search', json);
         }
     },
@@ -206,7 +205,7 @@ let config = {
         that.el.on("mouseleave",".float-button-group",function(){
             $(this).css("display","none");
         }).on("click",".float-button-group-show",function(){
-            that.el.find(".float-button-group").css({"display":"block","top":document.body.scrollLeft + event.clientY - 87});
+            that.el.find(".float-button-group").css({"display":"block","top":event.clientY - 90});
         }).on('click','.select-label-show',function(){
             config.actions.selectlabelshow($(this));
         }).on('click',".select-label",function(){
