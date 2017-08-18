@@ -1140,7 +1140,7 @@ let config = {
             }
             //高级查询
             if( this.el.find( '.expert-search-btn' )[0] ){
-                this.actions.getExpertSearchData();
+                this.actions.renderExpertSearch();
             }
             this.data.firstRender = false;
         },
@@ -1378,37 +1378,6 @@ let config = {
         onBtnClick: function () {
             this.actions.customColumnClick();
             this.actions.groupBtnClick();
-            //高级查询
-            if( this.el.find( '.expert-search-btn' )[0] ){
-                this.el.find( '.dataGrid-commonQuery' )[0].style.display = 'block';
-                this.el.find( '.expert-search-btn' ).on( 'click',()=>{
-                    let d = {
-                        tableId: this.data.tableId,
-                        fieldsData: this.data.expertSearchFields,
-                        commonQuery: this.data.commonQueryData,
-                        commonQuerySelectLength:this.el.find('.dataGrid-commonQuery-select option').length
-                        // getExpertSearchData:this.actions.getExpertSearchData,
-                        // postExpertSearch:this.actions.postExpertSearch,
-                        // saveTemporaryCommonQuery:this.actions.saveTemporaryCommonQuery
-					}
-                    PMAPI.openDialogByIframe(`/iframe/expertSearch/`,{
-                        width:950,
-                        height:600,
-                        title:`高级查询`,
-                        modal:true
-                    },{d}).then(res=>{
-                        if(res.type == 'temporaryQuery') {
-                            this.actions.postExpertSearch(res.value,res.id,res.name);
-                            this.el.find('.dataGrid-commonQuery-select').val(res.name);
-                        } if(res.appendChecked) {
-                            this.data.saveTemporaryCommonQuery == res.value
-                            this.actions.appendQuerySelect()
-                        } if(res.saveCommonQuery || res.onlyclose == true) {
-                            this.actions.getExpertSearchData()
-                        }
-                    })
-                } )
-            }
 
             //宽度自适应
             if( this.el.find( '.grid-auto-width' )[0] ){
@@ -1525,6 +1494,53 @@ let config = {
                     this.actions.checkCorrespondence();
                 } )
             }
+        },
+        //渲染高级查询
+        renderExpertSearch: function () {
+            this.el.find( '.dataGrid-commonQuery' )[0].style.display = 'block';
+            this.el.find( '.expert-search-btn' ).on( 'click',()=>{
+                let d = {
+                    tableId: this.data.tableId,
+                    fieldsData: this.data.expertSearchFields,
+                    commonQuery: this.data.commonQueryData,
+                    commonQuerySelectLength:this.el.find('.dataGrid-commonQuery-select option').length
+                    // getExpertSearchData:this.actions.getExpertSearchData,
+                    // postExpertSearch:this.actions.postExpertSearch,
+                    // saveTemporaryCommonQuery:this.actions.saveTemporaryCommonQuery
+                }
+                PMAPI.openDialogByIframe(`/iframe/expertSearch/`,{
+                    width:950,
+                    height:600,
+                    title:`高级查询`,
+                    modal:true
+                },{d}).then(res=>{
+                    if(res.type == 'temporaryQuery') {
+                        this.actions.postExpertSearch(res.value,res.id,res.name);
+                        this.el.find('.dataGrid-commonQuery-select').val(res.name);
+                    } if(res.appendChecked) {
+                        this.data.saveTemporaryCommonQuery == res.value
+                        this.actions.appendQuerySelect()
+                    } if(res.saveCommonQuery || res.onlyclose == true) {
+                        this.actions.getExpertSearchData()
+                    }
+                })
+            } )
+            let _this = this
+            $('.dataGrid-commonQuery-select').bind('change', function() {
+                if($(this).val() == '常用查询') {
+                    _this.actions.postExpertSearch([],'');
+                } else if($(this).val() == '临时高级查询') {
+                    _this.actions.postExpertSearch(_this.data.saveTemporaryCommonQuery,'');
+                } else {
+                    // $(this).find('.Temporary').remove();
+                    _this.data.commonQueryData.forEach((item) => {
+                        if(item.name == $(this).val()){
+                            _this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
+                        }
+                    })
+                }
+            })
+            this.actions.getExpertSearchData();
         },
         appendQuerySelect: function() {
             let length = this.el.find('.dataGrid-commonQuery-select option').length
@@ -1935,21 +1951,6 @@ let config = {
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();
-        let _this = this
-        $('.dataGrid-commonQuery-select').bind('change', function() {
-            if($(this).val() == '常用查询') {
-                _this.actions.postExpertSearch([],'');
-            } else if($(this).val() == '临时高级查询') {
-                _this.actions.postExpertSearch(_this.data.saveTemporaryCommonQuery,'');
-            } else {
-                // $(this).find('.Temporary').remove();
-                _this.data.commonQueryData.forEach((item) => {
-                    if(item.name == $(this).val()){
-                        _this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
-                    }
-                })
-            }
-        })
     }
 }
 
