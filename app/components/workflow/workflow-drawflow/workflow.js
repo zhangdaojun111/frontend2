@@ -475,7 +475,7 @@ let WorkFlow={
         });
         let component = new WF(workFlowData);
         this.WorkFlow=component;
-        let el = $(elem);
+        let el = $("#flow-node");
         component.render(el);
     },
     rejectNode(e){
