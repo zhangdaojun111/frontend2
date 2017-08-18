@@ -689,7 +689,8 @@ let config = {
                 let json = {
                     from_date:this.data.from_date,
                     to_date:this.data.to_date,
-                    tableid2filter:JSON.stringify(data)
+                    tableid2filter:JSON.stringify(data),
+                    cancel_fields: JSON.stringify(this.data.cancel_fields),
                 };
                 if(this.data.calendarContent !== 'schedule') {
                     this.actions.getCalendarData(json, 'calendar');
