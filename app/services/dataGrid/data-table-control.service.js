@@ -49,8 +49,7 @@ export const dgcService = {
             'padding-right': '0px',
             'text-align': 'center',
             'font-style': 'normal'
-        },
-        headerClass:'header-select'
+        }
     },
     numberCol: {
         //生成编号
