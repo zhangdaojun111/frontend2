@@ -13,8 +13,6 @@ import msgBox from '../lib/msgbox';
 
 function getLoginController() {
     return {
-        loginService:LoginService,
-        md5:md5,
         systemName:'',      //公司名称
         loginSize:"26px",
         versionInfo:{},     //后台获取的公司名称和版本信息
@@ -40,7 +38,7 @@ function getLoginController() {
 
         //检测浏览器是否可用
         browser_check: function (){
-            return this.loginService.support();    //检测浏览器
+            return this.LoginService.support();    //检测浏览器
         },
         //初始化登录表单控件
         formInit:function () {
@@ -232,9 +230,9 @@ function getLoginController() {
         userLogin:function (username,password) {
             let data = {
                 username:username,
-                password:this.md5(password)
+                password:md5(password)
             };
-            let replyMsg = this.loginService.userLogin(data);
+            let replyMsg = this.LoginService.userLogin(data);
             replyMsg.done((result) => {
                 if(result.success === 1){
                     //登录成功，设置缓存信息，跳转至index页面

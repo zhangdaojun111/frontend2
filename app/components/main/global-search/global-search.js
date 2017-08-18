@@ -182,12 +182,13 @@ let config ={
             }
         },
         setItemHover:function (event) {
-            $(this).find('.record-item').removeClass('item-selected');
-            $(this).addClass('item-selected');
-            this.data.selectNum = $(this)[0].attributes.data_index.value;
+            console.log(event)
+            this.el.find('.record-item').removeClass('item-selected');
+            event.currentTarget.addClass('item-selected');
+            this.data.selectNum = event.currentTarget.attributes.data_index.value;
         },
-        resetItemHover:function (event) {
-            $(event.target).removeClass('item-selected');
+        setItemBlur:function (event) {
+            event.currentTarget.removeClass('item-selected');
         },
         myKeyDown:function (event) {
             if(event.keyCode === 13){       //回车，进行搜索
@@ -241,10 +242,10 @@ let config ={
             this.actions.hideHistoryList();
         }).on('keydown','.search-content',(event) => {
             this.actions.myKeyDown(event);
-        }).on('mouseenter','li.record-item',function (event) {
-            that.actions.setItemHover(event);
-        }).on('mouseleave','li.record-item',function(event) {
-            that.actions.resetItemHover();
+        }).on('mouseenter','li.record-item',(event) => {
+            this.actions.setItemHover(event);
+        }).on('mouseleave','li.record-item',(event) => {
+            this.actions.setItemBlur();
         })
 
     },
