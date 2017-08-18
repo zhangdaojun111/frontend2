@@ -29,7 +29,7 @@ let config = {
         },
     },
     afterRender: function (){
-        $('.group-data-list, .grouping-data-list').sortable({
+        this.el.find('.group-data-list, .grouping-data-list').sortable({
             connectWith: ".connectedSortable",
             stop: ()=> {
                 this.data.group = [];

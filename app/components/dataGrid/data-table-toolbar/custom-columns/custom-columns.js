@@ -286,13 +286,13 @@ let config = {
     },
     afterRender: function (){
         //初始化拖拽
-        $( "#dragCustom" ).sortable({
+        this.el.find( "#dragCustom" ).sortable({
             items: "li:not(.custom-disabled)",
             scroll: true
         });
-        $( "#dragCustom" ).disableSelection();
+        this.el.find( "#dragCustom" ).disableSelection();
 
-        $('#dragCustom').bind('sortstop', (event)=> {
+        this.el.find('#dragCustom').bind('sortstop', (event)=> {
             this.actions.dragAction();
         });
 
