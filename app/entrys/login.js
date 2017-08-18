@@ -38,7 +38,7 @@ function getLoginController() {
 
         //检测浏览器是否可用
         browser_check: function (){
-            return this.LoginService.support();    //检测浏览器
+            return LoginService.support();    //检测浏览器
         },
         //初始化登录表单控件
         formInit:function () {
@@ -232,7 +232,7 @@ function getLoginController() {
                 username:username,
                 password:md5(password)
             };
-            let replyMsg = this.LoginService.userLogin(data);
+            let replyMsg = LoginService.userLogin(data);
             replyMsg.done((result) => {
                 if(result.success === 1){
                     //登录成功，设置缓存信息，跳转至index页面
