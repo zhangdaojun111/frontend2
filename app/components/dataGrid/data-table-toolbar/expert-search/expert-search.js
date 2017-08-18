@@ -12,6 +12,7 @@ import './expert-search.scss';
 
 let config = {
     template: template,
+    num:1,
     ulChecked: true,
     inputValue: null,
     radioId: 0,
@@ -95,9 +96,17 @@ let config = {
                 } else {
                     obj['cond']['keyword'] = this.el.find('.condition-search-input').eq(i).val();
                 }
-                obj['cond']['leftBracket'] = this.el.find('.condition-search-select.left-select').eq(i).val();
+                if(this.el.find('.condition-search-choice.left-choice').eq(i).hasClass('active')){
+                    obj['cond']['leftBracket'] = '('
+                } else {
+                    obj['cond']['leftBracket'] = '0'
+                }
+                if(this.el.find('.condition-search-choice.right-choice').eq(i).hasClass('active')){
+                    obj['cond']['rightBracket'] = ')'
+                } else {
+                    obj['cond']['rightBracket'] = '0'
+                }
                 obj['cond']['operate'] = this.el.find('.condition-search-select.relation').eq(i).val()
-                obj['cond']['rightBracket'] = this.el.find('.condition-search-select.right-select').eq(i).val();
                 obj['cond']['searchBy'] = this.el.find('.condition-search-box-input').eq(i).attr('name');
                 obj['cond']['searchByName'] = this.el.find('.condition-search-box-input').eq(i).val();
                 obj['cond']['searchByNew'] = this.el.find('.condition-search-box-input').eq(i).attr('name');
@@ -119,11 +128,19 @@ let config = {
             }
             for(let j = 0;j<searchData.length;j++) {
                 let html = this.actions.checkedRelationType(searchData[j]['cond']['searchByName']);
+                if(searchData[j]['cond']['leftBracket'] == '(') {
+                    this.el.find('.condition-search-choice.left-choice').addClass('active')
+                } else {
+                    this.el.find('.condition-search-choice.left-choice').removeClass('active')
+                }
+                if(searchData[j]['cond']['rightBracket'] == '(') {
+                    this.el.find('.condition-search-choice.right-choice').addClass('active')
+                } else {
+                    this.el.find('.condition-search-choice.right-choice').removeClass('active')
+                }
                 this.el.find('.condition-search-select.relation').eq(j).html(html)
                 this.el.find('.condition-search-input').eq(j).val(searchData[j]['cond']['keyword']);
-                this.el.find('.condition-search-select.left-select').eq(j).val(searchData[j]['cond']['leftBracket']);
                 this.el.find('.condition-search-select.relation').eq(j).val(searchData[j]['cond']['operate']);
-                this.el.find('.condition-search-select.right-select').eq(j).val(searchData[j]['cond']['rightBracket']);
                 this.el.find('.condition-search-box-input').eq(j).attr('name',searchData[j]['cond']['searchBy']);
                 this.el.find('.condition-search-box-input').eq(j).val(searchData[j]['cond']['searchByName']);
                 this.el.find('.condition-search-box-input').eq(j).attr('name',searchData[j]['cond']['searchByNew']);
@@ -253,10 +270,13 @@ let config = {
                     this.actions.renderQueryItem(this.data.searchInputList)
                     this.saveCommonQuery = true
                     this.data.commonQuery.push({
-                        id:0,
+                        id:1000+this.num,
                         name:name,
                         queryParams:JSON.stringify(this.data.searchInputList)
                     })
+                    this.num ++;
+                    this.name = name;
+                    this.id = 0;
                     this.el.find('.common-search-item').remove();
                     this.data.commonQuery.forEach((item)=> {
                         this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
@@ -318,6 +338,18 @@ let config = {
                 let length = this.el.find('.condition-search-item').length;
                 this.el.find('.condition-search-item').find('.condition-search-add').css('display','none')
                 this.el.find('.condition-search-item').eq(length-1).find('.condition-search-add').css('display','inline-block')
+            }).on('click','.condition-search-choice.left-choice',function(){
+                if($(this).hasClass('active')) {
+                    $(this).removeClass('active');
+                } else {
+                    $(this).addClass('active');
+                }
+            }).on('click','.condition-search-choice.right-choice',function(){
+                if($(this).hasClass('active')) {
+                    $(this).removeClass('active');
+                } else {
+                    $(this).addClass('active');
+                }
             }).on('click','.condition-search-radio', function() {
                 $(this).parent().parent('.condition-search-radiobox').find('.condition-search-radio').prop('checked',false);
                 $(this).prop('checked',true)
@@ -366,8 +398,6 @@ let config = {
             }
             this.actions.afterGetMsg();
         })
-
-
     }
 
 }
