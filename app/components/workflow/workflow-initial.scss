@@ -310,7 +310,13 @@ body{
     overflow: scroll;
   }
 }
-
+.h_panghu_mask{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background: #fff;
+  z-index: 99;
+}
 .h_panghu{
   animation: panghuAnimation 3s both;
   position: absolute;
