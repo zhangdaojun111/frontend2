@@ -446,5 +446,109 @@ export const dgcService = {
         style.innerHTML = html;
         head.appendChild(style);
         return classObj;
-    }
+    },
+    //设置偏好数据
+    setPreference: function (res,data) {
+        if (res['colWidth']) {
+            data.colWidth = res['colWidth'].colWidth;
+            if (typeof ( data.colWidth ) == 'string') {
+                data.colWidth = JSON.parse(res['colWidth'].colWidth);
+            }
+        }
+        if (res['pageSize'] && res['pageSize'].pageSize) {
+            data.rows = res['pageSize'].pageSize;
+        }
+        if (res['ignoreFields']) {
+            data.ignoreFields = JSON.parse(res['ignoreFields']['ignoreFields']);
+        } else {
+            // this.data.hideColumn = ['f1','f2','f3','f4']
+            // let json = {
+            //     action:'ignoreFields',
+            //     table_id:this.pageId,
+            //     ignoreFields:JSON.stringify( this.hideColumn ),
+            // }
+            // this.dataTableService.savePreference( json );
+        }
+        if (res['fieldsOrder']) {
+            data.orderFields = JSON.parse(res['fieldsOrder']['fieldsOrder']);
+        }
+        if (res['pinned'] && res['pinned']['pinned']) {
+            data.fixCols = JSON.parse(res['pinned']['pinned']);
+        }
+        // console.log("rows")
+        // console.log(data.rows)
+        // console.log("colWidth")
+        // console.log(data.colWidth)
+        // console.log("ignoreFields")
+        // console.log(data.ignoreFields)
+        // console.log("fixCols")
+        // console.log(data.fixCols)
+        // console.log("orderFields")
+        // console.log(data.orderFields)
+    },
+    //根据偏好返回agGrid sate
+    calcColumnState: function (data,agGrid,defaultArr) {
+        let gridState = agGrid.gridOptions.columnApi.getColumnState();
+        let indexedGridState = {};
+        for(let state of gridState) {
+            indexedGridState[state['colId']] = state;
+        }
+        for( let w in data.colWidth ){
+            if( indexedGridState[w] ){
+                indexedGridState[w]['width'] = data.colWidth[w];
+            }
+        }
+        let arr = [];
+        for( let d of defaultArr ){
+            let obj = indexedGridState[d]||{};
+            obj['pinned']= data.fixCols.l.length > 0 ? 'left' : null;
+            arr.push( obj );
+        }
+        //左侧固定
+        for( let col of data.fixCols.l ){
+            let state = indexedGridState[col]||{};
+            state['hide'] = data.ignoreFields.indexOf( col ) != -1;
+            state['pinned'] = 'left';
+            arr.push(state);
+        }
+        //中间不固定
+        let fixArr = data.fixCols.l.concat( data.fixCols.r );
+        for( let d of data.orderFields ){
+            if( d == '_id'||data == 'group' ){
+                continue;
+            }
+            if( d != 0 && fixArr.indexOf( data ) == -1 ){
+                let state = indexedGridState[d]||{};
+                state['hide'] = data.ignoreFields.indexOf( d ) != -1;
+                state['pinned'] = null;
+                arr.push(state);
+            }
+        }
+        if(data.orderFields.length == 0){
+            for(let state of gridState){
+                let id = state['colId'];
+                if(id != 'number' && id != 'mySelectAll' && id != 'group'){
+                    state['hide'] = data.ignoreFields.indexOf(id)!=-1;
+                    state['pinned'] = null;
+                    arr.push(state);
+                }
+            }
+        }
+        //右侧固定
+        for( let col of data.fixCols.r ){
+            let state = indexedGridState[col]||{};
+            state['hide'] = data.ignoreFields.indexOf( col ) != -1;
+            state['pinned'] = 'right';
+            arr.push(state);
+        }
+        //操作列宽度
+        for( let d of arr ){
+            if( d.colId && d.colId == 'myOperate' ){
+                d['width'] = data.operateColWidth;
+            }
+        }
+        // console.log( "状态" )
+        // console.log( arr )
+        agGrid.gridOptions.columnApi.setColumnState( arr );
+    },
 }
