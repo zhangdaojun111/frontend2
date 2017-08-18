@@ -9,3 +9,4 @@ component.render($("#register-page"));
 
 
 
+

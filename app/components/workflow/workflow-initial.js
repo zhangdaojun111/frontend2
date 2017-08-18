@@ -38,6 +38,12 @@ let config={
             Mediator.publish('workflow:submit',this.data.user);
             
         });
+        $(".h_panghu").on("webkitAnimationEnd",function () {
+            $(this).addClass("h_panghu2");
+            setTimeout(function () {
+                $(".h_panghu_mask").remove()
+            },2000)
+        });
     }
 };
 class WorkflowInitial extends Component{

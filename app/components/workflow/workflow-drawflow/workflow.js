@@ -475,7 +475,7 @@ let WorkFlow={
         });
         let component = new WF(workFlowData);
         this.WorkFlow=component;
-        let el = $(elem);
+        let el = $("#flow-node");
         component.render(el);
     },
     rejectNode(e){
@@ -491,7 +491,6 @@ let WorkFlow={
             }});
         })()
         .then(msg=>{
-            console.log(msg.data[0]);
             let component = new WF(msg.data[0]);
             this.WorkFlow=component;
             let el = $(o.el);

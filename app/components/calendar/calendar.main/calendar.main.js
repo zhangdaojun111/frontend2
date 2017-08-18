@@ -16,13 +16,17 @@ import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
 import Mediator from '../../../lib/mediator';
 import {CalendarWorkflowData} from './calendar.workflow/calendar.workflow';
+import {CalendarTimeService, CalendarToolService, CalendarHandleDataService} from '../../../services/calendar/calendar.tool.service';
 
 let config = {
     template: template,
     data: {
-        HeadList: [ '星期日','星期一', '星期二', '星期三', '星期四', '星期五', '星期六' ],
-        chooseDate: '',
+        calendarMonthComponent: {},
+        calendarWeekComponent: {},
+        calendarDayComponent: {},
 
+        headList: [ '星期日','星期一', '星期二', '星期三', '星期四', '星期五', '星期六' ],
+        chooseDate: '',
 
         monthDataList: [],
         weekDataList: [],
@@ -68,15 +72,6 @@ let config = {
         isShowWorkflowData: true,
     },
     actions: {
-        getDayNumOfMonth: function ( year , month ) {
-            month++;
-            let d = new Date( year , month , 0 );
-            return d.getDate();
-        },
-        getWeekByDay: function( year, month, day ){
-            let d = new Date( year, month, day );
-            return d.getDay();
-        },
         addOneDay: function( oldDay ){
             let oMyTime = new Date( oldDay ).getTime();
             oMyTime = oMyTime + 24*60*60*1000;
@@ -85,38 +80,27 @@ let config = {
                 month = nweTime.getMonth(),
                 day = nweTime.getDate(),
                 week = nweTime.getDay();
-            return year+'-'+this.actions.addZero(month+1)+'-'+this.actions.addZero(day);
+            return CalendarTimeService.formatDate(year,month,day);
         },
-        addZero: function( num ){
-            return ( num < 10 ) ? ( "0" + num ) : num;
-        },
-        colorRgb: function(str, opcity){
-            let sColor = str.toLowerCase();
-            if(sColor){
-                if(sColor.length === 4){
-                    let sColorNew = "#";
-                    for(let i=1; i<4; i+=1){
-                        sColorNew += sColor.slice(i,i+1).concat(sColor.slice(i,i+1));
-                    }
-                    sColor = sColorNew;
-                }
-                //处理六位的颜色值
-                let sColorChange = [];
-                for(let i=1; i<7; i+=2){
-                    sColorChange.push(parseInt("0x"+sColor.slice(i,i+2)));
-                }
-                return "rgba(" + sColorChange.join(",")+","+opcity + ")";
-            }else{
-                return sColor;
-            }
-        },
-
-        refresh: function () {
-            this.el.find('.calendar-main-content').empty();
-            if(this.data.calendarContent !== 'schedule') {
-
-            } else {
-                this.actions.makeScheduleData(this.data.from_date, this.data.to_date);
+        search: function( key ){
+            this.data.searchText = key;
+            if( this.data.calendarContent === 'schedule' ){
+                this.actions.getCalendarData({
+                    from_date: this.data.from_date,
+                    to_date: this.data.to_date,
+                    cancel_fields: JSON.stringify(this.data.cancel_fields)
+                });
+            }else {
+                this.actions.getCalendarData({
+                    from_date: this.data.from_date,
+                    to_date: this.data.to_date,
+                    cancel_fields: JSON.stringify(this.data.cancel_fields)
+                },'calendar');
+                // setTimeout(() => {
+                //     console.log(this.data.monthDataList);
+                // },500)
+                // this.actions.monthDataTogether();
+                // this.actions.getDataCount();
             }
         },
 
@@ -126,7 +110,7 @@ let config = {
                 this.data.calendarSettings = res['id2data'];
                 this.data.tableid2name = res['tableid2name'];
                 this.data.fieldInfos = res['field_infos']
-                if(type === 'month') {
+                if(type === 'calendar') {
                     this.actions.monthDataTogether();
                 }else {
                     this.actions.makeScheduleData(data.from_date, data.to_date);
@@ -186,173 +170,66 @@ let config = {
                 }
             }
 
-            // else if( this.data.calendarContent === 'schedule' ){
-            //     for( let day of this.scheduleDataList ){
-            //         for( let d of day['data'] ){
-            //             if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
-            //                 i++;
-            //             }else if( d.type === 2 ){
-            //                 j++;
-            //             }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
-            //                 w++;
-            //             }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
-            //                 m++;
-            //             }
-            //         }
-            //     }
-            // }
-            this.data.remindCount = i;
-            this.data.workflowCount = w;
-
-            // $('.remind-num').html(this.data.remindCount);
-            // $('.approval-num').html(this.data.workflowCount);
-            console.log(i,w);
-            $('body').find('.remind-num').html(this.data.remindCount);
-            $('body').find('.approval-num').html(this.data.workflowCount);
-
-            // if( this.firstFlash ){
-            //     setTimeout( ()=>{
-            //         this.isShowLoading = false;
-            //         this.firstFlash = false;
-            //         this.cd.markForCheck();
-            //     },1000 )
-            // }else {
-            //     this.isShowLoading = false;
-            //     $('.ui-dialog-content').css( 'overflow','auto' );
-            //     this.cd.markForCheck();
-            // }
-            // this.returnWidthHeight();
-        },
-
-        createMonthCalendar: function (y,m){
-            let monthDayNum = this.actions.getDayNumOfMonth( y , m ),
-                firstDayWeek = this.actions.getWeekByDay( y , m , 1 );
-            let endNum = ( monthDayNum + firstDayWeek ) > 35 ? 42 : 35;
-            let startNum = 1 - firstDayWeek;
-
-            //组成数据
-            this.data.monthDataList.length = 0;
-            let arr = [];
-            for( let i=1; i<=42 ;i++ ){
-                let obj = {};
-                obj['data'] = [];
-                if( startNum<1 || startNum>monthDayNum){
-                    obj['isPartOfMonth'] = false;
-                }else {
-                    let dateTime = y + "-" + this.actions.addZero( m + 1 ) + "-" + this.actions.addZero( startNum );
-                    obj['isToday'] = dateTime === this.data.todayStr ? true : false;
-                    obj['dataTime'] = dateTime;
-                    obj['dayNum'] = startNum;
-                    obj['week'] = arr.length;
-                    obj['year'] = y;
-                    obj['month'] = m;
-                    // obj['isSelect'] = ( this.chooseDate == dateTime ) ? true : false;
-                    obj['isPartOfMonth'] = true;
-                }
-                startNum++;
-                arr.push( obj );
-                if( i % 7 === 0 && i >= 7 ){
-                    this.data.monthDataList.push( { "weekList": arr } );
-                    arr  =[];
-                }
-            }
-            let pre_m = m,
-                pre_y = y;
-            if( pre_m === 0 ){
-                pre_y = pre_y-1;
-                pre_m = 11;
-            }else {
-                pre_m = pre_m - 1;
-            }
-            let prevMonthNum = this.actions.getDayNumOfMonth( pre_y , pre_m );
-            for( let i=6 ;i>=0; i-- ){
-                let day = this.data.monthDataList[0]['weekList'][i];
-                if( !day['isPartOfMonth'] ){
-                    day['dayNum'] = prevMonthNum;
-                    day['week'] = 6-i;
-                    day['year'] = pre_y;
-                    day['month'] = pre_m;
-                    day['dataTime'] = pre_y + "-" + this.actions.addZero( pre_m + 1 ) + "-" + this.actions.addZero( prevMonthNum );
-                    prevMonthNum--;
-                }
-            }
-
-            let next_m = m,
-                next_y = y;
-            if( next_m === 11 ){
-                next_y = next_y + 1;
-                next_m = 0;
-            }else {
-                next_m = next_m + 1;
-            }
-
-            let j = 1;
-            for( let i = 0;i<=6;i++ ){
-                let day = this.data.monthDataList[4]['weekList'][i];
-                if( !day['isPartOfMonth'] ){
-                    day['dayNum'] = j;
-                    day['week'] = i;
-                    day['year'] = next_y;
-                    day['month'] = next_m;
-                    day['dataTime'] = next_y + "-" + this.actions.addZero( next_m + 1 ) + "-" + this.actions.addZero( j );
-                    j++;
-                }
-            }
-            for( let i = 0;i<=6;i++ ){
-                let day = this.data.monthDataList[5]['weekList'][i];
-                if( !day['isPartOfMonth'] ){
-                    day['dayNum'] = j;
-                    day['year'] = next_y;
-                    day['month'] = next_m;
-                    day['dataTime'] = next_y + "-" + this.actions.addZero( next_m + 1 ) + "-" + this.actions.addZero( j );
-                    j++;
-                }
-            }
-
-            this.data.from_date = this.data.monthDataList[0]['weekList'][0]['dataTime'];
-            this.data.to_date = this.data.monthDataList[5]['weekList'][6]['dataTime'];
-            CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
-            if(this.data.calendarContent === 'month') {
-                CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
-                Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
-            }
-            this.actions.getCalendarData({from_date: this.data.from_date, to_date: this.data.to_date, cancel_fields: this.data.cancel_fields},'month');
-        },
-
-        createWeekCalendar: function (){
-            this.data.chooseDate = this.data.selectData.y + "-" + this.actions.addZero( this.data.selectData.m + 1 ) + "-" + this.actions.addZero( this.data.selectData.d );
-            this.data.weekDataList = [];
-            let weekData = [];
-            for( let data of this.data.monthDataList ){
-                for( let d of data['weekList'] ){
-                    if( d['dataTime'] === this.data.chooseDate ){
-                        weekData = data['weekList'];
-                        break;
+            else if( this.data.calendarContent === 'schedule' ){
+                for( let day of this.data.scheduleDataList ){
+                    for( let d of day['data'] ){
+                        if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
+                            i++;
+                        }else if( d.type === 2 ){
+                            j++;
+                        }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
+                            w++;
+                        }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
+                            m++;
+                        }
                     }
                 }
             }
-            let arrHead = [];
-            for( let d of weekData ){
-                arrHead.push( {time:d.dataTime,isTime:false,isHead: true} );
+            this.data.remindCount = i;
+            this.data.workflowCount = w;
+            $('body').find('.remind-num').html(this.data.remindCount);
+            $('body').find('.approval-num').html(this.data.workflowCount);
+
+        },
+
+        createMonthCalendar: function (y,m){
+            this.data.monthDataList = CalendarHandleDataService.createMonthCalendar(y,m, this.data.todayStr);
+            this.data.from_date = this.data.monthDataList[0]['weekList'][0]['dataTime'];
+            this.data.to_date = this.data.monthDataList[5]['weekList'][6]['dataTime'];
+
+            if(this.data.calendarContent === 'month') {
+                CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+                this.actions.getCalendarData({
+                    from_date: this.data.from_date,
+                    to_date: this.data.to_date,
+                    cancel_fields: JSON.stringify(this.data.cancel_fields)
+                },'calendar');
+                Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
             }
+        },
 
-            this.data.weekDataList.push( arrHead );
-            this.data.weekDataList.push( weekData );
-
-            if(arrHead.length !== 0) {
-                this.data.selectedDateShow = arrHead[0]['time'] + ' -- ' + arrHead[6]['time'];
+        createWeekCalendar: function (){
+            this.data.weekDataList = CalendarHandleDataService.createWeekCalendar(this.data.selectData);
+            if(this.data.weekDataList[0].length !== 0) {
+                this.data.selectedDateShow = this.data.weekDataList[0][0]['time'] + ' -- ' + this.data.weekDataList[0][6]['time'];
                 $('.nowDate').html(this.data.selectedDateShow);
-
-                this.data.from_date = arrHead[0]['time'];
-                this.data.to_date = arrHead[6]['time'];
+                this.data.from_date = this.data.weekDataList[0][0]['time'];
+                this.data.to_date = this.data.weekDataList[0][6]['time'];
             }
-            //Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
-            //CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+
+            if(this.data.calendarContent === 'week') {
+                CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+                this.actions.getCalendarData({
+                    from_date: this.data.from_date,
+                    to_date: this.data.to_date,
+                    cancel_fields: JSON.stringify(this.data.cancel_fields)
+                },'calendar');
+            }
         },
 
         createDayCalendar: function(){
             this.data.dayDataList = [];
-            let date = this.data.selectData.y + "-" + this.actions.addZero( this.data.selectData.m + 1 ) + "-" + this.actions.addZero( this.data.selectData.d );
+            let date = CalendarTimeService.formatDate(this.data.selectData.y, this.data.selectData.m, this.data.selectData.d);
             for( let data of this.data.monthDataList ){
                 for( let d of data['weekList'] ){
                     if( d.dataTime === date ){
@@ -361,12 +238,24 @@ let config = {
                     }
                 }
             }
-            this.data.selectedDateShow = this.data.selectData.y + "年" + ( this.data.selectData.m + 1 ) + "月" + this.data.selectData.d + "日 （"+ this.data.HeadList[this.data.selectData.w] +"）";
+            this.data.selectedDateShow = this.data.selectData.y + "年" + ( this.data.selectData.m + 1 ) + "月" + this.data.selectData.d + "日 （"+ this.data.headList[this.data.selectData.w] +"）";
             $('.nowDate').html(this.data.selectedDateShow);
             this.data.from_date = date;
             this.data.to_date = date;
-            //Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
-            //CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+            if(this.data.calendarContent === 'day') {
+                CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+                this.actions.getCalendarData({
+                    from_date: this.data.from_date,
+                    to_date: this.data.to_date,
+                    cancel_fields: JSON.stringify(this.data.cancel_fields)
+                },'calendar');
+                Mediator.emit(
+                    'CalendarWorkflowData: changeWorkflowData',
+                    {from_date: this.data.from_date,
+                        to_date: this.data.to_date
+                    });
+            }
+            console.log(this.data.dayDataList);
         },
 
         makeScheduleData: function (startDate, endDate) {
@@ -412,7 +301,7 @@ let config = {
         },
 
         changeWeek: function (lr) {
-            let slect = this.data.selectData['y'] + "-" + this.actions.addZero( this.data.selectData.m + 1 ) + "-" + this.actions.addZero( this.data.selectData['d']);
+            let slect = CalendarTimeService.formatDate(this.data.selectData.y, this.data.selectData.m, this.data.selectData.d);
             let oldWeekDay = new Date(slect).getTime();
             if( lr === 'l' ){
                 oldWeekDay = oldWeekDay-7*24*60*60*1000;
@@ -426,13 +315,13 @@ let config = {
                 week = nweTime.getDay();
             this.data.selectData = {'y':year, 'm':month, 'd':day, 'w':week};
 
-            this.data.chooseDate = year + "-" + this.actions.addZero( month ) + "-" + this.actions.addZero( day );
+            this.data.chooseDate = CalendarTimeService.formatDate(year,month-1,day);
 
-            this.actions.createWeekCalendar();
+            //this.actions.createWeekCalendar();
         },
 
         changeDay: function (lr) {
-            let oldDate = this.data.selectData.y+'-'+this.actions.addZero(this.data.selectData.m+1)+'-'+this.actions.addZero(this.data.selectData.d);
+            let oldDate = CalendarTimeService.formatDate(this.data.selectData.y, this.data.selectData.m, this.data.selectData.d);
             let oldMyTime = new Date(oldDate).getTime();
             if( lr === 'l' ){
                 oldMyTime = oldMyTime - 24*60*60*1000;
@@ -465,9 +354,9 @@ let config = {
                 this.append(new CalendarDay(this.data.dayDataList), this.el.find(".calendar-main-content"));
                 Mediator.emit('CalendarMain: date',{from_date: this.data.from_date, to_date: this.data.to_date});
             }
-            if(this.data.calendarContent !== 'month') {
-                Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
-            }
+            // if(this.data.calendarContent !== 'month') {
+            //     Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
+            // }
         },
 
         getDayData: function (day) {
@@ -505,7 +394,7 @@ let config = {
                         arrData['time'] = set.date;
                         arrData['setId'] = set.id;
                         arrData['dfield'] = setDetail.dfield;
-                        arrData['color'] = this.actions.colorRgb( setDetail.color , 0.5 );
+                        arrData['color'] = CalendarToolService.handleColorRGB( setDetail.color , 0.5 );
                         arrData['isDrag'] = setDetail.is_drag;
                         arrData['real_ids'] = JSON.stringify( setDetail.real_ids );
                         arrData['real_id'] = JSON.stringify( [select._id] );
@@ -604,7 +493,7 @@ let config = {
                     if( d['create_time'].indexOf( day.dataTime ) !== -1 ){
                         day['data'].push( {
                             data: d,
-                            color: this.actions.colorRgb( '#64A6EF' , 0.5 ),
+                            color: CalendarToolService.handleColorRGB( '#64A6EF' , 0.5 ),
                             srcColor: '#64A6EF',
                             isDrag:0,
                             isShow: true,
@@ -639,22 +528,20 @@ let config = {
             }
         }
     },
-    afterRender: function() {
-        this.el.css({"height":"100%","width":"100%"});
-
-        let oDate = new Date(),
-            year = oDate.getFullYear(),
-            month = oDate.getMonth(),
-            day = oDate.getDate(),
-            week = oDate.getDay();
+    firstAfterRender: function () {
+        let year = CalendarTimeService.getYear(),
+            month = CalendarTimeService.getMonth(),
+            week = CalendarTimeService.getWeek(),
+            day = CalendarTimeService.getDay();
         this.data.today = Object.assign({}, {'y': year, 'm':month, 'd':day, 'w':week});
-        this.data.selectData = this.data.today;
-        this.data.todayStr = year + "-" + this.actions.addZero( month + 1 ) + "-" + this.actions.addZero( day );
-        this.data.chooseDate = year + "-" + this.actions.addZero( month + 1 ) + "-" + this.actions.addZero( day );
-        this.data.selectedDateShow = year+'年'+(month+1) +'月';
-        this.el.find('.nowDate').html(this.data.selectedDateShow);
         this.actions.createMonthCalendar(year, month);
 
+        this.data.selectData = this.data.today;
+        this.data.todayStr = CalendarTimeService.formatDate(year, month, day);
+        this.data.chooseDate = CalendarTimeService.formatDate(year, month, day);
+    },
+    afterRender: function() {
+        this.el.css({"height":"100%","width":"100%"});
 
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.data.workflowData = data;
@@ -664,25 +551,44 @@ let config = {
 
         Mediator.on('Calendar: changeMainView', data => {
             this.data.calendarContent = data.calendarContent;
-            if(this.data.calendarContent === 'today') {
-                this.data.selectData = this.data.today;
-                this.data.calendarContent = 'day';
+            if(data.calendarContent === 'month') {
+                this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
                 this.actions.changeMainView(this.data.calendarContent);
-            } else if(this.data.calendarContent === 'schedule') {
-                this.el.find('.calendar-main-content').empty();
-                this.actions.makeScheduleData(this.data.from_date, this.data.to_date);
             }else {
-                this.actions.changeMainView(this.data.calendarContent);
+                if(this.data.calendarContent === 'today') {
+                    this.data.selectData = this.data.today;
+                    this.data.calendarContent = 'day';
+                    this.actions.changeMainView(this.data.calendarContent);
+                } else if(this.data.calendarContent === 'schedule') {
+                    this.el.find('.calendar-main-content').empty();
+                    this.actions.getCalendarData({
+                        from_date: this.data.from_date,
+                        to_date: this.data.to_date,
+                        cancel_fields: JSON.stringify(this.data.cancel_fields)
+                    });
+                    //this.actions.makeScheduleData(this.data.from_date, this.data.to_date);
+                }else {
+                    this.actions.changeMainView(this.data.calendarContent);
+                }
             }
-
         });
 
         Mediator.on('Calendar: tool', data => {
             if(data.toolMethod === 'refresh') {
-                if(this.data.calendarContent) {
-                    this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
+                if(this.data.calendarContent !== 'schedule') {
+                    this.actions.getCalendarData({
+                        from_date: this.data.from_date,
+                        to_date: this.data.to_date,
+                        cancel_fields: JSON.stringify(this.data.cancel_fields)
+                    },'calendar');
+                } else {
+                    this.actions.getCalendarData({
+                        from_date: this.data.from_date,
+                        to_date: this.data.to_date,
+                        cancel_fields: JSON.stringify(this.data.cancel_fields)
+                    });
                 }
-                this.actions.changeMainView(this.data.calendarContent);
+
             }else if(data.toolMethod === 'export') {
                 PMAPI.openDialogByComponent(CalendarExport, {
                     width: '350',
@@ -723,14 +629,18 @@ let config = {
 
         let that = this;
         Mediator.on('calendarSchedule: date', data => {
-            that.actions.getCalendarData(data,'schedule');
+
+            that.actions.getCalendarData({
+                from_date: data.from_date,
+                to_date: data.to_date,
+                cancel_fields: JSON.stringify(this.data.cancel_fields)
+            },'schedule');
             that.data.scheduleStart = data.from_date;
             that.data.scheduleEnd = data.to_date;
         });
 
         Mediator.on('calendar-left:unshowData', data => {
             if(data['data']) {
-                console.log(data['data']);
                 this.data.isShowArr = data['data'];
                 let arr = ['approve','remind'];
                 let arr_1 = [];
@@ -740,7 +650,6 @@ let config = {
                     }
                 }
                 this.data.cancel_fields = arr_1;
-                console.log(this.data.cancel_fields);
                 // if(this.data.calendarContent === 'month') {
                 //     this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
                 // }
@@ -754,13 +663,67 @@ let config = {
             }else {
                 this.data.isShowWorkflowData = false;
             }
-        })
+        });
 
+        Mediator.on('Calendar: globalSearch', data => {
+            if(data !== '') {
+                this.actions.search(data);
+            } else {
+                this.data.searchText = '';
+            }
+        });
+
+        Mediator.on('CalendarSelected: Search', data => {
+            if(data) {
+                let json = {
+                    from_date:this.data.from_date,
+                    to_date:this.data.to_date,
+                    tableid2filter:JSON.stringify(data)
+                };
+                if(this.data.calendarContent !== 'schedule') {
+                    this.actions.getCalendarData(json, 'calendar');
+                } else {
+                    this.actions.getCalendarData(json);
+                }
+
+            }
+        });
+
+        // Mediator.on('CalendarRemindTask: changeData', data => {
+        //     let params = data;
+        //     params['from_date'] = this.data.from_date;
+        //     params['to_date'] = this.data.to_date;
+        //     console.log(params);
+        //     CalendarService.getCalendarDrag(params).then(res => {
+        //         this.data.date2settings = res['calendar_data']['date2csids'];
+        //         this.data.calendarSettings = res['calendar_data']['id2data'];
+        //         this.data.tableid2name = res['calendar_data']['tableid2name'];
+        //         this.data.fieldInfos = res['calendar_data']['field_infos'];
+        //         if(this.data.calendarContent !== 'schedule') {
+        //             this.actions.monthDataTogether();
+        //         }else {
+        //             this.actions.makeScheduleData(data.from_date, data.to_date);
+        //         }
+        //         this.actions.getDataCount();
+        //     })
+        // });
+
+    },
+    beforeDestory: function () {
+        Mediator.removeAll('calendar-left');
+        Mediator.removeAll('CalendarWorkflowData: workflowData');
+        Mediator.removeAll('Calendar: changeMainView');
+        Mediator.removeAll('Calendar: tool');
+        Mediator.removeAll('Calendar: changeDate');
+        Mediator.removeAll('calendarSchedule: date');
+        Mediator.removeAll('calendar-left:unshowData');
+        Mediator.removeAll('Calendar: globalSearch');
     }
 };
 
 class CalendarMain extends Component {
-    constructor() {
+    constructor(data) {
+        config.data.cancel_fields = data;
         super(config);
     }
 }
