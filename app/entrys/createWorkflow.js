@@ -198,7 +198,8 @@ $('#multiFlow').on('click',()=>{
             viewMode:"createBatch"
         });
         AgGrid.actions.returnBatchData = function (ids) {
-            console.log('接受导入数据')
+            console.log('接受导入数据');
+            console.log(ids);
         };
         AgGrid.render($("#J-aggrid"));
     })

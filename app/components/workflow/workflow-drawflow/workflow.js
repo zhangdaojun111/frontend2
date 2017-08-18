@@ -117,7 +117,7 @@ let config = {
                             class: styleClass,
                             startPoint: startPoint,
                             endPoint: endPoint,
-                            title: myTitle,
+                            title: text,
                             state: state,
                             canreject: can_reject,
                             eventname: event_name,//event_name,
