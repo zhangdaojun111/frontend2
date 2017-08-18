@@ -30,6 +30,7 @@ let config = {
 
     },
     afterRender: function() {
+        console.log(this.data.dayScheduleList);
         this.data.dayScheduleList.forEach(item => {
             if(item.isShow) {
                 let taskItemHtml = document.createElement('div');
