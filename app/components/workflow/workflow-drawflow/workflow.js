@@ -448,9 +448,6 @@ let config = {
         this.el.parents(".workflow-wrapper").find("#flow-node").on('click', '#togglePic', () => {
             this.actions.togglePicture();
         });
-        this.el.on('click', '#addFocus', () => {
-            console.log(123);
-        });
     },
     beforeDestory: function(){
 
