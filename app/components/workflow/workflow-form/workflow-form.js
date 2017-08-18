@@ -68,22 +68,26 @@ let config = {
         },
         showImg(e){
             this.el.find(".oldImg").css("display","block");
+        },
+        trans(){
+            let ev = this.el.find('.collapseFormBtn');
+            if(this.formTrans){
+                ev.addClass("animat2");
+                ev.removeClass("animat1");
+                this.formTrans = false;
+            }else{
+                ev.addClass("animat1");
+                ev.removeClass("animat2");
+                this.formTrans = true;
+            }
+            this.el.find(".place-form").toggle();
         }
     },
     afterRender: function() {
         let __this=this;
         this.formTrans = false;
         this.el.on('click','.collapseFormBtn',()=>{
-            let ev = this.el.find('.collapseFormBtn');
-            if(this.formTrans){
-                ev.css("transform","rotateZ(360deg)");
-                this.formTrans = false;
-            }else{
-                ev.css("transform","rotateZ(180deg)");
-                this.formTrans = true;
-            }
-
-            this.el.find(".place-form").toggle();
+            this.actions.trans();
         })
         this.el.on("mouseenter",".imgseal",function(e){
             let ev = $(this).find('.J_del');
@@ -96,7 +100,6 @@ let config = {
         })
         this.el.on("click",'.J_del',(e)=>{
             this.actions.delimg(e);
-            this.actions.collectImg();
         })
         Mediator.subscribe('workflow:getImgInfo',(e)=>{
             this.actions.addImg(e);
@@ -111,7 +114,7 @@ let config = {
             Mediator.publish('workflow:sendImgInfo',this.actions.collectImg());
         });
         //获取表名，通过form传给我们表名
-        Mediator.subscribe("workflow:gotWorkflowTitle",res=>{
+        Mediator.subscribe("workflow:getWorkflowTitle",res=>{
            console.log("获取表头，通过form传给我们表头,发布为workflow:gotWorkflowTitle");
            if(res){
                this.el.find(".J_wfName").text(res);
@@ -119,27 +122,6 @@ let config = {
                this.el.find(".J_wfName").text("表名");
            }
         });
-
-        // 在页面显示表名，但是有一个bug，如果表名中含有>的话，只能截取部分表名
-        // Mediator.subscribe("workflow:gotWorkflowInfo",res=>{
-        //     console.log(res.data[0].content);
-        //     let data = res.data[0].content;
-        //     // console.log(res.data[0].content.indexOf("<table"));
-        //     let len = data.indexOf("<table");
-        //     if(len){
-        //         let titledata = data.substring(0,len);
-        //         let num = titledata.indexOf('</');
-        //         let a = len -num;
-        //         let str = titledata.split('').reverse().join('');
-        //         let b = str.substring(a,num);
-        //         let c = b.indexOf(">");
-        //         let title = b.substring(0,c);
-        //         title = title.split('').reverse().join('');
-        //         this.el.find(".J_wfName").text(title);
-        //     }else{
-        //         this.el.find(".J_wfName").text("表名");
-        //     }
-        // })
     }
 }
 
