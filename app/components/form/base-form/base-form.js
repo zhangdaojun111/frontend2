@@ -1451,20 +1451,27 @@ let config={
         //对应关系弹窗
         Mediator.subscribe('form:openCorrespondence:'+_this.data.tableId,function(data){
             let isView = data["is_view"];
-                _this.data.sonTableId = data["value"];
-                if(isView == '0'){
-                    _this.data.viewMode = 'editFromCorrespondence';
-                }else{
-                    _this.data.viewMode = 'viewFromCorrespondence';
+            _this.data.sonTableId = data["value"];
+            if(isView == '0'){
+                _this.data.viewMode = 'editFromCorrespondence';
+            }else{
+                _this.data.viewMode = 'viewFromCorrespondence';
+            }
+            PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`,{
+                width:800,
+                height:600,
+                title:`对应关系`,
+                modal:true
+            }).then(data=>{
+                //关闭对应关系后的回调刷新
+                if(data.dfield){
+                    console.log('关闭后的回调刷新');
+                    _this.childComponent[data.dfield].data.dataGrid.actions.getGridData();
                 }
-                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`,{
-                    width:800,
-                    height:600,
-                    title:`对应关系`,
-                    modal:true
-                }).then(data=>{
-                })
+            })
         });
+
+
        // 密码弹窗
         Mediator.subscribe('form:addPassword:'+_this.data.tableId,function(data){
             _this.data['addPassWordField']=data.dfield;

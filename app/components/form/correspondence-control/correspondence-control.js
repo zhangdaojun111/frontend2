@@ -31,6 +31,8 @@ let config={
             }
         })
         Mediator.subscribe('correspondenceSaved:' + this.data.dfield + ':' + this.data.value,(res)=>{
+            console.log('接收推送');
+            console.log(res);
             if(res == true){
                 //待晓川那边提供刷新接口
                 _this.data.dataGrid.actions.getGridData();
