@@ -41,11 +41,12 @@ $sub_color:#0088ff;
         margin-top: 10px;
         margin-left: 75px;
         background-repeat: no-repeat;
+        position: relative;
+        text-align: center;
 
         img{
-            width: 350px;
-            height: 350px;
             background-color: #FFFFFF;
+            position: absolute;
         }
         //.drag-able{
         //    width: 60px;
@@ -70,14 +71,19 @@ $sub_color:#0088ff;
         border-radius: 50%;
         position: absolute;
         .result-img{
-            width: 350px;
-            height: 350px;
             top:0;
             left:0;
             position: absolute;
         }
     }
-
+    .canvas-box{
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        text-align: center;
+        border: solid 1px black;
+        overflow: hidden;
+    }
     .bottom-box{
         position: absolute;
         bottom: 20px;

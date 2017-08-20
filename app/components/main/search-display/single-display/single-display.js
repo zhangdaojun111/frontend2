@@ -6,7 +6,6 @@ import './single-display.scss';
 import template from './single-display.html';
 
 
-
 let config = {
     template:template,
     data:{
@@ -20,6 +19,9 @@ let config = {
     },
     afterRender:function () {
         this.actions.initInfo();
+        this.el.on('click','.data-content',() => {
+
+        })
     },
     beforeDestory:function () {
 
