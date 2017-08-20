@@ -26,23 +26,9 @@ $bg-color: #ccc;
         }
     }
     .chart-form-group {
-        border: 1px solid #ccc;
         padding: 20px;
         margin-top: 20px;
         position: relative;
-        &:after {
-            position: absolute;
-            width: 118px;
-            height: 22px;
-            line-height: 22px;
-            content: '折柱图基础数据';
-            top: -10px;
-            left: 18px;
-            font-size: 14px;
-            background-color: #ffffff;
-            color: #ccc;
-            text-align: center;
-        }
         .form-group-y0 {
             margin: 26px 0;
             border: 1px solid $bg-color;
