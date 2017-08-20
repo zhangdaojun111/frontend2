@@ -12,9 +12,7 @@ import "./yAxis.scss";
 
 let config = {
     template:template,
-    data: {
-        field:null
-    },
+    data: {},
     actions: {},
     afterRender() {
         this.renderFitting();
@@ -63,7 +61,14 @@ export class FormNormalYComponent extends BiBaseComponent{
     renderFitting() {
 
         const groupYFitting = [
-            {name: 'field', option: {type: 'autoComplete', me: this, container: 'y-item'}},
+            {name: 'field', option: {
+                type: 'autoComplete',
+                me: this,
+                data: {
+                    onSelect: this.getValue.bind(this)
+                },
+                container: 'y-item'
+            }},
             {name: 'type', option: {type: 'select',data: {
                 options:[
                     {value: 'line', name: '折线图'},
@@ -72,7 +77,6 @@ export class FormNormalYComponent extends BiBaseComponent{
             }, me: this, container: 'y-item'}}
         ];
         this.yAxis = groupFitting(groupYFitting);
-        this.yAxis.field.autoSelect.data.onSelect = this.getValue.bind(this);
     }
 
     /**

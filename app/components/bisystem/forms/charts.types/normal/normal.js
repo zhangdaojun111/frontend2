@@ -12,6 +12,7 @@ import {PMAPI} from '../../../../../lib/postmsg';
 import {FormNormalYComponent} from './yAxis/yAxis';
 import {config as advancedDialogConfig} from "./advanced/advanced";
 import {FormMixShareComponent} from '../../mix.share/mix.share';
+import {FormNormalDeepComponent} from './deep/deep';
 import "./normal.scss";
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 
@@ -57,14 +58,15 @@ export class FormNormalComponent extends BiBaseComponent{
     renderFitting() {
         let base = new FormBaseComponent();
         let share = new FormMixShareComponent();
+        let deeps = new FormNormalDeepComponent()
         this.append(base, this.el.find('.form-group-base'));
         this.append(share, this.el.find('.form-group-share'));
+        this.append(deeps, this.el.find('.chart-form-deep'))
 
-        // 默认增加第一条y数据
-        this.addYAxis();
         this.formGroup = {
             chartName: base,
             share: share,
+            deeps: deeps,
             x: instanceFitting({
                 type:'autoComplete',
                 me: this,
@@ -133,7 +135,8 @@ export class FormNormalComponent extends BiBaseComponent{
                 data:{
                     value:null,
                     show: false,
-                    label: 'x轴下边距(未选择X轴竖向展示时生效)'
+                    label: 'x轴下边距(未选择X轴竖向展示时生效)',
+                    onChange: null
                 },
                 me: this,
                 container: 'form-group-yHorizontalColumns .x-margin-bottom'
@@ -173,32 +176,36 @@ export class FormNormalComponent extends BiBaseComponent{
             chartAssignment: instanceFitting({
                 type:'select',
                 data: {
-                    value:null,
+                    value:1,
                     label: '选择分组或下拉',
                     options:[
                         {value: 1, name: '分组'},
                         {value: 2, name: '下穿'}
-                    ]
+                    ],
+                    onChange: this.switchGroupandDeep.bind(this),
                 },
                 me: this,
                 container: 'form-group-chartAssignment'
-            }),
-            advanced: instanceFitting({
-                type:'autoComplete',
-                me: this,
-                container: 'form-deep-auto'
-            }),
+            })
         };
+        // 默认增加第一条y数据
+        this.addYAxis();
     }
 
     /**
      * 渲染x轴字段
      * @param fields x轴字段列表
      */
-    renderXField(fields) {
-        this.formGroup.x.autoSelect.data.choosed=[];
-        this.formGroup.x.autoSelect.data.list = fields;
-        this.formGroup.x.autoSelect.reload();
+    renderXField(fields = []) {
+        if (this.formGroup.x) {
+            this.formGroup.x.autoSelect.data.choosed=[];
+            this.formGroup.x.autoSelect.data.list = fields;
+            this.formGroup.x.autoSelect.reload();
+        };
+
+        if (this.formGroup.deeps) {
+            this.formGroup.deeps.reloadXaxis(fields);
+        };
     }
 
     /**
@@ -217,10 +224,8 @@ export class FormNormalComponent extends BiBaseComponent{
      * fields x轴列表数据，y轴列表数据
      */
     renderSourceRelationField(fields) {
-        if (fields['x_field'] || fields['y_field']) {
-            this.renderXField(fields['x_field']);
-            this.renderYField(fields['y_field']);
-        };
+        this.renderXField(fields['x_field']);
+        this.renderYField(fields['y_field']);
     }
 
     /**
@@ -344,6 +349,7 @@ export class FormNormalComponent extends BiBaseComponent{
         }
         this.formGroup.xMarginBottom.reload();
     }
+
     /**
      * 横向展示数据
      * @param checked 通过checkbox判断是否选中
@@ -357,6 +363,20 @@ export class FormNormalComponent extends BiBaseComponent{
         this.formGroup.echartXTextNum.reload();
         this.formGroup.echartXMarginBottom.reload();
         this.formGroup.echartX.reload();
+    }
+
+    /**
+     * 切换分组和下穿
+     * @param val 通过val判断是下穿还是分组 val === 1 分组， val === 2 下穿
+     */
+    switchGroupandDeep(val) {
+        if (val == 1) {
+            this.formGroup.deeps.data.deepShow = false;
+            this.formGroup.deeps.data.deeps =[]
+        } else {
+            this.formGroup.deeps.data.deepShow = true;
+        };
+        this.formGroup.deeps.reload();
     }
 
     /**

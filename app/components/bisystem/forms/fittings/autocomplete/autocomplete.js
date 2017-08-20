@@ -13,6 +13,7 @@ let config = {
     template: template,
     data: {
         list: [],
+        onSelect: null
     },
     afterRender() {
         this.data.choosed = this.autoSelect.data.choosed;
@@ -24,10 +25,11 @@ let config = {
 
         // 配置autoSelect组件
         const autoSelectData = {
-            list: [],
+            list:me.data.list,
             selectBoxHeight: 'auto',
-            multiSelect: false
-        }
+            multiSelect: false,
+            onSelect: me.data.onSelect
+        };
         this.autoSelect = new AutoSelect(autoSelectData);
         this.append(this.autoSelect, this.el.find('.autocomplete'));
 

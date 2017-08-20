@@ -42,6 +42,9 @@ export class FormMixShareComponent extends BiBaseComponent {
             chartSource:instanceFitting({
                 type:'autoComplete',
                 me: this,
+                data: {
+                    onSelect: this.getChartField.bind(this)
+                },
                 container: 'chart-mix-share' }),
             themes: instanceFitting({
                 type:'radio',
@@ -70,7 +73,6 @@ export class FormMixShareComponent extends BiBaseComponent {
         let res = await ChartFormService.getChartSource();
         if (res['success'] === 1) {
             this.mixForm.chartSource.autoSelect.data.list = res['data'];
-            this.mixForm.chartSource.autoSelect.data.onSelect = this.getChartField;
             this.mixForm.chartSource.autoSelect.reload();
         } else {
             msgbox.alert(res['error']);
@@ -101,17 +103,18 @@ export class FormMixShareComponent extends BiBaseComponent {
      */
     async getChartField(tableId) {
         const table = tableId.length > 0 ? tableId[0] : null;
+        let data;
         if (table) {
             let res = await ChartFormService.getChartField(table.id);
             if (res['success'] === 1) {
-                Mediator.publish('bi:chart:form:update', {type:'fields', data:res['data']});
+                data = res['data'];
             } else {
                 msgbox.alert(res['error']);
             }
         } else {
-            Mediator.publish('bi:chart:form:update', {type:'fields', data:[]});
-        }
-
+            data = [];
+        };
+        Mediator.publish('bi:chart:form:update', {type:'fields', data:data});
     }
 
     /**
