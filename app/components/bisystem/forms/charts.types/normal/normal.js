@@ -28,7 +28,8 @@ let config = {
                 width: 600,
                 height: 630,
                 title: '高级数据'
-            })
+            });
+            console.log(res);
         })
     },
     firstAfterRender() {
@@ -402,8 +403,8 @@ export class FormNormalComponent extends BiBaseComponent{
      */
     async saveChart() {
         const fields  = this.formGroup;
+
         // const data = {
-        //
         //         advancedDataTemplates: [],
         //         assortment: 'normal',
         //         chartAssignment: {name:'下穿', val:2},
@@ -458,6 +459,20 @@ export class FormNormalComponent extends BiBaseComponent{
                 data[k] = fields[k].getValue();
             };
         });
+        const chart = {
+            advancedDataTemplates: [],
+            assortment: 'normal',
+            chartAssignment: data.chartAssignment == 1 ? {name:'分组', val:1} : {name:'下穿', val:2},
+            chartName:data.base,
+            countColumn: {},
+            deeps:data.deeps,
+            double: data.doubleY ? 1 : 0,
+            echartX: data.echartX ? {marginBottom: data.echartXMarginBottom, textNum:data.echartXTextNum}: {},
+            filter: [],
+            icon: data.share.icons,
+            relations: [],
+            source: {}
+        };
         console.log(data);
         // let res = await ChartFormService.saveChart(JSON.stringify(data));
         // console.log(res);

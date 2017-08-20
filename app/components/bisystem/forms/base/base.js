@@ -47,7 +47,10 @@ export class FormBaseComponent extends BiBaseComponent {
      * 获取数据
      */
     getValue() {
-        return this.formGroup.chartName.data.value;
+        return  {
+            id: '',
+            name: this.formGroup.chartName.data.value
+        };
     }
 
 }
