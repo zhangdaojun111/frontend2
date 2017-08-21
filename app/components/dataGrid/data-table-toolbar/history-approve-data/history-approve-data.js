@@ -69,6 +69,10 @@ let config = {
                 _this.el.find('.history-content').removeClass('active');
                 _this.el.find('.history-content').eq(i).addClass('active');
             })
+            this.el.on('click','.history-table-title',function() {
+                $(this).next('.history-table').css('display','block')
+                $(this).find('.img').addClass('.active')
+            })
         }
     },
     afterRender: function() {
