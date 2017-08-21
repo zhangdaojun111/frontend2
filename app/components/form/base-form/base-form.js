@@ -779,112 +779,113 @@ let config={
             }
         },
 
-        //判断一下日期的类型，并且进行限制//判断一下日期的类型，并且进行限制
-        checkDateType(){
-            for(let i = 0;i<this.data.formData.length;i++){
-                if(this.data.formData[i]['type'] == 'Date'){
-                    let temp = this.data.formData[i];
-                    let dfield = this.data.formData[i]['dfield'];//f8
-                    if(temp['timeType'] == 'after'){
-                        let vals = data[dfield].split("-");
-                        //let vals = val.split("-");//[2011,11,11];
-                        let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
-                            }
-                        }
-                    }else if(this.data.formData[i]['type'] == 'before') {
-                        let vals = data[dfield].split("-");
-                        //let vals = val.split("-");//[2011,11,11];
-                        let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
-                            }
-                        }
-                    }
-                }
-                if(this.data.formData[i]['type'] == 'Datetime'){
-                    let temp = this.data.formData[i];
-                    let dfield = this.data.formData[i]['dfield'];//f8
-                    if(temp['timeType'] == 'after'){
-                        let vals = data[dfield].split(" ")[0].split("-");
-                        //let vals = val.split("-");//[2011,11,11];
-                        let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
-                            }
-                        }
-                    }else if(this.data.formData[i]['type'] == 'before') {
-                        let vals = data[dfield].split(" ")[0].split("-");
-                        //let vals = val.split("-");//[2011,11,11];
-                        let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
-                            }
-                        }
-                    }
-                }
-            }
-            for(let i = 0;i<this.data.formData.length;i++){
-                if(this.data.formData[i]['type'] == 'Date'){
-                    let temp = this.data.formData[i];
-                    let dfield = this.data.formData[i]['dfield'];//f8
-                    if(temp['timeType'] == 'after'){
-                        let vals = data[dfield].split("-");
-                        //let vals = val.split("-");//[2011,11,11];
-                        let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
-                            }
-                        }
-                    }else if(this.data.formData[i]['type'] == 'before') {
-                        let vals = data[dfield].split("-");
-                        //let vals = val.split("-");//[2011,11,11];
-                        let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
-                            }
-                        }
-                    }
-                }
-                if(this.data.formData[i]['type'] == 'Datetime'){
-                    let temp = this.data.formData[i];
-                    let dfield = this.data.formData[i]['dfield'];//f8
-                    if(temp['timeType'] == 'after'){
-                        let vals = data[dfield].split(" ")[0].split("-");
-                        //let vals = val.split("-");//[2011,11,11];
-                        let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
-                            }
-                        }
-                    }else if(this.data.formData[i]['type'] == 'before') {
-                        let vals = data[dfield].split(" ")[0].split("-");
-                        //let vals = val.split("-");//[2011,11,11];
-                        let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
-                            }
-                        }
-                    }
-                }
-            }
+        //判断一下日期的类型，并且进行限制
+        checkDateType(data){
+            // for(let i = 0;i<this.data.formData.length;i++){
+            //     if(this.data.formData[i]['type'] == 'Date'){
+            //         let temp = this.data.formData[i];
+            //         let dfield = this.data.formData[i]['dfield'];//f8
+            //         console.log(dfield)
+            //         if(temp['timeType'] == 'after'){
+            //             let vals = data[dfield].split("-");
+            //             //let vals = val.split("-");//[2011,11,11];
+            //             let myData = new Date();
+            //             let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+            //             for(let i = 0;i<3;i++){
+            //                 if(vals[i]<dates[i]){
+            //                     data[dfield]='';
+            //                 }
+            //             }
+            //         }else if(this.data.formData[i]['type'] == 'before') {
+            //             let vals = data[dfield].split("-");
+            //             //let vals = val.split("-");//[2011,11,11];
+            //             let myData = new Date();
+            //             let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+            //             for(let i = 0;i<3;i++){
+            //                 if(vals[i]<dates[i]){
+            //                     data[dfield]='';
+            //                 }
+            //             }
+            //         }
+            //     }
+            //     if(this.data.formData[i]['type'] == 'Datetime'){
+            //         let temp = this.data.formData[i];
+            //         let dfield = this.data.formData[i]['dfield'];//f8
+            //         if(temp['timeType'] == 'after'){
+            //             let vals = data[dfield].split(" ")[0].split("-");
+            //             //let vals = val.split("-");//[2011,11,11];
+            //             let myData = new Date();
+            //             let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+            //             for(let i = 0;i<3;i++){
+            //                 if(vals[i]<dates[i]){
+            //                     data[dfield]='';
+            //                 }
+            //             }
+            //         }else if(this.data.formData[i]['type'] == 'before') {
+            //             let vals = data[dfield].split(" ")[0].split("-");
+            //             //let vals = val.split("-");//[2011,11,11];
+            //             let myData = new Date();
+            //             let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+            //             for(let i = 0;i<3;i++){
+            //                 if(vals[i]<dates[i]){
+            //                     data[dfield]='';
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+            // for(let i = 0;i<this.data.formData.length;i++){
+            //     if(this.data.formData[i]['type'] == 'Date'){
+            //         let temp = this.data.formData[i];
+            //         let dfield = this.data.formData[i]['dfield'];//f8
+            //         if(temp['timeType'] == 'after'){
+            //             let vals = data[dfield].split("-");
+            //             //let vals = val.split("-");//[2011,11,11];
+            //             let myData = new Date();
+            //             let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+            //             for(let i = 0;i<3;i++){
+            //                 if(vals[i]<dates[i]){
+            //                     data[dfield]='';
+            //                 }
+            //             }
+            //         }else if(this.data.formData[i]['type'] == 'before') {
+            //             let vals = data[dfield].split("-");
+            //             //let vals = val.split("-");//[2011,11,11];
+            //             let myData = new Date();
+            //             let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+            //             for(let i = 0;i<3;i++){
+            //                 if(vals[i]<dates[i]){
+            //                     data[dfield]='';
+            //                 }
+            //             }
+            //         }
+            //     }
+            //     if(this.data.formData[i]['type'] == 'Datetime'){
+            //         let temp = this.data.formData[i];
+            //         let dfield = this.data.formData[i]['dfield'];//f8
+            //         if(temp['timeType'] == 'after'){
+            //             let vals = data[dfield].split(" ")[0].split("-");
+            //             //let vals = val.split("-");//[2011,11,11];
+            //             let myData = new Date();
+            //             let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+            //             for(let i = 0;i<3;i++){
+            //                 if(vals[i]<dates[i]){
+            //                     data[dfield]='';
+            //                 }
+            //             }
+            //         }else if(this.data.formData[i]['type'] == 'before') {
+            //             let vals = data[dfield].split(" ")[0].split("-");
+            //             //let vals = val.split("-");//[2011,11,11];
+            //             let myData = new Date();
+            //             let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+            //             for(let i = 0;i<3;i++){
+            //                 if(vals[i]<dates[i]){
+            //                     data[dfield]='';
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
         },
 
         //统计功能

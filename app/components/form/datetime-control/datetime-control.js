@@ -59,8 +59,8 @@ let config={
             timeFormat: 'HH:mm:ss', //格式化时间
 
             onSelect: function (selectTime, text) {
+                let selectTime1 = selectTime;
                 _this.data.value = selectTime.replace(/\//g, "-");
-
                 _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                 if( _this.data.value.length > 19 ){
                     _this.data.value = '';
@@ -86,7 +86,7 @@ let config={
                             _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                         }
                     }else if(_this.data['timeType'] == 'all'){
-                        _this.data.value = selectTime.replace(/\//g, "-");
+                        _this.data.value = selectTime1.replace(/\//g, "-");
                         _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                     }
                 }else{
