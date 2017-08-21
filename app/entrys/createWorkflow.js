@@ -194,7 +194,6 @@ $('#multiFlow').on('click',()=>{
 
         });
     })().then(function (res) {
-        console.log(temp_id);
         let AgGrid=new Grid({
             parentTempId:temp_id,
             tableId:res.table_id,

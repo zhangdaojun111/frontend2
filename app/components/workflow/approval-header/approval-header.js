@@ -36,11 +36,6 @@ let config = {
         this.el.on('click','.gz',(e)=>{
             this.actions.toogz(e);
         });
-        Mediator.subscribe("workflow:is_view",(e)=>{
-            if(e===1){
-                this.el.find('.approval-control').hide();
-            }
-        });
         Mediator.publish('workflow:loaded', 1);
     },
     beforeDestory: function(){

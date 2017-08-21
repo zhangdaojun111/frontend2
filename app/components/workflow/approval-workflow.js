@@ -215,6 +215,9 @@ let config={
                 ocloseSpan.style.display = 'none';
             });
             container.appendChild(ocloseSpan);
+        },
+        reApp(){
+            Mediator.publish('approval:re-app');
         }
 
     },
@@ -255,12 +258,15 @@ let config={
             e.stopPropagation();
             __this.actions.appRejAny();
         });
+        this.el.on('click','#re-app',function (e) {
+            __this.actions.reApp();
+        });
+
         this.el.on('click','#rej .draged-item',function(){
             WorkFlow.rejectNode(this);
         });
         this.el.on('click','#app-add',()=>{
             this.el.find('.addUser').show();
-
             PMAPI.openDialogByIframe(`/iframe/addSigner/`,{
                 width:1000,
                 height:800,
@@ -276,7 +282,6 @@ let config={
                 }
             })
         });
-
         Mediator.subscribe("workflow:sendImgInfo",(e)=>{
             this.data.imgInfo=e;
         })
