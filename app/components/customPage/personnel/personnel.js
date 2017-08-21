@@ -62,6 +62,8 @@ let config = {
         filterText: '',
         //请求数据参数
         commonQueryData:[],
+        //临时查询数据
+        temporaryCommonQuery:[],
         //部门名称
         departmentName: '',
         //用户状态
@@ -363,6 +365,10 @@ let config = {
                 let url = dgcService.returnIframeUrl( '/form/index/',obj );
                 this.actions.openSourceDataGrid( url,'新增' )
             } )
+            //高级查询
+            this.el.find( '.expert-search-btn' ).on( 'click',()=>{
+                this.actions.renderExpertSearch();
+            } )
         },
         //触发导出
         onExport: function () {
@@ -389,6 +395,89 @@ let config = {
             }).then((data) => {
 
             });
+        },
+        //渲染高级查询
+        renderExpertSearch: function () {
+            let d = {
+                tableId: this.data.tableId,
+                fieldsData: this.data.expertSearchFields,
+                commonQuery: this.data.commonQueryData,
+                commonQuerySelectLength:this.el.find('.dataGrid-commonQuery-select option').length
+                // getExpertSearchData:this.actions.getExpertSearchData,
+                // postExpertSearch:this.actions.postExpertSearch,
+                // saveTemporaryCommonQuery:this.actions.saveTemporaryCommonQuery
+            }
+            PMAPI.openDialogByIframe(`/iframe/expertSearch/`,{
+                width:950,
+                height:600,
+                title:`高级查询`,
+                modal:true
+            },{d}).then(res=>{
+                if(res.type == 'temporaryQuery') {
+                    if(res.addNameAry.length != 0){
+                        this.actions.getExpertSearchData(res.addNameAry);
+                    } else {
+                        this.actions.postExpertSearch(res.value,res.id,res.name);
+                    }
+                    this.el.find('.dataGrid-commonQuery-select').val(res.name);
+                } if(res.appendChecked) {
+                    this.data.temporaryCommonQuery = res.value
+                    this.actions.appendQuerySelect()
+                } if(res.saveCommonQuery || res.onlyclose == true) {
+                    this.actions.getExpertSearchData(res.addNameAry)
+                }
+            })
+            let _this = this
+            $('.dataGrid-commonQuery-select').bind('change', function() {
+                if($(this).val() == '常用查询') {
+                    _this.actions.postExpertSearch([],'');
+                } else if($(this).val() == '临时高级查询') {
+                    _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
+                } else {
+                    // $(this).find('.Temporary').remove();
+                    _this.data.commonQueryData.forEach((item) => {
+                        if(item.name == $(this).val()){
+                            _this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
+                        }
+                    })
+                }
+            })
+            this.actions.getExpertSearchData();
+        },
+        //设置常用查询选项值
+        appendQuerySelect: function() {
+            let length = this.el.find('.dataGrid-commonQuery-select option').length
+            for (let i = 0; i< length ;i++) {
+                if(this.el.find('.dataGrid-commonQuery-select option').eq(i).val() == '临时高级查询'){
+                    this.el.find('.dataGrid-commonQuery-select option').eq(i).remove()
+                }
+            }
+            this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
+            this.el.find('.dataGrid-commonQuery-select').val('临时高级查询');
+
+        },
+        //获取高级查询数据
+        getExpertSearchData: function (addNameAry) {
+            let obj = {'actions':JSON.stringify( ['queryParams'] ),'table_id':this.data.tableId};
+            dataTableService.getPreferences( obj ).then( res=>{
+                this.el.find('.dataGrid-commonQuery-option').remove();
+                this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="100" value="常用查询">常用查询</option>`)
+                res.rows.forEach((row) => {
+                    this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
+                });
+                this.data.commonQueryData = res.rows;
+                if(addNameAry && addNameAry.length != 0){
+                    this.data.commonQueryData.forEach((item)=>{
+                        for(let i = 0; i < addNameAry.length; i++) {
+                            if(item.name == addNameAry[i]){
+                                this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
+                                this.el.find('.dataGrid-commonQuery-select').val(item.name);
+                            }
+                        }
+                    })
+                }
+            } );
+            HTTP.flush();
         },
         //定制列
         customColumnClick: function () {
