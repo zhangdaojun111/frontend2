@@ -41,8 +41,6 @@ let config = {
         onRowDoubleClicked:function ($event) {
         },
         onRowSelected:function (param) {
-            console.log( 666 )
-            console.log( 666 )
         },
         setRowStyle:function (param) {
         }

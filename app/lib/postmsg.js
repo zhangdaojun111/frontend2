@@ -1,7 +1,8 @@
 import URL from './url';
 import component from '../lib/component';
-import 'jquery-ui/ui/widgets/dialog';
 import {HTTP} from './http';
+import './jquery-ui.dialog';
+
 
 /**
  * 父级页面，需要根据key来保存消息来源iframe或component的对象和打开的iframe或component的dom
@@ -74,7 +75,7 @@ window.addEventListener('message', function (event) {
                 comp['key'] = data.key;
                 comp.render(elementDiv);
                 dialogHash[data.key].comp = comp;
-                dialogHash[data.key].element.dialog(_.defaultsDeep(data.frame, {
+                dialogHash[data.key].element.erdsDialog(_.defaultsDeep(data.frame, {
                     modal: true,
                     close: function () {
                         if (dialogHash[data.key]) {
@@ -105,7 +106,7 @@ window.addEventListener('message', function (event) {
                         data: params
                     });
                 });
-                dialogHash[data.key].element.dialog(_.defaultsDeep(data.frame, {
+                dialogHash[data.key].element.erdsDialog(_.defaultsDeep(data.frame, {
                     modal: true,
                     close: function () {
                         if (dialogHash[data.key]) {
@@ -121,7 +122,7 @@ window.addEventListener('message', function (event) {
                 }));
                 break;
             case PMENUM.close_dialog:
-                dialogHash[data.key].element.dialog('destroy').remove();
+                dialogHash[data.key].element.erdsDialog('destroy').remove();
                 if (dialogHash[data.key].comp) {
                     dialogHash[data.key].comp.destroySelf();
                 }
