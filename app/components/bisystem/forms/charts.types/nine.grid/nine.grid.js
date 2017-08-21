@@ -10,17 +10,25 @@ import Mediator from '../../../../../lib/mediator';
 import msgbox from "../../../../../lib/msgbox";
 import {PMAPI} from '../../../../../lib/postmsg';
 import {FormMixShareComponent} from '../../mix.share/mix.share';
+import {NineGridNumberComponent} from './number/number';
 
 import './nine.grid.scss';
+
 let config = {
     template:template,
     data: {},
     actions: {},
     afterRender() {
         this.renderFitting();
+        this.showNumber();
     },
-    firstAfterRender() {}
-}
+    firstAfterRender() {
+        this.el.on('click','.bi-chart-select',function() {
+
+        })
+    }
+};
+
 export class FormNineGridComponent extends BiBaseComponent{
     constructor() {
         super(config);
@@ -47,79 +55,90 @@ export class FormNineGridComponent extends BiBaseComponent{
                     options:[
                         {
                             name:'3*3',
-                            value:'3*3'
+                            value:'3'
                         },
                         {
                             name:'4*4',
-                            value:'4*4'
+                            value:'4'
                         }
                     ]
                 }
 
             }),
-            nineGridColumnXL:instanceFitting({
-                type:'input',
-                data:{
-                    value:null,
-                    label: '请输入X轴名称1*',
-                    show:true
-                },
-                me: this,
-                container: 'nine-grid-column-x'
-            }),
-            nineGridColumnXC:instanceFitting({
-                type:'input',
-                data:{
-                    value:null,
-                    label: '请输入X轴名称2*',
-                    show:true
-                },
-                me: this,
-                container: 'nine-grid-column-x'
-            }),
-            nineGridColumnXR:instanceFitting({
-                type:'input',
-                data:{
-                    value:null,
-                    label: '请输入X轴名称3*',
-                    show:true
-                },
-                me: this,
-                container: 'nine-grid-column-x'
-            }),
-            nineGridColumnYL:instanceFitting({
-                type:'input',
-                data:{
-                    value:null,
-                    label: '请输入Y轴名称1*',
-                    show:true
-                },
-                me: this,
-                container: 'nine-grid-column-y'
-            }),
-            nineGridColumnYC:instanceFitting({
-                type:'input',
-                data:{
-                    value:null,
-                    label: '请输入Y轴名称2*',
-                    show:true
-                },
-                me: this,
-                container: 'nine-grid-column-y'
-            }),
-            nineGridColumnYR:instanceFitting({
-                type:'input',
-                data:{
-                    value:null,
-                    label: '请输入Y轴名称3*',
-                    show:true
-                },
-                me: this,
-                container: 'nine-grid-column-y'
-            }),
+            // nineGridColumnXL:instanceFitting({
+            //     type:'input',
+            //     data:{
+            //         value:null,
+            //         label: '请输入X轴名称1*',
+            //         show:true
+            //     },
+            //     me: this,
+            //     container: 'nine-grid-column-x'
+            // }),
+            // nineGridColumnXC:instanceFitting({
+            //     type:'input',
+            //     data:{
+            //         value:null,
+            //         label: '请输入X轴名称2*',
+            //         show:true
+            //     },
+            //     me: this,
+            //     container: 'nine-grid-column-x'
+            // }),
+            // nineGridColumnXR:instanceFitting({
+            //     type:'input',
+            //     data:{
+            //         value:null,
+            //         label: '请输入X轴名称3*',
+            //         show:true
+            //     },
+            //     me: this,
+            //     container: 'nine-grid-column-x'
+            // }),
+            // nineGridColumnYL:instanceFitting({
+            //     type:'input',
+            //     data:{
+            //         value:null,
+            //         label: '请输入Y轴名称1*',
+            //         show:true
+            //     },
+            //     me: this,
+            //     container: 'nine-grid-column-y'
+            // }),
+            // nineGridColumnYC:instanceFitting({
+            //     type:'input',
+            //     data:{
+            //         value:null,
+            //         label: '请输入Y轴名称2*',
+            //         show:true
+            //     },
+            //     me: this,
+            //     container: 'nine-grid-column-y'
+            // }),
+            // nineGridColumnYR:instanceFitting({
+            //     type:'input',
+            //     data:{
+            //         value:null,
+            //         label: '请输入Y轴名称3*',
+            //         show:true
+            //     },
+            //     me: this,
+            //     container: 'nine-grid-column-y'
+            // }),
 
         }
    }
+
+    /**
+     * 显示格子数3*3 或是 4*4
+     *
+     */
+    showNumber() {
+
+        let grid = new NineGridNumberComponent();
+        this.append(grid,this.el.find('.nine-grid-column-xy'));
+    }
+
 
     /**
      * reset实例，当通过路由重新进入实例，清空所有数据
