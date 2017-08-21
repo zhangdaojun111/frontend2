@@ -124,7 +124,7 @@ let config = {
                         })
                     }
                 }
-                console.log(this.data.allRows);
+                this.data.childComponents = [];
                 this.data.allRows.forEach((row, index) => {
                     let isConfig = false;
                     if(this.data.rowTitle[index]['id'] && this.data.rowTitle[index]['dtype'] === '8' && this.data.replaceDropDown.length !== 0){
