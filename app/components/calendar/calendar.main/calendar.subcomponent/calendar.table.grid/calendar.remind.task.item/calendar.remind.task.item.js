@@ -43,9 +43,7 @@ let config = {
                     Mediator.emit('CalendarRemindTask: changeData', params);
                 }
             });
-
         },
-
         openRemind: function () {
             CalendarRemind.data.remindTable = this.data.remindTaskItemData.tableName;
             CalendarRemind.data.remindDateProp = this.data.remindTaskItemData.fieldName;
@@ -97,9 +95,9 @@ let config = {
             if(this.data.remindTaskItemData['data3show'][0] && this.data.remindTaskItemData['data3show'][0][0]) {
                 this.el.find('.task-show-text').html(this.data.remindTaskItemData['data3show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data3show'][0][0]['fieldValue']);
             }
-            else if(this.data.remindTaskItemData['data2show'][0] && this.data.remindTaskItemData['data2show'][0][0]) {
-                this.el.find('.task-show-text').html(this.data.remindTaskItemData['data2show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data2show'][0][0]['fieldValue']);
-            }
+            // else if(this.data.remindTaskItemData['data2show'][0] && this.data.remindTaskItemData['data2show'][0][0]) {
+            //     this.el.find('.task-show-text').html(this.data.remindTaskItemData['data2show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data2show'][0][0]['fieldValue']);
+            // }
             this.el.on('click', '.task-show-text', () => {
                 this.actions.openRemind();
             });
@@ -108,17 +106,18 @@ let config = {
         } else if(this.data.remindTaskItemData['type'] === 3 || this.data.remindTaskItemData['type'] === 4) {
             this.actions.openWorkflow();
         }
-
-        this.el.on('click','.task-state-icon', () => {
+        this.el.on('click','.task-state-icon', function() {
             event.stopPropagation();
             if(!$(this).is(".options-show")){
+                console.log(that.el.find(".task-state-icon").offset().top);
                 that.el.parents(".calendar-main-content").find(".select-options").hide();
                 that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
+                // that.el.find(".select-options").css({"top":that.el.find(".task-state-icon").offset().top - 70});
                 that.el.find(".select-options").show();
                 $(this).addClass("options-show");
                 if(that.el.find(".task-item").parent().position().top > 60){
                     let task_list = that.el.find(".task-item").parents(".task-list");
-                    task_list.scrollTop(task_list.scrollTop()+25);
+                    task_list.scrollTop(task_list.scrollTop()+35);
                 }
             }
             else{
@@ -132,11 +131,22 @@ let config = {
             let sValue = this.el.find('.select-options option:selected').val();
             let sLabel = this.el.find('.select-options option:selected').text();
             this.actions.changSelectValue(sValue, sLabel);
+        }).on('dragstart','.task-item',function(ev){
+            let event = ev.originalEvent;
+            $(this).addClass("task-item-draggable");
+            event.dataTransfer.setData("Text",JSON.stringify(that.data.remindTaskItemData));
+            return true;
         });
         $(document).click(function(){
             that.el.parents(".calendar-main-content").find(".select-options").hide();
             that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
         });
+        // this.el.parent(".task-list").scroll(function () {
+        //     that.el.find(".select-options").hide();
+        //     that.el.find(".task-state-icon").removeClass("options-show");
+        // })
+
+
     }
 };
 

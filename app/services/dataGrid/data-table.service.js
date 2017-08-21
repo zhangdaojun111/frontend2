@@ -64,5 +64,9 @@ export const dataTableService = {
     //人员信息表请求数据
     getUserData: function ( data ) {
         return HTTP.post( 'query_user_list',data )
-    }
+    },
+    //表级操作数据
+    getTableOperation: function ( data ) {
+        return HTTP.post( 'get_operation',data )
+    },
 }

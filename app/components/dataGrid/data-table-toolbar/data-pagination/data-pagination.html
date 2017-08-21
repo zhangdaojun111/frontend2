@@ -11,6 +11,16 @@
         <span>（共</span><span class="sumPage">1</span><span>页）</span>
         <input class="enterPageNum" type="number">
     </div>
+    <!--表级操作-->
+    {{#if isSuperUser}}
+    <div>
+        <select class="tableOperateSelect">
+            {{#each tableOperationData}}
+                <opration></opration>
+            {{/each}}
+        </select>
+    </div>
+    {{/if}}
     <div class="p-page">
         <!--最前一页-->
         <span class="goFirst">

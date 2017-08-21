@@ -25,6 +25,7 @@ let config = {
         //pageType{0:'进展中的工作',1:'已完成的工作',2:'我的工作申请中的工作',3:'我的工作已完成的工作',4:'我的工作审批过的工作',5:'工作审批',6:'我的工作已关注的工作'}
         pageType: 5,
         tableId2pageType: {'approve-workflow':5,'approving-workflow':0,'finished-workflow':1,'my-workflow':2,'finish-workflow':3,'focus-workflow':6,'approved-workflow':4},
+        tableId2Name: {'approve-workflow':'工作审批','approving-workflow':'进展中的工作','finished-workflow':'已完成的工作','my-workflow':'我的工作->申请中的工作','finish-workflow':'我的工作->已完成的工作','focus-workflow':'我的工作->已关注的工作','approved-workflow':'我的工作->审批过的工作'},
         //定制列（列宽）
         colWidth: {},
         //定制列（固定列）
@@ -178,7 +179,32 @@ let config = {
             if( this.data.tableId == 'my-workflow' ){
                 this.el.find( '.batch-cancel' )[0].style.display = 'inline-block';
                 this.el.find( '.batch-cancel' ).on( 'click',()=>{
-
+                    this.data.selectRows = [];
+                    let rows = this.agGrid.gridOptions.api.getSelectedRows();
+                    for( let r of rows ){
+                        this.data.selectRows.push( r.id );
+                    }
+                    if( this.data.selectRows.length == 0 ){
+                        msgBox.alert( '请选择要取消的数据！' )
+                    }else {
+                        msgBox.confirm( '确定取消？' ).then( res=>{
+                            if( res ){
+                                let json = {
+                                    checkIds: JSON.stringify(this.data.selectRows),
+                                    action:4,
+                                    type:1
+                                }
+                                workflowService.approveMany( json )
+                                    .then(data => {
+                                        if( data.success ){
+                                            msgBox.showTips( '取消成功' );
+                                        }else {
+                                            msgBox.alert( '取消失败：' + data.error );
+                                        }
+                                    })
+                            }
+                        } )
+                    }
                 } );
             }
             //floatingFilter
