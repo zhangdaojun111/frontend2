@@ -1428,8 +1428,6 @@ let config={
         this.actions.addBtn();
         //控件值改变频道
         Mediator.subscribe('form:changeValue:'+_this.data.tableId,function(data){
-            console.log('值改变时间');
-            console.log(data);
             _this.actions.checkValue(data,_this);
         })
         //历史值触发
