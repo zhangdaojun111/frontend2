@@ -3,6 +3,8 @@ import component from '../lib/component';
 import 'jquery-ui/ui/widgets/dialog';
 import {HTTP} from './http';
 
+// console.log(dialog);
+
 /**
  * 父级页面，需要根据key来保存消息来源iframe或component的对象和打开的iframe或component的dom
  * @type json
@@ -33,9 +35,11 @@ export const PMENUM = {
     open_component_dialog: '3',
     iframe_active: '4',
     iframe_silent: '5',
-    table_invalid: '6',             // 表格数据失效
+    table_invalid: '6',              // 表格数据失效
     on_the_way_invalid: '7',         // 在途数据失效
-    open_iframe_params: '8'
+    open_iframe_params: '8',
+    get_param_from_root: '9',        // 来自子框架的消息，需要获取iframe的参数
+    send_param_to_iframe: '10'       // 来组主框架的消息，向iframe发送参数
 }
 
 /**
@@ -90,12 +94,13 @@ window.addEventListener('message', function (event) {
             case PMENUM.open_iframe_dialog:
                 let url = URL.getUrl(data.url, {key: data.key});
                 let element = $(`<iframe data-key="${data.key}" src="${url}">`);
-                dialogHash[data.key] = {
-                    iframe: event.source,
-                    element: element.appendTo(document.body)
-                };
                 // 向新打开的iframe内传递参数
                 let params = data.params || {};
+                dialogHash[data.key] = {
+                    iframe: event.source,
+                    element: element.appendTo(document.body),
+                    params: params
+                };
                 element.one('load', () => {
                     PMAPI.sendToChild(element[0], {
                         type: PMENUM.open_iframe_params,
@@ -136,6 +141,13 @@ window.addEventListener('message', function (event) {
                 dialogWaitHash[data.key](data.data);
                 delete dialogWaitHash[data.key];
                 break;
+
+            case PMENUM.get_param_from_root:
+                PMAPI.sendToChild(dialogHash[data.key].element[0], {
+                    type: PMENUM.send_param_to_iframe,
+                    data: dialogHash[data.key].params
+                });
+                break;
             default:
                 console.log('postmsg listener: unsupported message');
         }
@@ -171,7 +183,40 @@ export const PMAPI = {
     subscribe: function (channel, callback) {
         subscriber[channel] = callback;
     },
-    
+
+    /**
+     * 向主框架发消息，拉取iframe的参数
+     * @param key
+     * @returns {Promise}
+     */
+    getIframeParams: function (key) {
+        let resolve = null;
+        let promise = new Promise((_resolve) => {
+            resolve = _resolve;
+        });
+        PMAPI.sendToParent({
+            type: PMENUM.get_param_from_root,
+            key: key
+        });
+        PMAPI.subscribe(PMENUM.send_param_to_iframe, (data) => {
+            resolve(data);
+        });
+        return promise;
+    },
+
+    /**
+     * 给主框架发消息，关闭弹出框，并将数据传递给调用方
+     * @param key
+     * @param data
+     */
+    closeIframeDialog: function (key, data) {
+        PMAPI.sendToParent({
+            type: PMENUM.close_dialog,
+            key: key,
+            data: data
+        })
+    },
+
     /**
      * 获取根框架的window
      * @returns {*}
@@ -184,9 +229,10 @@ export const PMAPI = {
                 return func(win.parent);
             }
         }
+
         return func(window);
     },
-    
+
     /**
      * 将消息发送给调用的父组件
      * @param data

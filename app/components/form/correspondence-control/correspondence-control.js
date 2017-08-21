@@ -7,6 +7,7 @@ import template from './correspondence-control.html';
 let config={
     template:template,
     afterRender(){
+        let _this=this;
         let config={
             tableId:this.data.value,
             parentTableId:this.data.tableId,
@@ -27,12 +28,6 @@ let config={
             if(res == _this.data.value){
                 //待晓川那边提供刷新接口
                 this.data.dataGrid.actions.getGridData();
-            }
-        })
-        Mediator.subscribe('correspondenceSaved:' + this.data.dfield + ':' + this.data.value,(res)=>{
-            if(res == true){
-                //待晓川那边提供刷新接口
-                _this.data.dataGrid.actions.getGridData();
             }
         })
     },

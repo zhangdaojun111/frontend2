@@ -5,7 +5,7 @@
   color: #666666;
   font-size: 14px;
   user-select: none;
-  .left {
+  .p-left {
     float: left;
     margin-left: 15px;
     .pageSize {
@@ -26,7 +26,7 @@
       cursor: pointer;
     }
   }
-  .page {
+  .p-page {
     float: right;
     .goFirst {
       vertical-align: sub;
@@ -60,6 +60,14 @@
   .goLast:hover {
     cursor: pointer;
   }
+
+  .canNotClick {
+    color: #ABD1F9;
+    opacity: 0.7;
+  }
+  .canNotClick:hover {
+    cursor: not-allowed;
+  }
   .selectPage {
     margin-right: 15px;
     float: right;
@@ -67,12 +75,4 @@
       width: 50px;
     }
   }
-}
-
-.canNotClick {
-  color: #ABD1F9;
-  opacity: 0.7;
-}
-.canNotClick:hover {
-  cursor: not-allowed;
 }

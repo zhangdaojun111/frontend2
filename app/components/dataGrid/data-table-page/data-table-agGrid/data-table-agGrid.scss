@@ -39,6 +39,7 @@
   width: 100%;
 }
 .dataGrid-commonQuery {
+  display: none;
   float: left;
   padding-left: 15px;
   .dataGrid-commonQuery-select {
@@ -64,6 +65,7 @@
   display: none;
   margin-right: 10px;
   line-height: 25px;
+  user-select: none;
   a {
     cursor: pointer;
     margin-left: 20px;

@@ -24,14 +24,6 @@ export const attachmentListConfig = {
             file_ids:JSON.stringify(this.data.fileIds),
             dinput_type:this.data.dinput_type
         }).then(res=>{
-            //MOCK
-            res = {rows:
-                [{file_name: "dd6786b56762f1257060e2956bf1c825_r.jpg", file_id: "59892726d8e9e4794d2205d2", content_type: "image/jpeg"},
-                    {file_name: "223a8dc1ca7fec6894211030f5d1cd1b_r.jpg", file_id: "5989272cd8e9e479522205d1", content_type: "image/jpeg"},
-                    {file_name: "223a8dc1ca7fec6894211030f5d1cd1b_c.jpg", file_id: "5989272cd8e9e479522205d1", content_type: "image/jpeg"}],
-                success: 1,
-                error: ""};
-            //!MOCK
             if(res.success){
                 let t = this;
                 this.data['attachmentList'] = res.rows;
