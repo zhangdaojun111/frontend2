@@ -1,6 +1,4 @@
 import Component from '../../../lib/component';
-//import {md5} from "../../../services/login/md5";
-import Mediator from '../../../lib/mediator';
 import './add-enrypt.html';
 
 let config={
@@ -39,16 +37,15 @@ let config={
             this.data=_.defaultsDeep({},data);
             $('#inputShow').val(data.value);
             _.debounce(function(){
-                Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                _this.events.changeValue(_this.data);
+            },200)();
         }
     },
     afterRender: function() {
         let _this=this;
-        _this.el.on('click','#edit',function(){
-            _.debounce(function(){Mediator.publish('form:addPassword:'+_this.data.tableId,_this.data)},200)(
-
-            );
-        })
+        _this.el.on('click','#edit',_.debounce(function(){
+            _this.events.addPassword(_this.data);
+        },200))
         // this.el.on('click', ("#edit"), ()=> {
         //     this.el.find("#editShow").show();
         // });
@@ -64,8 +61,8 @@ let config={
 
 }
 class PasswordControl extends Component {
-    constructor(data){
-        super(config,data);
+    constructor(data,events){
+        super(config,data,events);
     }
 }
 

@@ -1,5 +1,4 @@
 import Component from '../../../lib/component'
-import Mediator from '../../../lib/mediator';
 import template from './time-control.html'
 import './time-control.scss';
 
@@ -11,9 +10,9 @@ let config={
     actions:{},
     afterRender(){
         let _this=this;
-        this.el.on('click','.ui-history',function(){
-            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
-        });
+        this.el.on('click','.ui-history',_.debounce(function(){
+            _this.events.emitHistory(_this.data);
+        },300));
         _this.el.find(".timeInput").val("时:分:秒");
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
@@ -42,7 +41,7 @@ let config={
                  _this.el.find('.time,.cancel-x').css('display', 'block');
                     let nowTime =  _this.el.find(".timeInput").val(now);
                           _this.data.value = now;
-                         _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                         _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                      _this.el.find(".hour").children("span").text(p(h));
                  _this.el.find(".minute").children("span").text(p(m));
                  _this.el.find(".second").children("span").text(p(s));
@@ -84,7 +83,7 @@ let config={
                 now = now2
             let nowTime =  _this.el.find(".timeInput").val(now);
             _this.data.value = now;
-            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+            _.debounce(function(){_this.events.changeValue(_this.data)},200)();
             });
 
             _this.el.find(".reduce").on("click", function () {
@@ -107,19 +106,18 @@ let config={
                 now = now3;
                 let nowTime =  _this.el.find(".timeInput").val(now);
                 _this.data.value = now;
-                _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                _.debounce(function(){_this.events.changeValue(_this.data)},200)();
             });
 
-        _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+        _.debounce(function(){_this.events.changeValue(_this.data)},200)();
 
     },
     beforeDestory:function(){
-        Mediator.removeAll('form:changeValue:'+this.data.tableId);
-        Mediator.removeAll('form:history:'+this.data.tableId);
+        this.el.off();
     }
 }
 export default class TimeControl extends Component{
-    constructor(data){
-        super(config,data);
+    constructor(data,events){
+        super(config,data,events);
     }
 }

@@ -1,7 +1,6 @@
 import Component from '../../../lib/component';
 import template from './setting-textarea.html';
 import './setting-textarea.scss';
-import Mediator from '../../../lib/mediator';
 import 'jquery-ui/ui/widgets/button';
 import {PMAPI} from '../../../lib/postmsg';
 import popupSetting from './popup/popup';
@@ -29,12 +28,16 @@ let config = {
         onSettingDataReturn: function (choosedData) {
             choosedData['-1'] = choosedData['-1'].join('\n');
             this.data.value = choosedData;
-            Mediator.publish('form:changeValue:' + this.data.tableId, this.data);
+            this.events.changeValue(this.data);
             this.actions.fillData();
         },
         fillData: function () {
             this.el.find('textarea').val(this.data.value['-1'] || '');
-        }
+        },
+        //周期规则默认值填充
+        loadSettingtextarea(data){
+
+        },
     },
     afterRender: function () {
         let _this=this;
@@ -46,13 +49,9 @@ let config = {
         this.el.on('click', '.button', () => {
             this.actions.openSettingDialog();
         })
-        this.el.on('click','.ui-history',function(){
-            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
-        });
-        //周期规则默认值填充
-        Mediator.subscribe('form:loadSettingtextarea:'+this.data.tableId,()=>{
-
-        });
+        this.el.on('click','.ui-history',_.debounce(function(){
+           _this.events.emitHistory(_this.data)
+        },300));
     },
     beforeDestory: function () {
 
@@ -60,8 +59,8 @@ let config = {
 }
 
 class SettingTextareaControl extends Component {
-    constructor(data) {
-        super(config, data);
+    constructor(data,events) {
+        super(config, data,events);
     }
 }
 

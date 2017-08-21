@@ -1,6 +1,5 @@
 import Component from '../../../lib/component';
 import '../base-form/base-form.scss';
-import Mediator from '../../../lib/mediator';
 import {FormService} from "../../../services/formService/formService"
 import template from './input-control.html'
 
@@ -18,8 +17,7 @@ let config={
             let regErrorMsg;
             let val = this.el.find("input").val();
             this.data.value=val;
-            console.log('走没走这里呢');
-            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+            _.debounce(function(){_this.events.changeValue(_this.data)},200)();
             let func = this.data.func;
             let reg = this.data.reg;
             let required = this.data.required
@@ -149,9 +147,9 @@ let config={
     },
     afterRender() {
         let _this=this;
-        _this.el.on('click','.ui-history',function(){
-            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
-        });
+        _this.el.on('click','.ui-history',_.debounce(function(){
+            _this.events.emitHistory(_this.data)
+        },300));
         this.el.find('.search').on( 'input', _.debounce(function () {
             _this.actions.keyup();
         }, 200));
@@ -176,14 +174,13 @@ let config={
         }
     },
     beforeDestory(){
-        Mediator.removeAll('form:changeValue:'+this.data.tableId);
-        Mediator.removeAll('form:history:'+this.data.tableId);
+        this.el.off();
     }
 }
 
 class InputControl extends Component {
-    constructor(data){
-        super(config,data);
+    constructor(data,events){
+        super(config,data,events);
     }
 }
 

@@ -11,6 +11,13 @@ import template from './correspondence-control.html';
 
 let config={
     template:template,
+    actions:{
+      correspondenceDefault(res){
+          if(res == this.data.value){
+              this.data.dataGrid.actions.getGridData();
+          }
+      }
+    },
     afterRender(){
         let _this=this;
         let config={
@@ -25,25 +32,17 @@ let config={
         let dataGrid=new DataTableAgGrid(config);
         this.data.dataGrid=dataGrid;
         this.append(dataGrid,this.el.find('.correspondence-box'));
-
         this.el.on('click','.ui-forms-a',_.debounce(function(){
-            Mediator.publish('form:openCorrespondence:'+_this.data.tableId,_this.data);
+            _this.events.openCorrespondence(_this.data);
         },300));
-        Mediator.subscribe('form:correspondenceDefaultData:'+this.data.tableId,()=>{
-            if(res == _this.data.value){
-                //待晓川那边提供刷新接口
-                this.data.dataGrid.actions.getGridData();
-            }
-        })
     },
 
     beforeDestory(){
-        Mediator.removeAll('form:correspondenceDefaultData:'+this.data.tableId);
-        Mediator.removeAll('form:openCorrespondence:'+this.data.tableId);
+        this.el.off();
     }
 }
 export default class Correspondence extends Component{
-    constructor(data){
-        super(config,data);
+    constructor(data,events){
+        super(config,data,events);
     }
 }

@@ -1,5 +1,4 @@
 import Component from '../../../lib/component'
-import DropDown from "../vender/dropdown/dropdown";
 import Mediator from '../../../lib/mediator';
 import template from './year-month-control.html'
 import {AutoSelect} from "../../util/autoSelect/autoSelect"
@@ -19,14 +18,14 @@ let config={
               val = _this.data.value.split('-')[0] + "-" + value;
           }
           _this.data.value = val;
-          _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+          _.debounce(function(){_this.events.changeValue(_this.data)},200)();
       }
     },
     afterRender(){
         let _this=this;
-        this.el.on('click','.ui-history',function(){
-            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
-        });
+        this.el.on('click','.ui-history',_.debounce(function(){
+            _this.events.emitHistory(_this.data);
+        },300));
         let yearData = {
             multiSelect:false,
             editable:this.data.is_view?false:true,
@@ -87,12 +86,11 @@ let config={
         this.data.isInit=false;
     },
     beforeDestory(){
-        Mediator.removeAll('form:changeValue:'+this.data.tableId);
-        Mediator.removeAll('form:history:'+this.data.tableId);
+        this.el.off();
     }
 }
 export default class YearMonthControl extends Component{
-    constructor(data){
-        super(config,data);
+    constructor(data,events){
+        super(config,data,events);
     }
 }

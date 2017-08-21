@@ -1,5 +1,4 @@
 import Component from '../../../lib/component'
-import Mediator from '../../../lib/mediator';
 import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui-timepicker-addon';
 import 'jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css';
@@ -13,7 +12,7 @@ let config={
         let _this=this;
 
         this.el.on('click','.ui-history',function(){
-            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
+            _.debounce(function(){_this.events.emitHistory(_this.data)},300)();
         });
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
@@ -50,7 +49,7 @@ let config={
             onSelect: function (selectTime, text) {
                 _this.data.value = selectTime.replace(/\//g, "-");
 
-                _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                 if( _this.data.value.length > 19 ){
                     _this.data.value = '';
                 }
@@ -66,17 +65,17 @@ let config={
                         if(selectTime < currentTime){
                             msgbox.alert("所选日期不能早于当前日期！");
                             _this.data.value = "请选择";
-                            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                            _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                         }
                     }else if( _this.data['timeType'] == 'before') {
                         if(selectTime > currentTime){
                             msgbox.alert("所选日期不能晚于当前日期！");
                             _this.data.value = "请选择";
-                            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                            _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                         }
                     }else if(_this.data['timeType'] == 'all'){
                         _this.data.value = selectTime.replace(/\//g, "-");
-                        _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                        _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                     }
                 }else{
                     console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！',this.selector);
@@ -101,15 +100,14 @@ let config={
         _this.el.on('click','.date-close',function () {
             _this.el.find(".datetime").val("年/月/日 时:分:秒");
         })
-        _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+        _.debounce(function(){_this.events.changeValue(_this.data)},200)();
     },
     beforeDestory:function(){
-        Mediator.removeAll('form:changeValue:'+this.data.tableId);
-        Mediator.removeAll('form:history:'+this.data.tableId);
+        this.el.off();
     }
 }
 export default class DateTimeControl extends Component{
-    constructor(data){
-        super(config,data);
+    constructor(data,events){
+        super(config,data,events);
     }
 }

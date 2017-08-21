@@ -12,10 +12,17 @@ import template from './songrid-control.html';
 
 let config={
     template:template,
+    actions:{
+      songridDefault(res){
+          if(res == _this.data.value){
+              dataGrid.actions.getGridData();
+          }
+      }
+    },
     afterRender(){
         let _this=this;
         _this.el.on('click','.ui-forms-a',_.debounce(function(){
-            Mediator.publish('form:openSongGrid:'+_this.data.tableId,_this.data);
+            _this.events.openSongGrid(_this.data);
         },300));
         let config={
             tableId:this.data.value,
@@ -27,19 +34,13 @@ let config={
         }
         let dataGrid=new DataTableAgGrid(config);
         this.append(dataGrid,this.el.find('.songGrid'));
-        Mediator.subscribe('form:songridDefaultData:'+this.data.tableId,(res)=>{
-            if(res == _this.data.value){
-                dataGrid.actions.getGridData();
-            }
-        })
     },
     beforeDestory(){
-        Mediator.removeAll('form:openSongGrid:'+_this.data.tableId);
-        Mediator.removeAll('form:songridDefaultData:'+_this.data.tableId);
+        this.el.off();
     }
 }
 export default class Songrid extends Component{
-    constructor(data){
-        super(config,data);
+    constructor(data,events){
+        super(config,data,events);
     }
 }

@@ -1,6 +1,5 @@
 import Component from '../../../lib/component';
 import '../base-form/base-form.scss';
-import Mediator from '../../../lib/mediator';
 import template from './readonly-control.html';
 import './readonly-control.scss';
 
@@ -88,18 +87,18 @@ let config={
     afterRender() {
 
         let _this=this;
-        this.el.on('click','.ui-history',function(){
-            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
-        });
+        this.el.on('click','.ui-history',_.debounce(function(){
+            _this.events.emitHistory(_this.data);
+        },300));
         this.el.find('.ui-width').css('width',this.data.width);
     },
     beforeDestory(){
-        Mediator.removeAll('form:history:'+_this.data.tableId);
+        this.el.off();
     }
 }
 class ReadonlyControl extends Component {
-    constructor(data){
-        super(config,data);
+    constructor(data,events){
+        super(config,data,events);
     }
 }
 
