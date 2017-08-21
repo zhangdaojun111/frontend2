@@ -267,6 +267,7 @@ let config = {
                 this.actions.getDayData(day);
                 this.data.scheduleDataList.push(day);
             }
+            console.log(this.data.scheduleDataList);
             this.el.find('.calendar-main-content').empty();
             this.append(new CalendarSchedule({startDate: startDate, endDate: endDate, scheduleDataList: this.data.scheduleDataList}), this.el.find(".calendar-main-content"));
         },
@@ -724,14 +725,16 @@ let config = {
 
     },
     beforeDestory: function () {
-        Mediator.removeAll('calendar-left');
         Mediator.removeAll('CalendarWorkflowData: workflowData');
         Mediator.removeAll('Calendar: changeMainView');
         Mediator.removeAll('Calendar: tool');
         Mediator.removeAll('Calendar: changeDate');
         Mediator.removeAll('calendarSchedule: date');
-        Mediator.removeAll('calendar-left:unshowData');
+        Mediator.removeAll('calendar-left: unshowData');
+        Mediator.removeAll('calendar-left: approve');
         Mediator.removeAll('Calendar: globalSearch');
+        Mediator.removeAll('CalendarSelected: Search');
+        Mediator.removeAll('CalendarRemindTask: changeData');
     }
 };
 

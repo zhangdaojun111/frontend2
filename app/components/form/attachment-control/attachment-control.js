@@ -83,6 +83,5 @@ export default class AttachmentControl extends Component{
     constructor(data){
         config.data = _.defaultsDeep(data,config.data);
         super(config);
-        console.dir(data);
     }
 }
