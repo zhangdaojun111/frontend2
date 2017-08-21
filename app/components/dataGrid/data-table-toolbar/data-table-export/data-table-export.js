@@ -152,7 +152,8 @@ let exportSetting = {
         css: css.replace(/(\n)/g, ''),
         isFilter: true,
         custom: true,
-        attachment: true
+        attachment: true,
+        hideOptions:[]
     },
     actions: {
         createUrl: function () {
@@ -204,6 +205,15 @@ let exportSetting = {
                 }
             } )
         } )
+        for( let h of this.data.hideOptions ){
+            let d = this.el.find( '.input-item' );
+            let obj = {
+                filter: 0,
+                custom: 1,
+                group: 2
+            }
+            d[obj[h]].innerHTML = '';
+        }
         this.actions.createUrl();
     },
     beforeDestory: function () {
