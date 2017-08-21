@@ -39,6 +39,9 @@ let config = {
         this.data.chooseDate = CalendarTimeService.formatDate(year, month, day);
     },
     afterRender: function() {
+        if(window === window.parent) {
+            this.el.find('#open-new-window').hide();
+        }
         CalendarService.getCalendarTreeData().then(res => {
             this.append(new LeftContent(res), this.el.find('.left-content'));
             this.append(new CalendarMain(res['cancel_fields']), this.el.find('.main-content'));

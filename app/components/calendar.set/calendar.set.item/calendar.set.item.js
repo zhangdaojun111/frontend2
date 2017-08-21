@@ -184,6 +184,13 @@ let config = {
                 this.el.find('.res-text option')[item].selected  = 'selected';
             }
         });
+        this.el.find('.page-change-text option').each(item => {
+            let a= $('.page-change-text option')[item].value;
+            console.log(a);
+            if(a === this.data.rowSetData['selectedEnums']) {
+                this.el.find('.page-change-text option')[item].selected  = 'selected';
+            }
+        });
         if(!this.data.rowSetData['email']['email_status'] && !this.data.rowSetData['sms']['sms_status']) {
             this.el.find('.set-remind-method').html('设置提醒方式');
         }

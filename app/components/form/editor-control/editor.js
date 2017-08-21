@@ -4,7 +4,6 @@ import './editor.scss';
 import Quill from 'quill';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
-import Mediator from '../../../lib/mediator';
 
 let toolbarOption = [
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -35,7 +34,7 @@ let config = {
     actions: {
         publishMessage: function () {
             this.data.value = this.quill.root.innerHTML;
-            Mediator.publish('form:changeValue:' + this.data.tableId, this.data);
+            this.events.changeValue(this.data);
         }
     },
     afterRender: function () {
@@ -57,8 +56,8 @@ let config = {
 };
 
 class EditorControl extends Component {
-    constructor(data) {
-        super(config, data);
+    constructor(data,events) {
+        super(config, data,events);
     }
 }
 

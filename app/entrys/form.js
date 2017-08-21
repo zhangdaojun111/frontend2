@@ -53,7 +53,7 @@ let FormEntrys = {
         this.fromApprove=config.from_approve||'';
         this.formFocus=config.from_focus||'';
         this.isAddBuild=config.isAddBuild || 0;
-        this.buildId=config.buildId || '';
+        this.buildId=config.id || '';
         this.btnType=config.btnType||'new';
     },
     //静态数据里是否有这个key
@@ -90,6 +90,7 @@ let FormEntrys = {
     //拼装发送json
     createPostJson(){
         let json;
+        //如果是发起工作流
         if(this.fromWorkFlow){
             json={
                 form_id:this.formId,
@@ -98,7 +99,7 @@ let FormEntrys = {
                 from_workflow:this.fromWorkFlow,
                 table_id:this.tableId
             }
-        }else if(this.fromApprove){
+        }else if(this.fromApprove){//审批流程
             json={
                 form_id: this.formId,
                 record_id: this.recordId,
@@ -194,6 +195,8 @@ let FormEntrys = {
         staticData.isBatch=this.isBatch;
         staticData.key=this.key;
         staticData.btnType=this.btnType;
+        staticData.isAddBuild=this.isAddBuild;
+        staticData.buildId=this.buildId;
         return staticData;
     },
     //处理字段数据
@@ -243,44 +246,6 @@ let FormEntrys = {
             }
         }
         }
-    },
-    //创建默认表单
-    formDefaultVersion(data){
-        let html=`<table class="form table table-striped table-bordered table-hover ">
-            <tbody>
-                `;
-        for(let obj of data){
-            if(data.type==='hidden'){
-                html+=`<div data-dfield="${obj.dfield}" data-type="${obj.type}"></div>`;
-            }else{
-                html+=`<tr>
-                        <td style="width: 150px;white-space: nowrap;">${ obj.label }</td>
-                        <td><div data-dfield="${obj.dfield}" data-type="${obj.type}"></div></td>
-                </tr>`;
-            }
-        }
-        html+=`</tbody>
-        </table>`
-        return html;
-    },
-    //创建人员信息表
-    formVersionUser(data){
-        let html=`<table class="form table table-striped table-bordered table-hover ">
-            <tbody>
-                `;
-        for(let obj of data){
-            if(data.type==='hidden'){
-                html+=`<div data-dfield="${obj.dfield}" data-type="${obj.type}"></div>`;
-            }else{
-                html+=`<tr>
-                        <td style="width: 150px;white-space: nowrap;">${ obj.label }</td>
-                        <td><div data-dfield="${obj.dfield}" data-type="${obj.type}"></div></td>
-                </tr>`;
-            }
-        }
-        html+=`</tbody>
-        </table>`
-        return html;
     },
     //清除所有已建form
     destoryAll(){
