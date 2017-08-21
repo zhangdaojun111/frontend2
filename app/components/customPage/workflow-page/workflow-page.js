@@ -43,10 +43,22 @@ let config = {
         searchValue: [],
         //floatingFilter搜索参数
         searchOldValue: [],
+        //floatingFilter搜索参数
+        queryList: {},
+        //搜索参数(判断是否需要重置分页)
+        filterText: '',
+        //请求数据参数
+        commonQueryData:[],
         //选择的数据
         selectRows: [],
         //高级查询字段参数
         expertSearchFields:[],
+        //是否显示floatingfilter
+        isShowFloatingFilter: false,
+        //排序参数
+        sortParam: {sortOrder:'',sortField:'',sort_real_type:''},
+        //排序方式
+        frontendSort: false,
         //定制列数据
         customColumnsFields: [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false}, {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false}, {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
     },
