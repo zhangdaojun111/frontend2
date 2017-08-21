@@ -15,10 +15,10 @@ let config = {
     afterRender: function() {
     }
 }
-class historyTable extends Component {
+class historyItem extends Component {
     constructor(data) {
         config.data = data
         super(config)
     }
 }
-export default historyTable
+export default historyItem

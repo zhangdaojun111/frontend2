@@ -2,7 +2,7 @@
  * Created by zhaohaoran
  */
 import Component from "../../../../../../lib/component";
-import template from './history-approve-ExaIte.html'
+import template from './history-approve-StrItem.html'
 
 
 let config = {
@@ -15,10 +15,10 @@ let config = {
     afterRender: function() {
     }
 }
-class examineItem extends Component {
+class strikeItem extends Component {
     constructor(data) {
         config.data = data
         super(config)
     }
 }
-export default examineItem
+export default strikeItem

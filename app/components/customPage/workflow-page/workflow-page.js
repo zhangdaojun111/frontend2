@@ -261,7 +261,7 @@ let config = {
                     })
                 }
             })
-            // this.actions.getExpertSearchData();
+            this.actions.getExpertSearchData();
         },
         //返回数据url
         returnIframeUrl( u,obj ){
