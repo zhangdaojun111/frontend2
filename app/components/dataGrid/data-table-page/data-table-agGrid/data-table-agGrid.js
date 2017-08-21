@@ -136,7 +136,9 @@ let config = {
         //对应关系选择的数据
         correspondenceSelectedData: [],
         //表单对应关系字段
-        correspondenceField: ''
+        correspondenceField: '',
+        //数据检索模式搜索参数
+        keyword: ''
     },
     //生成的表头数据
     columnDefs: [],
@@ -697,48 +699,6 @@ let config = {
             this.data.filterParam.common_filter_name = name;
             this.actions.getGridData();
         },
-        //偏好赋值
-        setPreference: function (res) {
-            if (res['colWidth']) {
-                this.data.colWidth = res['colWidth'].colWidth;
-                if (typeof ( this.data.colWidth ) == 'string') {
-                    this.data.colWidth = JSON.parse(res['colWidth'].colWidth);
-                }
-            }
-            if (res['pageSize'] && res['pageSize'].pageSize) {
-                this.data.rows = res['pageSize'].pageSize;
-            }
-            if (res['ignoreFields']) {
-                this.data.ignoreFields = JSON.parse(res['ignoreFields']['ignoreFields']);
-            } else {
-                // this.data.hideColumn = ['f1','f2','f3','f4']
-                // let json = {
-                //     action:'ignoreFields',
-                //     table_id:this.pageId,
-                //     ignoreFields:JSON.stringify( this.hideColumn ),
-                // }
-                // this.dataTableService.savePreference( json );
-            }
-            if (res['fieldsOrder']) {
-                this.data.orderFields = JSON.parse(res['fieldsOrder']['fieldsOrder']);
-            }
-            if (res['pinned'] && res['pinned']['pinned']) {
-                this.data.fixCols = JSON.parse(res['pinned']['pinned']);
-            }
-            this.data.myGroup = (res['group'] != undefined) ? JSON.parse(res['group'].group) : [];
-            // console.log("rows")
-            // console.log(this.data.rows)
-            // console.log("colWidth")
-            // console.log(this.data.colWidth)
-            // console.log("ignoreFields")
-            // console.log(this.data.ignoreFields)
-            // console.log("fixCols")
-            // console.log(this.data.fixCols)
-            // console.log("myGroup")
-            // console.log(this.data.myGroup)
-            // console.log("orderFields")
-            // console.log(this.data.orderFields)
-        },
         //初始化按钮
         renderBtn: function () {
             let btnGroup = dgcService.gridBtn( this.data.viewMode );
@@ -768,7 +728,8 @@ let config = {
             let sheetData = dataTableService.getSheetPage( obj2 );
 
             Promise.all([preferenceData, headerData, sheetData]).then((res)=> {
-                this.actions.setPreference( res[0] );
+                dgcService.setPreference( res[0],this.data );
+                this.data.myGroup = (res[0]['group'] != undefined) ? JSON.parse(res[0]['group'].group) : [];
                 this.data.fieldsData = res[1].rows || [];
                 this.data.permission = res[1].permission;
                 this.data.headerColor = dgcService.createHeaderStyle( this.data.tableId,res[1].field_color );
@@ -1038,6 +999,9 @@ let config = {
                     _id: this.data.rowId
                 }
             }
+            if( this.data.viewMode == 'keyword-tips' ){
+                json['keyWord'] = this.data.keyword;
+            }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
             }
@@ -1094,16 +1058,17 @@ let config = {
             //渲染定制列
             if( this.el.find('.custom-column-btn')[0] ){
                 //如果有定制列修改偏好状态
-                this.actions.calcColumnState();
+                dgcService.calcColumnState(this.data,this.agGrid,["group",'number',"mySelectAll"]);
                 let custom = {
                     gridoptions: this.agGrid.gridOptions,
                     fields: this.data.customColumnsFields,
                     fixCols: this.data.fixCols,
                     tableId: this.data.tableId,
-                    agGrid: this.agGrid
+                    agGrid: this.agGrid,
+                    close: this.actions.calcCustomColumn
                 }
                 this.customColumnsCom  = new customColumns(custom);
-                this.append(this.customColumnsCom, document.querySelector('.custom-columns-panel'));
+                this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
 
                 //点击关掉定制列panel
                 this.el.find( '.ag-body' ).on( 'click',()=>{
@@ -1118,10 +1083,11 @@ let config = {
                     tableId: this.data.tableId,
                     gridoptions: this.agGrid.gridOptions,
                     fields: this.data.myGroup.length == 0 ? this.data.groupFields : this.actions.deleteGroup(this.data.groupFields),
-                    myGroup:  this.actions.setMyGroup(this.data.myGroup.fields)
+                    myGroup:  this.actions.setMyGroup(this.data.myGroup.fields),
+                    close: this.actions.calcGroup
                 }
                 this.groupGridCom = new groupGrid(groupLit);
-                this.append(this.groupGridCom,document.querySelector('.group-panel'));
+                this.append(this.groupGridCom,this.el.find('.group-panel'));
 
                 this.groupGridCom.actions.onGroupChange = this.actions.onGroupChange;
             }
@@ -1242,67 +1208,6 @@ let config = {
             this.data.rows = data.rows;
             this.data.first = data.first;
             this.actions.getGridData();
-        },
-        //根据偏好返回agGrid sate
-        calcColumnState: function () {
-            let gridState = this.agGrid.gridOptions.columnApi.getColumnState();
-            let indexedGridState = {};
-            for(let state of gridState) {
-                indexedGridState[state['colId']] = state;
-            }
-            let numState = indexedGridState['number']||{};
-            numState['pinned']= this.data.fixCols.l.length > 0 ? 'left' : null;
-            let selectState = indexedGridState['mySelectAll']||{};
-            selectState['pinned']= this.data.fixCols.l.length > 0 ? 'left' : null;
-            let group = indexedGridState['group']||{};
-            group['hide'] = true;
-            //默认分组、序号、选择在前三个
-            let arr = [ group , numState , selectState ];
-            //左侧固定
-            for( let col of this.data.fixCols.l ){
-                let state = indexedGridState[col]||{};
-                state['hide'] = this.data.ignoreFields.indexOf( col ) != -1;
-                state['pinned'] = 'left';
-                arr.push(state);
-            }
-            //中间不固定
-            let fixArr = this.data.fixCols.l.concat( this.data.fixCols.r );
-            for( let data of this.data.orderFields ){
-                if( data == '_id'||data == 'group' ){
-                    continue;
-                }
-                if( data != 0 && fixArr.indexOf( data ) == -1 ){
-                    let state = indexedGridState[data]||{};
-                    state['hide'] = this.data.ignoreFields.indexOf( data ) != -1;
-                    state['pinned'] = null;
-                    arr.push(state);
-                }
-            }
-            if(this.data.orderFields.length == 0){
-                for(let state of gridState){
-                    let id = state['colId'];
-                    if(id != 'number' && id != 'mySelectAll' && id != 'group'){
-                        state['hide'] = this.data.ignoreFields.indexOf(id)!=-1;
-                        state['pinned'] = null;
-                        arr.push(state);
-                    }
-                }
-            }
-            //右侧固定
-            for( let col of this.data.fixCols.r ){
-                let state = indexedGridState[col]||{};
-                state['hide'] = this.data.ignoreFields.indexOf( col ) != -1;
-                state['pinned'] = 'right';
-                arr.push(state);
-            }
-            //操作列宽度
-            for( let d of arr ){
-                if( d.colId && d.colId == 'myOperate' ){
-                    d['width'] = this.data.operateColWidth;
-                }
-            }
-            //初始化状态
-            this.agGrid.gridOptions.columnApi.setColumnState( arr );
         },
         //渲染颜色
         setRowStyle: function ( param ) {
@@ -1518,10 +1423,14 @@ let config = {
                     modal:true
                 },{d}).then(res=>{
                     if(res.type == 'temporaryQuery') {
-                        this.actions.postExpertSearch(res.value,res.id,res.name);
+                        if(res.addNameAry.length != 0){
+                            this.actions.getExpertSearchData(res.addNameAry);
+                        } else {
+                            this.actions.postExpertSearch(res.value,res.id,res.name);
+                        }
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);
                     } if(res.appendChecked) {
-                        this.data.saveTemporaryCommonQuery == res.value
+                        this.data.temporaryCommonQuery = res.value
                         this.actions.appendQuerySelect()
                     } if(res.saveCommonQuery || res.onlyclose == true) {
                         this.actions.getExpertSearchData()
@@ -1533,7 +1442,7 @@ let config = {
                 if($(this).val() == '常用查询') {
                     _this.actions.postExpertSearch([],'');
                 } else if($(this).val() == '临时高级查询') {
-                    _this.actions.postExpertSearch(_this.data.saveTemporaryCommonQuery,'');
+                    _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
                 } else {
                     // $(this).find('.Temporary').remove();
                     _this.data.commonQueryData.forEach((item) => {
@@ -1577,12 +1486,16 @@ let config = {
         customColumnClick: function () {
             if( this.el.find('.custom-column-btn')[0] ){
                 this.el.find( '.custom-column-btn' ).on( 'click',()=>{
-                    this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
-                    this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
-
-                    this.actions.changeAgGridWidth();
+                    this.actions.calcCustomColumn();
                 } )
             }
+        },
+        //定制列事件
+        calcCustomColumn: function () {
+            this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
+            this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
+
+            this.actions.changeAgGridWidth();
         },
         //分组点击
         groupBtnClick: function () {
@@ -1590,20 +1503,24 @@ let config = {
                 return;
             }
             this.el.on('click','.group-btn',()=> {
-                if(!this.data.groupCheck) {
-                    this.el.find('.group-btn').find('span').html('数据');
-                    this.el.find('.group-panel').show();
-                    this.data.groupCheck = !this.data.groupCheck;
-                    this.actions.onGroupChange(this.data.myGroup.fields)
-                } else {
-                    this.el.find('.group-btn').find('span').html('分组');
-                    this.el.find('.group-panel').hide();
-                    this.data.groupCheck = !this.data.groupCheck;
-                    this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , false);
-                    this.actions.getGridData();
-                }
-                this.actions.changeAgGridWidth();
+                this.actions.calcGroup();
             })
+        },
+        //分组打开关闭
+        calcGroup: function () {
+            if(!this.data.groupCheck) {
+                this.el.find('.group-btn').find('span').html('数据');
+                this.el.find('.group-panel').show();
+                this.data.groupCheck = !this.data.groupCheck;
+                this.actions.onGroupChange(this.data.myGroup.fields)
+            } else {
+                this.el.find('.group-btn').find('span').html('分组');
+                this.el.find('.group-panel').hide();
+                this.data.groupCheck = !this.data.groupCheck;
+                this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , false);
+                this.actions.getGridData();
+            }
+            this.actions.changeAgGridWidth();
         },
         //返回选择数据
         retureSelectData: function () {
@@ -1652,7 +1569,7 @@ let config = {
             this.data.saveTemporaryCommonQuery  = data;
         },
         //获取高级查询数据
-        getExpertSearchData: function () {
+        getExpertSearchData: function (addNameAry) {
             let obj = {'actions':JSON.stringify( ['queryParams'] ),'table_id':this.data.tableId};
             dataTableService.getPreferences( obj ).then( res=>{
                 this.el.find('.dataGrid-commonQuery-option').remove();
@@ -1661,6 +1578,16 @@ let config = {
                     this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
                 });
                 this.data.commonQueryData = res.rows;
+                if(addNameAry && addNameAry.length != 0){
+                    this.data.commonQueryData.forEach((item)=>{
+                        for(let i = 0; i < addNameAry.length; i++) {
+                            if(item.name == addNameAry[i]){
+                                this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
+                                this.el.find('.dataGrid-commonQuery-select').val(item.name);
+                            }
+                        }
+                    })
+                }
                 //第一次请求footer数据
                 if( this.data.firstGetFooterData ){
                     if( this.data.common_filter_id ){
