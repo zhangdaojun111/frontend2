@@ -9,6 +9,8 @@ import {systemMessageUtil} from '../system-message/system-message';
 import {SysSetting} from "../system-setting/system-setting"
 import {postMessageUtil} from '../post-message/post-message';
 import {GlobalSearch} from '../global-search/global-search';
+import {OnlineDisplay} from "../online-users/online-users"
+import {GlobalService} from "../../../services/main/globalService"
 
 let config = {
     template: template,
@@ -54,7 +56,7 @@ let config = {
             OtherLogin.show();
         },
         goOnlineNumber: function () {
-            msgbox.alert('go online number');
+            OnlineDisplay.show();
         },
         goSystemSetting: function () {
             SysSetting.show();
@@ -83,8 +85,21 @@ let config = {
         },
         openPostMessageDialog: function () {
             postMessageUtil.show();
-        }
-
+        },
+        // setOnlineNum:function () {
+        //     //更新在线人数
+        //     GlobalService.getOnlineUserData().done((result) => {
+        //         if(result.success === 1){
+        //             if(result.total <= 999){
+        //                 this.el.find('.online-num').find('span').html(result.total);
+        //             }else{
+        //                 this.el.find('.online-num').find('span').html("999+");
+        //             }
+        //         }else{
+        //             console.log("获取数据失败");
+        //         }
+        //     })
+        // }
     },
 
     binds: [
@@ -149,6 +164,7 @@ let config = {
                 this.actions.openPostMessageDialog();
             }
         }
+
     ],
 
     afterRender: function () {
