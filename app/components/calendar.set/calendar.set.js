@@ -266,7 +266,7 @@ let config = {
                         //CalendarSetService.getColumnList(this.data.tableId)
                         this.el.find('.set-items').empty();
                         this.actions.getColumnListData(this.data.tableId);
-                    },100 );
+                    },500 );
 
                 }else  if(res['succ'] === 0){
                     MSG.alert(res['error']);
