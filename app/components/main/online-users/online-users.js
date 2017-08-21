@@ -46,7 +46,7 @@ let config = {
         });
         this.agGrid.render(gridRoot);
         this.pagination = new dataPagination({
-            page: 1,
+            currentPage: 1,
             rows: 5,
             range: {
                 l:5,

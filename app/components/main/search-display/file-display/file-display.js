@@ -13,6 +13,7 @@ let config = {
         isCanReview:true,    //根据文件名后缀判定是否可以预览
         previewSrc:'',  //预览地址
         src:'',         //下载地址
+        fileId:'',
     },
     actions:{
         initInfo:function () {
@@ -34,8 +35,9 @@ let config = {
                 // this.data.previewSrc = location.href.split('#')[0] + "data/download_attachment/?file_id=" + this.fileId + "&download=0";
                 // this.data.src = location.href.split('#')[0] + "data/download_attachment/?file_id=" + this.fileId + "&download=1";
                 this.el.find('a.preview').addClass('canReview');
-                this.data.previewSrc = window.location.href.split('search_result')[0] + "data/download_attachment/?file_id=" + this.fileId + "&download=0";
-                this.data.src = window.location.href.split('search_result')[0] + "data/download_attachment/?file_id=" + this.fileId + "&download=1";
+                this.fileId = this.data.searchData.file_id;
+                this.data.previewSrc = window.location.href.split('search_result')[0] + "download_attachment/?file_id=" + this.fileId + "&download=0";
+                this.data.src = window.location.href.split('search_result')[0] + "download_attachment/?file_id=" + this.fileId + "&download=1";
                 this.el.find('a.preview').attr('href',this.data.previewSrc).attr('target','_blank');
                 this.el.find('a.download').attr("href",this.data.src).attr('target','_blank');
             }

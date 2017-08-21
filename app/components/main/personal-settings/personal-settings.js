@@ -48,7 +48,6 @@ let config = {
                     $img.remove();
                 });
             }
-
         },
         onImageError: function () {
 
