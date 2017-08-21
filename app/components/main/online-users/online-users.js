@@ -26,6 +26,7 @@ let config = {
 
             GlobalService.getOnlineUserData(param).done((data) => {
                 if(data.success === 1){
+                    console.log(data);
                     this.agGrid.actions.setGridData({
                         rowData: data.rows
                     });

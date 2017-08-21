@@ -86,20 +86,20 @@ let config = {
         openPostMessageDialog: function () {
             postMessageUtil.show();
         },
-        setOnlineNum:function () {
-            //更新在线人数
-            GlobalService.getOnlineUserData().done((result) => {
-                if(result.success === 1){
-                    if(result.total <= 999){
-                        this.el.find('.online-num').find('span').html(result.total);
-                    }else{
-                        this.el.find('.online-num').find('span').html("999+");
-                    }
-                }else{
-                    console.log("获取数据失败");
-                }
-            })
-        }
+        // setOnlineNum:function () {
+        //     //更新在线人数
+        //     GlobalService.getOnlineUserData().done((result) => {
+        //         if(result.success === 1){
+        //             if(result.total <= 999){
+        //                 this.el.find('.online-num').find('span').html(result.total);
+        //             }else{
+        //                 this.el.find('.online-num').find('span').html("999+");
+        //             }
+        //         }else{
+        //             console.log("获取数据失败");
+        //         }
+        //     })
+        // }
     },
 
     binds: [
@@ -162,12 +162,6 @@ let config = {
             selector: '.message-push',
             callback: function(){
                 this.actions.openPostMessageDialog();
-            }
-        },{
-            event:'mouseenter',
-            selector:'.setting',
-            callback:function () {
-                this.actions.setOnlineNum();
             }
         }
     ],
