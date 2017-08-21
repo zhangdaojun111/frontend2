@@ -8,8 +8,6 @@ import TreeView from '../../util/tree/tree';
 import {AutoSelect} from '../../util/autoSelect/autoSelect';
 import moment from 'moment';
 
-window.m = moment;
-
 function formatTreeData(list) {
     let res = list.map((item) => {
         item.icon = '';
@@ -72,6 +70,10 @@ let config = {
                 selectBoxHeight: 200,           // select 框的高度
                 width: 300,                     // 为0表示显示默认宽度240
                 displayChoosed: false,
+            }, {
+                onSelect: function (param) {
+                    console.log(param);
+                }
             });
             this.autoSelect.render(this.el.find('.users'));
         },
