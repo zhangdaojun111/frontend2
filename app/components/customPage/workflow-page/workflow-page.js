@@ -245,6 +245,7 @@ let config = {
         },
         //渲染高级查询
         renderExpertSearch: function () {
+            let _this = this
             this.el.find( '.dataGrid-commonQuery' )[0].style.display = 'block';
             this.el.find( '.expert-search-btn' ).on( 'click',()=>{
                 let d = {
@@ -277,8 +278,7 @@ let config = {
                     }
                 })
             } )
-            let _this = this
-            $('.dataGrid-commonQuery-select').bind('change', function() {
+            _this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
                 if($(this).val() == '常用查询') {
                     _this.actions.postExpertSearch([],'');
                 } else if($(this).val() == '临时高级查询') {
