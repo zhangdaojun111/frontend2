@@ -60,6 +60,14 @@
   .goLast:hover {
     cursor: pointer;
   }
+
+  .canNotClick {
+    color: #ABD1F9;
+    opacity: 0.7;
+  }
+  .canNotClick:hover {
+    cursor: not-allowed;
+  }
   .selectPage {
     margin-right: 15px;
     float: right;
@@ -67,12 +75,4 @@
       width: 50px;
     }
   }
-}
-
-.canNotClick {
-  color: #ABD1F9;
-  opacity: 0.7;
-}
-.canNotClick:hover {
-  cursor: not-allowed;
 }
