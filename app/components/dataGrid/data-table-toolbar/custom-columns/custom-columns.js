@@ -22,7 +22,10 @@ let config = {
         tableId: '',
         dragFields: [],
         hideFields: [],
-        agGrid:null
+        agGrid:null,
+        close: function () {
+            
+        }
     },
     actions: {
         //使状态同步
@@ -309,6 +312,10 @@ let config = {
         this.actions.inputSearch();
         //添加全选事件
         this.actions.selectAllClick();
+        //关闭
+        this.el.find( '.closeCustom' ).on( 'click',()=>{
+            this.data.close();
+        } )
     }
 }
 
