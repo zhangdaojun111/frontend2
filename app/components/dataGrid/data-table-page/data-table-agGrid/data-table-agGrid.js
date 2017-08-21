@@ -659,6 +659,7 @@ let config = {
                 }
             }
             str += '</div>';
+            this.data.operateColWidth=20*operateWord+20;
             return str
         },
         //floatingFilter拼参数
@@ -1423,9 +1424,8 @@ let config = {
                     modal:true
                 },{d}).then(res=>{
                     if(res.type == 'temporaryQuery') {
-                        if(res.addNameAry.length != 0){
-                            this.actions.getExpertSearchData(res.addNameAry);
-                        } else {
+                        if(res.addNameAry.length == 0){
+                            // this.actions.getExpertSearchData(res.addNameAry);
                             this.actions.postExpertSearch(res.value,res.id,res.name);
                         }
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);
@@ -1433,7 +1433,7 @@ let config = {
                         this.data.temporaryCommonQuery = res.value
                         this.actions.appendQuerySelect()
                     } if(res.saveCommonQuery || res.onlyclose == true) {
-                        this.actions.getExpertSearchData()
+                        this.actions.getExpertSearchData(res.addNameAry)
                     }
                 })
             } )

@@ -154,7 +154,6 @@ let config = {
         },
         //加载不同查询条件的查询关系
         checkedRelationType: function(value){
-            debugger
             let htmlStr;
             this.data.fieldsData.forEach((item)=> {
                 if(item.name == value) {
@@ -234,7 +233,9 @@ let config = {
                 height: 220,
                 title: '保存为常用查询'
             }).then((data) => {
-                if(data) {
+                if(data.value == '') {
+                    msgBox.alert('名字不能为空')
+                }else  {
                     if(!this.isEdit) {
                         this.actions.saveCommonQuery(data.value);
                     } else {
@@ -279,7 +280,6 @@ let config = {
                         name:name,
                         queryParams:JSON.stringify(this.data.searchInputList)
                     })
-
                     this.num ++;
                     this.name = name;
                     this.id = 1000+this.data.num;
