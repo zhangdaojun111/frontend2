@@ -1,5 +1,6 @@
 @import "../../../../assets/scss/core/base";
 .history-approve{
+    min-width: 850px;
     .history-tab{
         padding:0 10px;
         height: 40px;
@@ -25,22 +26,23 @@
         padding: 0 10px;
         .history-content{
             display: none;
-            padding:15px 0;
+            padding:10px 0;
             &.active{
                 display: block;
             }
             .history-table-part {
+                overflow: hidden;
                 .history-table-time {
                     height:35px;
                     line-height:35px;
                     color: #666;
-                    padding-left: 25px;
+                    padding-left: 10px;
                     background-color: #f2f2f2;
                     .img{
                         display: inline-block;
                         width: 20px;
                         height: 20px;
-                        background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll left center transparent;
+                        background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll left 8px transparent;
                     }
                 }
                 .fieldName {
@@ -56,29 +58,54 @@
                     width: 8%;
                 }
                 .updateTime {
-                    width: 17%;
+                    width: 18.45%;
+                }
+                .handlerName{
+                    width: 10%;
+                }
+                .handlerTime{
+                    width: 20%;
+                }
+                .approveResult{
+                    width: 45%;
+                }
+                .comment{
+                    width: 24.69%;
                 }
                 .history-table-header {
                     width: 100%;
                     span {
                         text-align: center;
-                        display: inline-block;
+                        display: block;
+                        float: left;
                         line-height: 30px;
+                        border-bottom: 1px solid #f2f2f2;
+                        border-right: 1px solid #f2f2f2;
+                        font-weight: bold;
+                        &:last-child{
+                            border-right: none;
+                        }
                     }
                 }
                 .history-table-body {
                     width: 100%;
-                    span {
-                        text-align: center;
-                        display: inline-block;
-                        line-height: 30px;
-                    }
-                    history-table-item {
-                        height: 30px;
+                    .history-table-item {
                         width: 100%;
                         line-height: 30px;
+                        overflow: hidden;
+                        span {
+                            height: 30px;
+                            text-align: center;
+                            display: block;
+                            float: left;
+                            line-height: 30px;
+                            border-bottom: 1px solid #f2f2f2;
+                            border-right: 1px solid #f2f2f2;
+                            &:last-child{
+                                border-right: none;
+                            }
+                        }
                     }
-
                 }
             }
         }
