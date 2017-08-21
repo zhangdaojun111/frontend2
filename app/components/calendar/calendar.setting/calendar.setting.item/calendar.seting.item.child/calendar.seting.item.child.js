@@ -1,3 +1,7 @@
+/**
+ * Created by lipengfei.
+ * 日历设置单条目录
+ */
 import Component from "../../../../../lib/component";
 import template from './calendar.seting.item.child.html';
 import './calendar.seting.item.child.scss';

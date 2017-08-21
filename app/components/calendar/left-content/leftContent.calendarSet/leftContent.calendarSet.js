@@ -1,3 +1,7 @@
+/**
+ * Created by lipengfei.
+ * 日历树组
+ */
 import Component from "../../../../lib/component";
 import template from './leftContent.calendarSet.html';
 import './leftContent.calendarSet.scss';
@@ -17,6 +21,7 @@ let config = {
         contentStatus:1,
         rows:[],
         hide_item_table:[],
+        calendarTreeData: {},
     },
     actions: {
         checkbox_a3:function(temp,label_select_all_show,select_label_children,that){
@@ -130,23 +135,17 @@ let config = {
             Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
             Mediator.emit('calendar-left:checkbox3-check',{data:config.data.cancel_fields});
             config.data.hide_table = {'tableName':"",'table_Id':''}
-        }
-    },
-    afterRender: function() {
-        this.el.css({"height":"100%","width":"100%"});
-        let objects = {};
-        let that = this;
-        CalendarService.getCalendarTreeData().then(objs => {
-            config.data.cancel_fields = objs.cancel_fields;
-            config.data.hide_item_table = objs.hide_tables;
-            config.data.rows = objs.rows;
-            console.log(objs.cancel_fields);
-            for(let i = 0;i<objs.hide_tables.length;i++){
+        },
+        getCalendarTreeData:function(that){
+            config.data.cancel_fields = this.data.calendarTreeData.cancel_fields;
+            config.data.hide_item_table = this.data.calendarTreeData.hide_tables;
+            config.data.rows = this.data.calendarTreeData.rows;
+            for(let i = 0;i<this.data.calendarTreeData.hide_tables.length;i++){
                 let hide_table_name = "";
-                let hide_table_id = objs.hide_tables[i];
-                for(let j = 0;j < objs.rows.length;j++){
-                    if(hide_table_id == objs.rows[j].table_id){
-                        hide_table_name = objs.rows[j].table_name;
+                let hide_table_id = this.data.calendarTreeData.hide_tables[i];
+                for(let j = 0;j < this.data.calendarTreeData.rows.length;j++){
+                    if(hide_table_id === this.data.calendarTreeData.rows[j].table_id){
+                        hide_table_name = this.data.calendarTreeData.rows[j]['table_name'];
                     }
                 }
                 config.data.hide_table.tableName = hide_table_name;
@@ -160,8 +159,9 @@ let config = {
             else{
                 that.el.find($("#checkbox_a2").removeClass("workflow_checked"));
             }
-            objs.rows.forEach((data) =>{
-                that.append(new LeftContentSelect(data,objs.cancel_fields,config.data.hide_item_table,config.data.hide_tables,config.data.rows), that.el.find('.remind-group'));
+            this.data.calendarTreeData.rows.forEach((data) =>{
+                that.append(new LeftContentSelect(data,this.data.calendarTreeData.cancel_fields,config.data.hide_item_table,config.data.hide_tables,config.data.rows),
+                    that.el.find('.remind-group'));
             });
             let isAllGroupchecked = true;
             this.el.find('.label-select-all-show').each(function(){
@@ -173,23 +173,8 @@ let config = {
             if(isAllGroupchecked){
                 this.el.find("#checkbox_a3").addClass('label-select-all-checked');
             }
-            Mediator.emit('calendar-left:calendar-class-hide',{data:config.data.hide_tables});
-            objects = objs;
-        });
-        Mediator.on('calendar-left:remind-checkbox',data =>{
-            if(data === 1){
-                that.el.find("#checkbox_a3").addClass('label-select-all-checked');
-            }
-            else{
-                that.el.find("#checkbox_a3").removeClass('label-select-all-checked');
-            }
-        });
-        Mediator.on('calendar-left:unshowData',data =>{
-            config.data.cancel_fields = data.data;
-            let preference = {"content":data.data};
-            CalendarService.getCalendarPreference(preference);
-        });
-        Mediator.on('calendar-left:showRemindType',data =>{
+        },
+        showRemindType:function (that,data) {
             that.el.find("#select-all-"+data.data).addClass("label-select-all-show label-select-all-checked");
             that.el.find("#select-all-block-"+data.data).show();
             that.el.find(".select-children-"+data.data).removeClass("unchecked");
@@ -216,6 +201,27 @@ let config = {
             CalendarService.getCalendarhidePreference(preference);
             Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
             Mediator.emit('calendar-left:showRenmindclass',{data:config.data.cancel_fields,hide_tables:config.data.hide_tables});
+        }
+    },
+    afterRender: function() {
+        this.el.css({"height":"100%","width":"100%"});
+        let that = this;
+        that.actions.getCalendarTreeData(that);
+        Mediator.on('calendar-left:remind-checkbox',data =>{
+            if(data === 1){
+                that.el.find("#checkbox_a3").addClass('label-select-all-checked');
+            }
+            else{
+                that.el.find("#checkbox_a3").removeClass('label-select-all-checked');
+            }
+        });
+        Mediator.on('calendar-left:unshowData',data =>{
+            config.data.cancel_fields = data.data;
+            let preference = {"content":data.data};
+            CalendarService.getCalendarPreference(preference);
+        });
+        Mediator.on('calendar-left:showRemindType',data =>{
+            config.actions.showRemindType(that,data)
         });
         that.el.on('click',"#checkbox_a3",function(){
             let label_select_all_show = that.el.find(".label-select-all-show");
@@ -229,10 +235,14 @@ let config = {
         }).on('click',".hide-type-group",function(){
             config.actions.hide_group($(this),that);
         });
+    },
+    beforeDestory: function () {
+        Mediator.removeAll('calendar-left:unshowData');
     }
 };
 class LeftcontentCalendarset extends Component {
-    constructor() {
+    constructor(data) {
+        config.data.calendarTreeData = data;
         super(config);
     }
 }
