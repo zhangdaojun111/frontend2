@@ -164,7 +164,7 @@ let config = {
                     let obj = {
                         tableId: this.data.tableId,
                         groupCheck: false,
-                        hideOptions: ['filter']
+                        hideOptions: ['isFilter']
                     }
                     for( let o in obj ){
                         exportSetting.data[o] = obj[o];
