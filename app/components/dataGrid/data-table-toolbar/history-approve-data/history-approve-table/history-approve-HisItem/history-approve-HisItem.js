@@ -1,8 +1,8 @@
 /**
- * Created by zhaohaohao
+ * Created by zhaohaoran
  */
 import Component from "../../../../../../lib/component";
-import template from './expert-search-item.html'
+import template from './history-approve-HisItem.html'
 
 
 let config = {
@@ -13,13 +13,12 @@ let config = {
 
     },
     afterRender: function() {
-
     }
 }
-class expertItem extends Component {
+class historyTable extends Component {
     constructor(data) {
         config.data = data
         super(config)
     }
 }
-export default expertItem
+export default historyTable

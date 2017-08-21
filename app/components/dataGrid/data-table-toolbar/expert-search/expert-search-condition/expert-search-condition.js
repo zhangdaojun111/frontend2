@@ -47,9 +47,10 @@ let config = {
             this.inputObject = object;
             this.inputNextObject = nextObject;
         },
-        setInputValue: function(value,name) {
+        setInputValue: function(value,name,type) {
             this.inputObject.val(value);
             this.inputObject.attr('name',name);
+            this.inputObject.attr('title',type);
         },
         setInputType: function(type) {
             let inputType;
@@ -59,6 +60,7 @@ let config = {
                 case "number": inputType = 'number'; break
             }
             this.inputNextObject.attr("type",inputType);
+            this.inputNextObject.attr("title",type);
         },
         setSelectValue: function(type) {
             let optionHtmlOne = `<option value="$regex">包含</option>
@@ -68,11 +70,15 @@ let config = {
                                 <option value="exact">等于</option>
                                 <option value="$gt">大于</option>
                                 <option value="$lt">小于</option>
-                                <option value="$ne">不等于</option>`
+                                <option value="$ne">不等于</option>`;
+            let optionHtmlThree =  `<option value="exact">等于</option>
+                                <option value="$gt">大于</option>
+                                <option value="$lt">小于</option>
+                                <option value="$ne">不等于</option>`;
             switch (type) {
                 case "datetime": this.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlTwo); break;
                 case "text": this.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlOne); break;
-                case "number": this.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlOne); break
+                case "number": this.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlThree); break
             }
         },
         delete: function() {
@@ -87,7 +93,7 @@ let config = {
         // debugger
         let _this = this;
         this.el.on('click','.condition-search-li', function() {
-            _this.actions.setInputValue($(this).find('.name').html(),$(this).find('.searchField').html());
+            _this.actions.setInputValue($(this).find('.name').html(),$(this).find('.searchField').html(),$(this).find('.searchType').html());
             _this.actions.setSelectValue($(this).find('.searchType').html());
             _this.actions.setInputType($(this).find('.searchType').html());
             _this.data.inputBoxName = $(this).find('.name').html();

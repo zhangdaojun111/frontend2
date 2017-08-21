@@ -30,12 +30,6 @@ let config={
                 this.data.dataGrid.actions.getGridData();
             }
         })
-        Mediator.subscribe('correspondenceSaved:' + this.data.dfield + ':' + this.data.value,(res)=>{
-            if(res == true){
-                //待晓川那边提供刷新接口
-                _this.data.dataGrid.actions.getGridData();
-            }
-        })
     },
 
     beforeDestory(){

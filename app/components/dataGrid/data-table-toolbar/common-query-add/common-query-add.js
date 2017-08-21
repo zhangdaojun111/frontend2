@@ -20,9 +20,6 @@ let addQuery = {
                 PMAPI.sendToParent( {
                     key: this.key,
                     type: PMENUM.close_dialog,
-                    data: {
-
-                    }
                 } )
             } )
         }
