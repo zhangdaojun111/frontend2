@@ -3,7 +3,8 @@ import template from './history-approve-data.html';
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import {dataTableService} from '../../../../services/dataGrid/data-table.service';
 import {HTTP} from "../../../../lib/http";
-import historyTable from "./history-approve-table/history-approve-table";
+import historyTable from "./history-approve-HisTable/history-approve-HisTable";
+import examineTable from "./history-approve-ExaTable/history-approve-ExaTable";
 import './history-approve-data.scss'
 import agGrid from "../../agGrid/agGrid";
 
@@ -11,7 +12,8 @@ let config = {
     template: template,
     dataShow:[],
     recordHistory:[],
-    trigger_work_records:[],
+    historyData:[],
+    triggerWorkRecords:[],
     data: {
         table_id:'',
         real_id:'',
@@ -19,31 +21,45 @@ let config = {
         res:{}
     },
     actions: {
-        renderTable:function(){
-            this.dataShow.forEach((row) => {
-                this.append(new historyTable(row), this.el.find('.history-table-box.amend'));
+        renderHisTable:function(){
+            this.historyData.forEach((row) => {
+                this.append(new historyTable(row), this.el.find('.history-table-box.history'));
+            });
+        },
+        renderExaTable:function(){
+            this.recordHistory.forEach((row) => {
+                this.append(new examineTable(row), this.el.find('.history-table-box.examine'));
             });
         },
         afterGetMsg:function() {
+            this.recordHistory = [];
+            this.historyData = [];
             let _this = this;
             let obj = {
                 table_id: this.data.table_id,
                 real_id: this.data.real_id,
             }
             dataTableService.getHistoryApproveData(obj).then( res=>{
-                debugger
                 if( res.record_history && res.record_history.length > 0 ){
-
-                }
-                _this.trigger_work_records = res.trigger_work_records || [];
-                if( res.history_data && res.history_data.length > 0 ){
-                    _this.dataShow = [];
-                    _this.dataShow.push({
-                        'record_name': '',
-                        'history_data': res.history_data
+                    res.record_history.forEach((item)=> {
+                        _this.recordHistory.push({approve_tip:item['approve_tip']});
+                        _this.historyData.push({history_data:item['history_data']});
                     })
+                } else {
+                    if(res.history_data && res.history_data.length > 0){
+                        res.history_data.forEach((item)=> {
+                            _this.historyData.push({history_data:item});
+                        })
+                    }
                 }
-                // _this.actions.renderTable()
+                _this.triggerWorkRecords = res.trigger_work_records || [];
+                if(_this.historyData && _this.historyData.length > 0) {
+                    _this.actions.renderHisTable();
+                }
+                if(_this.recordHistory && _this.recordHistory.length > 0){
+                    _this.actions.renderExaTable();
+                }
+
             })
             HTTP.flush();
             this.el.on('click','.history-tab-item',function() {

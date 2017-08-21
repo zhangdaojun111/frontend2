@@ -45,64 +45,67 @@
                         background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll left 8px transparent;
                     }
                 }
-                .fieldName {
-                    width: 15%;
-                }
-                .oldValue {
-                    width: 20%;
-                }
-                .newValue {
-                    width: 38%;
-                }
-                .updateUser {
-                    width: 8%;
-                }
-                .updateTime {
-                    width: 18.45%;
-                }
-                .handlerName{
-                    width: 10%;
-                }
-                .handlerTime{
-                    width: 20%;
-                }
-                .approveResult{
-                    width: 45%;
-                }
-                .comment{
-                    width: 24.69%;
-                }
-                .history-table-header {
-                    width: 100%;
-                    span {
-                        text-align: center;
-                        display: block;
-                        float: left;
-                        line-height: 30px;
-                        border-bottom: 1px solid #f2f2f2;
-                        border-right: 1px solid #f2f2f2;
-                        font-weight: bold;
-                        &:last-child{
-                            border-right: none;
-                        }
+                .history-table {
+                    display: none;
+                    .fieldName {
+                        width: 15%;
                     }
-                }
-                .history-table-body {
-                    width: 100%;
-                    .history-table-item {
+                    .oldValue {
+                        width: 20%;
+                    }
+                    .newValue {
+                        width: 38%;
+                    }
+                    .updateUser {
+                        width: 8%;
+                    }
+                    .updateTime {
+                        width: 18.45%;
+                    }
+                    .handlerName {
+                        width: 10%;
+                    }
+                    .handlerTime {
+                        width: 20%;
+                    }
+                    .approveResult {
+                        width: 45%;
+                    }
+                    .comment {
+                        width: 24.69%;
+                    }
+                    .history-table-header {
                         width: 100%;
-                        line-height: 30px;
-                        overflow: hidden;
                         span {
-                            height: 30px;
                             text-align: center;
                             display: block;
                             float: left;
                             line-height: 30px;
                             border-bottom: 1px solid #f2f2f2;
                             border-right: 1px solid #f2f2f2;
-                            &:last-child{
+                            font-weight: bold;
+                            &:last-child {
                                 border-right: none;
+                            }
+                        }
+                    }
+                    .history-table-body {
+                        width: 100%;
+                        .history-table-item {
+                            width: 100%;
+                            line-height: 30px;
+                            overflow: hidden;
+                            span {
+                                height: 30px;
+                                text-align: center;
+                                display: block;
+                                float: left;
+                                line-height: 30px;
+                                border-bottom: 1px solid #f2f2f2;
+                                border-right: 1px solid #f2f2f2;
+                                &:last-child {
+                                    border-right: none;
+                                }
                             }
                         }
                     }
