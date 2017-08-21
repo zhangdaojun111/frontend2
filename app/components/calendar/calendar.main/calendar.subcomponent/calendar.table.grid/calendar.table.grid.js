@@ -21,7 +21,7 @@ let config = {
     afterRender: function() {
         let that = this;
         let Isdrag = false;
-        let drag_Postion = "";
+        let drag_Postion = null;
         if (this.data.type === 'day') {
             this.el.css({display: "inline-block", width: "calc(100% - 1px)", height: "100%"});
             $('.grid-content').css({'max-height': "840px", overflow: "auto"});
@@ -41,16 +41,28 @@ let config = {
                 this.append(new CalendarRemindTaskItem(item), this.el.find('.task-list'));
             });
         }
-        // this.el.on('dragenter', '.task-item',function(event){
-        //     let ev = event.originalEvent;
-        //     let temp = $(".task-item-draggable");
-        //     $(this).before(temp);
-        //     ev.preventDefault();
-        //     drag_Postion = $(this);
-        //     Isdrag = true;
-        //     console.log(Isdrag);
-        //     return true;
-        // });
+        this.el.on('dragenter', '.task-item',function(event){
+            let ev = event.originalEvent;
+            let temp = $(".task-item-draggable");
+            $(this).parent().before("<div class='temp'></div>");
+            ev.preventDefault();
+            drag_Postion = $(this).parent().prev(".temp");
+            drag_Postion.append(temp);
+            Isdrag = true;
+            console.log(drag_Postion);
+            return true;
+        });
+        this.el.on('dragenter', '.task-item',function(event){
+            let ev = event.originalEvent;
+            let temp = $(".task-item-draggable");
+            $(this).parent().before("<div class='temp'></div>");
+            ev.preventDefault();
+            drag_Postion = $(this).parent().prev(".temp");
+            // drag_Postion.append(temp);
+            Isdrag = true;
+            // console.log(drag_Postion);
+            return true;
+        });
         this.el.on('dragover', '.task-list',(event) => {
             let ev = event.originalEvent;
             ev.preventDefault();
@@ -60,7 +72,13 @@ let config = {
             let temp = $(".task-item-draggable");
             temp.removeClass("task-item-draggable");
             let data = JSON.parse(ev.dataTransfer.getData("Text"));
-            this.append(new CalendarRemindTaskItem(data), this.el.find('.task-list'));
+            if(drag_Postion ===null){
+                drag_Postion = this.el.find(".task-list");
+            }
+            if(drag_Postion.is(".temp")){
+                drag_Postion.html("");
+            }
+            this.append(new CalendarRemindTaskItem(data), drag_Postion);
             temp.parent().remove();
             return false;
         });
