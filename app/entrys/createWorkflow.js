@@ -19,8 +19,6 @@ import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-
 import jsplumb from 'jsplumb';
 import {PMAPI,PMENUM} from '../lib/postmsg';
 
-WorkFlow.createFlow({flow_id:34,el:"#a"});
-
 WorkFlowForm.showForm();
 WorkFlowGrid.showGrid();
 
@@ -70,7 +68,9 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             el:'#place-form',
             real_id:'',
             form_workflow:1,
-            form_id:msg.formid
+            form_id:msg.formid,
+            btnType:'none',
+            is_view:0
         });
 
         const intervalSave= async function (data) {
@@ -142,11 +142,17 @@ Mediator.subscribe('workflow:submit', (res)=> {
                 })().then(data=>{
                     Mediator.publish('workflow:gotWorkflowInfo', data);
                 });
-            };
+            }else{
+                msgBox.alert(`${res.error}`);
+                $("#submit").show();
+            }
         })
     }
 });
-
+let temp_id=``;
+Mediator.subscribe('workFlow:record_info', (res) => {
+    temp_id=res.data.temp_id.value;
+});
 
 
 //订阅收藏常用workflow
@@ -176,12 +182,11 @@ const approveWorkflow=(para)=>{
 }
 
 //Grid
-
-Mediator.subscribe('workflow:choose', function (info) {
+$('#multiFlow').on('click',()=>{
     (async function () {
         return workflowService.getGridinfo({
-            table_id:info.tableid,
-            formId:info.formid,
+            table_id:wfObj.tableid,
+            formId:wfObj.formid,
             is_view:0,
             parent_table_id:null,
             parent_real_id:null,
@@ -190,14 +195,14 @@ Mediator.subscribe('workflow:choose', function (info) {
         });
     })().then(function (res) {
         let AgGrid=new Grid({
-            parentTempId:'',
+            parentTempId:temp_id,
             tableId:res.table_id,
             viewMode:"createBatch"
         });
         AgGrid.actions.returnBatchData = function (ids) {
-            console.log('接受导入数据')
+            console.log('接受导入数据');
+            console.log(ids);
         };
         AgGrid.render($("#J-aggrid"));
     })
-
-});
+})
