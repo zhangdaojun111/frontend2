@@ -54,6 +54,10 @@ class Component {
         return this.reload();
     }
 
+    /**
+     * 组件渲染
+     * @returns {Component}
+     */
     reload() {
         this.destroyChildren();
         let compiler = Handlerbar.compile(this.template);
@@ -68,6 +72,9 @@ class Component {
         return this;
     }
 
+    /**
+     * 绑定事件
+     */
     bindEvents() {
         if (this.binds && this.binds.length) {
             let that = this;

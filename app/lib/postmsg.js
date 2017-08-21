@@ -3,6 +3,8 @@ import component from '../lib/component';
 import 'jquery-ui/ui/widgets/dialog';
 import {HTTP} from './http';
 
+// console.log(dialog);
+
 /**
  * 父级页面，需要根据key来保存消息来源iframe或component的对象和打开的iframe或component的dom
  * @type json
