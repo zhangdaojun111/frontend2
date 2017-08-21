@@ -12,10 +12,12 @@ import "./number.scss";
 
 let config = {
     template:template,
-    data: {},
+    data: {
+        columnsShow:false
+    },
     actions: {},
     afterRender() {
-        // this.renderFitting();
+        this.renderFitting();
     },
     firstAfterRender() {
 
@@ -29,31 +31,90 @@ export class NineGridNumberComponent extends BiBaseComponent{
     }
 
     /**
-     * 渲染3*3格子数 fittings
+     * 渲染4*4格子数 fittings
      */
-    // renderFitting() {
-    //
-    //     const gridNumeberFitting = [
-    //         {
-    //             name:'XL',
-    //             options:{
-    //
-    //             }
-    //         }
-    //     ];
-    //
-    //     // this.gridNumber = groupFitting(gridNumeberFitting);
-    //     // console.log(this.gridNumber);
-    // }
-
-
-    /**
-     * 获取y轴的数据
-     */
-    getValue(data) {
-        // this.data.field = data;
-        // Mediator.publish('bi:chart:form:update', {type:'update-y'},this.data);
-    }
-
-
+    renderFitting() {
+        this.columnsXY = {
+             columnsXL:instanceFitting({
+                type:'input',
+                data:{
+                    value:null,
+                    label: '请输入X轴名称1*',
+                    show:true
+                },
+                me: this,
+                container: 'x-columns'
+            }),
+            columnsXC:instanceFitting({
+                type:'input',
+                data:{
+                    value:null,
+                    label: '请输入X轴名称2*',
+                    show:true
+                },
+                me: this,
+                container: 'x-columns'
+            }),
+            columnsXR:instanceFitting({
+                type:'input',
+                data:{
+                    value:null,
+                    label: '请输入X轴名称3*',
+                    show:true
+                },
+                me: this,
+                container: 'x-columns'
+            }),
+            columnsXD:instanceFitting({
+                type:'input',
+                data:{
+                    value:null,
+                    label: '请输入X轴名称4*',
+                    show:this.data.columnsShow,
+                },
+                me: this,
+                container: 'x-columns'
+            }),
+            columnsYL:instanceFitting({
+                type:'input',
+                data:{
+                    value:null,
+                    label: '请输入Y轴名称1*',
+                    show:true
+                },
+                me: this,
+                container: 'y-columns'
+            }),
+            columnsYC:instanceFitting({
+                type:'input',
+                data:{
+                    value:null,
+                    label: '请输入Y轴名称2*',
+                    show:true
+                },
+                me: this,
+                container: 'y-columns'
+            }),
+            columnsYR:instanceFitting({
+                type:'input',
+                data:{
+                    value:null,
+                    label: '请输入Y轴名称3*',
+                    show:true
+                },
+                me: this,
+                container: 'y-columns'
+            }),
+             columnsYD:instanceFitting({
+                type:'input',
+                data:{
+                    value:null,
+                    label: '请输入Y轴名称4*',
+                    show:this.data.columnsShow
+                },
+                me: this,
+                container: 'y-columns'
+            })
+        }
+    };
 }

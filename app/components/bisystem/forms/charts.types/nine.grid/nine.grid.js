@@ -20,7 +20,6 @@ let config = {
     actions: {},
     afterRender() {
         this.renderFitting();
-        this.showNumber();
     },
     firstAfterRender() {
     }
@@ -38,106 +37,42 @@ export class FormNineGridComponent extends BiBaseComponent{
    renderFitting(){
        let base = new FormBaseComponent();
        let share = new FormMixShareComponent();
+       let grid = new NineGridNumberComponent();
        this.append(base, this.el.find('.nine-grid-base'));
        this.append(share, this.el.find('.nine-grid-share'));
+       this.append(grid,this.el.find('.nine-grid-column-xy'));
 
         this.formGroup = {
             nineGridName:base,
             nineGridShare:share,
+            grid:grid,
             nineGridColumn:instanceFitting({
                 type:'select',
                 me: this,
                 container: 'nine-grid-column',
                 data: {
                     options:[
-                        {
-                            name:'3*3',
-                            value:'3'
-                        },
-                        {
-                            name:'4*4',
-                            value:'4'
-                        }
+                        {name:'3*3', value:'3'},
+                        {name:'4*4', value:'4'}
                     ],
-                    onChange:(val) => {
-                        alert(this.formGroup.nineGridColumn.getValue());
-
-                    }
+                    onChange: this.switchOptions.bind(this),
                 }
 
-            }),
-            // nineGridColumnXL:instanceFitting({
-            //     type:'input',
-            //     data:{
-            //         value:null,
-            //         label: '请输入X轴名称1*',
-            //         show:true
-            //     },
-            //     me: this,
-            //     container: 'nine-grid-column-x'
-            // }),
-            // nineGridColumnXC:instanceFitting({
-            //     type:'input',
-            //     data:{
-            //         value:null,
-            //         label: '请输入X轴名称2*',
-            //         show:true
-            //     },
-            //     me: this,
-            //     container: 'nine-grid-column-x'
-            // }),
-            // nineGridColumnXR:instanceFitting({
-            //     type:'input',
-            //     data:{
-            //         value:null,
-            //         label: '请输入X轴名称3*',
-            //         show:true
-            //     },
-            //     me: this,
-            //     container: 'nine-grid-column-x'
-            // }),
-            // nineGridColumnYL:instanceFitting({
-            //     type:'input',
-            //     data:{
-            //         value:null,
-            //         label: '请输入Y轴名称1*',
-            //         show:true
-            //     },
-            //     me: this,
-            //     container: 'nine-grid-column-y'
-            // }),
-            // nineGridColumnYC:instanceFitting({
-            //     type:'input',
-            //     data:{
-            //         value:null,
-            //         label: '请输入Y轴名称2*',
-            //         show:true
-            //     },
-            //     me: this,
-            //     container: 'nine-grid-column-y'
-            // }),
-            // nineGridColumnYR:instanceFitting({
-            //     type:'input',
-            //     data:{
-            //         value:null,
-            //         label: '请输入Y轴名称3*',
-            //         show:true
-            //     },
-            //     me: this,
-            //     container: 'nine-grid-column-y'
-            // }),
-
+            })
         }
    }
-
     /**
-     * 显示格子数3*3 或是 4*4
+     * 切换3*3 / 4*4 格子数
+     * @param val === 3 / val ===4
      *
      */
-    showNumber() {
-        let grid = new NineGridNumberComponent();
-        this.append(grid,this.el.find('.nine-grid-column-xy'));
-
+    switchOptions(val) {
+        if(val == 4){
+            this.formGroup.grid.data.columnsShow = true;
+        }else{
+            this.formGroup.grid.data.columnsShow = false;
+        }
+        this.formGroup.grid.reload();
     }
 
 
