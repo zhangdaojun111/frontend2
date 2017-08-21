@@ -163,7 +163,8 @@ let config = {
                 this.el.find( '.grid-export-btn' ).on( 'click',()=>{
                     let obj = {
                         tableId: this.data.tableId,
-                        groupCheck: false
+                        groupCheck: false,
+                        hideOptions: ['filter']
                     }
                     for( let o in obj ){
                         exportSetting.data[o] = obj[o];
@@ -270,6 +271,7 @@ let config = {
                             msgBox.alert( res.error )
                         }
                     } )
+                    HTTP.flush();
                 }
             } )
         }
