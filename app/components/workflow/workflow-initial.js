@@ -1,6 +1,7 @@
 import Component from '../../lib/component';
 import template from './workflow-initial.html';
 import './workflow-initial.scss';
+import '../../assets/scss/workflow/workflow-base.scss';
 import Mediator from '../../lib/mediator';
 
 // import WorkFlowCatalog from './workflow-catalog/workflow-catalog'

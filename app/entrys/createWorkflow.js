@@ -142,7 +142,10 @@ Mediator.subscribe('workflow:submit', (res)=> {
                 })().then(data=>{
                     Mediator.publish('workflow:gotWorkflowInfo', data);
                 });
-            };
+            }else{
+                msgBox.alert(`${res.error}`);
+                $("#submit").show();
+            }
         })
     }
 });
