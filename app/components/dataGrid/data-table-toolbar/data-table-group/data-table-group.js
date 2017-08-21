@@ -53,6 +53,11 @@ let config = {
         this.el.find( '.closeGroup' ).on( 'click',()=>{
             this.data.close();
         } )
+
+        //重置
+        this.el.find( '.resetGroup' ).on( 'click',()=>{
+            console.log("重置分组")
+        } )
     }
 }
 

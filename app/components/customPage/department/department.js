@@ -233,6 +233,9 @@ let config = {
             this.actions.openSourceDataGrid( url,'查看' )
         },
         onCellClicked: function ($event) {
+            if( $event.colDef.field=='f5' ){
+                this.agGrid.gridOptions.api.redrawRows();
+            }
             if( $event.colDef.headerName == '操作' ){
                 if( $event.event.srcElement.className == 'departModify' ){
                     let obj = {
