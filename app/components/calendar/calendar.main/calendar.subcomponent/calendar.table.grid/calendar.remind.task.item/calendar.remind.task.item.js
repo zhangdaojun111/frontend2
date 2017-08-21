@@ -131,6 +131,11 @@ let config = {
             let sValue = this.el.find('.select-options option:selected').val();
             let sLabel = this.el.find('.select-options option:selected').text();
             this.actions.changSelectValue(sValue, sLabel);
+        }).on('dragstart','.task-item',function(ev){
+            let event = ev.originalEvent;
+            $(this).addClass("task-item-draggable");
+            event.dataTransfer.setData("Text",JSON.stringify(that.data.remindTaskItemData));
+            return true;
         });
         $(document).click(function(){
             that.el.parents(".calendar-main-content").find(".select-options").hide();
