@@ -52,6 +52,8 @@ let config = {
         filterText: '',
         //请求数据参数
         commonQueryData:[],
+        //临时查询数据
+        temporaryCommonQuery:[],
         //选择的数据
         selectRows: [],
         //高级查询字段参数
@@ -379,6 +381,19 @@ let config = {
             }
             return json;
         },
+        //设置常用查询选项值
+        appendQuerySelect: function() {
+            let length = this.el.find('.dataGrid-commonQuery-select option').length
+            for (let i = 0; i< length ;i++) {
+                if(this.el.find('.dataGrid-commonQuery-select option').eq(i).val() == '临时高级查询'){
+                    this.el.find('.dataGrid-commonQuery-select option').eq(i).remove()
+                }
+            }
+            this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
+            this.el.find('.dataGrid-commonQuery-select').val('临时高级查询');
+
+        },
+        //获取高级查询数据
         getExpertSearchData: function (addNameAry) {
             let obj = {'actions':JSON.stringify( ['queryParams'] ),'table_id':this.data.tableId};
             dataTableService.getPreferences( obj ).then( res=>{
