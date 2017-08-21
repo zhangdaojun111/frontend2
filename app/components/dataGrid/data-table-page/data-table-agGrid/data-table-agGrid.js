@@ -1059,7 +1059,8 @@ let config = {
                     fields: this.data.customColumnsFields,
                     fixCols: this.data.fixCols,
                     tableId: this.data.tableId,
-                    agGrid: this.agGrid
+                    agGrid: this.agGrid,
+                    close: this.actions.calcCustomColumn
                 }
                 this.customColumnsCom  = new customColumns(custom);
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
@@ -1077,7 +1078,8 @@ let config = {
                     tableId: this.data.tableId,
                     gridoptions: this.agGrid.gridOptions,
                     fields: this.data.myGroup.length == 0 ? this.data.groupFields : this.actions.deleteGroup(this.data.groupFields),
-                    myGroup:  this.actions.setMyGroup(this.data.myGroup.fields)
+                    myGroup:  this.actions.setMyGroup(this.data.myGroup.fields),
+                    close: this.actions.calcGroup
                 }
                 this.groupGridCom = new groupGrid(groupLit);
                 this.append(this.groupGridCom,this.el.find('.group-panel'));
@@ -1479,12 +1481,16 @@ let config = {
         customColumnClick: function () {
             if( this.el.find('.custom-column-btn')[0] ){
                 this.el.find( '.custom-column-btn' ).on( 'click',()=>{
-                    this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
-                    this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
-
-                    this.actions.changeAgGridWidth();
+                    this.actions.calcCustomColumn();
                 } )
             }
+        },
+        //定制列事件
+        calcCustomColumn: function () {
+            this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
+            this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
+
+            this.actions.changeAgGridWidth();
         },
         //分组点击
         groupBtnClick: function () {
@@ -1492,20 +1498,24 @@ let config = {
                 return;
             }
             this.el.on('click','.group-btn',()=> {
-                if(!this.data.groupCheck) {
-                    this.el.find('.group-btn').find('span').html('数据');
-                    this.el.find('.group-panel').show();
-                    this.data.groupCheck = !this.data.groupCheck;
-                    this.actions.onGroupChange(this.data.myGroup.fields)
-                } else {
-                    this.el.find('.group-btn').find('span').html('分组');
-                    this.el.find('.group-panel').hide();
-                    this.data.groupCheck = !this.data.groupCheck;
-                    this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , false);
-                    this.actions.getGridData();
-                }
-                this.actions.changeAgGridWidth();
+                this.actions.calcGroup();
             })
+        },
+        //分组打开关闭
+        calcGroup: function () {
+            if(!this.data.groupCheck) {
+                this.el.find('.group-btn').find('span').html('数据');
+                this.el.find('.group-panel').show();
+                this.data.groupCheck = !this.data.groupCheck;
+                this.actions.onGroupChange(this.data.myGroup.fields)
+            } else {
+                this.el.find('.group-btn').find('span').html('分组');
+                this.el.find('.group-panel').hide();
+                this.data.groupCheck = !this.data.groupCheck;
+                this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , false);
+                this.actions.getGridData();
+            }
+            this.actions.changeAgGridWidth();
         },
         //返回选择数据
         retureSelectData: function () {

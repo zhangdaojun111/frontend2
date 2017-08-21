@@ -12,6 +12,7 @@ let config = {
         gridoptions: null,
         fields: [],
         myGroup:[],
+        close: function () {}
     },
     group:[],
     actions: {
@@ -47,6 +48,11 @@ let config = {
             }
         }).disableSelection();
         this.actions.inputSearch();
+
+        //关闭
+        this.el.find( '.closeGroup' ).on( 'click',()=>{
+            this.data.close();
+        } )
     }
 }
 
