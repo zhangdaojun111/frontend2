@@ -27,7 +27,8 @@ let config = {
                 || this.data.searchData.file_name.indexOf('xls') !== -1){
 
                 this.data.isCanReview = false;
-                this.data.src = window.location.href.split('search_result')[0] + "data/download_attachment/?file_id=" + this.fileId + "&download=1";
+                this.fileId = this.data.searchData.file_id;
+                this.data.src = window.location.href.split('search_result')[0] + "download_attachment/?file_id=" + this.fileId + "&download=1";
                 this.el.find('a.preview').addClass('cantReview');
                 this.el.find('a.download').attr("href",this.data.src).attr('target','_blank');
 

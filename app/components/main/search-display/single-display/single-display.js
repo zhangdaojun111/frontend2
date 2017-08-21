@@ -4,6 +4,7 @@ import 'jquery-ui/themes/base/theme.css';
 import 'jquery-ui/ui/widgets/dialog.js';
 import './single-display.scss';
 import template from './single-display.html';
+import {PMAPI} from '../../../../lib/postmsg';
 
 
 let config = {
@@ -15,14 +16,24 @@ let config = {
         initInfo:function () {
             this.el.find('span.data-content').html(this.data.searchData.label);
             this.el.find('span.data-count').html(this.data.searchData.row_num);
+        },
+        penetrateToGrid:function () {
+            //穿透到ag-grid
+            let tableId = this.data.searchData.table_id;
+            let keyword = this.data.searchData.label;
+            PMAPI.openDialogByIframe(`/datagrid/source_data_grid/?tableId=${tableId}&keyword=${keyword}&viewMode=keyword&tableType=keyword`,{
+                width:1200,
+                height:700,
+                title:`${this.data.searchData.label}`,
+                modal:true
+            })
         }
     },
     afterRender:function () {
         this.actions.initInfo();
+        let that = this;
         this.el.on('click','.data-content',() => {
-            console.log(this.data.searchData.label);
-            //穿透到ag-grid
-
+            that.actions.penetrateToGrid();
         })
     },
     beforeDestory:function () {
