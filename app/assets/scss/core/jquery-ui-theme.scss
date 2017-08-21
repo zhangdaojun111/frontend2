@@ -28,10 +28,19 @@
             color: #666;
             font-weight: normal;
         }
-        .ui-dialog-titlebar-close {
+        .ui-dialog-titlebar-close, .ui-dialog-titlebar-full {
             outline: none;
             border: 0 none;
             background-color: transparent;
+        }
+        .ui-dialog-titlebar-full {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            width: 20px;
+            margin: -10px 0 0 0;
+            padding: 1px;
+            height: 20px;
         }
     }
     .ui-dialog-content {
