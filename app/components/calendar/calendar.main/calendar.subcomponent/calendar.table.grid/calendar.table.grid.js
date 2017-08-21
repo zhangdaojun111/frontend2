@@ -40,7 +40,6 @@ let config = {
             taskData.forEach(item => {
                 this.append(new CalendarRemindTaskItem(item), this.el.find('.task-list'));
             });
-
         }
         // this.el.on('dragenter', '.task-item',function(event){
         //     let ev = event.originalEvent;
@@ -52,21 +51,21 @@ let config = {
         //     console.log(Isdrag);
         //     return true;
         // });
-        this.el.on('dragover', '.task-list',(event) => {
-            let ev = event.originalEvent;
-            ev.preventDefault();
-            return true;
-        }).on('dragstart','.task-item',function(ev){
-            let event = ev.originalEvent;
-            $(this).addClass("task-item-draggable");
-            event.dataTransfer.setData("Text","task-item-draggable");
-            return true;
-        }).on('drop','.task-list',(event) => {
-            let temp = $(".task-item-draggable");
-            temp.removeClass("task-item-draggable");
-            this.el.find(".task-list").append(temp);
-            return false;
-        });
+        // this.el.on('dragover', '.task-list',(event) => {
+        //     let ev = event.originalEvent;
+        //     ev.preventDefault();
+        //     return true;
+        // }).on('dragstart','.task-item',function(ev){
+        //     let event = ev.originalEvent;
+        //     $(this).addClass("task-item-draggable");
+        //     event.dataTransfer.setData("Text","task-item-draggable");
+        //     return true;
+        // }).on('drop','.task-list',(event) => {
+        //     let temp = $(".task-item-draggable");
+        //     temp.removeClass("task-item-draggable");
+        //     this.el.find(".task-list").append(temp);
+        //     return false;
+        // });
 
     }
 };
