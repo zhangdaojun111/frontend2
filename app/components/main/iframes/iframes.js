@@ -62,6 +62,7 @@ export const IframeInstance = new Component({
         sort: [],
         focus: null,
         hideFlag:false,
+        autoOpenList:[],
     },
     actions: {
         openIframe: function (id, url, name) {
@@ -228,13 +229,52 @@ export const IframeInstance = new Component({
                 }
             }
             return name;
-        }
+        },
+        autoOpenTabs:function () {
+            let tempList = [];
+            //自动打开的标签由系统设置的bi/日历 和 最后一次系统关闭时未关闭的标签两部分组成
+            //此处添加未关闭的标签
+            let biFlag = window.config.sysConfig.logic_config.login_show_bi;
+            let calendarFlag = window.config.sysConfig.logic_config.login_show_calendar;
+            if(biFlag === 1 && !this.data.autoOpenList.includes('bi')){
+                tempList.prepend('bi');
+            }
+            if(calendarFlag === 1 && !this.data.autoOpenList.includes('calendar')){
+                tempList.prepend('calendar');
+            }
+            let menu = window.config.menu;
+            this.actions.findTabInfo(menu,tempList);
+            //依次打开各标签
+            for(let k of this.data.autoOpenList){
+
+            }
+        },
+        findTabInfo:function (nodes,targetList) {
+            for( let i=0; i < nodes.length; i++){
+                if(targetList.includes(nodes[i].id ) || targetList.includes(nodes[i].table_id )){
+                    let item = {};
+                    item.id = nodes[i].id;
+                    item.url = nodes[i].url;
+                    item.name = nodes[i].label;
+                    this.data.autoOpenList.push(item);
+                    _.remove(targetList,function (n) {
+                        return n.id === nodes[i].id;
+                    });
+                    if(targetList.length === 0){        //找到所有目标
+                        return;
+                    }
+                }
+                if(nodes[i].items && nodes[i].items.length > 0){
+                    this.actions.findTabInfo(nodes[i].items,targetList);
+                }
+            }
+        },
     },
     afterRender: function () {
         let that = this;
         this.data.tabs = this.el.find('.tabs');
         this.data.iframes = this.el.find('.iframes');
-
+        this.actions.autoOpenTabs();
         this.el.on('click', '.tabs .item .close', function () {
             let id = $(this).attr('iframeid');
             that.actions.closeIframe(id);
