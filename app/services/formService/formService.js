@@ -522,7 +522,7 @@ export const FormService={
             data.list.push({
                 id:options[key]['value']||'',
                 name:options[key]['label']||'',
-                py:options[key]['py']?options[key]['py'].join(','):'',
+                py:_.isArray(options[key]['py'])?options[key]['py'].join(','):'',
             });
         }
         if(!(data.list[0]['id']=='') && data.list[0]['id'] != '请选择' && !multi){

@@ -1,3 +1,8 @@
+/**
+ *@author yudeping
+ *选择器搜索模块
+ */
+
 import Component from "../../../lib/component";
 import Mediator from "../../../lib/mediator";
 import './searchBar.scss';
@@ -31,7 +36,7 @@ let config={
     },
     async firstAfterRender(){
         let _this=this;
-        _this.set('childDropDown',[]);
+        this.setData('childDropDown',[]);
         let res=await FormService.getColumnList(_this.data.tableId)
         _this.data.rows=res.rows;
         let d={
@@ -52,13 +57,13 @@ let config={
         }
         let dropDown=new DropDown(d);
         let dropDown2=new DropDown(_this.data.searchTerms);
-        _this.childDropDown.push(dropDown);
-        _this.childDropDown.push(dropDown2);
+        _this.data.childDropDown.push(dropDown);
+        _this.data.childDropDown.push(dropDown2);
         _this.append(dropDown,_this.el.find('.ui-box-1'));
         _this.append(dropDown2,_this.el.find('.ui-box-1'));
         _this.el.on('click','.select',async function(){
-            let selectedTerm =_this.childDropDown[1]['data'].value;
-            let selectedField =_this.childDropDown[0]['data'].value;
+            let selectedTerm =_this.data.childDropDown[1]['data'].value;
+            let selectedField =_this.data.childDropDown[0]['data'].value;
             let keyword=_this.el.find('.searchBar').val();
             let queryParams = [{
                 "relation": "and",

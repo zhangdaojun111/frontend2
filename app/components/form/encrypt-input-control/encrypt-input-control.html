@@ -1,0 +1,16 @@
+<div class="form-control">
+    {{#if unvisible}}
+    <a href="javascript:void(0);" class="info">权限受限</a>
+    {{else if be_control_condition}}
+    <a href="javascript:void(0);" class="info">被修改条件限制</a>
+    {{else}}
+    <input type="password"  value="{{value}}"  readonly id="inputShow"  class="dynamic-form-input ui-width">
+    <div style="display: inline-block">
+        {{#if required}}
+        <span id="requiredLogo" class="{{requiredClass}}" ></span>
+        {{/if}}
+    </div>
+    <a  href="javascript:;" id="edit" style="color: rgb(14, 122, 239); background: none;" class="dynamic-form-input-a">编辑</a>
+    {{/if}}
+</div>
+
