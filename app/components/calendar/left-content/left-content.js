@@ -32,6 +32,7 @@ let config = {
         contentHide:function(that,temp){
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
+                that.el.find(".item-content-1").show();
                 that.el.find(".item-content").css("height","27%");
                 that.el.find(".item-content-1").css("height","27%");
                 that.el.find(".item-content").show();
@@ -39,11 +40,11 @@ let config = {
                 that.el.find(".item-title").removeClass("display-all-content");
                 that.el.find(".item-title-2").removeClass("display-all-content");
                 temp.addClass("display-all-content");
-                that.el.find(".item-content-1").css("height","27%");
+                that.el.find(".item-content-1").hide();
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
                 temp.next(".item-content").show();
-                temp.next().animate({height:"55%"},"fast");
+                temp.next().animate({height:"82%"},"fast");
             }
         },
         hideclass:function(that,temp){
@@ -58,6 +59,7 @@ let config = {
             }else{
                 that.el.find(".item-title").removeClass("display-all-content");
                 temp.addClass("display-all-content");
+                that.el.find(".item-content-1").show();
                 that.el.find(".item-content-1").css("height","27%");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").show();
@@ -67,6 +69,7 @@ let config = {
         hide_item:function(that,temp){
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
+                that.el.find(".item-content-1").show();
                 that.el.find(".item-content-1").css("height","27%");
                 that.el.find(".item-content").css("height","27%");
                 that.el.find(".item-content-2").hide();
@@ -74,6 +77,7 @@ let config = {
                 that.el.find(".item-content-4").show();
             }else{
                 that.el.find(".item-title").removeClass("display-all-content");
+                that.el.find(".item-content-1").show();
                 temp.addClass("display-all-content");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
