@@ -28,10 +28,6 @@ let config = {
         Mediator.subscribe('bi:chart:form:update', option => {
             this.MediatorDistribution(option);
         });
-
-        if (this.chartId) {
-            this.getChartData(this.chartId);
-        }
     },
     firstAfterRender() {
         this.el.on('click', '.save-btn', (event) => {
@@ -63,8 +59,9 @@ export class FormNormalComponent extends BiBaseComponent{
      * @param chartId 图表id
      */
     async getChartData(chartId) {
-       const chart = await canvasCellService.getCellChart({chart_id: chartId});
-       this.fillChart(chart[0])
+        const chart = await canvasCellService.getCellChart({chart_id: chartId});
+        this.fillChart(chart[0])
+
     }
     /**
      * 编辑时渲染图表
@@ -79,7 +76,11 @@ export class FormNormalComponent extends BiBaseComponent{
             filter: chart['filter']
         };
         this.formGroup.share.setValue(share);
+        this.formGroup.x.data.choosed = chart['xAxis'];
+        this.formGroup.x.autoSelect.reload();
+        // this.formGroup.x.setValue(chart['xAxis']);
     }
+
 
     /**
      * 渲染chart fittings
@@ -90,7 +91,7 @@ export class FormNormalComponent extends BiBaseComponent{
         let deeps = new FormNormalDeepComponent()
         this.append(base, this.el.find('.form-group-base'));
         this.append(share, this.el.find('.form-group-share'));
-        this.append(deeps, this.el.find('.chart-form-deep'))
+        this.append(deeps, this.el.find('.chart-form-deep'));
 
         this.formGroup = {
             chartName: base,
@@ -234,7 +235,7 @@ export class FormNormalComponent extends BiBaseComponent{
             this.formGroup.x.autoSelect.data.list = fields;
             this.formGroup.x.autoSelect.reload();
         };
-
+        // this.getChartData(this.chartId);
         if (this.formGroup.deeps) {
             this.formGroup.deeps.reloadXaxis(fields);
         };

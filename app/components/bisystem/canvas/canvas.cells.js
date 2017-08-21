@@ -47,6 +47,7 @@ let config = {
          * 添加画布块
          */
         addCell() {
+
             const cell = {
                 layout_id: '',
                 chart_id: '',

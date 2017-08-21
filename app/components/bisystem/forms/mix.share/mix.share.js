@@ -17,10 +17,10 @@ let config = {
     data: {},
     actions: {},
     afterRender() {},
-    firstAfterRender() {
+   async firstAfterRender() {
         this.renderFitting();
-        this.getChartSource();
-        this.getChartIcon();
+        await this.getChartSource();
+        await this.getChartIcon();
     }
 };
 
@@ -124,11 +124,11 @@ export class FormMixShareComponent extends BiBaseComponent {
      * 设置mix.share value
      */
     setValue(val) {
-        console.log(this.mixForm.icons.data);
         this.mixForm.chartSource.setValue(val['chartSource']);
+        this.mixForm.themes.setValue(val['themes']);
         this.mixForm.icons.setValue(val['icons']);
+        this.mixForm.filter = val['filter'];
     }
-
 
     /**
      * 获取数据mix.share value
