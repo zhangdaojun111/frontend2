@@ -31,9 +31,15 @@ let config = {
                 this.append(new examineTable(row), this.el.find('.history-table-box.examine'));
             });
         },
+        renderStrTable:function(){
+            this.triggerWorkRecords.forEach((row) => {
+                this.append(new examineTable(row), this.el.find('.history-table-box.examine'));
+            });
+        },
         afterGetMsg:function() {
             this.recordHistory = [];
             this.historyData = [];
+            this.triggerWorkRecords = [];
             let _this = this;
             let obj = {
                 table_id: this.data.table_id,
@@ -42,14 +48,15 @@ let config = {
             dataTableService.getHistoryApproveData(obj).then( res=>{
                 if( res.record_history && res.record_history.length > 0 ){
                     res.record_history.forEach((item)=> {
-                        _this.recordHistory.push({approve_tip:item['approve_tip']});
-                        _this.historyData.push({history_data:item['history_data']});
+                        _this.recordHistory.push({'approve_tip':item['approve_tip']});
+                        _this.historyData.push({'history_data':item['history_data']});
                     })
                 } else {
                     if(res.history_data && res.history_data.length > 0){
-                        res.history_data.forEach((item)=> {
-                            _this.historyData.push({history_data:item});
-                        })
+                        this.historyData.push({
+                            'record_name': '',
+                            'history_data': res.history_data
+                        });
                     }
                 }
                 _this.triggerWorkRecords = res.trigger_work_records || [];
@@ -58,6 +65,9 @@ let config = {
                 }
                 if(_this.recordHistory && _this.recordHistory.length > 0){
                     _this.actions.renderExaTable();
+                }
+                if(_this.triggerWorkRecords && _this.triggerWorkRecords.length > 0){
+                    // _this.actions.renderStrTable();
                 }
 
             })
@@ -70,8 +80,16 @@ let config = {
                 _this.el.find('.history-content').eq(i).addClass('active');
             })
             this.el.on('click','.history-table-title',function() {
-                $(this).next('.history-table').css('display','block')
-                $(this).find('.img').addClass('.active')
+                if($(this).attr('title') == 'false') {
+                    $(this).next('.history-table').css('display','block')
+                    $(this).find('.img').addClass('active')
+                    $(this).attr('title','true')
+                } else {
+                    $(this).next('.history-table').css('display','none')
+                    $(this).find('.img').removeClass('active')
+                    $(this).attr('title','false')
+                }
+
             })
         }
     },
