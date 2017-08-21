@@ -1450,21 +1450,30 @@ let config={
         });
         //对应关系弹窗
         Mediator.subscribe('form:openCorrespondence:'+_this.data.tableId,function(data){
+            console.log('data')
+            console.log('data')
+            console.log('data')
+            console.log(data);
             let isView = data["is_view"];
-                _this.data.sonTableId = data["value"];
-                if(isView == '0'){
-                    _this.data.viewMode = 'editFromCorrespondence';
-                }else{
-                    _this.data.viewMode = 'viewFromCorrespondence';
-                }
-                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`,{
-                    width:800,
-                    height:600,
-                    title:`对应关系`,
-                    modal:true
-                }).then(data=>{
-                })
+            _this.data.sonTableId = data["value"];
+            if(isView == '0'){
+                _this.data.viewMode = 'editFromCorrespondence';
+            }else{
+                _this.data.viewMode = 'viewFromCorrespondence';
+            }
+            PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${data.value}&parentTableId=${data.tableId}&parentTempId=${data.temp_id}&recordId=${data.record_id}&viewMode=${_this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`,{
+                width:800,
+                height:600,
+                title:`对应关系`,
+                modal:true
+            }).then(res=>{
+                //关闭对应关系后的回调刷新
+                console.log('关闭后的回调刷新');
+                _this.childComponent[data.dfield].data.dataGrid.actions.getGridData();
+            })
         });
+
+
        // 密码弹窗
         Mediator.subscribe('form:addPassword:'+_this.data.tableId,function(data){
             _this.data['addPassWordField']=data.dfield;
