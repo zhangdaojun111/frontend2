@@ -300,10 +300,15 @@ let config = {
         btnClick: function () {
             //定制列点击
             this.actions.customColumnClick();
-            //显示离职
+            //显示所有
             this.el.find( '.show-all-btn' ).on( 'click',()=>{
+                this.data.departmentName = '';
+                this.actions.getUserData();
+            } )
+            //显示离职
+            this.el.find( '.show-leave-btn' ).on( 'click',()=>{
                 this.data.isShowLeave = !this.data.isShowLeave;
-                this.el.find( '.show-all-btn span' )[0].innerHTML = this.data.isShowLeave?'显示离职':'隐藏离职';
+                this.el.find( '.show-leave-btn span' )[0].innerHTML = this.data.isShowLeave?'显示离职':'隐藏离职';
                 this.actions.getUserData();
             } )
             //floatingFilter

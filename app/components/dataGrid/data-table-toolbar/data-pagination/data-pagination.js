@@ -188,8 +188,63 @@ let config = {
         tableOperate: function () {
             if( this.data.isSuperUser == 1 ){
                 this.el.find( '.tableOperateSelect' ).on( 'change',()=>{
-                    let operate = this.el.find( 'tableOperateSelect' );
+                    let operate = this.el.find( '.tableOperateSelect' )[0];
+                    if( operate.value != '操作' ){
+                        for( let o of this.data.tableOperationData ){
+                            if( o.name == operate.value ){
+                                this.actions.tableOperateFun( o.beAddress,o.addressss );
+                                break;
+                            }
+                        }
+                    }
+                    operate.value = '操作';
                 } )
+            }
+        },
+        //表级操作
+        tableOperateFun: function (opt,opera) {
+            if(opera != 0){
+                let address = JSON.parse(opera);
+                let deleteListRel = [];
+                // this.missionDListSourceSub = this.dataGridMissionService.missionDeleteListSource.subscribe(res =>{
+                //     if( res && res["deleteListRel"]) {
+                //         deleteListRel = res["deleteListRel"];
+                //         this.selectedListRel = res["deleteListRel"];
+                //         this.cd.markForCheck();
+                //     }
+                // })
+                //需弹框的表级操作
+                if(address['feAddress']!=''){
+                    if(address['feAddress']=='check'){
+                        this.dailyCheck=true;
+                        return;
+                    }
+                }else{//不需弹框的表级操作-刷新cache
+                    msgBox.showTips('已经向服务器发送请求');
+                    if(address['beAddress'] != ''){
+                        if(address['beAddress'].indexOf('method=get')!=-1){
+                            $('<a href="'+address['beAddress']+'" ></a>')[0].click();
+                        }else {
+                            $.ajax({
+                                method:'POST',
+                                url:'data'+address['beAddress'],
+                                data:{
+                                    table_id:this.data.tableId,
+                                    selectedRows:JSON.stringify(deleteListRel)
+                                },
+                                success: (res)=> {
+                                    if(res){
+                                        if(res['success']==1){
+                                        }else if(res['success']==0){
+                                            msgBox.alert('发送请求失败！错误是'+res['error']);
+                                        }
+                                    }
+                                }
+                            })
+                        }
+                    }
+                }
+
             }
         }
     },
