@@ -135,6 +135,17 @@ let config = {
             that.actions.hideclass(that,$(this).parents('.item-title-2'));
         }).on('click','.set-calendar',() =>{
             CalendarSetService.getMenu().then(res => {
+                // PMAPI.openDialogByIframe(
+                //     '/iframe/calendarOpenSetting/',
+                //     {
+                //         width: "1720",
+                //         height: '750',
+                //         title: '日历设置',
+                //     }, {
+                //         menu: res['menuList'],
+                //     }).then(res => {
+                //
+                // });
                 let component = new CalendarSetting(res['menuList']);
                 let el = $('<div>').appendTo(document.body);
                 component.render(el);
@@ -156,7 +167,9 @@ let config = {
                     width: "1000",
                     height: '550',
                     title: '日历表',
-                });
+                }).then(res => {
+                    // 创建日历表后的回调，接收form回传的参数
+            });
         });
     },
     beforeDestory: function () {

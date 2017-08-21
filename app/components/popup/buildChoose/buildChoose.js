@@ -1,3 +1,8 @@
+/**
+ *@author yudeping
+ *内置选择器
+ */
+
 import Component from "../../../lib/component";
 import {HTTP} from "../../../lib/http";
 import {PMAPI,PMENUM} from "../../../lib/postmsg";

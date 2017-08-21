@@ -26,21 +26,28 @@ export const CalendarWorkflowData = {
 
         //approve
         CalendarService.getWorkflowRecords( {type: 5,"rows":9999,"page":1,"rate_data":1,'from_date':from_date,'to_date':to_date} ).then( res=>{
-            this.workflow_approve_data = res['rows'];
-            this.is_approve_workflow = true;
-            this.getWorkflowDataTogether();
+            if(res) {
+                this.workflow_approve_data = res['rows'];
+                this.is_approve_workflow = true;
+                this.getWorkflowDataTogether();
+            }
+
         } );
         //approving
         CalendarService.getWorkflowRecords( {type: 2,"rows":9999,"page":1,"rate_data":1,'from_date':from_date,'to_date':to_date} ).then( res=>{
-            this.workflow_approving_data = res['rows'];
-            this.is_approving_workflow = true;
-            this.getWorkflowDataTogether();
+            if(res) {
+                this.workflow_approving_data = res['rows'];
+                this.is_approving_workflow = true;
+                this.getWorkflowDataTogether();
+            }
         } );
         //focus
         CalendarService.getWorkflowRecords( {type: 6,"rows":9999,"page":1,"rate_data":1,'from_date':from_date,'to_date':to_date} ).then( res=>{
-            this.workflow_focus_data = res['rows'];
-            this.is_focus_workflow = true;
-            this.getWorkflowDataTogether();
+            if(res) {
+                this.workflow_focus_data = res['rows'];
+                this.is_focus_workflow = true;
+                this.getWorkflowDataTogether();
+            }
         } );
     },
 

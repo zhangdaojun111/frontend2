@@ -38,7 +38,7 @@ let config = {
                         type: 1,
                         data: {},
                     };
-                    params['data'][this.data.remindTaskItemData['selectField']] = this.data.remindTaskItemData['data3show'][0][0]['selectValue'];
+                    params['data'][this.data.remindTaskItemData['selectField']] = newValue;
                     params['data'] = JSON.stringify(params['data']);
                     Mediator.emit('CalendarRemindTask: changeData', params);
                 }
@@ -52,6 +52,7 @@ let config = {
             CalendarRemind.data.remindTableId = this.data.remindTaskItemData.tableId;
             CalendarRemind.data.remindDate = this.data.remindTaskItemData.time.substr(0,10);
             CalendarRemind.data.remindTime = this.data.remindTaskItemData.time.substr(11,5);
+            CalendarRemind.data.remindRealId = this.data.remindTaskItemData.real_id.substr(2,24);
             PMAPI.openDialogByComponent(CalendarRemind, {
                 width: '1000',
                 height: '600',
@@ -94,9 +95,9 @@ let config = {
             if(this.data.remindTaskItemData['data3show'][0] && this.data.remindTaskItemData['data3show'][0][0]) {
                 this.el.find('.task-show-text').html(this.data.remindTaskItemData['data3show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data3show'][0][0]['fieldValue']);
             }
-            else if(this.data.remindTaskItemData['data2show'][0] && this.data.remindTaskItemData['data2show'][0][0]) {
-                this.el.find('.task-show-text').html(this.data.remindTaskItemData['data2show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data2show'][0][0]['fieldValue']);
-            }
+            // else if(this.data.remindTaskItemData['data2show'][0] && this.data.remindTaskItemData['data2show'][0][0]) {
+            //     this.el.find('.task-show-text').html(this.data.remindTaskItemData['data2show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data2show'][0][0]['fieldValue']);
+            // }
             this.el.on('click', '.task-show-text', () => {
                 this.actions.openRemind();
             });
@@ -129,7 +130,6 @@ let config = {
         }).on('change', '.select-options', () => {
             let sValue = this.el.find('.select-options option:selected').val();
             let sLabel = this.el.find('.select-options option:selected').text();
-            console.log(sValue, sLabel);
             this.actions.changSelectValue(sValue, sLabel);
         });
         $(document).click(function(){

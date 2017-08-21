@@ -5,8 +5,9 @@ import Component from "../../../../../lib/component";
 import template from './calendar.schedule.item.html';
 import './calendar.schedule.item.scss';
 
-import CalendarRemind from '../../calendar.remind/calendar.remind';
 import {PMAPI} from '../../../../../lib/postmsg';
+import CalendarRemindTaskItem from '../../calendar.subcomponent/calendar.table.grid/calendar.remind.task.item/calendar.remind.task.item';
+
 
 let config = {
     template: template,
@@ -30,32 +31,10 @@ let config = {
 
     },
     afterRender: function() {
+        console.log(this.data.dayScheduleList);
         this.data.dayScheduleList.forEach(item => {
-            if(item.isShow) {
-                let taskItemHtml = document.createElement('div');
-                taskItemHtml.id = 'schedule-item';
-                taskItemHtml.style.backgroundColor = item['color'];
-                if(item['data3show']) {
-                    taskItemHtml.innerHTML = item['data3show'][0][0]['fieldName'] + ':' + item['data3show'][0][0]['fieldValue'];
-                    this.el.find('.day-schedule-list').append(taskItemHtml);
-                    taskItemHtml.onclick = function () {
-                        CalendarRemind.data.remindTable = item.tableName;
-                        CalendarRemind.data.remindDateProp = item.fieldName;
-                        CalendarRemind.data.remindDetail = item.data2show;
-                        CalendarRemind.data.remindDateTime = item.time;
-                        CalendarRemind.data.remindTableId = item.tableId;
-                        CalendarRemind.data.remindDate = item.time.substr(0,10);
-                        CalendarRemind.data.remindTime = item.time.substr(11,5);
-                        PMAPI.openDialogByComponent(CalendarRemind, {
-                            width: '1000',
-                            height: '600',
-                            title: '查看',
-                        }).then(data => {
-                            console.log(data);
-                        });
-                    };
-                }
-            }
+            this.append(new CalendarRemindTaskItem(item), this.el.find('.day-schedule-list'));
+
         })
 
     },

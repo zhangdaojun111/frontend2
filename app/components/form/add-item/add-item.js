@@ -1,3 +1,8 @@
+/**
+ *@author yudeping
+ *枚举选项快捷添加
+ */
+
 import template from './add-item.html';
 let css = ``;
 css = css.replace(/(\n)/g, '')
