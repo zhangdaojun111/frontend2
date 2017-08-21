@@ -1,6 +1,7 @@
 import Component from '../../lib/component';
 import template from './approval-workflow.html';
 import './approval-workflow.scss';
+import '../../assets/scss/workflow/workflow-base.scss';
 import Mediator from '../../lib/mediator';
 import WorkFlow from './workflow-drawflow/workflow';
 import WorkflowSeal from './workflow-seal/workflow-seal';
