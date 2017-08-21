@@ -184,10 +184,10 @@ let config = {
                 this.el.find('.res-text option')[item].selected  = 'selected';
             }
         });
-        this.el.find('.page-change-text options').each(item => {
+        this.el.find('.page-change-text option').each(item => {
             let a= $('.page-change-text option')[item].value;
             console.log(a);
-            if(a === this.data.rowSetData['electedEnums']) {
+            if(a === this.data.rowSetData['selectedEnums']) {
                 this.el.find('.page-change-text option')[item].selected  = 'selected';
             }
         });
