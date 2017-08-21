@@ -67,7 +67,6 @@ let config = {
     actions: {
         //创建表头
         createColumnDefs: function () {
-            this.data.pageType = this.data.tableId2pageType[this.data.tableId];
             let cols = wchService.getWorkflowHeader( this.data.pageType );
             this.data.columnDefs = [dgcService.numberCol,dgcService.selectCol];
             let fixArr = this.data.fixCols.l.concat(this.data.fixCols.r);
@@ -77,7 +76,7 @@ let config = {
                     this.data.columnDefs.push( col );
                     continue;
                 }
-                let s = this.actions.searchType(col["field"]);
+                let s = this.actions.searchType(col["field"],col.headerName);
                 let obj = {
                     headerName: col.headerName,
                     field: col["field"],
@@ -95,6 +94,7 @@ let config = {
                     floatingFilterComponentParams: {suppressFilterButton: true},
                     enableRowGroup: true,
                     suppressSorting: s.type == 'none'?true : false,
+                    sortField: s.type == 'none'?'' : s.field,
                     suppressResize: false,
                     suppressMovable: false
                 }
@@ -104,10 +104,13 @@ let config = {
             }
         },
         //返回搜索类型
-        searchType: function ( data ) {
+        searchType: function ( data,name ) {
             let type = 'none';
             if( this.data.iCanSearch[data] ){
                 type = 'text';
+                if( name.indexOf( '时间' ) != -1 ){
+                    type = 'datetime';
+                }
             }
             return {type:type,field:this.data.iCanSearch[data] || data};
         },
@@ -309,6 +312,7 @@ let config = {
                 let obj = {
                     rowData: this.data.rowData
                 }
+                this.actions.sortWay();
                 this.agGrid.actions.setGridData( obj );
                 this.pagination.actions.setPagination( this.data.total,this.data.page );
             });
@@ -370,6 +374,12 @@ let config = {
                 }
             } );
             HTTP.flush();
+        },
+        postExpertSearch:function(data,id,name) {
+            this.data.filterParam.expertFilter = data;
+            this.data.filterParam.common_filter_id = id;
+            this.data.filterParam.common_filter_name = name;
+            this.actions.getData();
         },
         //根据偏好返回agGrid sate
         calcColumnState: function () {
@@ -442,7 +452,17 @@ let config = {
             this.customColumnsCom.actions.dragAction();
         },
         onSortChanged: function ($event) {
-            
+            if( this.data.frontendSort ){
+                return;
+            }
+            let data = this.agGrid.gridOptions.api.getSortModel()[0];
+            if (data) {
+                this.data.sortParam['sortOrder']= (data.sort == "desc" ? -1 : 1);
+                this.data.sortParam['sortField']=data.sortField;
+            }else {
+                this.data.sortParam = {sortOrder:'',sortField:'',sort_real_type:''}
+            }
+            this.actions.getData();
         },
         onRowDoubleClicked: function ($event) {
         },
@@ -564,10 +584,18 @@ let config = {
             this.data.filterParam['is_filter'] = 1;
             this.actions.getData();
         },
+        //排序方式
+        sortWay: function () {
+            this.data.frontendSort = this.data.total < this.data.rows?true:false;
+            console.log( '排序方式：' + (this.data.frontendSort ? '前端排序' : '后端排序') );
+            this.agGrid.gridOptions["enableServerSideSorting"] = !this.data.frontendSort;
+            this.agGrid.gridOptions["enableSorting"] = this.data.frontendSort;
+        },
     },
     afterRender: function (){
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
+        this.data.pageType = this.data.tableId2pageType[this.data.tableId];
         this.actions.getData();
     }
 }
