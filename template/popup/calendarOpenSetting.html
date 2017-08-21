@@ -12,16 +12,16 @@
 
 </script>
 
-<div id="calendarCreate"></div>
+<div id="calendarOpenSetting"></div>
 
 {% ifequal window_type 'develop'%}
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
-<script type="text/javascript" src="http://localhost:8080/scripts/calendarCreate.js"></script>
+<script type="text/javascript" src="http://localhost:8080/scripts/calendarOpenSetting.js"></script>
 {% else %}
 <link rel="stylesheet" href="/client/static/css/vendors.css">
-<link rel="stylesheet" href="/client/static/css/calendar.set.css">
+<link rel="stylesheet" href="/client/static/css/calendar.setting.scss">
 <script type="text/javascript" src="/client/static/vendors.js"></script>
-<script type="text/javascript" src="/client/static/calendarCreate.js"></script>
+<script type="text/javascript" src="/client/static/calendarOpenSetting.js"></script>
 {% endifequal %}
 
 </body>

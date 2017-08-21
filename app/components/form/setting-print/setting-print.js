@@ -1,3 +1,8 @@
+/**
+ *@author yudeping
+ *打印页眉定义
+ */
+
 import template from './setting-print.html';
 let css = `
 .wrap{
@@ -46,6 +51,93 @@ let SettingPrint = {
         printTitles:[],
         myContent:'',
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '.cancel',
+            callback: function(){
+                PMAPI.sendToParent({
+                    type: PMENUM.close_dialog,
+                    key: this.key,
+                })
+            }
+        },
+        {
+            event: 'click',
+            selector: '.confirm',
+            callback: function(){
+                let t=$('title').text();
+                let tempPrintTitles=_this.data.printTitles;
+                let _this=this;
+                if(_this.data.printTitles.length==0){
+                    _this.data.printTitles.unshift({content:_this.data.myContent,index:"1"});
+                }else{
+                    let isExsit=false;
+                    for(let con of _this.data.printTitles){
+                        if(con['content'] == _this.data.myContent){
+                            if(+con['index']==1){
+                                isExsit=true;
+                                break;
+                            }else if(+con['index']==2){
+                                let obj=_this.data.printTitles[0]['content'];
+                                _this.data.printTitles[0]['content']=_this.data.printTitles[1]['content'];
+                                _this.data.printTitles[1]['content']=obj;
+                                isExsit=true;
+                                break;
+                            }else {
+                                _this.data.printTitles[2]['content'] = _this.data.printTitles[1]['content'];
+                                _this.data.printTitles[1]['content'] = _this.data.printTitles[0]['content'];
+                                _this.data.printTitles[0]['content'] = _this.data.myContent;
+                                isExsit = true;
+                                break;
+                            }
+                        }
+                    }
+                    if(!isExsit){
+                        if(_this.data.printTitles.length>=2){
+                            if(_this.data.printTitles.length==2){
+                                _this.data.printTitles.push({content:'',index:"3"})
+                            }
+                            _this.data.printTitles[2]['content'] = _this.data.printTitles[1]['content'];
+                        }
+                        if(_this.data.printTitles.length>=1){
+                            if(_this.data.printTitles.length==1){
+                                _this.data.printTitles.push({content:'',index:"2"})
+                            }
+                            _this.data.printTitles[1]['content'] = _this.data.printTitles[0]['content'];
+                        }
+                        _this.data.printTitles[0]['content'] = _this.data.myContent;
+                    }
+                }
+                HTTP.post('user_preference',{action:'save',content:JSON.stringify(_this.data.printTitles)}).then(res=>{
+                        if(res.succ == 1){
+                            let isFrame=false;
+                            $('iframe').each((index,obj)=>{
+                                if(obj.src.indexOf(_this.data.key) != -1){
+                                    obj.focus();
+                                    $(obj.contentDocument).find('title').text(_this.data.myContent)
+                                    obj.contentWindow.print();
+                                    isFrame=true;
+                                };
+                            })
+                            if(!isFrame){
+                                $('title').text(_this.data.myContent);
+                                window.print();
+                                $('title').text(t);
+                            }
+                        }else{
+                            _this.data.printTitles=tempPrintTitles;
+                        }
+                        PMAPI.sendToParent({
+                            type: PMENUM.close_dialog,
+                            key: _this.key,
+                        })
+                    }
+                );
+                HTTP.flush();
+            }
+        }
+    ],
     afterRender(){
         let _this=this;
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
@@ -66,80 +158,6 @@ let SettingPrint = {
                    break;
                }
            }
-       }).on('click','.cancel',function(){
-           PMAPI.sendToParent({
-               type: PMENUM.close_dialog,
-               key: _this.key,
-           })
-       }).on('click','.confirm',function(){
-           let t=$('title').text();
-           let tempPrintTitles=_this.data.printTitles;
-           if(_this.data.printTitles.length==0){
-               _this.data.printTitles.unshift({content:_this.data.myContent,index:"1"});
-           }else{
-               let isExsit=false;
-               for(let con of _this.data.printTitles){
-                   if(con['content'] == _this.data.myContent){
-                       if(+con['index']==1){
-                           isExsit=true;
-                           break;
-                       }else if(+con['index']==2){
-                           let obj=_this.data.printTitles[0]['content'];
-                           _this.data.printTitles[0]['content']=_this.data.printTitles[1]['content'];
-                           _this.data.printTitles[1]['content']=obj;
-                           isExsit=true;
-                           break;
-                       }else {
-                           _this.data.printTitles[2]['content'] = _this.data.printTitles[1]['content'];
-                           _this.data.printTitles[1]['content'] = _this.data.printTitles[0]['content'];
-                           _this.data.printTitles[0]['content'] = _this.data.myContent;
-                           isExsit = true;
-                           break;
-                       }
-                   }
-               }
-               if(!isExsit){
-                   if(_this.data.printTitles.length>=2){
-                       if(_this.data.printTitles.length==2){
-                           _this.data.printTitles.push({content:'',index:"3"})
-                       }
-                       _this.data.printTitles[2]['content'] = _this.data.printTitles[1]['content'];
-                   }
-                   if(_this.data.printTitles.length>=1){
-                       if(_this.data.printTitles.length==1){
-                           _this.data.printTitles.push({content:'',index:"2"})
-                       }
-                       _this.data.printTitles[1]['content'] = _this.data.printTitles[0]['content'];
-                   }
-                   _this.data.printTitles[0]['content'] = _this.data.myContent;
-               }
-           }
-           HTTP.post('user_preference',{action:'save',content:JSON.stringify(_this.data.printTitles)}).then(res=>{
-                   if(res.succ == 1){
-                       let isFrame=false;
-                       $('iframe').each((index,obj)=>{
-                           if(obj.src.indexOf(_this.data.key) != -1){
-                               obj.focus();
-                               $(obj.contentDocument).find('title').text(_this.data.myContent)
-                               obj.contentWindow.print();
-                               isFrame=true;
-                           };
-                       })
-                       if(!isFrame){
-                           $('title').text(_this.data.myContent);
-                           window.print();
-                           $('title').text(t);
-                       }
-                   }else{
-                       _this.data.printTitles=tempPrintTitles;
-                   }
-                   PMAPI.sendToParent({
-                       type: PMENUM.close_dialog,
-                       key: _this.key,
-                   })
-               }
-           );
-           HTTP.flush();
        })
         _this.el.find('.global-search-input').on('focus',function(){
             if(_this.data.printTitles.length && _this.data.printTitles.length != 0){
@@ -169,6 +187,7 @@ let SettingPrint = {
     },
     beforeDestory: function () {
         this.el.find('.global-search-input').off();
+        this.el.off();
         this.data.style.remove();
     }
 }

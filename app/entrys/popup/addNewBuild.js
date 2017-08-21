@@ -1,3 +1,8 @@
+/**
+ *@author yudeping
+ *快捷添加内置选项入口
+ */
+
 import FormEntry from '../form';
 
 

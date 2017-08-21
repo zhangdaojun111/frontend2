@@ -1,3 +1,7 @@
+/**
+ *@author yudeping
+ *选择器入口
+ */
 import BuildChoose from '../../components/popup/buildChoose/buildChoose';
 function GetQueryString(name)
 {
