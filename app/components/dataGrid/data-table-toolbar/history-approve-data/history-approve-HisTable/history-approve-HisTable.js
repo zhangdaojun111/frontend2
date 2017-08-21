@@ -3,7 +3,7 @@
  */
 import Component from "../../../../../lib/component";
 import template from './history-approve-table.html'
-import historyItem from "../history-approve-HisTable/history-approve-HisItem/history-approve-HisItem";
+import historyItem from "./history-approve-HisItem/history-approve-HisItem";
 import examineItem from "../history-approve-ExaTable/history-approve-ExaItem/history-approve-ExaItem";
 
 
@@ -17,6 +17,7 @@ let config = {
     },
     afterRender: function() {
         console.log(this.data)
+        debugger
         if(this.data.history_data){
             this.data.history_data[0].data.forEach((item)=>{
                 this.append(new historyItem(item), this.el.find('.history-table-body.history'));
@@ -36,4 +37,6 @@ class historyTable extends Component {
         super(config)
     }
 }
-export default historyTable
+export default historyTable/**
+ * Created by dell on 2017/8/21.
+ */

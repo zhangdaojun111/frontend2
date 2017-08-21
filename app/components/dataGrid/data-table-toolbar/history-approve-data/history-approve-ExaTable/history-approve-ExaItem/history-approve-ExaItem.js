@@ -2,7 +2,7 @@
  * Created by zhaohaoran
  */
 import Component from "../../../../../../lib/component";
-import template from './history-approve-HisItem.html'
+import template from './history-approve-ExaIte.html'
 
 
 let config = {
