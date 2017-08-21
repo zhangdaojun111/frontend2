@@ -21,7 +21,7 @@ let config = {
         rowData:[],
         rows: 100,
         total: 0,
-        pageNum: 1,
+        page: 1,
         //pageType{0:'进展中的工作',1:'已完成的工作',2:'我的工作申请中的工作',3:'我的工作已完成的工作',4:'我的工作审批过的工作',5:'工作审批',6:'我的工作已关注的工作'}
         pageType: 5,
         tableId2pageType: {'approve-workflow':5,'approving-workflow':0,'finished-workflow':1,'my-workflow':2,'finish-workflow':3,'focus-workflow':6,'approved-workflow':4},
@@ -39,6 +39,8 @@ let config = {
         firstRender: true,
         //可以搜索的数据
         iCanSearch: {},
+        //搜索参数
+        filterParam: {expertFilter:[], filter: [], is_filter: 0, common_filter_id: '', common_filter_name: ''},
         //floatingFilter搜索参数
         searchValue: [],
         //floatingFilter搜索参数
@@ -147,6 +149,7 @@ let config = {
                 this.customColumnsCom  = new customColumns(custom);
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
             }
+            this.data.firstRender = false;
         },
         //返回选择数据
         retureSelectData: function () {
@@ -159,8 +162,11 @@ let config = {
             }
         },
         //分页刷新
-        refreshData: function () {
-
+        refreshData: function (res) {
+            this.data.rows = res.rows;
+            this.data.page = res.currentPage;
+            this.data.first = res.first;
+            this.actions.getData();
         },
         //渲染按钮
         renderBtn: function () {
@@ -219,7 +225,6 @@ let config = {
                     // postExpertSearch:this.actions.postExpertSearch,
                     // saveTemporaryCommonQuery:this.actions.saveTemporaryCommonQuery
                 }
-                debugger
                 PMAPI.openDialogByIframe(`/iframe/expertSearch/`,{
                     width:950,
                     height:600,
@@ -275,9 +280,9 @@ let config = {
                 table_id: this.data.tableId
             }
             let gridData = dataTableService.getWorkflowData( json );
-            let preferenceData = dataTableService.getPreferences(obj1);
             let arr = [gridData];
             if( this.data.firstRender ){
+                let preferenceData = dataTableService.getPreferences(obj1);
                 arr = [gridData,preferenceData];
             }
             Promise.all(arr).then((res)=> {
@@ -301,13 +306,46 @@ let config = {
                     dgcService.setPreference( res[1],this.data );
                     this.actions.renderGrid();
                 }
+                let obj = {
+                    rowData: this.data.rowData
+                }
+                this.agGrid.actions.setGridData( obj );
+                this.pagination.actions.setPagination( this.data.total,this.data.page );
             });
             HTTP.flush();
         },
         //创建请求数据参数
         createPostData: function () {
             let json = {
-                type:this.data.pageType,rows:this.data.rows,page:this.data.pageNum
+                type:this.data.pageType,rows:this.data.rows,page:this.data.page,filter:[]
+            }
+            if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
+                json['filter'] = this.data.filterParam.filter || [];
+            }
+            if( this.data.filterParam['common_filter_id'] ){
+                json['filter'] = json['filter'] || [];
+                for( let a of this.data.filterParam.expertFilter ){
+                    json['filter'].push( a );
+                }
+                if( this.data.filterParam['common_filter_id'] != '临时高级查询' ){
+                    json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
+                }
+                if( this.data.filterParam.filter.length == 0 ){
+                    msgBox.alert( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
+                }
+            }
+            //排序
+            if( this.data.sortParam.sortField ){
+                json = _.defaultsDeep( json,this.data.sortParam )
+            }
+            json = dgcService.returnQueryParams( json );
+            if( json.filter && json.filter != '' ){
+                if( this.data.filterText != json.filter ){
+                    this.data.first = 0;
+                    json.page = 1;
+                    this.data.page = 1;
+                    this.data.filterText = json.filter;
+                }
             }
             return json;
         },
@@ -330,24 +368,6 @@ let config = {
                         }
                     })
                 }
-                //第一次请求footer数据
-                // if( this.data.firstGetFooterData ){
-                //     if( this.data.common_filter_id ){
-                //         for( let r of res.rows ){
-                //             if( r.id == this.data.common_filter_id ){
-                //                 this.data.filterParam = {
-                //                     filter: JSON.parse(r.queryParams),
-                //                     is_filter: 1,
-                //                     common_filter_id: this.data.common_filter_id,
-                //                     common_filter_name: r.name
-                //                 }
-                //                 $('.dataGrid-commonQuery-select').val(r.name);
-                //             }
-                //         }
-                //     }
-                //     this.data.firstGetFooterData = false;
-                //     this.actions.getFooterData();
-                // }
             } );
             HTTP.flush();
         },
@@ -511,7 +531,39 @@ let config = {
                         })
                 }
             })
-        }
+        },
+        //floatingFilter拼参数
+        floatingFilterPostData: function (col_field, keyWord, searchOperate) {
+            this.data.queryList[col_field] = {
+                'keyWord': keyWord,
+                'operate': dgcService.getMongoSearch(searchOperate),
+                'col_field': col_field
+            };
+            //用于去除queryList中的空值''
+            let obj = {};
+            for (let key in this.data.queryList) {
+                if (!( this.data.queryList[key]["keyWord"] == "" )) {
+                    obj[key] = this.data.queryList[key];
+                }
+            }
+            this.data.queryList = obj;
+            let filter = [];
+            for (let attr in this.data.queryList) {
+                filter.push({
+                    "relation": "$and",
+                    "cond": {
+                        "leftBracket": 0,
+                        "searchBy": this.data.queryList[attr]['col_field'],
+                        "operate": this.data.queryList[attr]['operate'],
+                        "keyword": this.data.queryList[attr]['keyWord'],
+                        "rightBracket": 0
+                    }
+                });
+            }
+            this.data.filterParam['filter'] = filter;
+            this.data.filterParam['is_filter'] = 1;
+            this.actions.getData();
+        },
     },
     afterRender: function (){
         this.floatingFilterCom = new FloatingFilter();

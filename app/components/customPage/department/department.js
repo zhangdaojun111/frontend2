@@ -262,7 +262,8 @@ let config = {
                 if( res ){
                     let json = {
                         table_id:this.data.tableId,
-                        real_ids:JSON.stringify( this.data.deletedIds )
+                        real_ids:JSON.stringify( arr ),
+                        is_batch: 0
                     }
                     dataTableService.delTableData( json ).then( res=>{
                         if( res.success ){
