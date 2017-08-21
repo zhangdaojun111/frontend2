@@ -20,6 +20,8 @@ let config = {
     afterRender:function () {
         this.actions.initInfo();
         this.el.on('click','.data-content',() => {
+            console.log(this.data.searchData.label);
+            //穿透到ag-grid
 
         })
     },
@@ -38,7 +40,6 @@ class SingleResult extends Component{
 export const SingleDisplay = {
     el:null,
     create:function (data,$father) {
-        console.log("do create");
         this.el = $("<div class='single-container'>").appendTo($father);
         let component = new SingleResult(data);
         component.render(this.el);
