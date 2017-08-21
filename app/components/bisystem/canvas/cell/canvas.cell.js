@@ -143,11 +143,8 @@ export class CanvasCellComponent extends BiBaseComponent {
      *删除画布layout
      */
     delCellLayout() {
-        let ok = confirm('确定删除');
-        if (ok) {
-            Mediator.publish('bi:cell:remove', this.componentId);
-            this.destroySelf();
-        }
+        Mediator.publish('bi:cell:remove', this.componentId);
+        this.destroySelf();
     }
 
     /**

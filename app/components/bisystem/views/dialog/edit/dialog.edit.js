@@ -89,7 +89,11 @@ export let config = {
             });
 
         }).on('click','.cancel',()=>{
-            this.el.dialog('close');
+            PMAPI.sendToParent({
+                type: PMENUM.close_dialog,
+                key: this.key,
+                data: {}
+            });
         })
     },
     beforeDestory: function () {
