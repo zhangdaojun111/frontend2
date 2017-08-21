@@ -18,6 +18,13 @@ let css =`
     margin-left:20px;
     margin-bottom:10px;
 }
+.msg-border .error-tip{
+        color: red;
+        font-size: 16px;
+        margin-top: 10px;
+        padding-left: 20px;
+        display:none;
+ }
 .btns{
   text-align: right;
   padding: 0 20px;
@@ -65,6 +72,10 @@ export let config = {
         $(`<style>${this.data.css}</style>`).appendTo(this.el);
         this.el.on('click','.ok',()=>{
             this.data.name = this.el.find('.inp-val').val();
+            if(this.el.find('.inp-val').val() === ""){
+                this.el.find('.error-tip').show();
+                return ;
+            }
             let data = {
                 folder_id:'',
                 parent_table_id:'',
@@ -78,41 +89,9 @@ export let config = {
             });
 
         }).on('click','.cancel',()=>{
-            // PMAPI.sendToParent({
-            //     type: PMENUM.close_dialog,
-            //     key: this.key,
-            // });
             this.el.dialog('close');
         })
     },
     beforeDestory: function () {
     }
 };
-
-// class DialogEditComponent extends BiBaseComponent{
-//     constructor() {
-//         super(config);
-//     }
-// }
-//
-// export const dialogEditSetting = {
-//     el: null,
-//     show: function() {
-//         let component = new DialogEditComponent();
-//         this.el = $('<div id="dialog-create">').appendTo(document.body);
-//         component.render(this.el);
-//         this.el.dialog({
-//             title: '编辑视图',
-//             width: 348,
-//             height: 217,
-//             modal: true,
-//             close: function() {
-//                 $(this).dialog('destroy');
-//                 component.destroySelf();
-//             }
-//         });
-//     },
-//     hide: function () {
-//         this.el.dialog('close');
-//     }
-// }

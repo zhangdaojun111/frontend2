@@ -46,7 +46,7 @@ let config = {
         });
 
         //弹出框 新建视图
-        this.el.on('click','.create', async()=> {
+        this.el.on('click','.create', async ()=> {
             viewDialogConfig.data.view = null;
             const res = await PMAPI.openDialogByComponent(viewDialogConfig,{
                 width: 348,

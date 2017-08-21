@@ -23,9 +23,6 @@ let config = {
         this.showNumber();
     },
     firstAfterRender() {
-        this.el.on('click','.bi-chart-select',function() {
-
-        })
     }
 };
 
@@ -61,7 +58,11 @@ export class FormNineGridComponent extends BiBaseComponent{
                             name:'4*4',
                             value:'4'
                         }
-                    ]
+                    ],
+                    onChange:(val) => {
+                        alert(this.formGroup.nineGridColumn.getValue());
+
+                    }
                 }
 
             }),
@@ -134,9 +135,9 @@ export class FormNineGridComponent extends BiBaseComponent{
      *
      */
     showNumber() {
-
         let grid = new NineGridNumberComponent();
         this.append(grid,this.el.find('.nine-grid-column-xy'));
+
     }
 
 

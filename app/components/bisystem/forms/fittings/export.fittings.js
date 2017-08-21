@@ -27,8 +27,6 @@ export const fittings = {
  */
 let instanceFitting = (option) => {
     let component;
-    console.log('xxxxxxxxxxxxxxxxxxxxxx');
-    console.log(option);
     if (option.data) {
         component = new fittings[option.type](option.data);
     } else {
