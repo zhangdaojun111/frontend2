@@ -41,16 +41,16 @@ let config = {
                 this.append(new CalendarRemindTaskItem(item), this.el.find('.task-list'));
             });
         }
-        this.el.on('dragenter', '.task-item',function(event){
-            let ev = event.originalEvent;
-            let temp = $(".task-item-draggable");
-            $(this).before(temp);
-            ev.preventDefault();
-            drag_Postion = $(this);
-            Isdrag = true;
-            console.log(Isdrag);
-            return true;
-        });
+        // this.el.on('dragenter', '.task-item',function(event){
+        //     let ev = event.originalEvent;
+        //     let temp = $(".task-item-draggable");
+        //     $(this).before(temp);
+        //     ev.preventDefault();
+        //     drag_Postion = $(this);
+        //     Isdrag = true;
+        //     console.log(Isdrag);
+        //     return true;
+        // });
         this.el.on('dragover', '.task-list',(event) => {
             let ev = event.originalEvent;
             ev.preventDefault();
