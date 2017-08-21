@@ -136,7 +136,9 @@ let config = {
         //对应关系选择的数据
         correspondenceSelectedData: [],
         //表单对应关系字段
-        correspondenceField: ''
+        correspondenceField: '',
+        //数据检索模式搜索参数
+        keyword: ''
     },
     //生成的表头数据
     columnDefs: [],
@@ -996,6 +998,9 @@ let config = {
                 json['mongo'] = {
                     _id: this.data.rowId
                 }
+            }
+            if( this.data.viewMode == 'keyword-tips' ){
+                json['keyWord'] = this.data.keyword;
             }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
