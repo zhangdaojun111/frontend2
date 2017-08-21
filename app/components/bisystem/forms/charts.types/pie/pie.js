@@ -94,6 +94,7 @@ export class FormPieComponent extends BiBaseComponent{
         }
         this.formGroup.single.reload();
         this.formGroup.multiple.reload();
+
     }
 
     /**

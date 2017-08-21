@@ -35,6 +35,7 @@ export class MultipleComponent extends BiBaseComponent{
      */
     renderFitting() {
         this.multiples = {
+
             pieY:instanceFitting({
                 type:'autoComplete',
                 me: this,

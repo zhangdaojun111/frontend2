@@ -34,6 +34,7 @@ export class SingleComponent extends BiBaseComponent{
      * 单条数据 Y轴数据 fittings
      */
     renderFitting() {
+
         this.singles = {
             singleY:instanceFitting({
                 type:'checkbox',
