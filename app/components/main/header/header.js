@@ -169,6 +169,9 @@ let config = {
 
     afterRender: function () {
         this.el.tooltip();
+        if (window.config.sysConfig.unread_msg_count !== 0) {
+            this.actions.showMessageUnread();
+        }
     },
     firstAfterRender: function () {
         let that = this;
