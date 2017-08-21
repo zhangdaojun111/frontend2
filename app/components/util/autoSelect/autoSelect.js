@@ -87,6 +87,11 @@ let config = {
         getValue: function () {
             return this.data.choosed;
         },
+        setChoosed: function (choosed) {
+            console.log(choosed);
+            this.data.choosed = choosed;
+            this.actions.renderChoosed();
+        },
         renderChoosed: function () {
             this.listWrap.find('input:checkbox:checked').each(function () {
                 this.checked = false;
@@ -94,6 +99,8 @@ let config = {
             if (this.data.onSelect) {
                 this.data.onSelect(this.data.choosed);
             }
+
+            this.trigger('onSelect', this.data.choosed);
 
             if (this.data.choosed.length) {
                 if (this.data.displayChoosed === true) {
@@ -121,6 +128,34 @@ let config = {
             this.actions.renderChoosed();
         }
     },
+    binds:[
+        {
+            event: 'click',
+            selector: 'li',
+            callback: _.debounce(function (context) {
+                this.actions.selectItem($(context));
+            }, 50)
+        },{
+            event: 'input',
+            selector: 'input.text',
+            callback: _.debounce(function (context) {
+                this.actions.onInput($(context));
+            }, 1000)
+        },{
+            event: 'click',
+            selector: '.choosed',
+            callback: function (context) {
+                let id = $(context).data('id');
+                this.actions.unSelectItem(id);
+            }
+        },{
+            event: 'click',
+            selector: '.list button',
+            callback: function () {
+                this.actions.selectAll();
+            }
+        }
+    ],
     afterRender: function () {
         this.listWrap = this.el.find('.list');
         this.choosedWrap = this.el.find('.choosed');
@@ -146,16 +181,6 @@ let config = {
     firstAfterRender: function () {
         let that = this;
         if (this.data.editable === true) {
-            this.el.on('click', 'li', _.debounce(function () {
-                that.actions.selectItem($(this));
-            }, 50)).on('input', 'input.text', _.debounce(function () {
-                that.actions.onInput($(this));
-            }, 1000)).on('click', '.choosed .item', function () {
-                let id = $(this).data('id');
-                that.actions.unSelectItem(id);
-            }).on('click', '.list button', () => {
-                this.actions.selectAll();
-            });
             if (this.data.displayType === 'popup') {
                 this.el.on('mouseenter', () => {
                     that.actions.showSelectBox();
@@ -163,16 +188,16 @@ let config = {
                     that.actions.hideSelectBox();
                 })
             }
+        } else {
+            this.cancelEvents();
         }
-
     }
-
 }
 
 class AutoSelect extends Component {
 
-    constructor(data) {
-        super(config, data);
+    constructor(data, events) {
+        super(config, data, events);
     }
 
 }

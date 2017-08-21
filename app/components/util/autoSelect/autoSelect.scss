@@ -1,8 +1,8 @@
 .auto-select-component {
     position: relative;
     background-color: #fff;
+    height: 30px;
     input.text {
-        border: 0 none;
         width: 100%;
         border: 1px solid #ddd;
         height: 30px;
@@ -11,37 +11,11 @@
         outline: none;
         text-indent: 10px;
         box-sizing: border-box;
+        z-index: 100;
     }
     .list {
         border: 1px solid #ddd;
-
-        box-sizing: border-box;
-        user-select: none;
-        ul {
-            height: calc(100% - 30px);
-            overflow: auto;
-            li {
-                height: 30px;
-                line-height: 30px;
-            cursor: pointer;
-            input.checkbox {
-                vertical-align: top;
-                margin: 8px 0 8px 8px;
-            }
-            &:hover {
-                background: #ddd;
-            }
-            span {
-                margin: 0!important;
-                padding-left: 8px;
-            }
-            label {
-                display: block;
-                cursor: pointer;
-            }
-        }
-
-        }
+        overflow: auto;
         &.popup {
             position: absolute;
             width: 100%;
@@ -49,13 +23,40 @@
             left: 0;
             top: calc(100% - 1px);
             display: none;
+            z-index: 101;
+            box-sizing: border-box;
+        }
+        ul {
+            user-select: none;
+            overflow: auto;
+            box-sizing: border-box;
+            background-color: #fff;
+            li {
+                height: 30px;
+                line-height: 30px;
+                cursor: pointer;
+                input.checkbox {
+                    vertical-align: top;
+                    margin: 8px 0 8px 8px;
+                }
+                &:hover {
+                    background: #ddd;
+                }
+                span {
+                    margin: 0!important;
+                    padding-left: 8px;
+                }
+                label {
+                    display: block;
+                    cursor: pointer;
+                }
+            }
         }
     }
 
     .choosed {
         font-size: 0;
         padding-bottom: 5px;
-        display: none;
         .item {
             display: inline-block;
             background-color: #ccc;
