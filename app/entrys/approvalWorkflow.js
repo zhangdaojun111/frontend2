@@ -44,7 +44,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     if(res.record_info.current_node!=window.config.name){
         $('#approval-workflow').find('.for-hide').hide();
     };
-    if(res.record_info.status==="已驳回到发起人"){
+    if(res.record_info.status==="已驳回到发起人"&&res.record_info.start_handler===window.config.name){
         $('#approval-workflow').find('.for-hide').hide();
         $('#approval-workflow').find('#re-app').show();
     };
