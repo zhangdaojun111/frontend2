@@ -235,7 +235,7 @@ export class FormNormalComponent extends BiBaseComponent{
             this.formGroup.x.autoSelect.data.list = fields;
             this.formGroup.x.autoSelect.reload();
         };
-        // this.getChartData(this.chartId);
+
         if (this.formGroup.deeps) {
             this.formGroup.deeps.reloadXaxis(fields);
         };

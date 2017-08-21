@@ -19,8 +19,11 @@ let config = {
     afterRender() {},
    async firstAfterRender() {
         this.renderFitting();
-        await this.getChartSource();
-        await this.getChartIcon();
+        let p1 = this.getChartSource();
+        let p2 = this.getChartIcon();
+        Promise.all([p1,p2]).then((result) => {
+            console.log(result)
+       })
     }
 };
 

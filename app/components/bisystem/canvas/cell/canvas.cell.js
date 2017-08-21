@@ -103,7 +103,6 @@ export class CanvasCellComponent extends BiBaseComponent {
      * 动态渲染组件 通过this.cellType 决定渲染具体的图表
      */
     renderCell() {
-        console.log()
         this.el.find('.cell').css(this.cell.size);
         if (this.cell['chart']['assortment']) {
             let cellComponent = new cellTypes[this.cell['chart']['assortment']](this.cell);
