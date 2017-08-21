@@ -30,7 +30,6 @@ let config = {
         //收集上传的信息给后台
         collectImg(){
             let imgNode = this.el.find('.imgseal');
-            // console.log(imgNode);
             let len = imgNode.length;
             let arr =[];
             for (let i=0;i<len;i++){
@@ -48,7 +47,6 @@ let config = {
                 };
                 arr.push(obj);
             }
-            // console.log(arr);
             return arr;
         },
         addImg(e){
@@ -59,7 +57,7 @@ let config = {
             for (let i=0;i<len;i++){
                 let left = imgInfo[i].viewLeft+"%";
                 let top = imgInfo[i].viewTop+"%";
-                html += `<img class="oldImg" class="" src="http://${host}/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="position:absolute;z-index:100;left:${left};top:${top};height:{imgInfo[i].height}px;width:${imgInfo[i].width}px " />`
+                html += `<img class="oldImg" src="http://${host}/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="position:absolute;z-index:100;left:${left};top:${top};height:{imgInfo[i].height}px;width:${imgInfo[i].width}px " />`
             }
             this.el.find("#place-form").append(html);
         },
@@ -88,7 +86,7 @@ let config = {
         this.formTrans = false;
         this.el.on('click','.collapseFormBtn',()=>{
             this.actions.trans();
-        })
+        }),
         this.el.on("mouseenter",".imgseal",function(e){
             let ev = $(this).find('.J_del');
             ev.css("display","block");
@@ -100,6 +98,14 @@ let config = {
         })
         this.el.on("click",'.J_del',(e)=>{
             this.actions.delimg(e);
+        })
+        Mediator.subscribe('workflow:getFormTrans',(e)=>{
+            console.log(e+"............................");
+            if(!e){
+               if(this.formTrans) {
+                   this.actions.trans();
+               }
+            }
         })
         Mediator.subscribe('workflow:getImgInfo',(e)=>{
             this.actions.addImg(e);
