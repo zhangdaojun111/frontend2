@@ -138,7 +138,9 @@ let config = {
         //表单对应关系字段
         correspondenceField: '',
         //数据检索模式搜索参数
-        keyword: ''
+        keyword: '',
+        //表级操作数据
+
     },
     //生成的表头数据
     columnDefs: [],
@@ -727,8 +729,9 @@ let config = {
             let preferenceData = dataTableService.getPreferences(obj1);
             let headerData = dataTableService.getColumnList(obj2);
             let sheetData = dataTableService.getSheetPage( obj2 );
+            let tableOperate = dataTableService.getTableOperation( obj2 );
 
-            Promise.all([preferenceData, headerData, sheetData]).then((res)=> {
+            Promise.all([preferenceData, headerData, sheetData,tableOperate]).then((res)=> {
                 dgcService.setPreference( res[0],this.data );
                 this.data.myGroup = (res[0]['group'] != undefined) ? JSON.parse(res[0]['group'].group) : [];
                 this.data.fieldsData = res[1].rows || [];
@@ -751,6 +754,14 @@ let config = {
                 this.actions.getGridData();
                 //按钮点击事件
                 this.actions.onBtnClick();
+                //表级操作数据
+                let temp = res[3]['rows'];
+                for(let i =0;i<temp.length;i++){
+                    if (typeof (temp[i]) == 'object'){
+                        temp[i]['addressss']=JSON.stringify({feAddress:temp[i]['feAddress'],beAddress:temp[i]['beAddress']})
+                    }
+                }
+                this.data.tableOperationData = temp;
             })
             HTTP.flush();
         },
@@ -1099,7 +1110,9 @@ let config = {
                 let paginationData = {
                     total: this.data.total,
                     rows: this.data.rows,
-                    tableId: this.data.tableId
+                    tableId: this.data.tableId,
+                    tableOperationData: this.data.tableOperationData,
+                    isSuperUser: window.config.is_superuser || 0
                 }
                 this.pagination = new dataPagination(paginationData);
                 this.pagination.actions.paginationChanged = this.actions.refreshData;

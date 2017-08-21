@@ -29,7 +29,11 @@ let config = {
         range: {
             l:100,
             r:5000
-        }
+        },
+        //表级操作
+        tableOperationData: [],
+        //是否为超级管理员
+        isSuperUser: 0
     },
     actions: {
         //接受rows值和total值
