@@ -33,6 +33,8 @@ let config = {
         orderFields: [],
         //定制列（隐藏列）
         ignoreFields: [],
+        //请求数据参数
+        commonQueryData:[],
         //是否第一次渲染agGrid
         firstRender: true,
         //可以搜索的数据
@@ -188,9 +190,7 @@ let config = {
                 this.el.find('.grid-new-window').attr('href', url);
             }
             //高级查询
-            debugger
             if( this.el.find( '.expert-search-btn' )[0] ){
-                debugger
                 this.actions.renderExpertSearch();
             }
         },
@@ -244,7 +244,7 @@ let config = {
                     })
                 }
             })
-            this.actions.getExpertSearchData();
+            // this.actions.getExpertSearchData();
         },
         //返回数据url
         returnIframeUrl( u,obj ){
