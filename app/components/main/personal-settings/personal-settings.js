@@ -39,6 +39,7 @@ let config = {
         initInfo:function () {
             // 初始化，检测用户头像路径返回值，没有则显示默认头像
             let src = this.data.avatar;
+            console.log(src);
             if(src !== ''){
                 let $img = $("<img>").addClass("user-avatar");
                 $img.attr('src', src);

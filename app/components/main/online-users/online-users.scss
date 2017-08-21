@@ -1,0 +1,15 @@
+.online-users-page{
+    .online-user-main{
+        //overflow-x: hidden;
+
+        .user-grid{
+            overflow-y: auto;
+            position: relative;
+            height: 740px;
+        }
+
+        .user-pagination{
+            height: 30px;
+        }
+    }
+}

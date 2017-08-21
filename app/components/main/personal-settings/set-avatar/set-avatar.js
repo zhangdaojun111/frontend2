@@ -167,16 +167,13 @@ let config = {
         //     this.el.find(".drag-result").prepend($img);
         // },
         printSquare(){
-            console.log("do print");
             let pic = this.el.find('img.pic_set')[0];
             let canvasS = this.el.find('.avatar-result-square')[0];
             let ctx = canvasS.getContext('2d');
-
             let d = 60 * this.data.dragResult.proportion / this.data.scale;
-            console.log(this.data.DragX,this.data.DragY,d,d);
             ctx.drawImage(pic,this.data.DragX,this.data.DragY,d,d,0,0,60,60);
             this.data.avatarSrc = this.actions.convertCanvasToImage(canvasS).src;
-            console.log(this.data.avatarSrc);       //裁剪后的base64
+            // console.log(this.data.avatarSrc);       //裁剪后的base64
         },
         convertCanvasToImage(canvas){
             let image = new Image();
