@@ -167,8 +167,8 @@ let config = {
                 rows: Number(this.data.rows),
                 first: Number(this.data.first)
             };
-            console.log( '分页数据' )
-            console.log( obj )
+            console.log( '分页数据' );
+            console.log( obj );
             this.actions.paginationChanged(obj);
         },
         //分页变化

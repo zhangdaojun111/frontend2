@@ -1,14 +1,6 @@
 @import "../../../../assets/scss/core/base";
-.expert-search {
+.expert-search-box {
     font-size:12px;
-    padding: 0;
-    margin: 0;
-    p {
-      margin:0;
-    }
-    ul {
-      list-style: none;
-    }
     .common-search {
         padding: 10px 15px;
         border-bottom: 10px solid #ffffff;
@@ -113,7 +105,23 @@
                         background-color: #f2f2f2;
                     }
                 }
-
+                .condition-search-choice {
+                    display: inline-block;
+                    width: 20px;
+                    height: 12px;
+                    padding: 4px 0px;
+                    text-align: center;
+                    vertical-align: center;
+                    background-color: #f2f2f2;
+                    cursor: pointer;
+                    &.left-choice{
+                        margin-right: 10px;
+                    }
+                    &.active {
+                        background-color: #0e7aef;
+                        color: #ffffff;
+                    }
+                }
                 .condition-search-box {
                     display: inline-block;
                     position: relative;

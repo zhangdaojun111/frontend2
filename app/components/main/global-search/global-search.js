@@ -17,11 +17,11 @@ import msgbox from "../../../lib/msgbox";
 let config ={
     template:template,
     data:{
-        testResult:{"data": "[{\"content\": \"sad\", \"index\": \"0\", \"py\": \"sad\", \"display\": true}, {\"index\": \"1\", \"py\": \"cz\", \"selector\": false, \"content\": \"cz\", \"display\": true, \"select\": false}, {\"index\": \"2\", \"py\": \"a b\", \"selector\": false, \"content\": \"a b\", \"display\": true, \"select\": false}, {\"index\": \"3\", \"py\": \"vvcx\", \"selector\": false, \"content\": \"vvcx\", \"display\": true, \"select\": false}, {\"index\": \"4\", \"py\": \"h\", \"selector\": false, \"content\": \"\\u534e\", \"display\": true, \"select\": false}, {\"index\": \"5\", \"py\": \"c\", \"selector\": false, \"content\": \"c\", \"display\": true, \"select\": false}, {\"index\": \"6\", \"py\": \"i\", \"selector\": false, \"content\": \"i\", \"display\": true, \"select\": false}]", "success": 1, "error": ""},
-        // historyList:[],
+        historyList:[],
         searchContent:"",
         maxHistory:10,
         selectNum: -1,      //记录键盘选中的历史搜索记录，按一次下，选中第0条（界面中第一条）记录
+        formerSearchContent:"",
     },
     searchBarRef:null,
     actions:{
@@ -36,7 +36,6 @@ let config ={
             }).fail((err) => {
                 console.log("get search history failed",err);
             });
-            // this.actions.initList(this.data.historyList);
         },
         initList:function () {
             let $listParent = this.el.find('.history-list');
@@ -86,17 +85,40 @@ let config ={
             let content = this.data.searchContent;
             this.el.find('.search-content').val(content).blur();
             this.el.find("div.history-display").hide();
-            console.log("search content: ",content);
+
+            // 暂时隐藏搜索按钮
+            // this.el.find(".search-icon").hide();
             if(content && content !== ''){
-                Mediator.emit('menu:item:openiframe', {
-                    id: "search-result",
-                    name: "搜索结果",
-                    url: "/search_result?searchContent=" + content
+                //判断搜索结果iframe是否已打开，打开则重置src
+                //此处全局搜索div.iframes
+                let that = this;
+                let iframe = $("div.iframes").find("iframe").each(function () {
+                    let src = $(this)[0].src;
+                    let str = "search-content=" + that.data.formerSearchContent;
+                    if(src.indexOf(str) > 0){
+                        return $(this)[0];
+                    }
                 });
+
+                if(iframe && iframe.length > 0){
+                    let newSrc = '/search_result?searchContent=' + this.data.searchContent;
+                    iframe.attr("src",newSrc);
+                }else{
+                    //搜索结果展示窗口未打开
+                    Mediator.emit('menu:item:openiframe', {
+                        id: "search-result",
+                        name: "搜索结果",
+                        url: "/search_result?searchContent=" + content
+                    });
+                }
                 this.actions.addSearchHistory();
+                this.data.formerSearchContent = this.data.searchContent;
             }else{
                 msgbox.alert("搜索内容不能为空");
             }
+
+
+
         },
         addSearchHistory(){
             let content = this.data.searchContent;
@@ -120,8 +142,6 @@ let config ={
             }
             this.actions.initList();
             UserInfoService.saveGlobalSearchHistory(this.data.historyList).done((result) => {
-                // console.log("historyList save success",result);
-                //使用autoSelect扩展接口更新list的显示
             }).fail((err) => {
                 console.log("historyList save failed",err);
             })
@@ -182,13 +202,9 @@ let config ={
             }
         },
         setItemHover:function (event) {
-            console.log(event)
             this.el.find('.record-item').removeClass('item-selected');
-            event.currentTarget.addClass('item-selected');
+            $(event.currentTarget).addClass('item-selected');
             this.data.selectNum = event.currentTarget.attributes.data_index.value;
-        },
-        setItemBlur:function (event) {
-            event.currentTarget.removeClass('item-selected');
         },
         myKeyDown:function (event) {
             if(event.keyCode === 13){       //回车，进行搜索
@@ -244,8 +260,6 @@ let config ={
             this.actions.myKeyDown(event);
         }).on('mouseenter','li.record-item',(event) => {
             this.actions.setItemHover(event);
-        }).on('mouseleave','li.record-item',(event) => {
-            this.actions.setItemBlur();
         })
 
     },

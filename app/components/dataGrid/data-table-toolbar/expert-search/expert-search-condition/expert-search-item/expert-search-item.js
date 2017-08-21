@@ -1,5 +1,5 @@
 /**
- * Created by dell on 2017/8/2.
+ * Created by zhaohaohao
  */
 import Component from "../../../../../../lib/component";
 import template from './expert-search-item.html'
