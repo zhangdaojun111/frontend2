@@ -164,6 +164,7 @@ let config = {
                 this.actions.openPostMessageDialog();
             }
         }
+
     ],
 
     afterRender: function () {
