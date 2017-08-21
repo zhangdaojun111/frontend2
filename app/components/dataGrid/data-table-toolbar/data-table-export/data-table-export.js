@@ -127,11 +127,22 @@ background-color: rgba(250, 250, 250, 1);
     font-size: 12px;
     color: #FFFFFF !important;
     text-decoration:none
-   
 }
 .btn-name{
 margin-top:7px;
 }
+#right1{
+top:0
+}
+#right2{
+top:40px
+}
+#right3{
+top:80px
+}
+
+\`;
+
 
 `;
 

@@ -5,7 +5,9 @@
     background-color: rgba(250, 250, 250, 1);
     border-bottom: 1px solid rgba(228, 228, 228, 1);
     margin-bottom: 1px;
+    //position: relative;
     margin-right: 2px;
+    //width:100%;
     .task-bg-color {
         display: inline-block;
         width: 6px;
@@ -28,11 +30,10 @@
     }
 }
 .select-options{
-  position: absolute;
+  //position: absolute;
   display: none;
   z-index: 1024;
   left: 0px;
-  margin-top: 25px;
   width: 100px;
   padding-left: 20px;
   background-color: white;

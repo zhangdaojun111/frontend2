@@ -279,7 +279,6 @@ let config = {
             Mediator.emit('calendar-set:editor',{data:-1});
         },
 
-
         getColumnListData: function (tableId) {
             CalendarSetService.getColumnList(tableId).then(res => {
 

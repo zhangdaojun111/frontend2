@@ -33,21 +33,24 @@ let config = {
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
                 that.el.find(".item-content").css("height","27%");
+                that.el.find(".item-content-1").css("height","27%");
                 that.el.find(".item-content").show();
             }else{
                 that.el.find(".item-title").removeClass("display-all-content");
                 that.el.find(".item-title-2").removeClass("display-all-content");
                 temp.addClass("display-all-content");
+                that.el.find(".item-content-1").css("height","27%");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
                 temp.next(".item-content").show();
-                temp.next().animate({height:"83%"},"fast");
+                temp.next().animate({height:"55%"},"fast");
             }
         },
         hideclass:function(that,temp){
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
                 that.el.find(".item-content").css("height","27%");
+                that.el.find(".item-content-1").css("height","27%");
                 that.el.find(".item-content-2").hide();
                 that.el.find(".item-content-1").show();
                 that.el.find(".item-content-3").show();
@@ -55,9 +58,26 @@ let config = {
             }else{
                 that.el.find(".item-title").removeClass("display-all-content");
                 temp.addClass("display-all-content");
+                that.el.find(".item-content-1").css("height","27%");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").show();
-                that.el.find(".item-content-2").animate({height:"82%"},"fast");
+                that.el.find(".item-content-2").animate({height:"55%"},"fast");
+            }
+        },
+        hide_item:function(that,temp){
+            if(temp.is(".display-all-content")){
+                temp.removeClass("display-all-content");
+                that.el.find(".item-content-1").css("height","27%");
+                that.el.find(".item-content").css("height","27%");
+                that.el.find(".item-content-2").hide();
+                that.el.find(".item-content-3").show();
+                that.el.find(".item-content-4").show();
+            }else{
+                that.el.find(".item-title").removeClass("display-all-content");
+                temp.addClass("display-all-content");
+                that.el.find(".item-content").hide();
+                that.el.find(".item-content-2").hide();
+                that.el.find(".item-content-1").animate({height:"82%"},"fast");
             }
         },
         showRemindType:function(that){
@@ -109,6 +129,8 @@ let config = {
         that.el.on('click', '.hide-con',function(){
             let temp = $(this).parents('.item-title');
             that.actions.contentHide(that,temp);
+        }).on("click",".hide-con-1",function(){
+            that.actions.hide_item(that,$(this).parents('.item-title-1'));
         }).on("click",".hide-con-2",function(){
             that.actions.hideclass(that,$(this).parents('.item-title-2'));
         }).on('click','.set-calendar',() =>{

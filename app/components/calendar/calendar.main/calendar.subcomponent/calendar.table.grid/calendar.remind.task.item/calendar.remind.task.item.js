@@ -16,6 +16,8 @@ let config = {
         remindTaskItemData:{},
         isFinishedTask:false,
         isWaitCheck:true,
+        sValue: '',
+        sLabel: '',
     },
     actions: {
 
@@ -36,7 +38,7 @@ let config = {
                         type: 1,
                         data: {},
                     };
-                    params['data'][this.data.remindTaskItemData['selectField']] = newValue;
+                    params['data'][this.data.remindTaskItemData['selectField']] = this.data.remindTaskItemData['data3show'][0][0]['selectValue'];
                     params['data'] = JSON.stringify(params['data']);
                     Mediator.emit('CalendarRemindTask: changeData', params);
                 }
@@ -91,10 +93,13 @@ let config = {
         if(this.data.remindTaskItemData['type'] === 1) {
             if(this.data.remindTaskItemData['data3show'][0] && this.data.remindTaskItemData['data3show'][0][0]) {
                 this.el.find('.task-show-text').html(this.data.remindTaskItemData['data3show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data3show'][0][0]['fieldValue']);
-                this.el.on('click', '.task-show-text', () => {
-                    this.actions.openRemind();
-                });
             }
+            else if(this.data.remindTaskItemData['data2show'][0] && this.data.remindTaskItemData['data2show'][0][0]) {
+                this.el.find('.task-show-text').html(this.data.remindTaskItemData['data2show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data2show'][0][0]['fieldValue']);
+            }
+            this.el.on('click', '.task-show-text', () => {
+                this.actions.openRemind();
+            });
         } else if(this.data.remindTaskItemData['type'] === 2){
             console.log(this.data.remindTaskItemData);
         } else if(this.data.remindTaskItemData['type'] === 3 || this.data.remindTaskItemData['type'] === 4) {
@@ -103,14 +108,16 @@ let config = {
         this.el.on('click','.task-state-icon', function() {
             event.stopPropagation();
             if(!$(this).is(".options-show")){
+                console.log(that.el.find(".task-state-icon").offset().top);
                 that.el.parents(".calendar-main-content").find(".select-options").hide();
                 that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
+                that.el.find(".select-options").css({"left":that.el.find(".task-state-icon").offset().left - 30,"top":that.el.find(".task-state-icon").offset().top - 70});
                 that.el.find(".select-options").show();
                 $(this).addClass("options-show");
-                if(that.el.find(".task-item").parent().position().top > 60){
-                    let task_list = that.el.find(".task-item").parents(".task-list");
-                    task_list.scrollTop(task_list.scrollTop()+25);
-                }
+                // if(that.el.find(".task-item").parent().position().top > 60){
+                //     let task_list = that.el.find(".task-item").parents(".task-list");
+                //     task_list.scrollTop(task_list.scrollTop()+25);
+                // }
             }
             else{
                 that.el.find(".select-options").hide();
@@ -129,6 +136,12 @@ let config = {
             that.el.parents(".calendar-main-content").find(".select-options").hide();
             that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
         });
+        this.el.parent(".task-list").scroll(function () {
+            that.el.find(".select-options").hide();
+            that.el.find(".task-state-icon").removeClass("options-show");
+        })
+
+
     }
 };
 

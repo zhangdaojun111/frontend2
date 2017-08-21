@@ -691,6 +691,7 @@ let config = {
 
         Mediator.on('CalendarRemindTask: changeData', data => {
             let params = data;
+            console.log(params);
             params['from_date'] = this.data.from_date;
             params['to_date'] = this.data.to_date;
             console.log(params);
