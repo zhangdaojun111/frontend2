@@ -16,6 +16,8 @@ let config = {
         remindTaskItemData:{},
         isFinishedTask:false,
         isWaitCheck:true,
+        sValue: '',
+        sLabel: '',
     },
     actions: {
 
@@ -52,6 +54,7 @@ let config = {
             CalendarRemind.data.remindTableId = this.data.remindTaskItemData.tableId;
             CalendarRemind.data.remindDate = this.data.remindTaskItemData.time.substr(0,10);
             CalendarRemind.data.remindTime = this.data.remindTaskItemData.time.substr(11,5);
+            CalendarRemind.data.remindRealId = this.data.remindTaskItemData.real_id.substr(2,24);
             PMAPI.openDialogByComponent(CalendarRemind, {
                 width: '1000',
                 height: '600',
@@ -128,7 +131,6 @@ let config = {
         }).on('change', '.select-options', () => {
             let sValue = this.el.find('.select-options option:selected').val();
             let sLabel = this.el.find('.select-options option:selected').text();
-            console.log(sValue, sLabel);
             this.actions.changSelectValue(sValue, sLabel);
         });
         $(document).click(function(){
