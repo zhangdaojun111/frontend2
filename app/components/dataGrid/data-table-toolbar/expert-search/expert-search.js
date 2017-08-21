@@ -154,6 +154,7 @@ let config = {
         },
         //加载不同查询条件的查询关系
         checkedRelationType: function(value){
+            debugger
             let htmlStr;
             this.data.fieldsData.forEach((item)=> {
                 if(item.name == value) {
