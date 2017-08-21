@@ -93,6 +93,7 @@ FormEntrys.createForm({
     is_view: is_view,
     from_approve: 1,
     from_focus: 0,
+    btnType:'none',
     table_id: obj.table_id
 });
 

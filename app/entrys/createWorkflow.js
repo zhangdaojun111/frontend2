@@ -69,7 +69,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             real_id:'',
             form_workflow:1,
             form_id:msg.formid,
-            btnType:'edit',
+            btnType:'none',
             is_view:0
         });
 
