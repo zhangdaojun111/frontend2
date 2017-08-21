@@ -43,6 +43,8 @@ let config = {
         searchOldValue: [],
         //选择的数据
         selectRows: [],
+        //高级查询字段参数
+        expertSearchFields:[],
         //定制列数据
         customColumnsFields: [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false}, {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false}, {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
     },
@@ -107,7 +109,7 @@ let config = {
             }
             this.agGrid = new agGrid(gridData);
             this.append(this.agGrid , this.el.find('#workflow-agGrid'));
-            this.actions.calcColumnState();
+            dgcService.calcColumnState( this.data,this.agGrid,["number","mySelectAll"] )
             //渲染分页
             let paginationData = {
                 total: this.data.total,
@@ -273,7 +275,18 @@ let config = {
                     this.data.iCanSearch = res[0].field_mapping;
                     this.actions.renderBtn();
                     this.actions.createColumnDefs();
-                    this.actions.setPreference( res[1] );
+                    for( let c of this.data.columnDefs ){
+                        let f = c.field;
+                        let n = c.headerName
+                        if( this.data.iCanSearch[f] ){
+                            let obj = {}
+                            obj['name'] = n;
+                            obj['searchField'] = this.data.iCanSearch[f];
+                            obj['searchType'] = n.indexOf( '时间' ) != -1 ? 'datetime':'text';
+                            this.data.expertSearchFields.push( obj );
+                        }
+                    }
+                    dgcService.setPreference( res[1],this.data );
                     this.actions.renderGrid();
                 }
             });
@@ -285,45 +298,6 @@ let config = {
                 type:this.data.pageType,rows:this.data.rows,page:this.data.pageNum
             }
             return json;
-        },
-        //偏好赋值
-        setPreference: function (res) {
-            if (res['colWidth']) {
-                this.data.colWidth = res['colWidth'].colWidth;
-                if (typeof ( this.data.colWidth ) == 'string') {
-                    this.data.colWidth = JSON.parse(res['colWidth'].colWidth);
-                }
-            }
-            if (res['pageSize'] && res['pageSize'].pageSize) {
-                this.data.rows = res['pageSize'].pageSize;
-            }
-            if (res['ignoreFields']) {
-                this.data.ignoreFields = JSON.parse(res['ignoreFields']['ignoreFields']);
-            } else {
-                // this.data.hideColumn = ['f1','f2','f3','f4']
-                // let json = {
-                //     action:'ignoreFields',
-                //     table_id:this.pageId,
-                //     ignoreFields:JSON.stringify( this.hideColumn ),
-                // }
-                // this.dataTableService.savePreference( json );
-            }
-            if (res['fieldsOrder']) {
-                this.data.orderFields = JSON.parse(res['fieldsOrder']['fieldsOrder']);
-            }
-            if (res['pinned'] && res['pinned']['pinned']) {
-                this.data.fixCols = JSON.parse(res['pinned']['pinned']);
-            }
-            // console.log("rows")
-            // console.log(this.data.rows)
-            // console.log("colWidth")
-            // console.log(this.data.colWidth)
-            // console.log("ignoreFields")
-            // console.log(this.data.ignoreFields)
-            // console.log("fixCols")
-            // console.log(this.data.fixCols)
-            // console.log("orderFields")
-            // console.log(this.data.orderFields)
         },
         //根据偏好返回agGrid sate
         calcColumnState: function () {
