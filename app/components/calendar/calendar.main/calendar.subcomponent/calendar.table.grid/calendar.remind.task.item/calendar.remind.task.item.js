@@ -112,13 +112,13 @@ let config = {
                 console.log(that.el.find(".task-state-icon").offset().top);
                 that.el.parents(".calendar-main-content").find(".select-options").hide();
                 that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
-                that.el.find(".select-options").css({"left":that.el.find(".task-state-icon").offset().left - 30,"top":that.el.find(".task-state-icon").offset().top - 70});
+                // that.el.find(".select-options").css({"top":that.el.find(".task-state-icon").offset().top - 70});
                 that.el.find(".select-options").show();
                 $(this).addClass("options-show");
-                // if(that.el.find(".task-item").parent().position().top > 60){
-                //     let task_list = that.el.find(".task-item").parents(".task-list");
-                //     task_list.scrollTop(task_list.scrollTop()+25);
-                // }
+                if(that.el.find(".task-item").parent().position().top > 60){
+                    let task_list = that.el.find(".task-item").parents(".task-list");
+                    task_list.scrollTop(task_list.scrollTop()+35);
+                }
             }
             else{
                 that.el.find(".select-options").hide();
@@ -136,10 +136,10 @@ let config = {
             that.el.parents(".calendar-main-content").find(".select-options").hide();
             that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
         });
-        this.el.parent(".task-list").scroll(function () {
-            that.el.find(".select-options").hide();
-            that.el.find(".task-state-icon").removeClass("options-show");
-        })
+        // this.el.parent(".task-list").scroll(function () {
+        //     that.el.find(".select-options").hide();
+        //     that.el.find(".task-state-icon").removeClass("options-show");
+        // })
 
 
     }
