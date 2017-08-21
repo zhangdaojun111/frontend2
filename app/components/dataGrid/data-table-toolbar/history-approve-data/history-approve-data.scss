@@ -32,7 +32,8 @@
             }
             .history-table-part {
                 overflow: hidden;
-                .history-table-time {
+                .history-table-title {
+                    cursor: pointer;
                     height:35px;
                     line-height:35px;
                     color: #666;
@@ -42,7 +43,21 @@
                         display: inline-block;
                         width: 20px;
                         height: 20px;
-                        background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll left 8px transparent;
+                        background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll center center transparent;
+                        position: relative;
+                        top: 6px;
+                        transform:rotate(-90deg);
+                        -ms-transform:rotate(-90deg);
+                        -moz-transform:rotate(-90deg);
+                        -webkit-transform:rotate(-90deg);
+                        -o-transform:rotate(-90deg);
+                        &.active{
+                            transform:rotate(0deg);
+                            -ms-transform:rotate(0deg);
+                            -moz-transform:rotate(0deg);
+                            -webkit-transform:rotate(0deg);
+                            -o-transform:rotate(0deg);
+                        }
                     }
                 }
                 .history-table {
