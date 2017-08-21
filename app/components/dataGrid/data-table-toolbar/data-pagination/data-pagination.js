@@ -183,11 +183,21 @@ let config = {
             this.data.total = total;
             this.data.currentPage = currentPage;
             this.actions.resetPagination( this.data.total );
+        },
+        //表级操作
+        tableOperate: function () {
+            if( this.data.isSuperUser == 1 ){
+                this.el.find( '.tableOperateSelect' ).on( 'change',()=>{
+                    let operate = this.el.find( 'tableOperateSelect' );
+                } )
+            }
         }
     },
     afterRender: function (){
         this.actions.resetPagination( this.data.total );
         this.actions.addClick();
+        //表级操作
+        this.actions.tableOperate();
     }
 };
 class dataPagination extends Component {

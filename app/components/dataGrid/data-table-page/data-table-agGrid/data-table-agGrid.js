@@ -762,6 +762,9 @@ let config = {
                     }
                 }
                 this.data.tableOperationData = temp;
+                console.log( "_________________" )
+                console.log( "_________________" )
+                console.log( this.data.tableOperationData )
             })
             HTTP.flush();
         },

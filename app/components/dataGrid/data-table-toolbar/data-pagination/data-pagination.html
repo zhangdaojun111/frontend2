@@ -11,16 +11,6 @@
         <span>（共</span><span class="sumPage">1</span><span>页）</span>
         <input class="enterPageNum" type="number">
     </div>
-    <!--表级操作-->
-    {{#if isSuperUser}}
-    <div>
-        <select class="tableOperateSelect">
-            {{#each tableOperationData}}
-                <opration></opration>
-            {{/each}}
-        </select>
-    </div>
-    {{/if}}
     <div class="p-page">
         <!--最前一页-->
         <span class="goFirst">
@@ -37,4 +27,15 @@
             <img src="../../../../assets/images/dataGrid/icon_xiayiye.png" height="16" width="16"/>
         </span>
     </div>
+    <!--表级操作-->
+    {{#if isSuperUser}}
+    <div class="table-oprate-con">
+        <select value="" class="tableOperateSelect">
+            <option value="">操作</option>
+            {{#each tableOperationData}}
+            <option addressss="{{addressss}}" value="{{value}}">name</option>
+            {{/each}}
+        </select>
+    </div>
+    {{/if}}
 </div>
