@@ -30,6 +30,14 @@ export class InputComponent extends FormFittingAbstract {
     }
 
     /**
+     * 设置input值
+     */
+    setValue(val) {
+        this.el.find('input').val(val);
+        this.data.value = val;
+    }
+
+    /**
      * input 返回值
      */
     getValue() {

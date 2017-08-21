@@ -52,6 +52,14 @@ export class AutoCompleteComponent extends FormFittingAbstract {
     }
 
     /**
+     * 设置autoComplete值
+     */
+    setValue(val) {
+        console.log(val);
+        this.autoSelect.data.choosed[0] = val;
+    }
+
+    /**
      * autocomplete 返回值
      */
     getValue() {

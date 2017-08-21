@@ -44,6 +44,13 @@ export class CheckboxComponent extends FormFittingAbstract {
     }
 
     /**
+     * 设置checkbox值
+     */
+    setValue(val) {
+        console.log(val);
+    }
+
+    /**
      * checkbox 返回值
      */
     getValue() {
@@ -52,7 +59,6 @@ export class CheckboxComponent extends FormFittingAbstract {
         } else {
             return this.data.value;
         }
-
     }
 
     /**

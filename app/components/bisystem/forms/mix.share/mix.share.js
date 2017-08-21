@@ -61,6 +61,9 @@ export class FormMixShareComponent extends BiBaseComponent {
             icons: instanceFitting({
                 type:'radio',
                 me: this,
+                data: {
+                    radios:[]
+                },
                 container: 'chart-mix-share' }),
             filter: search
         };
@@ -116,6 +119,16 @@ export class FormMixShareComponent extends BiBaseComponent {
         };
         Mediator.publish('bi:chart:form:update', {type:'fields', data:data});
     }
+
+    /**
+     * 设置mix.share value
+     */
+    setValue(val) {
+        console.log(this.mixForm.icons.data);
+        this.mixForm.chartSource.setValue(val['chartSource']);
+        this.mixForm.icons.setValue(val['icons']);
+    }
+
 
     /**
      * 获取数据mix.share value

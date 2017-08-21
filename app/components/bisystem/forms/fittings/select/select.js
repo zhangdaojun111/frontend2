@@ -35,6 +35,20 @@ export class SelectComponent extends FormFittingAbstract {
     }
 
     /**
+     * 设置select值
+     */
+    setValue(val) {
+        for (let [index,option] of this.data.options.entries()) {
+            if (val == option.value) {
+                this.el.find('select option').eq(index).attr('selected', 'true');
+                break;
+            }
+        };
+        this.data.value = val;
+    }
+
+
+    /**
      * select 返回值
      */
     getValue() {

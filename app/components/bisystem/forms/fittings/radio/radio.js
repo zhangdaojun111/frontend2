@@ -36,6 +36,21 @@ export class RadioComponent extends FormFittingAbstract {
     }
 
     /**
+     * 设置input值
+     */
+    setValue(val) {
+        console.log('====================');
+        console.log(this.data.radios);
+        for (let [index,radio] of this.data.radios.entries()) {
+             if (val == radio.value) {
+                 this.el.find('input').eq(index).attr('checked', 'true');
+                 break;
+             }
+        };
+        this.data.value = val;
+    }
+
+    /**
      * radio 返回值
      */
     getValue() {

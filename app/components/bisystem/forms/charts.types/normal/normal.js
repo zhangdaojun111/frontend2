@@ -59,11 +59,26 @@ export class FormNormalComponent extends BiBaseComponent{
 
     }
     /**
-     * 编辑模式发送请求chartId
+     * 编辑模式发送chartId, 得到服务器数据
+     * @param chartId 图表id
      */
     async getChartData(chartId) {
-       const res = canvasCellService.getCellChart({chart_id: chartId});
-       console.log(res);
+       const chart = await canvasCellService.getCellChart({chart_id: chartId});
+       this.fillChart(chart[0])
+    }
+    /**
+     * 编辑时渲染图表
+     * @param 图表数据
+     */
+    fillChart(chart) {
+        this.formGroup.base.setValue(chart['chartName']);
+        let share = {
+            chartSource:chart['source'],
+            themes: chart['theme'],
+            icons: chart['icon'],
+            filter: chart['filter']
+        };
+        this.formGroup.share.setValue(share);
     }
 
     /**

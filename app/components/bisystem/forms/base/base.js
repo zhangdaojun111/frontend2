@@ -10,7 +10,12 @@ import {instanceFitting} from '../fittings/export.fittings';
 
 let config = {
     template: template,
-    data: {},
+    data: {
+        chartName: {
+            id: '',
+            name: ''
+        }
+    },
     actions: {},
     afterRender() {},
     firstAfterRender() {
@@ -44,13 +49,23 @@ export class FormBaseComponent extends BiBaseComponent {
     }
 
     /**
+     * 设置图表名称数据
+     * @param chartName = {id: '', name: ''}
+     */
+    setValue(chartName) {
+        this.formGroup.chartName.setValue(chartName.name);
+        this.data.chartName = chartName;
+    }
+
+    /**
      * 获取数据
      */
     getValue() {
-        return  {
-            id: '',
+        const chartName = {
+            id: this.data.chartName.id,
             name: this.formGroup.chartName.getValue()
-        };
+        }
+        return chartName;
     }
 
 }
