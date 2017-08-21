@@ -29,8 +29,8 @@ let config = {
         imgH:0,
         imgX:0,
         imgY:0,
-        DragX:0,
-        DragY:0,
+        DragX:0,        //用于记录裁剪图片时的起点，需要通过两次比例处理
+        DragY:0,        //用于记录裁剪图片时的起点
         scale:1,
         component:null,
         dragResult:{            //拖动结束后和数据
@@ -98,8 +98,8 @@ let config = {
             this.data.JPosition.Jy = (this.data.imgH - 60)/2;
             this.data.JPosition.Jx2 = this.data.JPosition.Jx + 60;
             this.data.JPosition.Jy2 = this.data.JPosition.Jy + 60;
-            this.data.DragX = this.data.JPosition.Jx;
-            this.data.DragY = this.data.JPosition.Jy;
+            this.data.DragX = this.data.JPosition.Jx / this.data.scale;
+            this.data.DragY = this.data.JPosition.Jy / this.data.scale;
         },
         displayPostImage(){
             let $parent = this.el.find(".avatar-container");
@@ -139,8 +139,9 @@ let config = {
             this.data.dragResult.coords = c;
             this.data.dragResult.proportion = (c.x2 - c.x)/60;
             this.actions.resizeImg(c,this.data.dragResult.proportion);
-            this.data.DragX = c.x;
-            this.data.DragY = c.y;
+            this.data.DragX = c.x / this.data.scale;
+            this.data.DragY = c.y / this.data.scale;
+            this.actions.printSquare();
         },
         resizeImg:function (c,p) {
             //根据比例缩放图片，作为最终使用图片
@@ -149,34 +150,33 @@ let config = {
             this.data.imgData.height = this.data.imgH/p + "px";
             this.data.imgData.left = 0 -  c.x/p + "px";
             this.data.imgData.top = 0 - c.y/p + "px";
-            this.actions.displayAvatar();
+            // this.actions.displayAvatar();
         },
-        displayAvatar:function () {
-            let $img = this.el.find("img.result-img");
-            if( $img.length === 0){
-                $img = $("<img>").addClass('result-img');
-            }
-
-            $img.attr("src",this.data.imgData.src)
-                .css("width",this.data.imgData.width)
-                .css("height",this.data.imgData.height)
-                .css("left",this.data.imgData.left)
-                .css("top",this.data.imgData.top);
-
-            this.el.find(".drag-result").prepend($img);
-        },
-        imageCropping:function () {                 //裁剪图片函数，根据imgData中的参数对图片进行裁剪
-            this.actions.printSquare();
-        },
+        // displayAvatar:function () {
+        //     let $img = this.el.find("img.result-img");
+        //     if( $img.length === 0){
+        //         $img = $("<img>").addClass('result-img');
+        //     }
+        //
+        //     $img.attr("src",this.data.imgData.src)
+        //         .css("width",this.data.imgData.width)
+        //         .css("height",this.data.imgData.height)
+        //         .css("left",this.data.imgData.left)
+        //         .css("top",this.data.imgData.top);
+        //
+        //     this.el.find(".drag-result").prepend($img);
+        // },
         printSquare(){
+            console.log("do print");
             let pic = this.el.find('img.pic_set')[0];
             let canvasS = this.el.find('.avatar-result-square')[0];
             let ctx = canvasS.getContext('2d');
+
             let d = 60 * this.data.dragResult.proportion / this.data.scale;
             console.log(this.data.DragX,this.data.DragY,d,d);
             ctx.drawImage(pic,this.data.DragX,this.data.DragY,d,d,0,0,60,60);
             this.data.avatarSrc = this.actions.convertCanvasToImage(canvasS).src;
-            console.log(this.data.avatarSrc);
+            console.log(this.data.avatarSrc);       //裁剪后的base64
         },
         convertCanvasToImage(canvas){
             let image = new Image();
@@ -184,28 +184,21 @@ let config = {
             return image;
         },
         saveAvatar:function () {
-            let finalSrc = this.actions.imageCropping();
-            // let data = this.data.imgData;
+            let data = this.data.avatarSrc;
             //向后台传递头像数据
-        //     UserInfoService.saveAvatar(data).done((result) => {
-        //         //根据结果处理后续工作
-        //         if(result.success === 1){
-        //             //向父窗口传递头像数据并设置
-        //             window.config.sysConfig.userInfo.avatar = data.src;
-        //             // window.config.sysConfig.userInfo.avatar_content = {
-        //             //     width:data.width,
-        //             //     height:data.height,
-        //             //     left:data.left,
-        //             //     top:data.top
-        //             // };
-        //             Mediator.emit("personal:setAvatar");
-        //         }else{
-        //             msgbox.alert("头像设置失败！");
-        //         }
-        //     }).fail((err) => {
-        //         msgbox.alert("头像设置失败！");
-        //         console.log("err",err)
-        //     })
+            UserInfoService.saveAvatar(data).done((result) => {
+                //根据结果处理后续工作
+                if(result.success === 1){
+                    //向父窗口传递头像数据并设置
+                    window.config.sysConfig.userInfo.avatar = this.data.avatarSrc;
+                    Mediator.emit("personal:setAvatar");
+                }else{
+                    msgbox.alert("头像设置失败！");
+                }
+            }).fail((err) => {
+                msgbox.alert("头像设置失败！");
+                console.log("err",err)
+            })
         }
     },
 
@@ -240,7 +233,7 @@ export default {
             title: '设置头像',
             width: 500,
             modal:true,
-            height: 800,
+            height: 600,
             close: function() {
                 $(this).dialog('destroy');
                 component.destroySelf();

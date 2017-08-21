@@ -60,30 +60,33 @@ $sub_color:#0088ff;
         //    z-index: 2;
         //}
     }
-
-    .drag-result{
+    .canvas-box{
         width: 64px;
         height: 64px;
         margin-top: 20px;
         margin-left: 230px;
-        overflow: hidden;
-        border: solid 1px black;
-        border-radius: 50%;
-        position: absolute;
-        .result-img{
-            top:0;
-            left:0;
-            position: absolute;
-        }
-    }
-    .canvas-box{
-        width: 60px;
-        height: 60px;
         border-radius: 50%;
         text-align: center;
         border: solid 1px black;
         overflow: hidden;
     }
+
+    //.drag-result{
+    //    width: 64px;
+    //    height: 64px;
+    //    margin-top: 20px;
+    //    margin-left: 230px;
+    //    overflow: hidden;
+    //    border: solid 1px black;
+    //    border-radius: 50%;
+    //    position: absolute;
+    //    .result-img{
+    //        top:0;
+    //        left:0;
+    //        position: absolute;
+    //    }
+    //}
+
     .bottom-box{
         position: absolute;
         bottom: 20px;
