@@ -36,6 +36,7 @@ serchStr.split('&').forEach(res => {
     if(res.data.flow_data.length===0){
         $('.workflow-foot').hide();
         $('.workflow-flex').hide();
+        $('#place-form').html('');
         FormEntrys.createForm({
             el: '#place-form',
             is_view: 0,
@@ -46,6 +47,7 @@ serchStr.split('&').forEach(res => {
             parent_real_id:obj.parent_real_id,
             parent_temp_id:obj.parent_temp_id,
             parent_record_id:obj.parent_record_id,
+            btnType:'none',
             real_id:obj.real_id
         });
     }else{
@@ -66,12 +68,14 @@ Mediator.subscribe('workflow:getflows', (res)=> {
     })().then(res => {
         Mediator.publish('workflow:gotWorkflowInfo', res);
     });
+    $('#place-form').html('');
     FormEntrys.createForm({
         el: '#place-form',
         form_id: res.form_id,
         is_view: 0,
         from_approve: 0,
         from_focus: 0,
+        btnType:'none',
         table_id: obj.table_id,
         parent_table_id:obj.parent_table_id,
         parent_real_id:obj.parent_real_id,

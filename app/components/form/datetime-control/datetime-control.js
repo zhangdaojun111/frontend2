@@ -1,5 +1,4 @@
 import Component from '../../../lib/component'
-import Mediator from '../../../lib/mediator';
 import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui-timepicker-addon';
 import 'jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css';
@@ -9,12 +8,24 @@ import template from  './datetime-control.html';
 import msgbox from '../../../lib/msgbox';
 let config={
     template:template,
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data)
+            }
+        },
+        {
+            event: 'click',
+            selector: '.date-close',
+            callback: function(){
+                this.el.find(".datetime").val("年/月/日 时:分:秒")
+            }
+        }
+    ],
     afterRender(){
         let _this=this;
-
-        this.el.on('click','.ui-history',function(){
-            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
-        });
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
             this.el.find('.ui-width').attr('disabled',true);
@@ -22,8 +33,15 @@ let config={
             this.el.find('.ui-width').attr('disabled',false);
         }
 
+
         //控制到时分秒
-        _this.el.find(".datetime").val("年/月/日 时:分:秒");
+        if(_this.data.value == ''){
+            _this.el.find(".datetime").val("年/月/日 时:分:秒");
+        }else{
+            _this.el.find(".datetime").val(_this.data.value.replace(/-/g, "/"));
+
+        }
+
         _this.el.find(".datetime").datetimepicker({
             monthNamesShort: [ "一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月" ],
             dayNamesMin: [ "日","一","二","三","四","五","六" ],
@@ -37,12 +55,13 @@ let config={
             changeYear:true,
             changeMonth: true,
             dateFormat: "yy/mm/dd",
+            defaultDate:new Date(_this.data.value),
             timeFormat: 'HH:mm:ss', //格式化时间
 
             onSelect: function (selectTime, text) {
                 _this.data.value = selectTime.replace(/\//g, "-");
 
-                _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                 if( _this.data.value.length > 19 ){
                     _this.data.value = '';
                 }
@@ -58,14 +77,17 @@ let config={
                         if(selectTime < currentTime){
                             msgbox.alert("所选日期不能早于当前日期！");
                             _this.data.value = "请选择";
-                            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                            _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                         }
                     }else if( _this.data['timeType'] == 'before') {
                         if(selectTime > currentTime){
                             msgbox.alert("所选日期不能晚于当前日期！");
                             _this.data.value = "请选择";
-                            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                            _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                         }
+                    }else if(_this.data['timeType'] == 'all'){
+                        _this.data.value = selectTime.replace(/\//g, "-");
+                        _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                     }
                 }else{
                     console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！',this.selector);
@@ -87,18 +109,14 @@ let config={
             });
             boolean = true;
         }
-        _this.el.on('click','.date-close',function () {
-            _this.el.find(".datetime").val("年/月/日 时:分:秒");
-        })
-        _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+        _.debounce(function(){_this.events.changeValue(_this.data)},200)();
     },
     beforeDestory:function(){
-        Mediator.removeAll('form:changeValue:'+this.data.tableId);
-        Mediator.removeAll('form:history:'+this.data.tableId);
+        this.el.off();
     }
 }
 export default class DateTimeControl extends Component{
-    constructor(data){
-        super(config,data);
+    constructor(data,events){
+        super(config,data,events);
     }
 }

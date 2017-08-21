@@ -1,5 +1,10 @@
+/**
+ *@author yudeping
+ *多选控件
+ */
+
+
 import Component from '../../../lib/component'
-import Mediator from '../../../lib/mediator'
 import {AutoSelect} from '../../util/autoSelect/autoSelect'
 import {FormService} from '../../../services/formService/formService'
 import template from './multi-select-control.html'
@@ -45,19 +50,19 @@ let config={
 
         dropOnChange(value){
             this.data.sDropValue=value;
-            this.multiBuildSelect['more']['data']['list'] = [];
+            this.data.multiBuildSelect['more']['data']['list'] = [];
             this.data.sMuiltValue = [];
             if( this.data.sDropValue!='' ){
-                this.multiBuildSelect['one'].data.list = [{name:this.data.sDropValue,id:this.data.sDropValue}];
+                this.data.multiBuildSelect['one'].data.list = [{name:this.data.sDropValue,id:this.data.sDropValue}];
             }
             for( let k in this.data.originalList ){
                 let arr = this.data.originalList[k];
                 if( arr[0] == this.data.sDropValue ){
-                    this.multiBuildSelect['more']['data']['list'].push( {name:arr[1],id:arr[1]} );
+                    this.data.multiBuildSelect['more']['data']['list'].push( {name:arr[1],id:arr[1]} );
                 }
             }
-            this.multiBuildSelect['more'].reload();
-            this.multiBuildSelect['one'].reload();
+            this.data.multiBuildSelect['more'].reload();
+            this.data.multiBuildSelect['one'].reload();
         },
 
         muiltOnChange (value){
@@ -76,20 +81,20 @@ let config={
                 }
             }
             this.data['value'] = val;
-            _.debounce(function(){Mediator.publish('form:changeValue:'+this.data.tableId,this.data)},200)();
+            _.debounce(function(){_this.events.changeValue(_this.data)},200)();
         },
 
         setValue(){
             let values=[];
-            for(let key in this.childSelect.data.choosed){
-                values.push(this.childSelect.data.choosed[key]['id']);
+            for(let key in this.data.childSelect.data.choosed){
+                values.push(this.data.childSelect.data.choosed[key]['id']);
             }
             this.data.value=values;
         },
 
         //创建下拉框
         creteSelect(hasValue){
-            this.set('multiBuildSelect',{});
+            this.setData('multiBuildSelect',{});
             let _this=this;
             let oneSelect=this.el.find('#oneSelect');
             let moreSelect=this.el.find('#moreSelect');
@@ -132,31 +137,40 @@ let config={
 
             let oneAutoSelect=new AutoSelect(oneSelectdata);
             let moreAutoSelect=new AutoSelect(moreSelectdata);
-            this.multiBuildSelect['one']=oneAutoSelect;
-            this.multiBuildSelect['more']=moreAutoSelect;
+            this.data.multiBuildSelect['one']=oneAutoSelect;
+            this.data.multiBuildSelect['more']=moreAutoSelect;
             this.append(oneAutoSelect,oneSelect);
             this.append(moreAutoSelect,moreSelect);
             this.data.isInit=false;
+        },
+        changeOption(res){
+            if( this.data.dfield && res == this.data.dfield ){
+                this.data.value = [];
+                this.data.childSelect.data.choosed=[];
+                this.reload();
+            }
         }
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.add-item',
+            callback: function(){
+                this.events.addItem(this.data)
+            }
+        }
+    ],
     afterRender(){
         let _this=this;
-        Mediator.subscribe('form:changeOption:'+_this.data.tableId,function(data){
-            if( _this.data.dfield && res == _this.data.dfield ){
-                _this.data.value = [];
-                _this.childSelect.data.choosed=[];
-                _this.reload();
-            }
-        })
-        this.el.on('click','.add-item',function(){
-            _.debounce(function(){Mediator.publish('form:addItem:'+_this.data.tableId,_this.data)},200)();
-        })
-        this.el.on('click','.ui-history',function(){
-            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
-        });
         this.data.isInit=true;
         if(!this.data.be_control_condition) {
-
             if( !this.data.is_special ){
                 if( this.data['filterOptions'] == 1 ){
                     if( this.data.childData && this.data.childData != "" ){
@@ -192,7 +206,7 @@ let config={
                     }
                 }
 
-                this.set('childSelect', {});
+                this.setData('childSelect', {});
                 let el=this.el.find('#multi-select');
                 if(this.data.options[0]['label'] == '-'){
                     this.data.options[0]['value']='-';
@@ -205,18 +219,18 @@ let config={
                 }
                 let data=FormService.createSelectJson(this.data,true);
                 data.onSelect=function(){
-                    if(_this.data.isInit || !_this.childSelect || _this.childSelect.data.choosed.length == 0 ){
+                    if(_this.data.isInit || !_this.data.childSelect || _this.data.childSelect.data.choosed.length == 0 ){
                         return;
                     }
                     _this.actions.setValue();
                     if(_this.data.isSys){
-                        _.debounce(function(){Mediator.publish('form:userSysOptions:'+_this.data.tableId,_this.data)},200)();
+                        _.debounce(function(){_this.events.userSysOptions(_this.data)},200)();
                     }
 
-                    _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                    _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                 };
                 let autoSelect=new AutoSelect(data);
-                this.childSelect=autoSelect;
+                this.data.childSelect=autoSelect;
                 this.append(autoSelect,el);
 
             }else {
@@ -249,11 +263,11 @@ let config={
         this.data.isInit=false;
     },
     beforeDestory:function(){
-        Mediator.removeAll('form:changeOption:'+this.data.tableId);
+        this.el.off();
     }
 }
 export default class MultiSelectControl extends Component{
-    constructor(data){
-        super(config,data);
+    constructor(data,events){
+        super(config,data,events);
     }
 }

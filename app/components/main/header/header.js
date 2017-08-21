@@ -87,57 +87,75 @@ let config = {
 
     },
 
+    binds: [
+        {
+            event: 'click',
+            selector: '.fold',
+            callback: function () {
+                this.data.asideSize = this.data.asideSize === 'full' ? 'mini' : 'full';
+                Mediator.emit('aside:size', this.data.asideSize);
+                if (this.data.asideSize === 'full') {
+                    this.actions.setSizeToFull();
+                } else {
+                    this.actions.setSizeToMini();
+                }
+            }
+        }, {
+            event: 'click',
+            selector: '.bi',
+            callback: function (context) {
+                this.actions.openBiIframe();
+            }
+        }, {
+            event: 'click',
+            selector: '.calendar',
+            callback: function () {
+                this.actions.openCalendarIframe();
+            }
+        }, {
+            event: 'click',
+            selector: '.task',
+            callback: function () {
+                msgbox.confirm('这是提示123123')
+            }
+        }, {
+            event: 'click',
+            selector: '.online-num',
+            callback: function () {
+                this.actions.goOnlineNumber();
+            }
+        }, {
+            event: 'click',
+            selector: '.system-setting',
+            callback: function () {
+                this.actions.goSystemSetting();
+            }
+        }, {
+            event: 'click',
+            selector: '.home',
+            callback: function(){
+                this.actions.openHome();
+            }
+        }, {
+            event: 'click',
+            selector: '.message',
+            callback: function(){
+                this.actions.openMessageDialog();
+            }
+        }, {
+            event: 'click',
+            selector: '.message-push',
+            callback: function(){
+                this.actions.openPostMessageDialog();
+            }
+        }
+    ],
+
     afterRender: function () {
         this.el.tooltip();
     },
     firstAfterRender: function () {
         let that = this;
-        this.el.on('click', '.fold', () => {
-            this.data.asideSize = this.data.asideSize === 'full' ? 'mini' : 'full';
-            Mediator.emit('aside:size', this.data.asideSize);
-            if (this.data.asideSize === 'full') {
-                this.actions.setSizeToFull();
-            } else {
-                this.actions.setSizeToMini();
-            }
-        }).on('click', '.bi', () => {
-            this.actions.openBiIframe();
-        }).on('click', '.calendar', () => {
-            this.actions.openCalendarIframe();
-        }).on('click', '.task', function () {
-            // $(`<div>12123</div>`).appendTo('body').dialog({
-            //     width: 400,
-            //     height: 400,
-            //     modal: true,
-            //     title: '提示'
-            // })
-            // msgbox.confirm('xxxxxxxxxxxxx').then((res) => {
-            //     console.log(res);
-            // });
-            // $(this).disableClick();
-            //
-            // console.log('click');
-
-            // _.delay(function () {
-            //     $(this).enableClick();
-            // }.bind(this), 1000);
-
-            msgbox.confirm('这是提示123123')
-
-        }).on('click', '.online-num', () => {
-            // msgbox.confirm('这是提示123123123')
-            that.actions.goOnlineNumber();
-        }).on('click', '.system-setting', () => {
-            that.actions.goSystemSetting();
-            // }).on('click','a.other-login', () => {   //他人登录
-            //     this.actions.otherLogin();
-        }).on('click', '.home', () => {
-            this.actions.openHome();
-        }).on('click', '.message', () => {
-            this.actions.openMessageDialog();
-        }).on('click', '.message-push', () => {
-            this.actions.openPostMessageDialog();
-        });
         Mediator.on('socket:online_user_num', that.actions.refreshOnlineNum);
         Mediator.on('socket:personal_message', this.actions.showMessageUnread);
         Mediator.on('socket:notice', this.actions.showMessageUnread);

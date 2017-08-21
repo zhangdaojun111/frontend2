@@ -69,7 +69,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             real_id:'',
             form_workflow:1,
             form_id:msg.formid,
-            btnType:'edit',
+            btnType:'none',
             is_view:0
         });
 
@@ -194,7 +194,6 @@ $('#multiFlow').on('click',()=>{
 
         });
     })().then(function (res) {
-        console.log(temp_id);
         let AgGrid=new Grid({
             parentTempId:temp_id,
             tableId:res.table_id,

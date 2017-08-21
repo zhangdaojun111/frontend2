@@ -1,10 +1,39 @@
+/**
+ *@author yudeping
+ *下拉框控件
+ */
+
+
 import Component from '../../../lib/component'
-import Mediator from '../../../lib/mediator';
 import template from './select-control.html'
 import {AutoSelect} from "../../util/autoSelect/autoSelect"
 import {FormService} from "../../../services/formService/formService";
 let config={
     template:template,
+    actions:{
+        changeOption(res){
+            if( _this.data.dfield && res == _this.data.dfield ){
+                _this.data.value = [];
+                _this.reload();
+            }
+        }
+    },
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.add-item',
+            callback: function(){
+                this.events.addItem(this.data)
+            }
+        }
+    ],
     afterRender(){
         let _this=this;
         this.data.isInit=true;
@@ -16,33 +45,19 @@ let config={
                     return;
                 }
                 _this.data.value=data[0]['id'];
-                _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+                _.debounce(function(){_this.events.changeValue(_this.data)},200)();
             };
             let autoSelect=new AutoSelect(data);
             this.append(autoSelect,el);
         }
         this.data.isInit=false;
-        Mediator.subscribe('form:changeOption:'+_this.data.tableId,function(res){
-            if( _this.data.dfield && res == _this.data.dfield ){
-                _this.data.value = [];
-                _this.reload();
-            }
-        })
-        this.el.on('click','.add-item',function(){
-            _.debounce(function(){Mediator.publish('form:addItem:'+_this.data.tableId,_this.data)},200)();
-        })
-        this.el.on('click','.ui-history',function(){
-            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
-        });
     },
     beforeDestory(){
-        Mediator.removeAll('form:changeValue:'+this.data.tableId);
-        Mediator.removeAll('form:addItem:'+this.data.tableId);
-        Mediator.removeAll('form:history:'+this.data.tableId);
+       this.el.off();
     }
 }
 export default class SelectControl extends Component{
-    constructor(data){
-        super(config,data);
+    constructor(data,events){
+        super(config,data,events);
     }
 }
