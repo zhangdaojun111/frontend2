@@ -1054,11 +1054,6 @@ let config={
                 }
                 MSG.alert('保存成功')
                 Mediator.publish('updateForm:success:'+this.data.tableId,true);
-                PMAPI.sendToParent({
-                    type: PMENUM.close_dialog,
-                    key:this.data.key,
-                    data:'close',
-                });
             }
             // this.successAlert(res["error"]);
             //自己操作的新增和编辑收到失效推送自己刷新
@@ -1364,6 +1359,24 @@ let config={
             });
         },
 
+        //打开打印页眉设置弹窗
+        async printSetting(){
+            let res = await FormService.getPrintSetting()
+            // if(res.succ == 1){
+            if (res.data && res.data.length && res.data.length != 0) {
+                SettingPrint.data['printTitles'] = res['data'];
+                SettingPrint.data['key'] = this.data.key;
+                SettingPrint.data['myContent'] = res['data'][0]['content'] || '';
+                SettingPrint.data['selectNum'] = parseInt(res['data']['index']) || 1;
+            }
+            PMAPI.openDialogByComponent(SettingPrint, {
+                width: 500,
+                height: 300,
+                title: '自定义页眉',
+                modal: true
+            })
+        },
+
         //打开子表弹窗
         openSongGrid(data){
             let _this=this;
@@ -1617,6 +1630,29 @@ let config={
             this.data.childComponent[_this.department.dfield].reload();
         },
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '#save',
+            callback: function(){
+                this.actions.onSubmit();
+            }
+        },
+        {
+            event: 'click',
+            selector: '#changeEdit',
+            callback: function(){
+                this.actions.changeToEdit(this);
+            }
+        },
+        {
+            event: 'click',
+            selector: '#print',
+            callback: function(){
+                this.actions.printSetting();
+            }
+        }
+    ],
     firstAfterRender(){
         let _this=this;
         this.actions.createFormControl();
@@ -1624,31 +1660,6 @@ let config={
         this.actions.changeOptions();
         this.actions.setDataFromParent();
         this.actions.addBtn();
-        //提交按钮事件绑定
-        this.el.on('click','#save',function () {
-            _this.actions.onSubmit();
-        });
-        //转到编辑模式
-        this.el.on('click','#changeEdit',function () {
-            _this.actions.changeToEdit(_this);
-        });
-        //打印
-        this.el.on('click','#print',async function() {
-            let res = await FormService.getPrintSetting()
-            // if(res.succ == 1){
-            if (res.data && res.data.length && res.data.length != 0) {
-                SettingPrint.data['printTitles'] = res['data'];
-                SettingPrint.data['key'] = _this.data.key;
-                SettingPrint.data['myContent'] = res['data'][0]['content'] || '';
-                SettingPrint.data['selectNum'] = parseInt(res['data']['index']) || 1;
-            }
-            PMAPI.openDialogByComponent(SettingPrint, {
-                width: 500,
-                height: 300,
-                title: '自定义页眉',
-                modal: true
-            })
-        })
         //固定按钮
         // _this.el.on('scroll','.wrap',function(){
         //     console.log('scroll');
@@ -1674,12 +1685,9 @@ let config={
                 _this.el.find('table').css({'overflow-y':'auto',"height":"520px"});
             })
         }
-
-
-
-
     },
     beforeDestory(){
+        this.el.off();
     }
 }
 class BaseForm extends Component{

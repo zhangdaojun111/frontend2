@@ -16,34 +16,41 @@ let config={
             }
         }
     },
-    afterRender(){
-        let _this=this;
-        this.el.on('click','.df-input-radio',function(event){
-            _this.data.value=event.target.value;
-            _.debounce(function(){
-                _this.events.changeValue(_this.data);
-            },200)();
-            for(let obj of _this.data.group){
-                if(obj.value==event.target.value){
-                    obj['checked']=true;
-                }else{
-                    obj['checked']=false;
-                }
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data);
             }
-            _this.reload();
-        })
-
-        this.el.on('click','.add-item',function(){
-            _.debounce(function(){
-                _this.events.addItem(_this.data);
-            },200)();
-        })
-
-        this.el.on('click','.ui-history',function(){
-            _.debounce(function(){
-                _this.events.emitHistory(_this.data);
-            },300)();
-        });
+        },
+        {
+            event: 'click',
+            selector: '.add-item',
+            callback: function(){
+                this.events.addItem(this.data)
+            }
+        },
+        {
+            event: 'click',
+            selector: '.df-input-radio',
+            callback: function(event){
+                this.data.value=event.target.value;
+                _.debounce(()=>{
+                    this.events.changeValue(this.data);
+                },200)();
+                for(let obj of _this.data.group){
+                    if(obj.value==event.target.value){
+                        obj['checked']=true;
+                    }else{
+                        obj['checked']=false;
+                    }
+                }
+                this.reload();
+            }
+        }
+    ],
+    afterRender(){
         if(this.data.is_view){
             this.el.find('.df-input-radio').attr('disabled',true);
         }else{

@@ -11,6 +11,29 @@ import template from './buildIn-control.html';
 
 let config={
     template:template,
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-selector',
+            callback: function(){
+                this.events.selectChoose(this.data);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data)
+            }
+        },
+        {
+            event: 'click',
+            selector: '.add-item',
+            callback: function(){
+                this.events.addNewBuildIn(this.data);
+            }
+        }
+    ],
     afterRender(){
         let _this=this;
         this.data.isInit=true;
@@ -28,17 +51,9 @@ let config={
             this.append(autoSelect,el);
         }
         this.data.isInit=false;
-        _this.el.on('click','.ui-selector',_.debounce(function(){
-            _this.events.selectChoose(_this.data);
-        },200));
-        _this.el.on('click','.ui-history',_.debounce(function(){
-            _this.events.emitHistory(_this.data);
-        },300));
-        _this.el.on('click','.add-item',_.debounce(function(){
-           _this.events.addNewBuildIn(_this.data);
-        },300));
     },
     beforeDestory(){
+        this.el.off();
     }
 }
 export default class BuildInControl extends Component{

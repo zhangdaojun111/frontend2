@@ -145,27 +145,49 @@ let config={
             }
         }
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data)
+            }
+        },
+        {
+            event: 'mouseenter',
+            selector: 'input',
+            callback: function(){
+                this.el.find("input").css({"border":"1px solid rgb(169, 210, 255)","background-color":"rgb(255, 255, 255)"});
+            }
+        },
+        {
+            event: 'focus',
+            selector: 'input',
+            callback: function(){
+                this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
+            }
+        },
+        {
+            event: 'blur',
+            selector: 'input',
+            callback: function(){
+                this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
+            }
+        },
+        {
+            event: 'mouseleave',
+            selector: 'input',
+            callback: function(){
+                this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
+            }
+        }
+    ],
     afterRender() {
         let _this=this;
-        _this.el.on('click','.ui-history',_.debounce(function(){
-            _this.events.emitHistory(_this.data)
-        },300));
         this.el.find('.search').on( 'input', _.debounce(function () {
             _this.actions.keyup();
         }, 200));
         /* setBorderColor*/
-        this.el.on('mouseenter', 'input', () => {
-            this.el.find("input").css({"border":"1px solid rgb(169, 210, 255)","background-color":"rgb(255, 255, 255)"});
-        });
-        this.el.on('focus', 'input', () => {
-            this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
-        });
-        this.el.on('blur', 'input', () => {
-            this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
-        });
-        this.el.on('mouseleave', 'input', () => {
-            this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
-        });
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
             this.el.find('.ui-width').attr('disabled',true);

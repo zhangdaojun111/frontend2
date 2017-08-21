@@ -18,8 +18,16 @@ let config={
           }
       }
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-forms-a',
+            callback: function(){
+                this.events.openCorrespondence(this.data);
+            }
+        },
+    ],
     afterRender(){
-        let _this=this;
         let config={
             tableId:this.data.value,
             parentTableId:this.data.tableId,
@@ -32,9 +40,6 @@ let config={
         let dataGrid=new DataTableAgGrid(config);
         this.data.dataGrid=dataGrid;
         this.append(dataGrid,this.el.find('.correspondence-box'));
-        this.el.on('click','.ui-forms-a',_.debounce(function(){
-            _this.events.openCorrespondence(_this.data);
-        },300));
     },
 
     beforeDestory(){

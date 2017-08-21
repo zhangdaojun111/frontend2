@@ -9,11 +9,24 @@ import msgbox from '../../../lib/msgbox';
 
 let config={
     template:template,
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data)
+            }
+        },
+        {
+            event: 'click',
+            selector: '.date-close',
+            callback: function(){
+                this.el.find(".date_yy-mm-dd").val("年/月/日");
+            }
+        }
+    ],
     afterRender(){
         let _this=this;
-        this.el.on('click','.ui-history',_.debounce(function(){
-            _this.events.emitHistory(_this.data)
-        },300));
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
             this.el.find('.ui-width').attr('disabled',true);
@@ -26,9 +39,6 @@ let config={
             _this.el.find(".date_yy-mm-dd").val("年/月/日");
         }else{
             _this.el.find(".date_yy-mm-dd").val(_this.data.value.replace(/-/g, "/"));
-            console.log(_this.data.value)
-            console.log(typeof(_this.data.value))
-
         }
 
         if(_this.data.value){
@@ -94,9 +104,6 @@ let config={
             });
              boolean = true;
         }
-        _this.el.on('click','.date-close',function () {
-            _this.el.find(".date_yy-mm-dd").val("年/月/日");
-        })
         _.debounce(function(){_this.events.changeValue(_this.data)},200)();
     },
     beforeDestory:function(){

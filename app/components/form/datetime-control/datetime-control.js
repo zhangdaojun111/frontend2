@@ -8,12 +8,24 @@ import template from  './datetime-control.html';
 import msgbox from '../../../lib/msgbox';
 let config={
     template:template,
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data)
+            }
+        },
+        {
+            event: 'click',
+            selector: '.date-close',
+            callback: function(){
+                this.el.find(".datetime").val("年/月/日 时:分:秒")
+            }
+        }
+    ],
     afterRender(){
         let _this=this;
-
-        this.el.on('click','.ui-history',function(){
-            _.debounce(function(){_this.events.emitHistory(_this.data)},300)();
-        });
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
             this.el.find('.ui-width').attr('disabled',true);
@@ -97,9 +109,6 @@ let config={
             });
             boolean = true;
         }
-        _this.el.on('click','.date-close',function () {
-            _this.el.find(".datetime").val("年/月/日 时:分:秒");
-        })
         _.debounce(function(){_this.events.changeValue(_this.data)},200)();
     },
     beforeDestory:function(){

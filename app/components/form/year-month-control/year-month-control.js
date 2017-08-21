@@ -8,6 +8,15 @@ let config={
     data:{
         isInit:true,
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data);
+            }
+        }
+    ],
     actions:{
       changeValue(value,_this){
           let val = 0;
@@ -23,9 +32,6 @@ let config={
     },
     afterRender(){
         let _this=this;
-        this.el.on('click','.ui-history',_.debounce(function(){
-            _this.events.emitHistory(_this.data);
-        },300));
         let yearData = {
             multiSelect:false,
             editable:this.data.is_view?false:true,

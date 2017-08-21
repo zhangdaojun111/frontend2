@@ -84,12 +84,16 @@ let config={
             }
         }
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data);
+            }
+        }
+    ],
     afterRender() {
-
-        let _this=this;
-        this.el.on('click','.ui-history',_.debounce(function(){
-            _this.events.emitHistory(_this.data);
-        },300));
         this.el.find('.ui-width').css('width',this.data.width);
     },
     beforeDestory(){

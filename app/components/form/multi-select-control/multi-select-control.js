@@ -151,14 +151,24 @@ let config={
             }
         }
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.add-item',
+            callback: function(){
+                this.events.addItem(this.data)
+            }
+        }
+    ],
     afterRender(){
         let _this=this;
-        this.el.on('click','.add-item',_.debounce(function(){
-            _this.events.addItem(_this.data);
-        },200))
-        this.el.on('click','.ui-history',_.debounce(function(){
-           _this.events.emitHistory(_this.data);
-        },300));
         this.data.isInit=true;
         if(!this.data.be_control_condition) {
             if( !this.data.is_special ){
@@ -253,6 +263,7 @@ let config={
         this.data.isInit=false;
     },
     beforeDestory:function(){
+        this.el.off();
     }
 }
 export default class MultiSelectControl extends Component{

@@ -119,15 +119,24 @@ let config={
             }
         }
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '.refresh',
+            callback: function(){
+                this.actions.refresh(this)
+            }
+        },
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data);
+            }
+        }
+    ],
     afterRender(){
         let _this=this;
-        this.el.on('click','.refresh',function(){
-            _this.actions.refresh(_this)
-        });
-        this.el.on('click','.ui-history',_.debounce(function(){
-            _this.events.emitHistory(_this.data);
-        },300));
-
         this.data.isInit=true;
         this.setData('hasChoose', new Map());
         if (!this.data.childDrop) {
@@ -178,6 +187,7 @@ let config={
         this.data.isInit=false;
     },
     beforeDestory(){
+        this.el.off();
     }
 }
 export default class MultiLinkageControl extends Component{

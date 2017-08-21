@@ -12,11 +12,17 @@ let config={
     data:{
         options:[],
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data);
+            }
+        }
+    ],
     afterRender(){
         let _this=this;
-        this.el.on('click','.ui-history',_.debounce(function(){
-            _this.events.changeValue(_this.data);
-        },300));
         this.data.isInit=true;
         if(!this.data.be_control_condition) {
             let el=this.el.find('.dropdown');
@@ -34,6 +40,7 @@ let config={
         this.data.isInit=false;
     },
     beforeDestory(){
+        this.el.off();
     }
 }
 export default class YearControl extends Component{

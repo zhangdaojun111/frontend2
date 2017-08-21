@@ -19,11 +19,23 @@ let config={
           }
       }
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-forms-a',
+            callback: function(){
+                this.events.openSongGrid(this.data)
+            }
+        },
+        {
+            event: 'click',
+            selector: '.add-item',
+            callback: function(){
+                this.events.addItem(this.data)
+            }
+        }
+    ],
     afterRender(){
-        let _this=this;
-        _this.el.on('click','.ui-forms-a',_.debounce(function(){
-            _this.events.openSongGrid(_this.data);
-        },300));
         let config={
             tableId:this.data.value,
             parentTableId:this.data.tableId,
