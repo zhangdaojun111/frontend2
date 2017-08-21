@@ -21,7 +21,6 @@ import TimeControl from "../time-control/time-control";
 import DateControl from "../date-control/date-control";
 import DateTimeControl from "../datetime-control/datetime-control";
 import Mediator from "../../../lib/mediator";
-import {HTTP} from "../../../lib/http";
 import {FormService} from "../../../services/formService/formService"
 import {fieldTypeService,FIELD_TYPE_MAPPING} from "../../../services/dataGrid/field-type-service"
 import MultiSelectControl from "../multi-select-control/multi-select-control";
@@ -73,7 +72,6 @@ let config={
     childComponent:{},
     actions:{
         md5:md5,
-
         //子表填充父表的数据
         setDataFromParent(){
             //待跟晓川协定
@@ -119,15 +117,15 @@ let config={
                 data: this.actions.createFormValue(this.data.data),
                 child_table_id: this.data.sonTableId
             });
-                //给统计赋值
-                for(let d in res["data"]){
-                    this.actions.setFormValue(d,res["data"][d]);
-                }
+            //给统计赋值
+            for(let d in res["data"]){
+                this.actions.setFormValue(d,res["data"][d]);
+            }
         },
 
         //给外部提供formValue格式数据
         getFormValue(){
-            return this.actions.createFormValue(this.data.data);
+            return this.actions.createFormValue(this.data.data,true);
         },
 
         //根据dfield查找类型
@@ -149,7 +147,7 @@ let config={
                 let parentTempId = data["parent_temp_id"];
                 if((FormService.idsInChildTableToParent[this.data.tableId] && FormService.idsInChildTableToParent[this.data.tableId].indexOf(key) != -1 ) && val != "" && parentTempId != "" && (type == 'Buildin' || type == 'Select')) {
                     data[key] = data["parent_temp_id"];
-            }
+                }
             }
         },
 
@@ -256,6 +254,7 @@ let config={
                     continue;
                 }
                 let val = formValue[key];
+                //必填检查
                 if(data["required"]) {
                     if( ( ( val == "" ) && ( ( val+'' ) != '0' ) ) || val == "[]" ) {
                         error = true;
@@ -263,6 +262,7 @@ let config={
                         break;
                     }
                 }
+                //正则检查
                 if(val != "" && data["reg"] !== "") {
                     for(let r in data["reg"]){
                         let reg = eval(r);
@@ -274,6 +274,7 @@ let config={
                         }
                     }
                 }
+                //数字范围检查
                 if(val.toString() != "" && data["numArea"]){
                     let label = data["label"];
                     let minNum = data["numArea"]["min"]||'';
@@ -311,6 +312,7 @@ let config={
                         }
                     }
                 }
+                //函数检查
                 if(val != "" && !$.isEmptyObject(data["func"])){
                     for(let r in data["func"]) {
                         let flag = FormService[r](val);
@@ -321,6 +323,7 @@ let config={
                         }
                     }
                 }
+                //数字位数限制
                 if(data["real_type"] == fieldTypeService.FLOAT_TYPE){
                     if(formValue[key] >= 100000000000) {
                         error = true;
@@ -582,7 +585,6 @@ let config={
                     }
                 }
             }
-
         },
 
         /**
@@ -590,7 +592,7 @@ let config={
          *  此data结构为{val: 自身的value,effect: [] 被影响的dfield集合}
          */
         async calcExpression(data) {
-            let send_exps = [];
+            // let send_exps = [];
             if(!data["effect"] || !data["effect"].length>0){
                 return;
             }
@@ -620,9 +622,10 @@ let config={
                 fields: fields,
                 change_fields:[data.id]
             });
-                for (let j in res['data']){
-                   this.actions.set_value_for_form(res['data'][j], j);
-                }
+            for (let j in res['data']){
+               this.actions.set_value_for_form(res['data'][j], j);
+            }
+            //直接传给后台判断 后期会添加前端验证
             // for(let f of data["effect"]) {
             //     //如果这个字段存在的话，再进行下面的逻辑
             //     let expression;
@@ -701,7 +704,7 @@ let config={
         changeOptionOfSelect ( data,l ){
             let obj = {'select':'options','radio':'group','multi-select':'options'};
             let linkage = l;
-            let field = data['dfield'];
+            // let field = data['dfield'];
             let type = data['type'];
             for( let key in linkage ){
                 let affectData = this.data[key];
@@ -757,19 +760,132 @@ let config={
         },
 
         //创建表单数据格式
-        createFormValue(data){
+        createFormValue(data,isCheck){
             let formValue={};
             for(let key in data){
                 formValue[key]=data[key].value;
             }
-            let {error,errorMsg} = this.actions.validForm(this.data.data,formValue);
-            if(error){
-                return {
-                    error:error,
-                    errorMessage:errorMsg
+            if(isCheck){
+                //外部调用需要验证表单
+                let {error,errorMsg} = this.actions.validForm(this.data.data,formValue);
+                if(error){
+                    return {
+                        error:error,
+                        errorMessage:errorMsg
+                    }
+                }else{
+                    return formValue;
                 }
             }else{
                 return formValue;
+            }
+        },
+
+        //判断一下日期的类型，并且进行限制//判断一下日期的类型，并且进行限制
+        checkDateType(){
+            for(let i = 0;i<this.data.formData.length;i++){
+                if(this.data.formData[i]['type'] == 'Date'){
+                    let temp = this.data.formData[i];
+                    let dfield = this.data.formData[i]['dfield'];//f8
+                    if(temp['timeType'] == 'after'){
+                        let vals = data[dfield].split("-");
+                        //let vals = val.split("-");//[2011,11,11];
+                        let myData = new Date();
+                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+                        for(let i = 0;i<3;i++){
+                            if(vals[i]<dates[i]){
+                                data[dfield]='';
+                            }
+                        }
+                    }else if(this.data.formData[i]['type'] == 'before') {
+                        let vals = data[dfield].split("-");
+                        //let vals = val.split("-");//[2011,11,11];
+                        let myData = new Date();
+                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+                        for(let i = 0;i<3;i++){
+                            if(vals[i]<dates[i]){
+                                data[dfield]='';
+                            }
+                        }
+                    }
+                }
+                if(this.data.formData[i]['type'] == 'Datetime'){
+                    let temp = this.data.formData[i];
+                    let dfield = this.data.formData[i]['dfield'];//f8
+                    if(temp['timeType'] == 'after'){
+                        let vals = data[dfield].split(" ")[0].split("-");
+                        //let vals = val.split("-");//[2011,11,11];
+                        let myData = new Date();
+                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+                        for(let i = 0;i<3;i++){
+                            if(vals[i]<dates[i]){
+                                data[dfield]='';
+                            }
+                        }
+                    }else if(this.data.formData[i]['type'] == 'before') {
+                        let vals = data[dfield].split(" ")[0].split("-");
+                        //let vals = val.split("-");//[2011,11,11];
+                        let myData = new Date();
+                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+                        for(let i = 0;i<3;i++){
+                            if(vals[i]<dates[i]){
+                                data[dfield]='';
+                            }
+                        }
+                    }
+                }
+            }
+            for(let i = 0;i<this.data.formData.length;i++){
+                if(this.data.formData[i]['type'] == 'Date'){
+                    let temp = this.data.formData[i];
+                    let dfield = this.data.formData[i]['dfield'];//f8
+                    if(temp['timeType'] == 'after'){
+                        let vals = data[dfield].split("-");
+                        //let vals = val.split("-");//[2011,11,11];
+                        let myData = new Date();
+                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+                        for(let i = 0;i<3;i++){
+                            if(vals[i]<dates[i]){
+                                data[dfield]='';
+                            }
+                        }
+                    }else if(this.data.formData[i]['type'] == 'before') {
+                        let vals = data[dfield].split("-");
+                        //let vals = val.split("-");//[2011,11,11];
+                        let myData = new Date();
+                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+                        for(let i = 0;i<3;i++){
+                            if(vals[i]<dates[i]){
+                                data[dfield]='';
+                            }
+                        }
+                    }
+                }
+                if(this.data.formData[i]['type'] == 'Datetime'){
+                    let temp = this.data.formData[i];
+                    let dfield = this.data.formData[i]['dfield'];//f8
+                    if(temp['timeType'] == 'after'){
+                        let vals = data[dfield].split(" ")[0].split("-");
+                        //let vals = val.split("-");//[2011,11,11];
+                        let myData = new Date();
+                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+                        for(let i = 0;i<3;i++){
+                            if(vals[i]<dates[i]){
+                                data[dfield]='';
+                            }
+                        }
+                    }else if(this.data.formData[i]['type'] == 'before') {
+                        let vals = data[dfield].split(" ")[0].split("-");
+                        //let vals = val.split("-");//[2011,11,11];
+                        let myData = new Date();
+                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+                        for(let i = 0;i<3;i++){
+                            if(vals[i]<dates[i]){
+                                data[dfield]='';
+                            }
+                        }
+                    }
+                }
             }
         },
 
@@ -843,31 +959,43 @@ let config={
         },
         //给相关赋值
         async setAboutData(id,value) {
-            let res=await FormService.getAboutData({
-                            buildin_field_id: id,
-                            buildin_mongo_id: value
-                    });
-                        for(let k in res["data"]){
-                            //如果是周期规则
+            let res=await FormService.getAboutData({buildin_field_id: id, buildin_mongo_id: value});
+            for(let k in res["data"]){
+                //如果是周期规则
                 let data=this.data.data;
                 if(data.hasOwnProperty(k) && data[k].hasOwnProperty("real_type") && data[k]["real_type"] == '27') {
-                                if(res["data"][k]["-1"]){
-                                    this.actions.setFormValue.bind(this)(k,res["data"][k]["-1"]);
-                                }
-                            }else{
-                                this.actions.setFormValue.bind(this)(k,res["data"][k]);
-                            }
-                        }
+                    if(res["data"][k]["-1"]){
+                        this.actions.setFormValue.bind(this)(k,res["data"][k]["-1"]);
+                    }
+                }else{
+                    this.actions.setFormValue.bind(this)(k,res["data"][k]);
+                }
+            }
         },
-
+        //拼接其他字段
+        montageOtherFields(){
+            data = {};
+            for(let key in this.data.dataOfOtherFields){
+                data[key] = this.data.dataOfOtherFields[key];
+            }
+            for(let key in data){
+                if(key == "temp_id" && !data["temp_id"]){
+                    continue;
+                }
+                data[key] = data[key];
+            }
+            data['temp_id'] = data['temp_id'];
+            //如果有其他字段的数据，这里是拼this.data.formData
+            formDataNew = formDataNew.concat(this.data.formDataOfOtherFields);
+        },
         //快捷添加后回显
         addNewItem(data){
             let dfield=this.data['quikAddDfield'];
             let fieldData=this.data.data[dfield];
             if(fieldData["options"]){
-                this.childComponent[dfield]['data']['options']=fieldData["options"] = data['newItems'];
+                this.childComponent[dfield]['data']['options']=fieldData["options"] = fieldData["options"].push(...data['newItems']);
             }else {
-                this.childComponent[dfield]['data']['group']=fieldData["group"] = data['newItems'];
+                this.childComponent[dfield]['data']['group']=fieldData["group"] = fieldData["options"].push(...data['newItems']);
             }
             this.childComponent[dfield].reload();
         },
@@ -890,73 +1018,9 @@ let config={
             let formDataNew=this.oldData;
             //如果有其他字段的数据，这里是拼approvedFormData
             if(this.data.hasOtherFields == '1'){
-                data = {};
-                for(let key in this.data.dataOfOtherFields){
-                    data[key] = this.data.dataOfOtherFields[key];
-                }
-                for(let key in data){
-                    if(key == "temp_id" && !data["temp_id"]){
-                        continue;
-                    }
-                    data[key] = data[key];
-                }
-                data['temp_id'] = data['temp_id'];
-                //如果有其他字段的数据，这里是拼this.data.formData
-                formDataNew = formDataNew.concat(this.data.formDataOfOtherFields);
+              this.actions.montageOtherFields();
             }
-            //判断一下日期的类型，并且进行限制
-            for(let i = 0;i<this.data.formData.length;i++){
-                if(this.data.formData[i]['type'] == 'Date'){
-                    let temp = this.data.formData[i];
-                    let dfield = this.data.formData[i]['dfield'];//f8
-                    if(temp['timeType'] == 'after'){
-                        let vals = data[dfield].split("-");
-                        //let vals = val.split("-");//[2011,11,11];
-                        let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
-                            }
-                        }
-                    }else if(this.data.formData[i]['type'] == 'before') {
-                        let vals = data[dfield].split("-");
-                        //let vals = val.split("-");//[2011,11,11];
-                        let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
-                            }
-                        }
-                    }
-                }
-                if(this.data.formData[i]['type'] == 'Datetime'){
-                    let temp = this.data.formData[i];
-                    let dfield = this.data.formData[i]['dfield'];//f8
-                    if(temp['timeType'] == 'after'){
-                        let vals = data[dfield].split(" ")[0].split("-");
-                        //let vals = val.split("-");//[2011,11,11];
-                        let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
-                            }
-                        }
-                    }else if(this.data.formData[i]['type'] == 'before') {
-                        let vals = data[dfield].split(" ")[0].split("-");
-                        //let vals = val.split("-");//[2011,11,11];
-                        let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
-                            }
-                        }
-                    }
-                }
-            }
+            this.actions.checkDateType();
             let obj_new = this.actions.createCacheData( formDataNew  , data , true, this);
             let obj_old = this.actions.createCacheData( formDataNew  , data , false, this);
             this.actions.changeValueForChildTable(data);
@@ -978,19 +1042,18 @@ let config={
             }
             // this.loadingAlert('正在提交请稍后');
             if(this.data.isAddBuild){
+                console.log('怎么回事呢？');
+                console.log(this.data.buildId);
                 json['buildin_id']=this.data.buildId;
             }
-            let res= await FormService.saveAddpageData(json)
+            let res= await FormService.saveAddpageData(json);
+            console.log(res);
             if(res.succ == 1){
                 if(this.data.isAddBuild && !this.flowId){
-                    let data={new_option:{
-                        py: "213213(lz)",
-                        value: "59892cbeca8b367dfbcff98d",
-                        label: "213213(离职)"}}
                     PMAPI.sendToParent({
                         type: PMENUM.close_dialog,
                         key:this.data.key,
-                        data:data
+                        data:{new_option:res.new_option},
                     });
                 }
                 MSG.alert('保存成功');
