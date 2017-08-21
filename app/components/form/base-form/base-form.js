@@ -1557,28 +1557,25 @@ let config={
         // })
         if( _this.el.find('table').hasClass('form-version-table-user') || _this.el.find('table').hasClass('form-version-table-department') ){
             _this.el.find('table').parents('#detail-form').addClass('detail-form-style');
-            _this.el.find('table>tbody').append('<div class="more">展开更多</div>')
+            _this.el.find('table>tbody').append('<div class="more"><span>展开更多</span></div>')
 
 
             _this.el.find(".overflow").on("scroll",function () {
                 let overflowHight = _this.el.find('.overflow').scrollTop();
-                if(overflowHight>=50){
+                console.log(overflowHight)
+                if(overflowHight>=70){
                     _this.el.find('.more').show();
                 }else{
                     _this.el.find('.more').hide();
                 }
             })
             _this.el.find('.more').on('click',function () {
-
                 _this.el.find('.more').hide();
-                _this.el.find('.overflow').css("overflow-y","hidden");
-                _this.el.find('table').css({'overflow-y':'auto','margin-top':'55px'});
+                _this.el.find('.overflow').removeClass('overflow');
+                _this.el.find('table').css({'overflow-y':'auto',"height":"520px"});
             })
         }
-        //table的展示高度
-        //let tableHight = _this.el.find('table').height()+'px';
-        //table的实际高度
-        //let tableActualHight = _this.el.find('table')[0].scrollHeight+'px';
+
 
 
 

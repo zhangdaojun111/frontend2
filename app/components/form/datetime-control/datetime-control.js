@@ -22,8 +22,15 @@ let config={
             this.el.find('.ui-width').attr('disabled',false);
         }
 
+
         //控制到时分秒
-        _this.el.find(".datetime").val("年/月/日 时:分:秒");
+        if(_this.data.value == ''){
+            _this.el.find(".datetime").val("年/月/日 时:分:秒");
+        }else{
+            _this.el.find(".datetime").val(_this.data.value.replace(/-/g, "/"));
+
+        }
+
         _this.el.find(".datetime").datetimepicker({
             monthNamesShort: [ "一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月" ],
             dayNamesMin: [ "日","一","二","三","四","五","六" ],
@@ -37,6 +44,7 @@ let config={
             changeYear:true,
             changeMonth: true,
             dateFormat: "yy/mm/dd",
+            defaultDate:new Date(_this.data.value),
             timeFormat: 'HH:mm:ss', //格式化时间
 
             onSelect: function (selectTime, text) {

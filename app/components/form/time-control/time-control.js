@@ -21,7 +21,11 @@ let config={
         }else{
             this.el.find('.ui-width').attr('disabled',false);
         }
-        this.el.find(".timeInput").val("时:分:秒");
+        if(_this.data.value == ''){
+            this.el.find(".timeInput").val("时:分:秒");
+        }else{
+            _this.el.find(".timeInput").val(_this.data.value);
+        }
 
         //增加0
         function p(s) {
