@@ -13,7 +13,8 @@ let config = {
     template: template,
     data: {
         list: [],
-        onSelect: null
+        onSelect: null,
+        items: []
     },
     afterRender() {
         this.data.choosed = this.autoSelect.data.choosed;
@@ -54,7 +55,18 @@ export class AutoCompleteComponent extends FormFittingAbstract {
      * autocomplete 返回值
      */
     getValue() {
-        return this.autoSelect.data.choosed;
+        const field = this.autoSelect.data.choosed[0];
+        let data = {}
+        if (field) {
+            for (let choosed of this.autoSelect.data.list) {
+                if (field.id == choosed.id) {
+                    data = choosed;
+                    break;
+                }
+            }
+
+        }
+        return data;
     }
 
 

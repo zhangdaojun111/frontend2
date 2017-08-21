@@ -49,7 +49,7 @@ export class FormBaseComponent extends BiBaseComponent {
     getValue() {
         return  {
             id: '',
-            name: this.formGroup.chartName.data.value
+            name: this.formGroup.chartName.getValue()
         };
     }
 

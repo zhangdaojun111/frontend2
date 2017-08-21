@@ -43,7 +43,7 @@ export const ChartFormService = {
                 folder_id: '',
                 operation_id: '',
                 parent_table_id: '',
-                query_mark: '',
+                query_mark: 'normal',
                 row_id:'',
                 chart:chart
             },

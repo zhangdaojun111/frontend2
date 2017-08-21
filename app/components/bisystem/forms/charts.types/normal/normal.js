@@ -15,6 +15,7 @@ import {FormMixShareComponent} from '../../mix.share/mix.share';
 import {FormNormalDeepComponent} from './deep/deep';
 import "./normal.scss";
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
+import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 
 
 let config = {
@@ -23,34 +24,46 @@ let config = {
     actions: {},
     afterRender() {
         this.renderFitting();
+        // 所有子组件的改变都通过
+        Mediator.subscribe('bi:chart:form:update', option => {
+            this.MediatorDistribution(option);
+        });
+
+        if (this.chartId) {
+            this.getChartData(this.chartId);
+        }
+    },
+    firstAfterRender() {
+        this.el.on('click', '.save-btn', (event) => {
+            this.saveChart();
+            return false;
+        });
         this.el.on('click','.add',async()=> {
             const res = await PMAPI.openDialogByComponent(advancedDialogConfig,{
                 width: 600,
                 height: 630,
                 title: '高级数据'
             });
-            console.log(res);
-        })
-    },
-    firstAfterRender() {
-        // 所有子组件的改变都通过
-        Mediator.subscribe('bi:chart:form:update', option => {
-            this.MediatorDistribution(option);
         });
-        this.el.on('click', '.save-btn', (event) => {
-            this.saveChart();
-        })
     },
     beforeDestory() {}
 };
 
 export class FormNormalComponent extends BiBaseComponent{
-    constructor() {
+    constructor(chartId) {
         super(config);
         this.formGroup = {};
+        this.chartId = chartId;
         this.y = [];
         this.y1 = [];
-        this.doubleY = null;
+
+    }
+    /**
+     * 编辑模式发送请求chartId
+     */
+    async getChartData(chartId) {
+       const res = canvasCellService.getCellChart({chart_id: chartId});
+       console.log(res);
     }
 
     /**
@@ -67,6 +80,7 @@ export class FormNormalComponent extends BiBaseComponent{
         this.formGroup = {
             chartName: base,
             share: share,
+            base: base,
             deeps: deeps,
             x: instanceFitting({
                 type:'autoComplete',
@@ -103,6 +117,8 @@ export class FormNormalComponent extends BiBaseComponent{
                 data: {
                     value:null,
                     checkboxs:[],
+                    items: [],
+                    checkedItems: [],
                     onChange: null
                 },
                 me: this,
@@ -277,7 +293,8 @@ export class FormNormalComponent extends BiBaseComponent{
             let items = _.remove(this.y1, (item) =>{
                 return item.componentId == data.componentId;
             });
-        }
+        };
+        this.selectYAxis(true);
 
     }
 
@@ -285,31 +302,34 @@ export class FormNormalComponent extends BiBaseComponent{
      * 默认展示Y轴数据
      */
     selectYAxis(flag) {
-        if (flag) {
+        if (this.formGroup.defaultY.getValue()) {
             let checkboxs = [];
+            let items = []
             this.y.concat(this.y1).map(y => {
-                if(y.data.field) {
-                    if (y.data.field[0]) {
-                        checkboxs.push(y.data.field[0]);
-                    }
+                if (y.data.field && y.data.field['field']['id']) {
+                    items.push(y.data.field);
+                    checkboxs.push(y.data.field['field'])
                 }
             });
-            this.formGroup.ySelectedGroup.data.checkboxs = checkboxs;
+            this.formGroup.ySelectedGroup.data['items'] = items;
+            this.formGroup.ySelectedGroup.data['checkboxs'] = checkboxs;
             this.formGroup.ySelectedGroup.reload();
         } else {
-            this.formGroup.ySelectedGroup.data.checkboxs = [];
+            this.formGroup.ySelectedGroup.data['checkboxs'] = [];
+            this.formGroup.ySelectedGroup.data['items'] = [];
+            this.formGroup.ySelectedGroup.data['checkItems'] = [];
             this.formGroup.ySelectedGroup.reload();
-        };
+        }
     }
 
     /**
      * reset实例，当通过路由重新进入实例，清空所有数据
      */
-    reset() {
+    reset(id) {
         this.formGroup = {};
         this.y = [];
         this.y1 = [];
-        this.doubleY = null;
+        this.chartId = id;
     }
 
     /**
@@ -403,7 +423,6 @@ export class FormNormalComponent extends BiBaseComponent{
      */
     async saveChart() {
         const fields  = this.formGroup;
-
         // const data = {
         //         advancedDataTemplates: [],
         //         assortment: 'normal',
@@ -459,23 +478,49 @@ export class FormNormalComponent extends BiBaseComponent{
                 data[k] = fields[k].getValue();
             };
         });
+        const yAxis = [];
+        // 设置y轴yAxisIndex
+        this.y.map(y => {
+            y.data.field['yAxisIndex'] = 0;
+            yAxis.push(y.data.field);
+        });
+        this.y1.map(y => {
+            y.data.field['yAxisIndex'] = 1;
+            yAxis.push(y.data.field);
+        });
+
         const chart = {
             advancedDataTemplates: [],
             assortment: 'normal',
             chartAssignment: data.chartAssignment == 1 ? {name:'分组', val:1} : {name:'下穿', val:2},
             chartName:data.base,
             countColumn: {},
-            deeps:data.deeps,
             double: data.doubleY ? 1 : 0,
             echartX: data.echartX ? {marginBottom: data.echartXMarginBottom, textNum:data.echartXTextNum}: {},
             filter: [],
             icon: data.share.icons,
             relations: [],
-            source: {}
+            source: data.share.chartSource,
+            theme: data.share.themes,
+            xAxis: data.x,
+            yAxis: yAxis,
+            yHorizontal: data.yHorizontal,
+            yHorizontalColumns: data.yHorizontal ? {marginBottom:data.xMarginBottom} : {},
+            ySelectedGroup: data.ySelectedGroup
         };
-        console.log(data);
-        // let res = await ChartFormService.saveChart(JSON.stringify(data));
-        // console.log(res);
-        // console.log(data);
+        if (data.chartAssignment == 1) {
+            chart['chartGroup'] = data.deeps.group
+        } else {
+            chart['deeps'] = data.deeps.deeps
+        };
+        let res = await ChartFormService.saveChart(JSON.stringify(chart));
+        if (res['success'] == 1) {
+            msgbox.alert('保存成功');
+            this.reset();
+            this.reload();
+            Mediator.publish('bi:aside:update',res['data'])
+        } else {
+            msgbox.alert(res['error'])
+        };
     }
 }

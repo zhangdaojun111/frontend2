@@ -7,6 +7,8 @@ import {ViewsEditComponent} from "./views/views";
 import {FormBaseComponent} from './forms/base/base';
 import {FormEntryComponent} from './forms/entry/entry';
 import {componentsJson} from './forms/entry/loadFormChart.json';
+import Mediator from '../../lib/mediator';
+
 let component;
 let viewComponent;
 let formComponent = {};
@@ -15,7 +17,8 @@ const BiAppRouter = Backbone.Router.extend({
         'views/edit':"routerViewsEditComponent",
         'views/:id':'routerViewsComponent',
         'forms/home':'routerFormEntryComponent',
-        'forms/:component':'routerFormDynamicComponent',
+        'forms/:chart': 'routerFormDynamicComponent',
+        'forms/:chart/:id':'routerFormDynamicComponent',
         '':'routerViewsComponent',
     },
 
@@ -46,13 +49,14 @@ const BiAppRouter = Backbone.Router.extend({
         let form = new FormEntryComponent();
         form.render($('#route-outlet'));
     },
-    routerFormDynamicComponent(type) {
+    routerFormDynamicComponent(type,id) {
+        Mediator.removeAll('bi:chart:form:update');
         if (formComponent[type]) {
             formComponent[type].destroyChildren();
-            formComponent[type].reset();
+            formComponent[type].reset(id);
             formComponent[type].reload();
         } else {
-            let component = new componentsJson[type]['component'];
+            let component = new componentsJson[type]['component'](id);
             component.render($('#route-outlet'));
             formComponent[type] = component;
         }

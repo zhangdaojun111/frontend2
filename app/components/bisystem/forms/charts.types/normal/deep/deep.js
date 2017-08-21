@@ -26,7 +26,7 @@ let config = {
     firstAfterRender() {
         let me = this;
         this.el.on('click', '.save-btn', (event) => {
-            this.addDeep(this.x.getValue()[0]);
+            this.addDeep(this.x.getValue());
         });
         this.el.on('click', '.del-deep-btn',function(event){
             let index = $(this).closest('tr').index();
@@ -62,7 +62,6 @@ export class FormNormalDeepComponent extends BiBaseComponent{
         this.data.xAxis = fields;
         this.data.deeps = [];
         this.reload();
-        console.log(this.x.autoSelect.data.choosed)
     }
 
     /**
@@ -70,6 +69,7 @@ export class FormNormalDeepComponent extends BiBaseComponent{
      *@param item 下穿数据
      */
     addDeep(item) {
+        console.log(item);
         if (item) {
             this.data.deeps.push(item);
             this.reload();
@@ -89,9 +89,10 @@ export class FormNormalDeepComponent extends BiBaseComponent{
      * 获取下穿和分组数据
      */
     getValue(){
+        console.log(this.x)
         return {
             deeps: this.data.deeps,
-            group: this.x.autoSelect.data.choosed
+            group: this.x.getValue()
         }
     }
 }

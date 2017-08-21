@@ -44,7 +44,7 @@ let config = {
         });
     },
     firstAfterRender() {
-        Mediator.on('bi:aside:del', (res) => {
+        Mediator.subscribe('bi:aside:del', (res) => {
             let charts = this.data.charts;
             for(let [index,view] of charts.entries()) {
                 if (res.id === view.id) {
@@ -52,6 +52,13 @@ let config = {
                     break;
                 }
             }
+        });
+
+        Mediator.subscribe('bi:aside:update',(res) => {
+            window.config.charts.push(res);
+            this.data.charts = window.config.charts;
+            console.log(window.config.charts);
+            this.reload();
         })
     }
 };

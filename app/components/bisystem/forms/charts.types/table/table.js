@@ -22,7 +22,7 @@ let config = {
     },
     firstAfterRender() {
         this.el.on('click', '.save-btn', (event) => {
-            this.saveChart();
+            // this.saveChart();
         })
     },
     beforeDestory() {}

@@ -13,6 +13,8 @@ let config = {
         checkboxs: [],
         value: null,
         checked: false,
+        items: [],
+        checkedItems: [],
         onChange: null // change后执行回调函数
     },
     firstAfterRender() {
@@ -20,6 +22,14 @@ let config = {
         me.onChange = me.data.onChange;
         this.el.on('change', 'input', function(event){
             me.data.value = $(this).is(':checked');
+            if (me.data.items && me.data.items.length > 0) {
+                const index = $(this).closest('div').index();
+                if (me.data.value) {
+                    me.data.checkedItems.push(me.data.items[index]);
+                } else {
+                    me.data.checkedItems.splice(index,1)
+                }
+            };
             if (me.data.onChange) {
                 me.onChange(me.data.value);
             };
@@ -37,7 +47,12 @@ export class CheckboxComponent extends FormFittingAbstract {
      * checkbox 返回值
      */
     getValue() {
-        return this.data.value;
+        if(this.data.items && this.data.items.length > 0) {
+            return this.data.checkedItems;
+        } else {
+            return this.data.value;
+        }
+
     }
 
     /**

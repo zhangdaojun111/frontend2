@@ -61,20 +61,29 @@ export class FormNormalYComponent extends BiBaseComponent{
     renderFitting() {
 
         const groupYFitting = [
-            {name: 'field', option: {
-                type: 'autoComplete',
-                me: this,
-                data: {
-                    onSelect: this.getValue.bind(this)
-                },
-                container: 'y-item'
+            {name: 'field',
+                option: {
+                    type: 'autoComplete',
+                    me: this,
+                    data: {
+                        onSelect: this.getValue.bind(this)
+                    },
+                    container: 'y-item'
             }},
-            {name: 'type', option: {type: 'select',data: {
-                options:[
-                    {value: 'line', name: '折线图'},
-                    {value: 'bar', name: '柱状图'}
-                ]
-            }, me: this, container: 'y-item'}}
+            {name: 'type',
+                option: {
+                    type: 'select',
+                    data: {
+                        value:'line',
+                        options:[
+                            {value: 'line', name: '折线图'},
+                            {value: 'bar', name: '柱状图'}
+                        ],
+                        onChange: this.getValue.bind(this)
+                    },
+                    me: this,
+                    container: 'y-item'}
+            }
         ];
         this.yAxis = groupFitting(groupYFitting);
     }
@@ -95,7 +104,14 @@ export class FormNormalYComponent extends BiBaseComponent{
      * 获取y轴的数据
      */
     getValue(data) {
-        this.data.field = data;
-        Mediator.publish('bi:chart:form:update', {type:'update-y'},this.data);
+        if (this.yAxis) {
+            this.data.field = {
+                areaStyle: 0,
+                group:0,
+                field: this.yAxis.field.getValue(),
+                type: this.yAxis.type.getValue() === 'line'? {'name':'折线图',type:'line'} : {'name':'柱状图',type:'bar'}
+            };
+            Mediator.publish('bi:chart:form:update', {type:'update-y'},this.data);
+        }
     }
 }
