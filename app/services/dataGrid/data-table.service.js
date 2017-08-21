@@ -45,8 +45,24 @@ export const dataTableService = {
     getWorkflowData: function ( data ) {
         return HTTP.post( 'get_workflow_records',data )
     },
-    //工作流操作
-    approveWorkflow: function ( data ) {
-        
+    //对应关系保存
+    saveForCorrespondence: function ( param ) {
+        return HTTP.post( 'update_correspondence',param )
+    },
+    //获取在途数据
+    getInProcessNum: function ( param ) {
+        return HTTP.post( 'get_on_passage_count',param )
+    },
+    //修改历史数据
+    getHistoryApproveData: function ( data ) {
+        return HTTP.post( 'get_update_history_data',data )
+    },
+    //获取部门数据
+    getDepartmentData: function ( data ) {
+        return HTTP.post( 'query_department_list',data )
+    },
+    //人员信息表请求数据
+    getUserData: function ( data ) {
+        return HTTP.post( 'query_user_list',data )
     }
 }

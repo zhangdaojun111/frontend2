@@ -27,6 +27,7 @@ export const TabService = {
             type:'post'
         })
     },
+
     deleteFavoriteItem:function (data) {
         let url = '/personal_view/';
         let para = Utils.formatParams(data);
@@ -37,6 +38,4 @@ export const TabService = {
             type:'post'
         })
     }
-
-
 };

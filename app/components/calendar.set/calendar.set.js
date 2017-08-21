@@ -11,6 +11,7 @@ import {CalendarService} from "../../services/calendar/calendar.service"
 import {CalendarSetService} from "../../services/calendar/calendar.set.service"
 import {UserInfoService} from '../../services/main/userInfoService';
 import MSG from '../../lib/msgbox';
+import {AutoSelect} from '../util/autoSelect/autoSelect';
 
 import {PMAPI} from '../../lib/postmsg';
 
@@ -76,6 +77,7 @@ let config = {
             this.actions.makeRows(this.data.initAllRows);
         },
         makeRows: function(param){
+            console.log(param);
             this.data.allRows = [];
             CalendarService.getReplace(this.data.tableId).then(res => {
                 if(res.error !== ''){
@@ -105,6 +107,7 @@ let config = {
                     }
                 }else {
                     for(let singleSetting of param['rows']){
+
                         this.data.allRows.push({
                             isSelected: singleSetting['isSelected']||false,
                             is_show_at_home_page: singleSetting['is_show_at_home_page'] === 1 ? true : false,
@@ -121,20 +124,21 @@ let config = {
                         })
                     }
                 }
-                console.log(this.data.allRows);
+                this.data.childComponents = [];
                 this.data.allRows.forEach((row, index) => {
+                    let isConfig = false;
                     if(this.data.rowTitle[index]['id'] && this.data.rowTitle[index]['dtype'] === '8' && this.data.replaceDropDown.length !== 0){
-                        this.data.isConfigField = true;
+                        isConfig = true;
                     }
+
                     let calendarSetItem = new CalendarSetItem({
                         rowData: row,
                         dropdown: this.data.dropdown,
                         dropdownForRes: this.data.dropdownForRes,
                         dropdownForCalendarChange: this.data.dropdownForCalendarChange,
                         replaceDropDown: this.data.replaceDropDown,
-                        isConfigField: this.data.isConfigField,
+                        isConfigField: isConfig,
                         rowTitle: this.data.rowTitle[index],
-                        //previewText: this.actions.returnShow(row['selectedOpts']),
 
                         recipients: this.data.recipients,
                         recipients_per: this.data.recipients_per,
@@ -144,9 +148,10 @@ let config = {
                     });
                     this.data.childComponents.push(calendarSetItem);
                     this.append(calendarSetItem, this.el.find('.set-items'));
+                    Mediator.emit('calendar-set:editor',{data:0});
                 })
             }).catch(err=>{
-                console.log('error',err);
+                //console.log('error',err);
             });
         },
 
@@ -200,16 +205,17 @@ let config = {
                 }
             }
             CalendarSetService.resetCalendar(tableId,this.data.allRows).then(res=>{
-
-                if(res['succ'] === "1"){
-                    MSG.showTips('重置成功');
-                    this.data.isEdit=false;
-                    //this.saveStatus.emit( res['success'] === "1" );
+                if(res['success'] === 1){
+                    MSG.alert('重置成功');
                     setTimeout( ()=>{
-                        CalendarSetService.getColumnList(this.data.tableId)
-                    },100 )
-                }else  if(res['succ'] === 0){
-                    MSG.showTips('重置失敗');
+                        // CalendarSetService.getColumnList(this.data.tableId).then(res => {
+                        //     console.log(res);
+                        // })
+                        this.el.find('.set-items').empty();
+                        this.actions.getColumnListData(this.data.tableId);
+                    },200 )
+                }else  if(res['success'] === 0){
+                    MSG.alert('重置失敗');
                     //MSG.alert(res['error']);
                     // this.saveStatus.emit( res['success'] === "0" );
                 }
@@ -219,14 +225,6 @@ let config = {
         saveSetting(tableId,param){
             // 判断提醒开启时收件人不为空
             for( let data of param ){
-                if( ( data.email.email_status === '1' && data.email.receiver.length === 0 ) || ( data.sms.sms_status === '1' && data.sms.receiver.length === 0 ) ){
-                    MSG.alert( "已开启提醒的收件人不能为空" );
-                    return;
-                }
-                if( ( data.email.email_status === '1' && data.email.remind_time.length === 0 ) || ( data.sms.sms_status === '1' && data.sms.remind_time.length === 0 ) ){
-                    MSG.alert( "已开启提醒的提醒时间不能为空" );
-                    return;
-                }
                 if( data.is_show_at_home_page && !data.selectedRepresents ){
                     MSG.alert( "如果首页显示勾选需要选择代表字段。" );
                     return;
@@ -260,23 +258,24 @@ let config = {
                     }
                 }
             }
-            console.log(tableId, param);
             CalendarService.saveCalendarTable(tableId,param).then(res=>{
-                console.log(res);
                 if(res['succ'] === 1){
                     console.log('success');
-                    MSG.showTips("保存成功");
+                    MSG.alert("保存成功");
                     setTimeout( ()=>{
-                        CalendarSetService.getColumnList(this.data.tableId)
-                    },100 );
+                        //CalendarSetService.getColumnList(this.data.tableId)
+                        this.el.find('.set-items').empty();
+                        this.actions.getColumnListData(this.data.tableId);
+                    },500 );
 
                 }else  if(res['succ'] === 0){
                     MSG.alert(res['error']);
                 }
             });
-
+            this.el.find(".hide-btns").css("visibility","hidden");
+            this.el.find(".set-btn").removeClass("disabled");
+            Mediator.emit('calendar-set:editor',{data:-1});
         },
-
 
         getColumnListData: function (tableId) {
             CalendarSetService.getColumnList(tableId).then(res => {
@@ -306,38 +305,58 @@ let config = {
                         }
                     }
                 });
-                UserInfoService.getAllUsersInfo().then(user => {
-                    this.data.copypeople = [];
-                    for( let data of user.rows ){
-                        this.data.copypeople.push( {name:data.name,id:data.id} );
-                    }
-                });
-
-                CalendarSetService.getEmailSetting().then(res => {
-                    this.data.emailAddressList = [];
-                    for(let x in res['data']){
-                        this.data.emailAddressList.push({
-                            name:res['data'][x]['host']+'('+res['data'][x]['user']+')',
-                            id:res['data'][x]['id']?res['data'][x]['id']:''
-                        });
-                        if(res['data'][x]['is_default'] === 1){
-                            this.data.emailAddress = res['data'][x]['id'];
-                        }
-                    }
-                });
+                // UserInfoService.getAllUsersInfo().then(user => {
+                //     this.data.copypeople = [];
+                //     for( let data of user.rows ){
+                //         this.data.copypeople.push( {name:data.name,id:data.id} );
+                //     }
+                // });
+                //
+                // CalendarSetService.getEmailSetting().then(res => {
+                //     this.data.emailAddressList = [];
+                //     for(let x in res['data']){
+                //         this.data.emailAddressList.push({
+                //             name:res['data'][x]['host']+'('+res['data'][x]['user']+')',
+                //             id:res['data'][x]['id']?res['data'][x]['id']:''
+                //         });
+                //         if(res['data'][x]['is_default'] === 1){
+                //             this.data.emailAddress = res['data'][x]['id'];
+                //         }
+                //     }
+                // });
 
             });
         }
     },
     afterRender: function() {
-        this.el.css({width: '100%'});
+        this.el.css({width: '100%',height:"100%"});
         this.el.find('iframe').css("width","100%");
 
         if(window.config.table_id) {
             this.data.tableId = window.config.table_id;
             this.actions.getColumnListData(this.data.tableId);
         }
+        UserInfoService.getAllUsersInfo().then(user => {
+            this.data.copypeople = [];
+            for( let data of user.rows ){
+                this.data.copypeople.push( {name:data.name,id:data.id} );
+            }
+        });
+
+        CalendarSetService.getEmailSetting().then(res => {
+            this.data.emailAddressList = [];
+            for(let x in res['data']){
+                this.data.emailAddressList.push({
+                    name:res['data'][x]['host']+'('+res['data'][x]['user']+')',
+                    id:res['data'][x]['id']?res['data'][x]['id']:''
+                });
+                if(res['data'][x]['is_default'] === 1){
+                    this.data.emailAddress = res['data'][x]['id'];
+                }
+            }
+        });
         Mediator.on('calendar-set-left:calendar-set', data => {
+
             this.data.tableId = data.table_id;
             this.actions.getColumnListData(data.table_id);
         });
@@ -358,8 +377,10 @@ let config = {
         }).on('click', '.save-btn', () => {
             let newAllRowsData = [];
             for(let obj of this.data.childComponents) {
+                console.log(obj.data.rowSetData);
                 newAllRowsData.push(obj.data.rowSetData);
             }
+            console.log(newAllRowsData);
             _this.actions.saveSetting(this.data.tableId, newAllRowsData);
         });
 

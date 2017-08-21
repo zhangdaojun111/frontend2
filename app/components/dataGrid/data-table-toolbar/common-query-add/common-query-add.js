@@ -26,7 +26,7 @@ let addQuery = {
     },
     afterRender: function () {
         if (this.data.name) {
-            this.el.find('.query-name-input').val(this.data.name);
+            $('.input').val(this.data.name);
         }
         this.actions.btnClick();
     },

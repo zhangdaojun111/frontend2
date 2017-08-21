@@ -1,6 +1,5 @@
 import Component from '../../../lib/component';
 import '../base-form/base-form.scss';
-import Mediator from '../../../lib/mediator';
 import {FormService} from "../../../services/formService/formService"
 import template from './input-control.html'
 
@@ -18,7 +17,7 @@ let config={
             let regErrorMsg;
             let val = this.el.find("input").val();
             this.data.value=val;
-            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
+            _.debounce(function(){_this.events.changeValue(_this.data)},200)();
             let func = this.data.func;
             let reg = this.data.reg;
             let required = this.data.required
@@ -146,29 +145,49 @@ let config={
             }
         }
     },
-    firstAfterRender(){
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data)
+            }
+        },
+        {
+            event: 'mouseenter',
+            selector: 'input',
+            callback: function(){
+                this.el.find("input").css({"border":"1px solid rgb(169, 210, 255)","background-color":"rgb(255, 255, 255)"});
+            }
+        },
+        {
+            event: 'focus',
+            selector: 'input',
+            callback: function(){
+                this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
+            }
+        },
+        {
+            event: 'blur',
+            selector: 'input',
+            callback: function(){
+                this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
+            }
+        },
+        {
+            event: 'mouseleave',
+            selector: 'input',
+            callback: function(){
+                this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
+            }
+        }
+    ],
+    afterRender() {
         let _this=this;
-        _this.el.on('click','.ui-history',function(){
-            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
-        });
         this.el.find('.search').on( 'input', _.debounce(function () {
             _this.actions.keyup();
         }, 200));
         /* setBorderColor*/
-        this.el.on('mouseenter', 'input', () => {
-            this.el.find("input").css({"border":"1px solid rgb(169, 210, 255)","background-color":"rgb(255, 255, 255)"});
-        });
-        this.el.on('focus', 'input', () => {
-            this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
-        });
-        this.el.on('blur', 'input', () => {
-            this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
-        });
-        this.el.on('mouseleave', 'input', () => {
-            this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
-        });
-    },
-    afterRender() {
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
             this.el.find('.ui-width').attr('disabled',true);
@@ -177,14 +196,13 @@ let config={
         }
     },
     beforeDestory(){
-        Mediator.removeAll('form:changeValue:'+this.data.tableId);
-        Mediator.removeAll('form:history:'+this.data.tableId);
+        this.el.off();
     }
 }
 
 class InputControl extends Component {
-    constructor(data){
-        super(config,data);
+    constructor(data,events){
+        super(config,data,events);
     }
 }
 

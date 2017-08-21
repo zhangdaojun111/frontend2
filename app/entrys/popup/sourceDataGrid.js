@@ -6,6 +6,7 @@ $(document).ready(function(){
         tableId: window.config.tableId || '',
         tableName: window.config.tableName || '',
         parentTableId: window.config.parentTableId || '',
+        parentTempId: window.config.parentTempId || '',
         parentRealId: window.config.parentRealId || '',
         rowId: window.config.rowId || '',
         fieldId: window.config.fieldId || '',
@@ -15,8 +16,9 @@ $(document).ready(function(){
         base_buildin_dfield: window.config.base_buildin_dfield || '',
         source_field_dfield: window.config.source_field_dfield || '',
         fieldContent: window.config.fieldContent || null,
+        correspondenceField: window.config.correspondenceField || '',
+        keyword: window.config.keyword || '',
     }
-    $( 'title' ).html( json.tableName || 'ERDS' );
     let DataTableAgGrid=new dataTableAgGrid( json );
     DataTableAgGrid.render($('#sourceDataGrid'));
 });

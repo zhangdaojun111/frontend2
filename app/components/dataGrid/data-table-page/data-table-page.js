@@ -1,8 +1,9 @@
 import Component from "../../../lib/component";
 import template from './data-table-page.html';
 import './data-table-page.scss';
-
+import {HTTP} from "../../../lib/http";
 import dataTableAgGrid from "../data-table-page/data-table-agGrid/data-table-agGrid"
+import {dataTableService} from "../../../services/dataGrid/data-table.service"
 let config = {
     template: template,
     data: {
@@ -10,41 +11,51 @@ let config = {
         tableName:'',
         isRenderIntrain: false
     },
-    actions: {},
+    actions: {
+        //获取在途数据
+        getInProcessNum: function () {
+            dataTableService.getInProcessNum( {table_id: this.data.tableId} ).then( res=>{
+                this.el.find( '.inProcessNum' )[0].innerHTML = res.total || 0;
+            } )
+            HTTP.flush();
+        },
+        //添加点击事件
+        addClick: function () {
+            this.el.find( '.tabTitle .left' ).on( 'click',()=>{
+                this.el.find( '.left' ).addClass( 'active' );
+                this.el.find('.right').removeClass('active');
+                this.el.find( '.page-group .dataTableAgGrid' )[0].style.display = 'block';
+                this.el.find( '.page-group .dataTableInTransit' )[0].style.display = 'none';
+            } )
+            this.el.find( '.tabTitle .right' ).on( 'click',()=>{
+                this.el.find( '.left' ).removeClass( 'active' );
+                this.el.find('.right').addClass('active');
+                this.el.find( '.page-group .dataTableAgGrid' )[0].style.display = 'none';
+                this.el.find( '.page-group .dataTableInTransit' )[0].style.display = 'block';
+                //渲染在途
+                if( !this.data.isRenderIntrain ){
+                    let obj = {
+                        tableId: this.data.tableId,
+                        tableName: this.data.tableName,
+                        tableType: 'in_process',
+                        viewMode: 'in_process'
+                    };
+                    this.append(new dataTableAgGrid(obj), this.el.find('#data-table-in-process'));
+                    this.data.isRenderIntrain = true;
+                }
+            } )
+        }
+    },
     afterRender: function (){
         let json = {
             tableId: this.data.tableId,
             tableName: this.data.tableName
         };
         this.append(new dataTableAgGrid(json), this.el.find('#data-table-agGrid'));
-        $('.tabContent').eq(0).show();
-        $('.tabTitle li').click(function() {
-            let i = $('.tabTitle li').index(this);
-            $('.tabContent').hide();
-            $('.tabContent').eq(i).show().siblings().hide();
 
-        });
-        $('.left-active').click(function () {
-            $(this).addClass('active');
-            $('.right-active').removeClass('active');
-        });
-        $('.right-active').click(function () {
-            $(this).addClass('active');
-            $('.left-active').removeClass('active');
-        });
-        //渲染在途
-        this.el.on( 'click','.dataTableInTransit',()=>{
-            if( !this.data.isRenderIntrain ){
-                let obj = {
-                    tableId: this.data.tableId,
-                    tableName: this.data.tableName,
-                    tableType: 'in_process',
-                    viewMode: 'in_process'
-                };
-                this.append(new dataTableAgGrid(obj), this.el.find('.dataTableInTransitCon'));
-                this.data.isRenderIntrain = true;
-            }
-        } )
+        this.actions.addClick();
+        //获取在途数据
+        this.actions.getInProcessNum();
     }
 };
 

@@ -1,3 +1,8 @@
+/**
+ *@author yudeping
+ *枚举选项快捷添加
+ */
+
 import template from './add-item.html';
 let css = ``;
 css = css.replace(/(\n)/g, '')
@@ -56,7 +61,7 @@ let AddItem = {
             });
         }
     },
-    firstAfterRender(){
+    afterRender(){
         let _this=this;
         this.el.on('click','.ui-del',function(){//此处不能用箭头函数 会造成this指针丢失
             _this.actions.deleteItem($(this));

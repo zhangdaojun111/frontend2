@@ -14,8 +14,8 @@
         <div class="tit">当前节点</div>
         <div class="txt"><span>{{current_node}}</span></div>
         <div class="approval-control flex">
-            <div class="approval-btn approval-pass" id="app-pass">审批通过</div>
-            <div class="approval-btn-sel">
+            <div class="approval-btn approval-pass for-hide" id="app-pass">审批通过</div>
+            <div class="approval-btn-sel for-hide">
                 <div class="approval-curr-txt">驳回到</div>
                 <div class="approval-sel-down">
                     <div class="approval-btn btn-transition1" id="app-rej-up">上一级</div>
@@ -23,13 +23,16 @@
                     <div class="approval-btn btn-transition3" id="app-rej-start">发起人</div>
                 </div>
             </div>
-            <div class="approval-btn approval-add" id="app-add">加签</div>
+            <div class="approval-btn approval-add for-hide" id="app-add">加签</div>
+            <div class="approval-btn approval-pass for-hide" id="re-app">重新申请</div>
         </div>
     </div>
 
     <div class="approval-info-item flex">
-        <div class="gz approval-btn">章</div>
-        <i class="workflow-icon icon-workflow-icon11"></i>
-        <div class="printBtn" onclick="window.print();">打印</div>
+        <div class="gz approval-btn for-hide">章</div>
+        <div  class=" printBtn" onclick="window.print();">
+            <i class="workflow-icon icon-workflow-icon11"></i>
+            打印
+        </div>
     </div>
 </div>

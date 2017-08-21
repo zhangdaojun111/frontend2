@@ -1,7 +1,6 @@
 import Component from '../../../lib/component';
 import template from './setting-textarea.html';
 import './setting-textarea.scss';
-import Mediator from '../../../lib/mediator';
 import 'jquery-ui/ui/widgets/button';
 import {PMAPI} from '../../../lib/postmsg';
 import popupSetting from './popup/popup';
@@ -12,7 +11,7 @@ let config = {
         value: {},
     },
     actions: {
-        openSettingDialog: function () {
+        openSettingDialog() {
             let choosedData = _.defaultsDeep({}, this.data.value);
             delete choosedData['-1'];
             popupSetting.data.choosedData = choosedData;
@@ -26,43 +25,51 @@ let config = {
                 this.actions.onSettingDataReturn(choosedData);
             });
         },
-        onSettingDataReturn: function (choosedData) {
+        onSettingDataReturn(choosedData) {
             choosedData['-1'] = choosedData['-1'].join('\n');
             this.data.value = choosedData;
-            Mediator.publish('form:changeValue:' + this.data.tableId, this.data);
+            this.events.changeValue(this.data);
             this.actions.fillData();
         },
-        fillData: function () {
+        fillData() {
             this.el.find('textarea').val(this.data.value['-1'] || '');
-        }
+        },
+        //周期规则默认值填充
+        loadSettingtextarea(data){
+
+        },
     },
-    afterRender: function () {
-        let _this=this;
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.button',
+            callback: function(){
+                this.actions.openSettingDialog();
+            }
+        }
+    ],
+    afterRender() {
         this.el.find('.ui-width').css('width',this.data.width);
         this.actions.fillData();
         this.el.find('.button').button({
             // disabled: true
         });
-        this.el.on('click', '.button', () => {
-            this.actions.openSettingDialog();
-        })
-        this.el.on('click','.ui-history',function(){
-            console.log(_this.data);
-            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
-        });
-        //周期规则默认值填充
-        Mediator.subscribe('form:loadSettingtextarea:'+this.data.tableId,()=>{
-
-        });
     },
-    beforeDestory: function () {
-
+    beforeDestory() {
+        this.el.off();
     }
 }
 
 class SettingTextareaControl extends Component {
-    constructor(data) {
-        super(config, data);
+    constructor(data,events) {
+        super(config, data,events);
     }
 }
 

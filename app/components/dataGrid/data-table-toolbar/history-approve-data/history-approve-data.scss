@@ -1,0 +1,132 @@
+@import "../../../../assets/scss/core/base";
+.history-approve{
+    min-width: 850px;
+    .history-tab{
+        padding:0 10px;
+        height: 40px;
+        line-height: 40px;
+        border-bottom: 10px solid #f2f2f2;
+        .history-tab-item {
+            display: block;
+            float: left;
+            margin: 0 5px;
+            font-size: 15px;
+            line-height: 39px;
+            cursor: pointer;
+            padding: 0 10px;
+            color: #666;
+            font-size: 12px;
+            &.active{
+                color: #0E7AEF;
+                border-bottom: 1px solid #0E7AEF;
+            }
+        }
+    }
+    .history-container {
+        padding: 0 10px;
+        .history-content{
+            display: none;
+            padding:10px 0;
+            &.active{
+                display: block;
+            }
+            .history-table-part {
+                overflow: hidden;
+                .history-table-title {
+                    cursor: pointer;
+                    height:35px;
+                    line-height:35px;
+                    color: #666;
+                    padding-left: 10px;
+                    background-color: #fafafa;
+                    border-bottom: 1px solid #f2f2f2;
+                    .img{
+                        display: inline-block;
+                        width: 20px;
+                        height: 20px;
+                        background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll center center transparent;
+                        position: relative;
+                        top: 6px;
+                        transform:rotate(-90deg);
+                        -ms-transform:rotate(-90deg);
+                        -moz-transform:rotate(-90deg);
+                        -webkit-transform:rotate(-90deg);
+                        -o-transform:rotate(-90deg);
+                        &.active{
+                            transform:rotate(0deg);
+                            -ms-transform:rotate(0deg);
+                            -moz-transform:rotate(0deg);
+                            -webkit-transform:rotate(0deg);
+                            -o-transform:rotate(0deg);
+                        }
+                    }
+                }
+                .history-table {
+                    display: none;
+                    .fieldName {
+                        width: 15%;
+                    }
+                    .oldValue {
+                        width: 20%;
+                    }
+                    .newValue {
+                        width: 38%;
+                    }
+                    .updateUser {
+                        width: 8%;
+                    }
+                    .updateTime {
+                        width: 18.45%;
+                    }
+                    .handlerName {
+                        width: 10%;
+                    }
+                    .handlerTime {
+                        width: 20%;
+                    }
+                    .approveResult {
+                        width: 45%;
+                    }
+                    .comment {
+                        width: 24.69%;
+                    }
+                    .history-table-header {
+                        width: 100%;
+                        span {
+                            text-align: center;
+                            display: block;
+                            float: left;
+                            line-height: 30px;
+                            border-bottom: 1px solid #f2f2f2;
+                            border-right: 1px solid #f2f2f2;
+                            font-weight: bold;
+                            &:last-child {
+                                border-right: none;
+                            }
+                        }
+                    }
+                    .history-table-body {
+                        width: 100%;
+                        .history-table-item {
+                            width: 100%;
+                            line-height: 30px;
+                            overflow: hidden;
+                            span {
+                                height: 30px;
+                                text-align: center;
+                                display: block;
+                                float: left;
+                                line-height: 30px;
+                                border-bottom: 1px solid #f2f2f2;
+                                border-right: 1px solid #f2f2f2;
+                                &:last-child {
+                                    border-right: none;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

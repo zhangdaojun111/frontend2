@@ -1,4 +1,7 @@
-//用于登录界面初始化与流程控制
+/**
+ * @author zhaoyan
+ * 打开登录界面
+ */
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
 import '../assets/scss/login.scss';
@@ -6,12 +9,10 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import {LoginService} from '../services/login/loginService';
 import {md5} from '../services/login/md5';
 import msgBox from '../lib/msgbox';
-import {RegisterComponent} from './register';
+
 
 function getLoginController() {
     return {
-        loginService:LoginService,
-        md5:md5,
         systemName:'',      //公司名称
         loginSize:"26px",
         versionInfo:{},     //后台获取的公司名称和版本信息
@@ -37,7 +38,7 @@ function getLoginController() {
 
         //检测浏览器是否可用
         browser_check: function (){
-            return this.loginService.support();    //检测浏览器
+            return LoginService.support();    //检测浏览器
         },
         //初始化登录表单控件
         formInit:function () {
@@ -72,14 +73,12 @@ function getLoginController() {
             //注册按钮
             this.$registerBtn.on('click', () => {
                 $(window).attr('location','/register_index');
-                // RegisterComponent.show();
             });
             //忘记密码，找回密码入口
             this.$findPwBtn.on("click", () => {
                 this.$whitePanel.hide();
                 this.$oppositePanel.fadeIn();
                 this.isOpposite = true;
-
             });
 
             //反面面板关闭返回正面面板
@@ -231,9 +230,9 @@ function getLoginController() {
         userLogin:function (username,password) {
             let data = {
                 username:username,
-                password:this.md5(password)
+                password:md5(password)
             };
-            let replyMsg = this.loginService.userLogin(data);
+            let replyMsg = LoginService.userLogin(data);
             replyMsg.done((result) => {
                 if(result.success === 1){
                     //登录成功，设置缓存信息，跳转至index页面

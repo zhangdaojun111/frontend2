@@ -1,112 +1,3 @@
-*{
-  box-sizing: border-box;
-}
-.workflow-icon{
-  background: url(../../assets/images/workflow/workflow-icon.png) no-repeat;
-}
-.icon-workflow-icon1 {
-
-  background-position: -26px 0px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon10 {
-
-  background-position: -52px -52px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon11 {
-
-  background-position: 0px -26px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon12 {
-
-  background-position: -26px -26px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon13 {
-
-  background-position: -52px 0px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon14 {
-
-  background-position: -52px -26px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon15 {
-
-  background-position: 0px -52px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon16 {
-
-  background-position: -26px -52px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon17 {
-
-  background-position: 0px 0px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon2 {
-
-  background-position: -104px 0px;
-  width: 14px;
-  height: 14px;
-}
-.icon-workflow-icon3 {
-
-  background-position: -78px -26px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon4 {
-
-  background-position: -78px -52px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon5 {
-
-  background-position: 0px -78px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon6 {
-
-  background-position: -26px -78px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon7 {
-
-  background-position: -52px -78px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon8 {
-
-  background-position: -78px 0px;
-  width: 16px;
-  height: 16px;
-}
-.icon-workflow-icon9 {
-
-  background-position: -78px -78px;
-  width: 16px;
-  height: 16px;
-}
-
 
 body{
   background:rgb(235,235,235);
@@ -230,6 +121,7 @@ body{
       .workflow-look{
         margin-left: 40px;
         .previewBtn{
+          cursor: pointer;
           padding: 0 7px;
           height: 40px;
           display: flex;
@@ -277,6 +169,10 @@ body{
     box-shadow: none;
     color: #fff;
     margin-right: 5px;
+  }
+  #workflowClose{
+    background: #fff;
+    color: #000;
   }
 }
 #workflow-form{

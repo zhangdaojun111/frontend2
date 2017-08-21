@@ -12,6 +12,7 @@ let config = {
         gridoptions: null,
         fields: [],
         myGroup:[],
+        close: function () {}
     },
     group:[],
     actions: {
@@ -29,7 +30,7 @@ let config = {
         },
     },
     afterRender: function (){
-        $('.group-data-list, .grouping-data-list').sortable({
+        this.el.find('.group-data-list, .grouping-data-list').sortable({
             connectWith: ".connectedSortable",
             stop: ()=> {
                 this.data.group = [];
@@ -47,6 +48,16 @@ let config = {
             }
         }).disableSelection();
         this.actions.inputSearch();
+
+        //关闭
+        this.el.find( '.closeGroup' ).on( 'click',()=>{
+            this.data.close();
+        } )
+
+        //重置
+        this.el.find( '.resetGroup' ).on( 'click',()=>{
+            console.log("重置分组")
+        } )
     }
 }
 

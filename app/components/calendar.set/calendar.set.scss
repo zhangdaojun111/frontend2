@@ -1,6 +1,6 @@
-$boder-color: #ddd;
 .calendar-set-container {
     width: 100%;
+    height:100%;
     .set-tool {
         margin: 8px 10px;
         .set-btn {
@@ -26,16 +26,26 @@ $boder-color: #ddd;
         }
     }
     .calendar-set-content {
+        height:85%;
         table{
             width:100%;
+            .table-set-checkbox{
+                width: 100px !important;
+            }
+            .table-set-multile{
+                width:300px !important;
+            }
             .set-table-head{
-                width: calc(9.5%);
-                min-width: 90px;
+                width: 138px;
                 text-align: center;
                 line-height: 30px;
                 border: 1px solid #C1CACA;
                 margin:0px !important;
             }
+        }
+        .set-items {
+            max-height: 520px;
+            overflow: auto;
         }
         .time-calendar-set{
             width: 400px;
@@ -51,6 +61,13 @@ $boder-color: #ddd;
                 color: #949191;
             }
         }
+        .calendar-setting-content{
+            height:100%;
+        }
+        .set-items{
+            height:100%;
+        }
 
     }
+
 }

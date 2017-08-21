@@ -27,12 +27,53 @@ let config = {
 
     },
     afterRender: function() {
+        this.data.fromDate = this.data.monthBodyDataList[0]['weekList'][0]['dataTime'];
         this.el.css({"height":"100%","width":"100%"});
         this.append(new CalendarTableHeader({headTitle: this.data.HeadList, type:'month'}), this.el.find('.month-head'));
-
         this.data.monthBodyDataList.forEach((item,index) => {
             this.append(new CalendarTableBody({item,index}), this.el.find('.month-body'));
         });
+        let temp;
+        // this.el.find(".task-item").parent().draggable({
+        //     start:function(){
+        //         // temp = $(this);
+        //         // $(this).css({'width':$(this).parent().width()});
+        //         //$(this).hide();
+        //         // event.clientY
+        //     },
+        //     // cancel: "",
+        //     revert: "invalid",
+        //     parent:this.el.find(".month-body"),
+        //     connectToSortable: $( ".task-list" ),
+        //     // containment: "document",
+        //     // helper: "clone",
+        //     cursor: "move",
+        //     helper:function(){
+        //         $(this).css("index-z","2048");
+        //         console.log($(this));
+        //         return $(this);
+        //         // "<div><div class='task-item' style='width:"+$(this).parent().width() +"px'>"+ $(this).html()+"</div></div>";
+        //     },
+        //
+        // });
+        // console.log(this.el.find('div.task-list'));
+        // this.el.find(".task-list").droppable({
+        //     accept: $(".task-item"),
+        //     activeClass: "",
+        //     drop: function(event, ui) {
+        //         $(this).mouseup(function(){
+        //             console.log($(this),ui.draggable);
+        //         })
+        //     },
+        //     deactivate( event, ui ){
+        //         // console.log("!!!!!!");
+        //     }
+        // });
+        // this.el.find( ".task-list" ).sortable({
+        //     revert: true
+        // });
+        // this.el.find(".task-item").disableSelection();
+
     }
 };
 

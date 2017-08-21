@@ -100,7 +100,7 @@ export const FormService={
         HTTP.flush();
         return res;
     },
-  
+
     //身份证验证
     checkCard (card) {
         let result = true;
@@ -416,6 +416,12 @@ export const FormService={
         HTTP.flush();
         return res;
     },
+    //获取系统表单配置
+    getSysConfig() {
+        let res=HTTP.get('sysConfig');
+        HTTP.flush();
+        return res;
+    },
     //获取用户打印页眉偏好
     getPrintSetting(){
         let res=HTTP.post('user_preference',{action:'get'});
@@ -442,9 +448,8 @@ export const FormService={
         return HTTP.post( 'get_form_dynamic_data',json )
     },
     //立即获得表单动态数据
-    //获取表单动态数据
     getDynamicDataImmediately(json) {
-        let res=HTTP.post( 'get_form_dynamic_data',json )
+        let res=HTTP.post('get_form_dynamic_data',json)
         HTTP.flush();
         return res;
     },
@@ -476,11 +481,13 @@ export const FormService={
     deleteUploaded(json) {
         return HTTP.postImmediately('/delete_attachment/',json);
     },
+    getAttachment(json){
+        return HTTP.postImmediately('/query_attachment_list/',json);
+    },
 
     //重新拼装下拉框格式
-    createSelectJson(json,multi){
-        console.log('multi');
-        console.log(json);
+    createSelectJson(json,multi,isMultiBuild){
+
         let data={list:[],choosed:[]};
         if(json.is_view){
             data['editable']=false;
@@ -488,20 +495,37 @@ export const FormService={
             data['editable']=true;
         }
         data['width']=json['width'];
-        for(let key in json['options']){
-            if(json['value'] && ((!multi && json['value']==json['options'][key]['value']) || (multi && json['value'].length > 0 && json['value'].indexOf(json['options'][key]['value'] != -1)))){
-                data.choosed.push({
-                    id:json['options'][key]['value'],
-                    name:json['options'][key]['label'],
-                });
+        let options;
+        if(isMultiBuild){
+            options=json.is_view?json.isViewOptions:(json.options2 || json.options);
+        }else{
+            options=json['options'];
+        }
+        for(let key in options){
+            if(json['value']){
+                if(multi && json['value'].length>0){
+                    for(let i in json['value']){
+                        if(json['value'][i] == options[key]['value']){
+                            data.choosed.push({
+                                id:options[key]['value']||'',
+                                name:options[key]['label']||'',
+                            });
+                        }
+                    }
+                }else if(json['value'] == options[key]['value']){
+                    data.choosed.push({
+                        id:options[key]['value']||'',
+                        name:options[key]['label']||'',
+                    });
+                }
             }
             data.list.push({
-                id:json['options'][key]['value'],
-                name:json['options'][key]['label'],
-                // py:json['options'][key]['py'].join(','),
+                id:options[key]['value']||'',
+                name:options[key]['label']||'',
+                py:_.isArray(options[key]['py'])?options[key]['py'].join(','):'',
             });
         }
-        if(data.list[0]['id'] && data.list[0]['id'] != '请选择' && !multi){
+        if(!(data.list[0]['id']=='') && data.list[0]['id'] != '请选择' && !multi){
             data.list.unshift({id:'',name:''});
         }
         data.multiSelect=multi?true:false;

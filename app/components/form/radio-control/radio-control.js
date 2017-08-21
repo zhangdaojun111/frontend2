@@ -1,56 +1,69 @@
+/**
+ *@author yudeping
+ *单选控件
+ */
+
 import Component from '../../../lib/component';
-import Mediator from "../../../lib/mediator";
 import './radio-control.scss';
 import template from './radio-control.html'
 let config={
     template:template,
-    firstAfterRender(){
-        let _this=this;
-        this.el.on('click','.df-input-radio',function(event){
-            _this.data.value=event.target.value;
-            _.debounce(function(){Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data)},200)();
-            for(let obj of _this.data.group){
-                if(obj.value==event.target.value){
-                    obj['checked']=true;
-                }else{
-                    obj['checked']=false;
-                }
+    actions:{
+        changeOption(res){
+            if( this.data.dfield && res == this.data.dfield ){
+                this.data.value = [];
+                this.reload();
             }
-            _this.reload();
-        })
-
-        this.el.on('click','.add-item',function(){
-            _.debounce(function(){Mediator.publish('form:addItem:'+_this.data.tableId,_this.data)},200)();
-        })
-
-        Mediator.subscribe('form:changeOption:'+_this.data.tableId,function(data){
-            if( _this.data.dfield && res == _this.data.dfield ){
-                _this.data.value = [];
-                _this.reload();
-            }
-        });
-
-        this.el.on('click','.ui-history',function(){
-            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
-        });
+        }
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.add-item',
+            callback: function(){
+                this.events.addItem(this.data)
+            }
+        },
+        {
+            event: 'click',
+            selector: '.df-input-radio',
+            callback: function(event){
+                this.data.value=event.value;
+                _.debounce(()=>{
+                    this.events.changeValue(this.data);
+                },200)();
+                for(let obj of this.data.group){
+                    if(obj.value==event.value){
+                        obj['checked']=true;
+                    }else{
+                        obj['checked']=false;
+                    }
+                }
+                this.reload();
+            }
+        }
+    ],
     afterRender(){
         if(this.data.is_view){
-            this.el.find('.df-input-label').attr('disabled',true);
+            this.el.find('.df-input-radio').attr('disabled',true);
         }else{
-            this.el.find('.df-input-label').attr('disabled',false);
+            this.el.find('.df-input-radio').attr('disabled',false);
         }
     },
     beforeDestory(){
-        Mediator.removeAll('form:changeValue:'+this.data.tableId);
-        Mediator.removeAll('form:changeOption:'+this.data.tableId);
-        Mediator.removeAll('form:history:'+this.data.tableId);
-        Mediator.removeAll('form:addItem:'+this.data.tableId);
+        this.el.off();
     }
 }
 class RadioControl extends Component {
-    constructor(data){
-        super(config,data);
+    constructor(data,events){
+        super(config,data,events);
     }
 }
 

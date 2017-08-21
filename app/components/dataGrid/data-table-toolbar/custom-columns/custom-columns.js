@@ -22,7 +22,10 @@ let config = {
         tableId: '',
         dragFields: [],
         hideFields: [],
-        agGrid:null
+        agGrid:null,
+        close: function () {
+            
+        }
     },
     actions: {
         //使状态同步
@@ -107,13 +110,15 @@ let config = {
                     }
                 }
             }
-            let save = [];
             for( let s of state ){
                 if( fieldArr.indexOf( s.colId )==-1 ){
                     arr.unshift( s );
                 }
-                if( this.data.dragFields.indexOf( s.colId )!=-1 ){
-                    save.push( s.colId )
+            }
+            let save = [];
+            for( let a of arr ){
+                if( this.data.dragFields.indexOf( a.colId )!=-1 ){
+                    save.push( a.colId )
                 }
             }
             console.log( "列排序数据保存" )
@@ -284,13 +289,13 @@ let config = {
     },
     afterRender: function (){
         //初始化拖拽
-        $( "#dragCustom" ).sortable({
+        this.el.find( "#dragCustom" ).sortable({
             items: "li:not(.custom-disabled)",
             scroll: true
         });
-        $( "#dragCustom" ).disableSelection();
+        this.el.find( "#dragCustom" ).disableSelection();
 
-        $('#dragCustom').bind('sortstop', (event)=> {
+        this.el.find('#dragCustom').bind('sortstop', (event)=> {
             this.actions.dragAction();
         });
 
@@ -307,6 +312,10 @@ let config = {
         this.actions.inputSearch();
         //添加全选事件
         this.actions.selectAllClick();
+        //关闭
+        this.el.find( '.closeCustom' ).on( 'click',()=>{
+            this.data.close();
+        } )
     }
 }
 

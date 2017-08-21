@@ -17,7 +17,6 @@ let config = {
         leftSelect:'0',
         rightSelect:'0',
         relationSelect:'',
-        inputBoxTitle:'',
         inputBoxName:'',
         inputBoxValue:'',
     },
@@ -56,11 +55,12 @@ let config = {
         setInputType: function(type) {
             let inputType;
             switch (type) {
-                case "datetime": inputType = 'date'; break;
+                case "datetime": inputType = 'datetime-local'; break;
                 case "text": inputType = 'text'; break;
                 case "number": inputType = 'number'; break
             }
             this.inputNextObject.attr("type",inputType);
+            this.inputNextObject.attr("title",type);
         },
         setSelectValue: function(type) {
             let optionHtmlOne = `<option value="$regex">包含</option>
@@ -71,7 +71,7 @@ let config = {
                                 <option value="$gt">大于</option>
                                 <option value="$lt">小于</option>
                                 <option value="$ne">不等于</option>`;
-            let optionHtmlThree = `<option value="exact">等于</option>
+            let optionHtmlThree =  `<option value="exact">等于</option>
                                 <option value="$gt">大于</option>
                                 <option value="$lt">小于</option>
                                 <option value="$ne">不等于</option>`;
@@ -87,6 +87,7 @@ let config = {
     },
     afterRender: function() {
         this.actions.rendItem();
+        // this.epSearch = new expertSearch.expertSearch ();
         this.ulChecked = true;
         // this.data.inputList = this.el.find('.condition-search-input').val();
         // debugger
@@ -97,7 +98,6 @@ let config = {
             _this.actions.setInputType($(this).find('.searchType').html());
             _this.data.inputBoxName = $(this).find('.name').html();
             _this.data.inputBoxValue = $(this).find('.searchField').html();
-            _this.data.inputBoxTitle = $(this).find('.searchType').html();
             _this.data.relationSelect = _this.el.find('.condition-search-select.relation').val();
             _this.actions.hideList();
         }).on('change','.condition-search-select.relation',function(){
@@ -115,8 +115,10 @@ let config = {
                 _this.actions.hideList();
             }
             _this.actions.setInputObject($(this),$(this).parent().parent().find('.condition-search-input'))
-        }).on('click','.delete',()=>{
+        }).on('click','.condition-search-delete',()=>{
             this.actions.delete();
+            let length = $('.condition-search-add').length;
+            $('.condition-search-add').eq(length-1).css('display','inline-block');
         });
     }
 }

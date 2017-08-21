@@ -3,6 +3,8 @@ import template from './workflow.html';
 import './workflow.scss';
 import msgBox from '../../../lib/msgbox';
 import Mediator from '../../../lib/mediator';
+import {workflowService} from '../../../services/workflow/workflow.service';
+import jsplumb from 'jsplumb';
 
 let config = {
     template: template,
@@ -115,7 +117,7 @@ let config = {
                             class: styleClass,
                             startPoint: startPoint,
                             endPoint: endPoint,
-                            title: myTitle,
+                            title: text,
                             state: state,
                             canreject: can_reject,
                             eventname: event_name,//event_name,
@@ -407,7 +409,7 @@ let config = {
 
             if (this.data.pictureOption == '事务图') {
                 this.data.pictureOption = '节点图';
-                this.el.parents(".workflow-wrapper").find(".togglePic-text").text('节点图');
+                this.el.find(".togglePic-text").text('节点图');
                 this.el.find(".draged-item").each(function () {
                     let $this = $(this);
                     if (!$this.hasClass('draged-maodian')) {
@@ -419,7 +421,7 @@ let config = {
             }
             else {
                 this.data.pictureOption = '事务图';
-                this.el.parents(".workflow-wrapper").find(".togglePic-text").text('事务图');
+                this.el.find(".togglePic-text").text('事务图');
                 this.el.find(".draged-item").each(function () {
                     let $this = $(this);
                     if (!$this.hasClass('draged-maodian')) {
@@ -434,20 +436,17 @@ let config = {
     afterRender: function() {
         this.actions.init();
 
-        this.el.parents(".workflow-wrapper").find("#flow-node").on('click', '#zoomIn', () => {
+        this.el.on('click', '#zoomIn', () => {
             this.actions.zoomInNodeflow();
         });
-        this.el.parents(".workflow-wrapper").find("#flow-node").on('click', '#zoomOut', () => {
+        this.el.on('click', '#zoomOut', () => {
             this.actions.zoomOutNodeflow();
         });
-        this.el.parents(".workflow-wrapper").find("#flow-node").on('click', '#newWin', () => {
+        this.el.on('click', '#newWin', () => {
             this.actions.maximizeNodeflow();
         });
-        this.el.parents(".workflow-wrapper").find("#flow-node").on('click', '#togglePic', () => {
+        this.el.on('click', '#togglePic', () => {
             this.actions.togglePicture();
-        });
-        this.el.on('click', '#addFocus', () => {
-            console.log(123);
         });
     },
     beforeDestory: function(){
@@ -473,7 +472,7 @@ let WorkFlow={
         });
         let component = new WF(workFlowData);
         this.WorkFlow=component;
-        let el = $(elem);
+        let el = $("#flow-node");
         component.render(el);
     },
     rejectNode(e){
@@ -481,6 +480,19 @@ let WorkFlow={
     },
     requiredFields(e){
         this.WorkFlow.actions.requiredFields(e);
+    },
+    createFlow(o){
+        (async function () {
+            return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
+                flow_id:o.flow_id
+            }});
+        })()
+        .then(msg=>{
+            let component = new WF(msg.data[0]);
+            this.WorkFlow=component;
+            let el = $(o.el);
+            component.render(el);
+        })
     }
 };
 export default WorkFlow;

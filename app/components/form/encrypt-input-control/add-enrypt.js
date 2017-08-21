@@ -18,7 +18,7 @@ let AddItem = {
         //     return isExist;
         // },
     },
-    firstAfterRender:function(){
+    afterRender: function() {
         let _this=this;
         this.el.on('click', '#save', function () {
             let valPw = $(this).siblings("input").val();
@@ -27,14 +27,14 @@ let AddItem = {
             //         _this.el.find('#inputShow').val(`${valPw}`);
             // }
             console.log(valPw)
-                    PMAPI.sendToParent({
-                        type: PMENUM.close_dialog,
-                        key: _this.key,
-                        data: {
-                            newItems:valPw
-                        }
-                    })
-            });
+            PMAPI.sendToParent({
+                type: PMENUM.close_dialog,
+                key: _this.key,
+                data: {
+                    newItems:valPw
+                }
+            })
+        });
         this.el.on('click', ("#cancel"), ()=> {
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
@@ -44,8 +44,6 @@ let AddItem = {
                 }
             })
         });
-    },
-    afterRender: function() {
     },
 }
 export default AddItem

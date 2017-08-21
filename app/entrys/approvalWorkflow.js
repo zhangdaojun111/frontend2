@@ -24,61 +24,73 @@ import msgBox from '../lib/msgbox';
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import Grid from '../components/dataGrid/data-table-page/data-table-page';
 import {PMAPI,PMENUM} from '../lib/postmsg';
-import jsPlumb from 'jsPlumb';
-
+import jsplumb from 'jsplumb';
 
 WorkFlowForm.showForm();
 
-let serchStr = location.search.slice(1);
+let serchStr = location.search.slice(1),nameArr=[];
 let obj = {},focus=[],is_view;
 serchStr.split('&').forEach(res => {
     var arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
-if(obj.btnType==='view'){
-    is_view=1;
-}else{
-    is_view=0;
-};
 
-
-//审批工作流
-(async function () {
-    return workflowService.getWorkflowInfo({
-        url: '/get_workflow_info/',
-        data: {
-            flow_id: obj.flow_id,
-            record_id: obj.record_id
-        }
-    });
-})().then(res => {
-    Mediator.publish('workflow:getImgInfo', res);
-    Mediator.publish('workflow:gotWorkflowInfo', res);
-    let a=res.data[0].updateuser2focususer;
-    for(var i in a){
-        for(var j in a[i]){
-            focus.push(a[i][j]);
-        }
-    }
-    Mediator.publish('workflow:focused', focus);
-    (async function () {
-        return workflowService.getWorkflowInfo({url: '/get_all_users/'});
-    })().then(users => {
-        let nameArr=[];
-        for(var i in focus){
-            nameArr.push(users.rows[focus[i]].name);
-        }
-        $('#addFollowerList').text(`${nameArr}`);
-    });
-});
 
 
 //订阅form data
 Mediator.subscribe('workFlow:record_info', (res) => {
-    ApprovalHeader.showheader(res);
-    WorkflowRecord.showRecord(res);
+    ApprovalHeader.showheader(res.record_info);
+    WorkflowRecord.showRecord(res.record_info);
+    if(res.record_info.current_node!=window.config.name){
+        $('#approval-workflow').find('.for-hide').hide();
+    };
+    if(res.record_info.status==="已驳回到发起人"&&res.record_info.start_handler===window.config.name){
+        $('#approval-workflow').find('.for-hide').hide();
+        $('#approval-workflow').find('#re-app').show();
+    };
+    //审批工作流
+    (async function () {
+        return workflowService.getWorkflowInfo({
+            url: '/get_workflow_info/',
+            data: {
+                flow_id: obj.flow_id,
+                record_id: obj.record_id
+            }
+        });
+    })().then(result => {
+        Mediator.publish('workflow:getImgInfo', result);
+        Mediator.publish('workflow:gotWorkflowInfo', result);
+        let a=result.data[0].updateuser2focususer;
+        for(var i in a){
+            for(var j in a[i]){
+                focus.push(a[i][j]);
+            }
+        }
+        Mediator.publish('workflow:focused', focus);
+        (async function () {
+            return workflowService.getWorkflowInfo({url: '/get_all_users/'});
+        })().then(users => {
+            for(var i in focus){
+                nameArr.push(users.rows[focus[i]].name);
+            }
+            $('#addFollowerList').text(`${nameArr}`);
+            if(nameArr.indexOf(window.config.name)>-1&&window.config.name!=res.record_info.current_node){
+                console.log(123);
+                $('#approval-workflow').find('.for-hide').hide();
+                $('#approval-workflow').find('#re-app').hide();
+            };
+        });
+    });
+    
 });
 
+Mediator.subscribe("workflow:loaded",(e)=>{
+    if(e===1){
+        if(obj.is_focus==1||obj.btnType==='view'){
+            $('#approval-workflow').find('.for-hide').hide();
+        }
+    }
+});
 
 FormEntrys.createForm({
     el: '#place-form',
@@ -87,6 +99,7 @@ FormEntrys.createForm({
     is_view: is_view,
     from_approve: 1,
     from_focus: 0,
+    btnType:'none',
     table_id: obj.table_id
 });
 
@@ -101,7 +114,6 @@ function GetQueryString(name)
     var r = window.location.search.substr(1).match(reg);
     if(r!=null)return  unescape(r[2]); return null;
 }
-
 
 //审批操作
 const approveWorkflow = (para) => {
@@ -176,6 +188,34 @@ Mediator.subscribe('approval:rejToAny', (id) => {
         node_id: id,
     });
 });
+//驳回至发起人，重新发起
+Mediator.subscribe("approval:re-app", (msg) => {
+    let key=GetQueryString('key');
+    let formData=FormEntrys.getFormValue(obj.table_id);
+    if(formData.error){
+        msgBox.alert(`${formData.errorMessage}`);
+    }else{
+        let postData={
+            flow_id:obj.flow_id,
+            focus_users:JSON.stringify(focusArr)||[],
+            data:JSON.stringify(formData)
+        };
+        (async function () {
+            return await workflowService.createWorkflowRecord(postData);
+        })().then(res=>{
+            if(res.success===1){
+                msgBox.alert(`${res.error}`);
+            }else{
+                msgBox.alert(`失败：${res.error}`);
+            }
+            PMAPI.sendToParent({
+                type: PMENUM.close_dialog,
+                key:key,
+                data:{}
+            })
+        })
+    }
+});
 
 
 //获取盖章图片
@@ -208,5 +248,4 @@ Mediator.subscribe("workflow:delImg", (msg) => {
         let data = await workflowService.delStmpImg(msg);
     })();
 });
-
 

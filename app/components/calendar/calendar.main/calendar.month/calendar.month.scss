@@ -2,11 +2,8 @@
 .month-table {
     height: calc( 100% - 1px );
     width: 100%;
-    thead {
-
-    }
-    tbody {
-        height: 100%;
+    .month-body {
+        height: 100% !important;
         text-align: left!important;
     }
 }

@@ -5,14 +5,14 @@
         <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
     {{else}}
         <a href="javascript:void(0);" class="view-attached-list">共{{value.length}}个文件</a>
-        <!--{{#if is_view}}-->
+        {{#unless is_view}}
             <!--上传文件，截图上传-->
             <input type="file" class="selecting-file" style="display: none;" multiple>
             <button type="button" class='upload-file' value="Browse...">上传文件</button>
             <button type="button" class="shot-screen">截图上传</button>
-            <div class="get-screenshot"></div>
+            <div class="attachment-list-anchor"></div>
             <div class="upload-process-queue"></div>
-        <!--{{/if}}-->
+        {{/unless}}
     {{/if}}
 </div>
 

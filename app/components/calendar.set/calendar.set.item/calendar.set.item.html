@@ -1,12 +1,12 @@
 <tr class="singleRow">
-    <td class="set-table-item">
+    <td class="set-table-item table-item-checkbox">
         {{#if rowSetData.isSelected}}
         <input type="checkbox" disabled class="editor-items set-show-text-input" checked>
         {{else}}
         <input type="checkbox" disabled class="editor-items set-show-text-input" >
         {{/if}}
     </td>
-    <td class="set-table-item">
+    <td class="set-table-item table-item-checkbox">
         {{#if rowSetData.is_show_at_home_page}}
         <input type="checkbox" class="editor-items set-calendar-page-show-text" disabled checked>
         {{else}}
@@ -28,6 +28,7 @@
             {{#each dropdownForRes}}
             <option class="testoption" value="{{this.id}}">{{this.name}}</option>
             {{/each}}
+
         </select>
     </td>
     <td class="set-table-item">
@@ -46,16 +47,11 @@
         {{/if}}
         {{#if rowSetData.sms.sms_status}}
         <span>短信</span>
-        {{else}}
-        <span>设置提醒方式</span>
         {{/if}}
     </td>
-    <!--<td class="set-table-item">-->
-        <!--<a class="remind-type-editor" aria-disabled="true">编辑提醒方式</a>-->
-    <!--</td>-->
     <td class="set-table-item">
-        {{#if isConfigField}}
-        <select class="config-text" disabled>
+        {{#if isConfigText}}
+        <select class="editor-items config-text" disabled>
             {{#each replaceDropDown}}
             <option class="testoption" value="{{this.id}}">{{this.name}}</option>
             {{/each}}
