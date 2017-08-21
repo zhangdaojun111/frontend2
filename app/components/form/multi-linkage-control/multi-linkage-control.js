@@ -1,3 +1,9 @@
+/**
+ *@author yudeping
+ *多级内置控件
+ */
+
+
 import Component from '../../../lib/component'
 import Mediator from '../../../lib/mediator';
 import template from './multi-linkage-control.html'

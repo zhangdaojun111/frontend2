@@ -1,3 +1,8 @@
+/**
+ *@author yudeping
+ *选择器搜索模块
+ */
+
 import Component from "../../../lib/component";
 import Mediator from "../../../lib/mediator";
 import './searchBar.scss';

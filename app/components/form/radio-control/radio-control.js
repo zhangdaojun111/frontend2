@@ -1,3 +1,8 @@
+/**
+ *@author yudeping
+ *单选控件
+ */
+
 import Component from '../../../lib/component';
 import Mediator from "../../../lib/mediator";
 import './radio-control.scss';

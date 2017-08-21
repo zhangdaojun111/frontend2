@@ -1,3 +1,8 @@
+/**
+ *@author yudeping
+ *文本区控件
+ */
+
 import Component from '../../../lib/component';
 import Mediator from '../../../lib/mediator';
 import template from './textarea-control.html';

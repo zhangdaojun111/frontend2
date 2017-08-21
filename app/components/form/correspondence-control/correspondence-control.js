@@ -1,3 +1,8 @@
+/**
+ *@author yudeping
+ *对应关系控件
+ */
+
 import Component from '../../../lib/component'
 import Mediator from '../../../lib/mediator';
 import DataTableAgGrid from '../../dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
@@ -12,9 +17,9 @@ let config={
             tableId:this.data.value,
             parentTableId:this.data.tableId,
             parentTempId:this.data.temp_id,
-            rowId:this.data.parent_temp_id,
+            rowId:this.data.parent_temp_id || '',
             viewMode:'viewFromCorrespondence',
-            recordId:this.data.recordId,
+            recordId:this.data.recordId || '',
             correspondenceField:this.data.dfield,
         }
         let dataGrid=new DataTableAgGrid(config);

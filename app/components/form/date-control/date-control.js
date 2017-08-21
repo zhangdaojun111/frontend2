@@ -22,6 +22,7 @@ let config={
             this.el.find('.ui-width').attr('disabled',false);
         }
         //控制到年月日
+
         if(_this.data.value == ''){
             _this.el.find(".date_yy-mm-dd").val("年/月/日");
         }else{
@@ -29,9 +30,13 @@ let config={
             console.log(_this.data.value)
             console.log(typeof(_this.data.value))
 
-
         }
 
+        if(_this.data.value){
+            _this.el.find(".date_yy-mm-dd").val(_this.data.value);
+        }else{
+            _this.el.find(".date_yy-mm-dd").val("年/月/日");
+        }
         _this.el.find(".date_yy-mm-dd").datepicker({
             monthNamesShort: [ "一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月" ],
             dayNamesMin: [ "日","一","二","三","四","五","六" ],
