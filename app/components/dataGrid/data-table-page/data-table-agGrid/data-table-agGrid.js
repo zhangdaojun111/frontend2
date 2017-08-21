@@ -1426,7 +1426,7 @@ let config = {
                         this.data.temporaryCommonQuery = res.value
                         this.actions.appendQuerySelect()
                     } if(res.saveCommonQuery || res.onlyclose == true) {
-                        this.actions.getExpertSearchData()
+                        this.actions.getExpertSearchData(res.addNameAry)
                     }
                 })
             } )
