@@ -38,31 +38,6 @@ const cellTypes = {
 let config = {
     template: template,
     actions: {},
-
-};
-
-export class CanvasCellComponent extends BiBaseComponent {
-
-    constructor(cell) {
-        config.data = cell.chart ? cell.chart : null;
-        config.data.biUser = window.config.bi_user === 'client' ? false : true;
-        super(config);
-        this.cell = cell;
-        this.loadData = false;
-    }
-
-    /**
-     * 动态渲染组件 通过this.cellType 决定渲染具体的图表
-     */
-    renderCell() {
-        this.el.find('.cell').css(this.cell.size);
-        if (this.cell['chart']['assortment']) {
-            let cellComponent = new cellTypes[this.cell['chart']['assortment']](this.cell);
-            let cellContainer = this.el.find('.cell-chart');
-            cellComponent.render(cellContainer);
-        }
-    }
-
     afterRender() {
         this.renderCell();
         if (window.config.bi_user !== 'client') {
@@ -101,20 +76,41 @@ export class CanvasCellComponent extends BiBaseComponent {
 
         // 返回(下穿)上一层
         this.el.on('click', '.back-floor-btn', (event) => {
-            console.log('xxxxxxxxxxxxxxxxxxxxxxxxxx');
             let deepComponentId = this.el.find('.cell-chart').attr('component');
             Mediator.publish(`bi:deep${deepComponentId}:cell`, true);
             return false;
         })
 
-    }
-
+    },
     /**
      * 等CanvasCellComponent组件渲染完成后，在动态渲染组件
      */
-    firstAfterRender() {
-    };
+    firstAfterRender() {}
 
+};
+
+export class CanvasCellComponent extends BiBaseComponent {
+
+    constructor(cell) {
+        config.data = cell.chart ? cell.chart : null;
+        config.data.biUser = window.config.bi_user === 'client' ? false : true;
+        super(config);
+        this.cell = cell;
+        this.loadData = false;
+    }
+
+    /**
+     * 动态渲染组件 通过this.cellType 决定渲染具体的图表
+     */
+    renderCell() {
+        console.log()
+        this.el.find('.cell').css(this.cell.size);
+        if (this.cell['chart']['assortment']) {
+            let cellComponent = new cellTypes[this.cell['chart']['assortment']](this.cell);
+            let cellContainer = this.el.find('.cell-chart');
+            cellComponent.render(cellContainer);
+        }
+    }
     /**
      *画布块拖拽，缩放
      */
