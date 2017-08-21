@@ -10,6 +10,7 @@ import agGrid from "../../agGrid/agGrid";
 let config = {
     template: template,
     dataShow:[],
+    recordHistory:[],
     trigger_work_records:[],
     data: {
         table_id:'',
@@ -30,8 +31,9 @@ let config = {
                 real_id: this.data.real_id,
             }
             dataTableService.getHistoryApproveData(obj).then( res=>{
+                debugger
                 if( res.record_history && res.record_history.length > 0 ){
-                    _this.dataShow = res.record_history;
+
                 }
                 _this.trigger_work_records = res.trigger_work_records || [];
                 if( res.history_data && res.history_data.length > 0 ){
@@ -41,10 +43,7 @@ let config = {
                         'history_data': res.history_data
                     })
                 }
-                _this.actions.renderTable()
-                // _this.dataShow.forEach((row) => {
-                //     _this.append(new historyTable(row), _this.el.find('.history-table-box.amend'));
-                // });
+                // _this.actions.renderTable()
             })
             HTTP.flush();
             this.el.on('click','.history-tab-item',function() {

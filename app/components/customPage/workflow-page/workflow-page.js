@@ -311,6 +311,46 @@ let config = {
             }
             return json;
         },
+        getExpertSearchData: function (addNameAry) {
+            let obj = {'actions':JSON.stringify( ['queryParams'] ),'table_id':this.data.tableId};
+            dataTableService.getPreferences( obj ).then( res=>{
+                this.el.find('.dataGrid-commonQuery-option').remove();
+                this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="100" value="常用查询">常用查询</option>`)
+                res.rows.forEach((row) => {
+                    this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
+                });
+                this.data.commonQueryData = res.rows;
+                if(addNameAry && addNameAry.length != 0){
+                    this.data.commonQueryData.forEach((item)=>{
+                        for(let i = 0; i < addNameAry.length; i++) {
+                            if(item.name == addNameAry[i]){
+                                this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
+                                this.el.find('.dataGrid-commonQuery-select').val(item.name);
+                            }
+                        }
+                    })
+                }
+                //第一次请求footer数据
+                // if( this.data.firstGetFooterData ){
+                //     if( this.data.common_filter_id ){
+                //         for( let r of res.rows ){
+                //             if( r.id == this.data.common_filter_id ){
+                //                 this.data.filterParam = {
+                //                     filter: JSON.parse(r.queryParams),
+                //                     is_filter: 1,
+                //                     common_filter_id: this.data.common_filter_id,
+                //                     common_filter_name: r.name
+                //                 }
+                //                 $('.dataGrid-commonQuery-select').val(r.name);
+                //             }
+                //         }
+                //     }
+                //     this.data.firstGetFooterData = false;
+                //     this.actions.getFooterData();
+                // }
+            } );
+            HTTP.flush();
+        },
         //根据偏好返回agGrid sate
         calcColumnState: function () {
             let gridState = this.agGrid.gridOptions.columnApi.getColumnState();
