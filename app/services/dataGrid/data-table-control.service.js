@@ -556,4 +556,22 @@ export const dgcService = {
         // console.log( arr )
         agGrid.gridOptions.columnApi.setColumnState( arr );
     },
+    //判断Object是否相等
+    checkObejctNotEqual(obj1,obj2){
+        let o1=Object.assign({},obj1);
+        let o2=Object.assign({},obj2);
+        if(Object.prototype.toString.call(o1)!='[object Object]'){
+            if(o1 != o2){
+                return true;
+            }else{
+                return false;
+            }
+        };
+        if(JSON.stringify(o1) == JSON.stringify(o2)){
+            return false;
+        }else{
+
+            return true;
+        }
+    }
 }

@@ -158,6 +158,8 @@ let config = {
         editMode: false,
         //上一次操作状态
         lastGridState: [],
+        //编辑模式对比原始数据
+        originRowData: {}
     },
     //生成的表头数据
     columnDefs: [],
@@ -354,10 +356,10 @@ let config = {
                             break;
                         case 'Buildin':
                         case 'Select':
-                            this.setOptionsForColumn(editCol, controlData, 'options');
+                            this.actions.setOptionsForColumn(editCol, controlData, 'options');
                             break;
                         case 'Radio':
-                            this.setOptionsForColumn(editCol, controlData, 'group');
+                            this.actions.setOptionsForColumn(editCol, controlData, 'group');
                             break;
                         default:
                             break;
@@ -372,6 +374,31 @@ let config = {
                 editCol['required'] = controlData['required'];
             }
             return editCol;
+        },
+        setOptionsForColumn: function(editCol,controlData,optionProp){
+            editCol['editable']=true;
+            editCol['cellEditor']='select';
+            let radioParams = [];
+            let groups = {};
+            if(controlData[optionProp] == undefined){
+                let field_content = controlData['field_content'];
+                Object.getOwnPropertyNames(field_content).forEach(option=>{
+                    let value = option;
+                    let label = field_content[value];
+                    groups[label]=value;
+                    radioParams.push(label);
+                });
+            } else {
+                controlData[optionProp].forEach(option=>{
+                    let value = option['value'];
+                    let label = option['label'];
+                    groups[label]=value;
+                    radioParams.push(label);
+                })
+            }
+
+            controlData['options_objs']=groups;
+            editCol['cellEditorParams']={values:radioParams};
         },
         bodyCellRender: function (params) {
             if (params.data && params.data.myfooter && params.data.myfooter == "合计") {
@@ -948,6 +975,14 @@ let config = {
                 }
                 console.log( '请求数据返回get_table_data' );
                 this.actions.sortWay();
+                //编辑模式原始数据
+                if( this.el.find( '.edit-btn' )[0] ){
+                    this.data.originRowData = {};
+                    //originRowData用深拷贝，保存初始值
+                    this.data.rowData.forEach((row,index)=>{
+                        this.data.originRowData[row['_id']]=JSON.parse(JSON.stringify(row));
+                    });
+                }
             })
             HTTP.flush();
         },
@@ -1519,7 +1554,7 @@ let config = {
                 } )
                 this.el.find( '.edit-btn-save' ).on( 'click',()=>{
                     //保存
-                    this.actions.onEditSave();
+                    // this.actions.onEditSave();
                 } )
                 //创建编辑模式表头
                 FormService.getStaticData({table_id: this.data.tableId}).then( res=>{
@@ -1546,53 +1581,116 @@ let config = {
             }
         },
         //编辑模式保存数据
-        onEditSave: function () {
-            //比对当前值与初始值的差别
-            let changedRows = this.actions.getChangedRows(this.data.rowData);
-        },
-        //比对当前值与初始值的差别
-        // getChangedRows(rowData){
-        //     let changedRows = {};
-        //     rowData.forEach((row,index)=>{
-        //         let real_id = row['_id'];
-        //         let originRow = this.originRowData[real_id];
-        //         let changed = {};
-        //         let data = {};
-        //         for (let k in row) {
-        //             if (this.checkObejctNotEqual(row[k],originRow[k])) {
-        //                 //buildin字段做转化
-        //                 if(this.colControlData[k]['type'] == 'Buildin'
-        //                     || this.colControlData[k]['type'] == 'Radio'
-        //                     || this.colControlData[k]['type'] == 'Select'){
-        //                     data[k] = this.colControlData[k]['options_objs'][row[k]];
-        //                 } else if(Array.isArray(row[k])){
-        //                     if(row[k].length == 0 && originRow[k].length == 0){
-        //                         continue;
-        //                     }
-        //                     for(let i = 0,length = row[k].length;i < length; i++){
-        //                         if(row[k][i]!=originRow[k][i]){
-        //                             data[k] = row[k];
-        //                             break;
-        //                         }
-        //                     }
-        //                 }else {
-        //                     data[k] = row[k];
+        // onEditSave: function () {
+        //     //比对当前值与初始值的差别
+        //     console.log( "***************" )
+        //     console.log( "***************" )
+        //     console.log( this.data.rowData )
+        //     console.log( this.agGrid.data.rowData )
+        //     this.agGrid.gridOptions.api.stopEditing(false);
+        //     let changedRows = this.actions.getChangedRows(this.agGrid.data.rowData);
+        //     for(let k in changedRows){
+        //         let changed = changedRows[k];
+        //         let real_id = changed['data']['real_id'];
+        //         changedRows[real_id] = changed;
+        //         FormService.getDynamicData({
+        //             table_id: this.data.tableId,
+        //             real_id: real_id,
+        //             is_view: 0
+        //         }).then( res=>{
+        //             console.log( "____________________" )
+        //             console.log( "____________________" )
+        //             console.log( res )
+        //             if(res){
+        //                 let data = res['data'];
+        //                 let real_id = data['real_id']['value'];
+        //                 if(!changedRows[real_id]){
+        //                     return;
         //                 }
+        //                 let obj = {
+        //                     real_id:data['real_id']['value'],
+        //                     temp_id:data['temp_id']['value'],
+        //                     parent_real_id:data['parent_real_id']['value'],
+        //                     parent_table_id:data['parent_table_id']['value'],
+        //                     parent_temp_id:data['parent_temp_id']['value']
+        //                 };
+        //                 let targetRow = changedRows[real_id];
+        //                 this.actions.saveEdit(targetRow,obj);
         //             }
-        //         }
-        //         if(Object.getOwnPropertyNames(data).length!= 0) {
-        //             data['real_id'] = real_id;
-        //             data['table_id'] = this.pageId;
-        //             changed['data'] = data;
-        //             changed['cache_old'] = this.originRowData[real_id];
-        //             changed['cache_new'] = row;
-        //             changed['table_id'] = this.pageId;
-        //             changed['focus_users'] = [];
-        //             changedRows[real_id] = changed;
-        //         }
-        //     });
-        //     return changedRows;
+        //         } )
+        //         HTTP.flush();
+        //     }
         // },
+        // saveEdit(targetRow,ids){
+        //     let json=this.dgcService.abjustTargetRow(targetRow,ids);
+        //     json['data']=encodeURIComponent(JSON.stringify(json['data']));
+        //     json['cache_new']=encodeURIComponent(JSON.stringify(json['cache_new']));
+        //     json['cache_old']=encodeURIComponent(JSON.stringify(json['cache_old']));
+        //     this.wfService.saveAddpageData(json).then(res=>{
+        //         if(this.imgType == 'success'){
+        //             this.alertVisible = false;
+        //         }
+        //         if(res['success']==1){
+        //             console.log('保存'+ids['real_id']+'的数据成功！');
+        //         } else {
+        //             this.openAlert(res['error'],'error');
+        //             //保存编辑失败后删除失效刷新的tableID
+        //             this.globalService.refreshDataTableId = [];
+        //             this.globalService.refreshParentDataTableId = [];
+        //         }
+        //         this.changedRowNum--;
+        //         if(this.changedRowNum <= 0){
+        //             this.cd.markForCheck();
+        //         }
+        //         this.setEditClickable();
+        //         this.setGridSort();
+        //         this.getOrSetGridState( false,false );
+        //     });
+        // },
+        //比对当前值与初始值的差别
+        getChangedRows(rowData){
+            let changedRows = {};
+            rowData.forEach((row,index)=>{
+                let real_id = row['_id'];
+                let originRow = this.data.originRowData[real_id];
+                let changed = {};
+                let data = {};
+                for (let k in row) {
+                    if (dgcService.checkObejctNotEqual(row[k],originRow[k])) {
+                        //buildin字段做转化
+                        if(this.data.colControlData[k]['type'] == 'Buildin'||this.data.colControlData[k]['type'] == 'Radio'||this.data.colControlData[k]['type'] == 'Select'){
+                            data[k] = this.data.colControlData[k]['options_objs'][row[k]];
+                        } else if(Array.isArray(row[k])){
+                            if(row[k].length == 0 && originRow[k].length == 0){
+                                continue;
+                            }
+                            for(let i = 0,length = row[k].length;i < length; i++){
+                                if(row[k][i]!=originRow[k][i]){
+                                    data[k] = row[k];
+                                    break;
+                                }
+                            }
+                        }else {
+                            data[k] = row[k];
+                        }
+                    }
+                }
+                if(Object.getOwnPropertyNames(data).length!= 0) {
+                    data['real_id'] = real_id;
+                    data['table_id'] = this.data.tableId;
+                    changed['data'] = data;
+                    changed['cache_old'] = this.data.originRowData[real_id];
+                    changed['cache_new'] = row;
+                    changed['table_id'] = this.data.tableId;
+                    changed['focus_users'] = [];
+                    changedRows[real_id] = changed;
+                }
+            });
+            console.log( "$$$$$$$$$$$$$$$$$$$" )
+            console.log( "$$$$$$$$$$$$$$$$$$$" )
+            console.log( changedRows )
+            return changedRows;
+        },
         //渲染高级查询
         renderExpertSearch: function () {
             let _this = this
@@ -1672,7 +1770,7 @@ let config = {
                 if( res.success ){
                     msgBox.showTips( '删除成功' )
                 }else {
-                    if( res.error.indexOf( '使用了所删行的内容' ) ){
+                    if( res.error.indexOf( '使用了所删行的内容' ) != -1 ){
                         msgBox.confirm( res.error + '是否前往处理？' ).then( r=>{
                             if( r ){
                                 let info = res.table_info;
