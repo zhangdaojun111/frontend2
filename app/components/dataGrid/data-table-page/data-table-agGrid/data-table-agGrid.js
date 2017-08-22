@@ -155,7 +155,9 @@ let config = {
         //编辑模式参数
         colControlData: {},
         //是否为编辑模式
-        editMode: false
+        editMode: false,
+        //上一次操作状态
+        lastGridState: [],
     },
     //生成的表头数据
     columnDefs: [],
@@ -1510,18 +1512,87 @@ let config = {
             //编辑模式
             if( this.el.find( '.edit-btn' )[0] ){
                 this.el.find( '.edit-btn' ).on( 'click',()=>{
-                    console.log( '编辑模式' )
+                    this.actions.toogleEdit();
+                } )
+                this.el.find( '.edit-btn-cancel' ).on( 'click',()=>{
+                    this.actions.toogleEdit();
+                } )
+                this.el.find( '.edit-btn-save' ).on( 'click',()=>{
+                    //保存
+                    this.actions.onEditSave();
                 } )
                 //创建编辑模式表头
                 FormService.getStaticData({table_id: this.data.tableId}).then( res=>{
                     for( let d of res.data ){
                         this.data.colControlData[d.dfield] = d;
                     }
-                    this.data.columnDefsEdit = this.actions.createHeaderColumnDefs( true );
+                    this.columnDefsEdit = this.actions.createHeaderColumnDefs( true );
                 } )
                 HTTP.flush();
             }
         },
+        //编辑模式切换
+        toogleEdit: function () {
+            if( !this.data.editMode ){
+                this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
+            }
+            this.data.editMode = !this.data.editMode;
+            this.el.find( '.dataGrid-btn-group' )[0].style.display = this.data.editMode ? 'none':'block';
+            this.el.find( '.dataGrid-edit-group' )[0].style.display = this.data.editMode ? 'block':'none';
+            let columns = this.data.editMode ? this.columnDefsEdit : this.columnDefs;
+            this.agGrid.gridOptions.api.setColumnDefs( columns );
+            if( !this.data.editMode ){
+                this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
+            }
+        },
+        //编辑模式保存数据
+        onEditSave: function () {
+            //比对当前值与初始值的差别
+            let changedRows = this.actions.getChangedRows(this.data.rowData);
+        },
+        //比对当前值与初始值的差别
+        // getChangedRows(rowData){
+        //     let changedRows = {};
+        //     rowData.forEach((row,index)=>{
+        //         let real_id = row['_id'];
+        //         let originRow = this.originRowData[real_id];
+        //         let changed = {};
+        //         let data = {};
+        //         for (let k in row) {
+        //             if (this.checkObejctNotEqual(row[k],originRow[k])) {
+        //                 //buildin字段做转化
+        //                 if(this.colControlData[k]['type'] == 'Buildin'
+        //                     || this.colControlData[k]['type'] == 'Radio'
+        //                     || this.colControlData[k]['type'] == 'Select'){
+        //                     data[k] = this.colControlData[k]['options_objs'][row[k]];
+        //                 } else if(Array.isArray(row[k])){
+        //                     if(row[k].length == 0 && originRow[k].length == 0){
+        //                         continue;
+        //                     }
+        //                     for(let i = 0,length = row[k].length;i < length; i++){
+        //                         if(row[k][i]!=originRow[k][i]){
+        //                             data[k] = row[k];
+        //                             break;
+        //                         }
+        //                     }
+        //                 }else {
+        //                     data[k] = row[k];
+        //                 }
+        //             }
+        //         }
+        //         if(Object.getOwnPropertyNames(data).length!= 0) {
+        //             data['real_id'] = real_id;
+        //             data['table_id'] = this.pageId;
+        //             changed['data'] = data;
+        //             changed['cache_old'] = this.originRowData[real_id];
+        //             changed['cache_new'] = row;
+        //             changed['table_id'] = this.pageId;
+        //             changed['focus_users'] = [];
+        //             changedRows[real_id] = changed;
+        //         }
+        //     });
+        //     return changedRows;
+        // },
         //渲染高级查询
         renderExpertSearch: function () {
             let _this = this
