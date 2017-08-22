@@ -25,10 +25,11 @@ let config = {
             let strhtml = "";
             data.items.forEach((items) =>{
                 strhtml+="<div class=\"label-task-children\">\n" +
-                    "<input type='checkbox' id='select-children-"+items.field_id+"' class='chk_1 chk_approve label-select-all checkbox-children-"+data.table_id +"'";
+                    "<input type='checkbox' id='select-children-"+items.field_id+"' class='chk_1 chk_approve label-select-all checkbox-children-"+
+                    data.table_id +"'";
                 strhtml+="/>" +
                     "<label class='select-label-children select-children-"+data.table_id;
-                if(config.data.cancel_fields.indexOf(items.field_id) != -1){
+                if(config.data.cancel_fields.indexOf(items.field_id) !== -1){
                     strhtml+=" unchecked"
                 }
                 let color = that.actions.colorRgb(items.color,0.7);
@@ -79,7 +80,7 @@ let config = {
                     $(this).addClass('unchecked');
                     $(this).prev('input').removeAttr('checked');
                     let filedId =$(this).attr("id").split("-")[2];
-                    if(config.data.cancel_fields.indexOf(filedId) == -1){
+                    if(config.data.cancel_fields.indexOf(filedId) === -1){
                         config.data.cancel_fields.push(filedId);
                     }
                 });
@@ -90,7 +91,7 @@ let config = {
                 that.el.find(class_Name).removeClass('unchecked');
                 that.el.find(class_Name).each(function(){
                     let filedId = $(this).attr("id").split("-")[2];
-                    if(config.data.cancel_fields.indexOf(filedId) != -1){
+                    if(config.data.cancel_fields.indexOf(filedId) !== -1){
                         config.data.cancel_fields.splice($.inArray(filedId,config.data.cancel_fields),1);
                     }
                 });
@@ -142,7 +143,7 @@ let config = {
             else {
                 temp.addClass('unchecked');
                 let filedId = temp.attr("id").split("-")[2];
-                if(config.data.cancel_fields.indexOf(fileId) == -1){
+                if(config.data.cancel_fields.indexOf(fileId) === -1){
                     config.data.cancel_fields.push(filedId);
                 }
                 Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});

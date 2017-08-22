@@ -25,7 +25,6 @@ let config = {
             config.data.show_type_ID = "";
             that.destroySelf();
         });
-
     },
 }
 class RightContentWorkFlow extends Component {
