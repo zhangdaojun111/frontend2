@@ -4,8 +4,6 @@ import './workflow-initial.scss';
 import '../../assets/scss/workflow/workflow-base.scss';
 import Mediator from '../../lib/mediator';
 
-// import WorkFlowCatalog from './workflow-catalog/workflow-catalog'
-
 let config={
     template: template,
     data:{
@@ -44,12 +42,6 @@ let config={
             })
             Mediator.publish('workflow:submit',this.data.user);
             
-        });
-        $(".h_panghu").on("webkitAnimationEnd",function () {
-            $(this).addClass("h_panghu2");
-            setTimeout(function () {
-                $(".h_panghu_mask").remove()
-            },2000)
         });
     }
 };

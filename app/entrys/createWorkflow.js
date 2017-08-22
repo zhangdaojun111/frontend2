@@ -8,13 +8,13 @@ import Mediator from '../lib/mediator';
 import {workflowService} from '../services/workflow/workflow.service';
 import WorkFlowCreate from '../components/workflow/workflow-create/workflow-create';
 import WorkflowInitial from '../components/workflow/workflow-initial';
+import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
 import WorkFlowGrid from '../components/workflow/workflow-grid/workflow-grid';
 import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addHome';
 import FormEntrys from './form';
 import TreeView from  '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
-import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import jsplumb from 'jsplumb';
 import {PMAPI,PMENUM} from '../lib/postmsg';
@@ -43,14 +43,9 @@ Mediator.subscribe('workflow:choose', (msg)=> {
     $("#startNew").hide();
     wfObj=msg;
     (async function () {
-        return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
-            flow_id:msg.id
-        }});
-    })()
-    .then(res=>{
-        Mediator.publish('workflow:gotWorkflowInfo', res);
+        WorkFlow.createFlow({flow_id:msg.id,el:"#flow-node"});
         return workflowService.validateDraftData({form_id:msg.formid});
-    })
+    })()
     .then(res=>{
         if(res.the_last_draft!=''){
             return msgBox.confirm(`您于${res.the_last_draft}时填写该工作表单尚未保存，是否继续编辑？`)
@@ -72,7 +67,6 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             btnType:'none',
             is_view:0
         });
-
         const intervalSave= async function (data) {
             let postData={
                 flow_id:msg.id,
@@ -83,15 +77,17 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             let res = await workflowService.createWorkflowRecord(postData);
             if(res.success===1){
                 msgBox.alert('自动保存成功！');
+            }else{
+                msgBox.alert(`${res.error}`);
             }
         };
         var timer;
         const autoSaving=function(){
             timer=setInterval(()=>{
-                intervalSave(FormEntrys.getFormValue());
+                intervalSave(FormEntrys.getFormValue(wfObj.tableid));
             },2*60*1000);
         };
-        autoSaving();
+        // autoSaving();
         Mediator.subscribe('workflow:autoSaveOpen', (msg)=> {
             clearInterval(timer);
             if(msg===1){
@@ -134,14 +130,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
                     $("#startNew").hide();
                     $("#submit").show();
                 });
-                (async function () {
-                    return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
-                        flow_id:wfObj.id,
-                        record_id:res.record_id
-                    }});
-                })().then(data=>{
-                    Mediator.publish('workflow:gotWorkflowInfo', data);
-                });
+                WorkFlow.createFlow({flow_id:wfObj.id,record_id:res.record_id,el:"#flow-node"});
             }else{
                 msgBox.alert(`${res.error}`);
                 $("#submit").show();
@@ -168,18 +157,6 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
         let data = await workflowService.delWorkflowFavorite({'id': msg});
     })();
 });
-
-
-const approveWorkflow=(para)=>{
-    (async function () {
-        return workflowService.approveWorkflowRecord({
-            url: '/approve_workflow_record/',
-            data:para
-        });
-    })().then(res=>{
-        msgBox.alert(`${res.error}`)
-    })
-}
 
 //Grid
 $('#multiFlow').on('click',()=>{
