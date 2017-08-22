@@ -54,6 +54,8 @@ export class FormNormalComponent extends BiBaseComponent{
         this.y1 = [];
         this.editModeOnce = this.chartId ? true : false // 如果是编辑模式 需要在第一次加载进来重置某些字段的默认值
         this.editModeXField = null;// 编辑模式 需要等到x轴数据加载完成在设置
+        this.editModeYField = []; // 编辑模式 需要等到y轴数据加载完成在设置
+        this.editModeY1Field = [] // 编辑模式 需要等到y轴数据加载完成在设置
     }
     /**
      * 编辑模式发送chartId, 得到服务器数据
@@ -80,7 +82,15 @@ export class FormNormalComponent extends BiBaseComponent{
         this.formGroup.share.setValue(share);
         this.editModeXField = chart['xAxis'];
         this.formGroup.doubleY.setValue(chart['double'] == 0 ? false : true);
-
+        chart['yAxis'].forEach((y,index) => {
+            if (y.yAxisIndex == 0) {
+                this.addYAxis();
+                this.editModeYField.push(y);
+            } else {
+               this.showAllXAxis(true);
+                this.editModeY1Field.push(y);
+            }
+        });
         console.log(chart);
     }
 
@@ -224,8 +234,11 @@ export class FormNormalComponent extends BiBaseComponent{
                 container: 'form-group-chartAssignment'
             })
         };
-        // 默认增加第一条y数据
-        this.addYAxis();
+        // 如果不是编辑模式，默认增加第一条y数据
+        if (!this.chartId) {
+            this.addYAxis();
+        };
+
     }
 
     /**
@@ -239,7 +252,6 @@ export class FormNormalComponent extends BiBaseComponent{
 
             if (fields.length > 0 && this.editModeOnce) {
                 this.formGroup.x.autoSelect.data.choosed[0] = this.editModeXField;
-                this.editModeOnce = false;
             }
             this.formGroup.x.autoSelect.reload()
         };
@@ -251,13 +263,21 @@ export class FormNormalComponent extends BiBaseComponent{
 
     /**
      * 渲染y轴字段
-     * @param fields x轴字段列表
+     * @param fields y轴字段列表
      */
-    renderYField(fields) {
+    renderYField(fields = []) {
         let yGroup = this.y.concat(this.y1);
         yGroup.forEach(y => {
             y.reloadRender(fields);
-        })
+        });
+
+        if (fields.length > 0 && this.editModeOnce) {
+            let yEditOnceGroup = this.editModeYField.concat(this.editModeY1Field);
+            yGroup.map((y,index) => {
+                y.setValue(yEditOnceGroup[index]);
+            })
+            this.editModeOnce = false;
+        }
     }
 
     /**
@@ -356,6 +376,7 @@ export class FormNormalComponent extends BiBaseComponent{
         this.chartId = id;
         this.editModeOnce = this.chartId ? true : false;
         this.editModeXField = null;
+        [this.editModeYField,this.editModeY1Field] = [[], []];
     }
 
     /**
