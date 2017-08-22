@@ -242,6 +242,17 @@ let config = {
             if( this.el.find( '.expert-search-btn' )[0] ){
                 this.actions.renderExpertSearch();
             }
+            //宽度自适应
+            this.el.find( '.grid-auto-width' ).on( 'click',()=>{
+                if( !this.data.isAutoWidth ){
+                    this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
+                    this.agGrid.actions.autoWidth();
+                }else {
+                    this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
+                }
+                this.el.find( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
+                this.data.isAutoWidth = !this.data.isAutoWidth;
+            } )
         },
         //渲染高级查询
         renderExpertSearch: function () {

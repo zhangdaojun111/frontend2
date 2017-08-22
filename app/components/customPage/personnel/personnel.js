@@ -79,7 +79,11 @@ let config = {
         //排序参数
         sortParam: {sortOrder:'',sortField:'',sort_real_type:''},
         //排序方式
-        frontendSort: false
+        frontendSort: false,
+        //宽度自适应
+        isAutoWidth: false,
+        //上次的状态
+        lastGridState: []
     },
     actions: {
         //获取表头数据
@@ -104,7 +108,7 @@ let config = {
                     dgcService.selectCol,
                     oprate
                 ];
-                this.data.fieldsData = res[1];
+                this.data.fieldsData = res[1].rows;
                 for( let col of res[1].rows ){
                     if( col.field == '_id' ){
                         continue;
@@ -150,6 +154,7 @@ let config = {
                 columnDefs: this.data.columnDefs,
                 rowData: this.data.rowData,
                 footerData: this.data.footerData,
+                fieldsData: this.data.fieldsData,
                 floatingFilter: true,
                 onColumnResized: this.actions.onColumnResized,
                 onSortChanged: this.actions.onSortChanged,
@@ -283,7 +288,7 @@ let config = {
                 isSearch: true,
                 treeName:"department-tree"
             });
-            treeView.render(this.el.find( '.choose-department' ));
+            treeView.render(this.el.find( '.choose-department-tree' ));
         },
         departmentTreeFun:function (tree) {
             for( let t of tree ){
@@ -373,6 +378,17 @@ let config = {
             //高级查询
             this.el.find( '.expert-search-btn' ).on( 'click',()=>{
                 this.actions.renderExpertSearch();
+            } )
+            //宽度自适应
+            this.el.find( '.grid-auto-width' ).on( 'click',()=>{
+                if( !this.data.isAutoWidth ){
+                    this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
+                    this.agGrid.actions.autoWidth();
+                }else {
+                    this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
+                }
+                this.el.find( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
+                this.data.isAutoWidth = !this.data.isAutoWidth;
             } )
         },
         //触发导出
