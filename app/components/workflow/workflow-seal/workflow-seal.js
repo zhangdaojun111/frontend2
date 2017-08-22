@@ -51,17 +51,16 @@ let config = {
         },
 
         createImg(top,left,width,height,id){
-            console.log(id);
             let viewLeft = left;
             let viewTop = top;
             let top1 = top+"%";
             let left1 = left+"%";
             let host = "http://"+window.location.host;
-            let html = `<div class='imgseal noprint' data-height=${height} data-width=${width} data-viewLeft=${viewLeft} data-viewTop=${viewTop} data-imgid=${id} style='top:${top1};left:${left1};z-index:1002;position:absolute;padding-top:15px;'>
-                            <img  width=228 height=148 src='${host}/download_attachment/?file_id=${id}&download=0'/>
+            let html = `<div class='imgseal noprint' data-height=${height} data-width=${width} data-viewLeft=${viewLeft} data-viewTop=${viewTop} data-imgid=${id} style='top:${top1};left:${left1}'>
+                            <img  width=${width} height=${height} src='${host}/download_attachment/?file_id=${id}&download=0'/>
                                 <i class='J_del'>X</i>
                          </div>`;
-            html += `<img class="printS printimg" style="top:${top1};left:${left1};" width=228 height=148 src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
+            html += `<img class="printS printimg" style="top:${top1};left:${left1};" width=${width} height=${height} src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
             $('#place-form').children(":first").append(html);
         },
         showImgDel(e){
@@ -86,13 +85,12 @@ let config = {
             let id = ui.helper[0].dataset.id;
             top= top.toFixed(6)*100;
             left= left.toFixed(6)*100;
-            this.actions.createImg(top,left,248,148,id);
+            this.actions.createImg(top,left,50,50,id);
             this.el.find(".signatureMock").css("visibility","hidden");
             $('#place-form').css("z-index",0);
         },
         init(){
             let that = this;
-            console.log("00000000000000000000000");
             this.el.find(".add-img").draggable({
                 helper: "clone",
                 appendTo:"#place-form",

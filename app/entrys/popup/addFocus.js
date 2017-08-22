@@ -1,3 +1,6 @@
+/*
+ * Created by qmy on 2017/8/10.
+ */
 import '../../assets/scss/main.scss';
 import {HTTP} from '../../lib/http';
 import Mediator from '../../lib/mediator';
