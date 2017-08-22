@@ -1,7 +1,3 @@
-
-body{
-  background:rgb(235,235,235);
-}
 .workflow-wrapper{
   width: 100%;
   position: relative;
@@ -136,12 +132,7 @@ body{
       padding: 10px;
       width: 100%;
       overflow-x: auto;
-      .follow-name-list{
-        position: relative;
-        min-height: 65px;
-        padding: 10px 5px;
-        line-height: 20px;
-      }
+      
 
       .approve-textarea{
         width: 100%;

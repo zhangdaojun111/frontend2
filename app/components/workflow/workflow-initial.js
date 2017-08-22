@@ -3,6 +3,7 @@ import template from './workflow-initial.html';
 import './workflow-initial.scss';
 import '../../assets/scss/workflow/workflow-base.scss';
 import Mediator from '../../lib/mediator';
+import WorkflowAddFollow from './workflow-addFollow/workflow-addFollow';
 
 let config={
     template: template,
@@ -43,6 +44,7 @@ let config={
             Mediator.publish('workflow:submit',this.data.user);
             
         });
+
     }
 };
 class WorkflowInitial extends Component{
