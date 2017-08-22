@@ -62,7 +62,8 @@ let config = {
             SysSetting.show();
         },
         refreshOnlineNum: function (data) {
-            this.el.find('.online-num span').text(data.online_user_num);
+            let title = "在线人数：" + data;
+            this.el.find('a.online-num').attr("title",title);
         },
 
         showMessageUnread: function () {
@@ -206,7 +207,7 @@ let config = {
             }
         }, {
             event: 'click',
-            selector: '.system-setting',
+            selector: '.setting',
             callback: function () {
                 this.actions.goSystemSetting();
             }

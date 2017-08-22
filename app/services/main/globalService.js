@@ -104,7 +104,7 @@ export const GlobalService = {
     },
     getOnlineUserData:function (_param) {         //获取在线人员列表数据
         let param = _.defaultsDeep(_param, {
-            rows: 50,
+            rows: 10,
             first:0,
             sortOrder: -1,
             sortField: '',
