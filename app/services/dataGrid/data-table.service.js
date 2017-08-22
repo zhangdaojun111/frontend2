@@ -77,4 +77,8 @@ export const dataTableService = {
     tableOperationRefresh: function ( data ) {
         return HTTP.post( 'update_table_cache',data )
     },
+    //获取表的表单工作流参数
+    getPrepareParmas: function ( data ) {
+        return HTTP.post( 'prepare_params',data )
+    }
 }

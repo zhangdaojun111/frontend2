@@ -1,3 +1,8 @@
+/**
+ * @author yangxiaochuan
+ * dataGrid
+ */
+
 import Component from "../../../../lib/component";
 import template from './data-table-agGrid.html';
 import './data-table-agGrid.scss';
@@ -34,6 +39,7 @@ let config = {
         parentRecordId: '',
         rowId: '',
         fieldId: '',
+        flowId: '',
         source_field_dfield: '',
         base_buildin_dfield: '',
         fieldContent: null,
@@ -60,7 +66,7 @@ let config = {
         operateColWidth: 0,
         //自定义操作
         customOperateList: [],
-        //自定义行机操作
+        //自定义行级操作
         rowOperation: [],
         //是否固化
         isFixed: false,
@@ -143,11 +149,14 @@ let config = {
         deleteHandingData: {_id: []},
         //表级操作数据
         tableOperationData: [],
+        //表的表单、工作流参数
+        prepareParmas: {}
     },
     //生成的表头数据
     columnDefs: [],
+    columnDefsEdit: [],
     actions: {
-        createHeaderColumnDefs: function () {
+        createHeaderColumnDefs: function (edit) {
             let columnDefs = [],
                 headerArr = [],
                 columnArr = [],
@@ -599,9 +608,27 @@ let config = {
             if( !this.data.noNeedCustom ){
                 eHeader.innerHTML = "初";
                 eHeader.className = "table-init-logo";
-
                 eHeader.addEventListener('click', () => {
-                    alert("重置偏好")
+                    msgBox.confirm( '确定初始化偏好？' ).then( r=>{
+                        if( r ){
+                            dataTableService.delPreference( {table_id: this.data.tableId} ).then( res=>{
+                                msgBox.showTips( '操作成功' );
+                                let obj = {
+                                    actions: JSON.stringify(['ignoreFields', 'group', 'fieldsOrder', 'pageSize', 'colWidth', 'pinned']),
+                                    table_id: this.data.tableId
+                                }
+                                dataTableService.getPreferences( obj ).then( res=>{
+                                    dgcService.setPreference( res,this.data );
+                                    //创建表头
+                                    this.columnDefs = this.actions.createHeaderColumnDefs();
+                                    this.agGrid.gridOptions.api.setColumnDefs( this.columnDefs );
+                                    dgcService.calcColumnState(this.data,this.agGrid,["group",'number',"mySelectAll"]);
+                                } )
+                                HTTP.flush();
+                            } )
+                            HTTP.flush();
+                        }
+                    } )
                 });
             }
             return eHeader;
@@ -712,6 +739,10 @@ let config = {
             for( let btn of btns ){
                 let name = btn.className;
                 if( btnGroup.indexOf( name )!=-1 && ( this.data.permission[dgcService.permission2btn[name]] || dgcService.permission2btn[name] == 'especial' ) ){
+                    //工作流表无编辑模式
+                    if( name == 'edit-btn' && this.data.flowId ){
+                        continue;
+                    }
                     html+=btn.outerHTML;
                 }
             }
@@ -732,13 +763,16 @@ let config = {
             let headerData = dataTableService.getColumnList(obj2);
             let sheetData = dataTableService.getSheetPage( obj2 );
             let tableOperate = dataTableService.getTableOperation( obj2 );
+            let prepareParmas = dataTableService.getPrepareParmas( obj2 );
 
-            Promise.all([preferenceData, headerData, sheetData,tableOperate]).then((res)=> {
+            Promise.all([preferenceData, headerData, sheetData,tableOperate,prepareParmas]).then((res)=> {
                 dgcService.setPreference( res[0],this.data );
                 this.data.myGroup = (res[0]['group'] != undefined) ? JSON.parse(res[0]['group'].group) : [];
                 this.data.fieldsData = res[1].rows || [];
                 this.data.permission = res[1].permission;
                 this.data.headerColor = dgcService.createHeaderStyle( this.data.tableId,res[1].field_color );
+                //获取表的表单工作流参数
+                this.actions.setPrepareParmas( res[4] );
                 //初始化按钮
                 this.actions.renderBtn();
                 //创建高级查询需要字段数据
@@ -766,6 +800,15 @@ let config = {
                 this.data.tableOperationData = temp;
             })
             HTTP.flush();
+        },
+        //设置表表单、工作流数据
+        setPrepareParmas: function (res) {
+            this.data.prepareParmas = res.data;
+            this.data.customOperateList = this.data.prepareParmas["operation_data"] || [];
+            this.data.rowOperation = this.data.prepareParmas['row_operation'] || [];
+            if( this.data.prepareParmas["flow_data"][0] ){
+                this.data.flowId = this.data.prepareParmas["flow_data"][0]["flow_id"] || "";
+            }
         },
         //请求在途数据
         getInprocessData: function () {
@@ -1420,6 +1463,20 @@ let config = {
                     this.actions.checkCorrespondence();
                 } )
             }
+            //编辑模式
+            if( this.el.find( '.edit-btn' )[0] ){
+                this.el.find( '.edit-btn' ).on( 'click',()=>{
+                    console.log( '编辑模式' )
+                } )
+                //创建编辑模式表头
+                FormService.getStaticData({table_id: this.data.tableId}).then( res=>{
+                    console.log( "______________________" )
+                    console.log( "______________________" )
+                    console.log( res )
+                    // this.data.colCon
+                } )
+                HTTP.flush();
+            }
         },
         //渲染高级查询
         renderExpertSearch: function () {
@@ -1489,7 +1546,12 @@ let config = {
                 table_id:this.data.tableId,
                 temp_ids:JSON.stringify([]),
                 real_ids:JSON.stringify( this.data.deletedIds ),
-                is_batch: this.data.viewMode == 'createBatch'?1:0
+                is_batch: this.data.viewMode == 'createBatch'?1:0,
+                flow_id: this.data.flowId,
+                parent_table_id: this.data.flowId,
+                parent_temp_id: this.data.parentTempId,
+                parent_real_id: this.data.parentRealId,
+                parent_record_id: this.data.parentRecordId
             }
             dataTableService.delTableData( json ).then( res=>{
                 if( res.success ){
