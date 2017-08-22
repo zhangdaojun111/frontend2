@@ -19,6 +19,7 @@ let config = {
         tableId: '',
         columnDefs: [],
         rowData:[],
+        fieldsData:[],
         rows: 100,
         total: 0,
         page: 1,
@@ -65,13 +66,17 @@ let config = {
         //排序方式
         frontendSort: false,
         //定制列数据
-        customColumnsFields: [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false}, {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false}, {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
+        customColumnsFields: [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false}, {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
     },
     actions: {
         //创建表头
         createColumnDefs: function () {
             let cols = wchService.getWorkflowHeader( this.data.pageType );
-            this.data.columnDefs = [dgcService.numberCol,dgcService.selectCol];
+            this.data.columnDefs = [dgcService.numberCol];
+            if( this.data.pageType == 2 ){
+                this.data.columnDefs.push( dgcService.selectCol )
+                this.data.customColumnsFields.push( {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false} )
+            }
             let fixArr = this.data.fixCols.l.concat(this.data.fixCols.r);
             for( let col of cols ){
                 if( col.field == 'myOperate' ){
@@ -105,6 +110,7 @@ let config = {
                 this.data.customColumnsFields.push( {name:col.headerName,field:col["field"],canhide:true,candrag:true,canFix:true} );
                 this.data.columnDefs.push( obj );
             }
+            this.data.fieldsData = this.data.columnDefs;
         },
         //返回搜索类型
         searchType: function ( data,name ) {
@@ -122,6 +128,7 @@ let config = {
             let gridData = {
                 columnDefs: this.data.columnDefs,
                 rowData: this.data.rowData,
+                fieldsData: this.data.fieldsData,
                 floatingFilter: true,
                 onColumnResized: this.actions.onColumnResized,
                 onSortChanged: this.actions.onSortChanged,

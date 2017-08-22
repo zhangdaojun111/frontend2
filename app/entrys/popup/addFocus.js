@@ -105,9 +105,6 @@ if(focus.length>1){
             }
         }
         recur(tree);
-        console.log( "______________" )
-        console.log( "______________" )
-        console.log( tree )
         var treeComp2 = new TreeView(tree,{
             callback: function (event,selectedNode) {
                 if(event==='select'){
