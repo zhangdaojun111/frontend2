@@ -100,11 +100,26 @@
 }
 .addConter{
 	.addCont{
-	  width: 800px;
-	  height: 600px;
-	  left: calc(50% - 400px);
-	  top:calc(50% - 300px);
-	  z-index: 111 !important;
-	  position: fixed;
+		width: 800px;
+		height: 600px;
+		left: calc(50% - 400px);
+		top:calc(50% - 300px);
+		z-index: 111 !important;
+		position: fixed;
+		border: 0 none;
+		border-radius: 0;
+		.addContDiv{
+			padding: 0;
+			height: 30px;
+			line-height: 30px;
+			border: 0 none;
+			border-radius: 0;
+			text-align: center;
+			background: #F6F6F6;
+			button{
+				border: none;
+				float: right;
+			}
+		}
 	}
   }
