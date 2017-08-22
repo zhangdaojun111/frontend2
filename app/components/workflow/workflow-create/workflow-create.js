@@ -22,7 +22,7 @@ let config = {
             if(this.favoDel){
                 del.hide();
                 oper.text("");
-                 oper.addClass("workflow-icon");
+                oper.addClass("workflow-icon");
                 this.favoDel = false;
             }else{
                 oper.text("取消");
@@ -47,6 +47,7 @@ let config = {
         },
         init(){
             $('#addFav').hide();
+            let favshow = this.el.find("#workflow-box").css('display');
             this.data.favList=this.data[1].rows;
             if(this.data.id!==undefined){
                 let flag=true;
@@ -56,8 +57,30 @@ let config = {
                     }
                     flag=true;
                 }
-                flag?$('#addFav').show():$('#addFav').hide();
+                    flag?$('#addFav').show():$('#addFav').hide();
             }
+        },
+        addFav(e){
+            Mediator.publish('workflow:addFav', this.data.id);
+            let len = this.data[1].rows.length;
+            for(let i = 0;i<this.data[0].data.length;i++){
+                for(let j = 0;j<this.data[0].data[i].children.length;j++){
+                    if(this.data[0].data[i].children[j].id == this.data.id){
+                        this.data[1].rows[len] = {
+                            id : this.data[0].data[i].children[j].id,
+                            wf_form_id : this.data[0].data[i].children[j].form_id,
+                            wf_name : this.data[0].data[i].children[j].label,
+                            wf_table_id : this.data[0].data[i].children[j].table_id
+                        };
+                    };
+                }
+            }
+            this.el.find('.J_workflow-content').children().remove();
+            this.data[1].rows.forEach((row)=>{
+                this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
+            });
+            this.actions.init();
+            $('#addFav').hide();
         }
     },
     afterRender: function() {
@@ -77,16 +100,7 @@ let config = {
         });
         //addFav
         this.el.on('click','#addFav',(e)=>{
-            Mediator.publish('workflow:addFav', this.data.id);
-            for(let i = 0;i<this.data[0].data.length;i++){
-                for(let j = 0;j<this.data[0].data[i].children.length;j++){
-                    if(this.data[0].data[i].children[j].id == this.data.id){
-                        this.data[1].rows.push(this.data[0].data[i].children[j]);
-                    };
-                }
-            }
-            this.actions.init();
-            $('#addFav').hide();
+            this.actions.addFav(e);
         });
 
         //订阅btn click

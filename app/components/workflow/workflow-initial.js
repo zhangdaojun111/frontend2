@@ -15,7 +15,9 @@ let config={
 
     },
     afterRender(){
+
         this.el.on('click','#workflowClose',()=>{
+            this.el.find('.J_select-Workflow').text("选择或输入查找");
             this.el.find("#workflow-box").show();
             this.el.find('#workflow-content').hide();
         }),
