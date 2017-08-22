@@ -1,4 +1,6 @@
-
+/*
+ * Created by qmy on 2017/8/10.
+ */
 import '../../assets/scss/main.scss';
 import 'jquery-ui/ui/widgets/button.js';
 import 'jquery-ui/ui/widgets/dialog.js';
@@ -47,7 +49,7 @@ serchStr.split('&').forEach(res => {
             parent_real_id:obj.parent_real_id,
             parent_temp_id:obj.parent_temp_id,
             parent_record_id:obj.parent_record_id,
-            btnType:'none',
+            btnType:obj.btnType,
             real_id:obj.real_id
         });
     }else{
@@ -58,16 +60,7 @@ Mediator.publish('workflow:focused', []);
 Mediator.subscribe('workflow:getflows', (res)=> {
     obj.flow_id=res.flow_id;
     obj.form_id=res.form_id;
-    (async function () {
-        return workflowService.getWorkflowInfo({
-            url: '/get_workflow_info/',
-            data: {
-                flow_id: res.flow_id
-            }
-        });
-    })().then(res => {
-        Mediator.publish('workflow:gotWorkflowInfo', res);
-    });
+    WorkFlow.createFlow({flow_id:res.flow_id,el:"#flow-node"});
     $('#place-form').html('');
     FormEntrys.createForm({
         el: '#place-form',

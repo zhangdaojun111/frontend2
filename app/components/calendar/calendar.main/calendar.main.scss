@@ -1,5 +1,3 @@
-@import "../calendar";
-
 .tool-bar {
     //border-bottom: 1px solid #ddd;
     div {
@@ -17,12 +15,12 @@
             display: inline-block;
             line-height: 28px;
             padding: 0px 28px;
-            border: 1px solid $btn-bg-color;
+            border: 1px solid #4892FC;
             border-radius: 5px;
             margin-right: 15px;
             cursor: pointer;
             &:hover {
-                background: $btn-bg-color;
+                background: #4892FC;
                 color: #fff;
             }
         }
@@ -44,7 +42,7 @@
             display: inline-block;
             line-height: 28px;
             padding: 0px 20px;
-            background: $btn-bg-color;
+            background: #4892FC;
             color: #fff;
             margin-top: 1px;
             cursor: pointer;

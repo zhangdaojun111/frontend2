@@ -749,6 +749,7 @@ let config = {
         Mediator.removeAll('Calendar: globalSearch');
         Mediator.removeAll('CalendarSelected: Search');
         Mediator.removeAll('CalendarRemindTask: changeData');
+        Mediator.removeAll('CalendarDrag: dragRemind');
     }
 };
 
