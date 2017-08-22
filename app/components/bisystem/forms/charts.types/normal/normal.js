@@ -602,6 +602,7 @@ export class FormNormalComponent extends BiBaseComponent{
                 this.reset();
                 this.reload();
             };
+
             Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
         } else {
             msgbox.alert(res['error'])
