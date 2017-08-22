@@ -136,24 +136,16 @@ let config = {
             this.actions.changSelectValue(sValue, sLabel);
         }).on('dragstart','.task-item',function(ev){
             if(that.data.type === 'month' && that.data.remindTaskItemData['isDrag'] !== 0) {
-                console.log(that.data.remindTaskItemData);
                 let event = ev.originalEvent;
                 $(this).addClass("task-item-draggable");
                 event.dataTransfer.setData("Text",JSON.stringify(that.data.remindTaskItemData));
                 return true;
             }
-
         });
         $(document).click(function(){
             that.el.parents(".calendar-main-content").find(".select-options").hide();
             that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
         });
-        // this.el.parent(".task-list").scroll(function () {
-        //     that.el.find(".select-options").hide();
-        //     that.el.find(".task-state-icon").removeClass("options-show");
-        // })
-
-
     }
 };
 
@@ -161,7 +153,7 @@ class CalendarRemindTaskItem extends Component {
     constructor(data) {
         config.data.remindTaskItemData = data['data'];
         config.data.type = data['type'];
-        if(data['data3show']) {
+        if(data['data']['data3show']) {
             config.data.remindTaskData = data['data']['data3show'][0][0];
         }
 
