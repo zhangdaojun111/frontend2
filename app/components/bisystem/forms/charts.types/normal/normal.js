@@ -98,7 +98,6 @@ export class FormNormalComponent extends BiBaseComponent{
         this.formGroup.doubleY.setValue(chart['double'] == 0 ? false : true);
         this.formGroup.defaultY.setValue(chart['ySelectedGroup'] ? true : false);
         this.formGroup.yHorizontal.setValue(chart['yHorizontal'] ? true : false);
-        console.log(chart['yHorizontal']);
         this.formGroup.yHorizontalColumns.setValue(chart['yHorizontalColumns'].hasOwnProperty('marginBottom') ? true : false);
         this.formGroup.xMarginBottom.setValue(chart['yHorizontalColumns'].hasOwnProperty('marginBottom') ? chart['yHorizontalColumns']['marginBottom'] : 0);
         this.formGroup.echartX.setValue(chart['echartX'].hasOwnProperty('marginBottom') ? true : false);
@@ -592,7 +591,7 @@ export class FormNormalComponent extends BiBaseComponent{
             xAxis: data.x,
             yAxis: yAxis,
             yHorizontal: data.yHorizontal,
-            yHorizontalColumns: data.yHorizontal ? {marginBottom:data.xMarginBottom} : {},
+            yHorizontalColumns: data.yHorizontalColumns ? {marginBottom:data.xMarginBottom} : {},
             ySelectedGroup: data.ySelectedGroup
         };
         if (data.chartAssignment == 1) {
@@ -600,7 +599,8 @@ export class FormNormalComponent extends BiBaseComponent{
         } else {
             chart['deeps'] = data.deeps.deeps
         };
-
+        console.log(data.yHorizontal);
+        console.log(chart);
         let res = await ChartFormService.saveChart(JSON.stringify(chart));
         if (res['success'] == 1) {
             msgbox.alert('保存成功');
