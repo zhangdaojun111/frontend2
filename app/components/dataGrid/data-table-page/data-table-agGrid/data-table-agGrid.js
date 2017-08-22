@@ -150,7 +150,11 @@ let config = {
         //表级操作数据
         tableOperationData: [],
         //表的表单、工作流参数
-        prepareParmas: {}
+        prepareParmas: {},
+        //编辑模式参数
+        colControlData: {},
+        //是否为编辑模式
+        editMode: false
     },
     //生成的表头数据
     columnDefs: [],
@@ -167,7 +171,7 @@ let config = {
 
             for (let data of headerArr) {
                 for (let i = 0, length = data.header.length; i < length; i++) {
-                    this.actions.getArr(i, 0, columnArr, length, data, otherCol);
+                    this.actions.getArr(i, 0, columnArr, length, data, otherCol , edit);
                 }
             }
 
@@ -204,9 +208,9 @@ let config = {
             columnDefs.push(operate)
             return columnDefs;
         },
-        getArr: function (i, n, column, len, data, otherCol) {
+        getArr: function (i, n, column, len, data, otherCol , edit) {
             if (i == n) {
-                this.actions.createHeader(column, i, len, data, otherCol)
+                this.actions.createHeader(column, i, len, data, otherCol,edit)
             } else {
                 for (let col of column) {
                     if (data.header[n] == col['headerName'] && col['children']) {
@@ -215,7 +219,7 @@ let config = {
                 }
             }
         },
-        createHeader: function (column, i, len, data, otherCol) {
+        createHeader: function (column, i, len, data, otherCol,edit) {
             let key = 0;
             for (let col of column) {
                 if (col['headerName'] == data.header[i]) {
@@ -319,13 +323,52 @@ let config = {
                         obj['cellStyle'] = {'font-style': 'normal'};
                         obj['cellStyle'] ['background'] = "#ddd"
                     }
-                    // if( editCols ){
-                    //     this.setEditableCol( obj );
-                    // }
-
+                    //编辑模式用
+                    if( edit ){
+                        this.actions.setEditableCol( obj );
+                    }
                     column.push(obj);
                 }
             }
+        },
+        //设置编辑模式表头
+        setEditableCol: function ( col ) {
+            let editCol = col;
+            //拷贝columnDefs的值
+            for(let k in col){
+                editCol[k]=col[k];
+            }
+            //列定义可编辑部分的赋值
+            let controlData = this.data.colControlData[editCol['colId']];
+            if(controlData){
+                if(controlData['is_view'] == 0 && controlData['relevance_condition']
+                    && Object.getOwnPropertyNames(controlData['relevance_condition']).length == 0) {
+                    let type = controlData['type'];
+                    switch (type) {
+                        case 'Input':
+                        case 'Textarea':
+                            editCol['editable'] = true;
+                            break;
+                        case 'Buildin':
+                        case 'Select':
+                            this.setOptionsForColumn(editCol, controlData, 'options');
+                            break;
+                        case 'Radio':
+                            this.setOptionsForColumn(editCol, controlData, 'group');
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if(controlData['reg']){
+                    editCol['reg']=controlData['reg'];
+                }
+                if(controlData['numArea']){
+                    editCol['numArea']= controlData['numArea'];
+                }
+                editCol['required'] = controlData['required'];
+            }
+            return editCol;
         },
         bodyCellRender: function (params) {
             if (params.data && params.data.myfooter && params.data.myfooter == "合计") {
@@ -1470,10 +1513,10 @@ let config = {
                 } )
                 //创建编辑模式表头
                 FormService.getStaticData({table_id: this.data.tableId}).then( res=>{
-                    console.log( "______________________" )
-                    console.log( "______________________" )
-                    console.log( res )
-                    // this.data.colCon
+                    for( let d of res.data ){
+                        this.data.colControlData[d.dfield] = d;
+                    }
+                    this.data.columnDefsEdit = this.actions.createHeaderColumnDefs( true );
                 } )
                 HTTP.flush();
             }
