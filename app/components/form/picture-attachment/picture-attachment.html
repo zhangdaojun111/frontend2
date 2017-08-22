@@ -2,7 +2,7 @@
     <div class="imgList">
         {{#each rows}}
         <div class="select-img" data-imgSelect="{{this.file_id}}">
-            <div style="height: 100%;width: 100%;">
+            <div class="img-click" data-fileId="{{this.file_id}}" style="height: 100%;width: 100%;">
                 <p style="word-break: break-all; margin: 5px;">{{this.file_name}}</p>
                 <a href="download_attachment/?file_id={{this.file_id}}&download=1">下载</a>
                 <!--<a style="color: blue;">预览</a>-->
