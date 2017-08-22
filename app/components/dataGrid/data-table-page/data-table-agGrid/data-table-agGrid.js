@@ -20,7 +20,6 @@ import FloatingFilter from "../../data-table-toolbar/floating-filter/floating-fi
 import customColumns from "../../data-table-toolbar/custom-columns/custom-columns";
 import groupGrid from "../../data-table-toolbar/data-table-group/data-table-group";
 import dataPagination from "../../data-table-toolbar/data-pagination/data-pagination";
-import delSetting from '../../data-table-toolbar/data-table-delete/data-table-delete';
 import importSetting from '../../data-table-toolbar/data-table-import/data-table-import';
 import exportSetting from '../../data-table-toolbar/data-table-export/data-table-export';
 
