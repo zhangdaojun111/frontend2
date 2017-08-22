@@ -130,6 +130,9 @@ export class FormNormalComponent extends BiBaseComponent{
             x: instanceFitting({
                 type:'autoComplete',
                 me: this,
+                data: {
+                    label: '请选择x轴字段',
+                },
                 container: 'form-group-x'
             }),
             y: [this.y, this.y1],
@@ -264,7 +267,9 @@ export class FormNormalComponent extends BiBaseComponent{
     renderXField(fields = []) {
         if (this.formGroup.deeps) {
             this.formGroup.deeps.reloadXaxis(fields);
-            this.formGroup.deeps.setValue(this.editModeDeeps);
+            if (fields.length > 0 && this.editModeOnce) {
+                this.formGroup.deeps.setValue(this.editModeDeeps);
+            }
         };
 
         if (this.formGroup.x) {
