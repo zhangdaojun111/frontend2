@@ -262,6 +262,13 @@ let config = {
                 this.actions.goSearch($(temp).parent(".search-function").attr("class").split(" ")[1],$(temp).attr("class").split(" ")[1]);
             }
         },
+        {
+            event: 'click',
+            selector: '.select-label-show',
+            callback: function(temp = this){
+                this.actions.selectlabelshow($(temp));
+            }
+        },
     ],
     afterRender: function() {
         let that = this;
