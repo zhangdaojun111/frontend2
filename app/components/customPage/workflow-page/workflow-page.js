@@ -72,6 +72,7 @@ let config = {
         //创建表头
         createColumnDefs: function () {
             let cols = wchService.getWorkflowHeader( this.data.pageType );
+            debugger
             this.data.columnDefs = [dgcService.numberCol];
             if( this.data.pageType == 2 ){
                 this.data.columnDefs.push( dgcService.selectCol )
@@ -323,6 +324,7 @@ let config = {
         },
         //获取数据
         getData: function () {
+            debugger
             let json = this.actions.createPostData();
             let obj1 = {
                 actions: JSON.stringify(['ignoreFields', 'fieldsOrder', 'pageSize', 'colWidth', 'pinned']),
@@ -397,6 +399,7 @@ let config = {
                     this.data.filterText = json.filter;
                 }
             }
+            debugger
             return json;
         },
         //设置常用查询选项值
