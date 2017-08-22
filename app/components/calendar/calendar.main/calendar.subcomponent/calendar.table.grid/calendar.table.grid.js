@@ -44,7 +44,7 @@ let config = {
         this.el.on('dragenter', '.task-item',function(event){
             drag_Postion = null;
             let ev = event.originalEvent;
-            let temp = that.el.find(".task-item-draggable").parent();
+            let temp = $(".task-item-draggable").parent();
             if(temp[0] === $(this).parent().prev()[0]){
                 $(this).parent().after(temp);
             } else{
