@@ -19,27 +19,21 @@ let config = {
             }
         },
         toogz(e){
-            let ev = this.el.find(".signature");
-            if(ev.css("display")=="none"){
-                ev.css("display","block");
-            }else{
-                ev.css("display","none");
-            }
+            this.el.find(".signature").toggle();
+            this.showgz = !this.showgz;
         },
     },
     afterRender: function() {
         let self=this;
+        this.showgz = false;
+
         this.el.on("click",".approval-curr-txt",function (e) {
             e.stopPropagation();
             self.actions.approvalBtnToggle($(this))
         })
         this.el.on('click','.gz',(e)=>{
+            Mediator.publish('workflow:getFormTrans',this.showgz);
             this.actions.toogz(e);
-        });
-        Mediator.subscribe("workflow:is_view",(e)=>{
-            if(e===1){
-                this.el.find('.approval-control').hide();
-            }
         });
         Mediator.publish('workflow:loaded', 1);
     },

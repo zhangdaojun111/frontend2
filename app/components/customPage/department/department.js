@@ -164,7 +164,7 @@ let config = {
                     let obj = {
                         tableId: this.data.tableId,
                         groupCheck: false,
-                        hideOptions: ['filter']
+                        hideOptions: ['isFilter']
                     }
                     for( let o in obj ){
                         exportSetting.data[o] = obj[o];
@@ -233,6 +233,9 @@ let config = {
             this.actions.openSourceDataGrid( url,'查看' )
         },
         onCellClicked: function ($event) {
+            if( $event.colDef.field=='f5' ){
+                this.agGrid.gridOptions.api.redrawRows();
+            }
             if( $event.colDef.headerName == '操作' ){
                 if( $event.event.srcElement.className == 'departModify' ){
                     let obj = {
@@ -262,7 +265,8 @@ let config = {
                 if( res ){
                     let json = {
                         table_id:this.data.tableId,
-                        real_ids:JSON.stringify( this.data.deletedIds )
+                        real_ids:JSON.stringify( arr ),
+                        is_batch: 0
                     }
                     dataTableService.delTableData( json ).then( res=>{
                         if( res.success ){

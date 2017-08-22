@@ -30,7 +30,6 @@ let config={
             }
             this.el.find('#wf-select').html(htmlStr);
             let o={};
-            console.log(_this.el.find('#wf-select option'));
             o.flow_id=_this.el.find('#wf-select option:first').data('flow_id');
             o.form_id=_this.el.find('#wf-select option:first').data('form_id');
             Mediator.publish('workflow:getflows', o);
