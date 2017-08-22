@@ -84,10 +84,8 @@ let config = {
         contentClose(){
             this.boxshow = true;
             this.actions.init();
-            let oper = this.el.find('.J_operate');
-            oper.text("");
-            oper.addClass("workflow-icon");
-            this.favoDel = false;
+            this.favoDel = true;
+            this.actions.operate();
         }
     },
     afterRender: function() {
