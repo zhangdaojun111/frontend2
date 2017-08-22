@@ -100,7 +100,6 @@ let config = {
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             WorkFlow.show(msg.data[0],'#drawflow');
         })
-
     },
     beforeDestory: function(){
        

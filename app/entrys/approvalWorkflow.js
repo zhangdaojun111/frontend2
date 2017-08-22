@@ -75,7 +75,6 @@ Mediator.subscribe('workFlow:record_info', (res) => {
             }
             $('#addFollowerList').text(`${nameArr}`);
             if(nameArr.indexOf(window.config.name)>-1&&window.config.name!=res.record_info.current_node){
-                console.log(123);
                 $('#approval-workflow').find('.for-hide').hide();
                 $('#approval-workflow').find('#re-app').hide();
             };
