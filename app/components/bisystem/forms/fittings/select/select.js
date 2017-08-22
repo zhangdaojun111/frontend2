@@ -61,6 +61,7 @@ export class SelectComponent extends FormFittingAbstract {
      * select 返回值
      */
     getValue() {
+        console.log(this.data.value);
         return this.data.value;
     }
     /**
