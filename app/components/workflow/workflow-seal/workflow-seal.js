@@ -43,134 +43,13 @@ let config = {
             }
             this.el.find('.J_ul-img').html(html);
         },
-        /*cloneImg:function (el) {
-            if(this.data.isClone){
-                this.data.isClone=false;
-                $(".cloneMask").show();
-                let id=this.data.cloneImgId+=1;
-                let cloneimgId=`cloneimgId${id}`;
-                $(".cloneImgdiv").append(el.find('img').clone().addClass("cloneImg").attr('id',cloneimgId).css({
-                    position: 'absolute',
-                    zIndex: '99',
-                    top:'50%',
-                    left:'50%',
-                    width:'100px',
-                    height:'100px'
-                }));
-            }
-        },
-        cloneImgDrag:function (el) {
-            var self=this;
-           el.draggable({
-               containment:'#detail-form',
-               drag:function () {
-                   $(".seal").css({
-                       zIndex:60
-                   })
-               },
-               stop: function() {
-                   $(".seal").css({
-                       zIndex:62
-                   });
-                   $(".cloneMask").hide();
-                   self.data.isClone=true;
-               }
-           });
-        },*/
-        dragimg(e){
-            let imgLeft = $(e.target).offset().left;
-            let imgTop = $(e.target).offset().top;
-            let imgId =  $(e.target).attr("data-id");
-            this.el.find('.J_dragimg').attr("data-id",imgId);
-            let url = `http://${window.location.host}/download_attachment/?file_id=${imgId}&download=0`;
-            this.el.find(".signatureMock").css('visibility','visible');
-            // this.el.find(".J_dragimg").attr("src",url);
-            console.log(url);
-            this.el.find(".J_dragimg").css({
-                "left":imgLeft,
-                "top":imgTop,
-                "background-image":  `url(${url})`,
-                "background-repeat":"no-repeat"
-            })
-            let disX = e.clientX - imgLeft;
-            let disY = e.clientY - imgTop;
-            this.el.find(".signatureMock").attr({
-                "disX":disX,
-                "disY":disY
-            })
-            console.log(disX+".."+disY);
-            let fromPlace =  $("#place-form").children(":first");
-            // let fromPlace =  $("#place-form");
-            if(fromPlace.length!=0){
-                let fromPlase = this.el.find(".fromClone");
-                let fromClone = fromPlace.clone();
-                let left =  parseInt(fromPlace.offset().left);
-                let top = parseInt(fromPlace.offset().top);
-                let width= fromPlace.css("width");
-                let height= fromPlace.css("height");
-                fromPlase.css({
-                    "top":top,
-                    "left":left,
-                    "width":width,
-                    "height":height,
-                    "background": "#fff"
-                })
-                fromPlase.children().remove();
-                fromPlase.append(fromClone);
-                fromPlase.find(".imgseal").hide();
-                fromPlase.find('.printS').hide();
-            }
-        },
-        Imgcoordinate(e){
-            let offsetLeft = this.el.find(".signatureMock").attr("disX");
-            let offsetTop = this.el.find(".signatureMock").attr("disY");
-            let ox =  e.clientX - offsetLeft;
-            let oy = e.clientY - offsetTop;
-            $('.J_dragimg').css({
-                "left":ox+"px",
-                "top":oy+"px"
-            })
-        },
+
         delImg(e){
             let msg = $(e.target).attr("id");
             Mediator.publish("workflow:delImg",{"file_id":msg});
             Mediator.publish("workflow:getStamp");
         },
-        //松开鼠标
-        closeSeal(e){
-            let from = this.el.find('.fromClone');
-            //from的宽高
-            console.log(from);
-            let fromWidth = parseInt(from.outerWidth());
-            console.log(fromWidth);
-            let fromHeight = parseInt(from.outerHeight());
-            //from表单距左上角的距离
-            let fromOffleft = parseInt(from.offset().left);
-            let fromOfftop = parseInt(from.offset().top);
-            //点击时鼠标相对图片偏差
-            let offsetLeft = parseInt(this.el.find(".signatureMock").attr("disX"));
-            let offsetTop = parseInt(this.el.find(".signatureMock").attr("disY"));
-            //图片的宽高
-            let imgWidth = parseInt(this.el.find(".li-img").css('width'));
-            let imgHeight = parseInt(this.el.find(".li-img").css("height"));
-            //鼠标释放的位置
-            let mouseLeft = e.clientX;
-            let mouseTop = e.clientY;
-            let imgId =$(e.target).attr("data-id");
-            console.log(mouseLeft-fromOffleft);
-            let leftout = mouseLeft-offsetLeft>fromOffleft;
-            let rightout = mouseTop-offsetTop>fromOfftop;
-            let topout = mouseTop+imgHeight-offsetTop<fromHeight+fromOfftop;
-            let bottomout = mouseLeft+imgWidth-offsetLeft<fromWidth+fromOffleft;
-            if(leftout&&rightout&&topout&&bottomout){
-                let left = (mouseLeft-fromOffleft-offsetLeft)/fromWidth;
-                let top = (mouseTop-fromOfftop-offsetTop)/fromHeight;
-                top= top.toFixed(6)*100;
-                left= left.toFixed(6)*100;
-                this.actions.createImg(top,left,280,140,imgId);
-            }
-            this.el.find(".signatureMock").css('visibility','hidden');
-        },
+
         createImg(top,left,width,height,id){
             console.log(id);
             let viewLeft = left;
@@ -197,46 +76,58 @@ let config = {
                 this.showImg = true;
                 Mediator.publish("workflow:showImg");
             }
+        },
+        dragImg(event,ui){
+            let container = $("#place-form")[0];
+            let containerHeight = container.clientHeight;
+            let containerWidth = container.clientWidth;
+            let top = ui.position.top/containerHeight;
+            let left = ui.position.left/containerWidth;
+            let id = ui.helper[0].dataset.id;
+            top= top.toFixed(6)*100;
+            left= left.toFixed(6)*100;
+            this.actions.createImg(top,left,248,148,id);
+            this.el.find(".signatureMock").css("visibility","hidden");
+            $('#place-form').css("z-index",0);
+        },
+        init(){
+            let that = this;
+            console.log("00000000000000000000000");
+            this.el.find(".add-img").draggable({
+                helper: "clone",
+                appendTo:"#place-form",
+                containment:"#place-form",
+                revert: false,
+                start:function (event, ui) {
+                    that.el.find(".signatureMock").css("visibility","visible");
+                    $('#place-form').css("z-index",105);
+                },
+                stop:function(event, ui){
+                    that.actions.dragImg(event,ui);
+                }
+            });
         }
     },
     afterRender: function() {
         this.showImg = true;
+        this.actions.init();
+
         this.el.on('change','.J_add',(e)=>{
             this.actions.addImg(e);
-        }),
-        this.el.on('mousedown','.add-img',(e)=>{
-            this.actions.dragimg(e);
-        }),
-        this.el.on("mouseup",'.signatureMock',(e)=>{
-            this.actions.closeSeal(e);
-            // e.stopPropagation(e);
         }),
         this.el.on("click",'.J_delImg',(e)=>{
             this.actions.delImg(e);
         }),
-        this.el.on("mousemove",'.signatureMock',(e)=>{
-            this.actions.Imgcoordinate(e);
-            // e.stopPropagation(e);
-        }),
         this.el.on("click",".J_toggImg",()=>{
             this.actions.toggImg();
         });
-        // $(".approval-info-item").on("click",(e)=>{
-        //     console.log(13265);
-        //     this.actions.showImgDel(e);
-        // })
-        // this.el.on("click",'.li-img',function () {
-        //     self.actions.cloneImg($(this));
-        // });
-        // this.el.parents("#approval-workflow").on('mousedown','.cloneImg',function () {
-        //     self.actions.cloneImgDrag($(this));
-        // });
         $(".approval-info-item").on("click",(e)=>{
             this.actions.showImgDel(e);
         });
         Mediator.subscribe('workflow:changeImg',(msg)=>{
             this.actions.changeImg(msg);
-        })
+            this.actions.init();
+        });
     },
     beforeDestory: function(){
     }

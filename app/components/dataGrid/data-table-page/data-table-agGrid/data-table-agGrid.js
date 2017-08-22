@@ -20,6 +20,7 @@ import importSetting from '../../data-table-toolbar/data-table-import/data-table
 import exportSetting from '../../data-table-toolbar/data-table-export/data-table-export';
 
 import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
+import AttachmentList from "../../../form/attachment-list/attachment-list";
 
 
 let config = {
@@ -659,6 +660,7 @@ let config = {
                 }
             }
             str += '</div>';
+            this.data.operateColWidth=20*operateWord+20;
             return str
         },
         //floatingFilter拼参数
@@ -1423,9 +1425,8 @@ let config = {
                     modal:true
                 },{d}).then(res=>{
                     if(res.type == 'temporaryQuery') {
-                        if(res.addNameAry.length != 0){
-                            this.actions.getExpertSearchData(res.addNameAry);
-                        } else {
+                        if(res.addNameAry.length == 0){
+                            // this.actions.getExpertSearchData(res.addNameAry);
                             this.actions.postExpertSearch(res.value,res.id,res.name);
                         }
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);
@@ -1433,7 +1434,7 @@ let config = {
                         this.data.temporaryCommonQuery = res.value
                         this.actions.appendQuerySelect()
                     } if(res.saveCommonQuery || res.onlyclose == true) {
-                        this.actions.getExpertSearchData()
+                        this.actions.getExpertSearchData(res.addNameAry)
                     }
                 })
             } )
@@ -1686,6 +1687,42 @@ let config = {
             }
             //附件字段
             if( data.event.srcElement.id == 'file_view' && fieldTypeService.attachment(data.colDef.real_type) ){
+                let dinput_type=data.colDef.real_type;
+                let fileIds=data['value'];
+                if(fileIds){
+                    dataTableService.getAttachmentList({
+                        file_ids: JSON.stringify(fileIds),
+                        dinput_type:dinput_type
+                    }).then(res=>{
+                        console.log('获得的是什么');
+                        console.log(res);
+                        let list = res["rows"];
+                        for( let data of list ){
+                            //附件名称编码转换
+                            data.file_name = decodeURI( data.file_name );
+                            let str = dataTableService.getFileExtension( data.file_name );
+                            if( dataTableService.preview_file.indexOf( str.toLowerCase() ) != -1 ){
+                                data["isPreview"] = true;
+                                if( dataTableService.preview_file.indexOf(str.toLowerCase()) <4){
+                                    data["isImg"] = true;
+                                }else{
+                                    data["isImg"] = false;
+                                }
+                            }else{
+                                data["isPreview"] = false;
+                            }
+                        }
+                        AttachmentList.data.list=list;
+                        AttachmentList.data.dinput_type=dinput_type;
+                        AttachmentList.data.is_view=1;
+                        PMAPI.openDialogByComponent(AttachmentList,{
+                            width: 1234,
+                            height: 876,
+                            title: '附件列表'
+                        })
+                    })
+                    HTTP.flush();
+                }
             }
             //内置相关查看原始数据用
             if( data.event.srcElement.id == 'relatedOrBuildin' ){
