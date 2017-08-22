@@ -4,20 +4,25 @@
  */
 
 import Component from '../../../lib/component';
-import Mediator from '../../../lib/mediator';
 import template from './textarea-control.html';
 import './textarea-control.scss';
 let config={
     template:template,
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data);
+            }
+        }
+    ],
     afterRender(){
         let _this=this;
-        _this.el.on('input','input',_.debounce(function(){
+        this.el.find('input').on('input',_.debounce(function(){
             _this.data.value=$(this).val();
-            Mediator.publish('form:changeValue:'+_this.data.tableId,_this.data);
+            _this.events.changeValue(_this.data);
         },300));
-        _this.el.on('click','.ui-history',function(){
-            _.debounce(function(){Mediator.publish('form:history:'+_this.data.tableId,_this.data)},300)();
-        });
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
             this.el.find('.ui-width').attr('disabled',true);
@@ -26,13 +31,13 @@ let config={
         }
     },
     beforeDestory(){
-      Mediator.removeAll('form:history:'+_this.data.tableId);
-      Mediator.removeAll('form:changeValue:'+_this.data.tableId);
+        this.el.find('input').off();
+        this.el.off();
     }
 }
 class TextAreaControl extends Component {
-    constructor(data){
-        super(config,data);
+    constructor(data,events){
+        super(config,data,events);
     }
 }
 
