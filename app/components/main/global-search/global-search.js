@@ -91,18 +91,21 @@ let config ={
             if(content && content !== ''){
                 //判断搜索结果iframe是否已打开，打开则重置src
                 //此处全局搜索div.iframes
-                let that = this;
-                let iframe = $("div.iframes").find("iframe").each(function () {
-                    let src = $(this)[0].src;
-                    let str = "search-content=" + that.data.formerSearchContent;
+                let resultIframe;
+                let iframes =  $("div.iframes").find("iframe");
+                let str = "searchContent=" + this.data.formerSearchContent;
+                str = encodeURI(str);
+                console.log(str);
+                for(let k of iframes){
+                    let src = k.src;
                     if(src.indexOf(str) > 0){
-                        return $(this)[0];
+                        resultIframe = k;
                     }
-                });
+                }
 
-                if(iframe && iframe.length > 0){
+                if(resultIframe){
                     let newSrc = '/search_result?searchContent=' + this.data.searchContent;
-                    iframe.attr("src",newSrc);
+                    $(resultIframe).attr("src",newSrc);
                 }else{
                     //搜索结果展示窗口未打开
                     Mediator.emit('menu:item:openiframe', {
