@@ -1590,11 +1590,15 @@ let config = {
             this.agGrid.gridOptions.api.stopEditing(false);
             let changedRows = this.actions.getChangedRows(this.agGrid.data.rowData);
             let i = 0;
+            this.data.editRowTotal = 0;
+            this.data.editRowNum = 0;
             for( let k in changedRows ){
-                k++;
+                i++;
             }
             this.data.editRowTotal = i;
-            this.data.editRowNum = i;
+            if( this.data.editRowTotal == 0 ){
+                this.actions.toogleEdit();
+            }
             for(let k in changedRows){
                 let changed = changedRows[k];
                 let real_id = changed['data']['real_id'];
@@ -1635,6 +1639,10 @@ let config = {
                     msgBox.showTips( res.error );
                 }else {
                     msgBox.alert( res.error );
+                }
+                this.data.editRowNum++;
+                if( this.data.editRowTotal == this.data.editRowNum ){
+                    this.actions.toogleEdit();
                 }
             } )
         },
