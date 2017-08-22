@@ -207,21 +207,27 @@ let config = {
         },
         onCellClicked: function (params) {
             if(params['colDef']['field']=='operation'){
-                this.actions.onOpenIframe(params)
+                let obj = {};
+                obj['type'] = 'operation';
+                obj['content'] = params['data']['result_detail'] || '';
+                obj['data_info'] = params['data']['data_info'] || [];
+                this.actions.onOpenIframe(obj)
             }else if(params['colDef']['field']=='cache_detail'){
-                this.actions.onOpenIframe(params)
+                let obj = {};
+                obj['type'] = 'cache_detail';
+                obj['content'] = params['data']['cache_detail'] || '';
+                this.actions.onOpenIframe(obj)
             }
 
         },
         //打开详情弹窗
-        onOpenIframe: function(data){
-            debugger
+        onOpenIframe: function(obj){
             PMAPI.openDialogByIframe(`/iframe/operationDetails/`,{
-                width:1000,
-                height:600,
+                width:1200,
+                height:800,
                 title:`详情`,
                 modal:true
-            },'111').then(res=>{
+            },{obj}).then(res=>{
 
             })
         },
