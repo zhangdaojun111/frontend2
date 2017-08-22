@@ -26,6 +26,7 @@ import exportSetting from '../../data-table-toolbar/data-table-export/data-table
 
 import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 import AttachmentList from "../../../form/attachment-list/attachment-list";
+import PictureAttachment from "../../../form/picture-attachment/picture-attachment";
 
 
 let config = {
@@ -1826,14 +1827,15 @@ let config = {
             if( data.colDef.real_type == fieldTypeService.IMAGE_TYPE ){
                 let json = {};
                 json["dfield"] = data.colDef.field;
-                json["table_id"] = this.pageId;
+                json["table_id"] = this.data.tableId;
                 json[(data.data.action?"temp_id":"real_id")] = data.data._id;
-                dataTableService.getImgData( json ).then( res => {
-                    let obj=this.dgcService.setImgDataAndNum(res,this.imgData,this.imgSelect);
-                    this.imgData=obj.imgData;
-                    this.imgSelect=obj.imgSelect;
-                    this.imgDisplay = true;
-                    this.setImgSize();
+                dataTableService.getAttachmentList( json ).then( res => {
+                    // let imgData,imgSelect;
+                    // let obj=dataTableService.setImgDataAndNum(res,imgData,imgSelect);
+                    // imgData=obj.imgData;
+                    // imgSelect=obj.imgSelect;
+                    // this.setImgSize();
+                    PictureAttachment.data.res=res;
                 } )
             }
             //富文本字段

@@ -1,25 +1,26 @@
 <div style="width: 90%; height: 100%;margin: auto;position: relative">
-    <div style="width: 100%;height: 100%;position: absolute;z-index: 1000;background-color: #fff" *ngIf="imgLoading">
-        <my-loading></my-loading>
-    </div>
     <div class="imgList">
-        <div *ngFor="let data of imgData.rows" [style.background]="data.file_id==imgSelect ? '#d4d4d4' : '#fff'">
-            <div style="height: 100%;width: 100%;" (click)="imgClickChange(data.file_id)">
-                <p style="word-break: break-all; margin: 5px;">{{data.file_name}}</p>
-                <a href="/data/download_attachment/?file_id={{data.file_id}}&download=1">下载</a>
+        {{#each rows}}
+        <div class="select-img" data-imgSelect="{{this.file_id}}">
+            <div style="height: 100%;width: 100%;">
+                <p style="word-break: break-all; margin: 5px;">{{this.file_name}}</p>
+                <a href="download_attachment/?file_id={{this.file_id}}&download=1">下载</a>
                 <!--<a style="color: blue;">预览</a>-->
                 <!--<a (click)="imgDel(data.file_id)">删除</a>-->
             </div>
         </div>
+        {{/each}}
     </div>
     <div class="imgContain">
-        <div class="changeBtn" style="left: 5px;" (click)="imgChange(1)"><i class="fa fa-arrow-left" aria-hidden="true"></i></div>
-        <div class="changeBtn" style="right: 5px;" (click)="imgChange(2)"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
+        <div class="changeBtn" style="left: 5px;" data-num="1"><i class="fa fa-arrow-left" aria-hidden="true"></i></div>
+        <div class="changeBtn" style="right: 5px;" data-num="2"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
         <div style="width: 100%; height: 100%;">
-            <div *ngIf="imgSelect != ''">
-                <img id="myImg" src="/data/download_attachment/?file_id={{imgSelect}}&download=0">
-                <img id="ImgToShow" src="/data/download_attachment/?file_id={{imgSelect}}&download=0">
-            </div>
+            {{#if imgSelect}}
+                <div>
+                    <img id="myImg" src="/download_attachment/?file_id={{imgSelect}}&download=0">
+                    <img id="ImgToShow" src="/download_attachment/?file_id={{imgSelect}}&download=0">
+                </div>
+            {{/if}}
         </div>
     </div>
 </div>
