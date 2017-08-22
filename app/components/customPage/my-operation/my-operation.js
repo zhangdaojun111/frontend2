@@ -221,7 +221,7 @@ let config = {
                 height:600,
                 title:`详情`,
                 modal:true
-            },{data}).then(res=>{
+            },'111').then(res=>{
 
             })
         },

@@ -19,7 +19,6 @@ let config = {
         }
     },
     afterRender: function() {
-        debugger
         PMAPI.getIframeParams(window.config.key).then((res) => {
             for (let item in res.data.obj) {
                 this.data[item] = res.data.obj[item]
