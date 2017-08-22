@@ -1,7 +1,14 @@
 //@import "../../../calendar";
-
+.item-td-col-month{
+    flex-grow: 1;
+    height: 138px;
+}
+.item-td-col-week {
+    flex-grow: 1;
+    height: 100%;
+}
 .grid-content {
-    width: calc(100% - 1px);
+    //width: calc(100% - 1px);
     display: block;
     text-align: left;
     height: 100%;

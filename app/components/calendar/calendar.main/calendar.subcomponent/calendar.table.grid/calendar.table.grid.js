@@ -27,10 +27,11 @@ let config = {
             $('.grid-content').css({'max-height': "840px", overflow: "auto"});
             $('.date').remove();
         } else if(this.data.type === 'month') {
-            this.el.css({display: "inline-block", width: "calc((100% - 1px)/7)", height: "calc(100% - 1px)"});
+            this.el.addClass("item-td-col-month");
             $('.task-list').css({'height': "calc(100% - 20px)", 'overflow-y': "auto",'overflow-x': "hidden" , width:"100%"});
         } else if (this.data.type === 'week') {
-            this.el.css({display: "inline-block", width: "calc((100% - 1px)/7)", height: "100%"});
+            this.el.addClass("item-td-col-week");
+            // this.el.css({display: "inline-block", width: "calc((100% - 1px)/7)", height: "100%"});
             $('.grid-content').css({'max-height': "805px", "border-bottom": "1px solid #ddd", overflow: "auto"});
             $('.date').remove();
         }
