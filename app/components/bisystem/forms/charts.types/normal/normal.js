@@ -31,6 +31,7 @@ let config = {
     },
     firstAfterRender() {
         this.el.on('click', '.save-normal-btn', (event) => {
+            console.log('xxxxxxxxxxxxxxxx');
             this.saveChart();
             return false;
         });

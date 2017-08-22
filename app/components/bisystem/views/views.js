@@ -65,7 +65,7 @@ let config = {
                 })
             }
             return false;
-        }).on('click','.save',()=> {
+        }).on('click','.save-view',()=> {
            let views = this.data.views;
             ViewsService.saveData({data:views}).then((res)=>{
                if(res['success']===1){
@@ -74,6 +74,7 @@ let config = {
                    msgbox.alert(res['error']);
                }
            })
+            return false;
         });
     }
 };

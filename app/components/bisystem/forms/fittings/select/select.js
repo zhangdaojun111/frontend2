@@ -54,7 +54,9 @@ export class SelectComponent extends FormFittingAbstract {
                 break;
             }
         };
+        console.log(val);
         this.data.value = val;
+        console.log(this.data);
     }
 
 
