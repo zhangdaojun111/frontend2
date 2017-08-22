@@ -1463,7 +1463,10 @@ let config = {
             if( this.el.find('.grid-del-btn')[0] ){
                 this.el.find( '.grid-del-btn' ).on( 'click',()=>{
                     this.actions.retureSelectData();
-                    delSetting.data['deletedIds'] = this.data.deletedIds;
+                    if( this.data.deletedIds.length == 0 ){
+                        msgBox.alert( '请选择数据' );
+                        return;
+                    }
                     msgBox.confirm( '确定删除？' ).then( res=>{
                         if( res ){
                             this.actions.delTableData();
