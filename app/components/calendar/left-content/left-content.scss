@@ -6,7 +6,7 @@ $chk_1-label-bg-color:#FFF;
 .item-title-1,.item-title-4,.item-title-3
 {
   border: 1px solid $boder-color;
-  width: calc(100% - 22px);
+  width: 100%;
   height: 30px;
   padding: 0px 10px 0px 10px;
   background-color:$item-title-bg-color;
@@ -31,7 +31,7 @@ $chk_1-label-bg-color:#FFF;
 }
 .item-title-2{
   border: 1px solid $boder-color;
-  width: calc(100% - 22px);
+  width: 100%;
   height: 30px;
   padding: 0px 10px 0px 10px;
   margin-bottom: 2px;
@@ -56,27 +56,13 @@ $chk_1-label-bg-color:#FFF;
   word-break: keep-all;
   white-space: nowrap;
 }
-//
-//.cate-hide::-webkit-scrollbar,.taskbar::-webkit-scrollbar {
-//  width: 4px;
-//  height: 4px;
-//}
-//.cate-hide::-webkit-scrollbar-thumb,.taskbar::-webkit-scrollbar-thumb {
-//  border-radius: 5px;
-//  -webkit-box-shadow: inset 0 0 5px rgba(14, 122, 239, 0.290196);
-//  background:  rgba(242, 242, 242, 1);
-//}
-//.cate-hide::-webkit-scrollbar-track,.taskbar::-webkit-scrollbar-track {
-//  -webkit-box-shadow: inset 0 0 5px rgba(14, 122, 239, 0.290196);
-//  border-radius: 0;
-//  background: rgba(14, 122, 239,0.1);
-//}
+
 .item-content-1,.item-content-4,.item-content-3
 {
   height:27%;
   overflow: auto;
   padding: 0px 0px 3px 10px;
-  width: calc(100% - 10px);
+  width: 100%;
 }
 .item-content-2
 {
@@ -84,7 +70,7 @@ $chk_1-label-bg-color:#FFF;
   height:27%;
   overflow: auto;
   padding: 10px 0px 3px 10px;
-  width: calc(100% - 20px);
+  width: 100%;
 }
 
 

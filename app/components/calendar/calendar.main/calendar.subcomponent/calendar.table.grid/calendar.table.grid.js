@@ -23,16 +23,12 @@ let config = {
         let that = this;
         let drag_Postion = null;
         if (this.data.type === 'day') {
-            this.el.css({display: "inline-block", width: "calc(100% - 1px)", height: "100%"});
-            $('.grid-content').css({'max-height': "840px", overflow: "auto"});
+            this.el.addClass("item-td-col-day");
             $('.date').remove();
         } else if(this.data.type === 'month') {
             this.el.addClass("item-td-col-month");
-            $('.task-list').css({'height': "calc(100% - 20px)", 'overflow-y': "auto",'overflow-x': "hidden" , width:"100%"});
         } else if (this.data.type === 'week') {
             this.el.addClass("item-td-col-week");
-            // this.el.css({display: "inline-block", width: "calc((100% - 1px)/7)", height: "100%"});
-            $('.grid-content').css({'max-height': "805px", "border-bottom": "1px solid #ddd", overflow: "auto"});
             $('.date').remove();
         }
         let taskData = this.data.bodyData['data'];
@@ -43,8 +39,6 @@ let config = {
             });
         }
         this.el.on('dragenter', '.task-item',function(event){
-            event.stopPropagation();
-            event.preventDefault();
             drag_Postion = null;
             let ev = event.originalEvent;
             let temp = that.el.find(".task-item-draggable").parent();
@@ -57,8 +51,6 @@ let config = {
             ev.preventDefault();
             return true;
         }).on('dragleave', '.task-list',(event) => {
-            event.stopPropagation();
-            event.preventDefault();
             if(this.el.find('.task-item').length < 2 ){
                 drag_Postion = null;
             }
@@ -66,14 +58,10 @@ let config = {
             ev.preventDefault();
             return true;
         }).on('dragover', '.task-list',(event) => {
-            event.stopPropagation();
-            event.preventDefault();
             let ev = event.originalEvent;
             ev.preventDefault();
             return true;
         }).on('drop','.task-list',(event) => {
-            event.stopPropagation();
-            event.preventDefault();
             let ev = event.originalEvent;
             let temp = $(".task-item-draggable");
             temp.removeClass("task-item-draggable");
