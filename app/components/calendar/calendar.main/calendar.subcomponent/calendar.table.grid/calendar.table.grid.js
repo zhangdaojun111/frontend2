@@ -14,9 +14,9 @@ let config = {
     data: {
         bodyData: {},
         itemData: {},
+        type: ''
     },
     actions: {
-
 
     },
     afterRender: function() {
@@ -38,7 +38,7 @@ let config = {
         if(taskData && taskData.length > 0) {
             this.el.find('.grid-content').css({backgroundColor: "rgba(255, 255, 255, 1)"});
             taskData.forEach(item => {
-                this.append(new CalendarRemindTaskItem(item), this.el.find('.task-list'));
+                this.append(new CalendarRemindTaskItem({data:item, type: this.data.type}), this.el.find('.task-list'));
             });
         }
         this.el.on('dragenter', '.task-item',function(event){
@@ -69,8 +69,19 @@ let config = {
             let temp = $(".task-item-draggable");
             temp.removeClass("task-item-draggable");
             temp = temp.parent();
-            let data = JSON.parse(ev.dataTransfer.getData("Text"));
-            console.log(data, this.data.bodyData);
+            if(ev.dataTransfer.getData("Text")) {
+                let data = JSON.parse(ev.dataTransfer.getData("Text"));
+                console.log(data, this.data.bodyData);
+                let params = {
+                    real_ids: data['real_id'],
+                    table_id: data['tableId'],
+                    calendar_id: data['setId'],
+                    data: {}
+                };
+                params['data'][data['dfield']] = this.data.bodyData['dataTime'];
+                params['data'] = JSON.stringify(params['data']);
+                Mediator.emit('CalendarDrag: dragRemind', params)
+            }
             if(drag_Postion ===null){
                 drag_Postion = this.el.find(".task-list");
                 drag_Postion.append(temp);
@@ -80,20 +91,6 @@ let config = {
             drag_Postion = null;
             return false;
         });
-        // this.el.on('dragleave', '.task-item',function(event){
-        //     if(this === that.el.find('.task-item')[that.el.find('.task-item').length -1]){
-        //         let temp = $(".task-item-draggable");
-        //         if(temp[0] !==this ){
-        //             temp = temp.parent();
-        //             $(this).parent().after(temp);
-        //             drag_Postion = null;
-        //         }
-        //     }
-        //     let ev = event.originalEvent;
-        //     ev.preventDefault();
-        //     return true;
-        // });
-
     }
 };
 
