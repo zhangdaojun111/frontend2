@@ -1,6 +1,6 @@
 @mixin nine-flex{
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: space-between;
   font-size: 12px;
 }

@@ -13,7 +13,19 @@ import "./number.scss";
 let config = {
     template:template,
     data: {
-        columnsShow:false
+        columnsShow:false,
+        xAxis:{
+            x1:'',
+            x2:'',
+            x3:'',
+            x4:'',
+        },
+        yAxis:{
+            y1:'',
+            y2:'',
+            y3:'',
+            y4:'',
+        },
     },
     actions: {},
     afterRender() {
@@ -35,7 +47,7 @@ export class NineGridNumberComponent extends BiBaseComponent{
      */
     renderFitting() {
         this.columnsXY = {
-             columnsXL:instanceFitting({
+            x1:instanceFitting({
                 type:'input',
                 data:{
                     value:null,
@@ -45,7 +57,7 @@ export class NineGridNumberComponent extends BiBaseComponent{
                 me: this,
                 container: 'x-columns'
             }),
-            columnsXC:instanceFitting({
+            x2:instanceFitting({
                 type:'input',
                 data:{
                     value:null,
@@ -55,7 +67,7 @@ export class NineGridNumberComponent extends BiBaseComponent{
                 me: this,
                 container: 'x-columns'
             }),
-            columnsXR:instanceFitting({
+            x3:instanceFitting({
                 type:'input',
                 data:{
                     value:null,
@@ -65,7 +77,7 @@ export class NineGridNumberComponent extends BiBaseComponent{
                 me: this,
                 container: 'x-columns'
             }),
-            columnsXD:instanceFitting({
+            x4:instanceFitting({
                 type:'input',
                 data:{
                     value:null,
@@ -75,7 +87,7 @@ export class NineGridNumberComponent extends BiBaseComponent{
                 me: this,
                 container: 'x-columns'
             }),
-            columnsYL:instanceFitting({
+            y1:instanceFitting({
                 type:'input',
                 data:{
                     value:null,
@@ -85,7 +97,7 @@ export class NineGridNumberComponent extends BiBaseComponent{
                 me: this,
                 container: 'y-columns'
             }),
-            columnsYC:instanceFitting({
+            y2:instanceFitting({
                 type:'input',
                 data:{
                     value:null,
@@ -95,7 +107,7 @@ export class NineGridNumberComponent extends BiBaseComponent{
                 me: this,
                 container: 'y-columns'
             }),
-            columnsYR:instanceFitting({
+            y3:instanceFitting({
                 type:'input',
                 data:{
                     value:null,
@@ -105,7 +117,7 @@ export class NineGridNumberComponent extends BiBaseComponent{
                 me: this,
                 container: 'y-columns'
             }),
-             columnsYD:instanceFitting({
+            y4:instanceFitting({
                 type:'input',
                 data:{
                     value:null,
@@ -117,4 +129,24 @@ export class NineGridNumberComponent extends BiBaseComponent{
             })
         }
     };
+
+
+    /**
+     * 分别获取到九宫格 所有数据 返回data
+     */
+    getValue() {
+        const data = {
+            'xAxis': {},
+            'yAxis': {}
+        };
+
+        Object.keys(this.columnsXY).map(key => {
+            if (key.indexOf('x')!== -1) {
+                data['xAxis'][key] = this.columnsXY[key].getValue();
+            } else {
+                data['yAxis'][key] = this.columnsXY[key].getValue();
+            }
+        });
+        return data;
+    }
 }

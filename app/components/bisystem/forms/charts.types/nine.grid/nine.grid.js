@@ -20,8 +20,12 @@ let config = {
     actions: {},
     afterRender() {
         this.renderFitting();
+        this.switchOptions(this.formGroup.nineGridColumn.data.value);
     },
     firstAfterRender() {
+        this.el.on('click', '.save-btn', (event) => {
+            this.save();
+        })
     }
 };
 
@@ -31,16 +35,16 @@ export class FormNineGridComponent extends BiBaseComponent{
         this.formGroup={};
     }
 
-   /**
-    * 渲染nine-grid fittings
-    */
-   renderFitting(){
-       let base = new FormBaseComponent();
-       let share = new FormMixShareComponent();
-       let grid = new NineGridNumberComponent();
-       this.append(base, this.el.find('.nine-grid-base'));
-       this.append(share, this.el.find('.nine-grid-share'));
-       this.append(grid,this.el.find('.nine-grid-column-xy'));
+    /**
+     * 渲染nine-grid fittings
+     */
+    renderFitting(){
+        let base = new FormBaseComponent();
+        let share = new FormMixShareComponent();
+        let grid = new NineGridNumberComponent();
+        this.append(base, this.el.find('.nine-grid-base'));
+        this.append(share, this.el.find('.nine-grid-share'));
+        this.append(grid,this.el.find('.nine-grid-column-xy'));
 
         this.formGroup = {
             nineGridName:base,
@@ -51,6 +55,7 @@ export class FormNineGridComponent extends BiBaseComponent{
                 me: this,
                 container: 'nine-grid-column',
                 data: {
+                    value: '3',
                     options:[
                         {name:'3*3', value:'3'},
                         {name:'4*4', value:'4'}
@@ -60,8 +65,7 @@ export class FormNineGridComponent extends BiBaseComponent{
 
             })
         }
-   }
-
+    }
     /**
      * 切换3*3 / 4*4 格子数
      * @param val === 3 / val ===4
@@ -82,6 +86,16 @@ export class FormNineGridComponent extends BiBaseComponent{
      */
     reset(flag) {
         this.formGroup = {};
+    }
+
+    /**
+     * 获取到九宫格 X,Y轴 输入数据
+     */
+    save() {
+       let val = this.formGroup.nineGridColumn.data.value;
+       let data = this.formGroup.grid.getValue();
+
+        console.log(data);
     }
 
 }
