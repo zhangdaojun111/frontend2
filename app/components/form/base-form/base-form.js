@@ -1666,6 +1666,7 @@ let config={
         //     console.log('scroll');
         //     _this.el.find('.ui-btn-box').css({'bottom':(-1*$('.wrap').get(0).scrollTop +' px'),'width':'calc(100% + '+$('.wrap').get(0).scrollLeft+'px)'});
         // })
+        //默认表单样式
         if( _this.el.find('table').hasClass('form-version-table-user') || _this.el.find('table').hasClass('form-version-table-department') ){
             _this.el.find('table').parents().parents('#detail-form').addClass('detail-form-style');
             _this.el.find('table').off();
@@ -1677,7 +1678,7 @@ let config={
             _this.el.find(".overflow").on("scroll",function () {
                 let overflowHight = _this.el.find('.overflow').scrollTop();
                 // console.log(overflowHight)
-                if(overflowHight>=70){
+                if(overflowHight>=60){
                     _this.el.find('.more').show();
                 }else{
                     _this.el.find('.more').hide();
