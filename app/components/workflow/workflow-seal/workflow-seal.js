@@ -56,7 +56,7 @@ let config = {
             let top1 = top+"%";
             let left1 = left+"%";
             let host = "http://"+window.location.host;
-            let html = `<div class='imgseal noprint' data-height=${height} data-width=${width} data-viewLeft=${viewLeft} data-viewTop=${viewTop} data-imgid=${id} style='top:${top1};left:${left1};z-index:1002;position:absolute;padding-top:15px;'>
+            let html = `<div class='imgseal noprint' data-height=${height} data-width=${width} data-viewLeft=${viewLeft} data-viewTop=${viewTop} data-imgid=${id} style='top:${top1};left:${left1}'>
                             <img  width=${width} height=${height} src='${host}/download_attachment/?file_id=${id}&download=0'/>
                                 <i class='J_del'>X</i>
                          </div>`;
@@ -85,7 +85,7 @@ let config = {
             let id = ui.helper[0].dataset.id;
             top= top.toFixed(6)*100;
             left= left.toFixed(6)*100;
-            this.actions.createImg(top,left,100,100,id);
+            this.actions.createImg(top,left,50,50,id);
             this.el.find(".signatureMock").css("visibility","hidden");
             $('#place-form').css("z-index",0);
         },

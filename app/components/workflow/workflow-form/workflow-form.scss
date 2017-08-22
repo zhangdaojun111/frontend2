@@ -38,6 +38,7 @@
     position: relative;
     padding: 20px 10px;
     background: #fff;
+    min-height: 130px;
     .add-img{
       width: 248px;
       height: 148px;
@@ -53,6 +54,11 @@
     top: 0;
     width: 23px;
     height: 23px;
+  }
+  .imgseal{
+    z-index:1002;
+    position:absolute;
+    padding-top:15px;
   }
   .printimg{
     position: absolute;
