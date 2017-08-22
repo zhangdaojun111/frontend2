@@ -159,7 +159,11 @@ let config = {
         //上一次操作状态
         lastGridState: [],
         //编辑模式对比原始数据
-        originRowData: {}
+        originRowData: {},
+        //编辑数据总数
+        editRowTotal: 0,
+        //编辑已经保存的数量
+        editRowNum: 0,
     },
     //生成的表头数据
     columnDefs: [],
@@ -1554,7 +1558,7 @@ let config = {
                 } )
                 this.el.find( '.edit-btn-save' ).on( 'click',()=>{
                     //保存
-                    // this.actions.onEditSave();
+                    this.actions.onEditSave();
                 } )
                 //创建编辑模式表头
                 FormService.getStaticData({table_id: this.data.tableId}).then( res=>{
@@ -1581,72 +1585,59 @@ let config = {
             }
         },
         //编辑模式保存数据
-        // onEditSave: function () {
-        //     //比对当前值与初始值的差别
-        //     console.log( "***************" )
-        //     console.log( "***************" )
-        //     console.log( this.data.rowData )
-        //     console.log( this.agGrid.data.rowData )
-        //     this.agGrid.gridOptions.api.stopEditing(false);
-        //     let changedRows = this.actions.getChangedRows(this.agGrid.data.rowData);
-        //     for(let k in changedRows){
-        //         let changed = changedRows[k];
-        //         let real_id = changed['data']['real_id'];
-        //         changedRows[real_id] = changed;
-        //         FormService.getDynamicData({
-        //             table_id: this.data.tableId,
-        //             real_id: real_id,
-        //             is_view: 0
-        //         }).then( res=>{
-        //             console.log( "____________________" )
-        //             console.log( "____________________" )
-        //             console.log( res )
-        //             if(res){
-        //                 let data = res['data'];
-        //                 let real_id = data['real_id']['value'];
-        //                 if(!changedRows[real_id]){
-        //                     return;
-        //                 }
-        //                 let obj = {
-        //                     real_id:data['real_id']['value'],
-        //                     temp_id:data['temp_id']['value'],
-        //                     parent_real_id:data['parent_real_id']['value'],
-        //                     parent_table_id:data['parent_table_id']['value'],
-        //                     parent_temp_id:data['parent_temp_id']['value']
-        //                 };
-        //                 let targetRow = changedRows[real_id];
-        //                 this.actions.saveEdit(targetRow,obj);
-        //             }
-        //         } )
-        //         HTTP.flush();
-        //     }
-        // },
-        // saveEdit(targetRow,ids){
-        //     let json=this.dgcService.abjustTargetRow(targetRow,ids);
-        //     json['data']=encodeURIComponent(JSON.stringify(json['data']));
-        //     json['cache_new']=encodeURIComponent(JSON.stringify(json['cache_new']));
-        //     json['cache_old']=encodeURIComponent(JSON.stringify(json['cache_old']));
-        //     this.wfService.saveAddpageData(json).then(res=>{
-        //         if(this.imgType == 'success'){
-        //             this.alertVisible = false;
-        //         }
-        //         if(res['success']==1){
-        //             console.log('保存'+ids['real_id']+'的数据成功！');
-        //         } else {
-        //             this.openAlert(res['error'],'error');
-        //             //保存编辑失败后删除失效刷新的tableID
-        //             this.globalService.refreshDataTableId = [];
-        //             this.globalService.refreshParentDataTableId = [];
-        //         }
-        //         this.changedRowNum--;
-        //         if(this.changedRowNum <= 0){
-        //             this.cd.markForCheck();
-        //         }
-        //         this.setEditClickable();
-        //         this.setGridSort();
-        //         this.getOrSetGridState( false,false );
-        //     });
-        // },
+        onEditSave: function () {
+            //比对当前值与初始值的差别
+            this.agGrid.gridOptions.api.stopEditing(false);
+            let changedRows = this.actions.getChangedRows(this.agGrid.data.rowData);
+            let i = 0;
+            for( let k in changedRows ){
+                k++;
+            }
+            this.data.editRowTotal = i;
+            this.data.editRowNum = i;
+            for(let k in changedRows){
+                let changed = changedRows[k];
+                let real_id = changed['data']['real_id'];
+                changedRows[real_id] = changed;
+                FormService.getDynamicData({
+                    table_id: this.data.tableId,
+                    real_id: real_id,
+                    is_view: 0
+                }).then( res=>{
+                    if(res){
+                        let data = res['data'];
+                        let real_id = data['real_id']['value'];
+                        if(!changedRows[real_id]){
+                            return;
+                        }
+                        let obj = {
+                            real_id:data['real_id']['value'],
+                            temp_id:data['temp_id']['value'],
+                            parent_real_id:data['parent_real_id']['value'],
+                            parent_table_id:data['parent_table_id']['value'],
+                            parent_temp_id:data['parent_temp_id']['value']
+                        };
+                        let targetRow = changedRows[real_id];
+                        this.actions.saveEdit(targetRow,obj);
+                    }
+                } )
+                HTTP.flush();
+            }
+        },
+        saveEdit(targetRow,ids){
+            let json = dgcService.abjustTargetRow(targetRow,ids);
+            json['data'] = JSON.stringify(json['data']);
+            json['focus_users'] = JSON.stringify(json['focus_users']);
+            json['cache_new'] = JSON.stringify(json['cache_new']);
+            json['cache_old'] = JSON.stringify(json['cache_old']);
+            FormService.saveAddpageData( json ).then( res=>{
+                if( res.succ == 1 ){
+                    msgBox.showTips( res.error );
+                }else {
+                    msgBox.alert( res.error );
+                }
+            } )
+        },
         //比对当前值与初始值的差别
         getChangedRows(rowData){
             let changedRows = {};
@@ -1686,9 +1677,6 @@ let config = {
                     changedRows[real_id] = changed;
                 }
             });
-            console.log( "$$$$$$$$$$$$$$$$$$$" )
-            console.log( "$$$$$$$$$$$$$$$$$$$" )
-            console.log( changedRows )
             return changedRows;
         },
         //渲染高级查询

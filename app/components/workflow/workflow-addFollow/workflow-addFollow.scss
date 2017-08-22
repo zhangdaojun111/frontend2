@@ -4,6 +4,12 @@
 #add-follow{
 	height: 100%;
 	width: 100%;
+	display: none;
+}
+#add-home{
+	.selectSpan{
+		margin-right: 15px;
+	}
 }
 #add-home .add-follow,#cloneId1 .add-follow{
 	color: #000;
@@ -16,7 +22,14 @@
 	.add-icon{
 		margin-right: 5px;
 	}
+	
 }
+.follow-name-list{
+	position: relative;
+	min-height: 65px;
+	padding: 10px 5px;
+	line-height: 20px;
+  }
 .follower-select{
 	background: #fff;
 	box-shadow: none;
@@ -83,6 +96,13 @@
 [disabled]{
 	background: #eee;
 }
-html,body{
-	height: 100%;
-}
+.addConter{
+	.addCont{
+	  width: 800px;
+	  height: 600px;
+	  left: calc(50% - 400px);
+	  top:calc(50% - 300px);
+	  z-index: 111;
+	  position: fixed;
+	}
+  }
