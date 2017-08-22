@@ -139,7 +139,6 @@ export class NineGridNumberComponent extends BiBaseComponent{
             'xAxis': {},
             'yAxis': {}
         };
-
         Object.keys(this.columnsXY).map(key => {
             if (key.indexOf('x')!== -1) {
                 data['xAxis'][key] = this.columnsXY[key].getValue();

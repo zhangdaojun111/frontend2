@@ -92,10 +92,23 @@ export class FormNineGridComponent extends BiBaseComponent{
      * 获取到九宫格 X,Y轴 输入数据
      */
     save() {
-       let val = this.formGroup.nineGridColumn.data.value;
-       let data = this.formGroup.grid.getValue();
-
-        console.log(data);
+        let dataCur = {
+            'xAxis': {},
+            'yAxis': {}
+        };
+        let val = this.formGroup.nineGridColumn.data.value;
+        let data = this.formGroup.grid.getValue();
+        if(val == 3){
+            Object.keys(data.xAxis).slice(0,3).map(key=>{
+                dataCur.xAxis[key]=data.xAxis[key]
+            });
+            Object.keys(data.yAxis).slice(0,3).map(key=>{
+                dataCur.yAxis[key]=data.yAxis[key]
+            });
+        }else{
+           dataCur = data;
+        }
+        console.log(dataCur);
+        return dataCur;
     }
-
 }
