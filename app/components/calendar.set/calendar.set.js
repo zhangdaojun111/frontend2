@@ -124,7 +124,7 @@ let config = {
                         })
                     }
                 }
-                console.log(this.data.allRows);
+                this.data.childComponents = [];
                 this.data.allRows.forEach((row, index) => {
                     let isConfig = false;
                     if(this.data.rowTitle[index]['id'] && this.data.rowTitle[index]['dtype'] === '8' && this.data.replaceDropDown.length !== 0){
@@ -266,7 +266,7 @@ let config = {
                         //CalendarSetService.getColumnList(this.data.tableId)
                         this.el.find('.set-items').empty();
                         this.actions.getColumnListData(this.data.tableId);
-                    },100 );
+                    },500 );
 
                 }else  if(res['succ'] === 0){
                     MSG.alert(res['error']);
@@ -276,7 +276,6 @@ let config = {
             this.el.find(".set-btn").removeClass("disabled");
             Mediator.emit('calendar-set:editor',{data:-1});
         },
-
 
         getColumnListData: function (tableId) {
             CalendarSetService.getColumnList(tableId).then(res => {

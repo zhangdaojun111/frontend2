@@ -170,6 +170,70 @@ let config = {
 
     ],
 
+    binds: [
+        {
+            event: 'click',
+            selector: '.fold',
+            callback: function () {
+                this.data.asideSize = this.data.asideSize === 'full' ? 'mini' : 'full';
+                Mediator.emit('aside:size', this.data.asideSize);
+                if (this.data.asideSize === 'full') {
+                    this.actions.setSizeToFull();
+                } else {
+                    this.actions.setSizeToMini();
+                }
+            }
+        }, {
+            event: 'click',
+            selector: '.bi',
+            callback: function (context) {
+                this.actions.openBiIframe();
+            }
+        }, {
+            event: 'click',
+            selector: '.calendar',
+            callback: function () {
+                this.actions.openCalendarIframe();
+            }
+        }, {
+            event: 'click',
+            selector: '.task',
+            callback: function () {
+                msgbox.confirm('这是提示123123')
+            }
+        }, {
+            event: 'click',
+            selector: '.online-num',
+            callback: function () {
+                this.actions.goOnlineNumber();
+            }
+        }, {
+            event: 'click',
+            selector: '.system-setting',
+            callback: function () {
+                this.actions.goSystemSetting();
+            }
+        }, {
+            event: 'click',
+            selector: '.home',
+            callback: function(){
+                this.actions.openHome();
+            }
+        }, {
+            event: 'click',
+            selector: '.message',
+            callback: function(){
+                this.actions.openMessageDialog();
+            }
+        }, {
+            event: 'click',
+            selector: '.message-push',
+            callback: function(){
+                this.actions.openPostMessageDialog();
+            }
+        }
+    ],
+
     afterRender: function () {
         this.el.tooltip();
         this.actions.displayMessageUnread({

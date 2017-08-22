@@ -106,7 +106,6 @@ let config = {
             this.data.recipients_per = params.data.recipients_per;
             this.data.sms = params.data.sms;
             this.data.email = params.data.email;
-            console.log(this.data.sms, this.data.email);
 
             if (this.data.smsStatus === '1') {
                 this.el.find('.open-sms-remind').addClass('checked');

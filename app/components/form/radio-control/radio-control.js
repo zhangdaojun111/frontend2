@@ -35,12 +35,12 @@ let config={
             event: 'click',
             selector: '.df-input-radio',
             callback: function(event){
-                this.data.value=event.target.value;
+                this.data.value=event.value;
                 _.debounce(()=>{
                     this.events.changeValue(this.data);
                 },200)();
-                for(let obj of _this.data.group){
-                    if(obj.value==event.target.value){
+                for(let obj of this.data.group){
+                    if(obj.value==event.value){
                         obj['checked']=true;
                     }else{
                         obj['checked']=false;

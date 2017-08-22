@@ -39,13 +39,6 @@ let config={
         },
         {
             event: 'click',
-            selector: '.time',
-            callback: function(event){
-                event.stopPropagation();
-            }
-        },
-        {
-            event: 'click',
             selector: '.cancel-x',
             callback: function(){
                 this.el.find('.time').css('display','none');
@@ -103,7 +96,9 @@ let config={
             _this.data.value = now;
             _.debounce(function(){_this.events.changeValue(_this.data)},200)();
             });
-
+        this.el.on('click','.time',function(event){
+            event.stopPropagation();
+        })
         this.el.on("click",'.reduce', function () {
             //当前时间-1
             var myDate3 = new Date();

@@ -659,6 +659,7 @@ let config = {
                 }
             }
             str += '</div>';
+            this.data.operateColWidth=20*operateWord+20;
             return str
         },
         //floatingFilter拼参数
