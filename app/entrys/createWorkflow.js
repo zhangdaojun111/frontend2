@@ -108,8 +108,6 @@ Mediator.subscribe('workflow:choose', (msg)=> {
 let focusArr=[];
 Mediator.subscribe('workflow:focus-users', (res)=> {
     focusArr=res;
-    console.log(focusArr);
-    Mediator.publish('workflow:focused', focusArr);
 })
 Mediator.subscribe('workflow:submit', (res)=> {
     let formData=FormEntrys.getFormValue(wfObj.tableid);
