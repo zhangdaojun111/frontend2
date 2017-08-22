@@ -38,7 +38,7 @@ let config = {
         if(taskData && taskData.length > 0) {
             this.el.find('.grid-content').css({backgroundColor: "rgba(255, 255, 255, 1)"});
             taskData.forEach(item => {
-                this.append(new CalendarRemindTaskItem(item), this.el.find('.task-list'));
+                this.append(new CalendarRemindTaskItem({data:item, type: this.data.type}), this.el.find('.task-list'));
             });
         }
         // this.el.on('dragenter', '.task-item',function(event){
@@ -81,22 +81,22 @@ let config = {
             temp.removeClass("task-item-draggable");
             temp = temp.parent();
             let data = JSON.parse(ev.dataTransfer.getData("Text"));
-            console.log(data, this.data.bodyData);
+            let params = {
+                real_ids: data['real_id'],
+                table_id: data['tableId'],
+                calendar_id: data['setId'],
+                data: {},
+            };
+            params.data[data['dfield']] = this.data.bodyData['dataTime'];
+            params['data'] = JSON.stringify(params['data']);
+            Mediator.emit('CalendarDrag: dragRemind', params);
             if(drag_Postion ===null){
                 drag_Postion = this.el.find(".task-list");
                 drag_Postion.append(temp);
             } else{
-                // drag_Postion.after("<div class='temp'></div>");
-                // drag_Postion = drag_Postion.next('.temp');
                 drag_Postion.after(temp);
             }
             drag_Postion = null;
-
-            // if(drag_Postion.is(".temp")){
-            //     drag_Postion.html("");
-            // }
-            // this.append(new CalendarRemindTaskItem(data), drag_Postion);
-            // temp.remove();
             return false;
         });
 
