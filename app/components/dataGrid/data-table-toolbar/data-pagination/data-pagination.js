@@ -33,7 +33,9 @@ let config = {
         //表级操作
         tableOperationData: [],
         //是否为超级管理员
-        isSuperUser: 0
+        isSuperUser: 0,
+        //agGrid配置
+        gridOptions: null
     },
     actions: {
         //接受rows值和total值
@@ -206,18 +208,29 @@ let config = {
             if(opera != 0){
                 let address = JSON.parse(opera);
                 let deleteListRel = [];
-                // this.missionDListSourceSub = this.dataGridMissionService.missionDeleteListSource.subscribe(res =>{
-                //     if( res && res["deleteListRel"]) {
-                //         deleteListRel = res["deleteListRel"];
-                //         this.selectedListRel = res["deleteListRel"];
-                //         this.cd.markForCheck();
-                //     }
-                // })
+                let rows = this.data.gridOptions.api.getSelectedRows();
+                for( let r of rows ){
+                    if( r._id ){
+                        deleteListRel.push( r._id );
+                    }
+                }
                 //需弹框的表级操作
                 if(address['feAddress']!=''){
                     if(address['feAddress']=='check'){
-                        this.dailyCheck=true;
                         return;
+                    }
+                    let beAddress=address['beAddress'];
+                    let fun=address['feAddress'].split('?')[0];
+                    let params=JSON.parse(address['feAddress'].split('?')[1]);
+                    switch(fun){
+                        //操作
+                        case 'funA':{
+                            break;
+                        }
+                        //操作B
+                        case 'funB':{
+                            break;
+                        }
                     }
                 }else{//不需弹框的表级操作-刷新cache
                     msgBox.showTips('已经向服务器发送请求');

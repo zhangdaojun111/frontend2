@@ -1112,7 +1112,8 @@ let config = {
                     rows: this.data.rows,
                     tableId: this.data.tableId,
                     tableOperationData: this.data.tableOperationData,
-                    isSuperUser: window.config.is_superuser || 0
+                    isSuperUser: window.config.is_superuser || 0,
+                    gridOptions: this.agGrid.gridOptions
                 }
                 this.pagination = new dataPagination(paginationData);
                 this.pagination.actions.paginationChanged = this.actions.refreshData;
