@@ -95,7 +95,6 @@ let config ={
                 let iframes =  $("div.iframes").find("iframe");
                 let str = "searchContent=" + this.data.formerSearchContent;
                 str = encodeURI(str);
-                console.log(str);
                 for(let k of iframes){
                     let src = k.src;
                     if(src.indexOf(str) > 0){

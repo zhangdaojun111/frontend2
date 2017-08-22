@@ -62,7 +62,7 @@ let config = {
             SysSetting.show();
         },
         refreshOnlineNum: function (data) {
-            let title = "在线人数：" + data;
+            let title = "在线人数：" + data.online_user_num;
             this.el.find('a.online-num').attr("title",title);
         },
 
