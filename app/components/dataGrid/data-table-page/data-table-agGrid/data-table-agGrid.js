@@ -20,7 +20,6 @@ import FloatingFilter from "../../data-table-toolbar/floating-filter/floating-fi
 import customColumns from "../../data-table-toolbar/custom-columns/custom-columns";
 import groupGrid from "../../data-table-toolbar/data-table-group/data-table-group";
 import dataPagination from "../../data-table-toolbar/data-pagination/data-pagination";
-import delSetting from '../../data-table-toolbar/data-table-delete/data-table-delete';
 import importSetting from '../../data-table-toolbar/data-table-import/data-table-import';
 import exportSetting from '../../data-table-toolbar/data-table-export/data-table-export';
 
@@ -735,7 +734,7 @@ let config = {
                 rowStatus = 0;
             }
             let str = '<div style="text-align:center;"><a class="gridView" style="color:#337ab7;">查看</a>';
-            if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data') {
+            if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data' || this.data.viewMode == 'deleteHanding') {
                 if (this.data.isFixed || rowStatus == 2) {
                     str += ' | <span style="color: darkgrey;">编辑</span>';
                     str += ' | <a style="color: darkgrey;">历史</a>';
@@ -1463,7 +1462,10 @@ let config = {
             if( this.el.find('.grid-del-btn')[0] ){
                 this.el.find( '.grid-del-btn' ).on( 'click',()=>{
                     this.actions.retureSelectData();
-                    delSetting.data['deletedIds'] = this.data.deletedIds;
+                    if( this.data.deletedIds.length == 0 ){
+                        msgBox.alert( '请选择数据' );
+                        return;
+                    }
                     msgBox.confirm( '确定删除？' ).then( res=>{
                         if( res ){
                             this.actions.delTableData();
@@ -1569,6 +1571,19 @@ let config = {
                     this.columnDefsEdit = this.actions.createHeaderColumnDefs( true );
                 } )
                 HTTP.flush();
+            }
+            //点击这里
+            if( this.el.find( '.showNormalGrid' )[0] ){
+                this.el.find( '.showNormalGrid' ).on( 'click',()=>{
+                    let obj = {
+                        tableId: this.data.tableId,
+                        tableName: this.data.tableName,
+                        viewMode: 'normal'
+                    }
+                    let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
+                    let winTitle = obj.tableName;
+                    this.actions.openSourceDataGrid( url,winTitle );
+                } )
             }
         },
         //编辑模式切换
