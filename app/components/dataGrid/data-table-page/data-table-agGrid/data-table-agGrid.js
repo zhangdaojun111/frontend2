@@ -139,8 +139,10 @@ let config = {
         correspondenceField: '',
         //数据检索模式搜索参数
         keyword: '',
+        //删除数据前往处理
+        deleteHandingData: {_id: []},
         //表级操作数据
-
+        tableOperationData: [],
     },
     //生成的表头数据
     columnDefs: [],
@@ -1016,6 +1018,9 @@ let config = {
             if( this.data.viewMode == 'keyword-tips' ){
                 json['keyWord'] = this.data.keyword;
             }
+            if( this.data.viewMode == 'deleteHanding' ){
+                json['mongo'] = this.data.deleteHandingData;
+            }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
             }
@@ -1491,13 +1496,24 @@ let config = {
                     msgBox.showTips( '删除成功' )
                 }else {
                     if( res.error.indexOf( '使用了所删行的内容' ) ){
-                        msgBox.confirm( res.error + '是否前往处理？' ).then( res=>{
-                            if( res ){
+                        msgBox.confirm( res.error + '是否前往处理？' ).then( r=>{
+                            if( r ){
                                 let info = res.table_info;
                                 let obj = {
-                                    tableId: res.table_id,
-                                    tableName: res.label
+                                    tableId: info.table_id,
+                                    tableName: info.label,
+                                    viewMode: 'deleteHanding',
+                                    deleteHandingData: res.queryParams
                                 }
+                                let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
+                                let winTitle = this.data.tableName + '->' + obj.tableName;
+                                PMAPI.openDialogByIframe( url,{
+                                    width: 1300,
+                                    height: 800,
+                                    title: winTitle,
+                                    modal:true
+                                },{obj}).then( (data)=>{
+                                } )
                             }
                         } )
                     }else {
@@ -1902,6 +1918,11 @@ let config = {
     afterRender: function () {
         if( this.data.viewMode == 'in_process' ){
             this.data.noNeedCustom = true;
+        }
+        if( this.data.viewMode == 'deleteHanding' ){
+            PMAPI.getIframeParams(window.config.key).then((res) => {
+                this.data.deleteHandingData = res.data.obj.deleteHandingData || [];
+            })
         }
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;

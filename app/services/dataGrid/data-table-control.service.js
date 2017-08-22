@@ -385,7 +385,8 @@ export const dgcService = {
             viewFromCorrespondence: ['correspondence-check','float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
             editFromCorrespondence: ['correspondence-check','float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width','correspondence-save'],
             in_process: ['float-search-btn','refresh-btn','grid-new-window'],
-            keyword: ['keyword-tips','custom-column-btn','grid-new-window']
+            keyword: ['keyword-tips','custom-column-btn','grid-new-window'],
+            deleteHanding: ['delete-tips','grid-del-btn','custom-column-btn']
         }
         return obj[viewMode];
     },
@@ -404,7 +405,8 @@ export const dgcService = {
         'correspondence-check':'especial',
         'refresh-btn':'especial',
         'correspondence-save':'especial',
-        'keyword-tips':'especial'
+        'keyword-tips':'especial',
+        'delete-tips':'especial'
     },
     //行选择
     rowClickSelect: function (data) {
