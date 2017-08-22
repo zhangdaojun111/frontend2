@@ -119,8 +119,6 @@ export class FormNormalYComponent extends BiBaseComponent{
         }
     }
 
-
-
     /**
      * 获取y轴的数据
      */
