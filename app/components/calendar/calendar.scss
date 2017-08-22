@@ -23,6 +23,8 @@ $grid-bg-color: rgba(248, 248, 248, 1);
         height: 60px;
         width: 100%;
         padding-left: 10px;
+        position: relative;
+        //display: inline-block;
         border-bottom: 1px solid $boder-color;
         .tool-icon {
             display: inline-block;
@@ -84,6 +86,8 @@ $grid-bg-color: rgba(248, 248, 248, 1);
         height: 30px;
         width: 100%;
         padding-left: 10px;
+        position: relative;
+        //display: inline-block;
         border-bottom: 1px solid $boder-color;
         .calendar-date {
             display: inline-block;
