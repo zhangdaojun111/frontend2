@@ -507,6 +507,9 @@ export const dgcService = {
         for( let d of defaultArr ){
             let obj = indexedGridState[d]||{};
             obj['pinned']= data.fixCols.l.length > 0 ? 'left' : null;
+            if( d == 'group' ){
+                obj[d]['hide'] = true;
+            }
             arr.push( obj );
         }
         //左侧固定
