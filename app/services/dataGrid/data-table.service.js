@@ -85,6 +85,21 @@ export const dataTableService = {
     getAttachmentList(json){
         return HTTP.post('query_attachment_list',json);
     },
+    setImgDataAndNum(res,imgData,imgSelect){
+        imgData = res;
+        this.imgTotal = res.rows.length;
+        if(imgData){
+            for( let i=0;i<imgData.rows.length;i++ ){
+                imgData.rows[i]["isSelect"] = false;
+            }
+            if( imgData.rows[0] ){
+                imgData.rows[0]["isSelect"] = true;
+                imgSelect = imgData.rows[0].file_id;
+            }
+        }
+        this.imgNum = 0;
+        return {imgSelect:imgSelect,imgData:imgData};
+    },
     //获取文件名后缀
     getFileExtension (filename) {
         return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
