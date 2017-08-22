@@ -1678,6 +1678,17 @@ let config = {
 
             //图片查看
             if( data.colDef.real_type == fieldTypeService.IMAGE_TYPE ){
+                let json = {};
+                json["dfield"] = data.colDef.field;
+                json["table_id"] = this.pageId;
+                json[(data.data.action?"temp_id":"real_id")] = data.data._id;
+                dataTableService.getImgData( json ).then( res => {
+                    let obj=this.dgcService.setImgDataAndNum(res,this.imgData,this.imgSelect);
+                    this.imgData=obj.imgData;
+                    this.imgSelect=obj.imgSelect;
+                    this.imgDisplay = true;
+                    this.setImgSize();
+                } )
             }
             //富文本字段
             if( data.colDef.real_type == fieldTypeService.UEDITOR ){
