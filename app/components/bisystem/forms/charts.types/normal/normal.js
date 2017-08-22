@@ -98,11 +98,12 @@ export class FormNormalComponent extends BiBaseComponent{
         this.formGroup.doubleY.setValue(chart['double'] == 0 ? false : true);
         this.formGroup.defaultY.setValue(chart['ySelectedGroup'] ? true : false);
         this.formGroup.yHorizontal.setValue(chart['yHorizontal'] ? true : false);
+        console.log(chart['yHorizontal']);
         this.formGroup.yHorizontalColumns.setValue(chart['yHorizontalColumns'].hasOwnProperty('marginBottom') ? true : false);
         this.formGroup.xMarginBottom.setValue(chart['yHorizontalColumns'].hasOwnProperty('marginBottom') ? chart['yHorizontalColumns']['marginBottom'] : 0);
         this.formGroup.echartX.setValue(chart['echartX'].hasOwnProperty('marginBottom') ? true : false);
-        this.formGroup.echartXTextNum.setValue(chart['echartX'].hasOwnProperty('textNum') ? chart['echartX'].hasOwnProperty('textNum') : 0);
-        this.formGroup.echartXMarginBottom.setValue(chart['echartX'].hasOwnProperty('marginBottom') ? chart['echartX'].hasOwnProperty('marginBottom') : 0);
+        this.formGroup.echartXTextNum.setValue(chart['echartX'].hasOwnProperty('textNum') ? chart['echartX']['textNum'] : 0);
+        this.formGroup.echartXMarginBottom.setValue(chart['echartX'].hasOwnProperty('marginBottom') ? chart['echartX']['marginBottom'] : 0);
         this.formGroup.chartAssignment.setValue(chart['chartAssignment'].val);
         this.editModeDeeps = {
             deeps: chart['deeps'],
@@ -350,8 +351,6 @@ export class FormNormalComponent extends BiBaseComponent{
             };
             this.y1.push(y);
         } else {
-            console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxx');
-            console.log(flag);
             this.el.find('.form-group-y1').removeClass('group-active');
             this.y1.map(y => y.destroySelf());
             this.y1 = [];
