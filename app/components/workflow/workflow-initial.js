@@ -3,8 +3,7 @@ import template from './workflow-initial.html';
 import './workflow-initial.scss';
 import '../../assets/scss/workflow/workflow-base.scss';
 import Mediator from '../../lib/mediator';
-
-// import WorkFlowCatalog from './workflow-catalog/workflow-catalog'
+import WorkflowAddFollow from './workflow-addFollow/workflow-addFollow';
 
 let config={
     template: template,
@@ -15,7 +14,10 @@ let config={
 
     },
     afterRender(){
+
         this.el.on('click','#workflowClose',()=>{
+            Mediator.publish("workflow:contentClose");
+            this.el.find('.J_select-Workflow').text("选择或输入查找");
             this.el.find("#workflow-box").show();
             this.el.find('#workflow-content').hide();
         }),
@@ -43,12 +45,7 @@ let config={
             Mediator.publish('workflow:submit',this.data.user);
             
         });
-        $(".h_panghu").on("webkitAnimationEnd",function () {
-            $(this).addClass("h_panghu2");
-            setTimeout(function () {
-                $(".h_panghu_mask").remove()
-            },2000)
-        });
+
     }
 };
 class WorkflowInitial extends Component{

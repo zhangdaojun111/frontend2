@@ -57,7 +57,7 @@ let config = {
             for (let i=0;i<len;i++){
                 let left = imgInfo[i].viewLeft+"%";
                 let top = imgInfo[i].viewTop+"%";
-                html += `<img class="oldImg" src="http://${host}/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="position:absolute;z-index:100;left:${left};top:${top};height:{imgInfo[i].height}px;width:${imgInfo[i].width}px " />`
+                html += `<img class="oldImg" src="http://${host}/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`
             }
             this.el.find("#place-form").append(html);
         },

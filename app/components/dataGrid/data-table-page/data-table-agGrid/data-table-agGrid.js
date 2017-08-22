@@ -25,6 +25,8 @@ import importSetting from '../../data-table-toolbar/data-table-import/data-table
 import exportSetting from '../../data-table-toolbar/data-table-export/data-table-export';
 
 import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
+import AttachmentList from "../../../form/attachment-list/attachment-list";
+import PictureAttachment from "../../../form/picture-attachment/picture-attachment";
 
 
 let config = {
@@ -150,7 +152,19 @@ let config = {
         //表级操作数据
         tableOperationData: [],
         //表的表单、工作流参数
-        prepareParmas: {}
+        prepareParmas: {},
+        //编辑模式参数
+        colControlData: {},
+        //是否为编辑模式
+        editMode: false,
+        //上一次操作状态
+        lastGridState: [],
+        //编辑模式对比原始数据
+        originRowData: {},
+        //编辑数据总数
+        editRowTotal: 0,
+        //编辑已经保存的数量
+        editRowNum: 0,
     },
     //生成的表头数据
     columnDefs: [],
@@ -167,7 +181,7 @@ let config = {
 
             for (let data of headerArr) {
                 for (let i = 0, length = data.header.length; i < length; i++) {
-                    this.actions.getArr(i, 0, columnArr, length, data, otherCol);
+                    this.actions.getArr(i, 0, columnArr, length, data, otherCol , edit);
                 }
             }
 
@@ -204,9 +218,9 @@ let config = {
             columnDefs.push(operate)
             return columnDefs;
         },
-        getArr: function (i, n, column, len, data, otherCol) {
+        getArr: function (i, n, column, len, data, otherCol , edit) {
             if (i == n) {
-                this.actions.createHeader(column, i, len, data, otherCol)
+                this.actions.createHeader(column, i, len, data, otherCol,edit)
             } else {
                 for (let col of column) {
                     if (data.header[n] == col['headerName'] && col['children']) {
@@ -215,7 +229,7 @@ let config = {
                 }
             }
         },
-        createHeader: function (column, i, len, data, otherCol) {
+        createHeader: function (column, i, len, data, otherCol,edit) {
             let key = 0;
             for (let col of column) {
                 if (col['headerName'] == data.header[i]) {
@@ -319,13 +333,77 @@ let config = {
                         obj['cellStyle'] = {'font-style': 'normal'};
                         obj['cellStyle'] ['background'] = "#ddd"
                     }
-                    // if( editCols ){
-                    //     this.setEditableCol( obj );
-                    // }
-
+                    //编辑模式用
+                    if( edit ){
+                        this.actions.setEditableCol( obj );
+                    }
                     column.push(obj);
                 }
             }
+        },
+        //设置编辑模式表头
+        setEditableCol: function ( col ) {
+            let editCol = col;
+            //拷贝columnDefs的值
+            for(let k in col){
+                editCol[k]=col[k];
+            }
+            //列定义可编辑部分的赋值
+            let controlData = this.data.colControlData[editCol['colId']];
+            if(controlData){
+                if(controlData['is_view'] == 0 && controlData['relevance_condition']
+                    && Object.getOwnPropertyNames(controlData['relevance_condition']).length == 0) {
+                    let type = controlData['type'];
+                    switch (type) {
+                        case 'Input':
+                        case 'Textarea':
+                            editCol['editable'] = true;
+                            break;
+                        case 'Buildin':
+                        case 'Select':
+                            this.actions.setOptionsForColumn(editCol, controlData, 'options');
+                            break;
+                        case 'Radio':
+                            this.actions.setOptionsForColumn(editCol, controlData, 'group');
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if(controlData['reg']){
+                    editCol['reg']=controlData['reg'];
+                }
+                if(controlData['numArea']){
+                    editCol['numArea']= controlData['numArea'];
+                }
+                editCol['required'] = controlData['required'];
+            }
+            return editCol;
+        },
+        setOptionsForColumn: function(editCol,controlData,optionProp){
+            editCol['editable']=true;
+            editCol['cellEditor']='select';
+            let radioParams = [];
+            let groups = {};
+            if(controlData[optionProp] == undefined){
+                let field_content = controlData['field_content'];
+                Object.getOwnPropertyNames(field_content).forEach(option=>{
+                    let value = option;
+                    let label = field_content[value];
+                    groups[label]=value;
+                    radioParams.push(label);
+                });
+            } else {
+                controlData[optionProp].forEach(option=>{
+                    let value = option['value'];
+                    let label = option['label'];
+                    groups[label]=value;
+                    radioParams.push(label);
+                })
+            }
+
+            controlData['options_objs']=groups;
+            editCol['cellEditorParams']={values:radioParams};
         },
         bodyCellRender: function (params) {
             if (params.data && params.data.myfooter && params.data.myfooter == "合计") {
@@ -902,6 +980,14 @@ let config = {
                 }
                 console.log( '请求数据返回get_table_data' );
                 this.actions.sortWay();
+                //编辑模式原始数据
+                if( this.el.find( '.edit-btn' )[0] ){
+                    this.data.originRowData = {};
+                    //originRowData用深拷贝，保存初始值
+                    this.data.rowData.forEach((row,index)=>{
+                        this.data.originRowData[row['_id']]=JSON.parse(JSON.stringify(row));
+                    });
+                }
             })
             HTTP.flush();
         },
@@ -1466,17 +1552,141 @@ let config = {
             //编辑模式
             if( this.el.find( '.edit-btn' )[0] ){
                 this.el.find( '.edit-btn' ).on( 'click',()=>{
-                    console.log( '编辑模式' )
+                    this.actions.toogleEdit();
+                } )
+                this.el.find( '.edit-btn-cancel' ).on( 'click',()=>{
+                    this.actions.toogleEdit();
+                } )
+                this.el.find( '.edit-btn-save' ).on( 'click',()=>{
+                    //保存
+                    this.actions.onEditSave();
                 } )
                 //创建编辑模式表头
                 FormService.getStaticData({table_id: this.data.tableId}).then( res=>{
-                    console.log( "______________________" )
-                    console.log( "______________________" )
-                    console.log( res )
-                    // this.data.colCon
+                    for( let d of res.data ){
+                        this.data.colControlData[d.dfield] = d;
+                    }
+                    this.columnDefsEdit = this.actions.createHeaderColumnDefs( true );
                 } )
                 HTTP.flush();
             }
+        },
+        //编辑模式切换
+        toogleEdit: function () {
+            if( !this.data.editMode ){
+                this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
+            }
+            this.data.editMode = !this.data.editMode;
+            this.el.find( '.dataGrid-btn-group' )[0].style.display = this.data.editMode ? 'none':'block';
+            this.el.find( '.dataGrid-edit-group' )[0].style.display = this.data.editMode ? 'block':'none';
+            let columns = this.data.editMode ? this.columnDefsEdit : this.columnDefs;
+            this.agGrid.gridOptions.api.setColumnDefs( columns );
+            if( !this.data.editMode ){
+                this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
+            }
+        },
+        //编辑模式保存数据
+        onEditSave: function () {
+            //比对当前值与初始值的差别
+            this.agGrid.gridOptions.api.stopEditing(false);
+            let changedRows = this.actions.getChangedRows(this.agGrid.data.rowData);
+            let i = 0;
+            this.data.editRowTotal = 0;
+            this.data.editRowNum = 0;
+            for( let k in changedRows ){
+                i++;
+            }
+            this.data.editRowTotal = i;
+            if( this.data.editRowTotal == 0 ){
+                this.actions.toogleEdit();
+            }
+            for(let k in changedRows){
+                let changed = changedRows[k];
+                let real_id = changed['data']['real_id'];
+                changedRows[real_id] = changed;
+                FormService.getDynamicData({
+                    table_id: this.data.tableId,
+                    real_id: real_id,
+                    is_view: 0
+                }).then( res=>{
+                    if(res){
+                        let data = res['data'];
+                        let real_id = data['real_id']['value'];
+                        if(!changedRows[real_id]){
+                            return;
+                        }
+                        let obj = {
+                            real_id:data['real_id']['value'],
+                            temp_id:data['temp_id']['value'],
+                            parent_real_id:data['parent_real_id']['value'],
+                            parent_table_id:data['parent_table_id']['value'],
+                            parent_temp_id:data['parent_temp_id']['value']
+                        };
+                        let targetRow = changedRows[real_id];
+                        this.actions.saveEdit(targetRow,obj);
+                    }
+                } )
+                HTTP.flush();
+            }
+        },
+        saveEdit(targetRow,ids){
+            let json = dgcService.abjustTargetRow(targetRow,ids);
+            json['data'] = JSON.stringify(json['data']);
+            json['focus_users'] = JSON.stringify(json['focus_users']);
+            json['cache_new'] = JSON.stringify(json['cache_new']);
+            json['cache_old'] = JSON.stringify(json['cache_old']);
+            FormService.saveAddpageData( json ).then( res=>{
+                if( res.succ == 1 ){
+                    msgBox.showTips( res.error );
+                }else {
+                    msgBox.alert( res.error );
+                }
+                this.data.editRowNum++;
+                if( this.data.editRowTotal == this.data.editRowNum ){
+                    this.actions.toogleEdit();
+                }
+            } )
+        },
+        //比对当前值与初始值的差别
+        getChangedRows(rowData){
+            let changedRows = {};
+            rowData.forEach((row,index)=>{
+                let real_id = row['_id'];
+                let originRow = this.data.originRowData[real_id];
+                let changed = {};
+                let data = {};
+                for (let k in row) {
+                    if (dgcService.checkObejctNotEqual(row[k],originRow[k])) {
+                        //buildin字段做转化
+                        if(this.data.colControlData[k]['type'] == 'Buildin'||this.data.colControlData[k]['type'] == 'Radio'||this.data.colControlData[k]['type'] == 'Select'){
+                            data[k] = this.data.colControlData[k]['options_objs'][row[k]];
+                        } else if(Array.isArray(row[k])){
+                            if(row[k].length == 0 && originRow[k].length == 0){
+                                continue;
+                            }
+                            for(let i = 0,length = row[k].length;i < length; i++){
+                                if(row[k][i]!=originRow[k][i]){
+                                    data[k] = row[k];
+                                    break;
+                                }
+                            }
+                        }else {
+                            data[k] = row[k];
+                        }
+                    }
+                }
+                if(Object.getOwnPropertyNames(data).length!= 0) {
+                    data['real_id'] = real_id;
+                    data['table_id'] = this.data.tableId;
+                    changed['data'] = data;
+                    changed['cache_old'] = this.data.originRowData[real_id];
+                    changed['cache_new'] = row;
+                    changed['table_id'] = this.data.tableId;
+                    changed['focus_users'] = [];
+                    changedRows[real_id] = changed;
+                }
+            });
+            return changedRows;
         },
         //渲染高级查询
         renderExpertSearch: function () {
@@ -1557,7 +1767,7 @@ let config = {
                 if( res.success ){
                     msgBox.showTips( '删除成功' )
                 }else {
-                    if( res.error.indexOf( '使用了所删行的内容' ) ){
+                    if( res.error.indexOf( '使用了所删行的内容' ) != -1 ){
                         msgBox.confirm( res.error + '是否前往处理？' ).then( r=>{
                             if( r ){
                                 let info = res.table_info;
@@ -1780,6 +1990,18 @@ let config = {
 
             //图片查看
             if( data.colDef.real_type == fieldTypeService.IMAGE_TYPE ){
+                let json = {};
+                json["dfield"] = data.colDef.field;
+                json["table_id"] = this.data.tableId;
+                json[(data.data.action?"temp_id":"real_id")] = data.data._id;
+                dataTableService.getAttachmentList( json ).then( res => {
+                    // let imgData,imgSelect;
+                    // let obj=dataTableService.setImgDataAndNum(res,imgData,imgSelect);
+                    // imgData=obj.imgData;
+                    // imgSelect=obj.imgSelect;
+                    // this.setImgSize();
+                    PictureAttachment.data.res=res;
+                } )
             }
             //富文本字段
             if( data.colDef.real_type == fieldTypeService.UEDITOR ){
@@ -1789,6 +2011,42 @@ let config = {
             }
             //附件字段
             if( data.event.srcElement.id == 'file_view' && fieldTypeService.attachment(data.colDef.real_type) ){
+                let dinput_type=data.colDef.real_type;
+                let fileIds=data['value'];
+                if(fileIds){
+                    dataTableService.getAttachmentList({
+                        file_ids: JSON.stringify(fileIds),
+                        dinput_type:dinput_type
+                    }).then(res=>{
+                        console.log('获得的是什么');
+                        console.log(res);
+                        let list = res["rows"];
+                        for( let data of list ){
+                            //附件名称编码转换
+                            data.file_name = decodeURI( data.file_name );
+                            let str = dataTableService.getFileExtension( data.file_name );
+                            if( dataTableService.preview_file.indexOf( str.toLowerCase() ) != -1 ){
+                                data["isPreview"] = true;
+                                if( dataTableService.preview_file.indexOf(str.toLowerCase()) <4){
+                                    data["isImg"] = true;
+                                }else{
+                                    data["isImg"] = false;
+                                }
+                            }else{
+                                data["isPreview"] = false;
+                            }
+                        }
+                        AttachmentList.data.list=list;
+                        AttachmentList.data.dinput_type=dinput_type;
+                        AttachmentList.data.is_view=1;
+                        PMAPI.openDialogByComponent(AttachmentList,{
+                            width: 1234,
+                            height: 876,
+                            title: '附件列表'
+                        })
+                    })
+                    HTTP.flush();
+                }
             }
             //内置相关查看原始数据用
             if( data.event.srcElement.id == 'relatedOrBuildin' ){

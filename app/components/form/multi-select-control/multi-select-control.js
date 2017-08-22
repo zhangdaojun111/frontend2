@@ -15,7 +15,7 @@ let config={
 
         //初始化各框
         resetOption (){
-            this.data.sDropOption = [{label:'',value:''}];
+            this.data.sDropOption = [];
             this.data.sMuiltOption = [];
             this.data.sMuiltValue = [];
             this.data.sDropValue = '';
@@ -48,6 +48,8 @@ let config={
             return arr;
         },
 
+
+        //特殊多选内置单选框选中后触发
         dropOnChange(value){
             this.data.sDropValue=value;
             this.data.multiBuildSelect['more']['data']['list'] = [];
@@ -63,8 +65,10 @@ let config={
             }
             this.data.multiBuildSelect['more'].reload();
             this.data.multiBuildSelect['one'].reload();
+            this.data.isReloading=false;
         },
 
+        //特殊多选内置多选框选中后触发
         muiltOnChange (value){
             this.data.sMuiltValue = value||[];
             this.actions.resetData();
@@ -81,6 +85,7 @@ let config={
                 }
             }
             this.data['value'] = val;
+            let _this=this;
             _.debounce(function(){_this.events.changeValue(_this.data)},200)();
         },
 
@@ -111,30 +116,38 @@ let config={
             let data2=_.defaultsDeep({},this.data);
             data1.options=this.data.sDropOption;
             data2.options=this.data.sMuiltOption;
-            let oneSelectdata=FormService.createSelectJson(data1,false,true);
-            let moreSelectdata=FormService.createSelectJson(data2,true,true);
+            let oneSelectdata=FormService.createSelectJson(data1,false,2);
+            let moreSelectdata=FormService.createSelectJson(data2,true,2);
             oneSelectdata.onSelect=function(data){
-                if(_this.data.isInit ){
+                if(_this.data.isInit || data.length == 0 || _this.data.isReloading){
                     return;
                 }
+                _this.data.isReloading=true;
                 _this.actions.dropOnChange(data[0]['id']);
             };
             moreSelectdata.onSelect=function(data){
-                if(_this.data.isInit ){
+                if(_this.data.isInit || data.length == 0 || _this.data.isReloading){
                     return;
                 }
-                _this.actions.muiltOnChange(data[0]['id']);
+                let arr=[];
+                for(let i in data){
+                    arr.push(data[i].id);
+                }
+                _this.actions.muiltOnChange(arr);
             };
 
             if(hasValue){
                 for(let i in this.data.sMuiltValue){
                     moreSelectdata.choosed.push({
-                        name:this.data.sMuiltValue[i].label,
-                        id:this.data.sMuiltValue[i].value,
+                        name:this.data.sMuiltValue[i],
+                        id:this.data.sMuiltValue[i],
                     })
                 }
+                oneSelectdata.choosed.push({
+                    name:this.data.sDropValue,
+                    id:this.data.sDropValue,
+                })
             }
-
             let oneAutoSelect=new AutoSelect(oneSelectdata);
             let moreAutoSelect=new AutoSelect(moreSelectdata);
             this.data.multiBuildSelect['one']=oneAutoSelect;
@@ -217,7 +230,7 @@ let config={
                 if(this.data.options2 && this.data.options2.length>0 && this.data.options2[0]['label'] == '-'){
                     this.data.options2[0]['value']='-';
                 }
-                let data=FormService.createSelectJson(this.data,true);
+                let data=FormService.createSelectJson(this.data,true,1);
                 data.onSelect=function(){
                     if(_this.data.isInit || !_this.data.childSelect || _this.data.childSelect.data.choosed.length == 0 ){
                         return;
@@ -232,7 +245,6 @@ let config={
                 let autoSelect=new AutoSelect(data);
                 this.data.childSelect=autoSelect;
                 this.append(autoSelect,el);
-
             }else {
                 this.data.originalList = {};
                 for( let o of this.data['options'] ){

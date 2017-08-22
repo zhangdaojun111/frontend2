@@ -507,6 +507,9 @@ export const dgcService = {
         for( let d of defaultArr ){
             let obj = indexedGridState[d]||{};
             obj['pinned']= data.fixCols.l.length > 0 ? 'left' : null;
+            if( d == 'group' ){
+                obj[d]['hide'] = true;
+            }
             arr.push( obj );
         }
         //左侧固定
@@ -556,4 +559,44 @@ export const dgcService = {
         // console.log( arr )
         agGrid.gridOptions.columnApi.setColumnState( arr );
     },
+    //判断Object是否相等
+    checkObejctNotEqual(obj1,obj2){
+        let o1=Object.assign({},obj1);
+        let o2=Object.assign({},obj2);
+        if(Object.prototype.toString.call(o1)!='[object Object]'){
+            if(o1 != o2){
+                return true;
+            }else{
+                return false;
+            }
+        };
+        if(JSON.stringify(o1) == JSON.stringify(o2)){
+            return false;
+        }else{
+
+            return true;
+        }
+    },
+    abjustTargetRow(targetRow,ids){
+        let pRealId = ids['parent_real_id'];
+        let pTableId = ids['parent_table_id'];
+        let pTempId = ids['parent_temp_id'];
+        let tempId = ids['temp_id'];
+        this.fillIdsInObj(targetRow['data'],pRealId,pTableId,pTempId,tempId);
+        this.fillIdsInObj(targetRow['cache_new'],pRealId,pTableId,pTempId,tempId);
+        this.fillIdsInObj(targetRow['cache_old'],pRealId,pTableId,pTempId,tempId);
+        this.fillIdsInObj(targetRow,pRealId,pTableId,pTempId);
+        return targetRow;
+    },
+    fillIdsInObj(obj,pRealId,pTableId,pTempId,temp_id){
+        if(!obj){
+            return;
+        }
+        if(temp_id){
+            obj['temp_id']=temp_id||'';
+        }
+        obj['parent_real_id']=pRealId||'';
+        obj['parent_table_id']=pTableId||'';
+        obj['parent_temp_id']=pTempId||'';
+    }
 }
