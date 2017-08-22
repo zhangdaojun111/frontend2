@@ -1,8 +1,14 @@
 <div class="bi-chart-checkbox">
     {{#each checkboxs}}
     <div class="i-check">
+        {{#if ../checked}}
+        <input type="checkbox" value="{{value}}" checked />{{{name}}}
+        <label></label>
+        {{else}}
         <input type="checkbox" value="{{value}}" />{{{name}}}
         <label></label>
+        {{/if}}
+
     </div>
     {{/each}}
 </div>

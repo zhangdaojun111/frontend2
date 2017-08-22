@@ -55,10 +55,21 @@ let config = {
         });
 
         Mediator.subscribe('bi:aside:update',(res) => {
-            window.config.charts.push(res);
-            this.data.charts = window.config.charts;
-            console.log(window.config.charts);
+            let charts = []
+
+            if (res['type'] == 'new') {
+                window.config.charts.push(res['data']);
+            } else {
+                for(let chart of window.config.charts) {
+                    if (res['data'].id == chart.id) {
+                        chart = res['data'];
+                    };
+                    charts.push(chart);
+                }
+            };
+            this.data.charts = window.config.charts = charts;
             this.reload();
+
         })
     }
 };

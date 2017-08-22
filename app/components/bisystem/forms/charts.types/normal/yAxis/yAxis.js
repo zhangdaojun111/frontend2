@@ -110,11 +110,13 @@ export class FormNormalYComponent extends BiBaseComponent{
      * @param yAxis => y轴数据
      */
     setValue(val) {
-        this.data.field = val;
-        this.yAxis.field.autoSelect.data.choosed[0] = val['field'];
-        this.yAxis.field.autoSelect.reload();
-        this.yAxis.type.data.value = val['type']['type'];
-        this.yAxis.type.reload();
+        if (val) {
+            this.data.field = val;
+            this.yAxis.field.autoSelect.data.choosed[0] = val['field'];
+            this.yAxis.field.autoSelect.reload();
+            this.yAxis.type.data.value = val['type']['type'];
+            this.yAxis.type.reload();
+        }
     }
 
 

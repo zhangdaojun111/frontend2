@@ -69,7 +69,6 @@ export class FormNormalDeepComponent extends BiBaseComponent{
      *@param item 下穿数据
      */
     addDeep(item) {
-        console.log(item);
         if (item) {
             this.data.deeps.push(item);
             this.reload();
@@ -86,10 +85,23 @@ export class FormNormalDeepComponent extends BiBaseComponent{
     }
 
     /**
+     * 设置下穿和分组数据
+     */
+    setValue(val){
+        if (val.group.hasOwnProperty('id')) {
+            this.x.autoSelect.data.choosed[0] = val['group'];
+            this.x.autoSelect.reload();
+        } else {
+            this.data.deeps = val['deeps'];
+            this.data.deepShow = true;
+            this.reload();
+        }
+    }
+
+    /**
      * 获取下穿和分组数据
      */
     getValue(){
-        console.log(this.x)
         return {
             deeps: this.data.deeps,
             group: this.x.getValue()

@@ -56,6 +56,10 @@ export class FormNormalComponent extends BiBaseComponent{
         this.editModeXField = null;// 编辑模式 需要等到x轴数据加载完成在设置
         this.editModeYField = []; // 编辑模式 需要等到y轴数据加载完成在设置
         this.editModeY1Field = [] // 编辑模式 需要等到y轴数据加载完成在设置
+        this.editModeDeeps = { // 同上
+            deeps:[],
+            group:{}
+        };
     }
     /**
      * 编辑模式发送chartId, 得到服务器数据
@@ -72,6 +76,7 @@ export class FormNormalComponent extends BiBaseComponent{
      * @param 图表数据
      */
     fillChart(chart) {
+        console.log(chart);
         this.formGroup.base.setValue(chart['chartName']);
         let share = {
             chartSource:chart['source'],
@@ -81,17 +86,28 @@ export class FormNormalComponent extends BiBaseComponent{
         };
         this.formGroup.share.setValue(share);
         this.editModeXField = chart['xAxis'];
-        this.formGroup.doubleY.setValue(chart['double'] == 0 ? false : true);
         chart['yAxis'].forEach((y,index) => {
             if (y.yAxisIndex == 0) {
                 this.addYAxis();
                 this.editModeYField.push(y);
             } else {
-               this.showAllXAxis(true);
+                this.showY1Axis(true);
                 this.editModeY1Field.push(y);
             }
         });
-        console.log(chart);
+        this.formGroup.doubleY.setValue(chart['double'] == 0 ? false : true);
+        this.formGroup.defaultY.setValue(chart['ySelectedGroup'] ? true : false);
+        this.formGroup.yHorizontal.setValue(chart['yHorizontal'] ? true : false);
+        this.formGroup.yHorizontalColumns.setValue(chart['yHorizontalColumns'].hasOwnProperty('marginBottom') ? true : false);
+        this.formGroup.xMarginBottom.setValue(chart['yHorizontalColumns'].hasOwnProperty('marginBottom') ? chart['yHorizontalColumns']['marginBottom'] : 0);
+        this.formGroup.echartX.setValue(chart['echartX'].hasOwnProperty('marginBottom') ? true : false);
+        this.formGroup.echartXTextNum.setValue(chart['echartX'].hasOwnProperty('textNum') ? chart['echartX'].hasOwnProperty('textNum') : 0);
+        this.formGroup.echartXMarginBottom.setValue(chart['echartX'].hasOwnProperty('marginBottom') ? chart['echartX'].hasOwnProperty('marginBottom') : 0);
+        this.formGroup.chartAssignment.setValue(chart['chartAssignment'].val);
+        this.editModeDeeps = {
+            deeps: chart['deeps'],
+            group: chart['chartGroup']
+        };
     }
 
 
@@ -124,7 +140,7 @@ export class FormNormalComponent extends BiBaseComponent{
                     checkboxs:[
                         {value:'', name:'是否展示双y轴'},
                     ],
-                    onChange: this.showY1Axis.bind(this)
+                    onChange: this.checkShowY1Axis.bind(this)
                 },
                 me: this,
                 container: 'form-group-doubleY'
@@ -226,7 +242,7 @@ export class FormNormalComponent extends BiBaseComponent{
                     label: '选择分组或下拉',
                     options:[
                         {value: 1, name: '分组'},
-                        {value: 2, name: '下穿'}
+                        {value: 2, name: '下穿'},
                     ],
                     onChange: this.switchGroupandDeep.bind(this),
                 },
@@ -246,6 +262,11 @@ export class FormNormalComponent extends BiBaseComponent{
      * @param fields x轴字段列表
      */
     renderXField(fields = []) {
+        if (this.formGroup.deeps) {
+            this.formGroup.deeps.reloadXaxis(fields);
+            this.formGroup.deeps.setValue(this.editModeDeeps);
+        };
+
         if (this.formGroup.x) {
             this.formGroup.x.autoSelect.data.choosed = [];
             this.formGroup.x.autoSelect.data.list = fields;
@@ -254,10 +275,6 @@ export class FormNormalComponent extends BiBaseComponent{
                 this.formGroup.x.autoSelect.data.choosed[0] = this.editModeXField;
             }
             this.formGroup.x.autoSelect.reload()
-        };
-
-        if (this.formGroup.deeps) {
-            this.formGroup.deeps.reloadXaxis(fields);
         };
     }
 
@@ -270,8 +287,9 @@ export class FormNormalComponent extends BiBaseComponent{
         yGroup.forEach(y => {
             y.reloadRender(fields);
         });
-
+        console.log()
         if (fields.length > 0 && this.editModeOnce) {
+            let a = this.editModeYField.concat(this.editModeY1Field);
             let yEditOnceGroup = this.editModeYField.concat(this.editModeY1Field);
             yGroup.map((y,index) => {
                 y.setValue(yEditOnceGroup[index]);
@@ -302,6 +320,15 @@ export class FormNormalComponent extends BiBaseComponent{
             };
         };
         this.y.push(y);
+    }
+
+    /**
+     * 勾选是否展示双y轴时
+     */
+    checkShowY1Axis(checked) {
+        if (checked && !this.editModeOnce) {
+            this.showY1Axis(true);
+        }
     }
 
     /**
@@ -350,7 +377,7 @@ export class FormNormalComponent extends BiBaseComponent{
             let checkboxs = [];
             let items = []
             this.y.concat(this.y1).map(y => {
-                if (y.data.field && y.data.field['field']['id']) {
+                if (y.data.field) {
                     items.push(y.data.field);
                     checkboxs.push(y.data.field['field'])
                 }
@@ -377,6 +404,10 @@ export class FormNormalComponent extends BiBaseComponent{
         this.editModeOnce = this.chartId ? true : false;
         this.editModeXField = null;
         [this.editModeYField,this.editModeY1Field] = [[], []];
+        this.editModeDeeps = {
+            deeps:[],
+            group:{}
+        };
     }
 
     /**
@@ -413,7 +444,7 @@ export class FormNormalComponent extends BiBaseComponent{
      * 展示所有x轴所有数据(x轴45°展示)
      */
     showAllXAxis(checked) {
-        if (checked) {
+        if (this.formGroup.yHorizontalColumns.getValue()) {
             this.formGroup.xMarginBottom.data.show = true;
         } else {
             this.formGroup.xMarginBottom.data.show = false;
@@ -426,7 +457,7 @@ export class FormNormalComponent extends BiBaseComponent{
      * @param checked 通过checkbox判断是否选中
      */
     showyHorizontal(checked) {
-        if (checked) {
+        if (this.formGroup.yHorizontal.getValue()) {
             this.formGroup.echartX.data.checked = false;
             this.formGroup.echartXTextNum.data.show = false;
             this.formGroup.echartXMarginBottom.data.show = false;
@@ -566,9 +597,11 @@ export class FormNormalComponent extends BiBaseComponent{
         let res = await ChartFormService.saveChart(JSON.stringify(chart));
         if (res['success'] == 1) {
             msgbox.alert('保存成功');
-            this.reset();
-            this.reload();
-            Mediator.publish('bi:aside:update',res['data'])
+            if (!chart['chartName']['id']) {
+                this.reset();
+                this.reload();
+            };
+            Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
         } else {
             msgbox.alert(res['error'])
         };

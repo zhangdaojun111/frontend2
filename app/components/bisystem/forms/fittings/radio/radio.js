@@ -20,8 +20,6 @@ let config = {
         me.onChange = me.data.onChange
         this.el.on('change', 'input', function(event){
             me.data.value = $(this).val();
-            $(this).siblings('.radio-circle').addClass('active');
-            $(this).closest('.bi-chart-radio').siblings().find('.radio-circle').removeClass('active');
             if (me.data.onChange) {
                 me.onChange(me.data.value);
             };
