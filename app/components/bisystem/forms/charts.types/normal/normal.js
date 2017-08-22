@@ -594,6 +594,7 @@ export class FormNormalComponent extends BiBaseComponent{
         } else {
             chart['deeps'] = data.deeps.deeps
         };
+
         let res = await ChartFormService.saveChart(JSON.stringify(chart));
         if (res['success'] == 1) {
             msgbox.alert('保存成功');
