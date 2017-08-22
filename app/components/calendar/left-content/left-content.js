@@ -111,12 +111,37 @@ let config = {
             })
         },
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '.hide-con',
+            callback: function(temp = this){
+                 temp = $(temp).parents('.item-title');
+                 this.actions.contentHide(this,temp);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.hide-con-1',
+            callback: function(temp = this){
+                this.actions.hide_item(this,$(temp).parents('.item-title-1'));
+            }
+        },
+        {
+            event: 'click',
+            selector: '.hide-con-2',
+            callback: function(temp = this){
+                this.actions.hideclass(this,$(temp).parents('.item-title-2'));
+            }
+        },
+    ],
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
         let that = this;
         this.actions.getCalendarTreeData(that);
         this.append(new LeftcontentCalendarset(this.data.calendarTreeData), this.el.find('.left-calendar-set'));
-        this.append(new leftContentFinished(),this.el.find('.item-content-4'));
+        let myChild = new leftContentFinished(function(){console.log("!!!!!!!!!!!!!")});
+        this.append(myChild,this.el.find('.item-content-4'));
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.el.find('.item-content-3').empty();
             console.log(data);
@@ -130,14 +155,7 @@ let config = {
         Mediator.on('calendar-left:showRemindType',()=>{
             that.actions.showRemindType(that);
         });
-        that.el.on('click', '.hide-con',function(){
-            let temp = $(this).parents('.item-title');
-            that.actions.contentHide(that,temp);
-        }).on("click",".hide-con-1",function(){
-            that.actions.hide_item(that,$(this).parents('.item-title-1'));
-        }).on("click",".hide-con-2",function(){
-            that.actions.hideclass(that,$(this).parents('.item-title-2'));
-        }).on('click','.set-calendar',() =>{
+        that.el.on('click','.set-calendar',() =>{
             CalendarSetService.getMenu().then(res => {
                 // PMAPI.openDialogByIframe(
                 //     '/iframe/calendarOpenSetting/',

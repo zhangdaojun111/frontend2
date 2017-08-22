@@ -196,33 +196,79 @@ let config = {
             Mediator.emit('CalendarSelected: Search', json);
         }
     },
+    binds:[
+        {
+            event: 'mouseleave',
+            selector: '.float-button-group',
+            callback: function(temp = this){
+                $(temp).css("display","none");
+            }
+        },
+        {
+            event: 'click',
+            selector: '.float-button-group-show',
+            callback: function(){
+                this.el.find(".float-button-group").css({"display":"block","top":event.clientY - 90});
+            }
+        },
+        {
+            event: 'click',
+            selector: '.select-label-show',
+            callback: function(){
+                this.actions.selectlabelshow($(this));
+            }
+        },
+        {
+            event: 'click',
+            selector: '.select-label',
+            callback: function(temp = this){
+                this.actions.selectlabel($(temp),this);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.select-label-children',
+            callback: function(temp = this){
+                this.actions.selectlabelchildren($(temp),this);
+            }
+        },
+        {
+            event: 'mouseover',
+            selector: '.hide-span-function',
+            callback: function(){
+                event.stopPropagation();
+                this.el.find(".search-function").show();
+            }
+        },
+        {
+            event: 'mouseover',
+            selector: '.hide-type-group',
+            callback: function(){
+                this.el.find(".search-function").css("display","none");
+            }
+        },
+        {
+            event: 'mouseover',
+            selector: '.float-button-group',
+            callback: function(){
+                event.stopPropagation();
+                this.el.find(".float-button-group").show();
+            }
+        },
+        {
+            event: 'click',
+            selector: '.search-function-children',
+            callback: function(temp = this){
+                this.actions.goSearch($(temp).parent(".search-function").attr("class").split(" ")[1],$(temp).attr("class").split(" ")[1]);
+            }
+        },
+    ],
     afterRender: function() {
         let that = this;
         that.actions.showfirst(that);
         config.actions.loaddatahtml(that,config.data.dataitem);
         Mediator.on('calendar-left:checkbox3-check',data =>{
             config.data.cancel_fields = data.data;
-        });
-        that.el.on("mouseleave",".float-button-group",function(){
-            $(this).css("display","none");
-        }).on("click",".float-button-group-show",function(){
-            that.el.find(".float-button-group").css({"display":"block","top":event.clientY - 90});
-        }).on('click','.select-label-show',function(){
-            config.actions.selectlabelshow($(this));
-        }).on('click',".select-label",function(){
-            config.actions.selectlabel($(this),that);
-        }).on('click','.select-label-children',function () {
-            config.actions.selectlabelchildren($(this),that);
-        }).on('mouseover',".hide-span-function",function () {
-            event.stopPropagation();
-            that.el.find(".search-function").show();
-        }).on('mouseover',".float-button-group", () =>{
-            event.stopPropagation();
-            this.el.find(".float-button-group").show();
-        }).on('mouseover',".hide-type-group", () => {
-            that.el.find(".search-function").css("display","none");
-        }).on('click','.search-function-children',function () {
-            that.actions.goSearch($(this).parent(".search-function").attr("class").split(" ")[1],$(this).attr("class").split(" ")[1]);
         });
         $(document).mouseover(function(){
             that.el.find(".float-button-group").hide();

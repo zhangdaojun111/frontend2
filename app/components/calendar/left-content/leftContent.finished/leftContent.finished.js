@@ -13,13 +13,27 @@ let config = {
     },
     actions:{
     },
+    events:{
+        onChange:function(){},
+    },
+    binds:[
+        {
+            event: 'click',
+            selector: '.has-finished',
+            callback: function (selector = this.selector) {
+                this.callback();
+            }
+        }
+    ],
     afterRender: function() {
         this.el.css("padding","2px 10px 5px 10px");
     },
 }
 class leftContentFinished extends Component {
-    constructor(){
+    constructor(callback){
         super(config);
+        this.callback = callback;
+
     }
 }
 export default leftContentFinished;
