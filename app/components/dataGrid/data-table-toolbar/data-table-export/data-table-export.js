@@ -152,7 +152,8 @@ let exportSetting = {
         css: css.replace(/(\n)/g, ''),
         isFilter: true,
         custom: true,
-        attachment: true
+        attachment: true,
+        hideOptions:[]
     },
     actions: {
         createUrl: function () {
@@ -192,7 +193,7 @@ let exportSetting = {
         this.el.on( 'click','#isFilter',()=>{
             this.actions.changeState( 'isFilter' );
         } ).on( 'click','#columns',()=>{
-            this.actions.changeState( 'columns' );
+            this.actions.changeState( 'custom' );
         } ).on( 'click','#attachment',()=>{
             this.actions.changeState( 'attachment' );
         } ).on( 'click','.export-btn',()=>{
@@ -204,6 +205,19 @@ let exportSetting = {
                 }
             } )
         } )
+        this.data['isFilter'] = true;
+        this.data['custom'] = true;
+        this.data['attachment'] = true;
+        for( let h of this.data.hideOptions ){
+            let d = this.el.find( '.input-item' );
+            let obj = {
+                isFilter: 0,
+                custom: 1,
+                attachment: 2
+            }
+            this.data[h] = false;
+            d[obj[h]].innerHTML = '';
+        }
         this.actions.createUrl();
     },
     beforeDestory: function () {

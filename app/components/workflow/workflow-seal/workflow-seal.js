@@ -51,7 +51,6 @@ let config = {
         },
 
         createImg(top,left,width,height,id){
-            console.log(id);
             let viewLeft = left;
             let viewTop = top;
             let top1 = top+"%";
@@ -92,7 +91,6 @@ let config = {
         },
         init(){
             let that = this;
-            console.log("00000000000000000000000");
             this.el.find(".add-img").draggable({
                 helper: "clone",
                 appendTo:"#place-form",
