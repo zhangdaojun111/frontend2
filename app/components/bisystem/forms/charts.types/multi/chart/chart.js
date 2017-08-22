@@ -91,7 +91,6 @@ export class MultiChartComponent extends BiBaseComponent{
      */
     multiDel(){
         this.destroySelf();
-        this.reload();
     }
 
 

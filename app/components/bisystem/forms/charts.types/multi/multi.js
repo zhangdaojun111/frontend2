@@ -25,6 +25,7 @@ let config = {
     firstAfterRender() {
         this.el.on('click','.multi-add-btn',()=>{
             this.multiAdd();
+            return false;
         })
     }
 }

@@ -107,4 +107,5 @@ export class FormNormalDeepComponent extends BiBaseComponent{
             group: this.x.getValue()
         }
     }
+
 }

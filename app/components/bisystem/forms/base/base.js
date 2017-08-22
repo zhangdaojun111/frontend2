@@ -40,7 +40,7 @@ export class FormBaseComponent extends BiBaseComponent {
                 data:{
                     show:true,
                     value: null,
-                    label: '请输入图标名称'
+                    label: '请输入图表名称'
                 },
                 me: this,
                 container: 'form-chart-base'
