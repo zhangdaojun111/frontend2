@@ -43,6 +43,11 @@
       width: 248px;
       height: 148px;
     }
+    .oldImg{
+      position: absolute;
+      z-index: 100;
+      margin-top: 17px;
+    }
   }
   .show{
     display: block;

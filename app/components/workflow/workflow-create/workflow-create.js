@@ -40,9 +40,8 @@ let config = {
                     this.data[1].rows.splice(i,i+1);
                 }
             }
-            let target = e.target;
-            let parent = $(target).parent().parent().parent();
-            parent.remove();
+            let parents = el.parents('div')[0];
+            parents.remove();
             this.actions.init();
         },
         init(){
