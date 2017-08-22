@@ -52,16 +52,18 @@ export class FormNormalComponent extends BiBaseComponent{
         this.chartId = chartId;
         this.y = [];
         this.y1 = [];
-
+        this.editModeOnce = this.chartId ? true : false // 如果是编辑模式 需要在第一次加载进来重置某些字段的默认值
+        this.editModeXField = null;// 编辑模式 需要等到x轴数据加载完成在设置
     }
     /**
      * 编辑模式发送chartId, 得到服务器数据
      * @param chartId 图表id
      */
     async getChartData(chartId) {
-        const chart = await canvasCellService.getCellChart({chart_id: chartId});
-        this.fillChart(chart[0])
-
+        if (this.chartId) {
+            const chart = await canvasCellService.getCellChart({chart_id: chartId});
+            this.fillChart(chart[0])
+        }
     }
     /**
      * 编辑时渲染图表
@@ -76,9 +78,10 @@ export class FormNormalComponent extends BiBaseComponent{
             filter: chart['filter']
         };
         this.formGroup.share.setValue(share);
-        this.formGroup.x.data.choosed = chart['xAxis'];
-        this.formGroup.x.autoSelect.reload();
-        // this.formGroup.x.setValue(chart['xAxis']);
+        this.editModeXField = chart['xAxis'];
+        this.formGroup.doubleY.setValue(chart['double'] == 0 ? false : true);
+
+        console.log(chart);
     }
 
 
@@ -231,9 +234,14 @@ export class FormNormalComponent extends BiBaseComponent{
      */
     renderXField(fields = []) {
         if (this.formGroup.x) {
-            this.formGroup.x.autoSelect.data.choosed=[];
+            this.formGroup.x.autoSelect.data.choosed = [];
             this.formGroup.x.autoSelect.data.list = fields;
-            this.formGroup.x.autoSelect.reload();
+
+            if (fields.length > 0 && this.editModeOnce) {
+                this.formGroup.x.autoSelect.data.choosed[0] = this.editModeXField;
+                this.editModeOnce = false;
+            }
+            this.formGroup.x.autoSelect.reload()
         };
 
         if (this.formGroup.deeps) {
@@ -346,6 +354,8 @@ export class FormNormalComponent extends BiBaseComponent{
         this.y = [];
         this.y1 = [];
         this.chartId = id;
+        this.editModeOnce = this.chartId ? true : false;
+        this.editModeXField = null;
     }
 
     /**
@@ -371,6 +381,9 @@ export class FormNormalComponent extends BiBaseComponent{
                 if (this.formGroup.defaultY.data.value) {
                     this.selectYAxis(true)
                 };
+                break;
+            case 'source_icon_load_finish':
+                this.getChartData(this.chartId);
                 break;
         }
     }

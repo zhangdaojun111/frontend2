@@ -17,13 +17,13 @@ let config = {
     data: {},
     actions: {},
     afterRender() {},
-   async firstAfterRender() {
+    firstAfterRender() {
         this.renderFitting();
         let p1 = this.getChartSource();
         let p2 = this.getChartIcon();
         Promise.all([p1,p2]).then((result) => {
-            console.log(result)
-       })
+            Mediator.publish('bi:chart:form:update', {type:'source_icon_load_finish', data:[]});
+        })
     }
 };
 
@@ -82,7 +82,7 @@ export class FormMixShareComponent extends BiBaseComponent {
             this.mixForm.chartSource.autoSelect.reload();
         } else {
             msgbox.alert(res['error']);
-        }
+        };
     }
 
     /**

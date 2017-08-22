@@ -47,7 +47,10 @@ export class CheckboxComponent extends FormFittingAbstract {
      * 设置checkbox值
      */
     setValue(val) {
-        console.log(val);
+        if(this.data.items && this.data.items.length > 0) {
+        } else {
+            this.el.find('input').attr('checked', val);
+        }
     }
 
     /**

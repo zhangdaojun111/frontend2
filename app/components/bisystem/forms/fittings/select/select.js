@@ -19,6 +19,16 @@ let config = {
     firstAfterRender() {
         let me = this;
         me.onChange = me.data.onChange;
+        // 如果给了默认值，初始化选中默认值
+        if (me.data.value) {
+            for (let [index,optionValue] of me.data.options.entries()) {
+                if (me.data.value == optionValue.value) {
+                     this.el.find('option').eq(index).attr('selected', true);
+                     break;
+                }
+            }
+        }
+
         this.el.on('change', 'select', function(event){
             me.data.value = $(this).val();
             if (me.data.onChange) {

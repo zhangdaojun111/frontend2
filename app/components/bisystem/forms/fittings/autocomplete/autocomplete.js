@@ -56,7 +56,6 @@ export class AutoCompleteComponent extends FormFittingAbstract {
      */
     setValue(val) {
         this.autoSelect.data.choosed[0] = val;
-        console.log(this.autoSelect.data.choosed[0])
         this.autoSelect.reload();
     }
 
