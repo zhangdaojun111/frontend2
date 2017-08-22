@@ -20,6 +20,17 @@ let config={
             event: 'click',
             selector: '.timeInput',
             callback: function(){
+                //增加0
+                function p(s) {
+                    return s < 10 ? '0' + s: s;
+                }
+                //获取当前时间
+                var myDate = new Date();
+                var h=myDate.getHours();
+                var m=myDate.getMinutes();
+                var s=myDate.getSeconds();
+                var now=p(h)+':'+p(m)+":"+p(s);
+
                 this.el.find('.time,.cancel-x').css('display', 'block');
                 let nowTime =  this.el.find(".timeInput").val(now);
                 this.data.value = now;
@@ -35,13 +46,6 @@ let config={
             selector: '.timeInput',
             callback: function(){
                 this.el.find('.cancel-x').css('display','block');
-            }
-        },
-        {
-            event: 'click',
-            selector: '.time',
-            callback: function(event){
-                event.stopPropagation();
             }
         },
         {
@@ -103,7 +107,9 @@ let config={
             _this.data.value = now;
             _.debounce(function(){_this.events.changeValue(_this.data)},200)();
             });
-
+        this.el.on('click','.time',function(event){
+            event.stopPropagation();
+        })
         this.el.on("click",'.reduce', function () {
             //当前时间-1
             var myDate3 = new Date();
