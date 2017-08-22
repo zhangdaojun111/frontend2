@@ -500,6 +500,12 @@ let config = {
             } );
             HTTP.flush();
         },
+        postExpertSearch:function(data,id,name) {
+            this.data.filterParam.expertFilter = data;
+            this.data.filterParam.common_filter_id = id;
+            this.data.filterParam.common_filter_name = name;
+            this.actions.getUserData();
+        },
         //定制列
         customColumnClick: function () {
             if( this.el.find('.custom-column-btn')[0] ){
