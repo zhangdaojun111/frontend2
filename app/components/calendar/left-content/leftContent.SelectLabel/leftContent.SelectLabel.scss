@@ -59,12 +59,13 @@
     .hide-span-function{
       .hide-right-con{
         float: right;
-        margin-top:8px;
+        display: inline-block;
+        margin-top:-20px;
       }
     }
     .search-function{
       display: none;
-      margin-left: 160px;
+      margin-left: 130px;
       position: absolute;
       margin-top:-32px;
       z-index: 1000;
