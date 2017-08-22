@@ -1035,6 +1035,7 @@ let config={
                 parent_temp_id: this.data.parentTempId || "",
                 parent_record_id: this.data.parentRecordId  || ""
             };
+            console.log(json);
             //如果是批量审批，删除flow_id
             if(this.data.isBatch == 1){
                 delete json["flow_id"];

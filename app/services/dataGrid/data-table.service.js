@@ -87,7 +87,7 @@ export const dataTableService = {
     },
     setImgDataAndNum(res,imgData,imgSelect){
         imgData = res;
-        this.imgTotal = res.rows.length;
+        let imgTotal = res.rows.length;
         if(imgData){
             for( let i=0;i<imgData.rows.length;i++ ){
                 imgData.rows[i]["isSelect"] = false;
@@ -97,8 +97,8 @@ export const dataTableService = {
                 imgSelect = imgData.rows[0].file_id;
             }
         }
-        this.imgNum = 0;
-        return {imgSelect:imgSelect,imgData:imgData};
+        let imgNum = 0;
+        return {imgSelect:imgSelect,imgData:imgData,imgTotal:imgTotal,imgNum:imgNum};
     },
     //获取文件名后缀
     getFileExtension (filename) {

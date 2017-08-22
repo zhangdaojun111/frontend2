@@ -55,6 +55,8 @@ let FormEntrys = {
         this.isAddBuild=config.isAddBuild || 0;
         this.buildId=config.id || '';
         this.btnType=config.btnType||'new';
+        console.log('配置文件');
+        console.log(config);
     },
     //静态数据里是否有这个key
     hasKeyInFormDataStatic(key,staticData){
