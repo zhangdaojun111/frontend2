@@ -61,6 +61,10 @@ let config = {
             UserInfoService.saveUserConfig(json2).done((result) => {
                 if(result.success === 1){
                     msgbox.alert("设置保存成功");
+                    //回写window.config
+
+
+                    this.el.dialog.hide();
                 }else{
                     msgbox.alert("设置保存失败");
                 }

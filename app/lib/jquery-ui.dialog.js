@@ -23,8 +23,8 @@ $.widget( "custom.erdsDialog", $.ui.dialog, {
                 } else {
                     this.options.originHeight = this.options.height;
                     this.options.originWidth = this.options.width;
-                    this.option('width', $(document).width());
-                    this.option('height', $(document).height());
+                    this.option('width', document.documentElement.clientWidth);
+                    this.option('height', document.documentElement.clientHeight);
                     this.option('position', { my: "center", at: "center", of: window });
                     this.fullScreen = true;
                 }
