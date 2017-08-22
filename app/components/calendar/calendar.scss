@@ -1,4 +1,4 @@
-@import "../../assets/scss/core/base";
+//@import "../../assets/scss/core/base";
 $boder-color: rgba(228, 228, 228, 1);
 $background_color: rgba(242, 242, 242, 1);
 $calendar-font: #666666;
@@ -10,7 +10,7 @@ $grid-bg-color: rgba(248, 248, 248, 1);
 
 .calendar-iframe {
     //min-width: 1200px;
-    width:calc(100% - 10px);
+    width: 100%;
     min-height: 600px;
     height: 100%;
     font-size: 12px;
@@ -24,6 +24,7 @@ $grid-bg-color: rgba(248, 248, 248, 1);
         width: 100%;
         padding-left: 10px;
         border-bottom: 1px solid $boder-color;
+        position: relative;
         .tool-icon {
             display: inline-block;
             line-height: 60px;
@@ -81,6 +82,7 @@ $grid-bg-color: rgba(248, 248, 248, 1);
         }
     }
     .calendar-remind {
+        position: relative;
         height: 30px;
         width: 100%;
         padding-left: 10px;

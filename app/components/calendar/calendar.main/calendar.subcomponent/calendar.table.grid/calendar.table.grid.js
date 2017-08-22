@@ -42,6 +42,8 @@ let config = {
             });
         }
         this.el.on('dragenter', '.task-item',function(event){
+            event.stopPropagation();
+            event.preventDefault();
             drag_Postion = null;
             let ev = event.originalEvent;
             let temp = that.el.find(".task-item-draggable").parent();
@@ -54,6 +56,8 @@ let config = {
             ev.preventDefault();
             return true;
         }).on('dragleave', '.task-list',(event) => {
+            event.stopPropagation();
+            event.preventDefault();
             if(this.el.find('.task-item').length < 2 ){
                 drag_Postion = null;
             }
@@ -61,10 +65,14 @@ let config = {
             ev.preventDefault();
             return true;
         }).on('dragover', '.task-list',(event) => {
+            event.stopPropagation();
+            event.preventDefault();
             let ev = event.originalEvent;
             ev.preventDefault();
             return true;
         }).on('drop','.task-list',(event) => {
+            event.stopPropagation();
+            event.preventDefault();
             let ev = event.originalEvent;
             let temp = $(".task-item-draggable");
             temp.removeClass("task-item-draggable");
@@ -80,7 +88,7 @@ let config = {
                 };
                 params['data'][data['dfield']] = this.data.bodyData['dataTime'];
                 params['data'] = JSON.stringify(params['data']);
-                Mediator.emit('CalendarDrag: dragRemind', params)
+                Mediator.emit('CalendarDrag: dragRemind', params);
             }
             if(drag_Postion ===null){
                 drag_Postion = this.el.find(".task-list");
