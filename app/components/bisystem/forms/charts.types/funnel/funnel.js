@@ -21,8 +21,8 @@ let config = {
         this.renderFitting();
     },
     firstAfterRender() {
-        this.el.on('click', '.save-btn', (event) => {
-            this.saveChart();
+        this.el.on('click', '.chart-form .save-btn', (event) => {
+            // this.saveChart();
         })
     },
     beforeDestory() {}

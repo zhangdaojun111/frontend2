@@ -30,7 +30,7 @@ let config = {
         });
     },
     firstAfterRender() {
-        this.el.on('click', '.save-btn', (event) => {
+        this.el.on('click', '.save-new', (event) => {
             this.saveChart();
             return false;
         });
@@ -328,6 +328,8 @@ export class FormNormalComponent extends BiBaseComponent{
     checkShowY1Axis(checked) {
         if (checked && !this.editModeOnce) {
             this.showY1Axis(true);
+        }else{
+            this.showY1Axis(false);
         }
     }
 
@@ -474,9 +476,11 @@ export class FormNormalComponent extends BiBaseComponent{
     switchGroupandDeep(val) {
         if (val == 1) {
             this.formGroup.deeps.data.deepShow = false;
-            this.formGroup.deeps.data.deeps =[]
+            this.formGroup.deeps.data.deeps =[];
+            this.changeContext(val);
         } else {
             this.formGroup.deeps.data.deepShow = true;
+            this.changeContext(val);
         };
         this.formGroup.deeps.reload();
     }
@@ -606,5 +610,17 @@ export class FormNormalComponent extends BiBaseComponent{
         } else {
             msgbox.alert(res['error'])
         };
+    }
+
+    /**
+     * 改变label的显示
+     */
+    changeContext(val){
+        if(val==2){
+            this.el.find('.chart-form-deep').addClass('after-content');
+        }else{
+            this.el.find('.chart-form-deep').removeClass('after-content');
+        }
+
     }
 }

@@ -23,7 +23,7 @@ let config = {
         this.switchOptions(this.formGroup.nineGridColumn.data.value);
     },
     firstAfterRender() {
-        this.el.on('click', '.save-btn', (event) => {
+        this.el.on('click', '.chart-nine-grid .save-btn', (event) => {
             this.save();
         })
     }
@@ -96,6 +96,7 @@ export class FormNineGridComponent extends BiBaseComponent{
             'xAxis': {},
             'yAxis': {}
         };
+        console.log(this.formGroup);
         let val = this.formGroup.nineGridColumn.data.value;
         let data = this.formGroup.grid.getValue();
         if(val == 3){
