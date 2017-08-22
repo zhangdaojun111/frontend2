@@ -65,19 +65,22 @@ let config = {
             this.el.find('.online-num span').text(data.online_user_num);
         },
 
-        showMessageUnread: function () {
-            this.el.find('.icon.message').addClass('unread');
-        },
-
-        hideMessageUnread: function () {
-            this.el.find('.icon.message').removeClass('unread');
+        displayMessageUnread: function (data) {
+            let badge = parseInt(data.badge);
+            if (_.isNaN(badge)) {
+                badge = 0;
+            }
+            if (badge > 0) {
+                this.el.find('.icon.message').addClass('unread');
+            } else {
+                this.el.find('.icon.message').removeClass('unread');
+            }
         },
 
         openMessageDialog: function () {
-            this.actions.hideMessageUnread();
-            // $("<div></div>").appendTo
             systemMessageUtil.show();
         },
+
         initGlobalSearch:function () {
             let component = new GlobalSearch();
             let $container = this.el.find(".global-search");
@@ -169,20 +172,14 @@ let config = {
 
     afterRender: function () {
         this.el.tooltip();
-        if (window.config.sysConfig.unread_msg_count !== 0) {
-            this.actions.showMessageUnread();
-        }
+        this.actions.displayMessageUnread({
+            badge: window.config.sysConfig.unread_msg_count
+        });
     },
     firstAfterRender: function () {
         let that = this;
         Mediator.on('socket:online_user_num', that.actions.refreshOnlineNum);
-        Mediator.on('socket:personal_message', this.actions.showMessageUnread);
-        Mediator.on('socket:notice', this.actions.showMessageUnread);
-        Mediator.on('socket:voice_message', this.actions.showMessageUnread);
-        Mediator.on('socket:workflow_approve_msg', this.actions.showMessageUnread);
-        Mediator.on('socket:online_user_num', function (data) {
-            that.actions.refreshOnlineNum(data.online_user_num);
-        });
+        Mediator.on('socket:personal_message', this.actions.displayMessageUnread);
         //加载全局搜索窗口
         this.actions.initGlobalSearch();
     },
@@ -190,9 +187,9 @@ let config = {
     beforeDestory: function () {
         Mediator.removeAll('socket:online_user_num');
         Mediator.removeAll('socket:personal_message');
-        Mediator.removeAll('socket:notice');
-        Mediator.removeAll('socket:voice_message');
-        Mediator.removeAll('socket:workflow_approve_msg');
+        // Mediator.removeAll('socket:notice');
+        // Mediator.removeAll('socket:voice_message');
+        // Mediator.removeAll('socket:workflow_approve_msg');
     }
 }
 
