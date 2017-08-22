@@ -69,7 +69,7 @@ export class FormNormalDeepComponent extends BiBaseComponent{
      *@param item 下穿数据
      */
     addDeep(item) {
-        if (item) {
+        if (item.hasOwnProperty('id')) {
             this.data.deeps.push(item);
             this.reload();
         }

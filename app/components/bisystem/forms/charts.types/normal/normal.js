@@ -326,8 +326,8 @@ export class FormNormalComponent extends BiBaseComponent{
      * 勾选是否展示双y轴时
      */
     checkShowY1Axis(checked) {
-        if (checked && !this.editModeOnce) {
-            this.showY1Axis(true);
+        if (!this.editModeOnce) {
+            this.showY1Axis(checked);
         }
     }
 
@@ -345,6 +345,8 @@ export class FormNormalComponent extends BiBaseComponent{
             };
             this.y1.push(y);
         } else {
+            console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxx');
+            console.log(flag);
             this.el.find('.form-group-y1').removeClass('group-active');
             this.y1.map(y => y.destroySelf());
             this.y1 = [];
