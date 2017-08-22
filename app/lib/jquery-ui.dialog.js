@@ -6,7 +6,8 @@ $.widget( "custom.erdsDialog", $.ui.dialog, {
         this.uiDialogTitlebarFull = $( "<button type='button' title='全屏'></button>" )
             .button( {
                 label: '',
-                icon: "ui-icon-newwin",
+                // icon: "ui-icon-newwin",
+                icon:"icon-maximize",
                 showLabel: false
             } )
             .appendTo( this.uiDialogTitlebar );

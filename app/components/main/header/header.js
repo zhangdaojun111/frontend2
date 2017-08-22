@@ -10,7 +10,7 @@ import {SysSetting} from "../system-setting/system-setting"
 import {postMessageUtil} from '../post-message/post-message';
 import {GlobalSearch} from '../global-search/global-search';
 import {OnlineDisplay} from "../online-users/online-users"
-import {GlobalService} from "../../../services/main/globalService"
+
 
 let config = {
     template: template,
