@@ -1677,8 +1677,8 @@ let config={
             }
             _this.el.find(".overflow").on("scroll",function () {
                 let overflowHight = _this.el.find('.overflow').scrollTop();
-                // console.log(overflowHight)
-                if(overflowHight>=60){
+               // console.log(overflowHight)
+                if(overflowHight>10){
                     _this.el.find('.more').show();
                 }else{
                     _this.el.find('.more').hide();
