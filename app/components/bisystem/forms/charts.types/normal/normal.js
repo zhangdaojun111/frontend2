@@ -613,7 +613,7 @@ export class FormNormalComponent extends BiBaseComponent{
     }
 
     /**
-     * 改变label的显示
+     * 改变label的显示 下拉,分组
      */
     changeContext(val){
         if(val==2){
