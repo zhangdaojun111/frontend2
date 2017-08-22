@@ -508,7 +508,7 @@ export const dgcService = {
             let obj = indexedGridState[d]||{};
             obj['pinned']= data.fixCols.l.length > 0 ? 'left' : null;
             if( d == 'group' ){
-                obj[d]['hide'] = true;
+                obj['hide'] = true;
             }
             arr.push( obj );
         }
