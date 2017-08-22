@@ -30,7 +30,7 @@ let config = {
         });
     },
     firstAfterRender() {
-        this.el.on('click', '.save-btn', (event) => {
+        this.el.on('click', '.save-normal-btn', (event) => {
             this.saveChart();
             return false;
         });
@@ -292,7 +292,6 @@ export class FormNormalComponent extends BiBaseComponent{
         yGroup.forEach(y => {
             y.reloadRender(fields);
         });
-        console.log()
         if (fields.length > 0 && this.editModeOnce) {
             let a = this.editModeYField.concat(this.editModeY1Field);
             let yEditOnceGroup = this.editModeYField.concat(this.editModeY1Field);
