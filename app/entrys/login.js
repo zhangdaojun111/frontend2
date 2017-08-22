@@ -153,7 +153,7 @@ function getLoginController() {
         versionInit:function () {
             let info = this.versionInfo.rows;
             let $table = this.$versionTable;
-            console.log(info);
+
             for (let obj of info){
                 let $row = $("<tr></tr>");
 
