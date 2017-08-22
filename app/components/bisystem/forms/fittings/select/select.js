@@ -69,4 +69,5 @@ export class SelectComponent extends FormFittingAbstract {
      * 这个绑定到data的onChange事件上
      */
     onChange() {}
+
 }
