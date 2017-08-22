@@ -60,8 +60,8 @@
                 border: 1px solid #dddddd;
                 padding: 10px;
                 .popup {
+                    width: 100%;
                     display: none;
-                    width: 400px;
                     position: absolute;
                     z-index: 100 !important;
                     background-color: white !important;
@@ -70,13 +70,19 @@
                     height: auto!important;
                     max-height: 300px!important;
                     overflow: auto !important;
-                    li {
-                        margin-left: 0px;
-                        list-style-type: none !important;
-                        label{
-                            text-align: left;
-                            overflow:hidden;
+                    ul{
+                        max-height: 300px!important;
+                        li {
+                            margin-left: 0px;
+                            list-style-type: none !important;
+                            label{
+                                text-align: left;
+                                overflow:hidden;
+                            }
                         }
+                    }
+                    button{
+                        width:100%;
                     }
                 }
             }

@@ -30,6 +30,7 @@ export const UserInfoService = {
     saveAvatar:function (data) {
         let url= '/user_preference/';
         let formatData = JSON.stringify(data);
+        console.log(data);
         let body = {
             action:"save",
             content:formatData,

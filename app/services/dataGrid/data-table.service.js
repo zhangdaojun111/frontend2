@@ -60,5 +60,9 @@ export const dataTableService = {
     //获取部门数据
     getDepartmentData: function ( data ) {
         return HTTP.post( 'query_department_list',data )
+    },
+    //人员信息表请求数据
+    getUserData: function ( data ) {
+        return HTTP.post( 'query_user_list',data )
     }
 }

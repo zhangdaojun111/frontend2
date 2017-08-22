@@ -22,25 +22,23 @@ let config = {
         status:true,
         imageArr:["image/png","image/jpg","image/jpeg","image/gif","image/tiff"],
         avatar:null,        //当前图片数据，包含picSrc，left，top
-        picSrc:'',         //记录当前图片
-        _picSrc:'',         //记录新上传图片
-        _img:'',            //新图片对象
-        imgW:350,           //图片显示宽度
-        imgH:350,
+        picSrc:'',         //图片文件源数据
+        avatarSrc:'',       //记录剪切后的图片的src
+        _img:{},            //新图片对象
+        imgW:0,           //图片显示宽度
+        imgH:0,
         imgX:0,
         imgY:0,
+        DragX:0,        //用于记录裁剪图片时的起点，需要通过两次比例处理
+        DragY:0,        //用于记录裁剪图片时的起点
+        scale:1,
         component:null,
         dragResult:{            //拖动结束后和数据
             coords:null,
             proportion:1,
         },
-        imgData:{               //根据比例计算后的结果，用于设置最终图片位置
-            src:"",
-            width:"",
-            height:"",
-            left:"",
-            top:"",
-        },
+        imgData:{},    //记录选中部分的坐标信息
+        JPosition:{},
     },
 
     actions:{
@@ -66,80 +64,130 @@ let config = {
             if(jcropApi !== undefined){
                 jcropApi.destroy();
             }
+
+            let that = this;
             reader.onload = (e) => {
                 let picSrc = e.target['result'];
-                // 手动显示上传的图片(350*350)
-                let $img = $("<img>").addClass('pic_set');
-                    $img.attr("src",picSrc)
-                        .css({
-                            "width": this.data.imgW,
-                            "height": this.data.imgH
-                        });
-                this.el.find(".avatar-container").append($img);
-                this.actions.initImgData(picSrc);
-                //上传图片后，开启裁剪功能
-                this.el.find("img.pic_set").Jcrop({
-                    aspectRatio:1,
-                    bgColor:"black",
-                    bgOpacity:0.4,
-                    bgFade: true,
-                    onSelect:this.actions.updateCoords
-                },function () {
-                    jcropApi = this;
-                    jcropApi.setSelect([145,145,205,205]);
-                });
+                that.actions.setImageProportion(picSrc);
             };
         },
-        initImgData:function (src) {
-            this.data.imgData.src = src;
-            this.data._picSrc = src;
-            this.data.imgData.width =  "350px";
-            this.data.imgData.height = "350px";
-            this.data.imgData.left = "-145px";
-            this.data.imgData.top = "-145px";
+        setImageProportion:function (src) {
+            this.data._img = new Image();
+            this.data._img.src = src;
+            let that = this;
+            this.data._img.onload = (event) => {
+                if(that.data._img.height >= that.data._img.width){
+                    that.data.imgH = 350;
+                    that.data.imgW = (that.data._img.width * 350 / that.data._img.height).toFixed(0);
+                    that.data.scale = parseFloat((350/this.data._img.height).toFixed(3));
+                    that.data.imgX = ((350 - that.data.imgW)/2).toFixed(0);
+                    that.data.imgY = 0;
+                }else if(that.data._img.width > that.data._img.height){
+                    that.data.imgW = 350;
+                    that.data.imgH = (that.data._img.height * 350 / that.data._img.width).toFixed(0);
+                    that.data.scale = parseFloat((350/that.data._img.width).toFixed(3));
+                    that.data.imgY = ((350 - that.data.imgH)/2).toFixed(0);
+                    that.data.imgX = 0;
+                }
+                that.actions.setJcropPosition();
+                that.actions.displayPostImage();
+            }
+        },
+        setJcropPosition:function () {
+            this.data.JPosition.Jx = (this.data.imgW - 60)/2;
+            this.data.JPosition.Jy = (this.data.imgH - 60)/2;
+            this.data.JPosition.Jx2 = this.data.JPosition.Jx + 60;
+            this.data.JPosition.Jy2 = this.data.JPosition.Jy + 60;
+            this.data.DragX = this.data.JPosition.Jx / this.data.scale;
+            this.data.DragY = this.data.JPosition.Jy / this.data.scale;
+        },
+        displayPostImage(){
+            let $parent = this.el.find(".avatar-container");
+            $parent.empty();
+            let $img = $("<img>").addClass('pic_set');
+            this.data.imgX = this.data.imgX + "px";
+            this.data.imgY = this.data.imgY + "px";
+            $img.attr("src",this.data._img.src)
+                .css("width",this.data.imgW)
+                .css("height",this.data.imgH);
+                // .css("left",this.data.imgX)
+                // .css("top",this.data.imgY);
+
+            $parent.append($img);
+            this.actions.initResultImgData();
+            // 上传图片后，开启裁剪功能
+            let that = this;
+            this.el.find("img.pic_set").Jcrop({
+                aspectRatio:1,
+                bgColor:"black",
+                bgOpacity:0.4,
+                bgFade: true,
+                onSelect:this.actions.updateCoords
+            },function () {
+                jcropApi = this;
+                jcropApi.setSelect([that.data.JPosition.Jx,that.data.JPosition.Jy,that.data.JPosition.Jx2,that.data.JPosition.Jy2]);
+            });
+        },
+        initResultImgData:function () {
+            this.data.imgData.src = this.data._img.src;
+            this.data.imgData.width =  this.data.imgW;
+            this.data.imgData.height = this.data.imgH;
+            this.data.imgData.left = this.data.imgX;
+            this.data.imgData.top = this.data.imgY;
         },
         updateCoords:function (c) {
             this.data.dragResult.coords = c;
             this.data.dragResult.proportion = (c.x2 - c.x)/60;
             this.actions.resizeImg(c,this.data.dragResult.proportion);
+            this.data.DragX = c.x / this.data.scale;
+            this.data.DragY = c.y / this.data.scale;
+            this.actions.printSquare();
         },
         resizeImg:function (c,p) {
             //根据比例缩放图片，作为最终使用图片
-            this.data.imgData.src = this.data._picSrc;
-            this.data.imgData.width =  350/p + "px";
-            this.data.imgData.height = 350/p + "px";
-            this.data.imgData.left = 0 - c.x/p + "px";
+            this.data.imgData.src = this.data._img.src;
+            this.data.imgData.width = this.data.imgW/p + "px";
+            this.data.imgData.height = this.data.imgH/p + "px";
+            this.data.imgData.left = 0 -  c.x/p + "px";
             this.data.imgData.top = 0 - c.y/p + "px";
-            this.actions.displayAvatar();
+            // this.actions.displayAvatar();
         },
-        displayAvatar:function () {
-            let $img = this.el.find("img.result-img");
-            if( $img.length === 0){
-                $img = $("<img>").addClass('result-img');
-            }
-
-            $img.attr("src",this.data.imgData.src)
-                .css("width",this.data.imgData.width)
-                .css("height",this.data.imgData.height)
-                .css("left",this.data.imgData.left)
-                .css("top",this.data.imgData.top);
-
-            this.el.find(".drag-result").append($img);
+        // displayAvatar:function () {
+        //     let $img = this.el.find("img.result-img");
+        //     if( $img.length === 0){
+        //         $img = $("<img>").addClass('result-img');
+        //     }
+        //
+        //     $img.attr("src",this.data.imgData.src)
+        //         .css("width",this.data.imgData.width)
+        //         .css("height",this.data.imgData.height)
+        //         .css("left",this.data.imgData.left)
+        //         .css("top",this.data.imgData.top);
+        //
+        //     this.el.find(".drag-result").prepend($img);
+        // },
+        printSquare(){
+            let pic = this.el.find('img.pic_set')[0];
+            let canvasS = this.el.find('.avatar-result-square')[0];
+            let ctx = canvasS.getContext('2d');
+            let d = 60 * this.data.dragResult.proportion / this.data.scale;
+            ctx.drawImage(pic,this.data.DragX,this.data.DragY,d,d,0,0,60,60);
+            this.data.avatarSrc = this.actions.convertCanvasToImage(canvasS).src;
+            // console.log(this.data.avatarSrc);       //裁剪后的base64
+        },
+        convertCanvasToImage(canvas){
+            let image = new Image();
+            image.src = canvas.toDataURL("image/png");
+            return image;
         },
         saveAvatar:function () {
-            let data = this.data.imgData;
+            let data = this.data.avatarSrc;
             //向后台传递头像数据
             UserInfoService.saveAvatar(data).done((result) => {
                 //根据结果处理后续工作
                 if(result.success === 1){
                     //向父窗口传递头像数据并设置
-                    window.config.sysConfig.userInfo.avatar = data.src;
-                    window.config.sysConfig.userInfo.avatar_content = {
-                        width:data.width,
-                        height:data.height,
-                        left:data.left,
-                        top:data.top
-                    };
+                    window.config.sysConfig.userInfo.avatar = this.data.avatarSrc;
                     Mediator.emit("personal:setAvatar");
                 }else{
                     msgbox.alert("头像设置失败！");
