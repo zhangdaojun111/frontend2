@@ -63,8 +63,6 @@ let config = {
             return true;
         });
         this.el.on('dragleave', '.task-list',(event) => {
-            // drag_Postion = null;
-            console.log(this.el.find('.task-item').length);
             if(this.el.find('.task-item').length < 2 ){
                 drag_Postion = null;
             }
@@ -83,11 +81,11 @@ let config = {
             temp.removeClass("task-item-draggable");
             temp = temp.parent();
             let data = JSON.parse(ev.dataTransfer.getData("Text"));
+            console.log(data, this.data.bodyData);
             if(drag_Postion ===null){
                 drag_Postion = this.el.find(".task-list");
                 drag_Postion.append(temp);
-            }
-            else{
+            } else{
                 // drag_Postion.after("<div class='temp'></div>");
                 // drag_Postion = drag_Postion.next('.temp');
                 drag_Postion.after(temp);

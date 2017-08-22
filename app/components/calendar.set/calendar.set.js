@@ -77,7 +77,6 @@ let config = {
             this.actions.makeRows(this.data.initAllRows);
         },
         makeRows: function(param){
-            console.log(param);
             this.data.allRows = [];
             CalendarService.getReplace(this.data.tableId).then(res => {
                 if(res.error !== ''){
@@ -85,8 +84,8 @@ let config = {
                 }
                 for(let key in res.data){
                     let obj={
-                        name: res.data[key].dname,
-                        id: res.data[key].field_id
+                        name: res.data[key]['dname'],
+                        id: res.data[key]['field_id'],
                     };
                     this.data.replaceDropDown.push(obj);
                 }
@@ -149,9 +148,9 @@ let config = {
                     this.data.childComponents.push(calendarSetItem);
                     this.append(calendarSetItem, this.el.find('.set-items'));
                     Mediator.emit('calendar-set:editor',{data:0});
-                })
+                });
             }).catch(err=>{
-                //console.log('error',err);
+                console.log('error',err);
             });
         },
 
