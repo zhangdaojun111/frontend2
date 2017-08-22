@@ -25,9 +25,6 @@ let config = {
                 div.className = select;
                 let json = {tableId:select};
                 let work = new workflowPage(json);
-                console.log( "______________" )
-                console.log( "______________" )
-                console.log( work )
                 this.el.find( '#page-contener' ).append( div );
                 work.render( this.el.find( '.' + select ) );
             }

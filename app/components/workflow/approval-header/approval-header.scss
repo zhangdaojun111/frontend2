@@ -56,14 +56,17 @@
       }
       .gz{
         margin-right: 15px;
-        height: 16px;
-        width: 16px;
-        border-radius: 50%;
-        color: red;
         text-align: center;
         line-height:16px;
-        border: 1px solid red;
         cursor: pointer;
+        .gz-icon{
+          height: 16px;
+          width: 16px;
+          display: inline-block;
+          margin-right: 5px;
+          float: left;
+          background: url("../../../assets/images/workflow/zhang.png") no-repeat 1px 1px;
+        }
       }
     }
     .approval-control{

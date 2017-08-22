@@ -27,4 +27,15 @@
             <img src="../../../../assets/images/dataGrid/icon_xiayiye.png" height="16" width="16"/>
         </span>
     </div>
+    <!--表级操作-->
+    {{#if isSuperUser}}
+    <div class="table-oprate-con">
+        <select class="tableOperateSelect">
+            <option value="操作">操作</option>
+            {{#each tableOperationData}}
+            <option value="{{name}}">{{name}}</option>
+            {{/each}}
+        </select>
+    </div>
+    {{/if}}
 </div>

@@ -8,14 +8,22 @@
     margin-right: 2px;
     .task-bg-color {
         display: inline-block;
-        width: 6px;
-        height: 6px;
-        margin: 9px;
+        width: 8px;
+        height: 8px;
+        margin: 7px;
     }
     .task-state-icon{
         border-right: 1px solid rgba(228, 228, 228, 1);
         margin: 4px;
         cursor: pointer;
+    }
+    .task-state-none {
+        border-right: 1px solid rgba(228, 228, 228, 1);
+        display: inline-block;
+        line-height: 16px;
+        height: 16px;
+        width: 16px;
+        margin: 4px;
     }
     .task-show-text {
         width: calc(100% - 58px);

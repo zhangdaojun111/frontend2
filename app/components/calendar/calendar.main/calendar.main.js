@@ -187,6 +187,7 @@ let config = {
             }
             this.data.remindCount = i;
             this.data.workflowCount = w;
+            console.log(this.data.remindCount);
             $('body').find('.remind-num').html(this.data.remindCount);
             $('body').find('.approval-num').html(this.data.workflowCount);
 
@@ -389,6 +390,9 @@ let config = {
                     }
 
                     let arrData = {};
+                    if(setDetail.is_drag === 1) {
+                        console.log(setDetail);
+                    }
 
                     if( setDetail.type === 0 ){
                         arrData['tableId'] = setDetail.table_id;
@@ -707,6 +711,7 @@ let config = {
             console.log(params);
             params['from_date'] = this.data.from_date;
             params['to_date'] = this.data.to_date;
+            params['cancel_fields'] = JSON.stringify(this.data.cancel_fields);
             console.log(params);
             CalendarService.getCalendarDrag(params).then(res => {
                 console.log(res);
@@ -723,6 +728,15 @@ let config = {
             })
         });
 
+        Mediator.on('CalendarDrag: dragRemind', data => {
+            data['from_date'] = this.data.from_date;
+            data['to_date'] = this.data.to_date;
+            data['cancel_fields'] = JSON.stringify(this.data.cancel_fields);
+            CalendarService.getCalendarDrag(data).then(res => {
+                console.log(res);
+            })
+        });
+
     },
     beforeDestory: function () {
         Mediator.removeAll('CalendarWorkflowData: workflowData');
@@ -735,6 +749,7 @@ let config = {
         Mediator.removeAll('Calendar: globalSearch');
         Mediator.removeAll('CalendarSelected: Search');
         Mediator.removeAll('CalendarRemindTask: changeData');
+        Mediator.removeAll('CalendarDrag: dragRemind');
     }
 };
 
