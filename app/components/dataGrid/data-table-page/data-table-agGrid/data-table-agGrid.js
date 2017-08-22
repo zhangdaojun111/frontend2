@@ -735,7 +735,7 @@ let config = {
                 rowStatus = 0;
             }
             let str = '<div style="text-align:center;"><a class="gridView" style="color:#337ab7;">查看</a>';
-            if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data') {
+            if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data' || this.data.viewMode == 'deleteHanding') {
                 if (this.data.isFixed || rowStatus == 2) {
                     str += ' | <span style="color: darkgrey;">编辑</span>';
                     str += ' | <a style="color: darkgrey;">历史</a>';
@@ -1569,6 +1569,19 @@ let config = {
                     this.columnDefsEdit = this.actions.createHeaderColumnDefs( true );
                 } )
                 HTTP.flush();
+            }
+            //点击这里
+            if( this.el.find( '.showNormalGrid' )[0] ){
+                this.el.find( '.showNormalGrid' ).on( 'click',()=>{
+                    let obj = {
+                        tableId: this.data.tableId,
+                        tableName: this.data.tableName,
+                        viewMode: 'normal'
+                    }
+                    let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
+                    let winTitle = obj.tableName;
+                    this.actions.openSourceDataGrid( url,winTitle );
+                } )
             }
         },
         //编辑模式切换
