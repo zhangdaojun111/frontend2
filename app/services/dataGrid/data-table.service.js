@@ -65,6 +65,22 @@ export const dataTableService = {
     getUserData: function ( data ) {
         return HTTP.post( 'query_user_list',data )
     },
+    //我的操作
+    getOperationData: function ( data ) {
+        return HTTP.post( 'get_operation_record',data )
+    },
+    //表级操作数据
+    getTableOperation: function ( data ) {
+        return HTTP.post( 'get_operation',data )
+    },
+    //表级操作cache
+    tableOperationRefresh: function ( data ) {
+        return HTTP.post( 'update_table_cache',data )
+    },
+    //获取表的表单工作流参数
+    getPrepareParmas: function ( data ) {
+        return HTTP.post( 'prepare_params',data )
+    },
     //请求附件数据
     getAttachmentList(json){
         return HTTP.post('query_attachment_list',json);
