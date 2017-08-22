@@ -82,6 +82,7 @@ Mediator.publish('workflow:focused', []);
 //订阅workflow choose事件，获取工作流info并发布getInfo,获取草稿
 let wfObj;
 Mediator.subscribe('workflow:choose', (msg)=> {
+    $("#singleFlow").click();
     $("#submit").show();
     $("#startNew").hide();
     wfObj=msg;
