@@ -73,7 +73,7 @@ let config = {
         createColumnDefs: function () {
             let cols = wchService.getWorkflowHeader( this.data.pageType );
             this.data.columnDefs = [dgcService.numberCol];
-            if( this.data.pageType == 2 ){
+            if( this.data.pageType == 2||this.data.pageType == 0 ){
                 this.data.columnDefs.push( dgcService.selectCol )
                 this.data.customColumnsFields.push( {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false} )
             }
@@ -183,7 +183,7 @@ let config = {
         },
         //渲染按钮
         renderBtn: function () {
-            if( this.data.tableId == 'my-workflow' ){
+            if( this.data.tableId == 'my-workflow' || this.data.tableId == 'approving-workflow' ){
                 this.el.find( '.batch-cancel' )[0].style.display = 'inline-block';
                 this.el.find( '.batch-cancel' ).on( 'click',()=>{
                     this.data.selectRows = [];
