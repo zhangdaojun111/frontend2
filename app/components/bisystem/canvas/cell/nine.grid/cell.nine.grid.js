@@ -56,14 +56,15 @@ let config = {
             Object.keys(cellChart['chart']['xAxis']).forEach((keys,index) => {
                 xAxis.push(cellChart['chart']['xAxis'][keys]);
                 yAxis.forEach((val,yAxisindex) => {
+                    console.log(val+ cellChart['chart']['xAxis'][keys]);
                     legend.push(val+ cellChart['chart']['xAxis'][keys])
                 })
             });
-
             config.data.grids = types;
             config.data.xAxis = xAxis;
             config.data.yAxis = yAxis;
             config.data.legend = legend;
+            console.log(config.data.legend);
         }
     },
     firstAfterRender() {}

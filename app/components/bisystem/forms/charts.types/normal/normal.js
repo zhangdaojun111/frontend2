@@ -30,7 +30,8 @@ let config = {
         });
     },
     firstAfterRender() {
-        this.el.on('click', '.save-new', (event) => {
+        this.el.on('click', '.save-normal-btn', (event) => {
+            console.log('xxxxxxxxxxxxxxxx');
             this.saveChart();
             return false;
         });
@@ -101,8 +102,8 @@ export class FormNormalComponent extends BiBaseComponent{
         this.formGroup.yHorizontalColumns.setValue(chart['yHorizontalColumns'].hasOwnProperty('marginBottom') ? true : false);
         this.formGroup.xMarginBottom.setValue(chart['yHorizontalColumns'].hasOwnProperty('marginBottom') ? chart['yHorizontalColumns']['marginBottom'] : 0);
         this.formGroup.echartX.setValue(chart['echartX'].hasOwnProperty('marginBottom') ? true : false);
-        this.formGroup.echartXTextNum.setValue(chart['echartX'].hasOwnProperty('textNum') ? chart['echartX'].hasOwnProperty('textNum') : 0);
-        this.formGroup.echartXMarginBottom.setValue(chart['echartX'].hasOwnProperty('marginBottom') ? chart['echartX'].hasOwnProperty('marginBottom') : 0);
+        this.formGroup.echartXTextNum.setValue(chart['echartX'].hasOwnProperty('textNum') ? chart['echartX']['textNum'] : 0);
+        this.formGroup.echartXMarginBottom.setValue(chart['echartX'].hasOwnProperty('marginBottom') ? chart['echartX']['marginBottom'] : 0);
         this.formGroup.chartAssignment.setValue(chart['chartAssignment'].val);
         this.editModeDeeps = {
             deeps: chart['deeps'],
@@ -130,6 +131,9 @@ export class FormNormalComponent extends BiBaseComponent{
             x: instanceFitting({
                 type:'autoComplete',
                 me: this,
+                data: {
+                    label: '请选择x轴字段',
+                },
                 container: 'form-group-x'
             }),
             y: [this.y, this.y1],
@@ -264,7 +268,9 @@ export class FormNormalComponent extends BiBaseComponent{
     renderXField(fields = []) {
         if (this.formGroup.deeps) {
             this.formGroup.deeps.reloadXaxis(fields);
-            this.formGroup.deeps.setValue(this.editModeDeeps);
+            if (fields.length > 0 && this.editModeOnce) {
+                this.formGroup.deeps.setValue(this.editModeDeeps);
+            }
         };
 
         if (this.formGroup.x) {
@@ -287,7 +293,6 @@ export class FormNormalComponent extends BiBaseComponent{
         yGroup.forEach(y => {
             y.reloadRender(fields);
         });
-        console.log()
         if (fields.length > 0 && this.editModeOnce) {
             let a = this.editModeYField.concat(this.editModeY1Field);
             let yEditOnceGroup = this.editModeYField.concat(this.editModeY1Field);
@@ -326,10 +331,8 @@ export class FormNormalComponent extends BiBaseComponent{
      * 勾选是否展示双y轴时
      */
     checkShowY1Axis(checked) {
-        if (checked && !this.editModeOnce) {
-            this.showY1Axis(true);
-        }else{
-            this.showY1Axis(false);
+        if (!this.editModeOnce) {
+            this.showY1Axis(checked);
         }
     }
 
@@ -476,11 +479,9 @@ export class FormNormalComponent extends BiBaseComponent{
     switchGroupandDeep(val) {
         if (val == 1) {
             this.formGroup.deeps.data.deepShow = false;
-            this.formGroup.deeps.data.deeps =[];
-            this.changeContext(val);
+            this.formGroup.deeps.data.deeps =[]
         } else {
             this.formGroup.deeps.data.deepShow = true;
-            this.changeContext(val);
         };
         this.formGroup.deeps.reload();
     }
@@ -590,7 +591,7 @@ export class FormNormalComponent extends BiBaseComponent{
             xAxis: data.x,
             yAxis: yAxis,
             yHorizontal: data.yHorizontal,
-            yHorizontalColumns: data.yHorizontal ? {marginBottom:data.xMarginBottom} : {},
+            yHorizontalColumns: data.yHorizontalColumns ? {marginBottom:data.xMarginBottom} : {},
             ySelectedGroup: data.ySelectedGroup
         };
         if (data.chartAssignment == 1) {
@@ -598,7 +599,8 @@ export class FormNormalComponent extends BiBaseComponent{
         } else {
             chart['deeps'] = data.deeps.deeps
         };
-
+        console.log(data.yHorizontal);
+        console.log(chart);
         let res = await ChartFormService.saveChart(JSON.stringify(chart));
         if (res['success'] == 1) {
             msgbox.alert('保存成功');
@@ -606,21 +608,10 @@ export class FormNormalComponent extends BiBaseComponent{
                 this.reset();
                 this.reload();
             };
+
             Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
         } else {
             msgbox.alert(res['error'])
         };
-    }
-
-    /**
-     * 改变label的显示
-     */
-    changeContext(val){
-        if(val==2){
-            this.el.find('.chart-form-deep').addClass('after-content');
-        }else{
-            this.el.find('.chart-form-deep').removeClass('after-content');
-        }
-
     }
 }

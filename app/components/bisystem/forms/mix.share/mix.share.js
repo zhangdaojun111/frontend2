@@ -46,6 +46,7 @@ export class FormMixShareComponent extends BiBaseComponent {
                 type:'autoComplete',
                 me: this,
                 data: {
+                    label: '请选择数据来源',
                     onSelect: this.getChartField.bind(this)
                 },
                 container: 'chart-mix-share' }),

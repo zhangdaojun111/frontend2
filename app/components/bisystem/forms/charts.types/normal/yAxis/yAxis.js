@@ -114,8 +114,8 @@ export class FormNormalYComponent extends BiBaseComponent{
             this.data.field = val;
             this.yAxis.field.autoSelect.data.choosed[0] = val['field'];
             this.yAxis.field.autoSelect.reload();
-            this.yAxis.type.data.value = val['type']['type'];
-            this.yAxis.type.reload();
+            // this.yAxis.type.data.value = val['type']['type'];
+            this.yAxis.type.setValue(val['type']['type']);
         }
     }
 
