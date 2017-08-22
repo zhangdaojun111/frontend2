@@ -72,6 +72,15 @@ let config = {
             if(ev.dataTransfer.getData("Text")) {
                 let data = JSON.parse(ev.dataTransfer.getData("Text"));
                 console.log(data, this.data.bodyData);
+                let params = {
+                    real_ids: data['real_id'],
+                    table_id: data['tableId'],
+                    calendar_id: data['setId'],
+                    data: {}
+                };
+                params['data'][data['dfield']] = this.data.bodyData['dataTime'];
+                params['data'] = JSON.stringify(params['data']);
+                Mediator.emit('CalendarDrag: dragRemind', params)
             }
             if(drag_Postion ===null){
                 drag_Postion = this.el.find(".task-list");

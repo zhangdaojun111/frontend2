@@ -390,6 +390,9 @@ let config = {
                     }
 
                     let arrData = {};
+                    if(setDetail.is_drag === 1) {
+                        console.log(setDetail);
+                    }
 
                     if( setDetail.type === 0 ){
                         arrData['tableId'] = setDetail.table_id;
