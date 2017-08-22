@@ -238,22 +238,18 @@ let config = {
                         if(address['beAddress'].indexOf('method=get')!=-1){
                             $('<a href="'+address['beAddress']+'" ></a>')[0].click();
                         }else {
-                            $.ajax({
-                                method:'POST',
-                                url:'data'+address['beAddress'],
-                                data:{
-                                    table_id:this.data.tableId,
-                                    selectedRows:JSON.stringify(deleteListRel)
-                                },
-                                success: (res)=> {
-                                    if(res){
-                                        if(res['success']==1){
-                                        }else if(res['success']==0){
-                                            msgBox.alert('发送请求失败！错误是'+res['error']);
-                                        }
-                                    }
+                            let obj = {
+                                table_id:this.data.tableId,
+                                selectedRows:JSON.stringify(deleteListRel)
+                            }
+                            dataTableService.tableOperationRefresh( obj ).then( res=>{
+                                if(res['success']==1){
+                                    msgBox.showTips('发送成功！');
+                                }else if(res['success']==0){
+                                    msgBox.alert('发送请求失败！错误是'+res['error']);
                                 }
-                            })
+                            } )
+                            HTTP.flush();
                         }
                     }
                 }

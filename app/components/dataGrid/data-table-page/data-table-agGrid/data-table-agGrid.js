@@ -774,6 +774,8 @@ let config = {
             post_arr = [body,remindData]
             Promise.all(post_arr).then((res)=> {
                 this.data.rowData = res[0].rows || [];
+                //固化数据
+                this.data.isFixed = this.data.rowData[0] && this.data.rowData[0]["fixed"];
                 this.data.total = res[0].total;
                 //提醒赋值
                 this.data.remindColor = res[1];
@@ -1328,15 +1330,11 @@ let config = {
                 this.el.find( '.grid-del-btn' ).on( 'click',()=>{
                     this.actions.retureSelectData();
                     delSetting.data['deletedIds'] = this.data.deletedIds;
-                    PMAPI.openDialogByComponent(delSetting, {
-                        width: 300,
-                        height: 200,
-                        title: '删除'
-                    }).then((data) => {
-                        if( data.type == 'del' ){
+                    msgBox.confirm( '确定删除？' ).then( res=>{
+                        if( res ){
                             this.actions.delTableData();
                         }
-                    });
+                    } )
                 } )
             }
             //导入数据
@@ -1490,9 +1488,21 @@ let config = {
             }
             dataTableService.delTableData( json ).then( res=>{
                 if( res.success ){
-                    msgBox.alert( '删除成功' )
+                    msgBox.showTips( '删除成功' )
                 }else {
-                    msgBox.alert( res.error )
+                    if( res.error.indexOf( '使用了所删行的内容' ) ){
+                        msgBox.confirm( res.error + '是否前往处理？' ).then( res=>{
+                            if( res ){
+                                let info = res.table_info;
+                                let obj = {
+                                    tableId: res.table_id,
+                                    tableName: res.label
+                                }
+                            }
+                        } )
+                    }else {
+                        msgBox.alert( res.error )
+                    }
                 }
             } )
             HTTP.flush();
