@@ -5,6 +5,8 @@
 	height: 100%;
 	width: 100%;
 	display: none;
+	position: absolute;
+	top: 0;
 }
 #add-home{
 	.selectSpan{
@@ -102,7 +104,7 @@
 	  height: 600px;
 	  left: calc(50% - 400px);
 	  top:calc(50% - 300px);
-	  z-index: 111;
+	  z-index: 111 !important;
 	  position: fixed;
 	}
   }
