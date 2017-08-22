@@ -61,6 +61,7 @@ export class FormNineGridComponent extends BiBaseComponent{
             })
         }
    }
+
     /**
      * 切换3*3 / 4*4 格子数
      * @param val === 3 / val ===4
