@@ -57,7 +57,6 @@ export class SelectComponent extends FormFittingAbstract {
         this.data.value = val;
     }
 
-
     /**
      * select 返回值
      */
