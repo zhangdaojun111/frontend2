@@ -80,5 +80,14 @@ export const dataTableService = {
     //获取表的表单工作流参数
     getPrepareParmas: function ( data ) {
         return HTTP.post( 'prepare_params',data )
-    }
+    },
+    //请求附件数据
+    getAttachmentList(json){
+        return HTTP.post('query_attachment_list',json);
+    },
+    //获取文件名后缀
+    getFileExtension (filename) {
+        return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+    },
+    preview_file : ["gif","jpg","jpeg","png","txt","pdf","lua","sql","rm","rmvb","wmv","mp4","3gp","mkv","avi"],
 }
