@@ -2,11 +2,11 @@
  * Created by zhr
  */
 import Component from "../../../../lib/component";
-import template from './operationDetails.html';
+import template from './operation-details.html';
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import {dataTableService} from '../../../../services/dataGrid/data-table.service';
 import {HTTP} from "../../../../lib/http";
-import './operationDetails.scss'
+import './operation-details.scss'
 
 let config = {
     template: template,
