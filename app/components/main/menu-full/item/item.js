@@ -148,7 +148,7 @@ let config = {
         }
 
         if (_.isUndefined(this.data.items)) {
-            this.data.key = this.data.table_id || this.data.ts_name;
+            this.data.key = this.data.ts_name || this.data.table_id;
             if (window.config.commonUse.data.indexOf(this.data.key) !== -1) {
                 this.actions.onCheckboxChange({checked: true});
             }
