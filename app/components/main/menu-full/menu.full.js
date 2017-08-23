@@ -71,7 +71,22 @@ let config = {
             this.actions.countHeight();
         },
         startEditModel: function () {
-            this.el.find('input:checkbox').show();
+            this.el.find('.custom-checkbox').show();
+            this.el.find('.search').addClass('edit');
+            this.el.find('.menu-full').addClass('edit');
+            this.actions.countHeight();
+        },
+        cancelEditModel: function () {
+            this.el.find('.custom-checkbox').hide();
+            this.el.find('.search').removeClass('edit');
+            this.el.find('.menu-full').removeClass('edit');
+            this.actions.countHeight();
+        },
+        getSelected: function () {
+            let choosed = this.el.find('input:checkbox:checked.leaf[key]');
+            return Array.from(choosed).map((item) => {
+                return $(item).attr('key');
+            });
         }
     },
 
@@ -97,12 +112,14 @@ let config = {
             this.append(component, $root, 'li');
         });
         this.actions.countHeight();
-        // this.el.removeClass('all').addClass('mini');
     },
     firstAfterRender: function() {
         this.originData = _.cloneDeep(this.data.list);
         $(window).on('resize.menu', () => {
             let menu = this.el.find('.menu-full');
+            menu.css({
+                height:0
+            })
             menu.css({
                 height: (document.body.scrollHeight - menu.offset().top) + 'px'
             });
