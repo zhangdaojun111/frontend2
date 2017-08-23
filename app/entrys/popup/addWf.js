@@ -77,7 +77,7 @@ serchStr.split('&').forEach(res => {
         FormEntrys.createForm({
             el: '#place-form',
             is_view: 0,
-            from_approve: 0,
+            from_workflow:1,
             from_focus: 0,
             table_id: obj.table_id,
             parent_table_id:obj.parent_table_id,
