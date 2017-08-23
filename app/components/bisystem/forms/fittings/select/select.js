@@ -54,13 +54,16 @@ export class SelectComponent extends FormFittingAbstract {
                 break;
             }
         };
+        console.log(val);
         this.data.value = val;
+        console.log(this.data);
     }
 
     /**
      * select 返回值
      */
     getValue() {
+        console.log(this.data.value);
         return this.data.value;
     }
     /**

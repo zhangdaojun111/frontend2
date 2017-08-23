@@ -107,17 +107,26 @@ let config={
 
         //saving follower
         this.el.on('click','#saveFollower',()=>{
-            let o={};
+            let nameArr=[],idArr=[];
             let domSpan=this.el.find('#selected').find('span');
             for(var i=0;i<domSpan.length;i++){
-                o[$(domSpan[i]).data('id')]=$(domSpan[i]).text();
+                nameArr.push(`<span class="selectSpan">${$(domSpan[i]).text()}</span>`);
+                idArr.push($(domSpan[i]).data('id'));
             }
-            PMAPI.sendToParent({
-                type: PMENUM.close_dialog,
-                key:this.data.key,
-                data:o
-            })
-        })
+            nameArr=_.uniq(nameArr);
+            idArr=_.uniq(idArr);
+            $('#add-follow').hide();
+            $('#addFollowerList').html(nameArr);
+
+            Mediator.publish('workflow:focus-users',idArr);                                  
+        });
+
+        $('#add-home').on('click','#addFollower',()=>{
+            $('#add-follow').show();
+        });
+        $('#add-follow').on('click','button[title="Close"]',()=>{
+            $('#add-follow').hide();
+        });
     }
 };
 class WorkflowAddFollow extends Component{
@@ -125,8 +134,6 @@ class WorkflowAddFollow extends Component{
         super(config,data);
     }
 }
-
-
 
 export default {
     showAdd(data) {

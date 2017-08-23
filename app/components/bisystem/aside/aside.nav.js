@@ -55,21 +55,20 @@ let config = {
         });
 
         Mediator.subscribe('bi:aside:update',(res) => {
-            let charts = []
-
             if (res['type'] == 'new') {
                 window.config.charts.push(res['data']);
+                this.data.charts = window.config.charts
             } else {
+                let charts = [];
                 for(let chart of window.config.charts) {
                     if (res['data'].id == chart.id) {
                         chart = res['data'];
                     };
                     charts.push(chart);
                 }
+                this.data.charts = window.config.charts = charts;
             };
-            this.data.charts = window.config.charts = charts;
             this.reload();
-
         })
     }
 };
@@ -86,7 +85,7 @@ class AsideNavComponent extends BiBaseComponent{
      */
     getChart(index) {
         let chart = this.data.charts[index];
-        return chart
+        return chart;
     }
 
 

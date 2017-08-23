@@ -196,11 +196,14 @@ export class EchartsService {
             // 当双y轴 只有2个y轴字段时 修改折线颜色
             if (cellOption['yAxis'].length === 2) {
                 yAxis.map((y, colorIndex) => {
-                    linebarOption['yAxis'][colorIndex]['axisLine'] = {
-                        lineStyle: {
-                            color: linebarOption['color'][colorIndex]
-                        }
-                    };
+                    console.log(linebarOption['yAxis'][colorIndex]);
+                    if (linebarOption['yAxis'][colorIndex]) {
+                        linebarOption['yAxis'][colorIndex]['axisLine'] = {
+                            lineStyle: {
+                                color: linebarOption['color'][colorIndex]
+                            }
+                        };
+                    }
                 });
             }
         }
@@ -239,7 +242,6 @@ export class EchartsService {
         if (cellOption['yHorizontalColumns']) {
             linebarOption['yAxis'][0]['axisLabel']['interval'] = 0;
         };
-        console.log(linebarOption);
         return linebarOption;
     }
 

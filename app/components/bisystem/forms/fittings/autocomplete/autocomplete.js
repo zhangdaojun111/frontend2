@@ -14,7 +14,8 @@ let config = {
     data: {
         list: [],
         onSelect: null,
-        items: []
+        items: [],
+        label: '',
     },
     afterRender() {
         this.data.choosed = this.autoSelect.data.choosed;
@@ -32,7 +33,7 @@ let config = {
             onSelect: me.data.onSelect
         };
         this.autoSelect = new AutoSelect(autoSelectData);
-        this.append(this.autoSelect, this.el.find('.autocomplete'));
+        this.append(this.autoSelect, this.el.find('.autocomplete-container .autocomplete'));
 
         // 取消mouseenter,增加click事件
         this.autoSelect.el.off('mouseenter');

@@ -1,3 +1,6 @@
+/*
+ * Created by qmy on 2017/8/10.
+ */
 import '../../assets/scss/main.scss';
 import {HTTP} from '../../lib/http';
 import Mediator from '../../lib/mediator';
@@ -105,9 +108,6 @@ if(focus.length>1){
             }
         }
         recur(tree);
-        console.log( "______________" )
-        console.log( "______________" )
-        console.log( tree )
         var treeComp2 = new TreeView(tree,{
             callback: function (event,selectedNode) {
                 if(event==='select'){
