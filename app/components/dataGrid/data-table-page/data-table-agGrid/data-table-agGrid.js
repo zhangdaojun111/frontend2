@@ -26,7 +26,7 @@ import exportSetting from '../../data-table-toolbar/data-table-export/data-table
 import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 import AttachmentList from "../../../form/attachment-list/attachment-list";
 import PictureAttachment from "../../../form/picture-attachment/picture-attachment";
-import PersonSetting from "../../../main/personal-settings/personal-settings";
+import {PersonSetting} from "../../../main/personal-settings/personal-settings";
 
 
 let config = {
