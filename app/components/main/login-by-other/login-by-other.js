@@ -60,7 +60,6 @@ let config = {
             if(userId && userId !== ''){
                 //执行以选中人的账号登录
                 return UserInfoService.change_login_user(userId).done((result) => {
-                    console.log(result);
                     if(result.success === 0){
                         msgbox.alert("切换用户失败，原因是" + result.error);
                     }
