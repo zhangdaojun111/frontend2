@@ -96,7 +96,7 @@ let config = {
             selector: 'label.search input:text',
             callback: _.debounce(function(context) {
                 this.actions.search(context.value);
-            }, 500)
+            }, 1000)
         }
     ],
 
@@ -111,6 +111,7 @@ let config = {
             }));
             this.append(component, $root, 'li');
         });
+        this.el.find('.search input:text').focus();
         this.actions.countHeight();
     },
     firstAfterRender: function() {
