@@ -1163,7 +1163,7 @@ let config = {
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
                 if( this.data.filterParam.filter.length == 0 ){
-                    msgBox.alert( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
+                    msgBox.showTips( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
                 }
             }
             if( this.data.groupCheck ){
@@ -1957,7 +1957,8 @@ let config = {
                         for( let r of res.rows ){
                             if( r.id == this.data.common_filter_id ){
                                 this.data.filterParam = {
-                                    filter: JSON.parse(r.queryParams),
+                                    expertFilter: JSON.parse(r.queryParams),
+                                    filter:[],
                                     is_filter: 1,
                                     common_filter_id: this.data.common_filter_id,
                                     common_filter_name: r.name
@@ -2073,7 +2074,7 @@ let config = {
                         let list = res["rows"];
                         for( let data of list ){
                             //附件名称编码转换
-                            data.file_name = decodeURI( data.file_name );
+                            data.file_name = data.file_name;
                             let str = dataTableService.getFileExtension( data.file_name );
                             if( dataTableService.preview_file.indexOf( str.toLowerCase() ) != -1 ){
                                 data["isPreview"] = true;
