@@ -2257,6 +2257,10 @@ let config = {
         onRowDoubleClicked: function (data) {
             console.log( "行双击查看" )
             console.log( data )
+            //屏蔽分组行
+            if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0) ){
+                return;
+            }
             let obj = {
                 table_id: this.data.tableId,
                 parent_table_id: this.data.parentTableId,
