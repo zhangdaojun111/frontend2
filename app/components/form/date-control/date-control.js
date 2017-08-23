@@ -34,7 +34,6 @@ let config={
             this.el.find('.ui-width').attr('disabled',false);
         }
         //控制到年月日
-
         if(_this.data.value == ''){
             _this.el.find(".date_yy-mm-dd").val("年/月/日");
         }else{

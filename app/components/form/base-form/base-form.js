@@ -1035,6 +1035,7 @@ let config={
                 parent_temp_id: this.data.parentTempId || "",
                 parent_record_id: this.data.parentRecordId  || ""
             };
+            console.log(json);
             //如果是批量审批，删除flow_id
             if(this.data.isBatch == 1){
                 delete json["flow_id"];
@@ -1212,22 +1213,22 @@ let config={
             this.el.find('.ui-btn-box').remove();
             //添加提交按钮
             if(this.data.btnType == 'new' || this.data.btnType == 'edit'){
-                this.el.append(`<div class="noprint ui-btn-box"><div>
-                    <button class="btn btn-normal mrgr" id="print">
-                        <span>打印</span>
-                        <div class="btn-ripple ripple"></div>
-                    </button>
+                this.el.find(".overflow").parents().append(`<div class="noprint ui-btn-box"><div>
+                    <!--<button class="btn btn-normal mrgr" id="print">-->
+                        <!--<span>打印</span>-->
+                        <!--<div class="btn-ripple ripple"></div>-->
+                    <!--</button>-->
                     <button class="btn btn-normal ceshi" id="save" >
                         <span>提交</span>
                         <div class="btn-ripple ripple"></div>
                     </button>
                 </div></div>`)
             }else if(this.data.btnType == 'view'){
-                this.el.append(`<div class="noprint ui-btn-box"><div >
-                    <button class="btn btn-normal mrgr" id="print" >
-                        <span>打印</span>
-                        <div class="btn-ripple ripple"></div>
-                    </button>
+                this.el.find(".overflow").parents().append(`<div class="noprint ui-btn-box"><div >
+                    <!--<button class="btn btn-normal mrgr" id="print" >-->
+                        <!--<span>打印</span>-->
+                        <!--<div class="btn-ripple ripple"></div>-->
+                    <!--</button>-->
                     <button class="btn btn-normal" id="changeEdit" >
                         <span>转到编辑模式</span>
                         <div class="btn-ripple ripple"></div>
@@ -1667,29 +1668,32 @@ let config={
         //     _this.el.find('.ui-btn-box').css({'bottom':(-1*$('.wrap').get(0).scrollTop +' px'),'width':'calc(100% + '+$('.wrap').get(0).scrollLeft+'px)'});
         // })
         //默认表单样式
-        if( _this.el.find('table').hasClass('form-version-table-user') || _this.el.find('table').hasClass('form-version-table-department') ){
-            _this.el.find('table').parents().parents('#detail-form').addClass('detail-form-style');
-            _this.el.find('table').off();
-            _this.el.find('table>tbody').append('<div class="more"><span>展开更多</span></div>')
+        if( _this.el.find('table').hasClass('form-version-table-user') ){
+            // _this.el.find('table').parents().parents('#detail-form').addClass('detail-form-style');
+            // _this.el.find('table').off();
+            // _this.el.find('table>tbody').append('<div class="more"><span>展开更多</span></div>')
+            //
+            // if(_this.el.find('table>tbody').height() <= _this.el.find('table').height()){
+            //     _this.el.find('.overflow').removeClass('overflow');
+            // }
+            _this.el.find('.btn').css("display","none");
 
-            if(_this.el.find('table>tbody').height() <= _this.el.find('table').height()){
-                _this.el.find('.overflow').removeClass('overflow');
+        //     _this.el.find('.more').on('click',function () {
+        //         _this.el.find('.more').hide();
+        //         _this.el.find('.overflow').removeClass('overflow');
+        //         _this.el.find('table').css({'overflow-y':'auto',"height":"520px"});
+        //     })
+         }
+        _this.el.find(".overflow").on("scroll",function () {
+            let overflowHight = _this.el.find('.overflow').scrollTop();
+            console.log(overflowHight)
+            _this.el.find('table').height()
+            if(overflowHight>=400){
+                _this.el.find('.btn').show();
+            }else{
+                _this.el.find('.btn').hide();
             }
-            _this.el.find(".overflow").on("scroll",function () {
-                let overflowHight = _this.el.find('.overflow').scrollTop();
-               // console.log(overflowHight)
-                if(overflowHight>10){
-                    _this.el.find('.more').show();
-                }else{
-                    _this.el.find('.more').hide();
-                }
-            })
-            _this.el.find('.more').on('click',function () {
-                _this.el.find('.more').hide();
-                _this.el.find('.overflow').removeClass('overflow');
-                _this.el.find('table').css({'overflow-y':'auto',"height":"520px"});
-            })
-        }
+        })
     },
     beforeDestory(){
         this.el.off();

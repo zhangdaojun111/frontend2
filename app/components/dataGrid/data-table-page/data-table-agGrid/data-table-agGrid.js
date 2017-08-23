@@ -20,7 +20,6 @@ import FloatingFilter from "../../data-table-toolbar/floating-filter/floating-fi
 import customColumns from "../../data-table-toolbar/custom-columns/custom-columns";
 import groupGrid from "../../data-table-toolbar/data-table-group/data-table-group";
 import dataPagination from "../../data-table-toolbar/data-pagination/data-pagination";
-import delSetting from '../../data-table-toolbar/data-table-delete/data-table-delete';
 import importSetting from '../../data-table-toolbar/data-table-import/data-table-import';
 import exportSetting from '../../data-table-toolbar/data-table-export/data-table-export';
 
@@ -156,7 +155,15 @@ let config = {
         //编辑模式参数
         colControlData: {},
         //是否为编辑模式
-        editMode: false
+        editMode: false,
+        //上一次操作状态
+        lastGridState: [],
+        //编辑模式对比原始数据
+        originRowData: {},
+        //编辑数据总数
+        editRowTotal: 0,
+        //编辑已经保存的数量
+        editRowNum: 0,
     },
     //生成的表头数据
     columnDefs: [],
@@ -353,10 +360,10 @@ let config = {
                             break;
                         case 'Buildin':
                         case 'Select':
-                            this.setOptionsForColumn(editCol, controlData, 'options');
+                            this.actions.setOptionsForColumn(editCol, controlData, 'options');
                             break;
                         case 'Radio':
-                            this.setOptionsForColumn(editCol, controlData, 'group');
+                            this.actions.setOptionsForColumn(editCol, controlData, 'group');
                             break;
                         default:
                             break;
@@ -371,6 +378,31 @@ let config = {
                 editCol['required'] = controlData['required'];
             }
             return editCol;
+        },
+        setOptionsForColumn: function(editCol,controlData,optionProp){
+            editCol['editable']=true;
+            editCol['cellEditor']='select';
+            let radioParams = [];
+            let groups = {};
+            if(controlData[optionProp] == undefined){
+                let field_content = controlData['field_content'];
+                Object.getOwnPropertyNames(field_content).forEach(option=>{
+                    let value = option;
+                    let label = field_content[value];
+                    groups[label]=value;
+                    radioParams.push(label);
+                });
+            } else {
+                controlData[optionProp].forEach(option=>{
+                    let value = option['value'];
+                    let label = option['label'];
+                    groups[label]=value;
+                    radioParams.push(label);
+                })
+            }
+
+            controlData['options_objs']=groups;
+            editCol['cellEditorParams']={values:radioParams};
         },
         bodyCellRender: function (params) {
             if (params.data && params.data.myfooter && params.data.myfooter == "合计") {
@@ -702,7 +734,7 @@ let config = {
                 rowStatus = 0;
             }
             let str = '<div style="text-align:center;"><a class="gridView" style="color:#337ab7;">查看</a>';
-            if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data') {
+            if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data' || this.data.viewMode == 'deleteHanding') {
                 if (this.data.isFixed || rowStatus == 2) {
                     str += ' | <span style="color: darkgrey;">编辑</span>';
                     str += ' | <a style="color: darkgrey;">历史</a>';
@@ -947,6 +979,14 @@ let config = {
                 }
                 console.log( '请求数据返回get_table_data' );
                 this.actions.sortWay();
+                //编辑模式原始数据
+                if( this.el.find( '.edit-btn' )[0] ){
+                    this.data.originRowData = {};
+                    //originRowData用深拷贝，保存初始值
+                    this.data.rowData.forEach((row,index)=>{
+                        this.data.originRowData[row['_id']]=JSON.parse(JSON.stringify(row));
+                    });
+                }
             })
             HTTP.flush();
         },
@@ -1422,7 +1462,10 @@ let config = {
             if( this.el.find('.grid-del-btn')[0] ){
                 this.el.find( '.grid-del-btn' ).on( 'click',()=>{
                     this.actions.retureSelectData();
-                    delSetting.data['deletedIds'] = this.data.deletedIds;
+                    if( this.data.deletedIds.length == 0 ){
+                        msgBox.alert( '请选择数据' );
+                        return;
+                    }
                     msgBox.confirm( '确定删除？' ).then( res=>{
                         if( res ){
                             this.actions.delTableData();
@@ -1511,17 +1554,154 @@ let config = {
             //编辑模式
             if( this.el.find( '.edit-btn' )[0] ){
                 this.el.find( '.edit-btn' ).on( 'click',()=>{
-                    console.log( '编辑模式' )
+                    this.actions.toogleEdit();
+                } )
+                this.el.find( '.edit-btn-cancel' ).on( 'click',()=>{
+                    this.actions.toogleEdit();
+                } )
+                this.el.find( '.edit-btn-save' ).on( 'click',()=>{
+                    //保存
+                    this.actions.onEditSave();
                 } )
                 //创建编辑模式表头
                 FormService.getStaticData({table_id: this.data.tableId}).then( res=>{
                     for( let d of res.data ){
                         this.data.colControlData[d.dfield] = d;
                     }
-                    this.data.columnDefsEdit = this.actions.createHeaderColumnDefs( true );
+                    this.columnDefsEdit = this.actions.createHeaderColumnDefs( true );
                 } )
                 HTTP.flush();
             }
+            //点击这里
+            if( this.el.find( '.showNormalGrid' )[0] ){
+                this.el.find( '.showNormalGrid' ).on( 'click',()=>{
+                    let obj = {
+                        tableId: this.data.tableId,
+                        tableName: this.data.tableName,
+                        viewMode: 'normal'
+                    }
+                    let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
+                    let winTitle = obj.tableName;
+                    this.actions.openSourceDataGrid( url,winTitle );
+                } )
+            }
+        },
+        //编辑模式切换
+        toogleEdit: function () {
+            if( !this.data.editMode ){
+                this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
+            }
+            this.data.editMode = !this.data.editMode;
+            this.el.find( '.dataGrid-btn-group' )[0].style.display = this.data.editMode ? 'none':'block';
+            this.el.find( '.dataGrid-edit-group' )[0].style.display = this.data.editMode ? 'block':'none';
+            let columns = this.data.editMode ? this.columnDefsEdit : this.columnDefs;
+            this.agGrid.gridOptions.api.setColumnDefs( columns );
+            if( !this.data.editMode ){
+                this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
+            }
+        },
+        //编辑模式保存数据
+        onEditSave: function () {
+            //比对当前值与初始值的差别
+            this.agGrid.gridOptions.api.stopEditing(false);
+            let changedRows = this.actions.getChangedRows(this.agGrid.data.rowData);
+            let i = 0;
+            this.data.editRowTotal = 0;
+            this.data.editRowNum = 0;
+            for( let k in changedRows ){
+                i++;
+            }
+            this.data.editRowTotal = i;
+            if( this.data.editRowTotal == 0 ){
+                this.actions.toogleEdit();
+            }
+            for(let k in changedRows){
+                let changed = changedRows[k];
+                let real_id = changed['data']['real_id'];
+                changedRows[real_id] = changed;
+                FormService.getDynamicData({
+                    table_id: this.data.tableId,
+                    real_id: real_id,
+                    is_view: 0
+                }).then( res=>{
+                    if(res){
+                        let data = res['data'];
+                        let real_id = data['real_id']['value'];
+                        if(!changedRows[real_id]){
+                            return;
+                        }
+                        let obj = {
+                            real_id:data['real_id']['value'],
+                            temp_id:data['temp_id']['value'],
+                            parent_real_id:data['parent_real_id']['value'],
+                            parent_table_id:data['parent_table_id']['value'],
+                            parent_temp_id:data['parent_temp_id']['value']
+                        };
+                        let targetRow = changedRows[real_id];
+                        this.actions.saveEdit(targetRow,obj);
+                    }
+                } )
+                HTTP.flush();
+            }
+        },
+        saveEdit(targetRow,ids){
+            let json = dgcService.abjustTargetRow(targetRow,ids);
+            json['data'] = JSON.stringify(json['data']);
+            json['focus_users'] = JSON.stringify(json['focus_users']);
+            json['cache_new'] = JSON.stringify(json['cache_new']);
+            json['cache_old'] = JSON.stringify(json['cache_old']);
+            FormService.saveAddpageData( json ).then( res=>{
+                if( res.succ == 1 ){
+                    msgBox.showTips( res.error );
+                }else {
+                    msgBox.alert( res.error );
+                }
+                this.data.editRowNum++;
+                if( this.data.editRowTotal == this.data.editRowNum ){
+                    this.actions.toogleEdit();
+                }
+            } )
+        },
+        //比对当前值与初始值的差别
+        getChangedRows(rowData){
+            let changedRows = {};
+            rowData.forEach((row,index)=>{
+                let real_id = row['_id'];
+                let originRow = this.data.originRowData[real_id];
+                let changed = {};
+                let data = {};
+                for (let k in row) {
+                    if (dgcService.checkObejctNotEqual(row[k],originRow[k])) {
+                        //buildin字段做转化
+                        if(this.data.colControlData[k]['type'] == 'Buildin'||this.data.colControlData[k]['type'] == 'Radio'||this.data.colControlData[k]['type'] == 'Select'){
+                            data[k] = this.data.colControlData[k]['options_objs'][row[k]];
+                        } else if(Array.isArray(row[k])){
+                            if(row[k].length == 0 && originRow[k].length == 0){
+                                continue;
+                            }
+                            for(let i = 0,length = row[k].length;i < length; i++){
+                                if(row[k][i]!=originRow[k][i]){
+                                    data[k] = row[k];
+                                    break;
+                                }
+                            }
+                        }else {
+                            data[k] = row[k];
+                        }
+                    }
+                }
+                if(Object.getOwnPropertyNames(data).length!= 0) {
+                    data['real_id'] = real_id;
+                    data['table_id'] = this.data.tableId;
+                    changed['data'] = data;
+                    changed['cache_old'] = this.data.originRowData[real_id];
+                    changed['cache_new'] = row;
+                    changed['table_id'] = this.data.tableId;
+                    changed['focus_users'] = [];
+                    changedRows[real_id] = changed;
+                }
+            });
+            return changedRows;
         },
         //渲染高级查询
         renderExpertSearch: function () {
@@ -1602,7 +1782,7 @@ let config = {
                 if( res.success ){
                     msgBox.showTips( '删除成功' )
                 }else {
-                    if( res.error.indexOf( '使用了所删行的内容' ) ){
+                    if( res.error.indexOf( '使用了所删行的内容' ) != -1 ){
                         msgBox.confirm( res.error + '是否前往处理？' ).then( r=>{
                             if( r ){
                                 let info = res.table_info;
@@ -1830,13 +2010,19 @@ let config = {
                 json["table_id"] = this.data.tableId;
                 json[(data.data.action?"temp_id":"real_id")] = data.data._id;
                 dataTableService.getAttachmentList( json ).then( res => {
-                    // let imgData,imgSelect;
-                    // let obj=dataTableService.setImgDataAndNum(res,imgData,imgSelect);
-                    // imgData=obj.imgData;
-                    // imgSelect=obj.imgSelect;
-                    // this.setImgSize();
-                    PictureAttachment.data.res=res;
-                } )
+                    let obj=dataTableService.setImgDataAndNum(res,{},'');
+                    PictureAttachment.data.imgData=obj.imgData;
+                    PictureAttachment.data.imgSelect=obj.imgSelect;
+                    PictureAttachment.data.imgTotal=obj.imgTotal;
+                    PictureAttachment.data.imgNum=obj.imgNum;
+                    PictureAttachment.data.rows=obj.imgData.rows;
+                    PMAPI.openDialogByComponent(PictureAttachment,{
+                        title:'图片附件',
+                        width: 1234,
+                        height: 987,
+                    })
+                })
+                HTTP.flush();
             }
             //富文本字段
             if( data.colDef.real_type == fieldTypeService.UEDITOR ){
