@@ -73,7 +73,6 @@ export class FormColumnComponent extends BiBaseComponent{
         this.data.choosed.clear();
         this.reload();
     }
-
     /**
      * 选择列名
      * @param checked = 是否选择，index = this.data.columns索引值
