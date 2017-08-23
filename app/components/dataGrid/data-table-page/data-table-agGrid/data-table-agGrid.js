@@ -1660,6 +1660,7 @@ let config = {
                             for( let o of this.data.saveEditObjArr ){
                                 saveArr.push( dataTableService.saveEditFormData( o ) )
                             }
+                            this.actions.setInvalid();
                             Promise.all(saveArr).then((res)=> {
                                 let j = 0;
                                 let wrong = 0;
@@ -1811,6 +1812,7 @@ let config = {
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
             }
+            this.actions.setInvalid();
             dataTableService.delTableData( json ).then( res=>{
                 if( res.success ){
                     msgBox.showTips( '删除成功' )
@@ -2266,8 +2268,16 @@ let config = {
             let title = '查看'
             this.actions.openSourceDataGrid( url,title );
         },
+        //设置失效
+        setInvalid: function () {
+            this.pagination.data.myInvalid = true;
+        },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title,w,h ) {
+            //暂时刷新方法
+            if( url.indexOf( '/iframe/addWf/' ) != -1 ){
+                this.actions.setInvalid();
+            }
             PMAPI.openDialogByIframe( url,{
                 width: w || 1300,
                 height: h || 800,
@@ -2295,10 +2305,6 @@ let config = {
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();
-
-        PMAPI.subscribe(PMENUM.data_invalid, (info) => {
-            console.log(info);
-        })
     }
 }
 
