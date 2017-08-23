@@ -1,36 +1,50 @@
 {{#if remindTaskItemData.isShow}}
 <div class="task-item" draggable="true">
     <span class="task-bg-color"></span>
-    {{#if IsHomeCalendar}}
+    {{#if isHomeCalendar}}
         {{#if remindTaskItemData.selectOption}}
-            {{#if isFinishedTask}}
+            {{#if remindTaskData.selectValue}}
+                {{#if isFinishedTask}}
                 <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-finished.png" alt="">
-            {{else}}
+                {{else}}
                 <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-waitcheck.png" alt="">
+                {{/if}}
+                <select class="select-options checked-options">
+                    {{#each remindTaskItemData.selectOption}}
+                    <option class="select-children" value="{{this.value}}">{{this.label}}</option>
+                    {{/each}}
+                </select>
+            {{else}}
+                <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-pending.png" alt="">
+                <select class="select-options">
+                    <option class="select-children"></option>
+                    {{#each remindTaskItemData.selectOption}}
+                    <option class="select-children" value="{{this.value}}">{{this.label}}</option>
+                    {{/each}}
+                </select>
             {{/if}}
-            <select class="select-options">
+        {{else}}
+            <span class="task-state-none"></span>
+        {{/if}}
+    {{else if remindTaskItemData.isSetSelect}}
+        {{#if remindTaskItemData.selectOption}}
+            {{#if remindTaskData.selectValue}}
+            <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-finished.png" alt="">
+            <select class="select-options ">
                 {{#each remindTaskItemData.selectOption}}
                 <option class="select-children" value="{{this.value}}">{{this.label}}</option>
                 {{/each}}
             </select>
-        {{else}}
+            {{else}}
             <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-pending.png" alt="">
-        {{/if}}
-    {{else if remindTaskItemData.isSetSelect}}
-        {{#if remindTaskItemData.selectOption}}
-        <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-finished.png" alt="">
-        <select class="select-options">
-            {{#each remindTaskItemData.selectOption}}
-            <option class="select-children" value="{{this.value}}">{{this.label}}</option>
-            {{/each}}
-        </select>
+            {{/if}}
         {{else}}
           <span class="task-state-none"></span>
         {{/if}}
     {{else}}
-    <!--<img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-pending.png" alt="">-->
     <span class="task-state-none"></span>
     {{/if}}
+
     <span class="task-show-text"></span>
 </div>
 {{/if}}

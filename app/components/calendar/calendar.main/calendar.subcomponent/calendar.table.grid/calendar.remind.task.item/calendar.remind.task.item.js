@@ -15,12 +15,12 @@ let config = {
         remindTaskData: {},
         remindTaskItemData:{},
         isFinishedTask:false,
+        isNone: false,
         isWaitCheck:true,
         sValue: '',
         sLabel: '',
         type: '',
-        IsHomeCalendar:false,
-        TestValue:new RegExp('已完成'),
+        isHomeCalendar:false,
     },
     actions: {
         changSelectValue: function(sValue, sLabel){
@@ -80,18 +80,20 @@ let config = {
     },
     afterRender: function() {
         //this.el.attr("draggable",true);
+        console.log(this.data.remindTaskItemData);
         this.el.addClass("comment-task-item");
         this.el.find('.task-bg-color').css({backgroundColor: this.data.remindTaskItemData['color']});
         let that = this;
         if(this.data.remindTaskItemData.selectOption) {
             for( let s of this.data.remindTaskItemData.selectOption ){
                 if( s.value === this.data.remindTaskItemData['data3show'][0][0]['selectValue'] ){
-                    this.el.find('.select-options option').each((item) => {
-                        let a = $('.select-options option')[item].value;
+                    let selectOpts = this.el.find('.checked-options option');
+                    selectOpts.each(item => {
+                        let a = selectOpts[item].value;
                         if(a === s.value) {
-                            this.el.find('.select-options option')[item].selected  = 'selected';
+                            this.el.find('.checked-options option')[item].selected  = 'selected';
                         }
-                    });
+                    })
                 }
             }
         }
@@ -154,14 +156,32 @@ class CalendarRemindTaskItem extends Component {
     constructor(data) {
         config.data.remindTaskItemData = data['data'];
         config.data.type = data['type'];
-        config.data.isFinishedTask = false;
         if(data['data']['data3show']) {
             config.data.remindTaskData = data['data']['data3show'][0][0];
         }
         if(config.data.remindTaskItemData.tableName === "首页日历事件表"){
-            config.data.IsHomeCalendar = true;
-            config.data.isFinishedTask =  config.data.TestValue.test(config.data.remindTaskData.fieldValue);
-        }else{config.data.IsHomeCalendar = false;}
+            config.data.isHomeCalendar = true;
+            //config.data.isFinishedTask =  config.data.TestValue.test(config.data.remindTaskData.fieldValue);
+            if(config.data.remindTaskData['selectLabel']) {
+                let checkText = '已';
+                let uncheckText = '未';
+                if(config.data.remindTaskData['selectLabel'].indexOf(checkText) >= 0) {
+                    console.log(checkText);
+                    config.data.isFinishedTask = true;
+                }else if (config.data.remindTaskData['selectLabel'].indexOf(uncheckText) >= 0) {
+                    console.log(uncheckText);
+                    config.data.isFinishedTask = false
+                }
+            } else {
+                config.data.isNone = true;
+            }
+        }else{
+            if(config.data.remindTaskData['selectLabel']) {
+                config.data.isFinishedTask = true;
+            } else {
+                config.data.isNone = true;
+            }
+        }
         super(config);
     }
 }
