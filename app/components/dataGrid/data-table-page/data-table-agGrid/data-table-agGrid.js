@@ -1672,8 +1672,9 @@ let config = {
                                         errorText += (wrong + '、' + r.error);
                                     }
                                 }
-                                if( wrong!=0 ){
-                                    msgBox.alert( wrong + '条数据保存失败，失败原因：' + errorText )
+                                if( wrong > 0 ){
+                                    let err = wrong + '条数据保存失败，失败原因：' + errorText;
+                                    msgBox.alert( encodeURI(err) );
                                 }else {
                                     msgBox.showTips( '执行成功！' )
                                 }
@@ -2294,6 +2295,10 @@ let config = {
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();
+
+        PMAPI.subscribe(PMENUM.data_invalid, (info) => {
+            console.log(info);
+        })
     }
 }
 
