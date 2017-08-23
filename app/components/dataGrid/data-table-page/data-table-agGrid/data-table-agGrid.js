@@ -545,7 +545,6 @@ let config = {
             // if(this.isShowEditCancel && params.colDef && !params.colDef.editable){
             //     color='rgba(230,230,230,0.8)';
             // }
-            console.log(fieldTypeService.numOrText(real_type));
             //处理数字类型
             if (fieldTypeService.numOrText(real_type)) {//数字类型
                 let numVal = fieldTypeService.intOrFloat(real_type) ? dgcService.formatter(params.value) : dgcService.formatter(Number(params.value).toFixed(colDef.real_accuracy))
