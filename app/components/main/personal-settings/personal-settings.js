@@ -41,7 +41,6 @@ let config = {
         initInfo:function () {
             // 初始化，检测用户头像路径返回值，没有则显示默认头像
             let src = this.data.avatar;
-            console.log(src);
             if(src !== ''){
                 let $img = $("<img>").addClass("user-avatar");
                 $img.attr('src', src);
@@ -195,10 +194,8 @@ let config = {
         },
         getTargetInfo:function () {
             UserInfoService.getUserInfoByName(this.data.targetUserName).done((result) => {
-                console.log(result);
                 if(result.success === 1){
                     //获取data
-                    console.log(result);
                     let data = result.rows;
                     this.actions.displayTargetInfo(data);
                 }else{
