@@ -364,9 +364,10 @@ let FormEntrys = {
         this.init(config);
         let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap"></div>`).prependTo(this.el);
         let res;
+        console.log(!this.fromWorkFlow);
         if(!this.fromWorkFlow){
-            this.findFormIdAndFlowId(res);
             res=await  FormService.getPrepareParmas({table_id:this.tableId});
+            this.findFormIdAndFlowId(res);
         }
         let json=this.createPostJson();
         res =await FormService.getFormData(json);
