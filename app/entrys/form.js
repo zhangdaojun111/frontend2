@@ -363,9 +363,10 @@ let FormEntrys = {
         console.time('获取表单数据的时间');
         this.init(config);
         let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap"></div>`).prependTo(this.el);
-        let res=await  FormService.getPrepareParmas({table_id:this.tableId});
+        let res;
         if(!this.fromWorkFlow){
             this.findFormIdAndFlowId(res);
+            res=await  FormService.getPrepareParmas({table_id:this.tableId});
         }
         let json=this.createPostJson();
         res =await FormService.getFormData(json);
