@@ -14,14 +14,16 @@ let config = {
     actions:{
     },
     events:{
-        onChange:function(){},
+        // onChange:function(){},
     },
     binds:[
         {
             event: 'click',
             selector: '.has-finished',
-            callback: function (selector = this.selector) {
-                this.callback();
+            callback: function () {
+                // this.callback();
+                console.log(11);
+                this.trigger('onChange', {type: 'clearAll', value: [1,1,1]});
             }
         }
     ],
@@ -30,10 +32,8 @@ let config = {
     },
 }
 class leftContentFinished extends Component {
-    constructor(callback){
-        super(config);
-        this.callback = callback;
-
+    constructor(data, events){
+        super(config, data, events);
     }
 }
 export default leftContentFinished;

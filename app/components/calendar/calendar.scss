@@ -148,12 +148,12 @@ $grid-bg-color: rgba(248, 248, 248, 1);
             height: 100%;
             border-right: 2px solid #6ed2f3;
             position: relative;
-            //display: inline-block;
+            display: inline-block;
             width: 200px;
-            //float:left;
+            float:left;
             min-width: 200px;
             max-height: 890px;
-            //overflow: auto;
+            overflow: auto;
             flex-shrink: 0;
         }
         .main-content {

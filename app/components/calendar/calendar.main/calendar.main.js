@@ -399,7 +399,7 @@ let config = {
                         arrData['time'] = set.date;
                         arrData['setId'] = set.id;
                         arrData['dfield'] = setDetail.dfield;
-                        arrData['color'] = CalendarToolService.handleColorRGB( setDetail.color , 0.5 );
+                        arrData['color'] = CalendarToolService.handleColorRGB( setDetail.color , 1 );
                         arrData['isDrag'] = setDetail.is_drag;
                         arrData['real_ids'] = JSON.stringify( setDetail.real_ids );
                         arrData['real_id'] = JSON.stringify( [select._id] );
@@ -498,7 +498,7 @@ let config = {
                     if( d['create_time'].indexOf( day.dataTime ) !== -1 ){
                         day['data'].push( {
                             data: d,
-                            color: CalendarToolService.handleColorRGB( '#64A6EF' , 0.5 ),
+                            color: CalendarToolService.handleColorRGB( '#64A6EF' , 1 ),
                             srcColor: '#64A6EF',
                             isDrag:0,
                             isShow: true,

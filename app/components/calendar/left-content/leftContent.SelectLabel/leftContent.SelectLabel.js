@@ -32,7 +32,7 @@ let config = {
                 if(config.data.cancel_fields.indexOf(items.field_id) !== -1){
                     strhtml+=" unchecked"
                 }
-                let color = that.actions.colorRgb(items.color,0.7);
+                let color = that.actions.colorRgb(items.color,1);
                 strhtml+="'style='background-color:"+ color+"' for='select-children-"+items.field_id+"' id='select-children-"+items.field_id+"'>" +
                     "</label><label>"+items.field_name+"</label>"+
                     "</div>";

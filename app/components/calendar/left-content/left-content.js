@@ -19,16 +19,17 @@ import {CalendarWorkflowData} from '../calendar.main/calendar.workflow/calendar.
 let config = {
     template: template,
     data:{
-        cancel_fields:[],
-        hide_table:{'table_Id':'','tableName':''},
-        hide_tables:[],
+        cancel_fields:[],                              // 取消选中数组
+        hide_table:{'table_Id':'','tableName':''},     //单条隐藏table
+        hide_tables:[],                                //隐藏table数组
         Add_hideTable:[],
         contentStatus:1,
-        rows:[],
+        rows:[],                                       //日立树数据
         hide_item_table:[],
         calendarTreeData: {},
     },
     actions: {
+        //与我相关审批和已完成显示隐藏
         contentHide:function(that,temp){
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
@@ -47,6 +48,7 @@ let config = {
                 temp.next().animate({height:"83%"},"fast");
             }
         },
+        //日历操作显示和隐藏
         hideclass:function(that,temp){
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
@@ -66,6 +68,7 @@ let config = {
                 that.el.find(".item-content-2").animate({height:"56%"},"fast");
             }
         },
+        //日历操作显示和隐藏
         hide_item:function(that,temp){
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
@@ -81,7 +84,7 @@ let config = {
                 temp.addClass("display-all-content");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
-                that.el.find(".item-content-1").animate({height:"84%"},"fast");
+                that.el.find(".item-content-1").animate({height:'83%'},"fast");
             }
         },
         showRemindType:function(that){
@@ -90,7 +93,7 @@ let config = {
             that.el.find(".item-content").hide();
             that.el.find(".item-content-2").hide();
             that.el.find(".item-content-1").show();
-            that.el.find(".item-content-1").css({height:"80%"});
+            that.el.find(".item-content-1").css({height:"83%"});
         },
         getCalendarTreeData:function(that){
             for(let i = 0;i<this.data.calendarTreeData.hide_tables.length;i++){
@@ -140,8 +143,8 @@ let config = {
         let that = this;
         this.actions.getCalendarTreeData(that);
         this.append(new LeftcontentCalendarset(this.data.calendarTreeData), this.el.find('.left-calendar-set'));
-        let myChild = new leftContentFinished(function(){console.log("!!!!!!!!!!!!!")});
-        this.append(myChild,this.el.find('.item-content-4'));
+        // let myChild = new leftContentFinished({},{onChange:function(data){console.log(data.type)}});
+        // this.append(myChild,this.el.find('.item-content-4'));
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.el.find('.item-content-3').empty();
             console.log(data);

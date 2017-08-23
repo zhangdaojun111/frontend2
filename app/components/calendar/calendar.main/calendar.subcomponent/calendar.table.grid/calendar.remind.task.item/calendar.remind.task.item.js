@@ -19,9 +19,10 @@ let config = {
         sValue: '',
         sLabel: '',
         type: '',
+        IsHomeCalendar:false,
+        TestValue:new RegExp('已完成'),
     },
     actions: {
-
         changSelectValue: function(sValue, sLabel){
             let oldValue = this.data.remindTaskItemData['data3show'][0][0]['selectValue'];
             let oldLabel = this.data.remindTaskItemData['data3show'][0][0]['selectLabel'];
@@ -79,6 +80,7 @@ let config = {
     },
     afterRender: function() {
         //this.el.attr("draggable",true);
+        console.log(this.data.remindTaskItemData);
         this.el.addClass("comment-task-item");
         this.el.find('.task-bg-color').css({backgroundColor: this.data.remindTaskItemData['color']});
         let that = this;
@@ -153,10 +155,14 @@ class CalendarRemindTaskItem extends Component {
     constructor(data) {
         config.data.remindTaskItemData = data['data'];
         config.data.type = data['type'];
+        config.data.isFinishedTask = false;
         if(data['data']['data3show']) {
             config.data.remindTaskData = data['data']['data3show'][0][0];
         }
-
+        if(config.data.remindTaskItemData.tableName === "首页日历事件表"){
+            config.data.IsHomeCalendar = true;
+            config.data.isFinishedTask =  config.data.TestValue.test(config.data.remindTaskData.fieldValue);
+        }else{config.data.IsHomeCalendar = false;}
         super(config);
     }
 }

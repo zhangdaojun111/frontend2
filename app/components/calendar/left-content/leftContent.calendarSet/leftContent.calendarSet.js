@@ -211,7 +211,7 @@ let config = {
             event: 'click',
             selector: '.hide-type-group',
             callback: function(temp = this){
-                this.actions.hide_group($(temp),that);
+                this.actions.hide_group($(temp),this);
             }
         }
     ],
