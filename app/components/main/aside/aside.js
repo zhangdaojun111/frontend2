@@ -155,7 +155,8 @@ let config = {
                 $page.focus();
             }else{
                 //打开个人设置页面
-                PersonSetting.show();
+                // PersonSetting.show();
+                PersonSetting.showUserInfo({name:"赵俨"});
             }
         },
         initAvatar:function () {

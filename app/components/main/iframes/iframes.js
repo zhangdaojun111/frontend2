@@ -70,20 +70,11 @@ export const IframeInstance = new Component({
         isAutoOpenTabs:true,    //标记是否为首次加载tabs
         tabsTotalWidth:"",           //tabs可用总长度 = div.tabs - 200;
         tabWidth:140,           //单个tabs长度，默认140（需和scss同步修改），空间不足以后自适应宽度
+        minTabWidth:100,        //用于估算小屏设备最大tabs数量
     },
     actions: {
         openIframe: function (id, url, name) {
-            if (this.data.isAutoOpenTabs === false && id !== 'search-result'){
-                //向后台发送请求记录
-                TabService.onOpenTab(id).done((result) => {
-                    if(result.success === 1){
-
-                    }else{
-                        console.log("post open record failed")
-                    }
-                });
-            }
-
+            this.actions.sendOpenRequest(id);
             id = id.toString();
             if (this.data.hash[id] === undefined) {
                 let tab = $(`<div class="item" iframeid="${id}">${name}<a class="close" iframeid="${id}"></a></div>`)
@@ -110,6 +101,27 @@ export const IframeInstance = new Component({
             }
             this.actions.adaptTabWidth();
         },
+        sendOpenRequest:function (id) {
+            if (this.data.isAutoOpenTabs === false && id !== 'search-result'){
+                //向后台发送请求记录
+                TabService.onOpenTab(id).done((result) => {
+                    if(result.success === 1){
+                        console.log("post open record success");
+                    }else{
+                        console.log("post open record failed")
+                    }
+                });
+            }
+        },
+        sendCloseRequest:function (id) {
+            TabService.onCloseTab(id,this.data.focus.id).done((result) => {
+                if(result.success === 1){
+                    console.log("post close record success")
+                }else{
+                    console.log("post close record failed")
+                }
+            });
+        },
         closeFirstIframe: function () {
             let firstId = this.data.sort.shift();
             this.actions.closeIframe(firstId);
@@ -118,14 +130,8 @@ export const IframeInstance = new Component({
             if ( id === undefined) {
                 return;
             }
-            TabService.onCloseTab(id,this.data.focus.id).done((result) => {
-                if(result.success === 1){
 
-                }else{
-                    console.log("post close record failed")
-                }
-            });
-
+            this.actions.sendCloseRequest(id);
             let item = this.data.hash[id];
             // IframeOnClick.retrack(item.iframe.find('iframe')[0]);
             item.tab.remove();
@@ -260,34 +266,45 @@ export const IframeInstance = new Component({
             //第一部分：获取系统关闭时未关闭的tabs
             let that = this;
             TabService.getOpeningTabs().then((result) => {
+                console.log(result);
+                let tabs = {};
                 //将未关闭的标签id加入tempList
-                let tabs = result[0].tabs;
-
-                if(tabs){
-                    for(let k in tabs){
-                        that.data.tempList.push(k);
+                if(result[0].succ === 1){
+                    tabs = result[0].tabs;
+                    delete tabs["0"];
+                    if(tabs){
+                        for(let k in tabs){
+                            that.data.tempList.push(k);
+                        }
                     }
+                }else{
+                    console.log("get tabs failed",result[0].err);
                 }
 
-                let biConfig = result[1];
-
-                if((biConfig.data && biConfig.data === "1") || tabs.hasOwnProperty("bi")){
-                    that.data.autoOpenList.push({
-                        id: 'bi',
-                        name: 'BI',
-                        url: window.config.sysConfig.bi_index
-                    });
-                    window.config.sysConfig.logic_config.login_show_bi = "1";
+                if(result[1].succ === 1){
+                    let biConfig = result[1];
+                    if((biConfig.data && biConfig.data === "1") || tabs.hasOwnProperty("bi")){
+                        that.data.autoOpenList.push({
+                            id: 'bi',
+                            name: 'BI',
+                            url: window.config.sysConfig.bi_index
+                        });
+                        window.config.sysConfig.logic_config.login_show_bi = "1";
+                    }
+                }else{
+                    console.log("get tabs failed",result[1].err);
                 }
 
-                let calendarConfig = result[2];
-                if((calendarConfig.data && calendarConfig.data === "1") || tabs.hasOwnProperty("calendar")){
-                    that.data.autoOpenList.push({
-                        id: 'calendar',
-                        name: '日历',
-                        url: window.config.sysConfig.calendar_index
-                    });
-                    window.config.sysConfig.logic_config.login_show_calendar = "1";
+                if(result[2].succ === 1){
+                    let calendarConfig = result[2];
+                    if((calendarConfig.data && calendarConfig.data === "1") || tabs.hasOwnProperty("calendar")){
+                        that.data.autoOpenList.push({
+                            id: 'calendar',
+                            name: '日历',
+                            url: window.config.sysConfig.calendar_index
+                        });
+                        window.config.sysConfig.logic_config.login_show_calendar = "1";
+                    }
                 }
                 that.actions.autoOpenTabs();
             });
@@ -322,14 +339,21 @@ export const IframeInstance = new Component({
                 }
             }
         },
+        setTabsCount:function () {
+            this.data.tabsTotalWidth = parseInt(this.el.find('div.tabs').width()) - 220;   //标签可用宽度
+            maxIframeCount = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);  //自适应最大tabs数量
+            // let count = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);
+            // maxIframeCount =  count>15 ? 15:count;      //最多不超过15个
+
+        },
         //自适应宽度
         adaptTabWidth:function () {
             let singleWidth = this.data.tabsTotalWidth/this.data.count ;
             if(singleWidth  > this.data.tabWidth){              //空间有剩余
-                this.el.find('div.item').css("width","114px");      //有25px padding-right,总长140px
+                this.el.find('.tabs div.item').css("width","114px");      //有25px padding-right,总长140px
             }else{
                 let width = singleWidth - 25 + "px";            // -25 padding
-                this.el.find('div.item').css("width",width);
+                this.el.find('.tabs div.item').css("width",width);
             }
         }
     },
@@ -337,9 +361,9 @@ export const IframeInstance = new Component({
         let that = this;
         this.data.tabs = this.el.find('.tabs');
         this.data.iframes = this.el.find('.iframes');
-        this.data.tabsTotalWidth = parseInt(this.el.find('div.tabs').width()) - 220;   //标签可用宽度
-
+        this.actions.setTabsCount();
         this.actions.readyOpenTabs();
+
         this.el.on('click', '.tabs .item .close', function () {
             let id = $(this).attr('iframeid');
             that.actions.closeIframe(id);
@@ -355,17 +379,9 @@ export const IframeInstance = new Component({
             SaveView.show(that.data.sort);
         }).on('mouseenter','.view-popup',() => {
             this.actions.showTabsPopup();
-            console.log("enter")
-            // }).on('click','.view-popup',(event) => {
-            //     event.stopPropagation();
-            // }).on('click','.drop-up-icon',() => {
-            //     this.el.find('.tab-list').hideTabsPopup();
-            // }).on('click','.drop-down-icon',() => {
-            //     this.el.find('.tab-list').hideTabsPopup();
         }).on('click','.tab-list',(event) => {
             this.actions.controlTabs(event);
         }).on('mouseleave','.view-popup',() => {
-            console.log("leave");
             this.actions.hideTabsPopup();
         })
     },
