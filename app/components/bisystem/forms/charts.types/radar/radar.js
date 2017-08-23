@@ -41,6 +41,7 @@ let config = {
     beforeDestory() {}
 };
 
+
 export class FormRadarComponent extends BiBaseComponent{
     constructor(chart) {
         super(config);
