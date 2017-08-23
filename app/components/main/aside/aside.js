@@ -6,7 +6,7 @@ import Mediator from '../../../lib/mediator';
 import {PersonSetting} from "../personal-settings/personal-settings";
 import {HTTP} from '../../../lib/http';
 // import {commonuse} from '../commonuse/commonuse';
-import {Uploader} from "../../../lib/uploader";
+// import {Uploader} from "../../../lib/uploader";
 
 
 function presetMenuData(menu, leaf) {
@@ -60,7 +60,6 @@ function presetCommonMenuData(menu, commonData) {
         })
         return res;
     };
-
     step_one(menuData);
     return setp_two(menuData);
 }
