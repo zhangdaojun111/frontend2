@@ -14,7 +14,9 @@ import Mediator from '../../../../lib/mediator';
 
 let config = {
     template: template,
-    data: {},
+    data: {
+        assortment: ''
+    },
     actions: {},
     afterRender() {},
     firstAfterRender() {
@@ -28,9 +30,10 @@ let config = {
 };
 
 export class FormMixShareComponent extends BiBaseComponent {
-    constructor() {
+    constructor(chart) {
         super(config);
-        this.mixForm = {}
+        this.mixForm = {};
+        this.data.assortment = chart;
     }
 
 
@@ -121,6 +124,7 @@ export class FormMixShareComponent extends BiBaseComponent {
         } else {
             data = [];
         };
+        this.messager(`${this.data.assortment}-chart-source`, {'sources': data});
         Mediator.publish('bi:chart:form:update', {type:'fields', data:data});
     }
 

@@ -31,7 +31,6 @@ let config = {
     },
     firstAfterRender() {
         this.el.on('click', '.save-normal-btn', (event) => {
-            console.log('xxxxxxxxxxxxxxxx');
             this.saveChart();
             return false;
         });
@@ -47,10 +46,10 @@ let config = {
 };
 
 export class FormNormalComponent extends BiBaseComponent{
-    constructor(chartId) {
+    constructor(chart) {
         super(config);
         this.formGroup = {};
-        this.chartId = chartId;
+        this.chartId = chart.id;
         this.y = [];
         this.y1 = [];
         this.editModeOnce = this.chartId ? true : false // 如果是编辑模式 需要在第一次加载进来重置某些字段的默认值
@@ -105,6 +104,7 @@ export class FormNormalComponent extends BiBaseComponent{
         this.formGroup.echartXTextNum.setValue(chart['echartX'].hasOwnProperty('textNum') ? chart['echartX']['textNum'] : 0);
         this.formGroup.echartXMarginBottom.setValue(chart['echartX'].hasOwnProperty('marginBottom') ? chart['echartX']['marginBottom'] : 0);
         this.formGroup.chartAssignment.setValue(chart['chartAssignment'].val);
+        this.formGroup.ySelectedGroup.setValue(chart['ySelectedGroup']);
         this.editModeDeeps = {
             deeps: chart['deeps'],
             group: chart['chartGroup']
@@ -401,11 +401,11 @@ export class FormNormalComponent extends BiBaseComponent{
     /**
      * reset实例，当通过路由重新进入实例，清空所有数据
      */
-    reset(id) {
+    reset(chart) {
         this.formGroup = {};
         this.y = [];
         this.y1 = [];
-        this.chartId = id;
+        this.chartId = chart.id;
         this.editModeOnce = this.chartId ? true : false;
         this.editModeXField = null;
         [this.editModeYField,this.editModeY1Field] = [[], []];

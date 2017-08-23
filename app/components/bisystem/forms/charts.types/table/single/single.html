@@ -1,0 +1,25 @@
+{{#if show}}
+<div>
+    <h5>需要显示多少列</h5>
+    <input type="text" class="single-column-num" value="{{singleNum}}" placeholder="只能输入大于0"/>
+</div>
+<div class="form-group-single-sorts">
+    <h5>拖拽列名可以修改位置</h5>
+    {{#each columns}}
+    <div>
+        <p>第一列显示字段</p>
+        <div>
+            <span>
+                <label class="column-item">更新时间</label>
+            </span>
+            <span>
+                <label class="column-item">电子邮件</label>
+            </span>
+            <span>
+                <label class="column-item">手机号码</label>
+            </span>
+        </div>
+    </div>
+    {{/each}}
+</div>
+{{/if}}

@@ -112,7 +112,6 @@ class Component {
     }
 
     destroyChildren(container) {
-
         if (!container) {
             container = this.el;
         }

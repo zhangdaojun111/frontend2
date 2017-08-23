@@ -11,30 +11,57 @@ import msgbox from "../../../../../lib/msgbox";
 import {FormMixShareComponent} from '../../mix.share/mix.share';
 import "./table.scss";
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
-
+import {FormColumnComponent} from './columns/column';
+import {FormSingleComponent} from './single/single';
 
 let config = {
     template:template,
-    data: {},
+    data: {
+        assortment: ''
+    },
     actions: {},
     afterRender() {
+        this.init();
         this.renderFitting();
     },
     firstAfterRender() {
+        let me = this;
+
+        // 监听数据源变化
+        this.el.on(`${this.data.assortment}-chart-source`,(event,params) => {
+            this.chartSourceChange(params['sources'])
+        }).on('test',(event,params) => { // 监听选中字段
+            console.log(params);
+            alert('hello world')
+        });
+
         this.el.on('click', '.save-btn', (event) => {
             // this.saveChart();
+        });
+
+        this.el.on('change', '.single-checkbox input', function(event){
+            let checked = $(this).is(':checked');
+            me.singleConfig(checked);
         })
     },
     beforeDestory() {}
 };
 
 export class FormTableComponent extends BiBaseComponent{
-    constructor() {
+    constructor(chart) {
         super(config);
+        this.data.assortment = chart.assortment
         this.formGroup = {};
-        this.y = [];
-        this.y1 = [];
-        this.doubleY = null;
+    }
+
+    /**
+     * 初始化操作
+     */
+    init() {
+        this.columns = new FormColumnComponent();
+        this.single = new FormSingleComponent();
+        this.append(this.columns, this.el.find('.table-columns'));
+        this.append(this.single, this.el.find('.form-group-single-columns'));
     }
 
     /**
@@ -42,49 +69,13 @@ export class FormTableComponent extends BiBaseComponent{
      */
     renderFitting() {
         let base = new FormBaseComponent();
-        let share = new FormMixShareComponent();
+        let share = new FormMixShareComponent(this.data.assortment);
         this.append(base, this.el.find('.form-group-base'));
         this.append(share, this.el.find('.form-group-share'));
 
         this.formGroup = {
             chartName: base,
             share: share,
-            columns: instanceFitting({
-                type:'checkbox',
-                data: {
-                    value:null,
-                    checkboxs:[
-                        {
-                            dfield: "f1",
-                            id: "8898_n3g8bsq7iNmxF6ejffiNdg",
-                            name: "创建时间",
-                            type: "5"
-                        },
-                        {
-                            dfield: "f2",
-                            id: "2420_Q3yziPZKn5hgewUkPGCEFL",
-                            name: "更新时间",
-                            type: "5"
-                        }
-                    ],
-                    onChange: null
-                },
-                me: this,
-                container: 'form-group-columns .table-columns'
-            }),
-            sort:instanceFitting({
-                type:'radio',
-                data: {
-                    value:null,
-                    radios:[
-                        {value:'0', name:'升序'},
-                        {value: '1',name: '降序'}
-                    ],
-                    onChange: null
-                },
-                me: this,
-                container: 'form-group-sort-columns .table-sort-columns'
-            }),
             sortColumn:instanceFitting({
                 type:'autoComplete',
                 data: {
@@ -93,26 +84,38 @@ export class FormTableComponent extends BiBaseComponent{
                 me: this,
                 container: 'form-group-sort-columns .table-sort-columns'
             }),
-            align:instanceFitting({
-                type:'select',
-                data: {
-                    value:1,
-                    label: '表格文字居中对齐',
-                    options:[
-                        {value: 'left', name: '居左'},
-                        {value: 'center', name: '居中'},
-                        {value: 'right', name: '居右'}
-                    ],
-                    onChange: null,
-                },
-                me: this,
-                container: 'form-group-align'
-            })
         };
 
     }
 
-    reset() {
+    /**
+     * 单行配置
+     */
+    singleConfig(checked) {
+        if (checked) {
+            this.el.find('.form-group-show-columns').hide();
+        } else {
+            this.el.find('.form-group-show-columns').show();
+        }
+        this.single.data.show = checked;
+        this.single.reload();
+    }
 
+    /**
+     * 数据源变化执行一些列动作
+     * @param sources = 数据源数据
+     */
+    chartSourceChange(sources) {
+        this.columns.reloadUi(sources);
+        if (this.formGroup.sortColumn) {
+            if (this.formGroup.sortColumn.autoSelect) {
+                this.formGroup.sortColumn.autoSelect.data.list = sources['x_field'];
+                this.formGroup.sortColumn.autoSelect.reload();
+            }
+        }
+
+    }
+
+    reset() {
     }
 }

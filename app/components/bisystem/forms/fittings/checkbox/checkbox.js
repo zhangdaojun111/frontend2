@@ -50,11 +50,12 @@ export class CheckboxComponent extends FormFittingAbstract {
      */
     setValue(val) {
         if(this.data.items && this.data.items.length > 0) {
+            console.log(val);
         } else {
             this.el.find('input').attr('checked', val);
             this.data.value = val;
             this.data.checked = val;
-            this.onChange(this.data.value);
+            // this.onChange(this.data.value);
         }
     }
 
