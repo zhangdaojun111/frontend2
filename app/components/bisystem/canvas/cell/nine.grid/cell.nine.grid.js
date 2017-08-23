@@ -33,10 +33,7 @@ let config = {
          * @param cellChart 画布块数据(通过父类初始化子类传递进来)
          */
         init(cellChart) {
-            if (
-                cellChart['chart']['data']['rows'].length === 0 ||
-                cellChart['chart']['data']['xAxis'].length === 0 ||
-                cellChart['chart']['data']['yAxis'].length === 0) {
+            if (cellChart['chart']['data']['rows'].length === 0) {
                 return false;
             }
             let nineType = cellChart['chart']['type'];
@@ -59,14 +56,15 @@ let config = {
             Object.keys(cellChart['chart']['xAxis']).forEach((keys,index) => {
                 xAxis.push(cellChart['chart']['xAxis'][keys]);
                 yAxis.forEach((val,yAxisindex) => {
+                    console.log(val+ cellChart['chart']['xAxis'][keys]);
                     legend.push(val+ cellChart['chart']['xAxis'][keys])
                 })
             });
-
             config.data.grids = types;
             config.data.xAxis = xAxis;
             config.data.yAxis = yAxis;
             config.data.legend = legend;
+            console.log(config.data.legend);
         }
     },
     firstAfterRender() {}
