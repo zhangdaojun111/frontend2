@@ -104,7 +104,7 @@ export const IframeInstance = new Component({
             this.actions.adaptTabWidth();
         },
         sendOpenRequest:function (id) {
-            if (this.data.isAutoOpenTabs === false && id !== 'search-result'){
+            if (this.data.isAutoOpenTabs === false && id !== 'search-result' && id !== 'bi' && id !== 'calendar'){      //不对搜索、bi、日历标签进行记录
                 //向后台发送请求记录
                 TabService.onOpenTab(id).done((result) => {
                     if(result.success === 1){
@@ -285,7 +285,7 @@ export const IframeInstance = new Component({
 
                 if(result[1].succ === 1){
                     let biConfig = result[1];
-                    if((biConfig.data && biConfig.data === "1") || tabs.hasOwnProperty("bi")){
+                    if((biConfig.data && biConfig.data === "1")){
                         that.data.biCalendarList.push({
                             id: 'bi',
                             name: 'BI',
@@ -299,7 +299,7 @@ export const IframeInstance = new Component({
 
                 if(result[2].succ === 1){
                     let calendarConfig = result[2];
-                    if((calendarConfig.data && calendarConfig.data === "1") || tabs.hasOwnProperty("calendar")){
+                    if((calendarConfig.data && calendarConfig.data === "1")){
                         that.data.biCalendarList.push({
                             id: 'calendar',
                             name: '日历',
@@ -367,7 +367,7 @@ export const IframeInstance = new Component({
                 let width = singleWidth - 35 + "px";            // -25 padding
                 this.el.find('.tabs div.item').css("width",width);
             }
-        }
+        },
         sendMsgToIframes: function (info) {
             PMAPI.sendToAllChildren({
                 type: PMENUM[info.typeName],
