@@ -33,7 +33,7 @@ let config = {
                 select_label_children.addClass("unchecked");
                 for(let i = 0;i < config.data.rows.length;i++){
                     for(let j = 0;j < config.data.rows[i].items.length;j++){
-                        if(config.data.cancel_fields.indexOf(config.data.rows[i].items[j].field_id) == -1){
+                        if(config.data.cancel_fields.indexOf(config.data.rows[i].items[j].field_id) === -1){
                             config.data.cancel_fields.push(config.data.rows[i].items[j].field_id);
                         }
                     }
@@ -47,10 +47,10 @@ let config = {
                 select_label_children.removeClass("unchecked");
                 console.log(config.data.hide_item_table,config.data.rows);
                 for(let i = 0;i < config.data.rows.length;i++){
-                    if(config.data.hide_item_table.indexOf(config.data.rows[i].table_id) != -1)
+                    if(config.data.hide_item_table.indexOf(config.data.rows[i].table_id) !== -1)
                     {
                         for(let j = 0;j < config.data.rows[i].items.length;j++){
-                            if(config.data.cancel_fields.indexOf(config.data.rows[i].items[j].field_id) == -1){
+                            if(config.data.cancel_fields.indexOf(config.data.rows[i].items[j].field_id) === -1){
                                 config.data.cancel_fields.push(config.data.rows[i].items[j].field_id);
                             }
                         }
@@ -85,7 +85,7 @@ let config = {
             that.el.find(class_Name).each(function(){
                 let filedId = $(this).attr("id").split("-")[2];
                 console.log(filedId);
-                if(config.data.cancel_fields.indexOf(filedId) == -1){
+                if(config.data.cancel_fields.indexOf(filedId) === -1){
                     config.data.cancel_fields.push(filedId);
                 }
             });
@@ -101,11 +101,11 @@ let config = {
             if(isAllGroupchecked && that.el.find('.label-select-all-show').length > 0){
                 that.el.find("#checkbox_a3").addClass('label-select-all-checked');
             }
-            if(that.el.find('.label-select-all-show').length ==0){
+            if(that.el.find('.label-select-all-show').length ===0){
                 that.el.find("#checkbox_a3").removeClass('label-select-all-checked');
             }
             for(let j = 0;j < config.data.rows.length;j++) {
-                if (hide_table_id == config.data.rows[j].table_id) {
+                if (hide_table_id === config.data.rows[j].table_id) {
                     hide_table_name = config.data.rows[j].table_name;
                 }
             }
@@ -165,16 +165,16 @@ let config = {
             that.el.find("#select-all-block-"+data.data).show();
             that.el.find(".select-children-"+data.data).removeClass("unchecked");
             for(let i = 0;i < config.data.hide_tables.length;i++){
-                if(config.data.hide_tables[i].table_Id == data.data){
+                if(config.data.hide_tables[i].table_Id === data.data){
                     config.data.hide_tables.splice(i,1);
                     config.data.hide_item_table.splice(i,1);
                     break;
                 }
             }
             for(let i = 0;i < config.data.rows.length;i++){
-                if(config.data.rows[i].table_id == data.data){
+                if(config.data.rows[i].table_id === data.data){
                     for(let j = 0;j < config.data.rows[i].items.length;j++){
-                        if(config.data.cancel_fields.indexOf(config.data.rows[i].items[j].field_id) != -1){
+                        if(config.data.cancel_fields.indexOf(config.data.rows[i].items[j].field_id) !== -1){
                             config.data.cancel_fields.splice(config.data.cancel_fields.indexOf(config.data.rows[i].items[j].field_id),1);
                         }
                     }
