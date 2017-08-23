@@ -240,7 +240,8 @@ let config = {
             //全屏
             if( this.el.find( '.grid-new-window' )[0] ){
                 let obj = {
-                    tableId:this.data.tableId
+                    tableId: this.data.tableId,
+                    tableName: this.data.tableId2Name[this.data.tableId]
                 }
                 let url = this.actions.returnIframeUrl( '/iframe/workflowPage/',obj )
                 this.el.find('.grid-new-window').attr('href', url);
