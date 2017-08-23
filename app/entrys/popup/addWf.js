@@ -100,6 +100,7 @@ Mediator.subscribe('workflow:getflows', (res)=> {
     FormEntrys.createForm({
         el: '#place-form',
         form_id: res.form_id,
+        flow_id:res.flow_id,
         is_view: 0,
         from_approve: 0,
         from_focus: 0,

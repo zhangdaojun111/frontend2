@@ -1559,12 +1559,10 @@ let config={
                         break;
                     case 'MultiSelect':
                         if(single.data('childData')){
-                            // data[key].childData=single.data('childData');
-                            data[key].childData='#*#2638_3egFSMCwDBHgNKBo59sr6P$#$#*#6487_VjN4tR8j6uChdEb8GkajaN';
+                            data[key].childData=single.data('childData');
                         }
                         if(single.data('selectType')){
-                            // data[key].childData=single.data('selectType');
-                            data[key].selectType='1';
+                            data[key].childData=single.data('selectType');
                         }
                         data[key].is_special = data[key].field_content['special_multi_choice'] == 1?true:false;
                         let multiSelectControl = new MultiSelectControl(data[key],actions);

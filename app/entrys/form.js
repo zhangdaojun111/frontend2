@@ -75,7 +75,7 @@ let FormEntrys = {
         if(res["data"] && res["data"]["flow_data"].length != 0) {
             if(this.flowId){
                 let selectItems = res["data"]["flow_data"];
-                for(let item of this.selectItems){
+                for(let item of selectItems){
                     if(item["flow_id"] == this.flowId){
                         this.formId = item["form_id"];
                     }
@@ -364,7 +364,9 @@ let FormEntrys = {
         this.init(config);
         let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap"></div>`).prependTo(this.el);
         let res=await  FormService.getPrepareParmas({table_id:this.tableId});
-        this.findFormIdAndFlowId(res);
+        if(!this.fromWorkFlow){
+            this.findFormIdAndFlowId(res);
+        }
         let json=this.createPostJson();
         res =await FormService.getFormData(json);
         console.timeEnd('获取表单数据的时间');
