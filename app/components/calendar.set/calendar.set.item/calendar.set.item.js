@@ -186,7 +186,6 @@ let config = {
         });
         this.el.find('.page-change-text option').each(item => {
             let a= $('.page-change-text option')[item].value;
-            console.log(a);
             if(a === this.data.rowSetData['selectedEnums']) {
                 this.el.find('.page-change-text option')[item].selected  = 'selected';
             }

@@ -5,7 +5,6 @@
     }
     .header-wrap {
         height: $header-height;
-        padding-right: 50px;
         .global-search {
             width: 220px;
             height: 40px;
@@ -54,38 +53,47 @@
             &.im {
                 background-image: url("../../../assets/images/framework/im.png");
             }
-        }
-        .setting {
-            float: right;
-            position: relative;
-            .icon {
+
+            &.setting{
                 background-image: url("../../../assets/images/framework/setting.png");
             }
-            .slide {
-                display: none;
-                position: absolute;
-                z-index: 1;
-                background: #fff;
-                border: 1px solid #ddd;
-                border-bottom: 0 none;
-                width: 120px;
-                right: 0;
-                top: 100%;
-                line-height: 40px;
-                height: 80px;
-                text-align: center;
-                li {
-                    cursor: pointer;
-                    border-bottom: 1px solid #ddd;
-                    height: 40px;
-                }
-            }
-            &:hover {
-                .slide {
-                    display: block;
-                }
+
+            &.online-num{
+                background-image: url("../../../assets/images/framework/online-users.png");
             }
         }
+
+        //.setting {
+        //    float: right;
+        //    position: relative;
+        //    .icon {
+        //        background-image: url("../../../assets/images/framework/setting.png");
+        //    }
+        //    .slide {
+        //        display: none;
+        //        position: absolute;
+        //        z-index: 1;
+        //        background: #fff;
+        //        border: 1px solid #ddd;
+        //        border-bottom: 0 none;
+        //        width: 120px;
+        //        right: 0;
+        //        top: 100%;
+        //        line-height: 40px;
+        //        height: 80px;
+        //        text-align: center;
+        //        li {
+        //            cursor: pointer;
+        //            border-bottom: 1px solid #ddd;
+        //            height: 40px;
+        //        }
+        //    }
+        //    &:hover {
+        //        .slide {
+        //            display: block;
+        //        }
+        //    }
+        //}
 
 
         .fold {

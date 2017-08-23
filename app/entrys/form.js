@@ -32,6 +32,7 @@ let FormEntrys = {
         this.isAddBuild=0;
         this.buildId='';
         this.btnType='new';
+        this.changeFlow='';
 
         this.tableId=config.table_id||'';
         this.parentRealId=config.parent_real_id||'';
@@ -55,6 +56,9 @@ let FormEntrys = {
         this.isAddBuild=config.isAddBuild || 0;
         this.buildId=config.id || '';
         this.btnType=config.btnType||'new';
+        this.changeFlow=config.change_flow||'';
+        console.log('配置文件');
+        console.log(config);
     },
     //静态数据里是否有这个key
     hasKeyInFormDataStatic(key,staticData){
@@ -69,14 +73,23 @@ let FormEntrys = {
     //找到加载表单数据的formId和加载节点的flowId
     findFormIdAndFlowId(res) {
         if(res["data"] && res["data"]["flow_data"].length != 0) {
-            //默认的form_id和flow_id取第一个select
-            this.formId = res["data"]["flow_data"][0]["form_id"];
-            this.flowId = res["data"]["flow_data"][0]["flow_id"];
-            //循环一遍，查看是否有默认值，如果有，则form_id和flow_id改变
-            for (let d of res["data"]["flow_data"]) {
-                if (d["selected"] == 1) {
-                    this.formId = d["form_id"];
-                    this.flowId = d["flow_id"];
+            if(this.flowId){
+                let selectItems = res["data"]["flow_data"];
+                for(let item of selectItems){
+                    if(item["flow_id"] == this.flowId){
+                        this.formId = item["form_id"];
+                    }
+                }
+            }else{
+                //默认的form_id和flow_id取第一个select
+                this.formId = res["data"]["flow_data"][0]["form_id"];
+                this.flowId = res["data"]["flow_data"][0]["flow_id"];
+                //循环一遍，查看是否有默认值，如果有，则form_id和flow_id改变
+                for (let d of res["data"]["flow_data"]) {
+                    if (d["selected"] == 1) {
+                        this.formId = d["form_id"];
+                        this.flowId = d["flow_id"];
+                    }
                 }
             }
         }
@@ -349,9 +362,11 @@ let FormEntrys = {
     async createForm(config={}){
         console.time('获取表单数据的时间');
         this.init(config);
-        let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap">`).prependTo(this.el);
+        let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap"></div>`).prependTo(this.el);
         let res=await  FormService.getPrepareParmas({table_id:this.tableId});
-        this.findFormIdAndFlowId(res);
+        if(!this.fromWorkFlow){
+            this.findFormIdAndFlowId(res);
+        }
         let json=this.createPostJson();
         res =await FormService.getFormData(json);
         console.timeEnd('获取表单数据的时间');

@@ -1,4 +1,8 @@
 #detail-form{
+  height: 100%;
+  width: 100%;
+  //overflow: auto;
+  background: #F2F2F2;
   @import "dateTime";
   .ui-history {
     display: inline-block;
@@ -57,7 +61,7 @@
   }
   .dropdown{
     border-radius:0px;
-    height:30px;
+    //height:30px;
     padding:2px 0px;
     margin-bottom:-3px;
     vertical-align:middle;
@@ -83,7 +87,7 @@
     //width: 100%;
     height: 100%;
     overflow: auto;
-    padding-top:40px ;
+   padding-top:40px ;
     padding-bottom: 70px;
     display: table;
     margin: 0 auto;
@@ -179,10 +183,12 @@
     padding: 15px 0;
     bottom: 0px;
     width: 100%;
-    background: #fff;
-    position: absolute;
+    //background: #ebebeb;
+    //position: absolute;
   }
   .ui-btn-box .btn{
+    margin-right: 35px;
+    margin-top: -20px;
     float: right;
   }
   .ui-btn-box .btn-normal{

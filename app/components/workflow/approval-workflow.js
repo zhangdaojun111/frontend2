@@ -285,7 +285,8 @@ let config={
         });
         Mediator.subscribe("workflow:sendImgInfo",(e)=>{
             this.data.imgInfo=e;
-        })
+        });
+        
     }
 };
 class ApprovalWorkflow extends Component{

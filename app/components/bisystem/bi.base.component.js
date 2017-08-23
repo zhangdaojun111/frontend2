@@ -5,9 +5,11 @@
  */
 
 import '../../assets/scss/core/reset.scss';
-import Component from '../../lib/component';
+import '../../assets/scss/core/common.scss';
+import '../../assets/scss/core/jquery-ui-theme.scss';
+import '../../assets/scss/core/base.scss';
 import "../../assets/scss/bisystem/quill.snow.css";
-import "../../assets/scss/bisystem/font/font-awesome.css";
+import Component from '../../lib/component';
 import Handlebars from 'handlebars';
 
 export class BiBaseComponent extends Component{

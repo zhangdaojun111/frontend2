@@ -26,6 +26,17 @@
       cursor: pointer;
     }
   }
+  .table-oprate-con {
+    float: right;
+    .tableOperateSelect {
+      width: 55px;
+      vertical-align: sub;
+      height: 20px;
+      border-radius: 3px;
+      margin-right: 30px;
+      color: #666666;
+    }
+  }
   .p-page {
     float: right;
     .goFirst {

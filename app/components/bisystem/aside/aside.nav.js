@@ -2,15 +2,20 @@ import {BiBaseComponent} from '../bi.base.component';
 
 import template from './aside.nav.html';
 import './aside.nav.scss';
-import { biChartService } from "../../../services/bisystem/bi.chart.service";
+
 import Mediator from '../../../lib/mediator';
 import {ChartsComponent} from './charts/charts';
 let config = {
     template: template,
     data:{
-        charts:window.config.charts
+        charts:window.config.charts,
+        chart_id:"",
     },
-    actions:{},
+    actions:{
+        reload() {
+            this.reload();
+        }
+    },
 
     afterRender() {
         //加载左侧导航
@@ -19,82 +24,52 @@ let config = {
             this.append(chartsComponent,this.el.find('.charts-items'));
         });
 
-        //滑过 显示编辑删除
-        $('.charts-items li').each(function (index) {
-            $(this).hover(
-                function () {
-                    $('.btn_ripple').eq(index).show();
-                },
-                function () {
-                    $('.btn_ripple').eq(index).hide();
-                }
-            )
-        });
-
-        //点击 显示隐藏菜单
-        $('.btn_ripple').each(function () {
-            $(this).on('click',function (event) {
-                let flag = true;
-                let top = $(this).offset().top - $('.charts-container').offset().top - 81;
-                const hideMenuHeight = $('.hide_meun').height();
-                $('.hide_meun').eq(0).css('top',top);
-                $('.hide_meun').eq(0).fadeIn('normal');
-                //底部显示 不超过底部
-                if (top>625){
-                    $('.hide_meun').eq(0).css('top',top-hideMenuHeight);
-                }
-                event.stopPropagation();
-                //点击消失
-                $(document).bind('click',function () {
-                    if (flag){
-                        $('.hide_meun').eq(0).fadeOut();
-                        flag = false;
-                    }else{
-                        return;
-                    }
-                })
-            });
-        });
-
-        //点击 跳转页面
-        $('.btn_del').click(function () {
-            confirm('确定删除吗？');
-            $('.hide_meun').eq(0).fadeOut();
-        });
-        $('.btn_change').click(function () {
-            alert('这里是跳转路由');
-            $('.hide_meun').eq(0).fadeOut();
-        });
-
         //模糊搜索
-        $('.filter-match').on('input',function () {
-            //值改变时 隐藏
-            $('.charts-items li').css('display','none');
-
-            //填空值时 仍显示
-            if($('.filter-match').val().length<=0){
-                $('.charts-items li').css('display','block');
-                return;
+        let self = this;
+        this.el.on('input','.filter-match',()=>{
+            self.el.find('.charts-items li').hide();
+            let len = self.el.find('.filter-match').val().length;
+            if(len<=0){
+                self.el.find('.charts-items li').show();
             }
-
-            // 模糊匹配 遍历所有 将匹配的显示出来
-            $('.charts-items li').each(function (index) {
-                if ($('.charts-items li').eq(index).text().substr(0,$('.filter-match').val().length) == $('.filter-match').val()){
-                    $('.charts-items li').eq(index).css('display','block');
-                }
+            self.el.find('.charts-items li').each(function () {
+                // let val = self.el.find('.filter-match').val();
+                // if($(this).find('.item').text().test(/val/)){
+                //     $(this).show();
+                // }
+               if($(this).find('.item').text().substr(0,len) === self.el.find('.filter-match').val()){
+                    $(this).show();
+               }
             })
         });
-
-
-        // //单页跳转指定路由
-        // $('.btn-single').click(function () {
-        //     let pathname = '/bi/index/';
-        //     let hash = window.location.hash;
-        //     let url = `${pathname}${hash}`;
-        //     $(this).attr('href',url);
-        // })
     },
     firstAfterRender() {
+        Mediator.subscribe('bi:aside:del', (res) => {
+            let charts = this.data.charts;
+            for(let [index,view] of charts.entries()) {
+                if (res.id === view.id) {
+                    charts.splice(index,1);
+                    break;
+                }
+            }
+        });
+
+        Mediator.subscribe('bi:aside:update',(res) => {
+            if (res['type'] == 'new') {
+                window.config.charts.push(res['data']);
+                this.data.charts = window.config.charts
+            } else {
+                let charts = [];
+                for(let chart of window.config.charts) {
+                    if (res['data'].id == chart.id) {
+                        chart = res['data'];
+                    };
+                    charts.push(chart);
+                }
+                this.data.charts = window.config.charts = charts;
+            };
+            this.reload();
+        })
     }
 };
 
@@ -110,7 +85,7 @@ class AsideNavComponent extends BiBaseComponent{
      */
     getChart(index) {
         let chart = this.data.charts[index];
-        return chart
+        return chart;
     }
 
 

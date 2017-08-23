@@ -26,7 +26,6 @@ let config = {
 
             GlobalService.getOnlineUserData(param).done((data) => {
                 if(data.success === 1){
-                    console.log(data);
                     this.agGrid.actions.setGridData({
                         rowData: data.rows
                     });
@@ -48,7 +47,7 @@ let config = {
         this.agGrid.render(gridRoot);
         this.pagination = new dataPagination({
             currentPage: 1,
-            rows: 5,
+            rows: 10,
             range: {
                 l:5,
                 r:5000

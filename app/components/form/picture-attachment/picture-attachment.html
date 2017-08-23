@@ -1,0 +1,26 @@
+<div style="width: 90%; height: 100%;margin: auto;position: relative">
+    <div class="imgList">
+        {{#each rows}}
+        <div class="select-img" data-imgSelect="{{this.file_id}}">
+            <div style="height: 100%;width: 100%;">
+                <p style="word-break: break-all; margin: 5px;">{{this.file_name}}</p>
+                <a href="download_attachment/?file_id={{this.file_id}}&download=1">下载</a>
+                <!--<a style="color: blue;">预览</a>-->
+                <!--<a (click)="imgDel(data.file_id)">删除</a>-->
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    <div class="imgContain">
+        <div class="changeBtn" style="left: 5px;" data-num="1"><i class="fa fa-arrow-left" aria-hidden="true"></i></div>
+        <div class="changeBtn" style="right: 5px;" data-num="2"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
+        <div class="showImg">
+            {{#if imgSelect}}
+                <div>
+                    <img id="myImg" src="/download_attachment/?file_id={{imgSelect}}&download=0">
+                    <img id="ImgToShow" src="/download_attachment/?file_id={{imgSelect}}&download=0">
+                </div>
+            {{/if}}
+        </div>
+    </div>
+</div>

@@ -208,6 +208,7 @@ let config = {
                                 appendChecked = false;
                             }
                         })
+                        debugger
                         PMAPI.closeIframeDialog(window.config.key, {
                             type:'temporaryQuery',
                             appendChecked:appendChecked,
