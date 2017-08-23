@@ -442,7 +442,7 @@ export const dgcService = {
         let classObj = {};
         let i = 1;
         for( let k in obj ){
-            let css = ('.hrader-bgColor-'+ i + '{background-color:'+ k +';}');
+            let css = ('.hrader-bgColor-'+ i + '{background-color:'+ this.colorRgb(k,0.7) +';}');
             for( let f of obj[k] ){
                 classObj[f] = ('hrader-bgColor-'+i);
             }
