@@ -239,6 +239,7 @@ export const PMAPI = {
      */
     sendToParent: function (data) {
         this.getRoot().postMessage(data, location.origin);
+        return this;
     },
 
     /**
@@ -253,6 +254,19 @@ export const PMAPI = {
         if (iframe.contentWindow) {
             iframe.contentWindow.postMessage(msg, location.origin);
         }
+        return this;
+    },
+
+    /**
+     * 将消息发送给所有的子框架
+     * @param msg
+     * @returns {PMAPI}
+     */
+    sendToAllChildren: function(msg) {
+        for(let i = 0; i < window.frames.length; i++){
+            this.sendToChild(window.frames[i], msg);
+        }
+        return this;
     },
 
     /**
