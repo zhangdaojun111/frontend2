@@ -35,6 +35,7 @@ import AttachmentControl from "../attachment-control/attachment-control";
 import SettingPrint from '../setting-print/setting-print'
 import Songrid from '../songrid-control/songrid-control';
 import Correspondence from '../correspondence-control/correspondence-control';
+import ContractControl from "../contract-control/contract-control";
 
 let config={
     template:'',
@@ -1212,8 +1213,12 @@ let config={
         addBtn(){
             this.el.find('.ui-btn-box').remove();
             //添加提交按钮
+            let $wrap=this.el.find("table").parent();
+            while(!($wrap.attr('id') == 'detail-form')){
+                $wrap=$wrap.parent();
+            }
             if(this.data.btnType == 'new' || this.data.btnType == 'edit'){
-                this.el.find("table").parent().parent().append(`<div class="noprint ui-btn-box"><div>
+                $wrap.append(`<div class="noprint ui-btn-box"><div>
                     <!--<button class="btn btn-normal mrgr" id="print">-->
                         <!--<span>打印</span>-->
                         <!--<div class="btn-ripple ripple"></div>-->
@@ -1224,7 +1229,7 @@ let config={
                     </button>
                 </div></div>`)
             }else if(this.data.btnType == 'view'){
-                this.el.find("table").parent().parent().append(`<div class="noprint ui-btn-box"><div >
+                $wrap.append(`<div class="noprint ui-btn-box"><div >
                     <!--<button class="btn btn-normal mrgr" id="print" >-->
                         <!--<span>打印</span>-->
                         <!--<div class="btn-ripple ripple"></div>-->
@@ -1237,7 +1242,7 @@ let config={
             }else if(this.data.btnType == 'none'){
 
             }else if(this.data.btnType == 'confirm'){
-                this.el.append(`<div class="noprint ui-btn-box"><div >
+                $wrap.append(`<div class="noprint ui-btn-box"><div >
                     <button class="btn btn-normal">
                         <span>确定</span>
                         <div class="btn-ripple ripple"></div>
@@ -1598,6 +1603,13 @@ let config={
                         let dateTimeControl = new DateTimeControl(data[key],actions);
                         dateTimeControl.render(single);
                         _this.data.childComponent[data[key].dfield] =  dateTimeControl;
+                        break;
+                    case 'editControl':
+                        data[key]['temp_id']=data['temp_id']['value'];
+                        data[key]['table_id']=data['table_id']['value'];
+                        let contractControl = new ContractControl(data[key]);
+                        contractControl.render(single);
+                        _this.data.childComponent[data[key].dfield] =  contractControl;
                         break;
                 }
             }

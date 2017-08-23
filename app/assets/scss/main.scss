@@ -75,3 +75,47 @@ html.main, html.main body {
 .bg_close {
     background-image: url("../images/framework/close.png");
 }
+.pointer {
+    cursor: pointer;
+}
+
+.clockwise{
+    width: 40px;
+    height:40px;
+    float: right;
+    line-height:40px;
+    text-align:center;
+    font-size:30px;
+    background:url("../images/dataGrid/clockwise.png") no-repeat center center white;
+}
+.counterclockwise{
+    width: 40px;
+    height:40px;
+    float: right;
+    line-height:40px;
+    text-align:center;
+    font-size:30px;
+    background:url("../images/dataGrid/counterclockwise.png") no-repeat center center;
+    background-size: 32px 32px;
+}
+.narrow,.enlarge,.counterclockwise{
+    width: 40px;
+    height: 40px;
+    margin-left: 25px;
+}
+.narrow{
+    background:url("../images/dataGrid/narrow.png") no-repeat center center;
+}
+.enlarge{
+    background:url("../images/dataGrid/enlarge.png") no-repeat center center;
+}
+.closeImg{
+    position: fixed;
+    right: 16px;
+    top: 16px;
+    z-index:500;
+    background:url("../images/dataGrid/icon_off.png") no-repeat center center;
+    height:30px;
+    width:30px;
+    border-radius:50%;
+}

@@ -1,3 +1,8 @@
+/**
+ *@author chenli
+ *@description 只读控件
+ */
+
 import Component from '../../../lib/component';
 import '../base-form/base-form.scss';
 import template from './readonly-control.html';
