@@ -85,6 +85,10 @@ export const dataTableService = {
     getAttachmentList(json){
         return HTTP.post('query_attachment_list',json);
     },
+    //保存编辑数据
+    saveEditFormData: function (data) {
+        return HTTP.post( 'add_update_table_data',data )
+    },
     setImgDataAndNum(res,imgData,imgSelect){
         imgData = res;
         this.imgTotal = res.rows.length;

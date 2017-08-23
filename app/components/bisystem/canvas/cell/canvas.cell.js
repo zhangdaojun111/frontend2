@@ -5,6 +5,7 @@
 import {BiBaseComponent} from '../../bi.base.component';
 import template from './canvas.cell.html';
 import './canvas.cell.scss';
+import Handlebars from 'handlebars';
 import Mediator from '../../../../lib/mediator';
 
 import {CellNormalComponent} from './normal/cell.normal';
@@ -37,6 +38,55 @@ const cellTypes = {
 let config = {
     template: template,
     actions: {},
+    afterRender() {
+        this.renderCell();
+        if (window.config.bi_user !== 'client') {
+            this.cellDragandResize();
+            this.el.on('mousedown', '.cell', function () {
+                self.cell.canvas.data.cellMaxZindex++;
+                let zIndex = self.cell.canvas.data.cellMaxZindex;
+                $(this).css('zIndex', zIndex);
+            }).on('mouseup', '.cell', function () {
+                self.cell.size.zIndex = self.cell.canvas.data.cellMaxZindex;
+            });
+        };
+        this.el.on('click', '.del-cell-btn', (event) => {
+            this.delCellLayout();
+            return false;
+        });
+
+        this.el.on('dragover', (event) => {
+            let ev = event.originalEvent;
+            ev.preventDefault();
+            return true;
+        });
+
+        this.el.on('drop', async (event) => {
+            let ev = event.originalEvent;
+            let data = JSON.parse(ev.dataTransfer.getData("Text"));
+            ev.dataTransfer.clearData("Text");
+            this.loadChartData([data.id]);
+            this.loadData = true;
+            return false;
+        });
+
+        // 设置cell zindex 为最大
+        let self = this;
+
+
+        // 返回(下穿)上一层
+        this.el.on('click', '.back-floor-btn', (event) => {
+            let deepComponentId = this.el.find('.cell-chart').attr('component');
+            Mediator.publish(`bi:deep${deepComponentId}:cell`, true);
+            return false;
+        })
+
+    },
+    /**
+     * 等CanvasCellComponent组件渲染完成后，在动态渲染组件
+     */
+    firstAfterRender() {}
+
 };
 
 export class CanvasCellComponent extends BiBaseComponent {
@@ -60,57 +110,6 @@ export class CanvasCellComponent extends BiBaseComponent {
             cellComponent.render(cellContainer);
         }
     }
-
-    afterRender() {
-        this.renderCell();
-        if (window.config.bi_user !== 'client') {
-            this.cellDragandResize();
-            this.el.on('mousedown', '.cell', function () {
-                self.cell.canvas.data.cellMaxZindex++;
-                let zIndex = self.cell.canvas.data.cellMaxZindex;
-                $(this).css('zIndex', zIndex);
-            }).on('mouseup', '.cell', function () {
-                self.cell.size.zIndex = self.cell.canvas.data.cellMaxZindex;
-            });
-        };
-        this.el.on('click', '.icon-group .del-cell-btn', (event) => {
-            this.delCellLayout();
-            return false;
-        });
-
-        this.el.on('dragover', (event) => {
-            let ev = event.originalEvent;
-            ev.preventDefault();
-            return true;
-        });
-
-        this.el.on('drop', async (event) => {
-            let ev = event.originalEvent;
-            let data = JSON.parse(ev.dataTransfer.getData("Text"));
-            ev.dataTransfer.clearData("Text");
-            this.loadChartData([data.id]);
-            this.loadData = true;
-            return false;
-        });
-
-        // 设置cell zindex 为最大
-        let self = this;
-
-        // 返回(下穿)上一层
-        this.el.on('click', '.back-floor-btn', (event) => {
-            let deepComponentId = this.el.find('.cell-chart').attr('component');
-            Mediator.publish(`bi:deep${deepComponentId}:cell`, true);
-            return false;
-        })
-
-    }
-
-    /**
-     * 等CanvasCellComponent组件渲染完成后，在动态渲染组件
-     */
-    firstAfterRender() {
-    };
-
     /**
      *画布块拖拽，缩放
      */
@@ -123,9 +122,9 @@ export class CanvasCellComponent extends BiBaseComponent {
             stop: (event, ui) => {
                 this.cell.size.left = ui.position.left;
                 this.cell.size.top = ui.position.top;
-                this.cell.size.zIndex = this.cell.canvas.data.cellMaxZindex
             }
         };
+
         const resizeOption = {
             grid: [10, 10],
             stop: (event, ui) => {
@@ -159,8 +158,9 @@ export class CanvasCellComponent extends BiBaseComponent {
         this.loadData = false;
         this.cell['chart'] = res[0];
         this.data = res[0];
+        this.data.biUser = window.config.bi
         this.cell.chart_id = chartId[0];
-        this.data.biUser = window.config.bi_user === 'client' ? false : true;
+        this.data.biUser = true;
         this.reload();
     }
 

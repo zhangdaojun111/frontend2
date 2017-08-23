@@ -164,6 +164,8 @@ let config = {
         editRowTotal: 0,
         //编辑已经保存的数量
         editRowNum: 0,
+        //编辑保存参数
+        saveEditObjArr: []
     },
     //生成的表头数据
     columnDefs: [],
@@ -1557,7 +1559,7 @@ let config = {
                     this.actions.toogleEdit();
                 } )
                 this.el.find( '.edit-btn-cancel' ).on( 'click',()=>{
-                    this.actions.toogleEdit();
+                    this.actions.onEditSave(true);
                 } )
                 this.el.find( '.edit-btn-save' ).on( 'click',()=>{
                     //保存
@@ -1601,7 +1603,7 @@ let config = {
             }
         },
         //编辑模式保存数据
-        onEditSave: function () {
+        onEditSave: function (cancel) {
             //比对当前值与初始值的差别
             this.agGrid.gridOptions.api.stopEditing(false);
             let changedRows = this.actions.getChangedRows(this.agGrid.data.rowData);
@@ -1612,9 +1614,23 @@ let config = {
                 i++;
             }
             this.data.editRowTotal = i;
+            if( cancel ){
+                if( this.data.editRowTotal > 0 ){
+                    msgBox.confirm( '数据已经修改，是否取消？' ).then( r=>{
+                        if( r ){
+                            this.actions.toogleEdit();
+                            this.agGrid.gridOptions.api.setRowData( this.data.rowData );
+                        }
+                    } )
+                }else {
+                    this.actions.toogleEdit();
+                }
+                return;
+            }
             if( this.data.editRowTotal == 0 ){
                 this.actions.toogleEdit();
             }
+            this.data.saveEditObjArr = [];
             for(let k in changedRows){
                 let changed = changedRows[k];
                 let real_id = changed['data']['real_id'];
@@ -1638,7 +1654,33 @@ let config = {
                             parent_temp_id:data['parent_temp_id']['value']
                         };
                         let targetRow = changedRows[real_id];
-                        this.actions.saveEdit(targetRow,obj);
+                        this.data.saveEditObjArr.push( this.actions.saveEdit(targetRow,obj) )
+                        if( this.data.saveEditObjArr.length == this.data.editRowTotal ){
+                            let saveArr = []
+                            for( let o of this.data.saveEditObjArr ){
+                                saveArr.push( dataTableService.saveEditFormData( o ) )
+                            }
+                            Promise.all(saveArr).then((res)=> {
+                                let j = 0;
+                                let wrong = 0;
+                                let errorText = '';
+                                for( let r of res ){
+                                    if( r.succ == 1 ){
+                                        j++;
+                                    }else {
+                                        wrong++;
+                                        errorText += (wrong + '、' + r.error);
+                                    }
+                                }
+                                if( wrong!=0 ){
+                                    msgBox.alert( wrong + '条数据保存失败，失败原因：' + errorText )
+                                }else {
+                                    msgBox.showTips( '执行成功！' )
+                                }
+                                this.actions.toogleEdit();
+                            })
+                            HTTP.flush();
+                        }
                     }
                 } )
                 HTTP.flush();
@@ -1650,17 +1692,7 @@ let config = {
             json['focus_users'] = JSON.stringify(json['focus_users']);
             json['cache_new'] = JSON.stringify(json['cache_new']);
             json['cache_old'] = JSON.stringify(json['cache_old']);
-            FormService.saveAddpageData( json ).then( res=>{
-                if( res.succ == 1 ){
-                    msgBox.showTips( res.error );
-                }else {
-                    msgBox.alert( res.error );
-                }
-                this.data.editRowNum++;
-                if( this.data.editRowTotal == this.data.editRowNum ){
-                    this.actions.toogleEdit();
-                }
-            } )
+            return json;
         },
         //比对当前值与初始值的差别
         getChangedRows(rowData){
@@ -1782,7 +1814,7 @@ let config = {
                 if( res.success ){
                     msgBox.showTips( '删除成功' )
                 }else {
-                    if( res.error.indexOf( '使用了所删行的内容' ) != -1 ){
+                    if( res.queryParams ){
                         msgBox.confirm( res.error + '是否前往处理？' ).then( r=>{
                             if( r ){
                                 let info = res.table_info;
