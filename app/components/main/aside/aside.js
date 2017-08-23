@@ -148,7 +148,14 @@ let config = {
             });
         },
         showInfoSet:function () {
-            PersonSetting.show();
+            //检查页面是否已创建
+            let $page = $(document).find("div#personal-setting-page");
+            if($page.length !== 0){
+                $page.focus();
+            }else{
+                //打开个人设置页面
+                PersonSetting.show();
+            }
         },
         initAvatar:function () {
             let src = this.data.avatar;
@@ -173,8 +180,7 @@ let config = {
          * 编辑常用菜单
          */
         editCommonUse: function () {
-            // commonuse.show();
-            this.allMenu.actions.startEditModel();
+            commonuse.show();
         },
         resetAvatar:function(){
             let $img = this.el.find("img.set-info");
@@ -208,6 +214,9 @@ let config = {
                 this.actions.showCommonMenu();
             }
         }
+        Mediator.on("personal:setAvatar",() => {
+            this.actions.resetAvatar();
+        })
     },
     firstAfterRender: function() {
         Mediator.on('aside:size', (order) => {
@@ -220,9 +229,7 @@ let config = {
         Mediator.on('commonuse:change', () => {
             this.actions.showCommonMenu(true);
         });
-        Mediator.on("personal:setAvatar",() => {
-            this.actions.resetAvatar();
-        });
+
         //上传初始化
         let state = 'on';
         let uploader = new Uploader();
@@ -291,7 +298,7 @@ let config = {
             //deleteFileByCode
             let code = Object.keys(temp)[0];
             uploader.deleteFileByCode(code,'/delete_attachment/');
-         });
+        });
     },
     beforeDestory: function() {
         Mediator.removeAll('aside');
