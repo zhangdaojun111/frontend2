@@ -102,7 +102,7 @@ Mediator.subscribe('workflow:getflows', (res)=> {
         form_id: res.form_id,
         flow_id:res.flow_id,
         is_view: 0,
-        from_approve: 0,
+        from_workflow:1,
         from_focus: 0,
         btnType:'none',
         table_id: obj.table_id,
