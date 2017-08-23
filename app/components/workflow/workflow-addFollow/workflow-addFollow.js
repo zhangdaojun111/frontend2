@@ -86,16 +86,23 @@ let config={
             }
         });
 
+
         //全选，反选btn
         this.el.on('click','#allSelector',function(){
             var inputs=_this.el.find('#staffMulti').find('.remove');
             if($(this).prop('checked')){
+                for (let i = 0;i<inputs.length;i++){
+                    if($(inputs[i]).hasClass('checked')){
+                        inputs.splice(i,1);
+                        i--;
+                    }
+                }
                 inputs.each(function(i,item){
-                    $(item).addClass('checked');
-                    Mediator.publish('workflow:pubCheckSingle',{
-                        id:$(item).attr('value'),
-                        name:$(item).attr('name')
-                    });
+                        $(item).addClass('checked');
+                        Mediator.publish('workflow:pubCheckSingle',{
+                            id:$(item).attr('value'),
+                            name:$(item).attr('name')
+                        });
                 })
             }else{
                 inputs.each(function(i,item){
