@@ -2056,6 +2056,7 @@ let config = {
             }
             //富文本字段
             if( data.colDef.real_type == fieldTypeService.UEDITOR ){
+                msgBox.alert( data.value )
             }
             //合同编辑器
             if( data.colDef.real_type == fieldTypeService.TEXT_COUNT_TYPE ){
