@@ -35,6 +35,7 @@ import AttachmentControl from "../attachment-control/attachment-control";
 import SettingPrint from '../setting-print/setting-print'
 import Songrid from '../songrid-control/songrid-control';
 import Correspondence from '../correspondence-control/correspondence-control';
+import ContractControl from "../contract-control/contract-control";
 
 let config={
     template:'',
@@ -1599,6 +1600,13 @@ let config={
                         let dateTimeControl = new DateTimeControl(data[key],actions);
                         dateTimeControl.render(single);
                         _this.data.childComponent[data[key].dfield] =  dateTimeControl;
+                        break;
+                    case 'editControl':
+                        data[key]['temp_id']=data['temp_id']['value'];
+                        data[key]['table_id']=data['table_id']['value'];
+                        let contractControl = new ContractControl(data[key]);
+                        contractControl.render(single);
+                        _this.data.childComponent[data[key].dfield] =  contractControl;
                         break;
                 }
             }
