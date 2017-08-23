@@ -2046,13 +2046,19 @@ let config = {
                 json["table_id"] = this.data.tableId;
                 json[(data.data.action?"temp_id":"real_id")] = data.data._id;
                 dataTableService.getAttachmentList( json ).then( res => {
-                    // let imgData,imgSelect;
-                    // let obj=dataTableService.setImgDataAndNum(res,imgData,imgSelect);
-                    // imgData=obj.imgData;
-                    // imgSelect=obj.imgSelect;
-                    // this.setImgSize();
-                    PictureAttachment.data.res=res;
-                } )
+                    let obj=dataTableService.setImgDataAndNum(res,{},'');
+                    PictureAttachment.data.imgData=obj.imgData;
+                    PictureAttachment.data.imgSelect=obj.imgSelect;
+                    PictureAttachment.data.imgTotal=obj.imgTotal;
+                    PictureAttachment.data.imgNum=obj.imgNum;
+                    PictureAttachment.data.rows=obj.imgData.rows;
+                    PMAPI.openDialogByComponent(PictureAttachment,{
+                        title:'图片附件',
+                        width: 1234,
+                        height: 987,
+                    })
+                })
+                HTTP.flush();
             }
             //富文本字段
             if( data.colDef.real_type == fieldTypeService.UEDITOR ){

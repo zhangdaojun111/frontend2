@@ -22,7 +22,8 @@ let config = {
                 EndpointStyles: [{ fill: 'transparent' }, { fill: 'transparent' }],
                 Endpoints: [["Dot", { radius: 4 }], ["Dot", { radius: 4 }]],
                 Container: this.el.find('.workflow-draw-box'),
-                ConnectionsDetachable: false
+                ConnectionsDetachable: false,
+
             });
             this.actions.drawWorkFlow();
         },
@@ -40,8 +41,8 @@ let config = {
                     value.can_reject=value.can_reject;
                     let {id,text,positionleft:left,positiontop:top,startPoint,endPoint,state,is_add_handler,add_handler_info,can_reject}=value,
                         style = "STATE_STYLE_" + state,
-                        theBestTop = __this.actions.getTheBestTop(),
-                        theBestLeft = __this.actions.getTheBestLeft() - 150,
+                        theBestTop = __this.actions.getTheBestTop()-10,
+                        theBestLeft = __this.actions.getTheBestLeft()-10,
                         isMaodian = id.indexOf("maodian") != -1,
                         styleClass = "",
                         css = {},

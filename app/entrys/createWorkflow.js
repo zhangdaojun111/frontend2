@@ -104,9 +104,10 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         FormEntrys.createForm({
             reload_draft_data:is_draft,
             table_id:msg.tableid,
+            flow_id:msg.id,
             el:'#place-form',
             real_id:'',
-            form_workflow:1,
+            from_workflow:1,
             form_id:msg.formid,
             btnType:'none',
             is_view:0
