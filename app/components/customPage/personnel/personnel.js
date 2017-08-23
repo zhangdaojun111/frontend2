@@ -100,8 +100,8 @@ let config = {
 
             Promise.all([preferenceData, headerData]).then((res)=> {
                 dgcService.setPreference( res[0],this.data );
-                let oprate = {headerName: '操作',field: 'myOperate', width: 120,suppressFilter: true,suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
-                    return '<div style="text-align:center;"><a class="view" style="color:#337ab7;">查看</a> | <a class="edit" style="color:#337ab7;">编辑</a><div>';
+                let oprate = {headerName: '操作',field: 'myOperate', width: 160,suppressFilter: true,suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
+                    return '<div style="text-align:center;"><a class="view" style="color:#337ab7;">查看</a> | <a class="edit" style="color:#337ab7;">编辑</a> | <a class="jurisdiction" style="color:#337ab7;">权限</a><div>';
                 }}
                 this.data.columnDefs = [
                     dgcService.numberCol,
@@ -627,6 +627,22 @@ let config = {
                     }
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
                     this.actions.openSourceDataGrid( url,'查看' )
+                }
+                if( $event.event.srcElement.className == 'jurisdiction' ){
+                    let obj = {
+                        table_id: this.data.tableId,
+                        btnType: 'view',
+                        real_id: $event.data._id,
+                    }
+                    // let url = dgcService.returnIframeUrl( '/form/index/',obj );
+                    PMAPI.openDialogByIframe(`/iframe/jurisdiction/`,{
+                        width:500,
+                        height:700,
+                        title:`权限`,
+                        modal:true
+                    },{obj}).then(res=>{
+
+                    })
                 }
             }
         },
