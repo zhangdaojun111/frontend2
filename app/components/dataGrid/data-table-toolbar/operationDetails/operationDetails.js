@@ -11,10 +11,18 @@ import './operationDetails.scss'
 let config = {
     template: template,
     data: {
-
+        type:'',
+        content:'',
     },
     actions: {
         afterGetMsg:function() {
+            if(this.data.type == 'cache_detail') {
+                this.el.find('.cache-detail-content').css('display','block')
+                this.el.find('.cache-detail-td').html(this.data.content);
+            } else {
+                this.el.find('.operation-content').css('display','block')
+                this.el.find('.operation-td').html(this.data.content);
+            }
 
         }
     },
