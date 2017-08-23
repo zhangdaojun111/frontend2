@@ -73,52 +73,14 @@ let css = `
         width: 300px;
         height: 50px;
         z-index: 10;
-        padding-left: 20px;
-        padding-right: 70px;
+        padding:0 20px;
         background: rgba(0,0,0,0.3);
         padding-top: 5px;
+        display:flex;
+        align-items:center;
+        justify-content: center;
     }
-    .clockwise{
-        width: 40px;
-        height:40px;
-        float: right;
-        line-height:40px;
-        text-align:center;
-        font-size:30px;
-        background:url('\./clockwise.png') no-repeat center center white;
-    }
-    .counterclockwise{
-        width: 40px;
-        height:40px;
-        float: right;
-        line-height:40px;
-        text-align:center;
-        font-size:30px;
-        background:url('\./counterclockwise.png') no-repeat center center;
-        background-size: 32px 32px;
-    }
-    .narrow,.enlarge,.closeImg{
-        width: 40px;
-        height: 40px;
-        float: right;
-        margin-left: 25px;
-    }
-    .narrow{
-        background:url('\./narrow.png') no-repeat center center;
-    }
-    .enlarge{
-        background:url('\./enlarge.png') no-repeat center center;
-    }
-    .closeImg{
-        position: fixed;
-        right: 16px;
-        top: 16px;
-        z-index:500;
-        background:url('\./icon_off.png') no-repeat center center;
-        height:30px;
-        width:30px;
-        border-radius:50%;
-    }
+   
     .closeImg:hover{
         background-color:darkred;
     }`;
@@ -188,7 +150,8 @@ let AttachmentList = {
             HTTP.flush();
         });
 
-        this.el.on('click','.mask-div .closeImg',function(event){
+        this.el.on('click','.mask-div,.closeImg',function(){
+            console.log('没触发么');
             _this.el.find('.my-mask').hide();
             _this.data.dragStart=false;
             $(document).off("mousewheel DOMMouseScroll");
@@ -225,10 +188,10 @@ let AttachmentList = {
         }).on('click','.enlarge',function(){
             _this.data.imgScale+=0.1;
             _this.el.find(".img-pre").css("transform","translate(-50%,-50%) rotate("+_this.data.rotateNo+"deg) scale("+_this.data.imgScale+")");
-        }).on('click','.counterclockwise',function(){
+        }).on('click','.counterclockwise',function(event){
             _this.data.rotateNo-=90;
             _this.data.imgScale=1;
-            $($event.target).parent().parent().find(".img-pre").css({"transform":"translate(-50%,-50%) rotate("+_this.data.rotateNo+"deg) scale("+_this.data.imgScale+")","top":"50%","left":"50%"});
+            $(event.target).parent().parent().find(".img-pre").css({"transform":"translate(-50%,-50%) rotate("+_this.data.rotateNo+"deg) scale("+_this.data.imgScale+")","top":"50%","left":"50%"});
         })
     },
     beforeDestory(){
