@@ -22,7 +22,7 @@ let config = {
             if(this.favoDel){
                 del.hide();
                 oper.text("");
-                 oper.addClass("workflow-icon");
+                oper.addClass("workflow-icon");
                 this.favoDel = false;
             }else{
                 oper.text("取消");
@@ -40,9 +40,8 @@ let config = {
                     this.data[1].rows.splice(i,i+1);
                 }
             }
-            let target = e.target;
-            let parent = $(target).parent().parent().parent();
-            parent.remove();
+            let parents = el.parents('div')[0];
+            parents.remove();
             this.actions.init();
         },
         init(){
@@ -56,13 +55,43 @@ let config = {
                     }
                     flag=true;
                 }
-                flag?$('#addFav').show():$('#addFav').hide();
+                if(!this.boxshow){
+                    flag?$('#addFav').show():$('#addFav').hide();
+                }
             }
+        },
+        addFav(e){
+            Mediator.publish('workflow:addFav', this.data.id);
+            let len = this.data[1].rows.length;
+            for(let i = 0;i<this.data[0].data.length;i++){
+                for(let j = 0;j<this.data[0].data[i].children.length;j++){
+                    if(this.data[0].data[i].children[j].id == this.data.id){
+                        this.data[1].rows[len] = {
+                            id : this.data[0].data[i].children[j].id,
+                            wf_form_id : this.data[0].data[i].children[j].form_id,
+                            wf_name : this.data[0].data[i].children[j].label,
+                            wf_table_id : this.data[0].data[i].children[j].table_id
+                        };
+                    };
+                }
+            }
+            this.el.find('.J_workflow-content').children().remove();
+            this.data[1].rows.forEach((row)=>{
+                this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
+            });
+            this.actions.init();
+        },
+        contentClose(){
+            this.boxshow = true;
+            this.actions.init();
+            this.favoDel = true;
+            this.actions.operate();
         }
     },
     afterRender: function() {
         this.favoDel = false;
         this.actions.init();
+        this.boxshow = true;
         //添加流程下来菜单
         this.append(new WorkFlowTree(this.data[0]), this.el.find('.J_select-container'));
         //添加常用工作流组件
@@ -77,21 +106,13 @@ let config = {
         });
         //addFav
         this.el.on('click','#addFav',(e)=>{
-            Mediator.publish('workflow:addFav', this.data.id);
-            for(let i = 0;i<this.data[0].data.length;i++){
-                for(let j = 0;j<this.data[0].data[i].children.length;j++){
-                    if(this.data[0].data[i].children[j].id == this.data.id){
-                        this.data[1].rows.push(this.data[0].data[i].children[j]);
-                    };
-                }
-            }
-            this.actions.init();
-            $('#addFav').hide();
+            this.actions.addFav(e);
         });
 
         //订阅btn click
         Mediator.subscribe('workflow:choose', (msg)=> {
             this.data.id=msg.id;
+            this.boxshow = false;
             this.actions.init();
             this.el.find("#workflow-box").hide();
             $("#workflow-content").show();
@@ -100,7 +121,9 @@ let config = {
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             WorkFlow.show(msg.data[0],'#drawflow');
         })
-
+        Mediator.subscribe("workflow:contentClose",(msg)=>{
+            this.actions.contentClose();
+        })
     },
     beforeDestory: function(){
        

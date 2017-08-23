@@ -29,7 +29,13 @@ let config = {
         range: {
             l:100,
             r:5000
-        }
+        },
+        //表级操作
+        tableOperationData: [],
+        //是否为超级管理员
+        isSuperUser: 0,
+        //agGrid配置
+        gridOptions: null
     },
     actions: {
         //接受rows值和total值
@@ -53,6 +59,7 @@ let config = {
         },
         //设置不可点击
         setDisable: function () {
+            // debugger
             this.actions.removeCanNotClick( 'goFirst' );
             this.actions.removeCanNotClick( 'goPre' );
             this.actions.removeCanNotClick( 'goNext' );
@@ -179,11 +186,83 @@ let config = {
             this.data.total = total;
             this.data.currentPage = currentPage;
             this.actions.resetPagination( this.data.total );
+        },
+        //表级操作
+        tableOperate: function () {
+            if( this.data.isSuperUser == 1 ){
+                this.el.find( '.tableOperateSelect' ).on( 'change',()=>{
+                    let operate = this.el.find( '.tableOperateSelect' )[0];
+                    if( operate.value != '操作' ){
+                        for( let o of this.data.tableOperationData ){
+                            if( o.name == operate.value ){
+                                this.actions.tableOperateFun( o.beAddress,o.addressss );
+                                break;
+                            }
+                        }
+                    }
+                    operate.value = '操作';
+                } )
+            }
+        },
+        //表级操作
+        tableOperateFun: function (opt,opera) {
+            if(opera != 0){
+                let address = JSON.parse(opera);
+                let deleteListRel = [];
+                let rows = this.data.gridOptions.api.getSelectedRows();
+                for( let r of rows ){
+                    if( r._id ){
+                        deleteListRel.push( r._id );
+                    }
+                }
+                //需弹框的表级操作
+                if(address['feAddress']!=''){
+                    if(address['feAddress']=='check'){
+                        return;
+                    }
+                    let beAddress=address['beAddress'];
+                    let fun=address['feAddress'].split('?')[0];
+                    let params=JSON.parse(address['feAddress'].split('?')[1]);
+                    switch(fun){
+                        //操作
+                        case 'funA':{
+                            break;
+                        }
+                        //操作B
+                        case 'funB':{
+                            break;
+                        }
+                    }
+                }else{//不需弹框的表级操作-刷新cache
+                    msgBox.showTips('已经向服务器发送请求');
+                    if(address['beAddress'] != ''){
+                        if(address['beAddress'].indexOf('method=get')!=-1){
+                            $('<a href="'+address['beAddress']+'" ></a>')[0].click();
+                        }else {
+                            let obj = {
+                                table_id:this.data.tableId,
+                                selectedRows:JSON.stringify(deleteListRel)
+                            }
+                            dataTableService.tableOperationRefresh( obj ).then( res=>{
+                                if(res['success']==1){
+                                    msgBox.showTips('发送成功！');
+                                }else if(res['success']==0){
+                                    msgBox.alert('发送请求失败！错误是'+res['error']);
+                                }
+                            } )
+                            HTTP.flush();
+                        }
+                    }
+                }
+
+            }
         }
     },
     afterRender: function (){
         this.actions.resetPagination( this.data.total );
         this.actions.addClick();
+        //表级操作
+        this.actions.tableOperate();
     }
 };
 class dataPagination extends Component {

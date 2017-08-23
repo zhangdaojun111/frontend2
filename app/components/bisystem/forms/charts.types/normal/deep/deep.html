@@ -1,0 +1,30 @@
+{{#if deepShow}}
+<div class="form-deep-table">
+    <table border-collapse="border-collapse" border-spacing="0" class="table">
+        <thead>
+            <tr>
+                <th class="index">序列</th>
+                <th class="xz">X轴字段</th>
+                <th class="tool">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        {{#each deeps}}
+            <tr>
+                <td class="index">{{@index}}</td>
+                <td class="xz">{{name}}</td>
+                <td class="tool">
+                    <a href="javascript:;" class="del-deep-btn">删除</a>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <div class="form-deep-xAxis"></div>
+    <div class="save-new save-btn">
+        <button>新增</button>
+    </div>
+</div>
+{{else}}
+    <div class="form-deep-xAxis"></div>
+{{/if}}

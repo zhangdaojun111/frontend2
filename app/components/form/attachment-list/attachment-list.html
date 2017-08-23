@@ -1,0 +1,45 @@
+<div class="attachment-list">
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>附件名称</th>
+            <th>附件操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each list}}
+            <tr>
+                <td>{{ this.file_name }}</td>
+                <td>
+                    <a style="color: blue;" href="/download_attachment/?file_id={{this.file_id}}&download=1&dinput_type={{dinput_type}}">下载</a>
+                    {{#if this.isPreview}}
+                        {{#if this.isImg}}
+                            <a style="color:blue;" class="ui-href pre" data-id="{{this.file_id}}" href="javascript:;">预览</a>
+                        {{else}}
+                            <a style="color:blue;" class="ui-href" href="/download_attachment/?file_id={{this..file_id}}&download=0&dinput_type={{dinput_type}}" target="_blank">预览</a>
+                        {{/if}}
+                    {{else}}
+                        <a style="color: grey;"href="javascript:void(0);">预览</a>&nbsp;&nbsp;
+                    {{/if}}
+                    {{#if is_view}}
+                        {{#unless isFormAbout}}
+                             <a style="color: blue;" class="del" data-id="{{this.file_id}}"  href="javascript:void(0);">删除</a>
+                        {{/unless}}
+                    {{/if}}
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <!--预览界面-->
+    <div class="my-mask" style="display: none">
+        <div class="mask-div"></div>
+        <div class="imgwrapper"><img class="img-pre"  [src]="imgSrc" alt=""></div>
+        <ul class="rotate-button">
+            <li class="narrow"></li>
+            <li class="enlarge"></li>
+            <li class="counterclockwise"></li>
+        </ul>
+        <div class="closeImg"></div>
+    </div>
+</div>

@@ -10,7 +10,7 @@ import {SysSetting} from "../system-setting/system-setting"
 import {postMessageUtil} from '../post-message/post-message';
 import {GlobalSearch} from '../global-search/global-search';
 import {OnlineDisplay} from "../online-users/online-users"
-import {GlobalService} from "../../../services/main/globalService"
+
 
 let config = {
     template: template,
@@ -62,7 +62,8 @@ let config = {
             SysSetting.show();
         },
         refreshOnlineNum: function (data) {
-            this.el.find('.online-num span').text(data.online_user_num);
+            let title = "在线人数：" + data.online_user_num;
+            this.el.find('a.online-num').attr("title",title);
         },
 
         displayMessageUnread: function (data) {
@@ -209,7 +210,7 @@ let config = {
             }
         }, {
             event: 'click',
-            selector: '.system-setting',
+            selector: '.setting',
             callback: function () {
                 this.actions.goSystemSetting();
             }

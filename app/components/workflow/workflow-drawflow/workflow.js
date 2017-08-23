@@ -9,7 +9,10 @@ import jsplumb from 'jsplumb';
 let config = {
     template: template,
     data: {
-        title:'this is workflow'
+        title:'this is workflow',
+        nodeflowSize: 1,
+        containerwidth: '100%',
+        containerheight: '100px',
     },
     actions: {
         init(){
@@ -484,7 +487,8 @@ let WorkFlow={
     createFlow(o){
         (async function () {
             return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
-                flow_id:o.flow_id
+                flow_id:o.flow_id,
+                record_id:o.record_id
             }});
         })()
         .then(msg=>{
