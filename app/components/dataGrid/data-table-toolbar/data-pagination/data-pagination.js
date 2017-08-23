@@ -59,6 +59,7 @@ let config = {
         },
         //设置不可点击
         setDisable: function () {
+            // debugger
             this.actions.removeCanNotClick( 'goFirst' );
             this.actions.removeCanNotClick( 'goPre' );
             this.actions.removeCanNotClick( 'goNext' );

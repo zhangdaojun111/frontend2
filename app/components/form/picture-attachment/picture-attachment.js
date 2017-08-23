@@ -52,7 +52,13 @@ let css = `.imgList {
     opacity: 0.7;
     cursor: pointer;
 }
-
+.showImg{
+    width:100%;
+    height:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 #myImg {
     width: auto;
     height: auto;
@@ -61,8 +67,11 @@ let css = `.imgList {
 }
 #ImgToShow {
     display: block;
-    position: absolute;
-}`;
+    max-width:100%;
+    max-height:100%;
+}
+,
+`;
 let PictureAttachment = {
     template: template.replace(/\"/g, '\''),
     data: {
@@ -70,93 +79,52 @@ let PictureAttachment = {
         imgData:'',
         imgSelect:'',
         res:'',
+        seletNum:0,
     },
     actions:{
-        setImageNum(imgData,val){
-            for (let i = 0; i < imgData.rows.length; i++) {
-                if (imgData.rows[i]["file_id"] == val) {
-                    this.data.imgNum=i;
-                    return i;
-                }
-            }
-            return null;
+        setBackground(){
+            this.el.find('.select-img').each((index,obj)=>{
+                let color=$(obj).data('imgselect') == this.data.imgSelect? '#d4d4d4' : '#fff';
+                $(obj).css('background-color',color);
+            });
         },
-        setImgData(imgData){
-            for (let i = 0; i < imgData.rows.length; i++) {
-                imgData.rows[i]["isSelect"] = (i == this.data.imgNum);
-            }
+        createUrl(fieldId){
+            let url=`/download_attachment/?file_id=${fieldId}&download=0`
+            this.data.imgShow.attr('src',url)
+            this.data.myImg.attr('src',url)
         },
-        //图片预览调整尺寸
-        sizeImageWin(){
-            let oldWidth = this.el.find("#myImg").width();
-            let oldHeight = this.el.find("#myImg").height();
-            let fWidth = this.el.find(".imgContain").width();
-            let fHeight = this.el.find(".imgContain").height();
-
-            if (( oldWidth >= fWidth && oldHeight < fHeight ) || ( oldWidth < fWidth && oldHeight < fHeight && ( oldWidth / fWidth >= oldHeight / fHeight ) ) || ( oldWidth >= fWidth && oldHeight >= fHeight && ( oldWidth / fWidth >= oldHeight / fHeight ) )) {
-                this.el.find("#ImgToShow").css({
-                    "width": fWidth,
-                    "height": "auto",
-                    "top": ( fHeight - fWidth / oldWidth * oldHeight ) / 2,
-                    "left": 0
-                });
-            } else {
-                this.el.find("#ImgToShow").css({
-                    "width": "auto",
-                    "height": fHeight,
-                    "top": 0,
-                    "left": ( fWidth - fHeight / oldHeight * oldWidth ) / 2
-                });
-            }
-        },
-        setImgDataAndNum(res,imgData,imgSelect){
-            imgData = res;
-            this.data.imgTotal = res.rows.length;
-            if(imgData){
-                for( let i=0;i<imgData.rows.length;i++ ){
-                    imgData.rows[i]["isSelect"] = false;
-                }
-                if( imgData.rows[0] ){
-                    imgData.rows[0]["isSelect"] = true;
-                    imgSelect = imgData.rows[0].file_id;
-                }
-            }
-            this.data.imgNum = 0;
-            return {imgSelect:imgSelect,imgData:imgData};
-        },
-        imgClickChange(val) {
-            let imgNum = this.actions.setImageNum(this.data.imgData,val)||this.data.imgNum;
-            this.data.imgSelect = this.data.imgData.rows[imgNum].file_id;
-            this.actions.setImgData(this.data.imgData);
-            this.actions.sizeImageWin();
-            this.reload();
-        },
-        getImageNum(num){
-            if (num == 1) {
-                this.data.imgNum = (this.data.imgNum == 0)? this.data.imgTotal - 1 : this.data.imgNum - 1;
-            } else {
-                this.data.imgNum = (this.data.imgNum == this.data.imgTotal - 1)? 0 : this.data.imgNum + 1;
-            }
-            return this.data.imgNum;
+        changeImg(id,index){
+            this.actions.createUrl(id);
+            this.data.imgSelect=id;
+            this.data.seletNum=index;
+            this.actions.setBackground();
         }
     },
     afterRender(){
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
         let _this=this;
-        this.el.find('.select-img').each((index,obj)=>{
-           $(obj).get(0).style.background=$(obj).data('imgSelect') == _this.data.imgSelect? '#d4d4d4' : '#fff';
-        });
-        this.actions.sizeImageWin();
-        this.el.on('click','.img-click',function(){
-            console.log($(this).data('fileId'));
-            _this.actions.imgClickChange($(this).data('fileId'));
+        this.actions.setBackground();
+        this.data.imgShow=this.el.find('#ImgToShow');
+        this.data.myImg=this.el.find('#myImg');
+        this.data.len=this.data.rows.length;
+        this.el.on('click','.select-img',function(){
+            _this.actions.changeImg($(this).data('imgselect'),$(this).index());
         })
         this.el.on('click','.changeBtn',function(){
             let num =$(this).data('num');
-            let imgNum = _this.actions.getImageNum(num);
-            _this.data.imgSelect = _this.data.imgData.rows[imgNum].file_id;
-            _this.actions.setImgData(_this.data.imgData);
-            _this.reload();
+            if(num==1){
+                if(_this.data.seletNum-1 >= 0){
+                    _this.actions.changeImg(_this.data.rows[_this.data.seletNum-1]['file_id'],_this.data.seletNum-1);
+                }else{
+                    _this.actions.changeImg(_this.data.rows[_this.data.rows.length-1]['file_id'],_this.data.rows.length-1);
+                }
+            }else{
+                if(_this.data.seletNum+1 <= _this.data.rows.length-1){
+                    _this.actions.changeImg(_this.data.rows[_this.data.seletNum+1]['file_id'],_this.data.seletNum+1);
+                }else{
+                    _this.actions.changeImg(_this.data.rows[0]['file_id'],0);
+                }
+            }
         })
     },
     beforeDestory(){
