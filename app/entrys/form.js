@@ -75,7 +75,7 @@ let FormEntrys = {
         if(res["data"] && res["data"]["flow_data"].length != 0) {
             if(this.flowId){
                 let selectItems = res["data"]["flow_data"];
-                for(let item of this.selectItems){
+                for(let item of selectItems){
                     if(item["flow_id"] == this.flowId){
                         this.formId = item["form_id"];
                     }
