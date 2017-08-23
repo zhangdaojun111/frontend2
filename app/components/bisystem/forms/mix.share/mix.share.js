@@ -24,6 +24,7 @@ let config = {
         let p1 = this.getChartSource();
         let p2 = this.getChartIcon();
         Promise.all([p1,p2]).then((result) => {
+            this.messager(`${this.data.assortment}-chart-editMode-source`, {'sources': []});
             Mediator.publish('bi:chart:form:update', {type:'source_icon_load_finish', data:[]});
         })
     }
