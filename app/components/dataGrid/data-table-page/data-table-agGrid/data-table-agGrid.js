@@ -26,6 +26,7 @@ import exportSetting from '../../data-table-toolbar/data-table-export/data-table
 import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 import AttachmentList from "../../../form/attachment-list/attachment-list";
 import PictureAttachment from "../../../form/picture-attachment/picture-attachment";
+import PersonSetting from "../../../main/personal-settings/personal-settings";
 
 
 let config = {
@@ -2103,19 +2104,23 @@ let config = {
             //内置相关查看原始数据用
             if( data.event.srcElement.id == 'relatedOrBuildin' ){
                 console.log( "内置相关穿透" )
-                let obj = {
-                    tableId: data.colDef.source_table_id,
-                    tableName: data.colDef.source_table_name||'',
-                    parentTableId: this.data.tableId,
-                    rowId: data.data._id,
-                    base_buildin_dfield: data.colDef.source_field_dfield,
-                    source_field_dfield: data.colDef.base_buildin_dfield,
-                    tableType: 'source_data',
-                    viewMode: 'source_data'
+                if( data.colDef.is_user ){
+                    PersonSetting.showUserInfo({name:data.value});
+                }else {
+                    let obj = {
+                        tableId: data.colDef.source_table_id,
+                        tableName: data.colDef.source_table_name||'',
+                        parentTableId: this.data.tableId,
+                        rowId: data.data._id,
+                        base_buildin_dfield: data.colDef.source_field_dfield,
+                        source_field_dfield: data.colDef.base_buildin_dfield,
+                        tableType: 'source_data',
+                        viewMode: 'source_data'
+                    }
+                    let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
+                    let winTitle = this.data.tableName + '->' + obj.tableName;
+                    this.actions.openSourceDataGrid( url,winTitle );
                 }
-                let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
-                let winTitle = this.data.tableName + '->' + obj.tableName;
-                this.actions.openSourceDataGrid( url,winTitle );
             }
             //对应关系查看
             if(data.colDef.real_type == fieldTypeService.CORRESPONDENCE && data.value.toString().length && data.event.target.id == "correspondenceClick"){
