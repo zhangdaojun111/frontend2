@@ -547,6 +547,12 @@ let config = {
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
+        let approve = 'approve';
+        for( let a of this.data.cancel_fields ){
+            if( approve.indexOf( a ) === 0 ){
+                this.data.isShowWorkflowData = false;
+            }
+        }
 
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.data.workflowData = data;
@@ -645,9 +651,10 @@ let config = {
         });
 
         Mediator.on('calendar-left:unshowData', data => {
+            console.log(data);
             if(data['data']) {
                 this.data.isShowArr = data['data'];
-                let arr = ['approve','remind'];
+                let arr = ['remind'];
                 let arr_1 = [];
                 for( let a of this.data.isShowArr ){
                     if( arr.indexOf( a ) === -1 ){
