@@ -184,7 +184,9 @@ class Component {
 
     }
 
-    enable(){}
+    enable(){
+
+    }
 
 }
 
