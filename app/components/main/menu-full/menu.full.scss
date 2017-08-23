@@ -1,90 +1,5 @@
 @import "../../../assets/scss/core/base";
 .menu {
-    &.mini {
-        .ui-widget.ui-widget-content {
-            border: 0 none;
-            background-color: transparent;
-        }
-        .ui-state-active {
-            background-color: $aside-top-bg;
-            border: 0 none;
-            margin: 0;
-        }
-        .ui-menu .ui-menu-item-wrapper {
-            padding: 3px;
-        }
-
-        .search {
-            display: none;
-        }
-        .menu-full {
-            > .list {
-                > li > .menu-full-item {
-                    > .ui-menu-icon.ui-icon {
-                        display: none;
-                    }
-                    > .row {
-                        &:hover, &.current {
-                            background-color: $aside-top-bg;
-                        }
-                    }
-                }
-            }
-        }
-        .menu-full {
-            .list {
-                .menu-full-item {
-                    .row {
-                        overflow: hidden;
-                        padding-left: 0;
-                        .icon {
-                            margin: 0 auto;
-                            float: none;
-                        }
-                        .name {
-                            display: none;
-                        }
-                        &:hover, &.current {
-                            background-color: #f5f5f5;
-                        }
-                    }
-                }
-                .list {
-                    color: #666!important;
-                    border: 1px solid #dddddd;
-                    border-bottom: 0 none;
-                    .icon {
-                        display: none;
-                    }
-                    .row {
-                        .name {
-                            display: block;
-                        }
-                    }
-                    .menu-full-item {
-                        border-bottom: 1px solid #dddddd;
-                        background: #FFFFFF;
-                        &:hover, &.current {
-                            background-color: #f5f5f5;
-                            .row {
-                                background-color: #f5f5f5;
-                                .name {
-                                    color: #0088ff;
-                                }
-                            }
-                        }
-                        .row {
-                            padding: 10px 15px!important;
-                            .name {
-                                font-size: 12px;
-                                color: #666;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     .search {
         background-image: url("../../../assets/images/framework/search.png");
@@ -104,15 +19,99 @@
             margin-left: 30px;
             width: calc(100% - 40px);
         }
+
+        &.edit {
+            display: none;
+        }
+
+    }
+
+    &.mini {
+        .ui-widget.ui-widget-content {
+            border: 0 none;
+            background-color: transparent;
+        }
+        .ui-state-active {
+            background-color: $aside-top-bg;
+            border: 0 none;
+            margin: 0;
+        }
+        .ui-menu .ui-menu-item-wrapper {
+            padding: 3px;
+        }
+
+        .search {
+            display: none;
+        }
+        .menu-full {
+            overflow-x: visible;
+            overflow-y: visible;
+            .root {
+                li {
+                    position: relative;
+                    z-index: 100;
+                }
+                > li > .menu-full-item {
+                    .ui-menu-icon.ui-icon {
+                        display: none;
+                    }
+                    .row {
+                        padding: 12px 10px;
+                        &:hover, &.current {
+                            background-color: $aside-top-bg;
+                        }
+                        .icon {
+                            float: none;
+                            margin: 0 auto;
+                        }
+                    }
+                    .name {
+                        display: none;
+                    }
+                }
+                .childlist {
+                    position: absolute;
+                    background-color: #f5f5f5;
+                    left: 100%;
+
+                    z-index: 101;
+                    box-shadow: 4px 4px 5px #ccc;
+                    &.top {
+                        top:0;
+                    }
+                    &.bottom {
+                        bottom: 0;
+                    }
+                    .menu-full-item {
+                        border-top: 1px solid #ddd;
+                        .row {
+                            .name {
+                                line-height: 16px;
+                                color: #0088ff;
+                                font-size: 12px;
+                            }
+                            &:hover {
+                                background-color: #DDDDDD;
+                            }
+                        }
+                    }
+                }
+                .custom-checkbox {
+                    display: none!important;
+                }
+            }
+        }
     }
     .menu-full {
         height: 100%;
+        overflow-x: auto;
+        overflow-y: auto;
         user-select:none;
-        .list {
+        .root {
             .menu-full-item {
                 .row {
                     padding: 12px 0 12px 10px;
-                    line-height: 14px;
+                    line-height: 16px;
                     cursor: pointer;
                     font-size: 14px;
                     &:hover, &.current {
@@ -122,7 +121,7 @@
                         width: 16px;
                         height: 16px;
                         float: left;
-                        margin-right: 10px;
+                        margin-right: 5px;
                         border: 0 none;
                         background-color: transparent;
                         &.lv1 {
@@ -132,15 +131,20 @@
                             margin-right: 4px;
                         }
                     }
+                    .custom-checkbox {
+                        float: left;
+                        margin: 0 5px 0 0;
+                        display: none;
+                    }
                     .name {
-                        color: #FFFFFF;
+                        color: #ccc;
                         font-size: 14px;
                         word-break: normal;
                         white-space: pre;
                     }
                 }
             }
-            .list {
+            .childlist {
                 display: none;
             }
         }

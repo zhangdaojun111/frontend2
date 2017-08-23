@@ -38,6 +38,7 @@ class Component {
             }
         }
         scan(this);
+        this.subComponents = [];
         this.componentId = componentId++;
         count ++;
     }
@@ -79,8 +80,8 @@ class Component {
         if (this.binds && this.binds.length) {
             let that = this;
             this.binds.forEach((item) => {
-                this.el.on(item.event, item.selector, function () {
-                    item.callback.call(that, this);
+                this.el.on(item.event, item.selector, function (event) {
+                    item.callback.call(that, this, event);
                 });
             })
         }
@@ -108,6 +109,7 @@ class Component {
         tagName = tagName || 'div';
         let el = $(`<${tagName}>`).appendTo(container);
         component.render(el);
+        this.subComponents.push(component);
         return this;
     }
 

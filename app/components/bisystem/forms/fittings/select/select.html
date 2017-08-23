@@ -1,0 +1,10 @@
+<div class="bi-chart-select">
+    {{#if label}}
+    <h3>{{label}}</h3>
+    {{/if}}
+    <select>
+        {{#each options}}
+        <option value="{{value}}">{{name}}</option>
+        {{/each}}
+    </select>
+</div>

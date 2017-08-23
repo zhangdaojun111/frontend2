@@ -1,4 +1,6 @@
-
+/*
+ * Created by qmy on 2017/8/10.
+ */
 import '../assets/scss/main.scss';
 import 'jquery-ui/ui/widgets/button.js';
 import 'jquery-ui/ui/widgets/dialog.js';
@@ -8,19 +10,60 @@ import Mediator from '../lib/mediator';
 import {workflowService} from '../services/workflow/workflow.service';
 import WorkFlowCreate from '../components/workflow/workflow-create/workflow-create';
 import WorkflowInitial from '../components/workflow/workflow-initial';
+import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
 import WorkFlowGrid from '../components/workflow/workflow-grid/workflow-grid';
-import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addHome';
+import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow';
 import FormEntrys from './form';
 import TreeView from  '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
-import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import jsplumb from 'jsplumb';
-import {PMAPI,PMENUM} from '../lib/postmsg';
+
+WorkflowAddFollow.showAdd();
 
 WorkFlowForm.showForm();
 WorkFlowGrid.showGrid();
+
+let tree=[],staff=[];
+(async function () {
+    return workflowService.getStuffInfo({url: '/get_department_tree/'});
+})().then(res=>{
+    tree=res.data.department_tree;
+    staff=res.data.department2user;
+    function recur(data) {
+        for (let item of data){
+            item.nodes=item.children;
+            if(item.children.length!==0){
+                recur(item.children);
+            }
+        }
+    }
+    recur(tree);
+    var treeComp2 = new TreeView(tree,{
+        callback: function (event,selectedNode) {
+            if(event==='select'){
+                for(var k in staff){
+                    if(k==selectedNode.id){
+                        Mediator.publish('workflow:checkDept', staff[k]);
+                        // recursion(staff,selectedNode,'checkDept');
+                    }
+                }
+            }else{
+                for(var k in staff){
+                    if(k==selectedNode.id){
+                        Mediator.publish('workflow:unCheckDept', staff[k]);
+                        // recursion(staff,selectedNode,'unCheckDept');
+                    }
+                }
+            }
+        },
+        treeType:'MULTI_SELECT',
+        isSearch: true,
+        withButtons:true
+        });
+    treeComp2.render($('#treeMulti'));
+});
 
 let get_workflow_info=()=>{
     let WorkFlowList=workflowService.getWorkfLow({}),
@@ -39,18 +82,14 @@ Mediator.publish('workflow:focused', []);
 //订阅workflow choose事件，获取工作流info并发布getInfo,获取草稿
 let wfObj;
 Mediator.subscribe('workflow:choose', (msg)=> {
+    $("#singleFlow").click();
     $("#submit").show();
     $("#startNew").hide();
     wfObj=msg;
     (async function () {
-        return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
-            flow_id:msg.id
-        }});
-    })()
-    .then(res=>{
-        Mediator.publish('workflow:gotWorkflowInfo', res);
+        WorkFlow.createFlow({flow_id:msg.id,el:"#flow-node"});
         return workflowService.validateDraftData({form_id:msg.formid});
-    })
+    })()
     .then(res=>{
         if(res.the_last_draft!=''){
             return msgBox.confirm(`您于${res.the_last_draft}时填写该工作表单尚未保存，是否继续编辑？`)
@@ -72,7 +111,6 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             btnType:'none',
             is_view:0
         });
-
         const intervalSave= async function (data) {
             let postData={
                 flow_id:msg.id,
@@ -83,15 +121,17 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             let res = await workflowService.createWorkflowRecord(postData);
             if(res.success===1){
                 msgBox.alert('自动保存成功！');
+            }else{
+                msgBox.alert(`${res.error}`);
             }
         };
         var timer;
         const autoSaving=function(){
             timer=setInterval(()=>{
-                intervalSave(FormEntrys.getFormValue());
+                intervalSave(FormEntrys.getFormValue(wfObj.tableid));
             },2*60*1000);
         };
-        autoSaving();
+        // autoSaving();
         Mediator.subscribe('workflow:autoSaveOpen', (msg)=> {
             clearInterval(timer);
             if(msg===1){
@@ -134,14 +174,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
                     $("#startNew").hide();
                     $("#submit").show();
                 });
-                (async function () {
-                    return workflowService.getWorkflowInfo({url: '/get_workflow_info/',data:{
-                        flow_id:wfObj.id,
-                        record_id:res.record_id
-                    }});
-                })().then(data=>{
-                    Mediator.publish('workflow:gotWorkflowInfo', data);
-                });
+                WorkFlow.createFlow({flow_id:wfObj.id,record_id:res.record_id,el:"#flow-node"});
             }else{
                 msgBox.alert(`${res.error}`);
                 $("#submit").show();
@@ -168,18 +201,6 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
         let data = await workflowService.delWorkflowFavorite({'id': msg});
     })();
 });
-
-
-const approveWorkflow=(para)=>{
-    (async function () {
-        return workflowService.approveWorkflowRecord({
-            url: '/approve_workflow_record/',
-            data:para
-        });
-    })().then(res=>{
-        msgBox.alert(`${res.error}`)
-    })
-}
 
 //Grid
 $('#multiFlow').on('click',()=>{

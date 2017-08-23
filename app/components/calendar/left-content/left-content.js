@@ -44,7 +44,7 @@ let config = {
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
                 temp.next(".item-content").show();
-                temp.next().animate({height:"82%"},"fast");
+                temp.next().animate({height:"83%"},"fast");
             }
         },
         hideclass:function(that,temp){
@@ -63,7 +63,7 @@ let config = {
                 that.el.find(".item-content-1").css("height","27%");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").show();
-                that.el.find(".item-content-2").animate({height:"55%"},"fast");
+                that.el.find(".item-content-2").animate({height:"56%"},"fast");
             }
         },
         hide_item:function(that,temp){
@@ -81,7 +81,7 @@ let config = {
                 temp.addClass("display-all-content");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
-                that.el.find(".item-content-1").animate({height:"82%"},"fast");
+                that.el.find(".item-content-1").animate({height:"84%"},"fast");
             }
         },
         showRemindType:function(that){

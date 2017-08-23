@@ -3,17 +3,28 @@
  */
 import {Router} from 'backbone';
 import {CanvasCellsComponent} from './canvas/canvas.cells';
-import {ViewsEditComponent} from "./views/views.edit";
+import {ViewsEditComponent} from "./views/views";
+import {FormBaseComponent} from './forms/base/base';
+import {FormEntryComponent} from './forms/entry/entry';
+import {componentsJson} from './forms/entry/loadFormChart.json';
+import Mediator from '../../lib/mediator';
 
 let component;
+let viewComponent;
+let formComponent = {};
 const BiAppRouter = Backbone.Router.extend({
     routes: {
         'views/edit':"routerViewsEditComponent",
         'views/:id':'routerViewsComponent',
+        'forms/home':'routerFormEntryComponent',
+        'forms/:chart': 'routerFormDynamicComponent',
+        'forms/:chart/:id':'routerFormDynamicComponent',
         '':'routerViewsComponent',
     },
+
     routerViewsComponent(id) {
         if (component) {
+            component.data.views = window.config.bi_views
             component.destroyChildren();
             component.viewId = id;
             component.reload();
@@ -24,8 +35,32 @@ const BiAppRouter = Backbone.Router.extend({
         }
     },
     routerViewsEditComponent() {
-        let ViewsEdit = new ViewsEditComponent();
-        ViewsEdit.render($('#route-outlet'));
+        if (viewComponent) {
+            viewComponent.destroyChildren();
+            viewComponent.reload();
+        } else {
+            let ViewsEdit = new ViewsEditComponent();
+            viewComponent = ViewsEdit;
+            ViewsEdit.render($('#route-outlet'));
+        }
+
+    },
+    routerFormEntryComponent() {
+        let form = new FormEntryComponent();
+        form.render($('#route-outlet'));
+    },
+    routerFormDynamicComponent(type,id) {
+        Mediator.removeAll('bi:chart:form:update');
+        if (formComponent[type]) {
+            formComponent[type].destroyChildren();
+            formComponent[type].reset(id);
+            formComponent[type].reload();
+        } else {
+            let component = new componentsJson[type]['component'](id);
+            component.render($('#route-outlet'));
+            formComponent[type] = component;
+        }
+
     }
 });
 

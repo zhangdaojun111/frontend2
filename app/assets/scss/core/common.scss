@@ -101,3 +101,69 @@ html {
 .pointer {
     cursor: pointer;
 }
+
+.custom-checkbox {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    overflow: hidden;
+    input[type=checkbox] {
+        margin: 2px;
+    }
+    input[type=checkbox]:before {
+        position: absolute;
+        width: 10px;
+        content: ' ';
+        height: 10px;
+        left: 2px;
+        top: 2px;
+        background-color: #fff;
+        border: 1px solid #d7d7d7;
+        cursor: pointer;
+    }
+    input[type=checkbox]:checked:after {
+        position: absolute;
+        width: 6px;
+        content: ' ';
+        height: 6px;
+        left: 5px;
+        top: 5px;
+        background-color: #0088ff;
+        cursor: pointer;
+    }
+}
+
+.custom-radio {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    overflow: hidden;
+    input[type=radio] {
+        margin: 2px;
+    }
+    input[type=radio]:before {
+        position: absolute;
+        width: 10px;
+        content: ' ';
+        height: 10px;
+        left: 2px;
+        top: 2px;
+        background-color: #fff;
+        border: 1px solid #d7d7d7;
+        cursor: pointer;
+        border-radius: 100%;
+    }
+    input[type=radio]:checked:after {
+        position: absolute;
+        width: 6px;
+        content: ' ';
+        height: 6px;
+        left: 5px;
+        top: 5px;
+        background-color: #0088ff;
+        cursor: pointer;
+        border-radius: 100%;
+    }
+}

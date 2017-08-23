@@ -14,14 +14,14 @@ let config = {
     data: {
         bodyData: {},
         itemData: {},
+        type: ''
     },
     actions: {
 
     },
     afterRender: function() {
         let that = this;
-        let Isdrag = false;
-        let drag_Postion = "";
+        let drag_Postion = null;
         if (this.data.type === 'day') {
             this.el.css({display: "inline-block", width: "calc(100% - 1px)", height: "100%"});
             $('.grid-content').css({'max-height': "840px", overflow: "auto"});
@@ -38,33 +38,67 @@ let config = {
         if(taskData && taskData.length > 0) {
             this.el.find('.grid-content').css({backgroundColor: "rgba(255, 255, 255, 1)"});
             taskData.forEach(item => {
-                this.append(new CalendarRemindTaskItem(item), this.el.find('.task-list'));
+                this.append(new CalendarRemindTaskItem({data:item, type: this.data.type}), this.el.find('.task-list'));
             });
         }
-        // this.el.on('dragenter', '.task-item',function(event){
-        //     let ev = event.originalEvent;
-        //     let temp = $(".task-item-draggable");
-        //     $(this).before(temp);
-        //     ev.preventDefault();
-        //     drag_Postion = $(this);
-        //     Isdrag = true;
-        //     console.log(Isdrag);
-        //     return true;
-        // });
-        this.el.on('dragover', '.task-list',(event) => {
+        this.el.on('dragenter', '.task-item',function(event){
+            event.stopPropagation();
+            event.preventDefault();
+            drag_Postion = null;
+            let ev = event.originalEvent;
+            let temp = $(".task-item-draggable").parent();
+            if(temp[0] === $(this).parent().prev()[0]){
+                $(this).parent().after(temp);
+            } else{
+                $(this).parent().before(temp);
+            }
+            drag_Postion = $(this).parent();
+            ev.preventDefault();
+            return true;
+        }).on('dragleave', '.task-list',(event) => {
+            event.stopPropagation();
+            event.preventDefault();
+            if(this.el.find('.task-item').length < 2 ){
+                drag_Postion = null;
+            }
+            let ev = event.originalEvent;
+            ev.preventDefault();
+            return true;
+        }).on('dragover', '.task-list',(event) => {
+            event.stopPropagation();
+            event.preventDefault();
             let ev = event.originalEvent;
             ev.preventDefault();
             return true;
         }).on('drop','.task-list',(event) => {
+            event.stopPropagation();
+            event.preventDefault();
             let ev = event.originalEvent;
             let temp = $(".task-item-draggable");
             temp.removeClass("task-item-draggable");
-            let data = JSON.parse(ev.dataTransfer.getData("Text"));
-            this.append(new CalendarRemindTaskItem(data), this.el.find('.task-list'));
-            temp.parent().remove();
+            temp = temp.parent();
+            if(ev.dataTransfer.getData("Text")) {
+                let data = JSON.parse(ev.dataTransfer.getData("Text"));
+                console.log(data, this.data.bodyData);
+                let params = {
+                    real_ids: data['real_id'],
+                    table_id: data['tableId'],
+                    calendar_id: data['setId'],
+                    data: {}
+                };
+                params['data'][data['dfield']] = this.data.bodyData['dataTime'];
+                params['data'] = JSON.stringify(params['data']);
+                Mediator.emit('CalendarDrag: dragRemind', params);
+            }
+            if(drag_Postion ===null){
+                drag_Postion = this.el.find(".task-list");
+                drag_Postion.append(temp);
+            } else{
+                drag_Postion.before(temp);
+            }
+            drag_Postion = null;
             return false;
         });
-
     }
 };
 
