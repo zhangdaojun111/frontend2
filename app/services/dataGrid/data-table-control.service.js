@@ -418,9 +418,10 @@ export const dgcService = {
             ele.className = '';
         }else if(ele.className.indexOf( "my-ag-cell-focus1" )!=-1){//第二次点击
             node.setSelected(true, false);
-            ele.className = 'my-ag-cell-focus1 my-ag-cell-focus2';
+            $(ele).addClass('my-ag-cell-focus1 my-ag-cell-focus2');
         }else{//第一次点击
-            ele.className = 'my-ag-cell-focus1';
+             // ele.className = 'my-ag-cell-focus1';
+            $(ele).addClass('my-ag-cell-focus1')
         }
     },
     //返回数据url
