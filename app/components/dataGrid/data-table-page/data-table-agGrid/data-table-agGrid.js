@@ -949,7 +949,7 @@ let config = {
             }
             Promise.all(post_arr).then((res)=> {
                 this.data.rowData = res[0].rows || [];
-                this.data.total = res[0].total || 0;
+                this.data.total = res[0].total || this.data.total;
                 //对应关系特殊处理
                 if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
                     this.actions.setCorrespondence(res[0]);
@@ -2233,6 +2233,24 @@ let config = {
                 },{obj}).then(res=>{
 
                 })
+                // let d = {
+                //     'table_id': this.data.tableId,
+                //     'real_id': data.data._id
+                // };
+                // dataTableService.getHistoryApproveData(d).then( res=>{
+                //     console.log()
+                //     obj.res = JSON.stringify(res);
+                //     PMAPI.openDialogByIframe(`/iframe/historyApprove/`,{
+                //         width:1000,
+                //         height:600,
+                //         title:`历史`,
+                //         modal:true
+                //     },{obj}).then(res=>{
+                //
+                //     })
+                // })
+                // HTTP.flush();
+
             }
         },
         //行双击
