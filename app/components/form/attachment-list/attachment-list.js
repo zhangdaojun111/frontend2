@@ -85,7 +85,7 @@ let css = `
         line-height:40px;
         text-align:center;
         font-size:30px;
-        background:url(\./clockwise.png) no-repeat center center white;
+        background:url('\./clockwise.png') no-repeat center center white;
     }
     .counterclockwise{
         width: 40px;
@@ -94,7 +94,7 @@ let css = `
         line-height:40px;
         text-align:center;
         font-size:30px;
-        background:url(\./counterclockwise.png) no-repeat center center;
+        background:url('\./counterclockwise.png') no-repeat center center;
         background-size: 32px 32px;
     }
     .narrow,.enlarge,.closeImg{
@@ -104,17 +104,17 @@ let css = `
         margin-left: 25px;
     }
     .narrow{
-        background:url(\./narrow.png) no-repeat center center;
+        background:url('\./narrow.png') no-repeat center center;
     }
     .enlarge{
-        background:url(\./enlarge.png) no-repeat center center;
+        background:url('\./enlarge.png') no-repeat center center;
     }
     .closeImg{
         position: fixed;
         right: 16px;
         top: 16px;
         z-index:500;
-        background:url(./icon_off.png) no-repeat center center;
+        background:url('\./icon_off.png') no-repeat center center;
         height:30px;
         width:30px;
         border-radius:50%;
@@ -154,7 +154,8 @@ let AttachmentList = {
             _this.el.find('.img-pre').css("height",$(window).height()*0.7+'px');
             _this.el.find(".img-pre").css("transform","translate(-50%,-50%) rotate("+_this.data.rotateNo+"deg) scale("+_this.data.imgScale+","+_this.data.imgScale+")");
             let myLocated=location.href.split('#');
-            _this.el.find('.img-pre').get(0).src=myLocated[0]+"data/download_attachment/?file_id="+$(event.target).attr("id")+"&download=0&dinput_type="+_this.data.dinput_type;
+            // _this.el.find('.img-pre').get(0).src=myLocated[0]+"download_attachment/?file_id="+$(event.target).data("id")+"&download=0&dinput_type="+_this.data.dinput_type;
+            _this.el.find('.img-pre').get(0).src="/download_attachment/?file_id="+$(event.target).data("id")+"&download=0&dinput_type="+_this.data.dinput_type;
             $(document).on("mousewheel DOMMouseScroll",(e)=>{
                 let delta = (e.originalEvent['wheelDelta'] && (e.originalEvent['wheelDelta'] > 0 ? 1 : -1)) ||
                     (e.originalEvent['detail'] && (e.originalEvent['detail'] > 0 ? -1 : 1));
