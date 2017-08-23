@@ -1,5 +1,6 @@
 /**
  * Created by birdyy on 2017/8/14.
+ * 雷达图配置
  */
 
 import {BiBaseComponent} from '../../../bi.base.component';
@@ -8,51 +9,161 @@ import {FormBaseComponent} from '../../base/base';
 import {instanceFitting, groupFitting} from '../../fittings/export.fittings';
 import Mediator from '../../../../../lib/mediator';
 import msgbox from "../../../../../lib/msgbox";
-import {PMAPI} from '../../../../../lib/postmsg';
 import {FormMixShareComponent} from '../../mix.share/mix.share';
-
-import "./radar.scss";
+import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
+import {FormColumnComponent} from './columns/column';
+import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 
 let config = {
     template:template,
-    data: {},
+    data: {
+        assortment: ''
+    },
     actions: {},
     afterRender() {
+        this.init();
         this.renderFitting();
     },
-    firstAfterRender() {}
-}
+    firstAfterRender() {
+        let me = this;
+        // 监听数据源变化
+        this.el.on(`${this.data.assortment}-chart-source`,(event,params) => {
+            this.chartSourceChange(params['sources']);
+            if (this.chartId && this.editModeOnce) {
+                this.getChartData(this.chartId);
+            }
+        });
+
+        this.el.on('click', '.save-radar-btn', (event) => {
+            this.saveChart();
+        });
+    },
+    beforeDestory() {}
+};
+
 export class FormRadarComponent extends BiBaseComponent{
-    constructor() {
+    constructor(chart) {
         super(config);
-        this.formGroup={};
+        this.data.assortment = chart.assortment;
+        this.chartId = chart.id;
+        this.formGroup = {};
+        this.editModeOnce = this.chartId ? true : false
     }
 
     /**
-     * 渲染radar fittings
+     * 初始化操作
      */
-    renderFitting(){
+    init() {
+        this.columns = new FormColumnComponent();
+        this.append(this.columns, this.el.find('.table-columns'));
+    }
+
+    /**
+     * 编辑模式发送chartId, 得到服务器数据
+     * @param chartId 图表id
+     */
+    async getChartData(chartId) {
+        if (this.chartId) {
+            const chart = await canvasCellService.getCellChart({chart_id: chartId});
+            this.fillChart(chart[0])
+        }
+    }
+
+    /**
+     * 编辑模式
+     */
+    fillChart(chart) {
+        console.log(chart);
+        this.editModeOnce = false;
+        this.formGroup.chartName.setValue(chart['chartName']);
+        let share = {
+            chartSource:chart['source'],
+            themes: chart['theme'],
+            icons: chart['icon'],
+            filter: chart['filter']
+        };
+        this.formGroup.share.setValue(share);
+    }
+
+    /**
+     * 渲染chart fittings
+     */
+    renderFitting() {
         let base = new FormBaseComponent();
-        let share = new FormMixShareComponent();
-        this.append(base, this.el.find('.radar-base'));
-        this.append(share, this.el.find('.radar-share'));
+        let share = new FormMixShareComponent(this.data.assortment);
+        this.append(base, this.el.find('.form-group-base'));
+        this.append(share, this.el.find('.form-group-share'));
 
         this.formGroup = {
-            radarName:base,
-            radarShare:share,
-            radarAuto:instanceFitting({
+            chartName: base,
+            share: share,
+            product:instanceFitting({
                 type:'autoComplete',
+                data: {
+                    value:null,
+                    label: '选中雷达图产品名称字段',
+                },
                 me: this,
-                container: 'radar-auto'
-            })
+                container: 'form-group-product'
+            }),
+        };
+
+    }
+
+    /**
+     * 数据源变化执行一些列动作
+     * @param sources = 数据源数据
+     */
+    chartSourceChange(sources) {
+        this.columns.reloadUi(sources);
+        if (this.formGroup.product) {
+            if (this.formGroup.product.autoSelect) {
+                this.formGroup.product.autoSelect.data.list = sources['x_field'];
+                this.formGroup.product.autoSelect.reload();
+            }
         }
+    }
+
+    /**
+     * 保存雷达数据
+     */
+    async saveChart() {
+        const fields  = this.formGroup;
+        const data = {};
+        Object.keys(fields).map(k => {
+            if (fields[k].getValue) {
+                data[k] = fields[k].getValue();
+            };
+        });
+        const chart = {
+            assortment: 'radar',
+            chartName:data.chartName,
+            countColumn:'',
+            filter: [],
+            columns:Array.from(this.columns.data.choosed),
+            product:data.product,
+            icon: data.share.icons,
+            source: data.share.chartSource,
+            theme: data.share.themes,
+        };
+        let res = await ChartFormService.saveChart(JSON.stringify(chart));
+        if (res['success'] == 1) {
+            msgbox.alert('保存成功');
+            if (!chart['chartName']['id']) {
+                this.reset();
+                this.reload();
+            };
+            Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
+        } else {
+            msgbox.alert(res['error'])
+        };
     }
 
     /**
      * reset实例，当通过路由重新进入实例，清空所有数据
      */
-    reset(flag) {
+    reset(chart) {
         this.formGroup = {};
+        this.editModeOnce = this.chartId ? true : false;
     }
-
 }

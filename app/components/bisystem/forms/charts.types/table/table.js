@@ -30,9 +30,8 @@ let config = {
         // 监听数据源变化
         this.el.on(`${this.data.assortment}-chart-source`,(event,params) => {
             this.chartSourceChange(params['sources'])
-        }).on('test',(event,params) => { // 监听选中字段
-            console.log(params);
-            alert('hello world')
+        }).on('form:table:column:choosed',(event,params) => { // 监听选中字段
+            this.single.setColumns(params['choosed'])
         });
 
         this.el.on('click', '.save-btn', (event) => {
