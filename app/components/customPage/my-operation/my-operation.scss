@@ -8,7 +8,7 @@
   .btn-nav {
     height: 30px;
     width: 100%;
-    .dataGrid-btn-group {
+    .operation-btn-group {
       float: right;
       display: block;
       margin-right: 10px;
@@ -31,10 +31,10 @@
       }
     }
   }
-
   .ag-grid-con {
-    height: calc( 100% - 40px );
-    #data-agGrid {
+    overflow-y: auto;
+    height: calc( 100% - 60px );
+    #operation-agGrid {
       width: 100%;
       float: left;
       position: relative;
@@ -47,6 +47,11 @@
       background: #f0f0f0;
       position: relative;
       display: none;
+    }
+    .pagination {
+      height: 30px;
+      width: 100%;
+      clear: both;
     }
   }
 }

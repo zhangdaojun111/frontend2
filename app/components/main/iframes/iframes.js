@@ -7,6 +7,7 @@ import Mediator from '../../../lib/mediator';
 import './iframe.scss';
 import {PMAPI, PMENUM} from '../../../lib/postmsg';
 import {SaveView} from "./save-view/save-view"
+import {TabService} from "../../../services/main/tabService"
 
 // let IframeOnClick = {
 //     resolution: 200,
@@ -62,10 +63,25 @@ export const IframeInstance = new Component({
         sort: [],
         focus: null,
         hideFlag:false,
+        tempList:[],        //记录未关闭的tabs的id
+        autoOpenList:[],        //记录根据id找到的iframes的所有信息url、id、name用于打开iframes
+        isLoginShowBI:"",
+        isLoginShowCalendar:"",
+        isAutoOpenTabs:true,    //标记是否为首次加载tabs
     },
     actions: {
         openIframe: function (id, url, name) {
-            console.log(id, url, name);
+            if (this.data.isAutoOpenTabs === false && id !== 'search-result'){
+                //向后台发送请求记录
+                TabService.onOpenTab(id).done((result) => {
+                    if(result.success === 1){
+
+                    }else{
+                        console.log("post open record failed")
+                    }
+                });
+            }
+
             id = id.toString();
             if (this.data.hash[id] === undefined) {
                 let tab = $(`<div class="item" iframeid="${id}">${name}<a class="close" iframeid="${id}"></a></div>`)
@@ -99,13 +115,21 @@ export const IframeInstance = new Component({
             if ( id === undefined) {
                 return;
             }
+            TabService.onCloseTab(id,this.data.focus.id).done((result) => {
+                if(result.success === 1){
+
+                }else{
+                    console.log("post close record failed")
+                }
+            });
+
             let item = this.data.hash[id];
             // IframeOnClick.retrack(item.iframe.find('iframe')[0]);
             item.tab.remove();
             item.iframe.remove();
             _.remove(this.data.sort, (v) => {
                 return v === id;
-            })
+            });
             delete this.data.hash[id];
             this.data.count--;
             if (this.data.focus && this.data.focus.id === id) {
@@ -116,7 +140,6 @@ export const IframeInstance = new Component({
             }
         },
         focusIframe: function (id) {
-            console.log("focus",id);
             if (this.data.focus) {
                 this.data.focus.tab.removeClass('focus');
                 this.data.focus.iframe.hide();
@@ -199,7 +222,6 @@ export const IframeInstance = new Component({
             }else{
                 //选中标签获得焦点
                 let id = this.actions.getTabIdByName(name,this.data.hash);
-                console.log(name,id);
                 if(id){
                     this.actions.focusIframe(id);
                 }
@@ -228,13 +250,80 @@ export const IframeInstance = new Component({
                 }
             }
             return name;
-        }
+        },
+        readyOpenTabs:function () {
+            //自动打开的标签由系统设置的bi/日历 和 最后一次系统关闭时未关闭的标签两部分组成
+            //第一部分：获取系统关闭时未关闭的tabs
+            let that = this;
+            TabService.getOpeningTabs().then((result) => {
+                //将未关闭的标签id加入tempList
+                let tabs = result[0].tabs;
+
+                if(tabs){
+                    for(let k in tabs){
+                        that.data.tempList.push(k);
+                    }
+                }
+
+                let biConfig = result[1];
+
+                if((biConfig.data && biConfig.data === "1") || tabs.hasOwnProperty("bi")){
+                    that.data.autoOpenList.push({
+                        id: 'bi',
+                        name: 'BI',
+                        url: window.config.sysConfig.bi_index
+                    });
+                    window.config.sysConfig.logic_config.login_show_bi = "1";
+                }
+
+                let calendarConfig = result[2];
+                if((calendarConfig.data && calendarConfig.data === "1") || tabs.hasOwnProperty("calendar")){
+                    that.data.autoOpenList.push({
+                        id: 'calendar',
+                        name: '日历',
+                        url: window.config.sysConfig.calendar_index
+                    });
+                    window.config.sysConfig.logic_config.login_show_calendar = "1";
+                }
+                that.actions.autoOpenTabs();
+            });
+        },
+        autoOpenTabs:function () {
+            let tempList = this.data.tempList;
+            let menu = window.config.menu;
+            this.actions.findTabInfo(menu,tempList);
+            //依次打开各标签
+            for(let k of this.data.autoOpenList){
+                this.actions.openIframe(k.id,k.url,k.name);
+            }
+            this.data.isAutoOpenTabs = false;   //首次自动打开的页面无需向后台发送请求，以后打开页面需要向后台发送请求
+        },
+        findTabInfo:function (nodes,targetList) {
+            for( let i=0; i < nodes.length; i++){
+                if(targetList.includes(nodes[i].id ) || targetList.includes(nodes[i].table_id )){
+                    let item = {};
+                    item.id = nodes[i].id;
+                    item.url = nodes[i].url;
+                    item.name = nodes[i].label;
+                    this.data.autoOpenList.push(item);
+                    _.remove(targetList,function (n) {
+                        return n.id === nodes[i].id;
+                    });
+                    if(targetList.length === 0){        //找到所有目标
+                        return;
+                    }
+                }
+                if(nodes[i].items && nodes[i].items.length > 0){
+                    this.actions.findTabInfo(nodes[i].items,targetList);
+                }
+            }
+        },
     },
     afterRender: function () {
         let that = this;
         this.data.tabs = this.el.find('.tabs');
         this.data.iframes = this.el.find('.iframes');
-
+        this.actions.readyOpenTabs();
         this.el.on('click', '.tabs .item .close', function () {
             let id = $(this).attr('iframeid');
             that.actions.closeIframe(id);
@@ -249,7 +338,6 @@ export const IframeInstance = new Component({
         this.el.on('click','.view-save',function () {
             SaveView.show(that.data.sort);
         }).on('mouseenter','.view-popup',() => {
-            console.log("enter");
             this.actions.showTabsPopup();
             // }).on('click','.view-popup',(event) => {
             //     event.stopPropagation();
@@ -260,7 +348,6 @@ export const IframeInstance = new Component({
         }).on('click','.tab-list',(event) => {
             this.actions.controlTabs(event);
         }).on('mouseleave','.view-popup',() => {
-            console.log("leave");
             this.actions.hideTabsPopup();
         })
     },
@@ -292,7 +379,6 @@ export const IframeInstance = new Component({
         Mediator.on('saveview:displayview', (data) => {
             this.actions.closeAllIframes();  //先关闭所有标签，再打开view中的标签
             for(let k of data){
-                console.log(k);
                 this.actions.openIframe(k.id,k.url,k.name);
             }
         })

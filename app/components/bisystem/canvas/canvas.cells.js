@@ -8,6 +8,7 @@ import {canvasCellService} from '../../../services/bisystem/canvas.cell.service'
 import Mediator from '../../../lib/mediator';
 import {ToolPlugin} from '../utils/tool.plugin';
 
+
 let config = {
     template: template,
     data: {
@@ -46,6 +47,7 @@ let config = {
          * 添加画布块
          */
         addCell() {
+
             const cell = {
                 layout_id: '',
                 chart_id: '',
@@ -151,11 +153,6 @@ let config = {
         });
 
         this.actions.getCellLayout()
-        //多页跳转隐藏
-        // $('.btn-multip').click(function () {
-        //     $(this).hide();
-        //     $('.btn-single').hide();
-        // })
     }
 };
 
@@ -166,7 +163,8 @@ export class CanvasCellsComponent extends BiBaseComponent{
             config.data.canvasSingle = false;
         } else {
             config.data.canvasSingle = true;
-        }
+        };
+        config.data.views = window.config.bi_views;
         super(config);
         this.viewId = id ? id : this.data.views[0] ? this.data.views[0]['id'] : [] ;
     }

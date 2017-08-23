@@ -33,7 +33,7 @@ SocketMgr.connect();
 // window.setTimeout(function () {
 //     SocketMgr.socket.send(JSON.stringify({
 //         "test": 1,
-//         'msg_type': 5
+//         'msg_type': 0
 //     }))
 // }, 2000)
 
