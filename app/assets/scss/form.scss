@@ -16,6 +16,7 @@
 }
 
 .overflow{
+  background: #F2F2F2;
   height: 96%;
   overflow-y: auto;
   overflow-x: hidden;
@@ -59,9 +60,11 @@
 
 //固定按钮
 .ui-btn-box{
+  float: right;
   margin: 0 auto;
   display: block;
-  bottom: 0
+  bottom: 0;
+  background: #F2F2F2;
 }
 .ui-btn-box button{
   width: 91px;

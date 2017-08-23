@@ -57,7 +57,7 @@ let config={
             dateFormat: "yy/mm/dd",
             defaultDate:new Date(_this.data.value),
             timeFormat: 'HH:mm:ss', //格式化时间
-
+            showOtherMonths: true,
             onSelect: function (selectTime, text) {
                 let selectTime1 = selectTime;
                 _this.data.value = selectTime.replace(/\//g, "-");

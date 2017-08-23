@@ -1213,7 +1213,7 @@ let config={
             this.el.find('.ui-btn-box').remove();
             //添加提交按钮
             if(this.data.btnType == 'new' || this.data.btnType == 'edit'){
-                this.el.find(".overflow").parent().append(`<div class="noprint ui-btn-box"><div>
+                this.el.find("table").parent().parent().append(`<div class="noprint ui-btn-box"><div>
                     <!--<button class="btn btn-normal mrgr" id="print">-->
                         <!--<span>打印</span>-->
                         <!--<div class="btn-ripple ripple"></div>-->
@@ -1224,7 +1224,7 @@ let config={
                     </button>
                 </div></div>`)
             }else if(this.data.btnType == 'view'){
-                this.el.find(".overflow").parents().append(`<div class="noprint ui-btn-box"><div >
+                this.el.find("table").parent().parent().append(`<div class="noprint ui-btn-box"><div >
                     <!--<button class="btn btn-normal mrgr" id="print" >-->
                         <!--<span>打印</span>-->
                         <!--<div class="btn-ripple ripple"></div>-->
@@ -1667,20 +1667,7 @@ let config={
         // })
         //默认表单样式
         if( _this.el.find('table').hasClass('form-version-table-user') ){
-            // _this.el.find('table').parents().parents('#detail-form').addClass('detail-form-style');
-            // _this.el.find('table').off();
-            // _this.el.find('table>tbody').append('<div class="more"><span>展开更多</span></div>')
-            //
-            // if(_this.el.find('table>tbody').height() <= _this.el.find('table').height()){
-            //     _this.el.find('.overflow').removeClass('overflow');
-            // }
             _this.el.find('.btn').css("display","none");
-
-        //     _this.el.find('.more').on('click',function () {
-        //         _this.el.find('.more').hide();
-        //         _this.el.find('.overflow').removeClass('overflow');
-        //         _this.el.find('table').css({'overflow-y':'auto',"height":"520px"});
-        //     })
          }
         _this.el.find(".overflow").on("scroll",function () {
             let overflowHight = _this.el.find('.overflow').scrollTop();

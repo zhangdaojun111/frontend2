@@ -54,6 +54,7 @@ let config={
             defaultDate:new Date(_this.data.value),
             onClose: function(selectedDate) {
             },
+            showOtherMonths: true,
             onSelect: function (selectTime, text) {
                 let selectTime1 = selectTime;
                 _this.data.value = selectTime.replace(/\//g, "-");
