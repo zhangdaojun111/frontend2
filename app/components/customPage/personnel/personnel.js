@@ -640,7 +640,7 @@ let config = {
                         height:700,
                         title:`权限`,
                         modal:true
-                    },{obj}).then(res=>{
+                    },'111').then(res=>{
 
                     })
                 }

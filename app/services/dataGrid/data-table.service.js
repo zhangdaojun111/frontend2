@@ -81,6 +81,14 @@ export const dataTableService = {
     getPrepareParmas: function ( data ) {
         return HTTP.post( 'prepare_params',data )
     },
+    //获取权限信息
+    getPermData: function ( data ) {
+        return HTTP.post( 'user_perms',data )
+    },
+    //设置权限信息
+    setPermData: function ( data ) {
+        return HTTP.post( 'user_perms',data )
+    },
     //请求附件数据
     getAttachmentList(json){
         return HTTP.post('query_attachment_list',json);
