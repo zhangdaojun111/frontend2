@@ -150,13 +150,11 @@ let config = {
         showInfoSet:function () {
             //检查页面是否已创建
             let $page = $(document).find("div#personal-setting-page");
-            console.log($page);
             if($page.length !== 0){
                 $page.focus();
             }else{
                 //打开个人设置页面
-                // PersonSetting.show();
-                PersonSetting.showUserInfo({name:"赵俨"});
+                PersonSetting.show();
             }
         },
         initAvatar:function () {

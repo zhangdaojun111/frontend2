@@ -64,6 +64,8 @@ export const IframeInstance = new Component({
         focus: null,
         hideFlag:false,
         tempList:[],        //记录未关闭的tabs的id
+        timeList:{},        //记录tabs的时间戳
+        biCalendarList:[],  //记录日历BI是否开启，tabs排序完成后，与autoOpenList合并
         autoOpenList:[],        //记录根据id找到的iframes的所有信息url、id、name用于打开iframes
         isLoginShowBI:"",
         isLoginShowCalendar:"",
@@ -74,10 +76,10 @@ export const IframeInstance = new Component({
     },
     actions: {
         openIframe: function (id, url, name) {
-            this.actions.sendOpenRequest(id);
             id = id.toString();
             if (this.data.hash[id] === undefined) {
-                let tab = $(`<div class="item" iframeid="${id}">${name}<a class="close" iframeid="${id}"></a></div>`)
+                this.actions.sendOpenRequest(id);       //确认iframe未被打开才发送请求，避免重复更新时间，扰乱排序
+                let tab = $(`<div class="item" iframeid="${id}" title="${name}">${name}<a class="close" iframeid="${id}"></a></div>`)
                     .prependTo(this.data.tabs);
                 let iframe = $(`<div class="item"><iframe id="${id}" src="${url}"></iframe></div>`).appendTo(this.data.iframes);
                 let originIframe = iframe.find('iframe');
@@ -106,9 +108,9 @@ export const IframeInstance = new Component({
                 //向后台发送请求记录
                 TabService.onOpenTab(id).done((result) => {
                     if(result.success === 1){
-                        console.log("post open record success");
+                        // console.log("post open record success");
                     }else{
-                        console.log("post open record failed")
+                        console.log("post open record failed",result);
                     }
                 });
             }
@@ -116,9 +118,9 @@ export const IframeInstance = new Component({
         sendCloseRequest:function (id) {
             TabService.onCloseTab(id,this.data.focus.id).done((result) => {
                 if(result.success === 1){
-                    console.log("post close record success")
+                    // console.log("post close record success")
                 }else{
-                    console.log("post close record failed")
+                    console.log("post close record failed",result);
                 }
             });
         },
@@ -266,11 +268,11 @@ export const IframeInstance = new Component({
             //第一部分：获取系统关闭时未关闭的tabs
             let that = this;
             TabService.getOpeningTabs().then((result) => {
-                console.log(result);
                 let tabs = {};
                 //将未关闭的标签id加入tempList
                 if(result[0].succ === 1){
                     tabs = result[0].tabs;
+                    that.data.timeList = tabs;
                     delete tabs["0"];
                     if(tabs){
                         for(let k in tabs){
@@ -284,7 +286,7 @@ export const IframeInstance = new Component({
                 if(result[1].succ === 1){
                     let biConfig = result[1];
                     if((biConfig.data && biConfig.data === "1") || tabs.hasOwnProperty("bi")){
-                        that.data.autoOpenList.push({
+                        that.data.biCalendarList.push({
                             id: 'bi',
                             name: 'BI',
                             url: window.config.sysConfig.bi_index
@@ -298,7 +300,7 @@ export const IframeInstance = new Component({
                 if(result[2].succ === 1){
                     let calendarConfig = result[2];
                     if((calendarConfig.data && calendarConfig.data === "1") || tabs.hasOwnProperty("calendar")){
-                        that.data.autoOpenList.push({
+                        that.data.biCalendarList.push({
                             id: 'calendar',
                             name: '日历',
                             url: window.config.sysConfig.calendar_index
@@ -313,11 +315,21 @@ export const IframeInstance = new Component({
             let tempList = this.data.tempList;
             let menu = window.config.menu;
             this.actions.findTabInfo(menu,tempList);
+            this.actions.sortTabs(this.data.autoOpenList,this.data.timeList);
+            this.data.autoOpenList =  this.data.autoOpenList.concat(this.data.biCalendarList);
             //依次打开各标签
             for(let k of this.data.autoOpenList){
                 this.actions.openIframe(k.id,k.url,k.name);
             }
             this.data.isAutoOpenTabs = false;   //首次自动打开的页面无需向后台发送请求，以后打开页面需要向后台发送请求
+        },
+        sortTabs:function (tabsList,timeList) {
+            for(let k of tabsList){
+                k.time = timeList[k.id];
+            }
+            tabsList.sort((a,b) => {
+                return a.time - b.time;
+            })
         },
         findTabInfo:function (nodes,targetList) {
             for( let i=0; i < nodes.length; i++){
@@ -350,9 +362,9 @@ export const IframeInstance = new Component({
         adaptTabWidth:function () {
             let singleWidth = this.data.tabsTotalWidth/this.data.count ;
             if(singleWidth  > this.data.tabWidth){              //空间有剩余
-                this.el.find('.tabs div.item').css("width","114px");      //有25px padding-right,总长140px
+                this.el.find('.tabs div.item').css("width","104px");      //有25px padding-right,总长140px
             }else{
-                let width = singleWidth - 25 + "px";            // -25 padding
+                let width = singleWidth - 35 + "px";            // -25 padding
                 this.el.find('.tabs div.item').css("width",width);
             }
         }
@@ -363,6 +375,10 @@ export const IframeInstance = new Component({
         this.data.iframes = this.el.find('.iframes');
         this.actions.setTabsCount();
         this.actions.readyOpenTabs();
+        $(window).resize(() => {            //监听浏览器窗口变化，重置参数及自适应窗口大小
+            that.actions.setTabsCount();
+            that.actions.adaptTabWidth();
+        });
 
         this.el.on('click', '.tabs .item .close', function () {
             let id = $(this).attr('iframeid');
