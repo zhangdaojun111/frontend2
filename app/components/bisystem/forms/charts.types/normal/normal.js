@@ -380,7 +380,7 @@ export class FormNormalComponent extends BiBaseComponent{
     selectYAxis(flag) {
         if (this.formGroup.defaultY.getValue()) {
             let checkboxs = [];
-            let items = []
+            let items = [];
             this.y.concat(this.y1).map(y => {
                 if (y.data.field) {
                     items.push(y.data.field);
