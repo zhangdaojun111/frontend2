@@ -48,17 +48,6 @@ export class FormPieComponent extends BiBaseComponent{
             pieShare:share,
             single:single,
             multiple:multiple,
-            pieType:instanceFitting({
-                type:'select',
-                me: this,
-                container: 'pie-type',
-                data:{
-                    options:[{
-                        name:'饼图',
-                        value:'饼图'
-                    }]
-                }
-            }),
             pieSingle:instanceFitting({
                 type:'select',
                 me: this,
