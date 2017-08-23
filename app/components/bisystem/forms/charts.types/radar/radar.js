@@ -77,7 +77,6 @@ export class FormRadarComponent extends BiBaseComponent{
      */
     fillChart(chart) {
         this.editChart = chart;
-
         this.formGroup.chartName.setValue(chart['chartName']);
         let share = {
             chartSource:chart['source'],
@@ -123,12 +122,18 @@ export class FormRadarComponent extends BiBaseComponent{
             if (this.formGroup.product.autoSelect) {
                 this.formGroup.product.autoSelect.data.list = sources['x_field'];
                 this.formGroup.product.autoSelect.reload();
+                console.log(this.editModeOnce);
+                console.log(this.editChart);
+                if (this.editModeOnce && this.editChart) {
+                    this.formGroup.product.setValue(this.editChart['product'])
+                }
             }
         };
 
         // 编辑模式使用因为要等到所有数据加载完成在填充部分数据
         if (this.editModeOnce && this.editChart) {
-            this.columns.setValue(this.editChart['columns'])
+            this.columns.setValue(this.editChart['columns']);
+            this.editModeOnce = false;
         };
     }
 
