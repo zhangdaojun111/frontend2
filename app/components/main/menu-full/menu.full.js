@@ -4,25 +4,34 @@ import './menu.full.scss';
 import 'jquery-ui/ui/widgets/menu';
 import {FullMenuItem} from './item/item';
 
-function searchData(menu, text, parent) {
-    menu.forEach(function(item) {
-        item.parent = parent;
-        item.searchDisplay = false;
-        if (new RegExp(text, 'g').test(item.label)) {
-            setSearchDisplayTrue(item);
-        } else {
-            if (item.items) {
-                searchData(item.items, text, item);
+function searchData(menu, text) {
+    let res = _.cloneDeep(menu);
+    
+    function search(_menu, _text, _parent) {
+        _menu.forEach(function(item) {
+            item.parent = _parent;
+            item.searchDisplay = false;
+            let reg = new RegExp(text, 'g');
+            if (reg.test(item.label) || reg.test(item.name_py)) {
+                setDisplay(item);
+            } else {
+                if (item.items) {
+                    search(item.items, text, item);
+                }
             }
-        }
-    });
-}
-
-function setSearchDisplayTrue(item) {
-    item.searchDisplay = true;
-    if (item.parent) {
-        setSearchDisplayTrue(item.parent);
+            delete item.parent;
+        });
     }
+    
+    function setDisplay(_item) {
+        _item.searchDisplay = true;
+        if (_item.parent) {
+            setDisplay(_item.parent);
+        }
+    }
+    search(res, text, null);
+    return res;
+
 }
 
 let config = {
@@ -35,8 +44,7 @@ let config = {
     actions: {
         search: function (text) {
             this.data.text = text;
-            let menu = _.defaultsDeep([], this.originData);
-            searchData(menu, text, null);
+            let menu = searchData(this.originData, text);
             this.data.list = menu;
             this.reload();
         },
@@ -61,39 +69,42 @@ let config = {
             this.data.type = 'mini';
             this.reload();
             this.actions.countHeight();
+        },
+        startEditModel: function () {
+            this.el.find('input:checkbox').show();
         }
     },
-    afterRender: function () {
 
+    binds: [
+        {
+            event: 'input',
+            selector: 'label.search input:text',
+            callback: _.debounce(function(context) {
+                this.actions.search(context.value);
+            }, 500)
+        }
+    ],
+
+    afterRender: function () {
         let $root = this.el.find('.root');
         this.data.list.forEach((data) => {
             let component = new FullMenuItem(_.defaultsDeep({}, data, {
                 root: true,
                 offset: 0,
-                searchDisplay: true
+                searchDisplay: true,
+                type: this.data.type
             }));
             this.append(component, $root, 'li');
         });
-
-        let that = this;
-        this.el.on('input', '#search-menu-button', _.debounce(function() {
-            that.actions.search(this.value);
-        }, 500));
-
-        if (this.data.type === 'mini') {
-            this.el.find('.root').menu({
-            });
-        }
         this.actions.countHeight();
+        // this.el.removeClass('all').addClass('mini');
     },
     firstAfterRender: function() {
-        this.originData = _.defaultsDeep([], this.data.list);
-        let that = this;
-        $(window).on('resize.menu', function () {
-            let menu = that.el.find('.menu-full');
+        this.originData = _.cloneDeep(this.data.list);
+        $(window).on('resize.menu', () => {
+            let menu = this.el.find('.menu-full');
             menu.css({
-                height: (document.body.scrollHeight - menu.offset().top) + 'px',
-                overflow: 'auto'
+                height: (document.body.scrollHeight - menu.offset().top) + 'px'
             });
         });
     },
