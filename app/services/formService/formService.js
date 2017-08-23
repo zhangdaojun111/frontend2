@@ -486,7 +486,9 @@ export const FormService={
     },
 
     //重新拼装下拉框格式
-    createSelectJson(json,multi,isMultiBuild){
+    //multiBuildType 特殊多选内置分支判断
+    //multi 是否多选
+    createSelectJson(json,multi,multiBuildType){
 
         let data={list:[],choosed:[]};
         if(json.is_view){
@@ -496,10 +498,13 @@ export const FormService={
         }
         data['width']=json['width'];
         let options;
-        if(isMultiBuild){
+        if(multiBuildType && multiBuildType ==1){
             options=json.is_view?json.isViewOptions:(json.options2 || json.options);
         }else{
             options=json['options'];
+        }
+        if(options[0]['value'] == ''){
+            options.shift();
         }
         for(let key in options){
             if(json['value']){
@@ -524,9 +529,6 @@ export const FormService={
                 name:options[key]['label']||'',
                 py:_.isArray(options[key]['py'])?options[key]['py'].join(','):'',
             });
-        }
-        if(!(data.list[0]['id']=='') && data.list[0]['id'] != '请选择' && !multi){
-            data.list.unshift({id:'',name:''});
         }
         data.multiSelect=multi?true:false;
         return data;

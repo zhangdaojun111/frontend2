@@ -349,7 +349,7 @@ let FormEntrys = {
     async createForm(config={}){
         console.time('获取表单数据的时间');
         this.init(config);
-        let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap">`).prependTo(this.el);
+        let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap"></div>`).prependTo(this.el);
         let res=await  FormService.getPrepareParmas({table_id:this.tableId});
         this.findFormIdAndFlowId(res);
         let json=this.createPostJson();

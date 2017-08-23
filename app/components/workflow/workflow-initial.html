@@ -14,17 +14,36 @@
                     <div class="workflow-form" id="workflow-form"></div>
                     <div class="workflow-form" id="workflow-grid"></div>
                     <div class="workflow-foot">
-                        <div class="workflow-box" id="add-home"></div>
+                        <div class="workflow-box" id="add-home">
+                            <div class="flex flex-column flex-start">
+                                <div class="workflow-box-l flex">
+                                    <div class="tit">
+                                        <i class="workflow-icon icon-workflow-icon3"></i>
+                                        <span>关注人</span>
+                                    </div>
+                                    <div class="add-follow flex" id="addFollower"><span class="workflow-icon icon-workflow-icon6 add-icon"></span><span>添加关注人</span></div>
+                                </div>
+                                <div class="workflow-box-r">
+                                    <div class="content">
+                                        <div class="follow-name-list" id="addFollowerList">
+                                                    
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="workflow-box" id="flow-node">
                         </div>
-                        <div class="flex">
+                        <div class="flex" name="Under" id="Under">
                             <div id="workflowClose" class="workflow-close ui-button">关闭</div>
                             <div id="submit" class="ui-button workflow-submit ui-widget ui-corner-all">提交</div>
                             <div id="startNew" class="ui-button ui-widget ui-corner-all">发起新工作</div>
                         </div>
+                        <a href="#Under" class="down">↓</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<div id="add-follow"></div>
