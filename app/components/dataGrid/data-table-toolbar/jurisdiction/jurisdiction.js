@@ -2,16 +2,18 @@
  * Created by zhr
  */
 import Component from "../../../../lib/component";
-import template from './operationDetails.html';
+import template from './jurisdiction.html';
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import {dataTableService} from '../../../../services/dataGrid/data-table.service';
 import {HTTP} from "../../../../lib/http";
-import './operationDetails.scss'
+import './jurisdiction.scss'
 
 let config = {
     template: template,
     data: {
-
+        type:'',
+        content:'',
+        dataInfo:'',
     },
     actions: {
         afterGetMsg:function() {
@@ -27,7 +29,7 @@ let config = {
         })
     }
 }
-class operationDetails extends Component {
+class jurisdiction extends Component {
     constructor(data) {
         for (let d in data) {
             config.data[d] = data[d]
@@ -35,4 +37,4 @@ class operationDetails extends Component {
         super(config)
     }
 }
-export default operationDetails
+export default jurisdiction

@@ -150,7 +150,6 @@ let config = {
         showInfoSet:function () {
             //检查页面是否已创建
             let $page = $(document).find("div#personal-setting-page");
-            console.log($page);
             if($page.length !== 0){
                 $page.focus();
             }else{
@@ -299,7 +298,7 @@ let config = {
             //deleteFileByCode
             let code = Object.keys(temp)[0];
             uploader.deleteFileByCode(code,'/delete_attachment/');
-         });
+        });
     },
     beforeDestory: function() {
         Mediator.removeAll('aside');

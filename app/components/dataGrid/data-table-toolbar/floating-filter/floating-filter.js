@@ -22,11 +22,13 @@ let config = {
                     this.eFilterInput.className = 'filter-input';
                     this.eGui.style.height = '25px';
                     this.eFilterInput.style.width = '80%';
-                    this.eFilterInput.style.height = '18px';
+                    this.eFilterInput.style.height = '17px';
                     this.eFilterInput.style.lineHeight = '20px';
                     this.eFilterInput.style.color = 'rgb(85,85,85)';
                     this.eFilterInput.style.border = '1px solid #55A1F3';
                     this.eFilterInput.style.marginBottom = '5px';
+                    this.eFilterInput.style.borderRadius = '2px';
+                    this.eFilterInput.style.marginTop = '3px';
                     let searchType = 'keyup';
                     if( colInfo == 'date' ){
                         this.eFilterInput.type = 'date';
