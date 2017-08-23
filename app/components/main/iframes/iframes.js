@@ -53,7 +53,7 @@ import {TabService} from "../../../services/main/tabService"
 //     }
 // };
 
-let maxIframeCount = 10;
+let maxIframeCount = 15;
 
 export const IframeInstance = new Component({
     template: template,
@@ -68,6 +68,8 @@ export const IframeInstance = new Component({
         isLoginShowBI:"",
         isLoginShowCalendar:"",
         isAutoOpenTabs:true,    //标记是否为首次加载tabs
+        tabsTotalWidth:"",           //tabs可用总长度 = div.tabs - 200;
+        tabWidth:140,           //单个tabs长度，默认140（需和scss同步修改），空间不足以后自适应宽度
     },
     actions: {
         openIframe: function (id, url, name) {
@@ -106,6 +108,7 @@ export const IframeInstance = new Component({
             if (this.data.count > maxIframeCount) {
                 this.actions.closeFirstIframe();
             }
+            this.actions.adaptTabWidth();
         },
         closeFirstIframe: function () {
             let firstId = this.data.sort.shift();
@@ -138,6 +141,7 @@ export const IframeInstance = new Component({
                     this.actions.focusIframe(lastId);
                 }
             }
+            this.actions.adaptTabWidth();
         },
         focusIframe: function (id) {
             if (this.data.focus) {
@@ -318,11 +322,23 @@ export const IframeInstance = new Component({
                 }
             }
         },
+        //自适应宽度
+        adaptTabWidth:function () {
+            let singleWidth = this.data.tabsTotalWidth/this.data.count ;
+            if(singleWidth  > this.data.tabWidth){              //空间有剩余
+                this.el.find('div.item').css("width","114px");      //有25px padding-right,总长140px
+            }else{
+                let width = singleWidth - 25 + "px";            // -25 padding
+                this.el.find('div.item').css("width",width);
+            }
+        }
     },
     afterRender: function () {
         let that = this;
         this.data.tabs = this.el.find('.tabs');
         this.data.iframes = this.el.find('.iframes');
+        this.data.tabsTotalWidth = parseInt(this.el.find('div.tabs').width()) - 220;   //标签可用宽度
+
         this.actions.readyOpenTabs();
         this.el.on('click', '.tabs .item .close', function () {
             let id = $(this).attr('iframeid');
@@ -339,6 +355,7 @@ export const IframeInstance = new Component({
             SaveView.show(that.data.sort);
         }).on('mouseenter','.view-popup',() => {
             this.actions.showTabsPopup();
+            console.log("enter")
             // }).on('click','.view-popup',(event) => {
             //     event.stopPropagation();
             // }).on('click','.drop-up-icon',() => {
@@ -348,6 +365,7 @@ export const IframeInstance = new Component({
         }).on('click','.tab-list',(event) => {
             this.actions.controlTabs(event);
         }).on('mouseleave','.view-popup',() => {
+            console.log("leave");
             this.actions.hideTabsPopup();
         })
     },
