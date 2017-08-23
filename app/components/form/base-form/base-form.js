@@ -1213,7 +1213,7 @@ let config={
             this.el.find('.ui-btn-box').remove();
             //添加提交按钮
             if(this.data.btnType == 'new' || this.data.btnType == 'edit'){
-                this.el.find(".overflow").parents().append(`<div class="noprint ui-btn-box"><div>
+                this.el.find(".overflow").parent().append(`<div class="noprint ui-btn-box"><div>
                     <!--<button class="btn btn-normal mrgr" id="print">-->
                         <!--<span>打印</span>-->
                         <!--<div class="btn-ripple ripple"></div>-->
@@ -1686,7 +1686,7 @@ let config={
          }
         _this.el.find(".overflow").on("scroll",function () {
             let overflowHight = _this.el.find('.overflow').scrollTop();
-            console.log(overflowHight)
+           // console.log(overflowHight)
             _this.el.find('table').height()
             if(overflowHight>=400){
                 _this.el.find('.btn').show();
