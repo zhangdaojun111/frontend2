@@ -193,6 +193,9 @@ export const IframeInstance = new Component({
             this.el.find('.tab-list').show();
             window.clearTimeout(this.data.timer)
         },
+        clearTimeOut:function () {
+            window.clearTimeout(this.data.timer);
+        },
         hideTabsPopup(){
             this.data.timer = window.setTimeout(() => {
                 this.el.find('.tab-list').hide();
@@ -399,8 +402,10 @@ export const IframeInstance = new Component({
 
         this.el.on('click','.view-save',function () {
             SaveView.show(that.data.sort);
-        }).on('mouseenter','.view-popup',() => {
+        }).on('mouseenter','.popup-icon',() => {
             this.actions.showTabsPopup();
+        }).on('mouseenter','.view-popup',() => {
+            this.actions.clearTimeOut();
         }).on('click','.tab-list',(event) => {
             this.actions.controlTabs(event);
         }).on('mouseleave','.view-popup',() => {
