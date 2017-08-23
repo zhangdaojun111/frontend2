@@ -335,9 +335,9 @@ export const dgcService = {
     },
     //替换的图标
     replacingIcons: {
-        checkboxChecked: '<img src="'+require('../../assets/images/dataGrid/icon_checkbox_yes.png') +'" />',
-        checkboxUnchecked: '<img src="'+require('../../assets/images/dataGrid/icon_checkbox_no.png') +'" />',
-        checkboxIndeterminate: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        checkboxChecked: '<img src="'+require('../../assets/images/dataGrid/ico_select_3_pre.png') +'" />',
+        checkboxUnchecked: '<img src="'+require('../../assets/images/dataGrid/ico_select_3.png') +'" />',
+        checkboxIndeterminate: '<img src="'+require('../../assets/images/dataGrid/ico_select_3.png') +'" />',
         columnMovePivot: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
         columnMoveGroup: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
         columnMovePin: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
