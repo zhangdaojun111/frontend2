@@ -19,16 +19,17 @@ import {CalendarWorkflowData} from '../calendar.main/calendar.workflow/calendar.
 let config = {
     template: template,
     data:{
-        cancel_fields:[],
-        hide_table:{'table_Id':'','tableName':''},
-        hide_tables:[],
+        cancel_fields:[],                              // 取消选中数组
+        hide_table:{'table_Id':'','tableName':''},     //单条隐藏table
+        hide_tables:[],                                //隐藏table数组
         Add_hideTable:[],
         contentStatus:1,
-        rows:[],
+        rows:[],                                       //日立树数据
         hide_item_table:[],
         calendarTreeData: {},
     },
     actions: {
+        //与我相关审批和已完成显示隐藏
         contentHide:function(that,temp){
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
@@ -47,6 +48,7 @@ let config = {
                 temp.next().animate({height:"83%"},"fast");
             }
         },
+        //日历操作显示和隐藏
         hideclass:function(that,temp){
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
@@ -66,6 +68,7 @@ let config = {
                 that.el.find(".item-content-2").animate({height:"56%"},"fast");
             }
         },
+        //日历操作显示和隐藏
         hide_item:function(that,temp){
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
@@ -81,7 +84,7 @@ let config = {
                 temp.addClass("display-all-content");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
-                that.el.find(".item-content-1").animate({height:"84%"},"fast");
+                that.el.find(".item-content-1").animate({height:'83%'},"fast");
             }
         },
         showRemindType:function(that){
@@ -90,7 +93,7 @@ let config = {
             that.el.find(".item-content").hide();
             that.el.find(".item-content-2").hide();
             that.el.find(".item-content-1").show();
-            that.el.find(".item-content-1").css({height:"80%"});
+            that.el.find(".item-content-1").css({height:"83%"});
         },
         getCalendarTreeData:function(that){
             for(let i = 0;i<this.data.calendarTreeData.hide_tables.length;i++){
@@ -111,12 +114,37 @@ let config = {
             })
         },
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '.hide-con',
+            callback: function(temp = this){
+                 temp = $(temp).parents('.item-title');
+                 this.actions.contentHide(this,temp);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.hide-con-1',
+            callback: function(temp = this){
+                this.actions.hide_item(this,$(temp).parents('.item-title-1'));
+            }
+        },
+        {
+            event: 'click',
+            selector: '.hide-con-2',
+            callback: function(temp = this){
+                this.actions.hideclass(this,$(temp).parents('.item-title-2'));
+            }
+        },
+    ],
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
         let that = this;
         this.actions.getCalendarTreeData(that);
         this.append(new LeftcontentCalendarset(this.data.calendarTreeData), this.el.find('.left-calendar-set'));
-        this.append(new leftContentFinished(),this.el.find('.item-content-4'));
+        // let myChild = new leftContentFinished({},{onChange:function(data){console.log(data.type)}});
+        // this.append(myChild,this.el.find('.item-content-4'));
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.el.find('.item-content-3').empty();
             console.log(data);
@@ -130,14 +158,7 @@ let config = {
         Mediator.on('calendar-left:showRemindType',()=>{
             that.actions.showRemindType(that);
         });
-        that.el.on('click', '.hide-con',function(){
-            let temp = $(this).parents('.item-title');
-            that.actions.contentHide(that,temp);
-        }).on("click",".hide-con-1",function(){
-            that.actions.hide_item(that,$(this).parents('.item-title-1'));
-        }).on("click",".hide-con-2",function(){
-            that.actions.hideclass(that,$(this).parents('.item-title-2'));
-        }).on('click','.set-calendar',() =>{
+        that.el.on('click','.set-calendar',() =>{
             CalendarSetService.getMenu().then(res => {
                 // PMAPI.openDialogByIframe(
                 //     '/iframe/calendarOpenSetting/',

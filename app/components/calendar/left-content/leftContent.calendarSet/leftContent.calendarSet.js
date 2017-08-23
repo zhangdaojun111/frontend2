@@ -74,20 +74,6 @@ let config = {
                 Mediator.emit('calendar-left:approveData',{data:true});
             }
         },
-        contentHide:function(){
-            if(this.data.contentStatus === 1){
-                this.el.find(".taskbar").animate({height:"61%"},200);
-                this.el.find(".cate-hide").animate({height:"4%"},100);
-                this.el.find(".item-content").hide();
-                this.data.contentStatus = 0;
-            }
-            else if(this.data.contentStatus === 0){
-                this.el.find(".taskbar").animate({height:"25%"},100);
-                this.el.find(".cate-hide").animate({height:"40%"});
-                this.el.find(".item-content").show();
-                this.data.contentStatus = 1;
-            }
-        },
         hide_group:function(temp,that){
             let hide_type_id = temp.attr("id").split('-');
             let hide_table_name = "";
@@ -203,6 +189,32 @@ let config = {
             Mediator.emit('calendar-left:showRenmindclass',{data:config.data.cancel_fields,hide_tables:config.data.hide_tables});
         }
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '#checkbox_a3',
+            callback: function(temp = this){
+                let label_select_all_show = this.el.find(".label-select-all-show");
+                let select_label_children = this.el.find(".select-label-children");
+                this.actions.checkbox_a3($(temp),label_select_all_show,select_label_children,this);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.approve-label',
+            callback: function(){
+                let checkbox_a2 = this.el.find("#checkbox_a2");
+                this.actions.approve_label(checkbox_a2);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.hide-type-group',
+            callback: function(temp = this){
+                this.actions.hide_group($(temp),this);
+            }
+        }
+    ],
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
         let that = this;
@@ -222,18 +234,6 @@ let config = {
         });
         Mediator.on('calendar-left:showRemindType',data =>{
             config.actions.showRemindType(that,data)
-        });
-        that.el.on('click',"#checkbox_a3",function(){
-            let label_select_all_show = that.el.find(".label-select-all-show");
-            let select_label_children = that.el.find(".select-label-children");
-            config.actions.checkbox_a3($(this),label_select_all_show,select_label_children,that);
-        }).on('click',".approve-label",function(){
-            let checkbox_a2 = that.el.find("#checkbox_a2");
-            config.actions.approve_label(checkbox_a2);
-        }).on('click', '.item-title', () =>{
-            this.actions.contentHide();
-        }).on('click',".hide-type-group",function(){
-            config.actions.hide_group($(this),that);
         });
     },
     beforeDestory: function () {

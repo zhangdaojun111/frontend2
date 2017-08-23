@@ -25,13 +25,14 @@ let config = {
             let strhtml = "";
             data.items.forEach((items) =>{
                 strhtml+="<div class=\"label-task-children\">\n" +
-                    "<input type='checkbox' id='select-children-"+items.field_id+"' class='chk_1 chk_approve label-select-all checkbox-children-"+data.table_id +"'";
+                    "<input type='checkbox' id='select-children-"+items.field_id+"' class='chk_1 chk_approve label-select-all checkbox-children-"+
+                    data.table_id +"'";
                 strhtml+="/>" +
                     "<label class='select-label-children select-children-"+data.table_id;
-                if(config.data.cancel_fields.indexOf(items.field_id) != -1){
+                if(config.data.cancel_fields.indexOf(items.field_id) !== -1){
                     strhtml+=" unchecked"
                 }
-                let color = that.actions.colorRgb(items.color,0.7);
+                let color = that.actions.colorRgb(items.color,1);
                 strhtml+="'style='background-color:"+ color+"' for='select-children-"+items.field_id+"' id='select-children-"+items.field_id+"'>" +
                     "</label><label>"+items.field_name+"</label>"+
                     "</div>";
@@ -79,7 +80,7 @@ let config = {
                     $(this).addClass('unchecked');
                     $(this).prev('input').removeAttr('checked');
                     let filedId =$(this).attr("id").split("-")[2];
-                    if(config.data.cancel_fields.indexOf(filedId) == -1){
+                    if(config.data.cancel_fields.indexOf(filedId) === -1){
                         config.data.cancel_fields.push(filedId);
                     }
                 });
@@ -90,7 +91,7 @@ let config = {
                 that.el.find(class_Name).removeClass('unchecked');
                 that.el.find(class_Name).each(function(){
                     let filedId = $(this).attr("id").split("-")[2];
-                    if(config.data.cancel_fields.indexOf(filedId) != -1){
+                    if(config.data.cancel_fields.indexOf(filedId) !== -1){
                         config.data.cancel_fields.splice($.inArray(filedId,config.data.cancel_fields),1);
                     }
                 });
@@ -142,7 +143,7 @@ let config = {
             else {
                 temp.addClass('unchecked');
                 let filedId = temp.attr("id").split("-")[2];
-                if(config.data.cancel_fields.indexOf(fileId) == -1){
+                if(config.data.cancel_fields.indexOf(fileId) === -1){
                     config.data.cancel_fields.push(filedId);
                 }
                 Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
@@ -195,33 +196,86 @@ let config = {
             Mediator.emit('CalendarSelected: Search', json);
         }
     },
+    binds:[
+        {
+            event: 'mouseleave',
+            selector: '.float-button-group',
+            callback: function(temp = this){
+                $(temp).css("display","none");
+            }
+        },
+        {
+            event: 'click',
+            selector: '.float-button-group-show',
+            callback: function(){
+                this.el.find(".float-button-group").css({"display":"block","top":event.clientY - 90});
+            }
+        },
+        {
+            event: 'click',
+            selector: '.select-label-show',
+            callback: function(){
+                this.actions.selectlabelshow($(this));
+            }
+        },
+        {
+            event: 'click',
+            selector: '.select-label',
+            callback: function(temp = this){
+                this.actions.selectlabel($(temp),this);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.select-label-children',
+            callback: function(temp = this){
+                this.actions.selectlabelchildren($(temp),this);
+            }
+        },
+        {
+            event: 'mouseover',
+            selector: '.hide-span-function',
+            callback: function(){
+                event.stopPropagation();
+                this.el.find(".search-function").show();
+            }
+        },
+        {
+            event: 'mouseover',
+            selector: '.hide-type-group',
+            callback: function(){
+                this.el.find(".search-function").css("display","none");
+            }
+        },
+        {
+            event: 'mouseover',
+            selector: '.float-button-group',
+            callback: function(){
+                event.stopPropagation();
+                this.el.find(".float-button-group").show();
+            }
+        },
+        {
+            event: 'click',
+            selector: '.search-function-children',
+            callback: function(temp = this){
+                this.actions.goSearch($(temp).parent(".search-function").attr("class").split(" ")[1],$(temp).attr("class").split(" ")[1]);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.select-label-show',
+            callback: function(temp = this){
+                this.actions.selectlabelshow($(temp));
+            }
+        },
+    ],
     afterRender: function() {
         let that = this;
         that.actions.showfirst(that);
         config.actions.loaddatahtml(that,config.data.dataitem);
         Mediator.on('calendar-left:checkbox3-check',data =>{
             config.data.cancel_fields = data.data;
-        });
-        that.el.on("mouseleave",".float-button-group",function(){
-            $(this).css("display","none");
-        }).on("click",".float-button-group-show",function(){
-            that.el.find(".float-button-group").css({"display":"block","top":event.clientY - 90});
-        }).on('click','.select-label-show',function(){
-            config.actions.selectlabelshow($(this));
-        }).on('click',".select-label",function(){
-            config.actions.selectlabel($(this),that);
-        }).on('click','.select-label-children',function () {
-            config.actions.selectlabelchildren($(this),that);
-        }).on('mouseover',".hide-span-function",function () {
-            event.stopPropagation();
-            that.el.find(".search-function").show();
-        }).on('mouseover',".float-button-group", () =>{
-            event.stopPropagation();
-            this.el.find(".float-button-group").show();
-        }).on('mouseover',".hide-type-group", () => {
-            that.el.find(".search-function").css("display","none");
-        }).on('click','.search-function-children',function () {
-            that.actions.goSearch($(this).parent(".search-function").attr("class").split(" ")[1],$(this).attr("class").split(" ")[1]);
         });
         $(document).mouseover(function(){
             that.el.find(".float-button-group").hide();

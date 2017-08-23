@@ -1,7 +1,22 @@
 {{#if remindTaskItemData.isShow}}
 <div class="task-item" draggable="true">
     <span class="task-bg-color"></span>
-    {{#if remindTaskItemData.isSetSelect}}
+    {{#if IsHomeCalendar}}
+        {{#if remindTaskItemData.selectOption}}
+            {{#if isFinishedTask}}
+                <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-finished.png" alt="">
+            {{else}}
+                <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-waitcheck.png" alt="">
+            {{/if}}
+            <select class="select-options">
+                {{#each remindTaskItemData.selectOption}}
+                <option class="select-children" value="{{this.value}}">{{this.label}}</option>
+                {{/each}}
+            </select>
+        {{else}}
+            <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-pending.png" alt="">
+        {{/if}}
+    {{else if remindTaskItemData.isSetSelect}}
         {{#if remindTaskItemData.selectOption}}
         <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-finished.png" alt="">
         <select class="select-options">
@@ -10,8 +25,7 @@
             {{/each}}
         </select>
         {{else}}
-        <span class="task-state-none"></span>
-        <!--<img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-pending.png" alt="">-->
+          <span class="task-state-none"></span>
         {{/if}}
     {{else}}
     <!--<img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-pending.png" alt="">-->
