@@ -35,6 +35,7 @@ import AttachmentControl from "../attachment-control/attachment-control";
 import SettingPrint from '../setting-print/setting-print'
 import Songrid from '../songrid-control/songrid-control';
 import Correspondence from '../correspondence-control/correspondence-control';
+import ContractControl from "../contract-control/contract-control";
 
 let config={
     template:'',
@@ -1213,7 +1214,7 @@ let config={
             this.el.find('.ui-btn-box').remove();
             //添加提交按钮
             if(this.data.btnType == 'new' || this.data.btnType == 'edit'){
-                this.el.find(".overflow").parents().append(`<div class="noprint ui-btn-box"><div>
+                this.el.find(".overflow").parent().append(`<div class="noprint ui-btn-box"><div>
                     <!--<button class="btn btn-normal mrgr" id="print">-->
                         <!--<span>打印</span>-->
                         <!--<div class="btn-ripple ripple"></div>-->
@@ -1559,12 +1560,10 @@ let config={
                         break;
                     case 'MultiSelect':
                         if(single.data('childData')){
-                            // data[key].childData=single.data('childData');
-                            data[key].childData='#*#2638_3egFSMCwDBHgNKBo59sr6P$#$#*#6487_VjN4tR8j6uChdEb8GkajaN';
+                            data[key].childData=single.data('childData');
                         }
                         if(single.data('selectType')){
-                            // data[key].childData=single.data('selectType');
-                            data[key].selectType='1';
+                            data[key].childData=single.data('selectType');
                         }
                         data[key].is_special = data[key].field_content['special_multi_choice'] == 1?true:false;
                         let multiSelectControl = new MultiSelectControl(data[key],actions);
@@ -1600,6 +1599,13 @@ let config={
                         let dateTimeControl = new DateTimeControl(data[key],actions);
                         dateTimeControl.render(single);
                         _this.data.childComponent[data[key].dfield] =  dateTimeControl;
+                        break;
+                    case 'editControl':
+                        data[key]['temp_id']=data['temp_id']['value'];
+                        data[key]['table_id']=data['table_id']['value'];
+                        let contractControl = new ContractControl(data[key]);
+                        contractControl.render(single);
+                        _this.data.childComponent[data[key].dfield] =  contractControl;
                         break;
                 }
             }
@@ -1686,7 +1692,7 @@ let config={
          }
         _this.el.find(".overflow").on("scroll",function () {
             let overflowHight = _this.el.find('.overflow').scrollTop();
-            console.log(overflowHight)
+           // console.log(overflowHight)
             _this.el.find('table').height()
             if(overflowHight>=400){
                 _this.el.find('.btn').show();
