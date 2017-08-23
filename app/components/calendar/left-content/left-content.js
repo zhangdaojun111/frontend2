@@ -45,10 +45,10 @@ let config = {
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
                 temp.next(".item-content").show();
-                temp.next().animate({height:"83%"},"fast");
+                temp.next().css({height:'calc(100% - 130px)'});
             }
         },
-        //日历操作显示和隐藏
+        //日历隐藏栏显示和隐藏
         hideclass:function(that,temp){
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
@@ -65,7 +65,7 @@ let config = {
                 that.el.find(".item-content-1").css("height","27%");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").show();
-                that.el.find(".item-content-2").animate({height:"56%"},"fast");
+                that.el.find(".item-content-2").css({height:'calc(73% - 133px)'});
             }
         },
         //日历操作显示和隐藏
@@ -84,7 +84,8 @@ let config = {
                 temp.addClass("display-all-content");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
-                that.el.find(".item-content-1").animate({height:'83%'},"fast");
+                that.el.find(".item-content-1").css({height:'calc(100% - 130px)'});
+                // that.el.find(".item-content-1").animate({height:'calc(100% - 120px)'},"fast");
             }
         },
         showRemindType:function(that){
@@ -93,7 +94,7 @@ let config = {
             that.el.find(".item-content").hide();
             that.el.find(".item-content-2").hide();
             that.el.find(".item-content-1").show();
-            that.el.find(".item-content-1").css({height:"83%"});
+            that.el.find(".item-content-1").css({height:'calc(100% - 130px)'});
         },
         getCalendarTreeData:function(that){
             for(let i = 0;i<this.data.calendarTreeData.hide_tables.length;i++){
