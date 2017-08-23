@@ -1523,7 +1523,7 @@ let config={
                         _this.data.childComponent[data[key].dfield]=textArea;
                         break;
                     case 'Readonly':
-                        let readonly=new Readonly(data[key]);
+                        let readonly=new Readonly(data[key],actions);
                         readonly.render(single);
                         _this.data.childComponent[data[key].dfield]=readonly;
                         break;
@@ -1543,7 +1543,7 @@ let config={
                         _this.data.childComponent[data[key].dfield]=selectControl;
                         break;
                     case 'Year':
-                        let yearControl = new YearControl(data[key]);
+                        let yearControl = new YearControl(data[key],actions);
                         yearControl.render(single);
                         _this.data.childComponent[data[key].dfield]=yearControl;
                         break;
@@ -1585,7 +1585,7 @@ let config={
                         _this.data.childComponent[data[key].dfield] = settingTextareaControl;
                         break;
                     case 'Attachment':
-                        let attachmentControl = new AttachmentControl(data[key]);
+                        let attachmentControl = new AttachmentControl(data[key],actions);
                         attachmentControl.render(single);
                         _this.data.childComponent[data[key].dfield] = attachmentControl;
                         break;
