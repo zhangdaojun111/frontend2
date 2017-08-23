@@ -51,19 +51,19 @@ let config = {
             this.floatingFilterCom = new FloatingFilter();
             let columnData = [
                 {headerName: '操作类型', width: 100,field:'operation_type',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('none', 'operation_type', this.data.searchValue, this.data.searchOldValue),
-                    floatingFilterComponentParams: {suppressFilterButton: true},suppressFilter: true, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},
+                    floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},
                 {headerName: '操作目标', width: 100,field:'obj_name', floatingFilterComponent: this.floatingFilterCom.actions.createFilter('text', 'obj_name', this.data.searchValue, this.data.searchOldValue),
-                    floatingFilterComponentParams: {suppressFilterButton: true},suppressFilter: true, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},
+                    floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},
                 {headerName: '操作时间', width: 100,field:'create_time',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('datetime', 'create_time', this.data.searchValue, this.data.searchOldValue),
-                    floatingFilterComponentParams: {suppressFilterButton: true},suppressFilter: true, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},
+                    floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},
                 {headerName: '级联结果', width: 100,field:'cache_result',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('none' , 'cache_result', this.data.searchValue, this.data.searchOldValue),
-                    floatingFilterComponentParams: {suppressFilterButton: true},suppressFilter: true, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},
+                    floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},
                 {headerName: '级联详情', width: 100,field:'cache_detail',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('none' , 'cache_detail', this.data.searchValue, this.data.searchOldValue),
-                    floatingFilterComponentParams: {suppressFilterButton: true},suppressFilter: true, suppressSorting: true,suppressMenu: true,cellRenderer:(param)=>{
+                    floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellRenderer:(param)=>{
                     return '<div style="text-align: center;color:#0E7AEF;">详情</div>'
                 },cellStyle:{'font-style': 'normal','text-align':'center'}},
                 {headerName: '本表结果', width: 100,field:'result_type',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('none', 'result_type', this.data.searchValue, this.data.searchOldValue),
-                    floatingFilterComponentParams: {suppressFilterButton: true}, suppressFilter: true,suppressSorting: true,suppressMenu: true,cellRenderer:(param)=>{
+                    floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellRenderer:(param)=>{
                     let result = param.data.result_type;
                     if( result=='失败' ){
                         return '<div style="text-align: center;color: red;font-weight: bold;">'+result+'</div>';
@@ -72,7 +72,7 @@ let config = {
                     }
                 },cellStyle:{'font-style': 'normal','text-align':'center'}},
                 {headerName: '本表详情', width: 100,field:'operation',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('none' , 'operation', this.data.searchValue, this.data.searchOldValue),
-                    floatingFilterComponentParams: {suppressFilterButton: true},suppressFilter: true, suppressSorting: true,suppressMenu: true,cellRenderer:()=>{
+                    floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellRenderer:()=>{
                     return '<div style="text-align: center;color:#0E7AEF;">详情</div>'
                 },cellStyle:{'font-style': 'normal','text-align':'center'}}
             ];
@@ -210,15 +210,14 @@ let config = {
                 let obj = {};
                 obj['type'] = 'operation';
                 obj['content'] = params['data']['result_detail'] || '';
-                obj['data_info'] = params['data']['data_info'] || [];
+                obj['dataInfo'] = params['data']['data_info'] || [];
                 this.actions.onOpenIframe(obj)
-            }else if(params['colDef']['field']=='cache_detail'){
+            } else if(params['colDef']['field']=='cache_detail'){
                 let obj = {};
                 obj['type'] = 'cache_detail';
                 obj['content'] = params['data']['cache_detail'] || '';
                 this.actions.onOpenIframe(obj)
             }
-
         },
         //打开详情弹窗
         onOpenIframe: function(obj){

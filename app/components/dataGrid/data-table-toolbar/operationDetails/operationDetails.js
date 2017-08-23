@@ -13,15 +13,17 @@ let config = {
     data: {
         type:'',
         content:'',
+        dataInfo:'',
     },
     actions: {
         afterGetMsg:function() {
             if(this.data.type == 'cache_detail') {
                 this.el.find('.cache-detail-content').css('display','block')
-                this.el.find('.cache-detail-td').html(this.data.content);
-            } else {
+                this.el.find('.cache-detail-text').html(this.data.content);
+            } else if (this.data.type == 'operation') {
+                console.log(this.data.dataInfo)
                 this.el.find('.operation-content').css('display','block')
-                this.el.find('.operation-td').html(this.data.content);
+                this.el.find('.operation-text').html(this.data.content);
             }
 
         }
