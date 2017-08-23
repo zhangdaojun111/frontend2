@@ -380,7 +380,7 @@ export class FormNormalComponent extends BiBaseComponent{
     selectYAxis(flag) {
         if (this.formGroup.defaultY.getValue()) {
             let checkboxs = [];
-            let items = []
+            let items = [];
             this.y.concat(this.y1).map(y => {
                 if (y.data.field) {
                     items.push(y.data.field);
@@ -479,9 +479,11 @@ export class FormNormalComponent extends BiBaseComponent{
     switchGroupandDeep(val) {
         if (val == 1) {
             this.formGroup.deeps.data.deepShow = false;
-            this.formGroup.deeps.data.deeps =[]
+            this.formGroup.deeps.data.deeps =[];
+            this.changeContext(val);
         } else {
             this.formGroup.deeps.data.deepShow = true;
+            this.changeContext(val);
         };
         this.formGroup.deeps.reload();
     }
@@ -613,5 +615,17 @@ export class FormNormalComponent extends BiBaseComponent{
         } else {
             msgbox.alert(res['error'])
         };
+    }
+
+    /**
+     * 改变label的显示 下拉,分组
+     */
+    changeContext(val){
+        if(val==2){
+            this.el.find('.chart-form-deep').addClass('after-content');
+        }else{
+            this.el.find('.chart-form-deep').removeClass('after-content');
+        }
+
     }
 }
