@@ -66,7 +66,7 @@ let config = {
             for (let k in this.data.currentIframesList){
                 list.push({ 'id':this.data.currentIframesList[k],                 //只需要存id
                             'table_id':"",
-                            'ts_name':""})
+                            'ts_name':""});
                 idList.push(this.data.currentIframesList[k]);
             }
             favorlist['name'] = name;
@@ -100,28 +100,28 @@ let config = {
 
                 let menu = window.config.menu;
                 //特殊处理bi和日历
-                if(tabIdList.includes('bi')){
-                    this.data.newHash.push({
-                        id: 'bi',
-                        name: 'BI',
-                        url: window.config.sysConfig.bi_index
-                    });
-                    _.remove(tabIdList,function (n) {
-                        return n === 'bi'
-                    })
-                }
-
-                if(tabIdList.includes('calendar')){
-                    this.data.newHash.push({
-                        id: 'calendar',
-                        name: '日历',
-                        url: window.config.sysConfig.calendar_index
-                    });
-
-                    _.remove(tabIdList,function (n) {
-                        return n === 'calendar'
-                    })
-                }
+                // if(tabIdList.includes('bi')){
+                //     this.data.newHash.push({
+                //         id: 'bi',
+                //         name: 'BI',
+                //         url: window.config.sysConfig.bi_index
+                //     });
+                //     _.remove(tabIdList,function (n) {
+                //         return n === 'bi'
+                //     })
+                // }
+                //
+                // if(tabIdList.includes('calendar')){
+                //     this.data.newHash.push({
+                //         id: 'calendar',
+                //         name: '日历',
+                //         url: window.config.sysConfig.calendar_index
+                //     });
+                //
+                //     _.remove(tabIdList,function (n) {
+                //         return n === 'calendar'
+                //     })
+                // }
                 this.actions.findTabInfo(menu,tabIdList);  //查找各tab的url和name
                 Mediator.emit('saveview:displayview',this.data.newHash);
                 SaveView.hide();
