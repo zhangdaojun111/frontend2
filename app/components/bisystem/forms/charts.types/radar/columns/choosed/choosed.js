@@ -21,4 +21,9 @@ export class FormColumnChoosedComponent extends BiBaseComponent{
     constructor() {
         super(config);
     }
+
+    setValue(choosed) {
+        this.data.choosed = choosed;
+        this.reload();
+    }
 }

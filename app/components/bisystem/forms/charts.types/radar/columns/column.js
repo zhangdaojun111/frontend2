@@ -46,6 +46,25 @@ export class FormColumnComponent extends BiBaseComponent{
     }
 
     /**
+     * 编辑模式设置值
+     * @param data 设置columns数据
+     */
+    setValue(choosed){
+        this.data.choosed = new Set(choosed);
+        this.choosed.data.choosed = Array.from(this.data.choosed);
+        this.choosed.reload();
+        this.data.columns.forEach((column,index) => {
+            choosed.map(val => {
+                if (val.id == column.id) {
+                    this.el.find('input').eq(index).attr('checked', true);
+                }
+            })
+
+        })
+        console.log(this.data.choosed);
+    }
+
+    /**
      * 当数据源变化的时候重新渲染
      * @param 需要重新渲染的columns字段
      */

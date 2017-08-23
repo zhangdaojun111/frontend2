@@ -29,6 +29,8 @@ let config = {
         // 监听数据源变化
         this.el.on(`${this.data.assortment}-chart-source`,(event,params) => {
             this.chartSourceChange(params['sources']);
+        }).on(`${this.data.assortment}-chart-editMode-source`, (event,params) => {
+            // 编辑模式
             if (this.chartId && this.editModeOnce) {
                 this.getChartData(this.chartId);
             }
@@ -47,7 +49,8 @@ export class FormRadarComponent extends BiBaseComponent{
         this.data.assortment = chart.assortment;
         this.chartId = chart.id;
         this.formGroup = {};
-        this.editModeOnce = this.chartId ? true : false
+        this.editModeOnce = this.chartId ? true : false;
+        this.editChart = null;
     }
 
     /**
@@ -73,8 +76,8 @@ export class FormRadarComponent extends BiBaseComponent{
      * 编辑模式
      */
     fillChart(chart) {
-        console.log(chart);
-        this.editModeOnce = false;
+        this.editChart = chart;
+
         this.formGroup.chartName.setValue(chart['chartName']);
         let share = {
             chartSource:chart['source'],
@@ -121,7 +124,12 @@ export class FormRadarComponent extends BiBaseComponent{
                 this.formGroup.product.autoSelect.data.list = sources['x_field'];
                 this.formGroup.product.autoSelect.reload();
             }
-        }
+        };
+
+        // 编辑模式使用因为要等到所有数据加载完成在填充部分数据
+        if (this.editModeOnce && this.editChart) {
+            this.columns.setValue(this.editChart['columns'])
+        };
     }
 
     /**
@@ -165,5 +173,6 @@ export class FormRadarComponent extends BiBaseComponent{
     reset(chart) {
         this.formGroup = {};
         this.editModeOnce = this.chartId ? true : false;
+        this.editChart = null;
     }
 }
