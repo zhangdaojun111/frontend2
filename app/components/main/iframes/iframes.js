@@ -318,6 +318,12 @@ export const IframeInstance = new Component({
                 }
             }
         },
+        sendMsgToIframes: function (info) {
+            PMAPI.sendToAllChildren({
+                type: PMENUM[info.typeName],
+                data: info
+            });
+        }
     },
     afterRender: function () {
         let that = this;
@@ -365,16 +371,9 @@ export const IframeInstance = new Component({
             }
         });
 
-        Mediator.on('socket:table_invalid', (info) => {
-            let item = this.data.hash[info.table_id];
-            if (!_.isUndefined(item)) {
-                let iframe = item.iframe[0];
-                PMAPI.sendToChild(iframe, {
-                    type: PMENUM.table_invalid,
-                    data: info
-                });
-            }
-        });
+        Mediator.on('socket:table_invalid', this.actions.sendMsgToIframes);
+        Mediator.on('socket:data_invalid', this.actions.sendMsgToIframes);
+        Mediator.on('socket:on_the_way_invalid', this.actions.sendMsgToIframes);
 
         Mediator.on('saveview:displayview', (data) => {
             this.actions.closeAllIframes();  //先关闭所有标签，再打开view中的标签

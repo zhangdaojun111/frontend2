@@ -1163,7 +1163,7 @@ let config = {
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
                 if( this.data.filterParam.filter.length == 0 ){
-                    msgBox.alert( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
+                    msgBox.showTips( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
                 }
             }
             if( this.data.groupCheck ){
@@ -1660,6 +1660,7 @@ let config = {
                             for( let o of this.data.saveEditObjArr ){
                                 saveArr.push( dataTableService.saveEditFormData( o ) )
                             }
+                            this.actions.setInvalid();
                             Promise.all(saveArr).then((res)=> {
                                 let j = 0;
                                 let wrong = 0;
@@ -1672,8 +1673,9 @@ let config = {
                                         errorText += (wrong + '、' + r.error);
                                     }
                                 }
-                                if( wrong!=0 ){
-                                    msgBox.alert( wrong + '条数据保存失败，失败原因：' + errorText )
+                                if( wrong > 0 ){
+                                    let err = wrong + '条数据保存失败，失败原因：' + errorText;
+                                    msgBox.alert( err );
                                 }else {
                                     msgBox.showTips( '执行成功！' )
                                 }
@@ -1810,6 +1812,7 @@ let config = {
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
             }
+            this.actions.setInvalid();
             dataTableService.delTableData( json ).then( res=>{
                 if( res.success ){
                     msgBox.showTips( '删除成功' )
@@ -1954,7 +1957,8 @@ let config = {
                         for( let r of res.rows ){
                             if( r.id == this.data.common_filter_id ){
                                 this.data.filterParam = {
-                                    filter: JSON.parse(r.queryParams),
+                                    expertFilter: JSON.parse(r.queryParams),
+                                    filter:[],
                                     is_filter: 1,
                                     common_filter_id: this.data.common_filter_id,
                                     common_filter_name: r.name
@@ -2052,6 +2056,7 @@ let config = {
             }
             //富文本字段
             if( data.colDef.real_type == fieldTypeService.UEDITOR ){
+                msgBox.alert( data.value )
             }
             //合同编辑器
             if( data.colDef.real_type == fieldTypeService.TEXT_COUNT_TYPE ){
@@ -2070,7 +2075,7 @@ let config = {
                         let list = res["rows"];
                         for( let data of list ){
                             //附件名称编码转换
-                            data.file_name = decodeURI( data.file_name );
+                            data.file_name = data.file_name;
                             let str = dataTableService.getFileExtension( data.file_name );
                             if( dataTableService.preview_file.indexOf( str.toLowerCase() ) != -1 ){
                                 data["isPreview"] = true;
@@ -2265,8 +2270,16 @@ let config = {
             let title = '查看'
             this.actions.openSourceDataGrid( url,title );
         },
+        //设置失效
+        setInvalid: function () {
+            this.pagination.data.myInvalid = true;
+        },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title,w,h ) {
+            //暂时刷新方法
+            if( url.indexOf( '/iframe/addWf/' ) != -1 ){
+                this.actions.setInvalid();
+            }
             PMAPI.openDialogByIframe( url,{
                 width: w || 1300,
                 height: h || 800,

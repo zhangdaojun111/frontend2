@@ -102,7 +102,8 @@ let config = {
             let autoSelect = new AutoSelect({
                 list: tempData,
                 multiSelect: false,
-                editable: true,
+                editable: true
+            }, {
                 onSelect: function (choosed) {
                     console.log(choosed);
                     that.actions.setAgentId(choosed);
