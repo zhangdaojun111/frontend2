@@ -178,6 +178,7 @@ export class FormRadarComponent extends BiBaseComponent{
      */
     reset(chart) {
         this.formGroup = {};
+        this.chartId = chart.id;
         this.editModeOnce = this.chartId ? true : false;
         this.editChart = null;
     }
