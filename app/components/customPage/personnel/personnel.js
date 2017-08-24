@@ -300,6 +300,7 @@ let config = {
                     }
                 },
                 treeType:"SINGLE_SELECT",
+                selectParentMode:'Select',
                 isSearch: true,
                 treeName:"department-tree"
             });
