@@ -38,6 +38,7 @@ class Component {
             }
         }
         scan(this);
+        this.subComponents = [];
         this.componentId = componentId++;
         count ++;
     }
@@ -108,6 +109,7 @@ class Component {
         tagName = tagName || 'div';
         let el = $(`<${tagName}>`).appendTo(container);
         component.render(el);
+        this.subComponents.push(component);
         return this;
     }
 
