@@ -111,7 +111,7 @@ let config = {
                 obj['cond']['searchBy'] = this.el.find('.condition-search-box-input').eq(i).attr('name');
                 obj['cond']['searchByName'] = this.el.find('.condition-search-box-input').eq(i).val();
                 obj['cond']['searchByNew'] = this.el.find('.condition-search-box-input').eq(i).attr('name');
-                obj['relation'] = this.el.find('.condition-search-select.radio').val()
+                obj['relation'] = this.el.find('.condition-search-select.radio').eq(i).val()
                 // if(this.el.find('.condition-search-radio.or').eq(i).prop('checked') == true) {
                 //     obj['relation'] = '$or';
                 // }
@@ -208,7 +208,6 @@ let config = {
                                 appendChecked = false;
                             }
                         })
-                        debugger
                         PMAPI.closeIframeDialog(window.config.key, {
                             type:'temporaryQuery',
                             appendChecked:appendChecked,
@@ -234,6 +233,9 @@ let config = {
                 height: 220,
                 title: '保存为常用查询'
             }).then((data) => {
+                if(data.onlyclose == true){
+                    return false
+                }
                 if(data.value == '') {
                     msgBox.alert('名字不能为空')
                 }else  {
@@ -396,7 +398,6 @@ let config = {
                 }
             })
         }
-
     },
     afterRender: function() {
         PMAPI.getIframeParams(window.config.key).then((res) => {
