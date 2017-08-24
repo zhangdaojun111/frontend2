@@ -124,11 +124,11 @@ html {
     }
     input[type=checkbox]:checked:after {
         position: absolute;
-        width: 6px;
+        width: 8px;
         content: ' ';
-        height: 6px;
-        left: 5px;
-        top: 5px;
+        height: 8px;
+        left: 4px;
+        top: 4px;
         background-color: #0088ff;
         cursor: pointer;
     }
@@ -157,11 +157,11 @@ html {
     }
     input[type=radio]:checked:after {
         position: absolute;
-        width: 6px;
+        width: 8px;
         content: ' ';
-        height: 6px;
-        left: 5px;
-        top: 5px;
+        height: 8px;
+        left: 4px;
+        top: 4px;
         background-color: #0088ff;
         cursor: pointer;
         border-radius: 100%;
