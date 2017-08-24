@@ -136,7 +136,7 @@ export class FormNineGridComponent extends BiBaseComponent{
             chartName:data.nineGridName,
             countColumn:'',
             filter: [],
-            icon: [],
+            icon: data.nineGridShare.icons,
             source: data.nineGridShare.chartSource,
             theme: data.nineGridShare.themes,
             type: opt,
@@ -172,6 +172,7 @@ export class FormNineGridComponent extends BiBaseComponent{
      * 编辑模式
      */
     fillChart(chart) {
+        console.log(chart);
         this.formGroup.nineGridName.setValue(chart['chartName']);
         let share = {
             chartSource:chart['source'],
