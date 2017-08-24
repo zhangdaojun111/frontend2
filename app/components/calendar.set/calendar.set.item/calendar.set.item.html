@@ -1,23 +1,38 @@
 <tr class="singleRow">
     <td class="set-table-item table-item-checkbox">
         {{#if rowSetData.isSelected}}
-        <input type="checkbox" disabled class="editor-items set-show-text-input" checked>
+        <!--<input type="checkbox" disabled class="editor-items set-show-text-input" checked>-->
+        <!--<label class="custom-checkbox z-checkbox">
+            <input type="checkbox" name="custom-checkbox" class="z-checkbox-input">
+        </label>-->
+        <label class="custom-checkbox z-checkbox">
+            <input type="checkbox" name="custom-checkbox" class="editor-items set-show-text-input z-checkbox-input" checked disabled>
+        </label>
         {{else}}
-        <input type="checkbox" disabled class="editor-items set-show-text-input" >
+        <!--<input type="checkbox" disabled class="editor-items set-show-text-input" >-->
+        <label class="custom-checkbox z-checkbox">
+            <input type="checkbox" name="custom-checkbox" class="editor-items set-show-text-input z-checkbox-input" disabled>
+        </label>
         {{/if}}
     </td>
     <td class="set-table-item table-item-checkbox">
         {{#if rowSetData.is_show_at_home_page}}
-        <input type="checkbox" class="editor-items set-calendar-page-show-text" disabled checked>
+        <!--<input type="checkbox" class="editor-items set-calendar-page-show-text" disabled checked>-->
+        <label class="custom-checkbox z-checkbox">
+            <input type="checkbox" name="custom-checkbox" class="editor-items set-calendar-page-show-text z-checkbox-input" checked disabled>
+        </label>
         {{else}}
-        <input type="checkbox" class="editor-items set-calendar-page-show-text" disabled >
+        <!--<input type="checkbox" class="editor-items set-calendar-page-show-text" disabled >-->
+        <label class="custom-checkbox z-checkbox">
+            <input type="checkbox" name="custom-checkbox" class="editor-items set-calendar-page-show-text z-checkbox-input" disabled>
+        </label>
         {{/if}}
     </td>
     <td class="set-table-item">
         {{rowTitle.name}}
     </td>
     <td class="set-table-item">
-        <input class="set-color editor-items" id="set-color-id" type="color" value="#8FF000" disabled>
+        <input class="set-color editor-items" id="set-color-id" type="color" value="#000000" disabled>
     </td>
     <td class="set-table-item multi-select-item">
 

@@ -1,11 +1,14 @@
-<div class="week-head flex">
+<!--<div class="week-head flex">
     {{#each weekListHead}}
     <span class="head-grid"><span class="date-head">{{this.time}}</span></span>
     {{/each}}
-</div>
+</div>-->
 <table class="week-table" border="1">
-    <!--<thead class="week-head flex">
-    </thead>-->
+    <div class="week-head flex">
+        {{#each weekListHead}}
+        <span class="head-grid"><span class="date-head">{{this.time}}</span></span>
+        {{/each}}
+    </div>
     <tbody class="week-body flex">
 
     </tbody>
