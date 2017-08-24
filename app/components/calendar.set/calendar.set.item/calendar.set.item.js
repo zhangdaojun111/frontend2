@@ -200,12 +200,16 @@ let config = {
         /**
          * @author zj
          */
-        this.el.find('.res-text option').each((item) => {
-            let a = $('.res-text option')[item].value;
-            if(a === this.data.rowSetData['selectedRepresents']) {
-                this.el.find('.res-text option')[item].selected  = 'selected';
-            }
-        });
+        if(this.el.find('.res-text option')) {
+            this.el.find('.res-text option').each((item) => {
+                let a = $('.res-text option')[item].value;
+                if(a === this.data.rowSetData['selectedRepresents']) {
+
+                    this.el.find('.res-text option')[item].selected  = 'selected';
+                }
+            });
+        }
+
         this.el.find('.page-change-text option').each(item => {
             let a= $('.page-change-text option')[item].value;
             if(a === this.data.rowSetData['selectedEnums']) {
