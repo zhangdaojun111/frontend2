@@ -27,7 +27,12 @@ let config={
             });
         },
         uploadFile:function () {
-            this.el.find('.selecting-file').click();
+            let ele = this.el.find('.selecting-file');
+            //视频附件
+            if(this.data.dinput_type == 33){
+                ele.attr('accept','video/*');
+            }
+            ele.click();
         },
         shotScreen:function () {
             PMAPI.openDialogByComponent(screenShotConfig,{
@@ -64,6 +69,9 @@ let config={
         }
     },
     afterRender: function () {
+        if(this.data.dinput_type == 33){
+            this.el.find('.shot-screen').css('display','none');
+        }
         this.el.on('click','.view-attached-list',()=>{
             this.actions.viewAttachList();
         }).on('click','.upload-file',()=>{
