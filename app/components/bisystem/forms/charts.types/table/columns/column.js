@@ -13,8 +13,7 @@ let config = {
     template:template,
     data: {
         columns: [],
-        choosed: new Set(),
-        test: null
+        choosed: []
     },
     actions: {},
     afterRender() {
@@ -52,7 +51,7 @@ export class FormColumnComponent extends BiBaseComponent{
      */
     reloadUi(data){
         this.data.columns = data['x_field'];
-        this.data.choosed.clear();
+        this.data.choosed = [];
         this.reload();
     }
 
@@ -67,7 +66,8 @@ export class FormColumnComponent extends BiBaseComponent{
                     this.el.find('input').eq(index).attr('checked',true)
                 }
             })
-        })
+        });
+        this.data.choosed = choosed;
     }
 
     /**
@@ -76,11 +76,18 @@ export class FormColumnComponent extends BiBaseComponent{
      */
     chooseColumn(checked,index) {
         if (checked) {
-            this.data.choosed.add(this.data.columns[index]);
+           let repeatColumn = _.remove(this.data.choosed, (column) => {
+                    return column.id == this.data.columns[index].id
+            });
+           if (repeatColumn.length  === 0) {
+               this.data.choosed.push(this.data.columns[index]);
+           };
         } else {
-            this.data.choosed.delete(this.data.columns[index]);
+           _.remove(this.data.choosed, (column) => {
+                return column.id == this.data.columns[index]['id']
+            });
         };
-        this.choosed.data.choosed = Array.from(this.data.choosed);
+        this.choosed.data.choosed = this.data.choosed
         this.messager('form:table:column:choosed',{'choosed': this.choosed.data.choosed});
         this.choosed.reload();
     }
