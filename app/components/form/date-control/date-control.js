@@ -55,6 +55,10 @@ let config={
             defaultDate:new Date(_this.data.value),
             onClose: function(selectedDate) {
             },
+            showOn: 'button',//设置触发选择器为button
+            //buttonImage:"../../../assets/images/form/icon-rili.png",
+            buttonImage:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAAbElEQVQ4y6VT0QoAIQibR9/qP+XP7p68h7C0cxDEYsrYEpLo4IlIM2OFA4CxPqqqrKKIc35Ewgrng0IL1WGfhZPHDCPbsMPRQitGM6NP393THlyBJOacJImb45qyhasq/4oxirMSbbtI0v3OL3+8d/U3+COTAAAAAElFTkSuQmCC",
+            buttonImageOnly:true,
             showOtherMonths: true, //填充没有显示的单元格，但无法使用
             //向外弹射操作后的值
             onSelect: function (selectTime, text) {
@@ -95,18 +99,18 @@ let config={
             }
 
         });
-        let boolean = true;
-        if(boolean){
-            _this.el.on('click','#icon_rili',function(){
-                _this.el.find(".date_yy-mm-dd").datepicker('show');
-            });
-            boolean = false;
-        }else{
-            _this.el.on('click','#icon_rili',function(){
-                _this.el.find(".date_yy-mm-dd").datepicker('hide');
-            });
-             boolean = true;
-        }
+        // let boolean = true;
+        // if(boolean){
+        //     _this.el.on('click','#icon_rili',function(){
+        //         _this.el.find(".date_yy-mm-dd").datepicker('show');
+        //     });
+        //     boolean = false;
+        // }else{
+        //     _this.el.on('click','#icon_rili',function(){
+        //         _this.el.find(".date_yy-mm-dd").datepicker('hide');
+        //     });
+        //      boolean = true;
+        // }
         _.debounce(function(){_this.events.changeValue(_this.data)},200)();
     },
     beforeDestory:function(){
