@@ -26,6 +26,7 @@ let confirmConfig = {
         }
     },
     afterRender: function () {
+        this.el.find('.text p').text(decodeURIComponent(this.data.text));
         this.el.on('click', '.yes', () => {
             this.actions.confirm();
         }).on('click', '.no', () => {

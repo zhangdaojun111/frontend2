@@ -19,6 +19,7 @@ $(document).ready(function(){
         correspondenceField: window.config.correspondenceField || '',
         keyword: window.config.keyword || ''
     }
+    $( 'title' ).html( window.config.tableName || 'REDS' );
     let DataTableAgGrid=new dataTableAgGrid( json );
     DataTableAgGrid.render($('#sourceDataGrid'));
 });
