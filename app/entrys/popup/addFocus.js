@@ -88,10 +88,10 @@ if(focus.length>1){
                 withButtons:true
                 });
             treeComp2.render($('#treeMulti'));
-        
-         
+
+
         });
-    
+
     })
 }else{
     (async function () {

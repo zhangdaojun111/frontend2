@@ -1,13 +1,13 @@
+/**
+ *@author qiumaoyun
+ *添加关注人中间组件
+ */
 import Component from '../../../../lib/component';
-// import './workflow-addFollow.scss';
+import template from './select-staff.html';
 import Mediator from '../../../../lib/mediator';
 
 let config={
-    template: `<div class="flex" data-id="{{id}}">
-    <div class="w33"><span class="remove checkbox checked" name="{{name}}" value="{{id}}"></span></div>
-        <div class="w33">{{name}}</div>
-        <div class="w33">{{username}}</div>
-    </div>`,
+    template: template,
     data:{},
     action:{
 
