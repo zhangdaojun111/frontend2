@@ -90,6 +90,7 @@ export class FormTableComponent extends BiBaseComponent{
         this.append(this.single, this.el.find('.form-group-single-columns'));
     }
 
+
     /**
      * 渲染chart fittings
      */
