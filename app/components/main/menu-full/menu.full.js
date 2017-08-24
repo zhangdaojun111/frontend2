@@ -84,9 +84,13 @@ let config = {
         },
         getSelected: function () {
             let choosed = this.el.find('input:checkbox:checked.leaf[key]');
-            return Array.from(choosed).map((item) => {
+            let res = Array.from(choosed).map((item) => {
                 return $(item).attr('key');
             });
+            _.remove(res, function (i) {
+                return i === '0';
+            });
+            return res;
         }
     },
 
