@@ -18,6 +18,11 @@
           margin-right: 5px;
           cursor: pointer;
       }
+      .custom-checkbox{
+        .workflow_checked{
+          background-color: RGB(100, 166, 239) !important;
+        }
+      }
       .label-select-all-checked + label:after {
           content: '\2714' !important; //勾选符号
           position: absolute !important;
@@ -29,9 +34,6 @@
           font-size: 14px !important;
           padding: 1px 0 0 0 !important;
           vertical-align: text-top !important;
-      }
-      .workflow_checked + label{
-          background-color: RGB(100, 166, 239);
       }
   }
 }

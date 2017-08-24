@@ -1,13 +1,14 @@
 @import "../calendar.set";
 .singleRow {
     width: 100%;
+    display: block;
     .table-item-checkbox{
-        width:100px !important;
+        width:9% !important;
     }
     .set-table-item{
         border-top: 1px solid #C1CACA;
         padding: 10px 0px;
-        width: 138px;
+        width: 9%;
         min-width: 30px;
         text-align: center;
         line-height: 30px;
@@ -33,7 +34,7 @@
         }
     }
     .multi-select-item{
-        width:300px !important;
+        width:20% !important;
         .popup {
             display: none;
             width: 100%;

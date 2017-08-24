@@ -1,6 +1,6 @@
 /**
  * Created by lipengfei.
- * 日历隐藏表
+ * 日历隐藏提醒
  */
 import Component from "../../../../lib/component";
 import template from './leftContent.hideContent.html';
@@ -9,11 +9,8 @@ import {CalendarService} from '../../../../services/calendar/calendar.service';
 import Mediator from '../../../../lib/mediator';
 let config = {
     template:template,
-    data:{
-        show_type_ID :"",
-    },
+    data:{},
     actions:{
-
     },
     binds:[
         {
