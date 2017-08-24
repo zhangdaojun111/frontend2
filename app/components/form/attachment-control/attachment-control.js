@@ -27,7 +27,12 @@ let config={
             });
         },
         uploadFile:function () {
-            this.el.find('.selecting-file').click();
+            let ele = this.el.find('.selecting-file');
+            //视频附件
+            if(this.data.dinput_type == 33){
+                ele.attr('accept','video/*');
+            }
+            ele.click();
         },
         shotScreen:function () {
             PMAPI.openDialogByComponent(screenShotConfig,{
@@ -47,15 +52,25 @@ let config={
                 return;
             }
             let ele = $('<div></div>');
-            let item = new AttachmentQueueItem(file,this.data.real_type,(event,data)=>{
-                if(event == 'delete'){
-                    ele.remove();
-                    if(data !=undefined){
-                        this.data.queue.slice(this.data.queue.indexOf(data),1);
+            let item = new AttachmentQueueItem({file:file,real_type:this.data.real_type},
+                {changeFile:event=>{
+                    if(event.event == 'delete'){
+                        ele.remove();
+                        if(event.data !=undefined){
+                            console.log(event.data);
+                            console.log(this.data.queue);
+                            console.log(this.data.value);
+                            this.data.queue.splice(this.data.queue.indexOf(event.data),1);
+                            this.data.value.splice(this.data.value.indexOf(event.data.fileId),1);
+                            this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
+                        }
                     }
-                }
-                if(event == 'finished'){
-                    this.data.queue.push(data);
+                    if(event.event == 'finished'){
+                        this.data.queue.push(event.data);
+                        this.data.value.push(event.data.fileId);
+                        this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
+                        this.trigger('changeValue', this.data);
+                    }
                 }
             });
             this.el.find('.upload-process-queue').append(ele);
@@ -64,6 +79,9 @@ let config={
         }
     },
     afterRender: function () {
+        if(this.data.dinput_type == 33){
+            this.el.find('.shot-screen').css('display','none');
+        }
         this.el.on('click','.view-attached-list',()=>{
             this.actions.viewAttachList();
         }).on('click','.upload-file',()=>{
@@ -80,8 +98,7 @@ let config={
 };
 
 export default class AttachmentControl extends Component{
-    constructor(data){
-        config.data = _.defaultsDeep(data,config.data);
-        super(config);
+    constructor(data,event){
+        super(config,data,event);
     }
 }

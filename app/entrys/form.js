@@ -32,7 +32,6 @@ let FormEntrys = {
         this.isAddBuild=0;
         this.buildId='';
         this.btnType='new';
-        this.changeFlow='';
 
         this.tableId=config.table_id||'';
         this.parentRealId=config.parent_real_id||'';
@@ -56,7 +55,6 @@ let FormEntrys = {
         this.isAddBuild=config.isAddBuild || 0;
         this.buildId=config.id || '';
         this.btnType=config.btnType||'new';
-        this.changeFlow=config.change_flow||'';
         console.log('配置文件');
         console.log(config);
     },
