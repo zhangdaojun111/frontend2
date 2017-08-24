@@ -173,19 +173,40 @@ class Component {
     }
 
     showLoading(){
+        let width = this.el.width();
+        let height = this.el.height();
+        let size = Math.min(width, height) * 0.15;
 
+        this.el.addClass('component-loading-effect');
+        this.el.children().addClass('component-filter-blur');
+
+        this.loadingOverlay = $('<div class="component-loading-cover">').appendTo(this.el);
+        let loadingHtml = `<div class='component-loading-box'><div class ="dot1"></div><div class ="dot2"></div></div>`;
+        this.loadingEffectBox = $(loadingHtml).appendTo(this.el);
+
+        this.loadingEffectBox.css({
+            "width":size,
+            "height":size,
+            marginLeft: -size/2,
+            marginTop: -size/2
+        });
     }
 
     hideLoading(){
-
+        this.el.removeClass('component-loading-effect');
+        this.loadingOverlay.remove();
+        this.loadingEffectBox.remove();
+        this.el.children().removeClass('component-filter-blur');
     }
 
     disable(){
-
+        this.el.addClass('relative');
+        this.disableEffectBox = $('<div class="component-disable-cover">').appendTo(this.el);
     }
 
     enable(){
-
+        this.disableEffectBox.remove();
+        this.el.removeClass('relative');
     }
 
 }
