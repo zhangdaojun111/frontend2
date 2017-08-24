@@ -74,7 +74,7 @@ let config = {
                 callback: (order, node) => {
                     this.actions._selectNode(order, node);
                 },
-                isSearch: true,
+                isSearch: false,
                 treeType: "MULTI_SELECT",
                 treeName: "post-message-depatment-tree"
             });
@@ -87,7 +87,7 @@ let config = {
         initChoosedUsers: function () {
             this.autoSelect = new AutoSelect({
                 displayType: 'static',           // popup或者static popup为弹出的形式 static 为静态显示
-                selectBoxHeight: 200,           // select 框的高度
+                selectBoxHeight: 180,           // select 框的高度
                 width: 300,                     // 为0表示显示默认宽度240
                 displayChoosed: false,
             }, {
@@ -150,14 +150,14 @@ let config = {
                 dom.css('display', 'flex');
                 dom.html(`
                     <label class="label-out">预计时间</label>
-                    <div class="inputs">
+                    <div class="inputs clearfix">
                         <input type="datetime-local" name="deadline" required="required" formnovalidate="formnovalidate">
-                        审批超预计时间是否仍发送：
-                        <label>
+                        <p>审批超预计时间是否仍发送：</p>
+                        <label class="custom-radio">
                             <input type="radio" name="outTimeSend" value="1" checked>
                             是
                         </label>
-                        <label>
+                        <label class="custom-radio">
                             <input type="radio" name="outTimeSend" value="0">
                             否
                         </label>
@@ -186,6 +186,7 @@ let config = {
                     if (formData.deadline !== undefined) {
                         formData.deadline = moment(new Date(formData.deadline)).format('YYYY-MM-DD hh:mm')
                     }
+                    this.showLoading();
                     HTTP.postImmediately('/set_notice/', formData).then((res) => {
                         if (res.success === 1) {
                             postMessageUtil.hide();
@@ -193,6 +194,7 @@ let config = {
                         } else {
                             msgbox.alert(res.error);
                         }
+                        this.hideLoading();
                     });
                 }
             }
@@ -230,8 +232,8 @@ let postMessageUtil = {
         let postMessage = new PostMessage();
         postMessage.render(this.el);
         this.el.dialog({
-            width: 1200,
-            height: 800,
+            width: 950,
+            height: 600,
             modal: true,
             title: '消息推送',
             close: function () {
@@ -246,4 +248,4 @@ let postMessageUtil = {
 }
 
 export {postMessageUtil};
-// postMessageUtil.show();
+postMessageUtil.show();
