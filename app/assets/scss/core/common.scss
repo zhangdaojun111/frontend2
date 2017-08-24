@@ -22,8 +22,8 @@ html {
 }
 
 ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 4px;
+    height: 4px;
 }
 
 ::-webkit-scrollbar-track-piece {
@@ -34,15 +34,15 @@ html {
 }
 
 ::-webkit-scrollbar-thumb:vertical {
-    height: 6px;
+    height: 4px;
     background-color: #999999;
-    border-radius: 6px;
+    border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
-    width: 6px;
+    width: 4px;
     background-color: #999999;
-    border-radius: 6px;
+    border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
