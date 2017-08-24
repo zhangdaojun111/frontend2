@@ -52,15 +52,21 @@ let config={
                 return;
             }
             let ele = $('<div></div>');
-            let item = new AttachmentQueueItem(file,this.data.real_type,(event,data)=>{
-                if(event == 'delete'){
-                    ele.remove();
-                    if(data !=undefined){
-                        this.data.queue.slice(this.data.queue.indexOf(data),1);
+            let item = new AttachmentQueueItem({file:file,real_type:this.data.real_type},
+                {changeFile:event=>{
+                    if(event.event == 'delete'){
+                        ele.remove();
+                        if(event.data !=undefined){
+                            this.data.queue.slice(this.data.queue.indexOf(event.data),1);
+                            this.data.value.slice(this.data.queue.indexOf(event.data),1);
+                        }
                     }
-                }
-                if(event == 'finished'){
-                    this.data.queue.push(data);
+                    if(event.event == 'finished'){
+                        event.data.fileId = 'test';
+                        this.data.queue.push(event.data);
+                        this.data.value.push(event.data.fileId);
+                        this.trigger('changeValue', this.data);
+                    }
                 }
             });
             this.el.find('.upload-process-queue').append(ele);
@@ -88,8 +94,7 @@ let config={
 };
 
 export default class AttachmentControl extends Component{
-    constructor(data){
-        config.data = _.defaultsDeep(data,config.data);
-        super(config);
+    constructor(data,event){
+        super(config,data,event);
     }
 }
