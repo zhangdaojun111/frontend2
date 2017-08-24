@@ -141,7 +141,6 @@ export class FormPieComponent extends BiBaseComponent{
             }
         };
 
-
         if (this.formGroup.single) {
             // 加载单条数据y轴数据
             this.formGroup.single.formYAxis.yAxis.data.checkboxs = sources['y_field'];
