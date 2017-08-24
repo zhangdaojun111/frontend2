@@ -399,6 +399,7 @@ export const IframeInstance = new Component({
             }
 
             if(resultIframe){
+                console.log('reset src');
                 let newSrc = '/search_result?searchContent=' + content;
                 $(resultIframe).attr("src",newSrc);
             }else{
