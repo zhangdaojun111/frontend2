@@ -93,9 +93,10 @@ $grid-bg-color: rgba(248, 248, 248, 1);
             display: inline-block;
             border: 1px solid $boder-color;
             .search-box {
+                width: 175px;
                 border: none;
                 vertical-align: middle;
-                height: 26px;
+                height: 24px;
                 padding: 0px 4px;
                 outline: none;
             }
