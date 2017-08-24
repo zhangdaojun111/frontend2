@@ -171,7 +171,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
             for(var i in focus){
                 nameArr.push(`<span class="selectSpan">${users.rows[focus[i]].name}</span>`);
             }
-            $('#addFollowerList').html(nameArr);
+            $('#add-home #addFollowerList').html(nameArr);
             if(nameArr.indexOf(window.config.name)>-1&&window.config.name!=res.record_info.current_node){
                 $('#approval-workflow').find('.for-hide').hide();
                 $('#approval-workflow').find('#re-app').hide();

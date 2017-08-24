@@ -2,19 +2,29 @@
  * Created by zhr
  */
 import Component from "../../../../lib/component";
-import template from './operationDetails.html';
+import template from './operation-details.html';
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import {dataTableService} from '../../../../services/dataGrid/data-table.service';
 import {HTTP} from "../../../../lib/http";
-import './operationDetails.scss'
+import './operation-details.scss'
 
 let config = {
     template: template,
     data: {
-
+        type:'',
+        content:'',
+        dataInfo:'',
     },
     actions: {
         afterGetMsg:function() {
+            if(this.data.type == 'cache_detail') {
+                this.el.find('.cache-detail-content').css('display','block')
+                this.el.find('.cache-detail-text').html(this.data.content);
+            } else if (this.data.type == 'operation') {
+                console.log(this.data.dataInfo)
+                this.el.find('.operation-content').css('display','block')
+                this.el.find('.operation-text').html(this.data.content);
+            }
 
         }
     },

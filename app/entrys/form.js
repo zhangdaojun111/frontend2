@@ -360,11 +360,15 @@ let FormEntrys = {
     },
     //创建表单入口
     async createForm(config={}){
+        console.log('更上去了没');
+        console.log('更上去了没');
+        console.log('更上去了没');
+        console.log('更上去了没');
+        console.log('更上去了没');
         console.time('获取表单数据的时间');
         this.init(config);
         let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap"></div>`).prependTo(this.el);
         let res;
-        console.log(!this.fromWorkFlow);
         if(!this.fromWorkFlow){
             res=await  FormService.getPrepareParmas({table_id:this.tableId});
             this.findFormIdAndFlowId(res);

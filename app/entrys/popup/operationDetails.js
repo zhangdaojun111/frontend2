@@ -1,10 +1,8 @@
 /**
  * Created by zhr
  */
-import operationDetails from '../../components/dataGrid/data-table-toolbar/operationDetails/operationDetails.js'
+import operationDetails from '../../components/dataGrid/data-table-toolbar/operation-details/operation-details.js'
 $(document).ready(function(){
-    debugger
-    console.log(window.config.key)
     let obj = {
         key: window.config.key
     }

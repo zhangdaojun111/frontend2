@@ -66,7 +66,8 @@ serchStr.split('&').forEach(res => {
     var arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
-
+is_view=obj.btnType==='view'?1:0;
+Mediator.publish('workflow:getKey', obj.key);
 (async function () {
     return workflowService.getPrepareParams({table_id:obj.table_id});
 })().then(res => {
@@ -76,8 +77,7 @@ serchStr.split('&').forEach(res => {
         $('#place-form').html('');
         FormEntrys.createForm({
             el: '#place-form',
-            is_view: 0,
-            from_approve: 0,
+            is_view: is_view,
             from_focus: 0,
             table_id: obj.table_id,
             parent_table_id:obj.parent_table_id,
@@ -101,8 +101,8 @@ Mediator.subscribe('workflow:getflows', (res)=> {
         el: '#place-form',
         form_id: res.form_id,
         flow_id:res.flow_id,
-        is_view: 0,
-        from_approve: 0,
+        is_view: is_view,
+        from_workflow:1,
         from_focus: 0,
         btnType:'none',
         table_id: obj.table_id,

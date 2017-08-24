@@ -107,6 +107,9 @@ btn-div{
      box-shadow:0px 5px 20px 1px #888;
      background: #fff;
      display: none;
+     #cloneId1 .follow-name-list .selectSpan {
+       margin-right: 15px;
+     }
      #cloneId2 .workflow-draw-box{
        transition: transform 0.5s ease-out;
        transform: scale(1);
@@ -186,12 +189,12 @@ btn-div{
           padding: 0 10px;
           display: flex;
           align-items: center;
+          width: 100px;
           .workflow-icon{
             margin-right: 5px;
           }
         }
         .workflow-look{
-          margin-left: 40px;
           .previewBtn{
            padding: 0 7px;
             height: 40px;

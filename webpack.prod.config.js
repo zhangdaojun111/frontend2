@@ -29,6 +29,8 @@ module.exports = {
         dataImport: path.resolve(APP_PATH, 'entrys/popup/dataImport.js'),
         expertSearch: path.resolve(APP_PATH, 'entrys/popup/expertSearch.js'),
         historyApprove: path.resolve(APP_PATH, 'entrys/popup/historyApprove.js'),
+        operationDetails: path.resolve(APP_PATH, 'entrys/popup/operationDetails.js'),
+        jurisdiction: path.resolve(APP_PATH, 'entrys/popup/jurisdiction.js'),
         workflowPage: path.resolve(APP_PATH, 'entrys/popup/workflowPage.js'),
         sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
