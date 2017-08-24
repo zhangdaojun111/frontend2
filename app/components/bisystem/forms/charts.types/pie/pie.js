@@ -147,6 +147,7 @@ export class FormPieComponent extends BiBaseComponent{
                 data[k] = fields[k].getValue();
             };
         });
+
         console.log(data);
         // const chart = {
         //     assortment: 'radar',
