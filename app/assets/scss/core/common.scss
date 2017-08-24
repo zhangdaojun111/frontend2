@@ -21,8 +21,8 @@ html {
 }
 
 ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: 6px;
+    height: 6px;
 }
 
 ::-webkit-scrollbar-track-piece {
@@ -33,15 +33,15 @@ html {
 }
 
 ::-webkit-scrollbar-thumb:vertical {
-    height: 4px;
+    height: 6px;
     background-color: #999999;
-    border-radius: 4px;
+    border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
-    width: 4px;
+    width: 6px;
     background-color: #999999;
-    border-radius: 4px;
+    border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -118,6 +118,7 @@ html {
 .grid-header-info {
 
 }
+
 .pointer {
     cursor: pointer;
 }
@@ -271,4 +272,3 @@ html {
     z-index: 150;
     background-color: rgba(0, 0, 0, 0.5);
 }
-
