@@ -14,6 +14,9 @@ let config = {
     template:template,
     data: {
         singleShow:'form-chart-pie-hide',
+        checkboxs: [], // 绑定y轴数据
+        items: [],
+        checkedItems: []
     },
     actions: {},
     afterRender() {
@@ -40,9 +43,9 @@ export class SingleComponent extends BiBaseComponent{
                 me: this,
                 data: {
                     value:null,
-                    checkboxs:[],
-                    items: [],
-                    checkedItems: [],
+                    checkboxs:this.data.checkboxs,
+                    items: this.data.items,
+                    checkedItems: this.data.checkedItems,
                 },
                 container: 'single-columns'
             }),
@@ -53,6 +56,7 @@ export class SingleComponent extends BiBaseComponent{
      * 获取单挑数据y轴字段
      */
     getValue() {
+        console.log(this.formYAxis.yAxis);
         return this.formYAxis.yAxis.getValue();
     }
 }
