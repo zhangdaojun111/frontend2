@@ -165,20 +165,6 @@ let config={
             }
         },
         {
-            event: 'focus',
-            selector: 'input',
-            callback: function(){
-                this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
-            }
-        },
-        {
-            event: 'blur',
-            selector: 'input',
-            callback: function(){
-                this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
-            }
-        },
-        {
             event: 'mouseleave',
             selector: 'input',
             callback: function(){
