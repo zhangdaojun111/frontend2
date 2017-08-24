@@ -64,7 +64,7 @@ let config={
                     if(event.event == 'finished'){
                         this.data.queue.push(event.data);
                         this.data.value.push(event.data.fileId);
-                        this.el.find('.view-attached-list').html(`共${this.data.value.lenght}个文件`);
+                        this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
                         this.trigger('changeValue', this.data);
                     }
                 }
