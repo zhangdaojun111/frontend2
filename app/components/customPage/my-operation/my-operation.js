@@ -236,12 +236,14 @@ let config = {
         onCellClicked: function (params) {
             if(params['colDef']['field']=='operation'){
                 let obj = {};
+                obj['tableId'] = params['data']['table_id'];
                 obj['type'] = 'operation';
                 obj['content'] = params['data']['result_detail'] || '';
                 obj['dataInfo'] = params['data']['data_info'] || [];
                 this.actions.onOpenIframe(obj)
             } else if(params['colDef']['field']=='cache_detail'){
                 let obj = {};
+                obj['tableId'] = params['data']['table_id'];
                 obj['type'] = 'cache_detail';
                 obj['content'] = params['data']['cache_detail'] || '';
                 this.actions.onOpenIframe(obj)
