@@ -2,7 +2,7 @@
     position: relative;
     background-color: #fff;
     //height: 30px;
-    input.text {
+    input.auto-select-text {
         width: 100%;
         border: 1px solid #ddd;
         height: 30px;
@@ -16,6 +16,7 @@
     .list {
         border: 1px solid #ddd;
         overflow: auto;
+        margin-top: -1px;
         &.popup {
             position: absolute;
             width: 100%;
@@ -37,21 +38,49 @@
                 height: 30px;
                 line-height: 30px;
                 cursor: pointer;
-                input.checkbox {
-                    vertical-align: top;
-                    margin: 8px 0 8px 8px;
-                }
+
                 &:hover {
                     background: #ddd;
                 }
-                span {
-                    margin: 0!important;
-                    padding-left: 8px;
-                }
-                label {
+
+                .custom-checkbox {
                     display: block;
                     cursor: pointer;
+                    width: 100%;
+                    height: 30px;
+                    input.checkbox {
+                        vertical-align: top;
+                        margin: 9px 0 0 8px;
+                        &:before {
+
+                        }
+                        &:after {
+
+                        }
+                    }
+                    span {
+                        margin: 0!important;
+                        padding-left: 8px;
+                    }
                 }
+            }
+        }
+        .select-all {
+            height: 30px;
+            background-color: #FAFAFA;
+            overflow: hidden;
+            a {
+                background-color: #0088ff;
+                color: #fff;
+                display: block;
+                width: 40px;
+                line-height: 22px;
+                margin: 4px 10px;
+                cursor: pointer;
+                float: left;
+                font-size: 12px;
+                text-align: center;
+                border-radius: 3px;
             }
         }
     }
