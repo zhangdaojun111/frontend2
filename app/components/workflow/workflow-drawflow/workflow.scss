@@ -130,6 +130,11 @@
         text-align: center;
         cursor: pointer;
     }
+    .closeSpan{
+        background: #fff;
+        z-index: 30;
+        position: relative;
+    }
 }
 .switch-node{
     font-size: 12px;
@@ -163,7 +168,6 @@
             }
         }
         .workflow-look{
-            margin-left: 40px;
             .previewBtn{
                 cursor: pointer;
                 padding: 0 7px;
@@ -180,6 +184,7 @@
         padding: 10px;
         width: 100%;
         overflow-x: auto;
+        box-sizing: border-box;
         .follow-name-list{
             position: relative;
             min-height: 65px;
@@ -199,4 +204,28 @@
             }
         }
     }
+}
+
+.flex{
+    display: flex;
+    align-items: center;
+}
+.flex.flex-column {
+    flex-direction: column;
+}
+.flex.flex-start{
+
+    align-items: flex-start;
+}
+.flex.flex-between{
+
+    justify-content: space-between;
+}
+.flex.flex-wrap{
+    flex-wrap: wrap;
+}
+
+.flex-item {
+    flex-grow: 1;
+    flex-shrink: 0;
 }

@@ -36,9 +36,10 @@ export const PMENUM = {
     iframe_silent: '5',
     table_invalid: '6',              // 表格数据失效
     on_the_way_invalid: '7',         // 在途数据失效
+    data_invalid: '11',
     open_iframe_params: '8',
     get_param_from_root: '9',        // 来自子框架的消息，需要获取iframe的参数
-    send_param_to_iframe: '10'       // 来组主框架的消息，向iframe发送参数
+    send_param_to_iframe: '10',       // 来组主框架的消息，向iframe发送参数
 }
 
 /**
@@ -238,6 +239,7 @@ export const PMAPI = {
      */
     sendToParent: function (data) {
         this.getRoot().postMessage(data, location.origin);
+        return this;
     },
 
     /**
@@ -252,6 +254,19 @@ export const PMAPI = {
         if (iframe.contentWindow) {
             iframe.contentWindow.postMessage(msg, location.origin);
         }
+        return this;
+    },
+
+    /**
+     * 将消息发送给所有的子框架
+     * @param msg
+     * @returns {PMAPI}
+     */
+    sendToAllChildren: function(msg) {
+        for(let i = 0; i < window.frames.length; i++){
+            this.sendToChild(window.frames[i], msg);
+        }
+        return this;
     },
 
     /**

@@ -53,7 +53,7 @@ import {TabService} from "../../../services/main/tabService"
 //     }
 // };
 
-let maxIframeCount = 10;
+let maxIframeCount = 15;
 
 export const IframeInstance = new Component({
     template: template,
@@ -68,20 +68,13 @@ export const IframeInstance = new Component({
         isLoginShowBI:"",
         isLoginShowCalendar:"",
         isAutoOpenTabs:true,    //标记是否为首次加载tabs
+        tabsTotalWidth:"",           //tabs可用总长度 = div.tabs - 200;
+        tabWidth:140,           //单个tabs长度，默认140（需和scss同步修改），空间不足以后自适应宽度
+        minTabWidth:100,        //用于估算小屏设备最大tabs数量
     },
     actions: {
         openIframe: function (id, url, name) {
-            if (this.data.isAutoOpenTabs === false && id !== 'search-result'){
-                //向后台发送请求记录
-                TabService.onOpenTab(id).done((result) => {
-                    if(result.success === 1){
-
-                    }else{
-                        console.log("post open record failed")
-                    }
-                });
-            }
-
+            this.actions.sendOpenRequest(id);
             id = id.toString();
             if (this.data.hash[id] === undefined) {
                 let tab = $(`<div class="item" iframeid="${id}">${name}<a class="close" iframeid="${id}"></a></div>`)
@@ -106,6 +99,28 @@ export const IframeInstance = new Component({
             if (this.data.count > maxIframeCount) {
                 this.actions.closeFirstIframe();
             }
+            this.actions.adaptTabWidth();
+        },
+        sendOpenRequest:function (id) {
+            if (this.data.isAutoOpenTabs === false && id !== 'search-result'){
+                //向后台发送请求记录
+                TabService.onOpenTab(id).done((result) => {
+                    if(result.success === 1){
+                        console.log("post open record success");
+                    }else{
+                        console.log("post open record failed")
+                    }
+                });
+            }
+        },
+        sendCloseRequest:function (id) {
+            TabService.onCloseTab(id,this.data.focus.id).done((result) => {
+                if(result.success === 1){
+                    console.log("post close record success")
+                }else{
+                    console.log("post close record failed")
+                }
+            });
         },
         closeFirstIframe: function () {
             let firstId = this.data.sort.shift();
@@ -115,14 +130,8 @@ export const IframeInstance = new Component({
             if ( id === undefined) {
                 return;
             }
-            TabService.onCloseTab(id,this.data.focus.id).done((result) => {
-                if(result.success === 1){
 
-                }else{
-                    console.log("post close record failed")
-                }
-            });
-
+            this.actions.sendCloseRequest(id);
             let item = this.data.hash[id];
             // IframeOnClick.retrack(item.iframe.find('iframe')[0]);
             item.tab.remove();
@@ -138,6 +147,7 @@ export const IframeInstance = new Component({
                     this.actions.focusIframe(lastId);
                 }
             }
+            this.actions.adaptTabWidth();
         },
         focusIframe: function (id) {
             if (this.data.focus) {
@@ -256,17 +266,23 @@ export const IframeInstance = new Component({
             //第一部分：获取系统关闭时未关闭的tabs
             let that = this;
             TabService.getOpeningTabs().then((result) => {
+                console.log(result);
+                let tabs = {};
                 //将未关闭的标签id加入tempList
-                let tabs = result[0].tabs;
-
+                if(result[0].succ === 1){
+                    tabs = result[0].tabs;
+                    delete tabs["0"];
                 if(tabs){
                     for(let k in tabs){
                         that.data.tempList.push(k);
                     }
                 }
+                }else{
+                    console.log("get tabs failed",result[0].err);
+                }
 
+                if(result[1].succ === 1){
                 let biConfig = result[1];
-
                 if((biConfig.data && biConfig.data === "1") || tabs.hasOwnProperty("bi")){
                     that.data.autoOpenList.push({
                         id: 'bi',
@@ -275,7 +291,11 @@ export const IframeInstance = new Component({
                     });
                     window.config.sysConfig.logic_config.login_show_bi = "1";
                 }
+                }else{
+                    console.log("get tabs failed",result[1].err);
+                }
 
+                if(result[2].succ === 1){
                 let calendarConfig = result[2];
                 if((calendarConfig.data && calendarConfig.data === "1") || tabs.hasOwnProperty("calendar")){
                     that.data.autoOpenList.push({
@@ -284,6 +304,7 @@ export const IframeInstance = new Component({
                         url: window.config.sysConfig.calendar_index
                     });
                     window.config.sysConfig.logic_config.login_show_calendar = "1";
+                }
                 }
                 that.actions.autoOpenTabs();
             });
@@ -318,12 +339,36 @@ export const IframeInstance = new Component({
                 }
             }
         },
+        sendMsgToIframes: function (info) {
+            PMAPI.sendToAllChildren({
+                type: PMENUM[info.typeName],
+                data: info
+            });
+        },        setTabsCount:function () {
+            this.data.tabsTotalWidth = parseInt(this.el.find('div.tabs').width()) - 220;   //标签可用宽度
+            maxIframeCount = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);  //自适应最大tabs数量
+            // let count = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);
+            // maxIframeCount =  count>15 ? 15:count;      //最多不超过15个
+
+        },
+        //自适应宽度
+        adaptTabWidth:function () {
+            let singleWidth = this.data.tabsTotalWidth/this.data.count ;
+            if(singleWidth  > this.data.tabWidth){              //空间有剩余
+                this.el.find('.tabs div.item').css("width","114px");      //有25px padding-right,总长140px
+            }else{
+                let width = singleWidth - 25 + "px";            // -25 padding
+                this.el.find('.tabs div.item').css("width",width);
+            }
+        }
     },
     afterRender: function () {
         let that = this;
         this.data.tabs = this.el.find('.tabs');
         this.data.iframes = this.el.find('.iframes');
+        this.actions.setTabsCount();
         this.actions.readyOpenTabs();
+
         this.el.on('click', '.tabs .item .close', function () {
             let id = $(this).attr('iframeid');
             that.actions.closeIframe(id);
@@ -339,12 +384,6 @@ export const IframeInstance = new Component({
             SaveView.show(that.data.sort);
         }).on('mouseenter','.view-popup',() => {
             this.actions.showTabsPopup();
-            // }).on('click','.view-popup',(event) => {
-            //     event.stopPropagation();
-            // }).on('click','.drop-up-icon',() => {
-            //     this.el.find('.tab-list').hideTabsPopup();
-            // }).on('click','.drop-down-icon',() => {
-            //     this.el.find('.tab-list').hideTabsPopup();
         }).on('click','.tab-list',(event) => {
             this.actions.controlTabs(event);
         }).on('mouseleave','.view-popup',() => {
@@ -365,16 +404,9 @@ export const IframeInstance = new Component({
             }
         });
 
-        Mediator.on('socket:table_invalid', (info) => {
-            let item = this.data.hash[info.table_id];
-            if (!_.isUndefined(item)) {
-                let iframe = item.iframe[0];
-                PMAPI.sendToChild(iframe, {
-                    type: PMENUM.table_invalid,
-                    data: info
-                });
-            }
-        });
+        Mediator.on('socket:table_invalid', this.actions.sendMsgToIframes);
+        Mediator.on('socket:data_invalid', this.actions.sendMsgToIframes);
+        Mediator.on('socket:on_the_way_invalid', this.actions.sendMsgToIframes);
 
         Mediator.on('saveview:displayview', (data) => {
             this.actions.closeAllIframes();  //先关闭所有标签，再打开view中的标签

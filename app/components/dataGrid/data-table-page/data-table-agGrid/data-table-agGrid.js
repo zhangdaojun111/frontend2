@@ -26,6 +26,7 @@ import exportSetting from '../../data-table-toolbar/data-table-export/data-table
 import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 import AttachmentList from "../../../form/attachment-list/attachment-list";
 import PictureAttachment from "../../../form/picture-attachment/picture-attachment";
+import {PersonSetting} from "../../../main/personal-settings/personal-settings";
 
 
 let config = {
@@ -164,6 +165,8 @@ let config = {
         editRowTotal: 0,
         //编辑已经保存的数量
         editRowNum: 0,
+        //编辑保存参数
+        saveEditObjArr: []
     },
     //生成的表头数据
     columnDefs: [],
@@ -542,7 +545,6 @@ let config = {
             // if(this.isShowEditCancel && params.colDef && !params.colDef.editable){
             //     color='rgba(230,230,230,0.8)';
             // }
-            console.log(fieldTypeService.numOrText(real_type));
             //处理数字类型
             if (fieldTypeService.numOrText(real_type)) {//数字类型
                 let numVal = fieldTypeService.intOrFloat(real_type) ? dgcService.formatter(params.value) : dgcService.formatter(Number(params.value).toFixed(colDef.real_accuracy))
@@ -947,7 +949,7 @@ let config = {
             }
             Promise.all(post_arr).then((res)=> {
                 this.data.rowData = res[0].rows || [];
-                this.data.total = res[0].total;
+                this.data.total = res[0].total || this.data.total;
                 //对应关系特殊处理
                 if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
                     this.actions.setCorrespondence(res[0]);
@@ -1161,7 +1163,7 @@ let config = {
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
                 if( this.data.filterParam.filter.length == 0 ){
-                    msgBox.alert( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
+                    msgBox.showTips( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
                 }
             }
             if( this.data.groupCheck ){
@@ -1557,7 +1559,7 @@ let config = {
                     this.actions.toogleEdit();
                 } )
                 this.el.find( '.edit-btn-cancel' ).on( 'click',()=>{
-                    this.actions.toogleEdit();
+                    this.actions.onEditSave(true);
                 } )
                 this.el.find( '.edit-btn-save' ).on( 'click',()=>{
                     //保存
@@ -1601,7 +1603,7 @@ let config = {
             }
         },
         //编辑模式保存数据
-        onEditSave: function () {
+        onEditSave: function (cancel) {
             //比对当前值与初始值的差别
             this.agGrid.gridOptions.api.stopEditing(false);
             let changedRows = this.actions.getChangedRows(this.agGrid.data.rowData);
@@ -1612,9 +1614,23 @@ let config = {
                 i++;
             }
             this.data.editRowTotal = i;
+            if( cancel ){
+                if( this.data.editRowTotal > 0 ){
+                    msgBox.confirm( '数据已经修改，是否取消？' ).then( r=>{
+                        if( r ){
+                            this.actions.toogleEdit();
+                            this.agGrid.gridOptions.api.setRowData( this.data.rowData );
+                        }
+                    } )
+                }else {
+                    this.actions.toogleEdit();
+                }
+                return;
+            }
             if( this.data.editRowTotal == 0 ){
                 this.actions.toogleEdit();
             }
+            this.data.saveEditObjArr = [];
             for(let k in changedRows){
                 let changed = changedRows[k];
                 let real_id = changed['data']['real_id'];
@@ -1638,7 +1654,35 @@ let config = {
                             parent_temp_id:data['parent_temp_id']['value']
                         };
                         let targetRow = changedRows[real_id];
-                        this.actions.saveEdit(targetRow,obj);
+                        this.data.saveEditObjArr.push( this.actions.saveEdit(targetRow,obj) )
+                        if( this.data.saveEditObjArr.length == this.data.editRowTotal ){
+                            let saveArr = []
+                            for( let o of this.data.saveEditObjArr ){
+                                saveArr.push( dataTableService.saveEditFormData( o ) )
+                            }
+                            this.actions.setInvalid();
+                            Promise.all(saveArr).then((res)=> {
+                                let j = 0;
+                                let wrong = 0;
+                                let errorText = '';
+                                for( let r of res ){
+                                    if( r.succ == 1 ){
+                                        j++;
+                                    }else {
+                                        wrong++;
+                                        errorText += (wrong + '、' + r.error);
+                                    }
+                                }
+                                if( wrong > 0 ){
+                                    let err = wrong + '条数据保存失败，失败原因：' + errorText;
+                                    msgBox.alert( err );
+                                }else {
+                                    msgBox.showTips( '执行成功！' )
+                                }
+                                this.actions.toogleEdit();
+                            })
+                            HTTP.flush();
+                        }
                     }
                 } )
                 HTTP.flush();
@@ -1650,17 +1694,7 @@ let config = {
             json['focus_users'] = JSON.stringify(json['focus_users']);
             json['cache_new'] = JSON.stringify(json['cache_new']);
             json['cache_old'] = JSON.stringify(json['cache_old']);
-            FormService.saveAddpageData( json ).then( res=>{
-                if( res.succ == 1 ){
-                    msgBox.showTips( res.error );
-                }else {
-                    msgBox.alert( res.error );
-                }
-                this.data.editRowNum++;
-                if( this.data.editRowTotal == this.data.editRowNum ){
-                    this.actions.toogleEdit();
-                }
-            } )
+            return json;
         },
         //比对当前值与初始值的差别
         getChangedRows(rowData){
@@ -1778,11 +1812,12 @@ let config = {
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
             }
+            this.actions.setInvalid();
             dataTableService.delTableData( json ).then( res=>{
                 if( res.success ){
                     msgBox.showTips( '删除成功' )
                 }else {
-                    if( res.error.indexOf( '使用了所删行的内容' ) != -1 ){
+                    if( res.queryParams ){
                         msgBox.confirm( res.error + '是否前往处理？' ).then( r=>{
                             if( r ){
                                 let info = res.table_info;
@@ -1922,7 +1957,8 @@ let config = {
                         for( let r of res.rows ){
                             if( r.id == this.data.common_filter_id ){
                                 this.data.filterParam = {
-                                    filter: JSON.parse(r.queryParams),
+                                    expertFilter: JSON.parse(r.queryParams),
+                                    filter:[],
                                     is_filter: 1,
                                     common_filter_id: this.data.common_filter_id,
                                     common_filter_name: r.name
@@ -2010,16 +2046,23 @@ let config = {
                 json["table_id"] = this.data.tableId;
                 json[(data.data.action?"temp_id":"real_id")] = data.data._id;
                 dataTableService.getAttachmentList( json ).then( res => {
-                    // let imgData,imgSelect;
-                    // let obj=dataTableService.setImgDataAndNum(res,imgData,imgSelect);
-                    // imgData=obj.imgData;
-                    // imgSelect=obj.imgSelect;
-                    // this.setImgSize();
-                    PictureAttachment.data.res=res;
-                } )
+                    let obj=dataTableService.setImgDataAndNum(res,{},'');
+                    PictureAttachment.data.imgData=obj.imgData;
+                    PictureAttachment.data.imgSelect=obj.imgSelect;
+                    PictureAttachment.data.imgTotal=obj.imgTotal;
+                    PictureAttachment.data.imgNum=obj.imgNum;
+                    PictureAttachment.data.rows=obj.imgData.rows;
+                    PMAPI.openDialogByComponent(PictureAttachment,{
+                        title:'图片附件',
+                        width: 1234,
+                        height: 987,
+                    })
+                })
+                HTTP.flush();
             }
             //富文本字段
             if( data.colDef.real_type == fieldTypeService.UEDITOR ){
+                msgBox.alert( data.value )
             }
             //合同编辑器
             if( data.colDef.real_type == fieldTypeService.TEXT_COUNT_TYPE ){
@@ -2038,7 +2081,7 @@ let config = {
                         let list = res["rows"];
                         for( let data of list ){
                             //附件名称编码转换
-                            data.file_name = decodeURI( data.file_name );
+                            data.file_name = data.file_name;
                             let str = dataTableService.getFileExtension( data.file_name );
                             if( dataTableService.preview_file.indexOf( str.toLowerCase() ) != -1 ){
                                 data["isPreview"] = true;
@@ -2066,19 +2109,23 @@ let config = {
             //内置相关查看原始数据用
             if( data.event.srcElement.id == 'relatedOrBuildin' ){
                 console.log( "内置相关穿透" )
-                let obj = {
-                    tableId: data.colDef.source_table_id,
-                    tableName: data.colDef.source_table_name||'',
-                    parentTableId: this.data.tableId,
-                    rowId: data.data._id,
-                    base_buildin_dfield: data.colDef.source_field_dfield,
-                    source_field_dfield: data.colDef.base_buildin_dfield,
-                    tableType: 'source_data',
-                    viewMode: 'source_data'
+                if( data.colDef.is_user ){
+                    PersonSetting.showUserInfo({name:data.value});
+                }else {
+                    let obj = {
+                        tableId: data.colDef.source_table_id,
+                        tableName: data.colDef.source_table_name||'',
+                        parentTableId: this.data.tableId,
+                        rowId: data.data._id,
+                        base_buildin_dfield: data.colDef.source_field_dfield,
+                        source_field_dfield: data.colDef.base_buildin_dfield,
+                        tableType: 'source_data',
+                        viewMode: 'source_data'
+                    }
+                    let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
+                    let winTitle = this.data.tableName + '->' + obj.tableName;
+                    this.actions.openSourceDataGrid( url,winTitle );
                 }
-                let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
-                let winTitle = this.data.tableName + '->' + obj.tableName;
-                this.actions.openSourceDataGrid( url,winTitle );
             }
             //对应关系查看
             if(data.colDef.real_type == fieldTypeService.CORRESPONDENCE && data.value.toString().length && data.event.target.id == "correspondenceClick"){
@@ -2220,6 +2267,10 @@ let config = {
         onRowDoubleClicked: function (data) {
             console.log( "行双击查看" )
             console.log( data )
+            //屏蔽分组行
+            if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0) ){
+                return;
+            }
             let obj = {
                 table_id: this.data.tableId,
                 parent_table_id: this.data.parentTableId,
@@ -2233,8 +2284,16 @@ let config = {
             let title = '查看'
             this.actions.openSourceDataGrid( url,title );
         },
+        //设置失效
+        setInvalid: function () {
+            this.pagination.data.myInvalid = true;
+        },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title,w,h ) {
+            //暂时刷新方法
+            if( url.indexOf( '/iframe/addWf/' ) != -1 ){
+                this.actions.setInvalid();
+            }
             PMAPI.openDialogByIframe( url,{
                 width: w || 1300,
                 height: h || 800,

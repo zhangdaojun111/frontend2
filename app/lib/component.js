@@ -79,8 +79,8 @@ class Component {
         if (this.binds && this.binds.length) {
             let that = this;
             this.binds.forEach((item) => {
-                this.el.on(item.event, item.selector, function () {
-                    item.callback.call(that, this);
+                this.el.on(item.event, item.selector, function (event) {
+                    item.callback.call(that, this, event);
                 });
             })
         }

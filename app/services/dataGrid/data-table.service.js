@@ -81,13 +81,25 @@ export const dataTableService = {
     getPrepareParmas: function ( data ) {
         return HTTP.post( 'prepare_params',data )
     },
+    //获取权限信息
+    getPermData: function ( data ) {
+        return HTTP.post( 'user_perms',data )
+    },
+    //设置权限信息
+    setPermData: function ( data ) {
+        return HTTP.post( 'user_perms',data )
+    },
     //请求附件数据
     getAttachmentList(json){
         return HTTP.post('query_attachment_list',json);
     },
+    //保存编辑数据
+    saveEditFormData: function (data) {
+        return HTTP.post( 'add_update_table_data',data )
+    },
     setImgDataAndNum(res,imgData,imgSelect){
         imgData = res;
-        this.imgTotal = res.rows.length;
+        let imgTotal = res.rows.length;
         if(imgData){
             for( let i=0;i<imgData.rows.length;i++ ){
                 imgData.rows[i]["isSelect"] = false;
@@ -97,8 +109,8 @@ export const dataTableService = {
                 imgSelect = imgData.rows[0].file_id;
             }
         }
-        this.imgNum = 0;
-        return {imgSelect:imgSelect,imgData:imgData};
+        let imgNum = 0;
+        return {imgSelect:imgSelect,imgData:imgData,imgTotal:imgTotal,imgNum:imgNum};
     },
     //获取文件名后缀
     getFileExtension (filename) {
