@@ -100,7 +100,6 @@ export class FormTableComponent extends BiBaseComponent{
         this.single.reload();
     }
 
-
     /**
      * 数据源变化执行一些列动作
      * @param sources = 数据源数据
