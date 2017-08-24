@@ -1,5 +1,6 @@
 /**
  * Created by birdyy on 2017/8/14.
+ * 饼图配置
  */
 
 import {BiBaseComponent} from '../../../bi.base.component';
@@ -21,7 +22,12 @@ let config = {
     afterRender() {
         this.renderFitting();
     },
-    firstAfterRender() {}
+    firstAfterRender() {
+        // 监听数据源变化
+        this.el.on(`${this.data.assortment}-chart-source`,(event,params) => {
+            console.log(params);
+        })
+    }
 }
 export class FormPieComponent extends BiBaseComponent{
     constructor() {
@@ -53,6 +59,7 @@ export class FormPieComponent extends BiBaseComponent{
                 me: this,
                 container: 'pie-single',
                 data:{
+                    label:'选择多条数据，单挑数据',
                     options:[
                         {name:'多条', value:'2'},
                         {name:'单条', value:'1'},
