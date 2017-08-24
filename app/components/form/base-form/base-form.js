@@ -1301,7 +1301,7 @@ let config={
                     return;
                 }
                 let options=_this.data.childComponent[_this.data['quikAddDfield']].data['options'];
-                if(options[0]['label'] == '请选择' || options[0]['label']==''){
+                if(options[0] && options[0]['label'] == '请选择' || options[0]['label']==''){
                     options.splice(1,0,data.new_option);
                 }else{
                     options.splice(0,0,data.new_option);
