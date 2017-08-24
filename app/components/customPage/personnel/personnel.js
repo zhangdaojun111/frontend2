@@ -119,8 +119,12 @@ let config = {
                 let oprate = {headerName: '操作',field: 'myOperate', width: 160,suppressFilter: true,suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
                     return '<div style="text-align:center;"><a class="view" style="color:#337ab7;">查看</a> | <a class="edit" style="color:#337ab7;">编辑</a> | <a class="jurisdiction" style="color:#337ab7;">权限</a><div>';
                 }}
+                //添加序号列
+                let number = dgcService.numberCol;
+                number['headerCellTemplate'] = this.actions.resetPreference();
+                this.data.columnDefs.unshift(number);
                 this.data.columnDefs = [
-                    dgcService.numberCol,
+                    // dgcService.numberCol,
                     dgcService.selectCol,
                     oprate
                 ];
@@ -238,8 +242,63 @@ let config = {
                     }
                 }
             }
-        }
-        ,
+        },
+        resetPreference: function () {
+            let ediv = document.createElement('div');
+            let eHeader = document.createElement('span');
+            let eImg = document.createElement('img');
+            eImg.src = require( '../../../assets/images/dataGrid/quxiao.png' );
+            eImg.className = 'resetFloatingFilter';
+            eImg.addEventListener( 'click',()=>{
+                msgBox.confirm( '确定清空筛选数据？' ).then( r=>{
+                    if( r ){
+                        for( let k in this.data.searchValue ){
+                            this.data.searchValue[k] = '';
+                        }
+                        this.actions.setFloatingFilterInput();
+                        this.data.filterParam.filter = [];
+                        this.actions.getGridData();
+                    }
+                } )
+            } )
+            ediv.appendChild( eHeader )
+            eHeader.innerHTML = "初";
+            eHeader.className = "table-init-logo";
+            eHeader.addEventListener('click', () => {
+                msgBox.confirm( '确定初始化偏好？' ).then( r=>{
+                    if( r ){
+                        dataTableService.delPreference( {table_id: this.data.tableId} ).then( res=>{
+                            msgBox.showTips( '操作成功' );
+                            let obj = {
+                                actions: JSON.stringify(['ignoreFields', 'group', 'fieldsOrder', 'pageSize', 'colWidth', 'pinned']),
+                                table_id: this.data.tableId
+                            };
+                            dataTableService.getPreferences( obj ).then( res=>{
+                                dgcService.setPreference( res,this.data );
+                                //初始化偏好隐藏系统默认列
+                                if( res.ignoreFields == null && this.data.haveSystemsFields ){
+                                    this.data.ignoreFields = ['f1','f2','f3','f4'];
+                                }
+                                //创建表头
+                                this.columnDefs = this.actions.createHeaderColumnDefs();
+                                this.agGrid.gridOptions.api.setColumnDefs( this.columnDefs );
+                                dgcService.calcColumnState(this.data,this.agGrid,["group",'number',"mySelectAll"]);
+                            } );
+                            HTTP.flush();
+                        } );
+                        HTTP.flush();
+                    }
+                } )
+            });
+            ediv.appendChild( eImg )
+            return ediv;
+        },
+        //设置搜索input值
+        setFloatingFilterInput: function () {
+            for( let k in this.data.searchValue ){
+                this.el.find( '.filter-input-'+k )[0].value = this.data.searchValue[k];
+            }
+        },
         //获取数据
         getUserData: function () {
             let json = {

@@ -300,6 +300,14 @@ let component = new ApprovalWorkflow();
 let el = $('#approval-workflow');
 component.render(el);
 
+export default {
+    create(elem){
+        let component = new ApprovalWorkflow();
+        let el = $(elem);
+        component.render(el);
+    },
+};
+
 Mediator.subscribe("workflow:getStampImg",(msg)=>{
     WorkflowSeal.showheader(msg);
-})
+});
