@@ -174,10 +174,8 @@ class CalendarRemindTaskItem extends Component {
                 let checkText = '已';
                 let uncheckText = '未';
                 if(config.data.remindTaskData['selectLabel'].indexOf(checkText) >= 0) {
-                    console.log(checkText);
                     config.data.isFinishedTask = true;
                 }else if (config.data.remindTaskData['selectLabel'].indexOf(uncheckText) >= 0) {
-                    console.log(uncheckText);
                     config.data.isFinishedTask = false
                 }
             } else {

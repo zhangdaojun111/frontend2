@@ -88,6 +88,8 @@ let config = {
                 week = nweTime.getDay();
             return CalendarTimeService.formatDate(year,month,day);
         },
+
+        // 日历全局搜索
         search: function( key ){
             this.data.searchText = key;
             if( this.data.calendarContent === 'schedule' ){
@@ -102,11 +104,6 @@ let config = {
                     to_date: this.data.to_date,
                     cancel_fields: JSON.stringify(this.data.cancel_fields)
                 },'calendar');
-                // setTimeout(() => {
-                //     console.log(this.data.monthDataList);
-                // },500)
-                // this.actions.monthDataTogether();
-                // this.actions.getDataCount();
             }
         },
 
@@ -115,7 +112,7 @@ let config = {
                 this.data.date2settings = res['date2csids'];
                 this.data.calendarSettings = res['id2data'];
                 this.data.tableid2name = res['tableid2name'];
-                this.data.fieldInfos = res['field_infos']
+                this.data.fieldInfos = res['field_infos'];
                 if(type === 'calendar') {
                     this.actions.monthDataTogether();
                 }else {
@@ -123,6 +120,10 @@ let config = {
                 }
                 this.actions.getDataCount();
             });
+        },
+
+        getCalendarScheduleData: function () {
+
         },
 
         getDataCount: function (){
@@ -699,6 +700,16 @@ let config = {
                 this.actions.search(data);
             } else {
                 this.data.searchText = '';
+                let json = {
+                    from_date:this.data.from_date,
+                    to_date:this.data.to_date,
+                    cancel_fields: JSON.stringify(this.data.cancel_fields),
+                };
+                if(this.data.calendarContent !== 'schedule') {
+                    this.actions.getCalendarData(json, 'calendar');
+                } else {
+                    this.actions.getCalendarData(json);
+                }
             }
         });
 
