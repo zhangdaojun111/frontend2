@@ -61,6 +61,7 @@ let config = {
             let mark = url.indexOf('=');
             mark += 1;
             this.data.searchText = url.substr(mark);
+            console.log(this.data.searchText);
             this.actions.sendSearch();
         },
         initPageController:function () {
@@ -146,13 +147,14 @@ let config = {
         sendSearch:function () {
             this.showLoading();
             let searchData = {
-                keyword:this.data.searchText,            //搜索文字
+                keyword:"大富翁",            //搜索文字
                 rows:24 ,                               //每页显示的个数
                 page:1,                               //页面分页的页数
             };
 
             //发起第一次搜索请求，查询数据
             GlobalService.sendSearch(searchData).done((result) => {
+                console.log(result);
                 if(result.success === 1){
                     let tempData = result;       //开全局搜索接口后使用
                     // let tempData = this.data.test_data_result;      //测试使用

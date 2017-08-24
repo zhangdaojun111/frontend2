@@ -76,6 +76,7 @@ export const IframeInstance = new Component({
     },
     actions: {
         openIframe: function (id, url, name) {
+            console.log(url);
             id = id.toString();
             if (this.data.hash[id] === undefined) {
                 this.actions.sendOpenRequest(id);       //确认iframe未被打开才发送请求，避免重复更新时间，扰乱排序
@@ -385,6 +386,33 @@ export const IframeInstance = new Component({
                 type: PMENUM[info.typeName],
                 data: info
             });
+        },
+        displaySearchResult:function (data) {
+            let content = data.content;
+            let formerContent = data.formerContent;
+            //判断搜索结果iframe是否已打开，打开则重置src
+            //此处全局搜索div.iframes
+            let resultIframe;
+            let iframes =  this.el.find("div.iframes iframe");
+            let str = "searchContent=" + formerContent;
+            str = encodeURI(str);
+            for(let k of iframes){
+                let src = k.src;
+                if(src.indexOf(str) > 0){
+                    resultIframe = k;
+                }
+            }
+
+            if(resultIframe){
+                let newSrc = '/search_result?searchContent=' + content;
+                $(resultIframe).attr("src",newSrc);
+            }else{
+                //搜索结果展示窗口未打开
+                let id = "search-result";
+                let url = "/search_result?searchContent=" + content;
+                let name = "搜索结果";
+                this.actions.openIframe(id,url,name);
+            }
         }
     },
     afterRender: function () {
@@ -429,7 +457,9 @@ export const IframeInstance = new Component({
         Mediator.on('menu:item:openiframe', (data) => {
             this.actions.openIframe(data.id, data.url, data.name)
         });
-
+        Mediator.on('search:displayreuslt',(data) => {
+            this.actions.displaySearchResult(data);
+        });
         Mediator.on('aside:size', (order) => {
             if (order === 'full') {
                 this.actions.setSizeToFull();
