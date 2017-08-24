@@ -183,7 +183,6 @@ let config = {
         },
         //floatingFilter拼参数
         floatingFilterPostData: function (col_field, keyWord, searchOperate) {
-            debugger
             this.data.queryList[col_field] = {
                 'keyWord': keyWord,
                 'operate': dgcService.getMongoSearch(searchOperate),
