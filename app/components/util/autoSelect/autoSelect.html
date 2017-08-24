@@ -1,5 +1,5 @@
 <div class="auto-select-component">
-    <input class="text" type="text" placeholder="选择或者输入查找" />
+    <input class="auto-select-text" type="text" placeholder="选择或者输入查找" />
     <div class="choosed">
         {{#each choosed}}
         <div class="item" title="点击删除" data-id="{{id}}">{{name}}</div>
@@ -9,15 +9,15 @@
         <ul>
             {{#each list}}
             <li data-id="{{id}}" data-name="{{name}}" data-py="{{py}}">
-                <label>
+                <label class="custom-checkbox">
                     <input type="checkbox" class="checkbox" name="" data-id="{{id}}" value="{{id}}" data-name="{{name}}"/>
                     <span>{{name}}</span>
                 </label>
             </li>
             {{/each}}
         </ul>
-        <div>
-            <button>全选</button>
+        <div class="select-all">
+            <a>全选</a>
         </div>
     </div>
 

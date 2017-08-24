@@ -105,18 +105,18 @@ html {
     display: inline-block;
     width: 16px;
     height: 16px;
-    position: relative;
     overflow: hidden;
     input[type=checkbox] {
         margin: 2px;
+        position: relative;
     }
     input[type=checkbox]:before {
         position: absolute;
         width: 10px;
         content: ' ';
         height: 10px;
-        left: 2px;
-        top: 2px;
+        left: 0px;
+        top: 0px;
         background-color: #fff;
         border: 1px solid #d7d7d7;
         cursor: pointer;
@@ -126,8 +126,8 @@ html {
         width: 8px;
         content: ' ';
         height: 8px;
-        left: 4px;
-        top: 4px;
+        left: 2px;
+        top: 2px;
         background-color: #0088ff;
         cursor: pointer;
     }
@@ -137,18 +137,18 @@ html {
     display: inline-block;
     width: 16px;
     height: 16px;
-    position: relative;
     overflow: hidden;
     input[type=radio] {
         margin: 2px;
+        position: relative;
     }
     input[type=radio]:before {
         position: absolute;
         width: 10px;
         content: ' ';
         height: 10px;
-        left: 2px;
-        top: 2px;
+        left: 0px;
+        top: 0px;
         background-color: #fff;
         border: 1px solid #d7d7d7;
         cursor: pointer;
@@ -159,8 +159,8 @@ html {
         width: 8px;
         content: ' ';
         height: 8px;
-        left: 4px;
-        top: 4px;
+        left: 2px;
+        top: 2px;
         background-color: #0088ff;
         cursor: pointer;
         border-radius: 100%;
@@ -170,6 +170,7 @@ html {
 //loading
 .component-loading-effect {
     position: relative;
+    overflow: hidden;
     > .component-filter-blur {
         filter: blur(5px);
     }
@@ -182,7 +183,7 @@ html {
     z-index: 15;
     left: 0;
     top: 0;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(153, 153, 153, 0.5);
 }
 
 .component-loading-box{
