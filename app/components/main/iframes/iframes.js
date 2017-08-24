@@ -84,6 +84,12 @@ export const IframeInstance = new Component({
                 let iframe = $(`<div class="item"><iframe id="${id}" src="${url}"></iframe></div>`).appendTo(this.data.iframes);
                 let originIframe = iframe.find('iframe');
 
+                this.showLoading(this.data.iframes);
+                window.clearTimeout(this.data.loadingTimer);
+                this.data.loadingTimer = window.setTimeout(() => {
+                    this.hideLoading();
+                }, 500);
+
                 originIframe.on('load', function () {
                     PMAPI.sendToChild(originIframe[0], {
                         type: PMENUM.open_iframe_data,
