@@ -120,32 +120,32 @@ let config = {
          * 获取可进行日历设置的表
          */
         getSettingMenu: function () {
-            // PMAPI.openDialogByIframe(
-            //     '/iframe/calendarOpenSetting/',
-            //     {
-            //         title: '日历设置',
-            //         width: '1700',
-            //         height: '800',
-            //     },
-            // );
-            CalendarSetService.getMenu().then(res => {
-                let menu = res['menuList'].filter(item => {
-                    return item['folder_id'] !== 1;
-                });
-                let component = new CalendarSetting(menu);
-                let el = $('<div>').appendTo(document.body);
-                component.render(el);
-                el.dialog({
+            PMAPI.openDialogByIframe(
+                '/iframe/calendarOpenSetting/',
+                {
                     title: '日历设置',
-                    width: '90%',
-                    height: '750',
-                    background: '#ddd',
-                    close: function() {
-                        $(this).dialog('destroy');
-                        component.destroySelf();
-                    }
-                });
-            });
+                    width: '1700',
+                    height: '800',
+                },
+            );
+            // CalendarSetService.getMenu().then(res => {
+            //     let menu = res['menuList'].filter(item => {
+            //         return item['folder_id'] !== 1;
+            //     });
+            //     let component = new CalendarSetting(menu);
+            //     let el = $('<div>').appendTo(document.body);
+            //     component.render(el);
+            //     el.dialog({
+            //         title: '日历设置',
+            //         width: '90%',
+            //         height: '750',
+            //         background: '#ddd',
+            //         close: function() {
+            //             $(this).dialog('destroy');
+            //             component.destroySelf();
+            //         }
+            //     });
+            // });
         },
 
         /**
