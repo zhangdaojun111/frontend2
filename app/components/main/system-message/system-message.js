@@ -23,12 +23,13 @@ let config = {
                 first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
                 currentPage: this.pagination.data.currentPage
             });
-            console.log(this.pagination.data.currentPage);
+            this.showLoading();
             systemMessageService.getMyMsg(param).then((data) => {
                 this.agGrid.actions.setGridData({
                     rowData: data.rows
                 });
                 this.pagination.actions.setPagination(data.total, param.currentPage);
+                this.hideLoading();
             });
         },
         markRead: function () {
