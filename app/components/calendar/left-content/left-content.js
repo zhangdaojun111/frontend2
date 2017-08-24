@@ -114,6 +114,55 @@ let config = {
                 that.append(new LeftContentHide(row), that.el.find('.left-calendar-hide'));
             })
         },
+
+        /**
+         * @author zj
+         * 获取可进行日历设置的表
+         */
+        getSettingMenu: function () {
+            // PMAPI.openDialogByIframe(
+            //     '/iframe/calendarOpenSetting/',
+            //     {
+            //         title: '日历设置',
+            //         width: '1700',
+            //         height: '800',
+            //     },
+            // );
+            CalendarSetService.getMenu().then(res => {
+                let menu = res['menuList'].filter(item => {
+                    return item['folder_id'] !== 1;
+                });
+                let component = new CalendarSetting(menu);
+                let el = $('<div>').appendTo(document.body);
+                component.render(el);
+                el.dialog({
+                    title: '日历设置',
+                    width: '90%',
+                    height: '750',
+                    background: '#ddd',
+                    close: function() {
+                        $(this).dialog('destroy');
+                        component.destroySelf();
+                    }
+                });
+            });
+        },
+
+        /**
+         * @author zj
+         * 打开创建日历表
+         */
+        openCalendarForm: function () {
+            PMAPI.openDialogByIframe(
+                '/calendar_mgr/create/?table_id=1639_8QvxFmFvVpK33bVPXdk8hD',
+                {
+                    width: "1000",
+                    height: '550',
+                    title: '日历表',
+                }).then(res => {
+                // 创建日历表后的回调，接收form回传的参数
+            });
+        }
     },
     binds:[
         {
@@ -138,6 +187,20 @@ let config = {
                 this.actions.hideclass(this,$(temp).parents('.item-title-2'));
             }
         },
+        {
+            event: 'click',
+            selector: '.set-calendar',
+            callback: function () {
+                this.actions.getSettingMenu()
+            },
+        },
+        {
+            event: 'click',
+            selector: '.create-calendar',
+            callback: function () {
+                this.actions.openCalendarForm()
+            },
+        }
     ],
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
@@ -158,36 +221,6 @@ let config = {
         });
         Mediator.on('calendar-left:showRemindType',()=>{
             that.actions.showRemindType(that);
-        });
-        that.el.on('click','.set-calendar',() =>{
-            CalendarSetService.getMenu().then(res => {
-                let menu = res['menuList'].filter(item => {
-                    return item['folder_id'] !== 1;
-                });
-                let component = new CalendarSetting(menu);
-                let el = $('<div>').appendTo(document.body);
-                component.render(el);
-                el.dialog({
-                    title: '日历设置',
-                    width: '90%',
-                    height: '750',
-                    background: '#ddd',
-                    close: function() {
-                        $(this).dialog('destroy');
-                        component.destroySelf();
-                    }
-                });
-            });
-        }).on('click', '.create-calendar', () => {
-            PMAPI.openDialogByIframe(
-                '/calendar_mgr/create/?table_id=1639_8QvxFmFvVpK33bVPXdk8hD',
-                {
-                    width: "1000",
-                    height: '550',
-                    title: '日历表',
-                }).then(res => {
-                    // 创建日历表后的回调，接收form回传的参数
-            });
         });
     },
     beforeDestory: function () {
