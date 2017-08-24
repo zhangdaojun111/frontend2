@@ -700,8 +700,16 @@ let config = {
             eImg.src = require( '../../../../assets/images/dataGrid/quxiao.png' );
             eImg.className = 'resetFloatingFilter';
             eImg.addEventListener( 'click',()=>{
-                this.data.searchValue = {};
-                this.data.searchOldValue = {};
+                msgBox.confirm( '确定清空筛选数据？' ).then( r=>{
+                    if( r ){
+                        for( let k in this.data.searchValue ){
+                            this.data.searchValue[k] = '';
+                        }
+                        this.actions.setFloatingFilterInput();
+                        this.data.filterParam.filter = [];
+                        this.actions.getGridData();
+                    }
+                } )
             } )
             if( !this.data.noNeedCustom ){
                 ediv.appendChild( eHeader )
@@ -796,6 +804,12 @@ let config = {
             str += '</div>';
             this.data.operateColWidth=20*operateWord+20;
             return str
+        },
+        //设置搜索input值
+        setFloatingFilterInput: function () {
+            for( let k in this.data.searchValue ){
+                this.el.find( '.filter-input-'+k )[0].value = this.data.searchValue[k];
+            }
         },
         //floatingFilter拼参数
         floatingFilterPostData: function (col_field, keyWord, searchOperate) {
@@ -1243,7 +1257,8 @@ let config = {
                     fixCols: this.data.fixCols,
                     tableId: this.data.tableId,
                     agGrid: this.agGrid,
-                    close: this.actions.calcCustomColumn
+                    close: this.actions.calcCustomColumn,
+                    setFloatingFilterInput: this.actions.setFloatingFilterInput
                 }
                 this.customColumnsCom  = new customColumns(custom);
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
