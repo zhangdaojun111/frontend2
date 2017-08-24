@@ -62,7 +62,6 @@ let config={
                         }
                     }
                     if(event.event == 'finished'){
-                        event.data.fileId = 'test';
                         this.data.queue.push(event.data);
                         this.data.value.push(event.data.fileId);
                         this.trigger('changeValue', this.data);
