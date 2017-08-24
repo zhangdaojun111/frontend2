@@ -13,16 +13,34 @@ let config={
     template: template,
     data:{},
     action:{
-
+        search(){
+            let keyword = this.el.find(".follower-search").val();
+            let node = this.el.find('#staffMulti').find('.w33');
+            let par = this.el.find("#staffMulti").children();
+            let arr = _.chunk(node,3);
+            let len = arr.length;
+            for(let i =0;i<len;i++){
+                if(arr[i][1].innerText.indexOf(keyword)!=-1 || arr[i][2].innerText.indexOf(keyword)!=-1){
+                    par[i].style.display = "block";
+                }else{
+                    par[i].style.display = "none";
+                }
+            }
+        }
     },
     afterRender(){
+        this.el.on("input propertychange",".follower-search",()=>{
+            this.action.search();
+        })
         const _this=this;
         this.el.find('#staffMulti').html('');
         Mediator.subscribe('workflow:idArr', (res)=> {
             this.data.idArr=res;
         });
+
         //部门选择
         Mediator.subscribe('workflow:checkDept', (res)=> {
+
             $.each(res,(i,val)=>{
                 val.id=i;
                 this.append(new SelectStaff(val), this.el.find('#staffMulti'));
@@ -41,6 +59,7 @@ let config={
 
         //部门反选，删除SelectedStaff组件
         Mediator.subscribe('workflow:unCheckDept', (res)=> {
+
             let userArr=[];
             for(var id in res){
                 userArr.push(id);
@@ -65,6 +84,8 @@ let config={
 
         //注册SelectedStaff组件
         Mediator.subscribe('workflow:pubCheck', (res)=> {
+            console.log(res);
+            console.log("....................");
             this.append(new SelectedStaff(res), this.el.find('#selected'));
         });
 
