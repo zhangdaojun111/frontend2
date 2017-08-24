@@ -231,21 +231,24 @@ let postMessageUtil = {
         this.el = $("<div>").appendTo('body');
         let postMessage = new PostMessage();
         postMessage.render(this.el);
-        this.el.dialog({
+        this.el.erdsDialog({
             width: 950,
             height: 600,
             modal: true,
             title: '消息推送',
+            maxable: false,
+            defaultMax: false,
             close: function () {
-                $(this).dialog('destroy');
+                $(this).erdsDialog('destroy');
                 postMessage.destroySelf();
             }
         })
     },
     hide: function () {
-        this.el.dialog('close');
+        this.el.erdsDialog('close');
     }
 }
 
 export {postMessageUtil};
+// msgbox.alert('<h1>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</h1>')
 // postMessageUtil.show();
