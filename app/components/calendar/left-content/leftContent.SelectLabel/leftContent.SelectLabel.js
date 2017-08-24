@@ -142,7 +142,6 @@ let config = {
                 return item.field_id;
             });
             that.data.items = items_Id;
-            console.log(_.includes([1,2,3],1));
             for(let i = 0;i< items_Id.length;i++){
                 if(this.data.cancel_fields.indexOf(items_Id[i]) !== -1){
                     IsChecked = false;

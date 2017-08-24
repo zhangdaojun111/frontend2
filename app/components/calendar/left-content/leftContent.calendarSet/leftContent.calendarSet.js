@@ -87,11 +87,13 @@ let config = {
         approve_label:function(checkbox_a2){
             if(checkbox_a2.is(".workflow_checked")){
                 checkbox_a2.removeClass("workflow_checked");
+                this.el.find(".checkbox_a2").attr("checked",false);
                 this.data.cancel_fields.unshift('approve');
                 Mediator.emit('calendar-left:approveData',{data:false});
             }
             else{
                 checkbox_a2.addClass("workflow_checked");
+                this.el.find(".checkbox_a2").attr("checked",true);
                 this.data.cancel_fields.splice($.inArray('approve',this.data.cancel_fields),1);
                 Mediator.emit('calendar-left:approveData',{data:true});
             }
@@ -160,11 +162,14 @@ let config = {
                 that.data.hide_tables[i] = that.data.hide_table;
                 that.data.hide_table = {'tableName':"",'table_Id':''}
             }
+            console.log()
             if(that.data.cancel_fields.indexOf('approve') ===-1){
                 that.el.find(".checkbox_a2").addClass("workflow_checked");
+                that.el.find(".checkbox_a2").attr("checked",true);
             }
             else{
                 that.el.find(".checkbox_a2").removeClass("workflow_checked");
+                that.el.find(".checkbox_a2").attr("checked",false);
             }
             this.data.calendarTreeData.rows.forEach((data) =>{
                 that.append(new LeftContentSelect(data,this.data.calendarTreeData.cancel_fields,this.data.hide_item_table,this.data.rows,
