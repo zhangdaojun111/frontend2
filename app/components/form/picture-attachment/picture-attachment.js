@@ -4,65 +4,128 @@
  */
 
 import template from './picture-attachment.html';
-let css = ``;
+let css = `.imgList {
+    width: 15%;
+    height: 100%;
+    border: 1px solid #d4d4d4;
+    float: left;
+    overflow-y: scroll;
+}
+.textList {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #d4d4d4;
+    margin: auto;
+    position: relative;
+}
+.imgList div {
+    height: 80px;
+    border: 1px solid #d4d4d4;
+}
+.imgList div a {
+    display: inline-block;
+    margin-left: 5px;
+    color: blueviolet;
+}
+.imgContain {
+    position: relative;
+    width: 80%;
+    height: 100%;
+    border: 1px solid #d4d4d4;
+    float: left;
+    overflow: hidden;
+}
+.changeBtn {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: calc(50% - 50px);
+    z-index: 999;
+    border: 1px solid #d4d4d4;
+    text-align: center;
+    line-height: 100px;
+    font-size: 30px;
+    background: #ddd;
+    opacity: 0.4;
+}
+.changeBtn:hover {
+    opacity: 0.7;
+    cursor: pointer;
+}
+.showImg{
+    width:100%;
+    height:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#myImg {
+    width: auto;
+    height: auto;
+    visibility: hidden;
+    position: absolute;
+}
+#ImgToShow {
+    display: block;
+    max-width:100%;
+    max-height:100%;
+}
+,
+`;
 let PictureAttachment = {
     template: template.replace(/\"/g, '\''),
     data: {
         css: css.replace(/(\n)/g, ''),
         imgData:'',
         imgSelect:'',
+        res:'',
+        seletNum:0,
     },
     actions:{
-        //图片预览调整尺寸
-        sizeImageWin(){
-            let oldWidth = $("#myImg").width();
-            let oldHeight = $("#myImg").height();
-            let fWidth = $(".imgContain").width();
-            let fHeight = $(".imgContain").height();
-
-            if (( oldWidth >= fWidth && oldHeight < fHeight ) || ( oldWidth < fWidth && oldHeight < fHeight && ( oldWidth / fWidth >= oldHeight / fHeight ) ) || ( oldWidth >= fWidth && oldHeight >= fHeight && ( oldWidth / fWidth >= oldHeight / fHeight ) )) {
-                $("#ImgToShow").css({
-                    "width": fWidth,
-                    "height": "auto",
-                    "top": ( fHeight - fWidth / oldWidth * oldHeight ) / 2,
-                    "left": 0
-                });
-            } else {
-                $("#ImgToShow").css({
-                    "width": "auto",
-                    "height": fHeight,
-                    "top": 0,
-                    "left": ( fWidth - fHeight / oldHeight * oldWidth ) / 2
-                });
-            }
+        setBackground(){
+            this.el.find('.select-img').each((index,obj)=>{
+                let color=$(obj).data('imgselect') == this.data.imgSelect? '#d4d4d4' : '#fff';
+                $(obj).css('background-color',color);
+            });
         },
-        setImgDataAndNum(res,imgData,imgSelect){
-            imgData = res;
-            this.imgTotal = res.rows.length;
-            if(imgData){
-                for( let i=0;i<imgData.rows.length;i++ ){
-                    imgData.rows[i]["isSelect"] = false;
-                }
-                if( imgData.rows[0] ){
-                    imgData.rows[0]["isSelect"] = true;
-                    imgSelect = imgData.rows[0].file_id;
-                }
-            }
-            this.imgNum = 0;
-            return {imgSelect:imgSelect,imgData:imgData};
+        createUrl(fieldId){
+            let url=`/download_attachment/?file_id=${fieldId}&download=0`
+            this.data.imgShow.attr('src',url)
+            this.data.myImg.attr('src',url)
+        },
+        changeImg(id,index){
+            this.actions.createUrl(id);
+            this.data.imgSelect=id;
+            this.data.seletNum=index;
+            this.actions.setBackground();
         }
     },
     afterRender(){
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
         let _this=this;
-        this.el.find('.select-img').each((index,obj)=>{
-           $(obj).get(0).style.background=$(obj).data('imgSelect') == _this.data.imgSelect? '#d4d4d4' : '#fff';
-        });
-        let obj=this.actions.setImgDataAndNum(res,this.data.imgData,this.data.imgSelect);
-        this.data.imgData=obj.imgData;
-        this.data.imgSelect=obj.imgSelect;
-        this.data.rows=this.data.imgData.rows;
-        this.actions.sizeImageWin();
+        this.actions.setBackground();
+        this.data.imgShow=this.el.find('#ImgToShow');
+        this.data.myImg=this.el.find('#myImg');
+        this.data.len=this.data.rows.length;
+        this.el.on('click','.select-img',function(){
+            _this.actions.changeImg($(this).data('imgselect'),$(this).index());
+        })
+        this.el.on('click','.changeBtn',function(){
+            let num =$(this).data('num');
+            if(num==1){
+                if(_this.data.seletNum-1 >= 0){
+                    _this.actions.changeImg(_this.data.rows[_this.data.seletNum-1]['file_id'],_this.data.seletNum-1);
+                }else{
+                    _this.actions.changeImg(_this.data.rows[_this.data.rows.length-1]['file_id'],_this.data.rows.length-1);
+                }
+            }else{
+                if(_this.data.seletNum+1 <= _this.data.rows.length-1){
+                    _this.actions.changeImg(_this.data.rows[_this.data.seletNum+1]['file_id'],_this.data.seletNum+1);
+                }else{
+                    _this.actions.changeImg(_this.data.rows[0]['file_id'],0);
+                }
+            }
+        })
     },
     beforeDestory(){
         this.data.style.remove();

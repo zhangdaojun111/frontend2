@@ -38,7 +38,9 @@ let config = {
         //agGrid配置
         gridOptions: null,
         //是否自己操作的失效刷新
-        myInvalid: false
+        myInvalid: false,
+        //是否在刷新
+        onRefresh: false,
     },
     actions: {
         //接受rows值和total值
@@ -283,7 +285,13 @@ let config = {
         PMAPI.subscribe(PMENUM.data_invalid, (info) => {
             let tableId = info.data.table_id;
             if( this.data.tableId == tableId ){
-                this.actions.invalidTips();
+                if( !this.data.onRefresh ){
+                    this.data.onRefresh = true;
+                    this.actions.invalidTips();
+                    setTimeout( ()=>{
+                        this.data.onRefresh = false;
+                    },100 )
+                }
             }
         })
     }

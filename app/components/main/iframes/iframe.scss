@@ -14,18 +14,20 @@
             color: #999;
             font-size: 12px;
             background-image: linear-gradient(rgba(228, 228, 228, 1) 1px, transparent 0);
-            background-color: $header-bg;
+            background-color: #e4e4e4;
             background-size: 30px 30px;
             background-position: 0 29px;
             .item {
                 line-height: 29px;
-                width: 114px;
-                overflow-x: hidden;
+                width: 104px;
+                overflow: hidden;
+                white-space:nowrap;
                 text-align: center;
                 float: left;
                 cursor: pointer;
                 position: relative;
-                padding-right: 25px;
+                padding: 0 30px 0 5px;
+                text-overflow:ellipsis;
                 //padding: 0 30px 0 15px;
                 border-right: 1px solid rgba(228, 228, 228, 1);
                 border-top: 1px solid rgba(228, 228, 228, 1);
