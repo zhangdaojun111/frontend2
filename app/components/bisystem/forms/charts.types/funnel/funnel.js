@@ -49,6 +49,11 @@ export class FormFunnelComponent extends BiBaseComponent{
         this.formGroup = {
             chartName: base,
             share: share,
+            auto:instanceFitting({
+                type:'auto',
+                me:this,
+                container:('form-group-auto'),
+            })
         };
 
     }
