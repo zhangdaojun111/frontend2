@@ -12,7 +12,7 @@ import handlebars from 'handlebars';
 let config = {
     template:template,
     data: {
-        columns: [1],
+        columns: [],
         choosed: [],
         show:false,
         singleNum: 1
@@ -23,15 +23,20 @@ let config = {
     firstAfterRender() {
         let me = this;
         this.el.on('input', '.single-column-num',_.debounce(function(event) {
-            let value = $(this).val();
+            let value = parseInt($(this).val());
             let columns = [];
-            if (parseInt(value) !== NaN) {
-                for (let i = 1; i<=value;i++) {
-                    columns.push(i);
-                };
-                columns.sort((a,b) => a-b);
-                this.data.columns = columns;
-                me.data.singleNum = value;
+            if (value !== NaN) {
+                let num = value;
+                let choosedNum = Math.ceil(me.data.columns.length / num);
+                let arr = [];
+                me.data.columns.forEach((val, index,items) => {
+                    val = items.slice(index * choosedNum, index * choosedNum + choosedNum);
+                    arr.push(val);
+                });
+                me.data.choosed = arr.filter(item => item.length > 0);
+                // console.log(choosedNum);
+                me.data.singleNum = me.data.choosed.length;
+                console.log(arr)
                 me.reload();
             }
             return false;
@@ -58,14 +63,16 @@ export class FormSingleComponent extends BiBaseComponent{
      */
     setColumns(choosed) {
         let num = this.data.singleNum;
-        console.log(num);
         let choosedNum = Math.ceil(choosed.length / num);
         let arr = [];
         choosed.forEach((val, index,items) => {
             val = items.slice(index * choosedNum, index * choosedNum + choosedNum);
             arr.push(val);
         });
-        this.data.choosed = this.data.columns =arr;
+        this.data.choosed = arr.filter(item => item.length > 0);
+        this.data.columns = choosed;
         this.reload();
     }
+
+
 }
