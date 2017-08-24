@@ -51,34 +51,35 @@ let config = {
                 content:calendarflag
             };
 
-            UserInfoService.saveUserConfig(json).done((result) => {
-                if(result.success === 1){
-                    console.log("json 保存成功")
-                }else{
-                    console.log("设置保存失败");
-                }
-            });
-            UserInfoService.saveUserConfig(json2).done((result) => {
-                if(result.success === 1){
+            UserInfoService.saveUserConfig(json,json2).then((result) => {
+                if(result[0].succ === 1 && result[1].succ === 1){
+                    window.config.sysConfig.logic_config.login_show_bi = result[0].data.toString();
+                    window.config.sysConfig.logic_config.login_show_calendar = result[1].data.toString();
                     msgbox.alert("设置保存成功");
-                    //回写window.config
-
-
-                    this.el.dialog.hide();
+                    SysSetting.hide();
                 }else{
                     msgbox.alert("设置保存失败");
                 }
-            })
+            });
         },
         changeFontSize:function () {
             let fontsize = this.el.find('input.font-range').val();
             this.el.find("span.font-size").html(fontsize);
             fontsize = fontsize + 'px';
             this.el.find("span.font-example").css("font-size",fontsize);
+        },
+        setCheckboxStatus:function () {
+            if(window.config.sysConfig.logic_config.login_show_bi === '1'){
+                this.el.find('input.bi-Show').attr("checked",true);
+            }
+            if(window.config.sysConfig.logic_config.login_show_calendar === '1'){
+                this.el.find('input.calendar-Show').attr("checked",true);
+            }
         }
     },
 
     afterRender:function () {
+        this.actions.setCheckboxStatus();
         this.el.on('click','.style-btn',() => {
             this.actions.showStyleSetting();
         }).on('click','.rapid-btn',() => {

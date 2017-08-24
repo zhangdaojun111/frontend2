@@ -37,11 +37,11 @@ export let componentsJson = {
         'name': '九宫图',
         'component': FormNineGridComponent
     },
-    'funnel': {
-        'entry': 'funnel',
-        'name': '漏斗图',
-        'component': FormFunnelComponent
-    },
+    // 'funnel': {
+    //     'entry': 'funnel',
+    //     'name': '漏斗图',
+    //     'component': FormFunnelComponent
+    // },
     'comment': {
         'entry': 'comment',
         'name': '注释图',
