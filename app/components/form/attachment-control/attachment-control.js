@@ -61,7 +61,7 @@ let config={
                             console.log(this.data.queue);
                             console.log(this.data.value);
                             this.data.queue.slice(this.data.queue.indexOf(event.data),1);
-                            this.data.value.slice(this.data.queue.indexOf(event.data),1);
+                            this.data.value.slice(this.data.value.indexOf(event.data.fileId),1);
                             this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
                         }
                     }
