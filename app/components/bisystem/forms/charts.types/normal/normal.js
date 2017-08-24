@@ -405,7 +405,7 @@ export class FormNormalComponent extends BiBaseComponent{
         this.formGroup = {};
         this.y = [];
         this.y1 = [];
-        this.chartId = chart.id;
+        this.chartId = chart ? chart.id : null;
         this.editModeOnce = this.chartId ? true : false;
         this.editModeXField = null;
         [this.editModeYField,this.editModeY1Field] = [[], []];
@@ -601,8 +601,6 @@ export class FormNormalComponent extends BiBaseComponent{
         } else {
             chart['deeps'] = data.deeps.deeps
         };
-        console.log(data.yHorizontal);
-        console.log(chart);
         let res = await ChartFormService.saveChart(JSON.stringify(chart));
         if (res['success'] == 1) {
             msgbox.alert('保存成功');

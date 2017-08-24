@@ -1,0 +1,21 @@
+.docs-example-viewer-body{
+  padding: 20px;
+  position: relative;
+  .mat-input-container{
+    display: inline-block;
+    border-bottom: 1px solid #ececec;
+      .mat-input-wrapper{
+        padding: 7px 0;
+        input{
+          outline: none;
+          border: 0;
+          width: 100%;
+        }
+      }
+    }
+  .mat-select-list{
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
