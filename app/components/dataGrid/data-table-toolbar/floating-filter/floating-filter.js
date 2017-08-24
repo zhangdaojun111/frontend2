@@ -14,6 +14,7 @@ let config = {
                 FloatingFilter.prototype.init = function (params) {
                     // this.onFloatingFilterChanged = params.onFloatingFilterChanged;
                     this.eGui = document.createElement('div');
+                    this.eGui.style.paddingTop = '5px';
                     this.eGui.innerHTML = '<input type="text"/>';
                     if( colInfo == 'none' ){
                         this.eGui.innerHTML = '<input disabled type="text"/>';
