@@ -17,7 +17,9 @@ import {MultipleComponent} from './multiple/multiple';
 import './pie.scss';
 let config = {
     template:template,
-    data: {},
+    data: {
+        assortment: ''
+    },
     actions: {},
     afterRender() {
         this.renderFitting();
@@ -35,9 +37,10 @@ let config = {
     }
 }
 export class FormPieComponent extends BiBaseComponent{
-    constructor() {
+    constructor(chart) {
         super(config);
         this.formGroup={};
+        this.data.assortment = chart.assortment;
     }
 
     /**
@@ -124,6 +127,7 @@ export class FormPieComponent extends BiBaseComponent{
         if (this.formGroup.single) {
             // 加载单条数据y轴数据
             this.formGroup.single.formYAxis.yAxis.data.checkboxs = sources['y_field'];
+            this.formGroup.single.formYAxis.yAxis.data['items'] = sources['y_field'];
             this.formGroup.single.formYAxis.yAxis.reload();
         }
 

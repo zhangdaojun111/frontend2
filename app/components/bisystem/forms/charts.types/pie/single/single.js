@@ -20,7 +20,6 @@ let config = {
         this.renderFitting();
     },
     firstAfterRender() {
-
     },
     beforeDestory() {}
 };
@@ -41,12 +40,19 @@ export class SingleComponent extends BiBaseComponent{
                 me: this,
                 data: {
                     value:null,
-                    checkboxs:[
-                        {value:'', name:'是否为管理员'},
-                    ],
+                    checkboxs:[],
+                    items: [],
+                    checkedItems: [],
                 },
                 container: 'single-columns'
             }),
         }
     };
+
+    /**
+     * 获取单挑数据y轴字段
+     */
+    getValue() {
+        return this.formYAxis.yAxis.getValue();
+    }
 }
