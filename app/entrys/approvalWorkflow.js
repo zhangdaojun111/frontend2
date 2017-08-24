@@ -295,7 +295,8 @@ Mediator.subscribe("approval:re-app", (msg) => {
         let postData={
             flow_id:obj.flow_id,
             focus_users:JSON.stringify(focusArr)||[],
-            data:JSON.stringify(formData)
+            data:JSON.stringify(formData),
+            record_id:obj.record_id
         };
         (async function () {
             return await workflowService.createWorkflowRecord(postData);
