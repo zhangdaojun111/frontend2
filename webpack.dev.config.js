@@ -29,7 +29,6 @@ module.exports = {
 
         form: path.resolve(APP_PATH, 'entrys/form.js'),
         openForm: path.resolve(APP_PATH, 'entrys/popup/openForm.js'),
-        addNewBuild: path.resolve(APP_PATH, 'entrys/popup/addNewBuild.js'),
         choose: path.resolve(APP_PATH, 'entrys/popup/choose.js'),
         createWorkflow: path.resolve(APP_PATH, 'entrys/createWorkflow.js'),
         approvalWorkflow: path.resolve(APP_PATH, 'entrys/approvalWorkflow.js'),
