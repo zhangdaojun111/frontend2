@@ -83,6 +83,7 @@ let config = {
             this.actions.makeRows(this.data.initAllRows);
         },
         makeRows: function(param){
+            console.log(param);
             this.data.allRows = [];
             CalendarService.getReplace(this.data.tableId).then(res => {
                 if(res.error !== ''){
@@ -129,13 +130,20 @@ let config = {
                         })
                     }
                 }
+                //console.log(this.data.rowTitle);
                 this.data.childComponents = [];
                 this.data.allRows.forEach((row, index) => {
                     let isConfig = false;
                     if(this.data.rowTitle[index]['id'] && this.data.rowTitle[index]['dtype'] === '8' && this.data.replaceDropDown.length !== 0){
                         isConfig = true;
                     }
-
+                    let rowTitleItem = {};
+                    for(let a of this.data.rowTitle) {
+                        if(a['id'] === row['field_id']) {
+                            rowTitleItem['id'] = a['id'];
+                            rowTitleItem['name'] = a['name'];
+                        }
+                    }
                     let calendarSetItem = new CalendarSetItem({
                         rowData: row,
                         dropdown: this.data.dropdown,
@@ -143,7 +151,7 @@ let config = {
                         dropdownForCalendarChange: this.data.dropdownForCalendarChange,
                         replaceDropDown: this.data.replaceDropDown,
                         isConfigField: isConfig,
-                        rowTitle: this.data.rowTitle[index],
+                        rowTitle: rowTitleItem,
 
                         recipients: this.data.recipients,
                         recipients_per: this.data.recipients_per,

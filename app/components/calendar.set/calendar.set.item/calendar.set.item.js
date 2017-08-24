@@ -146,6 +146,37 @@ let config = {
 
             });
         },
+
+        /**
+         * @author zj
+         *
+         */
+        checkResTextSelected: function () {
+            let resOpts = this.el.find('.res-text option');
+            resOpts.each((item) => {
+                if(resOpts[item].value) {
+                    let a = resOpts[item].value;
+                    if(a === this.data.rowSetData['selectedRepresents']) {
+                        resOpts[item].selected  = 'selected';
+                    }
+                }
+
+            });
+        },
+
+        checkChangeTextSelected: function () {
+            let changeOpts = this.el.find('.page-change-text option');
+            changeOpts.each(item => {
+                if(changeOpts[item].value) {
+                    let a= changeOpts[item].value;
+                    if(a === this.data.rowSetData['selectedEnums']) {
+                        changeOpts[item].selected  = 'selected';
+                    }
+                }
+
+            });
+
+        }
     },
     afterRender: function () {
         this.el.css({});
@@ -197,25 +228,10 @@ let config = {
         });
         this.el.find(".list").hide();
 
-        /**
-         * @author zj
-         */
-        if(this.el.find('.res-text option')) {
-            this.el.find('.res-text option').each((item) => {
-                let a = $('.res-text option')[item].value;
-                if(a === this.data.rowSetData['selectedRepresents']) {
+        this.actions.checkResTextSelected();
 
-                    this.el.find('.res-text option')[item].selected  = 'selected';
-                }
-            });
-        }
+        this.actions.checkChangeTextSelected();
 
-        this.el.find('.page-change-text option').each(item => {
-            let a= $('.page-change-text option')[item].value;
-            if(a === this.data.rowSetData['selectedEnums']) {
-                this.el.find('.page-change-text option')[item].selected  = 'selected';
-            }
-        });
         if(!this.data.rowSetData['email']['email_status'] && !this.data.rowSetData['sms']['sms_status']) {
             this.el.find('.set-remind-method').html('设置提醒方式');
         }
@@ -230,10 +246,8 @@ let config = {
             this.data.rowSetData['is_show_at_home_page'] = isShowHomePage;
 
         }).on('change', '.set-color', () => {
-
             let setColor = this.el.find('.set-color').val();
             this.data.rowSetData['color'] = setColor;
-
         }).on('change', '.res-text', () => {
             let textForResValue = this.el.find('.res-text option:selected').val();
             let textForResText = this.el.find('.res-text option:selected').text();
@@ -255,7 +269,7 @@ let config = {
         });
         this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text;
         this.el.find('.preview-text').text(this.data.preViewText);
-
+        //this.el.find('.set-color').attr('value', this.data.rowSetData.color);
         $("#set-color-id").attr("id", "set-color-" + this.data.rowSetData.field_id);
         let set_color_id = "#set-color-" + this.data.rowSetData.field_id;
         $(set_color_id).attr("value", this.data.rowSetData.color);
