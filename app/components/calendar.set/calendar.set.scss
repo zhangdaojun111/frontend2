@@ -30,13 +30,13 @@
         table{
             width:100%;
             .table-set-checkbox{
-                width: 100px !important;
+                width: 9% !important;
             }
             .table-set-multile{
-                width:300px !important;
+                width:20% !important;
             }
             .set-table-head{
-                width: 138px;
+                width: 9%;
                 text-align: center;
                 line-height: 30px;
                 border: 1px solid #C1CACA;
@@ -44,7 +44,7 @@
             }
         }
         .set-items {
-            max-height: 520px;
+            height: 617px;
             overflow: auto;
         }
         .time-calendar-set{
@@ -64,9 +64,7 @@
         .calendar-setting-content{
             height:100%;
         }
-        .set-items{
-            height:100%;
-        }
+
 
     }
 

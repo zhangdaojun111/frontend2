@@ -79,13 +79,17 @@ let config = {
             this.trigger('onSubCheckboxChange', value);
         },
         setCheckboxValue: function (value) {
-            this.ownCheckbox[0].checked = value;
+            if (this.ownCheckbox.length) {
+                this.ownCheckbox[0].checked = value;
+            }
             this.subComponents.forEach((comp) => {
                 comp.actions.setCheckboxValue(value);
             })
         },
         setCheckboxValueSelf: function (value) {
-            this.ownCheckbox[0].checked = value;
+            if (this.ownCheckbox.length) {
+                this.ownCheckbox[0].checked = value;
+            }
         },
         checkChildrenChecked: function () {
             let allCheckbox = this.el.find('.childlist input:checkbox');

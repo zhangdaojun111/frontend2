@@ -15,12 +15,12 @@ import {AutoSelect} from '../../util/autoSelect/autoSelect';
 let config = {
     template: template,
     data: {
-        rowSetData: {},
+        rowSetData: {},                 // 设置的行数据
         rowTitle: '',
-        dropdown: [],
-        dropdownForRes: [],
-        dropdownForCalendarChange: [],
-        replaceDropDown: [],
+        dropdown: [],                   // 附加字段
+        dropdownForRes: [],             // 代表字段
+        dropdownForCalendarChange: [],  // 首页可修改字段
+        replaceDropDown: [],            // 可配置字段
 
         isConfigText: true,
         selectedOpts: [],
@@ -54,6 +54,7 @@ let config = {
          * @author zj
          * @param param
          * @returns {{res: Array, text: Array}}
+         * 数据回显
          */
         returnShow: function (param) {
             let res = [];
@@ -73,6 +74,7 @@ let config = {
          * @author zj
          * @param forResText
          * @param forResId
+         * 代表字段选中后，附加字段中对应字段也选中
          */
         checkForResSelected: function (forResText, forResId) {
             let selectedOpts = this.data.multiSelectMenu.data.choosed;
@@ -93,6 +95,7 @@ let config = {
         /**
          * @author zj
          * @param newSelectedOpts
+         * 检查已选中的附加字段
          */
         checkSelectedOpts: function (newSelectedOpts) {
             let selectedOptsId = [];
@@ -106,6 +109,7 @@ let config = {
         },
         /**
          * @author zj
+         * 打开提醒方式设置
          */
         openSetRemind: function () {
             PMAPI.openDialogByIframe(
@@ -149,7 +153,7 @@ let config = {
 
         /**
          * @author zj
-         *
+         *检查已设置的代表字段
          */
         checkResTextSelected: function () {
             let resOpts = this.el.find('.res-text option');
@@ -164,6 +168,10 @@ let config = {
             });
         },
 
+        /**
+         * @author zj
+         * 检查已设置的首页可修改字段
+         */
         checkChangeTextSelected: function () {
             let changeOpts = this.el.find('.page-change-text option');
             changeOpts.each(item => {
@@ -173,19 +181,14 @@ let config = {
                         changeOpts[item].selected  = 'selected';
                     }
                 }
-
             });
-
-        }
+        },
     },
     afterRender: function () {
         this.el.css({});
         let staus = false;
         let _this = this;
-        /**
-         * @author
-         * @type {{list: (*), displayType: string, editable, choosed: Array, onSelect: onSelect}}
-         */
+
         let select_item_data = {
             'list': this.data.dropdown,
             displayType: 'popup',
@@ -255,7 +258,7 @@ let config = {
             this.data.rowSetData['selectedRepresents'] = textForResValue;
         }).on('change', '.page-change-text', () => {
             let valueForCalendarChangeValue = this.el.find('.page-change-text option:selected').val();
-            let textForCalendarChangeValue = this.el.find('.page-change-text option:selected').text();
+            // let textForCalendarChangeValue = this.el.find('.page-change-text option:selected').text();
 
             this.data.rowSetData['selectedEnums'] = valueForCalendarChangeValue;
         }).on('click', '.set-remind-method', () => {
@@ -265,11 +268,11 @@ let config = {
         }).on('change', '.config-text', () => {
             let valueConfigTextValue = this.el.find('.config-text option:selected').val();
             let textConfigTextValue = this.el.find('.config-text option:selected').text();
-
         });
+
         this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text;
         this.el.find('.preview-text').text(this.data.preViewText);
-        //this.el.find('.set-color').attr('value', this.data.rowSetData.color);
+
         $("#set-color-id").attr("id", "set-color-" + this.data.rowSetData.field_id);
         let set_color_id = "#set-color-" + this.data.rowSetData.field_id;
         $(set_color_id).attr("value", this.data.rowSetData.color);
