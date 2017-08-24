@@ -23,6 +23,11 @@ let config = {
         isHomeCalendar:false,
     },
     actions: {
+        /**
+         * @author zj
+         * @param sValue
+         * @param sLabel
+         */
         changSelectValue: function(sValue, sLabel){
             let oldValue = this.data.remindTaskItemData['data3show'][0][0]['selectValue'];
             let oldLabel = this.data.remindTaskItemData['data3show'][0][0]['selectLabel'];
@@ -46,6 +51,10 @@ let config = {
                 }
             });
         },
+
+        /**
+         * @author zj
+         */
         openRemind: function () {
             CalendarRemind.data.remindTable = this.data.remindTaskItemData.tableName;
             CalendarRemind.data.remindDateProp = this.data.remindTaskItemData.fieldName;
@@ -64,6 +73,9 @@ let config = {
             });
         },
 
+        /**
+         * @author zj
+         */
         openWorkflow: function () {
             this.el.find('.task-show-text').html(this.data.remindTaskItemData['data']['name']);
             this.el.on('click', '.task-show-text', () => {
@@ -115,7 +127,6 @@ let config = {
         this.el.on('click','.task-state-icon', function() {
             event.stopPropagation();
             if(!$(this).is(".options-show")){
-                console.log(that.el.find(".task-state-icon").offset().top);
                 that.el.parents(".calendar-main-content").find(".select-options").hide();
                 that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
                 // that.el.find(".select-options").css({"top":that.el.find(".task-state-icon").offset().top - 70});

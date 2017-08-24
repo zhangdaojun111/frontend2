@@ -1,6 +1,12 @@
 /**
  * Created by zj on 2017/7/27.
  */
+
+/**
+ * @author zj
+ * @description 日历主视图的切换及数据获取
+ */
+
 import Component from "../../../lib/component";
 import template from './calendar.main.html';
 import './calendar.main.scss';

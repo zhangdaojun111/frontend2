@@ -92,12 +92,12 @@ $grid-bg-color: rgba(248, 248, 248, 1);
         .calendar-search {
             display: inline-block;
             border: 1px solid $boder-color;
-            border-radius: 4px;
             .search-box {
                 border: none;
                 vertical-align: middle;
-                height: 18px;
-                padding: 4px;
+                height: 26px;
+                padding: 0px 4px;
+                outline: none;
             }
 
         }
