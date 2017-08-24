@@ -7,6 +7,7 @@ import template from './radio.html';
 import './radio.scss';
 import {FormFittingAbstract} from '../form.abstract';
 
+
 let config = {
     template: template,
     data: {
@@ -26,6 +27,7 @@ let config = {
         })
     }
 }
+
 
 export class RadioComponent extends FormFittingAbstract {
     constructor(data) {
