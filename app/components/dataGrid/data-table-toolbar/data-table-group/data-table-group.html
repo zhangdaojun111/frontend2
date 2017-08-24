@@ -1,12 +1,13 @@
 <div class="group-container">
     <div class="group-search">
-        <div class="title"><img class="icon-l" src="../../../../assets/images/dataGrid/icon_fenzu_1.png" alt=""><span class="text">分组</span><img class="closeCustom" src="../../../../assets/images/dataGrid/group-cancel.png" alt=""></div>
+        <div class="group-search-title"><img class="icon-l" src="../../../../assets/images/dataGrid/icon_fenzu_1.png" alt=""><span class="text">分组</span><img class="closeGroup" src="../../../../assets/images/dataGrid/group-cancel.png" alt=""></div>
         <!--<div><img src="../../../../assets/images/dataGrid/icon_fenzu_1.png" alt=""><span>分组</span><span class="closeGroup">x</span></div>-->
         <div class="input-box">
             <input placeholder="搜索关键字"  class="group-search-input" type="text">
         </div>
     </div>
     <div class="group-data">
+        <div class="group-data-title">将数据拖动到分组栏</div>
         <ul class="group-data-list connectedSortable">
             {{#fields}}
             <li field="{{field}}" name="{{name}}" class="group-data-item">
@@ -23,7 +24,7 @@
             </li>
             {{/fields}}
         </ul>
-        <div class="title"><span>分组</span><span class="resetGroup">重置</span></div>
+        <div class="grouping-data-title"><span>分组</span><span class="resetGroup">重置</span></div>
         <ul class="grouping-data-list connectedSortable">
             {{#myGroup}}
             <li field="{{field}}" name="{{name}}" class="group-data-item">

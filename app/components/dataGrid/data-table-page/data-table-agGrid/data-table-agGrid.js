@@ -1233,6 +1233,7 @@ let config = {
                     gridoptions: this.agGrid.gridOptions,
                     fields: this.data.myGroup.length == 0 ? this.data.groupFields : this.actions.deleteGroup(this.data.groupFields),
                     myGroup:  this.actions.setMyGroup(this.data.myGroup.fields),
+                    groupFields: this.data.myGroup.fields,
                     close: this.actions.calcGroup
                 }
                 this.groupGridCom = new groupGrid(groupLit);
