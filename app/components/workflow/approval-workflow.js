@@ -223,13 +223,13 @@ let config={
 
     },
     afterRender(){
-        
+
         let __this=this;
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             this.data.workflowData=msg.data[0];
             WorkFlow.show(msg.data[0],'#drawflow');
         });
-      
+
         this.el.on('click','.gz',(e)=>{
             this.actions.toogz(e);
         });
@@ -286,7 +286,7 @@ let config={
         Mediator.subscribe("workflow:sendImgInfo",(e)=>{
             this.data.imgInfo=e;
         });
-        
+
     }
 };
 class ApprovalWorkflow extends Component{
