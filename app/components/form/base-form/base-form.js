@@ -1679,20 +1679,7 @@ let config={
         // })
         //默认表单样式
         if( _this.el.find('table').hasClass('form-version-table-user') ){
-            // _this.el.find('table').parents().parents('#detail-form').addClass('detail-form-style');
-            // _this.el.find('table').off();
-            // _this.el.find('table>tbody').append('<div class="more"><span>展开更多</span></div>')
-            //
-            // if(_this.el.find('table>tbody').height() <= _this.el.find('table').height()){
-            //     _this.el.find('.overflow').removeClass('overflow');
-            // }
             _this.el.find('.btn').css("display","none");
-
-        //     _this.el.find('.more').on('click',function () {
-        //         _this.el.find('.more').hide();
-        //         _this.el.find('.overflow').removeClass('overflow');
-        //         _this.el.find('table').css({'overflow-y':'auto',"height":"520px"});
-        //     })
          }
         _this.el.find(".overflow").on("scroll",function () {
             let overflowHight = _this.el.find('.overflow').scrollTop();
