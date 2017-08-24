@@ -16,7 +16,8 @@ let config = {
 
     },
     afterRender: function() {
-        this.el.css({height:'calc(100%/6)',});
+        //this.el.css({height:'calc(100%/6)',});
+        this.el.addClass('abc');
         this.el.find('#weekNum').attr("id", 'weekNum'+this.data.index);
         this.data.currentData.forEach(item => {
             this.append(new TableGrid({bodyData:item, type: 'month'}), this.el.find('#weekNum'+this.data.index));

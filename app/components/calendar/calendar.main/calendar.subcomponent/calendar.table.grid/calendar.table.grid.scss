@@ -1,7 +1,15 @@
-@import "../../../calendar";
-
+.item-td-col-month{
+    flex-grow: 1;
+    height: 136px;
+}
+.item-td-col-week {
+    flex-grow: 1;
+    height: 100%;
+}
+.item-td-col-day {
+    height: 100%;
+}
 .grid-content {
-    width: calc(100% - 1px);
     display: block;
     text-align: left;
     height: 100%;
@@ -11,10 +19,10 @@
     position: relative;
     border-right: 1px solid rgba(228, 228, 228, 1);
     border-bottom: 1px solid rgba(228, 228, 228, 1);
-    margin: 0px !important;
-    background-color: $grid-bg-color;
+
+    background-color: rgba(248, 248, 248, 1);
     &:hover {
-        background-color: $grid-hover;
+        background-color: rgba(255, 255, 255, 1);
     }
     .date {
         display: block;
@@ -25,5 +33,21 @@
     .task-list {
         position: absolute;
         width: 100%;
+        height: 100%;
+        overflow: auto;
+    }
+    .task-list::-webkit-scrollbar,.right-content::-webkit-scrollbar,.left-content::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+    }
+    .task-list::-webkit-scrollbar-thumb,.right-content::-webkit-scrollbar-thumb,.left-content::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        -webkit-box-shadow: inset 0 0 5px rgba(215, 215, 215, 1);
+        background: rgba(215, 215, 215, 1);
+    }
+    .task-list::-webkit-scrollbar-track,.right-content::-webkit-scrollbar-track,.left-content::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 5px rgba(215, 215, 215, 0.2);
+        border-radius: 0;
+        background: rgba(215, 215, 215, 0.2);
     }
 }
