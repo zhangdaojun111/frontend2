@@ -1,9 +1,9 @@
-import Component from '../../lib/component';
+import Component from '../../../lib/component';
 import template from './workflow-initial.html';
 import './workflow-initial.scss';
-import '../../assets/scss/workflow/workflow-base.scss';
-import Mediator from '../../lib/mediator';
-import WorkflowAddFollow from './workflow-addFollow/workflow-addFollow';
+import '../../../assets/scss/workflow/workflow-base.scss';
+import Mediator from '../../../lib/mediator';
+import WorkflowAddFollow from '../workflow-addFollow/workflow-addFollow/workflow-addFollow';
 
 let config={
     template: template,

@@ -10,11 +10,11 @@ import {HTTP} from '../../lib/http';
 import Mediator from '../../lib/mediator';
 import {workflowService} from '../../services/workflow/workflow.service';
 import WorkFlowForm from '../../components/workflow/workflow-form/workflow-form';
-import AddWf from '../../components/workflow/add-workflow';
+import AddWf from '../../components/workflow/add-workflow/add-workflow';
 import FormEntrys from '../form';
 import msgBox from '../../lib/msgbox';
 import WorkFlow from '../../components/workflow/workflow-drawflow/workflow';
-import WorkflowAddFollow from '../../components/workflow/workflow-addFollow/workflow-addFollow';
+import WorkflowAddFollow from '../../components/workflow/workflow-addFollow/workflow-addFollow/workflow-addFollow';
 import TreeView from '../../components/util/tree/tree';
 import jsplumb from 'jsplumb';
 

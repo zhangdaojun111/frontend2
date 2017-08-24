@@ -1,14 +1,13 @@
-import Component from '../../lib/component';
+import Component from '../../../lib/component';
 import template from './approval-workflow.html';
 import './approval-workflow.scss';
-import '../../assets/scss/workflow/workflow-base.scss';
-import Mediator from '../../lib/mediator';
-import WorkFlow from './workflow-drawflow/workflow';
-import WorkflowSeal from './workflow-seal/workflow-seal';
-import {workflowService} from '../../services/workflow/workflow.service';
-import msgBox from '../../lib/msgbox';
-// import AddSigner from './add-signer';
-import {PMAPI,PMENUM} from '../../lib/postmsg';
+import '../../../assets/scss/workflow/workflow-base.scss';
+import Mediator from '../../../lib/mediator';
+import WorkFlow from '../workflow-drawflow/workflow';
+import WorkflowSeal from '../workflow-seal/workflow-seal';
+import {workflowService} from '../../../services/workflow/workflow.service';
+import msgBox from '../../../lib/msgbox';
+import {PMAPI,PMENUM} from '../../../lib/postmsg';
 
 let config={
     template: template,

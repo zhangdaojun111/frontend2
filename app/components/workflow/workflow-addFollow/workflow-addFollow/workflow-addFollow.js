@@ -1,13 +1,12 @@
-import Component from '../../../lib/component';
+import Component from '../../../../lib/component';
 import template from './workflow-addFollow.html';
 import './workflow-addFollow.scss';
-import Mediator from '../../../lib/mediator';
-import SelectStaff from './select-staff/select-staff';
-import SelectStaffNoDel from './select-staff-no-del/select-staff-no-del';
-import SelectedStaff from './selected-staff/selected-staff';
-import SelectedStaffNoDel from './selected-staff-no-del/selected-staff-no-del';
-import {PMAPI,PMENUM} from '../../../lib/postmsg';
-import selTemplate from './select-template';
+import Mediator from '../../../../lib/mediator';
+import SelectStaff from '../select-staff/select-staff';
+import SelectStaffNoDel from '../select-staff-no-del/select-staff-no-del';
+import SelectedStaff from '../selected-staff/selected-staff';
+import SelectedStaffNoDel from '../selected-staff-no-del/selected-staff-no-del';
+import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 
 let config={
     template: template,
@@ -84,8 +83,6 @@ let config={
 
         //注册SelectedStaff组件
         Mediator.subscribe('workflow:pubCheck', (res)=> {
-            console.log(res);
-            console.log("....................");
             this.append(new SelectedStaff(res), this.el.find('#selected'));
         });
 

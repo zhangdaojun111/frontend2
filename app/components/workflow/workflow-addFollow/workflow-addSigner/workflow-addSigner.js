@@ -1,13 +1,11 @@
-import Component from '../../../lib/component';
+import Component from '../../../../lib/component';
 import template from './workflow-addSigner.html';
-import './workflow-addFollow.scss';
+import '../workflow-addFollow/workflow-addFollow.scss';
 import './workflow-addSigner.scss';
-import Mediator from '../../../lib/mediator';
-import SelectStaff from './select-staff/select-staff';
-// import SelectedStaff from './selected-staff/selected-staff';
-import {PMAPI,PMENUM} from '../../../lib/postmsg';
-import selTemplate from './select-template';
-import AddSigner from './add-signer';
+import Mediator from '../../../../lib/mediator';
+import SelectStaff from '../select-staff/select-staff';
+import {PMAPI,PMENUM} from '../../../../lib/postmsg';
+import AddSigner from '../add-signer/add-signer';
 
 let config={
     template: template,
