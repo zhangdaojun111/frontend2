@@ -1,9 +1,9 @@
 .docs-example-viewer-body{
   padding: 20px;
-  position: relative;
   .mat-input-container{
     display: inline-block;
     border-bottom: 1px solid #ececec;
+    position: relative;
       .mat-input-wrapper{
         padding: 7px 0;
         input{
@@ -15,7 +15,10 @@
     }
   .mat-select-list{
     position: absolute;
-    top: 0;
+    top: 31px;
     left: 0;
+    width: 100%;
+    min-height: 260px;
+    overflow: auto;
   }
 }
