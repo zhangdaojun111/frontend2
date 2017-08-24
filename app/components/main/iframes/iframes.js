@@ -401,7 +401,8 @@ export const IframeInstance = new Component({
         });
 
         this.el.on('click','.view-save',function () {
-            SaveView.show(that.data.sort);
+            let temp_arr = _.defaultsDeep([],that.data.sort);
+            SaveView.show(temp_arr);
         }).on('mouseenter','.popup-icon',() => {
             this.actions.showTabsPopup();
         }).on('mouseenter','.view-popup',() => {
@@ -432,6 +433,7 @@ export const IframeInstance = new Component({
 
         Mediator.on('saveview:displayview', (data) => {
             this.actions.closeAllIframes();  //先关闭所有标签，再打开view中的标签
+            console.log(data);
             for(let k of data){
                 this.actions.openIframe(k.id,k.url,k.name);
             }
