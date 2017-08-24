@@ -193,36 +193,13 @@ let config = {
             selector: '.set-calendar',
             callback: function(){
                 this.actions.getSettingMenu();
-                // CalendarSetService.getMenu().then(res => {
-                //     let component = new CalendarSetting(res['menuList']);
-                //     let el = $('<div>').appendTo(document.body);
-                //     component.render(el);
-                //     el.dialog({
-                //         title: '日历设置',
-                //         width: '90%',
-                //         height: '750',
-                //         background: '#ddd',
-                //         close: function() {
-                //             $(this).dialog('destroy');
-                //             component.destroySelf();
-                //         }
-                //     });
-                // });
             }
         },
         {
             event: 'click',
             selector: '.create-calendar',
             callback: function(){
-                PMAPI.openDialogByIframe(
-                    '/calendar_mgr/create/?table_id=1639_8QvxFmFvVpK33bVPXdk8hD',
-                    {
-                        width: "1000",
-                        height: '550',
-                        title: '日历表',
-                    }).then(res => {
-                    // 创建日历表后的回调，接收form回传的参数
-                });
+                this.actions.openCalendarForm();
             }
         },
     ],
