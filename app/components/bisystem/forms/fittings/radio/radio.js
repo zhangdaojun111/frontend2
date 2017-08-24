@@ -37,6 +37,7 @@ export class RadioComponent extends FormFittingAbstract {
      * 设置input值
      */
     setValue(val) {
+        console.log(val);
         for (let [index,radio] of this.data.radios.entries()) {
              if (val == radio.value) {
                  this.el.find('input').eq(index).attr('checked', 'true');
