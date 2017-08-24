@@ -1,3 +1,7 @@
+/**
+ * @author xiongxiaotao
+ * @description 本组件是向其他用户推送消息的组件
+ */
 import template from './post-message.html';
 import './post-message.scss';
 import Component from '../../../lib/component';
@@ -8,6 +12,10 @@ import TreeView from '../../util/tree/tree';
 import {AutoSelect} from '../../util/autoSelect/autoSelect';
 import moment from 'moment';
 
+/**
+ * 初始化树的数据
+ * @param list
+ */
 function formatTreeData(list) {
     let res = list.map((item) => {
         item.icon = '';
@@ -39,11 +47,17 @@ function formatTreeData(list) {
 let config = {
     template: template,
     data: {
+        // 用户数据
         userData: [],
+        // 部门数据
         departmentData: [],
+        // 选中的部门
         choosedDepart: []
     },
     actions: {
+        /**
+         * 获取部门数据，并初始化部门树和人员选择组件
+         */
         getDepartmentData: function () {
             HTTP.getImmediately('/get_department_tree/', {type: ''}).then((res) => {
                 this.data.userData = res.data.department2user;
@@ -52,6 +66,9 @@ let config = {
                 this.actions.initChoosedUsers();
             });
         },
+        /**
+         * 初始化部门树
+         */
         initTree: function () {
             let treeView = new TreeView(this.data.departmentData, {
                 callback: (order, node) => {
@@ -64,6 +81,9 @@ let config = {
             let $container = this.el.find(".tree");
             treeView.render($container);
         },
+        /**
+         * 初始化人员选择组件
+         */
         initChoosedUsers: function () {
             this.autoSelect = new AutoSelect({
                 displayType: 'static',           // popup或者static popup为弹出的形式 static 为静态显示
@@ -77,6 +97,14 @@ let config = {
             });
             this.autoSelect.render(this.el.find('.users'));
         },
+        /**
+         * 内部方法，当树选中时触发此方法，根据选中的部门
+         * 显示对应部门的人员
+         * @param order
+         * @param node
+         * @param callback
+         * @private
+         */
         _selectNode: function (order, node, callback) {
             if (order === 'select') {
                 this.data.choosedDepart.push(node.id);
@@ -87,6 +115,9 @@ let config = {
             }
             this.actions.renderUsers(this);
         },
+        /**
+         * 将选中的人员渲染到组件内
+         */
         renderUsers: _.debounce(function (context) {
             let hash = {};
             let userData = context.data.userData;
@@ -109,6 +140,10 @@ let config = {
             this.autoSelect.data.choosed = users;
             this.autoSelect.reload();
         }, 500),
+        /**
+         * 当发送规则改变触发此方法
+         * @param value
+         */
         onSendTypeChange: function (value) {
             let dom = this.el.find('.prepare-time');
             if (value === '0') {
@@ -133,6 +168,9 @@ let config = {
                 this.el.find('.prepare-time').html('');
             }
         },
+        /**
+         * 提交数据
+         */
         submit: function () {
             let form = this.el.find('form')[0];
             let choosedUsers = this.autoSelect.actions.getValue();
