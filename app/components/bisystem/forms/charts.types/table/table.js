@@ -1,5 +1,6 @@
 /**
  * Created by birdyy on 2017/8/14.
+ * 表格图表配置
  */
 
 import {BiBaseComponent} from '../../../bi.base.component';
@@ -13,6 +14,7 @@ import "./table.scss";
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import {FormColumnComponent} from './columns/column';
 import {FormSingleComponent} from './single/single';
+import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 
 let config = {
     template:template,
@@ -33,6 +35,11 @@ let config = {
             this.chartSourceChange(params['sources'])
         }).on('form:table:column:choosed',(event,params) => { // 监听选中字段
             this.single.setColumns(params['choosed'])
+        }).on(`${this.data.assortment}-chart-editMode-source`, (event,params) => {
+            // 编辑模式
+            if (this.chartId && this.editModeOnce) {
+                this.getChartData(this.chartId);
+            }
         });
 
         this.el.on('click', '.save-btn', (event) => {
@@ -76,8 +83,11 @@ let config = {
 export class FormTableComponent extends BiBaseComponent{
     constructor(chart) {
         super(config);
-        this.data.assortment = chart.assortment
+        this.data.assortment = chart.assortment;
+        this.chartId = chart.id;
         this.formGroup = {};
+        this.editModeOnce = this.chartId ? true : false;
+        this.editChart = null;
     }
 
     /**
@@ -88,6 +98,32 @@ export class FormTableComponent extends BiBaseComponent{
         this.single = new FormSingleComponent();
         this.append(this.columns, this.el.find('.table-columns'));
         this.append(this.single, this.el.find('.form-group-single-columns'));
+    }
+
+    /**
+     * 编辑模式发送chartId, 得到服务器数据
+     * @param chartId 图表id
+     */
+    async getChartData(chartId) {
+        if (this.chartId) {
+            const chart = await canvasCellService.getCellChart({chart_id: chartId});
+            this.fillChart(chart[0])
+        }
+    }
+    /**
+     * 编辑模式
+     */
+    fillChart(chart) {
+        this.editChart = chart;
+        this.formGroup.chartName.setValue(chart['chartName']);
+        let share = {
+            chartSource:chart['source'],
+            themes: chart['theme'],
+            icons: chart['icon'],
+            filter: chart['filter']
+        };
+        this.formGroup.share.setValue(share);
+
     }
 
 
@@ -138,6 +174,13 @@ export class FormTableComponent extends BiBaseComponent{
      */
     chartSourceChange(sources) {
         this.columns.reloadUi(sources);
+        if (this.editModeOnce && this.editChart) {
+            if (sources['x_field'].length > 0) {
+                this.columns.setValue(this.editChart['columns']);
+                this.columns.choosed.data.choosed = this.editChart['columns'];
+                this.columns.choosed.reload();
+            }
+        }
         if (this.formGroup.sortColumn) {
             if (this.formGroup.sortColumn.autoSelect) {
                 this.formGroup.sortColumn.autoSelect.data.list = sources['x_field'];

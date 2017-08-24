@@ -13,7 +13,8 @@ let config = {
     template:template,
     data: {
         columns: [],
-        choosed: new Set()
+        choosed: new Set(),
+        test: null
     },
     actions: {},
     afterRender() {
@@ -56,6 +57,20 @@ export class FormColumnComponent extends BiBaseComponent{
     }
 
     /**
+     * 设置编辑模式选中的字段
+     * @param choosed选中的表格
+     */
+    setValue(choosed = []){
+        this.data.columns.forEach((column,index) => {
+            choosed.forEach(choose => {
+                if (choose.id === column.id) {
+                    this.el.find('input').eq(index).attr('checked',true)
+                }
+            })
+        })
+    }
+
+    /**
      * 选择列名
      * @param checked = 是否选择，index = this.data.columns索引值
      */
@@ -63,7 +78,7 @@ export class FormColumnComponent extends BiBaseComponent{
         if (checked) {
             this.data.choosed.add(this.data.columns[index]);
         } else {
-            this.data.choosed.delete(this.data.columns[index])
+            this.data.choosed.delete(this.data.columns[index]);
         };
         this.choosed.data.choosed = Array.from(this.data.choosed);
         this.messager('form:table:column:choosed',{'choosed': this.choosed.data.choosed});
