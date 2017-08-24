@@ -90,7 +90,6 @@ let config = {
     },
     afterRender: function() {
         //this.el.attr("draggable",true);
-        console.log(this.data.remindTaskItemData);
         this.el.addClass("comment-task-item");
         this.el.find('.task-bg-color').css({backgroundColor: this.data.remindTaskItemData['color']});
         let that = this;

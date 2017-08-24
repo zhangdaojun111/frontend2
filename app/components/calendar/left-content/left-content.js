@@ -19,14 +19,12 @@ import {CalendarWorkflowData} from '../calendar.main/calendar.workflow/calendar.
 let config = {
     template: template,
     data:{
-        cancel_fields:[],                              // 取消选中数组
-        hide_table:{'table_Id':'','tableName':''},     //单条隐藏table
-        hide_tables:[],                                //隐藏table数组
-        Add_hideTable:[],
-        contentStatus:1,
-        rows:[],                                       //日立树数据
-        hide_item_table:[],
-        calendarTreeData: {},
+        cancel_fields:[],                              //取消选中数组
+        hide_table:{'table_Id':'','tableName':''},     //隐藏对象
+        hide_tables:[],                                //隐藏对象数组
+        rows:[],                                       //日历树data_table数据
+        hide_item_table:[],                            //隐藏table_id数组
+        calendarTreeData: {},                          //日历树数据
     },
     actions: {
         //与我相关审批和已完成显示隐藏
@@ -88,6 +86,7 @@ let config = {
                 // that.el.find(".item-content-1").animate({height:'calc(100% - 120px)'},"fast");
             }
         },
+        //展开日历操作栏
         showRemindType:function(that){
             that.el.find(".item-title-2").removeClass("display-all-content");
             that.el.find(".item-title-1").addClass("display-all-content");
@@ -96,6 +95,7 @@ let config = {
             that.el.find(".item-content-1").show();
             that.el.find(".item-content-1").css({height:'calc(100% - 130px)'});
         },
+        //处理日历树数据
         getCalendarTreeData:function(that){
             for(let i = 0;i<this.data.calendarTreeData.hide_tables.length;i++){
                 let hide_table_name = "";
@@ -161,17 +161,6 @@ let config = {
         });
         that.el.on('click','.set-calendar',() =>{
             CalendarSetService.getMenu().then(res => {
-                // PMAPI.openDialogByIframe(
-                //     '/iframe/calendarOpenSetting/',
-                //     {
-                //         width: "1720",
-                //         height: '750',
-                //         title: '日历设置',
-                //     }, {
-                //         menu: res['menuList'],
-                //     }).then(res => {
-                //
-                // });
                 let component = new CalendarSetting(res['menuList']);
                 let el = $('<div>').appendTo(document.body);
                 component.render(el);
