@@ -12,7 +12,6 @@ import {PMAPI, PMENUM} from '../../../lib/postmsg';
 import msgbox from '../../../lib/msgbox';
 import {HTTP} from '../../../lib/http';
 
-
 let config = {
     template: template,
     actions: {

@@ -191,7 +191,11 @@ export const IframeInstance = new Component({
         showTabsPopup:function () {
             this.actions.initTabList(this.data.sort);
             this.el.find('.tab-list').show();
+            this.el.find('.popup-icon').addClass('mouse-enter-icon');
             window.clearTimeout(this.data.timer)
+        },
+        resetIcon:function () {
+            this.el.find('.popup-icon').removeClass('mouse-enter-icon');
         },
         clearTimeOut:function () {
             window.clearTimeout(this.data.timer);
@@ -404,6 +408,8 @@ export const IframeInstance = new Component({
             SaveView.show(temp_arr);
         }).on('mouseenter','.popup-icon',() => {
             this.actions.showTabsPopup();
+        }).on('mouseleave','.popup-icon',() => {
+            this.actions.resetIcon();
         }).on('mouseenter','.view-popup',() => {
             this.actions.clearTimeOut();
         }).on('click','.tab-list',(event) => {
