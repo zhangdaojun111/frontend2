@@ -117,6 +117,7 @@ let config = {
                         html.push(`<div class="item" title="点击删除" data-id="${item.id}">${item.name}</div>`)
                     };
                 });
+                this.el.find('.select-all span').text(this.data.choosed.length);
                 this.choosedWrap.html(html.join(''));
             } else {
                 this.choosedWrap.hide();
