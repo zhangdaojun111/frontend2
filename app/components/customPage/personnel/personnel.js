@@ -18,6 +18,7 @@ import customColumns from "../../dataGrid/data-table-toolbar/custom-columns/cust
 import dataPagination from "../../dataGrid/data-table-toolbar/data-pagination/data-pagination";
 import FloatingFilter from "../../dataGrid/data-table-toolbar/floating-filter/floating-filter";
 import {fieldTypeService} from "../../../services/dataGrid/field-type-service";
+import {TabService} from "../../../services/main/tabService";
 import TreeView from "../../../components/util/tree/tree";
 
 let config = {
@@ -399,6 +400,7 @@ let config = {
                         dataTableService.delTableData( json ).then( res=>{
                             if( res.success ){
                                 msgBox.showTips( '删除成功' )
+                                this.actions.setInvalid();
                             }else {
                                 msgBox.alert( res.error )
                             }
@@ -605,8 +607,16 @@ let config = {
             this.data.filterParam['is_filter'] = 1;
             this.actions.getUserData();
         },
+        //设置失效
+        setInvalid: function () {
+            this.pagination.data.myInvalid = true;
+        },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title,w,h ) {
+            //暂时刷新方法
+            if( url.indexOf( '/form/index/' ) != -1 ){
+                this.actions.setInvalid();
+            }
             PMAPI.openDialogByIframe( url,{
                 width: w || 1300,
                 height: h || 800,
@@ -751,6 +761,7 @@ let config = {
         }
     },
     afterRender: function (){
+        TabService.onOpenTab( this.data.tableId );
         this.actions.setFieldMapping();
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
