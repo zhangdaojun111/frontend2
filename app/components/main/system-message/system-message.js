@@ -94,7 +94,7 @@ let config = {
             if (data.msg_type === 3 || data.msg_type === 0) {
                 PMAPI.openDialogByIframe(data.url, {
                     width: 1200,
-                    height: 800,
+                    height: 500,
                     title: data.msg_type_text
                 })
             } else {
@@ -145,8 +145,8 @@ let systemMessageUtil = {
         let systemMessage = new SystemMessage();
         systemMessage.render(this.el);
         this.el.dialog({
-            width: 1200,
-            height: 800,
+            width: 945,
+            height: 640,
             modal: true,
             title: '消息提醒',
             close: function () {
