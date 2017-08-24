@@ -1,6 +1,6 @@
 /**
- * Created by lipengfei.
- * 日历树组
+ * @author  lipengfei.
+ * @description 日历树组
  */
 import Component from "../../../../lib/component";
 import template from './leftContent.calendarSet.html';
@@ -14,65 +14,87 @@ import {PMAPI} from '../../../../lib/postmsg';
 let config = {
     template: template,
     data:{
-        cancel_fields:[],
-        hide_table:{'table_Id':'','tableName':''},
-        hide_tables:[],
-        Add_hideTable:[],
-        contentStatus:1,
-        rows:[],
-        hide_item_table:[],
-        calendarTreeData: {},
+        cancel_fields:[],                                    //取消选中的filed_id数组
+        hide_table:{'table_Id':'','tableName':''},           //隐藏对象
+        hide_tables:[],                                      //隐藏列表table_id数组
+        rows:[],                                             //所有隐藏数据
+        hide_item_table:[],                                  //隐藏对象数组
+        calendarTreeData: {},                                //日历树数据
+    },
+    events:{
+        //日历树组件回掉函数  参数data格式：{type：，data：}
+        checkboxcheck:function(data){
+            if(data.type === "remind-checkbox"){
+                if(data.data === 1){
+                    this.el.find("#checkbox_a3").addClass('label-select-all-checked');
+                } else{
+                    this.el.find("#checkbox_a3").removeClass('label-select-all-checked');
+                }
+            }
+            if (data.type === "unshowData"){
+                if (data.staus) {
+                    data.data.forEach((item) => {
+                        if (this.data.cancel_fields.indexOf(item) === -1) {
+                            this.data.cancel_fields.push(item);
+                        }
+                    })
+                } else {
+                    this.data.cancel_fields = _.difference(this.data.cancel_fields, data.data);
+                }
+                Mediator.emit('calendar-left:unshowData', {data: this.data.cancel_fields});
+                let preference = {"content": this.data.cancel_fields};
+                CalendarService.getCalendarPreference(preference);
+            }
+        }
     },
     actions: {
         checkbox_a3:function(temp,label_select_all_show,select_label_children,that){
-            config.data.cancel_fields = that.el.find("#checkbox_a2").is(".workflow_checked")? []:['approve'];
-            console.log(config.data.cancel_fields);
+            that.data.cancel_fields = that.el.find("#checkbox_a2").is(".workflow_checked")? []:['approve'];
             if(temp.is(".label-select-all-checked")){
                 temp.removeClass("label-select-all-checked");
                 label_select_all_show.removeClass("label-select-all-checked");
                 select_label_children.addClass("unchecked");
-                for(let i = 0;i < config.data.rows.length;i++){
-                    for(let j = 0;j < config.data.rows[i].items.length;j++){
-                        if(config.data.cancel_fields.indexOf(config.data.rows[i].items[j].field_id) === -1){
-                            config.data.cancel_fields.push(config.data.rows[i].items[j].field_id);
+                for(let i = 0;i < that.data.rows.length;i++){
+                    for(let j = 0;j < that.data.rows[i].items.length;j++){
+                        if(that.data.cancel_fields.indexOf(that.data.rows[i].items[j].field_id) === -1){
+                            that.data.cancel_fields.push(that.data.rows[i].items[j].field_id);
                         }
                     }
                 }
-                Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
-                Mediator.emit('calendar-left:checkbox3-check',{data:config.data.cancel_fields});
-            }
-            else{
+            } else{
                 temp.addClass("label-select-all-checked");
                 label_select_all_show.addClass("label-select-all-checked");
                 select_label_children.removeClass("unchecked");
-                console.log(config.data.hide_item_table,config.data.rows);
-                for(let i = 0;i < config.data.rows.length;i++){
-                    if(config.data.hide_item_table.indexOf(config.data.rows[i].table_id) !== -1)
+                console.log(that.data.hide_item_table,that.data.rows);
+                for(let i = 0;i < that.data.rows.length;i++){
+                    if(that.data.hide_item_table.indexOf(that.data.rows[i].table_id) !== -1)
                     {
-                        for(let j = 0;j < config.data.rows[i].items.length;j++){
-                            if(config.data.cancel_fields.indexOf(config.data.rows[i].items[j].field_id) === -1){
-                                config.data.cancel_fields.push(config.data.rows[i].items[j].field_id);
+                        for(let j = 0;j < that.data.rows[i].items.length;j++){
+                            if(that.data.cancel_fields.indexOf(that.data.rows[i].items[j].field_id) === -1){
+                                that.data.cancel_fields.push(that.data.rows[i].items[j].field_id);
                             }
                         }
                     }
                 }
-                Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
-                Mediator.emit('calendar-left:checkbox3-check',{data:config.data.cancel_fields});
             }
+            Mediator.emit('calendar-left:unshowData',{data:that.data.cancel_fields});
+            let preference = {"content":that.data.cancel_fields};
+            CalendarService.getCalendarPreference(preference);
         },
         approve_label:function(checkbox_a2){
             if(checkbox_a2.is(".workflow_checked")){
                 checkbox_a2.removeClass("workflow_checked");
-                config.data.cancel_fields.unshift('approve');
-                Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
+                this.data.cancel_fields.unshift('approve');
                 Mediator.emit('calendar-left:approveData',{data:false});
             }
             else{
                 checkbox_a2.addClass("workflow_checked");
-                config.data.cancel_fields.splice($.inArray('approve',config.data.cancel_fields),1);
-                Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
+                this.data.cancel_fields.splice($.inArray('approve',this.data.cancel_fields),1);
                 Mediator.emit('calendar-left:approveData',{data:true});
             }
+            Mediator.emit('calendar-left:unshowData',{data:this.data.cancel_fields});
+            let preference = {"content":this.data.cancel_fields};
+            CalendarService.getCalendarPreference(preference);
         },
         hide_group:function(temp,that){
             let hide_type_id = temp.attr("id").split('-');
@@ -81,15 +103,13 @@ let config = {
             let select_checkbox_Id = "#select-all-"+hide_type_id[2];
             hide_type_id = "#select-all-block-"+ hide_type_id[2];
             that.el.find(select_checkbox_Id).removeClass("label-select-all-show");
-            let class_Name = ".select-children-"+temp.attr("id").split("-")[2];
-            that.el.find(class_Name).each(function(){
+            temp.parent(".float-button-group").next(".checkbox-group").find(".select-label-children").each(function(){
                 let filedId = $(this).attr("id").split("-")[2];
                 console.log(filedId);
-                if(config.data.cancel_fields.indexOf(filedId) === -1){
-                    config.data.cancel_fields.push(filedId);
+                if(that.data.cancel_fields.indexOf(filedId) === -1){
+                    that.data.cancel_fields.push(filedId);
                 }
             });
-            console.log(hide_type_id);
             that.el.find(hide_type_id).hide();
             let isAllGroupchecked = true;
             that.el.find('.label-select-all-show').each(function(){
@@ -97,35 +117,33 @@ let config = {
                     isAllGroupchecked = false;
                 }
             });
-            console.log(that.el.find('.label-select-all-show').length);
             if(isAllGroupchecked && that.el.find('.label-select-all-show').length > 0){
                 that.el.find("#checkbox_a3").addClass('label-select-all-checked');
             }
             if(that.el.find('.label-select-all-show').length ===0){
                 that.el.find("#checkbox_a3").removeClass('label-select-all-checked');
             }
-            for(let j = 0;j < config.data.rows.length;j++) {
-                if (hide_table_id === config.data.rows[j].table_id) {
-                    hide_table_name = config.data.rows[j].table_name;
+            for(let j = 0;j < that.data.rows.length;j++) {
+                if (hide_table_id === that.data.rows[j].table_id) {
+                    hide_table_name = that.data.rows[j].table_name;
                 }
             }
-            config.data.hide_table.tableName = hide_table_name;
-            config.data.hide_table.table_Id = hide_table_id;
-            config.data.hide_item_table.push(hide_table_id);
-            config.data.hide_tables.push(config.data.hide_table);
-            let preference = {"content":config.data.cancel_fields};
+            that.data.hide_table.tableName = hide_table_name;
+            that.data.hide_table.table_Id = hide_table_id;
+            that.data.hide_item_table.push(hide_table_id);
+            that.data.hide_tables.push(that.data.hide_table);
+            let preference = {"content":that.data.cancel_fields};
             CalendarService.getCalendarPreference(preference);
-            preference = {"content":config.data.hide_item_table};
+            preference = {"content":that.data.hide_item_table};
             CalendarService.getCalendarhidePreference(preference);
-            Mediator.emit('calendar-left:hideRemindType',{data:config.data.hide_table});
-            Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
-            Mediator.emit('calendar-left:checkbox3-check',{data:config.data.cancel_fields});
-            config.data.hide_table = {'tableName':"",'table_Id':''}
+            Mediator.emit('calendar-left:hideRemindType',{data:that.data.hide_table});
+            Mediator.emit('calendar-left:unshowData',{data:that.data.cancel_fields});
+            that.data.hide_table = {'tableName':"",'table_Id':''}
         },
         getCalendarTreeData:function(that){
-            config.data.cancel_fields = this.data.calendarTreeData.cancel_fields;
-            config.data.hide_item_table = this.data.calendarTreeData.hide_tables;
-            config.data.rows = this.data.calendarTreeData.rows;
+            that.data.cancel_fields = this.data.calendarTreeData.cancel_fields;
+            that.data.hide_item_table = this.data.calendarTreeData.hide_tables;
+            that.data.rows = this.data.calendarTreeData.rows;
             for(let i = 0;i<this.data.calendarTreeData.hide_tables.length;i++){
                 let hide_table_name = "";
                 let hide_table_id = this.data.calendarTreeData.hide_tables[i];
@@ -134,24 +152,23 @@ let config = {
                         hide_table_name = this.data.calendarTreeData.rows[j]['table_name'];
                     }
                 }
-                config.data.hide_table.tableName = hide_table_name;
-                config.data.hide_table.table_Id = hide_table_id;
-                config.data.hide_tables[i] = config.data.hide_table;
-                config.data.hide_table = {'tableName':"",'table_Id':''}
+                that.data.hide_table.tableName = hide_table_name;
+                that.data.hide_table.table_Id = hide_table_id;
+                that.data.hide_tables[i] = that.data.hide_table;
+                that.data.hide_table = {'tableName':"",'table_Id':''}
             }
-            if(config.data.cancel_fields.indexOf('approve') ===-1){
-                that.el.find($("#checkbox_a2").addClass("workflow_checked"));
+            if(that.data.cancel_fields.indexOf('approve') ===-1){
+                that.el.find("#checkbox_a2").addClass("workflow_checked");
             }
             else{
-                that.el.find($("#checkbox_a2").removeClass("workflow_checked"));
+                that.el.find("#checkbox_a2").removeClass("workflow_checked");
             }
             this.data.calendarTreeData.rows.forEach((data) =>{
-                that.append(new LeftContentSelect(data,this.data.calendarTreeData.cancel_fields,config.data.hide_item_table,config.data.hide_tables,config.data.rows),
-                    that.el.find('.remind-group'));
+                that.append(new LeftContentSelect(data,this.data.calendarTreeData.cancel_fields,this.data.hide_item_table,this.data.rows,
+                    that.events.checkboxcheck), that.el.find('.remind-group'));
             });
             let isAllGroupchecked = true;
             this.el.find('.label-select-all-show').each(function(){
-                console.log(isAllGroupchecked);
                 if(!$(this).is('.label-select-all-checked')){
                     isAllGroupchecked = false;
                 }
@@ -163,30 +180,29 @@ let config = {
         showRemindType:function (that,data) {
             that.el.find("#select-all-"+data.data).addClass("label-select-all-show label-select-all-checked");
             that.el.find("#select-all-block-"+data.data).show();
-            that.el.find(".select-children-"+data.data).removeClass("unchecked");
-            for(let i = 0;i < config.data.hide_tables.length;i++){
-                if(config.data.hide_tables[i].table_Id === data.data){
-                    config.data.hide_tables.splice(i,1);
-                    config.data.hide_item_table.splice(i,1);
+            that.el.find("#select-all-block-"+data.data).find(".select-label-children").removeClass("unchecked");
+            for(let i = 0;i < that.data.hide_tables.length;i++){
+                if(that.data.hide_tables[i].table_Id === data.data){
+                    that.data.hide_tables.splice(i,1);
+                    that.data.hide_item_table.splice(i,1);
                     break;
                 }
             }
-            for(let i = 0;i < config.data.rows.length;i++){
-                if(config.data.rows[i].table_id === data.data){
-                    for(let j = 0;j < config.data.rows[i].items.length;j++){
-                        if(config.data.cancel_fields.indexOf(config.data.rows[i].items[j].field_id) !== -1){
-                            config.data.cancel_fields.splice(config.data.cancel_fields.indexOf(config.data.rows[i].items[j].field_id),1);
+            for(let i = 0;i < that.data.rows.length;i++){
+                if(that.data.rows[i].table_id === data.data){
+                    for(let j = 0;j < that.data.rows[i].items.length;j++){
+                        if(that.data.cancel_fields.indexOf(that.data.rows[i].items[j].field_id) !== -1){
+                            that.data.cancel_fields.splice(that.data.cancel_fields.indexOf(that.data.rows[i].items[j].field_id),1);
                         }
                     }
                     break;
                 }
             }
-            let preference = {"content":config.data.cancel_fields};
+            let preference = {"content":that.data.cancel_fields};
             CalendarService.getCalendarPreference(preference);
-            preference = {"content":config.data.hide_item_table};
+            preference = {"content":that.data.hide_item_table};
             CalendarService.getCalendarhidePreference(preference);
-            Mediator.emit('calendar-left:unshowData',{data:config.data.cancel_fields});
-            Mediator.emit('calendar-left:showRenmindclass',{data:config.data.cancel_fields,hide_tables:config.data.hide_tables});
+            Mediator.emit('calendar-left:unshowData',{data:that.data.cancel_fields});
         }
     },
     binds:[
@@ -218,22 +234,9 @@ let config = {
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
         let that = this;
-        that.actions.getCalendarTreeData(that);
-        Mediator.on('calendar-left:remind-checkbox',data =>{
-            if(data === 1){
-                that.el.find("#checkbox_a3").addClass('label-select-all-checked');
-            }
-            else{
-                that.el.find("#checkbox_a3").removeClass('label-select-all-checked');
-            }
-        });
-        Mediator.on('calendar-left:unshowData',data =>{
-            config.data.cancel_fields = data.data;
-            let preference = {"content":data.data};
-            CalendarService.getCalendarPreference(preference);
-        });
+        this.actions.getCalendarTreeData(that);
         Mediator.on('calendar-left:showRemindType',data =>{
-            config.actions.showRemindType(that,data)
+            that.actions.showRemindType(that,data)
         });
     },
     beforeDestory: function () {
