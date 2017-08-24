@@ -18,6 +18,7 @@ let config = {
                 title:'合同编辑'
             }).then(res=>{
                 this.data.value = res;
+                this.trigger('changeValue',this.data);
             })
 
         }
@@ -26,7 +27,7 @@ let config = {
         if(this.data['is_view']){
             this.el.find('.contract-edit').css('display','none');
         }
-        
+
         this.el.on('click','.contract-view',()=>{
             this.data['mode']='view';
             this.actions.openEditor();
@@ -38,7 +39,7 @@ let config = {
 }
 
 export default class ContractControl extends Component{
-    constructor(data){
-        super(config,data);
+    constructor(data,events){
+        super(config,data,events);
     }
 }

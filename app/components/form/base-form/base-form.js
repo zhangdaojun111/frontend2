@@ -1609,7 +1609,7 @@ let config={
                     case 'editControl':
                         data[key]['temp_id']=data['temp_id']['value'];
                         data[key]['table_id']=data['table_id']['value'];
-                        let contractControl = new ContractControl(data[key]);
+                        let contractControl = new ContractControl(data[key],actions);
                         contractControl.render(single);
                         _this.data.childComponent[data[key].dfield] =  contractControl;
                         break;
