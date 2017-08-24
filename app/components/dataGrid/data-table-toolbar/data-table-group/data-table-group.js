@@ -1,3 +1,6 @@
+/**
+ * Created by zhr
+ */
 import Component from "../../../../lib/component";
 import template from './data-table-group.html';
 import {HTTP} from "../../../../lib/http"
