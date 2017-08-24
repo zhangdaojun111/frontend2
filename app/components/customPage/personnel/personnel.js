@@ -163,9 +163,6 @@ let config = {
                         d.searchType = 'person';
                     }
                 }
-                console.log( "________________________" )
-                console.log( "________________________" )
-                console.log( this.data.expertSearchFields )
                 //定制列需要字段数据
                 this.data.customColumnsFields = need.custom;
                 this.actions.renderAgGrid();

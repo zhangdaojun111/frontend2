@@ -27,6 +27,10 @@ let config = {
                     this.eFilterInput.style.color = 'rgb(85,85,85)';
                     this.eFilterInput.style.border = '1px solid #55A1F3';
                     this.eFilterInput.style.marginBottom = '5px';
+                    //人员信息特殊提示
+                    if( colInfo == 'person' ){
+                        this.eFilterInput.placeholder = '为保证查询正确，请输入完整信息。';
+                    }
                     let searchType = 'keyup';
                     if( colInfo == 'date' ){
                         this.eFilterInput.type = 'date';
