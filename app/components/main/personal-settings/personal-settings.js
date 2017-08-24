@@ -16,7 +16,6 @@ import OtherLogin from "../login-by-other/login-by-other";
 import Mediator from "../../../lib/mediator";
 
 function getData(component_instance) {
-    // console.log(window.config.sysConfig.userInfo);
     _.defaultsDeep(component_instance.data, {
         avatar: window.config.sysConfig.userInfo.avatar,
         avatar_content:window.config.sysConfig.userInfo.avatar_content,
@@ -27,13 +26,11 @@ function getData(component_instance) {
         user_email:window.config.sysConfig.userInfo.email,
         user_phone:window.config.sysConfig.userInfo.tel,
         otherLoginVisible:window.config.sysConfig.userInfo.is_superuser
-        // otherLoginVisible:1,
     });
 }
 
 let config = {
     template:template,
-    // dataService:UserInfoService,
     data:{
         targetUserName:'',
     },
@@ -45,11 +42,15 @@ let config = {
                 let $img = $("<img>").addClass("user-avatar");
                 $img.attr('src', src);
                 this.el.find("div.avatar-box").append($img);
+                let that = this;
                 $img.on('error', function () {
+                    console.log('error la');
+                    that.el.find("div.avatar-box").addClass('default_avatar');
                     $img.remove();
                 });
             }else{
-                this.el.find("div.avatar-box").addClass('.default_avatar');
+                console.log('no src');
+                this.el.find("div.avatar-box").addClass('default_avatar');
             }
         },
         onImageError: function () {
@@ -99,9 +100,6 @@ let config = {
         editTel:function () {
             this.el.find("input.phone-info").removeAttr("disabled").focus();
         },
-        // saveEmail:function () {
-        //
-        // },
         cancelEdit:function () {
             this.el.find("input.email-info").val(this.data.user_email);
             this.el.find("input.phone-info").val(this.data.user_phone);
@@ -169,13 +167,8 @@ let config = {
         },
         initAvatar:function () {
             let src = this.data.avatar;
-            let para = this.data.avatar_content;
             this.el.find("img.user-avatar")
                 .attr("src",src)
-                // .css("width",para.width)
-                // .css("height",para.height)
-                // .css("left",para.left)
-                // .css("top",para.top)
         },
         clearLocalStorage:function(){
             window.localStorage.clear();
@@ -196,6 +189,7 @@ let config = {
             UserInfoService.getUserInfoByName(this.data.targetUserName).done((result) => {
                 if(result.success === 1){
                     //获取data
+                    console.log(result);
                     let data = result.rows;
                     this.actions.displayTargetInfo(data);
                 }else{
@@ -203,8 +197,6 @@ let config = {
                     // PersonSetting.hide();
                 }
             });
-
-
         },
         displayTargetInfo:function (data) {
             this.el.find('.department-info').val(data.user_department);
@@ -212,7 +204,11 @@ let config = {
             this.el.find('.position-info').val(data.user_job);
             this.el.find('.phone-info').val(data.user_tel);
             this.el.find('.name').html(this.data.targetUserName.name);
-            this.data.avatar = "/mobile/get_file/?file_id=" + data.avatar + "&download=0";
+            if(data.avatar === ""){
+                this.data.avatar = "";
+            }else{
+                this.data.avatar = "/mobile/get_file/?file_id=" + data.avatar + "&download=0";
+            }
             this.actions.initInfo();
         }
     },
@@ -294,7 +290,6 @@ export const PersonSetting  = {
     },
     showUserInfo:function (targetName) {
         let component = new PersonalSetting(targetName,"other");
-        component.dataService = UserInfoService;
         this.el = $('<div class="show-other-info-page">').appendTo(document.body);
         component.render(this.el);
         this.el.dialog({

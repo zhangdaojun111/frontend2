@@ -26,7 +26,6 @@ module.exports = {
     // ],
 
     entry: {
-
         form: path.resolve(APP_PATH, 'entrys/form.js'),
         openForm: path.resolve(APP_PATH, 'entrys/popup/openForm.js'),
         addNewBuild: path.resolve(APP_PATH, 'entrys/popup/addNewBuild.js'),
