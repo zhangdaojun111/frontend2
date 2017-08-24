@@ -161,7 +161,10 @@ let config = {
         });
         that.el.on('click','.set-calendar',() =>{
             CalendarSetService.getMenu().then(res => {
-                let component = new CalendarSetting(res['menuList']);
+                let menu = res['menuList'].filter(item => {
+                    return item['folder_id'] !== 1;
+                });
+                let component = new CalendarSetting(menu);
                 let el = $('<div>').appendTo(document.body);
                 component.render(el);
                 el.dialog({

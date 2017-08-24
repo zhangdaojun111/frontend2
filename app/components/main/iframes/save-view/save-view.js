@@ -54,6 +54,11 @@ let config = {
             }
         },
         saveFavorite:function () {
+            //过滤List中的bi和日历
+            _.remove(this.data.currentIframesList,function (n) {
+                return (n === "bi" || n === 'calendar');
+            });
+
             if(Object.keys(this.data.currentIframesList).length === 0){
                 msgbox.alert("视图配置不能为空");
                 return;
@@ -97,7 +102,6 @@ let config = {
             }
 
             if(tabIdList && tabIdList.length > 0){
-
                 let menu = window.config.menu;
                 //特殊处理bi和日历
                 // if(tabIdList.includes('bi')){

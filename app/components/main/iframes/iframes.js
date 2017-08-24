@@ -84,6 +84,12 @@ export const IframeInstance = new Component({
                 let iframe = $(`<div class="item"><iframe id="${id}" src="${url}"></iframe></div>`).appendTo(this.data.iframes);
                 let originIframe = iframe.find('iframe');
 
+                this.showLoading(this.data.iframes);
+                window.clearTimeout(this.data.timerLoading);
+                this.data.timerLoading = window.setTimeout(() => {
+                    this.hideLoading();
+                }, 500);
+
                 originIframe.on('load', function () {
                     PMAPI.sendToChild(originIframe[0], {
                         type: PMENUM.open_iframe_data,
@@ -355,11 +361,10 @@ export const IframeInstance = new Component({
             }
         },
         setTabsCount:function () {
-            this.data.tabsTotalWidth = parseInt(this.el.find('div.tabs').width()) - 220;   //标签可用宽度
+            this.data.tabsTotalWidth = parseInt(this.el.find('div.tabs').width()) - 100;   //标签可用宽度
             maxIframeCount = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);  //自适应最大tabs数量
             // let count = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);
-            // maxIframeCount =  count>15 ? 15:count;      //最多不超过15个
-
+            // maxIframeCount =  count>15 ? 15:count;      //最多不超过15个启用这一行
         },
         //自适应宽度
         adaptTabWidth:function () {
@@ -401,7 +406,8 @@ export const IframeInstance = new Component({
         });
 
         this.el.on('click','.view-save',function () {
-            SaveView.show(that.data.sort);
+            let temp_arr = _.defaultsDeep([],that.data.sort);
+            SaveView.show(temp_arr);
         }).on('mouseenter','.popup-icon',() => {
             this.actions.showTabsPopup();
         }).on('mouseenter','.view-popup',() => {
@@ -432,6 +438,7 @@ export const IframeInstance = new Component({
 
         Mediator.on('saveview:displayview', (data) => {
             this.actions.closeAllIframes();  //先关闭所有标签，再打开view中的标签
+            console.log(data);
             for(let k of data){
                 this.actions.openIframe(k.id,k.url,k.name);
             }

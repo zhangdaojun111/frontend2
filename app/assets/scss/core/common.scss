@@ -1,7 +1,6 @@
 /**
    公共样式
  */
-
 html {
     font: 12px/1.5 "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
 }
@@ -22,8 +21,8 @@ html {
 }
 
 ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 4px;
+    height: 4px;
 }
 
 ::-webkit-scrollbar-track-piece {
@@ -34,15 +33,15 @@ html {
 }
 
 ::-webkit-scrollbar-thumb:vertical {
-    height: 6px;
+    height: 4px;
     background-color: #999999;
-    border-radius: 6px;
+    border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
-    width: 6px;
+    width: 4px;
     background-color: #999999;
-    border-radius: 6px;
+    border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -106,29 +105,29 @@ html {
     display: inline-block;
     width: 16px;
     height: 16px;
-    position: relative;
     overflow: hidden;
     input[type=checkbox] {
         margin: 2px;
+        position: relative;
     }
     input[type=checkbox]:before {
         position: absolute;
         width: 10px;
         content: ' ';
         height: 10px;
-        left: 2px;
-        top: 2px;
+        left: 0px;
+        top: 0px;
         background-color: #fff;
         border: 1px solid #d7d7d7;
         cursor: pointer;
     }
     input[type=checkbox]:checked:after {
         position: absolute;
-        width: 6px;
+        width: 8px;
         content: ' ';
-        height: 6px;
-        left: 5px;
-        top: 5px;
+        height: 8px;
+        left: 2px;
+        top: 2px;
         background-color: #0088ff;
         cursor: pointer;
     }
@@ -138,18 +137,18 @@ html {
     display: inline-block;
     width: 16px;
     height: 16px;
-    position: relative;
     overflow: hidden;
     input[type=radio] {
         margin: 2px;
+        position: relative;
     }
     input[type=radio]:before {
         position: absolute;
         width: 10px;
         content: ' ';
         height: 10px;
-        left: 2px;
-        top: 2px;
+        left: 0px;
+        top: 0px;
         background-color: #fff;
         border: 1px solid #d7d7d7;
         cursor: pointer;
@@ -157,11 +156,11 @@ html {
     }
     input[type=radio]:checked:after {
         position: absolute;
-        width: 6px;
+        width: 8px;
         content: ' ';
-        height: 6px;
-        left: 5px;
-        top: 5px;
+        height: 8px;
+        left: 2px;
+        top: 2px;
         background-color: #0088ff;
         cursor: pointer;
         border-radius: 100%;
@@ -169,15 +168,9 @@ html {
 }
 
 //loading
-//.relative {
-    //position: relative;
-    //.online-user-main{
-    //    filter: blur(6px);
-    //}
-//}
-
 .component-loading-effect {
     position: relative;
+    overflow: hidden;
     > .component-filter-blur {
         filter: blur(5px);
     }
@@ -190,7 +183,7 @@ html {
     z-index: 15;
     left: 0;
     top: 0;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(153, 153, 153, 0.5);
 }
 
 .component-loading-box{
@@ -257,3 +250,4 @@ html {
     z-index: 150;
     background-color: rgba(0, 0, 0, 0.5);
 }
+

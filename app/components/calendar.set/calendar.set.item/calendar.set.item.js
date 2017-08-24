@@ -181,12 +181,8 @@ let config = {
                         changeOpts[item].selected  = 'selected';
                     }
                 }
-
             });
-
         },
-
-        
     },
     afterRender: function () {
         this.el.css({});
@@ -262,7 +258,7 @@ let config = {
             this.data.rowSetData['selectedRepresents'] = textForResValue;
         }).on('change', '.page-change-text', () => {
             let valueForCalendarChangeValue = this.el.find('.page-change-text option:selected').val();
-            let textForCalendarChangeValue = this.el.find('.page-change-text option:selected').text();
+            // let textForCalendarChangeValue = this.el.find('.page-change-text option:selected').text();
 
             this.data.rowSetData['selectedEnums'] = valueForCalendarChangeValue;
         }).on('click', '.set-remind-method', () => {
@@ -272,11 +268,11 @@ let config = {
         }).on('change', '.config-text', () => {
             let valueConfigTextValue = this.el.find('.config-text option:selected').val();
             let textConfigTextValue = this.el.find('.config-text option:selected').text();
-
         });
+
         this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text;
         this.el.find('.preview-text').text(this.data.preViewText);
-        //this.el.find('.set-color').attr('value', this.data.rowSetData.color);
+
         $("#set-color-id").attr("id", "set-color-" + this.data.rowSetData.field_id);
         let set_color_id = "#set-color-" + this.data.rowSetData.field_id;
         $(set_color_id).attr("value", this.data.rowSetData.color);
