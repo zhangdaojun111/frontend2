@@ -97,7 +97,8 @@ let config = {
             value:[]
         },
         field_mapping: {},
-        filter_mapping: {},
+        filter_mapping: {is_active:{'是':1,'否':0},is_superuser:{'是':1,'否':0},status:{'离职':0,'在职':1,'实习':2,'试用':3,'管理员':4,'病休':5}},
+        specialFilter:{},
     },
     actions: {
         //获取表头数据
@@ -127,6 +128,10 @@ let config = {
                     if( col.field == '_id' ){
                         continue;
                     }
+                    let filterType = fieldTypeService.searchType(col["real_type"]);
+                    if( this.data.specialFilter[col["field"]] ){
+                        filterType = 'person';
+                    }
                     let obj = {
                         headerName: col.name,
                         field: col["field"],
@@ -146,13 +151,21 @@ let config = {
                         suppressResize: false,
                         suppressMovable: false,
                         suppressFilter: false,
-                        floatingFilterComponent: this.floatingFilterCom.actions.createFilter(fieldTypeService.searchType(col["real_type"]), col["field"], this.data.searchValue, this.data.searchOldValue),
+                        floatingFilterComponent: this.floatingFilterCom.actions.createFilter(filterType, col["field"], this.data.searchValue, this.data.searchOldValue),
                         floatingFilterComponentParams: {suppressFilterButton: true},
                     }
                     this.data.columnDefs.push( obj );
                 }
                 let need = dgcService.createNeedFields( res[1].rows );
                 this.data.expertSearchFields = need.search;
+                for( let d of this.data.expertSearchFields ){
+                    if( this.data.specialFilter[d.searchField] ){
+                        d.searchType = 'person';
+                    }
+                }
+                console.log( "________________________" )
+                console.log( "________________________" )
+                console.log( this.data.expertSearchFields )
                 //定制列需要字段数据
                 this.data.customColumnsFields = need.custom;
                 this.actions.renderAgGrid();
@@ -211,9 +224,22 @@ let config = {
             this.actions.getUserData();
         },
         //设置特殊字段filter
-        setEspecialFilter: function () {
-
-        },
+        setEspecialFilter: function (filter) {
+            let newFilter = [];
+            for( let f of filter ){
+                if( this.data.specialFilter[f.cond.searchBy] ){
+                    let obj = this.data.specialFilter[f.cond.searchBy]
+                    let keyword = f.cond.keyword;
+                    for( let k in obj ){
+                        if( k.indexOf( keyword )!=-1 ){
+                            f.cond.keyword = obj[k];
+                            f.cond.operate = 'exact';
+                        }
+                    }
+                }
+            }
+        }
+        ,
         //获取数据
         getUserData: function () {
             let json = {
@@ -222,7 +248,8 @@ let config = {
                 rows: this.data.rows,
                 page: this.data.page
             }
-            this.actions.setEspecialFilter(this.data.filterParam);
+            this.actions.setEspecialFilter(this.data.filterParam.filter);
+            this.actions.setEspecialFilter(this.data.filterParam.expertFilter);
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
             }
@@ -721,10 +748,10 @@ let config = {
             this.data.field_mapping = window.config.system_config[0]['field_mapping'];
             this.data.userStatus = this.data.field_mapping.status;
             this.data.departmentField = this.data.field_mapping.department;
-            console.log( "___________________" )
-            console.log( "___________________" )
-            console.log( this.data.field_mapping )
-        },
+            for( let key in this.data.filter_mapping ) {
+                this.data.specialFilter[this.data.field_mapping[key]] = this.data.filter_mapping[key];
+            }
+        }
     },
     afterRender: function (){
         this.actions.setFieldMapping();
