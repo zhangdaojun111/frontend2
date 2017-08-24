@@ -35,7 +35,8 @@ let config = {
                     record_id:'599bdb325700e9eeb23029fb',
                     table_id:'5318_EHFuJD7Ae76c6GMPtzdiWH',
                     form_id:181,
-                    flow_id:43
+                    flow_id:43,
+                    el:'#approval-workflow'
                 });
                 this.el.find('.operation-content').css('display','block')
                 this.el.find('.operation-text').html(this.data.content);
