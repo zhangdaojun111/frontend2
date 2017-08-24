@@ -14,6 +14,7 @@ import {FormMixShareComponent} from '../../mix.share/mix.share';
 import {SingleComponent} from './single/single';
 import {MultipleComponent} from './multiple/multiple';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
+import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 
 import './pie.scss';
 let config = {
@@ -29,6 +30,11 @@ let config = {
         // 监听数据源变化
         this.el.on(`${this.data.assortment}-chart-source`,(event,params) => {
             this.chartSourceChange(params['sources']);
+        }).on(`${this.data.assortment}-chart-editMode-source`, (event,params) => {
+            // 编辑模式
+            if (this.chartId && this.editModeOnce) {
+                this.getChartData(this.chartId);
+            }
         });
 
         // 保存饼图配置
@@ -42,7 +48,10 @@ export class FormPieComponent extends BiBaseComponent{
     constructor(chart) {
         super(config);
         this.formGroup={};
+        this.chartId = chart.id;
         this.data.assortment = chart.assortment;
+        this.editModeOnce = this.chartId ? true : false;
+        this.editChart = null;
     }
 
     /**
@@ -70,7 +79,7 @@ export class FormPieComponent extends BiBaseComponent{
                 container: 'pie-single',
                 data:{
                     value: '2',
-                    label:'选择多条数据，单挑数据',
+                    label:'选择多条数据，单条数据',
                     options:[
                         {name:'多条', value:'2'},
                         {name:'单条', value:'1'},
@@ -89,6 +98,35 @@ export class FormPieComponent extends BiBaseComponent{
         };
     }
 
+    /**
+     * 编辑模式发送chartId, 得到服务器数据
+     * @param chartId 图表id
+     */
+    async getChartData(chartId) {
+        if (chartId) {
+            const chart = await canvasCellService.getCellChart({chart_id: chartId});
+            this.fillChart(chart[0]);
+        }
+    }
+
+    /**
+     * 编辑模式填充饼图数据
+     * @param chart = 从服务器获取的chart配置数据
+     */
+    fillChart(chart) {
+        console.log(chart);
+        this.editChart = chart;
+        this.formGroup.pieName.setValue(chart['chartName']);
+        let share = {
+            chartSource:chart['source'],
+            themes: chart['theme'],
+            icons: chart['icon'],
+            filter: chart['filter']
+        };
+        this.formGroup.pieShare.setValue(share);
+        this.formGroup.pieSingle.setValue(chart['pieType']['value']);
+        this.switchSingle(chart['pieType']['value']);
+    }
 
     /**
      * 切换 单条数据/多条数据
@@ -118,13 +156,13 @@ export class FormPieComponent extends BiBaseComponent{
                 this.formGroup.pieX.autoSelect.data.choosed = [];
                 this.formGroup.pieX.autoSelect.data.list = sources['x_field'];
                 this.formGroup.pieX.autoSelect.reload();
-                // if (this.editModeOnce && this.editChart) {
-                //     if (this.editChart.hasOwnProperty('chartName')) {
-                //         if (this.editChart['product'].hasOwnProperty('id')) {
-                //             this.formGroup.product.setValue(this.editChart['product'])
-                //         }
-                //     }
-                // }
+                if (this.editModeOnce && this.editChart) {
+                    if (this.editChart.hasOwnProperty('chartName')) {
+                        if (this.editChart['xAxis'].hasOwnProperty('id')) {
+                            this.formGroup.pieX.setValue(this.editChart['xAxis'])
+                        }
+                    }
+                }
             }
         };
         // 加载多条数据
@@ -138,6 +176,12 @@ export class FormPieComponent extends BiBaseComponent{
                 this.formGroup.multiple.data.deeps = [];
                 this.formGroup.multiple.multiples.pieY.autoSelect.reload();
                 this.formGroup.multiple.multiples.pieDeep.autoSelect.reload();
+                if (this.editModeOnce && this.editChart && this.editChart['pieType']['value'] == 2) {
+                    this.formGroup.multiple.multiples.pieY.setValue(this.editChart['yAxis']);
+                    this.formGroup.multiple.multiples.deeps.data.deeps = this.editChart['deeps'];
+                    this.formGroup.multiple.multiples.deeps.reload();
+                    this.editModeOnce = false;
+                }
             }
         };
 
@@ -147,6 +191,9 @@ export class FormPieComponent extends BiBaseComponent{
             this.formGroup.single.data['items'] = sources['y_field'];
             this.formGroup.single.formYAxis.yAxis.data['items']  = this.formGroup.single.data['checkboxs']= sources['y_field'];
             this.formGroup.single.formYAxis.yAxis.reload();
+            if (this.editModeOnce && this.editChart) {
+                this.formGroup.single.formYAxis.yAxis.setValue(this.editChart['yAxis']);
+            }
         }
 
     }
@@ -157,8 +204,8 @@ export class FormPieComponent extends BiBaseComponent{
     reset(chart) {
         this.formGroup = {};
         this.chartId = chart ? chart.id: null;
-        // this.editModeOnce = this.chartId ? true : false;
-        // this.editChart = null;
+        this.editModeOnce = this.chartId ? true : false;
+        this.editChart = null;
     }
 
     /**

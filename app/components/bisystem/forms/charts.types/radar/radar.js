@@ -77,7 +77,6 @@ export class FormRadarComponent extends BiBaseComponent{
      * 编辑模式
      */
     fillChart(chart) {
-        console.log(chart);
         this.editChart = chart;
         this.formGroup.chartName.setValue(chart['chartName']);
         let share = {
@@ -130,7 +129,6 @@ export class FormRadarComponent extends BiBaseComponent{
             if (this.formGroup.product.autoSelect) {
                 this.formGroup.product.autoSelect.data.list = sources['x_field'];
                 this.formGroup.product.autoSelect.reload();
-                console.log(this.editChart);
                 if (this.editModeOnce && this.editChart) {
                     if (this.editChart.hasOwnProperty('chartName')) {
                         if (this.editChart['product'].hasOwnProperty('id')) {
