@@ -110,7 +110,9 @@ let config = {
                 this.data.hide_table = {'tableName':"",'table_Id':''}
             }
             this.data.hide_tables.forEach((row) =>{
-                this.append(new LeftContentHide(row), this.el.find('.left-calendar-hide'));
+                if(row.tableName !== ""){
+                    this.append(new LeftContentHide(row), this.el.find('.left-calendar-hide'));
+                }
             })
         },
     },

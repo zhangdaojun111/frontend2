@@ -83,6 +83,7 @@ let config = {
             let preference = {"content":that.data.cancel_fields};
             CalendarService.getCalendarPreference(preference);
         },
+
         approve_label:function(checkbox_a2){
             if(checkbox_a2.is(".workflow_checked")){
                 checkbox_a2.removeClass("workflow_checked");
@@ -98,13 +99,13 @@ let config = {
             let preference = {"content":this.data.cancel_fields};
             CalendarService.getCalendarPreference(preference);
         },
+
         hide_group:function(temp,that){
             let hide_type_id = temp.attr("id").split('-');
             let hide_table_name = "";
             let hide_table_id = hide_type_id[2];
-            let select_checkbox_Id = "#select-all-"+hide_type_id[2];
             hide_type_id = "#select-all-block-"+ hide_type_id[2];
-            that.el.find(select_checkbox_Id).removeClass("label-select-all-show");
+            that.el.find(hide_type_id).children(".select-head").removeClass("label-select-all-show");
             temp.parent(".float-button-group").next(".checkbox-group").find(".select-label-children").each(function(){
                 let filedId = $(this).attr("id").split("-")[2];
                 if(that.data.cancel_fields.indexOf(filedId) === -1){
@@ -118,6 +119,7 @@ let config = {
                     isAllGroupchecked = false;
                 }
             });
+            console.log(isAllGroupchecked);
             if(isAllGroupchecked && that.el.find('.label-select-all-show').length > 0){
                 that.el.find(".checkbox_a3").addClass('label-select-all-checked');
             }
@@ -140,6 +142,7 @@ let config = {
             Mediator.emit('calendar-left:unshowData',{data:that.data.cancel_fields});
             that.data.hide_table = {'tableName':"",'table_Id':''}
         },
+
         getCalendarTreeData:function(that){
             that.data.cancel_fields = this.data.calendarTreeData.cancel_fields;
             that.data.hide_item_table = this.data.calendarTreeData.hide_tables;
@@ -177,9 +180,11 @@ let config = {
                 this.el.find(".checkbox_a3").addClass('label-select-all-checked');
             }
         },
+
         showRemindType:function (that,data) {
-            that.el.find("#select-all-"+data.data).addClass("label-select-all-show label-select-all-checked");
+            // that.el.find("#select-all-"+data.data).addClass("label-select-all-show label-select-all-checked");
             that.el.find("#select-all-block-"+data.data).show();
+            that.el.find("#select-all-block-"+data.data).find(".select-head").addClass('label-select-all-show label-select-all-checked');
             that.el.find("#select-all-block-"+data.data).find(".select-label-children").removeClass("unchecked");
             for(let i = 0;i < that.data.hide_tables.length;i++){
                 if(that.data.hide_tables[i].table_Id === data.data){
@@ -205,6 +210,7 @@ let config = {
             Mediator.emit('calendar-left:unshowData',{data:that.data.cancel_fields});
         }
     },
+
     binds:[
         {
             event: 'click',
@@ -229,6 +235,7 @@ let config = {
             }
         }
     ],
+
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
         this.actions.getCalendarTreeData(this);
@@ -236,10 +243,12 @@ let config = {
             this.actions.showRemindType(this,data)
         });
     },
+
     beforeDestory: function () {
         Mediator.removeAll('calendar-left:unshowData');
     }
 };
+
 class LeftcontentCalendarset extends Component {
     constructor(data) {
         config.data.calendarTreeData = data;

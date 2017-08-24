@@ -39,10 +39,10 @@
       width:200px;
       height:20px;
       margin-right: 90px;
+      display: none;
       z-index: 5555;
       position: absolute;
       float: right;
-      font-size: 12px !important;
       .hide-span:hover{
         background-color: rgba(228, 228, 228, 1);
       }
