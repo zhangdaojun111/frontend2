@@ -947,11 +947,6 @@ let config={
             }else{
                 _this.el.find('#requiredLogo').removeClass().addClass('required2');
             }
-            if(_this.data.value==''){
-                _this.el.find('.ui-width').css('border','1px solid red');
-            }else{
-                _this.el.find('.ui-width').css('border','1px solid blue');
-            }
         },
         //赋值
         setFormValue(dfield,value){

@@ -199,12 +199,6 @@ let config={
         }else{
             this.el.find('.ui-width').attr('disabled',false);
         }
-
-        if(this.data.required){
-            this.el.find('.ui-width').css('border','1px solid red');
-        }else{
-            this.el.find('.ui-width').css('border','1px solid blue');
-        }
     },
     beforeDestory(){
         this.el.off();
