@@ -27,6 +27,7 @@ import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 import AttachmentList from "../../../form/attachment-list/attachment-list";
 import PictureAttachment from "../../../form/picture-attachment/picture-attachment";
 import {PersonSetting} from "../../../main/personal-settings/personal-settings";
+import ViewVideo from "../../../form/view-video/view-video";
 
 
 let config = {
@@ -666,7 +667,7 @@ let config = {
 
             //普通附件||视频附件
             else if (real_type == fieldTypeService.ATTACHMENT || real_type == fieldTypeService.VIDEO_TYPE) {
-                sHtml = '<a id="file_view" title="查看详情">' + myValue.length || 0 + '个附件</a>';
+                sHtml = '<a id="file_view" title="查看详情">' + ( myValue.length || 0 ) + '个附件</a>';
             }
 
             //都做为文本处理
@@ -704,6 +705,9 @@ let config = {
                     if( r ){
                         for( let k in this.data.searchValue ){
                             this.data.searchValue[k] = '';
+                        }
+                        for( let k in this.data.searchOldValue ){
+                            this.data.searchOldValue[k] = '';
                         }
                         this.actions.setFloatingFilterInput();
                         this.data.filterParam.filter = [];
@@ -1309,6 +1313,7 @@ let config = {
                 this.actions.renderExpertSearch();
             }
             this.data.firstRender = false;
+            this.hideLoading();
         },
         //触发导出
         onExport: function () {
@@ -1662,7 +1667,7 @@ let config = {
                     msgBox.confirm( '数据已经修改，是否取消？' ).then( r=>{
                         if( r ){
                             this.actions.toogleEdit();
-                            this.agGrid.gridOptions.api.setRowData( this.data.rowData );
+                            this.actions.getGridData();
                         }
                     } )
                 }else {
@@ -2086,6 +2091,18 @@ let config = {
                 return;
             }
 
+            //视频字段
+            if(data.colDef.real_type == fieldTypeService.VIDEO_TYPE && data.event.srcElement.id == 'file_view'){
+                let fieldids = data['value']
+                let file_dinput_type = data.colDef.real_type;
+                ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids}&download=0&dinput_type=${file_dinput_type}`;
+                PMAPI.openDialogByComponent(ViewVideo,{
+                    width:1000,
+                    height:600,
+                    title:'视频播放器'
+                })
+            }
+
             //图片查看
             if( data.colDef.real_type == fieldTypeService.IMAGE_TYPE ){
                 let json = {};
@@ -2123,8 +2140,6 @@ let config = {
                         file_ids: JSON.stringify(fileIds),
                         dinput_type:dinput_type
                     }).then(res=>{
-                        console.log('获得的是什么');
-                        console.log(res);
                         let list = res["rows"];
                         for( let data of list ){
                             //附件名称编码转换
@@ -2357,6 +2372,7 @@ let config = {
         }
     },
     afterRender: function () {
+        this.showLoading();
         if( this.data.viewMode == 'in_process' ){
             this.data.noNeedCustom = true;
         }
