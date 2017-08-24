@@ -95,7 +95,9 @@ let config = {
             department:'',
             options:[],
             value:[]
-        }
+        },
+        field_mapping: {},
+        filter_mapping: {},
     },
     actions: {
         //获取表头数据
@@ -124,12 +126,6 @@ let config = {
                 for( let col of res[1].rows ){
                     if( col.field == '_id' ){
                         continue;
-                    }
-                    if( col.name == '用户状态' ){
-                        this.data.userStatus = col.field;
-                    }
-                    if( col.name == '所在部门' ){
-                        this.data.departmentField = col.field;
                     }
                     let obj = {
                         headerName: col.name,
@@ -214,6 +210,10 @@ let config = {
             this.actions.btnClick();
             this.actions.getUserData();
         },
+        //设置特殊字段filter
+        setEspecialFilter: function () {
+
+        },
         //获取数据
         getUserData: function () {
             let json = {
@@ -222,6 +222,7 @@ let config = {
                 rows: this.data.rows,
                 page: this.data.page
             }
+            this.actions.setEspecialFilter(this.data.filterParam);
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
             }
@@ -715,8 +716,18 @@ let config = {
             this.agGrid.gridOptions["enableServerSideSorting"] = !this.data.frontendSort;
             this.agGrid.gridOptions["enableSorting"] = this.data.frontendSort;
         },
+        //设置特殊字段field信息
+        setFieldMapping: function () {
+            this.data.field_mapping = window.config.system_config[0]['field_mapping'];
+            this.data.userStatus = this.data.field_mapping.status;
+            this.data.departmentField = this.data.field_mapping.department;
+            console.log( "___________________" )
+            console.log( "___________________" )
+            console.log( this.data.field_mapping )
+        },
     },
     afterRender: function (){
+        this.actions.setFieldMapping();
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();
