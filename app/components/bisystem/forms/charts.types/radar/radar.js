@@ -85,6 +85,7 @@ export class FormRadarComponent extends BiBaseComponent{
             filter: chart['filter']
         };
         this.formGroup.share.setValue(share);
+
     }
 
     /**
