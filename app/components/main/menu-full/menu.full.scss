@@ -19,6 +19,11 @@
             margin-left: 30px;
             width: calc(100% - 40px);
         }
+
+        &.edit {
+            display: none;
+        }
+
     }
 
     &.mini {
@@ -39,12 +44,15 @@
             display: none;
         }
         .menu-full {
+            overflow-y: visible;
+            overflow-x: visible;
             .root {
                 li {
                     position: relative;
                     z-index: 100;
                 }
                 > li > .menu-full-item {
+                    background-color: #333;
                     .ui-menu-icon.ui-icon {
                         display: none;
                     }
@@ -89,7 +97,7 @@
                         }
                     }
                 }
-                .checkbox {
+                .custom-checkbox {
                     display: none!important;
                 }
             }
@@ -97,12 +105,14 @@
     }
     .menu-full {
         height: 100%;
+        overflow-x: auto;
+        overflow-y: auto;
         user-select:none;
         .root {
             .menu-full-item {
                 .row {
                     padding: 12px 0 12px 10px;
-                    line-height: 14px;
+                    line-height: 16px;
                     cursor: pointer;
                     font-size: 14px;
                     &:hover, &.current {
@@ -122,13 +132,13 @@
                             margin-right: 4px;
                         }
                     }
-                    .checkbox {
+                    .custom-checkbox {
                         float: left;
-                        margin: 0;
+                        margin: 0 5px 0 0;
                         display: none;
                     }
                     .name {
-                        color: #FFFFFF;
+                        color: #ccc;
                         font-size: 14px;
                         word-break: normal;
                         white-space: pre;
