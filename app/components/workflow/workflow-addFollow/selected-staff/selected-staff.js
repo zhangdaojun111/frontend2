@@ -1,9 +1,13 @@
+/**
+ *@author qiumaoyun
+ *添加关注人右边组件
+ */
 import Component from '../../../../lib/component';
-// import './workflow-addFollow.scss';
+import template from './selected-staff.html';
 import Mediator from '../../../../lib/mediator';
 
 let config={
-    template: `<span class="removeble" data-id="{{id}}">{{name}}</span>`,
+    template: template,
     data:{},
     action:{
 

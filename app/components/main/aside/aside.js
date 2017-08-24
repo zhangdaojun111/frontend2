@@ -5,8 +5,8 @@ import {MenuComponent} from '../menu-full/menu.full';
 import Mediator from '../../../lib/mediator';
 import {PersonSetting} from "../personal-settings/personal-settings";
 import {HTTP} from '../../../lib/http';
-// import {commonuse} from '../commonuse/commonuse';
-// import {Uploader} from "../../../lib/uploader";
+import {commonuse} from '../commonuse/commonuse';
+import {Uploader} from "../../../lib/uploader";
 
 
 function presetMenuData(menu, leaf) {
@@ -28,40 +28,52 @@ function presetMenuData(menu, leaf) {
 function presetCommonMenuData(menu, commonData) {
     let menuData = _.defaultsDeep([], menu);
     let commonKeys = commonData.data;
-    function setUsed(item) {
-        item.commonUsed = true;
-        if (item.parent) {
-            setUsed(item.parent);
+
+    function plusParentNumber(item) {
+        if (item) {
+            item.childrenIsCommonUseNumber += 1;
+            if (item.parent) {
+                plusParentNumber(item.parent);
+            }
         }
     }
-    function step_one(menu, parent) {
-        menu.forEach((item) => {
-            item.parent = parent;
+
+    function preset_one(_menu, parent) {
+        _menu.forEach((item) => {
             let key = item.ts_name || item.table_id;
-            item.commonUsed = false;
+            if (item.commonUseNum === undefined) {
+                item.childrenIsCommonUseNumber = 0;
+            }
             if (commonKeys.indexOf(key) !== -1) {
-                setUsed(item);
+                plusParentNumber(parent);
+                item.isCommonUse = true;
+            } else {
+                item.isCommonUse = false;
             }
             if (item.items) {
-                step_one(item.items, item);
+                preset_one(item.items, item);
             }
-        })
-    };
-    function setp_two(menu) {
+        });
+    }
+    preset_one(menuData);
+
+    function preset_two (_menu, parent) {
         let res = [];
-        menu.forEach((item) => {
-            delete item.parent;
-            if (item.commonUsed) {
+        _menu.forEach((item) => {
+            if (item.childrenIsCommonUseNumber > 0) {
+                item.isCommonUse = true;
+                preset_two(item.items, item);
+            }
+            if (item.isCommonUse === true) {
                 res.push(item);
             }
-            if (item.items) {
-                item.items = setp_two(item.items);
-            }
-        })
+        });
+        if (parent !== null) {
+            parent.items = res;
+        }
         return res;
-    };
-    step_one(menuData);
-    return setp_two(menuData);
+    }
+    return preset_two(menuData, null);
 }
 
 let config = {
@@ -136,7 +148,14 @@ let config = {
             });
         },
         showInfoSet:function () {
-            PersonSetting.show();
+            //检查页面是否已创建
+            let $page = $(document).find("div#personal-setting-page");
+            if($page.length !== 0){
+                $page.focus();
+            }else{
+                //打开个人设置页面
+                PersonSetting.show();
+            }
         },
         initAvatar:function () {
             let src = this.data.avatar;
@@ -160,18 +179,8 @@ let config = {
         /**
          * 编辑常用菜单
          */
-        startEditModel: function () {
-            this.el.find('.tabs').hide();
-            this.el.find('.edit-model-title').show();
-            this.el.find('.menu').addClass('edit');
-            this.actions.showAllMenu();
-            this.allMenu.actions.startEditModel();
-        },
-        cancelEditModel: function () {
-            this.el.find('.tabs').show();
-            this.el.find('.edit-model-title').hide();
-            this.el.find('.menu').removeClass('edit');
-            this.allMenu.actions.cancelEditModel();
+        editCommonUse: function () {
+            commonuse.show();
         },
         resetAvatar:function(){
             let $img = this.el.find("img.set-info");
@@ -183,74 +192,21 @@ let config = {
                 $img.attr("src",window.config.sysConfig.userInfo.avatar);
             }
         },
-        saveCommonuse: function (choosed) {
-            HTTP.postImmediately('/user_preference/', {
-                action: "save",
-                pre_type: "8",
-                content: "1"
-            });
-            HTTP.postImmediately('/user_preference/', {
-                action: "save",
-                pre_type: "7",
-                content: JSON.stringify(choosed)
-            });
-            window.config.commonUse.data = choosed;
-            this.actions.showCommonMenu(true);
-        },
         onImageError: function () {
 
         }
     },
-    binds: [
-        {
-            event: 'click',
-            selector: '.edit-model-title a',
-            callback: function () {
-                this.actions.cancelEditModel();
-                this.actions.saveCommonuse(this.allMenu.actions.getSelected());
-            }
-        },{
-            event: 'click',
-            selector: '.startwrokflow',
-            callback: function () {
-                this.actions.openWorkflowIframe();
-            }
-        },{
-            event: 'click',
-            selector: '.logout',
-            callback: function () {
-                this.actions.logout();
-            }
-        },{
-            event: 'click',
-            selector: '.tabs .edit',
-            callback: function () {
-                this.actions.startEditModel();
-            }
-        },{
-            event: 'click',
-            selector: '.tabs p.all',
-            callback: function () {
-                this.actions.showAllMenu();
-            }
-        },{
-            event: 'click',
-            selector: '.tabs p.common',
-            callback: function () {
-                this.actions.showCommonMenu();
-            }
-        },{
-            event: 'click',
-            selector: 'div.personal-setting',
-            callback: function () {
-                this.actions.showInfoSet();
-            }
-        }
-    ],
     afterRender: function () {
         if (window.config && window.config.menu) {
             this.allBtn = this.el.find('.tabs p.all');
             this.commonBtn = this.el.find('.tabs p.common');
+            this.el.on('click', '.tabs p.all', () => {
+                this.actions.showAllMenu();
+            }).on('click', '.tabs p.common', () => {
+                this.actions.showCommonMenu();
+            }).on('click','div.personal-setting',() => {
+                this.actions.showInfoSet();
+            });
             this.actions.initAvatar();
             if (window.config.isCommon === "0" || window.config.commonUse.data.length === 0) {
                 this.actions.showAllMenu();
@@ -270,11 +226,78 @@ let config = {
                 this.actions.setSizeToMini();
             }
         });
-        Mediator.on("personal:setAvatar",() => {
-            this.actions.resetAvatar();
-        });
         Mediator.on('commonuse:change', () => {
             this.actions.showCommonMenu(true);
+        });
+
+        //上传初始化
+        let state = 'on';
+        let uploader = new Uploader();
+        let temp;
+
+        this.el.on('click', '.startwrokflow', () => {
+            this.actions.openWorkflowIframe();
+        }).on('click', '.logout', () => {
+            this.actions.logout();
+        }).on('click', '.tabs .edit', () => {
+            this.actions.editCommonUse();
+        }).on('click','.uploader-button',()=>{
+            //upload_attachment示例
+            // //中断后续传
+            // if(state.startsWith('paused')){
+            //     let str = state.split(',');
+            //     uploader.shiftOn(str[1],str[2]);
+            //     console.log('shifton:'+str[1]+","+str[2]);
+            //     state = 'on';
+            //     return;
+            // }
+            //上传文件
+            uploader.addFile('test1').then(res=>{
+                temp = res;
+                uploader.appendData({
+                    md5:true,
+                    per_size:1024*1024,
+                    dinput_type:9,
+                    content_type:true
+                });
+                // //暂停传输
+                setTimeout(()=>{
+                    let codes = Object.keys(res);
+                    uploader.pause('test1',codes[0]);
+                    console.log('paused');
+                    state = 'paused,test1,'+codes[0];
+                },3000);
+                uploader.upload('/upload_attachment/?is_image_type=0',{},(event)=>{
+                    console.log('name:'+event.name+',code:'+event.code);
+                    console.log(' position:'+(event.loaded||event.position) +",total:"+event.total);
+                })
+            });
+
+            //upload_data
+            // uploader.addFile('test2').then(res=>{
+            //     temp = res;
+            //     uploader.appendData({
+            //         upload_file:true,
+            //         table_id:'5931_dWhWjDuongKecmfFopzdND',
+            //         parent_table_id:'',
+            //         parent_real_id:'',
+            //         parent_temp_id:'',
+            //         is_batch:0,
+            //         warning_msg:''
+            //     });
+            //     uploader.upload('/upload_data/',{},(event)=>{
+            //         console.log('name:'+event.name+',code:'+event.code);
+            //         console.log(' position:'+(event.loaded||event.position) +",total:"+event.total);
+            //     })
+            // })
+        }).on('click','.delete-button',()=>{
+            //删除文件
+            console.log('delete');
+            //deleteFileByName
+            // uploader.deleteFileByName('test1','/delete_attachment/');
+            //deleteFileByCode
+            let code = Object.keys(temp)[0];
+            uploader.deleteFileByCode(code,'/delete_attachment/');
         });
     },
     beforeDestory: function() {

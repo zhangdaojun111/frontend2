@@ -115,6 +115,10 @@
   float: left;
   position: relative;
   height: 100%;
+  .resetFloatingFilter {
+    display: block;
+    margin: auto;
+  }
 }
 
 .group-panel {
