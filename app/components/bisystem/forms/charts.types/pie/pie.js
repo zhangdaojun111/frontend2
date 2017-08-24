@@ -140,13 +140,14 @@ export class FormPieComponent extends BiBaseComponent{
      * 提交饼图配置到服务器
      */
     async saveChart() {
-        // const fields  = this.formGroup;
-        // const data = {};
-        // Object.keys(fields).map(k => {
-        //     if (fields[k].getValue) {
-        //         data[k] = fields[k].getValue();
-        //     };
-        // });
+        const fields  = this.formGroup;
+        const data = {};
+        Object.keys(fields).map(k => {
+            if (fields[k].getValue) {
+                data[k] = fields[k].getValue();
+            };
+        });
+        console.log(data);
         // const chart = {
         //     assortment: 'radar',
         //     chartName:data.chartName,
