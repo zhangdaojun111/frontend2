@@ -1,7 +1,15 @@
 .cancel-x{
   display: none;
   cursor: pointer;
+  display: block;
+  position: relative;
+  top: -20px;
+  left: 165px;
 }
 .time{
   width: 240px;
+}
+.timeInput{
+  display: block;
+  color: #999999;
 }

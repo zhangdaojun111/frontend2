@@ -1678,19 +1678,18 @@ let config={
         //     _this.el.find('.ui-btn-box').css({'bottom':(-1*$('.wrap').get(0).scrollTop +' px'),'width':'calc(100% + '+$('.wrap').get(0).scrollLeft+'px)'});
         // })
         //默认表单样式
-        if( _this.el.find('table').hasClass('form-version-table-user') ){
-            _this.el.find('.btn').css("display","none");
-         }
-        _this.el.find(".overflow").on("scroll",function () {
-            let overflowHight = _this.el.find('.overflow').scrollTop();
-           // console.log(overflowHight)
-            _this.el.find('table').height()
-            if(overflowHight>=400){
-                _this.el.find('.btn').show();
-            }else{
-                _this.el.find('.btn').hide();
-            }
-        })
+        // if( _this.el.find('table').hasClass('form-version-table-user') ){
+        //     _this.el.find('.btn').css("display","none");
+        //  }
+        // _this.el.find(".overflow").on("scroll",function () {
+        //     let overflowHight = _this.el.find('.overflow').scrollTop();
+        //    console.log(overflowHight)
+        //     if(overflowHight>=10){
+        //         _this.el.find('.btn').show();
+        //     }else{
+        //         _this.el.find('.btn').hide();
+        //     }
+        // })
     },
     beforeDestory(){
         this.el.off();
