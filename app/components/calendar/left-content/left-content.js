@@ -192,21 +192,22 @@ let config = {
             event: 'click',
             selector: '.set-calendar',
             callback: function(){
-                CalendarSetService.getMenu().then(res => {
-                    let component = new CalendarSetting(res['menuList']);
-                    let el = $('<div>').appendTo(document.body);
-                    component.render(el);
-                    el.dialog({
-                        title: '日历设置',
-                        width: '90%',
-                        height: '750',
-                        background: '#ddd',
-                        close: function() {
-                            $(this).dialog('destroy');
-                            component.destroySelf();
-                        }
-                    });
-                });
+                this.actions.getSettingMenu();
+                // CalendarSetService.getMenu().then(res => {
+                //     let component = new CalendarSetting(res['menuList']);
+                //     let el = $('<div>').appendTo(document.body);
+                //     component.render(el);
+                //     el.dialog({
+                //         title: '日历设置',
+                //         width: '90%',
+                //         height: '750',
+                //         background: '#ddd',
+                //         close: function() {
+                //             $(this).dialog('destroy');
+                //             component.destroySelf();
+                //         }
+                //     });
+                // });
             }
         },
         {
