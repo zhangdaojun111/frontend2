@@ -62,13 +62,13 @@ let config = {
         this.el.on('click',".hide-con",function(){
             if(!$(this).is(".is-hide")){
                 $(this).addClass("is-hide");
-                that.el.find(".calendar-setting-items").css("width","30px");
+                that.el.find(".calendar-setting-items").css({"width":"30px",'height':"740px"});
                 that.el.find(".search").hide();
                 that.el.find(".setting-content").hide();
                 that.el.find(".calendar-setting-item").css("width","calc(100% - 45px)");
             } else{
                 $(this).removeClass("is-hide");
-                that.el.find(".calendar-setting-items").css("width","200px");
+                that.el.find(".calendar-setting-items").css({"width":"200px",'height':"auto"});
                 that.el.find(".search").show();
                 that.el.find(".setting-content").show();
                 that.el.find(".calendar-setting-item").css("width","calc(100% - 220px)");
