@@ -37,6 +37,12 @@
             </select>
             {{else}}
             <img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-pending.png" alt="">
+            <select class="select-options ">
+                <option class="select-children"></option>
+                {{#each remindTaskItemData.selectOption}}
+                <option class="select-children" value="{{this.value}}">{{this.label}}</option>
+                {{/each}}
+            </select>
             {{/if}}
         {{else}}
           <span class="task-state-none"></span>

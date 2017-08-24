@@ -73,9 +73,7 @@ let config = {
             });
         },
 
-        /**
-         * @author zj
-         */
+
         openWorkflow: function () {
             this.el.find('.task-show-text').html(this.data.remindTaskItemData['data']['name']);
             this.el.on('click', '.task-show-text', () => {
@@ -99,11 +97,11 @@ let config = {
         if(this.data.remindTaskItemData.selectOption) {
             for( let s of this.data.remindTaskItemData.selectOption ){
                 if( s.value === this.data.remindTaskItemData['data3show'][0][0]['selectValue'] ){
-                    let selectOpts = this.el.find('.checked-options option');
+                    let selectOpts = this.el.find('.select-options option');
                     selectOpts.each(item => {
                         let a = selectOpts[item].value;
                         if(a === s.value) {
-                            this.el.find('.checked-options option')[item].selected  = 'selected';
+                            this.el.find('.select-options option')[item].selected  = 'selected';
                         }
                     })
                 }
