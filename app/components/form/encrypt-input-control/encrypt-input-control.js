@@ -1,3 +1,9 @@
+/**
+ *@author chenli
+ *@description 密码框控件
+ */
+
+
 import Component from '../../../lib/component';
 import './add-enrypt.html';
 import template from './encrypt-input-control.html'
