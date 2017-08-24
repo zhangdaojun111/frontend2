@@ -193,10 +193,13 @@ class Component {
     }
 
     hideLoading(){
-        this.el.removeClass('component-loading-effect');
-        this.loadingOverlay.remove();
-        this.loadingEffectBox.remove();
-        this.el.children().removeClass('component-filter-blur');
+        this.loadingOverlay.fadeOut();
+        this.loadingEffectBox.fadeOut(() => {
+            this.loadingOverlay.remove();
+            this.loadingEffectBox.remove();
+            this.el.removeClass('component-loading-effect');
+            this.el.children().removeClass('component-filter-blur');
+        });
     }
 
     disable(){
