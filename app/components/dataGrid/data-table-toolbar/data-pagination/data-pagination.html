@@ -5,6 +5,7 @@
         <span class="page-details">共<span><span class="total"></span></span>条数据</span>
         <!-- 刷新页面 -->
         <span class="ui-icon-refresh"><img src="../../../../assets/images/dataGrid/icon_shuaxin_blue.png"/></span>
+        <span class="data-invalid"></span>
     </div>
     <!--更改页码-->
     <div class="selectPage">
@@ -27,4 +28,15 @@
             <img src="../../../../assets/images/dataGrid/icon_xiayiye.png" height="16" width="16"/>
         </span>
     </div>
+    <!--表级操作-->
+    {{#if isSuperUser}}
+    <div class="table-oprate-con">
+        <select class="tableOperateSelect">
+            <option value="操作">操作</option>
+            {{#each tableOperationData}}
+            <option value="{{name}}">{{name}}</option>
+            {{/each}}
+        </select>
+    </div>
+    {{/if}}
 </div>

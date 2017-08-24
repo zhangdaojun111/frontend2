@@ -19,12 +19,14 @@ let config = {
         tableId: '',
         columnDefs: [],
         rowData:[],
+        fieldsData:[],
         rows: 100,
         total: 0,
         page: 1,
         //pageType{0:'进展中的工作',1:'已完成的工作',2:'我的工作申请中的工作',3:'我的工作已完成的工作',4:'我的工作审批过的工作',5:'工作审批',6:'我的工作已关注的工作'}
         pageType: 5,
         tableId2pageType: {'approve-workflow':5,'approving-workflow':0,'finished-workflow':1,'my-workflow':2,'finish-workflow':3,'focus-workflow':6,'approved-workflow':4},
+        tableId2Name: {'approve-workflow':'工作审批','approving-workflow':'进展中的工作','finished-workflow':'已完成的工作','my-workflow':'我的工作->申请中的工作','finish-workflow':'我的工作->已完成的工作','focus-workflow':'我的工作->已关注的工作','approved-workflow':'我的工作->审批过的工作'},
         //定制列（列宽）
         colWidth: {},
         //定制列（固定列）
@@ -51,6 +53,8 @@ let config = {
         filterText: '',
         //请求数据参数
         commonQueryData:[],
+        //临时查询数据
+        temporaryCommonQuery:[],
         //选择的数据
         selectRows: [],
         //高级查询字段参数
@@ -62,13 +66,17 @@ let config = {
         //排序方式
         frontendSort: false,
         //定制列数据
-        customColumnsFields: [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false}, {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false}, {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
+        customColumnsFields: [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false}, {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
     },
     actions: {
         //创建表头
         createColumnDefs: function () {
             let cols = wchService.getWorkflowHeader( this.data.pageType );
-            this.data.columnDefs = [dgcService.numberCol,dgcService.selectCol];
+            this.data.columnDefs = [dgcService.numberCol];
+            if( this.data.pageType == 2||this.data.pageType == 0 ){
+                this.data.columnDefs.push( dgcService.selectCol )
+                this.data.customColumnsFields.push( {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false} )
+            }
             let fixArr = this.data.fixCols.l.concat(this.data.fixCols.r);
             for( let col of cols ){
                 if( col.field == 'myOperate' ){
@@ -102,6 +110,7 @@ let config = {
                 this.data.customColumnsFields.push( {name:col.headerName,field:col["field"],canhide:true,candrag:true,canFix:true} );
                 this.data.columnDefs.push( obj );
             }
+            this.data.fieldsData = this.data.columnDefs;
         },
         //返回搜索类型
         searchType: function ( data,name ) {
@@ -119,6 +128,7 @@ let config = {
             let gridData = {
                 columnDefs: this.data.columnDefs,
                 rowData: this.data.rowData,
+                fieldsData: this.data.fieldsData,
                 floatingFilter: true,
                 onColumnResized: this.actions.onColumnResized,
                 onSortChanged: this.actions.onSortChanged,
@@ -173,10 +183,35 @@ let config = {
         },
         //渲染按钮
         renderBtn: function () {
-            if( this.data.tableId == 'my-workflow' ){
+            if( this.data.tableId == 'my-workflow' || this.data.tableId == 'approving-workflow' ){
                 this.el.find( '.batch-cancel' )[0].style.display = 'inline-block';
                 this.el.find( '.batch-cancel' ).on( 'click',()=>{
-
+                    this.data.selectRows = [];
+                    let rows = this.agGrid.gridOptions.api.getSelectedRows();
+                    for( let r of rows ){
+                        this.data.selectRows.push( r.id );
+                    }
+                    if( this.data.selectRows.length == 0 ){
+                        msgBox.alert( '请选择要取消的数据！' )
+                    }else {
+                        msgBox.confirm( '确定取消？' ).then( res=>{
+                            if( res ){
+                                let json = {
+                                    checkIds: JSON.stringify(this.data.selectRows),
+                                    action:4,
+                                    type:1
+                                }
+                                workflowService.approveMany( json )
+                                    .then(data => {
+                                        if( data.success ){
+                                            msgBox.showTips( '取消成功' );
+                                        }else {
+                                            msgBox.alert( '取消失败：' + data.error );
+                                        }
+                                    })
+                            }
+                        } )
+                    }
                 } );
             }
             //floatingFilter
@@ -205,7 +240,8 @@ let config = {
             //全屏
             if( this.el.find( '.grid-new-window' )[0] ){
                 let obj = {
-                    tableId:this.data.tableId
+                    tableId: this.data.tableId,
+                    tableName: this.data.tableId2Name[this.data.tableId]
                 }
                 let url = this.actions.returnIframeUrl( '/iframe/workflowPage/',obj )
                 this.el.find('.grid-new-window').attr('href', url);
@@ -214,9 +250,21 @@ let config = {
             if( this.el.find( '.expert-search-btn' )[0] ){
                 this.actions.renderExpertSearch();
             }
+            //宽度自适应
+            this.el.find( '.grid-auto-width' ).on( 'click',()=>{
+                if( !this.data.isAutoWidth ){
+                    this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
+                    this.agGrid.actions.autoWidth();
+                }else {
+                    this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
+                }
+                this.el.find( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
+                this.data.isAutoWidth = !this.data.isAutoWidth;
+            } )
         },
         //渲染高级查询
         renderExpertSearch: function () {
+            let _this = this
             this.el.find( '.dataGrid-commonQuery' )[0].style.display = 'block';
             this.el.find( '.expert-search-btn' ).on( 'click',()=>{
                 let d = {
@@ -249,8 +297,7 @@ let config = {
                     }
                 })
             } )
-            let _this = this
-            $('.dataGrid-commonQuery-select').bind('change', function() {
+            _this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
                 if($(this).val() == '常用查询') {
                     _this.actions.postExpertSearch([],'');
                 } else if($(this).val() == '临时高级查询') {
@@ -353,6 +400,19 @@ let config = {
             }
             return json;
         },
+        //设置常用查询选项值
+        appendQuerySelect: function() {
+            let length = this.el.find('.dataGrid-commonQuery-select option').length
+            for (let i = 0; i< length ;i++) {
+                if(this.el.find('.dataGrid-commonQuery-select option').eq(i).val() == '临时高级查询'){
+                    this.el.find('.dataGrid-commonQuery-select option').eq(i).remove()
+                }
+            }
+            this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
+            this.el.find('.dataGrid-commonQuery-select').val('临时高级查询');
+
+        },
+        //获取高级查询数据
         getExpertSearchData: function (addNameAry) {
             let obj = {'actions':JSON.stringify( ['queryParams'] ),'table_id':this.data.tableId};
             dataTableService.getPreferences( obj ).then( res=>{
@@ -465,6 +525,16 @@ let config = {
             this.actions.getData();
         },
         onRowDoubleClicked: function ($event) {
+            let obj = {
+                form_id: $event["data"]["form_id"],
+                record_id: $event["data"]["id"],
+                flow_id: $event["data"]["flow_id"],
+                table_id: $event["data"]["table_id"]
+            }
+            let winTitle = '查看工作';
+            obj['btnType'] = 'view';
+            let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
+            this.actions.openSourceDataGrid( url,winTitle );
         },
         onCellClicked: function ($event) {
             let type = $event["event"]["target"]["dataset"]["type"];

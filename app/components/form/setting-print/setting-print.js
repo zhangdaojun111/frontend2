@@ -67,8 +67,8 @@ let SettingPrint = {
             selector: '.confirm',
             callback: function(){
                 let t=$('title').text();
-                let tempPrintTitles=_this.data.printTitles;
                 let _this=this;
+                let tempPrintTitles=_this.data.printTitles;
                 if(_this.data.printTitles.length==0){
                     _this.data.printTitles.unshift({content:_this.data.myContent,index:"1"});
                 }else{

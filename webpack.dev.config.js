@@ -26,7 +26,6 @@ module.exports = {
     // ],
 
     entry: {
-
         form: path.resolve(APP_PATH, 'entrys/form.js'),
         openForm: path.resolve(APP_PATH, 'entrys/popup/openForm.js'),
         addNewBuild: path.resolve(APP_PATH, 'entrys/popup/addNewBuild.js'),
@@ -42,6 +41,8 @@ module.exports = {
         dataImport: path.resolve(APP_PATH, 'entrys/popup/dataImport.js'),
         expertSearch: path.resolve(APP_PATH, 'entrys/popup/expertSearch.js'),
         historyApprove: path.resolve(APP_PATH, 'entrys/popup/historyApprove.js'),
+        operationDetails: path.resolve(APP_PATH, 'entrys/popup/operationDetails'),
+        jurisdiction: path.resolve(APP_PATH, 'entrys/popup/jurisdiction'),
         workflowPage: path.resolve(APP_PATH, 'entrys/popup/workflowPage.js'),
         customDataGrid: path.resolve(APP_PATH, 'entrys/popup/customDataGrid.js'),
         bi:path.resolve(APP_PATH, 'entrys/bi.js'),
@@ -125,10 +126,6 @@ module.exports = {
                         }
                     }
                 ]
-            },{
-                test: /\.(jpe|jpg|woff|woff2|eot|ttf|svg)(\?.*$|$)/,
-                exclude: /node_modules/,
-                loader: 'url-loader'
             },
         ]
     },

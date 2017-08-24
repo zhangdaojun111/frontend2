@@ -66,7 +66,7 @@ export const dgcService = {
         colId: "number",
         hide: false,
         field: "number",
-        width: 30,
+        width: 40,
         headerClass:'ag-grid-number',
         suppressSorting: true,
         suppressResize: true,
@@ -337,7 +337,7 @@ export const dgcService = {
     replacingIcons: {
         checkboxChecked: '<img src="'+require('../../assets/images/dataGrid/icon_checkbox_yes.png') +'" />',
         checkboxUnchecked: '<img src="'+require('../../assets/images/dataGrid/icon_checkbox_no.png') +'" />',
-        checkboxIndeterminate: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        checkboxIndeterminate: '<img src="'+require('../../assets/images/dataGrid/icon_checkbox_no.png') +'" />',
         columnMovePivot: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
         columnMoveGroup: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
         columnMovePin: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
@@ -375,7 +375,7 @@ export const dgcService = {
     //按钮组
     gridBtn: function (viewMode) {
         let obj = {
-            normal:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width','grid-new-window'],
+            normal:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width','edit-btn','grid-new-window'],
             ViewChild:['float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
             EditChild:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
             child:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
@@ -385,7 +385,8 @@ export const dgcService = {
             viewFromCorrespondence: ['correspondence-check','float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
             editFromCorrespondence: ['correspondence-check','float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width','correspondence-save'],
             in_process: ['float-search-btn','refresh-btn','grid-new-window'],
-            keyword: ['keyword-tips','custom-column-btn','grid-new-window']
+            keyword: ['keyword-tips','custom-column-btn','grid-new-window'],
+            deleteHanding: ['delete-tips','grid-del-btn','custom-column-btn']
         }
         return obj[viewMode];
     },
@@ -401,10 +402,12 @@ export const dgcService = {
         'custom-column-btn':'custom_field',
         'grid-auto-width':'custom_width',
         'grid-new-window':'new_window',
+        'edit-btn':'cell_edit',
         'correspondence-check':'especial',
         'refresh-btn':'especial',
         'correspondence-save':'especial',
-        'keyword-tips':'especial'
+        'keyword-tips':'especial',
+        'delete-tips':'especial'
     },
     //行选择
     rowClickSelect: function (data) {
@@ -415,9 +418,10 @@ export const dgcService = {
             ele.className = '';
         }else if(ele.className.indexOf( "my-ag-cell-focus1" )!=-1){//第二次点击
             node.setSelected(true, false);
-            ele.className = 'my-ag-cell-focus1 my-ag-cell-focus2';
+            $(ele).addClass('my-ag-cell-focus1 my-ag-cell-focus2');
         }else{//第一次点击
-            ele.className = 'my-ag-cell-focus1';
+             // ele.className = 'my-ag-cell-focus1';
+            $(ele).addClass('my-ag-cell-focus1')
         }
     },
     //返回数据url
@@ -438,7 +442,7 @@ export const dgcService = {
         let classObj = {};
         let i = 1;
         for( let k in obj ){
-            let css = ('.hrader-bgColor-'+ i + '{background-color:'+ k +';}');
+            let css = ('.hrader-bgColor-'+ i + '{background-color:'+ this.colorRgb(k,0.7) +';}');
             for( let f of obj[k] ){
                 classObj[f] = ('hrader-bgColor-'+i);
             }
@@ -504,6 +508,9 @@ export const dgcService = {
         for( let d of defaultArr ){
             let obj = indexedGridState[d]||{};
             obj['pinned']= data.fixCols.l.length > 0 ? 'left' : null;
+            if( d == 'group' ){
+                obj['hide'] = true;
+            }
             arr.push( obj );
         }
         //左侧固定
@@ -553,4 +560,44 @@ export const dgcService = {
         // console.log( arr )
         agGrid.gridOptions.columnApi.setColumnState( arr );
     },
+    //判断Object是否相等
+    checkObejctNotEqual(obj1,obj2){
+        let o1=Object.assign({},obj1);
+        let o2=Object.assign({},obj2);
+        if(Object.prototype.toString.call(o1)!='[object Object]'){
+            if(o1 != o2){
+                return true;
+            }else{
+                return false;
+            }
+        };
+        if(JSON.stringify(o1) == JSON.stringify(o2)){
+            return false;
+        }else{
+
+            return true;
+        }
+    },
+    abjustTargetRow(targetRow,ids){
+        let pRealId = ids['parent_real_id'];
+        let pTableId = ids['parent_table_id'];
+        let pTempId = ids['parent_temp_id'];
+        let tempId = ids['temp_id'];
+        this.fillIdsInObj(targetRow['data'],pRealId,pTableId,pTempId,tempId);
+        this.fillIdsInObj(targetRow['cache_new'],pRealId,pTableId,pTempId,tempId);
+        this.fillIdsInObj(targetRow['cache_old'],pRealId,pTableId,pTempId,tempId);
+        this.fillIdsInObj(targetRow,pRealId,pTableId,pTempId);
+        return targetRow;
+    },
+    fillIdsInObj(obj,pRealId,pTableId,pTempId,temp_id){
+        if(!obj){
+            return;
+        }
+        if(temp_id){
+            obj['temp_id']=temp_id||'';
+        }
+        obj['parent_real_id']=pRealId||'';
+        obj['parent_table_id']=pTableId||'';
+        obj['parent_temp_id']=pTempId||'';
+    }
 }

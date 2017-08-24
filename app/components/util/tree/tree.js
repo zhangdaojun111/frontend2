@@ -69,8 +69,8 @@ let config = {
             }
         },
         selectAll:function(tree){
-           this.actions._cruiseWholeTree(tree,(node,tree)=>{
-               this.actions._cruiseSelectNode(node,tree);
+            this.actions._cruiseWholeTree(tree,(node,tree)=>{
+                this.actions._cruiseSelectNode(node,tree);
             })
         },
         _cruiseSelectNode:function(node,tree){
@@ -180,33 +180,43 @@ let config = {
             }
         } else {
             this.el.find('.buttons-in-tree').hide();
-            let options = _.defaultsDeep({}, TREETYPE.SINGLE_SELECT, {
+            let options = _.defaultsDeep({}, TREETYPE[this.data.options.treeType], {
                 data: this.data.treeNodes,
                 onNodeSelected: function (event, node) {
-                    tree.treeview('getSelected').forEach(selected => {
-                        if (selected.nodeId === node.nodeId) {
-                            return;
+                    if(treeview.data.options.selectParentMode == 'Expand'){
+                        console.log('expand');
+                        tree.treeview('getSelected').forEach(selected => {
+                            if (selected.nodeId === node.nodeId) {
+                                return;
+                            }
+                            tree.treeview('unselectNode', [selected.nodeId, {silent: true}]);
+                        });
+                        if (!node.nodes) {
+                            treeview.data.options.callback('select', node);
                         }
-                        tree.treeview('unselectNode', [selected.nodeId, {silent: true}]);
-                    });
-                    if (!node.nodes) {
+                        treeview.actions._expandAllParents(node, tree);
+                        tree.treeview('toggleNodeExpanded', [node.nodeId]);
+                    } else if (treeview.data.options.selectParentMode == 'Select'){
+                        console.log('select');
                         treeview.data.options.callback('select', node);
                     }
-                    treeview.actions._expandAllParents(node, tree);
-                    tree.treeview('toggleNodeExpanded', [node.nodeId]);
                 },
                 onNodeUnselected: function (event, node) {
-                    tree.treeview('selectNode', [node.nodeId, {silent: true}]);
-                    tree.treeview('toggleNodeExpanded', [node.nodeId]);
+                    if(treeview.data.options.selectParentMode == 'Expand') {
+                        tree.treeview('selectNode', [node.nodeId, {silent: true}]);
+                        tree.treeview('toggleNodeExpanded', [node.nodeId]);
+                    }
                 },
                 onNodeExpanded: function (event, node) {
-                    let siblings = tree.treeview('getSiblings', node);
-                    if (siblings) {
-                        siblings.forEach(sibling => {
-                            if (sibling.state.expanded) {
-                                tree.treeview('collapseNode', [sibling, {silent: true, ignoreChildren: false}]);
-                            }
-                        })
+                    if(treeview.data.options.selectParentMode == 'Expand') {
+                        let siblings = tree.treeview('getSiblings', node);
+                        if (siblings) {
+                            siblings.forEach(sibling => {
+                                if (sibling.state.expanded) {
+                                    tree.treeview('collapseNode', [sibling, {silent: true, ignoreChildren: false}]);
+                                }
+                            })
+                        }
                     }
                 }
             })
@@ -236,6 +246,7 @@ let defaultOptions = {
     callback: function (event, data) {
     },
     treeType: 'SINGLE_SELECT',
+    selectParentMode:'Expand',
     isSearch: false,
     treeName: ''
 }

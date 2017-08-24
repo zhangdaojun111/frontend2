@@ -1,15 +1,16 @@
 /**
  * Created by zj on 2017/8/4.
  */
+
+/**
+ * @description 表设置的行数据
+ */
 import Component from "../../../lib/component";
 import template from './calendar.set.item.html';
 import './calendar.set.item.scss';
-import CalendarSetItemMulitSelect from "./calendar.set.item.multiselect/calendar.set.item.multiselect"
-import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
 import Mediator from '../../../lib/mediator';
 import {AutoSelect} from '../../util/autoSelect/autoSelect';
-import CalendarSetRemindMethod from './calendar.set.remind/calendar.set.remind';
 
 let config = {
     template: template,
@@ -49,6 +50,11 @@ let config = {
 
     },
     actions: {
+        /**
+         * @author zj
+         * @param param
+         * @returns {{res: Array, text: Array}}
+         */
         returnShow: function (param) {
             let res = [];
             let text = [];
@@ -63,10 +69,11 @@ let config = {
             return {res: res, text: text};
         },
 
-        getSelectedValue: function () {
-            //return this.data.multiSelectMenu.data.choosed;
-        },
-
+        /**
+         * @author zj
+         * @param forResText
+         * @param forResId
+         */
         checkForResSelected: function (forResText, forResId) {
             let selectedOpts = this.data.multiSelectMenu.data.choosed;
             let isInSelectedOpts = false;
@@ -83,6 +90,10 @@ let config = {
 
         },
 
+        /**
+         * @author zj
+         * @param newSelectedOpts
+         */
         checkSelectedOpts: function (newSelectedOpts) {
             let selectedOptsId = [];
             let selectedOptsText  = [];
@@ -93,7 +104,9 @@ let config = {
             this.data.preViewText = selectedOptsText;
             this.el.find('.preview-text').html(this.data.preViewText);
         },
-
+        /**
+         * @author zj
+         */
         openSetRemind: function () {
             PMAPI.openDialogByIframe(
                 '/iframe/calendarSetRemind/',
@@ -138,6 +151,10 @@ let config = {
         this.el.css({});
         let staus = false;
         let _this = this;
+        /**
+         * @author
+         * @type {{list: (*), displayType: string, editable, choosed: Array, onSelect: onSelect}}
+         */
         let select_item_data = {
             'list': this.data.dropdown,
             displayType: 'popup',
@@ -154,6 +171,7 @@ let config = {
         };
         this.data.multiSelectMenu = new AutoSelect(select_item_data);
         this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
+
         Mediator.on('calendar-set:editor', data => {
             if (data.data === 1) {
                 this.el.find(".editor-items").attr("disabled", false);
@@ -178,12 +196,20 @@ let config = {
             }
         });
         this.el.find(".list").hide();
-        this.el.find('.res-text option').each((item) => {
-            let a = $('.res-text option')[item].value;
-            if(a === this.data.rowSetData['selectedRepresents']) {
-                this.el.find('.res-text option')[item].selected  = 'selected';
-            }
-        });
+
+        /**
+         * @author zj
+         */
+        if(this.el.find('.res-text option')) {
+            this.el.find('.res-text option').each((item) => {
+                let a = $('.res-text option')[item].value;
+                if(a === this.data.rowSetData['selectedRepresents']) {
+
+                    this.el.find('.res-text option')[item].selected  = 'selected';
+                }
+            });
+        }
+
         this.el.find('.page-change-text option').each(item => {
             let a= $('.page-change-text option')[item].value;
             if(a === this.data.rowSetData['selectedEnums']) {
@@ -227,10 +253,6 @@ let config = {
             let textConfigTextValue = this.el.find('.config-text option:selected').text();
 
         });
-        if(this.data.rowTitle['dtype'] === 8) {
-            console.log(this.data.rowSetData, this.data.replaceDropDown, this.data.rowTitle);
-        }
-
         this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text;
         this.el.find('.preview-text').text(this.data.preViewText);
 

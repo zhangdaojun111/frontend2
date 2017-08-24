@@ -46,7 +46,6 @@ let config = {
         },
         init(){
             $('#addFav').hide();
-            let favshow = this.el.find("#workflow-box").css('display');
             this.data.favList=this.data[1].rows;
             if(this.data.id!==undefined){
                 let flag=true;
@@ -56,7 +55,9 @@ let config = {
                     }
                     flag=true;
                 }
+                if(!this.boxshow){
                     flag?$('#addFav').show():$('#addFav').hide();
+                }
             }
         },
         addFav(e){
@@ -79,12 +80,18 @@ let config = {
                 this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
             });
             this.actions.init();
-            $('#addFav').hide();
+        },
+        contentClose(){
+            this.boxshow = true;
+            this.actions.init();
+            this.favoDel = true;
+            this.actions.operate();
         }
     },
     afterRender: function() {
         this.favoDel = false;
         this.actions.init();
+        this.boxshow = true;
         //添加流程下来菜单
         this.append(new WorkFlowTree(this.data[0]), this.el.find('.J_select-container'));
         //添加常用工作流组件
@@ -105,6 +112,7 @@ let config = {
         //订阅btn click
         Mediator.subscribe('workflow:choose', (msg)=> {
             this.data.id=msg.id;
+            this.boxshow = false;
             this.actions.init();
             this.el.find("#workflow-box").hide();
             $("#workflow-content").show();
@@ -112,6 +120,9 @@ let config = {
         //订阅 select list click
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             WorkFlow.show(msg.data[0],'#drawflow');
+        })
+        Mediator.subscribe("workflow:contentClose",(msg)=>{
+            this.actions.contentClose();
         })
     },
     beforeDestory: function(){

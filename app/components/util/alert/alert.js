@@ -17,6 +17,7 @@ let alertConfig = {
         }
     },
     afterRender: function () {
+        this.el.find('.text p').text(decodeURIComponent(this.data.text));
         this.el.on('click', 'button', () => {
             this.actions.close();
         })

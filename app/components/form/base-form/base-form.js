@@ -35,6 +35,7 @@ import AttachmentControl from "../attachment-control/attachment-control";
 import SettingPrint from '../setting-print/setting-print'
 import Songrid from '../songrid-control/songrid-control';
 import Correspondence from '../correspondence-control/correspondence-control';
+import ContractControl from "../contract-control/contract-control";
 
 let config={
     template:'',
@@ -1035,6 +1036,7 @@ let config={
                 parent_temp_id: this.data.parentTempId || "",
                 parent_record_id: this.data.parentRecordId  || ""
             };
+            console.log(json);
             //如果是批量审批，删除flow_id
             if(this.data.isBatch == 1){
                 delete json["flow_id"];
@@ -1211,23 +1213,27 @@ let config={
         addBtn(){
             this.el.find('.ui-btn-box').remove();
             //添加提交按钮
+            let $wrap=this.el.find("table").parent();
+            while(!($wrap.attr('id') == 'detail-form')){
+                $wrap=$wrap.parent();
+            }
             if(this.data.btnType == 'new' || this.data.btnType == 'edit'){
-                this.el.append(`<div class="noprint ui-btn-box"><div>
-                    <button class="btn btn-normal mrgr" id="print">
-                        <span>打印</span>
-                        <div class="btn-ripple ripple"></div>
-                    </button>
+                $wrap.append(`<div class="noprint ui-btn-box"><div>
+                    <!--<button class="btn btn-normal mrgr" id="print">-->
+                        <!--<span>打印</span>-->
+                        <!--<div class="btn-ripple ripple"></div>-->
+                    <!--</button>-->
                     <button class="btn btn-normal ceshi" id="save" >
                         <span>提交</span>
                         <div class="btn-ripple ripple"></div>
                     </button>
                 </div></div>`)
             }else if(this.data.btnType == 'view'){
-                this.el.append(`<div class="noprint ui-btn-box"><div >
-                    <button class="btn btn-normal mrgr" id="print" >
-                        <span>打印</span>
-                        <div class="btn-ripple ripple"></div>
-                    </button>
+                $wrap.append(`<div class="noprint ui-btn-box"><div >
+                    <!--<button class="btn btn-normal mrgr" id="print" >-->
+                        <!--<span>打印</span>-->
+                        <!--<div class="btn-ripple ripple"></div>-->
+                    <!--</button>-->
                     <button class="btn btn-normal" id="changeEdit" >
                         <span>转到编辑模式</span>
                         <div class="btn-ripple ripple"></div>
@@ -1236,7 +1242,7 @@ let config={
             }else if(this.data.btnType == 'none'){
 
             }else if(this.data.btnType == 'confirm'){
-                this.el.append(`<div class="noprint ui-btn-box"><div >
+                $wrap.append(`<div class="noprint ui-btn-box"><div >
                     <button class="btn btn-normal">
                         <span>确定</span>
                         <div class="btn-ripple ripple"></div>
@@ -1517,7 +1523,7 @@ let config={
                         _this.data.childComponent[data[key].dfield]=textArea;
                         break;
                     case 'Readonly':
-                        let readonly=new Readonly(data[key]);
+                        let readonly=new Readonly(data[key],actions);
                         readonly.render(single);
                         _this.data.childComponent[data[key].dfield]=readonly;
                         break;
@@ -1537,7 +1543,7 @@ let config={
                         _this.data.childComponent[data[key].dfield]=selectControl;
                         break;
                     case 'Year':
-                        let yearControl = new YearControl(data[key]);
+                        let yearControl = new YearControl(data[key],actions);
                         yearControl.render(single);
                         _this.data.childComponent[data[key].dfield]=yearControl;
                         break;
@@ -1558,12 +1564,10 @@ let config={
                         break;
                     case 'MultiSelect':
                         if(single.data('childData')){
-                            // data[key].childData=single.data('childData');
-                            data[key].childData='#*#2638_3egFSMCwDBHgNKBo59sr6P$#$#*#6487_VjN4tR8j6uChdEb8GkajaN';
+                            data[key].childData=single.data('childData');
                         }
                         if(single.data('selectType')){
-                            // data[key].childData=single.data('selectType');
-                            data[key].selectType='1';
+                            data[key].childData=single.data('selectType');
                         }
                         data[key].is_special = data[key].field_content['special_multi_choice'] == 1?true:false;
                         let multiSelectControl = new MultiSelectControl(data[key],actions);
@@ -1581,7 +1585,7 @@ let config={
                         _this.data.childComponent[data[key].dfield] = settingTextareaControl;
                         break;
                     case 'Attachment':
-                        let attachmentControl = new AttachmentControl(data[key]);
+                        let attachmentControl = new AttachmentControl(data[key],actions);
                         attachmentControl.render(single);
                         _this.data.childComponent[data[key].dfield] = attachmentControl;
                         break;
@@ -1599,6 +1603,13 @@ let config={
                         let dateTimeControl = new DateTimeControl(data[key],actions);
                         dateTimeControl.render(single);
                         _this.data.childComponent[data[key].dfield] =  dateTimeControl;
+                        break;
+                    case 'editControl':
+                        data[key]['temp_id']=data['temp_id']['value'];
+                        data[key]['table_id']=data['table_id']['value'];
+                        let contractControl = new ContractControl(data[key]);
+                        contractControl.render(single);
+                        _this.data.childComponent[data[key].dfield] =  contractControl;
                         break;
                 }
             }
@@ -1666,26 +1677,33 @@ let config={
         //     console.log('scroll');
         //     _this.el.find('.ui-btn-box').css({'bottom':(-1*$('.wrap').get(0).scrollTop +' px'),'width':'calc(100% + '+$('.wrap').get(0).scrollLeft+'px)'});
         // })
-        if( _this.el.find('table').hasClass('form-version-table-user') || _this.el.find('table').hasClass('form-version-table-department') ){
-            _this.el.find('table').parents('#detail-form').addClass('detail-form-style');
-            _this.el.find('table>tbody').append('<div class="more"><span>展开更多</span></div>')
+        //默认表单样式
+        if( _this.el.find('table').hasClass('form-version-table-user') ){
+            // _this.el.find('table').parents().parents('#detail-form').addClass('detail-form-style');
+            // _this.el.find('table').off();
+            // _this.el.find('table>tbody').append('<div class="more"><span>展开更多</span></div>')
+            //
+            // if(_this.el.find('table>tbody').height() <= _this.el.find('table').height()){
+            //     _this.el.find('.overflow').removeClass('overflow');
+            // }
+            _this.el.find('.btn').css("display","none");
 
-
-            _this.el.find(".overflow").on("scroll",function () {
-                let overflowHight = _this.el.find('.overflow').scrollTop();
-                console.log(overflowHight)
-                if(overflowHight>=70){
-                    _this.el.find('.more').show();
-                }else{
-                    _this.el.find('.more').hide();
-                }
-            })
-            _this.el.find('.more').on('click',function () {
-                _this.el.find('.more').hide();
-                _this.el.find('.overflow').removeClass('overflow');
-                _this.el.find('table').css({'overflow-y':'auto',"height":"520px"});
-            })
-        }
+        //     _this.el.find('.more').on('click',function () {
+        //         _this.el.find('.more').hide();
+        //         _this.el.find('.overflow').removeClass('overflow');
+        //         _this.el.find('table').css({'overflow-y':'auto',"height":"520px"});
+        //     })
+         }
+        _this.el.find(".overflow").on("scroll",function () {
+            let overflowHight = _this.el.find('.overflow').scrollTop();
+           // console.log(overflowHight)
+            _this.el.find('table').height()
+            if(overflowHight>=400){
+                _this.el.find('.btn').show();
+            }else{
+                _this.el.find('.btn').hide();
+            }
+        })
     },
     beforeDestory(){
         this.el.off();

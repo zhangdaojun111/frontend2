@@ -36,11 +36,14 @@
         .ui-dialog-titlebar-full {
             position: absolute;
             right: 25px;
-            top: 50%;
+            top: 51%;
             width: 20px;
             margin: -10px 0 0 0;
             padding: 1px;
             height: 20px;
+            .icon-maximize{
+                background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAVklEQVQ4T2NkoBAwUqifYfAZUMDAwMBPwFsPGRgYFsDUoHvhPwMDgyMBAxoYGBgc8BlAKFwOjAAD4AGEIzAb8YUBKBoFCMTCA3zRSHLKJhRlBA0ceAMAcKAQEZIDpT0AAAAASUVORK5CYII=);
+            }
         }
     }
     .ui-dialog-content {

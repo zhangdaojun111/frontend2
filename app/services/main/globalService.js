@@ -26,7 +26,7 @@ export const GlobalService = {
                 suppressMenu: true,
                 tooltipField: 'name',
                 cellStyle: {'text-align': 'center'},
-                suppressSorting: true
+                // suppressSorting: true
             },
             {
                 headerName: '是否在职',
@@ -35,7 +35,7 @@ export const GlobalService = {
                 suppressMenu: true,
                 tooltipField: 'is_active',
                 cellStyle: {'text-align': 'center'},
-                suppressSorting: true
+                // suppressSorting: true
             },
             {
                 headerName: '管理员权限',
@@ -44,7 +44,7 @@ export const GlobalService = {
                 suppressMenu: true,
                 tooltipField: 'is_superuser',
                 cellStyle: {'text-align': 'center'},
-                suppressSorting: true
+                // suppressSorting: true
             },
             {
                 headerName: '登陆时间',
@@ -53,7 +53,7 @@ export const GlobalService = {
                 suppressMenu: true,
                 tooltipField: 'login_time',
                 cellStyle: {'text-align': 'center'},
-                suppressSorting: true
+                // suppressSorting: true
             },
             {
                 headerName: '登录IP',
@@ -62,7 +62,7 @@ export const GlobalService = {
                 suppressMenu: true,
                 tooltipField: 'login_ip',
                 cellStyle: {'text-align': 'center'},
-                suppressSorting: true
+                // suppressSorting: true
             },
             {
                 headerName: '手机登录',
@@ -71,7 +71,7 @@ export const GlobalService = {
                 suppressMenu: true,
                 tooltipField: 'mobile',
                 cellStyle: {'text-align': 'center'},
-                suppressSorting: true
+                // suppressSorting: true
             },
             {
                 headerName: '设备',
@@ -80,7 +80,7 @@ export const GlobalService = {
                 suppressMenu: true,
                 tooltipField: 'device',
                 cellStyle: {'text-align': 'center'},
-                suppressSorting: true
+                // suppressSorting: true
             },
             {
                 headerName: 'app版本',
@@ -89,7 +89,7 @@ export const GlobalService = {
                 suppressMenu: true,
                 tooltipField: 'version',
                 cellStyle: {'text-align': 'center'},
-                suppressSorting: true
+                // suppressSorting: true
             },
             {
                 headerName: 'Session失效时间',
@@ -98,13 +98,13 @@ export const GlobalService = {
                 suppressMenu: true,
                 tooltipField: 'expire',
                 cellStyle: {'text-align': 'center'},
-                suppressSorting: true
+                // suppressSorting: true
             }
         ];
     },
     getOnlineUserData:function (_param) {         //获取在线人员列表数据
         let param = _.defaultsDeep(_param, {
-            rows: 50,
+            rows: 10,
             first:0,
             sortOrder: -1,
             sortField: '',

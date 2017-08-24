@@ -1,6 +1,5 @@
-
-body{
-  background:rgb(235,235,235);
+#myBody{
+  background: #EBEBEB;
 }
 .workflow-wrapper{
   width: 100%;
@@ -100,6 +99,18 @@ body{
 
 .workflow-foot{
   margin:10px 10px 0 10px;
+  .down{
+    position: fixed;
+    top: 93%;
+    right: 20px;
+    height: 30px;
+    line-height: 30px;
+    width: 30px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    text-decoration: none;
+  }
   .workflow-box{
     background: #fff;
     margin-bottom: 10px;
@@ -111,6 +122,7 @@ body{
       font-size: 14px;
       width: 100%;
       .tit{
+        width: 100px;
         padding: 0 10px;
         display: flex;
         align-items: center;
@@ -119,7 +131,7 @@ body{
         }
       }
       .workflow-look{
-        margin-left: 40px;
+
         .previewBtn{
           cursor: pointer;
           padding: 0 7px;
@@ -136,12 +148,7 @@ body{
       padding: 10px;
       width: 100%;
       overflow-x: auto;
-      .follow-name-list{
-        position: relative;
-        min-height: 65px;
-        padding: 10px 5px;
-        line-height: 20px;
-      }
+      
 
       .approve-textarea{
         width: 100%;

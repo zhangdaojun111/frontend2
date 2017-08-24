@@ -2,6 +2,7 @@
     <div class="workflow-wrapper">
         <div class="workflow-container">
             <div class="workflow-main" style="position:relative;top:0">
+                <div  id="print" class="printBtn"> <i class="workflow-icon icon-workflow-icon11"></i> 打印 </div>
                 <div class="workflow-foot">
                     <div class="workflow-box flex flex-column flex-start">
                         <div class="workflow-box-l flex">
@@ -22,7 +23,24 @@
                     
                 </div>
                 <div class="workflow-foot">
-                    <div class="workflow-box" id="add-home"></div>
+                    <div class="workflow-box" id="add-home">
+                            <div class="flex flex-column flex-start">
+                                    <div class="workflow-box-l flex">
+                                        <div class="tit">
+                                            <i class="workflow-icon icon-workflow-icon3"></i>
+                                            <span>关注人</span>
+                                        </div>
+                                        <div class="add-follow flex" id="addFollower"><span class="workflow-icon icon-workflow-icon6 add-icon"></span><span>添加关注人</span></div>
+                                    </div>
+                                    <div class="workflow-box-r">
+                                        <div class="content">
+                                            <div class="follow-name-list" id="addFollowerList">
+                                                        
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                    </div>
                     <div class="workflow-box flex flex-column flex-start" id="flow-node">
                         <div class="workflow-box-l flex">
                             <div class="tit">
@@ -54,8 +72,8 @@
             </div>
             <div class="workflow-flex">
                 <div id="submit">提交</div>
-                <div id="print">打印</div>
             </div>
         </div>
     </div>
 </div>
+<div id="add-follow"></div>

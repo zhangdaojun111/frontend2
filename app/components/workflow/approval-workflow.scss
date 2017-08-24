@@ -186,12 +186,12 @@ btn-div{
           padding: 0 10px;
           display: flex;
           align-items: center;
+          width: 100px;
           .workflow-icon{
             margin-right: 5px;
           }
         }
         .workflow-look{
-          margin-left: 40px;
           .previewBtn{
            padding: 0 7px;
             height: 40px;
@@ -244,7 +244,4 @@ btn-div{
       width: 300px;
     }
   }
-}
-html,body{
-  height: 100%;
 }

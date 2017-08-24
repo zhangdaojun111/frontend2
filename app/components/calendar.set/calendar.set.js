@@ -1,6 +1,12 @@
 /**
  * Created by zj on 2017/8/3.
  */
+
+/**
+ * @author zj
+ * @description 对日历表进行设置
+ */
+
 import Component from "../../lib/component";
 import template from './calendar.set.html';
 import './calendar.set.scss';
@@ -207,16 +213,11 @@ let config = {
                 if(res['success'] === 1){
                     MSG.alert('重置成功');
                     setTimeout( ()=>{
-                        // CalendarSetService.getColumnList(this.data.tableId).then(res => {
-                        //     console.log(res);
-                        // })
                         this.el.find('.set-items').empty();
                         this.actions.getColumnListData(this.data.tableId);
                     },200 )
                 }else  if(res['success'] === 0){
                     MSG.alert('重置失敗');
-                    //MSG.alert(res['error']);
-                    // this.saveStatus.emit( res['success'] === "0" );
                 }
             });
         },
@@ -304,25 +305,6 @@ let config = {
                         }
                     }
                 });
-                // UserInfoService.getAllUsersInfo().then(user => {
-                //     this.data.copypeople = [];
-                //     for( let data of user.rows ){
-                //         this.data.copypeople.push( {name:data.name,id:data.id} );
-                //     }
-                // });
-                //
-                // CalendarSetService.getEmailSetting().then(res => {
-                //     this.data.emailAddressList = [];
-                //     for(let x in res['data']){
-                //         this.data.emailAddressList.push({
-                //             name:res['data'][x]['host']+'('+res['data'][x]['user']+')',
-                //             id:res['data'][x]['id']?res['data'][x]['id']:''
-                //         });
-                //         if(res['data'][x]['is_default'] === 1){
-                //             this.data.emailAddress = res['data'][x]['id'];
-                //         }
-                //     }
-                // });
 
             });
         }
@@ -335,6 +317,7 @@ let config = {
             this.data.tableId = window.config.table_id;
             this.actions.getColumnListData(this.data.tableId);
         }
+
         UserInfoService.getAllUsersInfo().then(user => {
             this.data.copypeople = [];
             for( let data of user.rows ){
