@@ -4,6 +4,7 @@
 import 'jquery-ui/ui/widgets/button.js';
 import 'jquery-ui/ui/widgets/dialog.js';
 import CalendarSetting from '../../components/calendar/calendar.setting/calendar.setting';
+import '../../assets/scss/core/common.scss';
 import {PMAPI, PMENUM} from '../../lib/postmsg';
 import {CalendarSetService} from '../../services/calendar/calendar.set.service';
 CalendarSetService.getMenu().then(res => {
