@@ -1598,9 +1598,7 @@ let config = {
             this.el.find( '.dataGrid-edit-group' )[0].style.display = this.data.editMode ? 'block':'none';
             let columns = this.data.editMode ? this.columnDefsEdit : this.columnDefs;
             this.agGrid.gridOptions.api.setColumnDefs( columns );
-            if( !this.data.editMode ){
-                this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
-            }
+            this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
         },
         //编辑模式保存数据
         onEditSave: function (cancel) {
@@ -1707,6 +1705,9 @@ let config = {
                 for (let k in row) {
                     if (dgcService.checkObejctNotEqual(row[k],originRow[k])) {
                         //buildin字段做转化
+                        if( !this.data.colControlData[k] ){
+                            continue;
+                        }
                         if(this.data.colControlData[k]['type'] == 'Buildin'||this.data.colControlData[k]['type'] == 'Radio'||this.data.colControlData[k]['type'] == 'Select'){
                             data[k] = this.data.colControlData[k]['options_objs'][row[k]];
                         } else if(Array.isArray(row[k])){
@@ -2268,7 +2269,7 @@ let config = {
             console.log( "行双击查看" )
             console.log( data )
             //屏蔽分组行
-            if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0) ){
+            if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0)||this.data.editMode ){
                 return;
             }
             let obj = {
