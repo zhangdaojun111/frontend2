@@ -1719,10 +1719,11 @@ let config = {
                                 if( wrong > 0 ){
                                     let err = wrong + '条数据保存失败，失败原因：' + errorText;
                                     msgBox.alert( err );
+                                    this.actions.getGridData();
                                 }else {
                                     msgBox.showTips( '执行成功！' )
+                                    this.actions.toogleEdit();
                                 }
-                                this.actions.toogleEdit();
                             })
                             HTTP.flush();
                         }
