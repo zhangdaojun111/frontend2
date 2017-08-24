@@ -4,20 +4,48 @@
 import Component from "../../../../lib/component";
 import template from './jurisdiction.html';
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
+import {AutoSelect} from '../../../util/autoSelect/autoSelect';
 import {dataTableService} from '../../../../services/dataGrid/data-table.service';
 import {HTTP} from "../../../../lib/http";
 import './jurisdiction.scss'
 
 let config = {
     template: template,
+    choosedList:[],
     data: {
-        type:'',
-        content:'',
-        dataInfo:'',
+        choosed:[],
+        selectAry:[],
+        userPerm:{}
     },
+    binds:[
+        {
+            event:'click',
+            selector:'.jurisdiction-btn',
+            callback: _.debounce(function(){
+                PMAPI.closeIframeDialog(window.config.key, {
+                    type:'save',
+                    choosedList:this.choosedList,
+                });
+            }, 0)
+        }
+    ],
     actions: {
         afterGetMsg:function() {
-
+            let _this = this;
+            let selectData = {
+                list: this.data.selectAry,
+                displayType: 'static',
+                choosed: this.data.choosed,
+                editable: true,
+                displayChoosed: true,
+                onSelect:function(choosed) {
+                    _this.choosedList = [];
+                    for(let item of choosed) {
+                        _this.choosedList.push(item['id']);
+                    }
+                }
+            }
+            this.append(new AutoSelect(selectData),this.el.find('.jurisdiction-select'))
         }
     },
     afterRender: function() {

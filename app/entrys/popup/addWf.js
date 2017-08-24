@@ -1,5 +1,6 @@
-/*
- * Created by qmy on 2017/8/10.
+/**
+ *@author qiumaoyun
+ *默认新增，编辑等操作工作流逻辑
  */
 import '../../assets/scss/main.scss';
 import 'jquery-ui/ui/widgets/button.js';
@@ -66,6 +67,7 @@ serchStr.split('&').forEach(res => {
     var arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
+is_view=obj.btnType==='view'?1:0;
 Mediator.publish('workflow:getKey', obj.key);
 (async function () {
     return workflowService.getPrepareParams({table_id:obj.table_id});
@@ -76,8 +78,7 @@ Mediator.publish('workflow:getKey', obj.key);
         $('#place-form').html('');
         FormEntrys.createForm({
             el: '#place-form',
-            is_view: 0,
-            from_workflow:1,
+            is_view: is_view,
             from_focus: 0,
             table_id: obj.table_id,
             parent_table_id:obj.parent_table_id,
@@ -85,7 +86,10 @@ Mediator.publish('workflow:getKey', obj.key);
             parent_temp_id:obj.parent_temp_id,
             parent_record_id:obj.parent_record_id,
             btnType:obj.btnType,
-            real_id:obj.real_id
+            real_id:obj.real_id,
+            isAddBuild:obj.isAddBuild,
+            id:obj.id,
+            key:obj.key
         });
     }else{
         Mediator.publish('workflow:getParams', res.data.flow_data);
@@ -101,7 +105,7 @@ Mediator.subscribe('workflow:getflows', (res)=> {
         el: '#place-form',
         form_id: res.form_id,
         flow_id:res.flow_id,
-        is_view: 0,
+        is_view: is_view,
         from_workflow:1,
         from_focus: 0,
         btnType:'none',
@@ -110,7 +114,10 @@ Mediator.subscribe('workflow:getflows', (res)=> {
         parent_real_id:obj.parent_real_id,
         parent_temp_id:obj.parent_temp_id,
         parent_record_id:obj.parent_record_id,
-        real_id:obj.real_id
+        real_id:obj.real_id,
+        isAddBuild:obj.isAddBuild,
+        id:obj.id,
+        key:obj.key
     });
     
 });
