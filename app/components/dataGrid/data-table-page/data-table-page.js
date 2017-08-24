@@ -2,6 +2,7 @@ import Component from "../../../lib/component";
 import template from './data-table-page.html';
 import './data-table-page.scss';
 import {HTTP} from "../../../lib/http";
+import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import dataTableAgGrid from "../data-table-page/data-table-agGrid/data-table-agGrid"
 import {dataTableService} from "../../../services/dataGrid/data-table.service"
 let config = {
@@ -56,6 +57,15 @@ let config = {
         this.actions.addClick();
         //获取在途数据
         this.actions.getInProcessNum();
+
+        //订阅数据失效
+        PMAPI.subscribe(PMENUM.on_the_way_invalid, (info) => {
+            let tableId = info.data.table_id;
+            if( this.data.tableId == tableId ){
+                console.log( '在途数量失效刷新' );
+                this.actions.getInProcessNum();
+            }
+        })
     }
 };
 

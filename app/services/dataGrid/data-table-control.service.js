@@ -66,7 +66,7 @@ export const dgcService = {
         colId: "number",
         hide: false,
         field: "number",
-        width: 30,
+        width: 40,
         headerClass:'ag-grid-number',
         suppressSorting: true,
         suppressResize: true,
@@ -337,7 +337,7 @@ export const dgcService = {
     replacingIcons: {
         checkboxChecked: '<img src="'+require('../../assets/images/dataGrid/icon_checkbox_yes.png') +'" />',
         checkboxUnchecked: '<img src="'+require('../../assets/images/dataGrid/icon_checkbox_no.png') +'" />',
-        checkboxIndeterminate: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
+        checkboxIndeterminate: '<img src="'+require('../../assets/images/dataGrid/icon_checkbox_no.png') +'" />',
         columnMovePivot: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
         columnMoveGroup: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
         columnMovePin: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
@@ -418,9 +418,10 @@ export const dgcService = {
             ele.className = '';
         }else if(ele.className.indexOf( "my-ag-cell-focus1" )!=-1){//第二次点击
             node.setSelected(true, false);
-            ele.className = 'my-ag-cell-focus1 my-ag-cell-focus2';
+            $(ele).addClass('my-ag-cell-focus1 my-ag-cell-focus2');
         }else{//第一次点击
-            ele.className = 'my-ag-cell-focus1';
+             // ele.className = 'my-ag-cell-focus1';
+            $(ele).addClass('my-ag-cell-focus1')
         }
     },
     //返回数据url
@@ -441,7 +442,7 @@ export const dgcService = {
         let classObj = {};
         let i = 1;
         for( let k in obj ){
-            let css = ('.hrader-bgColor-'+ i + '{background-color:'+ k +';}');
+            let css = ('.hrader-bgColor-'+ i + '{background-color:'+ this.colorRgb(k,0.7) +';}');
             for( let f of obj[k] ){
                 classObj[f] = ('hrader-bgColor-'+i);
             }

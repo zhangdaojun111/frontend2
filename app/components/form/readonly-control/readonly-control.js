@@ -102,6 +102,8 @@ let config={
 }
 class ReadonlyControl extends Component {
     constructor(data,events){
+        console.log('历史值呢');
+        console.log(events);
         super(config,data,events);
     }
 }

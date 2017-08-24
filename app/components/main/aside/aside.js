@@ -258,6 +258,9 @@ let config = {
                 this.actions.showCommonMenu();
             }
         }
+        Mediator.on("personal:setAvatar",() => {
+            this.actions.resetAvatar();
+        })
     },
     firstAfterRender: function() {
         Mediator.on('aside:size', (order) => {
@@ -269,6 +272,9 @@ let config = {
         });
         Mediator.on("personal:setAvatar",() => {
             this.actions.resetAvatar();
+        });
+        Mediator.on('commonuse:change', () => {
+            this.actions.showCommonMenu(true);
         });
     },
     beforeDestory: function() {
