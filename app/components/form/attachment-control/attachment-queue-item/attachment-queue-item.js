@@ -13,7 +13,6 @@ let config = {
     data:{
         real_type:9,
         file:{},
-        callback:function () {},
         _controlItem:{
             pack_size:1024*768,
             process: 0,
@@ -68,7 +67,7 @@ let config = {
             this.data._controlItem.uploadingState = 'stopped';
         },
         cancelUploading:function () {
-            this.data.callback('delete');
+            this.trigger('changeFile',{event:'delete'});
         },
         deleteMe:function () {
             //删除文件
@@ -78,7 +77,7 @@ let config = {
                 dinput_type:this.data.real_type
             }).then(res=>{
                 if(res.success){
-                    this.data.callback('delete',this.data._controlItem);
+                    this.trigger('changeFile',{event:'delete',data:this.data._controlItem});
                 } else {
                     alert('删除文件失败，请再试一次');
                 }
@@ -121,7 +120,7 @@ let config = {
                             this.data._controlItem.uploadingState = 'finished';
                             this.data._controlItem['fileId'] = res.file_id;
                             this.data._controlItem['thumbnail'] = res.thumbnail;
-                            this.data.callback('finished',this.data._controlItem);
+                            this.trigger('changeFile',{event:'finished',data:this.data._controlItem});
                         }
                     } else {
                         this.data._controlItem.uploadingState = 'failed';
@@ -155,12 +154,7 @@ let config = {
 }
 
 export default class AttachmentQueueItem extends Component{
-    constructor(file,real_type,callback){
-        config.data.file = file;
-        config.data.real_type = real_type;
-        if(callback){
-            config.data.callback = callback;
-        }
-        super(config);
+    constructor(data,event){
+        super(config,data,event);
     }
 }

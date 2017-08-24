@@ -1,3 +1,7 @@
+/**
+ *@author chenli
+ *@description 隐藏框控件
+ */
 import Component from '../../../lib/component';
 let config={
     template:`
