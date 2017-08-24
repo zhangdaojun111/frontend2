@@ -90,7 +90,6 @@ let config = {
             return this.data.choosed;
         },
         setChoosed: function (choosed) {
-            console.log(choosed);
             this.data.choosed = choosed;
             this.actions.renderChoosed();
         },
@@ -141,7 +140,7 @@ let config = {
             }, 50)
         },{
             event: 'input',
-            selector: 'input.text',
+            selector: 'input.auto-select-text',
             callback: _.debounce(function (context) {
                 this.actions.onInput($(context));
             }, 1000)
