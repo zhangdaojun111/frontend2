@@ -709,6 +709,7 @@ let config = {
                         for( let k in this.data.searchOldValue ){
                             this.data.searchOldValue[k] = '';
                         }
+                        this.data.queryList = {};
                         this.actions.setFloatingFilterInput();
                         this.data.filterParam.filter = [];
                         this.actions.getGridData();
