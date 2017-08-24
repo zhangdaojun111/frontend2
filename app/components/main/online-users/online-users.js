@@ -8,6 +8,7 @@ import agGrid from '../../dataGrid/agGrid/agGrid';
 import dataPagination from '../../dataGrid/data-table-toolbar/data-pagination/data-pagination';
 import {GlobalService} from "../../../services/main/globalService"
 
+let component;
 let config = {
     template:template,
     data:{
@@ -16,6 +17,7 @@ let config = {
     },
     actions:{
         loadData:function (_param) {
+            component.showLoading();
             _param = _param || {};
             let param = _.defaultsDeep(_param, {
                 rows: this.pagination.data.rows,
@@ -30,7 +32,9 @@ let config = {
                         rowData: data.rows
                     });
                     this.pagination.actions.setPagination(data.total, param.currentPage);
+                    component.hideLoading();
                 }else{
+                    component.hideLoading();
                     console.log("获取在线用户数据失败",data.err);
                 }
             });
@@ -71,7 +75,7 @@ class OnlineUser extends Component {
 export const OnlineDisplay = {
     el:null,
     show:function () {
-        let component = new OnlineUser();
+        component = new OnlineUser();
         this.el = $('<div class="online-users-page">').appendTo(document.body);
         component.render(this.el);
         this.el.dialog({
