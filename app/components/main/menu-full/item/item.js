@@ -79,13 +79,17 @@ let config = {
             this.trigger('onSubCheckboxChange', value);
         },
         setCheckboxValue: function (value) {
-            this.ownCheckbox[0].checked = value;
+            if (this.ownCheckbox.length) {
+                this.ownCheckbox[0].checked = value;
+            }
             this.subComponents.forEach((comp) => {
                 comp.actions.setCheckboxValue(value);
             })
         },
         setCheckboxValueSelf: function (value) {
-            this.ownCheckbox[0].checked = value;
+            if (this.ownCheckbox.length) {
+                this.ownCheckbox[0].checked = value;
+            }
         },
         checkChildrenChecked: function () {
             let allCheckbox = this.el.find('.childlist input:checkbox');
@@ -148,7 +152,7 @@ let config = {
         }
 
         if (_.isUndefined(this.data.items)) {
-            this.data.key = this.data.table_id || this.data.ts_name;
+            this.data.key = this.data.ts_name || this.data.table_id;
             if (window.config.commonUse.data.indexOf(this.data.key) !== -1) {
                 this.actions.onCheckboxChange({checked: true});
             }

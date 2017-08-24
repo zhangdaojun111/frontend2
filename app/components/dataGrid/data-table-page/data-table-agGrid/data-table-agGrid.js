@@ -344,6 +344,7 @@ let config = {
                     }
                     //编辑模式用
                     if( edit ){
+                        obj['cellStyle'] = {'font-style': 'normal','background':'#EBEBEB'};
                         this.actions.setEditableCol( obj );
                     }
                     column.push(obj);
@@ -378,6 +379,9 @@ let config = {
                         default:
                             break;
                     }
+                }
+                if( editCol['editable'] == true ){
+                    editCol['cellStyle'] = {'font-style': 'normal'};
                 }
                 if(controlData['reg']){
                     editCol['reg']=controlData['reg'];
@@ -690,8 +694,25 @@ let config = {
         },
         //重置偏好
         resetPreference: function () {
+            let ediv = document.createElement('div');
             let eHeader = document.createElement('span');
+            let eImg = document.createElement('img');
+            eImg.src = require( '../../../../assets/images/dataGrid/quxiao.png' );
+            eImg.className = 'resetFloatingFilter';
+            eImg.addEventListener( 'click',()=>{
+                msgBox.confirm( '确定清空筛选数据？' ).then( r=>{
+                    if( r ){
+                        for( let k in this.data.searchValue ){
+                            this.data.searchValue[k] = '';
+                        }
+                        this.actions.setFloatingFilterInput();
+                        this.data.filterParam.filter = [];
+                        this.actions.getGridData();
+                    }
+                } )
+            } )
             if( !this.data.noNeedCustom ){
+                ediv.appendChild( eHeader )
                 eHeader.innerHTML = "初";
                 eHeader.className = "table-init-logo";
                 eHeader.addEventListener('click', () => {
@@ -721,7 +742,8 @@ let config = {
                     } )
                 });
             }
-            return eHeader;
+            ediv.appendChild( eImg )
+            return ediv;
         },
         //生成操作列
         operateCellRenderer: function (params) {
@@ -782,6 +804,12 @@ let config = {
             str += '</div>';
             this.data.operateColWidth=20*operateWord+20;
             return str
+        },
+        //设置搜索input值
+        setFloatingFilterInput: function () {
+            for( let k in this.data.searchValue ){
+                this.el.find( '.filter-input-'+k )[0].value = this.data.searchValue[k];
+            }
         },
         //floatingFilter拼参数
         floatingFilterPostData: function (col_field, keyWord, searchOperate) {
@@ -1229,7 +1257,8 @@ let config = {
                     fixCols: this.data.fixCols,
                     tableId: this.data.tableId,
                     agGrid: this.agGrid,
-                    close: this.actions.calcCustomColumn
+                    close: this.actions.calcCustomColumn,
+                    setFloatingFilterInput: this.actions.setFloatingFilterInput
                 }
                 this.customColumnsCom  = new customColumns(custom);
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));

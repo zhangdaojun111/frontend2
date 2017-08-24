@@ -19,7 +19,7 @@ let config = {
                         this.eGui.innerHTML = '<input disabled type="text"/>';
                     }
                     this.eFilterInput = this.eGui.querySelector('input');
-                    this.eFilterInput.className = 'filter-input';
+                    this.eFilterInput.className = 'filter-input filter-input-' + searchFiled;
                     this.eGui.style.height = '25px';
                     this.eFilterInput.style.width = '80%';
                     this.eFilterInput.style.height = '18px';

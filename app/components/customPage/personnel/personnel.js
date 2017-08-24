@@ -231,7 +231,9 @@ let config = {
                     for( let k in obj ){
                         if( k.indexOf( keyword )!=-1 ){
                             f.cond.keyword = obj[k];
-                            f.cond.operate = 'exact';
+                            if( f.cond.operate == '$regex' ){
+                                f.cond.operate = 'exact';
+                            }
                         }
                     }
                 }
@@ -400,7 +402,7 @@ let config = {
                         dataTableService.delTableData( json ).then( res=>{
                             if( res.success ){
                                 msgBox.showTips( '删除成功' )
-                                this.actions.setInvalid();
+                                this.actions.setInvalid()
                             }else {
                                 msgBox.alert( res.error )
                             }
