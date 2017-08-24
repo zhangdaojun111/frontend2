@@ -59,7 +59,7 @@ export const CreateForm={
     //创建人员信息表
     async formVersionuser(allData){
         let data=allData.data;
-        let html=userHtml.replace('</tbody> </table>');
+        let html=userHtml.replace('</tbody> </table>','');
         let res=await FormService.getSysConfig();
         let form_data=res.userInfo['system_config'][0]["field_mapping"];
         let arrData = [];
@@ -137,7 +137,7 @@ export const CreateForm={
     },
     //创建部门信息表
     async formVersiondepartment(allData){
-        let html=departmentHtml.replace('</tbody> </table>');
+        let html=departmentHtml.replace('</tbody> </table>','');
         let res=await FormService.getSysConfig();
         let data=allData.data;
         let form_data=res.userInfo['system_config'][1]["field_mapping"];

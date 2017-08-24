@@ -30,7 +30,6 @@ export const UserInfoService = {
     saveAvatar:function (data) {
         let url= '/user_preference/';
         let formatData = JSON.stringify(data);
-        console.log(data);
         let body = {
             action:"save",
             content:formatData,
@@ -109,14 +108,19 @@ export const UserInfoService = {
         })
     },
 
-    saveUserConfig:function (data) {
-        let url = '/user_preference/';
-        let temp = Utils.formatParams(data);
+    saveUserConfig:function (json,json2) {
+        let url = 'user_preference';
 
-        return this.http.postImmediately({
-            url:url,
-            data:temp,
-            type:'post'
-        })
+        let p1 = HTTP.post(url,json);
+        let p2 = HTTP.post(url,json2);
+
+        let res = Promise.all([p1,p2]);
+        HTTP.flush();
+        return res;
+    },
+    getUserInfoByName:function (json) {
+        console.log(json);
+        let url = '/get_user_info_by_name/';
+        return HTTP.postImmediately(url,Utils.formatParams(json))
     }
 };

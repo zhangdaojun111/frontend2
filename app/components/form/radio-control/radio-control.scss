@@ -2,8 +2,8 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   background: #0E7AEF;
   transform: translate(-50%,-50%);
   border-radius: 50%;
@@ -34,7 +34,7 @@ input:focus{
 
 .df-input-label {
   margin-right: 10px;
-  line-height: 30px;
+ // line-height: 30px;
   font-weight:normal;
   position: relative;
 }
@@ -46,12 +46,12 @@ input:focus{
   display: inline-block;
 }
 .df-input-radio-wrapper{
-  width: 14px;
-  height: 14px;
+  width: 10px;
+  height: 10px;
   position: absolute;
   border: 1px solid #0E7AEF;
   border-radius: 50%;
-  top: 5px;
+  top: 2px;
   left: 4px;
   /*z-index:-1;*/
 }

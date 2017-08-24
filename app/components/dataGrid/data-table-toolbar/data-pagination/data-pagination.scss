@@ -25,6 +25,26 @@
     .ui-icon-refresh:hover {
       cursor: pointer;
     }
+
+    .data-invalid {
+
+    }
+
+    @keyframes freshTip {
+      0%{color:rgb(255,84,0);}
+      16%{color:#fff;}
+      33%{color:rgb(255,84,0);}
+      49%{color:#fff;}
+      66%{color:rgb(255,84,0);}
+      82%{color:#fff;}
+      100%{color:rgb(255,84,0);}
+    }
+    .freshtip{
+      font-weight: normal;
+      margin-left:10px;
+      animation: freshTip 4s;
+      animation-fill-mode: forwards;
+    }
   }
   .table-oprate-con {
     float: right;

@@ -5,7 +5,7 @@ export default {
 
     alert: function(msg) {
         let config = _.defaultsDeep({}, alertConfig);
-        config.data.text = msg;
+        config.data.text = encodeURIComponent(msg);
         return PMAPI.openDialogByComponent(config, {
             width: 300,
             height: 170,
@@ -20,7 +20,7 @@ export default {
             resolveFunc = resolve;
         });
         let config = _.defaultsDeep({}, confirmConfig);
-        config.data.text = msg;
+        config.data.text = encodeURIComponent(msg);
         PMAPI.openDialogByComponent(config, {
             width: 300,
             height: 170,

@@ -32,8 +32,8 @@ export let componentsJson = {
         'name': '多表图',
         'component': FormMultiComponent
     },
-    'ninegrid': {
-        'entry': 'ninegrid',
+    'nineGrid': {
+        'entry': 'nineGrid',
         'name': '九宫图',
         'component': FormNineGridComponent
     },

@@ -6,11 +6,12 @@ $.widget( "custom.erdsDialog", $.ui.dialog, {
         this.uiDialogTitlebarFull = $( "<button type='button' title='全屏'></button>" )
             .button( {
                 label: '',
-                icon: "ui-icon-newwin",
+                // icon: "ui-icon-newwin",
+                icon:"icon-maximize",
                 showLabel: false
             } )
             .appendTo( this.uiDialogTitlebar );
-
+        let that = this;
         this._addClass( this.uiDialogTitlebarFull, "ui-dialog-titlebar-full" );
         this._on( this.uiDialogTitlebarFull, {
             click: function( event ) {
@@ -20,12 +21,18 @@ $.widget( "custom.erdsDialog", $.ui.dialog, {
                     this.option('height', this.options.originHeight);
                     this.option('position', { my: "center", at: "center", of: window });
                     this.fullScreen = false;
+
+                    that._removeClass($(that.uiDialogTitlebarFull[0].firstChild),"ui-icon-newwin");
+                    that._addClass($(that.uiDialogTitlebarFull[0].firstChild),"icon-maximize");
                 } else {
                     this.options.originHeight = this.options.height;
                     this.options.originWidth = this.options.width;
-                    this.option('height', document.documentElement.clientHeight);
-                    this.option('position', { my: "center", at: "center", of: window });
+                    this.option('height', $(document).height());
+             this.option('position', { my: "center", at: "center", of: window });
                     this.fullScreen = true;
+
+                    that._removeClass($(that.uiDialogTitlebarFull[0].firstChild),"icon-maximize");
+                    that._addClass($(that.uiDialogTitlebarFull[0].firstChild),"ui-icon-newwin");
                 }
             }
         } );
