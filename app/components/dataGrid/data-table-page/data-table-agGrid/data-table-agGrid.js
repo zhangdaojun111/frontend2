@@ -344,6 +344,7 @@ let config = {
                     }
                     //编辑模式用
                     if( edit ){
+                        obj['cellStyle'] = {'font-style': 'normal','background':'#EBEBEB'};
                         this.actions.setEditableCol( obj );
                     }
                     column.push(obj);
@@ -378,6 +379,9 @@ let config = {
                         default:
                             break;
                     }
+                }
+                if( editCol['editable'] == true ){
+                    editCol['cellStyle'] = {'font-style': 'normal'};
                 }
                 if(controlData['reg']){
                     editCol['reg']=controlData['reg'];
@@ -690,8 +694,17 @@ let config = {
         },
         //重置偏好
         resetPreference: function () {
+            let ediv = document.createElement('div');
             let eHeader = document.createElement('span');
+            let eImg = document.createElement('img');
+            eImg.src = require( '../../../../assets/images/dataGrid/quxiao.png' );
+            eImg.className = 'resetFloatingFilter';
+            eImg.addEventListener( 'click',()=>{
+                this.data.searchValue = {};
+                this.data.searchOldValue = {};
+            } )
             if( !this.data.noNeedCustom ){
+                ediv.appendChild( eHeader )
                 eHeader.innerHTML = "初";
                 eHeader.className = "table-init-logo";
                 eHeader.addEventListener('click', () => {
@@ -721,7 +734,8 @@ let config = {
                     } )
                 });
             }
-            return eHeader;
+            ediv.appendChild( eImg )
+            return ediv;
         },
         //生成操作列
         operateCellRenderer: function (params) {
