@@ -17,7 +17,8 @@ import {FormSingleComponent} from './single/single';
 let config = {
     template:template,
     data: {
-        assortment: ''
+        assortment: '',
+
     },
     actions: {},
     afterRender() {
@@ -35,7 +36,33 @@ let config = {
         });
 
         this.el.on('click', '.save-btn', (event) => {
-            // this.saveChart();
+            this.saveChart();
+        });
+
+        // 多行表格显示多少列
+        this.el.on('change', '.form-group-show-columns input', function() {
+            let num = parseInt($(this).val());
+             if (num !== NaN) {
+                 me.formGroup.countNum = num;
+            };
+        })
+
+        // 判断是多行表格还是单行表格
+        this.el.on('change', '.form-group-single .single-checkbox input', function() {
+            let checked= $(this).is(':checked');
+            me.formGroup.single = checked ? 1 : 0;
+        })
+
+        // 判断默认排序
+        this.el.on('change', '.table-sort-columns .sort-group input', function() {
+            let val = $(this).val();
+            me.formGroup.sort = val;
+        });
+
+        // 表格对齐方式
+        this.el.on('change', '.form-group-align select', function() {
+            let align = $(this).val();
+            me.formGroup.alignment = align;
         });
 
         this.el.on('change', '.single-checkbox input', function(event){
@@ -75,6 +102,10 @@ export class FormTableComponent extends BiBaseComponent{
         this.formGroup = {
             chartName: base,
             share: share,
+            countNum: 10,
+            single:0,
+            sort: -1,
+            alignment: 'left',
             sortColumn:instanceFitting({
                 type:'autoComplete',
                 data: {
@@ -112,7 +143,52 @@ export class FormTableComponent extends BiBaseComponent{
                 this.formGroup.sortColumn.autoSelect.reload();
             }
         }
+
     }
+
     reset() {
     }
+
+    /**
+     * 保存表格数据
+     */
+    async saveChart() {
+        const fields  = this.formGroup;
+        const data = {};
+        Object.keys(fields).map(k => {
+            if (fields[k].getValue) {
+                data[k] = fields[k].getValue();
+            };
+        });
+        const chart = {
+            assortment: 'table',
+            chartName:data.chartName,
+            countColumn:{},
+            columns:Array.from(this.columns.data.choosed),
+            icon: data.share.icons,
+            source: data.share.chartSource,
+            theme: data.share.themes,
+            filter: [],
+            countNum:fields.countNum,
+            single:fields.single,
+            singleColumnWidthList:[],
+            sort: fields.sort,
+            sortColumns:data.sortColumn.hasOwnProperty('id') ? [data.sortColumn] : [],
+            alignment:fields.alignment,
+            columnNum:this.single.data.singleNum
+        };
+        console.log(chart);
+        let res = await ChartFormService.saveChart(JSON.stringify(chart));
+        if (res['success'] == 1) {
+            msgbox.alert('保存成功');
+            if (!chart['chartName']['id']) {
+                this.reset();
+                this.reload();
+            };
+            Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
+        } else {
+            msgbox.alert(res['error'])
+        };
+    }
+
 }

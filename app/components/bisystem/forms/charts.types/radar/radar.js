@@ -110,6 +110,11 @@ export class FormRadarComponent extends BiBaseComponent{
                 me: this,
                 container: 'form-group-product'
             }),
+            auto:instanceFitting({
+                type:'auto',
+                me:this,
+                container:('form-group-auto'),
+            })
         };
 
     }
