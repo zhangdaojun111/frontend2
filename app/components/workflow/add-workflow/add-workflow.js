@@ -1,15 +1,14 @@
-import Component from '../../lib/component';
+import Component from '../../../lib/component';
 import template from './add-workflow.html';
-import './approval-workflow.scss';
+import '../approval-workflow/approval-workflow.scss';
 import './add-workflow.scss';
-import Mediator from '../../lib/mediator';
-import WorkFlow from './workflow-drawflow/workflow';
-import {workflowService} from '../../services/workflow/workflow.service';
-import {FormService} from "../../services/formService/formService"
-import msgBox from '../../lib/msgbox';
-// import AddSigner from './add-signer';
-import {PMAPI,PMENUM} from '../../lib/postmsg';
-import SettingPrint from '../form/setting-print/setting-print'
+import Mediator from '../../../lib/mediator';
+import WorkFlow from '../workflow-drawflow/workflow';
+import {workflowService} from '../../../services/workflow/workflow.service';
+import {FormService} from "../../../services/formService/formService"
+import msgBox from '../../../lib/msgbox';
+import {PMAPI,PMENUM} from '../../../lib/postmsg';
+import SettingPrint from '../../form/setting-print/setting-print'
 
 let config={
     template: template,

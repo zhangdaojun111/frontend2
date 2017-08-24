@@ -1,3 +1,7 @@
+/**
+ *@author chenli
+ *@description 普通输入框控件
+ */
 import Component from '../../../lib/component';
 import '../base-form/base-form.scss';
 import {FormService} from "../../../services/formService/formService"
@@ -22,7 +26,6 @@ let config={
             let reg = this.data.reg;
             let required = this.data.required
 
-                //console.log(" val:"+val+"  func:"+func+"  reg:"+reg);
                 //输入框输入时的实时函数验证
                 if(val != "" && !$.isEmptyObject(func)){
                     for( let r in func){
@@ -154,21 +157,14 @@ let config={
             }
         },
         {
-            event: 'click',
+            event: 'mousedown',
             selector: 'input',
             callback: function(){
                 this.el.find("input").css({"border":"1px solid rgb(169, 210, 255)","background-color":"rgb(255, 255, 255)"});
             }
         },
         {
-            event: 'focus',
-            selector: 'input',
-            callback: function(){
-                this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
-            }
-        },
-        {
-            event: 'blur',
+            event: 'mouseleave',
             selector: 'input',
             callback: function(){
                 this.el.find("input").css({"border":"1px solid rgb(226, 226, 226)","background-color":"rgb(255, 255, 255)"});
@@ -181,7 +177,7 @@ let config={
         this.el.find('.search').on( 'input', _.debounce(function () {
             _this.actions.keyup();
         }, 200));
-        /* setBorderColor*/
+
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
             this.el.find('.ui-width').attr('disabled',true);

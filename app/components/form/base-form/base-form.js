@@ -1289,7 +1289,9 @@ let config={
         addNewBuildIn(data){
             let _this=this;
             _this.data['quikAddDfield']=data.dfield;
-            PMAPI.openDialogByIframe(`/iframe/addBuildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
+            // PMAPI.openDialogByIframe(`/iframe/addBuildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
+            console.log(`/iframe/addWf/?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}&key=${this.data.key}&btnType=new`);
+            PMAPI.openDialogByIframe(`/iframe/addWf/?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}&key=${this.key}&btnType=new`,{
                 width:800,
                 height:600,
                 title:`快捷添加内置字段`,
@@ -1299,7 +1301,7 @@ let config={
                     return;
                 }
                 let options=_this.data.childComponent[_this.data['quikAddDfield']].data['options'];
-                if(options[0]['label'] == '请选择' || options[0]['label']==''){
+                if(options[0] && options[0]['label'] == '请选择' || options[0]['label']==''){
                     options.splice(1,0,data.new_option);
                 }else{
                     options.splice(0,0,data.new_option);
@@ -1607,7 +1609,7 @@ let config={
                     case 'editControl':
                         data[key]['temp_id']=data['temp_id']['value'];
                         data[key]['table_id']=data['table_id']['value'];
-                        let contractControl = new ContractControl(data[key]);
+                        let contractControl = new ContractControl(data[key],actions);
                         contractControl.render(single);
                         _this.data.childComponent[data[key].dfield] =  contractControl;
                         break;
@@ -1678,32 +1680,9 @@ let config={
         //     _this.el.find('.ui-btn-box').css({'bottom':(-1*$('.wrap').get(0).scrollTop +' px'),'width':'calc(100% + '+$('.wrap').get(0).scrollLeft+'px)'});
         // })
         //默认表单样式
-        if( _this.el.find('table').hasClass('form-version-table-user') ){
-            // _this.el.find('table').parents().parents('#detail-form').addClass('detail-form-style');
-            // _this.el.find('table').off();
-            // _this.el.find('table>tbody').append('<div class="more"><span>展开更多</span></div>')
-            //
-            // if(_this.el.find('table>tbody').height() <= _this.el.find('table').height()){
-            //     _this.el.find('.overflow').removeClass('overflow');
-            // }
-            _this.el.find('.btn').css("display","none");
-
-        //     _this.el.find('.more').on('click',function () {
-        //         _this.el.find('.more').hide();
-        //         _this.el.find('.overflow').removeClass('overflow');
-        //         _this.el.find('table').css({'overflow-y':'auto',"height":"520px"});
-        //     })
+        if( _this.el.find('table').hasClass('form-version-table-user')||  _this.el.find('table').hasClass('form-version-table-department')||  _this.el.find('table').hasClass('form-default')){
+            _this.el.find('table').parents('#detail-form').css("background","#F2F2F2");
          }
-        _this.el.find(".overflow").on("scroll",function () {
-            let overflowHight = _this.el.find('.overflow').scrollTop();
-           // console.log(overflowHight)
-            _this.el.find('table').height()
-            if(overflowHight>=400){
-                _this.el.find('.btn').show();
-            }else{
-                _this.el.find('.btn').hide();
-            }
-        })
     },
     beforeDestory(){
         this.el.off();

@@ -109,7 +109,7 @@ export const fieldTypeService = {
     },
     //附件
     attachment: function( data ){
-        let arr = [this.ATTACHMENT,this.VIDEO_TYPE,this.IMAGE_TYPE];
+        let arr = [this.ATTACHMENT,this.IMAGE_TYPE];
         return arr.indexOf( data ) != -1;
     }
 }
