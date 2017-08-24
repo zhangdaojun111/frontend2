@@ -7,6 +7,15 @@
         border: double #e4e4e4;
         .ag-body-viewport{
             overflow-x: hidden;
+            .grid-cell-info{
+                &.already-read-icon{
+                    color: #31fc38;
+                }
+
+                &.not-read-icon{
+                    color:red;
+                }
+            }
         }
     }
     .pagination {
