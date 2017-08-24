@@ -113,7 +113,6 @@ export class FormTableComponent extends BiBaseComponent{
             }
         }
     }
-
     reset() {
     }
 }
