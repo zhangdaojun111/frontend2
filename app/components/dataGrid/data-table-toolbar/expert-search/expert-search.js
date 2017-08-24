@@ -32,6 +32,8 @@ let config = {
                     <option value="$gt">大于</option>
                     <option value="$lt">小于</option>
                     <option value="$ne">不等于</option>`,
+    optionHtmlFour : `<option value="exact">等于</option>
+                      <option value="$ne">不等于</option>`,
     data: {
         tableId: null,
         num:1,
@@ -160,7 +162,8 @@ let config = {
                     switch (item.searchType) {
                         case "datetime": htmlStr = config.optionHtmlTwo; break;
                         case "text": htmlStr = config.optionHtmlOne; break;
-                        case "number": htmlStr = config.optionHtmlThree; break
+                        case "number": htmlStr = config.optionHtmlThree; break;
+                        case "person": htmlStr = config.optionHtmlFour; break;
                     }
                 }
             })
