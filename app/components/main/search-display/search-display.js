@@ -89,7 +89,7 @@ let config = {
             this.attachmentPageController.actions.paginationChanged = this.actions.attachmentPageChanged;
         },
         dataPageChanged:function (data) {
-            // Component.showLoading();
+            this.showLoading();
             //data页面改变分页，根据页面请求新数据，并刷新页面内容
             let searchData = {
                 keyword:this.data.searchText,            //搜索文字
@@ -107,18 +107,18 @@ let config = {
                     this.el.find('.data-count-display').html(str);
                     this.actions.displayDataResult(tempData);
                     this.dataPageController.setPagination(tempData.total,data.currentPage);
-                    // Component.hideLoading();
+                    this.hideLoading();
                 }else{
                     console.log("查询失败",result);
-                    // Component.hideLoading();
+                    this.hideLoading();
                 }
             }).fail((err) => {
                 console.log("查询失败",err);
-                // Component.hideLoading();
+                this.hideLoading();
             });
         },
         attachmentPageChanged:function (data) {
-            // Component.showLoading();
+            this.showLoading();
             let searchData = {
                 keyword:this.data.searchText,            //搜索文字
                 rows:18 ,                               //每页显示的个数
@@ -136,15 +136,15 @@ let config = {
                     this.el.find('.attachment-count-display').html(str);
                     this.actions.displayAttachmentResult(tempData);
                     this.attachmentPageController.actions.setPagination(tempData.total, data.currentPage);
-                    // Component.hideLoading();
+                    this.hideLoading();
                 } else {
                     console.log("查询数据失败");
-                    // Component.hideLoading();
+                    this.hideLoading();
                 }
             })
         },
         sendSearch:function () {
-            // Component.showLoading();
+            this.showLoading();
             let searchData = {
                 keyword:this.data.searchText,            //搜索文字
                 rows:24 ,                               //每页显示的个数
@@ -181,21 +181,20 @@ let config = {
                     this.el.find('.attachment-count-display').html(str);
                     this.actions.displayAttachmentResult(tempData);
                     this.attachmentPageController.actions.setPagination(tempData.total,1);
-                    // Component.hideLoading();
+                    this.hideLoading();
                 }else{
                     console.log("查询失败",result);
-                    // Component.hideLoading();
+                    this.hideLoading();
                 }
             }).fail((err) => {
                 console.log("查询失败",err);
-                // Component.hideLoading();
+                this.hideLoading();
             });
         }
     },
     afterRender:function () {
         this.actions.initPageController();
         this.actions.setSearchContent();
-
         this.el.on('click','.data-btn',() => {
             this.actions.showDataPage();
         }).on('click','.attachment-btn',() => {
