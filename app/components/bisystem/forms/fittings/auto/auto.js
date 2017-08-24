@@ -10,8 +10,38 @@ import {FormFittingAbstract} from '../form.abstract'
 let config = {
     template: template,
     data: {},
+    actions:{},
+    binds:[
+        {
+            event: 'focus',
+            selector: '.mat-input-container .mat-input-val',
+            callback: function () {
+                this.el.find('.mat-select-list').fadeIn();
+            }
+        },
+        {
+            event: 'blur',
+            selector: '.mat-input-container .mat-input-val',
+            callback: function () {
+                this.el.find('.mat-select-list').fadeOut();
+            }
+        },
+        // {
+        //     event: 'click',
+        //     selector: '.mat-select-list ul li span',
+        //     callback: function () {
+        //
+        //     }
+        // }
+    ],
     afterRender() {},
-    firstAfterRender() {}
+    firstAfterRender() {
+        let me = this;
+        this.el.on('click','.mat-select-list ul li span',function(){
+            let val = $(this).html();
+            me.el.find('.mat-input-container .mat-input-val').val(val);
+        })
+    }
 };
 
 export class AutoComponent extends FormFittingAbstract {

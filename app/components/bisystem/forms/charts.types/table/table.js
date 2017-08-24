@@ -112,7 +112,6 @@ export class FormTableComponent extends BiBaseComponent{
                 this.formGroup.sortColumn.autoSelect.reload();
             }
         }
-
     }
 
     reset() {
