@@ -26,7 +26,6 @@ let config={
             let reg = this.data.reg;
             let required = this.data.required
 
-                //console.log(" val:"+val+"  func:"+func+"  reg:"+reg);
                 //输入框输入时的实时函数验证
                 if(val != "" && !$.isEmptyObject(func)){
                     for( let r in func){
@@ -178,7 +177,7 @@ let config={
         this.el.find('.search').on( 'input', _.debounce(function () {
             _this.actions.keyup();
         }, 200));
-        /* setBorderColor*/
+
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
             this.el.find('.ui-width').attr('disabled',true);
