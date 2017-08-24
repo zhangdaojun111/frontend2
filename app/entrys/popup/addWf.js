@@ -1,5 +1,6 @@
-/*
- * Created by qmy on 2017/8/10.
+/**
+ *@author qiumaoyun
+ *默认新增，编辑等操作工作流逻辑
  */
 import '../../assets/scss/main.scss';
 import 'jquery-ui/ui/widgets/button.js';
@@ -85,7 +86,10 @@ Mediator.publish('workflow:getKey', obj.key);
             parent_temp_id:obj.parent_temp_id,
             parent_record_id:obj.parent_record_id,
             btnType:obj.btnType,
-            real_id:obj.real_id
+            real_id:obj.real_id,
+            isAddBuild:obj.isAddBuild,
+            id:obj.id,
+            key:obj.key
         });
     }else{
         Mediator.publish('workflow:getParams', res.data.flow_data);
@@ -110,7 +114,10 @@ Mediator.subscribe('workflow:getflows', (res)=> {
         parent_real_id:obj.parent_real_id,
         parent_temp_id:obj.parent_temp_id,
         parent_record_id:obj.parent_record_id,
-        real_id:obj.real_id
+        real_id:obj.real_id,
+        isAddBuild:obj.isAddBuild,
+        id:obj.id,
+        key:obj.key
     });
     
 });

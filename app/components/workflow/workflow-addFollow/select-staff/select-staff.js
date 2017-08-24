@@ -1,3 +1,7 @@
+/**
+ *@author qiumaoyun
+ *添加关注人中间组件
+ */
 import Component from '../../../../lib/component';
 // import './workflow-addFollow.scss';
 import Mediator from '../../../../lib/mediator';
