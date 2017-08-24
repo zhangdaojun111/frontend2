@@ -2044,7 +2044,6 @@ let config = {
             if(data.colDef.real_type == fieldTypeService.VIDEO_TYPE && data.event.srcElement.id == 'file_view'){
                 let fieldids = data['value']
                 let file_dinput_type = data.colDef.real_type;
-                console.log(location);
                 ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids}&download=0&dinput_type=${file_dinput_type}`;
                 PMAPI.openDialogByComponent(ViewVideo,{
                     width:1000,
