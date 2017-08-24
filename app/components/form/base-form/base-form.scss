@@ -1,8 +1,9 @@
 #detail-form{
   height: 100%;
   width: 100%;
-  //overflow: auto;
-  background: #F2F2F2;
+  overflow-y: auto;
+  overflow-x: hidden;
+  //background: #F2F2F2;
   @import "dateTime";
   .ui-history {
     display: inline-block;
@@ -17,7 +18,7 @@
     color: #ff0617;
     width: 16px;
     height: 16px;
-    margin-left: 5px;
+    margin-left: 10px;
     background: url("../../../assets/images/form/icon_bitian.png");
     vertical-align: middle;
   }
@@ -26,7 +27,7 @@
     color: #ff0617;
     width: 16px;
     height: 16px;
-    margin-left: 5px;
+    margin-left: 10px;
     background: url("../../../assets/images/form/icon_bitian_yes.png");
     vertical-align: middle;
   }
@@ -41,8 +42,9 @@
     }
   }
   .form-cell {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
+    //padding: 10px;
+    padding-right: 10px;
+   // border-bottom: 1px solid #ddd;
     .wrap {
       display: flex;
       flex-direction: row;
@@ -75,7 +77,7 @@
       td{
         line-height: 1.42857143;
         padding: 8px;
-        vertical-align: middle;
+       vertical-align: middle;
         border: 1px solid rgb(240,240,240);
         white-space: nowrap;
         width: auto;
@@ -164,16 +166,16 @@
     content: "\271A";
     color: #0E7AEF;
     font-size: 1.5em;
-    font-weight: bold;
-    margin-left: 15px;
+   // font-weight: bold;
+    margin-left: 10px;
   }
   .wrap{
     position: relative;
     width: 100%;
     height: 100%;
     overflow: auto;
-    padding-top: 20px;
-    padding-bottom: 70px;
+    //padding-top: 20px;
+   //padding-bottom: 70px;
   }
   .ui-box-1 {
     width: 100%;

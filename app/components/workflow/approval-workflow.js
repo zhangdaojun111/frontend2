@@ -136,6 +136,7 @@ let config={
             switch (type){
                 case 'follow-view' :
                     appendDiv.find(".preview-node1").html(addFollow);
+                    $("#cloneId1").find('.add-follow').remove();
                     appendDiv.find(".preview-node1").toggle().siblings().hide();
                     break;
                 case 'flow-view' :
@@ -223,13 +224,13 @@ let config={
 
     },
     afterRender(){
-        
+
         let __this=this;
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             this.data.workflowData=msg.data[0];
             WorkFlow.show(msg.data[0],'#drawflow');
         });
-      
+
         this.el.on('click','.gz',(e)=>{
             this.actions.toogz(e);
         });
@@ -286,7 +287,7 @@ let config={
         Mediator.subscribe("workflow:sendImgInfo",(e)=>{
             this.data.imgInfo=e;
         });
-        
+
     }
 };
 class ApprovalWorkflow extends Component{
@@ -299,6 +300,14 @@ let component = new ApprovalWorkflow();
 let el = $('#approval-workflow');
 component.render(el);
 
+export default {
+    create(elem){
+        let component = new ApprovalWorkflow();
+        let el = $(elem);
+        component.render(el);
+    },
+};
+
 Mediator.subscribe("workflow:getStampImg",(msg)=>{
     WorkflowSeal.showheader(msg);
-})
+});

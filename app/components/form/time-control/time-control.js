@@ -1,3 +1,7 @@
+/**
+ *@author chenli
+ *@description 时间控件
+ */
 import Component from '../../../lib/component'
 import template from './time-control.html'
 import './time-control.scss';
@@ -66,10 +70,11 @@ let config={
         }else{
             this.el.find('.ui-width').attr('disabled',false);
         }
-        if(_this.data.value == ''){
-            this.el.find(".timeInput").val("时:分:秒");
-        }else{
+        //回显
+        if(_this.data.value){
             _this.el.find(".timeInput").val(_this.data.value);
+        }else{
+            this.el.find(".timeInput").val("时:分:秒");
         }
 
         //增加0

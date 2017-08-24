@@ -100,7 +100,6 @@ let config = {
             this.actions.delimg(e);
         })
         Mediator.subscribe('workflow:getFormTrans',(e)=>{
-            console.log(e+"............................");
             if(!e){
                if(this.formTrans) {
                    this.actions.trans();

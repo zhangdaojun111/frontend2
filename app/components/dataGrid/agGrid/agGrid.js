@@ -119,9 +119,11 @@ let config = {
         //重新赋值
         setGridData: function ( json ) {
             if( json.rowData ){
+                this.data.rowData = json.rowData;
                 this.gridOptions.api.setRowData( json.rowData );
             }
             if( json.footerData ){
+                this.data.footerData = json.footerData;
                 this.gridOptions.api.setPinnedBottomRowData( json.footerData );
             }
             // this.agGrid.gridOptions.api.redrawRows();

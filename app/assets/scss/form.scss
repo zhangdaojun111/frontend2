@@ -5,8 +5,12 @@
   width: 100%;
   height: auto;
   max-width: 100%;
+  font-family: '微软雅黑';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 12px;
+  text-align: left;
 }
-
 .table-bordered > thead > tr > th,
 .table-bordered > thead > tr > td {
   border-bottom-width: 2px;
@@ -15,18 +19,14 @@
   background-color: #f5f5f5;
 }
 
-.overflow{
-  height: 96%;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-/*默认表单样式
+/*表单样式*/
+/*
 *form-version-table-user
 *form-version-table-department
 */
-.form-version-table-user,.form-version-table-department{
-      margin: 10px;
-      background: #FFFFFF;
+.form-version-table-user,.form-version-table-department,.form-default{
+    margin: 10px;
+    background: #FFFFFF;
     tr td:first-child{
        width:30%!important;
        background: #FFFFFF;
@@ -37,12 +37,12 @@
     }
     .auto-select-component, .auto-select-component input.text{
       background: url("../images/form/select-down.png") no-repeat  right;
-      width: 172px!important;
+      width: 180px!important;
       height: 24px;
     }
     .dynamic-form-input,.textArea {
-      width: 160px!important;
-      height:20px;
+      width: 168px!important;
+      height:22px;
     }
     .textArea {
       color: #000000;
@@ -53,15 +53,61 @@
       opacity: 100;
       padding: 0 5px;
     }
-  }
 
+  }
+//创建默认表单
+.form-default{
+  .dynamic-form-input,.textArea {
+    width: 180px!important;
+    height:24px;
+  }
+  //上传文件，截图
+  .upload-file,.shot-screen{
+    width: 65px;
+    height: 24px;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 1);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(215, 215, 215, 1);
+    border-radius: 4px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #666666;
+  }
+  .auto-select-component .choosed .item {
+    margin: 2px 3px 0 0;
+  }
+  //日期时间
+  .time{
+    width: 180px;
+  }
+  .cancel-x{
+    top: -20px;
+    left: 165px;
+  }
+  .date_yy-mm-dd，datetime,.timeInput{
+    color: #999999;
+  }
+  .ui-datepicker-trigger{
+    position: relative;
+    left: -20px;
+  }
+  .date-close{
+    position: relative;
+    left: -50px;
+  }
+}
 
 
 //固定按钮
 .ui-btn-box{
   margin: 0 auto;
   display: block;
-  bottom: 0
+  bottom: 0;
+  background: #F2F2F2;
 }
 .ui-btn-box button{
   width: 91px;
