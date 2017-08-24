@@ -2364,7 +2364,9 @@ let config = {
                 modal:true
             } ).then( (data)=>{
                 if( data.type == "batch" ){
+                    this.data.batchIdList = data.ids;
                     this.actions.returnBatchData( data.ids );
+                    this.actions.getGridData();
                 }
             } )
         },
