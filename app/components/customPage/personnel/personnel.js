@@ -83,7 +83,19 @@ let config = {
         //宽度自适应
         isAutoWidth: false,
         //上次的状态
-        lastGridState: []
+        lastGridState: [],
+        //查看某人权限的部门名称
+        permDeparmentName:'',
+        // //部门field
+        // departmentField: '',
+        // //用户id
+        // userId:'',
+        userPerm:{
+            id:'',
+            department:'',
+            options:[],
+            value:[]
+        }
     },
     actions: {
         //获取表头数据
@@ -115,6 +127,9 @@ let config = {
                     }
                     if( col.name == '用户状态' ){
                         this.data.userStatus = col.field;
+                    }
+                    if( col.name == '所在部门' ){
+                        this.data.departmentField = col.field;
                     }
                     let obj = {
                         headerName: col.name,
@@ -285,6 +300,7 @@ let config = {
                     }
                 },
                 treeType:"SINGLE_SELECT",
+                selectParentMode:'Select',
                 isSearch: true,
                 treeName:"department-tree"
             });
@@ -608,6 +624,63 @@ let config = {
             let url = dgcService.returnIframeUrl( '/form/index/',obj );
             this.actions.openSourceDataGrid( url,'查看' )
         },
+        getPermData:function() {
+            let obj = {
+                user_id:this.data.userPerm.id,
+                action:'get'
+            };
+            dataTableService.getPermData(obj).then( res=>{
+                let selectAry = []
+                res.options.forEach((item)=>{
+                    selectAry.push({
+                        id:item.value,
+                        name:item.label
+                    })
+                    for(let i = 0; i < res.data.length; i++){
+                        if(item.value == res.data[i]){
+                            this.data.userPerm.value.push({
+                                id:item.value,
+                                name:item.label
+                            });
+                        }
+                    }
+                })
+                this.data.userPerm.options = res.options || [];
+                let json = {
+                    userPerm: this.data.userPerm,
+                    selectAry: selectAry,
+                    choosed: this.data.userPerm.value
+                }
+                this.actions.onOpendIframe(json)
+            })
+            HTTP.flush();
+        },
+        setPermData: function(list){
+            let obj = {
+                department: this.data.userPerm.department,
+                user_id: this.data.userPerm.id,
+                action: 'save',
+                perms: JSON.stringify(list)
+            }
+            dataTableService.getPermData(obj).then( res=>{
+                if(res.succ == 0){
+                    msgBox.alert('保存成功')
+                }
+            })
+            HTTP.flush();
+        },
+        onOpendIframe: function(obj){
+            PMAPI.openDialogByIframe(`/iframe/jurisdiction/`,{
+                width:450,
+                height:550,
+                title:`权限设置`,
+                modal:true
+            },{obj}).then(res=>{
+                if(res.type == 'save'){
+                    this.actions.setPermData(res.choosedList)
+                }
+            })
+        },
         onCellClicked: function ($event) {
             if( $event.colDef.headerName == '操作' ){
                 if( $event.event.srcElement.className == 'edit' ){
@@ -629,20 +702,9 @@ let config = {
                     this.actions.openSourceDataGrid( url,'查看' )
                 }
                 if( $event.event.srcElement.className == 'jurisdiction' ){
-                    let obj = {
-                        table_id: this.data.tableId,
-                        btnType: 'view',
-                        real_id: $event.data._id,
-                    }
-                    // let url = dgcService.returnIframeUrl( '/form/index/',obj );
-                    PMAPI.openDialogByIframe(`/iframe/jurisdiction/`,{
-                        width:500,
-                        height:700,
-                        title:`权限`,
-                        modal:true
-                    },'111').then(res=>{
-
-                    })
+                    this.data.userPerm.id = $event.data['_id'];
+                    this.data.userPerm.department = $event.data[this.data.departmentField];
+                    this.actions.getPermData()
                 }
             }
         },

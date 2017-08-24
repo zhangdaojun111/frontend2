@@ -10,7 +10,7 @@ let config = {
     },
 
     actions: {
-        showChildrenAtFull: function() {
+        showChildrenAtFull: function () {
             this.childlist.show();
             this.iconWrap.removeClass('ui-state-focus').addClass('ui-state-active');
             this.icon.removeClass('ui-icon-caret-1-e').addClass('ui-icon-caret-1-s');
@@ -19,13 +19,13 @@ let config = {
                 brother.actions.hideChildrenAtFull();
             });
         },
-        hideChildrenAtFull: function() {
+        hideChildrenAtFull: function () {
             this.childlist.hide();
             this.iconWrap.removeClass('ui-state-active').addClass('ui-state-focus');
             this.icon.removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-e');
             this.data.display = false;
         },
-        onItemClickAtFull: function() {
+        onItemClickAtFull: function () {
             if (this.data.items && this.data.items.length) {
                 if (this.data.type === 'full') {
                     if (this.data.display === true) {
@@ -72,9 +72,32 @@ let config = {
                     url: this.data.url
                 });
             }
+        },
+        onCheckboxChange: function (context, event) {
+            let value = context.checked;
+            this.actions.setCheckboxValue(value);
+            this.trigger('onSubCheckboxChange', value);
+        },
+        setCheckboxValue: function (value) {
+            this.ownCheckbox[0].checked = value;
+            this.subComponents.forEach((comp) => {
+                comp.actions.setCheckboxValue(value);
+            })
+        },
+        setCheckboxValueSelf: function (value) {
+            this.ownCheckbox[0].checked = value;
+        },
+        checkChildrenChecked: function () {
+            let allCheckbox = this.el.find('.childlist input:checkbox');
+            let allChecked = this.el.find('.childlist input:checked');
+            if (allCheckbox.length === allChecked.length) {
+                this.actions.setCheckboxValueSelf(true);
+            } else {
+                this.actions.setCheckboxValueSelf(false);
+            }
         }
     },
-    binds:[
+    binds: [
         {
             event: 'click',
             selector: '> .menu-full-item > .row.full',
@@ -101,20 +124,35 @@ let config = {
             callback: function () {
                 this.actions.onItemClickAtMini();
             }
+        }, {
+            event: 'change',
+            selector: '> .menu-full-item .custom-checkbox input:checkbox',
+            callback: function (context, event) {
+                this.actions.onCheckboxChange(context, event);
+            }
         }
     ],
     afterRender: function () {
+        this.ownCheckbox = this.el.find('> .menu-full-item .custom-checkbox input:checkbox');
         // 子菜单
         this.childlist = this.el.find('> .childlist');
         // 自己
         this.row = this.el.find('> .menu-full-item > .row');
         this.iconWrap = this.el.find('> .menu-full-item > .row > .icon');
         this.icon = this.iconWrap.find('> .ui-icon');
-
         this.row.addClass(this.data.type);
+        let that = this;
         if (this.data.type === 'full') {
             this.el.off('mouseenter');
             this.el.off('mouseleave');
+        }
+
+        if (_.isUndefined(this.data.items)) {
+            this.data.key = this.data.table_id || this.data.ts_name;
+            if (window.config.commonUse.data.indexOf(this.data.key) !== -1) {
+                this.actions.onCheckboxChange({checked: true});
+            }
+            this.ownCheckbox.addClass('leaf').attr('key', this.data.key);
         }
 
         if (this.data.items) {
@@ -125,11 +163,16 @@ let config = {
                     searchDisplay: true,
                     type: this.data.type
                 });
-                let component = new FullMenuItem(newData);
+
+                let component = new FullMenuItem(newData, {
+                    onSubCheckboxChange: function (value) {
+                        that.actions.checkChildrenChecked();
+                    }
+                });
                 this.append(component, this.childlist, 'li');
             });
         }
-        if (this.data.root !== true ) {
+        if (this.data.root !== true) {
             if (this.data.type === 'full') {
                 let offset = this.data.offset;
                 if (this.data.items) {
@@ -153,8 +196,8 @@ let config = {
 }
 
 class FullMenuItem extends Component {
-    constructor(data) {
-        super(config, data)
+    constructor(data, event) {
+        super(config, data, event)
     }
 }
 

@@ -147,7 +147,7 @@
         }
 
         .tabs {
-            padding: 20px 0 10px;
+            padding: 10px 0 10px;
             position: relative;
             p {
                 float: left;
@@ -169,9 +169,28 @@
                 height: 16px;
                 position: absolute;
                 right: 10px;
-                top: 20px;
+                top: 10px;
                 cursor: pointer;
                 background: url("../../../assets/images/framework/edit.png");
+            }
+        }
+        .edit-model-title {
+            display: none;
+            padding: 10px 15px;
+            line-height: 18px;
+            font-size: 14px;
+            color: #ccc;
+            background-color: #252525;
+            a {
+                float: right;
+                cursor: pointer;
+                color: #0088ff;
+            }
+            border-bottom: 1px solid #444;
+        }
+        .menu {
+            &.edit {
+                background-color: #252525;
             }
         }
     }

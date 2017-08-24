@@ -255,7 +255,8 @@ $sub_color: #0088ff;
                 border-radius: 50%;
                 overflow: hidden;
                 position: absolute;
-                .default_avatar{
+                //background-image: url("../../../assets/images/framework/default_avatar_64.png");
+                &.default_avatar{
                     background-image: url("../../../assets/images/framework/default_avatar_64.png");
                 }
                 img{
