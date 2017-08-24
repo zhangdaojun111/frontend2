@@ -35,25 +35,14 @@ export class SingleComponent extends BiBaseComponent{
      */
     renderFitting() {
 
-        this.singles = {
-            singleY:instanceFitting({
+        this.formYAxis = {
+            yAxis:instanceFitting({
                 type:'checkbox',
                 me: this,
                 data: {
                     value:null,
                     checkboxs:[
                         {value:'', name:'是否为管理员'},
-                    ],
-                },
-                container: 'single-columns'
-            }),
-            singleM:instanceFitting({
-                type:'checkbox',
-                me: this,
-                data: {
-                    value:null,
-                    checkboxs:[
-                        {value:'', name:'交通补贴'},
                     ],
                 },
                 container: 'single-columns'

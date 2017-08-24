@@ -25,7 +25,12 @@ let config = {
     firstAfterRender() {
         // 监听数据源变化
         this.el.on(`${this.data.assortment}-chart-source`,(event,params) => {
-            console.log(params);
+            this.chartSourceChange(params['sources']);
+        })
+
+        // 保存饼图配置
+        this.el.on('click', '.chart-pie .save-btn', (event) => {
+            this.saveChart()
         })
     }
 }
@@ -70,7 +75,10 @@ export class FormPieComponent extends BiBaseComponent{
             pieX:instanceFitting({
                 type:'autoComplete',
                 me: this,
-                container: 'pie-x'
+                container: 'pie-x',
+                data: {
+                    label:'x轴字段'
+                }
             }),
         };
     }
@@ -94,9 +102,72 @@ export class FormPieComponent extends BiBaseComponent{
     }
 
     /**
+     * 数据源变化执行一些列动作
+     * @param sources = 数据源数据
+     */
+    chartSourceChange(sources) {
+        if (this.formGroup.pieX) {
+            // 加载x轴autoComplete
+            if (this.formGroup.pieX.autoSelect) {
+                this.formGroup.pieX.autoSelect.data.choosed = [];
+                this.formGroup.pieX.autoSelect.data.list = sources['x_field'];
+                this.formGroup.pieX.autoSelect.reload();
+                // if (this.editModeOnce && this.editChart) {
+                //     if (this.editChart.hasOwnProperty('chartName')) {
+                //         if (this.editChart['product'].hasOwnProperty('id')) {
+                //             this.formGroup.product.setValue(this.editChart['product'])
+                //         }
+                //     }
+                // }
+            }
+        };
+        if (this.formGroup.single) {
+            // 加载单条数据y轴数据
+            this.formGroup.single.formYAxis.yAxis.data.checkboxs = sources['y_field'];
+            this.formGroup.single.formYAxis.yAxis.reload();
+        }
+
+    }
+
+    /**
      * reset实例，当通过路由重新进入实例，清空所有数据
      */
     reset(flag) {
         this.formGroup = {};
+    }
+
+    /**
+     * 提交饼图配置到服务器
+     */
+    async saveChart() {
+        // const fields  = this.formGroup;
+        // const data = {};
+        // Object.keys(fields).map(k => {
+        //     if (fields[k].getValue) {
+        //         data[k] = fields[k].getValue();
+        //     };
+        // });
+        // const chart = {
+        //     assortment: 'radar',
+        //     chartName:data.chartName,
+        //     countColumn:'',
+        //     filter: [],
+        //     columns:Array.from(this.columns.data.choosed),
+        //     product:data.product,
+        //     icon: data.share.icons,
+        //     source: data.share.chartSource,
+        //     theme: data.share.themes,
+        // };
+        // let res = await ChartFormService.saveChart(JSON.stringify(chart));
+        // if (res['success'] == 1) {
+        //     msgbox.alert('保存成功');
+        //     if (!chart['chartName']['id']) {
+        //         this.reset();
+        //         this.reload();
+        //     };
+        //     Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
+        // } else {
+        //     msgbox.alert(res['error'])
+        // };
     }
 }
