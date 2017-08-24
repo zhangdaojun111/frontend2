@@ -44,7 +44,6 @@ let config = {
             let xAxis = [];
             let yAxis = [];
             let legend = [];
-
             // 合并九宫格数据为[[],[],[]]
             new Array(nineType).fill('').forEach((val, index) => {
                 val = grids.slice(index * nineType, index * nineType + nineType);
