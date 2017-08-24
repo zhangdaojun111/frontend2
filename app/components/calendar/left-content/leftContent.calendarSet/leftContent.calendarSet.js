@@ -26,9 +26,9 @@ let config = {
         checkboxcheck:function(data){
             if(data.type === "remind-checkbox"){
                 if(data.data === 1){
-                    this.el.find("#checkbox_a3").addClass('label-select-all-checked');
+                    this.el.find(".checkbox_a3").addClass('label-select-all-checked');
                 } else{
-                    this.el.find("#checkbox_a3").removeClass('label-select-all-checked');
+                    this.el.find(".checkbox_a3").removeClass('label-select-all-checked');
                 }
             }
             if (data.type === "unshowData"){
@@ -48,8 +48,11 @@ let config = {
         }
     },
     actions: {
-        checkbox_a3:function(temp,label_select_all_show,select_label_children,that){
-            that.data.cancel_fields = that.el.find("#checkbox_a2").is(".workflow_checked")? []:['approve'];
+        checkbox_a3:function(temp){
+            let that = this;
+            let label_select_all_show = this.el.find(".label-select-all-show");
+            let select_label_children = this.el.find(".select-label-children");
+            that.data.cancel_fields = that.el.find(".checkbox_a2").is(".workflow_checked")? []:['approve'];
             if(temp.is(".label-select-all-checked")){
                 temp.removeClass("label-select-all-checked");
                 label_select_all_show.removeClass("label-select-all-checked");
@@ -65,7 +68,6 @@ let config = {
                 temp.addClass("label-select-all-checked");
                 label_select_all_show.addClass("label-select-all-checked");
                 select_label_children.removeClass("unchecked");
-                console.log(that.data.hide_item_table,that.data.rows);
                 for(let i = 0;i < that.data.rows.length;i++){
                     if(that.data.hide_item_table.indexOf(that.data.rows[i].table_id) !== -1)
                     {
@@ -105,7 +107,6 @@ let config = {
             that.el.find(select_checkbox_Id).removeClass("label-select-all-show");
             temp.parent(".float-button-group").next(".checkbox-group").find(".select-label-children").each(function(){
                 let filedId = $(this).attr("id").split("-")[2];
-                console.log(filedId);
                 if(that.data.cancel_fields.indexOf(filedId) === -1){
                     that.data.cancel_fields.push(filedId);
                 }
@@ -118,18 +119,17 @@ let config = {
                 }
             });
             if(isAllGroupchecked && that.el.find('.label-select-all-show').length > 0){
-                that.el.find("#checkbox_a3").addClass('label-select-all-checked');
+                that.el.find(".checkbox_a3").addClass('label-select-all-checked');
             }
             if(that.el.find('.label-select-all-show').length ===0){
-                that.el.find("#checkbox_a3").removeClass('label-select-all-checked');
+                that.el.find(".checkbox_a3").removeClass('label-select-all-checked');
             }
             for(let j = 0;j < that.data.rows.length;j++) {
                 if (hide_table_id === that.data.rows[j].table_id) {
                     hide_table_name = that.data.rows[j].table_name;
                 }
             }
-            that.data.hide_table.tableName = hide_table_name;
-            that.data.hide_table.table_Id = hide_table_id;
+            that.data.hide_table = {'tableName':hide_table_name,'table_Id':hide_table_id};
             that.data.hide_item_table.push(hide_table_id);
             that.data.hide_tables.push(that.data.hide_table);
             let preference = {"content":that.data.cancel_fields};
@@ -158,10 +158,10 @@ let config = {
                 that.data.hide_table = {'tableName':"",'table_Id':''}
             }
             if(that.data.cancel_fields.indexOf('approve') ===-1){
-                that.el.find("#checkbox_a2").addClass("workflow_checked");
+                that.el.find(".checkbox_a2").addClass("workflow_checked");
             }
             else{
-                that.el.find("#checkbox_a2").removeClass("workflow_checked");
+                that.el.find(".checkbox_a2").removeClass("workflow_checked");
             }
             this.data.calendarTreeData.rows.forEach((data) =>{
                 that.append(new LeftContentSelect(data,this.data.calendarTreeData.cancel_fields,this.data.hide_item_table,this.data.rows,
@@ -174,7 +174,7 @@ let config = {
                 }
             });
             if(isAllGroupchecked){
-                this.el.find("#checkbox_a3").addClass('label-select-all-checked');
+                this.el.find(".checkbox_a3").addClass('label-select-all-checked');
             }
         },
         showRemindType:function (that,data) {
@@ -208,18 +208,16 @@ let config = {
     binds:[
         {
             event: 'click',
-            selector: '#checkbox_a3',
+            selector: '.checkbox_a3',
             callback: function(temp = this){
-                let label_select_all_show = this.el.find(".label-select-all-show");
-                let select_label_children = this.el.find(".select-label-children");
-                this.actions.checkbox_a3($(temp),label_select_all_show,select_label_children,this);
+                this.actions.checkbox_a3($(temp));
             }
         },
         {
             event: 'click',
             selector: '.approve-label',
             callback: function(){
-                let checkbox_a2 = this.el.find("#checkbox_a2");
+                let checkbox_a2 = this.el.find(".checkbox_a2");
                 this.actions.approve_label(checkbox_a2);
             }
         },
@@ -233,10 +231,9 @@ let config = {
     ],
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
-        let that = this;
-        this.actions.getCalendarTreeData(that);
+        this.actions.getCalendarTreeData(this);
         Mediator.on('calendar-left:showRemindType',data =>{
-            that.actions.showRemindType(that,data)
+            this.actions.showRemindType(this,data)
         });
     },
     beforeDestory: function () {
