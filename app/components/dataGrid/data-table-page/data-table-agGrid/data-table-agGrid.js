@@ -27,6 +27,7 @@ import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
 import AttachmentList from "../../../form/attachment-list/attachment-list";
 import PictureAttachment from "../../../form/picture-attachment/picture-attachment";
 import {PersonSetting} from "../../../main/personal-settings/personal-settings";
+import ViewVideo from "../../../form/view-video/view-video";
 
 
 let config = {
@@ -2039,6 +2040,19 @@ let config = {
                 return;
             }
 
+            //视频字段
+            if(data.colDef.real_type == fieldTypeService.VIDEO_TYPE && data.event.srcElement.id == 'file_view'){
+                let fieldids = data['value']
+                let file_dinput_type = data.colDef.real_type;
+                console.log(location);
+                ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids}&download=0&dinput_type=${file_dinput_type}`;
+                PMAPI.openDialogByComponent(ViewVideo,{
+                    width:1000,
+                    height:600,
+                    title:'视频播放器'
+                })
+            }
+
             //图片查看
             if( data.colDef.real_type == fieldTypeService.IMAGE_TYPE ){
                 let json = {};
@@ -2076,8 +2090,6 @@ let config = {
                         file_ids: JSON.stringify(fileIds),
                         dinput_type:dinput_type
                     }).then(res=>{
-                        console.log('获得的是什么');
-                        console.log(res);
                         let list = res["rows"];
                         for( let data of list ){
                             //附件名称编码转换
