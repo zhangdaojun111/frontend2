@@ -170,6 +170,7 @@ html {
 //loading
 .component-loading-effect {
     position: relative;
+    overflow: hidden;
     > .component-filter-blur {
         filter: blur(5px);
     }
@@ -182,7 +183,7 @@ html {
     z-index: 15;
     left: 0;
     top: 0;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(153, 153, 153, 0.5);
 }
 
 .component-loading-box{
