@@ -26,6 +26,7 @@
 .table-init-logo{
   color:rgb(51,122,183);
   cursor:pointer;
+  line-height: 27px;
 }
 
 .table-init-logo:hover{
@@ -114,6 +115,10 @@
   float: left;
   position: relative;
   height: 100%;
+  .resetFloatingFilter {
+    display: block;
+    margin: auto;
+  }
 }
 
 .group-panel {
@@ -184,4 +189,10 @@
 
 .ag-grid-con {
   height: calc( 100% - 60px );
+}
+.shareAddress {
+  color:#337ab7;
+}
+.num-value-style {
+  float: right;
 }

@@ -60,7 +60,8 @@ let config = {
                 sortingOrder: ['asc','desc','null'],
                 suppressRowClickSelection: true,
                 rowSelection: 'multiple',
-                headerHeight: 25,
+                headerHeight: 30,
+                rowHeight: 30,
                 floatingFiltersHeight: 0,
                 icons: dgcService.replacingIcons,
                 localeText: this.data.localeText,
@@ -118,9 +119,11 @@ let config = {
         //重新赋值
         setGridData: function ( json ) {
             if( json.rowData ){
+                this.data.rowData = json.rowData;
                 this.gridOptions.api.setRowData( json.rowData );
             }
             if( json.footerData ){
+                this.data.footerData = json.footerData;
                 this.gridOptions.api.setPinnedBottomRowData( json.footerData );
             }
             // this.agGrid.gridOptions.api.redrawRows();

@@ -14,6 +14,8 @@ let SocketMgr = {
         };
         this.socket.onmessage = function (event) {
             let data = JSON.parse(event.data);
+            let info = data.info || {};
+            info.typeName = data.type;
             Mediator.emit('socket:' + data.type, data.info);
         };
         this.socket.onclose = function (event) {
@@ -33,7 +35,7 @@ SocketMgr.connect();
 // window.setTimeout(function () {
 //     SocketMgr.socket.send(JSON.stringify({
 //         "test": 1,
-//         'msg_type': 0
+//         'msg_type': 2
 //     }))
 // }, 2000)
 

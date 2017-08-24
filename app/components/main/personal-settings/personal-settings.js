@@ -16,7 +16,6 @@ import OtherLogin from "../login-by-other/login-by-other";
 import Mediator from "../../../lib/mediator";
 
 function getData(component_instance) {
-    // console.log(window.config.sysConfig.userInfo);
     _.defaultsDeep(component_instance.data, {
         avatar: window.config.sysConfig.userInfo.avatar,
         avatar_content:window.config.sysConfig.userInfo.avatar_content,
@@ -27,26 +26,31 @@ function getData(component_instance) {
         user_email:window.config.sysConfig.userInfo.email,
         user_phone:window.config.sysConfig.userInfo.tel,
         otherLoginVisible:window.config.sysConfig.userInfo.is_superuser
-        // otherLoginVisible:1,
     });
 }
 
 let config = {
     template:template,
-    // dataService:UserInfoService,
-    data:{},
+    data:{
+        targetUserName:'',
+    },
     actions:{
         initInfo:function () {
             // 初始化，检测用户头像路径返回值，没有则显示默认头像
             let src = this.data.avatar;
-            console.log(src);
             if(src !== ''){
                 let $img = $("<img>").addClass("user-avatar");
                 $img.attr('src', src);
                 this.el.find("div.avatar-box").append($img);
+                let that = this;
                 $img.on('error', function () {
+                    console.log('error la');
+                    that.el.find("div.avatar-box").addClass('default_avatar');
                     $img.remove();
                 });
+            }else{
+                console.log('no src');
+                this.el.find("div.avatar-box").addClass('default_avatar');
             }
         },
         onImageError: function () {
@@ -96,9 +100,6 @@ let config = {
         editTel:function () {
             this.el.find("input.phone-info").removeAttr("disabled").focus();
         },
-        // saveEmail:function () {
-        //
-        // },
         cancelEdit:function () {
             this.el.find("input.email-info").val(this.data.user_email);
             this.el.find("input.phone-info").val(this.data.user_phone);
@@ -166,13 +167,8 @@ let config = {
         },
         initAvatar:function () {
             let src = this.data.avatar;
-            let para = this.data.avatar_content;
             this.el.find("img.user-avatar")
                 .attr("src",src)
-                // .css("width",para.width)
-                // .css("height",para.height)
-                // .css("left",para.left)
-                // .css("top",para.top)
         },
         clearLocalStorage:function(){
             window.localStorage.clear();
@@ -188,44 +184,76 @@ let config = {
                 $img.attr("src",window.config.sysConfig.userInfo.avatar);
             }
             msgbox.alert("头像设置成功!");
+        },
+        getTargetInfo:function () {
+            UserInfoService.getUserInfoByName(this.data.targetUserName).done((result) => {
+                if(result.success === 1){
+                    //获取data
+                    console.log(result);
+                    let data = result.rows;
+                    this.actions.displayTargetInfo(data);
+                }else{
+                    msgbox.alert("获取数据失败");
+                    // PersonSetting.hide();
+                }
+            });
+        },
+        displayTargetInfo:function (data) {
+            this.el.find('.department-info').val(data.user_department);
+            this.el.find('.email-info').val(data.user_email);
+            this.el.find('.position-info').val(data.user_job);
+            this.el.find('.phone-info').val(data.user_tel);
+            this.el.find('.name').html(this.data.targetUserName.name);
+            if(data.avatar === ""){
+                this.data.avatar = "";
+            }else{
+                this.data.avatar = "/mobile/get_file/?file_id=" + data.avatar + "&download=0";
+            }
+            this.actions.initInfo();
         }
     },
     afterRender:function () {
-       this.actions.initInfo();
-       this.actions.initAvatar();
-       //事件绑定
-        this.el.on("click","div.avatar-box",() => {           //打开头像设置页面
-            this.actions.setAvatar();
-        }).on("click","div.agent-group",() => {                 //设置代理
-            this.actions.setAgent();
-        }).on("click","div.login-group",() => {
-            this.actions.otherLogin();
-        }).on("click",".show-personal-info",() => {          //切换至个人资料
-            this.actions.showPersonalInfo();
-        }).on("click",".show-modify-password",() => {        //切换至修改密码
-            this.actions.showModifyPassword();
-        }).on("click","i.edit-email",() => {            //编辑邮箱
-            this.actions.editEmail();
-        }).on("blur","input.email-info",() => {            //保存邮箱
-            this.actions.saveEdit();
-        }).on("click","i.edit-tel",() => {            //编辑电话
-            this.actions.editTel();
-        }).on("blur","input.phone-info",() => {            //保存电话
-            this.actions.saveEdit();
-        }).on("click",".clear-storage-btn",() => {          //清除缓存
-            this.actions.clearLocalStorage();
-        }).on("click",".cancel-btn",() => {           //取消编辑
-            this.actions.cancelEdit();
-        }).on("click",".save-btn",() => {          //保存
-            this.actions.saveEdit();
-        }).on("click",".confirm-btn",() => {        //修改密码确认
-            this.actions.modifyPassword();
-        }).on("input","input.new-pw",() => {        //监听旧密码的输入
-            this.actions.isLegal();
-        });
+        if(this.data.mode === 'self'){
+            this.actions.initInfo();
+            this.actions.initAvatar();
+            //事件绑定
+            this.el.on("click","div.avatar-box",() => {           //打开头像设置页面
+                this.actions.setAvatar();
+            }).on("click","div.agent-group",() => {                 //设置代理
+                this.actions.setAgent();
+            }).on("click","div.login-group",() => {
+                this.actions.otherLogin();
+            }).on("click",".show-personal-info",() => {          //切换至个人资料
+                this.actions.showPersonalInfo();
+            }).on("click",".show-modify-password",() => {        //切换至修改密码
+                this.actions.showModifyPassword();
+            }).on("click","i.edit-email",() => {            //编辑邮箱
+                this.actions.editEmail();
+            }).on("blur","input.email-info",() => {            //保存邮箱
+                this.actions.saveEdit();
+            }).on("click","i.edit-tel",() => {            //编辑电话
+                this.actions.editTel();
+            }).on("blur","input.phone-info",() => {            //保存电话
+                this.actions.saveEdit();
+            }).on("click",".clear-storage-btn",() => {          //清除缓存
+                this.actions.clearLocalStorage();
+            }).on("click",".cancel-btn",() => {           //取消编辑
+                this.actions.cancelEdit();
+            }).on("click",".save-btn",() => {          //保存
+                this.actions.saveEdit();
+            }).on("click",".confirm-btn",() => {        //修改密码确认
+                this.actions.modifyPassword();
+            }).on("input","input.new-pw",() => {        //监听旧密码的输入
+                this.actions.isLegal();
+            });
+        }else if(this.data.mode === 'other'){
+            this.actions.getTargetInfo();
+        }
+
         //窗口监听来自子窗口的设置头像的消息
         Mediator.on("personal:setAvatar",() => {
-           this.actions.resetAvatar();
+            this.actions.resetAvatar();
+            this.actions.initAvatar();
         })
     },
     beforeDestory:function () {
@@ -234,22 +262,39 @@ let config = {
 };
 
 class PersonalSetting extends Component{
-    constructor(){
+    constructor(userName,mode){
         super(config);
+        this.data.targetUserName = userName;
+        this.data.mode = mode;
     }
 }
 
 export const PersonSetting  = {
     el:null,
     show: function() {
-        let component = new PersonalSetting();
+        let component = new PersonalSetting("","self");
         component.dataService = UserInfoService;
-        this.el = $('<div id="personal-setting-page">').appendTo(document.body);
+        this.el = $('<div class="personal-setting-page">').appendTo(document.body);
         getData(component);
         component.render(this.el);
         this.el.dialog({
             title: '账号设置',
             width: 540,
+            height: 600,
+            modal: true,
+            close: function() {
+                $(this).dialog('destroy');
+                component.destroySelf();
+            }
+        });
+    },
+    showUserInfo:function (targetName) {
+        let component = new PersonalSetting(targetName,"other");
+        this.el = $('<div class="show-other-info-page">').appendTo(document.body);
+        component.render(this.el);
+        this.el.dialog({
+            title: '人员信息',
+            width: 350,
             height: 600,
             modal: true,
             close: function() {

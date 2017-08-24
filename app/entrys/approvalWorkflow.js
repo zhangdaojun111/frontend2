@@ -46,6 +46,10 @@ Mediator.subscribe('workFlow:record_info', (res) => {
         $('#approval-workflow').find('.for-hide').hide();
         $('#approval-workflow').find('#re-app').show();
     };
+    if(res.record_info.status==="已撤回"&&res.record_info.start_handler===window.config.name){
+        $('#approval-workflow').find('.for-hide').hide();
+        $('#approval-workflow').find('#re-app').show();
+    };
     //审批工作流
     (async function () {
         return workflowService.getWorkflowInfo({
@@ -295,7 +299,8 @@ Mediator.subscribe("approval:re-app", (msg) => {
         let postData={
             flow_id:obj.flow_id,
             focus_users:JSON.stringify(focusArr)||[],
-            data:JSON.stringify(formData)
+            data:JSON.stringify(formData),
+            record_id:obj.record_id
         };
         (async function () {
             return await workflowService.createWorkflowRecord(postData);

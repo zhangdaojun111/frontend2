@@ -18,6 +18,7 @@ import customColumns from "../../dataGrid/data-table-toolbar/custom-columns/cust
 import dataPagination from "../../dataGrid/data-table-toolbar/data-pagination/data-pagination";
 import FloatingFilter from "../../dataGrid/data-table-toolbar/floating-filter/floating-filter";
 import {fieldTypeService} from "../../../services/dataGrid/field-type-service";
+import {TabService} from "../../../services/main/tabService";
 import TreeView from "../../../components/util/tree/tree";
 
 let config = {
@@ -83,7 +84,22 @@ let config = {
         //宽度自适应
         isAutoWidth: false,
         //上次的状态
-        lastGridState: []
+        lastGridState: [],
+        //查看某人权限的部门名称
+        permDeparmentName:'',
+        // //部门field
+        // departmentField: '',
+        // //用户id
+        // userId:'',
+        userPerm:{
+            id:'',
+            department:'',
+            options:[],
+            value:[]
+        },
+        field_mapping: {},
+        filter_mapping: {is_active:{'是':1,'否':0},is_superuser:{'是':1,'否':0},status:{'离职':0,'在职':1,'实习':2,'试用':3,'管理员':4,'病休':5}},
+        specialFilter:{},
     },
     actions: {
         //获取表头数据
@@ -100,8 +116,8 @@ let config = {
 
             Promise.all([preferenceData, headerData]).then((res)=> {
                 dgcService.setPreference( res[0],this.data );
-                let oprate = {headerName: '操作',field: 'myOperate', width: 120,suppressFilter: true,suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
-                    return '<div style="text-align:center;"><a class="view" style="color:#337ab7;">查看</a> | <a class="edit" style="color:#337ab7;">编辑</a><div>';
+                let oprate = {headerName: '操作',field: 'myOperate', width: 160,suppressFilter: true,suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
+                    return '<div style="text-align:center;"><a class="view" style="color:#337ab7;">查看</a> | <a class="edit" style="color:#337ab7;">编辑</a> | <a class="jurisdiction" style="color:#337ab7;">权限</a><div>';
                 }}
                 this.data.columnDefs = [
                     dgcService.numberCol,
@@ -113,8 +129,9 @@ let config = {
                     if( col.field == '_id' ){
                         continue;
                     }
-                    if( col.name == '用户状态' ){
-                        this.data.userStatus = col.field;
+                    let filterType = fieldTypeService.searchType(col["real_type"]);
+                    if( this.data.specialFilter[col["field"]] ){
+                        filterType = 'person';
                     }
                     let obj = {
                         headerName: col.name,
@@ -135,13 +152,18 @@ let config = {
                         suppressResize: false,
                         suppressMovable: false,
                         suppressFilter: false,
-                        floatingFilterComponent: this.floatingFilterCom.actions.createFilter(fieldTypeService.searchType(col["real_type"]), col["field"], this.data.searchValue, this.data.searchOldValue),
+                        floatingFilterComponent: this.floatingFilterCom.actions.createFilter(filterType, col["field"], this.data.searchValue, this.data.searchOldValue),
                         floatingFilterComponentParams: {suppressFilterButton: true},
                     }
                     this.data.columnDefs.push( obj );
                 }
                 let need = dgcService.createNeedFields( res[1].rows );
                 this.data.expertSearchFields = need.search;
+                for( let d of this.data.expertSearchFields ){
+                    if( this.data.specialFilter[d.searchField] ){
+                        d.searchType = 'person';
+                    }
+                }
                 //定制列需要字段数据
                 this.data.customColumnsFields = need.custom;
                 this.actions.renderAgGrid();
@@ -199,6 +221,25 @@ let config = {
             this.actions.btnClick();
             this.actions.getUserData();
         },
+        //设置特殊字段filter
+        setEspecialFilter: function (filter) {
+            let newFilter = [];
+            for( let f of filter ){
+                if( this.data.specialFilter[f.cond.searchBy] ){
+                    let obj = this.data.specialFilter[f.cond.searchBy]
+                    let keyword = f.cond.keyword;
+                    for( let k in obj ){
+                        if( k.indexOf( keyword )!=-1 ){
+                            f.cond.keyword = obj[k];
+                            if( f.cond.operate == '$regex' ){
+                                f.cond.operate = 'exact';
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        ,
         //获取数据
         getUserData: function () {
             let json = {
@@ -207,6 +248,8 @@ let config = {
                 rows: this.data.rows,
                 page: this.data.page
             }
+            this.actions.setEspecialFilter(this.data.filterParam.filter);
+            this.actions.setEspecialFilter(this.data.filterParam.expertFilter);
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
             }
@@ -285,6 +328,7 @@ let config = {
                     }
                 },
                 treeType:"SINGLE_SELECT",
+                selectParentMode:'Select',
                 isSearch: true,
                 treeName:"department-tree"
             });
@@ -358,6 +402,7 @@ let config = {
                         dataTableService.delTableData( json ).then( res=>{
                             if( res.success ){
                                 msgBox.showTips( '删除成功' )
+                                this.actions.setInvalid()
                             }else {
                                 msgBox.alert( res.error )
                             }
@@ -564,8 +609,16 @@ let config = {
             this.data.filterParam['is_filter'] = 1;
             this.actions.getUserData();
         },
+        //设置失效
+        setInvalid: function () {
+            this.pagination.data.myInvalid = true;
+        },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title,w,h ) {
+            //暂时刷新方法
+            if( url.indexOf( '/form/index/' ) != -1 ){
+                this.actions.setInvalid();
+            }
             PMAPI.openDialogByIframe( url,{
                 width: w || 1300,
                 height: h || 800,
@@ -608,6 +661,63 @@ let config = {
             let url = dgcService.returnIframeUrl( '/form/index/',obj );
             this.actions.openSourceDataGrid( url,'查看' )
         },
+        getPermData:function() {
+            let obj = {
+                user_id:this.data.userPerm.id,
+                action:'get'
+            };
+            dataTableService.getPermData(obj).then( res=>{
+                let selectAry = []
+                res.options.forEach((item)=>{
+                    selectAry.push({
+                        id:item.value,
+                        name:item.label
+                    })
+                    for(let i = 0; i < res.data.length; i++){
+                        if(item.value == res.data[i]){
+                            this.data.userPerm.value.push({
+                                id:item.value,
+                                name:item.label
+                            });
+                        }
+                    }
+                })
+                this.data.userPerm.options = res.options || [];
+                let json = {
+                    userPerm: this.data.userPerm,
+                    selectAry: selectAry,
+                    choosed: this.data.userPerm.value
+                }
+                this.actions.onOpendIframe(json)
+            })
+            HTTP.flush();
+        },
+        setPermData: function(list){
+            let obj = {
+                department: this.data.userPerm.department,
+                user_id: this.data.userPerm.id,
+                action: 'save',
+                perms: JSON.stringify(list)
+            }
+            dataTableService.getPermData(obj).then( res=>{
+                if(res.succ == 0){
+                    msgBox.alert('保存成功')
+                }
+            })
+            HTTP.flush();
+        },
+        onOpendIframe: function(obj){
+            PMAPI.openDialogByIframe(`/iframe/jurisdiction/`,{
+                width:450,
+                height:550,
+                title:`权限设置`,
+                modal:true
+            },{obj}).then(res=>{
+                if(res.type == 'save'){
+                    this.actions.setPermData(res.choosedList)
+                }
+            })
+        },
         onCellClicked: function ($event) {
             if( $event.colDef.headerName == '操作' ){
                 if( $event.event.srcElement.className == 'edit' ){
@@ -628,6 +738,11 @@ let config = {
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
                     this.actions.openSourceDataGrid( url,'查看' )
                 }
+                if( $event.event.srcElement.className == 'jurisdiction' ){
+                    this.data.userPerm.id = $event.data['_id'];
+                    this.data.userPerm.department = $event.data[this.data.departmentField];
+                    this.actions.getPermData()
+                }
             }
         },
         //排序方式
@@ -637,8 +752,19 @@ let config = {
             this.agGrid.gridOptions["enableServerSideSorting"] = !this.data.frontendSort;
             this.agGrid.gridOptions["enableSorting"] = this.data.frontendSort;
         },
+        //设置特殊字段field信息
+        setFieldMapping: function () {
+            this.data.field_mapping = window.config.system_config[0]['field_mapping'];
+            this.data.userStatus = this.data.field_mapping.status;
+            this.data.departmentField = this.data.field_mapping.department;
+            for( let key in this.data.filter_mapping ) {
+                this.data.specialFilter[this.data.field_mapping[key]] = this.data.filter_mapping[key];
+            }
+        }
     },
     afterRender: function (){
+        TabService.onOpenTab( this.data.tableId );
+        this.actions.setFieldMapping();
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();

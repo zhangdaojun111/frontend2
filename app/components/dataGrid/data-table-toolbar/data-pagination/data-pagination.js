@@ -6,6 +6,7 @@
 import Component from "../../../../lib/component";
 import template from './data-pagination.html';
 import './data-pagination.scss';
+import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import msgBox from '../../../../lib/msgbox';
 import {dataTableService} from "../../../../services/dataGrid/data-table.service";
 import {HTTP} from "../../../../lib/http"
@@ -35,7 +36,11 @@ let config = {
         //是否为超级管理员
         isSuperUser: 0,
         //agGrid配置
-        gridOptions: null
+        gridOptions: null,
+        //是否自己操作的失效刷新
+        myInvalid: false,
+        //是否在刷新
+        onRefresh: false,
     },
     actions: {
         //接受rows值和total值
@@ -168,7 +173,10 @@ let config = {
                 this.actions.onPaginationChanged();
             } )
         },
-        onPaginationChanged: function () {
+        onPaginationChanged: function (invalid) {
+            if( !invalid ){
+                this.el.find( '.data-invalid' )[0].innerHTML = '';
+            }
             let obj = {
                 currentPage: Number(this.data.currentPage),
                 rows: Number(this.data.rows),
@@ -256,6 +264,16 @@ let config = {
                 }
 
             }
+        },
+        //失效刷新
+        invalidTips: function () {
+            this.el.find( '.data-invalid' ).removeClass('freshtip');
+            this.el.find( '.data-invalid' )[0].innerHTML = this.data.myInvalid ? '数据失效，已刷新。' : '数据失效，请刷新。';
+            if( this.data.myInvalid ){
+                this.actions.onPaginationChanged( true );
+            }
+            this.el.find( '.data-invalid' ).addClass('freshtip');
+            this.data.myInvalid = false;
         }
     },
     afterRender: function (){
@@ -263,6 +281,19 @@ let config = {
         this.actions.addClick();
         //表级操作
         this.actions.tableOperate();
+        //订阅数据失效
+        PMAPI.subscribe(PMENUM.data_invalid, (info) => {
+            let tableId = info.data.table_id;
+            if( this.data.tableId == tableId ){
+                if( !this.data.onRefresh ){
+                    this.data.onRefresh = true;
+                    this.actions.invalidTips();
+                    setTimeout( ()=>{
+                        this.data.onRefresh = false;
+                    },100 )
+                }
+            }
+        })
     }
 };
 class dataPagination extends Component {

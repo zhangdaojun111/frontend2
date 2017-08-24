@@ -14,7 +14,7 @@ import msgbox from "../../../../lib/msgbox";
 import TreeView from "../../../../components/util/tree/tree";
 import {AutoSelect} from '../../../../components/util/autoSelect/autoSelect';
 
-
+let component;
 let config = {
     template:template,
     data:{
@@ -33,6 +33,7 @@ let config = {
 
     actions:{
         initData:function () {
+            component.showLoading();
             UserInfoService.getAgentData()
                 .done((result) => {
                     if(result.success === 1){
@@ -44,11 +45,13 @@ let config = {
                         $.extend(true,this.formatData,this.originData.data.workflow_list);
                     }else{
                         msgbox.alert("数据加载失败");
+                        component.hideLoading();
                         throw error("数据加载失败");
                     }
                 }).done(() => {
                 this.actions.initWorkflow();
                 this.actions.initAgentList();
+                component.hideLoading();
             }).catch((err) => {
                 msgbox.alert("数据加载失败");
                 return false;
@@ -102,7 +105,8 @@ let config = {
             let autoSelect = new AutoSelect({
                 list: tempData,
                 multiSelect: false,
-                editable: true,
+                editable: true
+            }, {
                 onSelect: function (choosed) {
                     console.log(choosed);
                     that.actions.setAgentId(choosed);
@@ -251,7 +255,7 @@ class SetAgent extends Component{
 export const agentSetting = {
     el: null,
     show: function() {
-        let component = new SetAgent();
+        component = new SetAgent();
         component.dataService = UserInfoService;
         this.el = $('<div id="set-agent-page">').appendTo(document.body);
         component.render(this.el);

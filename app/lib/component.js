@@ -38,6 +38,7 @@ class Component {
             }
         }
         scan(this);
+        this.subComponents = [];
         this.componentId = componentId++;
         count ++;
     }
@@ -79,8 +80,8 @@ class Component {
         if (this.binds && this.binds.length) {
             let that = this;
             this.binds.forEach((item) => {
-                this.el.on(item.event, item.selector, function () {
-                    item.callback.call(that, this);
+                this.el.on(item.event, item.selector, function (event) {
+                    item.callback.call(that, this, event);
                 });
             })
         }
@@ -108,6 +109,7 @@ class Component {
         tagName = tagName || 'div';
         let el = $(`<${tagName}>`).appendTo(container);
         component.render(el);
+        this.subComponents.push(component);
         return this;
     }
 
@@ -170,19 +172,54 @@ class Component {
         return coms;
     }
 
-    showLoading(){
+    showLoading(dom){
+        if (this.loadingTarget) {
+            return;
+        }
+        if (_.isUndefined(dom)) {
+            this.loadingTarget = this.el;
+        } else {
+            this.loadingTarget = dom;
+        }
+        let width = this.loadingTarget.width();
+        let height = this.loadingTarget.height();
+        let size = Math.min(width, height) * 0.15;
 
+        this.loadingTarget.addClass('component-loading-effect');
+        this.loadingTarget.children().addClass('component-filter-blur');
+
+        this.loadingOverlay = $('<div class="component-loading-cover">').appendTo(this.loadingTarget);
+        let loadingHtml = `<div class='component-loading-box'><div class ="dot1"></div><div class ="dot2"></div></div>`;
+        this.loadingEffectBox = $(loadingHtml).appendTo(this.loadingTarget);
+
+        this.loadingEffectBox.css({
+            "width":size,
+            "height":size,
+            marginLeft: -size/2,
+            marginTop: -size/2
+        });
     }
 
     hideLoading(){
-
+        this.loadingOverlay.fadeOut();
+        this.loadingEffectBox.fadeOut(() => {
+            this.loadingOverlay.remove();
+            this.loadingEffectBox.remove();
+            this.loadingTarget.removeClass('component-loading-effect');
+            this.loadingTarget.children().removeClass('component-filter-blur');
+            this.loadingTarget = null;
+        });
     }
 
     disable(){
-
+        this.el.addClass('relative');
+        this.disableEffectBox = $('<div class="component-disable-cover">').appendTo(this.el);
     }
 
-    enable(){}
+    enable(){
+        this.disableEffectBox.remove();
+        this.el.removeClass('relative');
+    }
 
 }
 
