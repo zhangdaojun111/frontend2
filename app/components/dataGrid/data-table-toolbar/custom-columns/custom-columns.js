@@ -25,6 +25,8 @@ let config = {
         agGrid:null,
         close: function () {
             
+        },
+        setFloatingFilterInput: function () {
         }
     },
     actions: {
@@ -131,6 +133,7 @@ let config = {
             });
             HTTP.flush();
             this.actions.setState( arr );
+            this.data.setFloatingFilterInput();
         },
         //固定列事件触发
         fixClick: function () {

@@ -103,10 +103,11 @@ let config = {
             }
 
             this.trigger('onSelect', this.data.choosed);
-
             if (this.data.choosed.length) {
                 if (this.data.displayChoosed === true) {
                     this.choosedWrap.show();
+                } else {
+                    this.choosedWrap.hide();
                 }
                 let html = [];
                 this.data.choosed.forEach((item) => {
@@ -152,7 +153,7 @@ let config = {
             }
         },{
             event: 'click',
-            selector: '.list button',
+            selector: '.select-all a',
             callback: function () {
                 this.actions.selectAll();
             }

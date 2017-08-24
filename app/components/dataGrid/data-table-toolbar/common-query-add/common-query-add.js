@@ -26,7 +26,7 @@ let addQuery = {
     },
     afterRender: function () {
         if (this.data.name) {
-            $('.input').val(this.data.name);
+            $('.query-name-input').val(this.data.name);
         }
         this.actions.btnClick();
     },

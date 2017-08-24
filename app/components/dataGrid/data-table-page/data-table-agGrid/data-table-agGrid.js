@@ -167,7 +167,9 @@ let config = {
         //编辑已经保存的数量
         editRowNum: 0,
         //编辑保存参数
-        saveEditObjArr: []
+        saveEditObjArr: [],
+        //是否为含有默认字段的表
+        haveSystemsFields: false
     },
     //生成的表头数据
     columnDefs: [],
@@ -268,6 +270,11 @@ let config = {
 
                     let fixArr = this.data.fixCols.l.concat(this.data.fixCols.r);
 
+                    //判断是否有系统字段（创建时间）
+                    if( data.header[i] == '创建时间' ){
+                        this.data.haveSystemsFields = true;
+                    }
+
                     let obj = {
                         headerName: data.header[i],
                         // headerCellTemplate: (params) => {
@@ -338,6 +345,7 @@ let config = {
                     }
                     //编辑模式用
                     if( edit ){
+                        obj['cellStyle'] = {'font-style': 'normal','background':'#EBEBEB'};
                         this.actions.setEditableCol( obj );
                     }
                     column.push(obj);
@@ -372,6 +380,9 @@ let config = {
                         default:
                             break;
                     }
+                }
+                if( editCol['editable'] == true ){
+                    editCol['cellStyle'] = {'font-style': 'normal'};
                 }
                 if(controlData['reg']){
                     editCol['reg']=controlData['reg'];
@@ -684,8 +695,25 @@ let config = {
         },
         //重置偏好
         resetPreference: function () {
+            let ediv = document.createElement('div');
             let eHeader = document.createElement('span');
+            let eImg = document.createElement('img');
+            eImg.src = require( '../../../../assets/images/dataGrid/quxiao.png' );
+            eImg.className = 'resetFloatingFilter';
+            eImg.addEventListener( 'click',()=>{
+                msgBox.confirm( '确定清空筛选数据？' ).then( r=>{
+                    if( r ){
+                        for( let k in this.data.searchValue ){
+                            this.data.searchValue[k] = '';
+                        }
+                        this.actions.setFloatingFilterInput();
+                        this.data.filterParam.filter = [];
+                        this.actions.getGridData();
+                    }
+                } )
+            } )
             if( !this.data.noNeedCustom ){
+                ediv.appendChild( eHeader )
                 eHeader.innerHTML = "初";
                 eHeader.className = "table-init-logo";
                 eHeader.addEventListener('click', () => {
@@ -699,6 +727,10 @@ let config = {
                                 };
                                 dataTableService.getPreferences( obj ).then( res=>{
                                     dgcService.setPreference( res,this.data );
+                                    //初始化偏好隐藏系统默认列
+                                    if( res.ignoreFields == null && this.data.haveSystemsFields ){
+                                        this.data.ignoreFields = ['f1','f2','f3','f4'];
+                                    }
                                     //创建表头
                                     this.columnDefs = this.actions.createHeaderColumnDefs();
                                     this.agGrid.gridOptions.api.setColumnDefs( this.columnDefs );
@@ -711,7 +743,8 @@ let config = {
                     } )
                 });
             }
-            return eHeader;
+            ediv.appendChild( eImg )
+            return ediv;
         },
         //生成操作列
         operateCellRenderer: function (params) {
@@ -772,6 +805,12 @@ let config = {
             str += '</div>';
             this.data.operateColWidth=20*operateWord+20;
             return str
+        },
+        //设置搜索input值
+        setFloatingFilterInput: function () {
+            for( let k in this.data.searchValue ){
+                this.el.find( '.filter-input-'+k )[0].value = this.data.searchValue[k];
+            }
         },
         //floatingFilter拼参数
         floatingFilterPostData: function (col_field, keyWord, searchOperate) {
@@ -864,6 +903,10 @@ let config = {
                 this.data.groupFields = r.group;
                 //创建表头
                 this.columnDefs = this.actions.createHeaderColumnDefs();
+                //第一次加载隐藏默认列
+                if( res[0].ignoreFields == null && this.data.haveSystemsFields ){
+                    this.data.ignoreFields = ['f1','f2','f3','f4'];
+                }
                 //创建sheet分页
                 this.actions.createSheetTabs( res[2] )
 
@@ -1215,7 +1258,8 @@ let config = {
                     fixCols: this.data.fixCols,
                     tableId: this.data.tableId,
                     agGrid: this.agGrid,
-                    close: this.actions.calcCustomColumn
+                    close: this.actions.calcCustomColumn,
+                    setFloatingFilterInput: this.actions.setFloatingFilterInput
                 }
                 this.customColumnsCom  = new customColumns(custom);
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
@@ -1234,6 +1278,7 @@ let config = {
                     gridoptions: this.agGrid.gridOptions,
                     fields: this.data.myGroup.length == 0 ? this.data.groupFields : this.actions.deleteGroup(this.data.groupFields),
                     myGroup:  this.actions.setMyGroup(this.data.myGroup.fields),
+                    groupFields: this.data.myGroup.fields,
                     close: this.actions.calcGroup
                 }
                 this.groupGridCom = new groupGrid(groupLit);
@@ -1599,9 +1644,7 @@ let config = {
             this.el.find( '.dataGrid-edit-group' )[0].style.display = this.data.editMode ? 'block':'none';
             let columns = this.data.editMode ? this.columnDefsEdit : this.columnDefs;
             this.agGrid.gridOptions.api.setColumnDefs( columns );
-            if( !this.data.editMode ){
-                this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
-            }
+            this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
         },
         //编辑模式保存数据
         onEditSave: function (cancel) {
@@ -1677,10 +1720,11 @@ let config = {
                                 if( wrong > 0 ){
                                     let err = wrong + '条数据保存失败，失败原因：' + errorText;
                                     msgBox.alert( err );
+                                    this.actions.getGridData();
                                 }else {
                                     msgBox.showTips( '执行成功！' )
+                                    this.actions.toogleEdit();
                                 }
-                                this.actions.toogleEdit();
                             })
                             HTTP.flush();
                         }
@@ -1708,6 +1752,9 @@ let config = {
                 for (let k in row) {
                     if (dgcService.checkObejctNotEqual(row[k],originRow[k])) {
                         //buildin字段做转化
+                        if( !this.data.colControlData[k] ){
+                            continue;
+                        }
                         if(this.data.colControlData[k]['type'] == 'Buildin'||this.data.colControlData[k]['type'] == 'Radio'||this.data.colControlData[k]['type'] == 'Select'){
                             data[k] = this.data.colControlData[k]['options_objs'][row[k]];
                         } else if(Array.isArray(row[k])){
@@ -2279,7 +2326,7 @@ let config = {
             console.log( "行双击查看" )
             console.log( data )
             //屏蔽分组行
-            if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0) ){
+            if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0)||this.data.editMode ){
                 return;
             }
             let obj = {

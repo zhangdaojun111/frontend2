@@ -44,14 +44,15 @@
             display: none;
         }
         .menu-full {
-            overflow-x: visible;
             overflow-y: visible;
+            overflow-x: visible;
             .root {
                 li {
                     position: relative;
                     z-index: 100;
                 }
                 > li > .menu-full-item {
+                    background-color: #333;
                     .ui-menu-icon.ui-icon {
                         display: none;
                     }
