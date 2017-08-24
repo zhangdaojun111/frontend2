@@ -117,14 +117,14 @@ let config = {
 
         /**
          * @author zj
-         * 获取可进行日历设置的表
+         * 打开日历设置
          */
         getSettingMenu: function () {
             PMAPI.openDialogByIframe(
                 '/iframe/calendarOpenSetting/',
                 {
                     title: '日历设置',
-                    width: '1700',
+                    width: '90%',
                     height: '800',
                 },
             );

@@ -54,6 +54,7 @@ let config = {
 
         /**
          * @author zj
+         * 打开日历提醒
          */
         openRemind: function () {
             CalendarRemind.data.remindTable = this.data.remindTaskItemData.tableName;
@@ -73,7 +74,10 @@ let config = {
             });
         },
 
-
+        /**
+         * @author zj
+         * 打开工作流
+         */
         openWorkflow: function () {
             this.el.find('.task-show-text').html(this.data.remindTaskItemData['data']['name']);
             this.el.on('click', '.task-show-text', () => {
