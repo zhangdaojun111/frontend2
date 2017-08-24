@@ -166,7 +166,9 @@ let config = {
         //编辑已经保存的数量
         editRowNum: 0,
         //编辑保存参数
-        saveEditObjArr: []
+        saveEditObjArr: [],
+        //是否为含有默认字段的表
+        haveSystemsFields: false
     },
     //生成的表头数据
     columnDefs: [],
@@ -266,6 +268,11 @@ let config = {
                     }
 
                     let fixArr = this.data.fixCols.l.concat(this.data.fixCols.r);
+
+                    //判断是否有系统字段（创建时间）
+                    if( data.header[i] == '创建时间' ){
+                        this.data.haveSystemsFields = true;
+                    }
 
                     let obj = {
                         headerName: data.header[i],
@@ -698,6 +705,10 @@ let config = {
                                 };
                                 dataTableService.getPreferences( obj ).then( res=>{
                                     dgcService.setPreference( res,this.data );
+                                    //初始化偏好隐藏系统默认列
+                                    if( res.ignoreFields == null && this.data.haveSystemsFields ){
+                                        this.data.ignoreFields = ['f1','f2','f3','f4'];
+                                    }
                                     //创建表头
                                     this.columnDefs = this.actions.createHeaderColumnDefs();
                                     this.agGrid.gridOptions.api.setColumnDefs( this.columnDefs );
@@ -863,6 +874,10 @@ let config = {
                 this.data.groupFields = r.group;
                 //创建表头
                 this.columnDefs = this.actions.createHeaderColumnDefs();
+                //第一次加载隐藏默认列
+                if( res[0].ignoreFields == null && this.data.haveSystemsFields ){
+                    this.data.ignoreFields = ['f1','f2','f3','f4'];
+                }
                 //创建sheet分页
                 this.actions.createSheetTabs( res[2] )
 
