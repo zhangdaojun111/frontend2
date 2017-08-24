@@ -1289,7 +1289,8 @@ let config={
         addNewBuildIn(data){
             let _this=this;
             _this.data['quikAddDfield']=data.dfield;
-            PMAPI.openDialogByIframe(`/iframe/addBuildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
+            // PMAPI.openDialogByIframe(`/iframe/addBuildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
+            PMAPI.openDialogByIframe(`/iframe/addWf/?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}&key=${this.key}&btnType=new`,{
                 width:800,
                 height:600,
                 title:`快捷添加内置字段`,
