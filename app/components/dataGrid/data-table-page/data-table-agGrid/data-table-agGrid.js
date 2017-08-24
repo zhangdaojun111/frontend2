@@ -706,6 +706,9 @@ let config = {
                         for( let k in this.data.searchValue ){
                             this.data.searchValue[k] = '';
                         }
+                        for( let k in this.data.searchOldValue ){
+                            this.data.searchOldValue[k] = '';
+                        }
                         this.actions.setFloatingFilterInput();
                         this.data.filterParam.filter = [];
                         this.actions.getGridData();
@@ -1664,7 +1667,7 @@ let config = {
                     msgBox.confirm( '数据已经修改，是否取消？' ).then( r=>{
                         if( r ){
                             this.actions.toogleEdit();
-                            this.agGrid.gridOptions.api.setRowData( this.data.rowData );
+                            this.actions.getGridData();
                         }
                     } )
                 }else {
