@@ -666,7 +666,7 @@ let config = {
 
             //普通附件||视频附件
             else if (real_type == fieldTypeService.ATTACHMENT || real_type == fieldTypeService.VIDEO_TYPE) {
-                sHtml = '<a id="file_view" title="查看详情">' + myValue.length || 0 + '个附件</a>';
+                sHtml = '<a id="file_view" title="查看详情">' + ( myValue.length || 0 ) + '个附件</a>';
             }
 
             //都做为文本处理
@@ -1309,6 +1309,7 @@ let config = {
                 this.actions.renderExpertSearch();
             }
             this.data.firstRender = false;
+            this.hideLoading();
         },
         //触发导出
         onExport: function () {
@@ -2357,6 +2358,7 @@ let config = {
         }
     },
     afterRender: function () {
+        this.showLoading();
         if( this.data.viewMode == 'in_process' ){
             this.data.noNeedCustom = true;
         }
