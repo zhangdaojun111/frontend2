@@ -55,7 +55,6 @@ export class CheckboxComponent extends FormFittingAbstract {
             this.el.find('input').attr('checked', val);
             this.data.value = val;
             this.data.checked = val;
-            // this.onChange(this.data.value);
         }
     }
 

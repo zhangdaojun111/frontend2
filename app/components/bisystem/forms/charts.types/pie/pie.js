@@ -13,11 +13,14 @@ import {PMAPI} from '../../../../../lib/postmsg';
 import {FormMixShareComponent} from '../../mix.share/mix.share';
 import {SingleComponent} from './single/single';
 import {MultipleComponent} from './multiple/multiple';
+import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 
 import './pie.scss';
 let config = {
     template:template,
-    data: {},
+    data: {
+        assortment: ''
+    },
     actions: {},
     afterRender() {
         this.renderFitting();
@@ -26,18 +29,20 @@ let config = {
         // 监听数据源变化
         this.el.on(`${this.data.assortment}-chart-source`,(event,params) => {
             this.chartSourceChange(params['sources']);
-        })
+        });
 
         // 保存饼图配置
-        this.el.on('click', '.chart-pie .save-btn', (event) => {
-            this.saveChart()
+        this.el.on('click', '.chart-pie .save-pie-btn', (event) => {
+            this.saveChart();
+            return false;
         })
     }
 }
 export class FormPieComponent extends BiBaseComponent{
-    constructor() {
+    constructor(chart) {
         super(config);
         this.formGroup={};
+        this.data.assortment = chart.assortment;
     }
 
     /**
@@ -46,7 +51,7 @@ export class FormPieComponent extends BiBaseComponent{
 
     renderFitting(){
         let base = new FormBaseComponent();
-        let share = new FormMixShareComponent();
+        let share = new FormMixShareComponent(this.data.assortment);
         let single = new SingleComponent();
         let multiple = new MultipleComponent();
         this.append(base, this.el.find('.pie-base'));
@@ -64,6 +69,7 @@ export class FormPieComponent extends BiBaseComponent{
                 me: this,
                 container: 'pie-single',
                 data:{
+                    value: '2',
                     label:'选择多条数据，单挑数据',
                     options:[
                         {name:'多条', value:'2'},
@@ -95,7 +101,7 @@ export class FormPieComponent extends BiBaseComponent{
         }else{
             this.formGroup.single.data.singleShow = 'form-chart-pie-hide';
             this.formGroup.multiple.data.multipleShow = '';
-        }
+        };
         this.formGroup.single.reload();
         this.formGroup.multiple.reload();
 
@@ -121,9 +127,26 @@ export class FormPieComponent extends BiBaseComponent{
                 // }
             }
         };
+        // 加载多条数据
+        if (this.formGroup.multiple) {
+            // 加载x轴autoComplete
+            if (this.formGroup.multiple.multiples.pieY.autoSelect) {
+                this.formGroup.multiple.multiples.pieY.autoSelect.data.choosed = [];
+                this.formGroup.multiple.multiples.pieY.autoSelect.data.list = this.formGroup.multiple.data.yAxis = sources['y_field'];
+                this.formGroup.multiple.multiples.pieDeep.autoSelect.data.choosed = [];
+                this.formGroup.multiple.multiples.pieDeep.autoSelect.data.list = this.formGroup.multiple.data.xAxis = sources['x_field'];
+                this.formGroup.multiple.data.deeps = [];
+                this.formGroup.multiple.multiples.pieY.autoSelect.reload();
+                this.formGroup.multiple.multiples.pieDeep.autoSelect.reload();
+            }
+        };
+
+
         if (this.formGroup.single) {
             // 加载单条数据y轴数据
             this.formGroup.single.formYAxis.yAxis.data.checkboxs = sources['y_field'];
+            this.formGroup.single.data['items'] = sources['y_field'];
+            this.formGroup.single.formYAxis.yAxis.data['items']  = this.formGroup.single.data['checkboxs']= sources['y_field'];
             this.formGroup.single.formYAxis.yAxis.reload();
         }
 
@@ -132,8 +155,11 @@ export class FormPieComponent extends BiBaseComponent{
     /**
      * reset实例，当通过路由重新进入实例，清空所有数据
      */
-    reset(flag) {
+    reset(chart) {
         this.formGroup = {};
+        this.chartId = chart ? chart.id: null;
+        // this.editModeOnce = this.chartId ? true : false;
+        // this.editChart = null;
     }
 
     /**
@@ -147,28 +173,40 @@ export class FormPieComponent extends BiBaseComponent{
                 data[k] = fields[k].getValue();
             };
         });
-        console.log(data);
-        // const chart = {
-        //     assortment: 'radar',
-        //     chartName:data.chartName,
-        //     countColumn:'',
-        //     filter: [],
-        //     columns:Array.from(this.columns.data.choosed),
-        //     product:data.product,
-        //     icon: data.share.icons,
-        //     source: data.share.chartSource,
-        //     theme: data.share.themes,
-        // };
-        // let res = await ChartFormService.saveChart(JSON.stringify(chart));
-        // if (res['success'] == 1) {
-        //     msgbox.alert('保存成功');
-        //     if (!chart['chartName']['id']) {
-        //         this.reset();
-        //         this.reload();
-        //     };
-        //     Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
-        // } else {
-        //     msgbox.alert(res['error'])
-        // };
+
+        const chart = {
+            assortment: 'pie',
+            chartName:data.pieName,
+            chartType: {
+                name: '饼图',
+                type: 'pie'
+            },
+            countColumn:'',
+            filter: [],
+            pieType: data.pieSingle == '1' ? {name: '单条数据', value: 1} : {name: '多条数据', value: 2},
+            relations: [],
+            xAxis:data.pieX,
+            icon: data.pieShare.icons,
+            source: data.pieShare.chartSource,
+            theme: data.pieShare.themes,
+        };
+        if (data.pieSingle == 1) {
+            chart['yAxis'] = data.single;
+            chart['deeps'] = []
+        } else {
+            chart['yAxis'] = data.multiple.yAxis;
+            chart['deeps'] = data.multiple.deeps;
+        };
+        let res = await ChartFormService.saveChart(JSON.stringify(chart));
+        if (res['success'] == 1) {
+            msgbox.alert('保存成功');
+            if (!chart['chartName']['id']) {
+                this.reset();
+                this.reload();
+            };
+            Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
+        } else {
+            msgbox.alert(res['error'])
+        };
     }
 }
