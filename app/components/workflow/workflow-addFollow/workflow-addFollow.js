@@ -84,8 +84,6 @@ let config={
 
         //注册SelectedStaff组件
         Mediator.subscribe('workflow:pubCheck', (res)=> {
-            console.log(res);
-            console.log("....................");
             this.append(new SelectedStaff(res), this.el.find('#selected'));
         });
 
