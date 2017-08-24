@@ -195,7 +195,6 @@ export class FormPieComponent extends BiBaseComponent{
                 this.formGroup.single.formYAxis.yAxis.setValue(this.editChart['yAxis']);
             }
         }
-
     }
 
     /**
