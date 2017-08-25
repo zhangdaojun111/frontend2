@@ -83,8 +83,8 @@ let config = {
             this.el.on('click', '.task-show-text', () => {
                 console.log(this.data.remindTaskItemData);
                 PMAPI.openDialogByIframe(`/wf/approval/?record_id=${this.data.remindTaskItemData['data']['id']}&form_id=${this.data.remindTaskItemData['data']['form_id']}&table_id=${this.data.remindTaskItemData['data']['table_id']}&flow_id=${this.data.remindTaskItemData['data']['flow_id']}`,{
-                    width:1500,
-                    height:1000,
+                    width: '100%',
+                    height: '900',
                     // title:"审批工作流",
                     modal:true
                 })

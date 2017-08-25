@@ -1,6 +1,6 @@
 //滚动条
 .ag-body-viewport::-webkit-scrollbar {
-  width: 4px;
+  width: 10px;
   height: 6px;
 }
 .ag-body-viewport::-webkit-scrollbar-thumb {
@@ -18,9 +18,6 @@
   border-color: transparent!important;
   background-color: transparent!important;
 }
-.ag-root {
-
-}
 .ag-header {
   border-top: 1px solid rgba(228, 228, 228, 1);
   border-bottom: 1px solid rgba(228, 228, 228, 1)!important;
@@ -28,12 +25,25 @@
     border-right: 1px solid rgba(228, 228, 228, 1) !important;
   }
 }
-.ag-body {
-  .ag-body-viewport-wrapper {
-
+.ag-header-container {
+  .ag-header-row {
+    border-bottom: 1px solid #E4E4E4;
   }
 }
-.ag-body-container {
+.ag-bootstrap .ag-ltr .ag-header-group-cell-label {
+  text-align: center;
+  border-right: 1px solid #E4E4E4;
+  padding: 0;
+  height: 100%;
+  .ag-header-group-text {
+    line-height: 30px;
+  }
+}
+.ag-header-cell-resize {
+  width: 0!important;
+}
+
+.ag-body {
   .ag-row {
     border-bottom: 1px solid rgba(228, 228, 228, 1);
     .ag-group-cell {
@@ -60,6 +70,9 @@
       &.ag-cell-focus{
         border: none;
         background: rgba(120,120,120,0.3);
+      }
+      &.ag-cell-no-focus {
+        border-right: 1px solid #E4E4E4 !important;
       }
     }
   }
