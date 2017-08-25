@@ -123,7 +123,6 @@ export const IframeInstance = new Component({
         },
         sendCloseRequest:function (id) {
             TabService.onCloseTab(id,this.data.focus.id).done((result) => {
-                console.log(result);
                 if(result.success === 1){
                     console.log("post close record success")
                 }else{
@@ -361,7 +360,7 @@ export const IframeInstance = new Component({
                 data: info
             });
         },        setTabsCount:function () {
-            this.data.tabsTotalWidth = parseInt(this.el.find('div.tabs').width()) - 220;   //标签可用宽度
+            this.data.tabsTotalWidth = parseInt(this.el.find('div.tabs').width()) - 100;   //标签可用宽度
             maxIframeCount = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);  //自适应最大tabs数量
             // let count = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);
             // maxIframeCount =  count>15 ? 15:count;      //最多不超过15个
