@@ -9,7 +9,7 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import {HTTP} from '../lib/http';
 import Mediator from '../lib/mediator';
 import {workflowService} from '../services/workflow/workflow.service';
-import WorkFlowCreate from '../components/workflow/workflow-create/workflow-create';
+
 import WorkflowInitial from '../components/workflow/workflow-initial/workflow-initial';
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
@@ -26,61 +26,10 @@ WorkflowAddFollow.showAdd();
 WorkFlowForm.showForm();
 WorkFlowGrid.showGrid();
 
-/*
-***部门，人员树的initial与render
- */
-let tree=[],staff=[];
-(async function () {
-    return workflowService.getStuffInfo({url: '/get_department_tree/'});
-})().then(res=>{
-    tree=res.data.department_tree;
-    staff=res.data.department2user;
-    function recur(data) {
-        for (let item of data){
-            item.nodes=item.children;
-            if(item.children.length!==0){
-                recur(item.children);
-            }
-        }
-    }
-    recur(tree);
-    var treeComp2 = new TreeView(tree,{
-        callback: function (event,selectedNode) {
-            if(event==='select'){
-                for(var k in staff){
-                    if(k==selectedNode.id){
-                        Mediator.publish('workflow:checkDept', staff[k]);
-                        // recursion(staff,selectedNode,'checkDept');
-                    }
-                }
-            }else{
-                for(var k in staff){
-                    if(k==selectedNode.id){
-                        Mediator.publish('workflow:unCheckDept', staff[k]);
-                        // recursion(staff,selectedNode,'unCheckDept');
-                    }
-                }
-            }
-        },
-        treeType:'MULTI_SELECT',
-        isSearch: true,
-        withButtons:true
-        });
-    treeComp2.render($('#treeMulti'));
-});
 
-/*
-***获取所有工作流与常用工作流
- */
-let get_workflow_info=()=>{
-    let WorkFlowList=workflowService.getWorkfLow({}),
-        FavWorkFlowList=workflowService.getWorkfLowFav({});
-    Promise.all([WorkFlowList,FavWorkFlowList]).then(res=>{
-        WorkFlowCreate.loadData(res);
-    });
-    HTTP.flush();
-}
-get_workflow_info();
+
+
+
 
 /*
 ***订阅workflow choose事件，获取工作流info并发布getInfo,获取草稿
@@ -88,7 +37,7 @@ get_workflow_info();
 let wfObj,temp_ids=[];
 Mediator.subscribe('workflow:choose', (msg)=> {
     $("#singleFlow").click();
-    $("#submit").show();
+    $("#submitWorkflow").show();
     $("#startNew").hide();
     wfObj=msg;
     (async function () {
@@ -188,7 +137,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
         if(formData.error){
             msgBox.alert(`${formData.errorMessage}`);
         }else{
-            $("#submit").hide();
+            $("#submitWorkflow").hide();
             let postData={
                 flow_id:wfObj.id,
                 focus_users:JSON.stringify(focusArr)||[],
@@ -202,17 +151,17 @@ Mediator.subscribe('workflow:submit', (res)=> {
                     $("#startNew").show().on('click',()=>{
                         Mediator.publish('workflow:choose',wfObj);
                         $("#startNew").hide();
-                        $("#submit").show();
+                        $("#submitWorkflow").show();
                     });
                     WorkFlow.createFlow({flow_id:wfObj.id,record_id:res.record_id,el:"#flow-node"});
                 }else{
                     msgBox.alert(`${res.error}`);
-                    $("#submit").show();
+                    $("#submitWorkflow").show();
                 }
             })
         }
     }else{
-        $("#submit").hide();
+        $("#submitWorkflow").hide();
         let postData={
             type:1,
             temp_ids:JSON.stringify(temp_ids),
@@ -227,12 +176,12 @@ Mediator.subscribe('workflow:submit', (res)=> {
                 $("#startNew").show().on('click',()=>{
                     Mediator.publish('workflow:choose',wfObj);
                     $("#startNew").hide();
-                    $("#submit").show();
+                    $("#submitWorkflow").show();
                 });
                 WorkFlow.createFlow({flow_id:wfObj.id,record_id:res.record_id,el:"#flow-node"});
             }else{
                 msgBox.alert(`${res.error}`);
-                $("#submit").show();
+                $("#submitWorkflow").show();
             }
         })
     }
