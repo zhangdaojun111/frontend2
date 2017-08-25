@@ -121,10 +121,10 @@ let config = {
                 }}
                 //添加序号列
                 let number = dgcService.numberCol;
-                number['headerCellTemplate'] = this.actions.resetPreference();
+                // number['headerCellTemplate'] = this.actions.resetPreference();
                 this.data.columnDefs.unshift(number);
                 this.data.columnDefs = [
-                    // dgcService.numberCol,
+                    dgcService.numberCol,
                     dgcService.selectCol,
                     oprate
                 ];
@@ -813,7 +813,7 @@ let config = {
         },
         //设置特殊字段field信息
         setFieldMapping: function () {
-            this.data.field_mapping = window.config.system_config[0]['field_mapping'];
+            this.data.field_mapping = window.config.system_config['0']['field_mapping'];
             this.data.userStatus = this.data.field_mapping.status;
             this.data.departmentField = this.data.field_mapping.department;
             for( let key in this.data.filter_mapping ) {

@@ -997,7 +997,7 @@ let config = {
             }
             Promise.all(post_arr).then((res)=> {
                 this.data.rowData = res[0].rows || [];
-                this.data.total = res[0].total || this.data.total;
+                this.data.total = res[0].total != undefined ? res[0].total : this.data.total;
                 //对应关系特殊处理
                 if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
                     this.actions.setCorrespondence(res[0]);
@@ -1853,7 +1853,7 @@ let config = {
 
         },
         //删除数据
-        delTableData: function () {
+        delTableData: function (type) {
             let json = {
                 table_id:this.data.tableId,
                 temp_ids:JSON.stringify([]),
@@ -1864,6 +1864,9 @@ let config = {
                 parent_temp_id: this.data.parentTempId,
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
+            }
+            if( type == 1 ){
+                json['abandon_validate'] = 1;
             }
             this.actions.setInvalid();
             dataTableService.delTableData( json ).then( res=>{
@@ -1892,7 +1895,15 @@ let config = {
                             }
                         } )
                     }else {
-                        msgBox.alert( res.error )
+                        if(res.abandon_validate){
+                            msgBox.confirm( res.error ).then( aa=>{
+                                if( aa ){
+                                    this.actions.delTableData( 1 );
+                                }
+                            } )
+                        }else {
+                            msgBox.alert( res.error )
+                        }
                     }
                 }
             } )
