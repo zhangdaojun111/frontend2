@@ -92,11 +92,13 @@ $grid-bg-color: rgba(248, 248, 248, 1);
         .calendar-search {
             display: inline-block;
             border: 1px solid $boder-color;
-            border-radius: 4px;
             .search-box {
+                width: 175px;
                 border: none;
-                height: 16px;
-                padding: 4px;
+                vertical-align: middle;
+                height: 24px;
+                padding: 0px 4px;
+                outline: none;
             }
 
         }
@@ -147,13 +149,12 @@ $grid-bg-color: rgba(248, 248, 248, 1);
         .left-content {
             height: 100%;
             border-right: 2px solid #6ed2f3;
-            position: relative;
-            //display: inline-block;
+            display: inline-block;
             width: 200px;
-            //float:left;
+            float:left;
             min-width: 200px;
             max-height: 890px;
-            //overflow: auto;
+            overflow: auto;
             flex-shrink: 0;
         }
         .main-content {

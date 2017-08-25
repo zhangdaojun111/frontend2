@@ -32,7 +32,6 @@ let FormEntrys = {
         this.isAddBuild=0;
         this.buildId='';
         this.btnType='new';
-        this.changeFlow='';
 
         this.tableId=config.table_id||'';
         this.parentRealId=config.parent_real_id||'';
@@ -56,7 +55,6 @@ let FormEntrys = {
         this.isAddBuild=config.isAddBuild || 0;
         this.buildId=config.id || '';
         this.btnType=config.btnType||'new';
-        this.changeFlow=config.change_flow||'';
         console.log('配置文件');
         console.log(config);
     },
@@ -360,6 +358,11 @@ let FormEntrys = {
     },
     //创建表单入口
     async createForm(config={}){
+        console.log('更上去了没');
+        console.log('更上去了没');
+        console.log('更上去了没');
+        console.log('更上去了没');
+        console.log('更上去了没');
         console.time('获取表单数据的时间');
         this.init(config);
         let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap"></div>`).prependTo(this.el);

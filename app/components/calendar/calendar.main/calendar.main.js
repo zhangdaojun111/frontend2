@@ -1,6 +1,12 @@
 /**
  * Created by zj on 2017/7/27.
  */
+
+/**
+ * @author zj
+ * @description 日历主视图的切换及数据获取
+ */
+
 import Component from "../../../lib/component";
 import template from './calendar.main.html';
 import './calendar.main.scss';
@@ -82,6 +88,8 @@ let config = {
                 week = nweTime.getDay();
             return CalendarTimeService.formatDate(year,month,day);
         },
+
+        // 日历全局搜索
         search: function( key ){
             this.data.searchText = key;
             if( this.data.calendarContent === 'schedule' ){
@@ -96,11 +104,6 @@ let config = {
                     to_date: this.data.to_date,
                     cancel_fields: JSON.stringify(this.data.cancel_fields)
                 },'calendar');
-                // setTimeout(() => {
-                //     console.log(this.data.monthDataList);
-                // },500)
-                // this.actions.monthDataTogether();
-                // this.actions.getDataCount();
             }
         },
 
@@ -109,7 +112,7 @@ let config = {
                 this.data.date2settings = res['date2csids'];
                 this.data.calendarSettings = res['id2data'];
                 this.data.tableid2name = res['tableid2name'];
-                this.data.fieldInfos = res['field_infos']
+                this.data.fieldInfos = res['field_infos'];
                 if(type === 'calendar') {
                     this.actions.monthDataTogether();
                 }else {
@@ -117,6 +120,10 @@ let config = {
                 }
                 this.actions.getDataCount();
             });
+        },
+
+        getCalendarScheduleData: function () {
+
         },
 
         getDataCount: function (){
@@ -399,7 +406,7 @@ let config = {
                         arrData['time'] = set.date;
                         arrData['setId'] = set.id;
                         arrData['dfield'] = setDetail.dfield;
-                        arrData['color'] = CalendarToolService.handleColorRGB( setDetail.color , 0.5 );
+                        arrData['color'] = CalendarToolService.handleColorRGB( setDetail.color , 1 );
                         arrData['isDrag'] = setDetail.is_drag;
                         arrData['real_ids'] = JSON.stringify( setDetail.real_ids );
                         arrData['real_id'] = JSON.stringify( [select._id] );
@@ -498,7 +505,7 @@ let config = {
                     if( d['create_time'].indexOf( day.dataTime ) !== -1 ){
                         day['data'].push( {
                             data: d,
-                            color: CalendarToolService.handleColorRGB( '#64A6EF' , 0.5 ),
+                            color: CalendarToolService.handleColorRGB( '#64A6EF' , 1 ),
                             srcColor: '#64A6EF',
                             isDrag:0,
                             isShow: true,
@@ -547,6 +554,12 @@ let config = {
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
+        let approve = 'approve';
+        for( let a of this.data.cancel_fields ){
+            if( approve.indexOf( a ) === 0 ){
+                this.data.isShowWorkflowData = false;
+            }
+        }
 
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.data.workflowData = data;
@@ -645,9 +658,10 @@ let config = {
         });
 
         Mediator.on('calendar-left:unshowData', data => {
+            console.log(data);
             if(data['data']) {
                 this.data.isShowArr = data['data'];
-                let arr = ['approve','remind'];
+                let arr = ['remind'];
                 let arr_1 = [];
                 for( let a of this.data.isShowArr ){
                     if( arr.indexOf( a ) === -1 ){
@@ -686,6 +700,16 @@ let config = {
                 this.actions.search(data);
             } else {
                 this.data.searchText = '';
+                let json = {
+                    from_date:this.data.from_date,
+                    to_date:this.data.to_date,
+                    cancel_fields: JSON.stringify(this.data.cancel_fields),
+                };
+                if(this.data.calendarContent !== 'schedule') {
+                    this.actions.getCalendarData(json, 'calendar');
+                } else {
+                    this.actions.getCalendarData(json);
+                }
             }
         });
 

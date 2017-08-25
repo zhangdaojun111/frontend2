@@ -4,12 +4,10 @@
 /**
  * Created by Yunxuan Yan on 2017/8/18.
  */
-import Component from "../../../../lib/component";
 import template from './contract-editor.html';
-import {HTTP} from '../../../../lib/http';
 import './contract-editor.scss';
 
-let config = {
+export const contractEditorConfig = {
     template:template,
     data:{
         local_data:[],
@@ -30,7 +28,9 @@ let config = {
                     select.addClass('data-source');
                     select.attr('id',element.table.table_id);
                     select.css('width','200px');
-                    select.append('<option value="0">请选择</option>');
+                    let defaultOption = $('<option>请选择</option>');
+                    defaultOption.attr('value','0');
+                    select.append(defaultOption);
                     this.data.elementKeys.push(element.table.table_id);
                     element.values.forEach(value=>{
                         let option = $('<option></option>');
@@ -77,7 +77,8 @@ let config = {
             }
         },
         getElement:function (json) {
-            return HTTP.postImmediately('/customize/rzrk/get_element/',json);
+            //在componentDialog中使用HTTP则报找不到_http的错误
+            return $.post('/customize/rzrk/get_element/',json);
         },
         addTab:function(){
             this.el.find('.edit-or-save').css('display','none');
@@ -110,14 +111,15 @@ let config = {
             this.data['current_tab']=i;
             console.log("current tab "+i);
             let tab = this.data.local_data[i];
+            if(tab==undefined){
+                console.log('tab['+i+'] is undefined');
+                return;
+            }
             let modelFlag = !tab['model_id']||tab['model_id']=='';
             let dataSourceFlag = !this.actions._isElementFull(tab['elements']);
-             if(modelFlag){
+            if(modelFlag){
                 this.el.find('.contract-model').val(0);
             }
-            // if(dataSourceFlag){
-            //     this.el.find('.data-source').val(0);
-            // }
             if(modelFlag || dataSourceFlag){
                 this.el.find('.contract-template-anchor').html('<p>请选择模板及所有数据源。</p>');
                 return;
@@ -144,7 +146,7 @@ let config = {
                 type:this.data['mode'],
                 index:0
             }).then(res=>{
-                if(res.success && this.data['current_tab'] == i){
+               if(res.success && this.data['current_tab'] == i){
                     this.el.find('.contract-template-anchor').html(res.data.content);
                     this.data.local_data[i]['content']=res.data.content;
                     this.data.local_data[i]['k2v']=res.data.k2v;
@@ -162,7 +164,7 @@ let config = {
         },
         downloadTemplate:function (i,isAll) {
             let contractData = this.data.local_data[i];
-            HTTP.postImmediately('/customize/rzrk/download_contract/',{
+            $.post('/customize/rzrk/download_contract/',{
                 table_id:this.data.table_id,
                 real_id:this.data.data.temp_id,
                 field_id:this.data.id,
@@ -184,6 +186,13 @@ let config = {
                 let title = event.target.title;
                 k2v["##"+title+"##"]=changedValue;
             })
+        },
+        closeMe:function () {
+            window.parent.postMessage({
+                type:'1',
+                key:this.key,
+                data:this.data.value
+            },location.origin);
         }
     },
     afterRender:function () {
@@ -203,6 +212,10 @@ let config = {
         this.actions.getElement(obj).then(res=>{
             if(res.success){
                 this.actions.loadData(res);
+                if(this.data.local_data==''){
+                    this.data.local_data = [];
+                    this.actions.addTab();
+                }
                 this.actions._loadTemplateByIndex(0);
             }
         })
@@ -230,7 +243,7 @@ let config = {
             this.data.value = this.data.local_data;
             delete this.data.local_data;
             delete this.data.elementKeys;
-            this.trigger('onChange');
+            this.actions.closeMe();
         }).on('click','.download-all',()=>{
             this.actions.downloadTemplate(0,true);
         }).on('click','.download-current',()=>{
@@ -241,6 +254,9 @@ let config = {
                 t.el.find('.save-n-close').css('display','none');
                 t.el.find('.download-all').css('display','none');
                 t.el.find('.download-current').css('display','none');
+                t.data.local_data[t.data['current_tab']].k2v = {
+                    test:'test'
+                }
                 editingK2v = JSON.parse(JSON.stringify(t.data.local_data[t.data['current_tab']].k2v));
                 t.actions.editContract(editingK2v);
             } else {
@@ -265,11 +281,5 @@ let config = {
                 this.actions._loadTemplateByIndex(currentIndex);
             }
         })
-    }
-}
-
-export default class ContractEditor extends Component{
-    constructor(data,event){
-        super(config,data,event);
     }
 }
