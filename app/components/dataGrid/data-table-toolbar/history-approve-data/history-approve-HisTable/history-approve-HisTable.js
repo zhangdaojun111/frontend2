@@ -15,9 +15,8 @@ let config = {
 
     },
     afterRender: function() {
-        console.log(this.data)
-        if(this.data.history_data && this.data.history_data.length > 0){
-            this.data.history_data[0].data.forEach((item)=>{
+        if(this.data.history_data && this.data.history_data.data.length > 0){
+            this.data.history_data.data.forEach((item)=>{
                 this.append(new historyItem(item), this.el.find('.history-table-body.history'));
             })
         }
