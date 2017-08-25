@@ -245,7 +245,7 @@ export class FormTableComponent extends BiBaseComponent{
             countNum:fields.countNum,
             single:fields.single,
             singleColumnWidthList:[],
-            sort: fields.sort,
+            sort: parseInt(fields.sort),
             sortColumns:data.sortColumn.hasOwnProperty('id') ? [data.sortColumn] : [],
             alignment:fields.alignment,
             columnNum:this.single.data.singleNum
