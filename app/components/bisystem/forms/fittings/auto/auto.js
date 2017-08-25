@@ -24,7 +24,6 @@ let config = {
                 this.el.find('.mat-select-list').fadeIn();
                 let top = $('.form-group-auto').offset().top + $('.mat-select-list').height() + $('.mat-input-container').height();
                 let maxHeight = $('.chart-form').height();
-                console.log($('.mat-input-container').height());
                 if(top>maxHeight){
                     $('.mat-select-list').css('top','-260px');
                 }else{
