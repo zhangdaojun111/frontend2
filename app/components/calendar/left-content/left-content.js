@@ -125,7 +125,7 @@ let config = {
                 '/iframe/calendarOpenSetting/',
                 {
                     title: '日历设置',
-                    width: '90%',
+                    width: '75%',
                     height: '800',
                 },
             );

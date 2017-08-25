@@ -93,6 +93,7 @@ let config = {
 
     },
     afterRender: function() {
+        // console.log(this.data.remindTaskItemData);
         //this.el.attr("draggable",true);
         this.el.addClass("comment-task-item");
         this.el.find('.task-bg-color').css({backgroundColor: this.data.remindTaskItemData['color']});
@@ -125,6 +126,7 @@ let config = {
         } else if(this.data.remindTaskItemData['type'] === 3 || this.data.remindTaskItemData['type'] === 4) {
             this.actions.openWorkflow();
         }
+
         this.el.on('click','.task-state-icon', function() {
             event.stopPropagation();
             if(!$(this).is(".options-show")){

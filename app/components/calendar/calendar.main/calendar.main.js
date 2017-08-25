@@ -408,6 +408,7 @@ let config = {
             day['data'] = [];
             for( let set of calendarDate ){
                 let setDetail = this.data.calendarSettings[set.id];
+                console.log(setDetail);
                 for( let select of setDetail['selectedOpts_data'] ){
 
                     if( select[setDetail['field_id']].indexOf(day.dataTime) === -1 ){
@@ -430,7 +431,6 @@ let config = {
                         arrData['fieldName'] = this.data.fieldInfos[setDetail.field_id]['dname'];
                         arrData['type'] = 1;
                         arrData['isShow'] = this.data.searchText === '' ? true : false;
-
                         let selectFieldId = '';
                         if( setDetail['selectedEnums']&&setDetail['selectedEnums'][0]&&setDetail['selectedEnums'][0]!=='' ){
                             selectFieldId = setDetail['selectedEnums'][0];
