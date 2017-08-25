@@ -1818,8 +1818,10 @@ let config = {
                     } if(res.appendChecked) {
                         this.data.temporaryCommonQuery = res.value
                         this.actions.appendQuerySelect()
-                    } if(res.saveCommonQuery || res.onlyclose == true) {
-                        this.actions.getExpertSearchData(res.addNameAry)
+                    } if(res.saveCommonQuery || (res.saveCommonQuery && res.onlyclose == true)) {
+                        this.actions.getExpertSearchData(res.addNameAry);
+                    } else if(res.onlyclose == true) {
+                        return false
                     }
                 })
             } )
@@ -1838,7 +1840,7 @@ let config = {
                     })
                 }
             })
-            this.actions.getExpertSearchData();
+            // this.actions.getExpertSearchData();
         },
         appendQuerySelect: function() {
             let length = this.el.find('.dataGrid-commonQuery-select option').length
