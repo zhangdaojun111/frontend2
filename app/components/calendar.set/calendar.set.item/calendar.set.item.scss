@@ -3,12 +3,11 @@
     width: 100%;
     display: block;
     .table-item-checkbox{
-        width:9% !important;
     }
     .set-table-item{
         border-top: 1px solid #C1CACA;
         padding: 10px 0px;
-        width: 9%;
+        width: 8%;
         min-width: 30px;
         text-align: center;
         line-height: 30px;
@@ -33,23 +32,51 @@
             }
         }
     }
+    .single-select-item{
+        width: 16%;
+        .popup {
+            display: none;
+            width: 100%;
+            position: absolute;
+            z-index: 100;
+            background-color: white;
+            padding-left: 0px ;
+            margin: 0px ;
+            height: auto!important;
+            overflow: auto;
+            ul{
+                max-height: 300px;
+                li {
+                    margin-left: 0px;
+                    list-style-type: none;
+                    label{
+                        text-align: left;
+                        overflow:hidden;
+                    }
+                }
+            }
+            button{
+                width:100%;
+            }
+        }
+    }
     .multi-select-item{
         width:20% !important;
         .popup {
             display: none;
             width: 100%;
             position: absolute;
-            z-index: 100 !important;
-            background-color: white !important;
-            padding-left: 0px !important;
-            margin: 0px !important;
+            z-index: 100 ;
+            background-color: white ;
+            padding-left: 0px;
+            margin: 0px;
             height: auto!important;
-            overflow: auto !important;
+            overflow: auto;
             ul{
-                max-height: 300px!important;
+                max-height: 300px;
                 li {
                     margin-left: 0px;
-                    list-style-type: none !important;
+                    list-style-type: none;
                     label{
                         text-align: left;
                         overflow:hidden;

@@ -23,9 +23,12 @@
         <div class="checkbox-group">
             {{#each dataitem.items}}
             <div class="label-task-children">
-                <input type='checkbox' class='chk_1 chk_approve label-select-all'/>
-                <label class='select-label-children' id='select-children-{{this.field_id}}'>
-                </label><label>{{this.field_name}}</label>
+                <div class="checkbox-label">
+                    <input type='checkbox' class='chk_2 chk_approve label-select-all'/>
+                     <label class='select-label-children' id='select-children-{{this.field_id}}'>
+                </label>
+                </div>
+                <label>{{this.field_name}}</label>
             </div>
             {{/each}}
         </div>
