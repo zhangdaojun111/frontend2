@@ -197,6 +197,7 @@ export class FormTableComponent extends BiBaseComponent{
                 }
             }
         }
+
         if (this.formGroup.sortColumn) {
             if (this.formGroup.sortColumn.autoSelect) {
                 this.formGroup.sortColumn.autoSelect.data.choosed = [];
