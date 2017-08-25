@@ -257,6 +257,10 @@ let config = {
                         for( let k in this.data.searchValue ){
                             this.data.searchValue[k] = '';
                         }
+                        for( let k in this.data.searchOldValue ){
+                            this.data.searchOldValue[k] = '';
+                        }
+                        this.data.queryList = {};
                         this.actions.setFloatingFilterInput();
                         this.data.filterParam.filter = [];
                         this.actions.getUserData();
@@ -690,7 +694,8 @@ let config = {
                 height: h || 800,
                 title: title,
                 modal:true,
-                defaultMax: defaultMax
+                defaultMax: defaultMax,
+                customSize: defaultMax
             } ).then( (data)=>{
             } )
         },
