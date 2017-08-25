@@ -123,6 +123,7 @@ export const IframeInstance = new Component({
         },
         sendCloseRequest:function (id) {
             TabService.onCloseTab(id,this.data.focus.id).done((result) => {
+                console.log(result);
                 if(result.success === 1){
                     console.log("post close record success")
                 }else{
