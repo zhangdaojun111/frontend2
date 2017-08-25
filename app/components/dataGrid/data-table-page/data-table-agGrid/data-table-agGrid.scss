@@ -118,8 +118,12 @@
   .resetFloatingFilter {
     display: block;
     margin: auto;
-    position: relative;
-    top: 5px;
+    position: absolute;
+    top: 35px;
+    left: 13px;
+  }
+  .resetFloatingFilter {
+    cursor: pointer;
   }
 }
 

@@ -700,6 +700,7 @@ let config = {
             let eImg = document.createElement('img');
             eImg.src = require( '../../../../assets/images/dataGrid/quxiao.png' );
             eImg.className = 'resetFloatingFilter';
+            eImg.title = '重置筛选';
             eImg.addEventListener( 'click',()=>{
                 msgBox.confirm( '确定清空筛选数据？' ).then( r=>{
                     if( r ){
@@ -719,6 +720,7 @@ let config = {
             if( !this.data.noNeedCustom ){
                 ediv.appendChild( eHeader )
                 eHeader.innerHTML = "初";
+                eHeader.title = '初始化偏好'
                 eHeader.className = "table-init-logo";
                 eHeader.addEventListener('click', () => {
                     msgBox.confirm( '确定初始化偏好？' ).then( r=>{
@@ -758,7 +760,7 @@ let config = {
                 return '';
             }
             if( this.data.viewMode == 'in_process' ){
-                return '<div></span><a href="javascript:;" class="gridView">查看</a></div>';
+                return '<div style="text-align: center;"><a class="gridView" style="color:#337ab7;">查看</a></div>';
             }
             if (params.data.group || Object.is(params.data.group, '') || Object.is(params.data.group, 0)) {
                 return '';
@@ -1121,6 +1123,20 @@ let config = {
             }
             let select = $event.node.selected;
             let id = $event.node.data._id;
+
+            //个人用户编辑表中的数据时,会发起对应的工作流,不让用户编辑
+            if( $event["node"]["data"]["status"] && ( $event["node"]["data"]["status"] == 2 ) && select ){
+                msgBox.alert("该数据正在审批，无法操作。");
+                $event["node"].setSelected( false,false );
+                return;
+            }
+            //数据计算cache时,不让用户编辑
+            if( $event["node"]["data"]["data_status"] && ( $event["node"]["data"]["data_status"] == 0 ) && select ){
+                msgBox.alert("数据计算中，请稍候");
+                $event["node"].setSelected( false,false );
+                return;
+            }
+
             if( this.data.viewMode == 'editFromCorrespondence' ){
                 if( select && this.data.correspondenceSelectedList.indexOf( id ) == -1 ){
                     this.data.correspondenceSelectedList.push( id );
@@ -2277,6 +2293,10 @@ let config = {
             console.log( data )
             if( data.event.srcElement.className == 'gridView' ){
                 console.log( '查看' )
+                let btnType = 'view';
+                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 ){
+                    btnType = 'none';
+                }
                 let obj = {
                     table_id: this.data.tableId,
                     parent_table_id: this.data.parentTableId,
@@ -2284,7 +2304,8 @@ let config = {
                     parent_temp_id: this.data.parentTempId,
                     parent_record_id: this.data.parentRecordId,
                     real_id: data.data._id,
-                    btnType: 'view',is_view:1
+                    btnType: btnType,
+                    is_view:1
                 };
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
@@ -2318,24 +2339,6 @@ let config = {
                 },{obj}).then(res=>{
 
                 })
-                // let d = {
-                //     'table_id': this.data.tableId,
-                //     'real_id': data.data._id
-                // };
-                // dataTableService.getHistoryApproveData(d).then( res=>{
-                //     console.log()
-                //     obj.res = JSON.stringify(res);
-                //     PMAPI.openDialogByIframe(`/iframe/historyApprove/`,{
-                //         width:1000,
-                //         height:600,
-                //         title:`历史`,
-                //         modal:true
-                //     },{obj}).then(res=>{
-                //
-                //     })
-                // })
-                // HTTP.flush();
-
             }
         },
         //行双击
@@ -2361,7 +2364,9 @@ let config = {
         },
         //设置失效
         setInvalid: function () {
-            this.pagination.data.myInvalid = true;
+            if( this.pagination ){
+                this.pagination.data.myInvalid = true;
+            }
         },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title,w,h ) {
