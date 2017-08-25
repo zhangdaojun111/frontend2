@@ -160,7 +160,7 @@ let config={
             nameArr=_.uniq(nameArr);
             idArr=_.uniq(idArr);
             $('#add-follow').hide();
-            $('#addFollowerList').html(nameArr);
+            $('#add-home #addFollowerList').html(nameArr);
 
             Mediator.publish('workflow:focus-users',idArr);                                  
         });
