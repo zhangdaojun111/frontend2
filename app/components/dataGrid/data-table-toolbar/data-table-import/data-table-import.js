@@ -63,6 +63,7 @@ let config = {
                 this.el.find( '.chooseFlow' ).on( 'change',()=>{
                     this.actions.drawFlowChart();
                 } )
+                this.hideLoading();
             } )
         },
         //设置流程图
@@ -173,6 +174,7 @@ let config = {
     },
     afterRender: function (){
         if( this.data.isBatch == '0' ){
+            this.showLoading();
             this.actions.prepareWorkflowData();
         }
         //上传初始化
