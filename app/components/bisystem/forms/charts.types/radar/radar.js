@@ -193,7 +193,4 @@ export class FormRadarComponent extends BiBaseComponent{
         this.editChart = null;
     }
 
-    /**
-     *
-     */
 }
