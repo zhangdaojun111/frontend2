@@ -137,6 +137,7 @@ export class FormTableComponent extends BiBaseComponent{
         this.formGroup.single = chart['single'];
     }
 
+
     /**
      * 渲染chart fittings
      */
