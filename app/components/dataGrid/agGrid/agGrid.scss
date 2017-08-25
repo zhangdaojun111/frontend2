@@ -79,7 +79,12 @@
       color: #333333;
       a{
         &.ag-text-style{
+          text-decoration: blink;
+          color: #0097FE;
+        }
+        &.ag-text-style:hover {
           text-decoration: underline;
+          cursor: pointer;
         }
       }
       .ag-num-right-style {
