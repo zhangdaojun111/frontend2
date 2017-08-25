@@ -71,7 +71,7 @@ export const IframeInstance = new Component({
         isLoginShowCalendar:"",
         isAutoOpenTabs:true,    //标记是否为首次加载tabs
         tabsTotalWidth:"",           //tabs可用总长度 = div.tabs - 200;
-        tabWidth:140,           //单个tabs长度，默认140（需和scss同步修改），空间不足以后自适应宽度
+        tabWidth:150,           //单个tabs长度，默认140（需和scss同步修改），空间不足以后自适应宽度
         minTabWidth:100,        //用于估算小屏设备最大tabs数量
     },
     actions: {
@@ -359,20 +359,20 @@ export const IframeInstance = new Component({
                 type: PMENUM[info.typeName],
                 data: info
             });
-        },        setTabsCount:function () {
+        },
+        setTabsCount:function () {
             this.data.tabsTotalWidth = parseInt(this.el.find('div.tabs').width()) - 100;   //标签可用宽度
             maxIframeCount = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);  //自适应最大tabs数量
             // let count = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);
             // maxIframeCount =  count>15 ? 15:count;      //最多不超过15个
-
         },
         //自适应宽度
         adaptTabWidth:function () {
             let singleWidth = this.data.tabsTotalWidth/this.data.count ;
             if(singleWidth  > this.data.tabWidth){              //空间有剩余
-                this.el.find('.tabs div.item').css("width","114px");      //有25px padding-right,总长140px
+                this.el.find('.tabs div.item').css("width","109px");      //有40px padding和1px border,总长150px
             }else{
-                let width = singleWidth - 25 + "px";            // -25 padding
+                let width = singleWidth - 40 + "px";            // -40 padding
                 this.el.find('.tabs div.item').css("width",width);
             }
         },
@@ -430,7 +430,6 @@ export const IframeInstance = new Component({
         });
 
         this.el.on('click','.view-save',function () {
-            SaveView.show(that.data.sort);
             let temp_arr = _.defaultsDeep([],that.data.sort);
             SaveView.show(temp_arr);
         }).on('mouseenter','.popup-icon',() => {
