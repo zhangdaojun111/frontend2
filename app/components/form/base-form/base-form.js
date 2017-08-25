@@ -1048,15 +1048,21 @@ let config={
             let res= await FormService.saveAddpageData(json);
             console.log(res);
             if(res.succ == 1){
+                MSG.alert('保存成功')
+                Mediator.publish('updateForm:success:'+this.data.tableId,true);
                 if(this.data.isAddBuild && !this.flowId){
                     PMAPI.sendToParent({
                         type: PMENUM.close_dialog,
                         key:this.data.key,
                         data:{new_option:res.new_option},
                     });
+                }else{
+                    PMAPI.sendToParent({
+                        type: PMENUM.close_dialog,
+                        key:this.data.key,
+                        data:'success',
+                    });
                 }
-                MSG.alert('保存成功')
-                Mediator.publish('updateForm:success:'+this.data.tableId,true);
             }
             // this.successAlert(res["error"]);
             //自己操作的新增和编辑收到失效推送自己刷新
