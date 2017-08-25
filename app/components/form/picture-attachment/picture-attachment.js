@@ -5,10 +5,12 @@
 
 import template from './picture-attachment.html';
 let css = `.imgList {
-    width: 15%;
+    width: 20%;
     height: 100%;
-    border: 1px solid #d4d4d4;
+    //border: 1px solid #d4d4d4;
     float: left;
+    margin-left:20px;
+    margin-top:20px;
     overflow-y: scroll;
 }
 .textList {
@@ -19,13 +21,16 @@ let css = `.imgList {
     position: relative;
 }
 .imgList div {
-    height: 80px;
-    border: 1px solid #d4d4d4;
+    height: 40px;
+    border-bottom: 1px solid #d4d4d4;
 }
 .imgList div a {
     display: inline-block;
     margin-left: 5px;
     color: blueviolet;
+}
+.select-img a{
+    background: url("../../../assets/images/form/icon_download.png");
 }
 .imgContain {
     position: relative;
@@ -55,6 +60,7 @@ let css = `.imgList {
 .showImg{
     width:100%;
     height:100%;
+    background: black;
     display: flex;
     align-items: center;
     justify-content: center;
