@@ -14,52 +14,46 @@ import msgbox from "../../../../lib/msgbox";
 import TreeView from "../../../../components/util/tree/tree";
 import {AutoSelect} from '../../../../components/util/autoSelect/autoSelect';
 
-let component;
+
 let config = {
     template:template,
     data:{
         selectedAgent:{},           //记录被选中的代理人
     },
 
-    originData:null,            //请求到的原始数据
-    formatData:null,
-    workflowTree:null,          //工作流数据
-    agentList:null,             //代理人数据
+    originData:{},            //请求到的原始数据
+    formatData:[],
+    workflowTree:{},          //工作流数据
+    agentList:{},             //代理人数据
 
-    selectedWorkflow:null,        //记录被选中的工作流的id
+    selectedWorkflow:new Set(),        //记录被选中的工作流的id
 
     isOpen:0,               //是否开启代理
-    atSelect:null,
+    atSelect:{},
 
     actions:{
         initData:function () {
-            component.showLoading();
-            UserInfoService.getAgentData()
-                .done((result) => {
-                console.log(result);
+            this.showLoading();
+            UserInfoService.getAgentData().done((result) => {
                     if(result.success === 1){
                         this.originData = result;
-                        this.formatData = [];
-                        this.selectedWorkflow = new Set();
                         this.data.selectedAgent = {
                             id:result.data.user_id,
                             name:result.data.agent_name
                         };
                         this.isOpen = result.data.is_apply ? 1:0;
-                        this.atSelect = null;
                         $.extend(true,this.formatData,this.originData.data.workflow_list);
                     }else{
-                        msgbox.alert("数据加载失败");
-                        component.hideLoading();
+                        this.hideLoading();
                         throw error("数据加载失败");
                     }
                 }).done(() => {
                 this.actions.initWorkflow();
                 this.actions.initAgentList();
                 this.actions.initSwitch();
-                component.hideLoading();
+                this.hideLoading();
             }).catch((err) => {
-                msgbox.alert("数据加载失败");
+                msgbox.alert(err);
                 return false;
             });
         },
@@ -126,29 +120,11 @@ let config = {
 
             this.atSelect = autoSelect;
             autoSelect.render($wrap);
-            // this.agentList = this.originData.data.user_list;
-            // let $nameList = this.el.find("#name_list");
-            // for(let agent of this.agentList){
-            //     let newAgent = $("<option class='agentRow'>");
-            //     newAgent.agentData = agent;
-            //     newAgent.html(agent.name);
-            //     $nameList.append(newAgent);
-            // }
-            // this.agentList = this.originData.data.user_list;
-            // let $nameList = this.el.find("#name_list");
-            // for(let agent of this.agentList){
-            //     let newAgent = $("<option class='agentRow'>");
-            //     newAgent.agentData = agent;
-            //     newAgent.html(agent.name);
-            //     $nameList.append(newAgent);
-            // }
         },
         initSwitch:function () {
             if(this.isOpen === 1){
-                console.log("do set open")
                 this.el.find('.open-radio').attr("checked",true);
             }else{
-                console.log("do set close")
                 this.el.find('.close-radio').attr("checked",true);
             }
         },
@@ -198,16 +174,6 @@ let config = {
             }else{
                 this.data.selectedAgent = {};
             }
-            // let user_name = this.el.find("input[name=name_input]").val();
-            // console.log(user_name);
-            // if(user_name !== ''){
-            //     for (let agent of this.originData.data.user_list) {
-            //         if ( user_name === agent.name){
-            //             this.selectedAgent = agent.id;
-            //         }
-            //     }
-            // }
-            // console.log(this.selectedAgent);
         },
         closeSwitch:function (event) {
             this.isOpen = 0;
@@ -252,14 +218,15 @@ let config = {
     },
     afterRender:function () {
         this.actions.initData();
+        let that = this;
         this.el.on("click","span.save-proxy",() => {
-            this.actions.saveAgent();
+            that.actions.saveAgent();
             // }).on("input","input[name=name_input]",(event) => {
             //     this.actions.setAgentId(event);
         }).on("click","input.close-radio",(event) => {
-            this.actions.closeSwitch(event);
+            that.actions.closeSwitch(event);
         }).on("click","input.open-radio",(event) => {
-            this.actions.openSwitch(event);
+            that.actions.openSwitch(event);
         });
     },
     beforeDestory:function () {
@@ -276,7 +243,7 @@ class SetAgent extends Component{
 export const agentSetting = {
     el: null,
     show: function() {
-        component = new SetAgent();
+        let component = new SetAgent();
         component.dataService = UserInfoService;
         this.el = $('<div id="set-agent-page">').appendTo(document.body);
         component.render(this.el);
@@ -296,4 +263,4 @@ export const agentSetting = {
     }
 }
 
-// agentSetting.show();
+
