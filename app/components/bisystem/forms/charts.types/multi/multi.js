@@ -31,7 +31,7 @@ let config = {
         this.el.on(`${this.data.assortment}-chart-source`,(event,params) => {
             this.chartSourceChange(params['sources']);
             return false;
-        })
+        });
 
         this.el.on('click','.multi-add-btn',()=>{
             this.multiAdd();
