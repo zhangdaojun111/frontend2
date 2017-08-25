@@ -68,13 +68,17 @@ export class MultiChartComponent extends BiBaseComponent{
             multiX: instanceFitting({
                 type:'autoComplete',
                 me: this,
+                data: {
+                    label: '选择X轴'
+                },
                 container: 'item-x'
             }),
             multiY: instanceFitting({
                 type:'autoComplete',
                 me: this,
                 data: {
-                    onSelect:this.choosedYs.bind(this)
+                    onSelect:this.choosedYs.bind(this),
+                    label: '选择Y轴'
                 },
                 container: 'item-filed .item-y'
             }),

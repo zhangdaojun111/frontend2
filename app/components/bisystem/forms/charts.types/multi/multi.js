@@ -12,6 +12,7 @@ import {PMAPI} from '../../../../../lib/postmsg';
 import {FormMixShareComponent} from '../../mix.share/mix.share';
 import {MultiChartComponent} from "./chart/chart";
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
+import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 
 import "./multi.scss";
 
@@ -31,6 +32,11 @@ let config = {
         this.el.on(`${this.data.assortment}-chart-source`,(event,params) => {
             this.chartSourceChange(params['sources']);
             return false;
+        }).on(`${this.data.assortment}-chart-editMode-source`, (event,params) => {
+            // 编辑模式
+            if (this.chartId && this.editModeOnce) {
+                this.getChartData(this.chartId);
+            }
         });
 
         this.el.on('click','.multi-add-btn',()=>{
@@ -52,6 +58,32 @@ export class FormMultiComponent extends BiBaseComponent{
         this.formGroup = {};
         this.editModeOnce = this.chartId ? true : false;
         this.editChart = null;
+    }
+
+    /**
+     * 编辑模式发送chartId, 得到服务器数据
+     * @param chartId 图表id
+     */
+    async getChartData(chartId) {
+        if (this.chartId) {
+            const chart = await canvasCellService.getCellChart({chart_id: chartId});
+            this.fillChart(chart[0])
+        }
+    }
+
+    /**
+     * 编辑模式
+     */
+    fillChart(chart) {
+        this.editChart = chart;
+        this.formGroup.multiName.setValue(chart['chartName']);
+        let share = {
+            chartSource:chart['source'],
+            themes: chart['theme'],
+            icons: chart['icon'],
+            filter: chart['filter']
+        };
+        console.log(this.editChart);
     }
 
     /**

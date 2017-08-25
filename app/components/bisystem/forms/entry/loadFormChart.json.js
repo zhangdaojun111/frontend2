@@ -27,8 +27,8 @@ export let componentsJson = {
         'name': '雷达图',
         'component': FormRadarComponent
     },
-    'multi': {
-        'entry': 'multi',
+    'multilist': {
+        'entry': 'multilist',
         'name': '多表图',
         'component': FormMultiComponent
     },
