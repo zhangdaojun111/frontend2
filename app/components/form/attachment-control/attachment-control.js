@@ -8,6 +8,8 @@ import AttachmentQueueItem from "./attachment-queue-item/attachment-queue-item";
 import {screenShotConfig} from "./screenshot-receiver/screenshot-receiver";
 import {PMAPI} from "../../../lib/postmsg";
 import {attachmentListConfig} from "./attachment-list/attachment-list";
+import {FormService} from '../../../services/formService/formService';
+import ThumbnailList from "./thumbnail-list/thumbnail-list";
 
 let config={
     template: template,
@@ -28,9 +30,10 @@ let config={
         },
         uploadFile:function () {
             let ele = this.el.find('.selecting-file');
-            //视频附件
-            if(this.data.dinput_type == 33){
+            if(this.data.dinput_type == 33){  //视频附件
                 ele.attr('accept','video/*');
+            } else if(this.data.dinput_type == 23){  //图片附件
+                ele.attr('accept','image/*');
             }
             ele.click();
         },
@@ -54,6 +57,11 @@ let config={
             if(this.data.dinput_type == 33){
                 if(!file.type.startsWith('video')){
                     alert(file.name + '非视频类型');
+                    return;
+                }
+            } else if(this.data.dinput_type == 23){
+                if(!file.type.startsWith('image')){
+                    alert(file.name + '非图片类型');
                     return;
                 }
             }
