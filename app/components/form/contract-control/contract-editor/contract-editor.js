@@ -88,11 +88,7 @@ export const contractEditorConfig = {
             this.el.find('.contract-tabs').append(tabEle);
             this.el.find('.contract-model').val(0);
             this.el.find('.data-source').val(0);
-            let elements = {};
-            for(let key of this.data.elementKeys){
-                elements[key]=0
-            }
-            this.data.local_data.push({name:'新建',elements:elements,model_id:''});
+            this.data.local_data.push({name:'新建',elements:{},model_id:''});
             this.data['current_tab'] = length;
             this.el.find('.contract-template-anchor').html('<p>请选择模板和数据源。</p>');
             //监听tab
@@ -115,13 +111,13 @@ export const contractEditorConfig = {
                 console.log('tab['+i+'] is undefined');
                 return;
             }
-            let modelFlag = !tab['model_id']||tab['model_id']=='';
-            let dataSourceFlag = !this.actions._isElementFull(tab['elements']);
-            if(modelFlag){
+            if(!tab['model_id']||tab['model_id']==''){
                 this.el.find('.contract-model').val(0);
+                this.el.find('.contract-template-anchor').html('<p>请选择模板。</p>');
+                return;
             }
-            if(modelFlag || dataSourceFlag){
-                this.el.find('.contract-template-anchor').html('<p>请选择模板及所有数据源。</p>');
+            if(!this.actions._isElementFull(tab['elements'])){
+                this.el.find('.contract-template-anchor').html('<p>请选择所有数据源。</p>');
                 return;
             }
 
@@ -151,12 +147,23 @@ export const contractEditorConfig = {
                     this.data.local_data[i]['content']=res.data.content;
                     this.data.local_data[i]['k2v']=res.data.k2v;
                     this.el.find('.edit-or-save').css('display','inline');
+                    let tabName =[];
+                    for(let key of this.data.elementKeys){
+                        let selectEle = this.el.find('#'+key)[0];
+                        tabName.push(selectEle.selectedOptions[0].label);
+                    }
+                   tab['name']=tabName.join(' ');
+                   $(this.el.find('.contract-tab').get(i)).text(tab['name']);
                 }
             })
         },
         _isElementFull:function (elements) {
-            for(let value of Object.values(elements)){
-                if(value==0 || value == ''){
+            if(Object.keys(elements).length == 0){
+                return true;
+            }
+            for(let key of this.data.elementKeys){
+                let value = elements[key];
+                if(!value||value==0 || value == ''){
                     return false;
                 }
             }

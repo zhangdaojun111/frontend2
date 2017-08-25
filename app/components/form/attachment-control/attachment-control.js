@@ -3,7 +3,7 @@
  */
 import template from './attachment-control.html';
 import Component from "../../../lib/component";
-import '../../../lib/msgbox'
+import msgBox from '../../../lib/msgbox';
 import AttachmentQueueItem from "./attachment-queue-item/attachment-queue-item";
 import {screenShotConfig} from "./screenshot-receiver/screenshot-receiver";
 import {PMAPI} from "../../../lib/postmsg";
@@ -51,17 +51,17 @@ let config={
          },
         controlUploadingForFile:function (file) {
             if(file.size>100*1024*1024){
-                alert(file.name + ' 文件过大，无法上传，请确保上传文件大小小于100MB');
+                msgBox.alert(file.name + ' 文件过大，无法上传，请确保上传文件大小小于100MB');
                 return;
             }
             if(this.data.dinput_type == 33){
                 if(!file.type.startsWith('video')){
-                    alert(file.name + '不是视频类型文件，支持文件类型包括：avi, asf, mpg, mpeg, mpe, wmv, mp4');
+                    msgBox.alert('"'+file.name + '"不是视频类型文件，支持文件类型包括：avi, asf, mpg, mpeg, mpe, wmv, mp4');
                     return;
                 }
             } else if(this.data.dinput_type == 23){
                 if(!file.type.startsWith('image')){
-                    alert(file.name + '不是图片类型文件，支持文件类型包括：bmp, jpg, png, tiff, gif, exif, svg, pcd, dxf, ufo');
+                    msgBox.alert('"'+file.name + '"不是图片类型文件，支持文件类型包括：bmp, jpg, png, tiff, gif, exif, svg, pcd, dxf, ufo');
                     return;
                 }
             }
@@ -93,6 +93,9 @@ let config={
     afterRender: function () {
         if(this.data.dinput_type == 33){
             this.el.find('.shot-screen').css('display','none');
+            this.el.find('.upload-file').val('上传视频');
+        } else if(this.data.dinput_type == 23){
+            this.el.find('.upload-file').val('上传图片');
         }
         this.el.on('click','.view-attached-list',()=>{
             this.actions.viewAttachList();
