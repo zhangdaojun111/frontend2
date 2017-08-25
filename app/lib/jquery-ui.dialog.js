@@ -21,8 +21,10 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
     },
 
     _customWindow: function () {
-        this.option('width', document.documentElement.clientWidth);
-        this.option('height', document.documentElement.clientHeight - 180);
+        let width = Math.max(400, document.documentElement.clientWidth);
+        let height = Math.max(400, document.documentElement.clientHeight - 180);
+        this.option('width', width);
+        this.option('height', height);
         this.option('position', {my: "center", at: "center", of: window});
         this.fullScreen = false;
         if (this.uiDialogTitlebarFull) {
@@ -32,10 +34,12 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
     },
 
     _maximizeWindow: function () {
+        let width = Math.max(400, document.documentElement.clientWidth);
+        let height = Math.max(400, document.documentElement.clientHeight);
         this.options.originHeight = this.options.height;
         this.options.originWidth = this.options.width;
-        this.option('width', document.documentElement.clientWidth);
-        this.option('height', document.documentElement.clientHeight);
+        this.option('width', width);
+        this.option('height', height);
         this.option('position', {my: "center", at: "center", of: window});
         this.fullScreen = true;
         if (this.uiDialogTitlebarFull) {
