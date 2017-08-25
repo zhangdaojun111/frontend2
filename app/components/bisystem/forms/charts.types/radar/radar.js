@@ -39,6 +39,7 @@ let config = {
         this.el.on('click', '.save-radar-btn', (event) => {
             this.saveChart();
         });
+
     },
     beforeDestory() {}
 };
@@ -191,4 +192,8 @@ export class FormRadarComponent extends BiBaseComponent{
         this.editModeOnce = this.chartId ? true : false;
         this.editChart = null;
     }
+
+    /**
+     *
+     */
 }
