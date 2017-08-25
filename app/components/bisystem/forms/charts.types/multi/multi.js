@@ -39,6 +39,13 @@ let config = {
             }
         });
 
+        this.el.on('form-multilist-remove',(event,params) => {
+            _.remove(this.formGroup.multiMulti, (comp) => {
+                return comp.componentId == params['componentId']
+            });
+            console.log(this.formGroup.multiMulti);
+        })
+
         this.el.on('click','.multi-add-btn',()=>{
             this.multiAdd();
             return false;
@@ -117,8 +124,11 @@ export class FormMultiComponent extends BiBaseComponent{
     /**
      * reset实例，当通过路由重新进入实例，清空所有数据
      */
-    reset(flag) {
+    reset(chart) {
         this.formGroup = {};
+        this.chartId = chart ? chart.id: null;
+        this.editModeOnce = this.chartId ? true : false;
+        this.editChart = null;
     }
 
     /**
@@ -142,7 +152,7 @@ export class FormMultiComponent extends BiBaseComponent{
     async saveChart() {
         const fields  = this.formGroup;
         const data = {};
-        const sources = []
+        const sources = [];
         fields.multiMulti.forEach(chart => {
             sources.push(chart.getValue());
         });

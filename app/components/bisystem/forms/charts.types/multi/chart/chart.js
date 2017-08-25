@@ -102,6 +102,7 @@ export class MultiChartComponent extends BiBaseComponent{
      * 删除一张图表
      */
     multiDel(){
+        this.messager('form-multilist-remove',{componentId:this.componentId});
         this.destroySelf();
     }
 
