@@ -39,6 +39,7 @@ let config = {
         num:1,
         addNameAry:[],
         saveCommonQuery: false,
+        deleteCommonQuery: false,
         key:'',
         commonQuerySelectLength:null,
         //高级查询字段信息
@@ -226,6 +227,14 @@ let config = {
                 }
             }
         },
+        //取消查询关闭iframe
+        cancelSearch:function() {
+            PMAPI.closeIframeDialog(window.config.key, {
+                saveCommonQuery:this.data.saveCommonQuery,
+                deleteCommonQuery:this.data.deleteCommonQuery,
+                onlyclose:true
+            });
+        },
         //打开保存常用查询
         openSaveQuery: function(){
             if(this.isEdit) {
@@ -344,6 +353,7 @@ let config = {
                             this.data.commonQuery.splice(i,1);
                         }
                     }
+                    this.data.deleteCommonQuery = true;
                 }
             } );
             HTTP.flush();
@@ -395,6 +405,8 @@ let config = {
                 $(this).prop('checked',true)
             }).on('click','.search-button', ()=> {
                 this.actions.submitData()
+            }).on('click','.cancel-button',()=>{
+                this.actions.cancelSearch()
             }).on('click','.reset-button',function(){
                 _this.el.find('.condition-search-container').find('div').remove();
                 _this.actions.rendSearchItem();
