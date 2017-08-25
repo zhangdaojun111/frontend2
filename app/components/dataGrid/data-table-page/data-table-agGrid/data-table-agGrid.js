@@ -2307,6 +2307,7 @@ let config = {
                     btnType: btnType,
                     is_view:1
                 };
+                console.log( o )
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
                 this.actions.openSourceDataGrid( url,title );

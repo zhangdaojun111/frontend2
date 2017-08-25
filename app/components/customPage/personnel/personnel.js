@@ -121,7 +121,7 @@ let config = {
                 }}
                 //添加序号列
                 let number = dgcService.numberCol;
-                // number['headerCellTemplate'] = this.actions.resetPreference();
+                number['headerCellTemplate'] = this.actions.resetPreference();
                 this.data.columnDefs.unshift(number);
                 this.data.columnDefs = [
                     dgcService.numberCol,
@@ -201,7 +201,8 @@ let config = {
                     fixCols: this.data.fixCols,
                     tableId: this.data.tableId,
                     agGrid: this.agGrid,
-                    close: this.actions.calcCustomColumn
+                    close: this.actions.calcCustomColumn,
+                    setFloatingFilterInput: this.actions.setFloatingFilterInput
                 }
                 this.customColumnsCom  = new customColumns(custom);
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
@@ -257,7 +258,7 @@ let config = {
                         }
                         this.actions.setFloatingFilterInput();
                         this.data.filterParam.filter = [];
-                        this.actions.getGridData();
+                        this.actions.getUserData();
                     }
                 } )
             } )
@@ -275,14 +276,9 @@ let config = {
                             };
                             dataTableService.getPreferences( obj ).then( res=>{
                                 dgcService.setPreference( res,this.data );
-                                //初始化偏好隐藏系统默认列
-                                if( res.ignoreFields == null && this.data.haveSystemsFields ){
-                                    this.data.ignoreFields = ['f1','f2','f3','f4'];
-                                }
                                 //创建表头
-                                this.columnDefs = this.actions.createHeaderColumnDefs();
-                                this.agGrid.gridOptions.api.setColumnDefs( this.columnDefs );
-                                dgcService.calcColumnState(this.data,this.agGrid,["group",'number',"mySelectAll"]);
+                                this.agGrid.gridOptions.api.setColumnDefs( this.data.columnDefs );
+                                dgcService.calcColumnState(this.data,this.agGrid,["number","mySelectAll"]);
                             } );
                             HTTP.flush();
                         } );
