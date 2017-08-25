@@ -322,12 +322,6 @@ let config = {
                             return this.actions.bodyCellRender(params);
                         }
                     }
-                    // if (fieldContent) {
-                    //     if (data.data['id'] == fieldContent['child_field']||data.data['id'] == fieldContent['count_field']) {
-                    //         obj['cellStyle'] = {'font-style': 'normal'};
-                    //         obj['cellStyle']['background-color'] =  'rgb(177,215,253)';
-                    //     }
-                    // }
                     // 图片可见单元格属性修改
                     if (data.data["dinput_type"] == fieldTypeService.IMAGE_TYPE && data.data['field_content']['is_show_image'] == 1) {
                         obj['cellStyle'] = {'font-style': 'normal'};
@@ -338,11 +332,9 @@ let config = {
                         width = this.data.colWidth[data.data["field"]];
                     }
                     obj["width"] = width + 17;
-                    if( this.viewMode == 'child' || this.viewMode == 'count' ){
-                        if (( fieldTypeService.childTable(data.data["dinput_type"]) || fieldTypeService.countTable(data.data["dinput_type"]) )) {
-                            obj['editable'] = false;
-                            obj['cellStyle'] = {'font-style': 'normal'};
-                            // obj['cellStyle'] ['background'] = "#ddd"
+                    if( this.data.viewMode == 'child' || this.data.viewMode == 'count' ){
+                        if( this.data.source_field_dfield == data.data["field"] && !edit ){
+                            obj['cellStyle']['background'] = "rgba(255,0,0,0.5)";
                         }
                     }
                     //编辑模式用
@@ -2259,7 +2251,8 @@ let config = {
                     viewMode: 'count',
                     rowId: data.data._id,
                     parentRealId: data.data._id,
-                    fieldId: data.colDef.id
+                    fieldId: data.colDef.id,
+                    source_field_dfield: data.colDef.field_content.count_field_dfield || '',
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
                 let winTitle = this.data.tableName + '->' + obj.tableName;
@@ -2276,7 +2269,8 @@ let config = {
                     viewMode: 'child',
                     rowId: data.data._id,
                     parentRealId: data.data._id,
-                    fieldId: data.colDef.id
+                    fieldId: data.colDef.id,
+                    source_field_dfield: data.colDef.field_content.child_field_dfield || '',
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
                 let winTitle = this.data.tableName + '->' + obj.tableName;
