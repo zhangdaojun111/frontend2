@@ -2,6 +2,7 @@ import Component from '../../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
 import 'jquery-ui/ui/widgets/dialog.js';
+import 'jquery-ui/ui/widgets/sortable';
 import './system-setting.scss';
 import template from './system-setting.html';
 import msgbox from "../../../lib/msgbox";
@@ -69,6 +70,9 @@ let config = {
             this.el.find("span.font-example").css("font-size",fontsize);
         },
         setCheckboxStatus:function () {
+            this.el.find('.sortable-box').sortable();
+            this.el.find('.sortable-box').disableSelection();
+
             if(window.config.sysConfig.logic_config.login_show_bi === '1'){
                 this.el.find('input.bi-Show').attr("checked",true);
             }

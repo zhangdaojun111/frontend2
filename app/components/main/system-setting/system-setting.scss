@@ -17,7 +17,6 @@
             .active{
                 background-color: #ffffff;
             }
-
         }
 
         .style-setting{
@@ -60,25 +59,28 @@
             width: 460px;
             float: left;
             display: none;
-            .isShow-BI{
-                height: 30px;
-                line-height: 30px;
-                margin-left: 30px;
-                margin-top: 25px;
-                .bi-Show{
-                    vertical-align: middle;
+            .sortable-window{
+                .isShow-BI{
+                    height: 30px;
+                    line-height: 30px;
+                    margin-left: 30px;
+                    margin-top: 25px;
+                    .bi-Show{
+                        vertical-align: middle;
+                    }
+                }
+
+                .isShow-calendar{
+                    height: 30px;
+                    line-height: 30px;
+                    margin-left: 30px;
+                    margin-top: 10px;
+                    .calendar-Show{
+                        vertical-align: middle;
+                    }
                 }
             }
 
-            .isShow-calendar{
-                height: 30px;
-                line-height: 30px;
-                margin-left: 30px;
-                margin-top: 10px;
-                .calendar-Show{
-                    vertical-align: middle;
-                }
-            }
 
             .rapid-save-btn{
                 width: 90px;
