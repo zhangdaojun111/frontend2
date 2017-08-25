@@ -36,7 +36,6 @@ let config = {
                 me.data.choosed = arr.filter(item => item.length > 0);
                 // console.log(choosedNum);
                 me.data.singleNum = me.data.choosed.length;
-                console.log(arr)
                 me.reload();
             }
             return false;

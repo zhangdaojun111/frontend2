@@ -55,9 +55,12 @@ let config = {
         })
 
         // 判断是多行表格还是单行表格
-        this.el.on('change', '.form-group-single .single-checkbox input', function() {
+        this.el.on('change', '.form-group-single .single-checkbox input', function(event) {
             let checked= $(this).is(':checked');
             me.formGroup.single = checked ? 1 : 0;
+            if (me.formGroup.single == 1) {
+                me.single.setColumns(me.columns.data.choosed);
+            }
         })
 
         // 判断默认排序
@@ -123,9 +126,16 @@ export class FormTableComponent extends BiBaseComponent{
             filter: chart['filter']
         };
         this.formGroup.share.setValue(share);
-
+        if (chart['sort'] == 1) {
+            this.el.find('.form-group-sort-columns .sort-group input').eq(0).attr('checked', 'checked');
+        } else {
+            this.el.find('.form-group-sort-columns .sort-group input').eq(1).attr('checked', 'checked');
+        }
+        this.el.find('.form-group-align select').val(chart['alignment']);
+        this.el.find('.form-group-show-columns input').val(chart['countNum']);
+        this.el.find('.form-group-single input').attr('checked', chart['single'] == 1 ? true : false);
+        this.formGroup.single = chart['single'];
     }
-
 
     /**
      * 渲染chart fittings
@@ -179,18 +189,36 @@ export class FormTableComponent extends BiBaseComponent{
                 this.columns.setValue(this.editChart['columns']);
                 this.columns.choosed.data.choosed = this.editChart['columns'];
                 this.columns.choosed.reload();
+                if (this.editChart['single'] == 1) {
+                    this.singleConfig(this.editChart['single'] == 1 ? true : false);
+                    this.single.data.singleNum = this.editChart['columnNum'] ? this.editChart['columnNum'] : 1;
+                    this.single.setColumns(this.columns.data.choosed);
+                }
             }
         }
         if (this.formGroup.sortColumn) {
             if (this.formGroup.sortColumn.autoSelect) {
+                this.formGroup.sortColumn.autoSelect.data.choosed = [];
                 this.formGroup.sortColumn.autoSelect.data.list = sources['x_field'];
                 this.formGroup.sortColumn.autoSelect.reload();
+
+                if (this.editModeOnce && this.editChart) {
+                        this.formGroup.sortColumn.setValue(this.editChart['sortColumns'][0])
+                        this.editModeOnce = false;
+                }
             }
         }
 
     }
 
-    reset() {
+    /**
+     * reset实例，当通过路由重新进入实例，清空所有数据
+     */
+    reset(chart) {
+        this.formGroup = {};
+        this.chartId = chart ? chart.id: null;
+        this.editModeOnce = this.chartId ? true : false;
+        this.editChart = null;
     }
 
     /**
