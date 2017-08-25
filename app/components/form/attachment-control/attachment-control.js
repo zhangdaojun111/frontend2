@@ -8,8 +8,8 @@ import AttachmentQueueItem from "./attachment-queue-item/attachment-queue-item";
 import {screenShotConfig} from "./screenshot-receiver/screenshot-receiver";
 import {PMAPI} from "../../../lib/postmsg";
 import {attachmentListConfig} from "./attachment-list/attachment-list";
-import {FormService} from '../../../services/formService/formService';
-import ThumbnailList from "./thumbnail-list/thumbnail-list";
+// import {FormService} from '../../../services/formService/formService';
+// import ThumbnailList from "./thumbnail-list/thumbnail-list";
 
 let config={
     template: template,
@@ -56,12 +56,12 @@ let config={
             }
             if(this.data.dinput_type == 33){
                 if(!file.type.startsWith('video')){
-                    alert(file.name + '非视频类型');
+                    alert(file.name + '不是视频类型文件，支持文件类型包括：avi, asf, mpg, mpeg, mpe, wmv, mp4');
                     return;
                 }
             } else if(this.data.dinput_type == 23){
                 if(!file.type.startsWith('image')){
-                    alert(file.name + '非图片类型');
+                    alert(file.name + '不是图片类型文件，支持文件类型包括：bmp, jpg, png, tiff, gif, exif, svg, pcd, dxf, ufo');
                     return;
                 }
             }
