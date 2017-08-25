@@ -51,6 +51,12 @@ let config={
                 alert(file.name + ' 文件过大，无法上传，请确保上传文件大小小于100MB');
                 return;
             }
+            if(this.data.dinput_type == 33){
+                if(!file.type.startsWith('video')){
+                    alert(file.name + '非视频类型');
+                    return;
+                }
+            }
             let ele = $('<div></div>');
             let item = new AttachmentQueueItem({file:file,real_type:this.data.real_type},
                 {changeFile:event=>{
@@ -64,6 +70,7 @@ let config={
                     }
                     if(event.event == 'finished'){
                         this.data.queue.push(event.data);
+                        this.data.value = this.data.value==''?[]:this.data.value;
                         this.data.value.push(event.data.fileId);
                         this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
                         this.trigger('changeValue', this.data);
