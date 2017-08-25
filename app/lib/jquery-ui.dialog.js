@@ -6,6 +6,9 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
         if (this.options.defaultMax === true) {
             this._maximizeWindow();
         }
+        if (this.options.customSize === true) {
+            this._customWindow();
+        }
         if (this.options.closable === false) {
             this.uiDialogTitlebarClose.hide();
             if (this.uiDialogTitlebarFull) {
@@ -16,6 +19,18 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
         }
         return this;
     },
+
+    _customWindow: function () {
+        this.option('width', document.documentElement.clientWidth);
+        this.option('height', document.documentElement.clientHeight - 180);
+        this.option('position', {my: "center", at: "center", of: window});
+        this.fullScreen = false;
+        if (this.uiDialogTitlebarFull) {
+            this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "ui-icon-newwin");
+            this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
+        }
+    },
+
     _maximizeWindow: function () {
         this.options.originHeight = this.options.height;
         this.options.originWidth = this.options.width;
@@ -23,16 +38,20 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
         this.option('height', document.documentElement.clientHeight);
         this.option('position', {my: "center", at: "center", of: window});
         this.fullScreen = true;
-        this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
-        this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "ui-icon-newwin");
+        if (this.uiDialogTitlebarFull) {
+            this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
+            this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "ui-icon-newwin");
+        }
     },
     _minimizeWindow: function () {
         this.option('width', this.options.originWidth);
         this.option('height', this.options.originHeight);
         this.option('position', {my: "center", at: "center", of: window});
         this.fullScreen = false;
-        this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "ui-icon-newwin");
-        this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
+        if (this.uiDialogTitlebarFull) {
+            this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "ui-icon-newwin");
+            this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
+        }
 
     },
     _createTitlebar: function () {
