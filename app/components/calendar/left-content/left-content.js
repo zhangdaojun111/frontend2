@@ -125,8 +125,9 @@ let config = {
                 '/iframe/calendarOpenSetting/',
                 {
                     title: '日历设置',
-                    width: '75%',
+                    width: '1000',
                     height: '800',
+                    defaultMax: true,
                 },
             );
             // CalendarSetService.getMenu().then(res => {
@@ -158,8 +159,9 @@ let config = {
                 '/calendar_mgr/create/?table_id=1639_8QvxFmFvVpK33bVPXdk8hD',
                 {
                     width: "1000",
-                    height: '550',
+                    height: '800',
                     title: '日历表',
+                    defaultMax: true,
                 }).then(res => {
                 // 创建日历表后的回调，接收form回传的参数
             });

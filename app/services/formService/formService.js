@@ -424,7 +424,7 @@ export const FormService={
     },
     //获取用户打印页眉偏好
     getPrintSetting(){
-        let res=HTTP.post('user_preference',{action:'get'});
+        let res=HTTP.post('user_preference',{action:'get',pre_type:0});
         HTTP.flush();
         return res;
     },

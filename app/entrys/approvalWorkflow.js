@@ -34,7 +34,7 @@ serchStr.split('&').forEach(res => {
     var arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
-
+is_view=obj.btnType==='view'?1:0;
 //订阅form data
 Mediator.subscribe('workFlow:record_info', (res) => {
     ApprovalHeader.showheader(res.record_info);
@@ -43,6 +43,10 @@ Mediator.subscribe('workFlow:record_info', (res) => {
         $('#approval-workflow').find('.for-hide').hide();
     };
     if(res.record_info.status==="已驳回到发起人"&&res.record_info.start_handler===window.config.name){
+        $('#approval-workflow').find('.for-hide').hide();
+        $('#approval-workflow').find('#re-app').show();
+    };
+    if(res.record_info.status==="已撤回"&&res.record_info.start_handler===window.config.name){
         $('#approval-workflow').find('.for-hide').hide();
         $('#approval-workflow').find('#re-app').show();
     };
@@ -171,7 +175,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
             for(var i in focus){
                 nameArr.push(`<span class="selectSpan">${users.rows[focus[i]].name}</span>`);
             }
-            $('#addFollowerList').html(nameArr);
+            $('#add-home #addFollowerList').html(nameArr);
             if(nameArr.indexOf(window.config.name)>-1&&window.config.name!=res.record_info.current_node){
                 $('#approval-workflow').find('.for-hide').hide();
                 $('#approval-workflow').find('#re-app').hide();
@@ -295,7 +299,8 @@ Mediator.subscribe("approval:re-app", (msg) => {
         let postData={
             flow_id:obj.flow_id,
             focus_users:JSON.stringify(focusArr)||[],
-            data:JSON.stringify(formData)
+            data:JSON.stringify(formData),
+            record_id:obj.record_id
         };
         (async function () {
             return await workflowService.createWorkflowRecord(postData);
