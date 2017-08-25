@@ -43,14 +43,12 @@ let tree=[],staff=[];
                 for(var k in staff){
                     if(k==selectedNode.id){
                         Mediator.publish('workflow:checkDept', staff[k]);
-                        // recursion(staff,selectedNode,'checkDept');
                     }
                 }
             }else{
                 for(var k in staff){
                     if(k==selectedNode.id){
                         Mediator.publish('workflow:unCheckDept', staff[k]);
-                        // recursion(staff,selectedNode,'unCheckDept');
                     }
                 }
             }
@@ -96,7 +94,6 @@ Mediator.publish('workflow:getKey', obj.key);
         Mediator.publish('workflow:getParams', res.data.flow_data);
     }
 });
-Mediator.publish('workflow:focused', []);
 Mediator.subscribe('workflow:getflows', (res)=> {
     obj.flow_id=res.flow_id;
     obj.form_id=res.form_id;
@@ -120,7 +117,6 @@ Mediator.subscribe('workflow:getflows', (res)=> {
         id:obj.id,
         key:obj.key
     });
-    
 });
 let focusArr=[];
 Mediator.subscribe('workflow:focus-users', (res)=> {
@@ -132,9 +128,9 @@ Mediator.subscribe('workflow:submit', (res)=> {
         msgBox.alert(`${formData.errorMessage}`);
     }else{
         let postData={
-                flow_id:obj.flow_id,
-                focus_users:JSON.stringify(focusArr)||[],
-                data:JSON.stringify(formData)
+            flow_id:obj.flow_id,
+            focus_users:JSON.stringify(focusArr)||[],
+            data:JSON.stringify(formData)
         };
         (async function () {
             return await workflowService.createWorkflowRecord(postData);
