@@ -51,9 +51,9 @@ const handlers = {
         return headerCell[0];
     },
     readRender: function (data) {
-        return `<div class="grid-cell-info">${data.value?'已读':'未读'}<div>`
+        return `<div class="grid-cell-info ${data.value?'already-read-icon':'not-read-icon'}">${data.value?'已读':'未读'}<div>`;
     }
-}
+};
 
 export const systemMessageService = {
     columnDefs: [],
@@ -64,13 +64,20 @@ export const systemMessageService = {
                 headerCellTemplate: function (data) {
                     return handlers.selectAll(data);
                 },
-
                 width: 60,
                 headerName: '全选',
                 checkboxSelection: true,
                 suppressSorting: true,
                 suppressMenu: true,
                 cellStyle: {'text-align': 'center'},
+            }, {
+                headerName: '阅读状态',
+                field: 'is_read',
+                width: 60,
+                suppressMenu: true,
+                tooltipField: 'is_read',
+                cellStyle: {'text-align': 'center'},
+                cellRenderer: handlers.readRender
             }, {
                 headerName: '发布者',
                 field: 'publisher',
@@ -108,14 +115,6 @@ export const systemMessageService = {
                 suppressMenu: true,
                 tooltipField: 'create_time',
                 cellStyle: {'text-align': 'center'}
-            }, {
-                headerName: '阅读状态',
-                field: 'is_read',
-                width: 60,
-                suppressMenu: true,
-                tooltipField: 'is_read',
-                cellStyle: {'text-align': 'center'},
-                cellRenderer: handlers.readRender
             }, {
                 headerName: '执行状态',
                 field: 'handle_status_text',

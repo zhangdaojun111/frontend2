@@ -15,13 +15,19 @@ let config = {
         remindTaskData: {},
         remindTaskItemData:{},
         isFinishedTask:false,
+        isNone: false,
         isWaitCheck:true,
         sValue: '',
         sLabel: '',
         type: '',
+        isHomeCalendar:false,
     },
     actions: {
-
+        /**
+         * @author zj
+         * @param sValue
+         * @param sLabel
+         */
         changSelectValue: function(sValue, sLabel){
             let oldValue = this.data.remindTaskItemData['data3show'][0][0]['selectValue'];
             let oldLabel = this.data.remindTaskItemData['data3show'][0][0]['selectLabel'];
@@ -45,6 +51,10 @@ let config = {
                 }
             });
         },
+
+        /**
+         * @author zj
+         */
         openRemind: function () {
             CalendarRemind.data.remindTable = this.data.remindTaskItemData.tableName;
             CalendarRemind.data.remindDateProp = this.data.remindTaskItemData.fieldName;
@@ -62,6 +72,7 @@ let config = {
                 console.log(data);
             });
         },
+
 
         openWorkflow: function () {
             this.el.find('.task-show-text').html(this.data.remindTaskItemData['data']['name']);
@@ -85,12 +96,13 @@ let config = {
         if(this.data.remindTaskItemData.selectOption) {
             for( let s of this.data.remindTaskItemData.selectOption ){
                 if( s.value === this.data.remindTaskItemData['data3show'][0][0]['selectValue'] ){
-                    this.el.find('.select-options option').each((item) => {
-                        let a = $('.select-options option')[item].value;
+                    let selectOpts = this.el.find('.select-options option');
+                    selectOpts.each(item => {
+                        let a = selectOpts[item].value;
                         if(a === s.value) {
                             this.el.find('.select-options option')[item].selected  = 'selected';
                         }
-                    });
+                    })
                 }
             }
         }
@@ -112,7 +124,6 @@ let config = {
         this.el.on('click','.task-state-icon', function() {
             event.stopPropagation();
             if(!$(this).is(".options-show")){
-                console.log(that.el.find(".task-state-icon").offset().top);
                 that.el.parents(".calendar-main-content").find(".select-options").hide();
                 that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
                 // that.el.find(".select-options").css({"top":that.el.find(".task-state-icon").offset().top - 70});
@@ -156,7 +167,27 @@ class CalendarRemindTaskItem extends Component {
         if(data['data']['data3show']) {
             config.data.remindTaskData = data['data']['data3show'][0][0];
         }
-
+        if(config.data.remindTaskItemData.tableName === "首页日历事件表"){
+            config.data.isHomeCalendar = true;
+            //config.data.isFinishedTask =  config.data.TestValue.test(config.data.remindTaskData.fieldValue);
+            if(config.data.remindTaskData['selectLabel']) {
+                let checkText = '已';
+                let uncheckText = '未';
+                if(config.data.remindTaskData['selectLabel'].indexOf(checkText) >= 0) {
+                    config.data.isFinishedTask = true;
+                }else if (config.data.remindTaskData['selectLabel'].indexOf(uncheckText) >= 0) {
+                    config.data.isFinishedTask = false
+                }
+            } else {
+                config.data.isNone = true;
+            }
+        }else{
+            if(config.data.remindTaskData['selectLabel']) {
+                config.data.isFinishedTask = true;
+            } else {
+                config.data.isNone = true;
+            }
+        }
         super(config);
     }
 }

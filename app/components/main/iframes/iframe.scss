@@ -80,6 +80,9 @@
                         margin-top: 7px;
                         background-image: url("../../../assets/images/framework/drop-down-icon.png");
                         cursor: pointer;
+                        &.mouse-enter-icon{
+                            background-image: url("../../../assets/images/framework/mouse-enter-icon.png");
+                        }
                     }
                 }
                 .tab-list{
