@@ -67,6 +67,9 @@ serchStr.split('&').forEach(res => {
     obj[arr[0]] = arr[1];
 });
 is_view=obj.btnType==='view'?1:0;
+if(obj.btnType==='view'){
+    $('#subAddworkflow').hide();
+}
 Mediator.publish('workflow:getKey', obj.key);
 (async function () {
     return workflowService.getPrepareParams({table_id:obj.table_id});
@@ -95,6 +98,10 @@ Mediator.publish('workflow:getKey', obj.key);
     }
 });
 Mediator.subscribe('workflow:getflows', (res)=> {
+    if(obj.btnType==='view'){
+        $('#toEdit').show();
+        $('#addFollower').hide();
+    }
     obj.flow_id=res.flow_id;
     obj.form_id=res.form_id;
     WorkFlow.createFlow({flow_id:res.flow_id,el:"#flow-node"});
@@ -151,6 +158,3 @@ Mediator.subscribe('workflow:submit', (res)=> {
         })
     }
 })
-if(obj.btnType==='view'){
-    $('.workflow-flex').hide();
-}
