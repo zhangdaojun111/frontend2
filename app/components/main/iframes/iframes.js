@@ -64,6 +64,8 @@ export const IframeInstance = new Component({
         focus: null,
         hideFlag:false,
         tempList:[],        //记录未关闭的tabs的id
+        timeList:{},        //记录tabs的时间戳
+        biCalendarList:[],  //记录日历BI是否开启，tabs排序完成后，与autoOpenList合并
         autoOpenList:[],        //记录根据id找到的iframes的所有信息url、id、name用于打开iframes
         isLoginShowBI:"",
         isLoginShowCalendar:"",
@@ -81,6 +83,12 @@ export const IframeInstance = new Component({
                     .prependTo(this.data.tabs);
                 let iframe = $(`<div class="item"><iframe id="${id}" src="${url}"></iframe></div>`).appendTo(this.data.iframes);
                 let originIframe = iframe.find('iframe');
+
+                this.showLoading(this.data.iframes);
+                window.clearTimeout(this.data.loadingTimer);
+                this.data.loadingTimer = window.setTimeout(() => {
+                    this.hideLoading();
+                }, 500);
 
                 originIframe.on('load', function () {
                     PMAPI.sendToChild(originIframe[0], {
@@ -189,7 +197,14 @@ export const IframeInstance = new Component({
         showTabsPopup:function () {
             this.actions.initTabList(this.data.sort);
             this.el.find('.tab-list').show();
+            this.el.find('.popup-icon').addClass('mouse-enter-icon');
             window.clearTimeout(this.data.timer)
+        },
+        resetIcon:function () {
+            this.el.find('.popup-icon').removeClass('mouse-enter-icon');
+        },
+        clearTimeOut:function () {
+            window.clearTimeout(this.data.timer);
         },
         hideTabsPopup(){
             this.data.timer = window.setTimeout(() => {
@@ -360,6 +375,39 @@ export const IframeInstance = new Component({
                 let width = singleWidth - 25 + "px";            // -25 padding
                 this.el.find('.tabs div.item').css("width",width);
             }
+        },
+        sendMsgToIframes: function (info) {
+            PMAPI.sendToAllChildren({
+                type: PMENUM[info.typeName],
+                data: info
+            });
+        },
+        displaySearchResult:function (data) {
+            let content = data.content;
+            let formerContent = data.formerContent;
+            //判断搜索结果iframe是否已打开，打开则重置src
+            //此处全局搜索div.iframes
+            let resultIframe;
+            let iframes =  this.el.find("div.iframes iframe");
+            let str = "searchContent=" + formerContent;
+            str = encodeURI(str);
+            for(let k of iframes){
+                let src = k.src;
+                if(src.indexOf(str) > 0){
+                    resultIframe = k;
+                }
+            }
+
+            if(resultIframe){
+                let newSrc = '/search_result?searchContent=' + content;
+                $(resultIframe).attr("src",newSrc);
+            }else{
+                //搜索结果展示窗口未打开
+                let id = "search-result";
+                let url = "/search_result?searchContent=" + content;
+                let name = "搜索结果";
+                this.actions.openIframe(id,url,name);
+            }
         }
     },
     afterRender: function () {
@@ -382,6 +430,12 @@ export const IframeInstance = new Component({
 
         this.el.on('click','.view-save',function () {
             SaveView.show(that.data.sort);
+            let temp_arr = _.defaultsDeep([],that.data.sort);
+            SaveView.show(temp_arr);
+        }).on('mouseenter','.popup-icon',() => {
+            this.actions.showTabsPopup();
+        }).on('mouseleave','.popup-icon',() => {
+            this.actions.resetIcon();
         }).on('mouseenter','.view-popup',() => {
             this.actions.showTabsPopup();
         }).on('click','.tab-list',(event) => {
@@ -395,7 +449,9 @@ export const IframeInstance = new Component({
         Mediator.on('menu:item:openiframe', (data) => {
             this.actions.openIframe(data.id, data.url, data.name)
         });
-
+        Mediator.on('search:displayreuslt',(data) => {
+            this.actions.displaySearchResult(data);
+        });
         Mediator.on('aside:size', (order) => {
             if (order === 'full') {
                 this.actions.setSizeToFull();

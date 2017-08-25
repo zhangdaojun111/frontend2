@@ -24,7 +24,7 @@ let config = {
         choosed: [],                    // 已经选择的数据
         displayType: 'popup',           // popup或者static popup为弹出的形式 static 为静态显示
         multiSelect: true,              // 是否多选
-        selectBoxHeight: 300,           // select 框的高度
+        selectBoxHeight: 'auto',           // select 框的高度
         width: 0,                       // 为0表示显示默认宽度240
         editable: true,                 // 是否可编辑
         displayChoosed: true,           // 是否显示已选中的
@@ -90,7 +90,6 @@ let config = {
             return this.data.choosed;
         },
         setChoosed: function (choosed) {
-            console.log(choosed);
             this.data.choosed = choosed;
             this.actions.renderChoosed();
         },
@@ -121,6 +120,7 @@ let config = {
             } else {
                 this.choosedWrap.hide();
             }
+            this.el.find('.select-all span').text(this.data.choosed.length);
         },
         selectAll: function () {
             if (this.data.choosed.length === this.data.list.length) {
@@ -140,13 +140,13 @@ let config = {
             }, 50)
         },{
             event: 'input',
-            selector: 'input.text',
+            selector: 'input.auto-select-text',
             callback: _.debounce(function (context) {
                 this.actions.onInput($(context));
             }, 1000)
         },{
             event: 'click',
-            selector: '.choosed',
+            selector: '.choosed .item',
             callback: function (context) {
                 let id = $(context).data('id');
                 this.actions.unSelectItem(id);
@@ -163,7 +163,16 @@ let config = {
         this.listWrap = this.el.find('.list');
         this.choosedWrap = this.el.find('.choosed');
         this.actions.renderChoosed();
-        this.listWrap.height(this.data.selectBoxHeight);
+        if (this.data.selectBoxHeight === 'auto') {
+            this.listWrap.css({
+                height: 'auto'
+            });
+            this.listWrap.find('ul').css({
+                maxHeight: '150px'
+            });
+        } else {
+            this.listWrap.height(this.data.selectBoxHeight);
+        }
         if (this.data.displayType === 'popup') {
             this.listWrap.addClass('popup');
         }
@@ -177,7 +186,7 @@ let config = {
             this.el.find('input.text').attr('disabled', 'true');
         }
         if (this.data.multiSelect === false) {
-            this.listWrap.find('button').hide();
+            this.listWrap.find('.select-all').hide();
             this.listWrap.find('ul').height('100%');
         }
     },

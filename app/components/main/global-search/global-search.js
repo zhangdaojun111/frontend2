@@ -89,38 +89,36 @@ let config ={
             // 暂时隐藏搜索按钮
             // this.el.find(".search-icon").hide();
             if(content && content !== ''){
-                //判断搜索结果iframe是否已打开，打开则重置src
-                //此处全局搜索div.iframes
-                let resultIframe;
-                let iframes =  $("div.iframes").find("iframe");
-                let str = "searchContent=" + this.data.formerSearchContent;
-                str = encodeURI(str);
-                for(let k of iframes){
-                    let src = k.src;
-                    if(src.indexOf(str) > 0){
-                        resultIframe = k;
-                    }
-                }
-
-                if(resultIframe){
-                    let newSrc = '/search_result?searchContent=' + this.data.searchContent;
-                    $(resultIframe).attr("src",newSrc);
-                }else{
-                    //搜索结果展示窗口未打开
-                    Mediator.emit('menu:item:openiframe', {
-                        id: "search-result",
-                        name: "搜索结果",
-                        url: "/search_result?searchContent=" + content
-                    });
-                }
+                // //判断搜索结果iframe是否已打开，打开则重置src
+                // //此处全局搜索div.iframes
+                // let resultIframe;
+                // let iframes =  $("div.iframes").find("iframe");
+                // let str = "searchContent=" + this.data.formerSearchContent;
+                // str = encodeURI(str);
+                // for(let k of iframes){
+                //     let src = k.src;
+                //     if(src.indexOf(str) > 0){
+                //         resultIframe = k;
+                //     }
+                // }
+                //
+                // if(resultIframe){
+                //     let newSrc = '/search_result?searchContent=' + this.data.searchContent;
+                //     $(resultIframe).attr("src",newSrc);
+                // }else{
+                //     //搜索结果展示窗口未打开
+                //     Mediator.emit('menu:item:openiframe', {
+                //         id: "search-result",
+                //         name: "搜索结果",
+                //         url: "/search_result?searchContent=" + content
+                //     });
+                // }
+                Mediator.emit('search:displayreuslt', {'content':content,'formerContent':this.data.formerSearchContent});
                 this.actions.addSearchHistory();
                 this.data.formerSearchContent = this.data.searchContent;
             }else{
                 msgbox.alert("搜索内容不能为空");
             }
-
-
-
         },
         addSearchHistory(){
             let content = this.data.searchContent;

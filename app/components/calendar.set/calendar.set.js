@@ -1,6 +1,12 @@
 /**
  * Created by zj on 2017/8/3.
  */
+
+/**
+ * @author zj
+ * @description 对日历表进行设置
+ */
+
 import Component from "../../lib/component";
 import template from './calendar.set.html';
 import './calendar.set.scss';
@@ -47,6 +53,11 @@ let config = {
         childComponents: [],
     },
     actions: {
+
+        /**
+         * @author zj
+         * 组装设置中下拉选项数据
+         */
         getMultiSelectDropdown: function(){
             let res = this.data.filedHead;
             this.data.dropdown = [];
@@ -70,14 +81,25 @@ let config = {
             }
             this.actions.getSetting(this.data.tableId);
         },
+
+
         getSetting: function(tableid){
             let res = this.data.colorInfoFields;
             this.data.initAllRows = [];
             this.data.initAllRows = res;
             this.actions.makeRows(this.data.initAllRows);
         },
+
+        /**
+         * @author zj
+         * 组装设置的行数据
+         * @param param
+         */
         makeRows: function(param){
+            console.log(param);
             this.data.allRows = [];
+
+            // 获取可配置字段数据
             CalendarService.getReplace(this.data.tableId).then(res => {
                 if(res.error !== ''){
                     throw res.error;
@@ -105,6 +127,7 @@ let config = {
                         })
                     }
                 }else {
+                    // 组装行数据
                     for(let singleSetting of param['rows']){
 
                         this.data.allRows.push({
@@ -123,46 +146,66 @@ let config = {
                         })
                     }
                 }
-                this.data.childComponents = [];
-                this.data.allRows.forEach((row, index) => {
-                    let isConfig = false;
-                    if(this.data.rowTitle[index]['id'] && this.data.rowTitle[index]['dtype'] === '8' && this.data.replaceDropDown.length !== 0){
-                        isConfig = true;
-                    }
+                this.actions.createSettingRow();
 
-                    let calendarSetItem = new CalendarSetItem({
-                        rowData: row,
-                        dropdown: this.data.dropdown,
-                        dropdownForRes: this.data.dropdownForRes,
-                        dropdownForCalendarChange: this.data.dropdownForCalendarChange,
-                        replaceDropDown: this.data.replaceDropDown,
-                        isConfigField: isConfig,
-                        rowTitle: this.data.rowTitle[index],
-
-                        recipients: this.data.recipients,
-                        recipients_per: this.data.recipients_per,
-                        copypeople: this.data.copypeople,
-                        emailAddressList: this.data.emailAddressList,
-                        emailAddress: this.data.emailAddress,
-                    });
-                    this.data.childComponents.push(calendarSetItem);
-                    this.append(calendarSetItem, this.el.find('.set-items'));
-                    Mediator.emit('calendar-set:editor',{data:0});
-                });
             }).catch(err=>{
                 console.log('error',err);
             });
         },
 
-        representChange: function(a,a_selectedRepresent){
-            if( a_selectedRepresent === '' ){
-                return;
-            }
-            if(a.selectedOpts.indexOf(a_selectedRepresent) === -1){
-                a.selectedOpts.push(a_selectedRepresent);
-            }
+        /**
+         * @author zj
+         * 创建行组件
+         */
+        createSettingRow: function () {
+            this.data.childComponents = [];
+            this.data.allRows.forEach((row, index) => {
+                let isConfig = false;
+                if(this.data.rowTitle[index]['id'] && this.data.rowTitle[index]['dtype'] === '8' && this.data.replaceDropDown.length !== 0){
+                    isConfig = true;
+                }
+                let rowTitleItem = {};
+                for(let a of this.data.rowTitle) {
+                    if(a['id'] === row['field_id']) {
+                        rowTitleItem['id'] = a['id'];
+                        rowTitleItem['name'] = a['name'];
+                    }
+                }
+                let calendarSetItem = new CalendarSetItem({
+                    rowData: row,
+                    dropdown: this.data.dropdown,
+                    dropdownForRes: this.data.dropdownForRes,
+                    dropdownForCalendarChange: this.data.dropdownForCalendarChange,
+                    replaceDropDown: this.data.replaceDropDown,
+                    isConfigField: isConfig,
+                    rowTitle: rowTitleItem,
+
+                    recipients: this.data.recipients,
+                    recipients_per: this.data.recipients_per,
+                    copypeople: this.data.copypeople,
+                    emailAddressList: this.data.emailAddressList,
+                    emailAddress: this.data.emailAddress,
+                });
+                this.data.childComponents.push(calendarSetItem);
+                this.append(calendarSetItem, this.el.find('.set-items'));
+                Mediator.emit('calendar-set:editor',{data:0});
+            });
         },
 
+        // representChange: function(a,a_selectedRepresent){
+        //     if( a_selectedRepresent === '' ){
+        //         return;
+        //     }
+        //     if(a.selectedOpts.indexOf(a_selectedRepresent) === -1){
+        //         a.selectedOpts.push(a_selectedRepresent);
+        //     }
+        // },
+
+        /**
+         * @author zj
+         * @param tableId
+         * 是否确定重置
+         */
         despReset: function(tableId){
             this.data.tableId=tableId;
             MSG.alert("确定要重置吗？重置后会清空所有设置").then(res => {
@@ -173,6 +216,10 @@ let config = {
             });
         },
 
+        /**
+         * 重置所有设置
+         * @param tableId
+         */
         reset: function(tableId){
             for(let a of this.data.allRows){
                 a['isSelected']=false;
@@ -207,20 +254,21 @@ let config = {
                 if(res['success'] === 1){
                     MSG.alert('重置成功');
                     setTimeout( ()=>{
-                        // CalendarSetService.getColumnList(this.data.tableId).then(res => {
-                        //     console.log(res);
-                        // })
                         this.el.find('.set-items').empty();
                         this.actions.getColumnListData(this.data.tableId);
                     },200 )
                 }else  if(res['success'] === 0){
                     MSG.alert('重置失敗');
-                    //MSG.alert(res['error']);
-                    // this.saveStatus.emit( res['success'] === "0" );
                 }
             });
         },
 
+        /**
+         * @author zj
+         * @param tableId
+         * @param param
+         * 保存修改
+         */
         saveSetting(tableId,param){
             // 判断提醒开启时收件人不为空
             for( let data of param ){
@@ -276,9 +324,13 @@ let config = {
             Mediator.emit('calendar-set:editor',{data:-1});
         },
 
+        /**
+         * @author zj
+         * @param tableId
+         *
+         */
         getColumnListData: function (tableId) {
             CalendarSetService.getColumnList(tableId).then(res => {
-
                 this.data.filedHead = res['rows'];
                 CalendarService.getCalendarTableById(tableId).then(res => {
                     this.data.colorInfoFields = res;
@@ -304,25 +356,6 @@ let config = {
                         }
                     }
                 });
-                // UserInfoService.getAllUsersInfo().then(user => {
-                //     this.data.copypeople = [];
-                //     for( let data of user.rows ){
-                //         this.data.copypeople.push( {name:data.name,id:data.id} );
-                //     }
-                // });
-                //
-                // CalendarSetService.getEmailSetting().then(res => {
-                //     this.data.emailAddressList = [];
-                //     for(let x in res['data']){
-                //         this.data.emailAddressList.push({
-                //             name:res['data'][x]['host']+'('+res['data'][x]['user']+')',
-                //             id:res['data'][x]['id']?res['data'][x]['id']:''
-                //         });
-                //         if(res['data'][x]['is_default'] === 1){
-                //             this.data.emailAddress = res['data'][x]['id'];
-                //         }
-                //     }
-                // });
 
             });
         }
@@ -335,6 +368,7 @@ let config = {
             this.data.tableId = window.config.table_id;
             this.actions.getColumnListData(this.data.tableId);
         }
+
         UserInfoService.getAllUsersInfo().then(user => {
             this.data.copypeople = [];
             for( let data of user.rows ){

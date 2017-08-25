@@ -33,6 +33,7 @@ const workflowForGrid={
         obj.table_id=para.table_id;
         obj.form_id=para.form_id;
         obj.flow_id=para.flow_id;
+        ApprovalWorkflow.create(para.el);
         this.create();
     },
     create(){
