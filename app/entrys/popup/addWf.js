@@ -17,6 +17,7 @@ import WorkFlow from '../../components/workflow/workflow-drawflow/workflow';
 import WorkflowAddFollow from '../../components/workflow/workflow-addFollow/workflow-addFollow/workflow-addFollow';
 import TreeView from '../../components/util/tree/tree';
 import jsplumb from 'jsplumb';
+import {PMAPI,PMENUM} from '../../lib/postmsg';
 
 
 WorkflowAddFollow.showAdd();
@@ -143,7 +144,10 @@ Mediator.subscribe('workflow:submit', (res)=> {
                 PMAPI.sendToParent({
                     type: PMENUM.close_dialog,
                     key:obj.key,
-                    data:{}
+                    data:{
+                        table_id:obj.table_id,
+                        type:'closeAddition'
+                    }
                 });
             }else{
                 msgBox.alert(`${res.error}`);
