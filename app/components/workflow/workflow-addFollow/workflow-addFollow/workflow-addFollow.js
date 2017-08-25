@@ -37,10 +37,17 @@ let config={
             this.data.idArr=res;
         });
 
+        this.check = {};
         //部门选择
         Mediator.subscribe('workflow:checkDept', (res)=> {
-
             $.each(res,(i,val)=>{
+                if(JSON.stringify(this.check).indexOf(i)==-1){
+                    this.check[i] = val;
+                };
+            })
+            this.el.find('#staffMulti').empty();
+            this.el.find("#selected").empty();
+            $.each(this.check,(i,val)=>{
                 val.id=i;
                 this.append(new SelectStaff(val), this.el.find('#staffMulti'));
             });
@@ -58,27 +65,39 @@ let config={
 
         //部门反选，删除SelectedStaff组件
         Mediator.subscribe('workflow:unCheckDept', (res)=> {
+            $.each(res,(i,val)=>{
+                if(JSON.stringify(this.check).indexOf(i) != -1){
+                    delete this.check[i];
+                }
+            })
+            this.el.find('#staffMulti').empty();
+            this.el.find("#selected").empty();
+            $.each(this.check,(i,val)=>{
+                val.id=i;
+                this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+            });
 
-            let userArr=[];
-            for(var id in res){
-                userArr.push(id);
-            }
-            let domDiv=this.el.find('#staffMulti').find('.flex');
-            for(var i=0;i<domDiv.length;i++){
-                for(var j=0;j<userArr.length;j++){
-                    if($(domDiv[i]).data('id')===userArr[j]){
-                        $(domDiv[i]).parent().remove();
-                    }
-                }
-            }
-            let domSpan=this.el.find('#selected').find('span.removeble');
-            for(var i=0;i<domSpan.length;i++){
-                for(var j=0;j<userArr.length;j++){
-                    if($(domSpan[i]).data('id')===userArr[j]){
-                        $(domSpan[i]).parent().remove();
-                    }
-                }
-            }
+
+            // let userArr=[];
+            // for(var id in this.check){
+            //     userArr.push(id);
+            // }
+            // let domDiv=this.el.find('#staffMulti').find('.flex');
+            // for(var i=0;i<domDiv.length;i++){
+            //     for(var j=0;j<userArr.length;j++){
+            //         if($(domDiv[i]).data('id')===userArr[j]){
+            //             $(domDiv[i]).parent().remove();
+            //         }
+            //     }
+            // }
+            // let domSpan=this.el.find('#selected').find('span.removeble');
+            // for(var i=0;i<domSpan.length;i++){
+            //     for(var j=0;j<userArr.length;j++){
+            //         if($(domSpan[i]).data('id')===userArr[j]){
+            //             $(domSpan[i]).parent().remove();
+            //         }
+            //     }
+            // }
         });
 
         //注册SelectedStaff组件
