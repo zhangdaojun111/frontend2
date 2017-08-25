@@ -24,6 +24,7 @@ let config = {
         },
     },
     afterRender: function() {
+        this.showLoading();
         let self=this;
         this.showgz = false;
 
@@ -54,5 +55,6 @@ export default {
         let component = new ApprovalHeader(data);
         let el = $('#approval-info');
         component.render(el);
+        component.hideLoading();
     },
 };
