@@ -188,6 +188,7 @@ export class MultiChartComponent extends BiBaseComponent{
             chartType: data.multiType == 'line' ? {'name': '折线图', 'type': 'line'} : {'name': '柱状图', 'type': 'bar'},
             countColumn: '',
             filter: [],
+            filter_rule: {},
             sources: data.multiSource,
             xAxis: data.multiX,
             yAxis: data.multiCheckbox

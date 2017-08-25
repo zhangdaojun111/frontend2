@@ -132,11 +132,13 @@ export class FormMixShareComponent extends BiBaseComponent {
     /**
      * 设置mix.share value
      */
-    setValue(val) {
-        this.mixForm.chartSource.setValue(val['chartSource']);
+    setValue(val,multilist = false) {
         this.mixForm.themes.setValue(val['themes']);
         this.mixForm.icons.setValue(val['icons']);
-        this.mixForm.filter = val['filter'];
+        if (!multilist) {
+            this.mixForm.chartSource.setValue(val['chartSource']);
+            this.mixForm.filter = val['filter'];
+        };
     }
 
     /**

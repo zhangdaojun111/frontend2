@@ -82,6 +82,7 @@ export class FormMultiComponent extends BiBaseComponent{
      * 编辑模式
      */
     fillChart(chart) {
+        console.log(chart);
         this.editChart = chart;
         this.formGroup.multiName.setValue(chart['chartName']);
         let share = {
@@ -90,7 +91,10 @@ export class FormMultiComponent extends BiBaseComponent{
             icons: chart['icon'],
             filter: chart['filter']
         };
-        console.log(this.editChart);
+        this.formGroup.multiShare.setValue(share, true);
+        chart['sources'].forEach(source => {
+            this.multiAdd();
+        });
     }
 
     /**
@@ -117,6 +121,9 @@ export class FormMultiComponent extends BiBaseComponent{
         if (this.data.sources.length > 0) {
             chart.multiChart.multiSource.autoSelect.data.list = this.data.sources;
             chart.multiChart.multiSource.autoSelect.reload();
+            if (this.editModeOnce) {
+
+            };
         }
         this.formGroup.multiMulti.push(chart);
     }
@@ -138,8 +145,11 @@ export class FormMultiComponent extends BiBaseComponent{
     chartSourceChange(sources) {
         if (this.formGroup.multiShare) {
             this.data.sources = this.formGroup.multiShare.mixForm.chartSource.autoSelect.data.list;
-            this.multiAdd();
+            if (!this.editModeOnce) {
+                this.multiAdd();
+            };
             this.formGroup.multiMulti.forEach((item,index) => {
+                item.multiChart.multiSource.autoSelect.data.choosed = [];
                 item.multiChart.multiSource.autoSelect.data.list = this.data.sources;
                 item.multiChart.multiSource.autoSelect.reload();
             })
