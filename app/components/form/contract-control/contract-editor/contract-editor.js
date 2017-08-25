@@ -111,9 +111,13 @@ export const contractEditorConfig = {
             this.data['current_tab']=i;
             console.log("current tab "+i);
             let tab = this.data.local_data[i];
+            if(tab==undefined){
+                console.log('tab['+i+'] is undefined');
+                return;
+            }
             let modelFlag = !tab['model_id']||tab['model_id']=='';
             let dataSourceFlag = !this.actions._isElementFull(tab['elements']);
-             if(modelFlag){
+            if(modelFlag){
                 this.el.find('.contract-model').val(0);
             }
             if(modelFlag || dataSourceFlag){
@@ -208,6 +212,10 @@ export const contractEditorConfig = {
         this.actions.getElement(obj).then(res=>{
             if(res.success){
                 this.actions.loadData(res);
+                if(this.data.local_data==''){
+                    this.data.local_data = [];
+                    this.actions.addTab();
+                }
                 this.actions._loadTemplateByIndex(0);
             }
         })

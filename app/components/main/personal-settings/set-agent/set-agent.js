@@ -59,7 +59,6 @@ let config = {
         },
         initWorkflow:function () {
             this.actions.formatOriginData(this.formatData);
-            console.log(this.formatData);
             let treeView = new TreeView(this.formatData,{
                 callback:(event,node) => {
                     this.actions.selectNode(event,node);
@@ -79,7 +78,7 @@ let config = {
                 node.backColor = "#FFFFFF";
                 node.selectable = false;
                 node.state = {
-                    checked: false,
+                    checked: node.isSelect,
                     disabled: false,
                     expanded: true,
                     selected: false,
@@ -108,7 +107,6 @@ let config = {
                 editable: true
             }, {
                 onSelect: function (choosed) {
-                    console.log(choosed);
                     that.actions.setAgentId(choosed);
                 }
             });
@@ -196,7 +194,6 @@ let config = {
         },
         saveAgent:function () {
             //保存代理前进行逻辑判断
-            console.log(this.isOpen , this.data.selectedAgent);
             if(this.isOpen === 1 && (this.data.selectedAgent === undefined || this.data.selectedAgent === '')){
                 msgbox.alert("请选择一个代理人");
                 return;
@@ -214,13 +211,15 @@ let config = {
 
             UserInfoService.saveAgentData(data)
                 .done((result) => {
-                    console.log(result);
                     if(result.success === 1){
                         if(result.agent_state === 0){
                             msgbox.alert("您所选择的代理人已离职，请重新选择");
                         }else{
                             msgbox.alert("选择代理成功");
-                            UserInfoService.getSysConfig();
+                            UserInfoService.getSysConfig().then((result) => {
+                                window.config.sysConfig = result;
+
+                            });
                             agentSetting.hide();
                         }
                     }else{
