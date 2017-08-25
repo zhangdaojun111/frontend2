@@ -1593,6 +1593,7 @@ let config={
                         _this.data.childComponent[data[key].dfield] = settingTextareaControl;
                         break;
                     case 'Attachment':
+                    case 'Picture':
                         let attachmentControl = new AttachmentControl(data[key],actions);
                         attachmentControl.render(single);
                         _this.data.childComponent[data[key].dfield] = attachmentControl;
