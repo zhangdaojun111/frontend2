@@ -649,11 +649,16 @@ let config = {
         },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title ) {
+            let defaultMax = false;
+            if( url.indexOf( '/wf/approval/' ) != -1 ){
+                defaultMax = true;
+            }
             PMAPI.openDialogByIframe( url,{
-                width: 1300,
+                width: 1000,
                 height: 800,
                 title: title,
-                modal:true
+                modal:true,
+                defaultMax: defaultMax
             } ).then( (data)=>{
             } )
         },

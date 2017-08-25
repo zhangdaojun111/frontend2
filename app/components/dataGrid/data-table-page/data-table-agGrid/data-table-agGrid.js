@@ -2307,7 +2307,6 @@ let config = {
                     btnType: btnType,
                     is_view:1
                 };
-                console.log( o )
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
                 this.actions.openSourceDataGrid( url,title );
@@ -2372,14 +2371,17 @@ let config = {
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title,w,h ) {
             //暂时刷新方法
+            let defaultMax = false;
             if( url.indexOf( '/iframe/addWf/' ) != -1 ){
                 this.actions.setInvalid();
+                defaultMax = true;
             }
             PMAPI.openDialogByIframe( url,{
-                width: w || 1300,
+                width: w || 1000,
                 height: h || 800,
                 title: title,
-                modal:true
+                modal:true,
+                defaultMax: defaultMax
             } ).then( (data)=>{
                 if( data.type == "batch" ){
                     this.data.batchIdList = data.ids;
