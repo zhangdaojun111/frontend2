@@ -28,19 +28,26 @@
     .calendar-set-content {
         height:85%;
         table{
+            border:0;
+            cellspacing:0;
+            cellpadding:0;
             width:100%;
-            .table-set-checkbox{
-                width: 9% !important;
-            }
-            .table-set-multile{
-                width:20% !important;
-            }
-            .set-table-head{
-                width: 9%;
-                text-align: center;
-                line-height: 30px;
-                border: 1px solid #C1CACA;
-                margin:0px !important;
+            //border-bottom: 1px solid #C1CACA;
+            //border-top: 1px solid #C1CACA;
+            .head-tr{
+                .table-set-checkbox{
+                    width: 9% !important;
+                }
+                .table-set-multile{
+                    width:20% !important;
+                }
+                .set-table-head{
+                    width: 9%;
+                    text-align: center;
+                    line-height: 30px;
+                    border-right: 1px solid #C1CACA;
+                    margin:0px !important;
+                }
             }
         }
         .set-items {

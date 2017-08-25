@@ -1,32 +1,32 @@
 @import "../calendar";
 .calendar-setting {
-    font-size: 12px;
     height: 100%;
     .calendar-setting-items {
-        display: inline-block;
         height: 99%;
         width: 200px;
         float: left;
         border: 1px solid #C1CACA;
         position: relative;
         .calendar-setting-items-title{
-            border: 1px solid #C1CACA;
-            padding: 5px;
-            background-color:#f2f2f2;
-            height: 35px;
+            border-bottom: 1px solid #C1CACA;
+            padding-left: 5px;
+            background-color:rgba(242, 242, 242, 1);
+            line-height: 30px;
+            height:30px;
             .search {
                 width: 165px;
                 display: inline-block;
                 background-color: white;
                 border: 1px solid $boder-color;
-                line-height: 16px;
+                line-height: 24px;
+                height:24px;
                 text-align: center;
                 vertical-align: middle;
                 .setting-search {
-                    width:135px;
+                    vertical-align: middle;
+                    padding: 0px 4px;
+                    width: 135px;
                     border: none;
-                    height: 100%;
-                    padding: 4px;
                     outline: none;
                 }
                 .search-con{
@@ -36,9 +36,12 @@
 
             }
             .hide-con{
-                float: right;
-                position: relative;
-                top: 5px;
+                display: inline-block;
+                margin-left: 5px;
+                line-height: 30px;
+                height: 24px;
+                /* text-align: center; */
+                vertical-align: middle;
             }
         }
         .header {
@@ -70,11 +73,11 @@
         width:calc(100% - 220px);
         display: inline-block;
         .calendar-setting-item-title{
-            border: 1px solid #C1CACA;
-            padding: 5px;
-            background-color:#f2f2f2;
+            padding-left: 5px;
+            background-color: rgba(242, 242, 242, 1);
+            line-height: 30px;
             text-align: left;
-            line-height: 22px;
+            border-bottom: 1px solid $boder-color;
         }
         .calendar-setting-item-content{
             height:100%;
