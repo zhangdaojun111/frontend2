@@ -44,8 +44,6 @@ export const UserInfoService = {
     },
     //请求agent界面信息
     getAgentData:function () {
-
-
         let url = '/get_agent/';
         return this.http.getImmediately({
             type:"get",
@@ -53,13 +51,22 @@ export const UserInfoService = {
         })
     },
     saveAgentData:function (data) {
-        console.log(data);
         let url = '/set_agent/';
         data.workflow_names = JSON.stringify(data.workflow_names);
         return this.http.postImmediately({
             type:'post',
             url:url,
             data:data
+        })
+    },
+    shutDownAgent:function (data) {
+        let url = '/set_agent/';
+        let body = Utils.formatParams(data);
+
+        return HTTP.postImmediately({
+            url:url,
+            data:body,
+            type:"post"
         })
     },
     getSysConfig:function () {
