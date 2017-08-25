@@ -33,24 +33,26 @@
       width: 100%;
       .dataGrid-commonQuery {
         //display: none;
+        margin-top: 3px;
         float: left;
         padding-left: 15px;
         .dataGrid-commonQuery-select {
-          padding: 6px 12px;
+          padding: 0 12px;
+          border: 1px solid #d7d7d7;
+          border-radius: 4px;
           text-indent: 0;
-          color: #0E7AEF;
+          color: #666666;
           float: left;
           width: 110px;
           font-size: 12px;
-          height: 30px;
+          height: 25px;
           display: inline-block;
-          border: none;
           outline: none;
           box-shadow: none;
           appearance: none;
           -moz-appearance: none;
           -webkit-appearance: none;
-          background: url(../../../assets/images/dataGrid/icon_xiala.png) no-repeat scroll right center transparent;
+          background: url(../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 90px center transparent;
         }
       }
       .dataGrid-btn-group {
