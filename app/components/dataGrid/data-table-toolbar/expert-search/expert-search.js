@@ -268,7 +268,7 @@ let config = {
                 height: 220,
                 title: '保存为常用查询'
             }).then((data) => {
-                if(data.onlyclose == true){
+                if(data.onlyclose){
                     return false
                 }
                 if(data.value == '') {
