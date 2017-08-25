@@ -32,6 +32,7 @@ let config={
 
     },
     afterRender(){
+        this.showLoading();
         let self=this;
         let pos={x:10,y:20};
         this.el.on("mouseover",".tipsText",function (e) {
@@ -54,9 +55,12 @@ class workflowRecord extends Component{
 
 export default {
     showRecord(data){
+
         let component = new workflowRecord(data);
         let el = $('#workflow-record');
         component.render(el);
+        component.hideLoading()
+
     },
 };
 
