@@ -46,6 +46,18 @@
             margin-right: 5px;
         }
     }
-    
+    .down{
+        position: absolute;
+        top: 15px;
+        right: 88px;
+        z-index: 1;
+        height: 30px;
+        line-height: 30px;
+        width: 30px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 50%;
+        text-decoration: none;
+    }
 }
     
