@@ -3,9 +3,16 @@ import 'jquery-ui/ui/widgets/dialog';
 $.widget("custom.erdsDialog", $.ui.dialog, {
     open: function () {
         this._super();
-        console.log(this.options);
         if (this.options.defaultMax === true) {
             this._maximizeWindow();
+        }
+        if (this.options.closable === false) {
+            this.uiDialogTitlebarClose.hide();
+            if (this.uiDialogTitlebarFull) {
+                this.uiDialogTitlebarFull.css({
+                    right: '0.3em'
+                });
+            }
         }
         return this;
     },
