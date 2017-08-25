@@ -18,7 +18,7 @@ let component;
 let config = {
     template:template,
     data:{
-        selectedAgent:'',           //记录被选中的代理人
+        selectedAgent:{},           //记录被选中的代理人
     },
 
     originData:null,            //请求到的原始数据
@@ -28,7 +28,7 @@ let config = {
 
     selectedWorkflow:null,        //记录被选中的工作流的id
 
-    isOpen:0,               //是否开启代理，默认否    1是开，0是关
+    isOpen:0,               //是否开启代理
     atSelect:null,
 
     actions:{
@@ -36,11 +36,16 @@ let config = {
             component.showLoading();
             UserInfoService.getAgentData()
                 .done((result) => {
+                console.log(result);
                     if(result.success === 1){
                         this.originData = result;
                         this.formatData = [];
                         this.selectedWorkflow = new Set();
-                        this.isOpen = 0;
+                        this.data.selectedAgent = {
+                            id:result.data.user_id,
+                            name:result.data.agent_name
+                        };
+                        this.isOpen = result.data.is_apply ? 1:0;
                         this.atSelect = null;
                         $.extend(true,this.formatData,this.originData.data.workflow_list);
                     }else{
@@ -51,6 +56,7 @@ let config = {
                 }).done(() => {
                 this.actions.initWorkflow();
                 this.actions.initAgentList();
+                this.actions.initSwitch();
                 component.hideLoading();
             }).catch((err) => {
                 msgbox.alert("数据加载失败");
@@ -85,6 +91,9 @@ let config = {
                 };
                 node.tags = ['available'];
                 node.nodes = node.children;
+                if(node.isSelect === true && (!node.hasOwnProperty("group"))){
+                    this.selectedWorkflow.add(node.id);
+                }
                 const children = node.children;
                 if ( children && children.length > 0){
                     this.actions.formatOriginData(children);
@@ -101,15 +110,20 @@ let config = {
                 }
             }
             let that = this;
+            let temp = [];
+            temp.push(this.data.selectedAgent);
             let autoSelect = new AutoSelect({
                 list: tempData,
                 multiSelect: false,
-                editable: true
+                editable: true,
+                choosed:temp
             }, {
                 onSelect: function (choosed) {
                     that.actions.setAgentId(choosed);
                 }
             });
+
+
             this.atSelect = autoSelect;
             autoSelect.render($wrap);
             // this.agentList = this.originData.data.user_list;
@@ -128,6 +142,15 @@ let config = {
             //     newAgent.html(agent.name);
             //     $nameList.append(newAgent);
             // }
+        },
+        initSwitch:function () {
+            if(this.isOpen === 1){
+                console.log("do set open")
+                this.el.find('.open-radio').attr("checked",true);
+            }else{
+                console.log("do set close")
+                this.el.find('.close-radio').attr("checked",true);
+            }
         },
         //仅保存被选中的具体工作流（叶子）节点的id，以是否具备group属性判断该节点是否为叶子节点
         selectNode:function (event,node) {
@@ -171,9 +194,9 @@ let config = {
         },
         setAgentId:function (agent) {
             if(agent.length > 0){
-                this.data.selectedAgent = agent[0].id;
+                this.data.selectedAgent = agent[0];
             }else{
-                this.data.selectedAgent = '';
+                this.data.selectedAgent = {};
             }
             // let user_name = this.el.find("input[name=name_input]").val();
             // console.log(user_name);
@@ -194,18 +217,18 @@ let config = {
         },
         saveAgent:function () {
             //保存代理前进行逻辑判断
-            if(this.isOpen === 1 && (this.data.selectedAgent === undefined || this.data.selectedAgent === '')){
+            if(Object.keys(this.data.selectedAgent).length === 0 || this.data.selectedAgent.id === ''){
                 msgbox.alert("请选择一个代理人");
                 return;
             }
-            if(this.isOpen === 1 && this.selectedWorkflow.size === 0){
+            if(this.selectedWorkflow.size === 0){
                 msgbox.alert("请选择至少一个流程");
                 return;
             }
             let workflow_temp = Array.from(this.selectedWorkflow);
             let data = {
                 workflow_names:workflow_temp,
-                agent_id:this.data.selectedAgent,
+                agent_id:this.data.selectedAgent.id,
                 is_apply:this.isOpen
             };
 
@@ -215,10 +238,9 @@ let config = {
                         if(result.agent_state === 0){
                             msgbox.alert("您所选择的代理人已离职，请重新选择");
                         }else{
-                            msgbox.alert("选择代理成功");
+                            msgbox.alert(`设置代理成功，目前代理状态为：${this.isOpen ? "已开启":"未开启"}`);
                             UserInfoService.getSysConfig().then((result) => {
                                 window.config.sysConfig = result;
-
                             });
                             agentSetting.hide();
                         }
