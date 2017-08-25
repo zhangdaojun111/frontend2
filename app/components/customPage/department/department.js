@@ -49,8 +49,10 @@ let config = {
             let columnData = dataTableService.getColumnList( {table_id: this.data.tableId} );
             Promise.all([preferenceData,columnData]).then((res)=> {
                 dgcService.setPreference( res[0],this.data );
+                let number = dgcService.numberCol;
+                number['headerCellTemplate'] = this.actions.resetPreference();
                 this.data.columnDefs = [
-                    dgcService.numberCol,dgcService.selectCol,
+                    number,dgcService.selectCol,
                     {headerName: '操作',field: 'myOperate', width: 120,  suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
                         return '<div style="text-align:center;"><a class="departModify" style="color:#337ab7;">编辑</a><div>';
                     }},
@@ -115,6 +117,35 @@ let config = {
                 this.actions.btnClick();
             });
             HTTP.flush();
+        },
+        resetPreference: function () {
+            let ediv = document.createElement('div');
+            let eHeader = document.createElement('span');
+            ediv.appendChild( eHeader )
+            eHeader.innerHTML = "初";
+            eHeader.className = "table-init-logo";
+            eHeader.addEventListener('click', () => {
+                msgBox.confirm( '确定初始化偏好？' ).then( r=>{
+                    if( r ){
+                        dataTableService.delPreference( {table_id: this.data.tableId} ).then( res=>{
+                            msgBox.showTips( '操作成功' );
+                            let obj = {
+                                actions: JSON.stringify(['ignoreFields', 'group', 'fieldsOrder', 'pageSize', 'colWidth', 'pinned']),
+                                table_id: this.data.tableId
+                            };
+                            dataTableService.getPreferences( obj ).then( res=>{
+                                dgcService.setPreference( res,this.data );
+                                //创建表头
+                                this.agGrid.gridOptions.api.setColumnDefs( this.data.columnDefs );
+                                dgcService.calcColumnState( this.data,this.agGrid,["number","mySelectAll","myOperate","f5"] )
+                            } );
+                            HTTP.flush();
+                        } );
+                        HTTP.flush();
+                    }
+                } )
+            });
+            return ediv;
         },
         //获取部门数据
         getDepartmentData: function (isRefresh) {
@@ -209,11 +240,16 @@ let config = {
         },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title,w,h ) {
+            let defaultMax = false;
+            if( url.indexOf( '/form/index/' ) != -1 ){
+                defaultMax = true;
+            }
             PMAPI.openDialogByIframe( url,{
-                width: w || 1300,
+                width: w || 1000,
                 height: h || 800,
                 title: title,
-                modal:true
+                modal:true,
+                defaultMax: defaultMax
             } ).then( (data)=>{
             } )
         },

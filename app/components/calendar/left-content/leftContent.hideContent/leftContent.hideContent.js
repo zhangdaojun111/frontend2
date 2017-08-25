@@ -15,17 +15,18 @@ let config = {
     actions:{
 
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '.show-type-button',
+            callback: function(temp = this){
+                Mediator.emit('calendar-left:showRemindType',{data:this.data.table_Id});
+                this.destroySelf();
+            }
+        },
+    ],
     afterRender: function() {
         this.el.css("padding","2px 10px 5px 10px");
-        let that = this;
-        this.el.find("#show-type").attr("id","show-type-"+config.data.table_Id);
-        this.el.find(".show-type-button").on('click',function () {
-            config.data.show_type_ID = $(this).attr("id").split('-')[2];
-            Mediator.emit('calendar-left:showRemindType',{data:config.data.show_type_ID});
-            config.data.show_type_ID = "";
-            that.destroySelf();
-        });
-
     },
 }
 class RightContentWorkFlow extends Component {

@@ -27,9 +27,34 @@
   .ag-header-cell {
     border-right: 1px solid rgba(228, 228, 228, 1) !important;
   }
-
+  .ag-grid-number {
+    position: relative;
+  }
   .ag-header-row:first-child {
     z-index: 1;
+  }
+
+  .resetFloatingFilter {
+    display: block;
+    margin: auto;
+    position: absolute;
+    top: 35px;
+    left: 13px;
+  }
+  .resetFloatingFilter {
+    cursor: pointer;
+  }
+  /*grid初始化按钮*/
+  .table-init-logo{
+    color:rgb(51,122,183);
+    cursor:pointer;
+    line-height: 27px;
+  }
+
+  .table-init-logo:hover{
+    color:rgb(195,195,195);
+    cursor:pointer;
+    text-decoration: none;
   }
 }
 .ag-body {

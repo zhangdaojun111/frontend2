@@ -700,6 +700,7 @@ let config = {
             let eImg = document.createElement('img');
             eImg.src = require( '../../../../assets/images/dataGrid/quxiao.png' );
             eImg.className = 'resetFloatingFilter';
+            eImg.title = '重置筛选';
             eImg.addEventListener( 'click',()=>{
                 msgBox.confirm( '确定清空筛选数据？' ).then( r=>{
                     if( r ){
@@ -709,6 +710,7 @@ let config = {
                         for( let k in this.data.searchOldValue ){
                             this.data.searchOldValue[k] = '';
                         }
+                        this.data.queryList = {};
                         this.actions.setFloatingFilterInput();
                         this.data.filterParam.filter = [];
                         this.actions.getGridData();
@@ -718,6 +720,7 @@ let config = {
             if( !this.data.noNeedCustom ){
                 ediv.appendChild( eHeader )
                 eHeader.innerHTML = "初";
+                eHeader.title = '初始化偏好'
                 eHeader.className = "table-init-logo";
                 eHeader.addEventListener('click', () => {
                     msgBox.confirm( '确定初始化偏好？' ).then( r=>{
@@ -757,7 +760,7 @@ let config = {
                 return '';
             }
             if( this.data.viewMode == 'in_process' ){
-                return '<div></span><a href="javascript:;" class="gridView">查看</a></div>';
+                return '<div style="text-align: center;"><a class="gridView" style="color:#337ab7;">查看</a></div>';
             }
             if (params.data.group || Object.is(params.data.group, '') || Object.is(params.data.group, 0)) {
                 return '';
@@ -996,7 +999,7 @@ let config = {
             }
             Promise.all(post_arr).then((res)=> {
                 this.data.rowData = res[0].rows || [];
-                this.data.total = res[0].total || this.data.total;
+                this.data.total = res[0].total != undefined ? res[0].total : this.data.total;
                 //对应关系特殊处理
                 if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
                     this.actions.setCorrespondence(res[0]);
@@ -1120,6 +1123,20 @@ let config = {
             }
             let select = $event.node.selected;
             let id = $event.node.data._id;
+
+            //个人用户编辑表中的数据时,会发起对应的工作流,不让用户编辑
+            if( $event["node"]["data"]["status"] && ( $event["node"]["data"]["status"] == 2 ) && select ){
+                msgBox.alert("该数据正在审批，无法操作。");
+                $event["node"].setSelected( false,false );
+                return;
+            }
+            //数据计算cache时,不让用户编辑
+            if( $event["node"]["data"]["data_status"] && ( $event["node"]["data"]["data_status"] == 0 ) && select ){
+                msgBox.alert("数据计算中，请稍候");
+                $event["node"].setSelected( false,false );
+                return;
+            }
+
             if( this.data.viewMode == 'editFromCorrespondence' ){
                 if( select && this.data.correspondenceSelectedList.indexOf( id ) == -1 ){
                     this.data.correspondenceSelectedList.push( id );
@@ -1536,6 +1553,7 @@ let config = {
                         isBatch: this.data.viewMode == 'createBatch'?1:0,
                         isSuperUser: window.config.is_superuser || 0
                     }
+                    this.actions.setInvalid();
                     let url = dgcService.returnIframeUrl( '/iframe/dataImport/',json );
                     let winTitle = '导入数据';
                     this.actions.openSourceDataGrid( url,winTitle,600,800 );
@@ -1854,7 +1872,7 @@ let config = {
 
         },
         //删除数据
-        delTableData: function () {
+        delTableData: function (type) {
             let json = {
                 table_id:this.data.tableId,
                 temp_ids:JSON.stringify([]),
@@ -1865,6 +1883,9 @@ let config = {
                 parent_temp_id: this.data.parentTempId,
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
+            }
+            if( type == 1 ){
+                json['abandon_validate'] = 1;
             }
             this.actions.setInvalid();
             dataTableService.delTableData( json ).then( res=>{
@@ -1893,7 +1914,15 @@ let config = {
                             }
                         } )
                     }else {
-                        msgBox.alert( res.error )
+                        if(res.abandon_validate){
+                            msgBox.confirm( res.error ).then( aa=>{
+                                if( aa ){
+                                    this.actions.delTableData( 1 );
+                                }
+                            } )
+                        }else {
+                            msgBox.alert( res.error )
+                        }
                     }
                 }
             } )
@@ -2266,6 +2295,10 @@ let config = {
             console.log( data )
             if( data.event.srcElement.className == 'gridView' ){
                 console.log( '查看' )
+                let btnType = 'view';
+                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 ){
+                    btnType = 'none';
+                }
                 let obj = {
                     table_id: this.data.tableId,
                     parent_table_id: this.data.parentTableId,
@@ -2273,7 +2306,8 @@ let config = {
                     parent_temp_id: this.data.parentTempId,
                     parent_record_id: this.data.parentRecordId,
                     real_id: data.data._id,
-                    btnType: 'view',is_view:1
+                    btnType: btnType,
+                    is_view:1
                 };
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
@@ -2307,24 +2341,6 @@ let config = {
                 },{obj}).then(res=>{
 
                 })
-                // let d = {
-                //     'table_id': this.data.tableId,
-                //     'real_id': data.data._id
-                // };
-                // dataTableService.getHistoryApproveData(d).then( res=>{
-                //     console.log()
-                //     obj.res = JSON.stringify(res);
-                //     PMAPI.openDialogByIframe(`/iframe/historyApprove/`,{
-                //         width:1000,
-                //         height:600,
-                //         title:`历史`,
-                //         modal:true
-                //     },{obj}).then(res=>{
-                //
-                //     })
-                // })
-                // HTTP.flush();
-
             }
         },
         //行双击
@@ -2350,22 +2366,29 @@ let config = {
         },
         //设置失效
         setInvalid: function () {
-            this.pagination.data.myInvalid = true;
+            if( this.pagination ){
+                this.pagination.data.myInvalid = true;
+            }
         },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title,w,h ) {
             //暂时刷新方法
+            let defaultMax = false;
             if( url.indexOf( '/iframe/addWf/' ) != -1 ){
                 this.actions.setInvalid();
+                defaultMax = true;
             }
             PMAPI.openDialogByIframe( url,{
-                width: w || 1300,
+                width: w || 1000,
                 height: h || 800,
                 title: title,
-                modal:true
+                modal:true,
+                defaultMax: defaultMax
             } ).then( (data)=>{
                 if( data.type == "batch" ){
+                    this.data.batchIdList = data.ids;
                     this.actions.returnBatchData( data.ids );
+                    this.actions.getGridData();
                 }
             } )
         },

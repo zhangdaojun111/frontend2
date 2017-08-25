@@ -1,10 +1,10 @@
-<div class="clearfix">
+<div class="clearfix component-time-control">
     {{#if unvisible}}
-        <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
+    <p class="info">权限受限</p>
     {{else if be_control_condition }}
-        <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+    <p class="info">被修改条件限制</p>
     {{else}}
-        <input type="text" class="ui-calendar ui-width dynamic-form-input timeInput" style=" color: #999999;"  value={{value}}>
+        <input type="text" class="ui-calendar ui-width dynamic-form-input timeInput" style=" color: #999999;"  value="{{value}}">
         <span class="cancel-x">X</span>
         <div class="ui-timepicker ui-widget-header ui-corner-all time" style="border:1px solid #000000;background: none;display: none;">
             <!--时-->
@@ -28,12 +28,13 @@
                 <a href="javascript:;" class="reduce">-</a>
             </div>
         </div>
-        {{#if required}}
-            <span id="requiredLogo" class="{{requiredClass}}" ></span>
-        {{/if}}
-        {{#if history}}
-            <a href="javascript:void(0);" class="ui-history" ></a>
-        {{/if}}
+        <div style="float: left;">
+            {{#if required}}
+                <span id="requiredLogo" class="{{requiredClass}}" ></span>
+            {{/if}}
+            {{#if history}}
+                <a href="javascript:void(0);" class="ui-history" ></a>
+            {{/if}}
         </div>
     {{/if}}
 </div>
