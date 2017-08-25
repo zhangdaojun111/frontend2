@@ -1,6 +1,6 @@
 /**
  * Created by birdyy on 2017/8/21.
- * xy轴组件
+ * 多表图表的单个图表组件
  */
 
 import {BiBaseComponent} from '../../../../bi.base.component';
@@ -10,11 +10,12 @@ import msgbox from "../../../../../../lib/msgbox";
 import {FormSearchComponent} from '../../../search/search';
 import template from './chart.html';
 import "./chart.scss";
+import {ChartFormService} from '../../../../../../services/bisystem/chart.form.service';
 
 let config = {
     template:template,
     data: {
-
+        yAxis: []
     },
     actions: {},
     afterRender() {
@@ -23,7 +24,7 @@ let config = {
     firstAfterRender() {
         this.el.on('click','.multi-close',()=>{
             this.multiDel();
-        })
+        });
     },
     beforeDestory() {}
 };
@@ -45,16 +46,19 @@ export class MultiChartComponent extends BiBaseComponent{
             multiSource: instanceFitting({
                 type:'autoComplete',
                 me: this,
+                data: {
+                    onSelect:this.getChartField.bind(this)
+                },
                 container: 'item-source'
             }),
             multiType: instanceFitting({
                 type:'select',
                 data: {
-                    value:1,
+                    value:'line',
                     label: '图表类型',
                     options:[
-                        {value: 1, name: '折线图'},
-                        {value: 2, name: '柱状图'}
+                        {value: 'line', name: '折线图'},
+                        {value: 'bar', name: '柱状图'}
                     ],
 
                 },
@@ -69,6 +73,9 @@ export class MultiChartComponent extends BiBaseComponent{
             multiY: instanceFitting({
                 type:'autoComplete',
                 me: this,
+                data: {
+                    onSelect:this.choosedYs.bind(this)
+                },
                 container: 'item-filed .item-y'
             }),
             multiCheckbox: instanceFitting({
@@ -76,9 +83,10 @@ export class MultiChartComponent extends BiBaseComponent{
                 me: this,
                 data: {
                     value:null,
-                    checkboxs:[
-                        {value:'', name:'剩余年假'},
-                    ],
+                    items:[],
+                    checkedItems: [],
+                    checkboxs:[],
+                    onChange: this.removeY.bind(this)
 
                 },
                 container: 'item-filed .item-y'
@@ -93,5 +101,91 @@ export class MultiChartComponent extends BiBaseComponent{
         this.destroySelf();
     }
 
+    /**
+     * 获取x,y轴
+     */
+    async getChartField(tableId) {
+        const table = tableId.length > 0 ? tableId[0] : null;
+        let data;
+        if (this.multiChart) {
+            if (table) {
+                let res = await ChartFormService.getChartField(table.id);
+                if (res['success'] === 1) {
+                    data = res['data'];
+                    this.multiChart.multiX.autoSelect.data.list = res['data']['x_field'];
+                    this.multiChart.multiY.autoSelect.data.list = res['data']['y_field'];
+                } else {
+                    msgbox.alert(res['error']);
+                };
+            } else {
+                data = [];
+                this.multiChart.multiX.autoSelect.data.list = data;
+                this.multiChart.multiY.autoSelect.data.list = data;
+            };
 
+            this.multiChart.multiX.autoSelect.data.choosed = [];
+            this.multiChart.multiX.autoSelect.reload();
+            this.multiChart.multiY.autoSelect.data.choosed = [];
+            this.multiChart.multiY.autoSelect.reload();
+        }
+    }
+
+    /**
+     * 选择多y轴
+     */
+    choosedYs() {
+        if (this.multiChart) {
+            let y = this.multiChart.multiY.getValue();
+            if (y.hasOwnProperty('id')) {
+                let yAxis = _.clone(this.data.yAxis);
+                let r = _.remove(yAxis, (val) => {
+                    return y.id === val.id
+                });
+
+                if (r.length === 0) {
+                    this.data.yAxis.push(y);
+                }
+                this.multiChart.multiY.autoSelect.actions.clearValue();
+                this.multiChart.multiCheckbox.data.checkboxs = this.data.yAxis;
+                this.multiChart.multiCheckbox.data.items = this.data.yAxis;
+                this.multiChart.multiCheckbox.data.items.checkedItems = this.data.yAxis;
+                this.multiChart.multiCheckbox.reload();
+                this.multiChart.multiCheckbox.setCheck();
+            }
+        }
+    }
+
+    /**
+     * 删除y轴
+     */
+    removeY(checked) {
+        if (!checked) {
+            this.data.yAxis = this.multiChart.multiCheckbox.data.items = this.multiChart.multiCheckbox.data.checkboxs = this.multiChart.multiCheckbox.data.checkedItems;
+            this.multiChart.multiCheckbox.reload();
+            this.multiChart.multiCheckbox.setCheck();
+        }
+    }
+
+    /**
+     * 获取值
+     */
+
+    getValue() {
+        const fields  = this.multiChart;
+        const data = {};
+        Object.keys(fields).map(k => {
+            if (fields[k].getValue) {
+                data[k] = fields[k].getValue();
+            };
+        });
+
+        return {
+            chartType: data.multiType == 'line' ? {'name': '折线图', 'type': 'line'} : {'name': '柱状图', 'type': 'bar'},
+            countColumn: '',
+            filter: [],
+            sources: data.multiSource,
+            xAxis: data.multiX,
+            yAxis: data.multiCheckbox
+        }
+    }
 }

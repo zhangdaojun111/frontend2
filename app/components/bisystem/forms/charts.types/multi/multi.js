@@ -11,28 +11,47 @@ import msgbox from "../../../../../lib/msgbox";
 import {PMAPI} from '../../../../../lib/postmsg';
 import {FormMixShareComponent} from '../../mix.share/mix.share';
 import {MultiChartComponent} from "./chart/chart";
-
+import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 
 import "./multi.scss";
 
 let config = {
     template:template,
-    data: {},
+    data: {
+        assortment: '',
+        sources: []
+    },
     actions: {},
     afterRender() {
         this.renderFitting();
     },
     firstAfterRender() {
+
+        // 监听数据源变化
+        this.el.on(`${this.data.assortment}-chart-source`,(event,params) => {
+            this.chartSourceChange(params['sources']);
+            return false;
+        })
+
         this.el.on('click','.multi-add-btn',()=>{
             this.multiAdd();
+            return false;
+        })
+
+        this.el.on('click','.save-multi-btn',()=>{
+            this.saveChart();
             return false;
         })
     }
 }
 export class FormMultiComponent extends BiBaseComponent{
-    constructor() {
+    constructor(chart) {
         super(config);
-        this.formGroup={};
+        this.data.assortment = chart.assortment;
+        this.chartId = chart.id;
+        this.formGroup = {};
+        this.editModeOnce = this.chartId ? true : false;
+        this.editChart = null;
     }
 
     /**
@@ -40,28 +59,27 @@ export class FormMultiComponent extends BiBaseComponent{
      */
     renderFitting(){
         let base = new FormBaseComponent();
-        let share = new FormMixShareComponent();
-        let multi =new MultiChartComponent();
-
+        let share = new FormMixShareComponent(this.data.assortment);
         this.append(base, this.el.find('.multi-base'));
         this.append(share, this.el.find('.multi-share'));
-        this.append(multi, this.el.find('.add-charts'));
-
         this.formGroup = {
             multiName:base,
             multiShare:share,
-            multiMulti:multi,
-
-
-        }
+            multiMulti:[],
+        };
     }
 
     /**
      * 增加一张图表
      */
     multiAdd(){
-        let multiChart = new MultiChartComponent();
-        this.append(multiChart,this.el.find('.add-charts'));
+        let chart = new MultiChartComponent();
+        this.append(chart,this.el.find('.add-charts'));
+        if (this.data.sources.length > 0) {
+            chart.multiChart.multiSource.autoSelect.data.list = this.data.sources;
+            chart.multiChart.multiSource.autoSelect.reload();
+        }
+        this.formGroup.multiMulti.push(chart);
     }
 
     /**
@@ -71,4 +89,55 @@ export class FormMultiComponent extends BiBaseComponent{
         this.formGroup = {};
     }
 
+    /**
+     * 数据源变化执行一些列动作
+     * @param sources = 数据源数据
+     */
+    chartSourceChange(sources) {
+        if (this.formGroup.multiShare) {
+            this.data.sources = this.formGroup.multiShare.mixForm.chartSource.autoSelect.data.list;
+            this.multiAdd();
+            this.formGroup.multiMulti.forEach((item,index) => {
+                item.multiChart.multiSource.autoSelect.data.list = this.data.sources;
+                item.multiChart.multiSource.autoSelect.reload();
+            })
+        }
+    }
+
+    /**
+     * 保存多表数据
+     */
+    async saveChart() {
+        const fields  = this.formGroup;
+        const data = {};
+        const sources = []
+        fields.multiMulti.forEach(chart => {
+            sources.push(chart.getValue());
+        });
+
+        Object.keys(fields).map(k => {
+            if (fields[k].getValue) {
+                data[k] = fields[k].getValue();
+            };
+        });
+        const chart = {
+            assortment: 'multilist',
+            chartName: data.multiName,
+            icon: data.multiShare.icons,
+            theme: data.multiShare.themes,
+            sources: sources
+        };
+        console.log(chart);
+        let res = await ChartFormService.saveChart(JSON.stringify(chart));
+        if (res['success'] == 1) {
+            msgbox.alert('保存成功');
+            if (!chart['chartName']['id']) {
+                this.reset();
+                this.reload();
+            };
+            Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
+        } else {
+            msgbox.alert(res['error'])
+        };
+    }
 }

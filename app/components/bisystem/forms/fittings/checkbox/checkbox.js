@@ -71,6 +71,17 @@ export class CheckboxComponent extends FormFittingAbstract {
         }
     }
 
+
+    /**
+     * 设置所有为选中状态
+     */
+    setCheck() {
+        this.data.items.map((choosed,choosedIndex) => {
+            this.el.find('input').attr('checked', true)
+        })
+        this.data.checkedItems = this.data.items;
+    }
+
     /**
      * checkbox 返回值
      */

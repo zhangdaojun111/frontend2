@@ -9,6 +9,14 @@
   }
   .multi-share {
     padding: 20px 0;
+    .chart-mix-share {
+      .autocomplete-container{
+        display:none;
+      }
+    }
+    .form-filter{
+      display:none;
+    }
   }
   .save-btn {
     margin-top: 26px;
