@@ -74,6 +74,7 @@ export class FormRadarComponent extends BiBaseComponent{
         }
     }
 
+
     /**
      * 编辑模式
      */
@@ -103,7 +104,7 @@ export class FormRadarComponent extends BiBaseComponent{
             chartName: base,
             share: share,
             product:instanceFitting({
-                type:'autoComplete',
+                type:'autocomplete1',
                 data: {
                     value:null,
                     label: '选中雷达图产品名称字段',
@@ -112,9 +113,12 @@ export class FormRadarComponent extends BiBaseComponent{
                 container: 'form-group-product'
             }),
             auto:instanceFitting({
-                type:'auto',
+                type:'autocomplete1',
                 me:this,
-                container:('form-group-auto'),
+                container:'form-group-auto',
+                data: {
+                    onSelect:null
+                }
             })
         };
 
@@ -127,17 +131,9 @@ export class FormRadarComponent extends BiBaseComponent{
     chartSourceChange(sources) {
         this.columns.reloadUi(sources);
         if (this.formGroup.product) {
-            if (this.formGroup.product.autoSelect) {
-                this.formGroup.product.autoSelect.data.list = sources['x_field'];
-                this.formGroup.product.autoSelect.reload();
-                if (this.editModeOnce && this.editChart) {
-                    if (this.editChart.hasOwnProperty('chartName')) {
-                        if (this.editChart['product'].hasOwnProperty('id')) {
-                            this.formGroup.product.setValue(this.editChart['product'])
-                        }
-                    }
-                }
-            }
+            console.log(this.formGroup.product.observable);
+            // this.formGroup.product.observable.items = sources['x_field']
+
         };
 
 
@@ -146,6 +142,11 @@ export class FormRadarComponent extends BiBaseComponent{
             this.columns.setValue(this.editChart['columns']);
             this.editModeOnce = false;
         };
+
+        if (this.formGroup.auto) {
+            this.formGroup.auto.setValue(sources['x_field']);
+            console.log(this.formGroup.auto.data);
+        }
     }
 
     /**
