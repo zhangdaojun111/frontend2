@@ -489,7 +489,6 @@ export const FormService={
     //multiBuildType 特殊多选内置分支判断
     //multi 是否多选
     createSelectJson(json,multi,multiBuildType){
-
         let data={list:[],choosed:[]};
         if(json.is_view){
             data['editable']=false;

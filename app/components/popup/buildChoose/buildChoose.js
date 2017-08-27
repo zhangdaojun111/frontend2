@@ -88,6 +88,8 @@ let config={
             });
         })
         Mediator.subscribe('form:chooseSelect',function(data){
+            console.log('这个data是啥啊');
+            console.log(data);
             _this.el.find('a').each((index,obj)=>{
                 if(data.indexOf($(obj).data('value')) != -1){
                     $(obj).show();

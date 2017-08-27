@@ -102,7 +102,7 @@ let FormEntrys = {
     createPostJson(){
         let json;
         //如果是发起工作流
-        if(this.fromWorkFlow){
+        if(this.fromWorkFlow && this.realId == ''){
             json={
                 form_id:this.formId,
                 record_id:this.recordId,
@@ -110,7 +110,7 @@ let FormEntrys = {
                 from_workflow:this.fromWorkFlow,
                 table_id:this.tableId
             }
-        }else if(this.fromApprove){//审批流程
+        }else if(this.fromApprove && this.realId == '' ){//审批流程
             json={
                 form_id: this.formId,
                 record_id: this.recordId,

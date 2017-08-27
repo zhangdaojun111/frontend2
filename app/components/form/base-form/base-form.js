@@ -990,12 +990,15 @@ let config={
         },
         //快捷添加后回显
         addNewItem(data){
+            console.log('快捷添加回显');
+            console.log(data);
             let dfield=this.data['quikAddDfield'];
             let fieldData=this.data.data[dfield];
+            console.log(fieldData['options']);
             if(fieldData["options"]){
-                this.data.childComponent[dfield]['data']['options']=fieldData["options"] = fieldData["options"].push(...data['newItems']);
+                this.data.childComponent[dfield]['data']['options']=fieldData["options"] =data['newItems'];
             }else {
-                this.data.childComponent[dfield]['data']['group']=fieldData["group"] = fieldData["options"].push(...data['newItems']);
+                this.data.childComponent[dfield]['data']['group']=fieldData["group"] = data['newItems'];
             }
             this.data.childComponent[dfield].reload();
         },
@@ -1358,8 +1361,6 @@ let config={
             }
             AddItem.data.originalOptions=_.defaultsDeep({},originalOptions);
             AddItem.data.data=_.defaultsDeep({},data);
-            console.log('*********');
-            console.log(AddItem);
             PMAPI.openDialogByComponent(AddItem, {
                 width: 800,
                 height: 600,
