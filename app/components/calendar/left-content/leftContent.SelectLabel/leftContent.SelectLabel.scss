@@ -12,21 +12,21 @@
       clear: both;
     }
     .checkbox-label{
+      cursor: pointer;
       border: 1px solid #C1CACA;
-      height: 12px;
-      padding: 1px;
+      height: 16px;
+      width:16px;
+      padding: 1px 0px 0px 2px;
       display: inline-block;
       .chk_2 {
         display: none;
       }
-      .chk_2 + label {
-        padding: 4px;
+      .chk_2 + label{
+        cursor: pointer;
+        padding: 5px;
         display: inline-block;
         position: relative;
-        bottom: 3px;
-        cursor: pointer;
       }
-
     }
     .chk_1 {
       display: none;
@@ -34,23 +34,23 @@
     .chk_1 + label {
       background-color: #FFF;
       border: 1px solid #d7d7d7;
-      padding: 5px;
+      padding: 7px;
       display: inline-block;
       position: relative;
-      margin-right: 5px;
+      //margin-right: 5px;
       cursor: pointer;
     }
     .label-select-all-checked + label:after {
       content: '\2714'; //勾选符号
       position: absolute;
-      height: 12px;
-      width: 11px;;
+      height: 14px;
+      width: 13px;;
       padding-right: 1px;
       top: 0px;
       left: 0px;
       color: #2398df;
       text-align: center;
-      font-size: 12px;
+      font-size: 14px;
     }
     .float-button-group{
       width:200px;

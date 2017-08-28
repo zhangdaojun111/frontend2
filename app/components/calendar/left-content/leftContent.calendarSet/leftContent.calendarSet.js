@@ -165,11 +165,9 @@ let config = {
             console.log()
             if(that.data.cancel_fields.indexOf('approve') ===-1){
                 that.el.find(".checkbox_a2").addClass("workflow_checked");
-                that.el.find(".checkbox_a2").attr("checked",true);
             }
             else{
                 that.el.find(".checkbox_a2").removeClass("workflow_checked");
-                that.el.find(".checkbox_a2").attr("checked",false);
             }
             this.data.calendarTreeData.rows.forEach((data) =>{
                 that.append(new LeftContentSelect(data,this.data.calendarTreeData.cancel_fields,this.data.hide_item_table,this.data.rows,
@@ -226,7 +224,7 @@ let config = {
         },
         {
             event: 'click',
-            selector: '.approve-label',
+            selector: '.checkbox_a2',
             callback: function(){
                 let checkbox_a2 = this.el.find(".checkbox_a2");
                 this.actions.approve_label(checkbox_a2);
