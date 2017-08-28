@@ -2410,24 +2410,24 @@ let config = {
         },
         //半触发操作
         customOperate: function (d) {
-            console.log( "_____" )
-            console.log( d )
-            let obj = {
-                table_id: this.data.tableId,
-                parent_table_id: this.data.parentTableId,
-                parent_real_id: this.data.parentRealId,
-                parent_temp_id: this.data.parentTempId,
-                parent_record_id: this.data.parentRecordId,
-                real_id: d["id"],
-                flow_id : d["flow_id"],
-                form_id : d["form_id"],
-                id : d["id"],
-                table_id : d['table_id'],
-                btnType: 'oprate'
-            };
-            let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
-            let title = d.name;
-            this.actions.openSourceDataGrid( url,title );
+            // console.log( "_____" )
+            // console.log( d )
+            // let obj = {
+            //     table_id: this.data.tableId,
+            //     parent_table_id: this.data.parentTableId,
+            //     parent_real_id: this.data.parentRealId,
+            //     parent_temp_id: this.data.parentTempId,
+            //     parent_record_id: this.data.parentRecordId,
+            //     real_id: d["id"],
+            //     flow_id : d["flow_id"],
+            //     form_id : d["form_id"],
+            //     id : d["id"],
+            //     table_id : d['table_id'],
+            //     btnType: 'oprate'
+            // };
+            // let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
+            // let title = d.name;
+            // this.actions.openSourceDataGrid( url,title );
         },
         //行级操作
         doRowOperation: function (ro,$event) {
