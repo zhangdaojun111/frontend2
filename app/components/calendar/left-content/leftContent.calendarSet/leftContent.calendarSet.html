@@ -1,11 +1,18 @@
 <div class="component-taskbar">
     <div class="label-task">
-        <input type="checkbox" id="checkbox_a2" class="chk_1"/>
-        <label for="checkbox_a2" class="approve-label"></label><label for="checkbox_a2" class="approve-label">审批</label>
+        <div class="checkbox-label">
+            <input type="checkbox" class="checkbox_a"/>
+            <label id='select-children-{{this.field_id}}' class="checkbox_a2">
+            </label>
+        </div>
+        <label class="approve-label">审批</label>
     </div>
     <div class="label-task">
-        <input type="checkbox" id="checkbox_a3" class="chk_1" />
-        <label for="checkbox_a3" class="label-select-all-type-checked"></label><label for="checkbox_a3">提醒</label>
+        <div class="checkbox-true">
+            <input type="checkbox" id="checkbox_all_remind" class="chk_1 checkbox_a3" />
+            <label for="checkbox_all_remind" class="remind-label label-select-all-type-checked"></label>
+        </div>
+        <label class="remind-label">提醒</label>
     </div>
     <div class="remind-group">
 

@@ -80,8 +80,8 @@ export const OnlineDisplay = {
         component.render(this.el);
         this.el.dialog({
             title: '在线用户',
-            width: 1320,
-            height: 800,
+            width: 1005,
+            height: 560,
             modal: true,
             close: function() {
                 $(this).dialog('destroy');
