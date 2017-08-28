@@ -13,8 +13,10 @@ import {UserInfoService} from "../../../services/main/userInfoService"
 let config = {
     template:template,
     data:{
-        biSort:2,
-        calendarSort:1
+        biSort:1,
+        calendarSort:2,
+        biStatus:0,
+        calendarStatus:0,
     },
     actions:{
         showStyleSetting:function () {
@@ -33,25 +35,44 @@ let config = {
             window.localStorage.clear();
             $(window).attr("location","/login");
         },
+        getItemData:function () {
+            let biStatus = window.config.sysConfig.logic_config.login_show_bi || "10";
+            this.data.biSort = biStatus.split('')[0];
+            this.data.biStatus = biStatus.split('')[1];
+
+            let calendarStatus = window.config.sysConfig.logic_config.login_show_calendar || "20";
+            this.data.calendarSort = calendarStatus.split('')[0];
+            this.data.calendarStatus = calendarStatus.split('')[1];
+
+            this.actions.addCheckbox();
+        },
+        addCheckbox:function () {
+            let $parent = this.el.find('.sortable-box');
+            let $ul = $("<li class='isShow-calendar sort-item'><input class='calendar-Show' type='checkbox'><span>登录时自动开启日历</span>" +
+                "<i class='drag-icon'></i></li>");
+            if(this.data.calendarSort === "1"){
+                $parent.append($ul);
+            }else{
+                $parent.prepend($ul);
+            }
+            this.actions.setCheckboxStatus();
+        },
         saveSetting:function () {
-            let biflag = 0;
-            let calendarflag = 0;
+            let biflag = 10;
+            let calendarflag = 20;
             let biValue = this.el.find('input.bi-Show').prop("checked");
             let calendarValue = this.el.find('input.calendar-Show').prop("checked");
             if(biValue === true){
-                if(this.data.biSort === 2){
-                    biflag = 2;
-                }else{
-                    biflag = 1;
-                }
+                biflag = this.data.biSort + "1";
+            }else{
+                biflag = this.data.biSort + "0";
             }
             if(calendarValue === true){
-                if(this.data.calendarSort === 2){
-                    calendarflag = 2;
-                }else{
-                    calendarflag = 1;
-                }
+                calendarflag = this.data.calendarSort + "1";
+            }else{
+                calendarflag = this.data.calendarSort + "0";
             }
+
             let json = {
                 action:'save',
                 pre_type:4,
@@ -65,6 +86,7 @@ let config = {
             };
 
             UserInfoService.saveUserConfig(json,json2).then((result) => {
+                console.log(result);
                 if(result[0].succ === 1 && result[1].succ === 1){
                     window.config.sysConfig.logic_config.login_show_bi = result[0].data.toString();
                     window.config.sysConfig.logic_config.login_show_calendar = result[1].data.toString();
@@ -93,10 +115,10 @@ let config = {
                 accept:".sort-item",
             });
 
-            if(window.config.sysConfig.logic_config.login_show_bi === '1'){
+            if(this.data.biStatus === '1'){
                 this.el.find('input.bi-Show').attr("checked",true);
             }
-            if(window.config.sysConfig.logic_config.login_show_calendar === '1'){
+            if(this.data.calendarStatus === '1'){
                 this.el.find('input.calendar-Show').attr("checked",true);
             }
         },
@@ -104,16 +126,11 @@ let config = {
             let temp = this.data.biSort;
             this.data.biSort = this.data.calendarSort;
             this.data.calendarSort = temp;
-        },
-        initSortItem:function () {          //根据后台的值初始化日历和BI的sort-item
-
-
-            
         }
     },
 
     afterRender:function () {
-        this.actions.setCheckboxStatus();
+        this.actions.getItemData();
         this.el.on('click','.style-btn',() => {
             this.actions.showStyleSetting();
         }).on('click','.rapid-btn',() => {
