@@ -1,5 +1,7 @@
-#add-wf *{
-    box-sizing: border-box;
+#add-wf{
+    div,span,a{
+        box-sizing: border-box;
+    }
 }
 #app-workflow {
     .workflow-foot .workflow-box{
