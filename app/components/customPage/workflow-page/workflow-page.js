@@ -72,7 +72,9 @@ let config = {
         //创建表头
         createColumnDefs: function () {
             let cols = wchService.getWorkflowHeader( this.data.pageType );
-            this.data.columnDefs = [dgcService.numberCol];
+            let number = dgcService.numberCol;
+            number['headerCellTemplate'] = this.actions.resetPreference();
+            this.data.columnDefs = [number];
             if( this.data.pageType == 2||this.data.pageType == 0 ){
                 this.data.columnDefs.push( dgcService.selectCol )
                 this.data.customColumnsFields.push( {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false} )
@@ -111,6 +113,51 @@ let config = {
                 this.data.columnDefs.push( obj );
             }
             this.data.fieldsData = this.data.columnDefs;
+        },
+        resetPreference: function () {
+            let ediv = document.createElement('div');
+            let eHeader = document.createElement('span');
+            let eImg = document.createElement('img');
+            eImg.src = require( '../../../assets/images/dataGrid/quxiao.png' );
+            eImg.className = 'resetFloatingFilter';
+            eImg.addEventListener( 'click',()=>{
+                msgBox.confirm( '确定清空筛选数据？' ).then( r=>{
+                    if( r ){
+                        for( let k in this.data.searchValue ){
+                            this.data.searchValue[k] = '';
+                        }
+                        this.actions.setFloatingFilterInput();
+                        this.data.filterParam.filter = [];
+                        this.actions.getData();
+                    }
+                } )
+            } )
+            ediv.appendChild( eHeader )
+            eHeader.innerHTML = "初";
+            eHeader.className = "table-init-logo";
+            eHeader.addEventListener('click', () => {
+                msgBox.confirm( '确定初始化偏好？' ).then( r=>{
+                    if( r ){
+                        dataTableService.delPreference( {table_id: this.data.tableId} ).then( res=>{
+                            msgBox.showTips( '操作成功' );
+                            let obj = {
+                                actions: JSON.stringify(['ignoreFields', 'group', 'fieldsOrder', 'pageSize', 'colWidth', 'pinned']),
+                                table_id: this.data.tableId
+                            };
+                            dataTableService.getPreferences( obj ).then( res=>{
+                                dgcService.setPreference( res,this.data );
+                                //创建表头
+                                this.agGrid.gridOptions.api.setColumnDefs( this.data.columnDefs );
+                                dgcService.calcColumnState(this.data,this.agGrid,["number","mySelectAll"]);
+                            } );
+                            HTTP.flush();
+                        } );
+                        HTTP.flush();
+                    }
+                } )
+            });
+            ediv.appendChild( eImg )
+            return ediv;
         },
         //返回搜索类型
         searchType: function ( data,name ) {
@@ -155,7 +202,8 @@ let config = {
                 fields: this.data.customColumnsFields,
                 fixCols: this.data.fixCols,
                 tableId: this.data.tableId,
-                agGrid: this.agGrid
+                agGrid: this.agGrid,
+                setFloatingFilterInput: this.actions.setFloatingFilterInput
             }
             //渲染定制列
             if( $('.custom-column-btn')[0] ){
@@ -364,6 +412,12 @@ let config = {
                 this.pagination.actions.setPagination( this.data.total,this.data.page );
             });
             HTTP.flush();
+        },
+        //设置搜索input值
+        setFloatingFilterInput: function () {
+            for( let k in this.data.searchValue ){
+                this.el.find( '.filter-input-'+k )[0].value = this.data.searchValue[k];
+            }
         },
         //创建请求数据参数
         createPostData: function () {
@@ -595,11 +649,16 @@ let config = {
         },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title ) {
+            let defaultMax = false;
+            if( url.indexOf( '/wf/approval/' ) != -1 ){
+                defaultMax = true;
+            }
             PMAPI.openDialogByIframe( url,{
-                width: 1300,
+                width: 1000,
                 height: 800,
                 title: title,
-                modal:true
+                modal:true,
+                defaultMax: defaultMax
             } ).then( (data)=>{
             } )
         },
