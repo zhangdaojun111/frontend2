@@ -148,21 +148,21 @@ let config={
         },
         appPass() {
             Mediator.publish('workflow:appPass');
-            msgBox.confirm("你确定审核通过吗").then((res)=>{
+            msgBox.confirm("确定审核通过").then((res)=>{
                 if(res===true){
                     Mediator.publish("approval:recordPass",this.data.imgInfo);
                 }
             })
         },
         appRejStart(){
-            msgBox.confirm("你确定驳回发起人吗").then((res)=>{
+            msgBox.confirm("确定驳回发起人").then((res)=>{
                 if(res===true){
                     Mediator.publish('approval:recordRejStart',res);
                 }
             })
         },
         appRejUp(){
-            msgBox.confirm("你确定驳回上一级吗").then((res)=>{
+            msgBox.confirm("确定驳回上一级").then((res)=>{
                 if(res===true){
                     Mediator.publish('approval:appRejUp',res);
                 }

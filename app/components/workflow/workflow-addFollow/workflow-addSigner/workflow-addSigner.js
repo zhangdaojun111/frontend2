@@ -15,9 +15,26 @@ let config={
     template: template,
     data:{},
     action:{
-
+        search(){
+            let keyword = this.el.find(".signer-search").val();
+            let node = this.el.find('#addUsercheck').find('.w33');
+            let par = this.el.find("#addUsercheck").children();
+            let arr = _.chunk(node,3);
+            let len = arr.length;
+            for(let i =0;i<len;i++){
+                if(arr[i][1].innerText.indexOf(keyword)!=-1 || arr[i][2].innerText.indexOf(keyword)!=-1){
+                    par[i].style.display = "block";
+                }else{
+                    par[i].style.display = "none";
+                }
+            }
+        },
     },
     afterRender(){
+        this.el.on("input propertychange",".signer-search",()=>{
+            this.action.search();
+        })
+
         const __this=this;
         this.el.find('#staffMulti').html('');
         //部门选择
