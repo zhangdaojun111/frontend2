@@ -60,22 +60,40 @@
   .p-page-con {
     float: right;
     .goFirst {
-      vertical-align: sub;
-      margin: 0 7px;
+      //vertical-align: sub;
+      vertical-align: top;
+      display: inline-block;
+      background: url(../../../../assets/images/dataGrid/icon_shangyiye.png) no-repeat scroll center 8px  transparent;
+      height: 33px;
+      width: 16px;
+      margin: 0 7px8px
     }
     .goPre {
+      vertical-align: top;
       margin: 0 7px;
+      display: inline-block;
+      height: 33px;
+      line-height: 33px;
     }
     .currentPage {
+      vertical-align: top;
       display: inline-block;
       width: 25px;
       text-align: center;
     }
     .goNext {
+      vertical-align: top;
       margin: 0 7px;
+      display: inline-block;
+      height: 33px;
+      line-height: 33px;
     }
     .goLast {
-      vertical-align: sub;
+      //vertical-align: sub;
+      display: inline-block;
+      background: url(../../../../assets/images/dataGrid/icon_xiayiye.png) no-repeat scroll center 8px  transparent;
+      height: 33px;
+      width: 16px;
       margin: 0 7px;
     }
   }
