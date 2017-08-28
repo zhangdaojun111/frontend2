@@ -26,6 +26,7 @@ let config = {
         }
     },
     afterRender: function() {
+        this.el.css("width","100%");
         this.actions.showfirst();
         this.el.on('click', '.workflow-content', () => {
             PMAPI.openDialogByIframe(

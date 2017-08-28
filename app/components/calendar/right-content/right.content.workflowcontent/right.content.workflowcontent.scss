@@ -3,7 +3,7 @@ $workflow-bg-color: rgb(202,238,255);
 .component-workflow{
     padding: 2px 0px 3px 0px;
     height: 25px;
-    width: 95%;
+    width: 97%;
     .workflow-content{
         padding: 1px 0px 2px 5px;
         position: relative;
@@ -16,7 +16,19 @@ $workflow-bg-color: rgb(202,238,255);
         white-space:nowrap;/* 不换行 */
     }
     .workflow-schedule{
+        display: inline-block;
         height:25px;
         background-color: $workflow-bg-color
+    }
+    .end-workflow{
+        display: inline-block;
+        width:2px;
+        height: 25px;
+        background-color: rgba(202, 238, 255, 1);
+        float: right;
+        right:0px;
+    }
+    .end-workflow:hover{
+        background-color: rgba(242, 242, 242, 1);
     }
 }
