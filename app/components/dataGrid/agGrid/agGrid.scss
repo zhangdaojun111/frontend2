@@ -69,11 +69,12 @@
     line-height: 30px;
   }
 }
-.ag-header-cell-resize {
-  width: 0!important;
-}
 
 .ag-body {
+  .ag-cell-wrapper {
+    display: block;
+    margin: -5px 5px;
+  }
   .ag-row {
     border-bottom: 1px solid rgba(228, 228, 228, 1);
     .ag-group-cell {
@@ -84,6 +85,7 @@
     }
     .ag-cell-value {
       padding: 0 3px;
+      line-height: 30px;
     }
     .ag-cell{
       border-right: 1px solid #E4E4E4 !important;
