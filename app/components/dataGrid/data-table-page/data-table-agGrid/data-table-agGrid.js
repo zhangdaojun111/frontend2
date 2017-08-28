@@ -1446,6 +1446,10 @@ let config = {
                     return {background:'#fd8f8f'};
                 }
             }
+            //分组样式
+            if( this.data.groupCheck && !param["data"].children ){
+                return {background:'#E6F7FF'};
+            }
         },
         //创建sheet分页数据
         createSheetTabs: function ( res ) {
