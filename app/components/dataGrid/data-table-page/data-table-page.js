@@ -22,15 +22,15 @@ let config = {
         },
         //添加点击事件
         addClick: function () {
-            this.el.find( '.tabTitle .left' ).on( 'click',()=>{
-                this.el.find( '.left' ).addClass( 'active' );
-                this.el.find('.right').removeClass('active');
+            this.el.find( '.tabTitle .dataTableAgGrid' ).on( 'click',()=>{
+                this.el.find( '.dataTableAgGrid' ).addClass( 'active' );
+                this.el.find('.dataTableInTransit').removeClass('active');
                 this.el.find( '.page-group .dataTableAgGrid' )[0].style.display = 'block';
                 this.el.find( '.page-group .dataTableInTransit' )[0].style.display = 'none';
             } )
-            this.el.find( '.tabTitle .right' ).on( 'click',()=>{
-                this.el.find( '.left' ).removeClass( 'active' );
-                this.el.find('.right').addClass('active');
+            this.el.find( '.tabTitle .dataTableInTransit' ).on( 'click',()=>{
+                this.el.find( '.dataTableAgGrid' ).removeClass( 'active' );
+                this.el.find('.dataTableInTransit').addClass('active');
                 this.el.find( '.page-group .dataTableAgGrid' )[0].style.display = 'none';
                 this.el.find( '.page-group .dataTableInTransit' )[0].style.display = 'block';
                 //渲染在途
