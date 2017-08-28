@@ -12,20 +12,22 @@
       clear: both;
     }
     .checkbox-label{
-      cursor: pointer;
-      border: 1px solid #C1CACA;
-      height: 16px;
-      width:16px;
-      padding: 1px 0px 0px 2px;
+      //cursor: pointer;
+      //border: 1px solid #C1CACA;
+      //height: 13px;
+      //width:12px;
+      //padding: 1px 0px 0px 2px;
       display: inline-block;
       .chk_2 {
         display: none;
       }
       .chk_2 + label{
         cursor: pointer;
+        //margin-left: 1px;
         padding: 5px;
         display: inline-block;
         position: relative;
+        border: 1px solid #C1CACA;
       }
     }
     .chk_1 {
