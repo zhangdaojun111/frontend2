@@ -8,8 +8,8 @@ export default {
         config.data.text = encodeURIComponent(msg);
         return PMAPI.openDialogByComponent(config, {
             width: 300,
-            height: 170,
             title: '提示',
+            maxable: false,
             modal: true
         });
     },
@@ -23,8 +23,8 @@ export default {
         config.data.text = encodeURIComponent(msg);
         PMAPI.openDialogByComponent(config, {
             width: 300,
-            height: 170,
             title: '提示',
+            maxable: false,
             modal: true
         }).then((data) => {
             if (data.onlyclose === true) {

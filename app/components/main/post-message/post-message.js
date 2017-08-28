@@ -59,11 +59,13 @@ let config = {
          * 获取部门数据，并初始化部门树和人员选择组件
          */
         getDepartmentData: function () {
+            this.showLoading();
             HTTP.getImmediately('/get_department_tree/', {type: ''}).then((res) => {
                 this.data.userData = res.data.department2user;
                 this.data.departmentData = formatTreeData(res.data.department_tree)
                 this.actions.initTree();
                 this.actions.initChoosedUsers();
+                this.hideLoading();
             });
         },
         /**
@@ -74,7 +76,7 @@ let config = {
                 callback: (order, node) => {
                     this.actions._selectNode(order, node);
                 },
-                isSearch: true,
+                isSearch: false,
                 treeType: "MULTI_SELECT",
                 treeName: "post-message-depatment-tree"
             });
@@ -87,7 +89,7 @@ let config = {
         initChoosedUsers: function () {
             this.autoSelect = new AutoSelect({
                 displayType: 'static',           // popup或者static popup为弹出的形式 static 为静态显示
-                selectBoxHeight: 200,           // select 框的高度
+                selectBoxHeight: 180,           // select 框的高度
                 width: 300,                     // 为0表示显示默认宽度240
                 displayChoosed: false,
             }, {
@@ -133,7 +135,8 @@ let config = {
             for (let userId in hash) {
                 users.push({
                     id: userId,
-                    name: hash[userId]['name']
+                    name: hash[userId]['name'],
+                    py: hash[userId]['username']
                 });
             }
             this.autoSelect.data.list = users;
@@ -150,14 +153,14 @@ let config = {
                 dom.css('display', 'flex');
                 dom.html(`
                     <label class="label-out">预计时间</label>
-                    <div class="inputs">
+                    <div class="inputs clearfix">
                         <input type="datetime-local" name="deadline" required="required" formnovalidate="formnovalidate">
-                        审批超预计时间是否仍发送：
-                        <label>
+                        <p>审批超预计时间是否仍发送：</p>
+                        <label class="custom-radio">
                             <input type="radio" name="outTimeSend" value="1" checked>
                             是
                         </label>
-                        <label>
+                        <label class="custom-radio">
                             <input type="radio" name="outTimeSend" value="0">
                             否
                         </label>
@@ -186,6 +189,7 @@ let config = {
                     if (formData.deadline !== undefined) {
                         formData.deadline = moment(new Date(formData.deadline)).format('YYYY-MM-DD hh:mm')
                     }
+                    this.showLoading();
                     HTTP.postImmediately('/set_notice/', formData).then((res) => {
                         if (res.success === 1) {
                             postMessageUtil.hide();
@@ -193,6 +197,7 @@ let config = {
                         } else {
                             msgbox.alert(res.error);
                         }
+                        this.hideLoading();
                     });
                 }
             }
@@ -229,19 +234,21 @@ let postMessageUtil = {
         this.el = $("<div>").appendTo('body');
         let postMessage = new PostMessage();
         postMessage.render(this.el);
-        this.el.dialog({
-            width: 1200,
-            height: 800,
+        this.el.erdsDialog({
+            width: 950,
+            height: 600,
             modal: true,
             title: '消息推送',
+            maxable: false,
+            defaultMax: false,
             close: function () {
-                $(this).dialog('destroy');
+                $(this).erdsDialog('destroy');
                 postMessage.destroySelf();
             }
         })
     },
     hide: function () {
-        this.el.dialog('close');
+        this.el.erdsDialog('close');
     }
 }
 

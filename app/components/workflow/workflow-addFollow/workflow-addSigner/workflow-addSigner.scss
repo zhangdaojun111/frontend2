@@ -1,0 +1,18 @@
+.selectUser{
+    .flexBox{
+        display: flex;
+        #addUsercheck{
+            height: 500px;
+            overflow: scroll;
+        }
+        .flex{
+            width: 300px;
+        }
+        .signer-place{
+            text-align: center;
+        }
+    }
+}
+html,body{
+	height: 100%;
+}

@@ -171,17 +171,25 @@ class Component {
         return coms;
     }
 
-    showLoading(){
-        let width = this.el.width();
-        let height = this.el.height();
+    showLoading(dom){
+        if (this.loadingTarget) {
+            return;
+        }
+        if (_.isUndefined(dom)) {
+            this.loadingTarget = this.el;
+        } else {
+            this.loadingTarget = dom;
+        }
+        let width = this.loadingTarget.width();
+        let height = this.loadingTarget.height();
         let size = Math.min(width, height) * 0.15;
 
-        this.el.addClass('component-loading-effect');
-        this.el.children().addClass('component-filter-blur');
+        this.loadingTarget.addClass('component-loading-effect');
+        this.loadingTarget.children().addClass('component-filter-blur');
 
-        this.loadingOverlay = $('<div class="component-loading-cover">').appendTo(this.el);
+        this.loadingOverlay = $('<div class="component-loading-cover">').appendTo(this.loadingTarget);
         let loadingHtml = `<div class='component-loading-box'><div class ="dot1"></div><div class ="dot2"></div></div>`;
-        this.loadingEffectBox = $(loadingHtml).appendTo(this.el);
+        this.loadingEffectBox = $(loadingHtml).appendTo(this.loadingTarget);
 
         this.loadingEffectBox.css({
             "width":size,
@@ -196,8 +204,9 @@ class Component {
         this.loadingEffectBox.fadeOut(() => {
             this.loadingOverlay.remove();
             this.loadingEffectBox.remove();
-            this.el.removeClass('component-loading-effect');
-            this.el.children().removeClass('component-filter-blur');
+            this.loadingTarget.removeClass('component-loading-effect');
+            this.loadingTarget.children().removeClass('component-filter-blur');
+            this.loadingTarget = null;
         });
     }
 

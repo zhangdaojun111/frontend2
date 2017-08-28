@@ -9,17 +9,29 @@
 }
 
 .btn-nav {
-  height: 30px;
+  height: 60px;
   width: 100%;
+}
+.btn-nav.flex{
+  display: flex;
+  align-items: center;
+}
+.btn-nav.flex.flex-end{
+  justify-content: flex-end;
 }
 
 .workflowGrid-btn-group {
-  float: right;
-  display: none;
+  //float: right;
+  //display: none;
   margin-right: 10px;
   line-height: 30px;
   height: 30px;
-  display: block;
+  display: flex !important;
+  align-items: center;
+  .datagrid-icon-box{
+    display: flex;
+    align-items: center;
+  }
   a {
     cursor: pointer;
     margin-left: 20px;
@@ -27,6 +39,11 @@
     color: #B399A6;
     text-decoration: none;
     font-size: 14px;
+    display: flex;
+    align-items: center;
+    .icon-aggrid{
+      margin-right: 5px;
+    }
     img {
       display: inline-block;
       width: 15px;
@@ -41,25 +58,26 @@
   float: left;
   padding-left: 15px;
   .dataGrid-commonQuery-select {
-    padding: 6px 12px;
+    padding: 0 12px;
+    border: 1px solid #d7d7d7;
+    border-radius: 4px;
     text-indent: 0;
-    color: #0E7AEF;
+    color: #666666;
     float: left;
     width: 110px;
     font-size: 12px;
-    height: 30px;
+    height: 25px;
     display: inline-block;
-    border: none;
     outline: none;
     box-shadow: none;
     appearance: none;
     -moz-appearance: none;
     -webkit-appearance: none;
-    background: url(../../../assets/images/dataGrid/icon_xiala.png) no-repeat scroll right center transparent;
+    background: url(../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 90px center transparent;
   }
 }
 .workflow-grid-con {
-  height: calc( 100% - 60px );
+  height: calc( 100% - 90px );
 }
 
 #workflow-agGrid {

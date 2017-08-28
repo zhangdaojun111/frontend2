@@ -82,6 +82,7 @@ let config = {
         }
     },
     afterRender: function() {
+        this.showLoading();
         let __this=this;
         this.formTrans = false;
         this.el.on('click','.collapseFormBtn',()=>{
@@ -100,7 +101,6 @@ let config = {
             this.actions.delimg(e);
         })
         Mediator.subscribe('workflow:getFormTrans',(e)=>{
-            console.log(e+"............................");
             if(!e){
                if(this.formTrans) {
                    this.actions.trans();
@@ -127,6 +127,9 @@ let config = {
            }else{
                this.el.find(".J_wfName").text("表名");
            }
+        });
+        Mediator.subscribe("form:formAlreadyCreate",(e)=>{
+            this.showLoading();
         });
     }
 }

@@ -1,5 +1,5 @@
 /**
- * author hufei
+ * @author hufei
  * 工作流审批盖章的操作
  */
 import Component from '../../../lib/component';
@@ -142,7 +142,7 @@ export default {
         let obj = new Array();
         for(let i=0;i<len;i++){
             let url = {};
-            url['url']= "http://"+host+"/download_attachment/?file_id="+data.file_ids[i]+"&download=0",
+            url['url']= `http://${host}/download_attachment/?file_id=${data.file_ids[i]}&download=0`,
                 url["id"]=data.file_ids[i];
             obj.push(url);
         }

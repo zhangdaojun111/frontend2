@@ -1,23 +1,23 @@
-<div class="form-control">
+<div class="form-control component-readonly-control">
     {{#if unvisible}}
-        <a href="javascript:void(0);" class="info">权限受限</a>
+        <p class="info">权限受限</p>
     {{else if be_control_condition}}
-        <a href="javascript:void(0);" class="info">被修改条件限制</a>
+        <p class="info">被修改条件限制</p>
     {{else}}
-        <input  type="text" readonly="readonly"  class='dynamic-form-input ui-readonly ui-width' value={{value}}>
-        <div style="display: inline-block">
+        <input  type="text" readonly="readonly"  class='dynamic-form-input ui-readonly ui-width' value="{{value}}">
+        <div style="float: left;">
             {{#if required}}
-                <span id="requiredLogo" class="{{requiredClass}}" ></span>
+            <span id="requiredLogo" class="{{requiredClass}}" ></span>
             {{/if}}
             {{#if history}}
-                <a href="javascript:void(0);" class="ui-history"></a>
+            <a href="javascript:void(0);" class="ui-history" title="修改历史"></a>
             {{/if}}
         </div>
-        <span style="position: relative; display:inline-block">
-           <div class={{error_msg}} id="error_tip"  style=" display:none">
-                <em class={{ui_error_arrow}}></em>
-                <pre>{{ regErrorMsg }}</pre>
-           </div>
+        <span class="error">
+             <div class={{error_msg}} id="error_tip"  style=" display:none">
+                    <em class={{ui_error_arrow}}></em>
+                    <pre>{{ regErrorMsg }}</pre>
+             </div>
         </span>
     {{/if}}
 </div>

@@ -1,10 +1,11 @@
+/**
+ *@author chenli
+ *@description 隐藏框控件
+ */
 import Component from '../../../lib/component';
+import template from './hidden-control.html'
 let config={
-    template:`
-                <div style="display: none">             
-                       <input style="width: 240px"  type="hidden" value="{{value}}"> 
-               </div>         
-                `,
+        template:template,
     data:{
 
     },

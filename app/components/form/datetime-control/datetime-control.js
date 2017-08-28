@@ -1,3 +1,7 @@
+/**
+ *@author chenli
+ *@description 精确日期控件
+ */
 import Component from '../../../lib/component'
 import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui-timepicker-addon';
@@ -5,6 +9,8 @@ import 'jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css';
 import 'jquery-ui';
 import '../base-form/base-form.scss'
 import template from  './datetime-control.html';
+// import './datetime-control.scss';
+import '../base-form/dateTime.scss'
 import msgbox from '../../../lib/msgbox';
 let config={
     template:template,
@@ -34,14 +40,14 @@ let config={
         }
 
 
-        //控制到时分秒
-        if(_this.data.value == ''){
-            _this.el.find(".datetime").val("年/月/日 时:分:秒");
-        }else{
+        //回显
+        if(_this.data.value){
             _this.el.find(".datetime").val(_this.data.value.replace(/-/g, "/"));
-
+        }else{
+            _this.el.find(".datetime").val("年/月/日 时:分:秒");
         }
 
+        //控制到时分秒
         _this.el.find(".datetime").datetimepicker({
             monthNamesShort: [ "一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月" ],
             dayNamesMin: [ "日","一","二","三","四","五","六" ],
@@ -49,15 +55,21 @@ let config={
             hourText: '小时',
             minuteText: '分钟',
             secondText: '秒',
-            currentText: '现在',
-            closeText: '完成',
+            currentText: '今',
+            closeText: '确定',
+            timeInput:'1',
             showSecond: true, //显示秒
-            changeYear:true,
             changeMonth: true,
+            changeYear:true,
             dateFormat: "yy/mm/dd",
             defaultDate:new Date(_this.data.value),
             timeFormat: 'HH:mm:ss', //格式化时间
-
+            showOn: 'button',//设置触发选择器为button
+            //buttonImage:"../../../assets/images/form/icon-rili.png",
+            buttonImage:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAAbElEQVQ4y6VT0QoAIQibR9/qP+XP7p68h7C0cxDEYsrYEpLo4IlIM2OFA4CxPqqqrKKIc35Ewgrng0IL1WGfhZPHDCPbsMPRQitGM6NP393THlyBJOacJImb45qyhasq/4oxirMSbbtI0v3OL3+8d/U3+COTAAAAAElFTkSuQmCC",
+            buttonImageOnly:true,
+            showOtherMonths: true,//填充没有显示的单元格，但无法使用
+            //向外弹射操作后的值
             onSelect: function (selectTime, text) {
                 let selectTime1 = selectTime;
                 _this.data.value = selectTime.replace(/\//g, "-");
@@ -71,7 +83,7 @@ let config={
                 }
                 let currentTime = new Date().getTime();
                 selectTime = new Date(_val).getTime();
-
+                //timeType 是否可以选择之前的日期，before:只能选择之前的日期，after：只能选择之后的，all：可以选择全部
                 if( _this.data['timeType']){
                     if( _this.data['timeType'] == 'after'){
                         if(selectTime < currentTime){
@@ -95,20 +107,6 @@ let config={
 
             }
         });
-
-        let boolean = true;
-        if(boolean){
-            _this.el.on('click','#icon_rili',function(){
-                _this.el.find(".datetime").datetimepicker('show');
-            });
-            boolean = false;
-        }else{
-            _this.el.on('click','#icon_rili',function(){
-                $('#ui-datepicker-div').off();
-                _this.el.find(".datetime").datetimepicker('hide');
-            });
-            boolean = true;
-        }
         _.debounce(function(){_this.events.changeValue(_this.data)},200)();
     },
     beforeDestory:function(){

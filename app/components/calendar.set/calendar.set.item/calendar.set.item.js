@@ -1,25 +1,26 @@
 /**
  * Created by zj on 2017/8/4.
  */
+
+/**
+ * @description 表设置的行数据
+ */
 import Component from "../../../lib/component";
 import template from './calendar.set.item.html';
 import './calendar.set.item.scss';
-import CalendarSetItemMulitSelect from "./calendar.set.item.multiselect/calendar.set.item.multiselect"
-import {CalendarService} from '../../../services/calendar/calendar.service';
 import {PMAPI} from '../../../lib/postmsg';
 import Mediator from '../../../lib/mediator';
 import {AutoSelect} from '../../util/autoSelect/autoSelect';
-import CalendarSetRemindMethod from './calendar.set.remind/calendar.set.remind';
 
 let config = {
     template: template,
     data: {
-        rowSetData: {},
+        rowSetData: {},                 // 设置的行数据
         rowTitle: '',
-        dropdown: [],
-        dropdownForRes: [],
-        dropdownForCalendarChange: [],
-        replaceDropDown: [],
+        dropdown: [],                   // 附加字段
+        dropdownForRes: [],             // 代表字段
+        dropdownForCalendarChange: [],  // 首页可修改字段
+        replaceDropDown: [],            // 可配置字段
 
         isConfigText: true,
         selectedOpts: [],
@@ -45,10 +46,17 @@ let config = {
         newSelectedOpts: [],
 
         multiSelectMenu: {},
+        singleSelectMenu: {},
         editable:false,
 
     },
     actions: {
+        /**
+         * @author zj
+         * @param param
+         * @returns {{res: Array, text: Array}}
+         * 数据回显
+         */
         returnShow: function (param) {
             let res = [];
             let text = [];
@@ -62,12 +70,26 @@ let config = {
             }
             return {res: res, text: text};
         },
-
-        getSelectedValue: function () {
-            //return this.data.multiSelectMenu.data.choosed;
+        dropdownChoosed: function (param) {
+            let res = [];
+            let text = [];
+            for(let b in this.data.dropdownForRes){
+                if(param === this.data.dropdownForRes[b]['id']){
+                    res.push(this.data.dropdownForRes[b]);
+                    text.push(this.data.dropdownForRes[b]['name']);
+                }
+            }
+            return {res: res, text: text};
         },
 
+        /**
+         * @author zj
+         * @param forResText
+         * @param forResId
+         * 代表字段选中后，附加字段中对应字段也选中
+         */
         checkForResSelected: function (forResText, forResId) {
+            console.log(forResText,forResId, this.data.multiSelectMenu.data.choosed);
             let selectedOpts = this.data.multiSelectMenu.data.choosed;
             let isInSelectedOpts = false;
             for(let item of selectedOpts) {
@@ -83,6 +105,11 @@ let config = {
 
         },
 
+        /**
+         * @author zj
+         * @param newSelectedOpts
+         * 检查已选中的附加字段
+         */
         checkSelectedOpts: function (newSelectedOpts) {
             let selectedOptsId = [];
             let selectedOptsText  = [];
@@ -93,7 +120,10 @@ let config = {
             this.data.preViewText = selectedOptsText;
             this.el.find('.preview-text').html(this.data.preViewText);
         },
-
+        /**
+         * @author zj
+         * 打开提醒方式设置
+         */
         openSetRemind: function () {
             PMAPI.openDialogByIframe(
                 '/iframe/calendarSetRemind/',
@@ -133,11 +163,45 @@ let config = {
 
             });
         },
+
+        /**
+         * @author zj
+         *检查已设置的代表字段
+         */
+        checkResTextSelected: function () {
+            // let resOpts = this.data.dropdownForRes;
+            // resOpts.each((item) => {
+            //     if(resOpts[item].id) {
+            //         let a = resOpts[item].id;
+            //         if(a === this.data.rowSetData['selectedRepresents']) {
+            //             resOpts[item].selected  = 'selected';
+            //         }
+            //     }
+            //
+            // });
+        },
+
+        /**
+         * @author zj
+         * 检查已设置的首页可修改字段
+         */
+        checkChangeTextSelected: function () {
+            let changeOpts = this.el.find('.page-change-text option');
+            changeOpts.each(item => {
+                if(changeOpts[item].value) {
+                    let a= changeOpts[item].value;
+                    if(a === this.data.rowSetData['selectedEnums']) {
+                        changeOpts[item].selected  = 'selected';
+                    }
+                }
+            });
+        },
     },
     afterRender: function () {
         this.el.css({});
         let staus = false;
         let _this = this;
+
         let select_item_data = {
             'list': this.data.dropdown,
             displayType: 'popup',
@@ -154,42 +218,60 @@ let config = {
         };
         this.data.multiSelectMenu = new AutoSelect(select_item_data);
         this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
+
+        let single_item_data = {
+            'list': this.data.dropdownForRes,
+            displayType: 'popup',
+            multiSelect: false,
+            editable:this.data.editable,
+            choosed:this.actions.dropdownChoosed(this.data.rowSetData['selectedRepresents']).res,
+            onSelect: function (choosed) {
+               if(choosed.length > 0){
+                   _this.actions.checkForResSelected(choosed[0].name, choosed[0].id);
+                   _this.data.rowSetData['selectedRepresents'] = choosed[0].id;
+               }
+            },
+        };
+
+        this.data.singleSelectMenu = new AutoSelect(single_item_data);
+        this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
+
         Mediator.on('calendar-set:editor', data => {
             if (data.data === 1) {
                 this.el.find(".editor-items").attr("disabled", false);
+                this.data.singleSelectMenu.destroySelf();
                 _this.data.multiSelectMenu.destroySelf();
                 select_item_data.editable = true;
                 _this.data.multiSelectMenu = new AutoSelect(select_item_data);
                 _this.append(_this.data.multiSelectMenu, _this.el.find('.multi-select-item'));
+                single_item_data.editable = true;
+                this.data.singleSelectMenu = new AutoSelect(single_item_data);
+                this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
                 _this.el.find('td').removeClass('unclick');
                 _this.el.find(".set-remind-method").removeClass('unclick');
                 _this.el.find('input').removeClass('unclick');
                 staus = true;
             } else {
                 this.el.find(".editor-items").attr("disabled", true);
+                this.data.singleSelectMenu.destroySelf();
                 _this.data.multiSelectMenu.destroySelf();
                 select_item_data.editable = false;
+                single_item_data.editable = false;
                 _this.data.multiSelectMenu = new AutoSelect(select_item_data);
                 _this.append(_this.data.multiSelectMenu, _this.el.find('.multi-select-item'));
+                this.data.singleSelectMenu = new AutoSelect(single_item_data);
+                this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
                 _this.el.find("td").addClass('unclick');
                 _this.el.find(".set-remind-method").addClass('unclick');
                 _this.el.find('input').addClass('unclick');
                 staus = false;
             }
         });
-        this.el.find(".list").hide();
-        this.el.find('.res-text option').each((item) => {
-            let a = $('.res-text option')[item].value;
-            if(a === this.data.rowSetData['selectedRepresents']) {
-                this.el.find('.res-text option')[item].selected  = 'selected';
-            }
-        });
-        this.el.find('.page-change-text option').each(item => {
-            let a= $('.page-change-text option')[item].value;
-            if(a === this.data.rowSetData['selectedEnums']) {
-                this.el.find('.page-change-text option')[item].selected  = 'selected';
-            }
-        });
+
+        this.actions.checkResTextSelected();
+
+        this.actions.checkChangeTextSelected();
+
         if(!this.data.rowSetData['email']['email_status'] && !this.data.rowSetData['sms']['sms_status']) {
             this.el.find('.set-remind-method').html('设置提醒方式');
         }
@@ -204,10 +286,8 @@ let config = {
             this.data.rowSetData['is_show_at_home_page'] = isShowHomePage;
 
         }).on('change', '.set-color', () => {
-
             let setColor = this.el.find('.set-color').val();
             this.data.rowSetData['color'] = setColor;
-
         }).on('change', '.res-text', () => {
             let textForResValue = this.el.find('.res-text option:selected').val();
             let textForResText = this.el.find('.res-text option:selected').text();
@@ -215,7 +295,7 @@ let config = {
             this.data.rowSetData['selectedRepresents'] = textForResValue;
         }).on('change', '.page-change-text', () => {
             let valueForCalendarChangeValue = this.el.find('.page-change-text option:selected').val();
-            let textForCalendarChangeValue = this.el.find('.page-change-text option:selected').text();
+            // let textForCalendarChangeValue = this.el.find('.page-change-text option:selected').text();
 
             this.data.rowSetData['selectedEnums'] = valueForCalendarChangeValue;
         }).on('click', '.set-remind-method', () => {
@@ -225,11 +305,7 @@ let config = {
         }).on('change', '.config-text', () => {
             let valueConfigTextValue = this.el.find('.config-text option:selected').val();
             let textConfigTextValue = this.el.find('.config-text option:selected').text();
-
         });
-        if(this.data.rowTitle['dtype'] === 8) {
-            console.log(this.data.rowSetData, this.data.replaceDropDown, this.data.rowTitle);
-        }
 
         this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text;
         this.el.find('.preview-text').text(this.data.preViewText);

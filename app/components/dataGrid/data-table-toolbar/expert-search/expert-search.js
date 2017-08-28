@@ -32,11 +32,14 @@ let config = {
                     <option value="$gt">大于</option>
                     <option value="$lt">小于</option>
                     <option value="$ne">不等于</option>`,
+    optionHtmlFour : `<option value="exact">等于</option>
+                      <option value="$ne">不等于</option>`,
     data: {
         tableId: null,
         num:1,
         addNameAry:[],
         saveCommonQuery: false,
+        deleteCommonQuery: false,
         key:'',
         commonQuerySelectLength:null,
         //高级查询字段信息
@@ -111,7 +114,7 @@ let config = {
                 obj['cond']['searchBy'] = this.el.find('.condition-search-box-input').eq(i).attr('name');
                 obj['cond']['searchByName'] = this.el.find('.condition-search-box-input').eq(i).val();
                 obj['cond']['searchByNew'] = this.el.find('.condition-search-box-input').eq(i).attr('name');
-                obj['relation'] = this.el.find('.condition-search-select.radio').val()
+                obj['relation'] = this.el.find('.condition-search-select.radio').eq(i).val()
                 // if(this.el.find('.condition-search-radio.or').eq(i).prop('checked') == true) {
                 //     obj['relation'] = '$or';
                 // }
@@ -160,7 +163,8 @@ let config = {
                     switch (item.searchType) {
                         case "datetime": htmlStr = config.optionHtmlTwo; break;
                         case "text": htmlStr = config.optionHtmlOne; break;
-                        case "number": htmlStr = config.optionHtmlThree; break
+                        case "number": htmlStr = config.optionHtmlThree; break;
+                        case "person": htmlStr = config.optionHtmlFour; break;
                     }
                 }
             })
@@ -208,7 +212,6 @@ let config = {
                                 appendChecked = false;
                             }
                         })
-                        debugger
                         PMAPI.closeIframeDialog(window.config.key, {
                             type:'temporaryQuery',
                             appendChecked:appendChecked,
@@ -224,24 +227,41 @@ let config = {
                 }
             }
         },
+        //取消查询关闭iframe
+        cancelSearch:function() {
+            PMAPI.closeIframeDialog(window.config.key, {
+                saveCommonQuery:this.data.saveCommonQuery,
+                deleteCommonQuery:this.data.deleteCommonQuery,
+                onlyclose:true
+            });
+        },
         //打开保存常用查询
         openSaveQuery: function(){
             if(this.isEdit) {
                 addQuery.data.name = this.name;
             }
+            this.actions.openSaveQueryDialog(addQuery);
+        },
+        //打开保存常用查询弹窗
+        openSaveQueryDialog:function(addQuery){
             PMAPI.openDialogByComponent(addQuery, {
                 width: 380,
-                height: 220,
+                height: 180,
                 title: '保存为常用查询'
             }).then((data) => {
+                if(data.onlyclose){
+                    return false
+                }
                 if(data.value == '') {
-                    msgBox.alert('名字不能为空')
+                    msgBox.alert('名字不能为空');
+                    // this.actions.openSaveQueryDialog(addQuery)
                 }else  {
                     if(!this.isEdit) {
                         this.actions.saveCommonQuery(data.value);
                     } else {
-                        this.actions.deleteCommonQuery(this.id);
-                        this.actions.saveCommonQuery(data.value);
+                        debugger
+                        this.actions.deleteCommonQuery(this.id,data.value);
+                        // this.actions.saveCommonQuery(data.value);
                     }
                 }
             });
@@ -280,7 +300,10 @@ let config = {
                         id:1000+this.data.num,
                         name:name,
                         queryParams:JSON.stringify(this.data.searchInputList)
-                    })
+                    });
+                    if(this.data.commonQuery.length != 0){
+                        this.el.find('.common-search-compile').css('display','block');
+                    }
                     this.num ++;
                     this.name = name;
                     this.id = 1000+this.data.num;
@@ -291,17 +314,19 @@ let config = {
                     // Mediator.on('renderQueryItem:itemData',data =>{
                     //     this.actions.renderQueryItem(data);
                     // });
+                    this.actions.setConditionHeight()
                 }
             });
             HTTP.flush();
         },
         //删除常用查询
-        deleteCommonQuery: function(id){
+        deleteCommonQuery: function(id,value){
             let obj = {
                 'table_id': this.data.tableId,
                 'id': id
             };
             dataTableService.delPreference(obj).then( res=>{
+                debugger
                 if(res.succ == 0) {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
@@ -310,6 +335,13 @@ let config = {
                         if (this.data.commonQuery[i].id == id){
                             this.data.commonQuery.splice(i,1);
                         }
+                    }
+                    this.data.deleteCommonQuery = true;
+                    if(this.isEdit) {
+                        this.actions.saveCommonQuery(value);
+                        this.el.find('.common-search-compile').html(`<span class="img"></span>`);
+                        this.itemDeleteChecked = !this.itemDeleteChecked;
+                        this.isEdit = false;
                     }
                 }
             } );
@@ -323,6 +355,11 @@ let config = {
                     this.el.find('.common-search-item').eq(i).remove();
                 }
             }
+            this.actions.setConditionHeight()
+        },
+        setConditionHeight:function() {
+            let height = 450 - parseInt(this.el.find('.common-search').css('height'));
+            this.el.find('.condition-search').css('height',`${height}px`);
         },
         // 接受父组件传数据过来后
         afterGetMsg:function() {
@@ -362,6 +399,8 @@ let config = {
                 $(this).prop('checked',true)
             }).on('click','.search-button', ()=> {
                 this.actions.submitData()
+            }).on('click','.cancel-button',()=>{
+                this.actions.cancelSearch()
             }).on('click','.reset-button',function(){
                 _this.el.find('.condition-search-container').find('div').remove();
                 _this.actions.rendSearchItem();
@@ -395,8 +434,8 @@ let config = {
                     _this.isEdit = false;
                 }
             })
+            this.actions.setConditionHeight()
         }
-
     },
     afterRender: function() {
         PMAPI.getIframeParams(window.config.key).then((res) => {

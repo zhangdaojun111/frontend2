@@ -181,9 +181,37 @@ let config = {
                 return '<div style="text-align: center;">'+result+'</div>';
             }
         },
-        //floatingFilter
+        //floatingFilter拼参数
         floatingFilterPostData: function (col_field, keyWord, searchOperate) {
-
+            this.data.queryList[col_field] = {
+                'keyWord': keyWord,
+                'operate': dgcService.getMongoSearch(searchOperate),
+                'col_field': col_field
+            };
+            //用于去除queryList中的空值''
+            let obj = {};
+            for (let key in this.data.queryList) {
+                if (!( this.data.queryList[key]["keyWord"] == "" )) {
+                    obj[key] = this.data.queryList[key];
+                }
+            }
+            this.data.queryList = obj;
+            let filter = [];
+            for (let attr in this.data.queryList) {
+                filter.push({
+                    "relation": "$and",
+                    "cond": {
+                        "leftBracket": 0,
+                        "searchBy": this.data.queryList[attr]['col_field'],
+                        "operate": this.data.queryList[attr]['operate'],
+                        "keyword": this.data.queryList[attr]['keyWord'],
+                        "rightBracket": 0
+                    }
+                });
+            }
+            this.data.filterParam['filter'] = filter;
+            this.data.filterParam['is_filter'] = 1;
+            this.actions.getData();
         },
         onColumnResized: function ($event) {
             // this.customColumnsCom.actions.onColumnResized( this.customColumnsCom );
@@ -208,12 +236,14 @@ let config = {
         onCellClicked: function (params) {
             if(params['colDef']['field']=='operation'){
                 let obj = {};
+                obj['tableId'] = params['data']['table_id'];
                 obj['type'] = 'operation';
                 obj['content'] = params['data']['result_detail'] || '';
                 obj['dataInfo'] = params['data']['data_info'] || [];
                 this.actions.onOpenIframe(obj)
             } else if(params['colDef']['field']=='cache_detail'){
                 let obj = {};
+                obj['tableId'] = params['data']['table_id'];
                 obj['type'] = 'cache_detail';
                 obj['content'] = params['data']['cache_detail'] || '';
                 this.actions.onOpenIframe(obj)

@@ -89,38 +89,36 @@ let config ={
             // 暂时隐藏搜索按钮
             // this.el.find(".search-icon").hide();
             if(content && content !== ''){
-                //判断搜索结果iframe是否已打开，打开则重置src
-                //此处全局搜索div.iframes
-                let resultIframe;
-                let iframes =  $("div.iframes").find("iframe");
-                let str = "searchContent=" + this.data.formerSearchContent;
-                str = encodeURI(str);
-                for(let k of iframes){
-                    let src = k.src;
-                    if(src.indexOf(str) > 0){
-                        resultIframe = k;
-                    }
-                }
-
-                if(resultIframe){
-                    let newSrc = '/search_result?searchContent=' + this.data.searchContent;
-                    $(resultIframe).attr("src",newSrc);
-                }else{
-                    //搜索结果展示窗口未打开
-                    Mediator.emit('menu:item:openiframe', {
-                        id: "search-result",
-                        name: "搜索结果",
-                        url: "/search_result?searchContent=" + content
-                    });
-                }
+                // //判断搜索结果iframe是否已打开，打开则重置src
+                // //此处全局搜索div.iframes
+                // let resultIframe;
+                // let iframes =  $("div.iframes").find("iframe");
+                // let str = "searchContent=" + this.data.formerSearchContent;
+                // str = encodeURI(str);
+                // for(let k of iframes){
+                //     let src = k.src;
+                //     if(src.indexOf(str) > 0){
+                //         resultIframe = k;
+                //     }
+                // }
+                //
+                // if(resultIframe){
+                //     let newSrc = '/search_result?searchContent=' + this.data.searchContent;
+                //     $(resultIframe).attr("src",newSrc);
+                // }else{
+                //     //搜索结果展示窗口未打开
+                //     Mediator.emit('menu:item:openiframe', {
+                //         id: "search-result",
+                //         name: "搜索结果",
+                //         url: "/search_result?searchContent=" + content
+                //     });
+                // }
+                Mediator.emit('search:displayreuslt', {'content':content,'formerContent':this.data.formerSearchContent});
                 this.actions.addSearchHistory();
                 this.data.formerSearchContent = this.data.searchContent;
             }else{
                 msgbox.alert("搜索内容不能为空");
             }
-
-
-
         },
         addSearchHistory(){
             let content = this.data.searchContent;
@@ -195,10 +193,7 @@ let config ={
             }
         },
         hideHistoryList:function () {
-            let that = this;
-            setTimeout(function () {
-                that.el.find("div.history-display").hide();
-            },100);
+            this.el.find("div.history-display").hide();
             if(this.el.find("input.search-content").val() === ''){
                 this.el.find("input.search-content").attr("placeholder","请输入要搜索的内容...");
             }
@@ -244,32 +239,29 @@ let config ={
         }
     },
     afterRender:function () {
-        let that = this;
         this.actions.getData();
         this.el.on("click","i.search-icon", () => {
             this.actions.doSearch();
         }).on('input','.search-content',(event) => {
             this.actions.setSearchContent(event);
-        }).on('click','.record-item',(event) => {
+        }).on('mousedown','.record-item',(event) => {
             this.actions.dealRecordClick(event);
-        }).on("click",".delete-all-history", (event) => {
+        }).on("click",".delete-all-history", () => {
             this.actions.isDeleteAllHistory();
         }).on('focus','.search-content',() => {
             this.actions.showHistoryList();
-        }).on('blur','.global-search-main',() => {
-            this.actions.hideHistoryList();
+        }).on('blur','.global-search-main',(event) => {
+            this.actions.hideHistoryList(event);
         }).on('keydown','.search-content',(event) => {
             this.actions.myKeyDown(event);
         }).on('mouseenter','li.record-item',(event) => {
             this.actions.setItemHover(event);
         })
-
     },
     beforeDestroy:function () {
 
     }
 };
-
 
 class GlobalSearch extends  Component{
     constructor(){

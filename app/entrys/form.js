@@ -32,7 +32,6 @@ let FormEntrys = {
         this.isAddBuild=0;
         this.buildId='';
         this.btnType='new';
-        this.changeFlow='';
 
         this.tableId=config.table_id||'';
         this.parentRealId=config.parent_real_id||'';
@@ -56,7 +55,6 @@ let FormEntrys = {
         this.isAddBuild=config.isAddBuild || 0;
         this.buildId=config.id || '';
         this.btnType=config.btnType||'new';
-        this.changeFlow=config.change_flow||'';
         console.log('配置文件');
         console.log(config);
     },
@@ -104,7 +102,7 @@ let FormEntrys = {
     createPostJson(){
         let json;
         //如果是发起工作流
-        if(this.fromWorkFlow){
+        if(this.fromWorkFlow && this.realId == ''){
             json={
                 form_id:this.formId,
                 record_id:this.recordId,
@@ -112,7 +110,7 @@ let FormEntrys = {
                 from_workflow:this.fromWorkFlow,
                 table_id:this.tableId
             }
-        }else if(this.fromApprove){//审批流程
+        }else if(this.fromApprove && this.realId == '' ){//审批流程
             json={
                 form_id: this.formId,
                 record_id: this.recordId,
@@ -385,6 +383,8 @@ let FormEntrys = {
         let formBase=new FormBase(formData);
         this.childForm[this.tableId]=formBase;
         formBase.render(html);
+        //通知父框架表单刷新完毕
+        Mediator.publish('form:formAlreadyCreate','success');
         console.timeEnd('form创建时间');
     },
 

@@ -1,7 +1,6 @@
 import Component from '../../../lib/component';
 import template from './menu.full.html';
 import './menu.full.scss';
-import 'jquery-ui/ui/widgets/menu';
 import {FullMenuItem} from './item/item';
 
 function searchData(menu, text) {
@@ -25,11 +24,13 @@ function searchData(menu, text) {
     
     function setDisplay(_item) {
         _item.searchDisplay = true;
+        _item.expandChild = true;
         if (_item.parent) {
             setDisplay(_item.parent);
         }
     }
     search(res, text, null);
+    console.log(res);
     return res;
 
 }
