@@ -27,21 +27,21 @@ export let componentsJson = {
         'name': '雷达图',
         'component': FormRadarComponent
     },
-    'multi': {
-        'entry': 'multi',
+    'multilist': {
+        'entry': 'multilist',
         'name': '多表图',
         'component': FormMultiComponent
     },
-    'ninegrid': {
-        'entry': 'ninegrid',
+    'nineGrid': {
+        'entry': 'nineGrid',
         'name': '九宫图',
         'component': FormNineGridComponent
     },
-    'funnel': {
-        'entry': 'funnel',
-        'name': '漏斗图',
-        'component': FormFunnelComponent
-    },
+    // 'funnel': {
+    //     'entry': 'funnel',
+    //     'name': '漏斗图',
+    //     'component': FormFunnelComponent
+    // },
     'comment': {
         'entry': 'comment',
         'name': '注释图',

@@ -1,11 +1,12 @@
 <div class="auto-select-component">
-    <input class="auto-select-text" type="text" placeholder="选择或者输入查找" />
-    <div class="choosed">
-        {{#each choosed}}
-        <div class="item" title="点击删除" data-id="{{id}}">{{name}}</div>
-        {{/each}}
-    </div>
+    <input class="result" disabled="" />
+    <!--<div class="choosed">-->
+        <!--{{#each choosed}}-->
+        <!--<div class="item" title="点击删除" data-id="{{id}}">{{name}}</div>-->
+        <!--{{/each}}-->
+    <!--</div>-->
     <div class="list">
+        <input class="auto-select-text" type="text" placeholder="选择或者输入查找" />
         <ul>
             {{#each list}}
             <li data-id="{{id}}" data-name="{{name}}" data-py="{{py}}">

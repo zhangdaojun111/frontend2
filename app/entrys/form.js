@@ -358,11 +358,6 @@ let FormEntrys = {
     },
     //创建表单入口
     async createForm(config={}){
-        console.log('更上去了没');
-        console.log('更上去了没');
-        console.log('更上去了没');
-        console.log('更上去了没');
-        console.log('更上去了没');
         console.time('获取表单数据的时间');
         this.init(config);
         let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap"></div>`).prependTo(this.el);
@@ -388,6 +383,8 @@ let FormEntrys = {
         let formBase=new FormBase(formData);
         this.childForm[this.tableId]=formBase;
         formBase.render(html);
+        //通知父框架表单刷新完毕
+        Mediator.publish('form:formAlreadyCreate','success');
         console.timeEnd('form创建时间');
     },
 

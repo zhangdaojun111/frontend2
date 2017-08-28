@@ -97,6 +97,10 @@ export const dataTableService = {
     saveEditFormData: function (data) {
         return HTTP.post( 'add_update_table_data',data )
     },
+    //行级操作（后端）
+    rowOperationBackend: function (data,address) {
+        return HTTP.postImmediately(address,data);
+    },
     setImgDataAndNum(res,imgData,imgSelect){
         imgData = res;
         let imgTotal = res.rows.length;

@@ -46,6 +46,9 @@ let config = {
             readOnly: this.data.is_view == 1,
             theme: 'snow'
         });
+        if(this.data.value){
+            this.quill.pasteHTML(this.data.value);
+        }
         this.quill.on('text-change', _.debounce(() => {
             this.actions.publishMessage();
         }, 1000));

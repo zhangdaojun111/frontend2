@@ -16,7 +16,7 @@ let config = {
         //获取在途数据
         getInProcessNum: function () {
             dataTableService.getInProcessNum( {table_id: this.data.tableId} ).then( res=>{
-                this.el.find( '.inProcessNum' )[0].innerHTML = res.total || 0;
+                this.el.find( '.inProcessNum' )[0].style.display =res.total? 'block':'none';
             } )
             HTTP.flush();
         },

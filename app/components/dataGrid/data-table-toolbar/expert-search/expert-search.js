@@ -241,31 +241,12 @@ let config = {
                 addQuery.data.name = this.name;
             }
             this.actions.openSaveQueryDialog(addQuery);
-            // PMAPI.openDialogByComponent(addQuery, {
-            //     width: 380,
-            //     height: 220,
-            //     title: '保存为常用查询'
-            // }).then((data) => {
-            //     if(data.onlyclose == true){
-            //         return false
-            //     }
-            //     if(data.value == '') {
-            //         msgBox.alert('名字不能为空')
-            //     }else  {
-            //         if(!this.isEdit) {
-            //             this.actions.saveCommonQuery(data.value);
-            //         } else {
-            //             this.actions.deleteCommonQuery(this.id);
-            //             this.actions.saveCommonQuery(data.value);
-            //         }
-            //     }
-            // });
         },
         //打开保存常用查询弹窗
         openSaveQueryDialog:function(addQuery){
             PMAPI.openDialogByComponent(addQuery, {
                 width: 380,
-                height: 220,
+                height: 180,
                 title: '保存为常用查询'
             }).then((data) => {
                 if(data.onlyclose){
@@ -278,8 +259,9 @@ let config = {
                     if(!this.isEdit) {
                         this.actions.saveCommonQuery(data.value);
                     } else {
-                        this.actions.deleteCommonQuery(this.id);
-                        this.actions.saveCommonQuery(data.value);
+                        debugger
+                        this.actions.deleteCommonQuery(this.id,data.value);
+                        // this.actions.saveCommonQuery(data.value);
                     }
                 }
             });
@@ -311,7 +293,6 @@ let config = {
                 if(res.succ == 0) {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
-                    
                     this.actions.renderQueryItem(this.data.searchInputList)
                     this.data.saveCommonQuery = true
                     this.data.addNameAry.push(name)
@@ -333,17 +314,19 @@ let config = {
                     // Mediator.on('renderQueryItem:itemData',data =>{
                     //     this.actions.renderQueryItem(data);
                     // });
+                    this.actions.setConditionHeight()
                 }
             });
             HTTP.flush();
         },
         //删除常用查询
-        deleteCommonQuery: function(id){
+        deleteCommonQuery: function(id,value){
             let obj = {
                 'table_id': this.data.tableId,
                 'id': id
             };
             dataTableService.delPreference(obj).then( res=>{
+                debugger
                 if(res.succ == 0) {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
@@ -354,6 +337,12 @@ let config = {
                         }
                     }
                     this.data.deleteCommonQuery = true;
+                    if(this.isEdit) {
+                        this.actions.saveCommonQuery(value);
+                        this.el.find('.common-search-compile').html(`<span class="img"></span>`);
+                        this.itemDeleteChecked = !this.itemDeleteChecked;
+                        this.isEdit = false;
+                    }
                 }
             } );
             HTTP.flush();
@@ -366,6 +355,11 @@ let config = {
                     this.el.find('.common-search-item').eq(i).remove();
                 }
             }
+            this.actions.setConditionHeight()
+        },
+        setConditionHeight:function() {
+            let height = 450 - parseInt(this.el.find('.common-search').css('height'));
+            this.el.find('.condition-search').css('height',`${height}px`);
         },
         // 接受父组件传数据过来后
         afterGetMsg:function() {
@@ -440,6 +434,7 @@ let config = {
                     _this.isEdit = false;
                 }
             })
+            this.actions.setConditionHeight()
         }
     },
     afterRender: function() {
