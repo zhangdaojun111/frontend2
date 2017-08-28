@@ -1,6 +1,7 @@
 import Component from "../../../lib/component";
 import template from './workflow-page.html';
 import './workflow-page.scss';
+import '../../../assets/scss/dataGrid/dataGrid-icon.scss';
 import {HTTP} from "../../../lib/http";
 import msgBox from '../../../lib/msgbox';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';

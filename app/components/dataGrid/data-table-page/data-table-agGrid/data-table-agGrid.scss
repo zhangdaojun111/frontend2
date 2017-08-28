@@ -53,11 +53,15 @@
   }
 }
 .dataGrid-btn-group {
-  float: right;
+  //float: right;
   display: none;
   margin-right: 10px;
   line-height: 25px;
   user-select: none;
+  .datagrid-icon-box{
+    display: flex;
+    align-items: center;
+  }
   a {
     cursor: pointer;
     margin-left: 20px;
@@ -65,6 +69,15 @@
     color: #B399A6;
     text-decoration: none;
     font-size: 14px;
+    display: flex;
+    align-items: center;
+    .icon-aggrid{
+      margin-right: 5px;
+      order:0;
+    }
+    span{
+      order: 1;
+    }
     img {
       display: inline-block;
       width: 16px;
@@ -79,7 +92,7 @@
 }
 
 .dataGrid-edit-group {
-  float: right;
+  //float: right;
   display: none;
   margin-right: 10px;
   line-height: 25px;
@@ -91,6 +104,15 @@
     color: #B399A6;
     text-decoration: none;
     font-size: 14px;
+    display: flex;
+    align-items: center;
+    .icon-aggrid{
+      margin-right: 5px;
+      order:0;
+    }
+    span{
+      order: 1;
+    }
     img {
       display: inline-block;
       width: 16px;

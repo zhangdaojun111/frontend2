@@ -56,11 +56,17 @@
         }
       }
       .dataGrid-btn-group {
-        float: right;
-        display: block;
+        //float: right;
+        display: flex !important;
+        align-items: center;
         margin-right: 10px;
         line-height: 30px;
         height: 30px;
+
+        .datagrid-icon-box{
+          display: flex;
+          align-items: center;
+        }
         a {
           cursor: pointer;
           margin-left: 20px;
