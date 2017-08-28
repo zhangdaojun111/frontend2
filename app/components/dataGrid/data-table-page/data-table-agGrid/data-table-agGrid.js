@@ -173,6 +173,9 @@ let config = {
         haveSystemsFields: false,
         //表的类型
         namespace: '',
+        //选择的数据
+        selectData: [],
+
     },
     //生成的表头数据
     columnDefs: [],
@@ -1008,6 +1011,7 @@ let config = {
                     //渲染agGrid
                     this.actions.renderAgGrid();
                 }else {
+                    this.actions.calcSelectData( 'get' );
                     let d = {
                         rowData: this.data.rowData,
                         footerData: this.data.footerData
@@ -1033,6 +1037,7 @@ let config = {
                         this.data.originRowData[row['_id']]=JSON.parse(JSON.stringify(row));
                     });
                 }
+                this.actions.calcSelectData( 'set' );
             })
             HTTP.flush();
         },
@@ -1051,6 +1056,30 @@ let config = {
 
             } )
             HTTP.flush();
+        },
+        //获取设置选择数据
+        calcSelectData: function ( type ) {
+            if( type == 'get' ){
+                let arr = [];
+                let rows = this.agGrid.gridOptions.api.getSelectedRows();
+                for( let r of rows ){
+                    if( r._id ){
+                        arr.push( r._id );
+                    }
+                }
+                this.data.selectData = arr;
+            }
+            if( type == 'set' ){
+                this.agGrid.gridOptions.api.forEachNode((node) => {
+                    if( !node["data"] ){//处理在group中，报错
+                        return;
+                    }
+                    let id = node["data"]["_id"];
+                    if( this.data.selectData.indexOf( id ) != -1 ){
+                        node.setSelected(true);
+                    }
+                })
+            }
         },
         //设置对应关系数据
         setCorrespondence: function ( res ) {
@@ -2381,11 +2410,50 @@ let config = {
         },
         //半触发操作
         customOperate: function (d) {
-
+            // console.log( "_____" )
+            // console.log( d )
+            // let obj = {
+            //     table_id: this.data.tableId,
+            //     parent_table_id: this.data.parentTableId,
+            //     parent_real_id: this.data.parentRealId,
+            //     parent_temp_id: this.data.parentTempId,
+            //     parent_record_id: this.data.parentRecordId,
+            //     real_id: d["id"],
+            //     flow_id : d["flow_id"],
+            //     form_id : d["form_id"],
+            //     id : d["id"],
+            //     table_id : d['table_id'],
+            //     btnType: 'oprate'
+            // };
+            // let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
+            // let title = d.name;
+            // this.actions.openSourceDataGrid( url,title );
         },
         //行级操作
-        doRowOperation: function (ro,data) {
-
+        doRowOperation: function (ro,$event) {
+            if( r['frontend_addr'] !== ''){
+                //执行前端操作
+                // this.rowOperationFrontend({
+                //     rowId:this.realId,
+                //     table_id:this.pageId,
+                //     frontendAddress:r['frontend_addr'],
+                //     row_op_id:r['row_op_id']
+                // });
+            }else if( r['pyscript_addr'] !== '' ){
+                //执行后端操作
+                let data = {
+                    table_id:this.data.tableId,
+                    selectedRows:JSON.stringify([$event['data']['_id']])
+                }
+                let address = 'data' + r['pyscript_addr'];
+                dataTableService.rowOperationBackend( data,address ).then( res=>{
+                    if(res.success == 1){
+                        msgBox.showTips('已经向服务器发送请求');
+                    }else if(res.success == 0){
+                        msgBox.alert( '发送请求失败！错误是' + res['error'] );
+                    }
+                } )
+            }
         },
         //行双击
         onRowDoubleClicked: function (data) {

@@ -827,8 +827,6 @@ let config = {
         //设置特殊字段field信息
         setFieldMapping: function () {
             this.data.field_mapping = window.config.system_config['0']['field_mapping'];
-            console.log( "定制表数据" )
-            console.log( window.config )
             this.data.userStatus = this.data.field_mapping.status;
             this.data.departmentField = this.data.field_mapping.department;
             for( let key in this.data.filter_mapping ) {
