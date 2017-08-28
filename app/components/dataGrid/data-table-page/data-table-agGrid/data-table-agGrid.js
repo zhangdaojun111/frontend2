@@ -28,6 +28,7 @@ import AttachmentList from "../../../form/attachment-list/attachment-list";
 import PictureAttachment from "../../../form/picture-attachment/picture-attachment";
 import {PersonSetting} from "../../../main/personal-settings/personal-settings";
 import ViewVideo from "../../../form/view-video/view-video";
+import QuillAlert from "../../../form/quill-alert/quill-alert";
 
 
 let config = {
@@ -2147,7 +2148,13 @@ let config = {
             }
             //富文本字段
             if( data.colDef.real_type == fieldTypeService.UEDITOR ){
-                msgBox.alert( data.value )
+                console.log(data.value);
+                QuillAlert.data.value=data.value;
+                PMAPI.openDialogByComponent(QuillAlert,{
+                    width:800,
+                    height:500,
+                    modal:true,
+                })
             }
             //合同编辑器
             if( data.colDef.real_type == fieldTypeService.TEXT_COUNT_TYPE ){
