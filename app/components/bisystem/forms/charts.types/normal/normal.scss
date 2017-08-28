@@ -35,6 +35,9 @@ $bg-color: #ccc;
         padding: 20px;
         margin-top: 20px;
         position: relative;
+        > div {
+            margin-top:15px;
+        }
         .form-group-y0 {
             margin: 26px 0;
             border: 1px solid $bg-color;

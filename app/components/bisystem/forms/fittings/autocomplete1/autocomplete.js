@@ -13,10 +13,10 @@ let config = {
     template: template,
     data: {
         items: [], // autocomplete 原始数据列表
-        fiterItems: [], // 模糊查询出的item
         select: null, //当前选中的值
-        onSelect: null
-
+        onChange: null, // 当值改变时，如果设置了会触发
+        onInput: null, // 当输入值，触发输入操作
+        title: '请输入标题',
     },
     actions:{
 
@@ -28,8 +28,8 @@ let config = {
             selector: '.mat-input-container .mat-input-val',
             callback: _.debounce(function () {
                 this.el.find('.mat-select-list').fadeIn();
-                let top = $('.form-group-auto').offset().top + $('.mat-select-list').height() + $('.mat-input-container').height();
-                let maxHeight = $('.chart-form').height();
+                // let top = $('.form-group-auto').offset().top + $('.mat-select-list').height() + $('.mat-input-container').height();
+                // let maxHeight = $('.chart-form').height();
             },50)
         },
         {
@@ -44,7 +44,11 @@ let config = {
             selector: '.mat-input-container .mat-input-val',
             callback: _.debounce(function (context,event) {
                 let query = $(context).val();
+                if (this.data.onInput) {
+                    this.data.onInput(query);
+                };
                 this.searchSelect(query);
+
             },500)
         },
         {
@@ -55,10 +59,8 @@ let config = {
                 this.el.find('.mat-input-container .mat-input-val').val(val);
                 this.searchSelect(val);
                 this.data.select = JSON.parse($(context).closest('li').attr('data-item'));
-                console.log(this.data.onSelect);
-                if (this.data.onSelect) {
-                    console.log('xxxxxxxxx');
-                    this.data.onSelect(this.data.select);
+                if (this.data.onChange) {
+                    this.data.onChange(this.data.select)
                 }
             }
         }
@@ -67,7 +69,11 @@ let config = {
     firstAfterRender() {
         this.autoItem = new AutoCompleteItemComponent();
         this.autoItem.data.items = this.data.items;
-        this.append(this.autoItem, this.el.find('.mat-select-list'))
+        this.append(this.autoItem, this.el.find('.mat-select-list'));
+        // if (this.data.onChange) {
+        //     this.data.onChange(this.data.select)
+        // }
+
     }
 };
 
@@ -84,6 +90,7 @@ export class AutoCompleteComponent1 extends FormFittingAbstract {
     searchSelect(query) {
         let items = [];
         if (query) {
+            console.log(this.data.items);
             this.data.items.map(item => {
                 if (item['name'].indexOf(query) !== -1) {
                     items.push(item);
@@ -99,14 +106,24 @@ export class AutoCompleteComponent1 extends FormFittingAbstract {
 
     /**
      * 设置值
+     * @param items = 渲染数据列表，select = 选中的值
      */
 
-    setValue(items,select = null) {
-        if(select) {
+    setItems(items,select) {
+        if(select !== undefined) {
             this.data.select = select;
-        }
+            this.el.find('.mat-input-val').val(this.data.select);
+        };
         this.data.items = this.autoItem.data.items = items;
         this.autoItem.reload();
+    }
+
+    /**
+     * 设置编辑模式的值
+     */
+    setValue(select) {
+        this.el.find('.mat-input-val').val(select.name);
+        this.data.select = select;
     }
 
     /**
@@ -117,5 +134,11 @@ export class AutoCompleteComponent1 extends FormFittingAbstract {
         return this.data.select
     }
 
+    /**
+     * 当值改变时
+     */
+    onChange(val) {
+
+    }
 
 }
