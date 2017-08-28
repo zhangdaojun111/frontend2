@@ -193,10 +193,7 @@ let config ={
             }
         },
         hideHistoryList:function () {
-            let that = this;
-            setTimeout(function () {
-                that.el.find("div.history-display").hide();
-            },100);
+            this.el.find("div.history-display").hide();
             if(this.el.find("input.search-content").val() === ''){
                 this.el.find("input.search-content").attr("placeholder","请输入要搜索的内容...");
             }
@@ -242,32 +239,29 @@ let config ={
         }
     },
     afterRender:function () {
-        let that = this;
         this.actions.getData();
         this.el.on("click","i.search-icon", () => {
             this.actions.doSearch();
         }).on('input','.search-content',(event) => {
             this.actions.setSearchContent(event);
-        }).on('click','.record-item',(event) => {
+        }).on('mousedown','.record-item',(event) => {
             this.actions.dealRecordClick(event);
-        }).on("click",".delete-all-history", (event) => {
+        }).on("click",".delete-all-history", () => {
             this.actions.isDeleteAllHistory();
         }).on('focus','.search-content',() => {
             this.actions.showHistoryList();
-        }).on('blur','.global-search-main',() => {
-            this.actions.hideHistoryList();
+        }).on('blur','.global-search-main',(event) => {
+            this.actions.hideHistoryList(event);
         }).on('keydown','.search-content',(event) => {
             this.actions.myKeyDown(event);
         }).on('mouseenter','li.record-item',(event) => {
             this.actions.setItemHover(event);
         })
-
     },
     beforeDestroy:function () {
 
     }
 };
-
 
 class GlobalSearch extends  Component{
     constructor(){
