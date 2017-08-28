@@ -22,19 +22,6 @@
   font-size: 12px!important;
 }
 
-/*grid初始化按钮*/
-.table-init-logo{
-  color:rgb(51,122,183);
-  cursor:pointer;
-  line-height: 27px;
-}
-
-.table-init-logo:hover{
-  color:rgb(195,195,195);
-  cursor:pointer;
-  text-decoration: none;
-}
-
 .btn-nav {
   height: 30px;
   width: 100%;
@@ -115,12 +102,6 @@
   float: left;
   position: relative;
   height: 100%;
-  .resetFloatingFilter {
-    display: block;
-    margin: auto;
-    position: relative;
-    top: 5px;
-  }
 }
 
 .group-panel {
