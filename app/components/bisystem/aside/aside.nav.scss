@@ -28,11 +28,11 @@ $font_size: 12px;
   top:0;
   width: 250px;
   height: 100%;
-  //height: 100vh;
   background-color: $aside-bg;
   //新建编辑按钮
   .user{
     padding: 20px 20px 30px ;
+    display: inline-block;
     a{
       display: block;
       width: 210px;
@@ -57,7 +57,9 @@ $font_size: 12px;
   }
   //搜索框及以下
   .charts-container{
+    width: 100%;
     height: calc(100% - 139px);
+    display: inline-block;
     .filter{
       padding: 20px 20px;
       background-color: $charts-container-p;
@@ -69,14 +71,9 @@ $font_size: 12px;
         outline: none;
         line-height: inherit;
       }
-      i{
-        margin-left: -25px;
-        font-size: 12px;
-      }
     }
     .charts{
       height: calc(100% - 68px);
-      //position: relative;
       }
     }
 }

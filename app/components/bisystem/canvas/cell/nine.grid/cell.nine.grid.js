@@ -33,22 +33,23 @@ let config = {
          * @param cellChart 画布块数据(通过父类初始化子类传递进来)
          */
         init(cellChart) {
+            console.log('xxxxxxxxxxxxxxxxxxxxxxxxxx');
+            console.log(cellChart);
             if (cellChart['chart']['data']['rows'].length === 0) {
                 return false;
             }
-            let nineType = cellChart['chart']['type'];
+            let nineType = parseInt(cellChart['chart']['type']);
             let grids = cellChart['chart']['data']['rows'][0];
             let types = [];
             let xAxis = [];
             let yAxis = [];
             let legend = [];
-
             // 合并九宫格数据为[[],[],[]]
             new Array(nineType).fill('').forEach((val, index) => {
                 val = grids.slice(index * nineType, index * nineType + nineType);
                 types.push(val);
             });
-
+            console.log(types);
             Object.keys(cellChart['chart']['yAxis']).forEach(keys => {
                 yAxis.push(cellChart['chart']['yAxis'][keys])
             });
@@ -56,7 +57,6 @@ let config = {
             Object.keys(cellChart['chart']['xAxis']).forEach((keys,index) => {
                 xAxis.push(cellChart['chart']['xAxis'][keys]);
                 yAxis.forEach((val,yAxisindex) => {
-                    console.log(val+ cellChart['chart']['xAxis'][keys]);
                     legend.push(val+ cellChart['chart']['xAxis'][keys])
                 })
             });
@@ -64,7 +64,6 @@ let config = {
             config.data.xAxis = xAxis;
             config.data.yAxis = yAxis;
             config.data.legend = legend;
-            console.log(config.data.legend);
         }
     },
     firstAfterRender() {}
