@@ -502,7 +502,7 @@ export const FormService={
         }else{
             options=json['options'];
         }
-        if(options[0]['value'] == ''){
+        if(options.length >0 && options[0]['value'] == ''){
             options.shift();
         }
         for(let key in options){
