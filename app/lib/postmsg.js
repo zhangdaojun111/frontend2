@@ -2,7 +2,9 @@ import URL from './url';
 import component from '../lib/component';
 import {HTTP} from './http';
 import './jquery-ui.dialog';
-
+import Quill from 'quill';
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
 
 /**
  * 父级页面，需要根据key来保存消息来源iframe或component的对象和打开的iframe或component的dom
@@ -380,7 +382,7 @@ export const PMAPI = {
                 let args = obj[key]['Arguments'] || "";
                 let source = obj[key]['Source'];
                 let fstr = "function " + obj[key]['Function'] + "(" + args + "){" + source + "}";
-                let f = new Function('$', '_', 'PMAPI', 'PMENUM', 'HTTP', "return " + fstr)($, _, PMAPI, PMENUM, HTTP);
+                let f = new Function('$', '_', 'PMAPI', 'PMENUM', 'HTTP', 'Quill', "return " + fstr)($, _, PMAPI, PMENUM, HTTP, Quill);
                 obj[key] = f;
             } else if (obj[key] instanceof Object) {
                 PMAPI._createFuncs(obj[key]);

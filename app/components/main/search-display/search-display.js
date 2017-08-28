@@ -199,7 +199,7 @@ let config = {
             this.actions.showDataPage();
         }).on('click','.attachment-btn',() => {
             this.actions.showAttachmentPage();
-        })
+        });
     },
     beforeDestroy:function () {
         Mediator.removeAll();

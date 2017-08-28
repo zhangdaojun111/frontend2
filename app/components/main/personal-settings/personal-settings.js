@@ -121,7 +121,7 @@ let config = {
                 useremail: this.data.user_email,
                 usertel: this.data.user_phone
             };
-            this.dataService.saveInfo(data).done((result) => {
+            UserInfoService.saveInfo(data).done((result) => {
                 //修改window.config中的数据
                 window.config.sysConfig.userInfo.email = this.data.user_email;
                 window.config.sysConfig.userInfo.tel = this.data.user_phone;
@@ -152,9 +152,10 @@ let config = {
                 newpwdagain:confirmNewPw
             };
 
-            this.dataService.modifyPassword(data).done((result) => {
+            UserInfoService.modifyPassword(data).done((result) => {
                 if(result.success === 1){
-                    msgbox.alert("密码修改成功！")
+                    msgbox.alert("密码修改成功！");
+                    PersonSetting.hide();
                 }else{
                     msgbox.alert(result.error)
                 }
@@ -273,7 +274,6 @@ export const PersonSetting  = {
     el:null,
     show: function() {
         let component = new PersonalSetting("","self");
-        component.dataService = UserInfoService;
         this.el = $('<div class="personal-setting-page">').appendTo(document.body);
         getData(component);
         component.render(this.el);
