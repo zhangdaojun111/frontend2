@@ -1,3 +1,7 @@
+/**
+ *@author qiumaoyun
+ *发起工作流page body
+ */
 import Component from '../../../lib/component';
 import template from './workflow-initial.html';
 import './workflow-initial.scss';

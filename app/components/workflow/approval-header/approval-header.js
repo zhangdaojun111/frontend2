@@ -1,9 +1,12 @@
+/**
+ * @author qiumaoyun
+ * 工作审批header
+ */
+
 import Component from '../../../lib/component';
 import template from './approval-header.html';
 import './approval-header.scss';
-
 import Mediator from '../../../lib/mediator';
-
 
 let config = {
     template: template,
@@ -27,7 +30,6 @@ let config = {
         this.showLoading();
         let self=this;
         this.showgz = false;
-
         this.el.on("click",".approval-curr-txt",function (e) {
             e.stopPropagation();
             self.actions.approvalBtnToggle($(this))
