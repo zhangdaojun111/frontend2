@@ -1,8 +1,9 @@
 @import "../../../../assets/scss/core/base";
 $workflow-bg-color: rgb(202,238,255);
 .component-workflow{
-    padding: 2px 0px 3px 0px;
+    padding: 2px 0px 0px 0px;
     height: 25px;
+    margin-bottom: 3px;
     width: 97%;
     .workflow-content{
         padding: 1px 0px 2px 5px;
