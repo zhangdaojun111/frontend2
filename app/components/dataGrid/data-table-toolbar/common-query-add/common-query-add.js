@@ -26,20 +26,22 @@ let css = `
 }
 .add-container .button-box .save-btn{
     color: #fff;
-    background: #0F79EF;
+    background: #0088ff;
     padding: 6px 17px;
     border: none;
     font-size: 12px;
     padding: 6px 17px;
     margin-right: 15px;
+    border-radius: 4px
 }
 .add-container .button-box .cancel-btn {
     color: #fff;
-    background: #0F79EF;
+    background: #0088ff;
     padding: 6px 17px;
     border: none;
     font-size: 12px;
     padding: 6px 17px;
+    border-radius: 4px
 }
 \`;
 `;
