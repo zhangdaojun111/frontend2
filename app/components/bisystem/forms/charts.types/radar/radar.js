@@ -28,8 +28,6 @@ let config = {
 
         // 获取数据源
         this.getChartSource();
-
-        this.getChartData(this.chartId);
     },
     firstAfterRender() {
         let me = this;
@@ -80,6 +78,9 @@ export class FormRadarComponent extends BiBaseComponent{
     async getChartSource() {
         let res = await ChartFormService.getChartSource();
         if (res['success'] === 1) {
+            if (this.editModeOnce) {
+                await this.getChartData(this.chartId);
+            }
             this.chartSourceFinish(res['data']);
         } else {
             msgbox.alert(res['error']);
@@ -112,7 +113,9 @@ export class FormRadarComponent extends BiBaseComponent{
      */
     chartSourceFinish(data) {
         this.formGroup['source'].setItems(data);
-        this.formGroup['source'].setValue(this.editChart.source);
+        if (this.editModeOnce && this.editChart) {
+            this.formGroup['source'].setValue(this.editChart.source);
+        };
     }
 
     /**
