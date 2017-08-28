@@ -6,6 +6,7 @@
 import Component from "../../../../lib/component";
 import template from './data-table-agGrid.html';
 import './data-table-agGrid.scss';
+import '../../../../assets/scss/dataGrid/dataGrid-icon.scss'
 import {HTTP} from "../../../../lib/http";
 import Mediator from "../../../../lib/mediator";
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
@@ -28,6 +29,7 @@ import AttachmentList from "../../../form/attachment-list/attachment-list";
 import PictureAttachment from "../../../form/picture-attachment/picture-attachment";
 import {PersonSetting} from "../../../main/personal-settings/personal-settings";
 import ViewVideo from "../../../form/view-video/view-video";
+import QuillAlert from "../../../form/quill-alert/quill-alert";
 
 
 let config = {
@@ -175,6 +177,8 @@ let config = {
         namespace: '',
         //选择的数据
         selectData: [],
+        //是否有sheet
+        isShowSheet: false,
 
     },
     //生成的表头数据
@@ -528,7 +532,7 @@ let config = {
             }
             let bgStyle = ' ';
             if( color != 'transparent' ){
-                bgStyle = ' style = "display: block;width: 100%;height: 100%;background:' + color+'"';
+                bgStyle = ' style = "padding: 0 3px;display: block;width: 100%;height: 100%;background:' + color+'"';
             }
 
             //前端表达式值计算
@@ -869,7 +873,11 @@ let config = {
             }
             let con = this.el.find( '.dataGrid-btn-group' )[0];
             con.innerHTML = html;
-            con.style.display = 'block';
+            $(con).addClass('flex');
+            setTimeout( ()=>{
+                con.style.display = 'flex';
+                this.el.find( '.dataGrid-btn-group' )[0].style.display = 'flex';
+            },1000 )
         },
         //请求表头数据
         getHeaderData: function () {
@@ -1349,7 +1357,11 @@ let config = {
                 this.append(this.pagination, this.el.find('.pagination'));
             }else {
                 this.el.find( '.pagination' )[0].style.height = '0px';
-                this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 40px )';
+                if( this.data.isShowSheet ){
+                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 60px )';
+                }else {
+                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 40px )';
+                }
             }
             //高级查询
             if( this.el.find( '.expert-search-btn' )[0] ){
@@ -1489,6 +1501,7 @@ let config = {
         //创建sheet分页数据
         createSheetTabs: function ( res ) {
             if( res.rows.length > 0 ){
+                this.data.isShowSheet = true;
                 let arr = [{name:'全部数据',id:0,value:[]}];
                 for( let r of res.rows ){
                     let obj = {
@@ -1692,8 +1705,15 @@ let config = {
                 this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
             }
             this.data.editMode = !this.data.editMode;
-            this.el.find( '.dataGrid-btn-group' )[0].style.display = this.data.editMode ? 'none':'block';
-            this.el.find( '.dataGrid-edit-group' )[0].style.display = this.data.editMode ? 'block':'none';
+            this.el.find( '.dataGrid-btn-group' )[0].style.display = this.data.editMode ? 'none':'flex';
+            this.el.find( '.dataGrid-edit-group' )[0].style.display = this.data.editMode ? 'flex':'none';
+           // if(this.data.editMode){
+           //     this.el.find( '.dataGrid-btn-group' ).removeClass('flex');
+           //     this.el.find( '.dataGrid-edit-group' ).addClass('flex');
+           // }else {
+           //     this.el.find( '.dataGrid-btn-group' ).addClass('flex');
+           //     this.el.find( '.dataGrid-edit-group' ).removeClass('flex');
+           // }
             let columns = this.data.editMode ? this.columnDefsEdit : this.columnDefs;
             this.agGrid.gridOptions.api.setColumnDefs( columns );
             this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
@@ -2173,14 +2193,20 @@ let config = {
                     PMAPI.openDialogByComponent(PictureAttachment,{
                         title:'图片附件',
                         width: 1234,
-                        height: 987,
+                        height:800
                     })
                 })
                 HTTP.flush();
             }
             //富文本字段
             if( data.colDef.real_type == fieldTypeService.UEDITOR ){
-                msgBox.alert( data.value )
+                console.log(data.value);
+                QuillAlert.data.value=data.value.replace(/(\n)/g, '');
+                PMAPI.openDialogByComponent(QuillAlert,{
+                    width:800,
+                    height:500,
+                    modal:true,
+                })
             }
             //合同编辑器
             if( data.colDef.real_type == fieldTypeService.TEXT_COUNT_TYPE ){

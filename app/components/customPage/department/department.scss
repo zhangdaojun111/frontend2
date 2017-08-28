@@ -6,14 +6,21 @@
   right: 0;
   overflow: hidden;
   .btn-nav {
-    height: 30px;
+    height: 60px;
     width: 100%;
+
     .dataGrid-btn-group {
-      float: right;
-      display: block;
+      //float: right;
+      //display: block;
       margin-right: 10px;
-      line-height: 30px;
-      height: 30px;
+      //line-height: 30px;
+      //height: 30px;
+      &.flex {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        height: 60px;
+      }
       a {
         cursor: pointer;
         margin-left: 20px;
@@ -21,6 +28,8 @@
         color: #B399A6;
         text-decoration: none;
         font-size: 14px;
+        display: flex;
+        align-items: center;
         img {
           display: inline-block;
           width: 15px;

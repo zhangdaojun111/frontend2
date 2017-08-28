@@ -1,6 +1,7 @@
 import Component from "../../../lib/component";
 import template from './workflow-page.html';
 import './workflow-page.scss';
+import '../../../assets/scss/dataGrid/dataGrid-icon.scss';
 import {HTTP} from "../../../lib/http";
 import msgBox from '../../../lib/msgbox';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
@@ -237,7 +238,7 @@ let config = {
         //渲染按钮
         renderBtn: function () {
             if( this.data.tableId == 'my-workflow' || this.data.tableId == 'approving-workflow' ){
-                this.el.find( '.batch-cancel' )[0].style.display = 'inline-block';
+                this.el.find( '.batch-cancel' )[0].style.display = 'flex';
                 this.el.find( '.batch-cancel' ).on( 'click',()=>{
                     this.data.selectRows = [];
                     let rows = this.agGrid.gridOptions.api.getSelectedRows();

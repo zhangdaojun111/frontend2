@@ -2,7 +2,13 @@
     position: relative;
     background-color: #fff;
     //height: 30px;
-    input.auto-select-text {
+
+    &.disabled {
+        input.result {
+            background-color: rgb(235, 235, 228);
+        }
+    }
+    input.result {
         width: 100%;
         border: 1px solid #ddd;
         height: 30px;
@@ -12,11 +18,29 @@
         text-indent: 10px;
         box-sizing: border-box;
         z-index: 100;
+        background-color: #fff;
     }
     .list {
         border: 1px solid #ddd;
         overflow: auto;
         margin-top: -1px;
+
+        background-color: #f5f5f5;
+
+        input.auto-select-text {
+            width: 100%;
+            border: 0 none;
+            border-bottom: 1px solid #ddd;
+            height: 30px;
+            line-height: 30px;
+            padding: 0;
+            outline: none;
+            text-indent: 10px;
+            box-sizing: border-box;
+            z-index: 100;
+        }
+
+
         &.popup {
             position: absolute;
             width: 100%;
@@ -85,26 +109,26 @@
             }
         }
     }
-    .choosed {
-        font-size: 0;
-        padding-bottom: 5px;
-        .item {
-            display: inline-block;
-            background-color: #ccc;
-            color: #fff;
-            height: 20px;
-            line-height: 20px;
-            padding: 0 5px;
-            margin: 5px 5px 0 0;
-            font-size: 12px;
-            cursor: pointer;
-        }
-    }
-    &.single-select {
-        .choosed {
-            position: absolute;
-            right: 0;
-            top: 0;
-        }
-    }
+    //.choosed {
+    //    font-size: 0;
+    //    padding-bottom: 5px;
+    //    .item {
+    //        display: inline-block;
+    //        background-color: #ccc;
+    //        color: #fff;
+    //        height: 20px;
+    //        line-height: 20px;
+    //        padding: 0 5px;
+    //        margin: 5px 5px 0 0;
+    //        font-size: 12px;
+    //        cursor: pointer;
+    //    }
+    //}
+    //&.single-select {
+    //    .choosed {
+    //        position: absolute;
+    //        right: 0;
+    //        top: 0;
+    //    }
+    //}
 }

@@ -286,40 +286,56 @@ export const IframeInstance = new Component({
                 //将未关闭的标签id加入tempList
                 if(result[0].succ === 1){
                     tabs = result[0].tabs;
+                    that.data.timeList = tabs;
                     delete tabs["0"];
-                if(tabs){
-                    for(let k in tabs){
-                        that.data.tempList.push(k);
+                    if(tabs){
+                        for(let k in tabs){
+                            that.data.tempList.push(k);
+                        }
                     }
-                }
                 }else{
                     console.log("get tabs failed",result[0].err);
                 }
 
+
                 if(result[1].succ === 1){
-                let biConfig = result[1];
-                if((biConfig.data && biConfig.data === "1") || tabs.hasOwnProperty("bi")){
-                    that.data.autoOpenList.push({
-                        id: 'bi',
-                        name: 'BI',
-                        url: window.config.sysConfig.bi_index
-                    });
-                    window.config.sysConfig.logic_config.login_show_bi = "1";
-                }
+                    let biConfig = result[1];
+                    //检测数据biConfig.data是否为两位数，如果不是，给用户设置默认值10
+                    if(biConfig.data !== "10" && biConfig.data !== "11" && biConfig.data !== "20" && biConfig.data !== "21"){
+                        biConfig.data = "10";
+                    }
+                    if((biConfig.data && biConfig.data.toString() !== "10" && biConfig.data.toString() !== "20")){
+                        that.data.biCalendarList.push({
+                            id: 'bi',
+                            name: 'BI',
+                            url: window.config.sysConfig.bi_index
+                        });
+                    }
+                    window.config.sysConfig.logic_config.login_show_bi = biConfig.data.toString();
                 }else{
                     console.log("get tabs failed",result[1].err);
                 }
 
                 if(result[2].succ === 1){
-                let calendarConfig = result[2];
-                if((calendarConfig.data && calendarConfig.data === "1") || tabs.hasOwnProperty("calendar")){
-                    that.data.autoOpenList.push({
-                        id: 'calendar',
-                        name: '日历',
-                        url: window.config.sysConfig.calendar_index
-                    });
-                    window.config.sysConfig.logic_config.login_show_calendar = "1";
-                }
+                    let calendarConfig = result[2];
+                    //检测数据calendarConfig.data是否为两位数，如果不是，给用户设置默认值20
+                    if(calendarConfig.data !== "10" && calendarConfig.data !== "11" && calendarConfig.data !== "20" && calendarConfig.data !== "21"){
+                        calendarConfig.data = "20";
+                    }
+                    window.config.sysConfig.logic_config.login_show_calendar = calendarConfig.data.toString();
+                    if((calendarConfig.data && calendarConfig.data.toString() === "11")){
+                        that.data.biCalendarList.unshift({
+                            id: 'calendar',
+                            name: '日历',
+                            url: window.config.sysConfig.calendar_index
+                        });
+                    }else if((calendarConfig.data && calendarConfig.data.toString() === "21")){
+                        that.data.biCalendarList.push({
+                            id: 'calendar',
+                            name: '日历',
+                            url: window.config.sysConfig.calendar_index
+                        });
+                    }
                 }
                 that.actions.autoOpenTabs();
             });
@@ -328,11 +344,21 @@ export const IframeInstance = new Component({
             let tempList = this.data.tempList;
             let menu = window.config.menu;
             this.actions.findTabInfo(menu,tempList);
+            this.actions.sortTabs(this.data.autoOpenList,this.data.timeList);
+            this.data.autoOpenList =  this.data.autoOpenList.concat(this.data.biCalendarList);
             //依次打开各标签
             for(let k of this.data.autoOpenList){
                 this.actions.openIframe(k.id,k.url,k.name);
             }
             this.data.isAutoOpenTabs = false;   //首次自动打开的页面无需向后台发送请求，以后打开页面需要向后台发送请求
+        },
+        sortTabs:function (tabsList,timeList) {
+            for(let k of tabsList){
+                k.time = timeList[k.id];
+            }
+            tabsList.sort((a,b) => {
+                return a.time - b.time;
+            })
         },
         findTabInfo:function (nodes,targetList) {
             for( let i=0; i < nodes.length; i++){
@@ -399,7 +425,6 @@ export const IframeInstance = new Component({
             }
 
             if(resultIframe){
-                console.log('reset src');
                 let newSrc = '/search_result?searchContent=' + content;
                 $(resultIframe).attr("src",newSrc);
             }else{
