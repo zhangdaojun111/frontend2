@@ -8,6 +8,12 @@
   .p-left {
     float: left;
     margin-left: 15px;
+    span{
+      vertical-align: top;
+      display: inline-block;
+      height: 33px;
+      line-height: 33px;
+    }
     .pageSize {
       width: 50px;
       margin: 0 5px;
@@ -19,7 +25,10 @@
       }
     }
     .ui-icon-refresh {
-      vertical-align: sub;
+      display: inline-block;
+      height: 33px;
+      width: 25px;
+      background: url(../../../../assets/images/dataGrid/icon_shuaxin_blue.png) no-repeat scroll center 8px  transparent;
     }
 
     .ui-icon-refresh:hover {
@@ -66,7 +75,7 @@
       background: url(../../../../assets/images/dataGrid/icon_shangyiye.png) no-repeat scroll center 8px  transparent;
       height: 33px;
       width: 16px;
-      margin: 0 7px8px
+      margin: 0 7px;
     }
     .goPre {
       vertical-align: top;
