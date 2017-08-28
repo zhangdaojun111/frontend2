@@ -24,9 +24,9 @@ let config = {
 };
 
 export class FormChartSourceComponent extends BiBaseComponent {
-    constructor(chart) {
+    constructor(data) {
         super(config);
-        this.data.assortment = chart['assortment'];
+        this.data.assortment = data;
     }
 
     /**

@@ -82,7 +82,6 @@ export class FormMultiComponent extends BiBaseComponent{
      * 编辑模式
      */
     fillChart(chart) {
-        console.log(chart);
         this.editChart = chart;
         this.formGroup.multiName.setValue(chart['chartName']);
         let share = {
@@ -93,7 +92,7 @@ export class FormMultiComponent extends BiBaseComponent{
         };
         this.formGroup.multiShare.setValue(share, true);
         chart['sources'].forEach(source => {
-            this.multiAdd();
+            this.multiAdd(source);
         });
     }
 
@@ -115,16 +114,14 @@ export class FormMultiComponent extends BiBaseComponent{
     /**
      * 增加一张图表
      */
-    multiAdd(){
-        let chart = new MultiChartComponent();
+    multiAdd(c){
+        const data = c ? c : null;
+        let chart = new MultiChartComponent(data);
         this.append(chart,this.el.find('.add-charts'));
         if (this.data.sources.length > 0) {
             chart.multiChart.multiSource.autoSelect.data.list = this.data.sources;
             chart.multiChart.multiSource.autoSelect.reload();
-            if (this.editModeOnce) {
-
-            };
-        }
+        };
         this.formGroup.multiMulti.push(chart);
     }
 
@@ -179,7 +176,7 @@ export class FormMultiComponent extends BiBaseComponent{
             theme: data.multiShare.themes,
             sources: sources
         };
-        console.log(chart);
+
         let res = await ChartFormService.saveChart(JSON.stringify(chart));
         if (res['success'] == 1) {
             msgbox.alert('保存成功');

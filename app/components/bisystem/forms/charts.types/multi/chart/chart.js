@@ -30,8 +30,12 @@ let config = {
 };
 
 export class MultiChartComponent extends BiBaseComponent{
-    constructor() {
+    constructor(data) {
+       if (data) {
+           config.data = data
+       };
         super(config);
+       console.log(this.data);
     }
 
     /**

@@ -18,20 +18,7 @@ import {ChartFormService} from '../../../../../services/bisystem/chart.form.serv
 let config = {
     template:template,
     data: {
-        chart: {
-            assortment: 'radar',
-            chartName:{
-                id: '',
-                name: ''
-            },
-            countColumn:'',
-            filter: [],
-            columns:[],
-            product:'',
-            icon: '',
-            source: '',
-            theme: '',
-        }
+        assortment: ''
     },
     actions: {
 
@@ -42,7 +29,7 @@ let config = {
         // 获取数据源
         this.getChartSource();
 
-        this.getChartData(this.data.chart.chartName.id);
+        this.getChartData(this.chartId);
     },
     firstAfterRender() {
         let me = this;
@@ -52,7 +39,7 @@ let config = {
         });
 
         // 加载x，y轴数据
-        this.el.on(`${this.data.chart.assortment}:fields:ready`, (event,params) => {
+        this.el.on(`${this.data.assortment}:fields:ready`, (event,params) => {
             this.loadData(params);
         })
 
@@ -64,24 +51,26 @@ let config = {
 export class FormRadarComponent extends BiBaseComponent{
     constructor(chart) {
         super(config);
-        this.formGroup = {}
-        this.data.chart.chartName.id = chart['id'];
-        this.editModeOnce = this.data.chart.chartName.id ? true : false;
+        this.formGroup = {};
+        this.data.assortment = chart.assortment;
+        this.chartId = chart.id;
+        this.editModeOnce = this.chartId ? true : false;
+        this.editChart = null;
     }
 
     /**
      * 初始化操作
      */
     init() {
-        this.formGroup['chartName'] = new FormBaseComponent(this.data.chart);
+        this.formGroup['chartName'] = new FormBaseComponent(this.data.assortment);
         this.append(this.formGroup['chartName'], this.el.find('.chart-form-group'));
-        this.formGroup['source'] = new FormChartSourceComponent(this.data.chart);
+        this.formGroup['source'] = new FormChartSourceComponent(this.data.assortment);
         this.append(this.formGroup['source'], this.el.find('.chart-form-group'));
-        this.formGroup['share'] = new FormShareComponent(this.data.chart);
+        this.formGroup['share'] = new FormShareComponent(this.data.assortment);
         this.append(this.formGroup['share'], this.el.find('.chart-form-group'));
         this.formGroup['product'] = new AutoCompleteComponent1({'title': '选择雷达图名称字段'});
         this.append(this.formGroup['product'],this.el.find('.chart-form-group'));
-        this.formGroup['columns'] = new FormColumnComponent(this.data.chart);
+        this.formGroup['columns'] = new FormColumnComponent(this.data.assortment);
         this.append(this.formGroup['columns'], this.el.find('.chart-form-group'));
     }
 
@@ -104,18 +93,18 @@ export class FormRadarComponent extends BiBaseComponent{
     async getChartData(chartId) {
         if (chartId) {
             const chart = await canvasCellService.getCellChart({chart_id: chartId});
-            this.data.chart = chart[0];
+            this.editChart = chart[0];
         }
     }
     /**
      * 填充图表数据
-     * @param chart = this.data.chart
+     * @param chart = this.editChart
      */
     fillChart(){
-       this.formGroup['chartName'].setValue(this.data.chart.chartName);
-       this.formGroup['share'].setValue(this.data.chart);
-       this.formGroup['product'].setValue(this.data.chart.product);
-       this.formGroup['columns'].setValue(this.data.chart.columns);
+       this.formGroup['chartName'].setValue(this.editChart.chartName);
+       this.formGroup['share'].setValue(this.editChart);
+       this.formGroup['product'].setValue(this.editChart.product);
+       this.formGroup['columns'].setValue(this.editChart.columns);
     }
 
     /**
@@ -123,8 +112,7 @@ export class FormRadarComponent extends BiBaseComponent{
      */
     chartSourceFinish(data) {
         this.formGroup['source'].setItems(data);
-        console.log(this.data.chart.source);
-        this.formGroup['source'].setValue(this.data.chart.source);
+        this.formGroup['source'].setValue(this.editChart.source);
     }
 
     /**
@@ -174,7 +162,7 @@ export class FormRadarComponent extends BiBaseComponent{
             this.formGroup.product.setItems(data['data']['x_field'], '');
         };
         this.formGroup.columns.reloadUi(data['data']);
-        if (this.editModeOnce && this.data.chart['chartName']['id']) {
+        if (this.editModeOnce && this.editChart['chartName']['id']) {
             this.fillChart();
             this.editModeOnce = false;
         }
@@ -186,8 +174,9 @@ export class FormRadarComponent extends BiBaseComponent{
      */
     reset(chart) {
         this.formGroup = {};
-        this.data.chart.chartName.id = chart ? chart.id: null;
-        this.editModeOnce = this.data.chart.chartName.id ? true : false;
+        this.chartId = chart ? chart.id: null;
+        this.editModeOnce = this.chartId ? true : false;
+        this.editChart = null;
     }
 
 }

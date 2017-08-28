@@ -53,7 +53,6 @@ export class FormColumnComponent extends BiBaseComponent{
         this.data.columns = data['x_field'];
         this.data.choosed = [];
         this.reload();
-        console.log(this.data);
     }
 
     /**
