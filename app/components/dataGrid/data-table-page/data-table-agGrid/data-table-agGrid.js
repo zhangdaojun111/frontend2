@@ -6,6 +6,7 @@
 import Component from "../../../../lib/component";
 import template from './data-table-agGrid.html';
 import './data-table-agGrid.scss';
+import '../../../../assets/scss/dataGrid/dataGrid-icon.scss'
 import {HTTP} from "../../../../lib/http";
 import Mediator from "../../../../lib/mediator";
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
@@ -101,6 +102,7 @@ let config = {
         //原始字段数据
         fieldsData: [],
         //临时查询数据
+        onlyCloseExpertSearch:false,
         temporaryCommonQuery:[],
         //高级查询需要的字段信息
         expertSearchFields: [],
@@ -863,7 +865,8 @@ let config = {
             }
             let con = this.el.find( '.dataGrid-btn-group' )[0];
             con.innerHTML = html;
-            con.style.display = 'block';
+            // con.style.display = 'block';
+            $(con).addClass('flex');
         },
         //请求表头数据
         getHeaderData: function () {
@@ -1445,6 +1448,10 @@ let config = {
                     return {background:'#fd8f8f'};
                 }
             }
+            //分组样式
+            if( this.data.groupCheck && !param["data"].children ){
+                return {background:'#E6F7FF'};
+            }
         },
         //创建sheet分页数据
         createSheetTabs: function ( res ) {
@@ -1652,8 +1659,15 @@ let config = {
                 this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
             }
             this.data.editMode = !this.data.editMode;
-            this.el.find( '.dataGrid-btn-group' )[0].style.display = this.data.editMode ? 'none':'block';
-            this.el.find( '.dataGrid-edit-group' )[0].style.display = this.data.editMode ? 'block':'none';
+            // this.el.find( '.dataGrid-btn-group' )[0].style.display = this.data.editMode ? 'none':'block';
+            //this.el.find( '.dataGrid-edit-group' )[0].style.display = this.data.editMode ? 'block':'none';
+           if(this.data.editMode){
+               this.el.find( '.dataGrid-btn-group' ).removeClass('flex');
+               this.el.find( '.dataGrid-edit-group' ).addClass('flex');
+           }else {
+               this.el.find( '.dataGrid-btn-group' ).addClass('flex');
+               this.el.find( '.dataGrid-edit-group' ).removeClass('flex');
+           }
             let columns = this.data.editMode ? this.columnDefsEdit : this.columnDefs;
             this.agGrid.gridOptions.api.setColumnDefs( columns );
             this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
@@ -1815,8 +1829,10 @@ let config = {
                     width:950,
                     height:600,
                     title:`高级查询`,
-                    modal:true
+                    modal:true,
+                    closable: false
                 },{d}).then(res=>{
+                    this.data.onlyCloseExpertSearch = res.onlyclose || false;
                     if(res.type == 'temporaryQuery') {
                         if(res.addNameAry.length == 0){
                             // this.actions.getExpertSearchData(res.addNameAry);
@@ -1828,27 +1844,15 @@ let config = {
                         this.actions.appendQuerySelect()
                     } if(res.saveCommonQuery || (res.saveCommonQuery && res.onlyclose == true)) {
                         this.actions.getExpertSearchData(res.addNameAry);
-                    } else if(res.onlyclose == true) {
+                    }if(res.deleteCommonQuery || (res.deleteCommonQuery && res.onlyclose == true)) {
+                        this.actions.getExpertSearchData(res.addNameAry);
+                    } if(!res.saveCommonQuery && res.onlyclose == true) {
                         return false
                     }
                 })
             } )
 
-            _this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
-                if($(this).val() == '常用查询') {
-                    _this.actions.postExpertSearch([],'');
-                } else if($(this).val() == '临时高级查询') {
-                    _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
-                } else {
-                    // $(this).find('.Temporary').remove();
-                    _this.data.commonQueryData.forEach((item) => {
-                        if(item.name == $(this).val()){
-                            _this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
-                        }
-                    })
-                }
-            })
-            // this.actions.getExpertSearchData();
+            
         },
         appendQuerySelect: function() {
             let length = this.el.find('.dataGrid-commonQuery-select option').length
@@ -2023,6 +2027,9 @@ let config = {
                             }
                         }
                     })
+                }
+                if(this.data.filterParam['common_filter_name'] && this.data.onlyCloseExpertSearch) {
+                    this.el.find('.dataGrid-commonQuery-select').val(this.data.filterParam['common_filter_name']);
                 }
                 //第一次请求footer数据
                 if( this.data.firstGetFooterData ){
@@ -2375,7 +2382,8 @@ let config = {
                 height: h || 800,
                 title: title,
                 modal:true,
-                defaultMax: defaultMax
+                defaultMax: defaultMax,
+                customSize: defaultMax
             } ).then( (data)=>{
                 if( data.type == "batch" ){
                     this.data.batchIdList = data.ids;
@@ -2401,6 +2409,22 @@ let config = {
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();
+        let _this = this;
+        this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
+            if($(this).val() == '常用查询') {
+                _this.actions.postExpertSearch([],'');
+            } else if($(this).val() == '临时高级查询') {
+                _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
+            } else {
+                // $(this).find('.Temporary').remove();
+                _this.data.commonQueryData.forEach((item) => {
+                    if(item.name == $(this).val()){
+                        _this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
+                    }
+                })
+            }
+        })
+        this.actions.getExpertSearchData();
     }
 }
 

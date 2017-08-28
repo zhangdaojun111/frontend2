@@ -1,0 +1,68 @@
+/*
+Icon classes can be used entirely standalone. They are named after their original file names.
+
+Example usage in HTML:
+
+`display: block` sprite:
+<div class="icon-home"></div>
+
+To change `display` (e.g. `display: inline-block;`), we suggest using a common CSS class:
+
+// CSS
+.icon {
+  display: inline-block;
+}
+
+// HTML
+<i class="icon icon-home"></i>
+*/
+.icon-aggrid{
+    background: url(../../images/dataGrid/sprite-datagrid-icon.png) no-repeat;
+    width: 16px;
+    height: 16px;
+    display: block;
+}
+
+.icon-aggrid-filter {
+    background-position: -26px 0px;
+}
+.icon-aggrid-import {
+    background-position: -26px -52px;
+}
+.icon-aggrid-export {
+    background-position: 0px -26px;
+}
+.icon-aggrid-full-screen {
+    background-position: -26px -26px;
+}
+.icon-aggrid-cancel {
+    background-position: -52px 0px;
+}
+.icon-aggrid-save {
+    background-position: -52px -26px;
+}
+.icon-aggrid-search {
+    background-position: 0px -52px;
+}
+.icon-aggrid-edit {
+    background-position: 0px 0px;
+}
+.icon-aggrid-add {
+    background-position: -52px -52px;
+}
+.icon-aggrid-delete {
+    background-position: -78px 0px;
+}
+.icon-aggrid-group {
+    background-position: -78px -26px;
+}
+.icon-aggrid-custom {
+    background-position: -78px -52px;
+}
+.icon-aggrid-self-adaptation {
+    background-position: 0px -78px;
+}
+.icon-aggrid-refresh {
+    background-position: -26px -78px;
+}
+
