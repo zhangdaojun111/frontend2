@@ -1,12 +1,13 @@
 .component-taskbar{
-  width: 100%;
+  width: 95%;
   height:25%;
   padding-left: 5px;
   max-width: 200px;
   display: inline-block;
   overflow: auto;
   .label-task{
-      padding-top: 5px;padding-bottom: 5px;width: calc(100% - 30px);
+      overflow: auto;
+      padding-top: 5px;padding-bottom: 5px;
       .checkbox-label{
         cursor: pointer;
         //border: 1px solid #C1CACA;
@@ -15,6 +16,8 @@
         //padding: 2px;
         display: inline-block;
         .workflow_checked{
+          padding: 6px !important;
+          border: 0px solid #C1CACA !important;
           background-color: RGB(100, 166, 239) !important;
         }
         .checkbox_a {
@@ -55,8 +58,7 @@
       }
     }
   }
-}
-.unchecked{
-  background-color: white !important;
+  .remind-group{
+  }
 }
 .checkbox-group{margin-left: 35px;}
