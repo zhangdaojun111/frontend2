@@ -47,6 +47,10 @@ let config={
             _this.el.find(".datetime").val("年/月/日 时:分:秒");
         }
 
+
+       if(_this.el.find('.ui-datepicker-close'))
+
+
         //控制到时分秒
         _this.el.find(".datetime").datetimepicker({
             monthNamesShort: [ "一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月" ],
