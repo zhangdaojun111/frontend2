@@ -253,6 +253,11 @@ function getLoginController() {
     };
 }
 
+//检查是否是在子窗口中打开，如果是则父窗口跳转至登录页面
+if(window.hasOwnProperty("parent") && window.parent !== window){
+    $(window.parent).attr('location','/login');
+}
+
 let controller = getLoginController();
 let isNeedDownload = controller.browser_check();
 if( isNeedDownload === false){      //正常显示登录表单

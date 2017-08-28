@@ -127,7 +127,8 @@ let config = {
                     title: '日历设置',
                     width: '1000',
                     height: '800',
-                    defaultMax: true,
+                    modal: true,
+                    customSize: true,
                 },
             );
             // CalendarSetService.getMenu().then(res => {
@@ -161,7 +162,8 @@ let config = {
                     width: "1000",
                     height: '800',
                     title: '日历表',
-                    defaultMax: true,
+                    modal: true,
+                    customSize: true,
                 }).then(res => {
                 // 创建日历表后的回调，接收form回传的参数
             });

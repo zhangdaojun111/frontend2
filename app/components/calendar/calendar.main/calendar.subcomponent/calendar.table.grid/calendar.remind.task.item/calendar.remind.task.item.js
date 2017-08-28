@@ -69,6 +69,8 @@ let config = {
                 width: '1000',
                 height: '600',
                 title: '查看',
+                modal: true,
+                customSize: true,
             }).then(data => {
                 console.log(data);
             });
@@ -86,7 +88,8 @@ let config = {
                     width: '100%',
                     height: '900',
                     // title:"审批工作流",
-                    modal:true
+                    modal:true,
+                    customSize: true,
                 })
             });
         }

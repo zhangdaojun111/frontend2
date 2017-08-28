@@ -59,8 +59,21 @@ export const UserInfoService = {
             data:data
         })
     },
-    getSysConfig:function () {
+    shutDownAgent:function (data) {
+        let url = '/set_agent/';
+        let body = Utils.formatParams(data);
 
+        return HTTP.postImmediately({
+            url:url,
+            data:body,
+            type:"post"
+        })
+    },
+    getSysConfig:function () {
+        let url = 'sysConfig';
+        let res = HTTP.post(url);
+        HTTP.flush();
+        return res;
     },
     getAllUsersInfo:function () {
         let url = '/get_all_userInfo/';

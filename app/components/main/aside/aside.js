@@ -5,6 +5,8 @@ import {MenuComponent} from '../menu-full/menu.full';
 import Mediator from '../../../lib/mediator';
 import {PersonSetting} from "../personal-settings/personal-settings";
 import {HTTP} from '../../../lib/http';
+import msgbox from "../../../lib/msgbox";
+import {UserInfoService} from "../../../services/main/userInfoService";
 // import {commonuse} from '../commonuse/commonuse';
 // import {Uploader} from "../../../lib/uploader";
 
@@ -199,6 +201,24 @@ let config = {
         },
         onImageError: function () {
 
+        },
+        checkAgent:function () {
+            let isOpenAgent = window.config.sysConfig.is_open_agent;
+            if(isOpenAgent === true){
+                msgbox.confirm("您的代理功能已开启，是否关闭该功能？")
+                    .then((result) => {
+                        if(result === true){
+                            UserInfoService.shutDownAgent({quick_shutdown:0}).done((result) => {
+                                console.log(result);
+                                if(result === 1){
+                                    console.log("quick shutdown success");
+                                }else{
+                                    console.log("quick shutdown failed",result)
+                                }
+                            })
+                        }
+                    })
+            }
         }
     },
     binds: [
@@ -258,9 +278,8 @@ let config = {
                 this.actions.showCommonMenu();
             }
         }
-        Mediator.on("personal:setAvatar",() => {
-            this.actions.resetAvatar();
-        })
+        //此处检查用户是否开启代理，并做提醒
+        this.actions.checkAgent();
     },
     firstAfterRender: function() {
         Mediator.on('aside:size', (order) => {
@@ -276,6 +295,9 @@ let config = {
         Mediator.on('commonuse:change', () => {
             this.actions.showCommonMenu(true);
         });
+        Mediator.on("personal:setAvatar",() => {
+            this.actions.resetAvatar();
+        })
     },
     beforeDestory: function() {
         Mediator.removeAll('aside');

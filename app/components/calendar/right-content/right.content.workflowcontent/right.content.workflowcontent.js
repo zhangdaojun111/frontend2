@@ -33,7 +33,8 @@ let config = {
                 {
                     width: "100%",
                     height: '900',
-                    modal: true
+                    modal: true,
+                    customSize: true,
                 })
         })
     },
