@@ -44,7 +44,7 @@ let config = {
             }
         },
         showChildrenAtMini: function () {
-            window.clearTimeout(this.data.timer);
+            // window.clearTimeout(this.data.timer);
             if (this.childlist.length) {
                 this.childlist.show();
                 let height = this.childlist.height();
@@ -58,10 +58,10 @@ let config = {
             }
         },
         hideChildrenAtMini: function () {
-            window.clearTimeout(this.data.timer);
-            this.data.timer = window.setTimeout(() => {
+            // window.clearTimeout(this.data.timer);
+            // this.data.timer = window.setTimeout(() => {
                 this.childlist.hide();
-            }, 500)
+            // }, 500)
         },
         onItemClickAtMini: function () {
             if (_.isUndefined(this.data.items)) {
