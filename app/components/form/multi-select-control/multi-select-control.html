@@ -13,17 +13,15 @@
         {{else}}
             <div id="multi-select"></div>
         {{/if}}
-        <div style="float: left;">
-            {{#if required}}
-                <span id="requiredLogo" class="required" ></span>
-            {{/if}}
-            {{#if history}}
-                <a href="javascript:void(0);" class="ui-history"></a>
-            {{/if}}
-        </div>
+        {{#if required}}
+            <span id="requiredLogo" class="required" ></span>
+        {{/if}}
         {{#if is_view}}
         {{else if can_add_item}}
-            <a href="javascript:void(0);" class="add-item noprint"> + </a>
+            <a href="javascript:void(0);" class="add-item noprint" title="添加新选项"> + </a>
+        {{/if}}
+        {{#if history}}
+            <a href="javascript:void(0);" class="ui-history" title="修改历史"></a>
         {{/if}}
     {{/if}}
 </div>

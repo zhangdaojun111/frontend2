@@ -21,8 +21,10 @@ let config = {
                 height: 600,
                 title: this.data.label
             }).then((data) => {
-                let choosedData = data.choosedData;
-                this.actions.onSettingDataReturn(choosedData);
+                if (!data.onlyclose) {
+                    let choosedData = data.choosedData;
+                    this.actions.onSettingDataReturn(choosedData);
+                }
             });
         },
         onSettingDataReturn(choosedData) {
@@ -58,6 +60,7 @@ let config = {
     afterRender() {
         this.el.find('.ui-width').css('width',this.data.width);
         this.actions.fillData();
+        // this.actions.openSettingDialog();
         this.el.find('.button').button({
             // disabled: true
         });

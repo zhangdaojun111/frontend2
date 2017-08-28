@@ -10,13 +10,14 @@ import {HTTP} from '../../lib/http';
 import Mediator from '../../lib/mediator';
 import {workflowService} from '../../services/workflow/workflow.service';
 import WorkFlowForm from '../../components/workflow/workflow-form/workflow-form';
-import AddWf from '../../components/workflow/add-workflow';
+import AddWf from '../../components/workflow/add-workflow/add-workflow';
 import FormEntrys from '../form';
 import msgBox from '../../lib/msgbox';
 import WorkFlow from '../../components/workflow/workflow-drawflow/workflow';
-import WorkflowAddFollow from '../../components/workflow/workflow-addFollow/workflow-addFollow';
+import WorkflowAddFollow from '../../components/workflow/workflow-addFollow/workflow-addFollow/workflow-addFollow';
 import TreeView from '../../components/util/tree/tree';
 import jsplumb from 'jsplumb';
+import {PMAPI,PMENUM} from '../../lib/postmsg';
 
 
 WorkflowAddFollow.showAdd();
@@ -42,14 +43,12 @@ let tree=[],staff=[];
                 for(var k in staff){
                     if(k==selectedNode.id){
                         Mediator.publish('workflow:checkDept', staff[k]);
-                        // recursion(staff,selectedNode,'checkDept');
                     }
                 }
             }else{
                 for(var k in staff){
                     if(k==selectedNode.id){
                         Mediator.publish('workflow:unCheckDept', staff[k]);
-                        // recursion(staff,selectedNode,'unCheckDept');
                     }
                 }
             }
@@ -68,6 +67,9 @@ serchStr.split('&').forEach(res => {
     obj[arr[0]] = arr[1];
 });
 is_view=obj.btnType==='view'?1:0;
+if(obj.btnType==='view'){
+    $('#subAddworkflow').hide();
+}
 Mediator.publish('workflow:getKey', obj.key);
 (async function () {
     return workflowService.getPrepareParams({table_id:obj.table_id});
@@ -95,8 +97,11 @@ Mediator.publish('workflow:getKey', obj.key);
         Mediator.publish('workflow:getParams', res.data.flow_data);
     }
 });
-Mediator.publish('workflow:focused', []);
 Mediator.subscribe('workflow:getflows', (res)=> {
+    if(obj.btnType==='view'){
+        $('#toEdit').show();
+        $('#addFollower').hide();
+    }
     obj.flow_id=res.flow_id;
     obj.form_id=res.form_id;
     WorkFlow.createFlow({flow_id:res.flow_id,el:"#flow-node"});
@@ -119,7 +124,6 @@ Mediator.subscribe('workflow:getflows', (res)=> {
         id:obj.id,
         key:obj.key
     });
-    
 });
 let focusArr=[];
 Mediator.subscribe('workflow:focus-users', (res)=> {
@@ -131,9 +135,9 @@ Mediator.subscribe('workflow:submit', (res)=> {
         msgBox.alert(`${formData.errorMessage}`);
     }else{
         let postData={
-                flow_id:obj.flow_id,
-                focus_users:JSON.stringify(focusArr)||[],
-                data:JSON.stringify(formData)
+            flow_id:obj.flow_id,
+            focus_users:JSON.stringify(focusArr)||[],
+            data:JSON.stringify(formData)
         };
         (async function () {
             return await workflowService.createWorkflowRecord(postData);
@@ -143,7 +147,10 @@ Mediator.subscribe('workflow:submit', (res)=> {
                 PMAPI.sendToParent({
                     type: PMENUM.close_dialog,
                     key:obj.key,
-                    data:{}
+                    data:{
+                        table_id:obj.table_id,
+                        type:'closeAddition'
+                    }
                 });
             }else{
                 msgBox.alert(`${res.error}`);
@@ -151,6 +158,3 @@ Mediator.subscribe('workflow:submit', (res)=> {
         })
     }
 })
-if(obj.btnType==='view'){
-    $('.workflow-flex').hide();
-}

@@ -6,6 +6,10 @@ let css = `
     font-size: 12px;
     padding: 20px;
 }
+.form-setting-textarea-popup p.line {
+    width: 100%;
+    border-top: 1px solid #eaeaea;
+}
 .form-setting-textarea-popup-tips {
     margin: 0;
     margin-bottom: 10px;
@@ -13,12 +17,10 @@ let css = `
     line-height: 20px;
     color: red;
 }
-.form-setting-textarea-popup-ul {
+.form-setting-textarea-popup-ul-wrap {
     list-style: none;
     margin: 0;
     padding: 0;
-    border-left: 1px solid #ddd;
-    border-top: 1px solid #ddd;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -28,16 +30,42 @@ let css = `
     height: 420px;
     overflow: auto;
 }
+.form-setting-textarea-popup-ul {
+    user-select: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: flex-start;
+    width: 50%;
+}
+.form-setting-textarea-popup-ul.remain {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: flex-start;
+    width: 100%;
+}
+.form-setting-textarea-popup-ul.remain .form-setting-textarea-popup-li {
+    width: 50%;
+}
 .form-setting-textarea-popup-li {
     list-style: none;
     margin: 0;
     padding: 0;
     line-height: 20px;
-    width: 33.3333%;
+    width: 340px;
     padding: 10px;
     box-sizing: border-box;
-    border: 1px solid #ddd;
-    margin: -1px 0 0 -1px;
     align-items: center;
     display: flex;
 }
@@ -47,6 +75,7 @@ let css = `
 .form-setting-textarea-popup-checkbox {
     float: left;
     margin: 3px 4px 0 0;
+    outline: none;
 }
 .form-setting-textarea-popup-inputtext {
     border: 0 none;
@@ -56,14 +85,19 @@ let css = `
     padding:0;
     text-align: center;
     background: transparent;
+    outline: none;
 }
 .form-setting-textarea-popup-save {
     margin: 0;
     padding: 0;
-    width: 120px;
-    height: 40px;
+    width: 80px;
+    height: 34px;
     float: right;
     margin-top: 20px;
+    border-radius: 5px;
+    background-color: #0088ff;
+    color: #fff;
+    border: 0 none;
 }
 `;
 
@@ -73,17 +107,16 @@ for(let key in textareaTextDict){
 }
 
 let popupSetting = {
-    template: template,
+    template: template.replace(/\"/g, '\''),
     data: {
         textareaTextDict,
         dealedTextareaTextDict,
-        array1: [66,0,1,2,3,4,5,6,7,8,9,10,11,12,13,59,15,60,17,61],
-        array2: [67,44,49,45,50,46,62,58,47,63,48,64,65,14,16,18],
-        array3: [19,20,21,22,23,24,25,26,27,28,29,30,31,32,51,52,53,54,33,34,35,36,37,38,39,40,41,55,42,56,43,57],
+        arrayLeft: [66,0,1,2,3,4,5,6,7,8,9,10,11,12,13,59,15,60,17,61],
+        arrayRight: [67,44,49,45,50,46,62,58,47,63,48,64,65,14,16,18],
+        arrayRemain: [19,20,21,22,23,24,25,26,27,28,29,30,31,32,51,52,53,54,33,34,35,36,37,38,39,40,41,55,42,56,43,57],
         css: css.replace(/(\n)/g, '')
     },
     actions: {
-
         valid: function (item) {
             if (item.find('input:checkbox').is(':checked')) {
                 let key = parseInt(item.attr('key'));
@@ -136,12 +169,90 @@ let popupSetting = {
                 let choosedData = this.data.choosedData;
                 for (let key in choosedData) {
                     let item = this.el.find(`.form-setting-textarea-popup-li[key=${key}]`);
-                    item.find('input:checkbox').attr('checked', true);
+                    let checkbox = item.find('input:checkbox')[0];
+                    checkbox.checked = true;
+                    console.log(key);
+                    if (key === '66' || key === '67') {
+                        $(checkbox).trigger('change');
+                    }
                     item.find('input:text').each(function(index) {
                         $(this).val(choosedData[key][index]);
-                    })
+                    });
                 }
             }
+        },
+
+        /**
+         * 渲染无开放日
+         */
+        renderLeft: function () {
+            let html = [];
+            let that = this;
+            this.data.arrayLeft.forEach(function(key) {
+                html.push(`<li class=form-setting-textarea-popup-li key=${key}><label><input key=${key} type=checkbox class=form-setting-textarea-popup-checkbox>${that.data.dealedTextareaTextDict[key]}</label></li>`);
+            });
+            this.leftWrap.html(html.join(''));
+        },
+
+        /**
+         * 渲染五无固定开放日
+         */
+        renderRight: function () {
+            let html = [];
+            let that = this;
+            this.data.arrayRight.forEach(function(key) {
+                html.push(`<li class=form-setting-textarea-popup-li key=${key}><label><input key=${key} type=checkbox class=form-setting-textarea-popup-checkbox>${that.data.dealedTextareaTextDict[key]}</label></li>`);
+            });
+            this.rightWrap.html(html.join(''));
+        },
+
+        /**
+         * 渲染剩下的所有
+         */
+        renderRemain: function () {
+            let html = [];
+            let that = this;
+            this.data.arrayRemain.forEach(function(key) {
+                html.push(`<li class=form-setting-textarea-popup-li key=${key}><label><input key=${key} type=checkbox class=form-setting-textarea-popup-checkbox>${that.data.dealedTextareaTextDict[key]}</label></li>`);
+            });
+            this.remainWrap.html(html.join(''));
+        },
+
+        onCheckboxChange: function (input) {
+            let checked = input.checked;
+            let $input = $(input);
+            let key = $input.attr('key');
+            let that = this;
+
+            function removeChecked(list) {
+                list.each(function (index, item) {
+                    if (item.checked) {
+                        item.checked = false;
+                        that.actions.valid($(item).parentsUntil('ul').last());
+                    }
+                })
+            }
+
+            if (key === '66' || key === '67') {
+                console.log(input);
+                if (checked) {
+                    this.leftCheckbox.removeAttr('disabled');
+                    removeChecked(this.rightCheckbox);
+                    removeChecked(this.leftCheckbox);
+                    removeChecked(this.remainCheckbox);
+                    this.leftCheckbox.attr('disabled', 'true');
+                    this.rightCheckbox.attr('disabled', 'true');
+                    this.remainCheckbox.attr('disabled', 'true');
+                    input.checked = true;
+                    $input.removeAttr('disabled');
+                } else {
+                    this.leftCheckbox.removeAttr('disabled');
+                    this.rightCheckbox.removeAttr('disabled');
+                    this.remainCheckbox.removeAttr('disabled');
+                }
+            }
+
+
         },
 
         save: function () {
@@ -183,23 +294,49 @@ let popupSetting = {
             }
         }
     },
+    binds: [
+        {
+            event: 'change',
+            selector: '.form-setting-textarea-popup-checkbox',
+            callback: function (context) {
+                this.actions.onCheckboxChange(context);
+            }
+        }, {
+            event: 'click',
+            selector: '.form-setting-textarea-popup-save',
+            callback: function () {
+                this.actions.save();
+            }
+        }, {
+            event: 'input',
+            selector: 'input:text',
+            callback: function(context) {
+                this.actions.onTextInput($(context));
+            }
+        }, {
+            event: 'change',
+            selector: 'input:checkbox',
+            callback: function (context) {
+                this.actions.valid($(context).parentsUntil('ul').last());
+            }
+        }
+    ],
     afterRender: function () {
+
+        this.leftWrap = this.el.find('.form-setting-textarea-popup-ul.left');
+        this.rightWrap = this.el.find('.form-setting-textarea-popup-ul.right');
+        this.remainWrap = this.el.find('.form-setting-textarea-popup-ul.remain');
+
+        this.actions.renderLeft();
+        this.actions.renderRight();
+        this.actions.renderRemain();
+
+        this.leftCheckbox = this.leftWrap.find('input:checkbox');
+        this.rightCheckbox = this.rightWrap.find('input:checkbox');
+        this.remainCheckbox = this.remainWrap.find('input:checkbox');
+
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
-        this.el.find('.form-setting-textarea-popup-save').button()
-        this.el.on('click', '.form-setting-textarea-popup-save', () => {
-            this.actions.save();
-        });
-
         this.actions.fillData();
-
-        let that = this;
-        this.el.find('input:text').on('input', function () {
-            let input = $(this);
-            that.actions.onTextInput(input);
-        });
-        this.el.find('input:checkbox').on('change', function () {
-            that.actions.valid($(this).parentsUntil('ul').last());
-        });
     },
     beforeDestory: function () {
         this.data.style.remove();

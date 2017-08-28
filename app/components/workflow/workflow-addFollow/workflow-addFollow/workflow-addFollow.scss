@@ -86,13 +86,13 @@
 		bottom: 0;
 	}
 	.checkbox{
-		background: url('../../../assets/images/util/tree/icon_checkbox_no.png') center/20px 20px no-repeat;
+		background: url('../../../../assets/images/util/tree/icon_checkbox_no.png') center/20px 20px no-repeat;
 		display: inline-block;
 		width: 20px;
 		height: 20px;
 	}
 	.checkbox.checked{
-		background: url('../../../assets/images/util/tree/icon_checkbox_yes.png') center/20px 20px no-repeat;
+		background: url('../../../../assets/images/util/tree/icon_checkbox_yes.png') center/20px 20px no-repeat;
 	}
 }
 [disabled]{

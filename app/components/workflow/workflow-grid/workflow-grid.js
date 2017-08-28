@@ -1,3 +1,7 @@
+/**
+ *@author qiumaoyun
+ *工作流表格
+ */
 import Component from "../../../lib/component";
 import template from './workflow-grid.html';
 import './workflow-grid.scss'

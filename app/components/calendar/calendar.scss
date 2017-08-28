@@ -125,7 +125,6 @@ $grid-bg-color: rgba(248, 248, 248, 1);
         height: calc(100% - 100px);
         position: absolute;
         width:calc(100% - 5px);
-
         .left-content {
             height: 100%;
             border-right: 2px solid #6ed2f3;
@@ -134,7 +133,6 @@ $grid-bg-color: rgba(248, 248, 248, 1);
             float:left;
             min-width: 200px;
             max-height: 890px;
-            overflow: auto;
             flex-shrink: 0;
         }
         .main-content {
