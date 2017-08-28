@@ -56,28 +56,28 @@ let config = {
             if(!temp.hasClass('hide-check-group'))
             {
                 temp.addClass("hide-check-group");
-                temp.nextAll('.checkbox-group').hide();
+                temp.parent(".calendar-select-table").nextAll('.checkbox-group').hide();
             }
             else{
                 temp.removeClass("hide-check-group");
-                temp.nextAll('.checkbox-group').show();
+                temp.parent(".calendar-select-table").nextAll('.checkbox-group').show();
             }
         },
 
         selectlabel:function(temp,that){
             let staus = false;
-            if(temp.prev('input').is(".label-select-all-checked"))
+            if(temp.is(".label-select-all-checked"))
             {
                 staus = true;
                 this.events.checkbox({type:'unshowData',staus:staus,data:this.data.items});
-                temp.prev('input').removeClass("label-select-all-checked");
+                temp.removeClass("label-select-all-checked");
                 that.el.find(".select-label-children").addClass('unchecked');
                 this.events.checkbox({type:'remind-checkbox',data:-1});
                 that.el.find("#checkbox_a3").removeClass('label-select-all-checked');
             } else {
                 staus = false;
                 this.events.checkbox({type:'unshowData',staus:staus,data:this.data.items});
-                temp.prev('input').addClass("label-select-all-checked");
+                temp.addClass("label-select-all-checked");
                 that.el.find(".select-label-children").removeClass('unchecked');
                 let isAllGroupchecked = true;
                 that.el.parent().find(".label-select-all-show").each(function(){
