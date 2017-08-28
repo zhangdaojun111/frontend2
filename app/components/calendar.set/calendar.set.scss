@@ -28,51 +28,30 @@
     .calendar-set-content {
         height:100%;
         .setting-header-title {
+            border-top: 1px solid $boder-color;
             width: 100%;
+            display: table;
             .table-set-checkbox{
                 width: 9% !important;
             }
             .table-set-multile{
-                width:19% !important;
+                width:16% !important;
             }
             .set-table-head{
                 width: 9%;
                 text-align: center;
-                line-height: 30px;
                 border-right: 1px solid $boder-color;
-                display: block;
-                float: left;
+                display: table-cell;
                 box-sizing: border-box;
-                //margin:0px !important;
+                line-height: 30px;
                 &.no-border{
                     border: none;
                 }
             }
+            .res-for-text {
+                width: 12%;
+            }
         }
-
-        //table{
-        //    width:100%;
-        //    border-top: 1px solid $boder-color;
-        //    .setting-header-title {
-        //
-        //    }
-        //    .table-set-checkbox{
-        //        width: 9% !important;
-        //    }
-        //    .table-set-multile{
-        //        width:20% !important;
-        //    }
-        //    .set-table-head{
-        //        width: 9%;
-        //        text-align: center;
-        //        line-height: 30px;
-        //        border-right: 1px solid $boder-color;
-        //        //margin:0px !important;
-        //        &.no-border{
-        //            border: none;
-        //        }
-        //    }
-        //}
         .set-items {
             height: 94%;
             overflow: auto;

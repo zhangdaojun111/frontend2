@@ -2,11 +2,11 @@
 .singleRow {
     width: 100%;
     display: block;
+    float: left;
+    border-top: 1px solid $boder-color;
     .table-item-checkbox{
-        width:9% !important;
     }
     .set-table-item{
-        border-top: 1px solid #C1CACA;
         padding: 10px 0px;
         width: 9%;
         min-width: 30px;
@@ -23,23 +23,53 @@
             }
         }
     }
-    .multi-select-item{
-        width:19% !important;
+    .single-select-item{
+        width: calc(12% - 10px);
+        margin: 0px 5px;
         .popup {
             display: none;
             width: 100%;
             position: absolute;
-            z-index: 100 !important;
-            background-color: white !important;
-            padding-left: 0px !important;
-            margin: 0px !important;
+            z-index: 100;
+            background-color: white;
+            padding-left: 0px ;
+            margin: 0px ;
             height: auto!important;
-            overflow: auto !important;
+            overflow: auto;
             ul{
-                max-height: 300px!important;
+                max-height: 300px;
                 li {
                     margin-left: 0px;
-                    list-style-type: none !important;
+                    list-style-type: none;
+                    label{
+                        text-align: left;
+                        overflow:hidden;
+                    }
+                }
+            }
+            button{
+                width:100%;
+            }
+        }
+    }
+    .multi-select-item{
+        width:calc(16% - 10px) !important;
+        margin: 0px 5px;
+        .popup {
+            display: none;
+            width: 100%;
+            position: absolute;
+            z-index: 100 ;
+            background-color: white ;
+            padding-left: 0px;
+            margin: 0px;
+            height: auto!important;
+            overflow: auto;
+            ul{
+                max-height: 300px;
+                li {
+                    margin-left: 0px;
+                    list-style-type: none;
                     label{
                         text-align: left;
                         overflow:hidden;

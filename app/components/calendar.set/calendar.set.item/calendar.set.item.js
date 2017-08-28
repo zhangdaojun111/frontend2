@@ -46,6 +46,7 @@ let config = {
         newSelectedOpts: [],
 
         multiSelectMenu: {},
+        singleSelectMenu: {},
         editable:false,
 
     },
@@ -69,6 +70,17 @@ let config = {
             }
             return {res: res, text: text};
         },
+        dropdownChoosed: function (param) {
+            let res = [];
+            let text = [];
+            for(let b in this.data.dropdownForRes){
+                if(param === this.data.dropdownForRes[b]['id']){
+                    res.push(this.data.dropdownForRes[b]);
+                    text.push(this.data.dropdownForRes[b]['name']);
+                }
+            }
+            return {res: res, text: text};
+        },
 
         /**
          * @author zj
@@ -77,6 +89,7 @@ let config = {
          * 代表字段选中后，附加字段中对应字段也选中
          */
         checkForResSelected: function (forResText, forResId) {
+            console.log(forResText,forResId, this.data.multiSelectMenu.data.choosed);
             let selectedOpts = this.data.multiSelectMenu.data.choosed;
             let isInSelectedOpts = false;
             for(let item of selectedOpts) {
@@ -156,16 +169,16 @@ let config = {
          *检查已设置的代表字段
          */
         checkResTextSelected: function () {
-            let resOpts = this.el.find('.res-text option');
-            resOpts.each((item) => {
-                if(resOpts[item].value) {
-                    let a = resOpts[item].value;
-                    if(a === this.data.rowSetData['selectedRepresents']) {
-                        resOpts[item].selected  = 'selected';
-                    }
-                }
-
-            });
+            // let resOpts = this.data.dropdownForRes;
+            // resOpts.each((item) => {
+            //     if(resOpts[item].id) {
+            //         let a = resOpts[item].id;
+            //         if(a === this.data.rowSetData['selectedRepresents']) {
+            //             resOpts[item].selected  = 'selected';
+            //         }
+            //     }
+            //
+            // });
         },
 
         /**
@@ -206,30 +219,54 @@ let config = {
         this.data.multiSelectMenu = new AutoSelect(select_item_data);
         this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
 
+        let single_item_data = {
+            'list': this.data.dropdownForRes,
+            displayType: 'popup',
+            multiSelect: false,
+            editable:this.data.editable,
+            choosed:this.actions.dropdownChoosed(this.data.rowSetData['selectedRepresents']).res,
+            onSelect: function (choosed) {
+               if(choosed.length > 0){
+                   _this.actions.checkForResSelected(choosed[0].name, choosed[0].id);
+                   _this.data.rowSetData['selectedRepresents'] = choosed[0].id;
+               }
+            },
+        };
+
+        this.data.singleSelectMenu = new AutoSelect(single_item_data);
+        this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
+
         Mediator.on('calendar-set:editor', data => {
             if (data.data === 1) {
                 this.el.find(".editor-items").attr("disabled", false);
+                this.data.singleSelectMenu.destroySelf();
                 _this.data.multiSelectMenu.destroySelf();
                 select_item_data.editable = true;
                 _this.data.multiSelectMenu = new AutoSelect(select_item_data);
                 _this.append(_this.data.multiSelectMenu, _this.el.find('.multi-select-item'));
+                single_item_data.editable = true;
+                this.data.singleSelectMenu = new AutoSelect(single_item_data);
+                this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
                 _this.el.find('td').removeClass('unclick');
                 _this.el.find(".set-remind-method").removeClass('unclick');
                 _this.el.find('input').removeClass('unclick');
                 staus = true;
             } else {
                 this.el.find(".editor-items").attr("disabled", true);
+                this.data.singleSelectMenu.destroySelf();
                 _this.data.multiSelectMenu.destroySelf();
                 select_item_data.editable = false;
+                single_item_data.editable = false;
                 _this.data.multiSelectMenu = new AutoSelect(select_item_data);
                 _this.append(_this.data.multiSelectMenu, _this.el.find('.multi-select-item'));
+                this.data.singleSelectMenu = new AutoSelect(single_item_data);
+                this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
                 _this.el.find("td").addClass('unclick');
                 _this.el.find(".set-remind-method").addClass('unclick');
                 _this.el.find('input').addClass('unclick');
                 staus = false;
             }
         });
-        this.el.find(".list").hide();
 
         this.actions.checkResTextSelected();
 

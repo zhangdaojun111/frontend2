@@ -1,70 +1,57 @@
-<tr class="singleRow clearfix">
-    <td class="set-table-item table-item-checkbox">
+<div class="singleRow clearfix">
+    <div class="set-table-item table-item-checkbox">
         {{#if rowSetData.isSelected}}
-        <!--<input type="checkbox" disabled class="editor-items set-show-text-input" checked>-->
-        <!--<label class="custom-checkbox z-checkbox">
-            <input type="checkbox" name="custom-checkbox" class="z-checkbox-input">
-        </label>-->
         <label class="custom-checkbox z-checkbox">
             <input type="checkbox" name="custom-checkbox" class="editor-items set-show-text-input z-checkbox-input" checked disabled>
         </label>
         {{else}}
-        <!--<input type="checkbox" disabled class="editor-items set-show-text-input" >-->
         <label class="custom-checkbox z-checkbox">
             <input type="checkbox" name="custom-checkbox" class="editor-items set-show-text-input z-checkbox-input" disabled>
         </label>
         {{/if}}
-    </td>
-    <td class="set-table-item table-item-checkbox">
+    </div>
+    <div class="set-table-item table-item-checkbox">
         {{#if rowSetData.is_show_at_home_page}}
-        <!--<input type="checkbox" class="editor-items set-calendar-page-show-text" disabled checked>-->
         <label class="custom-checkbox z-checkbox">
             <input type="checkbox" name="custom-checkbox" class="editor-items set-calendar-page-show-text z-checkbox-input" checked disabled>
         </label>
         {{else}}
-        <!--<input type="checkbox" class="editor-items set-calendar-page-show-text" disabled >-->
         <label class="custom-checkbox z-checkbox">
             <input type="checkbox" name="custom-checkbox" class="editor-items set-calendar-page-show-text z-checkbox-input" disabled>
         </label>
         {{/if}}
-    </td>
-    <td class="set-table-item">
+    </div>
+    <div class="set-table-item">
         {{rowTitle.name}}
-    </td>
-    <td class="set-table-item">
+    </div>
+    <div class="set-table-item">
         <input class="set-color editor-items" id="set-color-id" type="color" value="#000000" disabled>
-    </td>
-    <td class="set-table-item multi-select-item">
+    </div>
+    <div class="set-table-item multi-select-item">
 
-    </td>
+    </div>
+    <div class="set-table-item single-select-item">
 
-    <td class="set-table-item">
-        <select class="res-text editor-items"  disabled>
-            {{#each dropdownForRes}}
-            <option class="testoption" value="{{this.id}}">{{this.name}}</option>
-            {{/each}}
-
-        </select>
-    </td>
-    <td class="set-table-item">
+    </div>
+    <div class="set-table-item">
         <select class="page-change-text editor-items" disabled>
             {{#each dropdownForCalendarChange}}
             <option class="testoption" value="{{this.id}}">{{this.name}}</option>
             {{/each}}
         </select>
-    </td>
-    <td class="set-table-item preview-text">
+    </div>
+    <div class="set-table-item preview-text">
         {{preViewText}}
-    </td>
-    <td class="set-table-item set-remind-method" disabled>
+    </div>
+    <div class="set-table-item set-remind-method" disabled>
         {{#if rowSetData.email.email_status}}
         <span>邮件</span>
         {{/if}}
         {{#if rowSetData.sms.sms_status}}
         <span>短信</span>
         {{/if}}
-    </td>
-    <td class="set-table-item">
+    </div>
+    <div class="set-table-item">
         {{#if isConfigText}}
         <select class="editor-items config-text" disabled>
             {{#each replaceDropDown}}
@@ -74,5 +61,5 @@
         {{else}}
         <span>不可配置</span>
         {{/if}}
-    </td>
-</tr>
+    </div>
+</div>
