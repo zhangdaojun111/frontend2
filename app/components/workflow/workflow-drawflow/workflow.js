@@ -1,3 +1,7 @@
+/**
+ *@author qiumaoyun
+ *画流程节点图
+ */
 import Component from '../../../lib/component';
 import template from './workflow.html';
 import './workflow.scss';

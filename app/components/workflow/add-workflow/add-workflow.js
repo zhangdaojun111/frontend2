@@ -1,3 +1,8 @@
+/**
+ * @author qiumaoyun
+ * 新增、查看、编辑工作流
+ */
+
 import Component from '../../../lib/component';
 import template from './add-workflow.html';
 import '../approval-workflow/approval-workflow.scss';

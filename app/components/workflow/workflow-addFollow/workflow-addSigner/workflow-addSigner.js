@@ -1,3 +1,7 @@
+/**
+ *@author qiumaoyun
+ *添加加签人page body
+ */
 import Component from '../../../../lib/component';
 import template from './workflow-addSigner.html';
 import '../workflow-addFollow/workflow-addFollow.scss';

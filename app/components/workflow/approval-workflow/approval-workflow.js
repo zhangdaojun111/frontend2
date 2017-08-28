@@ -1,3 +1,8 @@
+/**
+ * @author qiumaoyun
+ * 工作审批page body
+ */
+
 import Component from '../../../lib/component';
 import template from './approval-workflow.html';
 import './approval-workflow.scss';
@@ -20,21 +25,8 @@ let config={
         workflowData:null,
         sigh_user_id:'',
         nodeflowSize:1,
-
     },
-
     actions:{
-        approveWorkflow (__this){
-            (async function () {
-                return workflowService.approveWorkflowRecord({
-                    url: '/approve_workflow_record/?seqid=qiumaoyun_1502093694205&record_id=598819d246e8e4283ced51bd',
-                    data:__this.data
-                });
-            })().then(res=>{
-                console.log(res);
-            })
-        },
-
         previewViewBtn:function (el) {
             let type=$(el).attr('id');
             let container = this.el.find('#cloneId2').find('.workflow-draw-box');
@@ -57,16 +49,13 @@ let config={
                 overflow: 'auto',
             }
             switch (type){
-
                 case 'zoomIn' :
-
                     var  nodeflowSize=this.data.nodeflowSize+= 0.1;
                     container.css({
                         height:`${nodeCssObj.height*nodeflowSize+'px'}`,
                         transform:`scale(${nodeflowSize})`,
                         transformOrigin:`${nodeCssObj.transformOrigin}`
                     });
-
                     break;
                 case 'zoomOut' :
                     var  nodeflowSize=this.data.nodeflowSize-= 0.1;
@@ -77,7 +66,6 @@ let config={
                     });
                     break;
                 case 'newWin' :
-
                     let screenBtn=$('.screenClose-btn');
                     if(!screenBtn.length){
                         container2.append(closeDiv);
@@ -219,11 +207,25 @@ let config={
         },
         reApp(){
             Mediator.publish('approval:re-app');
+        },
+        addSigner(){
+            this.el.find('.addUser').show();
+            PMAPI.openDialogByIframe(`/iframe/addSigner/`,{
+                width:1000,
+                height:800,
+                title:`加签节点`,
+                modal:true
+            }).then(res=>{
+                if(!res.onlyclose){
+                    Mediator.publish("approval:signUser",{
+                        sigh_type:res.sigh_type,
+                        sigh_user_id:res.sigh_user_id
+                    });
+                }
+            })
         }
-
     },
     afterRender(){
-
         let __this=this;
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             this.data.workflowData=msg.data[0];
@@ -247,7 +249,6 @@ let config={
             __this.actions.appPass();
         });
         this.el.on('click','#app-rej-start',function (e) {
-            console.log('dsdfsdsfdsf')
             e.stopPropagation();
             __this.actions.appRejStart();
         });
@@ -267,26 +268,11 @@ let config={
             WorkFlow.rejectNode(this);
         });
         this.el.on('click','#app-add',()=>{
-            this.el.find('.addUser').show();
-            PMAPI.openDialogByIframe(`/iframe/addSigner/`,{
-                width:1000,
-                height:800,
-                title:`加签节点`,
-                modal:true
-            }).then(res=>{
-                if(!res.onlyclose){
-                    console.log(res);
-                    Mediator.publish("approval:signUser",{
-                        sigh_type:res.sigh_type,
-                        sigh_user_id:res.sigh_user_id
-                    });
-                }
-            })
+            this.actions.addSigner();
         });
         Mediator.subscribe("workflow:sendImgInfo",(e)=>{
             this.data.imgInfo=e;
         });
-
     }
 };
 class ApprovalWorkflow extends Component{

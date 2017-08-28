@@ -1,3 +1,7 @@
+/**
+ *@author qiumaoyun
+ *添加关注人page body
+ */
 import Component from '../../../../lib/component';
 import template from './workflow-addFollow.html';
 import './workflow-addFollow.scss';
@@ -25,6 +29,9 @@ let config={
                     par[i].style.display = "none";
                 }
             }
+        },
+        init(){
+            
         }
     },
     afterRender(){

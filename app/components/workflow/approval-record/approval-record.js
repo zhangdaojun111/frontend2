@@ -1,14 +1,17 @@
+/**
+ * @author qiumaoyun
+ * 工作审批记录component
+ */
+
 import Component from '../../../lib/component';
 import template from '././approval-record.html';
 import '././approval-record.scss';
-
 
 let config={
     template: template,
     data:{},
     actions:{
         tipsMouseover:function (pos,txt,event) {
-
             if(txt!=''){
                 var tooltip = $('<div id="J_tooltip"></div>');
                 $("body").append(tooltip);
@@ -18,7 +21,6 @@ let config={
                     left:  (event.pageX+pos.x)  + "px"
                 }).show("fast").text(txt);
             }
-
         },
         tipsMouseout:function (el) {
             el.remove()
@@ -29,7 +31,6 @@ let config={
                 left:  (event.pageX+pos.x)  + "px"
             })
         }
-
     },
     afterRender(){
         this.showLoading();
