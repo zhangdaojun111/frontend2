@@ -6,14 +6,34 @@
 import template from './attachment-list.html';
 let css = `
     .attachment-list{
-        width:100%;
-        height:100%;
+      //  width:100%;
+        //height:100%;       
+          height: 90%;
+          display: flex;
+          border: 1px solid #E4E4E4;
+          margin: 10px;
+          text-align: left;          
     }
-    .attachment-list .table {
-        width: 100%;
-        max-width: 100%;
-        margin-bottom: 20px;
+    .attachment-list .table {    
+          position: relative;
+          margin: 0 auto;
+          width: 99%;
+          max-width: 100%;
+          margin-bottom: 20px;
+          margin-top: 8px;
     }
+    .attachment-list .table-bordered  thead  tr  th:first-child,.attachment-list .table-bordered  tbody  tr  td:first-child{
+      width: 70%;
+    }
+    .attachment-list .table-bordered  thead  tr  th:last-child,.attachment-list .table-bordered  tbody  tr  td:last-child{
+      width: 30%;
+    }
+    .attachment-list .table-bordered  tbody  tr  td a{
+        text-decoration: none;
+         margin-right: 25px;
+         color:#0088FF;       
+    }
+    
     .attachment-list .table  thead  tr  th,
     .attachment-list .table  tbody  tr  th,
     .attachment-list .table  tfoot  tr  th,
@@ -23,11 +43,21 @@ let css = `
       padding: 8px;
       line-height: 1.42857143;
       vertical-align: top;
-      border-top: 1px solid #ddd;
+      border-top: 1px solid #F2F2F2;
     }
     .attachment-list .table  thead  tr th {
       vertical-align: bottom;
       border-bottom: 2px solid #ddd;
+      font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
+      font-weight: 700;
+      font-style: normal;
+      text-align: left;
+    }
+      .attachment-list .table  tbody  tr td {
+        font-family: '微软雅黑';
+        font-weight: 400;
+        font-style: normal;
+        font-size: 12px;
     }
     .attachment-list .table-bordered  thead  tr  th,
     .attachment-list .table-bordered  tbody  tr  th,
@@ -35,7 +65,7 @@ let css = `
     .attachment-list .table-bordered  thead  tr  td,
     .attachment-list .table-bordered  tbody  tr  td,
     .attachment-list .table-bordered  tfoot  tr  td {
-      border: 1px solid #ddd;
+      border: 1px solid #F2F2F2;
     }
     .attachment-list .table-bordered  thead  tr  th,
     .attachment-list .table-bordered  thead  tr  td {

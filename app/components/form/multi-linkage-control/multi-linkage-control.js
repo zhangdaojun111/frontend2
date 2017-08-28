@@ -158,6 +158,7 @@ let config={
             d['multiSelect']=false;
             d['editable']=this.data.is_view?false:true;
             d['width']=this.data.width;
+            d['choosed']=[];
             d.onSelect=function(data){
                 if( _this.data.isInit || _this.data.isReolad || !_this.data.childDrop[i] || _this.data.childDrop[i].data.choosed.length == 0){
                     return;
@@ -169,6 +170,7 @@ let config={
             if (this.data.value) {
                 let value = this.data.dataList[this.data.value][i];
                 d['list'].push({name: value, id: value});
+                d['choosed'].push({name: value, id: value});;
                 this.data.hasChoose.set(i, value);
             } else {
                 let set = new Set();

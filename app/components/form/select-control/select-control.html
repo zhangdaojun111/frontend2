@@ -5,17 +5,15 @@
         <a href="javascript:void(0);" class="info">被修改条件限制</a>
     {{else}}
         <div class="dropdown"></div>
-        <div>
-            {{#if required}}
-                <span id="requiredLogo" class="{{requiredClass}}" ></span>
-            {{/if}}
-            {{#if history}}
-                <a href="javascript:void(0);" class="ui-history"></a>
-            {{/if}}
-        </div>
+        {{#if required}}
+            <span id="requiredLogo" class="{{requiredClass}}" ></span>
+        {{/if}}
         {{#if is_view}}
         {{else if can_add_item}}
-            <a href="javascript:void(0);" class="add-item noprint"> + </a>
+            <a href="javascript:void(0);" class="add-item noprint" title="添加新选项"> + </a>
+        {{/if}}
+        {{#if history}}
+            <a href="javascript:void(0);" class="ui-history" title="修改历史"></a>
         {{/if}}
     {{/if}}
 </div>

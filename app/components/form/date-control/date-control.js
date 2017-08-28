@@ -99,18 +99,6 @@ let config={
             }
 
         });
-        // let boolean = true;
-        // if(boolean){
-        //     _this.el.on('click','#icon_rili',function(){
-        //         _this.el.find(".date_yy-mm-dd").datepicker('show');
-        //     });
-        //     boolean = false;
-        // }else{
-        //     _this.el.on('click','#icon_rili',function(){
-        //         _this.el.find(".date_yy-mm-dd").datepicker('hide');
-        //     });
-        //      boolean = true;
-        // }
         _.debounce(function(){_this.events.changeValue(_this.data)},200)();
     },
     beforeDestory:function(){
