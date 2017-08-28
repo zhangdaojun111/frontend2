@@ -3,6 +3,7 @@ import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
 import 'jquery-ui/ui/widgets/dialog.js';
 import 'jquery-ui/ui/widgets/sortable';
+import 'jquery-ui/ui/widgets/droppable';
 import './system-setting.scss';
 import template from './system-setting.html';
 import msgbox from "../../../lib/msgbox";
@@ -11,7 +12,10 @@ import {UserInfoService} from "../../../services/main/userInfoService"
 
 let config = {
     template:template,
-    data:{},
+    data:{
+        biSort:2,
+        calendarSort:1
+    },
     actions:{
         showStyleSetting:function () {
             this.el.find('.style-setting').show();
@@ -35,10 +39,18 @@ let config = {
             let biValue = this.el.find('input.bi-Show').prop("checked");
             let calendarValue = this.el.find('input.calendar-Show').prop("checked");
             if(biValue === true){
-                biflag = 1;
+                if(this.data.biSort === 2){
+                    biflag = 2;
+                }else{
+                    biflag = 1;
+                }
             }
             if(calendarValue === true){
-                calendarflag = 1;
+                if(this.data.calendarSort === 2){
+                    calendarflag = 2;
+                }else{
+                    calendarflag = 1;
+                }
             }
             let json = {
                 action:'save',
@@ -70,8 +82,16 @@ let config = {
             this.el.find("span.font-example").css("font-size",fontsize);
         },
         setCheckboxStatus:function () {
-            this.el.find('.sortable-box').sortable();
-            this.el.find('.sortable-box').disableSelection();
+            let that = this;
+            this.el.find('.sortable-box').sortable({
+                containment:'.sortable-box',
+                update:function (event,ui) {
+                    that.actions.saveSortResult();
+                }
+            }).disableSelection();
+            this.el.find('.sortable-box:first').droppable({
+                accept:".sort-item",
+            });
 
             if(window.config.sysConfig.logic_config.login_show_bi === '1'){
                 this.el.find('input.bi-Show').attr("checked",true);
@@ -79,6 +99,16 @@ let config = {
             if(window.config.sysConfig.logic_config.login_show_calendar === '1'){
                 this.el.find('input.calendar-Show').attr("checked",true);
             }
+        },
+        saveSortResult(event,ui){           //仅当dom位置发生变化才会触发，原地拖动不会触发
+            let temp = this.data.biSort;
+            this.data.biSort = this.data.calendarSort;
+            this.data.calendarSort = temp;
+        },
+        initSortItem:function () {          //根据后台的值初始化日历和BI的sort-item
+
+
+            
         }
     },
 

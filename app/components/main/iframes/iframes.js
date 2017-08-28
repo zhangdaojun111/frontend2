@@ -311,15 +311,15 @@ export const IframeInstance = new Component({
                 }
 
                 if(result[2].succ === 1){
-                let calendarConfig = result[2];
-                if((calendarConfig.data && calendarConfig.data === "1") || tabs.hasOwnProperty("calendar")){
-                    that.data.autoOpenList.push({
-                        id: 'calendar',
-                        name: '日历',
-                        url: window.config.sysConfig.calendar_index
-                    });
-                    window.config.sysConfig.logic_config.login_show_calendar = "1";
-                }
+                    let calendarConfig = result[2];
+                    if((calendarConfig.data && calendarConfig.data === "1") || tabs.hasOwnProperty("calendar")){
+                        that.data.autoOpenList.push({
+                            id: 'calendar',
+                            name: '日历',
+                            url: window.config.sysConfig.calendar_index
+                        });
+                        window.config.sysConfig.logic_config.login_show_calendar = "1";
+                    }
                 }
                 that.actions.autoOpenTabs();
             });

@@ -33,29 +33,26 @@ let config = {
 
     actions:{
         initData:function () {
-            this.showLoading();
             UserInfoService.getAgentData().done((result) => {
-                    if(result.success === 1){
-                        this.originData = result;
-                        this.data.selectedAgent = {
-                            id:result.data.user_id,
-                            name:result.data.agent_name
-                        };
-                        this.isOpen = result.data.is_apply ? 1:0;
-                        $.extend(true,this.formatData,this.originData.data.workflow_list);
-                    }else{
-                        this.hideLoading();
-                        throw error("数据加载失败");
-                    }
-                }).done(() => {
-                this.actions.initWorkflow();
-                this.actions.initAgentList();
-                this.actions.initSwitch();
-                this.hideLoading();
-            }).catch((err) => {
-                msgbox.alert(err);
-                return false;
-            });
+                console.log(result);
+                if(result.success === 1){
+                    this.originData = result;
+                    this.data.selectedAgent = {
+                        id:result.data.user_id,
+                        name:result.data.agent_name
+                    };
+                    this.isOpen = result.data.is_apply ? 1:0;
+                    $.extend(true,this.formatData,this.originData.data.workflow_list);
+
+                    this.actions.initWorkflow();
+                    this.actions.initAgentList();
+                    this.actions.initSwitch();
+                    this.hideLoading();
+                }else{
+                    msgbox.alert("获取数据失败");
+                    this.hideLoading();
+                }
+            })
         },
         initWorkflow:function () {
             this.actions.formatOriginData(this.formatData);
@@ -98,7 +95,7 @@ let config = {
             let $wrap = this.el.find('.name-list');
             let tempData = [];
             for(let row of this.originData.data.user_list){
-                if(row.name && row.name.trim() !== ''){
+                if(row.name && row.name.trim() !== '' && row.id && row.id !== ''){
                     row.py = row.f7_p.join(',');
                     tempData.push(row);
                 }
@@ -217,6 +214,7 @@ let config = {
         }
     },
     afterRender:function () {
+        this.showLoading();
         this.actions.initData();
         let that = this;
         this.el.on("click","span.save-proxy",() => {

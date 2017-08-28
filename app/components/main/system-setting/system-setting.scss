@@ -60,23 +60,27 @@
             float: left;
             display: none;
             .sortable-window{
-                .isShow-BI{
-                    height: 30px;
-                    line-height: 30px;
-                    margin-left: 30px;
-                    margin-top: 25px;
-                    .bi-Show{
-                        vertical-align: middle;
+                margin-top: 25px;
+                .sortable-box{
+                    height: 100px;
+                    .isShow-BI{
+                        height: 30px;
+                        line-height: 30px;
+                        margin-left: 30px;
+                        margin-top: 10px;
+                        .bi-Show{
+                            vertical-align: middle;
+                        }
                     }
-                }
 
-                .isShow-calendar{
-                    height: 30px;
-                    line-height: 30px;
-                    margin-left: 30px;
-                    margin-top: 10px;
-                    .calendar-Show{
-                        vertical-align: middle;
+                    .isShow-calendar{
+                        height: 30px;
+                        line-height: 30px;
+                        margin-left: 30px;
+                        margin-top: 10px;
+                        .calendar-Show{
+                            vertical-align: middle;
+                        }
                     }
                 }
             }
