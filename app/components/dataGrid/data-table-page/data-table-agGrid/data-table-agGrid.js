@@ -870,8 +870,11 @@ let config = {
             }
             let con = this.el.find( '.dataGrid-btn-group' )[0];
             con.innerHTML = html;
-            // con.style.display = 'block';
             $(con).addClass('flex');
+            setTimeout( ()=>{
+                con.style.display = 'flex';
+                this.el.find( '.dataGrid-btn-group' )[0].style.display = 'flex';
+            },1000 )
         },
         //请求表头数据
         getHeaderData: function () {
