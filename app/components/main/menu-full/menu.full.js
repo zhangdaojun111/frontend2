@@ -24,11 +24,13 @@ function searchData(menu, text) {
     
     function setDisplay(_item) {
         _item.searchDisplay = true;
+        _item.expandChild = true;
         if (_item.parent) {
             setDisplay(_item.parent);
         }
     }
     search(res, text, null);
+    console.log(res);
     return res;
 
 }

@@ -6,7 +6,8 @@ import 'jquery-ui/ui/widgets/tooltip';
 let config = {
     template: template,
     data: {
-        type: 'full'
+        type: 'full',
+        expandChild: false
     },
 
     actions: {
@@ -195,6 +196,9 @@ let config = {
                     'padding-right': '20px'
                 })
             }
+        }
+        if (this.data.expandChild) {
+            this.childlist.show();
         }
     }
 }
