@@ -39,6 +39,7 @@ let config = {
         num:1,
         addNameAry:[],
         saveCommonQuery: false,
+        deleteCommonQuery: false,
         key:'',
         commonQuerySelectLength:null,
         //高级查询字段信息
@@ -226,21 +227,53 @@ let config = {
                 }
             }
         },
+        //取消查询关闭iframe
+        cancelSearch:function() {
+            PMAPI.closeIframeDialog(window.config.key, {
+                saveCommonQuery:this.data.saveCommonQuery,
+                deleteCommonQuery:this.data.deleteCommonQuery,
+                onlyclose:true
+            });
+        },
         //打开保存常用查询
         openSaveQuery: function(){
             if(this.isEdit) {
                 addQuery.data.name = this.name;
             }
+            this.actions.openSaveQueryDialog(addQuery);
+            // PMAPI.openDialogByComponent(addQuery, {
+            //     width: 380,
+            //     height: 220,
+            //     title: '保存为常用查询'
+            // }).then((data) => {
+            //     if(data.onlyclose == true){
+            //         return false
+            //     }
+            //     if(data.value == '') {
+            //         msgBox.alert('名字不能为空')
+            //     }else  {
+            //         if(!this.isEdit) {
+            //             this.actions.saveCommonQuery(data.value);
+            //         } else {
+            //             this.actions.deleteCommonQuery(this.id);
+            //             this.actions.saveCommonQuery(data.value);
+            //         }
+            //     }
+            // });
+        },
+        //打开保存常用查询弹窗
+        openSaveQueryDialog:function(addQuery){
             PMAPI.openDialogByComponent(addQuery, {
                 width: 380,
                 height: 220,
                 title: '保存为常用查询'
             }).then((data) => {
-                if(data.onlyclose == true){
+                if(data.onlyclose){
                     return false
                 }
                 if(data.value == '') {
-                    msgBox.alert('名字不能为空')
+                    msgBox.alert('名字不能为空');
+                    // this.actions.openSaveQueryDialog(addQuery)
                 }else  {
                     if(!this.isEdit) {
                         this.actions.saveCommonQuery(data.value);
@@ -278,6 +311,7 @@ let config = {
                 if(res.succ == 0) {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
+                    
                     this.actions.renderQueryItem(this.data.searchInputList)
                     this.data.saveCommonQuery = true
                     this.data.addNameAry.push(name)
@@ -285,7 +319,10 @@ let config = {
                         id:1000+this.data.num,
                         name:name,
                         queryParams:JSON.stringify(this.data.searchInputList)
-                    })
+                    });
+                    if(this.data.commonQuery.length != 0){
+                        this.el.find('.common-search-compile').css('display','block');
+                    }
                     this.num ++;
                     this.name = name;
                     this.id = 1000+this.data.num;
@@ -316,6 +353,7 @@ let config = {
                             this.data.commonQuery.splice(i,1);
                         }
                     }
+                    this.data.deleteCommonQuery = true;
                 }
             } );
             HTTP.flush();
@@ -367,6 +405,8 @@ let config = {
                 $(this).prop('checked',true)
             }).on('click','.search-button', ()=> {
                 this.actions.submitData()
+            }).on('click','.cancel-button',()=>{
+                this.actions.cancelSearch()
             }).on('click','.reset-button',function(){
                 _this.el.find('.condition-search-container').find('div').remove();
                 _this.actions.rendSearchItem();

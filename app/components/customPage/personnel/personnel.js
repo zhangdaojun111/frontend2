@@ -48,6 +48,7 @@ let config = {
         ignoreFields: [],
         //定制列需要字段信息
         customColumnsFields: [],
+        onlyCloseExpertSearch:false,
         isShowCustomPanel: false,
         //高级查询字段数据
         expertSearchFields: [],
@@ -121,7 +122,7 @@ let config = {
                 }}
                 //添加序号列
                 let number = dgcService.numberCol;
-                // number['headerCellTemplate'] = this.actions.resetPreference();
+                number['headerCellTemplate'] = this.actions.resetPreference();
                 this.data.columnDefs.unshift(number);
                 this.data.columnDefs = [
                     dgcService.numberCol,
@@ -201,7 +202,8 @@ let config = {
                     fixCols: this.data.fixCols,
                     tableId: this.data.tableId,
                     agGrid: this.agGrid,
-                    close: this.actions.calcCustomColumn
+                    close: this.actions.calcCustomColumn,
+                    setFloatingFilterInput: this.actions.setFloatingFilterInput
                 }
                 this.customColumnsCom  = new customColumns(custom);
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
@@ -255,9 +257,13 @@ let config = {
                         for( let k in this.data.searchValue ){
                             this.data.searchValue[k] = '';
                         }
+                        for( let k in this.data.searchOldValue ){
+                            this.data.searchOldValue[k] = '';
+                        }
+                        this.data.queryList = {};
                         this.actions.setFloatingFilterInput();
                         this.data.filterParam.filter = [];
-                        this.actions.getGridData();
+                        this.actions.getUserData();
                     }
                 } )
             } )
@@ -275,14 +281,9 @@ let config = {
                             };
                             dataTableService.getPreferences( obj ).then( res=>{
                                 dgcService.setPreference( res,this.data );
-                                //初始化偏好隐藏系统默认列
-                                if( res.ignoreFields == null && this.data.haveSystemsFields ){
-                                    this.data.ignoreFields = ['f1','f2','f3','f4'];
-                                }
                                 //创建表头
-                                this.columnDefs = this.actions.createHeaderColumnDefs();
-                                this.agGrid.gridOptions.api.setColumnDefs( this.columnDefs );
-                                dgcService.calcColumnState(this.data,this.agGrid,["group",'number',"mySelectAll"]);
+                                this.agGrid.gridOptions.api.setColumnDefs( this.data.columnDefs );
+                                dgcService.calcColumnState(this.data,this.agGrid,["number","mySelectAll"]);
                             } );
                             HTTP.flush();
                         } );
@@ -541,18 +542,22 @@ let config = {
                     title:`高级查询`,
                     modal:true
                 },{d}).then(res=>{
+                    this.data.onlyCloseExpertSearch = res.onlyclose || false;
                     if(res.type == 'temporaryQuery') {
-                        if(res.addNameAry.length != 0){
-                            this.actions.getExpertSearchData(res.addNameAry);
-                        } else {
+                        if(res.addNameAry.length == 0){
+                            // this.actions.getExpertSearchData(res.addNameAry);
                             this.actions.postExpertSearch(res.value,res.id,res.name);
                         }
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);
                     } if(res.appendChecked) {
                         this.data.temporaryCommonQuery = res.value
                         this.actions.appendQuerySelect()
-                    } if(res.saveCommonQuery || res.onlyclose == true) {
-                        this.actions.getExpertSearchData(res.addNameAry)
+                    } if(res.saveCommonQuery || (res.saveCommonQuery && res.onlyclose == true)) {
+                        this.actions.getExpertSearchData(res.addNameAry);
+                    }if(res.deleteCommonQuery || (res.deleteCommonQuery && res.onlyclose == true)) {
+                        this.actions.getExpertSearchData(res.addNameAry);
+                    } if(!res.saveCommonQuery && res.onlyclose == true) {
+                        return false
                     }
                 })
             } )
@@ -603,6 +608,10 @@ let config = {
                             }
                         }
                     })
+                }
+                if(this.data.filterParam['common_filter_name'] && this.data.onlyCloseExpertSearch) {
+                    debugger
+                    this.el.find('.dataGrid-commonQuery-select').val(this.data.filterParam['common_filter_name']);
                 }
             } );
             HTTP.flush();
@@ -675,14 +684,18 @@ let config = {
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title,w,h ) {
             //暂时刷新方法
+            let defaultMax = false;
             if( url.indexOf( '/form/index/' ) != -1 ){
                 this.actions.setInvalid();
+                defaultMax = true;
             }
             PMAPI.openDialogByIframe( url,{
                 width: w || 1300,
                 height: h || 800,
                 title: title,
-                modal:true
+                modal:true,
+                defaultMax: defaultMax,
+                customSize: defaultMax
             } ).then( (data)=>{
             } )
         },
