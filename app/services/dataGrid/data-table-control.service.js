@@ -60,7 +60,7 @@ export const dgcService = {
             }else {
                 text = ( params.rowIndex + 1 );
             }
-            return '<span style="text-align: center;font-size: 12px!important;display: block;overflow: visible;">' + text + '</span>';
+            return '<span style="text-align: center;line-height: 30px;font-size: 12px!important;display: block;overflow: visible;">' + text + '</span>';
         },
         headerName: '',
         colId: "number",

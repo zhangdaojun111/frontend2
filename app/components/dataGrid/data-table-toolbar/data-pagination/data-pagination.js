@@ -174,6 +174,7 @@ let config = {
             } )
         },
         onPaginationChanged: function (invalid) {
+            this.el.find( '.ui-icon-refresh' ).eq(0).addClass( 'refresh-rotate' )
             if( !invalid ){
                 this.el.find( '.data-invalid' )[0].innerHTML = '';
             }
@@ -194,6 +195,7 @@ let config = {
             this.data.total = total;
             this.data.currentPage = currentPage;
             this.actions.resetPagination( this.data.total );
+            this.el.find( '.ui-icon-refresh' ).eq(0).removeClass( 'refresh-rotate' );
         },
         //表级操作
         tableOperate: function () {
