@@ -12,6 +12,13 @@
   height: 60px;
   width: 100%;
 }
+.btn-nav.flex{
+  display: flex;
+  align-items: center;
+}
+.btn-nav.flex.flex-end{
+  justify-content: flex-end;
+}
 
 .workflowGrid-btn-group {
   //float: right;
