@@ -38,11 +38,14 @@ let config = {
                     this.data.workflowList = res.data.flow_data;
                     let html = '';
                     for( let d of this.data.workflowList ){
-                        html+= '<option value='+ d.flow_id + '>' + d.flow_name + '</option>'
+                        html+= '<option value='+ d.flow_id + '>' + d.flow_name + '</option>';
+                        if( d.selected == 1 ){
+                            this.data.flowId = d.flow_id;
+                        }
                     }
                     let choose = this.el.find( '.chooseFlow' )
                     choose[0].innerHTML = html;
-                    choose[0].value = this.data.workflowList[0]['flow_id'];
+                    choose.eq(0).val(this.data.flowId);
                     workflow[0].style.display = 'block';
                     workflow[1].style.display = 'block';
                     workflow[2].style.display = 'block';
@@ -60,6 +63,7 @@ let config = {
                 this.el.find( '.chooseFlow' ).on( 'change',()=>{
                     this.actions.drawFlowChart();
                 } )
+                this.hideLoading();
             } )
         },
         //设置流程图
@@ -170,6 +174,7 @@ let config = {
     },
     afterRender: function (){
         if( this.data.isBatch == '0' ){
+            this.showLoading();
             this.actions.prepareWorkflowData();
         }
         //上传初始化

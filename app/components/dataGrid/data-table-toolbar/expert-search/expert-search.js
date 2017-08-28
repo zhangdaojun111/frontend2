@@ -231,6 +231,29 @@ let config = {
             if(this.isEdit) {
                 addQuery.data.name = this.name;
             }
+            this.actions.openSaveQueryDialog(addQuery);
+            // PMAPI.openDialogByComponent(addQuery, {
+            //     width: 380,
+            //     height: 220,
+            //     title: '保存为常用查询'
+            // }).then((data) => {
+            //     if(data.onlyclose == true){
+            //         return false
+            //     }
+            //     if(data.value == '') {
+            //         msgBox.alert('名字不能为空')
+            //     }else  {
+            //         if(!this.isEdit) {
+            //             this.actions.saveCommonQuery(data.value);
+            //         } else {
+            //             this.actions.deleteCommonQuery(this.id);
+            //             this.actions.saveCommonQuery(data.value);
+            //         }
+            //     }
+            // });
+        },
+        //打开保存常用查询弹窗
+        openSaveQueryDialog:function(addQuery){
             PMAPI.openDialogByComponent(addQuery, {
                 width: 380,
                 height: 220,
@@ -240,7 +263,8 @@ let config = {
                     return false
                 }
                 if(data.value == '') {
-                    msgBox.alert('名字不能为空')
+                    msgBox.alert('名字不能为空');
+                    // this.actions.openSaveQueryDialog(addQuery)
                 }else  {
                     if(!this.isEdit) {
                         this.actions.saveCommonQuery(data.value);
@@ -278,6 +302,7 @@ let config = {
                 if(res.succ == 0) {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
+                    
                     this.actions.renderQueryItem(this.data.searchInputList)
                     this.data.saveCommonQuery = true
                     this.data.addNameAry.push(name)
@@ -285,7 +310,10 @@ let config = {
                         id:1000+this.data.num,
                         name:name,
                         queryParams:JSON.stringify(this.data.searchInputList)
-                    })
+                    });
+                    if(this.data.commonQuery.length != 0){
+                        this.el.find('.common-search-compile').css('display','block');
+                    }
                     this.num ++;
                     this.name = name;
                     this.id = 1000+this.data.num;

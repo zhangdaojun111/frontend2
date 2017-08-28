@@ -322,12 +322,6 @@ let config = {
                             return this.actions.bodyCellRender(params);
                         }
                     }
-                    // if (fieldContent) {
-                    //     if (data.data['id'] == fieldContent['child_field']||data.data['id'] == fieldContent['count_field']) {
-                    //         obj['cellStyle'] = {'font-style': 'normal'};
-                    //         obj['cellStyle']['background-color'] =  'rgb(177,215,253)';
-                    //     }
-                    // }
                     // 图片可见单元格属性修改
                     if (data.data["dinput_type"] == fieldTypeService.IMAGE_TYPE && data.data['field_content']['is_show_image'] == 1) {
                         obj['cellStyle'] = {'font-style': 'normal'};
@@ -338,10 +332,10 @@ let config = {
                         width = this.data.colWidth[data.data["field"]];
                     }
                     obj["width"] = width + 17;
-                    if (( fieldTypeService.childTable(data.data["dinput_type"]) || fieldTypeService.countTable(data.data["dinput_type"]) )) {
-                        obj['editable'] = false;
-                        obj['cellStyle'] = {'font-style': 'normal'};
-                        obj['cellStyle'] ['background'] = "#ddd"
+                    if( this.data.viewMode == 'child' || this.data.viewMode == 'count' ){
+                        if( this.data.source_field_dfield == data.data["field"] && !edit ){
+                            obj['cellStyle']['background'] = "rgba(255,0,0,0.5)";
+                        }
                     }
                     //编辑模式用
                     if( edit ){
@@ -432,9 +426,6 @@ let config = {
             let color = "transparent"; //颜色
             let real_type = colDef["real_type"];
             let dinput_type = colDef["dinput_type"];
-            // let someStyle = 'text-align:right;margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
-            //let someStyle = 'margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
-            //let someStyle_a = 'text-decoration:underline;margin:-5px;padding-left:5px;padding-right:5px;display:inline-block;width:calc(100% + 10px);height:100%;';//默认的样式
             if (params.data) {
                 rowId = params.data['_id']
             }
@@ -529,6 +520,10 @@ let config = {
                 sHtml = '<span ><span/>';
                 return sHtml;
             }
+            let bgStyle = ' ';
+            if( color != 'transparent' ){
+                bgStyle = ' style = "display: block;width: 100%;height: 100%;background:' + color+'"';
+            }
 
             //前端表达式值计算
             if (colDef.dinput_type == fieldTypeService.SURFACE_EXPRESSION) {
@@ -552,25 +547,20 @@ let config = {
                 }
                 params["value"] = eval(exp);
             }
-
-            //编辑模式下处理不能编辑数据
-            // if(this.isShowEditCancel && params.colDef && !params.colDef.editable){
-            //     color='rgba(230,230,230,0.8)';
-            // }
             //处理数字类型
             if (fieldTypeService.numOrText(real_type)) {//数字类型
                 let numVal = fieldTypeService.intOrFloat(real_type) ? dgcService.formatter(params.value) : dgcService.formatter(Number(params.value).toFixed(colDef.real_accuracy))
                 if (fieldTypeService.childTable(dinput_type) || fieldTypeService.countTable(dinput_type)) {//子表||统计类型
                     if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
-                        sHtml = '<span class="ag-num-right-style"><span>' + numVal + '</span><span/>';
+                        sHtml = '<span' + bgStyle + ' class="ag-num-right-style"><span>' + numVal + '</span><span/>';
                     } else {
-                        sHtml = '<span class="ag-num-right-style"><span id="childOrCount">' + numVal + '</span><span/>';
+                        sHtml = '<a' + bgStyle + 'class="ag-text-style ag-num-right-style" id="childOrCount">' + numVal + '</a>';
                     }
                 } else {
                     if (colDef['base_buildin_dfield'] != '' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人') {
-                        sHtml = '<a  title="查看源数据" class="ag-text-style ag-num-right-style"><span id="relatedOrBuildin" style="text-align: right">' + numVal + '</span></a>';
+                        sHtml = '<a' + bgStyle + ' title="查看源数据" class="ag-text-style ag-num-right-style"><span id="relatedOrBuildin" style="text-align: right">' + numVal + '</span></a>';
                     } else {
-                        sHtml = '<span class="ag-num-right-style"><span>' + numVal + '</span><span/>';
+                        sHtml = '<span' + bgStyle + ' class="ag-num-right-style"><span>' + numVal + '</span><span/>';
                     }
                 }
             }
@@ -587,35 +577,35 @@ let config = {
                     val = val.replace(/\n/g, "\n;\n");
                 }
                 if (colDef['base_buildin_dfield'] != '' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人') {
-                    sHtml = '<a  title="查看源数据" class="ag-text-style"><span id="relatedOrBuildin">' + val + '</span></a>';
+                    sHtml = '<a' + bgStyle + ' title="查看源数据" class="ag-text-style"><span id="relatedOrBuildin">' + val + '</span></a>';
                 } else {
-                    sHtml = '<span><span>' + val + '</span></span>';
+                    sHtml = '<span' + bgStyle + '><span>' + val + '</span></span>';
                 }
             }
 
             //富文本编辑框
             else if (real_type == fieldTypeService.UEDITOR) {
-                sHtml = '<a title="富文本" style="text-align: center;">查看详情</a>';
+                sHtml = '<a class="ag-text-style" title="富文本" style="text-align: center;">查看详情</a>';
             }
 
             //大数字段处理
             else if (real_type == fieldTypeService.DECIMAL_TYPE) {
                 if (fieldTypeService.childTable(dinput_type) || fieldTypeService.countTable(dinput_type)) {//子表||统计类型
                     let bigNum = params.value > 9007199254740992 ? dgcService.formatter(params.value.toString()) + '.00' : dgcService.formatter(Number(params.value).toFixed(colDef.real_accuracy))
-                    sHtml = '<a id="childOrCount">' + bigNum + '</a>';
+                    sHtml = '<a' + bgStyle + ' class="ag-text-style" id="childOrCount">' + bigNum + '</a>';
                 } else {
                     let bigNum = params.value > 9007199254740992 ? dgcService.formatter(params.value.toString()) + '.00' : dgcService.formatter(Number(params.value).toFixed(colDef.real_accuracy))
                     if (colDef['base_buildin_dfield'] != '' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人') {
-                        sHtml = '<a  title="查看源数据" class="ag-text-style"><span id="relatedOrBuildin">' + bigNum + '</span></a>';
+                        sHtml = '<a' + bgStyle + ' title="查看源数据" class="ag-text-style"><span id="relatedOrBuildin">' + bigNum + '</span></a>';
                     } else {
-                        sHtml = '<span ><span>' + bigNum + '</span></span>';
+                        sHtml = '<span' + bgStyle + '><span>' + bigNum + '</span></span>';
                     }
                 }
             }
 
             //地址类型
             else if (real_type == fieldTypeService.URL_TYPE) {
-                sHtml = '<a class="shareAddress" target="_blank">' + myValue + '</a>';
+                sHtml = '<a class="ag-text-style" id="shareAddress" target="_blank">' + myValue + '</a>';
             }
 
             //合同编辑器
@@ -626,9 +616,9 @@ let config = {
             //表对应关系（不显示为数字）
             else if (real_type == fieldTypeService.CORRESPONDENCE) {
                 if (this.data.viewMode == 'editFromCorrespondence') {
-                    sHtml = '<span >' + params.value + '</span>';
+                    sHtml = '<span' + bgStyle + '>' + params.value + '</span>';
                 } else {
-                    sHtml = '<a><span id="correspondenceClick">' + params.value + '</span></a>';
+                    sHtml = '<a' + bgStyle + ' class="ag-text-style"><span id="correspondenceClick">' + params.value + '</span></a>';
                 }
             }
 
@@ -667,22 +657,22 @@ let config = {
 
             //普通附件||视频附件
             else if (real_type == fieldTypeService.ATTACHMENT || real_type == fieldTypeService.VIDEO_TYPE) {
-                sHtml = '<a id="file_view" title="查看详情">' + ( myValue.length || 0 ) + '个附件</a>';
+                sHtml = '<a class="ag-text-style" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + '个附件</a>';
             }
 
             //都做为文本处理
             else {
                 if (fieldTypeService.childTable(dinput_type) || fieldTypeService.countTable(dinput_type,real_type)) { //子表或统计类型
                     if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
-                        sHtml = '<span>' + params.value + '</span>';
+                        sHtml = '<span' + bgStyle + '>' + params.value + '</span>';
                     } else {
-                        sHtml = '<a><span id="childOrCount">' + params.value + '</span></a>';
+                        sHtml = '<a' + bgStyle + ' class="ag-text-style"><span id="childOrCount">' + params.value + '</span></a>';
                     }
                 } else {
                     if (colDef['base_buildin_dfield'] != '' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人') {
-                        sHtml = '<a  title="查看源数据" class="ag-text-style"><span id="relatedOrBuildin">' + params.value + '</span></a>';
+                        sHtml = '<a' + bgStyle + ' title="查看源数据" class="ag-text-style"><span id="relatedOrBuildin">' + params.value + '</span></a>';
                     } else {
-                        sHtml = '<span><span>' + params.value + '</span></span>';
+                        sHtml = '<span' + bgStyle + '><span>' + params.value + '</span></span>';
                     }
                 }
             }
@@ -700,6 +690,7 @@ let config = {
             let eImg = document.createElement('img');
             eImg.src = require( '../../../../assets/images/dataGrid/quxiao.png' );
             eImg.className = 'resetFloatingFilter';
+            eImg.title = '重置筛选';
             eImg.addEventListener( 'click',()=>{
                 msgBox.confirm( '确定清空筛选数据？' ).then( r=>{
                     if( r ){
@@ -719,6 +710,7 @@ let config = {
             if( !this.data.noNeedCustom ){
                 ediv.appendChild( eHeader )
                 eHeader.innerHTML = "初";
+                eHeader.title = '初始化偏好'
                 eHeader.className = "table-init-logo";
                 eHeader.addEventListener('click', () => {
                     msgBox.confirm( '确定初始化偏好？' ).then( r=>{
@@ -758,7 +750,7 @@ let config = {
                 return '';
             }
             if( this.data.viewMode == 'in_process' ){
-                return '<div></span><a href="javascript:;" class="gridView">查看</a></div>';
+                return '<div style="text-align: center;"><a class="gridView" style="color:#337ab7;">查看</a></div>';
             }
             if (params.data.group || Object.is(params.data.group, '') || Object.is(params.data.group, 0)) {
                 return '';
@@ -997,7 +989,7 @@ let config = {
             }
             Promise.all(post_arr).then((res)=> {
                 this.data.rowData = res[0].rows || [];
-                this.data.total = res[0].total || this.data.total;
+                this.data.total = res[0].total != undefined ? res[0].total : this.data.total;
                 //对应关系特殊处理
                 if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
                     this.actions.setCorrespondence(res[0]);
@@ -1121,6 +1113,20 @@ let config = {
             }
             let select = $event.node.selected;
             let id = $event.node.data._id;
+
+            //个人用户编辑表中的数据时,会发起对应的工作流,不让用户编辑
+            if( $event["node"]["data"]["status"] && ( $event["node"]["data"]["status"] == 2 ) && select ){
+                msgBox.alert("该数据正在审批，无法操作。");
+                $event["node"].setSelected( false,false );
+                return;
+            }
+            //数据计算cache时,不让用户编辑
+            if( $event["node"]["data"]["data_status"] && ( $event["node"]["data"]["data_status"] == 0 ) && select ){
+                msgBox.alert("数据计算中，请稍候");
+                $event["node"].setSelected( false,false );
+                return;
+            }
+
             if( this.data.viewMode == 'editFromCorrespondence' ){
                 if( select && this.data.correspondenceSelectedList.indexOf( id ) == -1 ){
                     this.data.correspondenceSelectedList.push( id );
@@ -1537,6 +1543,7 @@ let config = {
                         isBatch: this.data.viewMode == 'createBatch'?1:0,
                         isSuperUser: window.config.is_superuser || 0
                     }
+                    this.actions.setInvalid();
                     let url = dgcService.returnIframeUrl( '/iframe/dataImport/',json );
                     let winTitle = '导入数据';
                     this.actions.openSourceDataGrid( url,winTitle,600,800 );
@@ -1819,8 +1826,10 @@ let config = {
                     } if(res.appendChecked) {
                         this.data.temporaryCommonQuery = res.value
                         this.actions.appendQuerySelect()
-                    } if(res.saveCommonQuery || res.onlyclose == true) {
-                        this.actions.getExpertSearchData(res.addNameAry)
+                    } if(res.saveCommonQuery || (res.saveCommonQuery && res.onlyclose == true)) {
+                        this.actions.getExpertSearchData(res.addNameAry);
+                    } else if(res.onlyclose == true) {
+                        return false
                     }
                 })
             } )
@@ -1839,7 +1848,7 @@ let config = {
                     })
                 }
             })
-            this.actions.getExpertSearchData();
+            // this.actions.getExpertSearchData();
         },
         appendQuerySelect: function() {
             let length = this.el.find('.dataGrid-commonQuery-select option').length
@@ -1853,7 +1862,7 @@ let config = {
 
         },
         //删除数据
-        delTableData: function () {
+        delTableData: function (type) {
             let json = {
                 table_id:this.data.tableId,
                 temp_ids:JSON.stringify([]),
@@ -1864,6 +1873,9 @@ let config = {
                 parent_temp_id: this.data.parentTempId,
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
+            }
+            if( type == 1 ){
+                json['abandon_validate'] = 1;
             }
             this.actions.setInvalid();
             dataTableService.delTableData( json ).then( res=>{
@@ -1892,7 +1904,15 @@ let config = {
                             }
                         } )
                     }else {
-                        msgBox.alert( res.error )
+                        if(res.abandon_validate){
+                            msgBox.confirm( res.error ).then( aa=>{
+                                if( aa ){
+                                    this.actions.delTableData( 1 );
+                                }
+                            } )
+                        }else {
+                            msgBox.alert( res.error )
+                        }
                     }
                 }
             } )
@@ -2231,7 +2251,8 @@ let config = {
                     viewMode: 'count',
                     rowId: data.data._id,
                     parentRealId: data.data._id,
-                    fieldId: data.colDef.id
+                    fieldId: data.colDef.id,
+                    source_field_dfield: data.colDef.field_content.count_field_dfield || '',
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
                 let winTitle = this.data.tableName + '->' + obj.tableName;
@@ -2248,7 +2269,8 @@ let config = {
                     viewMode: 'child',
                     rowId: data.data._id,
                     parentRealId: data.data._id,
-                    fieldId: data.colDef.id
+                    fieldId: data.colDef.id,
+                    source_field_dfield: data.colDef.field_content.child_field_dfield || '',
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
                 let winTitle = this.data.tableName + '->' + obj.tableName;
@@ -2265,6 +2287,10 @@ let config = {
             console.log( data )
             if( data.event.srcElement.className == 'gridView' ){
                 console.log( '查看' )
+                let btnType = 'view';
+                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 ){
+                    btnType = 'none';
+                }
                 let obj = {
                     table_id: this.data.tableId,
                     parent_table_id: this.data.parentTableId,
@@ -2272,7 +2298,8 @@ let config = {
                     parent_temp_id: this.data.parentTempId,
                     parent_record_id: this.data.parentRecordId,
                     real_id: data.data._id,
-                    btnType: 'view',is_view:1
+                    btnType: btnType,
+                    is_view:1
                 };
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
@@ -2306,24 +2333,6 @@ let config = {
                 },{obj}).then(res=>{
 
                 })
-                // let d = {
-                //     'table_id': this.data.tableId,
-                //     'real_id': data.data._id
-                // };
-                // dataTableService.getHistoryApproveData(d).then( res=>{
-                //     console.log()
-                //     obj.res = JSON.stringify(res);
-                //     PMAPI.openDialogByIframe(`/iframe/historyApprove/`,{
-                //         width:1000,
-                //         height:600,
-                //         title:`历史`,
-                //         modal:true
-                //     },{obj}).then(res=>{
-                //
-                //     })
-                // })
-                // HTTP.flush();
-
             }
         },
         //行双击
@@ -2349,19 +2358,24 @@ let config = {
         },
         //设置失效
         setInvalid: function () {
-            this.pagination.data.myInvalid = true;
+            if( this.pagination ){
+                this.pagination.data.myInvalid = true;
+            }
         },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title,w,h ) {
             //暂时刷新方法
+            let defaultMax = false;
             if( url.indexOf( '/iframe/addWf/' ) != -1 ){
                 this.actions.setInvalid();
+                defaultMax = true;
             }
             PMAPI.openDialogByIframe( url,{
-                width: w || 1300,
+                width: w || 1000,
                 height: h || 800,
                 title: title,
-                modal:true
+                modal:true,
+                defaultMax: defaultMax
             } ).then( (data)=>{
                 if( data.type == "batch" ){
                     this.data.batchIdList = data.ids;
