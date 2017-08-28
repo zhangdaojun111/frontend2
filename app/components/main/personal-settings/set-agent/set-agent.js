@@ -34,7 +34,6 @@ let config = {
     actions:{
         initData:function () {
             UserInfoService.getAgentData().done((result) => {
-                console.log(result);
                 if(result.success === 1){
                     this.originData = result;
                     this.data.selectedAgent = {
@@ -43,15 +42,13 @@ let config = {
                     };
                     this.isOpen = result.data.is_apply ? 1:0;
                     $.extend(true,this.formatData,this.originData.data.workflow_list);
-
                     this.actions.initWorkflow();
                     this.actions.initAgentList();
                     this.actions.initSwitch();
-                    this.hideLoading();
                 }else{
                     msgbox.alert("获取数据失败");
-                    this.hideLoading();
                 }
+                // this.hideLoading();
             })
         },
         initWorkflow:function () {
@@ -214,7 +211,7 @@ let config = {
         }
     },
     afterRender:function () {
-        this.showLoading();
+        // this.showLoading();
         this.actions.initData();
         let that = this;
         this.el.on("click","span.save-proxy",() => {
@@ -261,6 +258,6 @@ export const agentSetting = {
     }
 }
 
-agentSetting.show();
+// agentSetting.show();
 
 
