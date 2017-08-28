@@ -265,8 +265,8 @@ export const PMAPI = {
      * @param msg
      * @returns {PMAPI}
      */
-    sendToAllChildren: function(msg) {
-        for(let i = 0; i < window.frames.length; i++){
+    sendToAllChildren: function (msg) {
+        for (let i = 0; i < window.frames.length; i++) {
             this.sendToChild(window.frames[i], msg);
         }
         return this;
