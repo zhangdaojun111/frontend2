@@ -6,6 +6,7 @@
 import Component from "../../../../lib/component";
 import template from './data-table-agGrid.html';
 import './data-table-agGrid.scss';
+import '../../../../assets/scss/dataGrid/dataGrid-icon.scss'
 import {HTTP} from "../../../../lib/http";
 import Mediator from "../../../../lib/mediator";
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
@@ -869,7 +870,8 @@ let config = {
             }
             let con = this.el.find( '.dataGrid-btn-group' )[0];
             con.innerHTML = html;
-            con.style.display = 'block';
+            // con.style.display = 'block';
+            $(con).addClass('flex');
         },
         //请求表头数据
         getHeaderData: function () {
@@ -1692,8 +1694,15 @@ let config = {
                 this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
             }
             this.data.editMode = !this.data.editMode;
-            this.el.find( '.dataGrid-btn-group' )[0].style.display = this.data.editMode ? 'none':'block';
-            this.el.find( '.dataGrid-edit-group' )[0].style.display = this.data.editMode ? 'block':'none';
+            // this.el.find( '.dataGrid-btn-group' )[0].style.display = this.data.editMode ? 'none':'block';
+            //this.el.find( '.dataGrid-edit-group' )[0].style.display = this.data.editMode ? 'block':'none';
+           if(this.data.editMode){
+               this.el.find( '.dataGrid-btn-group' ).removeClass('flex');
+               this.el.find( '.dataGrid-edit-group' ).addClass('flex');
+           }else {
+               this.el.find( '.dataGrid-btn-group' ).addClass('flex');
+               this.el.find( '.dataGrid-edit-group' ).removeClass('flex');
+           }
             let columns = this.data.editMode ? this.columnDefsEdit : this.columnDefs;
             this.agGrid.gridOptions.api.setColumnDefs( columns );
             this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );

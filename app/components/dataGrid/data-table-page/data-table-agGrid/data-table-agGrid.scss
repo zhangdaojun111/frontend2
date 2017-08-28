@@ -23,8 +23,11 @@
 }
 
 .btn-nav {
-  height: 30px;
+  height: 60px;
   width: 100%;
+}
+.btn-nav.flex-end{
+  justify-content: flex-end;
 }
 .dataGrid-commonQuery {
   display: none;
@@ -37,7 +40,7 @@
     text-indent: 0;
     color: #666666;
     float: left;
-    width: 110px;
+    width: 90px;
     font-size: 12px;
     height: 25px;
     display: inline-block;
@@ -46,15 +49,19 @@
     appearance: none;
     -moz-appearance: none;
     -webkit-appearance: none;
-    background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 90px center transparent;
+    background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 65px center transparent;
   }
 }
 .dataGrid-btn-group {
-  float: right;
+  //float: right;
   display: none;
   margin-right: 10px;
   line-height: 25px;
   user-select: none;
+  .datagrid-icon-box{
+    display: flex;
+    align-items: center;
+  }
   a {
     cursor: pointer;
     margin-left: 20px;
@@ -62,10 +69,19 @@
     color: #B399A6;
     text-decoration: none;
     font-size: 14px;
+    display: flex;
+    align-items: center;
+    .icon-aggrid{
+      margin-right: 5px;
+      order:0;
+    }
+    span{
+      order: 1;
+    }
     img {
       display: inline-block;
-      width: 15px;
-      height: 15px;
+      width: 16px;
+      height: 16px;
       vertical-align: sub;
       margin-right: 6px;
     }
@@ -76,7 +92,7 @@
 }
 
 .dataGrid-edit-group {
-  float: right;
+  //float: right;
   display: none;
   margin-right: 10px;
   line-height: 25px;
@@ -88,10 +104,19 @@
     color: #B399A6;
     text-decoration: none;
     font-size: 14px;
+    display: flex;
+    align-items: center;
+    .icon-aggrid{
+      margin-right: 5px;
+      order:0;
+    }
+    span{
+      order: 1;
+    }
     img {
       display: inline-block;
-      width: 15px;
-      height: 15px;
+      width: 16px;
+      height: 16px;
       vertical-align: sub;
       margin-right: 6px;
     }

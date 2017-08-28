@@ -54,6 +54,7 @@ let config = {
 
         /**
          * @author zj
+         * 打开日历提醒
          */
         openRemind: function () {
             CalendarRemind.data.remindTable = this.data.remindTaskItemData.tableName;
@@ -68,27 +69,34 @@ let config = {
                 width: '1000',
                 height: '600',
                 title: '查看',
+                modal: true,
+                customSize: true,
             }).then(data => {
                 console.log(data);
             });
         },
 
-
+        /**
+         * @author zj
+         * 打开工作流
+         */
         openWorkflow: function () {
             this.el.find('.task-show-text').html(this.data.remindTaskItemData['data']['name']);
             this.el.on('click', '.task-show-text', () => {
                 console.log(this.data.remindTaskItemData);
                 PMAPI.openDialogByIframe(`/wf/approval/?record_id=${this.data.remindTaskItemData['data']['id']}&form_id=${this.data.remindTaskItemData['data']['form_id']}&table_id=${this.data.remindTaskItemData['data']['table_id']}&flow_id=${this.data.remindTaskItemData['data']['flow_id']}`,{
-                    width:1500,
-                    height:1000,
+                    width: '100%',
+                    height: '900',
                     // title:"审批工作流",
-                    modal:true
+                    modal:true,
+                    customSize: true,
                 })
             });
         }
 
     },
     afterRender: function() {
+        // console.log(this.data.remindTaskItemData);
         //this.el.attr("draggable",true);
         this.el.addClass("comment-task-item");
         this.el.find('.task-bg-color').css({backgroundColor: this.data.remindTaskItemData['color']});
@@ -121,6 +129,7 @@ let config = {
         } else if(this.data.remindTaskItemData['type'] === 3 || this.data.remindTaskItemData['type'] === 4) {
             this.actions.openWorkflow();
         }
+
         this.el.on('click','.task-state-icon', function() {
             event.stopPropagation();
             if(!$(this).is(".options-show")){
