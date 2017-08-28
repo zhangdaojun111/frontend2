@@ -1688,6 +1688,7 @@ let config={
         if( _this.el.find('table').hasClass('form-version-table-user')||  _this.el.find('table').hasClass('form-version-table-department')||  _this.el.find('table').hasClass('form-default')){
             _this.el.find('table').parents('#detail-form').css("background","#F2F2F2");
          }
+        //时间日期
 
 
     },
