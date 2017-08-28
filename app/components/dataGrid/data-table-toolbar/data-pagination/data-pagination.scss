@@ -25,9 +25,12 @@
       }
     }
     .ui-icon-refresh {
+      cursor: pointer;
+      top:0px;
       display: inline-block;
       height: 33px;
       width: 25px;
+      left: 0px;
       background: url(../../../../assets/images/dataGrid/icon_shuaxin_blue.png) no-repeat scroll center 8px  transparent;
     }
 
