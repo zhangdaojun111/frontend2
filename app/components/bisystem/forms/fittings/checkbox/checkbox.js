@@ -59,7 +59,7 @@ export class CheckboxComponent extends FormFittingAbstract {
             val.map((choosed,choosedIndex) => {
                 this.data.items.forEach((item,index) => {
                     if (choosed.id == item.id) {
-                        this.el.find('input').eq(index).attr('checked', true)
+                        this.el.find('input').eq(index).attr('checked', true);
                     }
                 })
             })

@@ -43,7 +43,6 @@ let config = {
             _.remove(this.formGroup.multiMulti, (comp) => {
                 return comp.componentId == params['componentId']
             });
-            console.log(this.formGroup.multiMulti);
         })
 
         this.el.on('click','.multi-add-btn',()=>{
@@ -120,8 +119,12 @@ export class FormMultiComponent extends BiBaseComponent{
         this.append(chart,this.el.find('.add-charts'));
         if (this.data.sources.length > 0) {
             chart.multiChart.multiSource.autoSelect.data.list = this.data.sources;
+            if (chart.data['sources']) {
+                chart.fillChart();
+            }
             chart.multiChart.multiSource.autoSelect.reload();
         };
+
         this.formGroup.multiMulti.push(chart);
     }
 

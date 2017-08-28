@@ -31,11 +31,11 @@ let config = {
 
 export class MultiChartComponent extends BiBaseComponent{
     constructor(data) {
+       let chart_config = _.cloneDeep(config)
        if (data) {
-           config.data = data
+           chart_config.data = data;
        };
-        super(config);
-       console.log(this.data);
+       super(chart_config);
     }
 
     /**
@@ -103,6 +103,20 @@ export class MultiChartComponent extends BiBaseComponent{
     };
 
     /**
+     * 填充数据
+     */
+    fillChart() {
+       console.log(this.data);
+       this.multiChart.multiSource.setValue(this.data['sources']);
+       this.multiChart.multiType.setValue(this.data['chartType']['type']);
+
+       this.multiChart.multiCheckbox.data.items = this.data['yAxis'];
+       this.multiChart.multiCheckbox.data.checkboxs = this.data['yAxis'];
+       this.multiChart.multiCheckbox.reload();
+       this.multiChart.multiCheckbox.setValue(this.data['yAxis']);
+    }
+
+    /**
      * 删除一张图表
      */
     multiDel(){
@@ -133,6 +147,10 @@ export class MultiChartComponent extends BiBaseComponent{
             };
 
             this.multiChart.multiX.autoSelect.data.choosed = [];
+            if (this.data['sources']) {
+                // this.multiChart.multiX.setValue(this.data['xAxis']);
+                this.multiChart.multiX.autoSelect.data.choosed[0] = this.data['xAxis'];
+            }
             this.multiChart.multiX.autoSelect.reload();
             this.multiChart.multiY.autoSelect.data.choosed = [];
             this.multiChart.multiY.autoSelect.reload();
