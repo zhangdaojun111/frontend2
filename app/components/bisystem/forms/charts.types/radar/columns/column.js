@@ -53,6 +53,7 @@ export class FormColumnComponent extends BiBaseComponent{
         this.data.columns = data['x_field'];
         this.data.choosed = [];
         this.reload();
+        console.log(this.data);
     }
 
     /**
@@ -60,6 +61,7 @@ export class FormColumnComponent extends BiBaseComponent{
      * @param choosed选中的表格
      */
     setValue(choosed = []){
+        console.log(this.data);
         this.data.columns.forEach((column,index) => {
             choosed.forEach(choose => {
                 if (choose.id === column.id) {

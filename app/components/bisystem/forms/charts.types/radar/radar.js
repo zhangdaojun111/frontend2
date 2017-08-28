@@ -46,9 +46,6 @@ let config = {
     },
     firstAfterRender() {
         let me = this;
-
-
-
         // 保存雷达图数据
         this.el.on('click', '.save-radar-btn', (event) => {
             this.saveChart();
@@ -188,7 +185,8 @@ export class FormRadarComponent extends BiBaseComponent{
      * reset实例，当通过路由重新进入实例，清空所有数据
      */
     reset(chart) {
-        this.data.chart.chartName.id = chart['id'];
+        this.formGroup = {};
+        this.data.chart.chartName.id = chart ? chart.id: null;
         this.editModeOnce = this.data.chart.chartName.id ? true : false;
     }
 
