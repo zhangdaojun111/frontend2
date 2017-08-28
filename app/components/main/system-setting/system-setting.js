@@ -2,6 +2,8 @@ import Component from '../../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
 import 'jquery-ui/ui/widgets/dialog.js';
+import 'jquery-ui/ui/widgets/sortable';
+import 'jquery-ui/ui/widgets/droppable';
 import './system-setting.scss';
 import template from './system-setting.html';
 import msgbox from "../../../lib/msgbox";
@@ -10,7 +12,12 @@ import {UserInfoService} from "../../../services/main/userInfoService"
 
 let config = {
     template:template,
-    data:{},
+    data:{
+        biSort:1,
+        calendarSort:2,
+        biStatus:0,
+        calendarStatus:0,
+    },
     actions:{
         showStyleSetting:function () {
             this.el.find('.style-setting').show();
@@ -28,17 +35,44 @@ let config = {
             window.localStorage.clear();
             $(window).attr("location","/login");
         },
+        getItemData:function () {
+            let biStatus = window.config.sysConfig.logic_config.login_show_bi || "10";
+            this.data.biSort = biStatus.split('')[0];
+            this.data.biStatus = biStatus.split('')[1];
+
+            let calendarStatus = window.config.sysConfig.logic_config.login_show_calendar || "20";
+            this.data.calendarSort = calendarStatus.split('')[0];
+            this.data.calendarStatus = calendarStatus.split('')[1];
+
+            this.actions.addCheckbox();
+        },
+        addCheckbox:function () {
+            let $parent = this.el.find('.sortable-box');
+            let $ul = $("<li class='isShow-calendar sort-item'><input class='calendar-Show' type='checkbox'><span>登录时自动开启日历</span>" +
+                "<i class='drag-icon'></i></li>");
+            if(this.data.calendarSort === "1"){
+                $parent.append($ul);
+            }else{
+                $parent.prepend($ul);
+            }
+            this.actions.setCheckboxStatus();
+        },
         saveSetting:function () {
-            let biflag = 0;
-            let calendarflag = 0;
+            let biflag = 10;
+            let calendarflag = 20;
             let biValue = this.el.find('input.bi-Show').prop("checked");
             let calendarValue = this.el.find('input.calendar-Show').prop("checked");
             if(biValue === true){
-                biflag = 1;
+                biflag = this.data.biSort + "1";
+            }else{
+                biflag = this.data.biSort + "0";
             }
             if(calendarValue === true){
-                calendarflag = 1;
+                calendarflag = this.data.calendarSort + "1";
+            }else{
+                calendarflag = this.data.calendarSort + "0";
             }
+
             let json = {
                 action:'save',
                 pre_type:4,
@@ -52,6 +86,7 @@ let config = {
             };
 
             UserInfoService.saveUserConfig(json,json2).then((result) => {
+                console.log(result);
                 if(result[0].succ === 1 && result[1].succ === 1){
                     window.config.sysConfig.logic_config.login_show_bi = result[0].data.toString();
                     window.config.sysConfig.logic_config.login_show_calendar = result[1].data.toString();
@@ -69,17 +104,33 @@ let config = {
             this.el.find("span.font-example").css("font-size",fontsize);
         },
         setCheckboxStatus:function () {
-            if(window.config.sysConfig.logic_config.login_show_bi === '1'){
+            let that = this;
+            this.el.find('.sortable-box').sortable({
+                containment:'.sortable-box',
+                update:function (event,ui) {
+                    that.actions.saveSortResult();
+                }
+            }).disableSelection();
+            this.el.find('.sortable-box:first').droppable({
+                accept:".sort-item",
+            });
+
+            if(this.data.biStatus === '1'){
                 this.el.find('input.bi-Show').attr("checked",true);
             }
-            if(window.config.sysConfig.logic_config.login_show_calendar === '1'){
+            if(this.data.calendarStatus === '1'){
                 this.el.find('input.calendar-Show').attr("checked",true);
             }
+        },
+        saveSortResult(event,ui){           //仅当dom位置发生变化才会触发，原地拖动不会触发
+            let temp = this.data.biSort;
+            this.data.biSort = this.data.calendarSort;
+            this.data.calendarSort = temp;
         }
     },
 
     afterRender:function () {
-        this.actions.setCheckboxStatus();
+        this.actions.getItemData();
         this.el.on('click','.style-btn',() => {
             this.actions.showStyleSetting();
         }).on('click','.rapid-btn',() => {
