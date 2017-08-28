@@ -1,89 +1,93 @@
 @import "../calendar";
-.calendar-setting {
-    height: 100%;
-    .calendar-setting-items {
-        height: 99%;
-        width: 200px;
-        float: left;
-        border: 1px solid #C1CACA;
-        position: relative;
-        .calendar-setting-items-title{
-            border-bottom: 1px solid #C1CACA;
-            padding-left: 5px;
-            background-color:rgba(242, 242, 242, 1);
-            line-height: 30px;
-            height:30px;
-            .search {
-                width: 165px;
-                display: inline-block;
-                background-color: white;
-                border: 1px solid $boder-color;
-                line-height: 24px;
-                height:24px;
-                text-align: center;
-                vertical-align: middle;
-                .setting-search {
-                    vertical-align: middle;
-                    padding: 0px 4px;
-                    width: 135px;
-                    border: none;
-                    outline: none;
-                }
-                .search-con{
-                    display: inline-block;
-                    vertical-align: middle;
-                }
-
-            }
-            .hide-con{
-                display: inline-block;
-                margin-left: 5px;
-                line-height: 30px;
-                height: 24px;
-                /* text-align: center; */
-                vertical-align: middle;
-            }
-        }
-        .header {
-            padding: 5px;
-            background: $bg-color;
-            span {
-                line-height: 28px;
-            }
-            .title {
-                display: inline-block;
-            }
-            .tool {
-                display: inline-block;
-                float: right;
-            }
-        }
-    }
-    .setting-content{
-        height: 700px;
+#calendarOpenSetting {
+    .calendar-setting {
+        font-size: 12px;
+        height: 100%;
         width: 100%;
-        overflow: auto;
-    }
-    .calendar-setting-item{
-        height: 99%;
-        float: left;
-        border: 1px solid #C1CACA;
-        overflow: hidden;
-        margin-left: 6px;
-        width:calc(100% - 220px);
-        display: inline-block;
-        .calendar-setting-item-title{
-            padding-left: 5px;
-            background-color: rgba(242, 242, 242, 1);
-            line-height: 30px;
-            text-align: left;
-            border-bottom: 1px solid $boder-color;
+        position: fixed;
+        padding: 10px;
+        box-sizing: border-box;
+        .calendar-setting-items {
+            display: inline-block;
+            height: 100%;
+            width: 200px;
+            float: left;
+            position: relative;
+            border: 1px solid $boder-color;
+            .calendar-setting-items-title{
+                border-bottom: 1px solid $boder-color;
+                padding: 3px;
+                background-color:#f2f2f2;
+                .search {
+                    width: 165px;
+                    display: inline-block;
+                    background-color: white;
+                    border: 1px solid $boder-color;
+                    line-height: 16px;
+                    text-align: center;
+                    vertical-align: middle;
+                    .setting-search {
+                        width:135px;
+                        border: none;
+                        height: 100%;
+                        padding: 4px;
+                        outline: none;
+                    }
+                    .search-con{
+                        display: inline-block;
+                        vertical-align: middle;
+                    }
+
+                }
+                .hide-con{
+                    float: right;
+                    position: relative;
+                    top: 5px;
+                }
+            }
+            .header {
+                padding: 5px;
+                background: $bg-color;
+                span {
+                    line-height: 28px;
+                }
+                .title {
+                    display: inline-block;
+                }
+                .tool {
+                    display: inline-block;
+                    float: right;
+                }
+            }
+            .setting-content{
+                height: calc(100% - 30px);
+                width: 100%;
+                overflow: auto;
+            }
         }
-        .calendar-setting-item-content{
-            height:100%;
+
+        .calendar-setting-item{
+            height: 100%;
+            float: left;
+            border: 1px solid $boder-color;
+            overflow: hidden;
+            margin-left: 6px;
+            width:calc(100% - 210px);
+            display: inline-block;
+            .calendar-setting-item-title{
+                border-bottom: 1px solid $boder-color;
+                padding: 5px;
+                background-color:#f2f2f2;
+                text-align: left;
+                line-height: 21px;
+            }
+            .calendar-setting-item-content{
+                height: calc(100% - 32px);
+            }
         }
     }
 }
+
 
 /*
 

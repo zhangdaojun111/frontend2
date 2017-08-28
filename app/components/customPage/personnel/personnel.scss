@@ -10,7 +10,13 @@
     height: 100%;
     float: left;
     .choose-department-tree {
-
+      padding: 15px;
+    }
+    .tips {
+      height: 30px;
+      line-height: 30px;
+      font-size: 15px;
+      padding-left: 15px;
     }
   }
   .personal-grid {
@@ -19,6 +25,8 @@
     float: left;
     .tips {
       float: left;
+      line-height: 30px;
+      font-size: 15px;
     }
     .btn-nav {
       height: 30px;

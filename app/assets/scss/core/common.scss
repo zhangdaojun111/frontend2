@@ -35,13 +35,13 @@ html {
 ::-webkit-scrollbar-thumb:vertical {
     height: 4px;
     background-color: #999999;
-    border-radius: 4px;
+    //border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
     width: 4px;
     background-color: #999999;
-    border-radius: 4px;
+    //border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -53,9 +53,11 @@ html {
     .text {
         overflow: auto;
         font-size: 14px;
-        line-height: 30px;
-        height: 60px;
+        line-height: 22px;
+        min-height: 60px;
         text-align: center;
+        white-space: normal;
+        word-break: break-all;
     }
     .button {
         height: 30px;
@@ -64,6 +66,13 @@ html {
         button {
             width: 80px;
             height: 30px;
+            outline: none;
+            border: 0 none;
+            background-color: #0088ff;
+            color: #fff;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 0 5px;
         }
     }
 }
@@ -73,9 +82,11 @@ html {
     .text {
         overflow: auto;
         font-size: 14px;
-        line-height: 30px;
-        height: 60px;
+        line-height: 22px;
+        min-height: 60px;
         text-align: center;
+        white-space: normal;
+        word-break: break-all;
     }
     .button {
         height: 30px;
@@ -84,6 +95,16 @@ html {
         button {
             width: 80px;
             height: 30px;
+            outline: none;
+            border: 0 none;
+            background-color: #0088ff;
+            color: #fff;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 0 5px;
+            &.no {
+                background-color: #999;
+            }
         }
     }
 }
@@ -97,6 +118,7 @@ html {
 .grid-header-info {
 
 }
+
 .pointer {
     cursor: pointer;
 }
@@ -250,4 +272,3 @@ html {
     z-index: 150;
     background-color: rgba(0, 0, 0, 0.5);
 }
-

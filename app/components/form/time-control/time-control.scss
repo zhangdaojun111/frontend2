@@ -1,7 +1,14 @@
-.cancel-x{
-  display: none;
-  cursor: pointer;
-}
-.time{
-  width: 240px;
+.component-time-control{
+  .cancel-x{
+    display: none;
+    cursor: pointer;
+    position: relative;
+  }
+  .time{
+    width: 240px;
+    display: block;
+  }
+  .timeInput{
+    display: block;
+  }
 }

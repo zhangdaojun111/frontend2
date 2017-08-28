@@ -59,11 +59,13 @@ let config = {
          * 获取部门数据，并初始化部门树和人员选择组件
          */
         getDepartmentData: function () {
+            this.showLoading();
             HTTP.getImmediately('/get_department_tree/', {type: ''}).then((res) => {
                 this.data.userData = res.data.department2user;
                 this.data.departmentData = formatTreeData(res.data.department_tree)
                 this.actions.initTree();
                 this.actions.initChoosedUsers();
+                this.hideLoading();
             });
         },
         /**
@@ -133,7 +135,8 @@ let config = {
             for (let userId in hash) {
                 users.push({
                     id: userId,
-                    name: hash[userId]['name']
+                    name: hash[userId]['name'],
+                    py: hash[userId]['username']
                 });
             }
             this.autoSelect.data.list = users;
@@ -231,19 +234,21 @@ let postMessageUtil = {
         this.el = $("<div>").appendTo('body');
         let postMessage = new PostMessage();
         postMessage.render(this.el);
-        this.el.dialog({
+        this.el.erdsDialog({
             width: 950,
             height: 600,
             modal: true,
             title: '消息推送',
+            maxable: false,
+            defaultMax: false,
             close: function () {
-                $(this).dialog('destroy');
+                $(this).erdsDialog('destroy');
                 postMessage.destroySelf();
             }
         })
     },
     hide: function () {
-        this.el.dialog('close');
+        this.el.erdsDialog('close');
     }
 }
 

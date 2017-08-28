@@ -1,3 +1,6 @@
+/**
+ * Created by zhr
+ */
 import Component from "../../../../lib/component";
 import template from './data-table-group.html';
 import {HTTP} from "../../../../lib/http"
@@ -8,13 +11,14 @@ import 'jquery-ui/ui/widgets/sortable.js';
 let config = {
     template: template,
     data: {
+        group:[],
         tableId: null,
         gridoptions: null,
         fields: [],
         myGroup:[],
+        groupField:[],
         close: function () {}
     },
-    group:[],
     actions: {
         onGroupChange: function (group) {
         },
@@ -56,8 +60,10 @@ let config = {
 
         //重置
         this.el.find( '.resetGroup' ).on( 'click',()=>{
-            console.log("重置分组")
-        } )
+            this.reload();
+            this.actions.onGroupChange( this.data.groupFields );
+        })
+
     }
 }
 

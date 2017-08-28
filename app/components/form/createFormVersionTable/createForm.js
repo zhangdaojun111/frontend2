@@ -15,7 +15,7 @@ export const CreateForm={
     isSuperuser:{},
     //创建默认表单
     formDefaultVersion(data){
-        let html=`<table class="form table table-striped table-bordered table-hover ">
+        let html=`<table class="form table table-striped table-bordered table-hover form-default">
             <tbody>
                 `;
         for(let key in data){

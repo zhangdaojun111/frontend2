@@ -2,15 +2,17 @@
 .singleRow {
     width: 100%;
     display: block;
+    float: left;
+    border-top: 1px solid $boder-color;
     .table-item-checkbox{
     }
     .set-table-item{
-        border-top: 1px solid #C1CACA;
         padding: 10px 0px;
-        width: 8%;
+        width: 9%;
         min-width: 30px;
         text-align: center;
         line-height: 30px;
+        float: left;
         select {
             width: 85%;
             height: 26px;
@@ -18,22 +20,12 @@
         .z-checkbox{
             .z-checkbox-input{
                 bottom: 2px;
-                //position: absolute;
-                //left: 0;
-                //top:0;
-                //&:before{
-                //    left: 0px;
-                //    top: 0px;
-                //}
-                //&:checked:after{
-                //    top:3px;
-                //    left: 3px;
-                //}
             }
         }
     }
     .single-select-item{
-        width: 16%;
+        width: calc(12% - 10px);
+        margin: 0px 5px;
         .popup {
             display: none;
             width: 100%;
@@ -61,7 +53,8 @@
         }
     }
     .multi-select-item{
-        width:20% !important;
+        width:calc(16% - 10px) !important;
+        margin: 0px 5px;
         .popup {
             display: none;
             width: 100%;
@@ -92,7 +85,6 @@
         cursor: pointer;
     }
     .preview-text {
-        width: 148px;
         word-break: break-all;
         word-wrap: break-word;
     }
@@ -101,19 +93,3 @@
     }
 
 }
-//.popup {
-//    z-index: 100 !important;
-//    background-color: white !important;
-//    padding-left: 0px !important;
-//    margin: 0px !important;
-//    height: auto!important;
-//    max-height: 300px!important;
-//    overflow: auto !important;
-//    li {
-//        margin-left: 0px;
-//        list-style-type: none !important;
-//        label{
-//            text-align: left;
-//        }
-//    }
-//}

@@ -109,6 +109,7 @@ window.addEventListener('message', function (event) {
                 });
                 dialogHash[data.key].element.erdsDialog(_.defaultsDeep(data.frame, {
                     modal: true,
+                    maxable: true,
                     close: function () {
                         if (dialogHash[data.key]) {
                             PMAPI.sendToParent({
