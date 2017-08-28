@@ -484,6 +484,9 @@ export const FormService={
     getAttachment(json){
         return HTTP.postImmediately('/query_attachment_list/',json);
     },
+    getThumbnails(json){
+        return HTTP.postImmediately('/get_thumbnails/',json);
+    },
 
     //重新拼装下拉框格式
     //multiBuildType 特殊多选内置分支判断
