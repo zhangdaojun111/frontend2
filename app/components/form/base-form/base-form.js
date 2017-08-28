@@ -1331,6 +1331,7 @@ let config={
                 modal:true
             }).then((res) => {
                 _this.actions.setFormValue(data.dfield,res.value,res.label);
+                _this.actions.checkValue(data,_this);
             });
         },
 
