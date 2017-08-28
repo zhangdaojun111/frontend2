@@ -1,5 +1,7 @@
-#add-wf *{
-    box-sizing: border-box;
+#add-wf{
+    div,span,a{
+        box-sizing: border-box;
+    }
 }
 #app-workflow {
     .workflow-foot .workflow-box{
@@ -24,7 +26,7 @@
         }
     }
     .icon-workflow-icon11 {
-        background: url(../../assets/images/workflow/workflow-icon.png) no-repeat;
+        background: url(../../../assets/images/workflow/workflow-icon.png) no-repeat;
         display: block;
         background-position: 0px -26px;
         width: 16px;
@@ -46,6 +48,21 @@
             margin-right: 5px;
         }
     }
-    
+    .down{
+        position: absolute;
+        top: 15px;
+        right: 88px;
+        z-index: 1;
+        height: 30px;
+        line-height: 30px;
+        width: 30px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 50%;
+        text-decoration: none;
+    }
+    #toEdit{
+        display: none;
+    }
 }
     

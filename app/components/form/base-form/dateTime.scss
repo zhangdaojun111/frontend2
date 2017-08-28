@@ -49,7 +49,7 @@ strong,b{
   width: 2em;
   border-left: 0 none;
 }
-
+//时间
 .ui-timepicker {
   text-align: center;
   padding: .5em 0;
@@ -76,6 +76,99 @@ strong,b{
   filter:Alpha(Opacity=70);
 }
 
-.btnHover:hover{
+.btnHover:hover {
   cursor: pointer;
+}
+//时间日期
+#ui-datepicker-div{
+  width: 244px;
+}
+.ui_tpicker_hour,.ui_tpicker_minute,.ui_tpicker_second,.ui_tpicker_hour_label,.ui_tpicker_minute_label,.ui_tpicker_second_label{
+  display: none;
+}
+.ui-datepicker-calendar thead{
+  border-bottom: 1px solid #CAEEFF;
+}
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active {
+  text-align: center;
+  border: 0;
+  background: white;
+}
+.ui-state-hover {
+  background: #F2F2F2 !important;
+}
+.ui-state-active{
+  background: #66CCFF !important;
+  color: #333333!important;
+}
+#ui-datepicker-div> .ui-datepicker-header{
+  margin: 0 !important;
+  width: 96%;
+  border: none;
+  background: #FAFAFA;
+  padding: .4em!important;
+}
+.ui-datepicker td {
+  border: 0;
+  padding: 1px;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+}
+.ui-datepicker td a{
+  text-align: center;
+}
+
+.ui-datepicker-buttonpane{
+  border-top: 0;
+  border-bottom: 1px solid #E4E4E4!important;
+  background: #F2F2F2;
+  height: 40px;
+}
+.ui-datepicker-month,.ui-datepicker-year{
+  font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
+  font-weight: 700;
+  font-style: normal;
+  font-size: 14px!important;
+  position: relative;
+  float: left;
+  left: 10%;
+  width: 40% !important;
+}
+//时间
+.ui-timepicker-div{
+  position: absolute;
+  bottom: 0;
+  left: 25%;
+  width: 45%;
+}
+.ui_tpicker_time_input{
+  border-bottom: 0!important;
+  background: white!important;
+  padding: 5px;
+}
+.ui-timepicker-div dl dt {
+  padding: 5px 0 0 10px;
+  font-family: '微软雅黑';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 12px;
+  color: #666666;
+}
+//今
+.ui-datepicker-current {
+  background: #CAEEFF!important;
+  float: left;
+  margin:0 !important;
+  cursor: pointer;
+  padding: .2em .6em .3em .6em;
+  width: 13%!important;
+  height: 100%!important;
+  overflow: visible;
+}
+//确定
+.ui-datepicker-close{
+  background: #0088FF!important;
+  height: 25px;
+  color: white!important;
 }

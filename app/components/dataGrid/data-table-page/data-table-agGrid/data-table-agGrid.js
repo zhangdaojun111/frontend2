@@ -29,6 +29,7 @@ import AttachmentList from "../../../form/attachment-list/attachment-list";
 import PictureAttachment from "../../../form/picture-attachment/picture-attachment";
 import {PersonSetting} from "../../../main/personal-settings/personal-settings";
 import ViewVideo from "../../../form/view-video/view-video";
+import QuillAlert from "../../../form/quill-alert/quill-alert";
 
 
 let config = {
@@ -2192,14 +2193,20 @@ let config = {
                     PMAPI.openDialogByComponent(PictureAttachment,{
                         title:'图片附件',
                         width: 1234,
-                        height: 987,
+                        height:800
                     })
                 })
                 HTTP.flush();
             }
             //富文本字段
             if( data.colDef.real_type == fieldTypeService.UEDITOR ){
-                msgBox.alert( data.value )
+                console.log(data.value);
+                QuillAlert.data.value=data.value.replace(/(\n)/g, '');
+                PMAPI.openDialogByComponent(QuillAlert,{
+                    width:800,
+                    height:500,
+                    modal:true,
+                })
             }
             //合同编辑器
             if( data.colDef.real_type == fieldTypeService.TEXT_COUNT_TYPE ){

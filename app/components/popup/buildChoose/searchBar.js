@@ -77,7 +77,9 @@ let config={
                 table_id: _this.data.tableId,
                 queryParams: JSON.stringify(queryParams)
             };
-            let res=FormService.searchByChooser(json)
+            let res=await FormService.searchByChooser(json)
+            console.log('这个res是啥');
+            console.log(res);
             _.debounce(function(){Mediator.publish('form:chooseSelect',res['data'])},300)();
         })
         _this.el.on('click','.confirm',function(){

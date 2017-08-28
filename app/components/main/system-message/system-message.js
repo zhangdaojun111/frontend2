@@ -128,7 +128,7 @@ let config = {
             this.actions.batchDelete();
         })
     }
-}
+};
 
 class SystemMessage extends Component {
 

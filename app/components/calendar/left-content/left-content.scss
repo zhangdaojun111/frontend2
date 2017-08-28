@@ -47,20 +47,16 @@ $chk_1-label-bg-color:#FFF;
       }
     }
   }
-  .label-task-children{
-    font-size: 13px !important;
-  }
-  .label-task-children{
-    padding-top: 5px;
-    padding-bottom: 5px;
-    word-break: keep-all;
-    white-space: nowrap;
-  }
   .item-content-1,.item-content-4,.item-content-3
   {
     height:27%;
     overflow: auto;
-    padding: 0px 0px 3px 10px;
+    width: 98%;
+    padding: 0px 0px 3px 5px;
+    .left-calendar-set{
+      height:100%;
+      width: 100%;
+    }
 
   }
   .item-content-2

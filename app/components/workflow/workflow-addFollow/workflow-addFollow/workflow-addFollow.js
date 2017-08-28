@@ -1,13 +1,16 @@
-import Component from '../../../lib/component';
+/**
+ *@author qiumaoyun
+ *添加关注人page body
+ */
+import Component from '../../../../lib/component';
 import template from './workflow-addFollow.html';
 import './workflow-addFollow.scss';
-import Mediator from '../../../lib/mediator';
-import SelectStaff from './select-staff/select-staff';
-import SelectStaffNoDel from './select-staff-no-del/select-staff-no-del';
-import SelectedStaff from './selected-staff/selected-staff';
-import SelectedStaffNoDel from './selected-staff-no-del/selected-staff-no-del';
-import {PMAPI,PMENUM} from '../../../lib/postmsg';
-import selTemplate from './select-template';
+import Mediator from '../../../../lib/mediator';
+import SelectStaff from '../select-staff/select-staff';
+import SelectStaffNoDel from '../select-staff-no-del/select-staff-no-del';
+import SelectedStaff from '../selected-staff/selected-staff';
+import SelectedStaffNoDel from '../selected-staff-no-del/selected-staff-no-del';
+import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 
 let config={
     template: template,
@@ -26,6 +29,9 @@ let config={
                     par[i].style.display = "none";
                 }
             }
+        },
+        init(){
+            
         }
     },
     afterRender(){
@@ -38,12 +44,24 @@ let config={
             this.data.idArr=res;
         });
 
+        this.check = {};
         //部门选择
         Mediator.subscribe('workflow:checkDept', (res)=> {
-
+            let checked=this.el.find('#staffMulti>div>div');
             $.each(res,(i,val)=>{
                 val.id=i;
-                this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+                if(checked.length===0){
+                    this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+                }else{
+                    for(var a=0;a<checked.length;a++){
+                        if(i===$(checked[a]).data('id')){
+                            return false;
+                        }else{
+                            this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+                            break;
+                        }
+                    }
+                }
             });
         });
         Mediator.subscribe('workflow:checkDeptAlready', (res)=> {
@@ -59,7 +77,6 @@ let config={
 
         //部门反选，删除SelectedStaff组件
         Mediator.subscribe('workflow:unCheckDept', (res)=> {
-
             let userArr=[];
             for(var id in res){
                 userArr.push(id);
@@ -84,8 +101,6 @@ let config={
 
         //注册SelectedStaff组件
         Mediator.subscribe('workflow:pubCheck', (res)=> {
-            console.log(res);
-            console.log("....................");
             this.append(new SelectedStaff(res), this.el.find('#selected'));
         });
 
@@ -144,7 +159,7 @@ let config={
             nameArr=_.uniq(nameArr);
             idArr=_.uniq(idArr);
             $('#add-follow').hide();
-            $('#addFollowerList').html(nameArr);
+            $('#add-home #addFollowerList').html(nameArr);
 
             Mediator.publish('workflow:focus-users',idArr);                                  
         });
