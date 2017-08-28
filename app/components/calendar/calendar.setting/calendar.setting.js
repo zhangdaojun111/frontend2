@@ -8,7 +8,6 @@ import Mediator from '../../../lib/mediator';
 import CalendarSettingItem from './calendar.setting.item/calendar.setting.item';
 import CalendarSet from '../../calendar.set/calendar.set';
 import {CalendarSetService} from "../../../services/calendar/calendar.set.service"
-import {PMAPI, PMENUM} from '../../../lib/postmsg';
 
 let config = {
     template: template,
