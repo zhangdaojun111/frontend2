@@ -22,9 +22,10 @@ let config = {
         },
         showfirst(){
             let record_progress = config.actions.toPercent(this.data['record_progress']);
-            if(record_progress === "100%"){
-                this.el.find(".end-workflow").hide();
-            }
+            console.log(record_progress);
+            // if(record_progress === "100.0%"){
+            //     this.el.find(".end-workflow").hide();
+            // }
             this.el.find(".workflow-schedule").css({"width":record_progress});
         }
     },
