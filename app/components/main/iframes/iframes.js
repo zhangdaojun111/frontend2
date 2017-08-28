@@ -281,6 +281,7 @@ export const IframeInstance = new Component({
             //第一部分：获取系统关闭时未关闭的tabs
             let that = this;
             TabService.getOpeningTabs().then((result) => {
+                console.log(result);
                 let tabs = {};
                 //将未关闭的标签id加入tempList
                 if(result[0].succ === 1){
@@ -296,8 +297,13 @@ export const IframeInstance = new Component({
                     console.log("get tabs failed",result[0].err);
                 }
 
+
                 if(result[1].succ === 1){
                     let biConfig = result[1];
+                    //检测数据biConfig.data是否为两位数，如果不是，给用户设置默认值10
+                    if(biConfig.data !== "10" && biConfig.data !== "11" && biConfig.data !== "20" && biConfig.data !== "21"){
+                        biConfig.data = "10";
+                    }
                     if((biConfig.data && biConfig.data.toString() !== "10" && biConfig.data.toString() !== "20")){
                         that.data.biCalendarList.push({
                             id: 'bi',
@@ -310,9 +316,12 @@ export const IframeInstance = new Component({
                     console.log("get tabs failed",result[1].err);
                 }
 
-
                 if(result[2].succ === 1){
                     let calendarConfig = result[2];
+                    //检测数据calendarConfig.data是否为两位数，如果不是，给用户设置默认值20
+                    if(calendarConfig.data !== "10" && calendarConfig.data !== "11" && calendarConfig.data !== "20" && calendarConfig.data !== "21"){
+                        calendarConfig.data = "20";
+                    }
                     window.config.sysConfig.logic_config.login_show_calendar = calendarConfig.data.toString();
                     if((calendarConfig.data && calendarConfig.data.toString() === "11")){
                         that.data.biCalendarList.unshift({
