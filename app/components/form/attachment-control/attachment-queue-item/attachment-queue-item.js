@@ -33,7 +33,7 @@ let config = {
                this.el.find('.keep-on-attaching').css('display','none');
                this.el.find('.pause-attaching').css('display','none');
                this.el.find('.cancel-attaching').css('display','none');
-               this.el.find('.delete-file').css('display','block');
+               this.el.find('.delete-file').css('display','inline');
             }
         },
         processEvent(event){
@@ -43,7 +43,7 @@ let config = {
         },
         pauseUploading:function(){
             this.el.find('.pause-attaching').css('display','none');
-            this.el.find('.keep-on-attaching').css('display','block');
+            this.el.find('.keep-on-attaching').css('display','inline');
             this.data._controlItem.uploadingState = 'paused';
         },
         keepOnUploading:function() {
@@ -52,7 +52,7 @@ let config = {
         },
         restartUploading:function() {
             this.el.find('.keep-on-attaching').css('display','none');
-            this.el.find('.pause-attaching').css('display','block');
+            this.el.find('.pause-attaching').css('display','inline');
             this.data._controlItem.uploadingState = 'on';
             this.actions.transData();
         },
@@ -63,7 +63,7 @@ let config = {
         showReuploadingButton:function(){
             this.el.find('.keep-on-attaching').css('display','none');
             this.el.find('.pause-attaching').css('display','none');
-            this.el.find('.re-uploading').css('display','block');
+            this.el.find('.re-uploading').css('display','inline');
             this.data._controlItem.uploadingState = 'stopped';
         },
         cancelUploading:function () {
@@ -135,7 +135,7 @@ let config = {
 
         this.el.on('click','.processing',()=>{
             this.el.find('.processing').css('display','none');
-            this.el.find('.cancel-attaching').css('display','block');
+            this.el.find('.cancel-attaching').css('display','inline');
             this.actions.pauseUploading();
         }).on('click','.pause-attaching',()=>{
             this.actions.pauseUploading();
