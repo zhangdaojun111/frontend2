@@ -33,14 +33,17 @@ let config = {
 
     actions:{
         initData:function () {
+            let that = this;
             UserInfoService.getAgentData().done((result) => {
-                console.log(result);
                 if(result.success === 1){
-                    this.originData = result;
-                    this.data.selectedAgent = {
-                        id:result.data.user_id,
-                        name:result.data.agent_name
-                    };
+                    that.originData = result;
+                    if(result.data.hasOwnProperty('user_id') && result.data.hasOwnProperty('agent_name')){
+                        that.data.selectedAgent = {
+                            id:result.data.user_id,
+                            name:result.data.agent_name
+                        };
+                    }
+
                     this.isOpen = result.data.is_apply ? 1:0;
                     $.extend(true,this.formatData,this.originData.data.workflow_list);
 
@@ -95,14 +98,17 @@ let config = {
             let $wrap = this.el.find('.name-list');
             let tempData = [];
             for(let row of this.originData.data.user_list){
-                if(row.name && row.name.trim() !== '' && row.id && row.id !== ''){
+                if(row.name && row.name.trim() !== '' && row.id && row.id.trim() !== ''){
                     row.py = row.f7_p.join(',');
                     tempData.push(row);
+                    console.log(row);
                 }
             }
             let that = this;
             let temp = [];
-            temp.push(this.data.selectedAgent);
+            if(Object.keys(this.data.selectedAgent).length > 0){
+                temp.push(this.data.selectedAgent);
+            }
             let autoSelect = new AutoSelect({
                 list: tempData,
                 multiSelect: false,
@@ -113,7 +119,6 @@ let config = {
                     that.actions.setAgentId(choosed);
                 }
             });
-
 
             this.atSelect = autoSelect;
             autoSelect.render($wrap);
