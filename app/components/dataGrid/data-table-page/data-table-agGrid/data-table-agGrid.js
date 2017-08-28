@@ -1694,15 +1694,15 @@ let config = {
                 this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
             }
             this.data.editMode = !this.data.editMode;
-            // this.el.find( '.dataGrid-btn-group' )[0].style.display = this.data.editMode ? 'none':'block';
-            //this.el.find( '.dataGrid-edit-group' )[0].style.display = this.data.editMode ? 'block':'none';
-           if(this.data.editMode){
-               this.el.find( '.dataGrid-btn-group' ).removeClass('flex');
-               this.el.find( '.dataGrid-edit-group' ).addClass('flex');
-           }else {
-               this.el.find( '.dataGrid-btn-group' ).addClass('flex');
-               this.el.find( '.dataGrid-edit-group' ).removeClass('flex');
-           }
+            this.el.find( '.dataGrid-btn-group' )[0].style.display = this.data.editMode ? 'none':'flex';
+            this.el.find( '.dataGrid-edit-group' )[0].style.display = this.data.editMode ? 'flex':'none';
+           // if(this.data.editMode){
+           //     this.el.find( '.dataGrid-btn-group' ).removeClass('flex');
+           //     this.el.find( '.dataGrid-edit-group' ).addClass('flex');
+           // }else {
+           //     this.el.find( '.dataGrid-btn-group' ).addClass('flex');
+           //     this.el.find( '.dataGrid-edit-group' ).removeClass('flex');
+           // }
             let columns = this.data.editMode ? this.columnDefsEdit : this.columnDefs;
             this.agGrid.gridOptions.api.setColumnDefs( columns );
             this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
