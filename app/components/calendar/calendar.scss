@@ -8,32 +8,12 @@ $bg-color: rgba(14, 122, 239, 0.290196);
 $btn-bg-color: #4892FC;
 $grid-hover: rgba(255, 255, 255, 1);
 $grid-bg-color: rgba(248, 248, 248, 1);
-/**{
-    box-sizing: border-box;
-}*/
+
 .flex{
     display: flex;
     align-items: center;
 }
-/*.flex.flex-column {
-    flex-direction: column;
-}
-.flex.flex-start{
 
-    align-items: flex-start;
-}
-.flex.flex-between{
-
-    justify-content: space-between;
-}
-.flex.flex-wrap{
-    flex-wrap: wrap;
-}
-
-.flex-item {
-    flex-grow: 1;
-    flex-shrink: 0;
-}*/
 .calendar-iframe {
     //min-width: 1200px;
     width: 100%;
