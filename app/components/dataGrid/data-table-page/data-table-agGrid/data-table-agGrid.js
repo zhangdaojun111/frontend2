@@ -529,7 +529,7 @@ let config = {
             }
             let bgStyle = ' ';
             if( color != 'transparent' ){
-                bgStyle = ' style = "display: block;width: 100%;height: 100%;background:' + color+'"';
+                bgStyle = ' style = "padding: 0 3px;display: block;width: 100%;height: 100%;background:' + color+'"';
             }
 
             //前端表达式值计算
