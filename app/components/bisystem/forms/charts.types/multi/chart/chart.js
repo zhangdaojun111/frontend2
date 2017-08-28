@@ -36,6 +36,7 @@ export class MultiChartComponent extends BiBaseComponent{
            chart_config.data = data;
        };
        super(chart_config);
+       this.editModeOnce = this.data['xAxis'] ? true : false
     }
 
     /**
@@ -106,7 +107,6 @@ export class MultiChartComponent extends BiBaseComponent{
      * 填充数据
      */
     fillChart() {
-       console.log(this.data);
        this.multiChart.multiSource.setValue(this.data['sources']);
        this.multiChart.multiType.setValue(this.data['chartType']['type']);
 
@@ -147,10 +147,11 @@ export class MultiChartComponent extends BiBaseComponent{
             };
 
             this.multiChart.multiX.autoSelect.data.choosed = [];
-            if (this.data['sources']) {
+            if (this.editModeOnce && this.data['sources']) {
                 // this.multiChart.multiX.setValue(this.data['xAxis']);
                 this.multiChart.multiX.autoSelect.data.choosed[0] = this.data['xAxis'];
-            }
+                this.editModeOnce = false;
+            };
             this.multiChart.multiX.autoSelect.reload();
             this.multiChart.multiY.autoSelect.data.choosed = [];
             this.multiChart.multiY.autoSelect.reload();

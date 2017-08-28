@@ -103,22 +103,23 @@ let config = {
             }
 
             this.trigger('onSelect', this.data.choosed);
-
-            if (this.data.choosed.length) {
-                if (this.data.displayChoosed === true) {
-                    this.choosedWrap.show();
-                }
-                let html = [];
-                this.data.choosed.forEach((item) => {
-                    let checkbox = this.listWrap.find(`input:checkbox[data-id=${item.id}]`);
-                    checkbox[0].checked = true;
+            if (this.data.list.length) {
+                if (this.data.choosed.length) {
                     if (this.data.displayChoosed === true) {
-                        html.push(`<div class="item" title="点击删除" data-id="${item.id}">${item.name}</div>`)
-                    };
-                });
-                this.choosedWrap.html(html.join(''));
-            } else {
-                this.choosedWrap.hide();
+                        this.choosedWrap.show();
+                    }
+                    let html = [];
+                    this.data.choosed.forEach((item) => {
+                        let checkbox = this.listWrap.find(`input:checkbox[data-id=${item.id}]`);
+                        checkbox[0].checked = true;
+                        if (this.data.displayChoosed === true) {
+                            html.push(`<div class="item" title="点击删除" data-id="${item.id}">${item.name}</div>`)
+                        };
+                    });
+                    this.choosedWrap.html(html.join(''));
+                } else {
+                    this.choosedWrap.hide();
+                }
             }
         },
         selectAll: function () {

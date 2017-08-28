@@ -55,7 +55,7 @@ export class CheckboxComponent extends FormFittingAbstract {
      * 设置checkbox值
      */
     setValue(val) {
-        if(val.length >= 0) {
+        if(val && val.length >= 0) {
             val.map((choosed,choosedIndex) => {
                 this.data.items.forEach((item,index) => {
                     if (choosed.id == item.id) {
