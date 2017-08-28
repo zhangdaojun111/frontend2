@@ -562,11 +562,11 @@ let config = {
             week = CalendarTimeService.getWeek(),
             day = CalendarTimeService.getDay();
         this.data.today = Object.assign({}, {'y': year, 'm':month, 'd':day, 'w':week});
-        this.actions.createMonthCalendar(year, month);
 
         this.data.selectData = this.data.today;
         this.data.todayStr = CalendarTimeService.formatDate(year, month, day);
         this.data.chooseDate = CalendarTimeService.formatDate(year, month, day);
+        this.actions.createMonthCalendar(year, month);
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
