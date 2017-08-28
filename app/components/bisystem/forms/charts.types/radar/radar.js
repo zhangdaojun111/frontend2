@@ -110,7 +110,6 @@ export class FormRadarComponent extends BiBaseComponent{
             this.data.chart = chart[0];
         }
     }
-
     /**
      * 填充图表数据
      * @param chart = this.data.chart
