@@ -1,15 +1,22 @@
 .component-select-group{
   .select-all{
-    padding-top: 5px;
-    .float-button-group-hide{
-      display: inline-block;
-      .float-button-group-show{
-        margin-top: -15px;
-        cursor: pointer;
+    .calendar-select-table{
+      word-break: keep-all;
+      white-space: nowrap;
+      .float-button-group-hide{
+        display: inline-block;
+        .float-button-group-show{
+          margin-top: -15px;
+          cursor: pointer;
+        }
       }
-    }
-    .clear{
-      clear: both;
+      .clear{
+        clear: both;
+      }
+      .select-label-show{
+        position: relative;
+        bottom: 3px;
+      }
     }
     .checkbox-label{
       //cursor: pointer;
@@ -47,18 +54,21 @@
       //margin-right: 5px;
       cursor: pointer;
     }
-    .label-select-all-checked + label:after {
-      content: '\2714'; //勾选符号
-      position: absolute;
-      height: 14px;
-      width: 13px;
-      padding-right: 1px;
-      top: 0px;
-      left: 0px;
-      color: #2398df;
-      text-align: center;
-      font-size: 14px;
+    .label-select-all-checked{
+      content: url('../../../../assets/images/calendar/calendar-checked-true.png');
     }
+    //.label-select-all-checked + label:after {
+    //  content: '\2714'; //勾选符号
+    //  position: absolute;
+    //  height: 14px;
+    //  width: 13px;
+    //  padding-right: 1px;
+    //  top: 0px;
+    //  left: 0px;
+    //  color: #2398df;
+    //  text-align: center;
+    //  font-size: 14px;
+    //}
     .float-button-group{
       width:200px;
       height:20px;
@@ -71,7 +81,7 @@
         background-color: rgb(242,242,242);
       }
       .hide-span{
-        width:150px;
+        width:130px;
         display:block ;
         background-color: rgba(250, 250, 250, 1);
         line-height: 30px;
@@ -88,7 +98,7 @@
       }
       .search-function{
         display: none;
-        margin-left: 150px;
+        margin-left: 160px;
         position: absolute;
         margin-top:-32px;
         z-index: 1000;
@@ -106,6 +116,13 @@
         }
       }
     }
+  }
+  .label-task-children{
+  }
+  .label-task-children{
+    padding: 5px 0px 5px 10px;
+    word-break: keep-all;
+    white-space: nowrap;
   }
 }
 
