@@ -9,17 +9,29 @@
 }
 
 .btn-nav {
-  height: 30px;
+  height: 60px;
   width: 100%;
+}
+.btn-nav.flex{
+  display: flex;
+  align-items: center;
+}
+.btn-nav.flex.flex-end{
+  justify-content: flex-end;
 }
 
 .workflowGrid-btn-group {
-  float: right;
-  display: none;
+  //float: right;
+  //display: none;
   margin-right: 10px;
   line-height: 30px;
   height: 30px;
-  display: block;
+  display: flex !important;
+  align-items: center;
+  .datagrid-icon-box{
+    display: flex;
+    align-items: center;
+  }
   a {
     cursor: pointer;
     margin-left: 20px;
@@ -27,6 +39,11 @@
     color: #B399A6;
     text-decoration: none;
     font-size: 14px;
+    display: flex;
+    align-items: center;
+    .icon-aggrid{
+      margin-right: 5px;
+    }
     img {
       display: inline-block;
       width: 15px;

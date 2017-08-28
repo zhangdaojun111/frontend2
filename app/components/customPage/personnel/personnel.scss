@@ -24,19 +24,18 @@
     height: 100%;
     float: left;
     .tips {
-      //float: left;
-      //line-height: 30px;
-      font-size: 15px;
-      position: absolute;
+      float: left;
       line-height: 60px;
+      position: absolute;
+      font-size: 15px;
     }
     .btn-nav {
       height: 60px;
       width: 100%;
-      &.flex{
+      &.flex {
         display: flex;
         align-items: center;
-        justify-content:flex-end;
+        justify-content: flex-end;
       }
       .dataGrid-commonQuery {
         //display: none;
@@ -63,11 +62,19 @@
         }
       }
       .dataGrid-btn-group {
-        float: right;
-        display: block;
+        //float: right;
+        display: flex;
+        align-items: center;
         margin-right: 10px;
-        line-height: 30px;
-        height: 30px;
+        height: 60px;
+
+        .datagrid-icon-box{
+          display: flex;
+          align-items: center;
+          .icon-aggrid {
+            margin-right: 5px;
+          }
+        }
         a {
           cursor: pointer;
           margin-left: 20px;
@@ -77,13 +84,20 @@
           font-size: 14px;
           img {
             display: inline-block;
-            width: 15px;
-            height: 15px;
+            width: 16px;
+            height: 16px;
             vertical-align: sub;
-            margin-right: 6px;
+            margin-right: 5px;
           }
         }
       }
+    }
+    .btn-nav.flex{
+      display: flex;
+      align-items: center;
+    }
+    .btn-nav.flex.flex-end{
+      justify-content: flex-end;
     }
 
     .ag-grid-con {
