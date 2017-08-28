@@ -259,7 +259,6 @@ let config = {
                     if(!this.isEdit) {
                         this.actions.saveCommonQuery(data.value);
                     } else {
-                        debugger
                         this.actions.deleteCommonQuery(this.id,data.value);
                         // this.actions.saveCommonQuery(data.value);
                     }
@@ -326,7 +325,6 @@ let config = {
                 'id': id
             };
             dataTableService.delPreference(obj).then( res=>{
-                debugger
                 if(res.succ == 0) {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
@@ -337,7 +335,7 @@ let config = {
                         }
                     }
                     this.data.deleteCommonQuery = true;
-                    if(this.isEdit) {
+                    if(this.isEdit && value) {
                         this.actions.saveCommonQuery(value);
                         this.el.find('.common-search-compile').html(`<span class="img"></span>`);
                         this.itemDeleteChecked = !this.itemDeleteChecked;
