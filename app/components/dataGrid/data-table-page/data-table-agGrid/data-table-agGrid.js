@@ -2149,7 +2149,7 @@ let config = {
             //富文本字段
             if( data.colDef.real_type == fieldTypeService.UEDITOR ){
                 console.log(data.value);
-                QuillAlert.data.value=data.value;
+                QuillAlert.data.value=data.value.replace(/(\n)/g, '');
                 PMAPI.openDialogByComponent(QuillAlert,{
                     width:800,
                     height:500,
