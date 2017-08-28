@@ -44,10 +44,10 @@ let config = {
                 for (let i = 0; i < dom.length; i++) {
                     this.data.group.push(dom[i].attributes['field'].nodeValue);
                 }
-                if(this.data.group == this.data.groupFields) {
+                if(this.data.group.join() == this.data.groupFields.join()) {
                     this.el.find('.resetGroup').css('color','#999999');
                 } else {
-                    this.el.find('.resetGroup').css('color','#ecf9ff');
+                    this.el.find('.resetGroup').css('color','#0F79EF');
                 }
                 dataTableService.savePreference({
                     action: 'group',
