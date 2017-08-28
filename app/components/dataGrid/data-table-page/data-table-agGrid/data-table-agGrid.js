@@ -176,6 +176,8 @@ let config = {
         namespace: '',
         //选择的数据
         selectData: [],
+        //是否有sheet
+        isShowSheet: false,
 
     },
     //生成的表头数据
@@ -1354,7 +1356,11 @@ let config = {
                 this.append(this.pagination, this.el.find('.pagination'));
             }else {
                 this.el.find( '.pagination' )[0].style.height = '0px';
-                this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 40px )';
+                if( this.data.isShowSheet ){
+                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 60px )';
+                }else {
+                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 40px )';
+                }
             }
             //高级查询
             if( this.el.find( '.expert-search-btn' )[0] ){
@@ -1494,6 +1500,7 @@ let config = {
         //创建sheet分页数据
         createSheetTabs: function ( res ) {
             if( res.rows.length > 0 ){
+                this.data.isShowSheet = true;
                 let arr = [{name:'全部数据',id:0,value:[]}];
                 for( let r of res.rows ){
                     let obj = {
