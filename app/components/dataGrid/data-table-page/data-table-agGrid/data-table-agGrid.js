@@ -170,7 +170,9 @@ let config = {
         //编辑保存参数
         saveEditObjArr: [],
         //是否为含有默认字段的表
-        haveSystemsFields: false
+        haveSystemsFields: false,
+        //表的类型
+        namespace: '',
     },
     //生成的表头数据
     columnDefs: [],
@@ -886,6 +888,7 @@ let config = {
                 this.data.myGroup = (res[0]['group'] != undefined) ? JSON.parse(res[0]['group'].group) : [];
                 this.data.fieldsData = res[1].rows || [];
                 this.data.permission = res[1].permission;
+                this.data.namespace = res[1].namespace;
                 this.data.headerColor = dgcService.createHeaderStyle( this.data.tableId,res[1].field_color );
                 //获取表的表单工作流参数
                 this.actions.setPrepareParmas( res[4] );
@@ -1042,7 +1045,10 @@ let config = {
                     footerData: this.data.footerData
                 }
                 //赋值
-                this.agGrid.actions.setGridData(d);
+                try {
+                    this.agGrid.actions.setGridData(d);
+                }catch(e){}
+
             } )
             HTTP.flush();
         },
@@ -1445,6 +1451,10 @@ let config = {
                     //对应关系减少的背景色
                     return {background:'#fd8f8f'};
                 }
+            }
+            //分组样式
+            if( this.data.groupCheck && !param["data"].children ){
+                return {background:'#E6F7FF'};
             }
         },
         //创建sheet分页数据
@@ -2275,11 +2285,30 @@ let config = {
                 this.actions.gridHandle( data )
             }
         },
+        //查看编辑权限判断
+        viewOrEditPerm: function (type) {
+            let obj = {
+                view: '查看',
+                edit: '编辑',
+            }
+            let test = obj[type];
+            if( this.data.namespace == 'external' && ( type == 'view'||type == 'edit' ) ){
+                msgBox.alert( '该表为外部数据表,不可' + test + '。' );
+            }
+            if( this.data.permission.view == 0 && type == 'view' ){
+                msgBox.alert( '没有查看权限' );
+            }
+            if( this.data.permission.edit == 0 && type == 'edit' ){
+                msgBox.alert( '没有编辑权限' );
+            }
+        },
         //操作列点击事件
         gridHandle: function ( data ) {
             console.log( "操作" )
             console.log( data )
+            console.log( this.data.namespace )
             if( data.event.srcElement.className == 'gridView' ){
+                this.actions.viewOrEditPerm( 'view' );
                 console.log( '查看' )
                 let btnType = 'view';
                 if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 ){
@@ -2300,6 +2329,7 @@ let config = {
                 this.actions.openSourceDataGrid( url,title );
             }
             if( data.event.srcElement.className == 'gridEdit' ){
+                this.actions.viewOrEditPerm( 'edit' );
                 console.log( '编辑' )
                 let obj = {
                     table_id: this.data.tableId,
@@ -2328,11 +2358,40 @@ let config = {
 
                 })
             }
+            //半触发操作
+            if( data.event.srcElement.className == 'customOperate' ){
+                let id = data["event"]["target"]["id"];
+                for (let d of this.data.customOperateList) {
+                    if (d["id"] == id) {
+                        this.actions.customOperate(d);
+                    }
+                }
+            }
+            //行级操作
+            if( data.event.srcElement.className == 'rowOperation' ){
+                let id = data["event"]["target"]["id"];
+                for(let ro of this.data.rowOperation){
+                    if(ro['row_op_id'] == id){
+                        //在这里处理脚本
+                        //如果前端地址不为空，处理前端页面
+                        this.actions.doRowOperation(ro,data);
+                    }
+                }
+            }
+        },
+        //半触发操作
+        customOperate: function (d) {
+
+        },
+        //行级操作
+        doRowOperation: function (ro,data) {
+
         },
         //行双击
         onRowDoubleClicked: function (data) {
             console.log( "行双击查看" )
             console.log( data )
+            this.actions.viewOrEditPerm( 'view' );
             //屏蔽分组行
             if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0)||this.data.editMode ){
                 return;

@@ -4,6 +4,7 @@ let css = `
 .form-setting-textarea-popup {
     overflow: hidden;
     font-size: 12px;
+    padding: 20px;
 }
 .form-setting-textarea-popup-tips {
     margin: 0;
@@ -76,6 +77,9 @@ let popupSetting = {
     data: {
         textareaTextDict,
         dealedTextareaTextDict,
+        array1: [66,0,1,2,3,4,5,6,7,8,9,10,11,12,13,59,15,60,17,61],
+        array2: [67,44,49,45,50,46,62,58,47,63,48,64,65,14,16,18],
+        array3: [19,20,21,22,23,24,25,26,27,28,29,30,31,32,51,52,53,54,33,34,35,36,37,38,39,40,41,55,42,56,43,57],
         css: css.replace(/(\n)/g, '')
     },
     actions: {
