@@ -2141,7 +2141,7 @@ let config = {
                     PMAPI.openDialogByComponent(PictureAttachment,{
                         title:'图片附件',
                         width: 1234,
-                        height: 987,
+                        height:800
                     })
                 })
                 HTTP.flush();

@@ -9,6 +9,8 @@ import 'jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css';
 import 'jquery-ui';
 import '../base-form/base-form.scss'
 import template from  './datetime-control.html';
+import './datetime-control.scss';
+
 import msgbox from '../../../lib/msgbox';
 let config={
     template:template,
@@ -44,6 +46,8 @@ let config={
         }else{
             _this.el.find(".datetime").val("年/月/日 时:分:秒");
         }
+
+        //_this.el.find('.ui_tpicker_time_input').attr("disabled",false);
         //控制到时分秒
         _this.el.find(".datetime").datetimepicker({
             monthNamesShort: [ "一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月" ],

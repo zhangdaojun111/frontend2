@@ -1684,15 +1684,13 @@ let config={
         this.actions.changeOptions();
         this.actions.setDataFromParent();
         this.actions.addBtn();
-        //固定按钮
-        // _this.el.on('scroll','.wrap',function(){
-        //     console.log('scroll');
-        //     _this.el.find('.ui-btn-box').css({'bottom':(-1*$('.wrap').get(0).scrollTop +' px'),'width':'calc(100% + '+$('.wrap').get(0).scrollLeft+'px)'});
-        // })
+
         //默认表单样式
         if( _this.el.find('table').hasClass('form-version-table-user')||  _this.el.find('table').hasClass('form-version-table-department')||  _this.el.find('table').hasClass('form-default')){
             _this.el.find('table').parents('#detail-form').css("background","#F2F2F2");
          }
+
+
     },
     beforeDestory(){
         this.el.off();
