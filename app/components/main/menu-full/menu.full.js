@@ -1,7 +1,6 @@
 import Component from '../../../lib/component';
 import template from './menu.full.html';
 import './menu.full.scss';
-import 'jquery-ui/ui/widgets/menu';
 import {FullMenuItem} from './item/item';
 
 function searchData(menu, text) {

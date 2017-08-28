@@ -7,7 +7,7 @@ import template from './add-item.html';
 let css = ``;
 css = css.replace(/(\n)/g, '')
 let AddItem = {
-    template: template.replace(/\"/g, '\''),
+    template: template.replace(/(\")/g, '\''),
     data: {
         text:'',
         newItems:[],
@@ -46,7 +46,7 @@ let AddItem = {
         //保存新选项
         saveItems(){
             HTTP.postImmediately({url:'/add_select_item/',data:{
-                field_id: this.data.data["id"],
+                field_id: this.data.fieldId,
                 content_list: JSON.stringify(this.data.newItems)
             }}).then(res=>{
                 if(res.success == 1){
