@@ -16,81 +16,55 @@ To change `display` (e.g. `display: inline-block;`), we suggest using a common C
 // HTML
 <i class="icon icon-home"></i>
 */
-//.icon-aggrid{
-//    background: url(../../images/dataGrid/sprite-aggrid-icon.png) no-repeat;
-//    width: 16px;
-//    height: 16px;
-//    background-size: ;
-//}
-//.icon-aggrid-icon1 {
-//    background-image: url(aggrid-icon.png);
-//    background-position: -26px 0px;
-//    width: 16px;
-//    height: 16px;
-//}
-//.icon-aggrid-icon10 {
-//    background-image: url(aggrid-icon.png);
-//    background-position: 0px -52px;
-//    width: 16px;
-//    height: 16px;
-//}
-//.icon-aggrid-icon11 {
-//    background-image: url(aggrid-icon.png);
-//    background-position: 0px -26px;
-//    width: 16px;
-//    height: 16px;
-//}
-//.icon-aggrid-icon12 {
-//    background-image: url(aggrid-icon.png);
-//    background-position: -26px -26px;
-//    width: 16px;
-//    height: 16px;
-//}
-//.icon-aggrid-icon2 {
-//    background-image: url(aggrid-icon.png);
-//    background-position: -52px 0px;
-//    width: 16px;
-//    height: 16px;
-//}
-//.icon-aggrid-icon3 {
-//    background-image: url(aggrid-icon.png);
-//    background-position: -52px -26px;
-//    width: 16px;
-//    height: 16px;
-//}
-//.icon-aggrid-icon4 {
-//    background-image: url(aggrid-icon.png);
-//    background-position: 0px 0px;
-//    width: 16px;
-//    height: 16px;
-//}
-//.icon-aggrid-icon5 {
-//    background-image: url(aggrid-icon.png);
-//    background-position: -26px -52px;
-//    width: 16px;
-//    height: 16px;
-//}
-//.icon-aggrid-icon6 {
-//    background-image: url(aggrid-icon.png);
-//    background-position: -52px -52px;
-//    width: 16px;
-//    height: 16px;
-//}
-//.icon-aggrid-icon7 {
-//    background-image: url(aggrid-icon.png);
-//    background-position: -78px 0px;
-//    width: 16px;
-//    height: 16px;
-//}
-//.icon-aggrid-icon8 {
-//    background-image: url(aggrid-icon.png);
-//    background-position: -78px -26px;
-//    width: 16px;
-//    height: 16px;
-//}
-//.icon-aggrid-icon9 {
-//    background-image: url(aggrid-icon.png);
-//    background-position: -78px -52px;
-//    width: 16px;
-//    height: 16px;
-//}
+.icon-aggrid{
+    background: url(../../images/dataGrid/sprite-datagrid-icon.png) no-repeat;
+    width: 16px;
+    height: 16px;
+    background-size:contain;
+    display: block;
+}
+
+.icon-aggrid-icon1 {
+    background-position: -26px 0px;
+
+}
+.icon-aggrid-icon10 {
+    background-position: -26px -52px;
+}
+.icon-aggrid-icon11 {
+    background-position: 0px -26px;
+}
+.icon-aggrid-icon12 {
+    background-position: -26px -26px;
+}
+.icon-aggrid-icon13 {
+    background-position: -52px 0px;
+}
+.icon-aggrid-icon14 {
+    background-position: -52px -26px;
+}
+.icon-aggrid-icon2 {
+    background-position: 0px -52px;
+}
+.icon-aggrid-icon3 {
+    background-position: 0px 0px;
+}
+.icon-aggrid-icon4 {
+    background-position: -52px -52px;
+}
+.icon-aggrid-icon5 {
+    background-position: -78px 0px;
+}
+.icon-aggrid-icon6 {
+    background-position: -78px -26px;
+}
+.icon-aggrid-icon7 {
+    background-position: -78px -52px;
+}
+.icon-aggrid-icon8 {
+    background-position: 0px -78px;
+}
+.icon-aggrid-icon9 {
+    background-position: -26px -78px;
+}
+
