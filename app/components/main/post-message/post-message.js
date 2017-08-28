@@ -59,11 +59,13 @@ let config = {
          * 获取部门数据，并初始化部门树和人员选择组件
          */
         getDepartmentData: function () {
+            this.showLoading();
             HTTP.getImmediately('/get_department_tree/', {type: ''}).then((res) => {
                 this.data.userData = res.data.department2user;
                 this.data.departmentData = formatTreeData(res.data.department_tree)
                 this.actions.initTree();
                 this.actions.initChoosedUsers();
+                this.hideLoading();
             });
         },
         /**
