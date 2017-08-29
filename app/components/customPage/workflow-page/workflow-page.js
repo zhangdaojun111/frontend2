@@ -260,6 +260,7 @@ let config = {
                                     .then(data => {
                                         if( data.success ){
                                             msgBox.showTips( '取消成功' );
+                                            this.actions.getData();
                                         }else {
                                             msgBox.alert( '取消失败：' + data.error );
                                         }
@@ -692,6 +693,7 @@ let config = {
                         .then(res => {
                             if( res.success ){
                                 msgBox.showTips( '取消成功' );
+                                this.actions.getData();
                             }else {
                                 msgBox.alert( '取消失败：' + res.error );
                             }
