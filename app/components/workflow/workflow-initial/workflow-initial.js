@@ -77,7 +77,6 @@ let config={
         this.actions.getTree();
         this.actions.get_workflow_info();
         this.el.on('click','#workflowClose',()=>{
-            this.actions.getTree();
             Mediator.publish("workflow:contentClose");
             this.el.find('.J_select-Workflow').text("选择或输入查找");
             this.el.find("#workflow-box").show();
