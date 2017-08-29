@@ -670,9 +670,14 @@ let config = {
                 sHtml = cDiv;
             }
 
-            //普通附件||视频附件
-            else if (real_type == fieldTypeService.ATTACHMENT || real_type == fieldTypeService.VIDEO_TYPE) {
-                sHtml = '<a class="ag-text-style" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + '个附件</a>';
+            //普通附件
+            else if (real_type == fieldTypeService.ATTACHMENT) {
+                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + '个附件</a>';
+            }
+
+            //视频附件
+            else if( real_type == fieldTypeService.VIDEO_TYPE ){
+                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + '段视频</a>';
             }
 
             //都做为文本处理
