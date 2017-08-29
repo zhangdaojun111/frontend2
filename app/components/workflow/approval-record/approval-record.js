@@ -42,17 +42,16 @@ let config={
         let self=this;
         const pos={x:10,y:20};
         this.el.on("mouseover",".tipsText",function (e) {
-             var elDiv=$(this);
-             var elDivText=elDiv.text();
-
+             let elDiv=$(this);
+             let elDivText=elDiv.text();
             self.actions.tipsMouseover(pos,elDivText,e)
         });
         this.el.on("mouseout",".tipsText",function () {
-            var J_tooltip=$("#J_tooltip");
+            let J_tooltip=$("#J_tooltip");
             self.actions.tipsMouseout(J_tooltip)
         });
         this.el.on("mousemove",".tipsText",function (e) {
-            var J_tooltip=$("#J_tooltip");
+            let J_tooltip=$("#J_tooltip");
             self.actions.tipsMousemove(pos,J_tooltip,e)
         })
     }
