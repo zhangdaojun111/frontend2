@@ -220,9 +220,6 @@ export const IframeInstance = new Component({
         resetIcon:function () {
             this.el.find('.popup-icon').removeClass('mouse-enter-icon');
         },
-        clearTimeOut:function () {
-            window.clearTimeout(this.data.timer);
-        },
         hideTabsPopup(){
             this.data.timer = window.setTimeout(() => {
                 this.el.find('.tab-list').hide();
