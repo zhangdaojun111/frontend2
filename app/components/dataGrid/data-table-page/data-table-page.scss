@@ -6,21 +6,21 @@
     right: 0;
     overflow: hidden;
     .page-tab {
-        height: 30px;
         line-height: 30px;
         background-color: #FFFFFF;
         user-select: none;
         position: absolute;
         left: 0;
         z-index: 20;
+        margin-left: 15px;
         ul {
             width: 100%;
             height: 100%;
+            overflow: hidden;
             line-height: 30px;
             display: block;
             margin: 0;
             padding: 0;
-            margin-left: 15px;
             .dataTableInTransit {
                 position: relative;
                 .inProcessNum {
@@ -37,7 +37,7 @@
             li {
                 display: block;
                 float: left;
-                margin: 15px 5px;
+                margin: 14px 5px;
                 cursor: pointer;
                 a {
                     display: block;
