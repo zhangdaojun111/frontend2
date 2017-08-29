@@ -73,6 +73,7 @@ export const IframeInstance = new Component({
         tabsTotalWidth:"",           //tabs可用总长度 = div.tabs - 200;
         tabWidth:150,           //单个tabs长度，默认140（需和scss同步修改），空间不足以后自适应宽度
         minTabWidth:100,        //用于估算小屏设备最大tabs数量
+        closeHistory:[],        //用于保存历史关闭记录，记录最近5个
     },
     actions: {
         openIframe: function (id, url, name) {
@@ -122,6 +123,7 @@ export const IframeInstance = new Component({
             }
         },
         sendCloseRequest:function (id) {
+            console.log(id);
             TabService.onCloseTab(id,this.data.focus.id).done((result) => {
                 if(result.success === 1){
                     console.log("post close record success")
@@ -141,6 +143,9 @@ export const IframeInstance = new Component({
 
             this.actions.sendCloseRequest(id);
             let item = this.data.hash[id];
+            console.log(item);
+            //关闭的item放入关闭历史数组，数组大于5则清除最后一项
+            this.actions.setCloseHistory(item);
             // IframeOnClick.retrack(item.iframe.find('iframe')[0]);
             item.tab.remove();
             item.iframe.remove();
@@ -156,6 +161,15 @@ export const IframeInstance = new Component({
                 }
             }
             this.actions.adaptTabWidth();
+        },
+        setCloseHistory:function (item) {
+            _.remove(this.data.closeHistory,function (n) {      //去重和重新插入，确保最后关闭的在记录最前面
+                return n.name === item.name;
+            });
+            this.data.closeHistory.unshift(item);
+            if(this.data.closeHistory.length > 5){
+                this.data.closeHistory.pop();
+            }
         },
         focusIframe: function (id) {
             if (this.data.focus) {
@@ -195,10 +209,13 @@ export const IframeInstance = new Component({
             }
         },
         showTabsPopup:function () {
-            this.actions.initTabList(this.data.sort);
+            this.actions.initTabList(this.data.closeHistory);
             this.el.find('.tab-list').show();
             this.el.find('.popup-icon').addClass('mouse-enter-icon');
             window.clearTimeout(this.data.timer)
+        },
+        removeTimeOut:function () {
+            window.clearTimeout(this.data.timer);
         },
         resetIcon:function () {
             this.el.find('.popup-icon').removeClass('mouse-enter-icon');
@@ -212,21 +229,13 @@ export const IframeInstance = new Component({
             }, 500);
         },
         initTabList:function (data) {
-            let names = [];
-            for(let k of data){
-                let temp = this.actions.getTabNameById(k,this.data.hash);
-                names.unshift(temp);
-            }
-
             let $parent = this.el.find('.tabs-ul');
             $parent.empty();
-            for(let j of names){
-                let $li = $("<li class='tab-item'>");
-                $li.html(j);
+            for(let j of data){
+                let $li = $(`<li class='tab-item' item_name = ${j.name} item_url = ${j.url} item_id = ${j.id}>`);
+                $li.html(j.name);
                 $parent.append($li);
             }
-            // let $li = $('<li><i class="drop-down-icon"></i></li>');
-            // $parent.append($li);
         },
         closeFocusTab:function () {
             if(this.data.focus){
@@ -234,22 +243,24 @@ export const IframeInstance = new Component({
             }
         },
         controlTabs:function (event) {
+            console.log(event);
             let name = event.target.textContent;
             if(name === '关闭标签'){
                 this.actions.closeFocusTab();
-                this.actions.initTabList(this.data.sort);
+                this.actions.initTabList(this.data.closeHistory);
             }else if(name === '关闭全部标签'){
                 this.actions.closeAllIframes();
-                this.actions.initTabList(this.data.sort);
+                this.actions.initTabList(this.data.closeHistory);
             }else if(name === '关闭其他标签'){
                 this.actions.closeOtherIframes();
-                this.actions.initTabList(this.data.sort);
+                this.actions.initTabList(this.data.closeHistory);
             }else{
-                //选中标签获得焦点
-                let id = this.actions.getTabIdByName(name,this.data.hash);
-                if(id){
-                    this.actions.focusIframe(id);
-                }
+                //打开历史记录标签
+                console.log('open history tabs',event);
+                let name = event.target.attributes.item_name.value;
+                let id = event.target.attributes.item_id.value;
+                let url = event.target.attributes.item_url.value;
+                this.actions.openIframe(id,url,name);
             }
         },
         getTabIdByName:function (name,nodes) {
@@ -296,7 +307,6 @@ export const IframeInstance = new Component({
                 }else{
                     console.log("get tabs failed",result[0].err);
                 }
-
 
                 if(result[1].succ === 1){
                     let biConfig = result[1];
@@ -462,7 +472,7 @@ export const IframeInstance = new Component({
         }).on('mouseleave','.popup-icon',() => {
             this.actions.resetIcon();
         }).on('mouseenter','.view-popup',() => {
-            this.actions.showTabsPopup();
+            this.actions.removeTimeOut();
         }).on('click','.tab-list',(event) => {
             this.actions.controlTabs(event);
         }).on('mouseleave','.view-popup',() => {
