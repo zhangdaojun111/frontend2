@@ -1,17 +1,87 @@
 /**
  * Created by Yunxuan Yan on 2017/8/18.
  */
-/**
- * Created by Yunxuan Yan on 2017/8/18.
- */
 import template from './contract-editor.html';
 import './contract-editor.scss';
 
 export const contractEditorConfig = {
     template:template,
+    binds:[
+        {
+           event:'click',
+           selector:'.save-n-close',
+           callback:function () {
+               //删除local_data中的合同信息，此数据不跟随data上传
+               for(let data of this.data.local_data){
+                   delete data['content'];
+               }
+               this.data.value = this.data.local_data;
+               delete this.data.local_data;
+               delete this.data.elementKeys;
+               this.actions.closeMe();
+           }
+        },{
+            event:'click',
+            selector:'.download-all',
+            callback:function () {
+                this.actions.downloadTemplate(0,true);
+            }
+        },{
+            event:'click',
+            selector:'.download-current',
+            callback:function () {
+                this.actions.downloadTemplate(this.data['current_tab'],false);
+            }
+        },{
+            event:'click',
+            selector:'.edit-or-save',
+            callback:function () {
+                if(this.el.find('.edit-or-save').text() == '编辑'){
+                    this.el.find('.edit-or-save').text('保存');
+                    this.el.find('.save-n-close').css('display','none');
+                    this.el.find('.download-all').css('display','none');
+                    this.el.find('.download-current').css('display','none');
+                    this.data.local_data[this.data['current_tab']].k2v = {
+                        test:'test'
+                    }
+                    this.data.editingK2v = JSON.parse(JSON.stringify(this.data.local_data[this.data['current_tab']].k2v));
+                    this.actions.editContract(this.data.editingK2v);
+                } else {
+                    this.el.find('.edit-or-save').text('编辑');
+                    this.el.find('.save-n-close').css('display','inline');
+                    this.el.find('.download-all').css('display','inline');
+                    this.el.find('.download-current').css('display','inline');
+                    this.data.local_data[this.data['current_tab']].k2v = this.data.editingK2v;
+                }
+            }
+        },{
+            event:'click',
+            selector:'.add-tab-button',
+            callback:function () {
+                this.actions.addTab();
+            }
+        },{
+            event:'click',
+            selector:'.delete-tab-button',
+            callback:function () {
+                let currentIndex = this.data['current_tab'];
+                this.data.local_data.splice(currentIndex,1);
+                //删除标签
+                this.el.find('.contract-tab').get(currentIndex).remove();
+                //如果右边有标签，当前标签向右移，没有则向左移
+                currentIndex = currentIndex==this.data.local_data.length?currentIndex-1:currentIndex;
+                if(currentIndex == -1){
+                    this.actions.addTab();
+                } else {
+                    this.actions._loadTemplateByIndex(currentIndex);
+                }
+            }
+        }
+    ],
     data:{
         local_data:[],
         elementKeys:[],
+        editingk2v:{}
     },
     actions:{
         loadData(res){
@@ -175,15 +245,17 @@ export const contractEditorConfig = {
             let contractData = this.data.local_data[i];
             $.post('/customize/rzrk/download_contract/',{
                 table_id:this.data.table_id,
-                real_id:this.data.data.temp_id,
+                real_id:this.data.temp_id,
                 field_id:this.data.id,
                 model_id:contractData.model_id,
                 k2v:contractData.k2v,
                 file_name:contractData.name
             }).then(res=>{
-                if(res.success){
+                 if(res.success){
+                    let url = '/download_attachment/?file_id='+JSON.parse(res.data).file_id+"&download=1";
+                    window.open(url);
                     if(isAll){
-                        this.actions.downloadTemplate(i++,isAll);
+                        this.actions.downloadTemplate(i+1,isAll);
                     }
                 }
             })
@@ -242,53 +314,5 @@ export const contractEditorConfig = {
             })
         }
 
-        let t = this;
-        let editingK2v={};
-        this.el.on('click','.save-n-close',()=>{
-            //删除local_data中的合同信息，此数据不跟随data上传
-            for(let data of this.data.local_data){
-                delete data['content'];
-            }
-            this.data.value = this.data.local_data;
-            delete this.data.local_data;
-            delete this.data.elementKeys;
-            this.actions.closeMe();
-        }).on('click','.download-all',()=>{
-            this.actions.downloadTemplate(0,true);
-        }).on('click','.download-current',()=>{
-            this.actions.downloadTemplate(this.data['current_tab'],false);
-        }).on('click','.edit-or-save',function () {
-            if($(this).text() == '编辑'){
-                $(this).text('保存');
-                t.el.find('.save-n-close').css('display','none');
-                t.el.find('.download-all').css('display','none');
-                t.el.find('.download-current').css('display','none');
-                t.data.local_data[t.data['current_tab']].k2v = {
-                    test:'test'
-                }
-                editingK2v = JSON.parse(JSON.stringify(t.data.local_data[t.data['current_tab']].k2v));
-                t.actions.editContract(editingK2v);
-            } else {
-                $(this).text('编辑');
-                t.el.find('.save-n-close').css('display','inline');
-                t.el.find('.download-all').css('display','inline');
-                t.el.find('.download-current').css('display','inline');
-                t.data.local_data[t.data['current_tab']].k2v = editingK2v;
-            }
-        }).on('click','.add-tab-button',()=>{
-            this.actions.addTab();
-        }).on('click','.delete-tab-button',()=>{
-            let currentIndex = this.data['current_tab'];
-            this.data.local_data.splice(currentIndex,1);
-            //删除标签
-            this.el.find('.contract-tab').get(currentIndex).remove();
-            //如果右边有标签，当前标签向右移，没有则向左移
-            currentIndex = currentIndex==this.data.local_data.length?currentIndex-1:currentIndex;
-            if(currentIndex == -1){
-                this.actions.addTab();
-            } else {
-                this.actions._loadTemplateByIndex(currentIndex);
-            }
-        })
     }
 }

@@ -8,7 +8,23 @@ import {PMAPI} from "../../../lib/postmsg";
 
 let config = {
     template:template,
-    data:{},
+    binds:[
+        {
+            event:'click',
+            selector:'.contract-view',
+            callback:function () {
+                this.data['mode']='view';
+                this.actions.openEditor();
+            }
+        },{
+            event:'click',
+            selector:'.contract-edit',
+            callback:function () {
+                this.data['mode']='edit';
+                this.actions.openEditor();
+            }
+        }
+    ],
     actions:{
         openEditor:function(){
             let contractConfig = _.defaultsDeep(contractEditorConfig,{data:this.data});
@@ -20,21 +36,12 @@ let config = {
                 this.data.value = res;
                 this.trigger('changeValue',this.data);
             })
-
         }
     },
     afterRender:function () {
         if(this.data['is_view']){
             this.el.find('.contract-edit').css('display','none');
         }
-
-        this.el.on('click','.contract-view',()=>{
-            this.data['mode']='view';
-            this.actions.openEditor();
-        }).on('click','.contract-edit',()=>{
-            this.data['mode']='edit';
-            this.actions.openEditor();
-        })
     }
 }
 
