@@ -21,7 +21,7 @@ let config = {
                 `/wf/approval/?record_id=${this.data['id']}&form_id=${this.data['form_id']}&table_id=${this.data['table_id']}&flow_id=${this.data['flow_id']}`,
                 {
                     width: "100%",
-                    height: '900',
+                    height: '800',
                     modal: true,
                     customSize: true,
                 })
