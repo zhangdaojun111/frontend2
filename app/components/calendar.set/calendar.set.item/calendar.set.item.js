@@ -119,6 +119,7 @@ let config = {
             this.data.preViewText = selectedOptsText;
             this.el.find('.preview-text').html(this.data.preViewText);
         },
+
         /**
          * @author zj
          * 打开提醒方式设置

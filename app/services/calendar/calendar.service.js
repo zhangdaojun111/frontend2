@@ -16,8 +16,6 @@ const calendarDataUrl = 'calendar_mgr/get_calendar_data';
 
 const workflowRecordsUrl = 'get_workflow_records';
 
-const missionRecordUrl = 'get_mission_record';
-
 const calendarPreferenceUrl = 'calendar_mgr/calendar_preference';
 
 const keyFieldDictUrl = 'calendar_mgr/key_field_dict';
