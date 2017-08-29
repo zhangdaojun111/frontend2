@@ -5,6 +5,7 @@ import {BiBaseComponent} from '../../../bi.base.component';
 import template from './cell.pie.html';
 import {EchartsService} from '../../../../../services/bisystem/echart.server';
 import Mediator from '../../../../../lib/mediator';
+import msgbox from '../../../../../lib/msgbox';
 
 let config = {
     template: template,
@@ -22,6 +23,16 @@ let config = {
         }
     },
     afterRender() {
+        // 下穿数据
+        this.pieChart.myChart.on('click', (params) => {
+            let deepX = params.name;
+            this.CanvasDeep(deepX);
+            return false;
+        });
+    },
+    firstAfterRender() {
+        this.actions.echartsInit();
+
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             this.pieChart.myChart.resize();
         });
@@ -30,15 +41,6 @@ let config = {
         Mediator.subscribe(`bi:deep${this.componentId}:cell`, (data) => {
             this.CanvasDeep(this.data.xAxis[this.data.floor], false);
         });
-
-        // 下穿数据
-        this.pieChart.myChart.on('click', (params) => {
-            let deepX =params.name;
-            this.CanvasDeep(deepX);
-        });
-    },
-    firstAfterRender() {
-        this.actions.echartsInit();
     }
 }
 
@@ -81,25 +83,32 @@ export class CellPieComponent extends BiBaseComponent {
                 this.data['xAxis'].pop()
             };
             deep_info[this.data.floor] = this.data['xAxis'];
-
-            const data = {
-                'layout_id': this.data.cellChart.layout_id,
+            const layouts = {
+                'layout_id': this.data.cellChart.cell.layout_id,
                 'deep_info':JSON.stringify(deep_info),
                 'floor':this.data.floor,
-                'query_type': 'deep',
-                'view_id': this.data.cellChart.canvas.viewId,
+                'view_id': this.data.cellChart.cell.canvas.viewId,
                 'xAxis': JSON.stringify(this.data['xAxis']),
-                'chart_id':this.data.cellChart.chart_id
+                'chart_id':this.data.cellChart.cell.chart_id
+            };
+            const data = {
+                'layouts': [JSON.stringify(layouts)],
+                'query_type': 'deep',
+                'is_deep': 0
             };
             const res = await this.pieChart.getDeepData(data);
-            if (res['data']['xAxis'].length > 0 && res['data']['yAxis'].length > 0) {
-                this.data.cellChart['chart']['data']['xAxis'] = res['data']['xAxis'];
-                this.data.cellChart['chart']['data']['yAxis'] = res['data']['yAxis'];
-                //重新渲染echarts
-                const option = this.pieChart.pieOption(this.data.cellChart);
-                this.pieChart.myChart.setOption(option);
-                this.pieChart.myChart.resize();
+            if (res[0]['success'] === 1) {
+                if (res[0]['data']['xAxis'].length > 0 && res[0]['data']['yAxis'].length > 0) {
+                    this.data.cellChart['chart']['data']['xAxis'] = res[0]['data']['xAxis'];
+                    //重新渲染echarts
+                    const option = this.pieChart.pieOption(this.data.cellChart);
+                    this.pieChart.myChart.setOption(option);
+                    this.pieChart.myChart.resize();
+                }
+            } else {
+                msgbox.alert(res[0]['error']);
             }
+
         } else {
             if (next) {
                 this.data.floor = deeps;

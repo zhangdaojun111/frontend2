@@ -111,7 +111,7 @@ let config = {
                     });
                     this.inputResult.val(html.join(','));
                 }
-                this.el.find('.select-all span').text(this.data.choosed.length);
+
 
         },
         selectAll: function () {

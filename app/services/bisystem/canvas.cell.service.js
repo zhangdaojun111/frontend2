@@ -14,7 +14,7 @@ export const canvasCellService = {
         const res = await HTTP.getImmediately('/bi/get_view_layout/?&canvasType=pc', data);
         return new Promise((resolve, reject) => {
             if (res['success']===1) {
-                resolve(res['data']);
+                resolve(res);
             } else {
                 reject(res);
             }
@@ -56,7 +56,7 @@ export const canvasCellService = {
         });
         return new Promise((resolve, reject) => {
             if (res['success'] === 1) {
-                resolve(res['data']);
+                resolve(res);
             } else {
                 reject(res);
             }

@@ -24,7 +24,7 @@ const BiAppRouter = Backbone.Router.extend({
 
     routerViewsComponent(id) {
         if (component) {
-            component.data.views = window.config.bi_views
+            component.data.views = window.config.bi_views;
             component.destroyChildren();
             component.viewId = id;
             component.reload();
