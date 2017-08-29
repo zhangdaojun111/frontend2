@@ -403,6 +403,7 @@ let config = {
         }).on("click",".cancel-btn", () => {
             _this.el.find(".hide-btns").css("visibility","hidden");
             _this.el.find(".set-btn").removeClass("disabled");
+            _this.el.find(".editor-btn").removeAttr("disabled");
             Mediator.emit('calendar-set:editor',{data:-1});
         }).on('click', '.reset-btn', () => {
             _this.actions.despReset(this.data.tableId);

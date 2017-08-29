@@ -20,6 +20,9 @@ let config = {
         items:[],
     },
     actions: {
+        /**
+         *加载子checkbox选中状态
+         */
         loaddatahtml:function(that,data){
             data.items.forEach((items) =>{
                 let filed_id = "#select-children-"+items.field_id;
@@ -30,7 +33,9 @@ let config = {
                 that.el.find(filed_id).css({backgroundColor:color});
             });
         },
-
+        /**
+         *处理颜色值
+         */
         colorRgb: function(str, opcity){
             let sColor = str.toLowerCase();
             if(sColor){
@@ -51,7 +56,9 @@ let config = {
                 return sColor;
             }
         },
-
+        /**
+         *隐藏子checkbox
+         */
         selectlabelshow:function(temp){
             if(!temp.hasClass('hide-check-group'))
             {
@@ -63,7 +70,9 @@ let config = {
                 temp.parent(".calendar-select-table").nextAll('.checkbox-group').show();
             }
         },
-
+        /**
+         *父checkbox发生选择
+         */
         selectlabel:function(temp,that){
             let staus = false;
             if(temp.is(".label-select-all-checked"))
@@ -91,7 +100,9 @@ let config = {
                 }
             }
         },
-
+        /**
+         *子checkbox选中状态
+         */
         selectlabelchildren:function(temp,that){
             let dataItem=[];
             let staus = false;
