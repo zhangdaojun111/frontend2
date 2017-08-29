@@ -32,8 +32,8 @@ let config = {
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
                 that.el.find(".item-content-1").show();
-                that.el.find(".item-content").css("height","27%");
-                that.el.find(".item-content-1").css("height","27%");
+                that.el.find(".item-content").css("height","28%");
+                that.el.find(".item-content-1").css("height","28%");
                 that.el.find(".item-content").show();
             }else{
                 that.el.find(".item-title").removeClass("display-all-content");
@@ -43,15 +43,15 @@ let config = {
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
                 temp.next(".item-content").show();
-                temp.next().css({height:'calc(100% - 140px)'});
+                temp.next().css({height:'calc(100% - 135px)'});
             }
         },
         //日历隐藏栏显示和隐藏
         hideclass:function(that,temp){
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
-                that.el.find(".item-content").css("height","27%");
-                that.el.find(".item-content-1").css("height","27%");
+                that.el.find(".item-content").css("height","28%");
+                that.el.find(".item-content-1").css("height","28%");
                 that.el.find(".item-content-2").hide();
                 that.el.find(".item-content-1").show();
                 that.el.find(".item-content-3").show();
@@ -60,10 +60,10 @@ let config = {
                 that.el.find(".item-title").removeClass("display-all-content");
                 temp.addClass("display-all-content");
                 that.el.find(".item-content-1").show();
-                that.el.find(".item-content-1").css("height","27%");
+                that.el.find(".item-content-1").css("height","28%");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").show();
-                that.el.find(".item-content-2").css({height:'calc(73% - 152px)'});
+                that.el.find(".item-content-2").css({height:'calc(72% - 135px)'});
             }
         },
         //日历操作显示和隐藏
@@ -71,8 +71,8 @@ let config = {
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
                 that.el.find(".item-content-1").show();
-                that.el.find(".item-content-1").css("height","27%");
-                that.el.find(".item-content").css("height","27%");
+                that.el.find(".item-content-1").css("height","28%");
+                that.el.find(".item-content").css("height","28%");
                 that.el.find(".item-content-2").hide();
                 that.el.find(".item-content-3").show();
                 that.el.find(".item-content-4").show();
@@ -82,7 +82,7 @@ let config = {
                 temp.addClass("display-all-content");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
-                that.el.find(".item-content-1").css({height:'calc(100% - 140px)'});
+                that.el.find(".item-content-1").css({height:'calc(100% - 135px)'});
             }
         },
         //展开日历操作栏
@@ -92,7 +92,7 @@ let config = {
             this.el.find(".item-content").hide();
             this.el.find(".item-content-2").hide();
             this.el.find(".item-content-1").show();
-            this.el.find(".item-content-1").css({height:'calc(100% - 140px)'});
+            this.el.find(".item-content-1").css({height:'calc(100% - 135px)'});
         },
         //处理日历树数据
         getCalendarTreeData:function(){
@@ -131,24 +131,6 @@ let config = {
                     customSize: true,
                 },
             );
-            // CalendarSetService.getMenu().then(res => {
-            //     let menu = res['menuList'].filter(item => {
-            //         return item['folder_id'] !== 1;
-            //     });
-            //     let component = new CalendarSetting(menu);
-            //     let el = $('<div>').appendTo(document.body);
-            //     component.render(el);
-            //     el.dialog({
-            //         title: '日历设置',
-            //         width: '90%',
-            //         height: '750',
-            //         background: '#ddd',
-            //         close: function() {
-            //             $(this).dialog('destroy');
-            //             component.destroySelf();
-            //         }
-            //     });
-            // });
         },
 
         /**
@@ -215,6 +197,12 @@ let config = {
             this.el.find('.item-content-3').empty();
             data.forEach((row) =>{
                 this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
+            });
+        });
+        Mediator.on('CalendarFinishedWorkflowData: workflowData', data =>{
+            this.el.find('.item-content-4').empty();
+            data.forEach((row) =>{
+                this.append(new leftContentFinished(row), this.el.find('.item-content-4'));
             });
         });
         Mediator.on('calendar-left:hideRemindType',data =>{
