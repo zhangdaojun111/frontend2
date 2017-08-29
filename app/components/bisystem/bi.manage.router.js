@@ -9,6 +9,7 @@ import {FormEntryComponent} from './forms/entry/entry';
 import {componentsJson} from './forms/entry/loadFormChart.json';
 import Mediator from '../../lib/mediator';
 
+import {LineBarEditor} from './test/editors/linebar/linebar';
 let component;
 let viewComponent;
 let formComponent = {};
@@ -51,14 +52,21 @@ const BiAppRouter = Backbone.Router.extend({
     },
     routerFormDynamicComponent(type,id) {
         Mediator.removeAll('bi:chart:form:update');
+        let comType = {
+            assortment: type,
+            id: id
+        }
         if (formComponent[type]) {
             formComponent[type].destroyChildren();
-            formComponent[type].reset(id);
+            formComponent[type].reset(comType);
             formComponent[type].reload();
         } else {
-            let component = new componentsJson[type]['component'](id);
+            // let component = new componentsJson[type]['component'](comType);
+            // component.render($('#route-outlet'));
+            // formComponent[type] = component;
+            component = new LineBarEditor();
             component.render($('#route-outlet'));
-            formComponent[type] = component;
+            component.drawForm();
         }
 
     }

@@ -148,12 +148,14 @@ export const contractEditorConfig = {
                     this.data.local_data[i]['k2v']=res.data.k2v;
                     this.el.find('.edit-or-save').css('display','inline');
                     let tabName =[];
-                    for(let key of this.data.elementKeys){
-                        let selectEle = this.el.find('#'+key)[0];
-                        tabName.push(selectEle.selectedOptions[0].label);
+                    if(Object.keys(this.data.local_data[i].elements).length != 0){
+                        for(let key of this.data.elementKeys){
+                            let selectEle = this.el.find('#'+key)[0];
+                            tabName.push(selectEle.selectedOptions[0].label);
+                        }
+                        tab['name']=tabName.join(' ');
+                        $(this.el.find('.contract-tab').get(i)).text(tab['name']);
                     }
-                   tab['name']=tabName.join(' ');
-                   $(this.el.find('.contract-tab').get(i)).text(tab['name']);
                 }
             })
         },

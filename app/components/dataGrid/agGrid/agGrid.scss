@@ -1,6 +1,6 @@
 //滚动条
 .ag-body-viewport::-webkit-scrollbar {
-  width: 4px;
+  width: 10px;
   height: 6px;
 }
 .ag-body-viewport::-webkit-scrollbar-thumb {
@@ -18,12 +18,10 @@
   border-color: transparent!important;
   background-color: transparent!important;
 }
-.ag-root {
-
-}
 .ag-header {
   border-top: 1px solid rgba(228, 228, 228, 1);
   border-bottom: 1px solid rgba(228, 228, 228, 1)!important;
+  background: #F2F2F2 !important;
   .ag-header-cell {
     border-right: 1px solid rgba(228, 228, 228, 1) !important;
   }
@@ -57,12 +55,26 @@
     text-decoration: none;
   }
 }
-.ag-body {
-  .ag-body-viewport-wrapper {
-
+.ag-header-container {
+  .ag-header-row {
+    border-bottom: 1px solid #E4E4E4;
   }
 }
-.ag-body-container {
+.ag-bootstrap .ag-ltr .ag-header-group-cell-label {
+  text-align: center;
+  border-right: 1px solid #E4E4E4;
+  padding: 0;
+  height: 100%;
+  .ag-header-group-text {
+    line-height: 30px;
+  }
+}
+
+.ag-body {
+  .ag-cell-wrapper {
+    display: block;
+    margin: -5px 5px;
+  }
   .ag-row {
     border-bottom: 1px solid rgba(228, 228, 228, 1);
     .ag-group-cell {
@@ -71,9 +83,14 @@
     .ag-cell-not-inline-editing {
       padding: 4px 0px;
     }
+    .ag-cell-value {
+      padding: 0 3px;
+      line-height: 30px;
+    }
     .ag-cell{
       border-right: 1px solid #E4E4E4 !important;
       font-family:微软雅黑;
+      font-size: 12px;
       font-weight: 400;
       text-align: left;
       color: #333333;
@@ -94,6 +111,9 @@
       &.ag-cell-focus{
         border: none;
         background: rgba(120,120,120,0.3);
+      }
+      &.ag-cell-no-focus {
+        border-right: 1px solid #E4E4E4 !important;
       }
     }
   }

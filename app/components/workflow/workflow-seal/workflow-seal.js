@@ -1,5 +1,5 @@
 /**
- * author hufei
+ * @author hufei
  * 工作流审批盖章的操作
  */
 import Component from '../../../lib/component';

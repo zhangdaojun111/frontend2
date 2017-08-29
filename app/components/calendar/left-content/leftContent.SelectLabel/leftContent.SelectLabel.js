@@ -30,6 +30,7 @@ let config = {
                 that.el.find(filed_id).css({backgroundColor:color});
             });
         },
+
         colorRgb: function(str, opcity){
             let sColor = str.toLowerCase();
             if(sColor){
@@ -50,31 +51,33 @@ let config = {
                 return sColor;
             }
         },
+
         selectlabelshow:function(temp){
             if(!temp.hasClass('hide-check-group'))
             {
                 temp.addClass("hide-check-group");
-                temp.nextAll('.checkbox-group').hide();
+                temp.parent(".calendar-select-table").nextAll('.checkbox-group').hide();
             }
             else{
                 temp.removeClass("hide-check-group");
-                temp.nextAll('.checkbox-group').show();
+                temp.parent(".calendar-select-table").nextAll('.checkbox-group').show();
             }
         },
+
         selectlabel:function(temp,that){
             let staus = false;
-            if(temp.prev('input').is(".label-select-all-checked"))
+            if(temp.is(".label-select-all-checked"))
             {
                 staus = true;
                 this.events.checkbox({type:'unshowData',staus:staus,data:this.data.items});
-                temp.prev('input').removeClass("label-select-all-checked");
+                temp.removeClass("label-select-all-checked");
                 that.el.find(".select-label-children").addClass('unchecked');
                 this.events.checkbox({type:'remind-checkbox',data:-1});
                 that.el.find("#checkbox_a3").removeClass('label-select-all-checked');
             } else {
                 staus = false;
                 this.events.checkbox({type:'unshowData',staus:staus,data:this.data.items});
-                temp.prev('input').addClass("label-select-all-checked");
+                temp.addClass("label-select-all-checked");
                 that.el.find(".select-label-children").removeClass('unchecked');
                 let isAllGroupchecked = true;
                 that.el.parent().find(".label-select-all-show").each(function(){
@@ -88,6 +91,7 @@ let config = {
                 }
             }
         },
+
         selectlabelchildren:function(temp,that){
             let dataItem=[];
             let staus = false;
@@ -127,6 +131,7 @@ let config = {
 
             }
         },
+
         showfirst:function(that){
             let IsChecked = true;
             if(that.data.hide_item_table.indexOf(that.data.dataitem.table_id) !== -1){
@@ -148,6 +153,7 @@ let config = {
                 this.el.find(".select-head").addClass("label-select-all-checked");
             }
         },
+
         goSearch:function(a,id){
             let temp;
             for( let d of this.data.rows ){
@@ -185,7 +191,7 @@ let config = {
             event: 'click',
             selector: '.float-button-group-show',
             callback: function(){
-                this.el.find(".float-button-group").css({"display":"block","top":event.clientY - 90});
+                this.el.find(".float-button-group").css({"display":"block","top":this.el.find(".float-button-group-show").offset().top - 85});
             }
         },
         {
@@ -247,6 +253,7 @@ let config = {
             }
         },
     ],
+
     afterRender: function() {
         let that = this;
         this.actions.showfirst(that);
@@ -257,6 +264,7 @@ let config = {
         });
     }
 }
+
 class LeftContentSelect extends Component {
     constructor(data,cancel_fields,hide_item_table,rows,event){
         config.data.dataitem = data;

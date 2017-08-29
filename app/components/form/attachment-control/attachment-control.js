@@ -8,8 +8,8 @@ import AttachmentQueueItem from "./attachment-queue-item/attachment-queue-item";
 import {screenShotConfig} from "./screenshot-receiver/screenshot-receiver";
 import {PMAPI} from "../../../lib/postmsg";
 import {attachmentListConfig} from "./attachment-list/attachment-list";
-// import {FormService} from '../../../services/formService/formService';
-// import ThumbnailList from "./thumbnail-list/thumbnail-list";
+import {FormService} from '../../../services/formService/formService';
+import ThumbnailList from "./thumbnail-list/thumbnail-list";
 
 let config={
     template: template,
@@ -74,6 +74,9 @@ let config={
                             this.data.queue.splice(this.data.queue.indexOf(event.data),1);
                             this.data.value.splice(this.data.value.indexOf(event.data.fileId),1);
                             this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
+                            if(this.data['thumbnailListComponent']){
+                                this.data['thumbnailListComponent'].actions.deleteItem(event.data.fileId);
+                            }
                         }
                     }
                     if(event.event == 'finished'){
@@ -82,6 +85,11 @@ let config={
                         this.data.value.push(event.data.fileId);
                         this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
                         this.trigger('changeValue', this.data);
+                        if(this.data['thumbnailListComponent']) {
+                            let obj = {};
+                            obj[event.data.fileId]=event.data.thumbnail;
+                            this.data['thumbnailListComponent'].actions.addItem(obj);
+                        }
                     }
                 }
             });
@@ -97,6 +105,22 @@ let config={
         } else if(this.data.dinput_type == 23){
             this.el.find('.upload-file').val('上传图片');
         }
+        if(this.data.value.length != 0){
+            FormService.getThumbnails({
+                file_ids:JSON.stringify(this.data.value)
+            }).then(res=>{
+
+                if(!res.success){
+                    console.log(res.error)
+                }
+                if(res.rows.length !=0){
+                    let comp = new ThumbnailList(res.rows);
+                    comp.render(this.el.find('.thumbnail-list'));
+                    this.data['thumbnailListComponent']=comp;
+                }
+            })
+        }
+
         this.el.on('click','.view-attached-list',()=>{
             this.actions.viewAttachList();
         }).on('click','.upload-file',()=>{

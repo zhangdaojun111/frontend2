@@ -8,6 +8,12 @@
   .p-left {
     float: left;
     margin-left: 15px;
+    span{
+      vertical-align: top;
+      display: inline-block;
+      height: 33px;
+      line-height: 33px;
+    }
     .pageSize {
       width: 50px;
       margin: 0 5px;
@@ -19,12 +25,21 @@
       }
     }
     .ui-icon-refresh {
-      vertical-align: sub;
+      cursor: pointer;
+      top:0px;
+      display: inline-block;
+      height: 33px;
+      width: 25px;
+      left: 0px;
+      background: url(../../../../assets/images/dataGrid/icon_shuaxin_blue.png) no-repeat scroll center 8px  transparent;
     }
 
     .ui-icon-refresh:hover {
       cursor: pointer;
     }
+    .refresh-rotate{animation:fa-spin 2s infinite linear}
+
+    @keyframes fa-spin{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}100%{-webkit-transform:rotate(359deg);transform:rotate(359deg)}}
 
     .data-invalid {
 
@@ -57,25 +72,43 @@
       color: #666666;
     }
   }
-  .p-page {
+  .p-page-con {
     float: right;
     .goFirst {
-      vertical-align: sub;
+      //vertical-align: sub;
+      vertical-align: top;
+      display: inline-block;
+      background: url(../../../../assets/images/dataGrid/icon_shangyiye.png) no-repeat scroll center 8px  transparent;
+      height: 33px;
+      width: 16px;
       margin: 0 7px;
     }
     .goPre {
+      vertical-align: top;
       margin: 0 7px;
+      display: inline-block;
+      height: 33px;
+      line-height: 33px;
     }
     .currentPage {
+      vertical-align: top;
       display: inline-block;
       width: 25px;
       text-align: center;
     }
     .goNext {
+      vertical-align: top;
       margin: 0 7px;
+      display: inline-block;
+      height: 33px;
+      line-height: 33px;
     }
     .goLast {
-      vertical-align: sub;
+      //vertical-align: sub;
+      display: inline-block;
+      background: url(../../../../assets/images/dataGrid/icon_xiayiye.png) no-repeat scroll center 8px  transparent;
+      height: 33px;
+      width: 16px;
       margin: 0 7px;
     }
   }
@@ -99,7 +132,7 @@
   .canNotClick:hover {
     cursor: not-allowed;
   }
-  .selectPage {
+  .selectPage-con {
     margin-right: 15px;
     float: right;
     .enterPageNum {

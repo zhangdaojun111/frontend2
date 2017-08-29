@@ -1,8 +1,9 @@
 <div class="data-table-agGrid-con">
     <!--按鈕-->
-    <div class="btn-nav">
+    <div class="btn-nav-con flex flex-end">
+        <div class="fast-search-con"></div>
         <div class="dataGrid-commonQuery">
-            <select class="dataGrid-commonQuery-select">
+            <select class="dataGrid-commonQuery-select dataGrid-commonQuery-select-style">
                 <option class="dataGrid-commonQuery-option" fieldId="100" value="常用查询">常用查询</option>
             </select>
         </div>
@@ -10,25 +11,25 @@
             <a class="keyword-tips" href="javascript:;" title=""><span>当前为数据检索模式，仅显示被搜索出的数据。若要查看所有数据，<span class="showNormalGrid">点击这里。</span></span></a>
             <a class="delete-tips" href="javascript:;" title=""><span>当前为数据删除模式，仅显示已被占用数据。若要查看所有数据，<span class="showNormalGrid">点击这里。</span></span></a>
             <a class="correspondence-check" href="javascript:;" title="仅显示勾选项"><img src="../../../../assets/images/dataGrid/icon_add_1.png" alt=""><span>仅显示勾选项</span></a>
-            <a class="float-search-btn" href="javascript:;" title="筛选"><img src="../../../../assets/images/dataGrid/shaixuan.png" alt=""><span>筛选</span></a>
-            <a class="expert-search-btn" href="javascript:;" title="高级查询"><img src="../../../../assets/images/dataGrid/icon_gaojichaxun_1.png" alt=""><span>高级查询</span></a>
-            <a class="group-btn" href="javascript:;" title="分组"><img src="../../../../assets/images/dataGrid/icon_fenzu_1.png" alt=""><span>分组</span></a>
-            <a class="new-form-btn" href="javascript:;" title="新增"><img src="../../../../assets/images/dataGrid/icon_add_1.png" alt=""><span>新增</span></a>
-            <a class="edit-btn" href="javascript:;" title="编辑"><img src="../../../../assets/images/dataGrid/icon_bianjimoshi.png" alt=""><span>编辑</span></a>
-            <a class="grid-del-btn" href="javascript:;" title="删除"><img src="../../../../assets/images/dataGrid/icon_delete_1.png" alt=""><span>删除</span></a>
-            <a class="grid-import-btn" href="javascript:;" title="导入"><img src="../../../../assets/images/dataGrid/icon_daoru_1.png" alt=""><span>导入</span></a>
-            <a class="grid-export-btn" href="javascript:;" title="导出"><img src="../../../../assets/images/dataGrid/icon_daochu_1.png" alt=""><span>导出</span></a>
-            <a class="custom-column-btn" href="javascript:;" title="定制列"><img src="../../../../assets/images/dataGrid/icon_dingzhilie_1.png" alt=""><span>定制列</span></a>
-            <a class="grid-auto-width" href="javascript:;" title="自适宽度"><img src="../../../../assets/images/dataGrid/icon_kuanduzishiyng_1.png" alt=""><span>自适宽度</span></a>
-            <a class="refresh-btn" href="javascript:;" title="刷新"><img src="../../../../assets/images/dataGrid/icon_shuaxin_blue.png" alt=""><span>刷新</span></a>
-            <a class="correspondence-save" href="javascript:;" title="保存"><img src="../../../../assets/images/dataGrid/icon_save.png" alt=""><span>保存</span></a>
-            <a class="grid-new-window" href="javascript:;" target="_blank" title="全屏"><img src="../../../../assets/images/dataGrid/icon_quanping.png" alt=""><span>全屏</span></a>
+            <a class="float-search-btn" href="javascript:;" title="筛选"><span>筛选</span><i class="icon-aggrid icon-aggrid-filter"></i></a>
+            <a class="expert-search-btn" href="javascript:;" title="高级查询"><span>高级查询</span><i class="icon-aggrid icon-aggrid-search"></i></a>
+            <a class="group-btn" href="javascript:;" title="分组"><span>分组</span><i class="icon-aggrid icon-aggrid-group"></i></a>
+            <a class="new-form-btn" href="javascript:;" title="新增"><span>新增</span><i class="icon-aggrid icon-aggrid-add"></i></a>
+            <a class="edit-btn" href="javascript:;" title="编辑"><span>编辑</span><i class="icon-aggrid icon-aggrid-edit"></i></a>
+            <a class="grid-del-btn" href="javascript:;" title="删除"><span>删除</span><i class="icon-aggrid icon-aggrid-delete"></i></a>
+            <a class="grid-import-btn" href="javascript:;" title="导入"><span>导入</span><i class="icon-aggrid icon-aggrid-import"></i></a>
+            <a class="grid-export-btn" href="javascript:;" title="导出"><span>导出</span><i class="icon-aggrid icon-aggrid-export"></i></a>
+            <a class="custom-column-btn" href="javascript:;" title="定制列"><span>定制列</span><i class="icon-aggrid icon-aggrid-custom"></i></a>
+            <a class="grid-auto-width" href="javascript:;" title="自适宽度"><span>自适宽度</span><i class="icon-aggrid icon-aggrid-self-adaptation"></i></a>
+            <a class="refresh-btn" href="javascript:;" title="刷新"><span>刷新</span><i class="icon-aggrid icon-aggrid-refresh"></i></a>
+            <a class="correspondence-save" href="javascript:;" title="保存"><span>保存</span><i class="icon-aggrid icon-aggrid-save"></i></a>
+            <a class="grid-new-window" href="javascript:;" target="_blank" title="全屏"><span>全屏</span><i class="icon-aggrid icon-aggrid-full-screen"></i></a>
         </div>
         <div class="dataGrid-edit-group">
-            <a class="edit-btn-save" href="javascript:;" title="保存"><img src="../../../../assets/images/dataGrid/icon_save2.png" alt=""><span>保存</span></a>
-            <a class="edit-btn-cancel" href="javascript:;" title="取消"><img src="../../../../assets/images/dataGrid/quxiao.png" alt=""><span>取消</span></a>
-            <a class="custom-column-btn" href="javascript:;" title="定制列"><img src="../../../../assets/images/dataGrid/icon_dingzhilie_1.png" alt=""><span>定制列</span></a>
-            <a class="grid-auto-width" href="javascript:;" title="自适宽度"><img src="../../../../assets/images/dataGrid/icon_kuanduzishiyng_1.png" alt=""><span>自适宽度</span></a>
+            <a class="edit-btn-save" href="javascript:;" title="保存"><span>保存</span><i class="icon-aggrid icon-aggrid-save"></i></a>
+            <a class="edit-btn-cancel" href="javascript:;" title="取消"><span>取消</span><i class="icon-aggrid icon-aggrid-cancel"></i></a>
+            <a class="custom-column-btn" href="javascript:;" title="定制列"><span>定制列</span><i class="icon-aggrid icon-aggrid-self-adaptation"></i></a>
+            <a class="grid-auto-width" href="javascript:;" title="自适宽度"><span>自适宽度</span><i class="icon-aggrid icon-aggrid-full-screen"></i></a>
         </div>
     </div>
     <!--sheet分页-->

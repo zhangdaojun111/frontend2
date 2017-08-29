@@ -990,12 +990,15 @@ let config={
         },
         //快捷添加后回显
         addNewItem(data){
+            console.log('快捷添加回显');
+            console.log(data);
             let dfield=this.data['quikAddDfield'];
             let fieldData=this.data.data[dfield];
+            console.log(fieldData['options']);
             if(fieldData["options"]){
-                this.data.childComponent[dfield]['data']['options']=fieldData["options"] = fieldData["options"].push(...data['newItems']);
+                this.data.childComponent[dfield]['data']['options']=fieldData["options"] =data['newItems'];
             }else {
-                this.data.childComponent[dfield]['data']['group']=fieldData["group"] = fieldData["options"].push(...data['newItems']);
+                this.data.childComponent[dfield]['data']['group']=fieldData["group"] = data['newItems'];
             }
             this.data.childComponent[dfield].reload();
         },
@@ -1328,6 +1331,7 @@ let config={
                 modal:true
             }).then((res) => {
                 _this.actions.setFormValue(data.dfield,res.value,res.label);
+                _this.actions.checkValue(data,_this);
             });
         },
 
@@ -1357,9 +1361,8 @@ let config={
                 originalOptions = data["group"];
             }
             AddItem.data.originalOptions=_.defaultsDeep({},originalOptions);
-            AddItem.data.data=_.defaultsDeep({},data);
-            console.log('*********');
-            console.log(AddItem);
+            AddItem.data.fieldId=data.id;
+            // AddItem.data.data=_.defaultsDeep({},data);
             PMAPI.openDialogByComponent(AddItem, {
                 width: 800,
                 height: 600,
@@ -1681,15 +1684,14 @@ let config={
         this.actions.changeOptions();
         this.actions.setDataFromParent();
         this.actions.addBtn();
-        //固定按钮
-        // _this.el.on('scroll','.wrap',function(){
-        //     console.log('scroll');
-        //     _this.el.find('.ui-btn-box').css({'bottom':(-1*$('.wrap').get(0).scrollTop +' px'),'width':'calc(100% + '+$('.wrap').get(0).scrollLeft+'px)'});
-        // })
+
         //默认表单样式
         if( _this.el.find('table').hasClass('form-version-table-user')||  _this.el.find('table').hasClass('form-version-table-department')||  _this.el.find('table').hasClass('form-default')){
             _this.el.find('table').parents('#detail-form').css("background","#F2F2F2");
          }
+        //时间日期
+
+
     },
     beforeDestory(){
         this.el.off();
