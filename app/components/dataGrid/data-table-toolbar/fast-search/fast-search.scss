@@ -1,14 +1,10 @@
-.fast-search- {
+.fast-search {
     padding:5px;
-    background-color: #fafafa;
-    border: 1px solid #e4e4e4;
-    border-top: none;
     .fast-search-select {
         font-size: 12px;
         height: 30px;
         background-color: #fafafa;
         background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll right center transparent;
-        border: none;
         appearance: none;
         -moz-appearance: none;
         -webkit-appearance: none;
@@ -19,6 +15,7 @@
         color: rgb(85, 85, 85);
         line-height: 30px;
         margin-right: 10px;
+        padding-left: 10px;
     }
     .fast-search-box {
       display: inline-block;
