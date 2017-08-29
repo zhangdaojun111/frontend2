@@ -1,3 +1,4 @@
+{% load client_version %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,10 +18,10 @@
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
 <script type="text/javascript" src="http://localhost:8080/scripts/dataGrid.js"></script>
 {% else %}
-<link rel="stylesheet" href="/client/static/css/vendors.css">
-<link rel="stylesheet" href="/client/static/css/dataGrid.css">
-<script type="text/javascript" src="/client/static/vendors.js"></script>
-<script type="text/javascript" src="/client/static/dataGrid.js"></script>
+<link rel="stylesheet" href=" {{ "/client/static/css/vendors.css"|version }}">
+<link rel="stylesheet" href=" {{ "/client/static/css/dataGrid.css"|version }}">
+<script type="text/javascript" src=" {{ "/client/static/vendors.js"|version }}"></script>
+<script type="text/javascript" src=" {{ "/client/static/dataGrid.js"|version }}"></script>
 {% endifequal %}
 
 </body>
