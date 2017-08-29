@@ -1,10 +1,12 @@
 import Component from '../../../../lib/component';
 import {Text} from '../forms/text/text';
 import {Select} from '../forms/select/select';
+import {AutoSelect} from '../forms/autoselect/autocomplete';
 
 let formItemTypes = {
     'text': Text,
-    'select': Select
+    'select': Select,
+    'autoselect': AutoSelect
 }
 
 class Base extends Component {
@@ -21,7 +23,7 @@ class Base extends Component {
                 label: item.label,
                 name: item.name
             }, item.events);
-            this.append(instance, this.el.find('.formwrap'));
+            this.append(instance, this.el.find('.form-group'));
             this.formItems[item.name] = instance;
         });
     }

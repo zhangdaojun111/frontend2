@@ -51,7 +51,7 @@ const BiAppRouter = Backbone.Router.extend({
         form.render($('#route-outlet'));
     },
     routerFormDynamicComponent(type,id) {
-        Mediator.removeAll('bi:chart:form:update');
+        // Mediator.removeAll('bi:chart:form:update');
         let comType = {
             assortment: type,
             id: id
@@ -61,13 +61,17 @@ const BiAppRouter = Backbone.Router.extend({
             formComponent[type].reset(comType);
             formComponent[type].reload();
         } else {
-            // let component = new componentsJson[type]['component'](comType);
-            // component.render($('#route-outlet'));
-            // formComponent[type] = component;
-            component = new LineBarEditor();
+            let component = new componentsJson[type]['component'](comType);
             component.render($('#route-outlet'));
-            component.drawForm();
+            formComponent[type] = component;
+            // component = new LineBarEditor();
+            // component.render($('#route-outlet'));
+            // component.drawForm();
         }
+
+        // let component = new componentsJson[type]['component'](comType);
+        // component.render($('#route-outlet'));
+        // formComponent[type] = component;
 
     }
 });

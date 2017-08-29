@@ -3,7 +3,7 @@
  * 入口配置文件，form图表组件都从这进入
  */
 import {FormNormalComponent} from '../charts.types/normal/normal';
-import {FormTableComponent} from '../charts.types/table/table';
+import {TableEditor} from '../../test/editors/table/table';
 import {FormRadarComponent} from '../charts.types/radar/radar';
 import {FormMultiComponent} from '../charts.types/multi/multi';
 import {FormNineGridComponent} from '../charts.types/nine.grid/nine.grid';
@@ -20,7 +20,7 @@ export let componentsJson = {
     'table': {
         'entry': 'table',
         'name': '表格图',
-        'component': FormTableComponent
+        'component': TableEditor
     },
     'radar': {
         'entry': 'radar',
