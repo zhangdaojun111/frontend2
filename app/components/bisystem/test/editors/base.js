@@ -1,12 +1,10 @@
 import Component from '../../../../lib/component';
 
 class Base extends Component {
-
-    constructor(config, data, event) {
+    constructor(config, data, event){
         super(config, data, event)
     }
-    setValue(){}
-    getValue(){}
+    fillData(){}
 }
 
 export {Base}
