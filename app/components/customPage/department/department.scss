@@ -61,7 +61,6 @@
     height: calc( 100% - 75px);;
     #data-agGrid {
       width: 100%;
-      float: left;
       position: relative;
       height: 100%;
     }
@@ -73,6 +72,7 @@
       display: block;
       right: -200px;
       z-index: 1;
+      top: 0px;
     }
   }
 }
