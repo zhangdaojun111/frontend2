@@ -1066,6 +1066,8 @@ let config={
                         data:'success',
                     });
                 }
+            }else{
+                MSG.alert(res.error);
             }
             // this.successAlert(res["error"]);
             //自己操作的新增和编辑收到失效推送自己刷新
