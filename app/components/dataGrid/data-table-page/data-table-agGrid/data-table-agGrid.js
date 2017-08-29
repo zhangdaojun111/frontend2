@@ -2134,6 +2134,7 @@ let config = {
                                 this.data.filterParam = {
                                     expertFilter: JSON.parse(r.queryParams),
                                     filter:[],
+                                    fastFilter:[],
                                     is_filter: 1,
                                     common_filter_id: this.data.common_filter_id,
                                     common_filter_name: r.name
