@@ -98,10 +98,11 @@
   .custom-columns-panel {
     width: 200px;
     height: 100%;
-    float: left;
     background: #f0f0f0;
-    position: relative;
-    display: none;
+    position: absolute;
+    display: block;
+    right: -200px;
+    z-index: 1;
   }
 }
 
