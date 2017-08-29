@@ -210,9 +210,11 @@ let config = {
 
                 //点击关掉定制列panel
                 this.el.find( '.ag-body' ).on( 'click',()=>{
-                    this.el.find( '.custom-columns-panel' )[0].style.display = 'none';
+                    setTimeout( ()=>{
+                        this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'-200px' } );
+                    },400 )
                     this.data.isShowCustomPanel = false;
-                    this.actions.changeAgGridWidth();
+                    this.actions.changeAgGridWidth(true);
                 } )
 
                 let paginationData = {
@@ -632,18 +634,32 @@ let config = {
         },
         //定制列事件
         calcCustomColumn: function () {
-            this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
             this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
-            this.actions.changeAgGridWidth();
+            let close = false;
+            if( this.data.isShowCustomPanel ){
+                this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'0px' } );
+            }else {
+                close = true;
+                setTimeout( ()=>{
+                    this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'-200px' } );
+                },400 )
+            }
+            this.actions.changeAgGridWidth(close);
         },
         //改变agGrid宽度
-        changeAgGridWidth: function () {
+        changeAgGridWidth: function (close) {
             let num = 0;
             if( this.data.isShowCustomPanel ){
                 num+=200;
             }
             let grid = this.el.find( '#data-agGrid' )
-            grid.width( 'calc(100% - ' + num + 'px)' );
+            if( close ){
+                grid.width( 'calc(100% - ' + num + 'px)' );
+            }else {
+                setTimeout( ()=>{
+                    grid.width( 'calc(100% - ' + num + 'px)' );
+                },400 )
+            }
         },
         //floatingFilter拼参数
         floatingFilterPostData: function (col_field, keyWord, searchOperate) {
