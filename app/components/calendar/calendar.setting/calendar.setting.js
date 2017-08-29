@@ -62,6 +62,8 @@ let config = {
             //$(".calendar-setting-item-content").empty();
             this.append(new CalendarSet(data.data), this.el.find('.calendar-setting-item-content'));
         });
+
+        // 设置左边菜单的隐藏
         let isHide = true;
         this.el.on('click',".hide-con",function(){
             if(isHide) {

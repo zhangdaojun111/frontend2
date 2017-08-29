@@ -298,7 +298,6 @@ let config = {
             }
             CalendarService.saveCalendarTable(tableId,param).then(res=>{
                 if(res['succ'] === 1){
-                    console.log('success');
                     MSG.alert("保存成功");
                     setTimeout( ()=>{
                         //CalendarSetService.getColumnList(this.data.tableId)
@@ -405,9 +404,9 @@ let config = {
         }).on('click', '.save-btn', () => {
             let newAllRowsData = [];
             for(let obj of this.data.childComponents) {
-                console.log(obj.data.rowSetData);
                 newAllRowsData.push(obj.data.rowSetData);
             }
+            console.log(newAllRowsData);
             _this.actions.saveSetting(this.data.tableId, newAllRowsData);
         });
 
