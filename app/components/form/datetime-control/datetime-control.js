@@ -47,12 +47,6 @@ let config={
             _this.el.find(".datetime").val("年/月/日 时:分:秒");
         }
 
-       //  _this.el.find('.ui_tpicker_time_input').on('click', function () {
-       //      _this.el.find('#ui-timepicker-div').sibling('#add-wf')
-       //  })
-       // if(_this.el.find('.ui-datepicker-close'))
-
-
         //控制到时分秒
         _this.el.find(".datetime").datetimepicker({
             monthNamesShort: [ "一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月" ],
@@ -63,7 +57,7 @@ let config={
             secondText: '秒',
             currentText: '今',
             closeText: '确定',
-            timeInput:'1',
+            //timeInput:'1',
             showSecond: true, //显示秒
             changeMonth: true,
             changeYear:true,

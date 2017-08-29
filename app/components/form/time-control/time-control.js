@@ -48,6 +48,7 @@ let config={
             selector: '.input-img',
             callback: function(){
                 this.el.find('.time').css({'display':'block','position':'fixed'});
+                event.stopPropagation();
             }
         },
         {
@@ -133,6 +134,10 @@ let config={
 
         _.debounce(function(){_this.events.changeValue(_this.data)},200)();
 
+        // $(document).click(function () {
+        //     _this.el.find(".time").hide();
+        //     event.stopPropagation();
+        // })
     },
     beforeDestory:function(){
         $(document).off('click:timeControl');
