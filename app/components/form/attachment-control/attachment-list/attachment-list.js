@@ -8,7 +8,7 @@ export const attachmentListConfig = {
     data:{},
     actions:{
         deleteItem:function (item) {
-            HTTP.postImmediately('/delete_attachment/',{
+            $.post('/delete_attachment/',{
                 file_ids:JSON.stringify([item['file_id']]),
                 dinput_type:this.data.dinput_type
             })
@@ -20,7 +20,7 @@ export const attachmentListConfig = {
         }
     },
     afterRender:function () {
-        HTTP.postImmediately('/query_attachment_list/',{
+        $.post('/query_attachment_list/',{
             file_ids:JSON.stringify(this.data.fileIds),
             dinput_type:this.data.dinput_type
         }).then(res=>{
