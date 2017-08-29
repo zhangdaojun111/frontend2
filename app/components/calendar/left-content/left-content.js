@@ -43,7 +43,7 @@ let config = {
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
                 temp.next(".item-content").show();
-                temp.next().css({height:'calc(100% - 130px)'});
+                temp.next().css({height:'calc(100% - 132px)'});
             }
         },
         //日历隐藏栏显示和隐藏
@@ -63,7 +63,7 @@ let config = {
                 that.el.find(".item-content-1").css("height","28%");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").show();
-                that.el.find(".item-content-2").css({height:'calc(72% - 130px)'});
+                that.el.find(".item-content-2").css({height:'calc(72% - 132px)'});
             }
         },
         //日历操作显示和隐藏
@@ -82,7 +82,7 @@ let config = {
                 temp.addClass("display-all-content");
                 that.el.find(".item-content").hide();
                 that.el.find(".item-content-2").hide();
-                that.el.find(".item-content-1").css({height:'calc(100% - 130px)'});
+                that.el.find(".item-content-1").css({height:'calc(100% - 132px)'});
             }
         },
         //展开日历操作栏
@@ -92,7 +92,7 @@ let config = {
             this.el.find(".item-content").hide();
             this.el.find(".item-content-2").hide();
             this.el.find(".item-content-1").show();
-            this.el.find(".item-content-1").css({height:'calc(100% - 130px)'});
+            this.el.find(".item-content-1").css({height:'calc(100% - 132px)'});
         },
         //处理日历树数据
         getCalendarTreeData:function(){
@@ -197,6 +197,12 @@ let config = {
             this.el.find('.item-content-3').empty();
             data.forEach((row) =>{
                 this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
+            });
+        });
+        Mediator.on('CalendarFinishedWorkflowData: workflowData', data =>{
+            this.el.find('.item-content-4').empty();
+            data.forEach((row) =>{
+                this.append(new leftContentFinished(row), this.el.find('.item-content-4'));
             });
         });
         Mediator.on('calendar-left:hideRemindType',data =>{

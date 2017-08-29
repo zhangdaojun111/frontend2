@@ -21,19 +21,17 @@ let config = {
             event: 'click',
             selector: '.has-finished',
             callback: function () {
-                // this.callback();
-                console.log(11);
-                this.trigger('onChange', {type: 'clearAll', value: [1,1,1]});
             }
         }
     ],
     afterRender: function() {
-        this.el.css("padding","2px 10px 5px 10px");
+        console.log(this.data);
     },
 }
 class leftContentFinished extends Component {
-    constructor(data, events){
-        super(config, data, events);
+    constructor(data){
+        config.data= data;
+        super(config);
     }
 }
 export default leftContentFinished;
