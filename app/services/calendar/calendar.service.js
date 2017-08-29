@@ -158,7 +158,7 @@ export const CalendarService = {
      * data = {content: [隐藏项]}
      * @param data
      */
-    getCalendarhidePreference: function (data) {
+    getCalendarHidePreference: function (data) {
         let params = {
             type: 6,
             content: JSON.stringify(data['content']),
