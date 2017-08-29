@@ -1,0 +1,21 @@
+<table border-collapse="border-collapse" border-spacing="0" class="pie-table">
+    <thead>
+        <tr>
+            <th class="index">序列</th>
+            <th class="xz">X轴字段</th>
+            <th class="tool">操作</th>
+        </tr>
+    </thead>
+
+    {{#each deeps}}
+    <tbody>
+        <tr>
+            <td class="index">{{@index}}</td>
+            <td class="xz">{{name}}</td>
+            <td class="tool">
+                <a class="del-deep-btn" href="javascript:;">删除</a>
+            </td>
+        </tr>
+    </tbody>
+    {{/each}}
+</table>

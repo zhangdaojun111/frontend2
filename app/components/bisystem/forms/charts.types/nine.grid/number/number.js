@@ -14,18 +14,6 @@ let config = {
     template:template,
     data: {
         columnsShow:false,
-        xAxis:{
-            x1:'',
-            x2:'',
-            x3:'',
-            x4:'',
-        },
-        yAxis:{
-            y1:'',
-            y2:'',
-            y3:'',
-            y4:'',
-        },
     },
     actions: {},
     afterRender() {

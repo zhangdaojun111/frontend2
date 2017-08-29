@@ -27,10 +27,12 @@ let config = {
         let me = this;
         this.el.on('click', '.save-btn', (event) => {
             this.addDeep(this.x.getValue());
+            return false;
         });
         this.el.on('click', '.del-deep-btn',function(event){
             let index = $(this).closest('tr').index();
             me.removeDeep(index);
+            return false;
         })
     },
     beforeDestory() {}
