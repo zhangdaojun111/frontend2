@@ -75,6 +75,7 @@ let css = `
 .form-setting-textarea-popup-checkbox {
     float: left;
     margin: 3px 4px 0 0;
+    outline: none;
 }
 .form-setting-textarea-popup-inputtext {
     border: 0 none;
@@ -84,6 +85,7 @@ let css = `
     padding:0;
     text-align: center;
     background: transparent;
+    outline: none;
 }
 .form-setting-textarea-popup-save {
     margin: 0;
@@ -169,8 +171,9 @@ let popupSetting = {
                     let item = this.el.find(`.form-setting-textarea-popup-li[key=${key}]`);
                     let checkbox = item.find('input:checkbox')[0];
                     checkbox.checked = true;
-                    if (key === '66' || key === '77') {
-                        this.actions.onCheckboxChange(checkbox);
+                    console.log(key);
+                    if (key === '66' || key === '67') {
+                        $(checkbox).trigger('change');
                     }
                     item.find('input:text').each(function(index) {
                         $(this).val(choosedData[key][index]);
@@ -230,29 +233,26 @@ let popupSetting = {
                 })
             }
 
-            if (key === '66') {
+            if (key === '66' || key === '67') {
+                console.log(input);
                 if (checked) {
                     this.leftCheckbox.removeAttr('disabled');
                     removeChecked(this.rightCheckbox);
-                    removeChecked(this.remainCheckbox);
-                    this.rightCheckbox.attr('disabled', 'true');
-                    this.remainCheckbox.attr('disabled', 'true');
-                } else {
-                    this.rightCheckbox.removeAttr('disabled');
-                    this.remainCheckbox.removeAttr('disabled');
-                }
-            } else if (key === '67') {
-                if (checked) {
-                    this.rightCheckbox.removeAttr('disabled');
                     removeChecked(this.leftCheckbox);
                     removeChecked(this.remainCheckbox);
                     this.leftCheckbox.attr('disabled', 'true');
+                    this.rightCheckbox.attr('disabled', 'true');
                     this.remainCheckbox.attr('disabled', 'true');
+                    input.checked = true;
+                    $input.removeAttr('disabled');
                 } else {
                     this.leftCheckbox.removeAttr('disabled');
+                    this.rightCheckbox.removeAttr('disabled');
                     this.remainCheckbox.removeAttr('disabled');
                 }
             }
+
+
         },
 
         save: function () {

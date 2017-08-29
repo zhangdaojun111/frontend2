@@ -93,26 +93,27 @@ let config = {
             this.actions.renderChoosed();
         },
         renderChoosed: function () {
-            this.listWrap.find('input:checkbox:checked').each(function () {
-                this.checked = false;
-            });
-            if (this.data.onSelect) {
-                this.data.onSelect(this.data.choosed);
-            }
-
-            this.trigger('onSelect', this.data.choosed);
-            if (this.data.choosed.length) {
-                let html = [];
-                this.data.choosed.forEach((item) => {
-                    if (item.id) {
-                        let checkbox = this.listWrap.find(`input:checkbox[data-id=${item.id}]`);
-                        checkbox[0].checked = true;
-                        html.push(item.name);
-                    }
+            if (this.data.list.length) {
+                this.listWrap.find('input:checkbox:checked').each(function () {
+                    this.checked = false;
                 });
-                this.inputResult.val(html.join(','));
+                if (this.data.onSelect) {
+                    this.data.onSelect(this.data.choosed);
+                }
+                this.trigger('onSelect', this.data.choosed);
+                if (this.data.choosed.length) {
+                    let html = [];
+                    this.data.choosed.forEach((item) => {
+                        if (item.id) {
+                            let checkbox = this.listWrap.find(`input:checkbox[data-id=${item.id}]`);
+                            checkbox[0].checked = true;
+                            html.push(item.name);
+                        }
+                    });
+                    this.inputResult.val(html.join(','));
+                }
+                this.el.find('.select-all span').text(this.data.choosed.length);
             }
-            this.el.find('.select-all span').text(this.data.choosed.length);
         },
         selectAll: function () {
             if (this.data.choosed.length === this.data.list.length) {

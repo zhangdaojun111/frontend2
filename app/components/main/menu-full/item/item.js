@@ -36,7 +36,13 @@ let config = {
                     }
                 }
             } else {
-                let key = this.data.ts_name || this.data.table_id;
+                let key;
+                if (this.data.table_id && this.data.table_id !== '') {
+                    key = this.data.table_id;
+                }else{
+                    key = this.data.ts_name;
+                }
+
                 Mediator.emit('menu:item:openiframe', {
                     id: key,
                     name: this.data.label,
@@ -66,7 +72,12 @@ let config = {
         },
         onItemClickAtMini: function () {
             if (_.isUndefined(this.data.items)) {
-                let key = this.data.ts_name || this.data.table_id;
+                let key;
+                if (this.data.table_id && this.data.table_id !== '') {
+                    key = this.data.table_id;
+                }else{
+                    key = this.data.ts_name;
+                }
                 Mediator.emit('menu:item:openiframe', {
                     id: key,
                     name: this.data.label,
