@@ -188,7 +188,7 @@ let config = {
                 });
                 this.data.childComponents.push(calendarSetItem);
                 this.append(calendarSetItem, this.el.find('.set-items'));
-                Mediator.emit('calendar-set:editor',{data:0});
+                //Mediator.emit('calendar-set:editor',{data:0});
             });
         },
 
@@ -389,7 +389,6 @@ let config = {
             }
         });
         Mediator.on('calendar-set-left:calendar-set', data => {
-
             this.data.tableId = data.table_id;
             this.actions.getColumnListData(data.table_id);
         });
@@ -400,7 +399,7 @@ let config = {
             $(this).addClass("disabled");
             $(this).next('span').addClass("disabled");
             Mediator.emit('calendar-set:editor',{data:1});
-            $(this).attr('disabled', 'true')
+            //$(this).attr('disabled', 'true')
         }).on("click",".cancel-btn", () => {
             _this.el.find(".hide-btns").css("visibility","hidden");
             _this.el.find(".set-btn").removeClass("disabled");
@@ -417,6 +416,9 @@ let config = {
             _this.actions.saveSetting(this.data.tableId, newAllRowsData);
         });
 
+    },
+    beforeDestory: function () {
+        Mediator.removeAll('calendar-set-left:calendar-set');
     }
 };
 

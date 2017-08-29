@@ -219,6 +219,7 @@ let config = {
         this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
 
         Mediator.on('calendar-set:editor', data => {
+            console.log(data);
             if (data.data === 1) {
                 this.el.find(".editor-items").attr("disabled", false);
                 this.data.singleSelectMenu.destroySelf();
