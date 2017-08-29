@@ -13,10 +13,11 @@ import {FormNormalYComponent} from './yAxis/yAxis';
 import {config as advancedDialogConfig} from "./advanced/advanced";
 import {FormMixShareComponent} from '../../mix.share/mix.share';
 import {FormNormalDeepComponent} from './deep/deep';
-import "./normal.scss";
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 
+import '../../../../../assets/scss/bisystem/charts.types.scss';
+import "./normal.scss";
 
 let config = {
     template:template,

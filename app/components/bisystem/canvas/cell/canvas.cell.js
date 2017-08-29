@@ -158,7 +158,7 @@ export class CanvasCellComponent extends BiBaseComponent {
         this.loadData = false;
         this.cell['chart'] = res[0];
         this.data = res[0];
-        this.data.biUser = window.config.bi
+        this.data.biUser = window.config.bi;
         this.cell.chart_id = chartId[0];
         this.data.biUser = true;
         this.reload();

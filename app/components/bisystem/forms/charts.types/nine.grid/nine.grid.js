@@ -12,6 +12,8 @@ import {FormMixShareComponent} from '../../mix.share/mix.share';
 import {NineGridNumberComponent} from './number/number';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
+
+import '../../../../../assets/scss/bisystem/charts.types.scss';
 import './nine.grid.scss';
 
 let config = {

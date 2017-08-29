@@ -10,11 +10,13 @@ import {instanceFitting, groupFitting} from '../../fittings/export.fittings';
 import Mediator from '../../../../../lib/mediator';
 import msgbox from "../../../../../lib/msgbox";
 import {FormMixShareComponent} from '../../mix.share/mix.share';
-import "./table.scss";
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import {FormColumnComponent} from './columns/column';
 import {FormSingleComponent} from './single/single';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
+
+import '../../../../../assets/scss/bisystem/charts.types.scss';
+import "./table.scss";
 
 let config = {
     template:template,

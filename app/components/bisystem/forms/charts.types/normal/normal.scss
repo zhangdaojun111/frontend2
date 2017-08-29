@@ -1,76 +1,42 @@
 $bg-color: #ccc;
-
-.chart-form {
-    overflow: auto;
-    height: calc(100% - 75px);
-    h3 {
-        font-size:16px;
-        color:#333;
+@mixin form-group-y{
+    margin: 26px 0;
+    border: 1px solid $bg-color;
+    position: relative;
+    padding: 10px;
+    &::after {
+        content: '请选择Y轴字段';
+        position: absolute;
+        top: -10px;
+        left: 10px;
+        width: 102px;
+        height: 20px;
+        font-size: 14px;
+        background-color: #ffffff;
+        color: $bg-color;
     }
-    .save-btn {
-        display: inline-block;
-
-        margin-top: 26px;
-        padding-top: 26px;
-        padding-bottom: 26px;
-        border-top: 1px solid #ececec;
-        clear: both;
-        button {
-            border: none;
-            color: #fff;
-            width: 210px;
-            height: 40px;
-            line-height: 40px;
-            text-align: center;
-            background: #3b8cff;
-            box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            outline: none;
-            position: relative;
-        }
+}
+@mixin chart-form-deep-title{
+    position: absolute;
+    width: 66px;
+    height: 22px;
+    line-height: 22px;
+    content: '分组图标';
+    top: -10px;
+    left: 18px;
+    font-size: 14px;
+    background-color: #ffffff;
+    color: #ccc;
+    text-align: center;
+}
+.chart-form {
+    h3 {
+        font-size: 16px;
+        color: #333;
     }
     .chart-form-group {
-        padding: 20px;
-        margin-top: 20px;
-        position: relative;
-        > div {
-            margin-top:15px;
-        }
-        .form-group-y0 {
-            margin: 26px 0;
-            border: 1px solid $bg-color;
-            position: relative;
-            padding: 10px;
-            &:after {
-                content: '请选择Y轴字段';
-                position: absolute;
-                top: -10px;
-                left: 10px;
-                width: 102px;
-                height: 20px;
-                font-size: 14px;
-                background-color: #ffffff;
-                color: $bg-color;
-            }
-        }
-        .group-active {
-            margin: 26px 0;
-            border: 1px solid $bg-color;
-            position: relative;
-            padding: 10px;
-            &:after {
-                content: '请选择Y轴字段';
-                position: absolute;
-                top: -10px;
-                left: 10px;
-                width: 102px;
-                height: 20px;
-                font-size: 14px;
-                background-color: #ffffff;
-                color: $bg-color;
-            }
+        .form-group-y0,.group-active {
+            @include form-group-y;
         }
     }
     .chart-form-deep {
@@ -78,65 +44,12 @@ $bg-color: #ccc;
         padding: 20px;
         margin-top: 20px;
         position: relative;
-        &:after {
-            position: absolute;
-            width: 66px;
-            height: 22px;
-            line-height: 22px;
-            content: '分组图标';
-            top: -10px;
-            left: 18px;
-            font-size: 14px;
-            background-color: #ffffff;
-            color: #ccc;
-            text-align: center;
-        }
-        .save-new {
-            border-top: 0;
-            padding: 0;
-            button {
-                width: 160px;
-                height: 36px;
-            }
-        }
-        .form-deep-table {
-            padding: 20px 10px 10px 10px;
-            .table {
-                width: 100%;
-                border: 1px solid #ececec;
-                th {
-                    font-size: 14px;
-                    background-color: #f5f5f5;
-                    font-weight: bold;
-                }
-                td {
-                    color: #666666;
-                    a {
-                        text-decoration: none;
-                        color: #3b8cff;
-                    }
-                }
-                th, td {
-                    padding: 15px 0;
-                    border-bottom: 1px solid #ececec;
-                    border-right: 1px solid #ececec;
-                    text-align: center;
-                    vertical-align: middle;
-                }
-                .index {
-                    width: 10%;
-                }
-                .xx {
-                    width: 70%;
-                }
-                .tool {
-                    width: 20%;
-                }
-            }
+        &::after{
+            @include chart-form-deep-title;
         }
     }
     .after-content{
-        &:after{
+        &::after{
             content: '下穿图标';
         }
     }
@@ -145,22 +58,11 @@ $bg-color: #ccc;
         padding: 20px;
         margin-top: 20px;
         position: relative;
-        &:after {
-            position: absolute;
-            width: 66px;
-            height: 22px;
-            line-height: 22px;
+        &::after {
+            @include chart-form-deep-title;
             content: '高级数据';
-            top: -10px;
-            left: 18px;
-            font-size: 14px;
-            background-color: #ffffff;
-            color: #ccc;
-            text-align: center;
         }
         .add {
-            border-top: 0;
-            padding: 0;
             button {
                 width: 68px;
                 height: 28px;

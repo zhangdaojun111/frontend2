@@ -1,14 +1,5 @@
 .chart-multi {
-  overflow: auto;
-  height: calc(100% - 75px);
-  padding: 20px;
-  margin: 15px;
-  background: #ffffff;
-  .multi-base {
-    padding: 20px 0;
-  }
   .multi-share {
-    padding: 20px 0;
     .chart-mix-share {
       .autocomplete-container{
         display:none;
@@ -16,30 +7,6 @@
     }
     .form-filter{
       display:none;
-    }
-  }
-  .save-btn {
-    margin-top: 26px;
-    padding-top: 26px;
-    padding-bottom: 26px;
-    border-top: 1px solid #ececec;
-    clear: both;
-    display: inline-block;
-
-    button {
-      border: none;
-      color: #fff;
-      width: 210px;
-      height: 40px;
-      line-height: 40px;
-      text-align: center;
-      background: #3b8cff;
-      box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      outline: none;
-      position: relative;
     }
   }
   .multi-add {

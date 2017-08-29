@@ -74,6 +74,7 @@ $font_size: 12px;
     }
     .charts{
       height: calc(100% - 68px);
+      overflow: auto;
       }
     }
 }

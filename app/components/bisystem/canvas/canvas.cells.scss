@@ -16,40 +16,41 @@ $active-color: #1caeff;
         font-size: $font_size;
         background-color: #374157;
         .nav-tabs{
-            float:left;
-            height:50px;
-            white-space: nowrap;
-            background-color: #ffffff;
-            border-bottom: solid 1px #eeeeee;
-            overflow: hidden;
-            div{
-                display: inline-block;
-            }
-            a{
-                text-decoration: none;
-                padding: 0 25px;
-                position: relative;
-                display: inline-block;
-                outline: none;
-                color: #666666;
-                line-height: 50px;
-                height: 50px;
-                margin-right: -3px;
-                background-color: #3e4a63;
-                border-left: solid 1px #556574;
-                color: #ffffff;
-            }
-            .active{
-                &::after{
-                    content: '';
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
-                    height: 4px;
-                    width: 100%;
-                    background-color: #00bcd4;
-                }
-            }
+          float:left;
+          height:50px;
+          white-space: nowrap;
+          border-bottom: solid 1px #eeeeee;
+          width: calc( 100% - 400px );
+          overflow: auto;
+          background-color: #374157;
+          div{
+              display: inline-block;
+          }
+          a{
+              text-decoration: none;
+              padding: 0 25px;
+              position: relative;
+              display: inline-block;
+              outline: none;
+              color: #666666;
+              line-height: 50px;
+              height: 50px;
+              margin-right: -3px;
+              background-color: #3e4a63;
+              border-left: solid 1px #556574;
+              color: #ffffff;
+          }
+          .active{
+              &::after{
+                  content: '';
+                  position: absolute;
+                  bottom: 0;
+                  left: 0;
+                  height: 4px;
+                  width: 100%;
+                  background-color: #00bcd4;
+              }
+          }
         }
     }
     .views-header2{
