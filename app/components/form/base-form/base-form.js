@@ -1325,8 +1325,8 @@ let config={
         selectChoose(data){
             let _this=this;
             PMAPI.openDialogByIframe(`/iframe/choose?fieldId=${data.id}`,{
-                width:1500,
-                height:1000,
+                width:900,
+                height:600,
                 title:`选择器`,
                 modal:true
             }).then((res) => {

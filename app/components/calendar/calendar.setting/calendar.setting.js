@@ -8,7 +8,6 @@ import Mediator from '../../../lib/mediator';
 import CalendarSettingItem from './calendar.setting.item/calendar.setting.item';
 import CalendarSet from '../../calendar.set/calendar.set';
 import {CalendarSetService} from "../../../services/calendar/calendar.set.service"
-import {PMAPI, PMENUM} from '../../../lib/postmsg';
 
 let config = {
     template: template,
@@ -62,15 +61,15 @@ let config = {
         this.el.on('click',".hide-con",function(){
             if(!$(this).is(".is-hide")){
                 $(this).addClass("is-hide");
-                that.el.find(".calendar-setting-items").css("width","30px");
+                that.el.find(".calendar-setting-items").css({"width":"30px",});
                 that.el.find(".search").hide();
-                that.el.find(".setting-content").hide();
+                that.el.find(".setting-content").css('visibility','hidden');
                 that.el.find(".calendar-setting-item").css("width","calc(100% - 45px)");
             } else{
                 $(this).removeClass("is-hide");
-                that.el.find(".calendar-setting-items").css("width","200px");
+                that.el.find(".calendar-setting-items").css({"width":"200px",'height':"auto"});
                 that.el.find(".search").show();
-                that.el.find(".setting-content").show();
+                that.el.find(".setting-content").css('visibility','visible');
                 that.el.find(".calendar-setting-item").css("width","calc(100% - 220px)");
             }
 

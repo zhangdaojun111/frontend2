@@ -15,9 +15,9 @@ import WorkflowRecord from '../components/workflow/approval-record/approval-reco
 import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
 import WorkFlowGrid from '../components/workflow/workflow-grid/workflow-grid';
 import ApprovalHeader from '../components/workflow/approval-header/approval-header';
-import ApprovalWorkflow from '../components/workflow/approval-workflow';
-import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow';
-import WorkflowAddSigner from '../components/workflow/workflow-addFollow/workflow-addSigner';
+import ApprovalWorkflow from '../components/workflow/approval-workflow/approval-workflow';
+import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow/workflow-addFollow';
+import WorkflowAddSigner from '../components/workflow/workflow-addFollow/workflow-addSigner/workflow-addSigner';
 import FormEntrys from './form';
 import TreeView from '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';

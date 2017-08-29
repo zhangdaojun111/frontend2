@@ -33,10 +33,6 @@ let config = {
                 self.el.find('.charts-items li').show();
             }
             self.el.find('.charts-items li').each(function () {
-                // let val = self.el.find('.filter-match').val();
-                // if($(this).find('.item').text().test(/val/)){
-                //     $(this).show();
-                // }
                if($(this).find('.item').text().substr(0,len) === self.el.find('.filter-match').val()){
                     $(this).show();
                }

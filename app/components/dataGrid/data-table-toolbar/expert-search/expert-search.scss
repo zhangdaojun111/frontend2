@@ -71,7 +71,7 @@
         padding: 5px;
         border: 1px solid #f2f2f2;
         overflow-y: auto;
-        height: 408px;
+        //height: 408px;
         .condition-search-choice {
             .condition-search-item {
                 padding:5px;
@@ -246,6 +246,16 @@
             cursor: pointer;
             width: 91px;
             height: 30px;
+            background-color: #0088ff;
+            border: 1px solid #0088ff;
+            border-radius: 4px;
+            color: #fff;
+            margin-right: 8px;
+        }
+        .cancel-button {
+            cursor: pointer;
+            width: 91px;
+            height: 30px;
             background-color: #fff;
             border: 1px solid #d7d7d7;
             border-radius: 4px;
@@ -256,9 +266,9 @@
             cursor: pointer;
             width: 91px;
             height: 30px;
-            background-color: #0088ff;
-            color: #fff;
-            border: 1px solid #0088ff;
+            background-color: #fff;
+            border: 1px solid #d7d7d7;
+            color: #666;
             border-radius: 4px;
         }
     }
