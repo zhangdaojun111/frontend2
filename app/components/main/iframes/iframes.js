@@ -115,7 +115,7 @@ export const IframeInstance = new Component({
                 //向后台发送请求记录
                 TabService.onOpenTab(id).done((result) => {
                     if(result.success === 1){
-                        console.log("post open record success");
+                        // console.log("post open record success");
                     }else{
                         console.log("post open record failed")
                     }
@@ -123,10 +123,9 @@ export const IframeInstance = new Component({
             }
         },
         sendCloseRequest:function (id) {
-            console.log(id);
             TabService.onCloseTab(id,this.data.focus.id).done((result) => {
                 if(result.success === 1){
-                    console.log("post close record success")
+                    // console.log("post close record success")
                 }else{
                     console.log("post close record failed")
                 }
@@ -143,7 +142,6 @@ export const IframeInstance = new Component({
 
             this.actions.sendCloseRequest(id);
             let item = this.data.hash[id];
-            console.log(item);
             //关闭的item放入关闭历史数组，数组大于5则清除最后一项
             this.actions.setCloseHistory(item);
             // IframeOnClick.retrack(item.iframe.find('iframe')[0]);
@@ -243,7 +241,6 @@ export const IframeInstance = new Component({
             }
         },
         controlTabs:function (event) {
-            console.log(event);
             let name = event.target.textContent;
             if(name === '关闭标签'){
                 this.actions.closeFocusTab();
@@ -256,7 +253,6 @@ export const IframeInstance = new Component({
                 this.actions.initTabList(this.data.closeHistory);
             }else{
                 //打开历史记录标签
-                console.log('open history tabs',event);
                 let name = event.target.attributes.item_name.value;
                 let id = event.target.attributes.item_id.value;
                 let url = event.target.attributes.item_url.value;
@@ -292,7 +288,6 @@ export const IframeInstance = new Component({
             //第一部分：获取系统关闭时未关闭的tabs
             let that = this;
             TabService.getOpeningTabs().then((result) => {
-                console.log(result);
                 let tabs = {};
                 //将未关闭的标签id加入tempList
                 if(result[0].succ === 1){
