@@ -1325,8 +1325,8 @@ let config={
         selectChoose(data){
             let _this=this;
             PMAPI.openDialogByIframe(`/iframe/choose?fieldId=${data.id}`,{
-                width:1500,
-                height:1000,
+                width:900,
+                height:600,
                 title:`选择器`,
                 modal:true
             }).then((res) => {
@@ -1689,8 +1689,6 @@ let config={
         if( _this.el.find('table').hasClass('form-version-table-user')||  _this.el.find('table').hasClass('form-version-table-department')||  _this.el.find('table').hasClass('form-default')){
             _this.el.find('table').parents('#detail-form').css("background","#F2F2F2");
          }
-        //时间日期
-
 
     },
     beforeDestory(){

@@ -31,13 +31,12 @@ let config = {
                 this.favoDel = true;
             }
         },
-        //向后台发送数据，删除该常用工作流,现在没有接口，只是在dom中删除这个
         delBtn:function(e){
             let el = $(e.target);
             let id = el.attr('data-id');
             for(let i=0;i<this.data[1].rows.length;i++){
                 if(this.data[1].rows[i].id == id){
-                    this.data[1].rows.splice(i,i+1);
+                    this.data[1].rows.splice(i,1);
                 }
             }
             let parents = el.parents('div')[0];

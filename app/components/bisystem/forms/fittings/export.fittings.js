@@ -7,6 +7,7 @@ import {RadioComponent} from './radio/radio';
 import {SelectComponent} from './select/select';
 import {CheckboxComponent} from './checkbox/checkbox';
 import {AutoCompleteComponent} from './autocomplete/autocomplete';
+import {AutoCompleteComponent1} from './autocomplete1/autocomplete';
 
 export const fittings = {
     input: InputComponent,
@@ -14,6 +15,7 @@ export const fittings = {
     select: SelectComponent,
     checkbox: CheckboxComponent,
     autoComplete: AutoCompleteComponent,
+    autocomplete1: AutoCompleteComponent1,
 };
 
 /**

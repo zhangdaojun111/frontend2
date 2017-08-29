@@ -1,0 +1,251 @@
+btn-div{
+  height: 24px;
+  background: #fff;
+  text-align: center;
+  padding: 0 10px;
+  line-height: 24px;
+  margin-right: 10px;
+  cursor: pointer;
+  color: #666;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+#approval-workflow{
+  .wf-btn-box{
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    height: 40px;
+    align-items: center;
+    background: #e4e4e4;
+    z-index: 50;
+  }
+  .left{
+    display: flex;
+    height: 24px;
+    line-height: 24px;
+    padding-left: 20px;
+    div{
+      @extend btn-div;
+    }
+  }
+  .right{
+    display: flex;
+    div{
+      @extend btn-div;
+    }
+  }
+}
+
+#app-workflow{
+
+  .workflow-wrapper{
+
+  }
+  .workflow-container{
+    background: #ebebeb;
+    position: relative;
+    height: 100%;
+  }
+}
+.workflow-container{
+  .approval-bar-f {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    min-width: 980px;
+    color: #666;
+    font-size: 12px;
+    z-index: 101;
+    .approval-bar {
+      background: #CAEEFF;
+      height: 30px;
+    }
+    .tit{
+      text-align: center;
+    }
+    .window{
+      justify-content: flex-end;
+      padding-right: 10px;
+      .window-icon-box{
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        .workflow-icon{
+          margin: 0 auto;
+        }
+      }
+    }
+    .approval-bar-col{
+      flex-grow: 1;
+      width: 300px;
+      flex-shrink: 0;
+    }
+  }
+  #approval-header{
+    position: absolute;
+    // top: 30px;
+    left: 0;
+    width: 100%;
+    z-index: 50;
+    background: #ebebeb;
+    padding-bottom: 10px;
+  }
+  
+  #preview-node{
+   .preview-node{
+     position: absolute;
+     top:0;
+     left: 0;
+     width: 100%;
+     min-width: 980px;
+     font-size: 14px;
+     z-index: 102;
+     box-shadow:0px 5px 20px 1px #888;
+     background: #fff;
+     display: none;
+     #cloneId1 .follow-name-list .selectSpan {
+       margin-right: 15px;
+     }
+     #cloneId2 .workflow-draw-box{
+       transition: transform 0.5s ease-out;
+       transform: scale(1);
+     }
+     #cloneId2 .screen-fixed{
+       transform: scale(1);
+       position:fixed;
+       top: 0;
+       left: 0;
+       right: 0;
+       bottom: 0;
+       background-color: rgb(255, 255, 255);
+       width: 100%;
+       height: 100% !important;
+       overflow: auto;
+     }
+     #cloneId2 .screenClose-btn{
+       cursor: pointer;
+       font-size: 30px;
+       border: 1px solid rgb(221, 221, 221);
+       position: fixed;
+       right: 0;
+       top: 0;
+       padding: 10px;
+
+     }
+   }
+
+  }
+  ::-webkit-scrollbar{
+    width: 5px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb{
+    background-color: rgba(187, 220, 255, 1) !important;
+  }
+  ::-webkit-scrollbar-track{
+    background-color: rgba(240, 247, 255, 1) !important;
+  }
+}
+
+
+#app-workflow{
+  height: 100%;
+  position: relative;
+  .workflow-wrapper{
+    height: 100%;
+    .workflow-container{
+      
+    }
+  }
+  .workflow-main{
+    position: absolute;
+    width: 100%;
+    padding: 10px;
+    overflow: auto;
+    top:57px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  #workflow-form .table-wrap{
+    display: block;
+  }
+  .workflow-record,.workflow-foot,#preview-node .preview-node {
+    .workflow-box {
+      background: #fff;
+      margin-bottom: 10px;
+      .workflow-box-l {
+        height: 40px;
+        border-bottom: 1px solid #e4e4e4;
+        line-height: 40px;
+        font-weight: 700;
+        font-size: 14px;
+        width: 100%;
+        .tit{
+          padding: 0 10px;
+          display: flex;
+          align-items: center;
+          width: 100px;
+          .workflow-icon{
+            margin-right: 5px;
+          }
+        }
+        .workflow-look{
+          .previewBtn{
+           padding: 0 7px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+          }
+          .workflow-icon{
+            margin: 0 auto;
+          }
+        }
+      }
+      .workflow-box-r {
+        padding: 10px;
+        width: 100%;
+        overflow-x: auto;
+        .follow-name-list{
+          border: 1px solid #f2dede;
+          position: relative;
+          min-height: 65px;
+          padding: 10px 5px;
+        }
+
+        .approve-textarea{
+          width: 100%;
+          height: 66px;
+          border: 1px solid #f2dede;
+          textarea{
+            border: none;
+            outline: none;
+            width: 100%;
+            height: 100%;
+            resize: none;
+            padding: 0;
+          }
+        }
+      }
+      &#flow-node{
+        margin-bottom: 40px;
+      }
+    }
+
+  }
+}
+
+.addUser{
+  .flexBox{
+    display: flex;
+    #addUsercheck{
+      overflow: scroll;
+      height: 500px;
+      width: 300px;
+    }
+  }
+}

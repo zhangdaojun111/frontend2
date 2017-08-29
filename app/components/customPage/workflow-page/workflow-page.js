@@ -1,6 +1,7 @@
 import Component from "../../../lib/component";
 import template from './workflow-page.html';
 import './workflow-page.scss';
+import '../../../assets/scss/dataGrid/dataGrid-icon.scss';
 import {HTTP} from "../../../lib/http";
 import msgBox from '../../../lib/msgbox';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
@@ -37,6 +38,7 @@ let config = {
         ignoreFields: [],
         //请求数据参数
         commonQueryData:[],
+        onlyCloseExpertSearch:false,
         //是否第一次渲染agGrid
         firstRender: true,
         //可以搜索的数据
@@ -126,6 +128,10 @@ let config = {
                         for( let k in this.data.searchValue ){
                             this.data.searchValue[k] = '';
                         }
+                        for( let k in this.data.searchOldValue ){
+                            this.data.searchOldValue[k] = '';
+                        }
+                        this.data.queryList = {};
                         this.actions.setFloatingFilterInput();
                         this.data.filterParam.filter = [];
                         this.actions.getData();
@@ -232,7 +238,7 @@ let config = {
         //渲染按钮
         renderBtn: function () {
             if( this.data.tableId == 'my-workflow' || this.data.tableId == 'approving-workflow' ){
-                this.el.find( '.batch-cancel' )[0].style.display = 'inline-block';
+                this.el.find( '.batch-cancel' )[0].style.display = 'flex';
                 this.el.find( '.batch-cancel' ).on( 'click',()=>{
                     this.data.selectRows = [];
                     let rows = this.agGrid.gridOptions.api.getSelectedRows();
@@ -330,18 +336,22 @@ let config = {
                     title:`高级查询`,
                     modal:true
                 },{d}).then(res=>{
+                    this.data.onlyCloseExpertSearch = res.onlyclose || false;
                     if(res.type == 'temporaryQuery') {
-                        if(res.addNameAry.length != 0){
-                            this.actions.getExpertSearchData(res.addNameAry);
-                        } else {
+                        if(res.addNameAry.length == 0){
+                            // this.actions.getExpertSearchData(res.addNameAry);
                             this.actions.postExpertSearch(res.value,res.id,res.name);
                         }
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);
                     } if(res.appendChecked) {
                         this.data.temporaryCommonQuery = res.value
                         this.actions.appendQuerySelect()
-                    } if(res.saveCommonQuery || res.onlyclose == true) {
-                        this.actions.getExpertSearchData(res.addNameAry)
+                    } if(res.saveCommonQuery || (res.saveCommonQuery && res.onlyclose == true)) {
+                        this.actions.getExpertSearchData(res.addNameAry);
+                    }if(res.deleteCommonQuery || (res.deleteCommonQuery && res.onlyclose == true)) {
+                        this.actions.getExpertSearchData(res.addNameAry);
+                    } if(!res.saveCommonQuery && res.onlyclose == true) {
+                        return false
                     }
                 })
             } )
@@ -485,6 +495,10 @@ let config = {
                             }
                         }
                     })
+                }
+                if(this.data.filterParam['common_filter_name'] && this.data.onlyCloseExpertSearch) {
+                    debugger
+                    this.el.find('.dataGrid-commonQuery-select').val(this.data.filterParam['common_filter_name']);
                 }
             } );
             HTTP.flush();
@@ -658,7 +672,8 @@ let config = {
                 height: 800,
                 title: title,
                 modal:true,
-                defaultMax: defaultMax
+                defaultMax: defaultMax,
+                customSize: defaultMax
             } ).then( (data)=>{
             } )
         },
