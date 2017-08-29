@@ -188,7 +188,6 @@ let config = {
                 });
                 this.data.childComponents.push(calendarSetItem);
                 this.append(calendarSetItem, this.el.find('.set-items'));
-                //Mediator.emit('calendar-set:editor',{data:0});
             });
         },
 
@@ -212,6 +211,7 @@ let config = {
          * @param tableId
          */
         reset: function(tableId){
+            // 重置每行数据
             for(let a of this.data.allRows){
                 a['isSelected']=false;
                 a['is_show_at_home_page']=false;
@@ -248,8 +248,6 @@ let config = {
                         this.el.find('.set-items').empty();
                         this.actions.getColumnListData(this.data.tableId);
                     },200 )
-                }else  if(res['success'] === 0){
-                    MSG.alert('重置失敗');
                 }
             });
         },
@@ -317,11 +315,12 @@ let config = {
         /**
          * @author zj
          * @param tableId
-         *
+         * 获取设置的表头及首页可修改字段
          */
         getColumnListData: function (tableId) {
             CalendarSetService.getColumnList(tableId).then(res => {
                 this.data.filedHead = res['rows'];
+
                 CalendarService.getCalendarTableById(tableId).then(res => {
                     this.data.colorInfoFields = res;
                     this.data.dropdownForCalendarChange = [{id:'',name:''}];
