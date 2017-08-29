@@ -1,5 +1,5 @@
 /**
- * @author qiumaoyun
+ * @author qiumaoyun and luyang
  * 工作审批记录component
  */
 
@@ -32,15 +32,22 @@ let config={
             })
         }
     },
+    /**
+     * @author luyang
+     * @method tipsMouseover 鼠标移入创建dom，tipsMouseout 鼠标移入删除dom，tipsMousemove 鼠标移动该改变位置
+     * @param  tipsMouseover(初始偏移，dom文字,event对象) tipsMouseout(dom对象,event对象) tipsMousemove(初始偏移，dom对象，event对象)
+     * @return 无返回
+     *
+     */
     afterRender(){
         this.showLoading();
         let self=this;
-        let pos={x:10,y:20};
+        const pos={x:10,y:20};
         this.el.on("mouseover",".tipsText",function (e) {
             self.actions.tipsMouseover(pos,$(this).text(),e)
         });
-        this.el.on("mouseout",".tipsText",function (e) {
-            self.actions.tipsMouseout($("#J_tooltip"),e)
+        this.el.on("mouseout",".tipsText",function () {
+            self.actions.tipsMouseout($("#J_tooltip"))
         });
         this.el.on("mousemove",".tipsText",function (e) {
             self.actions.tipsMousemove(pos,$("#J_tooltip"),e)

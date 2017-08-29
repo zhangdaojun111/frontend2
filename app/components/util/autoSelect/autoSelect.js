@@ -93,7 +93,6 @@ let config = {
             this.actions.renderChoosed();
         },
         renderChoosed: function () {
-            if (this.data.list.length) {
                 this.listWrap.find('input:checkbox:checked').each(function () {
                     this.checked = false;
                 });
@@ -113,7 +112,7 @@ let config = {
                     this.inputResult.val(html.join(','));
                 }
                 this.el.find('.select-all span').text(this.data.choosed.length);
-            }
+
         },
         selectAll: function () {
             if (this.data.choosed.length === this.data.list.length) {

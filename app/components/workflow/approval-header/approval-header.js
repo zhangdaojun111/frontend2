@@ -1,5 +1,5 @@
 /**
- * @author qiumaoyun
+ * @author qiumaoyun and luyang
  * 工作审批header
  */
 
@@ -26,6 +26,13 @@ let config = {
             this.showgz = !this.showgz;
         },
     },
+    /**
+     * @author luyang
+     * @method approvalBtnToggle 审批按钮操作
+     * @param  approvalBtnToggle(dom对象)
+     * @return 无返回
+     *
+     */
     afterRender: function() {
         this.showLoading();
         let self=this;
