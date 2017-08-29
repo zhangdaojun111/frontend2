@@ -20,6 +20,7 @@ export const attachmentListConfig = {
         }
     },
     afterRender:function () {
+        this.el.find('.table').addClass('table-striped').addClass('table-bordered');
         $.post('/query_attachment_list/',{
             file_ids:JSON.stringify(this.data.fileIds),
             dinput_type:this.data.dinput_type

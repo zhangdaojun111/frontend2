@@ -1,9 +1,6 @@
 /**
  * Created by Yunxuan Yan on 2017/8/18.
  */
-/**
- * Created by Yunxuan Yan on 2017/8/18.
- */
 import template from './contract-editor.html';
 import './contract-editor.scss';
 
@@ -248,15 +245,17 @@ export const contractEditorConfig = {
             let contractData = this.data.local_data[i];
             $.post('/customize/rzrk/download_contract/',{
                 table_id:this.data.table_id,
-                real_id:this.data.data.temp_id,
+                real_id:this.data.temp_id,
                 field_id:this.data.id,
                 model_id:contractData.model_id,
                 k2v:contractData.k2v,
                 file_name:contractData.name
             }).then(res=>{
-                if(res.success){
+                 if(res.success){
+                    let url = '/download_attachment/?file_id='+JSON.parse(res.data).file_id+"&download=1";
+                    window.open(url);
                     if(isAll){
-                        this.actions.downloadTemplate(i++,isAll);
+                        this.actions.downloadTemplate(i+1,isAll);
                     }
                 }
             })
