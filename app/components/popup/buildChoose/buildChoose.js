@@ -11,45 +11,11 @@ import {FormService} from '../../../services/formService/formService';
 import './buildChoose.scss';
 import FormEntry from '../../../entrys/form';
 import SearchBar from "./searchBar";
+import template from './buildChoose.html';
 
 let config={
-    template:`<hearder class="search-bar"></hearder>
-              <nav class="ui-nav">
-                <ul></ul>            
-              </nav>
-              {{#if authority}}
-                <p style="font-size:20px">您没有查看权限</p>
-              {{else}} 
-              <section class="ui-section">
-               
-              </section>
-              {{/if}} 
-            `,
-    data:{
-
-    },
-    actions:{
-        //默认表单
-        formDefaultVersion : function (data){
-            let html=`<table class="form table table-striped table-bordered table-hover ">
-            <tbody>
-                `;
-            for(let obj of data){
-                if(data.type==='hidden'){
-                    html+=`<div data-dfield="${obj.dfield}" data-type="${obj.type}"></div>`;
-                }else{
-                    html+=`<tr>
-                        <td style="width: 150px;white-space: nowrap;">${ obj.label }</td>
-                        <td><div data-dfield="${obj.dfield}" data-type="${obj.type}"></div></td>
-                </tr>`;
-                }
-            }
-            html+=`</tbody>
-        </table>`
-            return html;
-        },
-    },
-    firstAfterRender(){
+    template:template,
+    afterRender(){
         let _this=this;
         FormService.getStaticData({field_id:this.data.fieldId}).then(res=>{
             _this.data=Object.assign({},_this.data,res['data'][0]);
@@ -85,11 +51,10 @@ let config={
                 parent_temp_id:'',
                 real_id:$(this).data('value'),
                 el:_this.el.find('.ui-section'),
+                btnType:'none'
             });
         })
         Mediator.subscribe('form:chooseSelect',function(data){
-            console.log('这个data是啥啊');
-            console.log(data);
             _this.el.find('a').each((index,obj)=>{
                 if(data.indexOf($(obj).data('value')) != -1){
                     $(obj).show();
@@ -98,14 +63,12 @@ let config={
                 }
             })
         });
-        Mediator.subscribe('form:chooseConfirm',function(data){
-            if(data='isConfirm'){
-                PMAPI.sendToParent({
-                    type: PMENUM.close_dialog,
-                    key:_this.data.key,
-                    data:_this.data.selected
-                })
-            }
+        this.el.on('click','.confirm',function(){
+            PMAPI.sendToParent({
+                type: PMENUM.close_dialog,
+                key:_this.data.key,
+                data:_this.data.selected
+            })
         });
     }
 }
@@ -113,6 +76,5 @@ let config={
 export default class BuildChoose extends Component{
     constructor(data){
         super(config,data);
-        console.log(this.data);
     }
 }
