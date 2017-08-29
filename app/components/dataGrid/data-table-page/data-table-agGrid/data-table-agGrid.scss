@@ -161,7 +161,7 @@
   font-size: 14px;
   height: 20px;
   width:100%;
-  background: #F2F2F2;
+  background: #ffffff;
   ul {
     display: block;
     margin: 0;
@@ -172,7 +172,7 @@
       float: left;
       font-size: 14px;
       //border: 1px solid #afafaf;
-      background-color: rgba(228, 228, 228, 1);
+      background-color: #ffffff;
       border-color: rgba(228, 228, 228, 1);
       line-height: 20px;
       cursor: pointer;
@@ -192,12 +192,12 @@
     }
   }
   .active1{
-    background-color: rgba(255, 255, 255, 1);
+    background-color: #F2F2F2;
   }
 }
 
 .ag-grid-con {
-  height: calc( 100% - 60px );
+  height: calc( 100% - 70px);
 }
 .shareAddress {
   color:#337ab7;

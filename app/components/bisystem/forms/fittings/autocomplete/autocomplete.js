@@ -65,6 +65,7 @@ export class AutoCompleteComponent extends FormFittingAbstract {
      */
     getValue() {
         const field = this.autoSelect.data.choosed[0];
+
         let data = {}
         if (field) {
             for (let choosed of this.autoSelect.data.list) {

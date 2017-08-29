@@ -60,7 +60,7 @@ export const dgcService = {
             }else {
                 text = ( params.rowIndex + 1 );
             }
-            return '<span style="text-align: center;font-size: 12px!important;display: block;overflow: visible;">' + text + '</span>';
+            return '<span style="text-align: center;line-height: 30px;font-size: 12px!important;display: block;overflow: visible;">' + text + '</span>';
         },
         headerName: '',
         colId: "number",
@@ -187,10 +187,23 @@ export const dgcService = {
                 group.push( obj );
             }
         }
+        let fast = [];
+        //快速搜索数据
+        for( let f of rows ){
+            if( f.dsearch == 1 ){
+                for( let r of search ){
+                    if( f.field == r.searchField ){
+                        fast.push( r );
+                        break;
+                    }
+                }
+            }
+        }
         let obj = {
             search: search,
             custom: custom,
-            group: group
+            group: group,
+            fast: fast
         }
         return obj;
     },

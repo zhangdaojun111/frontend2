@@ -129,7 +129,7 @@ let config = {
            }
         });
         Mediator.subscribe("form:formAlreadyCreate",(e)=>{
-            this.showLoading();
+            this.hideLoading();
         });
     }
 }
