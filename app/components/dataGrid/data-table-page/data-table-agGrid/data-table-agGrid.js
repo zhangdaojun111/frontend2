@@ -597,7 +597,7 @@ let config = {
 
             //富文本编辑框
             else if (real_type == fieldTypeService.UEDITOR) {
-                sHtml = '<a class="ag-text-style" title="富文本" style="text-align: center;">查看详情</a>';
+                sHtml = '<a class="ag-text-style" title="富文本" style="text-align: center;display: block;">查看详情</a>';
             }
 
             //大数字段处理
