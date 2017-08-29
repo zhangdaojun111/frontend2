@@ -47,8 +47,10 @@ let config={
             _this.el.find(".datetime").val("年/月/日 时:分:秒");
         }
 
-
-       if(_this.el.find('.ui-datepicker-close'))
+       //  _this.el.find('.ui_tpicker_time_input').on('click', function () {
+       //      _this.el.find('#ui-timepicker-div').sibling('#add-wf')
+       //  })
+       // if(_this.el.find('.ui-datepicker-close'))
 
 
         //控制到时分秒

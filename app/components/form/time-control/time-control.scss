@@ -1,9 +1,4 @@
 .component-time-control{
-  .cancel-x{
-    display: none;
-    cursor: pointer;
-    position: relative;
-  }
   .time{
     width: 244px;
     display: block;
@@ -46,4 +41,45 @@
   .ui-timepicker div input{
     width: 25px;
   }
+
+  .ui-calendar {
+    position: relative;
+    display: inline-block;
+  }
+  .ui-calendar button {
+    position: absolute;
+    height: 100%;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    position: absolute;
+    width: 2em;
+    border-left: 0 none;
+  }
+  //时间
+  .ui-timepicker {
+    text-align: center;
+    padding: .5em 0;
+  }
+  .ui-timepicker > div {
+    display: inline-block;
+    margin-left: .5em;
+    min-width: 1.5em;
+  }
+  .ui-timepicker > .ui-minute-picker,
+  .ui-timepicker > .ui-second-picker {
+    margin-left: 0;
+  }
+  .ui-timepicker > .ui-separator {
+    margin-left: 0px;
+    min-width: .75em;
+  }
+  .ui-timepicker > .ui-separator a {
+    visibility: hidden;
+  }
+  .ui-timepicker > div a {
+    display: block;
+    opacity: 0.7;
+    filter:Alpha(Opacity=70);
+  }
+
 }
