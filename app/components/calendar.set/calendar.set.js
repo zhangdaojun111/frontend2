@@ -192,15 +192,6 @@ let config = {
             });
         },
 
-        // representChange: function(a,a_selectedRepresent){
-        //     if( a_selectedRepresent === '' ){
-        //         return;
-        //     }
-        //     if(a.selectedOpts.indexOf(a_selectedRepresent) === -1){
-        //         a.selectedOpts.push(a_selectedRepresent);
-        //     }
-        // },
-
         /**
          * @author zj
          * @param tableId
@@ -364,11 +355,13 @@ let config = {
         this.el.css({width: '100%',height:"100%"});
         this.el.find('iframe').css("width","100%");
 
+        // 用于在系统的其他地方打开日历设置
         if(window.config.table_id) {
             this.data.tableId = window.config.table_id;
             this.actions.getColumnListData(this.data.tableId);
         }
 
+        // 获取设置提醒方式中的可用的人员信息
         UserInfoService.getAllUsersInfo().then(user => {
             this.data.copypeople = [];
             for( let data of user.rows ){
@@ -376,6 +369,7 @@ let config = {
             }
         });
 
+        // 获取邮件发送地址
         CalendarSetService.getEmailSetting().then(res => {
             this.data.emailAddressList = [];
             for(let x in res['data']){
@@ -388,6 +382,7 @@ let config = {
                 }
             }
         });
+
         Mediator.on('calendar-set-left:calendar-set', data => {
             this.data.tableId = data.table_id;
             this.actions.getColumnListData(data.table_id);
@@ -413,7 +408,6 @@ let config = {
                 console.log(obj.data.rowSetData);
                 newAllRowsData.push(obj.data.rowSetData);
             }
-            console.log(newAllRowsData);
             _this.actions.saveSetting(this.data.tableId, newAllRowsData);
         });
 

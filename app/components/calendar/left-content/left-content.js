@@ -131,24 +131,6 @@ let config = {
                     customSize: true,
                 },
             );
-            // CalendarSetService.getMenu().then(res => {
-            //     let menu = res['menuList'].filter(item => {
-            //         return item['folder_id'] !== 1;
-            //     });
-            //     let component = new CalendarSetting(menu);
-            //     let el = $('<div>').appendTo(document.body);
-            //     component.render(el);
-            //     el.dialog({
-            //         title: '日历设置',
-            //         width: '90%',
-            //         height: '750',
-            //         background: '#ddd',
-            //         close: function() {
-            //             $(this).dialog('destroy');
-            //             component.destroySelf();
-            //         }
-            //     });
-            // });
         },
 
         /**
