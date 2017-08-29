@@ -196,7 +196,8 @@ let config = {
             let paginationData = {
                 total: this.data.total,
                 rows: this.data.rows,
-                tableId: this.data.tableId
+                tableId: this.data.tableId,
+                type: 'workflow'
             }
             //渲染分页
             this.pagination = new dataPagination(paginationData);
@@ -267,6 +268,8 @@ let config = {
                         } )
                     }
                 } );
+            }else {
+                this.el.find( '.batch-cancel' )[0].style.display = 'none';
             }
             //floatingFilter
             let floatSearch = this.el.find( '.float-search-btn' );
