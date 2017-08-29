@@ -29,6 +29,7 @@ import AttachmentList from "../../../form/attachment-list/attachment-list";
 import PictureAttachment from "../../../form/picture-attachment/picture-attachment";
 import {PersonSetting} from "../../../main/personal-settings/personal-settings";
 import ViewVideo from "../../../form/view-video/view-video";
+import fastSearch from "../../data-table-toolbar/fast-search/fast-search"
 import QuillAlert from "../../../form/quill-alert/quill-alert";
 
 
@@ -2566,6 +2567,7 @@ let config = {
         }
     },
     afterRender: function () {
+        this.append(new fastSearch(), this.el.find('.fast-search-con'))
         this.showLoading();
         if( this.data.viewMode == 'in_process' ){
             this.data.noNeedCustom = true;
