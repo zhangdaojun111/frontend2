@@ -1039,17 +1039,14 @@ let config={
                 parent_temp_id: this.data.parentTempId || "",
                 parent_record_id: this.data.parentRecordId  || ""
             };
-            console.log(json);
             //如果是批量审批，删除flow_id
             if(this.data.isBatch == 1){
                 delete json["flow_id"];
             }
-            // this.loadingAlert('正在提交请稍后');
             if(this.data.isAddBuild){
                 json['buildin_id']=this.data.buildId;
             }
             let res= await FormService.saveAddpageData(json);
-            console.log(res);
             if(res.succ == 1){
                 MSG.alert('保存成功')
                 Mediator.publish('updateForm:success:'+this.data.tableId,true);
@@ -1069,11 +1066,8 @@ let config={
             }else{
                 MSG.alert(res.error);
             }
-            // this.successAlert(res["error"]);
-            //自己操作的新增和编辑收到失效推送自己刷新
-            // this.isSuccessSubmit();
             //清空子表内置父表的ids
-            // delete this.globalService.idsInChildTableToParent[this.tableId];
+            delete FormService.idsInChildTableToParent[this.data.tableId];
         },
 
         //转到编辑模式
