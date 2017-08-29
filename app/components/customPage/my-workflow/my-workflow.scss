@@ -6,72 +6,76 @@
   bottom: 0;
   right: 0;
   overflow: hidden;
-}
 
-.tab-title {
-  border-bottom: 1px solid #ddd;
-  margin: 10px 0;
-  background-color: #ffffff;
-  margin-left:10px;
-  margin-right:10px;
-  font-size: 14px;
-  height: 30px;
-  position: absolute;
-  z-index: 1;
-}
+  .tab-title {
+    height: 30px;
+    line-height: 30px;
+    background-color: #FFFFFF;
+    user-select: none;
+    position: absolute;
+    left: 0;
+    z-index: 20;
+    ul {
+      width: 100%;
+      height: 100%;
+      line-height: 30px;
+      display: block;
+      margin: 0;
+      padding: 0;
+      margin-left: 15px;
+      li {
+        display: block;
+        float: left;
+        margin: 15px 5px;
+        cursor: pointer;
+        a {
+          display: block;
+          font-size: 14px;
+          height: 28px;
+          overflow: hidden;
+          line-height: 30px;
+          border-bottom: 2px solid #fff;
+          padding: 0 10px;
+          text-decoration: none;
+          color: #666;
+        }
+        a:hover {
+          color: #0088ff;
+        }
 
-.tab-title ul {
-  margin: 0;
-  padding: 0;
-}
+        .select {
+          border-bottom: 2px solid #0088FF;
+          color: #0088FF;
+         }
+      }
+    }
+  }
 
-.tab-title li {
-  display: inline-block;
-  position: relative;
-  bottom: -1px;
-}
+  #page-contener {
+    height: calc( 100% - 10px);
+    width: 100%;
+    position: relative;
+  }
 
-.tab-title li a {
-  display: block;
-  padding: 5px 10px;
-  text-align: center;
-  text-decoration: none;
-}
+  .my-workflow {
+    float: left;
+  }
+  .finish-workflow {
+    float: left;
+  }
+  .approved-workflow {
+    float: left;
+  }
+  .focus-workflow {
+    float: left;
+  }
+  #page-contener iframe {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
 
-.tab-title li a:hover {
-  background: #eee;
-}
-
-.select {
-  background: #fcfcfc;
-  border: 1px solid #DDDDDD;
-  border-bottom: 0px;
-}
-
-#page-contener {
-  height: calc( 100% - 10px);
-  width: 100%;
-  position: relative;
-}
-
-.my-workflow {
-  float: left;
-}
-.finish-workflow {
-  float: left;
-}
-.approved-workflow {
-  float: left;
-}
-.focus-workflow {
-  float: left;
-}
-#page-contener iframe {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-}
-
-.show {
-  display: block;
+  .show {
+    display: block;
+  }
 }
