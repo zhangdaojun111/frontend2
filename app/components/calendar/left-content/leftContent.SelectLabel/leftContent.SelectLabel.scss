@@ -3,6 +3,8 @@
     .calendar-select-table{
       word-break: keep-all;
       white-space: nowrap;
+      padding-top: 5px;
+      padding-bottom: 2px;
       .float-button-group-hide{
         display: inline-block;
         .float-button-group-show{
@@ -17,6 +19,10 @@
         position: relative;
         bottom: 3px;
       }
+    }
+    .checkbox-label-content{
+      position: relative;
+      bottom: 1px;
     }
     .checkbox-label{
       //cursor: pointer;
@@ -54,6 +60,9 @@
       //margin-right: 5px;
       cursor: pointer;
     }
+    .label-select-all-show{
+      cursor: pointer;
+    }
     .label-select-all-checked{
       content: url('../../../../assets/images/calendar/calendar-checked-true.png');
     }
@@ -81,7 +90,8 @@
         background-color: rgb(242,242,242);
       }
       .hide-span{
-        width:130px;
+        box-sizing: border-box;
+        width:160px;
         display:block ;
         background-color: rgba(250, 250, 250, 1);
         line-height: 30px;
@@ -97,6 +107,7 @@
         }
       }
       .search-function{
+        box-sizing: border-box;
         display: none;
         margin-left: 160px;
         position: absolute;
@@ -120,7 +131,7 @@
   .label-task-children{
   }
   .label-task-children{
-    padding: 5px 0px 5px 10px;
+    padding: 6px 0px 6px 10px;
     word-break: keep-all;
     white-space: nowrap;
   }

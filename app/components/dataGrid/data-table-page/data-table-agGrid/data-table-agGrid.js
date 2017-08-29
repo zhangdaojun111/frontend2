@@ -29,6 +29,7 @@ import AttachmentList from "../../../form/attachment-list/attachment-list";
 import PictureAttachment from "../../../form/picture-attachment/picture-attachment";
 import {PersonSetting} from "../../../main/personal-settings/personal-settings";
 import ViewVideo from "../../../form/view-video/view-video";
+import fastSearch from "../../data-table-toolbar/fast-search/fast-search"
 import QuillAlert from "../../../form/quill-alert/quill-alert";
 
 
@@ -107,10 +108,12 @@ let config = {
         temporaryCommonQuery:[],
         //高级查询需要的字段信息
         expertSearchFields: [],
+        //快速搜索字段数据
+        fastSearchFields: [],
         //定制列需要字段信息
         customColumnsFields: [],
         //搜索参数
-        filterParam: {expertFilter:[], filter: [], is_filter: 0, common_filter_id: '', common_filter_name: ''},
+        filterParam: {expertFilter:[],fastFilter: [], filter: [], is_filter: 0, common_filter_id: '', common_filter_name: ''},
         //上传一搜索参数
         filterText: '',
         //是否第一次渲染agGrid
@@ -121,6 +124,8 @@ let config = {
         groupCheck: false,
         //是否显示定制列panel
         isShowCustomPanel: false,
+        //点击的关闭
+        closePanel: false,
         //排序方式
         frontendSort: true,
         //排序参数
@@ -595,7 +600,7 @@ let config = {
 
             //富文本编辑框
             else if (real_type == fieldTypeService.UEDITOR) {
-                sHtml = '<a class="ag-text-style" title="富文本" style="text-align: center;">查看详情</a>';
+                sHtml = '<a class="ag-text-style" title="富文本" style="text-align: center;display: block;">查看详情</a>';
             }
 
             //大数字段处理
@@ -665,9 +670,14 @@ let config = {
                 sHtml = cDiv;
             }
 
-            //普通附件||视频附件
-            else if (real_type == fieldTypeService.ATTACHMENT || real_type == fieldTypeService.VIDEO_TYPE) {
-                sHtml = '<a class="ag-text-style" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + '个附件</a>';
+            //普通附件
+            else if (real_type == fieldTypeService.ATTACHMENT) {
+                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + '个附件</a>';
+            }
+
+            //视频附件
+            else if( real_type == fieldTypeService.VIDEO_TYPE ){
+                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + '段视频</a>';
             }
 
             //都做为文本处理
@@ -850,6 +860,10 @@ let config = {
             this.data.filterParam['is_filter'] = 1;
             this.actions.getGridData();
         },
+        fastSearchData: function (data) {
+            this.data.filterParam.fastFilter = data;
+            this.actions.getGridData();
+        },
         postExpertSearch:function(data,id,name) {
             this.data.filterParam.expertFilter = data;
             this.data.filterParam.common_filter_id = id;
@@ -908,6 +922,8 @@ let config = {
                 //创建高级查询需要字段数据
                 let r = dgcService.createNeedFields( this.data.fieldsData )
                 this.data.expertSearchFields = r.search;
+                //快速搜索需要字段数据
+                this.data.fastSearchFields = r.fast;
                 //定制列需要字段数据
                 this.data.customColumnsFields = r.custom;
                 //分组需要字段数据
@@ -1252,6 +1268,9 @@ let config = {
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
             }
+            if( this.data.filterParam.fastFilter && this.data.filterParam.fastFilter.length != 0 ){
+                json['filter'].push( this.data.filterParam.fastFilter[0] );
+            }
             if( this.data.filterParam['common_filter_id'] ){
                 json['filter'] = json['filter'] || [];
                 for( let a of this.data.filterParam.expertFilter ){
@@ -1260,7 +1279,7 @@ let config = {
                 if( this.data.filterParam['common_filter_id'] != '临时高级查询' ){
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
-                if( this.data.filterParam.filter.length == 0 ){
+                if( this.data.filterParam.filter.length == 0 && this.data.filterParam.fastFilter.length == 0 ){
                     msgBox.showTips( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
                 }
             }
@@ -1320,7 +1339,10 @@ let config = {
 
                 //点击关掉定制列panel
                 this.el.find( '.ag-body' ).on( 'click',()=>{
-                    this.el.find( '.custom-columns-panel' )[0].style.display = 'none';
+                    setTimeout( ()=>{
+                        this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'-200px' } );
+                    },400 )
+                    this.data.closePanel = true;
                     this.data.isShowCustomPanel = false;
                     this.actions.changeAgGridWidth();
                 } )
@@ -1339,6 +1361,15 @@ let config = {
                 this.append(this.groupGridCom,this.el.find('.group-panel'));
 
                 this.groupGridCom.actions.onGroupChange = this.actions.onGroupChange;
+            }
+
+            //渲染快速搜索
+            if(this.data.fastSearchFields && this.data.fastSearchFields.length != 0){
+                let d = {
+                    fieldsData: this.data.fastSearchFields,
+                    fastSearchData:this.actions.fastSearchData,
+                }
+                this.append(new fastSearch(d), this.el.find('.fast-search-con'))
             }
             //渲染分页
             let noPagination = ['in_process','viewFromCorrespondence','editFromCorrespondence']
@@ -1367,6 +1398,7 @@ let config = {
             if( this.el.find( '.expert-search-btn' )[0] ){
                 this.actions.renderExpertSearch();
             }
+            this.actions.getExpertSearchData();
             this.data.firstRender = false;
             this.hideLoading();
         },
@@ -1494,7 +1526,7 @@ let config = {
                 }
             }
             //分组样式
-            if( this.data.groupCheck && !param["data"].children ){
+            if( this.data.groupCheck && !param["data"].children && this.groupGridCom.data.group.length != 0 ){
                 return {background:'#E6F7FF'};
             }
         },
@@ -1539,9 +1571,8 @@ let config = {
                     $(this).addClass('active1');
                     $(this).siblings().removeClass('active1');
                 }) ;
-                this.el.find( '.ag-grid-con' ).height( 'calc( 100% - 80px )' );
+                this.el.find( '.ag-grid-con' ).height( 'calc(100% - 90px)' );
                 this.el.find( '.SheetPage' ).show();
-
             }
         },
         //按钮点击事件
@@ -1707,13 +1738,6 @@ let config = {
             this.data.editMode = !this.data.editMode;
             this.el.find( '.dataGrid-btn-group' )[0].style.display = this.data.editMode ? 'none':'flex';
             this.el.find( '.dataGrid-edit-group' )[0].style.display = this.data.editMode ? 'flex':'none';
-           // if(this.data.editMode){
-           //     this.el.find( '.dataGrid-btn-group' ).removeClass('flex');
-           //     this.el.find( '.dataGrid-edit-group' ).addClass('flex');
-           // }else {
-           //     this.el.find( '.dataGrid-btn-group' ).addClass('flex');
-           //     this.el.find( '.dataGrid-edit-group' ).removeClass('flex');
-           // }
             let columns = this.data.editMode ? this.columnDefsEdit : this.columnDefs;
             this.agGrid.gridOptions.api.setColumnDefs( columns );
             this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
@@ -1867,9 +1891,6 @@ let config = {
                     fieldsData: this.data.expertSearchFields,
                     commonQuery: this.data.commonQueryData,
                     commonQuerySelectLength:this.el.find('.dataGrid-commonQuery-select option').length
-                    // getExpertSearchData:this.actions.getExpertSearchData,
-                    // postExpertSearch:this.actions.postExpertSearch,
-                    // saveTemporaryCommonQuery:this.actions.saveTemporaryCommonQuery
                 }
                 PMAPI.openDialogByIframe(`/iframe/expertSearch/`,{
                     width:950,
@@ -1897,8 +1918,20 @@ let config = {
                     }
                 })
             } )
-
-            
+            this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
+                if($(this).val() == '常用查询') {
+                    _this.actions.postExpertSearch([],'');
+                } else if($(this).val() == '临时高级查询') {
+                    _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
+                } else {
+                    // $(this).find('.Temporary').remove();
+                    _this.data.commonQueryData.forEach((item) => {
+                        if(item.name == $(this).val()){
+                            _this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
+                        }
+                    })
+                }
+            })
         },
         appendQuerySelect: function() {
             let length = this.el.find('.dataGrid-commonQuery-select option').length
@@ -1978,9 +2011,15 @@ let config = {
         },
         //定制列事件
         calcCustomColumn: function () {
-            this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
             this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
-
+            if( this.data.isShowCustomPanel ){
+                this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':this.data.groupCheck ? '200px' : '0px' } );
+            }else {
+                this.data.closePanel = true;
+                setTimeout( ()=>{
+                    this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'-200px' } );
+                },400 )
+            }
             this.actions.changeAgGridWidth();
         },
         //分组点击
@@ -1996,12 +2035,15 @@ let config = {
         calcGroup: function () {
             if(!this.data.groupCheck) {
                 this.el.find('.group-btn').find('span').html('数据');
-                this.el.find('.group-panel').show();
+                this.el.find( '.group-panel' ).eq(0).animate( { 'right':this.data.isShowCustomPanel?'200px':'0px' } );
                 this.data.groupCheck = !this.data.groupCheck;
                 this.actions.onGroupChange(this.data.myGroup.fields)
             } else {
+                this.data.closePanel = true;
                 this.el.find('.group-btn').find('span').html('分组');
-                this.el.find('.group-panel').hide();
+                setTimeout( ()=>{
+                    this.el.find( '.group-panel' ).eq(0).animate( { 'right':'-200px' } );
+                },300 )
                 this.data.groupCheck = !this.data.groupCheck;
                 this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , false);
                 this.actions.getGridData();
@@ -2027,8 +2069,20 @@ let config = {
             if( this.data.isShowCustomPanel ){
                 num+=200;
             }
-            let grid = this.el.find( '#data-agGrid' )
-            grid.width( 'calc(100% - ' + num + 'px)' );
+            let grid = this.el.find( '#data-agGrid' );
+            if( this.data.closePanel ){
+                grid.width( 'calc(100% - ' + num + 'px)' );
+            }else {
+                setTimeout( ()=>{
+                    grid.width( 'calc(100% - ' + num + 'px)' );
+                },400 )
+            }
+            if( this.data.closePanel && ( this.data.groupCheck || this.data.isShowCustomPanel ) ){
+                setTimeout( ()=>{
+                    this.el.find( this.data.groupCheck?'.group-panel':'.custom-columns-panel' ).eq(0).animate( {'right':'0px'} );
+                },400 )
+            }
+            this.data.closePanel = false;
         },
         //筛选增加删除后常用查询
         getDiffereceQuery: function(data) {
@@ -2085,6 +2139,7 @@ let config = {
                                 this.data.filterParam = {
                                     expertFilter: JSON.parse(r.queryParams),
                                     filter:[],
+                                    fastFilter:[],
                                     is_filter: 1,
                                     common_filter_id: this.data.common_filter_id,
                                     common_filter_name: r.name
@@ -2549,22 +2604,6 @@ let config = {
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();
-        let _this = this;
-        this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
-            if($(this).val() == '常用查询') {
-                _this.actions.postExpertSearch([],'');
-            } else if($(this).val() == '临时高级查询') {
-                _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
-            } else {
-                // $(this).find('.Temporary').remove();
-                _this.data.commonQueryData.forEach((item) => {
-                    if(item.name == $(this).val()){
-                        _this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
-                    }
-                })
-            }
-        })
-        this.actions.getExpertSearchData();
     }
 }
 

@@ -42,6 +42,7 @@ export const PMENUM = {
     open_iframe_params: '8',
     get_param_from_root: '9',        // 来自子框架的消息，需要获取iframe的参数
     send_param_to_iframe: '10',       // 来组主框架的消息，向iframe发送参数
+    workflow_approve_msg: '11'
 }
 
 /**

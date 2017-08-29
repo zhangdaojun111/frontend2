@@ -86,7 +86,6 @@ let config = {
                     remind_time: this.data.emailRemindTime,
                 };
             }
-            console.log(window.config.key);
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
                 key: window.config.key,
@@ -136,11 +135,6 @@ let config = {
             this.data.emailAddressList.forEach(item => {
                 this.el.find('#send-email-address').append('<option value="'+ item.id +'">'+ item.name +'</option>');
             });
-            //this.el.find('.send-email-address').option(this.data.emailAddressList);
-            // this.data.emailAutoSelect = new AutoSelect({
-            //     list: this.data.emailAddressList,
-            // });
-            // this.append(this.data.emailAutoSelect, this.el.find('.remind-send-email-address'));
 
             // 邮件收件人
             this.data.emailReceiverAutoSelect = new AutoSelect({
@@ -152,7 +146,7 @@ let config = {
             // 邮件抄送人
             this.data.emailCopyPeopleAutoSelect = new AutoSelect({
                 list: this.data.copypeople,
-                choosed: this.data.cc_receiver,
+                choosed: this.data.email.cc_receiver,
             });
             this.append(this.data.emailCopyPeopleAutoSelect, this.el.find('.remind-copy-for-email'));
 
