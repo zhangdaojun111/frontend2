@@ -66,6 +66,7 @@ const BiAppRouter = Backbone.Router.extend({
             // formComponent[type] = component;
             component = new LineBarEditor();
             component.render($('#route-outlet'));
+            component.drawForm();
         }
 
     }

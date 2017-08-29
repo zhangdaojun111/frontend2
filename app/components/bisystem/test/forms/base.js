@@ -6,7 +6,16 @@ class Base extends Component {
         super(config, data, event)
     }
     setValue(){}
-    getValue(){}
+    getValue(){
+        return this.data.value;
+    }
+    setLabel(){}
+    setName(name){
+        this.data.name = name;
+    }
+    getName(){
+        return this.data.name;
+    }
 }
 
 export {Base}
