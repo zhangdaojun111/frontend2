@@ -36,6 +36,10 @@ let config = {
                 msgBox.showTips("图片类型错误");
             }
         },
+        /**
+         * 修改盖章图片列表
+         * @param msg 后台传递过来的包含图片的信息的一个数组
+         */
         changeImg(msg){
             this.el.find(".J_ul-img").empty();
             let len = msg.file_ids.length;
@@ -48,7 +52,7 @@ let config = {
         },
         /**
          *
-         * @param stmp
+         * @param stmp 点击的dom节点
          */
         delImg(stmp){
             let msg = $(stmp).attr("id");
@@ -56,7 +60,14 @@ let config = {
             Mediator.publish("workflow:delImg",{"file_id":msg});
             Mediator.publish("workflow:getStamp");
         },
-
+        /**
+         * 创建一个图片的的dom的节点，定位在form中
+         * @param top 图片的定位的top
+         * @param left 图片的定位的left
+         * @param width 图片的宽度
+         * @param height 图片的高度
+         * @param id 图片的id
+         */
         createImg(top,left,width,height,id){
             let viewLeft = left;
             let viewTop = top;
@@ -70,6 +81,9 @@ let config = {
             html += `<img class="printS printimg" style="top:${top1};left:${left1};" width=${width} height=${height} src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
             $('#place-form').children(":first").append(html);
         },
+        /**
+         * 是否显示隐藏form中已有的图片
+         */
         toggImg(){
             if(this.showImg){
                 this.showImg = false;
@@ -92,6 +106,9 @@ let config = {
             this.el.find(".signatureMock").css("visibility","hidden");
             $('#place-form').css("z-index",0);
         },
+        /**
+         * 初始化，是图片具有可拖拽属性
+         */
         init(){
             let that = this;
             this.el.find(".add-img").draggable({
