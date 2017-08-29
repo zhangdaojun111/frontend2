@@ -1393,6 +1393,7 @@ let config = {
             if( this.el.find( '.expert-search-btn' )[0] ){
                 this.actions.renderExpertSearch();
             }
+            this.actions.getExpertSearchData();
             this.data.firstRender = false;
             this.hideLoading();
         },
@@ -1520,7 +1521,7 @@ let config = {
                 }
             }
             //分组样式
-            if( this.data.groupCheck && !param["data"].group ){
+            if( this.data.groupCheck && !param["data"].children ){
                 return {background:'#E6F7FF'};
             }
         },
@@ -1732,13 +1733,6 @@ let config = {
             this.data.editMode = !this.data.editMode;
             this.el.find( '.dataGrid-btn-group' )[0].style.display = this.data.editMode ? 'none':'flex';
             this.el.find( '.dataGrid-edit-group' )[0].style.display = this.data.editMode ? 'flex':'none';
-           // if(this.data.editMode){
-           //     this.el.find( '.dataGrid-btn-group' ).removeClass('flex');
-           //     this.el.find( '.dataGrid-edit-group' ).addClass('flex');
-           // }else {
-           //     this.el.find( '.dataGrid-btn-group' ).addClass('flex');
-           //     this.el.find( '.dataGrid-edit-group' ).removeClass('flex');
-           // }
             let columns = this.data.editMode ? this.columnDefsEdit : this.columnDefs;
             this.agGrid.gridOptions.api.setColumnDefs( columns );
             this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
@@ -1891,10 +1885,7 @@ let config = {
                     tableId: this.data.tableId,
                     fieldsData: this.data.expertSearchFields,
                     commonQuery: this.data.commonQueryData,
-                    commonQuerySelectLength: this.el.find('.dataGrid-commonQuery-select option').length
-                    // getExpertSearchData:this.actions.getExpertSearchData,
-                    // postExpertSearch:this.actions.postExpertSearch,
-                    // saveTemporaryCommonQuery:this.actions.saveTemporaryCommonQuery
+                    commonQuerySelectLength:this.el.find('.dataGrid-commonQuery-select option').length
                 }
                 PMAPI.openDialogByIframe(`/iframe/expertSearch/`,{
                     width:950,
@@ -1922,8 +1913,20 @@ let config = {
                     }
                 })
             } )
-
-            
+            this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
+                if($(this).val() == '常用查询') {
+                    _this.actions.postExpertSearch([],'');
+                } else if($(this).val() == '临时高级查询') {
+                    _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
+                } else {
+                    // $(this).find('.Temporary').remove();
+                    _this.data.commonQueryData.forEach((item) => {
+                        if(item.name == $(this).val()){
+                            _this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
+                        }
+                    })
+                }
+            })
         },
         appendQuerySelect: function() {
             let length = this.el.find('.dataGrid-commonQuery-select option').length
@@ -2595,22 +2598,6 @@ let config = {
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();
-        let _this = this;
-        this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
-            if($(this).val() == '常用查询') {
-                _this.actions.postExpertSearch([],'');
-            } else if($(this).val() == '临时高级查询') {
-                _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
-            } else {
-                // $(this).find('.Temporary').remove();
-                _this.data.commonQueryData.forEach((item) => {
-                    if(item.name == $(this).val()){
-                        _this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
-                    }
-                })
-            }
-        })
-        this.actions.getExpertSearchData();
     }
 }
 

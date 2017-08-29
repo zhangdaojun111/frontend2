@@ -9,14 +9,49 @@
     width: 300px;
     height: 100%;
     float: left;
+    position: relative;
     .choose-department-tree {
       padding: 15px;
+      padding-top: 30px;
+      border-top: 1px solid #E4E4E4;
+      height: calc(100% - 60px);
+      overflow: visible;
     }
     .tips {
       height: 60px;
-      line-height: 60px;
-      font-size: 15px;
+      font-size: 12px;
       padding-left: 15px;
+      display: flex;
+      i {
+        background: url("../../../assets/images/dataGrid/tab-title.png") no-repeat;
+        width: 16px;
+        height: 16px;
+        display: block;
+        margin-right: 20px;
+        margin-top: 21px;
+      }
+      span {
+        line-height: 60px;
+      }
+    }
+    .tree-tips {
+      position: absolute;
+      width: 100%;
+      background: #F2F2F2;
+      height: 30px;
+      display: flex;
+      i {
+        background: url("../../../assets/images/dataGrid/tree-title.png") no-repeat;
+        width: 16px;
+        height: 16px;
+        display: block;
+        margin-right: 6px;
+        margin-top: 7px;
+        margin-left: 15px;
+      }
+      span {
+        line-height: 30px;
+      }
     }
   }
   .personal-grid {
@@ -49,7 +84,7 @@
           text-indent: 0;
           color: #666666;
           float: left;
-          width: 110px;
+          width: 90px;
           font-size: 12px;
           height: 25px;
           display: inline-block;
@@ -58,7 +93,7 @@
           appearance: none;
           -moz-appearance: none;
           -webkit-appearance: none;
-          background: url(../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 90px center transparent;
+          background: url(../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 70px center transparent;
         }
       }
       .dataGrid-btn-group {
@@ -81,7 +116,7 @@
           position: relative;
           color: #B399A6;
           text-decoration: none;
-          font-size: 14px;
+          font-size: 12px;
           img {
             display: inline-block;
             width: 16px;
@@ -102,19 +137,21 @@
 
     .ag-grid-con {
       height: calc( 100% - 100px);
+      position: relative;
       #data-agGrid {
         width: 100%;
-        float: left;
         position: relative;
         height: 100%;
       }
       .custom-columns-panel {
         width: 200px;
         height: 100%;
-        float: left;
         background: #f0f0f0;
-        position: relative;
-        display: none;
+        position: absolute;
+        display: block;
+        right: -200px;
+        z-index: 1;
+        top: 0px;
       }
     }
     .pagination {
