@@ -60,7 +60,7 @@ let config = {
             let url = location.search;
             let mark = url.indexOf('=');
             mark += 1;
-            this.data.searchText = url.substr(mark);
+            this.data.searchText =  decodeURI(url.substr(mark));
             this.actions.sendSearch();
         },
         initPageController:function () {

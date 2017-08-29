@@ -118,7 +118,7 @@ let config ={
             UserInfoService.register(json).done((result) => {
                 if(result.success === 1){
                     msgbox.alert("注册成功，即将跳转到登录界面");
-                    // $(window).attr('location','/login');
+                    $(window).attr('location','/login');
                 }else{
                     msgbox.alert("注册失败");
                     return;
@@ -264,9 +264,9 @@ let config ={
             this.actions.checkForm(event,"请填写手机号码","tel");
         }).on("blur","input.verification-code",(event) => {
             this.actions.checkVerification(event,"请填写验证码","verification-code");
-        }).on("click",".register-btn",() => {
+        }).on("click",".register-btn",_.debounce(() => {
             this.actions.postRegister();
-        })
+        },1000));
     },
     beforeDestory:function () {
 

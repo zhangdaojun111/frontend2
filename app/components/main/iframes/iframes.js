@@ -161,12 +161,14 @@ export const IframeInstance = new Component({
             this.actions.adaptTabWidth();
         },
         setCloseHistory:function (item) {
-            _.remove(this.data.closeHistory,function (n) {      //去重和重新插入，确保最后关闭的在记录最前面
-                return n.name === item.name;
-            });
-            this.data.closeHistory.unshift(item);
-            if(this.data.closeHistory.length > 5){
-                this.data.closeHistory.pop();
+            if(item.name !== 'BI' && item.name !== '日历'&& item.name !== '搜索结果'){    //不保存搜索/BI/日历
+                _.remove(this.data.closeHistory,function (n) {      //去重和重新插入，确保最后关闭的在记录最前面
+                    return n.name === item.name;
+                });
+                this.data.closeHistory.unshift(item);
+                if(this.data.closeHistory.length > 5){
+                    this.data.closeHistory.pop();
+                }
             }
         },
         focusIframe: function (id) {
@@ -229,10 +231,14 @@ export const IframeInstance = new Component({
         initTabList:function (data) {
             let $parent = this.el.find('.tabs-ul');
             $parent.empty();
-            for(let j of data){
-                let $li = $(`<li class='tab-item' item_name = ${j.name} item_url = ${j.url} item_id = ${j.id}>`);
-                $li.html(j.name);
-                $parent.append($li);
+            if(data.length > 0){
+                for(let j of data){
+                    let $li = $(`<li class='tab-item' item_name = ${j.name} item_url = ${j.url} item_id = ${j.id}>`);
+                    $li.html(j.name);
+                    $parent.append($li);
+                }
+                let $prompt = $('<li class="item-prompt">').html("最近关闭");
+                $parent.prepend($prompt);
             }
         },
         closeFocusTab:function () {
@@ -432,6 +438,7 @@ export const IframeInstance = new Component({
             if(resultIframe){
                 let newSrc = '/search_result?searchContent=' + content;
                 $(resultIframe).attr("src",newSrc);
+                this.actions.focusIframe("search-result");
             }else{
                 //搜索结果展示窗口未打开
                 let id = "search-result";

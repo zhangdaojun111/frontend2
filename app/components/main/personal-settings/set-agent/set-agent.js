@@ -99,7 +99,6 @@ let config = {
                 if(row.name && row.name.trim() !== '' && row.id && row.id.trim() !== ''){
                     row.py = row.f7_p.join(',');
                     tempData.push(row);
-                    console.log(row);
                 }
             }
             let that = this;
@@ -220,11 +219,9 @@ let config = {
         // this.showLoading();
         this.actions.initData();
         let that = this;
-        this.el.on("click","span.save-proxy",() => {
-            that.actions.saveAgent();
-            // }).on("input","input[name=name_input]",(event) => {
-            //     this.actions.setAgentId(event);
-        }).on("click","input.close-radio",(event) => {
+        this.el.on("click","span.save-proxy",_.debounce(() => {
+                that.actions.saveAgent();
+        },500)).on("click","input.close-radio",(event) => {
             that.actions.closeSwitch(event);
         }).on("click","input.open-radio",(event) => {
             that.actions.openSwitch(event);
