@@ -17,7 +17,7 @@ let config = {
     },
     actions:{
         initInfo:function () {
-            // this.el.find('div.table-name').html(this.data.searchData.label);
+            this.el.find('div.table-name').html(this.data.searchData.label);
             this.el.find('div.attachment-content').html(this.data.searchData.file_name + " 附件").attr('title',this.data.searchData.file_name + " 附件");
             this.actions.setHref();
         },

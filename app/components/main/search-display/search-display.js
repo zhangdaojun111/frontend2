@@ -71,9 +71,12 @@ let config = {
             });
             let $parent1 = this.el.find('.data-page-control');
             this.dataPageController.render($parent1);
-            let str = `${this.data.dataCount}条包含"${this.data.searchText}"的数据`;
-            let $span = $("<span class='data-count-display'>").html(str);
-            this.el.find('.data-count').append($span);
+            // let str = `${this.data.dataCount}条包含"${this.data.searchText}"的数据`;
+            // let $span = $("<span class='data-count-display'>").html(str);
+            // this.el.find('.data-count').append($span);
+            let str = '"' + this.data.searchText + '"';
+            this.el.find('.data-num').html(this.data.dataCount);
+            this.el.find('.data-name').html(str);
             this.dataPageController.actions.paginationChanged = this.actions.dataPageChanged;
 
             //初始化attachment页面分页控制
@@ -83,9 +86,12 @@ let config = {
             });
             let $parent2 = this.el.find('.attachment-page-control');
             this.attachmentPageController.render($parent2);
-            let str2 = `${this.data.attachmentCount}条包含"${this.data.searchText}"的数据`;
-            let $span2 = $("<span class='attachment-count-display'>").html(str2);
-            this.el.find('.attachment-count').append($span2);
+            // let str2 = `${this.data.attachmentCount}条包含"${this.data.searchText}"的数据`;
+            // let $span2 = $("<span class='attachment-count-display'>").html(str2);
+            // this.el.find('.attachment-count').append($span2);
+            let str2 = '"' + this.data.searchText + '"';
+            this.el.find('.attachment-num').html(this.data.attachmentCount);
+            this.el.find('.attachment-name').html(str2);
             this.attachmentPageController.actions.paginationChanged = this.actions.attachmentPageChanged;
         },
         dataPageChanged:function (data) {
@@ -103,8 +109,11 @@ let config = {
                     // let tempData = result;       //开全局搜索接口后使用
                     let tempData = this.data.test_data_result;      //测试使用
                     this.data.dataCount = tempData.total;
-                    let str = `${this.data.dataCount}条包含"${this.data.searchText}"的数据`;
-                    this.el.find('.data-count-display').html(str);
+                    // let str = `${this.data.dataCount}条包含"${this.data.searchText}"的数据`;
+                    // this.el.find('.data-count-display').html(str);
+                    let str = '"' + this.data.searchText + '"';
+                    this.el.find('.data-num').html(this.data.dataCount);
+                    this.el.find('.data-name').html(str);
                     this.actions.displayDataResult(tempData);
                     this.dataPageController.setPagination(tempData.total,data.currentPage);
                     this.hideLoading();
@@ -132,8 +141,11 @@ let config = {
                     // let tempData = result;                           //开全局搜索接口后使用
                     let tempData = this.data.test_attachment_result;    //测试使用
                     this.data.attachmentCount = tempData.total;
-                    let str = `${this.data.attachmentCount}条包含"${this.data.searchText}"的数据`;
-                    this.el.find('.attachment-count-display').html(str);
+                    // let str = `${this.data.attachmentCount}条包含"${this.data.searchText}"的数据`;
+                    // this.el.find('.attachment-count-display').html(str);
+                    let str2 = '"' + this.data.searchText + '"';
+                    this.el.find('.attachment-num').html(this.data.attachmentCount);
+                    this.el.find('.attachment-name').html(str2);
                     this.actions.displayAttachmentResult(tempData);
                     this.attachmentPageController.actions.setPagination(tempData.total, data.currentPage);
                     this.hideLoading();
@@ -157,8 +169,11 @@ let config = {
                     // let tempData = result;       //开全局搜索接口后使用
                     let tempData = this.data.test_data_result;      //测试使用
                     this.data.dataCount = tempData.total;
-                    let str = `${this.data.dataCount}条包含"${this.data.searchText}"的数据`;
-                    this.el.find('.data-count-display').html(str);
+                    // let str = `${this.data.dataCount}条包含"${this.data.searchText}"的数据`;
+                    // this.el.find('.data-count-display').html(str);
+                    let str = '"' + this.data.searchText + '"';
+                    this.el.find('.data-num').html(this.data.dataCount);
+                    this.el.find('.data-name').html(str);
                     this.actions.displayDataResult(tempData);
                     this.dataPageController.actions.setPagination(tempData.total,1);
                 }else{
@@ -177,8 +192,11 @@ let config = {
                     // let tempData = result;                           //开全局搜索接口后使用
                     let tempData = this.data.test_attachment_result;    //测试使用
                     this.data.attachmentCount = tempData.total;
-                    let str = `${this.data.attachmentCount}条包含"${this.data.searchText}"的数据`;
-                    this.el.find('.attachment-count-display').html(str);
+                    // let str = `${this.data.attachmentCount}条包含"${this.data.searchText}"的数据`;
+                    // this.el.find('.attachment-count-display').html(str);
+                    let str2 = '"' + this.data.searchText + '"';
+                    this.el.find('.attachment-num').html(this.data.attachmentCount);
+                    this.el.find('.attachment-name').html(str2);
                     this.actions.displayAttachmentResult(tempData);
                     this.attachmentPageController.actions.setPagination(tempData.total,1);
                     this.hideLoading();
