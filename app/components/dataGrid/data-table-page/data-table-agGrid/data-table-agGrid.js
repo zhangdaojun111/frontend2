@@ -2018,7 +2018,7 @@ let config = {
                 this.el.find('.group-btn').find('span').html('分组');
                 setTimeout( ()=>{
                     this.el.find( '.group-panel' ).eq(0).animate( { 'right':'-200px' } );
-                } )
+                },300 )
                 this.data.groupCheck = !this.data.groupCheck;
                 this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , false);
                 this.actions.getGridData();
