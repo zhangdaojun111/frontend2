@@ -107,6 +107,8 @@ let config = {
         temporaryCommonQuery:[],
         //高级查询需要的字段信息
         expertSearchFields: [],
+        //快速搜索字段数据
+        fastSearchFields: [],
         //定制列需要字段信息
         customColumnsFields: [],
         //搜索参数
@@ -908,6 +910,8 @@ let config = {
                 //创建高级查询需要字段数据
                 let r = dgcService.createNeedFields( this.data.fieldsData )
                 this.data.expertSearchFields = r.search;
+                //快速搜索需要字段数据
+                this.data.fastSearchFields = r.fast;
                 //定制列需要字段数据
                 this.data.customColumnsFields = r.custom;
                 //分组需要字段数据
@@ -1539,9 +1543,8 @@ let config = {
                     $(this).addClass('active1');
                     $(this).siblings().removeClass('active1');
                 }) ;
-                this.el.find( '.ag-grid-con' ).height( 'calc( 100% - 80px )' );
+                this.el.find( '.ag-grid-con' ).height( 'calc(100% - 90px)' );
                 this.el.find( '.SheetPage' ).show();
-
             }
         },
         //按钮点击事件

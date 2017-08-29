@@ -187,10 +187,23 @@ export const dgcService = {
                 group.push( obj );
             }
         }
+        let fast = [];
+        //快速搜索数据
+        for( let f of rows ){
+            if( f.dsearch == 1 ){
+                for( let r of search ){
+                    if( f.field == r.searchField ){
+                        fast.push( r );
+                        break;
+                    }
+                }
+            }
+        }
         let obj = {
             search: search,
             custom: custom,
-            group: group
+            group: group,
+            fast: fast
         }
         return obj;
     },
