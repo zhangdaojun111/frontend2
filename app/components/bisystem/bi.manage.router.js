@@ -51,6 +51,7 @@ const BiAppRouter = Backbone.Router.extend({
     },
     routerFormDynamicComponent(type,id) {
         Mediator.removeAll('bi:chart:form:update');
+        debugger;
         let comType = {
             assortment: type,
             id: id
