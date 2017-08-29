@@ -14,7 +14,9 @@ import Mediator from '../../../../lib/mediator';
 
 let config = {
     template: template,
-    data: {},
+    data: {
+        assortment: ''
+    },
     actions: {},
     afterRender() {},
     firstAfterRender() {
@@ -22,15 +24,17 @@ let config = {
         let p1 = this.getChartSource();
         let p2 = this.getChartIcon();
         Promise.all([p1,p2]).then((result) => {
+            this.messager(`${this.data.assortment}-chart-editMode-source`, {'sources': []});
             Mediator.publish('bi:chart:form:update', {type:'source_icon_load_finish', data:[]});
         })
     }
 };
 
 export class FormMixShareComponent extends BiBaseComponent {
-    constructor() {
+    constructor(chart) {
         super(config);
-        this.mixForm = {}
+        this.mixForm = {};
+        this.data.assortment = chart;
     }
 
 
@@ -121,17 +125,20 @@ export class FormMixShareComponent extends BiBaseComponent {
         } else {
             data = [];
         };
+        this.messager(`${this.data.assortment}-chart-source`, {'sources': data});
         Mediator.publish('bi:chart:form:update', {type:'fields', data:data});
     }
 
     /**
      * 设置mix.share value
      */
-    setValue(val) {
-        this.mixForm.chartSource.setValue(val['chartSource']);
+    setValue(val,multilist = false) {
         this.mixForm.themes.setValue(val['themes']);
         this.mixForm.icons.setValue(val['icons']);
-        this.mixForm.filter = val['filter'];
+        if (!multilist) {
+            this.mixForm.chartSource.setValue(val['chartSource']);
+            this.mixForm.filter = val['filter'];
+        };
     }
 
     /**
