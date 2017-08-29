@@ -124,6 +124,8 @@ let config = {
         groupCheck: false,
         //是否显示定制列panel
         isShowCustomPanel: false,
+        //点击的关闭
+        closePanel: false,
         //排序方式
         frontendSort: true,
         //排序参数
@@ -1325,7 +1327,10 @@ let config = {
 
                 //点击关掉定制列panel
                 this.el.find( '.ag-body' ).on( 'click',()=>{
-                    this.el.find( '.custom-columns-panel' )[0].style.display = 'none';
+                    setTimeout( ()=>{
+                        this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'-200px' } );
+                    },400 )
+                    this.data.closePanel = true;
                     this.data.isShowCustomPanel = false;
                     this.actions.changeAgGridWidth();
                 } )
@@ -1982,9 +1987,15 @@ let config = {
         },
         //定制列事件
         calcCustomColumn: function () {
-            this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
             this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
-
+            if( this.data.isShowCustomPanel ){
+                this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':this.data.groupCheck ? '200px' : '0px' } );
+            }else {
+                this.data.closePanel = true;
+                setTimeout( ()=>{
+                    this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'-200px' } );
+                },400 )
+            }
             this.actions.changeAgGridWidth();
         },
         //分组点击
@@ -2000,12 +2011,15 @@ let config = {
         calcGroup: function () {
             if(!this.data.groupCheck) {
                 this.el.find('.group-btn').find('span').html('数据');
-                this.el.find('.group-panel').show();
+                this.el.find( '.group-panel' ).eq(0).animate( { 'right':this.data.isShowCustomPanel?'200px':'0px' } );
                 this.data.groupCheck = !this.data.groupCheck;
                 this.actions.onGroupChange(this.data.myGroup.fields)
             } else {
+                this.data.closePanel = true;
                 this.el.find('.group-btn').find('span').html('分组');
-                this.el.find('.group-panel').hide();
+                setTimeout( ()=>{
+                    this.el.find( '.group-panel' ).eq(0).animate( { 'right':'-200px' } );
+                },300 )
                 this.data.groupCheck = !this.data.groupCheck;
                 this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , false);
                 this.actions.getGridData();
@@ -2031,8 +2045,20 @@ let config = {
             if( this.data.isShowCustomPanel ){
                 num+=200;
             }
-            let grid = this.el.find( '#data-agGrid' )
-            grid.width( 'calc(100% - ' + num + 'px)' );
+            let grid = this.el.find( '#data-agGrid' );
+            if( this.data.closePanel ){
+                grid.width( 'calc(100% - ' + num + 'px)' );
+            }else {
+                setTimeout( ()=>{
+                    grid.width( 'calc(100% - ' + num + 'px)' );
+                },400 )
+            }
+            if( this.data.closePanel && ( this.data.groupCheck || this.data.isShowCustomPanel ) ){
+                setTimeout( ()=>{
+                    this.el.find( this.data.groupCheck?'.group-panel':'.custom-columns-panel' ).eq(0).animate( {'right':'0px'} );
+                },400 )
+            }
+            this.data.closePanel = false;
         },
         //筛选增加删除后常用查询
         getDiffereceQuery: function(data) {
