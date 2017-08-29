@@ -15,7 +15,10 @@ let config = {
         // isClone:true,
     },
     actions: {
-        addImg(e){
+        /**
+         * 上传图片
+         */
+        addImg(){
             let imgFile = this.el.find('.J_add')[0].files[0];
             // this.el.find('.J_add').val("");
             if(/\.(png|PNG)$/.test(imgFile.name)){
@@ -43,9 +46,13 @@ let config = {
             }
             this.el.find('.J_ul-img').html(html);
         },
-
-        delImg(e){
-            let msg = $(e.target).attr("id");
+        /**
+         *
+         * @param stmp
+         */
+        delImg(stmp){
+            let msg = $(stmp).attr("id");
+            console.log(msg);
             Mediator.publish("workflow:delImg",{"file_id":msg});
             Mediator.publish("workflow:getStamp");
         },
@@ -62,10 +69,6 @@ let config = {
                          </div>`;
             html += `<img class="printS printimg" style="top:${top1};left:${left1};" width=${width} height=${height} src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
             $('#place-form').children(":first").append(html);
-        },
-        showImgDel(e){
-            let ev = $(e.target).children('i');
-            ev.css("display","block");
         },
         toggImg(){
             if(this.showImg){
@@ -106,22 +109,34 @@ let config = {
             });
         }
     },
+    binds:[
+        {
+            event:'change',
+            selector:'.J_add',
+            callback:function(){
+                this.actions.addImg();
+            }
+        },
+        {
+            event:'click',
+            selector:'.J_toggImg',
+            callback:function(){
+                this.actions.toggImg();
+            }
+        },
+        {
+            event:'click',
+            selector:'.J_delImg',
+            callback:function(stmp =this){
+                this.actions.delImg(stmp);
+            }
+        }
+
+    ],
     afterRender: function() {
+        //是否隐藏显示盖章图片
         this.showImg = true;
         this.actions.init();
-
-        this.el.on('change','.J_add',(e)=>{
-            this.actions.addImg(e);
-        }),
-        this.el.on("click",'.J_delImg',(e)=>{
-            this.actions.delImg(e);
-        }),
-        this.el.on("click",".J_toggImg",()=>{
-            this.actions.toggImg();
-        });
-        $(".approval-info-item").on("click",(e)=>{
-            this.actions.showImgDel(e);
-        });
         Mediator.subscribe('workflow:changeImg',(msg)=>{
             this.actions.changeImg(msg);
             this.actions.init();

@@ -81,13 +81,19 @@ let config = {
             this.el.find(".place-form").toggle();
         }
     },
+    binds:[
+        {
+            event:'click',
+            selector:'.collapseFormBtn',
+            callback:function(){
+                this.actions.trans();
+            }
+        },
+    ],
     afterRender: function() {
         this.showLoading();
         let __this=this;
         this.formTrans = false;
-        this.el.on('click','.collapseFormBtn',()=>{
-            this.actions.trans();
-        }),
         this.el.on("mouseenter",".imgseal",function(e){
             let ev = $(this).find('.J_del');
             ev.css("display","block");
@@ -95,7 +101,7 @@ let config = {
         this.el.on("mouseleave",'.imgseal',function(e){
             let ev = $(this).find('.J_del');
             ev.css("display","none");
-           
+
         })
         this.el.on("click",'.J_del',(e)=>{
             this.actions.delimg(e);
