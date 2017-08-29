@@ -1,10 +1,6 @@
 //时间日期
 #ui-datepicker-div{
   width: 244px;
-
-    .ui_tpicker_hour,.ui_tpicker_minute,.ui_tpicker_second,.ui_tpicker_hour_label,.ui_tpicker_minute_label,.ui_tpicker_second_label{
-      display: none;
-    }
     .ui-datepicker-calendar thead{
       border-bottom: 1px solid #CAEEFF;
     }
@@ -20,14 +16,14 @@
       background: #66CCFF !important;
       color: #333333!important;
     }
-    #ui-datepicker-div> .ui-datepicker-header{
+     .ui-datepicker-header{
       margin: 0 !important;
       width: 96%;
       border: none;
-      background: #FAFAFA;
+      background: #FAFAFA!important;
       padding: .4em!important;
     }
-    .ui-datepicker td {
+     .ui-datepicker-calendar td {
       border: 0;
       padding: 1px;
       width: 32px;
@@ -39,6 +35,7 @@
     }
 
     .ui-datepicker-buttonpane{
+      position: relative;
       border-top: 0;
       border-bottom: 1px solid #E4E4E4!important;
       background: #F2F2F2;
@@ -56,14 +53,11 @@
     }
     //时间
     .ui-timepicker-div{
-      position: absolute;
-      bottom: 0;
-      left: 25%;
-      width: 45%;
+      background: #FAFAFA;
+      padding-bottom: 1px;
     }
     .ui_tpicker_time_input{
-      border-bottom: 0!important;
-      background: white!important;
+      border-bottom: 1px solid #E4E4E4!important;
       padding: 5px;
     }
     .ui-timepicker-div dl dt {
@@ -74,19 +68,8 @@
       font-size: 12px;
       color: #666666;
     }
-    //今
-    .ui-datepicker-current {
-      background: #CAEEFF!important;
-      float: left;
-      margin:0 !important;
-      cursor: pointer;
-      padding: .2em .6em .3em .6em;
-      width: 13%!important;
-      height: 100%!important;
-      overflow: visible;
-    }
-    //确定
-    .ui-datepicker-close{
+    //按钮
+  .ui-datepicker-current,.ui-datepicker-close{
       background: #0088FF!important;
       height: 25px;
       color: white!important;

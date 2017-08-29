@@ -1,4 +1,9 @@
 .component-time-control{
+  .cancel-x{
+    display: none;
+    cursor: pointer;
+    position: relative;
+  }
   .time{
     width: 244px;
     display: block;
@@ -15,7 +20,9 @@
   }
 
 .ui-datepicker-close{
-  background: #f2f2f2;
+  background: #0088FF;
+  height: 25px;
+  color: white ;
   position: relative;
   float: right;
   display: block;
@@ -55,7 +62,7 @@
     width: 2em;
     border-left: 0 none;
   }
-  //时间
+  //时分秒
   .ui-timepicker {
     text-align: center;
     padding: .5em 0;
