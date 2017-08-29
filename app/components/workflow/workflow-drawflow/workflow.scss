@@ -103,39 +103,42 @@
     width: 16px;
     height: 16px;
 }
-.content{
-    position: relative;
-}
-.workflow-draw-box{
-    position: relative;
-    height: 100px;
-    font-size: 12px;
-    .draged-item{
-        position: absolute;
-        height: 30px;
-        text-align: center;
-        line-height: 30px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        cursor: pointer;
-        border: 1px solid rgb(225,225,225);
-    }
-    .draged-item.draged-maodian{
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-        background: transparent;
-        border: 1px solid rgb(225,225,225);
-        border-radius: 50%;
-        text-align: center;
-        cursor: pointer;
-    }
-    .closeSpan{
-        background: #fff;
-        z-index: 30;
+#drawflow{
+    .content{
         position: relative;
     }
+    .workflow-draw-box{
+        position: relative;
+        height: 100px;
+        font-size: 12px;
+        .draged-item{
+            position: absolute;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            border: 1px solid rgb(225,225,225);
+        }
+        .draged-item.draged-maodian{
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            background: transparent;
+            border: 1px solid rgb(225,225,225);
+            border-radius: 50%;
+            text-align: center;
+            cursor: pointer;
+        }
+        .closeSpan{
+            background: #fff;
+            z-index: 30;
+            position: relative;
+        }
+    }
 }
+
 .switch-node{
     font-size: 12px;
     margin-left: 10px;

@@ -182,7 +182,7 @@ class Component {
         }
         let width = this.loadingTarget.width();
         let height = this.loadingTarget.height();
-        let size = Math.min(width, height) * 0.15;
+        let size = Math.max(Math.min(width, height) * 0.15, 50);
 
         this.loadingTarget.addClass('component-loading-effect');
         this.loadingTarget.children().addClass('component-filter-blur');

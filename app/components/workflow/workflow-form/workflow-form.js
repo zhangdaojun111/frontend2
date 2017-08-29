@@ -27,7 +27,11 @@ let config = {
             em.remove();
             el.remove();
         },
-        //收集上传的信息给后台
+
+        /**
+         * 收集上传的信息给后台
+         * @returns {Array} 返回一个添加到form中的图片的信息
+         */
         collectImg(){
             let imgNode = this.el.find('.imgseal');
             let len = imgNode.length;
@@ -49,6 +53,10 @@ let config = {
             }
             return arr;
         },
+        /**
+         * 添加上次审批盖章图片
+         * @param e 后端传过来json
+         */
         addImg(e){
             let imgInfo = e.data[0].stamps;
             let len =imgInfo.length;
@@ -61,12 +69,21 @@ let config = {
             }
             this.el.find("#place-form").append(html);
         },
-        hideImg(e){
+        /**
+         * 隐藏原来的图片
+         */
+        hideImg(){
             this.el.find(".oldImg").css("display","none");
         },
-        showImg(e){
+        /**
+         * 显示原来的图片
+         */
+        showImg(){
             this.el.find(".oldImg").css("display","block");
         },
+        /**
+         * 收缩和展开form表单
+         */
         trans(){
             let ev = this.el.find('.collapseFormBtn');
             if(this.formTrans){
@@ -81,13 +98,19 @@ let config = {
             this.el.find(".place-form").toggle();
         }
     },
+    binds:[
+        {
+            event:'click',
+            selector:'.collapseFormBtn',
+            callback:function(){
+                this.actions.trans();
+            }
+        },
+    ],
     afterRender: function() {
         this.showLoading();
         let __this=this;
         this.formTrans = false;
-        this.el.on('click','.collapseFormBtn',()=>{
-            this.actions.trans();
-        }),
         this.el.on("mouseenter",".imgseal",function(e){
             let ev = $(this).find('.J_del');
             ev.css("display","block");
@@ -95,7 +118,7 @@ let config = {
         this.el.on("mouseleave",'.imgseal',function(e){
             let ev = $(this).find('.J_del');
             ev.css("display","none");
-           
+
         })
         this.el.on("click",'.J_del',(e)=>{
             this.actions.delimg(e);
@@ -110,11 +133,11 @@ let config = {
         Mediator.subscribe('workflow:getImgInfo',(e)=>{
             this.actions.addImg(e);
         });
-        Mediator.subscribe('workflow:hideImg',(e)=>{
-            this.actions.hideImg(e);
+        Mediator.subscribe('workflow:hideImg',()=>{
+            this.actions.hideImg();
         });
-        Mediator.subscribe('workflow:showImg',(e)=>{
-            this.actions.showImg(e);
+        Mediator.subscribe('workflow:showImg',()=>{
+            this.actions.showImg();
         });
         Mediator.subscribe("workflow:appPass",(e)=>{
             Mediator.publish('workflow:sendImgInfo',this.actions.collectImg());
@@ -129,7 +152,7 @@ let config = {
            }
         });
         Mediator.subscribe("form:formAlreadyCreate",(e)=>{
-            this.showLoading();
+            this.hideLoading();
         });
     }
 }

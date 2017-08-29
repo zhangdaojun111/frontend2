@@ -1,5 +1,5 @@
 /**
- * @author qiumaoyun
+ * @author qiumaoyun and luyang
  * 工作审批page body
  */
 
@@ -27,6 +27,12 @@ let config={
         nodeflowSize:1,
     },
     actions:{
+
+        /**
+         * @author luyang 放大 缩小 全屏查看顶部节点图
+         * @param el 顶部节点图 按钮 dom
+         *
+         */
         previewViewBtn:function (el) {
             let type=$(el).attr('id');
             let container = this.el.find('#cloneId2').find('.workflow-draw-box');
@@ -47,7 +53,7 @@ let config={
                 width: '100%',
                 height: '100%',
                 overflow: 'auto',
-            }
+            };
             switch (type){
                 case 'zoomIn' :
                     var  nodeflowSize=this.data.nodeflowSize+= 0.1;
@@ -115,6 +121,11 @@ let config={
                     break;
             }
         },
+        /**
+         * @author luyang 克隆节点插入顶部，切换显示
+         * @param el 当前点击按钮 type:follow-view 关注联系人，flow-view 流程节点 record-view：审批记录
+         * @param appendDiv 添加到的dom
+         */
         previewView:function (el,appendDiv) {
             let type=$(el).data("preview");
             let addFollow=this.el.find("#add-home").clone(true).attr('id','cloneId1');
@@ -127,7 +138,6 @@ let config={
                     appendDiv.find(".preview-node1").toggle().siblings().hide();
                     break;
                 case 'flow-view' :
-
                     appendDiv.find(".preview-node2").html(flowNode);
                     $("#cloneId2").find('#togglePic').remove();
                     appendDiv.find(".preview-node2").toggle().siblings().hide();
@@ -138,13 +148,44 @@ let config={
                     break;
             }
         },
-        toogz(e){
-            let ev = this.el.find(".signature");
-            if(ev.css("display")=="none"){
-                ev.css("display","block");
-            }else{
-                ev.css("display","none");
+        /**
+         *
+         * @param pos 初始偏移
+         * @param txt 提示框dom文字
+         * @param event event对象
+         */
+        tipsMouseover:function (pos,txt,event) {
+            if(txt!=''){
+                var tooltip = $('<div id="J_tooltip"></div>');
+                $("body").append(tooltip);
+                let tooltipDiv=$("#J_tooltip");
+                tooltipDiv.css({
+                    top: (event.pageY+pos.y) + "px",
+                    left:  (event.pageX+pos.x)  + "px"
+                }).show("fast").text(txt);
             }
+        },
+        /**
+         *
+         * @param el 提示框dom对象
+         */
+        tipsMouseout:function (el) {
+            el.remove()
+        },
+        /**
+         *
+         * @param pos 初始偏移
+         * @param el 提示框dom对象
+         * @param event event对象
+         */
+        tipsMousemove:function (pos,el,event) {
+            el.css({
+                top: (event.pageY+pos.y) + "px",
+                left:  (event.pageX+pos.x)  + "px"
+            })
+        },
+        toogz(ev){
+           ev.toggle();
         },
         appPass() {
             Mediator.publish('workflow:appPass');
@@ -232,8 +273,9 @@ let config={
             WorkFlow.show(msg.data[0],'#drawflow');
         });
 
-        this.el.on('click','.gz',(e)=>{
-            this.actions.toogz(e);
+        this.el.on('click','.gz',()=>{
+            let signature = $(".signature");
+            this.actions.toogz(signature);
         });
         this.el.on('click','.close',function () {
             __this.el.find('.rejContainer').hide();
@@ -273,6 +315,21 @@ let config={
         Mediator.subscribe("workflow:sendImgInfo",(e)=>{
             this.data.imgInfo=e;
         });
+        const pos={x:10,y:20};
+        this.el.on("mouseover","#cloneId3 .tipsText",function (e) {
+            let elDiv=$(this);
+            let elDivText=elDiv.text();
+            __this.actions.tipsMouseover(pos,elDivText,e)
+        });
+        this.el.on("mouseout","#cloneId3 .tipsText",function () {
+            let J_tooltip=$("#J_tooltip");
+            __this.actions.tipsMouseout(J_tooltip)
+        });
+        this.el.on("mousemove","#cloneId3 .tipsText",function (e) {
+            let J_tooltip=$("#J_tooltip");
+            __this.actions.tipsMousemove(pos,J_tooltip,e)
+        });
+
     }
 };
 class ApprovalWorkflow extends Component{

@@ -1,18 +1,19 @@
-.component-taskbar{
-  width: 97%;
+.component-calendar-taskbar{
   height:100%;
   padding-left: 5px;
   display: inline-block;
-  overflow: auto;
   .approve-task{
+    padding-top: 7px;
     padding-left: 2px;
+    padding-bottom: 5px;
     .approve-label{
       margin-left: 1px;
     }
   }
+  .remind-task{
+    padding-bottom: 5px;
+  }
   .label-task{
-      overflow: auto;
-      padding-top: 5px;padding-bottom: 5px;
       .checkbox-label{
         cursor: pointer;
         //border: 1px solid #C1CACA;
