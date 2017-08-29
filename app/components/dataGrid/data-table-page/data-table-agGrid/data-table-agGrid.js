@@ -113,7 +113,7 @@ let config = {
         //定制列需要字段信息
         customColumnsFields: [],
         //搜索参数
-        filterParam: {expertFilter:[], filter: [], is_filter: 0, common_filter_id: '', common_filter_name: ''},
+        filterParam: {expertFilter:[],fastFilter: [], filter: [], is_filter: 0, common_filter_id: '', common_filter_name: ''},
         //上传一搜索参数
         filterText: '',
         //是否第一次渲染agGrid
@@ -855,6 +855,10 @@ let config = {
             this.data.filterParam['is_filter'] = 1;
             this.actions.getGridData();
         },
+        fastSearchData: function (data) {
+            this.data.filterParam.fastFilter = data;
+            this.actions.getGridData();
+        },
         postExpertSearch:function(data,id,name) {
             this.data.filterParam.expertFilter = data;
             this.data.filterParam.common_filter_id = id;
@@ -1259,6 +1263,9 @@ let config = {
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
                 json['filter'] = this.data.filterParam.filter || [];
             }
+            if( this.data.filterParam.fastFilter && this.data.filterParam.fastFilter.length != 0 ){
+                json['filter'].push( this.data.filterParam.fastFilter[0] );
+            }
             if( this.data.filterParam['common_filter_id'] ){
                 json['filter'] = json['filter'] || [];
                 for( let a of this.data.filterParam.expertFilter ){
@@ -1267,7 +1274,7 @@ let config = {
                 if( this.data.filterParam['common_filter_id'] != '临时高级查询' ){
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
-                if( this.data.filterParam.filter.length == 0 ){
+                if( this.data.filterParam.filter.length == 0 && this.data.filterParam.fastFilter.length == 0 ){
                     msgBox.showTips( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
                 }
             }
@@ -1349,6 +1356,15 @@ let config = {
                 this.append(this.groupGridCom,this.el.find('.group-panel'));
 
                 this.groupGridCom.actions.onGroupChange = this.actions.onGroupChange;
+            }
+
+            //渲染快速搜索
+            if(this.data.fastSearchFields && this.data.fastSearchFields.length != 0){
+                let d = {
+                    fieldsData: this.data.fastSearchFields,
+                    fastSearchData:this.actions.fastSearchData,
+                }
+                this.append(new fastSearch(d), this.el.find('.fast-search-con'))
             }
             //渲染分页
             let noPagination = ['in_process','viewFromCorrespondence','editFromCorrespondence']
@@ -1504,7 +1520,7 @@ let config = {
                 }
             }
             //分组样式
-            if( this.data.groupCheck && !param["data"].children ){
+            if( this.data.groupCheck && !param["data"].group ){
                 return {background:'#E6F7FF'};
             }
         },
@@ -1875,7 +1891,7 @@ let config = {
                     tableId: this.data.tableId,
                     fieldsData: this.data.expertSearchFields,
                     commonQuery: this.data.commonQueryData,
-                    commonQuerySelectLength:this.el.find('.dataGrid-commonQuery-select option').length
+                    commonQuerySelectLength: this.el.find('.dataGrid-commonQuery-select option').length
                     // getExpertSearchData:this.actions.getExpertSearchData,
                     // postExpertSearch:this.actions.postExpertSearch,
                     // saveTemporaryCommonQuery:this.actions.saveTemporaryCommonQuery
@@ -2567,7 +2583,6 @@ let config = {
         }
     },
     afterRender: function () {
-        this.append(new fastSearch(), this.el.find('.fast-search-con'))
         this.showLoading();
         if( this.data.viewMode == 'in_process' ){
             this.data.noNeedCustom = true;

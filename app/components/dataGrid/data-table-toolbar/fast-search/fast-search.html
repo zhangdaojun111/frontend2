@@ -2,7 +2,9 @@
     <div class="fast-search-box">
         <input class="fast-search-box-input" placeholder="请选择" readonly="readonly" type="text">
         <ul class="fast-search-ul">
-            <li class="fast-search-li"></li>
+            {{#fieldsData}}
+            <li class="fast-search-li" title="{{searchField}}" type="{{searchType}}">{{name}}</li>
+            {{/fieldsData}}
         </ul>
     </div>
     <select class="fast-search-select relation">
@@ -13,4 +15,5 @@
         <option value="$ne">不等于</option>
     </select>
     <input class="fast-search-input">
+    <span class="fast-search-img"></span>
 </div>
