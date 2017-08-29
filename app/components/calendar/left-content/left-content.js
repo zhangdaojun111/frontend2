@@ -193,15 +193,17 @@ let config = {
         this.el.css({"height":"100%","width":"100%"});
         this.actions.getCalendarTreeData();
         this.append(new LeftcontentCalendarset(this.data.calendarTreeData), this.el.find('.left-calendar-set'));
-        this.append(new leftContentFinished(1), this.el.find('.item-content-4'));
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.el.find('.item-content-3').empty();
             data.forEach((row) =>{
                 this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
             });
         });
-        Mediator.on('CalendarFinshedWorkflowData: workflowData', data =>{
-            console.log(data);
+        Mediator.on('CalendarFinishedWorkflowData: workflowData', data =>{
+            this.el.find('.item-content-4').empty();
+            data.forEach((row) =>{
+                this.append(new leftContentFinished(row), this.el.find('.item-content-4'));
+            });
         });
         Mediator.on('calendar-left:hideRemindType',data =>{
                 this.append(new LeftContentHide(data.data), this.el.find('.left-calendar-hide'));

@@ -25,6 +25,7 @@ let config = {
         }
     ],
     afterRender: function() {
+        console.log(this.data);
     },
 }
 class leftContentFinished extends Component {
