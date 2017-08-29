@@ -27,6 +27,7 @@ let config={
         nodeflowSize:1,
     },
     actions:{
+
         /**
          * @author luyang 放大 缩小 全屏查看顶部节点图
          * @param el 顶部节点图 按钮 dom
@@ -52,7 +53,7 @@ let config={
                 width: '100%',
                 height: '100%',
                 overflow: 'auto',
-            }
+            };
             switch (type){
                 case 'zoomIn' :
                     var  nodeflowSize=this.data.nodeflowSize+= 0.1;
@@ -147,13 +148,44 @@ let config={
                     break;
             }
         },
-        toogz(e){
-            let ev = this.el.find(".signature");
-            if(ev.css("display")=="none"){
-                ev.css("display","block");
-            }else{
-                ev.css("display","none");
+        /**
+         *
+         * @param pos 初始偏移
+         * @param txt 提示框dom文字
+         * @param event event对象
+         */
+        tipsMouseover:function (pos,txt,event) {
+            if(txt!=''){
+                var tooltip = $('<div id="J_tooltip"></div>');
+                $("body").append(tooltip);
+                let tooltipDiv=$("#J_tooltip");
+                tooltipDiv.css({
+                    top: (event.pageY+pos.y) + "px",
+                    left:  (event.pageX+pos.x)  + "px"
+                }).show("fast").text(txt);
             }
+        },
+        /**
+         *
+         * @param el 提示框dom对象
+         */
+        tipsMouseout:function (el) {
+            el.remove()
+        },
+        /**
+         *
+         * @param pos 初始偏移
+         * @param el 提示框dom对象
+         * @param event event对象
+         */
+        tipsMousemove:function (pos,el,event) {
+            el.css({
+                top: (event.pageY+pos.y) + "px",
+                left:  (event.pageX+pos.x)  + "px"
+            })
+        },
+        toogz(ev){
+           ev.toggle();
         },
         appPass() {
             Mediator.publish('workflow:appPass');
@@ -241,8 +273,9 @@ let config={
             WorkFlow.show(msg.data[0],'#drawflow');
         });
 
-        this.el.on('click','.gz',(e)=>{
-            this.actions.toogz(e);
+        this.el.on('click','.gz',()=>{
+            let signature = $(".signature");
+            this.actions.toogz(signature);
         });
         this.el.on('click','.close',function () {
             __this.el.find('.rejContainer').hide();
@@ -281,6 +314,20 @@ let config={
         });
         Mediator.subscribe("workflow:sendImgInfo",(e)=>{
             this.data.imgInfo=e;
+        });
+        const pos={x:10,y:20};
+        this.el.on("mouseover","#cloneId3 .tipsText",function (e) {
+            let elDiv=$(this);
+            let elDivText=elDiv.text();
+            __this.actions.tipsMouseover(pos,elDivText,e)
+        });
+        this.el.on("mouseout","#cloneId3 .tipsText",function () {
+            let J_tooltip=$("#J_tooltip");
+            __this.actions.tipsMouseout(J_tooltip)
+        });
+        this.el.on("mousemove","#cloneId3 .tipsText",function (e) {
+            let J_tooltip=$("#J_tooltip");
+            __this.actions.tipsMousemove(pos,J_tooltip,e)
         });
 
     }
