@@ -47,7 +47,7 @@ let config={
             event: 'click',
             selector: '.input-img',
             callback: function(){
-                this.el.find('.time').css({'display':'block','position':'fixed'});
+                this.el.find('.time').css({'display':'block','position':'absolute'});
                 event.stopPropagation();
             }
         },
