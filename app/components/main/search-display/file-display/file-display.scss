@@ -13,7 +13,7 @@
         //cursor: pointer;
         .attachment-icon-box {
             box-sizing: border-box;
-            height: 50%;
+            height: 55%;
             text-align: center;
             padding-top: calc(15% - 32px);
             padding-left: calc(50% - 32px);
@@ -35,19 +35,30 @@
                 vertical-align: middle;
                 display: block;
                 width: 100%;
-                height: 52px;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                //max-width: 240px;
+                white-space:nowrap;
                 padding: 10px 15px 10px 15px;
-                word-break: break-all;
             }
             .operator-group{
                 width: 100%;
                 height: auto;
                 text-align: center;
-                margin-top: 10px;
+                .preview.canPreview,.download{
+                    cursor: pointer;
+                    text-decoration:none;
+                    &:hover{
+                        color: #0088ff;
+                        //text-decoration:solid;
+                    }
+                }
+                .cantPreview{
+                    color: rgba(122, 122, 122, 0.66);
+                }
 
+                .download{
+                    margin-left: 10px;
+                }
             }
         }
     }
