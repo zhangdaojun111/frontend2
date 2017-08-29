@@ -13,21 +13,10 @@ let config = {
     data:{
     },
     actions:{
-    },
-    events:{
-        // onChange:function(){},
-    },
-    binds:[
-        {
-            event: 'click',
-            selector: '.has-finished',
-            callback: function () {
-            }
-        }
-    ],
-    afterRender: function() {
-        console.log(this.data);
-        this.el.on('click', '.finished-content', () => {
+        /**
+         * 打开已完成工作
+         */
+        openFinishedWork:function(){
             PMAPI.openDialogByIframe(
                 `/wf/approval/?record_id=${this.data['id']}&form_id=${this.data['form_id']}&table_id=${this.data['table_id']}&flow_id=${this.data['flow_id']}`,
                 {
@@ -36,7 +25,21 @@ let config = {
                     modal: true,
                     customSize: true,
                 })
-        })
+        }
+    },
+    events:{
+        // onChange:function(){},
+    },
+    binds:[
+        {
+            event: 'click',
+            selector: '.finished-content',
+            callback: function () {
+                this.actions.openFinishedWork();
+            }
+        },
+    ],
+    afterRender: function() {
     },
 }
 class leftContentFinished extends Component {

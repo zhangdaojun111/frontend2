@@ -16,23 +16,26 @@ let config = {
     },
     actions:{
         toPercent:function(point){
-            var str=Number(point*100).toFixed(1);
+            let str=Number(point*100).toFixed(1);
             str+="%";
             return str;
         },
+        /**
+         * 加载工作进度
+         */
         showfirst(){
-            let record_progress = config.actions.toPercent(this.data['record_progress']);
+            let record_progress = this.actions.toPercent(this.data['record_progress']);
             // console.log(record_progress);
-            // if(record_progress === "100.0%"){
+            // if(this.data['record_progress'] > 0.8){
             //     this.el.find(".end-workflow").hide();
             // }
+            console.log(this.data['record_progress'] > 0.9);
             this.el.find(".workflow-schedule").css({"width":record_progress});
-        }
-    },
-    afterRender: function() {
-        this.el.css("width","100%");
-        this.actions.showfirst();
-        this.el.on('click', '.workflow-content', () => {
+        },
+        /**
+         * 打开与我相关工作
+         */
+        openMyWork:function () {
             PMAPI.openDialogByIframe(
                 `/wf/approval/?record_id=${this.data['id']}&form_id=${this.data['form_id']}&table_id=${this.data['table_id']}&flow_id=${this.data['flow_id']}`,
                 {
@@ -41,7 +44,20 @@ let config = {
                     modal: true,
                     customSize: true,
                 })
-        })
+        }
+    },
+    binds:[
+        {
+            event: 'click',
+            selector: '.workflow-content',
+            callback: function () {
+                this.actions.openMyWork();
+            }
+        },
+    ],
+    afterRender: function() {
+        this.el.css("width","100%");
+        this.actions.showfirst();
     },
 };
 class RightContentWorkFlow extends Component {
