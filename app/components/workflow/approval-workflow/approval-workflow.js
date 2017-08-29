@@ -123,7 +123,7 @@ let config={
         /**
          * @author luyang 克隆节点插入顶部，切换显示
          * @param el 当前点击按钮 type:follow-view 关注联系人，flow-view 流程节点 record-view：审批记录
-         * @param appendDiv 添加到dom
+         * @param appendDiv 添加到的dom
          */
         previewView:function (el,appendDiv) {
             let type=$(el).data("preview");
@@ -282,6 +282,7 @@ let config={
         Mediator.subscribe("workflow:sendImgInfo",(e)=>{
             this.data.imgInfo=e;
         });
+
     }
 };
 class ApprovalWorkflow extends Component{
