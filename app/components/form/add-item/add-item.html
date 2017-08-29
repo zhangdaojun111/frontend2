@@ -1,27 +1,29 @@
-<table>
-    <tr>
-        <td style="width:100px;">新增选项：</td>
-        <td>
-            <input type="text" class="addValue">
-            <button class="btn btn-primary add">添加</button>
-            <button class="btn btn-primary save">保存</button>
-        </td>
-    </tr>
-    <tr>
-        <td>原始选项：</td>
-        <td>
-            <table>
-                {{#each originalOptions}}
-                <tr><td>{{ this.label }}</td></tr>
-                {{/each}}
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td>添加结果：</td>
-        <td>
-            <table class="result">
-            </table>
-        </td>
-    </tr>
-</table>
+<div class="add-wrap">
+    <div class="response">
+        <div class="add-table">
+            <div class="add-new flex-wrap">
+                <div class="label">新增选项：</div>
+                <div class="content">
+                    <input type="text" class="addValue">
+                    <button class="add">添加</button>
+                </div>
+            </div>
+            <div class="add-item">
+                <div class="item-wrap flex-wrap">
+                    <div class="label">原始选项：</div>
+                    <div class="content">
+                            {{#each originalOptions}}
+                            <div class="item">{{ this.label }}</div>
+                            {{/each}}
+                    </div>
+                </div>
+                <div class="item-wrap flex-wrap">
+                    <div class="label">添加结果：</div>
+                    <div class="content result">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="save">保存</button>
+</div>
