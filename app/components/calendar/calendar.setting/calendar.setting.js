@@ -67,24 +67,16 @@ let config = {
             if(isHide) {
                 isHide = false;
                 _this.el.find('.setting-content').addClass('hide');
+                _this.el.find('.search').addClass('hide-search');
+                _this.el.find('.calendar-setting-items').addClass('hide-menu');
+                _this.el.find('.calendar-setting-item').addClass('hide');
             } else {
                 isHide = true;
                 _this.el.find('.setting-content').removeClass('hide');
+                _this.el.find('.search').removeClass('hide-search');
+                _this.el.find('.calendar-setting-items').removeClass('hide-menu');
+                _this.el.find('.calendar-setting-item').removeClass('hide');
             }
-            // if(!$(this).is(".is-hide")){
-            //     $(this).addClass("is-hide");
-            //     that.el.find(".calendar-setting-items").css({"width":"30px",});
-            //     that.el.find(".search").hide();
-            //     that.el.find(".setting-content").css('visibility','hidden');
-            //     that.el.find(".calendar-setting-item").css("width","calc(100% - 45px)");
-            // } else{
-            //     $(this).removeClass("is-hide");
-            //     that.el.find(".calendar-setting-items").css({"width":"200px",'height':"auto"});
-            //     that.el.find(".search").show();
-            //     that.el.find(".setting-content").css('visibility','visible');
-            //     that.el.find(".calendar-setting-item").css("width","calc(100% - 220px)");
-            // }
-
         });
 
     },
