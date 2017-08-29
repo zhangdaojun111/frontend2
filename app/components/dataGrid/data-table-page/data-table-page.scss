@@ -1,78 +1,92 @@
 #pagetabs {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  overflow: hidden;
-  .page-tab {
-    height: 30px;
-    line-height: 30px;
-    background-color: #FFFFFF;
-    user-select: none;
     position: absolute;
-    top:15px;
+    top: 0;
+    bottom: 0;
     left: 0;
-    z-index: 20;
-    ul {
-      width: 100%;
-      height: 100%;
-      line-height: 30px;
-      display: block;
-      margin: 0;
-      padding: 0;
-      margin-left: 15px;
-      li {
-        display: block;
-        float: left;
-        margin: 0 5px;
-        font-size: 15px;
+    right: 0;
+    overflow: hidden;
+    .page-tab {
+        height: 30px;
         line-height: 30px;
-        cursor: pointer;
-        a{
-          height: 26px;
-          line-height: 26px;
-          width: auto;
-          text-decoration: none;
-          color: #666666;
-          border-bottom: #0E7AEF;
-          padding: 2px 7px;
-        }
-        a:hover{
-          background-color: rgba(187, 220, 255, 1);
-        }
-        .active{
-          color: #004DC2;
-          border-bottom: 1px solid #004DC2;
-        }
-      }
+        background-color: #FFFFFF;
+        user-select: none;
+        position: absolute;
+        left: 0;
+        z-index: 20;
+        ul {
+            width: 100%;
+            height: 100%;
+            line-height: 30px;
+            display: block;
+            margin: 0;
+            padding: 0;
+            margin-left: 15px;
+            .dataTableInTransit {
+                position: relative;
+                .inProcessNum {
+                    display: none;
+                    position: absolute;
+                    right: 0px;
+                    top: 0px;
+                    width: 8px;
+                    height: 8px;
+                    background-color: red;
+                    border-radius: 4px;
+                }
+            }
+            li {
+                display: block;
+                float: left;
+                margin: 15px 5px;
+                cursor: pointer;
+                a {
+                    display: block;
+                    font-size: 14px;
+                    height: 28px;
+                    overflow: hidden;
+                    line-height: 30px;
+                    border-bottom: 2px solid #fff;
+                    padding: 0 10px;
+                    text-decoration: none;
+                    color: #666;
+                }
+                a:hover {
+                    color: #0088ff;
+                }
+                &.active {
+                    border-bottom: 2px solid #0088FF;
+                    a {
+                        color: #0088FF;
+                    }
+                }
+            }
 
+        }
     }
-  }
-  .page-group {
-    height: calc( 100% - 30px );
-    .dataTableAgGrid {
-      float: left;
-      width: calc(100% - 2px);
-      height: 100%;
-      #data-table-agGrid {
-        position: relative;
-        width: 100%;
-        height: 100%;
-      }
+    .page-group {
+        height: calc(100% - 30px);
+        .dataTableAgGrid {
+            float: left;
+            width: calc(100% - 2px);
+            height: 100%;
+            #data-table-agGrid {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .dataTableInTransit {
+            width: calc(100% - 2px);
+            float: left;
+            display: none;
+            height: 100%;
+            #data-table-in-process {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+        }
     }
-    .dataTableInTransit {
-      width: calc(100% - 2px);
-      float: left;
-      display: none;
-      height: 100%;
-      #data-table-in-process {
-        position: relative;
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
 }
 
 

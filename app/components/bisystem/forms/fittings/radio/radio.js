@@ -7,6 +7,7 @@ import template from './radio.html';
 import './radio.scss';
 import {FormFittingAbstract} from '../form.abstract';
 
+
 let config = {
     template: template,
     data: {
@@ -17,7 +18,7 @@ let config = {
     afterRender() {},
     firstAfterRender() {
         let me = this;
-        me.onChange = me.data.onChange
+        me.onChange = me.data.onChange;
         this.el.on('change', 'input', function(event){
             me.data.value = $(this).val();
             if (me.data.onChange) {
@@ -26,6 +27,7 @@ let config = {
         })
     }
 }
+
 
 export class RadioComponent extends FormFittingAbstract {
     constructor(data) {

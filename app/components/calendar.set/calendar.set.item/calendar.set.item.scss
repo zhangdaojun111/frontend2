@@ -1,9 +1,9 @@
-@import "../calendar.set";
+
 .singleRow {
     width: 100%;
     display: block;
     float: left;
-    border-top: 1px solid $boder-color;
+    border-top: 1px solid rgba(228, 228, 228, 1);
     .table-item-checkbox{
     }
     .set-table-item{
@@ -18,8 +18,20 @@
             height: 26px;
         }
         .z-checkbox{
+            vertical-align: middle;
             .z-checkbox-input{
-                bottom: 2px;
+                bottom: 6px;
+                right: 2px;
+                &::before {
+                    width: 14px;
+                    height: 14px;
+                }
+                &::after {
+                    left: 3px;
+                    top: 3px;
+                    width: 10px;
+                    height: 10px;
+                }
             }
         }
     }

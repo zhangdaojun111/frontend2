@@ -10,7 +10,9 @@ import 'jquery-ui/ui/widgets/sortable.js';
 
 let config = {
     template: template,
+
     data: {
+        initialGroup:[],
         group:[],
         tableId: null,
         gridoptions: null,
@@ -41,6 +43,11 @@ let config = {
                 let dom = $('.grouping-data-list').find('.group-data-item');
                 for (let i = 0; i < dom.length; i++) {
                     this.data.group.push(dom[i].attributes['field'].nodeValue);
+                }
+                if(this.data.group.join() == this.data.groupFields.join()) {
+                    this.el.find('.resetGroup').css('color','#999999');
+                } else {
+                    this.el.find('.resetGroup').css('color','#0F79EF');
                 }
                 dataTableService.savePreference({
                     action: 'group',

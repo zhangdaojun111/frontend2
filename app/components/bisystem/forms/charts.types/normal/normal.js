@@ -31,7 +31,6 @@ let config = {
     },
     firstAfterRender() {
         this.el.on('click', '.save-normal-btn', (event) => {
-            console.log('xxxxxxxxxxxxxxxx');
             this.saveChart();
             return false;
         });
@@ -47,10 +46,10 @@ let config = {
 };
 
 export class FormNormalComponent extends BiBaseComponent{
-    constructor(chartId) {
+    constructor(chart) {
         super(config);
         this.formGroup = {};
-        this.chartId = chartId;
+        this.chartId = chart.id;
         this.y = [];
         this.y1 = [];
         this.editModeOnce = this.chartId ? true : false // 如果是编辑模式 需要在第一次加载进来重置某些字段的默认值
@@ -105,6 +104,7 @@ export class FormNormalComponent extends BiBaseComponent{
         this.formGroup.echartXTextNum.setValue(chart['echartX'].hasOwnProperty('textNum') ? chart['echartX']['textNum'] : 0);
         this.formGroup.echartXMarginBottom.setValue(chart['echartX'].hasOwnProperty('marginBottom') ? chart['echartX']['marginBottom'] : 0);
         this.formGroup.chartAssignment.setValue(chart['chartAssignment'].val);
+        this.formGroup.ySelectedGroup.setValue(chart['ySelectedGroup']);
         this.editModeDeeps = {
             deeps: chart['deeps'],
             group: chart['chartGroup']
@@ -380,7 +380,7 @@ export class FormNormalComponent extends BiBaseComponent{
     selectYAxis(flag) {
         if (this.formGroup.defaultY.getValue()) {
             let checkboxs = [];
-            let items = []
+            let items = [];
             this.y.concat(this.y1).map(y => {
                 if (y.data.field) {
                     items.push(y.data.field);
@@ -401,11 +401,11 @@ export class FormNormalComponent extends BiBaseComponent{
     /**
      * reset实例，当通过路由重新进入实例，清空所有数据
      */
-    reset(id) {
+    reset(chart) {
         this.formGroup = {};
         this.y = [];
         this.y1 = [];
-        this.chartId = id;
+        this.chartId = chart ? chart.id : null;
         this.editModeOnce = this.chartId ? true : false;
         this.editModeXField = null;
         [this.editModeYField,this.editModeY1Field] = [[], []];
@@ -479,9 +479,11 @@ export class FormNormalComponent extends BiBaseComponent{
     switchGroupandDeep(val) {
         if (val == 1) {
             this.formGroup.deeps.data.deepShow = false;
-            this.formGroup.deeps.data.deeps =[]
+            this.formGroup.deeps.data.deeps =[];
+            this.changeContext(val);
         } else {
             this.formGroup.deeps.data.deepShow = true;
+            this.changeContext(val);
         };
         this.formGroup.deeps.reload();
     }
@@ -599,8 +601,6 @@ export class FormNormalComponent extends BiBaseComponent{
         } else {
             chart['deeps'] = data.deeps.deeps
         };
-        console.log(data.yHorizontal);
-        console.log(chart);
         let res = await ChartFormService.saveChart(JSON.stringify(chart));
         if (res['success'] == 1) {
             msgbox.alert('保存成功');
@@ -613,5 +613,17 @@ export class FormNormalComponent extends BiBaseComponent{
         } else {
             msgbox.alert(res['error'])
         };
+    }
+
+    /**
+     * 改变label的显示 下拉,分组
+     */
+    changeContext(val){
+        if(val==2){
+            this.el.find('.chart-form-deep').addClass('after-content');
+        }else{
+            this.el.find('.chart-form-deep').removeClass('after-content');
+        }
+
     }
 }

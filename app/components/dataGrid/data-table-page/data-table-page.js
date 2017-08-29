@@ -16,21 +16,21 @@ let config = {
         //获取在途数据
         getInProcessNum: function () {
             dataTableService.getInProcessNum( {table_id: this.data.tableId} ).then( res=>{
-                this.el.find( '.inProcessNum' )[0].innerHTML = res.total || 0;
+                this.el.find( '.inProcessNum' )[0].style.display =res.total? 'block':'none';
             } )
             HTTP.flush();
         },
         //添加点击事件
         addClick: function () {
-            this.el.find( '.tabTitle .left' ).on( 'click',()=>{
-                this.el.find( '.left' ).addClass( 'active' );
-                this.el.find('.right').removeClass('active');
+            this.el.find( '.tabTitle .dataTableAgGrid' ).on( 'click',()=>{
+                this.el.find( '.dataTableAgGrid' ).addClass( 'active' );
+                this.el.find('.dataTableInTransit').removeClass('active');
                 this.el.find( '.page-group .dataTableAgGrid' )[0].style.display = 'block';
                 this.el.find( '.page-group .dataTableInTransit' )[0].style.display = 'none';
             } )
-            this.el.find( '.tabTitle .right' ).on( 'click',()=>{
-                this.el.find( '.left' ).removeClass( 'active' );
-                this.el.find('.right').addClass('active');
+            this.el.find( '.tabTitle .dataTableInTransit' ).on( 'click',()=>{
+                this.el.find( '.dataTableAgGrid' ).removeClass( 'active' );
+                this.el.find('.dataTableInTransit').addClass('active');
                 this.el.find( '.page-group .dataTableAgGrid' )[0].style.display = 'none';
                 this.el.find( '.page-group .dataTableInTransit' )[0].style.display = 'block';
                 //渲染在途

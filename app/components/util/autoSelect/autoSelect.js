@@ -27,7 +27,6 @@ let config = {
         selectBoxHeight: 'auto',           // select 框的高度
         width: 0,                       // 为0表示显示默认宽度240
         editable: true,                 // 是否可编辑
-        displayChoosed: true,           // 是否显示已选中的
         onSelect: null                  // 选择时的事件
     },
     actions: {
@@ -94,33 +93,26 @@ let config = {
             this.actions.renderChoosed();
         },
         renderChoosed: function () {
-            this.listWrap.find('input:checkbox:checked').each(function () {
-                this.checked = false;
-            });
-            if (this.data.onSelect) {
-                this.data.onSelect(this.data.choosed);
-            }
-
-            this.trigger('onSelect', this.data.choosed);
-            if (this.data.choosed.length) {
-                if (this.data.displayChoosed === true) {
-                    this.choosedWrap.show();
-                } else {
-                    this.choosedWrap.hide();
-                }
-                let html = [];
-                this.data.choosed.forEach((item) => {
-                    let checkbox = this.listWrap.find(`input:checkbox[data-id=${item.id}]`);
-                    checkbox[0].checked = true;
-                    if (this.data.displayChoosed === true) {
-                        html.push(`<div class="item" title="点击删除" data-id="${item.id}">${item.name}</div>`)
-                    };
+                this.listWrap.find('input:checkbox:checked').each(function () {
+                    this.checked = false;
                 });
-                this.choosedWrap.html(html.join(''));
-            } else {
-                this.choosedWrap.hide();
-            }
-            this.el.find('.select-all span').text(this.data.choosed.length);
+                if (this.data.onSelect) {
+                    this.data.onSelect(this.data.choosed);
+                }
+                this.trigger('onSelect', this.data.choosed);
+                if (this.data.choosed.length) {
+                    let html = [];
+                    this.data.choosed.forEach((item) => {
+                        if (item.id) {
+                            let checkbox = this.listWrap.find(`input:checkbox[data-id=${item.id}]`);
+                            checkbox[0].checked = true;
+                            html.push(item.name);
+                        }
+                    });
+                    this.inputResult.val(html.join(','));
+                }
+                this.el.find('.select-all span').text(this.data.choosed.length);
+
         },
         selectAll: function () {
             if (this.data.choosed.length === this.data.list.length) {
@@ -157,11 +149,23 @@ let config = {
             callback: function () {
                 this.actions.selectAll();
             }
+        },{
+            event: 'mouseenter',
+            selector: '',
+            callback: function () {
+                this.actions.showSelectBox();
+            }
+        },{
+            event: 'mouseleave',
+            selector: '',
+            callback: function () {
+                this.actions.hideSelectBox();
+            }
         }
     ],
     afterRender: function () {
         this.listWrap = this.el.find('.list');
-        this.choosedWrap = this.el.find('.choosed');
+        this.inputResult = this.el.find('input.result');
         this.actions.renderChoosed();
         if (this.data.selectBoxHeight === 'auto') {
             this.listWrap.css({
@@ -176,14 +180,11 @@ let config = {
         if (this.data.displayType === 'popup') {
             this.listWrap.addClass('popup');
         }
-        if (this.data.multiSelect === false) {
-            this.el.find('.auto-select-component').addClass('single-select');
-        }
         if (this.data.width !== 0) {
             this.el.find('.auto-select-component').css('width', this.data.width);
         }
         if (this.data.editable === false) {
-            this.el.find('input.text').attr('disabled', 'true');
+            this.el.find('.auto-select-component').addClass('disabled');
         }
         if (this.data.multiSelect === false) {
             this.listWrap.find('.select-all').hide();
@@ -191,14 +192,10 @@ let config = {
         }
     },
     firstAfterRender: function () {
-        let that = this;
         if (this.data.editable === true) {
-            if (this.data.displayType === 'popup') {
-                this.el.on('mouseenter', () => {
-                    that.actions.showSelectBox();
-                }).on('mouseleave', () => {
-                    that.actions.hideSelectBox();
-                })
+            if (this.data.displayType !== 'popup') {
+                this.el.off('mouseenter');
+                this.el.off('mouseleave');
             }
         } else {
             this.cancelEvents();

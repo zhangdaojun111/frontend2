@@ -22,18 +22,18 @@
   font-size: 12px!important;
 }
 
-.btn-nav {
+.btn-nav-con {
   height: 60px;
   width: 100%;
 }
-.btn-nav.flex-end{
+.btn-nav-con.flex-end{
   justify-content: flex-end;
 }
 .dataGrid-commonQuery {
   display: none;
   float: left;
   padding-left: 15px;
-  .dataGrid-commonQuery-select {
+  .dataGrid-commonQuery-select-style {
     padding: 0 12px;
     border: 1px solid #d7d7d7;
     border-radius: 4px;
@@ -54,7 +54,7 @@
 }
 .dataGrid-btn-group {
   //float: right;
-  display: none;
+  display: flex;
   margin-right: 10px;
   line-height: 25px;
   user-select: none;

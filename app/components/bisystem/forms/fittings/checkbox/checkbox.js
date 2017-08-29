@@ -29,7 +29,13 @@ let config = {
                 if (me.data.value) {
                     me.data.checkedItems.push(me.data.items[index]);
                 } else {
-                    me.data.checkedItems.splice(index,1)
+                    let checkedItems = [];
+                    me.data.checkedItems.map(item => {
+                        if (item.id !== me.data.items[index].id) {
+                            checkedItems.push(item);
+                        };
+                    });
+                    me.data.checkedItems = checkedItems;
                 }
             };
             if (me.data.onChange) {
@@ -49,13 +55,31 @@ export class CheckboxComponent extends FormFittingAbstract {
      * 设置checkbox值
      */
     setValue(val) {
-        if(this.data.items && this.data.items.length > 0) {
+        if(val && val.length >= 0) {
+            val.map((choosed,choosedIndex) => {
+                this.data.items.forEach((item,index) => {
+                    if (choosed.id == item.id) {
+                        this.el.find('input').eq(index).attr('checked', true);
+                    }
+                })
+            })
+            this.data.checkedItems = val;
         } else {
             this.el.find('input').attr('checked', val);
             this.data.value = val;
             this.data.checked = val;
-            this.onChange(this.data.value);
         }
+    }
+
+
+    /**
+     * 设置所有为选中状态
+     */
+    setCheck() {
+        this.data.items.map((choosed,choosedIndex) => {
+            this.el.find('input').attr('checked', true)
+        })
+        this.data.checkedItems = this.data.items;
     }
 
     /**

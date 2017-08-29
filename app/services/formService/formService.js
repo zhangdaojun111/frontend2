@@ -484,12 +484,14 @@ export const FormService={
     getAttachment(json){
         return HTTP.postImmediately('/query_attachment_list/',json);
     },
+    getThumbnails(json){
+        return HTTP.postImmediately('/get_thumbnails/',json);
+    },
 
     //重新拼装下拉框格式
     //multiBuildType 特殊多选内置分支判断
     //multi 是否多选
     createSelectJson(json,multi,multiBuildType){
-
         let data={list:[],choosed:[]};
         if(json.is_view){
             data['editable']=false;
@@ -503,7 +505,7 @@ export const FormService={
         }else{
             options=json['options'];
         }
-        if(options[0]['value'] == ''){
+        if(options.length >0 && options[0]['value'] == ''){
             options.shift();
         }
         for(let key in options){
