@@ -1006,7 +1006,6 @@ let config = {
             let remindData = dataTableService.getReminRemindsInfo({table_id:this.data.tableId});
             post_arr = [body,remindData]
             if( !this.data.firstGetFooterData ){
-                console.log( "1111111111" )
                 let footer = dataTableService.getFooterData( postData );
                 post_arr.push( footer )
             }
@@ -1060,7 +1059,6 @@ let config = {
         //请求footer数据
         getFooterData: function () {
             let postData = this.actions.createPostData();
-            console.log( "22222222222" )
             dataTableService.getFooterData( postData ).then( res=>{
                 this.data.footerData = dgcService.createFooterData( res );
                 let d = {

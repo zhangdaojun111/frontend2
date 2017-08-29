@@ -58,7 +58,8 @@
   }
 
   .ag-grid-con {
-    height: calc( 100% - 75px);;
+    height: calc( 100% - 75px);
+    position: relative;
     #data-agGrid {
       width: 100%;
       position: relative;
