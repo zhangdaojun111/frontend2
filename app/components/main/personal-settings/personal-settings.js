@@ -13,7 +13,9 @@ import msgbox from '../../../lib/msgbox';
 import SetAvatar from './set-avatar/set-avatar';
 import {agentSetting} from './set-agent/set-agent';
 import OtherLogin from "../login-by-other/login-by-other";
-import Mediator from "../../../lib/mediator";
+import Mediator from '../../../lib/mediator';
+import userInfoDisplay from './user-info-display/user-info-display';
+import {PMAPI} from '../../../lib/postmsg';
 
 function getData(component_instance) {
     _.defaultsDeep(component_instance.data, {
@@ -211,7 +213,7 @@ let config = {
                 this.data.avatar = "/mobile/get_file/?file_id=" + data.avatar + "&download=0";
             }
             this.actions.initInfo();
-        }
+        },
     },
     afterRender:function () {
         if(this.data.mode === 'self'){
@@ -288,17 +290,19 @@ export const PersonSetting  = {
         });
     },
     showUserInfo:function (targetName) {
-        let component = new PersonalSetting(targetName,"other");
-        this.el = $('<div class="show-other-info-page">').appendTo(document.body);
-        component.render(this.el);
-        this.el.dialog({
-            title: '人员信息',
-            width: 350,
-            height: 600,
-            modal: true,
-            close: function() {
-                $(this).dialog('destroy');
-                component.destroySelf();
+        UserInfoService.getUserInfoByName(targetName).done((result) => {
+            if(result.success === 1){
+                //获取data
+                userInfoDisplay.data.userInfo = result.rows;
+                userInfoDisplay.data.userName = targetName.name;
+                PMAPI.openDialogByComponent(userInfoDisplay, {
+                    width: 350,
+                    height: 500,
+                    title: "人员信息"
+                })
+            }else{
+                msgbox.alert("获取数据失败");
+                // PersonSetting.hide();
             }
         });
     },
