@@ -64,7 +64,8 @@ let config = {
             this.actions.renderChoosed();
         },
         onInput: function (input) {
-            let value = input.val();
+            let value = _.trim(input.val());
+            input.val(value);
             if (value === '') {
                 this.listWrap.find('li').show();
             } else {

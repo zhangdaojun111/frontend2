@@ -24,21 +24,22 @@
         border: 1px solid #ddd;
         overflow: auto;
         margin-top: -1px;
-        background-color: #f5f5f5;
         .auto-select-text-wrap {
             height: 30px;
             overflow: hidden;
+            background-color: #f5f5f5;
             input.auto-select-text {
                 display: block;
                 width: 90%;
                 border: 1px solid #eaeaea;
                 height: 24px;
-                line-height: 24px;
+                line-height: 22px;
                 padding: 0;
                 outline: none;
                 text-indent: 10px;
                 box-sizing: border-box;
                 margin: 3px auto;
+                font-size: 12px;
             }
         }
         &.popup {
