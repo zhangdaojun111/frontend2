@@ -31,37 +31,37 @@ let config = {
                 //输入框输入时的实时函数验证
                 if (val != "" && !$.isEmptyObject(func)) {
                     for (let r in func) {
-                        //var a = FormService.r(val)
+                        //let a = FormService.r(val)
                         switch (r) {
                             case "checkCard":
-                                var a = FormService.checkCard(val);
+                                let a = FormService.checkCard(val);
                                 break;
                             case "orgcodevalidate":
-                                var a = FormService.orgcodevalidate(val);
+                                let a = FormService.orgcodevalidate(val);
                                 break;
                             case "xxzdx":
-                                var a = FormService.xxzdx(val);
+                                let a = FormService.xxzdx(val);
                                 break;
                             case "tjbds":
-                                var a = FormService.tjbds(val);
+                                let a = FormService.tjbds(val);
                                 break;
                             case "jssj":
-                                var a = FormService.jssj(val);
+                                let a = FormService.jssj(val);
                                 break;
                             case "dqsj":
-                                var a = FormService.dqsj(val);
+                                let a = FormService.dqsj(val);
                                 break;
                             case "getNowDate":
-                                var a = FormService.getNowDate(val);
+                                let a = FormService.getNowDate(val);
                                 break;
                             case "fun_ghl_dqrq":
-                                var a = FormService.fun_ghl_dqrq(val);
+                                let a = FormService.fun_ghl_dqrq(val);
                                 break;
                             case "fun_ghl_xxzdx":
-                                var a = FormService.fun_ghl_xxzdx(val);
+                                let a = FormService.fun_ghl_xxzdx(val);
                                 break;
                             case " fun_ghl_dqsj":
-                                var a = FormService.fun_ghl_dqsj(val);
+                                let a = FormService.fun_ghl_dqsj(val);
                                 break;
                             default:
                                 console.log("怎么错了呢(；′⌒`)");

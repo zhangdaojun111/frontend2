@@ -30,11 +30,11 @@ let config = {
                 }
 
                 //获取当前时间
-                var myDate = new Date();
-                var h = myDate.getHours();
-                var m = myDate.getMinutes();
-                var s = myDate.getSeconds();
-                var now = p(h) + ':' + p(m) + ":" + p(s);
+                let myDate = new Date();
+                let h = myDate.getHours();
+                let m = myDate.getMinutes();
+                let s = myDate.getSeconds();
+                let now = p(h) + ':' + p(m) + ":" + p(s);
 
                 let nowTime = this.el.find(".timeInput").val(now);
                 this.data.value = now;
@@ -85,15 +85,15 @@ let config = {
         }
 
         //获取当前时间
-        var myDate = new Date();
-        var h = myDate.getHours();
-        var m = myDate.getMinutes();
-        var s = myDate.getSeconds();
-        var now = p(h) + ':' + p(m) + ":" + p(s);
+        let myDate = new Date();
+        let h = myDate.getHours();
+        let m = myDate.getMinutes();
+        let s = myDate.getSeconds();
+        let now = p(h) + ':' + p(m) + ":" + p(s);
 
         this.el.on("click", '.plus', function () {
             //当前时间+1
-            var myDate2 = new Date();
+            let myDate2 = new Date();
             myDate2.setHours(h + 1);
             myDate2.setMinutes(m + 1);
             myDate2.setSeconds(s + 1);
@@ -107,7 +107,7 @@ let config = {
                 s = myDate2.getSeconds();
                 _this.el.find(".second").children("span").text(p(s));
             }
-            var now2 = p(h) + ':' + p(m) + ":" + p(s);
+            let now2 = p(h) + ':' + p(m) + ":" + p(s);
             now = now2
             let nowTime = _this.el.find(".timeInput").val(now);
             _this.data.value = now;
@@ -117,7 +117,7 @@ let config = {
         });
         this.el.on("click", '.reduce', function () {
             //当前时间-1
-            var myDate3 = new Date();
+            let myDate3 = new Date();
             myDate3.setHours(h - 1);
             myDate3.setMinutes(m - 1);
             myDate3.setSeconds(s - 1);
@@ -131,7 +131,7 @@ let config = {
                 s = myDate3.getSeconds();
                 _this.el.find(".second").children("span").text(p(s));
             }
-            var now3 = p(h) + ':' + p(m) + ":" + p(s);
+            let now3 = p(h) + ':' + p(m) + ":" + p(s);
             now = now3;
             let nowTime = _this.el.find(".timeInput").val(now);
             _this.data.value = now;
