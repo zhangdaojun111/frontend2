@@ -552,16 +552,24 @@ let config = {
                             this.actions.postExpertSearch(res.value,res.id,res.name);
                         }
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);
-                    } if(res.appendChecked) {
+                    }
+                    if(res.appendChecked) {
                         this.data.temporaryCommonQuery = res.value
                         this.actions.appendQuerySelect()
-                    } if(res.saveCommonQuery || (res.saveCommonQuery && res.onlyclose == true)) {
-                        this.actions.getExpertSearchData(res.addNameAry);
-                    }if(res.deleteCommonQuery || (res.deleteCommonQuery && res.onlyclose == true)) {
-                        this.actions.getExpertSearchData(res.addNameAry);
-                    } if(!res.saveCommonQuery && res.onlyclose == true) {
-                        return false
                     }
+                    if(res.saveCommonQuery || res.deleteCommonQuery) {
+                        this.actions.getExpertSearchData(res.addNameAry);
+                    }
+                    if(res.onlyclose == true) {
+                        this.actions.getExpertSearchData()
+                    }
+                    // if(res.saveCommonQuery || (res.saveCommonQuery && res.onlyclose == true)) {
+                    //     this.actions.getExpertSearchData(res.addNameAry);
+                    // }if(res.deleteCommonQuery || (res.deleteCommonQuery && res.onlyclose == true)) {
+                    //     this.actions.getExpertSearchData(res.addNameAry);
+                    // } if(!res.saveCommonQuery && res.onlyclose == true) {
+                    //     return false
+                    // }
                 })
             } )
             _this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
