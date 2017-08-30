@@ -6,12 +6,10 @@ import template from './canvas.cells.html';
 import './canvas.cells.scss';
 import {canvasCellService} from '../../../services/bisystem/canvas.cell.service';
 import Mediator from '../../../lib/mediator';
-import {ToolPlugin} from '../utils/tool.plugin';
 import msgbox from "../../../lib/msgbox";
 import "jquery-ui/ui/widgets/draggable";
 import "jquery-ui/ui/widgets/resizable";
 import "jquery-ui/ui/widgets/droppable";
-
 
 let config = {
     template: template,
@@ -78,8 +76,8 @@ let config = {
 
             // 获取画布块数据
             let zIndex = [];
-            let deeps = [];
-            const layouts = {
+            let layoutIds = [];
+            const layoutDeep = {
                 'layout_id': '',
                 'deep_info': {},
                 'floor':'',
@@ -89,16 +87,22 @@ let config = {
                 'xOld': []
             };
             const data = {
-                'layouts': [JSON.stringify(layouts)],
+                'layouts': [],
                 'query_type': 'deep',
-                'is_deep': 0
+                'is_deep': window.config.bi_user === 'manager' ? 0 : 1
             };
             const chartsId = cells.map((cell) => {
-
                 if (cell.is_deep == 1) {
-                    console.log(cell);
-                    // layouts['layout_id'] = cell.layout_id;
-                    // layouts['deep_info'][cell.deep.floor]
+                    let layouts = _.cloneDeep(layoutDeep);
+                    let xAxis = JSON.parse(cell.deep.xOld).map(x => x.name);
+                    layouts['layout_id'] = cell.layout_id;
+                    layouts['floor'] = cell.deep.floor;
+                    layouts['deep_info'][cell.deep.floor] = xAxis;
+                    layouts['xAxis'] = JSON.stringify(xAxis);
+                    layouts['xOld'] = cell.deep.xOld;
+                    layouts['chart_id'] = cell.chart_id;
+                    data['layouts'].push(JSON.stringify(layouts));
+                    layoutIds.push(cell.layout_id);
                 };
                 zIndex.push(cell.size.zIndex);
                 return cell.chart_id ? cell.chart_id : 0
@@ -127,9 +131,21 @@ let config = {
                 res['data'].forEach((chart,index) => {
                     charts[componentIds[index]] = chart;
                 });
-                this.messager('canvas:cell:chart:finish', {'data': charts});
+                this.messager('canvas:cell:chart:finish', {'data': charts, type: 'loadChartData'});
             } else {
                 msgbox.alert(res['error']);
+            };
+
+            // 获取下穿数据保存记录
+            if (data.layouts.length > 0) {
+                canvasCellService.getDeepData(data).then(res => {
+                    const data = {}
+                    res.map((val,index) => {
+                        data[layoutIds[index]] = val;
+                    });
+                    console.log(data);
+                    this.messager('canvas:cell:chart:finish', {'data': data, type: 'getDeeptData'});
+                })
             };
         },
 

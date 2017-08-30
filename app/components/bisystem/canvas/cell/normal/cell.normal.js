@@ -15,7 +15,8 @@ let config = {
         cellChart: {},
         deeps:0,
         floor:0,
-        xAxis: [] //每一层的下穿字段
+        xAxis: [], //每一层的下穿字段
+        xOld: [], //保存历史数据x轴字段
     },
     actions: {
         echartsInit() {
@@ -79,29 +80,45 @@ export class CellNormalComponent extends BiBaseComponent {
             let deep_info = {};
             if (next) {
                 this.data['xAxis'].push(deepX);
+                this.data.xOld.push({
+                    'xName': this.data.cellChart.chart.deeps[this.data.floor - 1].name,
+                    'name': deepX
+                });
             } else {
-                this.data['xAxis'].pop()
+                this.data['xAxis'].pop();
+                this.data.xOld.pop();
             };
             deep_info[this.data.floor] = this.data['xAxis'];
-
-            const data = {
-                'layout_id': this.data.cellChart.layout_id,
-                'deep_info':JSON.stringify(deep_info),
+            const layouts = {
+                'layout_id': this.data.cellChart.cell.layout_id,
+                'deep_info':deep_info,
                 'floor':this.data.floor,
-                'query_type': 'deep',
-                'view_id': this.data.cellChart.canvas.viewId,
+                'view_id': this.data.cellChart.cell.canvas.viewId,
                 'xAxis': JSON.stringify(this.data['xAxis']),
-                'chart_id':this.data.cellChart.chart_id
+                'chart_id':this.data.cellChart.cell.chart_id,
+                'xOld': JSON.stringify(this.data.xOld)
             };
-            const res = await this.normalChart.getDeepData(data);
-            if (res['data']['xAxis'].length > 0 && res['data']['yAxis'].length > 0) {
-                this.data.cellChart['chart']['data']['xAxis'] = res['data']['xAxis'];
-                this.data.cellChart['chart']['data']['yAxis'] = res['data']['yAxis'];
-                //重新渲染echarts
-                const option = this.normalChart.lineBarOption(this.data.cellChart);
-                this.normalChart.myChart.setOption(option);
-                this.normalChart.myChart.resize();
+            const data = {
+                'layouts': [JSON.stringify(layouts)],
+                'query_type': 'deep',
+                'is_deep': 0
+            };
+            console.log(data);
+            const res = await this.pieChart.getDeepData(data);
+            console.log(res);
+            if (res[0]['success'] === 1) {
+                if (res[0]['data']['xAxis'].length > 0 && res[0]['data']['yAxis'].length > 0) {
+                    this.data.cellChart['chart']['data']['xAxis'] = res[0]['data']['xAxis'];
+                    this.data.cellChart['chart']['data']['yAxis'] = res[0]['data']['yAxis'];
+                    //重新渲染echarts
+                    const option = this.pieChart.pieOption(this.data.cellChart);
+                    this.pieChart.myChart.setOption(option);
+                    this.pieChart.myChart.resize();
+                }
+            } else {
+                msgbox.alert(res[0]['error']);
             }
+
         } else {
             if (next) {
                 this.data.floor = deeps;

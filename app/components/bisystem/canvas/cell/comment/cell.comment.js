@@ -15,7 +15,8 @@ let config = {
 
 export class CellCommentComponent extends BiBaseComponent {
     constructor(cellChart) {
-        config.data.comment = cellChart['chart']['data'];
+        config.data.cellChart = cellChart;
         super(config);
+        this.data.comment = cellChart['chart']['data'];
     }
 }

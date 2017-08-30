@@ -9,6 +9,7 @@ let config = {
                 label: '图表名称',
                 name: 'table_name',
                 defaultValue: '你好才华',
+                extra: [],
                 type: 'text',
                 events: {
                     onChange: function (value) {

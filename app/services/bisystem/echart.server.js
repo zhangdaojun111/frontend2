@@ -6,7 +6,7 @@ import * as echarts from 'echarts';
 import {EchartsOption} from '../../components/bisystem/echarts.config/echarts.config';
 import {ToolPlugin} from "../../components/bisystem/utils/tool.plugin";
 import {HTTP} from '../../lib/http';
-
+import {canvasCellService} from './canvas.cell.service';
 const defaultOption = {
     grid: {},
     xAxis : [],
@@ -196,7 +196,6 @@ export class EchartsService {
             // 当双y轴 只有2个y轴字段时 修改折线颜色
             if (cellOption['yAxis'].length === 2) {
                 yAxis.map((y, colorIndex) => {
-                    console.log(linebarOption['yAxis'][colorIndex]);
                     if (linebarOption['yAxis'][colorIndex]) {
                         linebarOption['yAxis'][colorIndex]['axisLine'] = {
                             lineStyle: {
@@ -277,7 +276,6 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     multiChartOption(cellChart) {
-        console.log(cellChart);
         let cellOption = cellChart['chart'];
         const mutiListOption = EchartsOption.getEchartsConfigOption('multilist'); // 获取多表默认配置option
         const multilistData = cellOption['data']['multillist'][0]['xAxis']; // 多表数据
@@ -432,13 +430,7 @@ export class EchartsService {
      * @param data 需要发送给服务器的参数
      */
     async getDeepData(data) {
-        const res = await HTTP.ajaxImmediately({
-            url: '/bi/get_deep_bi_data/',
-            data: data,
-            // contentType: "application/json; charset=utf-8",
-            method:'get',
-            traditional: true
-        });
+        const res = await canvasCellService.getDeepData(data);
         return new Promise((resolve, reject) => {
             resolve(res);
         })

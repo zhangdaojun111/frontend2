@@ -50,8 +50,6 @@ export class CellPieComponent extends BiBaseComponent {
         config.data.cellChart = cellChart ? cellChart : null;
         super(config);
         this.initPie();
-        console.log('=======================');
-        console.log(this.data);
     }
 
     /**
@@ -93,7 +91,7 @@ export class CellPieComponent extends BiBaseComponent {
             deep_info[this.data.floor] = this.data['xAxis'];
             const layouts = {
                 'layout_id': this.data.cellChart.cell.layout_id,
-                'deep_info':JSON.stringify(deep_info),
+                'deep_info':deep_info,
                 'floor':this.data.floor,
                 'view_id': this.data.cellChart.cell.canvas.viewId,
                 'xAxis': JSON.stringify(this.data['xAxis']),
@@ -109,6 +107,7 @@ export class CellPieComponent extends BiBaseComponent {
             if (res[0]['success'] === 1) {
                 if (res[0]['data']['xAxis'].length > 0 && res[0]['data']['yAxis'].length > 0) {
                     this.data.cellChart['chart']['data']['xAxis'] = res[0]['data']['xAxis'];
+                    this.data.cellChart['chart']['data']['yAxis'] = res[0]['data']['yAxis'];
                     //重新渲染echarts
                     const option = this.pieChart.pieOption(this.data.cellChart);
                     this.pieChart.myChart.setOption(option);

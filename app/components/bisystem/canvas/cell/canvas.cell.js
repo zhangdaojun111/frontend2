@@ -59,6 +59,7 @@ let config = {
                 let cellComponent = new cellTypes[chart['assortment']](data);
                 let cellContainer = this.el.find('.cell-chart');
                 cellComponent.render(cellContainer);
+                this.cellChart = cellComponent;
             }
         },
 
@@ -113,6 +114,37 @@ let config = {
             this.data['cell'].chart_id = chartId[0];
             this.data.biUser = true;
             this.actions.loadCellChart(this.data.chart);
+        },
+
+        /**
+         * 渲染图表初始化下穿数据
+         * @param res = 下穿数据
+         */
+        loadChartDeepData(res) {
+            if (res.hasOwnProperty(this.data.cell.layout_id)) {
+                const chartDeepData = res[this.data.cell.layout_id];
+                if(chartDeepData['success'] === 1) {
+                    if (chartDeepData['data']['xAxis'].length > 0 && chartDeepData['data']['yAxis'].length > 0) {
+                        this.cellChart.data.cellChart['chart']['data']['xAxis'] = chartDeepData['data']['xAxis'];
+                        this.cellChart.data.cellChart['chart']['data']['yAxis'] = chartDeepData['data']['yAxis'];
+                        //重新渲染echarts
+                        const option = this.cellChart.pieChart.pieOption(this.cellChart.data.cellChart);
+                        this.cellChart.pieChart.myChart.setOption(option);
+                        this.cellChart.pieChart.myChart.resize();
+                    }
+                }
+
+            }
+            // if (res[0]['success'] === 1) {
+            //     if (res[0]['data']['xAxis'].length > 0 && res[0]['data']['yAxis'].length > 0) {
+            //         this.data.cellChart['chart']['data']['xAxis'] = res[0]['data']['xAxis'];
+            //         this.data.cellChart['chart']['data']['yAxis'] = res[0]['data']['yAxis'];
+            //         //重新渲染echarts
+            //         const option = this.pieChart.pieOption(this.data.cellChart);
+            //         this.pieChart.myChart.setOption(option);
+            //         this.pieChart.myChart.resize();
+            //     }
+            // }
         }
     },
     data: {
@@ -193,8 +225,12 @@ let config = {
     firstAfterRender() {
         // 监听当从服务器获取画布块图表数据finish时
         $('.bi-container').on('canvas:cell:chart:finish', (event,params) => {
-            this.data.chart = params['data'][this.componentId];
-            this.actions.loadCellChart(this.data.chart);
+            if (params['type'] === 'loadChartData') {
+                this.data.chart = params['data'][this.componentId];
+                this.actions.loadCellChart(this.data.chart);
+            } else {
+                this.actions.loadChartDeepData(params['data']);
+            }
         })
     },
     beforeDestory() {
@@ -210,5 +246,7 @@ export class CanvasCellComponent extends BiBaseComponent {
         this.data.cell = data['cell'];
         this.canvas = data['canvas'];
         this.loadData = false;
+        this.cellTitle = null; // 图表标题组件
+        this.cellChart = null; // 动态渲染图表组件
     }
 }
