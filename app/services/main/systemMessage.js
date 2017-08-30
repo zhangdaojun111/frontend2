@@ -64,7 +64,7 @@ export const systemMessageService = {
                 headerCellTemplate: function (data) {
                     return handlers.selectAll(data);
                 },
-                width: 100,
+                width: 60,
                 headerName: '全选',
                 checkboxSelection: true,
                 suppressSorting: true,
@@ -81,7 +81,7 @@ export const systemMessageService = {
             }, {
                 headerName: '发布者',
                 field: 'publisher',
-                width: 60,
+                width: 100,
                 suppressMenu: true,
                 tooltipField: 'publisher',
                 cellStyle: {'text-align': 'center'},
