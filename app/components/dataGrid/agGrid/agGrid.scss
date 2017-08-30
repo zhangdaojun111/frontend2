@@ -84,6 +84,13 @@
     display: block;
     margin: -5px 5px;
   }
+  .ui-link {
+    color: #337AB7;
+    text-decoration: none;
+  }
+  .ui-link:hover {
+    cursor: pointer;
+  }
   .ag-row {
     border-bottom: 1px solid rgba(228, 228, 228, 1);
     .ag-group-cell {
@@ -103,7 +110,7 @@
       font-weight: 400;
       text-align: left;
       color: #333333;
-      padding: 0 8px;
+
       a {
         &.ag-text-style {
           text-decoration: blink;

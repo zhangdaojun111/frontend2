@@ -118,7 +118,7 @@ let config = {
             Promise.all([preferenceData, headerData]).then((res)=> {
                 dgcService.setPreference( res[0],this.data );
                 let oprate = {headerName: '操作',field: 'myOperate', width: 160,suppressFilter: true,suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
-                    return '<div style="text-align:center;"><a class="view" style="color:#337ab7;">查看</a> | <a class="edit" style="color:#337ab7;">编辑</a> | <a class="jurisdiction" style="color:#337ab7;">权限</a><div>';
+                    return '<div style="text-align:center;"><a class="ui-link" id="view" style="color:#337ab7;">查看</a> | <a class="ui-link" id="edit" style="color:#337ab7;">编辑</a> | <a class="ui-link" id="jurisdiction" style="color:#337ab7;">权限</a><div>';
                 }}
                 //添加序号列
                 let number = dgcService.numberCol;
@@ -815,7 +815,7 @@ let config = {
         },
         onCellClicked: function ($event) {
             if( $event.colDef.headerName == '操作' ){
-                if( $event.event.srcElement.className == 'edit' ){
+                if( $event.event.srcElement.id == 'edit' ){
                     let obj = {
                         table_id: this.data.tableId,
                         btnType: 'edit',
@@ -824,7 +824,7 @@ let config = {
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
                     this.actions.openSourceDataGrid( url,'编辑' )
                 }
-                if( $event.event.srcElement.className == 'view' ){
+                if( $event.event.srcElement.id == 'view' ){
                     let obj = {
                         table_id: this.data.tableId,
                         btnType: 'view',
@@ -833,7 +833,7 @@ let config = {
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
                     this.actions.openSourceDataGrid( url,'查看' )
                 }
-                if( $event.event.srcElement.className == 'jurisdiction' ){
+                if( $event.event.srcElement.id == 'jurisdiction' ){
                     this.data.userPerm.id = $event.data['_id'];
                     this.data.userPerm.department = $event.data[this.data.departmentField];
                     this.actions.getPermData()
