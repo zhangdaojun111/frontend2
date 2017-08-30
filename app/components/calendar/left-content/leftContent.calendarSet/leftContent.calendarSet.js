@@ -159,7 +159,7 @@ let config = {
         },
 
         /**
-         *处理日历书数据，审批、提醒checkbox状态
+         *处理日历树数据，审批、提醒checkbox状态
          */
         getCalendarTreeData: function (that) {
             that.data.cancel_fields = this.data.calendarTreeData.cancel_fields;

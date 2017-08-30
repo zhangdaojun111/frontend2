@@ -133,7 +133,6 @@ let config = {
             if(!$(this).is(".options-show")){
                 that.el.parents(".calendar-main-content").find(".select-options").hide();
                 that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
-                // that.el.find(".select-options").css({"top":that.el.find(".task-state-icon").offset().top - 70});
                 that.el.find(".select-options").show();
                 $(this).addClass("options-show");
                 if(that.el.find(".task-item").parent().position().top > 60){

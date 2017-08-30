@@ -15,11 +15,9 @@ let config = {
     data: {
         dataitem: [],
         cancel_fields: [],
-        hide_tables: [],
         hide_item_table: [],
-        hide_table: {'table_Id': '', 'tableName': ''},
         rows: [],
-        items: [],
+        items: [],               //日历树中子filedID
     },
     actions: {
         /**
