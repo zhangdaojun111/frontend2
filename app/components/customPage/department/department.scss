@@ -57,12 +57,16 @@
 
       .departmentSratch-label {
         position: relative;
+        .departmentSratch {
+          border: 1px solid #E4E4E4;
+          height: 20px;
+        }
         .departmentSratch-icon {
           background: url("../../../assets/images/framework/search.png");
           width: 16px;
           height: 16px;
           position: absolute;
-          right: 2px;
+          right: 3px;
           top: 3px;
         }
       }
