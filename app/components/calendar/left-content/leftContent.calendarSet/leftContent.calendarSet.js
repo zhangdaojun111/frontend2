@@ -139,7 +139,7 @@ let config = {
             let preference = {"content":that.data.cancel_fields};
             CalendarService.getCalendarPreference(preference);
             preference = {"content":that.data.hide_item_table};
-            CalendarService.getCalendarhidePreference(preference);
+            CalendarService.getCalendarHidePreference(preference);
             Mediator.emit('calendar-left:hideRemindType',{data:that.data.hide_table});
             Mediator.emit('calendar-left:unshowData',{data:that.data.cancel_fields});
             that.data.hide_table = {'tableName':"",'table_Id':''}

@@ -72,13 +72,12 @@ let config = {
         cancel:function () {
             this.el.dialog('close');
         }
-
     },
     afterRender:function () {
         this.actions.getData();
-        this.el.on("click",".confirm-btn",() => {
+        this.el.on("click",".confirm-btn",_.debounce(() => {
             this.actions.loginOtherAccount();
-        }).on("click",".cancel-btn", () => {
+        },500)).on("click",".cancel-btn", () => {
             this.actions.cancel();
         })
     },

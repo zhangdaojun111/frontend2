@@ -1,4 +1,19 @@
 .has-finished{
-  cursor: pointer;
-  line-height: 17px;
+  line-height: 20px;
+  height:20px;
+  vertical-align: middle;
+  box-sizing: border-box;
+  margin: 5px 0px 5px 5px;
+  .finished-con{
+    height:20px;
+    vertical-align: middle;
+  }
+  .finished-content{
+    cursor: pointer;
+    height:20px;
+    vertical-align: middle;
+  }
+  .finished-content:hover{
+    color: rgb(0,136,255);
+  }
 }
