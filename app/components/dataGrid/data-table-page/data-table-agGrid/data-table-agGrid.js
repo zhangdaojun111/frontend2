@@ -1269,7 +1269,7 @@ let config = {
                 json['mongo'] = this.data.deleteHandingData;
             }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
-                json['filter'] = this.data.filterParam.filter || [];
+                json['filter'] = _.cloneDeep(this.data.filterParam.filter ) || []
             }
             if( this.data.filterParam.fastFilter && this.data.filterParam.fastFilter.length != 0 ){
                 json['filter'].push( this.data.filterParam.fastFilter[0] );
