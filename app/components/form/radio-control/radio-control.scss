@@ -45,13 +45,15 @@ input:focus{
   margin-right: 7px;
   display: inline-block;
 }
-.df-input-radio-wrapper{
-  width: 10px;
-  height: 10px;
-  position: absolute;
-  border: 1px solid #0E7AEF;
-  border-radius: 50%;
-  top: 2px;
-  left: 4px;
-  /*z-index:-1;*/
+
+
+.df-input-radio-wrapper {
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    border: 1px solid #333;
+    border-radius: 50%;
+    top: 2px;
+    left: 4px;
+    /*z-index:-1;*/
 }
