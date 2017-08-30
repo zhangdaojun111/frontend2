@@ -163,7 +163,6 @@ let config = {
             callback: function () {
                 this.el.find("input").css({
                     "border": "1px solid rgb(169, 210, 255)",
-                    "background-color": "rgb(255, 255, 255)"
                 });
             }
         },
@@ -173,7 +172,6 @@ let config = {
             callback: function () {
                 this.el.find("input").css({
                     "border": "1px solid rgb(226, 226, 226)",
-                    "background-color": "rgb(255, 255, 255)"
                 });
             }
         },

@@ -1185,7 +1185,7 @@ let config = {
                     }
                 }
                 if (j == 0) {
-                    let obj = _this.data.selectObj;
+                    let obj = this.data.selectObj;
                     for (let field of arr) {
                         this.data[field][obj[this.data[field]['type']]] = this.optionsToItem[field];
                     }
