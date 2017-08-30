@@ -20,6 +20,28 @@
             display: block;
             margin: 0;
             padding: 0;
+            .flex{
+                display: flex;
+                align-items: center;
+                &:hover{
+                    .icon-icon-data{
+                        background-position: 0px 0px;
+                    }
+                    .icon-icon-in-transit{
+                        background-position: -52px 0px;
+                    }
+                    .icon-icon-help{
+                        background-position: 0px -26px;
+                    }
+                    span{
+                        color: #0088FF;
+
+                    }
+                }
+                span{
+                    transition: color 0.3s;
+                }
+            }
             .dataTableInTransit {
                 position: relative;
                 .inProcessNum {
@@ -52,60 +74,27 @@
                     .icon-aggrid-new{
                         margin: 0px 4px;
                     }
-                    .icon-icon-data-check {
-                        display: none;
-                    }
-                    .icon-icon-help-check {
-                        display: none;
-                    }
-                    .icon-icon-in-transit-check {
-                        display: none;
-                    }
+
                 }
-                a:hover {
-                    color: #0088ff;
-                    .icon-icon-data-check {
-                        display: inline-block;
-                    }
-                    .icon-icon-data {
-                        display: none;
-                    }
-                    .icon-icon-help-check {
-                        display: inline-block;
-                    }
-                    .icon-icon-help {
-                        display: none;
-                    }
-                    .icon-icon-in-transit-check {
-                        display: inline-block;
-                    }
-                    .icon-icon-in-transit {
-                        display: none;
-                    }
-                }
+
                 &.active {
                     border-bottom: 2px solid #0088FF;
-                    a {
+                    .flex {
                         color: #0088FF;
+                        .icon-icon-data{
+                            background-position: 0px 0px;
+                        }
+                        .icon-icon-in-transit{
+                            background-position: -52px 0px;
+                        }
+                        .icon-icon-help{
+                            background-position: 0px -26px;
+                        }
+                        span{
+                            color: #0088FF;
+                        }
                     }
-                    .icon-icon-data {
-                        display: none;
-                    }
-                    .icon-icon-data-check {
-                        display: inline-block;
-                    }
-                    .icon-icon-help-check {
-                        display: inline-block;
-                    }
-                    .icon-icon-help {
-                        display: none;
-                    }
-                    .icon-icon-in-transit-check {
-                        display: inline-block;
-                    }
-                    .icon-icon-in-transit {
-                        display: none;
-                    }
+
                 }
             }
 
