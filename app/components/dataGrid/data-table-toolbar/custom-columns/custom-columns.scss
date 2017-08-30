@@ -50,8 +50,8 @@
       }
     }
     .custom-select-all {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       padding: 2px;
       margin-left: 5px;
       display: inline-block;
@@ -68,8 +68,8 @@
     height:calc(100% - 74px);
     width: calc(100% - 15px);
     .custom-select-all {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       padding: 2px;
       margin-left: 5px;
       display: inline-block;
@@ -113,10 +113,10 @@
           .custom-checkbox {
             box-sizing: content-box;
             display: inline-block;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             padding: 2px;
-
+            padding-bottom: 3px;
           }
           .custom-fix-l {
             box-sizing: content-box;
