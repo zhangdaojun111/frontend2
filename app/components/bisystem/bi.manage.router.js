@@ -10,6 +10,7 @@ import {componentsJson} from './forms/entry/loadFormChart.json';
 import Mediator from '../../lib/mediator';
 
 // import {LineBarEditor} from './test/editors/linebar/linebar';
+
 let component;
 let viewComponent;
 let formComponent = {};
@@ -25,7 +26,7 @@ const BiAppRouter = Backbone.Router.extend({
 
     routerViewsComponent(id) {
         if (component) {
-            component.data.views = window.config.bi_views
+            component.data.views = window.config.bi_views;
             component.destroyChildren();
             component.viewId = id;
             component.reload();
@@ -51,7 +52,7 @@ const BiAppRouter = Backbone.Router.extend({
         form.render($('#route-outlet'));
     },
     routerFormDynamicComponent(type,id) {
-        Mediator.removeAll('bi:chart:form:update');
+        // Mediator.removeAll('bi:chart:form:update');
         let comType = {
             assortment: type,
             id: id
@@ -68,6 +69,10 @@ const BiAppRouter = Backbone.Router.extend({
             // component.render($('#route-outlet'));
             // component.drawForm();
         }
+
+        // let component = new componentsJson[type]['component'](comType);
+        // component.render($('#route-outlet'));
+        // formComponent[type] = component;
 
     }
 });
