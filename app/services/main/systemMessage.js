@@ -102,7 +102,7 @@ export const systemMessageService = {
                 cellStyle: {'text-align': 'center'},
                 suppressSorting: true
             }, {
-                width:180,
+                width:515,
                 headerName: '消息内容',
                 field: 'msg_content',
                 suppressMenu: true,
