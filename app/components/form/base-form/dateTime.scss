@@ -1,77 +1,77 @@
 //时间日期
-#ui-datepicker-div{
-  width: 244px;
-    .ui-datepicker-calendar thead{
-      border-bottom: 1px solid #CAEEFF;
+#ui-datepicker-div {
+    width: 244px;
+    .ui-datepicker-calendar thead {
+        border-bottom: 1px solid #CAEEFF;
     }
     .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active {
-      text-align: center;
-      border: 0;
-      background: white;
+        text-align: center;
+        border: 0;
+        background: white;
     }
     .ui-state-hover {
-      background: #F2F2F2 !important;
+        background: #F2F2F2 !important;
     }
-    .ui-state-active{
-      background: #66CCFF !important;
-      color: #333333!important;
+    .ui-state-active {
+        background: #66CCFF !important;
+        color: #333333 !important;
     }
-     .ui-datepicker-header{
-      margin: 0 !important;
-      width: 96%;
-      border: none;
-      background: #FAFAFA!important;
-      padding: .4em!important;
+    .ui-datepicker-header {
+        margin: 0 !important;
+        width: 96%;
+        border: none;
+        background: #FAFAFA !important;
+        padding: .4em !important;
     }
-     .ui-datepicker-calendar td {
-      border: 0;
-      padding: 1px;
-      width: 32px;
-      height: 32px;
-      line-height: 32px;
+    .ui-datepicker-calendar td {
+        border: 0;
+        padding: 1px;
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
     }
-    .ui-datepicker td a{
-      text-align: center;
+    .ui-datepicker td a {
+        text-align: center;
     }
 
-    .ui-datepicker-buttonpane{
-      position: relative;
-      border-top: 0;
-      border-bottom: 1px solid #E4E4E4!important;
-      background: #F2F2F2;
-      height: 40px;
+    .ui-datepicker-buttonpane {
+        position: relative;
+        border-top: 0;
+        border-bottom: 1px solid #E4E4E4 !important;
+        background: #F2F2F2;
+        height: 40px;
     }
-    .ui-datepicker-month,.ui-datepicker-year{
-      font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
-      font-weight: 700;
-      font-style: normal;
-      font-size: 14px!important;
-      position: relative;
-      float: left;
-      left: 10%;
-      width: 40% !important;
+    .ui-datepicker-month, .ui-datepicker-year {
+        font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
+        font-weight: 700;
+        font-style: normal;
+        font-size: 14px !important;
+        position: relative;
+        float: left;
+        left: 10%;
+        width: 40% !important;
     }
     //时间
-    .ui-timepicker-div{
-      background: #FAFAFA;
-      padding-bottom: 1px;
+    .ui-timepicker-div {
+        background: #FAFAFA;
+        padding-bottom: 1px;
     }
-    .ui_tpicker_time_input{
-      border-bottom: 1px solid #E4E4E4!important;
-      padding: 5px;
+    .ui_tpicker_time_input {
+        border-bottom: 1px solid #E4E4E4 !important;
+        padding: 5px;
     }
     .ui-timepicker-div dl dt {
-      padding: 5px 0 0 10px;
-      font-family: '微软雅黑';
-      font-weight: 400;
-      font-style: normal;
-      font-size: 12px;
-      color: #666666;
+        padding: 5px 0 0 10px;
+        font-family: '微软雅黑';
+        font-weight: 400;
+        font-style: normal;
+        font-size: 12px;
+        color: #666666;
     }
     //按钮
-  .ui-datepicker-current,.ui-datepicker-close{
-      background: #0088FF!important;
-      height: 25px;
-      color: white!important;
+    .ui-datepicker-current, .ui-datepicker-close {
+        background: #0088FF !important;
+        height: 25px;
+        color: white !important;
     }
 }

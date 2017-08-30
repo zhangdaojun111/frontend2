@@ -1,10 +1,11 @@
+{% load client_version %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <script>
-        window.config = {{window_config|safe}}
+        window.config = {{window_config|safe}};
     </script>
 </head>
 <body>
@@ -16,10 +17,10 @@
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
 <script type="text/javascript" src="http://localhost:8080/scripts/addWf.js"></script>
 {% else %}
-<link rel="stylesheet" href="/client/static/css/vendors.css">
-<link rel="stylesheet" href="/client/static/css/addWf.css">
-<script type="text/javascript" src="/client/static/vendors.js"></script>
-<script type="text/javascript" src="/client/static/addWf.js"></script>
+<link rel="stylesheet" href=" {{ "/client/static/css/vendors.css"|version }}">
+<link rel="stylesheet" href=" {{ "/client/static/css/addWf.css"|version }}">
+<script type="text/javascript" src=" {{ "/client/static/vendors.js"|version }}"></script>
+<script type="text/javascript" src=" {{ "/client/static/addWf.js"|version }}"></script>
 {% endifequal %}
 </body>
 </html>
