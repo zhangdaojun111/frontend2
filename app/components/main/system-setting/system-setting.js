@@ -137,9 +137,9 @@ let config = {
             this.actions.showRapidSetting();
         }).on('click','.clear-storage',() => {
             this.actions.clearStorage();
-        }).on('click','.rapid-save-btn', () => {
+        }).on('click','.rapid-save-btn', _.debounce(() => {
             this.actions.saveSetting();
-        }).on('change','.font-range', () => {
+        },1000)).on('change','.font-range',() => {
             this.actions.changeFontSize();
         })
     },
