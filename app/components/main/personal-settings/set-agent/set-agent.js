@@ -99,7 +99,6 @@ let config = {
                 if(row.name && row.name.trim() !== '' && row.id && row.id.trim() !== ''){
                     row.py = row.f7_p.join(',');
                     tempData.push(row);
-                    console.log(row);
                 }
             }
             let that = this;
@@ -191,6 +190,7 @@ let config = {
                 msgbox.alert("请选择至少一个流程");
                 return;
             }
+            this.showLoading();
             let workflow_temp = Array.from(this.selectedWorkflow);
             let data = {
                 workflow_names:workflow_temp,
@@ -198,33 +198,30 @@ let config = {
                 is_apply:this.isOpen
             };
 
-            UserInfoService.saveAgentData(data)
-                .done((result) => {
-                    if(result.success === 1){
-                        if(result.agent_state === 0){
-                            msgbox.alert("您所选择的代理人已离职，请重新选择");
-                        }else{
-                            msgbox.alert(`设置代理成功，目前代理状态为：${this.isOpen ? "已开启":"未开启"}`);
-                            UserInfoService.getSysConfig().then((result) => {
-                                window.config.sysConfig = result;
-                            });
-                            agentSetting.hide();
-                        }
+            UserInfoService.saveAgentData(data).done((result) => {
+                this.hideLoading();
+                if(result.success === 1){
+                    if(result.agent_state === 0){
+                        msgbox.alert("您所选择的代理人已离职，请重新选择");
                     }else{
-                        msgbox.alert("选择代理失败")
+                        msgbox.alert(`设置代理成功，目前代理状态为：${this.isOpen ? "已开启":"未开启"}`);
+                        UserInfoService.getSysConfig().then((result) => {
+                            window.config.sysConfig = result;
+                        });
+                        agentSetting.hide();
                     }
-                });
+                }else{
+                    msgbox.alert("选择代理失败")
+                }
+            });
         }
     },
     afterRender:function () {
-        // this.showLoading();
         this.actions.initData();
         let that = this;
-        this.el.on("click","span.save-proxy",() => {
-            that.actions.saveAgent();
-            // }).on("input","input[name=name_input]",(event) => {
-            //     this.actions.setAgentId(event);
-        }).on("click","input.close-radio",(event) => {
+        this.el.on("click","span.save-proxy",_.debounce(() => {
+                that.actions.saveAgent();
+        },500)).on("click","input.close-radio",(event) => {
             that.actions.closeSwitch(event);
         }).on("click","input.open-radio",(event) => {
             that.actions.openSwitch(event);

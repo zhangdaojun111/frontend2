@@ -613,7 +613,6 @@ let config = {
                     })
                 }
                 if(this.data.filterParam['common_filter_name'] && this.data.onlyCloseExpertSearch) {
-                    debugger
                     this.el.find('.dataGrid-commonQuery-select').val(this.data.filterParam['common_filter_name']);
                 }
             } );
