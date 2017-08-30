@@ -430,7 +430,8 @@ export const dgcService = {
         let node = data.node;
         if(ele.className.indexOf( "my-ag-cell-focus2" )!=-1){//第三次点击
             node.setSelected(false, false);
-            ele.className = '';
+            $(ele).removeClass('my-ag-cell-focus1');
+            $(ele).removeClass('my-ag-cell-focus2');
         }else if(ele.className.indexOf( "my-ag-cell-focus1" )!=-1){//第二次点击
             node.setSelected(true, false);
             $(ele).addClass('my-ag-cell-focus1 my-ag-cell-focus2');
