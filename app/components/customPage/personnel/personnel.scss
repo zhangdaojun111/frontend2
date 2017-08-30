@@ -11,6 +11,10 @@
     float: left;
     .choose-department-tree {
       padding: 15px;
+      .list-group-item {
+        cursor: pointer;
+        padding: 5px 5px 5px 5px;
+      }
     }
     .tips {
       height: 60px;
