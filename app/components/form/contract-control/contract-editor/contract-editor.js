@@ -245,7 +245,7 @@ export const contractEditorConfig = {
                 real_id: this.data.temp_id,
                 field_id: this.data.id,
                 model_id: contractData.model_id,
-                k2v: contractData.k2v,
+                k2v: JSON.stringify(contractData.k2v),
                 file_name: contractData.name
             }).then(res => {
                 if (res.success) {
