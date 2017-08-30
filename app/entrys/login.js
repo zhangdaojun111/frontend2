@@ -146,7 +146,7 @@ function getLoginController() {
         },
         //初始化公司名称
         sysNameInit:function () {
-           this.systemName = this.versionInfo.sap_login_system_name || '';
+           this.systemName = this.versionInfo.sap_login_system_name || '成都睿银信息科技有限公司';
            this.resetSysName(this.systemName);
         },
         //初始化版本信息
@@ -263,9 +263,13 @@ let isNeedDownload = controller.browser_check();
 if( isNeedDownload === false){      //正常显示登录表单
     LoginService.getVersionInfo()
     .done((result) => {
-        controller.versionInfo = result;
-        controller.sysNameInit();   //初始化公司名称
-        controller.versionInit();   //初始化版本table
+        if(result.success === 1){
+            controller.versionInfo = result;
+            controller.sysNameInit();   //初始化公司名称
+            controller.versionInit();   //初始化版本table
+        }else{
+            console.log("版本数据获取失败");
+        }
     }).fail((err) => {
         console.log("get version info fail", err.statusText);
     });

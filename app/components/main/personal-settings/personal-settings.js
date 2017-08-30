@@ -244,7 +244,7 @@ let config = {
                 this.actions.saveEdit();
             }).on("click",".confirm-btn",_.debounce(() => {        //修改密码确认
                 this.actions.modifyPassword();
-            },1000)).on("input","input.new-pw",() => {        //监听旧密码的输入
+            },500)).on("input","input.new-pw",() => {        //监听旧密码的输入
                 this.actions.isLegal();
             });
         }else if(this.data.mode === 'other'){
@@ -254,7 +254,6 @@ let config = {
         //窗口监听来自子窗口的设置头像的消息
         Mediator.on("personal:setAvatar",() => {
             this.actions.resetAvatar();
-            this.actions.initAvatar();
         })
     },
     beforeDestory:function () {

@@ -150,22 +150,7 @@ let config = {
             this.data.imgData.height = this.data.imgH/p + "px";
             this.data.imgData.left = 0 -  c.x/p + "px";
             this.data.imgData.top = 0 - c.y/p + "px";
-            // this.actions.displayAvatar();
         },
-        // displayAvatar:function () {
-        //     let $img = this.el.find("img.result-img");
-        //     if( $img.length === 0){
-        //         $img = $("<img>").addClass('result-img');
-        //     }
-        //
-        //     $img.attr("src",this.data.imgData.src)
-        //         .css("width",this.data.imgData.width)
-        //         .css("height",this.data.imgData.height)
-        //         .css("left",this.data.imgData.left)
-        //         .css("top",this.data.imgData.top);
-        //
-        //     this.el.find(".drag-result").prepend($img);
-        // },
         printSquare(){
             let pic = this.el.find('img.pic_set')[0];
             let canvasS = this.el.find('.avatar-result-square')[0];
@@ -173,7 +158,7 @@ let config = {
             let d = 60 * this.data.dragResult.proportion / this.data.scale;
             ctx.drawImage(pic,this.data.DragX,this.data.DragY,d,d,0,0,60,60);
             this.data.avatarSrc = this.actions.convertCanvasToImage(canvasS).src;
-            // console.log(this.data.avatarSrc);       //裁剪后的base64
+            console.log(this.data.avatarSrc);       //裁剪后的base64
         },
         convertCanvasToImage(canvas){
             let image = new Image();
@@ -181,10 +166,12 @@ let config = {
             return image;
         },
         saveAvatar:function () {
-            let data = this.data.avatarSrc;
+            this.showLoading();
             //向后台传递头像数据
-            UserInfoService.saveAvatar(data).done((result) => {
+            UserInfoService.saveAvatar(this.data.avatarSrc).done((result) => {
+                console.log(result);
                 //根据结果处理后续工作
+                this.hideLoading();
                 if(result.success === 1){
                     //向父窗口传递头像数据并设置
                     window.config.sysConfig.userInfo.avatar = this.data.avatarSrc;
@@ -203,9 +190,9 @@ let config = {
         //设置监听
         this.el.on("change","input.select-pic",(event) => {   //监听上传图片
             this.actions.getPic(event);
-        }).on("click","span.save-avatar",(event) => {
+        }).on("click","span.save-avatar",_.debounce((event) => {
             this.actions.saveAvatar();
-        }).on("click","span.set-cancel",(event) => {
+        },300)).on("click","span.set-cancel",(event) => {
             this.el.dialog('close');
         });
         this.avatar = window.config.sysConfig.userInfo.avatar;
