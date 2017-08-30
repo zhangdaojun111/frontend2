@@ -14,7 +14,8 @@ let config = {
         cellChart: {},
         deeps:0,
         floor:0,
-        xAxis: [] //每一层的下穿字段
+        xAxis: [], //每一层的下穿字段
+        xOld: [], //保存历史数据x轴字段
     },
     actions: {
         echartsInit() {
@@ -81,8 +82,13 @@ export class CellPieComponent extends BiBaseComponent {
             let deep_info = {};
             if (next) {
                 this.data['xAxis'].push(deepX);
+                this.data.xOld.push({
+                    'xName': this.data.cellChart.chart.deeps[this.data.floor - 1].name,
+                    'name': deepX
+                });
             } else {
-                this.data['xAxis'].pop()
+                this.data['xAxis'].pop();
+                this.data.xOld.pop();
             };
             deep_info[this.data.floor] = this.data['xAxis'];
             const layouts = {
@@ -92,12 +98,7 @@ export class CellPieComponent extends BiBaseComponent {
                 'view_id': this.data.cellChart.cell.canvas.viewId,
                 'xAxis': JSON.stringify(this.data['xAxis']),
                 'chart_id':this.data.cellChart.cell.chart_id,
-                'xOld': [ // 用来保存历史下穿获取数据
-                    {
-                        'xName': this.data.cellChart.chart.xAxis.name,
-                        'name': deepX
-                    }
-                ]
+                'xOld': JSON.stringify(this.data.xOld)
             };
             const data = {
                 'layouts': [JSON.stringify(layouts)],

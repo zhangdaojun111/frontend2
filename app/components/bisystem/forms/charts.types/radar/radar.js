@@ -96,7 +96,7 @@ export class FormRadarComponent extends BiBaseComponent{
     async getChartData(chartId) {
         if (chartId) {
             const chart = await canvasCellService.getCellChart({chart_id: chartId});
-            this.editChart = chart[0];
+            this.editChart = chart['data'][0];
         }
     }
     /**

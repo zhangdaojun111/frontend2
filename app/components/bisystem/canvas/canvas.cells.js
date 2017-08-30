@@ -94,11 +94,12 @@ let config = {
                 'is_deep': 0
             };
             const chartsId = cells.map((cell) => {
-                console.log(cell);
-                // if (cell.is_deep == 1) {
-                //     layouts['layout_id'] = cell.layout_id;
-                //     layouts['deep_info'][cell.deep.floor]
-                // };
+
+                if (cell.is_deep == 1) {
+                    console.log(cell);
+                    // layouts['layout_id'] = cell.layout_id;
+                    // layouts['deep_info'][cell.deep.floor]
+                };
                 zIndex.push(cell.size.zIndex);
                 return cell.chart_id ? cell.chart_id : 0
             });

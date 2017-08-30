@@ -43,7 +43,6 @@ let config = {
             this.cellTitle = new CanvasCellTitleComponent();
             this.append(this.cellTitle, this.el.find('.bread-crumb-nav'));
         },
-
         /**
          * 动态渲染图表
          */
