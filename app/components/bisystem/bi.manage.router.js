@@ -9,7 +9,8 @@ import {FormEntryComponent} from './forms/entry/entry';
 import {componentsJson} from './forms/entry/loadFormChart.json';
 import Mediator from '../../lib/mediator';
 
-import {LineBarEditor} from './test/editors/linebar/linebar';
+// import {LineBarEditor} from './test/editors/linebar/linebar';
+
 let component;
 let viewComponent;
 let formComponent = {};
