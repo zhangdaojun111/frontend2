@@ -21,6 +21,11 @@ let ViewVideo = {
             console.log('quick')
             _this.data.video.currentTime=200;
         })
+        let video = _this.el.find('video');
+        _this.el.find('.play').on('click', function () {
+            video[0].play();
+            _this.el.find('.play').hide();
+        })
         this.el.find('.submit').on('click',function(){
             console.log('submit')
             let $div =$('<div></div>');

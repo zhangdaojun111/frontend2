@@ -1,3 +1,4 @@
+{% load client_version %}
 <!DOCTYPE html>
 <html style="height: 100%">
 <head>
@@ -17,10 +18,10 @@
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
 <script type="text/javascript" src="http://localhost:8080/scripts/resultDisplay.js"></script>
 {% else %}
-<link rel="stylesheet" href="/client/static/css/vendors.css">
-<link rel="stylesheet" href="/client/static/css/resultDisplay.css">
-<script type="text/javascript" src="/client/static/vendors.js"></script>
-<script type="text/javascript" src="/client/static/resultDisplay.js"></script>
+<link rel="stylesheet" href=" {{ "/client/static/css/vendors.css"|version }}">
+<link rel="stylesheet" href=" {{ "/client/static/css/resultDisplay.css"|version }}">
+<script type="text/javascript" src=" {{ "/client/static/vendors.js"|version }}"></script>
+<script type="text/javascript" src=" {{ "/client/static/resultDisplay.js"|version }}"></script>
 {% endifequal %}
 
 </body>

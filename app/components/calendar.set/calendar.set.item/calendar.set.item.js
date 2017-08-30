@@ -119,6 +119,7 @@ let config = {
             this.data.preViewText = selectedOptsText;
             this.el.find('.preview-text').html(this.data.preViewText);
         },
+
         /**
          * @author zj
          * 打开提醒方式设置
@@ -219,7 +220,6 @@ let config = {
         this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
 
         Mediator.on('calendar-set:editor', data => {
-            console.log(data);
             if (data.data === 1) {
                 this.el.find(".editor-items").attr("disabled", false);
                 this.data.singleSelectMenu.destroySelf();

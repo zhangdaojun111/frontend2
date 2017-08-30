@@ -15,7 +15,10 @@ let config = {
         // isClone:true,
     },
     actions: {
-        addImg(e){
+        /**
+         * 上传图片
+         */
+        addImg(){
             let imgFile = this.el.find('.J_add')[0].files[0];
             // this.el.find('.J_add').val("");
             if(/\.(png|PNG)$/.test(imgFile.name)){
@@ -33,6 +36,10 @@ let config = {
                 msgBox.showTips("图片类型错误");
             }
         },
+        /**
+         * 修改盖章图片列表
+         * @param msg 后台传递过来的包含图片的信息的一个数组
+         */
         changeImg(msg){
             this.el.find(".J_ul-img").empty();
             let len = msg.file_ids.length;
@@ -43,13 +50,24 @@ let config = {
             }
             this.el.find('.J_ul-img').html(html);
         },
-
-        delImg(e){
-            let msg = $(e.target).attr("id");
+        /**
+         *
+         * @param stmp 点击的dom节点
+         */
+        delImg(stmp){
+            let msg = $(stmp).attr("id");
+            console.log(msg);
             Mediator.publish("workflow:delImg",{"file_id":msg});
             Mediator.publish("workflow:getStamp");
         },
-
+        /**
+         * 创建一个图片的的dom的节点，定位在form中
+         * @param top 图片的定位的top
+         * @param left 图片的定位的left
+         * @param width 图片的宽度
+         * @param height 图片的高度
+         * @param id 图片的id
+         */
         createImg(top,left,width,height,id){
             let viewLeft = left;
             let viewTop = top;
@@ -63,10 +81,9 @@ let config = {
             html += `<img class="printS printimg" style="top:${top1};left:${left1};" width=${width} height=${height} src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
             $('#place-form').children(":first").append(html);
         },
-        showImgDel(e){
-            let ev = $(e.target).children('i');
-            ev.css("display","block");
-        },
+        /**
+         * 是否显示隐藏form中已有的图片
+         */
         toggImg(){
             if(this.showImg){
                 this.showImg = false;
@@ -89,6 +106,9 @@ let config = {
             this.el.find(".signatureMock").css("visibility","hidden");
             $('#place-form').css("z-index",0);
         },
+        /**
+         * 初始化，是图片具有可拖拽属性
+         */
         init(){
             let that = this;
             this.el.find(".add-img").draggable({
@@ -106,22 +126,34 @@ let config = {
             });
         }
     },
+    binds:[
+        {
+            event:'change',
+            selector:'.J_add',
+            callback:function(){
+                this.actions.addImg();
+            }
+        },
+        {
+            event:'click',
+            selector:'.J_toggImg',
+            callback:function(){
+                this.actions.toggImg();
+            }
+        },
+        {
+            event:'click',
+            selector:'.J_delImg',
+            callback:function(stmp =this){
+                this.actions.delImg(stmp);
+            }
+        }
+
+    ],
     afterRender: function() {
+        //是否隐藏显示盖章图片
         this.showImg = true;
         this.actions.init();
-
-        this.el.on('change','.J_add',(e)=>{
-            this.actions.addImg(e);
-        }),
-        this.el.on("click",'.J_delImg',(e)=>{
-            this.actions.delImg(e);
-        }),
-        this.el.on("click",".J_toggImg",()=>{
-            this.actions.toggImg();
-        });
-        $(".approval-info-item").on("click",(e)=>{
-            this.actions.showImgDel(e);
-        });
         Mediator.subscribe('workflow:changeImg',(msg)=>{
             this.actions.changeImg(msg);
             this.actions.init();

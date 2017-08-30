@@ -14,6 +14,9 @@ const APP_PATH = path.resolve(ROOT_PATH, 'app');
 const BUILD_PATH = path.resolve(ROOT_PATH, 'dist');
 
 module.exports = {
+
+    devtool: 'cheap-module-source-map',
+
     entry: {
         form: path.resolve(APP_PATH, 'entrys/form.js'),
         openForm: path.resolve(APP_PATH, 'entrys/popup/openForm.js'),

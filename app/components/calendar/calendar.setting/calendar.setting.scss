@@ -13,6 +13,9 @@
         float: left;
         position: relative;
         border: 1px solid $boder-color;
+        &.hide-menu {
+            width: 30px;
+        }
         .calendar-setting-items-title{
             border-bottom: 1px solid $boder-color;
             padding: 3px;
@@ -36,6 +39,9 @@
                 .search-con{
                     display: inline-block;
                     vertical-align: middle;
+                }
+                &.hide-search {
+                    display: none;
                 }
 
             }
@@ -62,13 +68,14 @@
             }
         }
         .setting-content{
-            height: calc(100% - 30px);
+            height: calc(100% - 33px);
             width: 100%;
             overflow: auto;
             &.hide {
                 visibility: hidden;
             }
         }
+
     }
 
     .calendar-setting-item{
@@ -79,15 +86,18 @@
         margin-left: 6px;
         width:calc(100% - 210px);
         display: inline-block;
+        &.hide {
+            width: calc(100% - 40px);
+        }
         .calendar-setting-item-title{
             border-bottom: 1px solid $boder-color;
             padding: 5px;
             background-color:#f2f2f2;
             text-align: left;
-            line-height: 21px;
+            line-height: 22px;
         }
         .calendar-setting-item-content{
-            height: calc(100% - 32px);
+            height: calc(100% - 33px);
         }
     }
 }
