@@ -24,23 +24,23 @@
         border: 1px solid #ddd;
         overflow: auto;
         margin-top: -1px;
-
         background-color: #f5f5f5;
-
-        input.auto-select-text {
-            width: 100%;
-            border: 0 none;
-            border-bottom: 1px solid #ddd;
+        .auto-select-text-wrap {
             height: 30px;
-            line-height: 30px;
-            padding: 0;
-            outline: none;
-            text-indent: 10px;
-            box-sizing: border-box;
-            z-index: 100;
+            overflow: hidden;
+            input.auto-select-text {
+                display: block;
+                width: 90%;
+                border: 1px solid #eaeaea;
+                height: 24px;
+                line-height: 24px;
+                padding: 0;
+                outline: none;
+                text-indent: 10px;
+                box-sizing: border-box;
+                margin: 3px auto;
+            }
         }
-
-
         &.popup {
             position: absolute;
             width: 100%;
@@ -61,11 +61,9 @@
                 height: 30px;
                 line-height: 30px;
                 cursor: pointer;
-
                 &:hover {
                     background: #ddd;
                 }
-
                 .custom-checkbox {
                     display: block;
                     cursor: pointer;
@@ -74,12 +72,6 @@
                     input.checkbox {
                         vertical-align: top;
                         margin: 9px 0 0 8px;
-                        &:before {
-
-                        }
-                        &:after {
-
-                        }
                     }
                     span {
                         margin: 0!important;
@@ -109,26 +101,4 @@
             }
         }
     }
-    //.choosed {
-    //    font-size: 0;
-    //    padding-bottom: 5px;
-    //    .item {
-    //        display: inline-block;
-    //        background-color: #ccc;
-    //        color: #fff;
-    //        height: 20px;
-    //        line-height: 20px;
-    //        padding: 0 5px;
-    //        margin: 5px 5px 0 0;
-    //        font-size: 12px;
-    //        cursor: pointer;
-    //    }
-    //}
-    //&.single-select {
-    //    .choosed {
-    //        position: absolute;
-    //        right: 0;
-    //        top: 0;
-    //    }
-    //}
 }

@@ -6,7 +6,9 @@
         <!--{{/each}}-->
     <!--</div>-->
     <div class="list">
-        <input class="auto-select-text" type="text" placeholder="选择或者输入查找" />
+        <div class="auto-select-text-wrap">
+            <input class="auto-select-text" type="text" placeholder="选择或者输入查找" />
+        </div>
         <ul>
             {{#each list}}
             <li data-id="{{id}}" data-name="{{name}}" data-py="{{py}}">
