@@ -136,7 +136,6 @@ export class FormCommentComponent extends BiBaseComponent{
         }
     }
 
-
     /**
      * 编辑模式
      */
