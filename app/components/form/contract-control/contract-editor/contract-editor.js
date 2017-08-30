@@ -198,11 +198,6 @@ export const contractEditorConfig = {
                 this.el.find('#'+key).val(currentTabData['elements'][key]);
             }
 
-            if(this.data.local_data[i]['content']){
-                this.el.find('.contract-template-anchor').html(this.data.local_data[i]['content']);
-                return;
-            }
-
             this.actions.getElement({
                 table_id:this.data.table_id,
                 real_id:this.data.temp_id,
@@ -216,7 +211,9 @@ export const contractEditorConfig = {
                     this.el.find('.contract-template-anchor').html(res.data.content);
                     this.data.local_data[i]['content']=res.data.content;
                     this.data.local_data[i]['k2v']=res.data.k2v;
-                    this.el.find('.edit-or-save').css('display','inline');
+                    if(this.data['mode']=='edit'){
+                        this.el.find('.edit-or-save').css('display','inline');
+                    }
                     let tabName =[];
                     if(Object.keys(this.data.local_data[i].elements).length != 0){
                         for(let key of this.data.elementKeys){
