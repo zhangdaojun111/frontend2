@@ -20,7 +20,7 @@ $chk_1-label-bg-color:#FFF;
       .cate-hide-icon-style{
         cursor: pointer;
         .calendar-con-style{
-          margin-top: 5px !important;
+          margin-top: 5px;
         }
         .calendar-add-con:hover{
           content: url('../../../assets/images/calendar/calendar-add-hover.png');
@@ -44,7 +44,7 @@ $chk_1-label-bg-color:#FFF;
       .cate-hide-icon-style{
         cursor: pointer;
         .calendar-con-style{
-          margin-top: 5px !important;
+          margin-top: 5px;
         }
       }
     }
@@ -52,7 +52,7 @@ $chk_1-label-bg-color:#FFF;
   .item-content-1,.item-content-4,.item-content-3
   {
     margin-top:3px;
-    height:28%;
+    height:calc(33.3% - 45px);
     overflow: auto;
     width: 100%;
     box-sizing: border-box;

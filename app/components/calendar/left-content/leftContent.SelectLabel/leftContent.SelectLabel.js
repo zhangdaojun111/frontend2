@@ -24,20 +24,20 @@ let config = {
         /**
          *加载子checkbox选中状态
          */
-        loaddatahtml:function(that,data){
+        loadDataHtml:function(data){
             data.items.forEach((items) =>{
                 let filed_id = "#select-children-"+items.field_id;
                 if(this.data.cancel_fields.indexOf(items.field_id) !== -1){
-                    that.el.find(filed_id).addClass("unchecked");
+                    this.el.find(filed_id).addClass("unchecked");
                 }
                 let color = CalendarToolService.handleColorRGB(items.color,1);
-                that.el.find(filed_id).css({backgroundColor:color});
+                this.el.find(filed_id).css({backgroundColor:color});
             });
         },
         /**
          *隐藏子checkbox
          */
-        selectlabelshow:function(temp){
+        selectLabelShow:function(temp){
             if(!temp.hasClass('hide-check-group'))
             {
                 temp.addClass("hide-check-group");
@@ -51,37 +51,32 @@ let config = {
         /**
          *父checkbox发生选择
          */
-        selectlabel:function(temp,that){
-            let staus = false;
+        selectHead:function(temp){
             if(temp.is(".label-select-all-checked"))
             {
-                staus = true;
-                this.events.checkbox({type:'unshowData',staus:staus,data:this.data.items});
+                this.events.checkbox({type:'unshowData',staus:true,data:this.data.items});
                 temp.removeClass("label-select-all-checked");
-                that.el.find(".select-label-children").addClass('unchecked');
+                this.el.find(".select-label-children").addClass('unchecked');
                 this.events.checkbox({type:'remind-checkbox',data:-1});
-                that.el.find("#checkbox_a3").removeClass('label-select-all-checked');
             } else {
-                staus = false;
-                this.events.checkbox({type:'unshowData',staus:staus,data:this.data.items});
+                this.events.checkbox({type:'unshowData',staus:false,data:this.data.items});
                 temp.addClass("label-select-all-checked");
-                that.el.find(".select-label-children").removeClass('unchecked');
+                this.el.find(".select-label-children").removeClass('unchecked');
                 let isAllGroupchecked = true;
-                that.el.parent().find(".label-select-all-show").each(function(){
+                this.el.parent().find(".label-select-all-show").each(function(){
                     if(!$(this).is('.label-select-all-checked')){
                         isAllGroupchecked = false;
                     }
                 });
                 if(isAllGroupchecked){
                     this.events.checkbox({type:'remind-checkbox',data:1});
-                    that.el.find("#checkbox_a3").addClass('label-select-all-checked');
                 }
             }
         },
         /**
          *子checkbox发生选择
          */
-        selectlabelchildren:function(temp){
+        selectLabelChildren:function(temp){
             let dataItem=[];
             dataItem[0] = temp.attr("id").split("-")[2];
             if(temp.is(".unchecked"))
@@ -113,14 +108,13 @@ let config = {
                 temp.addClass('unchecked');
                 this.el.find(".select-head").removeClass('label-select-all-checked');
                 this.events.checkbox({type:'remind-checkbox',data:-1});
-                this.el.find("#checkbox_a3").removeClass('label-select-all-checked');
 
             }
         },
         /**
          *页面判断隐藏项和父checkbox的状态
          */
-        showfirst:function(){
+        showFirst:function(){
             let IsChecked = true;
             if(this.data.hide_item_table.indexOf(this.data.dataitem.table_id) !== -1){
                 this.el.find(".select-head").removeClass("label-select-all-show");
@@ -185,25 +179,25 @@ let config = {
                 this.el.find(".float-button-group").css({"display":"block","top":this.el.find(".float-button-group-show").offset().top - 85});
             }
         },
-        {
-            event: 'click',
-            selector: '.select-label-show',
-            callback: function(){
-                this.actions.selectlabelshow($(this));
-            }
-        },
+        // {
+        //     event: 'click',
+        //     selector: '.select-label-show',
+        //     callback: function(){
+        //         this.actions.selectLabelShow($(this));
+        //     }
+        // },
         {
             event: 'click',
             selector: '.select-label',
             callback: function(temp = this){
-                this.actions.selectlabel($(temp),this);
+                this.actions.selectHead($(temp));
             }
         },
         {
             event: 'click',
             selector: '.select-label-children',
             callback: function(temp = this){
-                this.actions.selectlabelchildren($(temp));
+                this.actions.selectLabelChildren($(temp));
             }
         },
         {
@@ -240,15 +234,15 @@ let config = {
             event: 'click',
             selector: '.select-label-show',
             callback: function(temp = this){
-                this.actions.selectlabelshow($(temp));
+                this.actions.selectLabelShow($(temp));
             }
         },
     ],
 
     afterRender: function() {
         let that = this;
-        this.actions.showfirst();
-        this.actions.loaddatahtml(that,this.data.dataitem);
+        this.actions.showFirst();
+        this.actions.loadDataHtml(this.data.dataitem);
         $(document).mouseover(function(){
             that.el.find(".float-button-group").hide();
             that.el.find(".search-function").css("display","none");

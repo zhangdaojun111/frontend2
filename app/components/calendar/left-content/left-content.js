@@ -7,11 +7,9 @@ import Component from "../../../lib/component";
 import template from './left-content.html';
 import './left-content.scss';
 import LeftContentHide from './leftContent.hideContent/leftContent.hideContent';
-import {CalendarService} from '../../../services/calendar/calendar.service';
 import Mediator from '../../../lib/mediator';
-import CalendarSetting from '../calendar.setting/calendar.setting';
 import {PMAPI} from '../../../lib/postmsg';
-import LeftcontentCalendarset from'./leftContent.calendarSet/leftContent.calendarSet';
+import LeftContentCalendarSet from'./leftContent.calendarSet/leftContent.calendarSet';
 import leftContentFinished from './leftContent.finished/leftContent.finished';
 import RightContentWorkFlow from '../right-content/right.content.workflowcontent/right.content.workflowcontent';
 import {CalendarSetService} from "../../../services/calendar/calendar.set.service"
@@ -27,65 +25,73 @@ let config = {
         calendarTreeData: {},                          //日历树数据
     },
     actions: {
-        //与我相关审批和已完成显示隐藏
-        contentHide:function(that,temp){
+        /**
+         * 与我相关审批和已完成显示隐藏
+         */
+        contentHide:function(temp){
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
-                that.el.find(".item-content-1").show();
-                that.el.find(".item-content").css("height","28%");
-                that.el.find(".item-content-1").css("height","28%");
-                that.el.find(".item-content").show();
+                this.el.find(".item-content").show();
+                this.el.find(".item-content").css("height","calc(33.3% - 45px)");
+                // that.el.find(".item-content-1").css("height","calc(33.3% - 45px)");
+                // that.el.find(".item-content").show();
             }else{
-                that.el.find(".item-title").removeClass("display-all-content");
-                that.el.find(".item-title-2").removeClass("display-all-content");
+                this.el.find(".item-title").removeClass("display-all-content");
+                this.el.find(".item-title-2").removeClass("display-all-content");
                 temp.addClass("display-all-content");
-                that.el.find(".item-content-1").hide();
-                that.el.find(".item-content").hide();
-                that.el.find(".item-content-2").hide();
+                // that.el.find(".item-content-1").hide();
+                this.el.find(".item-content").hide();
+                this.el.find(".item-content-2").hide();
                 temp.next(".item-content").show();
                 temp.next().css({height:'calc(100% - 135px)'});
             }
         },
-        //日历隐藏栏显示和隐藏
-        hideclass:function(that,temp){
+        /**
+         * 日历隐藏栏显示和隐藏
+         */
+        hideclass:function(temp){
             if(temp.is(".display-all-content")){
                 temp.removeClass("display-all-content");
-                that.el.find(".item-content").css("height","28%");
-                that.el.find(".item-content-1").css("height","28%");
-                that.el.find(".item-content-2").hide();
-                that.el.find(".item-content-1").show();
-                that.el.find(".item-content-3").show();
-                that.el.find(".item-content-4").show();
+                this.el.find(".item-content").css("height","calc(33.3% - 45px)");
+                // that.el.find(".item-content-1").css("height","calc(33.3% - 45px)");
+                this.el.find(".item-content-2").hide();
+                this.el.find(".item-content").show();
+                // that.el.find(".item-content-3").show();
+                // that.el.find(".item-content-4").show();
             }else{
-                that.el.find(".item-title").removeClass("display-all-content");
+                this.el.find(".item-title").removeClass("display-all-content");
                 temp.addClass("display-all-content");
-                that.el.find(".item-content-1").show();
-                that.el.find(".item-content-1").css("height","28%");
-                that.el.find(".item-content").hide();
-                that.el.find(".item-content-2").show();
-                that.el.find(".item-content-2").css({height:'calc(72% - 135px)'});
+                this.el.find(".item-content").hide();
+                this.el.find(".item-content-2").show();
+                this.el.find(".item-content-1").show();
+                this.el.find(".item-content-1").css("height","calc(33.3% - 45px)");
+                this.el.find(".item-content-2").css({height:'calc(66.7% - 90px)'});
             }
         },
-        //日历操作显示和隐藏
-        hide_item:function(that,temp){
-            if(temp.is(".display-all-content")){
-                temp.removeClass("display-all-content");
-                that.el.find(".item-content-1").show();
-                that.el.find(".item-content-1").css("height","28%");
-                that.el.find(".item-content").css("height","28%");
-                that.el.find(".item-content-2").hide();
-                that.el.find(".item-content-3").show();
-                that.el.find(".item-content-4").show();
-            }else{
-                that.el.find(".item-title").removeClass("display-all-content");
-                that.el.find(".item-content-1").show();
-                temp.addClass("display-all-content");
-                that.el.find(".item-content").hide();
-                that.el.find(".item-content-2").hide();
-                that.el.find(".item-content-1").css({height:'calc(100% - 135px)'});
-            }
-        },
-        //展开日历操作栏
+        /**
+         * 日历操作显示和隐藏
+         */
+        // hide_item:function(that,temp){
+        //     if(temp.is(".display-all-content")){
+        //         temp.removeClass("display-all-content");
+        //         that.el.find(".item-content-1").show();
+        //         that.el.find(".item-content-1").css("height","calc(33.3% - 45px)");
+        //         that.el.find(".item-content").css("height","calc(33.3% - 45px)");
+        //         that.el.find(".item-content-2").hide();
+        //         that.el.find(".item-content-3").show();
+        //         that.el.find(".item-content-4").show();
+        //     }else{
+        //         that.el.find(".item-title").removeClass("display-all-content");
+        //         that.el.find(".item-content-1").show();
+        //         temp.addClass("display-all-content");
+        //         that.el.find(".item-content").hide();
+        //         that.el.find(".item-content-2").hide();
+        //         that.el.find(".item-content-1").css({height:'calc(100% - 135px)'});
+        //     }
+        // },
+        /**
+         * 展开日历操作栏
+         */
         showRemindType:function(){
             this.el.find(".item-title-2").removeClass("display-all-content");
             this.el.find(".item-title-1").addClass("display-all-content");
@@ -94,7 +100,9 @@ let config = {
             this.el.find(".item-content-1").show();
             this.el.find(".item-content-1").css({height:'calc(100% - 135px)'});
         },
-        //处理日历树数据
+        /**
+         * 处理日历树数据
+         */
         getCalendarTreeData:function(){
             for(let i = 0;i<this.data.calendarTreeData.hide_tables.length;i++){
                 let hide_table_name = "";
@@ -157,21 +165,21 @@ let config = {
             selector: '.hide-con',
             callback: function(temp = this){
                  temp = $(temp).parents('.item-title');
-                 this.actions.contentHide(this,temp);
+                 this.actions.contentHide(temp);
             }
         },
-        {
-            event: 'click',
-            selector: '.hide-con-1',
-            callback: function(temp = this){
-                this.actions.hide_item(this,$(temp).parents('.item-title-1'));
-            }
-        },
+        // {
+        //     event: 'click',
+        //     selector: '.hide-con-1',
+        //     callback: function(temp = this){
+        //         this.actions.hide_item(this,$(temp).parents('.item-title-1'));
+        //     }
+        // },
         {
             event: 'click',
             selector: '.hide-con-2',
             callback: function(temp = this){
-                this.actions.hideclass(this,$(temp).parents('.item-title-2'));
+                this.actions.hideclass($(temp).parents('.item-title-2'));
             }
         },
         {
@@ -192,7 +200,7 @@ let config = {
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
         this.actions.getCalendarTreeData();
-        this.append(new LeftcontentCalendarset(this.data.calendarTreeData), this.el.find('.left-calendar-set'));
+        this.append(new LeftContentCalendarSet(this.data.calendarTreeData), this.el.find('.left-calendar-set'));
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.el.find('.item-content-3').empty();
             data.forEach((row) =>{

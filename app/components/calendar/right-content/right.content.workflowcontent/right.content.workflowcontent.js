@@ -29,7 +29,6 @@ let config = {
             // if(this.data['record_progress'] > 0.8){
             //     this.el.find(".end-workflow").hide();
             // }
-            console.log(this.data['record_progress'] > 0.9);
             this.el.find(".workflow-schedule").css({"width":record_progress});
         },
         /**
