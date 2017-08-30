@@ -64,7 +64,8 @@ let config = {
             this.actions.renderChoosed();
         },
         onInput: function (input) {
-            let value = input.val();
+            let value = _.trim(input.val());
+            input.val(value);
             if (value === '') {
                 this.listWrap.find('li').show();
             } else {
@@ -92,27 +93,33 @@ let config = {
             this.data.choosed = choosed;
             this.actions.renderChoosed();
         },
+        setList: function (list) {
+            this.data.list = list;
+            this.reload();
+            this.actions.renderChoosed();
+        },
         renderChoosed: function () {
-                this.listWrap.find('input:checkbox:checked').each(function () {
-                    this.checked = false;
-                });
-                if (this.data.onSelect) {
-                    this.data.onSelect(this.data.choosed);
-                }
-                this.trigger('onSelect', this.data.choosed);
-                if (this.data.choosed.length) {
-                    let html = [];
-                    this.data.choosed.forEach((item) => {
-                        if (item.id) {
-                            let checkbox = this.listWrap.find(`input:checkbox[data-id=${item.id}]`);
+            this.listWrap.find('input:checkbox:checked').each(function () {
+                this.checked = false;
+            });
+            if (this.data.onSelect) {
+                this.data.onSelect(this.data.choosed);
+            }
+            this.trigger('onSelect', this.data.choosed);
+            let html = [];
+            if (this.data.choosed.length) {
+                this.data.choosed.forEach((item) => {
+                    if (item.id) {
+                        let checkbox = this.listWrap.find(`input:checkbox[data-id=${item.id}]`);
+                        if (checkbox.length) {
                             checkbox[0].checked = true;
-                            html.push(item.name);
                         }
-                    });
-                    this.inputResult.val(html.join(','));
-                }
-                this.el.find('.select-all span').text(this.data.choosed.length);
-
+                        html.push(item.name);
+                    }
+                });
+            }
+            this.inputResult.val(html.join(','));
+            this.el.find('.select-all span').text(this.data.choosed.length);
         },
         selectAll: function () {
             if (this.data.choosed.length === this.data.list.length) {
@@ -176,6 +183,11 @@ let config = {
             });
         } else {
             this.listWrap.height(this.data.selectBoxHeight);
+            let inputHeight = this.listWrap.find('.auto-select-text-wrap').outerHeight();
+            let selectAllHeight = this.listWrap.find('.select-all').outerHeight();
+            this.listWrap.find('ul').css({
+                maxHeight: (this.data.selectBoxHeight - inputHeight - selectAllHeight) + 'px'
+            });
         }
         if (this.data.displayType === 'popup') {
             this.listWrap.addClass('popup');
