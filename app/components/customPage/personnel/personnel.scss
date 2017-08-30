@@ -12,10 +12,13 @@
     position: relative;
     .choose-department-tree {
       padding: 15px;
-      padding-top: 30px;
+      padding-top: 40px;
       border-top: 1px solid #E4E4E4;
       height: calc(100% - 60px);
       overflow: visible;
+      .list-group-item {
+        margin: 7px 0;
+      }
     }
     .tips {
       height: 60px;
