@@ -101,6 +101,7 @@ let config = {
                     sortingOrder: ['desc', 'asc', null],
                     hide: false,
                     minWidth: 20,
+                    width: col["width"] || 120,
                     cellStyle: {'font-style': 'normal'},
                     floatingFilterComponent: this.floatingFilterCom.actions.createFilter(s.type , s.field, this.data.searchValue, this.data.searchOldValue),
                     floatingFilterComponentParams: {suppressFilterButton: true},
