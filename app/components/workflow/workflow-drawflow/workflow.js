@@ -5,6 +5,7 @@
 import Component from '../../../lib/component';
 import template from './workflow.html';
 import './workflow.scss';
+import '../../../assets/scss/workflow/workflow-base.scss';
 import msgBox from '../../../lib/msgbox';
 import Mediator from '../../../lib/mediator';
 import {workflowService} from '../../../services/workflow/workflow.service';

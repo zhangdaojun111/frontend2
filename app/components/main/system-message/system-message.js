@@ -95,7 +95,8 @@ let config = {
                 PMAPI.openDialogByIframe(data.url, {
                     width: 1200,
                     height: 500,
-                    title: data.msg_type_text
+                    title: data.msg_type_text,
+                    customSize:true
                 })
             } else {
                 systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
@@ -131,11 +132,9 @@ let config = {
 };
 
 class SystemMessage extends Component {
-
     constructor(data) {
         super(config, data);
     }
-
 }
 
 let systemMessageUtil = {
@@ -176,7 +175,7 @@ let systemMessageUtil = {
             }
         })
     }
-}
+};
 
 export {systemMessageUtil};
 // systemMessageUtil.show();
