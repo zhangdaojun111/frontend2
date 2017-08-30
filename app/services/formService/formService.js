@@ -1,15 +1,15 @@
 import {HTTP} from '../../lib/http';
 import alert from '../../lib/msgbox';
 
-export const FormService={
+export const FormService = {
     //子表内置父表的id集合（前端填充）tableid : ids
-    idsInChildTableToParent : {},
+    idsInChildTableToParent: {},
     //父表的this.form.value
-    frontendParentFormValue:[],
+    frontendParentFormValue: [],
     //父表子表关系
-    frontendRelation : [] ,
+    frontendRelation: [],
     //父表的this.newData
-    frontendParentNewData : {},
+    frontendParentNewData: {},
 
     /**
      *  组装子表所需列表或表单中内置或相关的父表中数据
@@ -17,47 +17,47 @@ export const FormService={
      *  @param formDataFromParent 父表中填写的数据
      *  @param frontendParentTableId父表id
      */
-    packageParentDataForChildData(kvDict,formDataFromParent,frontendParentTableId) {
+    packageParentDataForChildData(kvDict, formDataFromParent, frontendParentTableId) {
         let result = {};
-        for(let key in kvDict){
+        for (let key in kvDict) {
             //父表dfield已经填写的value
             let val;
             //父表的this.newData
             let newDataFromParent = this.frontendParentNewData[frontendParentTableId];
             //父表类型
-            if(newDataFromParent.hasOwnProperty(key)){
+            if (newDataFromParent.hasOwnProperty(key)) {
                 let type = newDataFromParent[key]["type"];
-                if(key != "temp_id" && key != "real_id"){
+                if (key != "temp_id" && key != "real_id") {
                     //要填充的value
                     val = formDataFromParent[key];
                     //判断父表类型
-                    if(type == 'select' || type == 'buildin'){
-                        for(var k in newDataFromParent[key]["options"]){
-                            if(newDataFromParent[key]["options"][k]["value"] == val){
+                    if (type == 'select' || type == 'buildin') {
+                        for (var k in newDataFromParent[key]["options"]) {
+                            if (newDataFromParent[key]["options"][k]["value"] == val) {
                                 val = newDataFromParent[key]["options"][k]["label"];
                                 break;
                             }
                         }
-                    }else if(type == 'radio'){
-                        for(var k in newDataFromParent[key]["group"]){
-                            if(newDataFromParent[key]["group"][k]["value"] == val){
+                    } else if (type == 'radio') {
+                        for (var k in newDataFromParent[key]["group"]) {
+                            if (newDataFromParent[key]["group"][k]["value"] == val) {
                                 val = newDataFromParent[key]["group"][k]["label"];
                                 break;
                             }
                         }
-                    }else if(type == 'multi-select'){
+                    } else if (type == 'multi-select') {
                         let resultVal = '';
-                        for(let v of val) {
-                            for(var k in newDataFromParent[key]["options"]){
-                                if(newDataFromParent[key]["options"][k]["value"] == v){
+                        for (let v of val) {
+                            for (var k in newDataFromParent[key]["options"]) {
+                                if (newDataFromParent[key]["options"][k]["value"] == v) {
                                     resultVal = resultVal + newDataFromParent[key]["options"][k]["label"] + '，';
                                     break;
                                 }
                             }
                         }
-                        val = resultVal.substr(0,resultVal.length - 1);
+                        val = resultVal.substr(0, resultVal.length - 1);
                     }
-                }else{
+                } else {
                     val = formDataFromParent[key];
                 }
                 result[key] = val;
@@ -67,115 +67,124 @@ export const FormService={
     },
 
     //获取统计数据
-    getCountData(json){
-        let res=HTTP.post('get_count_data',json);
+    getCountData(json) {
+        let res = HTTP.post('get_count_data', json);
         HTTP.flush();
         return res;
     },
-    get_exp_value(eval_exps){
-        let res=HTTP.post('eval_exp_fun',eval_exps);
+    get_exp_value(eval_exps) {
+        let res = HTTP.post('eval_exp_fun', eval_exps);
         HTTP.flush();
         return res;
     },
     //获取默认值数据
-    getDefaultValue(json){
-        let res=HTTP.post('get_workflow_default_values',json);
+    getDefaultValue(json) {
+        let res = HTTP.post('get_workflow_default_values', json);
         HTTP.flush();
         return res;
     },
     //获取相关数据
-    getAboutData(json){
-        let res=HTTP.post('get_about_data',json);
+    getAboutData(json) {
+        let res = HTTP.post('get_about_data', json);
         HTTP.flush();
         return res;
     },
-    execFieldPlugin(json){
-        let res=HTTP.post('exec_field_plugin',json);
+    execFieldPlugin(json) {
+        let res = HTTP.post('exec_field_plugin', json);
         HTTP.flush();
         return res;
     },
     //获取表单参数
-    getPrepareParmas(json){
-        let res=HTTP.post('prepare_params',json);
+    getPrepareParmas(json) {
+        let res = HTTP.post('prepare_params', json);
         HTTP.flush();
         return res;
     },
 
     //身份证验证
-    checkCard (card) {
+    checkCard(card) {
         let result = true;
         //校验长度，类型
-        if(isCardNo(card) === false) {result = false;}
+        if (isCardNo(card) === false) {
+            result = false;
+        }
         //检查省份
-        if(checkProvince(card) === false) {result = false;}
+        if (checkProvince(card) === false) {
+            result = false;
+        }
         //校验生日
-        if(checkBirthday(card) === false) {result = false;}
+        if (checkBirthday(card) === false) {
+            result = false;
+        }
         //检验位的检测
-        if(checkParity(card) === false) {result = false;}
+        if (checkParity(card) === false) {
+            result = false;
+        }
 
         return result;
 
         //检查号码是否符合规范，包括长度，类型
-        function isCardNo (card) {
+        function isCardNo(card) {
             //身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X
             var reg = /(^\d{15}$)|(^\d{17}(\d|X)$)/;
-            if(reg.test(card) === false) {
+            if (reg.test(card) === false) {
                 return false;
             }
             return true;
         }
 
         //检验省份
-        function checkProvince (card) {
-            const vcity={ 11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",
-                21:"辽宁",22:"吉林",23:"黑龙江",31:"上海",32:"江苏",
-                33:"浙江",34:"安徽",35:"福建",36:"江西",37:"山东",41:"河南",
-                42:"湖北",43:"湖南",44:"广东",45:"广西",46:"海南",50:"重庆",
-                51:"四川",52:"贵州",53:"云南",54:"西藏",61:"陕西",62:"甘肃",
-                63:"青海",64:"宁夏",65:"新疆",71:"台湾",81:"香港",82:"澳门",91:"国外"
+        function checkProvince(card) {
+            const vcity = {
+                11: "北京", 12: "天津", 13: "河北", 14: "山西", 15: "内蒙古",
+                21: "辽宁", 22: "吉林", 23: "黑龙江", 31: "上海", 32: "江苏",
+                33: "浙江", 34: "安徽", 35: "福建", 36: "江西", 37: "山东", 41: "河南",
+                42: "湖北", 43: "湖南", 44: "广东", 45: "广西", 46: "海南", 50: "重庆",
+                51: "四川", 52: "贵州", 53: "云南", 54: "西藏", 61: "陕西", 62: "甘肃",
+                63: "青海", 64: "宁夏", 65: "新疆", 71: "台湾", 81: "香港", 82: "澳门", 91: "国外"
             };
-            var province = card.substr(0,2);
-            if(vcity[province] == undefined) {
+            var province = card.substr(0, 2);
+            if (vcity[province] == undefined) {
                 return false;
             }
             return true;
         }
 
         //检查生日是否正确
-        function checkBirthday (card){
+        function checkBirthday(card) {
             var len = card.length;
             //身份证15位时，次序为省（3位）市（3位）年（2位）月（2位）日（2位）校验位（3位），皆为数字
-            if(len == '15') {
+            if (len == '15') {
                 var re_fifteen = /^(\d{6})(\d{2})(\d{2})(\d{2})(\d{3})$/;
                 var arr_data = card.match(re_fifteen);
                 var year = arr_data[2];
                 var month = arr_data[3];
                 var day = arr_data[4];
-                var birthday = new Date('19'+year+'/'+month+'/'+day);
-                return verifyBirthday('19'+year,month,day,birthday);
+                var birthday = new Date('19' + year + '/' + month + '/' + day);
+                return verifyBirthday('19' + year, month, day, birthday);
             }
             //身份证18位时，次序为省（3位）市（3位）年（4位）月（2位）日（2位）校验位（4位），校验位末尾可能为X
-            if(len == '18') {
+            if (len == '18') {
                 var re_eighteen = /^(\d{6})(\d{4})(\d{2})(\d{2})(\d{3})([0-9]|X)$/;
                 var arr_data = card.match(re_eighteen);
                 var year = arr_data[2];
                 var month = arr_data[3];
                 var day = arr_data[4];
-                var birthday = new Date(year+'/'+month+'/'+day);
-                return verifyBirthday(year,month,day,birthday);
+                var birthday = new Date(year + '/' + month + '/' + day);
+                return verifyBirthday(year, month, day, birthday);
             }
             return false;
         }
 
         //校验日期
-        function verifyBirthday (year,month,day,birthday) {
+        function verifyBirthday(year, month, day, birthday) {
             var now = new Date();
             var now_year = now.getFullYear();
             //年月日是否合理
-            if(birthday.getFullYear() == year && (birthday.getMonth() + 1) == month && birthday.getDate() == day) {
+            if (birthday.getFullYear() == year && (birthday.getMonth() + 1) == month && birthday.getDate() == day) {
                 //判断年份的范围（3岁到100岁之间)
                 var time = now_year - year;
-                if(time >= 3 && time <= 100) {
+                if (time >= 3 && time <= 100) {
                     return true;
                 }
                 return false;
@@ -184,15 +193,15 @@ export const FormService={
         }
 
         //校验位的检测
-        function checkParity (card) {
+        function checkParity(card) {
             //15位转18位
             card = changeFivteenToEighteen(card);
             var len = card.length;
-            if(len == '18') {
+            if (len == '18') {
                 var arrInt = new Array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2);
                 var arrCh = new Array('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2');
                 var cardTemp = 0, i, valnum;
-                for(i = 0; i < 17; i ++) {
+                for (i = 0; i < 17; i++) {
                     cardTemp += card.substr(i, 1) * arrInt[i];
                 }
                 valnum = arrCh[cardTemp % 11];
@@ -205,13 +214,13 @@ export const FormService={
         }
 
         //15位转18位身份证号
-        function changeFivteenToEighteen (card) {
-            if(card.length == '15') {
+        function changeFivteenToEighteen(card) {
+            if (card.length == '15') {
                 var arrInt = new Array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2);
                 var arrCh = new Array('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2');
                 var cardTemp = 0, i;
                 card = card.substr(0, 6) + '19' + card.substr(6, card.length - 6);
-                for(i = 0; i < 17; i ++) {
+                for (i = 0; i < 17; i++) {
                     cardTemp += card.substr(i, 1) * arrInt[i];
                 }
                 card += arrCh[cardTemp % 11];
@@ -222,9 +231,9 @@ export const FormService={
 
     },
     //验证组织机构合法性方法（因为原始方法的false是合法，true是不合法。所以return的时候，要取反）
-    orgcodevalidate(value){
-        if(value!=""){
-            var values=value.split("-");
+    orgcodevalidate(value) {
+        if (value != "") {
+            var values = value.split("-");
             var ws = [3, 7, 9, 10, 5, 8, 4, 2];
             var str = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             var reg = /^([0-9A-Z]){8}$/;
@@ -235,16 +244,16 @@ export const FormService={
             for (var i = 0; i < 8; i++) {
                 sum += str.indexOf(values[0].charAt(i)) * ws[i];
             }
-            var C9= 11 - (sum % 11);
-            var YC9=values[1]+'';
+            var C9 = 11 - (sum % 11);
+            var YC9 = values[1] + '';
             if (C9 == 11) {
                 C9 = '0';
             } else if (C9 == 10) {
-                C9 = 'X'  ;
+                C9 = 'X';
             } else {
-                C9 = C9+'';
+                C9 = C9 + '';
             }
-            var result = (YC9!=C9);
+            var result = (YC9 != C9);
             return !result;
         }
     },
@@ -255,13 +264,13 @@ export const FormService={
         n += "00";
         var p = n.indexOf('.');
         //截取小数点前面的数字
-        if (p >= 0){
+        if (p >= 0) {
             n = n.substring(0, p) + n.substr(p + 1, 2);
         }
         //将unit截取到当前数字的位数，改算法最大支持到9999亿
         unit = unit.substr(unit.length - n.length);
         //判断第i个数字的大小，并且从零壹贰叁肆伍陆柒捌玖中获取到与之数值对应的汉字，并且和位数拼接
-        for (var i = 0; i < n.length; i++){
+        for (var i = 0; i < n.length; i++) {
             str += '零壹贰叁肆伍陆柒捌玖'.charAt(n.charAt(i)) + unit.charAt(i);
         }
         //从最后一个判断汉子是"零"，空，或者“点”
@@ -274,7 +283,7 @@ export const FormService={
             .replace(/(零)+/g, "零")
             .replace(/零(万|亿|元)/g, "$1")
             .replace(/(亿)万|(拾)/g, "$1$2")
-            .replace(/^壹拾/g,"拾")
+            .replace(/^壹拾/g, "拾")
             .replace(/^元零?|零分/g, "")
             .replace(/零$/g, "")
             .replace(/ /g, "");
@@ -282,18 +291,18 @@ export const FormService={
     //条件表达式
     tjbds(expression) {
         let exp;
-        if(typeof expression === 'string') {
+        if (typeof expression === 'string') {
             exp = JSON.parse(expression);
         }
         let else_data;
-        for(let i in exp){
-            for(let j in exp[i]){
-                if (j != "else"){
+        for (let i in exp) {
+            for (let j in exp[i]) {
+                if (j != "else") {
                     //解析 and -> &&  or -> ||
-                    if(eval(j.replace("and", "&&").replace("or", "||"))){
+                    if (eval(j.replace("and", "&&").replace("or", "||"))) {
                         return eval(exp[i][j])
                     }
-                }else{
+                } else {
                     else_data = eval(exp[i][j]);
                 }
             }
@@ -302,7 +311,7 @@ export const FormService={
     },
     //计算时间
     jssj(expression) {
-        let tianshu = expression/1000/3600/24;
+        let tianshu = expression / 1000 / 3600 / 24;
         return tianshu.toFixed(1).toString();
     },
     //获取当前时间
@@ -315,11 +324,11 @@ export const FormService={
         let y = v.getFullYear().toString();
         let m = (v.getMonth() + 1).toString();
         let d = v.getDate().toString();
-        if(m.length==1){
-            m = "0"+m;
+        if (m.length == 1) {
+            m = "0" + m;
         }
-        if(d.length==1){
-            d = "0"+d;
+        if (d.length == 1) {
+            d = "0" + d;
         }
         return y + '-' + m + '-' + d;
     },
@@ -333,11 +342,11 @@ export const FormService={
         let y = v.getFullYear().toString();
         let m = (v.getMonth() + 1).toString();
         let d = v.getDate().toString();
-        if(m.length==1){
-            m = "0"+m;
+        if (m.length == 1) {
+            m = "0" + m;
         }
-        if(d.length==1){
-            d = "0"+d;
+        if (d.length == 1) {
+            d = "0" + d;
         }
         return y + '-' + m + '-' + d;
     },
@@ -352,14 +361,14 @@ export const FormService={
     fun_ghl_xxzdx(num, fenwei) {
         var strOutput = "";
         var strUnit = '仟佰拾亿仟佰拾万仟佰拾元角分';
-        num = (1+fenwei)*num;
+        num = (1 + fenwei) * num;
         num += "00";
         var intPos = num.indexOf('.');
         if (intPos >= 0)
             num = num.substring(0, intPos) + num.substr(intPos + 1, 2);
         strUnit = strUnit.substr(strUnit.length - num.length);
-        for (var i=0; i < num.length; i++)
-            strOutput += '零壹贰叁肆伍陆柒捌玖'.substr(num.substr(i,1),1) + strUnit.substr(i,1);
+        for (var i = 0; i < num.length; i++)
+            strOutput += '零壹贰叁肆伍陆柒捌玖'.substr(num.substr(i, 1), 1) + strUnit.substr(i, 1);
         return strOutput.replace(/零角零分$/, '整').replace(/零[仟佰拾]/g, '零').replace(/零{2,}/g, '零').replace(/零([亿|万])/g, '$1').replace(/零+元/, '元').replace(/亿零{0,3}万/, '亿').replace(/^元/, "零元");
     },
     //@function(fun_ghl_xxzdx) end
@@ -376,98 +385,98 @@ export const FormService={
         let H = v.getHours().toString();
         let M = v.getMinutes().toString();
         let S = v.getSeconds().toString();
-        if(m.length==1){
-            m = "0"+m;
+        if (m.length == 1) {
+            m = "0" + m;
         }
-        if(d.length==1){
-            d = "0"+d;
+        if (d.length == 1) {
+            d = "0" + d;
         }
-        return y+'-'+m+'-'+d+" "+H+':'+M+':'+S;
+        return y + '-' + m + '-' + d + " " + H + ':' + M + ':' + S;
     },
     //@function(fun_ghl_dqsj) end
 
     //获取列头信息待删除
-    getColumnList(id){
-        let res=HTTP.get('get_column_list',{table_id:id});
+    getColumnList(id) {
+        let res = HTTP.get('get_column_list', {table_id: id});
         HTTP.flush();
         return res;
     },
     //获取手绘表单str
     getFormContent(json) {
-        let res=HTTP.post('get_form_content',json);
+        let res = HTTP.post('get_form_content', json);
         HTTP.flush();
         return res;
     },
     //获取选择器数据
     searchByChooser(json) {
-        let res=HTTP.post('selector',json);
+        let res = HTTP.post('selector', json);
         HTTP.flush();
         return res;
     },
     //保存表单
     saveAddpageData(json) {
-        let res=HTTP.post('add_update_table_data',json);
+        let res = HTTP.post('add_update_table_data', json);
         HTTP.flush();
         return res;
     },
     //表达书后台计算
     expEffect(json) {
-        let res=HTTP.post('eval_exp_fun',json);
+        let res = HTTP.post('eval_exp_fun', json);
         HTTP.flush();
         return res;
     },
     //获取系统表单配置
     getSysConfig() {
-        let res=HTTP.get('sysConfig');
+        let res = HTTP.get('sysConfig');
         HTTP.flush();
         return res;
     },
     //获取用户打印页眉偏好
-    getPrintSetting(){
-        let res=HTTP.post('user_preference',{action:'get',pre_type:0});
+    getPrintSetting() {
+        let res = HTTP.post('user_preference', {action: 'get', pre_type: 0});
         HTTP.flush();
         return res;
     },
     //获取表单数据
-    getFormData(json){
+    getFormData(json) {
         let res;
-        if(json['form_id']){
-            res=Promise.all([this.getStaticData(json),this.getDynamicData(json),this.getFormContent({form_id:json['form_id']})]);
-        }else{
-            res=Promise.all([this.getStaticData(json),this.getDynamicData(json)]);
+        if (json['form_id']) {
+            res = Promise.all([this.getStaticData(json), this.getDynamicData(json), this.getFormContent({form_id: json['form_id']})]);
+        } else {
+            res = Promise.all([this.getStaticData(json), this.getDynamicData(json)]);
         }
         HTTP.flush();
         return res;
     },
     //获取表单静态数据
     getStaticData(json) {
-        return HTTP.post( 'get_form_static_data',json )
+        return HTTP.post('get_form_static_data', json)
     },
     //获取表单动态数据
     getDynamicData(json) {
-        return HTTP.post( 'get_form_dynamic_data',json )
+        return HTTP.post('get_form_dynamic_data', json)
     },
     //立即获得表单静态数据
     getStaticDataImmediately(json) {
-        let res=HTTP.post('get_form_static_data',json)
+        let res = HTTP.post('get_form_static_data', json)
         HTTP.flush();
         return res;
     },
     //立即获得表单动态数据
     getDynamicDataImmediately(json) {
-        let res=HTTP.post('get_form_dynamic_data',json)
+        let res = HTTP.post('get_form_dynamic_data', json)
         HTTP.flush();
         return res;
     },
-    uploadAttachment(url,json,processCallback,successCallback) {
+    uploadAttachment(url, json, processCallback, successCallback) {
         HTTP.ajaxImmediately({
-            type:"POST",
+            type: "POST",
             url: url,
             data: json,
             xhr: function () {
                 var myXhr = $.ajaxSettings.xhr();
-                if(myXhr.upload){
-                    myXhr.upload.addEventListener('progress',processCallback,false);
+                if (myXhr.upload) {
+                    myXhr.upload.addEventListener('progress', processCallback, false);
                 }
                 return myXhr;
             },
@@ -477,68 +486,68 @@ export const FormService={
             error: function (error) {
                 alert(error);
             },
-            async:true,
-            cache:false,
-            contentType:false,
-            processData:false,
-            timeout:60000
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            timeout: 60000
         })
     },
     deleteUploaded(json) {
-        return HTTP.postImmediately('/delete_attachment/',json);
+        return HTTP.postImmediately('/delete_attachment/', json);
     },
-    getAttachment(json){
-        return HTTP.postImmediately('/query_attachment_list/',json);
+    getAttachment(json) {
+        return HTTP.postImmediately('/query_attachment_list/', json);
     },
-    getThumbnails(json){
-        return HTTP.postImmediately('/get_thumbnails/',json);
+    getThumbnails(json) {
+        return HTTP.postImmediately('/get_thumbnails/', json);
     },
 
     //重新拼装下拉框格式
     //multiBuildType 特殊多选内置分支判断
     //multi 是否多选
-    createSelectJson(json,multi,multiBuildType){
-        let data={list:[],choosed:[]};
-        if(json.is_view){
-            data['editable']=false;
-        }else{
-            data['editable']=true;
+    createSelectJson(json, multi, multiBuildType) {
+        let data = {list: [], choosed: []};
+        if (json.is_view) {
+            data['editable'] = false;
+        } else {
+            data['editable'] = true;
         }
-        data['width']=json['width'];
+        data['width'] = json['width'];
         let options;
-        if(multiBuildType && multiBuildType ==1){
-            options=json.is_view?json.isViewOptions:(json.options2 || json.options);
-        }else{
-            options=json['options'];
+        if (multiBuildType && multiBuildType == 1) {
+            options = json.is_view ? json.isViewOptions : (json.options2 || json.options);
+        } else {
+            options = json['options'];
         }
-        if(options.length >0 && options[0]['value'] == ''){
+        if (options.length > 0 && options[0]['value'] == '') {
             options.shift();
         }
-        for(let key in options){
-            if(json['value']){
-                if(multi && json['value'].length>0){
-                    for(let i in json['value']){
-                        if(json['value'][i] == options[key]['value']){
+        for (let key in options) {
+            if (json['value']) {
+                if (multi && json['value'].length > 0) {
+                    for (let i in json['value']) {
+                        if (json['value'][i] == options[key]['value']) {
                             data.choosed.push({
-                                id:options[key]['value']||'',
-                                name:options[key]['label']||'',
+                                id: options[key]['value'] || '',
+                                name: options[key]['label'] || '',
                             });
                         }
                     }
-                }else if(json['value'] == options[key]['value']){
+                } else if (json['value'] == options[key]['value']) {
                     data.choosed.push({
-                        id:options[key]['value']||'',
-                        name:options[key]['label']||'',
+                        id: options[key]['value'] || '',
+                        name: options[key]['label'] || '',
                     });
                 }
             }
             data.list.push({
-                id:options[key]['value']||'',
-                name:options[key]['label']||'',
-                py:_.isArray(options[key]['py'])?options[key]['py'].join(','):'',
+                id: options[key]['value'] || '',
+                name: options[key]['label'] || '',
+                py: _.isArray(options[key]['py']) ? options[key]['py'].join(',') : '',
             });
         }
-        data.multiSelect=multi?true:false;
+        data.multiSelect = multi ? true : false;
         return data;
     }
 }
