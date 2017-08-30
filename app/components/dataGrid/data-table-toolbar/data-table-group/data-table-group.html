@@ -1,45 +1,36 @@
 <div class="group-container">
     <div class="group-search">
-        <div class="group-search-title"><img class="icon-l" src="../../../../assets/images/dataGrid/icon_fenzu_1.png" alt=""><span class="text">分组</span><img class="closeGroup" src="../../../../assets/images/dataGrid/group-cancel.png" alt=""></div>
+        <div class="group-search-title">
+            <img class="icon-l" src="../../../../assets/images/dataGrid/icon_fenzu_1.png" alt="">
+            <span class="text">分组</span>
+            <span class="line"></span>
+            <img class="closeGroup" src="../../../../assets/images/dataGrid/group-cancel.png" alt="">
+        </div>
         <!--<div><img src="../../../../assets/images/dataGrid/icon_fenzu_1.png" alt=""><span>分组</span><span class="closeGroup">x</span></div>-->
+
+    </div>
+    <div class="group-box">
         <div class="input-box">
             <input placeholder="搜索关键字"  class="group-search-input" type="text">
         </div>
-    </div>
-    <div class="group-data">
-        <div class="group-data-title">将数据拖动到分组栏</div>
-        <ul class="group-data-list connectedSortable">
-            {{#fields}}
-            <li field="{{field}}" name="{{name}}" class="group-data-item">
-                <span title="{{name}}" class="custom-name">{{name}}</span>
-                <!--<select class="group-data-item-select">-->
-                    <!--<option value="平均">平均</option>-->
-                    <!--<option value="统计">统计</option>-->
-                    <!--<option value="first">first</option>-->
-                    <!--<option value="last">last</option>-->
-                    <!--<option value="最大值">最大值</option>-->
-                    <!--<option value="最小值">最小值</option>-->
-                    <!--<option value="总数">总数</option>-->
-                <!--</select>-->
-            </li>
-            {{/fields}}
-        </ul>
-        <div class="grouping-data-title"><span>分组</span><span class="resetGroup">重置</span></div>
-        <ul class="grouping-data-list connectedSortable">
-            {{#myGroup}}
-            <li field="{{field}}" name="{{name}}" class="group-data-item">
-                <span title="{{name}}" class="custom-name">{{name}}</span>
-                <!--<select class="group-data-item-select">-->
-                    <!--<option value="平均">平均</option>-->
-                    <!--<option value="统计">统计</option>-->
-                    <!--<option value="first">first</option>-->
-                    <!--<option value="last">last</option>-->
-                    <!--<option value="最大值">最大值</option>-->
-                    <!--<option value="最小值">最小值</option>-->
-                    <!--<option value="总数">总数</option>-->
-                <!--</select>-->
-            </li>
-            {{/myGroup}}
-        </ul>
+        <div class="group-data">
+            <div class="group-data-title">将数据拖动到分组栏</div>
+            <ul class="group-data-list connectedSortable">
+                {{#fields}}
+                <li field="{{field}}" name="{{name}}" class="group-data-item">
+                    <span title="{{name}}" class="custom-name">{{name}}</span>
+                </li>
+                {{/fields}}
+            </ul>
+            <div class="grouping-data-title"><span>分组</span><span class="resetGroup">重置</span></div>
+            <ul class="grouping-data-list connectedSortable">
+                {{#myGroup}}
+                <li field="{{field}}" name="{{name}}" class="group-data-item">
+                    <span title="{{name}}" class="custom-name">{{name}}</span>
+
+                </li>
+                {{/myGroup}}
+            </ul>
+        </div>
     </div>
 </div>
