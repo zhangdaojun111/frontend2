@@ -377,8 +377,8 @@ export const dgcService = {
         valuePanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
         sortAscending: '<img src="'+require('../../assets/images/dataGrid/icon_paixu_1.png') +'" />',
         sortDescending: '<img src="'+require('../../assets/images/dataGrid/icon_paixu_2.png') +'" />',
-        groupExpanded: '<img src="'+require('../../assets/images/dataGrid/wenjianjia1.png') +'" />',
-        groupContracted: '<img src="'+require('../../assets/images/dataGrid/wenjianjia1.png') +'" />',
+        groupExpanded: '<img src="'+require('../../assets/images/dataGrid/ico_folder.png') +'" />',
+        groupContracted: '<img src="'+require('../../assets/images/dataGrid/ico_folder_pre.png') +'" />',
     },
     //返回fieds
     retureFields: function (id2fields,ids) {
