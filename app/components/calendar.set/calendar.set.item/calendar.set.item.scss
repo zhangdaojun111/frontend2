@@ -1,39 +1,72 @@
-@import "../calendar.set";
+
 .singleRow {
     width: 100%;
+    display: block;
+    float: left;
+    border-top: 1px solid rgba(228, 228, 228, 1);
     .table-item-checkbox{
-        width:100px !important;
     }
     .set-table-item{
-        border-top: 1px solid #C1CACA;
         padding: 10px 0px;
-        width: 138px;
+        width: 9%;
         min-width: 30px;
         text-align: center;
         line-height: 30px;
-        margin: 0px !important;
+        float: left;
         select {
-            width: 85%;
-            height: 26px;
+            width: calc(100% - 10px);
+            margin: 0px 5px;
+            height: 30px;
+            border: 1px solid #ddd;
+        }
+        .z-checkbox{
+            vertical-align: middle;
+            .z-checkbox-input{
+                bottom: 6px;
+                right: 2px;
+                &::before {
+                    width: 14px;
+                    height: 14px;
+                }
+                &::after {
+                    left: 3px;
+                    top: 3px;
+                    width: 10px;
+                    height: 10px;
+                }
+            }
+        }
+    }
+    .single-select-item{
+        width: calc(12% - 10px);
+        margin: 0px 5px;
+        .popup {
+            width: 100%;
+            ul{
+                //max-height: 300px;
+                li {
+                    margin-left: 0px;
+                    list-style-type: none;
+                    label{
+                        text-align: left;
+                        overflow:hidden;
+                    }
+                }
+            }
+            button{
+                width:100%;
+            }
         }
     }
     .multi-select-item{
-        width:300px !important;
+        width:calc(16% - 10px) !important;
+        margin: 0px 5px;
         .popup {
-            display: none;
             width: 100%;
-            position: absolute;
-            z-index: 100 !important;
-            background-color: white !important;
-            padding-left: 0px !important;
-            margin: 0px !important;
-            height: auto!important;
-            overflow: auto !important;
             ul{
-                max-height: 300px!important;
                 li {
                     margin-left: 0px;
-                    list-style-type: none !important;
+                    list-style-type: none;
                     label{
                         text-align: left;
                         overflow:hidden;
@@ -49,7 +82,6 @@
         cursor: pointer;
     }
     .preview-text {
-        width: 148px;
         word-break: break-all;
         word-wrap: break-word;
     }
@@ -58,19 +90,3 @@
     }
 
 }
-//.popup {
-//    z-index: 100 !important;
-//    background-color: white !important;
-//    padding-left: 0px !important;
-//    margin: 0px !important;
-//    height: auto!important;
-//    max-height: 300px!important;
-//    overflow: auto !important;
-//    li {
-//        margin-left: 0px;
-//        list-style-type: none !important;
-//        label{
-//            text-align: left;
-//        }
-//    }
-//}

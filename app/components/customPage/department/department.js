@@ -14,6 +14,7 @@ import agGrid from '../../../components/dataGrid/agGrid/agGrid';
 import {dataTableService} from '../../../services/dataGrid/data-table.service';
 import {dgcService} from "../../../services/dataGrid/data-table-control.service";
 import exportSetting from '../../dataGrid/data-table-toolbar/data-table-export/data-table-export';
+import {TabService} from "../../../services/main/tabService";
 import customColumns from "../../dataGrid/data-table-toolbar/custom-columns/custom-columns";
 
 let config = {
@@ -34,6 +35,8 @@ let config = {
         //定制列需要字段信息
         customColumnsFields: [],
         isShowCustomPanel: false,
+        //订阅刷新用
+        onRefresh: false
     },
     actions: {
         //创建表头数据
@@ -46,8 +49,10 @@ let config = {
             let columnData = dataTableService.getColumnList( {table_id: this.data.tableId} );
             Promise.all([preferenceData,columnData]).then((res)=> {
                 dgcService.setPreference( res[0],this.data );
+                let number = dgcService.numberCol;
+                number['headerCellTemplate'] = this.actions.resetPreference();
                 this.data.columnDefs = [
-                    dgcService.numberCol,dgcService.selectCol,
+                    number,dgcService.selectCol,
                     {headerName: '操作',field: 'myOperate', width: 120,  suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
                         return '<div style="text-align:center;"><a class="departModify" style="color:#337ab7;">编辑</a><div>';
                     }},
@@ -104,7 +109,8 @@ let config = {
                     fields: this.data.customColumnsFields,
                     fixCols: this.data.fixCols,
                     tableId: this.data.tableId,
-                    agGrid: this.agGrid
+                    agGrid: this.agGrid,
+                    close: this.actions.calcCustomColumn,
                 }
                 this.customColumnsCom  = new customColumns(custom);
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
@@ -112,6 +118,35 @@ let config = {
                 this.actions.btnClick();
             });
             HTTP.flush();
+        },
+        resetPreference: function () {
+            let ediv = document.createElement('div');
+            let eHeader = document.createElement('span');
+            ediv.appendChild( eHeader )
+            eHeader.innerHTML = "初";
+            eHeader.className = "table-init-logo";
+            eHeader.addEventListener('click', () => {
+                msgBox.confirm( '确定初始化偏好？' ).then( r=>{
+                    if( r ){
+                        dataTableService.delPreference( {table_id: this.data.tableId} ).then( res=>{
+                            msgBox.showTips( '操作成功' );
+                            let obj = {
+                                actions: JSON.stringify(['ignoreFields', 'group', 'fieldsOrder', 'pageSize', 'colWidth', 'pinned']),
+                                table_id: this.data.tableId
+                            };
+                            dataTableService.getPreferences( obj ).then( res=>{
+                                dgcService.setPreference( res,this.data );
+                                //创建表头
+                                this.agGrid.gridOptions.api.setColumnDefs( this.data.columnDefs );
+                                dgcService.calcColumnState( this.data,this.agGrid,["number","mySelectAll","myOperate","f5"] )
+                            } );
+                            HTTP.flush();
+                        } );
+                        HTTP.flush();
+                    }
+                } )
+            });
+            return ediv;
         },
         //获取部门数据
         getDepartmentData: function (isRefresh) {
@@ -193,24 +228,60 @@ let config = {
             //宽度自适应
             if( this.el.find( '.custom-column-btn' )[0] ){
                 this.el.find( '.custom-column-btn' ).on( 'click',()=>{
-                    this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
-                    this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
-                    let num = 0;
-                    if( this.data.isShowCustomPanel ){
-                        num+=200;
-                    }
-                    let grid = this.el.find( '#data-agGrid' )
-                    grid.width( 'calc(100% - ' + num + 'px)' );
+                    this.actions.calcCustomColumn();
                 } )
+            }
+            //点击关掉定制列panel
+            this.el.find( '.ag-body' ).on( 'click',()=>{
+                setTimeout( ()=>{
+                    this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'-200px' } );
+                },400 )
+                this.data.isShowCustomPanel = false;
+                this.actions.changeAgGridWidth(true);
+            } )
+        },
+        //定制列事件
+        calcCustomColumn: function () {
+            this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
+            let close = false;
+            if( this.data.isShowCustomPanel ){
+                this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'0px' } );
+            }else {
+                close = true;
+                setTimeout( ()=>{
+                    this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'-200px' } );
+                },400 )
+            }
+            this.actions.changeAgGridWidth(close);
+        },
+        //改变agGrid宽度
+        changeAgGridWidth: function (close) {
+            let num = 0;
+            if( this.data.isShowCustomPanel ){
+                num+=200;
+            }
+            let grid = this.el.find( '#data-agGrid' )
+            if( close ){
+                grid.width( 'calc(100% - ' + num + 'px)' );
+            }else {
+                setTimeout( ()=>{
+                    grid.width( 'calc(100% - ' + num + 'px)' );
+                },400 )
             }
         },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title,w,h ) {
+            let defaultMax = false;
+            if( url.indexOf( '/form/index/' ) != -1 ){
+                defaultMax = true;
+            }
             PMAPI.openDialogByIframe( url,{
-                width: w || 1300,
+                width: w || 1000,
                 height: h || 800,
                 title: title,
-                modal:true
+                modal:true,
+                defaultMax: defaultMax,
+                customSize: defaultMax
             } ).then( (data)=>{
             } )
         },
@@ -281,7 +352,22 @@ let config = {
         }
     },
     afterRender: function (){
+        TabService.onOpenTab( this.data.tableId );
         this.actions.createHeader();
+        //订阅数据失效
+        PMAPI.subscribe(PMENUM.data_invalid, (info) => {
+            console.log( "部门信息订阅数据失效" )
+            let tableId = info.data.table_id;
+            if( this.data.tableId == tableId ){
+                if( !this.data.onRefresh ){
+                    this.data.onRefresh = true;
+                    this.actions.getDepartmentData();
+                    setTimeout( ()=>{
+                        this.data.onRefresh = false;
+                    },500 )
+                }
+            }
+        })
     }
 }
 

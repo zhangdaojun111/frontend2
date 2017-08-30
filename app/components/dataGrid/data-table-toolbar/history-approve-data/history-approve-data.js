@@ -22,8 +22,8 @@ let config = {
     },
     actions: {
         renderHisTable:function(){
-            this.historyData.forEach((row) => {
-                this.append(new historyTable(row), this.el.find('.history-table-box.history'));
+            this.historyData[0]['history_data'].forEach((row) => {
+                this.append(new historyTable({history_data:row}), this.el.find('.history-table-box.history'));
             });
         },
         renderExaTable:function(){

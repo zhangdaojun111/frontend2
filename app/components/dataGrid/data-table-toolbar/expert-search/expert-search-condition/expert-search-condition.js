@@ -57,7 +57,8 @@ let config = {
             switch (type) {
                 case "datetime": inputType = 'datetime-local'; break;
                 case "text": inputType = 'text'; break;
-                case "number": inputType = 'number'; break
+                case "number": inputType = 'number'; break;
+                case "person": inputType = 'text'; break;
             }
             this.inputNextObject.attr("type",inputType);
             this.inputNextObject.attr("title",type);
@@ -65,20 +66,23 @@ let config = {
         setSelectValue: function(type) {
             let optionHtmlOne = `<option value="$regex">包含</option>
                                 <option value="exact">等于</option>
-                                <option value="$ne">不等于</option>`;
-            let optionHtmlTwo = `<option value="$regex">包含</option>
+                                <option value="$ne">不等于</option>`,
+                optionHtmlTwo = `<option value="$regex">包含</option>
                                 <option value="exact">等于</option>
                                 <option value="$gt">大于</option>
                                 <option value="$lt">小于</option>
-                                <option value="$ne">不等于</option>`;
-            let optionHtmlThree =  `<option value="exact">等于</option>
+                                <option value="$ne">不等于</option>`,
+                optionHtmlThree =  `<option value="exact">等于</option>
                                 <option value="$gt">大于</option>
                                 <option value="$lt">小于</option>
-                                <option value="$ne">不等于</option>`;
+                                <option value="$ne">不等于</option>`,
+                optionHtmlFour = `<option value="exact">等于</option>
+                                  <option value="$ne">不等于</option>`;
             switch (type) {
                 case "datetime": this.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlTwo); break;
                 case "text": this.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlOne); break;
                 case "number": this.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlThree); break
+                case "person": this.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlFour); break
             }
         },
         delete: function() {

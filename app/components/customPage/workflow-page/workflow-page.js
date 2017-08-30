@@ -1,6 +1,7 @@
 import Component from "../../../lib/component";
 import template from './workflow-page.html';
 import './workflow-page.scss';
+import '../../../assets/scss/dataGrid/dataGrid-icon.scss';
 import {HTTP} from "../../../lib/http";
 import msgBox from '../../../lib/msgbox';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
@@ -37,6 +38,7 @@ let config = {
         ignoreFields: [],
         //请求数据参数
         commonQueryData:[],
+        onlyCloseExpertSearch:false,
         //是否第一次渲染agGrid
         firstRender: true,
         //可以搜索的数据
@@ -72,7 +74,9 @@ let config = {
         //创建表头
         createColumnDefs: function () {
             let cols = wchService.getWorkflowHeader( this.data.pageType );
-            this.data.columnDefs = [dgcService.numberCol];
+            let number = dgcService.numberCol;
+            number['headerCellTemplate'] = this.actions.resetPreference();
+            this.data.columnDefs = [number];
             if( this.data.pageType == 2||this.data.pageType == 0 ){
                 this.data.columnDefs.push( dgcService.selectCol )
                 this.data.customColumnsFields.push( {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false} )
@@ -112,6 +116,55 @@ let config = {
             }
             this.data.fieldsData = this.data.columnDefs;
         },
+        resetPreference: function () {
+            let ediv = document.createElement('div');
+            let eHeader = document.createElement('span');
+            let eImg = document.createElement('img');
+            eImg.src = require( '../../../assets/images/dataGrid/quxiao.png' );
+            eImg.className = 'resetFloatingFilter';
+            eImg.addEventListener( 'click',()=>{
+                msgBox.confirm( '确定清空筛选数据？' ).then( r=>{
+                    if( r ){
+                        for( let k in this.data.searchValue ){
+                            this.data.searchValue[k] = '';
+                        }
+                        for( let k in this.data.searchOldValue ){
+                            this.data.searchOldValue[k] = '';
+                        }
+                        this.data.queryList = {};
+                        this.actions.setFloatingFilterInput();
+                        this.data.filterParam.filter = [];
+                        this.actions.getData();
+                    }
+                } )
+            } )
+            ediv.appendChild( eHeader )
+            eHeader.innerHTML = "初";
+            eHeader.className = "table-init-logo";
+            eHeader.addEventListener('click', () => {
+                msgBox.confirm( '确定初始化偏好？' ).then( r=>{
+                    if( r ){
+                        dataTableService.delPreference( {table_id: this.data.tableId} ).then( res=>{
+                            msgBox.showTips( '操作成功' );
+                            let obj = {
+                                actions: JSON.stringify(['ignoreFields', 'group', 'fieldsOrder', 'pageSize', 'colWidth', 'pinned']),
+                                table_id: this.data.tableId
+                            };
+                            dataTableService.getPreferences( obj ).then( res=>{
+                                dgcService.setPreference( res,this.data );
+                                //创建表头
+                                this.agGrid.gridOptions.api.setColumnDefs( this.data.columnDefs );
+                                dgcService.calcColumnState(this.data,this.agGrid,["number","mySelectAll"]);
+                            } );
+                            HTTP.flush();
+                        } );
+                        HTTP.flush();
+                    }
+                } )
+            });
+            ediv.appendChild( eImg )
+            return ediv;
+        },
         //返回搜索类型
         searchType: function ( data,name ) {
             let type = 'none';
@@ -143,7 +196,8 @@ let config = {
             let paginationData = {
                 total: this.data.total,
                 rows: this.data.rows,
-                tableId: this.data.tableId
+                tableId: this.data.tableId,
+                type: 'workflow'
             }
             //渲染分页
             this.pagination = new dataPagination(paginationData);
@@ -155,7 +209,9 @@ let config = {
                 fields: this.data.customColumnsFields,
                 fixCols: this.data.fixCols,
                 tableId: this.data.tableId,
-                agGrid: this.agGrid
+                agGrid: this.agGrid,
+                close: this.actions.calcCustomColumn,
+                setFloatingFilterInput: this.actions.setFloatingFilterInput
             }
             //渲染定制列
             if( $('.custom-column-btn')[0] ){
@@ -163,6 +219,14 @@ let config = {
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
             }
             this.data.firstRender = false;
+            //点击关掉定制列panel
+            this.el.find( '.ag-body' ).on( 'click',()=>{
+                setTimeout( ()=>{
+                    this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'-200px' } );
+                },400 )
+                this.data.isShowCustomPanel = false;
+                this.actions.changeAgGridWidth(true);
+            } )
         },
         //返回选择数据
         retureSelectData: function () {
@@ -184,7 +248,7 @@ let config = {
         //渲染按钮
         renderBtn: function () {
             if( this.data.tableId == 'my-workflow' || this.data.tableId == 'approving-workflow' ){
-                this.el.find( '.batch-cancel' )[0].style.display = 'inline-block';
+                this.el.find( '.batch-cancel' )[0].style.display = 'flex';
                 this.el.find( '.batch-cancel' ).on( 'click',()=>{
                     this.data.selectRows = [];
                     let rows = this.agGrid.gridOptions.api.getSelectedRows();
@@ -205,6 +269,7 @@ let config = {
                                     .then(data => {
                                         if( data.success ){
                                             msgBox.showTips( '取消成功' );
+                                            this.actions.getData();
                                         }else {
                                             msgBox.alert( '取消失败：' + data.error );
                                         }
@@ -213,6 +278,8 @@ let config = {
                         } )
                     }
                 } );
+            }else {
+                this.el.find( '.batch-cancel' )[0].style.display = 'none';
             }
             //floatingFilter
             let floatSearch = this.el.find( '.float-search-btn' );
@@ -227,14 +294,7 @@ let config = {
             let customCol = this.el.find( '.custom-column-btn' )
             if( customCol[0] ){
                 customCol.on( 'click',()=>{
-                    this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
-                    this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
-                    let num = 0;
-                    if( this.data.isShowCustomPanel ){
-                        num+=200;
-                    }
-                    let grid = this.el.find( '#workflow-agGrid' )
-                    grid.width( 'calc(100% - ' + num + 'px)' );
+                    this.actions.calcCustomColumn();
                 } )
             }
             //全屏
@@ -262,6 +322,35 @@ let config = {
                 this.data.isAutoWidth = !this.data.isAutoWidth;
             } )
         },
+        //定制列事件
+        calcCustomColumn: function () {
+            this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
+            let close = false;
+            if( this.data.isShowCustomPanel ){
+                this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'0px' } );
+            }else {
+                close = true;
+                setTimeout( ()=>{
+                    this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'-200px' } );
+                },400 )
+            }
+            this.actions.changeAgGridWidth(close);
+        },
+        //改变agGrid宽度
+        changeAgGridWidth: function (close) {
+            let num = 0;
+            if( this.data.isShowCustomPanel ){
+                num+=200;
+            }
+            let grid = this.el.find( '#workflow-agGrid' )
+            if( close ){
+                grid.width( 'calc(100% - ' + num + 'px)' );
+            }else {
+                setTimeout( ()=>{
+                    grid.width( 'calc(100% - ' + num + 'px)' );
+                },400 )
+            }
+        },
         //渲染高级查询
         renderExpertSearch: function () {
             let _this = this
@@ -282,18 +371,22 @@ let config = {
                     title:`高级查询`,
                     modal:true
                 },{d}).then(res=>{
+                    this.data.onlyCloseExpertSearch = res.onlyclose || false;
                     if(res.type == 'temporaryQuery') {
-                        if(res.addNameAry.length != 0){
-                            this.actions.getExpertSearchData(res.addNameAry);
-                        } else {
+                        if(res.addNameAry.length == 0){
+                            // this.actions.getExpertSearchData(res.addNameAry);
                             this.actions.postExpertSearch(res.value,res.id,res.name);
                         }
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);
                     } if(res.appendChecked) {
                         this.data.temporaryCommonQuery = res.value
                         this.actions.appendQuerySelect()
-                    } if(res.saveCommonQuery || res.onlyclose == true) {
-                        this.actions.getExpertSearchData(res.addNameAry)
+                    } if(res.saveCommonQuery || (res.saveCommonQuery && res.onlyclose == true)) {
+                        this.actions.getExpertSearchData(res.addNameAry);
+                    }if(res.deleteCommonQuery || (res.deleteCommonQuery && res.onlyclose == true)) {
+                        this.actions.getExpertSearchData(res.addNameAry);
+                    } if(!res.saveCommonQuery && res.onlyclose == true) {
+                        return false
                     }
                 })
             } )
@@ -365,6 +458,12 @@ let config = {
             });
             HTTP.flush();
         },
+        //设置搜索input值
+        setFloatingFilterInput: function () {
+            for( let k in this.data.searchValue ){
+                this.el.find( '.filter-input-'+k )[0].value = this.data.searchValue[k];
+            }
+        },
         //创建请求数据参数
         createPostData: function () {
             let json = {
@@ -432,6 +531,10 @@ let config = {
                         }
                     })
                 }
+                if(this.data.filterParam['common_filter_name'] && this.data.onlyCloseExpertSearch) {
+                    debugger
+                    this.el.find('.dataGrid-commonQuery-select').val(this.data.filterParam['common_filter_name']);
+                }
             } );
             HTTP.flush();
         },
@@ -440,65 +543,6 @@ let config = {
             this.data.filterParam.common_filter_id = id;
             this.data.filterParam.common_filter_name = name;
             this.actions.getData();
-        },
-        //根据偏好返回agGrid sate
-        calcColumnState: function () {
-            let gridState = this.agGrid.gridOptions.columnApi.getColumnState();
-            let indexedGridState = {};
-            for(let state of gridState) {
-                indexedGridState[state['colId']] = state;
-            }
-            let numState = indexedGridState['number']||{};
-            numState['pinned']= this.data.fixCols.l.length > 0 ? 'left' : null;
-            let selectState = indexedGridState['mySelectAll']||{};
-            selectState['pinned']= this.data.fixCols.l.length > 0 ? 'left' : null;
-            //默认分组、序号、选择在前三个
-            let arr = [ numState , selectState ];
-            //左侧固定
-            for( let col of this.data.fixCols.l ){
-                let state = indexedGridState[col]||{};
-                state['hide'] = this.data.ignoreFields.indexOf( col ) != -1;
-                state['pinned'] = 'left';
-                arr.push(state);
-            }
-            //中间不固定
-            let fixArr = this.data.fixCols.l.concat( this.data.fixCols.r );
-            for( let data of this.data.orderFields ){
-                if( data == '_id'||data == 'group' ){
-                    continue;
-                }
-                if( data != 0 && fixArr.indexOf( data ) == -1 ){
-                    let state = indexedGridState[data]||{};
-                    state['hide'] = this.data.ignoreFields.indexOf( data ) != -1;
-                    state['pinned'] = null;
-                    arr.push(state);
-                }
-            }
-            if(this.data.orderFields.length == 0){
-                for(let state of gridState){
-                    let id = state['colId'];
-                    if(id != 'number' && id != 'mySelectAll' && id != 'group'){
-                        state['hide'] = this.data.ignoreFields.indexOf(id)!=-1;
-                        state['pinned'] = null;
-                        arr.push(state);
-                    }
-                }
-            }
-            //右侧固定
-            for( let col of this.data.fixCols.r ){
-                let state = indexedGridState[col]||{};
-                state['hide'] = this.data.ignoreFields.indexOf( col ) != -1;
-                state['pinned'] = 'right';
-                arr.push(state);
-            }
-            //操作列宽度
-            for( let d of arr ){
-                if( d.colId && d.colId == 'myOperate' ){
-                    d['width'] = this.data.operateColWidth;
-                }
-            }
-            //初始化状态
-            this.agGrid.gridOptions.columnApi.setColumnState( arr );
         },
         //floatingFilter
         floatingFilterPostData: function (col_field, keyWord, searchOperate) {
@@ -595,11 +639,17 @@ let config = {
         },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title ) {
+            let defaultMax = false;
+            if( url.indexOf( '/wf/approval/' ) != -1 ){
+                defaultMax = true;
+            }
             PMAPI.openDialogByIframe( url,{
-                width: 1300,
+                width: 1000,
                 height: 800,
                 title: title,
-                modal:true
+                modal:true,
+                defaultMax: defaultMax,
+                customSize: defaultMax
             } ).then( (data)=>{
             } )
         },
@@ -615,6 +665,7 @@ let config = {
                         .then(res => {
                             if( res.success ){
                                 msgBox.showTips( '取消成功' );
+                                this.actions.getData();
                             }else {
                                 msgBox.alert( '取消失败：' + res.error );
                             }

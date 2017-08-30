@@ -9,15 +9,15 @@
             {{#if required}}
                 <span id="requiredLogo" class="{{requiredClass}}" ></span>
             {{/if}}
-            {{#if history}}
-                <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;"></a>
-            {{/if}}
             {{#unless is_view}}
-                <a href="javascript:void(0);" class="ui-selector" ></a>
+                <a href="javascript:void(0);" class="ui-selector" title="选择器"></a>
                 {{#if can_add_item}}
-                    <a href="javascript:void(0);" class="add-item noprint"> + </a>
+                    <a href="javascript:void(0);" class="add-item noprint icon-buildln" title="快捷添加内置字段"> </a>
                 {{/if}}
             {{/unless}}
+            {{#if history}}
+                <a href="javascript:void(0);" class="ui-history"  style="vertical-align: middle;" title="修改历史"></a>
+            {{/if}}
         </div>
     {{/if}}
 </div>

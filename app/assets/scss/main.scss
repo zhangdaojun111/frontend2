@@ -48,29 +48,6 @@ html.main, html.main body {
     bottom: 0;
     height: $footer-height;
 }
-.flex{
-    display: flex;
-    align-items: center;
-}
-.flex.flex-column {
-    flex-direction: column;
-}
-.flex.flex-start{
-
-    align-items: flex-start;
-}
-.flex.flex-between{
-
-    justify-content: space-between;
-}
-.flex.flex-wrap{
-    flex-wrap: wrap;
-}
-
-.flex-item {
-    flex-grow: 1;
-    flex-shrink: 0;
-}
 
 .bg_close {
     background-image: url("../images/framework/close.png");

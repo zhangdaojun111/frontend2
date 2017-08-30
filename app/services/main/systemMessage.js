@@ -51,9 +51,9 @@ const handlers = {
         return headerCell[0];
     },
     readRender: function (data) {
-        return `<div class="grid-cell-info">${data.value?'已读':'未读'}<div>`
+        return `<div class="grid-cell-info ${data.value?'already-read-icon':'not-read-icon'}">${data.value?'已读':'未读'}<div>`;
     }
-}
+};
 
 export const systemMessageService = {
     columnDefs: [],
@@ -64,7 +64,6 @@ export const systemMessageService = {
                 headerCellTemplate: function (data) {
                     return handlers.selectAll(data);
                 },
-
                 width: 60,
                 headerName: '全选',
                 checkboxSelection: true,
@@ -72,9 +71,17 @@ export const systemMessageService = {
                 suppressMenu: true,
                 cellStyle: {'text-align': 'center'},
             }, {
+                headerName: '阅读状态',
+                field: 'is_read',
+                width: 60,
+                suppressMenu: true,
+                tooltipField: 'is_read',
+                cellStyle: {'text-align': 'center'},
+                cellRenderer: handlers.readRender
+            }, {
                 headerName: '发布者',
                 field: 'publisher',
-                width: 100,
+                width: 60,
                 suppressMenu: true,
                 tooltipField: 'publisher',
                 cellStyle: {'text-align': 'center'},
@@ -82,42 +89,36 @@ export const systemMessageService = {
             }, {
                 headerName: '消息标题',
                 field: 'title',
-                width: 150,
+                width: 180,
                 suppressMenu: true,
                 tooltipField: 'title',
                 cellStyle: {'text-align': 'center'}
             }, {
                 headerName: '消息类型',
                 field: 'msg_type_text',
-                width: 180,
+                width: 80,
                 suppressMenu: true,
                 tooltipField: 'msg_type_text',
                 cellStyle: {'text-align': 'center'},
                 suppressSorting: true
             }, {
+                width:180,
                 headerName: '消息内容',
                 field: 'msg_content',
                 suppressMenu: true,
                 tooltipField: 'msg_content',
                 cellStyle: {'text-align': 'center'}
             }, {
+                width:180,
                 headerName: '发布时间',
                 field: 'create_time',
                 suppressMenu: true,
                 tooltipField: 'create_time',
                 cellStyle: {'text-align': 'center'}
             }, {
-                headerName: '阅读状态',
-                field: 'is_read',
-                width: 120,
-                suppressMenu: true,
-                tooltipField: 'is_read',
-                cellStyle: {'text-align': 'center'},
-                cellRenderer: handlers.readRender
-            }, {
                 headerName: '执行状态',
                 field: 'handle_status_text',
-                width: 120,
+                width: 60,
                 suppressMenu: true,
                 tooltipField: 'handle_status_text',
                 cellStyle: {'text-align': 'center'},

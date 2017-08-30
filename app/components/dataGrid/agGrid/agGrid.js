@@ -34,6 +34,12 @@ let config = {
         },
         onDragStopped:function ($event) {
         },
+        onDragStarted:function ($event) {
+            //提高拖动提示的层级使其显示
+            setTimeout( ()=>{
+                $(".ag-dnd-ghost").css( {'z-index':'999','background':'#ffffff'} );
+            },0 )
+        },
         onSortChanged:function ($event) {
         },
         onCellClicked:function ($event) {
@@ -69,6 +75,7 @@ let config = {
                 onColumnResized: this.data.onColumnResized,
                 //拖动结束
                 onDragStopped: this.data.onDragStopped,
+                onDragStarted: this.data.onDragStarted,
                 //双击查看
                 onCellClicked: this.data.onCellClicked,
                 //行双击
@@ -119,9 +126,11 @@ let config = {
         //重新赋值
         setGridData: function ( json ) {
             if( json.rowData ){
+                this.data.rowData = json.rowData;
                 this.gridOptions.api.setRowData( json.rowData );
             }
             if( json.footerData ){
+                this.data.footerData = json.footerData;
                 this.gridOptions.api.setPinnedBottomRowData( json.footerData );
             }
             // this.agGrid.gridOptions.api.redrawRows();

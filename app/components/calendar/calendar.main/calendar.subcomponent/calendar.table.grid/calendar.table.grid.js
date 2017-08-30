@@ -18,16 +18,16 @@ let config = {
         drag_Postion: null,
     },
     actions: {
-        dragEnter: function (event) {
+        dragEnter: function (event,_this) {
             this.data.drag_Postion = null;
             let ev = event.originalEvent;
-            let temp = this.el.find(".task-item-draggable").parent();
-            if(temp[0] === $(this).parent().prev()[0]){
-                $(this).parent().after(temp);
+            let temp = $(".task-item-draggable").parent();
+            if(temp[0] === $(_this).parent().prev()[0]){
+                $(_this).parent().after(temp);
             } else{
-                $(this).parent().before(temp);
+                $(_this).parent().before(temp);
             }
-            this.data.drag_Postion = $(this).parent();
+            this.data.drag_Postion = $(_this).parent();
             ev.preventDefault();
             return true;
         },
@@ -102,7 +102,7 @@ let config = {
 
         // 日历提醒的拖动设置
         this.el.on('dragenter', '.task-item',function(event){
-            that.actions.dragEnter(event);
+            that.actions.dragEnter(event,this);
         }).on('dragleave', '.task-list',(event) => {
             that.actions.dragLeave(event);
         }).on('dragover', '.task-list',(event) => {

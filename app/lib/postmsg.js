@@ -2,7 +2,9 @@ import URL from './url';
 import component from '../lib/component';
 import {HTTP} from './http';
 import './jquery-ui.dialog';
-
+import Quill from 'quill';
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
 
 /**
  * 父级页面，需要根据key来保存消息来源iframe或component的对象和打开的iframe或component的dom
@@ -40,6 +42,7 @@ export const PMENUM = {
     open_iframe_params: '8',
     get_param_from_root: '9',        // 来自子框架的消息，需要获取iframe的参数
     send_param_to_iframe: '10',       // 来组主框架的消息，向iframe发送参数
+    workflow_approve_msg: '11'
 }
 
 /**
@@ -109,6 +112,7 @@ window.addEventListener('message', function (event) {
                 });
                 dialogHash[data.key].element.erdsDialog(_.defaultsDeep(data.frame, {
                     modal: true,
+                    maxable: true,
                     close: function () {
                         if (dialogHash[data.key]) {
                             PMAPI.sendToParent({
@@ -262,8 +266,8 @@ export const PMAPI = {
      * @param msg
      * @returns {PMAPI}
      */
-    sendToAllChildren: function(msg) {
-        for(let i = 0; i < window.frames.length; i++){
+    sendToAllChildren: function (msg) {
+        for (let i = 0; i < window.frames.length; i++) {
             this.sendToChild(window.frames[i], msg);
         }
         return this;
@@ -379,7 +383,7 @@ export const PMAPI = {
                 let args = obj[key]['Arguments'] || "";
                 let source = obj[key]['Source'];
                 let fstr = "function " + obj[key]['Function'] + "(" + args + "){" + source + "}";
-                let f = new Function('$', '_', 'PMAPI', 'PMENUM', 'HTTP', "return " + fstr)($, _, PMAPI, PMENUM, HTTP);
+                let f = new Function('$', '_', 'PMAPI', 'PMENUM', 'HTTP', 'Quill', "return " + fstr)($, _, PMAPI, PMENUM, HTTP, Quill);
                 obj[key] = f;
             } else if (obj[key] instanceof Object) {
                 PMAPI._createFuncs(obj[key]);

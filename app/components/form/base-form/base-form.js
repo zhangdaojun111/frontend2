@@ -990,12 +990,15 @@ let config={
         },
         //快捷添加后回显
         addNewItem(data){
+            console.log('快捷添加回显');
+            console.log(data);
             let dfield=this.data['quikAddDfield'];
             let fieldData=this.data.data[dfield];
+            console.log(fieldData['options']);
             if(fieldData["options"]){
-                this.data.childComponent[dfield]['data']['options']=fieldData["options"] = fieldData["options"].push(...data['newItems']);
+                this.data.childComponent[dfield]['data']['options']=fieldData["options"] =data['newItems'];
             }else {
-                this.data.childComponent[dfield]['data']['group']=fieldData["group"] = fieldData["options"].push(...data['newItems']);
+                this.data.childComponent[dfield]['data']['group']=fieldData["group"] = data['newItems'];
             }
             this.data.childComponent[dfield].reload();
         },
@@ -1036,33 +1039,35 @@ let config={
                 parent_temp_id: this.data.parentTempId || "",
                 parent_record_id: this.data.parentRecordId  || ""
             };
-            console.log(json);
             //如果是批量审批，删除flow_id
             if(this.data.isBatch == 1){
                 delete json["flow_id"];
             }
-            // this.loadingAlert('正在提交请稍后');
             if(this.data.isAddBuild){
                 json['buildin_id']=this.data.buildId;
             }
             let res= await FormService.saveAddpageData(json);
-            console.log(res);
             if(res.succ == 1){
+                MSG.alert('保存成功')
+                Mediator.publish('updateForm:success:'+this.data.tableId,true);
                 if(this.data.isAddBuild && !this.flowId){
                     PMAPI.sendToParent({
                         type: PMENUM.close_dialog,
                         key:this.data.key,
                         data:{new_option:res.new_option},
                     });
+                }else{
+                    PMAPI.sendToParent({
+                        type: PMENUM.close_dialog,
+                        key:this.data.key,
+                        data:'success',
+                    });
                 }
-                MSG.alert('保存成功')
-                Mediator.publish('updateForm:success:'+this.data.tableId,true);
+            }else{
+                MSG.alert(res.error);
             }
-            // this.successAlert(res["error"]);
-            //自己操作的新增和编辑收到失效推送自己刷新
-            // this.isSuccessSubmit();
             //清空子表内置父表的ids
-            // delete this.globalService.idsInChildTableToParent[this.tableId];
+            delete FormService.idsInChildTableToParent[this.data.tableId];
         },
 
         //转到编辑模式
@@ -1289,7 +1294,9 @@ let config={
         addNewBuildIn(data){
             let _this=this;
             _this.data['quikAddDfield']=data.dfield;
-            PMAPI.openDialogByIframe(`/iframe/addBuildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
+            // PMAPI.openDialogByIframe(`/iframe/addBuildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
+            console.log(`/iframe/addWf/?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}&key=${this.data.key}&btnType=new`);
+            PMAPI.openDialogByIframe(`/iframe/addWf/?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}&key=${this.key}&btnType=new`,{
                 width:800,
                 height:600,
                 title:`快捷添加内置字段`,
@@ -1299,7 +1306,7 @@ let config={
                     return;
                 }
                 let options=_this.data.childComponent[_this.data['quikAddDfield']].data['options'];
-                if(options[0]['label'] == '请选择' || options[0]['label']==''){
+                if(options[0] && options[0]['label'] == '请选择' || options[0]['label']==''){
                     options.splice(1,0,data.new_option);
                 }else{
                     options.splice(0,0,data.new_option);
@@ -1314,12 +1321,13 @@ let config={
         selectChoose(data){
             let _this=this;
             PMAPI.openDialogByIframe(`/iframe/choose?fieldId=${data.id}`,{
-                width:1500,
-                height:1000,
+                width:900,
+                height:600,
                 title:`选择器`,
                 modal:true
             }).then((res) => {
                 _this.actions.setFormValue(data.dfield,res.value,res.label);
+                _this.actions.checkValue(data,_this);
             });
         },
 
@@ -1349,9 +1357,8 @@ let config={
                 originalOptions = data["group"];
             }
             AddItem.data.originalOptions=_.defaultsDeep({},originalOptions);
-            AddItem.data.data=_.defaultsDeep({},data);
-            console.log('*********');
-            console.log(AddItem);
+            AddItem.data.fieldId=data.id;
+            // AddItem.data.data=_.defaultsDeep({},data);
             PMAPI.openDialogByComponent(AddItem, {
                 width: 800,
                 height: 600,
@@ -1585,6 +1592,7 @@ let config={
                         _this.data.childComponent[data[key].dfield] = settingTextareaControl;
                         break;
                     case 'Attachment':
+                    case 'Picture':
                         let attachmentControl = new AttachmentControl(data[key],actions);
                         attachmentControl.render(single);
                         _this.data.childComponent[data[key].dfield] = attachmentControl;
@@ -1607,7 +1615,7 @@ let config={
                     case 'editControl':
                         data[key]['temp_id']=data['temp_id']['value'];
                         data[key]['table_id']=data['table_id']['value'];
-                        let contractControl = new ContractControl(data[key]);
+                        let contractControl = new ContractControl(data[key],actions);
                         contractControl.render(single);
                         _this.data.childComponent[data[key].dfield] =  contractControl;
                         break;
@@ -1672,38 +1680,12 @@ let config={
         this.actions.changeOptions();
         this.actions.setDataFromParent();
         this.actions.addBtn();
-        //固定按钮
-        // _this.el.on('scroll','.wrap',function(){
-        //     console.log('scroll');
-        //     _this.el.find('.ui-btn-box').css({'bottom':(-1*$('.wrap').get(0).scrollTop +' px'),'width':'calc(100% + '+$('.wrap').get(0).scrollLeft+'px)'});
-        // })
-        //默认表单样式
-        if( _this.el.find('table').hasClass('form-version-table-user') ){
-            // _this.el.find('table').parents().parents('#detail-form').addClass('detail-form-style');
-            // _this.el.find('table').off();
-            // _this.el.find('table>tbody').append('<div class="more"><span>展开更多</span></div>')
-            //
-            // if(_this.el.find('table>tbody').height() <= _this.el.find('table').height()){
-            //     _this.el.find('.overflow').removeClass('overflow');
-            // }
-            _this.el.find('.btn').css("display","none");
 
-        //     _this.el.find('.more').on('click',function () {
-        //         _this.el.find('.more').hide();
-        //         _this.el.find('.overflow').removeClass('overflow');
-        //         _this.el.find('table').css({'overflow-y':'auto',"height":"520px"});
-        //     })
+        //默认表单样式
+        if( _this.el.find('table').hasClass('form-version-table-user')||  _this.el.find('table').hasClass('form-version-table-department')||  _this.el.find('table').hasClass('form-default')){
+            _this.el.find('table').parents('#detail-form').css("background","#F2F2F2");
          }
-        _this.el.find(".overflow").on("scroll",function () {
-            let overflowHight = _this.el.find('.overflow').scrollTop();
-           // console.log(overflowHight)
-            _this.el.find('table').height()
-            if(overflowHight>=400){
-                _this.el.find('.btn').show();
-            }else{
-                _this.el.find('.btn').hide();
-            }
-        })
+
     },
     beforeDestory(){
         this.el.off();

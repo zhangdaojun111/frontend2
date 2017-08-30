@@ -38,7 +38,11 @@ let config = {
         //agGrid配置
         gridOptions: null,
         //是否自己操作的失效刷新
-        myInvalid: false
+        myInvalid: false,
+        //是否在刷新
+        onRefresh: false,
+        //分页应用类型
+        type: 'normal'
     },
     actions: {
         //接受rows值和total值
@@ -172,6 +176,7 @@ let config = {
             } )
         },
         onPaginationChanged: function (invalid) {
+            this.el.find( '.ui-icon-refresh' ).eq(0).addClass( 'refresh-rotate' )
             if( !invalid ){
                 this.el.find( '.data-invalid' )[0].innerHTML = '';
             }
@@ -192,6 +197,7 @@ let config = {
             this.data.total = total;
             this.data.currentPage = currentPage;
             this.actions.resetPagination( this.data.total );
+            this.el.find( '.ui-icon-refresh' ).eq(0).removeClass( 'refresh-rotate' );
         },
         //表级操作
         tableOperate: function () {
@@ -280,12 +286,26 @@ let config = {
         //表级操作
         this.actions.tableOperate();
         //订阅数据失效
-        PMAPI.subscribe(PMENUM.data_invalid, (info) => {
-            let tableId = info.data.table_id;
-            if( this.data.tableId == tableId ){
-                this.actions.invalidTips();
-            }
-        })
+        if( this.data.type == 'workflow' ){
+            PMAPI.subscribe(PMENUM.workflow_approve_msg, (info) => {
+                this.el.find( '.data-invalid' ).removeClass('freshtip');
+                this.el.find( '.data-invalid' )[0].innerHTML = '数据失效，请刷新。';
+                this.el.find( '.data-invalid' ).addClass('freshtip');
+            })
+        }else {
+            PMAPI.subscribe(PMENUM.data_invalid, (info) => {
+                let tableId = info.data.table_id;
+                if( this.data.tableId == tableId ){
+                    if( !this.data.onRefresh ){
+                        this.data.onRefresh = true;
+                        this.actions.invalidTips();
+                        setTimeout( ()=>{
+                            this.data.onRefresh = false;
+                        },100 )
+                    }
+                }
+            })
+        }
     }
 };
 class dataPagination extends Component {

@@ -1,41 +1,82 @@
-.taskbar{
-  width: 100%;
-  height:25%;
-  max-width: 200px;
+.component-calendar-taskbar{
+  height:100%;
+  padding-left: 5px;
   display: inline-block;
-  overflow: auto;
+  .approve-task{
+    padding-top: 7px;
+    padding-left: 2px;
+    padding-bottom: 5px;
+    .approve-label{
+      margin-left: 1px;
+    }
+  }
+  .remind-task{
+    padding-bottom: 5px;
+  }
   .label-task{
-      padding-top: 5px;padding-bottom: 5px;width: calc(100% - 30px);
-      .chk_1 {
+      .checkbox-label{
+        cursor: pointer;
+        //border: 1px solid #C1CACA;
+        //height: 10px;
+        //width:10px;
+        //padding: 2px;
+        display: inline-block;
+        .workflow_checked{
+          padding: 6px !important;
+          border: 0px solid #C1CACA !important;
+          background-color: RGB(100, 166, 239) !important;
+        }
+        .checkbox_a {
           display: none;
-      }
-      .chk_1 + label {
-          background-color: #FFF;
+        }
+        .checkbox_a2{
+          cursor: pointer;
+          padding: 5px;
           border: 1px solid #C1CACA;
-          padding: 6px;
           display: inline-block;
           position: relative;
-          margin-right: 5px;
-          cursor: pointer;
+        }
       }
-      .label-select-all-checked + label:after {
-          content: '\2714' !important; //勾选符号
-          position: absolute !important;
-          top: -2px !important;
-          left: 0px !important;
-          color: #2398df !important;
-          width: 100% !important;
-          text-align: center !important;
-          font-size: 14px !important;
-          padding: 1px 0 0 0 !important;
-          vertical-align: text-top !important;
+    .remind-label{
+      display: inline-block;
+    }
+    .checkbox-true{
+      display: inline-block;
+      .chk_1 {
+        display: none;
       }
-      .workflow_checked + label{
-          background-color: rgba(0, 136, 255, 1) !important;
+      .chk_1 + label {
+        background-color: #FFF;
+        border: 1px solid #d7d7d7;
+        padding: 7px;
+        display: inline-block;
+        position: relative;
+        //margin-right: 5px;
+        cursor: pointer;
       }
+      .calendar-checkbox-style{
+        position: relative;
+        cursor: pointer;
+        top: 3px;
+      }
+      .label-select-all-checked{
+        content: url('../../../../assets/images/calendar/calendar-checked-true.png');
+      }
+      //.label-select-all-checked + label:after {
+      //  content: '\2714'; //勾选符号
+      //  position: absolute;
+      //  height: 14px;
+      //  width: 13px;;
+      //  padding-right: 1px;
+      //  top: 0px;
+      //  left: 0px;
+      //  color: #2398df;
+      //  text-align: center;
+      //  font-size: 14px;
+      //}
+    }
   }
-}
-.unchecked{
-  background-color: white !important;
+  .remind-group{
+  }
 }
 .checkbox-group{margin-left: 35px;}

@@ -3,20 +3,27 @@
 .research-result{
     height: 95%;
     .data-attachment-switch{
-        padding-top: 10px;
+        height: 60px;
+        background: #ffffff;
         margin-bottom: 20px;
-        text-align: center;
-        font-size: 20px;
-        .attachment-btn{
-            margin-left: 10px;
-            cursor: pointer;
+        .switch-icon{
+            width: 16px;
+            height: 16px;
+            margin: 22px 17px 22px 17px;
+            background-image: url('../../../assets/images/framework/drag-icon.png');
+            float: left;
         }
-        .data-btn{
+        .attachment-btn,.data-btn{
+            line-height: 60px;
+            width: 40px;
             cursor: pointer;
+            float: left;
+            text-align: center;
+            margin-left: 10px;
         }
         .btn-active{
-            color: blue;
-            border-bottom: solid 3px blue;
+            color: #0088ff;
+            border-bottom: solid 2px #0088ff;
         }
     }
 

@@ -1,6 +1,12 @@
 /**
  * Created by zj on 2017/7/27.
  */
+
+/**
+ * @author zj
+ * @description 日历主视图的切换及数据获取
+ */
+
 import Component from "../../../lib/component";
 import template from './calendar.main.html';
 import './calendar.main.scss';
@@ -82,6 +88,11 @@ let config = {
                 week = nweTime.getDay();
             return CalendarTimeService.formatDate(year,month,day);
         },
+
+        /**
+         * 日历提醒全局搜索
+         * @param key
+         */
         search: function( key ){
             this.data.searchText = key;
             if( this.data.calendarContent === 'schedule' ){
@@ -96,20 +107,20 @@ let config = {
                     to_date: this.data.to_date,
                     cancel_fields: JSON.stringify(this.data.cancel_fields)
                 },'calendar');
-                // setTimeout(() => {
-                //     console.log(this.data.monthDataList);
-                // },500)
-                // this.actions.monthDataTogether();
-                // this.actions.getDataCount();
             }
         },
 
+        /**
+         * 向服务器获取数据
+         * @param data
+         * @param type
+         */
         getCalendarData: function (data,type){
             CalendarService.getCalendarData(data).then( res=>{
                 this.data.date2settings = res['date2csids'];
                 this.data.calendarSettings = res['id2data'];
                 this.data.tableid2name = res['tableid2name'];
-                this.data.fieldInfos = res['field_infos']
+                this.data.fieldInfos = res['field_infos'];
                 if(type === 'calendar') {
                     this.actions.monthDataTogether();
                 }else {
@@ -119,70 +130,53 @@ let config = {
             });
         },
 
+        getCalendarScheduleData: function () {
+
+        },
+
+        /**
+         * 统计每天对应的提醒及工作流
+         * @param i
+         * @param w
+         * @param dayData
+         * @returns {[*,*]}
+         */
+        getDayDataCount: function (i,w,dayData) {
+            for( let d of dayData){
+                if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
+                    i++;
+                }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
+                    w++;
+                }
+            }
+            return [i, w];
+        },
+
+        /**
+         *统计对应视图的提醒及工作流数
+         */
         getDataCount: function (){
             let i = 0;
-            let j = 0;
             let w = 0;
-            let m = 0;
             if( this.data.calendarContent === 'month' ){
                 for( let data of this.data.monthDataList ){
                     for( let day of data['weekList'] ){
-                        for( let d of day['data'] ){
-                            if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
-                                i++;
-                            }else if( d.type === 2 ){
-                                j++;
-                            }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
-                                w++;
-                            }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
-                                m++;
-                            }
-                        }
+                        [i, w] = this.actions.getDayDataCount(i,w,day['data']);
                     }
                 }
             }else if( this.data.calendarContent === 'week' ){
                 if( this.data.weekDataList.length === 2 ){
                     for( let day of this.data.weekDataList[1] ){
-                        for( let d of day['data'] ){
-                            if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
-                                i++;
-                            }else if( d.type === 2 ){
-                                j++;
-                            }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
-                                w++;
-                            }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
-                                m++;
-                            }
-                        }
+                        [i, w] = this.actions.getDayDataCount(i,w,day['data']);
                     }
                 }
             }else if( this.data.calendarContent === 'day' ){
-                for( let d of this.data.dayDataList[0]['data'] ){
-                    if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
-                        i++;
-                    }else if( d.type === 2 ){
-                        j++;
-                    }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
-                        w++;
-                    }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
-                        m++;
-                    }
-                }
+                [i, w] = this.actions.getDayDataCount(i,w,this.data.dayDataList[0]['data']);
             }
 
             else if( this.data.calendarContent === 'schedule' ){
                 for( let day of this.data.scheduleDataList ){
-                    for( let d of day['data'] ){
-                        if( d.type === 1 && this.data.isShowArr.indexOf( d.fieldId ) === -1 && d.isShow ){
-                            i++;
-                        }else if( d.type === 2 ){
-                            j++;
-                        }else if( d.type === 3 && d.isShow && this.data.isShowArr.indexOf('approve') === -1 ){
-                            w++;
-                        }else if( d.type === 4 && d.isShow && this.data.isShowArr.indexOf('mission') === -1 ){
-                            m++;
-                        }
-                    }
+                    [i, w] = this.actions.getDayDataCount(i,w,day['data']);
                 }
             }
             this.data.remindCount = i;
@@ -193,6 +187,11 @@ let config = {
 
         },
 
+        /**
+         * 创建月视图
+         * @param y
+         * @param m
+         */
         createMonthCalendar: function (y,m){
             this.data.monthDataList = CalendarHandleDataService.createMonthCalendar(y,m, this.data.todayStr);
             this.data.from_date = this.data.monthDataList[0]['weekList'][0]['dataTime'];
@@ -209,6 +208,9 @@ let config = {
             }
         },
 
+        /**
+         * 创建周视图
+         */
         createWeekCalendar: function (){
             this.data.weekDataList = CalendarHandleDataService.createWeekCalendar(this.data.selectData);
             if(this.data.weekDataList[0].length !== 0) {
@@ -228,6 +230,9 @@ let config = {
             }
         },
 
+        /**
+         * 创建日视图
+         */
         createDayCalendar: function(){
             this.data.dayDataList = [];
             let date = CalendarTimeService.formatDate(this.data.selectData.y, this.data.selectData.m, this.data.selectData.d);
@@ -256,9 +261,13 @@ let config = {
                         to_date: this.data.to_date
                     });
             }
-            console.log(this.data.dayDataList);
         },
 
+        /**
+         * 创建日程视图
+         * @param startDate
+         * @param endDate
+         */
         makeScheduleData: function (startDate, endDate) {
             this.data.scheduleStart = startDate;
             this.data.scheduleEnd = endDate;
@@ -273,6 +282,10 @@ let config = {
             this.append(new CalendarSchedule({startDate: startDate, endDate: endDate, scheduleDataList: this.data.scheduleDataList}), this.el.find(".calendar-main-content"));
         },
 
+        /**
+         * 改变月时间
+         * @param lr
+         */
         changeMonth: function (lr) {
             let y = this.data.selectData['y'];
             let m = this.data.selectData['m'];
@@ -302,6 +315,10 @@ let config = {
             }
         },
 
+        /**
+         * 改变周时间
+         * @param lr
+         */
         changeWeek: function (lr) {
             let slect = CalendarTimeService.formatDate(this.data.selectData.y, this.data.selectData.m, this.data.selectData.d);
             let oldWeekDay = new Date(slect).getTime();
@@ -322,6 +339,10 @@ let config = {
             //this.actions.createWeekCalendar();
         },
 
+        /**
+         * 改天时间
+         * @param lr
+         */
         changeDay: function (lr) {
             let oldDate = CalendarTimeService.formatDate(this.data.selectData.y, this.data.selectData.m, this.data.selectData.d);
             let oldMyTime = new Date(oldDate).getTime();
@@ -338,6 +359,10 @@ let config = {
             this.data.selectData = {'y':year, 'm':month, 'd':day, 'w':week};
         },
 
+        /**
+         * 改变视图
+         * @param type
+         */
         changeMainView: function (type) {
             this.data.calendarContent = type;
             this.el.find('.calendar-main-content').empty();
@@ -356,11 +381,12 @@ let config = {
                 this.append(new CalendarDay(this.data.dayDataList), this.el.find(".calendar-main-content"));
                 Mediator.emit('CalendarMain: date',{from_date: this.data.from_date, to_date: this.data.to_date});
             }
-            // if(this.data.calendarContent !== 'month') {
-            //     Mediator.emit('CalendarWorkflowData: changeWorkflowData', {from_date: this.data.from_date, to_date: this.data.to_date});
-            // }
         },
 
+        /**
+         * 每天的提醒数据
+         * @param day
+         */
         getDayData: function (day) {
             //获取当日包含的设置
             let calendarDate = [];
@@ -379,10 +405,10 @@ let config = {
                     }
                 }
             }
+
             day['data'] = [];
             for( let set of calendarDate ){
                 let setDetail = this.data.calendarSettings[set.id];
-                // debugger;
                 for( let select of setDetail['selectedOpts_data'] ){
 
                     if( select[setDetail['field_id']].indexOf(day.dataTime) === -1 ){
@@ -390,16 +416,13 @@ let config = {
                     }
 
                     let arrData = {};
-                    if(setDetail.is_drag === 1) {
-                        console.log(setDetail);
-                    }
 
                     if( setDetail.type === 0 ){
                         arrData['tableId'] = setDetail.table_id;
                         arrData['time'] = set.date;
                         arrData['setId'] = set.id;
                         arrData['dfield'] = setDetail.dfield;
-                        arrData['color'] = CalendarToolService.handleColorRGB( setDetail.color , 0.5 );
+                        arrData['color'] = CalendarToolService.handleColorRGB( setDetail.color , 1 );
                         arrData['isDrag'] = setDetail.is_drag;
                         arrData['real_ids'] = JSON.stringify( setDetail.real_ids );
                         arrData['real_id'] = JSON.stringify( [select._id] );
@@ -408,7 +431,6 @@ let config = {
                         arrData['fieldName'] = this.data.fieldInfos[setDetail.field_id]['dname'];
                         arrData['type'] = 1;
                         arrData['isShow'] = this.data.searchText === '' ? true : false;
-
                         let selectFieldId = '';
                         if( setDetail['selectedEnums']&&setDetail['selectedEnums'][0]&&setDetail['selectedEnums'][0]!=='' ){
                             selectFieldId = setDetail['selectedEnums'][0];
@@ -445,8 +467,6 @@ let config = {
 
                         data2show.push( everyData );
                         arrData['data2show'] = data2show;
-
-
 
                         //循环里面每一个小的数据
                         let data3show = [];
@@ -491,14 +511,14 @@ let config = {
 
                 }
             }
-            // 工作流数据
 
+            // 工作流数据
             if(this.data.isShowWorkflowData) {
                 for( let d of this.data.workflowData ){
                     if( d['create_time'].indexOf( day.dataTime ) !== -1 ){
                         day['data'].push( {
                             data: d,
-                            color: CalendarToolService.handleColorRGB( '#64A6EF' , 0.5 ),
+                            color: CalendarToolService.handleColorRGB( '#64A6EF' , 1 ),
                             srcColor: '#64A6EF',
                             isDrag:0,
                             isShow: true,
@@ -510,6 +530,9 @@ let config = {
             day['dateLength'] = day['data'].length || 0;
         },
 
+        /**
+         * 组装月数据
+         */
         monthDataTogether: function (){
             for( let week of this.data.monthDataList ){
                 for( let day of week['weekList'] ){
@@ -539,14 +562,20 @@ let config = {
             week = CalendarTimeService.getWeek(),
             day = CalendarTimeService.getDay();
         this.data.today = Object.assign({}, {'y': year, 'm':month, 'd':day, 'w':week});
-        this.actions.createMonthCalendar(year, month);
 
         this.data.selectData = this.data.today;
         this.data.todayStr = CalendarTimeService.formatDate(year, month, day);
         this.data.chooseDate = CalendarTimeService.formatDate(year, month, day);
+        this.actions.createMonthCalendar(year, month);
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
+        let approve = 'approve';
+        for( let a of this.data.cancel_fields ){
+            if( approve.indexOf( a ) === 0 ){
+                this.data.isShowWorkflowData = false;
+            }
+        }
 
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.data.workflowData = data;
@@ -645,9 +674,10 @@ let config = {
         });
 
         Mediator.on('calendar-left:unshowData', data => {
+            console.log(data);
             if(data['data']) {
                 this.data.isShowArr = data['data'];
-                let arr = ['approve','remind'];
+                let arr = ['remind'];
                 let arr_1 = [];
                 for( let a of this.data.isShowArr ){
                     if( arr.indexOf( a ) === -1 ){
@@ -686,6 +716,16 @@ let config = {
                 this.actions.search(data);
             } else {
                 this.data.searchText = '';
+                let json = {
+                    from_date:this.data.from_date,
+                    to_date:this.data.to_date,
+                    cancel_fields: JSON.stringify(this.data.cancel_fields),
+                };
+                if(this.data.calendarContent !== 'schedule') {
+                    this.actions.getCalendarData(json, 'calendar');
+                } else {
+                    this.actions.getCalendarData(json);
+                }
             }
         });
 

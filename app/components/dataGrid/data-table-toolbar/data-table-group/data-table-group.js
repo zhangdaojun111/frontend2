@@ -1,3 +1,6 @@
+/**
+ * Created by zhr
+ */
 import Component from "../../../../lib/component";
 import template from './data-table-group.html';
 import {HTTP} from "../../../../lib/http"
@@ -7,14 +10,17 @@ import 'jquery-ui/ui/widgets/sortable.js';
 
 let config = {
     template: template,
+
     data: {
+        initialGroup:[],
+        group:[],
         tableId: null,
         gridoptions: null,
         fields: [],
         myGroup:[],
+        groupField:[],
         close: function () {}
     },
-    group:[],
     actions: {
         onGroupChange: function (group) {
         },
@@ -38,6 +44,13 @@ let config = {
                 for (let i = 0; i < dom.length; i++) {
                     this.data.group.push(dom[i].attributes['field'].nodeValue);
                 }
+                if(this.data.group && this.data.groupFields && this.data.group.toString() == this.data.groupFields.toString()) {
+                    this.el.find('.resetGroup').css('color','#999999');
+                } else if(!this.data.group && !this.data.groupFields){
+                    this.el.find('.resetGroup').css('color','#999999');
+                } else {
+                    this.el.find('.resetGroup').css('color','#0F79EF');
+                }
                 dataTableService.savePreference({
                     action: 'group',
                     table_id: this.data.tableId,
@@ -56,8 +69,10 @@ let config = {
 
         //重置
         this.el.find( '.resetGroup' ).on( 'click',()=>{
-            console.log("重置分组")
-        } )
+            this.reload();
+            this.actions.onGroupChange( this.data.groupFields );
+        })
+
     }
 }
 

@@ -18,6 +18,9 @@ export const CalendarWorkflowData = {
     workflow_focus_data: [],
     is_focus_workflow: false,
 
+    // 审批完成的
+    workflowFinishedData: [],
+
     //获取工作流信息
     getWorkflowData: function(from_date, to_date){
         this.is_approve_workflow = false;
@@ -49,6 +52,14 @@ export const CalendarWorkflowData = {
                 this.getWorkflowDataTogether();
             }
         } );
+
+        // finished
+        CalendarService.getWorkflowRecords( {type: 3,"rows":9999,"page":1,"rate_data":1,'from_date':from_date,'to_date':to_date} ).then( res=>{
+            if(res) {
+                this.workflowFinishedData = res['rows'];
+                Mediator.emit('CalendarFinishedWorkflowData: workflowData', this.workflowFinishedData);
+            }
+        } );
     },
 
     //将工作流数据整合到一起
@@ -62,5 +73,6 @@ export const CalendarWorkflowData = {
             Mediator.emit('CalendarWorkflowData: workflowData', arr);
             return arr;
         }
-    }
+
+    },
 };

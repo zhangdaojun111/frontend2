@@ -25,14 +25,37 @@
             width: 100%;
             background-color: #f9f9f9;
             td{
-              border:1px solid #dddddd;
-              line-height: 30px;
-              height: 30px;
-              padding-left: 8px;
+                border:1px solid #dddddd;
+                line-height: 30px;
+                padding: 8px;
             }
 
             .operation-title {
-              width: 10%;
+                width: 10%;
+                height: 45px;
+                position: relative;
+                .text{
+                    position: absolute;
+                    top: 8px;
+                }
+            }
+            .operation-from {
+                #approval-workflow {
+                    .operation-from-item{
+                        span{
+                            display: inline-block;
+                        }
+                        .operation-from-details {
+                            color: #0E7AEF;
+                            margin-left: 20px;
+                            cursor: pointer;
+                        }
+                    }
+                }
+                #app-workflow {
+                    height: 645px;
+
+                }
             }
         }
     }
