@@ -1,26 +1,26 @@
-.component-favobtn{
+.component-favobtn {
     float: left;
     line-height: 30px;
     position: relative;
     margin: 0 20px 20px 0;
-    div{
+    div {
         cursor: pointer;
-        span{
+        span {
             display: block;
             padding: 0 10px;
             text-align: center;
             line-height: 30px;
             height: 30px;
-            background-color: rgba(255,255,255,0);
-            border: 1px solid rgba(215,215,215,1);
+            background-color: rgba(255, 255, 255, 0);
+            border: 1px solid rgba(215, 215, 215, 1);
             border-radius: 4px;
             box-shadow: none;
             color: #666;
         }
     }
-    .wf-del{
+    .wf-del {
         display: none;
-        .workflow-del{
+        .workflow-del {
             cursor: pointer;
             border-radius: 50%;
             position: absolute;
@@ -28,6 +28,6 @@
             right: -6px;
         }
     }
-    
+
 }
 
