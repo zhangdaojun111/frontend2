@@ -32,7 +32,7 @@ let config = {
     afterRender:function () {
         this.actions.initInfo();
         let that = this;
-        this.el.on('click','.data-content',() => {
+        this.el.on('click','.single-box',() => {
             that.actions.penetrateToGrid();
         })
     },

@@ -242,9 +242,9 @@ let config = {
                 this.actions.cancelEdit();
             }).on("click",".save-btn",() => {          //保存
                 this.actions.saveEdit();
-            }).on("click",".confirm-btn",() => {        //修改密码确认
+            }).on("click",".confirm-btn",_.debounce(() => {        //修改密码确认
                 this.actions.modifyPassword();
-            }).on("input","input.new-pw",() => {        //监听旧密码的输入
+            },1000)).on("input","input.new-pw",() => {        //监听旧密码的输入
                 this.actions.isLegal();
             });
         }else if(this.data.mode === 'other'){
