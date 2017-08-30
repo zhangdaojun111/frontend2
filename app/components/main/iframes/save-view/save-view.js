@@ -171,14 +171,13 @@ let config = {
     },
     afterRender:function () {
         this.actions.getUserViewList();
-        this.el.on("click",".save-btn",() => {
-           this.actions.saveFavorite();
-        }).on("click","span.list-name",(event) => {
+        this.el.on("click",".save-btn",_.debounce(() => {
+            this.actions.saveFavorite();
+        },1000)).on("click","span.list-name",(event) => {
             this.actions.displayView(event);
         }).on("click","i.delete-icon",(event) => {
             this.actions.deleteView(event);
         })
-
     },
     beforeDestory:function () {
 
