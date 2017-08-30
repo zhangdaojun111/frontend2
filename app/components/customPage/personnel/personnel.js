@@ -313,7 +313,7 @@ let config = {
             this.actions.setEspecialFilter(this.data.filterParam.filter);
             this.actions.setEspecialFilter(this.data.filterParam.expertFilter);
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
-                json['filter'] = this.data.filterParam.filter || [];
+                json['filter'] = _.cloneDeep(this.data.filterParam.filter ) || []
             }
             if( this.data.filterParam['common_filter_id'] ){
                 json['filter'] = json['filter'] || [];
