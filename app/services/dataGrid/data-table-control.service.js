@@ -53,14 +53,25 @@ export const dgcService = {
     },
     numberCol: {
         //生成编号
-        cellRenderer: (params)=>{
+        cellRenderer: (param)=>{
             let text = ''
-            if( params.data&&params.data.myfooter&&params.data.myfooter == '合计' ){
+            if( param.data&&param.data.myfooter&&param.data.myfooter == '合计' ){
                 text = '合计';
             }else {
-                text = ( params.rowIndex + 1 );
+                text = ( param.rowIndex + 1 );
             }
-            return '<span style="text-align: center;line-height: 30px;font-size: 12px!important;display: block;overflow: visible;">' + text + '</span>';
+            let bg = '';
+            if( param["data"] && param["data"]["status"] && param["data"]["status"] == 2 ){
+                bg = '#FECB6C';
+            }
+            if( param["data"]["data"] && param["data"]["data"]["status"] && param["data"]["data"]["status"] == 1 ){
+                bg = 'rgba(255,84,0,.2)';
+            }
+            //如果是在工作计算cache中的数据显示特殊颜色
+            if( param["data"] && param["data"]["data_status"] && param["data"]["data_status"] == 0 ){
+                bg = '#FFEFEF';
+            }
+            return '<span style="text-align: center;line-height: 30px;font-size: 12px!important;display: block;overflow: visible;background: ' + bg + ';">' + text + '</span>';
         },
         headerName: '',
         colId: "number",
