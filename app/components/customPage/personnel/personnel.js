@@ -543,7 +543,6 @@ let config = {
                     height:600,
                     title:`高级查询`,
                     modal:true,
-                    closable: false
                 },{d}).then(res=>{
                     this.data.onlyCloseExpertSearch = res.onlyclose || false;
                     if(res.type == 'temporaryQuery') {
