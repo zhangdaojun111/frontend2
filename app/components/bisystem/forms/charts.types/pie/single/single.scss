@@ -1,0 +1,11 @@
+.pie-single-columns {
+  margin-top: 20px;
+  .single-title {
+    display: block;
+    font-size: 14px;
+  }
+  .single-columns {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

@@ -14,6 +14,7 @@ import {MultiChartComponent} from "./chart/chart";
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 
+import '../../../../../assets/scss/bisystem/charts.types.scss';
 import "./multi.scss";
 
 let config = {

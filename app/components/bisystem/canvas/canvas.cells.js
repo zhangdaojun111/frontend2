@@ -7,6 +7,10 @@ import './canvas.cells.scss';
 import {canvasCellService} from '../../../services/bisystem/canvas.cell.service';
 import Mediator from '../../../lib/mediator';
 import {ToolPlugin} from '../utils/tool.plugin';
+import msgbox from "../../../lib/msgbox";
+import "jquery-ui/ui/widgets/draggable";
+import "jquery-ui/ui/widgets/resizable";
+import "jquery-ui/ui/widgets/droppable";
 
 
 let config = {
@@ -20,34 +24,11 @@ let config = {
         biUser:window.config.bi_user === 'client' ? true : false,
     },
     actions: {
-        /**
-         * 渲染cells
-         */
-        async loadCells() {
-            // 获取画布块数据
-            let zIndex = [];
-            const chartsId = this.data.cells.map((cell) => {
-                zIndex.push(cell.size.zIndex);
-                return cell.chart_id ? cell.chart_id : 0
-            });
-
-            // 获取画布块最大zindex
-            this.data.cellMaxZindex = Math.max(...zIndex);
-
-            const charts = await canvasCellService.getCellChart({chart_id: chartsId});
-            this.data.cells.forEach((val, index) => {
-                val['chart'] = charts[index];
-                val['canvas'] = this;
-                let id = this.instantiationCell(val);
-                val['componentId'] = id;
-            });
-        },
 
         /**
          * 添加画布块
          */
         addCell() {
-
             const cell = {
                 layout_id: '',
                 chart_id: '',
@@ -60,26 +41,115 @@ let config = {
                     zIndex: this.data.cellMaxZindex
                 }
             };
-            cell.chart = {};
-            cell['canvas'] = this;
-            let id = this.instantiationCell(cell);
-            cell['componentId'] = id;
+            const data = {
+                'canvas': this,
+                'cell': cell
+            };
+            let com = new CanvasCellComponent(data);
+            this.append(com, this.el.find('.cells'));
             this.data.cells.push(cell);
         },
 
         /**
-         * 初始化加载cell(仅加载一次)
+         * 根据当前视图id，得到当前视图画布块布局，大小
          */
         async getCellLayout() {
-            const cells = await canvasCellService.getCellLayout({view_id: this.viewId});
-            this.data.cells = cells['data'];
-            this.actions.loadCells();
-        }
+            const res = await canvasCellService.getCellLayout({view_id: this.viewId});
+            if (res['success'] === 1) {
+                this.actions.updateCells(res['data']['data']);
+                this.actions.loadCellChart(res['data']['data']);
+            } else {
+                msgbox.alert(res['error'])
+            }
+        },
+
+        /**
+         * 更新画布块cells
+         */
+        updateCells(data) {
+            this.data.cells = data;
+        },
+
+
+        /**
+         * 渲染画布块，只渲染基础数据 eg(left:100, top:100, width: 100, height:100,zIndex:20)
+         */
+        async loadCellChart(cells) {
+
+            // 获取画布块数据
+            let zIndex = [];
+            let deeps = [];
+            const layouts = {
+                'layout_id': '',
+                'deep_info': {},
+                'floor':'',
+                'view_id': this.viewId,
+                'xAxis': '',
+                'chart_id':'',
+                'xOld': []
+            };
+            const data = {
+                'layouts': [JSON.stringify(layouts)],
+                'query_type': 'deep',
+                'is_deep': 0
+            };
+            const chartsId = cells.map((cell) => {
+                console.log(cell);
+                // if (cell.is_deep == 1) {
+                //     layouts['layout_id'] = cell.layout_id;
+                //     layouts['deep_info'][cell.deep.floor]
+                // };
+                zIndex.push(cell.size.zIndex);
+                return cell.chart_id ? cell.chart_id : 0
+            });
+            let componentIds = [];
+
+            // 获取画布块最大zindex
+            this.data.cellMaxZindex = Math.max(...zIndex);
+
+            // 通过cells渲染画布块
+            cells.forEach((val, index) => {
+                val['canvas'] = this;
+                const data = {
+                    'canvas': this,
+                    'cell': val
+                };
+                let cell = new CanvasCellComponent(data);
+                componentIds.push(cell.componentId);
+                this.append(cell, this.el.find('.cells'));
+            });
+
+            // 获取画布块的chart数据
+            const res = await canvasCellService.getCellChart({chart_id: chartsId});
+            let charts = {};
+            if (res['success'] === 1) {
+                res['data'].forEach((chart,index) => {
+                    charts[componentIds[index]] = chart;
+                });
+                this.messager('canvas:cell:chart:finish', {'data': charts});
+            } else {
+                msgbox.alert(res['error']);
+            };
+        },
 
     },
+    binds:[
+        // 拖拽start画布mousedown触发
+        // {
+        //     event: 'mousedown',
+        //     selector: '.cell',
+        //     callback: function (context,event) {
+        //         this.canvas.data.cellMaxZindex++;
+        //         let zIndex = this.canvas.data.cellMaxZindex;
+        //         $(context).css('zIndex', zIndex);
+        //         return false;
+        //     }
+        // },
+
+    ],
 
     afterRender() {
-        this.cells = [];
+
         //加载头部导航
         if(config.data.canvasSingle){
             this.data.views.forEach((val,index) => {
@@ -101,16 +171,16 @@ let config = {
         };
 
         //子组件删除时 更新this.data.cells
-        Mediator.subscribe("bi:cell:remove", componentId => {
+        Mediator.subscribe("bi:cell:remove", layout_id => {
             _.remove(this.data.cells, function (cell) {
-                return cell.componentId === componentId;
+                return cell.layout_id == layout_id;
             });
         });
 
         // 保存视图画布
         const toolBtns = this.el.find('.views-btn-group');
         toolBtns.on('click', '.view-save-btn', (event) => {
-            let cells = ToolPlugin.clone(this.data.cells);
+            let cells = _.cloneDeep(this.data.cells);
             const data = {
                 view_id: this.viewId,
                 canvasType: "pc",
@@ -123,13 +193,13 @@ let config = {
             };
             canvasCellService.saveCellLayout(data).then(res => {
                 if (res['success'] === 1) {
-                    alert('保存成功')
+                    msgbox.alert('保存成功');
                 }
             });
             return false;
         });
 
-        //
+        //添加一个空的画布块
         toolBtns.on('click', '.add-cell-btn', (event) => {
             this.actions.addCell();
             return false;
@@ -153,7 +223,7 @@ let config = {
         });
 
         this.actions.getCellLayout()
-    }
+    },
 };
 
 export class CanvasCellsComponent extends BiBaseComponent{
@@ -167,16 +237,5 @@ export class CanvasCellsComponent extends BiBaseComponent{
         config.data.views = window.config.bi_views;
         super(config);
         this.viewId = id ? id : this.data.views[0] ? this.data.views[0]['id'] : [] ;
-    }
-
-    /**
-     * 实例化cell
-     * @param data cell实例化初始数据
-     */
-    instantiationCell(data) {
-        let cellComponent = new CanvasCellComponent(data);
-        this.append(cellComponent, this.el.find('.cells'));
-        this.data.componentIds.push(cellComponent.componentId);
-        return cellComponent.componentId;
     }
 }

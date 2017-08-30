@@ -16,7 +16,9 @@ import {MultipleComponent} from './multiple/multiple';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 
+import '../../../../../assets/scss/bisystem/charts.types.scss';
 import './pie.scss';
+
 let config = {
     template:template,
     data: {

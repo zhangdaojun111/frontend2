@@ -9,9 +9,10 @@ import {instanceFitting, groupFitting} from '../../fittings/export.fittings';
 import Mediator from '../../../../../lib/mediator';
 import msgbox from "../../../../../lib/msgbox";
 import {FormMixShareComponent} from '../../mix.share/mix.share';
-import "./funnel.scss";
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 
+import '../../../../../assets/scss/bisystem/charts.types.scss';
+import "./funnel.scss";
 
 let config = {
     template:template,

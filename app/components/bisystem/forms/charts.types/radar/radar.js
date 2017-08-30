@@ -15,6 +15,8 @@ import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.se
 import {AutoCompleteComponent1} from '../../fittings/autocomplete1/autocomplete';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 
+import '../../../../../assets/scss/bisystem/charts.types.scss';
+
 let config = {
     template:template,
     data: {

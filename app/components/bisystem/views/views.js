@@ -16,7 +16,63 @@ let config = {
         views:window.config.bi_views,
         chart_id:"",
     },
-    actions:{},
+    actions:{
+        /**
+         * 保存视图排序
+         */
+        saveView() {
+            let views = this.data.views;
+            ViewsService.saveData({data:views}).then((res)=>{
+                if(res['success']===1){
+                    msgbox.alert('保存成功');
+                }else{
+                    msgbox.alert(res['error']);
+                }
+            });
+            return false;
+        },
+        /**
+         * 新建视图
+         */
+        async createView() {
+            viewDialogConfig.data.view = null;
+            const res = await PMAPI.openDialogByComponent(viewDialogConfig,{
+                width: 348,
+                height: 217,
+                title: '新建视图'
+            });
+            if (res['name']) {
+                ViewsService.update(res).then((res) => {
+                    if(res['success']===1){
+                        this.data.views.push(res.data);
+                        window.config.bi_views = this.data.views;
+                        this.reload();
+                    }else{
+                        msgbox.alert(res['error']);
+                    }
+                })
+            }
+            return false;
+        }
+    },
+    binds:[
+        {
+            event:'click',
+            selector:'.save-view',
+            callback: function () {
+                this.actions.saveView();
+            }
+        },
+        {
+            event:'click',
+            selector:'.create',
+            callback: function () {
+                this.actions.createView();
+            }
+
+        },
+
+    ],
     afterRender(){
         //渲染列表数据
         this.data.views.forEach((val,index) => {
@@ -43,38 +99,6 @@ let config = {
                 }
             }
             window.config.bi_views = views;
-        });
-
-        //弹出框 新建视图
-        this.el.on('click','.create', async ()=> {
-            viewDialogConfig.data.view = null;
-            const res = await PMAPI.openDialogByComponent(viewDialogConfig,{
-                width: 348,
-                height: 217,
-                title: '新建视图'
-            });
-            if (res['name']) {
-                ViewsService.update(res).then((res) => {
-                    if(res['success']===1){
-                        this.data.views.push(res.data);
-                        window.config.bi_views = this.data.views;
-                        this.reload();
-                    }else{
-                        msgbox.alert(res['error']);
-                    }
-                })
-            }
-            return false;
-        }).on('click','.save-view',()=> {
-           let views = this.data.views;
-            ViewsService.saveData({data:views}).then((res)=>{
-               if(res['success']===1){
-                   msgbox.alert('保存成功');
-               }else{
-                   msgbox.alert(res['error']);
-               }
-           })
-            return false;
         });
     }
 };

@@ -92,12 +92,12 @@ export class CellPieComponent extends BiBaseComponent {
                 'view_id': this.data.cellChart.cell.canvas.viewId,
                 'xAxis': JSON.stringify(this.data['xAxis']),
                 'chart_id':this.data.cellChart.cell.chart_id,
-                'xOld': [ // 用来保存历史下穿获取数据
-                    {
-                        'xName': this.data.cellChart.chart.xAxis.name,
-                        'name': deepX
-                    }
-                ]
+                // 'xOld': [ // 用来保存历史下穿获取数据
+                //     {
+                //         'xName': this.data.cellChart.chart.xAxis.name,
+                //         'name': deepX
+                //     }
+                // ]
             };
             const data = {
                 'layouts': [JSON.stringify(layouts)],

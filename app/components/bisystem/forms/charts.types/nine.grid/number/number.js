@@ -8,6 +8,7 @@ import {instanceFitting, groupFitting} from '../../../fittings/export.fittings';
 import Mediator from '../../../../../../lib/mediator';
 import msgbox from "../../../../../../lib/msgbox";
 import template from './number.html';
+
 import "./number.scss";
 
 let config = {
