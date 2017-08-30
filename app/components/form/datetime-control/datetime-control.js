@@ -57,7 +57,7 @@ let config={
             secondText: '秒',
             currentText: '今',
             closeText: '确定',
-            timeInput:'1',
+            //timeInput:'1',
             showSecond: true, //显示秒
             changeMonth: true,
             changeYear:true,
