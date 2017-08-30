@@ -5,10 +5,28 @@
 import template from './thumbnail-list.html';
 import './thumbnail-list.scss';
 import Component from "../../../../lib/component";
-import {FormService} from "../../../../services/formService/formService";
 
 let config = {
     template:template,
+    binds:[
+        {
+            event:'click',
+            selector:'.left-button.enable',
+            callback:function () {
+                this.data.currentIndex--;
+                this.actions.setMoveController();
+                this.actions.loadThumbnail();
+            }
+        },{
+            event:'click',
+            selector:'.right-button.enable',
+            callback:function () {
+                this.data.currentIndex++;
+                this.actions.setMoveController();
+                this.actions.loadThumbnail();
+            }
+        }
+    ],
     data:{
         currentIndex:0
     },
@@ -74,16 +92,6 @@ let config = {
         }
         this.actions.setMoveController();
         this.actions.loadThumbnail();
-
-        this.el.on('click','.left-button.enable',()=>{
-            this.data.currentIndex--;
-            this.actions.setMoveController();
-            this.actions.loadThumbnail();
-        }).on('click','.right-button.enable',()=>{
-            this.data.currentIndex++;
-            this.actions.setMoveController();
-            this.actions.loadThumbnail();
-        })
     }
 }
 

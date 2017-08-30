@@ -19,13 +19,3 @@ _.defaultsDeep(AsideInstance.data, {
 AsideInstance.render($('#aside'));
 IframeInstance.render($('#content'));
 HeaderInstance.render($('#header'));
-
-
-
-
-
-// window.setTimeout(function () {
-//     socket.close()
-// }, 1000)
-
-// socket.close()

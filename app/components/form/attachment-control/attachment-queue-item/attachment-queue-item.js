@@ -10,6 +10,60 @@ import '../../../../lib/msgbox';
 
 let config = {
     template: template,
+    binds:[
+        {
+            event:'click',
+            selector:'.processing',
+            callback:function () {
+                this.el.find('.processing').css('display','none');
+                this.el.find('.cancel-attaching').css('display','inline');
+                this.actions.pauseUploading();
+            }
+        },{
+            event:'click',
+            selector:'.pause-attaching',
+            callback:function () {
+                this.actions.pauseUploading();
+            }
+        },{
+            event:'click',
+            selector:'.keep-on-attaching',
+            callback:function () {
+                this.data._controlItem.index++;
+                this.actions.restartUploading();
+            }
+        },{
+            event:'click',
+            selector:'.delete-file',
+            callback:function () {
+                //删除文件
+                let file_ids = [this.data._controlItem.fileId];
+                FormService.deleteUploaded({
+                    file_ids:JSON.stringify(file_ids),
+                    dinput_type:this.data.real_type
+                }).then(res=>{
+                    if(res.success){
+                        this.trigger('changeFile',{event:'delete',data:this.data._controlItem});
+                    } else {
+                        alert('删除文件失败，请再试一次');
+                    }
+                });
+            }
+        },{
+            event:'click',
+            selector:'.re-uploading',
+            callback:function () {
+                this.el.find('.re-uploading').css('display','none');
+                this.actions.restartUploading();
+            }
+        },{
+            event:'click',
+            selector:'.cancel-attaching',
+            callback:function () {
+                this.trigger('changeFile',{event:'delete'});
+            }
+        }
+    ],
     data:{
         real_type:9,
         file:{},
@@ -33,7 +87,7 @@ let config = {
                this.el.find('.keep-on-attaching').css('display','none');
                this.el.find('.pause-attaching').css('display','none');
                this.el.find('.cancel-attaching').css('display','none');
-               this.el.find('.delete-file').css('display','block');
+               this.el.find('.delete-file').css('display','inline');
             }
         },
         processEvent(event){
@@ -43,45 +97,20 @@ let config = {
         },
         pauseUploading:function(){
             this.el.find('.pause-attaching').css('display','none');
-            this.el.find('.keep-on-attaching').css('display','block');
+            this.el.find('.keep-on-attaching').css('display','inline');
             this.data._controlItem.uploadingState = 'paused';
-        },
-        keepOnUploading:function() {
-            this.data._controlItem.index++;
-            this.actions.restartUploading();
         },
         restartUploading:function() {
             this.el.find('.keep-on-attaching').css('display','none');
-            this.el.find('.pause-attaching').css('display','block');
+            this.el.find('.pause-attaching').css('display','inline');
             this.data._controlItem.uploadingState = 'on';
             this.actions.transData();
-        },
-        reUploading:function () {
-            this.el.find('.re-uploading').css('display','none');
-            this.actions.restartUploading();
         },
         showReuploadingButton:function(){
             this.el.find('.keep-on-attaching').css('display','none');
             this.el.find('.pause-attaching').css('display','none');
-            this.el.find('.re-uploading').css('display','block');
+            this.el.find('.re-uploading').css('display','inline');
             this.data._controlItem.uploadingState = 'stopped';
-        },
-        cancelUploading:function () {
-            this.trigger('changeFile',{event:'delete'});
-        },
-        deleteMe:function () {
-            //删除文件
-            let file_ids = [this.data._controlItem.fileId];
-            FormService.deleteUploaded({
-                file_ids:JSON.stringify(file_ids),
-                dinput_type:this.data.real_type
-            }).then(res=>{
-                if(res.success){
-                    this.trigger('changeFile',{event:'delete',data:this.data._controlItem});
-                } else {
-                    alert('删除文件失败，请再试一次');
-                }
-            });
         },
         startUploadFile:function () {
             let file = this.data.file;
@@ -132,23 +161,6 @@ let config = {
         }
     },
     afterRender:function () {
-
-        this.el.on('click','.processing',()=>{
-            this.el.find('.processing').css('display','none');
-            this.el.find('.cancel-attaching').css('display','block');
-            this.actions.pauseUploading();
-        }).on('click','.pause-attaching',()=>{
-            this.actions.pauseUploading();
-        }).on('click','.keep-on-attaching',()=>{
-            this.actions.keepOnUploading();
-        }).on('click','.delete-file',()=>{
-            this.actions.deleteMe();
-        }).on('click','.re-uploading',()=>{
-            this.actions.reUploading();
-        }).on('click','.cancel-attaching',()=>{
-            this.actions.cancelUploading();
-        });
-
         this.actions.startUploadFile();
     }
 }
