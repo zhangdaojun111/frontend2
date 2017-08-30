@@ -96,7 +96,6 @@ let config = {
 
     },
     afterRender: function() {
-        // console.log(this.data.remindTaskItemData);
         this.el.addClass("comment-task-item");
         this.el.find('.task-bg-color').css({backgroundColor: this.data.remindTaskItemData['color']});
         let that = this;
@@ -113,9 +112,7 @@ let config = {
                 }
             }
         }
-
         if(this.data.remindTaskItemData['type'] === 1) {
-            // 普通提醒数据
             if(this.data.remindTaskItemData['data3show'][0] && this.data.remindTaskItemData['data3show'][0][0]) {
                 this.el.find('.task-show-text').html(this.data.remindTaskItemData['data3show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data3show'][0][0]['fieldValue']);
             }
