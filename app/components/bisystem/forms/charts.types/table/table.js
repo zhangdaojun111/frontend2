@@ -112,7 +112,7 @@ export class FormTableComponent extends BiBaseComponent{
     async getChartData(chartId) {
         if (this.chartId) {
             const chart = await canvasCellService.getCellChart({chart_id: chartId});
-            this.fillChart(chart[0])
+            this.fillChart(chart['data'][0])
         }
     }
     /**
