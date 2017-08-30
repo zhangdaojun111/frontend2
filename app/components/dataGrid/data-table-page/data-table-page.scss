@@ -36,20 +36,21 @@
             li {
                 display: block;
                 float: left;
-                margin: 14px 5px;
+                padding: 15px 0px;
                 cursor: pointer;
+                width: 60px;
+                border-bottom: 2px solid #fff;
+                margin-right: 30px;
                 a {
                     display: flex;
                     align-items: center;
                     font-size: 14px;
                     height: 28px;
                     line-height: 30px;
-                    border-bottom: 2px solid #fff;
-                    padding: 0 10px;
                     text-decoration: none;
                     color: #666;
                     .icon-aggrid-new{
-                        margin-right: 5px;
+                        margin: 0px 4px;
                     }
                     .icon-icon-data-check {
                         display: none;
