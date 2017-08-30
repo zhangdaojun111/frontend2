@@ -14,11 +14,12 @@ let config = {
 
     },
     actions: {
-        approvalBtnToggle:function (el) {
-            if(el.parent().hasClass('active')){
-                el.parent().removeClass('active')
+        approvalBtnToggle:function (el,elPraent) {
+            var isactive=elPraent.hasClass('active');
+            if(isactive){
+                elPraent.removeClass('active')
             }else {
-                el.parent().addClass('active')
+                elPraent.addClass('active')
             }
         },
         toogz(e){
@@ -28,10 +29,8 @@ let config = {
     },
     /**
      * @author luyang
-     * @method approvalBtnToggle 审批按钮操作
-     * @param  approvalBtnToggle(dom对象)
-     * @return 无返回
-     *
+     * @method approvalBtnToggle 审批按钮操作显示
+     * @param  approvalBtnToggle(dom对象，dom父元素)
      */
     afterRender: function() {
         this.showLoading();
@@ -39,8 +38,10 @@ let config = {
         this.showgz = false;
         this.el.on("click",".approval-curr-txt",function (e) {
             e.stopPropagation();
-            self.actions.approvalBtnToggle($(this))
-        })
+            var elDiv=$(this);
+            var elParent=elDiv.parent();
+            self.actions.approvalBtnToggle(elDiv,elParent);
+        });
         this.el.on('click','.gz',(e)=>{
             Mediator.publish('workflow:getFormTrans',this.showgz);
             this.actions.toogz(e);

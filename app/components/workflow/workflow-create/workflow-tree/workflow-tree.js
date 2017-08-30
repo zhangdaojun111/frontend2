@@ -12,20 +12,15 @@ let config = {
     template: template,
     data:{
         treeArr:[],
+        showTree:true //显示下拉菜单
     },
     actions: {
-        //隐藏显示下拉菜单
-        toogleTree:function(e){
+        /**
+         * 隐藏显示下拉菜单
+         */
+        toogleTree:function(){
             let tree = this.el.find(".J_tree");
-            let tip = tree.hasClass('show');
-            if(tip){
-                tree.addClass('hide');
-                tree.removeClass('show');
-            }else{
-                tree.addClass('show');
-                tree.removeClass('hide');
-            }
-
+            tree.toggle();
             let len = this.el.find(".tree-list").children('li').length;
             for(let i = 0; i < len;i++){
                 this.el.find('.tree-list li').eq(i).removeClass('hide xixi');
@@ -35,8 +30,13 @@ let config = {
                 }
             }
             this.el.find('.J_search').val("");
+            this.data.showTree = !this.data.showTree;
         },
-        //点击孩子的根节点隐藏子节点
+        //
+        /**
+         * 点击树的根节点隐藏子节点
+         * @param e 点击的dom节点
+         */
         toogletip:function(e){
             let childList = $(e.target).siblings(".child-list");
             let root = this.el.find(childList);
@@ -48,19 +48,26 @@ let config = {
             }
             
         },
-        //点击子节点
+        /**
+         * 点击下来菜单中的子菜单，显示工作流
+         * @param e点击的dom节点
+         */
         clickChild:function(e){
             //get current clicked node info
             let {formid,tableid}=$(e.target)[0].dataset;
+            console.log($(e)[0].text);
             Mediator.publish('workflow:choose', $(e.target)[0].dataset);
             let childValue = $(e.target).text();
             let rootNode = this.el.find('.J_select-Workflow');
             let tree = this.el.find(".J_tree");
             rootNode.text(childValue);
-            tree.addClass('hide');
-            tree.removeClass('show');
+            tree.hide();
+            this.data.showTree = true;
         },
-        //输入搜索改变下拉菜单
+
+        /**
+         * 输入搜索改变下拉菜单
+         */
         changeTree:function(){
             let keyword = $('.J_search').val();
             var c;
@@ -76,9 +83,6 @@ let config = {
                    li.eq(i).find('.child-list').children('.child-item').removeClass('hide xixi');
                 }
             }
-
-
-           
             this.data.treeArr.forEach((el,index)=> {
                 let obj = new Array();
                 el.children.forEach((al,num)=>{
@@ -137,24 +141,30 @@ let config = {
             
         }
     },
+    binds:[
 
+    ],
     afterRender: function() {
         Mediator.subscribe('workflow:choose', (msg)=> {
             let rootNode = this.el.find('.J_select-Workflow');
             rootNode.text(msg.name);
         });
+
         $(document.body).on('click',()=> {
             let tree = this.el.find(".J_tree");
-            var isClass=tree.hasClass('show');
-            if(isClass){
-                tree.removeClass('show');
+            if(!this.data.showTree){
+                tree.hide();
+                this.data.showTree = true;
             }
         });
        this.data.treeArr=this.data.data;
+       this.data.showTree = true;
+
        this.el.on('click','.J_tip',(e)=>{
            this.actions.toogleTree(e);
            e.stopPropagation();
        });
+
        this.el.on('click','.J_root',(e)=>{
            this.actions.toogletip(e);
            e.stopPropagation(e);

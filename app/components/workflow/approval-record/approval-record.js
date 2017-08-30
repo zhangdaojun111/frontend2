@@ -35,22 +35,24 @@ let config={
     /**
      * @author luyang
      * @method tipsMouseover 鼠标移入创建dom，tipsMouseout 鼠标移入删除dom，tipsMousemove 鼠标移动该改变位置
-     * @param  tipsMouseover(初始偏移，dom文字,event对象) tipsMouseout(dom对象,event对象) tipsMousemove(初始偏移，dom对象，event对象)
-     * @return 无返回
-     *
+     * @param  tipsMouseover(初始偏移，提示框dom文字,event对象) tipsMouseout(提示框dom对象,event对象) tipsMousemove(初始偏移，提示框dom对象，event对象)
      */
     afterRender(){
         this.showLoading();
         let self=this;
         const pos={x:10,y:20};
         this.el.on("mouseover",".tipsText",function (e) {
-            self.actions.tipsMouseover(pos,$(this).text(),e)
+             let elDiv=$(this);
+             let elDivText=elDiv.text();
+            self.actions.tipsMouseover(pos,elDivText,e)
         });
         this.el.on("mouseout",".tipsText",function () {
-            self.actions.tipsMouseout($("#J_tooltip"))
+            let J_tooltip=$("#J_tooltip");
+            self.actions.tipsMouseout(J_tooltip)
         });
         this.el.on("mousemove",".tipsText",function (e) {
-            self.actions.tipsMousemove(pos,$("#J_tooltip"),e)
+            let J_tooltip=$("#J_tooltip");
+            self.actions.tipsMousemove(pos,J_tooltip,e)
         })
     }
 
