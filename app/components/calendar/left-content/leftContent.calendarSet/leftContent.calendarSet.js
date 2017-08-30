@@ -207,6 +207,10 @@ let config = {
                 this.el.find(".checkbox_a3").removeClass('label-select-all-checked');
             }
         },
+
+        /**
+         *从隐藏栏中显示日历树
+         */
         showRemindType: function (that, data) {
             that.el.find("#select-all-block-" + data.data).show();
             that.el.find("#select-all-block-" + data.data).find(".select-head").addClass('label-select-all-show label-select-all-checked');

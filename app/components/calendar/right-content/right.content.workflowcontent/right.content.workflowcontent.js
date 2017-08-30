@@ -10,31 +10,29 @@ import {PMAPI} from '../../../../lib/postmsg';
 
 let config = {
 
-    template:template,
-    data:{
-
-    },
-    actions:{
-        toPercent:function(point){
-            let str=Number(point*100).toFixed(1);
-            str+="%";
+    template: template,
+    data: {},
+    actions: {
+        toPercent: function (point) {
+            let str = Number(point * 100).toFixed(1);
+            str += "%";
             return str;
         },
         /**
          * 加载工作进度
          */
-        showfirst(){
+        showfirst() {
             let record_progress = this.actions.toPercent(this.data['record_progress']);
             // console.log(record_progress);
             // if(this.data['record_progress'] > 0.8){
             //     this.el.find(".end-workflow").hide();
             // }
-            this.el.find(".workflow-schedule").css({"width":record_progress});
+            this.el.find(".workflow-schedule").css({"width": record_progress});
         },
         /**
          * 打开与我相关工作
          */
-        openMyWork:function () {
+        openMyWork: function () {
             PMAPI.openDialogByIframe(
                 `/wf/approval/?record_id=${this.data['id']}&form_id=${this.data['form_id']}&table_id=${this.data['table_id']}&flow_id=${this.data['flow_id']}`,
                 {
@@ -45,7 +43,7 @@ let config = {
                 })
         }
     },
-    binds:[
+    binds: [
         {
             event: 'click',
             selector: '.workflow-content',
@@ -54,15 +52,17 @@ let config = {
             }
         },
     ],
-    afterRender: function() {
-        this.el.css("width","100%");
+    afterRender: function () {
+        this.el.css("width", "100%");
         this.actions.showfirst();
     },
 };
+
 class RightContentWorkFlow extends Component {
-    constructor(data){
+    constructor(data) {
         config.data = data;
         super(config);
     }
 }
+
 export default RightContentWorkFlow;
