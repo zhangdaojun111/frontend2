@@ -36,6 +36,7 @@ let config = {
         },
     },
     afterRender: function (){
+        this.data.group = this.data.groupFields;
         this.el.find('.group-data-list, .grouping-data-list').sortable({
             connectWith: ".connectedSortable",
             stop: ()=> {

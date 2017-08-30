@@ -342,7 +342,7 @@ let config = {
             if( this.data.isShowCustomPanel ){
                 num+=200;
             }
-            let grid = this.el.find( '#workflow-agGrid' )
+            let grid = this.el.find( '#data-agGrid' )
             if( close ){
                 grid.width( 'calc(100% - ' + num + 'px)' );
             }else {

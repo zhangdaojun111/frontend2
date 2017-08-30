@@ -109,7 +109,7 @@ function getLoginController() {
             });
 
             //密码找回页面提交按钮
-            this.$submitFindPw.on("click", () => {
+            this.$submitFindPw.on("click", _.debounce(() => {
                 let userName = $(".account-input").val();
                 let result = LoginService.findPassword(userName);
                 result.done((result) => {
@@ -121,7 +121,7 @@ function getLoginController() {
                 }).fail((err) => {
                     console.log("提交失败",err)
                 })
-            });
+            },1000));
 
             //自助更新
             $(".update-service").click(function () {

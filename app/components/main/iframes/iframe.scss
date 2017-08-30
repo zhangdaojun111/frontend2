@@ -90,52 +90,65 @@
                     height: auto;
                     position: absolute;
                     background: white;
-                    z-index:10;
+                    z-index:400;
                     border: solid 1px #d7d7d7;
                     border-top: none;
                     display: none;
                     right:50px;
                     top:30px;
                     .basic-ul{
-                        .drop-up-icon{
-                            width: 16px;
-                            height: 16px;
-                            margin-left: 67px;
-                            display: inline-block;
-                            background-image: url("./../../../assets/images/framework/drop-up-icon.png");
-                            cursor: pointer;
-                        }
+                        //.drop-up-icon{
+                        //    width: 16px;
+                        //    height: 16px;
+                        //    margin-left: 67px;
+                        //    display: inline-block;
+                        //    background-image: url("./../../../assets/images/framework/drop-up-icon.png");
+                        //    cursor: pointer;
+                        //}
                         .close-tab,.close-all-tabs{
                             text-align: left;
                             text-indent: 10px;
                             padding: 10px;
                             cursor: pointer;
+                            &:hover{
+                                background-color: #c5e1ff;
+                            }
                         }
                         .close-other-tabs{
                             text-align: left;
                             text-indent: 10px;
                             padding: 10px;
-                            margin-bottom: 10px;
                             border-bottom: solid 1px #e4e4e4;
                             cursor: pointer;
+                            &:hover{
+                                background-color: #c5e1ff;
+                            }
                         }
                     }
                     .tabs-ul{
+                        .item-prompt{
+                            text-align: left;
+                            text-indent: 10px;
+                            padding: 10px;
+                            color: gray;
+                        }
                         .tab-item{
                             text-align: left;
                             text-indent: 10px;
                             padding: 10px;
                             cursor: pointer;
+                            &:hover{
+                                background-color: #c5e1ff;
+                            }
                         }
-                        .drop-down-icon{
-                            width: 16px;
-                            height: 16px;
-                            margin-left: 67px;
-                            display: inline-block;
-                            background-image: url("./../../../assets/images/framework/drop-down-icon.png");
-                            cursor: pointer;
-                        }
-
+                        //.drop-down-icon{
+                        //    width: 16px;
+                        //    height: 16px;
+                        //    margin-left: 67px;
+                        //    display: inline-block;
+                        //    background-image: url("./../../../assets/images/framework/drop-down-icon.png");
+                        //    cursor: pointer;
+                        //}
                     }
 
                 }
