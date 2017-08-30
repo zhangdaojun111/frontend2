@@ -91,7 +91,7 @@ let config = {
             }
         },
         processEvent(event){
-            var position = event.loaded || event.position;
+            let position = event.loaded || event.position;
             position = position + this.data._controlItem.uploadedSize;
             this.actions.updateProcess(position/this.data._controlItem.file.size);
         },
