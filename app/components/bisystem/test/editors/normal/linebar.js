@@ -16,7 +16,8 @@ let config = {
                         this.formItems['copy_name'].setValue(value);
                     }
                 }
-            }, {
+            },
+            {
                 label: '图表名称2',
                 name: 'copy_name',
                 defaultValue: '你好才华',

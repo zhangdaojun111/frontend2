@@ -52,14 +52,11 @@ export const canvasCellService = {
         const res = await HTTP.ajaxImmediately({
             url: '/bi/get_bi_data/?&canvasType=pc',
             data: charts,
+            method:'post',
             traditional: true
         });
         return new Promise((resolve, reject) => {
-            if (res['success'] === 1) {
-                resolve(res);
-            } else {
-                reject(res);
-            }
+            resolve(res);
         })
     },
     /**
@@ -68,7 +65,7 @@ export const canvasCellService = {
      */
     async getDeepData(data) {
         const res = await HTTP.ajaxImmediately({
-            url: '/bi/get_deep_bi_data/',
+            url: '/bi/get_bi_data/',
             data: data,
             // contentType: "application/json; charset=utf-8",
             method:'get',

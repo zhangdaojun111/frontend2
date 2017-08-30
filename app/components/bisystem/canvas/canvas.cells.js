@@ -7,9 +7,6 @@ import './canvas.cells.scss';
 import {canvasCellService} from '../../../services/bisystem/canvas.cell.service';
 import Mediator from '../../../lib/mediator';
 import msgbox from "../../../lib/msgbox";
-import "jquery-ui/ui/widgets/draggable";
-import "jquery-ui/ui/widgets/resizable";
-import "jquery-ui/ui/widgets/droppable";
 
 let config = {
     template: template,
@@ -74,79 +71,47 @@ let config = {
          */
         async loadCellChart(cells) {
 
-            // 获取画布块数据
-            let zIndex = [];
-            let layoutIds = [];
-            const layoutDeep = {
-                'layout_id': '',
-                'deep_info': {},
-                'floor':'',
-                'view_id': this.viewId,
-                'xAxis': '',
-                'chart_id':'',
-                'xOld': []
-            };
-            const data = {
-                'layouts': [],
-                'query_type': 'deep',
-                'is_deep': window.config.bi_user === 'manager' ? 0 : 1
-            };
-            const chartsId = cells.map((cell) => {
-                if (cell.is_deep == 1) {
-                    let layouts = _.cloneDeep(layoutDeep);
-                    let xAxis = JSON.parse(cell.deep.xOld).map(x => x.name);
-                    layouts['layout_id'] = cell.layout_id;
-                    layouts['floor'] = cell.deep.floor;
-                    layouts['deep_info'][cell.deep.floor] = xAxis;
-                    layouts['xAxis'] = JSON.stringify(xAxis);
-                    layouts['xOld'] = cell.deep.xOld;
-                    layouts['chart_id'] = cell.chart_id;
-                    data['layouts'].push(JSON.stringify(layouts));
-                    layoutIds.push(cell.layout_id);
-                };
-                zIndex.push(cell.size.zIndex);
-                return cell.chart_id ? cell.chart_id : 0
-            });
-            let componentIds = [];
-
-            // 获取画布块最大zindex
-            this.data.cellMaxZindex = Math.max(...zIndex);
-
             // 通过cells渲染画布块
-            cells.forEach((val, index) => {
-                val['canvas'] = this;
+            let zIndex = [];
+            let layouts = []; // 需要请求服务器画布块的chart数据
+            let layoutsId = [];
+            cells.map((val,index) => {
+                zIndex.push(val.size.zIndex);
                 const data = {
                     'canvas': this,
                     'cell': val
                 };
                 let cell = new CanvasCellComponent(data);
-                componentIds.push(cell.componentId);
                 this.append(cell, this.el.find('.cells'));
+                layoutsId.push(val.layout_id);
+                let deep_info = {}
+                if (val.is_deep == 0) {
+                    deep_info = {}
+                } else {
+                    deep_info[val.deep.floor] =  val.deep.xOld.map(x => x['name'])
+                };
+                layouts.push(JSON.stringify({
+                    chart_id: val.chart_id,
+                    floor: val.is_deep == 0 ? 0 : val.deep.floor,
+                    view_id: this.viewId,
+                    layout_id: val.layout_id,
+                    xOld: val.is_deep == 0 ? 0 : val.deep.xOld,
+                    row_id:0,
+                    deep_info: deep_info
+                }))
+
+                console.log(layouts);
             });
+            // 获取画布块最大zindex
+            this.data.cellMaxZindex = Math.max(...zIndex);
 
             // 获取画布块的chart数据
-            const res = await canvasCellService.getCellChart({chart_id: chartsId});
-            let charts = {};
-            if (res['success'] === 1) {
-                res['data'].forEach((chart,index) => {
-                    charts[componentIds[index]] = chart;
-                });
-                this.messager('canvas:cell:chart:finish', {'data': charts, type: 'loadChartData'});
-            } else {
-                msgbox.alert(res['error']);
-            };
-
-            // 获取下穿数据保存记录
-            if (data.layouts.length > 0) {
-                canvasCellService.getDeepData(data).then(res => {
-                    const data = {}
-                    res.map((val,index) => {
-                        data[layoutIds[index]] = val;
-                    });
-                    console.log(data);
-                    this.messager('canvas:cell:chart:finish', {'data': data, type: 'getDeeptData'});
-                })
-            };
+            const res = await canvasCellService.getCellChart({layouts:layouts,query_type:'deep',is_deep:1});
+            let charts = {}
+            res.forEach((chart, index) => {
+                charts[layoutsId[index]] = chart
+            })
+            this.messager('canvas:cell:chart:finish', {'data': charts, type: 'loadChartData'});
         },
 
     },
@@ -205,6 +170,8 @@ let config = {
                     delete cell['chart'];
                     delete cell['canvas'];
                     delete cell['componentId'];
+                    delete cell['is_deep'];
+                    delete cell['deep'];
                     return JSON.stringify(cell);
                 })
             };

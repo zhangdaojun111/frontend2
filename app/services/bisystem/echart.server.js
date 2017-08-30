@@ -196,6 +196,7 @@ export class EchartsService {
             // 当双y轴 只有2个y轴字段时 修改折线颜色
             if (cellOption['yAxis'].length === 2) {
                 yAxis.map((y, colorIndex) => {
+                    console.log(linebarOption['yAxis'][colorIndex]);
                     if (linebarOption['yAxis'][colorIndex]) {
                         linebarOption['yAxis'][colorIndex]['axisLine'] = {
                             lineStyle: {
@@ -276,6 +277,7 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     multiChartOption(cellChart) {
+        console.log(cellChart);
         let cellOption = cellChart['chart'];
         const mutiListOption = EchartsOption.getEchartsConfigOption('multilist'); // 获取多表默认配置option
         const multilistData = cellOption['data']['multillist'][0]['xAxis']; // 多表数据
