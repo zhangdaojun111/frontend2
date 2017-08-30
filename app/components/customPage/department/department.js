@@ -54,7 +54,7 @@ let config = {
                 this.data.columnDefs = [
                     number,dgcService.selectCol,
                     {headerName: '操作',field: 'myOperate', width: 120,  suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
-                        return '<div style="text-align:center;"><a class="departModify" style="color:#337ab7;">编辑</a><div>';
+                        return '<div style="text-align:center;"><a class="departModify" style="color:#0088FF;">编辑</a><div>';
                     }},
                     { headerName: '部门', field: 'f5',cellRenderer: 'group',suppressMenu: true, tooltipField:'f5' }
                 ]

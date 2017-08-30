@@ -771,7 +771,7 @@ let config = {
                 return '';
             }
             if( this.data.viewMode == 'in_process' ){
-                return '<div style="text-align: center;"><a class="gridView" style="color:#337ab7;">查看</a></div>';
+                return '<div style="text-align: center;"><a class="gridView" style="color:#0088FF;">查看</a></div>';
             }
             if (params.data.group || Object.is(params.data.group, '') || Object.is(params.data.group, 0)) {
                 return '';
@@ -786,24 +786,24 @@ let config = {
             } catch (e) {
                 rowStatus = 0;
             }
-            let str = '<div style="text-align:center;"><a class="gridView" style="color:#337ab7;">查看</a>';
+            let str = '<div style="text-align:center;"><a class="gridView" style="color:#0088FF;">查看</a>';
             if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data' || this.data.viewMode == 'deleteHanding') {
                 if (this.data.isFixed || rowStatus == 2) {
                     str += ' | <span style="color: darkgrey;">编辑</span>';
                     str += ' | <a style="color: darkgrey;">历史</a>';
                 } else {
-                    str += ' | <a  class="gridEdit" style="color:#337ab7;">编辑</a>';
-                    str += ' | <a  class="gridHistory" style="color:#337ab7;">历史</a>';
+                    str += ' | <a  class="gridEdit" style="color:#0088FF;">编辑</a>';
+                    str += ' | <a  class="gridHistory" style="color:#0088FF;">历史</a>';
                 }
                 operateWord = operateWord + 4;
             }
             if (this.data.viewMode == 'batchInApprove') {
-                str += ' | <a  class="gridEdit" style="color:#337ab7;">编辑</a>';
+                str += ' | <a  class="gridEdit" style="color:#0088FF;">编辑</a>';
                 operateWord = operateWord + 2;
             }
             if (this.data.customOperateList) {
                 for (let d of this.data.customOperateList) {
-                    str += ` | <a class="customOperate" id="${ d["id"] }" style="color:#337ab7;">${ d["name"] }</a>`;
+                    str += ` | <a class="customOperate" id="${ d["id"] }" style="color:#0088FF;">${ d["name"] }</a>`;
                     operateWord = operateWord + (d["name"] ? d["name"].length : 0);
                 }
             }
@@ -811,10 +811,10 @@ let config = {
                 for (let ro of this.data.rowOperation) {
                     if (ro.frontend_addr && ro.frontend_addr == 'export_row') {
                         let selectedRows = JSON.stringify([params.data._id])
-                        str += ` | <a class="rowOperation" id="${ ro["row_op_id"] }" href='/data/customize/ta_excel_export/?table_id=${ this.pageId }&selectedRows=${ selectedRows }' style="color:#337ab7;">${ ro["name"] }</a>`;
+                        str += ` | <a class="rowOperation" id="${ ro["row_op_id"] }" href='/data/customize/ta_excel_export/?table_id=${ this.pageId }&selectedRows=${ selectedRows }' style="color:#0088FF;">${ ro["name"] }</a>`;
                         operateWord = operateWord + (ro["name"] ? ro["name"].length : 0);
                     } else {
-                        str += ` | <a class="rowOperation" id="${ ro["row_op_id"] }" style="color:#337ab7;">${ ro["name"] }</a>`;
+                        str += ` | <a class="rowOperation" id="${ ro["row_op_id"] }" style="color:#0088FF;">${ ro["name"] }</a>`;
                         operateWord = operateWord + (ro["name"] ? ro["name"].length : 0);
                     }
                 }
