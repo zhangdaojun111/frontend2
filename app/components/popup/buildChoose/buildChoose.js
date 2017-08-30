@@ -39,9 +39,10 @@ let config = {
             _this.data.selected = {value: _this.data['options'][1]['value'], label: _this.data['options'][1]['label']};
         });
         HTTP.flush();
+        //改变表单
         _this.el.on('click', 'a', function () {
             _this.data.selected = {value: $(this).data('value'), label: $(this).html()};
-            FormEntry.destoryAll();
+            FormEntry.destoryForm(_this.data.source_table_id);
             FormEntry.createForm({
                 table_id: _this.data.source_table_id,
                 form_id: '',
@@ -54,6 +55,7 @@ let config = {
                 btnType: 'none'
             });
         })
+        //搜索结果过滤
         Mediator.subscribe('form:chooseSelect', function (data) {
             _this.el.find('a').each((index, obj) => {
                 if (data.indexOf($(obj).data('value')) != -1) {
@@ -63,6 +65,7 @@ let config = {
                 }
             })
         });
+        //确认选择
         this.el.on('click', '.confirm', function () {
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
