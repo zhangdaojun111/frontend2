@@ -6,7 +6,7 @@ import template from './attachment-queue-item.html';
 import Component from "../../../../lib/component";
 import browserMD5File from 'browser-md5-file';
 import {FormService} from "../../../../services/formService/formService";
-import msgbox from '../../../../lib/msgbox';
+import '../../../../lib/msgbox';
 
 let config = {
     template: template,
@@ -45,7 +45,7 @@ let config = {
                     if(res.success){
                         this.trigger('changeFile',{event:'delete',data:this.data._controlItem});
                     } else {
-                        msgbox.alert('删除文件失败，请再试一次');
+                        alert('删除文件失败，请再试一次');
                     }
                 });
             }
@@ -72,16 +72,15 @@ let config = {
             process: 0,
             uploadedSize:0,
             uploadingState:'on'
-        },
-        fileSize:'0'
+        }
     },
     actions:{
         updateProcess:function (i) {
             this.data._controlItem.process = Math.round(i*100);
             if(this.data._controlItem.process > 100){
-                this.el.find('.loader').css('display','none');
                return;
             }
+            this.el.find('#my-bar').css('width',this.data._controlItem.process + '%');
             this.el.find('#process-num').text(this.data._controlItem.process+'%');
             if(this.data._controlItem.process == 100){
                this.el.find('.processing').css('display','none');
@@ -92,18 +91,16 @@ let config = {
             }
         },
         processEvent(event){
-            var position = event.loaded || event.position;
+            let position = event.loaded || event.position;
             position = position + this.data._controlItem.uploadedSize;
             this.actions.updateProcess(position/this.data._controlItem.file.size);
         },
         pauseUploading:function(){
-            this.el.find('.loader').css('animation','none');
             this.el.find('.pause-attaching').css('display','none');
             this.el.find('.keep-on-attaching').css('display','inline');
             this.data._controlItem.uploadingState = 'paused';
         },
         restartUploading:function() {
-            this.el.find('.loader').css('animation','spin 2s linear infinite');
             this.el.find('.keep-on-attaching').css('display','none');
             this.el.find('.pause-attaching').css('display','inline');
             this.data._controlItem.uploadingState = 'on';
@@ -114,19 +111,6 @@ let config = {
             this.el.find('.pause-attaching').css('display','none');
             this.el.find('.re-uploading').css('display','inline');
             this.data._controlItem.uploadingState = 'stopped';
-        },
-        getReadableFileSize:function (fileSize) {
-            let units = ['B','kB','MB','GB','TB','PB','EB','ZB','YB'];
-            let thresh = 1000;
-            let i = 0;
-            while(i < units.length){
-                if(fileSize < thresh){
-                    return fileSize+units[i];
-                }
-                fileSize=(fileSize/thresh).toFixed(1);
-                i++;
-            }
-            return fileSize+units[units.length-1];
         },
         startUploadFile:function () {
             let file = this.data.file;
@@ -169,7 +153,7 @@ let config = {
                         }
                     } else {
                         this.data._controlItem.uploadingState = 'failed';
-                        msgbox.alert('传输中断！');
+                        alert('传输中断！');
                         this.actions.showReuploadingButton();
                     }
                 });
@@ -183,7 +167,6 @@ let config = {
 
 export default class AttachmentQueueItem extends Component{
     constructor(data,event){
-        config.data.fileSize = config.actions.getReadableFileSize(data.file.size);
         super(config,data,event);
     }
 }

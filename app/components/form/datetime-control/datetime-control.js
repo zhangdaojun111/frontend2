@@ -9,7 +9,7 @@ import 'jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css';
 import 'jquery-ui';
 import '../base-form/base-form.scss'
 import template from './datetime-control.html';
-// import './datetime-control.scss';
+import './datetime-control.scss';
 import '../base-form/dateTime.scss'
 import msgbox from '../../../lib/msgbox';
 
@@ -27,7 +27,7 @@ let config = {
             event: 'click',
             selector: '.date-close',
             callback: function () {
-                this.el.find(".datetime").val("年/月/日 时:分:秒")
+                this.el.find(".datetime").val("年-月-日 时:分:秒")
             }
         }
     ],
@@ -45,7 +45,7 @@ let config = {
         if (_this.data.value) {
             _this.el.find(".datetime").val(_this.data.value.replace(/-/g, "/"));
         } else {
-            _this.el.find(".datetime").val("年/月/日 时:分:秒");
+            _this.el.find(".datetime").val("年-月-日 时:分:秒");
         }
 
         //控制到时分秒
@@ -58,12 +58,11 @@ let config = {
             secondText: '秒',
             currentText: '今',
             closeText: '确定',
-            autoSize: true,
-            //timeInput:'1',
+            timeInput:'1',
             showSecond: true, //显示秒
             changeMonth: true,
             changeYear: true,
-            dateFormat: "yy/mm/dd",
+            dateFormat: "yy-mm-dd",
             defaultDate: new Date(_this.data.value),
             timeFormat: 'HH:mm:ss', //格式化时间
             showOn: 'button',//设置触发选择器为button
@@ -115,7 +114,15 @@ let config = {
                     console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', this.selector);
                 }
 
-            }
+            },
+            onClose: function(timeText) {
+                console.log(timeText)
+                _this.data.value = timeText.replace(/\//g, "-");
+                _.debounce(function () {
+                    _this.events.changeValue(_this.data)
+                }, 200)();
+            },
+
         });
         _.debounce(function () {
             _this.events.changeValue(_this.data)

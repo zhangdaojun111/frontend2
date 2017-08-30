@@ -369,7 +369,8 @@ let config = {
                     width:950,
                     height:600,
                     title:`高级查询`,
-                    modal:true
+                    modal:true,
+                    closable: false
                 },{d}).then(res=>{
                     this.data.onlyCloseExpertSearch = res.onlyclose || false;
                     if(res.type == 'temporaryQuery') {
@@ -470,7 +471,7 @@ let config = {
                 type:this.data.pageType,rows:this.data.rows,page:this.data.page,filter:[]
             }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
-                json['filter'] = this.data.filterParam.filter || [];
+                json['filter'] = _.cloneDeep(this.data.filterParam.filter ) || []
             }
             if( this.data.filterParam['common_filter_id'] ){
                 json['filter'] = json['filter'] || [];

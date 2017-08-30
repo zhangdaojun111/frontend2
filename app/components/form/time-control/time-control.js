@@ -22,7 +22,7 @@ let config = {
         },
         {
             event: 'click',
-            selector: '.input-img',
+            selector: '.ui-datepicker-current,.input-img',
             callback: function () {
                 //增加0
                 function p(s) {
@@ -30,11 +30,11 @@ let config = {
                 }
 
                 //获取当前时间
-                var myDate = new Date();
-                var h = myDate.getHours();
-                var m = myDate.getMinutes();
-                var s = myDate.getSeconds();
-                var now = p(h) + ':' + p(m) + ":" + p(s);
+                let myDate = new Date();
+                let h = myDate.getHours();
+                let m = myDate.getMinutes();
+                let s = myDate.getSeconds();
+                let now = p(h) + ':' + p(m) + ":" + p(s);
 
                 let nowTime = this.el.find(".timeInput").val(now);
                 this.data.value = now;
@@ -51,15 +51,15 @@ let config = {
             selector: '.input-img',
             callback: function () {
                 this.el.find('.time').css({'display': 'block', 'position': 'absolute'});
-                event.stopPropagation();
+               event.stopPropagation();
             }
         },
+
         {
             event: 'click',
-            selector: '.time-close',
+            selector: '.ui-datepicker-close',
             callback: function () {
                 this.el.find('.time').css('display', 'none');
-
             }
         }
     ],
@@ -85,15 +85,15 @@ let config = {
         }
 
         //获取当前时间
-        var myDate = new Date();
-        var h = myDate.getHours();
-        var m = myDate.getMinutes();
-        var s = myDate.getSeconds();
-        var now = p(h) + ':' + p(m) + ":" + p(s);
+        let myDate = new Date();
+        let h = myDate.getHours();
+        let m = myDate.getMinutes();
+        let s = myDate.getSeconds();
+        let now = p(h) + ':' + p(m) + ":" + p(s);
 
         this.el.on("click", '.plus', function () {
             //当前时间+1
-            var myDate2 = new Date();
+            let myDate2 = new Date();
             myDate2.setHours(h + 1);
             myDate2.setMinutes(m + 1);
             myDate2.setSeconds(s + 1);
@@ -107,7 +107,7 @@ let config = {
                 s = myDate2.getSeconds();
                 _this.el.find(".second").children("span").text(p(s));
             }
-            var now2 = p(h) + ':' + p(m) + ":" + p(s);
+            let now2 = p(h) + ':' + p(m) + ":" + p(s);
             now = now2
             let nowTime = _this.el.find(".timeInput").val(now);
             _this.data.value = now;
@@ -117,7 +117,7 @@ let config = {
         });
         this.el.on("click", '.reduce', function () {
             //当前时间-1
-            var myDate3 = new Date();
+            let myDate3 = new Date();
             myDate3.setHours(h - 1);
             myDate3.setMinutes(m - 1);
             myDate3.setSeconds(s - 1);
@@ -131,7 +131,7 @@ let config = {
                 s = myDate3.getSeconds();
                 _this.el.find(".second").children("span").text(p(s));
             }
-            var now3 = p(h) + ':' + p(m) + ":" + p(s);
+            let now3 = p(h) + ':' + p(m) + ":" + p(s);
             now = now3;
             let nowTime = _this.el.find(".timeInput").val(now);
             _this.data.value = now;
@@ -139,15 +139,16 @@ let config = {
                 _this.events.changeValue(_this.data)
             }, 200)();
         });
-
+        _this.el.find(".ui-datepicker-close").on("click", function () {
+            _this.data.value =  _this.el.find('.timeInput').val();
+            _.debounce(function () {
+                _this.events.changeValue(_this.data)
+            }, 200)();
+        })
         _.debounce(function () {
             _this.events.changeValue(_this.data)
         }, 200)();
 
-        // $(document).click(function () {
-        //     _this.el.find(".time").hide();
-        //     event.stopPropagation();
-        // })
     },
     beforeDestory: function () {
         $(document).off('click:timeControl');

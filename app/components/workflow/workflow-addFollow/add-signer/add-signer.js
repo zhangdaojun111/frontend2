@@ -3,7 +3,9 @@ import Mediator from '../../../../lib/mediator';
 
 let config={
     template: `<div class="flex" data-id="{{id}}">
-        <input class="w33" type="radio" name="addUser" value="{{id}}">
+        <div class="custom-radio">
+        <input type="radio" name="addUser" value="{{id}}">
+        </div>
         <div class="w33">{{name}}</div>
         <div class="w33">{{username}}</div>
     </div>`,

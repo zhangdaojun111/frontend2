@@ -1,47 +1,10 @@
-.attachment-queue-item {
-  padding: 5px 0;
-
-  .processing{
-    color:darkgrey;
-  }
-
-  .delete-file{
-    color:darkgrey;
-  }
-
-  .keep-on-attaching{
-    color:darkgrey;
-  }
-
-  .pause-attaching{
-    color:darkgrey;
-  }
-
-  .re-uploading{
-    color:darkgrey;
-  }
-
-  .cancel-attaching{
-    color:darkgrey;
-  }
-
-  #process-num{
-    color:darkgrey;
-  }
-
-
-  .loader {
-    border: 2px solid #f3f3f3; /* Light grey */
-    border-top: 2px solid #3498db; /* Blue */
-    border-radius: 50%;
-    width: 10px;
-    height: 10px;
-    animation: spin 2s linear infinite;
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+#my-progress {
+  width: 200px;
+  background-color: lightgray;
 }
 
+#my-bar {
+  width: 0%;
+  height: 15px;
+  background-color: royalblue;
+}

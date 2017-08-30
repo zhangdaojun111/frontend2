@@ -10,7 +10,6 @@ import {PMAPI} from "../../../lib/postmsg";
 import {attachmentListConfig} from "./attachment-list/attachment-list";
 import {FormService} from '../../../services/formService/formService';
 import ThumbnailList from "./thumbnail-list/thumbnail-list";
-
 let config = {
     template: template,
     binds: [
@@ -99,6 +98,7 @@ let config = {
                                 if (this.data['thumbnailListComponent']) {
                                     this.data['thumbnailListComponent'].actions.deleteItem(event.data.fileId);
                                 }
+                                this.events.changeValue(this.data);
                             }
                         }
                         if (event.event == 'finished') {
@@ -121,7 +121,6 @@ let config = {
                 });
             this.el.find('.upload-process-queue').append(ele);
             item.render(ele);
-
         }
     },
     afterRender: function () {
@@ -135,7 +134,6 @@ let config = {
             FormService.getThumbnails({
                 file_ids: JSON.stringify(this.data.value)
             }).then(res => {
-
                 if (!res.success) {
                     console.log(res.error)
                 }
@@ -146,11 +144,8 @@ let config = {
                 }
             })
         }
-
-
     }
 };
-
 export default class AttachmentControl extends Component {
     constructor(data, event) {
         super(config, data, event);

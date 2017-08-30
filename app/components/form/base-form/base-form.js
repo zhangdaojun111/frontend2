@@ -428,10 +428,10 @@ let config = {
                 if (val != "" || !$.isEmptyObject(val)) {
                     if ($.isArray(val)) {
                         if (val.length != 0) {
-                            this.actions.checkValue(data[key], this);
+                            this.actions.checkValue(data[key]);
                         }
                     } else {
-                        this.actions.checkValue(data[key], this);
+                        this.actions.checkValue(data[key]);
                     }
                 }
             }
@@ -1100,7 +1100,7 @@ let config = {
             // }
         },
         //修改可修改性
-        reviseCondition: function (editConditionDict, value, _this) {
+        reviseCondition: function (editConditionDict, value) {
             // if(this.dfService.isView){return false;}
             let arr = [];
             for (let key in editConditionDict["edit_condition"]) {
@@ -1115,9 +1115,9 @@ let config = {
                                 }
                             }
                         }
-                        _this.data.data[f]["is_view"] = ( i == andData[f].length ) ? 0 : 1;
-                        _this.data.childComponent[f].data = _this.data.data[f];
-                        _this.data.childComponent[f].reload();
+                        this.data.data[f]["is_view"] = ( i == andData[f].length ) ? 0 : 1;
+                        this.data.childComponent[f].data = this.data.data[f];
+                        this.data.childComponent[f].reload();
                     }
                 } else {
                     for (let dfield of editConditionDict["edit_condition"][key]) {
@@ -1125,9 +1125,9 @@ let config = {
                             continue;
                         }
                         //如果有字段的负责性，再开始下面的逻辑
-                        let data = _this.data.data[dfield];
-                        if (_this.data.data[dfield]["required_perm"] == 1) {
-                            let data = _this.data.data[dfield];
+                        let data = this.data.data[dfield];
+                        if (this.data.data[dfield]["required_perm"] == 1) {
+                            let data = this.data.data[dfield];
                             //针对多选下拉框，只要包含就可以
                             if (value instanceof Array) {
                                 data["be_control_condition"] = value.indexOf(key) != -1 ? 0 : 1;
@@ -1138,19 +1138,19 @@ let config = {
                                 arr.push(dfield);
                             }
                         }
-                        _this.data.childComponent[dfield].data = data;
-                        _this.data.childComponent[dfield].reload();
+                        this.data.childComponent[dfield].data = data;
+                        this.data.childComponent[dfield].reload();
                     }
                 }
             }
         },
         //触发事件检查
-        checkValue: function (data, _this) {
-            if (!_this.data.childComponent[data.dfield]) {
+        checkValue: function (data,) {
+            if (!this.data.childComponent[data.dfield]) {
                 return;
             }
-            if (_this.data.data[data.dfield]) {
-                _this.data.data[data.dfield] = _.defaultsDeep({}, data);
+            if (this.data.data[data.dfield]) {
+                this.data.data[data.dfield] = _.defaultsDeep({}, data);
             }
             if (data.type == 'Buildin') {
                 let id = data["id"];
@@ -1161,15 +1161,15 @@ let config = {
                         break;
                     }
                 }
-                _this.actions.setAboutData(id, value);
+                this.actions.setAboutData(id, value);
             }
             //检查是否是默认值的触发条件
             // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
-            if (_this.data.flowId != "" && _this.data['base_fields'].indexOf(data["dfield"]) != -1) {
-                _this.actions.validDefault(data, data['value']);
+            if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1) {
+                this.actions.validDefault(data, data['value']);
             }
             //统计功能
-            _this.actions.countFunc(data.dfield);
+            this.actions.countFunc(data.dfield);
             //改变选择框的选项
             if (data['linkage'] != {}) {
                 let j = 0;
@@ -1181,13 +1181,13 @@ let config = {
                     if (value == val) {
                         j++;
                         //改变选择框的选项
-                        _this.changeOptionOfSelect(originalData, originalData['linkage'][value]);
+                        this.changeOptionOfSelect(originalData, originalData['linkage'][value]);
                     }
                 }
                 if (j == 0) {
-                    let obj = _this.data.selectObj;
+                    let obj = this.data.selectObj;
                     for (let field of arr) {
-                        _this.data[field][obj[_this.data[field]['type']]] = _this.optionsToItem[field];
+                        this.data[field][obj[this.data[field]['type']]] = this.optionsToItem[field];
                     }
                 }
             }
@@ -1195,12 +1195,12 @@ let config = {
             //修改负责
             if (data["edit_condition"] && data["edit_condition"] !== "") {
                 setTimeout(() => {
-                    _this.actions.reviseCondition(data, data.value, _this);
+                    _this.actions.reviseCondition(data, data.value);
                 }, 0);
             }
             //修改必填性功能
             if (data["required_condition"] && data["required_condition"] !== "") {
-                _this.actions.requiredCondition(data, data['value']);
+                this.actions.requiredCondition(data, data['value']);
             }
 
             let calcData = {
@@ -1208,11 +1208,11 @@ let config = {
                 effect: data["effect"],
                 id: data['id']
             };
-            _this.actions.calcExpression(calcData, data['value']);
+            this.actions.calcExpression(calcData, data['value']);
             if (data.required) {
-                _this.actions.requiredChange(_this.data.childComponent[data.dfield]);
+                this.actions.requiredChange(this.data.childComponent[data.dfield]);
             }
-            _this.el.find('.select-drop').hide();
+            this.el.find('.select-drop').hide();
         },
         //添加按钮组
         addBtn() {
@@ -1258,7 +1258,7 @@ let config = {
         createActions() {
             let actions = {
                 changeValue: (data) => {
-                    this.actions.checkValue(data, this);
+                    this.actions.checkValue(data);
                 },
                 emitHistory: (data) => {
                     this.actions.openHistoryDialog(data);
@@ -1327,7 +1327,7 @@ let config = {
                 modal: true
             }).then((res) => {
                 _this.actions.setFormValue(data.dfield, res.value, res.label);
-                _this.actions.checkValue(data, _this);
+                _this.actions.checkValue(data);
             });
         },
 
@@ -1491,7 +1491,7 @@ let config = {
                 }
                 //数据填充后，根据修改条件对不同框进行只读操作
                 setTimeout(() => {
-                    _this.actions.reviseCondition(data[key], data[key].value, _this);
+                    _this.actions.reviseCondition(data[key], data[key].value);
                 }, 0);
                 //在这里根据type创建各自的控件
                 switch (type) {
@@ -1499,14 +1499,14 @@ let config = {
                         data[key]['temp_id'] = data['temp_id']['value'];
                         let correspondence = new Correspondence(data[key], actions);
                         correspondence.render(single);
-                        _this.data.childComponent[data[key].dfield] = correspondence;
+                        this.data.childComponent[data[key].dfield] = correspondence;
                         break;
                     case 'Songrid':
                         let popupType = single.data('popupType') || 0;
                         data[key]['temp_id'] = data['temp_id']['value'];
                         let songrid = new Songrid(Object.assign(data[key], {popupType: popupType}), actions);
                         songrid.render(single);
-                        _this.data.childComponent[data[key].dfield] = songrid;
+                        this.data.childComponent[data[key].dfield] = songrid;
                         break;
                     case 'Radio':
                         for (let obj of data[key].group) {
@@ -1519,57 +1519,57 @@ let config = {
                         }
                         let radio = new Radio(data[key], actions);
                         radio.render(single);
-                        _this.data.childComponent[data[key].dfield] = radio;
+                        this.data.childComponent[data[key].dfield] = radio;
                         break;
                     case 'Input':
                         let input = new Input(data[key], actions);
                         input.render(single);
-                        _this.data.childComponent[data[key].dfield] = input;
+                        this.data.childComponent[data[key].dfield] = input;
                         break;
                     case 'Textarea':
                         let textArea = new TextArea(data[key], actions);
                         textArea.render(single);
-                        _this.data.childComponent[data[key].dfield] = textArea;
+                        this.data.childComponent[data[key].dfield] = textArea;
                         break;
                     case 'Readonly':
                         let readonly = new Readonly(data[key], actions);
                         readonly.render(single);
-                        _this.data.childComponent[data[key].dfield] = readonly;
+                        this.data.childComponent[data[key].dfield] = readonly;
                         break;
                     case 'EnctyptInput':
                         let password = new Password(data[key], actions);
                         password.render(single);
-                        _this.data.childComponent[data[key].dfield] = password;
+                        this.data.childComponent[data[key].dfield] = password;
                         break;
                     case 'Hidden':
                         let hidden = new Hidden(data[key]);
                         hidden.render(single);
-                        _this.data.childComponent[data[key].dfield] = hidden;
+                        this.data.childComponent[data[key].dfield] = hidden;
                         break;
                     case 'Select':
                         let selectControl = new SelectControl(data[key], actions);
                         selectControl.render(single);
-                        _this.data.childComponent[data[key].dfield] = selectControl;
+                        this.data.childComponent[data[key].dfield] = selectControl;
                         break;
                     case 'Year':
                         let yearControl = new YearControl(data[key], actions);
                         yearControl.render(single);
-                        _this.data.childComponent[data[key].dfield] = yearControl;
+                        this.data.childComponent[data[key].dfield] = yearControl;
                         break;
                     case 'Yearmonthtime':
                         let yearMonthControl = new YearMonthControl(data[key], actions);
                         yearMonthControl.render(single);
-                        _this.data.childComponent[data[key].dfield] = yearMonthControl;
+                        this.data.childComponent[data[key].dfield] = yearMonthControl;
                         break;
                     case 'Buildin':
                         let buildInControl = new BuildInControl(data[key], actions);
                         buildInControl.render(single);
-                        _this.data.childComponent[data[key].dfield] = buildInControl;
+                        this.data.childComponent[data[key].dfield] = buildInControl;
                         break;
                     case 'MultiLinkage':
                         let multiLinkageControl = new MultiLinkageControl(data[key], actions);
                         multiLinkageControl.render(single);
-                        _this.data.childComponent[data[key].dfield] = multiLinkageControl;
+                        this.data.childComponent[data[key].dfield] = multiLinkageControl;
                         break;
                     case 'MultiSelect':
                         if (single.data('childData')) {
@@ -1581,45 +1581,45 @@ let config = {
                         data[key].is_special = data[key].field_content['special_multi_choice'] == 1 ? true : false;
                         let multiSelectControl = new MultiSelectControl(data[key], actions);
                         multiSelectControl.render(single);
-                        _this.data.childComponent[data[key].dfield] = multiSelectControl;
+                        this.data.childComponent[data[key].dfield] = multiSelectControl;
                         break;
                     case 'Editor':
                         let editorControl = new EditorControl(data[key], actions);
                         editorControl.render(single);
-                        _this.data.childComponent[data[key].dfield] = editorControl;
+                        this.data.childComponent[data[key].dfield] = editorControl;
                         break;
                     case 'SettingTextarea':
                         let settingTextareaControl = new SettingTextareaControl(data[key], actions);
                         settingTextareaControl.render(single);
-                        _this.data.childComponent[data[key].dfield] = settingTextareaControl;
+                        this.data.childComponent[data[key].dfield] = settingTextareaControl;
                         break;
                     case 'Attachment':
                     case 'Picture':
                         let attachmentControl = new AttachmentControl(data[key], actions);
                         attachmentControl.render(single);
-                        _this.data.childComponent[data[key].dfield] = attachmentControl;
+                        this.data.childComponent[data[key].dfield] = attachmentControl;
                         break;
                     case 'Time':
                         let timeControl = new TimeControl(data[key], actions);
                         timeControl.render(single);
-                        _this.data.childComponent[data[key].dfield] = timeControl;
+                        this.data.childComponent[data[key].dfield] = timeControl;
                         break;
                     case 'Date':
                         let dateControl = new DateControl(data[key], actions);
                         dateControl.render(single);
-                        _this.data.childComponent[data[key].dfield] = dateControl;
+                        this.data.childComponent[data[key].dfield] = dateControl;
                         break;
                     case 'Datetime':
                         let dateTimeControl = new DateTimeControl(data[key], actions);
                         dateTimeControl.render(single);
-                        _this.data.childComponent[data[key].dfield] = dateTimeControl;
+                        this.data.childComponent[data[key].dfield] = dateTimeControl;
                         break;
                     case 'editControl':
                         data[key]['temp_id'] = data['temp_id']['value'];
                         data[key]['table_id'] = data['table_id']['value'];
                         let contractControl = new ContractControl(data[key], actions);
                         contractControl.render(single);
-                        _this.data.childComponent[data[key].dfield] = contractControl;
+                        this.data.childComponent[data[key].dfield] = contractControl;
                         break;
                 }
             }
@@ -1675,8 +1675,7 @@ let config = {
             }
         }
     ],
-    firstAfterRender() {
-        let _this = this;
+    afterRender() {
         this.actions.createFormControl();
         this.actions.triggerControl();
         this.actions.changeOptions();
@@ -1684,10 +1683,10 @@ let config = {
         this.actions.addBtn();
 
         //默认表单样式
-        if (_this.el.find('table').hasClass('form-version-table-user') || _this.el.find('table').hasClass('form-version-table-department') || _this.el.find('table').hasClass('form-default')) {
-            _this.el.find('table').parents('#detail-form').css("background", "#F2F2F2");
-        }
 
+        if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
+            this.el.find('table').parents('#detail-form').css("background", "#F2F2F2");
+        }
     },
     beforeDestory() {
         this.el.off();

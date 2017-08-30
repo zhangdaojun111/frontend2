@@ -6,7 +6,6 @@ import Component from '../../../lib/component';
 import '../base-form/base-form.scss';
 import {FormService} from "../../../services/formService/formService"
 import template from './input-control.html'
-
 let config = {
     template: template,
     data: {
@@ -27,41 +26,40 @@ let config = {
                 let func = this.data.func;
                 let reg = this.data.reg;
                 let required = this.data.required
-
                 //输入框输入时的实时函数验证
                 if (val != "" && !$.isEmptyObject(func)) {
                     for (let r in func) {
-                        //var a = FormService.r(val)
+                        let a;
                         switch (r) {
                             case "checkCard":
-                                var a = FormService.checkCard(val);
+                                a = FormService.checkCard(val);
                                 break;
                             case "orgcodevalidate":
-                                var a = FormService.orgcodevalidate(val);
+                                a = FormService.orgcodevalidate(val);
                                 break;
                             case "xxzdx":
-                                var a = FormService.xxzdx(val);
+                                a = FormService.xxzdx(val);
                                 break;
                             case "tjbds":
-                                var a = FormService.tjbds(val);
+                                a = FormService.tjbds(val);
                                 break;
                             case "jssj":
-                                var a = FormService.jssj(val);
+                                a = FormService.jssj(val);
                                 break;
                             case "dqsj":
-                                var a = FormService.dqsj(val);
+                                a = FormService.dqsj(val);
                                 break;
                             case "getNowDate":
-                                var a = FormService.getNowDate(val);
+                                a = FormService.getNowDate(val);
                                 break;
                             case "fun_ghl_dqrq":
-                                var a = FormService.fun_ghl_dqrq(val);
+                                a = FormService.fun_ghl_dqrq(val);
                                 break;
                             case "fun_ghl_xxzdx":
-                                var a = FormService.fun_ghl_xxzdx(val);
+                                a = FormService.fun_ghl_xxzdx(val);
                                 break;
                             case " fun_ghl_dqsj":
-                                var a = FormService.fun_ghl_dqsj(val);
+                                a = FormService.fun_ghl_dqsj(val);
                                 break;
                             default:
                                 console.log("怎么错了呢(；′⌒`)");
@@ -95,13 +93,11 @@ let config = {
                     }
                     //this.reload();
                 }
-
                 if (val != "" && this.data.numArea && this.data.numArea !== "") {
                     let label = this.data.label;
                     let minNum = this.data.numArea.min;
                     let maxNum = this.data.numArea.max;
                     let errorInfo = this.data.numArea.error;
-
                     if (minNum !== "" && maxNum === "") {
                         if (val < minNum) {
                             this.el.find("#error_tip").css("display", "inline-block");
@@ -163,7 +159,6 @@ let config = {
             callback: function () {
                 this.el.find("input").css({
                     "border": "1px solid rgb(169, 210, 255)",
-                    "background-color": "rgb(255, 255, 255)"
                 });
             }
         },
@@ -173,18 +168,15 @@ let config = {
             callback: function () {
                 this.el.find("input").css({
                     "border": "1px solid rgb(226, 226, 226)",
-                    "background-color": "rgb(255, 255, 255)"
                 });
             }
-        },
-
+        }
     ],
     afterRender() {
         let _this = this;
         this.el.find('.search').on('input', _.debounce(function () {
             _this.actions.keyup();
         }, 200));
-
         this.el.find('.ui-width').css('width', this.data.width);
         if (this.data.is_view) {
             this.el.find('.ui-width').attr('disabled', true);
@@ -196,11 +188,9 @@ let config = {
         this.el.off();
     }
 }
-
 class InputControl extends Component {
     constructor(data, events) {
         super(config, data, events);
     }
 }
-
 export default InputControl

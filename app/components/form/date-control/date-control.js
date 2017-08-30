@@ -43,7 +43,7 @@ let config = {
         if (_this.data.value) {
             _this.el.find(".date_yy-mm-dd").val(_this.data.value.replace(/-/g, "/"));
         } else {
-            _this.el.find(".date_yy-mm-dd").val("年/月/日");
+            _this.el.find(".date_yy-mm-dd").val("年-月-日");
         }
         //控制到年月日
         _this.el.find(".date_yy-mm-dd").datepicker({
@@ -51,11 +51,10 @@ let config = {
             dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
             changeYear: true,
             changeMonth: true,
-            dateFormat: "yy/mm/dd",
+            dateFormat: "yy-mm-dd",
             defaultDate: new Date(_this.data.value),
             onClose: function (selectedDate) {
             },
-            autoSize: true,
             showOn: 'button',//设置触发选择器为button
             //buttonImage:"../../../assets/images/form/icon-rili.png",
             buttonImage: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAAbElEQVQ4y6VT0QoAIQibR9/qP+XP7p68h7C0cxDEYsrYEpLo4IlIM2OFA4CxPqqqrKKIc35Ewgrng0IL1WGfhZPHDCPbsMPRQitGM6NP393THlyBJOacJImb45qyhasq/4oxirMSbbtI0v3OL3+8d/U3+COTAAAAAElFTkSuQmCC",

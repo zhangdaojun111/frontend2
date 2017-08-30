@@ -1,10 +1,30 @@
-.ui-correspondence-box {
-    position: relative;
-    height: 450px;
-    width: 1000px;
-    .correspondence-box {
-        width: 100%;
-        height: 100%;
+.form-control{
+ .ui-correspondence-box {
+        position: relative;
+        height: 450px;
+        width: 1000px;
+        .correspondence-box {
+            width: 100%;
+            height: 100%;
+        }
+        margin-bottom: 30px;
+        margin-top: 5px;
     }
-    margin-bottom: 30px;
+    .ui-forms-a {
+        position: absolute;
+        display: inline-block;
+        width: 100px;
+        height: 20px;
+        line-height: 20px;
+        left:calc(50% - 50px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .corr-img {
+            background: url("./correspondence.png");
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+        }
+    }
 }
