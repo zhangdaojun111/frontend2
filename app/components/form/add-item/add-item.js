@@ -4,6 +4,7 @@
  */
 
 import template from './add-item.html';
+
 let css = `
 .add-wrap{
     width:100%;
@@ -98,38 +99,38 @@ let css = `
 let AddItem = {
     template: template.replace(/(\")/g, '\''),
     data: {
-        text:'',
-        newItems:[],
-        css:css.replace(/(\n)/g, '')
+        text: '',
+        newItems: [],
+        css: css.replace(/(\n)/g, '')
     },
-    actions:{
+    actions: {
         //查找是否重复
         hasExistInOriginal(addItemContent) {
             let isExist = false;
-            for(let key in this.data.originalOptions) {
-                if(this.data.originalOptions[key]["label"] == addItemContent){
+            for (let key in this.data.originalOptions) {
+                if (this.data.originalOptions[key]["label"] == addItemContent) {
                     isExist = true;
                 }
             }
-            if(this.data.newItems.indexOf(addItemContent) != -1){
-                isExist=true;
+            if (this.data.newItems.indexOf(addItemContent) != -1) {
+                isExist = true;
             }
             return isExist;
         },
         //删除添加选项
-        deleteItem($this){
-            for(let i = 0,len = this.data.newItems.length;i < len;i++){
-                if(this.data.newItems[i] == $this.val()){
-                    this.data.newItems.splice(i,1);
+        deleteItem($this) {
+            for (let i = 0, len = this.data.newItems.length; i < len; i++) {
+                if (this.data.newItems[i] == $this.val()) {
+                    this.data.newItems.splice(i, 1);
                 }
             }
             $this.parent().remove();
         },
         //添加新选项
-        addItem(){
-            let val=this.el.find('.addValue').val();
+        addItem() {
+            let val = this.el.find('.addValue').val();
             if (val != '') {
-                if(!this.actions.hasExistInOriginal(val)){
+                if (!this.actions.hasExistInOriginal(val)) {
                     this.data.newItems.push(val);
                     this.el.find('.result').append(`<div class=item>${val}<span class=ui-del>X</span></div>`);
                     this.el.find('.addValue').val('');
@@ -137,30 +138,32 @@ let AddItem = {
             }
         },
         //保存新选项
-        saveItems(){
-            HTTP.postImmediately({url:'/add_select_item/',data:{
-                field_id: this.data.fieldId,
-                content_list: JSON.stringify(this.data.newItems)
-            }}).then(res=>{
-                if(res.success == 1){
+        saveItems() {
+            HTTP.postImmediately({
+                url: '/add_select_item/', data: {
+                    field_id: this.data.fieldId,
+                    content_list: JSON.stringify(this.data.newItems)
+                }
+            }).then(res => {
+                if (res.success == 1) {
                     PMAPI.sendToParent({
                         type: PMENUM.close_dialog,
                         key: this.key,
                         data: {
-                            newItems:res['data'],
+                            newItems: res['data'],
                         }
                     })
                 }
             });
         }
     },
-    afterRender(){
-        let _this=this;
-        this.el.on('click','.ui-del',function(){//此处不能用箭头函数 会造成this指针丢失
+    afterRender() {
+        let _this = this;
+        this.el.on('click', '.ui-del', function () {//此处不能用箭头函数 会造成this指针丢失
             _this.actions.deleteItem($(this));
-        }).on('click', '.add',()=>{
+        }).on('click', '.add', () => {
             this.actions.addItem();
-        }).on('click', '.save',()=> {
+        }).on('click', '.save', () => {
             this.actions.saveItems();
         })
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));

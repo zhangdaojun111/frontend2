@@ -46,7 +46,7 @@ let config = {
             readOnly: this.data.is_view == 1,
             theme: 'snow'
         });
-        if(this.data.value){
+        if (this.data.value) {
             this.quill.pasteHTML(this.data.value);
         }
         this.quill.on('text-change', _.debounce(() => {
@@ -59,8 +59,8 @@ let config = {
 };
 
 class EditorControl extends Component {
-    constructor(data,events) {
-        super(config, data,events);
+    constructor(data, events) {
+        super(config, data, events);
     }
 }
 

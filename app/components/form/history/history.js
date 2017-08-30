@@ -4,6 +4,7 @@
  */
 
 import template from './history.html';
+
 let css = `.history td{
                   line-height: 1.42857143;
                   padding: 8px;
@@ -43,10 +44,8 @@ let History = {
     data: {
         css: css.replace(/(\n)/g, ''),
     },
-    actions:{
-
-    },
-    firstAfterRender(){
+    actions: {},
+    firstAfterRender() {
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
     },
 }

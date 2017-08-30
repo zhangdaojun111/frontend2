@@ -1,13 +1,14 @@
 import template from './add-enrypt.html';
+
 let css = ``;
 css = css.replace(/(\n)/g, '')
 let AddItem = {
     template: template.replace(/\"/g, '\''),
     data: {
         // text:'哈哈',
-        newItems:[],
+        newItems: [],
     },
-    actions:{
+    actions: {
         // hasExistInOriginal:function(addItemContent) {
         //     let isExist = false;
         //     for(let key in this.data.originalOptions) {
@@ -18,8 +19,8 @@ let AddItem = {
         //     return isExist;
         // },
     },
-    afterRender: function() {
-        let _this=this;
+    afterRender: function () {
+        let _this = this;
         this.el.on('click', '#save', function () {
             let valPw = $(this).siblings("input").val();
             // if (valPw != '') {
@@ -31,16 +32,16 @@ let AddItem = {
                 type: PMENUM.close_dialog,
                 key: _this.key,
                 data: {
-                    newItems:valPw
+                    newItems: valPw
                 }
             })
         });
-        this.el.on('click', ("#cancel"), ()=> {
+        this.el.on('click', ("#cancel"), () => {
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
                 key: _this.key,
                 data: {
-                    cancel:true,
+                    cancel: true,
                 }
             })
         });
