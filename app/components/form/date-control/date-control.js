@@ -107,6 +107,8 @@ let config={
 }
 export default class DateControl extends Component{
     constructor(data,events){
+        console.log('dateComponent');
+        console.log(events);
         super(config,data,events);
     }
 }
