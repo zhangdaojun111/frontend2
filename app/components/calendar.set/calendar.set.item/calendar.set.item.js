@@ -89,7 +89,6 @@ let config = {
          * 代表字段选中后，附加字段中对应字段也选中
          */
         checkForResSelected: function (forResText, forResId) {
-            console.log(forResText,forResId, this.data.multiSelectMenu.data.choosed);
             let selectedOpts = this.data.multiSelectMenu.data.choosed;
             let isInSelectedOpts = false;
             for(let item of selectedOpts) {
@@ -120,6 +119,7 @@ let config = {
             this.data.preViewText = selectedOptsText;
             this.el.find('.preview-text').html(this.data.preViewText);
         },
+
         /**
          * @author zj
          * 打开提醒方式设置
@@ -142,44 +142,27 @@ let config = {
                     emailAddressList: this.data.emailAddressList,
                     emailAddress: this.data.emailAddress,
                 }).then(data => {
-                if(!data.onlyclose) {
-                    console.log(data);
-                    this.data.rowSetData.email = data['email'];
-                    this.data.rowSetData.sms = data['sms'];
-                    let showMethod = '';
-                    if(data['sms']['sms_status'] === '1') {
-                        showMethod = '短信';
-                        this.el.find('.set-remind-method').html(showMethod);
+                    if(!data.onlyclose) {
+                        console.log(data);
+                        this.data.rowSetData.email = data['email'];
+                        this.data.rowSetData.sms = data['sms'];
+                        let showMethod = '';
+                        if(data['sms']['sms_status'] === '1') {
+                            showMethod = '短信';
+                            this.el.find('.set-remind-method').html(showMethod);
+                        }
+                        if (data['email']['email_status'] === '1') {
+                            showMethod = showMethod + ' ' + '邮件';
+                            this.el.find('.set-remind-method').html(showMethod);
+                        }
+                        if(data['sms']['sms_status'] === 0 && data['email']['email_status'] === 0) {
+                            showMethod = '设置提醒方式';
+                            this.el.find('.set-remind-method').html(showMethod);
+                        }
                     }
-                    if (data['email']['email_status'] === '1') {
-                        showMethod = showMethod + ' ' + '邮件';
-                        this.el.find('.set-remind-method').html(showMethod);
-                    }
-                    if(data['sms']['sms_status'] === 0 && data['email']['email_status'] === 0) {
-                        showMethod = '设置提醒方式';
-                        this.el.find('.set-remind-method').html(showMethod);
-                    }
-                }
-
             });
         },
 
-        /**
-         * @author zj
-         *检查已设置的代表字段
-         */
-        checkResTextSelected: function () {
-            // let resOpts = this.data.dropdownForRes;
-            // resOpts.each((item) => {
-            //     if(resOpts[item].id) {
-            //         let a = resOpts[item].id;
-            //         if(a === this.data.rowSetData['selectedRepresents']) {
-            //             resOpts[item].selected  = 'selected';
-            //         }
-            //     }
-            //
-            // });
-        },
 
         /**
          * @author zj
@@ -267,8 +250,6 @@ let config = {
                 staus = false;
             }
         });
-
-        this.actions.checkResTextSelected();
 
         this.actions.checkChangeTextSelected();
 

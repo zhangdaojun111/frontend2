@@ -1,12 +1,11 @@
 /**
- *@author qiumaoyun
+ *@author qiumaoyun and luyang
  *工作流表格
  */
 import Component from "../../../lib/component";
 import template from './workflow-grid.html';
 import './workflow-grid.scss'
-import dataGrid from '../../../components/dataGrid/data-table-page/data-table-page'
-import Mediator from '../../../lib/mediator';
+
 
 let config = {
     template: template,

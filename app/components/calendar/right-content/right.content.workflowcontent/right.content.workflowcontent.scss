@@ -1,11 +1,15 @@
 @import "../../../../assets/scss/core/base";
 $workflow-bg-color: rgb(202,238,255);
-.component-workflow{
-    padding: 2px 0px 3px 0px;
+.component-calendar-workflow{
+    padding: 0px 0px 0px 0px;
     height: 25px;
+    margin-top: 5px;
     width: 97%;
+    border-right: 2px solid rgba(202, 238, 255, 1);
+    box-sizing: border-box;
     .workflow-content{
-        padding: 1px 0px 2px 5px;
+        box-sizing: border-box;
+        padding: 0px 0px 2px 5px;
         position: relative;
         bottom: 20px;
         z-index: 3;

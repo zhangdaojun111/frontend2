@@ -18,7 +18,7 @@ let config = {
     actions:{
         initInfo:function () {
             this.el.find('div.table-name').html(this.data.searchData.label);
-            this.el.find('p.attachment-name').html(this.data.searchData.file_name + " 附件");
+            this.el.find('div.attachment-content').html(this.data.searchData.file_name + " 附件").attr('title',this.data.searchData.file_name + " 附件");
             this.actions.setHref();
         },
         setHref:function () {
@@ -29,13 +29,13 @@ let config = {
                 this.data.isCanReview = false;
                 this.fileId = this.data.searchData.file_id;
                 this.data.src = window.location.href.split('search_result')[0] + "download_attachment/?file_id=" + this.fileId + "&download=1";
-                this.el.find('a.preview').addClass('cantReview');
+                this.el.find('a.preview').addClass('cantPreview');
                 this.el.find('a.download').attr("href",this.data.src).attr('target','_blank');
 
             }else{
                 // this.data.previewSrc = location.href.split('#')[0] + "data/download_attachment/?file_id=" + this.fileId + "&download=0";
                 // this.data.src = location.href.split('#')[0] + "data/download_attachment/?file_id=" + this.fileId + "&download=1";
-                this.el.find('a.preview').addClass('canReview');
+                this.el.find('a.preview').addClass('canPreview');
                 this.fileId = this.data.searchData.file_id;
                 this.data.previewSrc = window.location.href.split('search_result')[0] + "download_attachment/?file_id=" + this.fileId + "&download=0";
                 this.data.src = window.location.href.split('search_result')[0] + "download_attachment/?file_id=" + this.fileId + "&download=1";

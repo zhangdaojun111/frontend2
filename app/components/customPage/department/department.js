@@ -109,7 +109,8 @@ let config = {
                     fields: this.data.customColumnsFields,
                     fixCols: this.data.fixCols,
                     tableId: this.data.tableId,
-                    agGrid: this.agGrid
+                    agGrid: this.agGrid,
+                    close: this.actions.calcCustomColumn,
                 }
                 this.customColumnsCom  = new customColumns(custom);
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
@@ -227,15 +228,45 @@ let config = {
             //宽度自适应
             if( this.el.find( '.custom-column-btn' )[0] ){
                 this.el.find( '.custom-column-btn' ).on( 'click',()=>{
-                    this.el.find( '.custom-columns-panel' )[0].style.display = this.data.isShowCustomPanel?'none':'block';
-                    this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
-                    let num = 0;
-                    if( this.data.isShowCustomPanel ){
-                        num+=200;
-                    }
-                    let grid = this.el.find( '#data-agGrid' )
-                    grid.width( 'calc(100% - ' + num + 'px)' );
+                    this.actions.calcCustomColumn();
                 } )
+            }
+            //点击关掉定制列panel
+            this.el.find( '.ag-body' ).on( 'click',()=>{
+                setTimeout( ()=>{
+                    this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'-200px' } );
+                },400 )
+                this.data.isShowCustomPanel = false;
+                this.actions.changeAgGridWidth(true);
+            } )
+        },
+        //定制列事件
+        calcCustomColumn: function () {
+            this.data.isShowCustomPanel = !this.data.isShowCustomPanel;
+            let close = false;
+            if( this.data.isShowCustomPanel ){
+                this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'0px' } );
+            }else {
+                close = true;
+                setTimeout( ()=>{
+                    this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'-200px' } );
+                },400 )
+            }
+            this.actions.changeAgGridWidth(close);
+        },
+        //改变agGrid宽度
+        changeAgGridWidth: function (close) {
+            let num = 0;
+            if( this.data.isShowCustomPanel ){
+                num+=200;
+            }
+            let grid = this.el.find( '#data-agGrid' )
+            if( close ){
+                grid.width( 'calc(100% - ' + num + 'px)' );
+            }else {
+                setTimeout( ()=>{
+                    grid.width( 'calc(100% - ' + num + 'px)' );
+                },400 )
             }
         },
         //打开穿透数据弹窗

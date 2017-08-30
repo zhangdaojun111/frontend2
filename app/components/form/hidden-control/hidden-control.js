@@ -4,17 +4,16 @@
  */
 import Component from '../../../lib/component';
 import template from './hidden-control.html'
-let config={
-        template:template,
-    data:{
 
-    },
-    actions:{
-    },
+let config = {
+    template: template,
+    data: {},
+    actions: {},
 }
+
 class HiddenControl extends Component {
-    constructor(data){
-        super(config,data);
+    constructor(data) {
+        super(config, data);
     }
 }
 

@@ -10,49 +10,49 @@ import DataTableAgGrid from '../../dataGrid/data-table-page/data-table-agGrid/da
 import './songridControl.scss'
 import template from './songrid-control.html';
 
-let config={
-    template:template,
-    actions:{
-      songridDefault(res){
-          if(res == _this.data.value){
-              dataGrid.actions.getGridData();
-          }
-      }
+let config = {
+    template: template,
+    actions: {
+        songridDefault(res) {
+            if (res == _this.data.value) {
+                dataGrid.actions.getGridData();
+            }
+        }
     },
-    binds:[
+    binds: [
         {
             event: 'click',
             selector: '.ui-forms-a',
-            callback: function(){
+            callback: function () {
                 this.events.openSongGrid(this.data)
             }
         },
         {
             event: 'click',
             selector: '.add-item',
-            callback: function(){
+            callback: function () {
                 this.events.addItem(this.data)
             }
         }
     ],
-    afterRender(){
-        let config={
-            tableId:this.data.value,
-            parentTableId:this.data.tableId,
-            parentTempId:this.data.temp_id,
-            rowId:this.data.parent_temp_id || '',
-            tableType:'child',
-            viewMode:this.data.is_view==0?'EditChild':'ViewChild',
+    afterRender() {
+        let config = {
+            tableId: this.data.value,
+            parentTableId: this.data.tableId,
+            parentTempId: this.data.temp_id,
+            rowId: this.data.parent_temp_id || '',
+            tableType: 'child',
+            viewMode: this.data.is_view == 0 ? 'EditChild' : 'ViewChild',
         }
-        let dataGrid=new DataTableAgGrid(config);
-        this.append(dataGrid,this.el.find('.songGrid'));
+        let dataGrid = new DataTableAgGrid(config);
+        this.append(dataGrid, this.el.find('.songGrid'));
     },
-    beforeDestory(){
+    beforeDestory() {
         this.el.off();
     }
 }
-export default class Songrid extends Component{
-    constructor(data,events){
-        super(config,data,events);
+export default class Songrid extends Component {
+    constructor(data, events) {
+        super(config, data, events);
     }
 }

@@ -70,6 +70,15 @@ let config = {
             this.el.find('.condition-search-delete').css('visibility','hidden');
             this.el.find('.condition-search-add').css('display','inline-block');
         },
+        //获取高级查询数据
+        getExpertSearchData: function () {
+            let obj = {'actions':JSON.stringify( ['queryParams'] ),'table_id':this.data.tableId};
+            dataTableService.getPreferences( obj ).then( res=>{
+
+
+            } );
+            HTTP.flush();
+        },
         // 获取查询数据
         submitData: function (name){
             this.data.searchInputList = [];
@@ -259,7 +268,6 @@ let config = {
                     if(!this.isEdit) {
                         this.actions.saveCommonQuery(data.value);
                     } else {
-                        debugger
                         this.actions.deleteCommonQuery(this.id,data.value);
                         // this.actions.saveCommonQuery(data.value);
                     }
@@ -326,7 +334,6 @@ let config = {
                 'id': id
             };
             dataTableService.delPreference(obj).then( res=>{
-                debugger
                 if(res.succ == 0) {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
@@ -337,7 +344,7 @@ let config = {
                         }
                     }
                     this.data.deleteCommonQuery = true;
-                    if(this.isEdit) {
+                    if(this.isEdit && value) {
                         this.actions.saveCommonQuery(value);
                         this.el.find('.common-search-compile').html(`<span class="img"></span>`);
                         this.itemDeleteChecked = !this.itemDeleteChecked;
@@ -434,10 +441,12 @@ let config = {
                     _this.isEdit = false;
                 }
             })
+            this.hideLoading()
             this.actions.setConditionHeight()
         }
     },
     afterRender: function() {
+        this.showLoading()
         PMAPI.getIframeParams(window.config.key).then((res) => {
             for (let item in res.data.d) {
                 this.data[item] = res.data.d[item]

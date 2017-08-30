@@ -188,18 +188,8 @@ let config = {
                 });
                 this.data.childComponents.push(calendarSetItem);
                 this.append(calendarSetItem, this.el.find('.set-items'));
-                Mediator.emit('calendar-set:editor',{data:0});
             });
         },
-
-        // representChange: function(a,a_selectedRepresent){
-        //     if( a_selectedRepresent === '' ){
-        //         return;
-        //     }
-        //     if(a.selectedOpts.indexOf(a_selectedRepresent) === -1){
-        //         a.selectedOpts.push(a_selectedRepresent);
-        //     }
-        // },
 
         /**
          * @author zj
@@ -221,6 +211,7 @@ let config = {
          * @param tableId
          */
         reset: function(tableId){
+            // 重置每行数据
             for(let a of this.data.allRows){
                 a['isSelected']=false;
                 a['is_show_at_home_page']=false;
@@ -257,8 +248,6 @@ let config = {
                         this.el.find('.set-items').empty();
                         this.actions.getColumnListData(this.data.tableId);
                     },200 )
-                }else  if(res['success'] === 0){
-                    MSG.alert('重置失敗');
                 }
             });
         },
@@ -307,7 +296,6 @@ let config = {
             }
             CalendarService.saveCalendarTable(tableId,param).then(res=>{
                 if(res['succ'] === 1){
-                    console.log('success');
                     MSG.alert("保存成功");
                     setTimeout( ()=>{
                         //CalendarSetService.getColumnList(this.data.tableId)
@@ -327,11 +315,12 @@ let config = {
         /**
          * @author zj
          * @param tableId
-         *
+         * 获取设置的表头及首页可修改字段
          */
         getColumnListData: function (tableId) {
             CalendarSetService.getColumnList(tableId).then(res => {
                 this.data.filedHead = res['rows'];
+
                 CalendarService.getCalendarTableById(tableId).then(res => {
                     this.data.colorInfoFields = res;
                     this.data.dropdownForCalendarChange = [{id:'',name:''}];
@@ -364,11 +353,13 @@ let config = {
         this.el.css({width: '100%',height:"100%"});
         this.el.find('iframe').css("width","100%");
 
+        // 用于在系统的其他地方打开日历设置
         if(window.config.table_id) {
             this.data.tableId = window.config.table_id;
             this.actions.getColumnListData(this.data.tableId);
         }
 
+        // 获取设置提醒方式中的可用的人员信息
         UserInfoService.getAllUsersInfo().then(user => {
             this.data.copypeople = [];
             for( let data of user.rows ){
@@ -376,6 +367,7 @@ let config = {
             }
         });
 
+        // 获取邮件发送地址
         CalendarSetService.getEmailSetting().then(res => {
             this.data.emailAddressList = [];
             for(let x in res['data']){
@@ -388,8 +380,8 @@ let config = {
                 }
             }
         });
-        Mediator.on('calendar-set-left:calendar-set', data => {
 
+        Mediator.on('calendar-set-left:calendar-set', data => {
             this.data.tableId = data.table_id;
             this.actions.getColumnListData(data.table_id);
         });
@@ -400,23 +392,26 @@ let config = {
             $(this).addClass("disabled");
             $(this).next('span').addClass("disabled");
             Mediator.emit('calendar-set:editor',{data:1});
-            $(this).attr('disabled', 'true')
+            //$(this).attr('disabled', 'true')
         }).on("click",".cancel-btn", () => {
             _this.el.find(".hide-btns").css("visibility","hidden");
             _this.el.find(".set-btn").removeClass("disabled");
+            _this.el.find(".editor-btn").removeAttr("disabled");
             Mediator.emit('calendar-set:editor',{data:-1});
         }).on('click', '.reset-btn', () => {
             _this.actions.despReset(this.data.tableId);
         }).on('click', '.save-btn', () => {
             let newAllRowsData = [];
             for(let obj of this.data.childComponents) {
-                console.log(obj.data.rowSetData);
                 newAllRowsData.push(obj.data.rowSetData);
             }
             console.log(newAllRowsData);
             _this.actions.saveSetting(this.data.tableId, newAllRowsData);
         });
 
+    },
+    beforeDestory: function () {
+        Mediator.removeAll('calendar-set-left:calendar-set');
     }
 };
 
