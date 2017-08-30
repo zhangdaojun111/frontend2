@@ -49,7 +49,6 @@ export class CellPieComponent extends BiBaseComponent {
         config.data.cellChart = cellChart ? cellChart : null;
         super(config);
         this.initPie();
-        console.log('=======================');
         console.log(this.data);
     }
 
