@@ -200,14 +200,20 @@ class Component {
     }
 
     hideLoading(){
-        this.loadingOverlay.fadeOut();
-        this.loadingEffectBox.fadeOut(() => {
-            this.loadingOverlay.remove();
-            this.loadingEffectBox.remove();
-            this.loadingTarget.removeClass('component-loading-effect');
-            this.loadingTarget.children().removeClass('component-filter-blur');
-            this.loadingTarget = null;
-        });
+        // this.loadingOverlay.fadeOut();
+        // this.loadingEffectBox.fadeOut(() => {
+        //     this.loadingOverlay.remove();
+        //     this.loadingEffectBox.remove();
+        //     this.loadingTarget.removeClass('component-loading-effect');
+        //     this.loadingTarget.children().removeClass('component-filter-blur');
+        //     this.loadingTarget = null;
+        // });
+
+        this.loadingOverlay.remove();
+        this.loadingEffectBox.remove();
+        this.loadingTarget.removeClass('component-loading-effect');
+        this.loadingTarget.children().removeClass('component-filter-blur');
+        this.loadingTarget = null;
     }
 
     disable(){
