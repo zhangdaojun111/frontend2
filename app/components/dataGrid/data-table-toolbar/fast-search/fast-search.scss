@@ -8,13 +8,13 @@
         font-size: 12px;
         border: 1px solid #d7d7d7;
         background-color: #fafafa;
-        background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 62px center transparent;
+        background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 40px center transparent;
         appearance: none;
         -moz-appearance: none;
         -webkit-appearance: none;
         outline: none;
         padding-right: 14px;
-        width: 90px;
+        width: 62px;
         height: 24px;
         color: rgb(85, 85, 85);
         line-height: 24px;
@@ -24,11 +24,11 @@
     .fast-search-box {
         display: inline-block;
         position: relative;
-        width: 147px;
+        width: 114px;
         height: 25px;
         .fast-search-box-input {
             border-radius: 4px;
-            background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 113px center transparent;
+            background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 82px center transparent;
             top:-1px;
             font-size: 12px;
             border: 1px solid #d7d7d7;
@@ -36,7 +36,7 @@
             -moz-appearance: none;
             -webkit-appearance: none;
             padding-right: 14px;
-            width: 120px;
+            width: 86px;
             height: 20px;
             color: rgb(85, 85, 85);
             line-height: 20px;
@@ -49,7 +49,7 @@
             position: absolute;
             top: 23px;
             max-height: 210px;
-            width: 139px;
+            width: 105px;
             overflow: auto;
             line-height: 30px;
             border: 1px solid rgb(201, 201, 201);
