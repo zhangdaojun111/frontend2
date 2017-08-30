@@ -61,6 +61,7 @@ export class CellPieComponent extends BiBaseComponent {
         this.data.deeps = this.data.cellChart.chart.deeps.length;
     }
 
+
     /**
      * 获取下穿数据
      * @param deepX= 下穿的x轴字段，next ？ 下穿 ： 上传
