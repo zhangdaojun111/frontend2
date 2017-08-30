@@ -70,6 +70,15 @@ let config = {
             this.el.find('.condition-search-delete').css('visibility','hidden');
             this.el.find('.condition-search-add').css('display','inline-block');
         },
+        //获取高级查询数据
+        getExpertSearchData: function () {
+            let obj = {'actions':JSON.stringify( ['queryParams'] ),'table_id':this.data.tableId};
+            dataTableService.getPreferences( obj ).then( res=>{
+
+
+            } );
+            HTTP.flush();
+        },
         // 获取查询数据
         submitData: function (name){
             this.data.searchInputList = [];
@@ -432,10 +441,12 @@ let config = {
                     _this.isEdit = false;
                 }
             })
+            this.hideLoading()
             this.actions.setConditionHeight()
         }
     },
     afterRender: function() {
+        this.showLoading()
         PMAPI.getIframeParams(window.config.key).then((res) => {
             for (let item in res.data.d) {
                 this.data[item] = res.data.d[item]
