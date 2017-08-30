@@ -237,13 +237,13 @@ let config = {
             }
         },
         //取消查询关闭iframe
-        cancelSearch:function() {
-            PMAPI.closeIframeDialog(window.config.key, {
-                saveCommonQuery:this.data.saveCommonQuery,
-                deleteCommonQuery:this.data.deleteCommonQuery,
-                onlyclose:true
-            });
-        },
+        // cancelSearch:function() {
+        //     PMAPI.closeIframeDialog(window.config.key, {
+        //         saveCommonQuery:this.data.saveCommonQuery,
+        //         deleteCommonQuery:this.data.deleteCommonQuery,
+        //         onlyclose:true
+        //     });
+        // },
         //打开保存常用查询
         openSaveQuery: function(){
             if(this.isEdit) {

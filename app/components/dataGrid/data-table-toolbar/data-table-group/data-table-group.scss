@@ -57,10 +57,12 @@
         .input-box {
             padding: 5px;
             input{
-                width: 100%;
+                width: calc(100% - 3px);
                 font-size: 12px;
                 height: 20px;
                 border: 1px solid #d7d7d7;
+                padding-left: 3px;
+                background: url(../../../../assets/images/framework/search.png) no-repeat scroll right center transparent;
             }
         }
         .group-data {
