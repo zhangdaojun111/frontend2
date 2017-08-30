@@ -32,6 +32,12 @@
     z-index: 1;
   }
 
+  .ag-header-group-cell {
+    .ag-header-cell-resize {
+      width: 0px;
+    }
+  }
+
   .resetFloatingFilter {
     display: block;
     margin: auto;
