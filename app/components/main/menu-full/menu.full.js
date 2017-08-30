@@ -30,9 +30,7 @@ function searchData(menu, text) {
         }
     }
     search(res, text, null);
-    console.log(res);
     return res;
-
 }
 
 let config = {
@@ -124,7 +122,7 @@ let config = {
     afterRender: function () {
         this.$root = this.el.find('.root');
         this.actions.renderMenuList();
-        this.el.find('.search input:text').focus();
+        // this.el.find('.search input:text').focus();
         this.actions.countHeight();
     },
     firstAfterRender: function() {

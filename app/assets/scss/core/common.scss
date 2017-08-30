@@ -5,6 +5,10 @@ html {
     font: 12px/1.5 "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
 }
 
+input, textarea, select {
+    outline: none;
+}
+
 .clearfix:after {
     content: ".";
     display: block;
@@ -21,8 +25,8 @@ html {
 }
 
 ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: 6px;
+    height: 6px;
 }
 
 ::-webkit-scrollbar-track-piece {
@@ -33,13 +37,13 @@ html {
 }
 
 ::-webkit-scrollbar-thumb:vertical {
-    height: 4px;
+    height: 6px;
     background-color: #999999;
     //border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
-    width: 4px;
+    width: 6px;
     background-color: #999999;
     //border-radius: 4px;
 }

@@ -170,7 +170,7 @@ let config = {
                     "border": "1px solid rgb(226, 226, 226)",
                 });
             }
-        },
+        }
     ],
     afterRender() {
         let _this = this;

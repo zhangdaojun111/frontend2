@@ -4,6 +4,7 @@
 import Component from "../../../../lib/component";
 import template from './calendar.export.html';
 import './calendar.export.scss';
+import MSG from '../../../../lib/msgbox';
 
 let CalendarExport = {
     template: template,
@@ -13,10 +14,9 @@ let CalendarExport = {
     },
     actions: {
 
-        getSchedule: function() {
+        getExportDate: function() {
             this.data.fromDate = this.el.find('.start-date').val();
             this.data.toDate = this.el.find('.end-date').val();
-            console.log(this.data.fromDate, this.data.toDate);
             if( this.data.fromDate === '' || this.data.toDate === '' ){
                 return;
             }
@@ -35,11 +35,10 @@ let CalendarExport = {
         let that = this;
         this.el.on('click', '.export-btn', function () {
             window.open(`/calendar_mgr/export_calendar_data/?from_date=${that.data.fromDate}&to_date=${that.data.toDate}`);
-            console.log(that.data.fromDate, that.data.toDate);
         }).on('input propertychange', '.start-date', function () {
-            that.actions.getSchedule();
+            that.actions.getExportDate();
         }).on('input propertychange', '.end-date', function () {
-            that.actions.getSchedule();
+            that.actions.getExportDate();
         })
     },
 };

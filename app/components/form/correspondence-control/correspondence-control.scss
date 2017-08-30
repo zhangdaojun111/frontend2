@@ -1,6 +1,5 @@
-
 .form-control{
-    .ui-correspondence-box {
+ .ui-correspondence-box {
         position: relative;
         height: 450px;
         width: 1000px;
@@ -11,22 +10,20 @@
         margin-bottom: 30px;
         margin-top: 5px;
     }
-    .ui-forms-a{
+    .ui-forms-a {
         position: absolute;
         display: inline-block;
         width: 100px;
-        height:20px;
+        height: 20px;
         line-height: 20px;
-        color:#333333;
-        top:0;
         left:calc(50% - 50px);
         display: flex;
         align-items: center;
         justify-content: center;
-        .corr-img{
+        .corr-img {
             background: url("./correspondence.png");
             width: 16px;
-            height:16px;
+            height: 16px;
             display: inline-block;
         }
     }
