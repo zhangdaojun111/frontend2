@@ -114,7 +114,24 @@ let config = {
                             }
                         }
                     }
-                });
+                    if(event.event == 'finished'){
+                        this.data.queue.push(event.data);
+                        this.data.value = this.data.value==''?[]:this.data.value;
+                        this.data.value.push(event.data.fileId);
+                        this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
+                        this.trigger('changeValue', this.data);
+                        let obj = {};
+                        obj[event.data.fileId]=event.data.thumbnail;
+                        if(this.data['thumbnailListComponent']) {
+                             this.data['thumbnailListComponent'].actions.addItem(obj);
+                        } else {
+                            let comp = new ThumbnailList([obj]);
+                            comp.render(this.el.find('.thumbnail-list'));
+                            this.data['thumbnailListComponent']=comp;
+                        }
+                    }
+                }
+            });
             this.el.find('.upload-process-queue').append(ele);
             item.render(ele);
 
