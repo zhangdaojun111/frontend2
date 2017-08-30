@@ -5,7 +5,6 @@
 
 
 import Component from '../../../lib/component'
-import Mediator from '../../../lib/mediator';
 import DataTableAgGrid from '../../dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import './songridControl.scss'
 import template from './songrid-control.html';
