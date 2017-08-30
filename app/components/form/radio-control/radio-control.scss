@@ -1,47 +1,42 @@
 .df-input-radio-status {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 6px;
-  height: 6px;
-  background: #0E7AEF;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  /*opacity:0;*/
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    background: #0E7AEF;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    /*opacity:0;*/
 }
-
 .df-input-radio {
-  width: 20px;
-  height: 20px;
-  /*-webkit-appearance: none;*/
-  vertical-align: middle;
-  margin: 0;
-  margin-right: 2px;
-  outline: none;
-  opacity: 0;
+    width: 20px;
+    height: 20px;
+    /*-webkit-appearance: none;*/
+    vertical-align: middle;
+    margin: 0;
+    margin-right: 2px;
+    outline: none;
+    opacity: 0;
 }
-
 input:focus {
     outline: none;
 }
-
 .df-input-radio:checked {
-  width: 20px;
-  height: 20px;
-  /*-webkit-appearance: none;*/
-  vertical-align: middle;
-  margin: 0;
-  margin-right: 2px;
-  outline: none;
+    width: 20px;
+    height: 20px;
+    /*-webkit-appearance: none;*/
+    vertical-align: middle;
+    margin: 0;
+    margin-right: 2px;
+    outline: none;
 }
-
 .df-input-label {
-  margin-right: 10px;
-  // line-height: 30px;
-  font-weight: normal;
-  position: relative;
+    margin-right: 10px;
+    // line-height: 30px;
+    font-weight: normal;
+    position: relative;
 }
-
 .df-input-radio:disabled {
     /*-webkit-appearance: radio;*/
     width: 15px;
@@ -49,7 +44,6 @@ input:focus {
     margin-right: 7px;
     display: inline-block;
 }
-
 .df-input-radio-wrapper {
     width: 12px;
     height: 12px;

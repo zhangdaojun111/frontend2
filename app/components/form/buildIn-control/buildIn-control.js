@@ -9,55 +9,57 @@ import {FormService} from "../../../services/formService/formService";
 import './buildin-control.scss';
 import template from './buildIn-control.html';
 
-let config={
-    template:template,
-    binds:[
+let config = {
+    template: template,
+    binds: [
         {
             event: 'click',
             selector: '.ui-selector',
-            callback: function(){
+            callback: function () {
                 this.events.selectChoose(this.data);
             }
         },
         {
             event: 'click',
             selector: '.ui-history',
-            callback: function(){
+            callback: function () {
                 this.events.emitHistory(this.data)
             }
         },
         {
             event: 'click',
             selector: '.add-item',
-            callback: function(){
+            callback: function () {
                 this.events.addNewBuildIn(this.data);
             }
         }
     ],
-    afterRender(){
-        let _this=this;
-        this.data.isInit=true;
-        if(!this.data.be_control_condition) {
-            let el=this.el.find('.dropdown');
-            let data=FormService.createSelectJson(this.data);
-            data.onSelect=function(data){
-                if(_this.data.isInit || !data || data.length == 0 ){
+    afterRender() {
+        let _this = this;
+        this.data.isInit = true;
+        if (!this.data.be_control_condition) {
+            let el = this.el.find('.dropdown');
+            let data = FormService.createSelectJson(this.data);
+            data.onSelect = function (data) {
+                if (_this.data.isInit || !data || data.length == 0) {
                     return;
                 }
-                _this.data.value=data[0]['id'];
-                _.debounce(function(){_this.events.changeValue(_this.data)},200)();
+                _this.data.value = data[0]['id'];
+                _.debounce(function () {
+                    _this.events.changeValue(_this.data)
+                }, 200)();
             };
-            let autoSelect=new AutoSelect(data);
-            this.append(autoSelect,el);
+            let autoSelect = new AutoSelect(data);
+            this.append(autoSelect, el);
         }
-        this.data.isInit=false;
+        this.data.isInit = false;
     },
-    beforeDestory(){
+    beforeDestory() {
         this.el.off();
     }
 }
-export default class BuildInControl extends Component{
-    constructor(data,events){
-        super(config,data,events);
+export default class BuildInControl extends Component {
+    constructor(data, events) {
+        super(config, data, events);
     }
 }
