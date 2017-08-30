@@ -1,8 +1,4 @@
-html, body, div, span, iframe,
-h1, h2, h3, h4, h5, h6,
-img, strong, sub, sup,
-dl, dt, dd, ol, ul, li
-{
+#approval-workflow div,#WorkflowInitial div{
   box-sizing: border-box;
 }
 .workflow-icon{
@@ -10,13 +6,11 @@ dl, dt, dd, ol, ul, li
   display: block;
 }
 .icon-workflow-icon1 {
-
   background-position: -26px 0px;
   width: 16px;
   height: 16px;
 }
 .icon-workflow-icon10 {
-
   background-position: -52px -52px;
   width: 16px;
   height: 16px;

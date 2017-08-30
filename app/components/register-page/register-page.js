@@ -37,6 +37,7 @@ let config ={
             $(window).attr('location','/login');
         },
         postRegister:function () {
+            this.showLoading();
             if(this.data.status === 0){
                 this.actions.doInvestorsRegister();
             }else{
@@ -114,11 +115,12 @@ let config ={
                 email:email,
                 password:password
             };
-
+            let that = this;
             UserInfoService.register(json).done((result) => {
+                that.hideLoading();
                 if(result.success === 1){
                     msgbox.alert("注册成功，即将跳转到登录界面");
-                    // $(window).attr('location','/login');
+                    $(window).attr('location','/login');
                 }else{
                     msgbox.alert("注册失败");
                     return;
@@ -264,9 +266,9 @@ let config ={
             this.actions.checkForm(event,"请填写手机号码","tel");
         }).on("blur","input.verification-code",(event) => {
             this.actions.checkVerification(event,"请填写验证码","verification-code");
-        }).on("click",".register-btn",() => {
+        }).on("click",".register-btn",_.debounce(() => {
             this.actions.postRegister();
-        })
+        },500));
     },
     beforeDestory:function () {
 

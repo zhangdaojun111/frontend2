@@ -1,5 +1,5 @@
 
-.J_select-container{
+.component-select-comp{
     .J_tip{
         width: 300px;
         height: 25px;
@@ -10,24 +10,6 @@
             color: rgba(153,153,153,1);
         }
     }
-}
-.select-icon{
-    display: inline-block;
-    height: 28px;
-    text-align: center;
-    line-height: 28px;
-    width: 30px;
-    font-size: 20px;
-    position: absolute;
-    right: 1px;
-    bottom: 1px;
-    background-color: #f2f2f2;
-    box-sizing: border-box;
-    cursor: pointer;
-    .fa{
-    }
-}
-.select-comp{
     .select-tree{
         position: absolute;
         top: 30px;

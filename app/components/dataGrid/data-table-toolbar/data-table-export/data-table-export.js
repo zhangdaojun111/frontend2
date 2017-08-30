@@ -10,6 +10,11 @@ let css = `
    border:1px;
    width:580px;
 }
+.disableClick {
+}
+.disableClick:hover {
+    cursor: not-allowed;
+}
 .input-box{
     position: absolute;
     top: 5px;
@@ -216,7 +221,10 @@ let exportSetting = {
                 attachment: 2
             }
             this.data[h] = false;
-            d[obj[h]].innerHTML = '';
+            let a = this.el.find( '#'+h )
+            a[0].checked = false;
+            a[0].disabled = true;
+            a[0].className += ' disableClick';
         }
         this.actions.createUrl();
     },

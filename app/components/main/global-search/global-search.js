@@ -240,9 +240,9 @@ let config ={
     },
     afterRender:function () {
         this.actions.getData();
-        this.el.on("click","i.search-icon", () => {
+        this.el.on("click","i.search-icon", _.debounce(() => {
             this.actions.doSearch();
-        }).on('input','.search-content',(event) => {
+        },500)).on('input','.search-content',(event) => {
             this.actions.setSearchContent(event);
         }).on('mousedown','.record-item',(event) => {
             this.actions.dealRecordClick(event);

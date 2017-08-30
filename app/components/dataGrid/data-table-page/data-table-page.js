@@ -4,6 +4,7 @@ import './data-table-page.scss';
 import {HTTP} from "../../../lib/http";
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import dataTableAgGrid from "../data-table-page/data-table-agGrid/data-table-agGrid"
+import fastSearch from "../data-table-toolbar/fast-search/fast-search"
 import {dataTableService} from "../../../services/dataGrid/data-table.service"
 let config = {
     template: template,
@@ -22,15 +23,15 @@ let config = {
         },
         //添加点击事件
         addClick: function () {
-            this.el.find( '.tabTitle .left' ).on( 'click',()=>{
-                this.el.find( '.left' ).addClass( 'active' );
-                this.el.find('.right').removeClass('active');
+            this.el.find( '.tabTitle .dataTableAgGrid' ).on( 'click',()=>{
+                this.el.find( '.dataTableAgGrid' ).addClass( 'active' );
+                this.el.find('.dataTableInTransit').removeClass('active');
                 this.el.find( '.page-group .dataTableAgGrid' )[0].style.display = 'block';
                 this.el.find( '.page-group .dataTableInTransit' )[0].style.display = 'none';
             } )
-            this.el.find( '.tabTitle .right' ).on( 'click',()=>{
-                this.el.find( '.left' ).removeClass( 'active' );
-                this.el.find('.right').addClass('active');
+            this.el.find( '.tabTitle .dataTableInTransit' ).on( 'click',()=>{
+                this.el.find( '.dataTableAgGrid' ).removeClass( 'active' );
+                this.el.find('.dataTableInTransit').addClass('active');
                 this.el.find( '.page-group .dataTableAgGrid' )[0].style.display = 'none';
                 this.el.find( '.page-group .dataTableInTransit' )[0].style.display = 'block';
                 //渲染在途
@@ -53,7 +54,6 @@ let config = {
             tableName: this.data.tableName
         };
         this.append(new dataTableAgGrid(json), this.el.find('#data-table-agGrid'));
-
         this.actions.addClick();
         //获取在途数据
         this.actions.getInProcessNum();

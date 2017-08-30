@@ -11,6 +11,7 @@
             background: #0088FF;
             color: #fff;
             cursor: pointer;
+            outline: none;
         }
         .disabled {
             pointer-events: none;
@@ -28,7 +29,7 @@
     .calendar-set-content {
         height:100%;
         .setting-header-title {
-            border-top: 1px solid rgba(228, 228, 228, 1);
+            border-top: 1px solid #E4E4E4;
             width: 100%;
             display: table;
             .table-set-checkbox{
@@ -40,7 +41,7 @@
             .set-table-head{
                 width: 9%;
                 text-align: center;
-                border-right: 1px solid rgba(228, 228, 228, 1);
+                border-right: 1px solid #E4E4E4;
                 display: table-cell;
                 box-sizing: border-box;
                 line-height: 30px;
@@ -60,7 +61,7 @@
             width: 400px;
             line-height: 40px;
             padding-left: 50px;
-            background-color: rgba(242, 242, 242, 1);
+            background-color: #F2F2F2;
             margin-top: 30px;
             .time-start-calendar-set{
                 font-size: 13px;
