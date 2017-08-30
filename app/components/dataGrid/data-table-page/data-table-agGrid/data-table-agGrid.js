@@ -640,45 +640,17 @@ let config = {
 
             //图片附件
             else if (real_type == fieldTypeService.IMAGE_TYPE && colDef['field_content']['is_show_image'] == 1) {
-                let cDiv = document.createElement('div');
-                let cImg = document.createElement('img');
-                let dImg = document.createElement('img');
-                cImg.src = params.value;
-                cImg.style.height = 'inherit';
-                cImg.style.position = 'relative';
-                cDiv.style.height = 'inherit';
-                dImg.style.position = 'absolute';
-                dImg.style.maxWidth = (window.innerWidth / 2 - 120) + 'px';
-                dImg.style.maxHeight = (window.innerHeight - 300) / 2 + 'px';
-                dImg.style.zIndex = '2';
-                cImg.addEventListener("mouseover", function (param) {
-                    dImg.src = param.target['src'];
-                    if (param.y > window.innerHeight / 2) {
-                        dImg.style.bottom = '0'
-                    }
-                    if (param.x < window.innerWidth / 2) {
-                        dImg.style.left = '100%'
-                    } else {
-                        dImg.style.right = '100%'
-                    }
-                    cDiv.appendChild(dImg);
-
-                });
-                cImg.addEventListener("mouseout", function () {
-                    cDiv.removeChild(dImg);
-                });
-                cDiv.appendChild(cImg);
-                sHtml = cDiv;
+                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + ' 张图片</a>';
             }
 
             //普通附件
             else if (real_type == fieldTypeService.ATTACHMENT) {
-                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + '个附件</a>';
+                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + ' 个附件</a>';
             }
 
             //视频附件
             else if( real_type == fieldTypeService.VIDEO_TYPE ){
-                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + '段视频</a>';
+                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + ' 段视频</a>';
             }
 
             //都做为文本处理
@@ -1507,17 +1479,6 @@ let config = {
                 return;
             }
             let id = param["data"]["_id"];
-            //如果是在工作流进行中的数据显示特殊颜色
-            if( param["data"] && param["data"]["status"] && param["data"]["status"] == 2 ){
-                return {background:'#E2D6C0'};
-            }
-            if( param["data"]["data"] && param["data"]["data"]["status"] && param["data"]["data"]["status"] == 1 ){
-                return {background:'rgba(255,84,0,.2)'};
-            }
-            //如果是在工作计算cache中的数据显示特殊颜色
-            if( param["data"] && param["data"]["data_status"] && param["data"]["data_status"] == 0 ){
-                return {background:'#FFEFEF'};
-            }
             //对应关系颜色
             if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' ){
                 if(this.data.correspondenceAddList.indexOf(id) != -1){
