@@ -957,8 +957,10 @@ let config = {
             this.data.prepareParmas = res.data;
             this.data.customOperateList = this.data.prepareParmas["operation_data"] || [];
             this.data.rowOperation = this.data.prepareParmas['row_operation'] || [];
-            if( this.data.prepareParmas["flow_data"][0] ){
-                this.data.flowId = this.data.prepareParmas["flow_data"][0]["flow_id"] || "";
+            for( let d of this.data.prepareParmas["flow_data"] ){
+                if( d.selected == 1 ){
+                    this.data.flowId = d.flow_id;
+                }
             }
         },
         //请求在途数据
@@ -1956,7 +1958,7 @@ let config = {
                 real_ids:JSON.stringify( this.data.deletedIds ),
                 is_batch: this.data.viewMode == 'createBatch'?1:0,
                 flow_id: this.data.flowId,
-                parent_table_id: this.data.flowId,
+                parent_table_id: this.data.parentTableId,
                 parent_temp_id: this.data.parentTempId,
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
