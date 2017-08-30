@@ -42,7 +42,7 @@
     }
     a {
       cursor: pointer;
-      margin-left: 20px;
+      margin-left: 30px;
       position: relative;
       color: #B399A6;
       text-decoration: none;
@@ -50,7 +50,7 @@
       display: flex;
       align-items: center;
       .icon-aggrid{
-        margin-right: 5px;
+        margin-right: 4px;
       }
       img {
         display: inline-block;
@@ -87,6 +87,10 @@
   .workflow-grid-con {
     height: calc( 100% - 100px );
     position: relative;
+    .ui-link {
+      color: #337AB7;
+      text-decoration: none;
+    }
   }
 
   #workflow-agGrid {

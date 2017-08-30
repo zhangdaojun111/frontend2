@@ -20,13 +20,35 @@
             display: block;
             margin: 0;
             padding: 0;
+            .flex{
+                display: flex;
+                align-items: center;
+                &:hover{
+                    .icon-icon-data{
+                        background-position: 0px 0px;
+                    }
+                    .icon-icon-in-transit{
+                        background-position: -52px 0px;
+                    }
+                    .icon-icon-help{
+                        background-position: 0px -26px;
+                    }
+                    span{
+                        color: #0088FF;
+
+                    }
+                }
+                span{
+                    transition: color 0.3s;
+                }
+            }
             .dataTableInTransit {
                 position: relative;
                 .inProcessNum {
                     display: none;
                     position: absolute;
-                    right: 0px;
-                    top: 0px;
+                    right: 2px;
+                    top: 17px;
                     width: 8px;
                     height: 8px;
                     background-color: red;
@@ -36,26 +58,43 @@
             li {
                 display: block;
                 float: left;
-                margin: 14px 5px;
+                padding: 15px 0px;
                 cursor: pointer;
+                width: 60px;
+                border-bottom: 2px solid #fff;
+                margin-right: 30px;
                 a {
-                    display: block;
+                    display: flex;
+                    align-items: center;
                     font-size: 14px;
                     height: 28px;
                     line-height: 30px;
-                    border-bottom: 2px solid #fff;
-                    padding: 0 10px;
                     text-decoration: none;
                     color: #666;
+                    .icon-aggrid-new{
+                        margin: 0px 4px;
+                    }
+
                 }
-                a:hover {
-                    color: #0088ff;
-                }
+
                 &.active {
                     border-bottom: 2px solid #0088FF;
-                    a {
+                    .flex {
                         color: #0088FF;
+                        .icon-icon-data{
+                            background-position: 0px 0px;
+                        }
+                        .icon-icon-in-transit{
+                            background-position: -52px 0px;
+                        }
+                        .icon-icon-help{
+                            background-position: 0px -26px;
+                        }
+                        span{
+                            color: #0088FF;
+                        }
                     }
+
                 }
             }
 
