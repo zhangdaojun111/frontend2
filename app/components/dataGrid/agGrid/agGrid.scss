@@ -103,6 +103,7 @@
       font-weight: 400;
       text-align: left;
       color: #333333;
+      padding: 0 8px;
       a {
         &.ag-text-style {
           text-decoration: blink;
@@ -135,5 +136,5 @@
 }
 
 .ag-bootstrap .ag-row-selected {
-  background-color: #97DDFF !important;
+  background-color: #E4E4E4 !important;
 }

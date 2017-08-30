@@ -536,9 +536,12 @@ let config = {
                 sHtml = '<span ><span/>';
                 return sHtml;
             }
-            let bgStyle = ' ';
+
+            //字段类型对其
+            let textAline = fieldTypeService.textAline( colDef["real_type"] )
+            let bgStyle = ' style = "display: block;width: 100%;height: 100%;text-align:' + textAline+';"';
             if( color != 'transparent' ){
-                bgStyle = ' style = "padding: 0 3px;display: block;width: 100%;height: 100%;background:' + color+'"';
+                bgStyle = ' style = "display: block;width: 100%;height: 100%;background:' + color+';text-align:' + textAline + ';"';
             }
 
             //前端表达式值计算
@@ -574,7 +577,7 @@ let config = {
                     }
                 } else {
                     if (colDef['base_buildin_dfield'] != '' && colDef['source_table_id'] != '' && colDef['headerName'] != '创建人' && colDef['headerName'] != '最后修改人') {
-                        sHtml = '<a' + bgStyle + ' title="查看源数据" class="ag-text-style ag-num-right-style"><span id="relatedOrBuildin" style="text-align: right">' + numVal + '</span></a>';
+                        sHtml = '<a' + bgStyle + ' title="查看源数据" class="ag-text-style ag-num-right-style"><span id="relatedOrBuildin">' + numVal + '</span></a>';
                     } else {
                         sHtml = '<span' + bgStyle + ' class="ag-num-right-style"><span>' + numVal + '</span><span/>';
                     }
@@ -583,7 +586,7 @@ let config = {
 
             //加密文本处理
             else if (real_type == fieldTypeService.SECRET_TEXT) {
-                sHtml = '<span style="text-align: center;">******</span>';
+                sHtml = '<span' + bgStyle + '>******</span>';
             }
 
             //周期规则处理
@@ -601,7 +604,7 @@ let config = {
 
             //富文本编辑框
             else if (real_type == fieldTypeService.UEDITOR) {
-                sHtml = '<a class="ag-text-style" title="富文本" style="text-align: center;display: block;">查看详情</a>';
+                sHtml = '<a' + bgStyle + ' class="ag-text-style" title="富文本">查看详情</a>';
             }
 
             //大数字段处理
@@ -621,12 +624,12 @@ let config = {
 
             //地址类型
             else if (real_type == fieldTypeService.URL_TYPE) {
-                sHtml = '<a class="ag-text-style" id="shareAddress" target="_blank">' + myValue + '</a>';
+                sHtml = '<a' + bgStyle + ' class="ag-text-style" id="shareAddress" target="_blank">' + myValue + '</a>';
             }
 
             //合同编辑器
             else if (real_type == fieldTypeService.TEXT_COUNT_TYPE) {
-                sHtml = '<a class="view-contract">' + "查看" + '</a>' + '<span>' + "丨" + '</span>' + '<a class="download-contract">' + '下载' + '</a>';
+                sHtml = '<a' + bgStyle + ' class="view-contract">' + "查看" + '</a>' + '<span>' + "丨" + '</span>' + '<a class="download-contract">' + '下载' + '</a>';
             }
 
             //表对应关系（不显示为数字）
@@ -640,17 +643,17 @@ let config = {
 
             //图片附件
             else if (real_type == fieldTypeService.IMAGE_TYPE && colDef['field_content']['is_show_image'] == 1) {
-                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + ' 张图片</a>';
+                sHtml = '<a' + bgStyle + ' class="ag-text-style" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + ' 张图片</a>';
             }
 
             //普通附件
             else if (real_type == fieldTypeService.ATTACHMENT) {
-                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + ' 个附件</a>';
+                sHtml = '<a' + bgStyle + ' class="ag-text-style" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + ' 个附件</a>';
             }
 
             //视频附件
             else if( real_type == fieldTypeService.VIDEO_TYPE ){
-                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + ' 段视频</a>';
+                sHtml = '<a' + bgStyle + ' class="ag-text-style" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + ' 段视频</a>';
             }
 
             //都做为文本处理
@@ -672,7 +675,7 @@ let config = {
 
             //分组无数据时容错
             if (params && params.colDef && params.colDef.headerName == 'Group') {
-                sHtml = sHtml = '<span>' + params.value + '</span>';
+                sHtml = sHtml = '<span' + bgStyle + '>' + params.value + '</span>';
             }
             return sHtml;
         },

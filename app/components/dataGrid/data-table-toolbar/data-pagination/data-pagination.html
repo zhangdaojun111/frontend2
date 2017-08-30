@@ -1,7 +1,14 @@
 <div class="pagination-con">
     <!--切换每页显示数量-->
     <div class="p-left">
-        <span>每页显示</span><input class="pageSize" type="number"><span>条</span>
+        <!--<span>每页显示</span><input class="pageSize" type="number"><span>条</span>-->
+        <span>每页显示</span>
+        <select class="pageSize">
+            {{#each rowGroup}}
+            <option value="{{this}}">{{this}}</option>
+            {{/each}}
+        </select>
+        <span>条</span>
         <span class="page-details">共<span><span class="total"></span></span>条数据</span>
         <!-- 刷新页面 -->
         <span class="ui-icon-refresh"></span>

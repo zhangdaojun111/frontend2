@@ -111,6 +111,19 @@ export const fieldTypeService = {
     attachment: function( data ){
         let arr = [this.ATTACHMENT,this.IMAGE_TYPE];
         return arr.indexOf( data ) != -1;
+    },
+    //字段对其位置
+    textAline: function ( data ) {
+        console.log( data )
+        let right = ['10','11','16','26']
+        let center = ['2','3','4','5','9','12','23','30','34']
+        if( right.indexOf( data )!=-1 ){
+            return 'right';
+        }
+        if( center.indexOf( data )!=-1 ){
+            return 'center';
+        }
+        return 'left';
     }
 }
 export let FIELD_TYPE_MAPPING = {
