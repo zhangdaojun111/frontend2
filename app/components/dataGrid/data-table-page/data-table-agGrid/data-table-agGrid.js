@@ -1526,7 +1526,7 @@ let config = {
                 }
             }
             //分组样式
-            if( this.data.groupCheck && !param["data"].children && this.groupGridCom.data.group.length != 0 ){
+            if( this.data.groupCheck && !param["data"].children && this.groupGridCom.data.group.length != 0 && param["data"].myfooter == undefined ){
                 return {background:'#E6F7FF'};
             }
         },
