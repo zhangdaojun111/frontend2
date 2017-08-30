@@ -87,6 +87,10 @@
   .workflow-grid-con {
     height: calc( 100% - 100px );
     position: relative;
+    .ui-link {
+      color: #337AB7;
+      text-decoration: none;
+    }
   }
 
   #workflow-agGrid {
