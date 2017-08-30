@@ -1,32 +1,39 @@
-.component-time-control{
-    .cancel-x{
+.component-time-control {
+    .cancel-x {
         display: none;
         cursor: pointer;
         position: relative;
     }
-    .time{
+    .time {
         width: 244px;
         display: block;
         border: 0;
         margin-top: 30px;
     }
-    .timeInput{
+    .timeInput {
         display: block;
     }
+
     .input-img {
         position: relative;
         left: -22px;
         top: 3px;
     }
-    .ui-datepicker-close {
+
+    .ui-datepicker-close, .ui-datepicker-current {
         background: #0088FF;
         height: 25px;
         color: white;
         position: relative;
-        float: right;
         display: block;
         border: none;
         border-radius: 3px;
+    }
+    .ui-datepicker-close{
+        float: right;
+    }
+    .ui-datepicker-current{
+        float: left;
     }
     .time-close {
         padding-top: 7px;
@@ -47,6 +54,7 @@
     .ui-timepicker div input {
         width: 25px;
     }
+
     .ui-calendar {
         position: relative;
         display: inline-block;
@@ -86,4 +94,5 @@
         opacity: 0.7;
         filter: Alpha(Opacity=70);
     }
+
 }

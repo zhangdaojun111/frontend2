@@ -4,7 +4,6 @@
  */
 
 import template from './quill-alert.html';
-
 let css = `
 .form-rich-editor .editor{
         height: 300px;
@@ -1354,9 +1353,9 @@ css = css.replace(/(\n)/g, '');
 
 let QuillAlert = {
     template: template.replace(/(\")/g, '\''),
-    data: {
-        value: '',
-        toolbarOption: [
+    data:{
+        value:'',
+        toolbarOption : [
             ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
             ['link', 'image'],
             ['blockquote', 'code-block'],
@@ -1379,7 +1378,7 @@ let QuillAlert = {
 
         ]
     },
-    afterRender() {
+    afterRender(){
         let editorDom = this.el.find('.content .editor');
         this.data.quill = new Quill(editorDom[0], {
             modules: {
@@ -1390,7 +1389,7 @@ let QuillAlert = {
         });
         this.data.quill.pasteHTML(this.data.value);
     },
-    beforeDestory() {
+    beforeDestory(){
         this.data.quill = null;
     }
 }

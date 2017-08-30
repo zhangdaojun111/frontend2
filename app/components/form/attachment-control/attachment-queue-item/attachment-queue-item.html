@@ -1,11 +1,13 @@
-<div class="attachment-queue-item">
-    <div class="loader" style="width: 10px"></div>
+<div>
+    <strong>{{file.name}}</strong>
+    <span id="my-progress">
+        <span id="my-bar"></span>
+    </span>
+    <span id="process-num">0%</span>
     <span class="delete-file" style="display: none">删除</span>
-    <span class="processing">上传中</span>
+    <span class="processing">处理中</span>
     <span class="keep-on-attaching" style="display: none">继续上传</span>
     <span class="pause-attaching" style="display: none">暂停</span>
     <span class="re-uploading" style="display:none">重新上传</span>
     <span class="cancel-attaching" style="display: none">取消上传</span>
-    <span id="process-num">0%</span>
-    <strong>{{file.name}}({{fileSize}})</strong>
 </div>

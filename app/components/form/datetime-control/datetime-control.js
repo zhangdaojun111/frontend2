@@ -58,8 +58,7 @@ let config = {
             secondText: '秒',
             currentText: '今',
             closeText: '确定',
-            autoSize: true,
-            //timeInput:'1',
+            timeInput:'1',
             showSecond: true, //显示秒
             changeMonth: true,
             changeYear: true,
@@ -115,7 +114,14 @@ let config = {
                     console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', this.selector);
                 }
 
-            }
+            },
+            onClose: function(timeText) {
+                _this.data.value = timeText.replace(/\//g, "-");
+                _.debounce(function () {
+                    _this.events.changeValue(_this.data)
+                }, 200)();
+            },
+
         });
         _.debounce(function () {
             _this.events.changeValue(_this.data)
