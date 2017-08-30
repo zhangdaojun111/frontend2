@@ -1,6 +1,6 @@
-.item-child{
-  cursor: pointer;
-  &:hover {
-    background-color: rgba(228, 228, 228, 1);
-  }
+.component-item-child {
+    cursor: pointer;
+    &:hover {
+        background-color: rgba(228, 228, 228, 1);
+    }
 }

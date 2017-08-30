@@ -34,13 +34,10 @@ let config = {
                 temp.removeClass("display-all-content");
                 this.el.find(".item-content").show();
                 this.el.find(".item-content").css("height", "calc(33.3% - 45px)");
-                // that.el.find(".item-content-1").css("height","calc(33.3% - 45px)");
-                // that.el.find(".item-content").show();
             } else {
                 this.el.find(".item-title").removeClass("display-all-content");
                 this.el.find(".item-title-2").removeClass("display-all-content");
                 temp.addClass("display-all-content");
-                // that.el.find(".item-content-1").hide();
                 this.el.find(".item-content").hide();
                 this.el.find(".item-content-2").hide();
                 temp.next(".item-content").show();
@@ -54,11 +51,8 @@ let config = {
             if (temp.is(".display-all-content")) {
                 temp.removeClass("display-all-content");
                 this.el.find(".item-content").css("height", "calc(33.3% - 45px)");
-                // that.el.find(".item-content-1").css("height","calc(33.3% - 45px)");
                 this.el.find(".item-content-2").hide();
                 this.el.find(".item-content").show();
-                // that.el.find(".item-content-3").show();
-                // that.el.find(".item-content-4").show();
             } else {
                 this.el.find(".item-title").removeClass("display-all-content");
                 temp.addClass("display-all-content");
@@ -69,27 +63,6 @@ let config = {
                 this.el.find(".item-content-2").css({height: 'calc(66.7% - 90px)'});
             }
         },
-        /**
-         * 日历操作显示和隐藏
-         */
-        // hide_item:function(that,temp){
-        //     if(temp.is(".display-all-content")){
-        //         temp.removeClass("display-all-content");
-        //         that.el.find(".item-content-1").show();
-        //         that.el.find(".item-content-1").css("height","calc(33.3% - 45px)");
-        //         that.el.find(".item-content").css("height","calc(33.3% - 45px)");
-        //         that.el.find(".item-content-2").hide();
-        //         that.el.find(".item-content-3").show();
-        //         that.el.find(".item-content-4").show();
-        //     }else{
-        //         that.el.find(".item-title").removeClass("display-all-content");
-        //         that.el.find(".item-content-1").show();
-        //         temp.addClass("display-all-content");
-        //         that.el.find(".item-content").hide();
-        //         that.el.find(".item-content-2").hide();
-        //         that.el.find(".item-content-1").css({height:'calc(100% - 135px)'});
-        //     }
-        // },
         /**
          * 展开日历操作栏
          */
@@ -169,13 +142,6 @@ let config = {
                 this.actions.contentHide(temp);
             }
         },
-        // {
-        //     event: 'click',
-        //     selector: '.hide-con-1',
-        //     callback: function(temp = this){
-        //         this.actions.hide_item(this,$(temp).parents('.item-title-1'));
-        //     }
-        // },
         {
             event: 'click',
             selector: '.hide-con-2',
