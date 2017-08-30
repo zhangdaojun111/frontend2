@@ -101,6 +101,9 @@ Mediator.subscribe('workflow:getflows', (res)=> {
     if(obj.btnType==='view'){
         $('#toEdit').show();
         $('#addFollower').hide();
+    }else if(obj.btnType==='none'){
+        $('#toEdit').hide();
+        $('#addFollower').hide()
     }
     obj.flow_id=res.flow_id;
     obj.form_id=res.form_id;

@@ -4,6 +4,7 @@ import './data-table-page.scss';
 import {HTTP} from "../../../lib/http";
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import dataTableAgGrid from "../data-table-page/data-table-agGrid/data-table-agGrid"
+import fastSearch from "../data-table-toolbar/fast-search/fast-search"
 import {dataTableService} from "../../../services/dataGrid/data-table.service"
 let config = {
     template: template,
@@ -53,7 +54,6 @@ let config = {
             tableName: this.data.tableName
         };
         this.append(new dataTableAgGrid(json), this.el.find('#data-table-agGrid'));
-
         this.actions.addClick();
         //获取在途数据
         this.actions.getInProcessNum();

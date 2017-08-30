@@ -23,10 +23,18 @@
         font-size: 14px;
         img {
           display: inline-block;
-          width: 15px;
-          height: 15px;
+          //width: 15px;
+          //height: 15px;
           vertical-align: sub;
           margin-right: 6px;
+          &.full{
+            width: 13px;
+            height: 13px;
+          }
+          &.search{
+            width: 16px;
+            height: 16px;
+          }
         }
       }
     }

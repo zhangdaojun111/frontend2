@@ -1,5 +1,5 @@
 /**
- * @author qiumaoyun
+ * @author qiumaoyun and luyang
  * 工作审批header
  */
 
@@ -14,11 +14,12 @@ let config = {
 
     },
     actions: {
-        approvalBtnToggle:function (el) {
-            if(el.parent().hasClass('active')){
-                el.parent().removeClass('active')
+        approvalBtnToggle:function (el,elPraent) {
+            var isactive=elPraent.hasClass('active');
+            if(isactive){
+                elPraent.removeClass('active')
             }else {
-                el.parent().addClass('active')
+                elPraent.addClass('active')
             }
         },
         toogz(e){
@@ -26,14 +27,21 @@ let config = {
             this.showgz = !this.showgz;
         },
     },
+    /**
+     * @author luyang
+     * @method approvalBtnToggle 审批按钮操作显示
+     * @param  approvalBtnToggle(dom对象，dom父元素)
+     */
     afterRender: function() {
         this.showLoading();
         let self=this;
         this.showgz = false;
         this.el.on("click",".approval-curr-txt",function (e) {
             e.stopPropagation();
-            self.actions.approvalBtnToggle($(this))
-        })
+            var elDiv=$(this);
+            var elParent=elDiv.parent();
+            self.actions.approvalBtnToggle(elDiv,elParent);
+        });
         this.el.on('click','.gz',(e)=>{
             Mediator.publish('workflow:getFormTrans',this.showgz);
             this.actions.toogz(e);

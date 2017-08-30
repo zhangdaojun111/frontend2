@@ -13,42 +13,63 @@ import ThumbnailList from "./thumbnail-list/thumbnail-list";
 
 let config={
     template: template,
+    binds:[
+        {
+            event:'click',
+            selector:'.view-attached-list',
+            callback:function () {
+                attachmentListConfig.data = _.defaultsDeep({
+                    fileIds:this.data.value,
+                    dinput_type:this.data.real_type
+                },attachmentListConfig.data);
+                PMAPI.openDialogByComponent(attachmentListConfig,{
+                    width:500,
+                    height:300,
+                    title:"浏览上传文件"
+                });
+            }
+        }, {
+            event:'click',
+            selector:'.upload-file',
+            callback:function () {
+                let ele = this.el.find('.selecting-file');
+                if(this.data.dinput_type == 33){  //视频附件
+                    ele.attr('accept','video/*');
+                } else if(this.data.dinput_type == 23){  //图片附件
+                    ele.attr('accept','image/*');
+                }
+                ele.click();
+            }
+        }, {
+            event:'click',
+            selector:'.shot-screen',
+            callback:function () {
+                PMAPI.openDialogByComponent(screenShotConfig,{
+                    width:500,
+                    height:300,
+                    title:"选择截图"
+                }).then(res=>{
+                    if(!res.file){
+                        return;
+                    }
+                    this.actions.controlUploadingForFile(res.file);
+                })
+            }
+        }, {
+            event:'change',
+            selector:'.selecting-file',
+            callback:function (event) {
+                let files = event.files;
+                for(let file of files){
+                    this.actions.controlUploadingForFile(file);
+                }
+            }
+        }
+    ],
     data: {
         queue:[]
     },
     actions: {
-        viewAttachList:function(){
-            attachmentListConfig.data = _.defaultsDeep({
-                fileIds:this.data.value,
-                dinput_type:this.data.real_type
-            },attachmentListConfig.data);
-            PMAPI.openDialogByComponent(attachmentListConfig,{
-                width:500,
-                height:300,
-                title:"浏览上传文件"
-            });
-        },
-        uploadFile:function () {
-            let ele = this.el.find('.selecting-file');
-            if(this.data.dinput_type == 33){  //视频附件
-                ele.attr('accept','video/*');
-            } else if(this.data.dinput_type == 23){  //图片附件
-                ele.attr('accept','image/*');
-            }
-            ele.click();
-        },
-        shotScreen:function () {
-            PMAPI.openDialogByComponent(screenShotConfig,{
-                width:500,
-                height:300,
-                title:"选择截图"
-            }).then(res=>{
-                if(!res.file){
-                    return;
-                }
-                this.actions.controlUploadingForFile(res.file);
-            })
-         },
         controlUploadingForFile:function (file) {
             if(file.size>100*1024*1024){
                 msgBox.alert(file.name + ' 文件过大，无法上传，请确保上传文件大小小于100MB');
@@ -121,18 +142,7 @@ let config={
             })
         }
 
-        this.el.on('click','.view-attached-list',()=>{
-            this.actions.viewAttachList();
-        }).on('click','.upload-file',()=>{
-            this.actions.uploadFile();
-        }).on('click','.shot-screen',()=>{
-            this.actions.shotScreen();
-        }).on('change','.selecting-file',(event)=>{
-            let files = event.target.files;
-            for(let file of files){
-                this.actions.controlUploadingForFile(file);
-            }
-        })
+
     }
 };
 

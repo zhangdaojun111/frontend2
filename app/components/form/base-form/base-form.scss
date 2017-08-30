@@ -3,7 +3,6 @@
   width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  //background: #F2F2F2;
   @import "dateTime";
   .ui-history {
     display: inline-block;
@@ -42,9 +41,7 @@
     }
   }
   .form-cell {
-    //padding: 10px;
     padding-right: 10px;
-   // border-bottom: 1px solid #ddd;
     .wrap {
       display: flex;
       flex-direction: row;
@@ -72,28 +69,23 @@
     text-decoration: none;
   }
   /*table*/
+  table{
+    width: 100%;
+    margin: 0px auto;
+  }
   tbody{
     tr{
       td{
         line-height: 1.42857143;
         padding: 8px;
-       vertical-align: middle;
+        vertical-align: middle;
         border: 1px solid rgb(240,240,240);
         white-space: nowrap;
         width: auto;
       }
     }
   }
-  .table-wrap {
-    position: relative;
-    //width: 100%;
-    height: 100%;
-    overflow: auto;
-   padding-top:40px ;
-    padding-bottom: 70px;
-    display: table;
-    margin: 0 auto;
-  }
+
   /*input*/
   .dynamic-form-input {
     color: #000000;
@@ -124,7 +116,6 @@
   }
   /*errorTips*/
   .error-msg {
-    // height: 30px;
     top: -20px;
     zoom: 1;
     display: block;
@@ -174,8 +165,6 @@
     width: 100%;
     height: 100%;
     overflow: auto;
-    //padding-top: 20px;
-   //padding-bottom: 70px;
   }
   .ui-box-1 {
     width: 100%;
@@ -185,8 +174,6 @@
     padding: 15px 0;
     bottom: 0px;
     width: 100%;
-    //background: #ebebeb;
-    //position: absolute;
   }
   .ui-btn-box .btn{
     margin-right: 35px;
@@ -215,5 +202,29 @@
     text-decoration: underline;
     color: #0e7aef;
     font-size: 16px;
+  }
+
+  //固定按钮
+  .ui-btn-box{
+    margin: 0 auto;
+    display: block;
+    bottom: 0;
+    background: #F2F2F2;
+  }
+  .ui-btn-box button{
+    width: 91px;
+    height: 30px;
+    background: inherit;
+    background-color: rgba(0, 136, 255, 1);
+    border: none;
+    border-radius: 4px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    font-family: '微软雅黑';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 12px;
+    color: #FFFFFF;
   }
 }
