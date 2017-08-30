@@ -99,6 +99,11 @@ let config = {
                                 if (this.data['thumbnailListComponent']) {
                                     this.data['thumbnailListComponent'].actions.deleteItem(event.data.fileId);
                                 }
+                                console.log('值时多少');
+                                console.log(event.data.fileId);
+                                console.log(this.data.value.indexOf(event.data.fileId));
+                                console.log(this.data.value);
+                                this.events.changeValue(this.data);
                             }
                         }
                         if (event.event == 'finished') {
