@@ -1,9 +1,37 @@
+.search-in-tree-hd{
+    height: 30px;
+    background: #F2F2F2;
+    border-bottom: 1px solid #E4E4E4;
+    font-size: 12px;
+    color: #666;
+    padding: 0 5px;
+    .txt{
 
+    }
+    .search-in-tree-box{
+        height: 24px;
+        background: #fff;
+        padding-left: 5px;
+        width: 142px;
+        input{
+            border: none;
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            outline: none;
+        }
+    }
+}
 
 .treeview {
     .list-group {
         .list-group-item {
             padding-left: 10px;
+            height: 30px;
+            line-height: 30px;
+            &.node-tree:not(.node-disabled):hover{
+                background: #eee;
+            }
         }
     }
     .checked_box::before {
@@ -37,6 +65,21 @@
         &:before {
             vertical-align: sub;
         }
+    }
+}
+.buttons-in-tree{
+    position: absolute;
+    bottom:0;
+    height: 30px;
+    width: 100%;
+    border-top:1px solid #E4E4E4;
+    button{
+        border: none;
+        outline: none;
+        color:#0088FF;
+        background: none;
+        margin: 0 10px;
+        font-size: 12px;
     }
 }
 .treeBtn{

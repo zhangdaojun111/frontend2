@@ -56,14 +56,7 @@
 			}
 		}
 	}
-	.w33{
-		width: 33.3333%;
-		flex-shrink: 0;
-		text-align: center;
-		height: 30px;
-		line-height: 30px;
-		white-space: nowrap;
-	}
+
 	#selected{
 		&>div{
 			display: inline-block;

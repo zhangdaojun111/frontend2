@@ -4,25 +4,114 @@
         margin: 0 15px;
         .flexBox {
             display: flex;
+
+            #addUser{
+                width: 216px;
+                border: 1px solid #E4E4E4;
+                margin:3px;
+                position: relative;
+            }
             #addUsercheck {
                 height: 500px;
                 overflow: scroll;
+                >div:nth-child(1n){
+                    .search-check-row{
+                        background: #fafafa;
+                    }
+                }
+                >div:nth-child(2n){
+                    .search-check-row{
+                        background: #fff;
+                    }
+                }
+                .search-check-row{
+                    border-bottom: 1px solid #E4E4E4;
+
+                    .search-check-item{
+                        height: 30px;
+                        line-height: 30px;
+                        padding-left: 5px;
+                        border-right: 1px solid #eee;
+                        &:nth-child(1){
+                            width: 30px;
+                            flex-shrink: 0;
+                            padding-left: 0;
+                            position: relative;
+                            input{
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                margin-top: -6.5px;
+                                margin-left: -6.5px;
+                            }
+                        }
+                        &:nth-child(2){
+                            width: 205px;
+                            flex-shrink: 0;
+                        }
+                        &:nth-child(3){
+                            flex-grow: 1;
+                        }
+                        &:last-child{
+                            border-right: none;
+                        }
+                    }
+
+
+                }
             }
             .flex {
 
             }
 
             .people{
-                border: 1px solid rgba(228, 228, 228,1);
-                margin: 0 15px;
-                width: 80%;
+                border: 1px solid #E4E4E4;
+                flex-grow: 1;
+                margin:3px 3px 3px 0;
                 .signer-place {
-                    background: rgba(242, 242, 242, 1);
-                    border-bottom: 1px solid rgba(228, 228, 228,1);
-                    height: 24px;
-                    line-height: 24px;
+                    border-bottom: 1px solid #E4E4E4;
+                    background: #F2F2F2;
+                    height: 30px;
+                    line-height: 30px;
+                    padding: 0 10px;
+                    font-size: 12px;
+                    color: #666;
+                    span{
+                        margin-right: 5px;
+                    }
+                    .search-in-tree-box{
+                        margin-left: 5px;
+                    }
                 }
             }
+            .search-main-hd{
+
+                background: #fff;
+                border-bottom: 1px solid #E4E4E4;
+                .search-main-hd-item{
+                    border-right: 1px solid #eee;
+                    height: 30px;
+                    line-height: 30px;
+                    padding-left: 5px;
+                    &:nth-child(1){
+                        width: 30px;
+                        flex-shrink: 0;
+                        padding: 0;
+                    }
+                    &:nth-child(2){
+                        width: 205px;
+                        flex-shrink: 0;
+                    }
+                    &:nth-child(3){
+                        flex-grow: 1;
+
+                    }
+                    &:last-child{
+                        border-right: none;
+                    }
+                }
+            }
+
         }
 
     }
@@ -37,9 +126,34 @@
                 margin-top: 3px;
             }
         }
+        .custom-radio-box{
+            position: relative;
+            input{
+                position: absolute;
+                top:0;
+                left: 0;
+            }
+        }
     }
 
 }
+
+.search-in-tree-box{
+    height: 24px;
+    background: #fff;
+    padding-left: 5px;
+    width: 180px;
+    input{
+        border: none;
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        outline: none;
+        vertical-align: top;
+    }
+}
+
+
 html,body{
 	height: 100%;
 }
