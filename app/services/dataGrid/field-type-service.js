@@ -114,7 +114,6 @@ export const fieldTypeService = {
     },
     //字段对其位置
     textAline: function ( data ) {
-        console.log( data )
         let right = ['10','11','16','26']
         let center = ['2','3','4','5','9','12','23','30','34']
         if( right.indexOf( data )!=-1 ){
