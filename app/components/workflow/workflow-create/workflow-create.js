@@ -13,26 +13,28 @@ import WorkFlow from '../workflow-drawflow/workflow';
 let config = {
     template: template,
     data: {
-        favList:[]
+        favList:[],
+        favoDel:false, //常用工作流是否显示删除按钮
+        boxshow:true, //是否隐藏常用工作流按钮
     },
     actions: {
         operate:function(){
             let oper = this.el.find('.J_operate');
             let del = this.el.find('.J_del');
-            if(this.favoDel){
+            if(this.data.favoDel){
                 del.hide();
                 oper.text("");
                 oper.addClass("workflow-icon");
-                this.favoDel = false;
+                this.data.favoDel = false;
             }else{
                 oper.text("取消");
                 oper.removeClass("workflow-icon");
                 del.show();
-                this.favoDel = true;
+                this.data.favoDel = true;
             }
         },
-        delBtn:function(e){
-            let el = $(e.target);
+        delBtn:function(temp){
+            let el = $(temp).find('.delFav');
             let id = el.attr('data-id');
             for(let i=0;i<this.data[1].rows.length;i++){
                 if(this.data[1].rows[i].id == id){
@@ -40,6 +42,7 @@ let config = {
                 }
             }
             let parents = el.parents('div')[0];
+            console.log(el);
             parents.remove();
             this.actions.init();
         },
@@ -54,12 +57,12 @@ let config = {
                     }
                     flag=true;
                 }
-                if(!this.boxshow){
+                if(!this.data.boxshow){
                     flag?$('#addFav').show():$('#addFav').hide();
                 }
             }
         },
-        addFav(e){
+        addFav(){
             Mediator.publish('workflow:addFav', this.data.id);
             let len = this.data[1].rows.length;
             for(let i = 0;i<this.data[0].data.length;i++){
@@ -81,37 +84,50 @@ let config = {
             this.actions.init();
         },
         contentClose(){
-            this.boxshow = true;
+            this.data.boxshow = true;
             this.actions.init();
-            this.favoDel = true;
+            this.data.favoDel = true;
             this.actions.operate();
         }
     },
+    binds:[
+        {
+            event:'click',
+            selector: '.J_operate',
+            callback: function(){
+                this.actions.operate();
+            }
+        },
+        {
+            event:'click',
+            selector:'.J_del',
+            callback:function(temp = this){
+                this.actions.delBtn(temp);
+            }
+        },
+        {
+            event:'click',
+            selector:'#addFav',
+            callback:function(){
+                this.actions.addFav();
+            }
+        }
+    ],
     afterRender: function() {
-        this.favoDel = false;
+        this.data.favoDel = false;
         this.actions.init();
-        this.boxshow = true;
+        this.data.boxshow = true;
         //添加流程下来菜单
         this.append(new WorkFlowTree(this.data[0]), this.el.find('.J_select-container'));
         //添加常用工作流组件
         this.data[1].rows.forEach((row)=>{
             this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
         });
-        this.el.on('click','.J_operate',()=>{
-            this.actions.operate();
-        });
-        this.el.on('click','.J_del',(e)=>{
-            this.actions.delBtn(e);
-        });
-        //addFav
-        this.el.on('click','#addFav',(e)=>{
-            this.actions.addFav(e);
-        });
 
         //订阅btn click
         Mediator.subscribe('workflow:choose', (msg)=> {
             this.data.id=msg.id;
-            this.boxshow = false;
+            this.data.boxshow = false;
             this.actions.init();
             this.el.find("#workflow-box").hide();
             $("#workflow-content").show();

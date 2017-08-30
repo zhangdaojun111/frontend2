@@ -22,7 +22,7 @@ let config={
         },
         {
             event: 'click',
-            selector: '.timeInput',
+            selector: '.input-img',
             callback: function(){
                 //增加0
                 function p(s) {
@@ -35,29 +35,28 @@ let config={
                 var s=myDate.getSeconds();
                 var now=p(h)+':'+p(m)+":"+p(s);
 
-                this.el.find('.time,.cancel-x').css('display', 'block');
                 let nowTime =  this.el.find(".timeInput").val(now);
                 this.data.value = now;
                 _.debounce(()=>{this.events.changeValue(this.data)},200)();
                 this.el.find(".hour").children("span").text(p(h));
                 this.el.find(".minute").children("span").text(p(m));
                 this.el.find(".second").children("span").text(p(s));
-                event.stopPropagation();
-            }
-        },
-        {
-            event: 'mouseover',
-            selector: '.timeInput',
-            callback: function(){
-                this.el.find('.cancel-x').css('display','block');
             }
         },
         {
             event: 'click',
-            selector: '.cancel-x',
+            selector: '.input-img',
+            callback: function(){
+                this.el.find('.time').css({'display':'block','position':'absolute'});
+                event.stopPropagation();
+            }
+        },
+        {
+            event: 'click',
+            selector: '.time-close',
             callback: function(){
                 this.el.find('.time').css('display','none');
-                this.el.find(".timeInput").val("时:分:秒");
+
             }
         }
     ],
@@ -87,9 +86,7 @@ let config={
         var m=myDate.getMinutes();
         var s=myDate.getSeconds();
         var now=p(h)+':'+p(m)+":"+p(s);
-        $(document).on('click:timeControl',function(){
-            _this.el.find('.time,.cancel-x').css('display','none');
-        });
+
         this.el.on("click",'.plus', function () {
                 //当前时间+1
                 var myDate2 = new Date();
@@ -112,9 +109,6 @@ let config={
             _this.data.value = now;
             _.debounce(function(){_this.events.changeValue(_this.data)},200)();
             });
-        this.el.on('click','.time',function(event){
-            event.stopPropagation();
-        })
         this.el.on("click",'.reduce', function () {
             //当前时间-1
             var myDate3 = new Date();
@@ -140,6 +134,10 @@ let config={
 
         _.debounce(function(){_this.events.changeValue(_this.data)},200)();
 
+        // $(document).click(function () {
+        //     _this.el.find(".time").hide();
+        //     event.stopPropagation();
+        // })
     },
     beforeDestory:function(){
         $(document).off('click:timeControl');
