@@ -17,7 +17,7 @@ let config={
     action:{
         search(){
             let keyword = this.el.find(".signer-search").val();
-            let node = this.el.find('#addUsercheck').find('.w33');
+            let node = this.el.find('#addUsercheck').find('.J_name');
             let par = this.el.find("#addUsercheck").children();
             let arr = _.chunk(node,3);
             let len = arr.length;
