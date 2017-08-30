@@ -5,6 +5,10 @@ html {
     font: 12px/1.5 "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
 }
 
+input, textarea, select {
+    outline: none;
+}
+
 .clearfix:after {
     content: ".";
     display: block;

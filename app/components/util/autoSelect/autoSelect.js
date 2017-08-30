@@ -106,8 +106,8 @@ let config = {
                 this.data.onSelect(this.data.choosed);
             }
             this.trigger('onSelect', this.data.choosed);
+            let html = [];
             if (this.data.choosed.length) {
-                let html = [];
                 this.data.choosed.forEach((item) => {
                     if (item.id) {
                         let checkbox = this.listWrap.find(`input:checkbox[data-id=${item.id}]`);
@@ -117,8 +117,8 @@ let config = {
                         html.push(item.name);
                     }
                 });
-                this.inputResult.val(html.join(','));
             }
+            this.inputResult.val(html.join(','));
             this.el.find('.select-all span').text(this.data.choosed.length);
         },
         selectAll: function () {
