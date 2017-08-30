@@ -313,7 +313,7 @@ let config = {
             this.actions.setEspecialFilter(this.data.filterParam.filter);
             this.actions.setEspecialFilter(this.data.filterParam.expertFilter);
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
-                json['filter'] = this.data.filterParam.filter || [];
+                json['filter'] = _.cloneDeep(this.data.filterParam.filter ) || []
             }
             if( this.data.filterParam['common_filter_id'] ){
                 json['filter'] = json['filter'] || [];
@@ -542,7 +542,8 @@ let config = {
                     width:950,
                     height:600,
                     title:`高级查询`,
-                    modal:true
+                    modal:true,
+                    closable: false
                 },{d}).then(res=>{
                     this.data.onlyCloseExpertSearch = res.onlyclose || false;
                     if(res.type == 'temporaryQuery') {
@@ -612,7 +613,6 @@ let config = {
                     })
                 }
                 if(this.data.filterParam['common_filter_name'] && this.data.onlyCloseExpertSearch) {
-                    debugger
                     this.el.find('.dataGrid-commonQuery-select').val(this.data.filterParam['common_filter_name']);
                 }
             } );

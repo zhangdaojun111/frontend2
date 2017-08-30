@@ -54,7 +54,7 @@ let config = {
                 this.data.columnDefs = [
                     number,dgcService.selectCol,
                     {headerName: '操作',field: 'myOperate', width: 120,  suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
-                        return '<div style="text-align:center;"><a class="departModify" style="color:#337ab7;">编辑</a><div>';
+                        return '<div style="text-align:center;"><a class="departView" style="color:#337ab7;">查看</a> | <a class="departModify" style="color:#337ab7;">编辑</a><div>';
                     }},
                     { headerName: '部门', field: 'f5',cellRenderer: 'group',suppressMenu: true, tooltipField:'f5' }
                 ]
@@ -316,6 +316,15 @@ let config = {
                     }
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
                     this.actions.openSourceDataGrid( url,'编辑' )
+                }
+                if( $event.event.srcElement.className == 'departView' ){
+                    let obj = {
+                        table_id: this.data.tableId,
+                        btnType: 'view',
+                        real_id: $event.data._id,
+                    }
+                    let url = dgcService.returnIframeUrl( '/form/index/',obj );
+                    this.actions.openSourceDataGrid( url,'查看' )
                 }
             }
         },
