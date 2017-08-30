@@ -1,25 +1,25 @@
-.signature{
-    display:none;
-    .seal{
+.signature {
+    display: none;
+    .seal {
         overflow: scroll;
         display: flex;
         width: 280px;
         flex-direction: column;
-        border: 1px solid rgb(14,122,239);
+        border: 1px solid rgb(14, 122, 239);
         position: fixed;
         top: 69px;
         right: 2px;
         height: 500px;
         z-index: 62;
         background: #fff;
-        .add-seal{
+        .add-seal {
             border-bottom: 1px solid black;
             height: 88px;
             z-index: 10;
             margin-bottom: 20px;
             text-align: center;
-            padding:10px 0;
-            .add{
+            padding: 10px 0;
+            .add {
                 background: url(../../../assets/images/workflow/gz.png) no-repeat;
                 width: 50px;
                 height: 50px;
@@ -27,60 +27,60 @@
                 font-size: 20px;
                 overflow: hidden;
                 margin: 0 auto;
-                .img-file{
+                .img-file {
                     opacity: 0;
                     width: 100%;
                     height: 100%;
                 }
             }
-            .seal-tip{
-                color: rgb(157,157,157);
+            .seal-tip {
+                color: rgb(157, 157, 157);
                 text-align: center;
                 font-size: 12px;
             }
         }
-        .seal-img{
+        .seal-img {
             width: 100%;
             position: relative;
-            .ul-img{
-                .li-img{
+            .ul-img {
+                .li-img {
                     display: block;
                     margin-top: 15px;
                     position: relative;
-                    .add-img{
+                    .add-img {
                         width: 100%;
-                        height:148px;
+                        height: 148px;
                     }
-                    .delImg{
+                    .delImg {
                         float: right;
                         width: 20px;
                         height: 20px;
                         border-radius: 50%;
-                        border:1px solid #ccc;
+                        border: 1px solid #ccc;
                         line-height: 20px;
                         text-align: center;
                         cursor: pointer;
-                        color:red;
+                        color: red;
                     }
                 }
             }
         }
-        .imgshow{
-             position: fixed;
-             top: 530px;
-             right: 22px;
-         }
+        .imgshow {
+            position: fixed;
+            top: 530px;
+            right: 22px;
+        }
     }
-    .signatureMock{
+    .signatureMock {
         position: fixed;
         width: 9999px;
         height: 9999px;
         left: 0;
         top: 0;
         z-index: 100;
-        background: rgba(204,204,204,0.7);
+        background: rgba(204, 204, 204, 0.7);
         visibility: hidden;
-        .dragimg{
+        .dragimg {
             position: absolute;
             z-index: 10200;
             width: 228px;
@@ -90,13 +90,14 @@
             border: 1px solid black;
             background-size: 228px 148px;
         }
-        .fromClone{
+        .fromClone {
             position: relative;
             z-index: 102;
         }
     }
 
 }
+
 //.cloneMask{
 //     background: rgba(0,0,0,0.7);
 //     width: 100%;
