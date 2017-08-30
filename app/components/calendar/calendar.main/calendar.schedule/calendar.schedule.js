@@ -19,7 +19,11 @@ let config = {
         scheduleDataList: [],
     },
     actions: {
-        //获得日程数据
+        /**
+         * 获取日程数据
+         * @param startDate
+         * @param endDate
+         */
         getSchedule: function(startDate, endDate) {
             if( startDate === '' || endDate === '' ){
                 alert( '时间不能为空。' );
