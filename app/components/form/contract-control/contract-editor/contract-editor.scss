@@ -1,29 +1,29 @@
 .contract-editor-widget {
-    .contract-tabs {
-        display: inline-block;
-        max-width: 1700px;
-    }
+  .contract-tabs {
+    display: inline-block;
+    max-width: 1700px;
+  }
 
-    .contract-tab {
-        display: inline-block;
-        padding: 5px 15px;
-        border: 1px solid #ddd;
-        border-radius: 5px 5px 0 0;
-    }
+  .contract-tab {
+    display: inline-block;
+    padding: 5px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px 5px 0 0;
+  }
 
-    .contract-tab-container {
-        margin-top: 5px;
-        width: 100%;
-        border-bottom: 1px solid #dddddd;
-    }
+  .contract-tab-container {
+    margin-top: 5px;
+    width: 100%;
+    border-bottom: 1px solid #dddddd;
+  }
 
-    .add-tab-button {
-        content: url("../../../../assets/images/form/icon_add.png");
-        padding: 0px 20px 0px 20px;
-    }
+  .add-tab-button {
+    content:url("../../../../assets/images/form/icon_add.png");
+    padding: 0px 20px 0px 20px;
+  }
 
-    .delete-tab-button {
-        content: url('../../../../assets/images/form/icon_delete.png');
-        padding: 0px 20px 0px 20px;
-    }
+  .delete-tab-button {
+    content: url('../../../../assets/images/form/icon_delete.png');
+    padding: 0px 20px 0px 20px;
+  }
 }

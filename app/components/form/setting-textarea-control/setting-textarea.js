@@ -37,28 +37,28 @@ let config = {
             this.el.find('textarea').val(this.data.value['-1'] || '');
         },
         //周期规则默认值填充
-        loadSettingtextarea(data) {
+        loadSettingtextarea(data){
 
         },
     },
-    binds: [
+    binds:[
         {
             event: 'click',
             selector: '.ui-history',
-            callback: function () {
+            callback: function(){
                 this.events.emitHistory(this.data);
             }
         },
         {
             event: 'click',
             selector: '.button',
-            callback: function () {
+            callback: function(){
                 this.actions.openSettingDialog();
             }
         }
     ],
     afterRender() {
-        this.el.find('.ui-width').css('width', this.data.width);
+        this.el.find('.ui-width').css('width',this.data.width);
         this.actions.fillData();
         // this.actions.openSettingDialog();
         this.el.find('.button').button({
@@ -71,8 +71,8 @@ let config = {
 }
 
 class SettingTextareaControl extends Component {
-    constructor(data, events) {
-        super(config, data, events);
+    constructor(data,events) {
+        super(config, data,events);
     }
 }
 

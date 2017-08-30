@@ -7,52 +7,50 @@ import {AutoSelect} from "../../util/autoSelect/autoSelect"
 import {FormService} from "../../../services/formService/formService";
 import template from './year-control.html'
 
-let config = {
-    template: template,
-    data: {
-        options: [],
+let config={
+    template:template,
+    data:{
+        options:[],
     },
-    binds: [
+    binds:[
         {
             event: 'click',
             selector: '.ui-history',
-            callback: function () {
+            callback: function(){
                 this.events.emitHistory(this.data);
             }
         }
     ],
-    afterRender() {
-        let _this = this;
-        this.data.isInit = true;
-        if (!this.data.be_control_condition) {
-            let el = this.el.find('.dropdown');
-            let data = FormService.createSelectJson(this.data);
-            data.onSelect = function (data) {
-                if (_this.data.isInit || !data || data.length == 0) {
+    afterRender(){
+        let _this=this;
+        this.data.isInit=true;
+        if(!this.data.be_control_condition) {
+            let el=this.el.find('.dropdown');
+            let data=FormService.createSelectJson(this.data);
+            data.onSelect=function(data){
+                if(_this.data.isInit || !data || data.length == 0 ){
                     return;
                 }
-                _this.data.value = data[0]['id'];
-                _.debounce(function () {
-                    _this.events.changeValue(_this.data)
-                }, 200)();
+                _this.data.value=data[0]['id'];
+                _.debounce(function(){_this.events.changeValue(_this.data)},200)();
             };
-            let autoSelect = new AutoSelect(data);
-            this.append(autoSelect, el);
+            let autoSelect=new AutoSelect(data);
+            this.append(autoSelect,el);
         }
-        this.data.isInit = false;
+        this.data.isInit=false;
     },
-    beforeDestory() {
+    beforeDestory(){
         this.el.off();
     }
 }
-export default class YearControl extends Component {
-    constructor(data, events) {
+export default class YearControl extends Component{
+    constructor(data,events){
         let myDate = new Date();
         let myYear = myDate.getFullYear();
-        for (let i = 5; i >= -10; i--) {
-            config.data.options.push({"label": String(myYear + i), "value": String(myYear + i)});
+        for( let i=5;i>=-10;i-- ){
+            config.data.options.push( { "label": String(myYear + i),"value": String(myYear + i)} );
         }
-        config.data.options.unshift({"label": "请选择", "value": "请选择"});
-        super(config, data, events);
+        config.data.options.unshift({"label":"请选择","value":"请选择"});
+        super(config,data,events);
     }
 }

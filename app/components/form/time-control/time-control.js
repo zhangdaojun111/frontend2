@@ -22,7 +22,7 @@ let config = {
         },
         {
             event: 'click',
-            selector: '.input-img',
+            selector: '.ui-datepicker-current,.input-img',
             callback: function () {
                 //增加0
                 function p(s) {
@@ -51,15 +51,15 @@ let config = {
             selector: '.input-img',
             callback: function () {
                 this.el.find('.time').css({'display': 'block', 'position': 'absolute'});
-                event.stopPropagation();
+               event.stopPropagation();
             }
         },
+
         {
             event: 'click',
-            selector: '.time-close',
+            selector: '.ui-datepicker-close',
             callback: function () {
                 this.el.find('.time').css('display', 'none');
-
             }
         }
     ],
@@ -139,15 +139,16 @@ let config = {
                 _this.events.changeValue(_this.data)
             }, 200)();
         });
-
+        _this.el.find(".ui-datepicker-close").on("click", function () {
+            _this.data.value =  _this.el.find('.timeInput').val();
+            _.debounce(function () {
+                _this.events.changeValue(_this.data)
+            }, 200)();
+        })
         _.debounce(function () {
             _this.events.changeValue(_this.data)
         }, 200)();
 
-        // $(document).click(function () {
-        //     _this.el.find(".time").hide();
-        //     event.stopPropagation();
-        // })
     },
     beforeDestory: function () {
         $(document).off('click:timeControl');

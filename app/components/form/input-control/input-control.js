@@ -176,6 +176,7 @@ let config = {
             }
         },
 
+
     ],
     afterRender() {
         let _this = this;

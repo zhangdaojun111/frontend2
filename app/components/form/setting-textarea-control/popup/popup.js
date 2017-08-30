@@ -1,6 +1,5 @@
 import template from './popup.html';
 import {textareaTextDict} from '../options';
-
 let css = `
 .form-setting-textarea-popup {
     overflow: hidden;
@@ -103,7 +102,7 @@ let css = `
 `;
 
 let dealedTextareaTextDict = {};
-for (let key in textareaTextDict) {
+for(let key in textareaTextDict){
     dealedTextareaTextDict[key] = textareaTextDict[key].replace(/\$/g, `<input type='text' class='form-setting-textarea-popup-inputtext'>`);
 }
 
@@ -112,9 +111,9 @@ let popupSetting = {
     data: {
         textareaTextDict,
         dealedTextareaTextDict,
-        arrayLeft: [66, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 59, 15, 60, 17, 61],
-        arrayRight: [67, 44, 49, 45, 50, 46, 62, 58, 47, 63, 48, 64, 65, 14, 16, 18],
-        arrayRemain: [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 51, 52, 53, 54, 33, 34, 35, 36, 37, 38, 39, 40, 41, 55, 42, 56, 43, 57],
+        arrayLeft: [66,0,1,2,3,4,5,6,7,8,9,10,11,12,13,59,15,60,17,61],
+        arrayRight: [67,44,49,45,50,46,62,58,47,63,48,64,65,14,16,18],
+        arrayRemain: [19,20,21,22,23,24,25,26,27,28,29,30,31,32,51,52,53,54,33,34,35,36,37,38,39,40,41,55,42,56,43,57],
         css: css.replace(/(\n)/g, '')
     },
     actions: {
@@ -143,7 +142,7 @@ let popupSetting = {
 
         onTextInput: function (input) {
             let originVal = input.val();
-            if (_.trim(originVal) === '0') {
+            if (_.trim(originVal) === '0' ) {
                 input.val('');
                 return;
             }
@@ -176,7 +175,7 @@ let popupSetting = {
                     if (key === '66' || key === '67') {
                         $(checkbox).trigger('change');
                     }
-                    item.find('input:text').each(function (index) {
+                    item.find('input:text').each(function(index) {
                         $(this).val(choosedData[key][index]);
                     });
                 }
@@ -189,7 +188,7 @@ let popupSetting = {
         renderLeft: function () {
             let html = [];
             let that = this;
-            this.data.arrayLeft.forEach(function (key) {
+            this.data.arrayLeft.forEach(function(key) {
                 html.push(`<li class=form-setting-textarea-popup-li key=${key}><label><input key=${key} type=checkbox class=form-setting-textarea-popup-checkbox>${that.data.dealedTextareaTextDict[key]}</label></li>`);
             });
             this.leftWrap.html(html.join(''));
@@ -201,7 +200,7 @@ let popupSetting = {
         renderRight: function () {
             let html = [];
             let that = this;
-            this.data.arrayRight.forEach(function (key) {
+            this.data.arrayRight.forEach(function(key) {
                 html.push(`<li class=form-setting-textarea-popup-li key=${key}><label><input key=${key} type=checkbox class=form-setting-textarea-popup-checkbox>${that.data.dealedTextareaTextDict[key]}</label></li>`);
             });
             this.rightWrap.html(html.join(''));
@@ -213,7 +212,7 @@ let popupSetting = {
         renderRemain: function () {
             let html = [];
             let that = this;
-            this.data.arrayRemain.forEach(function (key) {
+            this.data.arrayRemain.forEach(function(key) {
                 html.push(`<li class=form-setting-textarea-popup-li key=${key}><label><input key=${key} type=checkbox class=form-setting-textarea-popup-checkbox>${that.data.dealedTextareaTextDict[key]}</label></li>`);
             });
             this.remainWrap.html(html.join(''));
@@ -311,7 +310,7 @@ let popupSetting = {
         }, {
             event: 'input',
             selector: 'input:text',
-            callback: function (context) {
+            callback: function(context) {
                 this.actions.onTextInput($(context));
             }
         }, {

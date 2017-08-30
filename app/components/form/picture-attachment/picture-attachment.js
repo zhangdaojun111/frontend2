@@ -1,10 +1,9 @@
 /**
  *@author yudeping
- *图片附件grid弹窗
+ *枚举选项快捷添加
  */
 
 import template from './picture-attachment.html';
-
 let css = `.imgList {
     width: 20%;
     height: 100%;
@@ -84,39 +83,39 @@ let PictureAttachment = {
     template: template.replace(/\"/g, '\''),
     data: {
         css: css.replace(/(\n)/g, ''),
-        imgData: '',
-        imgSelect: '',
-        res: '',
-        seletNum: 0,
+        imgData:'',
+        imgSelect:'',
+        res:'',
+        seletNum:0,
     },
-    actions: {
-        setBackground() {
-            this.el.find('.select-img').each((index, obj) => {
-                let color = $(obj).data('imgselect') == this.data.imgSelect ? '#F2F2F2' : '#fff';
-                $(obj).css('background-color', color);
+    actions:{
+        setBackground(){
+            this.el.find('.select-img').each((index,obj)=>{
+                let color=$(obj).data('imgselect') == this.data.imgSelect? '#F2F2F2' : '#fff';
+                $(obj).css('background-color',color);
             });
         },
-        createUrl(fieldId) {
-            let url = `/download_attachment/?file_id=${fieldId}&download=0`
-            this.data.imgShow.attr('src', url)
-            this.data.myImg.attr('src', url)
+        createUrl(fieldId){
+            let url=`/download_attachment/?file_id=${fieldId}&download=0`
+            this.data.imgShow.attr('src',url)
+            this.data.myImg.attr('src',url)
         },
-        changeImg(id, index) {
+        changeImg(id,index){
             this.actions.createUrl(id);
-            this.data.imgSelect = id;
-            this.data.seletNum = index;
+            this.data.imgSelect=id;
+            this.data.seletNum=index;
             this.actions.setBackground();
         }
     },
-    afterRender() {
+    afterRender(){
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
-        let _this = this;
+        let _this=this;
         this.actions.setBackground();
-        this.data.imgShow = this.el.find('#ImgToShow');
-        this.data.myImg = this.el.find('#myImg');
-        this.data.len = this.data.rows.length;
-        this.el.on('click', '.select-img', function () {
-            _this.actions.changeImg($(this).data('imgselect'), $(this).index());
+        this.data.imgShow=this.el.find('#ImgToShow');
+        this.data.myImg=this.el.find('#myImg');
+        this.data.len=this.data.rows.length;
+        this.el.on('click','.select-img',function(){
+            _this.actions.changeImg($(this).data('imgselect'),$(this).index());
         })
         // this.el.on('click','.changeBtn',function(){
         //     let num =$(this).data('num');
@@ -135,7 +134,7 @@ let PictureAttachment = {
         //     }
         // })
     },
-    beforeDestory() {
+    beforeDestory(){
         this.data.style.remove();
     }
 }
