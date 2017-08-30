@@ -2198,7 +2198,7 @@ let config = {
         onCellClicked: function (data) {
             console.log( "______data_______" )
             console.log( data )
-            if( !data.data || this.data.isEditable ){
+            if( !data.data || this.data.isEditable || data.data.myfooter ){
                 return;
             }
             //分组重新渲染序号
