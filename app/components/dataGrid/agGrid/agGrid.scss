@@ -110,7 +110,7 @@
       }
       &.ag-cell-focus{
         border: none;
-        background: rgba(120,120,120,0.3);
+        background: #E4E4E4;
       }
       &.ag-cell-no-focus {
         border-right: 1px solid #E4E4E4 !important;
@@ -124,4 +124,7 @@
   font-weight: 700;
   font-style: normal;
   font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
+}
+.ag-bootstrap .ag-row-selected {
+  background-color: #97DDFF !important;
 }
