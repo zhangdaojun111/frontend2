@@ -1,14 +1,16 @@
 <div class="follower-select addUser">
         <div class="flexBox">
             <div>
-                <div>
-                    加签类型：
-                    <div>
-                        <label >
-                            前加签<input  name="addHandlerType" type="radio" checked value="0">
+                <div class="flex signtype">
+                    <span>加签类型：</span>
+                    <div class="flex">
+                        <label class="flex around">
+                            <input  name="addHandlerType" type="radio" checked value="0">
+                            <span>前加签</span>
                         </label>
-                        <label >
-                            后加签<input  name="addHandlerType" type="radio" value="1">
+                        <label class="flex around">
+                            <input  name="addHandlerType" type="radio" value="1">
+                            <span>后加签</span>
                         </label>
                     </div>
                 </div>
@@ -16,9 +18,11 @@
                     选择人员：
                     <div class="flexBox">
                         <div id="addUser"></div>
-                        <div >
+                        <div class="people">
                             <div class="signer-place">
-                                <input type="text" placeholder="请输入搜索关键字" class="signer-search">
+                                <span>人员搜索</span>
+                                <span>已选：15人</span>
+                                <input type="text" placeholder="搜索" class="signer-search">
                             </div>
                             <div class="flex">
                                 <div class="w33">
