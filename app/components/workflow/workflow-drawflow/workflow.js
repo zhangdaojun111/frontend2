@@ -231,8 +231,12 @@ let config = {
             // __this.actions.requiredFields();
             
 
-            this.containerheight = __this.actions.getTheBestBottom() - __this.actions.getTheBestTop() + 100 + 'px';
-            this.containerwidth = __this.actions.getTheBestRight() - __this.actions.getTheBestLeft() + 250 + 'px';
+            this.el.find('.workflow-draw-box').css({
+                'height':__this.actions.getTheBestBottom() - __this.actions.getTheBestTop() + 100 + 'px',
+                'width':__this.actions.getTheBestRight() - __this.actions.getTheBestLeft() + 250 + 'px'
+            });
+            this.data.containerheight = __this.actions.getTheBestBottom() - __this.actions.getTheBestTop() + 100 + 'px';
+            this.data.containerwidth = __this.actions.getTheBestRight() - __this.actions.getTheBestLeft() + 250 + 'px';
         },
 
         //add mark points
