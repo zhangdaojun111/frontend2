@@ -14,7 +14,9 @@ import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 
 let config={
     template: template,
-    data:{},
+    data:{
+        total: 0
+    },
     action:{
         search(){
             let keyword = this.el.find(".follower-search").val();
@@ -30,8 +32,8 @@ let config={
                 }
             }
         },
-        init(){
-            
+        addtotal(num){
+            this.el.find('.total').text(num);
         }
     },
     afterRender(){
@@ -93,24 +95,32 @@ let config={
             for(var i=0;i<domSpan.length;i++){
                 for(var j=0;j<userArr.length;j++){
                     if($(domSpan[i]).data('id')===userArr[j]){
+                        this.data.total--;
                         $(domSpan[i]).parent().remove();
                     }
                 }
             }
+            this.action.addtotal(this.data.total);
         });
 
         //注册SelectedStaff组件
         Mediator.subscribe('workflow:pubCheck', (res)=> {
             this.append(new SelectedStaff(res), this.el.find('#selected'));
+            this.data.total++;
+            this.action.addtotal(this.data.total);
         });
 
         Mediator.subscribe('workflow:pubCheckNoDel', (res)=> {
             this.append(new SelectedStaffNoDel(res), this.el.find('#selected'));
+            this.data.total++;
+            this.action.addtotal(this.data.total);
         });
 
         //注册SelectedStaff组件
         Mediator.subscribe('workflow:pubCheckSingle', (res)=> {
             this.append(new SelectedStaff(res), this.el.find('#selected'));
+            this.data.total++;
+            this.action.addtotal(this.data.total);
         });
         //删除SelectedStaff组件
         Mediator.subscribe('workflow:pubUncheckSingle', (res)=> {
@@ -118,8 +128,10 @@ let config={
             for(var i=0;i<domSpan.length;i++){
                 if($(domSpan[i]).data('id')===res){
                     $(domSpan[i]).parent().remove();
+                    this.data.total--;
                 }
             }
+            this.action.addtotal(this.data.total);
         });
 
 
