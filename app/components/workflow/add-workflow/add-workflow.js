@@ -55,8 +55,9 @@ let config={
             this.el.find('#wf-select').html(htmlStr);
             this.el.find('#wf-select').on('change',()=>{
                 let o={};
-                o.flow_id=this.el.find('#wf-select option:selected').data('flow_id');
-                o.form_id=this.el.find('#wf-select option:selected').data('form_id');
+                o.flow_id=_this.el.find('#wf-select option[data-default="1"]').data('flow_id');
+                o.form_id=_this.el.find('#wf-select option[data-default="1"]').data('form_id');
+                _this.el.find('#wf-select option[data-default="1"]').attr("selected",true);
                 Mediator.publish('workflow:getflows', o);
             }).trigger('change');
         });

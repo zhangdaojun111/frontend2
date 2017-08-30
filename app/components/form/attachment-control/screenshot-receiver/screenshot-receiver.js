@@ -8,11 +8,37 @@ import './screenshot-receiver.scss';
 
 export const screenShotConfig={
     template:template,
+    binds:[
+        {
+            event:'click',
+            selector:'.comfirm-n-save',
+            callback:function () {
+                if(this.data.file == ''){
+                    return;
+                }
+                window.parent.postMessage({
+                    type:'1',
+                    key:this.key,
+                    data:{
+                        file:this.data.file
+                    }
+                }, location.origin);
+            }
+        },{
+            event:'click',
+            selector:'.cancel-to-rechoose',
+            callback:function () {
+                if(!this.data.imageEle){
+                    return;
+                }
+                this.data.imageEle.remove();
+                t.el.find('.paste-tip').css('display','block');
+                this.data.file = '';
+            }
+        }
+    ],
     data:{
         file:'',
-        imageEle:undefined,
-    },
-    actions:{
     },
     afterRender:function () {
         let t = this;
@@ -32,31 +58,13 @@ export const screenShotConfig={
                         ele.addClass('screenshot-image');
                         ele.attr('src',event.target.result);
                         t.el.find('.img-anchor').append(ele);
-                        t.data.imageEle = ele;
+                        t.data['imageEle'] = ele;
                         t.el.find('.paste-tip').css('display','none');
                     }; // data url!
                     reader.readAsDataURL(blob);
                 }
             }
-        }).on('click','.comfirm-n-save',()=>{
-            if(this.data.file == ''){
-                return;
-            }
-            window.parent.postMessage({
-                type:'1',
-                key:this.key,
-                data:{
-                    file:this.data.file
-                }
-            }, location.origin);
-        }).on('click','.cancel-to-rechoose',()=>{
-            if(!this.data.imageEle){
-                return;
-            }
-            this.data.imageEle.remove();
-            t.el.find('.paste-tip').css('display','block');
-            this.data.file = '';
-        })
+        });
     }
 }
 
