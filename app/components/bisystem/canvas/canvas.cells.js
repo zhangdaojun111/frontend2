@@ -79,23 +79,26 @@ let config = {
             // 获取画布块数据
             let zIndex = [];
             let deeps = [];
-            // const layouts = {
-            //     'layout_id': this.data.cellChart.cell.layout_id,
-            //     'deep_info':JSON.stringify(deep_info),
-            //     'floor':this.data.floor,
-            //     'view_id': this.data.cellChart.cell.canvas.viewId,
-            //     'xAxis': JSON.stringify(this.data['xAxis']),
-            //     'chart_id':this.data.cellChart.cell.chart_id
-            // };
-            // const data = {
-            //     'layouts': [JSON.stringify(layouts)],
-            //     'query_type': 'deep',
-            //     'is_deep': 0
-            // };
+            const layouts = {
+                'layout_id': '',
+                'deep_info': {},
+                'floor':'',
+                'view_id': this.viewId,
+                'xAxis': '',
+                'chart_id':'',
+                'xOld': []
+            };
+            const data = {
+                'layouts': [JSON.stringify(layouts)],
+                'query_type': 'deep',
+                'is_deep': 0
+            };
             const chartsId = cells.map((cell) => {
-                if (cell.is_deep == 1) {
-
-                };
+                console.log(cell);
+                // if (cell.is_deep == 1) {
+                //     layouts['layout_id'] = cell.layout_id;
+                //     layouts['deep_info'][cell.deep.floor]
+                // };
                 zIndex.push(cell.size.zIndex);
                 return cell.chart_id ? cell.chart_id : 0
             });
