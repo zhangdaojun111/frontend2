@@ -29,6 +29,9 @@
             padding-left: 10px;
             height: 30px;
             line-height: 30px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
             &.node-tree:not(.node-disabled):hover{
                 background: #eee;
             }
@@ -73,6 +76,8 @@
     height: 30px;
     width: 100%;
     border-top:1px solid #E4E4E4;
+    background: #fff;
+    z-index: 20;
     button{
         border: none;
         outline: none;
