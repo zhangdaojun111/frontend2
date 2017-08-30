@@ -114,7 +114,11 @@ let config = {
         this.agGrid.render(gridDom);
         this.pagination = new dataPagination({
             page: 1,
-            rows: 10
+            rows: 15,
+            range:{
+                l:10,
+                r:200
+            }
         });
         this.pagination.render(this.el.find('.pagination'));
         this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;

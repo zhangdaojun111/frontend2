@@ -10,11 +10,10 @@ import {LoginService} from '../services/login/loginService';
 import {md5} from '../services/login/md5';
 import msgBox from '../lib/msgbox';
 
-
 function getLoginController() {
     return {
         systemName:'',      //公司名称
-        loginSize:"26px",
+        // loginSize:"26px",
         versionInfo:{},     //后台获取的公司名称和版本信息
         isRememberKey:false,    //记录是否记住密码，点击登陆后根据其状态进行处理
         username_value:'',      //记录用户名称
@@ -188,7 +187,7 @@ function getLoginController() {
                 $table.append($row);
             }
             $(".run-btn").on("click", () => {
-                    $(".default-hide").toggle();
+                $(".default-hide").toggle();
             })
         },
         infoInit:function () {

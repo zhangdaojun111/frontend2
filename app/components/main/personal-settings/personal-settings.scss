@@ -67,14 +67,12 @@ $sub_color: #0088ff;
             .avatar-box{
                 width: 64px;
                 height: 64px;
-                top:40px;
-                left: 40px;
+                margin-left: 40px;
+                margin-top: 5px;
                 float: left;
-                clear: both;
                 cursor: pointer;
                 border-radius: 50%;
                 overflow: hidden;
-                position: absolute;
                 &.default_avatar{
                     background-image: url("../../../assets/images/framework/default_avatar_64.png");
                 }
@@ -86,11 +84,12 @@ $sub_color: #0088ff;
             }
             .name-group{
                 height: 60px;
-                //margin-top: 15px;
-                //margin-left: 20px;
-                position: absolute;
-                top: 50px;
-                left: 120px;
+                margin-top: 15px;
+                margin-left: 20px;
+                //position: absolute;
+                float: left;
+                //top: 50px;
+                //left: 120px;
                 .name{
                     height: 30px;
                     line-height: 30px;
@@ -136,24 +135,22 @@ $sub_color: #0088ff;
             }
         }
         .personal-info{
-            margin-top: 30px;
+            margin-top: 40px;
             .department-group,.position-group{
-                width: 210px;
                 height: 50px;
-                float: left;
-                margin-left: 50px;
+                margin-left: 130px;
+                margin-top: 10px;
                 line-height:50px;
-                position: relative;
                 input{
                     background-color: transparent;
                     border: none;
                 }
             }
             .email-group,.phone-group{
-                width: 260px;
                 height: 50px;
-                float: left;
                 line-height:50px;
+                margin-left: 130px;
+                margin-top: 10px;
                 position: relative;
                 input{
                     height: 25px;
@@ -197,19 +194,21 @@ $sub_color: #0088ff;
 
             .old-pw-group{
                 margin-top: 30px;
-                margin-left: 77px;
+                margin-left: 102px;
             }
             .new-pw-group{
-                margin-left: 77px;
+                margin-left: 102px;
+                margin-top: 15px;
             }
             .confirm-new-pw-group{
-                margin-left: 50px;
+                margin-left: 78px;
+                margin-top: 15px;
             }
             .ps-warn{
                 color: red;
                 display: block;
                 margin-top: 40px;
-                margin-left: 285px;
+                margin-left: 310px;
             }
             button{
                 width: 100px;
@@ -218,7 +217,7 @@ $sub_color: #0088ff;
                 background-color: #0088ff;
                 position: absolute;
                 bottom:20px;
-                right: 20px;
+                right: 30px;
                 border: 0;
                 border-radius: 5px;
                 cursor: pointer;
