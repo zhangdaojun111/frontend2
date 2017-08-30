@@ -31,7 +31,7 @@ WorkFlowForm.showForm();
 
 let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[];;
 serchStr.split('&').forEach(res => {
-    var arr = res.split('=');
+    let arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
 is_view=obj.btnType==='view'?1:0;
@@ -63,8 +63,8 @@ Mediator.subscribe('workFlow:record_info', (res) => {
         Mediator.publish('workflow:getImgInfo', result);
         Mediator.publish('workflow:gotWorkflowInfo', result);
         let a=result.data[0].updateuser2focususer;
-        for(var i in a){
-            for(var j in a[i]){
+        for(let i in a){
+            for(let j in a[i]){
                 focus.push(a[i][j]);
             }
         }
@@ -74,7 +74,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
                 return workflowService.getWorkflowInfo({url: '/get_all_users/'});
             })().then(users => {
                 let idArr=[];
-                for(var i in focus){
+                for(let i in focus){
                     idArr.push(users.rows[focus[i]].id);
                     dept.push(users.rows[focus[i]].department);
                 }
@@ -94,7 +94,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
                                     item.state={};
                                     item.state.checked=true;
                                     item.state.selected=true;
-                                    for(var k in staff){
+                                    for(let k in staff){
                                         if(k==item.id){
                                             Mediator.publish('workflow:checkDeptAlready', staff[k]);
                                         }
@@ -107,16 +107,16 @@ Mediator.subscribe('workFlow:record_info', (res) => {
                         }
                     }
                     recur(tree);
-                    var treeComp2 = new TreeView(tree,{
+                    let treeComp2 = new TreeView(tree,{
                         callback: function (event,selectedNode) {
                             if(event==='select'){
-                                for(var k in staff){
+                                for(let k in staff){
                                     if(k==selectedNode.id){
                                         Mediator.publish('workflow:checkDept', staff[k]);
                                     }
                                 }
                             }else{
-                                for(var k in staff){
+                                for(let k in staff){
                                     if(k==selectedNode.id){
                                         Mediator.publish('workflow:unCheckDept', staff[k]);
                                     }
@@ -145,16 +145,16 @@ Mediator.subscribe('workFlow:record_info', (res) => {
                     }
                 }
                 recur(tree);
-                var treeComp2 = new TreeView(tree,{
+                let treeComp2 = new TreeView(tree,{
                     callback: function (event,selectedNode) {
                         if(event==='select'){
-                            for(var k in staff){
+                            for(let k in staff){
                                 if(k==selectedNode.id){
                                     Mediator.publish('workflow:checkDept', staff[k]);
                                 }
                             }
                         }else{
-                            for(var k in staff){
+                            for(let k in staff){
                                 if(k==selectedNode.id){
                                     Mediator.publish('workflow:unCheckDept', staff[k]);
                                 }
@@ -172,7 +172,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
         (async function () {
             return workflowService.getWorkflowInfo({url: '/get_all_users/'});
         })().then(users => {
-            for(var i in focus){
+            for(let i in focus){
                 nameArr.push(`<span class="selectSpan">${users.rows[focus[i]].name}</span>`);
             }
             $('#add-home #addFollowerList').html(nameArr);
@@ -211,8 +211,8 @@ Mediator.subscribe('workflow:focus-users', (res)=> {
 
 function GetQueryString(name)
 {
-    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-    var r = window.location.search.substr(1).match(reg);
+    let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    let r = window.location.search.substr(1).match(reg);
     if(r!=null)return  unescape(r[2]); return null;
 }
 

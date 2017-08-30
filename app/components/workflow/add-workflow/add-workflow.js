@@ -49,7 +49,7 @@ let config={
         });
         Mediator.subscribe('workflow:getParams', (res)=> {
             let htmlStr=``;
-            for(var i in res){
+            for(let i in res){
                 htmlStr+=`<option data-default=${res[i].selected} data-flow_id=${res[i].flow_id} data-form_id=${res[i].form_id}>${res[i].flow_name}</option>`;
             }
             this.el.find('#wf-select').html(htmlStr);

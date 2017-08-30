@@ -78,7 +78,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
                 msgBox.alert('自动保存成功！');
             }
         };
-        var timer;
+        let timer;
         const autoSaving=function(){
             timer=setInterval(()=>{
                 intervalSave(FormEntrys.getFormValue(wfObj.tableid));

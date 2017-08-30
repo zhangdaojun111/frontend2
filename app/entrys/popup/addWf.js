@@ -37,16 +37,16 @@ let tree=[],staff=[];
         }
     }
     recur(tree);
-    var treeComp2 = new TreeView(tree,{
+    let treeComp2 = new TreeView(tree,{
         callback: function (event,selectedNode) {
             if(event==='select'){
-                for(var k in staff){
+                for(let k in staff){
                     if(k==selectedNode.id){
                         Mediator.publish('workflow:checkDept', staff[k]);
                     }
                 }
             }else{
-                for(var k in staff){
+                for(let k in staff){
                     if(k==selectedNode.id){
                         Mediator.publish('workflow:unCheckDept', staff[k]);
                     }
@@ -63,7 +63,7 @@ let tree=[],staff=[];
 let serchStr = location.search.slice(1);
 let obj = {},is_view;
 serchStr.split('&').forEach(res => {
-    var arr = res.split('=');
+    let arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
 is_view=obj.btnType==='view'?1:0;
