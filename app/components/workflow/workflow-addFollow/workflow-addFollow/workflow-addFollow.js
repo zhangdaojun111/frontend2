@@ -53,7 +53,7 @@ let config={
                 if(checked.length===0){
                     this.append(new SelectStaff(val), this.el.find('#staffMulti'));
                 }else{
-                    for(var a=0;a<checked.length;a++){
+                    for(let a=0;a<checked.length;a++){
                         if(i===$(checked[a]).data('id')){
                             return false;
                         }else{
@@ -67,7 +67,7 @@ let config={
         Mediator.subscribe('workflow:checkDeptAlready', (res)=> {
             $.each(res,(i,val)=>{
                 val.id=i;
-                for(var a in this.data.idArr){
+                for(let a in this.data.idArr){
                     if(val.id==this.data.idArr[a]){
                         this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
                     }
@@ -78,20 +78,20 @@ let config={
         //部门反选，删除SelectedStaff组件
         Mediator.subscribe('workflow:unCheckDept', (res)=> {
             let userArr=[];
-            for(var id in res){
+            for(let id in res){
                 userArr.push(id);
             }
             let domDiv=this.el.find('#staffMulti').find('.flex');
-            for(var i=0;i<domDiv.length;i++){
-                for(var j=0;j<userArr.length;j++){
+            for(let i=0;i<domDiv.length;i++){
+                for(let j=0;j<userArr.length;j++){
                     if($(domDiv[i]).data('id')===userArr[j]){
                         $(domDiv[i]).parent().remove();
                     }
                 }
             }
             let domSpan=this.el.find('#selected').find('span.removeble');
-            for(var i=0;i<domSpan.length;i++){
-                for(var j=0;j<userArr.length;j++){
+            for(let i=0;i<domSpan.length;i++){
+                for(let j=0;j<userArr.length;j++){
                     if($(domSpan[i]).data('id')===userArr[j]){
                         $(domSpan[i]).parent().remove();
                     }
@@ -115,7 +115,7 @@ let config={
         //删除SelectedStaff组件
         Mediator.subscribe('workflow:pubUncheckSingle', (res)=> {
             let domSpan=this.el.find('#selected').find('span.removeble');
-            for(var i=0;i<domSpan.length;i++){
+            for(let i=0;i<domSpan.length;i++){
                 if($(domSpan[i]).data('id')===res){
                     $(domSpan[i]).parent().remove();
                 }
@@ -125,7 +125,7 @@ let config={
 
         //全选，反选btn
         this.el.on('click','#allSelector',function(){
-            var inputs=_this.el.find('#staffMulti').find('.remove');
+            let inputs=_this.el.find('#staffMulti').find('.remove');
             if($(this).prop('checked')){
                 for (let i = 0;i<inputs.length;i++){
                     if($(inputs[i]).hasClass('checked')){
@@ -152,7 +152,7 @@ let config={
         this.el.on('click','#saveFollower',()=>{
             let nameArr=[],idArr=[];
             let domSpan=this.el.find('#selected').find('span');
-            for(var i=0;i<domSpan.length;i++){
+            for(let i=0;i<domSpan.length;i++){
                 nameArr.push(`<span class="selectSpan">${$(domSpan[i]).text()}</span>`);
                 idArr.push($(domSpan[i]).data('id'));
             }
