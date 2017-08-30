@@ -106,10 +106,14 @@ let config={
                         this.data.value.push(event.data.fileId);
                         this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
                         this.trigger('changeValue', this.data);
+                        let obj = {};
+                        obj[event.data.fileId]=event.data.thumbnail;
                         if(this.data['thumbnailListComponent']) {
-                            let obj = {};
-                            obj[event.data.fileId]=event.data.thumbnail;
-                            this.data['thumbnailListComponent'].actions.addItem(obj);
+                             this.data['thumbnailListComponent'].actions.addItem(obj);
+                        } else {
+                            let comp = new ThumbnailList([obj]);
+                            comp.render(this.el.find('.thumbnail-list'));
+                            this.data['thumbnailListComponent']=comp;
                         }
                     }
                 }
