@@ -25,6 +25,7 @@ import importSetting from '../../data-table-toolbar/data-table-import/data-table
 import exportSetting from '../../data-table-toolbar/data-table-export/data-table-export';
 
 import expertSearch from "../../data-table-toolbar/expert-search/expert-search";
+import {contractEditorConfig} from '../../../form/contract-control/contract-editor/contract-editor';
 import AttachmentList from "../../../form/attachment-list/attachment-list";
 import PictureAttachment from "../../../form/picture-attachment/picture-attachment";
 import {PersonSetting} from "../../../main/personal-settings/personal-settings";
@@ -625,7 +626,7 @@ let config = {
 
             //合同编辑器
             else if (real_type == fieldTypeService.TEXT_COUNT_TYPE) {
-                sHtml = '<a>' + "查看" + '</a>' + '<span>' + "丨" + '</span>' + '<a>' + '下载' + '</a>';
+                sHtml = '<a class="view-contract">' + "查看" + '</a>' + '<span>' + "丨" + '</span>' + '<a class="download-contract">' + '下载' + '</a>';
             }
 
             //表对应关系（不显示为数字）
@@ -2268,7 +2269,26 @@ let config = {
             }
             //合同编辑器
             if( data.colDef.real_type == fieldTypeService.TEXT_COUNT_TYPE ){
+                if(data.event.srcElement.className.indexOf('view-contract') != -1){
+                    let obj = {
+                        table_id:this.data.tableId,
+                        id:data.colDef.id,
+                        temp_id:data.data._id,
+                        value: data['value'],
+                        mode:'view'
+                    };
+                    let contractConfig = _.defaultsDeep(contractEditorConfig,{data:obj});
+                    PMAPI.openDialogByComponent(contractConfig,{
+                        width:900,
+                        height:600,
+                        title:'合同查看'
+                    });
+                } else if(data.event.srcElement.className.indexOf('download-contract') != -1){
+                    this.actions.downloadContract(data,0);
+                }
             }
+
+
             //附件字段
             if( data.event.srcElement.id == 'file_view' && fieldTypeService.attachment(data.colDef.real_type) ){
                 let dinput_type=data.colDef.real_type;
@@ -2592,6 +2612,31 @@ let config = {
         },
         //返回批量工作流导入后数据
         returnBatchData: function (ids) {
+        },
+        //逐一下载合同
+        downloadContract(data,i){
+            if(!data.value){
+                return;
+            }
+            if(i == data.value.length){
+                return;
+            }
+            let value = data.value[i];
+            HTTP.postImmediately('/customize/rzrk/download_contract/',{
+                table_id:this.data.tableId,
+                real_id:data.data._id,
+                field_id:data.colDef.id,
+                model_id:value.model_id,
+                k2v:value.k2v,
+                file_name:value.name
+            }).then(res=>{
+                if(res.success){
+                    let url = '/download_attachment/?file_id='+JSON.parse(res.data).file_id+"&download=1";
+                    window.open(url);
+                    this.actions.downloadContract(data,i+1);
+                }
+            })
+
         }
     },
     afterRender: function () {

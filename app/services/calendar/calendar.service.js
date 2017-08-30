@@ -4,6 +4,7 @@
 
 
 import { HTTP } from '../../lib/http';
+import MSG from '../../lib/msgbox';
 
 const saveCalendarTableUrl = 'calendar_mgr/save_calendar';
 
@@ -14,8 +15,6 @@ const calendarTreeUrl = 'calendar_mgr/get_calendar_tree';
 const calendarDataUrl = 'calendar_mgr/get_calendar_data';
 
 const workflowRecordsUrl = 'get_workflow_records';
-
-const missionRecordUrl = 'get_mission_record';
 
 const calendarPreferenceUrl = 'calendar_mgr/calendar_preference';
 
@@ -29,6 +28,12 @@ export const CodeEnum = {
 
 export const CalendarService = {
 
+    /**
+     * 保存日历设置
+     * @param table_id
+     * @param param_list
+     * @returns {undefined|void|Promise.<TResult>}
+     */
     saveCalendarTable: function (table_id, param_list) {
         let params = {
             table_id: table_id,
@@ -39,13 +44,18 @@ export const CalendarService = {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                alert('获取数据失败');
+                MSG.alert('获取数据失败');
             }
         });
         HTTP.flush();
         return res;
     },
 
+    /**
+     * 获取日历设置中对应表设置
+     * @param table_id
+     * @returns {undefined|void|Promise.<TResult>}
+     */
     getCalendarTableById: function (table_id) {
         let params = {
             table_id: table_id,
@@ -56,20 +66,7 @@ export const CalendarService = {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                alert('获取数据失败');
-            }
-        });
-        HTTP.flush();
-        return res;
-    },
-
-    getCalendarTreeData: function () {
-        let res = HTTP.get(calendarTreeUrl).then(res => {
-            if(res['code'] === CodeEnum.SUCCESS) {
-                console.log(res);
-                return res;
-            } else {
-                //alert('获取数据失败');
+                MSG.alert('获取数据失败');
             }
         });
         HTTP.flush();
@@ -77,6 +74,23 @@ export const CalendarService = {
     },
 
     /**
+     * 获取日历树数据
+     * @returns {undefined|void|Promise.<TResult>}
+     */
+    getCalendarTreeData: function () {
+        let res = HTTP.get(calendarTreeUrl).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                MSG.alert('获取数据失败');
+            }
+        });
+        HTTP.flush();
+        return res;
+    },
+
+    /**
+     * 获取对应与日历树中勾选项的数据
      * 需要传入的参数data = {from_date: String; to_date: String, cancel_fields: [取消勾选的项目]}
      * @param data
      */
@@ -85,7 +99,7 @@ export const CalendarService = {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                alert('获取数据失败');
+                MSG.alert('获取数据失败');
             }
         });
         HTTP.flush();
@@ -93,6 +107,7 @@ export const CalendarService = {
     },
 
     /**
+     * 获取工作流数据
      * 需要传入的参数data = {from_date: String; to_date: String}
      * @param data
      */
@@ -109,7 +124,7 @@ export const CalendarService = {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                //alert('获取数据失败');
+                MSG.alert('获取数据失败');
             }
         });
         HTTP.flush();
@@ -117,32 +132,7 @@ export const CalendarService = {
     },
 
     /**
-     * 需要传入的参数data = {from_date: String; to_date: String}
-     * @param data
-     */
-    getMissionRecords: function (data) {
-        let params = {
-            type: 5,
-            first: 0,
-            rows: 9999,
-            rate_data: 1,
-            from_date: data['from_date'],
-            to_date: data['to_date']
-        };
-
-        let res = HTTP.post(missionRecordUrl, params).then(res => {
-            if(res['code'] === CodeEnum.SUCCESS) {
-                return res;
-            } else {
-                //alert('获取数据失败');
-            }
-        });
-        HTTP.flush();
-        return res;
-
-    },
-
-    /**
+     * 保存个人偏好设置
      * data = {content: [取消勾选的项目]}
      * @param data
      */
@@ -166,7 +156,7 @@ export const CalendarService = {
      * data = {content: [隐藏项]}
      * @param data
      */
-    getCalendarhidePreference: function (data) {
+    getCalendarHidePreference: function (data) {
         let params = {
             type: 6,
             content: JSON.stringify(data['content']),
@@ -183,6 +173,11 @@ export const CalendarService = {
         return res;
     },
 
+    /**
+     * 获取可配置参数
+     * @param tableId
+     * @returns {undefined|void|Promise.<TResult>}
+     */
     getReplace: function (tableId) {
         let params = {
             table_id: tableId,
@@ -198,14 +193,19 @@ export const CalendarService = {
         HTTP.flush();
         return res;
     },
-    
+
+    /**
+     * 日历提醒
+     * @param params
+     * @returns {undefined|void|Promise.<TResult>}
+     */
     getCalendarDrag: function (params) {
         let res = HTTP.get(dragCalendarTaskUrl, params).then(res => {
             console.log(res);
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                //alert('获取数据失败');
+                MSG.alert('获取数据失败');
             }
         });
         HTTP.flush();
