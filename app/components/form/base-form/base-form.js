@@ -318,16 +318,16 @@ let config = {
                         }
                     }
                     //函数检查
-                    if (val != "" && !$.isEmptyObject(data["func"])) {
-                        for (let r in data["func"]) {
-                            let flag = FormService[r](val);
-                            if (!flag) {
-                                error = true;
-                                errorMsg = data["func"][r];
-                                break;
-                            }
-                        }
-                    }
+                    // if (val != "" && !$.isEmptyObject(data["func"])) {
+                    //     for (let r in data["func"]) {
+                    //         let flag = FormService[r](val);
+                    //         if (!flag) {
+                    //             error = true;
+                    //             errorMsg = data["func"][r];
+                    //             break;
+                    //         }
+                    //     }
+                    // }
                     //数字位数限制
                     if (data["real_type"] == fieldTypeService.FLOAT_TYPE) {
                         if (formValue[key] >= 100000000000) {
