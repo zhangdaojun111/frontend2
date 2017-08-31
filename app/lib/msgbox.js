@@ -7,7 +7,7 @@ export default {
         let config = _.defaultsDeep({}, alertConfig);
         config.data.text = encodeURIComponent(msg);
         return PMAPI.openDialogByComponent(config, {
-            width: 300,
+            width: 400,
             title: '提示',
             maxable: false,
             modal: true
@@ -22,7 +22,7 @@ export default {
         let config = _.defaultsDeep({}, confirmConfig);
         config.data.text = encodeURIComponent(msg);
         PMAPI.openDialogByComponent(config, {
-            width: 300,
+            width: 400,
             title: '提示',
             maxable: false,
             modal: true
