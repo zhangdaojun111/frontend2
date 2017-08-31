@@ -272,7 +272,11 @@ let config = {
                     if (data.data["field"] == "_id" || data.data['dtype'] == 9) {
                         return;
                     }
-                    let headClass = fieldTypeService.numOrText(data.data["real_type"]) ? 'header-style-r' : 'header-style-l';
+                    // let headClass = fieldTypeService.numOrText(data.data["real_type"]) ? 'header-style-r' : 'header-style-l';
+                    let headerStyleObj = {
+                        right:'header-style-r',left:'header-style-l',center:''
+                    }
+                    let headClass = headerStyleObj[fieldTypeService.textAline(data.data["real_type"])];
 
                     //添加表头提醒
                     if( this.data.headerColor[data.data["field"]] != undefined ){
@@ -293,11 +297,6 @@ let config = {
 
                     let obj = {
                         headerName: data.header[i],
-                        // headerCellTemplate: (params) => {
-                        //     return this.headerCellRenderer(params);
-                        // },
-                        // headerComponent:HeaderComponent,
-                        // headerComponentFramework:<{new():HeaderComponent}>HeaderComponent,
                         tableName: data.data['table_name'],
                         id: data.data["id"],
                         field: data.data["field"],
