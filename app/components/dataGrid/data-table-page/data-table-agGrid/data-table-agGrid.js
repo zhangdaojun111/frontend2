@@ -682,9 +682,8 @@ let config = {
         resetPreference: function () {
             let ediv = document.createElement('div');
             let eHeader = document.createElement('span');
-            let eImg = document.createElement('img');
-            eImg.src = require( '../../../../assets/images/dataGrid/quxiao.png' );
-            eImg.className = 'resetFloatingFilter';
+            let eImg = document.createElement('i');
+            eImg.className = 'icon-aggrid icon-aggrid-cancel resetFloatingFilter';
             eImg.title = '重置筛选';
             eImg.addEventListener( 'click',()=>{
                 msgBox.confirm( '确定清空筛选数据？' ).then( r=>{
@@ -1257,7 +1256,8 @@ let config = {
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
                 if( this.data.filterParam.filter.length == 0 && this.data.filterParam.fastFilter.length == 0 ){
-                    msgBox.showTips( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
+                    // msgBox.showTips( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
+                    msgBox.showTips( `加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;` );
                 }
             }
             if( this.data.groupCheck ){
@@ -1341,13 +1341,13 @@ let config = {
             }
 
             //渲染快速搜索
-            if(this.data.fastSearchFields && this.data.fastSearchFields.length != 0){
-                let d = {
-                    fieldsData: this.data.fastSearchFields,
-                    fastSearchData:this.actions.fastSearchData,
-                }
-                this.append(new fastSearch(d), this.el.find('.fast-search-con'))
-            }
+            // if(this.data.fastSearchFields && this.data.fastSearchFields.length != 0){
+            //     let d = {
+            //         fieldsData: this.data.fastSearchFields,
+            //         fastSearchData:this.actions.fastSearchData,
+            //     }
+            //     this.append(new fastSearch(d), this.el.find('.fast-search-con'))
+            // }
             //渲染分页
             let noPagination = ['in_process','viewFromCorrespondence','editFromCorrespondence']
             if( noPagination.indexOf( this.data.viewMode ) == -1 ){
