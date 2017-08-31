@@ -244,6 +244,7 @@ let config = {
             let error = false;
             let errorMsg = "";
             for (let key in formValue) {
+                try{
                 let data = allData[key];
                 //如果该dfield是父表填充子表的，那就不验证
                 if (this.data.idsOfSonDataByParent.indexOf(key) != -1) {
@@ -274,6 +275,10 @@ let config = {
                         }
                     }
                 }
+                console.log('哪个字段出错了呢');
+                console.log(key);
+                console.log(this.data.data[key]);
+                console.log(formValue[key]);
                 //数字范围检查
                 if (val.toString() != "" && data["numArea"]) {
                     let label = data["label"];
@@ -331,6 +336,14 @@ let config = {
                         break;
                     }
                 }
+                if(error){
+                    console.log('vaild ERROR');
+                    console.log(this.data.data[key]);
+                }
+                }catch (err){
+                    console.log(err);
+                    console.log(this.data.data[key]);
+                }
             }
 
             for (let d in allData) {
@@ -340,7 +353,6 @@ let config = {
                     break;
                 }
             }
-
             return {
                 error,
                 errorMsg
@@ -990,11 +1002,8 @@ let config = {
         },
         //快捷添加后回显
         addNewItem(data) {
-            console.log('快捷添加回显');
-            console.log(data);
             let dfield = this.data['quikAddDfield'];
             let fieldData = this.data.data[dfield];
-            console.log(fieldData['options']);
             if (fieldData["options"]) {
                 this.data.childComponent[dfield]['data']['options'] = fieldData["options"] = data['newItems'];
             } else {
@@ -1071,33 +1080,22 @@ let config = {
         },
 
         //转到编辑模式
-        async changeToEdit(_this) {
+        async changeToEdit() {
             let json = {
-                table_id: _this.data.tableId,
-                real_id: _this.data.realId,
+                table_id: this.data.tableId,
+                real_id: this.data.realId,
                 is_view: 0,
             }
             let res = await FormService.getDynamicDataImmediately(json);
-            console.log('转到编辑模式');
-            console.log(res);
             for (let key in res.data) {
-                _this.data.data[key] = Object.assign({}, _this.data.data[key], res.data[key]);
-                if (_this.data.childComponent[key]) {
-                    _this.data.childComponent[key].data = Object.assign({}, _this.data.childComponent[key].data, res.data[key]);
-                    _this.data.childComponent[key].reload();
+                this.data.data[key] = Object.assign({}, this.data.data[key], res.data[key]);
+                if (this.data.childComponent[key]) {
+                    this.data.childComponent[key].data = Object.assign({}, this.data.childComponent[key].data, res.data[key]);
+                    this.data.childComponent[key].reload();
                 }
             }
-            _this.data.btnType = 'new';
-            _this.actions.addBtn();
-            // for(let key in this.data.childComponent){
-            //     if(this.data.childComponent[key].data.type!='Readonly'){
-            //         this.data.childComponent[key].data.is_view='1';
-            //         if(this.data.childComponent[key].data.type=='MultiLinkage'){
-            //             this.data.childComponent[key].actions.changeView(this.data.childComponent[key]);
-            //         }
-            //         this.data.childComponent[key].reload();
-            //     }
-            // }
+            this.data.btnType = 'new';
+            this.actions.addBtn();
         },
         //修改可修改性
         reviseCondition: function (editConditionDict, value) {
@@ -1195,7 +1193,7 @@ let config = {
             //修改负责
             if (data["edit_condition"] && data["edit_condition"] !== "") {
                 setTimeout(() => {
-                    _this.actions.reviseCondition(data, data.value);
+                    this.actions.reviseCondition(data, data.value);
                 }, 0);
             }
             //修改必填性功能
@@ -1664,7 +1662,7 @@ let config = {
             event: 'click',
             selector: '#changeEdit',
             callback: function () {
-                this.actions.changeToEdit(this);
+                this.actions.changeToEdit();
             }
         },
         {

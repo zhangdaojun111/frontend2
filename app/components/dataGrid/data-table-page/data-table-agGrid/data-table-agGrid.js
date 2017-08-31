@@ -2189,21 +2189,26 @@ let config = {
 
             //视频字段
             if(data.colDef.real_type == fieldTypeService.VIDEO_TYPE && data.event.srcElement.id == 'file_view'){
-                let fieldids = data['value']
-                let file_dinput_type = data.colDef.real_type;
-                ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids}&download=0&dinput_type=${file_dinput_type}`;
-                PMAPI.openDialogByComponent(ViewVideo,{
-                    width:1000,
-                    height:600,
-                    title:'视频播放器'
-                })
-            }
 
+                let fieldids = data['value'];
+                let file_dinput_type = data.colDef.real_type;
+                console.log("ddd  "+data['value'])
+
+
+                ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids}&download=0&dinput_type=${file_dinput_type}`;
+              
+                ViewVideo.data.fieldids = fieldids;
+                    PMAPI.openDialogByComponent(ViewVideo, {
+                        width: 1000,
+                        height: 600,
+                        title: '视频播放器'
+                    })  }
             //图片查看
             if( data.colDef.real_type == fieldTypeService.IMAGE_TYPE ){
                 let json = {};
                 json["dfield"] = data.colDef.field;
                 json["table_id"] = this.data.tableId;
+                console.log(this.data.tableId)
                 json[(data.data.action?"temp_id":"real_id")] = data.data._id;
                 dataTableService.getAttachmentList( json ).then( res => {
                     let obj=dataTableService.setImgDataAndNum(res,{},'');
@@ -2212,6 +2217,8 @@ let config = {
                     PictureAttachment.data.imgTotal=obj.imgTotal;
                     PictureAttachment.data.imgNum=obj.imgNum;
                     PictureAttachment.data.rows=obj.imgData.rows;
+                    console.log("rows  ")
+                    console.log(obj.imgData.rows)
                     PMAPI.openDialogByComponent(PictureAttachment,{
                         title:'图片附件',
                         width: 1234,
