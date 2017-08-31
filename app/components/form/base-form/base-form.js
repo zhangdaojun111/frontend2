@@ -1224,7 +1224,7 @@ let config = {
             //添加提交按钮
             let $wrap = this.el.find('table').parentsUntil(this.data.el);
             if (this.data.btnType == 'new' || this.data.btnType == 'edit') {
-                $wrap.append(`<div class="noprint ui-btn-box"><div>
+                $wrap.append(`<div class="noprint ui-btn-box" style="margin-left: -20px"><div>
                     <!--<button class="btn btn-normal mrgr" id="print">-->
                         <!--<span>打印</span>-->
                         <!--<div class="btn-ripple ripple"></div>-->
@@ -1689,6 +1689,7 @@ let config = {
 
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('#detail-form').css("background", "#F2F2F2");
+            this.el.find('table').parents('#detail-form').children('.ui-btn-box').css("margin-left", "0px");
         }
     },
     beforeDestory() {
