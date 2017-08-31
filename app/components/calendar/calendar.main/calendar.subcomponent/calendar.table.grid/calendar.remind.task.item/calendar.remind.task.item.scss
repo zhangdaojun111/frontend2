@@ -16,6 +16,19 @@
         border-right: 1px solid rgba(228, 228, 228, 1);
         margin: 4px;
         cursor: pointer;
+        display: inline-block;
+        width: 16px;
+        height:16px;
+        //box-sizing: border-box;
+    }
+    .task-finished{
+        background: url("../../../../../../assets/images/calendar/calendar-task-finished.png");
+    }
+    .task-waitCheck{
+        background: url("../../../../../../assets/images/calendar/calendar-task-waitcheck.png");
+    }
+    .task-pending{
+        background: url("../../../../../../assets/images/calendar/calendar-pending.png");
     }
     .task-state-none {
         border-right: 1px solid rgba(228, 228, 228, 1);

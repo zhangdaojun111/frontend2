@@ -3,8 +3,18 @@
     .menu-item-title {
         padding-left: 10px;
         padding-top: 5px;
-        padding-bottom: 5px;
+        //padding-bottom: 5px;
         color: #999999;
+        .setItemTitle{
+            display: inline-block;
+            width: 16px;
+            height:16px;
+            cursor: pointer;
+            box-sizing: border-box;
+            position: relative;
+            top: 3px;
+            background: url("../../../../assets/images/calendar/calendar-setItemtitle.png");
+        }
         .menu-label {
             display: inline-block;
             line-height: 28px;
@@ -22,8 +32,14 @@
         overflow: hidden;
         text-overflow: clip;
         .img-con {
+            display: inline-block;
+            width: 16px;
+            height:16px;
+            cursor: pointer;
+            box-sizing: border-box;
             position: relative;
             top: 3px;
+            background: url("../../../../assets/images/calendar/calendar-setItem.png");
         }
     }
 }

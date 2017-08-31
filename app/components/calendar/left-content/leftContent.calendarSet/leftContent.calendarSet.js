@@ -176,7 +176,7 @@ let config = {
                 this.data.hide_table.tableName = hide_table_name;
                 this.data.hide_table.table_Id = hide_table_id;
                 this.data.hide_tables[i] = this.data.hide_table;
-                this.data.hide_table = {'tableName': "", 'table_Id': ''}
+                this.data.hide_table = {'tableName': "", 'table_Id': ''};
             }
             this.data.calendarTreeData.rows.forEach((data) => {
                 this.append(new LeftContentSelect(data, this.data.calendarTreeData.cancel_fields, this.data.hide_item_table, this.data.rows,
