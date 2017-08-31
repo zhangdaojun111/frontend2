@@ -2597,7 +2597,7 @@ let config = {
                 real_id:data.data._id,
                 field_id:data.colDef.id,
                 model_id:value.model_id,
-                k2v:value.k2v,
+                k2v:JSON.stringify(value.k2v),
                 file_name:value.name
             }).then(res=>{
                 if(res.success){
