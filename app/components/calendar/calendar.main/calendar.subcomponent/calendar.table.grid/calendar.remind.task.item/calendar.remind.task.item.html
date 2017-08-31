@@ -5,15 +5,9 @@
         {{#if remindTaskItemData.selectOption}}
             {{#if remindTaskData.selectValue}}
                 {{#if isFinishedTask}}
-                <div class="task-state-icon task-finished">
-
-                </div>
-                <!--<img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-finished.png" alt="">-->
+                <i class="icon-calendar icon-calendar-finished task-state-icon"></i>
                 {{else}}
-                <div class="task-state-icon task-waitCheck">
-
-                </div>
-                <!--<img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-waitcheck.png" alt="">-->
+                <i class="icon-calendar icon-calendar-watch task-state-icon"></i>
                 {{/if}}
                 <select class="select-options checked-options">
                     {{#each remindTaskItemData.selectOption}}
@@ -21,10 +15,7 @@
                     {{/each}}
                 </select>
             {{else}}
-                <div class="task-state-icon task-pending">
-
-                </div>
-                <!--<img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-pending.png" alt="">-->
+                <i class="icon-calendar icon-calendar-pending task-state-icon"></i>
                 <select class="select-options">
                     <option class="select-children"></option>
                     {{#each remindTaskItemData.selectOption}}
@@ -38,20 +29,14 @@
     {{else if remindTaskItemData.isSetSelect}}
         {{#if remindTaskItemData.selectOption}}
             {{#if remindTaskData.selectValue}}
-            <div class="task-state-icon task-finished">
-
-            </div>
-            <!--<img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-task-finished.png" alt="">-->
+            <i class="icon-calendar icon-calendar-finished task-state-icon"></i>
             <select class="select-options ">
                 {{#each remindTaskItemData.selectOption}}
                 <option class="select-children" value="{{this.value}}">{{this.label}}</option>
                 {{/each}}
             </select>
             {{else}}
-            <div class="task-state-icon task-pending">
-
-            </div>
-            <!--<img class="task-state-icon" src="../../../../../../assets/images/calendar/calendar-pending.png" alt="">-->
+            <i class="icon-calendar icon-calendar-pending task-state-icon"></i>
             <select class="select-options ">
                 <option class="select-children"></option>
                 {{#each remindTaskItemData.selectOption}}
