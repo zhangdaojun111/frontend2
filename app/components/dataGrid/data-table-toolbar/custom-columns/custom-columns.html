@@ -1,29 +1,29 @@
 <div class="dragCustom">
     <div class="custom-search">
         <div class="title">
-            <i class="icon-l"></i>
+            <i class="icon-l icon-aggrid"></i>
             <span class="text">定制列</span>
             <span class="line"></span>
-            <i class="closeCustom"></i>
+            <i class="closeCustom icon-aggrid-quxiao"></i>
         </div>
     </div>
 
     <div class="custom-box">
         <div>
-            <i class="custom-select-all checkbox-uncheck"></i><input id="custom-search-input" type="text" placeholder="搜索列名称">
+            <i class="custom-select-all icon-aggrid-cus checkbox-uncheck"></i><input id="custom-search-input aggrid-bg-search" type="text" placeholder="搜索列名称">
         </div>
         <div class="custom-data">
             <ul id="dragCustom">
                 {{#fields}}
                 {{#if candrag}}
                 <li field="{{field}}" name="{{name}}" class="ui-state-default">
-                    <i class="custom-checkbox checkbox-uncheck"></i><span title="{{name}}" class="custom-name">{{name}}</span>
-                    <i class="custom-fix-l"></i><i class="custom-fix-r"></i>
+                    <i class="custom-checkbox icon-aggrid-cus checkbox-uncheck"></i><span title="{{name}}" class="custom-name">{{name}}</span>
+                    <i class="custom-fix-l icon-aggrid-cus"></i><i class="custom-fix-r icon-aggrid-cus"></i>
                 </li>
                 {{else}}
                 <li field="{{field}}" name="{{name}}" class="custom-disabled">
-                    <i class="custom-checkbox checkbox-uncheck"></i><span title="{{name}}" class="custom-name">{{name}}</span>
-                    <i class="custom-fix-l" style="display: none;"></i><i class="custom-fix-r" style="display: none;"></i>
+                    <i class="custom-checkbox icon-aggrid-cus checkbox-uncheck"></i><span title="{{name}}" class="custom-name">{{name}}</span>
+                    <i class="custom-fix-l icon-aggrid-cus" style="display: none;"></i><i class="custom-fix-r icon-aggrid-cus" style="display: none;"></i>
                 </li>
                 {{/if}}
                 {{/fields}}

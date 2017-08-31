@@ -38,9 +38,9 @@ let config = {
             for( let s of state ){
                 for( let li of lis ){
                     if( li.attributes.field.value == s.colId ){
-                        li.querySelectorAll('i')[0].className = s.hide ? 'custom-checkbox checkbox-uncheck' : 'custom-checkbox checkbox-check';
-                        li.querySelectorAll('i')[1].className = s.pinned == 'left' ? 'custom-fix-l l-shi' : 'custom-fix-l l-kong';
-                        li.querySelectorAll('i')[2].className = s.pinned == 'right' ? 'custom-fix-r r-shi' : 'custom-fix-r r-kong';
+                        li.querySelectorAll('i')[0].className = s.hide ? 'custom-checkbox icon-aggrid-cus checkbox-uncheck' : 'custom-checkbox icon-aggrid-cus checkbox-check';
+                        li.querySelectorAll('i')[1].className = s.pinned == 'left' ? 'custom-fix-l icon-aggrid-cus l-shi' : 'custom-fix-l icon-aggrid-cus l-kong';
+                        li.querySelectorAll('i')[2].className = s.pinned == 'right' ? 'custom-fix-r icon-aggrid-cus r-shi' : 'custom-fix-r icon-aggrid-cus r-kong';
                         if( this.data.dragFields.indexOf( s.colId )!=-1 ){
                             li.className = s.pinned ? 'custom-disabled':'ui-state-default';
                         }
@@ -269,7 +269,7 @@ let config = {
                     i++;
                 }
             }
-            this.el.find( '.custom-select-all' )[0].className = i==this.data.hideFields.length?'custom-select-all checkbox-check':'custom-select-all checkbox-uncheck';
+            this.el.find( '.custom-select-all' )[0].className = i==this.data.hideFields.length?'custom-select-all bg-img checkbox-check':'custom-select-all bg-img checkbox-uncheck';
         },
         //列宽改变
         onColumnResized: _.debounce( (custom)=>{
