@@ -5,6 +5,18 @@
         background-color: transparent !important;
     }
 
+    //footer
+    .ag-floating-bottom-container {
+        .ag-cell-no-focus {
+            border-right: none;
+            border-left: 1px solid #FFFFFF;
+        }
+        .ag-cell-value {
+            padding: 0 8px;
+            line-height: 30px;
+        }
+    }
+
     .ag-header {
         border-top: 1px solid rgba(228, 228, 228, 1);
         border-bottom: 1px solid rgba(228, 228, 228, 1) !important;
