@@ -1182,7 +1182,7 @@ let config = {
                     for (let k in data['linkage'][value]) {
                         arr.push(k);
                     }
-                    if (value == val) {
+                    if (value == data['value']) {
                         j++;
                         //改变选择框的选项
                         this.changeOptionOfSelect(originalData, originalData['linkage'][value]);
