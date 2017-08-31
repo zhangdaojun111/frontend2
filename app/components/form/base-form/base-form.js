@@ -742,6 +742,7 @@ let config = {
                 this.data.childComponent[this.data.data[key]['dfield']].actions.changeOption(this.data.data[key]['dfield']);
                 }catch(err){
                     console.log('错误1');
+                    console.log(err);
                     console.log(this);
                     console.log(this.data.data[key]['dfield']);
                 }
