@@ -4,9 +4,9 @@
 import Component from "../../../../lib/component";
 import template from './calendar.export.html';
 import './calendar.export.scss';
-import MSG from '../../../../lib/msgbox';
+import DateControl from '../../../form/date-control/date-control';
 
-let CalendarExport = {
+let config = {
     template: template,
     data: {
         fromDate: '',
@@ -39,8 +39,21 @@ let CalendarExport = {
             that.actions.getExportDate();
         }).on('input propertychange', '.end-date', function () {
             that.actions.getExportDate();
-        })
+        });
+        let changeStartValue = (res) => {
+            console.log(res);
+        };
+        let changeEndValue = (res) => {
+            console.log(res);
+        };
+
+        this.append(new DateControl({value: ''},{changeValue: changeStartValue}), this.el.find('.start-date'));
+        this.append(new DateControl({value: ''},{changeValue: changeEndValue}), this.el.find('.end-date'));
     },
 };
-
+class CalendarExport extends Component {
+    constructor() {
+        super(config);
+    }
+}
 export default CalendarExport;

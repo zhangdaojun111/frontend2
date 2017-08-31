@@ -124,7 +124,7 @@ let config = {
                 '/calendar_mgr/create/?table_id=1639_8QvxFmFvVpK33bVPXdk8hD',
                 {
                     width: "900",
-                    height: '400',
+                    height: '410',
                     title: '日历表',
                     modal: true,
                     //customSize: true,

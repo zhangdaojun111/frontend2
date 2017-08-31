@@ -4,9 +4,12 @@
     padding: 6px 12px;
     .input-date {
         margin: 10px 0px;
-        input {
-            width: 156px;
-            height: 24px;
+        //input {
+        //    width: 156px;
+        //    height: 24px;
+        //}
+        .start-date, .end-date {
+            display: inline-block;
         }
     }
     .export-btn {
