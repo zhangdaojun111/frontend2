@@ -723,7 +723,7 @@ let config = {
             // let field = data['dfield'];
             let type = data['type'];
             for (let key in linkage) {
-                let affectData = this.data[key];
+                let affectData = this.data.data[key];
                 let affectType = affectData['type'];
                 let arr = [];
                 let srcOptions = this.data.optionsToItem[key];
@@ -732,13 +732,13 @@ let config = {
                         arr.push(op);
                     }
                 }
-                this.data[key][obj[affectType]] = arr;
+                this.data.data[key][obj[affectType]] = arr;
                 if (affectType == 'multi-select') {
-                    this.data[key]['value'] = [];
+                    this.data.data[key]['value'] = [];
                 } else {
-                    this.data[key]['value'] = '';
+                    this.data.data[key]['value'] = '';
                 }
-                this.data.childComponents[this.data[key]['dfield']].actions.changeOption(this.data[key]['dfield']);
+                this.data.childComponents[this.data.data[key]['dfield']].actions.changeOption(this.data.data[key]['dfield']);
             }
         },
 
@@ -1185,6 +1185,8 @@ let config = {
                     if (value == data['value']) {
                         j++;
                         //改变选择框的选项
+                        console.log('这个里面没有type？');
+                        console.log(data);
                         this.actions.changeOptionOfSelect(data, data['linkage'][value]);
                     }
                 }
