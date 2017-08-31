@@ -30,28 +30,28 @@
     justify-content: flex-end;
   }
   .dataGrid-commonQuery {
-    display: none;
-    float: left;
-    padding-left: 15px;
-    .dataGrid-commonQuery-select-style {
-      cursor: pointer;
-      padding: 0 12px;
-      border: 1px solid #d7d7d7;
-      border-radius: 4px;
-      text-indent: 0;
-      color: #666666;
+      display: none;
       float: left;
-      width: 90px;
-      font-size: 12px;
-      height: 25px;
-      display: inline-block;
-      outline: none;
-      box-shadow: none;
-      appearance: none;
-      -moz-appearance: none;
-      -webkit-appearance: none;
-      background-position: 70px;
-    }
+      padding-left: 15px;
+      .dataGrid-commonQuery-select{
+          cursor: pointer;
+          padding: 0 12px;
+          border: 1px solid #d7d7d7;
+          border-radius: 4px;
+          text-indent: 0;
+          color: #666666;
+          float: left;
+          width: 90px;
+          font-size: 12px;
+          height: 25px;
+          display: inline-block;
+          outline: none;
+          box-shadow: none;
+          appearance: none;
+          -moz-appearance: none;
+          -webkit-appearance: none;
+          background-position: 70px;
+      }
   }
   .dataGrid-btn-group {
     //float: right;
