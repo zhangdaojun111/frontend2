@@ -14,7 +14,8 @@ import {CalendarSetService} from "../../../services/calendar/calendar.set.servic
 let config = {
     template: template,
     data: {
-        menu: []
+        menu: [],
+        isHide: true,
     },
     actions: {
         getFilterMenu: function (keyValue, subMenu) {
@@ -27,60 +28,68 @@ let config = {
                     this.append(calendarSetItem, this.el.find('.setting-content'));
                 });
             })
+        },
+        /**
+         *设置左边菜单的隐藏
+         */
+        hideLeftMenu: function (isHide) {
+            if (isHide) {
+                this.data.isHide = false;
+                this.el.find('.setting-content').addClass('hide');
+                this.el.find('.search').addClass('hide-search');
+                this.el.find('.calendar-setting-items').addClass('hide-menu');
+                this.el.find('.calendar-setting-item').addClass('hide');
+            } else {
+                this.data.isHide = true;
+                this.el.find('.setting-content').removeClass('hide');
+                this.el.find('.search').removeClass('hide-search');
+                this.el.find('.calendar-setting-items').removeClass('hide-menu');
+                this.el.find('.calendar-setting-item').removeClass('hide');
+            }
         }
     },
     firstAfterRender: function () {
 
     },
-    afterRender: function() {
+    binds: [
+        {
+            event: 'click',
+            selector: '.hide-con',
+            callback: function () {
+                this.actions.hideLeftMenu(this.data.isHide);
+            }
+        },
+        {
+            event: 'input propertychange',
+            selector: '.setting-search',
+            callback: function () {
+                let keyValue = this.el.find('.setting-search').val();
+                let subMenu = "";
+                this.el.find('.setting-content').empty();
+                if (keyValue !== '') {
+                    this.actions.getFilterMenu(keyValue, subMenu);
+
+                } else {
+                    let calendarSetItem = new CalendarSettingItem();
+                    this.data.menu.forEach(item => {
+                        calendarSetItem.data.menuItem = item;
+                        this.append(calendarSetItem, this.el.find('.setting-content'));
+                    });
+                }
+            }
+        },
+    ],
+    afterRender: function () {
         let calendarSetItem = new CalendarSettingItem();
         this.data.menu.forEach(item => {
             calendarSetItem.data.menuItem = item;
             this.append(calendarSetItem, this.el.find('.setting-content'));
         });
-        let _this = this;
-        this.el.on('input propertychange', '.setting-search', () => {
-            let keyValue = _this.el.find('.setting-search').val();
-            let subMenu = "";
-            this.el.find('.setting-content').empty();
-            if(keyValue !== '') {
-                _this.actions.getFilterMenu(keyValue, subMenu);
-
-            }else {
-                let calendarSetItem = new CalendarSettingItem();
-                this.data.menu.forEach(item => {
-                    calendarSetItem.data.menuItem = item;
-                    this.append(calendarSetItem, this.el.find('.setting-content'));
-                });
-            }
-
-        });
-
-        Mediator.on('calendar-set-left:calendar-set',data =>{
-            this.el.find('.form-title').html('【'+ data.label +'】');
+        Mediator.on('calendar-set-left:calendar-set', data => {
+            this.el.find('.form-title').html('【' + data.label + '】');
             this.el.find('.calendar-setting-item-content').empty();
-            //$(".calendar-setting-item-content").empty();
             this.append(new CalendarSet(data.data), this.el.find('.calendar-setting-item-content'));
         });
-
-        // 设置左边菜单的隐藏
-        let isHide = true;
-        this.el.on('click',".hide-con",function(){
-            if(isHide) {
-                isHide = false;
-                _this.el.find('.setting-content').addClass('hide');
-                _this.el.find('.search').addClass('hide-search');
-                _this.el.find('.calendar-setting-items').addClass('hide-menu');
-                _this.el.find('.calendar-setting-item').addClass('hide');
-            } else {
-                isHide = true;
-                _this.el.find('.setting-content').removeClass('hide');
-                _this.el.find('.search').removeClass('hide-search');
-                _this.el.find('.calendar-setting-items').removeClass('hide-menu');
-                _this.el.find('.calendar-setting-item').removeClass('hide');
-            }
-        });
-
     },
     beforeDestory: function () {
         Mediator.removeAll('calendar-set-left:calendar-set');
