@@ -1218,6 +1218,7 @@ let config = {
             }
             this.el.find('.select-drop').hide();
             }catch (err){
+                console.log(err);
                 console.log('还是这儿呢？');
                 console.log(data);
             }
