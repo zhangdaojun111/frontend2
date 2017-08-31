@@ -40,7 +40,6 @@ let config = {
                     msgbox.alert(res['error'])
                 };
             })
-
         }
     },
     data: {
