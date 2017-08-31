@@ -120,9 +120,8 @@ let config = {
         resetPreference: function () {
             let ediv = document.createElement('div');
             let eHeader = document.createElement('span');
-            let eImg = document.createElement('img');
-            eImg.src = require( '../../../assets/images/dataGrid/quxiao.png' );
-            eImg.className = 'resetFloatingFilter';
+            let eImg = document.createElement('i');
+            eImg.className = 'icon-aggrid icon-aggrid-cancel resetFloatingFilter';
             eImg.addEventListener( 'click',()=>{
                 msgBox.confirm( '确定清空筛选数据？' ).then( r=>{
                     if( r ){

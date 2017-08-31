@@ -11,14 +11,34 @@ let config = {
     data: {
         tableId:'',
         tableName:'',
-        isRenderIntrain: false
+        isRenderIntrain: false,
+        firatShowHelp: false
     },
     actions: {
         //获取在途数据
         getInProcessNum: function () {
-            dataTableService.getInProcessNum( {table_id: this.data.tableId} ).then( res=>{
-                this.el.find( '.inProcessNum' )[0].style.display =res.total? 'block':'none';
-            } )
+            let inProcess = dataTableService.getInProcessNum( {table_id: this.data.tableId} )
+            let arr = [inProcess];
+            if( !this.data.firatShowHelp ){
+                let help = dataTableService.getHelpData( {is_form:1,table_id:this.data.tableId,type:0} )
+                arr.push( help );
+            }
+            Promise.all(arr).then((res)=> {
+                this.el.find( '.inProcessNum' )[0].style.display = res[0].total? 'block':'none';
+                if( !this.data.firatShowHelp ){
+                    console.log(res)
+                    console.log(res)
+                    if(typeof res[1].data != "object"){
+                        if(res[1].data != ""){
+                            this.el.find( '.dataTableHelp' )[0].style.display = 'flex';
+                        }
+                    }
+                }
+                this.data.firatShowHelp = true;
+            })
+            // dataTableService.getInProcessNum( {table_id: this.data.tableId} ).then( res=>{
+            //     this.el.find( '.inProcessNum' )[0].style.display =res.total? 'block':'none';
+            // } )
             HTTP.flush();
         },
         //添加点击事件
