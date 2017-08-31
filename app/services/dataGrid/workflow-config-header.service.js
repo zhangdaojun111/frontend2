@@ -6,7 +6,7 @@ export const wchService = {
     },
     //公共的头
     ordinaryHeader: [
-        { headerName: '工作名称', field: 'name',width:150 },
+        { headerName: '工作名称', field: 'name',width:100 },
         { headerName: '关键字', field: 'keyword',width:100 },
         { headerName: '所属流程名称', field: 'flow_name',width:100 },
         { headerName: '当前状态', field: 'status',width:100 },

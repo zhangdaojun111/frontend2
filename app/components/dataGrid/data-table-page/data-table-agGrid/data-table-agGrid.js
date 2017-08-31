@@ -272,7 +272,11 @@ let config = {
                     if (data.data["field"] == "_id" || data.data['dtype'] == 9) {
                         return;
                     }
-                    let headClass = fieldTypeService.numOrText(data.data["real_type"]) ? 'header-style-r' : 'header-style-l';
+                    // let headClass = fieldTypeService.numOrText(data.data["real_type"]) ? 'header-style-r' : 'header-style-l';
+                    let headerStyleObj = {
+                        right:'header-style-r',left:'header-style-l',center:''
+                    }
+                    let headClass = headerStyleObj[fieldTypeService.textAline(data.data["real_type"])];
 
                     //添加表头提醒
                     if( this.data.headerColor[data.data["field"]] != undefined ){
@@ -293,11 +297,6 @@ let config = {
 
                     let obj = {
                         headerName: data.header[i],
-                        // headerCellTemplate: (params) => {
-                        //     return this.headerCellRenderer(params);
-                        // },
-                        // headerComponent:HeaderComponent,
-                        // headerComponentFramework:<{new():HeaderComponent}>HeaderComponent,
                         tableName: data.data['table_name'],
                         id: data.data["id"],
                         field: data.data["field"],
@@ -746,7 +745,7 @@ let config = {
                 return '';
             }
             if( this.data.viewMode == 'in_process' ){
-                return '<div style="text-align: center;"><a class="gridView" style="color:#337ab7;">查看</a></div>';
+                return '<div class="ui-link" style="text-align: center;"><a class="gridView" style="color:#337ab7;">查看</a></div>';
             }
             if (params.data.group || Object.is(params.data.group, '') || Object.is(params.data.group, 0)) {
                 return '';
@@ -761,7 +760,7 @@ let config = {
             } catch (e) {
                 rowStatus = 0;
             }
-            let str = '<div style="text-align:center;"><a class="gridView" style="color:#337ab7;">查看</a>';
+            let str = '<div class="ui-link" style="text-align:center;"><a class="gridView" style="color:#337ab7;">查看</a>';
             if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data' || this.data.viewMode == 'deleteHanding') {
                 if (this.data.isFixed || rowStatus == 2) {
                     str += ' | <span style="color: darkgrey;">编辑</span>';
@@ -1557,7 +1556,16 @@ let config = {
                         this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
                         this.agGrid.actions.autoWidth();
                     }else {
-                        this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
+                        let state = this.agGrid.gridOptions.columnApi.getColumnState();
+                        for( let s of state ){
+                            for( let ls of this.data.lastGridState ){
+                                if( s.colId == ls.colId ){
+                                    s.width = ls.width;
+                                    break;
+                                }
+                            }
+                        }
+                        this.agGrid.gridOptions.columnApi.setColumnState( state );
                     }
                     this.el.find( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
                     this.data.isAutoWidth = !this.data.isAutoWidth;

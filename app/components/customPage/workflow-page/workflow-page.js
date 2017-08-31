@@ -722,6 +722,9 @@ let config = {
         },
     },
     afterRender: function (){
+        console.log(this.data.tableId2Name[this.data.tableId])
+        console.log(this.data.tableId2Name[this.data.tableId])
+        this.el.find( '.headerTips' ).eq(0).find( 'span' ).eq(0).html( this.data.tableId2Name[this.data.tableId] );
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.data.pageType = this.data.tableId2pageType[this.data.tableId];

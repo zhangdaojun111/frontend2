@@ -109,13 +109,13 @@ export const fieldTypeService = {
     },
     //附件
     attachment: function( data ){
-        let arr = [this.ATTACHMENT,this.IMAGE_TYPE];
+        let arr = [this.ATTACHMENT];
         return arr.indexOf( data ) != -1;
     },
     //字段对其位置
     textAline: function ( data ) {
         let right = ['10','11','16','26']
-        let center = ['2','3','4','5','9','12','23','30','34']
+        let center = ['2','3','4','5','9','12','23','30','33','34','35']
         if( right.indexOf( data )!=-1 ){
             return 'right';
         }
