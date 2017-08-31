@@ -93,8 +93,8 @@ let config = {
                 '/iframe/calendarExport/',
                 {
                     title: '导出',
-                    width: '350',
-                    height: '150',
+                    width: '650',
+                    height: '300',
                     modal: true,
                 },
             );

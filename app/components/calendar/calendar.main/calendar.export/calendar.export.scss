@@ -1,9 +1,9 @@
 @import "../../calendar";
-
+@import "../../../form/base-form/dateTime";
 .calendar-export {
-    padding: 6px 12px;
+    padding: 12px;
     .input-date {
-        margin: 10px 0px;
+        margin: 16px 0px;
         //input {
         //    width: 156px;
         //    height: 24px;
@@ -11,16 +11,19 @@
         .start-date, .end-date {
             display: inline-block;
         }
+        .start-date {
+            padding-left: 20px;
+        }
     }
     .export-btn {
         display: block;
-        line-height: 32px;
+        line-height: 30px;
         padding: 0px 12px;
         font-weight: bold;
         float: right;
         border: 1px solid $boder-color;
-        border-radius: 5px;
         cursor: pointer;
+        margin-right: 19px;
     }
     .disabled {
         pointer-events: none;
