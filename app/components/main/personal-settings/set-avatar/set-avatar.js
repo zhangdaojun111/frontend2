@@ -79,13 +79,13 @@ let config = {
                 if(that.data._img.height >= that.data._img.width){
                     that.data.imgH = 350;
                     that.data.imgW = (that.data._img.width * 350 / that.data._img.height).toFixed(0);
-                    that.data.scale = parseFloat((350/this.data._img.height).toFixed(3));
+                    that.data.scale = parseFloat((350/this.data._img.height).toFixed(5));
                     that.data.imgX = ((350 - that.data.imgW)/2).toFixed(0);
                     that.data.imgY = 0;
                 }else if(that.data._img.width > that.data._img.height){
                     that.data.imgW = 350;
                     that.data.imgH = (that.data._img.height * 350 / that.data._img.width).toFixed(0);
-                    that.data.scale = parseFloat((350/that.data._img.width).toFixed(3));
+                    that.data.scale = parseFloat((350/that.data._img.width).toFixed(5));
                     that.data.imgY = ((350 - that.data.imgH)/2).toFixed(0);
                     that.data.imgX = 0;
                 }
@@ -94,10 +94,10 @@ let config = {
             }
         },
         setJcropPosition:function () {
-            this.data.JPosition.Jx = (this.data.imgW - 60)/2;
-            this.data.JPosition.Jy = (this.data.imgH - 60)/2;
-            this.data.JPosition.Jx2 = this.data.JPosition.Jx + 60;
-            this.data.JPosition.Jy2 = this.data.JPosition.Jy + 60;
+            this.data.JPosition.Jx = (this.data.imgW - 64)/2;
+            this.data.JPosition.Jy = (this.data.imgH - 64)/2;
+            this.data.JPosition.Jx2 = this.data.JPosition.Jx + 64;
+            this.data.JPosition.Jy2 = this.data.JPosition.Jy + 64;
             this.data.DragX = this.data.JPosition.Jx / this.data.scale;
             this.data.DragY = this.data.JPosition.Jy / this.data.scale;
         },
@@ -110,9 +110,12 @@ let config = {
             $img.attr("src",this.data._img.src)
                 .css("width",this.data.imgW)
                 .css("height",this.data.imgH);
-                // .css("left",this.data.imgX)
-                // .css("top",this.data.imgY);
 
+            //设置avatar-container位置使图片居中，防止jcrop改变图片位置
+            $parent.css({
+                paddingLeft:(350 - this.data.imgW)/2,
+                paddingTop:(350 - this.data.imgH)/2
+            });
             $parent.append($img);
             this.actions.initResultImgData();
             // 上传图片后，开启裁剪功能
@@ -137,7 +140,7 @@ let config = {
         },
         updateCoords:function (c) {
             this.data.dragResult.coords = c;
-            this.data.dragResult.proportion = (c.x2 - c.x)/60;
+            this.data.dragResult.proportion = (c.x2 - c.x)/64;
             this.actions.resizeImg(c,this.data.dragResult.proportion);
             this.data.DragX = c.x / this.data.scale;
             this.data.DragY = c.y / this.data.scale;
@@ -145,6 +148,7 @@ let config = {
         },
         resizeImg:function (c,p) {
             //根据比例缩放图片，作为最终使用图片
+            console.log(c,p);
             this.data.imgData.src = this.data._img.src;
             this.data.imgData.width = this.data.imgW/p + "px";
             this.data.imgData.height = this.data.imgH/p + "px";
@@ -155,10 +159,11 @@ let config = {
             let pic = this.el.find('img.pic_set')[0];
             let canvasS = this.el.find('.avatar-result-square')[0];
             let ctx = canvasS.getContext('2d');
-            let d = 60 * this.data.dragResult.proportion / this.data.scale;
-            ctx.drawImage(pic,this.data.DragX,this.data.DragY,d,d,0,0,60,60);
+            ctx.clearRect(0,0,64,64);
+            let d = 64 * this.data.dragResult.proportion / this.data.scale;
+            console.log(d,this.data.scale,this.data.dragResult.proportion);
+            ctx.drawImage(pic,this.data.DragX,this.data.DragY,d,d,0,0,64,64);
             this.data.avatarSrc = this.actions.convertCanvasToImage(canvasS).src;
-            console.log(this.data.avatarSrc);       //裁剪后的base64
         },
         convertCanvasToImage(canvas){
             let image = new Image();
@@ -217,7 +222,7 @@ export default {
             title: '设置头像',
             width: 500,
             modal:true,
-            height: 600,
+            height: 620,
             close: function() {
                 $(this).dialog('destroy');
                 component.destroySelf();

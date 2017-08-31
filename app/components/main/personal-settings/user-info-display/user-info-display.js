@@ -68,9 +68,10 @@ img.user-avatar{
     line-height: 50px;
     position: relative;
 }
-.department-info,.position-info{
+input.department-info,input.position-info,input.email-info,input.phone-info{
     background-color: transparent;
     border: none;
+    !important;
 }
 .email-group,.phone-group {
     width: 260px;

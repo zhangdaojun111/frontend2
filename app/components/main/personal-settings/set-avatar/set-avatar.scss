@@ -34,39 +34,41 @@ $sub_color:#0088ff;
             }
         }
     }
-    .avatar-container{
-        width: 350px;
-        height: 350px;
+    .container-position{
         overflow: hidden;
         margin-top: 10px;
         margin-left: 75px;
-        background-repeat: no-repeat;
-        position: relative;
-        text-align: center;
+        .avatar-container{
+            box-sizing: border-box;
+            width: 350px;
+            height: 350px;
+            background-repeat: no-repeat;
+            position: relative;
 
-        img{
-            background-color: #FFFFFF;
-            position: absolute;
+            img{
+                background-color: #FFFFFF;
+                position: absolute;
+            }
+            //.drag-able{
+            //    width: 60px;
+            //    height: 60px;
+            //    border: solid 1px black;
+            //    border-radius: 50%;
+            //    background-color: rgba(255, 255, 255, 0);
+            //    position: absolute;
+            //    left: 0;
+            //    top: 0;
+            //    z-index: 2;
+            //}
         }
-        //.drag-able{
-        //    width: 60px;
-        //    height: 60px;
-        //    border: solid 1px black;
-        //    border-radius: 50%;
-        //    background-color: rgba(255, 255, 255, 0);
-        //    position: absolute;
-        //    left: 0;
-        //    top: 0;
-        //    z-index: 2;
-        //}
     }
+
     .canvas-box{
         width: 64px;
         height: 64px;
         margin-top: 20px;
         margin-left: 230px;
         border-radius: 50%;
-        text-align: center;
         border: solid 1px black;
         overflow: hidden;
     }
@@ -88,11 +90,9 @@ $sub_color:#0088ff;
     //}
 
     .bottom-box{
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
         color: white;
-
+        margin-top: 30px;
+        margin-left: 270px;
         .save-avatar{
             display: inline-block;
             width: 100px;

@@ -54,7 +54,6 @@
             }
         }
 
-
         .rapid-setting{
             width: 460px;
             float: left;
@@ -70,13 +69,14 @@
                 margin-top: 25px;
                 .sortable-box{
                     height: 100px;
-                    margin: 0;
+                    margin: 10px 20px 0 20px;
                     padding: 0;
                     list-style-type: none;
                     .isShow-BI,.isShow-calendar{
                         height: 30px;
                         line-height: 30px;
-                        margin: 10px 30px 0 30px;
+                        //margin: 10px 30px 0 30px;
+                        margin: 5px;
                         background-color: #f2f2f2;
                         cursor: url('../../../assets/images/framework/move-hand-24.png'),n-resize;
                         .bi-Show{

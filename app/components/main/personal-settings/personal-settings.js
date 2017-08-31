@@ -51,7 +51,6 @@ let config = {
                     $img.remove();
                 });
             }else{
-                console.log('no src');
                 this.el.find("div.avatar-box").addClass('default_avatar');
             }
         },
@@ -290,7 +289,7 @@ export const PersonSetting  = {
                 //获取data
                 userInfoDisplay.data.userInfo = result.rows;
                 userInfoDisplay.data.userName = targetName.name;
-                PMAPI.openDialogByComponent(userInfoDisplay, {
+                PMAPI.openDialogByComponent(userInfoDisplay,{
                     width: 350,
                     height: 500,
                     title: "人员信息"
