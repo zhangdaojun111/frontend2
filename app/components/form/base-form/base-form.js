@@ -727,9 +727,9 @@ let config = {
                 let affectType = affectData['type'];
                 let arr = [];
                 let srcOptions = this.data.optionsToItem[key];
-                for (let op of srcOptions) {
-                    if (linkage[key].indexOf(op.value) != -1) {
-                        arr.push(op);
+                for (let opIndex in srcOptions) {
+                    if (linkage[key].indexOf(srcOptions[opIndex].value) != -1) {
+                        arr.push(srcOptions[opIndex]);
                     }
                 }
                 this.data.data[key][obj[affectType]] = arr;
