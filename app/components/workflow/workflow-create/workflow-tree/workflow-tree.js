@@ -70,7 +70,7 @@ let config = {
          */
         changeTree:function(){
             let keyword = $('.J_search').val();
-            var c;
+            let c;
             let arr = {};
             let str = {}; 
             let li =  this.el.find('.tree-list li');

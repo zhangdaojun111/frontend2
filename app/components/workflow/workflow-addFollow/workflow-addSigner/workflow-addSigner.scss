@@ -1,28 +1,147 @@
+
+#add-signer div{
+    box-sizing: border-box;
+}
 .follower-select {
     .selectUser {
-        border: 1px solid rgba(228, 228, 228,1);
-        margin: 0 15px;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        padding-top: 40px;
+        padding-bottom: 45px;
         .flexBox {
             display: flex;
+            height: 100%;
+            border: 1px solid #e4e4e4;
+            padding: 5px;
+            margin: 5px;
+            #addUser{
+                width: 220px;
+                border: 1px solid #E4E4E4;
+                margin-right:3px;
+                position: relative;
+                height: 100%;
+                flex-shrink: 0;
+                #tree{
+                    height: 100%;
+                    position: absolute;
+                    width: 100%;
+                    padding-bottom: 60px;
+                    top: 30px;
+                    .list-group{
+                        height: 100%;
+                        overflow: auto;
+                    }
+                }
+            }
             #addUsercheck {
-                height: 500px;
-                overflow: scroll;
+                overflow: auto;
+                position: absolute;
+                width: 100%;
+                height: calc(100% - 60px);
+
+                >div:nth-child(1n){
+                    .search-check-row{
+                        background: #fafafa;
+                    }
+                }
+                >div:nth-child(2n){
+                    .search-check-row{
+                        background: #fff;
+                    }
+                }
+                .search-check-row{
+                    border-bottom: 1px solid #E4E4E4;
+
+                    .search-check-item{
+                        height: 30px;
+                        line-height: 30px;
+                        padding-left: 5px;
+                        border-right: 1px solid #eee;
+                        &:nth-child(1){
+                            width: 30px;
+                            flex-shrink: 0;
+                            padding-left: 0;
+                            position: relative;
+                            input{
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                margin-top: -6.5px;
+                                margin-left: -6.5px;
+                            }
+                        }
+                        &:nth-child(2){
+                            width: 205px;
+                            flex-shrink: 0;
+                        }
+                        &:nth-child(3){
+                            flex-grow: 1;
+                        }
+                        &:last-child{
+                            border-right: none;
+                        }
+                    }
+
+
+                }
             }
             .flex {
 
             }
 
             .people{
-                border: 1px solid rgba(228, 228, 228,1);
-                margin: 0 15px;
-                width: 80%;
+                border: 1px solid #E4E4E4;
+                flex-grow: 1;
+                height: 100%;
+                width: 100%;
+                position: relative;
+                overflow: hidden;
                 .signer-place {
-                    background: rgba(242, 242, 242, 1);
-                    border-bottom: 1px solid rgba(228, 228, 228,1);
-                    height: 24px;
-                    line-height: 24px;
+                    border-bottom: 1px solid #E4E4E4;
+                    background: #F2F2F2;
+                    height: 30px;
+                    line-height: 30px;
+                    padding: 0 10px;
+                    font-size: 12px;
+                    color: #666;
+                    span{
+                        margin-right: 5px;
+                    }
+                    .search-in-tree-box{
+                        margin-left: 5px;
+                    }
                 }
             }
+            .search-main-hd{
+
+                background: #fff;
+                border-bottom: 1px solid #E4E4E4;
+                .search-main-hd-item{
+                    border-right: 1px solid #eee;
+                    height: 30px;
+                    line-height: 30px;
+                    padding-left: 5px;
+                    &:nth-child(1){
+                        width: 30px;
+                        flex-shrink: 0;
+                        padding: 0;
+                    }
+                    &:nth-child(2){
+                        width: 205px;
+                        flex-shrink: 0;
+                    }
+                    &:nth-child(3){
+                        flex-grow: 1;
+
+                    }
+                    &:last-child{
+                        border-right: none;
+                    }
+                }
+            }
+
         }
 
     }
@@ -30,6 +149,8 @@
         height: 40px;
         line-height: 40px;
         margin-left: 20px;
+        position: relative;
+        z-index: 20;
         .around {
             margin-top: -1px;
             margin-left: 16px;
@@ -37,9 +158,52 @@
                 margin-top: 3px;
             }
         }
+        .custom-radio-box{
+            position: relative;
+            input{
+                position: absolute;
+                top:0;
+                left: 0;
+            }
+        }
+    }
+    .subAdder-box{
+        position: absolute;
+        bottom: 5px;
+        right: 10px;
+        z-index: 20;
+        .ui-button{
+            width: 90px;
+            height: 30px;
+            background: #0088FF;
+            border: none;
+            border-radius: 4px;
+            line-height: 30px;
+            padding: 0;
+            font-size: 12px;
+            color: #fff;
+        }
     }
 
 }
+
+.search-in-tree-box{
+    height: 24px;
+    background: #fff;
+    padding-left: 5px;
+    width: 180px;
+    input{
+        border: none;
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        outline: none;
+        vertical-align: top;
+    }
+}
+
+
 html,body{
 	height: 100%;
+    overflow: hidden;
 }

@@ -22,6 +22,7 @@ let config = {
     actions: {
         init(){
             //jsplumb initial config
+            this.showLoading();
             this.data.jsPlumbInstance = jsPlumb.getInstance({
                 DragOptions: { cursor: 'pointer', zIndex: 2000 },
                 EndpointStyles: [{ fill: 'transparent' }, { fill: 'transparent' }],
@@ -169,7 +170,7 @@ let config = {
 
             //draw connecting lines
             $.each(this.data.node, function (key, value) {
-                var source2target = value["source2target"];
+                let source2target = value["source2target"];
                 if (source2target != undefined) {
                     $.each(source2target, function (key, value) {
                         __this.data.jsPlumbInstance.connect({ uuids: value, editable: false });
@@ -238,11 +239,12 @@ let config = {
             });
             this.data.containerheight = __this.actions.getTheBestBottom() - __this.actions.getTheBestTop() + 100 + 'px';
             this.data.containerwidth = __this.actions.getTheBestRight() - __this.actions.getTheBestLeft() + 250 + 'px';
+            this.hideLoading();
         },
 
         //add mark points
         AddEndpoints(toId, sourceAnchors, targetAnchors) {
-            var connectorPaintStyle = {
+            let connectorPaintStyle = {
                 "stroke-width": 10,
                 stroke: "#ddd",
                 joinstyle: "round"
@@ -251,7 +253,7 @@ let config = {
                 "stroke-width": 10,
                 stroke: "#ddd"
             };
-            var sourceEndpoint = {
+            let sourceEndpoint = {
                 endpoint: "Dot",
                 paintStyle: { fill: "transparent", radius: 4 },
                 isSource: true,
@@ -261,7 +263,7 @@ let config = {
                 connectorHoverStyle: connectorHoverStyle,
                 maxConnections: 10
             };
-            var targetEndpoint = {
+            let targetEndpoint = {
                 endpoint: "Rectangle",
                 paintStyle: { fill: "transparent", width: 8, height: 8 },
                 hoverPaintStyle: connectorHoverStyle,
@@ -270,13 +272,13 @@ let config = {
                 isTarget: true,
                 allowLoopback: true
             };
-            var allSourceEndpoints = [], allTargetEndpoints = [];
-            for (var i = 0; i < sourceAnchors.length; i++) {
-                var sourceUUID = toId + sourceAnchors[i];
+            let allSourceEndpoints = [], allTargetEndpoints = [];
+            for (let i = 0; i < sourceAnchors.length; i++) {
+                let sourceUUID = toId + sourceAnchors[i];
                 allSourceEndpoints.push(this.data.jsPlumbInstance.addEndpoint(toId, sourceEndpoint, { anchor: sourceAnchors[i], uuid: sourceUUID }));
             }
-            for (var j = 0; j < targetAnchors.length; j++) {
-                var targetUUID = toId + targetAnchors[j];
+            for (let j = 0; j < targetAnchors.length; j++) {
+                let targetUUID = toId + targetAnchors[j];
                 allTargetEndpoints.push(this.data.jsPlumbInstance.addEndpoint(toId, targetEndpoint, { anchor: targetAnchors[j], uuid: targetUUID }));
             }
         },

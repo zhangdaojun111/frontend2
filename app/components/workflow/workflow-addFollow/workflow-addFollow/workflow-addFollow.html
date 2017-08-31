@@ -9,20 +9,27 @@
                 </button>
             </div>
             <div class="follower-select">
-                    <div class="flex">
+                    <div class="follower-select-main flex flex-start">
                         <div id="treeMulti" class="flexItem"></div>
-                        <div class="flexItem">
-                            <div>
-                                <input type="text" placeholder="请输入搜索关键字" class="follower-search">
+                        <div class="search-main-m flexItem">
+                            <div class="search-in-tree-hd flex">
+                                <span>已选：<em class="total">0</em>人</span>
+                                <div class="search-in-tree-box">
+                                    <input type="text" placeholder="请输入搜索关键字" class="follower-search">
+                                </div>
                             </div>
-                            <div class="flex">
-                                <div class="w33"><input id="allSelector" type="checkbox" name="" value="" checked></div>
-                                <div class="w33">中文名</div>
-                                <div class="w33">用户名</div>
+                            <div class="search-main-m-hd flex">
+                                <div class="search-main-m-hd-item">
+                                    <div class="custom-checkbox">
+                                        <input id="allSelector" type="checkbox" name="" value="" checked>
+                                    </div>
+                                </div>
+                                <div class="search-main-m-hd-item">中文名</div>
+                                <div class="search-main-m-hd-item">用户名</div>
                             </div>
                             <div id="staffMulti"></div>
                         </div>
-                        <div class="flexItem" id="selected"></div>
+                        <div class="flexItem clearfix" id="selected"></div>
                     </div>
                     <div id="saveFollower" class="ui-button ui-widget ui-corner-all">保存</div>
                     <!-- <div id="" class="ui-button ui-widget ui-corner-all close">关闭</div> -->
