@@ -18,6 +18,9 @@ let config = {
         boxshow:true, //是否隐藏常用工作流按钮
     },
     actions: {
+        /**
+         * 显示隐藏删除常用工作流按钮
+         */
         operate:function(){
             let oper = this.el.find('.J_operate');
             let del = this.el.find('.J_del');
@@ -33,6 +36,10 @@ let config = {
                 this.data.favoDel = true;
             }
         },
+        /**
+         * 删除常用工作流
+         * @param temp 当前dom节点
+         */
         delBtn:function(temp){
             let el = $(temp).find('.delFav');
             let id = el.attr('data-id');
@@ -46,6 +53,10 @@ let config = {
             parents.remove();
             this.actions.init();
         },
+        /**
+         * 初始化添加常用工作流按钮
+         * @returns {boolean}
+         */
         init(){
             $('#addFav').hide();
             this.data.favList=this.data[1].rows;
@@ -62,6 +73,9 @@ let config = {
                 }
             }
         },
+        /**
+         * 添加常用工作流按钮
+         */
         addFav(){
             Mediator.publish('workflow:addFav', this.data.id);
             let len = this.data[1].rows.length;
@@ -83,6 +97,9 @@ let config = {
             });
             this.actions.init();
         },
+        /**
+         * 点击关闭的时候显示常用工作流
+         */
         contentClose(){
             this.data.boxshow = true;
             this.actions.init();

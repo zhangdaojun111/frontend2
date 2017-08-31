@@ -1,17 +1,44 @@
-.selectUser{
-    .flexBox{
-        display: flex;
-        #addUsercheck{
-            height: 500px;
-            overflow: scroll;
+.follower-select {
+    .selectUser {
+        border: 1px solid rgba(228, 228, 228,1);
+        margin: 0 15px;
+        .flexBox {
+            display: flex;
+            #addUsercheck {
+                height: 500px;
+                overflow: scroll;
+            }
+            .flex {
+
+            }
+
+            .people{
+                border: 1px solid rgba(228, 228, 228,1);
+                margin: 0 15px;
+                width: 80%;
+                .signer-place {
+                    background: rgba(242, 242, 242, 1);
+                    border-bottom: 1px solid rgba(228, 228, 228,1);
+                    height: 24px;
+                    line-height: 24px;
+                }
+            }
         }
-        .flex{
-            width: 300px;
-        }
-        .signer-place{
-            text-align: center;
+
+    }
+    .signtype{
+        height: 40px;
+        line-height: 40px;
+        margin-left: 20px;
+        .around {
+            margin-top: -1px;
+            margin-left: 16px;
+            span {
+                margin-top: 3px;
+            }
         }
     }
+
 }
 html,body{
 	height: 100%;

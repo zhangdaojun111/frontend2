@@ -1,6 +1,10 @@
 //时间日期
 #ui-datepicker-div {
-    width: 244px;
+    width: 240px;
+    font-family: '微软雅黑 ';
+    .ui_tpicker_hour_label, .ui_tpicker_hour, .ui_tpicker_minute_label, .ui_tpicker_minute, .ui_tpicker_minute_label, .ui_tpicker_second_label, .ui_tpicker_second {
+        display: none;
+    }
     .ui-datepicker-calendar thead {
         border-bottom: 1px solid #CAEEFF;
     }
@@ -8,6 +12,9 @@
         text-align: center;
         border: 0;
         background: white;
+        font-family: 'Arial Normal', 'Arial';
+        font-size: 13px;
+        color: #333333;
     }
     .ui-state-hover {
         background: #F2F2F2 !important;
@@ -27,38 +34,64 @@
         border: 0;
         padding: 1px;
         width: 32px;
-        height: 32px;
-        line-height: 32px;
+        height: 25px;
+        line-height: 25px;
+        text-align: center;
+        border: 0;
+        background: white;
+        font-family: 'Arial Normal', 'Arial';
+        font-size: 13px;
+        color: #333333;
     }
     .ui-datepicker td a {
+        font-family: 'Arial Normal', 'Arial';
+        font-weight: 400;
+        font-style: normal;
+        font-size: 13px;
+        color: #333333;
         text-align: center;
+        line-height: normal;
     }
 
     .ui-datepicker-buttonpane {
         position: relative;
         border-top: 0;
-        border-bottom: 1px solid #E4E4E4 !important;
         background: #F2F2F2;
-        height: 40px;
     }
     .ui-datepicker-month, .ui-datepicker-year {
-        font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
-        font-weight: 700;
         font-style: normal;
-        font-size: 14px !important;
         position: relative;
         float: left;
         left: 10%;
         width: 40% !important;
+        font-family: 'Arial Normal', 'Arial';
+        font-size: 13px;
+        color: #333333;
+    }
+    th span{
+        font-weight: normal !important;
+    }
+     table {
+        width: 95%;
+        margin: .7em auto;
     }
     //时间
     .ui-timepicker-div {
+        padding-top: 10px;
         background: #FAFAFA;
         padding-bottom: 1px;
     }
+    .ui_tpicker_time_label {
+        margin-left: 20%;
+    }
     .ui_tpicker_time_input {
-        border-bottom: 1px solid #E4E4E4 !important;
+        width: 50%;
+        border: 0 !important;
+        background: white !important;
         padding: 5px;
+        font-family: 'Arial Normal', 'Arial';
+        font-size: 13px;
+        color: #333333;
     }
     .ui-timepicker-div dl dt {
         padding: 5px 0 0 10px;
@@ -73,5 +106,17 @@
         background: #0088FF !important;
         height: 25px;
         color: white !important;
+        position: relative;
+        bottom: 50px;
+    }
+    .ui-icon-circle-triangle-w {
+        background: url("../../../assets/images/form/inco_pre_month.png") !important;
+    }
+    .ui-datepicker-prev,.ui-datepicker-next {
+        top: 12%;
+        position: absolute;
+    }
+    .ui-icon-circle-triangle-e {
+        background: url("../../../assets/images/form/inco_next_month.png") !important;
     }
 }

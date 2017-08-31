@@ -19,11 +19,11 @@ module.exports = {
 
     devtool: 'cheap-module-eval-source-map',
 
-    // entry: [
-    //     // 'webpack/hot/dev-server',
-    //     // 'webpack-hot-middleware/client',
-    //     APP_PATH
-    // ],
+    entry: [
+        // 'webpack/hot/dev-server',
+        // 'webpack-hot-middleware/client',
+        APP_PATH
+    ],
 
     entry: {
         form: path.resolve(APP_PATH, 'entrys/form.js'),
