@@ -75,8 +75,12 @@ let config = {
             let zIndex = [];
             let layouts = []; // 需要请求服务器画布块的chart数据
             let layoutsId = [];
+            let userMode = window.config.bi_user === 'manager' ? 'manager' : 'client'; // 判断是客户端还是编辑模式
+
             cells.map((val,index) => {
                 zIndex.push(val.size.zIndex);
+                val.deep = userMode === 'manager' ? {} : val.is_deep == 1 ? JSON.parse(val.deep) : val.deep;
+                val.is_deep = userMode === 'manager' ? 0 : val.is_deep;
                 const data = {
                     'canvas': this,
                     'cell': val
@@ -84,23 +88,24 @@ let config = {
                 let cell = new CanvasCellComponent(data);
                 this.append(cell, this.el.find('.cells'));
                 layoutsId.push(val.layout_id);
-                let deep_info = {}
+
+                let deep_info = {};
                 if (val.is_deep == 0) {
                     deep_info = {}
                 } else {
-                    deep_info[val.deep.floor] =  val.deep.xOld.map(x => x['name'])
+                    if (userMode === 'client') {
+                        deep_info[val.deep.floor] = val.deep.xOld.map(x => x['name'])
+                    };
                 };
                 layouts.push(JSON.stringify({
-                    chart_id: val.chart_id,
-                    floor: val.is_deep == 0 ? 0 : val.deep.floor,
+                    chart_id: val.chart_id ? val.chart_id : 0,
+                    floor: val.is_deep == 0 ? 0 : userMode === 'client' ? val.deep['floor'] : 0,
                     view_id: this.viewId,
                     layout_id: val.layout_id,
-                    xOld: val.is_deep == 0 ? 0 : val.deep.xOld,
+                    xOld: val.is_deep == 0 ? {} : userMode === 'client' ? val.deep['xOld'] : {},
                     row_id:0,
                     deep_info: deep_info
-                }))
-
-                console.log(layouts);
+                }));
             });
             // 获取画布块最大zindex
             this.data.cellMaxZindex = Math.max(...zIndex);
@@ -108,6 +113,9 @@ let config = {
             // 获取画布块的chart数据
             const res = await canvasCellService.getCellChart({layouts:layouts,query_type:'deep',is_deep:1});
             let charts = {}
+            if (res['success'] == 0) {
+                msgbox.alert(res['error']);
+            };
             res.forEach((chart, index) => {
                 charts[layoutsId[index]] = chart
             })
