@@ -39,16 +39,16 @@ let config={
                     }
                 }
                 recur(tree);
-                var treeComp2 = new TreeView(tree,{
+                let treeComp2 = new TreeView(tree,{
                     callback: function (event,selectedNode) {
                         if(event==='select'){
-                            for(var k in staff){
+                            for(let k in staff){
                                 if(k==selectedNode.id){
                                     Mediator.publish('workflow:checkDept', staff[k]);
                                 }
                             }
                         }else{
-                            for(var k in staff){
+                            for(let k in staff){
                                 if(k==selectedNode.id){
                                     Mediator.publish('workflow:unCheckDept', staff[k]);
                                 }

@@ -244,107 +244,92 @@ let config = {
             let error = false;
             let errorMsg = "";
             for (let key in formValue) {
-                try {
-                    let data = allData[key];
-                    //如果该dfield是父表填充子表的，那就不验证
-                    if (this.data.idsOfSonDataByParent.indexOf(key) != -1) {
-                        continue;
-                    }
-                    let type = data["type"];
-                    if (type == 'songrid') {
-                        continue;
-                    }
-                    let val = formValue[key];
-                    //必填检查
-                    if (data["required"]) {
-                        if (( ( val == "" ) && ( ( val + '' ) != '0' ) ) || val == "[]") {
-                            error = true;
-                            errorMsg = `${ data["label"] }是必填项!`;
-                            break;
-                        }
-                    }
-                    // //正则检查
-                    // if (val != "" && data["reg"] !== "") {
-                    //     for (let r in data["reg"]) {
-                    //         let reg = eval(r);
-                    //         let flag = reg.test(val);
-                    //         if (!flag) {
-                    //             error = true;
-                    //             errorMsg = data["reg"][r];
-                    //             break;
-                    //         }
-                    //     }
-                    // }
-                    console.log('哪个字段出错了呢');
-                    console.log(key);
-                    console.log(this.data.data[key]);
-                    console.log(formValue[key]);
-                    //数字范围检查
-                    if (val.toString() != "" && data["numArea"]) {
-                        let label = data["label"];
-                        let minNum = data["numArea"]["min"] || '';
-                        let maxNum = data["numArea"]["max"] || '';
-                        let errorInfo = data["numArea"]["error"];
-                        if (minNum !== "" && maxNum === "") {
-                            if (val < minNum) {
-                                error = true;
-                                if (errorInfo === "") {
-                                    errorMsg = `“${ label }”字段不能小于${ minNum }`;
-                                } else {
-                                    errorMsg = errorInfo;
-                                }
-                                break;
-                            }
-                        } else if (minNum === "" && maxNum !== "") {
-                            if (val > maxNum) {
-                                error = true;
-                                if (errorInfo === "") {
-                                    errorMsg = `“${ label }”字段不能大于${ minNum }`;
-                                } else {
-                                    errorMsg = errorInfo;
-                                }
-                                break;
-                            }
-                        } else {
-                            if (val < minNum || val > maxNum) {
-                                error = true;
-                                if (errorInfo === "") {
-                                    errorMsg = `“${ label }”字段的取值范围在${ minNum } 和 ${ maxNum }内`;
-                                } else {
-                                    errorMsg = errorInfo;
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    //函数检查
-                    // if (val != "" && !$.isEmptyObject(data["func"])) {
-                    //     for (let r in data["func"]) {
-                    //         let flag = FormService[r](val);
-                    //         if (!flag) {
-                    //             error = true;
-                    //             errorMsg = data["func"][r];
-                    //             break;
-                    //         }
-                    //     }
-                    // }
-                    //数字位数限制
-                    if (data["real_type"] == fieldTypeService.FLOAT_TYPE) {
-                        if (formValue[key] >= 100000000000) {
-                            error = true;
-                            errorMsg = "小数不能超过12位！无法保存！";
-                            break;
-                        }
-                    }
-                    if (error) {
-                        console.log('vaild ERROR');
-                        console.log(errorMsg);
-                        console.log(this.data.data[key]);
+                let data = allData[key];
+                //如果该dfield是父表填充子表的，那就不验证
+                if (this.data.idsOfSonDataByParent.indexOf(key) != -1) {
+                    continue;
+                }
+                let type = data["type"];
+                if (type == 'songrid') {
+                    continue;
+                }
+                let val = formValue[key];
+                //必填检查
+                if (data["required"]) {
+                    if (( ( val == "" ) && ( ( val + '' ) != '0' ) ) || val == "[]") {
+                        error = true;
+                        errorMsg = `${ data["label"] }是必填项!`;
                         break;
                     }
-                } catch (err) {
-                    console.log(err);
-                    console.log(this.data.data[key]);
+                }
+                //正则检查
+                if (val != "" && data["reg"] !== "") {
+                    for (let r in data["reg"]) {
+                        let reg = eval(r);
+                        let flag = reg.test(val);
+                        if (!flag) {
+                            error = true;
+                            errorMsg = data["reg"][r];
+                            break;
+                        }
+                    }
+                }
+                //数字范围检查
+                if (val.toString() != "" && data["numArea"]) {
+                    let label = data["label"];
+                    let minNum = data["numArea"]["min"] || '';
+                    let maxNum = data["numArea"]["max"] || '';
+                    let errorInfo = data["numArea"]["error"];
+                    if (minNum !== "" && maxNum === "") {
+                        if (val < minNum) {
+                            error = true;
+                            if (errorInfo === "") {
+                                errorMsg = `“${ label }”字段不能小于${ minNum }`;
+                            } else {
+                                errorMsg = errorInfo;
+                            }
+                            break;
+                        }
+                    } else if (minNum === "" && maxNum !== "") {
+                        if (val > maxNum) {
+                            error = true;
+                            if (errorInfo === "") {
+                                errorMsg = `“${ label }”字段不能大于${ minNum }`;
+                            } else {
+                                errorMsg = errorInfo;
+                            }
+                            break;
+                        }
+                    } else {
+                        if (val < minNum || val > maxNum) {
+                            error = true;
+                            if (errorInfo === "") {
+                                errorMsg = `“${ label }”字段的取值范围在${ minNum } 和 ${ maxNum }内`;
+                            } else {
+                                errorMsg = errorInfo;
+                            }
+                            break;
+                        }
+                    }
+                }
+                //函数检查
+                if (val != "" && !$.isEmptyObject(data["func"])) {
+                    for (let r in data["func"]) {
+                        let flag = FormService[r](val);
+                        if (!flag) {
+                            error = true;
+                            errorMsg = data["func"][r];
+                            break;
+                        }
+                    }
+                }
+                //数字位数限制
+                if (data["real_type"] == fieldTypeService.FLOAT_TYPE) {
+                    if (formValue[key] >= 100000000000) {
+                        error = true;
+                        errorMsg = "小数不能超过12位！无法保存！";
+                        break;
+                    }
                 }
             }
             for (let d in allData) {
@@ -739,9 +724,9 @@ let config = {
                 } else {
                     this.data.data[key]['value'] = '';
                 }
-                try{
-                this.data.childComponent[this.data.data[key]['dfield']].actions.changeOption(this.data.data[key]['dfield']);
-                }catch(err){
+                try {
+                    this.data.childComponent[this.data.data[key]['dfield']].actions.changeOption(this.data.data[key]['dfield']);
+                } catch (err) {
                     console.log('错误1');
                     console.log(err);
                     console.log(this);
@@ -1157,77 +1142,77 @@ let config = {
         },
         //触发事件检查
         checkValue: function (data) {
-            try{
-            if (!this.data.childComponent[data.dfield]) {
-                return;
-            }
-            if (this.data.data[data.dfield]) {
-                this.data.data[data.dfield] = _.defaultsDeep({}, data);
-            }
-            if (data.type == 'Buildin') {
-                let id = data["id"];
-                let value;
-                for (let obj of data['options']) {
-                    if (obj.value == data.value) {
-                        value = obj.value;
-                        break;
+            try {
+                if (!this.data.childComponent[data.dfield]) {
+                    return;
+                }
+                if (this.data.data[data.dfield]) {
+                    this.data.data[data.dfield] = _.defaultsDeep({}, data);
+                }
+                if (data.type == 'Buildin') {
+                    let id = data["id"];
+                    let value;
+                    for (let obj of data['options']) {
+                        if (obj.value == data.value) {
+                            value = obj.value;
+                            break;
+                        }
+                    }
+                    this.actions.setAboutData(id, value);
+                }
+                //检查是否是默认值的触发条件
+                // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
+                if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1) {
+                    this.actions.validDefault(data, data['value']);
+                }
+                //统计功能
+                this.actions.countFunc(data.dfield);
+                //改变选择框的选项
+                if (data['linkage'] != {}) {
+                    let j = 0;
+                    let arr = [];
+                    for (let value in data['linkage']) {
+                        for (let k in data['linkage'][value]) {
+                            arr.push(k);
+                        }
+                        if (value == data['value']) {
+                            j++;
+                            //改变选择框的选项
+                            console.log('这个里面没有type？');
+                            console.log(data);
+                            this.actions.changeOptionOfSelect(data, data['linkage'][value]);
+                        }
+                    }
+                    if (j == 0) {
+                        let obj = this.data.selectObj;
+                        for (let field of arr) {
+                            this.data.data[field][obj[this.data[field]['type']]] = this.data.optionsToItem[field];
+                        }
                     }
                 }
-                this.actions.setAboutData(id, value);
-            }
-            //检查是否是默认值的触发条件
-            // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
-            if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1) {
-                this.actions.validDefault(data, data['value']);
-            }
-            //统计功能
-            this.actions.countFunc(data.dfield);
-            //改变选择框的选项
-            if (data['linkage'] != {}) {
-                let j = 0;
-                let arr = [];
-                for (let value in data['linkage']) {
-                    for (let k in data['linkage'][value]) {
-                        arr.push(k);
-                    }
-                    if (value == data['value']) {
-                        j++;
-                        //改变选择框的选项
-                        console.log('这个里面没有type？');
-                        console.log(data);
-                        this.actions.changeOptionOfSelect(data, data['linkage'][value]);
-                    }
-                }
-                if (j == 0) {
-                    let obj = this.data.selectObj;
-                    for (let field of arr) {
-                        this.data.data[field][obj[this.data[field]['type']]] = this.data.optionsToItem[field];
-                    }
-                }
-            }
 
-            //修改负责
-            if (data["edit_condition"] && data["edit_condition"] !== "") {
-                setTimeout(() => {
-                    this.actions.reviseCondition(data, data.value);
-                }, 0);
-            }
-            //修改必填性功能
-            if (data["required_condition"] && data["required_condition"] !== "") {
-                this.actions.requiredCondition(data, data['value']);
-            }
+                //修改负责
+                if (data["edit_condition"] && data["edit_condition"] !== "") {
+                    setTimeout(() => {
+                        this.actions.reviseCondition(data, data.value);
+                    }, 0);
+                }
+                //修改必填性功能
+                if (data["required_condition"] && data["required_condition"] !== "") {
+                    this.actions.requiredCondition(data, data['value']);
+                }
 
-            let calcData = {
-                val: data['value'],
-                effect: data["effect"],
-                id: data['id']
-            };
-            this.actions.calcExpression(calcData, data['value']);
-            if (data.required) {
-                this.actions.requiredChange(this.data.childComponent[data.dfield]);
-            }
-            this.el.find('.select-drop').hide();
-            }catch (err){
+                let calcData = {
+                    val: data['value'],
+                    effect: data["effect"],
+                    id: data['id']
+                };
+                this.actions.calcExpression(calcData, data['value']);
+                if (data.required) {
+                    this.actions.requiredChange(this.data.childComponent[data.dfield]);
+                }
+                this.el.find('.select-drop').hide();
+            } catch (err) {
                 console.log(err);
                 console.log('还是这儿呢？');
                 console.log(data);
@@ -1237,10 +1222,7 @@ let config = {
         addBtn() {
             this.el.find('.ui-btn-box').remove();
             //添加提交按钮
-            let $wrap = this.el.find("table").parent();
-            while (!($wrap.attr('id') == 'detail-form')) {
-                $wrap = $wrap.parent();
-            }
+            let $wrap = this.el.find('table').parentsUntil(this.data.el);
             if (this.data.btnType == 'new' || this.data.btnType == 'edit') {
                 $wrap.append(`<div class="noprint ui-btn-box"><div>
                     <!--<button class="btn btn-normal mrgr" id="print">-->
@@ -1699,7 +1681,9 @@ let config = {
         this.actions.triggerControl();
         this.actions.changeOptions();
         this.actions.setDataFromParent();
-        this.actions.addBtn();
+        if(this.data.btnType != 'none'){
+            this.actions.addBtn();
+        }
 
         //默认表单样式
 

@@ -13,10 +13,13 @@
             <ul class="tree-list">
                 {{#each data}}
                     <li>
-                        <div class="root J_root">{{this.label}}</div>
+                        <div class="root J_root"><i class="workflow-icon workflow-icon icon-workflow-icon2"></i>{{this.label}}</div>
                         <div class="child-list">
                             {{#each this.children}}
-                            <div class="child-item J_child-item" data-id="{{this.id}}" data-formId="{{this.form_id}}" data-tableId="{{this.table_id}}">{{this.label}}</div>
+                            <div class="child-item J_child-item" data-id="{{this.id}}" data-formId="{{this.form_id}}" data-tableId="{{this.table_id}}">
+                                <i class="workflow-icon workflow-icon icon-workflow-icon1"></i>
+                                {{this.label}}
+                            </div>
                             {{/each}}
                         </div>
                     </li>
