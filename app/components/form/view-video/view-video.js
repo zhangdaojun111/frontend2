@@ -4,17 +4,33 @@
  */
 
 import template from './view-video.html';
-let css = ``;
-css = css.replace(/(\n)/g, '');
+let css = `
+    .videoList {
+    width: 20%;
+    height: 100%;
+    float: left;
+    margin-left: 14px;
+    overflow-y: scroll;
+}
+.videoContain {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #d4d4d4;
+    float: left;
+    overflow: hidden;
+}
+`;
 let ViewVideo = {
     template: template.replace(/\"/g, '\''),
     data: {
-
+        css: css.replace(/(\n)/g, ''),
     },
     actions:{
 
     },
     afterRender(){
+        this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
         let _this=this;
         this.data.video=this.el.find('video').get(0);
         this.el.find('.quick').on('click',function(){

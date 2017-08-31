@@ -26,7 +26,7 @@ let config = {
             event: 'click',
             selector: '.date-close',
             callback: function () {
-                this.el.find(".date_yy-mm-dd").val("年/月/日");
+                this.el.find(".date_yy-mm-dd").val("年-月-日");
             }
         }
     ],

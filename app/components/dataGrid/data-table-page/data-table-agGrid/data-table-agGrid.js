@@ -2207,16 +2207,24 @@ let config = {
 
             //视频字段
             if(data.colDef.real_type == fieldTypeService.VIDEO_TYPE && data.event.srcElement.id == 'file_view'){
-                let fieldids = data['value']
-                let file_dinput_type = data.colDef.real_type;
-                ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids}&download=0&dinput_type=${file_dinput_type}`;
-                PMAPI.openDialogByComponent(ViewVideo,{
-                    width:1000,
-                    height:600,
-                    title:'视频播放器'
-                })
-            }
 
+               let fieldids = data['value'];
+                let file_dinput_type = data.colDef.real_type;
+               // ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids[0]}&download=0&dinput_type=${file_dinput_type}`;
+
+                for( let i=0;i< fieldids.length;i++ ){
+                  ViewVideo.data.videoSrc = `/download_attachment/?file_id=${fieldids[i]}&download=0&dinput_type=${file_dinput_type}`;
+
+                  console.log( ViewVideo.data.videoSrc )
+                    console.log( fieldids[0])
+                    console.log( fieldids[1])
+                }
+                    PMAPI.openDialogByComponent(ViewVideo, {
+                        width: 1000,
+                        height: 600,
+                        title: '视频播放器'
+                    })
+            }
             //图片查看
             if( data.colDef.real_type == fieldTypeService.IMAGE_TYPE ){
                 let json = {};
@@ -2608,7 +2616,7 @@ let config = {
                 real_id:data.data._id,
                 field_id:data.colDef.id,
                 model_id:value.model_id,
-                k2v:value.k2v,
+                k2v:JSON.stringify(value.k2v),
                 file_name:value.name
             }).then(res=>{
                 if(res.success){

@@ -336,7 +336,7 @@ export const PMAPI = {
             let str = String(componentConfig);
             let source = PMAPI._removeAllComments(str.substring(str.indexOf('{') + 1, str.lastIndexOf('}')));
             //str.substring(str.indexOf('function ')+9,str.indexOf('('))
-            let func = `{"Function":"${key}", "Arguments":"${str.substring(str.indexOf('(') + 1, str.indexOf(')'))}", "Source": "${source.replace(/\n/g, '').replace(/\"/g, "'")}"}`
+            let func = `{"Function":"${key}", "Arguments":"${str.substring(str.indexOf('(') + 1, str.indexOf(')'))}", "Source": "${source.replace(/\n/g, '').replace(/\"/g, '\\\"')}"}`
             return func;
         } else if (Array.isArray(componentConfig)) {
             if (componentConfig[0] === undefined) {
