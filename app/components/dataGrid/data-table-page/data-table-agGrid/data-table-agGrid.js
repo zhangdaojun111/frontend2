@@ -626,7 +626,7 @@ let config = {
 
             //合同编辑器
             else if (real_type == fieldTypeService.TEXT_COUNT_TYPE) {
-                sHtml = '<a class="view-contract">' + "查看" + '</a>' + '<span>' + "丨" + '</span>' + '<a class="download-contract">' + '下载' + '</a>';
+                sHtml = '<a class="view-contract" style="color:#337ab7;">' + "查看" + '</a>' + '<span>' + "丨" + '</span>' + '<a class="download-contract" style="color:#337ab7;">' + '下载' + '</a>';
             }
 
             //表对应关系（不显示为数字）
@@ -640,45 +640,17 @@ let config = {
 
             //图片附件
             else if (real_type == fieldTypeService.IMAGE_TYPE && colDef['field_content']['is_show_image'] == 1) {
-                let cDiv = document.createElement('div');
-                let cImg = document.createElement('img');
-                let dImg = document.createElement('img');
-                cImg.src = params.value;
-                cImg.style.height = 'inherit';
-                cImg.style.position = 'relative';
-                cDiv.style.height = 'inherit';
-                dImg.style.position = 'absolute';
-                dImg.style.maxWidth = (window.innerWidth / 2 - 120) + 'px';
-                dImg.style.maxHeight = (window.innerHeight - 300) / 2 + 'px';
-                dImg.style.zIndex = '2';
-                cImg.addEventListener("mouseover", function (param) {
-                    dImg.src = param.target['src'];
-                    if (param.y > window.innerHeight / 2) {
-                        dImg.style.bottom = '0'
-                    }
-                    if (param.x < window.innerWidth / 2) {
-                        dImg.style.left = '100%'
-                    } else {
-                        dImg.style.right = '100%'
-                    }
-                    cDiv.appendChild(dImg);
-
-                });
-                cImg.addEventListener("mouseout", function () {
-                    cDiv.removeChild(dImg);
-                });
-                cDiv.appendChild(cImg);
-                sHtml = cDiv;
+                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + ' 张图片</a>';
             }
 
             //普通附件
             else if (real_type == fieldTypeService.ATTACHMENT) {
-                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + '个附件</a>';
+                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + ' 个附件</a>';
             }
 
             //视频附件
             else if( real_type == fieldTypeService.VIDEO_TYPE ){
-                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + '段视频</a>';
+                sHtml = '<a class="ag-text-style" style="text-align: center;display: block;" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + ' 段视频</a>';
             }
 
             //都做为文本处理
@@ -957,8 +929,10 @@ let config = {
             this.data.prepareParmas = res.data;
             this.data.customOperateList = this.data.prepareParmas["operation_data"] || [];
             this.data.rowOperation = this.data.prepareParmas['row_operation'] || [];
-            if( this.data.prepareParmas["flow_data"][0] ){
-                this.data.flowId = this.data.prepareParmas["flow_data"][0]["flow_id"] || "";
+            for( let d of this.data.prepareParmas["flow_data"] ){
+                if( d.selected == 1 ){
+                    this.data.flowId = d.flow_id;
+                }
             }
         },
         //请求在途数据
@@ -1267,7 +1241,7 @@ let config = {
                 json['mongo'] = this.data.deleteHandingData;
             }
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
-                json['filter'] = this.data.filterParam.filter || [];
+                json['filter'] = _.cloneDeep(this.data.filterParam.filter ) || []
             }
             if( this.data.filterParam.fastFilter && this.data.filterParam.fastFilter.length != 0 ){
                 json['filter'].push( this.data.filterParam.fastFilter[0] );
@@ -1390,9 +1364,9 @@ let config = {
             }else {
                 this.el.find( '.pagination' )[0].style.height = '0px';
                 if( this.data.isShowSheet ){
-                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 60px )';
+                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc(100% - 90px)';
                 }else {
-                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 40px )';
+                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 70px )';
                 }
             }
             //高级查询
@@ -1505,17 +1479,6 @@ let config = {
                 return;
             }
             let id = param["data"]["_id"];
-            //如果是在工作流进行中的数据显示特殊颜色
-            if( param["data"] && param["data"]["status"] && param["data"]["status"] == 2 ){
-                return {background:'#E2D6C0'};
-            }
-            if( param["data"]["data"] && param["data"]["data"]["status"] && param["data"]["data"]["status"] == 1 ){
-                return {background:'rgba(255,84,0,.2)'};
-            }
-            //如果是在工作计算cache中的数据显示特殊颜色
-            if( param["data"] && param["data"]["data_status"] && param["data"]["data_status"] == 0 ){
-                return {background:'#FFEFEF'};
-            }
             //对应关系颜色
             if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' ){
                 if(this.data.correspondenceAddList.indexOf(id) != -1){
@@ -1527,7 +1490,7 @@ let config = {
                 }
             }
             //分组样式
-            if( this.data.groupCheck && !param["data"].children && this.groupGridCom.data.group.length != 0 && param["data"].myfooter == undefined ){
+            if( this.data.groupCheck && !param["data"].children && this.groupGridCom.data.group && this.groupGridCom.data.group.length != 0 && param["data"].myfooter == undefined ){
                 return {background:'#E6F7FF'};
             }
         },
@@ -1573,7 +1536,7 @@ let config = {
                     $(this).siblings().removeClass('active1');
                 });
                 console.log( "有sheet" )
-                this.el.find( '.ag-grid-con' ).height( 'calc(100% - 90px)' );
+                this.el.find( '.ag-grid-con' ).height( 'calc(100% - 120px)' );
                 this.el.find( '.SheetPage' ).show();
             }else {
                 console.log( "没有sheet" )
@@ -1894,7 +1857,7 @@ let config = {
                     tableId: this.data.tableId,
                     fieldsData: this.data.expertSearchFields,
                     commonQuery: this.data.commonQueryData,
-                    commonQuerySelectLength:this.el.find('.dataGrid-commonQuery-select option').length
+                    // commonQuerySelectLength:this.el.find('.dataGrid-commonQuery-select option').length
                 }
                 PMAPI.openDialogByIframe(`/iframe/expertSearch/`,{
                     width:950,
@@ -1956,7 +1919,7 @@ let config = {
                 real_ids:JSON.stringify( this.data.deletedIds ),
                 is_batch: this.data.viewMode == 'createBatch'?1:0,
                 flow_id: this.data.flowId,
-                parent_table_id: this.data.flowId,
+                parent_table_id: this.data.parentTableId,
                 parent_temp_id: this.data.parentTempId,
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
@@ -2196,7 +2159,7 @@ let config = {
         onCellClicked: function (data) {
             console.log( "______data_______" )
             console.log( data )
-            if( !data.data || this.data.isEditable ){
+            if( !data.data || this.data.isEditable || data.data.myfooter ){
                 return;
             }
             //分组重新渲染序号
