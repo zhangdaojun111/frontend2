@@ -13,6 +13,11 @@
             border-right: 1px solid rgba(228, 228, 228, 1) !important;
             //padding: 0px 8px;
         }
+        //解决宽度自适应出现...
+        .ag-header-cell-label {
+            text-overflow: clip;
+            overflow: hidden;
+        }
         .ag-grid-number {
             position: relative;
         }
