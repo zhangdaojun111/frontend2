@@ -14,7 +14,6 @@
     .timeInput {
         display: block;
     }
-
     .input-img {
         position: relative;
         display: inline-block;
@@ -24,7 +23,6 @@
         top: 6px;
         background: url("../../../assets/images/form/icon_time.png") no-repeat right;
     }
-
     .ui-datepicker-close, .ui-datepicker-current {
         background: #0088FF;
         height: 25px;
@@ -59,7 +57,6 @@
     .ui-timepicker div input {
         width: 25px;
     }
-
     .ui-calendar {
         position: relative;
         display: inline-block;
@@ -99,5 +96,4 @@
         opacity: 0.7;
         filter: Alpha(Opacity=70);
     }
-
 }
