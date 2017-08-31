@@ -4,6 +4,7 @@
 import Component from "../../lib/component";
 import template from './calendar.html';
 import './calendar.scss';
+import '../../assets/scss/calendar/icon-calendar.scss';
 import LeftContent from './left-content/left-content';
 import RightContent from './right-content/right-content';
 import CalendarMain from './calendar.main/calendar.main';
@@ -93,8 +94,8 @@ let config = {
                 '/iframe/calendarExport/',
                 {
                     title: '导出',
-                    width: '650',
-                    height: '300',
+                    width: '400',
+                    height: '440',
                     modal: true,
                 },
             );
