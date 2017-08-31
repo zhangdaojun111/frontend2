@@ -6,7 +6,6 @@ import Component from '../../../lib/component';
 import '../base-form/base-form.scss';
 import {FormService} from "../../../services/formService/formService"
 import template from './input-control.html'
-
 let config = {
     template: template,
     data: {
@@ -27,7 +26,6 @@ let config = {
                 let func = this.data.func;
                 let reg = this.data.reg;
                 let required = this.data.required
-
                 //输入框输入时的实时函数验证
                 if (val != "" && !$.isEmptyObject(func)) {
                     for (let r in func) {
@@ -95,13 +93,11 @@ let config = {
                     }
                     //this.reload();
                 }
-
                 if (val != "" && this.data.numArea && this.data.numArea !== "") {
                     let label = this.data.label;
                     let minNum = this.data.numArea.min;
                     let maxNum = this.data.numArea.max;
                     let errorInfo = this.data.numArea.error;
-
                     if (minNum !== "" && maxNum === "") {
                         if (val < minNum) {
                             this.el.find("#error_tip").css("display", "inline-block");
@@ -174,16 +170,13 @@ let config = {
                     "border": "1px solid rgb(226, 226, 226)",
                 });
             }
-        },
-
-
+        }
     ],
     afterRender() {
         let _this = this;
         this.el.find('.search').on('input', _.debounce(function () {
             _this.actions.keyup();
         }, 200));
-
         this.el.find('.ui-width').css('width', this.data.width);
         if (this.data.is_view) {
             this.el.find('.ui-width').attr('disabled', true);
@@ -195,11 +188,9 @@ let config = {
         this.el.off();
     }
 }
-
 class InputControl extends Component {
     constructor(data, events) {
         super(config, data, events);
     }
 }
-
 export default InputControl
