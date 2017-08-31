@@ -9,8 +9,21 @@ import './canvans.title.scss';
 let config = {
     template: template,
     actions: {
-        setValue(){
-
+        /**
+         * 设置canvas title 的值
+         * @param chart 初始数据
+         */
+        setValue(chart){
+            this.data.title = chart['data']['chartName']['name'];
+            this.data.isDeep = chart['data']['assortment'] === 'normal' || chart['data']['assortment'] === 'pie' ? true : false;
+            this.data.newCell = true;
+            this.data.icon = chart['data']['icon'];
+            this.data.isIcon = chart['data']['icon'] ? true : false;
+            if(this.data.isIcon){
+                console.log(this.el.find('.title'),77777777777777777777777777777777777777777);
+                this.el.find('.title').addClass('no-title');
+            }
+            this.reload();
         }
     },
     data: {
@@ -21,8 +34,7 @@ let config = {
         imgUrl: window.config.img_url,
         isIcon: false,// 是否存在图标
     },
-    afterRender() {
-    },
+    afterRender() {},
     firstAfterRender() {},
     beforeDestory() {}
 };
