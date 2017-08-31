@@ -176,13 +176,6 @@ let config = {
                 });
             }
         },
-        // {
-        //     event: 'click',
-        //     selector: '.select-label-show',
-        //     callback: function(){
-        //         this.actions.selectLabelShow($(this));
-        //     }
-        // },
         {
             event: 'click',
             selector: '.select-label',

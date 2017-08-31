@@ -83,7 +83,7 @@
             height: 20px;
             margin-right: 90px;
             display: none;
-            z-index: 5555;
+            z-index: 5;
             position: absolute;
             float: right;
             .hide-span:hover {
@@ -112,7 +112,7 @@
                 margin-left: 160px;
                 position: absolute;
                 margin-top: -32px;
-                z-index: 1000;
+                z-index: 5;
                 .search-function-children {
                     width: 150px;
                     display: block;

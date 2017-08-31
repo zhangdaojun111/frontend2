@@ -159,12 +159,12 @@ let config = {
         },
 
         /**
-         *处理日历树数据，审批、提醒checkbox状态
+         *处理日历树数据
          */
-        getCalendarTreeData: function (that) {
-            that.data.cancel_fields = this.data.calendarTreeData.cancel_fields;
-            that.data.hide_item_table = this.data.calendarTreeData.hide_tables;
-            that.data.rows = this.data.calendarTreeData.rows;
+        getCalendarTreeData: function () {
+            this.data.cancel_fields = this.data.calendarTreeData.cancel_fields;
+            this.data.hide_item_table = this.data.calendarTreeData.hide_tables;
+            this.data.rows = this.data.calendarTreeData.rows;
             for (let i = 0; i < this.data.calendarTreeData.hide_tables.length; i++) {
                 let hide_table_name = "";
                 let hide_table_id = this.data.calendarTreeData.hide_tables[i];
@@ -173,14 +173,14 @@ let config = {
                         hide_table_name = this.data.calendarTreeData.rows[j]['table_name'];
                     }
                 }
-                that.data.hide_table.tableName = hide_table_name;
-                that.data.hide_table.table_Id = hide_table_id;
-                that.data.hide_tables[i] = that.data.hide_table;
-                that.data.hide_table = {'tableName': "", 'table_Id': ''}
+                this.data.hide_table.tableName = hide_table_name;
+                this.data.hide_table.table_Id = hide_table_id;
+                this.data.hide_tables[i] = this.data.hide_table;
+                this.data.hide_table = {'tableName': "", 'table_Id': ''}
             }
             this.data.calendarTreeData.rows.forEach((data) => {
-                that.append(new LeftContentSelect(data, this.data.calendarTreeData.cancel_fields, this.data.hide_item_table, this.data.rows,
-                    that.events.checkboxcheck), that.el.find('.remind-group'));
+                this.append(new LeftContentSelect(data, this.data.calendarTreeData.cancel_fields, this.data.hide_item_table, this.data.rows,
+                    this.events.checkboxcheck), this.el.find('.remind-group'));
             });
             this.actions.approveRemindShow();
         },
@@ -267,7 +267,7 @@ let config = {
 
     afterRender: function () {
         this.el.css({"height": "100%", "width": "100%"});
-        this.actions.getCalendarTreeData(this);
+        this.actions.getCalendarTreeData();
         Mediator.on('calendar-left:showRemindType', data => {
             this.actions.showRemindType(this, data)
         });

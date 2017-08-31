@@ -47,7 +47,7 @@ let config = {
         /**
          * 日历隐藏栏显示和隐藏
          */
-        hideclass: function (temp) {
+        hideClass: function (temp) {
             if (temp.is(".display-all-content")) {
                 temp.removeClass("display-all-content");
                 this.el.find(".item-content").css("height", "calc(33.3% - 45px)");
@@ -75,7 +75,7 @@ let config = {
             this.el.find(".item-content-1").css({height: 'calc(100% - 135px)'});
         },
         /**
-         * 处理日历树数据
+         * 将日历树隐藏table数据格式处理成：[{'tableName': "", 'table_Id': ''},...]
          */
         getCalendarTreeData: function () {
             for (let i = 0; i < this.data.calendarTreeData.hide_tables.length; i++) {
@@ -146,7 +146,7 @@ let config = {
             event: 'click',
             selector: '.hide-con-2',
             callback: function (temp = this) {
-                this.actions.hideclass($(temp).parents('.item-title-2'));
+                this.actions.hideClass($(temp).parents('.item-title-2'));
             }
         },
         {
