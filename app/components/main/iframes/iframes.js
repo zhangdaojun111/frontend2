@@ -80,7 +80,7 @@ export const IframeInstance = new Component({
             this.actions.sendOpenRequest(id);
             id = id.toString();
             if (this.data.hash[id] === undefined) {
-                let tab = $(`<div class="item" iframeid="${id}" title="${name}">${name}<a class="close" iframeid="${id}"></a></div>`)
+                let tab = $(`<div class="item" iframeid="${id}" title="${name}">${name}<a class="close icon-framework-close" iframeid="${id}"></a></div>`)
                     .prependTo(this.data.tabs);
                 let iframe = $(`<div class="item"><iframe id="${id}" src="${url}"></iframe></div>`).appendTo(this.data.iframes);
                 let originIframe = iframe.find('iframe');

@@ -171,21 +171,24 @@ let config = {
             return image;
         },
         saveAvatar:function () {
+            this.showLoading();
+            let that = this;
             //向后台传递头像数据
             UserInfoService.saveAvatar(this.data.avatarSrc).done((result) => {
-                //根据结果处理后续工作
                 // that.hideLoading();
+                //根据结果处理后续工作
                 if(result.success === 1){
                     //向父窗口传递头像数据并设置
                     window.config.sysConfig.userInfo.avatar = this.data.avatarSrc;
                     Mediator.emit("personal:setAvatar");
                     msgbox.alert("头像设置成功!");
-                    AvatarSet.hide();
                 }else{
                     msgbox.alert("头像设置失败！");
                 }
+                AvatarSet.hide();
             }).fail((err) => {
                 msgbox.alert("头像设置失败！");
+                AvatarSet.hide();
                 console.log("err",err)
             })
         }
