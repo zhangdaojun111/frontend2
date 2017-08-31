@@ -101,6 +101,7 @@ let config = {
                     sortingOrder: ['desc', 'asc', null],
                     hide: false,
                     minWidth: 20,
+                    width: col["width"] || 120,
                     cellStyle: {'font-style': 'normal'},
                     floatingFilterComponent: this.floatingFilterCom.actions.createFilter(s.type , s.field, this.data.searchValue, this.data.searchOldValue),
                     floatingFilterComponentParams: {suppressFilterButton: true},
@@ -369,8 +370,7 @@ let config = {
                     width:950,
                     height:600,
                     title:`高级查询`,
-                    modal:true,
-                    closable: false
+                    modal:true
                 },{d}).then(res=>{
                     this.data.onlyCloseExpertSearch = res.onlyclose || false;
                     if(res.type == 'temporaryQuery') {
@@ -379,16 +379,24 @@ let config = {
                             this.actions.postExpertSearch(res.value,res.id,res.name);
                         }
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);
-                    } if(res.appendChecked) {
+                    }
+                    if(res.appendChecked) {
                         this.data.temporaryCommonQuery = res.value
                         this.actions.appendQuerySelect()
-                    } if(res.saveCommonQuery || (res.saveCommonQuery && res.onlyclose == true)) {
-                        this.actions.getExpertSearchData(res.addNameAry);
-                    }if(res.deleteCommonQuery || (res.deleteCommonQuery && res.onlyclose == true)) {
-                        this.actions.getExpertSearchData(res.addNameAry);
-                    } if(!res.saveCommonQuery && res.onlyclose == true) {
-                        return false
                     }
+                    if(res.saveCommonQuery || res.deleteCommonQuery) {
+                        this.actions.getExpertSearchData(res.addNameAry);
+                    }
+                    if(res.onlyclose == true) {
+                        this.actions.getExpertSearchData()
+                    }
+                    // if(res.saveCommonQuery || (res.saveCommonQuery && res.onlyclose == true)) {
+                    //     this.actions.getExpertSearchData(res.addNameAry);
+                    // }if(res.deleteCommonQuery || (res.deleteCommonQuery && res.onlyclose == true)) {
+                    //     this.actions.getExpertSearchData(res.addNameAry);
+                    // } if(!res.saveCommonQuery && res.onlyclose == true) {
+                    //     return false
+                    // }
                 })
             } )
             _this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
@@ -533,7 +541,6 @@ let config = {
                     })
                 }
                 if(this.data.filterParam['common_filter_name'] && this.data.onlyCloseExpertSearch) {
-                    debugger
                     this.el.find('.dataGrid-commonQuery-select').val(this.data.filterParam['common_filter_name']);
                 }
             } );
@@ -715,6 +722,9 @@ let config = {
         },
     },
     afterRender: function (){
+        console.log(this.data.tableId2Name[this.data.tableId])
+        console.log(this.data.tableId2Name[this.data.tableId])
+        this.el.find( '.headerTips' ).eq(0).find( 'span' ).eq(0).html( this.data.tableId2Name[this.data.tableId] );
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.data.pageType = this.data.tableId2pageType[this.data.tableId];
