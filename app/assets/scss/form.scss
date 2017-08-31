@@ -9,6 +9,7 @@
 .form-version-table-user, .form-version-table-department, .form-default {
     margin: 10px;
     background: #FFFFFF;
+    margin-bottom: 40px!important;
     tr td:first-child {
         width: 30% !important;
         background: #FFFFFF;
@@ -39,6 +40,12 @@
         outline: none;
         opacity: 100;
         padding: 0 5px;
+    }
+
+    .df-input-radio-wrapper {
+        width: 12px;
+        height: 12px;
+        top: 0;
     }
 
 }

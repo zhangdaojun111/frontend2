@@ -244,7 +244,6 @@ let config = {
             let error = false;
             let errorMsg = "";
             for (let key in formValue) {
-                try{
                 let data = allData[key];
                 //如果该dfield是父表填充子表的，那就不验证
                 if (this.data.idsOfSonDataByParent.indexOf(key) != -1) {
@@ -275,10 +274,6 @@ let config = {
                         }
                     }
                 }
-                console.log('哪个字段出错了呢');
-                console.log(key);
-                console.log(this.data.data[key]);
-                console.log(formValue[key]);
                 //数字范围检查
                 if (val.toString() != "" && data["numArea"]) {
                     let label = data["label"];
@@ -336,16 +331,7 @@ let config = {
                         break;
                     }
                 }
-                if(error){
-                    console.log('vaild ERROR');
-                    console.log(this.data.data[key]);
-                }
-                }catch (err){
-                    console.log(err);
-                    console.log(this.data.data[key]);
-                }
             }
-
             for (let d in allData) {
                 if (allData[d].type == 'songrid' && allData[d].required && allData[d].total == 0) {
                     error = true;
@@ -436,15 +422,20 @@ let config = {
         triggerControl: function () {
             let data = this.data.data;
             for (let key in data) {
-                let val = data[key]["value"];
-                if (val != "" || !$.isEmptyObject(val)) {
-                    if ($.isArray(val)) {
-                        if (val.length != 0) {
+                try {
+                    let val = data[key]["value"];
+                    if (val != "" || !$.isEmptyObject(val)) {
+                        if ($.isArray(val)) {
+                            if (val.length != 0) {
+                                this.actions.checkValue(data[key]);
+                            }
+                        } else {
                             this.actions.checkValue(data[key]);
                         }
-                    } else {
-                        this.actions.checkValue(data[key]);
                     }
+                } catch (err) {
+                    console.log('这里面么');
+                    console.log(data[key]);
                 }
             }
         },
@@ -718,22 +709,29 @@ let config = {
             // let field = data['dfield'];
             let type = data['type'];
             for (let key in linkage) {
-                let affectData = this.data[key];
+                let affectData = this.data.data[key];
                 let affectType = affectData['type'];
                 let arr = [];
-                let srcOptions = this.optionsToItem[key];
-                for (let op of srcOptions) {
-                    if (linkage[key].indexOf(op.value) != -1) {
-                        arr.push(op);
+                let srcOptions = this.data.optionsToItem[key];
+                for (let opIndex in srcOptions) {
+                    if (linkage[key].indexOf(srcOptions[opIndex].value) != -1) {
+                        arr.push(srcOptions[opIndex]);
                     }
                 }
-                this.data[key][obj[affectType]] = arr;
+                this.data.data[key][obj[affectType]] = arr;
                 if (affectType == 'multi-select') {
-                    this.data[key]['value'] = [];
+                    this.data.data[key]['value'] = [];
                 } else {
-                    this.data[key]['value'] = '';
+                    this.data.data[key]['value'] = '';
                 }
-                this.data.childComponents[this.data[key]['dfield']].actions.changeOption(this.data[key]['dfield']);
+                try {
+                    this.data.childComponent[this.data.data[key]['dfield']].actions.changeOption(this.data.data[key]['dfield']);
+                } catch (err) {
+                    console.log('错误1');
+                    console.log(err);
+                    console.log(this);
+                    console.log(this.data.data[key]['dfield']);
+                }
             }
         },
 
@@ -1143,83 +1141,88 @@ let config = {
             }
         },
         //触发事件检查
-        checkValue: function (data,) {
-            if (!this.data.childComponent[data.dfield]) {
-                return;
-            }
-            if (this.data.data[data.dfield]) {
-                this.data.data[data.dfield] = _.defaultsDeep({}, data);
-            }
-            if (data.type == 'Buildin') {
-                let id = data["id"];
-                let value;
-                for (let obj of data['options']) {
-                    if (obj.value == data.value) {
-                        value = obj.value;
-                        break;
+        checkValue: function (data) {
+            try {
+                if (!this.data.childComponent[data.dfield]) {
+                    return;
+                }
+                if (this.data.data[data.dfield]) {
+                    this.data.data[data.dfield] = _.defaultsDeep({}, data);
+                }
+                if (data.type == 'Buildin') {
+                    let id = data["id"];
+                    let value;
+                    for (let obj of data['options']) {
+                        if (obj.value == data.value) {
+                            value = obj.value;
+                            break;
+                        }
+                    }
+                    this.actions.setAboutData(id, value);
+                }
+                //检查是否是默认值的触发条件
+                // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
+                if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1) {
+                    this.actions.validDefault(data, data['value']);
+                }
+                //统计功能
+                this.actions.countFunc(data.dfield);
+                //改变选择框的选项
+                if (data['linkage'] != {}) {
+                    let j = 0;
+                    let arr = [];
+                    for (let value in data['linkage']) {
+                        for (let k in data['linkage'][value]) {
+                            arr.push(k);
+                        }
+                        if (value == data['value']) {
+                            j++;
+                            //改变选择框的选项
+                            console.log('这个里面没有type？');
+                            console.log(data);
+                            this.actions.changeOptionOfSelect(data, data['linkage'][value]);
+                        }
+                    }
+                    if (j == 0) {
+                        let obj = this.data.selectObj;
+                        for (let field of arr) {
+                            this.data.data[field][obj[this.data[field]['type']]] = this.data.optionsToItem[field];
+                        }
                     }
                 }
-                this.actions.setAboutData(id, value);
-            }
-            //检查是否是默认值的触发条件
-            // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
-            if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1) {
-                this.actions.validDefault(data, data['value']);
-            }
-            //统计功能
-            this.actions.countFunc(data.dfield);
-            //改变选择框的选项
-            if (data['linkage'] != {}) {
-                let j = 0;
-                let arr = [];
-                for (let value in data['linkage']) {
-                    for (let k in data['linkage'][value]) {
-                        arr.push(k);
-                    }
-                    if (value == val) {
-                        j++;
-                        //改变选择框的选项
-                        this.changeOptionOfSelect(originalData, originalData['linkage'][value]);
-                    }
-                }
-                if (j == 0) {
-                    let obj = this.data.selectObj;
-                    for (let field of arr) {
-                        this.data[field][obj[this.data[field]['type']]] = this.optionsToItem[field];
-                    }
-                }
-            }
 
-            //修改负责
-            if (data["edit_condition"] && data["edit_condition"] !== "") {
-                setTimeout(() => {
-                    this.actions.reviseCondition(data, data.value);
-                }, 0);
-            }
-            //修改必填性功能
-            if (data["required_condition"] && data["required_condition"] !== "") {
-                this.actions.requiredCondition(data, data['value']);
-            }
+                //修改负责
+                if (data["edit_condition"] && data["edit_condition"] !== "") {
+                    setTimeout(() => {
+                        this.actions.reviseCondition(data, data.value);
+                    }, 0);
+                }
+                //修改必填性功能
+                if (data["required_condition"] && data["required_condition"] !== "") {
+                    this.actions.requiredCondition(data, data['value']);
+                }
 
-            let calcData = {
-                val: data['value'],
-                effect: data["effect"],
-                id: data['id']
-            };
-            this.actions.calcExpression(calcData, data['value']);
-            if (data.required) {
-                this.actions.requiredChange(this.data.childComponent[data.dfield]);
+                let calcData = {
+                    val: data['value'],
+                    effect: data["effect"],
+                    id: data['id']
+                };
+                this.actions.calcExpression(calcData, data['value']);
+                if (data.required) {
+                    this.actions.requiredChange(this.data.childComponent[data.dfield]);
+                }
+                this.el.find('.select-drop').hide();
+            } catch (err) {
+                console.log(err);
+                console.log('还是这儿呢？');
+                console.log(data);
             }
-            this.el.find('.select-drop').hide();
         },
         //添加按钮组
         addBtn() {
             this.el.find('.ui-btn-box').remove();
             //添加提交按钮
-            let $wrap = this.el.find("table").parent();
-            while (!($wrap.attr('id') == 'detail-form')) {
-                $wrap = $wrap.parent();
-            }
+            let $wrap = this.el.find('table').parentsUntil(this.data.el);
             if (this.data.btnType == 'new' || this.data.btnType == 'edit') {
                 $wrap.append(`<div class="noprint ui-btn-box"><div>
                     <!--<button class="btn btn-normal mrgr" id="print">-->
@@ -1678,12 +1681,19 @@ let config = {
         this.actions.triggerControl();
         this.actions.changeOptions();
         this.actions.setDataFromParent();
-        this.actions.addBtn();
+        if(this.data.btnType != 'none'){
+            this.actions.addBtn();
+        }
 
         //默认表单样式
 
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('#detail-form').css("background", "#F2F2F2");
+        }
+        if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')) {
+            this.el.find('table').siblings('.ui-btn-box').css("margin-left", "0px");
+        }else {
+            this.el.find('table').siblings('.ui-btn-box').css("margin-left", "-20px");
         }
     },
     beforeDestory() {

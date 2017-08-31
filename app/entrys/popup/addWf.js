@@ -39,17 +39,17 @@ let tree = [], staff = [];
     }
 
     recur(tree);
-    var treeComp2 = new TreeView(tree, {
-        callback: function (event, selectedNode) {
-            if (event === 'select') {
-                for (var k in staff) {
-                    if (k == selectedNode.id) {
+    let treeComp2 = new TreeView(tree,{
+        callback: function (event,selectedNode) {
+            if(event==='select'){
+                for(let k in staff){
+                    if(k==selectedNode.id){
                         Mediator.publish('workflow:checkDept', staff[k]);
                     }
                 }
-            } else {
-                for (var k in staff) {
-                    if (k == selectedNode.id) {
+            }else{
+                for(let k in staff){
+                    if(k==selectedNode.id){
                         Mediator.publish('workflow:unCheckDept', staff[k]);
                     }
                 }
@@ -65,7 +65,7 @@ let tree = [], staff = [];
 let serchStr = location.search.slice(1);
 let obj = {}, is_view;
 serchStr.split('&').forEach(res => {
-    var arr = res.split('=');
+    let arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
 is_view = obj.btnType === 'view' ? 1 : 0;
@@ -81,7 +81,7 @@ Mediator.publish('workflow:getKey', obj.key);
         $('.workflow-flex').hide();
         $('#place-form').html('');
         FormEntrys.createForm({
-            el: '#place-form',
+            el: $('#place-form'),
             is_view: is_view,
             from_focus: 0,
             table_id: obj.table_id,
@@ -112,7 +112,7 @@ Mediator.subscribe('workflow:getflows', (res) => {
     WorkFlow.createFlow({flow_id: res.flow_id, el: "#flow-node"});
     $('#place-form').html('');
     FormEntrys.createForm({
-        el: '#place-form',
+        el: $('#place-form'),
         form_id: res.form_id,
         flow_id: res.flow_id,
         is_view: is_view,

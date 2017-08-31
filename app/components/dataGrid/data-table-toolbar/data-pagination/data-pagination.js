@@ -31,6 +31,8 @@ let config = {
             l:100,
             r:5000
         },
+        //选择的条数
+        rowGroup: [5000,1000,500,200,100],
         //表级操作
         tableOperationData: [],
         //是否为超级管理员
