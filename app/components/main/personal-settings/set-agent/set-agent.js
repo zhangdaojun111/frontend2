@@ -259,7 +259,7 @@ export const agentSetting = {
     hide: function () {
         this.el.dialog('close');
     }
-}
+};
 
 // agentSetting.show();
 

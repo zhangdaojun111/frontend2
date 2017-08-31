@@ -1,12 +1,6 @@
+@import "../../../assets/scss/core/base";
 $background_color: #ffffff;
 $sub_color: #0088ff;
-
-.clearfix{ zoom:1;}
-.clearfix:after{
-    display: table;
-    content: "";
-    clear: both;
-}
 
 .personal-setting-page{
     .main-window{
@@ -142,6 +136,7 @@ $sub_color: #0088ff;
                 margin-top: 10px;
                 line-height:50px;
                 input{
+                    width: 230px;
                     background-color: transparent;
                     border: none;
                 }
@@ -154,6 +149,7 @@ $sub_color: #0088ff;
                 position: relative;
                 input{
                     height: 25px;
+                    width: 180px;
                     background-color: transparent;
                     border: none;
                     &:focus{
@@ -185,6 +181,8 @@ $sub_color: #0088ff;
                     width: 250px;
                     background-color: #fafafa;
                     border: solid 1px #e4e4e4;
+                    outline: none;
+                    text-indent: 10px;
                     &:focus{
                       border: solid 1px #0088ff;
                     }

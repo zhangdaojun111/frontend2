@@ -46,7 +46,6 @@ let config = {
                 this.el.find("div.avatar-box").append($img);
                 let that = this;
                 $img.on('error', function () {
-                    console.log('error la');
                     that.el.find("div.avatar-box").addClass('default_avatar');
                     $img.remove();
                 });
@@ -58,24 +57,10 @@ let config = {
 
         },
         setAvatar(){
-            //检查页面是否已创建
-            let $page = $(document).find("div#set-avatar-page");
-            if($page.length !== 0){
-                $page.focus();
-            }else{
-                //打开个人设置页面
-                SetAvatar.show();
-            }
+            SetAvatar.show();
         },
         setAgent(){
-            //检查页面是否已创建
-            let $page = $(document).find("div#set-agent-page");
-            if($page.length !== 0){
-                $page.focus();
-            }else{
-                //打开个人设置页面
-                agentSetting.show();
-            }
+            agentSetting.show();
         },
         showPersonalInfo:function () {
             this.el.find("div.personal-info").show();
@@ -101,14 +86,14 @@ let config = {
         editTel:function () {
             this.el.find("input.phone-info").removeAttr("disabled").focus();
         },
-        cancelEdit:function () {
-            this.el.find("input.email-info").val(this.data.user_email);
-            this.el.find("input.phone-info").val(this.data.user_phone);
-            this.el.find("input.email-info").attr("disabled",true);
-            this.el.find("input.phone-info").attr("disabled",true);
-            this.el.find("div.personal-foot").show();
-            this.el.find("div.cancel-save").hide();
-        },
+        // cancelEdit:function () {
+        //     this.el.find("input.email-info").val(this.data.user_email);
+        //     this.el.find("input.phone-info").val(this.data.user_phone);
+        //     this.el.find("input.email-info").attr("disabled",true);
+        //     this.el.find("input.phone-info").attr("disabled",true);
+        //     this.el.find("div.personal-foot").show();
+        //     this.el.find("div.cancel-save").hide();
+        // },
         saveEdit:function () {
             this.data.user_email = this.el.find("input.email-info").val();
             this.data.user_phone = this.el.find("input.phone-info").val();
@@ -172,10 +157,10 @@ let config = {
             this.el.find("img.user-avatar")
                 .attr("src",src)
         },
-        clearLocalStorage:function(){
-            window.localStorage.clear();
-            $(window).attr("location","/login");
-        },
+        // clearLocalStorage:function(){
+        //     window.localStorage.clear();
+        //     $(window).attr("location","/login");
+        // },
         resetAvatar:function () {
             let $img = this.el.find("img.user-avatar");
             if($img.length === 0){
@@ -214,39 +199,82 @@ let config = {
         //     this.actions.initInfo();
         // },
     },
+    binds:[
+        {
+            event:'click',
+            selector:'.avatar-box',
+            callback:function(){
+                this.actions.setAvatar();       //打开头像设置页面
+            }
+        },
+        {
+            event:'click',
+            selector:'.agent-group',
+            callback:function(){
+                this.actions.setAgent();         //设置代理
+            }
+        },
+        {
+            event:'click',
+            selector:'.login-group',
+            callback:function(){
+                this.actions.otherLogin();      //他人登录页面
+            }
+        },{
+            event:'click',
+            selector:'.show-personal-info',
+            callback:function(){
+                this.actions.showPersonalInfo();        //显示个人信息
+            }
+        },{
+            event:'click',
+            selector:'.show-modify-password',
+            callback:function(){
+                this.actions.showModifyPassword();      //切换至修改密码
+            }
+        },{
+            event:'click',
+            selector:'.edit-email',
+            callback:function(){
+                this.actions.editEmail();       //编辑邮箱
+            }
+        },{
+            event:'blur',
+            selector:'.email-info',
+            callback:function(){
+                this.actions.saveEdit();        //保存邮箱
+            }
+        },{
+            event:'click',
+            selector:'.edit-tel',
+            callback: function(){
+                this.actions.editTel();         //编辑电话
+            }
+        },{
+            event:'blur',
+            selector:'.phone-info',
+            callback:function(){
+                this.actions.saveEdit();        //保存电话
+            }
+        },{
+            event:'click',
+            selector:'.confirm-btn',
+            callback:_.debounce(function(){             //修改密码确认
+                this.actions.modifyPassword();
+            },500),
+        },{
+            event:'input',
+            selector:'.new-pw',
+            callback:function(){
+                this.actions.isLegal();         //监听旧密码的输入
+            }
+        }
+    ],
     afterRender:function () {
         this.actions.initInfo();
         this.actions.initAvatar();
-        //事件绑定
-        this.el.on("click","div.avatar-box",() => {           //打开头像设置页面
-            this.actions.setAvatar();
-        }).on("click","div.agent-group",() => {                 //设置代理
-            this.actions.setAgent();
-        }).on("click","div.login-group",() => {
-            this.actions.otherLogin();
-        }).on("click",".show-personal-info",() => {          //切换至个人资料
-            this.actions.showPersonalInfo();
-        }).on("click",".show-modify-password",() => {        //切换至修改密码
-            this.actions.showModifyPassword();
-        }).on("click","i.edit-email",() => {            //编辑邮箱
-            this.actions.editEmail();
-        }).on("blur","input.email-info",() => {            //保存邮箱
-            this.actions.saveEdit();
-        }).on("click","i.edit-tel",() => {            //编辑电话
-            this.actions.editTel();
-        }).on("blur","input.phone-info",() => {            //保存电话
-            this.actions.saveEdit();
-        }).on("click",".clear-storage-btn",() => {          //清除缓存
-            this.actions.clearLocalStorage();
-        }).on("click",".cancel-btn",() => {           //取消编辑
-            this.actions.cancelEdit();
-        }).on("click",".save-btn",() => {          //保存
-            this.actions.saveEdit();
-        }).on("click",".confirm-btn",_.debounce(() => {        //修改密码确认
-            this.actions.modifyPassword();
-        },500)).on("input","input.new-pw",() => {        //监听旧密码的输入
-            this.actions.isLegal();
-        });
+    },
+    firstAfterRender:function () {
         //窗口监听来自子窗口的设置头像的消息
         Mediator.on("personal:setAvatar",() => {
             this.actions.resetAvatar();
