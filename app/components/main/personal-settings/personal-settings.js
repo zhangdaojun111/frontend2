@@ -10,10 +10,12 @@ import './personal-settings.scss';
 import template from './personal-settings.html';
 import {UserInfoService} from '../../../services/main/userInfoService';
 import msgbox from '../../../lib/msgbox';
-import SetAvatar from './set-avatar/set-avatar';
+import {AvatarSet} from './set-avatar/set-avatar';
 import {agentSetting} from './set-agent/set-agent';
 import OtherLogin from "../login-by-other/login-by-other";
-import Mediator from "../../../lib/mediator";
+import Mediator from '../../../lib/mediator';
+import userInfoDisplay from './user-info-display/user-info-display';
+import {PMAPI} from '../../../lib/postmsg';
 
 function getData(component_instance) {
     _.defaultsDeep(component_instance.data, {
@@ -44,12 +46,10 @@ let config = {
                 this.el.find("div.avatar-box").append($img);
                 let that = this;
                 $img.on('error', function () {
-                    console.log('error la');
                     that.el.find("div.avatar-box").addClass('default_avatar');
                     $img.remove();
                 });
             }else{
-                console.log('no src');
                 this.el.find("div.avatar-box").addClass('default_avatar');
             }
         },
@@ -57,24 +57,10 @@ let config = {
 
         },
         setAvatar(){
-            //检查页面是否已创建
-            let $page = $(document).find("div#set-avatar-page");
-            if($page.length !== 0){
-                $page.focus();
-            }else{
-                //打开个人设置页面
-                SetAvatar.show();
-            }
+            AvatarSet.show();
         },
         setAgent(){
-            //检查页面是否已创建
-            let $page = $(document).find("div#set-agent-page");
-            if($page.length !== 0){
-                $page.focus();
-            }else{
-                //打开个人设置页面
-                agentSetting.show();
-            }
+            agentSetting.show();
         },
         showPersonalInfo:function () {
             this.el.find("div.personal-info").show();
@@ -100,14 +86,14 @@ let config = {
         editTel:function () {
             this.el.find("input.phone-info").removeAttr("disabled").focus();
         },
-        cancelEdit:function () {
-            this.el.find("input.email-info").val(this.data.user_email);
-            this.el.find("input.phone-info").val(this.data.user_phone);
-            this.el.find("input.email-info").attr("disabled",true);
-            this.el.find("input.phone-info").attr("disabled",true);
-            this.el.find("div.personal-foot").show();
-            this.el.find("div.cancel-save").hide();
-        },
+        // cancelEdit:function () {
+        //     this.el.find("input.email-info").val(this.data.user_email);
+        //     this.el.find("input.phone-info").val(this.data.user_phone);
+        //     this.el.find("input.email-info").attr("disabled",true);
+        //     this.el.find("input.phone-info").attr("disabled",true);
+        //     this.el.find("div.personal-foot").show();
+        //     this.el.find("div.cancel-save").hide();
+        // },
         saveEdit:function () {
             this.data.user_email = this.el.find("input.email-info").val();
             this.data.user_phone = this.el.find("input.phone-info").val();
@@ -171,10 +157,10 @@ let config = {
             this.el.find("img.user-avatar")
                 .attr("src",src)
         },
-        clearLocalStorage:function(){
-            window.localStorage.clear();
-            $(window).attr("location","/login");
-        },
+        // clearLocalStorage:function(){
+        //     window.localStorage.clear();
+        //     $(window).attr("location","/login");
+        // },
         resetAvatar:function () {
             let $img = this.el.find("img.user-avatar");
             if($img.length === 0){
@@ -184,77 +170,113 @@ let config = {
             }else{
                 $img.attr("src",window.config.sysConfig.userInfo.avatar);
             }
-            msgbox.alert("头像设置成功!");
         },
-        getTargetInfo:function () {
-            UserInfoService.getUserInfoByName(this.data.targetUserName).done((result) => {
-                if(result.success === 1){
-                    //获取data
-                    console.log(result);
-                    let data = result.rows;
-                    this.actions.displayTargetInfo(data);
-                }else{
-                    msgbox.alert("获取数据失败");
-                    // PersonSetting.hide();
-                }
-            });
-        },
-        displayTargetInfo:function (data) {
-            this.el.find('.department-info').val(data.user_department);
-            this.el.find('.email-info').val(data.user_email);
-            this.el.find('.position-info').val(data.user_job);
-            this.el.find('.phone-info').val(data.user_tel);
-            this.el.find('.name').html(this.data.targetUserName.name);
-            if(data.avatar === ""){
-                this.data.avatar = "";
-            }else{
-                this.data.avatar = "/mobile/get_file/?file_id=" + data.avatar + "&download=0";
-            }
-            this.actions.initInfo();
-        }
+        // getTargetInfo:function () {
+        //     UserInfoService.getUserInfoByName(this.data.targetUserName).done((result) => {
+        //         if(result.success === 1){
+        //             //获取data
+        //             console.log(result);
+        //             let data = result.rows;
+        //             this.actions.displayTargetInfo(data);
+        //         }else{
+        //             msgbox.alert("获取数据失败");
+        //             // PersonSetting.hide();
+        //         }
+        //     });
+        // },
+        // displayTargetInfo:function (data) {
+        //     this.el.find('.department-info').val(data.user_department);
+        //     this.el.find('.email-info').val(data.user_email);
+        //     this.el.find('.position-info').val(data.user_job);
+        //     this.el.find('.phone-info').val(data.user_tel);
+        //     this.el.find('.name').html(this.data.targetUserName.name);
+        //     if(data.avatar === ""){
+        //         this.data.avatar = "";
+        //     }else{
+        //         this.data.avatar = "/mobile/get_file/?file_id=" + data.avatar + "&download=0";
+        //     }
+        //     this.actions.initInfo();
+        // },
     },
-    afterRender:function () {
-        if(this.data.mode === 'self'){
-            this.actions.initInfo();
-            this.actions.initAvatar();
-            //事件绑定
-            this.el.on("click","div.avatar-box",() => {           //打开头像设置页面
-                this.actions.setAvatar();
-            }).on("click","div.agent-group",() => {                 //设置代理
-                this.actions.setAgent();
-            }).on("click","div.login-group",() => {
-                this.actions.otherLogin();
-            }).on("click",".show-personal-info",() => {          //切换至个人资料
-                this.actions.showPersonalInfo();
-            }).on("click",".show-modify-password",() => {        //切换至修改密码
-                this.actions.showModifyPassword();
-            }).on("click","i.edit-email",() => {            //编辑邮箱
-                this.actions.editEmail();
-            }).on("blur","input.email-info",() => {            //保存邮箱
-                this.actions.saveEdit();
-            }).on("click","i.edit-tel",() => {            //编辑电话
-                this.actions.editTel();
-            }).on("blur","input.phone-info",() => {            //保存电话
-                this.actions.saveEdit();
-            }).on("click",".clear-storage-btn",() => {          //清除缓存
-                this.actions.clearLocalStorage();
-            }).on("click",".cancel-btn",() => {           //取消编辑
-                this.actions.cancelEdit();
-            }).on("click",".save-btn",() => {          //保存
-                this.actions.saveEdit();
-            }).on("click",".confirm-btn",_.debounce(() => {        //修改密码确认
+    binds:[
+        {
+            event:'click',
+            selector:'.avatar-box',
+            callback:function(){
+                this.actions.setAvatar();       //打开头像设置页面
+            }
+        },
+        {
+            event:'click',
+            selector:'.agent-group',
+            callback:function(){
+                this.actions.setAgent();         //设置代理
+            }
+        },
+        {
+            event:'click',
+            selector:'.login-group',
+            callback:function(){
+                this.actions.otherLogin();      //他人登录页面
+            }
+        },{
+            event:'click',
+            selector:'.show-personal-info',
+            callback:function(){
+                this.actions.showPersonalInfo();        //显示个人信息
+            }
+        },{
+            event:'click',
+            selector:'.show-modify-password',
+            callback:function(){
+                this.actions.showModifyPassword();      //切换至修改密码
+            }
+        },{
+            event:'click',
+            selector:'.edit-email',
+            callback:function(){
+                this.actions.editEmail();       //编辑邮箱
+            }
+        },{
+            event:'blur',
+            selector:'.email-info',
+            callback:function(){
+                this.actions.saveEdit();        //保存邮箱
+            }
+        },{
+            event:'click',
+            selector:'.edit-tel',
+            callback: function(){
+                this.actions.editTel();         //编辑电话
+            }
+        },{
+            event:'blur',
+            selector:'.phone-info',
+            callback:function(){
+                this.actions.saveEdit();        //保存电话
+            }
+        },{
+            event:'click',
+            selector:'.confirm-btn',
+            callback:_.debounce(function(){             //修改密码确认
                 this.actions.modifyPassword();
-            },1000)).on("input","input.new-pw",() => {        //监听旧密码的输入
-                this.actions.isLegal();
-            });
-        }else if(this.data.mode === 'other'){
-            this.actions.getTargetInfo();
+            },500),
+        },{
+            event:'input',
+            selector:'.new-pw',
+            callback:function(){
+                this.actions.isLegal();         //监听旧密码的输入
+            }
         }
-
+    ],
+    afterRender:function () {
+        this.actions.initInfo();
+        this.actions.initAvatar();
+    },
+    firstAfterRender:function () {
         //窗口监听来自子窗口的设置头像的消息
         Mediator.on("personal:setAvatar",() => {
             this.actions.resetAvatar();
-            this.actions.initAvatar();
         })
     },
     beforeDestory:function () {
@@ -289,17 +311,19 @@ export const PersonSetting  = {
         });
     },
     showUserInfo:function (targetName) {
-        let component = new PersonalSetting(targetName,"other");
-        this.el = $('<div class="show-other-info-page">').appendTo(document.body);
-        component.render(this.el);
-        this.el.dialog({
-            title: '人员信息',
-            width: 350,
-            height: 600,
-            modal: true,
-            close: function() {
-                $(this).dialog('destroy');
-                component.destroySelf();
+        UserInfoService.getUserInfoByName(targetName).done((result) => {
+            if(result.success === 1){
+                //获取data
+                userInfoDisplay.data.userInfo = result.rows;
+                userInfoDisplay.data.userName = targetName.name;
+                PMAPI.openDialogByComponent(userInfoDisplay,{
+                    width: 350,
+                    height: 500,
+                    title: "人员信息"
+                })
+            }else{
+                msgbox.alert("获取数据失败");
+                // PersonSetting.hide();
             }
         });
     },
