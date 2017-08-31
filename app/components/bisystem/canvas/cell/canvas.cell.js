@@ -17,6 +17,7 @@ import {CellMultiChartComponent} from './multi.chart/cell.multi.chart';
 import {CellFunnelComponent} from './funnel/cell.funnel';
 import {CellCommentComponent} from './comment/cell.comment';
 import {CanvasCellTitleComponent} from './title/canvas.title';
+import {CanvasDataSourceComponent} from './datasource/datasource';
 import {canvasCellService} from '../../../../services/bisystem/canvas.cell.service';
 
 // cell 组件类型，通过匹配assortment渲染不同的组件
@@ -59,6 +60,8 @@ let config = {
                 this.cellTitle.data.title = chart['data']['chartName']['name'];
                 this.cellTitle.data.isDeep = chart['data']['assortment'] === 'normal' || chart['data']['assortment'] === 'pie' ? true : false;
                 this.cellTitle.data.newCell = true;
+                this.cellTitle.data.icon = chart['data']['icon'];
+                this.cellTitle.data.isIcon = chart['data']['icon'] ? true : false;
                 this.cellTitle.reload();
                 let cellComponent = new cellTypes[chart['data']['assortment']](data);
                 let cellContainer = this.el.find('.cell-chart');
@@ -119,6 +122,18 @@ let config = {
             this.data['cell']['is_deep'] = 0;
             this.data.biUser = true;
             this.actions.loadCellChart(res[0]);
+        },
+
+        /**
+         *显示数据源画布块
+         */
+        showCellDataSource() {
+            let dataSource = new CanvasDataSourceComponent();
+            this.append(dataSource,this.el.find('.cell .cell-chart'));
+            this.el.find('.back-floor-btn-data').attr('disabled',true);
+            this.el.find('.bi-origin-data-close').on('click', ()=> {
+                this.el.find('.back-floor-btn-data').attr('disabled',false);
+            })
         },
 
         // /**
@@ -220,6 +235,15 @@ let config = {
             selector: '.del-cell-btn',
             callback: function (context,event) {
                 this.actions.delCellLayout();
+                return false;
+            }
+        },
+        // 显示数据源
+        {
+            event: 'click',
+            selector: '.back-floor-btn-data',
+            callback: function (context,event) {
+                this.actions.showCellDataSource();
                 return false;
             }
         },

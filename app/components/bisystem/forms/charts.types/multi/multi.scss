@@ -1,40 +1,40 @@
 .chart-multi {
-  .multi-share {
-    .chart-mix-share {
-      .autocomplete-container{
-        display:none;
-      }
+    .multi-share {
+        .chart-mix-share {
+            .autocomplete-container {
+                display: none;
+            }
+        }
+        .form-filter {
+            display: none;
+        }
     }
-    .form-filter{
-      display:none;
+    .multi-add {
+        font-size: 17px;
+        padding: 5px;
+        border-bottom: 3px solid #ececec;
+        color: #333;
+        overflow: hidden;
+        .multi-add-btn {
+            float: right;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            button {
+                width: 88px;
+                height: 36px;
+                line-height: 36px;
+                font-size: 14px;
+                font-weight: bold;
+            }
+        }
     }
-  }
-  .multi-add {
-    font-size: 17px;
-    padding: 5px;
-    border-bottom: 3px solid #ececec;
-    color: #333;
-    overflow: hidden;
-    .multi-add-btn {
-      float: right;
-      margin: 0;
-      padding: 0;
-      border: 0;
-      button {
-        width: 88px;
-        height: 36px;
-        line-height: 36px;
-        font-size: 14px;
-        font-weight: bold;
-      }
+    .multi-add-chart {
+        width: 100%;
+        max-height: calc(100% - 510px);
+        overflow: auto;
     }
-  }
-  .multi-add-chart{
-    width: 100%;
-    max-height: calc(100% - 510px);
-    overflow: auto;
-  }
-  .multi-add-chart>p{
-    padding: 10px 0;
-  }
+    .multi-add-chart > p {
+        padding: 10px 0;
+    }
 }

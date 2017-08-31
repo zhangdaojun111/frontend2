@@ -368,6 +368,7 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     radarOption(cellChart) {
+        console.log(cellChart);
         let cellOption = cellChart['chart'];
         const radarOption = EchartsOption.getEchartsConfigOption('radar');
         let maxNumList = [];

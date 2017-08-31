@@ -1,14 +1,19 @@
 <h3 class="title">
+    {{#if isIcon}}
+    <img src="{{imgUrl}}?file_id={{icon}}" >
+    {{/if}}
     {{title}}
     <span class="icon-group">
         {{#if isDeep}}
             <a href="javascript:;" class="back-floor-btn" title="上一层">上一层</a>
         {{/if}}
         {{#if biUser}}
-        {{#if newCell}}
-            <a href="###" title="编辑">编辑</a>
-        {{/if}}
+            {{#if newCell}}
+                <a href="###" title="编辑">编辑</a>
+            {{/if}}
         <a href="javascript:;" class="del-cell-btn" title="删除">删除</a>
+        {{else}}
+         <button href="javascript:;" class="back-floor-btn-data" title="数据">数据</button>
         {{/if}}
     </span>
 </h3>

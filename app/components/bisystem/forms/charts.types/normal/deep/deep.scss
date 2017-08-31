@@ -1,43 +1,43 @@
 .form-deep-table {
-  padding: 20px 10px 10px 10px;
-  .table {
-    width: 100%;
-    border: 1px solid #ececec;
-    th {
-      font-size: 14px;
-      background-color: #f5f5f5;
-      font-weight: bold;
+    padding: 20px 10px 10px 10px;
+    .table {
+        width: 100%;
+        border: 1px solid #ececec;
+        th {
+            font-size: 14px;
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        td {
+            color: #666666;
+            a {
+                text-decoration: none;
+                color: #3b8cff;
+            }
+        }
+        th, td {
+            padding: 15px 0;
+            border-bottom: 1px solid #ececec;
+            border-right: 1px solid #ececec;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .index {
+            width: 10%;
+        }
+        .xx {
+            width: 70%;
+        }
+        .tool {
+            width: 20%;
+        }
     }
-    td {
-      color: #666666;
-      a {
-        text-decoration: none;
-        color: #3b8cff;
-      }
+    .save-new {
+        border-top: 0;
+        padding: 0;
+        button {
+            width: 160px;
+            height: 36px;
+        }
     }
-    th, td {
-      padding: 15px 0;
-      border-bottom: 1px solid #ececec;
-      border-right: 1px solid #ececec;
-      text-align: center;
-      vertical-align: middle;
-    }
-    .index {
-      width: 10%;
-    }
-    .xx {
-      width: 70%;
-    }
-    .tool {
-      width: 20%;
-    }
-  }
-  .save-new {
-    border-top: 0;
-    padding: 0;
-    button {
-      width: 160px;
-      height: 36px;
-    }
-  }
 }

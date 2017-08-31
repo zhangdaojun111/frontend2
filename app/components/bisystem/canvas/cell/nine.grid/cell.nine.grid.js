@@ -50,11 +50,11 @@ let config = {
                 types.push(val);
             });
             console.log(types);
-            Object.keys(cellChart['chart']['yAxis']).forEach(keys => {
+            Object.keys(cellChart['chart']['yAxis']).sort().forEach(keys => {
                 yAxis.push(cellChart['chart']['yAxis'][keys])
             });
 
-            Object.keys(cellChart['chart']['xAxis']).forEach((keys,index) => {
+            Object.keys(cellChart['chart']['xAxis']).sort().forEach((keys,index) => {
                 xAxis.push(cellChart['chart']['xAxis'][keys]);
                 yAxis.forEach((val,yAxisindex) => {
                     legend.push(val+ cellChart['chart']['xAxis'][keys])
