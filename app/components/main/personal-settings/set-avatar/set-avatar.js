@@ -171,16 +171,16 @@ let config = {
             return image;
         },
         saveAvatar:function () {
-            this.showLoading();
             //向后台传递头像数据
             UserInfoService.saveAvatar(this.data.avatarSrc).done((result) => {
-                console.log(result);
                 //根据结果处理后续工作
-                this.hideLoading();
+                // that.hideLoading();
                 if(result.success === 1){
                     //向父窗口传递头像数据并设置
                     window.config.sysConfig.userInfo.avatar = this.data.avatarSrc;
                     Mediator.emit("personal:setAvatar");
+                    msgbox.alert("头像设置成功!");
+                    AvatarSet.hide();
                 }else{
                     msgbox.alert("头像设置失败！");
                 }
@@ -213,12 +213,13 @@ class SetAvatar extends Component{
     }
 }
 
-export default {
+export const AvatarSet = {
+    el:null,
     show: function() {
         let component = new SetAvatar();
-        let el = $('<div id="set-avatar-page">').appendTo(document.body);
-        component.render(el);
-        el.dialog({
+        this.el = $('<div id="set-avatar-page">').appendTo(document.body);
+        component.render(this.el);
+        this.el.dialog({
             title: '设置头像',
             width: 500,
             modal:true,
@@ -228,5 +229,8 @@ export default {
                 component.destroySelf();
             }
         });
+    },
+    hide:function () {
+        this.el.dialog('close');
     }
 }

@@ -10,7 +10,7 @@ import './personal-settings.scss';
 import template from './personal-settings.html';
 import {UserInfoService} from '../../../services/main/userInfoService';
 import msgbox from '../../../lib/msgbox';
-import SetAvatar from './set-avatar/set-avatar';
+import {AvatarSet} from './set-avatar/set-avatar';
 import {agentSetting} from './set-agent/set-agent';
 import OtherLogin from "../login-by-other/login-by-other";
 import Mediator from '../../../lib/mediator';
@@ -57,7 +57,7 @@ let config = {
 
         },
         setAvatar(){
-            SetAvatar.show();
+            AvatarSet.show();
         },
         setAgent(){
             agentSetting.show();
@@ -170,7 +170,6 @@ let config = {
             }else{
                 $img.attr("src",window.config.sysConfig.userInfo.avatar);
             }
-            msgbox.alert("头像设置成功!");
         },
         // getTargetInfo:function () {
         //     UserInfoService.getUserInfoByName(this.data.targetUserName).done((result) => {

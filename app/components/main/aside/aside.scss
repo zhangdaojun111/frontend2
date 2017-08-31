@@ -64,13 +64,17 @@
                 height: 32px;
                 border-radius: 100%;
                 overflow: hidden;
+                cursor: pointer;
                 margin-right: 10px;
-                background-image: url("../../../assets/images/framework/default_avatar_32.png");
+                background-color: #FFFFFF;
                 img {
                     display: block;
                     width: 100%;
                     height: 100%;
                 }
+            }
+            .default-avatar{
+                background-image: url("../../../assets/images/framework/default_avatar_32.png");
             }
             .u-name, .u-role {
                 font-size: 12px;

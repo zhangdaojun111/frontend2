@@ -208,6 +208,7 @@ class Component {
             this.loadingTarget.children().removeClass('component-filter-blur');
             this.loadingTarget = null;
         });
+        console.log("finish");
     }
 
     disable(){
