@@ -74,6 +74,9 @@ let config={
         this.el.on('click','#toEdit',()=>{
             location.href=location.href.replace(/=view/,'=edit').replace(/is_view=1/,'is_view=0');
         });
+        this.el.find('#print').on('click',()=>{
+            this.actions.printSetting();
+        });
     }
 };
 class AddWorkflow extends Component{
