@@ -22,6 +22,12 @@ To change `display` (e.g. `display: inline-block;`), we suggest using a common C
     height: 16px;
     display: block;
 }
+.icon-aggrid-new {
+    background: url("../../images/dataGrid/aggrid-icon-data.png") no-repeat;
+    width: 16px;
+    height: 16px;
+    display: block;
+}
 
 .icon-aggrid-filter {
     background-position: -26px 0px;
@@ -66,3 +72,21 @@ To change `display` (e.g. `display: inline-block;`), we suggest using a common C
     background-position: -26px -78px;
 }
 
+.icon-icon-data-check {
+    background-position: 0px 0px;
+}
+.icon-icon-data {
+    background-position: -26px 0px;
+}
+.icon-icon-help-check {
+    background-position: 0px -26px;
+}
+.icon-icon-help {
+    background-position: -26px -26px;
+}
+.icon-icon-in-transit-check {
+    background-position: -52px 0px;
+}
+.icon-icon-in-transit {
+    background-position: -52px -26px;
+}

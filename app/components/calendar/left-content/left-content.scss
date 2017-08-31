@@ -1,78 +1,76 @@
 @import "../../../assets/scss/core/base";
+
 $boder-color: rgba(228, 228, 228, 1);
 $item-title-bg-color: rgba(228, 228, 228, 1);
-$chk_1-label-color:#C1CACA;
-$chk_1-label-bg-color:#FFF;
-.component-calendar-left{
-  height:100%;
-  .item-title-1,.item-title-4,.item-title-3
-  {
-    box-sizing: border-box;
-    border: 1px solid $boder-color;
-    height: 30px;
-    padding: 0px 10px 0px 10px;
-    background-color:$item-title-bg-color;
-    margin-bottom: 2px;
-    line-height: 30px;
-    .cate-hide-icon{
-      display: inline-block;
-      float: right;
-      .cate-hide-icon-style{
-        cursor: pointer;
-        .calendar-con-style{
-          margin-top: 5px !important;
+$chk_1-label-color: #C1CACA;
+$chk_1-label-bg-color: #FFF;
+.component-calendar-left {
+    height: 100%;
+    .item-title-1, .item-title-4, .item-title-3 {
+        box-sizing: border-box;
+        border: 1px solid $boder-color;
+        height: 30px;
+        padding: 0px 10px 0px 10px;
+        background-color: $item-title-bg-color;
+        margin-bottom: 2px;
+        line-height: 30px;
+        .cate-hide-icon {
+            display: inline-block;
+            float: right;
+            .cate-hide-icon-style {
+                cursor: pointer;
+                .calendar-con-style {
+                    margin-top: 5px;
+                }
+                .calendar-add-con:hover {
+                    content: url('../../../assets/images/calendar/calendar-add-hover.png');
+                }
+                .calendar-set-con:hover {
+                    content: url('../../../assets/images/calendar/calendar-set-hover.png');
+                }
+            }
         }
-        .calendar-add-con:hover{
-          content: url('../../../assets/images/calendar/calendar-add-hover.png');
-        }
-        .calendar-set-con:hover{
-          content: url('../../../assets/images/calendar/calendar-set-hover.png');
-        }
-      }
     }
-  }
-  .item-title-2{
-    border: 1px solid $boder-color;
-    height: 30px;
-    box-sizing: border-box;
-    padding: 0px 10px 0px 10px;
-    margin-bottom: 2px;
-    line-height: 30px;
-    .cate-hide-icon{
-      display: inline-block;
-      float: right;
-      .cate-hide-icon-style{
-        cursor: pointer;
-        .calendar-con-style{
-          margin-top: 5px !important;
+    .item-title-2 {
+        border: 1px solid $boder-color;
+        height: 30px;
+        box-sizing: border-box;
+        padding: 0px 10px 0px 10px;
+        margin-bottom: 2px;
+        line-height: 30px;
+        .cate-hide-icon {
+            display: inline-block;
+            float: right;
+            .cate-hide-icon-style {
+                cursor: pointer;
+                .calendar-con-style {
+                    margin-top: 5px;
+                }
+            }
         }
-      }
     }
-  }
-  .item-content-1,.item-content-4,.item-content-3
-  {
-    margin-top:3px;
-    height:28%;
-    overflow: auto;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0px 0px 3px 5px;
-    .left-calendar-set{
-      height:100%;
-      width: 100%;
-    }
+    .item-content-1, .item-content-4, .item-content-3 {
+        margin-top: 3px;
+        height: calc(33.3% - 45px);
+        overflow: auto;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0px 0px 3px 5px;
+        .left-calendar-set {
+            height: 100%;
+            width: 100%;
+        }
 
-  }
-  .item-content-2
-  {
-    display: none;
-    width: 100%;
-    box-sizing: border-box;
-    height:28%;
-    overflow: auto;
-    padding: 10px 0px 3px 10px;
+    }
+    .item-content-2 {
+        display: none;
+        width: 100%;
+        box-sizing: border-box;
+        height: 28%;
+        overflow: auto;
+        padding: 10px 0px 3px 10px;
 
-  }
+    }
 }
 
 
