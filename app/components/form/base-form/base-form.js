@@ -338,14 +338,15 @@ let config = {
                     }
                     if (error) {
                         console.log('vaild ERROR');
+                        console.log(errorMsg);
                         console.log(this.data.data[key]);
+                        break;
                     }
                 } catch (err) {
                     console.log(err);
                     console.log(this.data.data[key]);
                 }
             }
-
             for (let d in allData) {
                 if (allData[d].type == 'songrid' && allData[d].required && allData[d].total == 0) {
                     error = true;
