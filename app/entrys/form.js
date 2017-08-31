@@ -360,6 +360,7 @@ let FormEntrys = {
 
     checkConfig(config){
         if(!(config.el instanceof jQuery)){
+            console.err('el不是一个Jquery对象');
             return {
                 error:true,
                 errorMsg:'el不是一个Jquery对象'
