@@ -1185,7 +1185,7 @@ let config = {
                     if (value == data['value']) {
                         j++;
                         //改变选择框的选项
-                        this.changeOptionOfSelect(data, data['linkage'][value]);
+                        this.actions.changeOptionOfSelect(data, data['linkage'][value]);
                     }
                 }
                 if (j == 0) {
