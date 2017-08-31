@@ -2192,6 +2192,7 @@ let config = {
                 let fieldids = data['value']
                 let file_dinput_type = data.colDef.real_type;
                 ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids}&download=0&dinput_type=${file_dinput_type}`;
+                ViewVideo.data.fieldId=fieldids;
                 PMAPI.openDialogByComponent(ViewVideo,{
                     width:1000,
                     height:600,
