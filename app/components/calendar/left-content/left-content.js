@@ -107,8 +107,8 @@ let config = {
                 '/iframe/calendarOpenSetting/',
                 {
                     title: '日历设置',
-                    width: '1000',
-                    height: '800',
+                    width: '1200',
+                    height: '760',
                     modal: true,
                     customSize: true,
                 },
@@ -123,11 +123,11 @@ let config = {
             PMAPI.openDialogByIframe(
                 '/calendar_mgr/create/?table_id=1639_8QvxFmFvVpK33bVPXdk8hD',
                 {
-                    width: "1000",
-                    height: '800',
+                    width: "900",
+                    height: '410',
                     title: '日历表',
                     modal: true,
-                    customSize: true,
+                    //customSize: true,
                 }).then(res => {
                 // 创建日历表后的回调，接收form回传的参数
             });

@@ -36,14 +36,14 @@ $grid-bg-color: rgba(248, 248, 248, 1);
         border-bottom: 1px solid $boder-color;
         .tool-icon {
             display: inline-block;
-            line-height: 60px;
+            vertical-align: middle;
             margin-right: 10px;
         }
         .tool-btn {
             display: inline-block;
             width: 40px;
             text-align: center;
-            line-height: 60px;
+            line-height: 58px;
             color: $calendar-font;
             margin-right: 15px;
             cursor: pointer;
@@ -83,11 +83,12 @@ $grid-bg-color: rgba(248, 248, 248, 1);
 
         }
         .right-tool {
-            display: inline-block;
+            height: 60px;
             float: right;
             .right-tool-btn {
+                display: flex;
                 cursor: pointer;
-                line-height: 60px;
+                line-height: 16px;
                 margin-right: 20px;
             }
         }

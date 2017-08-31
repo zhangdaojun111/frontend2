@@ -1,22 +1,56 @@
 @import "../../calendar";
-
+@import "../../../form/base-form/dateTime";
 .calendar-export {
-    padding: 6px 12px;
+    padding: 10px;
     .input-date {
-        margin: 10px 0px;
-        input {
-            width: 156px;
-            height: 24px;
+        margin: 16px 0px;
+        .date{
+            margin-bottom: 20px;
+            span{
+                font-size: 12px;
+            }
+        }
+        .export-date-picker {
+
+            .component-date-control{
+                position: relative;
+                width: 250px;
+                border: 1px solid #999;
+                overflow: hidden;
+                input{
+                    border: none;
+                    width: 210px;
+                    padding: 0 0 0 10px;
+                    outline: none;
+                    height: 30px;
+                    line-height: 30px;
+                }
+            }
+            .ui-datepicker-trigger{
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                margin-top: -8px;
+                left: inherit;
+            }
+        }
+
+        .start-date {
+            //padding-left: 20px;
         }
     }
     .export-btn {
         display: block;
-        line-height: 32px;
+        line-height: 30px;
         padding: 0px 12px;
         font-weight: bold;
         float: right;
-        border: 1px solid $boder-color;
-        border-radius: 5px;
+        background: #0088FF;
+        border: none;
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 150px;
     }
     .disabled {
         pointer-events: none;

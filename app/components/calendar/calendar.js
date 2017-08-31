@@ -4,10 +4,12 @@
 import Component from "../../lib/component";
 import template from './calendar.html';
 import './calendar.scss';
+import '../../assets/scss/calendar/icon-calendar.scss';
 import LeftContent from './left-content/left-content';
 import RightContent from './right-content/right-content';
 import CalendarMain from './calendar.main/calendar.main';
-import CalendarSetting from './calendar.setting/calendar.setting';
+import CalendarExport from './calendar.main/calendar.export/calendar.export';
+
 import {CalendarService} from '../../services/calendar/calendar.service';
 import {PMAPI} from '../../lib/postmsg';
 import {CalendarTimeService} from '../../services/calendar/calendar.tool.service';
@@ -87,7 +89,19 @@ let config = {
             this.actions.getCalendarTreeData();
             Mediator.emit('Calendar: tool', {toolMethod: 'refresh'});
         }).on('click', '#export', () => {
-            Mediator.emit('Calendar: tool', {toolMethod: 'export'});
+            //Mediator.emit('Calendar: tool', {toolMethod: 'export'});
+            PMAPI.openDialogByIframe(
+                '/iframe/calendarExport/',
+                {
+                    title: '导出',
+                    width: '400',
+                    height: '440',
+                    modal: true,
+                },
+            );
+
+
+
         }).on('click', '.pre-date', () => {
             Mediator.emit('Calendar: changeDate', 'pre');
         }).on('click', '.next-date', () => {
