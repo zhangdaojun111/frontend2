@@ -7,7 +7,6 @@
     background: #F2F2F2;
 
     .checkbox-uncheck {
-        background-image: url(../../../../assets/images/dataGrid/aggrid-icon.png);
         background-position: -26px 0px;
         width: 16px;
         height: 16px;
@@ -15,7 +14,6 @@
         vertical-align: sub;
     }
     .checkbox-check {
-        background-image: url(../../../../assets/images/dataGrid/aggrid-icon.png);
         background-position: -26px -52px;
         width: 16px;
         height: 16px;
@@ -24,7 +22,6 @@
     }
 
     .l-shi {
-        background-image: url(../../../../assets/images/dataGrid/aggrid-icon.png);
         background-position: -52px 0px;
         width: 16px;
         height: 16px;
@@ -33,7 +30,6 @@
     }
 
     .l-kong {
-        background-image: url(../../../../assets/images/dataGrid/aggrid-icon.png);
         background-position: -26px -26px;
         width: 16px;
         height: 16px;
@@ -42,7 +38,6 @@
     }
 
     .r-shi {
-        background-image: url(../../../../assets/images/dataGrid/aggrid-icon.png);
         background-position: -78px 0px;
         width: 16px;
         height: 16px;
@@ -51,7 +46,6 @@
     }
 
     .r-kong {
-        background-image: url(../../../../assets/images/dataGrid/aggrid-icon.png);
         background-position: -52px -52px;
         width: 16px;
         height: 16px;
@@ -74,7 +68,6 @@
                 position: absolute;
                 top: 8px;
                 left: 10px;
-                background: url(../../../../assets/images/dataGrid/sprite-datagrid-icon.png) no-repeat;
                 width: 16px;
                 height: 16px;
                 background-position: -78px -52px;
@@ -100,7 +93,6 @@
                 position: relative;
                 top: -2px;
                 left: 99px;
-                background: url("../../../../assets/images/dataGrid/group-cancel.png") no-repeat;
             }
             .closeCustom:hover {
                 cursor: pointer;
@@ -139,15 +131,15 @@
         }
         #custom-search-input {
             width: 152px;
-            margin-left: 5px;
+            //margin-left: 5px;
             font-size: 12px;
             height: 20px;
             border: 1px solid #d7d7d7;
             padding-left: 3px;
-            background: url(../../../../assets/images/framework/search.png) no-repeat scroll right center transparent;
+            background-position: right;
         }
         .custom-data {
-            height: calc(100% - 45px);
+            height: calc(100% - 43px);
             overflow-y: auto;
             border: 1px solid #D7D7D7;
             padding: 2px;
@@ -169,7 +161,7 @@
                     background-color: #e4e4e4;
                     .custom-name {
                         display: inline-block;
-                        width: 94px;
+                        width: 93px;
                         line-height: 22px;
                         overflow: hidden;
                         white-space: nowrap;
