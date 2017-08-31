@@ -121,7 +121,7 @@ let config = {
          */
         openCalendarForm: function () {
             PMAPI.openDialogByIframe(
-                '/calendar_mgr/create/?table_id=1639_8QvxFmFvVpK33bVPXdk8hD',
+                '/iframe/addwf/?table_id=1639_8QvxFmFvVpK33bVPXdk8hD',
                 {
                     width: "900",
                     height: '410',
