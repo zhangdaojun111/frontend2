@@ -1,10 +1,16 @@
 import Component from '../../../../lib/component';
 import {Text} from '../forms/text/text';
 import {Select} from '../forms/select/select';
+import {AutoComplete} from '../forms/autocomplete/autocomplete';
+import {Radio} from '../forms/radio/radio';
+import {Checkbox} from '../forms/checkbox/checkbox';
 
 let formItemTypes = {
     'text': Text,
-    'select': Select
+    'select': Select,
+    'autocomplete': AutoComplete,
+    'radio': Radio,
+    'checkbox': Checkbox
 }
 
 class Base extends Component {
@@ -19,7 +25,8 @@ class Base extends Component {
             let instance = new clazz({
                 value: item.defaultValue,
                 label: item.label,
-                name: item.name
+                name: item.name,
+                list: item.list,
             }, item.events);
             this.append(instance, this.el.find('.form-group'));
             this.formItems[item.name] = instance;

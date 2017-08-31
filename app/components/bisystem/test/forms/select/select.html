@@ -1,4 +1,8 @@
-<div class="component-form-text">
-    <label>{{label}}</label>
-    <input type="text" value="{{value}}"/>
+<div class="form-chart-select">
+    <h4 class="form-label">{{label}}</h4>
+    <select name="" id="">
+        {{#each list}}
+        <option value="{{value}}">{{name}}</option>
+        {{/each}}
+    </select>
 </div>

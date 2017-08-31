@@ -14,8 +14,28 @@ let config = {
     },
     actions: {
         echartsInit() {
-            let echartsService = new EchartsService(this.data);
-            this.myChart = echartsService.myChart;
+            let cellChart = this.data.cellChart.chart;
+            if (cellChart['data']['rows']) {
+                if (cellChart['data']['rows'].length > 0) {
+                    let isDraw = true;
+                    for (let row of cellChart['data']['rows']) { // 判断雷达图是否含有非数字
+                        for (let num of row) {
+                            if (isNaN(Number(num))) {
+                                isDraw = false;
+                                break;
+                            }
+                        }
+
+                    }
+                    if (isDraw) {
+                        let echartsService = new EchartsService(this.data);
+                        this.myChart = echartsService.myChart;
+                    } else {
+                        // alert('雷达图数据不能为非数字');
+                    }
+
+                }
+            }
         }
     },
     afterRender() {
