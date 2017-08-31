@@ -1256,7 +1256,8 @@ let config = {
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
                 if( this.data.filterParam.filter.length == 0 && this.data.filterParam.fastFilter.length == 0 ){
-                    msgBox.showTips( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
+                    // msgBox.showTips( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
+                    msgBox.showTips( `加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;` );
                 }
             }
             if( this.data.groupCheck ){
