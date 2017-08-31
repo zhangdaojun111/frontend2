@@ -726,7 +726,7 @@ let config = {
                 let affectData = this.data[key];
                 let affectType = affectData['type'];
                 let arr = [];
-                let srcOptions = this.optionsToItem[key];
+                let srcOptions = this.data.optionsToItem[key];
                 for (let op of srcOptions) {
                     if (linkage[key].indexOf(op.value) != -1) {
                         arr.push(op);
@@ -1185,13 +1185,13 @@ let config = {
                     if (value == data['value']) {
                         j++;
                         //改变选择框的选项
-                        this.changeOptionOfSelect(originalData, originalData['linkage'][value]);
+                        this.changeOptionOfSelect(data, data['linkage'][value]);
                     }
                 }
                 if (j == 0) {
                     let obj = this.data.selectObj;
                     for (let field of arr) {
-                        this.data[field][obj[this.data[field]['type']]] = this.optionsToItem[field];
+                        this.data.data[field][obj[this.data[field]['type']]] = this.data.optionsToItem[field];
                     }
                 }
             }
