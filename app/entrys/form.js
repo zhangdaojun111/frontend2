@@ -208,6 +208,7 @@ let FormEntrys = {
         staticData.btnType=this.btnType;
         staticData.isAddBuild=this.isAddBuild;
         staticData.buildId=this.buildId;
+        staticData.el=this.el;
         return staticData;
     },
     //处理字段数据
@@ -356,9 +357,24 @@ let FormEntrys = {
         }
         return html;
     },
+
+    checkConfig(config){
+        if(!(config.el instanceof jQuery)){
+            return {
+                error:true,
+                errorMsg:'el不是一个Jquery对象'
+            }
+        }else{
+            return {error:false}
+        }
+    },
     //创建表单入口
     async createForm(config={}){
         console.time('获取表单数据的时间');
+        let result=this.checkConfig(config);
+        if(result.error){
+            return result;
+        }
         this.init(config);
         let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap"></div>`).prependTo(this.el);
         let res;
