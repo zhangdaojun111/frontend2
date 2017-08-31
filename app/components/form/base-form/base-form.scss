@@ -1,230 +1,234 @@
-#detail-form{
-  height: 100%;
-  width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  @import "dateTime";
-  .ui-history {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin-left: 5px;
-    background: url("../../../assets/images/form/icon_history.png" );
-    vertical-align: middle;
-  }
-  span.required {
-    display: inline-block;
-    color: #ff0617;
-    width: 16px;
-    height: 16px;
-    margin-left: 10px;
-    background: url("../../../assets/images/form/icon_bitian.png");
-    vertical-align: middle;
-  }
-  span.required2 {
-    display: inline-block;
-    color: #ff0617;
-    width: 16px;
-    height: 16px;
-    margin-left: 10px;
-    background: url("../../../assets/images/form/icon_bitian_yes.png");
-    vertical-align: middle;
-  }
-  .form-control {
-    display: flex;
-    align-items: center;
-    .info {
-      color: #ccc;
-    }
-    .inline{
-      display: inline;
-    }
-  }
-  .form-cell {
-    padding-right: 10px;
-    .wrap {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: center;
-      .content {
-        flex-grow: 1;
-        .error {
-          color: red;
-        }
-        .info {
-          color: #ccc;
-        }
-      }
-    }
-  }
-  .dropdown{
-    border-radius:0px;
-    //height:30px;
-    padding:2px 0px;
-    margin-bottom:-3px;
-    vertical-align:middle;
-  }
-  a{
-    text-decoration: none;
-  }
-  /*table*/
-  table{
-    width: 100%;
-    margin: 0px auto;
-  }
-  tbody{
-    tr{
-      td{
-        line-height: 1.42857143;
-        padding: 8px;
-        vertical-align: middle;
-        border: 1px solid rgb(240,240,240);
-        white-space: nowrap;
-        width: auto;
-      }
-    }
-  }
-
-  /*input*/
-  .dynamic-form-input {
-    color: #000000;
-    line-height: 30px;
-    border: 1px solid #ddd;
-    -webkit-appearance: none;
-    outline: none;
-    opacity: 100;
-    padding: 0 5px;
-  }
-  .dynamic-form-input-a, .dynamic-form-input-ac {
-    display: inline-block;
-    width: 50px;
-    line-height: 25px;
-    text-align: center;
-    font-size: 14px;
-    text-decoration: none;
-    margin: 0 5px;
-  }
-  .dynamic-form-input-a{
-    color: #ffffff;
-    background-color: #197DEB;
-  }
-  .dynamic-form-input-ac {
-    color: #197DEB;
-    background-color: #ffffff;
-    border: 1px solid #197DEB;
-  }
-  /*errorTips*/
-  .error-msg {
-    top: -20px;
-    zoom: 1;
-    display: block;
-    position: absolute;
-    border: 1px solid red;
-    color: red;
-    padding-left: 25px;
-    padding-right: 10px;
-    background: #FFF5F5 url(../../../assets/images/form/error-msg.png) no-repeat;
-    line-height: 22px;
-    white-space: normal;
-    z-index: 999;
-    width: 300px;
-    .ui-error-arrow {
-      position: absolute;
-      left: -7px;
-      top: 6px;
-      width: 7px;
-      height: 10px;
-      display: block;
-      background: url(../../../assets/images/form/icon_error.png) no-repeat;
-      background-position: -16px -510px;
-    }
-    pre{
-      padding: 0;
-      margin: 3px 0;
-      color: red;
-      background-color: transparent;
-      border: none;
-      white-space: pre-line;
-      word-wrap: break-word;
-      -moz-tab-size: 4;
-      tab-size: 4;
-    }
-  }
-  .add-item {
-    vertical-align: middle;
-    display: inline-block;
-    content: "\271A";
-    color: #0E7AEF;
-    font-size: 1.5em;
-   // font-weight: bold;
-    margin-left: 10px;
-  }
-  .wrap{
-    position: relative;
-    width: 100%;
+#detail-form {
     height: 100%;
-    overflow: auto;
-  }
-  .ui-box-1 {
     width: 100%;
-    margin: 0 auto;
-  }
-  .ui-btn-box {
-    padding: 15px 0;
-    bottom: 0px;
-    width: 100%;
-  }
-  .ui-btn-box .btn{
-    margin-right: 35px;
-    margin-top: -20px;
-    float: right;
-  }
-  .ui-btn-box .btn-normal{
-    color: #ffffff;
-  }
-  .ui-box-2 {
-    margin: 20px auto;
-    width: 900px;
-  }
-  .title {
-    text-align: center;
-  }
-  .mrgr{
-    margin-right: 30px;
-    margin-left: 10px;
-  }
-  .ui-attachment {
-    float: right;
-    margin: 0 20px 20px 0;
-  }
-  .ui-link {
-    text-decoration: underline;
-    color: #0e7aef;
-    font-size: 16px;
-  }
+    overflow-y: auto;
+    overflow-x: hidden;
+    @import "dateTime";
+    .ui-history {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-left: 5px;
+        background: url("../../../assets/images/form/icon_history.png");
+        vertical-align: middle;
+    }
+    span.required {
+        display: inline-block;
+        color: #ff0617;
+        width: 16px;
+        height: 16px;
+        margin-left: 10px;
+        background: url("../../../assets/images/form/icon_bitian.png");
+        vertical-align: middle;
+    }
+    span.required2 {
+        display: inline-block;
+        color: #ff0617;
+        width: 16px;
+        height: 16px;
+        margin-left: 10px;
+        background: url("../../../assets/images/form/icon_bitian_yes.png");
+        vertical-align: middle;
+    }
+    .form-control {
+        display: flex;
+        align-items: center;
+        position: relative;
+        .info {
+            color: #ccc;
+        }
+        .inline {
+            display: inline;
+        }
+    }
+    .form-cell {
+        padding-right: 10px;
+        .wrap {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            .content {
+                flex-grow: 1;
+                .error {
+                    color: red;
+                }
+                .info {
+                    color: #ccc;
+                }
+            }
+        }
+    }
+    .dropdown {
+        border-radius: 0px;
+        //height:30px;
+        padding: 2px 0px;
+        margin-bottom: -3px;
+        vertical-align: middle;
+    }
+    a {
+        text-decoration: none;
+    }
+    /*table*/
+    table {
+        width: 100%;
+        margin: 0px auto;
+    }
+    tbody {
+        tr {
+            td {
+                line-height: 1.42857143;
+                padding: 8px;
+                vertical-align: middle;
+                border: 1px solid rgb(240, 240, 240);
+                white-space: nowrap;
+                width: auto;
+            }
+        }
+    }
 
-  //固定按钮
-  .ui-btn-box{
-    margin: 0 auto;
-    display: block;
-    bottom: 0;
-    background: #F2F2F2;
-  }
-  .ui-btn-box button{
-    width: 91px;
-    height: 30px;
-    background: inherit;
-    background-color: rgba(0, 136, 255, 1);
-    border: none;
-    border-radius: 4px;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    font-family: '微软雅黑';
-    font-weight: 400;
-    font-style: normal;
-    font-size: 12px;
-    color: #FFFFFF;
-  }
+    /*input*/
+    .dynamic-form-input {
+        color: #000000;
+        line-height: 30px;
+        border: 1px solid #ddd;
+        -webkit-appearance: none;
+        outline: none;
+        opacity: 100;
+        padding: 0 5px;
+    }
+    .dynamic-form-input-a, .dynamic-form-input-ac {
+        display: inline-block;
+        width: 50px;
+        line-height: 25px;
+        text-align: center;
+        font-size: 14px;
+        text-decoration: none;
+        margin: 0 5px;
+    }
+    .dynamic-form-input-a {
+        color: #ffffff;
+        background-color: #197DEB;
+    }
+    .dynamic-form-input-ac {
+        color: #197DEB;
+        background-color: #ffffff;
+        border: 1px solid #197DEB;
+    }
+    /*errorTips*/
+    .error-msg {
+        top: -20px;
+        zoom: 1;
+        display: block;
+        position: absolute;
+        border: 1px solid red;
+        color: red;
+        padding-left: 25px;
+        padding-right: 10px;
+        background: #FFF5F5 url(../../../assets/images/form/error-msg.png) no-repeat;
+        line-height: 22px;
+        white-space: normal;
+        z-index: 999;
+        width: 300px;
+        .ui-error-arrow {
+            position: absolute;
+            left: -7px;
+            top: 6px;
+            width: 7px;
+            height: 10px;
+            display: block;
+            background: url(../../../assets/images/form/icon_error.png) no-repeat;
+            background-position: -16px -510px;
+        }
+        pre {
+            padding: 0;
+            margin: 3px 0;
+            color: red;
+            background-color: transparent;
+            border: none;
+            white-space: pre-line;
+            word-wrap: break-word;
+            -moz-tab-size: 4;
+            tab-size: 4;
+        }
+    }
+    .add-item {
+        vertical-align: middle;
+        display: inline-block;
+        content: "\271A";
+        color: #0E7AEF;
+        font-size: 1.5em;
+        // font-weight: bold;
+        margin-left: 10px;
+    }
+    .wrap {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+    }
+    .ui-box-1 {
+        width: 100%;
+        margin: 0 auto;
+        margin-left: -10px;
+    }
+    .ui-btn-box {
+        padding: 15px 0;
+        bottom: 0px;
+        width: 100%;
+    }
+    .ui-btn-box .btn {
+        margin-right: 35px;
+        margin-top: -20px;
+        float: right;
+    }
+    .ui-btn-box .btn-normal {
+        color: #ffffff;
+    }
+    .ui-box-2 {
+        margin: 20px auto;
+        width: 900px;
+    }
+
+    .title {
+        text-align: center;
+    }
+    .mrgr {
+        margin-right: 30px;
+        margin-left: 10px;
+    }
+    .ui-attachment {
+        float: right;
+        margin: 0 20px 20px 0;
+    }
+    .ui-link {
+        text-decoration: underline;
+        color: #0e7aef;
+        font-size: 16px;
+    }
+
+    //固定按钮
+    .ui-btn-box {
+        margin: 0 auto;
+        display: block;
+        bottom: 0;
+        background: #F2F2F2;
+    }
+    .ui-btn-box button {
+        width: 91px;
+        height: 30px;
+        background: inherit;
+        background-color: rgba(0, 136, 255, 1);
+        border: none;
+        border-radius: 4px;
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        font-family: '微软雅黑';
+        font-weight: 400;
+        font-style: normal;
+        font-size: 12px;
+        color: #FFFFFF;
+        cursor: pointer;
+    }
 }

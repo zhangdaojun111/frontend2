@@ -106,12 +106,12 @@ let config = {
             this.data.sms = params.data.sms;
             this.data.email = params.data.email;
 
-            if (this.data.smsStatus === '1') {
+            if (this.data.smsStatus === 1) {
                 this.el.find('.open-sms-remind').addClass('checked');
             } else {
                 this.el.find('.close-sms-remind').addClass('checked');
             }
-            if (this.data.emailStatus === '1') {
+            if (this.data.emailStatus === 1) {
                 this.el.find('.open-email-remind').addClass('checked');
             } else {
                 this.el.find('.close-email-remind').addClass('checked');

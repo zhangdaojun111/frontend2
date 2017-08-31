@@ -32,7 +32,8 @@ let css = `
     font-size: 12px;
     padding: 6px 17px;
     margin-right: 15px;
-    border-radius: 4px
+    border-radius: 4px;
+    cursor: pointer;
 }
 .add-container .button-box .cancel-btn {
     color: #fff;
@@ -41,7 +42,8 @@ let css = `
     border: none;
     font-size: 12px;
     padding: 6px 17px;
-    border-radius: 4px
+    border-radius: 4px;
+    cursor: pointer;
 }
 \`;
 `;
@@ -56,28 +58,21 @@ let addQuery = {
         btnClick: function () {
             let _this = this;
             $( '.save-btn' ).click( ()=>{
-                if(_this.el.find('.query-name-input').val() == ''){
-                    PMAPI.sendToParent( {
-                        key: this.key,
-                        type: PMENUM.close_dialog,
-                        data: {
-                            value: _this.el.find('.query-name-input').val()
-                        }
-                    } )
-                } else{
-                    PMAPI.sendToParent( {
-                        key: this.key,
-                        type: PMENUM.close_dialog,
-                        data: {
-                            value: _this.el.find('.query-name-input').val()
-                        }
-                    } )
-                }
+                PMAPI.sendToParent( {
+                    key: this.key,
+                    type: PMENUM.close_dialog,
+                    data: {
+                        value: _this.el.find('.query-name-input').val()
+                    }
+                } )
             } )
             $( '.cancel-btn' ).click( ()=>{
                 PMAPI.sendToParent( {
                     key: this.key,
                     type: PMENUM.close_dialog,
+                    data:{
+                        onlyclose: true
+                    }
                 } )
             } )
         }
