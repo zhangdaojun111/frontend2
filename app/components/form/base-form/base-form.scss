@@ -173,13 +173,12 @@
         margin-left: -10px;
     }
     .ui-btn-box {
-        padding: 15px 0;
+        padding: 5px 0;
         bottom: 0px;
         width: 100%;
     }
     .ui-btn-box .btn {
         margin-right: 35px;
-        margin-top: -20px;
         float: right;
     }
     .ui-btn-box .btn-normal {
@@ -206,13 +205,17 @@
         color: #0e7aef;
         font-size: 16px;
     }
-
+    .ui-del{
+        float: right;
+        color: red;
+    }
     //固定按钮
     .ui-btn-box {
-        margin: 0 auto;
         display: block;
         bottom: 0;
         background: #F2F2F2;
+        position: fixed;
+        margin-left: -20px;
     }
     .ui-btn-box button {
         width: 91px;
