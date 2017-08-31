@@ -26,8 +26,6 @@ let config = {
             Promise.all(arr).then((res)=> {
                 this.el.find( '.inProcessNum' )[0].style.display = res[0].total? 'block':'none';
                 if( !this.data.firatShowHelp ){
-                    console.log(res)
-                    console.log(res)
                     if(typeof res[1].data != "object"){
                         if(res[1].data != ""){
                             this.el.find( '.dataTableHelp' )[0].style.display = 'flex';

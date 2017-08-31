@@ -34,6 +34,7 @@ To change `display` (e.g. `display: inline-block;`), we suggest using a common C
     width: 16px;
     height: 16px;
     display: block;
+    cursor: pointer;
 }
 
 .icon-aggrid-select {
@@ -43,7 +44,21 @@ To change `display` (e.g. `display: inline-block;`), we suggest using a common C
 .icon-aggrid-quxiao {
     background: url("../../images/dataGrid/group-cancel.png") no-repeat;
 }
-
+.icon-expert-save {
+    background: url("../../images/dataGrid/icon_save2.png") no-repeat;
+}
+.icon-expert-add {
+    background: url("../../images/dataGrid/icon_add_1.png") no-repeat;
+}
+.icon-expert-delete {
+    background: url("../../images/dataGrid/icon_delete_1.png") no-repeat;
+}
+.icon-expert-error-msg {
+    background: url("../../images/form/error-msg.png") no-repeat;
+}
+.icon-expert-edit {
+    background: url("../../images/dataGrid/icon_bianjimoshi.png") no-repeat;
+}
 .aggrid-bg-search {
     background: url("../../images/framework/search.png") no-repeat;
 }
@@ -82,6 +97,7 @@ To change `display` (e.g. `display: inline-block;`), we suggest using a common C
     background-position: -78px -26px;
 }
 .icon-aggrid-custom {
+
     background-position: -78px -52px;
 }
 .icon-aggrid-self-adaptation {
