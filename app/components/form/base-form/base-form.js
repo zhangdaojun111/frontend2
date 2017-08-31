@@ -1681,7 +1681,9 @@ let config = {
         this.actions.triggerControl();
         this.actions.changeOptions();
         this.actions.setDataFromParent();
-        this.actions.addBtn();
+        if(this.data.btnType != 'none'){
+            this.actions.addBtn();
+        }
 
         //默认表单样式
 
