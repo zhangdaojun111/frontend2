@@ -3,7 +3,7 @@
 // import 'jquery-ui/themes/base/theme.css';
 import '../assets/scss/main.scss';
 import '../lib/socket';
-
+import '../assets/scss/framework/framework-base.scss'
 import {IframeInstance} from '../components/main/iframes/iframes';
 import {HeaderInstance} from '../components/main/header/header';
 import {AsideInstance} from '../components/main/aside/aside';
