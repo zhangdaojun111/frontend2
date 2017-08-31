@@ -15,8 +15,6 @@ let config = {
     actions: {
 
         getExportDate: function() {
-            this.data.fromDate = this.el.find('.start-date').val();
-            this.data.toDate = this.el.find('.end-date').val();
             if( this.data.fromDate === '' || this.data.toDate === '' ){
                 return;
             }
@@ -32,19 +30,18 @@ let config = {
     afterRender: function() {
         this.el.find('.export-btn').attr("disabled", true);
         this.el.find('.export-btn').attr('disabled', true);
-        let that = this;
+        let _this = this;
         this.el.on('click', '.export-btn', function () {
-            window.open(`/calendar_mgr/export_calendar_data/?from_date=${that.data.fromDate}&to_date=${that.data.toDate}`);
-        }).on('input propertychange', '.start-date', function () {
-            that.actions.getExportDate();
-        }).on('input propertychange', '.end-date', function () {
-            that.actions.getExportDate();
+            console.log('ss');
+            window.open(`/calendar_mgr/export_calendar_data/?from_date=${_this.data.fromDate}&to_date=${_this.data.toDate}`);
         });
         let changeStartValue = (res) => {
-            console.log(res);
+            this.data.fromDate = res['value'];
+            _this.actions.getExportDate();
         };
         let changeEndValue = (res) => {
-            console.log(res);
+            this.data.toDate = res['value'];
+            _this.actions.getExportDate();
         };
 
         this.append(new DateControl({value: ''},{changeValue: changeStartValue}), this.el.find('.start-date'));
