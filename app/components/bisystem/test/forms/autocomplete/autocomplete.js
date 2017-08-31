@@ -37,7 +37,6 @@ class AutoComplete extends Base {
      * mapping autoselect onselect事件
      */
     onSelect() {
-        alert('hello world')
     }
 
 }

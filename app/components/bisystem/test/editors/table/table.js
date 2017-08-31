@@ -8,14 +8,21 @@ let config = {
     template: template,
     actions: {
         /**
+         * 渲染列名字段
+         */
+        loadColumns() {
+            alert('hello world')
+        },
+
+        /**
          * 初始化操作
          */
        async init() {
-
+            this.formItems['source'].onSelect = this.actions.loadColumns();
            // 获取数据来源
             ChartFormService.getChartSource().then(res => {
                 if (res['success'] === 1) {
-                    this.formItems['source'].setList(res['data'])
+                    this.formItems['source'].setList(res['data']);
                 } else {
                     msgbox.alert(res['error'])
                 };
