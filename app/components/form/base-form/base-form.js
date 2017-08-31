@@ -274,6 +274,10 @@ let config = {
                         }
                     }
                 }
+                console.log('哪个字段出错了呢');
+                console.log(key);
+                console.log(this.data.data[key]);
+                console.log(formValue[key]);
                 //数字范围检查
                 if (val.toString() != "" && data["numArea"]) {
                     let label = data["label"];
