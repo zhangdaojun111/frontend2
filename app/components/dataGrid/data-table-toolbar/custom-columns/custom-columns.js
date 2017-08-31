@@ -269,7 +269,7 @@ let config = {
                     i++;
                 }
             }
-            this.el.find( '.custom-select-all' )[0].className = i==this.data.hideFields.length?'custom-select-all bg-img checkbox-check':'custom-select-all bg-img checkbox-uncheck';
+            this.el.find( '.custom-select-all' )[0].className = i==this.data.hideFields.length?'custom-select-all icon-aggrid-cus checkbox-check':'custom-select-all icon-aggrid-cus checkbox-uncheck';
         },
         //列宽改变
         onColumnResized: _.debounce( (custom)=>{

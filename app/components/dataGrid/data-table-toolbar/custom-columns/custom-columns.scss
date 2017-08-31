@@ -131,14 +131,15 @@
         }
         #custom-search-input {
             width: 152px;
-            margin-left: 5px;
+            //margin-left: 5px;
             font-size: 12px;
             height: 20px;
             border: 1px solid #d7d7d7;
             padding-left: 3px;
+            background-position: right;
         }
         .custom-data {
-            height: calc(100% - 45px);
+            height: calc(100% - 43px);
             overflow-y: auto;
             border: 1px solid #D7D7D7;
             padding: 2px;

@@ -4,15 +4,30 @@
   bottom: 0;
   left: 0;
   right: 0;
-  overflow: hidden;
+  overflow: hidden;.tips {
+  position: absolute;
+  display: flex;
+  i {
+    background: url("../../../assets/images/dataGrid/tab-title.png") no-repeat;
+    width: 16px;
+    height: 16px;
+    display: block;
+    margin-right: 20px;
+    margin-top: 21px;
+    margin-left: 15px;
+  }
+  span {
+    line-height: 60px;
+  }
+}
   .btn-nav {
-      height: 30px;
+      height: 60px;
       width: 100%;
       .operation-btn-group {
           float: right;
           display: flex;
           margin-right: 10px;
-          line-height: 25px;
+          height: 60px;
           user-select: none;
           .datagrid-icon-box {
               display: flex;
