@@ -67,7 +67,7 @@
 			line-height: 30px;
 			margin-bottom: 10px;
 			float: left;
-			.removeble{
+			.rightpeople{
 				background: #eee;
 				display: block;
 				margin: 0 5px;
@@ -176,6 +176,13 @@
 	>div:nth-child(2n){
 		.search-check-row{
 			background: #fff;
+		}
+	}
+	#gzNoDel{
+		display:flex;
+		background: #eee;
+		.search-check-item{
+			border-right: 1px solid #E4E4E4;
 		}
 	}
 	.search-check-row{

@@ -20,7 +20,7 @@ let config={
     action:{
         search(){
             let keyword = this.el.find(".follower-search").val();
-            let node = this.el.find('#staffMulti').find('.w33');
+            let node = this.el.find('#staffMulti').find('.search-check-item');
             let par = this.el.find("#staffMulti").children();
             let arr = _.chunk(node,3);
             let len = arr.length;
@@ -40,6 +40,7 @@ let config={
         this.el.on("input propertychange",".follower-search",()=>{
             this.action.search();
         })
+        this.el.find('.addCont').draggable();
         const _this=this;
         this.el.find('#staffMulti').html('');
         Mediator.subscribe('workflow:idArr', (res)=> {
