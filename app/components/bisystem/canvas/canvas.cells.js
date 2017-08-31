@@ -88,7 +88,6 @@ let config = {
                 let cell = new CanvasCellComponent(data);
                 this.append(cell, this.el.find('.cells'));
                 layoutsId.push(val.layout_id);
-
                 let deep_info = {};
                 if (val.is_deep == 0) {
                     deep_info = {}
