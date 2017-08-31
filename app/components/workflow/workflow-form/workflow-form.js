@@ -60,7 +60,7 @@ let config = {
         addImg(e){
             let imgInfo = e.data[0].stamps;
             let len =imgInfo.length;
-            var html = " ";
+            let html = " ";
             let host = window.location.host;
             for (let i=0;i<len;i++){
                 let left = imgInfo[i].viewLeft+"%";

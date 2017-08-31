@@ -16,7 +16,8 @@ import {workflowService} from '../../../services/workflow/workflow.service';
 let config={
     template: template,
     data:{
-        user:[]
+        user:[],
+        allowagrid:true //允许agrid只加载一次
     },
     actions:{
         /*
@@ -38,16 +39,16 @@ let config={
                     }
                 }
                 recur(tree);
-                var treeComp2 = new TreeView(tree,{
+                let treeComp2 = new TreeView(tree,{
                     callback: function (event,selectedNode) {
                         if(event==='select'){
-                            for(var k in staff){
+                            for(let k in staff){
                                 if(k==selectedNode.id){
                                     Mediator.publish('workflow:checkDept', staff[k]);
                                 }
                             }
                         }else{
-                            for(var k in staff){
+                            for(let k in staff){
                                 if(k==selectedNode.id){
                                     Mediator.publish('workflow:unCheckDept', staff[k]);
                                 }
@@ -95,6 +96,10 @@ let config={
             ev.addClass("selected");
             this.el.find("#singleFlow").removeClass("selected");
             Mediator.publish('workflow:autoSaveOpen', 0);
+            if(this.data.allowagrid){
+                Mediator.publish('workflow:getGridinfo');
+                this.data.allowagrid = false;
+            }
             this.el.find('#workflow-grid').show();
             this.el.find('#workflow-form').hide();
         });
@@ -105,6 +110,9 @@ let config={
             })
             Mediator.publish('workflow:submit',this.data.user);
         });
+        Mediator.subscribe('workflow:choose',(res)=>{
+            this.data.allowagrid = true;
+        })
 
     }
 };

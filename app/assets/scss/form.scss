@@ -6,67 +6,74 @@
 *form-version-table-user
 *form-version-table-department
 */
-.form-version-table-user,.form-version-table-department,.form-default{
+.form-version-table-user, .form-version-table-department, .form-default {
     margin: 10px;
     background: #FFFFFF;
-    tr td:first-child{
-       width:30%!important;
-       background: #FFFFFF;
+    tr td:first-child {
+        width: 30% !important;
+        background: #FFFFFF;
     }
-    tr td:last-child{
-      width: 70%!important;
-      background: #F8F8F8;
+    tr td:last-child {
+        width: 70% !important;
+        background: #F8F8F8;
     }
-    .auto-select-component, .auto-select-component input.text{
-      background: url("../images/form/select-down.png") no-repeat  right;
-      width: 244px!important;
-      height: 24px;
+    .auto-select-component, .auto-select-component input.text {
+        background: url("../images/form/select-down.png") no-repeat right;
+        width: 244px !important;
+        height: 24px;
     }
-  .auto-select-component input.result{
-    width: 244px;
-    height: 24px;
-  }
+    .auto-select-component input.result {
+        width: 244px;
+        height: 24px;
+    }
 
-    .dynamic-form-input,.textArea {
-      width: 232px!important;
-      height:22px;
+    .dynamic-form-input, .textArea {
+        width: 232px !important;
+        height: 22px;
     }
     .textArea {
-      color: #000000;
-      line-height: 30px;
-      border: 1px solid #ddd;
-      -webkit-appearance: none;
-      outline: none;
-      opacity: 100;
-      padding: 0 5px;
+        color: #000000;
+        line-height: 30px;
+        border: 1px solid #ddd;
+        -webkit-appearance: none;
+        outline: none;
+        opacity: 100;
+        padding: 0 5px;
     }
 
-  }
+    .df-input-radio-wrapper {
+        width: 12px;
+        height: 12px;
+        top: 0;
+    }
+
+}
+
 //创建默认表单
-.form-default{
-  .dynamic-form-input,.textArea {
-    width: 232px!important;
-    height:24px;
-  }
-  //上传文件，截图
-  .upload-file,.shot-screen{
-    width: 65px;
-    height: 24px;
-    background: inherit;
-    background-color: rgba(255, 255, 255, 1);
-    box-sizing: border-box;
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgba(215, 215, 215, 1);
-    border-radius: 4px;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    color: #666666;
-  }
-  .auto-select-component .choosed .item {
-    margin: 2px 3px 0 0;
-  }
+.form-default {
+    .dynamic-form-input, .textArea {
+        width: 232px !important;
+        height: 24px;
+    }
+    //上传文件，截图
+    .upload-file, .shot-screen {
+        width: 65px;
+        height: 24px;
+        background: inherit;
+        background-color: rgba(255, 255, 255, 1);
+        box-sizing: border-box;
+        border-width: 1px;
+        border-style: solid;
+        border-color: rgba(215, 215, 215, 1);
+        border-radius: 4px;
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        color: #666666;
+    }
+    .auto-select-component .choosed .item {
+        margin: 2px 3px 0 0;
+    }
 }
 
 

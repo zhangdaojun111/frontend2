@@ -12,9 +12,9 @@ let config={
     template:template,
     actions:{
         changeOption(res){
-            if( _this.data.dfield && res == _this.data.dfield ){
-                _this.data.value = [];
-                _this.reload();
+            if( this.data.dfield && res == this.data.dfield ){
+                this.data.value = [];
+                this.reload();
             }
         }
     },

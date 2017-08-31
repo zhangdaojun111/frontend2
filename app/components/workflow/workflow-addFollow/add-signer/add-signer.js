@@ -2,10 +2,12 @@ import Component from '../../../../lib/component';
 import Mediator from '../../../../lib/mediator';
 
 let config={
-    template: `<div class="flex" data-id="{{id}}">
-        <input class="w33" type="radio" name="addUser" value="{{id}}">
-        <div class="w33">{{name}}</div>
-        <div class="w33">{{username}}</div>
+    template: `<div class="search-check-row flex" data-id="{{id}}">
+        <div class="search-check-item custom-radio J_name">
+            <input type="radio" name="addUser" value="{{id}}">
+        </div>
+        <div class="search-check-item J_name">{{name}}</div>
+        <div class="search-check-item J_name">{{username}}</div>
     </div>`,
     data:{},
     action:{

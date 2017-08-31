@@ -4,7 +4,6 @@
  */
 
 import Component from '../../../lib/component'
-import Mediator from '../../../lib/mediator';
 import DataTableAgGrid from '../../dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import './correspondence-control.scss';
 import template from './correspondence-control.html';
