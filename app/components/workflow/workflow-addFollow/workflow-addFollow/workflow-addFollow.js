@@ -40,14 +40,13 @@ let config={
         this.el.on("input propertychange",".follower-search",()=>{
             this.action.search();
         })
-        this.el.find('.addCont').draggable();
         const _this=this;
+        this.check = {};
+        this.el.find('.addCont').draggable();
         this.el.find('#staffMulti').html('');
         Mediator.subscribe('workflow:idArr', (res)=> {
             this.data.idArr=res;
         });
-
-        this.check = {};
         //部门选择
         Mediator.subscribe('workflow:checkDept', (res)=> {
             let checked=this.el.find('#staffMulti>div>div');
