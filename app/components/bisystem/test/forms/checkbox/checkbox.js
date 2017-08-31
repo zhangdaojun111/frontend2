@@ -12,6 +12,7 @@ let config = {
             this.data.list = [];
             this.reload();
         },
+
         /**
          * checked or no-checked
          */
