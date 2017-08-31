@@ -244,6 +244,7 @@ let config = {
             let error = false;
             let errorMsg = "";
             for (let key in formValue) {
+                try{
                 let data = allData[key];
                 //如果该dfield是父表填充子表的，那就不验证
                 if (this.data.idsOfSonDataByParent.indexOf(key) != -1) {
@@ -335,6 +336,10 @@ let config = {
                         break;
                     }
                 }
+                }catch (err){
+                    console.log(err);
+                    console.log(this.data.data[key]);
+                }
             }
 
             for (let d in allData) {
@@ -344,7 +349,10 @@ let config = {
                     break;
                 }
             }
-
+            if(error){
+                console.log('vaild ERROR');
+                console.log(this.data.data[key]);
+            }
             return {
                 error,
                 errorMsg
