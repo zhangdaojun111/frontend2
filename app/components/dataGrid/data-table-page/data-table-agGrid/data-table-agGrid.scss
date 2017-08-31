@@ -4,13 +4,14 @@
   bottom: 0;
   left: 0;
   right: 0;
+  overflow: hidden;
 
   .header-style-midfont {
-    font-size:14px;
+    font-size: 14px;
   }
 
   .header-style-bigfont {
-    font-size:15px;
+    font-size: 15px;
   }
 
   .header-select {
@@ -18,38 +19,39 @@
   }
 
   .ag-grid-number {
-    font-size: 12px!important;
+    font-size: 12px !important;
   }
 
   .btn-nav-con {
     height: 60px;
     width: 100%;
   }
-  .btn-nav-con.flex-end{
+  .btn-nav-con.flex-end {
     justify-content: flex-end;
   }
   .dataGrid-commonQuery {
-    display: none;
-    float: left;
-    padding-left: 15px;
-    .dataGrid-commonQuery-select-style {
-      padding: 0 12px;
-      border: 1px solid #d7d7d7;
-      border-radius: 4px;
-      text-indent: 0;
-      color: #666666;
+      display: none;
       float: left;
-      width: 90px;
-      font-size: 12px;
-      height: 25px;
-      display: inline-block;
-      outline: none;
-      box-shadow: none;
-      appearance: none;
-      -moz-appearance: none;
-      -webkit-appearance: none;
-      background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 70px center transparent;
-    }
+      padding-left: 15px;
+      .dataGrid-commonQuery-select{
+          cursor: pointer;
+          padding: 0 12px;
+          border: 1px solid #d7d7d7;
+          border-radius: 4px;
+          text-indent: 0;
+          color: #666666;
+          float: left;
+          width: 115px;
+          font-size: 12px;
+          height: 25px;
+          display: inline-block;
+          outline: none;
+          box-shadow: none;
+          appearance: none;
+          -moz-appearance: none;
+          -webkit-appearance: none;
+          background-position: 90px;
+      }
   }
   .dataGrid-btn-group {
     //float: right;
@@ -57,7 +59,7 @@
     margin-right: 10px;
     line-height: 25px;
     user-select: none;
-    .datagrid-icon-box{
+    .datagrid-icon-box {
       display: flex;
       align-items: center;
     }
@@ -70,11 +72,11 @@
       font-size: 12px;
       display: flex;
       align-items: center;
-      .icon-aggrid{
+      .icon-aggrid {
         margin-right: 4px;
-        order:0;
+        order: 0;
       }
-      span{
+      span {
         order: 1;
       }
       img {
@@ -105,11 +107,11 @@
       font-size: 14px;
       display: flex;
       align-items: center;
-      .icon-aggrid{
+      .icon-aggrid {
         margin-right: 4px;
-        order:0;
+        order: 0;
       }
-      span{
+      span {
         order: 1;
       }
       img {
@@ -162,7 +164,7 @@
     line-height: 20px;
     font-size: 14px;
     height: 20px;
-    width:100%;
+    width: 100%;
     background: #ffffff;
     ul {
       display: block;
@@ -193,17 +195,17 @@
         content: ''
       }
     }
-    .active1{
+    .active1 {
       background-color: #F2F2F2;
     }
   }
 
   .ag-grid-con {
-    height: calc( 100% - 100px);
+    height: calc(100% - 100px);
     position: relative;
   }
   .shareAddress {
-    color:#337ab7;
+    color: #337ab7;
   }
   .num-value-style {
     float: right;
