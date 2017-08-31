@@ -2202,6 +2202,7 @@ let config = {
                         height: 600,
                         title: '视频播放器'
                     })
+
             }
             //图片查看
             if( data.colDef.real_type == fieldTypeService.IMAGE_TYPE ){
