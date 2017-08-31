@@ -430,7 +430,10 @@ let config = {
         },
         bodyCellRender: function (params) {
             if (params.data && params.data.myfooter && params.data.myfooter == "合计") {
-                return params.value || '';
+                let textAline = fieldTypeService.textAline( params.colDef["real_type"] )
+                let bgStyle = ' style = "display: block;width: 100%;height: 100%;text-align:' + textAline+';"';
+                let h = '<span' + bgStyle + '><span>' + ( params.value || '' ) + '</span><span/>';
+                return h;
             }
             let myValue = params['value'];//当前单元格数值
             let remindColorInfo = this.data.remindColor['remind_color_info'];//枚举提醒颜色
