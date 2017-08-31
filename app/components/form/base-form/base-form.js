@@ -263,18 +263,18 @@ let config = {
                             break;
                         }
                     }
-                    //正则检查
-                    if (val != "" && data["reg"] !== "") {
-                        for (let r in data["reg"]) {
-                            let reg = eval(r);
-                            let flag = reg.test(val);
-                            if (!flag) {
-                                error = true;
-                                errorMsg = data["reg"][r];
-                                break;
-                            }
-                        }
-                    }
+                    // //正则检查
+                    // if (val != "" && data["reg"] !== "") {
+                    //     for (let r in data["reg"]) {
+                    //         let reg = eval(r);
+                    //         let flag = reg.test(val);
+                    //         if (!flag) {
+                    //             error = true;
+                    //             errorMsg = data["reg"][r];
+                    //             break;
+                    //         }
+                    //     }
+                    // }
                     console.log('哪个字段出错了呢');
                     console.log(key);
                     console.log(this.data.data[key]);
