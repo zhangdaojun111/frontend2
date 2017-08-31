@@ -1342,13 +1342,13 @@ let config = {
             }
 
             //渲染快速搜索
-            if(this.data.fastSearchFields && this.data.fastSearchFields.length != 0){
-                let d = {
-                    fieldsData: this.data.fastSearchFields,
-                    fastSearchData:this.actions.fastSearchData,
-                }
-                this.append(new fastSearch(d), this.el.find('.fast-search-con'))
-            }
+            // if(this.data.fastSearchFields && this.data.fastSearchFields.length != 0){
+            //     let d = {
+            //         fieldsData: this.data.fastSearchFields,
+            //         fastSearchData:this.actions.fastSearchData,
+            //     }
+            //     this.append(new fastSearch(d), this.el.find('.fast-search-con'))
+            // }
             //渲染分页
             let noPagination = ['in_process','viewFromCorrespondence','editFromCorrespondence']
             if( noPagination.indexOf( this.data.viewMode ) == -1 ){

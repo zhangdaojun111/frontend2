@@ -44,12 +44,16 @@
       font-size: 12px;
       height: 25px;
       display: inline-block;
+      cursor: pointer;
       outline: none;
       box-shadow: none;
       appearance: none;
       -moz-appearance: none;
       -webkit-appearance: none;
       background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 70px center transparent;
+      option{
+        cursor: pointer;
+      }
     }
   }
   .dataGrid-btn-group {

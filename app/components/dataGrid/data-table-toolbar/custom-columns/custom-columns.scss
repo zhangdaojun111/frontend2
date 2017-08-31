@@ -76,6 +76,7 @@
       //vertical-align: middle;
       position: relative;
       top: 7px;
+      cursor: pointer;
     }
     #custom-search-input {
       width: 152px;
@@ -115,9 +116,11 @@
             white-space: nowrap;
             text-overflow: ellipsis;
             margin-left: 5px;
+            cursor: pointer;
           }
 
           .custom-checkbox {
+            cursor: pointer;
             box-sizing: content-box;
             display: inline-block;
             width: 16px;
