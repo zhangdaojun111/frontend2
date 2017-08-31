@@ -16,11 +16,13 @@
             margin-bottom: 5px;
             .icon-l {
                 display: block;
-                width: 12px;
-                height: 12px;
                 position: absolute;
-                top: 10px;
+                top: 8px;
                 left: 10px;
+                background: url(../../../../assets/images/dataGrid/sprite-datagrid-icon.png) no-repeat;
+                width: 16px;
+                height: 16px;
+                background-position: -78px -52px;
             }
             .text {
                 margin-left: 30px;
@@ -41,8 +43,9 @@
                 width: 20px;
                 height: 20px;
                 position: relative;
-                top: -4px;
-                left: 110px;
+                top: -2px;
+                left: 99px;
+                background: url("../../../../assets/images/dataGrid/group-cancel.png") no-repeat;
             }
             .closeGroup:hover {
                 cursor: pointer;
