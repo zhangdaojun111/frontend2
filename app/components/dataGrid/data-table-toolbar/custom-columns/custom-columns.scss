@@ -27,7 +27,7 @@
         margin-left: 30px;
         display: inline-block;
         position: relative;
-        top: -10px;
+        top: -11.5px;
       }
       .line {
         display: inline-block;
@@ -71,16 +71,23 @@
       width: 16px;
       height: 16px;
       padding: 2px;
-      margin-left: 5px;
+      margin-left: 3px;
       display: inline-block;
-      vertical-align: middle;
+      //vertical-align: middle;
+      position: relative;
+      top: 7px;
     }
     #custom-search-input {
-      width: 140px;
+      width: 152px;
       margin-left: 5px;
+      font-size: 12px;
+      height: 20px;
+      border: 1px solid #d7d7d7;
+      padding-left: 3px;
+      background: url(../../../../assets/images/framework/search.png) no-repeat scroll right center transparent;
     }
     .custom-data {
-      height: calc(100% - 40px);
+      height: calc(100% - 45px);
       overflow-y: auto;
       border: 1px solid #D7D7D7;
       padding: 2px;
@@ -102,7 +109,7 @@
           background-color: #e4e4e4;
           .custom-name {
             display: inline-block;
-            width: 85px;
+            width: 94px;
             line-height: 22px;
             overflow: hidden;
             white-space: nowrap;

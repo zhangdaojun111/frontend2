@@ -25,6 +25,7 @@
   background: #F2F2F2 !important;
   .ag-header-cell {
     border-right: 1px solid rgba(228, 228, 228, 1) !important;
+    //padding: 0px 8px;
   }
   .ag-grid-number {
     position: relative;
@@ -84,6 +85,13 @@
     display: block;
     margin: -5px 5px;
   }
+  .ui-link {
+    color: #337AB7;
+    text-decoration: none;
+  }
+  .ui-link:hover {
+    cursor: pointer;
+  }
   .ag-row {
     border-bottom: 1px solid rgba(228, 228, 228, 1);
     .ag-group-cell {
@@ -93,7 +101,7 @@
       padding: 4px 0px;
     }
     .ag-cell-value {
-      padding: 0 3px;
+      padding: 0 8px;
       line-height: 30px;
     }
     .ag-cell {
@@ -103,6 +111,7 @@
       font-weight: 400;
       text-align: left;
       color: #333333;
+
       a {
         &.ag-text-style {
           text-decoration: blink;
@@ -135,5 +144,5 @@
 }
 
 .ag-bootstrap .ag-row-selected {
-  background-color: #97DDFF !important;
+  background-color: #E4E4E4 !important;
 }

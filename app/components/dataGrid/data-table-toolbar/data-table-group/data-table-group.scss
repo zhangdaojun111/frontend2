@@ -26,7 +26,7 @@
                 margin-left: 30px;
                 display: inline-block;
                 position: relative;
-                top: -10px;
+                top: -11.5px;
             }
             .line {
                 display: inline-block;
@@ -51,23 +51,27 @@
 
     }
     .group-box{
-        padding: 5px;
         border:1px solid #d7d7d7;
-        height: calc(100% - 74px);
+        height: calc(100% - 64px);
         .input-box {
             padding: 5px;
             input{
-                width: calc(100% - 2px);
+                width: calc(100% - 5px);
+                font-size: 12px;
+                height: 20px;
+                border: 1px solid #d7d7d7;
+                padding-left: 3px;
+                background: url(../../../../assets/images/framework/search.png) no-repeat scroll right center transparent;
             }
         }
         .group-data {
             width: calc(100% - 10px);
-            height: calc(100% - 42px);
+            height: calc(100% - 43px);
             overflow-y: hidden;
             padding: 5px;
             .group-data-title{
                 padding:7px;
-                width: calc(100% - 14px);
+                width: calc(100% - 16px);
                 font-size: 12px;
                 border: 1px solid #e4e4e4;
                 border-bottom: none;
@@ -76,10 +80,10 @@
                 height: calc(50% - 45px);
                 overflow-y: auto;
                 //border-bottom: 1px solid #fff;
-                width: calc(100% - 10px);
+                width: calc(100% - 12px);
                 border: 1px solid #e4e4e4;
                 padding: 5px;
-                margin-bottom: 16px;
+                margin-bottom: 10px;
                 .group-data-item {
                     background-color: #ecf9ff;
                     border: 1px solid #caeeff;
@@ -112,7 +116,7 @@
             }
             .grouping-data-title {
                 padding:7px;
-                width: calc(100% - 14px);
+                width: calc(100% - 17px);
                 font-size: 12px;
                 border: 1px solid #e4e4e4;
                 border-bottom: none;
@@ -126,7 +130,7 @@
                 height: calc(50% - 45px);
                 overflow-y: auto;
                 //border-bottom: 1px solid #fff;
-                width: calc(100% - 10px);
+                width: calc(100% - 13px);
                 border: 1px solid #e4e4e4;
                 padding: 5px;
                 .group-data-item {
