@@ -57,12 +57,7 @@ let config = {
                 canvas: this.canvas
             };
             if (chart['data']['assortment']) {
-                this.cellTitle.data.title = chart['data']['chartName']['name'];
-                this.cellTitle.data.isDeep = chart['data']['assortment'] === 'normal' || chart['data']['assortment'] === 'pie' ? true : false;
-                this.cellTitle.data.newCell = true;
-                this.cellTitle.data.icon = chart['data']['icon'];
-                this.cellTitle.data.isIcon = chart['data']['icon'] ? true : false;
-                this.cellTitle.reload();
+                this.cellTitle.actions.setValue(chart);
                 let cellComponent = new cellTypes[chart['data']['assortment']](data);
                 let cellContainer = this.el.find('.cell-chart');
                 cellComponent.render(cellContainer);
