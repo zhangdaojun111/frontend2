@@ -263,18 +263,18 @@ let config = {
                             break;
                         }
                     }
-                    //正则检查
-                    if (val != "" && data["reg"] !== "") {
-                        for (let r in data["reg"]) {
-                            let reg = eval(r);
-                            let flag = reg.test(val);
-                            if (!flag) {
-                                error = true;
-                                errorMsg = data["reg"][r];
-                                break;
-                            }
-                        }
-                    }
+                    // //正则检查
+                    // if (val != "" && data["reg"] !== "") {
+                    //     for (let r in data["reg"]) {
+                    //         let reg = eval(r);
+                    //         let flag = reg.test(val);
+                    //         if (!flag) {
+                    //             error = true;
+                    //             errorMsg = data["reg"][r];
+                    //             break;
+                    //         }
+                    //     }
+                    // }
                     console.log('哪个字段出错了呢');
                     console.log(key);
                     console.log(this.data.data[key]);
@@ -318,16 +318,16 @@ let config = {
                         }
                     }
                     //函数检查
-                    if (val != "" && !$.isEmptyObject(data["func"])) {
-                        for (let r in data["func"]) {
-                            let flag = FormService[r](val);
-                            if (!flag) {
-                                error = true;
-                                errorMsg = data["func"][r];
-                                break;
-                            }
-                        }
-                    }
+                    // if (val != "" && !$.isEmptyObject(data["func"])) {
+                    //     for (let r in data["func"]) {
+                    //         let flag = FormService[r](val);
+                    //         if (!flag) {
+                    //             error = true;
+                    //             errorMsg = data["func"][r];
+                    //             break;
+                    //         }
+                    //     }
+                    // }
                     //数字位数限制
                     if (data["real_type"] == fieldTypeService.FLOAT_TYPE) {
                         if (formValue[key] >= 100000000000) {
@@ -338,14 +338,15 @@ let config = {
                     }
                     if (error) {
                         console.log('vaild ERROR');
+                        console.log(errorMsg);
                         console.log(this.data.data[key]);
+                        break;
                     }
                 } catch (err) {
                     console.log(err);
                     console.log(this.data.data[key]);
                 }
             }
-
             for (let d in allData) {
                 if (allData[d].type == 'songrid' && allData[d].required && allData[d].total == 0) {
                     error = true;
@@ -723,22 +724,29 @@ let config = {
             // let field = data['dfield'];
             let type = data['type'];
             for (let key in linkage) {
-                let affectData = this.data[key];
+                let affectData = this.data.data[key];
                 let affectType = affectData['type'];
                 let arr = [];
-                let srcOptions = this.optionsToItem[key];
-                for (let op of srcOptions) {
-                    if (linkage[key].indexOf(op.value) != -1) {
-                        arr.push(op);
+                let srcOptions = this.data.optionsToItem[key];
+                for (let opIndex in srcOptions) {
+                    if (linkage[key].indexOf(srcOptions[opIndex].value) != -1) {
+                        arr.push(srcOptions[opIndex]);
                     }
                 }
-                this.data[key][obj[affectType]] = arr;
+                this.data.data[key][obj[affectType]] = arr;
                 if (affectType == 'multi-select') {
-                    this.data[key]['value'] = [];
+                    this.data.data[key]['value'] = [];
                 } else {
-                    this.data[key]['value'] = '';
+                    this.data.data[key]['value'] = '';
                 }
-                this.data.childComponents[this.data[key]['dfield']].actions.changeOption(this.data[key]['dfield']);
+                try{
+                this.data.childComponent[this.data.data[key]['dfield']].actions.changeOption(this.data.data[key]['dfield']);
+                }catch(err){
+                    console.log('错误1');
+                    console.log(err);
+                    console.log(this);
+                    console.log(this.data.data[key]['dfield']);
+                }
             }
         },
 
@@ -1185,13 +1193,15 @@ let config = {
                     if (value == data['value']) {
                         j++;
                         //改变选择框的选项
-                        this.changeOptionOfSelect(originalData, originalData['linkage'][value]);
+                        console.log('这个里面没有type？');
+                        console.log(data);
+                        this.actions.changeOptionOfSelect(data, data['linkage'][value]);
                     }
                 }
                 if (j == 0) {
                     let obj = this.data.selectObj;
                     for (let field of arr) {
-                        this.data[field][obj[this.data[field]['type']]] = this.optionsToItem[field];
+                        this.data.data[field][obj[this.data[field]['type']]] = this.data.optionsToItem[field];
                     }
                 }
             }
