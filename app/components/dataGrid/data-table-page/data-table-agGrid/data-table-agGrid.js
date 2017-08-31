@@ -626,7 +626,7 @@ let config = {
 
             //合同编辑器
             else if (real_type == fieldTypeService.TEXT_COUNT_TYPE) {
-                sHtml = '<a class="view-contract">' + "查看" + '</a>' + '<span>' + "丨" + '</span>' + '<a class="download-contract">' + '下载' + '</a>';
+                sHtml = '<a class="view-contract" style="color:#337ab7;">' + "查看" + '</a>' + '<span>' + "丨" + '</span>' + '<a class="download-contract" style="color:#337ab7;">' + '下载' + '</a>';
             }
 
             //表对应关系（不显示为数字）
