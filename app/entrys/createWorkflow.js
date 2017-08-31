@@ -59,7 +59,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             reload_draft_data:is_draft,
             table_id:msg.tableid,
             flow_id:msg.id,
-            el:'#place-form',
+            el:$('#place-form'),
             real_id:'',
             from_workflow:1,
             form_id:msg.formid,
