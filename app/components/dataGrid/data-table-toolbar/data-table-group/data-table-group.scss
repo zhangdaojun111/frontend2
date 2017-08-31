@@ -19,7 +19,6 @@
                 position: absolute;
                 top: 8px;
                 left: 10px;
-                background: url(../../../../assets/images/dataGrid/sprite-datagrid-icon.png) no-repeat;
                 width: 16px;
                 height: 16px;
                 background-position: -78px -52px;
@@ -36,7 +35,7 @@
                 width: 1px ;
                 border-left: 1px solid #d7d7d7;
                 position: relative;
-                left: 112px;
+                left: 111px;
             }
             .closeGroup {
                 display: inline-block;
@@ -44,8 +43,7 @@
                 height: 20px;
                 position: relative;
                 top: -2px;
-                left: 113px;
-                background: url("../../../../assets/images/dataGrid/group-cancel.png") no-repeat;
+                left: 111px;
             }
             .closeGroup:hover {
                 cursor: pointer;
@@ -64,7 +62,7 @@
                 height: 20px;
                 border: 1px solid #d7d7d7;
                 padding-left: 3px;
-                background: url(../../../../assets/images/framework/search.png) no-repeat scroll right center transparent;
+                background-position: right;
             }
         }
         .group-data {
