@@ -738,7 +738,13 @@ let config = {
                 } else {
                     this.data.data[key]['value'] = '';
                 }
+                try{
                 this.data.childComponents[this.data.data[key]['dfield']].actions.changeOption(this.data.data[key]['dfield']);
+                }catch(err){
+                    console.log('错误1');
+                    console.log(this.data.childComponents);
+                    console.log(this.data.data[key]['dfield']);
+                }
             }
         },
 
