@@ -2,6 +2,7 @@
 // import 'jquery-ui/themes/base/base.css';
 // import 'jquery-ui/themes/base/theme.css';
 import '../assets/scss/main.scss';
+import '../assets/scss/framework/framework-base.scss';
 import '../lib/socket';
 
 import {IframeInstance} from '../components/main/iframes/iframes';
