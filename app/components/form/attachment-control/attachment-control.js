@@ -111,7 +111,7 @@ let config = {
                             obj[event.data.fileId] = event.data.thumbnail;
                             if (this.data['thumbnailListComponent']) {
                                 this.data['thumbnailListComponent'].actions.addItem(obj);
-                            } else {
+                            } else if(this.data.dinput_type == 23) {
                                 let comp = new ThumbnailList([obj]);
                                 comp.render(this.el.find('.thumbnail-list'));
                                 this.data['thumbnailListComponent'] = comp;
