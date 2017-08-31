@@ -26,7 +26,7 @@ let config = {
             event: 'click',
             selector: '.date-close',
             callback: function () {
-                this.el.find(".date_yy-mm-dd").val("年/月/日");
+                this.el.find(".date_yy-mm-dd").val("年-月-日");
             }
         }
     ],
@@ -43,7 +43,7 @@ let config = {
         if (_this.data.value) {
             _this.el.find(".date_yy-mm-dd").val(_this.data.value.replace(/-/g, "/"));
         } else {
-            _this.el.find(".date_yy-mm-dd").val("年/月/日");
+            _this.el.find(".date_yy-mm-dd").val("年-月-日");
         }
         //控制到年月日
         _this.el.find(".date_yy-mm-dd").datepicker({
