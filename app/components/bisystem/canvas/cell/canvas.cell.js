@@ -158,7 +158,8 @@ let config = {
         // }
     },
     data: {
-        chart: null
+        chart: null,
+        isIcon :true,
     },
     binds: [
         // 拖拽start画布mousedown触发

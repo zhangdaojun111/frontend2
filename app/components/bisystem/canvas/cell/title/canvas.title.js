@@ -8,7 +8,11 @@ import './canvans.title.scss';
 
 let config = {
     template: template,
-    actions: {},
+    actions: {
+        setValue(){
+
+        }
+    },
     data: {
         title: '', // 画布块标题
         isDeep: false, // 是否显示上一层
