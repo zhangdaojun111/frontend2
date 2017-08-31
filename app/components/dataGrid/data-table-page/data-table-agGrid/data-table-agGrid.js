@@ -2196,14 +2196,13 @@ let config = {
 
 
                 ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids}&download=0&dinput_type=${file_dinput_type}`;
+              
                 ViewVideo.data.fieldids = fieldids;
                     PMAPI.openDialogByComponent(ViewVideo, {
                         width: 1000,
                         height: 600,
                         title: '视频播放器'
-                    })
-
-            }
+                    })  }
             //图片查看
             if( data.colDef.real_type == fieldTypeService.IMAGE_TYPE ){
                 let json = {};
