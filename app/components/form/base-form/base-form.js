@@ -336,6 +336,10 @@ let config = {
                         break;
                     }
                 }
+                if(error){
+                    console.log('vaild ERROR');
+                    console.log(this.data.data[key]);
+                }
                 }catch (err){
                     console.log(err);
                     console.log(this.data.data[key]);
@@ -348,10 +352,6 @@ let config = {
                     errorMsg = '子表字段:' + allData[d].label + '是必填！';
                     break;
                 }
-            }
-            if(error){
-                console.log('vaild ERROR');
-                console.log(this.data.data[key]);
             }
             return {
                 error,
@@ -1193,7 +1193,7 @@ let config = {
             //修改负责
             if (data["edit_condition"] && data["edit_condition"] !== "") {
                 setTimeout(() => {
-                    _this.actions.reviseCondition(data, data.value);
+                    this.actions.reviseCondition(data, data.value);
                 }, 0);
             }
             //修改必填性功能
