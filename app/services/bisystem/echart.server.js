@@ -6,7 +6,7 @@ import * as echarts from 'echarts';
 import {EchartsOption} from '../../components/bisystem/echarts.config/echarts.config';
 import {ToolPlugin} from "../../components/bisystem/utils/tool.plugin";
 import {HTTP} from '../../lib/http';
-
+import {canvasCellService} from './canvas.cell.service';
 const defaultOption = {
     grid: {},
     xAxis : [],
@@ -432,13 +432,7 @@ export class EchartsService {
      * @param data 需要发送给服务器的参数
      */
     async getDeepData(data) {
-        const res = await HTTP.ajaxImmediately({
-            url: '/bi/get_deep_bi_data/',
-            data: data,
-            // contentType: "application/json; charset=utf-8",
-            method:'get',
-            traditional: true
-        });
+        const res = await canvasCellService.getDeepData(data);
         return new Promise((resolve, reject) => {
             resolve(res);
         })

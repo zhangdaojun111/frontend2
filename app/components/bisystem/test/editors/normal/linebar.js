@@ -9,13 +9,15 @@ let config = {
                 label: '图表名称',
                 name: 'table_name',
                 defaultValue: '你好才华',
+                extra: [],
                 type: 'text',
                 events: {
                     onChange: function (value) {
                         this.formItems['copy_name'].setValue(value);
                     }
                 }
-            }, {
+            },
+            {
                 label: '图表名称2',
                 name: 'copy_name',
                 defaultValue: '你好才华',

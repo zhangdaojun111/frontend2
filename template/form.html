@@ -1,3 +1,4 @@
+{% load client_version %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,15 +13,15 @@
 {% ifequal window_type 'develop'%}
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
 <script type="text/javascript" src="http://localhost:8080/scripts/openForm.js"></script>
-<!--<link rel="stylesheet" href="/client/static/css/vendors.css">-->
+<!--<link rel="stylesheet" href=" {{ "/client/static/css/vendors.css"|version }}">-->
 <!--<link rel="stylesheet" href="/client/static/css/form.css">-->
-<!--<script type="text/javascript" src="/client/static/vendors.js"></script>-->
+<!--<script type="text/javascript" src=" {{ "/client/static/vendors.js"|version }}"></script>-->
 <!--<script type="text/javascript" src="/client/static/form.js"></script>-->
 {% else %}
-<link rel="stylesheet" href="/client/static/css/vendors.css">
-<link rel="stylesheet" href="/client/static/css/openForm.css">
-<script type="text/javascript" src="/client/static/vendors.js"></script>
-<script type="text/javascript" src="/client/static/openForm.js"></script>
+<link rel="stylesheet" href=" {{ "/client/static/css/vendors.css"|version }}">
+<link rel="stylesheet" href=" {{ "/client/static/css/openForm.css"|version }}">
+<script type="text/javascript" src=" {{ "/client/static/vendors.js"|version }}"></script>
+<script type="text/javascript" src=" {{ "/client/static/openForm.js"|version }}"></script>
 {% endifequal %}
 </body>
 </html>

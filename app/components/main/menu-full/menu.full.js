@@ -30,9 +30,7 @@ function searchData(menu, text) {
         }
     }
     search(res, text, null);
-    console.log(res);
     return res;
-
 }
 
 let config = {
@@ -45,9 +43,12 @@ let config = {
     actions: {
         search: function (text) {
             this.data.text = text;
-            let menu = searchData(this.originData, text);
-            this.data.list = menu;
-            this.reload();
+            if (text === '') {
+                this.data.list = this.originData;
+            } else {
+                this.data.list = searchData(this.originData, text);
+            }
+            this.actions.renderMenuList();
         },
         hide: function() {
             this.el.hide();
@@ -69,6 +70,7 @@ let config = {
             this.el.addClass('mini');
             this.data.type = 'mini';
             this.reload();
+            this.el.find('.childlist').hide();
             this.actions.countHeight();
         },
         startEditModel: function () {
@@ -92,6 +94,18 @@ let config = {
                 return i === '0';
             });
             return res;
+        },
+        renderMenuList: function () {
+            this.destroyChildren();
+            this.data.list.forEach((data) => {
+                let component = new FullMenuItem(_.defaultsDeep({}, data, {
+                    root: true,
+                    offset: 0,
+                    searchDisplay: true,
+                    type: this.data.type
+                }));
+                this.append(component, this.$root, 'li');
+            });
         }
     },
 
@@ -106,17 +120,9 @@ let config = {
     ],
 
     afterRender: function () {
-        let $root = this.el.find('.root');
-        this.data.list.forEach((data) => {
-            let component = new FullMenuItem(_.defaultsDeep({}, data, {
-                root: true,
-                offset: 0,
-                searchDisplay: true,
-                type: this.data.type
-            }));
-            this.append(component, $root, 'li');
-        });
-        this.el.find('.search input:text').focus();
+        this.$root = this.el.find('.root');
+        this.actions.renderMenuList();
+        // this.el.find('.search input:text').focus();
         this.actions.countHeight();
     },
     firstAfterRender: function() {

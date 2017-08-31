@@ -52,14 +52,27 @@ export const canvasCellService = {
         const res = await HTTP.ajaxImmediately({
             url: '/bi/get_bi_data/?&canvasType=pc',
             data: charts,
+            method:'post',
             traditional: true
         });
         return new Promise((resolve, reject) => {
-            if (res['success'] === 1) {
-                resolve(res);
-            } else {
-                reject(res);
-            }
+            resolve(res);
+        })
+    },
+    /**
+     * 获取下穿数据
+     * @param data 需要发送给服务器的参数
+     */
+    async getDeepData(data) {
+        const res = await HTTP.ajaxImmediately({
+            url: '/bi/get_bi_data/',
+            data: data,
+            // contentType: "application/json; charset=utf-8",
+            method:'get',
+            traditional: true
+        });
+        return new Promise((resolve, reject) => {
+            resolve(res);
         })
     }
 }

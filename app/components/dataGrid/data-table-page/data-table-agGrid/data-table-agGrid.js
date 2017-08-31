@@ -1527,7 +1527,7 @@ let config = {
                 }
             }
             //分组样式
-            if( this.data.groupCheck && !param["data"].children && this.groupGridCom.data.group.length != 0 ){
+            if( this.data.groupCheck && !param["data"].children && this.groupGridCom.data.group.length != 0 && param["data"].myfooter == undefined ){
                 return {background:'#E6F7FF'};
             }
         },
@@ -1571,9 +1571,12 @@ let config = {
                 this.el.find('.SheetPage ul li').on('click',function () {
                     $(this).addClass('active1');
                     $(this).siblings().removeClass('active1');
-                }) ;
+                });
+                console.log( "有sheet" )
                 this.el.find( '.ag-grid-con' ).height( 'calc(100% - 90px)' );
                 this.el.find( '.SheetPage' ).show();
+            }else {
+                console.log( "没有sheet" )
             }
         },
         //按钮点击事件
@@ -2562,7 +2565,7 @@ let config = {
             console.log( data )
             this.actions.viewOrEditPerm( 'view' );
             //屏蔽分组行
-            if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0)||this.data.editMode ){
+            if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0)||this.data.editMode||data.data.myfooter ){
                 return;
             }
             let obj = {

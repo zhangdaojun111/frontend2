@@ -47,18 +47,23 @@ let config = {
          * 动态渲染图表
          */
         loadCellChart(chart) {
-            const data = {
-                chart: chart,
-                cell: this.data.cell
+            if (chart['success'] !== 1) {
+                return false;
             };
-            if (chart['assortment']) {
-                this.cellTitle.data.title = chart['chartName']['name'];
-                this.cellTitle.data.isDeep = chart['assortment'] === 'normal' || chart['assortment'] === 'pie' ? true : false;
+            const data = {
+                chart: chart['data'],
+                cell: this.data.cell,
+                canvas: this.canvas
+            };
+            if (chart['data']['assortment']) {
+                this.cellTitle.data.title = chart['data']['chartName']['name'];
+                this.cellTitle.data.isDeep = chart['data']['assortment'] === 'normal' || chart['data']['assortment'] === 'pie' ? true : false;
                 this.cellTitle.data.newCell = true;
                 this.cellTitle.reload();
-                let cellComponent = new cellTypes[chart['assortment']](data);
+                let cellComponent = new cellTypes[chart['data']['assortment']](data);
                 let cellContainer = this.el.find('.cell-chart');
                 cellComponent.render(cellContainer);
+                this.cellChart = cellComponent;
             }
         },
 
@@ -103,17 +108,39 @@ let config = {
          *从左侧拖拽图表到画布块，
          * @param id 传递chart_id，从服务器获取chart 数据
          */
-        async dragChartData(chartId) {
+        async dragChartData(chart) {
             if (this.loadData) {
                 return false;
             };
-            const res = await canvasCellService.getCellChart({chart_id: chartId});
+            const res = await canvasCellService.getCellChart(chart.data);
             this.loadData = false;
-            this.data['chart'] = res['data'][0];
-            this.data['cell'].chart_id = chartId[0];
+            this.data['chart'] = res[0]['data'];
+            this.data['cell'].chart_id = chart.chart_id;
+            this.data['cell']['is_deep'] = 0;
             this.data.biUser = true;
-            this.actions.loadCellChart(this.data.chart);
-        }
+            this.actions.loadCellChart(res[0]);
+        },
+
+        // /**
+        //  * 渲染图表初始化下穿数据
+        //  * @param res = 下穿数据
+        //  */
+        // loadChartDeepData(res) {
+        //     console.log(res);
+        //     if (res.hasOwnProperty(this.data.cell.layout_id)) {
+        //         const chartDeepData = res[this.data.cell.layout_id];
+        //         if(chartDeepData['success'] === 1) {
+        //             if (chartDeepData['data']['xAxis'].length > 0 && chartDeepData['data']['yAxis'].length > 0) {
+        //                 this.cellChart.data.cellChart['chart']['data']['xAxis'] = chartDeepData['data']['xAxis'];
+        //                 this.cellChart.data.cellChart['chart']['data']['yAxis'] = chartDeepData['data']['yAxis'];
+        //                 //重新渲染echarts
+        //                 const option = this.cellChart.pieChart.pieOption(this.cellChart.data.cellChart);
+        //                 this.cellChart.pieChart.myChart.setOption(option);
+        //                 this.cellChart.pieChart.myChart.resize();
+        //             }
+        //         }
+        //     }
+        // }
     },
     data: {
         chart: null
@@ -156,7 +183,23 @@ let config = {
                 let ev = event.originalEvent;
                 let data = JSON.parse(ev.dataTransfer.getData("Text"));
                 ev.dataTransfer.clearData("Text");
-                this.actions.dragChartData([data.id]);
+                let layout = {
+                    chart_id: data.id,
+                    floor: 0,
+                    view_id: this.canvas.viewId,
+                    layout_id: this.data.cell.layout_id,
+                    xOld: 0,
+                    row_id:0,
+                    deep_info: {}
+                };
+                this.actions.dragChartData({
+                    data:{
+                        layouts:[JSON.stringify(layout)],
+                        query_type:'deep',
+                        is_deep:1,
+                    },
+                    chart_id: data.id
+                });
                 this.loadData = true;
                 return false;
             }
@@ -193,7 +236,7 @@ let config = {
     firstAfterRender() {
         // 监听当从服务器获取画布块图表数据finish时
         $('.bi-container').on('canvas:cell:chart:finish', (event,params) => {
-            this.data.chart = params['data'][this.componentId];
+            this.data.chart = params['data'][this.data.cell.layout_id];
             this.actions.loadCellChart(this.data.chart);
         })
     },
@@ -210,5 +253,7 @@ export class CanvasCellComponent extends BiBaseComponent {
         this.data.cell = data['cell'];
         this.canvas = data['canvas'];
         this.loadData = false;
+        this.cellTitle = null; // 图表标题组件
+        this.cellChart = null; // 动态渲染图表组件
     }
 }

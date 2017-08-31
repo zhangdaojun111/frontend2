@@ -1,12 +1,10 @@
 import Component from '../../../../lib/component';
 import {Text} from '../forms/text/text';
 import {Select} from '../forms/select/select';
-import {AutoSelect} from '../forms/autoselect/autocomplete';
 
 let formItemTypes = {
     'text': Text,
-    'select': Select,
-    'autoselect': AutoSelect
+    'select': Select
 }
 
 class Base extends Component {
