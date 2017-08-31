@@ -12,6 +12,10 @@
     position: relative;
     .choose-department-tree {
       padding: 15px;
+      .list-group-item {
+        cursor: pointer;
+        padding: 5px 5px 5px 5px;
+      }
       padding-top: 30px;
       border-top: 1px solid #E4E4E4;
       height: calc(100% - 60px);
@@ -112,7 +116,7 @@
         }
         a {
           cursor: pointer;
-          margin-left: 20px;
+          margin-left: 30px;
           position: relative;
           color: #B399A6;
           text-decoration: none;
@@ -122,7 +126,7 @@
             width: 16px;
             height: 16px;
             vertical-align: sub;
-            margin-right: 5px;
+            margin-right: 4px;
           }
         }
       }

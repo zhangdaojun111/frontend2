@@ -67,8 +67,6 @@ let CalendarRemind = {
                     width: "1700",
                     height: '800',
                     title: '表单'
-                }, {
-                    real_id: 'sss',
                 });
         })
     },

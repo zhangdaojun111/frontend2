@@ -1,13 +1,14 @@
 @import "../../../../assets/scss/core/base";
-$workflow-bg-color: rgb(202,238,255);
-.component-calendar-workflow{
+
+$workflow-bg-color: rgb(202, 238, 255);
+.component-calendar-workflow {
     padding: 0px 0px 0px 0px;
     height: 25px;
     margin-top: 5px;
     width: 97%;
     border-right: 2px solid rgba(202, 238, 255, 1);
     box-sizing: border-box;
-    .workflow-content{
+    .workflow-content {
         box-sizing: border-box;
         padding: 0px 0px 2px 5px;
         position: relative;
@@ -16,23 +17,23 @@ $workflow-bg-color: rgb(202,238,255);
         //max-width: 180px;
         overflow: hidden;
         cursor: pointer;
-        word-break:keep-all;/* 不换行 */
-        white-space:nowrap;/* 不换行 */
+        word-break: keep-all; /* 不换行 */
+        white-space: nowrap; /* 不换行 */
     }
-    .workflow-schedule{
+    .workflow-schedule {
         display: inline-block;
-        height:25px;
+        height: 25px;
         background-color: $workflow-bg-color
     }
-    .end-workflow{
+    .end-workflow {
         display: inline-block;
-        width:2px;
+        width: 2px;
         height: 25px;
         background-color: rgba(202, 238, 255, 1);
         float: right;
-        right:0px;
+        right: 0px;
     }
-    .end-workflow:hover{
+    .end-workflow:hover {
         background-color: rgba(242, 242, 242, 1);
     }
 }

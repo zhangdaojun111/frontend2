@@ -21,13 +21,17 @@ export const CalendarWorkflowData = {
     // 审批完成的
     workflowFinishedData: [],
 
-    //获取工作流信息
+    /**
+     * 获取工作流数据
+     * @param from_date
+     * @param to_date
+     */
     getWorkflowData: function(from_date, to_date){
         this.is_approve_workflow = false;
         this.is_approving_workflow = false;
         this.is_focus_workflow = false;
 
-        //approve
+        // 待审批
         CalendarService.getWorkflowRecords( {type: 5,"rows":9999,"page":1,"rate_data":1,'from_date':from_date,'to_date':to_date} ).then( res=>{
             if(res) {
                 this.workflow_approve_data = res['rows'];
@@ -36,7 +40,7 @@ export const CalendarWorkflowData = {
             }
 
         } );
-        //approving
+        // 审批中
         CalendarService.getWorkflowRecords( {type: 2,"rows":9999,"page":1,"rate_data":1,'from_date':from_date,'to_date':to_date} ).then( res=>{
             if(res) {
                 this.workflow_approving_data = res['rows'];
@@ -44,7 +48,7 @@ export const CalendarWorkflowData = {
                 this.getWorkflowDataTogether();
             }
         } );
-        //focus
+        // 我关注的
         CalendarService.getWorkflowRecords( {type: 6,"rows":9999,"page":1,"rate_data":1,'from_date':from_date,'to_date':to_date} ).then( res=>{
             if(res) {
                 this.workflow_focus_data = res['rows'];
@@ -53,7 +57,7 @@ export const CalendarWorkflowData = {
             }
         } );
 
-        // finished
+        // 由我发起并完成的
         CalendarService.getWorkflowRecords( {type: 3,"rows":9999,"page":1,"rate_data":1,'from_date':from_date,'to_date':to_date} ).then( res=>{
             if(res) {
                 this.workflowFinishedData = res['rows'];
@@ -62,7 +66,10 @@ export const CalendarWorkflowData = {
         } );
     },
 
-    //将工作流数据整合到一起
+    /**
+     * 整合工作流数据
+     * @returns {Array}
+     */
     getWorkflowDataTogether: function(){
         if( this.is_approve_workflow && this.is_approving_workflow && this.is_focus_workflow ){
             let arr = [];
