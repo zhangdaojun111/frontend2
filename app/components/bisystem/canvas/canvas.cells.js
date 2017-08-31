@@ -79,6 +79,7 @@ let config = {
 
             cells.map((val,index) => {
                 zIndex.push(val.size.zIndex);
+                console.log(val);
                 val.deep = userMode === 'manager' ? {} : val.is_deep == 1 ? JSON.parse(val.deep) : val.deep;
                 val.is_deep = userMode === 'manager' ? 0 : val.is_deep;
                 const data = {
@@ -92,9 +93,7 @@ let config = {
                 if (val.is_deep == 0) {
                     deep_info = {}
                 } else {
-                    if (userMode === 'client') {
-                        deep_info[val.deep.floor] = val.deep.xOld.map(x => x['name'])
-                    };
+                    deep_info[val.deep.floor] = val.deep.xOld.map(x => x['name'])
                 };
                 layouts.push(JSON.stringify({
                     chart_id: val.chart_id ? val.chart_id : 0,
@@ -121,19 +120,51 @@ let config = {
             this.messager('canvas:cell:chart:finish', {'data': charts, type: 'loadChartData'});
         },
 
+        /**
+         * 保存画布布局
+         */
+        saveCanvas() {
+            let cells = _.cloneDeep(this.data.cells);
+            const data = {
+                view_id: this.viewId,
+                canvasType: "pc",
+                data: cells.map((cell) => {
+                    delete cell['chart'];
+                    delete cell['canvas'];
+                    delete cell['componentId'];
+                    delete cell['is_deep'];
+                    delete cell['deep'];
+                    return JSON.stringify(cell);
+                })
+            };
+            canvasCellService.saveCellLayout(data).then(res => {
+                if (res['success'] === 1) {
+                    msgbox.alert('保存成功');
+                } else {
+                    msgbox.alert(res['error']);
+                }
+            });
+        }
+
     },
     binds:[
-        // 拖拽start画布mousedown触发
-        // {
-        //     event: 'mousedown',
-        //     selector: '.cell',
-        //     callback: function (context,event) {
-        //         this.canvas.data.cellMaxZindex++;
-        //         let zIndex = this.canvas.data.cellMaxZindex;
-        //         $(context).css('zIndex', zIndex);
-        //         return false;
-        //     }
-        // },
+        {
+            event: 'click',
+            selector: '.views-btn-group .view-save-btn',
+            callback: function (context,event) {
+                this.actions.saveCanvas();
+                return false;
+            }
+        },
+        {
+            // 新增画布块
+            event: 'click',
+            selector: '.views-btn-group .add-cell-btn',
+            callback: function (context,event) {
+                this.actions.addCell();
+                return false;
+            }
+        },
 
     ],
 
@@ -164,36 +195,6 @@ let config = {
             _.remove(this.data.cells, function (cell) {
                 return cell.layout_id == layout_id;
             });
-        });
-
-        // 保存视图画布
-        const toolBtns = this.el.find('.views-btn-group');
-        toolBtns.on('click', '.view-save-btn', (event) => {
-            let cells = _.cloneDeep(this.data.cells);
-            const data = {
-                view_id: this.viewId,
-                canvasType: "pc",
-                data: cells.map((cell) => {
-                    delete cell['chart'];
-                    delete cell['canvas'];
-                    delete cell['componentId'];
-                    delete cell['is_deep'];
-                    delete cell['deep'];
-                    return JSON.stringify(cell);
-                })
-            };
-            canvasCellService.saveCellLayout(data).then(res => {
-                if (res['success'] === 1) {
-                    msgbox.alert('保存成功');
-                }
-            });
-            return false;
-        });
-
-        //添加一个空的画布块
-        toolBtns.on('click', '.add-cell-btn', (event) => {
-            this.actions.addCell();
-            return false;
         });
 
         //单页跳转指定路由

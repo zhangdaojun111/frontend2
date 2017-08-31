@@ -1,4 +1,4 @@
-import template from './select.html';
+import template from './checkbox.html';
 import {Base} from '../base';
 
 let config = {
@@ -11,7 +11,7 @@ let config = {
     }
 };
 
-class Select extends Base {
+class Checkbox extends Base {
     constructor(data, event){
         super(config, data, event)
     }
@@ -23,8 +23,8 @@ class Select extends Base {
     setValue(value){}
 
     /**
-     * 设置select options
-     * @param list = 要设置的options数据
+     * 设置checkbox list
+     * @param checkbox = 要设置的checkboxs数据
      */
     setList(list) {
         this.data.list = list;
@@ -33,4 +33,4 @@ class Select extends Base {
 
 }
 
-export {Select}
+export {Checkbox}

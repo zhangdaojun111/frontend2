@@ -37,15 +37,6 @@ class Text extends Base {
         this.data.value = value;
         this.$input.val(value);
     }
-
-    /**
-     * 设置label
-     * @param label = input标题
-     */
-    setLabel(label){
-        this.data.label = label;
-        this.$label.text(label);
-    }
 }
 
 export {Text}
