@@ -19,6 +19,25 @@
   .btn-nav {
     height: 60px;
     width: 100%;
+    .headerTips {
+      height: 60px;
+      font-size: 12px;
+      padding-left: 15px;
+      display: flex;
+      position: absolute;
+      left: 0px;
+      i {
+        background: url("../../../assets/images/dataGrid/tab-title.png") no-repeat;
+        width: 16px;
+        height: 16px;
+        display: block;
+        margin-right: 20px;
+        margin-top: 21px;
+      }
+      span {
+        line-height: 60px;
+      }
+    }
   }
   .btn-nav.flex{
     display: flex;
