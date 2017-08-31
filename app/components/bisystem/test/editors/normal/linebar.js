@@ -20,7 +20,7 @@ let config = {
             {
                 label: '图表名称2',
                 name: 'copy_name',
-                defaultValue: '你好才华',
+                defaultValue: '',
                 type: 'text'
             }
         ]

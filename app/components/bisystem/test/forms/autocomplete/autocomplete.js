@@ -9,15 +9,14 @@ let config = {
     binds: [
     ],
     afterRender(){
-    },
-    firstAfterRender() {
         const autoselect_data = {
             multiSelect: false,
-            onSelect: this.onSelect
+            onSelect: this.data.onSelect
         };
         this.autoselect = new AutoSelect(autoselect_data);
         this.append(this.autoselect, this.el);
-    }
+    },
+    firstAfterRender() {}
 }
 
 class AutoComplete extends Base {
@@ -31,12 +30,6 @@ class AutoComplete extends Base {
      */
     setList(list) {
         this.autoselect.actions.setList(list);
-    }
-
-    /**
-     * mapping autoselect onselect事件
-     */
-    onSelect() {
     }
 
 }

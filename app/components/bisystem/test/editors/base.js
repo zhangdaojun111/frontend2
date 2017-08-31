@@ -4,13 +4,15 @@ import {Select} from '../forms/select/select';
 import {AutoComplete} from '../forms/autocomplete/autocomplete';
 import {Radio} from '../forms/radio/radio';
 import {Checkbox} from '../forms/checkbox/checkbox';
+import {Choosed} from '../forms/choosed/choosed';
 
 let formItemTypes = {
     'text': Text,
     'select': Select,
     'autocomplete': AutoComplete,
     'radio': Radio,
-    'checkbox': Checkbox
+    'checkbox': Checkbox,
+    'choosed':Choosed
 }
 
 class Base extends Component {

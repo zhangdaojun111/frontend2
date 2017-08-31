@@ -1,24 +1,57 @@
 import {Base} from '../base';
 import template from './table.html';
+import './table.scss';
+
 import {chartName, source,theme,icon} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 
+
 let config = {
     template: template,
     actions: {
+
         /**
-         * 渲染列名字段
+         * 加载x 和y轴数据
+         * @param data 选中的数据源
          */
-        loadColumns() {
-            alert('hello world')
+        async getFields(data) {
+            let table = data[0] ? data[0] : null;
+            if (table) {
+                let res = await ChartFormService.getChartField(table.id);
+                if (res['success'] === 1){
+                    this.actions.loadColumns(res['data']['x_field']);
+                } else {
+                    msgbox.alert(res['error'])
+                }
+            } else {
+                this.actions.loadColumns(table);
+            }
+
+        },
+
+        /**
+         * 渲染列名字段列表（x轴）
+         * @param columns 表格列表字段（x轴）
+         */
+        async loadColumns(columns) {
+            if (columns) {
+                this.formItems['columns'].setJsonList(columns);
+                this.formItems['sortColumns'].setList(columns);
+            } else { // 清空字段
+                this.formItems['columns'].actions.clear();
+                this.formItems['sortColumns'].setList([]);
+            }
         },
 
         /**
          * 初始化操作
          */
        async init() {
-            this.formItems['source'].onSelect = this.actions.loadColumns();
+           // 绑定数据源onSelect选择事件
+            this.formItems['source'].data.onSelect = this.actions.getFields;
+            this.formItems['source'].reload();
+
            // 获取数据来源
             ChartFormService.getChartSource().then(res => {
                 if (res['success'] === 1) {
@@ -54,6 +87,13 @@ let config = {
                 defaultValue: '',
                 list: [],
                 type: 'checkbox'
+            },
+            {
+                label: '已选择列名',
+                name: 'choosed',
+                defaultValue: '',
+                list: [],
+                type: 'choosed'
             },
             {
                 label: '默认排序',
