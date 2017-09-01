@@ -188,6 +188,8 @@ let config = {
         //显示tabs
         showTabs:function (opacity) {
         },
+        //左侧提示
+        gridTips: ''
     },
     //生成的表头数据
     columnDefs: [],
@@ -730,6 +732,7 @@ let config = {
                                     this.columnDefs = this.actions.createHeaderColumnDefs();
                                     this.agGrid.gridOptions.api.setColumnDefs( this.columnDefs );
                                     dgcService.calcColumnState(this.data,this.agGrid,["group",'number',"mySelectAll"]);
+                                    this.customColumnsCom.actions.makeSameSate();
                                 } );
                                 HTTP.flush();
                             } );
@@ -1402,6 +1405,10 @@ let config = {
             this.data.firstRender = false;
             this.hideLoading();
             this.data.showTabs(1);
+            //显示提示
+            if( this.data.gridTips!='' ){
+                this.el.find( '.grid-tips' )[0].style.display = 'flex';
+            }
         },
         //触发导出
         onExport: function () {
@@ -1657,7 +1664,8 @@ let config = {
                     rowId: this.data.rowId,
                     fieldId: this.data.fieldId,
                     source_field_dfield: this.data.source_field_dfield,
-                    base_buildin_dfield: this.data.base_buildin_dfield
+                    base_buildin_dfield: this.data.base_buildin_dfield,
+                    gridTips: this.data.gridTips
                 }
                 let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', url_obj);
                 this.el.find('.grid-new-window')[0].href = url;
