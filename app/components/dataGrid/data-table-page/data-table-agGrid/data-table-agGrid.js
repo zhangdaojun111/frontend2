@@ -1382,9 +1382,9 @@ let config = {
             }else {
                 this.el.find( '.pagination' )[0].style.height = '0px';
                 if( this.data.isShowSheet ){
-                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc(100% - 90px)';
+                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc(100% - 100px)';
                 }else {
-                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 70px )';
+                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 80px )';
                 }
             }
             //高级查询
@@ -1554,7 +1554,7 @@ let config = {
                     $(this).siblings().removeClass('active1');
                 });
                 console.log( "有sheet" )
-                this.el.find( '.ag-grid-con' ).height( 'calc(100% - 120px)' );
+                this.el.find( '.ag-grid-con' ).height( 'calc(100% - 140px)' );
                 this.el.find( '.SheetPage' ).show();
             }else {
                 console.log( "没有sheet" )
