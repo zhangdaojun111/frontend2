@@ -9,11 +9,6 @@
                 display: inline-block;
                 .float-button-group-show {
                     display: inline-block;
-                    width: 16px;
-                    height:16px;
-                    box-sizing: border-box;
-                    background: url("../../../../assets/images/calendar/button-hide.png");
-                    margin-top: -15px;
                     cursor: pointer;
                 }
             }
@@ -48,7 +43,6 @@
         }
         .label-select-all-show {
             display: inline-block;
-            background: url("../../../../assets/images/calendar/calendar-checked-false.png");
             cursor: pointer;
         }
         .label-select-all-checked {
@@ -112,7 +106,3 @@
         white-space: nowrap;
     }
 }
-
-
-
-

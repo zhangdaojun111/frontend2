@@ -180,21 +180,25 @@ let config = {
                 }
             });
         },
-        loadMultiSelect:function(){
-            this.data.select_item_data = {
-                'list': this.data.dropdown,
-                displayType: 'popup',
-                editable: this.data.editable,
-                choosed: this.actions.returnShow(this.data.rowSetData['selectedOpts']).res,
-                onSelect: function (choosed) {
-                    let choosedList = [];
-                    for (let choosedItem of choosed) {
-                        choosedList.push(choosedItem['id']);
-                    }
-                    this.data.rowSetData['selectedOpts'] = choosedList;
-                    this.actions.checkSelectedOpts(choosed);
-                },
-            };
+
+        editableTrue:function(){
+            this.el.find(".editor-items").attr("disabled", false);
+            this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
+            this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
+            this.el.find('td').removeClass('unclick');
+            this.el.find(".set-remind-method").removeClass('unclick');
+            this.el.find('input').removeClass('unclick');
+            this.data.staus = true;
+        },
+
+        editableFalse:function(){
+            this.el.find(".editor-items").attr("disabled", true);
+            this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
+            this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
+            this.el.find("td").addClass('unclick');
+            this.el.find(".set-remind-method").addClass('unclick');
+            this.el.find('input').addClass('unclick');
+            this.data.staus = false;
         }
     },
     binds: [
@@ -244,7 +248,6 @@ let config = {
         this.el.css({});
         this.data.staus = false;
         let _this = this;
-        this.actions.loadMultiSelect();
         let select_item_data = {
             'list': this.data.dropdown,
             displayType: 'popup',
@@ -277,34 +280,20 @@ let config = {
         this.data.singleSelectMenu = new AutoSelect(single_item_data);
         this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
         Mediator.on('calendar-set:editor', data => {
+            this.data.singleSelectMenu.destroySelf();
+            this.data.multiSelectMenu.destroySelf();
             if (data.data === 1) {
-                this.el.find(".editor-items").attr("disabled", false);
-                this.data.singleSelectMenu.destroySelf();
-                _this.data.multiSelectMenu.destroySelf();
                 select_item_data.editable = true;
-                _this.data.multiSelectMenu = new AutoSelect(select_item_data);
-                _this.append(_this.data.multiSelectMenu, _this.el.find('.multi-select-item'));
+                this.data.multiSelectMenu = new AutoSelect(select_item_data);
                 single_item_data.editable = true;
                 this.data.singleSelectMenu = new AutoSelect(single_item_data);
-                this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
-                _this.el.find('td').removeClass('unclick');
-                _this.el.find(".set-remind-method").removeClass('unclick');
-                _this.el.find('input').removeClass('unclick');
-                this.data.staus = true;
+                this.actions.editableTrue();
             } else {
-                this.el.find(".editor-items").attr("disabled", true);
-                this.data.singleSelectMenu.destroySelf();
-                _this.data.multiSelectMenu.destroySelf();
                 select_item_data.editable = false;
                 single_item_data.editable = false;
-                _this.data.multiSelectMenu = new AutoSelect(select_item_data);
-                _this.append(_this.data.multiSelectMenu, _this.el.find('.multi-select-item'));
+                this.data.multiSelectMenu = new AutoSelect(select_item_data);
                 this.data.singleSelectMenu = new AutoSelect(single_item_data);
-                this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
-                _this.el.find("td").addClass('unclick');
-                _this.el.find(".set-remind-method").addClass('unclick');
-                _this.el.find('input').addClass('unclick');
-                this.data.staus = false;
+                this.actions.editableFalse();
             }
         });
 
@@ -315,10 +304,7 @@ let config = {
         }
         this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text;
         this.el.find('.preview-text').text(this.data.preViewText);
-
-        $("#set-color-id").attr("id", "set-color-" + this.data.rowSetData.field_id);
-        let set_color_id = "#set-color-" + this.data.rowSetData.field_id;
-        $(set_color_id).attr("value", this.data.rowSetData.color);
+        this.el.find('.set-color').attr("value", this.data.rowSetData.color);
     },
     beforeDestory: function () {
         Mediator.removeAll('calendar-set:editor');
