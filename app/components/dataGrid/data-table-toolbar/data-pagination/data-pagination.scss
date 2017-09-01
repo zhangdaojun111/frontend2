@@ -1,8 +1,8 @@
 @import "../../../../assets/scss/core/base";
 
 .pagination-con {
-    height: 30px;
-    line-height: 30px;
+    height: 40px;
+    line-height: 40px;
     color: #666666;
     font-size: 14px;
     user-select: none;
@@ -11,9 +11,7 @@
         float: left;
         span {
             vertical-align: top;
-            display: inline-block;
-            height: 33px;
-            line-height: 33px;
+            line-height: 40px;
         }
         .pageSize {
             cursor: pointer;
@@ -41,12 +39,11 @@
         }
         .ui-icon-refresh {
             cursor: pointer;
-            top: 0px;
             display: inline-block;
-            height: 33px;
-            width: 25px;
-            left: 0px;
-            background: url(../../../../assets/images/dataGrid/icon_shuaxin_blue.png) no-repeat scroll center 8px transparent;
+            height: 16px;
+            width: 16px;
+            vertical-align: middle;
+            background: url(../../../../assets/images/dataGrid/icon_shuaxin_blue.png) no-repeat transparent;
         }
 
         .ui-icon-refresh:hover {
@@ -129,17 +126,17 @@
             //vertical-align: sub;
             vertical-align: top;
             display: inline-block;
-            background: url(../../../../assets/images/dataGrid/icon_shangyiye.png) no-repeat scroll center 8px transparent;
-            height: 33px;
+            background: url(../../../../assets/images/dataGrid/icon_shangyiye.png) no-repeat transparent;
+            height: 16px;
             width: 16px;
-            margin: 0 7px;
+            margin: 12px 7px;
         }
         .goPre {
             vertical-align: top;
             margin: 0 7px;
             display: inline-block;
-            height: 33px;
-            line-height: 33px;
+            height: 40px;
+            line-height: 40px;
         }
         .currentPage {
             vertical-align: top;
@@ -151,16 +148,16 @@
             vertical-align: top;
             margin: 0 7px;
             display: inline-block;
-            height: 33px;
-            line-height: 33px;
+            height: 40px;
+            line-height: 40px;
         }
         .goLast {
             //vertical-align: sub;
             display: inline-block;
-            background: url(../../../../assets/images/dataGrid/icon_xiayiye.png) no-repeat scroll center 8px transparent;
-            height: 33px;
+            background: url(../../../../assets/images/dataGrid/icon_xiayiye.png) no-repeat transparent;
+            height: 16px;
             width: 16px;
-            margin: 0 7px;
+            margin: 12px 7px;
         }
     }
     .goFirst:hover {
