@@ -45,7 +45,7 @@ To change `display` (e.g. `display: inline-block;`), we suggest using a common C
     background: url("../../images/dataGrid/group-cancel.png") no-repeat;
 }
 .icon-expert-save {
-    background: url("../../images/dataGrid/icon_save2.png") no-repeat;
+    background: url("../../images/dataGrid/save.png") no-repeat;
 }
 .icon-expert-add {
     background: url("../../images/dataGrid/icon_add_1.png") no-repeat;
@@ -57,54 +57,57 @@ To change `display` (e.g. `display: inline-block;`), we suggest using a common C
     background: url("../../images/form/error-msg.png") no-repeat;
 }
 .icon-expert-edit {
-    background: url("../../images/dataGrid/icon_bianjimoshi.png") no-repeat;
+    background: url("../../images/dataGrid/aggrid_ico_edit.png") no-repeat;
 }
 .aggrid-bg-search {
-    background: url("../../images/framework/search.png") no-repeat;
+    background: url("../../images/dataGrid/aggrid_ico_search_adv.png") no-repeat;
 }
 
 .icon-aggrid-filter {
-    background-position: -26px 0px;
+    background: url("../../images/dataGrid/aggrid_ico_shaixuan.png") no-repeat;
 }
 .icon-aggrid-import {
-    background-position: -26px -52px;
+    background: url("../../images/dataGrid/aggrid_ico_import.png") no-repeat;
 }
 .icon-aggrid-export {
-    background-position: 0px -26px;
+    background: url("../../images/dataGrid/aggrid_ico_export.png") no-repeat;
 }
 .icon-aggrid-full-screen {
-    background-position: -26px -26px;
+    background: url("../../images/dataGrid/aggrid_ico_full.png") no-repeat;
 }
 .icon-aggrid-cancel {
-    background-position: -52px 0px;
+    background: url("../../images/dataGrid/cancel.png") no-repeat;
 }
 .icon-aggrid-save {
-    background-position: -52px -26px;
+    background: url("../../images/dataGrid/save.png") no-repeat;
 }
 .icon-aggrid-search {
-    background-position: 0px -52px;
+    background: url("../../images/dataGrid/aggrid_ico_search_adv.png") no-repeat;
 }
 .icon-aggrid-edit {
-    background-position: 0px 0px;
+    background: url("../../images/dataGrid/aggrid_ico_edit.png") no-repeat;
 }
 .icon-aggrid-add {
-    background-position: -52px -52px;
+    background: url("../../images/dataGrid/icon_add_1.png") no-repeat;
 }
 .icon-aggrid-delete {
-    background-position: -78px 0px;
+    background: url("../../images/dataGrid/icon_delete_1.png") no-repeat;
 }
 .icon-aggrid-group {
-    background-position: -78px -26px;
+    background: url("../../images/dataGrid/aggrid_ico_group.png") no-repeat;
 }
 .icon-aggrid-custom {
 
-    background-position: -78px -52px;
+    background: url("../../images/dataGrid/icon_dingzhilie_1.png") no-repeat;
 }
 .icon-aggrid-self-adaptation {
-    background-position: 0px -78px;
+    background: url("../../images/dataGrid/aggrid_ico_adapt.png") no-repeat;
 }
 .icon-aggrid-refresh {
-    background-position: -26px -78px;
+    background: url("../../images/dataGrid/aggrid_ico_ref.png") no-repeat;
+}
+.icon-aggrid-tool {
+    background: url("../../images/dataGrid/tool.png") no-repeat;
 }
 
 .icon-icon-data-check {
