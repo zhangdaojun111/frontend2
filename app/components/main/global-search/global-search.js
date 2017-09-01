@@ -83,7 +83,6 @@ let config ={
             }
         },
         doSearch:function () {
-            this.data.globalSearchOpen = "0";
             if(this.data.globalSearchOpen === "1"){
                 let content = this.data.searchContent;
                 this.el.find('.search-content').val(content).blur();
