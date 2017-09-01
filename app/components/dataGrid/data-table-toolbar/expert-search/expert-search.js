@@ -76,7 +76,7 @@ let config = {
                 this.data.commonQuery = res.rows
                 this.el.find('.common-search-item').remove();
                 this.data.commonQuery.forEach((item)=> {
-                    this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
+                    this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete icon-expert-error-msg"></span></li>`);
                 })
             } );
             HTTP.flush();
@@ -280,7 +280,7 @@ let config = {
         //渲染常用查询按钮
         renderQueryItem: function(data){
             data.forEach((item)=> {
-                this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
+                this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete icon-expert-error-msg"></span></li>`);
             })
         },
         //保存临时常用查询
@@ -372,7 +372,7 @@ let config = {
                 this.el.find('.common-search-compile').css('display','none')
             } else {
                 this.data.commonQuery.forEach((item)=> {
-                    this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
+                    this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete icon-expert-error-msg"></span></li>`);
                 })
             }
             this.actions.rendSearchItem();

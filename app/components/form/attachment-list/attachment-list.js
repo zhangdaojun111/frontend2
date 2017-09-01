@@ -23,6 +23,9 @@ let css = `
           margin-bottom: 20px;
           margin-top: 8px;
     }
+    .attachment-list .table a{
+        outline-style:none;
+    }
     .attachment-list .table-bordered  thead  tr  th:first-child,.attachment-list .table-bordered  tbody  tr  td:first-child{
       width: 70%;
     }

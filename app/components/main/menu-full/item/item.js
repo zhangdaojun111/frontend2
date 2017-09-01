@@ -110,6 +110,27 @@ let config = {
             } else {
                 this.actions.setCheckboxValueSelf(false);
             }
+        },
+        setToFull: function () {
+            this.data.type = 'full';
+            this.cancelEvents();
+            this.bindEvents();
+            this.el.off('mouseenter');
+            this.el.off('mouseleave');
+        },
+        setToMini: function () {
+            this.data.type = 'mini';
+            this.cancelEvents();
+            this.bindEvents();
+            this.actions.hideChildrenAtFull();
+            let offset = 30;
+            if (this.data.items) {
+                offset = 10;
+            }
+            this.row.css({
+                'padding-left': offset + 'px',
+                'padding-right': '20px'
+            })
         }
     },
     binds: [
@@ -200,15 +221,6 @@ let config = {
                 }
                 this.row.css({
                     'padding-left': offset + 20 + 'px'
-                })
-            } else {
-                let offset = 30;
-                if (this.data.items) {
-                    offset = 10;
-                }
-                this.row.css({
-                    'padding-left': offset + 'px',
-                    'padding-right': '20px'
                 })
             }
         }
