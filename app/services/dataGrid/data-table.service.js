@@ -89,6 +89,10 @@ export const dataTableService = {
     setPermData: function ( data ) {
         return HTTP.post( 'user_perms',data )
     },
+    //请求帮助文档信息
+    getHelpData: function ( data ) {
+        return HTTP.post( 'get_help_data',data )
+    },
     //请求附件数据
     getAttachmentList(json){
         return HTTP.post('query_attachment_list',json);

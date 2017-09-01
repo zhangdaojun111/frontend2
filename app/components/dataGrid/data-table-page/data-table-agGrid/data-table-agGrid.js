@@ -185,7 +185,9 @@ let config = {
         selectData: [],
         //是否有sheet
         isShowSheet: false,
-
+        //显示tabs
+        showTabs:function (opacity) {
+        },
     },
     //生成的表头数据
     columnDefs: [],
@@ -430,7 +432,10 @@ let config = {
         },
         bodyCellRender: function (params) {
             if (params.data && params.data.myfooter && params.data.myfooter == "合计") {
-                return params.value || '';
+                let textAline = fieldTypeService.textAline( params.colDef["real_type"] )
+                let bgStyle = ' style = "display: block;width: 100%;height: 100%;text-align:' + textAline+';"';
+                let h = '<span' + bgStyle + '><span>' + ( params.value || '' ) + '</span><span/>';
+                return h;
             }
             let myValue = params['value'];//当前单元格数值
             let remindColorInfo = this.data.remindColor['remind_color_info'];//枚举提醒颜色
@@ -629,6 +634,7 @@ let config = {
             //合同编辑器
             else if (real_type == fieldTypeService.TEXT_COUNT_TYPE) {
                 sHtml = '<a' + bgStyle + ' class="view-contract">' + "查看" + '</a>' + '<span>' + "丨" + '</span>' + '<a class="download-contract">' + '下载' + '</a>';
+                sHtml = '<span '+ bgStyle +'><a style="color:#337ab7;" class="view-contract">查看</a>丨<a style="color:#337ab7;" class="download-contract">下载</a></span>';
             }
 
             //表对应关系（不显示为数字）
@@ -886,6 +892,7 @@ let config = {
                 dgcService.setPreference( res[0],this.data );
                 this.data.myGroup = (res[0]['group'] != undefined) ? JSON.parse(res[0]['group'].group) : [];
                 this.data.fieldsData = res[1].rows || [];
+                this.agGrid.data.fieldsData = this.data.fieldsData;
                 this.data.permission = res[1].permission;
                 this.data.namespace = res[1].namespace;
                 this.data.headerColor = dgcService.createHeaderStyle( this.data.tableId,res[1].field_color );
@@ -904,6 +911,13 @@ let config = {
                 this.data.groupFields = r.group;
                 //创建表头
                 this.columnDefs = this.actions.createHeaderColumnDefs();
+
+                let d = {
+                    columnDefs: this.columnDefs
+                }
+                //赋值
+                this.agGrid.actions.setGridData(d);
+
                 //第一次加载隐藏默认列
                 if( res[0].ignoreFields == null && this.data.haveSystemsFields ){
                     this.data.ignoreFields = ['f1','f2','f3','f4'];
@@ -952,6 +966,11 @@ let config = {
                 this.data.remindColor = res[1];
                 this.data.common_filter_id = res[0].common_filter_id || '';
                 if( this.data.firstRender ){
+                    let d = {
+                        rowData: this.data.rowData
+                    }
+                    //赋值
+                    this.agGrid.actions.setGridData(d);
                     //渲染agGrid
                     this.actions.renderAgGrid();
                 }else {
@@ -1008,6 +1027,11 @@ let config = {
                     this.data.footerData = dgcService.createFooterData( res[2] );
                 }
                 if( this.data.firstRender ){
+                    let d = {
+                        rowData: this.data.rowData
+                    }
+                    //赋值
+                    this.agGrid.actions.setGridData(d);
                     //渲染agGrid
                     this.actions.renderAgGrid();
                 }else {
@@ -1255,10 +1279,10 @@ let config = {
                 if( this.data.filterParam['common_filter_id'] != '临时高级查询' ){
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
-                if( this.data.filterParam.filter.length == 0 && this.data.filterParam.fastFilter.length == 0 ){
-                    // msgBox.showTips( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
-                    msgBox.showTips( `加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;` );
-                }
+                // if( this.data.filterParam.filter.length == 0 && this.data.filterParam.fastFilter.length == 0 ){
+                //     // msgBox.showTips( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
+                //     msgBox.showTips( `加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;` );
+                // }
             }
             if( this.data.groupCheck ){
                 json['is_group'] = 1;
@@ -1282,22 +1306,22 @@ let config = {
         },
         //渲染agGrid
         renderAgGrid: function () {
-            let gridData = {
-                columnDefs: this.columnDefs,
-                rowData: this.data.rowData,
-                footerData: this.data.footerData,
-                floatingFilter: true,
-                fieldsData: this.data.fieldsData,
-                onColumnResized: this.actions.onColumnResized,
-                onSortChanged: this.actions.onSortChanged,
-                onDragStopped: this.actions.onDragStopped,
-                onCellClicked: this.actions.onCellClicked,
-                onRowDoubleClicked: this.actions.onRowDoubleClicked,
-                setRowStyle: this.actions.setRowStyle,
-                onRowSelected: this.actions.onRowSelected
-            }
-            this.agGrid = new agGrid(gridData);
-            this.append(this.agGrid , this.el.find('#data-agGrid'));
+            // let gridData = {
+            //     columnDefs: this.columnDefs,
+            //     rowData: this.data.rowData,
+            //     footerData: this.data.footerData,
+            //     floatingFilter: true,
+            //     fieldsData: this.data.fieldsData,
+            //     onColumnResized: this.actions.onColumnResized,
+            //     onSortChanged: this.actions.onSortChanged,
+            //     onDragStopped: this.actions.onDragStopped,
+            //     onCellClicked: this.actions.onCellClicked,
+            //     onRowDoubleClicked: this.actions.onRowDoubleClicked,
+            //     setRowStyle: this.actions.setRowStyle,
+            //     onRowSelected: this.actions.onRowSelected
+            // }
+            // this.agGrid = new agGrid(gridData);
+            // this.append(this.agGrid , this.el.find('#data-agGrid'));
             //渲染定制列
             if( this.el.find('.custom-column-btn')[0] ){
                 //如果有定制列修改偏好状态
@@ -1366,9 +1390,9 @@ let config = {
             }else {
                 this.el.find( '.pagination' )[0].style.height = '0px';
                 if( this.data.isShowSheet ){
-                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc(100% - 90px)';
+                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc(100% - 100px)';
                 }else {
-                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 70px )';
+                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 80px )';
                 }
             }
             //高级查询
@@ -1378,6 +1402,7 @@ let config = {
             this.actions.getExpertSearchData();
             this.data.firstRender = false;
             this.hideLoading();
+            this.data.showTabs(1);
         },
         //触发导出
         onExport: function () {
@@ -1538,7 +1563,7 @@ let config = {
                     $(this).siblings().removeClass('active1');
                 });
                 console.log( "有sheet" )
-                this.el.find( '.ag-grid-con' ).height( 'calc(100% - 120px)' );
+                this.el.find( '.ag-grid-con' ).height( 'calc(100% - 140px)' );
                 this.el.find( '.SheetPage' ).show();
             }else {
                 console.log( "没有sheet" )
@@ -2207,18 +2232,9 @@ let config = {
 
             //视频字段
             if(data.colDef.real_type == fieldTypeService.VIDEO_TYPE && data.event.srcElement.id == 'file_view'){
-
                let fieldids = data['value'];
                 let file_dinput_type = data.colDef.real_type;
-               // ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids[0]}&download=0&dinput_type=${file_dinput_type}`;
-
-                for( let i=0;i< fieldids.length;i++ ){
-                  ViewVideo.data.videoSrc = `/download_attachment/?file_id=${fieldids[i]}&download=0&dinput_type=${file_dinput_type}`;
-
-                  console.log( ViewVideo.data.videoSrc )
-                    console.log( fieldids[0])
-                    console.log( fieldids[1])
-                }
+               ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids[0]}&download=0&dinput_type=${file_dinput_type}`;
                     PMAPI.openDialogByComponent(ViewVideo, {
                         width: 1000,
                         height: 600,
@@ -2585,7 +2601,7 @@ let config = {
                 defaultMax = true;
             }
             PMAPI.openDialogByIframe( url,{
-                width: w || 1000,
+                width: w || 1300,
                 height: h || 800,
                 title: title,
                 modal:true,
@@ -2626,10 +2642,31 @@ let config = {
                 }
             })
 
+        },
+        //数据改变
+        rowDataChanged: function ($event) {
         }
     },
     afterRender: function () {
         this.showLoading();
+        let gridData = {
+            columnDefs: this.columnDefs,
+            rowData: this.data.rowData,
+            footerData: this.data.footerData,
+            floatingFilter: true,
+            fieldsData: this.data.fieldsData,
+            onColumnResized: this.actions.onColumnResized,
+            onSortChanged: this.actions.onSortChanged,
+            onDragStopped: this.actions.onDragStopped,
+            onCellClicked: this.actions.onCellClicked,
+            onRowDoubleClicked: this.actions.onRowDoubleClicked,
+            setRowStyle: this.actions.setRowStyle,
+            rowDataChanged: this.actions.rowDataChanged,
+            onRowSelected: this.actions.onRowSelected
+        }
+        this.agGrid = new agGrid(gridData);
+        this.append(this.agGrid , this.el.find('#data-agGrid'));
+
         if( this.data.viewMode == 'in_process' ){
             this.data.noNeedCustom = true;
         }

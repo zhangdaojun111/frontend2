@@ -81,7 +81,7 @@ class Component {
             let that = this;
             this.binds.forEach((item) => {
                 this.el.on(item.event, item.selector, function (event) {
-                    item.callback.call(that, this, event);
+                    return item.callback.call(that, this, event);
                 });
             })
         }
@@ -179,6 +179,14 @@ class Component {
             }
         });
         return coms;
+    }
+
+    findAllChildren() {
+        let subs = Array.from(this.el.find('[component]'));
+        let res = subs.map((element) => {
+            return map.get(element);
+        });
+        return res;
     }
 
     showLoading(dom){
