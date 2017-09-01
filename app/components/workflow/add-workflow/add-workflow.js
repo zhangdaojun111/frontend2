@@ -68,9 +68,6 @@ let config={
         this.el.find('#subAddworkflow').on('click',()=>{
             Mediator.publish('workflow:submit', 1);
         });
-        this.el.find('#subAddworkflow').on('click',()=>{
-            Mediator.publish('workflow:submit', 1);
-        });
         this.el.on('click','#toEdit',()=>{
             location.href=location.href.replace(/=view/,'=edit').replace(/is_view=1/,'is_view=0');
         });
