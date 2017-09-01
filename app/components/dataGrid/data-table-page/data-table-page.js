@@ -51,6 +51,7 @@ let config = {
                 this.el.find( '.page-group .dataTableInTransit' )[0].style.display = 'block';
                 //渲染在途
                 if( !this.data.isRenderIntrain ){
+                    this.actions.showTabs(0);
                     let obj = {
                         tableId: this.data.tableId,
                         tableName: this.data.tableName,
@@ -61,12 +62,17 @@ let config = {
                     this.data.isRenderIntrain = true;
                 }
             } )
+        },
+        //显示tabs
+        showTabs: function (opacity) {
+            this.el.find( '.page-tab' )[0].style.opacity = opacity;
         }
     },
     afterRender: function (){
         let json = {
             tableId: this.data.tableId,
-            tableName: this.data.tableName
+            tableName: this.data.tableName,
+            showTabs: this.actions.showTabs
         };
         this.append(new dataTableAgGrid(json), this.el.find('#data-table-agGrid'));
         this.actions.addClick();
