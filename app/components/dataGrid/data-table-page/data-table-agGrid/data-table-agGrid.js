@@ -119,6 +119,8 @@ let config = {
         filterText: '',
         //是否第一次渲染agGrid
         firstRender: true,
+        //第一次设置数据
+        firstSetData: false,
         //权限
         permission:{add: 1, calendar: 1, complex_search: 1, custom_field: 1, custom_width: 1, delete: 1, download: 1, edit: 1, group: 1, in_work: 1, search: 1, upload: 1, view: 1 ,setting: 1,cell_edit:1,new_window:1},
         //是否分组
@@ -965,12 +967,13 @@ let config = {
                 if( this.data.firstRender ){
                     //渲染agGrid
                     this.actions.renderAgGrid();
+                    his.data.firstSetData = true;
                     let d = {
                         rowData: this.data.rowData
                     }
                     //赋值
                     this.agGrid.actions.setGridData(d);
-                    this.hideLoading();
+                    // this.hideLoading();
                 }else {
                     let d = {
                         rowData: this.data.rowData
@@ -1027,12 +1030,13 @@ let config = {
                 if( this.data.firstRender ){
                     //渲染agGrid
                     this.actions.renderAgGrid();
+                    this.data.firstSetData = true;
                     let d = {
                         rowData: this.data.rowData
                     }
                     //赋值
                     this.agGrid.actions.setGridData(d);
-                    this.hideLoading();
+                    // this.hideLoading();
                 }else {
                     this.actions.calcSelectData( 'get' );
                     let d = {
@@ -1389,9 +1393,9 @@ let config = {
             }else {
                 this.el.find( '.pagination' )[0].style.height = '0px';
                 if( this.data.isShowSheet ){
-                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc(100% - 90px)';
+                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc(100% - 100px)';
                 }else {
-                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 70px )';
+                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 80px )';
                 }
             }
             //高级查询
@@ -1560,7 +1564,7 @@ let config = {
                     $(this).siblings().removeClass('active1');
                 });
                 console.log( "有sheet" )
-                this.el.find( '.ag-grid-con' ).height( 'calc(100% - 120px)' );
+                this.el.find( '.ag-grid-con' ).height( 'calc(100% - 140px)' );
                 this.el.find( '.SheetPage' ).show();
             }else {
                 console.log( "没有sheet" )
@@ -2648,10 +2652,17 @@ let config = {
                 }
             })
 
+        },
+        //数据改变
+        rowDataChanged: function ($event) {
+            if( this.data.firstSetData ){
+                this.hideLoading();
+                this.data.firstSetData = false;
+            }
         }
     },
     afterRender: function () {
-
+        this.showLoading();
         let gridData = {
             columnDefs: this.columnDefs,
             rowData: this.data.rowData,
@@ -2664,12 +2675,12 @@ let config = {
             onCellClicked: this.actions.onCellClicked,
             onRowDoubleClicked: this.actions.onRowDoubleClicked,
             setRowStyle: this.actions.setRowStyle,
+            rowDataChanged: this.actions.rowDataChanged,
             onRowSelected: this.actions.onRowSelected
         }
         this.agGrid = new agGrid(gridData);
         this.append(this.agGrid , this.el.find('#data-agGrid'));
 
-        this.showLoading();
         if( this.data.viewMode == 'in_process' ){
             this.data.noNeedCustom = true;
         }
