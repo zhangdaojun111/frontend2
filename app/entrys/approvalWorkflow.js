@@ -192,7 +192,6 @@ Mediator.subscribe("workflow:loaded",(e)=>{
         }
     }
 });
-
 FormEntrys.createForm({
     el: '#place-form',
     form_id: obj.form_id,
