@@ -13,11 +13,18 @@ let config = {
         chart: {}
     },
     actions: {
-
         init(cellChart) {
             if (cellChart['chart']['single'] === 1) {
                 config.actions.singleTable(cellChart);
             }
+        },
+
+        /**
+         * table 居中显示
+         */
+        alignTable(chart) {
+            let alignMent = chart['data']['alignment'];
+            this.el.find('.bi-table table').css('text-align',alignMent);
         },
 
         /**
