@@ -889,6 +889,7 @@ let config = {
                 dgcService.setPreference( res[0],this.data );
                 this.data.myGroup = (res[0]['group'] != undefined) ? JSON.parse(res[0]['group'].group) : [];
                 this.data.fieldsData = res[1].rows || [];
+                this.agGrid.data.fieldsData = this.data.fieldsData;
                 this.data.permission = res[1].permission;
                 this.data.namespace = res[1].namespace;
                 this.data.headerColor = dgcService.createHeaderStyle( this.data.tableId,res[1].field_color );
@@ -907,6 +908,13 @@ let config = {
                 this.data.groupFields = r.group;
                 //创建表头
                 this.columnDefs = this.actions.createHeaderColumnDefs();
+
+                let d = {
+                    columnDefs: this.columnDefs
+                }
+                //赋值
+                this.agGrid.actions.setGridData(d);
+
                 //第一次加载隐藏默认列
                 if( res[0].ignoreFields == null && this.data.haveSystemsFields ){
                     this.data.ignoreFields = ['f1','f2','f3','f4'];
@@ -1013,6 +1021,11 @@ let config = {
                 if( this.data.firstRender ){
                     //渲染agGrid
                     this.actions.renderAgGrid();
+                    let d = {
+                        rowData: this.data.rowData
+                    }
+                    //赋值
+                    this.agGrid.actions.setGridData(d);
                 }else {
                     this.actions.calcSelectData( 'get' );
                     let d = {
@@ -1285,22 +1298,22 @@ let config = {
         },
         //渲染agGrid
         renderAgGrid: function () {
-            let gridData = {
-                columnDefs: this.columnDefs,
-                rowData: this.data.rowData,
-                footerData: this.data.footerData,
-                floatingFilter: true,
-                fieldsData: this.data.fieldsData,
-                onColumnResized: this.actions.onColumnResized,
-                onSortChanged: this.actions.onSortChanged,
-                onDragStopped: this.actions.onDragStopped,
-                onCellClicked: this.actions.onCellClicked,
-                onRowDoubleClicked: this.actions.onRowDoubleClicked,
-                setRowStyle: this.actions.setRowStyle,
-                onRowSelected: this.actions.onRowSelected
-            }
-            this.agGrid = new agGrid(gridData);
-            this.append(this.agGrid , this.el.find('#data-agGrid'));
+            // let gridData = {
+            //     columnDefs: this.columnDefs,
+            //     rowData: this.data.rowData,
+            //     footerData: this.data.footerData,
+            //     floatingFilter: true,
+            //     fieldsData: this.data.fieldsData,
+            //     onColumnResized: this.actions.onColumnResized,
+            //     onSortChanged: this.actions.onSortChanged,
+            //     onDragStopped: this.actions.onDragStopped,
+            //     onCellClicked: this.actions.onCellClicked,
+            //     onRowDoubleClicked: this.actions.onRowDoubleClicked,
+            //     setRowStyle: this.actions.setRowStyle,
+            //     onRowSelected: this.actions.onRowSelected
+            // }
+            // this.agGrid = new agGrid(gridData);
+            // this.append(this.agGrid , this.el.find('#data-agGrid'));
             //渲染定制列
             if( this.el.find('.custom-column-btn')[0] ){
                 //如果有定制列修改偏好状态
@@ -2632,6 +2645,24 @@ let config = {
         }
     },
     afterRender: function () {
+
+        let gridData = {
+            columnDefs: this.columnDefs,
+            rowData: this.data.rowData,
+            footerData: this.data.footerData,
+            floatingFilter: true,
+            fieldsData: this.data.fieldsData,
+            onColumnResized: this.actions.onColumnResized,
+            onSortChanged: this.actions.onSortChanged,
+            onDragStopped: this.actions.onDragStopped,
+            onCellClicked: this.actions.onCellClicked,
+            onRowDoubleClicked: this.actions.onRowDoubleClicked,
+            setRowStyle: this.actions.setRowStyle,
+            onRowSelected: this.actions.onRowSelected
+        }
+        this.agGrid = new agGrid(gridData);
+        this.append(this.agGrid , this.el.find('#data-agGrid'));
+
         this.showLoading();
         if( this.data.viewMode == 'in_process' ){
             this.data.noNeedCustom = true;

@@ -181,6 +181,14 @@ class Component {
         return coms;
     }
 
+    findAllChildren() {
+        let subs = Array.from(this.el.find('[component]'));
+        let res = subs.map((element) => {
+            return map.get(element);
+        });
+        return res;
+    }
+
     showLoading(dom){
         if (this.loadingTarget) {
             return;

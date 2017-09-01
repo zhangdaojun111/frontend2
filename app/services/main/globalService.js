@@ -35,7 +35,7 @@ export const GlobalService = {
             {
                 headerName: '是否在职',
                 field: 'is_active',
-                width: 60,
+                width: 80,
                 suppressMenu: true,
                 tooltipField: 'is_active',
                 cellStyle: {'text-align': 'center'},
@@ -72,7 +72,7 @@ export const GlobalService = {
             {
                 headerName: '手机登录',
                 field: 'mobile',
-                width: 60,
+                width: 80,
                 suppressMenu: true,
                 tooltipField: 'mobile',
                 cellStyle: {'text-align': 'center'},

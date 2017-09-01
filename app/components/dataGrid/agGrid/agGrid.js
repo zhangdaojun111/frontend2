@@ -125,6 +125,10 @@ let config = {
         },
         //重新赋值
         setGridData: function ( json ) {
+            if( json.columnDefs ){
+                this.data.columnDefs = json.columnDefs;
+                this.gridOptions.api.setColumnDefs( json.columnDefs );
+            }
             if( json.rowData ){
                 this.data.rowData = json.rowData;
                 this.gridOptions.api.setRowData( json.rowData );
