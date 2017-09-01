@@ -31,6 +31,9 @@
         .ag-header-cell-label {
             text-overflow: clip;
             overflow: hidden;
+            font-size: 12px;
+            line-height: 30px;
+            padding: 0px;
         }
         .ag-grid-number {
             position: relative;
