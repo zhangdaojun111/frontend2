@@ -1,4 +1,4 @@
- /**
+/**
  * Created by lipengfei.
  * 日历树选择
  */
@@ -13,13 +13,11 @@ import Mediator from '../../../../lib/mediator';
 let config = {
     template: template,
     data: {
-        dataitem: [],
-        cancel_fields: [],
-        hide_tables: [],
-        hide_item_table: [],
-        hide_table: {'table_Id': '', 'tableName': ''},
+        dataitem: [],              //日历树数据
+        cancel_fields: [],         //取消选中数组
+        hide_item_table: [],       //隐藏table数据
         rows: [],
-        items: [],
+        items: [],                 //日历树中filedID
     },
     actions: {
         /**
@@ -61,13 +59,13 @@ let config = {
                 this.events.checkbox({type: 'unshowData', staus: false, data: this.data.items});
                 temp.addClass("label-select-all-checked");
                 this.el.find(".select-label-children").removeClass('unchecked');
-                let isAllGroupchecked = true;
+                let isAllGroupChecked = true;
                 this.el.parent().find(".label-select-all-show").each(function () {
                     if (!$(this).is('.label-select-all-checked')) {
-                        isAllGroupchecked = false;
+                        isAllGroupChecked = false;
                     }
                 });
-                if (isAllGroupchecked) {
+                if (isAllGroupChecked) {
                     this.events.checkbox({type: 'remind-checkbox', data: 1});
                 }
             }
@@ -81,22 +79,22 @@ let config = {
             if (temp.is(".unchecked")) {
                 this.events.checkbox({type: 'unshowData', staus: false, data: dataItem});
                 temp.removeClass('unchecked');
-                let isAllchecked = true;
+                let isAllChecked = true;
                 this.el.find(".select-label-children").each(function () {
                     if ($(this).is('.unchecked')) {
-                        isAllchecked = false;
+                        isAllChecked = false;
                         return false;
                     }
                 });
-                if (isAllchecked) {
+                if (isAllChecked) {
                     this.el.find(".select-head").addClass('label-select-all-checked');
-                    let isAllGroupchecked = true;
+                    let isAllGroupChecked = true;
                     this.el.parent().find('.label-select-all-show').each(function () {
                         if (!$(this).is('.label-select-all-checked')) {
-                            isAllGroupchecked = false;
+                            isAllGroupChecked = false;
                         }
                     });
-                    if (isAllGroupchecked) {
+                    if (isAllGroupChecked) {
                         this.events.checkbox({type: 'remind-checkbox', data: 1});
                     }
                 }
@@ -106,7 +104,6 @@ let config = {
                 temp.addClass('unchecked');
                 this.el.find(".select-head").removeClass('label-select-all-checked');
                 this.events.checkbox({type: 'remind-checkbox', data: -1});
-
             }
         },
         /**
@@ -122,6 +119,13 @@ let config = {
                 return item.field_id;
             });
             this.data.items = items_Id;
+            // for(let items of items_Id){
+            //     if (this.data.cancel_fields.indexOf(items) !== -1) {
+            //         IsChecked = false;
+            //         break;
+            //     }
+            //     IsChecked = true;
+            // }
             for (let i = 0; i < items_Id.length; i++) {
                 if (this.data.cancel_fields.indexOf(items_Id[i]) !== -1) {
                     IsChecked = false;
@@ -178,16 +182,9 @@ let config = {
                 });
             }
         },
-        // {
-        //     event: 'click',
-        //     selector: '.select-label-show',
-        //     callback: function(){
-        //         this.actions.selectLabelShow($(this));
-        //     }
-        // },
         {
             event: 'click',
-            selector: '.select-label',
+            selector: '.select-head',
             callback: function (temp = this) {
                 this.actions.selectHead($(temp));
             }
@@ -240,13 +237,15 @@ let config = {
 
     afterRender: function () {
         let that = this;
-        this.actions.showFirst();
-        this.actions.loadDataHtml(this.data.dataitem);
         $(document).mouseover(function () {
             that.el.find(".float-button-group").hide();
             that.el.find(".search-function").css("display", "none");
         });
-    }
+    },
+    firstAfterRender: function () {
+        this.actions.showFirst();
+        this.actions.loadDataHtml(this.data.dataitem);
+    },
 }
 
 class LeftContentSelect extends Component {

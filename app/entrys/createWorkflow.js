@@ -59,7 +59,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             reload_draft_data:is_draft,
             table_id:msg.tableid,
             flow_id:msg.id,
-            el:'#place-form',
+            el:$('#place-form'),
             real_id:'',
             from_workflow:1,
             form_id:msg.formid,
@@ -78,7 +78,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
                 msgBox.alert('自动保存成功！');
             }
         };
-        var timer;
+        let timer;
         const autoSaving=function(){
             timer=setInterval(()=>{
                 intervalSave(FormEntrys.getFormValue(wfObj.tableid));

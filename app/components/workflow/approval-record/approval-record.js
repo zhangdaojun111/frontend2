@@ -13,7 +13,7 @@ let config={
     actions:{
         tipsMouseover:function (pos,txt,event) {
             if(txt!=''){
-                var tooltip = $('<div id="J_tooltip"></div>');
+                let tooltip = $('<div id="J_tooltip"></div>');
                 $("body").append(tooltip);
                 let tooltipDiv=$("#J_tooltip");
                 tooltipDiv.css({

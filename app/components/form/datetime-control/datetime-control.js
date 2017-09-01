@@ -116,7 +116,6 @@ let config = {
 
             },
             onClose: function(timeText) {
-                console.log(timeText)
                 _this.data.value = timeText.replace(/\//g, "-");
                 _.debounce(function () {
                     _this.events.changeValue(_this.data)

@@ -17,18 +17,41 @@ $chk_1-label-bg-color: #FFF;
         .cate-hide-icon {
             display: inline-block;
             float: right;
-            .cate-hide-icon-style {
+            .create-calendar,.hide-con,.set-calendar{
+                display: inline-block;
+                width: 16px;
+                height:16px;
                 cursor: pointer;
-                .calendar-con-style {
-                    margin-top: 5px;
-                }
-                .calendar-add-con:hover {
-                    content: url('../../../assets/images/calendar/calendar-add-hover.png');
-                }
-                .calendar-set-con:hover {
-                    content: url('../../../assets/images/calendar/calendar-set-hover.png');
-                }
+                margin-top: 5px;
+                box-sizing: border-box;
             }
+            .create-calendar{
+                background: url("../../../assets/images/calendar/calendar-add.png");
+            }
+            .hide-con{
+                background: url("../../../assets/images/calendar/calendar-left-hide.png");
+            }
+            .set-calendar{
+                background: url("../../../assets/images/calendar/calendar-set.png");
+            }
+            .set-calendar:hover{
+                background: url("../../../assets/images/calendar/calendar-set-hover.png");
+            }
+            .create-calendar:hover{
+                background: url("../../../assets/images/calendar/calendar-add-hover.png");
+            }
+            //.cate-hide-icon-style {
+            //    cursor: pointer;
+            //    .calendar-con-style {
+            //        margin-top: 5px;
+            //    }
+            //    .calendar-add-con:hover {
+            //        content: url('../../../assets/images/calendar/calendar-add-hover.png');
+            //    }
+            //    .calendar-set-con:hover {
+            //        content: url('../../../assets/images/calendar/calendar-set-hover.png');
+            //    }
+            //}
         }
     }
     .item-title-2 {
@@ -41,12 +64,21 @@ $chk_1-label-bg-color: #FFF;
         .cate-hide-icon {
             display: inline-block;
             float: right;
-            .cate-hide-icon-style {
+            .hide-con-2{
+                display: inline-block;
+                width: 16px;
+                height:16px;
                 cursor: pointer;
-                .calendar-con-style {
-                    margin-top: 5px;
-                }
+                margin-top: 5px;
+                box-sizing: border-box;
+                background: url("../../../assets/images/calendar/calendar-left-hide.png");
             }
+            //.cate-hide-icon-style {
+            //    //cursor: pointer;
+            //    .calendar-con-style {
+            //        margin-top: 5px;
+            //    }
+            //}
         }
     }
     .item-content-1, .item-content-4, .item-content-3 {
@@ -60,7 +92,9 @@ $chk_1-label-bg-color: #FFF;
             height: 100%;
             width: 100%;
         }
-
+    }
+    .item-content::-webkit-scrollbar,.item-content-2::-webkit-scrollbar{
+        width: 4px;
     }
     .item-content-2 {
         display: none;
