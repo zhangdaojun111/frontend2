@@ -3,6 +3,8 @@
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+    display: flex !important;
+    justify-content: center;
     @import "dateTime";
     .ui-history {
         display: inline-block;
@@ -59,20 +61,14 @@
             }
         }
     }
-    .dropdown {
-        border-radius: 0px;
-        //height:30px;
-        padding: 2px 0px;
-        margin-bottom: -3px;
-        vertical-align: middle;
-    }
     a {
         text-decoration: none;
     }
     /*table*/
     table {
-        width: 100%;
-        margin: 0px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     tbody {
         tr {
@@ -82,7 +78,6 @@
                 vertical-align: middle;
                 border: 1px solid rgb(240, 240, 240);
                 white-space: nowrap;
-                width: auto;
             }
         }
     }
@@ -96,6 +91,7 @@
         outline: none;
         opacity: 100;
         text-indent: 10px;
+        box-sizing: border-box;
     }
     .dynamic-form-input-a, .dynamic-form-input-ac {
         display: inline-block;
