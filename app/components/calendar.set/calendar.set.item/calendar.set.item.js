@@ -47,8 +47,10 @@ let config = {
 
         multiSelectMenu: {},
         singleSelectMenu: {},
-        editable:false,
-
+        editable: false,
+        status: false,
+        select_item_data:{},
+        single_item_data:{},
     },
     actions: {
         /**
@@ -60,9 +62,9 @@ let config = {
         returnShow: function (param) {
             let res = [];
             let text = [];
-            for(let a of param){
-                for(let b in this.data.dropdown){
-                    if(a === this.data.dropdown[b]['id']){
+            for (let a of param) {
+                for (let b in this.data.dropdown) {
+                    if (a === this.data.dropdown[b]['id']) {
                         res.push(this.data.dropdown[b]);
                         text.push(this.data.dropdown[b]['name']);
                     }
@@ -73,8 +75,8 @@ let config = {
         dropdownChoosed: function (param) {
             let res = [];
             let text = [];
-            for(let b in this.data.dropdownForRes){
-                if(param === this.data.dropdownForRes[b]['id']){
+            for (let b in this.data.dropdownForRes) {
+                if (param === this.data.dropdownForRes[b]['id']) {
                     res.push(this.data.dropdownForRes[b]);
                     text.push(this.data.dropdownForRes[b]['name']);
                 }
@@ -91,12 +93,12 @@ let config = {
         checkForResSelected: function (forResText, forResId) {
             let selectedOpts = this.data.multiSelectMenu.data.choosed;
             let isInSelectedOpts = false;
-            for(let item of selectedOpts) {
-                if(forResId === item['id']) {
+            for (let item of selectedOpts) {
+                if (forResId === item['id']) {
                     isInSelectedOpts = true;
                 }
             }
-            if(!isInSelectedOpts) {
+            if (!isInSelectedOpts) {
                 selectedOpts.push({id: forResId, name: forResText});
                 this.data.multiSelectMenu.actions.setChoosed(selectedOpts);
                 this.actions.checkSelectedOpts(selectedOpts);
@@ -111,8 +113,8 @@ let config = {
          */
         checkSelectedOpts: function (newSelectedOpts) {
             let selectedOptsId = [];
-            let selectedOptsText  = [];
-            for(let newItem of newSelectedOpts) {
+            let selectedOptsText = [];
+            for (let newItem of newSelectedOpts) {
                 selectedOptsText.push(newItem['name']);
                 selectedOptsId.push(newItem['id']);
             }
@@ -130,8 +132,8 @@ let config = {
                 {
                     width: "800",
                     height: '800',
-                    title: '【'+ this.data.rowTitle.name + '】'+'的提醒'
-                },{
+                    title: '【' + this.data.rowTitle.name + '】' + '的提醒'
+                }, {
                     emailStatus: this.data.rowSetData.email.email_status,
                     smsStatus: this.data.rowSetData.sms.sms_status,
                     sms: this.data.rowSetData.sms,
@@ -142,27 +144,26 @@ let config = {
                     emailAddressList: this.data.emailAddressList,
                     emailAddress: this.data.emailAddress,
                 }).then(data => {
-                    if(!data.onlyclose) {
-                        console.log(data);
-                        this.data.rowSetData.email = data['email'];
-                        this.data.rowSetData.sms = data['sms'];
-                        let showMethod = '';
-                        if(data['sms']['sms_status'] === '1') {
-                            showMethod = '短信';
-                            this.el.find('.set-remind-method').html(showMethod);
-                        }
-                        if (data['email']['email_status'] === '1') {
-                            showMethod = showMethod + ' ' + '邮件';
-                            this.el.find('.set-remind-method').html(showMethod);
-                        }
-                        if(data['sms']['sms_status'] === 0 && data['email']['email_status'] === 0) {
-                            showMethod = '设置提醒方式';
-                            this.el.find('.set-remind-method').html(showMethod);
-                        }
+                if (!data.onlyclose) {
+                    console.log(data);
+                    this.data.rowSetData.email = data['email'];
+                    this.data.rowSetData.sms = data['sms'];
+                    let showMethod = '';
+                    if (data['sms']['sms_status'] === '1') {
+                        showMethod = '短信';
+                        this.el.find('.set-remind-method').html(showMethod);
                     }
+                    if (data['email']['email_status'] === '1') {
+                        showMethod = showMethod + ' ' + '邮件';
+                        this.el.find('.set-remind-method').html(showMethod);
+                    }
+                    if (data['sms']['sms_status'] === 0 && data['email']['email_status'] === 0) {
+                        showMethod = '设置提醒方式';
+                        this.el.find('.set-remind-method').html(showMethod);
+                    }
+                }
             });
         },
-
 
         /**
          * @author zj
@@ -171,28 +172,87 @@ let config = {
         checkChangeTextSelected: function () {
             let changeOpts = this.el.find('.page-change-text option');
             changeOpts.each(item => {
-                if(changeOpts[item].value) {
-                    let a= changeOpts[item].value;
-                    if(a === this.data.rowSetData['selectedEnums']) {
-                        changeOpts[item].selected  = 'selected';
+                if (changeOpts[item].value) {
+                    let a = changeOpts[item].value;
+                    if (a === this.data.rowSetData['selectedEnums']) {
+                        changeOpts[item].selected = 'selected';
                     }
                 }
             });
         },
+        loadMultiSelect:function(){
+            this.data.select_item_data = {
+                'list': this.data.dropdown,
+                displayType: 'popup',
+                editable: this.data.editable,
+                choosed: this.actions.returnShow(this.data.rowSetData['selectedOpts']).res,
+                onSelect: function (choosed) {
+                    let choosedList = [];
+                    for (let choosedItem of choosed) {
+                        choosedList.push(choosedItem['id']);
+                    }
+                    this.data.rowSetData['selectedOpts'] = choosedList;
+                    this.actions.checkSelectedOpts(choosed);
+                },
+            };
+        }
     },
+    binds: [
+        {
+            event: "click",
+            selector: '.set-show-text-input',
+            callback: function () {
+                let isSetShowText = this.el.find('.set-show-text-input').is(':checked');
+                this.data.rowSetData['isSelected'] = isSetShowText;
+            }
+        },
+        {
+            event: 'click',
+            selector: ".set-calendar-page-show-text",
+            callback: function () {
+                let isShowHomePage = this.el.find('.set-calendar-page-show-text').is(':checked');
+                this.data.rowSetData['is_show_at_home_page'] = isShowHomePage;
+            }
+        },
+        {
+            event: 'change',
+            selector: '.set-color',
+            callback: function () {
+                let setColor = this.el.find('.set-color').val();
+                this.data.rowSetData['color'] = setColor;
+            }
+        },
+        {
+            event: 'change',
+            selector: '.page-change-text',
+            callback: function () {
+                let valueForCalendarChangeValue = this.el.find('.page-change-text option:selected').val();
+                this.data.rowSetData['selectedEnums'] = valueForCalendarChangeValue;
+            }
+        },
+        {
+            event: 'click',
+            selector: ".set-remind-method",
+            callback: function () {
+                if (this.data.staus) {
+                    this.actions.openSetRemind();
+                }
+            }
+        }
+    ],
     afterRender: function () {
         this.el.css({});
-        let staus = false;
+        this.data.staus = false;
         let _this = this;
-
+        this.actions.loadMultiSelect();
         let select_item_data = {
             'list': this.data.dropdown,
             displayType: 'popup',
-            editable:this.data.editable,
+            editable: this.data.editable,
             choosed: this.actions.returnShow(this.data.rowSetData['selectedOpts']).res,
             onSelect: function (choosed) {
                 let choosedList = [];
-                for(let choosedItem of choosed) {
+                for (let choosedItem of choosed) {
                     choosedList.push(choosedItem['id']);
                 }
                 _this.data.rowSetData['selectedOpts'] = choosedList;
@@ -201,24 +261,21 @@ let config = {
         };
         this.data.multiSelectMenu = new AutoSelect(select_item_data);
         this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
-
         let single_item_data = {
             'list': this.data.dropdownForRes,
             displayType: 'popup',
             multiSelect: false,
-            editable:this.data.editable,
-            choosed:this.actions.dropdownChoosed(this.data.rowSetData['selectedRepresents']).res,
+            editable: this.data.editable,
+            choosed: this.actions.dropdownChoosed(this.data.rowSetData['selectedRepresents']).res,
             onSelect: function (choosed) {
-               if(choosed.length > 0){
-                   _this.actions.checkForResSelected(choosed[0].name, choosed[0].id);
-                   _this.data.rowSetData['selectedRepresents'] = choosed[0].id;
-               }
+                if (choosed.length > 0) {
+                    _this.actions.checkForResSelected(choosed[0].name, choosed[0].id);
+                    _this.data.rowSetData['selectedRepresents'] = choosed[0].id;
+                }
             },
         };
-
         this.data.singleSelectMenu = new AutoSelect(single_item_data);
         this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
-
         Mediator.on('calendar-set:editor', data => {
             if (data.data === 1) {
                 this.el.find(".editor-items").attr("disabled", false);
@@ -228,13 +285,12 @@ let config = {
                 _this.data.multiSelectMenu = new AutoSelect(select_item_data);
                 _this.append(_this.data.multiSelectMenu, _this.el.find('.multi-select-item'));
                 single_item_data.editable = true;
-                // this.data.singleSelectMenu.data.editable = true;
                 this.data.singleSelectMenu = new AutoSelect(single_item_data);
                 this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
                 _this.el.find('td').removeClass('unclick');
                 _this.el.find(".set-remind-method").removeClass('unclick');
                 _this.el.find('input').removeClass('unclick');
-                staus = true;
+                this.data.staus = true;
             } else {
                 this.el.find(".editor-items").attr("disabled", true);
                 this.data.singleSelectMenu.destroySelf();
@@ -243,13 +299,12 @@ let config = {
                 single_item_data.editable = false;
                 _this.data.multiSelectMenu = new AutoSelect(select_item_data);
                 _this.append(_this.data.multiSelectMenu, _this.el.find('.multi-select-item'));
-                // this.data.singleSelectMenu.data.editable = false;
                 this.data.singleSelectMenu = new AutoSelect(single_item_data);
                 this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
                 _this.el.find("td").addClass('unclick');
                 _this.el.find(".set-remind-method").addClass('unclick');
                 _this.el.find('input').addClass('unclick');
-                staus = false;
+                this.data.staus = false;
             }
         });
 
@@ -258,38 +313,6 @@ let config = {
         if(!this.data.rowSetData['email']['email_status'] && !this.data.rowSetData['sms']['sms_status']) {
             this.el.find('.set-remind-method').html('设置提醒方式');
         }
-        this.el.on('click', '.set-show-text-input', () => {
-
-            let isSetShowText = this.el.find('.set-show-text-input').is(':checked');
-            this.data.rowSetData['isSelected'] = isSetShowText;
-
-        }).on('click', '.set-calendar-page-show-text', () => {
-
-            let isShowHomePage = this.el.find('.set-calendar-page-show-text').is(':checked');
-            this.data.rowSetData['is_show_at_home_page'] = isShowHomePage;
-
-        }).on('change', '.set-color', () => {
-            let setColor = this.el.find('.set-color').val();
-            this.data.rowSetData['color'] = setColor;
-        }).on('change', '.res-text', () => {
-            let textForResValue = this.el.find('.res-text option:selected').val();
-            let textForResText = this.el.find('.res-text option:selected').text();
-            this.actions.checkForResSelected(textForResText, textForResValue);
-            this.data.rowSetData['selectedRepresents'] = textForResValue;
-        }).on('change', '.page-change-text', () => {
-            let valueForCalendarChangeValue = this.el.find('.page-change-text option:selected').val();
-            // let textForCalendarChangeValue = this.el.find('.page-change-text option:selected').text();
-
-            this.data.rowSetData['selectedEnums'] = valueForCalendarChangeValue;
-        }).on('click', '.set-remind-method', () => {
-            if(staus){
-                this.actions.openSetRemind();
-            }
-        }).on('change', '.config-text', () => {
-            let valueConfigTextValue = this.el.find('.config-text option:selected').val();
-            let textConfigTextValue = this.el.find('.config-text option:selected').text();
-        });
-
         this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text;
         this.el.find('.preview-text').text(this.data.preViewText);
 

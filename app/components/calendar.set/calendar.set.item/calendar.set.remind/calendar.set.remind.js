@@ -93,7 +93,28 @@ let config = {
             });
         }
     },
-
+    binds:[
+        {
+            event:'click',
+            selector:'.sms-remind',
+            callback:function(){
+                this.el.find('.sms-remind').addClass("unchecked");
+                this.el.find(".email-remind").removeClass("unchecked");
+                this.el.find(".sms").show();
+                this.el.find(".email").hide();
+            }
+        },
+        {
+            event:'click',
+            selector:'.email-remind',
+            callback:function(){
+                this.el.find('.email-remind').addClass("unchecked");
+                this.el.find(".sms-remind").removeClass("unchecked");
+                this.el.find(".email").show();
+                this.el.find(".sms").hide();
+            }
+        }
+    ],
     afterRender: function() {
 
         PMAPI.subscribe(PMENUM.open_iframe_params, params => {
@@ -156,17 +177,7 @@ let config = {
 
         let _this = this;
         // Mediator.emit('calendar-set:editor',1);
-        this.el.on('click', '.sms-remind', () => {
-            _this.el.find('.sms-remind').addClass("unchecked");
-            _this.el.find(".email-remind").removeClass("unchecked");
-            _this.el.find(".sms").show();
-            _this.el.find(".email").hide();
-        }).on('click', '.email-remind', () => {
-            _this.el.find('.email-remind').addClass("unchecked");
-            _this.el.find(".sms-remind").removeClass("unchecked");
-            _this.el.find(".email").show();
-            _this.el.find(".sms").hide();
-        }).on('click', '.open-sms-remind', () => {
+        this.el.on('click', '.open-sms-remind', () => {
             _this.el.find('.open-sms-remind').addClass("checked");
             _this.el.find(".close-sms-remind").removeClass("checked");
             _this.data.smsStatus = '1';

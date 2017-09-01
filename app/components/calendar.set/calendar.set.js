@@ -354,10 +354,36 @@ let config = {
             event: 'click',
             selector: '.editor-btn',
             callback: function (temp = this) {
-                console.log(111);
                 this.el.find(".hide-btns").css("visibility", "visible");
                 $(temp).addClass("disabled");
                 Mediator.emit('calendar-set:editor', {data: 1});
+            }
+        },
+        {
+            event: 'click',
+            selector: '.cancel-btn',
+            callback: function () {
+                this.el.find(".hide-btns").css("visibility", "hidden");
+                this.el.find(".set-btn").removeClass("disabled");
+                Mediator.emit('calendar-set:editor', {data: -1});
+            }
+        },
+        {
+            event: "click",
+            selector: '.reset-btn',
+            callback: function () {
+                this.actions.despReset(this.data.tableId);
+            }
+        },
+        {
+            event:'click',
+            selector:'.save-btn',
+            callback:function(){
+                let newAllRowsData = [];
+                for (let obj of this.data.childComponents) {
+                    newAllRowsData.push(obj.data.rowSetData);
+                }
+                this.actions.saveSetting(this.data.tableId, newAllRowsData);
             }
         }
     ],
@@ -396,23 +422,6 @@ let config = {
         Mediator.on('calendar-set-left:calendar-set', data => {
             this.data.tableId = data.table_id;
             this.actions.getColumnListData(data.table_id);
-        });
-
-        let _this = this;
-        this.el.on("click", ".cancel-btn", () => {
-            _this.el.find(".hide-btns").css("visibility", "hidden");
-            _this.el.find(".set-btn").removeClass("disabled");
-            _this.el.find(".editor-btn").removeAttr("disabled");
-            Mediator.emit('calendar-set:editor', {data: -1});
-        }).on('click', '.reset-btn', () => {
-            _this.actions.despReset(this.data.tableId);
-        }).on('click', '.save-btn', () => {
-            let newAllRowsData = [];
-            for (let obj of this.data.childComponents) {
-                newAllRowsData.push(obj.data.rowSetData);
-            }
-            console.log(newAllRowsData);
-            _this.actions.saveSetting(this.data.tableId, newAllRowsData);
         });
 
     },
