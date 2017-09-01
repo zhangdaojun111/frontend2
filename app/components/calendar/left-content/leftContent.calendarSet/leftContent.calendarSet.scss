@@ -5,13 +5,13 @@
     .approve-task {
         padding-top: 7px;
         padding-left: 2px;
-        padding-bottom: 5px;
+        padding-bottom: 8px;
         .approve-label {
             margin-left: 1px;
         }
     }
     .remind-task {
-        padding-bottom: 5px;
+        padding-bottom: 2px;
     }
     .label-task {
         .checkbox-label {
@@ -39,28 +39,32 @@
         }
         .remind-label {
             display: inline-block;
+            position: relative;
+            bottom: 3px;
         }
         .checkbox-true {
             display: inline-block;
-            .chk_1 {
-                display: none;
-            }
-            .chk_1 + label {
-                background-color: #FFF;
-                border: 1px solid #d7d7d7;
-                padding: 7px;
-                display: inline-block;
-                position: relative;
-                //margin-right: 5px;
-                cursor: pointer;
-            }
+            width: 16px;
+            height:16px;
+            box-sizing: border-box;
+            background: url("../../../../assets/images/calendar/calendar-checked-false.png");
+            cursor: pointer;
+            //.chk_1 {
+            //    display: none;
+            //}
+            //.chk_1 + label {
+            //    background-color: #FFF;
+            //    border: 1px solid #d7d7d7;
+            //    padding: 7px;
+            //    display: inline-block;
+            //    position: relative;
+            //    //margin-right: 5px;
+            //    cursor: pointer;
+            //}
             .calendar-checkbox-style {
                 position: relative;
                 cursor: pointer;
                 top: 3px;
-            }
-            .label-select-all-checked {
-                content: url('../../../../assets/images/calendar/calendar-checked-true.png');
             }
             //.label-select-all-checked + label:after {
             //  content: '\2714'; //勾选符号
@@ -74,6 +78,9 @@
             //  text-align: center;
             //  font-size: 14px;
             //}
+        }
+        .label-select-all-checked {
+            background: url("../../../../assets/images/calendar/calendar-checked-true.png");
         }
     }
     .remind-group {
