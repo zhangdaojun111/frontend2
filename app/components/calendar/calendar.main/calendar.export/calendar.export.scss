@@ -1,6 +1,6 @@
 @import "../../calendar";
-@import "../../../form/base-form/dateTime";
 .calendar-export {
+    @import "../../../form/base-form/dateTime";
     padding: 10px;
     .input-date {
         margin: 16px 0px;
