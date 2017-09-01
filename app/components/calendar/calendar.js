@@ -33,6 +33,7 @@ let config = {
                 this.el.find('.main-content').empty();
                 this.append(new LeftContent(res), this.el.find('.left-content'));
                 this.append(new CalendarMain(res['cancel_fields']), this.el.find('.main-content'));
+                this.el.find('.nowDate').html(this.data.selectedDateShow);
             });
         }
     },
