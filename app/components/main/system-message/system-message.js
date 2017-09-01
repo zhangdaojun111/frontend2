@@ -114,7 +114,11 @@ let config = {
         this.agGrid.render(gridDom);
         this.pagination = new dataPagination({
             page: 1,
-            rows: 10
+            rows: 15,
+            range:{
+                l:10,
+                r:200
+            }
         });
         this.pagination.render(this.el.find('.pagination'));
         this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
@@ -144,8 +148,8 @@ let systemMessageUtil = {
         let systemMessage = new SystemMessage();
         systemMessage.render(this.el);
         this.el.dialog({
-            width: 945,
-            height: 640,
+            width: 1280,
+            height: 580,
             modal: true,
             title: '消息提醒',
             close: function () {

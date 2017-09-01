@@ -1,0 +1,22 @@
+.component-tips-item {
+    background-color: #fff;
+    box-shadow: 0 0 5px #ccc;
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 10px;
+    position: relative;
+    display: none;
+    .msg {
+        font-size: 14px;
+        line-height: 22px;
+        max-height: 66px;
+    }
+    .close {
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        cursor: pointer;
+    }
+}

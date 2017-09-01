@@ -8,6 +8,11 @@
             .float-button-group-hide {
                 display: inline-block;
                 .float-button-group-show {
+                    display: inline-block;
+                    width: 16px;
+                    height:16px;
+                    box-sizing: border-box;
+                    background: url("../../../../assets/images/calendar/button-hide.png");
                     margin-top: -15px;
                     cursor: pointer;
                 }
@@ -48,23 +53,28 @@
                 //border: 1px solid #C1CACA;
             }
         }
-        .chk_1 {
-            display: none;
-        }
-        .chk_1 + label {
-            background-color: #FFF;
-            border: 1px solid #d7d7d7;
-            padding: 6px;
-            display: inline-block;
-            position: relative;
-            //margin-right: 5px;
-            cursor: pointer;
-        }
+        //.chk_1 {
+        //    display: none;
+        //}
+        //.chk_1 + label {
+        //    background-color: #FFF;
+        //    border: 1px solid #d7d7d7;
+        //    padding: 6px;
+        //    display: inline-block;
+        //    position: relative;
+        //    //margin-right: 5px;
+        //    cursor: pointer;
+        //}
         .label-select-all-show {
+            display: inline-block;
+            width: 16px;
+            height:16px;
+            box-sizing: border-box;
+            background: url("../../../../assets/images/calendar/calendar-checked-false.png");
             cursor: pointer;
         }
         .label-select-all-checked {
-            content: url('../../../../assets/images/calendar/calendar-checked-true.png');
+            background: url("../../../../assets/images/calendar/calendar-checked-true.png");
         }
         //.label-select-all-checked + label:after {
         //  content: '\2714'; //勾选符号
@@ -83,7 +93,7 @@
             height: 20px;
             margin-right: 90px;
             display: none;
-            z-index: 5555;
+            z-index: 5;
             position: absolute;
             float: right;
             .hide-span:hover {
@@ -112,7 +122,7 @@
                 margin-left: 160px;
                 position: absolute;
                 margin-top: -32px;
-                z-index: 1000;
+                z-index: 5;
                 .search-function-children {
                     width: 150px;
                     display: block;

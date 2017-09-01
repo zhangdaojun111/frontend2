@@ -115,6 +115,14 @@ input, textarea, select {
     }
 }
 
+.tips-box {
+    position: fixed;
+    right: 10px;
+    top: 10px;
+    width: 250px;
+    transition: all 0.5s;
+}
+
 .grid-cell-info {
     text-align: center;
     &.red {

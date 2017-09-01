@@ -224,7 +224,7 @@ let config={
                 if(this.data.options[0]['label'] == '-'){
                     this.data.options[0]['value']='-';
                 }
-                if(this.data.isViewOptions.length>0 && this.data.isViewOptions[0]['label'] == '-'){
+                if(this.data.isViewOptions && this.data.isViewOptions.length>0 && this.data.isViewOptions[0]['label'] == '-'){
                     this.data.isViewOptions[0]['value']='-';
                 }
                 if(this.data.options2 && this.data.options2.length>0 && this.data.options2[0]['label'] == '-'){
