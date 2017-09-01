@@ -34,13 +34,10 @@ let config = {
                 temp.removeClass("display-all-content");
                 this.el.find(".item-content").show();
                 this.el.find(".item-content").css("height", "calc(33.3% - 45px)");
-                // that.el.find(".item-content-1").css("height","calc(33.3% - 45px)");
-                // that.el.find(".item-content").show();
             } else {
                 this.el.find(".item-title").removeClass("display-all-content");
                 this.el.find(".item-title-2").removeClass("display-all-content");
                 temp.addClass("display-all-content");
-                // that.el.find(".item-content-1").hide();
                 this.el.find(".item-content").hide();
                 this.el.find(".item-content-2").hide();
                 temp.next(".item-content").show();
@@ -50,15 +47,12 @@ let config = {
         /**
          * 日历隐藏栏显示和隐藏
          */
-        hideclass: function (temp) {
+        hideClass: function (temp) {
             if (temp.is(".display-all-content")) {
                 temp.removeClass("display-all-content");
                 this.el.find(".item-content").css("height", "calc(33.3% - 45px)");
-                // that.el.find(".item-content-1").css("height","calc(33.3% - 45px)");
                 this.el.find(".item-content-2").hide();
                 this.el.find(".item-content").show();
-                // that.el.find(".item-content-3").show();
-                // that.el.find(".item-content-4").show();
             } else {
                 this.el.find(".item-title").removeClass("display-all-content");
                 temp.addClass("display-all-content");
@@ -69,27 +63,6 @@ let config = {
                 this.el.find(".item-content-2").css({height: 'calc(66.7% - 90px)'});
             }
         },
-        /**
-         * 日历操作显示和隐藏
-         */
-        // hide_item:function(that,temp){
-        //     if(temp.is(".display-all-content")){
-        //         temp.removeClass("display-all-content");
-        //         that.el.find(".item-content-1").show();
-        //         that.el.find(".item-content-1").css("height","calc(33.3% - 45px)");
-        //         that.el.find(".item-content").css("height","calc(33.3% - 45px)");
-        //         that.el.find(".item-content-2").hide();
-        //         that.el.find(".item-content-3").show();
-        //         that.el.find(".item-content-4").show();
-        //     }else{
-        //         that.el.find(".item-title").removeClass("display-all-content");
-        //         that.el.find(".item-content-1").show();
-        //         temp.addClass("display-all-content");
-        //         that.el.find(".item-content").hide();
-        //         that.el.find(".item-content-2").hide();
-        //         that.el.find(".item-content-1").css({height:'calc(100% - 135px)'});
-        //     }
-        // },
         /**
          * 展开日历操作栏
          */
@@ -102,7 +75,7 @@ let config = {
             this.el.find(".item-content-1").css({height: 'calc(100% - 135px)'});
         },
         /**
-         * 处理日历树数据
+         * 将日历树隐藏table数据格式处理成：[{'tableName': "", 'table_Id': ''},...]
          */
         getCalendarTreeData: function () {
             for (let i = 0; i < this.data.calendarTreeData.hide_tables.length; i++) {
@@ -134,8 +107,8 @@ let config = {
                 '/iframe/calendarOpenSetting/',
                 {
                     title: '日历设置',
-                    width: '1000',
-                    height: '800',
+                    width: '1200',
+                    height: '760',
                     modal: true,
                     customSize: true,
                 },
@@ -148,13 +121,13 @@ let config = {
          */
         openCalendarForm: function () {
             PMAPI.openDialogByIframe(
-                '/calendar_mgr/create/?table_id=1639_8QvxFmFvVpK33bVPXdk8hD',
+                '/iframe/addwf/?table_id=1639_8QvxFmFvVpK33bVPXdk8hD',
                 {
-                    width: "1000",
-                    height: '800',
+                    width: "900",
+                    height: '520',
                     title: '日历表',
                     modal: true,
-                    customSize: true,
+                    //customSize: true,
                 }).then(res => {
                 // 创建日历表后的回调，接收form回传的参数
             });
@@ -169,18 +142,11 @@ let config = {
                 this.actions.contentHide(temp);
             }
         },
-        // {
-        //     event: 'click',
-        //     selector: '.hide-con-1',
-        //     callback: function(temp = this){
-        //         this.actions.hide_item(this,$(temp).parents('.item-title-1'));
-        //     }
-        // },
         {
             event: 'click',
             selector: '.hide-con-2',
             callback: function (temp = this) {
-                this.actions.hideclass($(temp).parents('.item-title-2'));
+                this.actions.hideClass($(temp).parents('.item-title-2'));
             }
         },
         {

@@ -90,7 +90,8 @@
                     border: 1px solid #caeeff;
                     padding:7px;
                     width: calc(100% - 15px);
-                    cursor: move;
+                    //cursor: move;
+                    cursor: n-resize;
                     margin-bottom: 5px;
                     position: relative;
                     .group-data-item-select {

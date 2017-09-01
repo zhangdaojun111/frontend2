@@ -11,14 +11,29 @@ let config = {
     data: {
         tableId:'',
         tableName:'',
-        isRenderIntrain: false
+        isRenderIntrain: false,
+        firatShowHelp: false
     },
     actions: {
         //获取在途数据
         getInProcessNum: function () {
-            dataTableService.getInProcessNum( {table_id: this.data.tableId} ).then( res=>{
-                this.el.find( '.inProcessNum' )[0].style.display =res.total? 'block':'none';
-            } )
+            let inProcess = dataTableService.getInProcessNum( {table_id: this.data.tableId} )
+            let arr = [inProcess];
+            // if( !this.data.firatShowHelp ){
+            //     let help = dataTableService.getHelpData( {is_form:1,table_id:this.data.tableId,type:0} )
+            //     arr.push( help );
+            // }
+            Promise.all(arr).then((res)=> {
+                this.el.find( '.inProcessNum' )[0].style.display = res[0].total? 'block':'none';
+                // if( !this.data.firatShowHelp ){
+                //     if(typeof res[1].data != "object"){
+                //         if(res[1].data != ""){
+                //             this.el.find( '.dataTableHelp' )[0].style.display = 'flex';
+                //         }
+                //     }
+                // }
+                // this.data.firatShowHelp = true;
+            })
             HTTP.flush();
         },
         //添加点击事件
@@ -36,6 +51,7 @@ let config = {
                 this.el.find( '.page-group .dataTableInTransit' )[0].style.display = 'block';
                 //渲染在途
                 if( !this.data.isRenderIntrain ){
+                    this.actions.showTabs(0);
                     let obj = {
                         tableId: this.data.tableId,
                         tableName: this.data.tableName,
@@ -46,12 +62,17 @@ let config = {
                     this.data.isRenderIntrain = true;
                 }
             } )
+        },
+        //显示tabs
+        showTabs: function (opacity) {
+            this.el.find( '.page-tab' )[0].style.opacity = opacity;
         }
     },
     afterRender: function (){
         let json = {
             tableId: this.data.tableId,
-            tableName: this.data.tableName
+            tableName: this.data.tableName,
+            showTabs: this.actions.showTabs
         };
         this.append(new dataTableAgGrid(json), this.el.find('#data-table-agGrid'));
         this.actions.addClick();
@@ -66,6 +87,11 @@ let config = {
                 this.actions.getInProcessNum();
             }
         })
+        //是否显示帮助
+        let help = window.config.sysConfig.logic_config.use_help || '0';
+        if( help == 1 ){
+            this.el.find( '.dataTableHelp' )[0].style.display = 'flex';
+        }
     }
 };
 

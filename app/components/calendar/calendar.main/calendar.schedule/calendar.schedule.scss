@@ -1,17 +1,21 @@
 @import "../../calendar";
-
+@import "../../../form/base-form/dateTime";
 .schedule-container {
     border-top: 1px solid $boder-color;
     .select-date {
         padding: 10px;
+        .start-date, .end-date {
+            display: inline-block;
+        }
         .ok-btn {
             border: 1px solid #c5dbec;
             background: $btn-bg-color;
             color: #fff;
-            line-height: 23px;
+            line-height: 27px;
             padding: 0px 10px;
             font-size: 14px;
             display: inline-block;
+            cursor: pointer;
         }
     }
     .schedule-content {

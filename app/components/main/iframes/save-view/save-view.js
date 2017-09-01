@@ -46,7 +46,7 @@ let config = {
                 let $span = $("<span class='list-name'>");
                 $span.html(k.name);
                 $span.attr("view_id",k.name);
-                let $deleteIcon = $("<i class='delete-icon'>");
+                let $deleteIcon = $("<i class='delete-icon icon-framework-delete'>");
                 $deleteIcon.attr("view_id",k.name);
                 $container.append($span);
                 $container.append($deleteIcon);
