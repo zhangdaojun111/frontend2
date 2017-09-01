@@ -63,7 +63,6 @@ let config = {
                 cellComponent.render(cellContainer);
                 if(chart['data']['assortment']=='table'){
                     cellComponent.actions.alignTable(chart);
-                    // console.log(cellComponent.el);
                 }
                 this.cellChart = cellComponent;
             }
