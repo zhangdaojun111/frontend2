@@ -11,7 +11,6 @@ import {postMessageUtil} from '../post-message/post-message';
 import {GlobalSearch} from '../global-search/global-search';
 import {OnlineDisplay} from "../online-users/online-users"
 
-
 let config = {
     template: template,
     data: {
