@@ -232,7 +232,6 @@ let config = {
                 this.data.isShowCustomPanel = false;
                 this.actions.changeAgGridWidth(true);
             } )
-            this.hideLoading();
         },
         //返回选择数据
         retureSelectData: function () {

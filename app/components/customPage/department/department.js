@@ -36,7 +36,9 @@ let config = {
         customColumnsFields: [],
         isShowCustomPanel: false,
         //订阅刷新用
-        onRefresh: false
+        onRefresh: false,
+        //第一次设置数据
+        firstSetData: true,
     },
     actions: {
         //创建表头数据
@@ -162,6 +164,11 @@ let config = {
                     msgBox.showTips( '刷新成功' );
                 }
                 this.el.find( '.departmentSratch' )[0].value = '';
+                //第一次关闭loading
+                if( this.data.firstSetData ){
+                    this.hideLoading();
+                    this.data.firstSetData = false;
+                }
             } )
             HTTP.flush();
         },
@@ -363,6 +370,7 @@ let config = {
         }
     },
     afterRender: function (){
+        this.showLoading();
         TabService.onOpenTab( this.data.tableId );
         this.actions.createHeader();
         //订阅数据失效
