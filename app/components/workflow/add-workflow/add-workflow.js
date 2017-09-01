@@ -72,8 +72,9 @@ let config={
             Mediator.publish('workflow:submit', 1);
         });
         this.el.on('click','#toEdit',()=>{
-            // location.href=location.href.replace(/=view/,'=edit').replace(/is_view=1/,'is_view=0');
-            let table_id =　location.href.split('=')[1].split('&')[0];
+            location.href=location.href.replace(/=view/,'=edit').replace(/is_view=1/,'is_view=0');
+            // let table_id =　location.href.split('=')[1].split('&')[0];
+            // Mediator.publish('workflow:changeToEdit',table_id);
         });
         this.el.find('#print').on('click',()=>{
             this.actions.printSetting();
