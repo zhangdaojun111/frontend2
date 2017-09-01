@@ -144,6 +144,7 @@
             &.ag-cell-no-focus {
                 border-right: 1px solid #E4E4E4 !important;
             }
+
         }
     }
 
@@ -201,4 +202,8 @@
         display: inline-block;
         vertical-align: sub;
     }
+}
+.ag-bootstrap .ag-cell-focus {
+    outline: none;
+    background-color: #E4E4E4;
 }
