@@ -143,16 +143,17 @@ let config = {
         },
         initAvatar:function () {
             let src = this.data.avatar;
-            // let para = this.data.avatar_content;
             if(src !== ''){
                 let $img = $("<img>").addClass("set-info");
                 $img.attr('src', src);
                 this.el.find("div.avatar").append($img);
+                let that = this;
                 $img.on('error', function () {
                     $img.remove();
+                    that.el.find('.avatar').addClass('default-avatar');
                 });
             }else{
-                this.el.find('avatar').addClass('default-avatar');
+                this.el.find('.avatar').addClass('default-avatar');
             }
         },
         logout: function () {
