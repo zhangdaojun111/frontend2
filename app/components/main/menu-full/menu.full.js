@@ -63,7 +63,6 @@ let config = {
         setSizeToFull: function () {
             this.el.removeClass('mini');
             this.data.type = 'full';
-            // this.reload();
             let allChildren = this.findAllChildren();
             allChildren.forEach((item) => {
                 item.actions.setToFull();
@@ -71,16 +70,13 @@ let config = {
             this.actions.countHeight();
         },
         setSizeToMini: function () {
-            console.time('menu')
             this.el.addClass('mini');
             this.data.type = 'mini';
-            // this.reload();
             let allChildren = this.findAllChildren();
             allChildren.forEach((item) => {
                 item.actions.setToMini();
             });
             this.actions.countHeight();
-            console.timeEnd('menu')
         },
         startEditModel: function () {
             this.el.find('.custom-checkbox').show();
