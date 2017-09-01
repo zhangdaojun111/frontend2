@@ -364,6 +364,7 @@ let FormEntrys = {
 
     //转到编辑模式
     changeToEdit(tableId){
+        this.childForm[tableId].data.isOtherChangeEdit=true;
         this.childForm[tableId].actions.changeToEdit();
     },
 

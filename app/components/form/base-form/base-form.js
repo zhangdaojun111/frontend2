@@ -1095,7 +1095,11 @@ let config = {
                     this.data.childComponent[key].reload();
                 }
             }
-            this.data.btnType = 'new';
+            if(this.data.isOtherChangeEdit){
+                this.data.btnType= 'none';
+            }else{
+                this.data.btnType = 'new';
+            }
             this.actions.addBtn();
         },
         //修改可修改性
