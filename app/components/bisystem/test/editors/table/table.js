@@ -51,6 +51,7 @@ let config = {
          * 初始化图表操作
          */
        async init() {
+           this.formItems['single'].trigger('onChange');
 
            // 获取数据来源
             ChartFormService.getChartSource().then(res => {
@@ -107,7 +108,7 @@ let config = {
                 events: {
                     onChange:function(value) {
                         this.formItems['choosed'].actions.update(value);
-                        this.formItems['table_single'].actions.setColumns(value);
+                        this.formItems['table_single'].actions.setColumns(value, this.formItems['columnNum'].getValue());
                     }
                 }
             },
@@ -163,12 +164,14 @@ let config = {
                 type: 'checkbox',
                 events: {
                     onChange:function(value) {
-                        if (value[0]) {
+                        if (value && value[0]) {
                             this.formItems['columnNum'].el.show();
                             this.formItems['countNum'].el.hide();
+                            this.formItems['table_single'].el.show();
                         } else {
                             this.formItems['columnNum'].el.hide();
                             this.formItems['countNum'].el.show();
+                            this.formItems['table_single'].el.hide();
                         };
                     }
                 }
@@ -180,20 +183,11 @@ let config = {
                 type: 'text',
                 events: {
                     onChange: _.debounce(function(value) {
-                        // let value = parseInt($(this).val());
-                        // let columns = [];
-                        // if (value !== NaN) {
-                        //     let num = value;
-                        //     let choosedNum = Math.ceil(this.data.columns.length / num);
-                        //     let arr = [];
-                        //     this.data.columns.forEach((val, index,items) => {
-                        //         val = items.slice(index * choosedNum, index * choosedNum + choosedNum);
-                        //         arr.push(val);
-                        //     });
-                        //     this.data.choosed = arr.filter(item => item.length > 0);
-                        //     this.data.singleNum = this.data.choosed.length;
-                        //     this.reload();
-                        // }
+                        let columnNum = parseInt(value);
+                        if (columnNum !== NaN) {
+                            let num = this.formItems['table_single'].actions.setColumns(this.formItems['choosed'].data.list, columnNum);
+                            this.formItems['columnNum'].setValue(num);
+                        }
                     },500)
                 }
             },
@@ -204,7 +198,6 @@ let config = {
                 type: 'table_single',
                 events: {}
             },
-
             {
                 label: '',
                 name: 'save',

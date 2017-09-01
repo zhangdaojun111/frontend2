@@ -43,6 +43,9 @@ let config = {
         }
     ],
     afterRender(){
+    },
+    firstAfterRender() {
+        // this.trigger('onChange', this.data.value);
     }
 };
 

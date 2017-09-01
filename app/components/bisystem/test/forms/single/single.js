@@ -11,18 +11,17 @@ let config = {
     data: {
         columns: [],
         choosed: [],
-        show:false,
-        singleNum: 1
+        show:false
     },
     binds: [
     ],
     actions: {
         /**
          * 设置选中字段
-         * @param columns = 已选中字段
+         * @param columns = 已选中字段 singleNum = 需要显示多少列
          */
-        setColumns(choosed) {
-            let num = this.data.singleNum;
+        setColumns(choosed, singleNum) {
+            let num = singleNum;
             let choosedNum = Math.ceil(choosed.length / num);
             let arr = [];
             choosed.forEach((val, index,items) => {
@@ -31,13 +30,13 @@ let config = {
             });
             this.data.choosed = arr.filter(item => item.length > 0);
             this.reload();
+            return this.data.choosed.length;
         },
 
         /**
          * 清空字段
          */
         clear() {
-            console.log('this is a test!');
             this.data.choosed = [];
             this.reload();
         }
