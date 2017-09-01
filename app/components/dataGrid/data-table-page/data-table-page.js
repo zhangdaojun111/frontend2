@@ -81,7 +81,6 @@ let config = {
                 this.actions.getInProcessNum();
             }
         })
-        console.log( window.config )
         //是否显示帮助
         let help = window.config.sysConfig.logic_config.use_help || '0';
         if( help == 1 ){
