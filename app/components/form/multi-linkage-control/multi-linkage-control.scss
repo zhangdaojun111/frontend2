@@ -1,4 +1,9 @@
-.multi-drop{
-  display: flex;
-  align-items: center;
+.component-multi-linkage-control {
+    .multi-drop {
+        display: flex;
+        align-items: center;
+    }
+    .refresh {
+        cursor: pointer;
+    }
 }

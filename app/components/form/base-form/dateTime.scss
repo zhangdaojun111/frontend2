@@ -110,13 +110,15 @@
         bottom: 50px;
     }
     .ui-icon-circle-triangle-w {
-        background: url("../../../assets/images/form/inco_pre_month.png") !important;
+        background-image: url(../../../assets/images/form/icon-form.png);
+        background-position: -110px -63px;
     }
     .ui-datepicker-prev,.ui-datepicker-next {
         top: 12%;
         position: absolute;
     }
     .ui-icon-circle-triangle-e {
-        background: url("../../../assets/images/form/inco_next_month.png") !important;
+        background-image: url(../../../assets/images/form/icon-form.png);
+        background-position: -85px -25px;
     }
 }
