@@ -213,11 +213,24 @@
 }
 
 
-@media screen and (max-width: 900px){
+@media screen and (max-width: 1200px){
   .data-table-agGrid-con {
     .dataGrid-btn-group {
       span {
         display: none;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 900px){
+  .data-table-agGrid-con {
+    .dataGrid-btn-group {
+      a {
+        margin-left: 15px;
+        span {
+          display: none;
+        }
       }
     }
   }
