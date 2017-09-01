@@ -81,7 +81,7 @@ class Component {
             let that = this;
             this.binds.forEach((item) => {
                 this.el.on(item.event, item.selector, function (event) {
-                    item.callback.call(that, this, event);
+                    return item.callback.call(that, this, event);
                 });
             })
         }
