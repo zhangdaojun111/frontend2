@@ -122,6 +122,7 @@ let config = {
             let eHeader = document.createElement('span');
             let eImg = document.createElement('i');
             eImg.className = 'icon-aggrid icon-aggrid-cancel resetFloatingFilter';
+            eImg.title = '重置筛选';
             eImg.addEventListener( 'click',()=>{
                 msgBox.confirm( '确定清空筛选数据？' ).then( r=>{
                     if( r ){
@@ -141,6 +142,7 @@ let config = {
             ediv.appendChild( eHeader )
             eHeader.innerHTML = "初";
             eHeader.className = "table-init-logo";
+            eHeader.title = '初始化偏好'
             eHeader.addEventListener('click', () => {
                 msgBox.confirm( '确定初始化偏好？' ).then( r=>{
                     if( r ){
@@ -155,6 +157,7 @@ let config = {
                                 //创建表头
                                 this.agGrid.gridOptions.api.setColumnDefs( this.data.columnDefs );
                                 dgcService.calcColumnState(this.data,this.agGrid,["number","mySelectAll"]);
+                                this.customColumnsCom.actions.makeSameSate();
                             } );
                             HTTP.flush();
                         } );

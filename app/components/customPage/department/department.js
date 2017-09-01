@@ -125,6 +125,7 @@ let config = {
             ediv.appendChild( eHeader )
             eHeader.innerHTML = "初";
             eHeader.className = "table-init-logo";
+            eHeader.title = '初始化偏好'
             eHeader.addEventListener('click', () => {
                 msgBox.confirm( '确定初始化偏好？' ).then( r=>{
                     if( r ){
@@ -139,6 +140,7 @@ let config = {
                                 //创建表头
                                 this.agGrid.gridOptions.api.setColumnDefs( this.data.columnDefs );
                                 dgcService.calcColumnState( this.data,this.agGrid,["number","mySelectAll","myOperate","f5"] )
+                                this.customColumnsCom.actions.makeSameSate();
                             } );
                             HTTP.flush();
                         } );
