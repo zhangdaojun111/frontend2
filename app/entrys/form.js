@@ -381,9 +381,7 @@ let FormEntrys = {
             return result;
         }
         this.init(config);
-        // let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap"><div></div></div>`).prependTo(this.el);
-        let $form=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap"><div></div></div>`).prependTo(this.el);
-        let html=$(`<div></div>`).prependTo($form);
+        let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap"><div></div></div>`).prependTo(this.el);
         let res;
         if(!this.fromWorkFlow){
             res=await  FormService.getPrepareParmas({table_id:this.tableId});
