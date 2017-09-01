@@ -10,7 +10,6 @@ import {FileDisplay} from './file-display/file-display'
 import {GlobalService} from "../../../services/main/globalService"
 import dataPagination from "../../../components/dataGrid/data-table-toolbar/data-pagination/data-pagination";
 
-
 let config = {
     template:template,
     data:{

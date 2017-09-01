@@ -81,7 +81,7 @@ export const systemMessageService = {
             }, {
                 headerName: '发布者',
                 field: 'publisher',
-                width: 60,
+                width: 100,
                 suppressMenu: true,
                 tooltipField: 'publisher',
                 cellStyle: {'text-align': 'center'},
@@ -102,7 +102,7 @@ export const systemMessageService = {
                 cellStyle: {'text-align': 'center'},
                 suppressSorting: true
             }, {
-                width:180,
+                width:475,
                 headerName: '消息内容',
                 field: 'msg_content',
                 suppressMenu: true,

@@ -16,7 +16,7 @@ let config = {
         {
             event: 'click',
             selector: '.show-type-button',
-            callback: function (temp = this) {
+            callback: function () {
                 Mediator.emit('calendar-left:showRemindType', {data: this.data.table_Id});
                 this.destroySelf();
             }

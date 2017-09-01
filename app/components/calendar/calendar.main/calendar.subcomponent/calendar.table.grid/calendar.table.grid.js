@@ -88,6 +88,7 @@ let config = {
             this.el.addClass("item-td-col-month");
         } else if (this.data.type === 'week') {
             this.el.addClass("item-td-col-week");
+            this.el.find('.task-list').addClass('week-task-list');
             $('.date').remove();
         }
 

@@ -17,7 +17,7 @@ let config={
     action:{
         search(){
             let keyword = this.el.find(".signer-search").val();
-            let node = this.el.find('#addUsercheck').find('.w33');
+            let node = this.el.find('#addUsercheck').find('.J_name');
             let par = this.el.find("#addUsercheck").children();
             let arr = _.chunk(node,3);
             let len = arr.length;
@@ -47,20 +47,20 @@ let config={
         //部门反选，删除SelectedStaff组件
         Mediator.subscribe('workflow:unCheckDept', (res)=> {
             let userArr=[];
-            for(var id in res){
+            for(let id in res){
                 userArr.push(id);
             }
             let domDiv=this.el.find('#staffMulti').find('.flex');
-            for(var i=0;i<domDiv.length;i++){
-                for(var j=0;j<userArr.length;j++){
+            for(let i=0;i<domDiv.length;i++){
+                for(let j=0;j<userArr.length;j++){
                     if($(domDiv[i]).data('id')===userArr[j]){
                         $(domDiv[i]).parent().remove();
                     }
                 }
             }
             let domSpan=this.el.find('#selected').find('span');
-            for(var i=0;i<domSpan.length;i++){
-                for(var j=0;j<userArr.length;j++){
+            for(let i=0;i<domSpan.length;i++){
+                for(let j=0;j<userArr.length;j++){
                     if($(domSpan[i]).data('id')===userArr[j]){
                         $(domSpan[i]).parent().remove();
                     }
@@ -78,12 +78,12 @@ let config={
 
         Mediator.subscribe('workflow:unCheckAdder', (res)=> {
             let userArr=[];
-            for(var id in res){
+            for(let id in res){
                 userArr.push(id);
             }
             let domDiv=this.el.find('#addUsercheck').find('.flex');
-            for(var i=0;i<domDiv.length;i++){
-                for(var j=0;j<userArr.length;j++){
+            for(let i=0;i<domDiv.length;i++){
+                for(let j=0;j<userArr.length;j++){
                     if($(domDiv[i]).data('id')===userArr[j]){
                         $(domDiv[i]).parent().remove();
                     }
@@ -95,7 +95,7 @@ let config={
         this.el.on('click','#saveFollower',()=>{
             let o={};
             let domSpan=this.el.find('#selected').find('span');
-            for(var i=0;i<domSpan.length;i++){
+            for(let i=0;i<domSpan.length;i++){
                 o[$(domSpan[i]).data('id')]=$(domSpan[i]).text();
             }
             
