@@ -30,9 +30,8 @@ let config = {
                     this.hideLoading();
                 }
                 this.el.find('.left-content').empty();
-                this.el.find('.main-content').empty();
                 this.append(new LeftContent(res), this.el.find('.left-content'));
-                this.append(new CalendarMain(res['cancel_fields']), this.el.find('.main-content'));
+                Mediator.emit('Calendar: tool', {toolMethod: 'refresh', data: res['cancel_fields']});
             });
         }
     },
@@ -87,7 +86,7 @@ let config = {
         }).on('click', '#refresh', () => {
             this.showLoading();
             this.actions.getCalendarTreeData();
-            Mediator.emit('Calendar: tool', {toolMethod: 'refresh'});
+            //Mediator.emit('Calendar: tool', {toolMethod: 'refresh'});
         }).on('click', '#export', () => {
             //Mediator.emit('Calendar: tool', {toolMethod: 'export'});
             PMAPI.openDialogByIframe(

@@ -609,6 +609,7 @@ let config = {
 
         Mediator.on('Calendar: tool', data => {
             if(data.toolMethod === 'refresh') {
+                this.data.cancel_fields = data['data'];
                 if(this.data.calendarContent !== 'schedule') {
                     this.actions.getCalendarData({
                         from_date: this.data.from_date,

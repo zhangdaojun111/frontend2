@@ -186,6 +186,9 @@ class CalendarRemindTaskItem extends Component {
                 config.data.isNone = true;
             }
         }else{
+            if(config.data.remindTaskData === undefined) {
+                MSG.alert('undefined!该表未设置代表字段');
+            }
             if(config.data.remindTaskData['selectLabel']) {
                 config.data.isFinishedTask = true;
             } else {
