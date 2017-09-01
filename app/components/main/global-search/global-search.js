@@ -98,8 +98,7 @@ let config ={
                     msgbox.alert("搜索内容不能为空");
                 }
             }else{
-                // msgbox.showTips("　　全文检索功能未开启，\n　　请联系管理员。");
-                msgbox.showTips("全文检索功能未开启，\n请联系管理员。");
+                msgbox.showTips("全文检索功能未开启，" + '<br>' + "请联系管理员。");
             }
         },
         addSearchHistory(){
