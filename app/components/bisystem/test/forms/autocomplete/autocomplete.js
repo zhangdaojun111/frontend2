@@ -5,13 +5,22 @@ import {AutoSelect} from '../../../../util/autoSelect/autoSelect';
 let config = {
     template: template,
     actions: {
+        /**
+         * 当AutoSelect 选中值时
+         * @param value
+         */
+        onSelect(value) {
+            this.data.value = value;
+            this.trigger('onSelect', this.data.value);
+        }
     },
     binds: [
     ],
     afterRender(){
         const autoselect_data = {
             multiSelect: false,
-            onSelect: this.data.onSelect
+            choosed: this.data.value,
+            onSelect: this.actions.onSelect
         };
         this.autoselect = new AutoSelect(autoselect_data);
         this.append(this.autoselect, this.el);

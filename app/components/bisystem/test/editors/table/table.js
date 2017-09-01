@@ -10,7 +10,6 @@ import msgbox from "../../../../../lib/msgbox";
 let config = {
     template: template,
     actions: {
-
         /**
          * 加载x 和y轴数据
          * @param data 选中的数据源
@@ -36,21 +35,19 @@ let config = {
          */
         async loadColumns(columns) {
             if (columns) {
-                this.formItems['columns'].setJsonList(columns);
+                this.formItems['columns'].setList(columns);
                 this.formItems['sortColumns'].setList(columns);
             } else { // 清空字段
                 this.formItems['columns'].actions.clear();
+                this.formItems['choosed'].actions.clear();
                 this.formItems['sortColumns'].setList([]);
             }
         },
 
         /**
-         * 初始化操作
+         * 初始化图表操作
          */
        async init() {
-           // 绑定数据源onSelect选择事件
-            this.formItems['source'].data.onSelect = this.actions.getFields;
-            this.formItems['source'].reload();
 
            // 获取数据来源
             ChartFormService.getChartSource().then(res => {
@@ -73,6 +70,13 @@ let config = {
                     msgbox.alert(res['error'])
                 };
             })
+        },
+
+        /**
+         * 保存图表数据
+         */
+        saveChart(chart) {
+            console.log(this.getData());
         }
     },
     data: {
@@ -84,9 +88,14 @@ let config = {
             {
                 label: '请选择列名',
                 name: 'columns',
-                defaultValue: '',
+                defaultValue: [],
                 list: [],
-                type: 'checkbox'
+                type: 'checkbox',
+                events: {
+                    onChange:function(value) {
+                        this.formItems['choosed'].actions.update(value);
+                    }
+                }
             },
             {
                 label: '已选择列名',
@@ -131,13 +140,24 @@ let config = {
             {
                 label: '',
                 name: 'single',
-                defaultValue: '',
+                defaultValue: [],
                 list: [
                     {
                         value:1, name: '是否显示为单行'
                     }
                 ],
                 type: 'checkbox'
+            },
+            {
+                label: '',
+                name: 'save',
+                defaultValue: '',
+                type: 'save',
+                events: {
+                    save() {
+                        this.actions.saveChart();
+                    }
+                }
             },
         ]
     },
