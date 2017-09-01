@@ -228,6 +228,7 @@ let config = {
                 _this.data.multiSelectMenu = new AutoSelect(select_item_data);
                 _this.append(_this.data.multiSelectMenu, _this.el.find('.multi-select-item'));
                 single_item_data.editable = true;
+                // this.data.singleSelectMenu.data.editable = true;
                 this.data.singleSelectMenu = new AutoSelect(single_item_data);
                 this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
                 _this.el.find('td').removeClass('unclick');
@@ -242,6 +243,7 @@ let config = {
                 single_item_data.editable = false;
                 _this.data.multiSelectMenu = new AutoSelect(select_item_data);
                 _this.append(_this.data.multiSelectMenu, _this.el.find('.multi-select-item'));
+                // this.data.singleSelectMenu.data.editable = false;
                 this.data.singleSelectMenu = new AutoSelect(single_item_data);
                 this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
                 _this.el.find("td").addClass('unclick');

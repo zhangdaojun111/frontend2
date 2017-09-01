@@ -265,6 +265,12 @@ let config = {
                 //正则检查
                 if (val != "" && data["reg"] !== "") {
                     for (let r in data["reg"]) {
+                        if(r.startsWith('/')){
+                            r=r.substring(1)
+                        }
+                        if(r.endsWith('/')){
+                            r=r.substring(0,r.length-1);
+                        }
                         let reg = new RegExp(r);
                         let flag = reg.test(val);
                         if (!flag) {
@@ -794,7 +800,7 @@ let config = {
 
         //判断一下日期的类型，并且进行限制
         checkDateType(data) {
-            for(let i = 0;i<this.data.formData.length;i++) {
+            // for(let i = 0;i<this.data.formData.length;i++) {
                 // if(this.data.formData[i]['type'] == 'Date'){
                 //     let _val = this.el.find(".date_yy-mm-dd").val()
                 //     let reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
@@ -809,22 +815,22 @@ let config = {
                 //      var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
                 //      var regExp = new RegExp(reg);
                 //      if(!regExp.test(_val)){
-                //          alert("时间格式不正确,正确格式为: 2014-01-01 12:00:00 ");
-                //          return;
+                //          console.log("时间格式不正确,正确格式为: 2014-01-01 12:00:00 ");
+                //          return 0;
                 //      }
                 // }
-                if(this.data.formData[i]['type'] == 'Time'){
-                    let _val = this.el.find(".timeInput").val()
-                    let reg = /^(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
-                    let regExp = new RegExp(reg);
-                    if(!regExp.test(_val)){
-                        console.log("时间格式不正确，正确格式为：12:00:00");
-                        return;
-                    }
-                }
+                // if(this.data.formData[i]['type'] == 'Time'){
+                //     let _val = this.el.find(".timeInput").val()
+                //     let reg = /^(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
+                //     let regExp = new RegExp(reg);
+                //     if(!regExp.test(_val)){
+                //         console.log("时间格式不正确，正确格式为：12:00:00");
+                //         return 0;
+                //     }
+                // }
 
 
-            }
+            // }
 
             // for(let i = 0;i<this.data.formData.length;i++){
             //     if(this.data.formData[i]['type'] == 'Date'){
@@ -1126,7 +1132,11 @@ let config = {
                     this.data.childComponent[key].reload();
                 }
             }
-            this.data.btnType = 'new';
+            if(this.data.isOtherChangeEdit){
+                this.data.btnType= 'none';
+            }else{
+                this.data.btnType = 'new';
+            }
             this.actions.addBtn();
         },
         //修改可修改性

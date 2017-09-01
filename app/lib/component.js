@@ -81,7 +81,7 @@ class Component {
             let that = this;
             this.binds.forEach((item) => {
                 this.el.on(item.event, item.selector, function (event) {
-                    item.callback.call(that, this, event);
+                    return item.callback.call(that, this, event);
                 });
             })
         }
@@ -105,11 +105,21 @@ class Component {
         this.data[key] = value;
     }
 
-    append(component, container, tagName) {
-        tagName = tagName || 'div';
+    append(component, container, tagName = 'div') {
         let el = $(`<${tagName}>`).appendTo(container);
         component.render(el);
         this.subComponents.push(component);
+        return this;
+    }
+
+    appendTo(container, tagName = 'div', sort = '') {
+        let el = $(`<${tagName}>`);
+        if (sort === 'desc') {
+            el.prependTo(container);
+        } else {
+            el.appendTo(container);
+        }
+        this.render(el);
         return this;
     }
 
@@ -169,6 +179,14 @@ class Component {
             }
         });
         return coms;
+    }
+
+    findAllChildren() {
+        let subs = Array.from(this.el.find('[component]'));
+        let res = subs.map((element) => {
+            return map.get(element);
+        });
+        return res;
     }
 
     showLoading(dom){

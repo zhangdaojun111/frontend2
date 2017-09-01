@@ -73,7 +73,7 @@ export const systemMessageService = {
             }, {
                 headerName: '阅读状态',
                 field: 'is_read',
-                width: 60,
+                width: 80,
                 suppressMenu: true,
                 tooltipField: 'is_read',
                 cellStyle: {'text-align': 'center'},
@@ -81,7 +81,7 @@ export const systemMessageService = {
             }, {
                 headerName: '发布者',
                 field: 'publisher',
-                width: 60,
+                width: 100,
                 suppressMenu: true,
                 tooltipField: 'publisher',
                 cellStyle: {'text-align': 'center'},
@@ -102,7 +102,7 @@ export const systemMessageService = {
                 cellStyle: {'text-align': 'center'},
                 suppressSorting: true
             }, {
-                width:180,
+                width:475,
                 headerName: '消息内容',
                 field: 'msg_content',
                 suppressMenu: true,
@@ -118,7 +118,7 @@ export const systemMessageService = {
             }, {
                 headerName: '执行状态',
                 field: 'handle_status_text',
-                width: 60,
+                width: 80,
                 suppressMenu: true,
                 tooltipField: 'handle_status_text',
                 cellStyle: {'text-align': 'center'},

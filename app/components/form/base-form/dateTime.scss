@@ -68,10 +68,10 @@
         font-size: 13px;
         color: #333333;
     }
-    th span{
+    th span {
         font-weight: normal !important;
     }
-     table {
+    table {
         width: 95%;
         margin: .7em auto;
     }
@@ -109,16 +109,8 @@
         position: relative;
         bottom: 50px;
     }
-    .ui-icon-circle-triangle-w {
-        background-image: url(../../../assets/images/form/icon-form.png);
-        background-position: -110px -84px;
-    }
-    .ui-datepicker-prev,.ui-datepicker-next {
-        top: 12%;
+    .ui-datepicker-prev,.ui-datepicker-next {  top: 12%;
         position: absolute;
     }
-    .ui-icon-circle-triangle-e {
-        background-image: url(../../../assets/images/form/icon-form.png);
-        background-position: -85px -25px;
-    }
+
 }

@@ -1,11 +1,11 @@
 @import "icon-form";
+
 #detail-form {
     height: 100%;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     @import "dateTime";
-
     .ui-history {
         margin-left: 5px;
         vertical-align: middle;
@@ -202,7 +202,7 @@
         color: #0e7aef;
         font-size: 16px;
     }
-    .ui-del{
+    .ui-del {
         float: right;
         color: red;
     }

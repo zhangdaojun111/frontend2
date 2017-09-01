@@ -5,6 +5,7 @@ import './jquery-ui.dialog';
 import Quill from 'quill';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
+import msgbox from './msgbox';
 
 /**
  * 父级页面，需要根据key来保存消息来源iframe或component的对象和打开的iframe或component的dom
@@ -42,7 +43,8 @@ export const PMENUM = {
     open_iframe_params: '8',
     get_param_from_root: '9',        // 来自子框架的消息，需要获取iframe的参数
     send_param_to_iframe: '10',       // 来组主框架的消息，向iframe发送参数
-    workflow_approve_msg: '11'
+    workflow_approve_msg: '11',
+    show_tips: '12'
 }
 
 /**
@@ -151,6 +153,10 @@ window.addEventListener('message', function (event) {
                     type: PMENUM.send_param_to_iframe,
                     data: dialogHash[data.key].params
                 });
+                break;
+
+            case PMENUM.show_tips:
+                msgbox._showTips(data.data);
                 break;
             default:
                 console.log('postmsg listener: unsupported message');
@@ -312,7 +318,7 @@ export const PMAPI = {
         return new Promise(function (resolve) {
             let key = PMAPI._getKey();
             dialogWaitHash[key] = resolve;
-            window.parent.postMessage({
+            PMAPI.sendToParent({
                 type: PMENUM.open_component_dialog,
                 key: key,
                 component: PMAPI.serializeComponent(componentConfig),

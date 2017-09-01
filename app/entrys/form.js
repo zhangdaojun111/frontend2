@@ -3,6 +3,7 @@ import Mediator from '../lib/mediator';
 import {FormService} from "../services/formService/formService";
 import '../assets/scss/form.scss'
 import '../assets/scss/core/print.scss'
+import '../assets/scss/form/form.scss';
 import {CreateForm} from "../components/form/createFormVersionTable/createForm"
 
 
@@ -360,6 +361,12 @@ let FormEntrys = {
             }
         }
         return html;
+    },
+
+    //转到编辑模式
+    changeToEdit(tableId){
+        this.childForm[tableId].data.isOtherChangeEdit=true;
+        this.childForm[tableId].actions.changeToEdit();
     },
 
     checkConfig(config){
