@@ -63,15 +63,24 @@ let config = {
         setSizeToFull: function () {
             this.el.removeClass('mini');
             this.data.type = 'full';
-            this.reload();
+            // this.reload();
+            let allChildren = this.findAllChildren();
+            allChildren.forEach((item) => {
+                item.actions.setToFull();
+            });
             this.actions.countHeight();
         },
         setSizeToMini: function () {
+            console.time('menu')
             this.el.addClass('mini');
             this.data.type = 'mini';
-            this.reload();
-            this.el.find('.childlist').hide();
+            // this.reload();
+            let allChildren = this.findAllChildren();
+            allChildren.forEach((item) => {
+                item.actions.setToMini();
+            });
             this.actions.countHeight();
+            console.timeEnd('menu')
         },
         startEditModel: function () {
             this.el.find('.custom-checkbox').show();
@@ -131,7 +140,7 @@ let config = {
             let menu = this.el.find('.menu-full');
             menu.css({
                 height:0
-            })
+            });
             menu.css({
                 height: (document.body.scrollHeight - menu.offset().top) + 'px'
             });
