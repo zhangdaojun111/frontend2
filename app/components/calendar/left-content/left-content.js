@@ -19,11 +19,11 @@ let config = {
     template: template,
     data: {
         cancel_fields: [],                              //取消选中数组
-        hide_table: {'table_Id': '', 'tableName': ''},     //隐藏对象
+        hide_table: {'table_Id': '', 'tableName': ''},  //隐藏对象
         hide_tables: [],                                //隐藏对象数组
         rows: [],                                       //日历树data_table数据
         hide_item_table: [],                            //隐藏table_id数组
-        calendarTreeData: {},                          //日历树数据
+        calendarTreeData: {},                           //日历树数据
     },
     actions: {
         /**

@@ -46,18 +46,6 @@
                 position: relative;
             }
         }
-        //.chk_1 {
-        //    display: none;
-        //}
-        //.chk_1 + label {
-        //    background-color: #FFF;
-        //    border: 1px solid #d7d7d7;
-        //    padding: 6px;
-        //    display: inline-block;
-        //    position: relative;
-        //    //margin-right: 5px;
-        //    cursor: pointer;
-        //}
         .label-select-all-show {
             display: inline-block;
             background: url("../../../../assets/images/calendar/calendar-checked-false.png");
@@ -66,18 +54,6 @@
         .label-select-all-checked {
             background: url("../../../../assets/images/calendar/calendar-checked-true.png");
         }
-        //.label-select-all-checked + label:after {
-        //  content: '\2714'; //勾选符号
-        //  position: absolute;
-        //  height: 14px;
-        //  width: 13px;
-        //  padding-right: 1px;
-        //  top: 0px;
-        //  left: 0px;
-        //  color: #2398df;
-        //  text-align: center;
-        //  font-size: 14px;
-        //}
         .float-button-group {
             width: 200px;
             height: 20px;
