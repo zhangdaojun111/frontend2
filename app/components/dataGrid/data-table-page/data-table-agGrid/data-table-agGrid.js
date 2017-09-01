@@ -186,7 +186,7 @@ let config = {
         //是否有sheet
         isShowSheet: false,
         //显示tabs
-        showTabs:function () {
+        showTabs:function (opacity) {
         },
     },
     //生成的表头数据
@@ -1401,7 +1401,7 @@ let config = {
             this.actions.getExpertSearchData();
             this.data.firstRender = false;
             this.hideLoading();
-            this.data.showTabs();
+            this.data.showTabs(1);
         },
         //触发导出
         onExport: function () {

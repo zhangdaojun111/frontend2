@@ -51,6 +51,7 @@ let config = {
                 this.el.find( '.page-group .dataTableInTransit' )[0].style.display = 'block';
                 //渲染在途
                 if( !this.data.isRenderIntrain ){
+                    this.actions.showTabs(0);
                     let obj = {
                         tableId: this.data.tableId,
                         tableName: this.data.tableName,
@@ -63,9 +64,8 @@ let config = {
             } )
         },
         //显示tabs
-        showTabs: function () {
-            console.log( 111111111111 )
-            this.el.find( '.page-tab' )[0].style.opacity = 1;
+        showTabs: function (opacity) {
+            this.el.find( '.page-tab' )[0].style.opacity = opacity;
         }
     },
     afterRender: function (){
