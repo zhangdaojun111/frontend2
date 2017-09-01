@@ -889,6 +889,7 @@ let config = {
                 dgcService.setPreference( res[0],this.data );
                 this.data.myGroup = (res[0]['group'] != undefined) ? JSON.parse(res[0]['group'].group) : [];
                 this.data.fieldsData = res[1].rows || [];
+                this.agGrid.data.fieldsData = this.data.fieldsData;
                 this.data.permission = res[1].permission;
                 this.data.namespace = res[1].namespace;
                 this.data.headerColor = dgcService.createHeaderStyle( this.data.tableId,res[1].field_color );
