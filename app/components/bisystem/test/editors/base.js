@@ -6,6 +6,7 @@ import {Radio} from '../forms/radio/radio';
 import {Checkbox} from '../forms/checkbox/checkbox';
 import {Choosed} from '../forms/choosed/choosed';
 import {Save} from '../forms/save/save';
+import {TableSingle} from '../forms/single/single';
 
 let formItemTypes = {
     'text': Text,
@@ -14,7 +15,8 @@ let formItemTypes = {
     'radio': Radio,
     'checkbox': Checkbox,
     'choosed':Choosed,
-    'save': Save
+    'save': Save,
+    'table_single': TableSingle
 }
 
 class Base extends Component {

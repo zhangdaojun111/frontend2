@@ -4,10 +4,28 @@ import {Base} from '../base';
 let config = {
     template: template,
     data: {},
-    actions: {},
+    actions: {
+        /**
+         * select change事件设置值
+         * @param value = radio value的值
+         */
+        onChange: function (value) {
+            this.data.value = value;
+        },
+    },
     binds: [
+        {
+            event: 'change',
+            selector: 'select',
+            callback: function (context) {
+                this.actions.onChange(context.value);
+            }
+        }
     ],
     afterRender(){
+        if (this.data.value) {
+            this.el.find('select').val(this.data.value);
+        }
     }
 };
 

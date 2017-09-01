@@ -17,6 +17,8 @@ let config = {
                         break;
                     }
                 };
+            } else {
+                this.data.value = null;
             }
             this.trigger('onSelect', this.data.value);
         }

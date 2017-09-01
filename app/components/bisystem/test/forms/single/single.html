@@ -1,0 +1,16 @@
+<div class="form-group-single-sorts">
+    <!--<h5>拖拽列名可以修改位置</h5>-->
+    {{#each choosed}}
+    <div>
+        <p>第{{@index}}列显示字段</p>
+        <div>
+            {{#each this}}
+            <span>
+                <label class="column-item">{{name}}</label>
+            </span>
+            {{/each}}
+        </div>
+    </div>
+    {{/each}}
+</div>
+

@@ -23,6 +23,7 @@ let config = {
             }
         }
     ],
+
     afterRender(){}
 };
 
