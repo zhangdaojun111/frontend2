@@ -10,7 +10,14 @@ let config = {
          * @param value
          */
         onSelect(value) {
-            this.data.value = value;
+            if (value.length > 0) {
+                for(let item of this.autoselect.data.list) {
+                    if (item.id === value[0].id) {
+                        this.data.value = item;
+                        break;
+                    }
+                };
+            }
             this.trigger('onSelect', this.data.value);
         }
     },
@@ -40,7 +47,6 @@ class AutoComplete extends Base {
     setList(list) {
         this.autoselect.actions.setList(list);
     }
-
 }
 
 export {AutoComplete}

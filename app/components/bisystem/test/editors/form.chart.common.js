@@ -10,12 +10,6 @@ let chartName = {
     type: 'text',
     events: {}
 };
-let source = {
-    label: '数据来源',
-    name: 'source',
-    defaultValue: '',
-    type: 'autocomplete'
-};
 let theme = {
     label: '选择颜色',
     name: 'theme',
@@ -35,4 +29,4 @@ let icon = {
     type: 'radio'
 }
 
-export {chartName, source, theme, icon};
+export {chartName, theme, icon};

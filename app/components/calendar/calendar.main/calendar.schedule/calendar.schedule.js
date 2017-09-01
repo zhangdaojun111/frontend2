@@ -7,6 +7,7 @@ import './calendar.schedule.scss';
 
 import CalendarScheduleItem from './calendar.schedule.item/calendar.schedule.item';
 import Mediator from '../../../../lib/mediator';
+import DateControl from '../../../form/date-control/date-control';
 
 import {PMAPI} from '../../../../lib/postmsg';
 
@@ -17,10 +18,17 @@ let config = {
         scheduleStart: '',
         scheduleEnd: '',
         scheduleDataList: [],
+        startDate: '',
+        endDate: '',
     },
     actions: {
-        //获得日程数据
+        /**
+         * 获取日程数据
+         * @param startDate
+         * @param endDate
+         */
         getSchedule: function(startDate, endDate) {
+            console.log(startDate, endDate);
             if( startDate === '' || endDate === '' ){
                 alert( '时间不能为空。' );
                 return;
@@ -30,30 +38,34 @@ let config = {
                 return
             }
             Mediator.emit('calendarSchedule: date', {from_date: startDate, to_date: endDate});
+        },
+        
+        changeValue: function (res) {
+            console.log(res);
         }
 
     },
     afterRender: function() {
-        $('.start-date').val(this.data.scheduleStart);
-        $('.end-date').val(this.data.scheduleEnd);
         this.el.css({"height":"100%","width":"100%"});
 
         this.data.scheduleDataList.forEach(item => {
             console.log(item);
             this.append(new CalendarScheduleItem({dayDate: item['dataTime'], dayScheduleList: item['data']}), this.el.find('.schedule-content'));
         });
-        let that = this;
-        this.el.on('input propertychange', '.start-date', function () {
-
-        }).on('input propertychange', '.end-date', function () {
-
-        }).on('click', '.ok-btn', function () {
-            let start = $('.start-date').val(),
-                end = $('.end-date').val();
-            that.actions.getSchedule(start, end);
+        let _this = this;
+        this.el.on('click', '.ok-btn', function () {
+            _this.actions.getSchedule(_this.data.startDate, _this.data.endDate);
             //PMAPI.sendToParent({startDate: start, endDate: end});
         });
+        let changeStartValue = (res) => {
+            this.data.startDate = res.value;
+        };
+        let changeEndValue = (res) => {
+            this.data.endDate = res.value;
+        };
 
+        this.append(new DateControl({value: this.data.scheduleStart},{changeValue: changeStartValue}), this.el.find('.start-date'));
+        this.append(new DateControl({value: this.data.scheduleEnd},{changeValue: changeEndValue}), this.el.find('.end-date'));
     },
 };
 

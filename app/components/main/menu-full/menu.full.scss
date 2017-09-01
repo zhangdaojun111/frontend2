@@ -86,6 +86,9 @@
                     .menu-full-item {
                         border-top: 1px solid #ddd;
                         .row {
+                            .icon {
+
+                            }
                             .name {
                                 line-height: 16px;
                                 color: #0088ff;
@@ -111,10 +114,10 @@
         .root {
             .menu-full-item {
                 .row {
-                    padding: 12px 0 12px 10px;
+                    padding: 12px 0 12px 20px;
                     line-height: 16px;
                     cursor: pointer;
-                    font-size: 14px;
+                    //font-size: 14px;
                     &:hover, &.current {
                         background-color: $aside-top-bg;
                     }
@@ -122,7 +125,7 @@
                         width: 16px;
                         height: 16px;
                         float: left;
-                        margin-right: 5px;
+                        margin-right: 8px;
                         border: 0 none;
                         background-color: transparent;
                         &.lv1 {
@@ -137,16 +140,23 @@
                         margin: 0 5px 0 0;
                         display: none;
                     }
-                    .name {
-                        color: #ccc;
-                        font-size: 14px;
+                    .name{
                         word-break: normal;
                         white-space: pre;
+                        color: #999999;
+                    }
+                    .ui-state-active ~p{
+                        color: #ccc;
                     }
                 }
             }
             .childlist {
                 display: none;
+                .row{
+                    .name{
+                        color: #ccc;
+                    }
+                }
             }
         }
     }

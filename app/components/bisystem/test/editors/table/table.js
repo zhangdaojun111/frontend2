@@ -2,7 +2,7 @@ import {Base} from '../base';
 import template from './table.html';
 import './table.scss';
 
-import {chartName, source,theme,icon} from '../form.chart.common';
+import {chartName,theme,icon} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 
@@ -15,7 +15,7 @@ let config = {
          * @param data 选中的数据源
          */
         async getFields(data) {
-            let table = data[0] ? data[0] : null;
+            let table = data ? data : null;
             if (table) {
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
@@ -34,13 +34,15 @@ let config = {
          * @param columns 表格列表字段（x轴）
          */
         async loadColumns(columns) {
-            if (columns) {
-                this.formItems['columns'].setList(columns);
-                this.formItems['sortColumns'].setList(columns);
-            } else { // 清空字段
-                this.formItems['columns'].actions.clear();
-                this.formItems['choosed'].actions.clear();
-                this.formItems['sortColumns'].setList([]);
+            if (this.formItems['columns']) {
+                if (columns) {
+                    this.formItems['columns'].setList(columns);
+                    this.formItems['sortColumns'].setList(columns);
+                } else { // 清空字段
+                    this.formItems['columns'].actions.clear();
+                    this.formItems['choosed'].actions.clear();
+                    this.formItems['sortColumns'].setList([]);
+                }
             }
         },
 
@@ -82,7 +84,17 @@ let config = {
     data: {
         options: [
             chartName,
-            source,
+            {
+                label: '数据来源',
+                name: 'source',
+                defaultValue: '',
+                type: 'autocomplete',
+                events: {
+                    onSelect(value) {
+                        this.actions.getFields(value);
+                    }
+                }
+            },
             theme,
             icon,
             {

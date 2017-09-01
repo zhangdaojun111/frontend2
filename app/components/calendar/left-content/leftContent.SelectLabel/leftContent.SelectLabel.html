@@ -1,21 +1,22 @@
 <div class="component-select-group">
-    <div class="select-all" id = "select-all-block-{{dataitem.table_id}}">
+    <div class="select-all" id="select-all-block-{{dataitem.table_id}}">
         <div class="calendar-select-table">
             <div class="float-button-group-hide">
-                <span class="float-button-group-show">
-                    <img src = "../../../../assets/images/calendar/button-hide.png">
-                </span>
+                <div class="float-button-group-show">
+                    <!--<img src="../../../../assets/images/calendar/button-hide.png">-->
+                </div>
             </div>
-            <img src = "../../../../assets/images/calendar/calendar-checked-false.png" class="label-select-all label-select-all-show select-head select-label" id="label-all-{{dataitem.table_id}}">
-            <!--<input type='checkbox' class='chk_1 chk_remind label-select-all label-select-all-show select-head' />-->
-            <!--<label class="select-label" id="label-all-{{dataitem.table_id}}"></label>-->
-            <label class="select-label-show" id="select-label-show-{{dataitem.table_id}}">{{dataitem.table_name}}</label>
+            <div class="label-select-all-show select-head" id="label-all-{{dataitem.table_id}}">
+                <!--<img src="../../../../assets/images/calendar/calendar-checked-false.png">-->
+            </div>
+            <label class="select-label-show"
+                   id="select-label-show-{{dataitem.table_id}}">{{dataitem.table_name}}</label>
         </div>
         <div class="float-button-group">
             <span class='hide-type-group hide-span' id='hide-type-{{dataitem.table_id}}'>隐藏</span>
-            <span class="hide-span hide-span-function">常用功能查询<img src="../../../../assets/images/calendar/calendar-hide-right.png" class="hide-right-con"></span>
+            <span class="hide-span hide-span-function">常用功能查询<img
+                    src="../../../../assets/images/calendar/calendar-hide-right.png" class="hide-right-con"></span>
             <div class="search-function {{dataitem.table_id}}">
-
                 <span class='search-function-children 0'>全部功能查询</span>
                 {{#each dataitem.query_params}}
                 <span class="search-function-children {{this.id}}">{{this.name}}</span>
@@ -26,9 +27,9 @@
             {{#each dataitem.items}}
             <div class="label-task-children">
                 <div class="checkbox-label">
-                    <input type='checkbox' class='chk_2 chk_approve label-select-all'/>
-                     <label class='select-label-children' id='select-children-{{this.field_id}}'>
-                     </label>
+                    <input type='checkbox' class='chk_2 chk_approve'/>
+                    <label class='select-label-children' id='select-children-{{this.field_id}}'>
+                    </label>
                 </div>
                 <label class="checkbox-label-content">{{this.field_name}}</label>
             </div>

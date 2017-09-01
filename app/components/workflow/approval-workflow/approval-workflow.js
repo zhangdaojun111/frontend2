@@ -56,7 +56,7 @@ let config={
             };
             switch (type){
                 case 'zoomIn' :
-                    var  nodeflowSize=this.data.nodeflowSize+= 0.1;
+                    let  nodeflowSize=this.data.nodeflowSize+= 0.1;
                     container.css({
                         height:`${nodeCssObj.height*nodeflowSize+'px'}`,
                         transform:`scale(${nodeflowSize})`,
@@ -64,10 +64,10 @@ let config={
                     });
                     break;
                 case 'zoomOut' :
-                    var  nodeflowSize=this.data.nodeflowSize-= 0.1;
+                    let  nodeflowSize1=this.data.nodeflowSize-= 0.1;
                     container.css({
-                        height:`${nodeCssObj.height*nodeflowSize+'px'}`,
-                        transform:`scale(${nodeflowSize})`,
+                        height:`${nodeCssObj.height*nodeflowSize1+'px'}`,
+                        transform:`scale(${nodeflowSize1})`,
                         transformOrigin:`${nodeCssObj.transformOrigin}`
                     });
                     break;
@@ -156,7 +156,7 @@ let config={
          */
         tipsMouseover:function (pos,txt,event) {
             if(txt!=''){
-                var tooltip = $('<div id="J_tooltip"></div>');
+                let tooltip = $('<div id="J_tooltip"></div>');
                 $("body").append(tooltip);
                 let tooltipDiv=$("#J_tooltip");
                 tooltipDiv.css({

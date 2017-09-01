@@ -2,6 +2,11 @@
     div,span,a{
         box-sizing: border-box;
     }
+    #app-workflow{
+        .workflow,#flow-node{
+            margin-bottom: 30px;
+        }
+    }
 }
 #app-workflow {
     .workflow-foot .workflow-box{
@@ -9,9 +14,11 @@
     }
     .workflow-flex{
         display: flex;
-        position: absolute;
-        bottom: 10px;
-        right: 20px;
+        position: fixed;
+        bottom: 0px;
+        width: 100%;
+        justify-content: flex-end;
+        background: #f2f2f2;
         div{
             background: #0088ff;
             width: 91px;
@@ -20,17 +27,10 @@
             border-radius: 4px;
             box-shadow: none;
             color: #fff;
-            margin-right: 5px;
+            margin-right: 9px;
             line-height: 30px;
             cursor: pointer;
         }
-    }
-    .icon-workflow-icon11 {
-        background: url(../../../assets/images/workflow/workflow-icon.png) no-repeat;
-        display: block;
-        background-position: 0px -26px;
-        width: 16px;
-        height: 16px;
     }
     .printBtn {
         background: #fff;

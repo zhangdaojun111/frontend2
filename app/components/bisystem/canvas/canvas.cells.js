@@ -79,7 +79,6 @@ let config = {
 
             cells.map((val,index) => {
                 zIndex.push(val.size.zIndex);
-                console.log(val);
                 val.deep = userMode === 'manager' ? {} : val.is_deep == 1 ? JSON.parse(val.deep) : val.deep;
                 val.is_deep = userMode === 'manager' ? 0 : val.is_deep;
                 const data = {

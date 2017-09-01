@@ -34,8 +34,11 @@
     .task-list {
         position: absolute;
         width: 100%;
-        height: calc(100% - 24px);
+        height: calc(100% - 20px);
         overflow: auto;
+        &.week-task-list {
+            height: 100%;
+        }
     }
     .task-list::-webkit-scrollbar {
         width: 4px;

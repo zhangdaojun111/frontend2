@@ -48,8 +48,8 @@ let config = {
         },
         addCheckbox:function () {
             let $parent = this.el.find('.sortable-box');
-            let $ul = $("<li class='isShow-calendar sort-item'><input class='calendar-Show' type='checkbox'><span>登录时自动开启日历</span>" +
-                "<i class='drag-icon'></i></li>");
+            let $ul = $("<li class='isShow-calendar sort-item' title='拖动调整顺序'><input class='calendar-Show' type='checkbox'><span>登录时自动开启日历</span>" +
+                "<i class='drag-icon icon-framework-drag'></i></li>");
             if(this.data.calendarSort === "1"){
                 $parent.append($ul);
             }else{
@@ -58,6 +58,7 @@ let config = {
             this.actions.setCheckboxStatus();
         },
         saveSetting:function () {
+            this.showLoading();
             let biflag = 10;
             let calendarflag = 20;
             let biValue = this.el.find('input.bi-Show').prop("checked");
@@ -86,7 +87,7 @@ let config = {
             };
 
             UserInfoService.saveUserConfig(json,json2).then((result) => {
-                console.log(result);
+                this.hideLoading();
                 if(result[0].succ === 1 && result[1].succ === 1){
                     window.config.sysConfig.logic_config.login_show_bi = result[0].data.toString();
                     window.config.sysConfig.logic_config.login_show_calendar = result[1].data.toString();
@@ -139,7 +140,7 @@ let config = {
             this.actions.clearStorage();
         }).on('click','.rapid-save-btn', _.debounce(() => {
             this.actions.saveSetting();
-        },1000)).on('change','.font-range',() => {
+        },300)).on('change','.font-range',() => {
             this.actions.changeFontSize();
         })
     },
