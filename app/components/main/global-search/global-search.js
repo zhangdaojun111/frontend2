@@ -83,6 +83,7 @@ let config ={
             }
         },
         doSearch:function () {
+            this.data.globalSearchOpen = "0";
             if(this.data.globalSearchOpen === "1"){
                 let content = this.data.searchContent;
                 this.el.find('.search-content').val(content).blur();
@@ -97,7 +98,8 @@ let config ={
                     msgbox.alert("搜索内容不能为空");
                 }
             }else{
-                msgbox.showTips("全文检索功能未开启，请联系管理员");
+                // msgbox.showTips("　　全文检索功能未开启，\n　　请联系管理员。");
+                msgbox.showTips("全文检索功能未开启，\n请联系管理员。");
             }
         },
         addSearchHistory(){
