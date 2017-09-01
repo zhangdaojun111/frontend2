@@ -119,8 +119,6 @@ let config = {
         filterText: '',
         //是否第一次渲染agGrid
         firstRender: true,
-        //第一次设置数据
-        firstSetData: false,
         //权限
         permission:{add: 1, calendar: 1, complex_search: 1, custom_field: 1, custom_width: 1, delete: 1, download: 1, edit: 1, group: 1, in_work: 1, search: 1, upload: 1, view: 1 ,setting: 1,cell_edit:1,new_window:1},
         //是否分组
@@ -965,15 +963,13 @@ let config = {
                 this.data.remindColor = res[1];
                 this.data.common_filter_id = res[0].common_filter_id || '';
                 if( this.data.firstRender ){
-                    //渲染agGrid
-                    this.actions.renderAgGrid();
-                    this.data.firstSetData = true;
                     let d = {
                         rowData: this.data.rowData
                     }
                     //赋值
                     this.agGrid.actions.setGridData(d);
-                    // this.hideLoading();
+                    //渲染agGrid
+                    this.actions.renderAgGrid();
                 }else {
                     let d = {
                         rowData: this.data.rowData
@@ -1028,15 +1024,13 @@ let config = {
                     this.data.footerData = dgcService.createFooterData( res[2] );
                 }
                 if( this.data.firstRender ){
-                    //渲染agGrid
-                    this.actions.renderAgGrid();
-                    this.data.firstSetData = true;
                     let d = {
                         rowData: this.data.rowData
                     }
                     //赋值
                     this.agGrid.actions.setGridData(d);
-                    // this.hideLoading();
+                    //渲染agGrid
+                    this.actions.renderAgGrid();
                 }else {
                     this.actions.calcSelectData( 'get' );
                     let d = {
@@ -1404,6 +1398,7 @@ let config = {
             }
             this.actions.getExpertSearchData();
             this.data.firstRender = false;
+            this.hideLoading();
         },
         //触发导出
         onExport: function () {
@@ -2655,10 +2650,6 @@ let config = {
         },
         //数据改变
         rowDataChanged: function ($event) {
-            if( this.data.firstSetData ){
-                this.hideLoading();
-                this.data.firstSetData = false;
-            }
         }
     },
     afterRender: function () {
