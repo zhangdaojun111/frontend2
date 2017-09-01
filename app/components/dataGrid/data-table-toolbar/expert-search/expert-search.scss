@@ -29,7 +29,8 @@
                         display: inline-block;
                         width: 20px;
                         height: 20px;
-                        background: url(../../../../assets/images/dataGrid/icon_bianjimoshi.png) no-repeat scroll right center transparent;
+                        background-position: right center;
+                        //background: url(../../../../assets/images/dataGrid/icon_bianjimoshi.png) no-repeat scroll right center transparent;
                     }
                 }
             }
@@ -61,7 +62,8 @@
                     right: -10px;
                     width: 20px;
                     height: 20px;
-                    background: url(../../../../assets/images/form/error-msg.png) no-repeat scroll right center transparent;
+                    background-position: right center;
+                    //background: url(../../../../assets/images/form/error-msg.png) no-repeat scroll right center transparent;
                 }
             }
         }
@@ -82,7 +84,8 @@
                     font-size: 12px;
                     height: 30px;
                     background-color: #fafafa;
-                    background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll right center transparent;
+                    background-position: right center;
+                    //background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll right center transparent;
                     border: none;
                     appearance: none;
                     -moz-appearance: none;
@@ -130,7 +133,8 @@
                     width: 185px;
                     top: -18px;
                     .condition-search-box-input {
-                        background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll right center transparent;
+                        background-position: right center;
+                        //background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll right center transparent;
                         position: absolute;
                         top:-1px;
                         font-size: 12px;
@@ -203,7 +207,8 @@
                     cursor: pointer;
                     width: 14px;
                     height: 30px;
-                    background: url(../../../../assets/images/dataGrid/icon_add_1.png) no-repeat scroll right center transparent;
+                    background-position: right center;
+                    //background: url(../../../../assets/images/dataGrid/icon_add_1.png) no-repeat scroll right center transparent;
                 }
                 .condition-search-delete {
                     float: right;
@@ -212,7 +217,8 @@
                     cursor: pointer;
                     width: 14px;
                     height: 30px;
-                    background: url(../../../../assets/images/dataGrid/icon_delete_1.png) no-repeat scroll right center transparent;
+                    background-position: right center;
+                    //background: url(../../../../assets/images/dataGrid/icon_delete_1.png) no-repeat scroll right center transparent;
                 }
             }
         }
@@ -232,7 +238,8 @@
             display: inline-block;
             width: 14px;
             height: 30px;
-            background: url(../../../../assets/images/dataGrid/icon_save2.png) no-repeat scroll right center transparent;
+            //background: url(../../../../assets/images/dataGrid/icon_save2.png) no-repeat scroll right center transparent;
+            background-position: right center;
         }
         .save-button {
             color: #0F79EF;
