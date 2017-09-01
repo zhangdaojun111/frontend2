@@ -63,17 +63,15 @@ export const IframeInstance = new Component({
         sort: [],
         focus: null,
         hideFlag:false,
-        tempList:[],        //记录未关闭的tabs的id
-        timeList:{},        //记录tabs的时间戳
-        biCalendarList:[],  //记录日历BI是否开启，tabs排序完成后，与autoOpenList合并
-        autoOpenList:[],        //记录根据id找到的iframes的所有信息url、id、name用于打开iframes
-        isLoginShowBI:"",
-        isLoginShowCalendar:"",
-        isAutoOpenTabs:true,    //标记是否为首次加载tabs
-        tabsTotalWidth:"",           //tabs可用总长度 = div.tabs - 200;
-        tabWidth:150,           //单个tabs长度，默认140（需和scss同步修改），空间不足以后自适应宽度
-        minTabWidth:100,        //用于估算小屏设备最大tabs数量
-        closeHistory:[],        //用于保存历史关闭记录，记录最近5个
+        openingTabsList:[],      //记录未关闭的tabs的id
+        timeList:{},             //记录tabs的时间戳
+        biCalendarList:[],       //记录日历BI是否开启，tabs排序完成后，与autoOpenList合并
+        autoOpenList:[],         //记录根据id找到的iframes的所有信息url、id、name用于打开iframes
+        // isAutoOpenTabs:true,     //标记是否为首次加载tabs
+        tabsTotalWidth:"",       //tabs可用总长度 = div.tabs - 85;
+        tabWidth:150,            //单个tabs长度，默认150（需和scss同步修改），空间不足以后自适应宽度
+        minTabWidth:100,         //用于估算小屏设备最大tabs数量
+        closeHistory:[],         //用于保存历史关闭记录，记录最近5个
     },
     actions: {
         openIframe: function (id, url, name) {
@@ -111,7 +109,7 @@ export const IframeInstance = new Component({
             this.actions.adaptTabWidth();
         },
         sendOpenRequest:function (id) {
-            if (this.data.isAutoOpenTabs === false && id !== 'search-result'){
+            if (id !== 'search-result'){
                 //向后台发送请求记录
                 TabService.onOpenTab(id).done((result) => {
                     if(result.success === 1){
@@ -123,6 +121,7 @@ export const IframeInstance = new Component({
             }
         },
         sendCloseRequest:function (id) {
+            console.log(id);
             TabService.onCloseTab(id,this.data.focus.id).done((result) => {
                 if(result.success === 1){
                     // console.log("post close record success")
@@ -136,6 +135,7 @@ export const IframeInstance = new Component({
             this.actions.closeIframe(firstId);
         },
         closeIframe: function (id) {
+            console.log(id);
             if ( id === undefined) {
                 return;
             }
@@ -172,6 +172,7 @@ export const IframeInstance = new Component({
             }
         },
         focusIframe: function (id) {
+            console.log(id);
             if (this.data.focus) {
                 this.data.focus.tab.removeClass('focus');
                 this.data.focus.iframe.hide();
@@ -262,44 +263,44 @@ export const IframeInstance = new Component({
                 this.actions.openIframe(id,url,name);
             }
         },
-        getTabIdByName:function (name,nodes) {
-            let id = false;
-            if(!nodes){
-                return id;
-            }
-            for (let k in nodes){
-                if(nodes[k].name === name){
-                    id = nodes[k].id;
-                }
-            }
-            return id;
-        },
-        getTabNameById:function (id,nodes) {
-            let name = false;
-            if(!nodes){
-                return name;
-            }
-            for (let k in nodes){
-                if(nodes[k].id === id){
-                    name = nodes[k].name;
-                }
-            }
-            return name;
-        },
+        // getTabIdByName:function (name,nodes) {
+        //     let id = false;
+        //     if(!nodes){
+        //         return id;
+        //     }
+        //     for (let k in nodes){
+        //         if(nodes[k].name === name){
+        //             id = nodes[k].id;
+        //         }
+        //     }
+        //     return id;
+        // },
+        // getTabNameById:function (id,nodes) {
+        //     let name = false;
+        //     if(!nodes){
+        //         return name;
+        //     }
+        //     for (let k in nodes){
+        //         if(nodes[k].id === id){
+        //             name = nodes[k].name;
+        //         }
+        //     }
+        //     return name;
+        // },
         readyOpenTabs:function () {
             //自动打开的标签由系统设置的bi/日历 和 最后一次系统关闭时未关闭的标签两部分组成
             //第一部分：获取系统关闭时未关闭的tabs
             let that = this;
             TabService.getOpeningTabs().then((result) => {
                 let tabs = {};
-                //将未关闭的标签id加入tempList
+                //将未关闭的标签id加入openingTabsList
                 if(result[0].succ === 1){
                     tabs = result[0].tabs;
                     that.data.timeList = tabs;
                     delete tabs["0"];
                     if(tabs){
                         for(let k in tabs){
-                            that.data.tempList.push(k);
+                            that.data.openingTabsList.push(k);
                         }
                     }
                 }else{
@@ -349,18 +350,17 @@ export const IframeInstance = new Component({
             });
         },
         autoOpenTabs:function () {
-            let tempList = this.data.tempList;
             let menu = window.config.menu;
-            this.actions.findTabInfo(menu,tempList);
+            this.actions.findTabInfo(menu,this.data.openingTabsList);
             this.actions.sortTabs(this.data.autoOpenList,this.data.timeList);
             this.data.autoOpenList =  this.data.autoOpenList.concat(this.data.biCalendarList);
             //依次打开各标签
             for(let k of this.data.autoOpenList){
                 this.actions.openIframe(k.id,k.url,k.name);
             }
-            this.data.isAutoOpenTabs = false;   //首次自动打开的页面无需向后台发送请求，以后打开页面需要向后台发送请求
+            // this.data.isAutoOpenTabs = false;   //首次自动打开的页面无需向后台发送请求，以后打开页面需要向后台发送请求
         },
-        sortTabs:function (tabsList,timeList) {
+        sortTabs:function (tabsList,timeList) {     //使用id取time值，再根据time排序
             for(let k of tabsList){
                 k.time = timeList[k.id];
             }
@@ -395,7 +395,7 @@ export const IframeInstance = new Component({
             });
         },
         setTabsCount:function () {
-            this.data.tabsTotalWidth = parseInt(this.el.find('div.tabs').width()) - 85;   //标签可用宽度
+            this.data.tabsTotalWidth = parseInt(this.el.find('div.tabs').width()) - 85;   //标签可用总宽度
             maxIframeCount = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);  //自适应最大tabs数量
             // let count = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);
             // maxIframeCount =  count>15 ? 15:count;      //最多不超过15个
@@ -444,38 +444,88 @@ export const IframeInstance = new Component({
             }
         }
     },
+    binds:[
+        {
+            event:'click',
+            selector:'.tabs .item',
+            callback:function (target) {
+                let id = $(target).attr('iframeid');
+                console.log(id);
+                this.actions.focusIframe(id);
+            }
+        },
+        {
+            event:'click',
+            selector:'.tabs .item .close',
+            callback:function (target) {
+                let id = $(target).attr('iframeid');
+                console.log(id);
+                this.actions.closeIframe(id);
+                return false;
+            },
+        },
+        {
+            event:'click',
+            selector:'.view-save',
+            callback:function () {
+                let temp_arr = _.defaultsDeep([],this.data.sort);
+                SaveView.show(temp_arr);
+            }
+        },
+        {
+            event:'mouseenter',
+            selector:'.popup-icon',
+            callback:function () {
+                this.actions.showTabsPopup();
+            }
+        },
+        {
+            event:'mouseleave',
+            selector:'.popup-icon',
+            callback:function () {
+                this.actions.resetIcon();
+            }
+        },
+        {
+            event:'mouseenter',
+            selector:'.view-popup',
+            callback:function () {
+                this.actions.removeTimeOut();
+            }
+        },
+        {
+            event:'click',
+            selector:'.tab-list',
+            callback:function (target,event) {
+                this.actions.controlTabs(event);
+            }
+        },
+        {
+            event:'mouseleave',
+            selector:'.view-popup',
+            callback:function () {
+                this.actions.hideTabsPopup();
+            }
+        }
+
+    ],
     afterRender: function () {
-        let that = this;
         this.data.tabs = this.el.find('.tabs');
         this.data.iframes = this.el.find('.iframes');
         this.actions.setTabsCount();
         this.actions.readyOpenTabs();
 
-        this.el.on('click', '.tabs .item .close', function () {
-            let id = $(this).attr('iframeid');
-            that.actions.closeIframe(id);
-            return false;
-        });
+        // this.el.on('click', '.tabs .item .close', function () {
+        //     let id = $(this).attr('iframeid');
+        //     console.log(id);
+        //     that.actions.closeIframe(id);
+        //     return false;
+        // });
 
-        this.el.on('click', '.tabs .item', function () {
-            let id = $(this).attr('iframeid');
-            that.actions.focusIframe(id);
-        });
-
-        this.el.on('click','.view-save',function () {
-            let temp_arr = _.defaultsDeep([],that.data.sort);
-            SaveView.show(temp_arr);
-        }).on('mouseenter','.popup-icon',() => {
-            this.actions.showTabsPopup();
-        }).on('mouseleave','.popup-icon',() => {
-            this.actions.resetIcon();
-        }).on('mouseenter','.view-popup',() => {
-            this.actions.removeTimeOut();
-        }).on('click','.tab-list',(event) => {
-            this.actions.controlTabs(event);
-        }).on('mouseleave','.view-popup',() => {
-            this.actions.hideTabsPopup();
-        })
+        // this.el.on('click', '.tabs .item', function () {
+        //     let id = $(this).attr('iframeid');
+        //     that.actions.focusIframe(id);
+        // });
     },
 
     firstAfterRender: function () {
