@@ -6,7 +6,7 @@
         margin: 10px;
         border: double #e4e4e4;
         .ag-body-viewport{
-            overflow: hidden !important;
+            overflow-x: hidden;
             .grid-cell-info{
                 &.already-read-icon{
                     color: #31fc38;
@@ -20,9 +20,9 @@
     .pagination {
         height: 30px;
         clear: none;
-        .p-left input,.p-left > span:nth-child(1),.p-left > span:nth-child(3){
-           display: none;
-        }
+        //.p-left select,.p-left > span:nth-child(1),.p-left > span:nth-child(3){
+        //   display: none;
+        //}
         div.p-page-con{
             float: left;
         }

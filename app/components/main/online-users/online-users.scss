@@ -9,15 +9,15 @@
             margin: 10px;
             border: double #e4e4e4;
             .ag-body-viewport{
-                overflow: hidden !important;
+                overflow-x: hidden;
             }
         }
 
         .user-pagination{
             height: 30px;
-            .p-left input,.p-left > span:nth-child(1),.p-left > span:nth-child(3){
-                display: none;
-            }
+            //.p-left input,.p-left > span:nth-child(1),.p-left > span:nth-child(3){
+            //    display: none;
+            //}
             div.p-page-con{
                 float: left;
             }
