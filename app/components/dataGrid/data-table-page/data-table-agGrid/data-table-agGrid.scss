@@ -211,3 +211,14 @@
     float: right;
   }
 }
+
+
+@media screen and (max-width: 900px){
+  .data-table-agGrid-con {
+    .dataGrid-btn-group {
+      span {
+        display: none;
+      }
+    }
+  }
+}
