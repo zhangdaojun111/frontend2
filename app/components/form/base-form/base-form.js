@@ -1618,7 +1618,7 @@ let config = {
                         this.data.childComponent[data[key].dfield] = dateTimeControl;
                         break;
                     case 'editControl':
-                        data[key]['temp_id'] = data['temp_id']['value'];
+                        data[key]['real_id'] = data['real_id']['value'];
                         data[key]['table_id'] = data['table_id']['value'];
                         let contractControl = new ContractControl(data[key], actions);
                         contractControl.render(single);
@@ -1691,6 +1691,11 @@ let config = {
 
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('#detail-form').css("background", "#F2F2F2");
+        }
+        if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')) {
+            this.el.find('table').siblings('.ui-btn-box').css("margin-left", "0px");
+        }else {
+            this.el.find('table').siblings('.ui-btn-box').css("margin-left", "-20px");
         }
     },
     beforeDestory() {
