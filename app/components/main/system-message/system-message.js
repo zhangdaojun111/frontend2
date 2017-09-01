@@ -157,13 +157,21 @@ let systemMessageUtil = {
     hide: function () {
 
     },
-    showMessageDetail: function (dialogTitle, msgTitle, msgContent) {
+    showMessageDetail: function (dialogTitle, msgTitle, msgContent, speak = false) {
         let html = `
             <div class="component-msg-detail">
                 <h3>${msgTitle}</h3>
                 <div class="text">${msgContent}</div>
             </div>
         `;
+        if (speak) {
+            var msg = new SpeechSynthesisUtterance(msgTitle.toString() + msgContent.toString());
+            msg.lang = 'zh';
+            msg.voice = speechSynthesis.getVoices().filter(function(voice) {
+                return voice.name == 'Whisper';
+            })[0];
+            speechSynthesis.speak(msg);
+        }
         this.el = $(html).appendTo('body');
         this.el.dialog({
             width: 800,

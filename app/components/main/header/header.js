@@ -91,7 +91,7 @@ let config = {
         },
 
         onSocketNotice: function (data = {}) {
-            systemMessageUtil.showMessageDetail('推送消息', data.title, data.content);
+            systemMessageUtil.showMessageDetail('推送消息', data.title, data.content, true);
         }
         // setOnlineNum:function () {
         //     //更新在线人数
