@@ -58,7 +58,9 @@ class Checkbox extends Base {
      * 设置value
      * @param value
      */
-    setValue(value){}
+    setValue(value){
+        console.log(this.data.list);
+    }
 
     /**
      * 设置checkbox list

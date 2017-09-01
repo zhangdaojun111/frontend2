@@ -253,7 +253,6 @@ export class FormTableComponent extends BiBaseComponent{
             alignment:fields.alignment,
             columnNum:this.single.data.singleNum
         };
-        console.log(chart);
         let res = await ChartFormService.saveChart(JSON.stringify(chart));
         if (res['success'] == 1) {
             msgbox.alert('保存成功');

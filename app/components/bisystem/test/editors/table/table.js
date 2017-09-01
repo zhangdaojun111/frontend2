@@ -5,7 +5,8 @@ import './table.scss';
 import {chartName,theme,icon} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
-
+import Mediator from '../../../../../lib/mediator';
+import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 
 let config = {
     template: template,
@@ -63,24 +64,74 @@ let config = {
             });
 
             // 获取图标
-            ChartFormService.getChartIcon().then(res => {
-                if (res['success'] === 1) {
-                    let icons =[];
-                    icons = res['data'].map(icon => {
-                        return {value: icon, name: `<img src=/bi/download_icon/?file_id=${icon} />`}
-                    });
-                    this.formItems['icon'].setList(icons)
-                } else {
-                    msgbox.alert(res['error'])
-                };
-            })
+           const res = await ChartFormService.getChartIcon();
+            if (res['success'] === 1) {
+                let icons =[];
+                icons = res['data'].map(icon => {
+                    return {value: icon, name: `<img src=/bi/download_icon/?file_id=${icon} />`}
+                });
+                this.formItems['icon'].setList(icons)
+            } else {
+                msgbox.alert(res['error'])
+            };
+            return Promise.resolve(res);
+        },
+
+        /**
+         * 当是编辑模式时，此时所有操作都需要等到从服务器获取渲染完成后再渲染字段
+         */
+        async getChartData(id) {
+            let layout = {
+                "chart_id":id,
+                "floor":0,
+                "view_id":"",
+                "layout_id":"",
+                "xOld":{},
+                "row_id":0,
+                "deep_info":{}
+            }
+            const data = {
+                layouts:[JSON.stringify(layout)],
+                query_type:'deep',
+                is_deep:1,
+            }
+            const chart = await canvasCellService.getCellChart(data);
+            return Promise.resolve(chart);
         },
 
         /**
          * 保存图表数据
          */
-        saveChart(chart) {
-            console.log(this.getData());
+        async saveChart() {
+            let data = this.getData();
+            let chart = {
+                assortment: 'table',
+                chartName:{id: '', name: data.chartName},
+                countColumn:{},
+                columns:data.columns,
+                icon: data.icon,
+                source: data.source,
+                theme: data.theme,
+                filter: [],
+                countNum: data.countNum,
+                single:data.single[0] ? data.single[0]: 0,
+                singleColumnWidthList:[],
+                sort: data.sort,
+                sortColumns:data.sortColumns ? [data.sortColumns] : [],
+                alignment:data.alignment,
+                columnNum:data.columnNum
+            };
+
+            let res = await ChartFormService.saveChart(JSON.stringify(chart));
+            if (res['success'] == 1) {
+                msgbox.alert('保存成功');
+                if (!chart['chartName']['id']) {
+                    this.reload();
+                };
+                Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
+            } else {
+                msgbox.alert(res['error'])
+            };
         }
     },
     data: {
@@ -122,7 +173,7 @@ let config = {
             {
                 label: '默认排序',
                 name: 'sort',
-                defaultValue: '',
+                defaultValue: '1',
                 list: [
                     {value: '1',name: '升序'},
                     {value: '-1', name:'降序'}
@@ -211,17 +262,33 @@ let config = {
             },
         ]
     },
-    afterRender() {
+    async afterRender() {
+        if(this.data.chart_id) {
+            const res = await this.actions.getChartData(this.data.chart_id);
+            if (res[0]['success'] === 1) {
+                this.data.chart = res[0]['data']
+            } else {
+                msgbox.alert(res[0]['error'])
+            };
+        }
         // 渲染图表表单字段
         this.drawForm();
-        this.actions.init();
+        await this.actions.init();
+        this.formItems['chartName'].setValue(this.data.chart['chartName']['name']);
+        this.formItems['source'].setValue(this.data.chart['source']);
+        this.formItems['theme'].setValue(this.data.chart['theme']);
+        this.formItems['icon'].setValue(this.data.chart['icon']);
+        this.formItems['columns'].setValue(this.data.chart['columns']);
     }
 }
 
 class TableEditor extends Base {
-    constructor() {
+    constructor(data) {
+        config.data.chart_id = data.id ? data.id : null;
         super(config);
     }
+
+    reset() {}
 }
 
 export {TableEditor}

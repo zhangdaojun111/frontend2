@@ -5,10 +5,14 @@ let config = {
     template: template,
     data: {},
     actions: {
+        /**
+         * 输入监听
+         * @param value
+         */
         onInput: function (value) {
             this.data.value = value;
             this.trigger('onChange', value);
-        }
+        },
     },
     binds: [
         {

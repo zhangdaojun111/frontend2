@@ -199,7 +199,7 @@ let config = {
                     floor: 0,
                     view_id: this.canvas.viewId,
                     layout_id: this.data.cell.layout_id,
-                    xOld: 0,
+                    xOld: {},
                     row_id:0,
                     deep_info: {}
                 };

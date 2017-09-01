@@ -37,6 +37,8 @@ class Radio extends Base {
      * @param value
      */
     setValue(value){
+        this.data.value = value;
+        this.el.find(`input[value=${this.data.value}]`).attr("checked",true);
     }
 
     /**
@@ -55,6 +57,9 @@ class Radio extends Base {
     setList(list) {
         this.data.list = list;
         this.reload();
+        if (this.data.value) {
+            this.el.find(`input[value=${this.data.value}]`).attr("checked",true);
+        }
     }
 
 }

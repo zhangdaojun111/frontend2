@@ -49,6 +49,15 @@ class AutoComplete extends Base {
     setList(list) {
         this.autoselect.actions.setList(list);
     }
+
+    /**
+     * 设置value
+     * @param value = 设置autoselect 默认值
+     */
+    setValue(value){
+        this.data.value = value;
+        this.autoselect.data.choosed = [value];
+    }
 }
 
 export {AutoComplete}
