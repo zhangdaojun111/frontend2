@@ -245,9 +245,9 @@ let config = {
         }
     ],
     afterRender: function () {
-        this.el.css({});
         this.data.staus = false;
         let _this = this;
+
         let select_item_data = {
             'list': this.data.dropdown,
             displayType: 'popup',
@@ -263,6 +263,7 @@ let config = {
             },
         };
         this.data.multiSelectMenu = new AutoSelect(select_item_data);
+
         this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
         let single_item_data = {
             'list': this.data.dropdownForRes,
@@ -278,6 +279,7 @@ let config = {
             },
         };
         this.data.singleSelectMenu = new AutoSelect(single_item_data);
+
         this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
         Mediator.on('calendar-set:editor', data => {
             this.data.singleSelectMenu.destroySelf();
