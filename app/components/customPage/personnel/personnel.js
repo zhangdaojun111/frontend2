@@ -101,6 +101,8 @@ let config = {
         field_mapping: {},
         filter_mapping: {is_active:{'是':1,'否':0},is_superuser:{'是':1,'否':0},status:{'离职':0,'在职':1,'实习':2,'试用':3,'管理员':4,'病休':5}},
         specialFilter:{},
+        //第一次设置数据
+        firstSetData: true,
     },
     actions: {
         //获取表头数据
@@ -371,6 +373,11 @@ let config = {
                 this.agGrid.actions.setGridData( obj );
                 let currentPage = parseInt( Number( this.data.first )/Number( this.data.rows ) );
                 this.pagination.actions.setPagination( this.data.total,this.data.page );
+                //第一次关闭loading
+                if( this.data.firstSetData ){
+                    this.hideLoading();
+                    this.data.firstSetData = false;
+                }
             } )
             HTTP.flush();
         },
@@ -860,6 +867,7 @@ let config = {
         }
     },
     afterRender: function (){
+        this.showLoading();
         TabService.onOpenTab( this.data.tableId );
         this.actions.setFieldMapping();
         this.floatingFilterCom = new FloatingFilter();

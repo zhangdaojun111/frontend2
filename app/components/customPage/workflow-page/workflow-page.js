@@ -67,6 +67,8 @@ let config = {
         sortParam: {sortOrder:'',sortField:'',sort_real_type:''},
         //排序方式
         frontendSort: false,
+        //第一次设置数据
+        firstSetData: true,
         //定制列数据
         customColumnsFields: [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false}, {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
     },
@@ -230,6 +232,7 @@ let config = {
                 this.data.isShowCustomPanel = false;
                 this.actions.changeAgGridWidth(true);
             } )
+            this.hideLoading();
         },
         //返回选择数据
         retureSelectData: function () {
@@ -466,6 +469,11 @@ let config = {
                 this.actions.sortWay();
                 this.agGrid.actions.setGridData( obj );
                 this.pagination.actions.setPagination( this.data.total,this.data.page );
+                //第一次关闭loading
+                if( this.data.firstSetData ){
+                    this.hideLoading();
+                    this.data.firstSetData = false;
+                }
             });
             HTTP.flush();
         },
@@ -724,8 +732,7 @@ let config = {
         },
     },
     afterRender: function (){
-        console.log(this.data.tableId2Name[this.data.tableId])
-        console.log(this.data.tableId2Name[this.data.tableId])
+        this.showLoading();
         this.el.find( '.headerTips' ).eq(0).find( 'span' ).eq(0).html( this.data.tableId2Name[this.data.tableId] );
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
