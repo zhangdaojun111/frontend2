@@ -64,17 +64,18 @@ let config = {
             });
 
             // 获取图标
-           const res = await ChartFormService.getChartIcon();
-            if (res['success'] === 1) {
-                let icons =[];
-                icons = res['data'].map(icon => {
-                    return {value: icon, name: `<img src=/bi/download_icon/?file_id=${icon} />`}
-                });
-                this.formItems['icon'].setList(icons)
-            } else {
-                msgbox.alert(res['error'])
-            };
-            return Promise.resolve(res);
+           ChartFormService.getChartIcon().then(res => {
+               if (res['success'] === 1) {
+                   let icons =[];
+                   icons = res['data'].map(icon => {
+                       return {value: icon, name: `<img src=/bi/download_icon/?file_id=${icon} />`}
+                   });
+                   this.formItems['icon'].setList(icons)
+               } else {
+                   msgbox.alert(res['error'])
+               };
+           });
+
         },
 
         /**
