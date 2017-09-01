@@ -963,14 +963,13 @@ let config = {
                 this.data.remindColor = res[1];
                 this.data.common_filter_id = res[0].common_filter_id || '';
                 if( this.data.firstRender ){
-                    //渲染agGrid
-                    this.actions.renderAgGrid();
                     let d = {
                         rowData: this.data.rowData
                     }
                     //赋值
                     this.agGrid.actions.setGridData(d);
-                    this.hideLoading();
+                    //渲染agGrid
+                    this.actions.renderAgGrid();
                 }else {
                     let d = {
                         rowData: this.data.rowData
@@ -1025,14 +1024,13 @@ let config = {
                     this.data.footerData = dgcService.createFooterData( res[2] );
                 }
                 if( this.data.firstRender ){
-                    //渲染agGrid
-                    this.actions.renderAgGrid();
                     let d = {
                         rowData: this.data.rowData
                     }
                     //赋值
                     this.agGrid.actions.setGridData(d);
-                    this.hideLoading();
+                    //渲染agGrid
+                    this.actions.renderAgGrid();
                 }else {
                     this.actions.calcSelectData( 'get' );
                     let d = {
@@ -1400,6 +1398,7 @@ let config = {
             }
             this.actions.getExpertSearchData();
             this.data.firstRender = false;
+            this.hideLoading();
         },
         //触发导出
         onExport: function () {
@@ -2648,10 +2647,13 @@ let config = {
                 }
             })
 
+        },
+        //数据改变
+        rowDataChanged: function ($event) {
         }
     },
     afterRender: function () {
-
+        this.showLoading();
         let gridData = {
             columnDefs: this.columnDefs,
             rowData: this.data.rowData,
@@ -2664,12 +2666,12 @@ let config = {
             onCellClicked: this.actions.onCellClicked,
             onRowDoubleClicked: this.actions.onRowDoubleClicked,
             setRowStyle: this.actions.setRowStyle,
+            rowDataChanged: this.actions.rowDataChanged,
             onRowSelected: this.actions.onRowSelected
         }
         this.agGrid = new agGrid(gridData);
         this.append(this.agGrid , this.el.find('#data-agGrid'));
 
-        this.showLoading();
         if( this.data.viewMode == 'in_process' ){
             this.data.noNeedCustom = true;
         }
