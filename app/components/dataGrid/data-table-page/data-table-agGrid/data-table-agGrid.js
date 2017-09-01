@@ -965,6 +965,12 @@ let config = {
                 if( this.data.firstRender ){
                     //渲染agGrid
                     this.actions.renderAgGrid();
+                    let d = {
+                        rowData: this.data.rowData
+                    }
+                    //赋值
+                    this.agGrid.actions.setGridData(d);
+                    this.hideLoading();
                 }else {
                     let d = {
                         rowData: this.data.rowData
@@ -1026,6 +1032,7 @@ let config = {
                     }
                     //赋值
                     this.agGrid.actions.setGridData(d);
+                    this.hideLoading();
                 }else {
                     this.actions.calcSelectData( 'get' );
                     let d = {
@@ -1393,7 +1400,6 @@ let config = {
             }
             this.actions.getExpertSearchData();
             this.data.firstRender = false;
-            this.hideLoading();
         },
         //触发导出
         onExport: function () {
