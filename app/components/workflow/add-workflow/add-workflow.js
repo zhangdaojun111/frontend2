@@ -14,6 +14,7 @@ import {FormService} from "../../../services/formService/formService"
 import msgBox from '../../../lib/msgbox';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import SettingPrint from '../../form/setting-print/setting-print'
+import FormEntrys from "../../../entrys/form";
 
 let config={
     template: template,
