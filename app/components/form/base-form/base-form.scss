@@ -1,15 +1,13 @@
+@import "icon-form";
 #detail-form {
     height: 100%;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     @import "dateTime";
+
     .ui-history {
-        display: inline-block;
-        width: 16px;
-        height: 16px;
         margin-left: 5px;
-        background: url("../../../assets/images/form/icon_history.png");
         vertical-align: middle;
     }
     span.required {
@@ -95,7 +93,7 @@
         -webkit-appearance: none;
         outline: none;
         opacity: 100;
-        padding: 0 5px;
+
     }
     .dynamic-form-input-a, .dynamic-form-input-ac {
         display: inline-block;
@@ -117,7 +115,7 @@
     }
     /*errorTips*/
     .error-msg {
-        top: -20px;
+        top: 0;
         zoom: 1;
         display: block;
         position: absolute;
@@ -126,7 +124,6 @@
         padding-left: 25px;
         padding-right: 10px;
         background: #FFF5F5 url(../../../assets/images/form/error-msg.png) no-repeat;
-        line-height: 22px;
         white-space: normal;
         z-index: 999;
         width: 300px;
@@ -173,13 +170,12 @@
         margin-left: -10px;
     }
     .ui-btn-box {
-        padding: 15px 0;
+        padding: 5px 0;
         bottom: 0px;
         width: 100%;
     }
     .ui-btn-box .btn {
         margin-right: 35px;
-        margin-top: -20px;
         float: right;
     }
     .ui-btn-box .btn-normal {
@@ -206,13 +202,16 @@
         color: #0e7aef;
         font-size: 16px;
     }
-
+    .ui-del{
+        float: right;
+        color: red;
+    }
     //固定按钮
     .ui-btn-box {
-        margin: 0 auto;
         display: block;
         bottom: 0;
         background: #F2F2F2;
+        position: fixed;
     }
     .ui-btn-box button {
         width: 91px;

@@ -31,6 +31,7 @@ let ViewVideo = {
     },
     afterRender(){
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
+
         let _this=this;
         this.data.video=this.el.find('video').get(0);
         this.el.find('.quick').on('click',function(){
