@@ -1,59 +1,55 @@
 .fast-search {
     padding:5px;
-    margin-right: 20px;
+    margin-right: 5px;
     .fast-search-select {
         border-radius: 4px;
         position: relative;
         top: 1px;
         font-size: 12px;
-        height: 30px;
-        border: 1px solid rgb(201, 201, 201);
+        border: 1px solid #d7d7d7;
         background-color: #fafafa;
-        background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 62px center transparent;
+        background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 40px center transparent;
         appearance: none;
         -moz-appearance: none;
         -webkit-appearance: none;
         outline: none;
         padding-right: 14px;
-        width: 90px;
-        height: 30px;
+        width: 62px;
+        height: 24px;
         color: rgb(85, 85, 85);
-        line-height: 30px;
-        margin-right: 10px;
+        line-height: 24px;
+        margin-right: 5px;
         padding-left: 10px;
     }
     .fast-search-box {
         display: inline-block;
         position: relative;
-        width: 185px;
-        top: -18px;
+        width: 114px;
+        height: 25px;
         .fast-search-box-input {
             border-radius: 4px;
-            background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 145px center transparent;
-            position: absolute;
+            background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 82px center transparent;
             top:-1px;
             font-size: 12px;
-            border: 1px solid rgb(201, 201, 201);
+            border: 1px solid #d7d7d7;
             appearance: none;
             -moz-appearance: none;
             -webkit-appearance: none;
             padding-right: 14px;
-            width: 151px;
-            height: 26px;
+            width: 86px;
+            height: 20px;
             color: rgb(85, 85, 85);
-            line-height: 30px;
+            line-height: 20px;
             margin-right: 10px;
             padding-left: 5px;
         }
         .fast-search-ul {
             display: none;
             z-index: 999;
-            padding: 0px;
-            margin: 0px;
             position: absolute;
-            top: 28px;
+            top: 23px;
             max-height: 210px;
-            width: 170px;
+            width: 105px;
             overflow: auto;
             line-height: 30px;
             border: 1px solid rgb(201, 201, 201);
@@ -84,13 +80,13 @@
         border-radius: 4px;
         position: relative;
         font-size: 12px;
-        border: 1px solid rgb(201, 201, 201);
+        border: 1px solid #d7d7d7;
         appearance: none;
         -moz-appearance: none;
         -webkit-appearance: none;
         padding-right: 14px;
-        width: 200px;
-        height: 26px;
+        width: 150px;
+        height: 20px;
         color: rgb(85, 85, 85);
         line-height: 30px;
         margin-right: 10px;

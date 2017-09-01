@@ -15,7 +15,9 @@ let config = {
         showTree:true //显示下拉菜单
     },
     actions: {
-        //隐藏显示下拉菜单
+        /**
+         * 隐藏显示下拉菜单
+         */
         toogleTree:function(){
             let tree = this.el.find(".J_tree");
             tree.toggle();
@@ -30,7 +32,11 @@ let config = {
             this.el.find('.J_search').val("");
             this.data.showTree = !this.data.showTree;
         },
-        //点击孩子的根节点隐藏子节点
+        //
+        /**
+         * 点击树的根节点隐藏子节点
+         * @param e 点击的dom节点
+         */
         toogletip:function(e){
             let childList = $(e.target).siblings(".child-list");
             let root = this.el.find(childList);
@@ -42,7 +48,10 @@ let config = {
             }
             
         },
-        //点击子节点
+        /**
+         * 点击下来菜单中的子菜单，显示工作流
+         * @param e点击的dom节点
+         */
         clickChild:function(e){
             //get current clicked node info
             let {formid,tableid}=$(e.target)[0].dataset;
@@ -55,10 +64,13 @@ let config = {
             tree.hide();
             this.data.showTree = true;
         },
-        //输入搜索改变下拉菜单
+
+        /**
+         * 输入搜索改变下拉菜单
+         */
         changeTree:function(){
             let keyword = $('.J_search').val();
-            var c;
+            let c;
             let arr = {};
             let str = {}; 
             let li =  this.el.find('.tree-list li');
@@ -71,9 +83,6 @@ let config = {
                    li.eq(i).find('.child-list').children('.child-item').removeClass('hide xixi');
                 }
             }
-
-
-           
             this.data.treeArr.forEach((el,index)=> {
                 let obj = new Array();
                 el.children.forEach((al,num)=>{

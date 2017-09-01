@@ -118,7 +118,7 @@ let config = {
             Promise.all([preferenceData, headerData]).then((res)=> {
                 dgcService.setPreference( res[0],this.data );
                 let oprate = {headerName: '操作',field: 'myOperate', width: 160,suppressFilter: true,suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
-                    return '<div style="text-align:center;"><a class="view" style="color:#0088FF;">查看</a> | <a class="edit" style="color:#0088FF;">编辑</a> | <a class="jurisdiction" style="color:#0088FF;">权限</a><div>';
+                    return '<div style="text-align:center;"><a class="ui-link" id="view" style="color:#337ab7;">查看</a> | <a class="ui-link" id="edit" style="color:#337ab7;">编辑</a> | <a class="ui-link" id="jurisdiction" style="color:#337ab7;">权限</a><div>';
                 }}
                 //添加序号列
                 let number = dgcService.numberCol;
@@ -250,9 +250,8 @@ let config = {
         resetPreference: function () {
             let ediv = document.createElement('div');
             let eHeader = document.createElement('span');
-            let eImg = document.createElement('img');
-            eImg.src = require( '../../../assets/images/dataGrid/quxiao.png' );
-            eImg.className = 'resetFloatingFilter';
+            let eImg = document.createElement('i');
+            eImg.className = 'icon-aggrid icon-aggrid-cancel resetFloatingFilter';
             eImg.addEventListener( 'click',()=>{
                 msgBox.confirm( '确定清空筛选数据？' ).then( r=>{
                     if( r ){
@@ -313,7 +312,7 @@ let config = {
             this.actions.setEspecialFilter(this.data.filterParam.filter);
             this.actions.setEspecialFilter(this.data.filterParam.expertFilter);
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
-                json['filter'] = this.data.filterParam.filter || [];
+                json['filter'] = _.cloneDeep(this.data.filterParam.filter ) || []
             }
             if( this.data.filterParam['common_filter_id'] ){
                 json['filter'] = json['filter'] || [];
@@ -542,7 +541,7 @@ let config = {
                     width:950,
                     height:600,
                     title:`高级查询`,
-                    modal:true
+                    modal:true,
                 },{d}).then(res=>{
                     this.data.onlyCloseExpertSearch = res.onlyclose || false;
                     if(res.type == 'temporaryQuery') {
@@ -551,16 +550,24 @@ let config = {
                             this.actions.postExpertSearch(res.value,res.id,res.name);
                         }
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);
-                    } if(res.appendChecked) {
+                    }
+                    if(res.appendChecked) {
                         this.data.temporaryCommonQuery = res.value
                         this.actions.appendQuerySelect()
-                    } if(res.saveCommonQuery || (res.saveCommonQuery && res.onlyclose == true)) {
-                        this.actions.getExpertSearchData(res.addNameAry);
-                    }if(res.deleteCommonQuery || (res.deleteCommonQuery && res.onlyclose == true)) {
-                        this.actions.getExpertSearchData(res.addNameAry);
-                    } if(!res.saveCommonQuery && res.onlyclose == true) {
-                        return false
                     }
+                    if(res.saveCommonQuery || res.deleteCommonQuery) {
+                        this.actions.getExpertSearchData(res.addNameAry);
+                    }
+                    if(res.onlyclose == true) {
+                        this.actions.getExpertSearchData()
+                    }
+                    // if(res.saveCommonQuery || (res.saveCommonQuery && res.onlyclose == true)) {
+                    //     this.actions.getExpertSearchData(res.addNameAry);
+                    // }if(res.deleteCommonQuery || (res.deleteCommonQuery && res.onlyclose == true)) {
+                    //     this.actions.getExpertSearchData(res.addNameAry);
+                    // } if(!res.saveCommonQuery && res.onlyclose == true) {
+                    //     return false
+                    // }
                 })
             } )
             _this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
@@ -612,7 +619,6 @@ let config = {
                     })
                 }
                 if(this.data.filterParam['common_filter_name'] && this.data.onlyCloseExpertSearch) {
-                    debugger
                     this.el.find('.dataGrid-commonQuery-select').val(this.data.filterParam['common_filter_name']);
                 }
             } );
@@ -808,7 +814,7 @@ let config = {
         },
         onCellClicked: function ($event) {
             if( $event.colDef.headerName == '操作' ){
-                if( $event.event.srcElement.className == 'edit' ){
+                if( $event.event.srcElement.id == 'edit' ){
                     let obj = {
                         table_id: this.data.tableId,
                         btnType: 'edit',
@@ -817,7 +823,7 @@ let config = {
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
                     this.actions.openSourceDataGrid( url,'编辑' )
                 }
-                if( $event.event.srcElement.className == 'view' ){
+                if( $event.event.srcElement.id == 'view' ){
                     let obj = {
                         table_id: this.data.tableId,
                         btnType: 'view',
@@ -826,7 +832,7 @@ let config = {
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
                     this.actions.openSourceDataGrid( url,'查看' )
                 }
-                if( $event.event.srcElement.className == 'jurisdiction' ){
+                if( $event.event.srcElement.id == 'jurisdiction' ){
                     this.data.userPerm.id = $event.data['_id'];
                     this.data.userPerm.department = $event.data[this.data.departmentField];
                     this.actions.getPermData()

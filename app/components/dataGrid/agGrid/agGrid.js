@@ -120,7 +120,7 @@ let config = {
             }
         },
         createAgGrid: function (){
-            var eGridDiv = this.el.find( '#myGrid' );
+            let eGridDiv = this.el.find( '#myGrid' );
             let mygrid = new Grid( eGridDiv[0] , this.gridOptions );
         },
         //重新赋值
