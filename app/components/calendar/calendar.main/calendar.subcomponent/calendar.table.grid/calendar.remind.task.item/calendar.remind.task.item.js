@@ -67,7 +67,7 @@ let config = {
             CalendarRemind.data.remindRealId = this.data.remindTaskItemData.real_id.substr(2,24);
             PMAPI.openDialogByComponent(CalendarRemind, {
                 width: '1200',
-                height: '640',
+                height: '600',
                 title: '查看',
                 modal: true,
                 //customSize: true,
