@@ -188,7 +188,7 @@ export const contractEditorConfig = {
                 return;
             }
 
-            let currentTabData = this.data.local_data[this.data['current_tab']];
+            let currentTabData = this.data.local_data[i];
             this.el.find('.contract-model').val(currentTabData['model_id']);
             let keys = Object.keys(currentTabData['elements']);
             for(let key of keys){
@@ -197,11 +197,11 @@ export const contractEditorConfig = {
 
             this.actions.getElement({
                 table_id:this.data.table_id,
-                real_id:this.data.temp_id,
+                real_id:this.data.real_id,
                 field_id:this.data.id,
-                model_id:this.data.local_data[i].model_id,
-                elements:JSON.stringify(this.data.local_data[i].elements||{}),
-                type:this.data['mode'],
+                model_id:currentTabData.model_id,
+                elements:JSON.stringify(currentTabData.elements||{}),
+                type:'show',
                 index:0
             }).then(res=>{
                if(res.success && this.data['current_tab'] == i){
@@ -237,7 +237,7 @@ export const contractEditorConfig = {
             let contractData = this.data.local_data[i];
             $.post('/customize/rzrk/download_contract/', {
                 table_id: this.data.table_id,
-                real_id: this.data.temp_id,
+                real_id: this.data.real_id,
                 field_id: this.data.id,
                 model_id: contractData.model_id,
                 k2v: JSON.stringify(contractData.k2v),
@@ -279,7 +279,7 @@ export const contractEditorConfig = {
         //初始化各控件
         let obj = {
             table_id:this.data.table_id,
-            real_id:this.data.temp_id,
+            real_id:this.data.real_id,
             field_id:this.data.id
         };
         this.data.local_data = JSON.parse(JSON.stringify(this.data.value));
