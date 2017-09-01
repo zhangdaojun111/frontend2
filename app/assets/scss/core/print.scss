@@ -1,65 +1,69 @@
 @media print {
-  body *{
-    visibility: hidden !important;
-    overflow: visible !important;
-    position: static !important;
-  }
+    body * {
+        visibility: hidden !important;
+        overflow: visible !important;
+        position: static !important;
+    }
 
-  #detail-form, #detail-form * {
-    visibility: visible !important;
-    overflow: visible !important;
-  }
+    #detail-form, #detail-form * {
+        visibility: visible !important;
+        overflow: visible !important;
+    }
 
-  #detail-form {
-    height: 100% !important;
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
-    overflow: initial !important;
-  }
+    #detail-form {
+        height: 100% !important;
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        overflow: initial !important;
+    }
 
-  #detail-form .ui-helper-hidden-accessible,
-  #detail-form .ui-dropdown-label{
-    position:absolute !important;
-  }
-  /*内联子表样式*/
-  #detail-form .ui-songrid-box,
-  #detail-form .sheet,
-  #detail-form .grid-box,
-  #detail-form  .ag-bl-full-height
-  {
-    position:relative !important;
-  }
+    #detail-form .ui-helper-hidden-accessible,
+    #detail-form .ui-dropdown-label {
+        position: absolute !important;
+    }
+    /*内联子表样式*/
+    #detail-form .ui-songrid-box,
+    #detail-form .sheet,
+    #detail-form .grid-box,
+    #detail-form .ag-bl-full-height {
+        position: relative !important;
+    }
 
-  #detail-form .biaojicaozuo-circle ,
-  #detail-form .paginator-box,
-  #detail-form .ag-bl-overlay
-  {
-    position: absolute!important;
-  }
+    #detail-form .biaojicaozuo-circle,
+    #detail-form .paginator-box,
+    #detail-form .ag-bl-overlay {
+        position: absolute !important;
+    }
 
-  #detail-form #myFilter{
-    overflow: hidden!important;
-  }
+    #detail-form #myFilter {
+        overflow: hidden !important;
+    }
 
-  #detail-form #footer .ag-header-row{
-    display: none;
-  }
-  #detail-form .printS{
-    visibility: visible !important;
-    position: absolute !important;
-  }
-  #detail-form .tempImg,#detail-form .showSign{
-    visibility:hidden !important;
-  }
-  #detail-form #collapseForm div:first-child{
-    position: relative !important;
-  }
+    #detail-form #footer .ag-header-row {
+        display: none;
+    }
+    #detail-form .printS {
+        visibility: visible !important;
+        position: absolute !important;
+    }
+    #detail-form .tempImg, #detail-form .showSign {
+        visibility: hidden !important;
+    }
+    #detail-form #collapseForm div:first-child {
+        position: relative !important;
+    }
 
-  #detail-form .df-input-radio-wrapper {
-    border: none;
-  }
-  .noprint{
-    display: none;
-  }
+    #detail-form .df-input-radio-wrapper {
+        border: none;
+    }
+    .ui-datepicker-trigger{
+        display: none;
+    }
+    .triangle{
+        display: none;
+    }
+    .noprint {
+        display: none;
+    }
 }
