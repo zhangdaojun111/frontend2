@@ -5,6 +5,9 @@ import '../assets/scss/form.scss'
 import '../assets/scss/core/print.scss'
 import {CreateForm} from "../components/form/createFormVersionTable/createForm"
 
+
+
+
 let FormEntrys = {
     childForm:{},
     isloadCustomTableForm:false,
@@ -55,8 +58,6 @@ let FormEntrys = {
         this.isAddBuild=config.isAddBuild || 0;
         this.buildId=config.id || '';
         this.btnType=config.btnType||'new';
-        console.log('配置文件');
-        console.log(config);
     },
     //静态数据里是否有这个key
     hasKeyInFormDataStatic(key,staticData){
@@ -110,6 +111,7 @@ let FormEntrys = {
                 from_workflow:this.fromWorkFlow,
                 table_id:this.tableId
             }
+            this.isloadWorkflow=true;
         }else if(this.fromApprove && this.realId == '' ){//审批流程
             json={
                 form_id: this.formId,
@@ -119,6 +121,7 @@ let FormEntrys = {
                 from_focus: this.fromFocus,
                 table_id: this.tableId
             }
+            this.isloadWorkflow=true;
         }
         else{
             json=this.pickJson();
@@ -148,6 +151,7 @@ let FormEntrys = {
                     parent_real_id: this.parentRealId || "",
                     parent_temp_id: this.parentTempId ||""
                 }
+                this.isloadCustomTableForm = true;
             }else {
                 json = {
                     form_id: "",
@@ -402,6 +406,10 @@ let FormEntrys = {
         formBase.render(html);
         //通知父框架表单刷新完毕
         Mediator.publish('form:formAlreadyCreate','success');
+        //发送给工作流表名信息
+        if(this.formId && this.el.find('.ui-myformtable').prev()[0].nodeName == 'P'){
+            Mediator.publish('workflow:getWorkflowTitle',this.el.find('.ui-myformtable').prev().text());
+        }
         console.timeEnd('form创建时间');
     },
 

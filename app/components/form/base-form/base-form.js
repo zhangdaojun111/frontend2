@@ -265,7 +265,7 @@ let config = {
                 //正则检查
                 if (val != "" && data["reg"] !== "") {
                     for (let r in data["reg"]) {
-                        let reg = eval(r);
+                        let reg = new RegExp(r);
                         let flag = reg.test(val);
                         if (!flag) {
                             error = true;
@@ -316,6 +316,8 @@ let config = {
                 if (val != "" && !$.isEmptyObject(data["func"])) {
                     for (let r in data["func"]) {
                         let flag = FormService[r](val);
+                        console.log(data);
+                        console.log(flag);
                         if (!flag) {
                             error = true;
                             errorMsg = data["func"][r];

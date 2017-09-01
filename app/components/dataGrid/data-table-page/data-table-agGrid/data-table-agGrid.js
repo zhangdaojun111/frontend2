@@ -2207,18 +2207,9 @@ let config = {
 
             //视频字段
             if(data.colDef.real_type == fieldTypeService.VIDEO_TYPE && data.event.srcElement.id == 'file_view'){
-
                let fieldids = data['value'];
-                let file_dinput_type = data.colDef.real_type;
-               // ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids[0]}&download=0&dinput_type=${file_dinput_type}`;
-
-                for( let i=0;i< fieldids.length;i++ ){
-                  ViewVideo.data.videoSrc = `/download_attachment/?file_id=${fieldids[i]}&download=0&dinput_type=${file_dinput_type}`;
-
-                  console.log( ViewVideo.data.videoSrc )
-                    console.log( fieldids[0])
-                    console.log( fieldids[1])
-                }
+               let file_dinput_type = data.colDef.real_type;
+               ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids[0]}&download=0&dinput_type=${file_dinput_type}`;
                     PMAPI.openDialogByComponent(ViewVideo, {
                         width: 1000,
                         height: 600,
