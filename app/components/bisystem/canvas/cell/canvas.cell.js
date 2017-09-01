@@ -61,9 +61,6 @@ let config = {
                 let cellComponent = new cellTypes[chart['data']['assortment']](data);
                 let cellContainer = this.el.find('.cell-chart');
                 cellComponent.render(cellContainer);
-                if(chart['data']['assortment']=='table'){
-                    cellComponent.actions.alignTable(chart);
-                }
                 this.cellChart = cellComponent;
             }
         },

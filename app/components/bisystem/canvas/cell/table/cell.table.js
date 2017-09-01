@@ -10,21 +10,13 @@ let config = {
     template: template,
     data: {
         rows: [],
-        chart: {}
+        chart: {},
     },
     actions: {
         init(cellChart) {
             if (cellChart['chart']['single'] === 1) {
                 config.actions.singleTable(cellChart);
             }
-        },
-
-        /**
-         * table 居中显示
-         */
-        alignTable(chart) {
-            let alignMent = chart['data']['alignment'];
-            this.el.find('.bi-table table').css('text-align',alignMent);
         },
 
         /**
@@ -72,12 +64,11 @@ let config = {
 
         }
     },
-    afterRender() {
-
-    }
+    afterRender() {}
 };
 export class CellTableComponent extends BiBaseComponent {
     constructor(cellChart) {
+        console.log(cellChart['chart']);
         config.data.chart = cellChart['chart'] ? cellChart['chart'] : null;
         config.actions.init(cellChart);
         super(config);
