@@ -128,3 +128,22 @@ To change `display` (e.g. `display: inline-block;`), we suggest using a common C
 .icon-tool {
     background-position: 0px -130px;
 }
+
+@media screen and (max-width: 1200px){
+    .dataGrid-btn-group {
+        span {
+            display: none;
+        }
+    }
+}
+
+@media screen and (max-width: 900px){
+    .dataGrid-btn-group {
+        a {
+            margin-left: 15px;
+            span {
+                display: none;
+            }
+        }
+    }
+}
