@@ -44,9 +44,12 @@ let config={
             this.data.key=msg;
         });
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
+
             this.data.workflowData=msg.data[0];
             WorkFlow.show(msg.data[0],'#drawflow');
         });
+        console.log(this.data);
+        console.log("0000000000000000000");
         Mediator.subscribe('workflow:getParams', (res)=> {
             let htmlStr=``;
             for(let i in res){
@@ -69,7 +72,8 @@ let config={
             Mediator.publish('workflow:submit', 1);
         });
         this.el.on('click','#toEdit',()=>{
-            location.href=location.href.replace(/=view/,'=edit').replace(/is_view=1/,'is_view=0');
+            // location.href=location.href.replace(/=view/,'=edit').replace(/is_view=1/,'is_view=0');
+            let table_id =　location.href.split('=')[1].split('&')[0];
         });
         this.el.find('#print').on('click',()=>{
             this.actions.printSetting();
