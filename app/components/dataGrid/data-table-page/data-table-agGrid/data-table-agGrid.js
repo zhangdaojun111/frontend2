@@ -629,6 +629,7 @@ let config = {
             //合同编辑器
             else if (real_type == fieldTypeService.TEXT_COUNT_TYPE) {
                 sHtml = '<a' + bgStyle + ' class="view-contract">' + "查看" + '</a>' + '<span>' + "丨" + '</span>' + '<a class="download-contract">' + '下载' + '</a>';
+                sHtml = '<span '+ bgStyle +'><a style="color:#337ab7;" class="view-contract">查看</a>丨<a style="color:#337ab7;" class="download-contract">下载</a></span>';
             }
 
             //表对应关系（不显示为数字）
@@ -2207,11 +2208,9 @@ let config = {
 
             //视频字段
             if(data.colDef.real_type == fieldTypeService.VIDEO_TYPE && data.event.srcElement.id == 'file_view'){
-
                let fieldids = data['value'];
                 let file_dinput_type = data.colDef.real_type;
-
-                ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids[0]}&download=0&dinput_type=${file_dinput_type}`;
+               ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids[0]}&download=0&dinput_type=${file_dinput_type}`;
                     PMAPI.openDialogByComponent(ViewVideo, {
                         width: 1000,
                         height: 600,

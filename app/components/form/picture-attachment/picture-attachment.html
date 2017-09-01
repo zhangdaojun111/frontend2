@@ -4,7 +4,7 @@
         <div class="select-img" data-imgSelect="{{this.file_id}}">
             <div style="height: 100%;width: 100%;">
                 <p style="word-break: break-all; margin: 5px;display: inline-block;">{{this.file_name}}</p>
-                <a href="download_attachment/?file_id={{this.file_id}}&download=1" ><img src="../../../assets/images/form/icon_download.png" alt="下载"></a>
+                <a href="download_attachment/?file_id={{this.file_id}}&download=1"><img src="../../../assets/images/form/icon_download.png" alt=""></a>
                 <!--<a style="color: blue;">预览</a>-->
                 <!--<a (click)="imgDel(data.file_id)">删除</a>-->
             </div>
@@ -16,10 +16,10 @@
         <!--<div class="changeBtn" style="right: 5px;" data-num="2"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>-->
         <div class="showImg">
             {{#if imgSelect}}
-                <div>
-                    <img id="myImg" src="/download_attachment/?file_id={{imgSelect}}&download=0">
-                    <img id="ImgToShow" src="/download_attachment/?file_id={{imgSelect}}&download=0">
-                </div>
+            <div>
+                <img id="myImg" src="/download_attachment/?file_id={{imgSelect}}&download=0">
+                <img id="ImgToShow" src="/download_attachment/?file_id={{imgSelect}}&download=0">
+            </div>
             {{/if}}
         </div>
     </div>

@@ -265,7 +265,7 @@ let config = {
                 //正则检查
                 if (val != "" && data["reg"] !== "") {
                     for (let r in data["reg"]) {
-                        let reg = eval(r);
+                        let reg = new RegExp(r);
                         let flag = reg.test(val);
                         if (!flag) {
                             error = true;
@@ -316,6 +316,8 @@ let config = {
                 if (val != "" && !$.isEmptyObject(data["func"])) {
                     for (let r in data["func"]) {
                         let flag = FormService[r](val);
+                        console.log(data);
+                        console.log(flag);
                         if (!flag) {
                             error = true;
                             errorMsg = data["func"][r];
@@ -1489,7 +1491,7 @@ let config = {
                 if (single.data('width')) {
                     data[key]['width'] = single.data('width') + 'px';
                 } else {
-                    data[key]['width'] = '240px';
+                    data[key]['width'] = '244px';
                 }
                 //数据填充后，根据修改条件对不同框进行只读操作
                 setTimeout(() => {
@@ -1617,7 +1619,7 @@ let config = {
                         this.data.childComponent[data[key].dfield] = dateTimeControl;
                         break;
                     case 'editControl':
-                        data[key]['temp_id'] = data['temp_id']['value'];
+                        data[key]['real_id'] = data['real_id']['value'];
                         data[key]['table_id'] = data['table_id']['value'];
                         let contractControl = new ContractControl(data[key], actions);
                         contractControl.render(single);
