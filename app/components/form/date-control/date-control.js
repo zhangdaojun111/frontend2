@@ -29,13 +29,6 @@ let config = {
                 this.el.find(".date_yy-mm-dd").val("年-月-日");
             }
         },
-        {
-            event: 'keyup',
-            selector: '.date_yy-mm-dd',
-            callback: function () {
-               this.value=this.value.replace("/[^\w&- ]|_/ig,''");
-            }
-        },
     ],
     afterRender() {
         let _this = this;
@@ -109,18 +102,12 @@ let config = {
                     console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', this.selector);
                 }
 
-                _this.el.find('.date_yy-mm-dd').on('change',function(){
-                    console.log("change")
-                })
-
 
             },
 
 
         });
-        _.debounce(function () {
-            _this.events.changeValue(_this.data)
-        }, 200)();
+
     },
     beforeDestory: function () {
         this.el.off();

@@ -30,13 +30,7 @@ let config = {
                 this.el.find(".datetime").val("年-月-日 时:分:秒")
             }
         },
-        {
-            event: 'keyup',
-            selector: '.datetime',
-            callback: function () {
-                this.value=this.value.replace("/[^w&-&:]|_/ig,''");
-            }
-        },
+
     ],
     afterRender() {
         let _this = this;
