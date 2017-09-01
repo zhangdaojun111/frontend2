@@ -19,24 +19,21 @@ let config = {
         getInProcessNum: function () {
             let inProcess = dataTableService.getInProcessNum( {table_id: this.data.tableId} )
             let arr = [inProcess];
-            if( !this.data.firatShowHelp ){
-                let help = dataTableService.getHelpData( {is_form:1,table_id:this.data.tableId,type:0} )
-                arr.push( help );
-            }
+            // if( !this.data.firatShowHelp ){
+            //     let help = dataTableService.getHelpData( {is_form:1,table_id:this.data.tableId,type:0} )
+            //     arr.push( help );
+            // }
             Promise.all(arr).then((res)=> {
                 this.el.find( '.inProcessNum' )[0].style.display = res[0].total? 'block':'none';
-                if( !this.data.firatShowHelp ){
-                    if(typeof res[1].data != "object"){
-                        if(res[1].data != ""){
-                            this.el.find( '.dataTableHelp' )[0].style.display = 'flex';
-                        }
-                    }
-                }
-                this.data.firatShowHelp = true;
+                // if( !this.data.firatShowHelp ){
+                //     if(typeof res[1].data != "object"){
+                //         if(res[1].data != ""){
+                //             this.el.find( '.dataTableHelp' )[0].style.display = 'flex';
+                //         }
+                //     }
+                // }
+                // this.data.firatShowHelp = true;
             })
-            // dataTableService.getInProcessNum( {table_id: this.data.tableId} ).then( res=>{
-            //     this.el.find( '.inProcessNum' )[0].style.display =res.total? 'block':'none';
-            // } )
             HTTP.flush();
         },
         //添加点击事件
@@ -84,6 +81,12 @@ let config = {
                 this.actions.getInProcessNum();
             }
         })
+        console.log( window.config )
+        //是否显示帮助
+        let help = window.config.sysConfig.logic_config.use_help || '0';
+        if( help == 1 ){
+            this.el.find( '.dataTableHelp' )[0].style.display = 'flex';
+        }
     }
 };
 
