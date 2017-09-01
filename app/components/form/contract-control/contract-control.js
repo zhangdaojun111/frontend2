@@ -13,7 +13,7 @@ let config = {
             event:'click',
             selector:'.contract-view',
             callback:function () {
-                this.data['mode']='view';
+                this.data['mode']='show';
                 this.actions.openEditor();
             }
         },{

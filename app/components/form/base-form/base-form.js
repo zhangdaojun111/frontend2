@@ -1616,7 +1616,7 @@ let config = {
                         this.data.childComponent[data[key].dfield] = dateTimeControl;
                         break;
                     case 'editControl':
-                        data[key]['temp_id'] = data['temp_id']['value'];
+                        data[key]['real_id'] = data['real_id']['value'];
                         data[key]['table_id'] = data['table_id']['value'];
                         let contractControl = new ContractControl(data[key], actions);
                         contractControl.render(single);
