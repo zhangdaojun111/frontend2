@@ -10,7 +10,7 @@ $grid-color: #666;
 
 @mixin diagonal {
     li:last-child div {
-        background-color: #33b6ac;
+        background: #33b6ac;
         color: $grid-bg;
     }
     li:first-child {
@@ -35,7 +35,7 @@ $grid-color: #666;
     }
     li:last-child {
         div:last-child {
-            background-color: $grid-bg;
+            background-color: $grid-bg !important;
             color: #666;
         }
     }
@@ -73,7 +73,7 @@ $grid-color: #666;
             }
             div:last-child {
                 border: none;
-                background-color: #5b95e8;
+                background: #5b95e8;
                 color: #ffffff;
             }
         }
