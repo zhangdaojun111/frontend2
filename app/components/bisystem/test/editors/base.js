@@ -5,6 +5,8 @@ import {AutoComplete} from '../forms/autocomplete/autocomplete';
 import {Radio} from '../forms/radio/radio';
 import {Checkbox} from '../forms/checkbox/checkbox';
 import {Choosed} from '../forms/choosed/choosed';
+import {Save} from '../forms/save/save';
+import {TableSingle} from '../forms/single/single';
 
 let formItemTypes = {
     'text': Text,
@@ -12,7 +14,9 @@ let formItemTypes = {
     'autocomplete': AutoComplete,
     'radio': Radio,
     'checkbox': Checkbox,
-    'choosed':Choosed
+    'choosed':Choosed,
+    'save': Save,
+    'table_single': TableSingle
 }
 
 class Base extends Component {
@@ -34,8 +38,16 @@ class Base extends Component {
             this.formItems[item.name] = instance;
         });
     }
+
+    /**
+     * 获取所有字段数据
+     */
     getData(){
-        this.formItems()
+        let chart = {}
+        Object.keys(this.formItems).map(name =>{
+           chart[name] = this.formItems[name].getValue();
+        })
+        return chart;
     }
     fillData(){}
 }

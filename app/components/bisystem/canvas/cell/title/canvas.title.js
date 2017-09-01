@@ -20,7 +20,6 @@ let config = {
             this.data.icon = chart['data']['icon'];
             this.data.isIcon = chart['data']['icon'] ? true : false;
             if(this.data.isIcon){
-                console.log(this.el.find('.title'),77777777777777777777777777777777777777777);
                 this.el.find('.title').addClass('no-title');
             }
             this.reload();

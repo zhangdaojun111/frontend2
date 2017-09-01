@@ -2,7 +2,7 @@ import {Base} from '../base';
 import template from './table.html';
 import './table.scss';
 
-import {chartName, source,theme,icon} from '../form.chart.common';
+import {chartName,theme,icon} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 
@@ -10,13 +10,12 @@ import msgbox from "../../../../../lib/msgbox";
 let config = {
     template: template,
     actions: {
-
         /**
          * 加载x 和y轴数据
          * @param data 选中的数据源
          */
         async getFields(data) {
-            let table = data[0] ? data[0] : null;
+            let table = data ? data : null;
             if (table) {
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
@@ -35,22 +34,23 @@ let config = {
          * @param columns 表格列表字段（x轴）
          */
         async loadColumns(columns) {
-            if (columns) {
-                this.formItems['columns'].setJsonList(columns);
-                this.formItems['sortColumns'].setList(columns);
-            } else { // 清空字段
-                this.formItems['columns'].actions.clear();
-                this.formItems['sortColumns'].setList([]);
+            if (this.formItems['columns']) {
+                if (columns) {
+                    this.formItems['columns'].setList(columns);
+                    this.formItems['sortColumns'].setList(columns);
+                } else { // 清空字段
+                    this.formItems['columns'].actions.clear();
+                    this.formItems['choosed'].actions.clear();
+                    this.formItems['table_single'].actions.clear();
+                    this.formItems['sortColumns'].setList([]);
+                }
             }
         },
 
         /**
-         * 初始化操作
+         * 初始化图表操作
          */
        async init() {
-           // 绑定数据源onSelect选择事件
-            this.formItems['source'].data.onSelect = this.actions.getFields;
-            this.formItems['source'].reload();
 
            // 获取数据来源
             ChartFormService.getChartSource().then(res => {
@@ -73,20 +73,43 @@ let config = {
                     msgbox.alert(res['error'])
                 };
             })
+        },
+
+        /**
+         * 保存图表数据
+         */
+        saveChart(chart) {
+            console.log(this.getData());
         }
     },
     data: {
         options: [
             chartName,
-            source,
+            {
+                label: '数据来源',
+                name: 'source',
+                defaultValue: '',
+                type: 'autocomplete',
+                events: {
+                    onSelect(value) {
+                        this.actions.getFields(value);
+                    }
+                }
+            },
             theme,
             icon,
             {
                 label: '请选择列名',
                 name: 'columns',
-                defaultValue: '',
+                defaultValue: [],
                 list: [],
-                type: 'checkbox'
+                type: 'checkbox',
+                events: {
+                    onChange:function(value) {
+                        this.formItems['choosed'].actions.update(value);
+                        this.formItems['table_single'].actions.setColumns(value);
+                    }
+                }
             },
             {
                 label: '已选择列名',
@@ -114,7 +137,7 @@ let config = {
             {
                 label: '表格文字对齐方式',
                 name: 'alignment',
-                defaultValue: '',
+                defaultValue: 'left',
                 list: [
                     {'value': 'left', 'name': '居左'},
                     {'value': 'center', 'name': '居中'},
@@ -131,13 +154,67 @@ let config = {
             {
                 label: '',
                 name: 'single',
-                defaultValue: '',
+                defaultValue: [],
                 list: [
                     {
                         value:1, name: '是否显示为单行'
                     }
                 ],
-                type: 'checkbox'
+                type: 'checkbox',
+                events: {
+                    onChange:function(value) {
+                        if (value[0]) {
+                            this.formItems['columnNum'].el.show();
+                            this.formItems['countNum'].el.hide();
+                        } else {
+                            this.formItems['columnNum'].el.hide();
+                            this.formItems['countNum'].el.show();
+                        };
+                    }
+                }
+            },
+            {
+                label: '需要显示多少列',
+                name: 'columnNum',
+                defaultValue: '1',
+                type: 'text',
+                events: {
+                    onChange: _.debounce(function(value) {
+                        // let value = parseInt($(this).val());
+                        // let columns = [];
+                        // if (value !== NaN) {
+                        //     let num = value;
+                        //     let choosedNum = Math.ceil(this.data.columns.length / num);
+                        //     let arr = [];
+                        //     this.data.columns.forEach((val, index,items) => {
+                        //         val = items.slice(index * choosedNum, index * choosedNum + choosedNum);
+                        //         arr.push(val);
+                        //     });
+                        //     this.data.choosed = arr.filter(item => item.length > 0);
+                        //     this.data.singleNum = this.data.choosed.length;
+                        //     this.reload();
+                        // }
+                    },500)
+                }
+            },
+            {
+                label: '',
+                name: 'table_single',
+                defaultValue: '',
+                type: 'table_single',
+                events: {}
+            },
+
+            {
+                label: '',
+                name: 'save',
+                defaultValue: '',
+                type: 'save',
+                events: {
+                    save() {
+                        this.actions.saveChart();
+                    }
+                }
             },
         ]
     },

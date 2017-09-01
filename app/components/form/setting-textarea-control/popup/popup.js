@@ -270,7 +270,6 @@ let popupSetting = {
                         '-1': []
                     };
                     selects.each(function () {
-
                         let item = $(this).parentsUntil('ul').last();
                         let key = item.attr('key');
                         res[key] = [];

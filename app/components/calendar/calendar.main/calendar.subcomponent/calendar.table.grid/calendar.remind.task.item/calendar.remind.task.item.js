@@ -96,7 +96,6 @@ let config = {
 
     },
     afterRender: function() {
-        // console.log(this.data.remindTaskItemData);
         this.el.addClass("comment-task-item");
         this.el.find('.task-bg-color').css({backgroundColor: this.data.remindTaskItemData['color']});
         let that = this;
@@ -117,15 +116,13 @@ let config = {
             if(this.data.remindTaskItemData['data3show'][0] && this.data.remindTaskItemData['data3show'][0][0]) {
                 this.el.find('.task-show-text').html(this.data.remindTaskItemData['data3show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data3show'][0][0]['fieldValue']);
             }
-            // else if(this.data.remindTaskItemData['data2show'][0] && this.data.remindTaskItemData['data2show'][0][0]) {
-            //     this.el.find('.task-show-text').html(this.data.remindTaskItemData['data2show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data2show'][0][0]['fieldValue']);
-            // }
             this.el.on('click', '.task-show-text', () => {
                 this.actions.openRemind();
             });
         } else if(this.data.remindTaskItemData['type'] === 2){
             console.log(this.data.remindTaskItemData);
         } else if(this.data.remindTaskItemData['type'] === 3 || this.data.remindTaskItemData['type'] === 4) {
+            // 工作流数据
             this.actions.openWorkflow();
         }
 
@@ -134,7 +131,6 @@ let config = {
             if(!$(this).is(".options-show")){
                 that.el.parents(".calendar-main-content").find(".select-options").hide();
                 that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
-                // that.el.find(".select-options").css({"top":that.el.find(".task-state-icon").offset().top - 70});
                 that.el.find(".select-options").show();
                 $(this).addClass("options-show");
                 if(that.el.find(".task-item").parent().position().top > 60){

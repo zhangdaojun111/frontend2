@@ -10,24 +10,25 @@ let config = {
          */
         clear() {
             this.data.list = [];
+            this.data.value = [];
             this.reload();
         },
 
         /**
-         * checked or no-checked
+         * checkbox 选中 or 不选中
+         * @param checked === true ? 选中 : '不选中'
+         *        vaulue = 选中的值，checked=true push()
          */
         onChange: function (checked,value) {
-            // this.data.value = value;
+            value = JSON.parse(value)
             if (checked) {
-                this.data.value.push(JSON.parse(value));
-                console.log(this.data.value)
+                this.data.value.push(value);
             } else {
                 _.remove(this.data.value, (item) => {
                     return item.id === value.id
                 });
-                console.log(this.data)
             }
-            this.trigger('onChange', value);
+            this.trigger('onChange', this.data.value);
         }
 
     },
@@ -61,15 +62,6 @@ class Checkbox extends Base {
      * @param checkbox = 要设置的checkboxs数据
      */
     setList(list) {
-        this.data.list = list;
-        this.reload();
-    }
-
-    /**
-     * 设置checkbox list
-     * @param list = 因为list的value是一个对象,需要把值转化为jsonstring
-     */
-    setJsonList(list) {
         let data = list.map(val => {
             return {value: JSON.stringify(val), name: val['name']}
         })

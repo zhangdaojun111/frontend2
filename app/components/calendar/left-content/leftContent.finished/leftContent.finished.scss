@@ -1,19 +1,26 @@
-.has-finished{
-  line-height: 20px;
-  height:20px;
-  vertical-align: middle;
-  box-sizing: border-box;
-  margin: 5px 0px 5px 5px;
-  .finished-con{
-    height:20px;
+.component-has-finished {
+    line-height: 20px;
+    height: 20px;
     vertical-align: middle;
-  }
-  .finished-content{
-    cursor: pointer;
-    height:20px;
-    vertical-align: middle;
-  }
-  .finished-content:hover{
-    color: rgb(0,136,255);
-  }
+    box-sizing: border-box;
+    margin: 5px 0px 5px 5px;
+    overflow: hidden;
+    word-break: keep-all; /* 不换行 */
+    white-space: nowrap; /* 不换行 */
+    .finished-con {
+        vertical-align: middle;
+        display: inline-block;
+        width: 16px;
+        height:16px;
+        box-sizing: border-box;
+        background: url("../../../../assets/images/calendar/calendar-finished.png");
+    }
+    .finished-content {
+        cursor: pointer;
+        height: 20px;
+        vertical-align: middle;
+    }
+    .finished-content:hover {
+        color: rgb(0, 136, 255);
+    }
 }

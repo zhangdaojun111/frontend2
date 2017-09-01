@@ -1,13 +1,16 @@
 import alertConfig from '../components/util/alert/alert';
 import confirmConfig from '../components/util/confirm/confirm';
+import {Tips} from '../components/util/tips/tips';
 import {PMAPI, PMENUM} from './postmsg';
+
+
 export default {
 
     alert: function(msg) {
         let config = _.defaultsDeep({}, alertConfig);
         config.data.text = encodeURIComponent(msg);
         return PMAPI.openDialogByComponent(config, {
-            width: 300,
+            width: 400,
             title: '提示',
             maxable: false,
             modal: true
@@ -22,7 +25,7 @@ export default {
         let config = _.defaultsDeep({}, confirmConfig);
         config.data.text = encodeURIComponent(msg);
         PMAPI.openDialogByComponent(config, {
-            width: 300,
+            width: 400,
             title: '提示',
             maxable: false,
             modal: true
@@ -40,6 +43,14 @@ export default {
      *  后期会改进为5秒关闭
      */
     showTips: function (msg) {
-        return this.alert(msg);
+        PMAPI.sendToParent({
+            type: PMENUM.show_tips,
+            data: msg
+        });
+        // return this.alert(msg);
+    },
+
+    _showTips: function (msg) {
+        Tips.showMessage(msg)
     }
 }

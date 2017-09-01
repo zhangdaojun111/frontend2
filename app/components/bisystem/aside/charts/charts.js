@@ -10,7 +10,7 @@ import "./charts.scss";
 let config = {
     template:template,
     data:{
-      charts:[],
+        charts:[],
     },
     actions:{
         /**
@@ -98,6 +98,8 @@ let config = {
 export class ChartsComponent extends BiBaseComponent{
     constructor(charts) {
         config.data = charts? charts : null;
+        config.data.imgUrl = window.config.img_url;
+        config.data.isIcon = charts['icon']? true:false;
         super(config);
     }
 }

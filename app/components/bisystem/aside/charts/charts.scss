@@ -17,6 +17,11 @@ $font_size: 12px;
     //overflow: auto;//显示滚动条
     font-size: 12px;
     cursor: move;
+    img{
+        float: left;
+        margin-right: 4px;
+        border-radius: 50%;
+    }
     li {
         position: relative;
     }

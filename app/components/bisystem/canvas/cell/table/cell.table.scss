@@ -9,7 +9,6 @@ $font-color: #eeeeee;
     border: 1px solid $font-color;
     table {
         width: 100%;
-        text-align: center;
     }
     .double-list {
         tr:nth-child(odd) {
@@ -55,12 +54,10 @@ $font-color: #eeeeee;
             border-right: none;
         }
         td:nth-child(odd) {
-            text-align: center;
             background-color: #FAFAFA;
             font-weight: bold;
         }
         td:nth-child(even) {
-            text-align: right;
             background-color: #ffffff;
         }
 

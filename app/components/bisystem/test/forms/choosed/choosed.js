@@ -8,14 +8,23 @@ import template from './choosed.html';
 let config = {
     template:template,
     data: {
-        choosed: []
+        list: []
     },
     actions: {
         /**
          * 更新选中的字段
+         * @param columns = 选中的字段列表
          */
         update(columns) {
-            this.data.choosed = columns;
+            this.data.list = columns;
+            this.reload();
+        },
+
+        /**
+         * 清空所有选中字段
+         */
+        clear() {
+            this.data.list = [];
             this.reload();
         }
 

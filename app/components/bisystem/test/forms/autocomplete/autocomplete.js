@@ -5,13 +5,31 @@ import {AutoSelect} from '../../../../util/autoSelect/autoSelect';
 let config = {
     template: template,
     actions: {
+        /**
+         * 当AutoSelect 选中值时
+         * @param value
+         */
+        onSelect(value) {
+            if (value.length > 0) {
+                for(let item of this.autoselect.data.list) {
+                    if (item.id === value[0].id) {
+                        this.data.value = item;
+                        break;
+                    }
+                };
+            } else {
+                this.data.value = null;
+            }
+            this.trigger('onSelect', this.data.value);
+        }
     },
     binds: [
     ],
     afterRender(){
         const autoselect_data = {
             multiSelect: false,
-            onSelect: this.data.onSelect
+            choosed: this.data.value,
+            onSelect: this.actions.onSelect
         };
         this.autoselect = new AutoSelect(autoselect_data);
         this.append(this.autoselect, this.el);
@@ -31,7 +49,6 @@ class AutoComplete extends Base {
     setList(list) {
         this.autoselect.actions.setList(list);
     }
-
 }
 
 export {AutoComplete}
