@@ -7,6 +7,7 @@ import {PersonSetting} from "../personal-settings/personal-settings";
 import {HTTP} from '../../../lib/http';
 import msgbox from "../../../lib/msgbox";
 import {UserInfoService} from "../../../services/main/userInfoService";
+import {AvatarSet} from '../personal-settings/set-avatar/set-avatar';
 // import {commonuse} from '../commonuse/commonuse';
 // import {Uploader} from "../../../lib/uploader";
 
@@ -150,6 +151,8 @@ let config = {
                 $img.on('error', function () {
                     $img.remove();
                 });
+            }else{
+                this.el.find('avatar').addClass('default-avatar');
             }
         },
         logout: function () {
@@ -280,6 +283,10 @@ let config = {
         }
         //此处检查用户是否开启代理，并做提醒
         this.actions.checkAgent();
+
+        this.el.find('.avatar').on('click',function () {
+            AvatarSet.show();
+        })
     },
     firstAfterRender: function() {
         Mediator.on('aside:size', (order) => {
@@ -288,9 +295,6 @@ let config = {
             } else {
                 this.actions.setSizeToMini();
             }
-        });
-        Mediator.on("personal:setAvatar",() => {
-            this.actions.resetAvatar();
         });
         Mediator.on('commonuse:change', () => {
             this.actions.showCommonMenu(true);

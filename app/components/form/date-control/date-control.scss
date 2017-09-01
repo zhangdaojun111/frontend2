@@ -1,12 +1,13 @@
-.component-date-control{
-  .ui-calendar{
-    padding: 5px;
-    line-height: normal;
-  }
-  .ui-datepicker-trigger{
-    position: relative;
-    left: -20px;
-  }
+.component-date-control {
+    .ui-calendar {
+        padding: 5px;
+        line-height: normal;
+    }
+    .ui-datepicker-trigger {
+        position: relative;
+        left: -20px;
+        cursor: pointer;
+    }
 }
 
 

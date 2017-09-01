@@ -157,7 +157,7 @@ let exportSetting = {
         css: css.replace(/(\n)/g, ''),
         isFilter: true,
         custom: true,
-        attachment: true,
+        attachment: false,
         hideOptions:[]
     },
     actions: {
@@ -212,7 +212,7 @@ let exportSetting = {
         } )
         this.data['isFilter'] = true;
         this.data['custom'] = true;
-        this.data['attachment'] = true;
+        this.data['attachment'] = false;
         for( let h of this.data.hideOptions ){
             let d = this.el.find( '.input-item' );
             let obj = {
@@ -225,6 +225,7 @@ let exportSetting = {
             a[0].checked = false;
             a[0].disabled = true;
             a[0].className += ' disableClick';
+            d.eq( obj[h] ).find( 'div' ).css( 'background','#E4E4E4' );
         }
         this.actions.createUrl();
     },

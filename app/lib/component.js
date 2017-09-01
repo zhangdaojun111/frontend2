@@ -105,11 +105,21 @@ class Component {
         this.data[key] = value;
     }
 
-    append(component, container, tagName) {
-        tagName = tagName || 'div';
+    append(component, container, tagName = 'div') {
         let el = $(`<${tagName}>`).appendTo(container);
         component.render(el);
         this.subComponents.push(component);
+        return this;
+    }
+
+    appendTo(container, tagName = 'div', sort = '') {
+        let el = $(`<${tagName}>`);
+        if (sort === 'desc') {
+            el.prependTo(container);
+        } else {
+            el.appendTo(container);
+        }
+        this.render(el);
         return this;
     }
 
@@ -200,14 +210,20 @@ class Component {
     }
 
     hideLoading(){
-        this.loadingOverlay.fadeOut();
-        this.loadingEffectBox.fadeOut(() => {
-            this.loadingOverlay.remove();
-            this.loadingEffectBox.remove();
-            this.loadingTarget.removeClass('component-loading-effect');
-            this.loadingTarget.children().removeClass('component-filter-blur');
-            this.loadingTarget = null;
-        });
+        // this.loadingOverlay.fadeOut();
+        // this.loadingEffectBox.fadeOut(() => {
+        //     this.loadingOverlay.remove();
+        //     this.loadingEffectBox.remove();
+        //     this.loadingTarget.removeClass('component-loading-effect');
+        //     this.loadingTarget.children().removeClass('component-filter-blur');
+        //     this.loadingTarget = null;
+        // });
+
+        this.loadingOverlay.remove();
+        this.loadingEffectBox.remove();
+        this.loadingTarget.removeClass('component-loading-effect');
+        this.loadingTarget.children().removeClass('component-filter-blur');
+        this.loadingTarget = null;
     }
 
     disable(){

@@ -11,15 +11,15 @@
 </head>
 
 <body>
-<div class="main-window">
+<div class="login-main-window">
     <!--登录界面标题-->
     <div class="bg-div">
         <div class="login-content">
             <h1 class="login-main-title">欢迎使用 <strong>ERDS</strong>企业管理系统</h1>
-            <h2 class="login-version-title">v1.1.0.0</h2>
+            <div class="login-version-title">v1.1.0.0</div>
             <!--无需下载，显示表单和版本-->
             <div class="white-panel login-container">
-                <h2 class="company-info"></h2>
+                <h2 class="company-info">成都睿银信息科技有限公司</h2>
                 <!--登录表单开始-->
                 <form class="login-form" onsubmit="return false">
                     <!--登录用户名和密码-->
@@ -38,7 +38,7 @@
 
                     <div class="warn-info"></div>
                     <!--更新信息、登录-->
-                    <div class="panel-bottom">
+                    <div class="panel-bottom clearfix">
                         <div class="update-group">
                             <i class="update-logo"></i>
                             <label class="check-update-info">更新信息</label>
@@ -66,7 +66,7 @@
             </div>
             <!--反面面板结束-->
 
-            <div class="find-pw-group">
+            <div class="find-pw-group clearfix">
                 <div class="register-btn">注册</div>
                 <div class="find-pw-btn">忘记密码?</div>
             </div>

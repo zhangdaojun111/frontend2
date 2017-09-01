@@ -121,10 +121,10 @@ let config = {
          */
         openCalendarForm: function () {
             PMAPI.openDialogByIframe(
-                '/calendar_mgr/create/?table_id=1639_8QvxFmFvVpK33bVPXdk8hD',
+                '/iframe/addWf/?table_id=1639_8QvxFmFvVpK33bVPXdk8hD',
                 {
                     width: "900",
-                    height: '410',
+                    height: '520',
                     title: '日历表',
                     modal: true,
                     //customSize: true,
