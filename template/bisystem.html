@@ -12,6 +12,7 @@
         is_admin: {{ is_admin | safe }},
         bi_views: {{ bi_views|safe }},
         bi_user: '{{bi_user|safe}}',
+            img_url: '{{ config.img_url | safe }}',
     }
 </script>
 <div id="route-outlet" class="bi-container"></div>
