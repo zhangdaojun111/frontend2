@@ -6,15 +6,6 @@
     overflow-y: auto;
     overflow-x: hidden;
     @import "dateTime";
-    #ui-datepicker-div {
-        .ui-icon-circle-triangle-w {
-            background: url("../../../assets/images/form/inco_pre_month.png") !important;
-        }
-        .ui-icon-circle-triangle-e {
-            background: url("../../../assets/images/form/inco_next_month.png") !important;
-        }
-    }
-
     .ui-history {
         margin-left: 5px;
         vertical-align: middle;
