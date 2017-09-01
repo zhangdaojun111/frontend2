@@ -496,7 +496,7 @@ export const IframeInstance = new Component({
         {
             event:'click',
             selector:'.tab-list',
-            callback:function (dom,event) {
+            callback:function (target,event) {
                 this.actions.controlTabs(event);
             }
         },
@@ -510,7 +510,6 @@ export const IframeInstance = new Component({
 
     ],
     afterRender: function () {
-        let that = this;
         this.data.tabs = this.el.find('.tabs');
         this.data.iframes = this.el.find('.iframes');
         this.actions.setTabsCount();
@@ -527,23 +526,6 @@ export const IframeInstance = new Component({
         //     let id = $(this).attr('iframeid');
         //     that.actions.focusIframe(id);
         // });
-
-        // this.el.on('click','.tab-list',(event) => {
-        //     this.actions.controlTabs(event);
-        // })
-
-        // .on('click','.view-save',function () {
-        //     let temp_arr = _.defaultsDeep([],that.data.sort);
-        //     SaveView.show(temp_arr);
-        // }).on('mouseenter','.popup-icon',() => {
-        //     this.actions.showTabsPopup();
-        // }).on('mouseleave','.popup-icon',() => {
-        //     this.actions.resetIcon();
-        // }).on('mouseenter','.view-popup',() => {
-        //     this.actions.removeTimeOut();
-        // }).on('mouseleave','.view-popup',() => {
-        //     this.actions.hideTabsPopup();
-        // })
     },
 
     firstAfterRender: function () {
