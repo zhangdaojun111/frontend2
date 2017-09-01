@@ -967,7 +967,7 @@ let config = {
                 if( this.data.firstRender ){
                     //渲染agGrid
                     this.actions.renderAgGrid();
-                    his.data.firstSetData = true;
+                    this.data.firstSetData = true;
                     let d = {
                         rowData: this.data.rowData
                     }
