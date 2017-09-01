@@ -29,6 +29,7 @@ let config = {
             }
             this.trigger('onChange', value);
         }
+
     },
     binds: [
         {
