@@ -96,6 +96,7 @@ let config = {
 
     },
     afterRender: function() {
+        console.log(this.data.remindTaskItemData);
         this.el.addClass("comment-task-item");
         this.el.find('.task-bg-color').css({backgroundColor: this.data.remindTaskItemData['color']});
         let that = this;
@@ -186,6 +187,9 @@ class CalendarRemindTaskItem extends Component {
                 config.data.isNone = true;
             }
         }else{
+            if(config.data.remindTaskData === undefined) {
+                MSG.alert('undefined!该表未设置代表字段');
+            }
             if(config.data.remindTaskData['selectLabel']) {
                 config.data.isFinishedTask = true;
             } else {
