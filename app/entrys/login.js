@@ -19,6 +19,8 @@ function getLoginController() {
         username_value:'',      //记录用户名称
         password_value:'',      //记录密码
         isOpposite:false,       //记录页面状态
+        versionBtnOpen:1,       //是否可以查看更新信息
+        registerBtnOpen:1,      //是否可以使用注册功能
 
         $loginMainTitle:$(".login-main-title"),     //系统名称显示
         $companyInfo:$('.company-info'),            //公司名称显示
@@ -142,6 +144,10 @@ function getLoginController() {
                     }
                 }
             })
+
+            //根据权限处理versionBtn和registerBtn
+
+
         },
         //初始化公司名称
         sysNameInit:function () {
@@ -260,9 +266,10 @@ if(window.hasOwnProperty("parent") && window.parent !== window){
 let controller = getLoginController();
 let isNeedDownload = controller.browser_check();
 if( isNeedDownload === false){      //正常显示登录表单
-    LoginService.getVersionInfo()
-    .done((result) => {
+    LoginService.getVersionInfo().done((result) => {
         if(result.success === 1){
+            controller.registerBtnOpen = result.use_register;
+            controller.versionBtnOpen = result.sap_login_system_version;
             controller.versionInfo = result;
             controller.sysNameInit();   //初始化公司名称
             controller.versionInit();   //初始化版本table
