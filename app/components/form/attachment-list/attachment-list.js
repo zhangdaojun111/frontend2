@@ -4,6 +4,7 @@
  */
 
 import template from './attachment-list.html';
+
 let css = `
     .attachment-list{
       //  width:100%;
@@ -110,65 +111,68 @@ let css = `
         align-items:center;
         justify-content: center;
     }
-   
     .closeImg:hover{
         background-color:darkred;
-    }`;
+    }
+    `;
 let AttachmentList = {
     template: template.replace(/\"/g, '\''),
     data: {
         css: css.replace(/(\n)/g, ''),
-        dragStart:false,
-        rotateNo:0,
-        imgScale:1,
-        list:[],
-        dinput_type:'',
-        fileIds:'',
-        is_view:'',
-        isFormAbout:'',
-        fileGroup:[],
-        preview_file : ["gif","jpg","jpeg","png","txt","pdf","lua","sql","rm","rmvb","wmv","mp4","3gp","mkv","avi"],
+        dragStart: false,
+        rotateNo: 0,
+        imgScale: 1,
+        list: [],
+        dinput_type: '',
+        fileIds: '',
+        is_view: '',
+        isFormAbout: '',
+        fileGroup: [],
+        preview_file: ["gif", "jpg", "jpeg", "png", "txt", "pdf", "lua", "sql", "rm", "rmvb", "wmv", "mp4", "3gp", "mkv", "avi"],
     },
-    actions:{
+    actions: {
         //获取文件名后缀
-        getFileExtension (filename) {
+        getFileExtension(filename) {
             return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
         }
     },
-    afterRender(){
+    afterRender() {
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
-        let _this=this;
+        let _this = this;
         //图片弹窗预览
-        this.el.on('click','.pre',function(event){
+        this.el.on('click', '.pre', function (event) {
             _this.el.find('.my-mask').show();
-            _this.data.rotateNo=0;
-            _this.data.imgScale=1;
-            _this.el.find('.img-pre').css("height",$(window).height()*0.7+'px');
-            _this.el.find(".img-pre").css("transform","translate(-50%,-50%) rotate("+_this.data.rotateNo+"deg) scale("+_this.data.imgScale+","+_this.data.imgScale+")");
-            let myLocated=location.href.split('#');
+            _this.data.rotateNo = 0;
+            _this.data.imgScale = 1;
+            _this.el.find('.img-pre').css("height", $(window).height() * 0.7 + 'px');
+            _this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + _this.data.rotateNo + "deg) scale(" + _this.data.imgScale + "," + _this.data.imgScale + ")");
+            let myLocated = location.href.split('#');
             // _this.el.find('.img-pre').get(0).src=myLocated[0]+"download_attachment/?file_id="+$(event.target).data("id")+"&download=0&dinput_type="+_this.data.dinput_type;
-            _this.el.find('.img-pre').get(0).src="/download_attachment/?file_id="+$(event.target).data("id")+"&download=0&dinput_type="+_this.data.dinput_type;
-            $(document).on("mousewheel DOMMouseScroll",(e)=>{
+            _this.el.find('.img-pre').get(0).src = "/download_attachment/?file_id=" + $(event.target).data("id") + "&download=0&dinput_type=" + _this.data.dinput_type;
+            $(document).on("mousewheel DOMMouseScroll", (e) => {
                 let delta = (e.originalEvent['wheelDelta'] && (e.originalEvent['wheelDelta'] > 0 ? 1 : -1)) ||
                     (e.originalEvent['detail'] && (e.originalEvent['detail'] > 0 ? -1 : 1));
                 if (delta > 0) {
-                    _this.data.imgScale+=0.1;
-                    _this.el.find(".img-pre").css("transform","translate(-50%,-50%) rotate("+_this.data.rotateNo+"deg) scale("+_this.data.imgScale+")");
+                    _this.data.imgScale += 0.1;
+                    _this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + _this.data.rotateNo + "deg) scale(" + _this.data.imgScale + ")");
                 } else if (delta < 0) {
-                    this.imgScale-=0.1;
-                    _this.el.find(".img-pre").css("transform","translate(-50%,-50%) rotate("+_this.data.rotateNo+"deg) scale("+_this.data.imgScale+")");
+                    this.imgScale -= 0.1;
+                    _this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + _this.data.rotateNo + "deg) scale(" + _this.data.imgScale + ")");
                 }
             });
         });
         //删除
-        this.el.on('click','.del',function(event){
-            let _this=this;
-            let fielIds=$(event.target).attr('id');
-            HTTP.post('delete_attachment',{file_ids:JSON.stringify([fielIds]),dinput_type:this.data.dinput_type}).then(res=>{
-                _this.data.list=res["rows"];
-                for(let i = 0,len = _this.data.list.length;i < len ;i++){
-                    if(_this.data.list[i]["file_id"] == fielIds){
-                        _this.data.list.splice(i,1);
+        this.el.on('click', '.del', function (event) {
+            let _this = this;
+            let fielIds = $(event.target).attr('id');
+            HTTP.post('delete_attachment', {
+                file_ids: JSON.stringify([fielIds]),
+                dinput_type: this.data.dinput_type
+            }).then(res => {
+                _this.data.list = res["rows"];
+                for (let i = 0, len = _this.data.list.length; i < len; i++) {
+                    if (_this.data.list[i]["file_id"] == fielIds) {
+                        _this.data.list.splice(i, 1);
                         break;
                     }
                 }
@@ -180,51 +184,57 @@ let AttachmentList = {
             HTTP.flush();
         });
 
-        this.el.on('click','.mask-div,.closeImg',function(){
+        this.el.on('click', '.mask-div,.closeImg', function () {
             console.log('没触发么');
             _this.el.find('.my-mask').hide();
-            _this.data.dragStart=false;
+            _this.data.dragStart = false;
             $(document).off("mousewheel DOMMouseScroll");
         })
-        this.el.on('mouseup','.img-pre',function(){
-            _this.data.dragStart=false;
-        }).on('mousemove','.img-pre',function($event){
+        this.el.on('mouseup', '.img-pre', function () {
+            _this.data.dragStart = false;
+        }).on('mousemove', '.img-pre', function ($event) {
             //是否拖拽
-            if(!_this.data.dragStart) {return;}
+            if (!_this.data.dragStart) {
+                return;
+            }
 
             //初始值调用 计算位移偏差值
-            let disX=$event.clientX-_this.data.dragStartX;
-            let disY=$event.clientY-_this.data.dragStartY;
+            let disX = $event.clientX - _this.data.dragStartX;
+            let disY = $event.clientY - _this.data.dragStartY;
 
             //计算图片相对位置
-            let goX=_this.data.imgStartX+disX+$(".img-pre").width()/2;
-            let goY=_this.data.imgStartY+disY+$(".img-pre").height()/2;
+            let goX = _this.data.imgStartX + disX + $(".img-pre").width() / 2;
+            let goY = _this.data.imgStartY + disY + $(".img-pre").height() / 2;
 
-            $($event.target).css({'top':goY+'px','left':goX+'px'});
-        }).on('mousedown','.img-pre',function($event){
+            $($event.target).css({'top': goY + 'px', 'left': goX + 'px'});
+        }).on('mousedown', '.img-pre', function ($event) {
             $event.preventDefault && $event.preventDefault();//这个很重要
             //dragStart==可拖拽标识
-            _this.data.dragStart=true;
+            _this.data.dragStart = true;
 
             //初始值记录
-            _this.data.dragStartX=$event.clientX;
-            _this.data.dragStartY=$event.clientY;
-            _this.data.imgStartX=_this.el.find('.img-pre').position().left;
-            _this.data.imgStartY=_this.el.find('.img-pre').position().top;
+            _this.data.dragStartX = $event.clientX;
+            _this.data.dragStartY = $event.clientY;
+            _this.data.imgStartX = _this.el.find('.img-pre').position().left;
+            _this.data.imgStartY = _this.el.find('.img-pre').position().top;
         })
-        this.el.on('click','.narrow',function(){
-            _this.data.imgScale-=0.1;
-            _this.el.find(".img-pre").css("transform","translate(-50%,-50%) rotate("+_this.data.rotateNo+"deg) scale("+_this.data.imgScale+")");
-        }).on('click','.enlarge',function(){
-            _this.data.imgScale+=0.1;
-            _this.el.find(".img-pre").css("transform","translate(-50%,-50%) rotate("+_this.data.rotateNo+"deg) scale("+_this.data.imgScale+")");
-        }).on('click','.counterclockwise',function(event){
-            _this.data.rotateNo-=90;
-            _this.data.imgScale=1;
-            $(event.target).parent().parent().find(".img-pre").css({"transform":"translate(-50%,-50%) rotate("+_this.data.rotateNo+"deg) scale("+_this.data.imgScale+")","top":"50%","left":"50%"});
+        this.el.on('click', '.narrow', function () {
+            _this.data.imgScale -= 0.1;
+            _this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + _this.data.rotateNo + "deg) scale(" + _this.data.imgScale + ")");
+        }).on('click', '.enlarge', function () {
+            _this.data.imgScale += 0.1;
+            _this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + _this.data.rotateNo + "deg) scale(" + _this.data.imgScale + ")");
+        }).on('click', '.counterclockwise', function (event) {
+            _this.data.rotateNo -= 90;
+            _this.data.imgScale = 1;
+            $(event.target).parent().parent().find(".img-pre").css({
+                "transform": "translate(-50%,-50%) rotate(" + _this.data.rotateNo + "deg) scale(" + _this.data.imgScale + ")",
+                "top": "50%",
+                "left": "50%"
+            });
         })
     },
-    beforeDestory(){
+    beforeDestory() {
         this.data.style.remove();
     }
 }

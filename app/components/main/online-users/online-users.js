@@ -51,10 +51,10 @@ let config = {
         this.agGrid.render(gridRoot);
         this.pagination = new dataPagination({
             currentPage: 1,
-            rows: 10,
+            rows: 15,
             range: {
-                l:5,
-                r:5000
+                l:15,
+                r:200
             }
         });
         this.pagination.render(this.el.find('.user-pagination'));
@@ -80,8 +80,8 @@ export const OnlineDisplay = {
         component.render(this.el);
         this.el.dialog({
             title: '在线用户',
-            width: 1005,
-            height: 560,
+            width: 1035,
+            height: 580,
             modal: true,
             close: function() {
                 $(this).dialog('destroy');

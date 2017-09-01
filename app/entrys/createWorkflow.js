@@ -59,7 +59,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             reload_draft_data:is_draft,
             table_id:msg.tableid,
             flow_id:msg.id,
-            el:'#place-form',
+            el:$('#place-form'),
             real_id:'',
             from_workflow:1,
             form_id:msg.formid,
@@ -78,7 +78,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
                 msgBox.alert('自动保存成功！');
             }
         };
-        var timer;
+        let timer;
         const autoSaving=function(){
             timer=setInterval(()=>{
                 intervalSave(FormEntrys.getFormValue(wfObj.tableid));
@@ -100,6 +100,34 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         });
     });
 
+    // (async function () {
+    //     return workflowService.getGridinfo({
+    //         table_id:wfObj.tableid,
+    //         formId:wfObj.formid,
+    //         is_view:0,
+    //         parent_table_id:null,
+    //         parent_real_id:null,
+    //         parent_temp_id:null,
+    //
+    //     });
+    // })().then(function (res) {
+    //     let AgGrid=new Grid({
+    //         parentTempId:temp_id,
+    //         tableId:res.table_id,
+    //         viewMode:"createBatch"
+    //     });
+    //     AgGrid.actions.returnBatchData = function (ids) {
+    //         temp_ids=ids;
+    //     };
+    //     AgGrid.render($("#J-aggrid"));
+    // })
+
+});
+
+/**
+ * 点击初始化批量工作流
+ */
+Mediator.subscribe('workflow:getGridinfo',(res)=>{
     (async function () {
         return workflowService.getGridinfo({
             table_id:wfObj.tableid,
@@ -121,8 +149,8 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         };
         AgGrid.render($("#J-aggrid"));
     })
+})
 
-});
 
 /*
 ***submit workflow data 提交工作流

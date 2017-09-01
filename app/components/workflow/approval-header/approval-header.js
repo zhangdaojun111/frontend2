@@ -15,7 +15,7 @@ let config = {
     },
     actions: {
         approvalBtnToggle:function (el,elPraent) {
-            var isactive=elPraent.hasClass('active');
+            let isactive=elPraent.hasClass('active');
             if(isactive){
                 elPraent.removeClass('active')
             }else {
@@ -38,8 +38,8 @@ let config = {
         this.showgz = false;
         this.el.on("click",".approval-curr-txt",function (e) {
             e.stopPropagation();
-            var elDiv=$(this);
-            var elParent=elDiv.parent();
+            let elDiv=$(this);
+            let elParent=elDiv.parent();
             self.actions.approvalBtnToggle(elDiv,elParent);
         });
         this.el.on('click','.gz',(e)=>{

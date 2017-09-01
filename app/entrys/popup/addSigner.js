@@ -13,7 +13,7 @@ let tree=[];
 let staff=[];
 function recursion(arr,slnds,pubInfo){
     if(slnds.nodes.length!==0){
-        for(var j in arr){
+        for(let j in arr){
             slnds.nodes.forEach(child=>{
                 if(j==child.id){
                     Mediator.publish(`workflow:${pubInfo}`, arr[j]);
@@ -37,17 +37,17 @@ function recursion(arr,slnds,pubInfo){
         }
     }
     recur(tree);
-    var treeComp3 = new TreeView(tree, {
+    let treeComp3 = new TreeView(tree, {
         callback: function (event, selectedNode) {
             if (event === 'select') {
-                for (var k in staff) {
+                for (let k in staff) {
                     if (k == selectedNode.id) {
                         Mediator.publish('workflow:checkAdder', staff[k]);
                         recursion(staff, selectedNode, 'checkAdder');
                     }
                 }
             } else {
-                for (var k in staff) {
+                for (let k in staff) {
                     if (k == selectedNode.id) {
                         Mediator.publish('workflow:unCheckAdder', staff[k]);
                         recursion(staff, selectedNode, 'unCheckAdder');
@@ -64,8 +64,8 @@ function recursion(arr,slnds,pubInfo){
 
 function GetQueryString(name)
 {
-    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-    var r = window.location.search.substr(1).match(reg);
+    let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    let r = window.location.search.substr(1).match(reg);
     if(r!=null)return  unescape(r[2]); return null;
 }
 

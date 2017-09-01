@@ -29,6 +29,25 @@ To change `display` (e.g. `display: inline-block;`), we suggest using a common C
     display: block;
 }
 
+.icon-aggrid-cus {
+    background: url("../../images/dataGrid/aggrid-icon.png") no-repeat;
+    width: 16px;
+    height: 16px;
+    display: block;
+}
+
+.icon-aggrid-select {
+    background: url("../../images/dataGrid/icon_xiala2.png") no-repeat;
+}
+
+.icon-aggrid-quxiao {
+    background: url("../../images/dataGrid/group-cancel.png") no-repeat;
+}
+
+.aggrid-bg-search {
+    background: url("../../images/framework/search.png") no-repeat;
+}
+
 .icon-aggrid-filter {
     background-position: -26px 0px;
 }

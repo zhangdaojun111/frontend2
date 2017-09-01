@@ -53,14 +53,25 @@ export const dgcService = {
     },
     numberCol: {
         //生成编号
-        cellRenderer: (params)=>{
+        cellRenderer: (param)=>{
             let text = ''
-            if( params.data&&params.data.myfooter&&params.data.myfooter == '合计' ){
+            if( param.data&&param.data.myfooter&&param.data.myfooter == '合计' ){
                 text = '合计';
             }else {
-                text = ( params.rowIndex + 1 );
+                text = ( param.rowIndex + 1 );
             }
-            return '<span style="text-align: center;line-height: 30px;font-size: 12px!important;display: block;overflow: visible;">' + text + '</span>';
+            let bg = '';
+            if( param["data"] && param["data"]["status"] && param["data"]["status"] == 2 ){
+                bg = '#FECB6C';
+            }
+            if( param["data"]["data"] && param["data"]["data"]["status"] && param["data"]["data"]["status"] == 1 ){
+                bg = 'rgba(255,84,0,.2)';
+            }
+            //如果是在工作计算cache中的数据显示特殊颜色
+            if( param["data"] && param["data"]["data_status"] && param["data"]["data_status"] == 0 ){
+                bg = '#FFEFEF';
+            }
+            return '<span style="text-align: center;line-height: 30px;font-size: 12px!important;display: block;overflow: visible;background: ' + bg + ';">' + text + '</span>';
         },
         headerName: '',
         colId: "number",
@@ -348,24 +359,26 @@ export const dgcService = {
     },
     //替换的图标
     replacingIcons: {
-        checkboxChecked: '<img src="'+require('../../assets/images/dataGrid/icon_checkbox_yes.png') +'" />',
-        checkboxUnchecked: '<img src="'+require('../../assets/images/dataGrid/icon_checkbox_no.png') +'" />',
-        checkboxIndeterminate: '<img src="'+require('../../assets/images/dataGrid/icon_checkbox_no.png') +'" />',
-        columnMovePivot: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
-        columnMoveGroup: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
-        columnMovePin: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
-        columnMoveAdd: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
-        columnMoveHide: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
-        columnMoveMove: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
-        columnMoveLeft: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
-        columnMoveRight: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
-        columnMoveValue: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
-        dropNotAllowed: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
-        rowGroupPanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
-        pivotPanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
-        valuePanel: '<img src="'+require('../../assets/images/dataGrid/icon_intermedia.png') +'" />',
-        sortAscending: '<img src="'+require('../../assets/images/dataGrid/icon_paixu_1.png') +'" />',
-        sortDescending: '<img src="'+require('../../assets/images/dataGrid/icon_paixu_2.png') +'" />'
+        checkboxChecked: '<i class="icon-aggrid-cus checkbox-check"></i>',
+        checkboxUnchecked: '<i class="icon-aggrid-cus checkbox-uncheck"></i>',
+        checkboxIndeterminate: '<i class="icon-aggrid-cus checkbox-uncheck"></i>',
+        columnMovePivot: '<i class="icon-aggrid-cus checkbox-uncheck"></i>',
+        columnMoveGroup: '<i class="icon-aggrid-cus checkbox-uncheck"></i>',
+        columnMovePin: '<i class="icon-aggrid-cus checkbox-uncheck"></i>',
+        columnMoveAdd: '<i class="icon-aggrid-cus checkbox-uncheck"></i>',
+        columnMoveHide: '<i class="icon-aggrid-cus checkbox-uncheck"></i>',
+        columnMoveMove: '<i class="icon-aggrid-cus checkbox-uncheck"></i>',
+        columnMoveLeft: '<i class="icon-aggrid-cus checkbox-uncheck"></i>',
+        columnMoveRight: '<i class="icon-aggrid-cus checkbox-uncheck"></i>',
+        columnMoveValue: '<i class="icon-aggrid-cus checkbox-uncheck"></i>',
+        dropNotAllowed: '<i class="icon-aggrid-cus checkbox-uncheck"></i>',
+        rowGroupPanel: '<i class="icon-aggrid-cus checkbox-uncheck"></i>',
+        pivotPanel: '<i class="icon-aggrid-cus checkbox-uncheck"></i>',
+        valuePanel: '<i class="icon-aggrid-cus checkbox-uncheck"></i>',
+        sortAscending: '<i class="icon-aggrid-cus sort-1"></i>',
+        sortDescending: '<i class="icon-aggrid-cus sort-2"></i>',
+        groupExpanded: '<i class="icon-aggrid-cus group-expand"></i>',
+        groupContracted: '<i class="icon-aggrid-cus group-close"></i>',
     },
     //返回fieds
     retureFields: function (id2fields,ids) {
@@ -428,7 +441,8 @@ export const dgcService = {
         let node = data.node;
         if(ele.className.indexOf( "my-ag-cell-focus2" )!=-1){//第三次点击
             node.setSelected(false, false);
-            ele.className = '';
+            $(ele).removeClass('my-ag-cell-focus1');
+            $(ele).removeClass('my-ag-cell-focus2');
         }else if(ele.className.indexOf( "my-ag-cell-focus1" )!=-1){//第二次点击
             node.setSelected(true, false);
             $(ele).addClass('my-ag-cell-focus1 my-ag-cell-focus2');
