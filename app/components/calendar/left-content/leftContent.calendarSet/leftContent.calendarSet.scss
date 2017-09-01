@@ -43,12 +43,13 @@
             bottom: 3px;
         }
         .checkbox-true {
-            display: inline-block;
-            width: 16px;
-            height:16px;
-            box-sizing: border-box;
-            background: url("../../../../assets/images/calendar/calendar-checked-false.png");
             cursor: pointer;
+            .icon-calendar{
+                display: inline-block;
+            }
+            .label-select-all-checked {
+                background: url("../../../../assets/images/calendar/calendar-checked-true.png");
+            }
             //.chk_1 {
             //    display: none;
             //}
@@ -61,11 +62,11 @@
             //    //margin-right: 5px;
             //    cursor: pointer;
             //}
-            .calendar-checkbox-style {
-                position: relative;
-                cursor: pointer;
-                top: 3px;
-            }
+            //.calendar-checkbox-style {
+            //    position: relative;
+            //    cursor: pointer;
+            //    top: 3px;
+            //}
             //.label-select-all-checked + label:after {
             //  content: '\2714'; //勾选符号
             //  position: absolute;
@@ -78,9 +79,6 @@
             //  text-align: center;
             //  font-size: 14px;
             //}
-        }
-        .label-select-all-checked {
-            background: url("../../../../assets/images/calendar/calendar-checked-true.png");
         }
     }
     .remind-group {

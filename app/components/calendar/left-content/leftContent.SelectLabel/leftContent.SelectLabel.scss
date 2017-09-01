@@ -9,11 +9,6 @@
                 display: inline-block;
                 .float-button-group-show {
                     display: inline-block;
-                    width: 16px;
-                    height:16px;
-                    box-sizing: border-box;
-                    background: url("../../../../assets/images/calendar/button-hide.png");
-                    margin-top: -15px;
                     cursor: pointer;
                 }
             }
@@ -30,11 +25,6 @@
             bottom: 1px;
         }
         .checkbox-label {
-            //cursor: pointer;
-            //border: 1px solid #C1CACA;
-            //height: 13px;
-            //width:12px;
-            //padding: 1px 0px 0px 2px;
             display: inline-block;
             .unchecked {
                 background-color: white !important;
@@ -46,48 +36,18 @@
             }
             .chk_2 + label {
                 cursor: pointer;
-                //margin-left: 1px;
                 padding: 6px;
                 display: inline-block;
                 position: relative;
-                //border: 1px solid #C1CACA;
             }
         }
-        //.chk_1 {
-        //    display: none;
-        //}
-        //.chk_1 + label {
-        //    background-color: #FFF;
-        //    border: 1px solid #d7d7d7;
-        //    padding: 6px;
-        //    display: inline-block;
-        //    position: relative;
-        //    //margin-right: 5px;
-        //    cursor: pointer;
-        //}
         .label-select-all-show {
             display: inline-block;
-            width: 16px;
-            height:16px;
-            box-sizing: border-box;
-            background: url("../../../../assets/images/calendar/calendar-checked-false.png");
             cursor: pointer;
         }
         .label-select-all-checked {
             background: url("../../../../assets/images/calendar/calendar-checked-true.png");
         }
-        //.label-select-all-checked + label:after {
-        //  content: '\2714'; //勾选符号
-        //  position: absolute;
-        //  height: 14px;
-        //  width: 13px;
-        //  padding-right: 1px;
-        //  top: 0px;
-        //  left: 0px;
-        //  color: #2398df;
-        //  text-align: center;
-        //  font-size: 14px;
-        //}
         .float-button-group {
             width: 200px;
             height: 20px;
@@ -146,7 +106,3 @@
         white-space: nowrap;
     }
 }
-
-
-
-
