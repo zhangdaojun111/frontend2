@@ -165,7 +165,7 @@ let systemMessageUtil = {
             </div>
         `;
         if (speak) {
-            var msg = new SpeechSynthesisUtterance(msgTitle.toString() + msgContent.toString());
+            let msg = new SpeechSynthesisUtterance(msgTitle.toString() + msgContent.toString());
             msg.lang = 'zh';
             msg.voice = speechSynthesis.getVoices().filter(function(voice) {
                 return voice.name == 'Whisper';
