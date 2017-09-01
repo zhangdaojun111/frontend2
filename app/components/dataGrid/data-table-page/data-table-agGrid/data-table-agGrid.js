@@ -185,7 +185,9 @@ let config = {
         selectData: [],
         //是否有sheet
         isShowSheet: false,
-
+        //显示tabs
+        showTabs:function () {
+        },
     },
     //生成的表头数据
     columnDefs: [],
@@ -1399,6 +1401,7 @@ let config = {
             this.actions.getExpertSearchData();
             this.data.firstRender = false;
             this.hideLoading();
+            this.data.showTabs();
         },
         //触发导出
         onExport: function () {

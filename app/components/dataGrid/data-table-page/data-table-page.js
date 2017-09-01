@@ -61,12 +61,18 @@ let config = {
                     this.data.isRenderIntrain = true;
                 }
             } )
+        },
+        //显示tabs
+        showTabs: function () {
+            console.log( 111111111111 )
+            this.el.find( '.page-tab' )[0].style.opacity = 1;
         }
     },
     afterRender: function (){
         let json = {
             tableId: this.data.tableId,
-            tableName: this.data.tableName
+            tableName: this.data.tableName,
+            showTabs: this.actions.showTabs
         };
         this.append(new dataTableAgGrid(json), this.el.find('#data-table-agGrid'));
         this.actions.addClick();
