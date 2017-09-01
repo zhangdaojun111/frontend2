@@ -794,11 +794,12 @@ let config = {
 
         //判断一下日期的类型，并且进行限制
         checkDateType(data) {
+            console.log()
             // for(let i = 0;i<this.data.formData.length;i++){
             //     if(this.data.formData[i]['type'] == 'Date'){
             //         let temp = this.data.formData[i];
             //         let dfield = this.data.formData[i]['dfield'];//f8
-            //         console.log(dfield)
+            //
             //         if(temp['timeType'] == 'after'){
             //             let vals = data[dfield].split("-");
             //             //let vals = val.split("-");//[2011,11,11];
@@ -1226,7 +1227,7 @@ let config = {
             //添加提交按钮
             let $wrap = this.el.find('table').parentsUntil(this.data.el);
             if (this.data.btnType == 'new' || this.data.btnType == 'edit') {
-                $wrap.append(`<div class="noprint ui-btn-box"><div>
+                $wrap.append(`<div class="noprint ui-btn-box" style="margin-left: -20px"><div>
                     <!--<button class="btn btn-normal mrgr" id="print">-->
                         <!--<span>打印</span>-->
                         <!--<div class="btn-ripple ripple"></div>-->
@@ -1677,6 +1678,7 @@ let config = {
                 this.actions.printSetting();
             }
         }
+
     ],
     afterRender() {
         this.actions.createFormControl();
