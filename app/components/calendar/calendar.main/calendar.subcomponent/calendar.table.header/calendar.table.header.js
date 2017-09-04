@@ -15,6 +15,7 @@ let config = {
 
     },
     afterRender: function() {
+        this.el.find('.header-title').empty();
         if(this.data.type === 'month') {
             this.data.headData.forEach(item => {
                 $('.header-title').append('<td class="head-grid"><span class="date-head">'+item.itemTitle+'</span></td>');

@@ -16,15 +16,11 @@
     .label-task {
         .checkbox-label {
             cursor: pointer;
-            //border: 1px solid #C1CACA;
-            //height: 10px;
-            //width:10px;
-            //padding: 2px;
             display: inline-block;
-            .workflow_checked {
-                padding: 6px !important;
-                border: 0px solid #C1CACA !important;
-                background-color: RGB(100, 166, 239) !important;
+            label.workflow_checked {
+                padding: 6px ;
+                border: 0px ;
+                background-color: RGB(100, 166, 239);
             }
             .checkbox_a {
                 display: none;
@@ -43,44 +39,8 @@
             bottom: 3px;
         }
         .checkbox-true {
-            display: inline-block;
-            width: 16px;
-            height:16px;
-            box-sizing: border-box;
-            background: url("../../../../assets/images/calendar/calendar-checked-false.png");
             cursor: pointer;
-            //.chk_1 {
-            //    display: none;
-            //}
-            //.chk_1 + label {
-            //    background-color: #FFF;
-            //    border: 1px solid #d7d7d7;
-            //    padding: 7px;
-            //    display: inline-block;
-            //    position: relative;
-            //    //margin-right: 5px;
-            //    cursor: pointer;
-            //}
-            .calendar-checkbox-style {
-                position: relative;
-                cursor: pointer;
-                top: 3px;
-            }
-            //.label-select-all-checked + label:after {
-            //  content: '\2714'; //勾选符号
-            //  position: absolute;
-            //  height: 14px;
-            //  width: 13px;;
-            //  padding-right: 1px;
-            //  top: 0px;
-            //  left: 0px;
-            //  color: #2398df;
-            //  text-align: center;
-            //  font-size: 14px;
-            //}
-        }
-        .label-select-all-checked {
-            background: url("../../../../assets/images/calendar/calendar-checked-true.png");
+            display: inline-block;
         }
     }
     .remind-group {
