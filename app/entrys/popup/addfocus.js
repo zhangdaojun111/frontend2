@@ -10,7 +10,7 @@ let tree=[];
 let staff=[];
 function recursion(arr,slnds,pubInfo){
     if(slnds.nodes.length!==0){
-        for(var j in arr){
+        for(let j in arr){
             slnds.nodes.forEach(child=>{
                 if(j==child.id){
                     Mediator.publish(`workflow:${pubInfo}`, arr[j]);
@@ -28,7 +28,7 @@ if(focus.length>1){
         return workflowService.getWorkflowInfo({url: '/get_all_users/'});
     })().then(users => {
         let idArr=[];
-        for(var i in focus){
+        for(let i in focus){
             idArr.push(users.rows[focus[i]].id);
             dept.push(users.rows[focus[i]].department);
         }
@@ -48,7 +48,7 @@ if(focus.length>1){
                             item.state={};
                             item.state.checked=true;
                             item.state.selected=true;
-                            for(var k in staff){
+                            for(let k in staff){
                                 if(k==item.id){
                                     Mediator.publish('workflow:checkDeptAlready', staff[k]);
                                     // recursion(staff,selectedNode,'checkDept');
@@ -62,17 +62,17 @@ if(focus.length>1){
                 }
             }
             recur(tree);
-            var treeComp2 = new TreeView(tree,{
+            let treeComp2 = new TreeView(tree,{
                 callback: function (event,selectedNode) {
                     if(event==='select'){
-                        for(var k in staff){
+                        for(let k in staff){
                             if(k==selectedNode.id){
                                 Mediator.publish('workflow:checkDept', staff[k]);
                                 // recursion(staff,selectedNode,'checkDept');
                             }
                         }
                     }else{
-                        for(var k in staff){
+                        for(let k in staff){
                             if(k==selectedNode.id){
                                 Mediator.publish('workflow:unCheckDept', staff[k]);
                                 // recursion(staff,selectedNode,'unCheckDept');
@@ -85,10 +85,7 @@ if(focus.length>1){
                 withButtons:true
                 });
             treeComp2.render($('#treeMulti'));
-        
-         
         });
-    
     })
 }else{
     (async function () {
@@ -105,17 +102,17 @@ if(focus.length>1){
             }
         }
         recur(tree);
-        var treeComp2 = new TreeView(tree,{
+        let treeComp2 = new TreeView(tree,{
             callback: function (event,selectedNode) {
                 if(event==='select'){
-                    for(var k in staff){
+                    for(let k in staff){
                         if(k==selectedNode.id){
                             Mediator.publish('workflow:checkDept', staff[k]);
                             // recursion(staff,selectedNode,'checkDept');
                         }
                     }
                 }else{
-                    for(var k in staff){
+                    for(let k in staff){
                         if(k==selectedNode.id){
                             Mediator.publish('workflow:unCheckDept', staff[k]);
                             // recursion(staff,selectedNode,'unCheckDept');
@@ -131,10 +128,74 @@ if(focus.length>1){
     });
 }
 
+Mediator.subscribe('workflow:addusers', (arr) => {
+    if(!arr)return;
+    let dept=[];
+    (async function () {
+        return workflowService.getWorkflowInfo({url: '/get_all_users/'});
+    })().then(users => {
+        let idArr=[];
+        for(let i in arr){
+            idArr.push(users.rows[i].id);
+            dept.push(users.rows[i].department);
+        }
+        Mediator.publish('workflow:idArr', idArr);
+        dept=_.uniq(dept);
+    }).then(()=>{
+        (async function () {
+            return workflowService.getStuffInfo({url: '/get_department_tree/'});
+        })().then(res=>{
+            tree=res.data.department_tree;
+            staff=res.data.department2user;
+            function recur(data) {
+                for (let item of data){
+                    item.nodes=item.children;
+                    for(let i in dept){
+                        if(item.text.indexOf(dept[i])!==-1){
+                            item.state={};
+                            item.state.checked=true;
+                            item.state.selected=true;
+                            for(let k in staff){
+                                if(k==item.id){
+                                    Mediator.publish('workflow:checkDept', staff[k]);
+                                }
+                            }
+                        }
+                    }
+                    if(item.children.length!==0){
+                        recur(item.children);
+                    }
+                }
+            }
+            recur(tree);
+            let treeComp2 = new TreeView(tree,{
+                callback: function (event,selectedNode) {
+                    if(event==='select'){
+                        for(let k in staff){
+                            if(k==selectedNode.id){
+                                Mediator.publish('workflow:checkDept', staff[k]);
+                            }
+                        }
+                    }else{
+                        for(let k in staff){
+                            if(k==selectedNode.id){
+                                Mediator.publish('workflow:unCheckDept', staff[k]);
+                            }
+                        }
+                    }
+                },
+                treeType:'MULTI_SELECT',
+                isSearch: true,
+                withButtons:true
+                });
+            treeComp2.render($('#treeMulti'));
+        });
+    })
+});
 function GetQueryString(name)
 {
-    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-    var r = window.location.search.substr(1).match(reg);
+    let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    let r = window.location.search.substr(1).match(reg);
     if(r!=null)return  unescape(r[2]); return null;
 }
 
