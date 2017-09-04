@@ -14,53 +14,12 @@ import AddWf from '../../components/workflow/add-workflow/add-workflow';
 import FormEntrys from '../form';
 import msgBox from '../../lib/msgbox';
 import WorkFlow from '../../components/workflow/workflow-drawflow/workflow';
-import WorkflowAddFollow from '../../components/workflow/workflow-addFollow/workflow-addFollow/workflow-addFollow';
 import TreeView from '../../components/util/tree/tree';
 import jsplumb from 'jsplumb';
 import {PMAPI, PMENUM} from '../../lib/postmsg';
 
 
-WorkflowAddFollow.showAdd();
 WorkFlowForm.showForm();
-let tree = [], staff = [];
-(async function () {
-    return workflowService.getStuffInfo({url: '/get_department_tree/'});
-})().then(res => {
-    tree = res.data.department_tree;
-    staff = res.data.department2user;
-
-    function recur(data) {
-        for (let item of data) {
-            item.nodes = item.children;
-            if (item.children.length !== 0) {
-                recur(item.children);
-            }
-        }
-    }
-
-    recur(tree);
-    let treeComp2 = new TreeView(tree,{
-        callback: function (event,selectedNode) {
-            if(event==='select'){
-                for(let k in staff){
-                    if(k==selectedNode.id){
-                        Mediator.publish('workflow:checkDept', staff[k]);
-                    }
-                }
-            }else{
-                for(let k in staff){
-                    if(k==selectedNode.id){
-                        Mediator.publish('workflow:unCheckDept', staff[k]);
-                    }
-                }
-            }
-        },
-        treeType: 'MULTI_SELECT',
-        isSearch: true,
-        withButtons: true
-    });
-    treeComp2.render($('#treeMulti'));
-});
 
 let serchStr = location.search.slice(1);
 let obj = {}, is_view;

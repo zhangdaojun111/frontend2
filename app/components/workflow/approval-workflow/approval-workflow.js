@@ -332,7 +332,6 @@ let config={
         Mediator.subscribe("workflow:focused", (res) => {
             if(res.length>0){
                 this.el.on('click','#addFollower',()=>{
-                    console.log(1111111111111111111111111);
                     PMAPI.openDialogByIframe(`/iframe/addFocus/?${res}`,{
                         width:800,
                         height:600,
