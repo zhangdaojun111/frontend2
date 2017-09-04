@@ -1401,8 +1401,8 @@ let config = {
             //高级查询
             if( this.el.find( '.expert-search-btn' )[0] ){
                 this.actions.renderExpertSearch();
+                this.actions.getExpertSearchData();
             }
-            this.actions.getExpertSearchData();
             this.data.firstRender = false;
             this.hideLoading();
             this.data.showTabs(1);
