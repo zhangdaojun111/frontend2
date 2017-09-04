@@ -186,10 +186,12 @@ export const CalendarService = {
      * @param data
      */
     getCalendarPreference: function (data) {
+        console.log(data);
         let params = {
             pre_type: 6,
             content: JSON.stringify(data['content']),
         };
+
         let res = HTTP.post(calendarPreferenceUrl, params).then(res => {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
@@ -197,30 +199,45 @@ export const CalendarService = {
                 MSG.showTips('获取数据失败');
             }
         });
+
+        if(data['contentHide']) {
+            let paramsHide = {
+                type: 6,
+                content: JSON.stringify(data['contentHide']['content']),
+            };
+            let resHide = HTTP.post(calendarPreferenceUrl, paramsHide).then(res => {
+                if(res['code'] === CodeEnum.SUCCESS) {
+                    return res;
+                } else {
+                    MSG.showTips('获取数据失败');
+                }
+            });
+        }
+
         HTTP.flush();
-        return res;
+        return ;
     },
 
     /**
      * data = {content: [隐藏项]}
      * @param data
      */
-    getCalendarHidePreference: function (data) {
-        let params = {
-            type: 6,
-            content: JSON.stringify(data['content']),
-        };
-        console.log(data);
-        let res = HTTP.post(calendarPreferenceUrl, params).then(res => {
-            if(res['code'] === CodeEnum.SUCCESS) {
-                return res;
-            } else {
-                MSG.showTips('获取数据失败');
-            }
-        });
-        HTTP.flush();
-        return res;
-    },
+    // getCalendarHidePreference: function (data) {
+    //     let params = {
+    //         type: 6,
+    //         content: JSON.stringify(data['content']),
+    //     };
+    //     console.log(data);
+    //     let res = HTTP.post(calendarPreferenceUrl, params).then(res => {
+    //         if(res['code'] === CodeEnum.SUCCESS) {
+    //             return res;
+    //         } else {
+    //             MSG.showTips('获取数据失败');
+    //         }
+    //     });
+    //     HTTP.flush();
+    //     return res;
+    // },
 
     /**
      * 获取可配置参数
