@@ -61,10 +61,8 @@ let config={
                 val.id=i;
                 if(checked.length===0){
                     this.append(new SelectStaff(val), this.el.find('#staffMulti'));
-                }else{
-                    if(arr.indexOf(i)===-1){
-                        this.append(new SelectStaff(val), this.el.find('#staffMulti'));
-                    }
+                }else if(arr.indexOf(i)===-1){
+                    this.append(new SelectStaff(val), this.el.find('#staffMulti'));
                 }
             });
         });
