@@ -244,7 +244,7 @@ export const PMAPI = {
     },
 
     /**
-     * 将消息发送给调用的父组件
+     * 将消息发送给的根组件
      * @param data
      */
     sendToParent: function (data) {
