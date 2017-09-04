@@ -7,13 +7,9 @@
         color: #999999;
         .setItemTitle{
             display: inline-block;
-            width: 16px;
-            height:16px;
-            cursor: pointer;
-            box-sizing: border-box;
             position: relative;
             top: 3px;
-            background: url("../../../../assets/images/calendar/calendar-setItemtitle.png");
+            //background: url("../../../../assets/images/calendar/calendar-setItemtitle.png");
         }
         .menu-label {
             display: inline-block;
@@ -33,13 +29,10 @@
         text-overflow: clip;
         .img-con {
             display: inline-block;
-            width: 16px;
-            height:16px;
             cursor: pointer;
-            box-sizing: border-box;
             position: relative;
             top: 3px;
-            background: url("../../../../assets/images/calendar/calendar-setItem.png");
+            //background: url("../../../../assets/images/calendar/calendar-setItem.png");
         }
     }
 }
