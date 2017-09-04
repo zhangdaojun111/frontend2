@@ -1267,8 +1267,6 @@ let config = {
         createActions() {
             let actions = {
                 changeValue: (data) => {
-                    console.log('值改变的事件');
-                    console.log(data);
                     this.actions.checkValue(data);
                 },
                 emitHistory: (data) => {
@@ -1297,9 +1295,54 @@ let config = {
                 },
                 userSysOptions: (data) => {
                     this.actions.changeMainDepart(true, data);
+                },
+                emitOpenCount:(data)=>{
+                    this.actions.openCount(data);
                 }
             }
             return actions;
+        },
+        //打开统计穿透
+        openCount(data){
+            let whichCount={};
+            for(let obj in this.data.colDef) {
+                if (this.data.colDef[obj]['colDef']['headerName'] == data.label) {
+                    whichCount = this.data.colDef[obj];
+                }
+            }
+            let penetrateFieldId=data.id;
+            let childId = whichCount['colDef']['field_content']['count_table'];
+            let childName = {};
+            childName['parentTableName'] = whichCount['colDef']['tableName'];
+            childName['parentFieldName'] = whichCount['colDef']['headerName'];
+            childName['parentStandName'] = '';
+            childName['childTableName'] = whichCount['colDef']['field_content']['child_table_name'];
+            let showName;
+            try {
+                showName =JSON.stringify(childName) ;
+            }catch (err){
+                showName = whichCount['colDef']['field_content']['child_table_name'];
+            }
+            this.data.childName=showName;
+            if(this.data.col_id){
+                // this.data.rowId=this.col_id;
+                // this.data.child_tableType = 'count';
+                // this.data.countfieldId =whichCount['colDef'].id;
+                // this.data.fieldContent = JSON.stringify(whichCount['colDef']['field_content']);
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?viewMode=${this.data.viewMode}tableId=${childId}&rowId=${this.data.col_id}&child_tableType=count&countfieldId=${whichCount['colDef'].id}&fieldContent=${JSON.stringify(whichCount['colDef']['field_content'])}`,{
+                    title:showName,
+                    width:1200,
+                    height:800,
+                })
+            }else{
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?source_table_id=${childId}&isCreateFalseTable=true&fieldId=${penetrateFieldId}`,{
+                    title:showName,
+                    width:1200,
+                    height:800,
+                },{
+                    formValue:formValue,
+                })
+            }
         },
         //打开内置快捷添加
         addNewBuildIn(data) {
@@ -1699,7 +1742,7 @@ let config = {
         //默认表单样式
 
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
-            this.el.find('table').parents('#detail-form').css("background", "#F2F2F2");
+            this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
         }
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')) {
             this.el.find('table').siblings('.ui-btn-box').css("margin-left", "0px");
