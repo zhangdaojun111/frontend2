@@ -22,6 +22,7 @@ let config ={
         maxHistory:10,
         selectNum: -1,      //记录键盘选中的历史搜索记录，按一次下，选中第0条（界面中第一条）记录
         formerSearchContent:"",
+        globalSearchOpen:"1",
     },
     searchBarRef:null,
     actions:{
@@ -82,42 +83,21 @@ let config ={
             }
         },
         doSearch:function () {
-            let content = this.data.searchContent;
-            this.el.find('.search-content').val(content).blur();
-            this.el.find("div.history-display").hide();
-
-            // 暂时隐藏搜索按钮
-            // this.el.find(".search-icon").hide();
-            if(content && content !== ''){
-                // //判断搜索结果iframe是否已打开，打开则重置src
-                // //此处全局搜索div.iframes
-                // let resultIframe;
-                // let iframes =  $("div.iframes").find("iframe");
-                // let str = "searchContent=" + this.data.formerSearchContent;
-                // str = encodeURI(str);
-                // for(let k of iframes){
-                //     let src = k.src;
-                //     if(src.indexOf(str) > 0){
-                //         resultIframe = k;
-                //     }
-                // }
-                //
-                // if(resultIframe){
-                //     let newSrc = '/search_result?searchContent=' + this.data.searchContent;
-                //     $(resultIframe).attr("src",newSrc);
-                // }else{
-                //     //搜索结果展示窗口未打开
-                //     Mediator.emit('menu:item:openiframe', {
-                //         id: "search-result",
-                //         name: "搜索结果",
-                //         url: "/search_result?searchContent=" + content
-                //     });
-                // }
-                Mediator.emit('search:displayreuslt', {'content':content,'formerContent':this.data.formerSearchContent});
-                this.actions.addSearchHistory();
-                this.data.formerSearchContent = this.data.searchContent;
+            if(this.data.globalSearchOpen === "1"){
+                let content = this.data.searchContent;
+                this.el.find('.search-content').val(content).blur();
+                this.el.find("div.history-display").hide();
+                // 暂时隐藏搜索按钮
+                // this.el.find(".search-icon").hide();
+                if(content && content !== ''){
+                    Mediator.emit('search:displayreuslt', {'content':content,'formerContent':this.data.formerSearchContent});
+                    this.actions.addSearchHistory();
+                    this.data.formerSearchContent = this.data.searchContent;
+                }else{
+                    msgbox.alert("搜索内容不能为空");
+                }
             }else{
-                msgbox.alert("搜索内容不能为空");
+                msgbox.showTips("全文检索功能未开启，" + '<br>' + "请联系管理员。");
             }
         },
         addSearchHistory(){
@@ -240,6 +220,7 @@ let config ={
     },
     afterRender:function () {
         this.actions.getData();
+        this.data.globalSearchOpen = window.config.sysConfig.logic_config.use_search.toString();
         this.el.on("click","i.search-icon", _.debounce(() => {
             this.actions.doSearch();
         },500)).on('input','.search-content',(event) => {

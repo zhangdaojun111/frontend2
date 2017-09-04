@@ -67,6 +67,8 @@ let config = {
         sortParam: {sortOrder:'',sortField:'',sort_real_type:''},
         //排序方式
         frontendSort: false,
+        //第一次设置数据
+        firstSetData: true,
         //定制列数据
         customColumnsFields: [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false}, {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
     },
@@ -122,6 +124,7 @@ let config = {
             let eHeader = document.createElement('span');
             let eImg = document.createElement('i');
             eImg.className = 'icon-aggrid icon-aggrid-cancel resetFloatingFilter';
+            eImg.title = '重置筛选';
             eImg.addEventListener( 'click',()=>{
                 msgBox.confirm( '确定清空筛选数据？' ).then( r=>{
                     if( r ){
@@ -141,6 +144,7 @@ let config = {
             ediv.appendChild( eHeader )
             eHeader.innerHTML = "初";
             eHeader.className = "table-init-logo";
+            eHeader.title = '初始化偏好'
             eHeader.addEventListener('click', () => {
                 msgBox.confirm( '确定初始化偏好？' ).then( r=>{
                     if( r ){
@@ -155,6 +159,7 @@ let config = {
                                 //创建表头
                                 this.agGrid.gridOptions.api.setColumnDefs( this.data.columnDefs );
                                 dgcService.calcColumnState(this.data,this.agGrid,["number","mySelectAll"]);
+                                this.customColumnsCom.actions.makeSameSate();
                             } );
                             HTTP.flush();
                         } );
@@ -463,6 +468,11 @@ let config = {
                 this.actions.sortWay();
                 this.agGrid.actions.setGridData( obj );
                 this.pagination.actions.setPagination( this.data.total,this.data.page );
+                //第一次关闭loading
+                if( this.data.firstSetData ){
+                    this.hideLoading();
+                    this.data.firstSetData = false;
+                }
             });
             HTTP.flush();
         },
@@ -721,8 +731,7 @@ let config = {
         },
     },
     afterRender: function (){
-        console.log(this.data.tableId2Name[this.data.tableId])
-        console.log(this.data.tableId2Name[this.data.tableId])
+        this.showLoading();
         this.el.find( '.headerTips' ).eq(0).find( 'span' ).eq(0).html( this.data.tableId2Name[this.data.tableId] );
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
