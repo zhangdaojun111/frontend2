@@ -52,7 +52,7 @@ let config = {
          * 初始化图表操作
          */
        async init() {
-           // this.formItems['single'].trigger('onChange');
+           this.formItems['single'].trigger('onChange');
            // 获取数据来源
             ChartFormService.getChartSource().then(res => {
                 if (res['success'] === 1) {

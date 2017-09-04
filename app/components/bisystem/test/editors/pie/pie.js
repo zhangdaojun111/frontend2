@@ -185,6 +185,7 @@ let config = {
                             this.formItems['yAxis'].el.show();
                             this.formItems['deeps'].el.show();
                             this.formItems['deepX'].el.show();
+                            this.formItems['columns'].data.value = [];
                         }
                     }
                 }
