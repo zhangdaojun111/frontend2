@@ -129,10 +129,13 @@ let config = {
             that.data.hide_table = {'tableName': hide_table_name, 'table_Id': hide_table_id};
             that.data.hide_item_table.push(hide_table_id);
             that.data.hide_tables.push(that.data.hide_table);
-            let preference = {"content": that.data.cancel_fields};
+            // let preference = {"content": that.data.cancel_fields};
+            // CalendarService.getCalendarPreference(preference);
+            // preference = {"content": that.data.hide_item_table};
+            // CalendarService.getCalendarHidePreference(preference);
+            let preferenceHide = {"content": that.data.hide_item_table};
+            let preference = {"content": that.data.cancel_fields, contentHide: preferenceHide};
             CalendarService.getCalendarPreference(preference);
-            preference = {"content": that.data.hide_item_table};
-            CalendarService.getCalendarHidePreference(preference);
             Mediator.emit('calendar-left:hideRemindType', {data: that.data.hide_table});
             Mediator.emit('calendar-left:unshowData', {data: that.data.cancel_fields});
             that.data.hide_table = {'tableName': "", 'table_Id': ''}
@@ -230,10 +233,13 @@ let config = {
                     break;
                 }
             }
-            let preference = {"content": that.data.cancel_fields};
+            // let preference = {"content": that.data.cancel_fields};
+            // CalendarService.getCalendarPreference(preference);
+            // preference = {"content": that.data.hide_item_table};
+            // CalendarService.getCalendarHidePreference(preference);
+            let preferenceHide = {"content": that.data.hide_item_table};
+            let preference = {"content": that.data.cancel_fields, contentHide: preferenceHide};
             CalendarService.getCalendarPreference(preference);
-            preference = {"content": that.data.hide_item_table};
-            CalendarService.getCalendarHidePreference(preference);
             Mediator.emit('calendar-left:unshowData', {data: that.data.cancel_fields});
         }
     },
