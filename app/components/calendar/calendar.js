@@ -26,9 +26,6 @@ let config = {
     actions: {
         getCalendarTreeData: function () {
             CalendarService.getCalendarTreeData().then(res => {
-                if(res) {
-                    this.hideLoading();
-                }
                 this.el.find('.left-content').empty();
                 this.append(new LeftContent(res), this.el.find('.left-content'));
                 Mediator.emit('Calendar: tool', {toolMethod: 'refresh', data: res['cancel_fields']});
@@ -84,7 +81,6 @@ let config = {
             $('#monthView, #weekView, #dayView').removeClass('btn-checked');
             Mediator.emit('Calendar: changeMainView', {calendarContent: 'schedule',});
         }).on('click', '#refresh', () => {
-            this.showLoading();
             this.actions.getCalendarTreeData();
             //Mediator.emit('Calendar: tool', {toolMethod: 'refresh'});
         }).on('click', '#export', () => {

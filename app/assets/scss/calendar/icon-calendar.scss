@@ -1,5 +1,4 @@
 .icon-calendar{
-    background: url("../../images/calendar/icon-calendar.png") no-repeat;
     width: 16px;
     height: 16px;
     display: block;
@@ -15,7 +14,7 @@
     background: url("../../images/calendar/calendar-refresh.png") no-repeat;
 }
 .icon-calendar-create-check {
-    background: url("../../images/calendar/calendar-add-hover.png") no-repeat;
+    background: url("../../images/calendar/calendar-create.png") no-repeat;
 }
 .icon-calendar-create {
     background: url("../../images/calendar/calendar-add.png") no-repeat;
@@ -25,9 +24,6 @@
 }
 .icon-calendar-floder {
     background: url("../../images/calendar/calendar-setItemtitle.png") no-repeat;
-}
-.icon-calendar-form {
-    background-position: -26px -52px;
 }
 .icon-calendar-finished {
     background: url("../../images/calendar/calendar-task-finished.png") no-repeat;

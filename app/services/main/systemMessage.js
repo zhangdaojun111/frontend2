@@ -73,7 +73,7 @@ export const systemMessageService = {
             }, {
                 headerName: '阅读状态',
                 field: 'is_read',
-                width: 60,
+                width: 80,
                 suppressMenu: true,
                 tooltipField: 'is_read',
                 cellStyle: {'text-align': 'center'},
@@ -118,7 +118,7 @@ export const systemMessageService = {
             }, {
                 headerName: '执行状态',
                 field: 'handle_status_text',
-                width: 60,
+                width: 80,
                 suppressMenu: true,
                 tooltipField: 'handle_status_text',
                 cellStyle: {'text-align': 'center'},

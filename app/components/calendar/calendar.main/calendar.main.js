@@ -116,7 +116,11 @@ let config = {
          * @param type
          */
         getCalendarData: function (data,type){
+            this.showLoading();
             CalendarService.getCalendarData(data).then( res=>{
+                if(res) {
+                    this.hideLoading();
+                }
                 this.data.date2settings = res['date2csids'];
                 this.data.calendarSettings = res['id2data'];
                 this.data.tableid2name = res['tableid2name'];
@@ -277,7 +281,6 @@ let config = {
                 this.actions.getDayData(day);
                 this.data.scheduleDataList.push(day);
             }
-            console.log(this.data.scheduleDataList);
             this.el.find('.calendar-main-content').empty();
             this.append(new CalendarSchedule({startDate: startDate, endDate: endDate, scheduleDataList: this.data.scheduleDataList}), this.el.find(".calendar-main-content"));
         },

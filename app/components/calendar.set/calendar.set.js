@@ -189,6 +189,7 @@ let config = {
                 this.data.childComponents.push(calendarSetItem);
                 this.append(calendarSetItem, this.el.find('.set-items'));
             });
+            this.hideLoading();
         },
 
         /**
@@ -420,6 +421,7 @@ let config = {
         });
 
         Mediator.on('calendar-set-left:calendar-set', data => {
+            this.showLoading();
             this.data.tableId = data.table_id;
             this.actions.getColumnListData(data.table_id);
         });
