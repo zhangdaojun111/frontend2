@@ -450,7 +450,6 @@ export const IframeInstance = new Component({
             selector:'.tabs .item',
             callback:function (target) {
                 let id = $(target).attr('iframeid');
-                console.log(id);
                 this.actions.focusIframe(id);
             }
         },
@@ -459,7 +458,6 @@ export const IframeInstance = new Component({
             selector:'.tabs .item .close',
             callback:function (target) {
                 let id = $(target).attr('iframeid');
-                console.log(id);
                 this.actions.closeIframe(id);
                 return false;
             },
@@ -469,6 +467,7 @@ export const IframeInstance = new Component({
             selector:'.view-save',
             callback:function () {
                 let temp_arr = _.defaultsDeep([],this.data.sort);
+                console.log(this.data.hash,this.data.sort);
                 SaveView.show(temp_arr);
             }
         },
