@@ -23,6 +23,7 @@ let config = {
         getUserViewList:function () {
             let that = this;
             TabService.getFavoriteList().done((result) => {
+                console.log(result);
                 if(result.success === 1 ){
                     let tempList = result.data;
                     for (let k in tempList){
@@ -69,8 +70,8 @@ let config = {
             let name = this.el.find('.view-name').val();
 
             for (let k in this.data.currentIframesList){
-                list.push({ 'id':this.data.currentIframesList[k],                 //只需要存id
-                            'table_id':"",
+                list.push({ 'id':this.data.currentIframesList[k],
+                            'table_id':this.data.currentIframesList[k],
                             'ts_name':""});
                 idList.push(this.data.currentIframesList[k]);
             }
