@@ -265,11 +265,12 @@ let config = {
                 //正则检查
                 if (val != "" && data["reg"] !== "") {
                     for (let r in data["reg"]) {
-                        if(r.startsWith('/')){
-                            r=r.substring(1)
-                        }
-                        if(r.endsWith('/')){
-                            r=r.substring(0,r.length-1);
+                        //有待优化
+                        if (r.startsWith('/')) {
+                            r = r.substring(1)
+                            if (r.endsWith('/')) {
+                                r = r.substring(0, r.length - 1);
+                            }
                         }
                         let reg = new RegExp(r);
                         let flag = reg.test(val);
@@ -430,20 +431,15 @@ let config = {
         triggerControl: function () {
             let data = this.data.data;
             for (let key in data) {
-                try {
-                    let val = data[key]["value"];
-                    if (val != "" || !$.isEmptyObject(val)) {
-                        if ($.isArray(val)) {
-                            if (val.length != 0) {
-                                this.actions.checkValue(data[key]);
-                            }
-                        } else {
+                let val = data[key]["value"];
+                if (val != "" || !$.isEmptyObject(val)) {
+                    if ($.isArray(val)) {
+                        if (val.length != 0) {
                             this.actions.checkValue(data[key]);
                         }
+                    } else {
+                        this.actions.checkValue(data[key]);
                     }
-                } catch (err) {
-                    console.log('这里面么');
-                    console.log(data[key]);
                 }
             }
         },
@@ -800,38 +796,6 @@ let config = {
 
         //判断一下日期的类型，并且进行限制
         checkDateType(data) {
-            // for(let i = 0;i<this.data.formData.length;i++) {
-                // if(this.data.formData[i]['type'] == 'Date'){
-                //     let _val = this.el.find(".date_yy-mm-dd").val()
-                //     let reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
-                //     let regExp = new RegExp(reg);
-                //     if(!regExp.test(_val)){
-                //        console.log("日期格式不正确，正确格式为：2014-01-01");
-                //         return;
-                //     }
-                // }
-                //  if(this.data.formData[i]['type'] == 'Datetime'){
-                //     let _val = this.el.find(".datetime").val()
-                //      var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
-                //      var regExp = new RegExp(reg);
-                //      if(!regExp.test(_val)){
-                //          console.log("时间格式不正确,正确格式为: 2014-01-01 12:00:00 ");
-                //          return 0;
-                //      }
-                // }
-                // if(this.data.formData[i]['type'] == 'Time'){
-                //     let _val = this.el.find(".timeInput").val()
-                //     let reg = /^(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
-                //     let regExp = new RegExp(reg);
-                //     if(!regExp.test(_val)){
-                //         console.log("时间格式不正确，正确格式为：12:00:00");
-                //         return 0;
-                //     }
-                // }
-
-
-            // }
-
             // for(let i = 0;i<this.data.formData.length;i++){
             //     if(this.data.formData[i]['type'] == 'Date'){
             //         let temp = this.data.formData[i];
@@ -1132,9 +1096,9 @@ let config = {
                     this.data.childComponent[key].reload();
                 }
             }
-            if(this.data.isOtherChangeEdit){
-                this.data.btnType= 'none';
-            }else{
+            if (this.data.isOtherChangeEdit) {
+                this.data.btnType = 'none';
+            } else {
                 this.data.btnType = 'new';
             }
             this.actions.addBtn();
@@ -1331,9 +1295,54 @@ let config = {
                 },
                 userSysOptions: (data) => {
                     this.actions.changeMainDepart(true, data);
+                },
+                emitOpenCount:(data)=>{
+                    this.actions.openCount(data);
                 }
             }
             return actions;
+        },
+        //打开统计穿透
+        openCount(data){
+            let whichCount={};
+            for(let obj in this.data.colDef) {
+                if (this.data.colDef[obj]['colDef']['headerName'] == data.label) {
+                    whichCount = this.data.colDef[obj];
+                }
+            }
+            let penetrateFieldId=data.id;
+            let childId = whichCount['colDef']['field_content']['count_table'];
+            let childName = {};
+            childName['parentTableName'] = whichCount['colDef']['tableName'];
+            childName['parentFieldName'] = whichCount['colDef']['headerName'];
+            childName['parentStandName'] = '';
+            childName['childTableName'] = whichCount['colDef']['field_content']['child_table_name'];
+            let showName;
+            try {
+                showName =JSON.stringify(childName) ;
+            }catch (err){
+                showName = whichCount['colDef']['field_content']['child_table_name'];
+            }
+            this.data.childName=showName;
+            if(this.data.col_id){
+                // this.data.rowId=this.col_id;
+                // this.data.child_tableType = 'count';
+                // this.data.countfieldId =whichCount['colDef'].id;
+                // this.data.fieldContent = JSON.stringify(whichCount['colDef']['field_content']);
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?viewMode=${this.data.viewMode}tableId=${childId}&rowId=${this.data.col_id}&child_tableType=count&countfieldId=${whichCount['colDef'].id}&fieldContent=${JSON.stringify(whichCount['colDef']['field_content'])}`,{
+                    title:showName,
+                    width:1200,
+                    height:800,
+                })
+            }else{
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?source_table_id=${childId}&isCreateFalseTable=true&fieldId=${penetrateFieldId}`,{
+                    title:showName,
+                    width:1200,
+                    height:800,
+                },{
+                    formValue:formValue,
+                })
+            }
         },
         //打开内置快捷添加
         addNewBuildIn(data) {
@@ -1383,7 +1392,7 @@ let config = {
             PMAPI.openDialogByComponent(AddEnrypt, {
                 width: 800,
                 height: 600,
-                title: '添加新选项',
+                title: '修改内容',
                 modal: true
             }).then((data) => {
                 if (!data.cancel) {
@@ -1726,20 +1735,22 @@ let config = {
         this.actions.triggerControl();
         this.actions.changeOptions();
         this.actions.setDataFromParent();
-        if(this.data.btnType != 'none'){
+        if (this.data.btnType != 'none') {
             this.actions.addBtn();
         }
 
         //默认表单样式
 
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
-            this.el.find('table').parents('#detail-form').css("background", "#F2F2F2");
+            this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
         }
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')) {
             this.el.find('table').siblings('.ui-btn-box').css("margin-left", "0px");
-        }else {
+        } else {
             this.el.find('table').siblings('.ui-btn-box').css("margin-left", "-20px");
         }
+        //时间日期
+
     },
     beforeDestory() {
         this.el.off();
