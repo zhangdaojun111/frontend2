@@ -66,10 +66,14 @@ let config = {
         }
         //回显
         if (_this.data.value) {
-            _this.el.find(".datetime").val(_this.data.value.replace(/-/g, "/"));
+            _this.el.find(".datetime").val(_this.data.value);
         } else {
             _this.el.find(".datetime").val("年-月-日 时:分:秒");
         }
+        _this.el.find(".ui-datepicker-trigger").on('click', function () {
+            console.log("ssss")
+            _this.el.find("#errorMessage").css("display","none");
+        })
         //控制到时分秒
         _this.el.find(".datetime").datetimepicker({
             monthNamesShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
@@ -142,7 +146,7 @@ let config = {
                 let strTime = $(".ui_tpicker_time_input").val();
                 console.log(strTime)
                 if(strTime == "00:00:00"){
-                    _this.el.find("#errorMessage").css("display", "inline-block").text("时间格式不正确，正确格式为12:00:00 ");
+                    _this.el.find("#errorMessage").css("display", "inline-block").text("时间格式不正确,正确格式为: 2017-09-01 12:00:00");
                 }else{
                     _this.el.find("#errorMessage").css("display", "none");
                 }
