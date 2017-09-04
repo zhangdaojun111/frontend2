@@ -13,7 +13,7 @@
             {{#each chart.data.rows}}
             <tr>
                 {{#each @this}}
-                <td align="{{../chart.alignment}}">
+                <td align="{{@root.chart.alignment}}">
                     {{this}}
                 </td>
                 {{/each}}
@@ -27,7 +27,7 @@
             {{#each rows}}
                 <tr>
                     {{#each this}}
-                    <td align="{{../chart.alignment}}">{{@this}}</td>
+                    <td align="{{@root.chart.alignment}}">{{@this}}</td>
                     {{/each}}
                 </tr>
             {{/each}}
