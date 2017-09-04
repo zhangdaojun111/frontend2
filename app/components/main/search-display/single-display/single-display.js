@@ -29,12 +29,21 @@ let config = {
             })
         }
     },
+    binds:[
+        {
+            event:'click',
+            selector:'.single-box',
+            callback:function () {
+                this.actions.penetrateToGrid();
+            }
+        }
+    ],
     afterRender:function () {
         this.actions.initInfo();
-        let that = this;
-        this.el.on('click','.single-box',() => {
-            that.actions.penetrateToGrid();
-        })
+        // let that = this;
+        // this.el.on('click','.single-box',() => {
+        //     that.actions.penetrateToGrid();
+        // })
     },
     beforeDestory:function () {
 

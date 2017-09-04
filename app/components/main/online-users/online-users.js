@@ -26,12 +26,13 @@ let config = {
                 currentPage:this.pagination.data.currentPage
             });
 
+            let that = this;
             GlobalService.getOnlineUserData(param).done((data) => {
                 if(data.success === 1){
-                    this.agGrid.actions.setGridData({
+                    that.agGrid.actions.setGridData({
                         rowData: data.rows
                     });
-                    this.pagination.actions.setPagination(data.total, param.currentPage);
+                    that.pagination.actions.setPagination(data.total, param.currentPage);
                     component.hideLoading();
                 }else{
                     component.hideLoading();

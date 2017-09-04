@@ -46,7 +46,6 @@ let config = {
     },
     afterRender:function () {
         this.actions.initInfo();
-
     },
     beforeDestory:function () {
 
