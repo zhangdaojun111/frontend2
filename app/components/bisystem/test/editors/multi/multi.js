@@ -1,66 +1,34 @@
 import {Base} from '../base';
-import template from './radar.html';
+import template from './multi.html';
 
 import {chartName,theme,icon} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
+import {ChartEditor} from './chart/chart';
+import './multi.scss'
 
 let config = {
     template: template,
     actions: {
         /**
-         * 加载x 和y轴数据
-         * @param data 选中的数据源
-         */
-        async getFields(data) {
-            let table = data ? data : null;
-            if (table) {
-                let res = await ChartFormService.getChartField(table.id);
-                if (res['success'] === 1){
-                    this.actions.loadColumns(res['data']['x_field']);
-                } else {
-                    msgbox.alert(res['error'])
-                }
-            } else {
-                this.actions.loadColumns(table);
-            }
-
-        },
-
-        /**
-         * 渲染列名字段列表（x轴）
-         * @param columns 表格列表字段（x轴）
-         */
-        async loadColumns(columns) {
-            if (this.formItems['columns']) {
-                if (columns) {
-                    this.formItems['columns'].setList(columns);
-                    this.formItems['product'].setList(columns);
-                } else { // 清空字段
-                    this.formItems['columns'].actions.clear();
-                    this.formItems['choosed'].actions.clear();
-                    this.formItems['product'].setList([]);
-                }
-            }
-        },
-
-        /**
          * 初始化图表操作
          */
        async init() {
+
            // 获取数据来源
-            ChartFormService.getChartSource().then(res => {
+          let p1 =  ChartFormService.getChartSource().then(res => {
                 if (res['success'] === 1) {
-                    this.formItems['source'].setList(res['data']);
+                    this.data.source = res['data'];
+                   // this.formItems['source'].setList(res['data']);
                 } else {
                     msgbox.alert(res['error'])
                 };
             });
 
             // 获取图标
-           ChartFormService.getChartIcon().then(res => {
+          let p2 = ChartFormService.getChartIcon().then(res => {
                if (res['success'] === 1) {
                    let icons =[];
                    icons = res['data'].map(icon => {
@@ -71,7 +39,7 @@ let config = {
                    msgbox.alert(res['error'])
                };
            });
-
+          return Promise.all([p1,p2])
         },
 
         /**
@@ -101,18 +69,19 @@ let config = {
          */
         async saveChart() {
             let data = this.getData();
+            let sources = [];
+            Object.keys(this.data.charts).forEach(key => {
+                sources.push(this.data.charts[key].getChartData());
+            });
+            console.log(sources);
             let chart = {
-                assortment: 'radar',
+                assortment: 'multilist',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
-                countColumn:'',
-                filter: [],
-                columns:data.columns,
-                product:data.product,
                 icon: data.icon,
-                source: data.source,
+                sources: sources,
                 theme: data.theme,
             };
-
+            console.log(chart);
             let res = await ChartFormService.saveChart(JSON.stringify(chart));
             if (res['success'] == 1) {
                 msgbox.alert('保存成功');
@@ -130,58 +99,36 @@ let config = {
          * @param chart = this.data.chart
          */
         fillChart(chart) {
-            console.log(chart);
             this.formItems['chartName'].setValue(chart['chartName']['name']);
-            this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
-            this.formItems['columns'].setValue(chart['columns']);
-            this.formItems['product'].setValue(chart['product']);
+            chart['sources'].forEach(item => {
+                let comp = this.actions.addChart(this.data.source);
+                comp.setValue(item);
+            });
+        },
+
+        /**
+         * 添加图表
+         */
+        addChart(data) {
+            let chart = new ChartEditor({
+                source: data
+            },{
+                onRemoveChart: (componentId) => {
+                    delete this.data.charts[componentId];
+                }
+            });
+            this.data.charts[chart.componentId] = chart;
+            this.append(chart, this.el.find('.form-group'));
+            return chart;
         }
     },
     data: {
         options: [
             chartName,
-            {
-                label: '数据来源',
-                name: 'source',
-                defaultValue: '',
-                type: 'autocomplete',
-                events: {
-                    onSelect(value) {
-                        console.log('------------------------------------');
-                        console.log(value);
-                        this.actions.getFields(value);
-                    }
-                }
-            },
             theme,
             icon,
-            {
-                label: '选中雷达图名称字段',
-                name: 'product',
-                defaultValue: '',
-                type: 'autocomplete'
-            },
-            {
-                label: '请选择列名',
-                name: 'columns',
-                defaultValue: [],
-                list: [],
-                type: 'checkbox',
-                events: {
-                    onChange:function(value) {
-                        this.formItems['choosed'].actions.update(value);
-                    }
-                }
-            },
-            {
-                label: '已选择列名',
-                name: 'choosed',
-                defaultValue: '',
-                list: [],
-                type: 'choosed'
-            },
             {
                 label: '',
                 name: 'save',
@@ -193,9 +140,22 @@ let config = {
                     }
                 }
             },
-        ]
+        ],
+        charts: {}
     },
+    binds:[
+        {
+            event: 'click',
+            selector: '.add-chart-btn',
+            callback: function (context) {
+                this.actions.addChart(this.data.source);
+            }
+        }
+    ],
     async afterRender() {
+
+        this.data.chart_id = this.data.id;
+
         if(this.data.chart_id) {
             const res = await this.actions.getChartData(this.data.chart_id);
             if (res[0]['success'] === 1) {
@@ -207,20 +167,22 @@ let config = {
 
         // 渲染图表表单字段
         this.drawForm();
-        this.actions.init();
+        await this.actions.init();
 
         if (this.data.chart_id) {
             this.actions.fillChart(this.data.chart);
+        }else {
+            this.actions.addChart(this.data.source);
         }
 
+    },
+    firstAfterRender() {}
+};
+
+class MultiEditor extends Base {
+    constructor(data, event) {
+        super(config, data, event);
     }
 }
 
-class RadarEditor extends Base {
-    constructor(data) {
-        config.data.chart_id = data.id ? data.id : null;
-        super(config);
-    }
-}
-
-export {RadarEditor}
+export {MultiEditor}

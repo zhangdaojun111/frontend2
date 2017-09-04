@@ -5,7 +5,7 @@
 import {FormNormalComponent} from '../charts.types/normal/normal';
 import {TableEditor as FormTableComponent} from '../../test/editors/table/table';
 import {RadarEditor as FormRadarComponent} from '../../test/editors/radar/radar';
-import {FormMultiComponent} from '../charts.types/multi/multi';
+import {MultiEditor as FormMultiComponent} from '../../test/editors/multi/multi';
 import {NineGridEditor as FormNineGridComponent} from '../../test/editors/nine.grid/nine.grid';
 import {FormFunnelComponent} from '../charts.types/funnel/funnel';
 import {CommentEditor as FormCommentComponent} from '../../test/editors/comment/comment';

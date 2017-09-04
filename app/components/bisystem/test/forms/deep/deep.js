@@ -35,7 +35,6 @@ let config = {
             })
             this.reload();
         },
-
         /**
          *清除所有下穿字段
          */

@@ -61,7 +61,10 @@ class AutoComplete extends Base {
     setValue(value){
         this.data.value = value;
         this.autoselect.data.choosed = value ? [value] : [];
-        this.data.firstDo = true;
+        this.data.firstDo = this.autoselect.data.list.length > 0 ? false : true;
+        if (this.autoselect.data.list.length > 0) {
+            this.autoselect.reload();
+        };
     }
 }
 
