@@ -36,11 +36,17 @@ let config = {
                 if (data) {
                     this.formItems['xAxis'].setList(data['x_field']);
                     this.formItems['yAxis'].setList(data['y_field']);
+                    // 编辑模式下第一次不清空y轴字段列表
+                    if (!this.data.firstDo) {
+                        this.formItems['columns'].actions.clear();
+                    };
+                    this.data.firstDo = false;
                 } else { // 清空字段
                     this.formItems['xAxis'].setList([]);
                     this.formItems['yAxis'].setList([]);
+                    this.formItems['columns'].actions.clear();
                 };
-                this.formItems['columns'].actions.clear();
+
             }
         },
 
@@ -91,8 +97,6 @@ let config = {
                 type: 'autocomplete',
                 events: {
                     onSelect(value) {
-                        console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxx');
-                        console.log(value);
                         this.actions.getFields(value);
                     }
                 }
@@ -172,6 +176,7 @@ class ChartEditor extends Base {
      */
     getChartData() {
         let data = this.getData();
+        console.log(data);
         let chart = {
             chartType: data.chartType == 'line' ? {'name': '折线图', 'type': 'line'} : {'name': '柱状图', 'type': 'bar'},
             countColumn: '',
@@ -193,6 +198,7 @@ class ChartEditor extends Base {
         this.formItems['chartType'].setValue(data['chartType']['type']);
         this.formItems['xAxis'].setValue(data['xAxis']);
         this.actions.selectY(data['yAxis']);
+        this.data.firstDo = true;
     }
 }
 

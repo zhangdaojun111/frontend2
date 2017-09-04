@@ -153,7 +153,7 @@ let config = {
         }
     ],
     async afterRender() {
-
+        this.data.charts = {};
         this.data.chart_id = this.data.id;
 
         if(this.data.chart_id) {

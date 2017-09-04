@@ -45,10 +45,13 @@ class Base extends Component {
      * 获取所有字段数据
      */
     getData(){
-        let chart = {}
-        Object.keys(this.formItems).map(name =>{
-           chart[name] = this.formItems[name].getValue();
-        })
+        let chart = {};
+        if (this.formItems) {
+            Object.keys(this.formItems).map(name =>{
+                chart[name] = this.formItems[name].getValue();
+            })
+        }
+
         return chart;
     }
     fillData(){}
