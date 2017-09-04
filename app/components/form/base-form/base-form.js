@@ -265,13 +265,20 @@ let config = {
                 //正则检查
                 if (val != "" && data["reg"] !== "") {
                     for (let r in data["reg"]) {
+                        let reg1=eval(r);
                         if(r.startsWith('/')){
                             r=r.substring(1)
+                            if(r.endsWith('/')){
+                                r=r.substring(0,r.length-1);
+                            }
                         }
-                        if(r.endsWith('/')){
-                            r=r.substring(0,r.length-1);
-                        }
+                        console.log('reg是啥呢');
+                        console.log(r);
                         let reg = new RegExp(r);
+                        console.log(reg);
+                        console.log(reg.test(val));
+                        console.log(reg1);
+                        console.log(reg1.test(val));
                         let flag = reg.test(val);
                         if (!flag) {
                             error = true;
