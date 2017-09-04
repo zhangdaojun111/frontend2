@@ -5,11 +5,8 @@
 import {BiBaseComponent} from '../../../bi.base.component';
 import template from './cell.comment.html';
 import "./cell.comment.scss";
-import Quill from 'quill';
-import 'quill/dist/quill.core.css';
-import 'quill/dist/quill.snow.css';
-import {config as editDialogConfig} from "../edit/edit";
-import {PMAPI} from '../../../../../lib/postmsg';
+import Mediator from '../../../../../lib/mediator';
+
 
 let config = {
     template: template,
@@ -20,10 +17,7 @@ let config = {
     afterRender(){
 
     },
-    firstAfterRender(){
-        console.log('iiiiiiiiiiiiiiiiiiiiii')
-        console.log(this.el);
-    }
+    firstAfterRender(){}
 };
 
 

@@ -151,6 +151,7 @@ let config = {
         //         }
         //     }
         // }
+
     },
     data: {
         chart: null,
