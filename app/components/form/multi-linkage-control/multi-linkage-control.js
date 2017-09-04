@@ -81,9 +81,11 @@ let config={
                 }
             }
             if(childSelectValue.length == this.data.index){
-                for(let key in this.data.datalist){
+                for(let key in this.data.dataList){
                     let isValue=true;
                     for(let i=0;i<this.data.index;i++){
+                        console.log(this.data.dataList[key][i]);
+                        console.log(childSelectValue[i]);
                         if(this.data.dataList[key][i]!=childSelectValue[i]){
                             isValue=false;
                             break;

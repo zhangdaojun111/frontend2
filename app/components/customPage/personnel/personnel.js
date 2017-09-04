@@ -101,6 +101,8 @@ let config = {
         field_mapping: {},
         filter_mapping: {is_active:{'是':1,'否':0},is_superuser:{'是':1,'否':0},status:{'离职':0,'在职':1,'实习':2,'试用':3,'管理员':4,'病休':5}},
         specialFilter:{},
+        //第一次设置数据
+        firstSetData: true,
     },
     actions: {
         //获取表头数据
@@ -251,6 +253,7 @@ let config = {
             let ediv = document.createElement('div');
             let eHeader = document.createElement('span');
             let eImg = document.createElement('i');
+            eImg.title = '重置筛选';
             eImg.className = 'icon-aggrid icon-aggrid-cancel resetFloatingFilter';
             eImg.addEventListener( 'click',()=>{
                 msgBox.confirm( '确定清空筛选数据？' ).then( r=>{
@@ -271,6 +274,7 @@ let config = {
             ediv.appendChild( eHeader )
             eHeader.innerHTML = "初";
             eHeader.className = "table-init-logo";
+            eHeader.title = '初始化偏好'
             eHeader.addEventListener('click', () => {
                 msgBox.confirm( '确定初始化偏好？' ).then( r=>{
                     if( r ){
@@ -285,6 +289,7 @@ let config = {
                                 //创建表头
                                 this.agGrid.gridOptions.api.setColumnDefs( this.data.columnDefs );
                                 dgcService.calcColumnState(this.data,this.agGrid,["number","mySelectAll"]);
+                                this.customColumnsCom.actions.makeSameSate();
                             } );
                             HTTP.flush();
                         } );
@@ -368,6 +373,11 @@ let config = {
                 this.agGrid.actions.setGridData( obj );
                 let currentPage = parseInt( Number( this.data.first )/Number( this.data.rows ) );
                 this.pagination.actions.setPagination( this.data.total,this.data.page );
+                //第一次关闭loading
+                if( this.data.firstSetData ){
+                    this.hideLoading();
+                    this.data.firstSetData = false;
+                }
             } )
             HTTP.flush();
         },
@@ -857,6 +867,7 @@ let config = {
         }
     },
     afterRender: function (){
+        this.showLoading();
         TabService.onOpenTab( this.data.tableId );
         this.actions.setFieldMapping();
         this.floatingFilterCom = new FloatingFilter();

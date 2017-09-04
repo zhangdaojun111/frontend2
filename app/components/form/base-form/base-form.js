@@ -265,7 +265,13 @@ let config = {
                 //正则检查
                 if (val != "" && data["reg"] !== "") {
                     for (let r in data["reg"]) {
-                        let reg = eval(r);
+                        if(r.startsWith('/')){
+                            r=r.substring(1)
+                        }
+                        if(r.endsWith('/')){
+                            r=r.substring(0,r.length-1);
+                        }
+                        let reg = new RegExp(r);
                         let flag = reg.test(val);
                         if (!flag) {
                             error = true;
@@ -316,6 +322,8 @@ let config = {
                 if (val != "" && !$.isEmptyObject(data["func"])) {
                     for (let r in data["func"]) {
                         let flag = FormService[r](val);
+                        console.log(data);
+                        console.log(flag);
                         if (!flag) {
                             error = true;
                             errorMsg = data["func"][r];
@@ -792,11 +800,12 @@ let config = {
 
         //判断一下日期的类型，并且进行限制
         checkDateType(data) {
+            console.log()
             // for(let i = 0;i<this.data.formData.length;i++){
             //     if(this.data.formData[i]['type'] == 'Date'){
             //         let temp = this.data.formData[i];
             //         let dfield = this.data.formData[i]['dfield'];//f8
-            //         console.log(dfield)
+            //
             //         if(temp['timeType'] == 'after'){
             //             let vals = data[dfield].split("-");
             //             //let vals = val.split("-");//[2011,11,11];
@@ -1092,7 +1101,11 @@ let config = {
                     this.data.childComponent[key].reload();
                 }
             }
-            this.data.btnType = 'new';
+            if(this.data.isOtherChangeEdit){
+                this.data.btnType= 'none';
+            }else{
+                this.data.btnType = 'new';
+            }
             this.actions.addBtn();
         },
         //修改可修改性
@@ -1224,7 +1237,7 @@ let config = {
             //添加提交按钮
             let $wrap = this.el.find('table').parentsUntil(this.data.el);
             if (this.data.btnType == 'new' || this.data.btnType == 'edit') {
-                $wrap.append(`<div class="noprint ui-btn-box"><div>
+                $wrap.append(`<div class="noprint ui-btn-box" style="margin-left: -20px"><div>
                     <!--<button class="btn btn-normal mrgr" id="print">-->
                         <!--<span>打印</span>-->
                         <!--<div class="btn-ripple ripple"></div>-->
@@ -1488,7 +1501,7 @@ let config = {
                 if (single.data('width')) {
                     data[key]['width'] = single.data('width') + 'px';
                 } else {
-                    data[key]['width'] = '240px';
+                    data[key]['width'] = '244px';
                 }
                 //数据填充后，根据修改条件对不同框进行只读操作
                 setTimeout(() => {
@@ -1616,7 +1629,7 @@ let config = {
                         this.data.childComponent[data[key].dfield] = dateTimeControl;
                         break;
                     case 'editControl':
-                        data[key]['temp_id'] = data['temp_id']['value'];
+                        data[key]['real_id'] = data['real_id']['value'];
                         data[key]['table_id'] = data['table_id']['value'];
                         let contractControl = new ContractControl(data[key], actions);
                         contractControl.render(single);
@@ -1675,6 +1688,7 @@ let config = {
                 this.actions.printSetting();
             }
         }
+
     ],
     afterRender() {
         this.actions.createFormControl();
@@ -1689,6 +1703,11 @@ let config = {
 
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('#detail-form').css("background", "#F2F2F2");
+        }
+        if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')) {
+            this.el.find('table').siblings('.ui-btn-box').css("margin-left", "0px");
+        }else {
+            this.el.find('table').siblings('.ui-btn-box').css("margin-left", "-20px");
         }
     },
     beforeDestory() {

@@ -49,6 +49,8 @@ let config = {
         onRowSelected:function (param) {
         },
         setRowStyle:function (param) {
+        },
+        rowDataChanged:function ($event) {
         }
     },
     gridOptions: GridOptions,
@@ -76,6 +78,7 @@ let config = {
                 //拖动结束
                 onDragStopped: this.data.onDragStopped,
                 onDragStarted: this.data.onDragStarted,
+                onRowDataChanged: this.data.rowDataChanged,
                 //双击查看
                 onCellClicked: this.data.onCellClicked,
                 //行双击
@@ -125,6 +128,10 @@ let config = {
         },
         //重新赋值
         setGridData: function ( json ) {
+            if( json.columnDefs ){
+                this.data.columnDefs = json.columnDefs;
+                this.gridOptions.api.setColumnDefs( json.columnDefs );
+            }
             if( json.rowData ){
                 this.data.rowData = json.rowData;
                 this.gridOptions.api.setRowData( json.rowData );
