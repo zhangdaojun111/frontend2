@@ -22,7 +22,7 @@ import {PMAPI, PMENUM} from '../../lib/postmsg';
 WorkFlowForm.showForm();
 
 let serchStr = location.search.slice(1);
-let obj = {}, is_view;
+let obj = {}, is_view,cache_old;
 serchStr.split('&').forEach(res => {
     let arr = res.split('=');
     obj[arr[0]] = arr[1];
@@ -31,6 +31,7 @@ is_view = obj.btnType === 'view' ? 1 : 0;
 if (obj.btnType === 'view') {
     $('#subAddworkflow').hide();
 }
+
 Mediator.publish('workflow:getKey', obj.key);
 (async function () {
     return workflowService.getPrepareParams({table_id: obj.table_id});
@@ -54,6 +55,9 @@ Mediator.publish('workflow:getKey', obj.key);
             id: obj.id,
             key: obj.key
         });
+        setTimeout(()=>{
+            cache_old= FormEntrys.getFormValue(obj.table_id);
+        },1000)
     } else {
         Mediator.publish('workflow:getParams', res.data.flow_data);
     }
@@ -88,6 +92,9 @@ Mediator.subscribe('workflow:getflows', (res) => {
         id: obj.id,
         key: obj.key
     });
+    setTimeout(()=>{
+        cache_old= FormEntrys.getFormValue(obj.table_id);
+    },1000)
 });
 let focusArr = [];
 Mediator.subscribe('workflow:focus-users', (res) => {
@@ -101,10 +108,17 @@ Mediator.subscribe('workflow:submit', (res) => {
         let postData = {
             flow_id: obj.flow_id,
             focus_users: JSON.stringify(focusArr) || [],
-            data: JSON.stringify(formData)
+            data: JSON.stringify(formData),
+            cache_new:JSON.stringify(formData),
+            cache_old:JSON.stringify(cache_old),
+            table_id:obj.table_id,
+            parent_table_id:obj.parent_table_id,
+            parent_real_id:obj.parent_real_id,
+            parent_temp_id:obj.parent_temp_id,
+            parent_record_id:obj.parent_record_id
         };
         (async function () {
-            return await workflowService.createWorkflowRecord(postData);
+            return workflowService.addUpdateTableData(postData);
         })().then(res => {
             if (res.success === 1) {
                 msgBox.alert(`${res.error}`);
