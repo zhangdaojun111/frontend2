@@ -62,6 +62,7 @@ let config = {
                 };
             });
 
+
             // 获取图标
            ChartFormService.getChartIcon().then(res => {
                if (res['success'] === 1) {
