@@ -1303,6 +1303,8 @@ let config = {
         createActions() {
             let actions = {
                 changeValue: (data) => {
+                    console.log('值改变的事件');
+                    console.log(data);
                     this.actions.checkValue(data);
                 },
                 emitHistory: (data) => {
