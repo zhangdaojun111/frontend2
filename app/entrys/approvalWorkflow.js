@@ -68,6 +68,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
                 focus.push(a[i][j]);
             }
         }
+        Mediator.publish('workflow:focused', focus);
         if(focus.length>0){
             let dept=[];
             (async function () {
@@ -192,7 +193,6 @@ Mediator.subscribe("workflow:loaded",(e)=>{
         }
     }
 });
-
 FormEntrys.createForm({
     el: $('#place-form'),
     form_id: obj.form_id,

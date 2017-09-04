@@ -30,11 +30,11 @@ WorkFlowGrid.showGrid();
 
 
 
-
 /*
 ***订阅workflow choose事件，获取工作流info并发布getInfo,获取草稿
  */
 let wfObj,temp_ids=[];
+let timer ;
 Mediator.subscribe('workflow:choose', (msg)=> {
     $("#singleFlow").click();
     $("#submitWorkflow").show();
@@ -78,13 +78,17 @@ Mediator.subscribe('workflow:choose', (msg)=> {
                 msgBox.alert('自动保存成功！');
             }
         };
-        let timer;
+        // let timer;
         const autoSaving=function(){
             timer=setInterval(()=>{
                 intervalSave(FormEntrys.getFormValue(wfObj.tableid));
             },2*60*1000);
         };
+        clearInterval(timer);
         autoSaving();
+        Mediator.subscribe("workflow:contentClose",()=>{
+            clearInterval(timer);
+        })
         Mediator.subscribe('workflow:autoSaveOpen', (msg)=> {
             clearInterval(timer);
             if(msg===1){

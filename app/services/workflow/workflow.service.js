@@ -14,6 +14,9 @@ export const workflowService={
     createWorkflowRecord(params){
         return HTTP.postImmediately('/create_workflow_record/', params)
     },
+    addUpdateTableData(params){
+        return HTTP.postImmediately('/add_update_table_data/', params)
+    },
     validateDraftData(params){
         return HTTP.postImmediately('/validate_draft_data/', params)
     },
