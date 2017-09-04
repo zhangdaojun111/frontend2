@@ -25,7 +25,7 @@ class Base extends Component {
     constructor(config, data, event){
         super(config, data, event);
     }
-    drawForm(){
+    drawForm(container){
         let options = this.data.options;
         this.formItems = {};
         options.forEach((item) => {
@@ -36,7 +36,7 @@ class Base extends Component {
                 name: item.name,
                 list: item.list,
             }, item.events);
-            this.append(instance, this.el.find('.form-group'));
+            this.append(instance, this.el.find(container ? container : '.form-group'));
             this.formItems[item.name] = instance;
         });
     }
@@ -55,6 +55,7 @@ class Base extends Component {
 
     reset(chart) {
         this.data.chart_id = chart.id ? chart.id : null;
+        this.data.id = chart.id ? chart.id : null;
     }
 }
 export {Base}

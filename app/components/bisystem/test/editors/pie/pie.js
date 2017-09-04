@@ -228,7 +228,7 @@ let config = {
                 events: {}
             },
             {
-                label: '选择x轴字段',
+                label: '选择下穿x轴字段',
                 name: 'deepX',
                 defaultValue: '',
                 type: 'autocomplete',

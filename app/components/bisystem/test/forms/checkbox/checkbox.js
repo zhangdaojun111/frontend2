@@ -13,6 +13,17 @@ let config = {
             this.data.value = [];
             this.reload();
         },
+        /**
+         * 全选
+         */
+        selectAll() {
+            let list = [];
+            this.data.list.map(checkbox => {
+                list.push(JSON.parse(checkbox.value))
+                this.el.find('input').attr('checked', true);
+            });
+            this.data.value = list;
+        },
 
         /**
          * checkbox 选中 or 不选中
@@ -20,7 +31,7 @@ let config = {
          *        vaulue = 选中的值，checked=true push()
          */
         onChange: function (checked,value) {
-            value = JSON.parse(value)
+            value = JSON.parse(value);
             if (checked) {
                 this.data.value.push(value);
             } else {
@@ -59,6 +70,7 @@ class Checkbox extends Base {
         this.data.firstDo = true;
         if (Array.isArray(value)) {
             this.data.value = value;
+            console.log(this.data.list);
             this.data.list.forEach((l,index) => {
                 for (let choosed of this.data.value) {
                     if (choosed.id === JSON.parse(l.value).id) {

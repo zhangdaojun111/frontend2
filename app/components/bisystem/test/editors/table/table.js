@@ -164,6 +164,8 @@ let config = {
                 type: 'autocomplete',
                 events: {
                     onSelect(value) {
+                        console.log('===========================');
+                        console.log(value);
                         this.actions.getFields(value);
                     }
                 }
