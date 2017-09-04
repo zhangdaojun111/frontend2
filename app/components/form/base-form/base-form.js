@@ -265,20 +265,14 @@ let config = {
                 //正则检查
                 if (val != "" && data["reg"] !== "") {
                     for (let r in data["reg"]) {
-                        let reg1=eval(r);
-                        if(r.startsWith('/')){
-                            r=r.substring(1)
-                            if(r.endsWith('/')){
-                                r=r.substring(0,r.length-1);
+                        //有待优化
+                        if (r.startsWith('/')) {
+                            r = r.substring(1)
+                            if (r.endsWith('/')) {
+                                r = r.substring(0, r.length - 1);
                             }
                         }
-                        alert('reg是啥呢');
-                        alert(r);
                         let reg = new RegExp(r);
-                        alert(reg);
-                        alert(reg.test(val));
-                        alert(reg1);
-                        alert(reg1.test(val));
                         let flag = reg.test(val);
                         if (!flag) {
                             error = true;
@@ -437,20 +431,15 @@ let config = {
         triggerControl: function () {
             let data = this.data.data;
             for (let key in data) {
-                try {
-                    let val = data[key]["value"];
-                    if (val != "" || !$.isEmptyObject(val)) {
-                        if ($.isArray(val)) {
-                            if (val.length != 0) {
-                                this.actions.checkValue(data[key]);
-                            }
-                        } else {
+                let val = data[key]["value"];
+                if (val != "" || !$.isEmptyObject(val)) {
+                    if ($.isArray(val)) {
+                        if (val.length != 0) {
                             this.actions.checkValue(data[key]);
                         }
+                    } else {
+                        this.actions.checkValue(data[key]);
                     }
-                } catch (err) {
-                    console.log('这里面么');
-                    console.log(data[key]);
                 }
             }
         },
@@ -808,33 +797,33 @@ let config = {
         //判断一下日期的类型，并且进行限制
         checkDateType(data) {
             // for(let i = 0;i<this.data.formData.length;i++) {
-                // if(this.data.formData[i]['type'] == 'Date'){
-                //     let _val = this.el.find(".date_yy-mm-dd").val()
-                //     let reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
-                //     let regExp = new RegExp(reg);
-                //     if(!regExp.test(_val)){
-                //        console.log("日期格式不正确，正确格式为：2014-01-01");
-                //         return;
-                //     }
-                // }
-                //  if(this.data.formData[i]['type'] == 'Datetime'){
-                //     let _val = this.el.find(".datetime").val()
-                //      var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
-                //      var regExp = new RegExp(reg);
-                //      if(!regExp.test(_val)){
-                //          console.log("时间格式不正确,正确格式为: 2014-01-01 12:00:00 ");
-                //          return 0;
-                //      }
-                // }
-                // if(this.data.formData[i]['type'] == 'Time'){
-                //     let _val = this.el.find(".timeInput").val()
-                //     let reg = /^(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
-                //     let regExp = new RegExp(reg);
-                //     if(!regExp.test(_val)){
-                //         console.log("时间格式不正确，正确格式为：12:00:00");
-                //         return 0;
-                //     }
-                // }
+            // if(this.data.formData[i]['type'] == 'Date'){
+            //     let _val = this.el.find(".date_yy-mm-dd").val()
+            //     let reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+            //     let regExp = new RegExp(reg);
+            //     if(!regExp.test(_val)){
+            //        console.log("日期格式不正确，正确格式为：2014-01-01");
+            //         return;
+            //     }
+            // }
+            //  if(this.data.formData[i]['type'] == 'Datetime'){
+            //     let _val = this.el.find(".datetime").val()
+            //      var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
+            //      var regExp = new RegExp(reg);
+            //      if(!regExp.test(_val)){
+            //          console.log("时间格式不正确,正确格式为: 2014-01-01 12:00:00 ");
+            //          return 0;
+            //      }
+            // }
+            // if(this.data.formData[i]['type'] == 'Time'){
+            //     let _val = this.el.find(".timeInput").val()
+            //     let reg = /^(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
+            //     let regExp = new RegExp(reg);
+            //     if(!regExp.test(_val)){
+            //         console.log("时间格式不正确，正确格式为：12:00:00");
+            //         return 0;
+            //     }
+            // }
 
 
             // }
@@ -1139,9 +1128,9 @@ let config = {
                     this.data.childComponent[key].reload();
                 }
             }
-            if(this.data.isOtherChangeEdit){
-                this.data.btnType= 'none';
-            }else{
+            if (this.data.isOtherChangeEdit) {
+                this.data.btnType = 'none';
+            } else {
                 this.data.btnType = 'new';
             }
             this.actions.addBtn();
@@ -1735,7 +1724,7 @@ let config = {
         this.actions.triggerControl();
         this.actions.changeOptions();
         this.actions.setDataFromParent();
-        if(this.data.btnType != 'none'){
+        if (this.data.btnType != 'none') {
             this.actions.addBtn();
         }
 
@@ -1746,7 +1735,7 @@ let config = {
         }
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')) {
             this.el.find('table').siblings('.ui-btn-box').css("margin-left", "0px");
-        }else {
+        } else {
             this.el.find('table').siblings('.ui-btn-box').css("margin-left", "-20px");
         }
     },
