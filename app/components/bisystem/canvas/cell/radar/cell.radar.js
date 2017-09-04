@@ -41,7 +41,9 @@ let config = {
     afterRender() {
 
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
-            this.myChart.resize();
+            if (this.myChart) {
+                this.myChart.resize();
+            }
         })
     },
     firstAfterRender() {
