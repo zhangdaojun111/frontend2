@@ -16,6 +16,7 @@ export const TabService = {
         })
     },
     saveFavoriteItem:function (data) {
+        console.log(data);
         let url = '/personal_view/';
         let para = Utils.formatParams(data);
         console.log(para);
