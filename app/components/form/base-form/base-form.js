@@ -1349,7 +1349,7 @@ let config = {
             PMAPI.openDialogByComponent(AddEnrypt, {
                 width: 800,
                 height: 600,
-                title: '添加新选项',
+                title: '修改内容',
                 modal: true
             }).then((data) => {
                 if (!data.cancel) {

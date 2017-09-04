@@ -18,7 +18,6 @@ let config = {
     actions:{
         keyup: function () {
             let _this = this;
-            console.log("输了啊")
             //YYYY-MM-DD hh:mm:ss
             let strDate = this.el.find(".datetime").val();
             console.log(strDate);
@@ -71,7 +70,9 @@ let config = {
         } else {
             _this.el.find(".datetime").val("年-月-日 时:分:秒");
         }
-
+        _this.el.find('.datetime').on('input', _.debounce(function () {
+            _this.actions.keyup();
+        }, 200));
         //控制到时分秒
         _this.el.find(".datetime").datetimepicker({
             monthNamesShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
@@ -96,6 +97,7 @@ let config = {
             showOtherMonths: true,//填充没有显示的单元格，但无法使用
             //向外弹射操作后的值
             onSelect: function (selectTime, text) {
+                _this.el.find("#errorMessage").css("display","none");
                 let selectTime1 = selectTime;
                 _this.data.value = selectTime.replace(/\//g, "-");
                 _.debounce(function () {
@@ -147,9 +149,7 @@ let config = {
             },
 
         });
-        _this.el.find('.datetime').on('input', _.debounce(function () {
-            _this.actions.keyup();
-        }, 200));
+
 
         _.debounce(function () {
             _this.events.changeValue(_this.data)

@@ -86,6 +86,7 @@ let config = {
             showOtherMonths: true, //填充没有显示的单元格，但无法使用
             //向外弹射操作后的值
             onSelect: function (selectTime, text) {
+                _this.el.find("#errorMessage").css("display","none");
                 let selectTime1 = selectTime;
                 _this.data.value = selectTime.replace(/\//g, "-");
                 _.debounce(function () {

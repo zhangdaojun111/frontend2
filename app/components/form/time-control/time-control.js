@@ -42,6 +42,7 @@ let config = {
             event: 'click',
             selector: '.ui-datepicker-current,.input-img',
             callback: function () {
+                this.el.find("#errorMessage").css("display","none");
                 //增加0
                 function p(s) {
                     return s < 10 ? '0' + s : s;
