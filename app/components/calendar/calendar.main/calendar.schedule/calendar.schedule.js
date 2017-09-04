@@ -49,7 +49,6 @@ let config = {
         this.el.css({"height":"100%","width":"100%"});
 
         this.data.scheduleDataList.forEach(item => {
-            console.log(item);
             this.append(new CalendarScheduleItem({dayDate: item['dataTime'], dayScheduleList: item['data']}), this.el.find('.schedule-content'));
         });
         let _this = this;
