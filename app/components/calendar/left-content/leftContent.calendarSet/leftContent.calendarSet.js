@@ -8,24 +8,22 @@ import './leftContent.calendarSet.scss';
 import LeftContentSelect from '../leftContent.SelectLabel/leftContent.SelectLabel'
 import {CalendarService} from '../../../../services/calendar/calendar.service';
 import Mediator from '../../../../lib/mediator';
-import CalendarSetting from '../../calendar.setting/calendar.setting';
-import {PMAPI} from '../../../../lib/postmsg';
 
 let config = {
     template: template,
     data: {
         cancel_fields: [],                                    //取消选中的filed_id数组
-        hide_table: {'table_Id': '', 'tableName': ''},           //隐藏对象
+        hide_table: {'table_Id': '', 'tableName': ''},        //隐藏对象
         hide_tables: [],                                      //隐藏列表table_id数组
         rows: [],                                             //所有隐藏数据
         hide_item_table: [],                                  //隐藏对象数组
-        calendarTreeData: {},                                //日历树数据
+        calendarTreeData: {},                                 //日历树数据
     },
     events: {
         /**
-         *日历树组件回掉函数  参数data格式：{type：，data：}
+         *日历树组件回掉函数  参数data格式：{type:,data:}
          */
-        checkboxcheck: function (data) {
+        checkBoxCheck: function (data) {
             if (data.type === "remind-checkbox") {
                 if (data.data === 1) {
                     this.el.find(".checkbox_a3").addClass('label-select-all-checked');
@@ -131,10 +129,13 @@ let config = {
             that.data.hide_table = {'tableName': hide_table_name, 'table_Id': hide_table_id};
             that.data.hide_item_table.push(hide_table_id);
             that.data.hide_tables.push(that.data.hide_table);
-            let preference = {"content": that.data.cancel_fields};
+            // let preference = {"content": that.data.cancel_fields};
+            // CalendarService.getCalendarPreference(preference);
+            // preference = {"content": that.data.hide_item_table};
+            // CalendarService.getCalendarHidePreference(preference);
+            let preferenceHide = {"content": that.data.hide_item_table};
+            let preference = {"content": that.data.cancel_fields, contentHide: preferenceHide};
             CalendarService.getCalendarPreference(preference);
-            preference = {"content": that.data.hide_item_table};
-            CalendarService.getCalendarHidePreference(preference);
             Mediator.emit('calendar-left:hideRemindType', {data: that.data.hide_table});
             Mediator.emit('calendar-left:unshowData', {data: that.data.cancel_fields});
             that.data.hide_table = {'tableName': "", 'table_Id': ''}
@@ -180,7 +181,7 @@ let config = {
             }
             this.data.calendarTreeData.rows.forEach((data) => {
                 this.append(new LeftContentSelect(data, this.data.calendarTreeData.cancel_fields, this.data.hide_item_table, this.data.rows,
-                    this.events.checkboxcheck), this.el.find('.remind-group'));
+                    this.events.checkBoxCheck), this.el.find('.remind-group'));
             });
             this.actions.approveRemindShow();
         },
@@ -232,10 +233,13 @@ let config = {
                     break;
                 }
             }
-            let preference = {"content": that.data.cancel_fields};
+            // let preference = {"content": that.data.cancel_fields};
+            // CalendarService.getCalendarPreference(preference);
+            // preference = {"content": that.data.hide_item_table};
+            // CalendarService.getCalendarHidePreference(preference);
+            let preferenceHide = {"content": that.data.hide_item_table};
+            let preference = {"content": that.data.cancel_fields, contentHide: preferenceHide};
             CalendarService.getCalendarPreference(preference);
-            preference = {"content": that.data.hide_item_table};
-            CalendarService.getCalendarHidePreference(preference);
             Mediator.emit('calendar-left:unshowData', {data: that.data.cancel_fields});
         }
     },

@@ -1,8 +1,13 @@
 .day-date-title {
-    font-size: 17px;
-    margin-left: 20px;
-    padding-bottom: 2px;
+    font-size: 12px;
+    padding-left: 7px;
     line-height: 24px;
+    font-weight: bold;
+    height: 24px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e4e4e4;
+    margin-bottom: 1px;
+    display: block;
 }
 #schedule-item {
     overflow: hidden;

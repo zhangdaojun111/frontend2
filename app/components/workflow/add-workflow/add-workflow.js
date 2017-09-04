@@ -45,8 +45,6 @@ let config={
             this.data.workflowData=msg.data[0];
             WorkFlow.show(msg.data[0],'#drawflow');
         });
-        console.log(this.data);
-        console.log("0000000000000000000");
         Mediator.subscribe('workflow:getParams', (res)=> {
             let htmlStr=``;
             for(let i in res){
@@ -82,6 +80,30 @@ let config={
         });
         this.el.find('#print').on('click',()=>{
             this.actions.printSetting();
+        });
+        this.el.on('click', '#addFollower', () => {
+            PMAPI.openDialogByIframe(`/iframe/addFocus/`, {
+                width: 800,
+                height: 600,
+                title: `添加关注人`,
+                modal: true
+            },{
+                users:this.data.user
+            }).then(res => {
+                if (!res.onlyclose) {
+                    let nameArr = [],
+                        idArr = [],
+                        htmlStr = [];
+                    for (var k in res) {
+                        nameArr.push(res[k]);
+                        htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
+                        idArr.push(k);
+                    }
+                    this.el.find('#addFollowerList').html(htmlStr);
+                    Mediator.publish('workflow:focus-users', idArr);
+                    this.data.user=res;
+                }
+            })
         });
     }
 };

@@ -14,56 +14,15 @@ import AddWf from '../../components/workflow/add-workflow/add-workflow';
 import FormEntrys from '../form';
 import msgBox from '../../lib/msgbox';
 import WorkFlow from '../../components/workflow/workflow-drawflow/workflow';
-import WorkflowAddFollow from '../../components/workflow/workflow-addFollow/workflow-addFollow/workflow-addFollow';
 import TreeView from '../../components/util/tree/tree';
 import jsplumb from 'jsplumb';
 import {PMAPI, PMENUM} from '../../lib/postmsg';
 
 
-WorkflowAddFollow.showAdd();
 WorkFlowForm.showForm();
-let tree = [], staff = [];
-(async function () {
-    return workflowService.getStuffInfo({url: '/get_department_tree/'});
-})().then(res => {
-    tree = res.data.department_tree;
-    staff = res.data.department2user;
-
-    function recur(data) {
-        for (let item of data) {
-            item.nodes = item.children;
-            if (item.children.length !== 0) {
-                recur(item.children);
-            }
-        }
-    }
-
-    recur(tree);
-    let treeComp2 = new TreeView(tree,{
-        callback: function (event,selectedNode) {
-            if(event==='select'){
-                for(let k in staff){
-                    if(k==selectedNode.id){
-                        Mediator.publish('workflow:checkDept', staff[k]);
-                    }
-                }
-            }else{
-                for(let k in staff){
-                    if(k==selectedNode.id){
-                        Mediator.publish('workflow:unCheckDept', staff[k]);
-                    }
-                }
-            }
-        },
-        treeType: 'MULTI_SELECT',
-        isSearch: true,
-        withButtons: true
-    });
-    treeComp2.render($('#treeMulti'));
-});
 
 let serchStr = location.search.slice(1);
-let obj = {}, is_view;
+let obj = {}, is_view,cache_old;
 serchStr.split('&').forEach(res => {
     let arr = res.split('=');
     obj[arr[0]] = arr[1];
@@ -72,6 +31,7 @@ is_view = obj.btnType === 'view' ? 1 : 0;
 if (obj.btnType === 'view') {
     $('#subAddworkflow').hide();
 }
+
 Mediator.publish('workflow:getKey', obj.key);
 (async function () {
     return workflowService.getPrepareParams({table_id: obj.table_id});
@@ -95,6 +55,9 @@ Mediator.publish('workflow:getKey', obj.key);
             id: obj.id,
             key: obj.key
         });
+        setTimeout(()=>{
+            cache_old= FormEntrys.getFormValue(obj.table_id);
+        },1000)
     } else {
         Mediator.publish('workflow:getParams', res.data.flow_data);
     }
@@ -129,6 +92,9 @@ Mediator.subscribe('workflow:getflows', (res) => {
         id: obj.id,
         key: obj.key
     });
+    setTimeout(()=>{
+        cache_old= FormEntrys.getFormValue(obj.table_id);
+    },1000)
 });
 let focusArr = [];
 Mediator.subscribe('workflow:focus-users', (res) => {
@@ -142,10 +108,17 @@ Mediator.subscribe('workflow:submit', (res) => {
         let postData = {
             flow_id: obj.flow_id,
             focus_users: JSON.stringify(focusArr) || [],
-            data: JSON.stringify(formData)
+            data: JSON.stringify(formData),
+            cache_new:JSON.stringify(formData),
+            cache_old:JSON.stringify(cache_old),
+            table_id:obj.table_id,
+            parent_table_id:obj.parent_table_id,
+            parent_real_id:obj.parent_real_id,
+            parent_temp_id:obj.parent_temp_id,
+            parent_record_id:obj.parent_record_id
         };
         (async function () {
-            return await workflowService.createWorkflowRecord(postData);
+            return workflowService.addUpdateTableData(postData);
         })().then(res => {
             if (res.success === 1) {
                 msgBox.alert(`${res.error}`);
