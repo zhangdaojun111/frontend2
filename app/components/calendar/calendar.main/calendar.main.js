@@ -185,7 +185,6 @@ let config = {
             }
             this.data.remindCount = i;
             this.data.workflowCount = w;
-            console.log(this.data.remindCount);
             $('body').find('.remind-num').html(this.data.remindCount);
             $('body').find('.approval-num').html(this.data.workflowCount);
 
@@ -715,6 +714,9 @@ let config = {
             }
         });
 
+        /**
+         * 日历提醒的全局搜索
+         */
         Mediator.on('Calendar: globalSearch', data => {
             if(data !== '') {
                 this.actions.search(data);
@@ -733,6 +735,9 @@ let config = {
             }
         });
 
+        /**
+         * 常用查询
+         */
         Mediator.on('CalendarSelected: Search', data => {
             if(data) {
                 let json = {
@@ -752,13 +757,10 @@ let config = {
 
         Mediator.on('CalendarRemindTask: changeData', data => {
             let params = data;
-            console.log(params);
             params['from_date'] = this.data.from_date;
             params['to_date'] = this.data.to_date;
             params['cancel_fields'] = JSON.stringify(this.data.cancel_fields);
-            console.log(params);
             CalendarService.getCalendarDrag(params).then(res => {
-                console.log(res);
                 this.data.date2settings = res['calendar_data']['date2csids'];
                 this.data.calendarSettings = res['calendar_data']['id2data'];
                 this.data.tableid2name = res['calendar_data']['tableid2name'];
