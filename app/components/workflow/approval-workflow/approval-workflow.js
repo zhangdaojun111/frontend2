@@ -329,7 +329,49 @@ let config={
             let J_tooltip=$("#J_tooltip");
             __this.actions.tipsMousemove(pos,J_tooltip,e)
         });
-
+        Mediator.subscribe("workflow:focused", (res) => {
+            if(res.length>0){
+                this.el.on('click','#addFollower',()=>{
+                    PMAPI.openDialogByIframe(`/iframe/addFocus/?${res}`,{
+                        width:800,
+                        height:600,
+                        title:`添加关注人`,
+                        modal:true
+                    }).then(res=>{
+                        if(!res.onlyclose){
+                            let nameArr=[],idArr=[],htmlStr=[];
+                            for(var k in res){
+                                nameArr.push(res[k]);
+                                htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
+                                idArr.push(k);
+                            }
+                            this.el.find('#addFollowerList').html(htmlStr);
+                            Mediator.publish('workflow:focus-users',idArr);
+                        }
+                    })
+                });
+            }else{
+                this.el.on('click','#addFollower',()=>{
+                    PMAPI.openDialogByIframe(`/iframe/addFocus/`,{
+                        width:800,
+                        height:600,
+                        title:`添加关注人`,
+                        modal:true
+                    }).then(res=>{
+                        if(!res.onlyclose){
+                            let nameArr=[],idArr=[],htmlStr=[];
+                            for(var k in res){
+                                nameArr.push(res[k]);
+                                htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
+                                idArr.push(k);
+                            }
+                            this.el.find('#addFollowerList').html(htmlStr);
+                            Mediator.publish('workflow:focus-users',idArr);
+                        }
+                    })
+                });
+            }
+        });
     }
 };
 class ApprovalWorkflow extends Component{

@@ -37,43 +37,50 @@ let config={
         }
     },
     afterRender(){
+        PMAPI.getIframeParams(this.data.key).then((res) => {
+            Mediator.publish('workflow:addusers', res.data.users);
+        })
         this.el.on("input propertychange",".follower-search",()=>{
             this.action.search();
         })
         const _this=this;
         this.check = {};
-        this.el.find('.addCont').draggable();
         this.el.find('#staffMulti').html('');
         Mediator.subscribe('workflow:idArr', (res)=> {
             this.data.idArr=res;
         });
         //部门选择
         Mediator.subscribe('workflow:checkDept', (res)=> {
-            let checked=this.el.find('#staffMulti>div>div');
+            let arr = [];
+            let checked=this.el.find('#staffMulti .search-check-row');
+            let len = checked.length;
+            for(let i =0;i<len; i++){
+                arr.push($(checked[i]).data('id'))
+            }
             $.each(res,(i,val)=>{
                 val.id=i;
                 if(checked.length===0){
                     this.append(new SelectStaff(val), this.el.find('#staffMulti'));
-                }else{
-                    for(let a=0;a<checked.length;a++){
-                        if(i===$(checked[a]).data('id')){
-                            return false;
-                        }else{
-                            this.append(new SelectStaff(val), this.el.find('#staffMulti'));
-                            break;
-                        }
-                    }
+                }else if(arr.indexOf(i)===-1){
+                    this.append(new SelectStaff(val), this.el.find('#staffMulti'));
                 }
             });
         });
         Mediator.subscribe('workflow:checkDeptAlready', (res)=> {
+            let arr = [];
+            let checked=this.el.find('#staffMulti .flexNoDel');
+            let len = checked.length;
+            for(let i =0;i<len; i++){
+                arr.push($(checked[i]).data('id'));
+            }
             $.each(res,(i,val)=>{
                 val.id=i;
-                for(let a in this.data.idArr){
-                    if(val.id==this.data.idArr[a]){
-                        this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
-                    }
+                if(checked.length===0){
+                    this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+                }else if(arr.indexOf(i)===-1){
+                    this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
                 }
+                
             });
         });
 
@@ -161,27 +168,19 @@ let config={
         });
 
         //saving follower
-        this.el.on('click','#saveFollower',()=>{
-            let nameArr=[],idArr=[];
+        this.el.on('click','#saveFollower',()=>{        
+            let o={};
             let domSpan=this.el.find('#selected').find('span');
-            for(let i=0;i<domSpan.length;i++){
-                nameArr.push(`<span class="selectSpan">${$(domSpan[i]).text()}</span>`);
-                idArr.push($(domSpan[i]).data('id'));
+            for(var i=0;i<domSpan.length;i++){
+                o[$(domSpan[i]).data('id')]=$(domSpan[i]).text();
             }
-            nameArr=_.uniq(nameArr);
-            idArr=_.uniq(idArr);
-            $('#add-follow').hide();
-            $('#add-home #addFollowerList').html(nameArr);
-
-            Mediator.publish('workflow:focus-users',idArr);                                  
+            PMAPI.sendToParent({
+                type: PMENUM.close_dialog,
+                key:this.data.key,
+                data:o
+            })                       
         });
 
-        $('#add-home').on('click','#addFollower',()=>{
-            $('#add-follow').show();
-        });
-        $('#add-follow').on('click','button[title="Close"]',()=>{
-            $('#add-follow').hide();
-        });
     }
 };
 class WorkflowAddFollow extends Component{
