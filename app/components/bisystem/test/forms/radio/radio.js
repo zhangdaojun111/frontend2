@@ -48,7 +48,6 @@ class Radio extends Base {
     setValue(value){
         if (value) {
             this.data.value = value;
-            console.log(typeof this.data.value);
             this.el.find(`input[value='${this.data.value}']`).attr("checked",true);
         };
         this.data.firstDo = true;

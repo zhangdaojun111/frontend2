@@ -235,8 +235,6 @@ class NineGridEditor extends Base {
         config.data.chart_id = data.id ? data.id : null;
         super(config);
     }
-
-    reset() {}
 }
 
 export {NineGridEditor}

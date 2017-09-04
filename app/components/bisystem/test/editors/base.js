@@ -53,5 +53,9 @@ class Base extends Component {
         return chart;
     }
     fillData(){}
+
+    reset(chart) {
+        this.data.chart_id = chart.id ? chart.id : null;
+    }
 }
 export {Base}

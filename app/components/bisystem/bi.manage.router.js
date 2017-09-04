@@ -58,7 +58,6 @@ const BiAppRouter = Backbone.Router.extend({
             id: id
         }
         if (formComponent[type]) {
-            formComponent[type].destroyChildren();
             formComponent[type].reset(comType);
             formComponent[type].reload();
         } else {
