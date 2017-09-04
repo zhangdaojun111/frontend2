@@ -112,15 +112,64 @@ export const CalendarService = {
      * @param data
      */
     getWorkflowRecords: function (data) {
-        let params = {
-            type: data['type'],
+        // 待审批
+        let params1 = {
+            type: 5,
             rows: 9999,
             page: 1,
             rate_data: 1,
             from_date: data['from_date'],
             to_date: data['to_date']
         };
-        let res = HTTP.post(workflowRecordsUrl, params).then(res => {
+        // 审批中
+        let params2 = {
+            type: 2,
+            rows: 9999,
+            page: 1,
+            rate_data: 1,
+            from_date: data['from_date'],
+            to_date: data['to_date']
+        };
+        // 我关注的
+        let params3 = {
+            type: 6,
+            rows: 9999,
+            page: 1,
+            rate_data: 1,
+            from_date: data['from_date'],
+            to_date: data['to_date']
+        };
+        // 由我发起并完成的
+        let params4 = {
+            type: 3,
+            rows: 9999,
+            page: 1,
+            rate_data: 1,
+            from_date: data['from_date'],
+            to_date: data['to_date']
+        };
+        let res1 = HTTP.post(workflowRecordsUrl, params1).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                MSG.showTips('获取数据失败');
+            }
+        });
+        let res2 = HTTP.post(workflowRecordsUrl, params2).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                MSG.showTips('获取数据失败');
+            }
+        });
+        let res3 = HTTP.post(workflowRecordsUrl, params3).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                MSG.showTips('获取数据失败');
+            }
+        });
+        let res4 = HTTP.post(workflowRecordsUrl, params4).then(res => {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
@@ -128,7 +177,7 @@ export const CalendarService = {
             }
         });
         HTTP.flush();
-        return res;
+        return [res1,res2,res3,res4];
     },
 
     /**
