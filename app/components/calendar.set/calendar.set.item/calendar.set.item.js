@@ -247,7 +247,7 @@ let config = {
     afterRender: function () {
         this.data.staus = false;
         let _this = this;
-
+        //附加显示字段下拉多选组件数据
         let select_item_data = {
             'list': this.data.dropdown,
             displayType: 'popup',
@@ -262,9 +262,10 @@ let config = {
                 _this.actions.checkSelectedOpts(choosed);
             },
         };
-        this.data.multiSelectMenu = new AutoSelect(select_item_data);
 
+        this.data.multiSelectMenu = new AutoSelect(select_item_data);
         this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
+        //代表字段下拉单选组件数据
         let single_item_data = {
             'list': this.data.dropdownForRes,
             displayType: 'popup',
@@ -278,9 +279,10 @@ let config = {
                 }
             },
         };
-        this.data.singleSelectMenu = new AutoSelect(single_item_data);
 
+        this.data.singleSelectMenu = new AutoSelect(single_item_data);
         this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
+        //是否可编辑
         Mediator.on('calendar-set:editor', data => {
             this.data.singleSelectMenu.destroySelf();
             this.data.multiSelectMenu.destroySelf();
@@ -300,7 +302,6 @@ let config = {
         });
 
         this.actions.checkChangeTextSelected();
-
         if(!this.data.rowSetData['email']['email_status'] && !this.data.rowSetData['sms']['sms_status']) {
             this.el.find('.set-remind-method').html('设置提醒方式');
         }

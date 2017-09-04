@@ -29,24 +29,6 @@ let config = {
         },
     ],
     afterRender: function () {
-        // let that = this;
-        // this.el.on('click', ".item-child", function () {
-        //     console.log(that.data.menuItem);
-        //     Mediator.emit(
-        //         'calendar-set-left:calendar-set',
-        //         {
-        //             table_id: that.data.menuItem['table_id'],
-        //             label: that.data.menuItem['label'],
-        //         });
-        //     // PMAPI.openDialogByIframe(
-        //     //     '/calendar_mgr/set/?table_id='+that.data.menuItem['table_id'],
-        //     //     {
-        //     //         width: "75%",
-        //     //         height: '750',
-        //     //         title: '设置 【' + that.data.menuItem['label'] + '】',
-        //     //     })
-        // });
-
     }
 };
 
