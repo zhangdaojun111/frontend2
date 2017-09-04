@@ -34,10 +34,13 @@
             font-size:14px;
             .query-tips-delete {
                 position: absolute;
+                display: block;
                 color: #999;
-                top: -25px;
-                right: 6px;
+                width: 16px;
+                height: 16px;
+                right: 0px;
                 cursor: pointer;
+                background: url(../../../assets/images/framework/close.png) no-repeat scroll center center transparent;
             }
         }
         .headerTips {
