@@ -796,38 +796,6 @@ let config = {
 
         //判断一下日期的类型，并且进行限制
         checkDateType(data) {
-            // for(let i = 0;i<this.data.formData.length;i++) {
-            // if(this.data.formData[i]['type'] == 'Date'){
-            //     let _val = this.el.find(".date_yy-mm-dd").val()
-            //     let reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
-            //     let regExp = new RegExp(reg);
-            //     if(!regExp.test(_val)){
-            //        console.log("日期格式不正确，正确格式为：2014-01-01");
-            //         return;
-            //     }
-            // }
-            //  if(this.data.formData[i]['type'] == 'Datetime'){
-            //     let _val = this.el.find(".datetime").val()
-            //      var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
-            //      var regExp = new RegExp(reg);
-            //      if(!regExp.test(_val)){
-            //          console.log("时间格式不正确,正确格式为: 2014-01-01 12:00:00 ");
-            //          return 0;
-            //      }
-            // }
-            // if(this.data.formData[i]['type'] == 'Time'){
-            //     let _val = this.el.find(".timeInput").val()
-            //     let reg = /^(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
-            //     let regExp = new RegExp(reg);
-            //     if(!regExp.test(_val)){
-            //         console.log("时间格式不正确，正确格式为：12:00:00");
-            //         return 0;
-            //     }
-            // }
-
-
-            // }
-
             // for(let i = 0;i<this.data.formData.length;i++){
             //     if(this.data.formData[i]['type'] == 'Date'){
             //         let temp = this.data.formData[i];
@@ -1424,7 +1392,7 @@ let config = {
             PMAPI.openDialogByComponent(AddEnrypt, {
                 width: 800,
                 height: 600,
-                title: '添加新选项',
+                title: '修改内容',
                 modal: true
             }).then((data) => {
                 if (!data.cancel) {
@@ -1781,6 +1749,8 @@ let config = {
         } else {
             this.el.find('table').siblings('.ui-btn-box').css("margin-left", "-20px");
         }
+        //时间日期
+
     },
     beforeDestory() {
         this.el.off();

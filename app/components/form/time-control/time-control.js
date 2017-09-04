@@ -11,7 +11,25 @@ let config = {
     data: {
         width: '240px'
     },
-    actions: {},
+    actions: {
+        keyup: function () {
+            let _this = this
+            //hh:mm:ss
+            let strDate = this.el.find(".timeInput").val();
+            let re = /^((20|21|22|23|[0-1]\d)\:[0-5][0-9])(\:[0-5][0-9])?$/;
+            if (re.test(strDate))//判断日期格式符合hh:mm:ss标准
+            {
+                this.el.find("#errorMessage").css("display", "none");
+                _this.data.value = strDate.replace(/\//g, "-");
+                _.debounce(function () {
+                    _this.events.changeValue(_this.data)
+                }, 200)();
+            }
+            else {
+                this.el.find("#errorMessage").css("display", "inline-block").text("时间格式不正确，正确格式为12:00:00 ");
+            }
+        }
+    },
     binds: [
         {
             event: 'click',
@@ -20,18 +38,11 @@ let config = {
                 this.events.emitHistory(this.data);
             }
         },
-        // {
-        //     event: 'keyup',
-        //     selector: '.timeInput',
-        //     callback: function () {
-        //         console.log(this.value)
-        //         this.value=this.value.replace("/[^w:]|_/ig,''");
-        //     }
-        // },
         {
             event: 'click',
             selector: '.ui-datepicker-current,.input-img',
             callback: function () {
+                this.el.find("#errorMessage").css("display","none");
                 //增加0
                 function p(s) {
                     return s < 10 ? '0' + s : s;
@@ -59,7 +70,7 @@ let config = {
             selector: '.input-img',
             callback: function () {
                 this.el.find('.time').css({'display': 'block', 'position': 'absolute'});
-               event.stopPropagation();
+                event.stopPropagation();
             }
         },
 
@@ -148,7 +159,7 @@ let config = {
             }, 200)();
         });
         _this.el.find(".ui-datepicker-close").on("click", function () {
-            _this.data.value =  _this.el.find('.timeInput').val();
+            _this.data.value = _this.el.find('.timeInput').val();
             _.debounce(function () {
                 _this.events.changeValue(_this.data)
             }, 200)();
@@ -156,9 +167,11 @@ let config = {
 
         _this.el.find('.timeInput').on('keyup', function () {
             console.log("keyup")
-            _this.data.value= _this.data.value.replace("/[^w:]|_/ig,''");
+            _this.data.value = _this.data.value.replace("/[^w:]|_/ig,''");
         })
-
+        this.el.find('.timeInput').on('input', _.debounce(function () {
+            _this.actions.keyup();
+        }, 200));
         _.debounce(function () {
             _this.events.changeValue(_this.data)
         }, 200)();
