@@ -342,10 +342,15 @@ let config = {
                             this.data.commonQuery.splice(i,1);
                         }
                     }
+                    if(this.data.commonQuery.length == 0){
+                        this.el.find('.common-search-compile').css('display','none');
+                        this.el.find('.common-search-compile').html(`<span class="img icon-expert-edit"></span>`);
+                        this.itemDeleteChecked = false;
+                    }
                     this.data.deleteCommonQuery = true;
                     if(this.isEdit && value) {
                         this.actions.saveCommonQuery(value);
-                        this.el.find('.common-search-compile').html(`<span class="img"></span>`);
+                        this.el.find('.common-search-compile').html(`<span class="img icon-expert-edit"></span>`);
                         this.itemDeleteChecked = !this.itemDeleteChecked;
                         this.isEdit = false;
                     }
@@ -435,7 +440,7 @@ let config = {
                     _this.itemDeleteChecked = !_this.itemDeleteChecked;
                 } else {
                     _this.el.find('.common-search-list').find('.item-delete').css('display','none');
-                    _this.el.find('.common-search-compile').html(`<span class="img"></span>`);
+                    _this.el.find('.common-search-compile').html(`<span class="img icon-expert-edit"></span>`);
                     _this.itemDeleteChecked = !_this.itemDeleteChecked;
                     _this.isEdit = false;
                 }

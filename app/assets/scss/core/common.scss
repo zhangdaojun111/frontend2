@@ -26,7 +26,7 @@ input, textarea, select {
 
 ::-webkit-scrollbar {
     width: 6px;
-    height: 6px;
+    height: 10px;
 }
 
 ::-webkit-scrollbar-track-piece {
@@ -37,7 +37,7 @@ input, textarea, select {
 }
 
 ::-webkit-scrollbar-thumb:vertical {
-    height: 6px;
+    height: 10px;
     background-color: #999999;
     //border-radius: 4px;
 }

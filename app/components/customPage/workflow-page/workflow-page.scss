@@ -20,6 +20,29 @@
     .btn-nav {
         height: 60px;
         width: 100%;
+        .query-tips {
+            position: absolute;
+            width: 200px;
+            height: 70px;
+            background: #fff;
+            text-align: center;
+            line-height: 70px;
+            right: calc(50% - 100px);
+            top: 45px;
+            box-shadow: 0 0 5px #ccc;
+            z-index: 100;
+            font-size:14px;
+            .query-tips-delete {
+                position: absolute;
+                display: block;
+                color: #999;
+                width: 16px;
+                height: 16px;
+                right: 0px;
+                cursor: pointer;
+                background: url(../../../assets/images/framework/close.png) no-repeat scroll center center transparent;
+            }
+        }
         .headerTips {
             height: 60px;
             font-size: 12px;
