@@ -1,3 +1,7 @@
+/**
+ * @author zhaoyan
+ * 内置展示个人信息
+ */
 import template from './user-info-display.html'
 
 let css = `
