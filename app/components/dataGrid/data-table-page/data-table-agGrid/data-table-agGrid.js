@@ -947,6 +947,7 @@ let config = {
             this.data.prepareParmas = res.data;
             this.data.customOperateList = this.data.prepareParmas["operation_data"] || [];
             this.data.rowOperation = this.data.prepareParmas['row_operation'] || [];
+            try{this.data.flowId = res["data"]["flow_data"][0]["flow_id"] || "";}catch(e){}
             for( let d of this.data.prepareParmas["flow_data"] ){
                 if( d.selected == 1 ){
                     this.data.flowId = d.flow_id;
@@ -1133,8 +1134,6 @@ let config = {
                 correspondence_row_ids: JSON.stringify(this.data.correspondenceSelectedList)
             };
             dataTableService.saveForCorrespondence( json ).then( res=>{
-                console.log( "对应关系保存" )
-                console.log( res )
                 msgBox.alert( '保存成功' );
                 this.actions.correspondenceSaved();
                 this.actions.getGridData();
