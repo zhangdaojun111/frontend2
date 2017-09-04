@@ -16,12 +16,12 @@ let config = {
          * @param value = x轴下穿字段
          */
         update(value) {
-            if (this.data.deeps) {
-                _.remove(this.data.deeps,(deep) => {
+            if (this.data.value) {
+                _.remove(this.data.value,(deep) => {
                     return value.id === deep.id
                 })
             };
-            this.data.deeps.push(value);
+            this.data.value.push(value);
             this.reload();
         },
 
@@ -30,12 +30,19 @@ let config = {
          * @param value = x轴下穿字段
          */
         remove(id) {
-            _.remove(this.data.deeps,(deep) => {
+            _.remove(this.data.value,(deep) => {
                 return id ===deep.id
             })
             this.reload();
-        }
+        },
 
+        /**
+         *清除所有下穿字段
+         */
+       clear() {
+            this.data.value = [];
+            this.reload();
+        },
     },
     binds: [
         {

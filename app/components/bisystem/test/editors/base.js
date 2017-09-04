@@ -34,7 +34,6 @@ class Base extends Component {
                 value: item.defaultValue,
                 label: item.label,
                 name: item.name,
-                deeps: item.deeps,
                 list: item.list,
             }, item.events);
             this.append(instance, this.el.find('.form-group'));

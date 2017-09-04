@@ -40,12 +40,15 @@ let config = {
                     this.formItems['yAxis'].setList(data['y_field']);
                     this.formItems['columns'].setList(data['y_field']);
                     this.formItems['deepX'].setList(data['x_field']);
+
                 } else { // 清空字段
                     this.formItems['columns'].actions.clear();
                     this.formItems['xAxis'].setList([]);
                     this.formItems['yAxis'].setList([]);
                     this.formItems['deepX'].setList([]);
-                }
+                };
+                // 清除所有下穿字段数据
+                this.formItems['deeps'].actions.clear();
             }
         },
 
@@ -116,6 +119,7 @@ let config = {
                 pieType: data.pieType == '1' ? {name: '单条数据', value: 1} : {name: '多条数据', value: 2},
                 xAxis:data.xAxis,
                 yAxis:data.pieType == '1' ? data.columns : data.yAxis,
+                deeps: data.pieType == '1' ? [] : data.deeps
             };
             console.log(chart)
             // let res = await ChartFormService.saveChart(JSON.stringify(chart));
@@ -175,6 +179,7 @@ let config = {
                             this.formItems['yAxis'].el.hide();
                             this.formItems['deeps'].el.hide();
                             this.formItems['deepX'].el.hide();
+                            this.formItems['deeps'].actions.clear();
                         } else {
                             this.formItems['columns'].el.hide();
                             this.formItems['yAxis'].el.show();
@@ -207,7 +212,7 @@ let config = {
             {
                 label: '',
                 name: 'deeps',
-                deeps:[],
+                defaultValue: [],
                 type: 'deep',
                 events: {}
             },
