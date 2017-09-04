@@ -1,3 +1,7 @@
+/**
+ * @author yangxiaochuan
+ * agGrid
+ */
 import Component from "../../../lib/component";
 import template from './agGrid.html';
 import {Grid,GridOptions} from 'ag-grid/main';
