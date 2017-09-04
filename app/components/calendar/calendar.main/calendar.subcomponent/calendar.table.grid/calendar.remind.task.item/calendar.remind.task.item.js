@@ -136,7 +136,8 @@ let config = {
         // {
         //     event:'dragstart',
         //     selector:'.task-item',
-        //     callback:function(ev,temp = this){
+        //     callback:function(ev){
+        //         console.log(ev.Event());
         //         if(this.data.type === 'month' && this.data.remindTaskItemData['isDrag'] !== 0) {
         //             let event = ev.originalEvent;
         //             $(temp).addClass("task-item-draggable");
@@ -178,6 +179,7 @@ let config = {
         }
 
         this.el.on('dragstart','.task-item',function(ev){
+            console.log(ev);
             if(that.data.type === 'month' && that.data.remindTaskItemData['isDrag'] !== 0) {
                 let event = ev.originalEvent;
                 $(this).addClass("task-item-draggable");
