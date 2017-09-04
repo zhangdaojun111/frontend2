@@ -30,6 +30,7 @@ let css = `
     margin: 5px 0px;
     width: 96%;
     padding: 0px 5px;
+    height: 30px;
 }
 .start, .end {
     width: 46.7%;
@@ -58,7 +59,6 @@ let CalendarRemind = {
 
     },
     afterRender: function() {
-        console.log(this.data.remindDetail);
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
         this.el.on('click', '.open-form', () => {
             PMAPI.openDialogByIframe(

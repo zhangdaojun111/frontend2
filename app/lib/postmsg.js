@@ -253,6 +253,15 @@ export const PMAPI = {
     },
 
     /**
+     * 将消息发送给调用的父组件
+     * @param data
+     */
+    sendToRealParent: function (data) {
+        this.parent.postMessage(data, location.origin);
+        return this;
+    },
+
+    /**
      * 将消息发送给指定的iframe
      * @param iframe
      * @param msg
@@ -276,6 +285,16 @@ export const PMAPI = {
         for (let i = 0; i < window.frames.length; i++) {
             this.sendToChild(window.frames[i], msg);
         }
+        return this;
+    },
+
+    /**
+     * 将消息发送给自己
+     * @param msg
+     * @returns {PMAPI}
+     */
+    sendToSelf: function (msg) {
+        window.postMessage(msg, location.origin)
         return this;
     },
 
@@ -304,6 +323,30 @@ export const PMAPI = {
     },
 
     /**
+     * 本方法同上，唯一区别是在本框架打开
+     * @param url
+     * @frame 对话框设置，包括大小，标题等，例：{
+     *          width: 500,
+     *          height: 200,
+     *          title: 'Iframe页面'
+     *      }
+     * @return Promise
+     */
+    openDialogToSelfByIframe: function (url, frame, params) {
+        return new Promise(function (resolve) {
+            let key = PMAPI._getKey();
+            dialogWaitHash[key] = resolve;
+            PMAPI.sendToSelf({
+                type: PMENUM.open_iframe_dialog,
+                key: key,
+                url: url,
+                frame: frame,
+                params: params
+            });
+        });
+    },
+
+    /**
      * 传入组件配置，然后在父级生成一个该组件配置的组件
      * 然后用dialog弹出,该方法性能优于iframe方式，较简单的弹出框用此方法
      * 注意：该组件配置必须为简单组件，所有用到的变量必须为内部变量
@@ -319,6 +362,27 @@ export const PMAPI = {
             let key = PMAPI._getKey();
             dialogWaitHash[key] = resolve;
             PMAPI.sendToParent({
+                type: PMENUM.open_component_dialog,
+                key: key,
+                component: PMAPI.serializeComponent(componentConfig),
+                frame: frame
+            }, location.origin);
+        });
+    },
+
+    /**
+     * 本方法同上，唯一区别是在本框架打开
+     * @frame 对话框设置，包括大小，标题等，例：{
+     *          width: 500,
+     *          height: 200,
+     *          title: '组件页面'
+     *      }
+     */
+    openDialogToSelfByComponent: function (componentConfig, frame) {
+        return new Promise(function (resolve) {
+            let key = PMAPI._getKey();
+            dialogWaitHash[key] = resolve;
+            PMAPI.sendToSelf({
                 type: PMENUM.open_component_dialog,
                 key: key,
                 component: PMAPI.serializeComponent(componentConfig),
