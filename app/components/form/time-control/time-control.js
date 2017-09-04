@@ -15,8 +15,8 @@ let config = {
         keyup: function () {
             let _this = this
             //hh:mm:ss
-            var strDate = this.el.find(".timeInput").val();
-            var re = /^((20|21|22|23|[0-1]\d)\:[0-5][0-9])(\:[0-5][0-9])?$/;
+            let strDate = this.el.find(".timeInput").val();
+            let re = /^((20|21|22|23|[0-1]\d)\:[0-5][0-9])(\:[0-5][0-9])?$/;
             if (re.test(strDate))//判断日期格式符合hh:mm:ss标准
             {
                 this.el.find("#errorMessage").css("display", "none");

@@ -21,12 +21,12 @@ let config = {
         keyup: function () {
             let _this = this;
                  //YYYY-MM-DD
-                var strDate = this.el.find(".date_yy-mm-dd").val();
+                let strDate = this.el.find(".date_yy-mm-dd").val();
 
-                    var  re =/^(\d{4})-(\d{2})-(\d{2})$/;
+                    let  re =/^(\d{4})-(\d{2})-(\d{2})$/;
                     if(re.test(strDate))//判断日期格式符合YYYY-MM-DD标准
                     {
-                        var dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3);
+                        let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3);
                         console.log(dateElement);
 
                         if(!((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))))//判断日期逻辑
