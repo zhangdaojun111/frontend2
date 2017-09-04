@@ -415,7 +415,9 @@ let FormEntrys = {
         Mediator.publish('form:formAlreadyCreate','success');
         //发送给工作流表名信息
         if(this.formId && this.el.find('.ui-myformtable').prev()[0].nodeName == 'P'){
-            Mediator.publish('workflow:getWorkflowTitle',this.el.find('.ui-myformtable').prev().text());
+            Mediator.publish('workflow:getWorkflowTitle',this.el.find('.ui-myformtable').prev()[0].innerText);
+        }else{
+            Mediator.publish('workflow:getWorkflowTitle','');
         }
         console.timeEnd('form创建时间');
     },

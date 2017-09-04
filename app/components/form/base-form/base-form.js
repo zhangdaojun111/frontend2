@@ -265,11 +265,12 @@ let config = {
                 //正则检查
                 if (val != "" && data["reg"] !== "") {
                     for (let r in data["reg"]) {
-                        if(r.startsWith('/')){
-                            r=r.substring(1)
-                        }
-                        if(r.endsWith('/')){
-                            r=r.substring(0,r.length-1);
+                        //有待优化
+                        if (r.startsWith('/')) {
+                            r = r.substring(1)
+                            if (r.endsWith('/')) {
+                                r = r.substring(0, r.length - 1);
+                            }
                         }
                         let reg = new RegExp(r);
                         let flag = reg.test(val);
@@ -430,20 +431,15 @@ let config = {
         triggerControl: function () {
             let data = this.data.data;
             for (let key in data) {
-                try {
-                    let val = data[key]["value"];
-                    if (val != "" || !$.isEmptyObject(val)) {
-                        if ($.isArray(val)) {
-                            if (val.length != 0) {
-                                this.actions.checkValue(data[key]);
-                            }
-                        } else {
+                let val = data[key]["value"];
+                if (val != "" || !$.isEmptyObject(val)) {
+                    if ($.isArray(val)) {
+                        if (val.length != 0) {
                             this.actions.checkValue(data[key]);
                         }
+                    } else {
+                        this.actions.checkValue(data[key]);
                     }
-                } catch (err) {
-                    console.log('这里面么');
-                    console.log(data[key]);
                 }
             }
         },
@@ -800,7 +796,6 @@ let config = {
 
         //判断一下日期的类型，并且进行限制
         checkDateType(data) {
-            console.log()
             // for(let i = 0;i<this.data.formData.length;i++){
             //     if(this.data.formData[i]['type'] == 'Date'){
             //         let temp = this.data.formData[i];
@@ -1101,9 +1096,9 @@ let config = {
                     this.data.childComponent[key].reload();
                 }
             }
-            if(this.data.isOtherChangeEdit){
-                this.data.btnType= 'none';
-            }else{
+            if (this.data.isOtherChangeEdit) {
+                this.data.btnType = 'none';
+            } else {
                 this.data.btnType = 'new';
             }
             this.actions.addBtn();
@@ -1272,6 +1267,8 @@ let config = {
         createActions() {
             let actions = {
                 changeValue: (data) => {
+                    console.log('值改变的事件');
+                    console.log(data);
                     this.actions.checkValue(data);
                 },
                 emitHistory: (data) => {
@@ -1352,7 +1349,7 @@ let config = {
             PMAPI.openDialogByComponent(AddEnrypt, {
                 width: 800,
                 height: 600,
-                title: '添加新选项',
+                title: '修改内容',
                 modal: true
             }).then((data) => {
                 if (!data.cancel) {
@@ -1695,7 +1692,7 @@ let config = {
         this.actions.triggerControl();
         this.actions.changeOptions();
         this.actions.setDataFromParent();
-        if(this.data.btnType != 'none'){
+        if (this.data.btnType != 'none') {
             this.actions.addBtn();
         }
 
@@ -1706,9 +1703,11 @@ let config = {
         }
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')) {
             this.el.find('table').siblings('.ui-btn-box').css("margin-left", "0px");
-        }else {
+        } else {
             this.el.find('table').siblings('.ui-btn-box').css("margin-left", "-20px");
         }
+        //时间日期
+
     },
     beforeDestory() {
         this.el.off();
