@@ -69,6 +69,8 @@ Mediator.subscribe('workFlow:record_info', (res) => {
             }
         }
         Mediator.publish('workflow:focused', focus);
+        console.log(`-------------------------`);
+        console.log(focus);
         if(focus.length>0){
             let dept=[];
             (async function () {
