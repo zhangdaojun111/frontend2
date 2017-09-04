@@ -39,7 +39,6 @@ let config = {
         }
     },
     afterRender() {
-
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             if (this.myChart) {
                 this.myChart.resize();
