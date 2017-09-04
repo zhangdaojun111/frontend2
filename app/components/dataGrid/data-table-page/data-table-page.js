@@ -3,6 +3,7 @@ import template from './data-table-page.html';
 import './data-table-page.scss';
 import {HTTP} from "../../../lib/http";
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
+import msgBox from '../../../lib/msgbox';
 import dataTableAgGrid from "../data-table-page/data-table-agGrid/data-table-agGrid"
 import fastSearch from "../data-table-toolbar/fast-search/fast-search"
 import {dataTableService} from "../../../services/dataGrid/data-table.service"
@@ -12,7 +13,9 @@ let config = {
         tableId:'',
         tableName:'',
         isRenderIntrain: false,
-        firatShowHelp: false
+        firatShowHelp: false,
+        //刷新在途
+        refreshOnTheWay: true
     },
     actions: {
         //获取在途数据
@@ -82,11 +85,18 @@ let config = {
         this.actions.getInProcessNum();
 
         //订阅数据失效
-        PMAPI.subscribe(PMENUM.on_the_way_invalid, (info) => {
+        PMAPI.subscribe(PMENUM.one_the_way_invalid, (info) => {
             let tableId = info.data.table_id;
             if( this.data.tableId == tableId ){
                 console.log( '在途数量失效刷新' );
-                this.actions.getInProcessNum();
+                if( this.data.refreshOnTheWay ){
+                    this.actions.getInProcessNum();
+                    this.data.refreshOnTheWay = false;
+                    msgBox.showTips( '表：《' + this.data.tableName + '》在途数据失效。'  );
+                    setTimeout( ()=>{
+                        this.data.refreshOnTheWay = true;
+                    },200 )
+                }
             }
         })
         //是否显示帮助

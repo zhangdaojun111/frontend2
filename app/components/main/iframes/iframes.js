@@ -495,7 +495,7 @@ export const IframeInstance = new Component({
 
         Mediator.on('socket:table_invalid', this.actions.sendMsgToIframes);
         Mediator.on('socket:data_invalid', this.actions.sendMsgToIframes);
-        Mediator.on('socket:on_the_way_invalid', this.actions.sendMsgToIframes);
+        Mediator.on('socket:one_the_way_invalid', this.actions.sendMsgToIframes);
         Mediator.on('socket:workflow_approve_msg', this.actions.sendMsgToIframes);
 
         Mediator.on('saveview:displayview', (data) => {
