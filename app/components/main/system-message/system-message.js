@@ -114,7 +114,7 @@ let config = {
         this.agGrid.render(gridDom);
         this.pagination = new dataPagination({
             page: 1,
-            rows: 10
+            rows: 100
         });
         this.pagination.render(this.el.find('.pagination'));
         this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
@@ -144,8 +144,8 @@ let systemMessageUtil = {
         let systemMessage = new SystemMessage();
         systemMessage.render(this.el);
         this.el.dialog({
-            width: 945,
-            height: 640,
+            width: 1320,
+            height: 580,
             modal: true,
             title: '消息提醒',
             close: function () {
@@ -157,13 +157,21 @@ let systemMessageUtil = {
     hide: function () {
 
     },
-    showMessageDetail: function (dialogTitle, msgTitle, msgContent) {
+    showMessageDetail: function (dialogTitle, msgTitle, msgContent, speak = false) {
         let html = `
             <div class="component-msg-detail">
                 <h3>${msgTitle}</h3>
                 <div class="text">${msgContent}</div>
             </div>
         `;
+        if (speak) {
+            let msg = new SpeechSynthesisUtterance(msgTitle.toString() + msgContent.toString());
+            msg.lang = 'zh';
+            msg.voice = speechSynthesis.getVoices().filter(function(voice) {
+                return voice.name == 'Whisper';
+            })[0];
+            speechSynthesis.speak(msg);
+        }
         this.el = $(html).appendTo('body');
         this.el.dialog({
             width: 800,

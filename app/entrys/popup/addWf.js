@@ -81,7 +81,7 @@ Mediator.publish('workflow:getKey', obj.key);
         $('.workflow-flex').hide();
         $('#place-form').html('');
         FormEntrys.createForm({
-            el: '#place-form',
+            el: $('#place-form'),
             is_view: is_view,
             from_focus: 0,
             table_id: obj.table_id,
@@ -112,7 +112,7 @@ Mediator.subscribe('workflow:getflows', (res) => {
     WorkFlow.createFlow({flow_id: res.flow_id, el: "#flow-node"});
     $('#place-form').html('');
     FormEntrys.createForm({
-        el: '#place-form',
+        el: $('#place-form'),
         form_id: res.form_id,
         flow_id: res.flow_id,
         is_view: is_view,

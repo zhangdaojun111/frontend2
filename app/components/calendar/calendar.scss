@@ -34,17 +34,16 @@ $grid-bg-color: rgba(248, 248, 248, 1);
         box-sizing: border-box;
         margin:0px !important;
         border-bottom: 1px solid $boder-color;
-        position: relative;
         .tool-icon {
             display: inline-block;
-            line-height: 60px;
+            vertical-align: middle;
             margin-right: 10px;
         }
         .tool-btn {
             display: inline-block;
             width: 40px;
             text-align: center;
-            line-height: 60px;
+            line-height: 58px;
             color: $calendar-font;
             margin-right: 15px;
             cursor: pointer;
@@ -84,11 +83,12 @@ $grid-bg-color: rgba(248, 248, 248, 1);
 
         }
         .right-tool {
-            display: inline-block;
+            height: 60px;
             float: right;
             .right-tool-btn {
+                display: flex;
                 cursor: pointer;
-                line-height: 60px;
+                line-height: 16px;
                 margin-right: 20px;
             }
         }
@@ -103,10 +103,15 @@ $grid-bg-color: rgba(248, 248, 248, 1);
         .calendar-date {
             display: inline-block;
             margin-right: 15px;
+            line-height: 30px;
             .datepick {
                 display: inline-block;
+                vertical-align: middle;
                 line-height: 30px;
                 cursor: pointer;
+            }
+            .nowDate {
+                vertical-align: middle;
             }
         }
         .remind-count {

@@ -11,7 +11,6 @@ import {postMessageUtil} from '../post-message/post-message';
 import {GlobalSearch} from '../global-search/global-search';
 import {OnlineDisplay} from "../online-users/online-users"
 
-
 let config = {
     template: template,
     data: {
@@ -90,6 +89,10 @@ let config = {
         openPostMessageDialog: function () {
             postMessageUtil.show();
         },
+
+        onSocketNotice: function (data = {}) {
+            systemMessageUtil.showMessageDetail('推送消息', data.title, data.content, true);
+        }
         // setOnlineNum:function () {
         //     //更新在线人数
         //     GlobalService.getOnlineUserData().done((result) => {
@@ -245,13 +248,14 @@ let config = {
         let that = this;
         Mediator.on('socket:online_user_num', that.actions.refreshOnlineNum);
         Mediator.on('socket:personal_message', this.actions.displayMessageUnread);
+        Mediator.on('socket:notice', this.actions.onSocketNotice);
         //加载全局搜索窗口
         this.actions.initGlobalSearch();
     },
 
     beforeDestory: function () {
-        Mediator.removeAll('socket:online_user_num');
-        Mediator.removeAll('socket:personal_message');
+        // Mediator.removeAll('socket:online_user_num');
+        // Mediator.removeAll('socket:personal_message');
         // Mediator.removeAll('socket:notice');
         // Mediator.removeAll('socket:voice_message');
         // Mediator.removeAll('socket:workflow_approve_msg');

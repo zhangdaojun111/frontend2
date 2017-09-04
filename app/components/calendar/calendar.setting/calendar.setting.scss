@@ -1,5 +1,5 @@
 @import "../calendar";
-.calendar-setting {
+.component-calendar-setting {
     font-size: 12px;
     height: 100%;
     width: 100%;
@@ -38,7 +38,11 @@
                 }
                 .search-con{
                     display: inline-block;
-                    vertical-align: middle;
+                    width: 16px;
+                    height:16px;
+                    position: relative;
+                    top: 3px;
+                    background: url("../../../assets/images/calendar/calendar-search.png");
                 }
                 &.hide-search {
                     display: none;
@@ -48,9 +52,13 @@
             .hide-con{
                 position: absolute;
                 display: inline-block;
-                img {
-                    padding: 5px;
-                }
+                width: 16px;
+                height:16px;
+                cursor: pointer;
+                margin-top: 5px;
+                box-sizing: border-box;
+                margin-left: 5px;
+                background: url("../../../assets/images/calendar/calendar-hide.png");
             }
         }
         .header {

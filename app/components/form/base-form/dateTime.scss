@@ -68,10 +68,10 @@
         font-size: 13px;
         color: #333333;
     }
-    th span{
+    th span {
         font-weight: normal !important;
     }
-     table {
+    table {
         width: 95%;
         margin: .7em auto;
     }
@@ -109,14 +109,10 @@
         position: relative;
         bottom: 50px;
     }
-    .ui-icon-circle-triangle-w {
-        background: url("../../../assets/images/form/inco_pre_month.png") !important;
-    }
-    .ui-datepicker-prev,.ui-datepicker-next {
+
+    .ui-datepicker-prev, .ui-datepicker-next {
         top: 12%;
         position: absolute;
     }
-    .ui-icon-circle-triangle-e {
-        background: url("../../../assets/images/form/inco_next_month.png") !important;
-    }
+
 }

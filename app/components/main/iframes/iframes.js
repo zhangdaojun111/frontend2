@@ -80,16 +80,16 @@ export const IframeInstance = new Component({
             this.actions.sendOpenRequest(id);
             id = id.toString();
             if (this.data.hash[id] === undefined) {
-                let tab = $(`<div class="item" iframeid="${id}" title="${name}">${name}<a class="close" iframeid="${id}"></a></div>`)
+                let tab = $(`<div class="item" iframeid="${id}" title="${name}">${name}<a class="close icon-framework-close" iframeid="${id}"></a></div>`)
                     .prependTo(this.data.tabs);
                 let iframe = $(`<div class="item"><iframe id="${id}" src="${url}"></iframe></div>`).appendTo(this.data.iframes);
                 let originIframe = iframe.find('iframe');
 
-                this.showLoading(this.data.iframes);
-                window.clearTimeout(this.data.loadingTimer);
-                this.data.loadingTimer = window.setTimeout(() => {
-                    this.hideLoading();
-                }, 500);
+                // this.showLoading(this.data.iframes);
+                // window.clearTimeout(this.data.loadingTimer);
+                // this.data.loadingTimer = window.setTimeout(() => {
+                //     this.hideLoading();
+                // }, 500);
 
                 originIframe.on('load', function () {
                     PMAPI.sendToChild(originIframe[0], {
@@ -395,7 +395,7 @@ export const IframeInstance = new Component({
             });
         },
         setTabsCount:function () {
-            this.data.tabsTotalWidth = parseInt(this.el.find('div.tabs').width()) - 100;   //标签可用宽度
+            this.data.tabsTotalWidth = parseInt(this.el.find('div.tabs').width()) - 85;   //标签可用宽度
             maxIframeCount = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);  //自适应最大tabs数量
             // let count = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);
             // maxIframeCount =  count>15 ? 15:count;      //最多不超过15个
@@ -404,10 +404,9 @@ export const IframeInstance = new Component({
         adaptTabWidth:function () {
             let singleWidth = this.data.tabsTotalWidth/this.data.count ;
             if(singleWidth  > this.data.tabWidth){              //空间有剩余
-                this.el.find('.tabs div.item').css("width","109px");      //有40px padding和1px border,总长150px
+                this.el.find('.tabs div.item').css("width","150px");      //有40px padding和1px border,总长150px
             }else{
-                let width = singleWidth - 40 + "px";            // -40 padding
-                this.el.find('.tabs div.item').css("width",width);
+                this.el.find('.tabs div.item').css("width",singleWidth);
             }
         },
         sendMsgToIframes: function (info) {

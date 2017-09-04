@@ -20,11 +20,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        .corr-img {
-            background: url("./correspondence.png");
-            width: 16px;
-            height: 16px;
-            display: inline-block;
-        }
+        top:0;
+        z-index:1;
     }
 }

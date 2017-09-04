@@ -20,6 +20,14 @@ let config = {
                 this.events.emitHistory(this.data);
             }
         },
+        // {
+        //     event: 'keyup',
+        //     selector: '.timeInput',
+        //     callback: function () {
+        //         console.log(this.value)
+        //         this.value=this.value.replace("/[^w:]|_/ig,''");
+        //     }
+        // },
         {
             event: 'click',
             selector: '.ui-datepicker-current,.input-img',
@@ -145,6 +153,12 @@ let config = {
                 _this.events.changeValue(_this.data)
             }, 200)();
         })
+
+        _this.el.find('.timeInput').on('keyup', function () {
+            console.log("keyup")
+            _this.data.value= _this.data.value.replace("/[^w:]|_/ig,''");
+        })
+
         _.debounce(function () {
             _this.events.changeValue(_this.data)
         }, 200)();

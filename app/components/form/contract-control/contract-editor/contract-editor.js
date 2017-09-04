@@ -3,6 +3,7 @@
  */
 import template from './contract-editor.html';
 import './contract-editor.scss';
+import {PMENUM} from '../../../../lib/postmsg';
 
 export const contractEditorConfig = {
     template:template,
@@ -16,8 +17,6 @@ export const contractEditorConfig = {
                    delete data['content'];
                }
                this.data.value = this.data.local_data;
-               delete this.data.local_data;
-               delete this.data.elementKeys;
                this.actions.closeMe();
            }
         },{
@@ -41,12 +40,10 @@ export const contractEditorConfig = {
                     this.el.find('.save-n-close').css('display','none');
                     this.el.find('.download-all').css('display','none');
                     this.el.find('.download-current').css('display','none');
-                    this.data.local_data[this.data['current_tab']].k2v = {
-                        test:'test'
-                    }
                     this.data.editingK2v = JSON.parse(JSON.stringify(this.data.local_data[this.data['current_tab']].k2v));
                     this.actions.editContract(this.data.editingK2v);
                 } else {
+                    this.el.find('.contract-template-anchor').find('span').removeAttr('contenteditable');
                     this.el.find('.edit-or-save').text('编辑');
                     this.el.find('.save-n-close').css('display','inline');
                     this.el.find('.download-all').css('display','inline');
@@ -81,7 +78,7 @@ export const contractEditorConfig = {
     data:{
         local_data:[],
         elementKeys:[],
-        editingk2v:{}
+        editingk2v:{},
     },
     actions:{
         loadData(res){
@@ -191,25 +188,20 @@ export const contractEditorConfig = {
                 return;
             }
 
-            let currentTabData = this.data.local_data[this.data['current_tab']];
+            let currentTabData = this.data.local_data[i];
             this.el.find('.contract-model').val(currentTabData['model_id']);
             let keys = Object.keys(currentTabData['elements']);
             for(let key of keys){
                 this.el.find('#'+key).val(currentTabData['elements'][key]);
             }
 
-            if(this.data.local_data[i]['content']){
-                this.el.find('.contract-template-anchor').html(this.data.local_data[i]['content']);
-                return;
-            }
-
             this.actions.getElement({
                 table_id:this.data.table_id,
-                real_id:this.data.temp_id,
+                real_id:this.data.real_id,
                 field_id:this.data.id,
-                model_id:this.data.local_data[i].model_id,
-                elements:JSON.stringify(this.data.local_data[i].elements||{}),
-                type:this.data['mode'],
+                model_id:currentTabData.model_id,
+                elements:JSON.stringify(currentTabData.elements||{}),
+                type:'show',
                 index:0
             }).then(res=>{
                if(res.success && this.data['current_tab'] == i){
@@ -243,16 +235,16 @@ export const contractEditorConfig = {
         },
         downloadTemplate:function (i,isAll) {
             let contractData = this.data.local_data[i];
-            $.post('/customize/rzrk/download_contract/',{
-                table_id:this.data.table_id,
-                real_id:this.data.temp_id,
-                field_id:this.data.id,
-                model_id:contractData.model_id,
-                k2v:contractData.k2v,
-                file_name:contractData.name
-            }).then(res=>{
-                 if(res.success){
-                    let url = '/download_attachment/?file_id='+JSON.parse(res.data).file_id+"&download=1";
+            $.post('/customize/rzrk/download_contract/', {
+                table_id: this.data.table_id,
+                real_id: this.data.real_id,
+                field_id: this.data.id,
+                model_id: contractData.model_id,
+                k2v: JSON.stringify(contractData.k2v),
+                file_name: contractData.name
+            }).then(res => {
+                if (res.success) {
+                    let url = '/download_attachment/?file_id=' + JSON.parse(res.data).file_id + "&download=1";
                     window.open(url);
                     if(isAll){
                         this.actions.downloadTemplate(i+1,isAll);
@@ -266,6 +258,7 @@ export const contractEditorConfig = {
                 let changedValue = event.target.textContent;
                 let title = event.target.title;
                 k2v["##"+title+"##"]=changedValue;
+                this.el.find('span[title="'+title+'"]').text(changedValue);
             })
         },
         closeMe:function () {
@@ -286,7 +279,7 @@ export const contractEditorConfig = {
         //初始化各控件
         let obj = {
             table_id:this.data.table_id,
-            real_id:this.data.temp_id,
+            real_id:this.data.real_id,
             field_id:this.data.id
         };
         this.data.local_data = JSON.parse(JSON.stringify(this.data.value));

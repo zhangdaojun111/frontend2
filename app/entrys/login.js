@@ -10,11 +10,10 @@ import {LoginService} from '../services/login/loginService';
 import {md5} from '../services/login/md5';
 import msgBox from '../lib/msgbox';
 
-
 function getLoginController() {
     return {
         systemName:'',      //公司名称
-        loginSize:"26px",
+        // loginSize:"26px",
         versionInfo:{},     //后台获取的公司名称和版本信息
         isRememberKey:false,    //记录是否记住密码，点击登陆后根据其状态进行处理
         username_value:'',      //记录用户名称
@@ -146,7 +145,7 @@ function getLoginController() {
         },
         //初始化公司名称
         sysNameInit:function () {
-           this.systemName = this.versionInfo.sap_login_system_name || '';
+           this.systemName = this.versionInfo.sap_login_system_name || '成都睿银信息科技有限公司';
            this.resetSysName(this.systemName);
         },
         //初始化版本信息
@@ -188,7 +187,7 @@ function getLoginController() {
                 $table.append($row);
             }
             $(".run-btn").on("click", () => {
-                    $(".default-hide").toggle();
+                $(".default-hide").toggle();
             })
         },
         infoInit:function () {
@@ -263,9 +262,13 @@ let isNeedDownload = controller.browser_check();
 if( isNeedDownload === false){      //正常显示登录表单
     LoginService.getVersionInfo()
     .done((result) => {
-        controller.versionInfo = result;
-        controller.sysNameInit();   //初始化公司名称
-        controller.versionInit();   //初始化版本table
+        if(result.success === 1){
+            controller.versionInfo = result;
+            controller.sysNameInit();   //初始化公司名称
+            controller.versionInit();   //初始化版本table
+        }else{
+            console.log("版本数据获取失败");
+        }
     }).fail((err) => {
         console.log("get version info fail", err.statusText);
     });

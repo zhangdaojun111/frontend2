@@ -29,7 +29,14 @@ let config = {
             callback: function () {
                 this.el.find(".datetime").val("年-月-日 时:分:秒")
             }
-        }
+        },
+        {
+            event: 'keyup',
+            selector: '.datetime',
+            callback: function () {
+                this.value=this.value.replace("/[^w&-&:]|_/ig,''");
+            }
+        },
     ],
     afterRender() {
         let _this = this;
@@ -116,7 +123,6 @@ let config = {
 
             },
             onClose: function(timeText) {
-                console.log(timeText)
                 _this.data.value = timeText.replace(/\//g, "-");
                 _.debounce(function () {
                     _this.events.changeValue(_this.data)
