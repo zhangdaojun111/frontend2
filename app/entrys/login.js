@@ -37,7 +37,7 @@ function getLoginController() {
         $oppositePanel:$('.opposite-panel'),        //反面面板
         $submitFindPw:$('.submit-find-account'),    //查找密码提交按钮
         $mobileDownload:$('.mobile-download-btn'),  //移动下载按钮
-        $selfServiceUpdate:$('.self-service-update'),   //自助下载按钮
+        $selfServiceUpdate:$('.self-service-update'),   //自助更新按钮
 
 
         //检测浏览器是否可用
@@ -268,11 +268,14 @@ let isNeedDownload = controller.browser_check();
 if( isNeedDownload === false){      //正常显示登录表单
     LoginService.getVersionInfo().done((result) => {
         if(result.success === 1){
-            if(result.use_register.toString() === "0"){
+            if(result.use_register && result.use_register.toString() === "0"){
                 $('.register-btn').hide();
             }
-            if(result.sap_login_system_version.toString() === "0"){
+            if(result.sap_login_system_version && result.sap_login_system_version.toString() === "0"){
                 $('.update-btn').hide();
+            }
+            if(result.show_publish_link && result.show_publish_link.toString() === "0"){
+                $('.self-service-update').hide();
             }
 
             controller.versionInfo = result;

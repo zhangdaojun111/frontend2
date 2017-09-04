@@ -1,6 +1,6 @@
 /**
  * @author zhaoyan
- * 打开注册界面
+ * 注册界面
  */
 
 import Component from '../../lib/component';
@@ -11,7 +11,6 @@ import './register-page.scss';
 import template from './register-page.html';
 import {UserInfoService} from '../../services/main/userInfoService';
 import msgbox from '../../lib/msgbox';
-
 
 let config ={
     template:template,

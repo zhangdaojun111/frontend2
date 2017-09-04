@@ -1,3 +1,7 @@
+/**
+ * @author zhaoyan
+ * 系统设置界面
+ */
 import Component from '../../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
@@ -8,7 +12,6 @@ import './system-setting.scss';
 import template from './system-setting.html';
 import msgbox from "../../../lib/msgbox";
 import {UserInfoService} from "../../../services/main/userInfoService"
-
 
 let config = {
     template:template,

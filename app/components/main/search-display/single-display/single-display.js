@@ -1,3 +1,7 @@
+/**
+ * @author zhaoyan
+ * 全局搜索单个数据展示
+ */
 import Component from '../../../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
