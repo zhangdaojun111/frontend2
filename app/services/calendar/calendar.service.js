@@ -271,7 +271,7 @@ export const CalendarService = {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                MSG.alert('获取数据失败');
+                MSG.showTips('获取数据失败');
             }
         });
         HTTP.flush();
