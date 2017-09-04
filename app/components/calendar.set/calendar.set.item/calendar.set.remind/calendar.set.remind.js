@@ -44,9 +44,7 @@ let config = {
 
     actions: {
         checkRemindStatus:function () {
-            console.log(this.data.smsStatus, this.data.emailStatus);
             if( ( this.data.smsStatus === '1' && this.data.smsReciver.length === 0 ) || ( this.data.emailStatus === '1' && this.data.emailReciver.length === 0 ) ){
-                console.log('error');
                 MSG.alert( "已开启提醒的收件人不能为空" );
                 return;
             }
