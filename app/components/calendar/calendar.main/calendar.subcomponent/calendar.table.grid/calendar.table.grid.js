@@ -54,7 +54,6 @@ let config = {
             temp = temp.parent();
             if(ev.dataTransfer.getData("Text")) {
                 let data = JSON.parse(ev.dataTransfer.getData("Text"));
-                console.log(data, this.data.bodyData);
                 let params = {
                     real_ids: data['real_id'],
                     table_id: data['tableId'],
