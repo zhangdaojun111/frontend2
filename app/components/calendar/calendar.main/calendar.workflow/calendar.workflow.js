@@ -32,38 +32,67 @@ export const CalendarWorkflowData = {
         this.is_focus_workflow = false;
 
         // 待审批
-        CalendarService.getWorkflowRecords( {type: 5,"rows":9999,"page":1,"rate_data":1,'from_date':from_date,'to_date':to_date} ).then( res=>{
+        // CalendarService.getWorkflowRecords( {type: 5,"rows":9999,"page":1,"rate_data":1,'from_date':from_date,'to_date':to_date} ).then( res=>{
+        //     if(res) {
+        //         this.workflow_approve_data = res['rows'];
+        //         this.is_approve_workflow = true;
+        //         this.getWorkflowDataTogether();
+        //     }
+        //
+        // } );
+        // // 审批中
+        // CalendarService.getWorkflowRecords( {type: 2,"rows":9999,"page":1,"rate_data":1,'from_date':from_date,'to_date':to_date} ).then( res=>{
+        //     if(res) {
+        //         this.workflow_approving_data = res['rows'];
+        //         this.is_approving_workflow = true;
+        //         this.getWorkflowDataTogether();
+        //     }
+        // } );
+        //
+        // // 我关注的
+        // CalendarService.getWorkflowRecords( {type: 6,"rows":9999,"page":1,"rate_data":1,'from_date':from_date,'to_date':to_date} ).then( res=>{
+        //     if(res) {
+        //         this.workflow_focus_data = res['rows'];
+        //         this.is_focus_workflow = true;
+        //         this.getWorkflowDataTogether();
+        //     }
+        // } );
+        //
+        // // 由我发起并完成的
+        // CalendarService.getWorkflowRecords( {type: 3,"rows":9999,"page":1,"rate_data":1,'from_date':from_date,'to_date':to_date} ).then( res=>{
+        //     if(res) {
+        //         this.workflowFinishedData = res['rows'];
+        //         Mediator.emit('CalendarFinishedWorkflowData: workflowData', this.workflowFinishedData);
+        //     }
+        // } );
+        let workData = CalendarService.getWorkflowRecords({'from_date':from_date,'to_date':to_date});
+        workData[0].then(res => {
             if(res) {
                 this.workflow_approve_data = res['rows'];
                 this.is_approve_workflow = true;
                 this.getWorkflowDataTogether();
             }
-
-        } );
-        // 审批中
-        CalendarService.getWorkflowRecords( {type: 2,"rows":9999,"page":1,"rate_data":1,'from_date':from_date,'to_date':to_date} ).then( res=>{
+        });
+        workData[1].then(res => {
             if(res) {
                 this.workflow_approving_data = res['rows'];
                 this.is_approving_workflow = true;
                 this.getWorkflowDataTogether();
             }
-        } );
-        // 我关注的
-        CalendarService.getWorkflowRecords( {type: 6,"rows":9999,"page":1,"rate_data":1,'from_date':from_date,'to_date':to_date} ).then( res=>{
+        });
+        workData[2].then(res => {
             if(res) {
                 this.workflow_focus_data = res['rows'];
                 this.is_focus_workflow = true;
                 this.getWorkflowDataTogether();
             }
-        } );
-
-        // 由我发起并完成的
-        CalendarService.getWorkflowRecords( {type: 3,"rows":9999,"page":1,"rate_data":1,'from_date':from_date,'to_date':to_date} ).then( res=>{
+        });
+        workData[3].then(res => {
             if(res) {
                 this.workflowFinishedData = res['rows'];
                 Mediator.emit('CalendarFinishedWorkflowData: workflowData', this.workflowFinishedData);
             }
-        } );
+        });
     },
 
     /**
