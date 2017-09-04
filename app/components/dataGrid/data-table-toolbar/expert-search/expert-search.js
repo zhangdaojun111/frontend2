@@ -78,6 +78,9 @@ let config = {
                 this.data.commonQuery.forEach((item)=> {
                     this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete icon-expert-error-msg"></span></li>`);
                 })
+                if(this.data.commonQuery.length != 0){
+                    this.el.find('.common-search-compile').css('display','block');
+                }
             } );
             HTTP.flush();
         },
@@ -313,9 +316,7 @@ let config = {
                     //     name:name,
                     //     queryParams:JSON.stringify(this.data.searchInputList)
                     // });
-                    if(this.data.commonQuery.length != 0){
-                        this.el.find('.common-search-compile').css('display','block');
-                    }
+
                     this.name = name;
                     // Mediator.on('renderQueryItem:itemData',data =>{
                     //     this.actions.renderQueryItem(data);
