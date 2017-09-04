@@ -192,7 +192,7 @@ let config = {
         }
     ],
     afterRender:function () {
-        // this.actions.getUserViewList();
+        this.actions.getUserViewList();
         // this.el.on("click",".save-btn",_.debounce(() => {
         //     this.actions.saveFavorite();
         // },1000)).on("click","span.list-name",(event) => {
