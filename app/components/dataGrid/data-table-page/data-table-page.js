@@ -56,7 +56,8 @@ let config = {
                         tableId: this.data.tableId,
                         tableName: this.data.tableName,
                         tableType: 'in_process',
-                        viewMode: 'in_process'
+                        viewMode: 'in_process',
+                        gridTips: '在途'
                     };
                     this.append(new dataTableAgGrid(obj), this.el.find('#data-table-in-process'));
                     this.data.isRenderIntrain = true;
@@ -72,7 +73,8 @@ let config = {
         let json = {
             tableId: this.data.tableId,
             tableName: this.data.tableName,
-            showTabs: this.actions.showTabs
+            showTabs: this.actions.showTabs,
+            gridTips: '数据'
         };
         this.append(new dataTableAgGrid(json), this.el.find('#data-table-agGrid'));
         this.actions.addClick();
