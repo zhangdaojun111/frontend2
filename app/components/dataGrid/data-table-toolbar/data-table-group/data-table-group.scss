@@ -79,7 +79,7 @@
             }
             .group-data-list {
                 height: calc(50% - 45px);
-                overflow-y: auto;
+                overflow-y: scroll;
                 //border-bottom: 1px solid #fff;
                 width: calc(100% - 12px);
                 border: 1px solid #e4e4e4;
@@ -130,7 +130,7 @@
             }
             .grouping-data-list {
                 height: calc(50% - 45px);
-                overflow-y: auto;
+                overflow-y: scroll;
                 //border-bottom: 1px solid #fff;
                 width: calc(100% - 13px);
                 border: 1px solid #e4e4e4;
@@ -140,15 +140,15 @@
                     border: 1px solid #caeeff;
                     padding:7px;
                     width: calc(100% - 15px);
-                    cursor: move;
+                    //cursor: move;
+                    cursor: n-resize;
                     margin-bottom: 5px;
                     position: relative;
-                    cursor: n-resize;
                     .group-data-item-select {
                         display: none;
                         right: 5px;
                         position: absolute;
-                        width: 70px;
+                        width: 90px;
                     }
                 }
             }
