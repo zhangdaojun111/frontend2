@@ -1706,6 +1706,8 @@ let config = {
         } else {
             this.el.find('table').siblings('.ui-btn-box').css("margin-left", "-20px");
         }
+        //时间日期
+
     },
     beforeDestory() {
         this.el.off();
