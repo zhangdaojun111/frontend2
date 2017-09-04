@@ -40,7 +40,9 @@ let config = {
          *清除所有下穿字段
          */
        clear() {
-            this.data.value = [];
+           // this.data.firstDo 因为有可能是编辑模式下第一次加载，所以第一次不能清空数据
+            this.data.value = this.data.firstDo ? this.data.value : [];
+            this.data.firstDo = false;
             this.reload();
         },
     },
@@ -61,6 +63,16 @@ let config = {
 class Deep extends Base {
     constructor(data, event){
         super(config, data, event)
+    }
+
+    /**
+     * 设置下穿字段列表
+     * @param value
+     */
+    setValue(value){
+        this.data.value = value;
+        this.data.firstDo = true;
+        this.reload();
     }
 }
 

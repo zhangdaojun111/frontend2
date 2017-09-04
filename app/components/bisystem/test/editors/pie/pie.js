@@ -113,6 +113,10 @@ let config = {
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
                 countColumn:'',
                 filter: [],
+                chartType: {
+                    name: '饼图',
+                    type: 'pie'
+                },
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
@@ -121,17 +125,16 @@ let config = {
                 yAxis:data.pieType == '1' ? data.columns : data.yAxis,
                 deeps: data.pieType == '1' ? [] : data.deeps
             };
-            console.log(chart)
-            // let res = await ChartFormService.saveChart(JSON.stringify(chart));
-            // if (res['success'] == 1) {
-            //     msgbox.alert('保存成功');
-            //     if (!chart['chartName']['id']) {
-            //         this.reload();
-            //     };
-            //     Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
-            // } else {
-            //     msgbox.alert(res['error'])
-            // };
+            let res = await ChartFormService.saveChart(JSON.stringify(chart));
+            if (res['success'] == 1) {
+                msgbox.alert('保存成功');
+                if (!chart['chartName']['id']) {
+                    this.reload();
+                };
+                Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
+            } else {
+                msgbox.alert(res['error'])
+            };
         },
 
         /**
@@ -144,7 +147,15 @@ let config = {
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
-            this.formItems['columns'].setValue(JSON.stringify(chart['columns']));
+            this.formItems['columns'].setValue(chart['columns']);
+            this.formItems['pieType'].setValue(chart['pieType']['value']);
+            this.formItems['xAxis'].setValue(chart['xAxis']);
+            if (chart['pieType']['value'] == 1) {
+                this.formItems['columns'].setValue(chart['yAxis']);
+            } else {
+                this.formItems['yAxis'].setValue(chart['yAxis']);
+                this.formItems['deeps'].setValue(chart['deeps']);
+            };
         }
     },
     data: {
@@ -185,7 +196,6 @@ let config = {
                             this.formItems['yAxis'].el.show();
                             this.formItems['deeps'].el.show();
                             this.formItems['deepX'].el.show();
-                            this.formItems['columns'].data.value = [];
                         }
                     }
                 }
@@ -272,8 +282,6 @@ class PieEditor extends Base {
         config.data.chart_id = data.id ? data.id : null;
         super(config);
     }
-
-    reset() {}
 }
 
 export {PieEditor}
