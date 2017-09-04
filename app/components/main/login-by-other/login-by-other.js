@@ -95,7 +95,7 @@ class LoginOther extends Component{
 export default {
     show: function() {
         let component = new LoginOther();
-        let el = $('<div id="login-by-other">').appendTo(document.body);
+        let el = $('<div class="login-by-other">').appendTo(document.body);
         component.render(el);
         el.dialog({
             title: '他人登录',

@@ -15,6 +15,9 @@
             padding: 0 8px;
             line-height: 30px;
         }
+        .ag-cell-focus {
+            border: none;
+        }
     }
 
     .ag-header {
@@ -31,6 +34,9 @@
         .ag-header-cell-label {
             text-overflow: clip;
             overflow: hidden;
+            font-size: 12px;
+            line-height: 30px;
+            padding: 0px;
         }
         .ag-grid-number {
             position: relative;
@@ -46,6 +52,8 @@
             }
             .ag-header-group-cell-label {
                 text-align: center;
+                font-size: 12px;
+                line-height: 24px;
             }
             .ag-header-group-cell-label:hover {
                 cursor: pointer;
