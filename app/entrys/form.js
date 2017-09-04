@@ -3,7 +3,11 @@ import Mediator from '../lib/mediator';
 import {FormService} from "../services/formService/formService";
 import '../assets/scss/form.scss'
 import '../assets/scss/core/print.scss'
+import '../assets/scss/form/form.scss';
 import {CreateForm} from "../components/form/createFormVersionTable/createForm"
+
+
+
 
 let FormEntrys = {
     childForm:{},
@@ -55,8 +59,6 @@ let FormEntrys = {
         this.isAddBuild=config.isAddBuild || 0;
         this.buildId=config.id || '';
         this.btnType=config.btnType||'new';
-        console.log('配置文件');
-        console.log(config);
     },
     //静态数据里是否有这个key
     hasKeyInFormDataStatic(key,staticData){
@@ -110,6 +112,7 @@ let FormEntrys = {
                 from_workflow:this.fromWorkFlow,
                 table_id:this.tableId
             }
+            this.isloadWorkflow=true;
         }else if(this.fromApprove && this.realId == '' ){//审批流程
             json={
                 form_id: this.formId,
@@ -119,6 +122,7 @@ let FormEntrys = {
                 from_focus: this.fromFocus,
                 table_id: this.tableId
             }
+            this.isloadWorkflow=true;
         }
         else{
             json=this.pickJson();
@@ -148,6 +152,7 @@ let FormEntrys = {
                     parent_real_id: this.parentRealId || "",
                     parent_temp_id: this.parentTempId ||""
                 }
+                this.isloadCustomTableForm = true;
             }else {
                 json = {
                     form_id: "",
@@ -358,6 +363,12 @@ let FormEntrys = {
         return html;
     },
 
+    //转到编辑模式
+    changeToEdit(tableId){
+        this.childForm[tableId].data.isOtherChangeEdit=true;
+        this.childForm[tableId].actions.changeToEdit();
+    },
+
     checkConfig(config){
         if(!(config.el instanceof jQuery)){
             console.err('el不是一个Jquery对象');
@@ -377,7 +388,7 @@ let FormEntrys = {
             return result;
         }
         this.init(config);
-        let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap"></div>`).prependTo(this.el);
+        let html=$(`<div id="detail-form" data-id="form-${this.tableId}" style="" class="table-wrap wrap"><div></div></div>`).prependTo(this.el);
         let res;
         if(!this.fromWorkFlow){
             res=await  FormService.getPrepareParmas({table_id:this.tableId});
@@ -402,6 +413,12 @@ let FormEntrys = {
         formBase.render(html);
         //通知父框架表单刷新完毕
         Mediator.publish('form:formAlreadyCreate','success');
+        //发送给工作流表名信息
+        if(this.formId && this.el.find('.ui-myformtable').prev()[0].nodeName == 'P'){
+            Mediator.publish('workflow:getWorkflowTitle',this.el.find('.ui-myformtable').prev()[0].innerText);
+        }else{
+            Mediator.publish('workflow:getWorkflowTitle','');
+        }
         console.timeEnd('form创建时间');
     },
 

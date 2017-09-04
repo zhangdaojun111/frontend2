@@ -5,6 +5,18 @@
         background-color: transparent !important;
     }
 
+    //footer
+    .ag-floating-bottom-container {
+        .ag-cell-no-focus {
+            border-right: 1px solid #FFFFFF;
+            border-left: none;
+        }
+        .ag-cell-value {
+            padding: 0 8px;
+            line-height: 30px;
+        }
+    }
+
     .ag-header {
         border-top: 1px solid rgba(228, 228, 228, 1);
         border-bottom: 1px solid rgba(228, 228, 228, 1) !important;
@@ -28,8 +40,15 @@
         }
 
         .ag-header-group-cell {
+            border-right: 1px solid rgba(228, 228, 228, 1);
             .ag-header-cell-resize {
                 width: 0px;
+            }
+            .ag-header-group-cell-label {
+                text-align: center;
+            }
+            .ag-header-group-cell-label:hover {
+                cursor: pointer;
             }
         }
 
@@ -125,6 +144,7 @@
             &.ag-cell-no-focus {
                 border-right: 1px solid #E4E4E4 !important;
             }
+
         }
     }
 
@@ -182,4 +202,8 @@
         display: inline-block;
         vertical-align: sub;
     }
+}
+.ag-bootstrap .ag-cell-focus {
+    outline: none;
+    background-color: #E4E4E4;
 }

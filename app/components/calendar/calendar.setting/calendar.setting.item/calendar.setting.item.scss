@@ -1,29 +1,45 @@
 @import "../../calendar";
-.setting-menu {
-    .menu-item-title{
+.component-setting-menu {
+    .menu-item-title {
         padding-left: 10px;
         padding-top: 5px;
-        padding-bottom: 5px;
-        color:#999999;
+        //padding-bottom: 5px;
+        color: #999999;
+        .setItemTitle{
+            display: inline-block;
+            width: 16px;
+            height:16px;
+            cursor: pointer;
+            box-sizing: border-box;
+            position: relative;
+            top: 3px;
+            background: url("../../../../assets/images/calendar/calendar-setItemtitle.png");
+        }
         .menu-label {
             display: inline-block;
             line-height: 28px;
             padding-left: 2px;
         }
     }
-    .menu-item-title:hover{
+    .menu-item-title:hover {
         background-color: rgba(228, 228, 228, 1);
     }
-    .item-child {
+    .component-item-child {
         padding-left: 30px;
         padding-top: 5px;
         padding-bottom: 5px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: clip;
-        .img-con{
+        .img-con {
+            display: inline-block;
+            width: 16px;
+            height:16px;
+            cursor: pointer;
+            box-sizing: border-box;
             position: relative;
             top: 3px;
+            background: url("../../../../assets/images/calendar/calendar-setItem.png");
         }
     }
 }

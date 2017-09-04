@@ -6,30 +6,29 @@
     {{else}}
     <div style="position: relative; float: left;">
         <input type="text" disabled class="ui-calendar ui-width dynamic-form-input timeInput" style=" color: #999999;"  value="{{value}}" >
-        <!--<span class="cancel-x">X</span>-->
-        <a href="javascript:void(0);" class="input-img"></a>
+        <a href="javascript:void(0);" class="input-img icon-time form-icon"></a>
     </div>
     <div class="time" style="display: none">
             <div class="ui-timepicker " style="background: #FAFAFA;display: block; border-bottom: 1px solid #E1E1E1">
                 <!--时-->
                 <div class="ui-hour-picker hour">
-                    <a href="javascript:;" class="plus"></a>
+                    <a href="javascript:;" class="plus icon-plus form-icon"></a>
                     <span style="display: inline;"></span>
-                    <a href="javascript:;" class="reduce"></a>
+                    <a href="javascript:;" class="reduce icon-reduce form-icon"></a>
                 </div>
                 <span class="ui-separator" style="position:relative;">:</span>
                 <!--分-->
                 <div class="ui-minute-picker minute">
-                    <a href="javascript:;" class="plus"></a>
+                    <a href="javascript:;" class="plus icon-plus form-icon"></a>
                     <span style="display: inline;"></span>
-                    <a href="javascript:;" class="reduce"></a>
+                    <a href="javascript:;" class="reduce icon-reduce form-icon"></a>
                 </div>
                 <span class="ui-separator" style="position:relative;">:</span>
                 <!--秒-->
                 <div class="ui-second-picker second">
-                    <a href="javascript:;" class="plus"></a>
+                    <a href="javascript:;" class="plus icon-plus form-icon"></a>
                     <span style="display: inline;"></span>
-                    <a href="javascript:;" class="reduce"></a>
+                    <a href="javascript:;" class="reduce icon-reduce form-icon"></a>
                 </div>
             </div>
 
@@ -46,7 +45,7 @@
         <span id="requiredLogo" class="{{requiredClass}}"></span>
         {{/if}}
         {{#if history}}
-        <a href="javascript:void(0);" class="ui-history" title="修改历史" style="position: relative"></a>
+        <a href="javascript:void(0);" class="ui-history icon-history form-icon" title="修改历史" style="position: relative"></a>
         {{/if}}
     </div>
     {{/if}}

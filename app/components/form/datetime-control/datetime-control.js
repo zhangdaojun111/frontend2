@@ -29,7 +29,8 @@ let config = {
             callback: function () {
                 this.el.find(".datetime").val("年-月-日 时:分:秒")
             }
-        }
+        },
+
     ],
     afterRender() {
         let _this = this;
