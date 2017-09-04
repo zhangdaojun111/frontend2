@@ -154,6 +154,9 @@
             }
 
         }
+        .ag-row-selected {
+            background-color: #97DDFF!important;
+        }
     }
 
     .ag-bootstrap .ag-header-cell-text {
@@ -162,10 +165,6 @@
         font-weight: 700;
         font-style: normal;
         font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
-    }
-
-    .ag-bootstrap .ag-row-selected {
-        background-color: #E4E4E4 !important;
     }
     //图标
     .checkbox-uncheck {
