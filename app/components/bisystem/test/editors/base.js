@@ -7,6 +7,7 @@ import {Checkbox} from '../forms/checkbox/checkbox';
 import {Choosed} from '../forms/choosed/choosed';
 import {Save} from '../forms/save/save';
 import {TableSingle} from '../forms/single/single';
+import {Deep} from '../forms/deep/deep';
 
 let formItemTypes = {
     'text': Text,
@@ -16,7 +17,8 @@ let formItemTypes = {
     'checkbox': Checkbox,
     'choosed':Choosed,
     'save': Save,
-    'table_single': TableSingle
+    'table_single': TableSingle,
+    'deep': Deep
 }
 
 class Base extends Component {
@@ -32,6 +34,7 @@ class Base extends Component {
                 value: item.defaultValue,
                 label: item.label,
                 name: item.name,
+                deeps: item.deeps,
                 list: item.list,
             }, item.events);
             this.append(instance, this.el.find('.form-group'));

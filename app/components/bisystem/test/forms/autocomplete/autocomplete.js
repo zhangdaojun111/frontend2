@@ -19,12 +19,11 @@ let config = {
                 };
             } else {
                 this.data.value = null;
-            }
+            };
             this.trigger('onSelect', this.data.value);
         }
     },
-    binds: [
-    ],
+    binds: [],
     afterRender(){
         const autoselect_data = {
             multiSelect: false,
@@ -47,6 +46,11 @@ class AutoComplete extends Base {
      * @param list = 要设置的list数据
      */
     setList(list) {
+        if (this.data.firstDo) {
+            this.data.firstDo = false;
+        } else {
+            this.autoselect.data.choosed = [];
+        }
         this.autoselect.actions.setList(list);
     }
 
@@ -56,7 +60,8 @@ class AutoComplete extends Base {
      */
     setValue(value){
         this.data.value = value;
-        this.autoselect.data.choosed = [value];
+        this.autoselect.data.choosed = value ? [value] : [];
+        this.data.firstDo = true;
     }
 }
 

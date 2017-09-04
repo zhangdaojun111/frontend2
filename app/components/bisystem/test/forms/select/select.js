@@ -11,6 +11,7 @@ let config = {
          */
         onChange: function (value) {
             this.data.value = value;
+            this.trigger('onChange', value);
         },
     },
     binds: [
@@ -38,7 +39,11 @@ class Select extends Base {
      * 设置value
      * @param value
      */
-    setValue(value){}
+    setValue(value){
+        this.data.value = value;
+        this.el.find("select").val(value);
+        this.trigger('onChange',value);
+    }
 
     /**
      * 设置select options

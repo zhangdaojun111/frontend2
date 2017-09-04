@@ -1,6 +1,5 @@
 import {Base} from '../base';
-import template from './table.html';
-import './table.scss';
+import template from './pie.html';
 
 import {chartName,theme,icon} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
@@ -20,7 +19,7 @@ let config = {
             if (table) {
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
-                    this.actions.loadColumns(res['data']['x_field']);
+                    this.actions.loadColumns(res['data']);
                 } else {
                     msgbox.alert(res['error'])
                 }
@@ -31,19 +30,21 @@ let config = {
         },
 
         /**
-         * 渲染列名字段列表（x轴）
-         * @param columns 表格列表字段（x轴）
+         * 渲染列名字段列表（x,y轴）
+         * @param data 表格列表字段（x,y轴）
          */
-        async loadColumns(columns) {
+        async loadColumns(data) {
             if (this.formItems['columns']) {
-                if (columns) {
-                    this.formItems['columns'].setList(columns);
-                    this.formItems['sortColumns'].setList(columns);
+                if (data) {
+                    this.formItems['xAxis'].setList(data['x_field']);
+                    this.formItems['yAxis'].setList(data['y_field']);
+                    this.formItems['columns'].setList(data['y_field']);
+                    this.formItems['deepX'].setList(data['x_field']);
                 } else { // 清空字段
                     this.formItems['columns'].actions.clear();
-                    this.formItems['choosed'].actions.clear();
-                    this.formItems['table_single'].actions.clear();
-                    this.formItems['sortColumns'].setList([]);
+                    this.formItems['xAxis'].setList([]);
+                    this.formItems['yAxis'].setList([]);
+                    this.formItems['deepX'].setList([]);
                 }
             }
         },
@@ -52,7 +53,7 @@ let config = {
          * 初始化图表操作
          */
        async init() {
-           // this.formItems['single'].trigger('onChange');
+            this.formItems['pieType'].trigger('onChange', this.formItems['pieType'].data.value);
            // 获取数据来源
             ChartFormService.getChartSource().then(res => {
                 if (res['success'] === 1) {
@@ -105,35 +106,28 @@ let config = {
         async saveChart() {
             let data = this.getData();
             let chart = {
-                assortment: 'table',
+                assortment: 'pie',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
-                countColumn:{},
-                columns:data.columns,
+                countColumn:'',
+                filter: [],
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
-                filter: [],
-                countNum: data.countNum,
-                single:data.single[0] ? data.single[0]: 0,
-                singleColumnWidthList:[],
-                sort: data.sort,
-                sortColumns:data.sortColumns ? [data.sortColumns] : [],
-                alignment:data.alignment,
-                columnNum:data.columnNum
+                pieType: data.pieType == '1' ? {name: '单条数据', value: 1} : {name: '多条数据', value: 2},
+                xAxis:data.xAxis,
+                yAxis:data.pieType == '1' ? data.columns : data.yAxis,
             };
-
-            console.log(chart);
-
-            let res = await ChartFormService.saveChart(JSON.stringify(chart));
-            if (res['success'] == 1) {
-                msgbox.alert('保存成功');
-                if (!chart['chartName']['id']) {
-                    this.reload();
-                };
-                Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
-            } else {
-                msgbox.alert(res['error'])
-            };
+            console.log(chart)
+            // let res = await ChartFormService.saveChart(JSON.stringify(chart));
+            // if (res['success'] == 1) {
+            //     msgbox.alert('保存成功');
+            //     if (!chart['chartName']['id']) {
+            //         this.reload();
+            //     };
+            //     Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
+            // } else {
+            //     msgbox.alert(res['error'])
+            // };
         },
 
         /**
@@ -141,17 +135,12 @@ let config = {
          * @param chart = this.data.chart
          */
         fillChart(chart) {
+            console.log(chart);
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
-            this.formItems['columns'].setValue(chart['columns']);
-            this.formItems['sort'].setValue(chart['sort']);
-            this.formItems['sortColumns'].setValue(chart['sortColumns'][0]);
-            this.formItems['alignment'].setValue(chart['alignment']);
-            this.formItems['countNum'].setValue(chart['countNum']);
-            this.formItems['single'].setValue(chart['single']);
-            this.formItems['columnNum'].setValue(chart['columnNum']);
+            this.formItems['columns'].setValue(JSON.stringify(chart['columns']));
         }
     },
     data: {
@@ -171,106 +160,72 @@ let config = {
             theme,
             icon,
             {
-                label: '请选择列名',
-                name: 'columns',
-                defaultValue: [],
-                list: [],
-                type: 'checkbox',
+                label: '选择单条数据，多条数据',
+                name: 'pieType',
+                defaultValue: '1',
+                list: [
+                    {name:'多条', value:'2'},
+                    {name:'单条', value:'1'},
+                ],
+                type: 'select',
                 events: {
-                    onChange:function(value) {
-                        this.formItems['choosed'].actions.update(value);
-                        this.formItems['table_single'].actions.setColumns(value, this.formItems['columnNum'].getValue());
+                    onChange(value) {
+                        if (value == 1) {
+                            this.formItems['columns'].el.show();
+                            this.formItems['yAxis'].el.hide();
+                            this.formItems['deeps'].el.hide();
+                            this.formItems['deepX'].el.hide();
+                        } else {
+                            this.formItems['columns'].el.hide();
+                            this.formItems['yAxis'].el.show();
+                            this.formItems['deeps'].el.show();
+                            this.formItems['deepX'].el.show();
+                        }
                     }
                 }
             },
             {
-                label: '已选择列名',
-                name: 'choosed',
-                defaultValue: '',
-                list: [],
-                type: 'choosed'
-            },
-            {
-                label: '默认排序',
-                name: 'sort',
-                defaultValue: '1',
-                list: [
-                    {value: '1',name: '升序'},
-                    {value: '-1', name:'降序'}
-                ],
-                type: 'radio'
-            },
-            {
-                label: '选择排序字段(非必选)',
-                name: 'sortColumns',
+                label: 'x轴字段',
+                name: 'xAxis',
                 defaultValue: '',
                 type: 'autocomplete'
             },
             {
-                label: '表格文字对齐方式',
-                name: 'alignment',
-                defaultValue: 'left',
-                list: [
-                    {'value': 'left', 'name': '居左'},
-                    {'value': 'center', 'name': '居中'},
-                    {'value': 'right', 'name': '居右'},
-                ],
-                type: 'select'
+                label: 'y轴字段',
+                name: 'yAxis',
+                defaultValue: '',
+                type: 'autocomplete'
             },
             {
-                label: '请输入显示多少多少列(默认10条)',
-                name: 'countNum',
-                defaultValue: 10,
-                type: 'text'
+                label: '选择y轴数据',
+                name: 'columns',
+                defaultValue: [],
+                list: [],
+                type: 'checkbox',
+                events: {}
             },
             {
                 label: '',
-                name: 'single',
-                defaultValue: [],
-                list: [
-                    {
-                        value:1, name: '是否显示为单行'
-                    }
-                ],
-                type: 'checkbox',
+                name: 'deeps',
+                deeps:[],
+                type: 'deep',
+                events: {}
+            },
+            {
+                label: '选择x轴字段',
+                name: 'deepX',
+                defaultValue: '',
+                type: 'autocomplete',
                 events: {
-                    onChange:function(value) {
-                        console.log(value);
-                        if (value && value[0]) {
-                            this.formItems['columnNum'].el.show();
-                            this.formItems['countNum'].el.hide();
-                            this.formItems['table_single'].el.show();
-
-                        } else {
-                            this.formItems['columnNum'].el.hide();
-                            this.formItems['countNum'].el.show();
-                            this.formItems['table_single'].el.hide();
+                    onSelect(value) {
+                        if (value) {
+                            this.formItems['deeps'].actions.update(value);
+                            this.formItems['deepX'].autoselect.actions.clearValue()
                         };
                     }
                 }
             },
-            {
-                label: '需要显示多少列',
-                name: 'columnNum',
-                defaultValue: '1',
-                type: 'text',
-                events: {
-                    onChange: _.debounce(function(value) {
-                        let columnNum = parseInt(value);
-                        if (columnNum !== NaN) {
-                            let num = this.formItems['table_single'].actions.setColumns(this.formItems['choosed'].data.list, columnNum);
-                            this.formItems['columnNum'].setValue(num);
-                        }
-                    },100)
-                }
-            },
-            {
-                label: '',
-                name: 'table_single',
-                defaultValue: '',
-                type: 'table_single',
-                events: {}
-            },
+
             {
                 label: '',
                 name: 'save',
@@ -282,6 +237,7 @@ let config = {
                     }
                 }
             },
+
         ]
     },
     async afterRender() {
@@ -305,7 +261,7 @@ let config = {
     }
 }
 
-class TableEditor extends Base {
+class PieEditor extends Base {
     constructor(data) {
         config.data.chart_id = data.id ? data.id : null;
         super(config);
@@ -314,4 +270,4 @@ class TableEditor extends Base {
     reset() {}
 }
 
-export {TableEditor}
+export {PieEditor}

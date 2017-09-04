@@ -1,6 +1,5 @@
 import {Base} from '../base';
-import template from './table.html';
-import './table.scss';
+import template from './radar.html';
 
 import {chartName,theme,icon} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
@@ -38,12 +37,11 @@ let config = {
             if (this.formItems['columns']) {
                 if (columns) {
                     this.formItems['columns'].setList(columns);
-                    this.formItems['sortColumns'].setList(columns);
+                    this.formItems['product'].setList(columns);
                 } else { // 清空字段
                     this.formItems['columns'].actions.clear();
                     this.formItems['choosed'].actions.clear();
-                    this.formItems['table_single'].actions.clear();
-                    this.formItems['sortColumns'].setList([]);
+                    this.formItems['product'].setList([]);
                 }
             }
         },
@@ -52,7 +50,6 @@ let config = {
          * 初始化图表操作
          */
        async init() {
-           // this.formItems['single'].trigger('onChange');
            // 获取数据来源
             ChartFormService.getChartSource().then(res => {
                 if (res['success'] === 1) {
@@ -105,24 +102,16 @@ let config = {
         async saveChart() {
             let data = this.getData();
             let chart = {
-                assortment: 'table',
+                assortment: 'radar',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
-                countColumn:{},
+                countColumn:'',
+                filter: [],
                 columns:data.columns,
+                product:data.product,
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
-                filter: [],
-                countNum: data.countNum,
-                single:data.single[0] ? data.single[0]: 0,
-                singleColumnWidthList:[],
-                sort: data.sort,
-                sortColumns:data.sortColumns ? [data.sortColumns] : [],
-                alignment:data.alignment,
-                columnNum:data.columnNum
             };
-
-            console.log(chart);
 
             let res = await ChartFormService.saveChart(JSON.stringify(chart));
             if (res['success'] == 1) {
@@ -141,17 +130,13 @@ let config = {
          * @param chart = this.data.chart
          */
         fillChart(chart) {
+            console.log(chart);
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
             this.formItems['columns'].setValue(chart['columns']);
-            this.formItems['sort'].setValue(chart['sort']);
-            this.formItems['sortColumns'].setValue(chart['sortColumns'][0]);
-            this.formItems['alignment'].setValue(chart['alignment']);
-            this.formItems['countNum'].setValue(chart['countNum']);
-            this.formItems['single'].setValue(chart['single']);
-            this.formItems['columnNum'].setValue(chart['columnNum']);
+            this.formItems['product'].setValue(chart['product']);
         }
     },
     data: {
@@ -171,6 +156,12 @@ let config = {
             theme,
             icon,
             {
+                label: '选中雷达图名称字段',
+                name: 'product',
+                defaultValue: '',
+                type: 'autocomplete'
+            },
+            {
                 label: '请选择列名',
                 name: 'columns',
                 defaultValue: [],
@@ -179,7 +170,6 @@ let config = {
                 events: {
                     onChange:function(value) {
                         this.formItems['choosed'].actions.update(value);
-                        this.formItems['table_single'].actions.setColumns(value, this.formItems['columnNum'].getValue());
                     }
                 }
             },
@@ -189,87 +179,6 @@ let config = {
                 defaultValue: '',
                 list: [],
                 type: 'choosed'
-            },
-            {
-                label: '默认排序',
-                name: 'sort',
-                defaultValue: '1',
-                list: [
-                    {value: '1',name: '升序'},
-                    {value: '-1', name:'降序'}
-                ],
-                type: 'radio'
-            },
-            {
-                label: '选择排序字段(非必选)',
-                name: 'sortColumns',
-                defaultValue: '',
-                type: 'autocomplete'
-            },
-            {
-                label: '表格文字对齐方式',
-                name: 'alignment',
-                defaultValue: 'left',
-                list: [
-                    {'value': 'left', 'name': '居左'},
-                    {'value': 'center', 'name': '居中'},
-                    {'value': 'right', 'name': '居右'},
-                ],
-                type: 'select'
-            },
-            {
-                label: '请输入显示多少多少列(默认10条)',
-                name: 'countNum',
-                defaultValue: 10,
-                type: 'text'
-            },
-            {
-                label: '',
-                name: 'single',
-                defaultValue: [],
-                list: [
-                    {
-                        value:1, name: '是否显示为单行'
-                    }
-                ],
-                type: 'checkbox',
-                events: {
-                    onChange:function(value) {
-                        console.log(value);
-                        if (value && value[0]) {
-                            this.formItems['columnNum'].el.show();
-                            this.formItems['countNum'].el.hide();
-                            this.formItems['table_single'].el.show();
-
-                        } else {
-                            this.formItems['columnNum'].el.hide();
-                            this.formItems['countNum'].el.show();
-                            this.formItems['table_single'].el.hide();
-                        };
-                    }
-                }
-            },
-            {
-                label: '需要显示多少列',
-                name: 'columnNum',
-                defaultValue: '1',
-                type: 'text',
-                events: {
-                    onChange: _.debounce(function(value) {
-                        let columnNum = parseInt(value);
-                        if (columnNum !== NaN) {
-                            let num = this.formItems['table_single'].actions.setColumns(this.formItems['choosed'].data.list, columnNum);
-                            this.formItems['columnNum'].setValue(num);
-                        }
-                    },100)
-                }
-            },
-            {
-                label: '',
-                name: 'table_single',
-                defaultValue: '',
-                type: 'table_single',
-                events: {}
             },
             {
                 label: '',
@@ -305,7 +214,7 @@ let config = {
     }
 }
 
-class TableEditor extends Base {
+class RadarEditor extends Base {
     constructor(data) {
         config.data.chart_id = data.id ? data.id : null;
         super(config);
@@ -314,4 +223,4 @@ class TableEditor extends Base {
     reset() {}
 }
 
-export {TableEditor}
+export {RadarEditor}

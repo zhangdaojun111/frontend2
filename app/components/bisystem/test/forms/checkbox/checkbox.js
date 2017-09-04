@@ -27,7 +27,7 @@ let config = {
                 _.remove(this.data.value, (item) => {
                     return item.id === value.id
                 });
-            }
+            };
             this.trigger('onChange', this.data.value);
         }
 
@@ -42,11 +42,8 @@ let config = {
             }
         }
     ],
-    afterRender(){
-    },
-    firstAfterRender() {
-        // this.trigger('onChange', this.data.value);
-    }
+    afterRender(){},
+    firstAfterRender() {}
 };
 
 class Checkbox extends Base {
@@ -59,7 +56,24 @@ class Checkbox extends Base {
      * @param value
      */
     setValue(value){
-        console.log(this.data.list);
+        this.data.firstDo = true;
+        if (Array.isArray(value)) {
+            this.data.value = value;
+            this.data.list.forEach((l,index) => {
+                for (let choosed of this.data.value) {
+                    if (choosed.id === JSON.parse(l.value).id) {
+                        this.el.find('input[type=checkbox]').eq(index).attr('checked',true);
+                        break;
+                    }
+                }
+            })
+        } else {
+            if (value) {
+                this.data.value.push(value);
+                this.el.find(`input`).attr("checked",true);
+            };
+            this.trigger('onChange', this.data.value);// 作为单选的时候触发
+        };
     }
 
     /**
@@ -71,7 +85,13 @@ class Checkbox extends Base {
             return {value: JSON.stringify(val), name: val['name']}
         })
         this.data.list = data;
+        this.data.value = this.data.firstDo ? this.data.value : [];
         this.reload();
+        if (this.data.firstDo) {
+            this.setValue(this.data.value);
+            this.data.firstDo = false;
+        };
+        this.trigger('onChange', this.data.value);
     }
 
 }

@@ -1,0 +1,32 @@
+.form-chart-deep {
+  width: 100%;
+  border: 1px solid #ececec;
+  th {
+    font-size: 14px;
+    background-color: #f5f5f5;
+    font-weight: bold;
+  }
+  td {
+    color: #666666;
+    a {
+      text-decoration: none;
+      color: #3b8cff;
+    }
+  }
+  th, td {
+    padding: 15px 0;
+    border-bottom: 1px solid #ececec;
+    border-right: 1px solid #ececec;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .index {
+    width: 10%;
+  }
+  .xx {
+    width: 70%;
+  }
+  .tool {
+    width: 20%;
+  }
+}

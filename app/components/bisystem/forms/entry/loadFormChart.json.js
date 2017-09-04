@@ -4,12 +4,12 @@
  */
 import {FormNormalComponent} from '../charts.types/normal/normal';
 import {TableEditor as FormTableComponent} from '../../test/editors/table/table';
-import {FormRadarComponent} from '../charts.types/radar/radar';
+import {RadarEditor as FormRadarComponent} from '../../test/editors/radar/radar';
 import {FormMultiComponent} from '../charts.types/multi/multi';
-import {FormNineGridComponent} from '../charts.types/nine.grid/nine.grid';
+import {NineGridEditor as FormNineGridComponent} from '../../test/editors/nine.grid/nine.grid';
 import {FormFunnelComponent} from '../charts.types/funnel/funnel';
-import {FormCommentComponent} from '../charts.types/comment/comment';
-import {FormPieComponent} from '../charts.types/pie/pie';
+import {CommentEditor as FormCommentComponent} from '../../test/editors/comment/comment';
+import {PieEditor as FormPieComponent} from '../../test/editors/pie/pie';
 
 export let componentsJson = {
     'normal': {

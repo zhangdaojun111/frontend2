@@ -12,6 +12,15 @@ let config = {
          */
         onChange: function (value) {
             this.data.value = value;
+        },
+
+        /**
+         * 清空所有选中字段
+         */
+        clear() {
+            this.data.list = [];
+            this.data.value = null;
+            this.reload();
         }
     },
     binds: [
@@ -37,8 +46,12 @@ class Radio extends Base {
      * @param value
      */
     setValue(value){
-        this.data.value = value;
-        this.el.find(`input[value=${this.data.value}]`).attr("checked",true);
+        if (value) {
+            this.data.value = value;
+            console.log(typeof this.data.value);
+            this.el.find(`input[value='${this.data.value}']`).attr("checked",true);
+        };
+        this.data.firstDo = true;
     }
 
     /**
@@ -56,10 +69,12 @@ class Radio extends Base {
      */
     setList(list) {
         this.data.list = list;
+        this.data.value = this.data.firstDo ? this.data.value : null;
         this.reload();
-        if (this.data.value) {
-            this.el.find(`input[value=${this.data.value}]`).attr("checked",true);
-        }
+        if (this.data.firstDo) {
+            this.setValue(this.data.value);
+            this.data.firstDo = false;
+        };
     }
 
 }

@@ -38,4 +38,12 @@ export class Choosed extends Base{
     constructor(data, event){
         super(config, data, event)
     }
+
+    /**
+     * 编辑模式下设置选中的值
+     * @param choosed = 选中的值列表
+     */
+    setValue(choosed) {
+        this.actions.update(choosed);
+    }
 }
