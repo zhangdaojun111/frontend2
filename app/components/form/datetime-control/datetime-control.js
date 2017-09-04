@@ -15,19 +15,44 @@ import msgbox from '../../../lib/msgbox';
 
 let config = {
     template: template,
+    actions:{
+        keyup: function () {
+            let _this = this;
+            console.log("输了啊")
+            //YYYY-MM-DD hh:mm:ss
+            var strDate = this.el.find(".datetime").val();
+            console.log(strDate);
+            var  re =/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+
+            if(re.test(strDate))//判断日期格式符合YYYY-MM-DD hh:mm:ss标准
+            {
+                var dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3,RegExp.$4,RegExp.$5,RegExp.$6);
+                console.log(dateElement);
+
+                if(!((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))&&(dateElement.getHours()==parseInt(RegExp.$4))&&(dateElement.getMinutes()==parseInt(RegExp.$5))&&(dateElement.getSeconds()==parseInt(RegExp.$6))))//判断日期逻辑
+                {
+                    this.el.find("#errorMessage").css("display","inline-block").innerText = "时间格式不正确,正确格式为: 2017-09-01 12:00:00 ";
+                } else{
+                    this.el.find("#errorMessage").css("display","none");
+                    _this.data.value = strDate;
+                    _.debounce(function () {
+                        _this.events.changeValue(_this.data)
+                    }, 200)();
+                }
+            }
+            else{
+                this.el.find("#errorMessage").css("display","inline-block").text("时间格式不正确,正确格式为: 2017-09-01 12:00:00") ;
+            }
+        },
+    }
+    ,
+
     binds: [
         {
             event: 'click',
             selector: '.ui-history',
             callback: function () {
                 this.events.emitHistory(this.data)
-            }
-        },
-        {
-            event: 'click',
-            selector: '.date-close',
-            callback: function () {
-                this.el.find(".datetime").val("年-月-日 时:分:秒")
             }
         },
 
@@ -40,8 +65,6 @@ let config = {
         } else {
             this.el.find('.ui-width').attr('disabled', false);
         }
-
-
         //回显
         if (_this.data.value) {
             _this.el.find(".datetime").val(_this.data.value.replace(/-/g, "/"));
@@ -124,6 +147,10 @@ let config = {
             },
 
         });
+        _this.el.find('.datetime').on('input', _.debounce(function () {
+            _this.actions.keyup();
+        }, 200));
+
         _.debounce(function () {
             _this.events.changeValue(_this.data)
         }, 200)();
