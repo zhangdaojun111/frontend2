@@ -272,13 +272,13 @@ let config = {
                                 r=r.substring(0,r.length-1);
                             }
                         }
-                        console.log('reg是啥呢');
-                        console.log(r);
+                        alert('reg是啥呢');
+                        alert(r);
                         let reg = new RegExp(r);
-                        console.log(reg);
-                        console.log(reg.test(val));
-                        console.log(reg1);
-                        console.log(reg1.test(val));
+                        alert(reg);
+                        alert(reg.test(val));
+                        alert(reg1);
+                        alert(reg1.test(val));
                         let flag = reg.test(val);
                         if (!flag) {
                             error = true;
