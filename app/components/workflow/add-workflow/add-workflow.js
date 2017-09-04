@@ -2,7 +2,6 @@
  * @author qiumaoyun
  * 新增、查看、编辑工作流
  */
-
 import Component from '../../../lib/component';
 import template from './add-workflow.html';
 import '../approval-workflow/approval-workflow.scss';
@@ -14,11 +13,10 @@ import {FormService} from "../../../services/formService/formService"
 import msgBox from '../../../lib/msgbox';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import SettingPrint from '../../form/setting-print/setting-print'
-
+import FormEntrys from "../../../entrys/form";
 let config={
     template: template,
     data:{
-
     },
     actions:{
         async printSetting(){
@@ -47,6 +45,8 @@ let config={
             this.data.workflowData=msg.data[0];
             WorkFlow.show(msg.data[0],'#drawflow');
         });
+        console.log(this.data);
+        console.log("0000000000000000000");
         Mediator.subscribe('workflow:getParams', (res)=> {
             let htmlStr=``;
             for(let i in res){
@@ -75,11 +75,10 @@ let config={
         this.el.find('#subAddworkflow').on('click',()=>{
             Mediator.publish('workflow:submit', 1);
         });
-        this.el.find('#subAddworkflow').on('click',()=>{
-            Mediator.publish('workflow:submit', 1);
-        });
         this.el.on('click','#toEdit',()=>{
-            location.href=location.href.replace(/=view/,'=edit').replace(/is_view=1/,'is_view=0');
+            // location.href=location.href.replace(/=view/,'=edit').replace(/is_view=1/,'is_view=0');
+            let table_id =　location.href.split('=')[1].split('&')[0];
+            Mediator.publish('workflow:changeToEdit',table_id);
         });
         this.el.find('#print').on('click',()=>{
             this.actions.printSetting();
@@ -91,7 +90,6 @@ class AddWorkflow extends Component{
         super(config,data);
     }
 }
-
 let component = new AddWorkflow();
 let el = $('#add-wf');
 component.render(el);

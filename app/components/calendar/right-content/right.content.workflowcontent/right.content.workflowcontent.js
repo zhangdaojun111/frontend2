@@ -28,6 +28,7 @@ let config = {
             //     this.el.find(".end-workflow").hide();
             // }
             this.el.find(".workflow-schedule").css({"width": record_progress});
+            this.el.find(".workflow-content-title").attr("title",this.data.name);
         },
         /**
          * 打开与我相关工作

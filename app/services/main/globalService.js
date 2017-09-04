@@ -26,7 +26,7 @@ export const GlobalService = {
             {
                 headerName: '姓名',
                 field: 'name',
-                width: 60,
+                width: 100,
                 suppressMenu: true,
                 tooltipField: 'name',
                 cellStyle: {'text-align': 'center'},
@@ -35,7 +35,7 @@ export const GlobalService = {
             {
                 headerName: '是否在职',
                 field: 'is_active',
-                width: 60,
+                width: 80,
                 suppressMenu: true,
                 tooltipField: 'is_active',
                 cellStyle: {'text-align': 'center'},
@@ -63,7 +63,7 @@ export const GlobalService = {
             {
                 headerName: '登录IP',
                 field: 'login_ip',
-                width: 180,
+                width: 120,
                 suppressMenu: true,
                 tooltipField: 'login_ip',
                 cellStyle: {'text-align': 'center'},
@@ -72,7 +72,7 @@ export const GlobalService = {
             {
                 headerName: '手机登录',
                 field: 'mobile',
-                width: 60,
+                width: 80,
                 suppressMenu: true,
                 tooltipField: 'mobile',
                 cellStyle: {'text-align': 'center'},
@@ -81,7 +81,7 @@ export const GlobalService = {
             {
                 headerName: '设备',
                 field: 'device',
-                width: 120,
+                width: 80,
                 suppressMenu: true,
                 tooltipField: 'device',
                 cellStyle: {'text-align': 'center'},
@@ -90,7 +90,7 @@ export const GlobalService = {
             {
                 headerName: 'app版本',
                 field: 'version',
-                width: 60,
+                width: 150,
                 suppressMenu: true,
                 tooltipField: 'version',
                 cellStyle: {'text-align': 'center'},

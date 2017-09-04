@@ -27,7 +27,7 @@ let config = {
         selectBoxHeight: 'auto',           // select 框的高度
         width: 0,                       // 为0表示显示默认宽度240
         editable: true,                 // 是否可编辑
-        onSelect: null                  // 选择时的事件
+        onSelect: null,                  // 选择时的事件
     },
     actions: {
         selectItem: function (item) {
@@ -47,6 +47,7 @@ let config = {
                         id: item.data('id'),
                         name: item.data('name')
                     }];
+                    this.actions.hideSelectBox();
                 } else {
                     this.data.choosed = [];
                 }
@@ -75,16 +76,14 @@ let config = {
             }
         },
         showSelectBox: function () {
-            window.clearTimeout(this.data.timer);
             this.listWrap.show();
+            this.data.isSelectBoxDisplayed = true;
         },
         hideSelectBox: function () {
-            window.clearTimeout(this.data.timer);
-            this.data.timer = window.setTimeout(() => {
-                if (this.listWrap) {
-                    this.listWrap.hide();
-                }
-            }, 500);
+            if (this.listWrap) {
+                this.listWrap.hide();
+                this.data.isSelectBoxDisplayed = false;
+            }
         },
         getValue: function () {
             return this.data.choosed;
@@ -157,13 +156,17 @@ let config = {
                 this.actions.selectAll();
             }
         },{
-            event: 'mouseenter',
-            selector: '',
+            event: 'click.visible',
+            selector: '.result,.triangle',
             callback: function () {
-                this.actions.showSelectBox();
+                if (this.data.isSelectBoxDisplayed) {
+                    this.actions.hideSelectBox();
+                } else {
+                    this.actions.showSelectBox();
+                }
             }
         },{
-            event: 'mouseleave',
+            event: 'mouseleave.visible',
             selector: '',
             callback: function () {
                 this.actions.hideSelectBox();
@@ -206,8 +209,8 @@ let config = {
     firstAfterRender: function () {
         if (this.data.editable === true) {
             if (this.data.displayType !== 'popup') {
-                this.el.off('mouseenter');
-                this.el.off('mouseleave');
+                this.el.off('click.visible');
+                this.el.off('mouseleave.visible');
             }
         } else {
             this.cancelEvents();

@@ -162,4 +162,7 @@ Mediator.subscribe('workflow:submit', (res) => {
             }
         })
     }
+}),
+Mediator.subscribe('workflow:changeToEdit',(res)=>{
+    FormEntrys.changeToEdit(res);
 })
