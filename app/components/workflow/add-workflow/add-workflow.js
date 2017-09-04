@@ -2,7 +2,6 @@
  * @author qiumaoyun
  * 新增、查看、编辑工作流
  */
-
 import Component from '../../../lib/component';
 import template from './add-workflow.html';
 import '../approval-workflow/approval-workflow.scss';
@@ -15,11 +14,9 @@ import msgBox from '../../../lib/msgbox';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import SettingPrint from '../../form/setting-print/setting-print'
 import FormEntrys from "../../../entrys/form";
-
 let config={
     template: template,
     data:{
-
     },
     actions:{
         async printSetting(){
@@ -45,7 +42,6 @@ let config={
             this.data.key=msg;
         });
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
-
             this.data.workflowData=msg.data[0];
             WorkFlow.show(msg.data[0],'#drawflow');
         });
@@ -94,7 +90,6 @@ class AddWorkflow extends Component{
         super(config,data);
     }
 }
-
 let component = new AddWorkflow();
 let el = $('#add-wf');
 component.render(el);
