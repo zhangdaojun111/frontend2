@@ -96,6 +96,13 @@ let config = {
             callback: function () {
                 this.events.emitHistory(this.data);
             }
+        },
+        {
+            event:'click',
+            selector:'.countView',
+            callback:function(){
+                this.events.emitOpenCount(this.data);
+            }
         }
     ],
     afterRender() {
@@ -108,6 +115,11 @@ let config = {
 
 class ReadonlyControl extends Component {
     constructor(data, events) {
+        if(data.dtype==10 && data.value){
+            data.isCount=1;
+        }
+        console.log('count');
+        console.log(data);
         super(config, data, events);
     }
 }
