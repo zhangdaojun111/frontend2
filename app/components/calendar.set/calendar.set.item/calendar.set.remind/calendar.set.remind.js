@@ -91,8 +91,16 @@ let config = {
             });
         },
         
-        getRemindId: function (choosedId, choosedData) {
-            
+        checkSelectedReciver: function (dataSelected, dataList) {
+            let res = [];
+            for(let d of dataList) {
+                for(let s of dataSelected) {
+                    if(s === d['id']) {
+                        res.push(d);
+                    }
+                }
+            }
+            return res;
         }
     },
     binds:[
@@ -199,7 +207,6 @@ let config = {
             this.data.recipients_per = params.data.recipients_per;
             this.data.sms = params.data.sms;
             this.data.email = params.data.email;
-
             if (this.data.smsStatus === 1) {
                 this.el.find('.open-sms-remind').addClass('checked');
             } else {
@@ -214,14 +221,15 @@ let config = {
             // 短信收件人
             this.data.smsReceiverAutoSelect = new AutoSelect({
                 list: this.data.recipients_per,
-                choosed: this.data.sms.receiver,
+                choosed: this.actions.checkSelectedReciver(this.data.sms.receiver, this.data.recipients_per),
             });
             this.append(this.data.smsReceiverAutoSelect, this.el.find('.remind-receiver-sms'));
 
             // 短信抄送人
             this.data.smsCopyPeopleAutoSelect = new AutoSelect({
                 list: this.data.copypeople,
-                choosed: this.data.sms.cc_receiver,
+                //choosed: this.data.sms.cc_receiver,
+                choosed: this.actions.checkSelectedReciver(this.data.sms.cc_receiver, this.data.copypeople),
             });
             this.append(this.data.smsCopyPeopleAutoSelect, this.el.find('.remind-copy-for-sms'));
 
@@ -233,14 +241,16 @@ let config = {
             // 邮件收件人
             this.data.emailReceiverAutoSelect = new AutoSelect({
                 list: this.data.recipients,
-                choosed: this.data.email.receiver,
+                //choosed: this.data.email.receiver,
+                choosed: this.actions.checkSelectedReciver(this.data.email.receiver, this.data.recipients),
             });
             this.append(this.data.emailReceiverAutoSelect, this.el.find('.remind-receiver-email'));
 
             // 邮件抄送人
             this.data.emailCopyPeopleAutoSelect = new AutoSelect({
                 list: this.data.copypeople,
-                choosed: this.data.email.cc_receiver,
+                //choosed: this.data.email.cc_receiver,
+                choosed: this.actions.checkSelectedReciver(this.data.email.cc_receiver, this.data.copypeople),
             });
             this.append(this.data.emailCopyPeopleAutoSelect, this.el.find('.remind-copy-for-email'));
 
