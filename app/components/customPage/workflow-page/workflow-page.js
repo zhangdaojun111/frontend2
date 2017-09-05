@@ -325,7 +325,16 @@ let config = {
                     this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
                     this.agGrid.actions.autoWidth();
                 }else {
-                    this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
+                    let state = this.agGrid.gridOptions.columnApi.getColumnState();
+                    for( let s of state ){
+                        for( let ls of this.data.lastGridState ){
+                            if( s.colId == ls.colId ){
+                                s.width = ls.width;
+                                break;
+                            }
+                        }
+                    }
+                    this.agGrid.gridOptions.columnApi.setColumnState( state );
                 }
                 this.el.find( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
                 this.data.isAutoWidth = !this.data.isAutoWidth;

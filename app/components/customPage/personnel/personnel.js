@@ -328,12 +328,7 @@ let config = {
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
                 if( this.data.filterParam.filter.length == 0 ){
-                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span>加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;</div>`;
-                    this.el.find('.btn-nav').append(dom);
-                    this.el.find('.query-tips-delete').on('click', ()=> {
-                        this.el.find('.query-tips').css('display','none');
-                    })
-                    // msgBox.alert( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
+                    msgBox.alert( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
                 }
             }
             if( this.data.isShowLeave && this.data.userStatus != '' ){
@@ -506,7 +501,16 @@ let config = {
                     this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
                     this.agGrid.actions.autoWidth();
                 }else {
-                    this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
+                    let state = this.agGrid.gridOptions.columnApi.getColumnState();
+                    for( let s of state ){
+                        for( let ls of this.data.lastGridState ){
+                            if( s.colId == ls.colId ){
+                                s.width = ls.width;
+                                break;
+                            }
+                        }
+                    }
+                    this.agGrid.gridOptions.columnApi.setColumnState( state );
                 }
                 this.el.find( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
                 this.data.isAutoWidth = !this.data.isAutoWidth;

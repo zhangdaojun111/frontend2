@@ -148,6 +148,7 @@ let config = {
         },
         //宽度自适应
         autoWidth: function () {
+            debugger
             let arr = [];
             for( let d of this.data.fieldsData ){
                 let no = ['group','mySelectAll','myOperate','number'];
