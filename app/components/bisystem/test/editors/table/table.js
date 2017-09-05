@@ -202,10 +202,11 @@ let config = {
                 type: 'radio'
             },
             {
-                label: '选择排序字段(非必选)',
+                label: '',
                 name: 'sortColumns',
                 defaultValue: '',
-                type: 'autocomplete'
+                type: 'autocomplete',
+                placeholder: '选择排序字段（非必选）'
             },
             {
                 label: '表格文字对齐方式',

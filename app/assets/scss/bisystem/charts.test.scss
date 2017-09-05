@@ -16,20 +16,19 @@
  * 按钮
  */
 @mixin form-btn{
-    button{
-        padding: 8px 40px;
-        background: #0E7AEF;
-        border: none;
-        cursor: pointer;
-        border-radius: 6px;
-        color: #ffffff;
-        outline: none;
-    }
+    padding: 8px 40px;
+    background: #0E7AEF;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    color: #ffffff;
+    outline: none;
+    font-size: 12px;
 }
 
 .form-chart-clo{
     @include form-clo;
 }
-.form-chart-save-btn{
+.save-btn{
     @include form-btn;
 }

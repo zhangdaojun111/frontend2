@@ -31,5 +31,14 @@
                 outline:none;
             }
         }
+        .btn-group {
+            position:relative;
+            top:-8px;
+            button {
+                text-indent:-99999px;
+                border:none;
+                outline:none;
+            }
+        }
     }
 }
