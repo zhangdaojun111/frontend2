@@ -291,6 +291,50 @@ let config = {
                 }
             },
             {
+                label: '选择分组或下穿',
+                name: 'chartAssignment',
+                class: 'chart-assignment',
+                defaultValue: 2,
+                list: [
+                    {'value': 1, 'name': '分组'},
+                    {'value': 2, 'name': '下穿'},
+                ],
+                type: 'select',
+                events:{
+                    onChange: function(value) {
+                        if (value == 1) {
+                            this.formItems['deeps'].el.hide();
+                            this.formItems['deeps'].actions.clear();
+                        } else {
+                            this.formItems['deeps'].el.show();
+                        };
+                        this.formItems['deeps'].actions.clear();
+                        this.formItems['chartGroup'].autoselect.actions.clearValue();
+                    }
+                }
+            },
+            {
+                label: '',
+                name: 'chartGroup',
+                defaultValue: '',
+                class: 'chart-group',
+                type: 'autocomplete',
+                events: {
+                    onSelect(value) {
+                        if (value) {
+                            this.formItems['deeps'].actions.update(value);
+                        };
+                    }
+                }
+            },
+            {
+                label: '',
+                name: 'deeps',
+                defaultValue: [],
+                type: 'deep',
+                events: {}
+            },
+            {
                 label: '',
                 name: 'defaultY',
                 defaultValue: [],
@@ -398,48 +442,6 @@ let config = {
                 defaultValue: 1,
                 type: 'text',
                 events: {}
-            },
-            {
-                label: '选择分组或下穿',
-                name: 'chartAssignment',
-                defaultValue: 2,
-                list: [
-                    {'value': 1, 'name': '分组'},
-                    {'value': 2, 'name': '下穿'},
-                ],
-                type: 'select',
-                events:{
-                    onChange: function(value) {
-                        if (value == 1) {
-                            this.formItems['deeps'].el.hide();
-                            this.formItems['deeps'].actions.clear();
-                        } else {
-                            this.formItems['deeps'].el.show();
-                        };
-                        this.formItems['deeps'].actions.clear();
-                        this.formItems['chartGroup'].autoselect.actions.clearValue();
-                    }
-                }
-            },
-            {
-                label: '',
-                name: 'deeps',
-                defaultValue: [],
-                type: 'deep',
-                events: {}
-            },
-            {
-                label: '选择下穿x轴字段',
-                name: 'chartGroup',
-                defaultValue: '',
-                type: 'autocomplete',
-                events: {
-                    onSelect(value) {
-                        if (value) {
-                            this.formItems['deeps'].actions.update(value);
-                        };
-                    }
-                }
             },
             {
                 label: '',
