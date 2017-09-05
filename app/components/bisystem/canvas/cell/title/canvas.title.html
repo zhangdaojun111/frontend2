@@ -11,7 +11,9 @@
         {{/if}}
         {{#if biUser}}
             {{#if newCell}}
+                {{#if isEdit}}
                 <a href="javascript:;" title="注释" class="edit-title">注释</a>
+                {{/if}}
                 <a href="###" title="编辑">编辑</a>
             {{/if}}
         <a href="javascript:;" class="del-cell-btn" title="删除">删除</a>

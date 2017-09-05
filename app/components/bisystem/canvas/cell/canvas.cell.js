@@ -35,13 +35,19 @@ const cellTypes = {
 
 let config = {
     template: template,
+    events:
+        {
+            onChange: function () {
+                this.data.cellComponent.reload();
+            },
+        },
     actions: {
         /**
          * 渲染cell
          */
         renderCell() {
             this.el.find('.cell').css(this.data.cell.size);
-            this.cellTitle = new CanvasCellTitleComponent();
+            this.cellTitle = new CanvasCellTitleComponent(this.events.onChange);
             this.append(this.cellTitle, this.el.find('.bread-crumb-nav'));
         },
         /**
@@ -58,10 +64,10 @@ let config = {
             };
             if (chart['data']['assortment']) {
                 this.cellTitle.actions.setValue(chart);
-                let cellComponent = new cellTypes[chart['data']['assortment']](data);
+                this.data.cellComponent = new cellTypes[chart['data']['assortment']](data);
                 let cellContainer = this.el.find('.cell-chart');
-                cellComponent.render(cellContainer);
-                this.cellChart = cellComponent;
+                this.data.cellComponent.render(cellContainer);
+                this.cellChart = this.data.cellComponent;
             }
         },
 
@@ -156,6 +162,7 @@ let config = {
     data: {
         chart: null,
         isIcon :true,
+        cellComponent:'',
     },
     binds: [
         // 拖拽start画布mousedown触发

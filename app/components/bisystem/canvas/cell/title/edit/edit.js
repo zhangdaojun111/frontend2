@@ -1,5 +1,5 @@
 import template from './edit.html';
-import Mediator from "../../../../../lib/mediator";
+import Mediator from "../../../../../../lib/mediator";
 
 let css =`
     #editor{
@@ -33,14 +33,17 @@ let css =`
 export let config = {
     template:template,
     data: {
+        view:"",
         css:css.replace(/(\n)/g, ''),
+        toolbarOptions:[],
+        editor:null,
     },
     actions: {
         /**
          * 新建文本编译器
          */
         newEditor() {
-            let toolbarOptions = [
+            this.data.toolbarOptions = [
                 [{ 'size': ['small', false, 'large', 'huge'] }],
                 [{ 'font': [] }],
                 ['bold', 'italic', 'underline'],
@@ -51,12 +54,13 @@ export let config = {
                 ['clean']
 
             ];
-            let editor = new Quill('#editor', {
+            this.data.editor = new Quill('#editor', {
                 modules: {
-                    toolbar: toolbarOptions
+                    toolbar: this.data.toolbarOptions
                 },
                 theme: 'snow',
             });
+
         }
 
     },
@@ -65,10 +69,14 @@ export let config = {
             event:'click',
             selector:'.editor-btn-save',
             callback: function () {
+                console.log(this.data.editor.getContents());
                 let data = {
-                    name:''
+                    field_id: this.data.view.data.source.id,
+                    content: this.data.editor.getContents(),
+                    table_id : this.data.view.data.columns.id,
+                    row_id: this.data.view.data.data.rows['0']['1'],
                 };
-                data.name = this.data.name;
+
                 PMAPI.sendToParent({
                     type: PMENUM.close_dialog,
                     key: this.key,
@@ -89,10 +97,14 @@ export let config = {
         }
     ],
     afterRender() {
+        console.log(this.data);
         //添加样式
         $(`<style>${this.data.css}</style>`).appendTo(this.el);
     },
     firstAfterRender() {
         this.actions.newEditor();
+        // quill.container.firstChild.innerHTML = this.data.view['edits']['0'];
+        // document.querySelector(".ql-editor").innerHTML = this.data.view;
+        // console.log(this.data.view);
     }
 };
