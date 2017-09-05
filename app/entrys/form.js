@@ -36,6 +36,7 @@ let FormEntrys = {
         this.btnType = 'new';
         //统计穿透列头信息
         this.colDef = {};
+        this.col_id = '';
         this.viewMode='0';
 
         this.tableId = config.table_id || '';
@@ -56,11 +57,11 @@ let FormEntrys = {
         this.fieldId = config.field_Id || '';
         this.key = config.key || '';
         this.fromApprove = config.from_approve || '';
-        this.formFocus = config.from_focus || '';
         this.isAddBuild = config.isAddBuild || 0;
         this.buildId = config.id || '';
         this.btnType = config.btnType || 'new';
         this.colDef = config.colDef||{};
+        this.col_id = config.colDef||'';
         this.viewMode=config.viewMode || '0';
     }
     ,
@@ -220,6 +221,7 @@ let FormEntrys = {
         staticData.buildId = this.buildId;
         staticData.el = this.el;
         staticData.colDef=this.colDef;
+        staticData.col_id=this.col_id;
         staticData.viewMode=this.viewMode;
         return staticData;
     },
@@ -439,11 +441,11 @@ let FormEntrys = {
     },
 
     //获取表单数据
-    getFormValue(tableId) {
+    getFormValue(tableId,isCheck) {
         if (!this.childForm[tableId]) {
             return;
         }
-        return this.childForm[tableId].actions.getFormValue();
+        return this.childForm[tableId].actions.getFormValue(isCheck);
     }
 }
 export default FormEntrys

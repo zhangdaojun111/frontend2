@@ -124,8 +124,8 @@ let config = {
         },
 
         //给外部提供formValue格式数据
-        getFormValue() {
-            return this.actions.createFormValue(this.data.data, true);
+        getFormValue(isCheck) {
+            return isCheck?this.actions.createFormValue(this.data.data, true):this.actions.createFormValue(this.data.data);
         },
 
         //根据dfield查找类型
@@ -623,6 +623,11 @@ let config = {
                 }
                 new_data[d] = old_data[d];
             }
+            for(let key in new_data){
+                if(this.data.data[key].effect && this.data.data[key].effect.length>0){
+                    new_data[key]=this.actions.changeIdToText(new_data[key],this.data.data[key].options);
+                }
+            }
             let res = await FormService.expEffect({
                 data: new_data,
                 fields: fields,
@@ -666,6 +671,14 @@ let config = {
             //         }
             //     });
             // }
+        },
+
+        changeIdToText(id,array){
+            for(let key in array){
+                if(array[key].value == id){
+                    return array[key].label;
+                }
+            }
         },
 
         //改变选择框的选项
@@ -917,7 +930,7 @@ let config = {
                     if (this.data['use_fields'][key].sort().toString() == data.sort().toString()) {
                         let formValue = this.actions.createFormValue(this.data.data);
                         let _this = this;
-                        let res = await FormService.getCountData({data: formValue})
+                        let res = await FormService.getCountData({data:JSON.stringify(formValue)})
                         //给统计赋值
                         for (let d in res["data"]) {
                             _this.actions.setFormValue(d, res["data"][d]);
@@ -1237,7 +1250,7 @@ let config = {
                         <!--<span>打印</span>-->
                         <!--<div class="btn-ripple ripple"></div>-->
                     <!--</button>-->
-                    <button class="btn btn-normal ceshi" id="save" >
+                    <button class="btn btn-normal ceshi save" >
                         <span>提交</span>
                         <div class="btn-ripple ripple"></div>
                     </button>
@@ -1248,7 +1261,7 @@ let config = {
                         <!--<span>打印</span>-->
                         <!--<div class="btn-ripple ripple"></div>-->
                     <!--</button>-->
-                    <button class="btn btn-normal" id="changeEdit" >
+                    <button class="btn btn-normal changeEdit" >
                         <span>转到编辑模式</span>
                         <div class="btn-ripple ripple"></div>
                     </button>
@@ -1323,14 +1336,11 @@ let config = {
             }catch (err){
                 showName = whichCount['colDef']['field_content']['child_table_name'];
             }
-            this.data.childName=showName;
             if(this.data.col_id){
-                // this.data.rowId=this.col_id;
-                // this.data.child_tableType = 'count';
-                // this.data.countfieldId =whichCount['colDef'].id;
-                // this.data.fieldContent = JSON.stringify(whichCount['colDef']['field_content']);
-                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?viewMode=${this.data.viewMode}tableId=${childId}&rowId=${this.data.col_id}&tableType=count&fieldId=${whichCount['colDef'].id}&fieldContent=${JSON.stringify(whichCount['colDef']['field_content'])}&recordId=${this.data.recordId}`,{
-                    title:showName,
+                let rowId=this.data.col_id;
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=${this.data.viewMode}&tableId=${childId}&rowId=${this.data.col_id}&tableType=count&fieldId=${whichCount['colDef'].id}`,{
+                // PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=统计表&parentTableId=${this.data.tableId}&viewMode=count&tableId=7653_G7TWBbQxkFb9b6HNWs2c59&rowId=59ae22c0c904d99f4f241354&tableType=count&fieldId=4633_gcJuT3ncpSoadnGe3okjC4`,{
+                    title:'统计',
                     width:1200,
                     height:800,
                 })
@@ -1707,30 +1717,6 @@ let config = {
             this.data.childComponent[_this.department.dfield].reload();
         },
     },
-    binds: [
-        {
-            event: 'click',
-            selector: '#save',
-            callback: function () {
-                this.actions.onSubmit();
-            }
-        },
-        {
-            event: 'click',
-            selector: '#changeEdit',
-            callback: function () {
-                this.actions.changeToEdit();
-            }
-        },
-        {
-            event: 'click',
-            selector: '#print',
-            callback: function () {
-                this.actions.printSetting();
-            }
-        }
-
-    ],
     afterRender() {
         this.actions.createFormControl();
         this.actions.triggerControl();
@@ -1750,7 +1736,12 @@ let config = {
         } else {
             this.el.find('table').siblings('.ui-btn-box').css("margin-left", "-20px");
         }
-        //时间日期
+        this.el.parent().find('.save').bind('click',()=>{
+            this.actions.onSubmit();
+        })
+        this.el.parent().find('.changeEdit').bind('click',()=>{
+            this.actions.changeToEdit();
+        })
 
     },
     beforeDestory() {
