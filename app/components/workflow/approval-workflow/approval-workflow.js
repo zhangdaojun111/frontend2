@@ -235,6 +235,9 @@ let config={
                 }
             ).then(close=>{
 
+                if(close.onlyclose){
+                    this.el.find(".approval-btn-sel").removeClass('active');
+                }
             });
             // this.el.find('.rejContainer').show();
             // this.el.find('.closeSpan').remove();
@@ -358,7 +361,6 @@ let config={
         Mediator.subscribe("workflow:focused", (res) => {
             if(res.length>0){
                 this.el.on('click','#addFollower',()=>{
-                    console.log(1111111111111111111111111);
                     PMAPI.openDialogByIframe(`/iframe/addFocus/?${res}`,{
                         width:800,
                         height:600,
