@@ -8,6 +8,7 @@ import {Choosed} from '../forms/choosed/choosed';
 import {Save} from '../forms/save/save';
 import {TableSingle} from '../forms/single/single';
 import {Deep} from '../forms/deep/deep';
+import {YaXis} from '../forms/linebar.yAxis/yAxis';
 
 let formItemTypes = {
     'text': Text,
@@ -18,7 +19,8 @@ let formItemTypes = {
     'choosed':Choosed,
     'save': Save,
     'table_single': TableSingle,
-    'deep': Deep
+    'deep': Deep,
+    'yAxis': YaXis
 }
 
 class Base extends Component {

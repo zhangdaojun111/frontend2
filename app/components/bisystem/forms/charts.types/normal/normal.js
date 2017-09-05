@@ -577,7 +577,6 @@ export class FormNormalComponent extends BiBaseComponent{
             y.data.field['yAxisIndex'] = 1;
             yAxis.push(y.data.field);
         });
-
         const chart = {
             advancedDataTemplates: [],
             assortment: 'normal',

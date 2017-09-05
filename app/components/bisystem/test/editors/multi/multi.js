@@ -73,7 +73,6 @@ let config = {
             Object.keys(this.data.charts).forEach(key => {
                 sources.push(this.data.charts[key].getChartData());
             });
-            console.log(sources);
             let chart = {
                 assortment: 'multilist',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
@@ -81,7 +80,6 @@ let config = {
                 sources: sources,
                 theme: data.theme,
             };
-            console.log(chart);
             let res = await ChartFormService.saveChart(JSON.stringify(chart));
             if (res['success'] == 1) {
                 msgbox.alert('保存成功');
@@ -116,6 +114,7 @@ let config = {
                 source: data
             },{
                 onRemoveChart: (componentId) => {
+                    console.log(this);
                     delete this.data.charts[componentId];
                 }
             });
