@@ -5,6 +5,8 @@
         width: 98%;
         display: block;
         margin: 0 auto;
+        background: #FAFAFA;
+        border-collapse:collapse;
         tbody {
             width: 100%;
             display: block;
@@ -12,41 +14,51 @@
                 width: 100%;
                 display: block;
                 border: 1px solid #F2F2F2;
+                border-bottom: none;
                 td {
                     min-height: 30px;
                     padding: 7px;
                     line-height: 17px;
                 }
                 td:first-child {
-                    width: 130px;
-                    background: #FAFAFA;
+                    width: 170px;
+                    background: #ffffff;
                 }
+            }
+            .file-name {
+                color: #999999;
             }
             .uploader-button {
                 width: 90px;
                 height: 25px;
                 background: #fff;
-                border: 1px solid #afafaf;
+                border: 1px solid #e4e4e4;
                 border-radius: 5px;
                 margin-right: 10px;
             }
             select {
-                height: 20px;
-                border-radius: 2px;
+                height: 22px;
+                border-color: #e4e4e4;
                 width: 40px;
                 padding-left: 5px;
+                border-color:#e4e4e4 ;
                 appearance: none;
                 -moz-appearance: none;
                 -webkit-appearance: none;
-                background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 20px center transparent;
+                background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat;
+                background-color: #ffffff;
+                //background-position: 20px center;
             }
             .record_type {
                 width: 200px;
-                background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 180px center transparent;
+                //background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 180px center transparent;
+                background-position: 180px center;
+
             }
             .chooseFlow {
                 width: 200px;
-                background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 180px center transparent;
+                //background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 180px center transparent;
+                background-position: 180px center;
             }
             .showMore {
                 display: inline-block;
@@ -60,6 +72,7 @@
             }
             .workflow {
                 display: none;
+                border-bottom: 1px solid #F2F2F2;
             }
 
             .uploadRemark {
@@ -97,7 +110,7 @@
             top: 0px;
             position: absolute;
             display: block;
-            width: 98%;
+            width: 100%;
             padding-left: 15px;
         }
 

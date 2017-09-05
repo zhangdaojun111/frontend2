@@ -412,7 +412,8 @@ export const dgcService = {
             editFromCorrespondence: ['correspondence-check','float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width','correspondence-save'],
             in_process: ['float-search-btn','refresh-btn','grid-new-window'],
             keyword: ['keyword-tips','custom-column-btn','grid-new-window'],
-            deleteHanding: ['delete-tips','grid-del-btn','custom-column-btn']
+            deleteHanding: ['delete-tips','grid-del-btn','custom-column-btn'],
+            newFormCount: ['custom-column-btn','custom-column-btn'],
         }
         return obj[viewMode];
     },

@@ -189,7 +189,9 @@ let config = {
         showTabs:function (opacity) {
         },
         //左侧提示
-        gridTips: ''
+        gridTips: '',
+        //是否为双击
+        doubleClick: false
     },
     //生成的表头数据
     columnDefs: [],
@@ -862,7 +864,7 @@ let config = {
                 let name = btn.className;
                 if( btnGroup.indexOf( name )!=-1 && ( this.data.permission[dgcService.permission2btn[name]] || dgcService.permission2btn[name] == 'especial' ) ){
                     //工作流表无编辑模式
-                    if( name == 'edit-btn' && this.data.flowId ){
+                    if( name == 'edit-btn' && this.data.flowId != '' ){
                         continue;
                     }
                     html+=btn.outerHTML;
@@ -954,6 +956,48 @@ let config = {
                 }
             }
         },
+        //请求新增表单统计数据
+        getNewFormCountData: function () {
+            PMAPI.getIframeParams(window.config.key).then((r) => {
+                let data = r.data.d;
+                dataTableService.getNewFormCountData( data ).then( res=>{
+                    let resRows = [];
+                    if(res.data.db.length != 0 && res.data.temp.length == 0){
+                        resRows = res.data.db
+                    }
+                    if(res.data.db.length == 0 && res.data.temp.length != 0){
+                        for(let obj of res.data.temp){
+                            obj['data'] = {};
+                            obj['data']['status'] = 1;
+                        }
+                        resRows = res.data.temp
+                    }
+                    if(res.data.db != 0 && res.data.temp != 0){
+                        for(let obj of res.data.temp){
+                            obj['data']={};
+                            obj['data']['status']=1;
+                        }
+                        resRows = res.data.temp.concat(res.data.db);
+                    }
+                    this.data.rowData = resRows;
+                    if( this.data.firstRender ){
+                        let d = {
+                            rowData: this.data.rowData
+                        }
+                        //赋值
+                        this.agGrid.actions.setGridData(d);
+                        //渲染agGrid
+                        this.actions.renderAgGrid();
+                    }else {
+                        let d = {
+                            rowData: this.data.rowData
+                        }
+                        //赋值
+                        this.agGrid.actions.setGridData(d);
+                    }
+                } )
+            })
+        },
         //请求在途数据
         getInprocessData: function () {
             let postData = this.actions.createPostData();
@@ -1004,8 +1048,13 @@ let config = {
         },
         //请求表格数据
         getGridData: function () {
+            //在途数据
             if( this.data.viewMode == 'in_process' ){
                 this.actions.getInprocessData();
+                return;
+            }
+            if( this.data.viewMode == 'newFormCount' ){
+                this.actions.getNewFormCountData();
                 return;
             }
             let postData = this.actions.createPostData();
@@ -1382,7 +1431,7 @@ let config = {
             //     this.append(new fastSearch(d), this.el.find('.fast-search-con'))
             // }
             //渲染分页
-            let noPagination = ['in_process','viewFromCorrespondence','editFromCorrespondence']
+            let noPagination = ['in_process','viewFromCorrespondence','editFromCorrespondence','newFormCount']
             if( noPagination.indexOf( this.data.viewMode ) == -1 ){
                 this.data.pagination = true;
                 let paginationData = {
@@ -1981,13 +2030,29 @@ let config = {
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
             }
+            if( json.is_batch == 1 ){
+                json.temp_ids = json.real_ids;
+                json['real_ids'] = JSON.stringify([]);
+            }
             if( type == 1 ){
                 json['abandon_validate'] = 1;
             }
             this.actions.setInvalid();
             dataTableService.delTableData( json ).then( res=>{
-                if( res.success ){
+                if( res.succ ){
                     msgBox.showTips( '删除成功' )
+                    //批量工作流删除后返回值处理
+                    if( json.is_batch == 1 ){
+                        this.actions.getGridData();
+                        let arr = [];
+                        for( let i of this.data.batchIdList ){
+                            if( this.data.deletedIds.indexOf( i )==-1 ){
+                                arr.push( i )
+                            }
+                        }
+                        this.data.batchIdList = arr;
+                        this.actions.returnBatchData( this.data.batchIdList );
+                    }
                 }else {
                     if( res.queryParams ){
                         msgBox.confirm( res.error + '是否前往处理？' ).then( r=>{
@@ -2216,7 +2281,7 @@ let config = {
         onCellClicked: function (data) {
             console.log( "______data_______" )
             console.log( data )
-            if( !data.data || this.data.isEditable || data.data.myfooter ){
+            if( !data.data || this.data.isEditable || data.data.myfooter || this.data.doubleClick ){
                 return;
             }
             //分组重新渲染序号
@@ -2292,7 +2357,7 @@ let config = {
                     let obj = {
                         table_id:this.data.tableId,
                         id:data.colDef.id,
-                        temp_id:data.data._id,
+                        real_id:data.data._id,
                         value: data['value'],
                         mode:'view'
                     };
@@ -2582,6 +2647,10 @@ let config = {
         onRowDoubleClicked: function (data) {
             console.log( "行双击查看" )
             console.log( data )
+            this.data.doubleClick = true;
+            setTimeout( ()=>{
+                this.data.doubleClick = false;
+            },500 )
             this.actions.viewOrEditPerm( 'view' );
             //屏蔽分组行
             if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0)||this.data.editMode||data.data.myfooter ){
@@ -2594,8 +2663,12 @@ let config = {
                 parent_temp_id: this.data.parentTempId,
                 parent_record_id: this.data.parentRecordId,
                 real_id: data.data._id,
-                btnType: 'view',is_view:1
+                btnType: 'view',
+                is_view:1
             };
+            if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 ){
+                obj.btnType = 'none';
+            }
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
             let title = '查看'
             this.actions.openSourceDataGrid( url,title );
