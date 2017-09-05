@@ -82,7 +82,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         const autoSaving=function(){
             timer=setInterval(()=>{
                 intervalSave(FormEntrys.getFormValue(wfObj.tableid));
-            },2*60*1000);
+            },30*1000);
         };
         clearInterval(timer);
         autoSaving();

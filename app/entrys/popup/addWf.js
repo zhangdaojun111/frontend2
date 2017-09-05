@@ -22,15 +22,18 @@ import {PMAPI, PMENUM} from '../../lib/postmsg';
 WorkFlowForm.showForm();
 
 let serchStr = location.search.slice(1);
-let obj = {}, is_view,cache_old;
+let obj = {}, is_view = 0,cache_old;
 serchStr.split('&').forEach(res => {
     let arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
-is_view = obj.btnType === 'view' ? 1 : 0;
-if (obj.btnType === 'view') {
+// is_view = obj.btnType === 'view' ? 1 : 0;
+
+if (obj.btnType === 'view'||obj.btnType ==="none") {
     $('#subAddworkflow').hide();
+    is_view = 1;
 }
+
 
 Mediator.publish('workflow:getKey', obj.key);
 (async function () {
@@ -68,7 +71,7 @@ Mediator.subscribe('workflow:getflows', (res) => {
         $('#addFollower').hide();
     }else if(obj.btnType==='none'){
         $('#toEdit').hide();
-        $('#addFollower').hide()
+        $('#addFollower').hide();
     }
     obj.flow_id = res.flow_id;
     obj.form_id = res.form_id;
