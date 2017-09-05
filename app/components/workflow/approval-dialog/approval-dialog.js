@@ -60,7 +60,7 @@ let config = {
         });
 
         PMAPI.getIframeParams(this.data.key).then(res=>{
-            WorkFlow.createFlow({flow_id:res.data.flow_id,record_id:res.data.record_id,el:"#drawflow"});
+            WorkFlow.createFlow({flow_id:res.data.flow_id,record_id:res.data.record_id,el:"#approvalDialog-box"});
         });
         this.el.on('click','.draged-item',function(){
             WorkFlow.rejectNode(this);
