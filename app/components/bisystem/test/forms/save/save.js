@@ -5,6 +5,7 @@
 
 import template from './save.html';
 import {Base} from '../base';
+import './save.scss';
 
 let config = {
     template: template,

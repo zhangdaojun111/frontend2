@@ -146,11 +146,10 @@ let config = {
                 label: '数据来源',
                 name: 'source',
                 defaultValue: '',
+                placeholder: '请选择数据来源',
                 type: 'autocomplete',
                 events: {
                     onSelect(value) {
-                        console.log('------------------------------------');
-                        console.log(value);
                         this.actions.getFields(value);
                     }
                 }

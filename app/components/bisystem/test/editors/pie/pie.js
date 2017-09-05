@@ -165,6 +165,7 @@ let config = {
                 label: '数据来源',
                 name: 'source',
                 defaultValue: '',
+                placeholder: '选择数据来源',
                 type: 'autocomplete',
                 events: {
                     onSelect(value) {
@@ -204,12 +205,14 @@ let config = {
                 label: 'x轴字段',
                 name: 'xAxis',
                 defaultValue: '',
+                placeholder: '选择x轴字段',
                 type: 'autocomplete'
             },
             {
                 label: 'y轴字段',
                 name: 'yAxis',
                 defaultValue: '',
+                placeholder: '选择y轴字段',
                 type: 'autocomplete'
             },
             {
@@ -221,16 +224,10 @@ let config = {
                 events: {}
             },
             {
-                label: '',
-                name: 'deeps',
-                defaultValue: [],
-                type: 'deep',
-                events: {}
-            },
-            {
                 label: '选择下穿x轴字段',
                 name: 'deepX',
                 defaultValue: '',
+                placeholder: '选择下穿x轴字段',
                 type: 'autocomplete',
                 events: {
                     onSelect(value) {
@@ -240,6 +237,13 @@ let config = {
                         };
                     }
                 }
+            },
+            {
+                label: '',
+                name: 'deeps',
+                defaultValue: [],
+                type: 'deep',
+                events: {}
             },
 
             {

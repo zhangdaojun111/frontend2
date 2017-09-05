@@ -29,6 +29,7 @@ let config = {
         const autoselect_data = {
             multiSelect: false,
             choosed: this.data.value,
+            placeholder:this.data.placeholder ? this.data.placeholder : '请选择数据',
             onSelect: this.actions.onSelect
         };
         this.autoselect = new AutoSelect(autoselect_data);

@@ -6,7 +6,7 @@ import {ChartFormService} from '../../../../../services/bisystem/chart.form.serv
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
-
+import './nine.grid.scss';
 let config = {
     template: template,
     actions: {
@@ -120,6 +120,7 @@ let config = {
                 label: '数据来源',
                 name: 'source',
                 defaultValue: '',
+                placeholder: '请选择数据来源',
                 type: 'autocomplete'
             },
             theme,
@@ -147,51 +148,67 @@ let config = {
                 }
             },
             {
-                label: '请输入x轴名称1',
+                label: '请输入x轴数据',
                 name: 'x1',
                 defaultValue: '',
+                class:'fl',
+                placeholder: '请输入x1',
                 type: 'text'
             },
             {
-                label: '请输入x轴名称2',
+                label: '',
                 name: 'x2',
                 defaultValue: '',
+                class:'fl',
+                placeholder: '请输入x2',
                 type: 'text'
             },
             {
-                label: '请输入x轴名称3',
+                label: '',
                 name: 'x3',
                 defaultValue: '',
+                class:'fl',
+                placeholder: '请输入x3',
                 type: 'text'
             },
             {
-                label: '请输入x轴名称4',
+                label: '',
                 name: 'x4',
                 defaultValue: '',
+                class:'fl',
+                placeholder: '请输入x4',
                 type: 'text'
             },
             {
-                label: '请输入y轴名称1',
+                label: '请输入y轴数据',
                 name: 'y1',
                 defaultValue: '',
+                class:'fl y1',
+                placeholder: '请输入y1',
                 type: 'text'
             },
             {
-                label: '请输入y轴名称2',
+                label: '',
                 name: 'y2',
                 defaultValue: '',
+                class:'fl',
+                placeholder: '请输入y2',
                 type: 'text'
             },
             {
-                label: '请输入y轴名称3',
+                label: '',
                 name: 'y3',
                 defaultValue: '',
+                class:'fl',
+                placeholder: '请输入y3',
                 type: 'text'
             },
             {
-                label: '请输入y轴名称4',
+                label: '',
                 name: 'y4',
                 defaultValue: '',
+                class:'fl',
+                placeholder: '请输入y4',
                 type: 'text'
             },
 
