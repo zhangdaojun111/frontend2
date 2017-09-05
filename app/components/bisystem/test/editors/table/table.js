@@ -222,6 +222,7 @@ let config = {
                 label: '请输入显示多少多少列(默认10条)',
                 name: 'countNum',
                 defaultValue: 10,
+                placeholder: '请输入显示多少多少列(默认10条)',
                 type: 'text'
             },
             {
@@ -254,6 +255,7 @@ let config = {
                 label: '需要显示多少列',
                 name: 'columnNum',
                 defaultValue: '1',
+                placeholder: '请输入默认显示单行为多少列',
                 type: 'text',
                 events: {
                     onChange: _.debounce(function(value) {

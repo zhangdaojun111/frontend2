@@ -24,6 +24,10 @@
     @include icon;
     background:url('../../../assets/images/bisystem/edit.png') no-repeat;
 }
+.red-remove-icon {
+    @include icon;
+    background:url('../../../assets/images/bisystem/red-remove.png') no-repeat;
+}
 
 .remove-icon {
     display:inline-block;
