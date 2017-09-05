@@ -1,5 +1,6 @@
 import template from './radio.html';
 import {Base} from '../base';
+import './radio.scss';
 
 let config = {
     template: template,

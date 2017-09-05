@@ -1,5 +1,6 @@
 import template from './text.html';
 import {Base} from '../base';
+import './text.scss'
 
 let config = {
     template: template,

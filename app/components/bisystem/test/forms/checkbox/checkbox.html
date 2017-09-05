@@ -1,8 +1,10 @@
 <div class="form-chart-radio">
-    <h4 class="form-label">{{label}}</h4>
-    <div>
+    {{#if label}}
+    <h4 class="form-label"><span>{{label}}</span></h4>
+    {{/if}}
+    <div class="form-chart-wrapper">
         {{#each list}}
-            <label><input type="checkbox" value="{{value}}">{{{name}}}</label>
+            <label><span class="custom-checkbox"><input type="checkbox" value="{{value}}"></span>{{{name}}}</label>
         {{/each}}
     </div>
 </div>

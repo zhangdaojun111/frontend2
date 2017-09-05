@@ -1,6 +1,6 @@
 import template from './select.html';
 import {Base} from '../base';
-
+import './select.scss';
 let config = {
     template: template,
     data: {},

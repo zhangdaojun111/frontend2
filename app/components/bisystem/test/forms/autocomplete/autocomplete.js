@@ -1,6 +1,7 @@
 import template from './autocomplete.html';
 import {Base} from '../base';
 import {AutoSelect} from '../../../../util/autoSelect/autoSelect';
+import './autocomplete.scss';
 
 let config = {
     template: template,
@@ -31,7 +32,7 @@ let config = {
             onSelect: this.actions.onSelect
         };
         this.autoselect = new AutoSelect(autoselect_data);
-        this.append(this.autoselect, this.el);
+        this.append(this.autoselect, this.el.find('.form-chart-wrapper'));
     },
     firstAfterRender() {}
 }

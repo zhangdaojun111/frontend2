@@ -1,5 +1,6 @@
 import template from './checkbox.html';
 import {Base} from '../base';
+import './checkbox.scss';
 
 let config = {
     template: template,

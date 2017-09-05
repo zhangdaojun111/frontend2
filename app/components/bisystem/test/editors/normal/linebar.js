@@ -5,6 +5,7 @@ import {ChartFormService} from '../../../../../services/bisystem/chart.form.serv
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
+import './normal.scss';
 
 let config = {
     template: template,
@@ -208,7 +209,7 @@ let config = {
             if (chart['double'] == 1) {
                 this.formItems['yAxis1'].setValue(yAxis1);
             };
-            this.formItems['defaultY'].setValue(chart['ySelectedGroup'].length > 0 ? 1 : 0);
+            this.formItems['defaultY'].setValue(chart['ySelectedGroup'] && chart['ySelectedGroup'].length > 0 ? 1 : 0);
             this.formItems['ySelectedGroup'].setValue(chart['ySelectedGroup']);
             this.formItems['yHorizontal'].setValue(chart['yHorizontal'] ? 1 : 0);
             this.formItems['yHorizontalColumns'].setValue(chart['yHorizontalColumns']['marginBottom'] ? 1 : 0);
@@ -248,7 +249,7 @@ let config = {
                 events: {}
             },
             {
-                label: '',
+                label: 'Y轴字段',
                 name: 'double',
                 defaultValue: [],
                 list: [
@@ -268,7 +269,7 @@ let config = {
                 }
             },
             {
-                label: '请选择y轴字段',
+                label: '',
                 name: 'yAxis0',
                 defaultValue: '',
                 type: 'yAxis',
@@ -279,7 +280,7 @@ let config = {
                 }
             },
             {
-                label: '请选择y轴字段',
+                label: '',
                 name: 'yAxis1',
                 defaultValue: '',
                 type: 'yAxis',
