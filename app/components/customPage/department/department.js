@@ -30,6 +30,8 @@ let config = {
         fixCols: {l: [], r: []},
         //定制列（列排序）
         orderFields: [],
+        //上一次操作状态
+        lastGridState: [],
         //定制列（隐藏列）
         ignoreFields: [],
         //定制列需要字段信息
@@ -235,8 +237,32 @@ let config = {
                 } )
             }
             //宽度自适应
+            if( this.el.find( '.grid-auto-width' )[0] ){
+                this.el.find( '.grid-auto-width' ).on( 'click',()=>{
+                    debugger
+                    if( !this.data.isAutoWidth ){
+                        this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
+                        this.agGrid.actions.autoWidth();
+                    }else {
+                        let state = this.agGrid.gridOptions.columnApi.getColumnState();
+                        for( let s of state ){
+                            for( let ls of this.data.lastGridState ){
+                                if( s.colId == ls.colId ){
+                                    s.width = ls.width;
+                                    break;
+                                }
+                            }
+                        }
+                        this.agGrid.gridOptions.columnApi.setColumnState( state );
+                    }
+                    this.el.find( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
+                    this.data.isAutoWidth = !this.data.isAutoWidth;
+                } )
+            }
+            //定制列
             if( this.el.find( '.custom-column-btn' )[0] ){
                 this.el.find( '.custom-column-btn' ).on( 'click',()=>{
+                    debugger
                     this.actions.calcCustomColumn();
                 } )
             }
