@@ -168,6 +168,7 @@ export const CalendarHandleDataService = {
                 j++;
             }
         }
+        console.log(this.monthDataList);
         return this.monthDataList;
     },
 
