@@ -236,7 +236,7 @@ let config={
             ).then(close=>{
 
                 if(close.onlyclose){
-                    this.el.find(".approval-btn-sel").removeClass('active');
+                   this.el.find(".approval-btn-sel").removeClass('active')
                 }
             });
             // this.el.find('.rejContainer').show();
