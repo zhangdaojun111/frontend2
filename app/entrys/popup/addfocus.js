@@ -93,6 +93,7 @@ if(focus.length>1){
     })().then(res=>{
         tree=res.data.department_tree;
         staff=res.data.department2user;
+        Mediator.publish('workflow:checkDeptAlready',0);
         function recur(data) {
             for (let item of data){
                 item.nodes=item.children;

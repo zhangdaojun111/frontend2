@@ -104,28 +104,6 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         });
     });
 
-    // (async function () {
-    //     return workflowService.getGridinfo({
-    //         table_id:wfObj.tableid,
-    //         formId:wfObj.formid,
-    //         is_view:0,
-    //         parent_table_id:null,
-    //         parent_real_id:null,
-    //         parent_temp_id:null,
-    //
-    //     });
-    // })().then(function (res) {
-    //     let AgGrid=new Grid({
-    //         parentTempId:temp_id,
-    //         tableId:res.table_id,
-    //         viewMode:"createBatch"
-    //     });
-    //     AgGrid.actions.returnBatchData = function (ids) {
-    //         temp_ids=ids;
-    //     };
-    //     AgGrid.render($("#J-aggrid"));
-    // })
-
 });
 
 /**
@@ -238,8 +216,3 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
         let data = await workflowService.delWorkflowFavorite({'id': msg});
     })();
 });
-
-//Grid
-$('#multiFlow').on('click',()=>{
-    
-})
