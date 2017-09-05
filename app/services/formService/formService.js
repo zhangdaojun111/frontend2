@@ -419,7 +419,7 @@ export const FormService = {
         HTTP.flush();
         return res;
     },
-    //表达书后台计算
+    //表达式后台计算
     expEffect(json) {
         let res = HTTP.post('eval_exp_fun', json);
         HTTP.flush();
@@ -441,7 +441,9 @@ export const FormService = {
     getFormData(json) {
         let res;
         if (json['form_id']) {
-            res = Promise.all([this.getStaticData(json), this.getDynamicData(json), this.getFormContent({form_id: json['form_id']})]);
+            let form_id=json['form_id'];
+            delete json['form_id'];
+            res = Promise.all([this.getStaticData(json), this.getDynamicData(json), this.getFormContent({form_id: form_id})]);
         } else {
             res = Promise.all([this.getStaticData(json), this.getDynamicData(json)]);
         }

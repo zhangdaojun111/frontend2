@@ -2278,7 +2278,7 @@ let config = {
                     let obj = {
                         table_id:this.data.tableId,
                         id:data.colDef.id,
-                        temp_id:data.data._id,
+                        real_id:data.data._id,
                         value: data['value'],
                         mode:'view'
                     };
