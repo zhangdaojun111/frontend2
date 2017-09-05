@@ -550,6 +550,7 @@ let config = {
             } else if(this.data.calendarContent === 'day') {
                 this.append(new CalendarDay(this.data.dayDataList), this.el.find(".calendar-main-content"));
             }
+            this.actions.getDataCount();
         },
 
         workflowMission: function(){
