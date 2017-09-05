@@ -336,6 +336,8 @@ export const contractEditorConfig = {
             this.el.find('.contract-settings').css('display','none');
             this.el.find('.save-n-close').css('display','none');
             this.el.find('.edit-or-save').css('display','none');
+            this.el.find('.add-tab-button').css('display','none');
+            this.el.find('.delete-tab-button').css('display','none');
         }
 
         //初始化各控件
