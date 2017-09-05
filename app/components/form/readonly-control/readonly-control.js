@@ -96,10 +96,20 @@ let config = {
             callback: function () {
                 this.events.emitHistory(this.data);
             }
+        },
+        {
+            event:'click',
+            selector:'.countView',
+            callback:function(){
+                this.events.emitOpenCount(this.data);
+            }
         }
     ],
     afterRender() {
         this.el.find('.ui-width').css('width', this.data.width);
+        if(this.data.dtype==10 && this.data.value){
+            this.el.find('.countView').css('visibility','visible')
+        }
     },
     beforeDestory() {
         this.el.off();
