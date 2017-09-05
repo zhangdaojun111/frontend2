@@ -130,26 +130,31 @@ input, textarea, select {
         color: #ff4f4a;
     }
 }
+
 .grid-header-info {
 
 }
 
-.flex{
+.flex {
     display: flex;
     align-items: center;
 }
+
 .flex.flex-column {
     flex-direction: column;
 }
-.flex.flex-start{
+
+.flex.flex-start {
 
     align-items: flex-start;
 }
-.flex.flex-between{
+
+.flex.flex-between {
 
     justify-content: space-between;
 }
-.flex.flex-wrap{
+
+.flex.flex-wrap {
     flex-wrap: wrap;
 }
 
@@ -157,6 +162,7 @@ input, textarea, select {
     flex-grow: 1;
     flex-shrink: 0;
 }
+
 .pointer {
     cursor: pointer;
 }
@@ -236,74 +242,64 @@ input, textarea, select {
     }
 }
 
-.component-loading-cover{
+.component-loading-cover {
     width: 100%;
     height: 100%;
     position: absolute;
     z-index: 15;
     left: 0;
     top: 0;
-    background-color: rgba(153, 153, 153, 0.5);
+    //background-color: rgba(153, 153, 153, 0.5);
+    background-color: #ddd;
 }
 
-.component-loading-box{
+.component-loading-box {
     left: 50%;
     top: 50%;
     position: absolute;
     z-index: 200;
     text-align: center;
-    //transform: translate(-50%,-50%);
     animation: rotate 2.0s infinite linear;
-    .dot1, .dot2, .dot3 {
-        width: 50%;
-        height: 50%;
+    max-width: 50px;
+    max-height: 50px;
+    min-width: 20px;
+    min-height: 20px;
+    .dot1, .dot2, .dot3, .dot4, .dot5 {
+        background-color: #0099ff;
+        height: 100%;
+        width: 12%;
         display: inline-block;
-        position: absolute;
-        top: 0;
-        background-color: #539ee0;
-        border-radius: 100%;
-        //left: 25%;
-        animation: bounce 2.0s infinite ease-in-out;
+        margin: 0 3%;
+        animation: stretchdelay 1.0s infinite ease-in-out;
     }
 
     .dot2 {
-        top: auto;
-        bottom: 0px;
-        //left: 0;
-        animation-delay: -1s;
+        animation-delay: -0.9s;
     }
     .dot3 {
-        top: auto;
-        bottom: 0px;
-        left: auto;
-        right: 0;
-        animation-delay: -1.32s;
+        animation-delay: -0.8s;
+    }
+    .dot4 {
+        animation-delay: -0.7s;
+    }
+    .dot5 {
+        animation-delay: -0.6s;
     }
 }
 
-
-@-webkit-keyframes rotate { 100% { -webkit-transform: rotate(360deg) }}
-@keyframes rotate { 100% { transform: rotate(360deg); -webkit-transform: rotate(360deg) }}
-
-@-webkit-keyframes bounce {
-    0%, 100% { -webkit-transform: scale(0.0) }
-    50% { -webkit-transform: scale(1.0) }
-}
-
-@keyframes bounce {
-    0%, 100% {
-        transform: scale(0.0);
-        -webkit-transform: scale(0.0);
-    } 50% {
-          transform: scale(1.0);
-          -webkit-transform: scale(1.0);
-      }
+@keyframes stretchdelay {
+    0%, 40%, 100% {
+        transform: scaleY(0.4);
+    }
+    20% {
+        transform: scaleY(1.0);
+    }
 }
 
 //disable
-.component-disable-cover{
+.component-disable-cover {
     position: absolute;
-    top:0;
+    top: 0;
     left: 0;
     width: 100%;
     height: 100%;

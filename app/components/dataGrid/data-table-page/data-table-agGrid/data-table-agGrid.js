@@ -956,6 +956,48 @@ let config = {
                 }
             }
         },
+        //请求新增表单统计数据
+        getNewFormCountData: function () {
+            PMAPI.getIframeParams(window.config.key).then((r) => {
+                let data = r.data.d;
+                dataTableService.getNewFormCountData( data ).then( res=>{
+                    let resRows = [];
+                    if(res.data.db.length != 0 && res.data.temp.length == 0){
+                        resRows = res.data.db
+                    }
+                    if(res.data.db.length == 0 && res.data.temp.length != 0){
+                        for(let obj of res.data.temp){
+                            obj['data'] = {};
+                            obj['data']['status'] = 1;
+                        }
+                        resRows = res.data.temp
+                    }
+                    if(res.data.db != 0 && res.data.temp != 0){
+                        for(let obj of res.data.temp){
+                            obj['data']={};
+                            obj['data']['status']=1;
+                        }
+                        resRows = res.data.temp.concat(res.data.db);
+                    }
+                    this.data.rowData = resRows;
+                    if( this.data.firstRender ){
+                        let d = {
+                            rowData: this.data.rowData
+                        }
+                        //赋值
+                        this.agGrid.actions.setGridData(d);
+                        //渲染agGrid
+                        this.actions.renderAgGrid();
+                    }else {
+                        let d = {
+                            rowData: this.data.rowData
+                        }
+                        //赋值
+                        this.agGrid.actions.setGridData(d);
+                    }
+                } )
+            })
+        },
         //请求在途数据
         getInprocessData: function () {
             let postData = this.actions.createPostData();
@@ -1006,8 +1048,13 @@ let config = {
         },
         //请求表格数据
         getGridData: function () {
+            //在途数据
             if( this.data.viewMode == 'in_process' ){
                 this.actions.getInprocessData();
+                return;
+            }
+            if( this.data.viewMode == 'newFormCount' ){
+                this.actions.getNewFormCountData();
                 return;
             }
             let postData = this.actions.createPostData();
@@ -1384,7 +1431,7 @@ let config = {
             //     this.append(new fastSearch(d), this.el.find('.fast-search-con'))
             // }
             //渲染分页
-            let noPagination = ['in_process','viewFromCorrespondence','editFromCorrespondence']
+            let noPagination = ['in_process','viewFromCorrespondence','editFromCorrespondence','newFormCount']
             if( noPagination.indexOf( this.data.viewMode ) == -1 ){
                 this.data.pagination = true;
                 let paginationData = {
@@ -2310,7 +2357,7 @@ let config = {
                     let obj = {
                         table_id:this.data.tableId,
                         id:data.colDef.id,
-                        temp_id:data.data._id,
+                        real_id:data.data._id,
                         value: data['value'],
                         mode:'view'
                     };

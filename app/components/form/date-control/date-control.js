@@ -67,7 +67,7 @@ let config = {
 
         //回显
         if (_this.data.value) {
-            _this.el.find(".date_yy-mm-dd").val(_this.data.value.replace(/-/g, "/"));
+            _this.el.find(".date_yy-mm-dd").val(_this.data.value);
         } else {
             _this.el.find(".date_yy-mm-dd").val("年-月-日");
         }

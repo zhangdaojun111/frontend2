@@ -5,12 +5,12 @@
         position: static !important;
     }
 
-    #detail-form, #detail-form * {
+    .detail-form, .detail-form * {
         visibility: visible !important;
         overflow: visible !important;
     }
 
-    #detail-form {
+    .detail-form {
         height: 100% !important;
         position: absolute !important;
         left: 0 !important;
@@ -18,43 +18,43 @@
         overflow: initial !important;
     }
 
-    #detail-form .ui-helper-hidden-accessible,
-    #detail-form .ui-dropdown-label {
+    .detail-form .ui-helper-hidden-accessible,
+    .detail-form .ui-dropdown-label {
         position: absolute !important;
     }
     /*内联子表样式*/
-    #detail-form .ui-songrid-box,
-    #detail-form .sheet,
-    #detail-form .grid-box,
-    #detail-form .ag-bl-full-height {
+    .detail-form .ui-songrid-box,
+    .detail-form .sheet,
+    .detail-form .grid-box,
+    .detail-form .ag-bl-full-height {
         position: relative !important;
     }
 
-    #detail-form .biaojicaozuo-circle,
-    #detail-form .paginator-box,
-    #detail-form .ag-bl-overlay {
+    .detail-form .biaojicaozuo-circle,
+    .detail-form .paginator-box,
+    .detail-form .ag-bl-overlay {
         position: absolute !important;
     }
 
-    #detail-form #myFilter {
+    .detail-form #myFilter {
         overflow: hidden !important;
     }
 
-    #detail-form #footer .ag-header-row {
+    .detail-form #footer .ag-header-row {
         display: none;
     }
-    #detail-form .printS {
+    .detail-form .printS {
         visibility: visible !important;
         position: absolute !important;
     }
-    #detail-form .tempImg, #detail-form .showSign {
+    .detail-form .tempImg, .detail-form .showSign {
         visibility: hidden !important;
     }
-    #detail-form #collapseForm div:first-child {
+    .detail-form #collapseForm div:first-child {
         position: relative !important;
     }
 
-    #detail-form .df-input-radio-wrapper {
+    .detail-form .df-input-radio-wrapper {
         border: none;
     }
     .ui-datepicker-trigger{

@@ -124,8 +124,8 @@ let config = {
         },
 
         //给外部提供formValue格式数据
-        getFormValue() {
-            return this.actions.createFormValue(this.data.data, true);
+        getFormValue(isCheck) {
+            return isCheck?this.actions.createFormValue(this.data.data, true):this.actions.createFormValue(this.data.data);
         },
 
         //根据dfield查找类型
@@ -623,6 +623,11 @@ let config = {
                 }
                 new_data[d] = old_data[d];
             }
+            for(let key in new_data){
+                if(this.data.data[key].effect && this.data.data[key].effect.length>0){
+                    new_data[key]=this.actions.changeIdToText(new_data[key],this.data.data[key].options);
+                }
+            }
             let res = await FormService.expEffect({
                 data: new_data,
                 fields: fields,
@@ -666,6 +671,14 @@ let config = {
             //         }
             //     });
             // }
+        },
+
+        changeIdToText(id,array){
+            for(let key in array){
+                if(array[key].value == id){
+                    return array[key].label;
+                }
+            }
         },
 
         //改变选择框的选项
@@ -917,7 +930,7 @@ let config = {
                     if (this.data['use_fields'][key].sort().toString() == data.sort().toString()) {
                         let formValue = this.actions.createFormValue(this.data.data);
                         let _this = this;
-                        let res = await FormService.getCountData({data: formValue})
+                        let res = await FormService.getCountData({data:JSON.stringify(formValue)})
                         //给统计赋值
                         for (let d in res["data"]) {
                             _this.actions.setFormValue(d, res["data"][d]);
@@ -1237,7 +1250,7 @@ let config = {
                         <!--<span>打印</span>-->
                         <!--<div class="btn-ripple ripple"></div>-->
                     <!--</button>-->
-                    <button class="btn btn-normal ceshi" id="save" >
+                    <button class="btn btn-normal ceshi save" >
                         <span>提交</span>
                         <div class="btn-ripple ripple"></div>
                     </button>
@@ -1248,7 +1261,7 @@ let config = {
                         <!--<span>打印</span>-->
                         <!--<div class="btn-ripple ripple"></div>-->
                     <!--</button>-->
-                    <button class="btn btn-normal" id="changeEdit" >
+                    <button class="btn btn-normal changeEdit" >
                         <span>转到编辑模式</span>
                         <div class="btn-ripple ripple"></div>
                     </button>
@@ -1267,8 +1280,6 @@ let config = {
         createActions() {
             let actions = {
                 changeValue: (data) => {
-                    console.log('值改变的事件');
-                    console.log(data);
                     this.actions.checkValue(data);
                 },
                 emitHistory: (data) => {
@@ -1297,9 +1308,37 @@ let config = {
                 },
                 userSysOptions: (data) => {
                     this.actions.changeMainDepart(true, data);
+                },
+                emitOpenCount:(data)=>{
+                    this.actions.openCount(data);
                 }
             }
             return actions;
+        },
+        //打开统计穿透
+        openCount(data){
+            let childId = data['field_content']['count_table'];
+            let showName=`${this.data['table_name']}=>${data['field_content']['child_table_name']}`;
+            if(this.data.realId){
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=count&tableId=${childId}&rowId=${this.data.realId}&tableType=count&fieldId=${data.id}`,{
+                    title:showName,
+                    width:1200,
+                    height:800,
+                })
+            }else{
+                let formValue=this.actions.getFormValue();
+                let d={
+                    table_id:childId,
+                    data:JSON.stringify(formValue),
+                    field_id:data.id
+                };
+                console.log(d);
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?viewMode=newFormCount&tableId=${childId}&fieldId=${data.id}`,{
+                    title:showName,
+                    width:1200,
+                    height:800,
+                },{d});
+            }
         },
         //打开内置快捷添加
         addNewBuildIn(data) {
@@ -1663,30 +1702,6 @@ let config = {
             this.data.childComponent[_this.department.dfield].reload();
         },
     },
-    binds: [
-        {
-            event: 'click',
-            selector: '#save',
-            callback: function () {
-                this.actions.onSubmit();
-            }
-        },
-        {
-            event: 'click',
-            selector: '#changeEdit',
-            callback: function () {
-                this.actions.changeToEdit();
-            }
-        },
-        {
-            event: 'click',
-            selector: '#print',
-            callback: function () {
-                this.actions.printSetting();
-            }
-        }
-
-    ],
     afterRender() {
         this.actions.createFormControl();
         this.actions.triggerControl();
@@ -1699,14 +1714,19 @@ let config = {
         //默认表单样式
 
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
-            this.el.find('table').parents('#detail-form').css("background", "#F2F2F2");
+            this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
         }
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')) {
             this.el.find('table').siblings('.ui-btn-box').css("margin-left", "0px");
         } else {
             this.el.find('table').siblings('.ui-btn-box').css("margin-left", "-20px");
         }
-        //时间日期
+        this.el.parent().find('.save').bind('click',()=>{
+            this.actions.onSubmit();
+        })
+        this.el.parent().find('.changeEdit').bind('click',()=>{
+            this.actions.changeToEdit();
+        })
 
     },
     beforeDestory() {
