@@ -236,6 +236,8 @@ let config={
             ).then(res=>{
                 if(!res.onlyclose){
                     Mediator.publish('approval:rejToAny',res);
+                }else {
+                    this.el.find(".approval-btn-sel").removeClass('active');
                 }
             });
             // this.el.find('.rejContainer').show();

@@ -1,6 +1,7 @@
 import template from './approval-dialog.html';
 import Component from '../../../lib/component';
 import Mediator from '../../../lib/mediator';
+import '../../../assets/scss/core/common.scss'
 import WorkFlow from '../workflow-drawflow/workflow';
 import {PMAPI,PMENUM} from "../../../lib/postmsg";
 let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[];;
@@ -15,7 +16,6 @@ let config = {
     data: {
         workflowData:null,
         key:obj.key
-        // flow_id:obj.flow_id,
 
     },
     actions: {
