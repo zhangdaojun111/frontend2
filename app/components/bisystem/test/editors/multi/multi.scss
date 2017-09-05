@@ -1,32 +1,62 @@
-.form-chart-multi-chart {
-    .form-group-chart {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        position: relative;
-        padding: 0 20px 30px;
-        div {
-            display: flex;
-            flex-grow: 1;
-        }
-        div:last-child {
-            width: 100%;
-        }
-        .remove-y-btn {
-            position: absolute;
-            right: 5px;
-            bottom: 0;
-            color: red;
-            text-decoration: none;
-            font-size: 14px;
-        }
-        .form-chart-radio{
-            label{
-                margin: 8px;
-                border: 1px solid #e4e4e4;
-                padding: 10px 24px;
-                background: #F2F2F2;
+.form-chart {
+    .form-group {
+        height: calc(100% - 162px) !important;
+        overflow: auto;
+        .form-chart-multi-chart {
+            .form-group-chart {
+                position: relative;
+                margin-bottom: 20px;
+                > div:nth-child(2) {
+                    display: inline-block;
+                    width: 33.3%;
+                }
+                > div:nth-child(3) {
+                    display: inline-block;
+                    width: 33.3%;
+                }
+                > div:nth-child(4) {
+                    display: inline-block;
+                    width: 33.3%;
+                }
+                > div:nth-child(5) {
+                    display: inline-block;
+                    width: 33.3%;
+                }
+                > div:nth-child(6) {
+                    display: inline-block;
+                    width: 100%;
+                }
+                .remove-y-btn {
+                    position: absolute;
+                    right: 5px;
+                    bottom: 0;
+                    color: red;
+                    text-decoration: none;
+                    font-size: 14px;
+                }
+                .form-chart-radio {
+                    label {
+                        margin: 8px;
+                        border: 1px solid #e4e4e4;
+                        padding: 10px 24px;
+                        background: #F2F2F2;
+                    }
+                }
             }
         }
+    }
+    h3:last-child{
+        background: #f2f2f2;
+    }
+    .add-chart-btn {
+        text-decoration: none;
+        padding: 8px 40px;
+        background: #FFFFFF;
+        cursor: pointer;
+        border-radius: 6px;
+        color: #666666;
+        outline: none;
+        border: 1px solid #e4e4e4;
+        margin-left: 80%;
     }
 }
