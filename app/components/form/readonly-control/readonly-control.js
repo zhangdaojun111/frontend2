@@ -107,6 +107,9 @@ let config = {
     ],
     afterRender() {
         this.el.find('.ui-width').css('width', this.data.width);
+        if(this.data.dtype==10 && this.data.value){
+            this.el.find('.countView').css('visibility','visible');
+        }
     },
     beforeDestory() {
         this.el.off();
@@ -115,11 +118,6 @@ let config = {
 
 class ReadonlyControl extends Component {
     constructor(data, events) {
-        if(data.dtype==10 && data.value){
-            data.isCount=1;
-        }
-        console.log('count');
-        console.log(data);
         super(config, data, events);
     }
 }

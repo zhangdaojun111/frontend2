@@ -1317,25 +1317,26 @@ let config = {
         },
         //打开统计穿透
         openCount(data){
-            let penetrateFieldId=data.id;
             let childId = data['field_content']['count_table'];
             let showName=`${this.data['table_name']}=>${data['field_content']['child_table_name']}`;
-            if(this.data.btnType != 'new'){
-                console.log(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=count&tableId=${childId}&rowId=${this.data.realId}&tableType=count&fieldId=${penetrateFieldId}`);
-                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=count&tableId=${childId}&rowId=${this.data.realId}&tableType=count&fieldId=${penetrateFieldId}`,{
+            if(this.data.realId){
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=count&tableId=${childId}&rowId=${this.data.realId}&tableType=count&fieldId=${data.id}`,{
                     title:showName,
                     width:1200,
                     height:800,
                 })
             }else{
                 let formValue=this.actiosn.getFormValue();
-                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?source_table_id=${childId}&isCreateFalseTable=true&fieldId=${penetrateFieldId}`,{
+                let d={
+                    table_id:childId,
+                    data:JSON.stringify(formValue),
+                    field_id:data.id
+                };
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?viewMode=newFormCount&tableId=${childId}&fieldId=${data.id}`,{
                     title:showName,
                     width:1200,
                     height:800,
-                },{
-                    formValue:formValue,
-                })
+                },{d});
             }
         },
         //打开内置快捷添加
