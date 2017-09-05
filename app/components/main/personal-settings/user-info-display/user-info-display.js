@@ -38,7 +38,7 @@ img.user-avatar{
     top: 50px;
     left: 180px;
 }
-.name{
+.name-group > .name{
     height: 50px;
     line-height: 50px;
     margin-top: 5px;

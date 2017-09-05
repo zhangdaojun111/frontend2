@@ -55,7 +55,7 @@ let ViewVideo = {
                 'top':Math.random()*(_this.el.height()*0.65)+'px',
                 'left':'100%',
                 'border':'1px solid red'
-            })
+            });
             $div.animate({
                 left:'-100%'
             },6666,function(){
