@@ -320,6 +320,7 @@ export const contractEditorConfig = {
                 let title = event.target.title;
                 k2v["##"+title+"##"]=changedValue;
                 this.el.find('span[title="'+title+'"]').text(changedValue);
+                this.data.local_data[this.data['current_tab']]['content']=this.el.find('.contract-template-anchor').html();
             })
         },
         closeMe:function () {
