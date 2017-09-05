@@ -1,0 +1,48 @@
+<div class="personal-con">
+    <div class="choose-department">
+        <div class="tips"><i></i><span>人员信息</span></div>
+        <div class="tree-tips"><i></i><span>部门结构</span></div>
+        <div class="choose-department-tree"></div>
+    </div>
+    <div class="personal-grid">
+        <!--按鈕-->
+        <div class="btn-nav flex flex-end">
+            <!--<span>人员</span>-->
+            <div class="dataGrid-commonQuery">
+                <select class="dataGrid-commonQuery-select icon-aggrid-select" title="选择常用查询">
+                    <option class="dataGrid-commonQuery-option" fieldId="100" value="常用查询">常用查询</option>
+                </select>
+            </div>
+            <div class="dataGrid-btn-group">
+                <a class="datagrid-icon-box float-search-btn" href="javascript:;" title="筛选"><i class="icon-aggrid icon-aggrid-filter"></i><span>筛选</span></a>
+                <a class="datagrid-icon-box expert-search-btn" href="javascript:;" title="高级查询"><i class="icon-aggrid icon-aggrid-search"></i><span>高级查询</span></a>
+                <a class="datagrid-icon-box new-form-btn" href="javascript:;" title="新增"><i class="icon-aggrid icon-aggrid-add"></i><span>新增</span></a>
+                <a class="datagrid-icon-box grid-del-btn" href="javascript:;" title="删除"><i class="icon-aggrid icon-aggrid-delete"></i><span>删除</span></a>
+                <a class="datagrid-icon-box grid-import-btn" href="javascript:;" title="导入"><i class="icon-aggrid icon-aggrid-import"></i><span>导入</span></a>
+                <a class="datagrid-icon-box grid-export-btn" href="javascript:;" title="导出"><i class="icon-aggrid icon-aggrid-export"></i><span>导出</span></a>
+                <a class="datagrid-icon-box custom-column-btn" href="javascript:;" title="定制列"><i class="icon-aggrid icon-aggrid-custom"></i><span>定制列</span></a>
+                <a class="datagrid-icon-box grid-auto-width" href="javascript:;" title="自适宽度"><i class="icon-aggrid icon-aggrid-self-adaptation"></i><span>自适宽度</span></a>
+                <a class="datagrid-icon-box show-all-btn" href="javascript:;" title="显示所有"><img src="../../../assets/images/dataGrid/icon-show-all.png" alt=""><span>显示所有</span></a>
+                <a class="datagrid-icon-box show-leave-btn" href="javascript:;" title=""><img src="../../../assets/images/dataGrid/icon-aggrid-leave.png" alt=""><span>显示离职</span></a>
+                <a class="datagrid-icon-box grid-new-window" href="/datagrid/custom_index/?table_id={{tableId}}&folder_id=8&custom_id=personal-information" target="_blank" title="新窗口"><i class="icon-aggrid icon-aggrid-full-screen"></i><span>新窗口</span></a>
+            </div>
+        </div>
+        <!--sheet分页-->
+        <div class="SheetPage">
+
+        </div>
+        <div class="ag-grid-con">
+            <!--agGrid数据展示-->
+            <div id="data-agGrid">
+
+            </div>
+            <!--定制列-->
+            <div class="custom-columns-panel">
+
+            </div>
+        </div>
+        <!--分页-->
+        <div class="pagination">
+        </div>
+    </div>
+</div>

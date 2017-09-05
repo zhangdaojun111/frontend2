@@ -1,0 +1,153 @@
+@import "../../../assets/scss/core/base";
+
+.workflowGrid-con {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    .pagination {
+        height: 30px;
+        width: 100%;
+        clear: both;
+    }
+
+    .batch-cancel {
+        display: none;
+    }
+
+    .btn-nav {
+        height: 60px;
+        width: 100%;
+        .query-tips {
+            position: absolute;
+            width: 200px;
+            height: 70px;
+            background: #fff;
+            text-align: center;
+            line-height: 70px;
+            right: calc(50% - 100px);
+            top: 45px;
+            box-shadow: 0 0 5px #ccc;
+            z-index: 100;
+            font-size:14px;
+            .query-tips-delete {
+                position: absolute;
+                display: block;
+                color: #999;
+                width: 16px;
+                height: 16px;
+                right: 0px;
+                cursor: pointer;
+                background: url(../../../assets/images/framework/close.png) no-repeat scroll center center transparent;
+            }
+        }
+        .headerTips {
+            height: 60px;
+            font-size: 12px;
+            padding-left: 15px;
+            display: flex;
+            position: absolute;
+            left: 0px;
+            i {
+                background: url("../../../assets/images/dataGrid/tab-title.png") no-repeat;
+                width: 16px;
+                height: 16px;
+                display: block;
+                margin-right: 20px;
+                margin-top: 21px;
+            }
+            span {
+                line-height: 60px;
+            }
+        }
+    }
+    .btn-nav.flex {
+        display: flex;
+        align-items: center;
+    }
+    .btn-nav.flex.flex-end {
+        justify-content: flex-end;
+    }
+
+    .workflowGrid-btn-group {
+        //float: right;
+        //display: none;
+        margin-right: 10px;
+        line-height: 30px;
+        height: 30px;
+        display: flex !important;
+        align-items: center;
+        .datagrid-icon-box {
+            display: flex;
+            align-items: center;
+        }
+        a {
+            cursor: pointer;
+            margin-left: 30px;
+            position: relative;
+            color: #B399A6;
+            text-decoration: none;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            .icon-aggrid {
+                margin-right: 4px;
+            }
+            img {
+                display: inline-block;
+                width: 15px;
+                height: 15px;
+                vertical-align: sub;
+                margin-right: 6px;
+            }
+        }
+    }
+    .dataGrid-commonQuery {
+        //display: none;
+        float: left;
+        padding-left: 15px;
+        .dataGrid-commonQuery-select {
+            padding: 0 12px;
+            border: 1px solid #d7d7d7;
+            border-radius: 4px;
+            text-indent: 0;
+            color: #666666;
+            float: left;
+            width: 115px;
+            font-size: 12px;
+            height: 25px;
+            display: inline-block;
+            outline: none;
+            box-shadow: none;
+            appearance: none;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            background-position: 90px;
+        }
+    }
+    .workflow-grid-con {
+        height: calc(100% - 100px);
+        position: relative;
+    }
+
+    #workflow-agGrid {
+        width: 100%;
+        position: relative;
+        height: 100%;
+    }
+
+    .custom-columns-panel {
+        width: 200px;
+        height: 100%;
+        background: #f0f0f0;
+        position: absolute;
+        display: block;
+        right: -200px;
+        z-index: 1;
+        top: 0px;
+    }
+}
+
+
