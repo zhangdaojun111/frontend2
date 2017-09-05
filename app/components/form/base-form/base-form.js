@@ -1326,12 +1326,13 @@ let config = {
                     height:800,
                 })
             }else{
-                let formValue=this.actiosn.getFormValue();
+                let formValue=this.actions.getFormValue();
                 let d={
                     table_id:childId,
                     data:JSON.stringify(formValue),
                     field_id:data.id
                 };
+                console.log(d);
                 PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?viewMode=newFormCount&tableId=${childId}&fieldId=${data.id}`,{
                     title:showName,
                     width:1200,
