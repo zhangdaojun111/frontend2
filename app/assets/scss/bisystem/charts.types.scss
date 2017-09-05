@@ -5,6 +5,30 @@
     height: calc(100%);
     background: rgba(242, 242, 242, 1);
 }
+@mixin icon{
+    display:inline-block;
+    width:16px;
+    height:16px;
+}
+
+.remove-icon {
+    @include icon;
+    background:url('../../../assets/images/bisystem/remove.png') no-repeat;
+}
+.add-icon {
+    @include icon;
+    background:url('../../../assets/images/bisystem/add.png') no-repeat;
+}
+.edit-icon {
+    @include icon;
+    background:url('../../../assets/images/bisystem/edit.png') no-repeat;
+}
+
+.remove-icon {
+    display:inline-block;
+    width:16px;
+    height:16px;
+}
 
 /**
 * 保存/确定 按钮
