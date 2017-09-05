@@ -1317,30 +1317,13 @@ let config = {
         },
         //打开统计穿透
         openCount(data){
-            let whichCount={};
-            for(let obj in this.data.colDef) {
-                if (this.data.colDef[obj]['colDef']['headerName'] == data.label) {
-                    whichCount = this.data.colDef[obj];
-                }
-            }
             let penetrateFieldId=data.id;
-            let childId = whichCount['colDef']['field_content']['count_table'];
-            let childName = {};
-            childName['parentTableName'] = whichCount['colDef']['tableName'];
-            childName['parentFieldName'] = whichCount['colDef']['headerName'];
-            childName['parentStandName'] = '';
-            childName['childTableName'] = whichCount['colDef']['field_content']['child_table_name'];
-            let showName;
-            try {
-                showName =JSON.stringify(childName) ;
-            }catch (err){
-                showName = whichCount['colDef']['field_content']['child_table_name'];
-            }
-            if(this.data.col_id){
-                let rowId=this.data.col_id;
-                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=${this.data.viewMode}&tableId=${childId}&rowId=${this.data.col_id}&tableType=count&fieldId=${whichCount['colDef'].id}`,{
-                // PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=统计表&parentTableId=${this.data.tableId}&viewMode=count&tableId=7653_G7TWBbQxkFb9b6HNWs2c59&rowId=59ae22c0c904d99f4f241354&tableType=count&fieldId=4633_gcJuT3ncpSoadnGe3okjC4`,{
-                    title:'统计',
+            let childId = data['field_content']['count_table'];
+            let showName=`${this.data['table_name']}=>${data['field_content']['child_table_name']}`;
+            if(this.data.btnType != 'new'){
+                console.log(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=count&tableId=${childId}&rowId=${this.data.realId}&tableType=count&fieldId=${penetrateFieldId}`);
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=count&tableId=${childId}&rowId=${this.data.realId}&tableType=count&fieldId=${penetrateFieldId}`,{
+                    title:showName,
                     width:1200,
                     height:800,
                 })
