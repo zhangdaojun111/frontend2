@@ -17,20 +17,20 @@ import msgbox from "../../../lib/msgbox";
 let config ={
     template:template,
     data:{
-        historyList:[],
-        searchContent:"",
-        maxHistory:10,
+        historyList:[],     //存放历史搜索记录
+        searchContent:"",   //当前爱搜索内容
+        maxHistory:10,      //历史记录最大数量
         selectNum: -1,      //记录键盘选中的历史搜索记录，按一次下，选中第0条（界面中第一条）记录
-        formerSearchContent:"",
-        globalSearchOpen:"1",
+        formerSearchContent:"",     //上一次的搜索记录，用来查找iframe
+        globalSearchOpen:"1",       //是否允许使用全局搜索
     },
-    searchBarRef:null,
     actions:{
         getData:function () {
+            let that = this;
             UserInfoService.getSearchHistory().done((result) => {
                 if(result.success === 1){
-                    this.data.historyList = $.parseJSON(result.data);
-                    this.actions.initList();
+                    that.data.historyList = $.parseJSON(result.data);
+                    that.actions.initList();
                 }else{
                     console.log("get search history failed");
                 }
@@ -218,26 +218,84 @@ let config ={
             }
         }
     },
+    binds:[
+        {
+            event:'click',
+            selector:'i.search-icon',
+            callback:_.debounce(function(){
+                this.actions.doSearch();
+            },500)
+        },
+        {
+            event:'input',
+            selector:'.search-content',
+            callback:function (target,event) {
+                this.actions.setSearchContent(event);
+            }
+        },
+        {
+            event:'mousedown',
+            selector:'.record-item',
+            callback:function (target,event) {
+                this.actions.dealRecordClick(event);
+            }
+        },
+        {
+            event:'click',
+            selector:'.delete-all-history',
+            callback:function () {
+                this.actions.isDeleteAllHistory();
+            }
+        },
+        {
+            event:'focus',
+            selector:'.search-content',
+            callback:function () {
+                this.actions.showHistoryList();
+            }
+        },
+        {
+            event:'blur',
+            selector:'.global-search-main',
+            callback:function (target,event) {
+                this.actions.hideHistoryList(event);
+            }
+        },
+        {
+            event:'keydown',
+            selector:'.search-content',
+            callback:function (target,event) {
+                this.actions.myKeyDown(event);
+            }
+        },
+        {
+            event:'mouseenter',
+            selector:'li.record-item',
+            callback:function (target,event) {
+                this.actions.setItemHover(event);
+            }
+        },
+    ],
     afterRender:function () {
         this.actions.getData();
         this.data.globalSearchOpen = window.config.sysConfig.logic_config.use_search.toString();
-        this.el.on("click","i.search-icon", _.debounce(() => {
-            this.actions.doSearch();
-        },500)).on('input','.search-content',(event) => {
-            this.actions.setSearchContent(event);
-        }).on('mousedown','.record-item',(event) => {
-            this.actions.dealRecordClick(event);
-        }).on("click",".delete-all-history", () => {
-            this.actions.isDeleteAllHistory();
-        }).on('focus','.search-content',() => {
-            this.actions.showHistoryList();
-        }).on('blur','.global-search-main',(event) => {
-            this.actions.hideHistoryList(event);
-        }).on('keydown','.search-content',(event) => {
-            this.actions.myKeyDown(event);
-        }).on('mouseenter','li.record-item',(event) => {
-            this.actions.setItemHover(event);
-        })
+        // this.el.on("click","i.search-icon", _.debounce(() => {
+        //     this.actions.doSearch();
+        // },500)).on('input','.search-content',(event) => {
+        //     this.actions.setSearchContent(event);
+        // }).on('mousedown','.record-item',(event) => {
+        //     this.actions.dealRecordClick(event);
+        // }).on("click",".delete-all-history", () => {
+        //     this.actions.isDeleteAllHistory();
+        // }).on('focus','.search-content',() => {
+        //     this.actions.showHistoryList();
+        // }).on('blur','.global-search-main',(event) => {
+        //     this.actions.hideHistoryList(event);
+        // }).on('keydown','.search-content',(event) => {
+        //     this.actions.myKeyDown(event);
+        // }).on('mouseenter','li.record-item',(event) => {
+        //     this.actions.setItemHover(event);
+        // })
     },
     beforeDestroy:function () {
 

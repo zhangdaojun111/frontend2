@@ -18,8 +18,7 @@ let config = {
     data:{
         userData:null,
         selectedUserName:"",
-        _autoSelect : null,
-        _otherId:'',
+        _otherId:''
     },
     actions:{
         getData:function () {
@@ -42,7 +41,6 @@ let config = {
                 multiSelect: false,
                 editable: true,
                 onSelect: function (choosed) {
-                    console.log(choosed);
                     if(choosed.length > 0){
                         that.data._otherId = choosed[0].id;
                     }else{
@@ -51,10 +49,8 @@ let config = {
                 }
             });
             autoSelect.render($wrap);
-            this._autoSelect = autoSelect;
         },
         loginOtherAccount:function () {
-            // let userId = this._autoSelect.actions.getId();
             let userId = this.data._otherId;
             userId = userId.trim();
             if(userId && userId !== ''){
@@ -73,13 +69,24 @@ let config = {
             this.el.dialog('close');
         }
     },
+    binds:[
+        {
+            event:'click',
+            selector:'.confirm-btn',
+            callback:_.debounce(function(){
+                this.actions.loginOtherAccount();
+            },500)
+        },
+        {
+            event:'click',
+            selector:'.cancel-btn',
+            callback:function () {
+                this.actions.cancel();
+            }
+        }
+    ],
     afterRender:function () {
         this.actions.getData();
-        this.el.on("click",".confirm-btn",_.debounce(() => {
-            this.actions.loginOtherAccount();
-        },500)).on("click",".cancel-btn", () => {
-            this.actions.cancel();
-        })
     },
     beforeDestory:function () {
 

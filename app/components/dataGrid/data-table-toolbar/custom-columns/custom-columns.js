@@ -1,3 +1,7 @@
+/**
+ * @author yangxiaochuan
+ * 定制列
+ */
 import Component from "../../../../lib/component";
 import template from './custom-columns.html';
 import './custom-columns.scss';
