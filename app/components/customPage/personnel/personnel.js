@@ -328,7 +328,12 @@ let config = {
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
                 if( this.data.filterParam.filter.length == 0 ){
-                    msgBox.alert( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
+                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span>加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;</div>`;
+                    this.el.find('.btn-nav').append(dom);
+                    this.el.find('.query-tips-delete').on('click', ()=> {
+                        this.el.find('.query-tips').css('display','none');
+                    })
+                    // msgBox.alert( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
                 }
             }
             if( this.data.isShowLeave && this.data.userStatus != '' ){
