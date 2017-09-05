@@ -155,7 +155,6 @@ let config = {
     async afterRender() {
         this.data.charts = {};
         this.data.chart_id = this.data.id;
-
         if(this.data.chart_id) {
             const res = await this.actions.getChartData(this.data.chart_id);
             if (res[0]['success'] === 1) {
