@@ -89,6 +89,10 @@ let config = {
                 key: window.config.key,
                 data: {sms: this.data.sms, email: this.data.email},
             });
+        },
+        
+        getRemindId: function (choosedId, choosedData) {
+            
         }
     },
     binds:[
@@ -164,10 +168,22 @@ let config = {
             callback:function(){
                 this.data.smsRemindTime = this.el.find('.remind-time-sms').val();
                 this.data.emailRemindTime = this.el.find('.remind-time-email').val();
-                this.data.smsReciver = this.data.smsReceiverAutoSelect.data.choosed;
-                this.data.smsCopyPeople = this.data.smsCopyPeopleAutoSelect.data.choosed;
-                this.data.emailReciver = this.data.emailReceiverAutoSelect.data.choosed;
-                this.data.emailCopyPeople = this.data.emailCopyPeopleAutoSelect.data.choosed;
+                // this.data.smsReciver = this.data.smsReceiverAutoSelect.data.choosed;
+                // this.data.smsCopyPeople = this.data.smsCopyPeopleAutoSelect.data.choosed;
+                // this.data.emailReciver = this.data.emailReceiverAutoSelect.data.choosed;
+                // this.data.emailCopyPeople = this.data.emailCopyPeopleAutoSelect.data.choosed;
+                this.data.smsReceiverAutoSelect.data.choosed.forEach(item => {
+                    this.data.smsReciver.push(item['id']);
+                });
+                this.data.smsCopyPeopleAutoSelect.data.choosed.forEach(item => {
+                    this.data.smsCopyPeople.push(item['id']);
+                });
+                this.data.emailReceiverAutoSelect.data.choosed.forEach(item => {
+                    this.data.emailReciver.push(item['id']);
+                });
+                this.data.emailCopyPeopleAutoSelect.data.choosed.forEach(item => {
+                    this.data.emailCopyPeople.push(item['id']);
+                });
                 this.actions.checkRemindStatus();
             }
         },

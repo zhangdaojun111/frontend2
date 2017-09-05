@@ -230,8 +230,8 @@ let config = {
             event: 'click',
             selector: '.edit-model-title a',
             callback: function () {
-                this.actions.cancelEditModel();
                 this.actions.saveCommonuse(this.allMenu.actions.getSelected());
+                this.actions.cancelEditModel();
             }
         },{
             event: 'click',
@@ -269,6 +269,12 @@ let config = {
             callback: function () {
                 this.actions.showInfoSet();
             }
+        },{
+            event:'click',
+            selector:'.avatar',
+            callback:function () {
+                AvatarSet.show();
+            }
         }
     ],
     afterRender: function () {
@@ -284,10 +290,6 @@ let config = {
         }
         //此处检查用户是否开启代理，并做提醒
         this.actions.checkAgent();
-
-        this.el.find('.avatar').on('click',function () {
-            AvatarSet.show();
-        })
     },
     firstAfterRender: function() {
         Mediator.on('aside:size', (order) => {
@@ -307,6 +309,6 @@ let config = {
     beforeDestory: function() {
         Mediator.removeAll('aside');
     }
-}
+};
 
 export const AsideInstance = new Component(config);

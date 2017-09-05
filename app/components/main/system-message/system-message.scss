@@ -1,12 +1,12 @@
 .system-message {
+    padding: 10px 10px 0 10px;
     .grid {
-        height: 480px;
+        height: 485px;
+        width: 1301px;
         position: relative;
         //margin: 10px 0 10px 0;
-        margin: 10px;
         border: double #e4e4e4;
         .ag-body-viewport{
-            overflow-x: hidden;
             .grid-cell-info{
                 &.already-read-icon{
                     color: #31fc38;
@@ -18,13 +18,14 @@
         }
     }
     .pagination {
-        height: 30px;
+        height: 40px;
         clear: none;
         //.p-left select,.p-left > span:nth-child(1),.p-left > span:nth-child(3){
         //   display: none;
         //}
         div.p-page-con{
             float: left;
+            height: 40px;
         }
         div.selectPage-con{
             margin-left: 30px;
@@ -35,6 +36,7 @@
         height: 30px;
         float: right;
         margin-right: 20px;
+        margin-top: 5px;
         .markRead,.batchApprove,.batchDelete{
             width: 60px;
             height: 24px;

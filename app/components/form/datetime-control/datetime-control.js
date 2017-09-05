@@ -15,6 +15,37 @@ import msgbox from '../../../lib/msgbox';
 
 let config = {
     template: template,
+    actions:{
+        keyup: function () {
+            let _this = this;
+            //YYYY-MM-DD hh:mm:ss
+            let strDate = this.el.find(".datetime").val();
+            console.log(strDate);
+            let  re =/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+
+            if(re.test(strDate))//判断日期格式符合YYYY-MM-DD hh:mm:ss标准
+            {
+                let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3,RegExp.$4,RegExp.$5,RegExp.$6);
+                console.log(dateElement);
+
+                if(!((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))&&(dateElement.getHours()==parseInt(RegExp.$4))&&(dateElement.getMinutes()==parseInt(RegExp.$5))&&(dateElement.getSeconds()==parseInt(RegExp.$6))))//判断日期逻辑
+                {
+                    this.el.find("#errorMessage").css("display","inline-block").innerText = "时间格式不正确,正确格式为: 2017-09-01 12:00:00 ";
+                } else{
+                    this.el.find("#errorMessage").css("display","none");
+                    _this.data.value = strDate;
+                    _.debounce(function () {
+                        _this.events.changeValue(_this.data)
+                    }, 200)();
+                }
+            }
+            else{
+                this.el.find("#errorMessage").css("display","inline-block").text("时间格式不正确,正确格式为: 2017-09-01 12:00:00") ;
+            }
+        },
+    }
+    ,
+
     binds: [
         {
             event: 'click',
@@ -23,20 +54,7 @@ let config = {
                 this.events.emitHistory(this.data)
             }
         },
-        {
-            event: 'click',
-            selector: '.date-close',
-            callback: function () {
-                this.el.find(".datetime").val("年-月-日 时:分:秒")
-            }
-        },
-        {
-            event: 'keyup',
-            selector: '.datetime',
-            callback: function () {
-                this.value=this.value.replace("/[^w&-&:]|_/ig,''");
-            }
-        },
+
     ],
     afterRender() {
         let _this = this;
@@ -46,15 +64,16 @@ let config = {
         } else {
             this.el.find('.ui-width').attr('disabled', false);
         }
-
-
         //回显
         if (_this.data.value) {
-            _this.el.find(".datetime").val(_this.data.value.replace(/-/g, "/"));
+            _this.el.find(".datetime").val(_this.data.value);
         } else {
             _this.el.find(".datetime").val("年-月-日 时:分:秒");
         }
-
+        _this.el.find(".ui-datepicker-trigger").on('click', function () {
+            console.log("ssss")
+            _this.el.find("#errorMessage").css("display","none");
+        })
         //控制到时分秒
         _this.el.find(".datetime").datetimepicker({
             monthNamesShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
@@ -79,6 +98,7 @@ let config = {
             showOtherMonths: true,//填充没有显示的单元格，但无法使用
             //向外弹射操作后的值
             onSelect: function (selectTime, text) {
+                _this.el.find("#errorMessage").css("display","none");
                 let selectTime1 = selectTime;
                 _this.data.value = selectTime.replace(/\//g, "-");
                 _.debounce(function () {
@@ -122,7 +142,15 @@ let config = {
                 }
 
             },
-            onClose: function(timeText) {
+            onClose: function(timeText, text) {
+                let strTime = $(".ui_tpicker_time_input").val();
+                console.log(strTime)
+                if(strTime == "00:00:00"){
+                    _this.el.find("#errorMessage").css("display", "inline-block").text("时间格式不正确,正确格式为: 2017-09-01 12:00:00");
+                }else{
+                    _this.el.find("#errorMessage").css("display", "none");
+                }
+
                 _this.data.value = timeText.replace(/\//g, "-");
                 _.debounce(function () {
                     _this.events.changeValue(_this.data)
@@ -130,6 +158,10 @@ let config = {
             },
 
         });
+
+        _this.el.find('.datetime').on('input', _.debounce(function () {
+            _this.actions.keyup();
+        }, 200));
         _.debounce(function () {
             _this.events.changeValue(_this.data)
         }, 200)();

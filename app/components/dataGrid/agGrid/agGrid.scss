@@ -15,6 +15,9 @@
             padding: 0 8px;
             line-height: 30px;
         }
+        .ag-cell-focus {
+            border: none;
+        }
     }
 
     .ag-header {
@@ -31,6 +34,9 @@
         .ag-header-cell-label {
             text-overflow: clip;
             overflow: hidden;
+            font-size: 12px;
+            line-height: 30px;
+            padding: 0px;
         }
         .ag-grid-number {
             position: relative;
@@ -46,6 +52,8 @@
             }
             .ag-header-group-cell-label {
                 text-align: center;
+                font-size: 12px;
+                line-height: 24px;
             }
             .ag-header-group-cell-label:hover {
                 cursor: pointer;
@@ -146,6 +154,9 @@
             }
 
         }
+        .ag-row-selected {
+            background-color: #97DDFF!important;
+        }
     }
 
     .ag-bootstrap .ag-header-cell-text {
@@ -154,10 +165,6 @@
         font-weight: 700;
         font-style: normal;
         font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
-    }
-
-    .ag-bootstrap .ag-row-selected {
-        background-color: #E4E4E4 !important;
     }
     //图标
     .checkbox-uncheck {

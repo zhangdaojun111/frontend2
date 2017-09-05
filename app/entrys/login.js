@@ -19,21 +19,26 @@ function getLoginController() {
         username_value:'',      //记录用户名称
         password_value:'',      //记录密码
         isOpposite:false,       //记录页面状态
+        versionBtnOpen:1,       //是否可以查看更新信息
+        registerBtnOpen:1,      //是否可以使用注册功能
 
-        $loginMainTitle:$(".login-main-title"),     //系统名称显示
+        $loginMainTitle:$('.login-main-title'),     //系统名称显示
         $companyInfo:$('.company-info'),            //公司名称显示
-        $rememberPwCheck:$(".remember-pw-check"),   //记住密码
-        $updateGroup:$(".update-group"),              //显示更新信息logo
-        $versionTable:$(".version-table"),          //版本信息显示表格
-        $loginBtn:$("button.login-btn"),            //登录按钮
-        $registerBtn:$("div.register-btn"),      //注册按钮
-        $findPwBtn:$(".find-pw-btn"),               //忘记密码
-        $closeIcon:$(".close-icon"),                //找回密码面板关闭按钮
-        $usernameInput:$("input[name=username]"),   //用户名输入框
-        $passwordInput:$("input[name=password]"),   //密码输入框
-        $whitePanel:$(".white-panel"),              //正面面板
-        $oppositePanel:$(".opposite-panel"),        //反面面板
-        $submitFindPw:$(".submit-find-account"),    //查找密码提交按钮
+        $rememberPwCheck:$('.remember-pw-check'),   //记住密码
+        $updateGroup:$('.update-btn'),              //显示更新信息logo
+        $versionTable:$('.version-view'),          //版本信息显示表格
+        $loginBtn:$('button.login-btn'),            //登录按钮
+        $registerBtn:$('div.register-btn'),         //注册按钮
+        $findPwBtn:$('.find-pw-group'),             //忘记密码
+        $closeIcon:$('.close-icon'),                //找回密码面板关闭按钮
+        $usernameInput:$('input[name=username]'),   //用户名输入框
+        $passwordInput:$('input[name=password]'),   //密码输入框
+        $whitePanel:$('.white-panel'),              //正面面板
+        $oppositePanel:$('.opposite-panel'),        //反面面板
+        $submitFindPw:$('.submit-find-account'),    //查找密码提交按钮
+        $mobileDownload:$('.mobile-download-btn'),  //移动下载按钮
+        $selfServiceUpdate:$('.self-service-update'),   //自助更新按钮
+
 
         //检测浏览器是否可用
         browser_check: function (){
@@ -42,13 +47,13 @@ function getLoginController() {
         //初始化登录表单控件
         formInit:function () {
             //系统名称改变
-            this.$loginMainTitle.on("change", () => {
+            this.$loginMainTitle.on('change', () => {
                 this.systemName = this.$loginMainTitle.val();
                 this.resetSysName(this.systemName);
             });
 
             //记住密码和忘记密码
-            this.$rememberPwCheck.on("click", (event) => {
+            this.$rememberPwCheck.on('click', (event) => {
                 this.isRememberKey = event.target.checked;
                 if(this.isRememberKey === false){
                     if(this.username_value !== ''){
@@ -59,7 +64,7 @@ function getLoginController() {
             });
 
             //展示或关闭版本信息
-            this.$updateGroup.on("click", () => {
+            this.$updateGroup.on('click', () => {
                 this.$versionTable.toggle();
             });
 
@@ -74,62 +79,62 @@ function getLoginController() {
                 $(window).attr('location','/register_index');
             });
             //忘记密码，找回密码入口
-            this.$findPwBtn.on("click", () => {
+            this.$findPwBtn.on('click', () => {
                 this.$whitePanel.hide();
                 this.$oppositePanel.fadeIn();
                 this.isOpposite = true;
             });
 
             //反面面板关闭返回正面面板
-            this.$closeIcon.on("click", () => {
+            this.$closeIcon.on('click', () => {
                 this.$whitePanel.fadeIn();
                 this.$oppositePanel.hide();
                 this.isOpposite = false;
             });
 
             //监听用户名输出框
-            this.$usernameInput.on("input",() => {
+            this.$usernameInput.on('input',() => {
                 this.username_value = this.$usernameInput.val();
             });
 
             //监听密码输入框
-            this.$passwordInput.on("input",() => {
+            this.$passwordInput.on('input',() => {
                 this.password_value = this.$passwordInput.val();
-            }).on("focus",() => {
+            }).on('focus',() => {
                 //查找缓存中是否有当前用户密码
                 if(this.username_value !== ''){
                     let password = window.localStorage.getItem(this.username_value);
                     if(password !== undefined && password !== null){
                         this.isRememberKey = true;
                         this.$passwordInput.val(password);
-                        this.$rememberPwCheck.prop("checked",true);
+                        this.$rememberPwCheck.prop('checked',true);
                     }
                 }
             });
 
             //密码找回页面提交按钮
-            this.$submitFindPw.on("click", _.debounce(() => {
-                let userName = $(".account-input").val();
+            this.$submitFindPw.on('click', _.debounce(() => {
+                let userName = $('.account-input').val();
                 let result = LoginService.findPassword(userName);
                 result.done((result) => {
                     if(result.success === 1){
-                        msgBox.alert("提交成功！我们已发送邮件至您的邮箱中，请注意查收！");
+                        msgBox.alert('提交成功！我们已发送邮件至您的邮箱中，请注意查收！');
                     }else{
                         msgBox.alert(result.error)
                     }
                 }).fail((err) => {
-                    console.log("提交失败",err)
+                    console.log('提交失败',err)
                 })
             },1000));
 
             //自助更新
-            $(".update-service").click(function () {
-                // console.log("自助更新服务");
+            this.$selfServiceUpdate.on('click',function () {
+                console.log('打开自助更新页面');
             });
 
             //移动下载
-            $(".mobile-download").click(function () {
-                // console.log("打开移动下载页面");
+            this.$mobileDownload.on('click',function () {
+                console.log('打开移动下载页面');
             });
 
             //键盘绑定
@@ -142,6 +147,7 @@ function getLoginController() {
                     }
                 }
             })
+            //根据权限处理versionBtn和registerBtn
         },
         //初始化公司名称
         sysNameInit:function () {
@@ -151,29 +157,29 @@ function getLoginController() {
         //初始化版本信息
         versionInit:function () {
             let info = this.versionInfo.rows;
-            let $table = this.$versionTable;
+            let $table = $('.version-table');
 
             for (let obj of info){
-                let $row = $("<tr></tr>");
+                let $row = $('<tr></tr>');
 
-                let $module = $("<td></td>");
+                let $module = $('<td></td>');
                 $module.html(obj["module"] || '-');
                 $row.append($module);
 
-                let $codeTime = $("<td></td>");
+                let $codeTime = $('<td></td>');
                 $codeTime.html(obj["last_change_time"] || '-');
                 $row.append($codeTime);
 
-                let $updateTime = $("<td></td>");
+                let $updateTime = $('<td></td>');
                 $updateTime.html(obj["update_time"] || '-');
                 $row.append($updateTime);
 
-                let $runStats = $("<td class='run-btn'></td>");
+                let $runStats = $('<td class="run-btn"></td>');
                 $runStats.html(obj["run_stats"] || '-');
                 $row.append($runStats);
 
                 let $branch = $("<td class='default-hide'></td>");
-                $branch.html(obj["branch"] || '-');
+                $branch.html(obj['branch'] || '-');
                 $row.append($branch);
 
                 let $revision = $("<td class='default-hide'></td>");
@@ -260,9 +266,18 @@ if(window.hasOwnProperty("parent") && window.parent !== window){
 let controller = getLoginController();
 let isNeedDownload = controller.browser_check();
 if( isNeedDownload === false){      //正常显示登录表单
-    LoginService.getVersionInfo()
-    .done((result) => {
+    LoginService.getVersionInfo().done((result) => {
         if(result.success === 1){
+            if(result.use_register && result.use_register.toString() === "0"){
+                $('.register-btn').hide();
+            }
+            if(result.sap_login_system_version && result.sap_login_system_version.toString() === "0"){
+                $('.update-btn').hide();
+            }
+            if(result.show_publish_link && result.show_publish_link.toString() === "0"){
+                $('.self-service-update').hide();
+            }
+
             controller.versionInfo = result;
             controller.sysNameInit();   //初始化公司名称
             controller.versionInit();   //初始化版本table
@@ -279,9 +294,3 @@ if( isNeedDownload === false){      //正常显示登录表单
     $(".login-content").hide();
     $(".need-download").show();
 }
-
-
-
-
-
-

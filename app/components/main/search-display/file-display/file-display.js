@@ -3,6 +3,10 @@ import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
 import 'jquery-ui/ui/widgets/dialog.js';
 import './file-display.scss';
+/**
+ * @author zhaoyan
+ * 全局搜索单个附件展示
+ */
 import template from './file-display.html';
 
 
@@ -46,7 +50,6 @@ let config = {
     },
     afterRender:function () {
         this.actions.initInfo();
-
     },
     beforeDestory:function () {
 
