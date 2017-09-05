@@ -51,7 +51,6 @@ if(focus.length>1){
                             for(let k in staff){
                                 if(k==item.id){
                                     Mediator.publish('workflow:checkDeptAlready', staff[k]);
-                                    // recursion(staff,selectedNode,'checkDept');
                                 }
                             }
                         }

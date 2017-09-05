@@ -15,7 +15,8 @@ import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 let config={
     template: template,
     data:{
-        total: 0
+        total: 0,
+        flag:true
     },
     action:{
         search(){
@@ -84,7 +85,10 @@ let config={
                     }
                 });
             }
-            this.hideLoading();
+            if(this.data.flag===true){
+                this.hideLoading();
+                this.data.flag=false;
+            }
         });
 
         //部门反选，删除SelectedStaff组件
