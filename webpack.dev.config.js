@@ -34,6 +34,7 @@ module.exports = {
         addSigner: path.resolve(APP_PATH, 'entrys/popup/addSigner.js'),
         addfocus: path.resolve(APP_PATH, 'entrys/popup/addfocus.js'),
         addWf: path.resolve(APP_PATH, 'entrys/popup/addWf.js'),
+        approvalDialog:path.resolve(APP_PATH, 'entrys/popup/approvalDialog.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
