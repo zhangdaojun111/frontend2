@@ -97,6 +97,9 @@ let config = {
                                 this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
                                 if (this.data['thumbnailListComponent']) {
                                     this.data['thumbnailListComponent'].actions.deleteItem(event.data.fileId);
+                                    if(this.data.value.length == 0){
+                                        delete this.data['thumbnailListComponent'];
+                                    }
                                 }
                                 this.events.changeValue(this.data);
                             }
@@ -111,9 +114,9 @@ let config = {
                             obj[event.data.fileId] = event.data.thumbnail;
                             if (this.data['thumbnailListComponent']) {
                                 this.data['thumbnailListComponent'].actions.addItem(obj);
-                            } else if(this.data.dinput_type == 23) {
+                            } else if(this.data.dinput_type == 23 || this.data.dinput_type == 33) {
                                 let comp = new ThumbnailList([obj]);
-                                comp.render(this.el.find('.thumbnail-list'));
+                                comp.render(this.el.find('.thumbnail-list-anchor'));
                                 this.data['thumbnailListComponent'] = comp;
                             }
                         }
@@ -129,21 +132,20 @@ let config = {
             this.el.find('.upload-file').val('上传视频');
         } else if (this.data.dinput_type == 23) {
             this.el.find('.upload-file').val('上传图片');
-            if (this.data.value.length != 0) {
-                FormService.getThumbnails({
-                    file_ids: JSON.stringify(this.data.value)
-                }).then(res => {
-                    if (!res.success) {
-                        console.log(res.error)
-                    }
-                    if (res.rows.length != 0) {
-                        let comp = new ThumbnailList(res.rows);
-                        comp.render(this.el.find('.thumbnail-list'));
-                        this.data['thumbnailListComponent'] = comp;
-                    }
-                })
-            }
-
+        }
+        if ((this.data.dinput_type == 33 || this.data.dinput_type == 23)&&this.data.value.length != 0) {
+            FormService.getThumbnails({
+                file_ids: JSON.stringify(this.data.value)
+            }).then(res => {
+                if (!res.success) {
+                    console.log(res.error)
+                }
+                if (res.rows.length != 0) {
+                    let comp = new ThumbnailList(res.rows);
+                    comp.render(this.el.find('.thumbnail-list-anchor'));
+                    this.data['thumbnailListComponent'] = comp;
+                }
+            })
         }
     }
 };

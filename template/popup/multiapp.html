@@ -5,16 +5,19 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
-<div id="add-follow"></div>
+<body class="border-box">
+
+<div id="multi-app"></div>
+
+
 {% ifequal window_type 'develop'%}
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
-<script type="text/javascript" src="http://localhost:8080/scripts/addfocus.js"></script>
+<script type="text/javascript" src="http://localhost:8080/scripts/multiapp.js"></script>
 {% else %}
 <link rel="stylesheet" href=" {{ "/client/static/css/vendors.css"|version }}">
-<link rel="stylesheet" href=" {{ "/client/static/css/addfocus.css"|version }}">
+<link rel="stylesheet" href=" {{ "/client/static/css/multiapp.css"|version }}">
 <script type="text/javascript" src=" {{ "/client/static/vendors.js"|version }}"></script>
-<script type="text/javascript" src=" {{ "/client/static/addfocus.js"|version }}"></script>
+<script type="text/javascript" src=" {{ "/client/static/multiapp.js"|version }}"></script>
 {% endifequal %}
 </body>
 </html>

@@ -38,7 +38,7 @@ export const PMENUM = {
     iframe_active: '4',
     iframe_silent: '5',
     table_invalid: '6',              // 表格数据失效
-    on_the_way_invalid: '7',         // 在途数据失效
+    one_the_way_invalid: '7',         // 在途数据失效
     data_invalid: '11',
     open_iframe_params: '8',
     get_param_from_root: '9',        // 来自子框架的消息，需要获取iframe的参数
@@ -244,7 +244,7 @@ export const PMAPI = {
     },
 
     /**
-     * 将消息发送给调用的父组件
+     * 将消息发送给的根组件
      * @param data
      */
     sendToParent: function (data) {

@@ -184,11 +184,10 @@ let config = {
         }
 
         if (_.isUndefined(this.data.items)) {
-            let key;
             if (this.data.table_id && this.data.table_id !== '' && this.data.table_id !== "0") {
-                key = this.data.table_id;
+                this.data.key = this.data.table_id;
             }else{
-                key = this.data.ts_name;
+                this.data.key = this.data.ts_name;
             }
             if (window.config.commonUse.data.indexOf(this.data.key) !== -1) {
                 this.actions.onCheckboxChange({checked: true});
