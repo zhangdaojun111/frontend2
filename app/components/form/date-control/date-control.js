@@ -61,7 +61,7 @@ let config = {
         this.el.find('.ui-width').css('width', this.data.width);
         if (this.data.is_view) {
             this.el.find('.ui-width').attr('disabled', true);
-            this.el.find('.ui-datepicker-trigger').attr('disabled', true);
+            this.el.find('.component-date-control').css('pointer-events','none');
         } else {
             this.el.find('.ui-width').attr('disabled', false);
         }
