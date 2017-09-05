@@ -122,7 +122,7 @@ export const dataTableService = {
     },
     //获取表单新增统计表数据
     getNewFormCountData: function ( data ) {
-        return HTTP.postImmediately( '/get_detailed_data/',this.formatParams(data),{headers:this.headers} )
+        return HTTP.postImmediately( '/get_detailed_data/',data )
     },
     //获取文件名后缀
     getFileExtension (filename) {

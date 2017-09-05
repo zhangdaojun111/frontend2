@@ -961,8 +961,6 @@ let config = {
             PMAPI.getIframeParams(window.config.key).then((r) => {
                 let data = r.data.d;
                 dataTableService.getNewFormCountData( data ).then( res=>{
-                    console.log( "表单新增数据统计返回数据" )
-                    console.log( res )
                     let resRows = [];
                     if(res.data.db.length != 0 && res.data.temp.length == 0){
                         resRows = res.data.db
@@ -981,9 +979,6 @@ let config = {
                         }
                         resRows = res.data.temp.concat(res.data.db);
                     }
-                    console.log( "__________________" )
-                    console.log( "__________________" )
-                    console.log( resRows )
                     this.data.rowData = resRows;
                     if( this.data.firstRender ){
                         let d = {
