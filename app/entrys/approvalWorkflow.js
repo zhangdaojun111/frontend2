@@ -24,7 +24,12 @@ import Grid from '../components/dataGrid/data-table-page/data-table-page';
 import {PMAPI,PMENUM} from '../lib/postmsg';
 import jsplumb from 'jsplumb';
 
-WorkFlowForm.showForm();
+WorkFlowForm.showForm().then(function () {
+    setTimeout(()=>{
+        $('.J_component-loading-cover').remove();
+    },2000)
+
+});
 
 let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[];;
 serchStr.split('&').forEach(res => {

@@ -108,7 +108,7 @@ let config = {
         },
     ],
     afterRender: function() {
-        this.showLoading();
+        // this.showLoading();
         let __this=this;
         this.formTrans = false;
         this.el.on("mouseenter",".imgseal",function(e){
@@ -152,7 +152,7 @@ let config = {
            }
         });
         Mediator.subscribe("form:formAlreadyCreate",(e)=>{
-            this.hideLoading();
+            // this.hideLoading();
         });
     }
 }
@@ -166,8 +166,12 @@ class WorkFlowForm extends Component {
 
 export default {
      showForm(data) {
-        let component = new WorkFlowForm();
-        let el = $('#workflow-form');
-        component.render(el);
+         return new Promise(function(resolve, reject){
+             let component = new WorkFlowForm();
+             let el = $('#workflow-form');
+             component.render(el);
+             resolve()
+         })
+
      }
 };
