@@ -149,6 +149,18 @@
                 }
                 border: none;
                 //background: #E4E4E4;
+                .ag-cell-edit-input {
+                    border: 1px solid rgb(228, 228, 228);
+                    border-radius: 2px;
+                    height: 20px;
+                    margin: auto;
+                    select {
+                        border: 1px solid #d7d7d7;
+                        border-radius: 3px;
+                        height: 20px;
+                        margin: auto;
+                    }
+                }
             }
             &.ag-cell-no-focus {
                 border-right: 1px solid #E4E4E4 !important;

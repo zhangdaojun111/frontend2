@@ -28,6 +28,7 @@ let config = {
             // }
             Promise.all(arr).then((res)=> {
                 this.el.find( '.inProcessNum' )[0].style.display = res[0].total? 'block':'none';
+                try{this.inProcessGrid.actions.getInprocessData()}catch(e){}
                 // if( !this.data.firatShowHelp ){
                 //     if(typeof res[1].data != "object"){
                 //         if(res[1].data != ""){
@@ -62,7 +63,8 @@ let config = {
                         viewMode: 'in_process',
                         gridTips: '在途'
                     };
-                    this.append(new dataTableAgGrid(obj), this.el.find('#data-table-in-process'));
+                    this.inProcessGrid = new dataTableAgGrid(obj);
+                    this.append(this.inProcessGrid, this.el.find('#data-table-in-process'));
                     this.data.isRenderIntrain = true;
                 }
             } )
