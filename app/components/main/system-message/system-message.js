@@ -153,7 +153,7 @@ let systemMessageUtil = {
         let systemMessage = new SystemMessage();
         systemMessage.render(this.el);
         this.el.dialog({
-            width: 1328,
+            width: 1298,
             height: 575,
             modal: true,
             title: '消息提醒',
