@@ -8,9 +8,10 @@ import '../../assets/scss/core/reset.scss';
 import '../../assets/scss/core/common.scss';
 import '../../assets/scss/core/jquery-ui-theme.scss';
 import '../../assets/scss/core/base.scss';
-import "../../assets/scss/bisystem/quill.snow.css";
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
+import Quill from 'quill';
 import Component from '../../lib/component';
-import Handlebars from 'handlebars';
 
 export class BiBaseComponent extends Component{
     constructor(config) {
