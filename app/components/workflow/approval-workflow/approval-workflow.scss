@@ -260,3 +260,15 @@ btn-div{
     }
   }
 }
+.component-loading-cover.J_component-loading-cover{
+  z-index: 999;
+}
+.component-loading-box.J_component-loading-box{
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+
+}
