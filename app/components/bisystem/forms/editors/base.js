@@ -1,14 +1,14 @@
 import Component from '../../../../lib/component';
-import {Text} from '../forms/text/text';
-import {Select} from '../forms/select/select';
-import {AutoComplete} from '../forms/autocomplete/autocomplete';
-import {Radio} from '../forms/radio/radio';
-import {Checkbox} from '../forms/checkbox/checkbox';
-import {Choosed} from '../forms/choosed/choosed';
-import {Save} from '../forms/save/save';
-import {TableSingle} from '../forms/single/single';
-import {Deep} from '../forms/deep/deep';
-import {YaXis} from '../forms/linebar.yAxis/yAxis';
+import {Text} from '../form/text/text';
+import {Select} from '../form/select/select';
+import {AutoComplete} from '../form/autocomplete/autocomplete';
+import {Radio} from '../form/radio/radio';
+import {Checkbox} from '../form/checkbox/checkbox';
+import {Choosed} from '../form/choosed/choosed';
+import {Save} from '../form/save/save';
+import {TableSingle} from '../form/single/single';
+import {Deep} from '../form/deep/deep';
+import {YaXis} from '../form/linebar.yAxis/yAxis';
 
 let formItemTypes = {
     'text': Text,
