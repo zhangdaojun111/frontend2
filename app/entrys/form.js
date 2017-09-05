@@ -393,8 +393,9 @@ let FormEntrys = {
             return result;
         }
         this.init(config);
-        let $wrap = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"><div></div></div>`).prependTo(this.el);
-        let html = $(`<div class="center-wrap"></div>`).appendTo($wrap);
+        // let $wrap = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"></div>`).prependTo(this.el);
+        // let html = $(`<div class="center-wrap"></div>`).appendTo($wrap);
+        let html = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"></div>`).prependTo(this.el);
         let res;
         //如果不处于工作流中
         if (!this.fromWorkFlow) {

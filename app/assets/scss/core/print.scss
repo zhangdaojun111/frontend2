@@ -5,12 +5,12 @@
         position: static !important;
     }
 
-    .center-wrap, .center-wrap * {
+    .detail-form, .detail-form * {
         visibility: visible !important;
         overflow: visible !important;
     }
 
-    .center-wrap {
+    .detail-form {
         height: 100% !important;
         position: absolute !important;
         left: 0 !important;
@@ -18,48 +18,43 @@
         overflow: initial !important;
     }
 
-    .center-wrap table{
-        width:100%;
-        display: flex;
-    }
-
-    .center-wrap .ui-helper-hidden-accessible,
-    .center-wrap .ui-dropdown-label {
+    .detail-form .ui-helper-hidden-accessible,
+    .detail-form .ui-dropdown-label {
         position: absolute !important;
     }
     /*内联子表样式*/
-    .center-wrap .ui-songrid-box,
-    .center-wrap .sheet,
-    .center-wrap .grid-box,
-    .center-wrap .ag-bl-full-height {
+    .detail-form .ui-songrid-box,
+    .detail-form .sheet,
+    .detail-form .grid-box,
+    .detail-form .ag-bl-full-height {
         position: relative !important;
     }
 
-    .center-wrap .biaojicaozuo-circle,
-    .center-wrap .paginator-box,
-    .center-wrap .ag-bl-overlay {
+    .detail-form .biaojicaozuo-circle,
+    .detail-form .paginator-box,
+    .detail-form .ag-bl-overlay {
         position: absolute !important;
     }
 
-    .center-wrap #myFilter {
+    .detail-form #myFilter {
         overflow: hidden !important;
     }
 
-    .center-wrap #footer .ag-header-row {
+    .detail-form #footer .ag-header-row {
         display: none;
     }
-    .center-wrap .printS {
+    .detail-form .printS {
         visibility: visible !important;
         position: absolute !important;
     }
-    .center-wrap .tempImg, .center-wrap .showSign {
+    .detail-form .tempImg, .detail-form .showSign {
         visibility: hidden !important;
     }
-    .center-wrap #collapseForm div:first-child {
+    .detail-form #collapseForm div:first-child {
         position: relative !important;
     }
 
-    .center-wrap .df-input-radio-wrapper {
+    .detail-form .df-input-radio-wrapper {
         border: none;
     }
     .ui-datepicker-trigger{

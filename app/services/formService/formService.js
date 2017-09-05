@@ -404,7 +404,7 @@ export const FormService = {
     //获取手绘表单str
     getFormContent(json) {
         let res = HTTP.post('get_form_content', json);
-        HTTP.flush();
+        // HTTP.flush();
         return res;
     },
     //获取选择器数据
@@ -443,9 +443,9 @@ export const FormService = {
         if (json['form_id']) {
             let form_id=json['form_id'];
             delete json['form_id'];
-            res = Promise.all([this.getStaticData(json), this.getDynamicData(json), this.getFormContent({form_id: form_id})]);
+            res = Promise.all([this.getStaticDataImmediately(json), this.getDynamicData(json), this.getFormContent({form_id: form_id})]);
         } else {
-            res = Promise.all([this.getStaticData(json), this.getDynamicData(json)]);
+            res = Promise.all([this.getStaticDataImmediately(json), this.getDynamicData(json)]);
         }
         HTTP.flush();
         return res;
@@ -460,13 +460,12 @@ export const FormService = {
     },
     //立即获得表单静态数据
     getStaticDataImmediately(json) {
-        let res = HTTP.post('get_form_static_data', json)
-        HTTP.flush();
+        let res = HTTP.postImmediately({url:'/get_form_static_data/', data:json});
         return res;
     },
     //立即获得表单动态数据
     getDynamicDataImmediately(json) {
-        let res = HTTP.post('get_form_dynamic_data', json)
+        let res = HTTP.post('get_form_dynamic_data',json);
         HTTP.flush();
         return res;
     },
