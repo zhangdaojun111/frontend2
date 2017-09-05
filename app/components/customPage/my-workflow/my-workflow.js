@@ -1,3 +1,7 @@
+/**
+ * @author yangxiaochuan
+ * 我的工作定制表
+ */
 import Component from "../../../lib/component";
 import template from './my-workflow.html';
 import './my-workflow.scss';

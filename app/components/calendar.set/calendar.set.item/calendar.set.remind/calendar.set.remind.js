@@ -44,9 +44,7 @@ let config = {
 
     actions: {
         checkRemindStatus:function () {
-            console.log(this.data.smsStatus, this.data.emailStatus);
             if( ( this.data.smsStatus === '1' && this.data.smsReciver.length === 0 ) || ( this.data.emailStatus === '1' && this.data.emailReciver.length === 0 ) ){
-                console.log('error');
                 MSG.alert( "已开启提醒的收件人不能为空" );
                 return;
             }
@@ -93,7 +91,87 @@ let config = {
             });
         }
     },
-
+    binds:[
+        {
+            event:'click',
+            selector:'.sms-remind',
+            callback:function(){
+                this.el.find('.sms-remind').addClass("unchecked");
+                this.el.find(".email-remind").removeClass("unchecked");
+                this.el.find(".sms").show();
+                this.el.find(".email").hide();
+            }
+        },
+        {
+            event:'click',
+            selector:'.email-remind',
+            callback:function(){
+                this.el.find('.email-remind').addClass("unchecked");
+                this.el.find(".sms-remind").removeClass("unchecked");
+                this.el.find(".email").show();
+                this.el.find(".sms").hide();
+            }
+        },
+        {
+            event:'click',
+            selector:'.open-sms-remind',
+            callback:function(){
+                this.el.find('.open-sms-remind').addClass("checked");
+                this.el.find(".close-sms-remind").removeClass("checked");
+                this.data.smsStatus = '1';
+            }
+        },
+        {
+            event:'click',
+            selector:'.close-sms-remind',
+            callback:function(){
+                this.el.find('.close-sms-remind').addClass("checked");
+                this.el.find(".open-sms-remind").removeClass("checked");
+                this.data.smsStatus = 0;
+            }
+        },
+        {
+            event:'click',
+            selector:'.open-email-remind',
+            callback:function(){
+                this.el.find('.open-email-remind').addClass("checked");
+                this.el.find(".close-email-remind").removeClass("checked");
+                this.data.emailStatus = '1';
+            }
+        },
+        {
+            event:'click',
+            selector:'.close-email-remind',
+            callback:function(){
+                this.el.find('.close-email-remind').addClass("checked");
+                this.el.find(".open-email-remind").removeClass("checked");
+                this.data.emailStatus = 0;
+            }
+        },
+        {
+            event:'change',
+            selector:'#send-email-address',
+            callback:function(){
+                this.data.emailAddressList = [];
+                let sendEmailAddressValue = this.el.find('#send-email-address option:selected').text();
+                this.data.sendEmailAddressId = this.el.find('#send-email-address option:selected').val();
+                this.data.emailAddressList.push({id: this.data.sendEmailAddressId, name: sendEmailAddressValue});
+            }
+        },
+        {
+            event:'click',
+            selector:'.set-ok',
+            callback:function(){
+                this.data.smsRemindTime = this.el.find('.remind-time-sms').val();
+                this.data.emailRemindTime = this.el.find('.remind-time-email').val();
+                this.data.smsReciver = this.data.smsReceiverAutoSelect.data.choosed;
+                this.data.smsCopyPeople = this.data.smsCopyPeopleAutoSelect.data.choosed;
+                this.data.emailReciver = this.data.emailReceiverAutoSelect.data.choosed;
+                this.data.emailCopyPeople = this.data.emailCopyPeopleAutoSelect.data.choosed;
+                this.actions.checkRemindStatus();
+            }
+        },
+    ],
     afterRender: function() {
 
         PMAPI.subscribe(PMENUM.open_iframe_params, params => {
@@ -154,50 +232,40 @@ let config = {
             this.el.find('.remind-time-email').val(this.data.email.remind_time);
         });
 
-        let _this = this;
+        // let _this = this;
         // Mediator.emit('calendar-set:editor',1);
-        this.el.on('click', '.sms-remind', () => {
-            _this.el.find('.sms-remind').addClass("unchecked");
-            _this.el.find(".email-remind").removeClass("unchecked");
-            _this.el.find(".sms").show();
-            _this.el.find(".email").hide();
-        }).on('click', '.email-remind', () => {
-            _this.el.find('.email-remind').addClass("unchecked");
-            _this.el.find(".sms-remind").removeClass("unchecked");
-            _this.el.find(".email").show();
-            _this.el.find(".sms").hide();
-        }).on('click', '.open-sms-remind', () => {
-            _this.el.find('.open-sms-remind').addClass("checked");
-            _this.el.find(".close-sms-remind").removeClass("checked");
-            _this.data.smsStatus = '1';
-        }).on('click', '.close-sms-remind', () => {
-            _this.el.find('.close-sms-remind').addClass("checked");
-            _this.el.find(".open-sms-remind").removeClass("checked");
-            _this.data.smsStatus = 0;
-        }).on('click', '.open-email-remind', () => {
-            _this.el.find('.open-email-remind').addClass("checked");
-            _this.el.find(".close-email-remind").removeClass("checked");
-            _this.data.emailStatus = '1';
-        }).on('click', '.close-email-remind', () => {
-            _this.el.find('.close-email-remind').addClass("checked");
-            _this.el.find(".open-email-remind").removeClass("checked");
-            _this.data.emailStatus = 0;
-        }).on('change', '#send-email-address', () => {
-            _this.data.emailAddressList = [];
-            let sendEmailAddressValue = this.el.find('#send-email-address option:selected').text();
-            _this.data.sendEmailAddressId = this.el.find('#send-email-address option:selected').val();
-            _this.data.emailAddressList.push({id: this.data.sendEmailAddressId, name: sendEmailAddressValue});
-        }).on('click', '.set-ok', () => {
-            _this.data.smsRemindTime = this.el.find('.remind-time-sms').val();
-            _this.data.emailRemindTime = this.el.find('.remind-time-email').val();
-
-            _this.data.smsReciver = this.data.smsReceiverAutoSelect.data.choosed;
-            _this.data.smsCopyPeople = this.data.smsCopyPeopleAutoSelect.data.choosed;
-
-            _this.data.emailReciver = this.data.emailReceiverAutoSelect.data.choosed;
-            _this.data.emailCopyPeople = this.data.emailCopyPeopleAutoSelect.data.choosed;
-            _this.actions.checkRemindStatus();
-        })
+        // this.el.on('click', '.open-sms-remind', () => {
+        //     _this.el.find('.open-sms-remind').addClass("checked");
+        //     _this.el.find(".close-sms-remind").removeClass("checked");
+        //     _this.data.smsStatus = '1';
+        // }).on('click', '.close-sms-remind', () => {
+        //     _this.el.find('.close-sms-remind').addClass("checked");
+        //     _this.el.find(".open-sms-remind").removeClass("checked");
+        //     _this.data.smsStatus = 0;
+        // }).on('click', '.open-email-remind', () => {
+        //     _this.el.find('.open-email-remind').addClass("checked");
+        //     _this.el.find(".close-email-remind").removeClass("checked");
+        //     _this.data.emailStatus = '1';
+        // }).on('click', '.close-email-remind', () => {
+        //     _this.el.find('.close-email-remind').addClass("checked");
+        //     _this.el.find(".open-email-remind").removeClass("checked");
+        //     _this.data.emailStatus = 0;
+        // }).on('change', '#send-email-address', () => {
+        //     _this.data.emailAddressList = [];
+        //     let sendEmailAddressValue = this.el.find('#send-email-address option:selected').text();
+        //     _this.data.sendEmailAddressId = this.el.find('#send-email-address option:selected').val();
+        //     _this.data.emailAddressList.push({id: this.data.sendEmailAddressId, name: sendEmailAddressValue});
+        // }).on('click', '.set-ok', () => {
+        //     _this.data.smsRemindTime = this.el.find('.remind-time-sms').val();
+        //     _this.data.emailRemindTime = this.el.find('.remind-time-email').val();
+        //
+        //     _this.data.smsReciver = this.data.smsReceiverAutoSelect.data.choosed;
+        //     _this.data.smsCopyPeople = this.data.smsCopyPeopleAutoSelect.data.choosed;
+        //
+        //     _this.data.emailReciver = this.data.emailReceiverAutoSelect.data.choosed;
+        //     _this.data.emailCopyPeople = this.data.emailCopyPeopleAutoSelect.data.choosed;
+        //     _this.actions.checkRemindStatus();
+        // })
     }
 };
 

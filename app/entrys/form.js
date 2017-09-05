@@ -35,7 +35,6 @@ let FormEntrys = {
         this.buildId = '';
         this.btnType = 'new';
         //统计穿透列头信息
-        this.colDef = {};
         this.viewMode='0';
 
         this.tableId = config.table_id || '';
@@ -56,11 +55,9 @@ let FormEntrys = {
         this.fieldId = config.field_Id || '';
         this.key = config.key || '';
         this.fromApprove = config.from_approve || '';
-        this.formFocus = config.from_focus || '';
         this.isAddBuild = config.isAddBuild || 0;
         this.buildId = config.id || '';
         this.btnType = config.btnType || 'new';
-        this.colDef = config.colDef||{};
         this.viewMode=config.viewMode || '0';
     }
     ,
@@ -208,6 +205,7 @@ let FormEntrys = {
         staticData.parentRealId = this.parentRealId;
         staticData.parentTempId = this.parentTempId;
         staticData.parentRecordId = this.parentRecordId;
+        staticData.recordId = this.recordId;
         staticData.tableId = staticData['table_id'] || this.tableId;
         staticData.formId = this.formId;
         staticData.realId = this.realId;
@@ -219,6 +217,7 @@ let FormEntrys = {
         staticData.buildId = this.buildId;
         staticData.el = this.el;
         staticData.colDef=this.colDef;
+        staticData.col_id=this.col_id;
         staticData.viewMode=this.viewMode;
         return staticData;
     },
@@ -397,7 +396,9 @@ let FormEntrys = {
         let $wrap = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"><div></div></div>`).prependTo(this.el);
         let html = $(`<div class="center-wrap"></div>`).appendTo($wrap);
         let res;
+        //如果不处于工作流中
         if (!this.fromWorkFlow) {
+            //获取表单的form_id
             res = await  FormService.getPrepareParmas({table_id: this.tableId});
             this.findFormIdAndFlowId(res);
         }
@@ -438,11 +439,11 @@ let FormEntrys = {
     },
 
     //获取表单数据
-    getFormValue(tableId) {
+    getFormValue(tableId,isCheck) {
         if (!this.childForm[tableId]) {
             return;
         }
-        return this.childForm[tableId].actions.getFormValue();
+        return this.childForm[tableId].actions.getFormValue(isCheck);
     }
 }
 export default FormEntrys
