@@ -37,6 +37,7 @@ let config = {
                     this.data.formId = res.data.form_id;
                     this.data.workflowList = res.data.flow_data;
                     let html = '';
+                    try{this.data.flowId = this.data.workflowList[0]['flow_id'] || '';}catch(e){}
                     for( let d of this.data.workflowList ){
                         html+= '<option value='+ d.flow_id + '>' + d.flow_name + '</option>';
                         if( d.selected == 1 ){
@@ -73,6 +74,7 @@ let config = {
                 flow_id: this.el.find( '.chooseFlow' )[0].value,
                 el: this.el.find( '.flow-chart' )
             }
+            this.data.flowId = obj['flow_id'];
             let flowchart = WorkFlow.createFlow( obj );
             this.el.find( '.flowCharCon' )[0].style.width = '95%';
         },

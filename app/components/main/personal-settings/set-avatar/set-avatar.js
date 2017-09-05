@@ -10,7 +10,6 @@ import './set-avatar.scss';
 import template from './set-avatar.html';
 import {UserInfoService} from "../../../../services/main/userInfoService"
 import Mediator from "../../../../lib/mediator"
-// import msgbox from '../../../../lib/msgbox';
 import "../../../../lib/jcrop";
 import msgbox from "../../../../lib/msgbox";
 
@@ -75,7 +74,7 @@ let config = {
             this.data._img = new Image();
             this.data._img.src = src;
             let that = this;
-            this.data._img.onload = (event) => {
+            this.data._img.onload = (event) => {                //根据图片大小以长边为基准对图片按比例放大或缩小，长边长度放缩为350px
                 if(that.data._img.height >= that.data._img.width){
                     that.data.imgH = 350;
                     that.data.imgW = (that.data._img.width * 350 / that.data._img.height).toFixed(0);
@@ -148,7 +147,6 @@ let config = {
         },
         resizeImg:function (c,p) {
             //根据比例缩放图片，作为最终使用图片
-            console.log(c,p);
             this.data.imgData.src = this.data._img.src;
             this.data.imgData.width = this.data.imgW/p + "px";
             this.data.imgData.height = this.data.imgH/p + "px";
@@ -161,7 +159,6 @@ let config = {
             let ctx = canvasS.getContext('2d');
             ctx.clearRect(0,0,64,64);
             let d = 64 * this.data.dragResult.proportion / this.data.scale;
-            console.log(d,this.data.scale,this.data.dragResult.proportion);
             ctx.drawImage(pic,this.data.DragX,this.data.DragY,d,d,0,0,64,64);
             this.data.avatarSrc = this.actions.convertCanvasToImage(canvasS).src;
         },
@@ -172,10 +169,8 @@ let config = {
         },
         saveAvatar:function () {
             this.showLoading();
-            let that = this;
             //向后台传递头像数据
             UserInfoService.saveAvatar(this.data.avatarSrc).done((result) => {
-                // that.hideLoading();
                 //根据结果处理后续工作
                 if(result.success === 1){
                     //向父窗口传递头像数据并设置
@@ -193,16 +188,31 @@ let config = {
             })
         }
     },
+    binds:[
+        {
+            event:'change',
+            selector:'input.select-pic',
+            callback:function (target,event) {
+                this.actions.getPic(event);
+            }
+        },
+        {
+            event:'click',
+            selector:'span.save-avatar',
+            callback:_.debounce(function(){
+                this.actions.saveAvatar();
+            },300)
+        },
+        {
+            event:'click',
+            selector:'span.set-cancel',
+            callback:function () {
+                this.el.dialog('close');
+            }
+        }
+    ],
 
     afterRender:function () {
-        //设置监听
-        this.el.on("change","input.select-pic",(event) => {   //监听上传图片
-            this.actions.getPic(event);
-        }).on("click","span.save-avatar",_.debounce((event) => {
-            this.actions.saveAvatar();
-        },300)).on("click","span.set-cancel",(event) => {
-            this.el.dialog('close');
-        });
         this.avatar = window.config.sysConfig.userInfo.avatar;
     },
     beforeDestory:function () {
@@ -236,4 +246,4 @@ export const AvatarSet = {
     hide:function () {
         this.el.dialog('close');
     }
-}
+};
