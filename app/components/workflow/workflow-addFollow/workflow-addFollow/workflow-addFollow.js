@@ -69,6 +69,8 @@ let config={
             });
         });
         Mediator.subscribe('workflow:checkDeptAlready', (res)=> {
+            console.log(`-------------`);
+            console.log(res);
             if(res){
                 let arr = [];
                 let checked=this.el.find('#staffMulti .flexNoDel');

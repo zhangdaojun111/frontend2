@@ -22,7 +22,7 @@ function recursion(arr,slnds,pubInfo){
 }
 let focus=location.search.slice(1).split('&')[0].split(',');
 
-if(focus.length>1){
+if(focus.length>=1&&focus[0].indexOf('key')===-1){
     let dept=[];
     (async function () {
         return workflowService.getWorkflowInfo({url: '/get_all_users/'});
