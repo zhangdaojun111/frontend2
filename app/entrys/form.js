@@ -208,6 +208,7 @@ let FormEntrys = {
         staticData.parentRealId = this.parentRealId;
         staticData.parentTempId = this.parentTempId;
         staticData.parentRecordId = this.parentRecordId;
+        staticData.recordId = this.recordId;
         staticData.tableId = staticData['table_id'] || this.tableId;
         staticData.formId = this.formId;
         staticData.realId = this.realId;

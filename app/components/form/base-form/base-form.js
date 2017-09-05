@@ -1329,12 +1329,13 @@ let config = {
                 // this.data.child_tableType = 'count';
                 // this.data.countfieldId =whichCount['colDef'].id;
                 // this.data.fieldContent = JSON.stringify(whichCount['colDef']['field_content']);
-                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?viewMode=${this.data.viewMode}tableId=${childId}&rowId=${this.data.col_id}&child_tableType=count&countfieldId=${whichCount['colDef'].id}&fieldContent=${JSON.stringify(whichCount['colDef']['field_content'])}`,{
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?viewMode=${this.data.viewMode}tableId=${childId}&rowId=${this.data.col_id}&tableType=count&fieldId=${whichCount['colDef'].id}&fieldContent=${JSON.stringify(whichCount['colDef']['field_content'])}&recordId=${this.data.recordId}`,{
                     title:showName,
                     width:1200,
                     height:800,
                 })
             }else{
+                let formValue=this.actiosn.getFormValue();
                 PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?source_table_id=${childId}&isCreateFalseTable=true&fieldId=${penetrateFieldId}`,{
                     title:showName,
                     width:1200,
