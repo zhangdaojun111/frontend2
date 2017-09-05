@@ -23,7 +23,7 @@ let config = {
         getUserViewList:function () {
             let that = this;
             TabService.getFavoriteList().done((result) => {
-                console.log(result);
+                // console.log(result);
                 if(result.success === 1 ){
                     let tempList = result.data;
                     for (let k in tempList){
@@ -78,7 +78,7 @@ let config = {
             favorlist['name'] = name;
             favorlist['list'] = JSON.stringify(list);
             favorlist['query_type'] = 'save';
-
+            // console.log(favorlist);
             let that = this;
             TabService.saveFavoriteItem(favorlist).done((result) => {
                 if(result.success === 1){
