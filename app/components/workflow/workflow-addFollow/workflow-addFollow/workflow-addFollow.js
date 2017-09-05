@@ -37,6 +37,7 @@ let config={
         }
     },
     afterRender(){
+        this.showLoading();
         PMAPI.getIframeParams(this.data.key).then((res) => {
             Mediator.publish('workflow:addusers', res.data.users);
         })
@@ -67,21 +68,23 @@ let config={
             });
         });
         Mediator.subscribe('workflow:checkDeptAlready', (res)=> {
-            let arr = [];
-            let checked=this.el.find('#staffMulti .flexNoDel');
-            let len = checked.length;
-            for(let i =0;i<len; i++){
-                arr.push($(checked[i]).data('id'));
-            }
-            $.each(res,(i,val)=>{
-                val.id=i;
-                if(checked.length===0){
-                    this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
-                }else if(arr.indexOf(i)===-1){
-                    this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+            if(res){
+                let arr = [];
+                let checked=this.el.find('#staffMulti .flexNoDel');
+                let len = checked.length;
+                for(let i =0;i<len; i++){
+                    arr.push($(checked[i]).data('id'));
                 }
-                
-            });
+                $.each(res,(i,val)=>{
+                    val.id=i;
+                    if(checked.length===0){
+                        this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+                    }else if(arr.indexOf(i)===-1){
+                        this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+                    }
+                });
+            }
+            this.hideLoading();
         });
 
         //部门反选，删除SelectedStaff组件

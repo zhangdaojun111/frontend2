@@ -115,9 +115,11 @@ let config = {
 
 class ReadonlyControl extends Component {
     constructor(data, events) {
-        if(data.d_type==10 && data.value){
+        if(data.dtype==10 && data.value){
             data.isCount=1;
         }
+        console.log('count');
+        console.log(data);
         super(config, data, events);
     }
 }
