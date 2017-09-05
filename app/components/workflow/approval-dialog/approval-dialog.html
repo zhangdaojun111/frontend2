@@ -1,0 +1,181 @@
+<style>
+    .flex{
+        display: flex;
+        align-items: center;
+    }
+    .flex.flex-column {
+        flex-direction: column;
+    }
+    .flex.flex-start{
+
+        align-items: flex-start;
+    }
+    .flex.flex-between{
+
+        justify-content: space-between;
+    }
+    .flex.flex-wrap{
+        flex-wrap: wrap;
+    }
+
+    .flex-item {
+        flex-grow: 1;
+        flex-shrink: 0;
+    }
+    /*.workflow-icon {*/
+        /*background: url(data:image/png;base64,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) no-repeat;*/
+        /*display: block;*/
+        /*width: 16px;*/
+        /*height: 16px;*/
+    /*}*/
+    /*.icon-workflow-icon1 {*/
+        /*background-position: -26px 0px;*/
+    /*}*/
+
+    /*.icon-workflow-icon10 {*/
+        /*background-position: -52px -52px;*/
+    /*}*/
+
+    /*.icon-workflow-icon11 {*/
+        /*background-position: 0px -26px;*/
+    /*}*/
+
+    /*.icon-workflow-icon12 {*/
+        /*background-position: -26px -26px;*/
+    /*}*/
+
+    /*.icon-workflow-icon13 {*/
+        /*background-position: -52px 0px;*/
+    /*}*/
+
+    /*.icon-workflow-icon14 {*/
+        /*background-position: -52px -26px;*/
+    /*}*/
+
+    /*.icon-workflow-icon15 {*/
+        /*background-position: 0px -52px;*/
+    /*}*/
+
+    /*.icon-workflow-icon16 {*/
+        /*background-position: -26px -52px;*/
+    /*}*/
+
+    /*.icon-workflow-icon17 {*/
+        /*background-position: 0px 0px;*/
+    /*}*/
+
+    /*.icon-workflow-icon2 {*/
+        /*background-position: -104px 0px;*/
+    /*}*/
+
+    /*.icon-workflow-icon3 {*/
+        /*background-position: -78px -26px;*/
+    /*}*/
+
+    /*.icon-workflow-icon4 {*/
+        /*background-position: -78px -52px;*/
+    /*}*/
+
+    /*.icon-workflow-icon5 {*/
+        /*background-position: 0px -78px;*/
+    /*}*/
+
+    /*.icon-workflow-icon6 {*/
+        /*background-position: -26px -78px;*/
+    /*}*/
+
+    /*.icon-workflow-icon7 {*/
+        /*background-position: -52px -78px;*/
+    /*}*/
+
+    /*.icon-workflow-icon8 {*/
+        /*background-position: -78px 0px;*/
+    /*}*/
+
+    /*.icon-workflow-icon9 {*/
+        /*background-position: -78px -78px;*/
+    /*}*/
+
+    /*.icon-workflow-icon18 {*/
+        /*background-position: -128px -52px;*/
+    /*}*/
+
+    /*.icon-workflow-icon19 {*/
+        /*background-position: -128px -26px;*/
+    /*}*/
+
+    /*.icon-workflow-icon20 {*/
+        /*background-position: -128px 0px;*/
+    /*}*/
+    /*.icon-workflow-icon21 {*/
+        /*background-position: -154px 0px;*/
+        /*width: 50px;*/
+        /*height: 50px;*/
+    /*}*/
+    /*.icon-workflow-icon22 {*/
+        /*background-position: -154px -60px;*/
+    /*}*/
+    /*.approval-dialog-content .approval-dialog-hd{*/
+        /*height: 40px;*/
+        /*border-bottom: 1px solid #e4e4e4;*/
+        /*line-height: 40px;*/
+        /*font-weight: 700;*/
+        /*font-size: 14px;*/
+        /*width: 100%;*/
+        /*display: flex;*/
+        /*align-items: center;*/
+    /*}*/
+    /*.approval-dialog-content .workflow-look{*/
+        /*display: flex;*/
+        /*align-items: center;*/
+    /*}*/
+    /*.approval-dialog-hd .tit {*/
+        /*padding: 0 10px;*/
+        /*display: flex;*/
+        /*align-items: center;*/
+    /*}*/
+    /*.approval-dialog-hd .tit .workflow-icon {*/
+        /*margin-right: 5px;*/
+    /*}*/
+    /*.approval-dialog-content .workflow-look .previewBtn {*/
+        /*cursor: pointer;*/
+        /*padding: 0 7px;*/
+        /*height: 40px;*/
+        /*display: flex;*/
+        /*align-items: center;*/
+    /*}*/
+    /*.workflow-look .previewBtn .workflow-icon{*/
+        /*margin: 0 auto;*/
+    /*}*/
+</style>
+<!--<div class="approval-dialog-content">-->
+    <!--<div class="approval-dialog-hd flex">-->
+        <!--<div class="tit">-->
+            <!--<i class="workflow-icon icon-workflow-icon5"></i>-->
+            <!--<span>节点流程</span>-->
+        <!--</div>-->
+        <!--<div class="workflow-look flex">-->
+            <!--<div class="previewBtn"  id="zoomIn">-->
+                <!--<i class="workflow-icon icon-workflow-icon19"></i>-->
+            <!--</div>-->
+            <!--<div class="previewBtn" id="zoomOut">-->
+                <!--<i class="workflow-icon icon-workflow-icon18"></i>-->
+            <!--</div>-->
+            <!--<div class="previewBtn" id="newWin">-->
+                <!--<i class="workflow-icon icon-workflow-icon9"></i>-->
+            <!--</div>-->
+            <!--<div class="previewBtn flex" id="togglePic">-->
+                <!--<i class="workflow-icon icon-workflow-icon4"></i>-->
+                <!--<div class="togglePic-text">节点图</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="approval-dialog-bd">-->
+        <!--<div id="drawflow">-->
+            <!--<div class="content">-->
+                <!--<div class="workflow-draw-box"></div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<div id="drawflow"></div>
