@@ -625,7 +625,7 @@ let config = {
                         cancel_fields: JSON.stringify(this.data.cancel_fields)
                     });
                 }
-
+                CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
             }else if(data.toolMethod === 'export') {
                 PMAPI.openDialogByComponent(CalendarExport, {
                     width: '350',

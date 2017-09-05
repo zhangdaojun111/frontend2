@@ -1,3 +1,7 @@
+/**
+ * @author zhaoyan
+ * 系统设置界面
+ */
 import Component from '../../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
@@ -9,11 +13,10 @@ import template from './system-setting.html';
 import msgbox from "../../../lib/msgbox";
 import {UserInfoService} from "../../../services/main/userInfoService"
 
-
 let config = {
     template:template,
     data:{
-        biSort:1,
+        biSort:1,       //以两位数保存bi和日历的顺序及开关，第一位表示顺序，2在前面（面板的上方），1在后面，第二位表示开关，0为关闭，1为开启
         calendarSort:2,
         biStatus:0,
         calendarStatus:0,
@@ -86,8 +89,9 @@ let config = {
                 content:calendarflag
             };
 
+            let that = this;
             UserInfoService.saveUserConfig(json,json2).then((result) => {
-                this.hideLoading();
+                that.hideLoading();
                 if(result[0].succ === 1 && result[1].succ === 1){
                     window.config.sysConfig.logic_config.login_show_bi = result[0].data.toString();
                     window.config.sysConfig.logic_config.login_show_calendar = result[1].data.toString();
@@ -129,20 +133,57 @@ let config = {
             this.data.calendarSort = temp;
         }
     },
+    binds:[ 
+        {
+            event:'click',
+            selector:'.style-btn',
+            callback:function () {
+                this.actions.showStyleSetting();
+            }
+        },
+        {
+            event:'click',
+            selector:'.rapid-btn',
+            callback:function () {
+                this.actions.showRapidSetting();
+            }
+        },
+        {
+            event:'click',
+            selector:'.clear-storage',
+            callback:function () {
+                this.actions.clearStorage();
+            }
+        },
+        {
+            event:'click',
+            selector:'.rapid-save-btn',
+            callback:_.debounce(function() {
+                this.actions.saveSetting();
+            },300)
+        },
+        {
+            event:'change',
+            selector:'.font-range',
+            callback:function () {
+                this.actions.changeFontSize();
+            }
+        }
+    ],
 
     afterRender:function () {
         this.actions.getItemData();
-        this.el.on('click','.style-btn',() => {
-            this.actions.showStyleSetting();
-        }).on('click','.rapid-btn',() => {
-            this.actions.showRapidSetting();
-        }).on('click','.clear-storage',() => {
-            this.actions.clearStorage();
-        }).on('click','.rapid-save-btn', _.debounce(() => {
-            this.actions.saveSetting();
-        },300)).on('change','.font-range',() => {
-            this.actions.changeFontSize();
-        })
+        // this.el.on('click','.style-btn',() => {
+        //     this.actions.showStyleSetting();
+        // }).on('click','.rapid-btn',() => {
+        //     this.actions.showRapidSetting();
+        // }).on('click','.clear-storage',() => {
+        //     this.actions.clearStorage();
+        // }).on('click','.rapid-save-btn', _.debounce(() => {
+        //     this.actions.saveSetting();
+        // },300)).on('change','.font-range',() => {
+        //     this.actions.changeFontSize();
+        // })
     },
     beforeDestory:function () {
 

@@ -947,6 +947,7 @@ let config = {
             this.data.prepareParmas = res.data;
             this.data.customOperateList = this.data.prepareParmas["operation_data"] || [];
             this.data.rowOperation = this.data.prepareParmas['row_operation'] || [];
+            try{this.data.flowId = res["data"]["flow_data"][0]["flow_id"] || "";}catch(e){}
             for( let d of this.data.prepareParmas["flow_data"] ){
                 if( d.selected == 1 ){
                     this.data.flowId = d.flow_id;
@@ -1133,8 +1134,6 @@ let config = {
                 correspondence_row_ids: JSON.stringify(this.data.correspondenceSelectedList)
             };
             dataTableService.saveForCorrespondence( json ).then( res=>{
-                console.log( "对应关系保存" )
-                console.log( res )
                 msgBox.alert( '保存成功' );
                 this.actions.correspondenceSaved();
                 this.actions.getGridData();
@@ -1282,10 +1281,17 @@ let config = {
                 if( this.data.filterParam['common_filter_id'] != '临时高级查询' ){
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
-                // if( this.data.filterParam.filter.length == 0 && this.data.filterParam.fastFilter.length == 0 ){
-                //     // msgBox.showTips( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
-                //     msgBox.showTips( `加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;` );
-                // }
+                if( this.data.filterParam.filter.length == 0 && this.data.filterParam.fastFilter.length == 0 ){
+                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span>加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;</div>`;
+                    this.el.find('.btn-nav-con').append(dom);
+                    this.el.find('.query-tips-delete').on('click', ()=> {
+                        this.el.find('.query-tips').css('display','none');
+                    })
+                    // setTimeout(()=>{
+                    //     this.el.find('.query-tips').css('display','none');
+                    // },3000)
+                    // msgBox.showTips( `加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;` );
+                }
             }
             if( this.data.groupCheck ){
                 json['is_group'] = 1;
@@ -1401,8 +1407,8 @@ let config = {
             //高级查询
             if( this.el.find( '.expert-search-btn' )[0] ){
                 this.actions.renderExpertSearch();
+                this.actions.getExpertSearchData();
             }
-            this.actions.getExpertSearchData();
             this.data.firstRender = false;
             this.hideLoading();
             this.data.showTabs(1);
