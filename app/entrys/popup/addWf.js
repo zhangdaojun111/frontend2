@@ -59,7 +59,7 @@ Mediator.publish('workflow:getKey', obj.key);
             key: obj.key
         });
         setTimeout(()=>{
-            cache_old= FormEntrys.getFormValue(obj.table_id);
+            cache_old= FormEntrys.getFormValue(obj.table_id,true);
         },1000)
     } else {
         Mediator.publish('workflow:getParams', res.data.flow_data);
@@ -96,7 +96,7 @@ Mediator.subscribe('workflow:getflows', (res) => {
         key: obj.key
     });
     setTimeout(()=>{
-        cache_old= FormEntrys.getFormValue(obj.table_id);
+        cache_old= FormEntrys.getFormValue(obj.table_id,true);
     },1000)
 });
 let focusArr = [];
@@ -104,7 +104,7 @@ Mediator.subscribe('workflow:focus-users', (res) => {
     focusArr = res;
 })
 Mediator.subscribe('workflow:submit', (res) => {
-    let formData = FormEntrys.getFormValue(obj.table_id);
+    let formData = FormEntrys.getFormValue(obj.table_id,true);
     if (formData.error) {
         msgBox.alert(`${formData.errorMessage}`);
     } else {
