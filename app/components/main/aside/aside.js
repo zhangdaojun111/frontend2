@@ -230,8 +230,8 @@ let config = {
             event: 'click',
             selector: '.edit-model-title a',
             callback: function () {
-                this.actions.cancelEditModel();
                 this.actions.saveCommonuse(this.allMenu.actions.getSelected());
+                this.actions.cancelEditModel();
             }
         },{
             event: 'click',
