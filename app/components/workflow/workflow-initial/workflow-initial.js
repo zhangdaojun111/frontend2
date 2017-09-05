@@ -5,125 +5,111 @@
 import Component from '../../../lib/component';
 import template from './workflow-initial.html';
 import './workflow-initial.scss';
-import {HTTP} from '../../../lib/http';
+import {
+    HTTP
+} from '../../../lib/http';
 import '../../../assets/scss/workflow/workflow-base.scss';
 import Mediator from '../../../lib/mediator';
-import WorkflowAddFollow from '../workflow-addFollow/workflow-addFollow/workflow-addFollow';
+// import WorkflowAddFollow from '../workflow-addFollow/workflow-addFollow/workflow-addFollow';
 import WorkFlowCreate from '../workflow-create/workflow-create';
-import TreeView from  '../../util/tree/tree';
-import {workflowService} from '../../../services/workflow/workflow.service';
+import TreeView from '../../util/tree/tree';
+import {
+    PMAPI,
+    PMENUM
+} from '../../../lib/postmsg';
+import {
+    workflowService
+} from '../../../services/workflow/workflow.service';
 
-let config={
+let config = {
     template: template,
-    data:{
-        user:[],
-        allowagrid:true //允许agrid只加载一次
+    data: {
+        user: [],
+        allowagrid: true //允许agrid只加载一次
     },
-    actions:{
+    actions: {
         /*
-        ***部门，人员树的initial与render
-        */
-        getTree(){
-            let tree=[],staff=[];
-            (async function () {
-                return workflowService.getStuffInfo({url: '/get_department_tree/'});
-            })().then(res=>{
-                tree=res.data.department_tree;
-                staff=res.data.department2user;
-                function recur(data) {
-                    for (let item of data){
-                        item.nodes=item.children;
-                        if(item.children.length!==0){
-                            recur(item.children);
-                        }
-                    }
-                }
-                recur(tree);
-                let treeComp2 = new TreeView(tree,{
-                    callback: function (event,selectedNode) {
-                        if(event==='select'){
-                            for(let k in staff){
-                                if(k==selectedNode.id){
-                                    Mediator.publish('workflow:checkDept', staff[k]);
-                                }
-                            }
-                        }else{
-                            for(let k in staff){
-                                if(k==selectedNode.id){
-                                    Mediator.publish('workflow:unCheckDept', staff[k]);
-                                }
-                            }
-                        }
-                    },
-                    treeType:'MULTI_SELECT',
-                    isSearch: true,
-                    withButtons:true
-                    });
-                treeComp2.render($('#treeMulti'));
-            });
-        },
-        /*
-        ***获取所有工作流与常用工作流
-        */
-        get_workflow_info(){
-            let WorkFlowList=workflowService.getWorkfLow({}),
-                FavWorkFlowList=workflowService.getWorkfLowFav({});
-            Promise.all([WorkFlowList,FavWorkFlowList]).then(res=>{
+         ***获取所有工作流与常用工作流
+         */
+        get_workflow_info() {
+            let WorkFlowList = workflowService.getWorkfLow({}),
+                FavWorkFlowList = workflowService.getWorkfLowFav({});
+            Promise.all([WorkFlowList, FavWorkFlowList]).then(res => {
                 WorkFlowCreate.loadData(res);
             });
             HTTP.flush();
         }
     },
-    afterRender(){
-        this.actions.getTree();
+    afterRender() {
         this.actions.get_workflow_info();
-        this.el.on('click','#workflowClose',()=>{
-            Mediator.publish("workflow:contentClose");
-            this.el.find('.J_select-Workflow').text("选择或输入查找");
-            this.el.find("#workflow-box").show();
-            this.el.find('#workflow-content').hide();
-        }),
-        this.el.on('click','#singleFlow',(e)=>{
-            let ev =$(e.target);
-            ev.addClass("selected");
-            this.el.find("#multiFlow").removeClass("selected");
-            Mediator.publish('workflow:autoSaveOpen', 1);
-            this.el.find('#workflow-form').show();
-            this.el.find('#workflow-grid').hide();
-        });
-        this.el.on('click','#multiFlow',(e)=>{
-            let ev =$(e.target);
+        this.el.on('click', '#workflowClose', () => {
+                Mediator.publish("workflow:contentClose");
+                this.el.find('.J_select-Workflow').text("选择或输入查找");
+                this.el.find("#workflow-box").show();
+                this.el.find('#workflow-content').hide();
+            }),
+            this.el.on('click', '#singleFlow', (e) => {
+                let ev = $(e.target);
+                ev.addClass("selected");
+                this.el.find("#multiFlow").removeClass("selected");
+                Mediator.publish('workflow:autoSaveOpen', 1);
+                this.el.find('#workflow-form').show();
+                this.el.find('#workflow-grid').hide();
+            });
+        this.el.on('click', '#multiFlow', (e) => {
+            let ev = $(e.target);
             ev.addClass("selected");
             this.el.find("#singleFlow").removeClass("selected");
             Mediator.publish('workflow:autoSaveOpen', 0);
-            if(this.data.allowagrid){
+            if (this.data.allowagrid) {
                 Mediator.publish('workflow:getGridinfo');
                 this.data.allowagrid = false;
             }
             this.el.find('#workflow-grid').show();
             this.el.find('#workflow-form').hide();
         });
-        this.el.on('click','#submitWorkflow',()=>{
-            let user=[];
-            Mediator.subscribe('workflow:focus-users', (res)=> {
-                this.data.user=res;
+        this.el.on('click', '#submitWorkflow', () => {
+            let user = [];
+            Mediator.subscribe('workflow:focus-users', (res) => {
+                this.data.user = res;
             })
-            Mediator.publish('workflow:submit',this.data.user);
+            Mediator.publish('workflow:submit', this.data.user);
         });
-        Mediator.subscribe('workflow:choose',(res)=>{
+        Mediator.subscribe('workflow:choose', (res) => {
             this.data.allowagrid = true;
         })
-
+        this.el.on('click', '#addFollower', () => {
+            PMAPI.openDialogByIframe(`/iframe/addfocus/`, {
+                width: 800,
+                height: 600,
+                title: `添加关注人`,
+                modal: true
+            },{
+                users:this.data.user
+            }).then(res => {
+                if (!res.onlyclose) {
+                    let nameArr = [],
+                        idArr = [],
+                        htmlStr = [];
+                    for (var k in res) {
+                        nameArr.push(res[k]);
+                        htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
+                        idArr.push(k);
+                    }
+                    this.el.find('#addFollowerList').html(htmlStr);
+                    Mediator.publish('workflow:focus-users', idArr);
+                    this.data.user=res;
+                }
+            })
+        });
     }
 };
-class WorkflowInitial extends Component{
-    constructor (data){
-        super(config,data);
+class WorkflowInitial extends Component {
+    constructor(data) {
+        super(config, data);
     }
 }
 
 let component = new WorkflowInitial();
 let el = $('#WorkflowInitial');
 component.render(el);
-
-// WorkFlowCatalog.showCatalog();

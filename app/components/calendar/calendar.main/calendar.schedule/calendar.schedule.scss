@@ -1,17 +1,42 @@
 @import "../../calendar";
 @import "../../../form/base-form/dateTime";
 .schedule-container {
-    border-top: 1px solid $boder-color;
     .select-date {
         padding: 10px;
-        .start-date, .end-date {
+        display: flex;
+        .date-tips {
+            line-height: 30px;
+        }
+        .schedule-date-picker {
             display: inline-block;
+            margin-right: 20px;
+            .component-date-control{
+                position: relative;
+                width: 250px;
+                border: 1px solid #999;
+                overflow: hidden;
+                input{
+                    border: none;
+                    width: 210px;
+                    padding: 0 0 0 10px;
+                    outline: none;
+                    height: 30px;
+                    line-height: 30px;
+                }
+            }
+            .ui-datepicker-trigger{
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                margin-top: -8px;
+                left: inherit;
+            }
         }
         .ok-btn {
             border: 1px solid #c5dbec;
             background: $btn-bg-color;
             color: #fff;
-            line-height: 27px;
+            line-height: 28px;
             padding: 0px 10px;
             font-size: 14px;
             display: inline-block;

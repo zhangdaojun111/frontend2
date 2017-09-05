@@ -14,6 +14,39 @@ import msgbox from '../../../lib/msgbox';
 
 let config = {
     template: template,
+    data:{
+
+    },
+    actions: {
+        keyup: function () {
+            let _this = this;
+                 //YYYY-MM-DD
+                let strDate = this.el.find(".date_yy-mm-dd").val();
+
+                    let  re =/^(\d{4})-(\d{2})-(\d{2})$/;
+                    if(re.test(strDate))//判断日期格式符合YYYY-MM-DD标准
+                    {
+                        let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3);
+                        console.log(dateElement);
+
+                        if(!((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))))//判断日期逻辑
+                        {
+                            this.el.find("#errorMessage").css("display","inline-block").innerText = "时间格式不正确,正确格式为: 2017-09-01";
+                        } else{
+                            this.el.find("#errorMessage").css("display","none");
+                            _this.data.value = strDate;
+                            _.debounce(function () {
+                                _this.events.changeValue(_this.data)
+                            }, 200)();
+                        }
+                    }
+                    else{
+
+                        this.el.find("#errorMessage").css("display","inline-block").text("时间格式不正确,正确格式为: 2017-09-01") ;
+                    }
+            }
+
+    },
     binds: [
         {
             event: 'click',
@@ -22,13 +55,6 @@ let config = {
                 this.events.emitHistory(this.data)
             }
         },
-        {
-            event: 'click',
-            selector: '.date-close',
-            callback: function () {
-                this.el.find(".date_yy-mm-dd").val("年-月-日");
-            }
-        }
     ],
     afterRender() {
         let _this = this;
@@ -41,7 +67,7 @@ let config = {
 
         //回显
         if (_this.data.value) {
-            _this.el.find(".date_yy-mm-dd").val(_this.data.value.replace(/-/g, "/"));
+            _this.el.find(".date_yy-mm-dd").val(_this.data.value);
         } else {
             _this.el.find(".date_yy-mm-dd").val("年-月-日");
         }
@@ -53,8 +79,6 @@ let config = {
             changeMonth: true,
             dateFormat: "yy-mm-dd",
             defaultDate: new Date(_this.data.value),
-            onClose: function (selectedDate) {
-            },
             showOn: 'button',//设置触发选择器为button
             //buttonImage:"../../../assets/images/form/icon-rili.png",
             buttonImage: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAAbElEQVQ4y6VT0QoAIQibR9/qP+XP7p68h7C0cxDEYsrYEpLo4IlIM2OFA4CxPqqqrKKIc35Ewgrng0IL1WGfhZPHDCPbsMPRQitGM6NP393THlyBJOacJImb45qyhasq/4oxirMSbbtI0v3OL3+8d/U3+COTAAAAAElFTkSuQmCC",
@@ -62,6 +86,7 @@ let config = {
             showOtherMonths: true, //填充没有显示的单元格，但无法使用
             //向外弹射操作后的值
             onSelect: function (selectTime, text) {
+                _this.el.find("#errorMessage").css("display","none");
                 let selectTime1 = selectTime;
                 _this.data.value = selectTime.replace(/\//g, "-");
                 _.debounce(function () {
@@ -103,13 +128,13 @@ let config = {
                 } else {
                     console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', this.selector);
                 }
-
-            }
-
+            },
         });
-        _.debounce(function () {
-            _this.events.changeValue(_this.data)
-        }, 200)();
+
+        _this.el.find('.date_yy-mm-dd').on('input', _.debounce(function () {
+            _this.actions.keyup();
+        }, 200));
+
     },
     beforeDestory: function () {
         this.el.off();

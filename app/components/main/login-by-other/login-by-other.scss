@@ -1,19 +1,34 @@
 
-#login-by-other{
-    .user-list{
-        width: 240px;
-        height: 350px;
-        margin-top: 30px;
-        margin-left: 80px;
-        box-sizing: border-box;
-        overflow: hidden;
-    }
-    .other-login-footer{
-        margin-top: 50px;
-        float: right;
-        margin-right: 20px;
-        button{
-            cursor: pointer;
+.login-by-other{
+    .other-login-main{
+        padding: 20px;
+        .select-prompt{
+            padding-left: 20px;
+        }
+        .user-list{
+            width: 240px;
+            height: 300px;
+            margin-top: 20px;
+            margin-left: 60px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .other-login-footer{
+            margin-top: 60px;
+            float: right;
+            .confirm-btn,.cancel-btn{
+                width: 100px;
+                height: 35px;
+                background-color: #0088ff;
+                color: #FFFFFF;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                text-align: center;
+                outline: none;
+                margin-right: 10px;
+            }
         }
     }
 }

@@ -5,6 +5,21 @@
         background-color: transparent !important;
     }
 
+    //footer
+    .ag-floating-bottom-container {
+        .ag-cell-no-focus {
+            border-right: 1px solid #FFFFFF;
+            border-left: none;
+        }
+        .ag-cell-value {
+            padding: 0 8px;
+            line-height: 30px;
+        }
+        .ag-cell-focus {
+            border: none;
+        }
+    }
+
     .ag-header {
         border-top: 1px solid rgba(228, 228, 228, 1);
         border-bottom: 1px solid rgba(228, 228, 228, 1) !important;
@@ -19,6 +34,9 @@
         .ag-header-cell-label {
             text-overflow: clip;
             overflow: hidden;
+            font-size: 12px;
+            line-height: 30px;
+            padding: 0px;
         }
         .ag-grid-number {
             position: relative;
@@ -28,8 +46,17 @@
         }
 
         .ag-header-group-cell {
+            border-right: 1px solid rgba(228, 228, 228, 1);
             .ag-header-cell-resize {
                 width: 0px;
+            }
+            .ag-header-group-cell-label {
+                text-align: center;
+                font-size: 12px;
+                line-height: 24px;
+            }
+            .ag-header-group-cell-label:hover {
+                cursor: pointer;
             }
         }
 
@@ -48,6 +75,7 @@
             color: rgb(51, 122, 183);
             cursor: pointer;
             line-height: 27px;
+            font-size: 12px;
         }
 
         .table-init-logo:hover {
@@ -125,6 +153,10 @@
             &.ag-cell-no-focus {
                 border-right: 1px solid #E4E4E4 !important;
             }
+
+        }
+        .ag-row-selected {
+            background-color: #97DDFF!important;
         }
     }
 
@@ -134,10 +166,6 @@
         font-weight: 700;
         font-style: normal;
         font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
-    }
-
-    .ag-bootstrap .ag-row-selected {
-        background-color: #E4E4E4 !important;
     }
     //图标
     .checkbox-uncheck {
@@ -182,4 +210,8 @@
         display: inline-block;
         vertical-align: sub;
     }
+}
+.ag-bootstrap .ag-cell-focus {
+    outline: none;
+    background-color: #E4E4E4;
 }

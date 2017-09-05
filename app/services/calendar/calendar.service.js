@@ -44,7 +44,7 @@ export const CalendarService = {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                MSG.alert('获取数据失败');
+                MSG.showTips('获取数据失败');
             }
         });
         HTTP.flush();
@@ -66,7 +66,7 @@ export const CalendarService = {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                MSG.alert('获取数据失败');
+                MSG.showTips('获取数据失败');
             }
         });
         HTTP.flush();
@@ -82,7 +82,7 @@ export const CalendarService = {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                MSG.alert('获取数据失败');
+                MSG.showTips('获取数据失败');
             }
         });
         HTTP.flush();
@@ -99,7 +99,7 @@ export const CalendarService = {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                MSG.alert('获取数据失败');
+                MSG.showTips('获取数据失败');
             }
         });
         HTTP.flush();
@@ -112,23 +112,72 @@ export const CalendarService = {
      * @param data
      */
     getWorkflowRecords: function (data) {
-        let params = {
-            type: data['type'],
+        // 待审批
+        let params1 = {
+            type: 5,
             rows: 9999,
             page: 1,
             rate_data: 1,
             from_date: data['from_date'],
             to_date: data['to_date']
         };
-        let res = HTTP.post(workflowRecordsUrl, params).then(res => {
+        // 审批中
+        let params2 = {
+            type: 2,
+            rows: 9999,
+            page: 1,
+            rate_data: 1,
+            from_date: data['from_date'],
+            to_date: data['to_date']
+        };
+        // 我关注的
+        let params3 = {
+            type: 6,
+            rows: 9999,
+            page: 1,
+            rate_data: 1,
+            from_date: data['from_date'],
+            to_date: data['to_date']
+        };
+        // 由我发起并完成的
+        let params4 = {
+            type: 3,
+            rows: 9999,
+            page: 1,
+            rate_data: 1,
+            from_date: data['from_date'],
+            to_date: data['to_date']
+        };
+        let res1 = HTTP.post(workflowRecordsUrl, params1).then(res => {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                MSG.alert('获取数据失败');
+                MSG.showTips('获取数据失败');
+            }
+        });
+        let res2 = HTTP.post(workflowRecordsUrl, params2).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                MSG.showTips('获取数据失败');
+            }
+        });
+        let res3 = HTTP.post(workflowRecordsUrl, params3).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                MSG.showTips('获取数据失败');
+            }
+        });
+        let res4 = HTTP.post(workflowRecordsUrl, params4).then(res => {
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                MSG.showTips('获取数据失败');
             }
         });
         HTTP.flush();
-        return res;
+        return [res1,res2,res3,res4];
     },
 
     /**
@@ -137,41 +186,58 @@ export const CalendarService = {
      * @param data
      */
     getCalendarPreference: function (data) {
+        console.log(data);
         let params = {
             pre_type: 6,
             content: JSON.stringify(data['content']),
         };
+
         let res = HTTP.post(calendarPreferenceUrl, params).then(res => {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                alert('获取数据失败');
+                MSG.showTips('获取数据失败');
             }
         });
+
+        if(data['contentHide']) {
+            let paramsHide = {
+                type: 6,
+                content: JSON.stringify(data['contentHide']['content']),
+            };
+            let resHide = HTTP.post(calendarPreferenceUrl, paramsHide).then(res => {
+                if(res['code'] === CodeEnum.SUCCESS) {
+                    return res;
+                } else {
+                    MSG.showTips('获取数据失败');
+                }
+            });
+        }
+
         HTTP.flush();
-        return res;
+        return ;
     },
 
     /**
      * data = {content: [隐藏项]}
      * @param data
      */
-    getCalendarHidePreference: function (data) {
-        let params = {
-            type: 6,
-            content: JSON.stringify(data['content']),
-        };
-        console.log(data);
-        let res = HTTP.post(calendarPreferenceUrl, params).then(res => {
-            if(res['code'] === CodeEnum.SUCCESS) {
-                return res;
-            } else {
-                alert('获取数据失败');
-            }
-        });
-        HTTP.flush();
-        return res;
-    },
+    // getCalendarHidePreference: function (data) {
+    //     let params = {
+    //         type: 6,
+    //         content: JSON.stringify(data['content']),
+    //     };
+    //     console.log(data);
+    //     let res = HTTP.post(calendarPreferenceUrl, params).then(res => {
+    //         if(res['code'] === CodeEnum.SUCCESS) {
+    //             return res;
+    //         } else {
+    //             MSG.showTips('获取数据失败');
+    //         }
+    //     });
+    //     HTTP.flush();
+    //     return res;
+    // },
 
     /**
      * 获取可配置参数
@@ -187,7 +253,7 @@ export const CalendarService = {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                alert('获取数据失败');
+                MSG.showTips('获取数据失败');
             }
         });
         HTTP.flush();
@@ -205,7 +271,7 @@ export const CalendarService = {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                MSG.alert('获取数据失败');
+                MSG.showTips('获取数据失败');
             }
         });
         HTTP.flush();

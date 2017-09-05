@@ -90,6 +90,9 @@ $grid-bg-color: rgba(248, 248, 248, 1);
                 cursor: pointer;
                 line-height: 16px;
                 margin-right: 20px;
+                .right-tool-icon {
+                    margin-right: 4px;
+                }
             }
         }
     }

@@ -116,7 +116,11 @@ let config = {
          * @param type
          */
         getCalendarData: function (data,type){
+            this.showLoading();
             CalendarService.getCalendarData(data).then( res=>{
+                if(res) {
+                    this.hideLoading();
+                }
                 this.data.date2settings = res['date2csids'];
                 this.data.calendarSettings = res['id2data'];
                 this.data.tableid2name = res['tableid2name'];
@@ -181,7 +185,6 @@ let config = {
             }
             this.data.remindCount = i;
             this.data.workflowCount = w;
-            console.log(this.data.remindCount);
             $('body').find('.remind-num').html(this.data.remindCount);
             $('body').find('.approval-num').html(this.data.workflowCount);
 
@@ -277,7 +280,6 @@ let config = {
                 this.actions.getDayData(day);
                 this.data.scheduleDataList.push(day);
             }
-            console.log(this.data.scheduleDataList);
             this.el.find('.calendar-main-content').empty();
             this.append(new CalendarSchedule({startDate: startDate, endDate: endDate, scheduleDataList: this.data.scheduleDataList}), this.el.find(".calendar-main-content"));
         },
@@ -609,6 +611,7 @@ let config = {
 
         Mediator.on('Calendar: tool', data => {
             if(data.toolMethod === 'refresh') {
+                this.data.cancel_fields = data['data'];
                 if(this.data.calendarContent !== 'schedule') {
                     this.actions.getCalendarData({
                         from_date: this.data.from_date,
@@ -711,6 +714,9 @@ let config = {
             }
         });
 
+        /**
+         * 日历提醒的全局搜索
+         */
         Mediator.on('Calendar: globalSearch', data => {
             if(data !== '') {
                 this.actions.search(data);
@@ -729,6 +735,9 @@ let config = {
             }
         });
 
+        /**
+         * 常用查询
+         */
         Mediator.on('CalendarSelected: Search', data => {
             if(data) {
                 let json = {
@@ -748,13 +757,10 @@ let config = {
 
         Mediator.on('CalendarRemindTask: changeData', data => {
             let params = data;
-            console.log(params);
             params['from_date'] = this.data.from_date;
             params['to_date'] = this.data.to_date;
             params['cancel_fields'] = JSON.stringify(this.data.cancel_fields);
-            console.log(params);
             CalendarService.getCalendarDrag(params).then(res => {
-                console.log(res);
                 this.data.date2settings = res['calendar_data']['date2csids'];
                 this.data.calendarSettings = res['calendar_data']['id2data'];
                 this.data.tableid2name = res['calendar_data']['tableid2name'];

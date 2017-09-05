@@ -30,13 +30,17 @@ let config = {
         fixCols: {l: [], r: []},
         //定制列（列排序）
         orderFields: [],
+        //上一次操作状态
+        lastGridState: [],
         //定制列（隐藏列）
         ignoreFields: [],
         //定制列需要字段信息
         customColumnsFields: [],
         isShowCustomPanel: false,
         //订阅刷新用
-        onRefresh: false
+        onRefresh: false,
+        //第一次设置数据
+        firstSetData: true,
     },
     actions: {
         //创建表头数据
@@ -125,6 +129,7 @@ let config = {
             ediv.appendChild( eHeader )
             eHeader.innerHTML = "初";
             eHeader.className = "table-init-logo";
+            eHeader.title = '初始化偏好'
             eHeader.addEventListener('click', () => {
                 msgBox.confirm( '确定初始化偏好？' ).then( r=>{
                     if( r ){
@@ -139,6 +144,7 @@ let config = {
                                 //创建表头
                                 this.agGrid.gridOptions.api.setColumnDefs( this.data.columnDefs );
                                 dgcService.calcColumnState( this.data,this.agGrid,["number","mySelectAll","myOperate","f5"] )
+                                this.customColumnsCom.actions.makeSameSate();
                             } );
                             HTTP.flush();
                         } );
@@ -160,6 +166,11 @@ let config = {
                     msgBox.showTips( '刷新成功' );
                 }
                 this.el.find( '.departmentSratch' )[0].value = '';
+                //第一次关闭loading
+                if( this.data.firstSetData ){
+                    this.hideLoading();
+                    this.data.firstSetData = false;
+                }
             } )
             HTTP.flush();
         },
@@ -226,8 +237,32 @@ let config = {
                 } )
             }
             //宽度自适应
+            if( this.el.find( '.grid-auto-width' )[0] ){
+                this.el.find( '.grid-auto-width' ).on( 'click',()=>{
+                    debugger
+                    if( !this.data.isAutoWidth ){
+                        this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
+                        this.agGrid.actions.autoWidth();
+                    }else {
+                        let state = this.agGrid.gridOptions.columnApi.getColumnState();
+                        for( let s of state ){
+                            for( let ls of this.data.lastGridState ){
+                                if( s.colId == ls.colId ){
+                                    s.width = ls.width;
+                                    break;
+                                }
+                            }
+                        }
+                        this.agGrid.gridOptions.columnApi.setColumnState( state );
+                    }
+                    this.el.find( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
+                    this.data.isAutoWidth = !this.data.isAutoWidth;
+                } )
+            }
+            //定制列
             if( this.el.find( '.custom-column-btn' )[0] ){
                 this.el.find( '.custom-column-btn' ).on( 'click',()=>{
+                    debugger
                     this.actions.calcCustomColumn();
                 } )
             }
@@ -361,6 +396,7 @@ let config = {
         }
     },
     afterRender: function (){
+        this.showLoading();
         TabService.onOpenTab( this.data.tableId );
         this.actions.createHeader();
         //订阅数据失效

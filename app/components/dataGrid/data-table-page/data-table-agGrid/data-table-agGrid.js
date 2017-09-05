@@ -185,7 +185,13 @@ let config = {
         selectData: [],
         //是否有sheet
         isShowSheet: false,
-
+        //显示tabs
+        showTabs:function (opacity) {
+        },
+        //左侧提示
+        gridTips: '',
+        //是否为双击
+        doubleClick: false
     },
     //生成的表头数据
     columnDefs: [],
@@ -430,7 +436,10 @@ let config = {
         },
         bodyCellRender: function (params) {
             if (params.data && params.data.myfooter && params.data.myfooter == "合计") {
-                return params.value || '';
+                let textAline = fieldTypeService.textAline( params.colDef["real_type"] )
+                let bgStyle = ' style = "display: block;width: 100%;height: 100%;text-align:' + textAline+';"';
+                let h = '<span' + bgStyle + '><span>' + ( params.value || '' ) + '</span><span/>';
+                return h;
             }
             let myValue = params['value'];//当前单元格数值
             let remindColorInfo = this.data.remindColor['remind_color_info'];//枚举提醒颜色
@@ -629,6 +638,7 @@ let config = {
             //合同编辑器
             else if (real_type == fieldTypeService.TEXT_COUNT_TYPE) {
                 sHtml = '<a' + bgStyle + ' class="view-contract">' + "查看" + '</a>' + '<span>' + "丨" + '</span>' + '<a class="download-contract">' + '下载' + '</a>';
+                sHtml = '<span '+ bgStyle +'><a style="color:#337ab7;" class="view-contract">查看</a>丨<a style="color:#337ab7;" class="download-contract">下载</a></span>';
             }
 
             //表对应关系（不显示为数字）
@@ -725,6 +735,7 @@ let config = {
                                     this.columnDefs = this.actions.createHeaderColumnDefs();
                                     this.agGrid.gridOptions.api.setColumnDefs( this.columnDefs );
                                     dgcService.calcColumnState(this.data,this.agGrid,["group",'number',"mySelectAll"]);
+                                    this.customColumnsCom.actions.makeSameSate();
                                 } );
                                 HTTP.flush();
                             } );
@@ -853,7 +864,7 @@ let config = {
                 let name = btn.className;
                 if( btnGroup.indexOf( name )!=-1 && ( this.data.permission[dgcService.permission2btn[name]] || dgcService.permission2btn[name] == 'especial' ) ){
                     //工作流表无编辑模式
-                    if( name == 'edit-btn' && this.data.flowId ){
+                    if( name == 'edit-btn' && this.data.flowId != '' ){
                         continue;
                     }
                     html+=btn.outerHTML;
@@ -886,6 +897,7 @@ let config = {
                 dgcService.setPreference( res[0],this.data );
                 this.data.myGroup = (res[0]['group'] != undefined) ? JSON.parse(res[0]['group'].group) : [];
                 this.data.fieldsData = res[1].rows || [];
+                this.agGrid.data.fieldsData = this.data.fieldsData;
                 this.data.permission = res[1].permission;
                 this.data.namespace = res[1].namespace;
                 this.data.headerColor = dgcService.createHeaderStyle( this.data.tableId,res[1].field_color );
@@ -904,6 +916,13 @@ let config = {
                 this.data.groupFields = r.group;
                 //创建表头
                 this.columnDefs = this.actions.createHeaderColumnDefs();
+
+                let d = {
+                    columnDefs: this.columnDefs
+                }
+                //赋值
+                this.agGrid.actions.setGridData(d);
+
                 //第一次加载隐藏默认列
                 if( res[0].ignoreFields == null && this.data.haveSystemsFields ){
                     this.data.ignoreFields = ['f1','f2','f3','f4'];
@@ -930,11 +949,54 @@ let config = {
             this.data.prepareParmas = res.data;
             this.data.customOperateList = this.data.prepareParmas["operation_data"] || [];
             this.data.rowOperation = this.data.prepareParmas['row_operation'] || [];
+            try{this.data.flowId = res["data"]["flow_data"][0]["flow_id"] || "";}catch(e){}
             for( let d of this.data.prepareParmas["flow_data"] ){
                 if( d.selected == 1 ){
                     this.data.flowId = d.flow_id;
                 }
             }
+        },
+        //请求新增表单统计数据
+        getNewFormCountData: function () {
+            PMAPI.getIframeParams(window.config.key).then((r) => {
+                let data = r.data.d;
+                dataTableService.getNewFormCountData( data ).then( res=>{
+                    let resRows = [];
+                    if(res.data.db.length != 0 && res.data.temp.length == 0){
+                        resRows = res.data.db
+                    }
+                    if(res.data.db.length == 0 && res.data.temp.length != 0){
+                        for(let obj of res.data.temp){
+                            obj['data'] = {};
+                            obj['data']['status'] = 1;
+                        }
+                        resRows = res.data.temp
+                    }
+                    if(res.data.db != 0 && res.data.temp != 0){
+                        for(let obj of res.data.temp){
+                            obj['data']={};
+                            obj['data']['status']=1;
+                        }
+                        resRows = res.data.temp.concat(res.data.db);
+                    }
+                    this.data.rowData = resRows;
+                    if( this.data.firstRender ){
+                        let d = {
+                            rowData: this.data.rowData
+                        }
+                        //赋值
+                        this.agGrid.actions.setGridData(d);
+                        //渲染agGrid
+                        this.actions.renderAgGrid();
+                    }else {
+                        let d = {
+                            rowData: this.data.rowData
+                        }
+                        //赋值
+                        this.agGrid.actions.setGridData(d);
+                    }
+                } )
+            })
         },
         //请求在途数据
         getInprocessData: function () {
@@ -952,6 +1014,11 @@ let config = {
                 this.data.remindColor = res[1];
                 this.data.common_filter_id = res[0].common_filter_id || '';
                 if( this.data.firstRender ){
+                    let d = {
+                        rowData: this.data.rowData
+                    }
+                    //赋值
+                    this.agGrid.actions.setGridData(d);
                     //渲染agGrid
                     this.actions.renderAgGrid();
                 }else {
@@ -981,8 +1048,13 @@ let config = {
         },
         //请求表格数据
         getGridData: function () {
+            //在途数据
             if( this.data.viewMode == 'in_process' ){
                 this.actions.getInprocessData();
+                return;
+            }
+            if( this.data.viewMode == 'newFormCount' ){
+                this.actions.getNewFormCountData();
                 return;
             }
             let postData = this.actions.createPostData();
@@ -1008,6 +1080,11 @@ let config = {
                     this.data.footerData = dgcService.createFooterData( res[2] );
                 }
                 if( this.data.firstRender ){
+                    let d = {
+                        rowData: this.data.rowData
+                    }
+                    //赋值
+                    this.agGrid.actions.setGridData(d);
                     //渲染agGrid
                     this.actions.renderAgGrid();
                 }else {
@@ -1106,8 +1183,6 @@ let config = {
                 correspondence_row_ids: JSON.stringify(this.data.correspondenceSelectedList)
             };
             dataTableService.saveForCorrespondence( json ).then( res=>{
-                console.log( "对应关系保存" )
-                console.log( res )
                 msgBox.alert( '保存成功' );
                 this.actions.correspondenceSaved();
                 this.actions.getGridData();
@@ -1256,8 +1331,15 @@ let config = {
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
                 if( this.data.filterParam.filter.length == 0 && this.data.filterParam.fastFilter.length == 0 ){
-                    // msgBox.showTips( '加载常用查询<'+this.data.filterParam['common_filter_name']+'>' );
-                    msgBox.showTips( `加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;` );
+                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span>加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;</div>`;
+                    this.el.find('.btn-nav-con').append(dom);
+                    this.el.find('.query-tips-delete').on('click', ()=> {
+                        this.el.find('.query-tips').css('display','none');
+                    })
+                    // setTimeout(()=>{
+                    //     this.el.find('.query-tips').css('display','none');
+                    // },3000)
+                    // msgBox.showTips( `加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;` );
                 }
             }
             if( this.data.groupCheck ){
@@ -1282,22 +1364,22 @@ let config = {
         },
         //渲染agGrid
         renderAgGrid: function () {
-            let gridData = {
-                columnDefs: this.columnDefs,
-                rowData: this.data.rowData,
-                footerData: this.data.footerData,
-                floatingFilter: true,
-                fieldsData: this.data.fieldsData,
-                onColumnResized: this.actions.onColumnResized,
-                onSortChanged: this.actions.onSortChanged,
-                onDragStopped: this.actions.onDragStopped,
-                onCellClicked: this.actions.onCellClicked,
-                onRowDoubleClicked: this.actions.onRowDoubleClicked,
-                setRowStyle: this.actions.setRowStyle,
-                onRowSelected: this.actions.onRowSelected
-            }
-            this.agGrid = new agGrid(gridData);
-            this.append(this.agGrid , this.el.find('#data-agGrid'));
+            // let gridData = {
+            //     columnDefs: this.columnDefs,
+            //     rowData: this.data.rowData,
+            //     footerData: this.data.footerData,
+            //     floatingFilter: true,
+            //     fieldsData: this.data.fieldsData,
+            //     onColumnResized: this.actions.onColumnResized,
+            //     onSortChanged: this.actions.onSortChanged,
+            //     onDragStopped: this.actions.onDragStopped,
+            //     onCellClicked: this.actions.onCellClicked,
+            //     onRowDoubleClicked: this.actions.onRowDoubleClicked,
+            //     setRowStyle: this.actions.setRowStyle,
+            //     onRowSelected: this.actions.onRowSelected
+            // }
+            // this.agGrid = new agGrid(gridData);
+            // this.append(this.agGrid , this.el.find('#data-agGrid'));
             //渲染定制列
             if( this.el.find('.custom-column-btn')[0] ){
                 //如果有定制列修改偏好状态
@@ -1349,7 +1431,7 @@ let config = {
             //     this.append(new fastSearch(d), this.el.find('.fast-search-con'))
             // }
             //渲染分页
-            let noPagination = ['in_process','viewFromCorrespondence','editFromCorrespondence']
+            let noPagination = ['in_process','viewFromCorrespondence','editFromCorrespondence','newFormCount']
             if( noPagination.indexOf( this.data.viewMode ) == -1 ){
                 this.data.pagination = true;
                 let paginationData = {
@@ -1366,18 +1448,23 @@ let config = {
             }else {
                 this.el.find( '.pagination' )[0].style.height = '0px';
                 if( this.data.isShowSheet ){
-                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc(100% - 90px)';
+                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc(100% - 100px)';
                 }else {
-                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 70px )';
+                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 80px )';
                 }
             }
             //高级查询
             if( this.el.find( '.expert-search-btn' )[0] ){
                 this.actions.renderExpertSearch();
+                this.actions.getExpertSearchData();
             }
-            this.actions.getExpertSearchData();
             this.data.firstRender = false;
             this.hideLoading();
+            this.data.showTabs(1);
+            //显示提示
+            if( this.data.gridTips!='' ){
+                this.el.find( '.grid-tips' )[0].style.display = 'flex';
+            }
         },
         //触发导出
         onExport: function () {
@@ -1538,7 +1625,7 @@ let config = {
                     $(this).siblings().removeClass('active1');
                 });
                 console.log( "有sheet" )
-                this.el.find( '.ag-grid-con' ).height( 'calc(100% - 120px)' );
+                this.el.find( '.ag-grid-con' ).height( 'calc(100% - 140px)' );
                 this.el.find( '.SheetPage' ).show();
             }else {
                 console.log( "没有sheet" )
@@ -1633,7 +1720,8 @@ let config = {
                     rowId: this.data.rowId,
                     fieldId: this.data.fieldId,
                     source_field_dfield: this.data.source_field_dfield,
-                    base_buildin_dfield: this.data.base_buildin_dfield
+                    base_buildin_dfield: this.data.base_buildin_dfield,
+                    gridTips: this.data.gridTips
                 }
                 let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', url_obj);
                 this.el.find('.grid-new-window')[0].href = url;
@@ -1942,13 +2030,29 @@ let config = {
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
             }
+            if( json.is_batch == 1 ){
+                json.temp_ids = json.real_ids;
+                json['real_ids'] = JSON.stringify([]);
+            }
             if( type == 1 ){
                 json['abandon_validate'] = 1;
             }
             this.actions.setInvalid();
             dataTableService.delTableData( json ).then( res=>{
-                if( res.success ){
+                if( res.succ ){
                     msgBox.showTips( '删除成功' )
+                    //批量工作流删除后返回值处理
+                    if( json.is_batch == 1 ){
+                        this.actions.getGridData();
+                        let arr = [];
+                        for( let i of this.data.batchIdList ){
+                            if( this.data.deletedIds.indexOf( i )==-1 ){
+                                arr.push( i )
+                            }
+                        }
+                        this.data.batchIdList = arr;
+                        this.actions.returnBatchData( this.data.batchIdList );
+                    }
                 }else {
                     if( res.queryParams ){
                         msgBox.confirm( res.error + '是否前往处理？' ).then( r=>{
@@ -2177,7 +2281,7 @@ let config = {
         onCellClicked: function (data) {
             console.log( "______data_______" )
             console.log( data )
-            if( !data.data || this.data.isEditable || data.data.myfooter ){
+            if( !data.data || this.data.isEditable || data.data.myfooter || this.data.doubleClick ){
                 return;
             }
             //分组重新渲染序号
@@ -2207,18 +2311,9 @@ let config = {
 
             //视频字段
             if(data.colDef.real_type == fieldTypeService.VIDEO_TYPE && data.event.srcElement.id == 'file_view'){
-
                let fieldids = data['value'];
                 let file_dinput_type = data.colDef.real_type;
-               // ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids[0]}&download=0&dinput_type=${file_dinput_type}`;
-
-                for( let i=0;i< fieldids.length;i++ ){
-                  ViewVideo.data.videoSrc = `/download_attachment/?file_id=${fieldids[i]}&download=0&dinput_type=${file_dinput_type}`;
-
-                  console.log( ViewVideo.data.videoSrc )
-                    console.log( fieldids[0])
-                    console.log( fieldids[1])
-                }
+               ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids[0]}&download=0&dinput_type=${file_dinput_type}`;
                     PMAPI.openDialogByComponent(ViewVideo, {
                         width: 1000,
                         height: 600,
@@ -2262,7 +2357,7 @@ let config = {
                     let obj = {
                         table_id:this.data.tableId,
                         id:data.colDef.id,
-                        temp_id:data.data._id,
+                        real_id:data.data._id,
                         value: data['value'],
                         mode:'view'
                     };
@@ -2552,6 +2647,10 @@ let config = {
         onRowDoubleClicked: function (data) {
             console.log( "行双击查看" )
             console.log( data )
+            this.data.doubleClick = true;
+            setTimeout( ()=>{
+                this.data.doubleClick = false;
+            },500 )
             this.actions.viewOrEditPerm( 'view' );
             //屏蔽分组行
             if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0)||this.data.editMode||data.data.myfooter ){
@@ -2564,8 +2663,12 @@ let config = {
                 parent_temp_id: this.data.parentTempId,
                 parent_record_id: this.data.parentRecordId,
                 real_id: data.data._id,
-                btnType: 'view',is_view:1
+                btnType: 'view',
+                is_view:1
             };
+            if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 ){
+                obj.btnType = 'none';
+            }
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
             let title = '查看'
             this.actions.openSourceDataGrid( url,title );
@@ -2585,7 +2688,7 @@ let config = {
                 defaultMax = true;
             }
             PMAPI.openDialogByIframe( url,{
-                width: w || 1000,
+                width: w || 1300,
                 height: h || 800,
                 title: title,
                 modal:true,
@@ -2626,10 +2729,31 @@ let config = {
                 }
             })
 
+        },
+        //数据改变
+        rowDataChanged: function ($event) {
         }
     },
     afterRender: function () {
         this.showLoading();
+        let gridData = {
+            columnDefs: this.columnDefs,
+            rowData: this.data.rowData,
+            footerData: this.data.footerData,
+            floatingFilter: true,
+            fieldsData: this.data.fieldsData,
+            onColumnResized: this.actions.onColumnResized,
+            onSortChanged: this.actions.onSortChanged,
+            onDragStopped: this.actions.onDragStopped,
+            onCellClicked: this.actions.onCellClicked,
+            onRowDoubleClicked: this.actions.onRowDoubleClicked,
+            setRowStyle: this.actions.setRowStyle,
+            rowDataChanged: this.actions.rowDataChanged,
+            onRowSelected: this.actions.onRowSelected
+        }
+        this.agGrid = new agGrid(gridData);
+        this.append(this.agGrid , this.el.find('#data-agGrid'));
+
         if( this.data.viewMode == 'in_process' ){
             this.data.noNeedCustom = true;
         }

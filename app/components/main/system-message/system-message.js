@@ -91,7 +91,14 @@ let config = {
         },
         onCellClicked: function ($event) {
             let data = $event.data;
+            console.log(data);
             if (data.msg_type === 3 || data.msg_type === 0) {
+                if(data.handle_status_text === '待审批'){
+                    data.url += "&btnType=edit";
+                }else if(data.handle_status_text === '已取消'){
+                    data.url += "&btnType=view";
+                }
+
                 PMAPI.openDialogByIframe(data.url, {
                     width: 1200,
                     height: 500,
@@ -144,8 +151,8 @@ let systemMessageUtil = {
         let systemMessage = new SystemMessage();
         systemMessage.render(this.el);
         this.el.dialog({
-            width: 1320,
-            height: 580,
+            width: 1328,
+            height: 575,
             modal: true,
             title: '消息提醒',
             close: function () {
@@ -157,13 +164,21 @@ let systemMessageUtil = {
     hide: function () {
 
     },
-    showMessageDetail: function (dialogTitle, msgTitle, msgContent) {
+    showMessageDetail: function (dialogTitle, msgTitle, msgContent, speak = false) {
         let html = `
             <div class="component-msg-detail">
                 <h3>${msgTitle}</h3>
                 <div class="text">${msgContent}</div>
             </div>
         `;
+        if (speak) {
+            let msg = new SpeechSynthesisUtterance(msgTitle.toString() + msgContent.toString());
+            msg.lang = 'zh';
+            msg.voice = speechSynthesis.getVoices().filter(function(voice) {
+                return voice.name == 'Whisper';
+            })[0];
+            speechSynthesis.speak(msg);
+        }
         this.el = $(html).appendTo('body');
         this.el.dialog({
             width: 800,
