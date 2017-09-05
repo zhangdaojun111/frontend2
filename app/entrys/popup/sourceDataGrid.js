@@ -17,7 +17,8 @@ $(document).ready(function(){
         source_field_dfield: window.config.source_field_dfield || '',
         fieldContent: window.config.fieldContent || null,
         correspondenceField: window.config.correspondenceField || '',
-        keyword: window.config.keyword || ''
+        keyword: window.config.keyword || '',
+        gridTips: window.config.gridTips || ''
     }
     $( 'title' ).html( window.config.tableName || 'REDS' );
     let DataTableAgGrid=new dataTableAgGrid( json );

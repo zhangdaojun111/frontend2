@@ -109,10 +109,12 @@
         position: relative;
         bottom: 50px;
     }
-
-    .ui-datepicker-prev, .ui-datepicker-next {
-        top: 12%;
+    .ui-datepicker-prev,.ui-datepicker-next {  top: 12%;
         position: absolute;
     }
 
+}
+#errorMessage{
+    padding-top: 5px;
+    color: red;
 }

@@ -8,12 +8,12 @@
     word-break: keep-all; /* 不换行 */
     white-space: nowrap; /* 不换行 */
     .finished-con {
-        vertical-align: middle;
-        display: inline-block;
-        width: 16px;
-        height:16px;
-        box-sizing: border-box;
-        background: url("../../../../assets/images/calendar/calendar-finished.png");
+        .icon-calendar{
+            display: inline-block;
+            cursor: pointer;
+            position: relative;
+            top: 3px;
+        }
     }
     .finished-content {
         cursor: pointer;

@@ -45,8 +45,6 @@ let config={
             this.data.workflowData=msg.data[0];
             WorkFlow.show(msg.data[0],'#drawflow');
         });
-        console.log(this.data);
-        console.log("0000000000000000000");
         Mediator.subscribe('workflow:getParams', (res)=> {
             let htmlStr=``;
             for(let i in res){
@@ -75,13 +73,39 @@ let config={
         this.el.find('#subAddworkflow').on('click',()=>{
             Mediator.publish('workflow:submit', 1);
         });
-        this.el.on('click','#toEdit',()=>{
-            // location.href=location.href.replace(/=view/,'=edit').replace(/is_view=1/,'is_view=0');
+        this.el.on('click','#toEdit',(el)=>{
             let table_id =　location.href.split('=')[1].split('&')[0];
             Mediator.publish('workflow:changeToEdit',table_id);
+            $(el.target).hide();
+            this.el.find("#subAddworkflow").show();
+            this.el.find("#addFollower").show();
         });
         this.el.find('#print').on('click',()=>{
             this.actions.printSetting();
+        });
+        this.el.on('click', '#addFollower', () => {
+            PMAPI.openDialogByIframe(`/iframe/addfocus/`, {
+                width: 800,
+                height: 600,
+                title: `添加关注人`,
+                modal: true
+            },{
+                users:this.data.user
+            }).then(res => {
+                if (!res.onlyclose) {
+                    let nameArr = [],
+                        idArr = [],
+                        htmlStr = [];
+                    for (var k in res) {
+                        nameArr.push(res[k]);
+                        htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
+                        idArr.push(k);
+                    }
+                    this.el.find('#addFollowerList').html(htmlStr);
+                    Mediator.publish('workflow:focus-users', idArr);
+                    this.data.user=res;
+                }
+            })
         });
     }
 };

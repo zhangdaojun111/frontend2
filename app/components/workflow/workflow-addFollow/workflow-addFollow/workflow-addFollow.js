@@ -51,31 +51,36 @@ let config={
         });
         //部门选择
         Mediator.subscribe('workflow:checkDept', (res)=> {
-            let checked=this.el.find('#staffMulti>div>div');
+            let arr = [];
+            let checked=this.el.find('#staffMulti .search-check-row');
+            let len = checked.length;
+            for(let i =0;i<len; i++){
+                arr.push($(checked[i]).data('id'))
+            }
             $.each(res,(i,val)=>{
                 val.id=i;
                 if(checked.length===0){
                     this.append(new SelectStaff(val), this.el.find('#staffMulti'));
-                }else{
-                    for(let a=0;a<checked.length;a++){
-                        if(i===$(checked[a]).data('id')){
-                            return false;
-                        }else{
-                            this.append(new SelectStaff(val), this.el.find('#staffMulti'));
-                            break;
-                        }
-                    }
+                }else if(arr.indexOf(i)===-1){
+                    this.append(new SelectStaff(val), this.el.find('#staffMulti'));
                 }
             });
         });
         Mediator.subscribe('workflow:checkDeptAlready', (res)=> {
+            let arr = [];
+            let checked=this.el.find('#staffMulti .flexNoDel');
+            let len = checked.length;
+            for(let i =0;i<len; i++){
+                arr.push($(checked[i]).data('id'));
+            }
             $.each(res,(i,val)=>{
                 val.id=i;
-                for(let a in this.data.idArr){
-                    if(val.id==this.data.idArr[a]){
-                        this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
-                    }
+                if(checked.length===0){
+                    this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+                }else if(arr.indexOf(i)===-1){
+                    this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
                 }
+                
             });
         });
 

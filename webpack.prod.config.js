@@ -27,6 +27,7 @@ module.exports = {
         addfocus: path.resolve(APP_PATH, 'entrys/popup/addfocus.js'),
         addWf: path.resolve(APP_PATH, 'entrys/popup/addWf.js'),
         approvalDialog:path.resolve(APP_PATH, 'entrys/popup/approvalDialog.js'),
+        multiapp: path.resolve(APP_PATH, 'entrys/popup/multiapp.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         customDataGrid: path.resolve(APP_PATH, 'entrys/popup/customDataGrid.js'),
         dataImport: path.resolve(APP_PATH, 'entrys/popup/dataImport.js'),

@@ -127,6 +127,10 @@
 
 #treeMulti,.search-main-m{
 	.search-in-tree-hd{
+		position: sticky;
+		top: 0;
+		background: #fff;
+		z-index: 99;
 		.txt{
 			width: 48px;
 			flex-shrink: 0;
@@ -134,10 +138,18 @@
 		.search-in-tree-box{
 			flex-grow: 1;
 			margin-left: 10px;
+			input{
+				border: 1px solid #E4E4E4;
+				height: 22px;
+			}
 		}
 	}
 	.search-main-m-hd{
 		border-bottom: 1px solid #E4E4E4;
+		position: sticky;
+		top: 31px;
+		z-index: 30;
+		background: #fff;
 		.search-main-m-hd-item{
 			height: 30px;
 			line-height: 30px;

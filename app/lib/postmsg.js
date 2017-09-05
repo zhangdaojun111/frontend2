@@ -38,7 +38,7 @@ export const PMENUM = {
     iframe_active: '4',
     iframe_silent: '5',
     table_invalid: '6',              // 表格数据失效
-    on_the_way_invalid: '7',         // 在途数据失效
+    one_the_way_invalid: '7',         // 在途数据失效
     data_invalid: '11',
     open_iframe_params: '8',
     get_param_from_root: '9',        // 来自子框架的消息，需要获取iframe的参数
@@ -244,11 +244,20 @@ export const PMAPI = {
     },
 
     /**
-     * 将消息发送给调用的父组件
+     * 将消息发送给的根组件
      * @param data
      */
     sendToParent: function (data) {
         this.getRoot().postMessage(data, location.origin);
+        return this;
+    },
+
+    /**
+     * 将消息发送给调用的父组件
+     * @param data
+     */
+    sendToRealParent: function (data) {
+        this.parent.postMessage(data, location.origin);
         return this;
     },
 
@@ -280,6 +289,16 @@ export const PMAPI = {
     },
 
     /**
+     * 将消息发送给自己
+     * @param msg
+     * @returns {PMAPI}
+     */
+    sendToSelf: function (msg) {
+        window.postMessage(msg, location.origin)
+        return this;
+    },
+
+    /**
      * 根据url，在父级打开一个iframe的弹出框
      * @param url
      * @frame 对话框设置，包括大小，标题等，例：{
@@ -294,6 +313,30 @@ export const PMAPI = {
             let key = PMAPI._getKey();
             dialogWaitHash[key] = resolve;
             PMAPI.sendToParent({
+                type: PMENUM.open_iframe_dialog,
+                key: key,
+                url: url,
+                frame: frame,
+                params: params
+            });
+        });
+    },
+
+    /**
+     * 本方法同上，唯一区别是在本框架打开
+     * @param url
+     * @frame 对话框设置，包括大小，标题等，例：{
+     *          width: 500,
+     *          height: 200,
+     *          title: 'Iframe页面'
+     *      }
+     * @return Promise
+     */
+    openDialogToSelfByIframe: function (url, frame, params) {
+        return new Promise(function (resolve) {
+            let key = PMAPI._getKey();
+            dialogWaitHash[key] = resolve;
+            PMAPI.sendToSelf({
                 type: PMENUM.open_iframe_dialog,
                 key: key,
                 url: url,
@@ -319,6 +362,27 @@ export const PMAPI = {
             let key = PMAPI._getKey();
             dialogWaitHash[key] = resolve;
             PMAPI.sendToParent({
+                type: PMENUM.open_component_dialog,
+                key: key,
+                component: PMAPI.serializeComponent(componentConfig),
+                frame: frame
+            }, location.origin);
+        });
+    },
+
+    /**
+     * 本方法同上，唯一区别是在本框架打开
+     * @frame 对话框设置，包括大小，标题等，例：{
+     *          width: 500,
+     *          height: 200,
+     *          title: '组件页面'
+     *      }
+     */
+    openDialogToSelfByComponent: function (componentConfig, frame) {
+        return new Promise(function (resolve) {
+            let key = PMAPI._getKey();
+            dialogWaitHash[key] = resolve;
+            PMAPI.sendToSelf({
                 type: PMENUM.open_component_dialog,
                 key: key,
                 component: PMAPI.serializeComponent(componentConfig),

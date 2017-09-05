@@ -216,62 +216,41 @@ let config={
             })
         },
         appRejAny(){
-            // PMAPI.openDialogByComponent(ApprovalDialog, {
-            //     width: 900,
-            //     height: 600,
-            //     title: '驳回到任意节点'
-            // }).then((data) => {
-            //
-            // });
-            PMAPI.openDialogByIframe('/iframe/approvalDialog/',
-                {
-                    title: '驳回任意节点',
-                    width: '900',
-                    height: '600',
-                    modal: true,
-                },
-                {
-                    flow_id:obj.flow_id,
-                    record_id:obj.record_id
-                }
-            ).then(close=>{
-
+            // this.el.find('.rejContainer').show();
+            this.el.find('.closeSpan').remove();
+            let container = this.el.find('.workflow-draw-box')[0];
+            container.style.transform = 'scale(1)';
+            container.id = "rej";
+            let e = document.documentElement, g = document.getElementsByTagName('body')[0], w = window.innerWidth || e.clientWidth || g.clientWidth, h = window.innerHeight || e.clientHeight || g.clientHeight;
+            container.style.position = "fixed";
+            container.style.top = "0";
+            container.style.left = "0";
+            container.style.right = "0";
+            container.style.bottom = "0";
+            container.style.backgroundColor = "#fff";
+            container.style.width = w + 'px';
+            container.style.height = h + 'px';
+            container.style.marginTop = 0;
+            container.style.margin = 0;
+            container.style.zIndex = '99';
+            container.style.overflow = 'auto';
+            let ocloseSpan = document.createElement('span');
+            ocloseSpan.className = 'closeSpan';
+            ocloseSpan.style['float'] = 'right';
+            ocloseSpan.style.cursor = 'pointer';
+            ocloseSpan.style.fontSize = '30px';
+            ocloseSpan.style.border = '1px solid #ddd';
+            ocloseSpan.innerHTML = '&nbsp;×&nbsp;';
+            ocloseSpan.addEventListener('click', (event) => {
+                container.id = "";
+                container.style.height ='100px';
+                container.style.width = '100%';
+                container.style.position = "relative";
+                container.style.zIndex = '0';
+                container.style.overflow = 'visible';
+                ocloseSpan.style.display = 'none';
             });
-            // // this.el.find('.rejContainer').show();
-            // this.el.find('.closeSpan').remove();
-            // let container = this.el.find('.workflow-draw-box')[0];
-            // container.style.transform = 'scale(1)';
-            // container.id = "rej";
-            // let e = document.documentElement, g = document.getElementsByTagName('body')[0], w = window.innerWidth || e.clientWidth || g.clientWidth, h = window.innerHeight || e.clientHeight || g.clientHeight;
-            // container.style.position = "fixed";
-            // container.style.top = "0";
-            // container.style.left = "0";
-            // container.style.right = "0";
-            // container.style.bottom = "0";
-            // container.style.backgroundColor = "#fff";
-            // container.style.width = w + 'px';
-            // container.style.height = h + 'px';
-            // container.style.marginTop = 0;
-            // container.style.margin = 0;
-            // container.style.zIndex = '99';
-            // container.style.overflow = 'auto';
-            // let ocloseSpan = document.createElement('span');
-            // ocloseSpan.className = 'closeSpan';
-            // ocloseSpan.style['float'] = 'right';
-            // ocloseSpan.style.cursor = 'pointer';
-            // ocloseSpan.style.fontSize = '30px';
-            // ocloseSpan.style.border = '1px solid #ddd';
-            // ocloseSpan.innerHTML = '&nbsp;×&nbsp;';
-            // ocloseSpan.addEventListener('click', (event) => {
-            //     container.id = "";
-            //     container.style.height ='100px';
-            //     container.style.width = '100%';
-            //     container.style.position = "relative";
-            //     container.style.zIndex = '0';
-            //     container.style.overflow = 'visible';
-            //     ocloseSpan.style.display = 'none';
-            // });
-            // container.appendChild(ocloseSpan);
+            container.appendChild(ocloseSpan);
         },
         reApp(){
             Mediator.publish('approval:re-app');
@@ -359,7 +338,7 @@ let config={
         Mediator.subscribe("workflow:focused", (res) => {
             if(res.length>0){
                 this.el.on('click','#addFollower',()=>{
-
+                    console.log(1111111111111111111111111);
                     PMAPI.openDialogByIframe(`/iframe/addFocus/?${res}`,{
                         width:800,
                         height:600,

@@ -79,7 +79,7 @@ let config = {
             this.data.allowagrid = true;
         })
         this.el.on('click', '#addFollower', () => {
-            PMAPI.openDialogByIframe(`/iframe/addFocus/`, {
+            PMAPI.openDialogByIframe(`/iframe/addfocus/`, {
                 width: 800,
                 height: 600,
                 title: `添加关注人`,
