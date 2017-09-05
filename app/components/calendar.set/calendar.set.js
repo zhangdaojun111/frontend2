@@ -96,7 +96,6 @@ let config = {
          * @param param
          */
         makeRows: function (param) {
-            console.log(param);
             this.data.allRows = [];
 
             // 获取可配置字段数据

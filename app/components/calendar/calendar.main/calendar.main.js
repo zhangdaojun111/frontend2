@@ -121,7 +121,6 @@ let config = {
                 if(res) {
                     this.hideLoading();
                 }
-                console.log(res);
                 this.data.date2settings = res['date2csids'];
                 this.data.calendarSettings = res['id2data'];
                 this.data.tableid2name = res['tableid2name'];
@@ -198,7 +197,6 @@ let config = {
          */
         createMonthCalendar: function (y,m){
             this.data.monthDataList = CalendarHandleDataService.createMonthCalendar(y,m, this.data.todayStr);
-            console.log( this.data.monthDataList);
             this.data.from_date = this.data.monthDataList[0]['weekList'][0]['dataTime'];
             this.data.to_date = this.data.monthDataList[5]['weekList'][6]['dataTime'];
 
