@@ -50,6 +50,7 @@ export const contractEditorConfig = {
                //删除local_data中的合同信息，此数据不跟随data上传
                for(let data of this.data.local_data){
                    delete data['content'];
+                   delete data['mode'];
                }
                this.data.value = this.data.local_data;
                console.dir(this.data.local_data);
@@ -152,7 +153,7 @@ export const contractEditorConfig = {
                         if(currentTab['model_id']==undefined){
                             this.el.find('.contract-template-anchor').html('<p>尚未选择模板。</p>');
                         } else {
-                            currentTab['elements'][element.table.table_id]=valueSource;
+                            currentTab['elements'][(element.table.table_id)+'']=valueSource;
                             if(!this.actions._isElementFull(currentTab['elements'])){
                                 this.el.find('.contract-template-anchor').html('<p>请选择所有数据源。</p>');
                                 return;
@@ -192,7 +193,7 @@ export const contractEditorConfig = {
             this.el.find('.contract-tabs').append(tabEle);
             this.el.find('.contract-model').val(0);
             this.el.find('.data-source').val(0);
-            this.data.local_data.push({name:'新建',elements:{},model_id:''});
+            this.data.local_data.push({name:'新建',elements:{},model_id:'',mode:'edit'});
             this.data['current_tab'] = length;
             this.el.find('.contract-template-anchor').html('<p>请选择模板和数据源。</p>');
             //监听tab
@@ -243,15 +244,16 @@ export const contractEditorConfig = {
                 }
                 return;
             }
-
+            let type = tab['mode']||'show';
+            let index = tab['mode']?0:i;
             this.actions.getElement({
                 table_id:this.data.table_id,
                 real_id:this.data.real_id,
                 field_id:this.data.id,
                 model_id:tab.model_id,
-                elements:JSON.stringify(tab.elements||{}),
-                type:'show',
-                index:0
+                elements:JSON.stringify(tab.elements),
+                type:type,
+                index:index
             }).then(res=>{
                if(res.success && this.data['current_tab'] == i){
                     this.el.find('.contract-template-anchor').html(res.data.content);
