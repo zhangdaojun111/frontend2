@@ -1,3 +1,7 @@
+/**
+ * @author qiumaoyun、 luyang
+ * 驳回节点操作
+ */
 import template from './approval-dialog.html';
 import Component from '../../../lib/component';
 import Mediator from '../../../lib/mediator';
