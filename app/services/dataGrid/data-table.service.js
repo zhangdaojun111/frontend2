@@ -120,6 +120,10 @@ export const dataTableService = {
         let imgNum = 0;
         return {imgSelect:imgSelect,imgData:imgData,imgTotal:imgTotal,imgNum:imgNum};
     },
+    //获取表单新增统计表数据
+    getNewFormCountData: function ( data ) {
+        return HTTP.postImmediately( '/get_detailed_data/',this.formatParams(data),{headers:this.headers} )
+    },
     //获取文件名后缀
     getFileExtension (filename) {
         return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
