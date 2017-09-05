@@ -864,7 +864,7 @@ let config = {
                 let name = btn.className;
                 if( btnGroup.indexOf( name )!=-1 && ( this.data.permission[dgcService.permission2btn[name]] || dgcService.permission2btn[name] == 'especial' ) ){
                     //工作流表无编辑模式
-                    if( name == 'edit-btn' && this.data.flowId ){
+                    if( name == 'edit-btn' && this.data.flowId != '' ){
                         continue;
                     }
                     html+=btn.outerHTML;
