@@ -7,6 +7,7 @@ let chartName = {
     label: '图表名称',
     name: 'chartName',
     defaultValue: '',
+    placeholder: '请输入图表名称',
     type: 'text',
     events: {}
 };

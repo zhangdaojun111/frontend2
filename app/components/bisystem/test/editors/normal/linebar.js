@@ -5,7 +5,7 @@ import {ChartFormService} from '../../../../../services/bisystem/chart.form.serv
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
-import './normal.scss';
+import './linebar.scss';
 
 let config = {
     template: template,
@@ -213,10 +213,10 @@ let config = {
             this.formItems['ySelectedGroup'].setValue(chart['ySelectedGroup']);
             this.formItems['yHorizontal'].setValue(chart['yHorizontal'] ? 1 : 0);
             this.formItems['yHorizontalColumns'].setValue(chart['yHorizontalColumns']['marginBottom'] ? 1 : 0);
-            this.formItems['marginBottomx'].setValue(chart['yHorizontalColumns']['marginBottom'] ? chart['yHorizontalColumns']['marginBottom'] : 1);
+            this.formItems['marginBottomx'].setValue(chart['yHorizontalColumns']['marginBottom'] ? chart['yHorizontalColumns']['marginBottom'] : '');
             this.formItems['echartX'].setValue(chart['echartX']['textNum'] ? 1 : 0);
-            this.formItems['marginBottom'].setValue(chart['echartX']['marginBottom'] ? chart['echartX']['marginBottom'] : 1);
-            this.formItems['textNum'].setValue(chart['echartX']['textNum'] ? chart['echartX']['textNum'] : 1);
+            this.formItems['marginBottom'].setValue(chart['echartX']['marginBottom'] ? chart['echartX']['marginBottom'] : '');
+            this.formItems['textNum'].setValue(chart['echartX']['textNum'] ? chart['echartX']['textNum'] : '');
             this.formItems['chartAssignment'].setValue(chart['chartAssignment'].val);
             if (chart['chartAssignment'].val == 1) {
                 this.formItems['chartGroup'].setValue(chart['chartGroup']);
@@ -335,7 +335,7 @@ let config = {
                 events: {}
             },
             {
-                label: '',
+                label: '更多设置',
                 name: 'defaultY',
                 defaultValue: [],
                 list: [
@@ -401,9 +401,10 @@ let config = {
                 }
             },
             {
-                label: 'x轴下边距',
+                label: '',
                 name: 'marginBottomx',
-                defaultValue: 0,
+                defaultValue: '',
+                placeholder: 'x轴下边距',
                 type: 'text',
                 events: {}
             },
@@ -430,16 +431,18 @@ let config = {
                 }
             },
             {
-                label: 'x轴每行字数',
+                label: '',
                 name: 'textNum',
-                defaultValue:1,
+                defaultValue:'',
+                placeholder: 'x轴每行字数',
                 type: 'text',
                 events: {}
             },
             {
-                label: 'x轴下边距',
+                label: '',
                 name: 'marginBottom',
-                defaultValue: 1,
+                defaultValue: '',
+                placeholder: 'x轴下边距',
                 type: 'text',
                 events: {}
             },
