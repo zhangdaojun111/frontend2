@@ -13,7 +13,7 @@ let config = {
             event:'click',
             selector:'.contract-view',
             callback:function () {
-                this.data['mode']='show';
+                this.data['mode']='view';
                 this.actions.openEditor();
             }
         },{
@@ -33,6 +33,9 @@ let config = {
                 height:600,
                 title:'合同编辑'
             }).then(res=>{
+                if(res.onlyclose){
+                    return;
+                }
                 this.data.value = res;
                 this.trigger('changeValue',this.data);
             })
