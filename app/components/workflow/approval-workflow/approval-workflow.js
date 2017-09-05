@@ -233,9 +233,9 @@ let config={
                     flow_id:obj.flow_id,
                     record_id:obj.record_id
                 }
-            ).then(close=>{
-                if(close.onlyclose){
-                   this.el.find(".approval-btn-sel").removeClass('active');
+            ).then(res=>{
+                if(!res.onlyclose){
+                    Mediator.publish('approval:rejToAny',res);
                 }
             });
             // this.el.find('.rejContainer').show();
