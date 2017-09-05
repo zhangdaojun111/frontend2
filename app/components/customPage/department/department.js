@@ -24,6 +24,7 @@ let config = {
         tableName:'',
         columnDefs: [],
         rowData:[],
+        fieldsData:[],
         //定制列（列宽）
         colWidth: {},
         //定制列（固定列）
@@ -65,6 +66,7 @@ let config = {
                 this.data.customColumnsFields = [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false},
                     {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false},
                     {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
+                this.data.fieldsData = res[1].rows;
                 for( let col of res[1].rows ){
                     if( col.field == '_id' ){
                         continue;
@@ -99,6 +101,7 @@ let config = {
                 let gridData = {
                     columnDefs: this.data.columnDefs,
                     rowData: this.data.rowData,
+                    fieldsData: this.data.fieldsData,
                     onColumnResized: this.actions.onColumnResized,
                     onSortChanged: this.actions.onSortChanged,
                     onDragStopped: this.actions.onDragStopped,
