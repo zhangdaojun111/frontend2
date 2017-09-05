@@ -5,6 +5,14 @@ import template from './contract-editor.html';
 import {PMENUM} from '../../../../lib/postmsg';
 
 let css=`
+    
+   .contract-editor{
+    display: flex;
+    overflow: hidden;
+    margin: 0 auto;
+    border: 1px solid #e4e4e4;
+    padding: 5px;
+} 
   .contract-tabs {
     display: inline-block;
     max-width: 1700px;

@@ -35,8 +35,6 @@ let FormEntrys = {
         this.buildId = '';
         this.btnType = 'new';
         //统计穿透列头信息
-        this.colDef = {};
-        this.col_id = '';
         this.viewMode='0';
 
         this.tableId = config.table_id || '';
@@ -60,8 +58,6 @@ let FormEntrys = {
         this.isAddBuild = config.isAddBuild || 0;
         this.buildId = config.id || '';
         this.btnType = config.btnType || 'new';
-        this.colDef = config.colDef||{};
-        this.col_id = config.colDef||'';
         this.viewMode=config.viewMode || '0';
     }
     ,
