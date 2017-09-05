@@ -262,7 +262,6 @@ let config = {
             //定制列
             if( this.el.find( '.custom-column-btn' )[0] ){
                 this.el.find( '.custom-column-btn' ).on( 'click',()=>{
-                    debugger
                     this.actions.calcCustomColumn();
                 } )
             }
