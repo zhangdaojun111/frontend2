@@ -400,7 +400,9 @@ let FormEntrys = {
         let $wrap = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"><div></div></div>`).prependTo(this.el);
         let html = $(`<div class="center-wrap"></div>`).appendTo($wrap);
         let res;
+        //如果不处于工作流中
         if (!this.fromWorkFlow) {
+            //获取表单的form_id
             res = await  FormService.getPrepareParmas({table_id: this.tableId});
             this.findFormIdAndFlowId(res);
         }
