@@ -91,7 +91,7 @@ let config = {
     data: {
         options: [
             {
-                label: '数据来源',
+                label: '',
                 name: 'source',
                 defaultValue: '',
                 type: 'autocomplete',
@@ -102,7 +102,7 @@ let config = {
                 }
             },
             {
-                label: '图表类型',
+                label: '',
                 name: 'chartType',
                 defaultValue: 'line',
                 type: 'select',
@@ -114,14 +114,14 @@ let config = {
                 }
             },
             {
-                label: 'x轴字段',
+                label: '',
                 name: 'xAxis',
                 defaultValue: '',
                 type: 'autocomplete',
                 events: {}
             },
             {
-                label: 'y轴字段',
+                label: '',
                 name: 'yAxis',
                 defaultValue: '',
                 type: 'autocomplete',

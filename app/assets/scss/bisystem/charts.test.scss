@@ -1,0 +1,35 @@
+/*
+ * 字段列名显示
+ */
+@mixin form-clo{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    span{
+        margin: 8px;
+        border: 1px solid #e4e4e4;
+        padding: 10px 24px;
+        background: #F2F2F2;
+    }
+}
+/*
+ * 按钮
+ */
+@mixin form-btn{
+    button{
+        padding: 8px 40px;
+        background: #0E7AEF;
+        border: none;
+        cursor: pointer;
+        border-radius: 6px;
+        color: #ffffff;
+        outline: none;
+    }
+}
+
+.form-chart-clo{
+    @include form-clo;
+}
+.form-chart-save{
+    @include form-btn;
+}

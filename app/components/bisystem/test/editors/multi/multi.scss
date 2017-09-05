@@ -1,20 +1,31 @@
-.form-chart-multi {
-    .form-chart-multi-chart {
-        .form-group-chart{
-            float:left;
-            width:50%;
-            border:solid 1px #dddddd;
-            padding:15px;
-            position:relative;
-            >div{
-                margin-top:15px;
-            }
-            .remove-y-btn {
-                position:absolute;
-                right:5px;
-                top:5px;
-                color:red;
-                font-size:16px;
+.form-chart-multi-chart {
+    .form-group-chart {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        position: relative;
+        padding: 0 20px 30px;
+        div {
+            display: flex;
+            flex-grow: 1;
+        }
+        div:last-child {
+            width: 100%;
+        }
+        .remove-y-btn {
+            position: absolute;
+            right: 5px;
+            bottom: 0;
+            color: red;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .form-chart-radio{
+            label{
+                margin: 8px;
+                border: 1px solid #e4e4e4;
+                padding: 10px 24px;
+                background: #F2F2F2;
             }
         }
     }
