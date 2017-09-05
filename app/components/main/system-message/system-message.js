@@ -75,10 +75,12 @@ let config = {
                     let checkIds = rows.map((item) => {
                         return item.id;
                     });
+                    console.log(JSON.stringify(checkIds));
                     HTTP.postImmediately('/remark_or_del_msg/', {
                         checkIds: JSON.stringify(checkIds),
                         is_del: 1
                     }).then((res) => {
+                        console.log(res);
                         if (res.success === 1) {
                             this.actions.loadData();
                         }
