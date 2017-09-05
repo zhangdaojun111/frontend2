@@ -189,7 +189,9 @@ let config = {
         showTabs:function (opacity) {
         },
         //左侧提示
-        gridTips: ''
+        gridTips: '',
+        //是否为双击
+        doubleClick: false
     },
     //生成的表头数据
     columnDefs: [],
@@ -2232,7 +2234,7 @@ let config = {
         onCellClicked: function (data) {
             console.log( "______data_______" )
             console.log( data )
-            if( !data.data || this.data.isEditable || data.data.myfooter ){
+            if( !data.data || this.data.isEditable || data.data.myfooter || this.data.doubleClick ){
                 return;
             }
             //分组重新渲染序号
@@ -2598,6 +2600,10 @@ let config = {
         onRowDoubleClicked: function (data) {
             console.log( "行双击查看" )
             console.log( data )
+            this.data.doubleClick = true;
+            setTimeout( ()=>{
+                this.data.doubleClick = false;
+            },500 )
             this.actions.viewOrEditPerm( 'view' );
             //屏蔽分组行
             if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0)||this.data.editMode||data.data.myfooter ){
@@ -2610,8 +2616,12 @@ let config = {
                 parent_temp_id: this.data.parentTempId,
                 parent_record_id: this.data.parentRecordId,
                 real_id: data.data._id,
-                btnType: 'view',is_view:1
+                btnType: 'view',
+                is_view:1
             };
+            if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 ){
+                obj.btnType = 'none';
+            }
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
             let title = '查看'
             this.actions.openSourceDataGrid( url,title );
