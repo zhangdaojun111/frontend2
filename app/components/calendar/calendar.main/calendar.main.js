@@ -553,7 +553,7 @@ let config = {
         },
 
         workflowMission: function(){
-            if( this.data.isWorkflowDataReady ){
+            if( this.data.isWorkflowDataReady && this.data.calendarContent !== 'schedule'){
                 this.actions.monthDataTogether();
             }
         }
@@ -677,7 +677,6 @@ let config = {
         });
 
         Mediator.on('calendar-left:unshowData', data => {
-            console.log(data);
             if(data['data']) {
                 this.data.isShowArr = data['data'];
                 let arr = ['remind'];
