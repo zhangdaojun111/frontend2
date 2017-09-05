@@ -103,11 +103,10 @@ let config ={
         addSearchHistory(){
             let content = this.data.searchContent;
             if(content && content !== ""){
-                for (let history of this.data.historyList){
-                    if(history.content === content){
-                        return;
-                    }
-                }
+                _.remove(this.data.historyList,function (n) {
+                    return n.content === content;
+                });
+
                 let newHistory = {
                     'content':content,
                     'py':content,
