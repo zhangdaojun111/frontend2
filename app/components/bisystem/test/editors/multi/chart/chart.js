@@ -95,6 +95,7 @@ let config = {
                 name: 'source',
                 defaultValue: '',
                 type: 'autocomplete',
+                placeholder: '选择数据来源',
                 events: {
                     onSelect(value) {
                         this.actions.getFields(value);
@@ -118,6 +119,7 @@ let config = {
                 name: 'xAxis',
                 defaultValue: '',
                 type: 'autocomplete',
+                placeholder: '选择X轴字段',
                 events: {}
             },
             {
@@ -125,6 +127,7 @@ let config = {
                 name: 'yAxis',
                 defaultValue: '',
                 type: 'autocomplete',
+                placeholder: '选择Y轴字段',
                 events: {
                     onSelect(value) {
                         if(value) {
