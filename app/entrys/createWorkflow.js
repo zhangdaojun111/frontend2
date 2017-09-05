@@ -81,7 +81,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         // let timer;
         const autoSaving=function(){
             timer=setInterval(()=>{
-                intervalSave(FormEntrys.getFormValue(wfObj.tableid));
+                intervalSave(FormEntrys.getFormValue(wfObj.tableid,false));
             },30*1000);
         };
         clearInterval(timer);
@@ -143,7 +143,7 @@ Mediator.subscribe('workflow:focus-users', (res)=> {
 })
 Mediator.subscribe('workflow:submit', (res)=> {
     if($("#workflow-form:visible").length>0){
-        let formData=FormEntrys.getFormValue(wfObj.tableid);
+        let formData=FormEntrys.getFormValue(wfObj.tableid,true);
         if(formData.error){
             msgBox.alert(`${formData.errorMessage}`);
         }else{

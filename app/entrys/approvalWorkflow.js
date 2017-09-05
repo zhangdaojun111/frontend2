@@ -116,7 +116,7 @@ function GetQueryString(name)
 //审批操作
 const approveWorkflow = (para) => {
     let key=GetQueryString('key');
-    let formData=FormEntrys.getFormValue(obj.table_id),
+    let formData=FormEntrys.getFormValue(obj.table_id,true),
         comment=$('#comment').val();
     para.data=JSON.stringify(formData);
     para.comment=comment;
@@ -189,7 +189,7 @@ Mediator.subscribe('approval:rejToAny', (id) => {
 //驳回至发起人，重新发起
 Mediator.subscribe("approval:re-app", (msg) => {
     let key=GetQueryString('key');
-    let formData=FormEntrys.getFormValue(obj.table_id);
+    let formData=FormEntrys.getFormValue(obj.table_id,true);
     if(formData.error){
         msgBox.alert(`${formData.errorMessage}`);
     }else{
