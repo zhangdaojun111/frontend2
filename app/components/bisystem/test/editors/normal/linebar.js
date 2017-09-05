@@ -5,7 +5,7 @@ import {ChartFormService} from '../../../../../services/bisystem/chart.form.serv
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
-import './normal.scss';
+import './linebar.scss';
 
 let config = {
     template: template,
@@ -213,10 +213,10 @@ let config = {
             this.formItems['ySelectedGroup'].setValue(chart['ySelectedGroup']);
             this.formItems['yHorizontal'].setValue(chart['yHorizontal'] ? 1 : 0);
             this.formItems['yHorizontalColumns'].setValue(chart['yHorizontalColumns']['marginBottom'] ? 1 : 0);
-            this.formItems['marginBottomx'].setValue(chart['yHorizontalColumns']['marginBottom'] ? chart['yHorizontalColumns']['marginBottom'] : 1);
+            this.formItems['marginBottomx'].setValue(chart['yHorizontalColumns']['marginBottom'] ? chart['yHorizontalColumns']['marginBottom'] : '');
             this.formItems['echartX'].setValue(chart['echartX']['textNum'] ? 1 : 0);
-            this.formItems['marginBottom'].setValue(chart['echartX']['marginBottom'] ? chart['echartX']['marginBottom'] : 1);
-            this.formItems['textNum'].setValue(chart['echartX']['textNum'] ? chart['echartX']['textNum'] : 1);
+            this.formItems['marginBottom'].setValue(chart['echartX']['marginBottom'] ? chart['echartX']['marginBottom'] : '');
+            this.formItems['textNum'].setValue(chart['echartX']['textNum'] ? chart['echartX']['textNum'] : '');
             this.formItems['chartAssignment'].setValue(chart['chartAssignment'].val);
             if (chart['chartAssignment'].val == 1) {
                 this.formItems['chartGroup'].setValue(chart['chartGroup']);
@@ -291,7 +291,51 @@ let config = {
                 }
             },
             {
+                label: '选择分组或下穿',
+                name: 'chartAssignment',
+                class: 'chart-assignment',
+                defaultValue: 2,
+                list: [
+                    {'value': 1, 'name': '分组'},
+                    {'value': 2, 'name': '下穿'},
+                ],
+                type: 'select',
+                events:{
+                    onChange: function(value) {
+                        if (value == 1) {
+                            this.formItems['deeps'].el.hide();
+                            this.formItems['deeps'].actions.clear();
+                        } else {
+                            this.formItems['deeps'].el.show();
+                        };
+                        this.formItems['deeps'].actions.clear();
+                        this.formItems['chartGroup'].autoselect.actions.clearValue();
+                    }
+                }
+            },
+            {
                 label: '',
+                name: 'chartGroup',
+                defaultValue: '',
+                class: 'chart-group',
+                type: 'autocomplete',
+                events: {
+                    onSelect(value) {
+                        if (value) {
+                            this.formItems['deeps'].actions.update(value);
+                        };
+                    }
+                }
+            },
+            {
+                label: '',
+                name: 'deeps',
+                defaultValue: [],
+                type: 'deep',
+                events: {}
+            },
+            {
+                label: '更多设置',
                 name: 'defaultY',
                 defaultValue: [],
                 list: [
@@ -357,9 +401,10 @@ let config = {
                 }
             },
             {
-                label: 'x轴下边距',
+                label: '',
                 name: 'marginBottomx',
-                defaultValue: 0,
+                defaultValue: '',
+                placeholder: 'x轴下边距',
                 type: 'text',
                 events: {}
             },
@@ -386,60 +431,20 @@ let config = {
                 }
             },
             {
-                label: 'x轴每行字数',
+                label: '',
                 name: 'textNum',
-                defaultValue:1,
+                defaultValue:'',
+                placeholder: 'x轴每行字数',
                 type: 'text',
                 events: {}
-            },
-            {
-                label: 'x轴下边距',
-                name: 'marginBottom',
-                defaultValue: 1,
-                type: 'text',
-                events: {}
-            },
-            {
-                label: '选择分组或下穿',
-                name: 'chartAssignment',
-                defaultValue: 2,
-                list: [
-                    {'value': 1, 'name': '分组'},
-                    {'value': 2, 'name': '下穿'},
-                ],
-                type: 'select',
-                events:{
-                    onChange: function(value) {
-                        if (value == 1) {
-                            this.formItems['deeps'].el.hide();
-                            this.formItems['deeps'].actions.clear();
-                        } else {
-                            this.formItems['deeps'].el.show();
-                        };
-                        this.formItems['deeps'].actions.clear();
-                        this.formItems['chartGroup'].autoselect.actions.clearValue();
-                    }
-                }
             },
             {
                 label: '',
-                name: 'deeps',
-                defaultValue: [],
-                type: 'deep',
-                events: {}
-            },
-            {
-                label: '选择下穿x轴字段',
-                name: 'chartGroup',
+                name: 'marginBottom',
                 defaultValue: '',
-                type: 'autocomplete',
-                events: {
-                    onSelect(value) {
-                        if (value) {
-                            this.formItems['deeps'].actions.update(value);
-                        };
-                    }
-                }
+                placeholder: 'x轴下边距',
+                type: 'text',
+                events: {}
             },
             {
                 label: '',

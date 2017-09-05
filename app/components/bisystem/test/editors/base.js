@@ -37,6 +37,8 @@ class Base extends Component {
                 label: item.label,
                 name: item.name,
                 list: item.list,
+                class: item.class,
+                placeholder: item.placeholder
             }, item.events);
             this.append(instance, this.el.find(container ? container : '.form-group'));
             this.formItems[item.name] = instance;

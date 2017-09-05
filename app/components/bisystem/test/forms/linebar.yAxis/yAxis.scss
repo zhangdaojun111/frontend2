@@ -1,4 +1,5 @@
 .form-chart-yAxis {
+    margin-top:20px;
     .form-chart-y{
         padding:10px;
         background-color:rgba(250, 250, 250, 1);
@@ -16,6 +17,15 @@
             }
             .form-chart-wrapper{
                 padding-left:0;
+            }
+        }
+        .btn-group {
+            position:relative;
+            top:-8px;
+            button {
+                text-indent:-99999px;
+                border:none;
+                outline:none;
             }
         }
     }
