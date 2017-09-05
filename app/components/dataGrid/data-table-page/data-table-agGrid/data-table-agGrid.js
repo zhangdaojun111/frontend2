@@ -1981,13 +1981,29 @@ let config = {
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
             }
+            if( json.is_batch == 1 ){
+                json.temp_ids = json.real_ids;
+                json['real_ids'] = JSON.stringify([]);
+            }
             if( type == 1 ){
                 json['abandon_validate'] = 1;
             }
             this.actions.setInvalid();
             dataTableService.delTableData( json ).then( res=>{
-                if( res.success ){
+                if( res.succ ){
                     msgBox.showTips( '删除成功' )
+                    //批量工作流删除后返回值处理
+                    if( json.is_batch == 1 ){
+                        this.actions.getGridData();
+                        let arr = [];
+                        for( let i of this.data.batchIdList ){
+                            if( this.data.deletedIds.indexOf( i )==-1 ){
+                                arr.push( i )
+                            }
+                        }
+                        this.data.batchIdList = arr;
+                        this.actions.returnBatchData( this.data.batchIdList );
+                    }
                 }else {
                     if( res.queryParams ){
                         msgBox.confirm( res.error + '是否前往处理？' ).then( r=>{
