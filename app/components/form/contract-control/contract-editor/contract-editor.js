@@ -2,8 +2,43 @@
  * Created by Yunxuan Yan on 2017/8/18.
  */
 import template from './contract-editor.html';
-import './contract-editor.scss';
 import {PMENUM} from '../../../../lib/postmsg';
+
+let css=`
+  .contract-tabs {
+    display: inline-block;
+    max-width: 1700px;
+  }
+
+  .contract-tab {
+    display: inline-block;
+    padding: 5px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px 5px 0 0;
+  }
+
+  .contract-tab-container {
+    margin-top: 5px;
+    width: 100%;
+    border-bottom: 1px solid #dddddd;
+  }
+
+  .add-tab-button {
+    display:inline-block;
+    width: 10px;
+    height: 10px;
+    background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAVlpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KTMInWQAAAMNJREFUGBmNUDkOwkAQ8yQLFc+gQ0hpeQgNP6FLF15Cw2do0vGM0CRaBnuWQEpW2h3L9hw7gM7R64gX36PzZ1zhhZbCtEONGzIqxhdWYRDWkQZHws1ymERmDDCyM1ZsbVRIUAtly1ShIWcS+DYcAVQ27JKNxoH0mtcpql5pbZiIVV2JY8Xnr5PoOnxbq53h+sk8sd7913pZr/MtjX1Qzv+e7THLVayndc1YBi8zWVQSJ417LuuJmUnyd4ST9MCKPTmu8A2pxEh6XTDHawAAAABJRU5ErkJggg==') no-repeat;
+    margin: 0 16px;
+  }
+
+  .delete-tab-button {
+    display:inline-block;
+    width: 10px;
+    height: 10px;
+    background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAGKAAABigEzlzBYAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAABBUlEQVQYGVWQ3U7CQBSEv1OkSBXfrKAmJMolxkcQXgE08QVQL9XYRI3c+Vb+Fasp65y1N+xm09np7JlzxrgMXSquabFkYncMQwtfhdXMwkgoJ2W8xQ9X7HLMFwPmoWJqj1E4D4cEFuyQURKM8zBkzQ3bkn+rNhxEITyJ64j7JGFskbwIOTX3ssjk8BG5lJ5wicltai8JD+rpzJbqcaAfb3rdi8excxK5JqFojGraQklz808iF+c0GCrs67/xW1l3VPU9cil7wpUUIx/QmggWajxT4yvV2Y/CNc/iuuJK3U/dKo8RrDSdcaQsX+Nx7BNn2oG+xcB/FbgpjokVG4F7dEFxtTn5AzxdXK/Y1PcdAAAAAElFTkSuQmCC') no-repeat;
+    margin: 0 16px;
+  }
+`;
 
 export const contractEditorConfig = {
     template:template,
@@ -17,6 +52,7 @@ export const contractEditorConfig = {
                    delete data['content'];
                }
                this.data.value = this.data.local_data;
+               console.dir(this.data.local_data);
                this.actions.closeMe();
            }
         },{
@@ -79,6 +115,7 @@ export const contractEditorConfig = {
         local_data:[],
         elementKeys:[],
         editingk2v:{},
+        css:css.replace(/(\n)/g, '')
     },
     actions:{
         loadData(res){
@@ -160,16 +197,17 @@ export const contractEditorConfig = {
             this.el.find('.contract-template-anchor').html('<p>请选择模板和数据源。</p>');
             //监听tab
             tabEle.on('click',()=>{
-                this.actions.loadTab(length);
+                this.actions.loadTab(length,true);
             })
         },
-        loadTab:function (i) {
+        loadTab:function (i,isLoadCache) {
             if(i == this.data['current_tab']){
                 return;
             }
-            this.actions._loadTemplateByIndex(i);
+            this.actions._loadTemplateByIndex(i,isLoadCache);
         },
-        _loadTemplateByIndex:function (i) {
+        //只有在切换tab的时候才会用缓存加载合同
+        _loadTemplateByIndex:function (i,isLoadCache) {
             this.el.find('.edit-or-save').css('display','none');
             this.data['current_tab']=i;
             console.log("current tab "+i);
@@ -178,41 +216,52 @@ export const contractEditorConfig = {
                 console.log('tab['+i+'] is undefined');
                 return;
             }
-            if(!tab['model_id']||tab['model_id']==''){
-                this.el.find('.contract-model').val(0);
+
+            //加载选项
+            let hasModelId = tab['model_id']&&tab['model_id']!='';
+            this.el.find('.contract-model').val(hasModelId?tab['model_id']:0);
+            for(let key of this.data.elementKeys){
+                this.el.find('#'+key).val(tab['elements'][key]||0);
+            }
+
+            if(!hasModelId){
                 this.el.find('.contract-template-anchor').html('<p>请选择模板。</p>');
                 return;
             }
             if(!this.actions._isElementFull(tab['elements'])){
+                this.el.find('.data-source').val(0);
                 this.el.find('.contract-template-anchor').html('<p>请选择所有数据源。</p>');
                 return;
             }
 
-            let currentTabData = this.data.local_data[i];
-            this.el.find('.contract-model').val(currentTabData['model_id']);
-            let keys = Object.keys(currentTabData['elements']);
-            for(let key of keys){
-                this.el.find('#'+key).val(currentTabData['elements'][key]);
+
+            if(isLoadCache && tab['content']){
+                $(this.el.find('.contract-tab').get(i)).text(tab['name']);
+                this.el.find('.contract-template-anchor').html(tab['content']);
+                if(this.data.mode == 'edit'){
+                    this.el.find('.edit-or-save').css('display','inline');
+                }
+                return;
             }
 
             this.actions.getElement({
                 table_id:this.data.table_id,
                 real_id:this.data.real_id,
                 field_id:this.data.id,
-                model_id:currentTabData.model_id,
-                elements:JSON.stringify(currentTabData.elements||{}),
+                model_id:tab.model_id,
+                elements:JSON.stringify(tab.elements||{}),
                 type:'show',
                 index:0
             }).then(res=>{
                if(res.success && this.data['current_tab'] == i){
                     this.el.find('.contract-template-anchor').html(res.data.content);
-                    this.data.local_data[i]['content']=res.data.content;
-                    this.data.local_data[i]['k2v']=res.data.k2v;
+                    tab['content']=res.data.content;
+                    tab['k2v']=res.data.k2v;
                     if(this.data.mode == 'edit'){
                         this.el.find('.edit-or-save').css('display','inline');
                     }
                     let tabName =[];
-                    if(Object.keys(this.data.local_data[i].elements).length != 0){
+                    if(Object.keys(tab.elements).length != 0){
                         for(let key of this.data.elementKeys){
                             let selectEle = this.el.find('#'+key)[0];
                             tabName.push(selectEle.selectedOptions[0].label);
@@ -272,6 +321,7 @@ export const contractEditorConfig = {
         }
     },
     afterRender:function () {
+        this.data.style = $('<style type="text/css"></style>').text(this.data.css).appendTo($("head"));
         if(this.data['mode']=='view'){
             this.el.find('.contract-settings').css('display','none');
             this.el.find('.save-n-close').css('display','none');
@@ -305,9 +355,12 @@ export const contractEditorConfig = {
             tabEle.text(tabname);
             tabsEle.append(tabEle);
             tabEle.on('click',event=>{
-                this.actions.loadTab(i);
+                this.actions.loadTab(i,true);
             })
         }
 
+    },
+    beforeDestory() {
+        this.data.style.remove();
     }
 }
