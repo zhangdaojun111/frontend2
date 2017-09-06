@@ -1,29 +1,37 @@
 <div class="contract-editor">
     <div class="contract-editor-widget">
+
         <div class="contract-settings">
-            <div style="padding: 5px">
-                <span>请选择模板</span>
-                <select name="选择模板" class="contract-model" style="width: 200px">
+            <div class="select-template ">
+                <div class="contract-settings-title">&nbsp;&nbsp;请选择模板</div>
+                <select name="选择模板" class="contract-model" style="width: 200px; margin-top: 5px;margin-left: 5px;">
                     <option value="0">请选择</option>
                 </select>
             </div>
-            <div style="padding: 5px">
-                <div>请选择数据源</div>
+            <div>
+                <div class="contract-settings-title">&nbsp;&nbsp;请选择数据源</div>
                 <div class="contract-data-source-anchor"></div>
             </div>
         </div>
-        <p style="background: #dddddd;width:100%; padding-left: 5px;">合同预览</p>
-        <div class="contract-tab-container">
-            <ul class="contract-tabs">
-            </ul>
-            <!--componentDialog中使用主框架样式无效？ icon-add，icon-delete-->
-            <div class="add-tab-button"></div>
-            <div class="delete-tab-button"></div>
+
+        <div class="contract-container">
+            <p class="contract-container-title">&nbsp;&nbsp;合同预览</p>
+            <div class="contract-container-content">
+                <div class="contract-tab-container">
+                    <div class="add-tab-button"></div>
+                    <ul class="contract-tabs">
+                    </ul>
+                    <!--componentDialog中使用主框架样式无效？ icon-add，icon-delete-->
+                    <div class="delete-tab-button"></div>
+                </div>
+                <div style="min-height: 30px">
+                    <div class="contract-template-anchor"></div>
+                </div>
+            </div>
+
         </div>
-        <div style="min-height: 30px">
-            <div class="contract-template-anchor"></div>
-        </div>
-        <div style="position:relative;">
+
+        <div class="contract-editor-button">
             <button type="button" class="save-n-close">保存并关闭窗口</button>
             <button type="button" class="download-all">下载所有文档</button>
             <button type="button" class="download-current">下载当前文档</button>
@@ -31,3 +39,5 @@
         </div>
     </div>
 </div>
+
+
