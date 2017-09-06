@@ -71,9 +71,9 @@ class Checkbox extends Base {
         this.data.firstDo = true;
         if (Array.isArray(value)) {
             this.data.value = value;
-            console.log(this.data.list);
             this.data.list.forEach((l,index) => {
                 for (let choosed of this.data.value) {
+                    console.log('xxxxxxxxxxxxxxxxxxxx');
                     if (choosed.id === JSON.parse(l.value).id) {
                         this.el.find('input[type=checkbox]').eq(index).attr('checked',true);
                         break;
@@ -102,7 +102,9 @@ class Checkbox extends Base {
         this.reload();
         if (this.data.firstDo) {
             this.setValue(this.data.value);
-            this.data.firstDo = false;
+            if (this.data.list.length > 0) {
+                this.data.firstDo = false;
+            };
         };
         this.trigger('onChange', this.data.value);
     }

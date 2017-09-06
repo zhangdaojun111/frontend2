@@ -74,7 +74,7 @@
         position:relative;
     }
     .form-group {
-        min-width:774px;
+        min-width:600px;
         max-width:1000px;
         padding:40px 30px 0;
         background:#ffffff;
@@ -101,6 +101,17 @@
     }
     .save-btn {
         @include save-btn;
+    }
+    .checkbox-columns-list {
+        label {
+            margin: 8px;
+            border: 1px solid #e4e4e4;
+            padding: 10px 20px;
+            background: #F2F2F2;
+            span {
+                vertical-align: text-bottom;
+            }
+        }
     }
     @import "charts.test";
 }

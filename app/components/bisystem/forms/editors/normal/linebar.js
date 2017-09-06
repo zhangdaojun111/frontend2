@@ -35,8 +35,6 @@ let config = {
                     });
                 };
                 this.formItems['ySelectedGroup'].setList(data);
-
-                // console.log(this.formItems['yAxis0'].field.data.value)
             }
         },
 
@@ -61,8 +59,8 @@ let config = {
         },
 
         /**
-         * 渲染列名字段列表（x轴）
-         * @param columns 表格列表字段（x轴）
+         * 渲染列名字段列表（x 和y轴）
+         * @param columns 列表字段（x 和y轴）
          */
         async loadColumns(data) {
             if (this.formItems['xAxis']) {
@@ -210,6 +208,8 @@ let config = {
                 this.formItems['yAxis1'].setValue(yAxis1);
             };
             this.formItems['defaultY'].setValue(chart['ySelectedGroup'] && chart['ySelectedGroup'].length > 0 ? 1 : 0);
+            console.log('===============================');
+            console.log(chart['ySelectedGroup']);
             this.formItems['ySelectedGroup'].setValue(chart['ySelectedGroup']);
             this.formItems['yHorizontal'].setValue(chart['yHorizontal'] ? 1 : 0);
             this.formItems['yHorizontalColumns'].setValue(chart['yHorizontalColumns']['marginBottom'] ? 1 : 0);
@@ -252,6 +252,7 @@ let config = {
                 label: 'Y轴字段',
                 name: 'double',
                 defaultValue: [],
+                class: 'double-y',
                 list: [
                     {
                         value:1, name: '是否展示双Y轴'
@@ -338,6 +339,7 @@ let config = {
                 label: '更多设置',
                 name: 'defaultY',
                 defaultValue: [],
+                class: 'default-y',
                 list: [
                     {
                         value:1, name: '默认展示y轴数据'
@@ -354,11 +356,13 @@ let config = {
                     }
                 }
             },
+
             {
                 label: '',
                 name: 'ySelectedGroup',
                 defaultValue: [],
                 list: [],
+                class: 'checkbox-columns-list',
                 type: 'checkbox',
                 events: {
                     onChange:function(value) {
