@@ -2203,9 +2203,33 @@ let config = {
             dataTableService.getPreferences( obj ).then( res=>{
                 this.el.find('.dataGrid-commonQuery-option').remove();
                 this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="100" value="常用查询">常用查询</option>`)
-                res.rows.forEach((row) => {
-                    this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
-                });
+                if(res.rows.length != 0){
+                    res.rows.forEach((row) => {
+                        this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
+                    });
+                }
+                if(this.data.filterParam['common_filter_name'] && this.data.onlyCloseExpertSearch) {
+                    this.el.find('.dataGrid-commonQuery-select').val(this.data.filterParam['common_filter_name']);
+                }
+                if(this.data.commonQueryData && res.rows && this.data.commonQueryData.length > res.rows.length){
+                    let inCheck = true;
+                    if(this.data.filterParam['common_filter_name'] != ''){
+                        if(res.rows.length == 0){
+                            inCheck = true;
+                        } else {
+                            for(let item of res.rows) {
+                                debugger
+                                if (item.name == this.data.filterParam['common_filter_name']) {
+                                    inCheck = false ;
+                                }
+                            }
+                        }
+                    }
+                    if(inCheck) {
+                        this.actions.postExpertSearch([],'');
+                        this.el.find('.dataGrid-commonQuery-select').val('常用查询');
+                    }
+                }
                 this.data.commonQueryData = res.rows;
                 if(addNameAry && addNameAry.length != 0){
                     this.data.commonQueryData.forEach((item)=>{
@@ -2217,9 +2241,7 @@ let config = {
                         }
                     })
                 }
-                if(this.data.filterParam['common_filter_name'] && this.data.onlyCloseExpertSearch) {
-                    this.el.find('.dataGrid-commonQuery-select').val(this.data.filterParam['common_filter_name']);
-                }
+
                 //第一次请求footer数据
                 if( this.data.firstGetFooterData ){
                     if( this.data.common_filter_id ){
