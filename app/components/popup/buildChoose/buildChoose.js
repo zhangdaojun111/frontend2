@@ -28,6 +28,7 @@ let config = {
                 parent_temp_id: '',
                 real_id: _this.data['options'][1]['value'],
                 el: _this.el.find('.ui-section'),
+                btnType:'none',
             });
             for (let i = 0, len = _this.data['options'].length; i < len; i++) {
                 if (_this.data['options'][i]['value'] != '') {
