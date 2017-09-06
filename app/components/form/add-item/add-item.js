@@ -159,16 +159,25 @@ let AddItem = {
             });
         }
     },
+    binds:[{
+        event:'click',
+        selector:'.add',
+        callback:function(){
+            this.actions.addItem();
+        }
+    },{
+        event:'click',
+        selectory:'.save',
+        callback:function(){
+            this.actions.saveItems();
+        }
+    }],
     afterRender(){
         let _this=this;
-        this.el.on('click','.ui-del',function(){//此处不能用箭头函数 会造成this指针丢失
-            _this.actions.deleteItem($(this));
-        }).on('click', '.add',()=>{
-            this.actions.addItem();
-        }).on('click', '.save',()=> {
-            this.actions.saveItems();
-        })
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
+        this.el.on('click','.ui-del',function(){
+            _this.actions.deleteItem($(this));
+        })
     },
     beforeDestory: function () {
         this.data.style.remove();
