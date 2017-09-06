@@ -21,9 +21,10 @@ export const dgcService = {
             return sColor;
         }
     },
+    accuracy: 1000,
     //格式化参数
     formatter: function (num) {
-        var source = String(num).split(".");//按小数点分成2部分
+        let source = String(num).split(".");//按小数点分成2部分
         if (this.accuracy == 1000) {
             source[0] = source[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");//只将整数部分进行都好分割
         } else {
@@ -406,6 +407,7 @@ export const dgcService = {
             EditChild:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
             child:['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
             createBatch: ['grid-del-btn','grid-import-btn','custom-column-btn'],
+            approveBatch: ['custom-column-btn'],
             source_data: ['custom-column-btn','grid-auto-width'],
             count: ['float-search-btn','expert-search-btn','group-btn','new-form-btn','grid-del-btn','grid-import-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
             viewFromCorrespondence: ['correspondence-check','float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width'],
