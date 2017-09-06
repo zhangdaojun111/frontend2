@@ -152,7 +152,7 @@ let systemMessageUtil = {
         this.el = $("<div>").appendTo('body');
         let systemMessage = new SystemMessage();
         systemMessage.render(this.el);
-        this.el.dialog({
+        this.el.erdsDialog({
             width: 1298,
             height: 575,
             modal: true,
@@ -182,7 +182,7 @@ let systemMessageUtil = {
             speechSynthesis.speak(msg);
         }
         this.el = $(html).appendTo('body');
-        this.el.dialog({
+        this.el.erdsDialog({
             width: 800,
             height: 600,
             modal: true,
