@@ -28,7 +28,8 @@ let config = {
          * @param endDate
          */
         getSchedule: function(startDate, endDate) {
-            console.log(startDate, endDate);
+            startDate = startDate || this.data.scheduleStart;
+            endDate = endDate || this.data.scheduleEnd;
             if( startDate === '' || endDate === '' ){
                 alert( '时间不能为空。' );
                 return;
@@ -39,10 +40,6 @@ let config = {
             }
             Mediator.emit('calendarSchedule: date', {from_date: startDate, to_date: endDate});
         },
-        
-        changeValue: function (res) {
-            console.log(res);
-        }
 
     },
     afterRender: function() {

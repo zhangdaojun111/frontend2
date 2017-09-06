@@ -615,15 +615,16 @@ let config = {
 
         Mediator.on('Calendar: tool', data => {
             if(data.toolMethod === 'refresh') {
-                CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
                 this.data.cancel_fields = data['data'];
                 if(this.data.calendarContent !== 'schedule') {
+                    CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
                     this.actions.getCalendarData({
                         from_date: this.data.from_date,
                         to_date: this.data.to_date,
                         cancel_fields: JSON.stringify(this.data.cancel_fields)
                     },'calendar');
                 } else {
+                    CalendarWorkflowData.getWorkflowData(this.data.scheduleStart, this.data.scheduleEnd);
                     this.actions.getCalendarData({
                         from_date: this.data.scheduleStart,
                         to_date: this.data.scheduleEnd,
