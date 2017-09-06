@@ -1,0 +1,10 @@
+.form-chart {
+    .form-group{
+        >div{
+            margin-bottom:15px;
+        }
+        >div:nth-child(8){
+            margin-top: 0;
+        }
+    }
+}

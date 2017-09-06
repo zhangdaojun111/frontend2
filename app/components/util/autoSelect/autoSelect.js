@@ -28,6 +28,7 @@ let config = {
         width: 0,                       // 为0表示显示默认宽度240
         editable: true,                 // 是否可编辑
         onSelect: null,                  // 选择时的事件
+        placeholder: ''
     },
     actions: {
         selectItem: function (item) {
@@ -95,7 +96,7 @@ let config = {
         setList: function (list) {
             this.data.list = list;
             this.reload();
-            this.actions.renderChoosed();
+            // this.actions.renderChoosed();
         },
         renderChoosed: function () {
             this.listWrap.find('input:checkbox:checked').each(function () {

@@ -95,6 +95,58 @@ let config = {
         }
 
     },
+    binds:[
+        {
+            event:'click',
+            selector:'.task-state-icon',
+            callback:function (temp = this) {
+                event.stopPropagation();
+                if(!$(temp).is(".options-show")){
+                    this.el.parents(".calendar-main-content").find(".select-options").hide();
+                    this.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
+                    this.el.find(".select-options").show();
+                    $(temp).addClass("options-show");
+                    if(this.el.find(".task-item").parent().position().top > 60){
+                        let task_list = this.el.find(".task-item").parents(".task-list");
+                        task_list.scrollTop(task_list.scrollTop()+35);
+                    }
+                }
+                else{
+                    this.el.find(".select-options").hide();
+                    $(temp).removeClass("options-show");
+                }
+            }
+        },
+        {
+            event:'click',
+            selector:'.select-options',
+            callback:function () {
+                event.stopPropagation();
+            }
+        },
+        {
+            event:'change',
+            selector:'.select-options',
+            callback:function(){
+                let sValue = this.el.find('.select-options option:selected').val();
+                let sLabel = this.el.find('.select-options option:selected').text();
+                this.actions.changSelectValue(sValue, sLabel);
+            }
+        },
+        // {
+        //     event:'dragstart',
+        //     selector:'.task-item',
+        //     callback:function(ev){
+        //         console.log(ev.Event());
+        //         if(this.data.type === 'month' && this.data.remindTaskItemData['isDrag'] !== 0) {
+        //             let event = ev.originalEvent;
+        //             $(temp).addClass("task-item-draggable");
+        //             event.dataTransfer.setData("Text",JSON.stringify(this.data.remindTaskItemData));
+        //             return true;
+        //         }
+        //     }
+        // }
+    ],
     afterRender: function() {
         this.el.addClass("comment-task-item");
         this.el.find('.task-bg-color').css({backgroundColor: this.data.remindTaskItemData['color']});
@@ -126,30 +178,8 @@ let config = {
             this.actions.openWorkflow();
         }
 
-        this.el.on('click','.task-state-icon', function() {
-            event.stopPropagation();
-            if(!$(this).is(".options-show")){
-                that.el.parents(".calendar-main-content").find(".select-options").hide();
-                that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
-                that.el.find(".select-options").show();
-                $(this).addClass("options-show");
-                if(that.el.find(".task-item").parent().position().top > 60){
-                    let task_list = that.el.find(".task-item").parents(".task-list");
-                    task_list.scrollTop(task_list.scrollTop()+35);
-                }
-            }
-            else{
-                that.el.find(".select-options").hide();
-                $(this).removeClass("options-show");
-            }
-        }).on('click','.select-options', () => {
-            event.stopPropagation();
-
-        }).on('change', '.select-options', () => {
-            let sValue = this.el.find('.select-options option:selected').val();
-            let sLabel = this.el.find('.select-options option:selected').text();
-            this.actions.changSelectValue(sValue, sLabel);
-        }).on('dragstart','.task-item',function(ev){
+        this.el.on('dragstart','.task-item',function(ev){
+            console.log(ev);
             if(that.data.type === 'month' && that.data.remindTaskItemData['isDrag'] !== 0) {
                 let event = ev.originalEvent;
                 $(this).addClass("task-item-draggable");

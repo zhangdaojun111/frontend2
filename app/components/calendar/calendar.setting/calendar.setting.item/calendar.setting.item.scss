@@ -1,17 +1,18 @@
 @import "../../calendar";
+
 .component-setting-menu {
+    .setItemTitle, .img-con {
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        position: relative;
+        top: 3px;
+    }
     .menu-item-title {
         padding-left: 10px;
         padding-top: 5px;
         color: #999999;
-        .setItemTitle{
-            display: inline-block;
-            width: 16px;
-            height:16px;
-            cursor: pointer;
-            box-sizing: border-box;
-            position: relative;
-            top: 3px;
+        .setItemTitle {
             background: url("../../../../assets/images/calendar/calendar-setItemtitle.png");
         }
         .menu-label {
@@ -31,13 +32,7 @@
         overflow: hidden;
         text-overflow: clip;
         .img-con {
-            display: inline-block;
-            width: 16px;
-            height:16px;
             cursor: pointer;
-            box-sizing: border-box;
-            position: relative;
-            top: 3px;
             background: url("../../../../assets/images/calendar/calendar-setItem.png");
         }
     }

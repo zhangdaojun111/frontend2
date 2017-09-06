@@ -191,7 +191,11 @@ let config = {
         //左侧提示
         gridTips: '',
         //是否为双击
-        doubleClick: false
+        doubleClick: false,
+        //是否显示提示
+        isShowTips: true,
+        //是否第一次创建编辑表头
+        firstCreateEditCol: true
     },
     //生成的表头数据
     columnDefs: [],
@@ -437,8 +441,12 @@ let config = {
         bodyCellRender: function (params) {
             if (params.data && params.data.myfooter && params.data.myfooter == "合计") {
                 let textAline = fieldTypeService.textAline( params.colDef["real_type"] )
-                let bgStyle = ' style = "display: block;width: 100%;height: 100%;text-align:' + textAline+';"';
-                let h = '<span' + bgStyle + '><span>' + ( params.value || '' ) + '</span><span/>';
+                let bgStyle = ' style = "display: block;height: 100%;text-align:' + textAline+';"';
+                let val = params.value || '';
+                if( fieldTypeService.numOrText(params.colDef["real_type"])|| params.colDef["real_type"] == fieldTypeService.DECIMAL_TYPE ){
+                    val = dgcService.formatter(val)
+                }
+                let h = '<span' + bgStyle + '><span>' + val + '</span><span/>';
                 return h;
             }
             let myValue = params['value'];//当前单元格数值
@@ -547,9 +555,9 @@ let config = {
 
             //字段类型对其
             let textAline = fieldTypeService.textAline( colDef["real_type"] )
-            let bgStyle = ' style = "display: block;width: 100%;height: 100%;text-align:' + textAline+';"';
+            let bgStyle = ' style = "display: block;padding: 0 8px;height: 100%;text-align:' + textAline+';"';
             if( color != 'transparent' ){
-                bgStyle = ' style = "display: block;width: 100%;height: 100%;background:' + color+';text-align:' + textAline + ';"';
+                bgStyle = ' style = "display: block;padding: 0 8px;height: 100%;background:' + color+';text-align:' + textAline + ';"';
             }
 
             //前端表达式值计算
@@ -930,7 +938,7 @@ let config = {
                 //创建sheet分页
                 this.actions.createSheetTabs( res[2] )
 
-                this.actions.getGridData();
+                // this.actions.getGridData();
                 //按钮点击事件
                 this.actions.onBtnClick();
                 //表级操作数据
@@ -941,8 +949,11 @@ let config = {
                     }
                 }
                 this.data.tableOperationData = temp;
+                //渲染其他组件
+                this.actions.renderAgGrid();
             })
-            HTTP.flush();
+            //请求表单数据
+            this.actions.getGridData();
         },
         //设置表表单、工作流数据
         setPrepareParmas: function (res) {
@@ -986,8 +997,6 @@ let config = {
                         }
                         //赋值
                         this.agGrid.actions.setGridData(d);
-                        //渲染agGrid
-                        this.actions.renderAgGrid();
                     }else {
                         let d = {
                             rowData: this.data.rowData
@@ -1019,8 +1028,6 @@ let config = {
                     }
                     //赋值
                     this.agGrid.actions.setGridData(d);
-                    //渲染agGrid
-                    this.actions.renderAgGrid();
                 }else {
                     let d = {
                         rowData: this.data.rowData
@@ -1085,8 +1092,6 @@ let config = {
                     }
                     //赋值
                     this.agGrid.actions.setGridData(d);
-                    //渲染agGrid
-                    this.actions.renderAgGrid();
                 }else {
                     this.actions.calcSelectData( 'get' );
                     let d = {
@@ -1227,13 +1232,25 @@ let config = {
 
             //个人用户编辑表中的数据时,会发起对应的工作流,不让用户编辑
             if( $event["node"]["data"]["status"] && ( $event["node"]["data"]["status"] == 2 ) && select ){
-                msgBox.alert("该数据正在审批，无法操作。");
+                if( this.data.isShowTips ){
+                    msgBox.alert("数据正在审批，无法操作。");
+                    this.data.isShowTips = false;
+                    setTimeout( ()=>{
+                        this.data.isShowTips = true;
+                    },500 )
+                }
                 $event["node"].setSelected( false,false );
                 return;
             }
             //数据计算cache时,不让用户编辑
             if( $event["node"]["data"]["data_status"] && ( $event["node"]["data"]["data_status"] == 0 ) && select ){
-                msgBox.alert("数据计算中，请稍候");
+                if( this.data.isShowTips ){
+                    msgBox.alert("数据计算中，请稍候");
+                    this.data.isShowTips = false;
+                    setTimeout( ()=>{
+                        this.data.isShowTips = true;
+                    },500 )
+                }
                 $event["node"].setSelected( false,false );
                 return;
             }
@@ -1459,12 +1476,12 @@ let config = {
                 this.actions.getExpertSearchData();
             }
             this.data.firstRender = false;
-            this.hideLoading();
             this.data.showTabs(1);
             //显示提示
             if( this.data.gridTips!='' ){
                 this.el.find( '.grid-tips' )[0].style.display = 'flex';
             }
+            this.hideLoading();
         },
         //触发导出
         onExport: function () {
@@ -1764,7 +1781,20 @@ let config = {
             //编辑模式
             if( this.el.find( '.edit-btn' )[0] ){
                 this.el.find( '.edit-btn' ).on( 'click',()=>{
-                    this.actions.toogleEdit();
+                    if( this.data.firstCreateEditCol ){
+                        this.data.firstCreateEditCol = false;
+                        //创建编辑模式表头
+                        FormService.getStaticData({table_id: this.data.tableId}).then( res=>{
+                            for( let d of res.data ){
+                                this.data.colControlData[d.dfield] = d;
+                            }
+                            this.columnDefsEdit = this.actions.createHeaderColumnDefs( true );
+                            this.actions.toogleEdit();
+                        } )
+                        HTTP.flush();
+                    }else {
+                        this.actions.toogleEdit();
+                    }
                 } )
                 this.el.find( '.edit-btn-cancel' ).on( 'click',()=>{
                     this.actions.onEditSave(true);
@@ -1773,14 +1803,6 @@ let config = {
                     //保存
                     this.actions.onEditSave();
                 } )
-                //创建编辑模式表头
-                FormService.getStaticData({table_id: this.data.tableId}).then( res=>{
-                    for( let d of res.data ){
-                        this.data.colControlData[d.dfield] = d;
-                    }
-                    this.columnDefsEdit = this.actions.createHeaderColumnDefs( true );
-                } )
-                HTTP.flush();
             }
             //点击这里
             if( this.el.find( '.showNormalGrid' )[0] ){
@@ -2041,9 +2063,9 @@ let config = {
             dataTableService.delTableData( json ).then( res=>{
                 if( res.succ ){
                     msgBox.showTips( '删除成功' )
+                    this.data.selectData = [];
                     //批量工作流删除后返回值处理
                     if( json.is_batch == 1 ){
-                        this.actions.getGridData();
                         let arr = [];
                         for( let i of this.data.batchIdList ){
                             if( this.data.deletedIds.indexOf( i )==-1 ){
@@ -2710,7 +2732,7 @@ let config = {
                 defaultMax = true;
             }
             PMAPI.openDialogByIframe( url,{
-                width: w || 1300,
+                width: w || 1400,
                 height: h || 800,
                 title: title,
                 modal:true,
@@ -2758,6 +2780,7 @@ let config = {
     },
     afterRender: function () {
         this.showLoading();
+        try{dgcService.accuracy = window.config.sysConfig.accuracy || 1000;}catch(e){}
         let gridData = {
             columnDefs: this.columnDefs,
             rowData: this.data.rowData,

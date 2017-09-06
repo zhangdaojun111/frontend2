@@ -5,6 +5,7 @@
 import {BiBaseComponent} from '../../bi.base.component';
 import template from './entry.html';
 import './entry.scss';
+import '../../../../assets/scss/bisystem/charts.types.scss';
 import {componentsJson} from './loadFormChart.json';
 
 // 将对象转化为数组

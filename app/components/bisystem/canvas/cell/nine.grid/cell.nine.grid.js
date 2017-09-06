@@ -33,8 +33,6 @@ let config = {
          * @param cellChart 画布块数据(通过父类初始化子类传递进来)
          */
         init(cellChart) {
-            console.log('xxxxxxxxxxxxxxxxxxxxxxxxxx');
-            console.log(cellChart);
             if (cellChart['chart']['data']['rows'].length === 0) {
                 return false;
             }
@@ -50,11 +48,11 @@ let config = {
                 types.push(val);
             });
             console.log(types);
-            Object.keys(cellChart['chart']['yAxis']).forEach(keys => {
+            Object.keys(cellChart['chart']['yAxis']).sort().forEach(keys => {
                 yAxis.push(cellChart['chart']['yAxis'][keys])
             });
 
-            Object.keys(cellChart['chart']['xAxis']).forEach((keys,index) => {
+            Object.keys(cellChart['chart']['xAxis']).sort().forEach((keys,index) => {
                 xAxis.push(cellChart['chart']['xAxis'][keys]);
                 yAxis.forEach((val,yAxisindex) => {
                     legend.push(val+ cellChart['chart']['xAxis'][keys])
@@ -64,9 +62,25 @@ let config = {
             config.data.xAxis = xAxis;
             config.data.yAxis = yAxis;
             config.data.legend = legend;
+        },
+        /**
+         * 主题颜色切换
+         */
+        themeChange(){
+            let theme = this.data.cellChart.chart.theme;
+            if (theme == 'green'){
+                this.el.find('.grid li:last-child div').css('background','#f1c888');
+                this.el.find('.grid li div:last-child').css('background','#33b6ac');
+            }else if(theme == 'grayBlue'){
+                this.el.find('.grid li:last-child div').css('background','#5b95e8');
+                this.el.find('.grid li div:last-child').css('background','#646c9e');
+            }
         }
     },
-    firstAfterRender() {}
+    afterRender() {},
+    firstAfterRender() {
+        this.actions.themeChange();
+    }
 }
 
 export class CellNineGridComponent extends BiBaseComponent {
