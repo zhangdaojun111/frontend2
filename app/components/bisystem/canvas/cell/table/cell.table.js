@@ -10,10 +10,9 @@ let config = {
     template: template,
     data: {
         rows: [],
-        chart: {}
+        chart: {},
     },
     actions: {
-
         init(cellChart) {
             if (cellChart['chart']['single'] === 1) {
                 config.actions.singleTable(cellChart);
@@ -65,12 +64,11 @@ let config = {
 
         }
     },
-    afterRender() {
-
-    }
+    afterRender() {}
 };
 export class CellTableComponent extends BiBaseComponent {
     constructor(cellChart) {
+        console.log(cellChart['chart']);
         config.data.chart = cellChart['chart'] ? cellChart['chart'] : null;
         config.actions.init(cellChart);
         super(config);
