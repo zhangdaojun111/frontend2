@@ -3,6 +3,10 @@ $font_size: 14px;
 $active-bg: #f5f5f5;
 $active-color: #1caeff;
 
+.component-loading-cover{
+    opacity: 0.1;
+}
+
 .canvas-container {
     -moz-user-select: none; /*火狐*/
     -webkit-user-select: none; /*webkit浏览器*/
@@ -10,6 +14,7 @@ $active-color: #1caeff;
     user-select: none;
     width: 100%;
     height: 100%;
+
     .views-header {
         width: 100%;
         height: 50px;

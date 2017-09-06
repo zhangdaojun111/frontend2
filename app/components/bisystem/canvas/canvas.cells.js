@@ -109,7 +109,10 @@ let config = {
 
             // 获取画布块的chart数据
             const res = await canvasCellService.getCellChart({layouts:layouts,query_type:'deep',is_deep:1});
-            let charts = {}
+            //结束加载动画
+            this.hideLoading();
+
+            let charts = {};
             if (res['success'] == 0) {
                 msgbox.alert(res['error']);
             };
@@ -168,7 +171,8 @@ let config = {
     ],
 
     afterRender() {
-
+        //加载动画
+        this.showLoading();
         //加载头部导航
         if(config.data.canvasSingle){
             this.data.views.forEach((val,index) => {

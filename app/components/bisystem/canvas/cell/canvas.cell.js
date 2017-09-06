@@ -49,6 +49,7 @@ let config = {
             this.el.find('.cell').css(this.data.cell.size);
             this.cellTitle = new CanvasCellTitleComponent(this.events.onChange);
             this.append(this.cellTitle, this.el.find('.bread-crumb-nav'));
+
         },
         /**
          * 动态渲染图表
@@ -57,7 +58,6 @@ let config = {
             if (!chart || chart['success'] !== 1) {
                 return false;
             };
-
             const data = {
                 chart: chart['data'],
                 cell: this.data.cell,
