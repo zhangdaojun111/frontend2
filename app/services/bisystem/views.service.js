@@ -42,6 +42,23 @@ export const ViewsService = {
                 reject(res);
             }
         })
-    }
+    },
+
+    /**
+     * 修改文本框数据
+     * @param data 需要发送给服务器的参数
+     */
+    async setEditData(data) {
+        const res = await HTTP.ajaxImmediately({
+            url: '/bi/set_new_richtxt/',
+            data: data,
+            method:'post',
+            traditional: true
+        });
+        return new Promise((resolve, reject) => {
+                resolve(res);
+        })
+    },
+
 
 };
