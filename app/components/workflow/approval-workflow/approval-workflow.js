@@ -359,6 +359,12 @@ let config={
             let J_tooltip=$("#J_tooltip");
             __this.actions.tipsMousemove(pos,J_tooltip,e)
         });
+        Mediator.subscribe("workflow:aggridorform",(res)=>{
+            if(res.record_info.is_batch==1){
+                this.el.find("#workflow-grid").show();
+                this.el.find("#workflow-form").hide();
+            }
+        })
         Mediator.subscribe("workflow:focused", (res) => {
             if(res.length>0){
                 this.el.on('click','#addFollower',()=>{
