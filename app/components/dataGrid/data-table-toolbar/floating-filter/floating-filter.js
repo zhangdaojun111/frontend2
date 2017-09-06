@@ -29,6 +29,7 @@ let config = {
                     this.eFilterInput.style.border = '1px solid #E4E4E4';
                     this.eFilterInput.style.marginBottom = '5px';
                     this.eFilterInput.style.borderRadius = '2px';
+                    this.eFilterInput.style.textIndent = '5px';
                     //人员信息特殊提示
                     if( colInfo == 'person' ){
                         this.eFilterInput.placeholder = '为保证查询正确，请输入完整信息。';
