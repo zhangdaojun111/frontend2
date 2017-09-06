@@ -96,7 +96,6 @@ let config = {
          * @param param
          */
         makeRows: function (param) {
-            console.log(param);
             this.data.allRows = [];
 
             // 获取可配置字段数据
@@ -390,7 +389,7 @@ let config = {
     ],
     afterRender: function () {
         this.el.css({width: '100%', height: "100%"});
-        this.el.find('iframe').css("width", "100%");
+        // this.el.find('iframe').css("width", "100%");
 
         // 用于在系统的其他地方打开日历设置
         if (window.config.table_id) {

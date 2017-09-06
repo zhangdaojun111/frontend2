@@ -13,67 +13,68 @@ $btn_width: 16px;
 $font_size: 12px;
 
 .bi-container {
-  position: fixed;
-  left:250px;
-  top:0;
-  height:100%;
-  width: calc(100% - 250px);
+    position: fixed;
+    left: 250px;
+    top: 0;
+    height: 100%;
+    width: calc(100% - 250px);
 }
 
 //左侧导航
-.aside{
-  z-index: 99;
-  position: fixed;
-  left:0;
-  top:0;
-  width: 250px;
-  height: 100%;
-  background-color: $aside-bg;
-  //新建编辑按钮
-  .user{
-    padding: 20px 20px 30px ;
-    display: inline-block;
-    a{
-      display: block;
-      width: 210px;
-      height: 17px;
-      line-height: 17px;
-      text-align: center;
-      margin-top: 10px;
-      color: #ffffff;
-      padding: 8px 0;
-      text-decoration: none;
-      font-size: 12px;
-      &.add-chart-btn{
-        background-color: $aside-a;
-      }
-      &.edit-view-btn{
-        background-color: $aside-a-last;
-      }
+.aside {
+    z-index: 99;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    background-color: $aside-bg;
+    //新建编辑按钮
+    .user {
+        padding: 20px 20px 30px;
+        display: inline-block;
+        a {
+            display: block;
+            width: 210px;
+            height: 17px;
+            line-height: 17px;
+            text-align: center;
+            margin-top: 10px;
+            color: #ffffff;
+            padding: 8px 0;
+            text-decoration: none;
+            font-size: 12px;
+            &.add-chart-btn {
+                background-color: $aside-a;
+            }
+            &.edit-view-btn {
+                background-color: $aside-a-last;
+            }
+        }
+        .active {
+            box-shadow: 0 0 20px $active inset;
+        }
     }
-    .active{
-      box-shadow: 0 0 20px $active inset;
-    }
-  }
-  //搜索框及以下
-  .charts-container{
-    width: 100%;
-    height: calc(100% - 139px);
-    display: inline-block;
-    .filter{
-      padding: 20px 20px;
-      background-color: $charts-container-p;
-      .filter-match{
-        width: 168px;
-        background-color: $filter-match-bg;
-        border: 1px solid $filter-match-bg;
-        padding: 7px 15px;
-        outline: none;
-        line-height: inherit;
-      }
-    }
-    .charts{
-      height: calc(100% - 68px);
-      }
+    //搜索框及以下
+    .charts-container {
+        width: 100%;
+        height: calc(100% - 139px);
+        display: inline-block;
+        .filter {
+            padding: 20px 20px;
+            background-color: $charts-container-p;
+            .filter-match {
+                width: 168px;
+                background-color: $filter-match-bg;
+                border: 1px solid $filter-match-bg;
+                padding: 7px 15px;
+                outline: none;
+                line-height: inherit;
+            }
+        }
+        .charts {
+            height: calc(100% - 68px);
+            overflow: auto;
+        }
     }
 }
