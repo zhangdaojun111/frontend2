@@ -549,12 +549,14 @@ let config = {
                 this.append(new CalendarWeek(this.data.weekDataList), this.el.find(".calendar-main-content"));
             } else if(this.data.calendarContent === 'day') {
                 this.append(new CalendarDay(this.data.dayDataList), this.el.find(".calendar-main-content"));
+            } else if(this.data.calendarContent === 'schedule') {
+                this.actions.makeScheduleData(this.data.from_date, this.data.to_date);
             }
             this.actions.getDataCount();
         },
 
         workflowMission: function(){
-            if( this.data.isWorkflowDataReady && this.data.calendarContent !== 'schedule'){
+            if( this.data.isWorkflowDataReady){
                 this.actions.monthDataTogether();
             }
         }
@@ -581,6 +583,7 @@ let config = {
 
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.data.workflowData = data;
+            //this.hideLoading();
             this.data.isWorkflowDataReady = true;
             this.actions.workflowMission();
         });
@@ -602,6 +605,7 @@ let config = {
                         to_date: this.data.to_date,
                         cancel_fields: JSON.stringify(this.data.cancel_fields)
                     });
+                    CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
                     //this.actions.makeScheduleData(this.data.from_date, this.data.to_date);
                 }else {
                     this.actions.changeMainView(this.data.calendarContent);
@@ -611,6 +615,7 @@ let config = {
 
         Mediator.on('Calendar: tool', data => {
             if(data.toolMethod === 'refresh') {
+                CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
                 this.data.cancel_fields = data['data'];
                 if(this.data.calendarContent !== 'schedule') {
                     this.actions.getCalendarData({
@@ -620,12 +625,12 @@ let config = {
                     },'calendar');
                 } else {
                     this.actions.getCalendarData({
-                        from_date: this.data.from_date,
-                        to_date: this.data.to_date,
+                        from_date: this.data.scheduleStart,
+                        to_date: this.data.scheduleEnd,
                         cancel_fields: JSON.stringify(this.data.cancel_fields)
                     });
                 }
-                CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+
             }else if(data.toolMethod === 'export') {
                 PMAPI.openDialogByComponent(CalendarExport, {
                     width: '350',
@@ -672,6 +677,7 @@ let config = {
                 to_date: data.to_date,
                 cancel_fields: JSON.stringify(this.data.cancel_fields)
             },'schedule');
+            CalendarWorkflowData.getWorkflowData(data.from_date, data.to_date);
             that.data.scheduleStart = data.from_date;
             that.data.scheduleEnd = data.to_date;
         });
