@@ -28,7 +28,6 @@ let config ={
         getData:function () {
             let that = this;
             UserInfoService.getSearchHistory().done((result) => {
-                console.log(result);
                 if(result.success === 1){
                     that.data.historyList = $.parseJSON(result.data);
                     that.actions.initList();

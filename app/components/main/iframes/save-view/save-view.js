@@ -23,6 +23,7 @@ let config = {
         getUserViewList:function () {
             let that = this;
             TabService.getFavoriteList().done((result) => {
+                console.log(result);
                 if(result.success === 1 ){
                     let tempList = result.data;
                     for (let k in tempList){
@@ -169,7 +170,7 @@ let config = {
             })
         },
         deleteViewByName:function(name){
-            
+
         }
     },
     binds:[
