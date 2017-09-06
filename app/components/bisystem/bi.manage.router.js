@@ -4,7 +4,6 @@
 import {Router} from 'backbone';
 import {CanvasCellsComponent} from './canvas/canvas.cells';
 import {ViewsEditComponent} from "./views/views";
-import {FormBaseComponent} from './forms/base/base';
 import {FormEntryComponent} from './forms/entry/entry';
 import {componentsJson} from './forms/entry/loadFormChart.json';
 import Mediator from '../../lib/mediator';

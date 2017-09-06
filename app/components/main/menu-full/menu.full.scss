@@ -14,16 +14,18 @@
             border: 0 none;
             outline: none;
             display: block;
-            color: #fff;
+            color: #999;
             float: left;
             margin-left: 30px;
             width: calc(100% - 40px);
+            &::-webkit-input-placeholder{
+                color: #666;
+            }
         }
 
         &.edit {
             display: none;
         }
-
     }
 
     &.mini {
@@ -114,7 +116,7 @@
         .root {
             .menu-full-item {
                 .row {
-                    padding: 12px 0 12px 20px;
+                    padding: 12px 0 12px 12px;
                     line-height: 16px;
                     cursor: pointer;
                     //font-size: 14px;

@@ -119,13 +119,6 @@ let config = {
                 return item.field_id;
             });
             this.data.items = items_Id;
-            // for(let items of items_Id){
-            //     if (this.data.cancel_fields.indexOf(items) !== -1) {
-            //         IsChecked = false;
-            //         break;
-            //     }
-            //     IsChecked = true;
-            // }
             for (let i = 0; i < items_Id.length; i++) {
                 if (this.data.cancel_fields.indexOf(items_Id[i]) !== -1) {
                     IsChecked = false;
@@ -178,7 +171,7 @@ let config = {
             callback: function () {
                 this.el.find(".float-button-group").css({
                     "display": "block",
-                    "top": this.el.find(".float-button-group-show").offset().top - 85
+                    "top": this.el.find(".float-button-group-show").offset().top - 80
                 });
             }
         },

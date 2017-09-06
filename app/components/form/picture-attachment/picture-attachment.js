@@ -5,7 +5,8 @@
 
 import template from './picture-attachment.html';
 let css = `.imgList {
-    width: 20%;
+    min-width: 20%;
+    width: auto;
     height: 100%;
     //border: 1px solid #d4d4d4;
     float: left;
@@ -25,9 +26,14 @@ let css = `.imgList {
     border-bottom: 1px solid #F2F2F2;
 }
 .imgList div a {
+    outline-style:none;
     display: inline-block;
     margin-left: 5px;
-    color: blueviolet;
+    // background: url(../../../assets/images/form/icon-form.png);
+    // // background-position: -21px -85px;
+    // width: 16px;
+    // height: 16px;
+  
 }
 .select-img a{
     margin-right: 20px;
@@ -35,7 +41,7 @@ let css = `.imgList {
 }
 .imgContain {
     position: relative;
-    width: 80%;
+    width: 100%;
     height: 100%;
     border: 1px solid #d4d4d4;
     float: left;

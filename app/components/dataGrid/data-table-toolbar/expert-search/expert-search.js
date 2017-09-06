@@ -76,8 +76,11 @@ let config = {
                 this.data.commonQuery = res.rows
                 this.el.find('.common-search-item').remove();
                 this.data.commonQuery.forEach((item)=> {
-                    this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
+                    this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete icon-expert-error-msg"></span></li>`);
                 })
+                if(this.data.commonQuery.length != 0){
+                    this.el.find('.common-search-compile').css('display','block');
+                }
             } );
             HTTP.flush();
         },
@@ -280,7 +283,7 @@ let config = {
         //渲染常用查询按钮
         renderQueryItem: function(data){
             data.forEach((item)=> {
-                this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
+                this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete icon-expert-error-msg"></span></li>`);
             })
         },
         //保存临时常用查询
@@ -313,9 +316,7 @@ let config = {
                     //     name:name,
                     //     queryParams:JSON.stringify(this.data.searchInputList)
                     // });
-                    if(this.data.commonQuery.length != 0){
-                        this.el.find('.common-search-compile').css('display','block');
-                    }
+
                     this.name = name;
                     // Mediator.on('renderQueryItem:itemData',data =>{
                     //     this.actions.renderQueryItem(data);
@@ -341,10 +342,15 @@ let config = {
                             this.data.commonQuery.splice(i,1);
                         }
                     }
+                    if(this.data.commonQuery.length == 0){
+                        this.el.find('.common-search-compile').css('display','none');
+                        this.el.find('.common-search-compile').html(`<span class="img icon-expert-edit"></span>`);
+                        this.itemDeleteChecked = false;
+                    }
                     this.data.deleteCommonQuery = true;
                     if(this.isEdit && value) {
                         this.actions.saveCommonQuery(value);
-                        this.el.find('.common-search-compile').html(`<span class="img"></span>`);
+                        this.el.find('.common-search-compile').html(`<span class="img icon-expert-edit"></span>`);
                         this.itemDeleteChecked = !this.itemDeleteChecked;
                         this.isEdit = false;
                     }
@@ -372,7 +378,7 @@ let config = {
                 this.el.find('.common-search-compile').css('display','none')
             } else {
                 this.data.commonQuery.forEach((item)=> {
-                    this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete"></span></li>`);
+                    this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete icon-expert-error-msg"></span></li>`);
                 })
             }
             this.actions.rendSearchItem();
@@ -434,7 +440,7 @@ let config = {
                     _this.itemDeleteChecked = !_this.itemDeleteChecked;
                 } else {
                     _this.el.find('.common-search-list').find('.item-delete').css('display','none');
-                    _this.el.find('.common-search-compile').html(`<span class="img"></span>`);
+                    _this.el.find('.common-search-compile').html(`<span class="img icon-expert-edit"></span>`);
                     _this.itemDeleteChecked = !_this.itemDeleteChecked;
                     _this.isEdit = false;
                 }

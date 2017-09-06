@@ -104,8 +104,8 @@ export const dgcService = {
     //分组列
     groupCol: { headerName: '分组', field: 'group' ,pinned:'left',hide:true,suppressSorting: true,suppressMovable:true,cellRenderer: 'group', suppressMenu: true, tooltipField:'group',suppressFilter: true},
     //在途状态
-    in_process_state: { headerName: '状态',field:'operation', width: 120,suppressFilter: true, suppressSorting: true,suppressMenu: true,minWidth: 50,cellRenderer: (param)=>{
-        if( param.data['isFooter'] ){
+    in_process_state: { headerName: '状态',field:'operation',hide:false, width: 120,suppressFilter: true, suppressSorting: true,suppressMenu: true,minWidth: 50,cellRenderer: (param)=>{
+        if( param.data['myfooter'] ){
             return '';
         }
         let type = param.data.type;
@@ -412,7 +412,8 @@ export const dgcService = {
             editFromCorrespondence: ['correspondence-check','float-search-btn','expert-search-btn','group-btn','grid-export-btn','custom-column-btn','grid-auto-width','correspondence-save'],
             in_process: ['float-search-btn','refresh-btn','grid-new-window'],
             keyword: ['keyword-tips','custom-column-btn','grid-new-window'],
-            deleteHanding: ['delete-tips','grid-del-btn','custom-column-btn']
+            deleteHanding: ['delete-tips','grid-del-btn','custom-column-btn'],
+            newFormCount: ['custom-column-btn','custom-column-btn'],
         }
         return obj[viewMode];
     },

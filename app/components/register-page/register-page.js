@@ -1,6 +1,6 @@
 /**
  * @author zhaoyan
- * 打开注册界面
+ * 注册界面
  */
 
 import Component from '../../lib/component';
@@ -11,7 +11,6 @@ import './register-page.scss';
 import template from './register-page.html';
 import {UserInfoService} from '../../services/main/userInfoService';
 import msgbox from '../../lib/msgbox';
-
 
 let config ={
     template:template,
@@ -64,6 +63,7 @@ let config ={
             }
 
             let $btn = this.el.find('.get-code');
+            let that = this;
             if (this.data.timer === 0) {
                 $btn.removeAttr('disable');
                 $btn.html("获取验证码");
@@ -75,7 +75,7 @@ let config ={
                 this.data.timer--;
             }
             setTimeout(() => {
-                this.actions.getVerificationCode(event);
+                that.actions.getVerificationCode(event);
             },1000)
         },
         doInvestorsRegister:function () {
@@ -123,11 +123,9 @@ let config ={
                     $(window).attr('location','/login');
                 }else{
                     msgbox.alert("注册失败");
-                    return;
                 }
             }).fail((err) => {
                 msgbox.alert("注册失败");
-                return;
             })
         },
         checkForm:function (event,tip,type) {
@@ -185,6 +183,7 @@ let config ={
                         case 'tel':
                             if (this.actions.checkTel(value)) {
                                 json["tel"] = value;
+                                let that = this;
                                 UserInfoService.register(json).done((result)=> {
                                     if(result.success === 1){
                                         //检测手机号未注册
@@ -194,7 +193,7 @@ let config ={
                                     }else{
                                         event.target.style.borderColor = 'red';
                                         event.target.nextElementSibling.textContent = result.error;
-                                        this.el.find('button.get-code').attr('disabled',true);
+                                        that.el.find('button.get-code').attr('disabled',true);
                                     }
                                 })
                             }else{
@@ -239,36 +238,131 @@ let config ={
             msgbox.alert("管理员注册暂未开放");
         }
     },
+    binds:[
+        {
+            event:'click',
+            selector:'div.investors-btn',
+            callback:function () {
+                this.actions.showInvestorsLogin();
+            }
+        },
+        {
+            event:'click',
+            selector:'div.manager-btn',
+            callback:function () {
+                this.actions.showManagerLogin();
+            }
+        },
+        {
+            event:'click',
+            selector:'.login-btn',
+            callback:function () {
+                this.actions.toLoginPage();
+            }
+        },
+        {
+            event:'click',
+            selector:'.register-page-btn',
+            callback:function () {
+                this.actions.postRegister();
+            }
+        },
+        {
+            event:'click',
+            selector:'.get-code',
+            callback:function (target,event) {
+                this.actions.getVerificationCode(event);
+            }
+        },
+        {
+            event:'input',
+            selector:'input.tel',
+            callback:function (target,event) {
+                this.data.telephone = event.target.value;
+            }
+        },
+        {
+            event:'blur',
+            selector:'input.username',
+            callback:function (target,event) {
+                this.actions.checkForm(event,"请填写用户名","username");
+            }
+        },
+        {
+            event:'blur',
+            selector:'input.password',
+            callback:function (target,event) {
+                this.actions.checkForm(event,"请填写密码","password");
+            }
+        },
+        {
+            event:'blur',
+            selector:'input.name',
+            callback:function (target,event) {
+                this.actions.checkForm(event,"请填写姓名","name");
+            }
+        },
+        {
+            event:'blur',
+            selector:'input.email',
+            callback:function (target,event) {
+                this.actions.checkForm(event,"请填写邮箱地址","email");
+            }
+        },
+        {
+            event:'blur',
+            selector:'input.tel',
+            callback:function(target,event){
+                this.actions.checkForm(event,"请填写手机号码","tel");
+            }
+        },
+        {
+            event:'blur',
+            selector:'input.verification-code',
+            callback:function (target,event) {
+                this.actions.checkVerification(event,"请填写验证码","verification-code");
+            }
+        },
+        {
+            event:'click',
+            selector:'.register-btn',
+            callback:_.debounce(function(){
+                this.actions.postRegister();
+            },500)
+        }
+
+    ],
+
     afterRender:function () {
         this.data.status = 0;       //默认状态为0，投资人注册
 
-        this.el.on('click','div.investors-btn',() => {
-            this.actions.showInvestorsLogin();
-        }).on('click','div.manager-btn',() => {
-            this.actions.showManagerLogin();
-        }).on('click','.login-btn',() => {
-            this.actions.toLoginPage();
-        }).on('click','.register-page-btn',() => {
-            this.actions.postRegister();
-        }).on('click','.get-code',(event) => {
-            this.actions.getVerificationCode(event);
-        }).on('input','input.tel',(event) => {
-            this.data.telephone = event.target.value;
-        }).on("blur","input.username",(event) => {
-            this.actions.checkForm(event,"请填写用户名","username");
-        }).on("blur","input.password",(event) => {
-            this.actions.checkForm(event,"请填写密码","password");
-        }).on("blur","input.name",(event) => {
-            this.actions.checkForm(event,"请填写姓名","name");
-        }).on("blur","input.email",(event) => {
-            this.actions.checkForm(event,"请填写邮箱地址","email");
-        }).on("blur","input.tel",(event) => {
-            this.actions.checkForm(event,"请填写手机号码","tel");
-        }).on("blur","input.verification-code",(event) => {
-            this.actions.checkVerification(event,"请填写验证码","verification-code");
-        }).on("click",".register-btn",_.debounce(() => {
-            this.actions.postRegister();
-        },500));
+        // this.el.on('click','div.investors-btn',() => {
+        //     this.actions.showInvestorsLogin();
+        // }).on('click','div.manager-btn',() => {
+        //     this.actions.showManagerLogin();
+        // }).on('click','.login-btn',() => {
+        //     this.actions.toLoginPage();
+        // }).on('click','.register-page-btn',() => {
+        //     this.actions.postRegister();
+        // }).on('click','.get-code',(event) => {
+        //     this.actions.getVerificationCode(event);
+        // }).on('input','input.tel',(event) => {
+        //     this.data.telephone = event.target.value;
+        // }).on("blur","input.username",(event) => {
+        //     this.actions.checkForm(event,"请填写用户名","username");
+        // }).on("blur","input.password",(event) => {
+        //     this.actions.checkForm(event,"请填写密码","password");
+        // }).on("blur","input.name",(event) => {
+        //     this.actions.checkForm(event,"请填写姓名","name");
+        // }).on("blur","input.email",(event) => {
+        //     this.actions.checkForm(event,"请填写邮箱地址","email");
+        // }).on("blur","input.tel",(event) => {
+        //     this.actions.checkForm(event,"请填写手机号码","tel");
+        // }).on("blur","input.verification-code",(event) => {
+        //     this.actions.checkVerification(event,"请填写验证码","verification-code");
+        // }).on("click",".register-btn",_.debounce(() => {
+        //     this.actions.postRegister();
+        // },500));
     },
     beforeDestory:function () {
 

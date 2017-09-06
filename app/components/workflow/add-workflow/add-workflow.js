@@ -2,7 +2,6 @@
  * @author qiumaoyun
  * 新增、查看、编辑工作流
  */
-
 import Component from '../../../lib/component';
 import template from './add-workflow.html';
 import '../approval-workflow/approval-workflow.scss';
@@ -14,11 +13,10 @@ import {FormService} from "../../../services/formService/formService"
 import msgBox from '../../../lib/msgbox';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import SettingPrint from '../../form/setting-print/setting-print'
-
+import FormEntrys from "../../../entrys/form";
 let config={
     template: template,
     data:{
-
     },
     actions:{
         async printSetting(){
@@ -75,14 +73,37 @@ let config={
         this.el.find('#subAddworkflow').on('click',()=>{
             Mediator.publish('workflow:submit', 1);
         });
-        this.el.find('#subAddworkflow').on('click',()=>{
-            Mediator.publish('workflow:submit', 1);
-        });
         this.el.on('click','#toEdit',()=>{
-            location.href=location.href.replace(/=view/,'=edit').replace(/is_view=1/,'is_view=0');
+            // location.href=location.href.replace(/=view/,'=edit').replace(/is_view=1/,'is_view=0');
+            let table_id =　location.href.split('=')[1].split('&')[0];
+            Mediator.publish('workflow:changeToEdit',table_id);
         });
         this.el.find('#print').on('click',()=>{
             this.actions.printSetting();
+        });
+        this.el.on('click', '#addFollower', () => {
+            PMAPI.openDialogByIframe(`/iframe/addfocus/`, {
+                width: 800,
+                height: 600,
+                title: `添加关注人`,
+                modal: true
+            },{
+                users:this.data.user
+            }).then(res => {
+                if (!res.onlyclose) {
+                    let nameArr = [],
+                        idArr = [],
+                        htmlStr = [];
+                    for (var k in res) {
+                        nameArr.push(res[k]);
+                        htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
+                        idArr.push(k);
+                    }
+                    this.el.find('#addFollowerList').html(htmlStr);
+                    Mediator.publish('workflow:focus-users', idArr);
+                    this.data.user=res;
+                }
+            })
         });
     }
 };
@@ -91,7 +112,6 @@ class AddWorkflow extends Component{
         super(config,data);
     }
 }
-
 let component = new AddWorkflow();
 let el = $('#add-wf');
 component.render(el);

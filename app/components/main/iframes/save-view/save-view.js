@@ -16,8 +16,8 @@ let config = {
     template:template,
     data:{
         favoriteList:[],
-        currentIframesList:[],
-        newHash:[],
+        currentIframesList:[],      //当前打开的iframe的列表
+        newHash:[],                 //按配置打开iframes
     },
     actions:{
         getUserViewList:function () {
@@ -167,17 +167,39 @@ let config = {
                 }
             })
         }
-
     },
+    binds:[
+        {
+            event:'click',
+            selector:'.save-btn',
+            callback: _.debounce( function () {
+                this.actions.saveFavorite();
+            },500)
+        },
+        {
+            event:'click',
+            selector:'span.list-name',
+            callback:function (target,event) {
+                this.actions.displayView(event);
+            }
+        },
+        {
+            event:'click',
+            selector:'i.delete-icon',
+            callback:function (target,event) {
+                this.actions.deleteView(event);
+            }
+        }
+    ],
     afterRender:function () {
         this.actions.getUserViewList();
-        this.el.on("click",".save-btn",_.debounce(() => {
-            this.actions.saveFavorite();
-        },1000)).on("click","span.list-name",(event) => {
-            this.actions.displayView(event);
-        }).on("click","i.delete-icon",(event) => {
-            this.actions.deleteView(event);
-        })
+        // this.el.on("click",".save-btn",_.debounce(() => {
+        //     this.actions.saveFavorite();
+        // },1000)).on("click","span.list-name",(event) => {
+        //     this.actions.displayView(event);
+        // }).on("click","i.delete-icon",(event) => {
+        //     this.actions.deleteView(event);
+        // })
     },
     beforeDestory:function () {
 

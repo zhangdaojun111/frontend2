@@ -81,7 +81,7 @@ class Component {
             let that = this;
             this.binds.forEach((item) => {
                 this.el.on(item.event, item.selector, function (event) {
-                    item.callback.call(that, this, event);
+                    return item.callback.call(that, this, event);
                 });
             })
         }
@@ -206,7 +206,7 @@ class Component {
         this.loadingTarget.children().addClass('component-filter-blur');
 
         this.loadingOverlay = $('<div class="component-loading-cover">').appendTo(this.loadingTarget);
-        let loadingHtml = `<div class='component-loading-box'><div class ="dot1"></div><div class ="dot2"></div></div>`;
+        let loadingHtml = `<div class='component-loading-box'><div class ="dot1"></div><div class ="dot2"></div><div class ="dot3"></div><div class ="dot4"></div><div class ="dot5"></div></div>`;
         this.loadingEffectBox = $(loadingHtml).appendTo(this.loadingTarget);
 
         this.loadingEffectBox.css({

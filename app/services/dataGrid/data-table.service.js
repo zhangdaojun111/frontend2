@@ -89,6 +89,10 @@ export const dataTableService = {
     setPermData: function ( data ) {
         return HTTP.post( 'user_perms',data )
     },
+    //请求帮助文档信息
+    getHelpData: function ( data ) {
+        return HTTP.post( 'get_help_data',data )
+    },
     //请求附件数据
     getAttachmentList(json){
         return HTTP.post('query_attachment_list',json);
@@ -115,6 +119,10 @@ export const dataTableService = {
         }
         let imgNum = 0;
         return {imgSelect:imgSelect,imgData:imgData,imgTotal:imgTotal,imgNum:imgNum};
+    },
+    //获取表单新增统计表数据
+    getNewFormCountData: function ( data ) {
+        return HTTP.postImmediately( '/get_detailed_data/',data )
     },
     //获取文件名后缀
     getFileExtension (filename) {

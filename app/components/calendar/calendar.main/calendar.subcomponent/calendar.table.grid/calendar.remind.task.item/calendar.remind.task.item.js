@@ -66,11 +66,11 @@ let config = {
             CalendarRemind.data.remindTime = this.data.remindTaskItemData.time.substr(11,5);
             CalendarRemind.data.remindRealId = this.data.remindTaskItemData.real_id.substr(2,24);
             PMAPI.openDialogByComponent(CalendarRemind, {
-                width: '1000',
-                height: '600',
+                width: '1200',
+                height: '640',
                 title: '查看',
                 modal: true,
-                customSize: true,
+                //customSize: true,
             }).then(data => {
                 console.log(data);
             });
@@ -186,6 +186,9 @@ class CalendarRemindTaskItem extends Component {
                 config.data.isNone = true;
             }
         }else{
+            if(config.data.remindTaskData === undefined) {
+                MSG.alert('undefined!该表未设置代表字段');
+            }
             if(config.data.remindTaskData['selectLabel']) {
                 config.data.isFinishedTask = true;
             } else {

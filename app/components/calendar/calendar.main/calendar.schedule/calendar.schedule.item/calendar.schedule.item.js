@@ -31,7 +31,6 @@ let config = {
 
     },
     afterRender: function() {
-        console.log(this.data.dayScheduleList);
         this.data.dayScheduleList.forEach(item => {
             this.append(new CalendarRemindTaskItem({data: item, type: 'schedule'}), this.el.find('.day-schedule-list'));
 

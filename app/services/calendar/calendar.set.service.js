@@ -30,7 +30,7 @@ export const CalendarSetService = {
                 this.menu = res['menuList'];
                 return res;
             } else {
-                MSG.alert('获取数据失败');
+                MSG.showTips('获取数据失败');
             }
         });
         HTTP.flush();
@@ -98,7 +98,7 @@ export const CalendarSetService = {
                 Mediator.emit('CalendarSetService: getColumnList', res['rows']);
                 return res;
             } else {
-                MSG.alert('获取数据失败');
+                MSG.showTips('获取数据失败');
             }
         });
         HTTP.flush();
@@ -119,7 +119,7 @@ export const CalendarSetService = {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                MSG.alert('获取数据失败');
+                MSG.showTips('获取数据失败');
             }
         });
         HTTP.flush();
@@ -135,7 +135,7 @@ export const CalendarSetService = {
             if(res['success'] === 1) {
                 return res;
             } else {
-                MSG.alert('获取数据失败');
+                MSG.showTips('获取数据失败');
             }
         });
         HTTP.flush();
@@ -158,7 +158,7 @@ export const CalendarSetService = {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;
             } else {
-                MSG.alert('获取数据失败');
+                MSG.showTips('获取数据失败');
             }
         });
         HTTP.flush();
