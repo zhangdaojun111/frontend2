@@ -130,9 +130,11 @@ window.addEventListener('message', function (event) {
                 break;
             case PMENUM.close_dialog:
                 if (dialogHash[data.key].comp) {
+                    // 弹出框是组件
+                    dialogHash[data.key].element.erdsDialog('destroy').remove();
                     dialogHash[data.key].comp.destroySelf();
-                }
-                if (dialogHash[data.key].element) {
+                } else {
+                    // 弹出框是iframe
                     let iframe = dialogHash[data.key].element.find('iframe');
                     if (iframe.length) {
                         iframe = iframe[0];
@@ -140,9 +142,8 @@ window.addEventListener('message', function (event) {
                             $(iframe.contentWindow).trigger('iframe.close');
                         }
                     }
-                    dialogHash[data.key].element.remove();
+                    dialogHash[data.key].element.erdsDialog('destroy').remove();
                 }
-                dialogHash[data.key].element.erdsDialog('destroy').remove();
                 PMAPI.sendToChild(dialogHash[data.key].iframe, {
                     type: PMENUM.recieve_data,
                     key: data.key,
