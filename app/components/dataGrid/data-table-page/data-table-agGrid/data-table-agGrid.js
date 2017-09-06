@@ -2240,7 +2240,6 @@ let config = {
                             inCheck = true;
                         } else {
                             for(let item of res.rows) {
-                                debugger
                                 if (item.name == this.data.filterParam['common_filter_name']) {
                                     inCheck = false ;
                                 }
