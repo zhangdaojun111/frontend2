@@ -7,6 +7,7 @@
     <script>
         window.config = {
             is_admin: {{ is_admin | safe }},
+            img_url: '{{ config.img_url | safe }}',
         bi_views: {{ bi_views|safe }},
         charts: {{ bi_setting|safe }},
 //        self: {{self|safe}},
@@ -17,7 +18,7 @@
 </head>
 <body>
 <div id="aside-container"></div>
-<div id="route-outlet" class="bi-container"></div>
+<div id="route-outlet" class="bi-container bi-component-container"></div>
 </body>
 {% ifequal config.window_type 'develop'%}
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>

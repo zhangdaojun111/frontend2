@@ -90,7 +90,7 @@ let config = {
                 {
                     title: '导出',
                     width: '400',
-                    height: '440',
+                    height: '460',
                     modal: true,
                 },
             );

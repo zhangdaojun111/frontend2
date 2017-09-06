@@ -8,7 +8,7 @@ import './leftContent.finished.scss';
 import {PMAPI} from '../../../../lib/postmsg';
 import {CalendarService} from '../../../../services/calendar/calendar.service';
 import Mediator from '../../../../lib/mediator';
-
+// import {config as viewDialogConfig} from "./test/test";
 let config = {
     template: template,
     data: {},
@@ -24,7 +24,16 @@ let config = {
                     height: '800',
                     modal: true,
                     customSize: true,
-                })
+                });
+            // viewDialogConfig.data.view = this.data;
+            // const res = PMAPI.openDialogByComponent(viewDialogConfig,{
+            //     width: 348,
+            //     height: 217,
+            //     title: '编辑视图'
+            // });
+            // if (res['name']) {
+            // }
+            // return false;
         }
     },
     events: {

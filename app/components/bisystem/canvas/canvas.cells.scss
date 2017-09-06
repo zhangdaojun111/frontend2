@@ -10,22 +10,23 @@ $active-color: #1caeff;
     user-select: none;
     width: 100%;
     height: 100%;
-    .views-header{
+    .views-header {
         width: 100%;
         height: 50px;
         font-size: $font_size;
         background-color: #374157;
-        .nav-tabs{
-            float:left;
-            height:50px;
+        .nav-tabs {
+            float: left;
+            height: 50px;
             white-space: nowrap;
-            background-color: #ffffff;
             border-bottom: solid 1px #eeeeee;
-            overflow: hidden;
-            div{
+            width: calc(100% - 400px);
+            overflow: auto;
+            background-color: #374157;
+            div {
                 display: inline-block;
             }
-            a{
+            a {
                 text-decoration: none;
                 padding: 0 25px;
                 position: relative;
@@ -39,8 +40,8 @@ $active-color: #1caeff;
                 border-left: solid 1px #556574;
                 color: #ffffff;
             }
-            .active{
-                &::after{
+            .active {
+                &::after {
                     content: '';
                     position: absolute;
                     bottom: 0;
@@ -52,14 +53,14 @@ $active-color: #1caeff;
             }
         }
     }
-    .views-header2{
+    .views-header2 {
         width: 100%;
         height: 50px;
         background-color: $active-bg;
     }
-    .views-btn-group{
-        float:right;
-        a{
+    .views-btn-group {
+        float: right;
+        a {
             text-decoration: none;
             padding: 0 25px;
             position: relative;
@@ -72,31 +73,32 @@ $active-color: #1caeff;
             color: #ffffff;
             background-color: #3e4a63;
             border-left: solid 1px #556574;
-            &:hover{
+            &:hover {
                 background-color: #374157;
             }
         }
     }
-    &.manage{
+    &.manage {
         margin: 0px 0 0 250px;
     }
 }
 
 .cells-container {
     position: absolute;
-    width:100%;
+    width: 100%;
     height: calc(100% - 51px);
     overflow: auto;
     &.client {
-        background:$canvasCellsBg;
+        background: $canvasCellsBg;
     }
 
 }
-.cells{
+
+.cells {
     width: 100%;
     height: 100%;
-    position:relative;
-    .editpage{
+    position: relative;
+    .editpage {
         position: fixed;
         bottom: 10px;
         z-index: 99999;
@@ -104,32 +106,32 @@ $active-color: #1caeff;
         right: 25px;
         //display: none;
     }
-      //单页 多页 按钮跳转
-      .switch-button{
+    //单页 多页 按钮跳转
+    .switch-button {
         position: fixed;
         bottom: 10px;
         z-index: 999999;
         text-align: center;
         right: 25px;
-        .mat-fab{
-          text-decoration: none;
-          min-width: 0;
-          border-radius: 50%;
-          border: none;
-          background-color: #ffd740;
-          color: rgba(0, 0, 0, .87);
-          width: 56px;
-          height: 56px;
-          line-height: 56px;
-          display: inline-block;
-          box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+        .mat-fab {
+            text-decoration: none;
+            min-width: 0;
+            border-radius: 50%;
+            border: none;
+            background-color: #ffd740;
+            color: rgba(0, 0, 0, .87);
+            width: 56px;
+            height: 56px;
+            line-height: 56px;
+            display: inline-block;
+            box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2), 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12);
         }
-        .mat-fab:hover{
-          color: #0088FF;
+        .mat-fab:hover {
+            color: #337ab7;
         }
-      }
-      .singlepage{
+    }
+    .singlepage {
         right: 90px;
-      }
+    }
 }
 

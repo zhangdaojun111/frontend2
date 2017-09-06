@@ -8,38 +8,52 @@ import {ChartsComponent} from './charts/charts';
 let config = {
     template: template,
     data:{
-        charts:window.config.charts,
-        chart_id:"",
+        charts:window.config.charts,//原始数据
+        chart_id:"",//列表对应id
     },
     actions:{
-        reload() {
-            this.reload();
+        /**
+         * 获取单个chart数据
+         * @param index = this.data.charts[index]
+         * @returns { "assortment":  "funnel", "id": 1094, "name": "图表名字"}
+         */
+        getChart(index) {
+            let chart = this.data.charts[index];
+            return chart;
+        },
+        /**
+         *模糊匹配查询
+         */
+        searchItems(query) {
+            this.el.find('.charts-items li').hide();
+            this.el.find('.charts-items li').each(function () {
+                let chartVal = $(this).find('.item').text();
+                if(chartVal.indexOf(query) !== -1){
+                    $(this).show();
+                }
+            })
         }
     },
-
+    binds:[
+        {
+        event: 'input',
+        selector: '.aside .filter-match',
+        callback: _.debounce(function (context,event) {
+            let query = $(context).val();
+            this.actions.searchItems(query);
+            },50)
+        },
+    ],
     afterRender() {
-        //加载左侧导航
+        //加载左侧导航数据
         this.data.charts.forEach((val,index) => {
             let chartsComponent = new ChartsComponent(val);
             this.append(chartsComponent,this.el.find('.charts-items'));
         });
 
-        //模糊搜索
-        let self = this;
-        this.el.on('input','.filter-match',()=>{
-            self.el.find('.charts-items li').hide();
-            let len = self.el.find('.filter-match').val().length;
-            if(len<=0){
-                self.el.find('.charts-items li').show();
-            }
-            self.el.find('.charts-items li').each(function () {
-               if($(this).find('.item').text().substr(0,len) === self.el.find('.filter-match').val()){
-                    $(this).show();
-               }
-            })
-        });
     },
     firstAfterRender() {
+
         Mediator.subscribe('bi:aside:del', (res) => {
             let charts = this.data.charts;
             for(let [index,view] of charts.entries()) {
@@ -73,18 +87,6 @@ class AsideNavComponent extends BiBaseComponent{
     constructor() {
         super(config)
     }
-
-    /**
-     * 获取单个chart数据
-     * @param index = this.data.charts[index]
-     * @returns {"assortment": "funnel", "id": 1094, "name": "图表名字"}
-     */
-    getChart(index) {
-        let chart = this.data.charts[index];
-        return chart;
-    }
-
-
 }
 
 export default AsideNavComponent;
