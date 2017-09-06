@@ -2706,7 +2706,7 @@ let config = {
                 defaultMax = true;
             }
             PMAPI.openDialogByIframe( url,{
-                width: w || 1300,
+                width: w || 1400,
                 height: h || 800,
                 title: title,
                 modal:true,
