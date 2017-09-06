@@ -35,8 +35,6 @@ let FormEntrys = {
         this.buildId = '';
         this.btnType = 'new';
         //统计穿透列头信息
-        this.colDef = {};
-        this.col_id = '';
         this.viewMode='0';
 
         this.tableId = config.table_id || '';
@@ -60,8 +58,6 @@ let FormEntrys = {
         this.isAddBuild = config.isAddBuild || 0;
         this.buildId = config.id || '';
         this.btnType = config.btnType || 'new';
-        this.colDef = config.colDef||{};
-        this.col_id = config.colDef||'';
         this.viewMode=config.viewMode || '0';
     }
     ,
@@ -397,8 +393,9 @@ let FormEntrys = {
             return result;
         }
         this.init(config);
-        let $wrap = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"><div></div></div>`).prependTo(this.el);
-        let html = $(`<div class="center-wrap"></div>`).appendTo($wrap);
+        // let $wrap = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"></div>`).prependTo(this.el);
+        // let html = $(`<div class="center-wrap"></div>`).appendTo($wrap);
+        let html = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"></div>`).prependTo(this.el);
         let res;
         //如果不处于工作流中
         if (!this.fromWorkFlow) {

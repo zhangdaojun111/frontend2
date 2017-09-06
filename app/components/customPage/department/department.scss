@@ -5,6 +5,10 @@
     left: 0;
     right: 0;
     overflow: hidden;
+    .ag-cell-value {
+        padding: 0px 8px!important;
+        line-height: 30px;
+    }
     .tips {
         position: absolute;
         display: flex;
@@ -46,11 +50,7 @@
                 font-size: 12px;
                 display: flex;
                 align-items: center;
-                img {
-                    display: inline-block;
-                    width: 15px;
-                    height: 15px;
-                    vertical-align: sub;
+                i{
                     margin-right: 4px;
                 }
             }

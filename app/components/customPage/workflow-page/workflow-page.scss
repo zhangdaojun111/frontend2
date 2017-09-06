@@ -7,6 +7,10 @@
     left: 0;
     right: 0;
     overflow: hidden;
+    .ag-cell-value {
+        padding: 0px 8px!important;
+        line-height: 30px;
+    }
     .pagination {
         height: 30px;
         width: 100%;
@@ -109,6 +113,7 @@
         float: left;
         padding-left: 15px;
         .dataGrid-commonQuery-select {
+            cursor: pointer;
             padding: 0 12px;
             border: 1px solid #d7d7d7;
             border-radius: 4px;

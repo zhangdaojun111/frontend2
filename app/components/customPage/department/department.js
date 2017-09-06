@@ -24,12 +24,15 @@ let config = {
         tableName:'',
         columnDefs: [],
         rowData:[],
+        fieldsData:[],
         //定制列（列宽）
         colWidth: {},
         //定制列（固定列）
         fixCols: {l: [], r: []},
         //定制列（列排序）
         orderFields: [],
+        //上一次操作状态
+        lastGridState: [],
         //定制列（隐藏列）
         ignoreFields: [],
         //定制列需要字段信息
@@ -63,6 +66,7 @@ let config = {
                 this.data.customColumnsFields = [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false},
                     {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false},
                     {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
+                this.data.fieldsData = res[1].rows;
                 for( let col of res[1].rows ){
                     if( col.field == '_id' ){
                         continue;
@@ -97,6 +101,7 @@ let config = {
                 let gridData = {
                     columnDefs: this.data.columnDefs,
                     rowData: this.data.rowData,
+                    fieldsData: this.data.fieldsData,
                     onColumnResized: this.actions.onColumnResized,
                     onSortChanged: this.actions.onSortChanged,
                     onDragStopped: this.actions.onDragStopped,
@@ -235,6 +240,28 @@ let config = {
                 } )
             }
             //宽度自适应
+            if( this.el.find( '.grid-auto-width' )[0] ) {
+                this.el.find('.grid-auto-width').on('click', () => {
+                    if (!this.data.isAutoWidth) {
+                        this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
+                        this.agGrid.actions.autoWidth();
+                    } else {
+                        let state = this.agGrid.gridOptions.columnApi.getColumnState();
+                        for (let s of state) {
+                            for (let ls of this.data.lastGridState) {
+                                if (s.colId == ls.colId) {
+                                    s.width = ls.width;
+                                    break;
+                                }
+                            }
+                        }
+                        this.agGrid.gridOptions.columnApi.setColumnState(state);
+                    }
+                    this.el.find('.grid-auto-width').find('span').html(!this.data.isAutoWidth ? '恢复默认' : '自适宽度');
+                    this.data.isAutoWidth = !this.data.isAutoWidth;
+                })
+            }
+            //定制列
             if( this.el.find( '.custom-column-btn' )[0] ){
                 this.el.find( '.custom-column-btn' ).on( 'click',()=>{
                     this.actions.calcCustomColumn();
