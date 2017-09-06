@@ -144,7 +144,6 @@ let config = {
         });
         //获取表名，通过form传给我们表名
         Mediator.subscribe("workflow:getWorkflowTitle",res=>{
-           console.log("获取表头，通过form传给我们表头,发布为workflow:gotWorkflowTitle");
            if(res){
                this.el.find(".J_wfName").text(res);
            }else{
