@@ -83,7 +83,7 @@ let css = `
   }
   .contract-template-anchor span{
         color: #0088FF;
-        background-color: none !important;
+        background-color: yellow; */
   }
     .contract-editor-button{
         position: absolute;

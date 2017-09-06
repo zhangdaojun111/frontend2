@@ -1,4 +1,10 @@
 .component-date-control {
+    .date_yy-mm-dd{
+        padding-left: 10px;
+        width: 232px;
+        line-height: 28px;
+        height: 24px;
+    }
     .ui-calendar {
         line-height: normal;
     }

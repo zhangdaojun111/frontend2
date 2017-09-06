@@ -9,7 +9,7 @@ import './time-control.scss';
 let config = {
     template: template,
     data: {
-        width: '240px'
+        // width: '240px'
     },
     actions: {
         keyup: function () {
