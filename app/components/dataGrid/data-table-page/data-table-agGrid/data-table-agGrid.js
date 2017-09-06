@@ -2754,6 +2754,7 @@ let config = {
     },
     afterRender: function () {
         this.showLoading();
+        try{dgcService.accuracy = window.config.sysConfig.accuracy || 1000;}catch(e){}
         let gridData = {
             columnDefs: this.columnDefs,
             rowData: this.data.rowData,
