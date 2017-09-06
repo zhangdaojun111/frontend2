@@ -77,7 +77,7 @@ let config = {
             favorlist['name'] = name;
             favorlist['list'] = JSON.stringify(list);
             favorlist['query_type'] = 'save';
-            console.log(favorlist);
+
             let that = this;
             TabService.saveFavoriteItem(favorlist).done((result) => {
                 if(result.success === 1){
@@ -167,6 +167,9 @@ let config = {
                     that.actions.initList();
                 }
             })
+        },
+        deleteViewByName:function(name){
+            
         }
     },
     binds:[

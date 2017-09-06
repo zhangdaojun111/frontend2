@@ -149,7 +149,7 @@ let config ={
             }
         },
         isDeleteAllHistory:function () {
-            msgbox.confirm("您确定要清除全局搜索所有的历史数据吗？").then((result) => {
+            msgbox.confirm("确定清除所有检索历史？").then((result) => {
                 if (result === true) {
                     this.actions.deleteAllHistory();
                 } else {

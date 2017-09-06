@@ -467,7 +467,6 @@ export const IframeInstance = new Component({
             selector:'.view-save',
             callback:function () {
                 let temp_arr = _.defaultsDeep([],this.data.sort);
-                console.log(this.data.hash,this.data.sort);
                 SaveView.show(temp_arr);
             }
         },
