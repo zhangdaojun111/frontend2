@@ -129,13 +129,20 @@ window.addEventListener('message', function (event) {
                 }));
                 break;
             case PMENUM.close_dialog:
-                dialogHash[data.key].element.erdsDialog('destroy').remove();
                 if (dialogHash[data.key].comp) {
                     dialogHash[data.key].comp.destroySelf();
                 }
                 if (dialogHash[data.key].element) {
+                    let iframe = dialogHash[data.key].element.find('iframe');
+                    if (iframe.length) {
+                        iframe = iframe[0];
+                        if (iframe.contentWindow) {
+                            $(iframe.contentWindow).trigger('iframe.close');
+                        }
+                    }
                     dialogHash[data.key].element.remove();
                 }
+                dialogHash[data.key].element.erdsDialog('destroy').remove();
                 PMAPI.sendToChild(dialogHash[data.key].iframe, {
                     type: PMENUM.recieve_data,
                     key: data.key,
