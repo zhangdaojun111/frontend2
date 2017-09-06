@@ -550,10 +550,11 @@ let config = {
             } else if(this.data.calendarContent === 'day') {
                 this.append(new CalendarDay(this.data.dayDataList), this.el.find(".calendar-main-content"));
             }
+            this.actions.getDataCount();
         },
 
         workflowMission: function(){
-            if( this.data.isWorkflowDataReady ){
+            if( this.data.isWorkflowDataReady && this.data.calendarContent !== 'schedule'){
                 this.actions.monthDataTogether();
             }
         }
@@ -564,7 +565,6 @@ let config = {
             week = CalendarTimeService.getWeek(),
             day = CalendarTimeService.getDay();
         this.data.today = Object.assign({}, {'y': year, 'm':month, 'd':day, 'w':week});
-
         this.data.selectData = this.data.today;
         this.data.todayStr = CalendarTimeService.formatDate(year, month, day);
         this.data.chooseDate = CalendarTimeService.formatDate(year, month, day);
@@ -625,7 +625,7 @@ let config = {
                         cancel_fields: JSON.stringify(this.data.cancel_fields)
                     });
                 }
-
+                CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
             }else if(data.toolMethod === 'export') {
                 PMAPI.openDialogByComponent(CalendarExport, {
                     width: '350',
@@ -677,7 +677,6 @@ let config = {
         });
 
         Mediator.on('calendar-left:unshowData', data => {
-            console.log(data);
             if(data['data']) {
                 this.data.isShowArr = data['data'];
                 let arr = ['remind'];
