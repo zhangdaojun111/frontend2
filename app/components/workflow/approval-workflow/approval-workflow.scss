@@ -174,7 +174,8 @@ btn-div{
     position: absolute;
     width: 100%;
     padding: 10px;
-    overflow: auto;
+    overflow-y: scroll;
+    overflow-x:auto;
     top:57px;
     bottom: 0;
     left: 0;
@@ -248,14 +249,26 @@ btn-div{
   }
 }
 
-.addUser{
-  .flexBox{
-    display: flex;
-    height: 100%;
-    #addUsercheck{
-      overflow: scroll;
-      height: 500px;
-      width: 300px;
-    }
-  }
+//.addUser{
+//  .flexBox{
+//    display: flex;
+//    height: 100%;
+//    #addUsercheck{
+//      overflow: scroll;
+//      height: 500px;
+//      width: 300px;
+//    }
+//  }
+//}
+.component-loading-cover.J_component-loading-cover{
+  z-index: 999;
+}
+.component-loading-box.J_component-loading-box{
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+
 }
