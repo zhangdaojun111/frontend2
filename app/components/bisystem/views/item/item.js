@@ -11,9 +11,33 @@ import {PMAPI} from "../../../../lib/postmsg";
 let config = {
     template:template,
     data:{},
-    afterRender(){},
-    firstAfterRender(){
-        this.el.on('click','.btn-edit', async ()=> {
+    actions:{
+        /**
+         * 删除视图
+         * @returns {Promise.<void>}
+         */
+        async delConfirm(){
+            const ok = await msgbox.confirm("是否删除？");
+            let data = {
+                view_id:''
+            };
+            if(ok){
+                data.view_id = this.data.id;
+                ViewsService.delData(data).then((res)=>{
+                    if(res['success']===1){
+                        Mediator.publish('bi:views:update', {'view': 'remove', data: this.data});
+                        this.destroySelf();
+                    }else{
+                        alert(res['error']);
+                    }
+                });
+            }
+        },
+        /**
+         * 编辑视图
+         * @returns {Promise.<boolean>}
+         */
+        async editViews(){
             viewDialogConfig.data.view = this.data;
             const res = await PMAPI.openDialogByComponent(viewDialogConfig,{
                 width: 348,
@@ -32,31 +56,32 @@ let config = {
                 });
             }
             return false;
-        }).on('click','.btn-del', async()=> {
-            const ok = await msgbox.confirm("是否删除？");
-            let data = {
-                view_id:''
-            };
-            if(ok){
-                data.view_id = this.data.id;
-                ViewsService.delData(data).then((res)=>{
-                    if(res['success']===1){
-                        Mediator.publish('bi:views:update', {'view': 'remove', data: this.data});
-                        this.destroySelf();
-                    }else{
-                        alert(res['error']);
-                    }
-                });
-            }
+        }
 
-        })
-    }
+    },
+    binds:[
+        {
+            event:'click',
+            selector:'.btn-del',
+            callback:function () {
+                this.actions.delConfirm();
+            }
+        },
+        {
+            event:'click',
+            selector:'.btn-edit',
+            callback:function () {
+                this.actions.editViews();
+            }
+        }
+    ],
+    afterRender(){},
+    firstAfterRender(){}
 };
 
 
 export class ViewItemComponent extends BiBaseComponent{
     constructor(item) {
-        // console.log(config.data);
         config.data = item? item : null;
         super(config);
     }

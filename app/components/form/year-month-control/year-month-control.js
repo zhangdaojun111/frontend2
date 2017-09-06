@@ -1,5 +1,9 @@
+/**
+ *@author fangqiwei
+ *年份控件
+ */
+
 import Component from '../../../lib/component'
-import Mediator from '../../../lib/mediator';
 import template from './year-month-control.html'
 import {AutoSelect} from "../../util/autoSelect/autoSelect"
 

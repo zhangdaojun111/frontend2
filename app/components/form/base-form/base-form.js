@@ -42,9 +42,6 @@ let config = {
     data: {
         //其他字段的数据
         dataOfOtherFields: '',
-        selectObj: {'select': 'options', 'radio': 'group', 'multi-select': 'options'},
-        continue_key: ["parent_real_id", "parent_table_id", "parent_temp_id", "real_id", "table_id", "temp_id"],
-        need_key: ["id", "dfield", "effect", "expression", "dinput_type", "real_type"],
         //父表填充子表的id集合
         idsOfSonDataByParent: [],
         //本地存储已经触发默认值的数组
@@ -60,21 +57,25 @@ let config = {
         baseIdsLocalDict: {},
         //用于比较字段插件配置的list
         myPluginFields: [],
-        dataSelectFrom: {
-            "Radio": "group",      //"field_content",无序
-            "Select": "options",
-            "MultiSelect": "options",
-            "Buildin": "options",
-            // "Year": "options",
-            "MultiLinkage": "dataList",
-            "SettingTextarea": "settingTextarea"
-        }
     },
+    binds: [{
+        event: 'click',
+        selector: '.save',
+        callback: function () {
+            this.actions.onSubmit();
+        }
+    }, {
+        event: 'click',
+        selector: '.changeEdit',
+        callback: function () {
+            this.actions.changeToEdit();
+        }
+    }],
     actions: {
         md5: md5,
         //子表填充父表的数据
         setDataFromParent() {
-            //待跟晓川协定
+            //待跟aggrid协定
             // if(!this.globalService.fromSongridControl){return false;}
             if (this.data.parent_table_id !== "" && FormService.frontendRelation[this.data.parent_table_id] && FormServicefrontendRelation[this.data.parent_table_id][this.data.tableId]) {
                 //父子表对应的kv关系
@@ -125,7 +126,7 @@ let config = {
 
         //给外部提供formValue格式数据
         getFormValue(isCheck) {
-            return isCheck?this.actions.createFormValue(this.data.data, true):this.actions.createFormValue(this.data.data);
+            return isCheck ? this.actions.createFormValue(this.data.data, true) : this.actions.createFormValue(this.data.data);
         },
 
         //根据dfield查找类型
@@ -162,8 +163,8 @@ let config = {
                 }
                 for (let key in val) {
                     if (key == data.dfield) {
-                        if (com.data.dataSelectFrom[data.type]) {
-                            let select = com.data.dataSelectFrom[data.type];
+                        if (FormService.dataSelectFrom[data.type]) {
+                            let select = FormService.dataSelectFrom[data.type];
                             if (data.type == "MultiSelect") {
                                 obj[key] = [];
                                 for (let option of data['options']) {
@@ -266,11 +267,9 @@ let config = {
                 if (val != "" && data["reg"] !== "") {
                     for (let r in data["reg"]) {
                         //有待优化
-                        if (r.startsWith('/')) {
+                        if (r.startsWith('/') && r.endsWith('/')) {
                             r = r.substring(1)
-                            if (r.endsWith('/')) {
-                                r = r.substring(0, r.length - 1);
-                            }
+                            r = r.substring(0, r.length - 1);
                         }
                         let reg = new RegExp(r);
                         let flag = reg.test(val);
@@ -603,8 +602,8 @@ let config = {
                 return;
             }
             let fields = {};
-            let continue_key = this.data.continue_key;
-            let need_key = this.data.need_key;
+            let continue_key = FormService.continue_key;
+            let need_key = FormService.need_key;
             for (let f in this.data.data) {
                 if (continue_key.indexOf(f) != -1) {
                     continue
@@ -623,9 +622,9 @@ let config = {
                 }
                 new_data[d] = old_data[d];
             }
-            for(let key in new_data){
-                if(this.data.data[key].effect && this.data.data[key].effect.length>0){
-                    new_data[key]=this.actions.changeIdToText(new_data[key],this.data.data[key].options);
+            for (let key in new_data) {
+                if (this.data.data[key].effect && this.data.data[key].effect.length > 0) {
+                    new_data[key] = this.actions.getTextByOptionID(key, new_data[key]);
                 }
             }
             let res = await FormService.expEffect({
@@ -673,19 +672,11 @@ let config = {
             // }
         },
 
-        changeIdToText(id,array){
-            for(let key in array){
-                if(array[key].value == id){
-                    return array[key].label;
-                }
-            }
-        },
-
         //改变选择框的选项
         changeOptions() {
             for (let key in this.data.data) {
                 let data = this.data.data[key];
-                let obj = this.data.selectObj;
+                let obj = FormService.selectObj;
                 let affectType = data['type'];
                 if (!obj[affectType]) {
                     continue;
@@ -741,14 +732,7 @@ let config = {
                 } else {
                     this.data.data[key]['value'] = '';
                 }
-                try {
-                    this.data.childComponent[this.data.data[key]['dfield']].actions.changeOption(this.data.data[key]['dfield']);
-                } catch (err) {
-                    console.log('错误1');
-                    console.log(err);
-                    console.log(this);
-                    console.log(this.data.data[key]['dfield']);
-                }
+                this.data.childComponent[this.data.data[key]['dfield']].actions.changeOption(this.data.data[key]['dfield']);
             }
         },
 
@@ -929,11 +913,10 @@ let config = {
                     }
                     if (this.data['use_fields'][key].sort().toString() == data.sort().toString()) {
                         let formValue = this.actions.createFormValue(this.data.data);
-                        let _this = this;
-                        let res = await FormService.getCountData({data:JSON.stringify(formValue)})
+                        let res = await FormService.getCountData({data: JSON.stringify(formValue)})
                         //给统计赋值
                         for (let d in res["data"]) {
-                            _this.actions.setFormValue(d, res["data"][d]);
+                            this.actions.setFormValue(d, res["data"][d]);
                         }
                     }
                 }
@@ -1101,6 +1084,7 @@ let config = {
                 real_id: this.data.realId,
                 is_view: 0,
             }
+            //重新获取动态数据 （temp_id会变）
             let res = await FormService.getDynamicDataImmediately(json);
             for (let key in res.data) {
                 this.data.data[key] = Object.assign({}, this.data.data[key], res.data[key]);
@@ -1163,80 +1147,71 @@ let config = {
         },
         //触发事件检查
         checkValue: function (data) {
-            try {
-                if (!this.data.childComponent[data.dfield]) {
-                    return;
-                }
-                if (this.data.data[data.dfield]) {
-                    this.data.data[data.dfield] = _.defaultsDeep({}, data);
-                }
-                if (data.type == 'Buildin') {
-                    let id = data["id"];
-                    let value;
-                    for (let obj of data['options']) {
-                        if (obj.value == data.value) {
-                            value = obj.value;
-                            break;
-                        }
-                    }
-                    this.actions.setAboutData(id, value);
-                }
-                //检查是否是默认值的触发条件
-                // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
-                if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1) {
-                    this.actions.validDefault(data, data['value']);
-                }
-                //统计功能
-                this.actions.countFunc(data.dfield);
-                //改变选择框的选项
-                if (data['linkage'] != {}) {
-                    let j = 0;
-                    let arr = [];
-                    for (let value in data['linkage']) {
-                        for (let k in data['linkage'][value]) {
-                            arr.push(k);
-                        }
-                        if (value == data['value']) {
-                            j++;
-                            //改变选择框的选项
-                            console.log('这个里面没有type？');
-                            console.log(data);
-                            this.actions.changeOptionOfSelect(data, data['linkage'][value]);
-                        }
-                    }
-                    if (j == 0) {
-                        let obj = this.data.selectObj;
-                        for (let field of arr) {
-                            this.data.data[field][obj[this.data[field]['type']]] = this.data.optionsToItem[field];
-                        }
+            if (!this.data.childComponent[data.dfield]) {
+                return;
+            }
+            if (this.data.data[data.dfield]) {
+                this.data.data[data.dfield] = _.defaultsDeep({}, data);
+            }
+            if (data.type == 'Buildin') {
+                let id = data["id"];
+                let value;
+                for (let obj of data['options']) {
+                    if (obj.value == data.value) {
+                        value = obj.value;
+                        break;
                     }
                 }
+                this.actions.setAboutData(id, value);
+            }
+            //检查是否是默认值的触发条件
+            // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
+            if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1) {
+                this.actions.validDefault(data, data['value']);
+            }
+            //统计功能
+            this.actions.countFunc(data.dfield);
+            //改变选择框的选项
+            if (data['linkage'] != {}) {
+                let j = 0;
+                let arr = [];
+                for (let value in data['linkage']) {
+                    for (let k in data['linkage'][value]) {
+                        arr.push(k);
+                    }
+                    if (value == data['value']) {
+                        j++;
+                        //改变选择框的选项
+                        this.actions.changeOptionOfSelect(data, data['linkage'][value]);
+                    }
+                }
+                if (j == 0) {
+                    let obj = FormService.selectObj;
+                    for (let field of arr) {
+                        this.data.data[field][obj[this.data[field]['type']]] = this.data.optionsToItem[field];
+                    }
+                }
+            }
 
-                //修改负责
-                if (data["edit_condition"] && data["edit_condition"] !== "") {
-                    setTimeout(() => {
-                        this.actions.reviseCondition(data, data.value);
-                    }, 0);
-                }
-                //修改必填性功能
-                if (data["required_condition"] && data["required_condition"] !== "") {
-                    this.actions.requiredCondition(data, data['value']);
-                }
+            //修改负责
+            if (data["edit_condition"] && data["edit_condition"] !== "") {
+                setTimeout(() => {
+                    this.actions.reviseCondition(data, data.value);
+                }, 0);
+            }
+            //修改必填性功能
+            if (data["required_condition"] && data["required_condition"] !== "") {
+                this.actions.requiredCondition(data, data['value']);
+            }
 
-                let calcData = {
-                    val: data['value'],
-                    effect: data["effect"],
-                    id: data['id']
-                };
-                this.actions.calcExpression(calcData, data['value']);
-                if (data.required) {
-                    this.actions.requiredChange(this.data.childComponent[data.dfield]);
-                }
-                this.el.find('.select-drop').hide();
-            } catch (err) {
-                console.log(err);
-                console.log('还是这儿呢？');
-                console.log(data);
+            let calcData = {
+                val: data['value'],
+                effect: data["effect"],
+                id: data['id']
+            };
+            this.actions.calcExpression(calcData, data['value']);
+            if (data.required) {
+                this.actions.requiredChange(this.data.childComponent[data.dfield]);
             }
         },
         //添加按钮组
@@ -1309,42 +1284,40 @@ let config = {
                 userSysOptions: (data) => {
                     this.actions.changeMainDepart(true, data);
                 },
-                emitOpenCount:(data)=>{
+                emitOpenCount: (data) => {
                     this.actions.openCount(data);
                 }
             }
             return actions;
         },
         //打开统计穿透
-        openCount(data){
+        openCount(data) {
             let childId = data['field_content']['count_table'];
-            let showName=`${this.data['table_name']}=>${data['field_content']['child_table_name']}`;
-            if(this.data.realId){
-                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=count&tableId=${childId}&rowId=${this.data.realId}&tableType=count&fieldId=${data.id}`,{
-                    title:showName,
-                    width:1200,
-                    height:800,
+            let showName = `${this.data['table_name']}=>${data['field_content']['child_table_name']}`;
+            if (this.data.realId) {
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=count&tableId=${childId}&rowId=${this.data.realId}&tableType=count&fieldId=${data.id}`, {
+                    title: showName,
+                    width: 1200,
+                    height: 800,
                 })
-            }else{
-                let formValue=this.actions.getFormValue();
-                let d={
-                    table_id:this.data.tableId,
-                    data:JSON.stringify(formValue),
-                    field_id:data.id
+            } else {
+                let formValue = this.actions.getFormValue();
+                let d = {
+                    table_id: this.data.tableId,
+                    data: JSON.stringify(formValue),
+                    field_id: data.id
                 };
-                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?viewMode=newFormCount&tableId=${childId}&fieldId=${data.id}`,{
-                    title:showName,
-                    width:1200,
-                    height:800,
-                },{d});
+                PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?viewMode=newFormCount&tableId=${childId}&fieldId=${data.id}`, {
+                    title: showName,
+                    width: 1200,
+                    height: 800,
+                }, {d});
             }
         },
         //打开内置快捷添加
         addNewBuildIn(data) {
             let _this = this;
             _this.data['quikAddDfield'] = data.dfield;
-            // PMAPI.openDialogByIframe(`/iframe/addBuildin?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}`,{
-            console.log(`/iframe/addWf/?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}&key=${this.data.key}&btnType=new`);
             PMAPI.openDialogByIframe(`/iframe/addWf/?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}&key=${this.key}&btnType=new`, {
                 width: 800,
                 height: 600,
@@ -1355,6 +1328,7 @@ let config = {
                     return;
                 }
                 let options = _this.data.childComponent[_this.data['quikAddDfield']].data['options'];
+                //默认选中新添加选项
                 if (options[0] && options[0]['label'] == '请选择' || options[0]['label'] == '') {
                     options.splice(1, 0, data.new_option);
                 } else {
@@ -1414,7 +1388,6 @@ let config = {
                 title: '添加新选项',
                 modal: true
             }).then((data) => {
-                console.log('快捷添加回显');
                 if (data.onlyclose) {
                     return;
                 }
@@ -1422,7 +1395,7 @@ let config = {
             });
         },
 
-        //打开打印页眉设置弹窗
+        //打开打印页眉设置弹窗 现由工作流负责此功能，以防万一先放着
         async printSetting() {
             let res = await FormService.getPrintSetting()
             // if(res.succ == 1){
@@ -1490,7 +1463,6 @@ let config = {
                 modal: true
             }).then(res => {
                 //关闭对应关系后的回调刷新
-                console.log('关闭后的回调刷新');
                 _this.data.childComponent[data.dfield].data.dataGrid.actions.getGridData();
             })
         },
@@ -1502,6 +1474,7 @@ let config = {
             for (let k in history) {
                 history[k]['index'] = i++;
             }
+            //处理周期规则值回车符
             if (data.type == 'SettingTextarea') {
                 for (let key in history) {
                     if (_.isObject(history[key]['new_value'])) {
@@ -1536,7 +1509,7 @@ let config = {
                 if (single.data('width')) {
                     data[key]['width'] = single.data('width') + 'px';
                 } else {
-                    data[key]['width'] = '244px';
+                    data[key]['width'] = '234px';
                 }
                 //数据填充后，根据修改条件对不同框进行只读操作
                 setTimeout(() => {
@@ -1720,13 +1693,6 @@ let config = {
         } else {
             this.el.find('table').siblings('.ui-btn-box').css("margin-left", "-20px");
         }
-        this.el.parent().find('.save').bind('click',()=>{
-            this.actions.onSubmit();
-        })
-        this.el.parent().find('.changeEdit').bind('click',()=>{
-            this.actions.changeToEdit();
-        })
-
     },
     beforeDestory() {
         this.el.off();
