@@ -114,11 +114,13 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     })().then(function (res) {
         Mediator.publish("workflow:aggridorform",res);
         let AgGrid=new Grid({
-            parentTempId:res.record_info.temp_ids,
-            tableId:res.record_info.table_id,
-            record_id: obj.record_id,
-            viewMode:"createBatch",
+            // parentTempId:res.record_info.temp_ids,
+            tableId:obj.table_id,
+            recordId: obj.record_id,
+            viewMode:"approveBatch",
         });
+        console.log(obj);
+        console.log("0000000000000000")
         AgGrid.actions.returnBatchData = function (ids) {
             temp_ids=ids;
         };
