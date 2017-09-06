@@ -4,7 +4,9 @@ import './text.scss'
 
 let config = {
     template: template,
-    data: {},
+    data: {
+        rules: []
+    },
     actions: {
         /**
          * 输入监听

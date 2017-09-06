@@ -71,7 +71,6 @@ class Checkbox extends Base {
         this.data.firstDo = true;
         if (Array.isArray(value)) {
             this.data.value = value;
-            console.log(this.data.list);
             this.data.list.forEach((l,index) => {
                 for (let choosed of this.data.value) {
                     if (choosed.id === JSON.parse(l.value).id) {

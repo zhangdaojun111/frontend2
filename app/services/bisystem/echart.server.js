@@ -55,6 +55,8 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     lineBarOption(cellChart) {
+        console.log('===========11111111111111===========');
+        console.log(cellChart);
         let cellOption = cellChart['chart'];
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
             return defaultOption;
@@ -362,7 +364,6 @@ export class EchartsService {
         });
         return mutiListOption;
     }
-
     /**
      * 雷达图处理
      * @param chart = cellChart['chart']数据

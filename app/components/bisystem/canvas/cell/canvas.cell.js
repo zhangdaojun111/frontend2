@@ -49,7 +49,6 @@ let config = {
             this.el.find('.cell').css(this.data.cell.size);
             this.cellTitle = new CanvasCellTitleComponent(this.events.onChange);
             this.append(this.cellTitle, this.el.find('.bread-crumb-nav'));
-
         },
         /**
          * 动态渲染图表
@@ -58,6 +57,7 @@ let config = {
             if (!chart || chart['success'] !== 1) {
                 return false;
             };
+
             const data = {
                 chart: chart['data'],
                 cell: this.data.cell,
@@ -260,7 +260,8 @@ let config = {
             this.actions.cellDragandResize();
         } else {
             this.el.off('mousedown mouseup');
-        }
+        };
+
     },
     firstAfterRender() {
         // 监听当从服务器获取画布块图表数据finish时

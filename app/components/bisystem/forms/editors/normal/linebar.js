@@ -34,8 +34,13 @@ let config = {
                         }
                     });
                 };
+                if (data) {
+                    if (this.data.ySelectedGroupLoadOnce) {
+                        delete this.data.ySelectedGroupLoadOnce;
+                        return false;
+                    }
+                };
                 this.formItems['ySelectedGroup'].setList(data);
-
                 // console.log(this.formItems['yAxis0'].field.data.value)
             }
         },
@@ -196,6 +201,7 @@ let config = {
          */
         fillChart(chart) {
             console.log(chart);
+            this.chart = chart;
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
@@ -210,7 +216,10 @@ let config = {
                 this.formItems['yAxis1'].setValue(yAxis1);
             };
             this.formItems['defaultY'].setValue(chart['ySelectedGroup'] && chart['ySelectedGroup'].length > 0 ? 1 : 0);
+            this.formItems['ySelectedGroup'].setList(chart['ySelectedGroup']);
+            this.data.ySelectedGroupLoadOnce = true;
             this.formItems['ySelectedGroup'].setValue(chart['ySelectedGroup']);
+            console.log(this.formItems['ySelectedGroup'].data.list);
             this.formItems['yHorizontal'].setValue(chart['yHorizontal'] ? 1 : 0);
             this.formItems['yHorizontalColumns'].setValue(chart['yHorizontalColumns']['marginBottom'] ? 1 : 0);
             this.formItems['marginBottomx'].setValue(chart['yHorizontalColumns']['marginBottom'] ? chart['yHorizontalColumns']['marginBottom'] : '');
@@ -457,7 +466,8 @@ let config = {
                     }
                 }
             },
-        ]
+        ],
+        firstDo: false, // 用于在编辑模式下 第一次加载保留数据
     },
     async afterRender() {
         this.data.chart_id = this.data.id;

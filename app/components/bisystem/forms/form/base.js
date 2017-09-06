@@ -16,6 +16,11 @@ class Base extends Component {
     getName(){
         return this.data.name;
     }
+
+    /**
+     * 数据验证
+     */
+    valid(){}
 }
 
 export {Base}
