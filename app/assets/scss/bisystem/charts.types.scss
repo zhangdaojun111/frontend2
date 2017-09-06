@@ -1,0 +1,115 @@
+/**
+* 容器的大小
+*/
+@mixin chart-com {
+    height: calc(100%);
+    background: rgba(242, 242, 242, 1);
+}
+@mixin icon{
+    display:inline-block;
+    width:16px;
+    height:16px;
+    text-indent:-9999px;
+}
+
+.remove-icon {
+    @include icon;
+    background:url('../../../assets/images/bisystem/remove.png') no-repeat;
+}
+.add-icon {
+    @include icon;
+    background:url('../../../assets/images/bisystem/add.png') no-repeat;
+}
+.edit-icon {
+    @include icon;
+    background:url('../../../assets/images/bisystem/edit.png') no-repeat;
+}
+.red-remove-icon {
+    @include icon;
+    background:url('../../../assets/images/bisystem/red-remove.png') no-repeat;
+}
+
+.remove-icon {
+    display:inline-block;
+    width:16px;
+    height:16px;
+}
+
+/**
+* 保存/确定 按钮
+*/
+@mixin save-btn {
+    display: inline-block;
+    margin-top: 26px;
+    padding-top: 26px;
+    padding-bottom: 26px;
+    clear: both;
+    button {
+        border: none;
+        color: #fff;
+        width: 210px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        background: #3b8cff;
+        box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        outline: none;
+        position: relative;
+    }
+}
+
+.bi-component-container {
+    .form-chart {
+        @include chart-com;
+        > h3 {
+            height:60px;
+            line-height:60px;
+            text-indent:20px;
+            background:#ffffff;
+            border-bottom:solid 1px rgba(228, 228, 228, 1);
+        }
+        position:relative;
+    }
+    .form-group {
+        min-width:774px;
+        max-width:1000px;
+        padding:40px 30px 0;
+        background:#ffffff;
+        height:calc(100% - 175px);
+        overflow-y:auto;
+        overflow-x:hidden;
+        margin:0 auto;
+        >div{
+            margin-bottom:40px;
+        }
+        .form-chart-wrapper{
+            padding-left:80px;
+        }
+        .form-label {
+            padding-left:10px;
+            border-bottom:#57c4ff solid 1px;
+            span {
+                background:#57c4ff;
+                display:inline-block;
+                padding:6px 8px;
+                color:#ffffff;
+            }
+        }
+    }
+    .save-btn {
+        @include save-btn;
+    }
+    @import "charts.test";
+}
+
+
+
+
+
+
+
+
+

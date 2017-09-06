@@ -14,16 +14,18 @@
             border: 0 none;
             outline: none;
             display: block;
-            color: #fff;
+            color: #999;
             float: left;
             margin-left: 30px;
             width: calc(100% - 40px);
+            &::-webkit-input-placeholder{
+                color: #666;
+            }
         }
 
         &.edit {
             display: none;
         }
-
     }
 
     &.mini {
