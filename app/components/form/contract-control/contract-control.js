@@ -5,6 +5,7 @@ import Component from "../../../lib/component";
 import template from './contract-control.html';
 import {contractEditorConfig} from "./contract-editor/contract-editor";
 import {PMAPI} from "../../../lib/postmsg";
+import './contract-control.scss'
 
 let config = {
     template:template,
