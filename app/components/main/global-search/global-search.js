@@ -28,7 +28,6 @@ let config ={
         getData:function () {
             let that = this;
             UserInfoService.getSearchHistory().done((result) => {
-                console.log(result);
                 if(result.success === 1){
                     that.data.historyList = $.parseJSON(result.data);
                     that.actions.initList();
@@ -104,10 +103,11 @@ let config ={
         addSearchHistory(){
             let content = this.data.searchContent;
             if(content && content !== ""){
-                _.remove(this.data.historyList,function (n) {
-                    return n.content === content;
-                });
-
+                for (let history of this.data.historyList){
+                    if(history.content === content){
+                        return;
+                    }
+                }
                 let newHistory = {
                     'content':content,
                     'py':content,
@@ -149,7 +149,7 @@ let config ={
             }
         },
         isDeleteAllHistory:function () {
-            msgbox.confirm("您确定要清除全局搜索所有的历史数据吗？").then((result) => {
+            msgbox.confirm("确定清除所有检索历史？").then((result) => {
                 if (result === true) {
                     this.actions.deleteAllHistory();
                 } else {
