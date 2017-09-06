@@ -179,7 +179,6 @@ let config = {
         }
 
         this.el.on('dragstart','.task-item',function(ev){
-            console.log(ev);
             if(that.data.type === 'month' && that.data.remindTaskItemData['isDrag'] !== 0) {
                 let event = ev.originalEvent;
                 $(this).addClass("task-item-draggable");
