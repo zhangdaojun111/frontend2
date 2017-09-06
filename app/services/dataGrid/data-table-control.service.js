@@ -25,7 +25,6 @@ export const dgcService = {
     //格式化参数
     formatter: function (num) {
         let source = String(num).split(".");//按小数点分成2部分
-        console.log( this.accuracy )
         if (this.accuracy == 1000) {
             source[0] = source[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");//只将整数部分进行都好分割
         } else {
