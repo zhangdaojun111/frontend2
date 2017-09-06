@@ -5,6 +5,7 @@ import {dataTableService} from '../../../../services/dataGrid/data-table.service
 import {HTTP} from "../../../../lib/http";
 import historyTable from "./history-approve-HisTable/history-approve-HisTable";
 import examineTable from "./history-approve-ExaTable/history-approve-ExaTable";
+import strikeTable from "./history-approve-StrTable/history-approve-StrTable";
 import './history-approve-data.scss'
 import agGrid from "../../agGrid/agGrid";
 
@@ -21,19 +22,22 @@ let config = {
         res:{}
     },
     actions: {
+        // 渲染修改历史
         renderHisTable:function(){
             this.historyData[0]['history_data'].forEach((row) => {
                 this.append(new historyTable({history_data:row}), this.el.find('.history-table-box.history'));
             });
         },
+        // 渲染审批历史
         renderExaTable:function(){
             this.recordHistory.forEach((row) => {
                 this.append(new examineTable(row), this.el.find('.history-table-box.examine'));
             });
         },
+        // 渲染触发历史
         renderStrTable:function(){
             this.triggerWorkRecords.forEach((row) => {
-                this.append(new examineTable(row), this.el.find('.history-table-box.examine'));
+                this.append(new strikeTable(row), this.el.find('.history-table-box.strike'));
             });
         },
         afterGetMsg:function() {
