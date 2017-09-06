@@ -119,8 +119,6 @@ Mediator.subscribe('workFlow:record_info', (res) => {
             recordId: obj.record_id,
             viewMode:"approveBatch",
         });
-        console.log(obj);
-        console.log("0000000000000000")
         AgGrid.actions.returnBatchData = function (ids) {
             temp_ids=ids;
         };
