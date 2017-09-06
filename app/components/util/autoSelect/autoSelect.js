@@ -28,6 +28,7 @@ let config = {
         width: 0,                       // 为0表示显示默认宽度240
         editable: true,                 // 是否可编辑
         onSelect: null,                  // 选择时的事件
+        placeholder: ''
     },
     actions: {
         selectItem: function (item) {
