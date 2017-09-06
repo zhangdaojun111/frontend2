@@ -80,7 +80,7 @@ export const OnlineDisplay = {
         component = new OnlineUser();
         this.el = $('<div class="online-users-page">').appendTo(document.body);
         component.render(this.el);
-        this.el.dialog({
+        this.el.erdsDialog({
             title: '在线用户',
             width: 1082,
             height: 575,

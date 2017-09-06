@@ -78,7 +78,12 @@ let config = {
             favorlist['list'] = JSON.stringify(list);
             favorlist['query_type'] = 'save';
             //检查name是否已存在，存在则先删除该条记录，保证新加记录在最前面
-            this.actions.deleteViewByName(name);
+            for(let k of this.data.favoriteList){
+                if(k.name === name){
+                    this.actions.deleteViewByName(name);
+                    break;
+                }
+            }
 
             let that = this;
             TabService.saveFavoriteItem(favorlist).done((result) => {
@@ -236,7 +241,7 @@ export const SaveView = {
         let component = new SaveViewController(data);
         this.el = $('<div id="save-view">').appendTo(document.body);
         component.render(this.el);
-        this.el.dialog({
+        this.el.erdsDialog({
             title: '保存视图',
             width: 280,
             modal:true,
