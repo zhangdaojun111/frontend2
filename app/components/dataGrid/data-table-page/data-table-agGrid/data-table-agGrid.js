@@ -790,7 +790,7 @@ let config = {
                 }
                 operateWord = operateWord + 4;
             }
-            if (this.data.viewMode == 'batchInApprove') {
+            if (this.data.viewMode == 'approveBatch') {
                 str += ' | <a  class="gridEdit" style="color:#337ab7;">编辑</a>';
                 operateWord = operateWord + 2;
             }
