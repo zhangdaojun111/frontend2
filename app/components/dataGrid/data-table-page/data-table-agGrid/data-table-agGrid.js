@@ -443,7 +443,7 @@ let config = {
                 let textAline = fieldTypeService.textAline( params.colDef["real_type"] )
                 let bgStyle = ' style = "display: block;height: 100%;text-align:' + textAline+';"';
                 let val = params.value || '';
-                if( fieldTypeService.numOrText(params.colDef["real_type"]) || params.colDef["real_type"] == fieldTypeService.DECIMAL_TYPE ){
+                if( fieldTypeService.numOrText(params.colDef["real_type"])|| params.colDef["real_type"] == fieldTypeService.DECIMAL_TYPE ){
                     val = dgcService.formatter(val)
                 }
                 let h = '<span' + bgStyle + '><span>' + val + '</span><span/>';
