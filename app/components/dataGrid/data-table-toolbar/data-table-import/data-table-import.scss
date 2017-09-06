@@ -7,6 +7,7 @@
         margin: 0 auto;
         background: #FAFAFA;
         border-collapse:collapse;
+        border-bottom: 1px solid #F2F2F2;
         tbody {
             width: 100%;
             display: block;
@@ -51,13 +52,11 @@
             }
             .record_type {
                 width: 200px;
-                //background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 180px center transparent;
                 background-position: 180px center;
 
             }
             .chooseFlow {
                 width: 200px;
-                //background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll 180px center transparent;
                 background-position: 180px center;
             }
             .showMore {
@@ -72,7 +71,7 @@
             }
             .workflow {
                 display: none;
-                border-bottom: 1px solid #F2F2F2;
+
             }
 
             .uploadRemark {
