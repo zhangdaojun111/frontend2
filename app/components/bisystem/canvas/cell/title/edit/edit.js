@@ -60,7 +60,6 @@ export let config = {
                 },
                 theme: 'snow',
             });
-
         }
 
     },
@@ -70,14 +69,13 @@ export let config = {
             selector:'.editor-btn-save',
             callback: function () {
 
-                console.log(this.data.editor.container.firstChild.innerHTML);
-
                 let data = {
-                    field_id: this.data.view.data.source.id,
-                    content: this.data.editor.container.firstChild.innerHTML,
-                    table_id : this.data.view.data.columns.id,
-                    row_id: this.data.view.data.data.rows['0']['1'],
+                    field_id: this.data.view.field_id,
+                    content: this.data.editor.getText(),
+                    table_id : this.data.view.table_id,
+                    row_id: this.data.view.row_id,
                 };
+
                 PMAPI.sendToParent({
                     type: PMENUM.close_dialog,
                     key: this.key,
@@ -99,12 +97,15 @@ export let config = {
     ],
     afterRender() {
         //添加样式
+        // Mediator.on('edit:title',(data) =>{
+        //     console.log(data);
+        // });
         $(`<style>${this.data.css}</style>`).appendTo(this.el);
     },
     firstAfterRender() {
         this.actions.newEditor();
+        this.data.editor.container.firstChild.innerHTML = this.data.view.content;
         // quill.container.firstChild.innerHTML = this.data.view['edits']['0'];
         // document.querySelector(".ql-editor").innerHTML = this.data.view;
-        // console.log(this.data.view);
     }
 };

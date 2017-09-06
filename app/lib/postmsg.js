@@ -437,8 +437,6 @@ export const PMAPI = {
      * @return ComponentConfig
      */
     deserializeComponent(componentString) {
-        console.log('xxxxxxxxxxxxxxxxxxxxxxx');
-        console.log(componentString);
         let obj = JSON.parse(componentString);
         PMAPI._createFuncs(obj);
         return obj;
