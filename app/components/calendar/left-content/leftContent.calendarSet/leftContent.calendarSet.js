@@ -107,38 +107,35 @@ let config = {
         /**
          *隐藏日历树
          */
-        hide_group: function (temp, that) {
+        hide_group: function (temp) {
             let hide_type_id = temp.attr("id").split('-');
             let hide_table_name = "";
             let hide_table_id = hide_type_id[2];
             hide_type_id = "#select-all-block-" + hide_type_id[2];
-            that.el.find(hide_type_id + " .select-head").removeClass("label-select-all-show");
+            this.el.find(hide_type_id + " .select-head").removeClass("label-select-all-show");
+            let that = this;
             temp.parent(".float-button-group").next(".checkbox-group").find(".select-label-children").each(function () {
                 let filedId = $(this).attr("id").split("-")[2];
                 if (that.data.cancel_fields.indexOf(filedId) === -1) {
                     that.data.cancel_fields.push(filedId);
                 }
             });
-            that.el.find(hide_type_id).hide();
+            this.el.find(hide_type_id).hide();
             this.actions.remindShow();
-            for (let j = 0; j < that.data.rows.length; j++) {
-                if (hide_table_id === that.data.rows[j].table_id) {
-                    hide_table_name = that.data.rows[j].table_name;
+            for (let j = 0; j < this.data.rows.length; j++) {
+                if (hide_table_id === this.data.rows[j].table_id) {
+                    hide_table_name = this.data.rows[j].table_name;
                 }
             }
-            that.data.hide_table = {'tableName': hide_table_name, 'table_Id': hide_table_id};
-            that.data.hide_item_table.push(hide_table_id);
-            that.data.hide_tables.push(that.data.hide_table);
-            // let preference = {"content": that.data.cancel_fields};
-            // CalendarService.getCalendarPreference(preference);
-            // preference = {"content": that.data.hide_item_table};
-            // CalendarService.getCalendarHidePreference(preference);
-            let preferenceHide = {"content": that.data.hide_item_table};
-            let preference = {"content": that.data.cancel_fields, contentHide: preferenceHide};
+            this.data.hide_table = {'tableName': hide_table_name, 'table_Id': hide_table_id};
+            this.data.hide_item_table.push(hide_table_id);
+            this.data.hide_tables.push(this.data.hide_table);
+            let preferenceHide = {"content": this.data.hide_item_table};
+            let preference = {"content": this.data.cancel_fields, contentHide: preferenceHide};
             CalendarService.getCalendarPreference(preference);
-            Mediator.emit('calendar-left:hideRemindType', {data: that.data.hide_table});
-            Mediator.emit('calendar-left:unshowData', {data: that.data.cancel_fields});
-            that.data.hide_table = {'tableName': "", 'table_Id': ''}
+            Mediator.emit('calendar-left:hideRemindType', {data: this.data.hide_table});
+            Mediator.emit('calendar-left:unshowData', {data: this.data.cancel_fields});
+            this.data.hide_table = {'tableName': "", 'table_Id': ''}
         },
 
         /**
@@ -153,8 +150,7 @@ let config = {
             });
             if (isAllGroupChecked && this.el.find('.label-select-all-show').length > 0) {
                 this.el.find(".checkbox_a3").addClass('label-select-all-checked');
-            }
-            if (this.el.find('.label-select-all-show').length === 0) {
+            }else if (this.el.find('.label-select-all-show').length === 0) {
                 this.el.find(".checkbox_a3").removeClass('label-select-all-checked');
             }
         },
@@ -212,35 +208,34 @@ let config = {
         /**
          *从隐藏栏中显示日历树
          */
-        showRemindType: function (that, data) {
-            that.el.find("#select-all-block-" + data.data).show();
-            that.el.find("#select-all-block-" + data.data).find(".select-head").addClass('label-select-all-show label-select-all-checked');
-            that.el.find("#select-all-block-" + data.data).find(".select-label-children").removeClass("unchecked");
-            for (let i = 0; i < that.data.hide_tables.length; i++) {
-                if (that.data.hide_tables[i].table_Id === data.data) {
-                    that.data.hide_tables.splice(i, 1);
-                    that.data.hide_item_table.splice(i, 1);
+        showRemindType: function (data) {
+            if(this.el.find(".label-select-all-show").length === 0){
+                this.el.find(".checkbox_a3").addClass('label-select-all-checked');
+            }
+            this.el.find("#select-all-block-" + data.data).show();
+            this.el.find("#select-all-block-" + data.data).find(".select-head").addClass('label-select-all-show label-select-all-checked');
+            this.el.find("#select-all-block-" + data.data).find(".select-label-children").removeClass("unchecked");
+            for (let i = 0; i < this.data.hide_tables.length; i++) {
+                if (this.data.hide_tables[i].table_Id === data.data) {
+                    this.data.hide_tables.splice(i, 1);
+                    this.data.hide_item_table.splice(i, 1);
                     break;
                 }
             }
-            for (let i = 0; i < that.data.rows.length; i++) {
-                if (that.data.rows[i].table_id === data.data) {
-                    for (let j = 0; j < that.data.rows[i].items.length; j++) {
-                        if (that.data.cancel_fields.indexOf(that.data.rows[i].items[j].field_id) !== -1) {
-                            that.data.cancel_fields.splice(that.data.cancel_fields.indexOf(that.data.rows[i].items[j].field_id), 1);
+            for (let i = 0; i < this.data.rows.length; i++) {
+                if (this.data.rows[i].table_id === data.data) {
+                    for (let j = 0; j < this.data.rows[i].items.length; j++) {
+                        if (this.data.cancel_fields.indexOf(this.data.rows[i].items[j].field_id) !== -1) {
+                            this.data.cancel_fields.splice(this.data.cancel_fields.indexOf(this.data.rows[i].items[j].field_id), 1);
                         }
                     }
                     break;
                 }
             }
-            // let preference = {"content": that.data.cancel_fields};
-            // CalendarService.getCalendarPreference(preference);
-            // preference = {"content": that.data.hide_item_table};
-            // CalendarService.getCalendarHidePreference(preference);
-            let preferenceHide = {"content": that.data.hide_item_table};
-            let preference = {"content": that.data.cancel_fields, contentHide: preferenceHide};
+            let preferenceHide = {"content": this.data.hide_item_table};
+            let preference = {"content": this.data.cancel_fields, contentHide: preferenceHide};
             CalendarService.getCalendarPreference(preference);
-            Mediator.emit('calendar-left:unshowData', {data: that.data.cancel_fields});
+            Mediator.emit('calendar-left:unshowData', {data: this.data.cancel_fields});
         }
     },
 
@@ -264,7 +259,7 @@ let config = {
             event: 'click',
             selector: '.hide-type-group',
             callback: function (temp = this) {
-                this.actions.hide_group($(temp), this);
+                this.actions.hide_group($(temp));
             }
         }
     ],
@@ -273,7 +268,7 @@ let config = {
         this.el.css({"height": "100%", "width": "100%"});
         this.actions.getCalendarTreeData();
         Mediator.on('calendar-left:showRemindType', data => {
-            this.actions.showRemindType(this, data)
+            this.actions.showRemindType(data)
         });
     },
 

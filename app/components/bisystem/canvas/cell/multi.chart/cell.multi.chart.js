@@ -18,9 +18,8 @@ let config = {
         }
     },
     afterRender() {
-        console.log(this.componentId);
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
-            this.data.cellChart.size = data;
+            this.data.cellChart.cell.size = data;
             const option = this.myChart.multiChartOption(this.data.cellChart);
             const myChart = this.myChart.myChart;
             myChart.setOption(option);
@@ -36,6 +35,6 @@ export class CellMultiChartComponent extends BiBaseComponent {
     constructor(cellChart) {
         config.data.cellChart = cellChart ? cellChart : null;
         super(config);
-        this.data.id += this.componentId
+        this.data.id += this.componentId;
     }
 }

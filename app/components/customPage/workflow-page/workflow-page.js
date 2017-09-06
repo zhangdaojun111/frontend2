@@ -325,7 +325,16 @@ let config = {
                     this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
                     this.agGrid.actions.autoWidth();
                 }else {
-                    this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
+                    let state = this.agGrid.gridOptions.columnApi.getColumnState();
+                    for( let s of state ){
+                        for( let ls of this.data.lastGridState ){
+                            if( s.colId == ls.colId ){
+                                s.width = ls.width;
+                                break;
+                            }
+                        }
+                    }
+                    this.agGrid.gridOptions.columnApi.setColumnState( state );
                 }
                 this.el.find( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
                 this.data.isAutoWidth = !this.data.isAutoWidth;
@@ -544,9 +553,33 @@ let config = {
             dataTableService.getPreferences( obj ).then( res=>{
                 this.el.find('.dataGrid-commonQuery-option').remove();
                 this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="100" value="常用查询">常用查询</option>`)
-                res.rows.forEach((row) => {
-                    this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
-                });
+                if(res.rows.length != 0){
+                    res.rows.forEach((row) => {
+                        this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
+                    });
+                }
+                if(this.data.filterParam['common_filter_name'] && this.data.onlyCloseExpertSearch) {
+                    this.el.find('.dataGrid-commonQuery-select').val(this.data.filterParam['common_filter_name']);
+                }
+                if(this.data.commonQueryData && res.rows && this.data.commonQueryData.length > res.rows.length){
+                    let inCheck = true;
+                    if(this.data.filterParam['common_filter_name'] != ''){
+                        if(res.rows.length == 0){
+                            inCheck = true;
+                        } else {
+                            for(let item of res.rows) {
+                                debugger
+                                if (item.name == this.data.filterParam['common_filter_name']) {
+                                    inCheck = false ;
+                                }
+                            }
+                        }
+                    }
+                    if(inCheck) {
+                        this.actions.postExpertSearch([],'');
+                        this.el.find('.dataGrid-commonQuery-select').val('常用查询');
+                    }
+                }
                 this.data.commonQueryData = res.rows;
                 if(addNameAry && addNameAry.length != 0){
                     this.data.commonQueryData.forEach((item)=>{
@@ -557,9 +590,6 @@ let config = {
                             }
                         }
                     })
-                }
-                if(this.data.filterParam['common_filter_name'] && this.data.onlyCloseExpertSearch) {
-                    this.el.find('.dataGrid-commonQuery-select').val(this.data.filterParam['common_filter_name']);
                 }
             } );
             HTTP.flush();
