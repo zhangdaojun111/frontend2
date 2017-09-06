@@ -58,6 +58,15 @@ let config = {
                     let checkIds = rows.map((item) => {
                         return item.id;
                     });
+                    // let url = '/iframe/multiapp';
+                    // let data = JSON.stringify(checkIds);
+                    // PMAPI.openDialogByIframe(url,{
+                    //     width: 1200,
+                    //     height: 500,
+                    //     title: '批量审批',
+                    //     customSize:true
+                    // },data)
+
                     HTTP.postImmediately('/approve_many_workflow/', {
                         checkIds: JSON.stringify(checkIds)
                     }).then((res) => {
@@ -93,7 +102,6 @@ let config = {
         },
         onCellClicked: function ($event) {
             let data = $event.data;
-            console.log(data);
             if (data.msg_type === 3 || data.msg_type === 0) {
                 if(data.handle_status_text === '待审批'){
                     data.url += "&btnType=edit";
