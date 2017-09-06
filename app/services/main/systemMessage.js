@@ -60,17 +60,19 @@ export const systemMessageService = {
     getColumnDefs: function () {
         return [
             _.defaultsDeep({headerName: '序号', width: 60}, dgcService.numberCol),
+            dgcService.selectCol,
+            // {
+            //     headerCellTemplate: function (data) {
+            //         return handlers.selectAll(data);
+            //     },
+            //     width: 60,
+            //     headerName: '全选',
+            //     checkboxSelection: true,
+            //     suppressSorting: true,
+            //     suppressMenu: true,
+            //     cellStyle: {'text-align': 'center'},
+            // },
             {
-                headerCellTemplate: function (data) {
-                    return handlers.selectAll(data);
-                },
-                width: 60,
-                headerName: '全选',
-                checkboxSelection: true,
-                suppressSorting: true,
-                suppressMenu: true,
-                cellStyle: {'text-align': 'center'},
-            }, {
                 headerName: '阅读状态',
                 field: 'is_read',
                 width: 80,

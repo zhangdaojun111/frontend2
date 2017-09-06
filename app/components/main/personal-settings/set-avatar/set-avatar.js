@@ -232,7 +232,7 @@ export const AvatarSet = {
         let component = new SetAvatar();
         this.el = $('<div id="set-avatar-page">').appendTo(document.body);
         component.render(this.el);
-        this.el.dialog({
+        this.el.erdsDialog({
             title: '设置头像',
             width: 500,
             modal:true,
