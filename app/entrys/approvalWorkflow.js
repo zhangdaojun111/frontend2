@@ -30,6 +30,7 @@ WorkFlowForm.showForm().then(function () {
     },2000)
 
 });
+WorkFlowGrid.showGrid();
 
 let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[];;
 serchStr.split('&').forEach(res => {
@@ -62,6 +63,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
             }
         });
     })().then(result => {
+
         Mediator.publish('workflow:getImgInfo', result);
         Mediator.publish('workflow:gotWorkflowInfo', result);
         let a=result.data[0].updateuser2focususer;
@@ -70,8 +72,20 @@ Mediator.subscribe('workFlow:record_info', (res) => {
                 focus.push(a[i][j]);
             }
         }
-        Mediator.publish('workflow:focused', focus);
-        
+
+        Mediator.publish('workflow:focused' , focus);
+        // if(result[0].temp_ids==0){
+        //     FormEntrys.createForm({
+        //         el: $('#place-form'),
+        //         form_id: obj.form_id,
+        //         record_id: obj.record_id,
+        //         is_view: is_view,
+        //         from_approve: 1,
+        //         from_focus: 0,
+        //         btnType:'none',
+        //         table_id: obj.table_id
+        //     });
+        // }
         (async function () {
             return workflowService.getWorkflowInfo({url: '/get_all_users/'});
         })().then(users => {
@@ -83,10 +97,36 @@ Mediator.subscribe('workFlow:record_info', (res) => {
                 $('#approval-workflow').find('.for-hide').hide();
                 $('#approval-workflow').find('#re-app').hide();
             };
-        });
+        }).then()
     });
     
 });
+
+    (async function () {
+        return workflowService.getRecordInfo(
+            {
+                flow_id: obj.flow_id,
+                record_id: obj.record_id,
+                // is_view:0,
+                table_id: obj.table_id,
+            }
+        )
+    })().then(function (res) {
+        Mediator.publish("workflow:aggridorform",res);
+        let AgGrid=new Grid({
+            // parentTempId:res.record_info.temp_ids,
+            tableId:obj.table_id,
+            recordId: obj.record_id,
+            viewMode:"approveBatch",
+        });
+        console.log(obj);
+        console.log("0000000000000000")
+        AgGrid.actions.returnBatchData = function (ids) {
+            temp_ids=ids;
+        };
+        AgGrid.render($("#J-aggrid"));
+    })
+
 
 Mediator.subscribe("workflow:loaded",(e)=>{
     if(e===1){
@@ -95,6 +135,7 @@ Mediator.subscribe("workflow:loaded",(e)=>{
         }
     }
 });
+
 FormEntrys.createForm({
     el: $('#place-form'),
     form_id: obj.form_id,
