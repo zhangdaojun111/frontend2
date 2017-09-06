@@ -77,6 +77,7 @@ let FormEntrys = {
     },
     //找到加载表单数据的formId和加载节点的flowId
     findFormIdAndFlowId(res) {
+        console.log(res);
         if (res["data"] && res["data"]["flow_data"].length != 0) {
             if (this.flowId) {
                 let selectItems = res["data"]["flow_data"];

@@ -505,14 +505,19 @@ export const IframeInstance = new Component({
             callback:function () {
                 this.actions.hideTabsPopup();
             }
-        }
-
+        },
     ],
     afterRender: function () {
         this.data.tabs = this.el.find('.tabs');
         this.data.iframes = this.el.find('.iframes');
         this.actions.setTabsCount();
         this.actions.readyOpenTabs();
+
+        let that = this;
+        $(window).resize(function () {          //监听浏览器大小变化
+            that.actions.setTabsCount();
+            that.actions.adaptTabWidth();
+        });
 
         // this.el.on('click', '.tabs .item .close', function () {
         //     let id = $(this).attr('iframeid');
