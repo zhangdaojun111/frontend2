@@ -54,6 +54,7 @@ class Component {
         map.set(this.el.get(0), this);
         return this.reload();
     }
+
     /**
      * 组件渲染
      * @returns {Component}
