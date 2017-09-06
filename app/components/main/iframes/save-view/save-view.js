@@ -77,11 +77,10 @@ let config = {
             favorlist['name'] = name;
             favorlist['list'] = JSON.stringify(list);
             favorlist['query_type'] = 'save';
-            console.log(favorlist);
+
             let that = this;
             TabService.saveFavoriteItem(favorlist).done((result) => {
                 if(result.success === 1){
-                    console.log(result);
                     msgbox.alert("保存成功");
                     _.remove(that.data.favoriteList,function (n) {
                         return n.name === name;
