@@ -551,9 +551,9 @@ let config = {
 
             //字段类型对其
             let textAline = fieldTypeService.textAline( colDef["real_type"] )
-            let bgStyle = ' style = "display: block;width: 100%;height: 100%;text-align:' + textAline+';"';
+            let bgStyle = ' style = "display: block;padding: 0 8px;width: 100%;height: 100%;text-align:' + textAline+';"';
             if( color != 'transparent' ){
-                bgStyle = ' style = "display: block;width: 100%;height: 100%;background:' + color+';text-align:' + textAline + ';"';
+                bgStyle = ' style = "display: block;padding: 0 8px;width: 100%;height: 100%;background:' + color+';text-align:' + textAline + ';"';
             }
 
             //前端表达式值计算
