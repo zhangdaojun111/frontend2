@@ -69,14 +69,15 @@ export let config = {
             event:'click',
             selector:'.editor-btn-save',
             callback: function () {
-                console.log(this.data.editor.getContents());
+
+                console.log(this.data.editor.container.firstChild.innerHTML);
+
                 let data = {
                     field_id: this.data.view.data.source.id,
-                    content: this.data.editor.getContents(),
+                    content: this.data.editor.container.firstChild.innerHTML,
                     table_id : this.data.view.data.columns.id,
                     row_id: this.data.view.data.data.rows['0']['1'],
                 };
-
                 PMAPI.sendToParent({
                     type: PMENUM.close_dialog,
                     key: this.key,
@@ -97,7 +98,6 @@ export let config = {
         }
     ],
     afterRender() {
-        console.log(this.data);
         //添加样式
         $(`<style>${this.data.css}</style>`).appendTo(this.el);
     },

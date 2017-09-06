@@ -42,15 +42,20 @@ let config = {
             selector:'.edit-title',
             callback: async function () {
                 this.events.onChange();
-                editDialogConfig.data.view = this.data.charts;
+                let data = _.cloneDeep(this.data.charts);
+                let r = data.data.data.rows.toString();
+                data.data.data.rows = r;
+                console.log(r);
+                editDialogConfig.data.view = data;
                 const res = await PMAPI.openDialogByComponent(editDialogConfig,{
                     width: 740,
                     height: 442,
                     title: '注释编辑',
                 });
+
                 ViewsService.setEditData(res).then((val)=>{
                     if(val['success']===1){
-                        alert(val['success']);
+
                     }else{
                         alert(val['error']);
                     }
