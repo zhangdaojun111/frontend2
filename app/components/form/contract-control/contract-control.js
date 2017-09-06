@@ -5,6 +5,7 @@ import Component from "../../../lib/component";
 import template from './contract-control.html';
 import {contractEditorConfig} from "./contract-editor/contract-editor";
 import {PMAPI} from "../../../lib/postmsg";
+import './contract-control.scss'
 
 let config = {
     template:template,
@@ -14,24 +15,24 @@ let config = {
             selector:'.contract-view',
             callback:function () {
                 this.data['mode']='view';
-                this.actions.openEditor();
+                this.actions.openEditor('合同查看');
             }
         },{
             event:'click',
             selector:'.contract-edit',
             callback:function () {
                 this.data['mode']='edit';
-                this.actions.openEditor();
+                this.actions.openEditor('合同编辑');
             }
         }
     ],
     actions:{
-        openEditor:function(){
-            let contractConfig = _.defaultsDeep(contractEditorConfig,{data:this.data});
+        openEditor:function(title){
+            let contractConfig = _.defaultsDeep({data:this.data},contractEditorConfig);
             PMAPI.openDialogByComponent(contractConfig,{
                 width:900,
                 height:600,
-                title:'合同编辑'
+                title:title
             }).then(res=>{
                 if(res.onlyclose){
                     return;
