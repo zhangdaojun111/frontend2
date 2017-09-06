@@ -1328,11 +1328,10 @@ let config = {
             }else{
                 let formValue=this.actions.getFormValue();
                 let d={
-                    table_id:childId,
+                    table_id:this.data.tableId,
                     data:JSON.stringify(formValue),
                     field_id:data.id
                 };
-                console.log(d);
                 PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?viewMode=newFormCount&tableId=${childId}&fieldId=${data.id}`,{
                     title:showName,
                     width:1200,
