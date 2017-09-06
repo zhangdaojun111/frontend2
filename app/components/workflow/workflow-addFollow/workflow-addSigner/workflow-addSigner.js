@@ -10,10 +10,13 @@ import Mediator from '../../../../lib/mediator';
 import SelectStaff from '../select-staff/select-staff';
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import AddSigner from '../add-signer/add-signer';
+import msgBox from '../../../../lib/msgbox';
 
 let config={
     template: template,
-    data:{},
+    data:{
+
+    },
     action:{
         search(){
             let keyword = this.el.find(".signer-search").val();
@@ -56,6 +59,9 @@ let config={
                     if($(domDiv[i]).data('id')===userArr[j]){
                         $(domDiv[i]).parent().remove();
                     }
+                    if(userArr[j]===__this.data.sigh_user_id){
+                        __this.data.sigh_user_id = null;
+                    }
                 }
             }
             let domSpan=this.el.find('#selected').find('span');
@@ -63,6 +69,9 @@ let config={
                 for(let j=0;j<userArr.length;j++){
                     if($(domSpan[i]).data('id')===userArr[j]){
                         $(domSpan[i]).parent().remove();
+                    }
+                    if(userArr[j]===__this.data.sigh_user_id){
+                        __this.data.sigh_user_id = null;
                     }
                 }
             }
@@ -87,6 +96,9 @@ let config={
                     if($(domDiv[i]).data('id')===userArr[j]){
                         $(domDiv[i]).parent().remove();
                     }
+                    if(userArr[j]===__this.data.sigh_user_id){
+                        __this.data.sigh_user_id = null;
+                    }
                 }
             }
         });
@@ -108,11 +120,16 @@ let config={
             let o={};
             o.sigh_type=__this.el.find('[name="addHandlerType"]:checked').val();
             o.sigh_user_id=__this.data.sigh_user_id;
-            PMAPI.sendToParent({
-                type: PMENUM.close_dialog,
-                key:__this.data.key,
-                data:o
-            })
+            if(o.sigh_user_id){
+                PMAPI.sendToParent({
+                    type: PMENUM.close_dialog,
+                    key:__this.data.key,
+                    data:o
+                })
+            }else{
+                msgBox.alert("请选择一名加签人员");
+            }
+
         });
     }
 };
