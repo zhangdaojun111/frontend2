@@ -52,6 +52,10 @@ input, textarea, select {
     background-color: #ccc;
 }
 
+input::-webkit-input-placeholder{
+    color: #ccc;
+}
+
 .alert-box {
     padding: 20px;
     .text {
