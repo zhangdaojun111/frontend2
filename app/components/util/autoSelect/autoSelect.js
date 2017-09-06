@@ -95,7 +95,7 @@ let config = {
         setList: function (list) {
             this.data.list = list;
             this.reload();
-            this.actions.renderChoosed();
+            // this.actions.renderChoosed();
         },
         renderChoosed: function () {
             this.listWrap.find('input:checkbox:checked').each(function () {
