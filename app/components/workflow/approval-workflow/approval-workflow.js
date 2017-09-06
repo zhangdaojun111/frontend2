@@ -362,7 +362,7 @@ let config={
         Mediator.subscribe("workflow:focused", (res) => {
             if(res.length>0){
                 this.el.on('click','#addFollower',()=>{
-                    PMAPI.openDialogByIframe(`/iframe/addFocus/?${res}`,{
+                    PMAPI.openDialogByIframe(`/iframe/addfocus/?${res}`,{
                         width:800,
                         height:600,
                         title:`添加关注人`,
@@ -382,7 +382,7 @@ let config={
                 });
             }else{
                 this.el.on('click','#addFollower',()=>{
-                    PMAPI.openDialogByIframe(`/iframe/addFocus/`,{
+                    PMAPI.openDialogByIframe(`/iframe/addfocus/`,{
                         width:800,
                         height:600,
                         title:`添加关注人`,

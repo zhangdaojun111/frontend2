@@ -10,7 +10,9 @@ import {workflowService} from '../../../services/workflow/workflow.service';
 
 let config={
     template: template,
-    data:{},
+    data:{
+        checkIds:[]
+    },
     actions:{
         approve(e){
             msgBox.confirm(`确认审批`)
@@ -19,7 +21,7 @@ let config={
                     let postData={};
                     postData.action=e;
                     postData.comment=$('#comment').val();
-                    postData.checkIds=JSON.stringify([]);
+                    postData.checkIds=this.data.checkIds;
                     (async function () {
                         return workflowService.approveManyWorkflow(postData);
                     })().then((res)=>{
@@ -56,6 +58,10 @@ let config={
         },
     ],
     afterRender(){
+        PMAPI.getIframeParams(this.data.key).then((res) => {
+            Mediator.publish('workflow:addusers', res.data.checkIds);
+            this.data.checkIds=res.data.checkIds;
+        })
     }
 };
 class MultiApp extends Component{
