@@ -6,6 +6,7 @@
     //flex-direction: column;
     height: 100%;
     width: 100%;
+    margin-bottom: 30px;//解决时间框下拉框弹出撑开form的抖动
     @import "dateTime";
     .ui-history {
         margin-left: 5px;
@@ -94,6 +95,8 @@
         -webkit-appearance: none;
         outline: none;
         opacity: 100;
+        text-indent: 10px;
+        height:26px;
 
     }
     .dynamic-form-input-a, .dynamic-form-input-ac {
