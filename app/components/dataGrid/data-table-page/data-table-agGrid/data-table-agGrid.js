@@ -47,6 +47,7 @@ let config = {
         rowId: '',
         fieldId: '',
         flowId: '',
+        recordId: '',
         source_field_dfield: '',
         base_buildin_dfield: '',
         fieldContent: null,
@@ -1282,6 +1283,7 @@ let config = {
                 tableType: this.data.tableType,
                 fieldId: this.data.fieldId,
                 rowId: this.data.rowId,
+                record_id: this.data.recordId,
                 is_filter: this.data.filterParam.is_filter,
                 filter: []
             }
@@ -1313,6 +1315,12 @@ let config = {
                 json["tableType"]='count';
             }
             if( this.data.viewMode == 'createBatch' ){
+                json["is_batch"] = 1;
+                json['mongo'] = {
+                    _id: { $in: this.data.batchIdList }
+                }
+            }
+            if( this.data.viewMode == 'approveBatch' ){
                 json["is_batch"] = 1;
                 json['mongo'] = {
                     _id: { $in: this.data.batchIdList }
