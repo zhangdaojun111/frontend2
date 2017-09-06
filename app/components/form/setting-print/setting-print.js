@@ -159,8 +159,7 @@ let SettingPrint = {
                }
            }
        })
-        _this.el.find('.global-search-input').blur();
-        _this.el.find('.global-search-input').on('click',function(){
+        _this.el.find('.global-search-input').on('focus',function(){
             if(_this.data.printTitles.length && _this.data.printTitles.length != 0){
                 _this.el.find('.global-search-history').css('visibility','visible');
             }else{

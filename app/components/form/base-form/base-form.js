@@ -1252,6 +1252,7 @@ let config = {
                 </div></div>`)
             }
         },
+        //创建events函数
         createActions() {
             let actions = {
                 changeValue: (data) => {
