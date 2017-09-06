@@ -36,6 +36,9 @@ let config={
     },
     afterRender(){
         let _this=this;
+        if(this.data.history){
+            this.el.find('.ui-history').css('visibility','visible');
+        }
         let yearData = {
             multiSelect:false,
             editable:this.data.is_view?false:true,

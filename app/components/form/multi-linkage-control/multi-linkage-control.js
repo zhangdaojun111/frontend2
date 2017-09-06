@@ -185,6 +185,9 @@ let config={
         this.data.isInit=true;
         //记录已选择的选项数，只有全部选择才会触发changeValue事件
         this.setData('hasChoose', new Map());
+        if(this.data.history){
+            this.el.find('.ui-history').css('visibility','visible');
+        }
         if (!this.data.childDrop) {
             this.setData('childDrop', []);
         }

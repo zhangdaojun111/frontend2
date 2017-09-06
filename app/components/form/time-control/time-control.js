@@ -87,6 +87,9 @@ let config = {
         this.el.find(".timeInput").val("时:分:秒");
         this.el.find('.ui-width').css('width', this.data.width);
         this.el.find('.time').css('width', this.data.width);
+        if(this.data.history){
+            this.el.find('.ui-history').css('visibility','visible');
+        }
         if (this.data.is_view) {
             this.el.find('.ui-width').attr('disabled', true);
             this.el.find('.input-img').css('pointer-events','none');

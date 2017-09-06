@@ -111,6 +111,9 @@ let config = {
         if(this.data.dtype==10 && this.data.value){
             this.el.find('.countView').css('visibility','visible');
         }
+        if(this.data.history){
+            this.el.find('.ui-history').css('visibility','visible');
+        }
     },
     beforeDestory() {
         this.el.off();
