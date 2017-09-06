@@ -23,11 +23,10 @@ let config = {
         getUserViewList:function () {
             let that = this;
             TabService.getFavoriteList().done((result) => {
-                // console.log(result);
                 if(result.success === 1 ){
                     let tempList = result.data;
                     for (let k in tempList){
-                        that.data.favoriteList.push({'name':k, 'list':tempList[k]});
+                        that.data.favoriteList.unshift({'name':tempList[k].name, 'list':tempList[k].info});
                     }
                 }else{
                     console.log("get favorite list failed");
@@ -78,10 +77,11 @@ let config = {
             favorlist['name'] = name;
             favorlist['list'] = JSON.stringify(list);
             favorlist['query_type'] = 'save';
-            // console.log(favorlist);
+            console.log(favorlist);
             let that = this;
             TabService.saveFavoriteItem(favorlist).done((result) => {
                 if(result.success === 1){
+                    console.log(result);
                     msgbox.alert("保存成功");
                     _.remove(that.data.favoriteList,function (n) {
                         return n.name === name;
