@@ -88,8 +88,10 @@ let config = {
             secondText: '秒',
             currentText: '今',
             closeText: '确定',
-            timeInput:'1',
-            showSecond: true, //显示秒
+            timeInput:true,
+            showHour: false,
+            showMinute:false,
+            showSecond:false,
             changeMonth: true,
             changeYear: true,
             dateFormat: "yy-mm-dd",
