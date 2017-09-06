@@ -23,7 +23,6 @@ let config = {
         getUserViewList:function () {
             let that = this;
             TabService.getFavoriteList().done((result) => {
-                console.log(result);
                 if(result.success === 1 ){
                     let tempList = result.data;
                     for (let k in tempList){
@@ -78,11 +77,12 @@ let config = {
             favorlist['name'] = name;
             favorlist['list'] = JSON.stringify(list);
             favorlist['query_type'] = 'save';
+            //检查name是否已存在，存在则先删除该条记录，保证新加记录在最前面
+            this.actions.deleteViewByName(name);
 
             let that = this;
             TabService.saveFavoriteItem(favorlist).done((result) => {
                 if(result.success === 1){
-                    console.log(result);
                     msgbox.alert("保存成功");
                     _.remove(that.data.favoriteList,function (n) {
                         return n.name === name;
@@ -170,7 +170,18 @@ let config = {
             })
         },
         deleteViewByName:function(name){
+            let favorlist = {};
+            favorlist['name'] = name;
+            favorlist['query_type'] = 'delete';
 
+            TabService.deleteFavoriteItem(favorlist).done((result) => {
+                console.log(result);
+                if(result.success === 1){
+                    _.remove(this.data.favoriteList,function (n) {
+                        return n.name === name;
+                    });
+                }
+            })
         }
     },
     binds:[
@@ -179,7 +190,7 @@ let config = {
             selector:'.save-btn',
             callback: _.debounce( function () {
                 this.actions.saveFavorite();
-            },500)
+            },100)
         },
         {
             event:'click',
