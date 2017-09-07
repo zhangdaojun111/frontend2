@@ -46,7 +46,7 @@ let config = {
         },
         {
             event: 'click',
-            selector: '.ui-datepicker-current,.input-img',
+            selector: '.ui-datepicker-current',
             callback: function () {
                 this.el.find("#errorMessage").css("display","none");
                 //增加0
@@ -102,12 +102,7 @@ let config = {
         } else {
             this.el.find('.ui-width').attr('disabled', false);
         }
-        //回显
-        if (_this.data.value) {
-            _this.el.find(".timeInput").val(_this.data.value);
-        } else {
-            this.el.find(".timeInput").val("时:分:秒");
-        }
+
 
         //增加0
         function p(s) {
@@ -120,6 +115,20 @@ let config = {
         let m = myDate.getMinutes();
         let s = myDate.getSeconds();
         let now = p(h) + ':' + p(m) + ":" + p(s);
+
+        //回显
+        if (_this.data.value) {
+            let strDate = _this.el.find(".timeInput").val(_this.data.value);
+            this.el.find(".hour").children("span").text(strDate.substring(0,2))
+            this.el.find(".minute").children("span").text(strDate.substring(3,5));
+            this.el.find(".second").children("span").text(strDate.substring(6,8));
+
+        } else {
+            this.el.find(".timeInput").val("时:分:秒");
+            this.el.find(".hour").children("span").text(p(h));
+            this.el.find(".minute").children("span").text(p(m));
+            this.el.find(".second").children("span").text(p(s));
+        }
 
         this.el.on("click", '.plus', function () {
             //当前时间+1
@@ -169,12 +178,12 @@ let config = {
                 _this.events.changeValue(_this.data)
             }, 200)();
         });
-        _this.el.find(".ui-datepicker-close").on("click", function () {
-            _this.data.value = _this.el.find('.timeInput').val();
-            _.debounce(function () {
-                _this.events.changeValue(_this.data)
-            }, 200)();
-        })
+        // _this.el.find(".ui-datepicker-close").on("click", function () {
+        //     _this.data.value = _this.el.find('.timeInput').val();
+        //     _.debounce(function () {
+        //         _this.events.changeValue(_this.data)
+        //     }, 200)();
+        // })
 
         this.el.find('.timeInput').on('input', _.debounce(function () {
             _this.actions.keyup();
