@@ -383,6 +383,7 @@ let config = {
                 for (let obj of this.data.childComponents) {
                     newAllRowsData.push(obj.data.rowSetData);
                 }
+                console.log(newAllRowsData);
                 this.actions.saveSetting(this.data.tableId, newAllRowsData);
             }
         }
