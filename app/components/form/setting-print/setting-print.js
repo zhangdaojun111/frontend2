@@ -53,6 +53,7 @@ let css = `
  height: 30px;
  line-height: 31px;
  color: #fff;
+ border-radius:4px;
  }
  .J-print-btn.cancel{
     right:10px;
