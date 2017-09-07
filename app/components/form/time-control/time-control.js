@@ -12,6 +12,7 @@ let config = {
         // width: '240px'
     },
     actions: {
+        //时间日期输入错误提示
         keyup: function () {
             let _this = this
             //hh:mm:ss
@@ -31,7 +32,7 @@ let config = {
                 }, 200)();
             }
             else {
-                this.el.find("#errorMessage").css("display", "inline-block").text("时间格式不正确，正确格式为12:00:00 ");
+               // this.el.find("#errorMessage").css("display", "inline-block").text("时间格式不正确，正确格式为12:00:00 ");
             }
         }
     },
@@ -74,7 +75,7 @@ let config = {
             event: 'click',
             selector: '.input-img',
             callback: function () {
-                this.el.find('.time').css({'display': 'block', 'position': 'absolute'});
+                this.el.find('.time').css({ 'position': 'absolute'}).toggle();
                 event.stopPropagation();
             }
         },
@@ -120,16 +121,6 @@ let config = {
         let s = myDate.getSeconds();
         let now = p(h) + ':' + p(m) + ":" + p(s);
 
-        this.el.on("click",'.ui-datepicker-current,.input-img', function () {
-            let nowTime = this.el.find(".timeInput").val(now);
-            this.data.value = now;
-            _.debounce(() => {
-                this.events.changeValue(this.data)
-            }, 200)();
-            this.el.find(".hour").children("span").text(p(h));
-            this.el.find(".minute").children("span").text(p(m));
-            this.el.find(".second").children("span").text(p(s));
-        })
         this.el.on("click", '.plus', function () {
             //当前时间+1
             let myDate2 = new Date();
@@ -185,10 +176,6 @@ let config = {
             }, 200)();
         })
 
-        _this.el.find('.timeInput').on('keyup', function () {
-            console.log("keyup")
-            _this.data.value = _this.data.value.replace("/[^w:]|_/ig,''");
-        })
         this.el.find('.timeInput').on('input', _.debounce(function () {
             _this.actions.keyup();
         }, 200));
