@@ -1,5 +1,9 @@
-#approval-workflow-body,#myBody{
+#approval-workflow-body,#myBody,#add-signer-body,#ly-body,#add-follow-body{
     font-size: 12px;
+}
+#ly-body,#add-follow-body,#add-signer-body{
+    padding: 0;
+    margin: 0;
 }
 #myBody{
     overflow-y: scroll;

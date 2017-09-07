@@ -1,4 +1,5 @@
 import '../../assets/scss/main.scss';
+import '../../assets/scss/workflow/workflow-base.scss'
 import {HTTP} from '../../lib/http';
 import Mediator from '../../lib/mediator';
 import {workflowService} from '../../services/workflow/workflow.service';
