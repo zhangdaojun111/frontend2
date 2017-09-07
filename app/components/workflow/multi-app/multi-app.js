@@ -31,6 +31,11 @@ let config={
                         }else{
                             msgBox.alert(`操作失败：${res.error}`);
                         }
+                        PMAPI.sendToParent({
+                            type: PMENUM.close_dialog,
+                            key:this.data.key,
+                            data:{refresh:true}
+                        })
                     })
                 }
             })
