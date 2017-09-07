@@ -53,6 +53,7 @@ if(focus.length>=1&&focus[0].indexOf('key')===-1){
                                     for(let j in idArr){
                                         o[idArr[j]]=staff[k][idArr[j]];
                                     }
+                                    console.log(o);
                                     Mediator.publish('workflow:checkDeptAlready', o);
                                 }
                             }
@@ -132,7 +133,9 @@ if(focus.length>=1&&focus[0].indexOf('key')===-1){
 }
 
 Mediator.subscribe('workflow:addusers', (arr) => {
+    console.log(arr);
     if(!arr)return;
+    console.log(1);
     let dept=[],idArr=[];
     (async function () {
         return workflowService.getWorkflowInfo({url: '/get_all_users/'});
