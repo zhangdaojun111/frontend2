@@ -171,8 +171,6 @@ let config = {
     ],
 
     afterRender() {
-        //加载动画
-        this.showLoading();
         //加载头部导航
         if(config.data.canvasSingle){
             this.data.views.forEach((val,index) => {
@@ -181,6 +179,8 @@ let config = {
             });
         }
         let self = this;
+        // 加载loading动画;
+        this.showLoading();
 
         // 匹配导航的视图id
         if (self.viewId) {
@@ -199,7 +199,6 @@ let config = {
                 return cell.layout_id == layout_id;
             });
         });
-
         //单页跳转指定路由
         $('.btn-single').click(function () {
             let pathname = '/bi/index/';

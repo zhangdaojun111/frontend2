@@ -80,13 +80,13 @@ let config = {
                     this.formItems['yAxis0'].actions.updateY(data['y_field']);
                     this.formItems['yAxis1'].actions.updateY(data['y_field']);
                     this.formItems['chartGroup'].setList(data['x_field']);
-                    this.formItems['tableSortColumn'].setList(data['x_field']);
+                    // this.formItems['tableSortColumn'].setList(data['x_field']);
                 } else { // 清空字段
                     this.formItems['xAxis'].setList([]);
                     this.formItems['yAxis0'].actions.updateY([]);
                     this.formItems['yAxis1'].actions.updateY([]);
                     this.formItems['chartGroup'].setList([]);
-                    this.formItems['tableSortColumn'].setList([]);
+                    // this.formItems['tableSortColumn'].setList([]);
                 }
             }
         },
@@ -253,23 +253,23 @@ let config = {
             },
             theme,
             icon,
-            {
-                label: '默认排序',
-                name: 'sort',
-                defaultValue: '1',
-                list: [
-                    {value: '1',name: '升序'},
-                    {value: '-1', name:'降序'}
-                ],
-                type: 'radio'
-            },
-            {
-                label: '',
-                name: 'tableSortColumn',
-                defaultValue: '',
-                type: 'autocomplete',
-                placeholder: '选择排序字段（非必选）'
-            },
+            // {
+            //     label: '默认排序',
+            //     name: 'sort',
+            //     defaultValue: '1',
+            //     list: [
+            //         {value: '1',name: '升序'},
+            //         {value: '-1', name:'降序'}
+            //     ],
+            //     type: 'radio'
+            // },
+            // {
+            //     label: '',
+            //     name: 'tableSortColumn',
+            //     defaultValue: '',
+            //     type: 'autocomplete',
+            //     placeholder: '选择排序字段（非必选）'
+            // },
             {
                 label: 'x轴字段',
                 name: 'xAxis',

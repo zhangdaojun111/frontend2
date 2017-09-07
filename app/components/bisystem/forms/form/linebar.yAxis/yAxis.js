@@ -89,7 +89,7 @@ let config = {
     },
     binds: [],
     afterRender(){
-        this.actions.yMoreSetting();
+        // this.actions.yMoreSetting();
         this.actions.addY();
     }
 }
