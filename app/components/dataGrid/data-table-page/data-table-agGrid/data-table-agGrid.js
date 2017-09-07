@@ -2807,7 +2807,7 @@ let config = {
             console.log( data )
             console.log( window.config )
             //表头
-            let headerRes = [data.preferences,data.column_list,data.tab_page,data.operation,data.prepare_params]
+            let headerRes = [data.preferences,data.column_list,data.tab_page,data.operation,data.prepare_params];
             this.actions.setHeaderData( headerRes );
             //数据
             let gridRes = [data.table_data,data.reminds_infos,data.footer_data];
