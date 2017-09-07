@@ -5,6 +5,8 @@
 	height: 550px;
 	width: 800px;
 	overflow-x: hidden;
+	padding: 10px;
+	box-sizing: border-box;
 }
 #add-home{
 	.selectSpan{
@@ -42,6 +44,7 @@
 	.follower-select-main{
 		position: relative;
 		height: 100%;
+		border: 1px solid #eee;
 		.flexItem{
 			flex-grow: 1;
 			flex-shrink: 0;
@@ -82,6 +85,8 @@
 		position: fixed;
 		right: 12px;
 		bottom: 6px;
+		background: #0088ff;
+		color: #fff;
 	}
 	.close{
 		position: absolute;
