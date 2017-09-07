@@ -20,7 +20,7 @@ import WorkflowAddSigner from '../components/workflow/workflow-addFollow/workflo
 import FormEntrys from './form';
 import msgBox from '../lib/msgbox';
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
-import Grid from '../components/dataGrid/data-table-page/data-table-page';
+import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import {PMAPI,PMENUM} from '../lib/postmsg';
 import jsplumb from 'jsplumb';
 
@@ -30,9 +30,10 @@ WorkFlowForm.showForm().then(function () {
     },2000)
 
 });
+
 WorkFlowGrid.showGrid();
 
-let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[];;
+let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[],agorfo=true,is_batch=0;
 serchStr.split('&').forEach(res => {
     let arr = res.split('=');
     obj[arr[0]] = arr[1];
@@ -63,7 +64,6 @@ Mediator.subscribe('workFlow:record_info', (res) => {
             }
         });
     })().then(result => {
-
         Mediator.publish('workflow:getImgInfo', result);
         Mediator.publish('workflow:gotWorkflowInfo', result);
         let a=result.data[0].updateuser2focususer;
@@ -72,20 +72,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
                 focus.push(a[i][j]);
             }
         }
-
         Mediator.publish('workflow:focused' , focus);
-        // if(result[0].temp_ids==0){
-        //     FormEntrys.createForm({
-        //         el: $('#place-form'),
-        //         form_id: obj.form_id,
-        //         record_id: obj.record_id,
-        //         is_view: is_view,
-        //         from_approve: 1,
-        //         from_focus: 0,
-        //         btnType:'none',
-        //         table_id: obj.table_id
-        //     });
-        // }
         (async function () {
             return workflowService.getWorkflowInfo({url: '/get_all_users/'});
         })().then(users => {
@@ -102,28 +89,35 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     
 });
 
-    (async function () {
-        return workflowService.getRecordInfo(
-            {
-                flow_id: obj.flow_id,
-                record_id: obj.record_id,
-                // is_view:0,
-                table_id: obj.table_id,
-            }
-        )
-    })().then(function (res) {
-        Mediator.publish("workflow:aggridorform",res);
-        let AgGrid=new Grid({
-            // parentTempId:res.record_info.temp_ids,
-            tableId:obj.table_id,
-            recordId: obj.record_id,
-            viewMode:"approveBatch",
-        });
-        AgGrid.actions.returnBatchData = function (ids) {
-            temp_ids=ids;
-        };
-        AgGrid.render($("#J-aggrid"));
-    })
+/**
+ * 审批批量工作流初始化
+ */
+(async function () {
+    return workflowService.getRecordInfo(
+        {
+            flow_id: obj.flow_id,
+            record_id: obj.record_id,
+            // is_view:0,
+            table_id: obj.table_id,
+        }
+    )
+})().then(function (res) {
+    Mediator.publish("workflow:aggridorform",res);
+    is_batch = res.record_info.is_batch;
+    if(is_batch==1){
+        agorfo =false;
+    }
+    let AgGrid=new Grid({
+        batchIdList:res.record_info.temp_ids,
+        tableId:obj.table_id,
+        recordId: obj.record_id,
+        viewMode:"approveBatch",
+    });
+    AgGrid.actions.returnBatchData = function (ids) {
+        temp_ids=ids;
+    };
+    AgGrid.render($("#J-aggrid"));
+})
 
 
 Mediator.subscribe("workflow:loaded",(e)=>{
@@ -134,6 +128,9 @@ Mediator.subscribe("workflow:loaded",(e)=>{
     }
 });
 
+/**
+ * 审批表单初始化
+ */
 FormEntrys.createForm({
     el: $('#place-form'),
     form_id: obj.form_id,
@@ -162,7 +159,10 @@ const approveWorkflow = (para) => {
     let key=GetQueryString('key');
     let formData=FormEntrys.getFormValue(obj.table_id,true),
         comment=$('#comment').val();
-    para.data=JSON.stringify(formData);
+    para.data={};
+    if(agorfo){
+        para.data=JSON.stringify(formData);
+    }
     para.comment=comment;
     para.focus_users=JSON.stringify(focusArr);
     (async function () {
