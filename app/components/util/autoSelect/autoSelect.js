@@ -109,7 +109,7 @@ let config = {
             let html = [];
             if (this.data.choosed.length) {
                 this.data.choosed.forEach((item) => {
-                    if (item.id) {
+                    if (!_.isUndefined(item.id)) {
                         let checkbox = this.listWrap.find(`input:checkbox[data-id=${item.id}]`);
                         if (checkbox.length) {
                             checkbox[0].checked = true;

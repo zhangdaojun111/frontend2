@@ -62,12 +62,22 @@ let config = {
         event: 'click',
         selector: '.save',
         callback: function () {
+            if(this.data.isBtnClick){
+                console.log('有没有阻止呢？');
+                return;
+            }
+            console.log('过来楼');
+            this.data.isBtnClick=true;
             this.actions.onSubmit();
         }
     }, {
         event: 'click',
         selector: '.changeEdit',
         callback: function () {
+            if(this.data.isBtnClick){
+                return;
+            }
+            this.data.isBtnClick=true;
             this.actions.changeToEdit();
         }
     }],
@@ -952,7 +962,7 @@ let config = {
 
         //必填性改变
         requiredChange(_this) {
-            if (_this.data.value == '') {
+            if (_this.data.value === '') {
                 _this.el.find('#requiredLogo').removeClass().addClass('required');
             } else {
                 _this.el.find('#requiredLogo').removeClass().addClass('required2');
@@ -1073,6 +1083,7 @@ let config = {
             } else {
                 MSG.alert(res.error);
             }
+            this.data.isBtnClick=false;
             //清空子表内置父表的ids
             delete FormService.idsInChildTableToParent[this.data.tableId];
         },
@@ -1099,6 +1110,7 @@ let config = {
                 this.data.btnType = 'new';
             }
             this.actions.addBtn();
+            this.data.isBtnClick=false;
         },
         //修改可修改性
         reviseCondition: function (editConditionDict, value) {

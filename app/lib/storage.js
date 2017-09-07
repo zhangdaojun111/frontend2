@@ -2,6 +2,10 @@
  * Created by Yunxuan Yan on 2017/9/4.
  */
 
+/**
+ * 本工具会在main页初始化的时候清除跟SECTION和IFRAME相关的缓存，在Iframe退出时清除和本Iframe相关的缓存
+ * @type {{SECTION: {FORM: string, DATAGRID: string, WORKFLOW: string, FRAMEWORK: string, BI: string}, iframe_key: string, init: (function(*)), setItem: Storage.setItem, getItemAndDelete: Storage.getItemAndDelete, getItem: Storage.getItem, deleteItem: Storage.deleteItem, clear: Storage.clear, clearAll: Storage.clearAll}}
+ */
 export const Storage = {
     SECTION:{
         FORM:'form',
@@ -9,6 +13,12 @@ export const Storage = {
         WORKFLOW:'workflow',
         FRAMEWORK:'framework',
         BI:'BI'
+    },
+
+    iframe_key:'',
+
+    init(key){
+       Storage.iframe_key = key;
     },
 
     /**
@@ -23,13 +33,14 @@ export const Storage = {
             return;
         }
         let obj;
-        if(window.localStorage[section]==undefined){
+        if(window.localStorage[Storage.iframe_key]==undefined){
             obj = {};
         } else {
-            obj = JSON.parse(window.localStorage[section]);
+            obj = JSON.parse(window.localStorage[Storage.iframe_key]);
         }
-        obj[itemTag]=item;
-        window.localStorage[section] = JSON.stringify(obj);
+        obj[section]=obj[section]||{};
+        obj[section][itemTag]=item;
+        window.localStorage[Storage.iframe_key] = JSON.stringify(obj);
     },
 
     /**
@@ -38,10 +49,10 @@ export const Storage = {
      * @param section 所属部分
      */
     getItemAndDelete:function(itemTag,section){
-        let obj = JSON.parse(window.localStorage[section]);
-        let item = obj[itemTag];
-        delete obj[itemTag];
-        window.localStorage[section] = JSON.stringify(obj);
+        let obj = JSON.parse(window.localStorage[Storage.iframe_key]);
+        let item = obj[section][itemTag];
+        delete obj[section][itemTag];
+        window.localStorage[Storage.iframe_key] = JSON.stringify(obj);
         return item;
     },
 
@@ -51,7 +62,14 @@ export const Storage = {
      * @param section 所属部分
      */
     getItem:function (itemTag,section){
-        return JSON.parse(window.localStorage[section])[itemTag];
+        if(window.localStorage[Storage.iframe_key]){
+            let obj = JSON.parse(window.localStorage[Storage.iframe_key])[section];
+            if(obj == undefined){
+                return null;
+            }
+            return obj[itemTag];
+        }
+        return null;
     },
 
     /**
@@ -60,21 +78,38 @@ export const Storage = {
      * @param section 所属部分
      */
     deleteItem:function (itemTag,section) {
-        let obj = JSON.parse(window.localStorage[section]);
-        for(let key of Object.keys(obj)){
+        let obj = JSON.parse(window.localStorage[Storage.iframe_key]);
+        for(let key of Object.keys(obj[section])){
             if(key.indexOf(itemTag)>=0){
-                delete obj[key];
+                delete obj[section][key];
             }
         }
         window.localStorage[section] = JSON.stringify(obj);
     },
 
     /**
-     * 所有section中的缓存
+     * 清除指定iframe中的缓存
+     * @param key iframe的key
+     */
+    clear:function (key) {
+        delete window.localStorage[key];
+    },
+
+    /**
+     * 清楚所有section的缓存
+     *
      */
     clearAll:function () {
-        for(let value of Object.values(Storage.SECTION)){
-            delete window.localStorage[value];
+        for(let key of Object.keys(window.localStorage)){
+            if(key.indexOf('iframedialog')!=0){
+                delete window.localStorage[key];
+            } else {
+                for(let section of Object.values(Storage.SECTION)){
+                    if(key.indexOf(section)!=0){
+                        delete window.localStorage[key];
+                    }
+                }
+            }
         }
     }
 }
