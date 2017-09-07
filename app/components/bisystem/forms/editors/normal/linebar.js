@@ -201,6 +201,7 @@ let config = {
                 msgbox.alert(res['error'])
             };
         },
+
         /**
          * 编辑时填充表格配置
          * @param chart = this.data.chart

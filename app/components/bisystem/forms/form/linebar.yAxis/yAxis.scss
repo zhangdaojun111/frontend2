@@ -55,7 +55,12 @@
         }
     }
     .yAxis-setting {
-        padding-bottom: 20px;
+        padding-bottom: 10px;
+        .form-chart-checkbox {
+            label {
+                margin-top:0;
+            }
+        }
         >div {
             float:left;
             label {
