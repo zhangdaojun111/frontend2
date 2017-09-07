@@ -21,11 +21,26 @@
     <div class="cells-container client">
         <div class="cells">
             {{#if biUser}}
-            <div class="switch-button editpage"><a class="mat-fab bi-manage-btn" title="编辑" href="javascript:;">编辑</a></div>
+            <div class="switch-button editpage"><a class="mat-fab bi-manage-btn" title="编辑" href="javascript:;">编辑</a>
+            </div>
             {{else}}
-            <div class="switch-button singlepage"><a class="mat-fab btn-single" title="单页" href="javascript:;">单页</a></div>
-            <div class="switch-button multiplepage"><a class="mat-fab btn-multip" title="多页" href="javascript:;">多页</a></div>
+            <div class="switch-button singlepage"><a class="mat-fab btn-single" title="单页" href="javascript:;">单页</a>
+            </div>
+            <div class="switch-button multiplepage"><a class="mat-fab btn-multip" title="多页" href="javascript:;">多页</a>
+            </div>
             {{/if}}
         </div>
+
+        <div class="editor-text">
+            <div class="editor-text-auto">
+                <div class="editor-content"></div>
+                <div class="editor-btn">
+                    <button class="editor-btn-save">保存</button>
+                    <button class="editor-btn-cancel">取消</button>
+                </div>
+            </div>
+        </div>
+
     </div>
+
 </div>

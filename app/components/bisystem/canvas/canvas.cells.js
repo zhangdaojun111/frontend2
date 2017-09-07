@@ -7,6 +7,8 @@ import './canvas.cells.scss';
 import {canvasCellService} from '../../../services/bisystem/canvas.cell.service';
 import Mediator from '../../../lib/mediator';
 import msgbox from "../../../lib/msgbox";
+import Quill from 'quill';
+import {ViewsService} from "../../../services/bisystem/views.service";
 
 let config = {
     template: template,
@@ -15,8 +17,9 @@ let config = {
         cells: [],
         componentIds: [],
         cellMaxZindex: 0,
-        canvasSingle: false,
-        biUser: window.config.bi_user === 'client' ? true : false,
+        canvasSingle:false,
+        biUser:window.config.bi_user === 'client' ? true : false,
+        editVal:null,
     },
     actions: {
 
@@ -116,8 +119,7 @@ let config = {
             let charts = {};
             if (res['success'] == 0) {
                 msgbox.alert(res['error']);
-            }
-            ;
+            };
             res.forEach((chart, index) => {
                 charts[layoutsId[index]] = chart
             })
@@ -148,6 +150,29 @@ let config = {
                     msgbox.alert(res['error']);
                 }
             });
+        },
+
+        /**
+         * 新建文本编译器
+         */
+        newEditor(data) {
+            this.data.toolbarOptions = [
+                [{ 'size': ['small', false, 'large', 'huge'] }],
+                [{ 'font': [] }],
+                ['bold', 'italic', 'underline'],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'align': [] }],
+                ['link','image','code-block'],
+                ['clean']
+            ];
+            this.data.editor = new Quill( '.editor-content' , {
+                modules: {
+                    toolbar: this.data.toolbarOptions
+                },
+                theme: 'snow',
+            });
+            this.data.editor.root.innerHTML = data.content;
         }
 
     },
@@ -169,9 +194,50 @@ let config = {
                 return false;
             }
         },
+        // {
+        //     event:'click',
+        //     selector:'.edit-title',
+        //     callback: function (self = this) {
+        //         let val = $(self).parents('.cell').find('.editor').html();
+        //         this.el.find('.editor-text').show();
+        //         this.actions.newEditor(val);
+        //     }
+        // },
+        {
+            event:'click',
+            selector:'.editor-btn-cancel',
+            callback: function (self=this) {
+                $(self).parent().prevAll('.ql-toolbar').remove();
+                $(self).parent().prevAll('.editor-content').empty();
+                this.el.find('.editor-text').hide();
+
+            }
+        },
+        {
+            event:'click',
+            selector:'.editor-btn-save',
+            callback: function (self=this) {
+                this.data.editVal.content = this.data.editor.root.innerHTML;
+                ViewsService.setEditData(this.data.editVal).then((val)=>{
+                    if(val['success']===1){
+                        // this.reload();
+                    }else{
+                        alert(val['error']);
+                    }
+                });
+                $(self).parent().prevAll('.ql-toolbar').remove();
+                $(self).parent().prevAll('.editor-content').empty();
+                this.el.find('.editor-text').hide();
+            }
+        },
+
     ],
 
     afterRender() {
+
+        // 加载loading动画;
+        this.showLoading();
+
         //加载头部导航
         if (config.data.canvasSingle) {
             this.data.views.forEach((val, index) => {
@@ -181,21 +247,17 @@ let config = {
         }
         let self = this;
 
-        // 加载loading动画;
-        this.showLoading();
 
         // 匹配导航的视图id
         if (self.viewId) {
             for (let [index, view] of self.data.views.entries()) {
                 if (view.id == self.viewId) {
                     $('.nav-tabs a').eq(index).addClass('active');
-                }
-                ;
+                };
             }
         } else {
             $('.nav-tabs a').eq(0).addClass('active');
-        }
-        ;
+        };
 
         //子组件删除时 更新this.data.cells
         Mediator.subscribe("bi:cell:remove", layout_id => {
@@ -216,25 +278,25 @@ let config = {
             let url = window.location.hash;
             let reg = url.replace(/\?single/, "");
             window.location.href = `/bi/manager/${reg}`;
-        }).on('click', '.btn-multip', function () {
+        }).on('click', '.btn-multip', function(){
             let url = window.location.hash;
             window.location.href = `/bi/index/${url}`;
         });
 
-        this.actions.getCellLayout();
+        this.actions.getCellLayout()
     },
 };
 
-export class CanvasCellsComponent extends BiBaseComponent {
+export class CanvasCellsComponent extends BiBaseComponent{
     constructor(id) {
         let hash = window.location.href.indexOf('single');
-        if (hash > 0) {
+        if(hash>0){
             config.data.canvasSingle = false;
         } else {
             config.data.canvasSingle = true;
-        }
+        };
         config.data.views = window.config.bi_views;
         super(config);
-        this.viewId = id ? id : this.data.views[0] ? this.data.views[0]['id'] : [];
+        this.viewId = id ? id : this.data.views[0] ? this.data.views[0]['id'] : [] ;
     }
 }

@@ -5,4 +5,37 @@
     img {
         max-width: 100%;
     }
+    .editor{
+        //display: none;
+    }
+    .editor-text {
+        display: none;
+        .editor-content {
+            min-height: 200px;
+        }
+        .editor-btn {
+            padding: 10px 0;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .editor-btn button {
+            margin-right: 15px;
+            outline: none;
+            border: none;
+            text-align: center;
+            line-height: 28px;
+            width: 60px;
+            height: 28px;
+            color: #ffffff;
+            box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2);
+            cursor: pointer;
+        }
+        .editor-btn .editor-btn-save {
+            background: #3b8cff;
+        }
+        .editor-btn .editor-btn-cancel {
+            color: #666;
+            background: #fafafa;
+        }
+    }
 }
