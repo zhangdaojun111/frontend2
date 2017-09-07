@@ -74,7 +74,7 @@ class Y extends Base {
      * 获取y数据
      */
     getYData() {
-        this.data.value.group = this.group.data.value;
+        this.data.value.group = this.group.data.value ? this.group.data.value : 0;
         return this.data.value;
     }
 }

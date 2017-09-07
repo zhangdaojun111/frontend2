@@ -155,10 +155,9 @@ class YaXis extends Base {
             y.field.setValue(item['field']);
             y.type.setValue(item['type']['type']);
             y.group.setValue(item['group'] == 0 ? '' : item['group']);
-            console.log(item);
         });
-        this.data.areaStyle.setValue(yAxis[0]['areaStyle'] == 0 ? 0: 1);
-        this.data.label.setValue(yAxis[0]['label'] == 0 ? 0: 1)
+        this.data.areaStyle.setValue(!yAxis[0]['areaStyle'] || yAxis[0]['areaStyle'] == 0 ? 0: 1);
+        this.data.label.setValue(!yAxis[0]['label'] || yAxis[0]['label'] == 0 ? 0: 1)
     }
 
 
