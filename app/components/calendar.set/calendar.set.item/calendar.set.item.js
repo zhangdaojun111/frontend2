@@ -131,7 +131,7 @@ let config = {
                 '/iframe/calendarSetRemind/',
                 {
                     width: "800",
-                    height: '800',
+                    height: '570',
                     title: '【' + this.data.rowTitle.name + '】' + '的提醒'
                 }, {
                     emailStatus: this.data.rowSetData.email.email_status,
