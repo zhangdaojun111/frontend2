@@ -4,6 +4,10 @@
         border-color: transparent !important;
         background-color: transparent !important;
     }
+    //去掉宽度改变时候的滚动条
+    .ag-bl {
+        overflow-x: hidden;
+    }
 
     //footer
     .ag-floating-bottom-container {
