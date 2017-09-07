@@ -3,6 +3,23 @@
  */
 import template from './contract-editor.html';
 
+/**
+ * logic的get_element调用规则：
+ *  table_id: 对应数据表的TableID，可从data.table_id获得
+ *  real_id: 数据记录的ID，可从data.real_id获得
+ *  field_id: 数据列的ID，可从data.id获得
+ *        只写以上三者，get_element将返回合同模板选项（model_id）和数据源选项(elements)
+ *  model_id: 合同模板ID，可从data.value[i].model_id或者通过合同模板选项的value获得
+ *        只写以上四者，将获得未填写数据源的合同模板
+ *  elements: 一个键值对象，用于填充合同模板的数据源（某表的某行数据），可从data.value[i].elements或者通过数据源选项的value获得
+ *  type: 可填"show"和"edit"，注意在获得已提交的合同用show，新增数据用edit
+ *  index: 索引，对应tab页索引，从0开始，但是新增数据时用0
+ *        上述七个参数均填对即可获得带有内容的合同数据
+ *
+ *  如果修改了合同中的数据，在向上提数据的时候一定加上k2v用于存已修改的数据
+ *  
+ **/
+
 let css = `
    .contract-editor{       
         width: 880px;
