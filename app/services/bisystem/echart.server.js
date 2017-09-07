@@ -56,6 +56,7 @@ export class EchartsService {
      */
     lineBarOption(cellChart) {
         let cellOption = cellChart['chart'];
+        let ySelectedGroup = cellChart['chart']['ySelectedGroup'];
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
             return defaultOption;
         };
@@ -75,7 +76,7 @@ export class EchartsService {
         let maxXnum = [];
         let maxYTextNum; // y轴数字toSting().length最大字数
 
-        yAxis.forEach(y => {
+        yAxis.forEach((y,i) => {
             legend.push(y[nameType]);
             let yTextNum = [];
             y['data'].forEach(val => {
@@ -109,7 +110,15 @@ export class EchartsService {
                     normal: {
                         width: 1
                     }
-                }
+                },
+                areaStyle:(cellOption.yAxis[i] && cellOption.yAxis[i].areaStyle==1)?{normal: {}}:{},
+                stack:cellOption.yAxis[i] && cellOption.yAxis[i]['group'] || '',
+                label: (cellOption.yAxis[i] && cellOption.yAxis[i]['label']==1)?
+                    {normal: {
+                        show: true,
+                        position: (cellOption.yAxis[i] && cellOption.yAxis[i]['group'] != '')?'inside':'top'
+                        // position:'top'
+                    }}:{}
             });
         });
         xAxis.forEach(x => {
@@ -209,6 +218,19 @@ export class EchartsService {
         }
         linebarOption['series'] = series;
         linebarOption['legend'].data = legend;
+        // 默认显示y轴字段列表
+        if (Array.isArray(ySelectedGroup) && ySelectedGroup.length > 0) {
+            legend.map(name => {
+                for (let val of ySelectedGroup) {
+                    if (val.name === name) {
+                        linebarOption['legend']['selected'][name] = true;
+                        break;
+                    } else {
+                        linebarOption['legend']['selected'][name] = false;
+                    }
+                }
+            });
+        };
 
         if (cellOption['yHorizontal']) {
             linebarOption['grid']['left'] = 15 * maxXTextNum;
@@ -242,6 +264,7 @@ export class EchartsService {
         if (cellOption['yHorizontalColumns']) {
             linebarOption['yAxis'][0]['axisLabel']['interval'] = 0;
         };
+        console.log(linebarOption);
         return linebarOption;
     }
 
@@ -277,7 +300,6 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     multiChartOption(cellChart) {
-        console.log(cellChart);
         let cellOption = cellChart['chart'];
         const mutiListOption = EchartsOption.getEchartsConfigOption('multilist'); // 获取多表默认配置option
         const multilistData = cellOption['data']['multillist'][0]['xAxis']; // 多表数据
@@ -362,7 +384,6 @@ export class EchartsService {
         });
         return mutiListOption;
     }
-
     /**
      * 雷达图处理
      * @param chart = cellChart['chart']数据

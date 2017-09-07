@@ -238,7 +238,6 @@ let config = {
                 type: 'checkbox',
                 events: {
                     onChange:function(value) {
-                        console.log(value);
                         if (value && value[0]) {
                             this.formItems['columnNum'].el.show();
                             this.formItems['countNum'].el.hide();

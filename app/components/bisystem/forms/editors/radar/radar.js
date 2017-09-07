@@ -19,7 +19,7 @@ let config = {
             if (table) {
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
-                    this.actions.loadColumns(res['data']['x_field']);
+                    this.actions.loadColumns(res['data']['y_field']);
                 } else {
                     msgbox.alert(res['error'])
                 }

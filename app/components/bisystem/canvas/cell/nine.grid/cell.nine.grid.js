@@ -47,7 +47,6 @@ let config = {
                 val = grids.slice(index * nineType, index * nineType + nineType);
                 types.push(val);
             });
-            console.log(types);
             Object.keys(cellChart['chart']['yAxis']).sort().forEach(keys => {
                 yAxis.push(cellChart['chart']['yAxis'][keys])
             });

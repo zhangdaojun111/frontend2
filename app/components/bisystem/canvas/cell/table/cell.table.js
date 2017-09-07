@@ -68,7 +68,6 @@ let config = {
 };
 export class CellTableComponent extends BiBaseComponent {
     constructor(cellChart) {
-        console.log(cellChart['chart']);
         config.data.chart = cellChart['chart'] ? cellChart['chart'] : null;
         config.actions.init(cellChart);
         super(config);

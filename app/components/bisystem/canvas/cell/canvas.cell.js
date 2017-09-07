@@ -54,9 +54,10 @@ let config = {
          * 动态渲染图表
          */
         loadCellChart(chart) {
-            if (chart['success'] !== 1) {
+            if (!chart || chart['success'] !== 1) {
                 return false;
             };
+
             const data = {
                 chart: chart['data'],
                 cell: this.data.cell,
@@ -259,7 +260,8 @@ let config = {
             this.actions.cellDragandResize();
         } else {
             this.el.off('mousedown mouseup');
-        }
+        };
+
     },
     firstAfterRender() {
         // 监听当从服务器获取画布块图表数据finish时

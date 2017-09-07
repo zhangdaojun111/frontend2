@@ -7,6 +7,7 @@ import template from './yAxis.html';
 import './yAxis.scss';
 import {Base} from '../base';
 import {Y} from './y/y';
+import {Checkbox} from '../checkbox/checkbox';
 
 let config = {
     template: template,
@@ -42,7 +43,29 @@ let config = {
                  */
                 onSelectY: (value) => {
                     this.trigger('onSelectY', value);
-                }
+                },
+
+                /**
+                 * 判断是否可以显示折线图面积区域
+                 * @param value = y轴字段类型(bar: 柱状图, line: 折线图)
+                 */
+                onSetBG: (value) => {
+                    let areaStyle = this.data.areaStyle.el.find('input');
+                    let checkBar;// 判断是否含有bar类型
+                    for (let y of this.getYaxisData()) {
+                        if (y.type['type'] === 'bar') {
+                            checkBar = true;
+                            break;
+                        }
+                    };
+                    if(checkBar) {
+                            this.data.areaStyle.data.value = [];
+                            areaStyle.prop('checked', false);
+                            areaStyle.prop('disabled', true);
+                    } else {
+                        areaStyle.prop('disabled', false);
+                    };
+                },
             });
             this.append(y, this.el.find('.form-chart-yAxis'));
             this.data.yAxis[y.componentId] = y;
@@ -59,10 +82,36 @@ let config = {
                 this.data.yAxis[key].field.setList(data);
             });
             this.trigger('onUpdate')
+        },
+        /**
+         * y轴设置
+         */
+        yMoreSetting() {
+            this.data.label = new Checkbox({
+                value: [],
+                list: [
+                    {
+                        value:1, name: '显示折柱图值'
+                    }
+                ],
+            });
+            this.data.areaStyle = new Checkbox({
+                value: [],
+                list: [
+                    {
+                        value:1, name: '显示折线图面积区域<b style="color:red;">(只有Y轴全部为"折线图"时才可以勾选此项)</b>'
+                    }
+                ],
+            },{
+                onChange() {}
+            });
+            this.append(this.data.label, this.el.find('.yAxis-setting'));
+            this.append(this.data.areaStyle, this.el.find('.yAxis-setting'));
         }
     },
     binds: [],
     afterRender(){
+        this.actions.yMoreSetting();
         this.actions.addY();
     }
 }
@@ -78,11 +127,12 @@ class YaXis extends Base {
     getYaxisData() {
         let data = [];
         Object.keys(this.data.yAxis).forEach(key => {
-            data.push(Object.assign({
-                areaStyle: 0,
-                group: 0
-            }, this.data.yAxis[key].getYData()));
-        })
+            data.push(Object.assign(
+                {
+                    label:this.data.label.data.value[0] ? 1: 0,
+                    areaStyle:this.data.areaStyle.data.value[0] ? 1: 0
+                },this.data.yAxis[key].getYData()))
+        });
         return data;
     }
 
@@ -104,7 +154,10 @@ class YaXis extends Base {
             };
             y.field.setValue(item['field']);
             y.type.setValue(item['type']['type']);
-        })
+            y.group.setValue(item['group'] == 0 ? '' : item['group']);
+        });
+        this.data.areaStyle.setValue(!yAxis[0]['areaStyle'] || yAxis[0]['areaStyle'] == 0 ? 0: 1);
+        this.data.label.setValue(!yAxis[0]['label'] || yAxis[0]['label'] == 0 ? 0: 1)
     }
 
 

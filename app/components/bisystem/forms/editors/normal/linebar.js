@@ -10,6 +10,7 @@ import './linebar.scss';
 let config = {
     template: template,
     actions: {
+
         /**
          * 更新默认展示y轴数据
          */
@@ -34,10 +35,20 @@ let config = {
                         }
                     });
                 };
-                this.formItems['ySelectedGroup'].setList(data);
+
+                // 当是编辑模式下,需要先渲染完y轴在执行默认展示y轴数据
+                if(this.data.id) {
+                    if (data) {
+                        if (this.data.chart['yAxis'].length == data.length) {
+                            delete this.data.id;
+                            return false;
+                        }
+                    }
+                } else {
+                    this.formItems['ySelectedGroup'].setList(data);
+                };
             }
         },
-
 
         /**
          * 加载x 和y轴数据
@@ -59,8 +70,8 @@ let config = {
         },
 
         /**
-         * 渲染列名字段列表（x 和y轴）
-         * @param columns 列表字段（x 和y轴）
+         * 渲染列名字段列表（x轴）
+         * @param columns 表格列表字段（x轴）
          */
         async loadColumns(data) {
             if (this.formItems['xAxis']) {
@@ -69,11 +80,13 @@ let config = {
                     this.formItems['yAxis0'].actions.updateY(data['y_field']);
                     this.formItems['yAxis1'].actions.updateY(data['y_field']);
                     this.formItems['chartGroup'].setList(data['x_field']);
+                    this.formItems['sortColumns'].setList(data['x_field']);
                 } else { // 清空字段
                     this.formItems['xAxis'].setList([]);
                     this.formItems['yAxis0'].actions.updateY([]);
                     this.formItems['yAxis1'].actions.updateY([]);
                     this.formItems['chartGroup'].setList([]);
+                    this.formItems['sortColumns'].setList([]);
                 }
             }
         },
@@ -165,6 +178,8 @@ let config = {
                 source: data.source,
                 theme: data.theme,
                 xAxis: data.xAxis,
+                sort: data.sort,
+                sortColumns:data.sortColumns ? [data.sortColumns] : [],
                 yAxis: yAxis,
                 yHorizontal: data.yHorizontal[0] ? true : false,
                 yHorizontalColumns: data.yHorizontalColumns[0] ? {marginBottom:data.marginBottomx} : {},
@@ -192,8 +207,8 @@ let config = {
          * 编辑时填充表格配置
          * @param chart = this.data.chart
          */
-        fillChart(chart) {
-            console.log(chart);
+        fillChart(data) {
+            let chart = _.cloneDeep(data);
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
@@ -208,8 +223,7 @@ let config = {
                 this.formItems['yAxis1'].setValue(yAxis1);
             };
             this.formItems['defaultY'].setValue(chart['ySelectedGroup'] && chart['ySelectedGroup'].length > 0 ? 1 : 0);
-            console.log('===============================');
-            console.log(chart['ySelectedGroup']);
+            this.formItems['ySelectedGroup'].setList(data['yAxis'].map(y => y.field));
             this.formItems['ySelectedGroup'].setValue(chart['ySelectedGroup']);
             this.formItems['yHorizontal'].setValue(chart['yHorizontal'] ? 1 : 0);
             this.formItems['yHorizontalColumns'].setValue(chart['yHorizontalColumns']['marginBottom'] ? 1 : 0);
@@ -222,7 +236,7 @@ let config = {
                 this.formItems['chartGroup'].setValue(chart['chartGroup']);
             } else {
                 this.formItems['deeps'].setValue(chart['deeps']);
-            }
+            };
         }
     },
     data: {
@@ -233,6 +247,7 @@ let config = {
                 name: 'source',
                 defaultValue: '',
                 type: 'autocomplete',
+                required: true,
                 events: {
                     onSelect(value) {
                         this.actions.getFields(value);
@@ -242,17 +257,35 @@ let config = {
             theme,
             icon,
             {
+                label: '默认排序',
+                name: 'sort',
+                defaultValue: '-1',
+                list: [
+                    {value: '1',name: '升序'},
+                    {value: '-1', name:'降序'}
+                ],
+                type: 'radio'
+            },
+            {
+                label: '',
+                name: 'sortColumns',
+                defaultValue: '',
+                type: 'autocomplete',
+                placeholder: '选择排序字段（非必选）'
+            },
+            {
                 label: 'x轴字段',
                 name: 'xAxis',
                 defaultValue: '',
+                required: true,
                 type: 'autocomplete',
                 events: {}
             },
             {
                 label: 'Y轴字段',
                 name: 'double',
+                required: true,
                 defaultValue: [],
-                class: 'double-y',
                 list: [
                     {
                         value:1, name: '是否展示双Y轴'
@@ -295,6 +328,7 @@ let config = {
                 label: '选择分组或下穿',
                 name: 'chartAssignment',
                 class: 'chart-assignment',
+                required: true,
                 defaultValue: 2,
                 list: [
                     {'value': 1, 'name': '分组'},
@@ -339,7 +373,6 @@ let config = {
                 label: '更多设置',
                 name: 'defaultY',
                 defaultValue: [],
-                class: 'default-y',
                 list: [
                     {
                         value:1, name: '默认展示y轴数据'
@@ -356,13 +389,11 @@ let config = {
                     }
                 }
             },
-
             {
                 label: '',
                 name: 'ySelectedGroup',
                 defaultValue: [],
                 list: [],
-                class: 'checkbox-columns-list',
                 type: 'checkbox',
                 events: {
                     onChange:function(value) {
@@ -381,6 +412,11 @@ let config = {
                 type: 'checkbox',
                 events: {
                     onChange:function(value) {
+                        if (value) {
+                            this.formItems['echartX'].data.value = [];
+                            this.formItems['echartX'].el.find('input').prop('checked', false);
+                            this.formItems['echartX'].trigger('onChange', []);
+                        }
                     }
                 }
             },
@@ -425,6 +461,8 @@ let config = {
                 events: {
                     onChange:function(value) {
                         if (value && value[0]) {
+                            this.formItems['yHorizontal'].el.find('input').prop('checked', false);
+                            this.formItems['yHorizontal'].data.value = [];
                             this.formItems['textNum'].el.show();
                             this.formItems['marginBottom'].el.show();
                         } else {
@@ -461,24 +499,23 @@ let config = {
                     }
                 }
             },
-        ]
+        ],
+        firstDo: false, // 用于在编辑模式下 第一次加载保留数据
     },
     async afterRender() {
-        this.data.chart_id = this.data.id;
-        if(this.data.chart_id) {
-            const res = await this.actions.getChartData(this.data.chart_id);
+        if(this.data.id) {
+            const res = await this.actions.getChartData(this.data.id);
             if (res[0]['success'] === 1) {
-                this.data.chart = res[0]['data']
+                this.data.chart = res[0]['data'];
             } else {
                 msgbox.alert(res[0]['error'])
             };
         };
-
         // 渲染图表表单字段
         this.drawForm();
         this.actions.init();
 
-        if (this.data.chart_id) {
+        if (this.data.id) {
             this.actions.fillChart(this.data.chart);
         }
     }
