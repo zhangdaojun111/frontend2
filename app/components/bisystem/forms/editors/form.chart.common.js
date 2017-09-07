@@ -11,7 +11,11 @@ let chartName = {
     placeholder: '请输入图表名称',
     rules:[
         {
-            error: '请输入正确的图表名称'
+            error: '请输入正确的图表名称',
+            success: 1,
+            rule: function(){
+                console.log(this);
+            }
         }
     ],
     type: 'text',
