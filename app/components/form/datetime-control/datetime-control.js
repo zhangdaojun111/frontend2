@@ -61,6 +61,7 @@ let config = {
         this.el.find('.ui-width').css('width', this.data.width);
         if (this.data.is_view) {
             this.el.find('.ui-width').attr('disabled', true);
+            this.el.find('.component-date-control').css('pointer-events','none');
         } else {
             this.el.find('.ui-width').attr('disabled', false);
         }
@@ -150,12 +151,16 @@ let config = {
                 }else{
                     _this.el.find("#errorMessage").css("display", "none");
                 }
-
+                console.log("timeText  "+timeText)
                 _this.data.value = timeText.replace(/\//g, "-");
                 _.debounce(function () {
                     _this.events.changeValue(_this.data)
                 }, 200)();
             },
+            _doKeyUp: function () {
+                let strTime = $(".ui_tpicker_time_input").val();
+                console.log("ddd "+dstrTime)
+            }
 
         });
 

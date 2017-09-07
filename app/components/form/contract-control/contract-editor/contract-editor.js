@@ -5,6 +5,14 @@ import template from './contract-editor.html';
 import {PMENUM} from '../../../../lib/postmsg';
 
 let css=`
+    
+   .contract-editor{
+    display: flex;
+    overflow: hidden;
+    margin: 0 auto;
+    border: 1px solid #e4e4e4;
+    padding: 5px;
+} 
   .contract-tabs {
     display: inline-block;
     max-width: 1700px;
@@ -312,6 +320,7 @@ export const contractEditorConfig = {
                 let title = event.target.title;
                 k2v["##"+title+"##"]=changedValue;
                 this.el.find('span[title="'+title+'"]').text(changedValue);
+                this.data.local_data[this.data['current_tab']]['content']=this.el.find('.contract-template-anchor').html();
             })
         },
         closeMe:function () {
@@ -328,6 +337,8 @@ export const contractEditorConfig = {
             this.el.find('.contract-settings').css('display','none');
             this.el.find('.save-n-close').css('display','none');
             this.el.find('.edit-or-save').css('display','none');
+            this.el.find('.add-tab-button').css('display','none');
+            this.el.find('.delete-tab-button').css('display','none');
         }
 
         //初始化各控件

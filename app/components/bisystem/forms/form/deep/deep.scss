@@ -1,0 +1,34 @@
+.form-chart-deep {
+  width: 100%;
+  clear: both;
+  margin-bottom:70px;
+  table {
+    width:calc(100% - 80px);
+    border:solid 1px rgba(228, 228, 228, 1);
+    thead{
+      th{
+
+          border-right:solid 1px rgba(228, 228, 228, 1);
+          padding:8px;
+          background-color:rgba(242, 242, 242, 1);
+          &:nth-child(2) {
+            width: 85%;
+            text-align: left;
+          }
+      }
+    }
+    tbody{
+      tr {
+        td {
+          text-align: center;
+          border-top:solid 1px rgba(228, 228, 228, 1);
+          border-right:solid 1px rgba(228, 228, 228, 1);
+          padding:8px;
+          &:nth-child(2) {
+            text-align: left;
+          }
+        }
+      }
+    }
+  }
+}
