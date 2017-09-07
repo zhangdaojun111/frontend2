@@ -133,11 +133,10 @@ if(focus.length>=1&&focus[0].indexOf('key')===-1){
 
 Mediator.subscribe('workflow:addusers', (arr) => {
     if(!arr)return;
-    let dept=[];
+    let dept=[],idArr=[];
     (async function () {
         return workflowService.getWorkflowInfo({url: '/get_all_users/'});
     })().then(users => {
-        let idArr=[];
         for(let i in arr){
             idArr.push(users.rows[i].id);
             dept.push(users.rows[i].department);
@@ -160,7 +159,11 @@ Mediator.subscribe('workflow:addusers', (arr) => {
                             item.state.selected=true;
                             for(let k in staff){
                                 if(k==item.id){
-                                    Mediator.publish('workflow:checkDept', staff[k]);
+                                    let o={};
+                                    for(let j in idArr){
+                                        o[idArr[j]]=staff[k][idArr[j]];
+                                    }
+                                    Mediator.publish('workflow:checkDept', o);
                                 }
                             }
                         }
