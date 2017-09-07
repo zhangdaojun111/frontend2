@@ -111,9 +111,9 @@ let config = {
                 //由于选择一个常用查询后 改变其查询值 new一个组件时push到数组的值是不会发生变化的
 
                 if(this.el.find('.condition-search-box-input').eq(i).attr('title') == 'number') {
-                    obj['cond']['keyword'] = parseInt(this.el.find('.condition-search-input').eq(i).val());
+                    obj['cond']['keyword'] = parseInt(this.el.find('.condition-search-value').find('input').eq(i).val());
                 } else {
-                    obj['cond']['keyword'] = this.el.find('.condition-search-input').eq(i).val();
+                    obj['cond']['keyword'] = this.el.find('.condition-search-value').find('input').eq(i).val();
                 }
                 if(this.el.find('.condition-search-choice.left-choice').eq(i).hasClass('active')){
                     obj['cond']['leftBracket'] = '('
