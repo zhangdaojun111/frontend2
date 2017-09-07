@@ -40,26 +40,26 @@ let config = {
             selector:'.edit-title',
             callback: async function () {
                 this.events.onChange();
-                let views = {
-                    content: this.data.charts.data.data['rows']['0']['0'].toString().replace(/[\r\n]/g,'<b>').replace(/[ ]/g,'&nbsp;'),
-                    field_id: this.data.charts.data.columns.dfield,
-                    table_id : this.data.charts.data.source.id,
-                    row_id: this.data.charts.data.data.rows['0']['1'],
-                };
-                editDialogConfig.data.view = views;
-                const res = await PMAPI.openDialogByComponent(editDialogConfig,{
-                    width: 740,
-                    height: 442,
-                    title: '注释编辑',
-                });
+                // let views = {
+                //     content: this.data.charts.data.data['rows']['0']['0'].toString().replace(/[\r\n]/g,'<i>').replace(/[ ]/g,'&nbsp;'),
+                //     field_id: this.data.charts.data.columns.dfield,
+                //     table_id : this.data.charts.data.source.id,
+                //     row_id: this.data.charts.data.data.rows['0']['1'],
+                // };
+                // editDialogConfig.data.view = views;
+                // const res = await PMAPI.openDialogByComponent(editDialogConfig,{
+                //     width: 740,
+                //     height: 442,
+                //     title: '注释编辑',
+                // });
 
-                ViewsService.setEditData(res).then((val)=>{
-                    if(val['success']===1){
-
-                    }else{
-                        alert(val['error']);
-                    }
-                })
+                // ViewsService.setEditData(res).then((val)=>{
+                //     if(val['success']===1){
+                //
+                //     }else{
+                //         alert(val['error']);
+                //     }
+                // })
             }
         }
     ],
