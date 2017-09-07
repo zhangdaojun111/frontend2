@@ -29,8 +29,8 @@ let config={
                 SettingPrint.data['selectNum'] = parseInt(res['data']['index']) || 1;
             }
             PMAPI.openDialogByComponent(SettingPrint, {
-                width: 500,
-                height: 300,
+                width: 400,
+                height: 180,
                 title: '自定义页眉',
                 modal: true
             })
