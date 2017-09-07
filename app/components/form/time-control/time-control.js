@@ -12,13 +12,19 @@ let config = {
         // width: '240px'
     },
     actions: {
+        //时间日期输入错误提示
         keyup: function () {
             let _this = this
             //hh:mm:ss
             let strDate = this.el.find(".timeInput").val();
             let re = /^((20|21|22|23|[0-1]\d)\:[0-5][0-9])(\:[0-5][0-9])?$/;
+            console.log(strDate)
+
             if (re.test(strDate))//判断日期格式符合hh:mm:ss标准
             {
+                this.el.find(".hour").children("span").text(strDate.substring(0,2))
+                this.el.find(".minute").children("span").text(strDate.substring(3,5));
+                this.el.find(".second").children("span").text(strDate.substring(6,8));
                 this.el.find("#errorMessage").css("display", "none");
                 _this.data.value = strDate.replace(/\//g, "-");
                 _.debounce(function () {
@@ -26,7 +32,7 @@ let config = {
                 }, 200)();
             }
             else {
-                this.el.find("#errorMessage").css("display", "inline-block").text("时间格式不正确，正确格式为12:00:00 ");
+               // this.el.find("#errorMessage").css("display", "inline-block").text("时间格式不正确，正确格式为12:00:00 ");
             }
         }
     },
@@ -69,7 +75,7 @@ let config = {
             event: 'click',
             selector: '.input-img',
             callback: function () {
-                this.el.find('.time').css({'display': 'block', 'position': 'absolute'});
+                this.el.find('.time').css({ 'position': 'absolute'}).toggle();
                 event.stopPropagation();
             }
         },
@@ -170,10 +176,6 @@ let config = {
             }, 200)();
         })
 
-        _this.el.find('.timeInput').on('keyup', function () {
-            console.log("keyup")
-            _this.data.value = _this.data.value.replace("/[^w:]|_/ig,''");
-        })
         this.el.find('.timeInput').on('input', _.debounce(function () {
             _this.actions.keyup();
         }, 200));
