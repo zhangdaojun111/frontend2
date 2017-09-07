@@ -104,7 +104,7 @@ export default {
         let component = new LoginOther();
         let el = $('<div class="login-by-other">').appendTo(document.body);
         component.render(el);
-        el.dialog({
+        el.erdsDialog({
             title: '他人登录',
             width: 400,
             height: 500,

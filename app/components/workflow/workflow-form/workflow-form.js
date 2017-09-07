@@ -108,7 +108,7 @@ let config = {
         },
     ],
     afterRender: function() {
-        this.showLoading();
+        // this.showLoading();
         let __this=this;
         this.formTrans = false;
         this.el.on("mouseenter",".imgseal",function(e){
@@ -144,7 +144,6 @@ let config = {
         });
         //获取表名，通过form传给我们表名
         Mediator.subscribe("workflow:getWorkflowTitle",res=>{
-           console.log("获取表头，通过form传给我们表头,发布为workflow:gotWorkflowTitle");
            if(res){
                this.el.find(".J_wfName").text(res);
            }else{
@@ -152,7 +151,7 @@ let config = {
            }
         });
         Mediator.subscribe("form:formAlreadyCreate",(e)=>{
-            this.hideLoading();
+            // this.hideLoading();
         });
     }
 }
@@ -166,8 +165,12 @@ class WorkFlowForm extends Component {
 
 export default {
      showForm(data) {
-        let component = new WorkFlowForm();
-        let el = $('#workflow-form');
-        component.render(el);
+         return new Promise(function(resolve, reject){
+             let component = new WorkFlowForm();
+             let el = $('#workflow-form');
+             component.render(el);
+             resolve()
+         })
+
      }
 };

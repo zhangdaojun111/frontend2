@@ -11,11 +11,11 @@ import SelectStaffNoDel from '../select-staff-no-del/select-staff-no-del';
 import SelectedStaff from '../selected-staff/selected-staff';
 import SelectedStaffNoDel from '../selected-staff-no-del/selected-staff-no-del';
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
-
 let config={
     template: template,
     data:{
-        total: 0
+        total: 0,
+        flag:true
     },
     action:{
         search(){
@@ -37,6 +37,7 @@ let config={
         }
     },
     afterRender(){
+        this.showLoading();
         PMAPI.getIframeParams(this.data.key).then((res) => {
             Mediator.publish('workflow:addusers', res.data.users);
         })
@@ -67,23 +68,27 @@ let config={
             });
         });
         Mediator.subscribe('workflow:checkDeptAlready', (res)=> {
-            let arr = [];
-            let checked=this.el.find('#staffMulti .flexNoDel');
-            let len = checked.length;
-            for(let i =0;i<len; i++){
-                arr.push($(checked[i]).data('id'));
-            }
-            $.each(res,(i,val)=>{
-                val.id=i;
-                if(checked.length===0){
-                    this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
-                }else if(arr.indexOf(i)===-1){
-                    this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+            if(res){
+                let arr = [];
+                let checked=this.el.find('#staffMulti .flexNoDel');
+                let len = checked.length;
+                for(let i =0;i<len; i++){
+                    arr.push($(checked[i]).data('id'));
                 }
-                
-            });
+                $.each(res,(i,val)=>{
+                    val.id=i;
+                    if(checked.length===0){
+                        this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+                    }else if(arr.indexOf(i)===-1){
+                        this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+                    }
+                });
+            }
+            if(this.data.flag===true){
+                this.hideLoading();
+                this.data.flag=false;
+            }
         });
-
         //部门反选，删除SelectedStaff组件
         Mediator.subscribe('workflow:unCheckDept', (res)=> {
             let userArr=[];
@@ -109,20 +114,17 @@ let config={
             }
             this.action.addtotal(this.data.total);
         });
-
         //注册SelectedStaff组件
         Mediator.subscribe('workflow:pubCheck', (res)=> {
             this.append(new SelectedStaff(res), this.el.find('#selected'));
             this.data.total++;
             this.action.addtotal(this.data.total);
         });
-
         Mediator.subscribe('workflow:pubCheckNoDel', (res)=> {
             this.append(new SelectedStaffNoDel(res), this.el.find('#selected'));
             this.data.total++;
             this.action.addtotal(this.data.total);
         });
-
         //注册SelectedStaff组件
         Mediator.subscribe('workflow:pubCheckSingle', (res)=> {
             this.append(new SelectedStaff(res), this.el.find('#selected'));
@@ -140,8 +142,6 @@ let config={
             }
             this.action.addtotal(this.data.total);
         });
-
-
         //全选，反选btn
         this.el.on('click','#allSelector',function(){
             let inputs=_this.el.find('#staffMulti').find('.remove');
@@ -153,11 +153,11 @@ let config={
                     }
                 }
                 inputs.each(function(i,item){
-                        $(item).addClass('checked');
-                        Mediator.publish('workflow:pubCheckSingle',{
-                            id:$(item).attr('value'),
-                            name:$(item).attr('name')
-                        });
+                    $(item).addClass('checked');
+                    Mediator.publish('workflow:pubCheckSingle',{
+                        id:$(item).attr('value'),
+                        name:$(item).attr('name')
+                    });
                 })
             }else{
                 inputs.each(function(i,item){
@@ -166,9 +166,8 @@ let config={
                 })
             }
         });
-
         //saving follower
-        this.el.on('click','#saveFollower',()=>{        
+        this.el.on('click','#saveFollower',()=>{
             let o={};
             let domSpan=this.el.find('#selected').find('span');
             for(var i=0;i<domSpan.length;i++){
@@ -178,9 +177,8 @@ let config={
                 type: PMENUM.close_dialog,
                 key:this.data.key,
                 data:o
-            })                       
+            })
         });
-
     }
 };
 class WorkflowAddFollow extends Component{
@@ -188,7 +186,6 @@ class WorkflowAddFollow extends Component{
         super(config,data);
     }
 }
-
 export default {
     showAdd(data) {
         let component = new WorkflowAddFollow(data);

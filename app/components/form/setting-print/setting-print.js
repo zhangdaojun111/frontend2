@@ -43,7 +43,26 @@ let css = `
 .global-search-input{
     color: black;
     font-size: 12px;
-}`;
+}
+.J-print-btn{
+ position: absolute;
+ bottom: 10px ;
+ border:none;
+ outline: none;
+ width: 91px;
+ height: 30px;
+ line-height: 31px;
+ color: #fff;
+ }
+ .J-print-btn.cancel{
+    right:10px;
+    background: #ddd;
+ }
+ .J-print-btn.confirm{
+    right:111px;
+    background: #0088ff;
+ }
+`;
 let SettingPrint = {
     template: template.replace(/\"/g, '\''),
     data: {
@@ -159,8 +178,7 @@ let SettingPrint = {
                }
            }
        })
-        _this.el.find('.global-search-input').blur();
-        _this.el.find('.global-search-input').on('click',function(){
+        _this.el.find('.global-search-input').on('focus',function(){
             if(_this.data.printTitles.length && _this.data.printTitles.length != 0){
                 _this.el.find('.global-search-history').css('visibility','visible');
             }else{

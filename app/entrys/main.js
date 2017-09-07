@@ -8,6 +8,8 @@ import '../assets/scss/framework/framework-base.scss'
 import {IframeInstance} from '../components/main/iframes/iframes';
 import {HeaderInstance} from '../components/main/header/header';
 import {AsideInstance} from '../components/main/aside/aside';
+import '../assets/scss/dataGrid/dataGrid-icon.scss';
+
 
 _.defaultsDeep(AsideInstance.data, {
     systemName: window.config.sysConfig.logic_config.sap_login_system_name,

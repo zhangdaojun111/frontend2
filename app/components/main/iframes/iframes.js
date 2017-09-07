@@ -450,7 +450,6 @@ export const IframeInstance = new Component({
             selector:'.tabs .item',
             callback:function (target) {
                 let id = $(target).attr('iframeid');
-                console.log(id);
                 this.actions.focusIframe(id);
             }
         },
@@ -459,7 +458,6 @@ export const IframeInstance = new Component({
             selector:'.tabs .item .close',
             callback:function (target) {
                 let id = $(target).attr('iframeid');
-                console.log(id);
                 this.actions.closeIframe(id);
                 return false;
             },
@@ -506,14 +504,19 @@ export const IframeInstance = new Component({
             callback:function () {
                 this.actions.hideTabsPopup();
             }
-        }
-
+        },
     ],
     afterRender: function () {
         this.data.tabs = this.el.find('.tabs');
         this.data.iframes = this.el.find('.iframes');
         this.actions.setTabsCount();
         this.actions.readyOpenTabs();
+
+        let that = this;
+        $(window).resize(function () {          //监听浏览器大小变化
+            that.actions.setTabsCount();
+            that.actions.adaptTabWidth();
+        });
 
         // this.el.on('click', '.tabs .item .close', function () {
         //     let id = $(this).attr('iframeid');
