@@ -179,6 +179,9 @@ let config = {
         }
         let self = this;
 
+        // 加载loading动画;
+        this.showLoading();
+
         // 匹配导航的视图id
         if (self.viewId) {
             for(let [index,view] of self.data.views.entries()) {
@@ -213,9 +216,6 @@ let config = {
             let url = window.location.hash;
             window.location.href = `/bi/index/${url}`;
         });
-
-        // 加载loading动画;
-        this.showLoading();
 
         this.actions.getCellLayout();
     },
