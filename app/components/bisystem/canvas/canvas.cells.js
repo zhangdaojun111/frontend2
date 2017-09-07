@@ -194,15 +194,6 @@ let config = {
                 return false;
             }
         },
-        // {
-        //     event:'click',
-        //     selector:'.edit-title',
-        //     callback: function (self = this) {
-        //         let val = $(self).parents('.cell').find('.editor').html();
-        //         this.el.find('.editor-text').show();
-        //         this.actions.newEditor(val);
-        //     }
-        // },
         {
             event:'click',
             selector:'.editor-btn-cancel',
@@ -210,7 +201,6 @@ let config = {
                 $(self).parent().prevAll('.ql-toolbar').remove();
                 $(self).parent().prevAll('.editor-content').empty();
                 this.el.find('.editor-text').hide();
-
             }
         },
         {
@@ -283,7 +273,12 @@ let config = {
             window.location.href = `/bi/index/${url}`;
         });
 
-        this.actions.getCellLayout()
+        this.actions.getCellLayout();
+        Mediator.on('bi-edit-title:val',(data)=>{
+            this.el.find('.editor-text').show();
+            this.data.editVal = data;
+            this.actions.newEditor(data);
+        })
     },
 };
 
