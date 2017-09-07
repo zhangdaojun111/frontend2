@@ -1,7 +1,6 @@
 import template from './text.html';
 import {Base} from '../base';
 import './text.scss'
-
 let config = {
     template: template,
     data: {
@@ -15,6 +14,7 @@ let config = {
         onInput: function (value) {
             this.data.value = value;
             this.trigger('onChange', value);
+            this.$input.siblings('.error-msg').html('');
         },
     },
     binds: [
@@ -33,14 +33,15 @@ let config = {
 }
 
 class Text extends Base {
-    constructor(data, event){
+    constructor(data, event) {
         super(config, data, event)
     }
+
     /**
      * 设置value
      * @param value = input输入框值
      */
-    setValue(value){
+    setValue(value) {
         this.data.value = value;
         this.$input.val(value);
     }
@@ -48,8 +49,8 @@ class Text extends Base {
     /**
      * 验证数据
      */
-    valid(){
-        console.log(this.data.rules);
+    valid() {
+
     }
 }
 

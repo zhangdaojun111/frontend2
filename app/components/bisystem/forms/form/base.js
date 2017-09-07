@@ -1,4 +1,5 @@
 import Component from '../../../../lib/component';
+import {formChartValidateService as formValidate} from '../../../../services/bisystem/bi.chart.validate.service';
 
 class Base extends Component {
 
@@ -20,7 +21,21 @@ class Base extends Component {
     /**
      * 数据验证
      */
-    valid(){}
+    valid(){
+        let isValid;
+        for (let rule of this.data.rules) {
+            isValid = formValidate[rule['type']](this.data.value);
+            if (!isValid) {
+                // this.$input.focus();
+                this.showErrorMsg(msg);
+                break;
+            }
+        };
+        return isValid;
+    }
+    showErrorMsg(){
+
+    }
 }
 
 export {Base}

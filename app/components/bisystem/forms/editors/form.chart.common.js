@@ -11,11 +11,8 @@ let chartName = {
     placeholder: '请输入图表名称',
     rules:[
         {
-            error: '请输入正确的图表名称',
-            success: 1,
-            rule: function(){
-                console.log(this);
-            }
+            errorMsg: '图表名称不能为空',
+            type: 'required', // length reg function number xxx
         }
     ],
     type: 'text',
