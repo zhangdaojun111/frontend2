@@ -993,7 +993,7 @@ let config = {
             }
         },
         //拼接其他字段
-        montageOtherFields() {
+        montageOtherFields(formDataNew) {
             data = {};
             for (let key in this.data.dataOfOtherFields) {
                 data[key] = this.data.dataOfOtherFields[key];
@@ -1038,7 +1038,7 @@ let config = {
             let formDataNew = this.data.oldData;
             //如果有其他字段的数据，这里是拼approvedFormData
             if (this.data.hasOtherFields == '1') {
-                this.actions.montageOtherFields();
+                this.actions.montageOtherFields(formDataNew);
             }
             this.actions.checkDateType();
             let obj_new = this.actions.createCacheData(formDataNew, data, true, this);
