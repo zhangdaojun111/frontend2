@@ -44,6 +44,13 @@ class Text extends Base {
         this.data.value = value;
         this.$input.val(value);
     }
+
+    /**
+     * 验证数据
+     */
+    valid(){
+        console.log(this.data.rules);
+    }
 }
 
 export {Text}

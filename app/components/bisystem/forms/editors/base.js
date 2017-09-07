@@ -38,6 +38,7 @@ class Base extends Component {
                 name: item.name,
                 list: item.list,
                 class: item.class,
+                rules: item.rules,
                 placeholder: item.placeholder,
                 required: item.required
             }, item.events);

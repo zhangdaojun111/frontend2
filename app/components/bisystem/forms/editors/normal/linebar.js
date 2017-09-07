@@ -208,10 +208,13 @@ let config = {
          */
         fillChart(data) {
             let chart = _.cloneDeep(data);
+            console.log(chart);
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
+            this.formItems['sort'].setValue(chart['sort']);
+            this.formItems['sortColumns'].setValue(chart['sortColumns'][0]);
             this.formItems['xAxis'].setValue(chart['xAxis']);
             let yAxis1 = _.remove(chart['yAxis'],(item) => {
                 return item.yAxisIndex != 0

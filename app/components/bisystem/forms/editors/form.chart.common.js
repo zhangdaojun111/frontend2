@@ -9,6 +9,11 @@ let chartName = {
     defaultValue: '',
     required: true,
     placeholder: '请输入图表名称',
+    rules:[
+        {
+            error: '请输入正确的图表名称'
+        }
+    ],
     type: 'text',
     events: {}
 };
