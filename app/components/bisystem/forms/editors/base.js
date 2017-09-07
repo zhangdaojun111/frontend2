@@ -46,7 +46,6 @@ class Base extends Component {
             this.formItems[item.name] = instance;
         });
     }
-
     /**
      * 获取所有字段数据
      */
