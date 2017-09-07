@@ -1,7 +1,6 @@
 import {HTTP} from "../../lib/http"
 import {Utils} from "./utils";
 
-
 export const TabService = {
     getFavoriteList:function () {
         let favorite = {};
@@ -18,7 +17,6 @@ export const TabService = {
     saveFavoriteItem:function (data) {
         let url = '/personal_view/';
         let para = Utils.formatParams(data);
-        console.log(para);
         return HTTP.postImmediately({
             url:url,
             data:para,

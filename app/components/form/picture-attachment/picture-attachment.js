@@ -95,17 +95,20 @@ let PictureAttachment = {
         seletNum:0,
     },
     actions:{
+        //设置背景色
         setBackground(){
             this.el.find('.select-img').each((index,obj)=>{
                 let color=$(obj).data('imgselect') == this.data.imgSelect? '#F2F2F2' : '#fff';
                 $(obj).css('background-color',color);
             });
         },
+        //创建img地址
         createUrl(fieldId){
             let url=`/download_attachment/?file_id=${fieldId}&download=0`
             this.data.imgShow.attr('src',url)
             this.data.myImg.attr('src',url)
         },
+        //切换图片
         changeImg(id,index){
             this.actions.createUrl(id);
             this.data.imgSelect=id;

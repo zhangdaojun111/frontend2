@@ -11,6 +11,19 @@ export const FormService = {
     //父表的this.newData
     frontendParentNewData: {},
 
+    selectObj: {'select': 'options', 'radio': 'group', 'multi-select': 'options'},
+    continue_key: ["parent_real_id", "parent_table_id", "parent_temp_id", "real_id", "table_id", "temp_id"],
+    need_key: ["id", "dfield", "effect", "expression", "dinput_type", "real_type"],
+    dataSelectFrom: {
+        "Radio": "group",      //"field_content",无序
+        "Select": "options",
+        "MultiSelect": "options",
+        "Buildin": "options",
+        // "Year": "options",
+        "MultiLinkage": "dataList",
+        "SettingTextarea": "settingTextarea"
+    },
+
     /**
      *  组装子表所需列表或表单中内置或相关的父表中数据
      *  @param kvDict 父子数据字段对应的关系 {f1: f2 ,temp_id:section_page_id }
