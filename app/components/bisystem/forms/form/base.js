@@ -26,14 +26,19 @@ class Base extends Component {
         for (let rule of this.data.rules) {
             isValid = formValidate[rule['type']](this.data.value);
             if (!isValid) {
-                // this.$input.focus();
-                this.showErrorMsg(msg);
+                this.showErrorMsg(rule.errorMsg);
                 break;
             }
         };
         return isValid;
     }
-    showErrorMsg(){
+
+    /**
+     * 显示错误消息
+     * @param msg = 错误提示消息
+     */
+    showErrorMsg(msg){
+        this.el.find('.form-label .error-msg').html(msg);
 
     }
 }

@@ -190,6 +190,8 @@ let config = {
                 chart['deeps'] = data.deeps
             };
             this.formItems['chartName'].valid();
+            this.formItems['source'].valid();
+            this.formItems['xAxis'].valid();
             // let res = await ChartFormService.saveChart(JSON.stringify(chart));
             // if (res['success'] == 1) {
             //     msgbox.alert('保存成功');
@@ -250,6 +252,12 @@ let config = {
                 defaultValue: '',
                 type: 'autocomplete',
                 required: true,
+                rules: [
+                    {
+                        errorMsg: '数据源不能为空',
+                        type: 'required'
+                    }
+                ],
                 events: {
                     onSelect(value) {
                         this.actions.getFields(value);
@@ -280,6 +288,12 @@ let config = {
                 name: 'xAxis',
                 defaultValue: '',
                 required: true,
+                rules: [
+                    {
+                        errorMsg: 'x轴字段不能为空',
+                        type: 'required'
+                    }
+                ],
                 type: 'autocomplete',
                 events: {}
             },

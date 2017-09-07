@@ -14,7 +14,6 @@ let config = {
         onInput: function (value) {
             this.data.value = value;
             this.trigger('onChange', value);
-            this.$input.siblings('.error-msg').html('');
         },
     },
     binds: [
@@ -44,13 +43,6 @@ class Text extends Base {
     setValue(value) {
         this.data.value = value;
         this.$input.val(value);
-    }
-
-    /**
-     * 验证数据
-     */
-    valid() {
-
     }
 }
 

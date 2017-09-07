@@ -9,6 +9,7 @@ let formChartValidateService = {
      * @param data = 传递过来的值
      */
     required(value) {
+        console.log(value);
         if (value) {
             return true;
         } else {

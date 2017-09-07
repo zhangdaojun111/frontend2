@@ -1,9 +1,13 @@
 <div class="form-chart-text {{class}}">
     {{#if label}}
-    <h4 class="form-label"><span>{{label}}</span>{{#if required}}<b class="start-icon"></b>{{/if}}</h4>
+    <h4 class="form-label">
+        <span>{{label}}</span>
+        {{#if required}}<i class="start-icon"></i>{{/if}}
+        <b class="error-msg"></b>
+    </h4>
     {{/if}}
     <div class="form-chart-wrapper">
         <input type="text" required minlength="2" placeholder={{{placeholder}}} value="{{value}}">
-        <span class="error-msg"></span>
+
     </div>
 </div>
