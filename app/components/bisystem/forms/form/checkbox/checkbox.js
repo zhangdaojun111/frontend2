@@ -73,7 +73,6 @@ class Checkbox extends Base {
             this.data.value = value;
             this.data.list.forEach((l,index) => {
                 for (let choosed of this.data.value) {
-                    console.log('xxxxxxxxxxxxxxxxxxxx');
                     if (choosed.id === JSON.parse(l.value).id) {
                         this.el.find('input[type=checkbox]').eq(index).attr('checked',true);
                         break;
