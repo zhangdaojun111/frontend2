@@ -29,6 +29,9 @@ let config={
         }else{
             this.el.find('.ui-width').attr('disabled',false);
         }
+        if(this.data.history){
+            this.el.find('.ui-history').css('visibility','visible');
+        }
     },
     beforeDestory(){
         this.el.find('input').off();

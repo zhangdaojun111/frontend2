@@ -40,11 +40,13 @@
             }
         }
     }
-    .show {
-        display: block;
-    }
-    .hide {
-        display: none;
+    #tree-list{
+        .show {
+            display: block;
+        }
+        .hide {
+            display: none;
+        }
     }
 }
 

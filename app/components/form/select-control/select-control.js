@@ -37,6 +37,12 @@ let config={
     afterRender(){
         let _this=this;
         this.data.isInit=true;
+        if(!this.data.is_view && this.data.can_add_item){
+            this.el.find('.add-item').css('visibility','visible')
+        }
+        if(this.data.history){
+            this.el.find('.ui-history').css('visibility','visible');
+        }
         if(!this.data.be_control_condition) {
             let el=this.el.find('.dropdown');
             let data=FormService.createSelectJson(this.data);

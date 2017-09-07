@@ -73,4 +73,7 @@ export const workflowService={
     getPrepareParams(params){
         return HTTP.postImmediately('/prepare_params/', params)
     },
+    approveManyWorkflow(params){
+        return HTTP.postImmediately('/approve_many_workflow/', params)
+    }
 }

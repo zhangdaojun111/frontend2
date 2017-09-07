@@ -1,6 +1,6 @@
 /**
  *@author yudeping
- *枚举选项快捷添加
+ *aggrid附件弹窗
  */
 
 import template from './attachment-list.html';
@@ -140,6 +140,7 @@ let AttachmentList = {
         }
     },
     afterRender() {
+        //许多操作已暂时弃用 代码留着 有备无患
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
         let _this = this;
         //图片弹窗预览
@@ -188,7 +189,6 @@ let AttachmentList = {
         });
 
         this.el.on('click', '.mask-div,.closeImg', function () {
-            console.log('没触发么');
             _this.el.find('.my-mask').hide();
             _this.data.dragStart = false;
             $(document).off("mousewheel DOMMouseScroll");

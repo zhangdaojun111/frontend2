@@ -131,7 +131,7 @@ let config = {
                 '/iframe/calendarSetRemind/',
                 {
                     width: "800",
-                    height: '800',
+                    height: '570',
                     title: '【' + this.data.rowTitle.name + '】' + '的提醒'
                 }, {
                     emailStatus: this.data.rowSetData.email.email_status,
@@ -252,6 +252,7 @@ let config = {
             displayType: 'popup',
             editable: this.data.editable,
             choosed: this.actions.returnShow(this.data.rowSetData['selectedOpts']).res,
+            placeholder:'请选择',
             onSelect: function (choosed) {
                 let choosedList = [];
                 for (let choosedItem of choosed) {
@@ -269,6 +270,7 @@ let config = {
             'list': this.data.dropdownForRes,
             displayType: 'popup',
             multiSelect: false,
+            placeholder:'请选择',
             editable: this.data.editable,
             choosed: this.actions.dropdownChoosed(this.data.rowSetData['selectedRepresents']).res,
             onSelect: function (choosed) {

@@ -6,10 +6,12 @@
 *form-version-table-user
 *form-version-table-department
 */
+.form-version-table-user, .form-version-table-department{
+    width: 100%!important;
+}
 .form-version-table-user, .form-version-table-department, .form-default {
     margin: 10px;
     background: #FFFFFF;
-    margin-bottom: 40px!important;
     tr td:first-child {
         width: 30% !important;
         background: #FFFFFF;
@@ -18,27 +20,23 @@
         width: 70% !important;
         background: #F8F8F8;
     }
-    .auto-select-component, .auto-select-component input.text {
-        background: url("../images/form/select-down.png") no-repeat right;
+    .auto-select-component{
         width: 244px !important;
-        height: 24px;
-    }
-    .auto-select-component input.result {
-        width: 244px;
-        height: 24px;
-    }
+        height: 28px;
+        input.text,  input.result{
+            height: 28px;
+        }
 
+    }
     .dynamic-form-input, .textArea {
-        width: 244px !important;
-        height: 22px;
+        width: 242px !important;
+        height: 24px;
     }
     .textArea {
-        color: #000000;
-        line-height: 30px;
+        height: 26px;
+        width: 232px !important;
         border: 1px solid #ddd;
         -webkit-appearance: none;
-        outline: none;
-        opacity: 100;
         padding: 0 5px;
     }
 
