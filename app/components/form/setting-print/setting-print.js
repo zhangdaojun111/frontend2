@@ -6,10 +6,10 @@
 import template from './setting-print.html';
 let css = `
 .wrap{
-    display: inline-block;
-    margin-top: 6px;
-    margin-left: 10px;
+    margin: 20px auto 0;
+    width: 270px;
     position: relative;
+    
 }
 .global-search-history {
     padding: 0;
@@ -56,11 +56,11 @@ let css = `
  border-radius:4px;
  }
  .J-print-btn.cancel{
-    right:10px;
+    right:100px;
     background: #ddd;
  }
  .J-print-btn.confirm{
-    right:111px;
+    left:100px;
     background: #0088ff;
  }
 `;
