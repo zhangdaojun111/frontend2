@@ -15,7 +15,7 @@ let config = {
             selector:'.contract-view',
             callback:function () {
                 this.data['mode']='view';
-                this.actions.openEditor('合同查看');
+                this.actions.openEditor('合同模板预览');
             }
         },{
             event:'click',
