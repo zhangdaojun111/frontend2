@@ -167,7 +167,6 @@ let config = {
                 return false;
             }
         },
-
     ],
 
     afterRender() {
@@ -179,8 +178,6 @@ let config = {
             });
         }
         let self = this;
-        // 加载loading动画;
-        this.showLoading();
 
         // 匹配导航的视图id
         if (self.viewId) {
@@ -199,6 +196,7 @@ let config = {
                 return cell.layout_id == layout_id;
             });
         });
+
         //单页跳转指定路由
         $('.btn-single').click(function () {
             let pathname = '/bi/index/';
@@ -216,7 +214,10 @@ let config = {
             window.location.href = `/bi/index/${url}`;
         });
 
-        this.actions.getCellLayout()
+        // 加载loading动画;
+        this.showLoading();
+
+        this.actions.getCellLayout();
     },
 };
 
