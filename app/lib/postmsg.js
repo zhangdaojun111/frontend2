@@ -100,6 +100,8 @@ window.addEventListener('message', function (event) {
             case PMENUM.open_iframe_dialog:
                 let url = URL.getUrl(data.url, {key: data.key});
                 let element = $(`<iframe data-key="${data.key}" src="${url}">`);
+                //初始化Storage
+                Storage.init(data.key);
                 // 向新打开的iframe内传递参数
                 let params = data.params || {};
                 dialogHash[data.key] = {
@@ -136,15 +138,8 @@ window.addEventListener('message', function (event) {
                     dialogHash[data.key].comp.destroySelf();
                 } else {
                     // 弹出框是iframe
-                    let iframe = dialogHash[data.key].element;
-                    if (iframe.length) {
-                        iframe = iframe[0];
-                        if (iframe.contentDocument) {
-                            // console.dir(iframe.contentDocument);
-                            $(iframe.contentDocument).trigger('iframeClose');
-                        }
-                    }
-                    dialogHash[data.key].element.erdsDialog('destroy').remove();
+                    // 清除iframe中适用的localstorage
+                    Storage.clear(data.key);
                 }
                 PMAPI.sendToChild(dialogHash[data.key].iframe, {
                     type: PMENUM.recieve_data,

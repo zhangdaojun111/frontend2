@@ -2,8 +2,6 @@
  * Created by Yunxuan Yan on 2017/8/18.
  */
 import template from './contract-editor.html';
-import {AutoSelect} from "../../../util/autoSelect/autoSelect"
-import {PMENUM} from '../../../../lib/postmsg';
 
 let css = `
    .contract-editor{       
@@ -169,6 +167,8 @@ export const contractEditorConfig = {
                     this.el.find('.download-all').css('display', 'inline');
                     this.el.find('.download-current').css('display', 'inline');
                     this.data.local_data[this.data['current_tab']].k2v = this.data.editingK2v;
+                    //将修改缓存到本地，如果需要编辑即保存，将下一行放到editContract的input事件回调中
+                    Storage.setItem(this.data.local_data,'contractCache-'+this.data.id,Storage.SECTION.FORM);
                 }
             }
         }, {
@@ -425,7 +425,9 @@ export const contractEditorConfig = {
             real_id: this.data.real_id,
             field_id: this.data.id
         };
-        this.data.local_data = JSON.parse(JSON.stringify(this.data.value));
+
+        this.data.local_data = Storage.getItem('contractCache-'+this.data.id,Storage.SECTION.FORM);
+        this.data.local_data = this.data.local_data || JSON.parse(JSON.stringify(this.data.value));
         this.actions.getElement(obj).then(res => {
             if (res.success) {
                 this.actions.loadData(res);
@@ -433,7 +435,7 @@ export const contractEditorConfig = {
                     this.data.local_data = [];
                     this.actions.addTab();
                 }
-                this.actions._loadTemplateByIndex(0);
+                this.actions._loadTemplateByIndex(0,true);
             }
         })
 
