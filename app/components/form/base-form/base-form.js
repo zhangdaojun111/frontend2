@@ -62,13 +62,23 @@ let config = {
         event: 'click',
         selector: '.save',
         callback: function () {
+            if(this.data.isBtnClick){
+                return;
+            }
+            this.data.isBtnClick=true;
             this.actions.onSubmit();
+            this.data.isBtnClick=false;
         }
     }, {
         event: 'click',
         selector: '.changeEdit',
         callback: function () {
+            if(this.data.isBtnClick){
+                return;
+            }
+            this.data.isBtnClick=true;
             this.actions.changeToEdit();
+            this.data.isBtnClick=false;
         }
     }],
     actions: {
