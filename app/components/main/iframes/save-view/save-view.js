@@ -26,7 +26,7 @@ let config = {
                 if(result.success === 1 ){
                     let tempList = result.data;
                     for (let k in tempList){
-                        that.data.favoriteList.push({'name':k, 'list':tempList[k]});
+                        that.data.favoriteList.unshift({'name':tempList[k].name, 'list':tempList[k].info});
                     }
                 }else{
                     console.log("get favorite list failed");
@@ -69,14 +69,21 @@ let config = {
             let name = this.el.find('.view-name').val();
 
             for (let k in this.data.currentIframesList){
-                list.push({ 'id':this.data.currentIframesList[k],                 //只需要存id
-                            'table_id':"",
+                list.push({ 'id':this.data.currentIframesList[k],
+                            'table_id':this.data.currentIframesList[k],
                             'ts_name':""});
                 idList.push(this.data.currentIframesList[k]);
             }
             favorlist['name'] = name;
             favorlist['list'] = JSON.stringify(list);
             favorlist['query_type'] = 'save';
+            //检查name是否已存在，存在则先删除该条记录，保证新加记录在最前面
+            for(let k of this.data.favoriteList){
+                if(k.name === name){
+                    this.actions.deleteViewByName(name);
+                    break;
+                }
+            }
 
             let that = this;
             TabService.saveFavoriteItem(favorlist).done((result) => {
@@ -166,6 +173,20 @@ let config = {
                     that.actions.initList();
                 }
             })
+        },
+        deleteViewByName:function(name){
+            let favorlist = {};
+            favorlist['name'] = name;
+            favorlist['query_type'] = 'delete';
+
+            TabService.deleteFavoriteItem(favorlist).done((result) => {
+                console.log(result);
+                if(result.success === 1){
+                    _.remove(this.data.favoriteList,function (n) {
+                        return n.name === name;
+                    });
+                }
+            })
         }
     },
     binds:[
@@ -174,7 +195,7 @@ let config = {
             selector:'.save-btn',
             callback: _.debounce( function () {
                 this.actions.saveFavorite();
-            },500)
+            },100)
         },
         {
             event:'click',
@@ -220,7 +241,7 @@ export const SaveView = {
         let component = new SaveViewController(data);
         this.el = $('<div id="save-view">').appendTo(document.body);
         component.render(this.el);
-        this.el.dialog({
+        this.el.erdsDialog({
             title: '保存视图',
             width: 280,
             modal:true,

@@ -256,7 +256,7 @@ export const agentSetting = {
         component.dataService = UserInfoService;
         this.el = $('<div class="set-agent-page">').appendTo(document.body);
         component.render(this.el);
-        this.el.dialog({
+        this.el.erdsDialog({
             title: '设置代理',
             width: 915,
             height: 620,

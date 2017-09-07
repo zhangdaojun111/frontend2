@@ -202,7 +202,7 @@ export const SysSetting = {
         let component = new SettingPage();
         this.el = $('<div id="sys-setting-page">').appendTo(document.body);
         component.render(this.el);
-        this.el.dialog({
+        this.el.erdsDialog({
             title: '系统设置',
             width: 540,
             modal:true,

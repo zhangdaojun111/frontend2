@@ -1,6 +1,9 @@
 import 'jquery-ui/ui/widgets/dialog';
 
 $.widget("custom.erdsDialog", $.ui.dialog, {
+    options: {
+        closeText: "关闭",
+    },
     open: function () {
         this._super();
         if (this.options.defaultMax === true) {
