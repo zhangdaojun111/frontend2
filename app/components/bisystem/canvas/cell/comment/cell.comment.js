@@ -14,34 +14,8 @@ let config = {
         comment:"",
         chartNameId:null,
     },
-    actions:{
-        /**
-         * 新建文本编译器
-         */
-        newEditor(id) {
-            this.data.toolbarOptions = [
-                [{ 'size': ['small', false, 'large', 'huge'] }],
-                [{ 'font': [] }],
-                ['bold', 'italic', 'underline'],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'align': [] }],
-                ['link','image','code-block'],
-                ['clean']
-            ];
-            let conId = '.editor-content'+id;
-            this.data.editor = new Quill( conId , {
-                modules: {
-                    toolbar: this.data.toolbarOptions
-                },
-                theme: 'snow',
-            });
-        }
-    },
-    afterRender(){
-        // this.actions.newEditor(this.data.chartNameId);
-        // this.data.editor.root.innerHTML = this.data.chartVal;
-    },
+    actions:{},
+    afterRender(){},
     firstAfterRender(){}
 };
 

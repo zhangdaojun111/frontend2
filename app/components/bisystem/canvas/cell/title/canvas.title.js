@@ -5,11 +5,7 @@
 import template from './canvas.title.html';
 import {BiBaseComponent} from '../../../bi.base.component';
 import './canvans.title.scss';
-import {config as editDialogConfig} from "./edit/edit";
-import {PMAPI} from '../../../../../lib/postmsg';
-import {ViewsService} from "../../../../../services/bisystem/views.service";
 import Mediator from '../../../../../lib/mediator';
-// import Quill from 'quill';
 
 let config = {
     template: template,
@@ -49,29 +45,7 @@ let config = {
             event:'click',
             selector:'.edit-title',
             callback: function () {
-                Mediator.emit("bi-edit-title:val",this.actions.sendValue())
-                // this.events.onChange();
-
-                // let views = {
-                //     content: this.data.charts.data.data['rows']['0']['0'].toString().replace(/[\r\n]/g,'<i>').replace(/[ ]/g,'&nbsp;'),
-                //     field_id: this.data.charts.data.columns.dfield,
-                //     table_id : this.data.charts.data.source.id,
-                //     row_id: this.data.charts.data.data.rows['0']['1'],
-                // };
-                // editDialogConfig.data.view = views;
-                // const res = await PMAPI.openDialogByComponent(editDialogConfig,{
-                //     width: 740,
-                //     height: 442,
-                //     title: '注释编辑',
-                // });
-
-                // ViewsService.setEditData(res).then((val)=>{
-                //     if(val['success']===1){
-                //
-                //     }else{
-                //         alert(val['error']);
-                //     }
-                // })
+                Mediator.emit("bi-edit-title:val",this.actions.sendValue());
             }
         }
     ],

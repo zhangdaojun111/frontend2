@@ -7,7 +7,6 @@ import template from './canvas.cell.html';
 import './canvas.cell.scss';
 import Handlebars from 'handlebars';
 import Mediator from '../../../../lib/mediator';
-import Quill from 'quill';
 import {CellNormalComponent} from './normal/cell.normal';
 import {CellTableComponent} from './table/cell.table';
 import {CellRadarComponent} from './radar/cell.radar';
@@ -247,19 +246,6 @@ let config = {
             callback: function (context,event) {
                 this.actions.showCellDataSource();
                 return false;
-            }
-        },
-        //显示文本编译器
-        {
-            event:'click',
-            selector:'.edit-title',
-            callback: function () {
-                // this.el.find('.cell-chart .editor').hide();
-                // this.el.find('.title .edit-title').hide();
-                // this.el.find('.cell-chart .editor-text').show();
-                // this.el.find('.cell').draggable({cancel:'.cell-chart'});
-                // this.el.find('.cell').draggable('disable');
-                // this.el.find('.cell-chart .editor-text .ql-editor').focus();
             }
         },
 
