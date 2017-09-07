@@ -31,7 +31,7 @@ let config = {
         //
         //         if(!((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))&&(dateElement.getHours()==parseInt(RegExp.$4))&&(dateElement.getMinutes()==parseInt(RegExp.$5))&&(dateElement.getSeconds()==parseInt(RegExp.$6))))//判断日期逻辑
         //         {
-        //             this.el.find("#errorMessage").css("display","inline-block").innerText = "时间格式不正确,正确格式为: 2017-09-01 12:00:00 ";
+        //            // this.el.find("#errorMessage").css("display","inline-block").innerText = "时间格式不正确,正确格式为: 2017-09-01 12:00:00 ";
         //         } else{
         //             this.el.find("#errorMessage").css("display","none");
         //             _this.data.value = strDate;
@@ -41,7 +41,7 @@ let config = {
         //         }
         //     }
         //     else{
-        //         this.el.find("#errorMessage").css("display","inline-block").text("时间格式不正确,正确格式为: 2017-09-01 12:00:00") ;
+        //       //  this.el.find("#errorMessage").css("display","inline-block").text("时间格式不正确,正确格式为: 2017-09-01 12:00:00") ;
         //     }
         // },
     }

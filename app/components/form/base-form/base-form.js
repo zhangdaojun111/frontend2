@@ -804,11 +804,12 @@ let config = {
         //判断一下日期的类型，并且进行限制
         checkDateType(data) {
             // for(let i = 0;i<this.data.formData.length;i++){
-            //     if(this.data.formData[i]['type'] == 'Date'){
-            //         let temp = this.data.formData[i];
-            //         let dfield = this.data.formData[i]['dfield'];//f8
+            //   if(this.data.formData[i]['type'] == 'Date'){
+            //       let temp = this.data.formData[i];
+            //       let dfield = this.data.formData[i]['dfield'];//f8
             //
             //         if(temp['timeType'] == 'after'){
+            //             console.log("data  "+ data[dfield].split("-"))
             //             let vals = data[dfield].split("-");
             //             //let vals = val.split("-");//[2011,11,11];
             //             let myData = new Date();
@@ -854,8 +855,9 @@ let config = {
             //                 }
             //             }
             //         }
-            //     }
-            // }
+            //    }
+            //  }
+             //
             // for(let i = 0;i<this.data.formData.length;i++){
             //     if(this.data.formData[i]['type'] == 'Date'){
             //         let temp = this.data.formData[i];
