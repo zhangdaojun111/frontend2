@@ -6,8 +6,8 @@ let config={
         <div class="search-check-item custom-radio J_name">
             <input type="radio" name="addUser" value="{{id}}">
         </div>
-        <div class="search-check-item J_name">{{name}}</div>
-        <div class="search-check-item J_name">{{username}}</div>
+        <div class="search-check-item J_name" title="{{name}}">{{name}}</div>
+        <div class="search-check-item J_name" title="{{username}}">{{username}}</div>
     </label>`,
     data:{},
     action:{

@@ -76,11 +76,13 @@ let config={
                     arr.push($(checked[i]).data('id'));
                 }
                 $.each(res,(i,val)=>{
-                    val.id=i;
-                    if(checked.length===0){
-                        this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
-                    }else if(arr.indexOf(i)===-1){
-                        this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+                    if(val){
+                        val.id=i;
+                        if(checked.length===0){
+                            this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+                        }else if(arr.indexOf(i)===-1){
+                            this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+                        }
                     }
                 });
             }
