@@ -144,28 +144,24 @@ let config = {
                         }, 200)();
                     }
                 } else {
-                    console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', this.selector);
+                    console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', 'datetime-control');
                 }
 
             },
-            onClose: function(timeText, text) {
-                let strTime = $(".ui_tpicker_time_input").val();
-                console.log(strTime)
-                if(strTime == "00:00:00"){
-                    _this.el.find("#errorMessage").css("display", "inline-block").text("时间格式不正确,正确格式为: 2017-09-01 12:00:00");
-                }else{
-                    _this.el.find("#errorMessage").css("display", "none");
-                }
-                console.log("timeText  "+timeText)
+            onClose: function(timeText) {
+                // let strTime = $(".ui_tpicker_time_input").val();
+                // console.log(strTime)
+                // if(strTime == "00:00:00"){
+                //     _this.el.find("#errorMessage").css("display", "inline-block").text("时间格式不正确,正确格式为: 2017-09-01 12:00:00");
+                // }else{
+                //     _this.el.find("#errorMessage").css("display", "none");
+                // }
+                // console.log("timeText  "+timeText)
                 _this.data.value = timeText.replace(/\//g, "-");
                 _.debounce(function () {
                     _this.events.changeValue(_this.data)
                 }, 200)();
             },
-            _doKeyUp: function () {
-                let strTime = $(".ui_tpicker_time_input").val();
-                console.log("ddd "+dstrTime)
-            }
 
         });
 

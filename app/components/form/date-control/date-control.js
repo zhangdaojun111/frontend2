@@ -52,7 +52,6 @@ let config = {
             event: 'click',
             selector: '.ui-history',
             callback: function () {
-                console.log('11111111');
                 this.events.emitHistory(this.data)
             }
         },
@@ -131,7 +130,7 @@ let config = {
                         }, 200)();
                     }
                 } else {
-                    console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', this.selector);
+                    console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', 'date-control');
                 }
             },
         });
