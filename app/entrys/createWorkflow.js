@@ -14,21 +14,14 @@ import WorkflowInitial from '../components/workflow/workflow-initial/workflow-in
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
 import WorkFlowGrid from '../components/workflow/workflow-grid/workflow-grid';
-import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow/workflow-addFollow';
 import FormEntrys from './form';
 import TreeView from  '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
 import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import jsplumb from 'jsplumb';
 
-WorkflowAddFollow.showAdd();
-
 WorkFlowForm.showForm();
 WorkFlowGrid.showGrid();
-
-
-
-
 
 /*
 ***订阅workflow choose事件，获取工作流info并发布getInfo,获取草稿
