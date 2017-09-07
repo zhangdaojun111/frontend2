@@ -139,7 +139,7 @@ window.addEventListener('message', function (event) {
                     if (iframe.length) {
                         iframe = iframe[0];
                         if (iframe.contentWindow) {
-                            $(iframe.contentWindow).trigger('iframe.close');
+                            // $(iframe.contentWindow).trigger('iframe.close');
                         }
                     }
                     dialogHash[data.key].element.erdsDialog('destroy').remove();
