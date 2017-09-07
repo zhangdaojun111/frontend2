@@ -550,7 +550,7 @@ let config = {
             } else if(this.data.calendarContent === 'day') {
                 this.append(new CalendarDay(this.data.dayDataList), this.el.find(".calendar-main-content"));
             } else if(this.data.calendarContent === 'schedule') {
-                this.actions.makeScheduleData(this.data.from_date, this.data.to_date);
+                this.actions.makeScheduleData(this.data.scheduleStart, this.data.scheduleEnd);
             }
             this.actions.getDataCount();
         },
@@ -674,7 +674,6 @@ let config = {
 
         let that = this;
         Mediator.on('calendarSchedule: date', data => {
-
             that.actions.getCalendarData({
                 from_date: data.from_date,
                 to_date: data.to_date,
