@@ -6,6 +6,7 @@ import template from './calendar.export.html';
 import './calendar.export.scss';
 import DateControl from '../../../form/date-control/date-control';
 import {PMAPI, PMENUM} from '../../../../lib/postmsg';
+import {CalendarService} from '../../../../services/calendar/calendar.service';
 
 let config = {
     template: template,
@@ -13,6 +14,7 @@ let config = {
         fromDate: '',
         toDate: '',
         cancelFields: [],
+
     },
     actions: {
 
@@ -31,11 +33,11 @@ let config = {
     },
     afterRender: function() {
         PMAPI.subscribe(PMENUM.open_iframe_params, params => {
-            let _this = this
-            this.data.cancelFields = params.data.cancelFields;
-            this.el.on('click', '.export-btn', function () {
-                console.log(_this.data.cancelFields);
-                window.open(`/calendar_mgr/export_calendar_data/?from_date=${_this.data.fromDate}&to_date=${_this.data.toDate}`);
+            let _this = this;
+            _this.data.cancelFields = JSON.stringify(params.data.cancelFields);
+            _this.el.on('click', '.export-btn', function () {
+                window.open(
+                    `/calendar_mgr/export_calendar_data/?from_date=${_this.data.fromDate}&to_date=${_this.data.toDate}&cancel_fields=${_this.data.cancelFields}`);
             });
         });
         this.el.find('.export-btn').attr("disabled", true);
