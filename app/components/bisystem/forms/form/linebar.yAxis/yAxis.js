@@ -7,6 +7,7 @@ import template from './yAxis.html';
 import './yAxis.scss';
 import {Base} from '../base';
 import {Y} from './y/y';
+import {Checkbox} from '../checkbox/checkbox';
 
 let config = {
     template: template,
@@ -59,10 +60,36 @@ let config = {
                 this.data.yAxis[key].field.setList(data);
             });
             this.trigger('onUpdate')
+        },
+        /**
+         * y轴设置
+         */
+        yMoreSetting() {
+            this.data.label = new Checkbox({
+                value: [],
+                list: [
+                    {
+                        value:1, name: '显示折柱图值'
+                    }
+                ],
+            });
+            this.data.areaStyle = new Checkbox({
+                value: [],
+                list: [
+                    {
+                        value:1, name: '显示折线图面积区域<b style="color:red;">(只有Y轴全部为"折线图"时才可以勾选此项)</b>'
+                    }
+                ],
+            },{
+                onChange() {}
+            });
+            this.append(this.data.label, this.el.find('.yAxis-setting'));
+            this.append(this.data.areaStyle, this.el.find('.yAxis-setting'));
         }
     },
     binds: [],
     afterRender(){
+        this.actions.yMoreSetting();
         this.actions.addY();
     }
 }

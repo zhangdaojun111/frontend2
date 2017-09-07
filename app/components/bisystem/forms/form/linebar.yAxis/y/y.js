@@ -5,6 +5,7 @@
 import {Base} from '../../base';
 import {AutoComplete} from '../../autocomplete/autocomplete';
 import {Select} from '../../select/select';
+import {Text} from '../../text/text';
 import template from './y.html'
 let config = {
     template: template,
@@ -52,8 +53,10 @@ let config = {
                 this.data.value.type = value === 'line' ? {name: "折线图", type:"line"} : {name: "柱状图", type:"bar"}
             }
         });
+        this.group = new Text({placeholder: '分组值'});
         this.append(this.field, this.el.find(".form-chart-y-columns"));
         this.append(this.type, this.el.find(".form-chart-y-columns"));
+        this.append(this.group, this.el.find('.form-chart-y-columns'));
     }
 };
 

@@ -69,7 +69,7 @@ class Checkbox extends Base {
      */
     setValue(value){
         this.data.firstDo = true;
-        if (Array.isArray(value)) {
+        if (Array.isArray(value)) { // 多选
             this.data.value = value;
             this.data.list.forEach((l,index) => {
                 for (let choosed of this.data.value) {
@@ -79,7 +79,7 @@ class Checkbox extends Base {
                     }
                 }
             })
-        } else {
+        } else { // 单选
             if (value) {
                 this.data.value.push(value);
                 this.el.find(`input`).attr("checked",true);
