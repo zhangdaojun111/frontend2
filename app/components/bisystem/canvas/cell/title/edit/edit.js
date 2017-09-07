@@ -106,8 +106,8 @@ export let config = {
         $(`<style>${this.data.css}</style>`).appendTo(this.el);
     },
     firstAfterRender() {
-        this.actions.newEditor();
-        this.data.editor.root.innerHTML = this.data.view.content;
+        // this.actions.newEditor();
+        // this.data.editor.root.innerHTML = this.data.view.content;
         // this.data.editor.container.firstChild.innerHTML = this.data.view.content;
         // document.querySelector(".ql-editor").innerHTML = this.data.view.content;
     }
