@@ -17,8 +17,13 @@ let config = {
             //hh:mm:ss
             let strDate = this.el.find(".timeInput").val();
             let re = /^((20|21|22|23|[0-1]\d)\:[0-5][0-9])(\:[0-5][0-9])?$/;
+            console.log(strDate)
+
             if (re.test(strDate))//判断日期格式符合hh:mm:ss标准
             {
+                this.el.find(".hour").children("span").text(strDate.substring(0,2))
+                this.el.find(".minute").children("span").text(strDate.substring(3,5));
+                this.el.find(".second").children("span").text(strDate.substring(6,8));
                 this.el.find("#errorMessage").css("display", "none");
                 _this.data.value = strDate.replace(/\//g, "-");
                 _.debounce(function () {
@@ -115,6 +120,16 @@ let config = {
         let s = myDate.getSeconds();
         let now = p(h) + ':' + p(m) + ":" + p(s);
 
+        this.el.on("click",'.ui-datepicker-current,.input-img', function () {
+            let nowTime = this.el.find(".timeInput").val(now);
+            this.data.value = now;
+            _.debounce(() => {
+                this.events.changeValue(this.data)
+            }, 200)();
+            this.el.find(".hour").children("span").text(p(h));
+            this.el.find(".minute").children("span").text(p(m));
+            this.el.find(".second").children("span").text(p(s));
+        })
         this.el.on("click", '.plus', function () {
             //当前时间+1
             let myDate2 = new Date();
