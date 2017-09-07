@@ -1,5 +1,9 @@
+/**
+ *@author fangqiwei
+ *年份控件
+ */
+
 import Component from '../../../lib/component'
-import Mediator from '../../../lib/mediator';
 import template from './year-month-control.html'
 import {AutoSelect} from "../../util/autoSelect/autoSelect"
 
@@ -32,6 +36,9 @@ let config={
     },
     afterRender(){
         let _this=this;
+        if(this.data.history){
+            this.el.find('.ui-history').css('visibility','visible');
+        }
         let yearData = {
             multiSelect:false,
             editable:this.data.is_view?false:true,

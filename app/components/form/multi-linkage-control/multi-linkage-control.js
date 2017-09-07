@@ -84,8 +84,6 @@ let config={
                 for(let key in this.data.dataList){
                     let isValue=true;
                     for(let i=0;i<this.data.index;i++){
-                        console.log(this.data.dataList[key][i]);
-                        console.log(childSelectValue[i]);
                         if(this.data.dataList[key][i]!=childSelectValue[i]){
                             isValue=false;
                             break;
@@ -119,6 +117,52 @@ let config={
                     this.actions.echoData4Control(res);
                 }
             }
+        },
+        //初始化下拉框
+        initSelect(){
+            let _this=this;
+            let index;
+            for (let key in this.data.dataList) {
+                index = this.data.dataList[key].length;
+                this.data['index'] = index;
+            }
+            for (let i = 0; i < index; i++) {
+                let d = {};
+                d['index'] = i;
+                d['dfield'] = this.data.dfield;
+                d['list']=[];
+                d['multiSelect']=false;
+                d['editable']=this.data.is_view?false:true;
+                d['width']=this.data.width;
+                d['choosed']=[];
+                d.onSelect=function(data){
+                    if( _this.data.isInit || _this.data.isReolad || !_this.data.childDrop[i] || _this.data.childDrop[i].data.choosed.length == 0){
+                        return;
+                    }
+                    _this.data.isReolad=true;
+                    _this.actions.changeValue(data[0]['id'],i);
+                    _.debounce(function(){_this.events.changeValue(_this.data)},200)();
+                };
+                if (this.data.value) {
+                    let value = this.data.dataList[this.data.value][i];
+                    d['list'].push({name: value, id: value});
+                    d['choosed'].push({name: value, id: value});;
+                    this.data.hasChoose.set(i, value);
+                } else {
+                    let set = new Set();
+                    d['choosed']=[{name:'请选择',id:'请选择'}];
+                    for (let key in this.data.dataList) {
+                        set.add(this.data.dataList[key][i]);
+                    }
+                    for(let item of set) {
+                        d['list'].push({name: item, id: item});
+                    }
+                }
+                let autoSelect = new AutoSelect(d);
+                this.data.childDrop[i] = autoSelect;
+                this.append(autoSelect, this.el.find('.multi-drop'));
+            }
+            this.data.isInit=false;
         }
     },
     binds:[
@@ -138,57 +182,19 @@ let config={
         }
     ],
     afterRender(){
-        let _this=this;
         this.data.isInit=true;
+        //记录已选择的选项数，只有全部选择才会触发changeValue事件
         this.setData('hasChoose', new Map());
+        if(this.data.history){
+            this.el.find('.ui-history').css('visibility','visible');
+        }
         if (!this.data.childDrop) {
             this.setData('childDrop', []);
         }
         if (this.data.be_control_condition) {
             return;
         }
-        let index;
-        for (let key in this.data.dataList) {
-            index = this.data.dataList[key].length;
-            this.data['index'] = index;
-        }
-        for (let i = 0; i < index; i++) {
-            let d = {};
-            d['index'] = i;
-            d['dfield'] = this.data.dfield;
-            d['list']=[];
-            d['multiSelect']=false;
-            d['editable']=this.data.is_view?false:true;
-            d['width']=this.data.width;
-            d['choosed']=[];
-            d.onSelect=function(data){
-                if( _this.data.isInit || _this.data.isReolad || !_this.data.childDrop[i] || _this.data.childDrop[i].data.choosed.length == 0){
-                    return;
-                }
-                _this.data.isReolad=true;
-                _this.actions.changeValue(data[0]['id'],i);
-                _.debounce(function(){_this.events.changeValue(_this.data)},200)();
-            };
-            if (this.data.value) {
-                let value = this.data.dataList[this.data.value][i];
-                d['list'].push({name: value, id: value});
-                d['choosed'].push({name: value, id: value});;
-                this.data.hasChoose.set(i, value);
-            } else {
-                let set = new Set();
-                d['choosed']=[{name:'请选择',id:'请选择'}];
-                for (let key in this.data.dataList) {
-                    set.add(this.data.dataList[key][i]);
-                }
-                for(let item of set) {
-                    d['list'].push({name: item, id: item});
-                }
-            }
-            let autoSelect = new AutoSelect(d);
-            this.data.childDrop[i] = autoSelect;
-            this.append(autoSelect, this.el.find('.multi-drop'));
-        }
-        this.data.isInit=false;
+       this.actions.initSelect();
     },
     beforeDestory(){
         this.el.off();

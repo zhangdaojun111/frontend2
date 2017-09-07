@@ -31,6 +31,9 @@ let config = {
     ],
     afterRender() {
         this.el.find('.ui-width').css('width', this.data.width);
+        if(this.data.history){
+            this.el.find('.ui-history').css('visibility','visible');
+        }
         if (this.data.is_view) {
             this.el.find('.ui-width').attr('disabled', true);
         } else {

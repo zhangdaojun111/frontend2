@@ -22,12 +22,11 @@ function recursion(arr,slnds,pubInfo){
 }
 let focus=location.search.slice(1).split('&')[0].split(',');
 
-if(focus.length>1){
-    let dept=[];
+if(focus.length>=1&&focus[0].indexOf('key')===-1){
+    let dept=[],idArr=[];
     (async function () {
         return workflowService.getWorkflowInfo({url: '/get_all_users/'});
     })().then(users => {
-        let idArr=[];
         for(let i in focus){
             idArr.push(users.rows[focus[i]].id);
             dept.push(users.rows[focus[i]].department);
@@ -50,8 +49,11 @@ if(focus.length>1){
                             item.state.selected=true;
                             for(let k in staff){
                                 if(k==item.id){
-                                    Mediator.publish('workflow:checkDeptAlready', staff[k]);
-                                    // recursion(staff,selectedNode,'checkDept');
+                                    let o={};
+                                    for(let j in idArr){
+                                        o[idArr[j]]=staff[k][idArr[j]];
+                                    }
+                                    Mediator.publish('workflow:checkDeptAlready', o);
                                 }
                             }
                         }
@@ -93,6 +95,7 @@ if(focus.length>1){
     })().then(res=>{
         tree=res.data.department_tree;
         staff=res.data.department2user;
+        Mediator.publish('workflow:checkDeptAlready',0);
         function recur(data) {
             for (let item of data){
                 item.nodes=item.children;

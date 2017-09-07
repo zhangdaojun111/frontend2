@@ -6,9 +6,13 @@
         input.search-content{
             width: 200px;
             height: 24px;
-            border: none;
+            border: solid 1px #f2f2f2;
             text-indent: 15px;
             outline: none;
+            font-size: 12px;
+            &::placeholder{
+                color: #999999;
+            }
         }
 
         .search-icon{
@@ -30,7 +34,7 @@
         background-color: white;
         position: relative;
         z-index:10;
-        border: solid 1px #c5e1ff;
+        border: solid 1px #f2f2f2;
         display: none;
 
         .history-list{
