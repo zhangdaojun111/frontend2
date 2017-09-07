@@ -783,7 +783,7 @@ let config = {
             }
             let str = '<div class="ui-link" style="text-align:center;"><a class="gridView" style="color:#337ab7;">查看</a>';
             if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data' || this.data.viewMode == 'deleteHanding') {
-                if (this.data.isFixed || rowStatus == 2 || this.data.cell_edit == 0) {
+                if (this.data.isFixed || rowStatus == 2 || this.data.permission.cell_edit == 0) {
                     str += ' | <span style="color: darkgrey;">编辑</span>';
                     str += ' | <a style="color: darkgrey;">历史</a>';
                 } else {
@@ -2596,7 +2596,7 @@ let config = {
                 this.actions.viewOrEditPerm( 'view' );
                 console.log( '查看' )
                 let btnType = 'view';
-                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.cell_edit == 0 ){
+                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
                     btnType = 'none';
                 }
                 let obj = {
@@ -2734,7 +2734,7 @@ let config = {
                 btnType: 'view',
                 is_view:1
             };
-            if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.cell_edit == 0 ){
+            if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
                 obj.btnType = 'none';
             }
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
