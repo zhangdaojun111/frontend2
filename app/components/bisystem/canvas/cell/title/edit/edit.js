@@ -68,44 +68,47 @@ export let config = {
             event:'click',
             selector:'.editor-btn-save',
             callback: function () {
+                // console.log(this.data.editor.getContents());
+                // console.log(this.data.editor.root.innerHTML);
+                // console.log(this.data.editor.container.firstChild.innerHTML);
+                // console.log(this.data.editor.container.innerHTML);
+                // let data = {
+                //     field_id: this.data.view.field_id,
+                //     content: this.data.editor.root.innerHTML,
+                //     table_id : this.data.view.table_id,
+                //     row_id: this.data.view.row_id,
+                // };
 
-                let data = {
-                    field_id: this.data.view.field_id,
-                    content: this.data.editor.getText(),
-                    table_id : this.data.view.table_id,
-                    row_id: this.data.view.row_id,
-                };
-
-                PMAPI.sendToParent({
-                    type: PMENUM.close_dialog,
-                    key: this.key,
-                    data: data
-                });
+                // PMAPI.sendToParent({
+                //     type: PMENUM.close_dialog,
+                //     key: this.key,
+                //     data: data
+                // });
             }
         },
         {
             event:'click',
             selector:'.editor-btn-cancel',
             callback: function () {
-                PMAPI.sendToParent({
-                    type: PMENUM.close_dialog,
-                    key: this.key,
-                    data: {}
-                });
+                // PMAPI.sendToParent({
+                //     type: PMENUM.close_dialog,
+                //     key: this.key,
+                //     data: {}
+                // });
             }
         }
     ],
     afterRender() {
-        //添加样式
         // Mediator.on('edit:title',(data) =>{
         //     console.log(data);
         // });
+        //添加样式
         $(`<style>${this.data.css}</style>`).appendTo(this.el);
     },
     firstAfterRender() {
         this.actions.newEditor();
-        this.data.editor.container.firstChild.innerHTML = this.data.view.content;
-        // quill.container.firstChild.innerHTML = this.data.view['edits']['0'];
-        // document.querySelector(".ql-editor").innerHTML = this.data.view;
+        this.data.editor.root.innerHTML = this.data.view.content;
+        // this.data.editor.container.firstChild.innerHTML = this.data.view.content;
+        // document.querySelector(".ql-editor").innerHTML = this.data.view.content;
     }
 };

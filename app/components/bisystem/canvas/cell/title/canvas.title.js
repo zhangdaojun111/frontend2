@@ -8,6 +8,7 @@ import './canvans.title.scss';
 import {config as editDialogConfig} from "./edit/edit";
 import {PMAPI} from '../../../../../lib/postmsg';
 import {ViewsService} from "../../../../../services/bisystem/views.service";
+import Mediator from '../../../../../lib/mediator';
 
 let config = {
     template: template,
@@ -27,9 +28,6 @@ let config = {
                 this.el.find('.title').addClass('no-title');
             }
             this.data.isEdit = chart['data']['assortment'] === 'comment' ? true : false;
-            // if(this.data.isEdit){
-            //     this.data.edits = chart['data']['data']['rows']['0'];
-            // }
             this.reload();
         }
     },
@@ -42,22 +40,26 @@ let config = {
             selector:'.edit-title',
             callback: async function () {
                 this.events.onChange();
-                let data = _.cloneDeep(this.data.charts);
-                let r = data.data.data.rows[0][0];
-                editDialogConfig.data.view = String(r);
-                const res = await PMAPI.openDialogByComponent(editDialogConfig,{
-                    width: 740,
-                    height: 442,
-                    title: '注释编辑',
-                });
+                // let views = {
+                //     content: this.data.charts.data.data['rows']['0']['0'].toString().replace(/[\r\n]/g,'<i>').replace(/[ ]/g,'&nbsp;'),
+                //     field_id: this.data.charts.data.columns.dfield,
+                //     table_id : this.data.charts.data.source.id,
+                //     row_id: this.data.charts.data.data.rows['0']['1'],
+                // };
+                // editDialogConfig.data.view = views;
+                // const res = await PMAPI.openDialogByComponent(editDialogConfig,{
+                //     width: 740,
+                //     height: 442,
+                //     title: '注释编辑',
+                // });
 
-                ViewsService.setEditData(res).then((val)=>{
-                    if(val['success']===1){
-
-                    }else{
-                        alert(val['error']);
-                    }
-                })
+                // ViewsService.setEditData(res).then((val)=>{
+                //     if(val['success']===1){
+                //
+                //     }else{
+                //         alert(val['error']);
+                //     }
+                // })
             }
         }
     ],
