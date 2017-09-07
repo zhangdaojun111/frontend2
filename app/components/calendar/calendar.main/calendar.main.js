@@ -580,7 +580,6 @@ let config = {
                 this.data.isShowWorkflowData = false;
             }
         }
-
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.data.workflowData = data;
             //this.hideLoading();
@@ -612,7 +611,6 @@ let config = {
                 }
             }
         });
-
         Mediator.on('Calendar: tool', data => {
             if(data.toolMethod === 'refresh') {
                 this.data.cancel_fields = data['data'];
@@ -633,12 +631,16 @@ let config = {
                 }
 
             }else if(data.toolMethod === 'export') {
-                PMAPI.openDialogByComponent(CalendarExport, {
-                    width: '350',
-                    height: '150',
-                    title: '导出',
-                }).then(data => {
-                    console.log(data);
+                PMAPI.openDialogByIframe(
+                    '/iframe/calendarExport/',
+                    {
+                        width: '400',
+                        height: '460',
+                        title: '导出',
+                    },{
+                        cancelFields: this.data.cancel_fields,
+                    }).then(data => {
+                        console.log(data);
                 });
             }
 
