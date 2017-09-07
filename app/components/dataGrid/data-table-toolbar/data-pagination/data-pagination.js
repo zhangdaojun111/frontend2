@@ -303,7 +303,7 @@ let config = {
                         this.actions.invalidTips();
                         setTimeout( ()=>{
                             this.data.onRefresh = false;
-                        },100 )
+                        },500 )
                     }
                 }
             })
