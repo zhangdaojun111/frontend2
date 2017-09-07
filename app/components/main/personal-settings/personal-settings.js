@@ -299,7 +299,7 @@ export const PersonSetting  = {
         this.el = $('<div class="personal-setting-page">').appendTo(document.body);
         getData(component);
         component.render(this.el);
-        this.el.dialog({
+        this.el.erdsDialog({
             title: '账号设置',
             width: 540,
             height: 600,

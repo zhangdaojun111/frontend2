@@ -13,7 +13,12 @@ import WorkflowSeal from '../workflow-seal/workflow-seal';
 import {workflowService} from '../../../services/workflow/workflow.service';
 import msgBox from '../../../lib/msgbox';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
-
+let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[];;
+serchStr.split('&').forEach(res => {
+    let arr = res.split('=');
+    obj[arr[0]] = arr[1];
+});
+is_view=obj.btnType==='view'?1:0;
 let config={
     template: template,
     data:{
@@ -210,41 +215,66 @@ let config={
             })
         },
         appRejAny(){
-            // this.el.find('.rejContainer').show();
-            this.el.find('.closeSpan').remove();
-            let container = this.el.find('.workflow-draw-box')[0];
-            container.style.transform = 'scale(1)';
-            container.id = "rej";
-            let e = document.documentElement, g = document.getElementsByTagName('body')[0], w = window.innerWidth || e.clientWidth || g.clientWidth, h = window.innerHeight || e.clientHeight || g.clientHeight;
-            container.style.position = "fixed";
-            container.style.top = "0";
-            container.style.left = "0";
-            container.style.right = "0";
-            container.style.bottom = "0";
-            container.style.backgroundColor = "#fff";
-            container.style.width = w + 'px';
-            container.style.height = h + 'px';
-            container.style.marginTop = 0;
-            container.style.margin = 0;
-            container.style.zIndex = '99';
-            container.style.overflow = 'auto';
-            let ocloseSpan = document.createElement('span');
-            ocloseSpan.className = 'closeSpan';
-            ocloseSpan.style['float'] = 'right';
-            ocloseSpan.style.cursor = 'pointer';
-            ocloseSpan.style.fontSize = '30px';
-            ocloseSpan.style.border = '1px solid #ddd';
-            ocloseSpan.innerHTML = '&nbsp;×&nbsp;';
-            ocloseSpan.addEventListener('click', (event) => {
-                container.id = "";
-                container.style.height ='100px';
-                container.style.width = '100%';
-                container.style.position = "relative";
-                container.style.zIndex = '0';
-                container.style.overflow = 'visible';
-                ocloseSpan.style.display = 'none';
+            // PMAPI.openDialogByComponent(ApprovalDialog, {
+            //     width: 900,
+            //     height: 600,
+            //     title: '驳回到任意节点'
+            // }).then((data) => {
+            //
+            // });
+            PMAPI.openDialogByIframe('/iframe/approvalDialog/',
+                {
+                    title: '驳回任意节点',
+                    width: '900',
+                    height: '600',
+                    modal: true,
+                },
+                {
+                    flow_id:obj.flow_id,
+                    record_id:obj.record_id
+                }
+            ).then(res=>{
+                if(!res.onlyclose){
+                    Mediator.publish('approval:rejToAny',res);
+                }else {
+                    this.el.find(".approval-btn-sel").removeClass('active');
+                }
             });
-            container.appendChild(ocloseSpan);
+            // this.el.find('.rejContainer').show();
+            // this.el.find('.closeSpan').remove();
+            // let container = this.el.find('.workflow-draw-box')[0];
+            // container.style.transform = 'scale(1)';
+            // container.id = "rej";
+            // let e = document.documentElement, g = document.getElementsByTagName('body')[0], w = window.innerWidth || e.clientWidth || g.clientWidth, h = window.innerHeight || e.clientHeight || g.clientHeight;
+            // container.style.position = "fixed";
+            // container.style.top = "0";
+            // container.style.left = "0";
+            // container.style.right = "0";
+            // container.style.bottom = "0";
+            // container.style.backgroundColor = "#fff";
+            // container.style.width = w + 'px';
+            // container.style.height = h + 'px';
+            // container.style.marginTop = 0;
+            // container.style.margin = 0;
+            // container.style.zIndex = '99';
+            // container.style.overflow = 'auto';
+            // let ocloseSpan = document.createElement('span');
+            // ocloseSpan.className = 'closeSpan';
+            // ocloseSpan.style['float'] = 'right';
+            // ocloseSpan.style.cursor = 'pointer';
+            // ocloseSpan.style.fontSize = '30px';
+            // ocloseSpan.style.border = '1px solid #ddd';
+            // ocloseSpan.innerHTML = '&nbsp;×&nbsp;';
+            // ocloseSpan.addEventListener('click', (event) => {
+            //     container.id = "";
+            //     container.style.height ='100px';
+            //     container.style.width = '100%';
+            //     container.style.position = "relative";
+            //     container.style.zIndex = '0';
+            //     container.style.overflow = 'visible';
+            //     ocloseSpan.style.display = 'none';
+            // });
+            // container.appendChild(ocloseSpan);
         },
         reApp(){
             Mediator.publish('approval:re-app');
@@ -329,6 +359,12 @@ let config={
             let J_tooltip=$("#J_tooltip");
             __this.actions.tipsMousemove(pos,J_tooltip,e)
         });
+        Mediator.subscribe("workflow:aggridorform",(res)=>{
+            if(res.record_info.is_batch==1){
+                this.el.find("#workflow-grid").show();
+                this.el.find("#workflow-form").hide();
+            }
+        })
         Mediator.subscribe("workflow:focused", (res) => {
             if(res.length>0){
                 this.el.on('click','#addFollower',()=>{
@@ -352,7 +388,7 @@ let config={
                 });
             }else{
                 this.el.on('click','#addFollower',()=>{
-                    PMAPI.openDialogByIframe(`/iframe/addFocus/`,{
+                    PMAPI.openDialogByIframe(`/iframe/addfocus/`,{
                         width:800,
                         height:600,
                         title:`添加关注人`,

@@ -149,7 +149,7 @@ let config ={
             }
         },
         isDeleteAllHistory:function () {
-            msgbox.confirm("您确定要清除全局搜索所有的历史数据吗？").then((result) => {
+            msgbox.confirm("确定清除所有检索历史？").then((result) => {
                 if (result === true) {
                     this.actions.deleteAllHistory();
                 } else {
@@ -166,17 +166,17 @@ let config ={
                 })
         },
         showHistoryList:function () {
-            this.el.find('.search-content').val('');
+            // this.el.find('.search-content').val('');
             if(this.data.historyList.length > 0){
                 this.el.find("div.history-display").show();
-                this.el.find("input.search-content").removeAttr("placeholder");
+                // this.el.find("input.search-content").removeAttr("placeholder");
             }
         },
         hideHistoryList:function () {
             this.el.find("div.history-display").hide();
-            if(this.el.find("input.search-content").val() === ''){
-                this.el.find("input.search-content").attr("placeholder","请输入要搜索的内容...");
-            }
+            // if(this.el.find("input.search-content").val() === ''){
+            //     this.el.find("input.search-content").attr("placeholder","请输入要搜索的内容...");
+            // }
         },
         setItemHover:function (event) {
             this.el.find('.record-item').removeClass('item-selected');
@@ -216,6 +216,9 @@ let config ={
             }else{
 
             }
+        },
+        allItemBlur:function () {
+            this.el.find('.record-item').removeClass('item-selected');
         }
     },
     binds:[
@@ -241,7 +244,7 @@ let config ={
             }
         },
         {
-            event:'click',
+            event:'mousedown',
             selector:'.delete-all-history',
             callback:function () {
                 this.actions.isDeleteAllHistory();
@@ -275,6 +278,13 @@ let config ={
                 this.actions.setItemHover(event);
             }
         },
+        {
+            event:'mouseenter',
+            selector:'.delete-all-history',
+            callback:function () {
+                this.actions.allItemBlur();
+            }
+        }
     ],
     afterRender:function () {
         this.actions.getData();

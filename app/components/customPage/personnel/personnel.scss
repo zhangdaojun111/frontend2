@@ -5,6 +5,10 @@
     left: 0;
     right: 0;
     overflow: hidden;
+    .ag-cell-value {
+        padding: 0px 8px!important;
+        line-height: 30px;
+    }
     .choose-department {
         width: 300px;
         height: 100%;

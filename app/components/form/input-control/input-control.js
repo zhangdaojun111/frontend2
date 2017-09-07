@@ -174,6 +174,9 @@ let config = {
     ],
     afterRender() {
         let _this = this;
+        if(this.data.history){
+            this.el.find('.ui-history').css('visibility','visible');
+        }
         this.el.find('.search').on('input', _.debounce(function () {
             _this.actions.keyup();
         }, 200));
