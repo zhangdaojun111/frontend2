@@ -80,13 +80,13 @@ let config = {
                     this.formItems['yAxis0'].actions.updateY(data['y_field']);
                     this.formItems['yAxis1'].actions.updateY(data['y_field']);
                     this.formItems['chartGroup'].setList(data['x_field']);
-                    // this.formItems['tableSortColumn'].setList(data['x_field']);
+                    this.formItems['sortColumns'].setList(data['x_field']);
                 } else { // 清空字段
                     this.formItems['xAxis'].setList([]);
                     this.formItems['yAxis0'].actions.updateY([]);
                     this.formItems['yAxis1'].actions.updateY([]);
                     this.formItems['chartGroup'].setList([]);
-                    // this.formItems['tableSortColumn'].setList([]);
+                    this.formItems['sortColumns'].setList([]);
                 }
             }
         },
@@ -178,6 +178,8 @@ let config = {
                 source: data.source,
                 theme: data.theme,
                 xAxis: data.xAxis,
+                sort: data.sort,
+                sortColumns:data.sortColumns ? [data.sortColumns] : [],
                 yAxis: yAxis,
                 yHorizontal: data.yHorizontal[0] ? true : false,
                 yHorizontalColumns: data.yHorizontalColumns[0] ? {marginBottom:data.marginBottomx} : {},
@@ -245,6 +247,7 @@ let config = {
                 name: 'source',
                 defaultValue: '',
                 type: 'autocomplete',
+                required: true,
                 events: {
                     onSelect(value) {
                         this.actions.getFields(value);
@@ -253,33 +256,35 @@ let config = {
             },
             theme,
             icon,
-            // {
-            //     label: '默认排序',
-            //     name: 'sort',
-            //     defaultValue: '1',
-            //     list: [
-            //         {value: '1',name: '升序'},
-            //         {value: '-1', name:'降序'}
-            //     ],
-            //     type: 'radio'
-            // },
-            // {
-            //     label: '',
-            //     name: 'tableSortColumn',
-            //     defaultValue: '',
-            //     type: 'autocomplete',
-            //     placeholder: '选择排序字段（非必选）'
-            // },
+            {
+                label: '默认排序',
+                name: 'sort',
+                defaultValue: '-1',
+                list: [
+                    {value: '1',name: '升序'},
+                    {value: '-1', name:'降序'}
+                ],
+                type: 'radio'
+            },
+            {
+                label: '',
+                name: 'sortColumns',
+                defaultValue: '',
+                type: 'autocomplete',
+                placeholder: '选择排序字段（非必选）'
+            },
             {
                 label: 'x轴字段',
                 name: 'xAxis',
                 defaultValue: '',
+                required: true,
                 type: 'autocomplete',
                 events: {}
             },
             {
                 label: 'Y轴字段',
                 name: 'double',
+                required: true,
                 defaultValue: [],
                 list: [
                     {
@@ -323,6 +328,7 @@ let config = {
                 label: '选择分组或下穿',
                 name: 'chartAssignment',
                 class: 'chart-assignment',
+                required: true,
                 defaultValue: 2,
                 list: [
                     {'value': 1, 'name': '分组'},

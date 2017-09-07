@@ -10,6 +10,7 @@ import '../../assets/scss/core/jquery-ui-theme.scss';
 import '../../assets/scss/core/base.scss';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
+import '../../assets/scss/bisystem/bi.common.scss';
 import Quill from 'quill';
 import Component from '../../lib/component';
 

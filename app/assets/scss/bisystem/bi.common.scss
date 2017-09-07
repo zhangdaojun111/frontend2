@@ -2,16 +2,6 @@
 * 容器的大小
 */
 
-html.bi,body.bi {
-    min-height: 100%;
-    .bi-container {
-        min-height: 100%;
-    }
-}
-@mixin chart-com {
-    height: calc(100%);
-    background: rgba(242, 242, 242, 1);
-}
 @mixin icon{
     display:inline-block;
     width:16px;
@@ -19,22 +9,39 @@ html.bi,body.bi {
     text-indent:-9999px;
 }
 
-.remove-icon {
-    @include icon;
-    background:url('../../../assets/images/bisystem/remove.png') no-repeat;
+html.bi,body.bi {
+    height: 100%;
+    .bi-container {
+        height: 100%;
+    }
+    .remove-icon {
+        @include icon;
+        background:url('../../../assets/images/bisystem/remove.png') no-repeat;
+    }
+    .add-icon {
+        @include icon;
+        background:url('../../../assets/images/bisystem/add.png') no-repeat;
+    }
+    .edit-icon {
+        @include icon;
+        background:url('../../../assets/images/bisystem/edit.png') no-repeat;
+    }
+    .red-remove-icon {
+        @include icon;
+        background:url('../../../assets/images/bisystem/red-remove.png') no-repeat;
+    }
+    .start-icon {
+        @include icon;
+        background:url('../../../assets/images/bisystem/start.png') no-repeat;
+    }
 }
-.add-icon {
-    @include icon;
-    background:url('../../../assets/images/bisystem/add.png') no-repeat;
+@mixin chart-com {
+    height: calc(100%);
+    background: rgba(242, 242, 242, 1);
 }
-.edit-icon {
-    @include icon;
-    background:url('../../../assets/images/bisystem/edit.png') no-repeat;
-}
-.red-remove-icon {
-    @include icon;
-    background:url('../../../assets/images/bisystem/red-remove.png') no-repeat;
-}
+
+
+
 
 .remove-icon {
     display:inline-block;
@@ -102,6 +109,9 @@ html.bi,body.bi {
                 display:inline-block;
                 padding:6px 8px;
                 color:#ffffff;
+            }
+            .required{
+                color:red;
             }
         }
     }

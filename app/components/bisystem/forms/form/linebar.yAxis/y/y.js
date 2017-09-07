@@ -12,7 +12,7 @@ let config = {
     data: {
         value: {
             field: {},
-            type: {}
+            type: {},
         }
     },
     actions: {},
@@ -50,10 +50,15 @@ let config = {
         this.data.value.type = {name: "折线图", type:"line"};
         this.type = new Select(typeConfig, {
             onChange: (value) => {
-                this.data.value.type = value === 'line' ? {name: "折线图", type:"line"} : {name: "柱状图", type:"bar"}
+                this.data.value.type = value === 'line' ? {name: "折线图", type:"line"} : {name: "柱状图", type:"bar"};
+                this.trigger('onSetBG', value);
             }
         });
-        this.group = new Text({placeholder: '分组值'});
+        this.group = new Text({placeholder: '分组值'},{
+            onChange:(value) => {
+                this.data.value.group = value ? value : 0;
+            }
+        });
         this.append(this.field, this.el.find(".form-chart-y-columns"));
         this.append(this.type, this.el.find(".form-chart-y-columns"));
         this.append(this.group, this.el.find('.form-chart-y-columns'));
@@ -69,6 +74,7 @@ class Y extends Base {
      * 获取y数据
      */
     getYData() {
+        this.data.value.group = this.group.data.value;
         return this.data.value;
     }
 }

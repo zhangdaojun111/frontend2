@@ -1,6 +1,6 @@
 {% load client_version %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bi">
 <head>
     <meta charset="UTF-8">
     <title>BI管理界面</title>
@@ -16,18 +16,18 @@
         }
     </script>
 </head>
-<body>
+<body class="bi">
 <div id="aside-container"></div>
 <div id="route-outlet" class="bi-container bi-component-container"></div>
 </body>
 {% ifequal config.window_type 'develop'%}
+<script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
+<script type="text/javascript" src="http://localhost:8080/scripts/bimanager.js"></script>
+{% else %}
 <link rel="stylesheet" href=" {{ "/client/static/css/vendors.css"|version }}" />
 <link rel="stylesheet" href=" {{ "/client/static/css/bimanager.css"|version }}" />
 <script type="text/javascript" src=" {{ "/client/static/vendors.js"|version }}"></script>
 <script type="text/javascript" src=" {{ "/client/static/bimanager.js"|version }}"></script>
-{% else %}
-<script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
-<script type="text/javascript" src="http://localhost:8080/scripts/bimanager.js"></script>
 {% endifequal %}
 </html>
 

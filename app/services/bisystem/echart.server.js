@@ -76,7 +76,7 @@ export class EchartsService {
         let maxXnum = [];
         let maxYTextNum; // y轴数字toSting().length最大字数
 
-        yAxis.forEach(y => {
+        yAxis.forEach((y,i) => {
             legend.push(y[nameType]);
             let yTextNum = [];
             y['data'].forEach(val => {
@@ -110,7 +110,15 @@ export class EchartsService {
                     normal: {
                         width: 1
                     }
-                }
+                },
+                areaStyle:(cellOption.yAxis[i] && cellOption.yAxis[i].areaStyle==1)?{normal: {}}:{},
+                stack:cellOption.yAxis[i] && cellOption.yAxis[i]['group'] || '',
+                label: (cellOption.yAxis[i] && cellOption.yAxis[i]['label']==1)?
+                    {normal: {
+                        show: true,
+                        position: (cellOption.yAxis[i] && cellOption.yAxis[i]['group'] != '')?'inside':'top'
+                        // position:'top'
+                    }}:{}
             });
         });
         xAxis.forEach(x => {

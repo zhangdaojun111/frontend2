@@ -1,11 +1,11 @@
 {% load client_version %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bi">
 <head>
     <meta charset="UTF-8">
     <title>BI</title>
 </head>
-<body>
+<body class="bi">
 <script>
     window.config = {
         is_admin: {{ is_admin | safe }},
@@ -14,14 +14,6 @@
         img_url: '{{ config.img_url | safe }}',
     }
 </script>
-<style>
-    html,body {
-        height:100%;
-    }
-    .bi-container{
-        height:100%;
-    }
-</style>
 <div id="route-outlet" class="bi-container"></div>
 </body>
 {% ifequal config.window_type 'develop'%}
