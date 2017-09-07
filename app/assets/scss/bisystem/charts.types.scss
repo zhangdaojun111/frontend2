@@ -1,6 +1,13 @@
 /**
 * 容器的大小
 */
+
+html.bi,body.bi {
+    min-height: 100%;
+    .bi-container {
+        min-height: 100%;
+    }
+}
 @mixin chart-com {
     height: calc(100%);
     background: rgba(242, 242, 242, 1);
