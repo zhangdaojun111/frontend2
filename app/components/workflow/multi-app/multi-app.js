@@ -6,6 +6,7 @@ import Component from '../../../lib/component';
 import template from './multi-app.html';
 import Mediator from '../../../lib/mediator';
 import msgBox from '../../../lib/msgbox';
+import {PMAPI,PMENUM} from "../../../lib/postmsg";
 import {workflowService} from '../../../services/workflow/workflow.service';
 
 let config={
@@ -59,8 +60,8 @@ let config={
     ],
     afterRender(){
         PMAPI.getIframeParams(this.data.key).then((res) => {
-            Mediator.publish('workflow:addusers', res.data.checkIds);
-            this.data.checkIds=res.data.checkIds;
+            Mediator.publish('workflow:addusers', res.data);
+            this.data.checkIds=res.data;
         })
     }
 };
