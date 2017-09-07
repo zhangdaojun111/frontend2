@@ -190,7 +190,7 @@ export const contractEditorConfig = {
                 if (currentIndex == -1) {
                     this.actions.addTab();
                 } else {
-                    this.actions._loadTemplateByIndex(currentIndex);
+                    this.actions._loadTemplateByIndex(currentIndex,true,true);
                 }
             }
         }
@@ -213,22 +213,13 @@ export const contractEditorConfig = {
                 let dataSourcesEle = this.el.find('.contract-data-source-anchor');
 
                 elements.forEach(element => {
-                    let select = $('<select></select>');
-                    select.addClass('data-source');
-                    select.attr('id', element.table.table_id);
-                    select.css({width:'200px',marginTop:'5px'});
-                    let defaultOption = $('<option>请选择</option>');
-                    defaultOption.attr('value', '0');
-                    select.append(defaultOption);
+                    let select = $('<select class="data-source" id="'+element.table.table_id+'" style="width: 200px;margin-top: 5px;"><option value="0">请选择</option></select>');
                     this.data.elementKeys.push(element.table.table_id);
                     element.values.forEach(value => {
-                        let option = $('<option></option>');
-                        option.attr('value', value.id);
-                        option.text(value.name);
+                        let option = $('<option value="'+value.id+'">'+value.name+'</option>');
                         select.append(option);
                     });
-                    let ele = $('<div style="margin-top: 10px; margin-left: 5px;"></div>');
-                    ele.text(element.table.table_name);
+                    let ele = $('<div style="margin-top: 10px; margin-left: 5px;">'+element.table.table_name+'</div>');
                     ele.append(select);
                     dataSourcesEle.append(ele);
                     ele.on('change', (event) => {
@@ -254,9 +245,7 @@ export const contractEditorConfig = {
                 let options = this.el.find('.contract-model');
                 //模板选择
                 model_files.forEach(model => {
-                    let optionEle = $('<option></option>');
-                    optionEle.attr('value', model.file_id);
-                    optionEle.text(model.file_name);
+                    let optionEle = $('<option value="'+model.file_id+'">'+model.file_name+'</option>');
                     options.append(optionEle);
                 });
                 options.on('change', (event) => {
@@ -271,12 +260,11 @@ export const contractEditorConfig = {
         },
         addTab: function () {
             this.el.find('.edit-or-save').css('display', 'none');
-            let tabEle = $('<li>新建</li>');
+            let tabEle = $('<li class="contract-tab">新建</li>');
             let length = this.el.find('.contract-tab').length;
-            tabEle.addClass('contract-tab');
             this.el.find('.contract-tabs').append(tabEle);
-            this.el.find('.contract-model').val(0);
-            this.el.find('.data-source').val(0);
+            this.el.find('.contract-model').val(0).removeAttr('disabled');
+            this.el.find('.data-source').val(0).removeAttr('disabled');
             this.data.local_data.push({name: '新建', elements: {}, model_id: '', mode: 'edit'});
             this.data['current_tab'] = length;
             this.el.find('.contract-template-anchor').html('<p>请选择模板和数据源。</p>');
@@ -285,14 +273,14 @@ export const contractEditorConfig = {
                 this.actions.loadTab(length, true);
             })
         },
-        loadTab: function (i, isLoadCache) {
+        loadTab: function (i, isLoadCache,disabled) {
             if (i == this.data['current_tab']) {
                 return;
             }
-            this.actions._loadTemplateByIndex(i, isLoadCache);
+            this.actions._loadTemplateByIndex(i, isLoadCache,disabled);
         },
         //只有在切换tab的时候才会用缓存加载合同
-        _loadTemplateByIndex: function (i, isLoadCache) {
+        _loadTemplateByIndex: function (i, isLoadCache,disabled) {
             this.el.find('.edit-or-save').css('display', 'none');
             this.data['current_tab'] = i;
             console.log("current tab " + i);
@@ -304,9 +292,21 @@ export const contractEditorConfig = {
 
             //加载选项
             let hasModelId = tab['model_id'] && tab['model_id'] != '';
-            this.el.find('.contract-model').val(hasModelId ? tab['model_id'] : 0);
+            let model = hasModelId ? tab['model_id'] : 0;
+            this.el.find('.contract-model').val(model);
+            if(disabled && model != 0){    //已提交的合同并且选项已选则锁住选项
+                this.el.find('.contract-model').attr('disabled','disabled');
+            } else {
+                this.el.find('.contract-model').removeAttr('disabled');
+            }
             for (let key of this.data.elementKeys) {
-                this.el.find('#' + key).val(tab['elements'][key] || 0);
+                let value = tab['elements'][key] || 0;
+                this.el.find('#' + key).val(value);
+                if(disabled && value != 0){
+                    this.el.find('#' + key).attr('disabled','disabled');
+                } else {
+                    this.el.find('#' + key).removeAttr('disabled');
+                }
             }
 
             if (!hasModelId) {
@@ -314,7 +314,6 @@ export const contractEditorConfig = {
                 return;
             }
             if (!this.actions._isElementFull(tab['elements'])) {
-                this.el.find('.data-source').val(0);
                 this.el.find('.contract-template-anchor').html('<p>请选择所有数据源。</p>');
                 return;
             }
@@ -401,7 +400,7 @@ export const contractEditorConfig = {
         },
         closeMe: function () {
             window.parent.postMessage({
-                type: '1',
+                type: PMENUM.closedialog,
                 key: this.key,
                 data: this.data.value
             }, location.origin);
@@ -416,7 +415,6 @@ export const contractEditorConfig = {
             this.el.find('.edit-or-save').css('display','none');
             this.el.find('.add-tab-button').css('display','none');
             this.el.find('.delete-tab-button').css('display','none');
-
         }
 
         //初始化各控件
@@ -435,25 +433,22 @@ export const contractEditorConfig = {
                     this.data.local_data = [];
                     this.actions.addTab();
                 }
-                this.actions._loadTemplateByIndex(0,true);
+                this.actions._loadTemplateByIndex(0,true,true);
             }
         })
 
         //加载tab
         let tabsEle = this.el.find('.contract-tabs');
         for (let i = 0, length = this.data.local_data.length; i < length; i++) {
-            let tabname = this.data.local_data[i].name;
-            let tabEle = $('<li></li>');
-            tabEle.addClass('contract-tab');
-            tabEle.text(tabname);
+            let tabEle = $('<li class="contract-tab">'+this.data.local_data[i].name+'</li>');
             tabsEle.append(tabEle);
             tabEle.on('click', event => {
-                this.actions.loadTab(i, true);
+                this.actions.loadTab(i,true,true);
             })
         }
 
     },
-    beforeDestory() {
+    beforeDestroy() {
         this.data.style.remove();
     }
 }
