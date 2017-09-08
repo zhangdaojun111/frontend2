@@ -17,33 +17,31 @@ let config = {
     template: template,
     actions:{
         //时间日期输入错误提示，暂时先去掉
-        // keyup: function () {
-        //     let _this = this;
-        //     //YYYY-MM-DD hh:mm:ss
-        //     let strDate = this.el.find(".datetime").val();
-        //     console.log(strDate);
-        //     let  re =/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
-        //
-        //     if(re.test(strDate))//判断日期格式符合YYYY-MM-DD hh:mm:ss标准
-        //     {
-        //         let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3,RegExp.$4,RegExp.$5,RegExp.$6);
-        //         console.log(dateElement);
-        //
-        //         if(!((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))&&(dateElement.getHours()==parseInt(RegExp.$4))&&(dateElement.getMinutes()==parseInt(RegExp.$5))&&(dateElement.getSeconds()==parseInt(RegExp.$6))))//判断日期逻辑
-        //         {
-        //            // this.el.find("#errorMessage").css("display","inline-block").innerText = "时间格式不正确,正确格式为: 2017-09-01 12:00:00 ";
-        //         } else{
-        //             this.el.find("#errorMessage").css("display","none");
-        //             _this.data.value = strDate;
-        //             _.debounce(function () {
-        //                 _this.events.changeValue(_this.data)
-        //             }, 200)();
-        //         }
-        //     }
-        //     else{
-        //       //  this.el.find("#errorMessage").css("display","inline-block").text("时间格式不正确,正确格式为: 2017-09-01 12:00:00") ;
-        //     }
-        // },
+        keyup: function () {
+            let _this = this;
+            //YYYY-MM-DD hh:mm:ss
+            let strDate = this.el.find(".datetime").val();
+            let  re =/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+
+            if(re.test(strDate))//判断日期格式符合YYYY-MM-DD hh:mm:ss标准
+            {
+                let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3,RegExp.$4,RegExp.$5,RegExp.$6);
+
+                if(!((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))&&(dateElement.getHours()==parseInt(RegExp.$4))&&(dateElement.getMinutes()==parseInt(RegExp.$5))&&(dateElement.getSeconds()==parseInt(RegExp.$6))))//判断日期逻辑
+                {
+                   //this.el.find("#errorMessage").css("display","inline-block").innerText = "时间格式不正确,正确格式为: 2017-09-01 12:00:00 ";
+                } else{
+                    this.el.find("#errorMessage").css("display","none");
+                    _this.data.value = strDate;
+                    _.debounce(function () {
+                        _this.events.changeValue(_this.data)
+                    }, 200)();
+                }
+            }
+            else{
+              //  this.el.find("#errorMessage").css("display","inline-block").text("时间格式不正确,正确格式为: 2017-09-01 12:00:00") ;
+            }
+        },
     }
     ,
 
@@ -89,7 +87,7 @@ let config = {
             secondText: '秒',
             currentText: '今',
             closeText: '确定',
-            timeInput:true,
+            timeInput: true ,
             showHour: false,
             showMinute:false,
             showSecond:false,
@@ -105,6 +103,7 @@ let config = {
             showOtherMonths: true,//填充没有显示的单元格，但无法使用
             //向外弹射操作后的值
             onSelect: function (selectTime, text) {
+                console.log("selectTime"  +selectTime)
                 _this.el.find("#errorMessage").css("display","none");
                 let selectTime1 = selectTime;
                 _this.data.value = selectTime.replace(/\//g, "-");
@@ -150,25 +149,28 @@ let config = {
 
             },
             onClose: function(timeText) {
-                // let strTime = $(".ui_tpicker_time_input").val();
-                // console.log(strTime)
-                // if(strTime == "00:00:00"){
-                //     _this.el.find("#errorMessage").css("display", "inline-block").text("时间格式不正确,正确格式为: 2017-09-01 12:00:00");
-                // }else{
-                //     _this.el.find("#errorMessage").css("display", "none");
-                // }
-                // console.log("timeText  "+timeText)
-                _this.data.value = timeText.replace(/\//g, "-");
-                _.debounce(function () {
-                    _this.events.changeValue(_this.data)
-                }, 200)();
+                let  re =/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+                if(re.test( timeText))
+                {
+                    let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3,RegExp.$4,RegExp.$5,RegExp.$6);
+                    if((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))&&(dateElement.getHours()==parseInt(RegExp.$4))&&(dateElement.getMinutes()==parseInt(RegExp.$5))&&(dateElement.getSeconds()==parseInt(RegExp.$6)))//判断日期逻辑
+                    {
+                        _this.data.value = timeText;
+                        console.log(  _this.data.value)
+                        _.debounce(function () {
+                            _this.events.changeValue(_this.data)
+                        }, 200)();
+                    }
+                }
             },
+
 
         });
 
         _this.el.find('.datetime').on('input', _.debounce(function () {
             _this.actions.keyup();
         }, 200));
+
         _.debounce(function () {
             _this.events.changeValue(_this.data)
         }, 200)();
