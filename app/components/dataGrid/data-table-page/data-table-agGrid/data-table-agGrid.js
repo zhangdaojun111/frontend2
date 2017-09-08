@@ -1015,7 +1015,7 @@ let config = {
                         //赋值
                         this.agGrid.actions.setGridData(d);
                     }
-                    this.hideLoading();
+                    try{this.hideLoading();}catch(e){}
                 } )
             })
         },
@@ -1065,7 +1065,7 @@ let config = {
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
                 }
-                this.hideLoading();
+                try{this.hideLoading();}catch(e){}
             })
             HTTP.flush();
         },
@@ -1145,7 +1145,7 @@ let config = {
                 });
             }
             this.actions.calcSelectData( 'set' );
-            this.hideLoading();
+            try{this.hideLoading();}catch(e){}
         },
         //请求footer数据
         getFooterData: function () {
