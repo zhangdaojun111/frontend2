@@ -136,6 +136,7 @@ function getLoginController() {
             //移动下载
             this.$mobileDownload.on('click',function () {
                 console.log('打开移动下载页面');
+                // $(window).attr('location','/find_pwd');  测试密码找回页面
             });
 
             //键盘绑定
