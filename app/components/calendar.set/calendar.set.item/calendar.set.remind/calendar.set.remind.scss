@@ -1,6 +1,6 @@
 .remind-dom-content {
     border: 1px solid #dddddd;
-    width:100%;
+    margin: 8px;
     font-size: 12px;
     .icon-calendar-require {
         height: 16px;
@@ -97,6 +97,8 @@
             }
             #send-email-address{
                 width: 95%;
+                height: 30px;
+                border: 1px solid #dddddd;
             }
 
         }
