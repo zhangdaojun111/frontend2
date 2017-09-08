@@ -1736,7 +1736,7 @@ let config = {
                     this.actions.setInvalid();
                     let url = dgcService.returnIframeUrl( '/iframe/dataImport/',json );
                     let winTitle = '导入数据';
-                    this.actions.openSourceDataGrid( url,winTitle,600,800 );
+                    this.actions.openSourceDataGrid( url,winTitle,600,650 );
                 } )
             }
             //导出

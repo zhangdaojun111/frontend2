@@ -3,6 +3,9 @@ import Component from "../../../../../lib/component";
 import template from './expert-search-condition.html';
 import '../expert-search.scss';
 import expertItem from './expert-search-item/expert-search-item';
+import DateTimeControl from "../../../../form/datetime-control/datetime-control";
+import DateControl from "../../../../form/date-control/date-control";
+import TimeControl from "../../../../form/time-control/time-control";
 import expertSearch from '../expert-search';
 let config = {
     template: template,
@@ -53,12 +56,33 @@ let config = {
             this.inputObject.attr('title',type);
         },
         setInputType: function(type) {
+            // this.append(new DateTimeControl('', function(data){}),this.el.find('.condition-search-ul'));
             let inputType;
             switch (type) {
-                case "datetime": inputType = 'datetime-local'; break;
-                case "text": inputType = 'text'; break;
-                case "number": inputType = 'number'; break;
-                case "person": inputType = 'text'; break;
+                case "datetime":
+                    // inputType = 'datetime-local'; break;
+                    this.el.find('.condition-search-input').remove();
+                    let dateTimeControl = new DateTimeControl({value: ''},{changeValue:function(data){}});
+                    dateTimeControl.render(this.el.find('.condition-search-value'));
+                    break;
+                case "date":
+                    // inputType = 'datetime-local'; break;
+                    this.el.find('.condition-search-input').remove();
+                    let dateControl = new DateControl({value: ''},{changeValue:function(data){}});
+                    dateControl.render(this.el.find('.condition-search-value'));
+                    break;
+                case "time":
+                    // inputType = 'datetime-local'; break;
+                    this.el.find('.condition-search-input').remove();
+                    let timeControl = new TimeControl({value: ''},{changeValue:function(data){}});
+                    timeControl.render(this.el.find('.condition-search-value'));
+                    break;
+                case "text":
+                    this.el.find('.condition-search-value').html(`<input class="condition-search-input" type="text">`)
+                case "number":
+                    inputType = 'number'; break;
+                case "person":
+                    inputType = 'text'; break;
             }
             this.inputNextObject.attr("type",inputType);
             this.inputNextObject.attr("title",type);
