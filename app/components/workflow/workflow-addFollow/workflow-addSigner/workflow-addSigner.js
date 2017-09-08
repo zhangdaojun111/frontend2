@@ -79,9 +79,19 @@ let config={
 
 
         Mediator.subscribe('workflow:checkAdder', (res)=> {
+            let arr = [];
+            let checked=this.el.find('#addUsercheck .search-check-row');
+            let len = checked.length;
+            for(let i =0;i<len; i++){
+                arr.push($(checked[i]).data('id'))
+            }
             $.each(res,(i,val)=>{
                 val.id=i;
-                this.append(new AddSigner(val), this.el.find('#addUsercheck'));
+                if(checked.length===0){
+                    this.append(new AddSigner(val), this.el.find('#addUsercheck'));
+                }else if(arr.indexOf(i)===-1){
+                    this.append(new AddSigner(val), this.el.find('#addUsercheck'));
+                }
             });
         });
 

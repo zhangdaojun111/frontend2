@@ -8,6 +8,7 @@ import Mediator from '../../../lib/mediator';
 import '../../../assets/scss/core/common.scss'
 import WorkFlow from '../workflow-drawflow/workflow';
 import {PMAPI,PMENUM} from "../../../lib/postmsg";
+import '../../../assets/scss/workflow/workflow-base.scss';
 let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[];;
 serchStr.split('&').forEach(res => {
     let arr = res.split('=');
@@ -44,7 +45,7 @@ let config = {
                 PMAPI.sendToParent({
                     type: PMENUM.close_dialog,
                     key:key,
-                    data:{}
+                    data:{refresh:true}
                 })
             })
         }
