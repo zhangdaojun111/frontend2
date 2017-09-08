@@ -491,7 +491,8 @@ let config = {
             this.el.find( '.new-form-btn' ).on( 'click',()=>{
                 let obj = {
                     table_id: this.data.tableId,
-                    btnType: 'new'
+                    btnType: 'new',
+                    is_view: 0
                 }
                 let url = dgcService.returnIframeUrl( '/form/index/',obj );
                 this.actions.openSourceDataGrid( url,'新增' )
@@ -796,6 +797,7 @@ let config = {
                 table_id: this.data.tableId,
                 btnType: 'view',
                 real_id: $event.data._id,
+                is_view: 1
             }
             let url = dgcService.returnIframeUrl( '/form/index/',obj );
             this.actions.openSourceDataGrid( url,'查看' )
@@ -864,6 +866,7 @@ let config = {
                         table_id: this.data.tableId,
                         btnType: 'edit',
                         real_id: $event.data._id,
+                        is_view: 0
                     }
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
                     this.actions.openSourceDataGrid( url,'编辑' )
@@ -873,6 +876,7 @@ let config = {
                         table_id: this.data.tableId,
                         btnType: 'view',
                         real_id: $event.data._id,
+                        is_view: 1
                     }
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
                     this.actions.openSourceDataGrid( url,'查看' )

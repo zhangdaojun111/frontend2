@@ -6,6 +6,7 @@ import template from './contract-control.html';
 import {contractEditorConfig} from "./contract-editor/contract-editor";
 import {PMAPI} from "../../../lib/postmsg";
 import './contract-control.scss'
+import {Storage} from '../../../lib/storage';
 
 let config = {
     template:template,
@@ -35,9 +36,18 @@ let config = {
                 title:title
             }).then(res=>{
                 if(res.onlyclose){
-                    return;
+                    let obj = Storage.getItem('contractCache-'+this.data.id,Storage.SECTION.FORM);
+                    if(obj == undefined){
+                        return;
+                    }
+                    for (let data of obj) {
+                        delete data['content'];
+                        delete data['mode'];
+                    }
+                    this.data.value = obj;
+                } else {
+                    this.data.value = res;
                 }
-                this.data.value = res;
                 this.trigger('changeValue',this.data);
             })
         }

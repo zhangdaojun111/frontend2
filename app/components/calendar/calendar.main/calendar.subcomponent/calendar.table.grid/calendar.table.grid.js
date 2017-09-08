@@ -18,6 +18,9 @@ let config = {
         drag_Postion: null,
     },
     actions: {
+        /**
+         * 拖动进入.task-item排序
+         */
         dragEnter: function (event,_this) {
             this.data.drag_Postion = null;
             let ev = event.originalEvent;
@@ -32,6 +35,9 @@ let config = {
             return true;
         },
 
+        /**
+         * 拖动离开.task-list
+         */
         dragLeave: function (event) {
             if(this.el.find('.task-item').length < 2 ){
                 this.data.drag_Postion = null;
@@ -47,6 +53,9 @@ let config = {
             return true;
         },
 
+        /**
+         * 拖动放在.task-list内
+         */
         dragDrop: function (event) {
             let ev = event.originalEvent;
             let temp = $(".task-item-draggable");
