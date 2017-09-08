@@ -57,7 +57,6 @@ let config = {
         },
         setInputType: function(type) {
             // this.append(new DateTimeControl('', function(data){}),this.el.find('.condition-search-ul'));
-            let inputType;
             switch (type) {
                 case "datetime":
                     // inputType = 'datetime-local'; break;
@@ -78,14 +77,19 @@ let config = {
                     timeControl.render(this.el.find('.condition-search-value'));
                     break;
                 case "text":
-                    this.el.find('.condition-search-value').html(`<input class="condition-search-input" type="text">`)
+                    this.el.find('.condition-search-value').html(`<input class="condition-search-input" type="text">`);
+                    break;
                 case "number":
-                    inputType = 'number'; break;
+                    this.el.find('.condition-search-value').html(`<input class="condition-search-input" type="number">`);
+                    // inputType = 'number';
+                    break;
                 case "person":
-                    inputType = 'text'; break;
+                    this.el.find('.condition-search-value').html(`<input class="condition-search-input" type="text">`)
+                    // inputType = 'text';
+                    break;
             }
-            this.inputNextObject.attr("type",inputType);
-            this.inputNextObject.attr("title",type);
+            // this.inputNextObject.attr("type",inputType);
+            // this.inputNextObject.attr("title",type);
         },
         setSelectValue: function(type) {
             let optionHtmlOne = `<option value="$regex">包含</option>

@@ -307,7 +307,11 @@ let config = {
                     if( data.header[i] == '创建时间' ){
                         this.data.haveSystemsFields = true;
                     }
-
+                    let minWidth = {
+                        datetime: 155,
+                        time: 80,
+                        date: 100
+                    }
                     let obj = {
                         headerName: data.header[i],
                         tableName: data.data['table_name'],
@@ -336,7 +340,7 @@ let config = {
                         tooltipField: fieldTypeService.noToolTips(data.data["dinput_type"]) ? '' : data.data["field"],
                         sortingOrder: ['desc', 'asc', null],
                         hide: false,
-                        minWidth: 20,
+                        minWidth: minWidth[fieldTypeService.searchType(data.data["real_type"])] || 20,
                         filter: fieldTypeService.numOrText(data.data["real_type"]) ? "number" : "text",
                         headerClass: headClass,
                         cellStyle: {'font-style': 'normal'},
