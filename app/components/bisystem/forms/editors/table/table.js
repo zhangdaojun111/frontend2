@@ -134,7 +134,6 @@ let config = {
                 }
             };
 
-            console.log(chart);
             if(pass) {
                 let res = await ChartFormService.saveChart(JSON.stringify(chart));
                 if (res['success'] == 1) {

@@ -131,30 +131,6 @@ let config = {
                 this.el.find('.back-floor-btn-data').attr('disabled',false);
             })
         },
-
-        // /**
-        //  * 渲染图表初始化下穿数据
-        //  * @param res = 下穿数据
-        //  */
-        // loadChartDeepData(res) {
-        //     console.log(res);
-        //     if (res.hasOwnProperty(this.data.cell.layout_id)) {
-        //         const chartDeepData = res[this.data.cell.layout_id];
-        //         if(chartDeepData['success'] === 1) {
-        //             if (chartDeepData['data']['xAxis'].length > 0 && chartDeepData['data']['yAxis'].length > 0) {
-        //                 this.cellChart.data.cellChart['chart']['data']['xAxis'] = chartDeepData['data']['xAxis'];
-        //                 this.cellChart.data.cellChart['chart']['data']['yAxis'] = chartDeepData['data']['yAxis'];
-        //                 //重新渲染echarts
-        //                 const option = this.cellChart.pieChart.pieOption(this.cellChart.data.cellChart);
-        //                 this.cellChart.pieChart.myChart.setOption(option);
-        //                 this.cellChart.pieChart.myChart.resize();
-        //             }
-        //         }
-        //     }
-        // }
-
-
-
     },
     data: {
         chart: null,
