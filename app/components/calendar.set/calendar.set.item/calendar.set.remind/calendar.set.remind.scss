@@ -1,8 +1,10 @@
 .remind-dom-content {
+    .set-remind-container,.remind-table-content{
+        border-collapse: inherit;
+    }
     border: 1px solid #dddddd;
     margin: 8px;
     font-size: 12px;
-    border-collapse: inherit;
     .icon-calendar-require {
         height: 16px;
         width: 16px;
