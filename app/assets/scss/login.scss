@@ -7,20 +7,24 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
 
 //界面背景
 .login-main-window {
-    position: fixed;
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
     width: 100%;
     background-color: $background_color;
+    background-image: url("../images/login/background.png") ;
+    background-repeat: no-repeat;
+    background-position: 50% 30%;
 
     .bg-div {
         position: absolute;
         width: 672px;
-        height: 100%;
         left: calc(50% - 350px);
         top: calc(50% - 400px);
         overflow: hidden;
-        background: url("../images/login/background.png");
-        background-repeat: no-repeat;
+        //background: url("../images/login/background.png");
+        //background-repeat: no-repeat;
 
         .login-content {
             width: 300px;
