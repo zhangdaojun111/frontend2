@@ -1019,7 +1019,7 @@ let config = {
             })
         },
         //请求在途数据
-        getInprocessData: function () {
+        getInprocessData: function (refresh) {
             let postData = this.actions.createPostData();
             let post_arr = [];
             let body = dataTableService.getTableData( postData );
@@ -1061,18 +1061,21 @@ let config = {
                 } );
                 HTTP.flush();
                 this.actions.sortWay();
+                if(refresh){
+                    msgBox.showTips( '数据刷新成功。' )
+                }
             })
             HTTP.flush();
         },
         //请求表格数据
-        getGridData: function () {
+        getGridData: function (refresh) {
             //在途数据
             if( this.data.viewMode == 'in_process' ){
-                this.actions.getInprocessData();
+                this.actions.getInprocessData(refresh);
                 return;
             }
             if( this.data.viewMode == 'newFormCount' ){
-                this.actions.getNewFormCountData();
+                this.actions.getNewFormCountData(refresh);
                 return;
             }
             let postData = this.actions.createPostData();
@@ -1086,6 +1089,9 @@ let config = {
             }
             Promise.all(post_arr).then((res)=> {
                 this.actions.setGridData( res );
+                if(refresh){
+                    msgBox.showTips( '数据刷新成功。' )
+                }
             })
             HTTP.flush();
         },
@@ -1599,7 +1605,7 @@ let config = {
         refreshData: function ( data ) {
             this.data.rows = data.rows;
             this.data.first = data.first;
-            this.actions.getGridData();
+            this.actions.getGridData(true);
         },
         //渲染颜色
         setRowStyle: function ( param ) {
@@ -2610,6 +2616,8 @@ let config = {
                     parent_temp_id: this.data.parentTempId,
                     parent_record_id: this.data.parentRecordId,
                     real_id: data.data._id,
+                    temp_id: data.data.temp_id || '',
+                    record_id: data.data.record_id || '',
                     btnType: btnType,
                     is_view:1
                 };
@@ -2735,6 +2743,8 @@ let config = {
                 parent_temp_id: this.data.parentTempId,
                 parent_record_id: this.data.parentRecordId,
                 real_id: data.data._id,
+                temp_id: data.data.temp_id || '',
+                record_id: data.data.record_id || '',
                 btnType: 'view',
                 is_view:1
             };
