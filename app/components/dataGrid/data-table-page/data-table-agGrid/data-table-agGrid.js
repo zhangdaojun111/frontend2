@@ -1015,7 +1015,6 @@ let config = {
                         //赋值
                         this.agGrid.actions.setGridData(d);
                     }
-                    try{this.hideLoading();}catch(e){}
                 } )
             })
         },
@@ -1065,7 +1064,6 @@ let config = {
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
                 }
-                try{this.hideLoading();}catch(e){}
             })
             HTTP.flush();
         },
@@ -1145,7 +1143,6 @@ let config = {
                 });
             }
             this.actions.calcSelectData( 'set' );
-            try{this.hideLoading();}catch(e){}
         },
         //请求footer数据
         getFooterData: function () {
@@ -1512,6 +1509,7 @@ let config = {
             if( this.data.gridTips!='' ){
                 this.el.find( '.grid-tips' )[0].style.display = 'flex';
             }
+            this.hideLoading()
         },
         //触发导出
         onExport: function () {
