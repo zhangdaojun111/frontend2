@@ -37,7 +37,7 @@ export const LoginService = {
             url:'/get_revision_info/',
         })
     },
-    userLogin:function (data) {
+    userLoginVerification:function (data) {
         //登录
         let body = this.utils.formatParams(data);
         return this.http.postImmediately({
