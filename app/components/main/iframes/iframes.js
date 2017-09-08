@@ -121,7 +121,6 @@ export const IframeInstance = new Component({
             }
         },
         sendCloseRequest:function (id) {
-            console.log(id);
             TabService.onCloseTab(id,this.data.focus.id).done((result) => {
                 if(result.success === 1){
                     // console.log("post close record success")
@@ -135,7 +134,6 @@ export const IframeInstance = new Component({
             this.actions.closeIframe(firstId);
         },
         closeIframe: function (id) {
-            console.log(id);
             if ( id === undefined) {
                 return;
             }
@@ -172,7 +170,6 @@ export const IframeInstance = new Component({
             }
         },
         focusIframe: function (id) {
-            console.log(id);
             if (this.data.focus) {
                 this.data.focus.tab.removeClass('focus');
                 this.data.focus.iframe.hide();
