@@ -60,13 +60,17 @@ let config = {
                     });
                     let url = '/iframe/multiapp';
                     let data = JSON.stringify(checkIds);
-                    console.log(data);
+                    let that = this;
                     PMAPI.openDialogByIframe(url,{
                         width: 1000,
                         height: 400,
                         title: '批量审批',
                         // customSize:true
-                    },data);
+                    },data).then(res => {
+                        if(res.refresh === true){
+                            that.actions.loadData();
+                        }
+                    });
 
                     // HTTP.postImmediately('/approve_many_workflow/', {
                     //     checkIds: JSON.stringify(checkIds)
