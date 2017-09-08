@@ -22,6 +22,16 @@ let config = {
         getInitData:function () {       //根据url获取初始数据
             this.data.randomCode = this.actions.getUrlPara('random_code');
             this.data.username = this.actions.getUrlPara('username');
+            UserInfoService.resetPassword({username:this.data.username,random_code:this.data.randomCode}).done((result) => {
+                console.log(result);
+                if(result.success === 1){
+                    this.el.find('.find-pw-step1').show();
+                }else{
+                    this.el.find('.find-pw-step2').show();
+                    this.el.find('.reset-result').html(result.error);
+                    this.el.find('.goLogin').hide();
+                }
+            })
         },
         getUrlPara(key){
             let reg = new RegExp('(^|;)' + key + '=([^;]*)(;|$)', 'i');
