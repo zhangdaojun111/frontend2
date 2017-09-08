@@ -125,16 +125,28 @@ let config = {
                 yAxis:data.pieType == '1' ? data.columns : data.yAxis,
                 deeps: data.pieType == '1' ? [] : data.deeps
             };
-            let res = await ChartFormService.saveChart(JSON.stringify(chart));
-            if (res['success'] == 1) {
-                msgbox.alert('保存成功');
-                if (!chart['chartName']['id']) {
-                    this.reload();
-                };
-                Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
-            } else {
-                msgbox.alert(res['error'])
+            let pass = true; // 判断表单是否验证通过
+            for (let key of Object.keys(this.formItems)) {
+                if (this.formItems[key].data.rules) {
+                    let isValid = this.formItems[key].valid();
+                    if (!isValid) {
+                        pass = false;
+                    };
+                }
             };
+
+            if (pass) {
+                let res = await ChartFormService.saveChart(JSON.stringify(chart));
+                if (res['success'] == 1) {
+                    msgbox.alert('保存成功');
+                    if (!chart['chartName']['id']) {
+                        this.reload();
+                    };
+                    Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
+                } else {
+                    msgbox.alert(res['error'])
+                };
+            }
         },
 
         /**
@@ -167,6 +179,13 @@ let config = {
                 defaultValue: '',
                 placeholder: '选择数据来源',
                 type: 'autocomplete',
+                required: true,
+                rules: [
+                    {
+                        errorMsg: '数据源不能为空',
+                        type: 'required'
+                    }
+                ],
                 events: {
                     onSelect(value) {
                         this.actions.getFields(value);
@@ -206,6 +225,13 @@ let config = {
                 name: 'xAxis',
                 defaultValue: '',
                 placeholder: '选择x轴字段',
+                required: true,
+                rules: [
+                    {
+                        errorMsg: 'x轴不能为空',
+                        type: 'required'
+                    }
+                ],
                 type: 'autocomplete'
             },
             {
@@ -213,6 +239,7 @@ let config = {
                 name: 'yAxis',
                 defaultValue: '',
                 placeholder: '选择y轴字段',
+                required: true,
                 type: 'autocomplete'
             },
             {
@@ -220,6 +247,7 @@ let config = {
                 name: 'columns',
                 defaultValue: [],
                 list: [],
+                required: true,
                 type: 'checkbox',
                 events: {}
             },

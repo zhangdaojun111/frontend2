@@ -123,17 +123,30 @@ let config = {
                 columnNum:data.columnNum
             };
 
-            console.log(chart);
-            let res = await ChartFormService.saveChart(JSON.stringify(chart));
-            if (res['success'] == 1) {
-                msgbox.alert('保存成功');
-                if (!chart['chartName']['id']) {
-                    this.reload();
-                };
-                Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
-            } else {
-                msgbox.alert(res['error'])
+
+            let pass = true; // 判断表单是否验证通过
+            for (let key of Object.keys(this.formItems)) {
+                if (this.formItems[key].data.rules) {
+                    let isValid = this.formItems[key].valid();
+                    if (!isValid) {
+                        pass = false;
+                    };
+                }
             };
+
+            console.log(chart);
+            if(pass) {
+                let res = await ChartFormService.saveChart(JSON.stringify(chart));
+                if (res['success'] == 1) {
+                    msgbox.alert('保存成功');
+                    if (!chart['chartName']['id']) {
+                        this.reload();
+                    };
+                    Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
+                } else {
+                    msgbox.alert(res['error'])
+                };
+            }
         },
 
         /**
@@ -162,6 +175,13 @@ let config = {
                 name: 'source',
                 defaultValue: '',
                 type: 'autocomplete',
+                required: true,
+                rules: [
+                    {
+                        errorMsg: '数据源不能为空',
+                        type: 'required'
+                    }
+                ],
                 events: {
                     onSelect(value) {
                         this.actions.getFields(value);
@@ -175,9 +195,17 @@ let config = {
                 name: 'columns',
                 defaultValue: [],
                 list: [],
+                required: true,
+                rules: [
+                    {
+                        errorMsg: '请至少选择一个列名',
+                        type: 'required'
+                    }
+                ],
                 type: 'checkbox',
                 events: {
                     onChange:function(value) {
+                        this.formItems['columns'].clearErrorMsg();
                         this.formItems['choosed'].actions.update(value);
                         this.formItems['table_single'].actions.setColumns(value, this.formItems['columnNum'].getValue());
                     }
@@ -193,7 +221,7 @@ let config = {
             {
                 label: '默认排序',
                 name: 'sort',
-                defaultValue: '1',
+                defaultValue: '-1',
                 list: [
                     {value: '1',name: '升序'},
                     {value: '-1', name:'降序'}
@@ -223,6 +251,7 @@ let config = {
                 name: 'countNum',
                 defaultValue: 10,
                 placeholder: '请输入显示多少多少列(默认10条)',
+                category: 'number',
                 type: 'text'
             },
             {
@@ -256,6 +285,7 @@ let config = {
                 defaultValue: '1',
                 placeholder: '请输入默认显示单行为多少列',
                 type: 'text',
+                category: 'number',
                 events: {
                     onChange: _.debounce(function(value) {
                         let columnNum = parseInt(value);

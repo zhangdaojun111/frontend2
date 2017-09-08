@@ -4,7 +4,7 @@ import './text.scss'
 let config = {
     template: template,
     data: {
-        rules: []
+        category: 'text', // 设置input type 输入框类型 number date
     },
     actions: {
         /**
@@ -14,6 +14,9 @@ let config = {
         onInput: function (value) {
             this.data.value = value;
             this.trigger('onChange', value);
+            if (value) {
+                this.clearErrorMsg();
+            };
         },
     },
     binds: [

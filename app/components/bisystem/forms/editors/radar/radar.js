@@ -113,16 +113,28 @@ let config = {
                 theme: data.theme,
             };
 
-            let res = await ChartFormService.saveChart(JSON.stringify(chart));
-            if (res['success'] == 1) {
-                msgbox.alert('保存成功');
-                if (!chart['chartName']['id']) {
-                    this.reload();
-                };
-                Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
-            } else {
-                msgbox.alert(res['error'])
+            let pass = true; // 判断表单是否验证通过
+            for (let key of Object.keys(this.formItems)) {
+                if (this.formItems[key].data.rules) {
+                    let isValid = this.formItems[key].valid();
+                    if (!isValid) {
+                        pass = false;
+                    };
+                }
             };
+
+            if (pass) {
+                let res = await ChartFormService.saveChart(JSON.stringify(chart));
+                if (res['success'] == 1) {
+                    msgbox.alert('保存成功');
+                    if (!chart['chartName']['id']) {
+                        this.reload();
+                    };
+                    Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
+                } else {
+                    msgbox.alert(res['error'])
+                };
+            }
         },
 
         /**
@@ -148,6 +160,13 @@ let config = {
                 defaultValue: '',
                 placeholder: '请选择数据来源',
                 type: 'autocomplete',
+                required:true,
+                rules: [
+                    {
+                        errorMsg: '数据源不能为空',
+                        type: 'required'
+                    }
+                ],
                 events: {
                     onSelect(value) {
                         this.actions.getFields(value);
@@ -160,6 +179,13 @@ let config = {
                 label: '选中雷达图名称字段',
                 name: 'product',
                 defaultValue: '',
+                required: true,
+                rules: [
+                    {
+                        errorMsg: '雷达图名称字段不能为空',
+                        type: 'required'
+                    }
+                ],
                 type: 'autocomplete'
             },
             {
@@ -168,8 +194,16 @@ let config = {
                 defaultValue: [],
                 list: [],
                 type: 'checkbox',
+                required: true,
+                rules: [
+                    {
+                        errorMsg: '请至少选择一个列名',
+                        type: 'required'
+                    }
+                ],
                 events: {
                     onChange:function(value) {
+                        this.formItems['columns'].clearErrorMsg();
                         this.formItems['choosed'].actions.update(value);
                     }
                 }

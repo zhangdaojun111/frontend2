@@ -112,16 +112,27 @@ let config = {
                 theme: data.theme,
                 columns: JSON.parse(data.columns)
             };
-            let res = await ChartFormService.saveChart(JSON.stringify(chart));
-            if (res['success'] == 1) {
-                msgbox.alert('保存成功');
-                if (!chart['chartName']['id']) {
-                    this.reload();
-                };
-                Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
-            } else {
-                msgbox.alert(res['error'])
+            let pass = true; // 判断表单是否验证通过
+            for (let key of Object.keys(this.formItems)) {
+                if (this.formItems[key].data.rules) {
+                    let isValid = this.formItems[key].valid();
+                    if (!isValid) {
+                        pass = false;
+                    };
+                }
             };
+            if (pass) {
+                let res = await ChartFormService.saveChart(JSON.stringify(chart));
+                if (res['success'] == 1) {
+                    msgbox.alert('保存成功');
+                    if (!chart['chartName']['id']) {
+                        this.reload();
+                    };
+                    Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
+                } else {
+                    msgbox.alert(res['error'])
+                };
+            }
         },
 
         /**
@@ -145,6 +156,13 @@ let config = {
                 name: 'source',
                 defaultValue: '',
                 type: 'autocomplete',
+                required: true,
+                rules: [
+                    {
+                        errorMsg: '数据源不能为空',
+                        type: 'required'
+                    }
+                ],
                 events: {
                     onSelect(value) {
                         this.actions.getFields(value);
@@ -159,6 +177,13 @@ let config = {
                 defaultValue: [],
                 list: [],
                 type: 'radio',
+                required: true,
+                rules: [
+                    {
+                        errorMsg: '请选择一个注释字段',
+                        type: 'required'
+                    }
+                ],
                 events: {
                     onChange:function(value) {
                     }

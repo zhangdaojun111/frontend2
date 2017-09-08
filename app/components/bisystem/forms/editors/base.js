@@ -40,7 +40,8 @@ class Base extends Component {
                 class: item.class,
                 rules: item.rules,
                 placeholder: item.placeholder,
-                required: item.required
+                required: item.required,
+                category: item.category, // 用于input输入框类型 number text
             }, item.events);
             this.append(instance, this.el.find(container ? container : '.form-group'));
             this.formItems[item.name] = instance;

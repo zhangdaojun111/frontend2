@@ -39,7 +39,12 @@ class Base extends Component {
      */
     showErrorMsg(msg){
         this.el.find('.form-label .error-msg').html(msg);
-
+    }
+    /**
+     * 清空数据错误提示
+     */
+    clearErrorMsg() {
+        this.el.find('.form-label .error-msg').html('');
     }
 }
 

@@ -6,7 +6,7 @@ import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 import './linebar.scss';
-
+import {formChartValidateService as formValidate} from '../../../../../services/bisystem/bi.chart.validate.service';
 let config = {
     template: template,
     actions: {
@@ -20,7 +20,6 @@ let config = {
                 let yAxis0 = this.formItems['yAxis0'].getYaxisData();
                 let yAxis1 = this.formItems['yAxis1'].getYaxisData();
                 let double = this.formItems['double'].data.value[0] ? true : false;
-
                 yAxis0.forEach(yAxis => {
                     if (yAxis.field) {
                         data.push(yAxis.field)
@@ -35,7 +34,7 @@ let config = {
                         }
                     });
                 };
-
+                this.formItems['double'].clearErrorMsg();
                 // 当是编辑模式下,需要先渲染完y轴在执行默认展示y轴数据
                 if(this.data.id) {
                     if (data) {
@@ -185,23 +184,49 @@ let config = {
                 ySelectedGroup: data.defaultY[0] ? data.ySelectedGroup : [],
             };
             if (data.chartAssignment == 1) {
-                chart['chartGroup'] = data.chartGroup
+                chart['chartGroup'] = data.chartGroup;
             } else {
                 chart['deeps'] = data.deeps
             };
-            this.formItems['chartName'].valid();
-            this.formItems['source'].valid();
-            this.formItems['xAxis'].valid();
-            // let res = await ChartFormService.saveChart(JSON.stringify(chart));
-            // if (res['success'] == 1) {
-            //     msgbox.alert('保存成功');
-            //     if (!chart['chartName']['id']) {
-            //         this.reload();
-            //     };
-            //     Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
-            // } else {
-            //     msgbox.alert(res['error'])
-            // };
+
+            let pass = true; // 判断表单是否验证通过
+
+            for (let key of Object.keys(this.formItems)) {
+                if (this.formItems[key].data.rules) {
+                   let isValid = this.formItems[key].valid();
+                   if (!isValid) {
+                       pass = false;
+                   };
+                }
+            };
+
+
+            // y轴单独验证
+            let yAxispass = formValidate.validateYAxis(yAxis);
+            if (!yAxispass) {
+                this.formItems['double'].showErrorMsg('y轴字段不能为空');
+            };
+
+            // 当选择分组字段时验证是否为空
+            let groupPass = true;
+            if (data.chartAssignment == 1) {
+                groupPass = this.formItems['chartGroup'].data.value;
+                if (!groupPass) {
+                    this.formItems['chartAssignment'].showErrorMsg('分组字段不能为空');
+                }
+            };
+            if (pass && yAxispass && groupPass) {
+                let res = await ChartFormService.saveChart(JSON.stringify(chart));
+                if (res['success'] == 1) {
+                    msgbox.alert('保存成功');
+                    if (!chart['chartName']['id']) {
+                        this.reload();
+                    };
+                    Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
+                } else {
+                    msgbox.alert(res['error'])
+                };
+            }
         },
 
         /**
@@ -353,6 +378,7 @@ let config = {
                 type: 'select',
                 events:{
                     onChange: function(value) {
+                        this.formItems['chartAssignment'].clearErrorMsg();
                         if (value == 1) {
                             this.formItems['deeps'].el.hide();
                             this.formItems['deeps'].actions.clear();
@@ -372,6 +398,7 @@ let config = {
                 type: 'autocomplete',
                 events: {
                     onSelect(value) {
+                        this.formItems['chartAssignment'].clearErrorMsg();
                         if (value) {
                             this.formItems['deeps'].actions.update(value);
                         };
@@ -461,6 +488,7 @@ let config = {
                 name: 'marginBottomx',
                 defaultValue: '',
                 placeholder: 'x轴下边距',
+                category: 'number',
                 type: 'text',
                 events: {}
             },
@@ -494,6 +522,7 @@ let config = {
                 defaultValue:'',
                 placeholder: 'x轴每行字数',
                 type: 'text',
+                category: 'number',
                 events: {}
             },
             {
@@ -501,6 +530,7 @@ let config = {
                 name: 'marginBottom',
                 defaultValue: '',
                 placeholder: 'x轴下边距',
+                category: 'number',
                 type: 'text',
                 events: {}
             },

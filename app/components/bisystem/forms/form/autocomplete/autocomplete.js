@@ -18,6 +18,7 @@ let config = {
                         break;
                     }
                 };
+                this.clearErrorMsg();
             } else {
                 this.data.value = null;
             };
