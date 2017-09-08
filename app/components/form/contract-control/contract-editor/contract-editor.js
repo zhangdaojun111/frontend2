@@ -300,7 +300,7 @@ export const contractEditorConfig = {
             this.actions._loadTemplateByIndex(i, isLoadCache,disabled);
         },
         initButtonStates:function (i) {
-            if(this.data.mode = 'edit'){
+            if(this.data.mode == 'edit'){
                 this.data.buttonStates.push({
                     display:{
                         save_n_close:'inline',
@@ -495,7 +495,7 @@ export const contractEditorConfig = {
             tabsEle.append(tabEle);
             this.actions.initButtonStates(i);
             this.actions.loadButtons(0);
-            tabEle.on('click', event => {
+            tabEle.on('click', ()=>{
                 this.actions.loadTab(i,true,true);
             })
         }
