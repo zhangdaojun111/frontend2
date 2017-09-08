@@ -138,8 +138,14 @@ window.addEventListener('message', function (event) {
                     dialogHash[data.key].comp.destroySelf();
                 } else {
                     // 弹出框是iframe
-                    // 清除iframe中适用的localstorage
-                    Storage.clear(data.key);
+                    let iframe = dialogHash[data.key].element.find('iframe');
+                    if (iframe.length) {
+                        iframe = iframe[0];
+                        if (iframe.contentWindow) {
+                            // $(iframe.contentWindow).trigger('iframe.close');
+                        }
+                    }
+                    dialogHash[data.key].element.erdsDialog('destroy').remove();
                 }
                 PMAPI.sendToChild(dialogHash[data.key].iframe, {
                     type: PMENUM.recieve_data,
