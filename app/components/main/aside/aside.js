@@ -31,7 +31,6 @@ function presetMenuData(menu, leaf) {
 function presetCommonMenuData(menu, commonData) {
     let menuData = _.defaultsDeep([], menu);
     let commonKeys = commonData.data;
-    console.log(commonKeys);
     function setUsed(item) {
         item.commonUsed = true;
         if (item.parent) {
@@ -41,14 +40,7 @@ function presetCommonMenuData(menu, commonData) {
     function step_one(menu, parent) {
         menu.forEach((item) => {
             item.parent = parent;
-            // let key = item.ts_name || item.table_id;
-            let key;
-            if (item.table_id && item.table_id !== '' && item.table_id !== "0") {
-                key = item.table_id;
-            }else{
-                key = item.ts_name || "0";
-            }
-
+            let key = item.ts_name || item.table_id;
             item.commonUsed = false;
             if (commonKeys.indexOf(key) !== -1) {
                 setUsed(item);
@@ -208,7 +200,6 @@ let config = {
                 pre_type: "7",
                 content: JSON.stringify(choosed)
             });
-            console.log(choosed);
             window.config.commonUse.data = choosed;
             this.actions.showCommonMenu(true);
         },
