@@ -126,13 +126,22 @@ export const attachmentListConfig = {
     },
     actions:{
         deleteItem:function (item) {
-            $.post('/delete_attachment/',{
+            HTTP.postImmediately('/delete_attachment/',{
                 file_ids:JSON.stringify([item['file_id']]),
                 dinput_type:this.data.dinput_type
             }).then(res=>{
-                let index = _.findIndex(this.data.attachmentList,item);
-                this.data.attachmentList.splice(index,1);
+                if(res.success){
+                }
             })
+
+            let index = _.findIndex(this.data.attachmentList,item);
+            this.data.attachmentList.splice(index,1);
+            let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
+            if(deletedFiles == undefined){
+                deletedFiles = [];
+            }
+            deletedFiles.push(item['file_id']);
+            Storage.setItem(deletedFiles,'deletedItem-'+this.data.id,Storage.SECTION.FORM);
         },
         viewItem:function (item) {
             let ele = $('<img>');
@@ -143,7 +152,7 @@ export const attachmentListConfig = {
     afterRender:function () {
         this.data.style = $('<style type="text/css"></style>').text(this.data.css).appendTo($("head"));
         this.el.find('.table').addClass('table-striped').addClass('table-bordered');
-        $.post('/query_attachment_list/',{
+        HTTP.postImmediately('/query_attachment_list/',{
             file_ids:JSON.stringify(this.data.fileIds),
             dinput_type:this.data.dinput_type
         }).then(res=>{
