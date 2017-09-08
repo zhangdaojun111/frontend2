@@ -13,45 +13,33 @@ import msgbox from '../../lib/msgbox';
 
 let config = {
     template:template,
-    data:{},
+    data:{
+        password:'',
+    },
     actions:{
-        doSubmit:function () {
-            let newPw = this.el.find('.new-password').val();
-            let newPwConfirm = this.el.find('.new-password-confirm').val();
-            if(newPw === ''){
-                msgbox.showTips('请输入密码');
-                return;
-            }
-            if(newPwConfirm === ''){
-                msgbox.showTips('请再次输入密码');
-                return;
-            }
-            if(newPw !== newPwConfirm){
-                //两次输入不同
-                msgbox.showTips('两次密码输入不一致！');
-                return;
-            }
+        removeHtmlTab:function(pw){
+            return pw.replace(/<[^<>]+?>/g,'');    //删除所有HTML标签
+        },
+        resetUserPassword:function () {
+            this.actions.checkPasswordLegal();
 
-            let json = {};
-            json['reset_pwd'] = 1;
-            json['password'] = newPw;
-            json['random_code'] = this.data.random_code;
-            json['username'] = this.data.username;
-            UserInfoService.resetPassword(json).done((result) => {
-                if(result.success === 1){
-                    //修改成功
-                }else{
+        },
+        checkPasswordLegal:function () {
+            let new_pw = this.el.find('.new-pw').val();
+            let new_pw_confirm = this.el.find('.new-pw-confirm').val();
+            if(new_pw === ''){
 
-                }
-            })
+            }
         }
+
+
     },
     binds:[
         {
             event:'click',
-            selector:'.find-pw-btn',
+            selector:'.reset-pw-btn',
             callback:function () {
-                this.actions.doSubmit();
+                this.actions.resetUserPassword();
             }
         }
     ],
@@ -63,11 +51,10 @@ let config = {
     }
 };
 
-class FindPassword extends  Component{
+class FindPassword extends Component{
     constructor(){
         super(config);
     }
 }
 
-export {FindPassword};
-
+export{FindPassword}
