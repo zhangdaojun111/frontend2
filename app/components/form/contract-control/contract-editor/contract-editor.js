@@ -143,8 +143,9 @@ export const contractEditorConfig = {
     binds: [
         {
             event: 'click',
-            selector: '.save-n-close',
+            selector: '.save_n_close',
             callback: function () {
+                Storage.setItem(this.data.local_data,'contractCache-'+this.data.id,Storage.SECTION.FORM);
                 //删除local_data中的合同信息，此数据不跟随data上传
                 for (let data of this.data.local_data) {
                     delete data['content'];
@@ -156,33 +157,37 @@ export const contractEditorConfig = {
             }
         }, {
             event: 'click',
-            selector: '.download-all',
+            selector: '.download_all',
             callback: function () {
                 this.actions.downloadTemplate(0, true);
             }
         }, {
             event: 'click',
-            selector: '.download-current',
+            selector: '.download_current',
             callback: function () {
                 this.actions.downloadTemplate(this.data['current_tab'], false);
             }
         }, {
             event: 'click',
-            selector: '.edit-or-save',
+            selector: '.edit_or_save',
             callback: function () {
-                if (this.el.find('.edit-or-save').text() == '编辑') {
-                    this.el.find('.edit-or-save').text('保存');
-                    this.el.find('.save-n-close').css('display', 'none');
-                    this.el.find('.download-all').css('display', 'none');
-                    this.el.find('.download-current').css('display', 'none');
+                if (this.el.find('.edit_or_save').text() == '编辑') {
+                    let butStates = this.data.buttonStates[this.data['current_tab']];
+                    butStates.edit_or_save_text = '保存';
+                    butStates.display.save_n_close = 'none';
+                    butStates.display.download_all = 'none';
+                    butStates.display.download_current = 'none';
+                    this.actions.loadButtons(this.data['current_tab']);
                     this.data.editingK2v = JSON.parse(JSON.stringify(this.data.local_data[this.data['current_tab']].k2v));
                     this.actions.editContract(this.data.editingK2v);
                 } else {
                     this.el.find('.contract-template-anchor').find('span').removeAttr('contenteditable');
-                    this.el.find('.edit-or-save').text('编辑');
-                    this.el.find('.save-n-close').css('display', 'inline');
-                    this.el.find('.download-all').css('display', 'inline');
-                    this.el.find('.download-current').css('display', 'inline');
+                    let butStates = this.data.buttonStates[this.data['current_tab']];
+                    butStates.edit_or_save_text = '编辑';
+                    butStates.display.save_n_close = 'inline';
+                    butStates.display.download_all = 'inline';
+                    butStates.display.download_current = 'inline';
+                    this.actions.loadButtons(this.data['current_tab']);
                     this.data.local_data[this.data['current_tab']].k2v = this.data.editingK2v;
                     //将修改缓存到本地，如果需要编辑即保存，将下一行放到editContract的input事件回调中
                     Storage.setItem(this.data.local_data,'contractCache-'+this.data.id,Storage.SECTION.FORM);
@@ -214,15 +219,12 @@ export const contractEditorConfig = {
     ],
     data: {
         local_data: [],
+        buttonStates:[],
         elementKeys: [],
         editingk2v: {},
         css: css.replace(/(\n)/g, '')
     },
     actions: {
-        loadData(res) {
-            this.actions._loadDataSource(res.data.elements);
-            this.actions._loadTmplOptions(res.data.model_files);
-        },
         //加载各数据源选项
         _loadDataSource: function (elements) {
             if (elements) {
@@ -276,7 +278,6 @@ export const contractEditorConfig = {
             return $.post('/customize/rzrk/get_element/', json);
         },
         addTab: function () {
-            this.el.find('.edit-or-save').css('display', 'none');
             let tabEle = $('<li class="contract-tab">新建</li>');
             let length = this.el.find('.contract-tab').length;
             this.el.find('.contract-tabs').append(tabEle);
@@ -284,6 +285,8 @@ export const contractEditorConfig = {
             this.el.find('.data-source').val(0).removeAttr('disabled');
             this.data.local_data.push({name: '新建', elements: {}, model_id: '', mode: 'edit'});
             this.data['current_tab'] = length;
+            this.actions.initButtonStates(this.data['current_tab']);
+            this.actions.loadButtons(this.data['current_tab']);
             this.el.find('.contract-template-anchor').html('<p>请选择模板和数据源。</p>');
             //监听tab
             tabEle.on('click', () => {
@@ -296,9 +299,39 @@ export const contractEditorConfig = {
             }
             this.actions._loadTemplateByIndex(i, isLoadCache,disabled);
         },
+        initButtonStates:function (i) {
+            if(this.data.mode = 'edit'){
+                this.data.buttonStates.push({
+                    display:{
+                        save_n_close:'inline',
+                        download_all:'inline',
+                        download_current:'inline',
+                        edit_or_save:'none',
+                    },
+                    edit_or_save_text:'编辑'
+                });
+            } else {
+                this.data.buttonStates.push({
+                    display:{
+                        save_n_close:'none',
+                        download_all:'inline',
+                        download_current:'inline',
+                        edit_or_save:'none',
+                    },
+                    edit_or_save_text:'编辑'
+                });
+            }
+        },
+        loadButtons:function (i) {
+            let butStates = this.data.buttonStates[i];
+            for(let key of Object.keys(butStates.display)){
+                this.el.find('.'+key).css('display',butStates.display[key]);
+            }
+            this.el.find('.edit_or_save').text(butStates.edit_or_save_text);
+        },
         //只有在切换tab的时候才会用缓存加载合同
         _loadTemplateByIndex: function (i, isLoadCache,disabled) {
-            this.el.find('.edit-or-save').css('display', 'none');
+            this.actions.loadButtons(i);
             this.data['current_tab'] = i;
             console.log("current tab " + i);
             let tab = this.data.local_data[i];
@@ -340,7 +373,8 @@ export const contractEditorConfig = {
                 $(this.el.find('.contract-tab').get(i)).text(tab['name']);
                 this.el.find('.contract-template-anchor').html(tab['content']);
                 if (this.data.mode == 'edit') {
-                    this.el.find('.edit-or-save').css('display', 'inline');
+                    this.el.find('.edit_or_save').css('display', 'inline');
+                    this.data.buttonStates[i].display.edit_or_save = 'inline';
                 }
                 return;
             }
@@ -360,7 +394,8 @@ export const contractEditorConfig = {
                     tab['content'] = res.data.content;
                     tab['k2v'] = res.data.k2v;
                     if (this.data.mode == 'edit') {
-                        this.el.find('.edit-or-save').css('display', 'inline');
+                        this.el.find('.edit_or_save').css('display', 'inline');
+                        this.data.buttonStates[i].display.edit_or_save = 'inline';
                     }
                     let tabName = [];
                     if (Object.keys(tab.elements).length != 0) {
@@ -417,7 +452,7 @@ export const contractEditorConfig = {
         },
         closeMe: function () {
             window.parent.postMessage({
-                type: PMENUM.closedialog,
+                type: PMENUM.close_dialog,
                 key: this.key,
                 data: this.data.value
             }, location.origin);
@@ -428,8 +463,6 @@ export const contractEditorConfig = {
 
         if(this.data['mode']=='view'){
             this.el.find('.contract-settings').css('display','none');
-            this.el.find('.save-n-close').css('display','none');
-            this.el.find('.edit-or-save').css('display','none');
             this.el.find('.add-tab-button').css('display','none');
             this.el.find('.delete-tab-button').css('display','none');
         }
@@ -445,7 +478,8 @@ export const contractEditorConfig = {
         this.data.local_data = this.data.local_data || JSON.parse(JSON.stringify(this.data.value));
         this.actions.getElement(obj).then(res => {
             if (res.success) {
-                this.actions.loadData(res);
+                this.actions._loadDataSource(res.data.elements);
+                this.actions._loadTmplOptions(res.data.model_files);
                 if (this.data.local_data == '') {
                     this.data.local_data = [];
                     this.actions.addTab();
@@ -459,6 +493,8 @@ export const contractEditorConfig = {
         for (let i = 0, length = this.data.local_data.length; i < length; i++) {
             let tabEle = $('<li class="contract-tab">'+this.data.local_data[i].name+'</li>');
             tabsEle.append(tabEle);
+            this.actions.initButtonStates(i);
+            this.actions.loadButtons(0);
             tabEle.on('click', event => {
                 this.actions.loadTab(i,true,true);
             })
