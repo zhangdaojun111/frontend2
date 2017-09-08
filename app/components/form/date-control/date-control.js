@@ -18,33 +18,34 @@ let config = {
 
     },
     actions: {
-        keyup: function () {
-            let _this = this;
-                 //YYYY-MM-DD
-                let strDate = this.el.find(".date_yy-mm-dd").val();
-
-                    let  re =/^(\d{4})-(\d{2})-(\d{2})$/;
-                    if(re.test(strDate))//判断日期格式符合YYYY-MM-DD标准
-                    {
-                        let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3);
-                        console.log(dateElement);
-
-                        if(!((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))))//判断日期逻辑
-                        {
-                            this.el.find("#errorMessage").css("display","inline-block").innerText = "时间格式不正确,正确格式为: 2017-09-01";
-                        } else{
-                            this.el.find("#errorMessage").css("display","none");
-                            _this.data.value = strDate;
-                            _.debounce(function () {
-                                _this.events.changeValue(_this.data)
-                            }, 200)();
-                        }
-                    }
-                    else{
-
-                        this.el.find("#errorMessage").css("display","inline-block").text("时间格式不正确,正确格式为: 2017-09-01") ;
-                    }
-            }
+        //时间日期输入错误提示，暂时先去掉
+        // keyup: function () {
+        //     let _this = this;
+        //          //YYYY-MM-DD
+        //         let strDate = this.el.find(".date_yy-mm-dd").val();
+        //
+        //             let  re =/^(\d{4})-(\d{2})-(\d{2})$/;
+        //             if(re.test(strDate))//判断日期格式符合YYYY-MM-DD标准
+        //             {
+        //                 let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3);
+        //                 console.log(dateElement);
+        //
+        //                 if(!((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))))//判断日期逻辑
+        //                 {
+        //                     this.el.find("#errorMessage").css("display","inline-block").innerText = "时间格式不正确,正确格式为: 2017-09-01";
+        //                 } else{
+        //                     this.el.find("#errorMessage").css("display","none");
+        //                     _this.data.value = strDate;
+        //                     _.debounce(function () {
+        //                         _this.events.changeValue(_this.data)
+        //                     }, 200)();
+        //                 }
+        //             }
+        //             else{
+        //
+        //                 this.el.find("#errorMessage").css("display","inline-block").text("时间格式不正确,正确格式为: 2017-09-01") ;
+        //             }
+        //     }
 
     },
     binds: [
@@ -52,7 +53,6 @@ let config = {
             event: 'click',
             selector: '.ui-history',
             callback: function () {
-                console.log('11111111');
                 this.events.emitHistory(this.data)
             }
         },
@@ -131,7 +131,7 @@ let config = {
                         }, 200)();
                     }
                 } else {
-                    console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', this.selector);
+                    console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', 'date-control');
                 }
             },
         });

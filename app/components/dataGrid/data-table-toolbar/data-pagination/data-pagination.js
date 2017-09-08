@@ -175,6 +175,8 @@ let config = {
                 this.actions.onPaginationChanged();
             },1000 ) ).on( 'click','.ui-icon-refresh',()=>{
                 this.actions.onPaginationChanged();
+            } ).on( 'click','.data-invalid',()=>{
+                this.el.find( '.data-invalid' ).eq(0).html( '' );
             } )
         },
         onPaginationChanged: function (invalid) {
@@ -303,7 +305,7 @@ let config = {
                         this.actions.invalidTips();
                         setTimeout( ()=>{
                             this.data.onRefresh = false;
-                        },100 )
+                        },500 )
                     }
                 }
             })

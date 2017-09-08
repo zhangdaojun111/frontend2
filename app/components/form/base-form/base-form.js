@@ -62,12 +62,22 @@ let config = {
         event: 'click',
         selector: '.save',
         callback: function () {
+            if(this.data.isBtnClick){
+                console.log('有没有阻止呢？');
+                return;
+            }
+            console.log('过来楼');
+            this.data.isBtnClick=true;
             this.actions.onSubmit();
         }
     }, {
         event: 'click',
         selector: '.changeEdit',
         callback: function () {
+            if(this.data.isBtnClick){
+                return;
+            }
+            this.data.isBtnClick=true;
             this.actions.changeToEdit();
         }
     }],
@@ -794,11 +804,12 @@ let config = {
         //判断一下日期的类型，并且进行限制
         checkDateType(data) {
             // for(let i = 0;i<this.data.formData.length;i++){
-            //     if(this.data.formData[i]['type'] == 'Date'){
-            //         let temp = this.data.formData[i];
-            //         let dfield = this.data.formData[i]['dfield'];//f8
+            //   if(this.data.formData[i]['type'] == 'Date'){
+            //       let temp = this.data.formData[i];
+            //       let dfield = this.data.formData[i]['dfield'];//f8
             //
             //         if(temp['timeType'] == 'after'){
+            //             console.log("data  "+ data[dfield].split("-"))
             //             let vals = data[dfield].split("-");
             //             //let vals = val.split("-");//[2011,11,11];
             //             let myData = new Date();
@@ -844,8 +855,9 @@ let config = {
             //                 }
             //             }
             //         }
-            //     }
-            // }
+            //    }
+            //  }
+             //
             // for(let i = 0;i<this.data.formData.length;i++){
             //     if(this.data.formData[i]['type'] == 'Date'){
             //         let temp = this.data.formData[i];
@@ -952,7 +964,7 @@ let config = {
 
         //必填性改变
         requiredChange(_this) {
-            if (_this.data.value == '') {
+            if (_this.data.value === '') {
                 _this.el.find('#requiredLogo').removeClass().addClass('required');
             } else {
                 _this.el.find('#requiredLogo').removeClass().addClass('required2');
@@ -983,7 +995,7 @@ let config = {
             }
         },
         //拼接其他字段
-        montageOtherFields() {
+        montageOtherFields(formDataNew) {
             data = {};
             for (let key in this.data.dataOfOtherFields) {
                 data[key] = this.data.dataOfOtherFields[key];
@@ -1028,7 +1040,7 @@ let config = {
             let formDataNew = this.data.oldData;
             //如果有其他字段的数据，这里是拼approvedFormData
             if (this.data.hasOtherFields == '1') {
-                this.actions.montageOtherFields();
+                this.actions.montageOtherFields(formDataNew);
             }
             this.actions.checkDateType();
             let obj_new = this.actions.createCacheData(formDataNew, data, true, this);
@@ -1073,6 +1085,7 @@ let config = {
             } else {
                 MSG.alert(res.error);
             }
+            this.data.isBtnClick=false;
             //清空子表内置父表的ids
             delete FormService.idsInChildTableToParent[this.data.tableId];
         },
@@ -1099,6 +1112,7 @@ let config = {
                 this.data.btnType = 'new';
             }
             this.actions.addBtn();
+            this.data.isBtnClick=false;
         },
         //修改可修改性
         reviseCondition: function (editConditionDict, value) {
