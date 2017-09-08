@@ -60,7 +60,7 @@ let config = {
     afterRender() {
         let _this = this;
         this.el.find('.ui-width').css('width', this.data.width);
-        if(this.data.history){
+        if(!this.data.isCalendar && this.data.history){
             this.el.find('.ui-history').css('visibility','visible');
         }
         if (this.data.is_view) {
