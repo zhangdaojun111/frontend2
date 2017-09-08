@@ -3,4 +3,4 @@ import ApprovalDialog from '../../components/workflow/approval-dialog/approval-d
 
 let ApprovalDialog1 = new ApprovalDialog();
 
-ApprovalDialog1.render($('#ly'));
+ApprovalDialog1.render($('#approval-reject'));
