@@ -21,6 +21,7 @@
         }
         .z-checkbox{
             vertical-align: middle;
+            font-weight: lighter;
             .z-checkbox-input{
                 bottom: 6px;
                 right: 2px;
@@ -80,6 +81,8 @@
     }
     .set-remind-method {
         cursor: pointer;
+        background: white;
+        color: #0088FF;
     }
     .preview-text {
         word-break: break-all;
