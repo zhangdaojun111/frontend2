@@ -1509,7 +1509,9 @@ let config = {
             if( this.data.gridTips!='' ){
                 this.el.find( '.grid-tips' )[0].style.display = 'flex';
             }
-            this.hideLoading();
+            setTimeout( ()=>{
+                this.hideLoading();
+            },100 )
         },
         //触发导出
         onExport: function () {
