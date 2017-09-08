@@ -64,8 +64,8 @@ let config = {
             this.data.endDate = res.value;
             this.data.scheduleEnd = this.data.endDate;
         };
-        this.append(new DateControl({value: this.data.scheduleStart},{changeValue: changeStartValue}), this.el.find('.start-date'));
-        this.append(new DateControl({value: this.data.scheduleEnd},{changeValue: changeEndValue}), this.el.find('.end-date'));
+        this.append(new DateControl({value: this.data.scheduleStart,isCalendar: true},{changeValue: changeStartValue}), this.el.find('.start-date'));
+        this.append(new DateControl({value: this.data.scheduleEnd, isCalendar: true},{changeValue: changeEndValue}), this.el.find('.end-date'));
     },
 };
 
