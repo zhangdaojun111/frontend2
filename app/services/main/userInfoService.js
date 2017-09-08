@@ -132,7 +132,6 @@ export const UserInfoService = {
         return res;
     },
     getUserInfoByName:function (json) {
-        console.log(json);
         let url = '/get_user_info_by_name/';
         return HTTP.postImmediately(url,Utils.formatParams(json))
     },
