@@ -17,10 +17,10 @@ let config = {
             event: 'click',
             selector: '.view-attached-list',
             callback: function () {
-                attachmentListConfig.data = _.defaultsDeep({
+                attachmentListConfig.data =_.defaultsDeep({
                     fileIds: this.data.value,
                     dinput_type: this.data.real_type
-                }, attachmentListConfig.data);
+                },attachmentListConfig.data);
                 PMAPI.openDialogByComponent(attachmentListConfig, {
                     width: 500,
                     height: 300,

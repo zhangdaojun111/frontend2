@@ -5,13 +5,20 @@
     .set-tool {
         padding: 8px 10px;
         .set-btn {
-            padding: 5px 12px;
-            display: inline-block;
-            border: 1px solid #c5dbec;
-            background: #0088FF;
-            color: #fff;
+            //padding: 5px 12px;
+            //display: inline-block;
+            //border: 1px solid #c5dbec;
+            //background: #0088FF;
+            //color: #fff;
+            //cursor: pointer;
+            //outline: none;
             cursor: pointer;
-            outline: none;
+            width: 50px;
+            height: 30px;
+            background-color: #0088ff;
+            border: 1px solid #0088ff;
+            border-radius: 4px;
+            color: #fff;
         }
         .disabled {
             pointer-events: none;
@@ -23,6 +30,7 @@
             visibility: hidden;
             .cancel-btn {
                 background-color: #ff0000;
+                border: 1px solid #ff0000;
             }
         }
     }
