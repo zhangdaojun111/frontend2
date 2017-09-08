@@ -125,6 +125,7 @@ let config = {
                 yAxis:data.pieType == '1' ? data.columns : data.yAxis,
                 deeps: data.pieType == '1' ? [] : data.deeps
             };
+
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
