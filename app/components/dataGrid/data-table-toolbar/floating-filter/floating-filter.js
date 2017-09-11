@@ -41,7 +41,9 @@ let config = {
                         this.eFilterInput.className += (' filter-input-' + searchFiled);
                     }else if( colInfo  == 'datetime' ){
                         let dateTimeControl = new DateTimeControl({value: ''},{changeValue:function(data){
-                            That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
+                            setTimeout(()=>{
+                                That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
+                            },1000)
                         }});
                         dateTimeControl.render($(this.eGui));
                         this.eFilterInput = this.eGui.querySelector('input');

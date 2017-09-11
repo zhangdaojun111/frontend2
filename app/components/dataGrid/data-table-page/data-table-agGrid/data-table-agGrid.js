@@ -308,9 +308,9 @@ let config = {
                         this.data.haveSystemsFields = true;
                     }
                     let minWidth = {
-                        datetime: 155,
-                        time: 80,
-                        date: 100
+                        datetime: 160,
+                        time: 90,
+                        date: 110
                     }
                     let obj = {
                         headerName: data.header[i],
