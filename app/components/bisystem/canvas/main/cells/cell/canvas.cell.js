@@ -57,7 +57,7 @@ let config = {
                 viewId: this.data.currentViewId,
             };
             if (chart['data']['assortment']) {
-                this.cellTitle.actions.setValue(chart);
+                this.cellTitle.actions.setValue(chart,this.data.currentViewId);
                 this.data.cellComponent = new cellTypes[chart['data']['assortment']](data);
                 let cellContainer = this.el.find('.cell-chart');
                 this.data.cellComponent.render(cellContainer);
