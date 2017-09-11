@@ -5,6 +5,7 @@ import {chartName,theme,icon} from '../../form.chart.common';
 import {ChartFormService} from '../../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../../lib/msgbox";
 import Mediator from '../../../../../../lib/mediator';
+import './chart.scss';
 
 let config = {
     template: template,
@@ -91,11 +92,18 @@ let config = {
     data: {
         options: [
             {
-                label: '',
+                label: '选择数据来源',
                 name: 'source',
                 defaultValue: '',
                 type: 'autocomplete',
                 placeholder: '选择数据来源',
+                required: true,
+                rules: [
+                    {
+                        errorMsg:'数据源不能为空',
+                        type:'required',
+                    }
+                ],
                 events: {
                     onSelect(value) {
                         this.actions.getFields(value);
@@ -115,22 +123,37 @@ let config = {
                 }
             },
             {
-                label: '',
+                label: '选择X轴字段',
                 name: 'xAxis',
                 defaultValue: '',
                 type: 'autocomplete',
                 placeholder: '选择X轴字段',
+                required: true,
+                rules: [
+                    {
+                        errorMsg:'请选择X轴字段',
+                        type:'required',
+                    }
+                ],
                 events: {}
             },
             {
-                label: '',
+                label: '选择Y轴字段',
                 name: 'yAxis',
                 defaultValue: '',
                 type: 'autocomplete',
                 placeholder: '选择Y轴字段',
+                required: true,
+                // rules: [
+                //     {
+                //         errorMsg:'请选择Y轴字段',
+                //         type:'required',
+                //     }
+                // ],
                 events: {
                     onSelect(value) {
                         if(value) {
+                            console.log(this);
                             this.actions.addyAxis(value);
                             this.formItems['yAxis'].autoselect.actions.clearValue();
                         }
@@ -138,11 +161,18 @@ let config = {
                 }
             },
             {
-                label: '',
+                label: '请选择Y轴字段',
                 name: 'columns',
                 defaultValue: [],
                 list:[],
                 type: 'checkbox',
+                required: false,
+                rules: [
+                    {
+                        errorMsg:'请选择Y轴字段',
+                        type:'required',
+                    }
+                ],
                 events: {
                     onChange:function(value) {
                         let list = _.cloneDeep(value);
@@ -165,6 +195,23 @@ let config = {
         // 渲染图表表单字段
         this.drawForm('.form-group-chart');
         this.actions.init();
+        //接受状态
+        Mediator.on('bi:multi:chart',(res)=>{
+            let pass = true; // 判断添加图表组件是否验证通过
+            if(this.formItems){
+                for (let key of Object.keys(this.formItems)) {
+                    if (this.formItems[key].data.rules) {
+                        let isValid = this.formItems[key].valid();
+                        if (!isValid) {
+                            pass = false;
+                        }
+                    }
+                }
+            }
+            if(!pass){
+                this.events.onChange(pass);
+            }
+        })
     }
 };
 

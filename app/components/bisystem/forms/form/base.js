@@ -38,6 +38,7 @@ class Base extends Component {
      * @param msg = 错误提示消息
      */
     showErrorMsg(msg){
+        console.log(this);
         this.el.find('.form-label .error-msg').html(msg);
     }
     /**
