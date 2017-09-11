@@ -87,6 +87,22 @@ let config = {
                 msgBox.alert( '请选择导入文件！' );
                 return;
             }
+            //只保留最新选择的附件
+            let num = 0;
+            for( let code in this.data.fileData ){
+                num++;
+            }
+            let newFile = {}
+            let n = 0;
+            for( let code in this.data.fileData ){
+                n++;
+                if( n==num ){
+                    newFile[code] = this.data.fileData[code]
+                }else {
+                    this.uploader.deleteFileByCode( code,'/upload_data/' )
+                }
+            }
+            this.data.fileData = newFile;
             let json = {
                 file:'upload_file',
                 table_id: this.data.tableId,

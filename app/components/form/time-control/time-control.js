@@ -118,10 +118,10 @@ let config = {
 
         //回显
         if (_this.data.value) {
-            let strDate = _this.el.find(".timeInput").val(_this.data.value);
-            this.el.find(".hour").children("span").text(strDate.substring(0,2))
-            this.el.find(".minute").children("span").text(strDate.substring(3,5));
-            this.el.find(".second").children("span").text(strDate.substring(6,8));
+             _this.el.find(".timeInput").val(_this.data.value);
+            let a =this.el.find(".hour").children("span").text(_this.data.value.substring(0,2))
+            this.el.find(".minute").children("span").text(_this.data.value.substring(3,5));
+            this.el.find(".second").children("span").text(_this.data.value.substring(6,8));
 
         } else {
             this.el.find(".timeInput").val("时:分:秒");
@@ -178,12 +178,6 @@ let config = {
                 _this.events.changeValue(_this.data)
             }, 200)();
         });
-        // _this.el.find(".ui-datepicker-close").on("click", function () {
-        //     _this.data.value = _this.el.find('.timeInput').val();
-        //     _.debounce(function () {
-        //         _this.events.changeValue(_this.data)
-        //     }, 200)();
-        // })
 
         this.el.find('.timeInput').on('input', _.debounce(function () {
             _this.actions.keyup();

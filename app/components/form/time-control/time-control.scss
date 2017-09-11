@@ -1,8 +1,7 @@
 .component-time-control {
-    .cancel-x {
-        display: none;
-        cursor: pointer;
-        position: relative;
+    display: inline-flex;
+    .ui-history{
+        margin-top: 5px;
     }
     .time {
         display: block;
