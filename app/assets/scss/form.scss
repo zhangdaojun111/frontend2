@@ -7,9 +7,13 @@
 *form-version-table-department
 */
 .form-version-table-user, .form-version-table-department{
+    tr td span{
+        font-size: 12px!important;
+    }
     width: 100%!important;
 }
 .form-version-table-user, .form-version-table-department, .form-default {
+
     margin: 10px;
     background: #FFFFFF;
     tr td:first-child {

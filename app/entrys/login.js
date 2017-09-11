@@ -70,6 +70,7 @@ function getLoginController() {
 
             //登录按钮
             this.$loginBtn.on('click', () => {
+                console.log('click');
                 // this.username = this.$usernameInput.val();
                 // this.password = this.$passwordInput.val();
                 this.userLogin(this.username_value,this.password_value);   //根据用户名和密码登录
@@ -113,7 +114,7 @@ function getLoginController() {
             });
 
             //密码找回页面提交按钮
-            this.$submitFindPw.on('click', _.debounce(() => {
+            this.$submitFindPw.on('click', _.throttle(() => {
                 let userName = $('.account-input').val();
                 let result = LoginService.findPassword(userName);
                 result.done((result) => {
@@ -125,7 +126,7 @@ function getLoginController() {
                 }).fail((err) => {
                     console.log('提交失败',err)
                 })
-            },1000));
+            },4000));
 
             //自助更新
             this.$selfServiceUpdate.on('click',function () {
@@ -138,12 +139,13 @@ function getLoginController() {
             });
 
             //键盘绑定
+            let that = this;
             $(document).keypress((event) => {
                 if(event.keyCode === 13){
-                    if(this.isOpposite === false){
-                        this.$loginBtn.click();
+                    if(that.isOpposite === false){
+                        that.userLogin(that.username_value,that.password_value);   //根据用户名和密码登录
                     }else{
-                        this.$submitFindPw.click();
+                        that.$submitFindPw.click();
                     }
                 }
             })
@@ -151,7 +153,7 @@ function getLoginController() {
         },
         //初始化公司名称
         sysNameInit:function () {
-           this.systemName = this.versionInfo.sap_login_system_name || '成都睿银信息科技有限公司';
+           this.systemName = this.versionInfo.sap_login_system_name;
            this.resetSysName(this.systemName);
         },
         //初始化版本信息
@@ -237,7 +239,7 @@ function getLoginController() {
                 username:username,
                 password:md5(password)
             };
-            let replyMsg = LoginService.userLogin(data);
+            let replyMsg = LoginService.userLoginVerification(data);
             replyMsg.done((result) => {
                 if(result.success === 1){
                     //登录成功，设置缓存信息，跳转至index页面
