@@ -1,5 +1,5 @@
 import template from './edit.html';
-import Mediator from "../../../../../../lib/mediator";
+import Mediator from "../../../../../../../../lib/mediator";
 
 let css =`
     #editor{

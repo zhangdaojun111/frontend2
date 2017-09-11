@@ -3,12 +3,12 @@
  * 画布块标题
  */
 import template from './canvas.title.html';
-import {BiBaseComponent} from '../../../bi.base.component';
+import {BiBaseComponent} from '../../../../../bi.base.component';
 import './canvans.title.scss';
 import {config as editDialogConfig} from "./edit/edit";
-import {PMAPI} from '../../../../../lib/postmsg';
-import {ViewsService} from "../../../../../services/bisystem/views.service";
-import Mediator from '../../../../../lib/mediator';
+import {PMAPI} from '../../../../../../../lib/postmsg';
+import {ViewsService} from "../../../../../../../services/bisystem/views.service";
+import Mediator from '../../../../../../../lib/mediator';
 
 let config = {
     template: template,

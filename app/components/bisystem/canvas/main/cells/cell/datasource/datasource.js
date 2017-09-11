@@ -2,7 +2,7 @@
  * Created by birdyy on 2017/8/30.
  * 数据源画布
  */
-import {BiBaseComponent} from '../../../bi.base.component';
+import {BiBaseComponent} from '../../../../../bi.base.component';
 import template from './datasource.html';
 import './datasource.scss';
 

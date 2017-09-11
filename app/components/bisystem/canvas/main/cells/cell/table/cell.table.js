@@ -2,7 +2,7 @@
  * Created by birdyy on 2017/7/31.
  * 表格图表配置
  */
-import {BiBaseComponent} from '../../../bi.base.component';
+import {BiBaseComponent} from '../../../../../bi.base.component';
 import template from './cell.table.html';
 import "./cell.table.scss";
 

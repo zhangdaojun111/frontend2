@@ -31,20 +31,17 @@ let config = {
                     zIndex: 1
                 }
             };
-            // const data = {
-            //     'currentViewId': this.data.currentViewId,
-            //     'cell': layout
-            // };
             this.trigger('onAddCell', layout);
         },
 
     },
     binds: [
+        //保存画布块
         {
             event: 'click',
             selector: '.views-btn-group .view-save-btn',
             callback: function (context, event) {
-                this.actions.saveCanvas();
+                this.trigger('onSaveCanvas');
                 return false;
             }
         },

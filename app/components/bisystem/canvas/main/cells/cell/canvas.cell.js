@@ -2,10 +2,10 @@
  * Created by birdyy on 2017/7/31.
  */
 
-import Component from '../../../../lib/component';
+import Component from '../../../../../../lib/component';
 import template from './canvas.cell.html';
 import './canvas.cell.scss';
-import Mediator from '../../../../lib/mediator';
+import Mediator from '../../../../../../lib/mediator';
 
 import {CellNormalComponent} from './normal/cell.normal';
 import {CellTableComponent} from './table/cell.table';
@@ -17,7 +17,7 @@ import {CellFunnelComponent} from './funnel/cell.funnel';
 import {CellCommentComponent} from './comment/cell.comment';
 import {CanvasCellTitleComponent} from './title/canvas.title';
 import {CanvasDataSourceComponent} from './datasource/datasource';
-import {canvasCellService} from '../../../../services/bisystem/canvas.cell.service';
+import {canvasCellService} from '../../../../../../services/bisystem/canvas.cell.service';
 
 // cell 组件类型，通过匹配assortment渲染不同的组件
 const cellTypes = {
@@ -69,7 +69,7 @@ let config = {
          *画布块拖拽，缩放
          */
         cellDragandResize() {
-            let dragCell = $(this.el).find('.cell');
+            let dragCell = this.el.find('.cell');
             const dragOption = {
                 cursor: "crosshair",
                 containment: '.cells-container',
@@ -77,6 +77,7 @@ let config = {
                 stop: (event, ui) => {
                     this.data.cell.size.left = ui.position.left;
                     this.data.cell.size.top = ui.position.top;
+                    this.trigger('onUpdateLayout', {componentId: this.componentId,cell:this.data.cell});
                 }
             };
 
@@ -86,6 +87,7 @@ let config = {
                     this.data.cell.size.width = ui.size.width;
                     this.data.cell.size.height = ui.size.height;
                     let myChartComponentId = dragCell.find('.cell-chart').attr('component');
+                    this.trigger('onUpdateLayout', {componentId: this.componentId,cell:this.data.cell});
                     //通知echarts resize更新
                     Mediator.publish(`bi:cell${myChartComponentId}:resize`, this.data.cell.size);
                 }
@@ -98,7 +100,7 @@ let config = {
          *删除画布layout
          */
         delCellLayout() {
-            Mediator.publish('bi:cell:remove', this.data.cell.layout_id);
+            this.trigger('onRemoveLayout', this.componentId);
             this.destroySelf();
         },
 
@@ -115,6 +117,7 @@ let config = {
             this.data['chart'] = res[0]['data'];
             this.data['cell'].chart_id = chart.chart_id;
             this.data['cell']['is_deep'] = 0;
+            this.trigger('onUpdateLayout', {componentId: this.componentId,cell:this.data.cell});
             this.data.biUser = true;
             this.actions.loadCellChart(res[0]);
         },

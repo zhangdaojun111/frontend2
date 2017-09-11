@@ -1,5 +1,5 @@
 import Component from '../../../../../lib/component';
-import {CanvasCellComponent} from '../../cell/canvas.cell';
+import {CanvasCellComponent} from './cell/canvas.cell';
 
 import template from './canvas.cells.html';
 import './canvas.cells.scss';
@@ -11,17 +11,26 @@ let config = {
     template: template,
     data: {
         currentViewId: '', // 当前画布块视图id
-        layouts: [], // 画布块布局信息
-        cells: {}, // 用于存储cell的信息(通过layouts的id标识唯一标识符)
+        cells: {}, // 用于存储cell的信息(通过componentId标识唯一标识符)
         cellMaxZindex: 0,
     },
     actions: {
         makeCell(data) {
             let cell = new CanvasCellComponent(data,{
+
                 onDrag: (componentId) => {
                     this.data.cellMaxZindex++;
-                    this.data.layouts[componentId].data.cellMaxZindex = this.data.cellMaxZindex;
-                }
+                    this.data.cells[componentId].data.cellMaxZindex = this.data.cellMaxZindex;
+                },
+
+                onUpdateLayout:(data) => {
+                    this.data.cells[data.componentId].data.cell = data.cell;
+                },
+
+                onRemoveLayout:(componentId) => {
+                    delete this.data.cells[componentId];
+                    console.log(this.data.cells);
+                },
             });
             this.append(cell, this.el.find('.cells'));
             return cell;
@@ -31,13 +40,13 @@ let config = {
          * 添加画布块
          */
         addCell(cell) {
-            cell.size.zIndex = this.data.cellMaxZindex;
+            cell.size.zIndex += this.data.cellMaxZindex;
             const data = {
                 'currentViewId': this.data.currentViewId,
                 'cell': cell
             };
             let cellLayout = this.actions.makeCell(data);
-            this.data.layouts.push(cellLayout);
+            this.data.cells[cellLayout.componentId] = cellLayout;
         },
 
         /**
@@ -46,18 +55,10 @@ let config = {
         async getCellLayout() {
             const res = await canvasCellService.getCellLayout({view_id: this.data.currentViewId});
             if (res['success'] === 1) {
-                this.actions.updateLayouts(res['data']['data']);
                 this.actions.loadCellChart(res['data']['data']);
             } else {
                 msgbox.alert(res['error'])
             }
-        },
-
-        /**
-         * 更新画布块cells
-         */
-        updateLayouts(data) {
-            this.data.layouts = data;
         },
 
         /**
@@ -78,7 +79,7 @@ let config = {
                     'cell': val
                 };
                 let cell = this.actions.makeCell(data);
-                this.data.cells[val.layout_id] = cell;
+                this.data.cells[cell.componentId] = cell;
 
                 // 在客户模式下获取有没有下穿记录
                 let deep_info = {};
@@ -117,20 +118,17 @@ let config = {
             Object.keys(this.data.cells).map((key,index) => {
                 this.data.cells[key].setChartData(res[index]);
             })
-            // console.log(this.data.cells);
         },
 
         /**
          * 保存画布布局
          */
         saveCanvas() {
-            let cells = _.cloneDeep(this.data.layouts);
+            let cells = Object.values(this.data.cells).map(cell => cell.data.cell);
             const data = {
                 view_id: this.data.currentViewId,
                 canvasType: "pc",
                 data: cells.map((cell) => {
-                    delete cell['chart'];
-                    delete cell['componentId'];
                     delete cell['is_deep'];
                     delete cell['deep'];
                     return JSON.stringify(cell);
@@ -146,19 +144,11 @@ let config = {
         }
 
     },
-    binds: [
-    ],
+    binds: [],
 
     afterRender() {
         // 加载loading动画;
         this.showLoading();
-
-        //子组件删除时 更新this.data.layouts
-        Mediator.subscribe("bi:cell:remove", layout_id => {
-            _.remove(this.data.layouts, function (layout) {
-                return layout.layout_id == layout_id;
-            });
-        });
 
         this.actions.getCellLayout();
     },

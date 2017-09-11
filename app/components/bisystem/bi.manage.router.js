@@ -13,7 +13,7 @@ let formComponent = {};
 const BiAppRouter = Backbone.Router.extend({
     routes: {
         'views/edit':"routerViewsEditComponent",
-        'views/:id':'routerViewsComponent',
+        'canvas/:id':'routerViewsComponent',
         'forms/home':'routerFormEntryComponent',
         'forms/:chart': 'routerFormDynamicComponent',
         'forms/:chart/:id':'routerFormDynamicComponent',
@@ -24,9 +24,10 @@ const BiAppRouter = Backbone.Router.extend({
         if (canvasComponent) {
             canvasComponent.reload();
         } else {
-            canvasComponent = CanvasMain;
+            canvasComponent = new CanvasMain();
+            canvasComponent.render($('#route-outlet'));
         };
-        CanvasMain.actions.switchViewId(id);
+        canvasComponent.actions.switchViewId(id);
     },
     routerViewsEditComponent() {
         if (viewComponent) {

@@ -4,13 +4,20 @@
 import {Router} from 'backbone';
 import {CanvasMain} from './canvas/main/main';
 
+let canvasComponent;
 const BiAppRouter = Backbone.Router.extend({
     routes: {
         'views/:id':'routerViewsComponent',
         '':'routerViewsComponent',
     },
     routerViewsComponent(id) {
-        CanvasMain.actions.switchViewId(id);
+        if (canvasComponent) {
+            canvasComponent.reload();
+        } else {
+            canvasComponent = new CanvasMain();
+            canvasComponent.render($('#route-outlet'));
+        };
+        canvasComponent.actions.switchViewId(id);
     }
 });
 

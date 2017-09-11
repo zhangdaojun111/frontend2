@@ -1,11 +1,11 @@
 /**
  * Created by birdyy on 2017/7/31.
  */
-import {BiBaseComponent} from '../../../bi.base.component';
+import {BiBaseComponent} from '../../../../../bi.base.component';
 import template from './cell.pie.html';
-import {EchartsService} from '../../../../../services/bisystem/echart.server';
-import Mediator from '../../../../../lib/mediator';
-import msgbox from '../../../../../lib/msgbox';
+import {EchartsService} from '../../../../../../../services/bisystem/echart.server';
+import Mediator from '../../../../../../../lib/mediator';
+import msgbox from '../../../../../../../lib/msgbox';
 
 let config = {
     template: template,

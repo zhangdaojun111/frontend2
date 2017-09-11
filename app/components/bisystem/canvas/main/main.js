@@ -21,7 +21,7 @@ let config = {
             event: 'click',
             selector: '.editpage',
             callback: function (context,event) {
-                window.location.href = `/bi/manager/#/views/${this.currentViewId}`;
+                window.location.href = `/bi/manager/#/canvas/${this.currentViewId}`;
                 return false;
             }
         },
@@ -30,7 +30,7 @@ let config = {
             event: 'click',
             selector: '.multiplepage',
             callback: function (context,event) {
-                window.location.href = `/bi/index/#/views/${this.currentViewId}`;
+                window.location.href = `/bi/index/#/canvas/${this.currentViewId}`;
                 return false;
             }
         },
@@ -39,7 +39,7 @@ let config = {
             event: 'click',
             selector: '.singlepage',
             callback: function (context,event) {
-                window.location.href = `/bi/index/#/views/${this.currentViewId}?single`;
+                window.location.href = `/bi/index/#/canvas/${this.currentViewId}?single`;
                 return false;
             }
         },
@@ -60,7 +60,10 @@ let config = {
             let header = new CanvasHeaderComponent({},{
                 onAddCell: (cell) => {
                     this.data.cells.actions.addCell(cell)
-                }
+                },
+                onSaveCanvas: () => {
+                    this.data.cells.actions.saveCanvas()
+                },
             });
             this.append(header, this.el.find('.views-header'));
             this.data.headerComponents = header;
@@ -68,7 +71,14 @@ let config = {
     }
 };
 
-let CanvasMain = new Component(config);
-CanvasMain.render($('#route-outlet'));
-export {CanvasMain};
+export class CanvasMain extends Component {
+    constructor(data, events) {
+        super(config, data, events);
+    }
+}
+
+
+// let CanvasMain = new Component(config);
+// CanvasMain.render($('#route-outlet'));
+// export {CanvasMain};
 
