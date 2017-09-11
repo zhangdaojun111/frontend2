@@ -54,7 +54,7 @@ let config = {
                 this.trigger('onSetBG', value);
             }
         });
-        this.group = new Text({placeholder: '分组值'},{
+        this.group = new Text({placeholder: '分组名称'},{
             onChange:(value) => {
                 this.data.value.group = value ? value : 0;
             }

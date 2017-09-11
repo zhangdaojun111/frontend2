@@ -3,9 +3,9 @@
  * 保存表单图表到服务器
  */
 
-import template from './save.html';
+import template from './button.html';
 import {Base} from '../base';
-import './save.scss';
+import './button.scss';
 
 let config = {
     template: template,
@@ -27,15 +27,22 @@ let config = {
             callback: function (context) {
                 this.actions.saveChart();
             }
+        },
+        {
+            event: 'click',
+            selector: '.back-chart',
+            callback: function (context) {
+                window.location.hash = '#/forms/home';
+            }
         }
     ],
     afterRender(){}
 }
 
-class Save extends Base {
+class Button extends Base {
     constructor(data, event){
         super(config, data, event)
     }
 }
 
-export {Save}
+export {Button}

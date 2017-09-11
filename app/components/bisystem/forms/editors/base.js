@@ -5,10 +5,13 @@ import {AutoComplete} from '../form/autocomplete/autocomplete';
 import {Radio} from '../form/radio/radio';
 import {Checkbox} from '../form/checkbox/checkbox';
 import {Choosed} from '../form/choosed/choosed';
-import {Save} from '../form/save/save';
+import {Button} from '../form/button/button';
 import {TableSingle} from '../form/single/single';
 import {Deep} from '../form/deep/deep';
 import {YaXis} from '../form/linebar.yAxis/yAxis';
+import msgbox from "../../../../lib/msgbox";
+import {ChartFormService} from '../../../../services/bisystem/chart.form.service';
+import Mediator from '../../../../lib/mediator';
 
 let formItemTypes = {
     'text': Text,
@@ -17,7 +20,7 @@ let formItemTypes = {
     'radio': Radio,
     'checkbox': Checkbox,
     'choosed':Choosed,
-    'save': Save,
+    'button': Button,
     'table_single': TableSingle,
     'deep': Deep,
     'yAxis': YaXis
@@ -60,7 +63,24 @@ class Base extends Component {
 
         return chart;
     }
+
     fillData(){}
+
+    /**
+     * 传送图表数据
+     */
+    async save(chart){
+        let res = await ChartFormService.saveChart(JSON.stringify(chart));
+        if (res['success'] == 1) {
+            msgbox.alert('保存成功');
+            if (!chart['chartName']['id']) {
+                this.reload();
+            };
+            Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
+        } else {
+            msgbox.alert(res['error'])
+        };
+    }
 
     reset(chart) {
         this.data.chart_id = chart.id ? chart.id : null;

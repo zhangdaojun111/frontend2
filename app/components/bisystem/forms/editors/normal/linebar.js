@@ -1,6 +1,6 @@
 import {Base} from '../base';
 import template from './linebar.html';
-import {chartName,theme,icon} from '../form.chart.common';
+import {chartName,theme,icon,button} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
@@ -216,16 +216,7 @@ let config = {
                 }
             };
             if (pass && yAxispass && groupPass) {
-                let res = await ChartFormService.saveChart(JSON.stringify(chart));
-                if (res['success'] == 1) {
-                    msgbox.alert('保存成功');
-                    if (!chart['chartName']['id']) {
-                        this.reload();
-                    };
-                    Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
-                } else {
-                    msgbox.alert(res['error'])
-                };
+                this.save(chart);
             }
         },
 
@@ -235,7 +226,7 @@ let config = {
          */
         fillChart(data) {
             let chart = _.cloneDeep(data);
-            console.log(chart);
+
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
@@ -536,15 +527,16 @@ let config = {
             },
             {
                 label: '',
-                name: 'save',
+                name: '保存',
                 defaultValue: '',
-                type: 'save',
+                type: 'button',
                 events: {
                     save() {
                         this.actions.saveChart();
                     }
                 }
             },
+            button,
         ],
         firstDo: false, // 用于在编辑模式下 第一次加载保留数据
     },

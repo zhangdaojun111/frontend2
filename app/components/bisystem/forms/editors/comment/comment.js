@@ -1,7 +1,7 @@
 import {Base} from '../base';
 import template from './comment.html';
 
-import {chartName,theme,icon} from '../form.chart.common';
+import {chartName,theme,icon,button} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
@@ -122,16 +122,7 @@ let config = {
                 }
             };
             if (pass) {
-                let res = await ChartFormService.saveChart(JSON.stringify(chart));
-                if (res['success'] == 1) {
-                    msgbox.alert('保存成功');
-                    if (!chart['chartName']['id']) {
-                        this.reload();
-                    };
-                    Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
-                } else {
-                    msgbox.alert(res['error'])
-                };
+                this.save(chart);
             }
         },
 
@@ -140,7 +131,6 @@ let config = {
          * @param chart = this.data.chart
          */
         fillChart(chart) {
-            console.log(chart);
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
@@ -189,18 +179,18 @@ let config = {
                     }
                 }
             },
-
             {
                 label: '',
-                name: 'save',
+                name: '保存',
                 defaultValue: '',
-                type: 'save',
+                type: 'button',
                 events: {
                     save() {
                         this.actions.saveChart();
                     }
                 }
             },
+            button
 
         ]
     },

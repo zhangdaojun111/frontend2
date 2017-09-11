@@ -35,6 +35,13 @@ let icon = {
     name: 'icon',
     defaultValue: '',
     type: 'radio'
-}
+};
+let button = {
+    label: '',
+    name: '返回图表',
+    defaultValue: '',
+    type: 'button',
+    class:'back-chart'
+};
 
-export {chartName, theme, icon};
+export {chartName, theme, icon,button};

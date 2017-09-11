@@ -1,0 +1,39 @@
+.form-group-chart {
+    .form-chart-autocomplete {
+        position: relative;
+        .form-label {
+            position: absolute;
+            border: none;
+            left: 45px;
+            span {
+                display: none;
+            }
+            .error-msg {
+                position: absolute;
+                top: 35px;
+                left: 40px;
+                min-width: 100px;
+            }
+        }
+    }
+    .form-chart-checkbox{
+        position: relative;
+        .form-label {
+            position: absolute;
+            border: none;
+            left: 45px;
+            .start-icon{
+                display: inline-block;
+            }
+            span {
+                display: none;
+            }
+            .error-msg {
+                position: absolute;
+                top: 6px;
+                left: 30px;
+                min-width: 100px;
+            }
+        }
+    }
+}
