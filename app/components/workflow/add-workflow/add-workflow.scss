@@ -77,5 +77,36 @@
     #addFollowerList{
         line-height: 20px;
     }
+    #wf-select-box{
+        width: auto;
+        position: relative;
+        #wf-select{
+            cursor: pointer;
+            border: 1px solid #d7d7d7;
+            border-radius: 4px;
+            text-indent: 0;
+            color: #666666;
+            font-size: 12px;
+            height: 25px;
+            outline: none;
+            box-shadow: none;
+            -webkit-appearance:none;
+            position: relative;
+            padding:0 15px 0 5px;
+        }
+        //&:after{
+        //    content: '';
+        //    position: absolute;
+        //    width: 0;
+        //    height: 0;
+        //    border-left: 5px solid transparent;
+        //    border-right: 5px solid transparent;
+        //    border-top: 5px solid #000;
+        //    right: 18px;
+        //    top: 50%;
+        //    transform: translateY(-50%);
+        //}
+    }
+
 }
     
