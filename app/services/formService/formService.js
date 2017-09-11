@@ -454,9 +454,7 @@ export const FormService = {
     getFormData(json) {
         let res;
         if (json['form_id']) {
-            let form_id=json['form_id'];
-            delete json['form_id'];
-            res = Promise.all([this.getStaticDataImmediately(json), this.getDynamicData(json), this.getFormContent({form_id: form_id})]);
+            res = Promise.all([this.getStaticDataImmediately(json), this.getDynamicData(json), this.getFormContent({form_id: json['form_id']})]);
         } else {
             res = Promise.all([this.getStaticDataImmediately(json), this.getDynamicData(json)]);
         }

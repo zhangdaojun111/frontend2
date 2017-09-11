@@ -24,6 +24,7 @@
         padding-left: 10px;
         border-bottom: 1px solid rgba(228, 228, 228, 1);
         justify-content: space-between;
+        font-size: 14px;
         .collapseFormBtn {
             cursor: pointer;
             margin-right: 10px;
@@ -40,7 +41,7 @@
             margin-right: 5px;
         }
         .wfName {
-            font-weight: bold;
+            font-weight: 700;
         }
     }
     .place-form {
