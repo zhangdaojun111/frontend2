@@ -6,6 +6,7 @@ import Component from '../../../lib/component';
 import template from './add-workflow.html';
 import '../approval-workflow/approval-workflow.scss';
 import './add-workflow.scss';
+import '../../../assets/scss/workflow/workflow-base.scss'
 import Mediator from '../../../lib/mediator';
 import WorkFlow from '../workflow-drawflow/workflow';
 import {workflowService} from '../../../services/workflow/workflow.service';

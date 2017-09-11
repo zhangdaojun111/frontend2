@@ -1,5 +1,8 @@
-#approval-workflow-body,#myBody,#add-signer-body,#approval-reject-body,#add-follow-body{
+#approval-workflow-body,#myBody,#add-signer-body,#approval-reject-body,#add-follow-body,#add-wf-body{
     font-size: 12px;
+    &::-webkit-scrollbar{
+        background: #ebebeb;
+    }
 }
 #approval-reject-body,#add-follow-body,#add-signer-body{
     padding: 0;
