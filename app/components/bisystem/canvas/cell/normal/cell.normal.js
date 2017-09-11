@@ -72,7 +72,7 @@ let config = {
                 const layouts = {
                     chart_id: this.data.cellChart.cell.chart_id,
                     floor: this.data.floor,
-                    view_id: this.data.cellChart.canvas.viewId,
+                    view_id: this.data.cellChart.viewId,
                     layout_id:  this.data.cellChart.cell.layout_id,
                     xOld: this.data.xOld,
                     row_id:0,

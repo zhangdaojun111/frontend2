@@ -5,6 +5,9 @@
 import template from './canvas.title.html';
 import {BiBaseComponent} from '../../../bi.base.component';
 import './canvans.title.scss';
+import {config as editDialogConfig} from "./edit/edit";
+import {PMAPI} from '../../../../../lib/postmsg';
+import {ViewsService} from "../../../../../services/bisystem/views.service";
 import Mediator from '../../../../../lib/mediator';
 
 let config = {
@@ -26,26 +29,14 @@ let config = {
             }
             this.data.isEdit = chart['data']['assortment'] === 'comment' ? true : false;
             this.reload();
-        },
-        /**
-         * 传递文本框数据
-         */
-        sendValue(){
-            let views = {
-                content: this.data.charts.data.data['rows']['0']['0'],
-                field_id: this.data.charts.data.columns.dfield,
-                table_id : this.data.charts.data.source.id,
-                row_id: this.data.charts.data.data.rows['0']['1'],
-            };
-            return views;
         }
     },
     binds:[
         {
             event:'click',
             selector:'.edit-title',
-            callback: function () {
-                Mediator.emit("bi-edit-title:val",this.actions.sendValue());
+            callback: async function () {
+                this.events.onChange();
             }
         }
     ],
@@ -57,17 +48,15 @@ let config = {
         imgUrl: window.config.img_url,
         isIcon: false,// 是否存在图标
         isEdit: false,
-        editor:null,
+        edits: '',
     },
-    afterRender() {
-
-    },
+    afterRender() {},
     firstAfterRender() {},
     beforeDestory() {}
 };
 
 export class CanvasCellTitleComponent extends BiBaseComponent {
-        constructor() {
+        constructor(event) {
             super(config)
         }
 

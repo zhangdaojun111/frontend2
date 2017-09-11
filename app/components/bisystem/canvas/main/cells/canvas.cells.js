@@ -1,0 +1,172 @@
+import Component from '../../../../../lib/component';
+import {CanvasCellComponent} from '../../cell/canvas.cell';
+
+import template from './canvas.cells.html';
+import './canvas.cells.scss';
+import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
+import Mediator from '../../../../../lib/mediator';
+import msgbox from '../../../../../lib/msgbox';
+
+let config = {
+    template: template,
+    data: {
+        currentViewId: '', // 当前画布块视图id
+        layouts: [], // 画布块布局信息
+        cells: {}, // 用于存储cell的信息(通过layouts的id标识唯一标识符)
+        cellMaxZindex: 0,
+    },
+    actions: {
+        makeCell(data) {
+            let cell = new CanvasCellComponent(data,{
+                onDrag: (componentId) => {
+                    this.data.cellMaxZindex++;
+                    this.data.layouts[componentId].data.cellMaxZindex = this.data.cellMaxZindex;
+                }
+            });
+            this.append(cell, this.el.find('.cells'));
+            return cell;
+        },
+
+        /**
+         * 添加画布块
+         */
+        addCell(cell) {
+            cell.size.zIndex = this.data.cellMaxZindex;
+            const data = {
+                'currentViewId': this.data.currentViewId,
+                'cell': cell
+            };
+            let cellLayout = this.actions.makeCell(data);
+            this.data.layouts.push(cellLayout);
+        },
+
+        /**
+         * 根据当前视图id，得到当前视图画布块布局，大小
+         */
+        async getCellLayout() {
+            const res = await canvasCellService.getCellLayout({view_id: this.data.currentViewId});
+            if (res['success'] === 1) {
+                this.actions.updateLayouts(res['data']['data']);
+                this.actions.loadCellChart(res['data']['data']);
+            } else {
+                msgbox.alert(res['error'])
+            }
+        },
+
+        /**
+         * 更新画布块cells
+         */
+        updateLayouts(data) {
+            this.data.layouts = data;
+        },
+
+        /**
+         * 渲染画布块，只渲染基础数据 eg(left:100, top:100, width: 100, height:100,zIndex:20)
+         */
+        async loadCellChart(layoutsData) {
+            let zIndex = [];  // 获取每个画布块的zIndex(用来获取最大)
+            let layouts = []; // 需要请求服务器画布块的chart数据
+            let userMode = window.config.bi_user === 'manager' ? 'manager' : 'client'; // 判断是客户端还是编辑模式
+
+            // 通过cells渲染画布块
+            layoutsData.map((val, index) => {
+                zIndex.push(val.size.zIndex);
+                val.deep = userMode === 'manager' ? {} : val.is_deep == 1 ? JSON.parse(val.deep) : val.deep;
+                val.is_deep = userMode === 'manager' ? 0 : val.is_deep;
+                const data = {
+                    'currentViewId': this.data.currentViewId,
+                    'cell': val
+                };
+                let cell = this.actions.makeCell(data);
+                this.data.cells[val.layout_id] = cell;
+
+                // 在客户模式下获取有没有下穿记录
+                let deep_info = {};
+                if (val.is_deep == 0) {
+                    deep_info = {}
+                } else {
+                    deep_info[val.deep.floor] = val.deep.xOld.map(x => x['name'])
+                };
+
+                layouts.push(JSON.stringify({
+                    chart_id: val.chart_id ? val.chart_id : 0,
+                    floor: val.is_deep == 0 ? 0 : userMode === 'client' ? val.deep['floor'] : 0,
+                    view_id: this.data.currentViewId,
+                    layout_id: val.layout_id,
+                    xOld: val.is_deep == 0 ? {} : userMode === 'client' ? val.deep['xOld'] : {},
+                    row_id: 0,
+                    deep_info: deep_info
+                }));
+            });
+
+            // 获取画布块最大zindex
+            this.data.cellMaxZindex = Math.max(...zIndex);
+
+            // 获取画布块的chart数据
+            const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1});
+
+            //结束加载动画
+            this.hideLoading();
+
+            if (res['success'] == 0) {
+                msgbox.alert(res['error']);
+                return false;
+            };
+
+            // 当返回成功时，通知各个cell渲染chart数据
+            Object.keys(this.data.cells).map((key,index) => {
+                this.data.cells[key].setChartData(res[index]);
+            })
+            // console.log(this.data.cells);
+        },
+
+        /**
+         * 保存画布布局
+         */
+        saveCanvas() {
+            let cells = _.cloneDeep(this.data.layouts);
+            const data = {
+                view_id: this.data.currentViewId,
+                canvasType: "pc",
+                data: cells.map((cell) => {
+                    delete cell['chart'];
+                    delete cell['componentId'];
+                    delete cell['is_deep'];
+                    delete cell['deep'];
+                    return JSON.stringify(cell);
+                })
+            };
+            canvasCellService.saveCellLayout(data).then(res => {
+                if (res['success'] === 1) {
+                    msgbox.alert('保存成功');
+                } else {
+                    msgbox.alert(res['error']);
+                }
+            });
+        }
+
+    },
+    binds: [
+    ],
+
+    afterRender() {
+        // 加载loading动画;
+        this.showLoading();
+
+        //子组件删除时 更新this.data.layouts
+        Mediator.subscribe("bi:cell:remove", layout_id => {
+            _.remove(this.data.layouts, function (layout) {
+                return layout.layout_id == layout_id;
+            });
+        });
+
+        this.actions.getCellLayout();
+    },
+    beforeDestory() {}
+};
+
+export class CanvasCellsComponent extends Component {
+    constructor(id, events) {
+        super(config, {currentViewId: id});
+    }
+}

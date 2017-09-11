@@ -2,11 +2,11 @@
  * Created by birdyy on 2017/7/31.
  */
 
-import {BiBaseComponent} from '../../bi.base.component';
+import Component from '../../../../lib/component';
 import template from './canvas.cell.html';
 import './canvas.cell.scss';
-import Handlebars from 'handlebars';
 import Mediator from '../../../../lib/mediator';
+
 import {CellNormalComponent} from './normal/cell.normal';
 import {CellTableComponent} from './table/cell.table';
 import {CellRadarComponent} from './radar/cell.radar';
@@ -39,7 +39,6 @@ let config = {
          * 渲染cell
          */
         renderCell() {
-            console.log(this.data);
             this.el.find('.cell').css(this.data.cell.size);
             this.cellTitle = new CanvasCellTitleComponent();
             this.append(this.cellTitle, this.el.find('.bread-crumb-nav'));
@@ -55,7 +54,7 @@ let config = {
             const data = {
                 chart: chart['data'],
                 cell: this.data.cell,
-                canvas: this.canvas
+                viewId: this.data.currentViewId,
             };
             if (chart['data']['assortment']) {
                 this.cellTitle.actions.setValue(chart);
@@ -136,6 +135,7 @@ let config = {
         chart: null,
         isIcon :true,
         cellComponent:'',
+        cellMaxZindex:1
     },
     binds: [
         // 拖拽start画布mousedown触发
@@ -143,9 +143,8 @@ let config = {
             event: 'mousedown',
             selector: '.cell',
             callback: function (context,event) {
-                this.canvas.data.cellMaxZindex++;
-                let zIndex = this.canvas.data.cellMaxZindex;
-                $(context).css('zIndex', zIndex);
+                this.trigger('onDrag',this.componentId);
+                $(context).css('zIndex', this.data.cellMaxZindex);
                 return false;
             }
         },
@@ -154,7 +153,7 @@ let config = {
             event: 'mouseup',
             selector: '.cell',
             callback: function (context,event) {
-                this.data.cell.size.zIndex = this.canvas.data.cellMaxZindex;
+                // this.data.cell.size.zIndex = this.data.cellMaxZindex;
             }
         },
         // html5原生拖拽，dragover需要ev.preventDefault
@@ -178,7 +177,7 @@ let config = {
                 let layout = {
                     chart_id: data.id,
                     floor: 0,
-                    view_id: this.canvas.viewId,
+                    view_id: this.data.currentViewId,
                     layout_id: this.data.cell.layout_id,
                     xOld: {},
                     row_id:0,
@@ -224,10 +223,8 @@ let config = {
                 return false;
             }
         },
-
     ],
     afterRender() {
-        let self = this;
         this.actions.renderCell();
         if (window.config.bi_user !== 'client') {
             this.actions.cellDragandResize();
@@ -235,28 +232,29 @@ let config = {
             this.el.off('mousedown mouseup');
         };
 
-    },
-    firstAfterRender() {
-        // 监听当从服务器获取画布块图表数据finish时
-        $('.bi-container').on('canvas:cell:chart:finish', (event,params) => {
-            this.data.chart = params['data'][this.data.cell.layout_id];
-            this.actions.loadCellChart(this.data.chart);
-        })
-    },
-    beforeDestory() {
-        $('.bi-container').off('canvas:cell:chart:finish');
     }
 };
 
-export class CanvasCellComponent extends BiBaseComponent {
+export class CanvasCellComponent extends Component {
 
-    constructor(data) {
-        config.data.biUser = window.config.bi_user === 'client' ? false : true;
-        super(config);
-        this.data.cell = data['cell'];
-        this.canvas = data['canvas'];
-        this.loadData = false;
-        this.cellTitle = null; // 图表标题组件
-        this.cellChart = null; // 动态渲染图表组件
+    constructor(data, events) {
+        super(config, data, events);
+        // config.data.biUser = window.config.bi_user === 'client' ? false : true;
+        // super(config);
+        // this.data.cell = data['cell'];
+        // this.canvas = data['canvas'];
+        // this.loadData = false;
+        // this.cellTitle = null; // 图表标题组件
+        // this.cellChart = null; // 动态渲染图表组件
+    }
+    setChartData(chart) {
+        try {
+            this.data.chart = chart['data'];
+            this.actions.loadCellChart(chart);
+        } catch (err) {
+            console.log(err)
+        } finally {
+
+        }
     }
 }

@@ -2,8 +2,7 @@
  * Created by birdyy on 2017/8/1.
  */
 import {Router} from 'backbone';
-import {CanvasCellsComponent} from './canvas/canvas.cells';
-
+import {CanvasMain} from './canvas/main/main';
 
 const BiAppRouter = Backbone.Router.extend({
     routes: {
@@ -11,8 +10,7 @@ const BiAppRouter = Backbone.Router.extend({
         '':'routerViewsComponent',
     },
     routerViewsComponent(id) {
-        let CanvasCells = new CanvasCellsComponent(id);
-        CanvasCells.render($('#route-outlet'));
+        CanvasMain.actions.switchViewId(id);
     }
 });
 
