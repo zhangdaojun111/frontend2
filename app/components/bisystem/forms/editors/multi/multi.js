@@ -97,16 +97,7 @@ let config = {
             Mediator.emit('bi:multi:chart',1);
             //判断验证是否全部通过
             if(pass && config.data.succ){
-                let res = await ChartFormService.saveChart(JSON.stringify(chart));
-                if (res['success'] == 1) {
-                    msgbox.alert('保存成功');
-                    if (!chart['chartName']['id']) {
-                        this.reload();
-                    };
-                    Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
-                } else {
-                    msgbox.alert(res['error'])
-                };
+                this.save(chart);
             }
             config.data.succ = true;
         },

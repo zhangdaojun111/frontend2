@@ -126,7 +126,6 @@ let config = {
 
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
-                console.log(Object.keys(this.formItems))
                 if (this.formItems[key].data.rules) {
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
@@ -135,18 +134,9 @@ let config = {
                 }
             };
 
-            console.log(chart);
+
             if(pass) {
-                let res = await ChartFormService.saveChart(JSON.stringify(chart));
-                if (res['success'] == 1) {
-                    msgbox.alert('保存成功');
-                    if (!chart['chartName']['id']) {
-                        this.reload();
-                    };
-                    Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
-                } else {
-                    msgbox.alert(res['error'])
-                };
+                this.save(chart);
             }
         },
 
@@ -206,7 +196,6 @@ let config = {
                 type: 'checkbox',
                 events: {
                     onChange:function(value) {
-                        console.log( this.formItems)
                         this.formItems['columns'].clearErrorMsg();
                         this.formItems['choosed'].actions.update(value);
                         this.formItems['table_single'].actions.setColumns(value, this.formItems['columnNum'].getValue());
@@ -319,8 +308,6 @@ let config = {
         ]
     },
     async afterRender() {
-        console.log(this.data);
-        console.log(this.formItems);
         if(this.data.chart_id) {
             const res = await this.actions.getChartData(this.data.chart_id);
             if (res[0]['success'] === 1) {

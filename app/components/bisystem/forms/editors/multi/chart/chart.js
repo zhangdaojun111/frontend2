@@ -153,7 +153,6 @@ let config = {
                 events: {
                     onSelect(value) {
                         if(value) {
-                            console.log(this);
                             this.actions.addyAxis(value);
                             this.formItems['yAxis'].autoselect.actions.clearValue();
                         }
