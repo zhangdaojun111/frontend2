@@ -58,6 +58,11 @@ let config = {
                     let checkIds = rows.map((item) => {
                         return item.id;
                     });
+
+                    if(checkIds.length === 0){
+                        msgbox.alert('请选择至少一条消息进行审批');
+                        return;
+                    }
                     let url = '/iframe/multiapp';
                     let data = JSON.stringify(checkIds);
                     let that = this;

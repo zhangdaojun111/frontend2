@@ -23,7 +23,6 @@ let config = {
             this.data.randomCode = this.actions.getUrlPara('random_code');
             this.data.username = this.actions.getUrlPara('username');
             UserInfoService.resetPassword({username:this.data.username,random_code:this.data.randomCode}).done((result) => {
-                console.log(result);
                 if(result.success === 1){
                     this.el.find('.find-pw-step1').show();
                 }else{
