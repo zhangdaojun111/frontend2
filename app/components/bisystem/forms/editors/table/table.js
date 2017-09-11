@@ -2,7 +2,7 @@ import {Base} from '../base';
 import template from './table.html';
 import './table.scss';
 
-import {chartName,theme,icon} from '../form.chart.common';
+import {chartName, theme, icon, button} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
@@ -296,15 +296,16 @@ let config = {
             },
             {
                 label: '',
-                name: 'save',
+                name: '保存',
                 defaultValue: '',
-                type: 'save',
+                type: 'button',
                 events: {
                     save() {
                         this.actions.saveChart();
                     }
                 }
             },
+            button,
         ]
     },
     async afterRender() {
@@ -320,7 +321,8 @@ let config = {
         // 渲染图表表单字段
         this.drawForm();
         this.actions.init();
-
+        console.log(this.el.find('.form-group'));
+        console.log(this.el.find('.form-chart-save'));
         if (this.data.chart_id) {
             this.actions.fillChart(this.data.chart);
         }
@@ -330,6 +332,7 @@ let config = {
 
 class TableEditor extends Base {
     constructor(data) {
+
         config.data.chart_id = data.id ? data.id : null;
         super(config);
     }

@@ -1,7 +1,7 @@
 import {Base} from '../base';
 import template from './multi.html';
 
-import {chartName,theme,icon} from '../form.chart.common';
+import {chartName,theme,icon,button} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
@@ -143,15 +143,16 @@ let config = {
             icon,
             {
                 label: '',
-                name: 'save',
+                name: '保存',
                 defaultValue: '',
-                type: 'save',
+                type: 'button',
                 events: {
                     save() {
                         this.actions.saveChart();
                     }
                 }
             },
+            button
         ],
         charts: {},
         succ: true,

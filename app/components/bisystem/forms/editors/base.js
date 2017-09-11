@@ -5,7 +5,7 @@ import {AutoComplete} from '../form/autocomplete/autocomplete';
 import {Radio} from '../form/radio/radio';
 import {Checkbox} from '../form/checkbox/checkbox';
 import {Choosed} from '../form/choosed/choosed';
-import {Save} from '../form/save/save';
+import {Button} from '../form/button/button';
 import {TableSingle} from '../form/single/single';
 import {Deep} from '../form/deep/deep';
 import {YaXis} from '../form/linebar.yAxis/yAxis';
@@ -20,7 +20,7 @@ let formItemTypes = {
     'radio': Radio,
     'checkbox': Checkbox,
     'choosed':Choosed,
-    'save': Save,
+    'button': Button,
     'table_single': TableSingle,
     'deep': Deep,
     'yAxis': YaXis
