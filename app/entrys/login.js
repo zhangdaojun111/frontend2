@@ -118,6 +118,7 @@ function getLoginController() {
                 let userName = $('.account-input').val();
                 let result = LoginService.findPassword(userName);
                 result.done((result) => {
+                    console.log(result);
                     if(result.success === 1){
                         msgBox.alert('提交成功！我们已发送邮件至您的邮箱中，请注意查收！');
                     }else{
@@ -136,6 +137,7 @@ function getLoginController() {
             //移动下载
             this.$mobileDownload.on('click',function () {
                 console.log('打开移动下载页面');
+                // $(window).attr('location','/find_pwd');  测试密码找回页面
             });
 
             //键盘绑定

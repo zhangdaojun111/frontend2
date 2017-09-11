@@ -20,13 +20,14 @@ let config = {
             selector: '.view-attached-list',
             callback: function () {
                 attachmentListConfig.data =_.defaultsDeep({
+                    isView:this.data.is_view,
                     id:this.data.id,
                     fileIds: this.data.value,
                     dinput_type: this.data.real_type
                 },attachmentListConfig.data);
                 PMAPI.openDialogByComponent(attachmentListConfig, {
-                    width: 500,
-                    height: 300,
+                    width: 700,
+                    height: 500,
                     title: "浏览上传文件"
                 }).then(res=>{
                     Storage.init((new URL(document.URL)).searchParams.get('key'));
