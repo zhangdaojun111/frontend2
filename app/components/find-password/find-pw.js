@@ -34,7 +34,7 @@ let config = {
             })
         },
         getUrlPara(key){
-            let reg = new RegExp('(^|;)' + key + '=([^;]*)(;|$)', 'i');
+            let reg = new RegExp('(^|&)' + key + '=([^&]*)(&|$)', 'i');
             let r = window.location.search.substr(1).match(reg);
             if (r !== null) {
                 return unescape(r[2]);
