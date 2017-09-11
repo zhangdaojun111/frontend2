@@ -5,12 +5,15 @@ import Component from "../../../../lib/component";
 import template from './calendar.export.html';
 import './calendar.export.scss';
 import DateControl from '../../../form/date-control/date-control';
+import {PMAPI, PMENUM} from '../../../../lib/postmsg';
+import {CalendarService} from '../../../../services/calendar/calendar.service';
 
 let config = {
     template: template,
     data: {
         fromDate: '',
-        toDate: ''
+        toDate: '',
+        cancelFields: [],
     },
     actions: {
 
@@ -28,13 +31,18 @@ let config = {
         },
     },
     afterRender: function() {
+        PMAPI.subscribe(PMENUM.open_iframe_params, params => {
+            let _this = this;
+            _this.data.cancelFields = JSON.stringify(params.data.cancelFields);
+            _this.el.on('click', '.export-btn', function () {
+                window.open(
+                    `/calendar_mgr/export_calendar_data/?from_date=${_this.data.fromDate}&to_date=${_this.data.toDate}&cancel_fields=${_this.data.cancelFields}`);
+            });
+        });
         this.el.find('.export-btn').attr("disabled", true);
         this.el.find('.export-btn').attr('disabled', true);
         let _this = this;
-        this.el.on('click', '.export-btn', function () {
-            console.log('ss');
-            window.open(`/calendar_mgr/export_calendar_data/?from_date=${_this.data.fromDate}&to_date=${_this.data.toDate}`);
-        });
+
         let changeStartValue = (res) => {
             this.data.fromDate = res['value'];
             _this.actions.getExportDate();
@@ -44,7 +52,7 @@ let config = {
             _this.actions.getExportDate();
         };
 
-        this.append(new DateControl({value: ''},{changeValue: changeStartValue}), this.el.find('.start-date'));
+        this.append(new DateControl({value: ''}), this.el.find('.start-date'));
         this.append(new DateControl({value: ''},{changeValue: changeEndValue}), this.el.find('.end-date'));
     },
 };

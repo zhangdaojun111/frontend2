@@ -1,15 +1,22 @@
 @import "core/base";
 @import "core/print";
 
-/*表单样式*/
+/*人员信息表，部门信息表样式*/
 /*
 *form-version-table-user
 *form-version-table-department
 */
+.form-version-table-user, .form-version-table-department{
+    font-size: 12px;
+    width: 100%!important;
+
+    .ui-btn-box {
+        margin-left: -20px;
+    }
+}
 .form-version-table-user, .form-version-table-department, .form-default {
     margin: 10px;
     background: #FFFFFF;
-    margin-bottom: 40px!important;
     tr td:first-child {
         width: 30% !important;
         background: #FFFFFF;
@@ -18,28 +25,24 @@
         width: 70% !important;
         background: #F8F8F8;
     }
-    .auto-select-component, .auto-select-component input.text {
-        background: url("../images/form/select-down.png") no-repeat right;
+    .auto-select-component{
         width: 244px !important;
-        height: 24px;
-    }
-    .auto-select-component input.result {
-        width: 244px;
-        height: 24px;
-    }
+        height: 28px;
+        input.text,  input.result{
+            height: 28px;
+        }
 
-    .dynamic-form-input, .textArea {
-        width: 244px !important;
-        height: 22px;
+    }
+    .dynamic-form-input {
+        width: 242px !important;
+        height: 24px;
     }
     .textArea {
-        color: #000000;
-        line-height: 30px;
+        height: 26px;
+        width: 232px !important;
         border: 1px solid #ddd;
         -webkit-appearance: none;
-        outline: none;
-        opacity: 100;
-        padding: 0 5px;
+        padding: 0 0 0 10px;
     }
 
     .df-input-radio-wrapper {
@@ -50,27 +53,11 @@
 
 }
 
-//创建默认表单
+//默认表单样式
 .form-default {
     .dynamic-form-input, .textArea {
-        width: 232px !important;
+        width: 242px !important;
         height: 24px;
-    }
-    //上传文件，截图
-    .upload-file, .shot-screen {
-        width: 65px;
-        height: 24px;
-        background: inherit;
-        background-color: rgba(255, 255, 255, 1);
-        box-sizing: border-box;
-        border-width: 1px;
-        border-style: solid;
-        border-color: rgba(215, 215, 215, 1);
-        border-radius: 4px;
-        -moz-box-shadow: none;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-        color: #666666;
     }
     .auto-select-component .choosed .item {
         margin: 2px 3px 0 0;

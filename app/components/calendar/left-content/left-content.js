@@ -60,7 +60,7 @@ let config = {
                 this.el.find(".item-content-2").show();
                 this.el.find(".item-content-1").show();
                 this.el.find(".item-content-1").css("height", "calc(33.3% - 45px)");
-                this.el.find(".item-content-2").css({height: 'calc(66.7% - 90px)'});
+                this.el.find(".item-content-2").css({height: 'calc(66.6% - 90px)'});
             }
         },
         /**

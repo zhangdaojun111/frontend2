@@ -37,11 +37,19 @@ let config={
     afterRender(){
         let _this=this;
         this.data.isInit=true;
+        if(!this.data.is_view && this.data.can_add_item){
+            this.el.find('.add-item').css('visibility','visible')
+        }
+        if(this.data.history){
+            this.el.find('.ui-history').css('visibility','visible');
+        }
         if(!this.data.be_control_condition) {
             let el=this.el.find('.dropdown');
             let data=FormService.createSelectJson(this.data);
             data.onSelect=function(data){
+                console.log(data);
                 if(_this.data.isInit || !data || data.length == 0 ){
+                    console.log('但是没触发onselect');
                     return;
                 }
                 _this.data.value=data[0]['id'];

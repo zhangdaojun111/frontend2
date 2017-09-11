@@ -6,10 +6,10 @@
 import template from './setting-print.html';
 let css = `
 .wrap{
-    display: inline-block;
-    margin-top: 6px;
-    margin-left: 10px;
+    margin: 20px auto 0;
+    width: 270px;
     position: relative;
+    
 }
 .global-search-history {
     padding: 0;
@@ -43,7 +43,27 @@ let css = `
 .global-search-input{
     color: black;
     font-size: 12px;
-}`;
+}
+.J-print-btn{
+ position: absolute;
+ bottom: 10px ;
+ border:none;
+ outline: none;
+ width: 91px;
+ height: 30px;
+ line-height: 31px;
+ color: #fff;
+ border-radius:4px;
+ }
+ .J-print-btn.cancel{
+    right:100px;
+    background: #ddd;
+ }
+ .J-print-btn.confirm{
+    left:100px;
+    background: #0088ff;
+ }
+`;
 let SettingPrint = {
     template: template.replace(/\"/g, '\''),
     data: {

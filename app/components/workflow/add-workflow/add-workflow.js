@@ -29,8 +29,8 @@ let config={
                 SettingPrint.data['selectNum'] = parseInt(res['data']['index']) || 1;
             }
             PMAPI.openDialogByComponent(SettingPrint, {
-                width: 500,
-                height: 300,
+                width: 400,
+                height: 180,
                 title: '自定义页眉',
                 modal: true
             })
@@ -73,10 +73,12 @@ let config={
         this.el.find('#subAddworkflow').on('click',()=>{
             Mediator.publish('workflow:submit', 1);
         });
-        this.el.on('click','#toEdit',()=>{
-            // location.href=location.href.replace(/=view/,'=edit').replace(/is_view=1/,'is_view=0');
+        this.el.on('click','#toEdit',(el)=>{
             let table_id =　location.href.split('=')[1].split('&')[0];
             Mediator.publish('workflow:changeToEdit',table_id);
+            $(el.target).hide();
+            this.el.find("#subAddworkflow").show();
+            this.el.find("#addFollower").show();
         });
         this.el.find('#print').on('click',()=>{
             this.actions.printSetting();
@@ -84,7 +86,7 @@ let config={
         this.el.on('click', '#addFollower', () => {
             PMAPI.openDialogByIframe(`/iframe/addfocus/`, {
                 width: 800,
-                height: 600,
+                height: 620,
                 title: `添加关注人`,
                 modal: true
             },{

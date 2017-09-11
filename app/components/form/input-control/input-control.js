@@ -29,42 +29,7 @@ let config = {
                 //输入框输入时的实时函数验证
                 if (val != "" && !$.isEmptyObject(func)) {
                     for (let r in func) {
-                        let a;
-                        switch (r) {
-                            case "checkCard":
-                                a = FormService.checkCard(val);
-                                break;
-                            case "orgcodevalidate":
-                                a = FormService.orgcodevalidate(val);
-                                break;
-                            case "xxzdx":
-                                a = FormService.xxzdx(val);
-                                break;
-                            case "tjbds":
-                                a = FormService.tjbds(val);
-                                break;
-                            case "jssj":
-                                a = FormService.jssj(val);
-                                break;
-                            case "dqsj":
-                                a = FormService.dqsj(val);
-                                break;
-                            case "getNowDate":
-                                a = FormService.getNowDate(val);
-                                break;
-                            case "fun_ghl_dqrq":
-                                a = FormService.fun_ghl_dqrq(val);
-                                break;
-                            case "fun_ghl_xxzdx":
-                                a = FormService.fun_ghl_xxzdx(val);
-                                break;
-                            case " fun_ghl_dqsj":
-                                a = FormService.fun_ghl_dqsj(val);
-                                break;
-                            default:
-                                console.log("怎么错了呢(；′⌒`)");
-                        }
-                        let flag = a;
+                        let flag = FormService[r](val);
                         if (!flag) {
                             this.el.find("#error_tip").css("display", "inline-block");
                             regErrorMsg = func[r];
@@ -74,8 +39,8 @@ let config = {
                             this.el.find("#error_tip").css("display", "none");
                         }
                     }
-                    //this.reload();
                 }
+
                 //输入框输入时的实时验证提示
                 let regReg = new RegExp(reg);
                 if (val != "" && reg !== "") {
@@ -91,7 +56,6 @@ let config = {
                             this.el.find("#error_tip").css("display", "none");
                         }
                     }
-                    //this.reload();
                 }
                 if (val != "" && this.data.numArea && this.data.numArea !== "") {
                     let label = this.data.label;
@@ -138,7 +102,6 @@ let config = {
                             this.el.find("#error_tip").css("display", "none");
                         }
                     }
-                    // this.reload();
                 }
             } catch (error) {
                 return 1;
@@ -174,6 +137,9 @@ let config = {
     ],
     afterRender() {
         let _this = this;
+        if(this.data.history){
+            this.el.find('.ui-history').css('visibility','visible');
+        }
         this.el.find('.search').on('input', _.debounce(function () {
             _this.actions.keyup();
         }, 200));

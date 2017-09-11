@@ -52,21 +52,35 @@ let config = {
             });
         },
         batchApprove: function () {
-            msgbox.confirm('是否将选中的消息标为已审批？').then((res) => {
-                if (res) {
+            // msgbox.confirm('是否将选中的消息标为已审批？').then((res) => {
+            //     if (res) {
                     let rows = this.agGrid.gridOptions.api.getSelectedRows();
                     let checkIds = rows.map((item) => {
                         return item.id;
                     });
-                    HTTP.postImmediately('/approve_many_workflow/', {
-                        checkIds: JSON.stringify(checkIds)
-                    }).then((res) => {
-                        if (res.success === 1) {
-                            this.actions.loadData();
+                    let url = '/iframe/multiapp';
+                    let data = JSON.stringify(checkIds);
+                    let that = this;
+                    PMAPI.openDialogByIframe(url,{
+                        width: 1000,
+                        height: 400,
+                        title: '批量审批',
+                        // customSize:true
+                    },data).then(res => {
+                        if(res.refresh === true){
+                            that.actions.loadData();
                         }
                     });
-                }
-            });
+
+                    // HTTP.postImmediately('/approve_many_workflow/', {
+                    //     checkIds: JSON.stringify(checkIds)
+                    // }).then((res) => {
+                    //     if (res.success === 1) {
+                    //         this.actions.loadData();
+                    //     }
+                    // });
+                // }
+            // });
         },
         batchDelete: function () {
             msgbox.confirm('是否批量删除选中的消息？').then((res) => {
@@ -75,10 +89,12 @@ let config = {
                     let checkIds = rows.map((item) => {
                         return item.id;
                     });
+                    console.log(JSON.stringify(checkIds));
                     HTTP.postImmediately('/remark_or_del_msg/', {
                         checkIds: JSON.stringify(checkIds),
                         is_del: 1
                     }).then((res) => {
+                        console.log(res);
                         if (res.success === 1) {
                             this.actions.loadData();
                         }
@@ -91,7 +107,6 @@ let config = {
         },
         onCellClicked: function ($event) {
             let data = $event.data;
-            console.log(data);
             if (data.msg_type === 3 || data.msg_type === 0) {
                 if(data.handle_status_text === '待审批'){
                     data.url += "&btnType=edit";
@@ -150,8 +165,8 @@ let systemMessageUtil = {
         this.el = $("<div>").appendTo('body');
         let systemMessage = new SystemMessage();
         systemMessage.render(this.el);
-        this.el.dialog({
-            width: 1328,
+        this.el.erdsDialog({
+            width: 1298,
             height: 575,
             modal: true,
             title: '消息提醒',
@@ -180,7 +195,7 @@ let systemMessageUtil = {
             speechSynthesis.speak(msg);
         }
         this.el = $(html).appendTo('body');
-        this.el.dialog({
+        this.el.erdsDialog({
             width: 800,
             height: 600,
             modal: true,

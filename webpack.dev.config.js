@@ -34,6 +34,8 @@ module.exports = {
         addSigner: path.resolve(APP_PATH, 'entrys/popup/addSigner.js'),
         addfocus: path.resolve(APP_PATH, 'entrys/popup/addfocus.js'),
         addWf: path.resolve(APP_PATH, 'entrys/popup/addWf.js'),
+        approvalDialog:path.resolve(APP_PATH, 'entrys/popup/approvalDialog.js'),
+        multiapp: path.resolve(APP_PATH, 'entrys/popup/multiapp.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
         sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
@@ -55,6 +57,7 @@ module.exports = {
         main: path.resolve(APP_PATH, 'entrys/main.js'),
         register:path.resolve(APP_PATH, 'entrys/register.js'),
         resultDisplay:path.resolve(APP_PATH,'entrys/resultDisplay.js'),
+        findPassword:path.resolve(APP_PATH,'entrys/findPassword.js'),
         vendors: [
             'jquery',
             'jquery-ui',

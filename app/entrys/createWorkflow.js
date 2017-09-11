@@ -14,21 +14,13 @@ import WorkflowInitial from '../components/workflow/workflow-initial/workflow-in
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
 import WorkFlowGrid from '../components/workflow/workflow-grid/workflow-grid';
-import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow/workflow-addFollow';
 import FormEntrys from './form';
-import TreeView from  '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
 import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import jsplumb from 'jsplumb';
 
-WorkflowAddFollow.showAdd();
-
 WorkFlowForm.showForm();
 WorkFlowGrid.showGrid();
-
-
-
-
 
 /*
 ***订阅workflow choose事件，获取工作流info并发布getInfo,获取草稿
@@ -75,14 +67,14 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             postData.data=JSON.stringify(data);
             let res = await workflowService.createWorkflowRecord(postData);
             if(res.success===1){
-                msgBox.alert('自动保存成功！');
+                msgBox.showTips('自动保存成功！');
             }
         };
         // let timer;
         const autoSaving=function(){
             timer=setInterval(()=>{
-                intervalSave(FormEntrys.getFormValue(wfObj.tableid));
-            },2*60*1000);
+                intervalSave(FormEntrys.getFormValue(wfObj.tableid,false));
+            },30*1000);
         };
         clearInterval(timer);
         autoSaving();
@@ -103,28 +95,6 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             clearInterval(timer);
         });
     });
-
-    // (async function () {
-    //     return workflowService.getGridinfo({
-    //         table_id:wfObj.tableid,
-    //         formId:wfObj.formid,
-    //         is_view:0,
-    //         parent_table_id:null,
-    //         parent_real_id:null,
-    //         parent_temp_id:null,
-    //
-    //     });
-    // })().then(function (res) {
-    //     let AgGrid=new Grid({
-    //         parentTempId:temp_id,
-    //         tableId:res.table_id,
-    //         viewMode:"createBatch"
-    //     });
-    //     AgGrid.actions.returnBatchData = function (ids) {
-    //         temp_ids=ids;
-    //     };
-    //     AgGrid.render($("#J-aggrid"));
-    // })
 
 });
 
@@ -165,7 +135,7 @@ Mediator.subscribe('workflow:focus-users', (res)=> {
 })
 Mediator.subscribe('workflow:submit', (res)=> {
     if($("#workflow-form:visible").length>0){
-        let formData=FormEntrys.getFormValue(wfObj.tableid);
+        let formData=FormEntrys.getFormValue(wfObj.tableid,true);
         if(formData.error){
             msgBox.alert(`${formData.errorMessage}`);
         }else{
@@ -238,8 +208,3 @@ Mediator.subscribe('workflow:delFav', (msg)=> {
         let data = await workflowService.delWorkflowFavorite({'id': msg});
     })();
 });
-
-//Grid
-$('#multiFlow').on('click',()=>{
-    
-})

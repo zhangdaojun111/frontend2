@@ -8,6 +8,8 @@ import '../assets/scss/framework/framework-base.scss'
 import {IframeInstance} from '../components/main/iframes/iframes';
 import {HeaderInstance} from '../components/main/header/header';
 import {AsideInstance} from '../components/main/aside/aside';
+import '../assets/scss/dataGrid/dataGrid-icon.scss';
+import {Storage} from "../lib/storage";
 
 _.defaultsDeep(AsideInstance.data, {
     systemName: window.config.sysConfig.logic_config.sap_login_system_name,
@@ -20,3 +22,4 @@ _.defaultsDeep(AsideInstance.data, {
 AsideInstance.render($('#aside'));
 IframeInstance.render($('#content'));
 HeaderInstance.render($('#header'));
+Storage.clearAll();

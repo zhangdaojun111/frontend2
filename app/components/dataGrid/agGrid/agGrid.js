@@ -39,9 +39,12 @@ let config = {
         onDragStopped:function ($event) {
         },
         onDragStarted:function ($event) {
+            if( $('.ag-dnd-ghost-label').html() == 'undefined' ){
+                $('.ag-dnd-ghost-label').html('')
+            }
             //提高拖动提示的层级使其显示
             setTimeout( ()=>{
-                $(".ag-dnd-ghost").css( {'z-index':'999','background':'#ffffff'} );
+                $(".ag-dnd-ghost").css( {'z-index':'999','background':'#ffffff','font-size':'12px','border-radius':'2px','border-color':'rgba(228, 228, 228, 1)'} );
             },0 )
         },
         onSortChanged:function ($event) {
