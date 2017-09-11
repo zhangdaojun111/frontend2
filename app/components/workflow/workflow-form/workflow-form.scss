@@ -56,7 +56,7 @@
         .oldImg {
             position: absolute;
             z-index: 100;
-            margin-top: 17px;
+            //margin-top: 17px;
         }
     }
     .show {
@@ -65,19 +65,24 @@
     .J_del {
         display: none;
         position: absolute;
-        right: -22px;
-        top: 0;
+        right: -23px;
+        top: -10px;
         width: 23px;
         height: 23px;
+        border-radius: 50%;
+        border: 1px solid black;
+        font-weight: bold;
+        text-align: center;
+        line-height: 23px;
     }
     .imgseal {
         z-index: 1002;
         position: absolute;
-        padding-top: 15px;
+        //padding-top: 15px;
     }
     .printimg {
         position: absolute;
-        margin-top: 17px;
+        //margin-top: 17px;
     }
 
 }
@@ -88,4 +93,7 @@
 
 #startNew {
     display: none;
+}
+#place-form>div{
+    position: relative;
 }
