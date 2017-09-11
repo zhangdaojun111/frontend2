@@ -10,6 +10,8 @@ $(document).ready(function(){
         parentRealId: window.config.parentRealId || '',
         rowId: window.config.rowId || '',
         fieldId: window.config.fieldId || '',
+        flowId: window.config.flowId || '',
+        recordId: window.config.recordId || '',
         tableType: window.config.tableType || '',
         viewMode: window.config.viewMode || 'normal',
         key: window.config.key || '',

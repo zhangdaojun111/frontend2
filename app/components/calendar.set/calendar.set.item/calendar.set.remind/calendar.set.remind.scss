@@ -1,7 +1,14 @@
 .remind-dom-content {
     border: 1px solid #dddddd;
-    margin-left: 50px;
-    width:90%;
+    width:100%;
+    font-size: 12px;
+    .icon-calendar-require {
+        height: 16px;
+        width: 16px;
+        background: url("../../../../assets/images/calendar/calendar-require.png");
+        display: inline-block;
+        vertical-align: middle;
+    }
     .set-remind-container {
         width: 100%;
         padding: 10px 30px;
@@ -26,11 +33,12 @@
     }
     .remind-table-content {
         border: 1px solid #dddddd;
-        padding: 5px;
-        margin-left: 18px;
+        padding: 5px 50px 5px 5px;
+        margin-left: 2.5%;
         margin-top: 10px;
         width: 95%;
-        margin-bottom: 30px;
+        margin-bottom: 10px;
+        //padding-right: 20px;
         .remind-table-row {
             height: 55px;
             width: 100%;
@@ -41,25 +49,31 @@
                 text-align: center;
                 .change-state-btn {
                     display: inline-block;
-                    line-height: 26px;
+                    line-height: 28px;
+                    //width: 50px;
+                    //border: 1px solid #dddddd;
+                    cursor: pointer;
                     width: 50px;
-                    border: 1px solid #dddddd;
+                    //background-color: #0088ff;
+                    border: 1px solid #0088ff;
+                    border-radius: 4px;
+                    color: #0088ff;
                 }
                 .close-sms-remind{
                 }
                 .checked{
-                    background-color: #205cdc;
+                    background-color: #0088ff;
                     color: white;
                 }
             }
             .remind-row-label {
-                width: 30%;
+                width: 20%;
                 line-height: 55px;
                 text-align: center;
             }
             .remind-auto-select {
                 border: 1px solid #dddddd;
-                padding: 10px;
+                padding-left: 10px;
                 .popup {
                     width: 100%;
                     ul{
@@ -78,7 +92,11 @@
                 }
             }
             .select-input {
-                width: 100%;
+                width: 95%;
+                display: inline-block;
+            }
+            #send-email-address{
+                width: 95%;
             }
 
         }
@@ -86,10 +104,17 @@
     .set-ok{
         float: right;
         margin-top: 20px;
-        width: 50px;
-        line-height: 20px;
-        background-color: #3d83cc;
-        border: 0px;
-        color: white;
+        //width: 50px;
+        //line-height: 20px;
+        //background-color: #3d83cc;
+        //border: 0px;
+        //color: white;
+        cursor: pointer;
+        width: 90px;
+        height: 30px;
+        background-color: #0088ff;
+        border: 1px solid #0088ff;
+        border-radius: 4px;
+        color: #fff;
     }
 }
