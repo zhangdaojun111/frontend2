@@ -260,11 +260,24 @@ export class EchartsService {
                     };
                 });
             }
-        }
-        if (cellOption['yHorizontalColumns']) {
-            linebarOption['yAxis'][0]['axisLabel']['interval'] = 0;
         };
-        console.log(linebarOption);
+
+        if (cellOption['yHorizontalColumns'] && cellOption['yHorizontalColumns']['marginBottom']) {
+            if (cellOption['yHorizontalColumns'].hasOwnProperty('marginBottom')) {
+                if (cellOption['yHorizontal']) {
+                    //y轴横向展示的时候，显示所有y坐标
+                    linebarOption['yAxis'][0]['axisLabel']['interval'] = 0;
+                } else {
+                    //显示所有x坐标
+                    linebarOption['xAxis'][0]['axisLabel']['interval'] = 0;
+                    //如果没选择x轴横向展示
+                    if(!cellOption['echartX']['textNum']){
+                        linebarOption['xAxis'][0]['axisLabel']['rotate'] = 45;
+                        linebarOption['grid']['bottom'] = cellOption['yHorizontalColumns']['marginBottom'];
+                    }
+                }
+            }
+        };
         return linebarOption;
     }
 

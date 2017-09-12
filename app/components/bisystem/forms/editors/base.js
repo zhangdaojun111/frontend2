@@ -12,6 +12,8 @@ import {YaXis} from '../form/linebar.yAxis/yAxis';
 import msgbox from "../../../../lib/msgbox";
 import {ChartFormService} from '../../../../services/bisystem/chart.form.service';
 import Mediator from '../../../../lib/mediator';
+import {router} from '../../bi.manage.router';
+
 
 let formItemTypes = {
     'text': Text,
@@ -60,11 +62,8 @@ class Base extends Component {
                 chart[name] = this.formItems[name].getValue();
             })
         }
-
         return chart;
     }
-
-    fillData(){}
 
     /**
      * 传送图表数据
@@ -72,13 +71,19 @@ class Base extends Component {
     async save(chart){
         let res = await ChartFormService.saveChart(JSON.stringify(chart));
         if (res['success'] == 1) {
-            msgbox.alert('保存成功');
+            msgbox.showTips('保存成功');
             if (!chart['chartName']['id']) {
                 this.reload();
-            };
+            } else {
+                let isBackCanvas = location.hash.indexOf('viewId=');
+                if (isBackCanvas !== -1) {
+                    let viewId = location.hash.slice(isBackCanvas+7);
+                    router.navigate(`/canvas/${viewId}`,{trigger: true, replace: true});
+                }
+            }
             Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
         } else {
-            msgbox.alert(res['error'])
+            msgbox.showTips(res['error'])
         };
     }
 
