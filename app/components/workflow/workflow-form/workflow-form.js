@@ -164,13 +164,10 @@ class WorkFlowForm extends Component {
 }
 
 export default {
-     showForm(data) {
-         return new Promise(function(resolve, reject){
-             let component = new WorkFlowForm();
-             let el = $('#workflow-form');
-             component.render(el);
-             resolve()
-         })
-
+     showForm() {
+         let component = new WorkFlowForm();
+         let el = $('#workflow-form');
+         component.render(el);
      }
+
 };
