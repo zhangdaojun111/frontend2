@@ -3,6 +3,7 @@ import 'jquery-ui/ui/widgets/dialog';
 $.widget("custom.erdsDialog", $.ui.dialog, {
     options: {
         closeText: "关闭",
+        classes:{'ui-dialog':'ui-dialog-shadow'}
     },
     open: function () {
         this._super();
@@ -83,7 +84,7 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
                 }
             });
         }
-    }
+    },
 });
 
 

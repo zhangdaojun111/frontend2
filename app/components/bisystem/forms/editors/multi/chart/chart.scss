@@ -1,0 +1,56 @@
+@mixin msg-show {
+    position: relative;
+    .form-label {
+        position: absolute;
+        border: none;
+        left: 45px;
+        span {
+            position: absolute;
+            top: -22px;
+            left: 31px;
+            min-width: 100px;
+            background: none;
+            color: #666;
+        }
+        .error-msg {
+            position: absolute;
+            top: 35px;
+            left: 30px;
+            min-width: 100px;
+        }
+    }
+}
+.form-group-chart {
+    .form-chart-autocomplete {
+        @include msg-show;
+    }
+    .form-chart-select {
+        @include msg-show;
+        .form-label {
+            span {
+                top: 0;
+            }
+        }
+    }
+    .form-chart-checkbox {
+        @include msg-show;
+        .form-label {
+            span {
+                display: none;
+            }
+            .error-msg{
+                top: -2px;
+            }
+        }
+    }
+}
+
+.form-chart-multi-chart {
+    .form-label {
+        b {
+            color: #f57070;
+            padding: 0 6px;
+            letter-spacing: 1px;
+        }
+    }
+}
