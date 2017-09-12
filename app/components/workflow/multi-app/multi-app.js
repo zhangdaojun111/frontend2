@@ -4,6 +4,8 @@
  */
 import Component from '../../../lib/component';
 import template from './multi-app.html';
+import '../../../assets/scss/workflow/workflow-base.scss';
+import './multi-app.scss'
 import Mediator from '../../../lib/mediator';
 import msgBox from '../../../lib/msgbox';
 import {PMAPI,PMENUM} from "../../../lib/postmsg";

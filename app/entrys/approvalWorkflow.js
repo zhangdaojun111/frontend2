@@ -23,15 +23,10 @@ import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-
 import {PMAPI,PMENUM} from '../lib/postmsg';
 import jsplumb from 'jsplumb';
 
-WorkFlowForm.showForm().then(function () {
-    setTimeout(()=>{
-        $('.J_component-loading-cover').remove();
-    },2000)
-
-});
-
 WorkFlowGrid.showGrid();
-
+ApprovalWorkflow.showDom().then(function (component) {
+    setTimeout(()=> component.hideLoading(),1000)
+});
 let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[],agorfo=true,is_batch=0;
 serchStr.split('&').forEach(res => {
     let arr = res.split('=');
@@ -42,7 +37,7 @@ is_view=obj.btnType==='view'?1:0;
 Mediator.subscribe('workFlow:record_info', (res) => {
     ApprovalHeader.showheader(res.record_info);
     WorkflowRecord.showRecord(res.record_info);
-    if(res.record_info.current_node!=window.config.name){
+    if(res.record_info.current_node.indexOf(window.config.name)==-1){
         $('#approval-workflow').find('.for-hide').hide();
     };
     if(res.record_info.status==="已驳回到发起人"&&res.record_info.start_handler===window.config.name){
