@@ -23,3 +23,8 @@ IframeInstance.render($('#content'));
 HeaderInstance.render($('#header'));
 AsideInstance.render($('#aside'));
 Storage.clearAll();
+
+let body = $('body');
+body.find('.component-loading-cover').remove();
+body.find('.component-loading-box').remove();
+body.removeClass('component-loading-effect');
