@@ -74,7 +74,7 @@ let config = {
             event: 'click',
             selector: '.input-img',
             callback: function () {
-                if(_this.data.isAgGrid){
+                if(this.data.isAgGrid){
                     this.el.find('.time').css({'position': 'fixed'}).toggle();
                 }else{
                     this.el.find('.time').css({'position': 'absolute'}).toggle();

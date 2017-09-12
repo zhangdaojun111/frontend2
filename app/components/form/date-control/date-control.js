@@ -129,32 +129,28 @@ let config = {
                     if (_this.data['timeType'] == 'after') {
                         if (selectTime < currentTime) {
                             msgbox.alert("所选日期不能早于当前日期！");
-                            if(!_this.data.isAgGrid){
+
                                 _this.data.value = "请选择";
                                 _.debounce(function () {
                                     _this.events.changeValue(_this.data)
                                 }, 200)();
-                            }
 
                         }
                     } else if (_this.data['timeType'] == 'before') {
                         if (selectTime > currentTime) {
                             msgbox.alert("所选日期不能晚于当前日期！");
-                            if(!_this.data.isAgGrid){
+
                                 _this.data.value = "请选择";
                                 _.debounce(function () {
                                     _this.events.changeValue(_this.data)
                                 }, 200)();
-                            }
 
                         }
                     } else if (_this.data['timeType'] == 'all') {
-                        if(!_this.data.isAgGrid){
                             _this.data.value = selectTime1.replace(/\//g, "-");
                             _.debounce(function () {
                                 _this.events.changeValue(_this.data)
                             }, 200)();
-                        }
 
                     }
                 } else {
