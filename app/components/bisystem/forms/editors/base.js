@@ -5,10 +5,15 @@ import {AutoComplete} from '../form/autocomplete/autocomplete';
 import {Radio} from '../form/radio/radio';
 import {Checkbox} from '../form/checkbox/checkbox';
 import {Choosed} from '../form/choosed/choosed';
-import {Save} from '../form/save/save';
+import {Button} from '../form/button/button';
 import {TableSingle} from '../form/single/single';
 import {Deep} from '../form/deep/deep';
 import {YaXis} from '../form/linebar.yAxis/yAxis';
+import msgbox from "../../../../lib/msgbox";
+import {ChartFormService} from '../../../../services/bisystem/chart.form.service';
+import Mediator from '../../../../lib/mediator';
+import {router} from '../../bi.manage.router';
+
 
 let formItemTypes = {
     'text': Text,
@@ -17,7 +22,7 @@ let formItemTypes = {
     'radio': Radio,
     'checkbox': Checkbox,
     'choosed':Choosed,
-    'save': Save,
+    'button': Button,
     'table_single': TableSingle,
     'deep': Deep,
     'yAxis': YaXis
@@ -38,13 +43,15 @@ class Base extends Component {
                 name: item.name,
                 list: item.list,
                 class: item.class,
-                placeholder: item.placeholder
+                rules: item.rules,
+                placeholder: item.placeholder,
+                required: item.required,
+                category: item.category, // 用于input输入框类型 number text
             }, item.events);
             this.append(instance, this.el.find(container ? container : '.form-group'));
             this.formItems[item.name] = instance;
         });
     }
-
     /**
      * 获取所有字段数据
      */
@@ -55,14 +62,35 @@ class Base extends Component {
                 chart[name] = this.formItems[name].getValue();
             })
         }
-
         return chart;
     }
-    fillData(){}
+
+    /**
+     * 传送图表数据
+     */
+    async save(chart){
+        let res = await ChartFormService.saveChart(JSON.stringify(chart));
+        if (res['success'] == 1) {
+            msgbox.showTips('保存成功');
+            if (!chart['chartName']['id']) {
+                this.reload();
+            } else {
+                let isBackCanvas = location.hash.indexOf('viewId=');
+                if (isBackCanvas !== -1) {
+                    let viewId = location.hash.slice(isBackCanvas+7);
+                    router.navigate(`/canvas/${viewId}`,{trigger: true, replace: true});
+                }
+            }
+            Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
+        } else {
+            msgbox.showTips(res['error'])
+        };
+    }
 
     reset(chart) {
         this.data.chart_id = chart.id ? chart.id : null;
         this.data.id = chart.id ? chart.id : null;
+        this.data.chart = null;
     }
 }
 export {Base}

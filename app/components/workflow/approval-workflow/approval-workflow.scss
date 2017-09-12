@@ -5,6 +5,15 @@
 #approval-workflow{
   height: 100%;
   min-width: 980px;
+  .add-img {
+    width: 248px;
+    height: 148px;
+    z-index: 106;
+  }
+  //.ui-myformtable{
+  //  position: relative;
+  //  background: #fff;
+  //}
 }
 btn-div{
   height: 24px;
@@ -174,7 +183,7 @@ btn-div{
     position: absolute;
     width: 100%;
     padding: 10px;
-    overflow-y: scroll;
+    //overflow-y: scroll;
     overflow-x:auto;
     top:57px;
     bottom: 0;
