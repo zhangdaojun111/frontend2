@@ -644,6 +644,7 @@ let config = {
                         width: '400',
                         height: '460',
                         title: '导出',
+                        modal: true,
                     },{
                         cancelFields: this.data.cancel_fields,
                     }).then(data => {
