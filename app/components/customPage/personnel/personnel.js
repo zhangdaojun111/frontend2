@@ -307,7 +307,7 @@ let config = {
             }
         },
         //获取数据
-        getUserData: function () {
+        getUserData: function (refresh) {
             let json = {
                 department: this.data.departmentName,
                 filter: [],
@@ -383,6 +383,9 @@ let config = {
                     this.hideLoading();
                     this.data.firstSetData = false;
                 }
+                if(refresh){
+                    msgBox.showTips( '数据刷新成功。' )
+                }
             } )
             HTTP.flush();
         },
@@ -391,7 +394,7 @@ let config = {
             this.data.rows = res.rows;
             this.data.page = res.currentPage;
             this.data.first = res.first;
-            this.actions.getUserData();
+            this.actions.getUserData(true);
         },
         //创建部门树
         createDepartment: function () {

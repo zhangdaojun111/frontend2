@@ -15,10 +15,10 @@ let config = {
         //时间日期输入错误提示
         keyup: function () {
             let _this = this
+            // _this.data.value=_this.data.value.replace(/[^\d&:&]|_/ig,'');
             //hh:mm:ss
             let strDate = this.el.find(".timeInput").val();
             let re = /^((20|21|22|23|[0-1]\d)\:[0-5][0-9])(\:[0-5][0-9])?$/;
-            console.log(strDate)
 
             if (re.test(strDate))//判断日期格式符合hh:mm:ss标准
             {
@@ -26,10 +26,13 @@ let config = {
                 this.el.find(".minute").children("span").text(strDate.substring(3,5));
                 this.el.find(".second").children("span").text(strDate.substring(6,8));
                 this.el.find("#errorMessage").css("display", "none");
-                _this.data.value = strDate.replace(/\//g, "-");
-                _.debounce(function () {
-                    _this.events.changeValue(_this.data)
-                }, 200)();
+                if(!_this.data.isAgGrid){
+                    _this.data.value = strDate.replace(/\//g, "-");
+                    _.debounce(function () {
+                        _this.events.changeValue(_this.data)
+                    }, 200)();
+                }
+
             }
             else {
                // this.el.find("#errorMessage").css("display", "inline-block").text("时间格式不正确，正确格式为12:00:00 ");
@@ -84,7 +87,17 @@ let config = {
             event: 'click',
             selector: '.ui-datepicker-close',
             callback: function () {
+                let _this =this;
                 this.el.find('.time').css('display', 'none');
+                let re = /^((20|21|22|23|[0-1]\d)\:[0-5][0-9])(\:[0-5][0-9])?$/;
+                let strDate = this.el.find(".timeInput").val();
+                if (re.test(strDate)){
+                    _this.data.value =strDate;
+                    console.log("dd  "+ _this.data.value)
+                    _.debounce(function () {
+                        _this.events.changeValue(_this.data)
+                    }, 200)();
+                }
             }
         }
     ],
@@ -149,10 +162,13 @@ let config = {
             let now2 = p(h) + ':' + p(m) + ":" + p(s);
             now = now2
             let nowTime = _this.el.find(".timeInput").val(now);
-            _this.data.value = now;
-            _.debounce(function () {
-                _this.events.changeValue(_this.data)
-            }, 200)();
+            if(!_this.data.isAgGrid){
+                _this.data.value = now;
+                _.debounce(function () {
+                    _this.events.changeValue(_this.data)
+                }, 200)();
+            }
+
         });
         this.el.on("click", '.reduce', function () {
             //当前时间-1
@@ -173,10 +189,13 @@ let config = {
             let now3 = p(h) + ':' + p(m) + ":" + p(s);
             now = now3;
             let nowTime = _this.el.find(".timeInput").val(now);
-            _this.data.value = now;
-            _.debounce(function () {
-                _this.events.changeValue(_this.data)
-            }, 200)();
+            if(!_this.data.isAgGrid){
+                _this.data.value = now;
+                _.debounce(function () {
+                    _this.events.changeValue(_this.data)
+                }, 200)();
+            }
+
         });
 
         this.el.find('.timeInput').on('input', _.debounce(function () {
