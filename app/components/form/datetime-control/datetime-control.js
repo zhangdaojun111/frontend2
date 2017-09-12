@@ -157,15 +157,18 @@ let config = {
 
             },
             onClose: function(timeText) {
+                let _timeText = $.trim(timeText);
                 let  re =/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
-                if(re.test( timeText))
+                if(re.test(_timeText ))
                 {
+                    console.log(re.test( _timeText ))
                     let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3,RegExp.$4,RegExp.$5,RegExp.$6);
                     if((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))&&(dateElement.getHours()==parseInt(RegExp.$4))&&(dateElement.getMinutes()==parseInt(RegExp.$5))&&(dateElement.getSeconds()==parseInt(RegExp.$6)))//判断日期逻辑
                     {
-                        _this.data.value = timeText;
+                        _this.data.value =_timeText ;
                         _.debounce(function () {
                             _this.events.changeValue(_this.data)
+                            debugger;
                         }, 200)();
                     }
                 }

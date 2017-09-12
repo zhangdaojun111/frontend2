@@ -109,7 +109,8 @@ let config = {
             onSelect: function (selectTime, text) {
                 _this.el.find("#errorMessage").css("display","none");
                 let selectTime1 = selectTime;
-                if(!_this.data.isAgGrid){
+                let a =false
+                if(a){
                     _this.data.value = selectTime.replace(/\//g, "-");
                     _.debounce(function () {
                         _this.events.changeValue(_this.data)
@@ -163,18 +164,21 @@ let config = {
                 }
             },
             onClose: function(timeText) {
+                let _timeText = $.trim(timeText);
                 let  re =/^(\d{4})-(\d{2})-(\d{2})$/
-                if(re.test( timeText))
+                if(re.test(_timeText))
                 {
                     let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3);
                     if((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()))//判断日期逻辑
                     {
-                        _this.data.value = timeText;
-                        console.log( 'val ', _this.data.value)
+                        _this.data.value = _timeText;
                         _.debounce(function () {
                             _this.events.changeValue(_this.data)
+                          //  debugger;
                         }, 200)();
-                    }
+                   }
+                }else{
+                    console.log("日期格式有问题")
                 }
             },
         });
@@ -191,6 +195,7 @@ let config = {
 export default class DateControl extends Component {
 
     constructor(data, events) {
+       // debugger;
         super(config, data, events);
     }
 }
