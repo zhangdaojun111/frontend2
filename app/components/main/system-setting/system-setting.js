@@ -205,7 +205,7 @@ export const SysSetting = {
         this.el.erdsDialog({
             title: '系统设置',
             width: 540,
-            modal:true,
+            // modal:true,
             height: 600,
             close: function() {
                 $(this).dialog('destroy');
