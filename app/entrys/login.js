@@ -154,7 +154,7 @@ function getLoginController() {
            this.systemName = this.versionInfo.sap_login_system_name;
            this.resetSysName(this.systemName);
         },
-        //初始化版本信息
+        //初始化表格中的版本信息
         versionInit:function () {
             let info = this.versionInfo.rows;
             let $table = $('.version-table');
