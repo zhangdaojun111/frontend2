@@ -12,13 +12,13 @@ import template from './datetime-control.html';
 import './datetime-control.scss';
 import '../base-form/dateTime.scss';
 import msgbox from '../../../lib/msgbox';
+// import 'jedate'
 
 let config = {
     template: template,
     actions:{
         //时间日期输入错误提示，暂时先去掉
         keyup: function () {
-
             let _this = this;
             //YYYY-MM-DD hh:mm:ss
             let strDate = this.el.find(".datetime").val();
@@ -30,9 +30,8 @@ let config = {
 
                 if(!((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))&&(dateElement.getHours()==parseInt(RegExp.$4))&&(dateElement.getMinutes()==parseInt(RegExp.$5))&&(dateElement.getSeconds()==parseInt(RegExp.$6))))//判断日期逻辑
                 {
-                   //this.el.find("#errorMessage").css("display","inline-block").innerText = "时间格式不正确,正确格式为: 2017-09-01 12:00:00 ";
+
                 } else{
-                    this.el.find("#errorMessage").css("display","none");
                     if(!_this.data.isAgGrid){
                         _this.data.value = strDate;
                         _.debounce(function () {
@@ -42,13 +41,8 @@ let config = {
 
                 }
             }
-            else{
-              //  this.el.find("#errorMessage").css("display","inline-block").text("时间格式不正确,正确格式为: 2017-09-01 12:00:00") ;
-            }
         },
-    }
-    ,
-
+    } ,
     binds: [
         {
             event: 'click',
@@ -63,8 +57,6 @@ let config = {
         let _this = this;
         this.el.find('.ui-width').css('width', this.data.width);
         if(! this.data.isCalendar && this.data.history){
-            console.log(this.data.isCalendar)
-            console.log(this.data.history)
             this.el.find('.ui-history').css('visibility','visible');
         }
         if (this.data.is_view) {
@@ -79,7 +71,11 @@ let config = {
         } else {
             _this.el.find(".datetime").val("年-月-日 时:分:秒");
         }
-
+        // _this.el.find("#aa").jeDate({
+        //     isinitVal:true,
+        //     format:"YYYY-MM-DD hh:mm:ss",
+        //     zIndex:3000,
+        // })
         //控制到时分秒
         _this.el.find(".datetime").datetimepicker({
             monthNamesShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
@@ -113,7 +109,6 @@ let config = {
                     _.debounce(function () {
                         _this.events.changeValue(_this.data)
                     }, 200)();
-
                 }
 
                 if (_this.data.value.length > 19) {
@@ -130,14 +125,12 @@ let config = {
                     if (_this.data['timeType'] == 'after') {
                         if (selectTime < currentTime) {
                             msgbox.alert("所选日期不能早于当前日期！");
-
                             if(!_this.data.isAgGrid){
                                 _this.data.value = "请选择";
                                 _.debounce(function () {
                                     _this.events.changeValue(_this.data)
                                 }, 200)();
                             }
-
                         }
                     } else if (_this.data['timeType'] == 'before') {
                         if (selectTime > currentTime) {
@@ -148,7 +141,6 @@ let config = {
                                     _this.events.changeValue(_this.data)
                                 }, 200)();
                             }
-
                         }
                     } else if (_this.data['timeType'] == 'all') {
                         if(!_this.data.isAgGrid){
@@ -165,17 +157,19 @@ let config = {
 
             },
             onClose: function(timeText) {
+                let _timeText = $.trim(timeText);
                 let  re =/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
-                if(re.test( timeText))
+                if(re.test(_timeText ))
                 {
+                    console.log(re.test( _timeText ))
                     let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3,RegExp.$4,RegExp.$5,RegExp.$6);
                     if((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))&&(dateElement.getHours()==parseInt(RegExp.$4))&&(dateElement.getMinutes()==parseInt(RegExp.$5))&&(dateElement.getSeconds()==parseInt(RegExp.$6)))//判断日期逻辑
                     {
-                            _this.data.value = timeText;
-                            console.log(  _this.data.value)
-                            _.debounce(function () {
-                                _this.events.changeValue(_this.data)
-                            }, 200)();
+                        _this.data.value =_timeText ;
+                        _.debounce(function () {
+                            _this.events.changeValue(_this.data)
+                            debugger;
+                        }, 200)();
                     }
                 }
             },
@@ -187,9 +181,11 @@ let config = {
             _this.actions.keyup();
         }, 200));
 
-        _.debounce(function () {
-            _this.events.changeValue(_this.data)
-        }, 200)();
+        if(!_this.data.isAgGrid){
+            _.debounce(function () {
+                _this.events.changeValue(_this.data)
+            }, 200)();
+        }
     },
     beforeDestory: function () {
         this.el.off();
