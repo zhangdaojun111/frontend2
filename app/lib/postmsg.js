@@ -115,9 +115,7 @@ window.addEventListener('message', function (event) {
                         data: params
                     });
                 });
-                dialogHash[data.key].element.erdsDialog(_.defaultsDeep({
-                    modal: false
-                }, data.frame, {
+                dialogHash[data.key].element.erdsDialog(_.defaultsDeep(data.frame, {
                     modal: true,
                     maxable: true,
                     close: function () {
