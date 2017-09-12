@@ -8,7 +8,6 @@ import DateTimeControl from "../../../form/datetime-control/datetime-control";
 import DateControl from "../../../form/date-control/date-control";
 import TimeControl from "../../../form/time-control/time-control";
 import agGrid from "../../agGrid/agGrid";
-
 let config = {
     template: template,
     data: {
@@ -41,7 +40,6 @@ let config = {
                         this.eFilterInput.className += (' filter-input-' + searchFiled);
                     }else if( colInfo  == 'datetime' ){
                         let dateTimeControl = new DateTimeControl({value: '', isAgGrid: true},{changeValue:function(data){
-                            debugger
                             setTimeout(()=>{
                                 That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                             },1000)
