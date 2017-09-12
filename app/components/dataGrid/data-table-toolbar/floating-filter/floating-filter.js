@@ -26,21 +26,22 @@ let config = {
                     if( colInfo == 'none' ){
                         this.eGui.innerHTML = '<input disabled type="text"/>';
                     } else if( colInfo == 'date' ){
-                        let dateControl = new DateControl({value: ''},{changeValue:function(data){
+                        let dateControl = new DateControl({value: '', isAgGrid: true},{changeValue:function(data){
                             That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                         }});
                         dateControl.render($(this.eGui));
                         this.eFilterInput = this.eGui.querySelector('input');
                         this.eFilterInput.className += (' filter-input-' + searchFiled);
                     }else if( colInfo  == 'time' ){
-                        let timeControl = new TimeControl({value: ''},{changeValue:function(data){
+                        let timeControl = new TimeControl({value: '', isAgGrid: true},{changeValue:function(data){
                             That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                         }});
                         timeControl.render($(this.eGui));
                         this.eFilterInput = this.eGui.querySelector('input');
                         this.eFilterInput.className += (' filter-input-' + searchFiled);
                     }else if( colInfo  == 'datetime' ){
-                        let dateTimeControl = new DateTimeControl({value: ''},{changeValue:function(data){
+                        let dateTimeControl = new DateTimeControl({value: '', isAgGrid: true},{changeValue:function(data){
+                            debugger
                             setTimeout(()=>{
                                 That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                             },1000)
