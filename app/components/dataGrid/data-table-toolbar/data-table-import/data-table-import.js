@@ -87,6 +87,22 @@ let config = {
                 msgBox.alert( '请选择导入文件！' );
                 return;
             }
+            //只保留最新选择的附件
+            let num = 0;
+            for( let code in this.data.fileData ){
+                num++;
+            }
+            let newFile = {}
+            let n = 0;
+            for( let code in this.data.fileData ){
+                n++;
+                if( n==num ){
+                    newFile[code] = this.data.fileData[code]
+                }else {
+                    this.uploader.deleteFileByCode( code,'/upload_data/' )
+                }
+            }
+            this.data.fileData = newFile;
             let json = {
                 file:'upload_file',
                 table_id: this.data.tableId,
@@ -97,10 +113,10 @@ let config = {
                 flow_id: this.data.flowId
             }
             if( this.data.needMore ){
-                json['has_create_user'] = this.el.find( '.has_create_user' )[0].value;
-                json['unique_check'] = this.el.find( '.unique_check' )[0].value;
-                json['use_increment_data'] = this.el.find( '.use_increment_data' )[0].value;
-                json['use_default_value'] = this.el.find( '.use_default_value' )[0].value;
+                json['has_create_user'] = this.el.find( '.has_create_user' ).parent('td').attr('name');
+                json['unique_check'] = this.el.find( '.unique_check' ).parent('td').attr('name');
+                json['use_increment_data'] = this.el.find( '.use_increment_data' ).parent('td').attr('name');
+                json['use_default_value'] = this.el.find( '.use_default_value' ).parent('td').attr('name');
             }
             if( this.data.warning_msg ){
                 json['warning_msg'] = JSON.stringify( this.data.warning_msg );
@@ -171,7 +187,12 @@ let config = {
             for( let m of more ){
                 m.style.display = this.data.needMore?'block':'none';
             }
-            this.el.find( '.more-btn' )[0].innerHTML = this.data.needMore?'收起':'展开更多';
+            this.el.find( '.more-btn .text' )[0].innerHTML = this.data.needMore?'收起':'展开更多';
+            if(this.data.needMore) {
+                this.el.find('.more-btn .img').addClass('active')
+            } else {
+                this.el.find('.more-btn .img').removeClass('active')
+            }
         }
     },
     afterRender: function (){
@@ -192,6 +213,15 @@ let config = {
                 this.actions.fileTip();
             });
         } )
+        this.el.on('click','.radio-container', function(){
+            if($(this).parent('td').attr('name') == 1){
+                $(this).parent('td').attr('name', 0)
+            } else {
+                $(this).parent('td').attr('name', 1)
+            }
+            $(this).parent().find('.radio-in').removeClass('active');
+            $(this).find('.radio-in').addClass('active');
+        })
         this.el.on( 'click','.import-submit-btn',()=>{
             this.actions.import();
         } )

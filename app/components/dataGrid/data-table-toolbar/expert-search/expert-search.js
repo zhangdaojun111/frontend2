@@ -1,9 +1,16 @@
+/**
+ *@author zhr
+ *@description 高级查询组件
+ */
 import Component from "../../../../lib/component";
 import template from './expert-search.html';
 import expertCondition from './expert-search-condition/expert-search-condition';
 import {dataTableService} from '../../../../services/dataGrid/data-table.service';
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import {HTTP} from "../../../../lib/http";
+import DateTimeControl from "../../../form/datetime-control/datetime-control";
+import DateControl from "../../../form/date-control/date-control";
+import TimeControl from "../../../form/time-control/time-control";
 import Mediator from "../../../../lib/mediator"
 import addQuery from '../common-query-add/common-query-add.js';
 import msgBox from '../../../../lib/msgbox';
@@ -111,9 +118,9 @@ let config = {
                 //由于选择一个常用查询后 改变其查询值 new一个组件时push到数组的值是不会发生变化的
 
                 if(this.el.find('.condition-search-box-input').eq(i).attr('title') == 'number') {
-                    obj['cond']['keyword'] = parseInt(this.el.find('.condition-search-input').eq(i).val());
+                    obj['cond']['keyword'] = parseInt(this.el.find('.condition-search-value').find('input').eq(i).val());
                 } else {
-                    obj['cond']['keyword'] = this.el.find('.condition-search-input').eq(i).val();
+                    obj['cond']['keyword'] = this.el.find('.condition-search-value').find('input').eq(i).val();
                 }
                 if(this.el.find('.condition-search-choice.left-choice').eq(i).hasClass('active')){
                     obj['cond']['leftBracket'] = '('
@@ -147,6 +154,7 @@ let config = {
             }
             for(let j = 0;j<searchData.length;j++) {
                 let html = this.actions.checkedRelationType(searchData[j]['cond']['searchByName']);
+                this.actions.checkedInputType(searchData[j]['cond']['searchByName'],searchData[j]['cond']['keyword'],j)
                 if(searchData[j]['cond']['leftBracket'] == '(') {
                     this.el.find('.condition-search-choice.left-choice').eq(j).addClass('active')
                 } else {
@@ -158,7 +166,7 @@ let config = {
                     this.el.find('.condition-search-choice.right-choice').eq(j).removeClass('active')
                 }
                 this.el.find('.condition-search-select.relation').eq(j).html(html)
-                this.el.find('.condition-search-input').eq(j).val(searchData[j]['cond']['keyword']);
+                // this.el.find('.condition-search-input').eq(j).val(searchData[j]['cond']['keyword']);
                 this.el.find('.condition-search-select.relation').eq(j).val(searchData[j]['cond']['operate']);
                 this.el.find('.condition-search-box-input').eq(j).attr('name',searchData[j]['cond']['searchBy']);
                 this.el.find('.condition-search-box-input').eq(j).val(searchData[j]['cond']['searchByName']);
@@ -184,6 +192,42 @@ let config = {
                 }
             })
             return htmlStr;
+        },
+        //加载不同查询条件的输入框类型
+        checkedInputType: function(type, value, index){
+            this.data.fieldsData.forEach((item)=> {
+                if(item.name == type) {
+                    switch (item.searchType) {
+                        case "datetime":
+                            this.el.find('.condition-search-input').eq(index).remove();
+                            let dateTimeControl = new DateTimeControl({value: value},{changeValue:function(data){}});
+                            dateTimeControl.render(this.el.find('.condition-search-value').eq(index));
+                            break;
+                        case "date":
+                            this.el.find('.condition-search-input').eq(index).remove();
+                            let dateControl = new DateControl({value: value},{changeValue:function(data){}});
+                            dateControl.render(this.el.find('.condition-search-value').eq(index));
+                            break;
+                        case "time":
+                            this.el.find('.condition-search-input').eq(index).remove();
+                            let timeControl = new TimeControl({value: value},{changeValue:function(data){}});
+                            timeControl.render(this.el.find('.condition-search-value').eq(index));
+                            break;
+                        case "text":
+                            this.el.find('.condition-search-value').eq(index).html(`<input class="condition-search-input" type="text">`);
+                            this.el.find('.condition-search-input').eq(index).val(value);
+                            break;
+                        case "number":
+                            this.el.find('.condition-search-value').eq(index).html(`<input class="condition-search-input" type="text">`);
+                            this.el.find('.condition-search-input').eq(index).val(value);
+                            break;
+                        case "person":
+                            this.el.find('.condition-search-value').eq(index).html(`<input class="condition-search-input" type="text">`);
+                            this.el.find('.condition-search-input').eq(index).val(value);
+                            break;
+                    }
+                }
+            })
         },
         //校验提交的高级查询
         checkedSubmitData: function(name) {

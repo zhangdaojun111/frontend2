@@ -1646,14 +1646,8 @@ let config = {
         }
 
         //默认表单样式
-
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
-        }
-        if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')) {
-            this.el.find('table').siblings('.ui-btn-box').css("margin-left", "0px");
-        } else {
-            this.el.find('table').siblings('.ui-btn-box').css("margin-left", "-20px");
         }
     },
     beforeDestory() {

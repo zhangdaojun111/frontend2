@@ -30,14 +30,16 @@
                 color: #999999;
             }
             .uploader-button {
-                width: 90px;
+                width: 70px;
                 height: 25px;
                 background: #fff;
                 border: 1px solid #e4e4e4;
-                border-radius: 5px;
+                border-radius: 3px;
                 margin-right: 10px;
+                font-size: 12px;
             }
             select {
+                font-size: 12px;
                 height: 22px;
                 border-color: #e4e4e4;
                 width: 40px;
@@ -92,6 +94,37 @@
 
             .need-more {
                 display: none;
+                .radio-container {
+                    display: inline-block;
+                    margin-right: 15px;
+                    cursor: pointer;
+                    .radio-out {
+                        display: inline-block;
+                        width: 13px;
+                        height: 13px;
+                        border: 1px solid #d3d3d3;
+                        border-radius: 100%;
+                        position: relative;
+                        top: 1px;
+                        .radio-in {
+                            display: inline-block;
+                            visibility: hidden;
+                            width: 9px;
+                            height: 9px;
+                            position: relative;
+                            left: 2px;
+                            top: -1px;
+                            border-radius: 100%;
+                            background-color: #0088ff;
+                            &.active{
+                                visibility: visible;
+                            }
+                        }
+                    }
+                }
+                select{
+                    background-position: 20px center;
+                }
             }
         }
     }
@@ -100,17 +133,39 @@
         width: 98%;
         margin: 0 auto;
         .more-btn {
-            font-size: 14px;
+            cursor: pointer;
+            font-size: 12px;
             text-decoration: none;
             color: #333333;
-            background: #FAFAFA;
+            background-color: #FAFAFA;
             height: 40px;
             line-height: 40px;
             top: 0px;
             position: absolute;
             display: block;
-            width: 100%;
+            width: calc(100% - 13px);
             padding-left: 15px;
+            .img {
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                position: relative;
+                top: 4px;
+                left: 8px;
+                background: url(../../../../assets/images/framework/detail-icon.png) no-repeat;
+                transform:rotate(90deg);
+                -ms-transform:rotate(90deg);
+                -moz-transform:rotate(90deg);
+                -webkit-transform:rotate(90deg);
+                -o-transform:rotate(90deg);
+                &.active {
+                    transform:rotate(-90deg);
+                    -ms-transform:rotate(-90deg);
+                    -moz-transform:rotate(-90deg);
+                    -webkit-transform:rotate(-90deg);
+                    -o-transform:rotate(-90deg);
+                }
+            }
         }
 
     }

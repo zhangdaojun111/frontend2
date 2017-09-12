@@ -10,6 +10,8 @@ import {PMAPI} from "../../../lib/postmsg";
 import {attachmentListConfig} from "./attachment-list/attachment-list";
 import {FormService} from '../../../services/formService/formService';
 import ThumbnailList from "./thumbnail-list/thumbnail-list";
+import {Storage} from "../../../lib/storage";
+
 let config = {
     template: template,
     binds: [
@@ -18,13 +20,22 @@ let config = {
             selector: '.view-attached-list',
             callback: function () {
                 attachmentListConfig.data =_.defaultsDeep({
+                    isView:this.data.is_view,
+                    id:this.data.id,
                     fileIds: this.data.value,
                     dinput_type: this.data.real_type
                 },attachmentListConfig.data);
                 PMAPI.openDialogByComponent(attachmentListConfig, {
-                    width: 500,
-                    height: 300,
+                    width: 700,
+                    height: 500,
                     title: "浏览上传文件"
+                }).then(res=>{
+                    Storage.init((new URL(document.URL)).searchParams.get('key'));
+                    let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
+                    for(let file of deletedFiles){
+                        this.data.value.splice(this.data.value.indexOf(file),1);
+                    }
+                    this.trigger('changeValue',this.data);
                 });
             }
         }, {
