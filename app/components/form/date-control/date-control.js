@@ -81,7 +81,8 @@ let config = {
             _this.el.find(".date_yy-mm-dd").val("年-月-日");
         }
         //控制到年月日
-        _this.el.find(".date_yy-mm-dd").datetimepicker({
+
+        _this.el.find(".date_yy-mm-dd").datepicker({
             monthNamesShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
             dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
             timeText: '时间',
@@ -89,7 +90,7 @@ let config = {
             minuteText: '分钟',
             secondText: '秒',
             currentText: '今',
-            closeText: '确定',
+            closeText: false,
             timeInput: true ,
             timeFormat:' ',
             showTime:false,
@@ -109,13 +110,10 @@ let config = {
             onSelect: function (selectTime, text) {
                 _this.el.find("#errorMessage").css("display","none");
                 let selectTime1 = selectTime;
-                let a =false
-                if(a){
                     _this.data.value = selectTime.replace(/\//g, "-");
                     _.debounce(function () {
                         _this.events.changeValue(_this.data)
                     }, 200)();
-                }
 
                 if (_this.data.value.length > 10) {
                     _this.data.value = '';
@@ -163,24 +161,24 @@ let config = {
                     console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', 'date-control');
                 }
             },
-            onClose: function(timeText) {
-                let _timeText = $.trim(timeText);
-                let  re =/^(\d{4})-(\d{2})-(\d{2})$/
-                if(re.test(_timeText))
-                {
-                    let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3);
-                    if((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()))//判断日期逻辑
-                    {
-                        _this.data.value = _timeText;
-                        _.debounce(function () {
-                            _this.events.changeValue(_this.data)
-                          //  debugger;
-                        }, 200)();
-                   }
-                }else{
-                    console.log("日期格式有问题")
-                }
-            },
+            // onClose: function(timeText) {
+            //     let _timeText = $.trim(timeText);
+            //     let  re =/^(\d{4})-(\d{2})-(\d{2})$/
+            //     if(re.test(_timeText))
+            //     {
+            //         let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3);
+            //         if((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()))//判断日期逻辑
+            //         {
+            //             _this.data.value = _timeText;
+            //             _.debounce(function () {
+            //                 _this.events.changeValue(_this.data)
+            //               //  debugger;
+            //             }, 200)();
+            //        }
+            //     }else{
+            //         console.log("日期格式有问题")
+            //     }
+            // },
         });
 
         _this.el.find('.date_yy-mm-dd').on('input', _.debounce(function () {

@@ -181,9 +181,11 @@ let config = {
             _this.actions.keyup();
         }, 200));
 
-        _.debounce(function () {
-            _this.events.changeValue(_this.data)
-        }, 200)();
+        if(!_this.data.isAgGrid){
+            _.debounce(function () {
+                _this.events.changeValue(_this.data)
+            }, 200)();
+        }
     },
     beforeDestory: function () {
         this.el.off();
