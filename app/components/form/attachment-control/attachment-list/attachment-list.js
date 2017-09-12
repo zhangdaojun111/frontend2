@@ -116,34 +116,63 @@ let css=`
     .closeImg:hover{
         background-color:darkred;
     }
-
 `;
 
 export const attachmentListConfig = {
     template: template,
     data:{
-        css:css.replace(/(\n)/g, '')
+        css:css.replace(/(\n)/g, ''),
     },
     actions:{
         deleteItem:function (item) {
-            $.post('/delete_attachment/',{
+            HTTP.postImmediately('/delete_attachment/',{
                 file_ids:JSON.stringify([item['file_id']]),
                 dinput_type:this.data.dinput_type
             }).then(res=>{
-                let index = _.findIndex(this.data.attachmentList,item);
-                this.data.attachmentList.splice(index,1);
+                if(res.success){
+                }
             })
+
+            let index = _.findIndex(this.data.attachmentList,item);
+            this.data.attachmentList.splice(index,1);
+            let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
+            if(deletedFiles == undefined){
+                deletedFiles = [];
+            }
+            deletedFiles.push(item['file_id']);
+            Storage.setItem(deletedFiles,'deletedItem-'+this.data.id,Storage.SECTION.FORM);
         },
         viewItem:function (item) {
-            let ele = $('<img>');
-            ele.attr('src','/download_attachment/?file_id='+item.file_id+'&download=0&dinput_type='+this.data.dinput_type);
+            if(item.viewable == 'no'){
+                return;
+            }
+            let url = '/download_attachment/?file_id='+item.file_id+'&download=0&dinput_type='+this.data.dinput_type;
+            let ele;
+            if(item.viewable == 'viewable'){
+                ele = $('<img src="'+url+'">');
+            } else if(item.viewable == 'playable'){
+                ele = $('<video width="400" controls><source src="'+url+'" type="video/mp4">您的浏览器不支持HTML5</video>');
+            }
             this.el.find('.preview-anchor').empty().append(ele);
+        },
+        isViewable:function (filename) {
+            let exp = filename.split('.').pop();
+            let viewableFileType = ['jpg','jpeg','bmp', 'png', 'tiff', 'gif', 'exif', 'svg', 'pcd', 'dxf', 'ufo'];
+            for(let type of viewableFileType){
+                if(exp.toLowerCase().indexOf(type)!=-1){
+                    return 'viewable';
+                }
+            }
+            if(exp.toLowerCase().indexOf('mp4')!=-1){
+                return 'playable';
+            }
+            return 'no';
         }
     },
     afterRender:function () {
         this.data.style = $('<style type="text/css"></style>').text(this.data.css).appendTo($("head"));
         this.el.find('.table').addClass('table-striped').addClass('table-bordered');
-        $.post('/query_attachment_list/',{
+        HTTP.postImmediately('/query_attachment_list/',{
             file_ids:JSON.stringify(this.data.fileIds),
             dinput_type:this.data.dinput_type
         }).then(res=>{
@@ -154,8 +183,7 @@ export const attachmentListConfig = {
                     row['dinput_type']=this.data.dinput_type;
                     row['callback'] = this.actions.deleteItem;
                     let ele = $('<tr></tr>');
-                    let fileTd = $('<td></td>');
-                    fileTd.text(row.file_name);
+                    let fileTd = $('<td>'+row.file_name+'</td>');
                     ele.append(fileTd);
                     let controlersTd = $('<td></td>');
                     let downloadCon = $('<a>下载</a>');
@@ -166,14 +194,19 @@ export const attachmentListConfig = {
                     viewCon.on('click',function () {
                         t.actions.viewItem(row);
                     });
-                    let deleteCon = $('<a>删除</a>');
-                    controlersTd.append(deleteCon);
-                    deleteCon.on('click',function () {
-                        t.actions.deleteItem(row);
-                        ele.remove();
-                    })
+                    if(this.data.isView == 0){
+                        let deleteCon = $('<a>删除</a>');
+                        controlersTd.append(deleteCon);
+                        deleteCon.on('click',function () {
+                            t.actions.deleteItem(row);
+                            ele.remove();
+                        })
+                    }
                     ele.append(controlersTd);
-                    row['element']=ele;
+                    row['viewable']= this.actions.isViewable(row.file_name);
+                    if(row['viewable']=='no'){
+                        viewCon.css('color','#a9a9a9');
+                    }
                     this.el.find('.attachment-list-anchor').append(ele);
                 }
             }

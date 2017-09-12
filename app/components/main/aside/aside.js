@@ -31,7 +31,7 @@ function presetMenuData(menu, leaf) {
 function presetCommonMenuData(menu, commonData) {
     let menuData = _.defaultsDeep([], menu);
     let commonKeys = commonData.data;
-    console.log(commonKeys);
+
     function setUsed(item) {
         item.commonUsed = true;
         if (item.parent) {
@@ -208,7 +208,7 @@ let config = {
                 pre_type: "7",
                 content: JSON.stringify(choosed)
             });
-            console.log(choosed);
+
             window.config.commonUse.data = choosed;
             this.actions.showCommonMenu(true);
         },
@@ -222,9 +222,8 @@ let config = {
                     .then((result) => {
                         if(result === true){
                             UserInfoService.shutDownAgent({quick_shutdown:0}).done((result) => {
-                                console.log(result);
                                 if(result === 1){
-                                    console.log("quick shutdown success");
+                                    // console.log("quick shutdown success");
                                 }else{
                                     console.log("quick shutdown failed",result)
                                 }

@@ -14,7 +14,6 @@ let config = {
         fromDate: '',
         toDate: '',
         cancelFields: [],
-
     },
     actions: {
 
@@ -53,7 +52,7 @@ let config = {
             _this.actions.getExportDate();
         };
 
-        this.append(new DateControl({value: ''},{changeValue: changeStartValue}), this.el.find('.start-date'));
+        this.append(new DateControl({value: ''}), this.el.find('.start-date'));
         this.append(new DateControl({value: ''},{changeValue: changeEndValue}), this.el.find('.end-date'));
     },
 };

@@ -15,10 +15,8 @@ export const Storage = {
         BI:'BI'
     },
 
-    iframe_key:'',
-
     init(key){
-       Storage.iframe_key = key;
+       Storage['iframe_key'] = key;
     },
 
     /**
@@ -33,14 +31,14 @@ export const Storage = {
             return;
         }
         let obj;
-        if(window.localStorage[Storage.iframe_key]==undefined){
+        if(window.localStorage[Storage['iframe_key']]==undefined){
             obj = {};
         } else {
-            obj = JSON.parse(window.localStorage[Storage.iframe_key]);
+            obj = JSON.parse(window.localStorage[Storage['iframe_key']]);
         }
         obj[section]=obj[section]||{};
         obj[section][itemTag]=item;
-        window.localStorage[Storage.iframe_key] = JSON.stringify(obj);
+        window.localStorage[Storage['iframe_key']] = JSON.stringify(obj);
     },
 
     /**
@@ -49,10 +47,10 @@ export const Storage = {
      * @param section 所属部分
      */
     getItemAndDelete:function(itemTag,section){
-        let obj = JSON.parse(window.localStorage[Storage.iframe_key]);
+        let obj = JSON.parse(window.localStorage[Storage['iframe_key']]);
         let item = obj[section][itemTag];
         delete obj[section][itemTag];
-        window.localStorage[Storage.iframe_key] = JSON.stringify(obj);
+        window.localStorage[Storage['iframe_key']] = JSON.stringify(obj);
         return item;
     },
 
@@ -62,8 +60,9 @@ export const Storage = {
      * @param section 所属部分
      */
     getItem:function (itemTag,section){
-        if(window.localStorage[Storage.iframe_key]){
-            let obj = JSON.parse(window.localStorage[Storage.iframe_key])[section];
+        if(window.localStorage[Storage['iframe_key']]){
+            let obj = JSON.parse(window.localStorage[Storage['iframe_key']])[section];
+            console.dir(JSON.parse(window.localStorage[Storage['iframe_key']]));
             if(obj == undefined){
                 return null;
             }
@@ -78,7 +77,7 @@ export const Storage = {
      * @param section 所属部分
      */
     deleteItem:function (itemTag,section) {
-        let obj = JSON.parse(window.localStorage[Storage.iframe_key]);
+        let obj = JSON.parse(window.localStorage[Storage['iframe_key']]);
         for(let key of Object.keys(obj[section])){
             if(key.indexOf(itemTag)>=0){
                 delete obj[section][key];

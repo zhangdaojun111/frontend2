@@ -68,7 +68,7 @@ let config = {
          * @param height 图片的高度
          * @param id 图片的id
          */
-        createImg(top,left,width,height,id){
+        createImg(top,left,width,height,id,H,L){
             let viewLeft = left;
             let viewTop = top;
             let top1 = top+"%";
@@ -78,8 +78,8 @@ let config = {
                             <img  width=${width} height=${height} src='${host}/download_attachment/?file_id=${id}&download=0'/>
                                 <i class='J_del'>X</i>
                          </div>`;
-            html += `<img class="printS printimg" style="top:${top1};left:${left1};" width=${width} height=${height} src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
-            $('#place-form').find(".ui-myformtable").append(html);
+            html += `<img class="printS printimg" style="top:${H}px;left:${L}px;" width=${width} height=${height} src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
+            $('#place-form').find(".form-print-position").append(html);
         },
         /**
          * 是否显示隐藏form中已有的图片
@@ -94,14 +94,14 @@ let config = {
             }
         },
         dragImg(event,ui){
-            let container = $(".ui-myformtable")[0];
+            let container = $(".form-print-position")[0];
             //容器的宽高
             let containerHeight = container.clientHeight;
             let containerWidth = container.clientWidth;
             let id = ui.helper[0].dataset.id;
             //容器的偏移量
-            let offsetleft = $('.ui-myformtable').offset().left;
-            let offsettop = $('.ui-myformtable').offset().top;
+            let offsetleft = $('.form-print-position').offset().left;
+            let offsettop = $('.form-print-position').offset().top;
             //判断图片放置位置是否在容器区域
             let leftout = ui.position.left > offsetleft;
             let topout = ui.position.top > offsettop;
@@ -110,13 +110,15 @@ let config = {
             if(leftout && topout && bottomout && rightout){
                 let top = (ui.position.top-offsettop)/containerHeight;
                 let left = (ui.position.left-offsetleft)/containerWidth;
+                let H = ui.position.top-offsettop;
+                let L = ui.position.left-offsetleft+248;
                 top = top.toFixed(6)*100;
                 left = left.toFixed(6)*100;
-                this.actions.createImg(top,left,248,148,id);
+                this.actions.createImg(top,left,248,148,id,H,L);
             }
             // this.actions.createImg(top,left,50,50,id);
             this.el.find(".signatureMock").css("visibility","hidden");
-            $('.ui-myformtable').css("z-index",0);
+            $('.form-print-position').css("z-index",0);
         },
         /**
          * 初始化，是图片具有可拖拽属性
@@ -130,7 +132,10 @@ let config = {
                 revert: false,
                 start:function (event, ui) {
                     that.el.find(".signatureMock").css("visibility","visible");
-                    $('.ui-myformtable').css("z-index",105);
+                    $('.form-print-position').css({
+                                                    "z-index":105,
+                                                    "background":"#fff"
+                                                    });
                 },
                 stop:function(event, ui){
                     that.actions.dragImg(event,ui);
