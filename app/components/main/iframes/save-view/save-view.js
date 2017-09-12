@@ -184,7 +184,6 @@ let config = {
             favorlist['query_type'] = 'delete';
 
             TabService.deleteFavoriteItem(favorlist).done((result) => {
-                console.log(result);
                 if(result.success === 1){
                     _.remove(this.data.favoriteList,function (n) {
                         return n.name === name;

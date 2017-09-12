@@ -1,0 +1,74 @@
+@import "../../assets/scss/core/base";
+
+#find-password-main-window{
+    width: 100%;
+    .find-pw-component{
+        position: relative;
+        .find-pw-step1{
+            display: none;
+            position: relative;
+            margin-top:15%;
+            margin-left:40%;
+            width:450px;
+            font-size: 24px;
+            span{
+                vertical-align: middle;
+            }
+            input{
+                border:1px solid #d6d6d6;
+                border-radius: 3px;
+                width:230px;
+                height:30px;
+                position:relative;
+                padding-left:5px;
+                margin: 10px 0 10px 0;
+                vertical-align: middle;
+            }
+
+            .new-pw-confirm-prompt{
+                margin-left: 48px;
+            }
+
+            .reset-pw-btn{
+                width: 100px;
+                height: 35px;
+                background-color: #0088ff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                line-height: 35px;
+                text-align: center;
+                color: #FFFFFF;
+                margin-top: 20px;
+                margin-left: 310px;
+            }
+        }
+
+        .find-pw-step2{
+            display: none;
+            position: relative;
+            margin-top:15%;
+            margin-left:40%;
+            width:450px;
+            font-size: 24px;
+            .reset-result{
+                text-align: center;
+                font-size: 24px;
+                margin-top: 20%;
+            }
+            .goLogin{
+                width: 100px;
+                height: 35px;
+                background-color: #0088ff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                line-height: 35px;
+                text-align: center;
+                color: #FFFFFF;
+                margin-top: 20px;
+                margin-left: 177px;
+            }
+        }
+    }
+}

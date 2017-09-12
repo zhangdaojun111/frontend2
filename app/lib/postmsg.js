@@ -115,7 +115,9 @@ window.addEventListener('message', function (event) {
                         data: params
                     });
                 });
-                dialogHash[data.key].element.erdsDialog(_.defaultsDeep(data.frame, {
+                dialogHash[data.key].element.erdsDialog(_.defaultsDeep({
+                    modal: false
+                }, data.frame, {
                     modal: true,
                     maxable: true,
                     close: function () {
@@ -138,14 +140,8 @@ window.addEventListener('message', function (event) {
                     dialogHash[data.key].comp.destroySelf();
                 } else {
                     // 弹出框是iframe
-                    let iframe = dialogHash[data.key].element.find('iframe');
-                    if (iframe.length) {
-                        iframe = iframe[0];
-                        if (iframe.contentWindow) {
-                            // $(iframe.contentWindow).trigger('iframe.close');
-                        }
-                    }
-                    dialogHash[data.key].element.erdsDialog('destroy').remove();
+                    // 清除iframe中适用的localstorage
+                    Storage.clear(data.key);
                 }
                 PMAPI.sendToChild(dialogHash[data.key].iframe, {
                     type: PMENUM.recieve_data,
