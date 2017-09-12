@@ -1,3 +1,8 @@
+@mixin div-equal{
+    display: inline-block;
+    width: 33.3%;
+    margin-top: 10px;
+}
 .form-chart-multi{
     .form-group {
         .form-chart-multi-chart {
@@ -5,20 +10,16 @@
                 position: relative;
                 margin-bottom: 20px;
                 > div:nth-child(2) {
-                    display: inline-block;
-                    width: 33.3%;
+                    @include div-equal;
                 }
                 > div:nth-child(3) {
-                    display: inline-block;
-                    width: 33.3%;
+                    @include div-equal;
                 }
                 > div:nth-child(4) {
-                    display: inline-block;
-                    width: 33.3%;
+                    @include div-equal;
                 }
                 > div:nth-child(5) {
-                    display: inline-block;
-                    width: 33.3%;
+                    @include div-equal;
                 }
                 > div:nth-child(6) {
                     display: inline-block;

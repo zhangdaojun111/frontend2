@@ -111,7 +111,7 @@ let config = {
                 }
             },
             {
-                label: '',
+                label: '选择图形',
                 name: 'chartType',
                 defaultValue: 'line',
                 type: 'select',

@@ -1,39 +1,56 @@
+@mixin msg-show {
+    position: relative;
+    .form-label {
+        position: absolute;
+        border: none;
+        left: 45px;
+        span {
+            position: absolute;
+            top: -22px;
+            left: 31px;
+            min-width: 100px;
+            background: none;
+            color: #666;
+        }
+        .error-msg {
+            position: absolute;
+            top: 35px;
+            left: 30px;
+            min-width: 100px;
+        }
+    }
+}
 .form-group-chart {
     .form-chart-autocomplete {
-        position: relative;
+        @include msg-show;
+    }
+    .form-chart-select {
+        @include msg-show;
         .form-label {
-            position: absolute;
-            border: none;
-            left: 45px;
             span {
-                display: none;
-            }
-            .error-msg {
-                position: absolute;
-                top: 35px;
-                left: 40px;
-                min-width: 100px;
+                top: 0;
             }
         }
     }
-    .form-chart-checkbox{
-        position: relative;
+    .form-chart-checkbox {
+        @include msg-show;
         .form-label {
-            position: absolute;
-            border: none;
-            left: 45px;
-            .start-icon{
-                display: inline-block;
-            }
             span {
                 display: none;
             }
-            .error-msg {
-                position: absolute;
-                top: 6px;
-                left: 30px;
-                min-width: 100px;
+            .error-msg{
+                top: -2px;
             }
+        }
+    }
+}
+
+.form-chart-multi-chart {
+    .form-label {
+        b {
+            color: #f57070;
+            padding: 0 6px;
+            letter-spacing: 1px;
         }
     }
 }
