@@ -3,7 +3,6 @@
  * name: bi基础类
  * desc: 用来扩展component
  */
-
 import '../../assets/scss/core/reset.scss';
 import '../../assets/scss/core/common.scss';
 import '../../assets/scss/core/jquery-ui-theme.scss';
