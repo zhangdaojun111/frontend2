@@ -286,6 +286,7 @@ let config = {
         }
     ],
     afterRender: function () {
+        this.showLoading($(document.body));
         if (window.config && window.config.menu) {
             this.allBtn = this.el.find('.tabs p.all');
             this.commonBtn = this.el.find('.tabs p.common');
@@ -298,6 +299,7 @@ let config = {
         }
         //此处检查用户是否开启代理，并做提醒
         this.actions.checkAgent();
+        this.hideLoading();
     },
     firstAfterRender: function() {
         Mediator.on('aside:size', (order) => {
