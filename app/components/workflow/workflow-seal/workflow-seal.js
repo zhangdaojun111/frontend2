@@ -62,11 +62,13 @@ let config = {
         },
         /**
          * 创建一个图片的的dom的节点，定位在form中
-         * @param top 图片的定位的top
-         * @param left 图片的定位的left
+         * @param top 图片的定位的top百分比
+         * @param left 图片的定位的left百分比
          * @param width 图片的宽度
          * @param height 图片的高度
          * @param id 图片的id
+         * @param H 图片的高度
+         * @param L 图片的右边距加上图片的宽度，初步解决打印位置不对的bug
          */
         createImg(top,left,width,height,id,H,L){
             let viewLeft = left;
