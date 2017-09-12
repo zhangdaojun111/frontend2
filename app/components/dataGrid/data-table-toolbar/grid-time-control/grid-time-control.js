@@ -1,6 +1,6 @@
 /**
  *@author chenli
- *@description æ—¶é—´æ§ä»¶
+ *@description Ê±¼ä¿Ø¼ş
  */
 import Component from '../../../lib/component'
 import template from './time-control.html'
@@ -12,7 +12,7 @@ let config = {
         // width: '240px'
     },
     actions: {
-        //æ—¶é—´æ—¥æœŸè¾“å…¥é”™è¯¯æç¤º
+        //Ê±¼äÈÕÆÚÊäÈë´íÎóÌáÊ¾
         keyup: function () {
             let _this = this
             // _this.data.value=_this.data.value.replace(/[^\d&:&]|_/ig,'');
@@ -20,7 +20,7 @@ let config = {
             let strDate = this.el.find(".timeInput").val();
             let re = /^((20|21|22|23|[0-1]\d)\:[0-5][0-9])(\:[0-5][0-9])?$/;
 
-            if (re.test(strDate))//åˆ¤æ–­æ—¥æœŸæ ¼å¼ç¬¦åˆhh:mm:ssæ ‡å‡†
+            if (re.test(strDate))//ÅĞ¶ÏÈÕÆÚ¸ñÊ½·ûºÏhh:mm:ss±ê×¼
             {
                 this.el.find(".hour").children("span").text(strDate.substring(0,2))
                 this.el.find(".minute").children("span").text(strDate.substring(3,5));
@@ -35,7 +35,7 @@ let config = {
 
             }
             else {
-               // this.el.find("#errorMessage").css("display", "inline-block").text("æ—¶é—´æ ¼å¼ä¸æ­£ç¡®ï¼Œæ­£ç¡®æ ¼å¼ä¸º12:00:00 ");
+               // this.el.find("#errorMessage").css("display", "inline-block").text("Ê±¼ä¸ñÊ½²»ÕıÈ·£¬ÕıÈ·¸ñÊ½Îª12:00:00 ");
             }
         }
     },
@@ -52,12 +52,12 @@ let config = {
             selector: '.ui-datepicker-current',
             callback: function () {
                 this.el.find("#errorMessage").css("display","none");
-                //å¢åŠ 0
+                //Ôö¼Ó0
                 function p(s) {
                     return s < 10 ? '0' + s : s;
                 }
 
-                //è·å–å½“å‰æ—¶é—´
+                //»ñÈ¡µ±Ç°Ê±¼ä
                 let myDate = new Date();
                 let h = myDate.getHours();
                 let m = myDate.getMinutes();
@@ -103,7 +103,7 @@ let config = {
     ],
     afterRender() {
         let _this = this;
-        this.el.find(".timeInput").val("æ—¶:åˆ†:ç§’");
+        this.el.find(".timeInput").val("Ê±:·Ö:Ãë");
         this.el.find('.ui-width').css('width', this.data.width);
         this.el.find('.time').css('width', this.data.width);
         if(this.data.history){
@@ -117,19 +117,19 @@ let config = {
         }
 
 
-        //å¢åŠ 0
+        //Ôö¼Ó0
         function p(s) {
             return s < 10 ? '0' + s : s;
         }
 
-        //è·å–å½“å‰æ—¶é—´
+        //»ñÈ¡µ±Ç°Ê±¼ä
         let myDate = new Date();
         let h = myDate.getHours();
         let m = myDate.getMinutes();
         let s = myDate.getSeconds();
         let now = p(h) + ':' + p(m) + ":" + p(s);
 
-        //å›æ˜¾
+        //»ØÏÔ
         if (_this.data.value) {
              _this.el.find(".timeInput").val(_this.data.value);
             let a =this.el.find(".hour").children("span").text(_this.data.value.substring(0,2))
@@ -137,14 +137,14 @@ let config = {
             this.el.find(".second").children("span").text(_this.data.value.substring(6,8));
 
         } else {
-            this.el.find(".timeInput").val("æ—¶:åˆ†:ç§’");
+            this.el.find(".timeInput").val("Ê±:·Ö:Ãë");
             this.el.find(".hour").children("span").text(p(h));
             this.el.find(".minute").children("span").text(p(m));
             this.el.find(".second").children("span").text(p(s));
         }
 
         this.el.on("click", '.plus', function () {
-            //å½“å‰æ—¶é—´+1
+            //µ±Ç°Ê±¼ä+1
             let myDate2 = new Date();
             myDate2.setHours(h + 1);
             myDate2.setMinutes(m + 1);
@@ -171,7 +171,7 @@ let config = {
 
         });
         this.el.on("click", '.reduce', function () {
-            //å½“å‰æ—¶é—´-1
+            //µ±Ç°Ê±¼ä-1
             let myDate3 = new Date();
             myDate3.setHours(h - 1);
             myDate3.setMinutes(m - 1);
