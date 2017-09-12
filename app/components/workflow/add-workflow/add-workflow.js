@@ -39,6 +39,7 @@ let config={
     },
     afterRender(){
         let _this=this;
+        _this.showLoading();
         Mediator.subscribe('workflow:getKey', (msg)=> {
             this.data.key=msg;
         });
@@ -115,6 +116,14 @@ class AddWorkflow extends Component{
         super(config,data);
     }
 }
-let component = new AddWorkflow();
-let el = $('#add-wf');
-component.render(el);
+export default {
+    showDom(){
+        return new Promise(function(resolve, reject){
+            let component = new AddWorkflow();
+            let el = $('#add-wf');
+            component.render(el);
+            resolve(component);
+        })
+
+    }
+}

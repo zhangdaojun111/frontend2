@@ -23,15 +23,10 @@ import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-
 import {PMAPI,PMENUM} from '../lib/postmsg';
 import jsplumb from 'jsplumb';
 
-WorkFlowForm.showForm().then(function () {
-    setTimeout(()=>{
-        $('.J_component-loading-cover').remove();
-    },2000)
-
-});
-
 WorkFlowGrid.showGrid();
-
+ApprovalWorkflow.showDom().then(function (component) {
+    setTimeout(()=> component.hideLoading(),1000)
+});
 let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[],agorfo=true,is_batch=0;
 serchStr.split('&').forEach(res => {
     let arr = res.split('=');
