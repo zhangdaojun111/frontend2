@@ -1785,7 +1785,7 @@ let config = {
                     let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
 
                     let title = '新增'
-                    this.actions.openSourceDataGrid( url,title );
+                    this.actions.openSelfIframe( url,title );
                 } )
             }
             //在途刷新
@@ -2623,7 +2623,7 @@ let config = {
                 };
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
-                this.actions.openSourceDataGrid( url,title );
+                this.actions.openSelfIframe( url,title );
             }
             if( data.event.srcElement.className == 'gridEdit' ){
                 this.actions.viewOrEditPerm( 'edit' );
@@ -2638,7 +2638,7 @@ let config = {
                     btnType: 'edit' };
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '编辑'
-                this.actions.openSourceDataGrid( url,title );
+                this.actions.openSelfIframe( url,title );
             }
             if( data.event.srcElement.className == 'gridHistory' ){
                 console.log( '历史' )
@@ -2753,7 +2753,7 @@ let config = {
             }
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
             let title = '查看'
-            this.actions.openSourceDataGrid( url,title );
+            this.actions.openSelfIframe( url,title );
         },
         //设置失效
         setInvalid: function () {
@@ -2782,6 +2782,19 @@ let config = {
                     this.actions.returnBatchData( data.ids );
                     this.actions.getGridData();
                 }
+            } )
+        },
+        //打开局部的弹窗
+        openSelfIframe: function ( url,title,w,h ) {
+            PMAPI.openDialogToSelfByIframe( url,{
+                    width: w || 1400,
+                    height: h || 800,
+                    title: title,
+                    modal:true,
+                    defaultMax: true,
+                    // customSize: true
+            } ).then( (data)=>{
+
             } )
         },
         //返回批量工作流导入后数据
