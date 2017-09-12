@@ -1,7 +1,14 @@
-#approval-workflow-body,#myBody,#add-signer-body,#ly-body,#add-follow-body{
+#approval-workflow-body,#myBody,#add-signer-body,#approval-reject-body,#add-follow-body,#add-wf-body{
     font-size: 12px;
+    &::-webkit-scrollbar{
+        background: #ebebeb;
+    }
 }
-#ly-body,#add-follow-body,#add-signer-body{
+#add-wf-html,#add-wf-body{
+    height: 100%;
+    background: #ebebeb;
+}
+#approval-reject-body,#add-follow-body,#add-signer-body{
     padding: 0;
     margin: 0;
 }
@@ -84,9 +91,9 @@
     width: 50px;
     height: 50px;
     display: block;
-
-
-
+}
+.workflow-icon-select {
+    background: url("../../images/dataGrid/icon_xiala2.png") right center no-repeat;
 }
 .icon-workflow-icon1 {
     background-position: -26px 0px;
