@@ -82,7 +82,7 @@ class Checkbox extends Base {
         } else { // 单选
             if (value) {
                 this.data.value.push(value);
-                this.el.find(`input`).attr("checked",true);
+                this.el.find(`input`).prop("checked",true);
             };
             this.trigger('onChange', this.data.value);// 作为单选的时候触发
         };
