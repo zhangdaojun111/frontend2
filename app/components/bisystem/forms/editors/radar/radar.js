@@ -19,7 +19,7 @@ let config = {
             if (table) {
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
-                    this.actions.loadColumns(res['data']['y_field']);
+                    this.actions.loadColumns(res['data']);
                 } else {
                     msgbox.alert(res['error'])
                 }
@@ -36,8 +36,8 @@ let config = {
         async loadColumns(columns) {
             if (this.formItems['columns']) {
                 if (columns) {
-                    this.formItems['columns'].setList(columns);
-                    this.formItems['product'].setList(columns);
+                    this.formItems['columns'].setList(columns['y_field']);
+                    this.formItems['product'].setList(columns['x_field']);
                 } else { // 清空字段
                     this.formItems['columns'].actions.clear();
                     this.formItems['choosed'].actions.clear();
