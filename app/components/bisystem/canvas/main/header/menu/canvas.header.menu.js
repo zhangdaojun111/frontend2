@@ -2,7 +2,7 @@
  * Created by birdyy on 2017/9/11.
  * 画布header视图列表menu
  */
-import Component from '../../../../../../lib/Component';
+import Component from '../../../../../../lib/component';
 import template from './canvas.header.menu.html';
 
 

@@ -205,7 +205,6 @@ export class EchartsService {
             // 当双y轴 只有2个y轴字段时 修改折线颜色
             if (cellOption['yAxis'].length === 2) {
                 yAxis.map((y, colorIndex) => {
-                    console.log(linebarOption['yAxis'][colorIndex]);
                     if (linebarOption['yAxis'][colorIndex]) {
                         linebarOption['yAxis'][colorIndex]['axisLine'] = {
                             lineStyle: {
