@@ -803,13 +803,11 @@ let config = {
 
         //判断一下日期的类型，并且进行限制
         checkDateType(data) {
-            for(let i = 0;i<this.data.data.length;i++){
+            for(let i in this.data.data){
               if(this.data.data[i]['type'] == 'Date'){
                   let temp = this.data.data[i];
                   let dfield = this.data.data[i]['dfield'];//f8
-
                     if(temp['timeType'] == 'after'){
-                        console.log("data  "+ data[dfield].split("-"))
                         let vals = data[dfield].split("-");
                         //let vals = val.split("-");//[2011,11,11];
                         let myData = new Date();
@@ -990,6 +988,7 @@ let config = {
                 this.actions.montageOtherFields(formDataNew);
             }
             this.actions.checkDateType(formValue);
+            console.log('cc  ',formValue)
             let obj_new = this.actions.createCacheData(formDataNew, data, true, this);
             let obj_old = this.actions.createCacheData(formDataNew, data, false, this);
             this.actions.changeValueForChildTable(data);
