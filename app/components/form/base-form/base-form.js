@@ -1178,9 +1178,10 @@ let config = {
         addBtn() {
             this.el.find('.ui-btn-box').remove();
             //添加提交按钮
-            let $wrap = this.el.find('table').parentsUntil(this.data.el);
+            // let $wrap = this.el.find('table').parentsUntil(this.data.el);
+            let $wrap = this.el;
             if (this.data.btnType == 'new' || this.data.btnType == 'edit') {
-                $wrap.append(`<div class="noprint ui-btn-box" style="margin-left: -20px"><div>
+                $wrap.append(`<div class="noprint ui-btn-box"><div>
                     <!--<button class="btn btn-normal mrgr" id="print">-->
                         <!--<span>打印</span>-->
                         <!--<div class="btn-ripple ripple"></div>-->

@@ -223,7 +223,6 @@ const funnel = {
         }
     ]
 }
-
 // 折线柱状图
 const linebar = {
     animation : false,
@@ -239,14 +238,17 @@ const linebar = {
     },
     legend: {
         top: 0,
-        data: []
+        data: [],
+        selected: {}
     },
+
     grid: {
         left: 30,
         right: 30,
-        bottom: 20,
+        bottom: 30,
         top: 50
     },
+
     xAxis: [
         {
             type: 'category',

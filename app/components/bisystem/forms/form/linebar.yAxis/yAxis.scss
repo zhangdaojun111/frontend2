@@ -5,15 +5,28 @@
         background-color:rgba(250, 250, 250, 1);
         .form-chart-y-columns {
             display:inline-block;
+            width: calc(100% - 40px);
             >div{
                 float:left;
-                margin-right:10px;
+                width:30%;
+                margin-right:3%;
                 select {
                     vertical-align: bottom;
+                    width:100%;
                 }
                 .auto-select-component{
                     margin-top:0!important;
+                    width:100%;
                 }
+                .form-chart-text {
+                    input {
+                        width:100%;
+                        padding: 9px 7px 6px;
+                        margin-top:0;
+                    }
+
+                }
+
             }
             .form-chart-wrapper{
                 padding-left:0;
@@ -38,6 +51,20 @@
                 text-indent:-99999px;
                 border:none;
                 outline:none;
+            }
+        }
+    }
+    .yAxis-setting {
+        padding-bottom: 10px;
+        .form-chart-checkbox {
+            label {
+                margin-top:0;
+            }
+        }
+        >div {
+            float:left;
+            label {
+                padding-top:0;
             }
         }
     }
