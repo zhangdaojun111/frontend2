@@ -28,7 +28,6 @@ let config = {
             }
 
         },
-
         /**
          * 渲染列名字段列表（x轴）
          * @param columns 表格列表字段（x轴）
