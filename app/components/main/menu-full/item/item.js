@@ -26,7 +26,7 @@ let config = {
             this.icon.removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-e');
             this.data.display = false;
         },
-        onItemClickAtFull: function () {
+        onItemClickAtFull: function (event) {
             if (this.data.items && this.data.items.length) {
                 if (this.data.type === 'full') {
                     if (this.data.display === true) {
@@ -36,6 +36,10 @@ let config = {
                     }
                 }
             } else {
+                //编辑模式下不再打开tab
+                if(event.currentTarget.className.indexOf('edit') > 0){
+                    return;
+                }
                 let key;
                 if (this.data.table_id && this.data.table_id !== '' && this.data.table_id !== "0") {
                     key = this.data.table_id;
@@ -139,7 +143,7 @@ let config = {
             selector: '> .menu-full-item > .row.full',
             callback: function (context, event) {
                 if (!$(event.target).is('input')) {
-                    this.actions.onItemClickAtFull();
+                    this.actions.onItemClickAtFull(event);
                 }
             }
         }, {

@@ -82,12 +82,14 @@ let config = {
             this.el.find('.custom-checkbox').show();
             this.el.find('.search').addClass('edit');
             this.el.find('.menu-full').addClass('edit');
+            this.el.find('.menu-full-item > .row.full').addClass('edit');
             this.actions.countHeight();
         },
         cancelEditModel: function () {
             this.el.find('.custom-checkbox').hide();
             this.el.find('.search').removeClass('edit');
             this.el.find('.menu-full').removeClass('edit');
+            this.el.find('.menu-full-item > .row.full').removeClass('edit');
             this.actions.countHeight();
         },
         getSelected: function () {
