@@ -2,51 +2,53 @@
 * 容器的大小
 */
 
-@mixin icon{
-    display:inline-block;
-    width:16px;
-    height:16px;
-    text-indent:-9999px;
+@mixin icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    text-indent: -9999px;
 }
 
-html.bi,body.bi {
+html.bi, body.bi {
     height: 100%;
     .bi-container {
         height: 100%;
     }
     .remove-icon {
         @include icon;
-        background:url('../../../assets/images/bisystem/remove.png') no-repeat;
+        background: url('../../../assets/images/bisystem/remove.png') no-repeat;
     }
     .add-icon {
         @include icon;
-        background:url('../../../assets/images/bisystem/add.png') no-repeat;
+        background: url('../../../assets/images/bisystem/add.png') no-repeat;
     }
     .edit-icon {
         @include icon;
-        background:url('../../../assets/images/bisystem/edit.png') no-repeat;
+        background: url('../../../assets/images/bisystem/edit.png') no-repeat;
     }
     .red-remove-icon {
         @include icon;
-        background:url('../../../assets/images/bisystem/red-remove.png') no-repeat;
+        background: url('../../../assets/images/bisystem/red-remove.png') no-repeat;
     }
     .start-icon {
         @include icon;
-        background:url('../../../assets/images/bisystem/start.png') no-repeat;
+        background: url('../../../assets/images/bisystem/start.png') no-repeat;
+    }
+    .view-back-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/bi_view_back.png') no-repeat;
     }
 }
+
 @mixin chart-com {
     height: calc(100%);
     background: rgba(242, 242, 242, 1);
 }
 
-
-
-
 .remove-icon {
-    display:inline-block;
-    width:16px;
-    height:16px;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
 }
 
 /**
@@ -74,44 +76,45 @@ html.bi,body.bi {
         position: relative;
     }
 }
+
 .bi-component-container {
     .form-chart {
         @include chart-com;
         > h3 {
-            height:60px;
-            line-height:60px;
-            text-indent:20px;
-            background:#ffffff;
-            border-bottom:solid 1px rgba(228, 228, 228, 1);
+            height: 60px;
+            line-height: 60px;
+            text-indent: 20px;
+            background: #ffffff;
+            border-bottom: solid 1px rgba(228, 228, 228, 1);
         }
-        position:relative;
+        position: relative;
     }
     .form-group {
-        min-width:600px;
-        max-width:1000px;
-        padding:40px 30px 0;
-        background:#ffffff;
-        height:calc(100% - 175px);
-        overflow-y:auto;
-        overflow-x:hidden;
-        margin:0 auto;
-        >div{
-            margin-bottom:40px;
+        min-width: 600px;
+        max-width: 1000px;
+        padding: 40px 30px 0;
+        background: #ffffff;
+        height: calc(100% - 175px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        margin: 0 auto;
+        > div {
+            margin-bottom: 40px;
         }
-        .form-chart-wrapper{
-            padding-left:80px;
+        .form-chart-wrapper {
+            padding-left: 80px;
         }
         .form-label {
-            padding-left:10px;
-            border-bottom:#57c4ff solid 1px;
+            padding-left: 10px;
+            border-bottom: #57c4ff solid 1px;
             span {
-                background:#57c4ff;
-                display:inline-block;
-                padding:6px 8px;
-                color:#ffffff;
+                background: #57c4ff;
+                display: inline-block;
+                padding: 6px 8px;
+                color: #ffffff;
             }
-            .required,.error-msg{
-                color:red;
+            .required, .error-msg {
+                color: red;
             }
         }
     }
