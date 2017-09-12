@@ -7,7 +7,7 @@ import {CanvasMain} from './canvas/main/main';
 let canvasComponent;
 const BiAppRouter = Backbone.Router.extend({
     routes: {
-        'views/:id':'routerViewsComponent',
+        'canvas/:id':'routerViewsComponent',
         '':'routerViewsComponent',
     },
     routerViewsComponent(id) {

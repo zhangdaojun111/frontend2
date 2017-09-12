@@ -30,8 +30,6 @@ let config = {
             }
             this.data.isEdit = chart['data']['assortment'] === 'comment' ? true : false;
             this.reload();
-            console.log('=-==============');
-            console.log(this.data.chart);
         }
     },
     binds:[

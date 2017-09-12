@@ -19,8 +19,9 @@ let config = {
             let cell = new CanvasCellComponent(data,{
 
                 onDrag: (componentId) => {
+                    let comp = this.data.cells[componentId];
                     this.data.cellMaxZindex++;
-                    this.data.cells[componentId].data.cellMaxZindex = this.data.cellMaxZindex;
+                    comp.data.cellMaxZindex = comp.data.cell.size.zIndex = this.data.cellMaxZindex;
                 },
 
                 onUpdateLayout:(data) => {
