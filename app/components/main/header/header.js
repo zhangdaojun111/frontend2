@@ -23,7 +23,7 @@ let config = {
         postMessageVisible: window.config.sysConfig.userInfo.is_superuser.toString() === "1",
         calendarVisible: window.config.sysConfig.logic_config.use_calendar.toString() === "1",
         biVisible: window.config.sysConfig.logic_config.use_bi.toString() === "1",
-        imVisible: window.config.sysConfig.logic_config.use_im.toString() === "1",
+        // imVisible: window.config.sysConfig.logic_config.use_im.toString() === "1",
     },
     actions: {
         setSizeToFull: function () {

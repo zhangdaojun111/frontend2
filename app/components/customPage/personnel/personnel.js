@@ -498,7 +498,7 @@ let config = {
                     is_view: 0
                 }
                 let url = dgcService.returnIframeUrl( '/form/index/',obj );
-                this.actions.openSourceDataGrid( url,'新增' )
+                this.actions.openSelfIframe( url,'新增' )
             } )
             //高级查询
             if( this.el.find( '.expert-search-btn' )[0] ){
@@ -770,6 +770,19 @@ let config = {
             } ).then( (data)=>{
             } )
         },
+        //打开局部的弹窗
+        openSelfIframe: function ( url,title,w,h ) {
+            PMAPI.openDialogToSelfByIframe( url,{
+                width: w || 1400,
+                height: h || 800,
+                title: title,
+                modal:true,
+                defaultMax: true,
+                // customSize: true
+            } ).then( (data)=>{
+
+            } )
+        },
         onColumnResized: function ($event) {
             this.customColumnsCom.actions.onColumnResized( this.customColumnsCom );
         },
@@ -803,7 +816,7 @@ let config = {
                 is_view: 1
             }
             let url = dgcService.returnIframeUrl( '/form/index/',obj );
-            this.actions.openSourceDataGrid( url,'查看' )
+            this.actions.openSelfIframe( url,'查看' )
         },
         getPermData:function() {
             let obj = {
@@ -872,7 +885,7 @@ let config = {
                         is_view: 0
                     }
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
-                    this.actions.openSourceDataGrid( url,'编辑' )
+                    this.actions.openSelfIframe( url,'编辑' )
                 }
                 if( $event.event.srcElement.id == 'view' ){
                     let obj = {
@@ -882,7 +895,7 @@ let config = {
                         is_view: 1
                     }
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
-                    this.actions.openSourceDataGrid( url,'查看' )
+                    this.actions.openSelfIframe( url,'查看' )
                 }
                 if( $event.event.srcElement.id == 'jurisdiction' ){
                     this.data.userPerm.id = $event.data['_id'];
