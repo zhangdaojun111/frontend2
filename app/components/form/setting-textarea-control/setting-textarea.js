@@ -61,6 +61,9 @@ let config = {
         this.el.find('.ui-width').css('width',this.data.width);
         this.actions.fillData();
         // this.actions.openSettingDialog();
+        if(this.data.history){
+            this.el.find('.ui-history').css('visibility','visible');
+        }
         this.el.find('.button').button({
             // disabled: true
         });

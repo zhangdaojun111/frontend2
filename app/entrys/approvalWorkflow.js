@@ -16,20 +16,23 @@ import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
 import WorkFlowGrid from '../components/workflow/workflow-grid/workflow-grid';
 import ApprovalHeader from '../components/workflow/approval-header/approval-header';
 import ApprovalWorkflow from '../components/workflow/approval-workflow/approval-workflow';
-import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow/workflow-addFollow';
-import WorkflowAddSigner from '../components/workflow/workflow-addFollow/workflow-addSigner/workflow-addSigner';
 import FormEntrys from './form';
-import TreeView from '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
 import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
-import Grid from '../components/dataGrid/data-table-page/data-table-page';
+import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import {PMAPI,PMENUM} from '../lib/postmsg';
 import jsplumb from 'jsplumb';
 
-WorkflowAddFollow.showAdd();
-WorkFlowForm.showForm();
+WorkFlowForm.showForm().then(function () {
+    setTimeout(()=>{
+        $('.J_component-loading-cover').remove();
+    },2000)
 
-let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[];;
+});
+
+WorkFlowGrid.showGrid();
+
+let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[],agorfo=true,is_batch=0;
 serchStr.split('&').forEach(res => {
     let arr = res.split('=');
     obj[arr[0]] = arr[1];
@@ -68,108 +71,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
                 focus.push(a[i][j]);
             }
         }
-        Mediator.publish('workflow:focused', focus);
-        if(focus.length>0){
-            let dept=[];
-            (async function () {
-                return workflowService.getWorkflowInfo({url: '/get_all_users/'});
-            })().then(users => {
-                let idArr=[];
-                for(let i in focus){
-                    idArr.push(users.rows[focus[i]].id);
-                    dept.push(users.rows[focus[i]].department);
-                }
-                Mediator.publish('workflow:idArr', idArr);
-                dept=_.uniq(dept);
-            }).then(()=>{
-                (async function () {
-                    return workflowService.getStuffInfo({url: '/get_department_tree/'});
-                })().then(res=>{
-                    tree=res.data.department_tree;
-                    staff=res.data.department2user;
-                    function recur(data) {
-                        for (let item of data){
-                            item.nodes=item.children;
-                            for(let i in dept){
-                                if(item.text.indexOf(dept[i])!==-1){
-                                    item.state={};
-                                    item.state.checked=true;
-                                    item.state.selected=true;
-                                    for(let k in staff){
-                                        if(k==item.id){
-                                            Mediator.publish('workflow:checkDeptAlready', staff[k]);
-                                        }
-                                    }
-                                }
-                            }
-                            if(item.children.length!==0){
-                                recur(item.children);
-                            }
-                        }
-                    }
-                    recur(tree);
-                    let treeComp2 = new TreeView(tree,{
-                        callback: function (event,selectedNode) {
-                            if(event==='select'){
-                                for(let k in staff){
-                                    if(k==selectedNode.id){
-                                        Mediator.publish('workflow:checkDept', staff[k]);
-                                    }
-                                }
-                            }else{
-                                for(let k in staff){
-                                    if(k==selectedNode.id){
-                                        Mediator.publish('workflow:unCheckDept', staff[k]);
-                                    }
-                                }
-                            }
-                        },
-                        treeType:'MULTI_SELECT',
-                        isSearch: true,
-                        withButtons:true
-                        });
-                    treeComp2.render($('#treeMulti'));
-                });
-            })
-        }else{
-            (async function () {
-                return workflowService.getStuffInfo({url: '/get_department_tree/'});
-            })().then(res=>{
-                tree=res.data.department_tree;
-                staff=res.data.department2user;
-                function recur(data) {
-                    for (let item of data){
-                        item.nodes=item.children;
-                        if(item.children.length!==0){
-                            recur(item.children);
-                        }
-                    }
-                }
-                recur(tree);
-                let treeComp2 = new TreeView(tree,{
-                    callback: function (event,selectedNode) {
-                        if(event==='select'){
-                            for(let k in staff){
-                                if(k==selectedNode.id){
-                                    Mediator.publish('workflow:checkDept', staff[k]);
-                                }
-                            }
-                        }else{
-                            for(let k in staff){
-                                if(k==selectedNode.id){
-                                    Mediator.publish('workflow:unCheckDept', staff[k]);
-                                }
-                            }
-                        }
-                    },
-                    treeType:'MULTI_SELECT',
-                    isSearch: true,
-                    withButtons:true
-                    });
-                treeComp2.render($('#treeMulti'));
-            });
-        }
-    
+        Mediator.publish('workflow:focused' , focus);
         (async function () {
             return workflowService.getWorkflowInfo({url: '/get_all_users/'});
         })().then(users => {
@@ -181,10 +83,41 @@ Mediator.subscribe('workFlow:record_info', (res) => {
                 $('#approval-workflow').find('.for-hide').hide();
                 $('#approval-workflow').find('#re-app').hide();
             };
-        });
+        }).then()
     });
     
 });
+
+/**
+ * 审批批量工作流初始化
+ */
+(async function () {
+    return workflowService.getRecordInfo(
+        {
+            flow_id: obj.flow_id,
+            record_id: obj.record_id,
+            // is_view:0,
+            table_id: obj.table_id,
+        }
+    )
+})().then(function (res) {
+    Mediator.publish("workflow:aggridorform",res);
+    is_batch = res.record_info.is_batch;
+    if(is_batch==1){
+        agorfo =false;
+    }
+    let AgGrid=new Grid({
+        batchIdList:res.record_info.temp_ids,
+        tableId:obj.table_id,
+        recordId: obj.record_id,
+        viewMode:"approveBatch",
+    });
+    AgGrid.actions.returnBatchData = function (ids) {
+        temp_ids=ids;
+    };
+    AgGrid.render($("#J-aggrid"));
+})
+
 
 Mediator.subscribe("workflow:loaded",(e)=>{
     if(e===1){
@@ -193,6 +126,10 @@ Mediator.subscribe("workflow:loaded",(e)=>{
         }
     }
 });
+
+/**
+ * 审批表单初始化
+ */
 FormEntrys.createForm({
     el: $('#place-form'),
     form_id: obj.form_id,
@@ -219,9 +156,12 @@ function GetQueryString(name)
 //审批操作
 const approveWorkflow = (para) => {
     let key=GetQueryString('key');
-    let formData=FormEntrys.getFormValue(obj.table_id),
+    let formData=FormEntrys.getFormValue(obj.table_id,true),
         comment=$('#comment').val();
-    para.data=JSON.stringify(formData);
+    para.data={};
+    if(agorfo){
+        para.data=JSON.stringify(formData);
+    }
     para.comment=comment;
     para.focus_users=JSON.stringify(focusArr);
     (async function () {
@@ -292,7 +232,7 @@ Mediator.subscribe('approval:rejToAny', (id) => {
 //驳回至发起人，重新发起
 Mediator.subscribe("approval:re-app", (msg) => {
     let key=GetQueryString('key');
-    let formData=FormEntrys.getFormValue(obj.table_id);
+    let formData=FormEntrys.getFormValue(obj.table_id,true);
     if(formData.error){
         msgBox.alert(`${formData.errorMessage}`);
     }else{

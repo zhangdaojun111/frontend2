@@ -33,7 +33,7 @@ let config = {
                     FR.readAsDataURL(imgFile);
                 }
             }else{
-                msgBox.showTips("图片类型错误");
+                msgBox.alert("图片类型错误");
             }
         },
         /**

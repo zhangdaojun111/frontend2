@@ -131,7 +131,7 @@ let config = {
                 '/iframe/calendarSetRemind/',
                 {
                     width: "800",
-                    height: '800',
+                    height: '570',
                     title: '【' + this.data.rowTitle.name + '】' + '的提醒'
                 }, {
                     emailStatus: this.data.rowSetData.email.email_status,
@@ -145,7 +145,6 @@ let config = {
                     emailAddress: this.data.emailAddress,
                 }).then(data => {
                 if (!data.onlyclose) {
-                    console.log(data);
                     this.data.rowSetData.email = data['email'];
                     this.data.rowSetData.sms = data['sms'];
                     let showMethod = '';
@@ -245,14 +244,15 @@ let config = {
         }
     ],
     afterRender: function () {
-        this.el.css({});
         this.data.staus = false;
         let _this = this;
+        //附加显示字段下拉多选组件数据
         let select_item_data = {
             'list': this.data.dropdown,
             displayType: 'popup',
             editable: this.data.editable,
             choosed: this.actions.returnShow(this.data.rowSetData['selectedOpts']).res,
+            placeholder:'请选择',
             onSelect: function (choosed) {
                 let choosedList = [];
                 for (let choosedItem of choosed) {
@@ -262,12 +262,15 @@ let config = {
                 _this.actions.checkSelectedOpts(choosed);
             },
         };
+
         this.data.multiSelectMenu = new AutoSelect(select_item_data);
         this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
+        //代表字段下拉单选组件数据
         let single_item_data = {
             'list': this.data.dropdownForRes,
             displayType: 'popup',
             multiSelect: false,
+            placeholder:'请选择',
             editable: this.data.editable,
             choosed: this.actions.dropdownChoosed(this.data.rowSetData['selectedRepresents']).res,
             onSelect: function (choosed) {
@@ -277,8 +280,10 @@ let config = {
                 }
             },
         };
+
         this.data.singleSelectMenu = new AutoSelect(single_item_data);
         this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
+        //是否可编辑
         Mediator.on('calendar-set:editor', data => {
             this.data.singleSelectMenu.destroySelf();
             this.data.multiSelectMenu.destroySelf();
@@ -298,7 +303,6 @@ let config = {
         });
 
         this.actions.checkChangeTextSelected();
-
         if(!this.data.rowSetData['email']['email_status'] && !this.data.rowSetData['sms']['sms_status']) {
             this.el.find('.set-remind-method').html('设置提醒方式');
         }

@@ -56,6 +56,12 @@ let config={
         }else{
             this.el.find('.df-input-radio').attr('disabled',false);
         }
+        if(this.data.history){
+            this.el.find('.ui-history').css('visibility','visible');
+        }
+        if(!this.data.is_view && this.data.can_add_item){
+            this.el.find('.add-item').css('visibility','visible')
+        }
     },
     beforeDestory(){
         this.el.off();
@@ -64,8 +70,6 @@ let config={
 class RadioControl extends Component {
     constructor(data,events){
         super(config,data,events);
-        console.log('是否成为管理员');
-        console.log(this.data);
     }
 }
 

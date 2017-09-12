@@ -23,10 +23,6 @@ let config = {
          */
         showfirst() {
             let record_progress = this.actions.toPercent(this.data['record_progress']);
-            // console.log(record_progress);
-            // if(this.data['record_progress'] > 0.8){
-            //     this.el.find(".end-workflow").hide();
-            // }
             this.el.find(".workflow-schedule").css({"width": record_progress});
             this.el.find(".workflow-content-title").attr("title",this.data.name);
         },

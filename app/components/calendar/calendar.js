@@ -84,19 +84,16 @@ let config = {
             this.actions.getCalendarTreeData();
             //Mediator.emit('Calendar: tool', {toolMethod: 'refresh'});
         }).on('click', '#export', () => {
-            //Mediator.emit('Calendar: tool', {toolMethod: 'export'});
-            PMAPI.openDialogByIframe(
-                '/iframe/calendarExport/',
-                {
-                    title: '导出',
-                    width: '400',
-                    height: '440',
-                    modal: true,
-                },
-            );
-
-
-
+            Mediator.emit('Calendar: tool', {toolMethod: 'export'});
+            // PMAPI.openDialogByIframe(
+            //     '/iframe/calendarExport/',
+            //     {
+            //         title: '导出',
+            //         width: '400',
+            //         height: '460',
+            //         modal: true,
+            //     },
+            // );
         }).on('click', '.pre-date', () => {
             Mediator.emit('Calendar: changeDate', 'pre');
         }).on('click', '.next-date', () => {

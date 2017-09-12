@@ -82,7 +82,7 @@ btn-div{
         width: 30px;
         height: 30px;
         cursor: pointer;
-        .workflow-icon{
+        .workflow-icon-box{
           margin: 0 auto;
         }
       }
@@ -174,11 +174,15 @@ btn-div{
     position: absolute;
     width: 100%;
     padding: 10px;
-    overflow: auto;
+    overflow-y: scroll;
+    overflow-x:auto;
     top:57px;
     bottom: 0;
     left: 0;
     right: 0;
+  }
+  .workflow-grid{
+    display: none;
   }
   #workflow-form .table-wrap{
     display: block;
@@ -199,7 +203,7 @@ btn-div{
           display: flex;
           align-items: center;
           width: 100px;
-          .workflow-icon{
+          .workflow-icon-box{
             margin-right: 5px;
           }
         }
@@ -210,7 +214,7 @@ btn-div{
             display: flex;
             align-items: center;
           }
-          .workflow-icon{
+          .workflow-icon-box{
             margin: 0 auto;
           }
         }
@@ -248,14 +252,46 @@ btn-div{
   }
 }
 
-.addUser{
-  .flexBox{
-    display: flex;
-    height: 100%;
-    #addUsercheck{
-      overflow: scroll;
-      height: 500px;
-      width: 300px;
-    }
-  }
+//.addUser{
+//  .flexBox{
+//    display: flex;
+//    height: 100%;
+//    #addUsercheck{
+//      overflow: scroll;
+//      height: 500px;
+//      width: 300px;
+//    }
+//  }
+//}
+.component-loading-cover.J_component-loading-cover{
+  z-index: 999;
+}
+.component-loading-box.J_component-loading-box{
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+
+}
+#add-home .add-follow, #cloneId1 .add-follow {
+  color: #000;
+  font-size: 12px;
+  height: 22px;
+  line-height: 22px;
+  border: 1px solid #e4e4e4;
+  padding: 0 5px;
+  font-weight: 400;
+}
+.follow-name-list{
+	line-height: 20px;
+}
+#add-home{
+	.selectSpan{
+		margin-right: 15px;
+	}
+}
+#addFollower{
+	cursor: pointer;
 }

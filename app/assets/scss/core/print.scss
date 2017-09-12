@@ -66,4 +66,10 @@
     .noprint {
         display: none;
     }
+    .add-item{
+        display: none!important;
+    }
+    #edit, .form-setting-textarea .button , .ql-toolbar, .ui-btn-box button, .countView, .info, .upload-file, .shot-screen, .shot-screen, .refresh {
+        display: none;
+    }
 }
