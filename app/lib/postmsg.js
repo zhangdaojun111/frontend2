@@ -6,6 +6,7 @@ import Quill from 'quill';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import msgbox from './msgbox';
+import {Storage} from "./storage";
 
 /**
  * 父级页面，需要根据key来保存消息来源iframe或component的对象和打开的iframe或component的dom
@@ -99,6 +100,8 @@ window.addEventListener('message', function (event) {
             case PMENUM.open_iframe_dialog:
                 let url = URL.getUrl(data.url, {key: data.key});
                 let element = $(`<iframe data-key="${data.key}" src="${url}">`);
+                //初始化Storage
+                Storage.init(data.key);
                 // 向新打开的iframe内传递参数
                 let params = data.params || {};
                 dialogHash[data.key] = {
@@ -135,14 +138,8 @@ window.addEventListener('message', function (event) {
                     dialogHash[data.key].comp.destroySelf();
                 } else {
                     // 弹出框是iframe
-                    let iframe = dialogHash[data.key].element.find('iframe');
-                    if (iframe.length) {
-                        iframe = iframe[0];
-                        if (iframe.contentWindow) {
-                            // $(iframe.contentWindow).trigger('iframe.close');
-                        }
-                    }
-                    dialogHash[data.key].element.erdsDialog('destroy').remove();
+                    // 清除iframe中适用的localstorage
+                    Storage.clear(data.key);
                 }
                 PMAPI.sendToChild(dialogHash[data.key].iframe, {
                     type: PMENUM.recieve_data,
@@ -357,7 +354,10 @@ export const PMAPI = {
     /**
      * 传入组件配置，然后在父级生成一个该组件配置的组件
      * 然后用dialog弹出,该方法性能优于iframe方式，较简单的弹出框用此方法
-     * 注意：该组件配置必须为简单组件，所有用到的变量必须为内部变量
+     *
+     * 注意：该组件配置必须为简单组件，所有用到的变量不要再config中import依赖库，
+     * 而通过postmsg进行（反序列化中定义的库），放置webpack打包修改依赖库引用名
+     * 
      * @param componentConfig 简单组件的配置
      * @frame 对话框设置，包括大小，标题等，例：{
      *          width: 500,
@@ -461,7 +461,7 @@ export const PMAPI = {
                 let args = obj[key]['Arguments'] || "";
                 let source = obj[key]['Source'];
                 let fstr = "function " + obj[key]['Function'] + "(" + args + "){" + source + "}";
-                let f = new Function('$', '_', 'PMAPI', 'PMENUM', 'HTTP', 'Quill', "return " + fstr)($, _, PMAPI, PMENUM, HTTP, Quill);
+                let f = new Function('$', '_', 'PMAPI', 'PMENUM', 'HTTP', 'Storage','Quill', "return " + fstr)($, _, PMAPI, PMENUM, HTTP, Storage, Quill);
                 obj[key] = f;
             } else if (obj[key] instanceof Object) {
                 PMAPI._createFuncs(obj[key]);

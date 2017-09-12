@@ -549,12 +549,14 @@ let config = {
                 this.append(new CalendarWeek(this.data.weekDataList), this.el.find(".calendar-main-content"));
             } else if(this.data.calendarContent === 'day') {
                 this.append(new CalendarDay(this.data.dayDataList), this.el.find(".calendar-main-content"));
+            } else if(this.data.calendarContent === 'schedule') {
+                this.actions.makeScheduleData(this.data.scheduleStart, this.data.scheduleEnd);
             }
             this.actions.getDataCount();
         },
 
         workflowMission: function(){
-            if( this.data.isWorkflowDataReady && this.data.calendarContent !== 'schedule'){
+            if( this.data.isWorkflowDataReady){
                 this.actions.monthDataTogether();
             }
         }
@@ -578,9 +580,9 @@ let config = {
                 this.data.isShowWorkflowData = false;
             }
         }
-
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.data.workflowData = data;
+            //this.hideLoading();
             this.data.isWorkflowDataReady = true;
             this.actions.workflowMission();
         });
@@ -602,37 +604,43 @@ let config = {
                         to_date: this.data.to_date,
                         cancel_fields: JSON.stringify(this.data.cancel_fields)
                     });
+                    CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
                     //this.actions.makeScheduleData(this.data.from_date, this.data.to_date);
                 }else {
                     this.actions.changeMainView(this.data.calendarContent);
                 }
             }
         });
-
         Mediator.on('Calendar: tool', data => {
             if(data.toolMethod === 'refresh') {
                 this.data.cancel_fields = data['data'];
                 if(this.data.calendarContent !== 'schedule') {
+                    CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
                     this.actions.getCalendarData({
                         from_date: this.data.from_date,
                         to_date: this.data.to_date,
                         cancel_fields: JSON.stringify(this.data.cancel_fields)
                     },'calendar');
                 } else {
+                    CalendarWorkflowData.getWorkflowData(this.data.scheduleStart, this.data.scheduleEnd);
                     this.actions.getCalendarData({
-                        from_date: this.data.from_date,
-                        to_date: this.data.to_date,
+                        from_date: this.data.scheduleStart,
+                        to_date: this.data.scheduleEnd,
                         cancel_fields: JSON.stringify(this.data.cancel_fields)
                     });
                 }
-                CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+
             }else if(data.toolMethod === 'export') {
-                PMAPI.openDialogByComponent(CalendarExport, {
-                    width: '350',
-                    height: '150',
-                    title: '导出',
-                }).then(data => {
-                    console.log(data);
+                PMAPI.openDialogByIframe(
+                    '/iframe/calendarExport/',
+                    {
+                        width: '400',
+                        height: '460',
+                        title: '导出',
+                    },{
+                        cancelFields: this.data.cancel_fields,
+                    }).then(data => {
+                        console.log(data);
                 });
             }
 
@@ -666,12 +674,12 @@ let config = {
 
         let that = this;
         Mediator.on('calendarSchedule: date', data => {
-
             that.actions.getCalendarData({
                 from_date: data.from_date,
                 to_date: data.to_date,
                 cancel_fields: JSON.stringify(this.data.cancel_fields)
             },'schedule');
+            CalendarWorkflowData.getWorkflowData(data.from_date, data.to_date);
             that.data.scheduleStart = data.from_date;
             that.data.scheduleEnd = data.to_date;
         });

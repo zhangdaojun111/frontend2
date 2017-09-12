@@ -7,40 +7,43 @@ import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui-timepicker-addon';
 import 'jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css';
 import 'jquery-ui';
-import '../base-form/base-form.scss'
+import '../base-form/base-form.scss';
 import template from './datetime-control.html';
 import './datetime-control.scss';
-import '../base-form/dateTime.scss'
+import '../base-form/dateTime.scss';
 import msgbox from '../../../lib/msgbox';
 
 let config = {
     template: template,
     actions:{
+        //时间日期输入错误提示，暂时先去掉
         keyup: function () {
+
             let _this = this;
             //YYYY-MM-DD hh:mm:ss
             let strDate = this.el.find(".datetime").val();
-            console.log(strDate);
             let  re =/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
 
             if(re.test(strDate))//判断日期格式符合YYYY-MM-DD hh:mm:ss标准
             {
                 let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3,RegExp.$4,RegExp.$5,RegExp.$6);
-                console.log(dateElement);
 
                 if(!((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))&&(dateElement.getHours()==parseInt(RegExp.$4))&&(dateElement.getMinutes()==parseInt(RegExp.$5))&&(dateElement.getSeconds()==parseInt(RegExp.$6))))//判断日期逻辑
                 {
-                    this.el.find("#errorMessage").css("display","inline-block").innerText = "时间格式不正确,正确格式为: 2017-09-01 12:00:00 ";
+                   //this.el.find("#errorMessage").css("display","inline-block").innerText = "时间格式不正确,正确格式为: 2017-09-01 12:00:00 ";
                 } else{
                     this.el.find("#errorMessage").css("display","none");
-                    _this.data.value = strDate;
-                    _.debounce(function () {
-                        _this.events.changeValue(_this.data)
-                    }, 200)();
+                    if(!_this.data.isAgGrid){
+                        _this.data.value = strDate;
+                        _.debounce(function () {
+                            _this.events.changeValue(_this.data)
+                        }, 200)();
+                    }
+
                 }
             }
             else{
-                this.el.find("#errorMessage").css("display","inline-block").text("时间格式不正确,正确格式为: 2017-09-01 12:00:00") ;
+              //  this.el.find("#errorMessage").css("display","inline-block").text("时间格式不正确,正确格式为: 2017-09-01 12:00:00") ;
             }
         },
     }
@@ -59,7 +62,9 @@ let config = {
     afterRender() {
         let _this = this;
         this.el.find('.ui-width').css('width', this.data.width);
-        if(this.data.history){
+        if(! this.data.isCalendar && this.data.history){
+            console.log(this.data.isCalendar)
+            console.log(this.data.history)
             this.el.find('.ui-history').css('visibility','visible');
         }
         if (this.data.is_view) {
@@ -74,10 +79,7 @@ let config = {
         } else {
             _this.el.find(".datetime").val("年-月-日 时:分:秒");
         }
-        _this.el.find(".ui-datepicker-trigger").on('click', function () {
-            console.log("ssss")
-            _this.el.find("#errorMessage").css("display","none");
-        })
+
         //控制到时分秒
         _this.el.find(".datetime").datetimepicker({
             monthNamesShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
@@ -88,7 +90,7 @@ let config = {
             secondText: '秒',
             currentText: '今',
             closeText: '确定',
-            timeInput:true,
+            timeInput: true ,
             showHour: false,
             showMinute:false,
             showSecond:false,
@@ -106,10 +108,14 @@ let config = {
             onSelect: function (selectTime, text) {
                 _this.el.find("#errorMessage").css("display","none");
                 let selectTime1 = selectTime;
-                _this.data.value = selectTime.replace(/\//g, "-");
-                _.debounce(function () {
-                    _this.events.changeValue(_this.data)
-                }, 200)();
+                if(!_this.data.isAgGrid){
+                    _this.data.value = selectTime.replace(/\//g, "-");
+                    _.debounce(function () {
+                        _this.events.changeValue(_this.data)
+                    }, 200)();
+
+                }
+
                 if (_this.data.value.length > 19) {
                     _this.data.value = '';
                 }
@@ -124,54 +130,63 @@ let config = {
                     if (_this.data['timeType'] == 'after') {
                         if (selectTime < currentTime) {
                             msgbox.alert("所选日期不能早于当前日期！");
-                            _this.data.value = "请选择";
-                            _.debounce(function () {
-                                _this.events.changeValue(_this.data)
-                            }, 200)();
+
+                            if(!_this.data.isAgGrid){
+                                _this.data.value = "请选择";
+                                _.debounce(function () {
+                                    _this.events.changeValue(_this.data)
+                                }, 200)();
+                            }
+
                         }
                     } else if (_this.data['timeType'] == 'before') {
                         if (selectTime > currentTime) {
                             msgbox.alert("所选日期不能晚于当前日期！");
-                            _this.data.value = "请选择";
+                            if(!_this.data.isAgGrid){
+                                _this.data.value = "请选择";
+                                _.debounce(function () {
+                                    _this.events.changeValue(_this.data)
+                                }, 200)();
+                            }
+
+                        }
+                    } else if (_this.data['timeType'] == 'all') {
+                        if(!_this.data.isAgGrid){
+                            _this.data.value = selectTime1.replace(/\//g, "-");
                             _.debounce(function () {
                                 _this.events.changeValue(_this.data)
                             }, 200)();
                         }
-                    } else if (_this.data['timeType'] == 'all') {
-                        _this.data.value = selectTime1.replace(/\//g, "-");
-                        _.debounce(function () {
-                            _this.events.changeValue(_this.data)
-                        }, 200)();
+
                     }
                 } else {
-                    console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', this.selector);
+                    console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', 'datetime-control');
                 }
 
             },
-            onClose: function(timeText, text) {
-                let strTime = $(".ui_tpicker_time_input").val();
-                console.log(strTime)
-                if(strTime == "00:00:00"){
-                    _this.el.find("#errorMessage").css("display", "inline-block").text("时间格式不正确,正确格式为: 2017-09-01 12:00:00");
-                }else{
-                    _this.el.find("#errorMessage").css("display", "none");
+            onClose: function(timeText) {
+                let  re =/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+                if(re.test( timeText))
+                {
+                    let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3,RegExp.$4,RegExp.$5,RegExp.$6);
+                    if((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))&&(dateElement.getHours()==parseInt(RegExp.$4))&&(dateElement.getMinutes()==parseInt(RegExp.$5))&&(dateElement.getSeconds()==parseInt(RegExp.$6)))//判断日期逻辑
+                    {
+                            _this.data.value = timeText;
+                            console.log(  _this.data.value)
+                            _.debounce(function () {
+                                _this.events.changeValue(_this.data)
+                            }, 200)();
+                    }
                 }
-                console.log("timeText  "+timeText)
-                _this.data.value = timeText.replace(/\//g, "-");
-                _.debounce(function () {
-                    _this.events.changeValue(_this.data)
-                }, 200)();
             },
-            _doKeyUp: function () {
-                let strTime = $(".ui_tpicker_time_input").val();
-                console.log("ddd "+dstrTime)
-            }
+
 
         });
 
         _this.el.find('.datetime').on('input', _.debounce(function () {
             _this.actions.keyup();
         }, 200));
+
         _.debounce(function () {
             _this.events.changeValue(_this.data)
         }, 200)();

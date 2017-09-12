@@ -33,14 +33,14 @@ let config = {
             })
         },
         getUrlPara(key){
-            let reg = new RegExp('(^|;)' + key + '=([^;]*)(;|$)', 'i');
+            let reg = new RegExp('(^|&)' + key + '=([^&]*)(&|$)', 'i');
             let r = window.location.search.substr(1).match(reg);
             if (r !== null) {
                 return unescape(r[2]);
             }
             return null
         },
-        checkLegal:function(pw){     //验证密码合法性0-9 a-z A-Z,待完善
+        checkLegal:function(pw){     //验证密码合法性0-9 a-z A-Z
             let reg = /^[a-z0-9]+$/i;
             return reg.test(pw);
         },

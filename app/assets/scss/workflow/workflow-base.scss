@@ -1,6 +1,17 @@
+#approval-workflow-body,#myBody,#add-signer-body,#ly-body,#add-follow-body{
+    font-size: 12px;
+}
+#ly-body,#add-follow-body,#add-signer-body{
+    padding: 0;
+    margin: 0;
+}
+#myBody{
+    overflow-y: scroll;
+}
 #approval-workflow div, #WorkflowInitial div {
     box-sizing: border-box;
 }
+
 
 .workflow-icon {
     background: url(../../images/workflow/workflow-icon2.png) no-repeat;
@@ -8,7 +19,75 @@
     width: 16px;
     height: 16px;
 }
+.workflow-icon-box{
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+}
+.workflow-icon-file{
+    background-image: url(../../images/workflow/workflow-file.png);
+}
+.workflow-icon-add{
+    background-image: url(../../images/workflow/workflow-icon-add.png);
+}
+.workflow-icon-follow{
+    background-image: url(../../images/workflow/workflow-icon-follow.png);
+}
+.workflow-icon-gz{
+    background-image: url(../../images/workflow/workflow-icon-gz.png);
+}
+.workflow-icon-node{
+    background-image: url(../../images/workflow/workflow-icon-node.png);
+}
+.workflow-icon-print{
+    background-image: url(../../images/workflow/workflow-icon-print.png);
+}
+.workflow-icon-record{
+    background-image: url(../../images/workflow/workflow-icon-record.png);
+}
+.workflow-icon-record2{
+    background-image: url(../../images/workflow/workflow-icon-record2.png);
+}
+.workflow-icon-switch{
+    background-image: url(../../images/workflow/workflow-icon-switch.png);
+}
+.workflow-icon-table{
+    background-image: url(../../images/workflow/workflow-icon-tabel.png);
+}
+.workflow-icon-twofile{
+    background-image: url(../../images/workflow/workflow-icon-twofile.png);
+}
+.workflow-icon-menu{
+    background-image: url(../../images/workflow/workflow-menu.png);
+}
+.workflow-icon-scale1{
+    background-image: url(../../images/workflow/workflow-icon-scale1.png);
+}
+.workflow-icon-scale2{
+    background-image: url(../../images/workflow/workflow-icon-scale2.png);
+}
+.workflow-icon-full{
+    background-image: url(../../images/workflow/workflow-icon-full.png);
+}
+.workflow-icon-tridown{
+    background-image: url(../../images/workflow/workflow-icon-tridown.png);
+}
+.workflow-icon-edit{
+    background-image: url(../../images/workflow/workflow-icon-edit.png);
+}
+.workflow-icon-close{
+    background-image: url(../../images/workflow/workflow-icon-close.png);
+}
+.workflow-icon-upload{
+    background: url(../../images/workflow/gz.png) no-repeat;
+    width: 50px;
+    height: 50px;
+    display: block;
 
+
+
+}
 .icon-workflow-icon1 {
     background-position: -26px 0px;
 }

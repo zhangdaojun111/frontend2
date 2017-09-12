@@ -62,12 +62,22 @@ let config = {
         event: 'click',
         selector: '.save',
         callback: function () {
+            if(this.data.isBtnClick){
+                console.log('有没有阻止呢？');
+                return;
+            }
+            console.log('过来楼');
+            this.data.isBtnClick=true;
             this.actions.onSubmit();
         }
     }, {
         event: 'click',
         selector: '.changeEdit',
         callback: function () {
+            if(this.data.isBtnClick){
+                return;
+            }
+            this.data.isBtnClick=true;
             this.actions.changeToEdit();
         }
     }],
@@ -793,111 +803,60 @@ let config = {
 
         //判断一下日期的类型，并且进行限制
         checkDateType(data) {
-            // for(let i = 0;i<this.data.formData.length;i++){
-            //     if(this.data.formData[i]['type'] == 'Date'){
-            //         let temp = this.data.formData[i];
-            //         let dfield = this.data.formData[i]['dfield'];//f8
-            //
-            //         if(temp['timeType'] == 'after'){
-            //             let vals = data[dfield].split("-");
-            //             //let vals = val.split("-");//[2011,11,11];
-            //             let myData = new Date();
-            //             let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-            //             for(let i = 0;i<3;i++){
-            //                 if(vals[i]<dates[i]){
-            //                     data[dfield]='';
-            //                 }
-            //             }
-            //         }else if(this.data.formData[i]['type'] == 'before') {
-            //             let vals = data[dfield].split("-");
-            //             //let vals = val.split("-");//[2011,11,11];
-            //             let myData = new Date();
-            //             let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-            //             for(let i = 0;i<3;i++){
-            //                 if(vals[i]<dates[i]){
-            //                     data[dfield]='';
-            //                 }
-            //             }
-            //         }
-            //     }
-            //     if(this.data.formData[i]['type'] == 'Datetime'){
-            //         let temp = this.data.formData[i];
-            //         let dfield = this.data.formData[i]['dfield'];//f8
-            //         if(temp['timeType'] == 'after'){
-            //             let vals = data[dfield].split(" ")[0].split("-");
-            //             //let vals = val.split("-");//[2011,11,11];
-            //             let myData = new Date();
-            //             let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-            //             for(let i = 0;i<3;i++){
-            //                 if(vals[i]<dates[i]){
-            //                     data[dfield]='';
-            //                 }
-            //             }
-            //         }else if(this.data.formData[i]['type'] == 'before') {
-            //             let vals = data[dfield].split(" ")[0].split("-");
-            //             //let vals = val.split("-");//[2011,11,11];
-            //             let myData = new Date();
-            //             let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-            //             for(let i = 0;i<3;i++){
-            //                 if(vals[i]<dates[i]){
-            //                     data[dfield]='';
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
-            // for(let i = 0;i<this.data.formData.length;i++){
-            //     if(this.data.formData[i]['type'] == 'Date'){
-            //         let temp = this.data.formData[i];
-            //         let dfield = this.data.formData[i]['dfield'];//f8
-            //         if(temp['timeType'] == 'after'){
-            //             let vals = data[dfield].split("-");
-            //             //let vals = val.split("-");//[2011,11,11];
-            //             let myData = new Date();
-            //             let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-            //             for(let i = 0;i<3;i++){
-            //                 if(vals[i]<dates[i]){
-            //                     data[dfield]='';
-            //                 }
-            //             }
-            //         }else if(this.data.formData[i]['type'] == 'before') {
-            //             let vals = data[dfield].split("-");
-            //             //let vals = val.split("-");//[2011,11,11];
-            //             let myData = new Date();
-            //             let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-            //             for(let i = 0;i<3;i++){
-            //                 if(vals[i]<dates[i]){
-            //                     data[dfield]='';
-            //                 }
-            //             }
-            //         }
-            //     }
-            //     if(this.data.formData[i]['type'] == 'Datetime'){
-            //         let temp = this.data.formData[i];
-            //         let dfield = this.data.formData[i]['dfield'];//f8
-            //         if(temp['timeType'] == 'after'){
-            //             let vals = data[dfield].split(" ")[0].split("-");
-            //             //let vals = val.split("-");//[2011,11,11];
-            //             let myData = new Date();
-            //             let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-            //             for(let i = 0;i<3;i++){
-            //                 if(vals[i]<dates[i]){
-            //                     data[dfield]='';
-            //                 }
-            //             }
-            //         }else if(this.data.formData[i]['type'] == 'before') {
-            //             let vals = data[dfield].split(" ")[0].split("-");
-            //             //let vals = val.split("-");//[2011,11,11];
-            //             let myData = new Date();
-            //             let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-            //             for(let i = 0;i<3;i++){
-            //                 if(vals[i]<dates[i]){
-            //                     data[dfield]='';
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
+            for(let i = 0;i<this.data.data.length;i++){
+              if(this.data.data[i]['type'] == 'Date'){
+                  let temp = this.data.data[i];
+                  let dfield = this.data.data[i]['dfield'];//f8
+
+                    if(temp['timeType'] == 'after'){
+                        console.log("data  "+ data[dfield].split("-"))
+                        let vals = data[dfield].split("-");
+                        //let vals = val.split("-");//[2011,11,11];
+                        let myData = new Date();
+                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+                        for(let i = 0;i<3;i++){
+                            if(vals[i]<dates[i]){
+                                data[dfield]='';
+                            }
+                        }
+                    }else if(this.data.data[i]['type'] == 'before') {
+                        let vals = data[dfield].split("-");
+                        //let vals = val.split("-");//[2011,11,11];
+                        let myData = new Date();
+                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+                        for(let i = 0;i<3;i++){
+                            if(vals[i]<dates[i]){
+                                data[dfield]='';
+                            }
+                        }
+                    }
+                }
+                if(this.data.data[i]['type'] == 'Datetime'){
+                    let temp = this.data.data[i];
+                    let dfield = this.data.data[i]['dfield'];//f8
+                    if(temp['timeType'] == 'after'){
+                        let vals = data[dfield].split(" ")[0].split("-");
+                        //let vals = val.split("-");//[2011,11,11];
+                        let myData = new Date();
+                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+                        for(let i = 0;i<3;i++){
+                            if(vals[i]<dates[i]){
+                                data[dfield]='';
+                            }
+                        }
+                    }else if(this.data.data[i]['type'] == 'before') {
+                        let vals = data[dfield].split(" ")[0].split("-");
+                        //let vals = val.split("-");//[2011,11,11];
+                        let myData = new Date();
+                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
+                        for(let i = 0;i<3;i++){
+                            if(vals[i]<dates[i]){
+                                data[dfield]='';
+                            }
+                        }
+                    }
+               }
+             }
         },
 
         //统计功能
@@ -952,7 +911,7 @@ let config = {
 
         //必填性改变
         requiredChange(_this) {
-            if (_this.data.value == '') {
+            if (_this.data.value === '') {
                 _this.el.find('#requiredLogo').removeClass().addClass('required');
             } else {
                 _this.el.find('#requiredLogo').removeClass().addClass('required2');
@@ -983,7 +942,7 @@ let config = {
             }
         },
         //拼接其他字段
-        montageOtherFields() {
+        montageOtherFields(formDataNew) {
             data = {};
             for (let key in this.data.dataOfOtherFields) {
                 data[key] = this.data.dataOfOtherFields[key];
@@ -1028,9 +987,9 @@ let config = {
             let formDataNew = this.data.oldData;
             //如果有其他字段的数据，这里是拼approvedFormData
             if (this.data.hasOtherFields == '1') {
-                this.actions.montageOtherFields();
+                this.actions.montageOtherFields(formDataNew);
             }
-            this.actions.checkDateType();
+            this.actions.checkDateType(formValue);
             let obj_new = this.actions.createCacheData(formDataNew, data, true, this);
             let obj_old = this.actions.createCacheData(formDataNew, data, false, this);
             this.actions.changeValueForChildTable(data);
@@ -1073,6 +1032,7 @@ let config = {
             } else {
                 MSG.alert(res.error);
             }
+            this.data.isBtnClick=false;
             //清空子表内置父表的ids
             delete FormService.idsInChildTableToParent[this.data.tableId];
         },
@@ -1099,6 +1059,7 @@ let config = {
                 this.data.btnType = 'new';
             }
             this.actions.addBtn();
+            this.data.isBtnClick=false;
         },
         //修改可修改性
         reviseCondition: function (editConditionDict, value) {
@@ -1685,14 +1646,8 @@ let config = {
         }
 
         //默认表单样式
-
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
-        }
-        if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')) {
-            this.el.find('table').siblings('.ui-btn-box').css("margin-left", "0px");
-        } else {
-            this.el.find('table').siblings('.ui-btn-box').css("margin-left", "-20px");
         }
     },
     beforeDestory() {

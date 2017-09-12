@@ -27,11 +27,11 @@ let config = {
             if(this.data.favoDel){
                 del.hide();
                 oper.text("");
-                oper.addClass("workflow-icon");
+                oper.addClass("workflow-icon-edit");
                 this.data.favoDel = false;
             }else{
                 oper.text("取消");
-                oper.removeClass("workflow-icon");
+                oper.removeClass("workflow-icon-edit");
                 del.show();
                 this.data.favoDel = true;
             }

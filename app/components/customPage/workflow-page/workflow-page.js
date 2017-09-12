@@ -252,7 +252,7 @@ let config = {
             this.data.rows = res.rows;
             this.data.page = res.currentPage;
             this.data.first = res.first;
-            this.actions.getData();
+            this.actions.getData(true);
         },
         //渲染按钮
         renderBtn: function () {
@@ -442,7 +442,7 @@ let config = {
             return u + str;
         },
         //获取数据
-        getData: function () {
+        getData: function (refresh) {
             let json = this.actions.createPostData();
             let obj1 = {
                 actions: JSON.stringify(['ignoreFields', 'fieldsOrder', 'pageSize', 'colWidth', 'pinned']),
@@ -485,6 +485,9 @@ let config = {
                 if( this.data.firstSetData ){
                     this.hideLoading();
                     this.data.firstSetData = false;
+                }
+                if(refresh){
+                    msgBox.showTips( '数据刷新成功。' )
                 }
             });
             HTTP.flush();
