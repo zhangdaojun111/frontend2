@@ -135,5 +135,14 @@ export const UserInfoService = {
         console.log(json);
         let url = '/get_user_info_by_name/';
         return HTTP.postImmediately(url,Utils.formatParams(json))
+    },
+    resetPassword:function (json) {
+        // let url='/data/validate_url_or_reset_pwd/';
+        // let body = this.formatParams(param);
+        // let options = new RequestOptions({ headers: this.headers });
+        // return this.http.post(url, body,options)
+        //     .toPromise()
+        //     .then(this.extractNormalData)
+        //     .catch(this.handleError);
     }
 };
