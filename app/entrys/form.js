@@ -374,7 +374,7 @@ let FormEntrys = {
         this.init(config);
         // let $wrap = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"></div>`).prependTo(this.el);
         // let html = $(`<div class="center-wrap"></div>`).appendTo($wrap);
-        let html = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"></div>`).prependTo(this.el);
+        let html = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"><div class="form-print-position"></div></div>`).prependTo(this.el);
         let res;
         //如果不处于工作流中
         if (!this.fromWorkFlow) {
@@ -401,7 +401,8 @@ let FormEntrys = {
         }
         let formBase = new FormBase(formData);
         this.childForm[this.tableId] = formBase;
-        formBase.render(html);
+        let $newWrap = this.el.find('.form-print-position');
+        formBase.render($newWrap);
         //通知父框架表单刷新完毕
         Mediator.publish('form:formAlreadyCreate', 'success');
         console.timeEnd('form创建时间');
