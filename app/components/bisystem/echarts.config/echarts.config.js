@@ -223,7 +223,6 @@ const funnel = {
         }
     ]
 }
-
 // 折线柱状图
 const linebar = {
     animation : false,
