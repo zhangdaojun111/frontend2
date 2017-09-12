@@ -7,7 +7,14 @@ let chartName = {
     label: '图表名称',
     name: 'chartName',
     defaultValue: '',
+    required: true,
     placeholder: '请输入图表名称',
+    rules:[
+        {
+            errorMsg: '图表名称不能为空',
+            type: 'required', // length reg function number xxx
+        }
+    ],
     type: 'text',
     events: {}
 };
@@ -28,6 +35,13 @@ let icon = {
     name: 'icon',
     defaultValue: '',
     type: 'radio'
-}
+};
+let button = {
+    label: '',
+    name: '返回图表',
+    defaultValue: '',
+    type: 'button',
+    class:'back-chart'
+};
 
-export {chartName, theme, icon};
+export {chartName, theme, icon,button};

@@ -69,9 +69,8 @@ class Checkbox extends Base {
      */
     setValue(value){
         this.data.firstDo = true;
-        if (Array.isArray(value)) {
+        if (Array.isArray(value)) { // 多选
             this.data.value = value;
-            console.log(this.data.list);
             this.data.list.forEach((l,index) => {
                 for (let choosed of this.data.value) {
                     if (choosed.id === JSON.parse(l.value).id) {
@@ -80,10 +79,10 @@ class Checkbox extends Base {
                     }
                 }
             })
-        } else {
+        } else { // 单选
             if (value) {
                 this.data.value.push(value);
-                this.el.find(`input`).attr("checked",true);
+                this.el.find(`input`).prop("checked",true);
             };
             this.trigger('onChange', this.data.value);// 作为单选的时候触发
         };
@@ -102,7 +101,9 @@ class Checkbox extends Base {
         this.reload();
         if (this.data.firstDo) {
             this.setValue(this.data.value);
-            this.data.firstDo = false;
+            if (this.data.list.length > 0) {
+                this.data.firstDo = false;
+            };
         };
         this.trigger('onChange', this.data.value);
     }

@@ -5,12 +5,12 @@
   width: 100%;
   position: relative;
   .workflow-container{
-    background: #ebebeb;
-    position: absolute;
-    width: 100%;
-    // top: 30px;
-    left: 0;
-    right: 0;
+    //background: #ebebeb;
+    //position: absolute;
+    //width: 100%;
+    //// top: 30px;
+    //left: 0;
+    //right: 0;
   }
 }
 .wrap-box{
@@ -35,6 +35,7 @@
       border: none;
       outline: none;
       width: 24px;
+      line-height: 16px;
       margin-left: 6px;
     }
   }

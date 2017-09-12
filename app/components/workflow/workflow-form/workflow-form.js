@@ -65,9 +65,17 @@ let config = {
             for (let i=0;i<len;i++){
                 let left = imgInfo[i].viewLeft+"%";
                 let top = imgInfo[i].viewTop+"%";
-                html += `<img class="oldImg" src="http://${host}/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`
+                let container = $(".form-print-position")[0];
+                //容器的宽高
+                let containerHeight = container.clientHeight/100;
+                let containerWidth = container.clientWidth/100;
+                let left1 = parseFloat(left)*containerWidth+248;
+                let top1 = parseFloat(top)*containerHeight;
+                html += `<img class="oldImg noprint" src="http://${host}/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`;
+                html += `<img class="printimg printS" src="http://${host}/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left1}px;top:${top1}px;height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`;
+
             }
-            this.el.find("#place-form").append(html);
+            this.el.find(".form-print-position").append(html);
         },
         /**
          * 隐藏原来的图片
@@ -164,13 +172,10 @@ class WorkFlowForm extends Component {
 }
 
 export default {
-     showForm(data) {
-         return new Promise(function(resolve, reject){
-             let component = new WorkFlowForm();
-             let el = $('#workflow-form');
-             component.render(el);
-             resolve()
-         })
-
+     showForm() {
+         let component = new WorkFlowForm();
+         let el = $('#workflow-form');
+         component.render(el);
      }
+
 };
