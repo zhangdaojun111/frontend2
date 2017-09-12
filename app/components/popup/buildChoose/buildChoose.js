@@ -32,7 +32,7 @@ let config = {
             });
             for (let i = 0, len = _this.data['options'].length; i < len; i++) {
                 if (_this.data['options'][i]['value'] != '') {
-                    _this.el.find('ul').append(`<li><a href="javascript:void(0);" title="${_this.data['options'][i]['label']}" data-value="${_this.data['options'][i]['value']}">${_this.data['options'][i]['label']}</a></li>`)
+                    _this.el.find('ul').append(`<li><a class="choose-aside-a" href="javascript:void(0);" title="${_this.data['options'][i]['label']}" data-value="${_this.data['options'][i]['value']}">${_this.data['options'][i]['label']}</a></li>`)
                 }
             }
             let searchBar = new SearchBar({tableId: _this.data.source_table_id});
@@ -41,7 +41,8 @@ let config = {
         });
         HTTP.flush();
         //改变表单
-        _this.el.on('click', 'a', function () {
+        _this.el.on('click', 'a.choose-aside-a', function () {
+            debugger;
             _this.data.selected = {value: $(this).data('value'), label: $(this).html()};
             FormEntry.destoryForm(_this.data.source_table_id);
             FormEntry.createForm({
