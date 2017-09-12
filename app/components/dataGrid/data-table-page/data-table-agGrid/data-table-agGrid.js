@@ -307,7 +307,11 @@ let config = {
                     if( data.header[i] == '创建时间' ){
                         this.data.haveSystemsFields = true;
                     }
-
+                    let minWidth = {
+                        datetime: 160,
+                        time: 90,
+                        date: 110
+                    }
                     let obj = {
                         headerName: data.header[i],
                         tableName: data.data['table_name'],
@@ -336,7 +340,7 @@ let config = {
                         tooltipField: fieldTypeService.noToolTips(data.data["dinput_type"]) ? '' : data.data["field"],
                         sortingOrder: ['desc', 'asc', null],
                         hide: false,
-                        minWidth: 20,
+                        minWidth: minWidth[fieldTypeService.searchType(data.data["real_type"])] || 20,
                         filter: fieldTypeService.numOrText(data.data["real_type"]) ? "number" : "text",
                         headerClass: headClass,
                         cellStyle: {'font-style': 'normal'},
@@ -1015,7 +1019,7 @@ let config = {
             })
         },
         //请求在途数据
-        getInprocessData: function () {
+        getInprocessData: function (refresh) {
             let postData = this.actions.createPostData();
             let post_arr = [];
             let body = dataTableService.getTableData( postData );
@@ -1057,18 +1061,21 @@ let config = {
                 } );
                 HTTP.flush();
                 this.actions.sortWay();
+                if(refresh){
+                    msgBox.showTips( '数据刷新成功。' )
+                }
             })
             HTTP.flush();
         },
         //请求表格数据
-        getGridData: function () {
+        getGridData: function (refresh) {
             //在途数据
             if( this.data.viewMode == 'in_process' ){
-                this.actions.getInprocessData();
+                this.actions.getInprocessData(refresh);
                 return;
             }
             if( this.data.viewMode == 'newFormCount' ){
-                this.actions.getNewFormCountData();
+                this.actions.getNewFormCountData(refresh);
                 return;
             }
             let postData = this.actions.createPostData();
@@ -1082,6 +1089,9 @@ let config = {
             }
             Promise.all(post_arr).then((res)=> {
                 this.actions.setGridData( res );
+                if(refresh){
+                    msgBox.showTips( '数据刷新成功。' )
+                }
             })
             HTTP.flush();
         },
@@ -1499,7 +1509,7 @@ let config = {
             if( this.data.gridTips!='' ){
                 this.el.find( '.grid-tips' )[0].style.display = 'flex';
             }
-            this.hideLoading();
+            this.hideLoading()
         },
         //触发导出
         onExport: function () {
@@ -1595,7 +1605,7 @@ let config = {
         refreshData: function ( data ) {
             this.data.rows = data.rows;
             this.data.first = data.first;
-            this.actions.getGridData();
+            this.actions.getGridData(true);
         },
         //渲染颜色
         setRowStyle: function ( param ) {
@@ -1730,7 +1740,7 @@ let config = {
                     this.actions.setInvalid();
                     let url = dgcService.returnIframeUrl( '/iframe/dataImport/',json );
                     let winTitle = '导入数据';
-                    this.actions.openSourceDataGrid( url,winTitle,600,800 );
+                    this.actions.openSourceDataGrid( url,winTitle,600,650 );
                 } )
             }
             //导出
@@ -2606,6 +2616,8 @@ let config = {
                     parent_temp_id: this.data.parentTempId,
                     parent_record_id: this.data.parentRecordId,
                     real_id: data.data._id,
+                    temp_id: data.data.temp_id || '',
+                    record_id: data.data.record_id || '',
                     btnType: btnType,
                     is_view:1
                 };
@@ -2731,6 +2743,8 @@ let config = {
                 parent_temp_id: this.data.parentTempId,
                 parent_record_id: this.data.parentRecordId,
                 real_id: data.data._id,
+                temp_id: data.data.temp_id || '',
+                record_id: data.data.record_id || '',
                 btnType: 'view',
                 is_view:1
             };
