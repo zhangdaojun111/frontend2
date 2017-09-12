@@ -245,7 +245,7 @@ const linebar = {
     grid: {
         left: 30,
         right: 30,
-        bottom: 20,
+        bottom: 30,
         top: 50
     },
     xAxis: [
