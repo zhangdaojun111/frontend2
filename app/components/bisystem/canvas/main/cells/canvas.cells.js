@@ -108,6 +108,7 @@ let config = {
             const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1});
 
             //结束加载动画
+
             this.hideLoading();
 
             if (res['success'] == 0) {
@@ -153,7 +154,8 @@ let config = {
 
         this.actions.getCellLayout();
     },
-    beforeDestory() {}
+    beforeDestory() {
+    }
 };
 
 export class CanvasCellsComponent extends Component {
