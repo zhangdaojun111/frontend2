@@ -242,6 +242,7 @@ const linebar = {
         data: [],
         selected: {}
     },
+
     grid: {
         left: 30,
         right: 30,
