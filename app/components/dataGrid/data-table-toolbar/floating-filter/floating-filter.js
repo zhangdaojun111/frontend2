@@ -5,8 +5,8 @@
 import Component from "../../../../lib/component";
 import template from './floating-filter.html';
 import DateTimeControl from "../../../form/datetime-control/datetime-control";
-import DateControl from "../../../form/date-control/date-control";
-import TimeControl from "../../../form/time-control/time-control";
+import DateControl from "../grid-data-control/grid-data-control";
+import TimeControl from "../grid-time-control/grid-time-control";
 import agGrid from "../../agGrid/agGrid";
 let config = {
     template: template,
@@ -31,6 +31,11 @@ let config = {
                         dateControl.render($(this.eGui));
                         this.eFilterInput = this.eGui.querySelector('input');
                         this.eFilterInput.className += (' filter-input-' + searchFiled);
+                        this.eFilterInput.addEventListener( 'input', _.debounce(()=> {
+                            if(this.eFilterInput.value == ''){
+                                That.actions.keyupSearch(null,this.eFilterInput.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
+                            }
+                        },1000 ))
                     }else if( colInfo  == 'time' ){
                         let timeControl = new TimeControl({value: '', isAgGrid: true},{changeValue:function(data){
                             That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
@@ -38,6 +43,11 @@ let config = {
                         timeControl.render($(this.eGui));
                         this.eFilterInput = this.eGui.querySelector('input');
                         this.eFilterInput.className += (' filter-input-' + searchFiled);
+                        this.eFilterInput.addEventListener( 'input', _.debounce(  ($event)=> {
+                            if(this.eFilterInput.value == ''){
+                                That.actions.keyupSearch(null,this.eFilterInput.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
+                            }
+                        },1000 ))
                     }else if( colInfo  == 'datetime' ){
                         let dateTimeControl = new DateTimeControl({value: '', isAgGrid: true},{changeValue:function(data){
                             setTimeout(()=>{
@@ -47,9 +57,12 @@ let config = {
                         dateTimeControl.render($(this.eGui));
                         this.eFilterInput = this.eGui.querySelector('input');
                         this.eFilterInput.className += (' filter-input-' + searchFiled);
-                        // this.eFilterInput.addEventListener( 'input', _.debounce(  ($event)=> {
-                        //     That.actions.keyupSearch(null,this.eFilterInput.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
-                        // },1000 ))
+                        this.eFilterInput.addEventListener( 'input', _.debounce(  ($event)=> {
+                            if(this.eFilterInput.value == ''){
+                                debugger
+                                That.actions.keyupSearch(null,this.eFilterInput.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
+                            }
+                        },1000 ))
                     }else {
                         this.eGui.innerHTML = '<input type="text"/>';
                         this.eFilterInput = this.eGui.querySelector('input');
