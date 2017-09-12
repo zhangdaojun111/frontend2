@@ -35,7 +35,6 @@ let config = {
             let _this = this;
             _this.data.cancelFields = JSON.stringify(params.data.cancelFields);
             _this.el.on('click', '.export-btn', function () {
-                console.log('data');
                 window.open(`/calendar_mgr/export_calendar_data/?from_date=${_this.data.fromDate}&to_date=${_this.data.toDate}&cancel_fields=${_this.data.cancelFields}`);
             });
         });
@@ -45,7 +44,6 @@ let config = {
 
         let changeStartValue = (res) => {
             this.data.fromDate = res['value'];
-            console.log(this.data.fromDate);
             _this.actions.getExportDate();
         };
         let changeEndValue = (res) => {
