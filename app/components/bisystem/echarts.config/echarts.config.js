@@ -248,6 +248,7 @@ const linebar = {
         bottom: 30,
         top: 50
     },
+
     xAxis: [
         {
             type: 'category',
