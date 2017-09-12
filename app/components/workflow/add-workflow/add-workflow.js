@@ -20,6 +20,9 @@ let config={
     data:{
     },
     actions:{
+        /**
+         * @method 自定义页眉
+         */
         async printSetting(){
             let res = await FormService.getPrintSetting()
             // if(res.succ == 1){
