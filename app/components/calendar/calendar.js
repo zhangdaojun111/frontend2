@@ -27,6 +27,7 @@ let config = {
     actions: {
         getCalendarTreeData: function () {
             CalendarService.getCalendarTreeData().then(res => {
+                this.data.cancelFields = res['cancel_fields'];
                 this.el.find('.left-content').empty();
                 this.append(new LeftContent(res), this.el.find('.left-content'));
                 Mediator.emit('Calendar: tool', {toolMethod: 'refresh', data: res['cancel_fields']});
@@ -92,6 +93,17 @@ let config = {
             this.actions.getCalendarTreeData();
         }).on('click', '#export', () => {
             Mediator.emit('Calendar: tool', {toolMethod: 'export'});
+            // PMAPI.openDialogByIframe(
+            //     '/iframe/calendarExport/',
+            //     {
+            //         width: '400',
+            //         height: '460',
+            //         title: '导出',
+            //     },{
+            //         cancelFields: this.data.cancelFields,
+            //     }).then(data => {
+            //     console.log(data);
+            // });
         }).on('click', '.pre-date', () => {
             Mediator.emit('Calendar: changeDate', 'pre');
         }).on('click', '.next-date', () => {
