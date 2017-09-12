@@ -1,7 +1,7 @@
 import {Base} from '../base';
 import template from './radar.html';
 
-import {chartName,theme,icon} from '../form.chart.common';
+import {chartName,theme,icon,button} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
@@ -19,7 +19,7 @@ let config = {
             if (table) {
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
-                    this.actions.loadColumns(res['data']['x_field']);
+                    this.actions.loadColumns(res['data']);
                 } else {
                     msgbox.alert(res['error'])
                 }
@@ -28,7 +28,6 @@ let config = {
             }
 
         },
-
         /**
          * 渲染列名字段列表（x轴）
          * @param columns 表格列表字段（x轴）
@@ -36,8 +35,8 @@ let config = {
         async loadColumns(columns) {
             if (this.formItems['columns']) {
                 if (columns) {
-                    this.formItems['columns'].setList(columns);
-                    this.formItems['product'].setList(columns);
+                    this.formItems['columns'].setList(columns['y_field']);
+                    this.formItems['product'].setList(columns['x_field']);
                 } else { // 清空字段
                     this.formItems['columns'].actions.clear();
                     this.formItems['choosed'].actions.clear();
@@ -113,16 +112,19 @@ let config = {
                 theme: data.theme,
             };
 
-            let res = await ChartFormService.saveChart(JSON.stringify(chart));
-            if (res['success'] == 1) {
-                msgbox.alert('保存成功');
-                if (!chart['chartName']['id']) {
-                    this.reload();
-                };
-                Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
-            } else {
-                msgbox.alert(res['error'])
+            let pass = true; // 判断表单是否验证通过
+            for (let key of Object.keys(this.formItems)) {
+                if (this.formItems[key].data.rules) {
+                    let isValid = this.formItems[key].valid();
+                    if (!isValid) {
+                        pass = false;
+                    };
+                }
             };
+
+            if (pass) {
+                this.save(chart);
+            }
         },
 
         /**
@@ -130,7 +132,7 @@ let config = {
          * @param chart = this.data.chart
          */
         fillChart(chart) {
-            console.log(chart);
+
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
@@ -148,6 +150,13 @@ let config = {
                 defaultValue: '',
                 placeholder: '请选择数据来源',
                 type: 'autocomplete',
+                required:true,
+                rules: [
+                    {
+                        errorMsg: '数据源不能为空',
+                        type: 'required'
+                    }
+                ],
                 events: {
                     onSelect(value) {
                         this.actions.getFields(value);
@@ -160,6 +169,13 @@ let config = {
                 label: '选中雷达图名称字段',
                 name: 'product',
                 defaultValue: '',
+                required: true,
+                rules: [
+                    {
+                        errorMsg: '雷达图名称字段不能为空',
+                        type: 'required'
+                    }
+                ],
                 type: 'autocomplete'
             },
             {
@@ -168,8 +184,16 @@ let config = {
                 defaultValue: [],
                 list: [],
                 type: 'checkbox',
+                required: true,
+                rules: [
+                    {
+                        errorMsg: '请至少选择一个列名',
+                        type: 'required'
+                    }
+                ],
                 events: {
                     onChange:function(value) {
+                        this.formItems['columns'].clearErrorMsg();
                         this.formItems['choosed'].actions.update(value);
                     }
                 }
@@ -183,15 +207,16 @@ let config = {
             },
             {
                 label: '',
-                name: 'save',
+                name: '保存',
                 defaultValue: '',
-                type: 'save',
+                type: 'button',
                 events: {
                     save() {
                         this.actions.saveChart();
                     }
                 }
             },
+            button
         ]
     },
     async afterRender() {
