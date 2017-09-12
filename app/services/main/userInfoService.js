@@ -132,17 +132,14 @@ export const UserInfoService = {
         return res;
     },
     getUserInfoByName:function (json) {
-        console.log(json);
         let url = '/get_user_info_by_name/';
         return HTTP.postImmediately(url,Utils.formatParams(json))
     },
     resetPassword:function (json) {
-        // let url='/data/validate_url_or_reset_pwd/';
-        // let body = this.formatParams(param);
-        // let options = new RequestOptions({ headers: this.headers });
-        // return this.http.post(url, body,options)
-        //     .toPromise()
-        //     .then(this.extractNormalData)
-        //     .catch(this.handleError);
+        let url = '/validate_url_or_reset_pwd/';
+        let body = Utils.formatParams(json);
+        console.log(body);
+
+        return HTTP.postImmediately(url,body);
     }
 };
