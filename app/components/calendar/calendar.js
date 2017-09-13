@@ -57,27 +57,27 @@ let config = {
 
         this.el.on('click', '#monthView', () => {
             Mediator.emit('Calendar: changeMainView', {calendarContent: 'month',});
-            $('#monthView').addClass('btn-checked');
-            $('#weekView, #dayView').removeClass('btn-checked');
-            $('#todayView, #schedule').removeClass('today-btn-checked');
+            this.el.find('#monthView').addClass('btn-checked');
+            this.el.find('#weekView, #dayView').removeClass('btn-checked');
+            this.el.find('#todayView, #schedule').removeClass('today-btn-checked');
         }).on('click', '#weekView', () => {
             Mediator.emit('Calendar: changeMainView', {calendarContent: 'week',});
-            $('#weekView').addClass('btn-checked');
-            $('#monthView, #dayView').removeClass('btn-checked');
-            $('#todayView, #schedule').removeClass('today-btn-checked');
+            this.el.find('#weekView').addClass('btn-checked');
+            this.el.find('#monthView, #dayView').removeClass('btn-checked');
+            this.el.find('#todayView, #schedule').removeClass('today-btn-checked');
         }).on('click', '#dayView', () => {
-            $('#dayView').addClass('btn-checked');
-            $('#monthView, #weekView').removeClass('btn-checked');
-            $('#todayView, #schedule').removeClass('today-btn-checked');
+            this.el.find('#dayView').addClass('btn-checked');
+            this.el.find('#monthView, #weekView').removeClass('btn-checked');
+            this.el.find('#todayView, #schedule').removeClass('today-btn-checked');
             Mediator.emit('Calendar: changeMainView', {calendarContent: 'day',});
         }).on('click', '#todayView', () => {
-            $('#todayView').addClass('today-btn-checked');
-            $('#schedule').removeClass('today-btn-checked');
-            $('#monthView, #weekView, #dayView').removeClass('btn-checked');
+            this.el.find('#todayView').addClass('today-btn-checked');
+            this.el.find('#schedule').removeClass('today-btn-checked');
+            this.el.find('#monthView, #weekView, #dayView').removeClass('btn-checked');
             Mediator.emit('Calendar: changeMainView', {calendarContent: 'today',});
         }).on('click', '#schedule', () => {
-            $('#schedule').addClass('today-btn-checked');
-            $('#todayView').removeClass('today-btn-checked');
+            this.el.find('#schedule').addClass('today-btn-checked');
+            this.el.find('#todayView').removeClass('today-btn-checked');
             $('#monthView, #weekView, #dayView').removeClass('btn-checked');
             Mediator.emit('Calendar: changeMainView', {calendarContent: 'schedule',});
         }).on('click', '#refresh', () => {
