@@ -27,15 +27,21 @@ let config = {
             this.reload();
         }
     },
-    binds:[],
+    binds:[
+        {
+            event:'click',
+            selector:'.original-data-btn',
+            callback:function () {
+                this.trigger('onShowOriginal');
+            }
+        },
+    ],
     data: {
         title: '', // 画布块标题
         isDeep: false, // 是否显示上一层
         editMode: window.config.bi_user === 'manager' ? true : false, // 是否显示编辑，删除操作
         newCell: false, // 用来判断是否新建画布块
         imgUrl: window.config.img_url,
-        isEdit: false,
-        edits: '',
     },
     afterRender() {},
     firstAfterRender() {},
@@ -46,5 +52,4 @@ export class CanvasCellTitleComponent extends Component {
         constructor(data,event) {
             super(config,data,event)
         }
-
 }

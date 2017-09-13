@@ -12,32 +12,26 @@
                             <input type="checkbox" name="custom-checkbox-all">
                         </label>
                     </th>
-                    <th>模板名称</th>
+                    <th>{{xAxis.name}}</th>
+                    {{#each yAxis}}
                     <th>
-                        <span>功能点数目</span>
-                        <span class="sort">
-                            <!--<span class="sort-inner">▲</span>-->
-                            <span class="sort-inner">▼</span>
-                        </span>
+                        <span>{{field.name}}</span>
                     </th>
-                    <th>
-                        <span>功能点数目</span>
-                        <span class="sort">
-                            <!--<span class="sort-inner">▲</span>-->
-                            <span class="sort-inner">▼</span>
-                        </span>
-                    </th>
+                    {{/each}}
                 </tr>
+                {{#each data.xAxis}}
                 <tr class="tr-body">
                     <th>
                         <label class="custom-checkbox z-checkbox">
                             <input type="checkbox" name="custom-checkbox">
                         </label>
                     </th>
-                    <td><a href="javascript:;">UI设计</a></td>
-                    <td><span class="property-item">19</span></td>
-                    <td><span class="property-item">19</span></td>
+                    <td><a href="javascript:;">{{@this}}</a></td>
+                    {{#each @root.data.yAxis}}
+                    <td></td>
+                    {{/each}}
                 </tr>
+                {{/each}}
             </table>
         </div>
     </div>

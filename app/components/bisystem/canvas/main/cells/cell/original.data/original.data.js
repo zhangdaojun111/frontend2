@@ -8,28 +8,13 @@ import './original.data.scss';
 
 let config = {
     template: template,
-    actions: {
-        /**
-         *选中处理
-         */
-        checkedBox(self = this) {
-            let allChecked = true;
-            this.el.find('input[name="custom-checkbox"]:checkbox').each( function() {
-                if(!$(this).is(':checked')){
-                    allChecked = false;
-                    return;
-                }
-            });
-            if(allChecked){
-                self.el.find('input[name="custom-checkbox-all"]:checkbox').prop("checked",true);
-            }else{
-                self.el.find('input[name="custom-checkbox-all"]:checkbox').prop("checked",false);
-            }
-        }
-
-    },
+    actions: {},
     data: {
         showData:true,
+        deepOriginalData: { // 通过初始化数据组装后得到的下穿数据
+            titles: [],
+            items: []
+        }
     },
     binds:[
         {
@@ -38,25 +23,7 @@ let config = {
             callback:function () {
                 this.destroySelf();
             }
-        },
-        {
-            event:'click',
-            selector:'input[name="custom-checkbox"]:checkbox',
-            callback:function () {
-                this.actions.checkedBox()
-            }
-        },
-        {
-            event:'click',
-            selector:'input[name="custom-checkbox-all"]:checkbox',
-            callback:function (self = this) {
-                if ($(self).is(':checked')){
-                    this.el.find('input[name="custom-checkbox"]:checkbox').prop("checked",true);
-                }else{
-                    this.el.find('input[name="custom-checkbox"]:checkbox').prop("checked",false);
-                }
-            }
-        },
+        }
     ],
     afterRender() {},
     firstAfterRender() {},
@@ -65,6 +32,22 @@ let config = {
 
 export class CanvasOriginalDataComponent extends Component {
     constructor(data,events) {
+        CanvasOriginalDataComponent.handleOriginalData(data);
         super(config,data,events)
+    }
+
+    /**
+     * 处理初始化数据(因为饼图,折线图返回数据格式不同)
+     */
+    static handleOriginalData(chart) {
+        console.log(chart);
+        if (chart.assortment === 'pie') {
+        } else {
+            let items = [];
+            chart.data.xAxis.forEach((val,index) => {
+                console.log(val);
+            });
+            data.originalData.items = []
+        }
     }
 }

@@ -16,7 +16,7 @@ import {CellMultiChartComponent} from './multi.chart/cell.multi.chart';
 import {CellFunnelComponent} from './funnel/cell.funnel';
 import {CellCommentComponent} from './comment/cell.comment';
 import {CanvasCellTitleComponent} from './title/canvas.title';
-import {CanvasOriginalDataComponent} from './original.data/original.data';
+
 import {canvasCellService} from '../../../../../../services/bisystem/canvas.cell.service';
 
 // cell 组件类型，通过匹配assortment渲染不同的组件
@@ -40,7 +40,15 @@ let config = {
          */
         renderCell() {
             this.el.find('.cell').css(this.data.cell.size);
-            this.cellTitle = new CanvasCellTitleComponent();
+            this.cellTitle = new CanvasCellTitleComponent({},{
+                /**
+                 * 显示原始数据
+                 */
+                onShowOriginal: () => {
+                    let originalData = this.data.cellComponent.data.cellChart.chart;
+                    this.data.cellComponent.showCellDataSource(originalData,this.el.find('.cell-chart'))
+                }
+            });
             this.append(this.cellTitle, this.el.find('.bread-crumb-nav'));
         },
         /**
@@ -120,14 +128,6 @@ let config = {
             this.trigger('onUpdateLayout', {componentId: this.componentId,cell:this.data.cell});
             this.data.biUser = true;
             this.actions.loadCellChart(res[0]);
-        },
-
-        /**
-         *显示数据源画布块
-         */
-        showCellDataSource() {
-            let dataSource = new CanvasOriginalDataComponent();
-            this.append(dataSource,this.el.find('.cell .cell-chart'));
         },
     },
     data: {
@@ -210,15 +210,6 @@ let config = {
             selector: '.del-cell-btn',
             callback: function (context,event) {
                 this.actions.delCellLayout();
-                return false;
-            }
-        },
-        // 显示数据源
-        {
-            event: 'click',
-            selector: '.back-floor-btn-data',
-            callback: function (context,event) {
-                this.actions.showCellDataSource();
                 return false;
             }
         },

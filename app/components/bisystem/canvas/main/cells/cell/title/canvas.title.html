@@ -9,13 +9,16 @@
         {{#if isDeep}}
             <a href="javascript:;" class="back-floor-btn" title="上一层"><i class="view-back-icon"></i></a>
         {{/if}}
+
         {{#if editMode}}
             {{#if newCell}}
                 <a href="#/forms/{{chart.data.assortment}}/{{chart.data.chartName.id}}?&viewId={{viewId}}" title="编辑"><i class="edit-icon"></i></a>
             {{/if}}
         <a href="javascript:;" class="del-cell-btn" title="删除"><i class="remove-icon"></i></a>
         {{else}}
-         <button href="javascript:;" class="back-floor-btn-data" title="原始数据">原始数据</button>
+            {{#if isDeep}}
+            <a href="javascript:;" class="original-data-btn" title="原始数据">原始数据</a>
+            {{/if}}
         {{/if}}
     </span>
 </h3>

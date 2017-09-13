@@ -1,7 +1,7 @@
 /**
  * Created by birdyy on 2017/7/31.
  */
-import {BiBaseComponent} from '../../../../../bi.base.component';
+import {CellBaseComponent} from '../base';
 import template from './cell.normal.html';
 import './cell.normal.scss';
 
@@ -28,6 +28,10 @@ let config = {
          * 初始化pie图表数据
          */
         initNormal() {
+            this.data.cellChart = {
+                cell: this.data.cell,
+                chart: this.data.chart
+            };
             this.data.id += this.componentId;
             this.data.deeps = this.data.cellChart.chart.deeps.length;
             this.data.floor = this.data.cellChart.cell.is_deep == 1 ? this.data.cellChart.cell.deep.floor : 0;
@@ -125,14 +129,13 @@ let config = {
 
     },
     firstAfterRender() {
-        this.actions.echartsInit()
+        this.actions.echartsInit();
     }
 }
 
-export class CellNormalComponent extends BiBaseComponent {
-    constructor(cellChart) {
-        config.data.cellChart = cellChart ? cellChart : null;
-        super(config);
+export class CellNormalComponent extends CellBaseComponent {
+    constructor(data,event) {
+        super(config,data,event);
         this.actions.initNormal();
     }
 }
