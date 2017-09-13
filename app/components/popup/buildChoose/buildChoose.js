@@ -42,7 +42,6 @@ let config = {
         HTTP.flush();
         //改变表单
         _this.el.on('click', 'a.choose-aside-a', function () {
-            debugger;
             _this.data.selected = {value: $(this).data('value'), label: $(this).html()};
             FormEntry.destoryForm(_this.data.source_table_id);
             FormEntry.createForm({
