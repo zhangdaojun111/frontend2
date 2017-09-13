@@ -65,10 +65,6 @@ let config = {
             for (let i=0;i<len;i++){
                 let left = imgInfo[i].viewLeft+"%";
                 let top = imgInfo[i].viewTop+"%";
-                let container = $(".form-print-position")[0];
-                //容器的宽高
-                let containerHeight = container.clientHeight/100;
-                let containerWidth = container.clientWidth/100;
                 html += `<img class="oldImg noprint" src="http://${host}/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`;
                 html += `<img class="printimg printS" src="http://${host}/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`;
             }
