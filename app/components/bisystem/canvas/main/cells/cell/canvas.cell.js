@@ -121,6 +121,7 @@ let config = {
             this.data.biUser = true;
             this.actions.loadCellChart(res[0]);
         },
+
         /**
          *显示数据源画布块
          */
