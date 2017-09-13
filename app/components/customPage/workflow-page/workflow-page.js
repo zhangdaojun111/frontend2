@@ -95,6 +95,11 @@ let config = {
                     continue;
                 }
                 let s = this.actions.searchType(col["field"],col.headerName);
+                let minWidth = {
+                    datetime: 160,
+                    time: 90,
+                    date: 110
+                }
                 let obj = {
                     headerName: col.headerName,
                     field: col["field"],
@@ -106,7 +111,7 @@ let config = {
                     tooltipField: col["field"],
                     sortingOrder: ['desc', 'asc', null],
                     hide: false,
-                    minWidth: 20,
+                    minWidth: minWidth[s.type] || 20,
                     width: col["width"] || 120,
                     cellStyle: {'font-style': 'normal'},
                     floatingFilterComponent: this.floatingFilterCom.actions.createFilter(s.type , s.field, this.data.searchValue, this.data.searchOldValue),
