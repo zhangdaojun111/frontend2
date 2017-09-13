@@ -2720,9 +2720,9 @@ let config = {
             //二维表数据穿透
             if( data.event.target.id == 'reportTable2' ){
                 //查找对应列的colId
-                // if(data.value == 0){
-                //     return
-                // }
+                if(data.value == 0){
+                    return
+                }
                 let current_colId = data.colDef.colId;
                 let val = data.value;
                 let real_colId = '';

@@ -589,9 +589,15 @@ export const dgcService = {
                 d['width'] = data.operateColWidth;
             }
         }
+        let new_arr = []
+        for( let d of arr ){
+            if( d.colId!=undefined ){
+                new_arr.push( d );
+            }
+        }
         // console.log( "状态" )
-        // console.log( arr )
-        agGrid.gridOptions.columnApi.setColumnState( arr );
+        // console.log( new_arr )
+        agGrid.gridOptions.columnApi.setColumnState( new_arr );
     },
     //判断Object是否相等
     checkObejctNotEqual(obj1,obj2){
