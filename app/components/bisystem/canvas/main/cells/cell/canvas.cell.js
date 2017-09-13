@@ -16,7 +16,7 @@ import {CellMultiChartComponent} from './multi.chart/cell.multi.chart';
 import {CellFunnelComponent} from './funnel/cell.funnel';
 import {CellCommentComponent} from './comment/cell.comment';
 import {CanvasCellTitleComponent} from './title/canvas.title';
-import {CanvasDataSourceComponent} from './datasource/datasource';
+import {CanvasOriginalDataComponent} from './original.data/original.data';
 import {canvasCellService} from '../../../../../../services/bisystem/canvas.cell.service';
 
 // cell 组件类型，通过匹配assortment渲染不同的组件
@@ -126,12 +126,8 @@ let config = {
          *显示数据源画布块
          */
         showCellDataSource() {
-            let dataSource = new CanvasDataSourceComponent();
+            let dataSource = new CanvasOriginalDataComponent();
             this.append(dataSource,this.el.find('.cell .cell-chart'));
-            this.el.find('.back-floor-btn-data').attr('disabled',true);
-            this.el.find('.bi-origin-data-close').on('click', ()=> {
-                this.el.find('.back-floor-btn-data').attr('disabled',false);
-            })
         },
     },
     data: {

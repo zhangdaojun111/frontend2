@@ -1,4 +1,4 @@
-import {BiBaseComponent} from '../bi.base.component';
+import Component from '../../../lib/component';
 
 import {ViewItemComponent} from "./item/item";
 
@@ -76,36 +76,37 @@ let config = {
     afterRender(){
         //渲染列表数据
         this.data.views.forEach((val,index) => {
-            let viewItemComponent = new ViewItemComponent(val);
+            let viewItemComponent = new ViewItemComponent(val,{
+                onChange: (res)=>{
+                    let views = this.data.views;
+                    if (res.type === 'remove') {
+                        for(let [index,view] of views.entries()) {
+                            if (res.value.id === view.id) {
+                                views.splice(index,1);
+                                break;
+                            }
+                        }
+                    } else {
+                        for(let [index,view] of views.entries()) {
+                            if (res.id === view.id) {
+                                view.name = res.name;
+                                break;
+                            }
+                        }
+                    }
+                    window.config.bi_views = views;
+
+                }
+            });
             this.append(viewItemComponent,this.el.find('.view-list'));
         });
     },
-    firstAfterRender() {
-        Mediator.subscribe("bi:views:update", (res) => {
-            let views = this.data.views;
-            if (res.view === 'remove') {
-                for(let [index,view] of views.entries()) {
-                    if (res.data.id === view.id) {
-                        views.splice(index,1);
-                        break;
-                    }
-                }
-            }else{
-                for(let [index,view] of views.entries()) {
-                    if (res.id === view.id) {
-                        view.name = res.name;
-                        break;
-                    }
-                }
-            }
-            window.config.bi_views = views;
-        });
-    }
+    firstAfterRender() {}
 };
 
-export class ViewsEditComponent extends BiBaseComponent{
-    constructor() {
-        super(config)
+export class ViewsEditComponent extends Component{
+    constructor(data,events) {
+        super(config,data,events)
     }
 }
 

@@ -12,7 +12,7 @@ let config = {
         views: window.config.bi_views,
         currentViewId: '',
         headerComponents: {},
-        editMode: window.config.bi_user === 'manager',
+        editMode: window.config.bi_user === 'manager' ? window.config.bi_user : false,
         singleMode: window.location.href.indexOf('single') !== -1,
     },
     binds: [
@@ -48,13 +48,22 @@ let config = {
         switchViewId: function (viewId) {
             this.currentViewId = viewId ? viewId.toString() : window.config.bi_views[0].id;
             if (!this.data.singleMode) {
-                this.data.headerComponents.data.menus[this.currentViewId].actions.focus();
+                // this.data.headerComponents.data.menus[this.currentViewId].actions.focus();
             };
             this.data.cells = new CanvasCellsComponent(this.currentViewId);
             this.data.cells.render(this.el.find('.cells-container'));
         },
+
+        /**
+         * 销毁canvas.cells组件
+         */
+        destroyCanvasCells() {
+            this.data.cells.destroySelf();
+            this.el.find('.component-bi-canvas-main').append("<div class='cells-container client'></div>")
+        }
     },
     afterRender(){
+        this.showLoading();
         //根据判断是否单行模式加载header
         if (!this.data.singleMode) {
             let header = new CanvasHeaderComponent({},{
@@ -68,7 +77,8 @@ let config = {
             this.append(header, this.el.find('.views-header'));
             this.data.headerComponents = header;
         };
-    }
+        this.hideLoading();
+    },
 };
 
 export class CanvasMain extends Component {

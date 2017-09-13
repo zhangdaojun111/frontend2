@@ -1,9 +1,10 @@
-@mixin div-equal{
+@mixin div-equal {
     display: inline-block;
     width: 33.3%;
     margin-top: 10px;
 }
-.form-chart-multi{
+
+.form-chart-multi {
     .form-group {
         .form-chart-multi-chart {
             .form-group-chart {
@@ -25,17 +26,6 @@
                     display: inline-block;
                     width: 100%;
                 }
-                .remove-y-btn {
-                    position: absolute;
-                    right: 5px;
-                    top: -20px;
-                    color: red;
-                    text-decoration: none;
-                    font-size: 12px;
-                    i{
-                        vertical-align: middle;
-                    }
-                }
                 .form-chart-radio {
                     label {
                         margin: 8px;
@@ -47,10 +37,10 @@
             }
         }
     }
-    h3:last-child{
+    h3:last-child {
         min-width: 774px;
         max-width: 1000px;
-        margin:  0 auto;
+        margin: 0 auto;
         background: #f2f2f2;
         border: none;
     }
@@ -66,8 +56,8 @@
         font-size: 12px;
         margin-left: calc(100% - 770px);
     }
-    @media screen and (max-width: 1300px){
-        .add-chart-btn{
+    @media screen and (max-width: 1300px) {
+        .add-chart-btn {
             margin-left: 256px;
         }
     }

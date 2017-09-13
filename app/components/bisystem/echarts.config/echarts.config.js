@@ -217,12 +217,11 @@ const funnel = {
             minSize: '0%',
             maxSize: '100%',
             sort: 'descending',
-            data: [
-                // {value: 60, name: '产品C'}
-            ]
+            data: []
         }
     ]
 }
+
 // 折线柱状图
 const linebar = {
     animation : false,
@@ -241,14 +240,12 @@ const linebar = {
         data: [],
         selected: {}
     },
-
     grid: {
         left: 30,
         right: 30,
-        bottom: 30,
+        bottom: 20,
         top: 50
     },
-
     xAxis: [
         {
             type: 'category',
