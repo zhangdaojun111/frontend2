@@ -15,29 +15,38 @@ import {UserInfoService} from "../../../services/main/userInfoService"
 
 let config = {
     template:template,
+    //以两位数保存bi和日历的顺序及开关，第一位表示顺序，2在前面（面板的上方），1在后面，第二位表示开关，0为关闭，1为开启
     data:{
-        biSort:1,       //以两位数保存bi和日历的顺序及开关，第一位表示顺序，2在前面（面板的上方），1在后面，第二位表示开关，0为关闭，1为开启
-        calendarSort:2,
-        biStatus:0,
-        calendarStatus:0,
+        biSort:1,           //记录bi的顺序
+        calendarSort:2,     //记录日历顺序
+        biStatus:0,         //记录快捷bi状态（0为不快捷打开bi）
+        calendarStatus:0,   //记录快捷bi状态（0为不快捷打开日历）
     },
     actions:{
+        //打开样式设置页面
         showStyleSetting:function () {
             this.el.find('.style-setting').show();
             this.el.find('.rapid-setting').hide();
             this.el.find('.style-btn').addClass('active');
             this.el.find('.rapid-btn').removeClass('active');
         },
+        //打开快捷设置页面
         showRapidSetting:function () {
             this.el.find('.style-setting').hide();
             this.el.find('.rapid-setting').show();
             this.el.find('.style-btn').removeClass('active');
             this.el.find('.rapid-btn').addClass('active');
         },
+        //清理缓存
         clearStorage:function () {
-            window.localStorage.clear();
-            $(window).attr("location","/login");
+            msgbox.confirm('确定要清除缓存，并退出到登录页面吗？').then((result) => {
+                if(result === true){
+                    window.localStorage.clear();
+                    $(window).attr("location","/login");
+                }
+            })
         },
+        //获取用户快捷设置参数并解析
         getItemData:function () {
             let biStatus = window.config.sysConfig.logic_config.login_show_bi || "10";
             this.data.biSort = biStatus.split('')[0];
@@ -49,6 +58,7 @@ let config = {
 
             this.actions.addCheckbox();
         },
+        //根据用户设置的参数在bi前或后添加日历拖动框
         addCheckbox:function () {
             let $parent = this.el.find('.sortable-box');
             let $ul = $("<li class='isShow-calendar sort-item' title='拖动调整顺序'><input class='calendar-Show' type='checkbox'><span>登录时自动开启日历</span>" +
@@ -58,9 +68,9 @@ let config = {
             }else{
                 $parent.prepend($ul);
             }
-            debugger;
             this.actions.setCheckboxStatus();
         },
+        //保存用户快捷设置状态
         saveSetting:function () {
             this.showLoading();
             let biflag = 10;
@@ -77,7 +87,7 @@ let config = {
             }else{
                 calendarflag = this.data.calendarSort + "0";
             }
-
+            //以两位数保存bi和日历的顺序及开关，第一位表示顺序，2在前面（面板的上方），1在后面，第二位表示开关，0为关闭，1为开启
             let json = {
                 action:'save',
                 pre_type:4,
@@ -103,12 +113,15 @@ let config = {
                 }
             });
         },
+        //改变字体大小（目前仅有示例效果，实际效果未完成）
         changeFontSize:function () {
             let fontsize = this.el.find('input.font-range').val();
             this.el.find("span.font-size").html(fontsize);
             fontsize = fontsize + 'px';
             this.el.find("span.font-example").css("font-size",fontsize);
+            //添加对aggrid的影响
         },
+        //设置bi/日历li可拖动以及checkbox初始状态
         setCheckboxStatus:function () {
             let that = this;
             this.el.find('.sortable-box').sortable({
@@ -117,6 +130,7 @@ let config = {
                     that.actions.saveSortResult();
                 }
             }).disableSelection();
+            console.log(this.el.find('.sortable-box:first'));
             this.el.find('.sortable-box:first').droppable({
                 accept:".sort-item",
             });
@@ -128,7 +142,8 @@ let config = {
                 this.el.find('input.calendar-Show').attr("checked",true);
             }
         },
-        saveSortResult(event,ui){           //仅当dom位置发生变化才会触发，原地拖动不会触发
+        //仅当dom位置发生变化（即bi/日历顺序有变化）才会触发，原地拖动不会触发
+        saveSortResult(event,ui){
             let temp = this.data.biSort;
             this.data.biSort = this.data.calendarSort;
             this.data.calendarSort = temp;
@@ -171,20 +186,8 @@ let config = {
             }
         }
     ],
-
     afterRender:function () {
         this.actions.getItemData();
-        // this.el.on('click','.style-btn',() => {
-        //     this.actions.showStyleSetting();
-        // }).on('click','.rapid-btn',() => {
-        //     this.actions.showRapidSetting();
-        // }).on('click','.clear-storage',() => {
-        //     this.actions.clearStorage();
-        // }).on('click','.rapid-save-btn', _.debounce(() => {
-        //     this.actions.saveSetting();
-        // },300)).on('change','.font-range',() => {
-        //     this.actions.changeFontSize();
-        // })
     },
     beforeDestory:function () {
 
@@ -209,12 +212,12 @@ export const SysSetting = {
             modal:true,
             height: 600,
             close: function() {
-                $(this).dialog('destroy');
+                $(this).erdsDialog('destroy');
                 component.destroySelf();
             }
         });
     },
     hide:function () {
-        this.el.dialog('close');
+        this.el.erdsDialog('close');
     }
 };

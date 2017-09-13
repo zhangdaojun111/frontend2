@@ -305,7 +305,7 @@ export const PersonSetting  = {
             height: 600,
             modal: true,
             close: function() {
-                $(this).dialog('destroy');
+                $(this).erdsDialog('destroy');
                 component.destroySelf();
             }
         });
@@ -329,6 +329,6 @@ export const PersonSetting  = {
         });
     },
     hide:function () {
-        this.el.dialog('close');
+        this.el.erdsDialog('close');
     }
 };

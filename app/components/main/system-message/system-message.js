@@ -202,7 +202,7 @@ let systemMessageUtil = {
             modal: true,
             title: dialogTitle,
             close: function () {
-                $(this).dialog('destroy');
+                $(this).erdsDialog('destroy');
             }
         })
     }
