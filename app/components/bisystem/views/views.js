@@ -15,6 +15,7 @@ let config = {
     data:{
         views:window.config.bi_views,
         chart_id:"",
+
     },
     actions:{
         /**
@@ -35,7 +36,6 @@ let config = {
          * 新建视图
          */
         async createView() {
-            console.log('xxxxxxxxxxxxxxxxxxxxx');
             viewDialogConfig.data.view = null;
             const res = await PMAPI.openDialogByComponent(viewDialogConfig,{
                 width: 348,
