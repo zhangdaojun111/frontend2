@@ -59,7 +59,6 @@ let config = {
                         this.eFilterInput.className += (' filter-input-' + searchFiled);
                         this.eFilterInput.addEventListener( 'input', _.debounce(  ($event)=> {
                             if(this.eFilterInput.value == ''){
-                                debugger
                                 That.actions.keyupSearch(null,this.eFilterInput.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                             }
                         },1000 ))
