@@ -1,0 +1,27 @@
+.nav-tabs {
+    float: left;
+    height: 50px;
+    white-space: nowrap;
+    border-bottom: solid 1px #eeeeee;
+    width: calc(100% - 400px);
+    overflow-x: auto;
+    background-color: #374157;
+    div {
+        display: inline-block;
+    }
+    a {
+        text-decoration: none;
+        padding: 0 25px;
+        display: inline-block;
+        outline: none;
+        height: 50px;
+        line-height:50px;
+        box-sizing:border-box;
+        border-right: solid 1px #556574;
+        color: #ffffff;
+        border-top: 4px solid transparent;
+        &.active {
+            border-top-color: #00bcd4;
+        }
+    }
+}

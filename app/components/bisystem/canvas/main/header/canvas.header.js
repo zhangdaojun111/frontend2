@@ -4,13 +4,14 @@
 import Component from '../../../../../lib/component';
 import template from './canvas.header.html';
 import {CanvasHeaderMenuComponent} from './menu/canvas.header.menu';
+import './canvas.header.scss';
 
 let config = {
     template: template,
     data: {
         id: '',
         name: '',
-        views: window.config.bi_views,
+        views: [],
         editMode: window.config.bi_user === 'manager',
         menus: {}
     },
@@ -56,6 +57,7 @@ let config = {
         },
     ],
     afterRender() {
+        this.data.views = window.config.bi_views;
         // 渲染header视图列表
         this.data.views.forEach(viewData => {
             let menu = new CanvasHeaderMenuComponent(viewData);
@@ -64,7 +66,6 @@ let config = {
         })
     }
 };
-
 export class CanvasHeaderComponent extends Component {
     constructor(data, events) {
         super(config, data, events);
