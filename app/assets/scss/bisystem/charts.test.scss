@@ -1,21 +1,22 @@
 /*
  * 字段列名显示
  */
-@mixin form-clo{
+@mixin form-clo {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    span{
+    span {
         margin: 8px;
         border: 1px solid #e4e4e4;
         padding: 10px 24px;
         background: #F2F2F2;
     }
 }
+
 /*
  * 按钮
  */
-@mixin form-btn{
+@mixin form-btn {
     padding: 8px 40px;
     background: #0E7AEF;
     border: none;
@@ -26,9 +27,10 @@
     font-size: 12px;
 }
 
-.form-chart-clo{
+.form-chart-clo {
     @include form-clo;
 }
-.save-btn{
+
+.save-btn {
     @include form-btn;
 }

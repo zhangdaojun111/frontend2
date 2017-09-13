@@ -20,29 +20,33 @@ let config ={
         telephone:'',       //用于保存电话
     },
     actions:{
+        //显示投资人注册页面
         showInvestorsLogin:function () {
             this.el.find('div.investors-btn').addClass('active');
             this.el.find('div.manager-btn').removeClass('active');
             this.el.find('div.page-2').hide();
             this.data.status = 0;
         },
+        //显示管理员注册页面
         showManagerLogin:function () {
             this.el.find('div.investors-btn').removeClass('active');
             this.el.find('div.manager-btn').addClass('active');
             this.el.find('div.page-2').show();
             this.data.status = 1;
         },
+        //跳转到登录页面
         toLoginPage:function () {
             $(window).attr('location','/login');
         },
+        //点击注册后，判断注册种类
         postRegister:function () {
-            this.showLoading();
             if(this.data.status === 0){
                 this.actions.doInvestorsRegister();
             }else{
                 this.actions.doManagerRegister();
             }
         },
+        //获取注册验证码
         getVerificationCode:function (event) {
             if(this.data.timer === 60){
                 let json = {
@@ -78,6 +82,7 @@ let config ={
                 that.actions.getVerificationCode(event);
             },1000)
         },
+        //进行投资人注册，验证注册信息后向后台发送注册数据
         doInvestorsRegister:function () {
             let username = this.el.find('input.username').val();
             let password = this.el.find('input.password').val();
@@ -105,7 +110,7 @@ let config ={
                 msgbox.alert('请填写验证码');
                 return;
             }
-
+            this.showLoading();
             let json = {
                 action:'investor',
                 phone:tel,
@@ -125,9 +130,11 @@ let config ={
                     msgbox.alert("注册失败");
                 }
             }).fail((err) => {
+                that.hideLoading();
                 msgbox.alert("注册失败");
             })
         },
+        //用户输入时对表格内容进行检查
         checkForm:function (event,tip,type) {
             if(event.target.required === false){
                 event.target.style.borderColor = 'rgba(169,169,169,0.5)';
@@ -215,6 +222,7 @@ let config ={
                 }
             }
         },
+        //单独检测验证码输入
         checkVerification:function (event,tip,type) {
             let value = event.target.value.trim();
             if(value !== ''){
@@ -224,16 +232,18 @@ let config ={
                 event.target.style.borderColor = 'red';
                 this.el.find('p.verification-p').html(tip);
             }
-
         },
+        //正则检查电话
         checkTel:function (tel) {
             let reg =/^1[3|7|5|8]\d{9}$/;
             return reg.test(tel);
         },
+        //正则检查email
         checkEmail:function (email) {
             let reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
             return reg.test(email);
         },
+        //管理员注册，向后台发送注册请求
         doManagerRegister:function () {
             msgbox.alert("管理员注册暂未开放");
         }
@@ -241,28 +251,28 @@ let config ={
     binds:[
         {
             event:'click',
-            selector:'div.investors-btn',
+            selector:'div.investors-btn',                //点击显示投资人注册页面
             callback:function () {
                 this.actions.showInvestorsLogin();
             }
         },
         {
             event:'click',
-            selector:'div.manager-btn',
+            selector:'div.manager-btn',                 //点击显示管理者注册页面
             callback:function () {
                 this.actions.showManagerLogin();
             }
         },
         {
             event:'click',
-            selector:'.login-btn',
+            selector:'.login-btn',                      //跳转到登录页面
             callback:function () {
                 this.actions.toLoginPage();
             }
         },
         {
             event:'click',
-            selector:'.register-page-btn',
+            selector:'.register-page-btn',              //点击进行注册操作
             callback:function () {
                 this.actions.postRegister();
             }
@@ -271,33 +281,33 @@ let config ={
             event:'click',
             selector:'.get-code',
             callback:function (target,event) {
-                this.actions.getVerificationCode(event);
+                this.actions.getVerificationCode(event);        //点击获取验证码
             }
         },
         {
             event:'input',
             selector:'input.tel',
             callback:function (target,event) {
-                this.data.telephone = event.target.value;
+                this.data.telephone = event.target.value;       //检查电话格式
             }
         },
         {
             event:'blur',
             selector:'input.username',
             callback:function (target,event) {
-                this.actions.checkForm(event,"请填写用户名","username");
+                this.actions.checkForm(event,"请填写用户名","username");      //检查用户名格式
             }
         },
         {
             event:'blur',
             selector:'input.password',
             callback:function (target,event) {
-                this.actions.checkForm(event,"请填写密码","password");
+                this.actions.checkForm(event,"请填写密码","password");       //检查密码格式
             }
         },
         {
             event:'blur',
-            selector:'input.name',
+            selector:'input.name',                                          //检查姓名格式
             callback:function (target,event) {
                 this.actions.checkForm(event,"请填写姓名","name");
             }
@@ -306,28 +316,28 @@ let config ={
             event:'blur',
             selector:'input.email',
             callback:function (target,event) {
-                this.actions.checkForm(event,"请填写邮箱地址","email");
+                this.actions.checkForm(event,"请填写邮箱地址","email");        //检查邮箱格式
             }
         },
         {
             event:'blur',
             selector:'input.tel',
             callback:function(target,event){
-                this.actions.checkForm(event,"请填写手机号码","tel");
+                this.actions.checkForm(event,"请填写手机号码","tel");          //检查手机号码格式
             }
         },
         {
             event:'blur',
             selector:'input.verification-code',
             callback:function (target,event) {
-                this.actions.checkVerification(event,"请填写验证码","verification-code");
+                this.actions.checkVerification(event,"请填写验证码","verification-code");     //检查验证码填写
             }
         },
         {
             event:'click',
             selector:'.register-btn',
             callback:_.debounce(function(){
-                this.actions.postRegister();
+                this.actions.postRegister();        //点击发送注册请求
             },500)
         }
 
