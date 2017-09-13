@@ -120,6 +120,8 @@ let config={
             let moreSelectdata=FormService.createSelectJson(data2,true,2);
             oneSelectdata.onSelect=function(data){
                 if(_this.data.isInit || data.length == 0 || _this.data.isReloading){
+                    _this.data.value='';
+                    _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                     return;
                 }
                 _this.data.isReloading=true;
@@ -127,6 +129,8 @@ let config={
             };
             moreSelectdata.onSelect=function(data){
                 if(_this.data.isInit || data.length == 0 || _this.data.isReloading){
+                    _this.data.value='';
+                    _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                     return;
                 }
                 let arr=[];
