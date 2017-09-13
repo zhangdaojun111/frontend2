@@ -47,16 +47,22 @@ let config={
             let el=this.el.find('.dropdown');
             let data=FormService.createSelectJson(this.data);
             data.onSelect=function(data){
-                console.log(data);
                 if(_this.data.isInit || !data || data.length == 0 ){
+                    console.log('ddddate  ',data[0])
+
+                        _this.data.value=data.length;
+                        _.debounce(function(){_this.events.changeValue(_this.data)},200)();
+
                     console.log('但是没触发onselect');
                     return;
                 }
                 _this.data.value=data[0]['id'];
+                console.log('id  ',  _this.data.value)
                 _.debounce(function(){_this.events.changeValue(_this.data)},200)();
             };
             let autoSelect=new AutoSelect(data);
             this.append(autoSelect,el);
+            console.log('data  ',el)
         }
         this.data.isInit=false;
     },
