@@ -7,13 +7,9 @@
   min-width: 980px;
   .add-img {
     width: 248px;
-    height: 148px;
+    max-height: 150px;
     z-index: 106;
   }
-  //.ui-myformtable{
-  //  position: relative;
-  //  background: #fff;
-  //}
 }
 btn-div{
   height: 24px;
