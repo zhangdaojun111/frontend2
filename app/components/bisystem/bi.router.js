@@ -12,7 +12,8 @@ const BiAppRouter = Backbone.Router.extend({
     },
     routerViewsComponent(id) {
         if (canvasComponent) {
-            canvasComponent.reload();
+            canvasComponent.actions.destroyCanvasCells();
+            canvasComponent.actions.switchViewId(id);
         } else {
             canvasComponent = new CanvasMain();
             canvasComponent.render($('#route-outlet'));
