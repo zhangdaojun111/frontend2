@@ -2,6 +2,7 @@ import alertConfig from '../components/util/alert/alert';
 import confirmConfig from '../components/util/confirm/confirm';
 import {Tips} from '../components/util/tips/tips';
 import {PMAPI, PMENUM} from './postmsg';
+import {progressConfig} from "../components/util/progresses/progresses";
 
 
 export default {
@@ -52,5 +53,51 @@ export default {
 
     _showTips: function (msg) {
         Tips.showMessage(msg)
-    }
+    },
+
+    /**
+     * 显示进度条
+     */
+    showProgress: function (data) {
+        let key = PMAPI._getKey();
+        progressConfig.data = data;
+        PMAPI.openDialogByComponentWithKey(progressConfig,key,{
+            width:400,
+            height:200,
+            title:'查看上传进度'
+        });
+
+        return {
+            /**
+             * @param item 上传进度百分比数组[20,30,20]
+             **/
+            update:function (items) {
+                PMAPI.sendToParent({
+                    type:PMENUM.send_data_to_dialog_component,
+                    key:key,
+                    data:{type:'update',msg:items}
+                })
+            },
+            finish:function ({fileOrder:index}) {
+                PMAPI.sendToParent({
+                    type:PMENUM.send_data_to_dialog_component,
+                    key:key,
+                    data:{type:'finish',msg:index}
+                })
+            },
+            /**
+             *
+             * @param msgData {fileId:filename_time,msg:'....'}
+             */
+            showError:function (msgData) {
+                PMAPI.sendToParent({
+                    type:PMENUM.send_data_to_dialog_component,
+                    key:key,
+                    data:{type:'error',msg:msgData}
+                })
+            }
+        }
+    },
+
+
 }
