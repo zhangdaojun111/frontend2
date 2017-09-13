@@ -1,6 +1,9 @@
 .remind-dom-content {
+    .set-remind-container,.remind-table-content{
+        border-collapse: inherit;
+    }
     border: 1px solid #dddddd;
-    width:100%;
+    margin: 8px;
     font-size: 12px;
     .icon-calendar-require {
         height: 16px;
@@ -34,9 +37,9 @@
     .remind-table-content {
         border: 1px solid #dddddd;
         padding: 5px 50px 5px 5px;
-        margin-left: 2.5%;
+        margin-left: 10px;
         margin-top: 10px;
-        width: 95%;
+        width: calc(100% - 20px);
         margin-bottom: 10px;
         //padding-right: 20px;
         .remind-table-row {
@@ -47,6 +50,7 @@
                 width: 100%;
                 line-height: 55px;
                 text-align: center;
+                padding-left: 25px;
                 .change-state-btn {
                     display: inline-block;
                     line-height: 28px;
@@ -97,6 +101,8 @@
             }
             #send-email-address{
                 width: 95%;
+                height: 30px;
+                border: 1px solid #dddddd;
             }
 
         }

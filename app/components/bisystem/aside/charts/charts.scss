@@ -11,13 +11,14 @@ $li-odd-bg: #374157;
 $li-hover: #424e67;
 $btn_width: 16px;
 $font_size: 12px;
+
 .charts-items {
     width: 100%;
     //height: 100%;
     //overflow: auto;//显示滚动条
     font-size: 12px;
     cursor: move;
-    img{
+    img {
         float: left;
         margin-right: 4px;
         border-radius: 50%;

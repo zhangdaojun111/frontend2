@@ -19,7 +19,12 @@ _.defaultsDeep(AsideInstance.data, {
     role: window.config.sysConfig.userInfo.is_superuser === 1 ? '管理员' : '普通用户'
 });
 
-AsideInstance.render($('#aside'));
 IframeInstance.render($('#content'));
 HeaderInstance.render($('#header'));
+AsideInstance.render($('#aside'));
 Storage.clearAll();
+
+let body = $('body');
+body.find('.component-loading-cover').remove();
+body.find('.component-loading-box').remove();
+body.removeClass('component-loading-effect');
