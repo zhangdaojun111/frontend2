@@ -52,6 +52,7 @@ class Uploader {
             // }
             that.fileInput.val('');
             resolve(that.fileList[name]);
+            this.value = null;
         });
         this.fileInput.trigger('click');
         return promise;
