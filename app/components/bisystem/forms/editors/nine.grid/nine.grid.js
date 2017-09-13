@@ -1,7 +1,7 @@
 import {Base} from '../base';
 import template from './nine.grid.html';
 
-import {chartName,theme,icon} from '../form.chart.common';
+import {chartName,theme,icon,button} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
@@ -84,16 +84,19 @@ let config = {
                 xAxis:xAxis,
                 yAxis:yAxis,
             };
-            let res = await ChartFormService.saveChart(JSON.stringify(chart));
-            if (res['success'] == 1) {
-                msgbox.alert('保存成功');
-                if (!chart['chartName']['id']) {
-                    this.reload();
-                };
-                Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
-            } else {
-                msgbox.alert(res['error'])
+
+            let pass = true; // 判断表单是否验证通过
+            for (let key of Object.keys(this.formItems)) {
+                if (this.formItems[key].data.rules) {
+                    let isValid = this.formItems[key].valid();
+                    if (!isValid) {
+                        pass = false;
+                    };
+                }
             };
+            if (pass) {
+                this.save(chart);
+            }
         },
 
         /**
@@ -101,7 +104,6 @@ let config = {
          * @param chart = this.data.chart
          */
         fillChart(chart) {
-            console.log(chart);
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
@@ -121,6 +123,13 @@ let config = {
                 name: 'source',
                 defaultValue: '',
                 placeholder: '请选择数据来源',
+                required: true,
+                rules: [
+                    {
+                        errorMsg: '数据源不能为空',
+                        type: 'required'
+                    }
+                ],
                 type: 'autocomplete'
             },
             theme,
@@ -153,6 +162,13 @@ let config = {
                 defaultValue: '',
                 class:'fl',
                 placeholder: '请输入x1',
+                required: true,
+                rules: [
+                    {
+                        errorMsg: '请填写完整的x轴数据',
+                        type: 'required'
+                    }
+                ],
                 type: 'text'
             },
             {
@@ -185,6 +201,13 @@ let config = {
                 defaultValue: '',
                 class:'fl y1',
                 placeholder: '请输入y1',
+                required: true,
+                rules: [
+                    {
+                        errorMsg: '请填写完整的x轴数据',
+                        type: 'required'
+                    }
+                ],
                 type: 'text'
             },
             {
@@ -214,15 +237,16 @@ let config = {
 
             {
                 label: '',
-                name: 'save',
+                name: '保存',
                 defaultValue: '',
-                type: 'save',
+                type: 'button',
                 events: {
                     save() {
                         this.actions.saveChart();
                     }
                 }
             },
+            button
 
         ]
     },

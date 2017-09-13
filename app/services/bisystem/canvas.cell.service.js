@@ -55,6 +55,7 @@ export const canvasCellService = {
             method:'post',
             traditional: true
         });
+
         return new Promise((resolve, reject) => {
             resolve(res);
         })

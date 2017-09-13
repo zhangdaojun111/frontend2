@@ -6,6 +6,7 @@ import Component from '../../../lib/component';
 import template from './add-workflow.html';
 import '../approval-workflow/approval-workflow.scss';
 import './add-workflow.scss';
+import '../../../assets/scss/workflow/workflow-base.scss'
 import Mediator from '../../../lib/mediator';
 import WorkFlow from '../workflow-drawflow/workflow';
 import {workflowService} from '../../../services/workflow/workflow.service';
@@ -19,6 +20,9 @@ let config={
     data:{
     },
     actions:{
+        /**
+         * @method 自定义页眉
+         */
         async printSetting(){
             let res = await FormService.getPrintSetting()
             // if(res.succ == 1){
@@ -29,8 +33,8 @@ let config={
                 SettingPrint.data['selectNum'] = parseInt(res['data']['index']) || 1;
             }
             PMAPI.openDialogByComponent(SettingPrint, {
-                width: 500,
-                height: 300,
+                width: 400,
+                height: 180,
                 title: '自定义页眉',
                 modal: true
             })
@@ -38,6 +42,7 @@ let config={
     },
     afterRender(){
         let _this=this;
+        _this.showLoading();
         Mediator.subscribe('workflow:getKey', (msg)=> {
             this.data.key=msg;
         });
@@ -86,7 +91,7 @@ let config={
         this.el.on('click', '#addFollower', () => {
             PMAPI.openDialogByIframe(`/iframe/addfocus/`, {
                 width: 800,
-                height: 600,
+                height: 620,
                 title: `添加关注人`,
                 modal: true
             },{
@@ -114,6 +119,14 @@ class AddWorkflow extends Component{
         super(config,data);
     }
 }
-let component = new AddWorkflow();
-let el = $('#add-wf');
-component.render(el);
+export default {
+    showDom(){
+        return new Promise(function(resolve, reject){
+            let component = new AddWorkflow();
+            let el = $('#add-wf');
+            component.render(el);
+            resolve(component);
+        })
+
+    }
+}

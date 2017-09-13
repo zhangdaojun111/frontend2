@@ -140,9 +140,13 @@ let config = {
         },
         findTabInfo:function (nodes,targetList) {
             for( let i=0; i < nodes.length; i++){
-                if(targetList.includes(nodes[i].id ) || targetList.includes(nodes[i].table_id )){
+                if(targetList.includes(nodes[i].ts_name ) || targetList.includes(nodes[i].table_id )){
                     let item = {};
-                    item.id = nodes[i].id;
+                    if(nodes[i].table_id && nodes[i].table_id !== ''&& nodes[i].table_id !== '0'){
+                        item.id = nodes[i].table_id;
+                    }else{
+                        item.id = nodes[i].ts_name || '0';
+                    }
                     item.url = nodes[i].url;
                     item.name = nodes[i].label;
                     this.data.newHash.push(item);
@@ -180,7 +184,6 @@ let config = {
             favorlist['query_type'] = 'delete';
 
             TabService.deleteFavoriteItem(favorlist).done((result) => {
-                console.log(result);
                 if(result.success === 1){
                     _.remove(this.data.favoriteList,function (n) {
                         return n.name === name;

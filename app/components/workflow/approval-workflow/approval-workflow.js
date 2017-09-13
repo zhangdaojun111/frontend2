@@ -297,6 +297,7 @@ let config={
         }
     },
     afterRender(){
+        this.showLoading();
         let __this=this;
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             this.data.workflowData=msg.data[0];
@@ -370,7 +371,7 @@ let config={
                 this.el.on('click','#addFollower',()=>{
                     PMAPI.openDialogByIframe(`/iframe/addfocus/?${res}`,{
                         width:800,
-                        height:600,
+                        height:620,
                         title:`添加关注人`,
                         modal:true
                     }).then(res=>{
@@ -390,7 +391,7 @@ let config={
                 this.el.on('click','#addFollower',()=>{
                     PMAPI.openDialogByIframe(`/iframe/addfocus/`,{
                         width:800,
-                        height:600,
+                        height:620,
                         title:`添加关注人`,
                         modal:true
                     }).then(res=>{
@@ -416,16 +417,24 @@ class ApprovalWorkflow extends Component{
     }
 }
 
-let component = new ApprovalWorkflow();
-let el = $('#approval-workflow');
-component.render(el);
+
 
 export default {
+    showDom(){
+        return new Promise(function(resolve, reject){
+            let component = new ApprovalWorkflow();
+            let el = $('#approval-workflow');
+            component.render(el);
+            resolve(component);
+        })
+
+    },
     create(elem){
         let component = new ApprovalWorkflow();
         let el = $(elem);
         component.render(el);
     },
+
 };
 
 Mediator.subscribe("workflow:getStampImg",(msg)=>{

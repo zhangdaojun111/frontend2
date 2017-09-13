@@ -5,12 +5,12 @@
   width: 100%;
   position: relative;
   .workflow-container{
-    background: #ebebeb;
-    position: absolute;
-    width: 100%;
-    // top: 30px;
-    left: 0;
-    right: 0;
+    //background: #ebebeb;
+    //position: absolute;
+    //width: 100%;
+    //// top: 30px;
+    //left: 0;
+    //right: 0;
   }
 }
 .wrap-box{
@@ -35,6 +35,7 @@
       border: none;
       outline: none;
       width: 24px;
+      line-height: 16px;
       margin-left: 6px;
     }
   }
@@ -126,7 +127,7 @@
         padding: 0 10px;
         display: flex;
         align-items: center;
-        .workflow-icon{
+        .workflow-icon-box{
           margin-right: 5px;
         }
       }
@@ -139,7 +140,7 @@
           display: flex;
           align-items: center;
         }
-        .workflow-icon{
+        .workflow-icon-box{
           margin: 0 auto;
         }
       }
@@ -213,4 +214,24 @@
   #dwf{
     overflow: scroll;
   }
+}
+#add-home .add-follow, #cloneId1 .add-follow {
+  color: #000;
+  font-size: 12px;
+  height: 22px;
+  line-height: 22px;
+  border: 1px solid #e4e4e4;
+  padding: 0 5px;
+  font-weight: 400;
+}
+#addFollower{
+	cursor: pointer;
+}
+.follow-name-list{
+	line-height: 20px;
+}
+#add-home{
+	.selectSpan{
+		margin-right: 15px;
+	}
 }

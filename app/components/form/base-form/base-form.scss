@@ -218,6 +218,7 @@
         bottom: 0;
         background: #F2F2F2;
         position: fixed;
+        left: 0;
     }
     .ui-btn-box button {
         width: 91px;
@@ -234,6 +235,25 @@
         font-style: normal;
         font-size: 12px;
         color: #FFFFFF;
+        cursor: pointer;
+    }
+
+    //上传文件，截图
+    .upload-file, .shot-screen {
+        width: 65px;
+        height: 24px;
+        line-height: 24px;
+        background: inherit;
+        background-color: rgba(255, 255, 255, 1);
+        box-sizing: border-box;
+        border-width: 1px;
+        border-style: solid;
+        border-color: rgba(215, 215, 215, 1);
+        border-radius: 4px;
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        color: #666666;
         cursor: pointer;
     }
 }

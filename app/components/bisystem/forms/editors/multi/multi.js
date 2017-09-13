@@ -1,7 +1,7 @@
 import {Base} from '../base';
 import template from './multi.html';
 
-import {chartName,theme,icon} from '../form.chart.common';
+import {chartName,theme,icon,button} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
@@ -9,6 +9,7 @@ import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.se
 import {ChartEditor} from './chart/chart';
 import './multi.scss'
 
+// let succ = true;
 let config = {
     template: template,
     actions: {
@@ -80,16 +81,25 @@ let config = {
                 sources: sources,
                 theme: data.theme,
             };
-            let res = await ChartFormService.saveChart(JSON.stringify(chart));
-            if (res['success'] == 1) {
-                msgbox.alert('保存成功');
-                if (!chart['chartName']['id']) {
-                    this.reload();
-                };
-                Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
-            } else {
-                msgbox.alert(res['error'])
+
+            let pass = true; // 判断表单是否验证通过
+            for (let key of Object.keys(this.formItems)) {
+                if (this.formItems[key].data.rules) {
+                    let isValid = this.formItems[key].valid();
+                    if (!isValid) {
+                        pass = false;
+                    };
+                }
             };
+
+
+            //发送状态给子组件
+            Mediator.emit('bi:multi:chart',1);
+            //判断验证是否全部通过
+            if(pass && config.data.succ){
+                this.save(chart);
+            }
+            config.data.succ = true;
         },
 
         /**
@@ -114,8 +124,10 @@ let config = {
                 source: data
             },{
                 onRemoveChart: (componentId) => {
-                    console.log(this);
                     delete this.data.charts[componentId];
+                },
+                onChange:function (data) {
+                    config.data.succ =  data;
                 }
             });
             this.data.charts[chart.componentId] = chart;
@@ -123,6 +135,7 @@ let config = {
             return chart;
         }
     },
+
     data: {
         options: [
             chartName,
@@ -130,17 +143,19 @@ let config = {
             icon,
             {
                 label: '',
-                name: 'save',
+                name: '保存',
                 defaultValue: '',
-                type: 'save',
+                type: 'button',
                 events: {
                     save() {
                         this.actions.saveChart();
                     }
                 }
             },
+            button
         ],
-        charts: {}
+        charts: {},
+        succ: true,
     },
     binds:[
         {

@@ -112,7 +112,9 @@ let config = {
                     modal: true,
                     customSize: true,
                 },
-            );
+            ).then(data => {
+                this.events.refresh();
+            });
         },
 
         /**
@@ -133,6 +135,10 @@ let config = {
             });
         }
     },
+    events:{
+        refresh:null,
+    },
+
     binds: [
         {
             event: 'click',
@@ -193,8 +199,9 @@ let config = {
 };
 
 class Leftcontent extends Component {
-    constructor(data) {
+    constructor(data,events) {
         config.data.calendarTreeData = data;
+        config.events.refresh = events;
         super(config);
     }
 }

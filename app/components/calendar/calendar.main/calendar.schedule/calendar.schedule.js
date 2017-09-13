@@ -28,6 +28,10 @@ let config = {
          * @param endDate
          */
         getSchedule: function(startDate, endDate) {
+            // startDate = startDate || this.data.scheduleStart;
+            // endDate = endDate || this.data.scheduleEnd;
+            startDate = startDate? startDate:this.data.scheduleStart;
+            endDate = endDate? endDate:this.data.scheduleEnd;
             console.log(startDate, endDate);
             if( startDate === '' || endDate === '' ){
                 alert( '时间不能为空。' );
@@ -39,10 +43,6 @@ let config = {
             }
             Mediator.emit('calendarSchedule: date', {from_date: startDate, to_date: endDate});
         },
-        
-        changeValue: function (res) {
-            console.log(res);
-        }
 
     },
     afterRender: function() {
@@ -58,13 +58,14 @@ let config = {
         });
         let changeStartValue = (res) => {
             this.data.startDate = res.value;
+            this.data.scheduleStart = this.data.startDate;
         };
         let changeEndValue = (res) => {
             this.data.endDate = res.value;
+            this.data.scheduleEnd = this.data.endDate;
         };
-
-        this.append(new DateControl({value: this.data.scheduleStart},{changeValue: changeStartValue}), this.el.find('.start-date'));
-        this.append(new DateControl({value: this.data.scheduleEnd},{changeValue: changeEndValue}), this.el.find('.end-date'));
+        this.append(new DateControl({value: this.data.scheduleStart,isCalendar: true},{changeValue: changeStartValue}), this.el.find('.start-date'));
+        this.append(new DateControl({value: this.data.scheduleEnd, isCalendar: true},{changeValue: changeEndValue}), this.el.find('.end-date'));
     },
 };
 

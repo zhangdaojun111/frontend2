@@ -48,7 +48,6 @@ let FormEntrys = {
     },
     //找到加载表单数据的formId和加载节点的flowId
     findFormIdAndFlowId(res) {
-        console.log(res);
         if (res["data"] && res["data"]["flow_data"].length != 0) {
             if (this.flowId) {
                 let selectItems = res["data"]["flow_data"];
@@ -374,7 +373,7 @@ let FormEntrys = {
         this.init(config);
         // let $wrap = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"></div>`).prependTo(this.el);
         // let html = $(`<div class="center-wrap"></div>`).appendTo($wrap);
-        let html = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"></div>`).prependTo(this.el);
+        let html = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"><div class="form-print-position"></div></div>`).prependTo(this.el);
         let res;
         //如果不处于工作流中
         if (!this.fromWorkFlow) {
@@ -385,6 +384,7 @@ let FormEntrys = {
         let json = this.createPostJson();
         res = await FormService.getFormData(json);
         //将表单名称发送给工作流
+
         Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
         console.timeEnd('获取表单数据的时间');
         console.time('form创建时间');
@@ -400,7 +400,8 @@ let FormEntrys = {
         }
         let formBase = new FormBase(formData);
         this.childForm[this.tableId] = formBase;
-        formBase.render(html);
+        let $newWrap = this.el.find('.form-print-position');
+        formBase.render($newWrap);
         //通知父框架表单刷新完毕
         Mediator.publish('form:formAlreadyCreate', 'success');
         console.timeEnd('form创建时间');

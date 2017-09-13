@@ -307,7 +307,7 @@ let config = {
             }
         },
         //获取数据
-        getUserData: function () {
+        getUserData: function (refresh) {
             let json = {
                 department: this.data.departmentName,
                 filter: [],
@@ -383,6 +383,9 @@ let config = {
                     this.hideLoading();
                     this.data.firstSetData = false;
                 }
+                if(refresh){
+                    msgBox.showTips( '数据刷新成功。' )
+                }
             } )
             HTTP.flush();
         },
@@ -391,7 +394,7 @@ let config = {
             this.data.rows = res.rows;
             this.data.page = res.currentPage;
             this.data.first = res.first;
-            this.actions.getUserData();
+            this.actions.getUserData(true);
         },
         //创建部门树
         createDepartment: function () {
@@ -491,7 +494,8 @@ let config = {
             this.el.find( '.new-form-btn' ).on( 'click',()=>{
                 let obj = {
                     table_id: this.data.tableId,
-                    btnType: 'new'
+                    btnType: 'new',
+                    is_view: 0
                 }
                 let url = dgcService.returnIframeUrl( '/form/index/',obj );
                 this.actions.openSourceDataGrid( url,'新增' )
@@ -796,6 +800,7 @@ let config = {
                 table_id: this.data.tableId,
                 btnType: 'view',
                 real_id: $event.data._id,
+                is_view: 1
             }
             let url = dgcService.returnIframeUrl( '/form/index/',obj );
             this.actions.openSourceDataGrid( url,'查看' )
@@ -864,6 +869,7 @@ let config = {
                         table_id: this.data.tableId,
                         btnType: 'edit',
                         real_id: $event.data._id,
+                        is_view: 0
                     }
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
                     this.actions.openSourceDataGrid( url,'编辑' )
@@ -873,6 +879,7 @@ let config = {
                         table_id: this.data.tableId,
                         btnType: 'view',
                         real_id: $event.data._id,
+                        is_view: 1
                     }
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
                     this.actions.openSourceDataGrid( url,'查看' )

@@ -6,6 +6,7 @@ import template from './contract-control.html';
 import {contractEditorConfig} from "./contract-editor/contract-editor";
 import {PMAPI} from "../../../lib/postmsg";
 import './contract-control.scss'
+import {Storage} from '../../../lib/storage';
 
 let config = {
     template:template,
@@ -15,7 +16,7 @@ let config = {
             selector:'.contract-view',
             callback:function () {
                 this.data['mode']='view';
-                this.actions.openEditor('合同查看');
+                this.actions.openEditor('合同模板预览');
             }
         },{
             event:'click',
@@ -35,9 +36,19 @@ let config = {
                 title:title
             }).then(res=>{
                 if(res.onlyclose){
-                    return;
+                    Storage.init((new URL(document.URL)).searchParams.get('key'));
+                    let obj = Storage.getItem('contractCache-'+this.data.id,Storage.SECTION.FORM);
+                    if(obj == undefined){
+                        return;
+                    }
+                    for (let data of obj) {
+                        delete data['content'];
+                        delete data['mode'];
+                    }
+                    this.data.value = obj;
+                } else {
+                    this.data.value = res;
                 }
-                this.data.value = res;
                 this.trigger('changeValue',this.data);
             })
         }

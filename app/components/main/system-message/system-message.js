@@ -52,30 +52,40 @@ let config = {
             });
         },
         batchApprove: function () {
-            msgbox.confirm('是否将选中的消息标为已审批？').then((res) => {
-                if (res) {
+            // msgbox.confirm('是否将选中的消息标为已审批？').then((res) => {
+            //     if (res) {
                     let rows = this.agGrid.gridOptions.api.getSelectedRows();
                     let checkIds = rows.map((item) => {
                         return item.id;
                     });
-                    // let url = '/iframe/multiapp';
-                    // let data = JSON.stringify(checkIds);
-                    // PMAPI.openDialogByIframe(url,{
-                    //     width: 1200,
-                    //     height: 500,
-                    //     title: '批量审批',
-                    //     customSize:true
-                    // },data)
 
-                    HTTP.postImmediately('/approve_many_workflow/', {
-                        checkIds: JSON.stringify(checkIds)
-                    }).then((res) => {
-                        if (res.success === 1) {
-                            this.actions.loadData();
+                    if(checkIds.length === 0){
+                        msgbox.alert('请选择至少一条消息进行审批');
+                        return;
+                    }
+                    let url = '/iframe/multiapp';
+                    let data = JSON.stringify(checkIds);
+                    let that = this;
+                    PMAPI.openDialogByIframe(url,{
+                        width: 1000,
+                        height: 400,
+                        title: '批量审批',
+                        // customSize:true
+                    },data).then(res => {
+                        if(res.refresh === true){
+                            that.actions.loadData();
                         }
                     });
-                }
-            });
+
+                    // HTTP.postImmediately('/approve_many_workflow/', {
+                    //     checkIds: JSON.stringify(checkIds)
+                    // }).then((res) => {
+                    //     if (res.success === 1) {
+                    //         this.actions.loadData();
+                    //     }
+                    // });
+                // }
+            // });
         },
         batchDelete: function () {
             msgbox.confirm('是否批量删除选中的消息？').then((res) => {
@@ -84,12 +94,11 @@ let config = {
                     let checkIds = rows.map((item) => {
                         return item.id;
                     });
-                    console.log(JSON.stringify(checkIds));
+
                     HTTP.postImmediately('/remark_or_del_msg/', {
                         checkIds: JSON.stringify(checkIds),
                         is_del: 1
                     }).then((res) => {
-                        console.log(res);
                         if (res.success === 1) {
                             this.actions.loadData();
                         }

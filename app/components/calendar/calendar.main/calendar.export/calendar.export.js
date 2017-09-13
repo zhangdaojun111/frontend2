@@ -14,7 +14,6 @@ let config = {
         fromDate: '',
         toDate: '',
         cancelFields: [],
-
     },
     actions: {
 
@@ -36,8 +35,7 @@ let config = {
             let _this = this;
             _this.data.cancelFields = JSON.stringify(params.data.cancelFields);
             _this.el.on('click', '.export-btn', function () {
-                window.open(
-                    `/calendar_mgr/export_calendar_data/?from_date=${_this.data.fromDate}&to_date=${_this.data.toDate}&cancel_fields=${_this.data.cancelFields}`);
+                window.open(`/calendar_mgr/export_calendar_data/?from_date=${_this.data.fromDate}&to_date=${_this.data.toDate}&cancel_fields=${_this.data.cancelFields}`);
             });
         });
         this.el.find('.export-btn').attr("disabled", true);
@@ -53,8 +51,8 @@ let config = {
             _this.actions.getExportDate();
         };
 
-        this.append(new DateControl({value: ''},{changeValue: changeStartValue}), this.el.find('.start-date'));
-        this.append(new DateControl({value: ''},{changeValue: changeEndValue}), this.el.find('.end-date'));
+        this.append(new DateControl({value: '',isCalendar: true},{changeValue: changeStartValue}), this.el.find('.start-date'));
+        this.append(new DateControl({value: '',isCalendar: true},{changeValue: changeEndValue}), this.el.find('.end-date'));
     },
 };
 class CalendarExport extends Component {

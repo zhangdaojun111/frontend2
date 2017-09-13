@@ -4,8 +4,11 @@
  */
 import Component from '../../../lib/component';
 import template from './multi-app.html';
+import '../../../assets/scss/workflow/workflow-base.scss';
+import './multi-app.scss'
 import Mediator from '../../../lib/mediator';
 import msgBox from '../../../lib/msgbox';
+import {PMAPI,PMENUM} from "../../../lib/postmsg";
 import {workflowService} from '../../../services/workflow/workflow.service';
 
 let config={
@@ -30,6 +33,11 @@ let config={
                         }else{
                             msgBox.alert(`操作失败：${res.error}`);
                         }
+                        PMAPI.sendToParent({
+                            type: PMENUM.close_dialog,
+                            key:this.data.key,
+                            data:{refresh:true}
+                        })
                     })
                 }
             })
@@ -59,8 +67,8 @@ let config={
     ],
     afterRender(){
         PMAPI.getIframeParams(this.data.key).then((res) => {
-            Mediator.publish('workflow:addusers', res.data.checkIds);
-            this.data.checkIds=res.data.checkIds;
+            Mediator.publish('workflow:addusers', res.data);
+            this.data.checkIds=res.data;
         })
     }
 };

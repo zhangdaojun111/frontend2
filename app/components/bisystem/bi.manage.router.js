@@ -2,21 +2,18 @@
  * Created by birdyy on 2017/8/1.
  */
 import {Router} from 'backbone';
-import {CanvasCellsComponent} from './canvas/canvas.cells';
+import {CanvasMain} from './canvas/main/main';
 import {ViewsEditComponent} from "./views/views";
 import {FormEntryComponent} from './forms/entry/entry';
 import {componentsJson} from './forms/entry/loadFormChart.json';
-import Mediator from '../../lib/mediator';
 
-// import {LineBarEditor} from './test/editors/linebar/linebar';
-
-let component;
+let canvasComponent;
 let viewComponent;
 let formComponent = {};
 const BiAppRouter = Backbone.Router.extend({
     routes: {
         'views/edit':"routerViewsEditComponent",
-        'views/:id':'routerViewsComponent',
+        'canvas/:id':'routerViewsComponent',
         'forms/home':'routerFormEntryComponent',
         'forms/:chart': 'routerFormDynamicComponent',
         'forms/:chart/:id':'routerFormDynamicComponent',
@@ -24,16 +21,13 @@ const BiAppRouter = Backbone.Router.extend({
     },
 
     routerViewsComponent(id) {
-        if (component) {
-            component.data.views = window.config.bi_views;
-            component.destroyChildren();
-            component.viewId = id;
-            component.reload();
+        if (canvasComponent) {
+            canvasComponent.reload();
         } else {
-            let CanvasCells = new CanvasCellsComponent(id);
-            component = CanvasCells;
-            CanvasCells.render($('#route-outlet'));
-        }
+            canvasComponent = new CanvasMain();
+            canvasComponent.render($('#route-outlet'));
+        };
+        canvasComponent.actions.switchViewId(id);
     },
     routerViewsEditComponent() {
         if (viewComponent) {
