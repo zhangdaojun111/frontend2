@@ -168,7 +168,6 @@ let config = {
                         _this.data.value =_timeText ;
                         _.debounce(function () {
                             _this.events.changeValue(_this.data)
-                            debugger;
                         }, 200)();
                     }
                 }

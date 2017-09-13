@@ -52,16 +52,13 @@ let config={
                     _this.data.value=''
                     _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                     return;
-
                 }
                 _this.data.value=data[0]['id'];
-                console.log('id  ',  _this.data.value)
                 _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                  //debugger;
             };
             let autoSelect=new AutoSelect(data);
             this.append(autoSelect,el);
-            console.log('data  ',el)
         }
         this.data.isInit=false;
     },
