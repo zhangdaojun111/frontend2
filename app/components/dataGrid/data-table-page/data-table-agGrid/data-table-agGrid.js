@@ -409,9 +409,6 @@ let config = {
             }
             //列定义可编辑部分的赋值
             let controlData = this.data.colControlData[editCol['colId']];
-            console.log("_______________")
-            console.log(editCol)
-            console.log(controlData)
             if(controlData){
                 if(controlData['is_view'] == 0 && controlData['relevance_condition']
                     && Object.getOwnPropertyNames(controlData['relevance_condition']).length == 0) {
