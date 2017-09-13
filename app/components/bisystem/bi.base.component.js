@@ -18,6 +18,7 @@ export class BiBaseComponent extends Component{
         super(config)
     }
 
+
     /**
      *组件消息传递
      * @param name '消息标识符', data数据传递
