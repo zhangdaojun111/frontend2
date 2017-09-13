@@ -5,6 +5,18 @@
 import Component from '../../../../../../../lib/component';
 import template from './original.data.html';
 import './original.data.scss';
+import handlebars from 'handlebars';
+
+// 自定义handlebar helper
+handlebars.registerHelper('original_each_yAxis', function(data,index, options) {
+    return data[index];
+});
+
+// 自定义handlebar helper
+handlebars.registerHelper('original_data_title', function(data, options) {
+    console.log(data);
+    return data['field'] ? data['field']['name'] : data['name'];
+});
 
 let config = {
     template: template,
@@ -32,22 +44,21 @@ let config = {
 
 export class CanvasOriginalDataComponent extends Component {
     constructor(data,events) {
-        CanvasOriginalDataComponent.handleOriginalData(data);
-        super(config,data,events)
+        let originData = CanvasOriginalDataComponent.handleOriginalData(data);
+        super(config,originData,events);
     }
 
     /**
      * 处理初始化数据(因为饼图,折线图返回数据格式不同)
      */
     static handleOriginalData(chart) {
-        console.log(chart);
-        if (chart.assortment === 'pie') {
-        } else {
-            let items = [];
-            chart.data.xAxis.forEach((val,index) => {
-                console.log(val);
-            });
-            data.originalData.items = []
-        }
+        let data = _.cloneDeep(chart);
+        if (chart.assortment === 'pie') { //如果饼图类型是多条情况
+            if (chart.pieType.value == 2) {
+                data.yAxis = [chart.yAxis]
+            }
+        };
+        console.log(data);
+        return data;
     }
 }

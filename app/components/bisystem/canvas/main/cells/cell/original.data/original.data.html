@@ -15,7 +15,7 @@
                     <th>{{xAxis.name}}</th>
                     {{#each yAxis}}
                     <th>
-                        <span>{{field.name}}</span>
+                        <span>{{original_data_title @this}}</span>
                     </th>
                     {{/each}}
                 </tr>
@@ -28,7 +28,7 @@
                     </th>
                     <td><a href="javascript:;">{{@this}}</a></td>
                     {{#each @root.data.yAxis}}
-                    <td></td>
+                    <td>{{original_each_yAxis data @../index}}</td>
                     {{/each}}
                 </tr>
                 {{/each}}
