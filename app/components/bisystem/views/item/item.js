@@ -26,7 +26,7 @@ let config = {
                 data.view_id = this.data.id;
                 ViewsService.delData(data).then((res)=>{
                     if(res['success']===1){
-                        this.trigger('onChange',{type:'remove',value:this.data});
+                        this.trigger('onDelete',this.data);
                         this.destroySelf();
                     }else{
                         alert(res['error']);
@@ -49,7 +49,7 @@ let config = {
                 ViewsService.update(res).then((val) => {
                     if(val['success']===1){
                         this.data = res;
-                        this.trigger('onChange',this.data);
+                        this.trigger('onUpdate',this.data);
                         this.reload();
                     }else{
                         alert(val['error'])

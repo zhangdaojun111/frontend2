@@ -55,7 +55,7 @@ $active-color: #1caeff;
     .switch-button {
         position: fixed;
         bottom: 10px;
-        z-index: 999999;
+        z-index: 10;
         text-align: center;
         right: 25px;
         .mat-fab {

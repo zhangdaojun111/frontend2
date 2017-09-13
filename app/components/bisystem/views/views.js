@@ -78,26 +78,22 @@ let config = {
         //渲染列表数据
         this.data.views.forEach((val,index) => {
             let viewItemComponent = new ViewItemComponent(val,{
-                onChange: (res)=>{
+                onDelete: (res)=>{
                     let views = this.data.views;
-                    if (res.type === 'remove') {
-                        for(let [index,view] of views.entries()) {
-                            if (res.value.id === view.id) {
-                                views.splice(index,1);
-                                break;
-                            }
-                        }
-                    } else {
-                        for(let [index,view] of views.entries()) {
-                            if (res.id === view.id) {
-                                view.name = res.name;
-                                break;
-                            }
-                        }
-                    }
+                    _.remove(views,function (val) {
+                        return res.id === val.id;
+                    });
                     window.config.bi_views = views;
-
-                }
+                },
+                onUpdate: (res)=>{
+                    let views = this.data.views;
+                    _.filter(views,function (val){
+                        if(res.id === val.id){
+                            return val.name = res.name;
+                        }
+                    });
+                    window.config.bi_views = views;
+                },
             });
             this.append(viewItemComponent,this.el.find('.view-list'));
         });
