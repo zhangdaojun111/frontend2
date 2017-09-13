@@ -48,7 +48,7 @@ let config = {
         switchViewId: function (viewId) {
             this.currentViewId = viewId ? viewId.toString() : window.config.bi_views[0].id;
             if (!this.data.singleMode) {
-                // this.data.headerComponents.data.menus[this.currentViewId].actions.focus();
+                this.data.headerComponents.data.menus[this.currentViewId].actions.focus();
             };
             this.data.cells = new CanvasCellsComponent(this.currentViewId);
             this.data.cells.render(this.el.find('.cells-container'));
