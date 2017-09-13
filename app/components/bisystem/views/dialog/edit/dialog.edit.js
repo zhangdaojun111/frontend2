@@ -86,6 +86,7 @@ export let config = {
                 type: PMENUM.close_dialog,
                 key: this.key,
                 data: data
+
             });
 
         }).on('click','.cancel',()=>{
