@@ -23,8 +23,20 @@ import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-
 import {PMAPI,PMENUM} from '../lib/postmsg';
 import jsplumb from 'jsplumb';
 
-WorkFlowGrid.showGrid();
+
 ApprovalWorkflow.showDom().then(function (component) {
+    WorkFlowGrid.showGrid();
+    WorkFlowForm.showForm();
+    FormEntrys.createForm({
+        el: $('#place-form'),
+        form_id: obj.form_id,
+        record_id: obj.record_id,
+        is_view: is_view,
+        from_approve: 1,
+        from_focus: 0,
+        btnType:'none',
+        table_id: obj.table_id
+    });
     setTimeout(()=> component.hideLoading(),1000)
 });
 let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[],agorfo=true,is_batch=0;
@@ -125,16 +137,7 @@ Mediator.subscribe("workflow:loaded",(e)=>{
 /**
  * 审批表单初始化
  */
-FormEntrys.createForm({
-    el: $('#place-form'),
-    form_id: obj.form_id,
-    record_id: obj.record_id,
-    is_view: is_view,
-    from_approve: 1,
-    from_focus: 0,
-    btnType:'none',
-    table_id: obj.table_id
-});
+
 
 let focusArr=[];
 Mediator.subscribe('workflow:focus-users', (res)=> {

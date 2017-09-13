@@ -58,7 +58,7 @@ let config = {
         })
         //搜索结果过滤
         Mediator.subscribe('form:chooseSelect', function (data) {
-            _this.el.find('a').each((index, obj) => {
+            _this.el.find('a.choose-aside-a').each((index, obj) => {
                 if (data.indexOf($(obj).data('value')) != -1) {
                     $(obj).show();
                 } else {
