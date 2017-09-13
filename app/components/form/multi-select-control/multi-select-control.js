@@ -239,6 +239,8 @@ let config={
                 let data=FormService.createSelectJson(this.data,true,1);
                 data.onSelect=function(){
                     if(_this.data.isInit || !_this.data.childSelect || _this.data.childSelect.data.choosed.length == 0 ){
+                        _this.data.value='';
+                        _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                         return;
                     }
                     _this.actions.setValue();

@@ -48,17 +48,20 @@ let config={
             let data=FormService.createSelectJson(this.data);
             data.onSelect=function(data){
                 if(_this.data.isInit || !data || data.length == 0 ){
-                    console.log('ddddate  ',data[0])
 
-                        _this.data.value=data.length;
-                        _.debounce(function(){_this.events.changeValue(_this.data)},200)();
-
+                    console.log("_this.data.isInit  ",_this.data.isInit)
+                    console.log("!data  ", !data)
+                    console.log(" data.length == 0  ", data.length == 0)
                     console.log('但是没触发onselect');
+                    _this.data.value=''
+                    _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                     return;
+
                 }
                 _this.data.value=data[0]['id'];
                 console.log('id  ',  _this.data.value)
                 _.debounce(function(){_this.events.changeValue(_this.data)},200)();
+                 //debugger;
             };
             let autoSelect=new AutoSelect(data);
             this.append(autoSelect,el);
