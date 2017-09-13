@@ -2,9 +2,9 @@
  * Created by birdyy on 2017/8/30.
  * 数据源画布
  */
-import {BiBaseComponent} from '../../../../../bi.base.component';
-import template from './datasource.html';
-import './datasource.scss';
+import Component from '../../../../../../../lib/component';
+import template from './original.data.html';
+import './original.data.scss';
 
 let config = {
     template: template,
@@ -63,8 +63,8 @@ let config = {
     beforeDestory() {}
 };
 
-export class CanvasDataSourceComponent extends BiBaseComponent {
-    constructor() {
-        super(config)
+export class CanvasOriginalDataComponent extends Component {
+    constructor(data,events) {
+        super(config,data,events)
     }
 }
