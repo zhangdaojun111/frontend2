@@ -9,6 +9,7 @@ import {componentsJson} from './forms/entry/loadFormChart.json';
 
 let canvasComponent;
 let formComponent = {};
+let viewsManage;
 const BiAppRouter = Backbone.Router.extend({
     routes: {
         'views/edit':"routerViewsEditComponent",
@@ -30,8 +31,13 @@ const BiAppRouter = Backbone.Router.extend({
     },
     routerViewsEditComponent() {
         canvasComponent = null;
-        let ViewsList = new ViewsEditComponent();
-        ViewsList.render($('#route-outlet'));
+        if (viewsManage) {
+            viewsManage.reload();
+        } else {
+            viewsManage = new ViewsEditComponent();
+            viewsManage.render($('#route-outlet'));
+        }
+
 
     },
     routerFormEntryComponent() {

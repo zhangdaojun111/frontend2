@@ -71,6 +71,7 @@ export let config = {
         //添加样式
         $(`<style>${this.data.css}</style>`).appendTo(this.el);
         this.el.on('click','.ok',()=>{
+            console.log(this.data,123);
             this.data.name = this.el.find('.inp-val').val();
             if(this.el.find('.inp-val').val() === ""){
                 this.el.find('.error-tip').show();

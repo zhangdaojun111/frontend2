@@ -19,9 +19,9 @@
         box-sizing:border-box;
         border-right: solid 1px #556574;
         color: #ffffff;
-        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
         &.active {
-            border-top-color: #00bcd4;
+            border-bottom-color: #00bcd4;
         }
     }
 }

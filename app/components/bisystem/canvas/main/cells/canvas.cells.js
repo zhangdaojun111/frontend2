@@ -2,7 +2,6 @@ import Component from '../../../../../lib/component';
 import {CanvasCellComponent} from './cell/canvas.cell';
 
 import template from './canvas.cells.html';
-import './canvas.cells.scss';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 import Mediator from '../../../../../lib/mediator';
 import msgbox from '../../../../../lib/msgbox';

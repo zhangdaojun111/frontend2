@@ -12,7 +12,7 @@ let config = {
         id: '',
         name: '',
         views: [],
-        editMode: window.config.bi_user === 'manager',
+        editMode: window.config.bi_user === 'manager'? window.config.bi_user : false,
         menus: {}
     },
     actions: {

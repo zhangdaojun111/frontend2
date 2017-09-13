@@ -5,7 +5,6 @@
 import template from './canvas.title.html';
 import {BiBaseComponent} from '../../../../../bi.base.component';
 import './canvans.title.scss';
-import {config as editDialogConfig} from "./edit/edit";
 import {PMAPI} from '../../../../../../../lib/postmsg';
 import {ViewsService} from "../../../../../../../services/bisystem/views.service";
 import Mediator from '../../../../../../../lib/mediator';
@@ -32,15 +31,7 @@ let config = {
             this.reload();
         }
     },
-    binds:[
-        {
-            event:'click',
-            selector:'.edit-title',
-            callback: async function () {
-                this.events.onChange();
-            }
-        }
-    ],
+    binds:[],
     data: {
         title: '', // 画布块标题
         isDeep: false, // 是否显示上一层

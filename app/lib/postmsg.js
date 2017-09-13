@@ -86,7 +86,7 @@ window.addEventListener('message', function (event) {
                     modal: true,
                     close: function () {
                         if (dialogHash[data.key]) {
-                            PMAPI.sendToParent({
+                            PMAPI.sendToSelf({
                                 type: PMENUM.close_dialog,
                                 key: data.key,
                                 data: {
@@ -109,18 +109,18 @@ window.addEventListener('message', function (event) {
                     element: element.appendTo(document.body),
                     params: params
                 };
-                element.one('load', () => {
-                    PMAPI.sendToChild(element[0], {
-                        type: PMENUM.open_iframe_params,
-                        data: params
-                    });
-                });
+                // element.one('load', () => {
+                //     PMAPI.sendToChild(element[0], {
+                //         type: PMENUM.open_iframe_params,
+                //         data: params
+                //     });
+                // });
                 dialogHash[data.key].element.erdsDialog(_.defaultsDeep(data.frame, {
                     modal: true,
                     maxable: true,
                     close: function () {
                         if (dialogHash[data.key]) {
-                            PMAPI.sendToParent({
+                            PMAPI.sendToSelf({
                                 type: PMENUM.close_dialog,
                                 key: data.key,
                                 data: {
@@ -130,6 +130,7 @@ window.addEventListener('message', function (event) {
                         }
                     }
                 }));
+
                 break;
             case PMENUM.close_dialog:
                 if (dialogHash[data.key].comp) {
@@ -140,6 +141,7 @@ window.addEventListener('message', function (event) {
                     // 弹出框是iframe
                     // 清除iframe中适用的localstorage
                     Storage.clear(data.key);
+                    dialogHash[data.key].element.erdsDialog('destroy').remove();
                 }
                 PMAPI.sendToChild(dialogHash[data.key].iframe, {
                     type: PMENUM.recieve_data,
