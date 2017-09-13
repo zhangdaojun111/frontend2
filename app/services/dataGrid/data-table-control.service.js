@@ -415,7 +415,8 @@ export const dgcService = {
             in_process: ['float-search-btn','refresh-btn','grid-new-window'],
             keyword: ['keyword-tips','custom-column-btn','grid-new-window'],
             deleteHanding: ['delete-tips','grid-del-btn','custom-column-btn'],
-            newFormCount: ['custom-column-btn','custom-column-btn'],
+            newFormCount: ['custom-column-btn'],
+            reportTable2: ['new-form-btn','refresh-btn','edit-btn','custom-column-btn','grid-auto-width'],
         }
         return obj[viewMode];
     },
@@ -494,7 +495,7 @@ export const dgcService = {
         if (res['pageSize'] && res['pageSize'].pageSize) {
             data.rows = res['pageSize'].pageSize;
         }
-        if (res['ignoreFields']) {
+        if (res['ignoreFields']&&res['ignoreFields']['ignoreFields']) {
             data.ignoreFields = JSON.parse(res['ignoreFields']['ignoreFields']);
         } else {
             // this.data.hideColumn = ['f1','f2','f3','f4']
@@ -525,6 +526,8 @@ export const dgcService = {
     //根据偏好返回agGrid sate
     calcColumnState: function (data,agGrid,defaultArr) {
         let gridState = agGrid.gridOptions.columnApi.getColumnState();
+        // console.log('gridState')
+        // console.log(gridState)
         let indexedGridState = {};
         for(let state of gridState) {
             indexedGridState[state['colId']] = state;
