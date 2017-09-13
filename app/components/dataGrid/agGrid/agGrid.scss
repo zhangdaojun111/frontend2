@@ -40,7 +40,7 @@
             .floatingFilter-box {
                 padding: 5px 10px 0px 10px;
                 .component-time-control {
-                    .time-box{
+                    div:first-child{
                         top: -2px;
                     }
                 }

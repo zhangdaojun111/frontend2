@@ -140,6 +140,11 @@ let config = {
                     if( this.data.specialFilter[col["field"]] ){
                         filterType = 'person';
                     }
+                    let minWidth = {
+                        datetime: 160,
+                        time: 90,
+                        date: 110
+                    }
                     let obj = {
                         headerName: col.name,
                         field: col["field"],
@@ -151,7 +156,7 @@ let config = {
                         sortingOrder: ['desc', 'asc', null],
                         width: col.width,
                         hide: false,
-                        minWidth: 20,
+                        minWidth: minWidth[fieldTypeService.searchType(col["real_type"])] || 20,
                         width: col.width,
                         cellStyle: {'font-style': 'normal'},
                         enableRowGroup: true,
