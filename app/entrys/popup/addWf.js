@@ -99,7 +99,8 @@ Mediator.subscribe('workflow:getflows', (res) => {
         real_id: obj.real_id,
         isAddBuild: obj.isAddBuild,
         id: obj.id,
-        key: obj.key
+        key: obj.key,
+        action: action
     });
     setTimeout(()=>{
         cache_old= FormEntrys.getFormValue(obj.table_id,true);
