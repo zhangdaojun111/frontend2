@@ -58,6 +58,7 @@ let config = {
             }else{
                 $parent.prepend($ul);
             }
+            debugger;
             this.actions.setCheckboxStatus();
         },
         saveSetting:function () {

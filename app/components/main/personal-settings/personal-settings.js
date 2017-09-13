@@ -14,8 +14,8 @@ import {AvatarSet} from './set-avatar/set-avatar';
 import {agentSetting} from './set-agent/set-agent';
 import OtherLogin from "../login-by-other/login-by-other";
 import Mediator from '../../../lib/mediator';
-import userInfoDisplay from './user-info-display/user-info-display';
 import {PMAPI} from '../../../lib/postmsg';
+import userInfoDisplay from './user-info-display/user-info-display';
 
 function getData(component_instance) {
     _.defaultsDeep(component_instance.data, {
@@ -316,6 +316,7 @@ export const PersonSetting  = {
                 //获取data
                 userInfoDisplay.data.userInfo = result.rows;
                 userInfoDisplay.data.userName = targetName.name;
+
                 PMAPI.openDialogByComponent(userInfoDisplay,{
                     width: 350,
                     height: 500,
