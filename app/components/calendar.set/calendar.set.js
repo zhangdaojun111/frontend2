@@ -365,6 +365,8 @@ let config = {
             callback: function () {
                 this.el.find(".hide-btns").css("visibility", "hidden");
                 this.el.find(".set-btn").removeClass("disabled");
+                this.el.find('.set-items').empty();
+                this.actions.getSetting(this.data.tableId);
                 Mediator.emit('calendar-set:editor', {data: -1});
             }
         },

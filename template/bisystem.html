@@ -1,20 +1,18 @@
 {% load client_version %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bi">
 <head>
     <meta charset="UTF-8">
     <title>BI</title>
 </head>
-<body>
-<aside id="aside"></aside>
+<body class="bi">
 <script>
     window.config = {
         is_admin: {{ is_admin | safe }},
         bi_views: {{ bi_views|safe }},
         bi_user: '{{bi_user|safe}}',
-            img_url: '{{ config.img_url | safe }}',
+        img_url: '{{ config.img_url | safe }}',
     }
-
 </script>
 <div id="route-outlet" class="bi-container"></div>
 </body>
