@@ -2,17 +2,22 @@
  * Created by birdyy on 2017/8/1.
  */
 import {Router} from 'backbone';
-import {CanvasCellsComponent} from './canvas/canvas.cells';
+import {CanvasMain} from './canvas/main/main';
 
-
+let canvasComponent;
 const BiAppRouter = Backbone.Router.extend({
     routes: {
-        'views/:id':'routerViewsComponent',
+        'canvas/:id':'routerViewsComponent',
         '':'routerViewsComponent',
     },
     routerViewsComponent(id) {
-        let CanvasCells = new CanvasCellsComponent(id);
-        CanvasCells.render($('#route-outlet'));
+        if (canvasComponent) {
+            canvasComponent.reload();
+        } else {
+            canvasComponent = new CanvasMain();
+            canvasComponent.render($('#route-outlet'));
+        };
+        canvasComponent.actions.switchViewId(id);
     }
 });
 
