@@ -33,8 +33,12 @@ const workflowForGrid={
         obj.table_id=para.table_id;
         obj.form_id=para.form_id;
         obj.flow_id=para.flow_id;
-        ApprovalWorkflow.create(para.el);
-        this.create();
+        var self=this;
+        ApprovalWorkflow.create(para.el).then(function (component) {
+            self.create();
+            setTimeout(()=>component.hideLoading(),1000)
+        });
+
     },
     create(){
         WorkflowAddFollow.showAdd();
@@ -195,9 +199,9 @@ const workflowForGrid={
                 }
             }
         });
-        
+
         FormEntrys.createForm({
-            el: '#place-form',
+            el: $('#place-form'),
             form_id: obj.form_id,
             record_id: obj.record_id,
             is_view: is_view,
