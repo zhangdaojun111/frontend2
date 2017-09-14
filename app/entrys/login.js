@@ -46,33 +46,37 @@ function getLoginController() {
         },
         //初始化登录表单控件
         formInit:function () {
+            let that = this;
             //系统名称改变
             this.$loginMainTitle.on('change', () => {
-                this.systemName = this.$loginMainTitle.val();
-                this.resetSysName(this.systemName);
+                that.systemName = that.$loginMainTitle.val();
+                that.resetSysName(that.systemName);
             });
 
             //记住密码和忘记密码
             this.$rememberPwCheck.on('click', (event) => {
-                this.isRememberKey = event.target.checked;
-                if(this.isRememberKey === false){
-                    if(this.username_value !== ''){
+                that.isRememberKey = event.target.checked;
+                if(that.isRememberKey === false){
+                    if(that.username_value !== ''){
                         //缓存中查找并清除当前用户密码
-                        window.localStorage.removeItem(this.username_value);
+                        // window.localStorage.removeItem(this.username_value);
+                        let info = window.localStorage.getItem('password_info');
+                        delete info[that.username_value];
+                        window.localStorage.setItem('password_info',info);
                     }
                 }
             });
 
             //展示或关闭版本信息
             this.$updateGroup.on('click', () => {
-                this.$versionTable.toggle();
+                that.$versionTable.toggle();
             });
 
             //登录按钮
             this.$loginBtn.on('click', () => {
                 // this.username = this.$usernameInput.val();
                 // this.password = this.$passwordInput.val();
-                this.userLogin(this.username_value,this.password_value);   //根据用户名和密码登录
+                that.userLogin(that.username_value,that.password_value);   //根据用户名和密码登录
             });
             //注册按钮
             this.$registerBtn.on('click', () => {
@@ -80,38 +84,28 @@ function getLoginController() {
             });
             //忘记密码，找回密码入口
             this.$findPwBtn.on('click', () => {
-                this.$whitePanel.hide();
-                this.$oppositePanel.fadeIn();
-                this.isOpposite = true;
+                that.$whitePanel.hide();
+                that.$oppositePanel.fadeIn();
+                that.isOpposite = true;
             });
 
             //反面面板关闭返回正面面板
             this.$closeIcon.on('click', () => {
-                this.$whitePanel.fadeIn();
-                this.$oppositePanel.hide();
-                this.isOpposite = false;
+                that.$whitePanel.fadeIn();
+                that.$oppositePanel.hide();
+                that.isOpposite = false;
             });
 
             //监听用户名输出框
-            this.$usernameInput.on('input',() => {
-                this.username_value = this.$usernameInput.val();
-            });
+            this.$usernameInput.on('input',_.debounce(() => {
+                that.username_value = this.$usernameInput.val();
+                that.findPasswordByInput();
+            },100));
 
             //监听密码输入框
-            this.$passwordInput.on('input',() => {
-                this.password_value = this.$passwordInput.val();
-            }).on('focus',() => {
-                //查找缓存中是否有当前用户密码
-                if(this.username_value !== ''){
-                    let password = window.localStorage.getItem(this.username_value);
-                    if(password !== undefined && password !== null){
-                        this.isRememberKey = true;
-                        this.$passwordInput.val(password);
-                        this.$rememberPwCheck.prop('checked',true);
-                    }
-                }
-            });
-
+            this.$passwordInput.on('input',(() => {
+                that.password_value = that.$passwordInput.val();
+            }));
             //密码找回页面提交按钮
             this.$submitFindPw.on('click', _.throttle(() => {
                 let userName = $('.account-input').val();
@@ -138,7 +132,6 @@ function getLoginController() {
             });
 
             //键盘绑定
-            let that = this;
             $(document).keypress((event) => {
                 if(event.keyCode === 13){
                     if(that.isOpposite === false){
@@ -149,6 +142,31 @@ function getLoginController() {
                 }
             })
         },
+        //动态查找记录的密码
+        findPasswordByInput(){
+            //查找缓存中是否有当前用户密码
+            if(this.username_value !== ''){
+                // let password = window.localStorage.getItem(this.username_value);
+                let info = window.localStorage.getItem('password_info') || {};
+                info = JSON.parse(info);
+                let password = '';
+                if(info.hasOwnProperty(this.username_value)){
+                    password = info[this.username_value];
+                    if(password !== undefined && password !== ''){
+                        this.isRememberKey = true;
+                        this.$passwordInput.val(password);
+                        this.$rememberPwCheck.prop('checked',true);
+                        this.password_value = password;
+                    }
+                }else{
+                    this.isRememberKey = false;
+                    this.$passwordInput.val('');
+                    this.$rememberPwCheck.prop('checked',false);
+                    this.password_value = '';
+                }
+            }
+        },
+
         //初始化公司名称
         sysNameInit:function () {
            this.systemName = this.versionInfo.sap_login_system_name;
@@ -198,11 +216,22 @@ function getLoginController() {
         },
         infoInit:function () {
             let storage = window.localStorage;
-            let username = storage.getItem("former_username");  //获取最后一个登陆用户名
-            if(username !== undefined){
+            // let username = storage.getItem("former_username");  //获取最后一个登陆用户名
+            let info = storage.getItem("password_info") || {};
+            info = JSON.parse(info);
+            let username = '';
+            if (info.hasOwnProperty('former_username')){
+                username = info.former_username;
+            }
+
+            if(username !== '' && username !== undefined){
                 this.username_value = username;
                 this.$usernameInput.val(this.username_value);
-                let password = storage.getItem(this.username_value);    //根据用户名查找是否保存密码
+                // let password = storage.getItem(this.username_value);    //根据用户名查找是否保存密码
+                let password = undefined;
+                if(info[this.username_value]){
+                    password = info[this.username_value];
+                }
                 if(password !== undefined && password !== null){
                     this.password_value = password;
                     this.isRememberKey = true;
@@ -238,15 +267,22 @@ function getLoginController() {
                 password:md5(password)
             };
             let replyMsg = LoginService.userLoginVerification(data);
+            let that = this;
             replyMsg.done((result) => {
                 if(result.success === 1){
                     //登录成功，设置缓存信息，跳转至index页面
-                    window.localStorage.setItem("former_username",this.username_value);
-                    if(this.$rememberPwCheck.prop("checked") === true){
-                        window.localStorage.setItem(this.username_value,this.password_value);
+                    // window.localStorage.setItem("former_username",this.username_value);
+                    let info = JSON.parse(window.localStorage.getItem('password_info')) || {};
+                    info['former_username'] = this.username_value;
+                    if(that.$rememberPwCheck.prop("checked") === true){
+                        // window.localStorage.setItem(this.username_value,this.password_value);
+                        info[that.username_value] = that.password_value;
                     }else{
-                        window.localStorage.removeItem(this.username_value);
+                        // window.localStorage.removeItem(this.username_value);
+                        delete info[that.username_value];
                     }
+                    info = JSON.stringify(info);
+                    window.localStorage.setItem('password_info',info);
                     $(window).attr('location','/index');
                 }else if(result.success === 0){
                     $(".warn-info").html(result['error']).show();
