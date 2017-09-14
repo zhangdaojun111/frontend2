@@ -1205,6 +1205,8 @@ let config = {
                 //赋值
                 try {
                     this.agGrid.actions.setGridData(d);
+                    this.data.showTabs(1);
+                    this.hideLoading();
                 }catch(e){}
 
             } )
@@ -1558,12 +1560,10 @@ let config = {
                 this.actions.getExpertSearchData();
             }
             this.data.firstRender = false;
-            this.data.showTabs(1);
-            //显示提示
-            if( this.data.gridTips!='' ){
-                this.el.find( '.grid-tips' )[0].style.display = 'flex';
+            if( this.data.viewMode != 'normal' ){
+                this.data.showTabs(1);
+                try{this.hideLoading()}catch(e){}
             }
-            this.hideLoading()
         },
         //触发导出
         onExport: function () {
