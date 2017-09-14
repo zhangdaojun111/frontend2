@@ -52,6 +52,7 @@ let config = {
         base_buildin_dfield: '',
         fieldContent: null,
         rowData:[],
+        footerData:[{myfooter: '合计'}],
         //iframe弹窗key
         key: '',
         // 提醒颜色
@@ -375,7 +376,7 @@ let config = {
                         obj['cellStyle'] = {'font-style': 'normal'};
                         obj['cellStyle']['overflow'] = "visible";
                     }
-                    let width = data.data["width"] || 200;
+                    let width = data.data["width"] || 100;
                     if (this.data.colWidth && this.data.colWidth[data.data["field"]]) {
                         width = this.data.colWidth[data.data["field"]];
                     }
