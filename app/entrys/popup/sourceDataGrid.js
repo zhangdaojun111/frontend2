@@ -20,7 +20,8 @@ $(document).ready(function(){
         fieldContent: window.config.fieldContent || null,
         correspondenceField: window.config.correspondenceField || '',
         keyword: window.config.keyword || '',
-        gridTips: window.config.gridTips || ''
+        gridTips: window.config.gridTips || '',
+        project: window.config.project || ''
     }
     $( 'title' ).html( window.config.tableName || 'REDS' );
     let DataTableAgGrid=new dataTableAgGrid( json );

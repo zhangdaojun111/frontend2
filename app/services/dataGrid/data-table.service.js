@@ -101,6 +101,10 @@ export const dataTableService = {
     saveEditFormData: function (data) {
         return HTTP.post( 'add_update_table_data',data )
     },
+    //二维表保存
+    refreshReport: function (data) {
+        return HTTP.postImmediately( '/refresh_report/',data )
+    },
     //行级操作（后端）
     rowOperationBackend: function (data,address) {
         return HTTP.postImmediately(address,data);
