@@ -35,7 +35,7 @@ let config = {
                         this.eFilterInput.style.marginBottom = '5px';
                         this.eFilterInput.style.borderRadius = '2px';
                         this.eFilterInput.style.textIndent = '5px';
-                    } else if( colInfo == 'date' ){
+                    } else if( colInfo == 'date' ){ // 使用年月日插件
                         let dateControl = new DateControl({value: '', isAgGrid: true},{changeValue:function(data){
                             That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                         }});
@@ -47,7 +47,7 @@ let config = {
                                 That.actions.keyupSearch(null,this.eFilterInput.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                             }
                         },1000 ))
-                    }else if( colInfo  == 'time' ){
+                    }else if( colInfo  == 'time' ){  //使用时间插件
                         let timeControl = new TimeControl({value: '', isAgGrid: true},{changeValue:function(data){
                             That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                         }});
@@ -59,7 +59,7 @@ let config = {
                                 That.actions.keyupSearch(null,this.eFilterInput.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                             }
                         },1000 ))
-                    }else if( colInfo  == 'datetime' ){
+                    }else if( colInfo  == 'datetime' ){ //使用年月日时分秒插件
                         let dateTimeControl = new DateTimeControl({value: '', isAgGrid: true},{changeValue:function(data){
                             setTimeout(()=>{
                                 That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
