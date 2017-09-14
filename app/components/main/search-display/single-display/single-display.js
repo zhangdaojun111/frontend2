@@ -26,7 +26,7 @@ let config = {
             let tableId = this.data.searchData.table_id;
             let keyword = this.data.searchData.label;
             PMAPI.openDialogByIframe(`/datagrid/source_data_grid/?tableId=${tableId}&keyword=${keyword}&viewMode=keyword&tableType=keyword`,{
-                width:1200,
+                width:1550,
                 height:700,
                 title:`${this.data.searchData.label}`,
                 modal:true

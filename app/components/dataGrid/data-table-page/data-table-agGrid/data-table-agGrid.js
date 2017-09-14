@@ -52,6 +52,7 @@ let config = {
         base_buildin_dfield: '',
         fieldContent: null,
         rowData:[],
+        footerData:[{myfooter: '合计'}],
         //iframe弹窗key
         key: '',
         // 提醒颜色
@@ -375,7 +376,7 @@ let config = {
                         obj['cellStyle'] = {'font-style': 'normal'};
                         obj['cellStyle']['overflow'] = "visible";
                     }
-                    let width = data.data["width"] || 200;
+                    let width = data.data["width"] || 100;
                     if (this.data.colWidth && this.data.colWidth[data.data["field"]]) {
                         width = this.data.colWidth[data.data["field"]];
                     }
@@ -1124,6 +1125,9 @@ let config = {
                 this.actions.getNewFormCountData(refresh);
                 return;
             }
+            if( this.data.viewMode == 'keyword' ){
+                this.data.firstGetFooterData = false;
+            }
             let postData = this.actions.createPostData();
             let post_arr = [];
             let body = dataTableService.getTableData( postData );
@@ -1201,6 +1205,8 @@ let config = {
                 //赋值
                 try {
                     this.agGrid.actions.setGridData(d);
+                    this.data.showTabs(1);
+                    this.hideLoading();
                 }catch(e){}
 
             } )
@@ -1405,7 +1411,7 @@ let config = {
                     _id: this.data.rowId
                 }
             }
-            if( this.data.viewMode == 'keyword-tips' ){
+            if( this.data.viewMode == 'keyword' ){
                 json['keyWord'] = this.data.keyword;
             }
             if( this.data.viewMode == 'deleteHanding' ){
@@ -1554,12 +1560,10 @@ let config = {
                 this.actions.getExpertSearchData();
             }
             this.data.firstRender = false;
-            this.data.showTabs(1);
-            //显示提示
-            if( this.data.gridTips!='' ){
-                this.el.find( '.grid-tips' )[0].style.display = 'flex';
+            if( this.data.viewMode != 'normal' ){
+                this.data.showTabs(1);
+                try{this.hideLoading()}catch(e){}
             }
-            this.hideLoading()
         },
         //触发导出
         onExport: function () {
