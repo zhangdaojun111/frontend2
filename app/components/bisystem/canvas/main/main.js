@@ -5,7 +5,7 @@ import {CanvasCellsComponent} from './cells/canvas.cells';
 import {CanvasHeaderComponent} from './header/canvas.header';
 import {canvasCellService} from '../../../../services/bisystem/canvas.cell.service';
 import msgbox from '../../../../lib/msgbox';
-import {PMAPI} from "../../../../lib/postmsg";
+import {PMAPI, PMENUM} from "../../../../lib/postmsg";
 
 let config = {
     template: template,
@@ -24,14 +24,15 @@ let config = {
             selector: '.to-edit-page',
             callback: function (context, event) {
                 //编辑模式Iframe
+                let iFrameUrl = '/bi/manager/' + window.location.hash;
                 PMAPI.openDialogByIframe(
-                    '/bi/manager/',
+                    iFrameUrl,
                     {
                         title: '编辑模式',
                         modal: true,
-                        customSize: true
-                    }
-                ).then((data) => {
+                        customSize: true,
+
+                    }).then((data) => {
                         location.reload();
                     }
                 );
@@ -98,12 +99,15 @@ let config = {
             this.el.find('.component-bi-canvas-main').append("<div class='cells-container client " + this.data.editMode + "'></div>")
         }
     },
-    afterRender() {
+    afterRender:function(){
         this.showLoading();
         //根据判断是否单行模式加载header
         this.actions.headLoad();
         this.hideLoading();
     },
+    beforeDestory:function () {
+
+    }
 };
 
 export class CanvasMain extends Component {
