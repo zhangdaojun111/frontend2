@@ -94,6 +94,7 @@ let config = {
          * 销毁canvas.cells组件
          */
         destroyCanvasCells() {
+
             this.data.cells.destroySelf();
             this.el.find('.component-bi-canvas-main').append("<div class='cells-container client "+ this.data.editMode +"'></div>")
         }
