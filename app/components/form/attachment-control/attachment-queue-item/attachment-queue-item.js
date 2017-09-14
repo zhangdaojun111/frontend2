@@ -60,7 +60,7 @@ let config = {
             event:'click',
             selector:'.cancel-attaching',
             callback:function () {
-                this.trigger('changeFile',{event:'delete'});
+                this.actions.cancelUploading();
             }
         }
     ],
@@ -81,15 +81,25 @@ let config = {
             if(this.data._controlItem.process > 100){
                return;
             }
+            if(this.data.toolbox){
+                this.data.toolbox.update({
+                    fileOrder:this.data.fileOrder,
+                    progress:this.data._controlItem.process,
+                });
+            }
             this.el.find('#process-num').text(this.data._controlItem.process+'%');
             if(this.data._controlItem.process == 100){
                 this.el.find('.loader').css('display','none');
                 this.el.find('.processing').css('display','none');
-               this.el.find('.keep-on-attaching').css('display','none');
-               this.el.find('.pause-attaching').css('display','none');
-               this.el.find('.cancel-attaching').css('display','none');
-               this.el.find('.delete-file').css('display','inline');
+                this.el.find('.keep-on-attaching').css('display','none');
+                this.el.find('.pause-attaching').css('display','none');
+                this.el.find('.cancel-attaching').css('display','none');
+                this.el.find('.delete-file').css('display','inline');
             }
+        },
+        cancelUploading:function () {
+            this.data._controlItem.uploadingState = 'canceled';
+            this.trigger('changeFile',{event:'delete'});
         },
         processEvent(event){
             var position = event.loaded || event.position;
@@ -155,6 +165,7 @@ let config = {
                 formData.append('per_size', item.pack_size);
                 formData.append('content_type', item.file.type);
                 formData.append('dinput_type', this.data.real_type);
+                let errorCallback = this.data.toolbox?this.data.toolbox.showError:undefined;
                 FormService.uploadAttachment(item.url, formData, this.actions.processEvent, (res) => {
                     if (res.success) {
                         if (item.index < item.chunks - 1) {
@@ -162,6 +173,9 @@ let config = {
                             this.actions.transData(item);
                         } else {
                             this.actions.updateProcess(1);
+                            if(this.data.toolbox){
+                                this.data.toolbox.finish({fileOrder:this.data.fileOrder});
+                            }
                             this.data._controlItem.uploadingState = 'finished';
                             this.data._controlItem['fileId'] = res.file_id;
                             this.data._controlItem['thumbnail'] = res.thumbnail;
@@ -169,10 +183,14 @@ let config = {
                         }
                     } else {
                         this.data._controlItem.uploadingState = 'failed';
-                        msgbox.alert('传输中断！');
+                        if(this.data.toolbox){
+                            this.data.toolbox.showError({fileOrder:this.data.fileOrder,msg:"传输中断"});
+                        } else {
+                            msgbox.alert('传输中断！');
+                        }
                         this.actions.showReuploadingButton();
                     }
-                });
+                },errorCallback);
             }
         }
     },
