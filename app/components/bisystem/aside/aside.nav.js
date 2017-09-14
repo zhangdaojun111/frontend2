@@ -1,4 +1,4 @@
-import {BiBaseComponent} from '../bi.base.component';
+import Component from '../../../lib/component';
 
 import template from './aside.nav.html';
 import './aside.nav.scss';
@@ -47,22 +47,20 @@ let config = {
     afterRender() {
         //加载左侧导航数据
         this.data.charts.forEach((val,index) => {
-            let chartsComponent = new ChartsComponent(val);
+            let chartsComponent = new ChartsComponent(val,{
+                onDelete: (res)=>{
+                    let charts = this.data.charts;
+                    _.remove(charts,function (val) {
+                        return res.id === val.id;
+                    });
+                    window.config.charts = charts;
+                },
+            });
             this.append(chartsComponent,this.el.find('.charts-items'));
         });
 
     },
     firstAfterRender() {
-
-        Mediator.subscribe('bi:aside:del', (res) => {
-            let charts = this.data.charts;
-            for(let [index,view] of charts.entries()) {
-                if (res.id === view.id) {
-                    charts.splice(index,1);
-                    break;
-                }
-            }
-        });
 
         Mediator.subscribe('bi:aside:update',(res) => {
             if (res['type'] == 'new') {
@@ -83,9 +81,9 @@ let config = {
     }
 };
 
-class AsideNavComponent extends BiBaseComponent{
-    constructor() {
-        super(config)
+class AsideNavComponent extends Component{
+    constructor(data,events) {
+        super(config,data,events)
     }
 }
 

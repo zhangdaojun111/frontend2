@@ -94,9 +94,8 @@ let config = {
          * 销毁canvas.cells组件
          */
         destroyCanvasCells() {
-
             this.data.cells.destroySelf();
-            this.el.find('.component-bi-canvas-main').append("<div class='cells-container client "+ this.data.editMode +"'></div>")
+            this.el.find('.component-bi-canvas-main').append("<div class='cells-container client " + this.data.editMode + "'></div>")
         }
     },
     afterRender() {
@@ -104,13 +103,12 @@ let config = {
         //根据判断是否单行模式加载header
         this.actions.headLoad();
         this.hideLoading();
-        console.log(window.location)
     },
 };
 
 export class CanvasMain extends Component {
     constructor(data, events) {
-        if (window.location.href.indexOf('key')!==-1){
+        if (window.location.href.indexOf('key') !== -1) {
             config.data.editModeDialog = false;
         }
         super(config, data, events);
