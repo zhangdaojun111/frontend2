@@ -1125,6 +1125,9 @@ let config = {
                 this.actions.getNewFormCountData(refresh);
                 return;
             }
+            if( this.data.viewMode == 'keyword' ){
+                this.data.firstGetFooterData = false;
+            }
             let postData = this.actions.createPostData();
             let post_arr = [];
             let body = dataTableService.getTableData( postData );
@@ -1406,7 +1409,7 @@ let config = {
                     _id: this.data.rowId
                 }
             }
-            if( this.data.viewMode == 'keyword-tips' ){
+            if( this.data.viewMode == 'keyword' ){
                 json['keyWord'] = this.data.keyword;
             }
             if( this.data.viewMode == 'deleteHanding' ){
