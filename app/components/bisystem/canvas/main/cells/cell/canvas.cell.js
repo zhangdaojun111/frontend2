@@ -45,7 +45,7 @@ let config = {
                  * 显示原始数据
                  */
                 onShowOriginal: () => {
-                    let originalData = this.data.cellComponent.data.cellChart.chart;
+                    let originalData = this.data.cellComponent.data;
                     this.data.cellComponent.showCellDataSource(originalData,this.el.find('.cell-chart'))
                 }
             });

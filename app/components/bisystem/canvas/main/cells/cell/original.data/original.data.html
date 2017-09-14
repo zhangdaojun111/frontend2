@@ -6,32 +6,53 @@
     <div class="origin-data">
         <div class="content">
             <table>
-                <tr class="td-checkbox">
-                    <th>
-                        <label class="custom-checkbox z-checkbox">
-                            <input type="checkbox" name="custom-checkbox-all">
-                        </label>
-                    </th>
-                    <th>{{xAxis.name}}</th>
-                    {{#each yAxis}}
-                    <th>
-                        <span>{{original_data_title @this}}</span>
-                    </th>
-                    {{/each}}
+                <thead>
+                    <tr class="td-checkbox">
+                        <th class="selectAllX">
+                            <label class="custom-checkbox z-checkbox">
+                                {{#if selectAllX}}
+                                <input type="checkbox" checked="checked"  name="">
+                                {{else}}
+                                <input type="checkbox"  name="">
+                                {{/if}}
+                            </label>
+                        </th>
+                        <th>{{cellChart.chart.xAxis.name}}</th>
+                        {{#each cellChart.cell.attribute}}
+                        <th class="selectY" data-y-index="{{@index}}">
+                            <span>
+                                <label class="custom-checkbox z-checkbox">
+                                {{#if selected}}
+                                <input type="checkbox" checked="checked"  name="">
+                                {{else}}
+                                <input type="checkbox"  name="">
+                                {{/if}}
+                                </label>
+                                {{name}}</span>
+                        </th>
+                        {{/each}}
                 </tr>
-                {{#each data.xAxis}}
-                <tr class="tr-body">
-                    <th>
-                        <label class="custom-checkbox z-checkbox">
-                            <input type="checkbox" name="custom-checkbox">
-                        </label>
-                    </th>
-                    <td><a href="javascript:;">{{@this}}</a></td>
-                    {{#each @root.data.yAxis}}
-                    <td>{{original_each_yAxis data @../index}}</td>
+                </thead>
+                <tbody>
+                    {{#each cellChart.cell.select}}
+                    <tr class="tr-body">
+                        <td>
+                            <label class="custom-checkbox z-checkbox">
+                                {{#if select}}
+                                <input type="checkbox" checked="checked" name="">
+                                {{else}}
+                                <input type="checkbox" name="">
+                                {{/if}}
+                            </label>
+                        </td>
+                        <td><a href="javascript:;">{{name}}</a></td>
+                        {{#each @root.chart.data.yAxis}}
+                        <td>
+                            {{original_each_yAxis data @../index}}</td>
+                        {{/each}}
+                    </tr>
                     {{/each}}
-                </tr>
-                {{/each}}
+                </tbody>
             </table>
         </div>
     </div>

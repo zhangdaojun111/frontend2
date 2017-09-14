@@ -16,7 +16,17 @@ export class CellBaseComponent extends Component {
      * @param data = 原始数据数据,container = 原始数据放置容器
      */
     showCellDataSource(data = null,container) {
-        let dataSource = new CanvasOriginalDataComponent(data);
+        let dataSource = new CanvasOriginalDataComponent(data, {
+            onUpdateOriginal: (data) => {
+                this.UpdateOriginal(data)
+            }
+        });
         this.append(dataSource,container);
     }
+
+    /**
+     * 当原始数据改变时，更新画布块数据
+     * @data 需要更新的数据
+     */
+    UpdateOriginal(data) {}
 }

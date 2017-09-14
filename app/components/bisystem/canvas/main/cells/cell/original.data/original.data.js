@@ -6,59 +6,176 @@ import Component from '../../../../../../../lib/component';
 import template from './original.data.html';
 import './original.data.scss';
 import handlebars from 'handlebars';
+import {canvasCellService} from '../../../../../../../services/bisystem/canvas.cell.service';
+import msgbox from '../../../../../../../lib/msgbox';
 
-// 自定义handlebar helper
+// 自定义original_each_yAxis helper
 handlebars.registerHelper('original_each_yAxis', function(data,index, options) {
     return data[index];
 });
 
-// 自定义handlebar helper
-handlebars.registerHelper('original_data_title', function(data, options) {
-    console.log(data);
-    return data['field'] ? data['field']['name'] : data['name'];
+// 自定义original_data_title helper
+handlebars.registerHelper('original_data_title', function(index, options) {
+    return index;
+    // return data['field'] ? data['field']['name'] : data['name'];
 });
 
 let config = {
     template: template,
-    actions: {},
+    actions: {
+        /**
+         * 获取原始数据改变的数据
+         */
+        getChangeData() {
+            return  {
+                attribute: this.data.cellChart.cell.attribute.map(item =>{
+                        return JSON.stringify({selected: item.selected})
+                }),
+                select: this.data.cellChart.cell.select.map(item => JSON.stringify(item))
+            };
+        },
+    },
     data: {
-        showData:true,
-        deepOriginalData: { // 通过初始化数据组装后得到的下穿数据
-            titles: [],
-            items: []
-        }
+        selectAllX: true,
     },
     binds:[
-        {
+        { // 点击关闭原始数据
             event:'click',
             selector:'.bi-origin-data-close',
             callback:function () {
-                this.destroySelf();
+                let data = this.actions.getChangeData();
+                let originalData = {
+                    view_id: this.data.viewId,
+                    floor: 0,
+                    layout_id: this.data.cellChart.cell.layout_id,
+                    chart_id: this.data.cellChart.cell.chart_id,
+                    xAxis:[],
+                    select: data.select,
+                    attribute: data.attribute
+                };
+                let yAxis = _.cloneDeep(this.data.cellChart.chart.data.yAxis);
+
+                canvasCellService.saveOriginalData(originalData).then(res => {
+                    if (res['success'] !== 1) {
+                        msgbox.showTips(res['error']);
+                    } else {
+                        originalData.yAxis = [];
+                         data.attribute.map((item,index) => {
+                            let val = JSON.parse(item);
+                            if (val.selected) {
+                                originalData.yAxis.push(yAxis[index])
+                            }
+                        });
+
+                        this.trigger('onUpdateOriginal', originalData);
+                    };
+                    this.destroySelf();
+                });
             }
-        }
+        },
+        {// 选择y轴字段
+            event:'change',
+            selector:'.selectY input',
+            callback:function (context) {
+                let checked = $(context).is(':checked');
+                let index = parseInt($(context).closest('th').attr('data-y-index'));
+                if (checked) {
+                    this.data.cellChart.cell.attribute[index].selected = true;
+                } else {
+                    this.data.cellChart.cell.attribute[index].selected = false;
+                }
+            }
+        },
+        { // 选择所有x轴字段
+            event:'change',
+            selector:'.selectAllX input',
+            callback:function (context) {
+                let checked = $(context).is(':checked');
+                if (checked) {
+                    this.el.find(".tr-body input").prop('checked', true);
+                    this.data.cellChart.cell.select.map(item => {
+                        return item.select = true;
+                    });
+                } else {
+                    this.el.find(".tr-body input").prop('checked', false);
+                    this.data.cellChart.cell.select.map(item => {
+                        return item.select = false;
+                    });
+                }
+            }
+        },
+        { // 选择单个x轴字段
+            event:'change',
+            selector:'.tr-body input',
+            callback:function (context) {
+                let checked = $(context).is(':checked');
+                let index = $(context).closest('tr').index();
+                if (!checked) {
+                    $('.selectAllX input').prop('checked', false);
+                    this.data.cellChart.cell.select[index].select = false;
+                }else {
+                    this.data.cellChart.cell.select[index].select = true;
+                    let selectAll = true;
+                    for (let checkbox of [...this.el.find(".tr-body input")]) {
+                        if (!$(checkbox).is(':checked')) {
+                            selectAll = false;
+                            break;
+                        }
+                    }
+                    if (selectAll) {
+                        $('.selectAllX input').prop('checked', true);
+                    };
+                }
+            }
+        },
     ],
-    afterRender() {},
+    afterRender() {
+    },
     firstAfterRender() {},
     beforeDestory() {}
 };
 
 export class CanvasOriginalDataComponent extends Component {
     constructor(data,events) {
-        let originData = CanvasOriginalDataComponent.handleOriginalData(data);
-        super(config,originData,events);
+        let originalData = CanvasOriginalDataComponent.handleOriginalData(data);
+        super(config,originalData,events);
     }
 
     /**
-     * 处理初始化数据(因为饼图,折线图返回数据格式不同)
+     * 处理初始化数据 用于组装需要的数据格式
+     * @param originalData = 初始化data传递过来的参数
      */
-    static handleOriginalData(chart) {
-        let data = _.cloneDeep(chart);
-        if (chart.assortment === 'pie') { //如果饼图类型是多条情况
-            if (chart.pieType.value == 2) {
-                data.yAxis = [chart.yAxis]
-            }
+    static handleOriginalData(originalData) {
+        let data = _.cloneDeep(originalData);
+
+        // 如果select有数据就用select的数据 select = xAxis
+        if (data.cellChart.cell.select.length  === 0) {
+            data.cellChart.cell.select = data.cellChart.chart.data.xAxis.map(name => {
+                return {'name': name, 'select': true}
+            });
+        } else {
+            data.cellChart.cell.select = data.cellChart.cell.select.map(item => {
+                let value = JSON.parse(item);
+                if (!value.select) {
+                    data.selectAllX = false;
+                };
+                return value;
+            });
+        }
+
+        // 如果attribute有数据就用attribute的数据 attribute = yAxis
+        if (data.cellChart.cell.attribute.length === 0) {
+            data.cellChart.cell.attribute = data.cellChart.chart.yAxis.map(item => {
+                return {'selected': true, 'name': item.field.name}
+            });
+        } else {
+            let attribute = data.cellChart.chart.yAxis.map((item,index) => {
+                let selected = data.cellChart.cell.attribute[index];
+                return {'selected':JSON.parse(selected).selected, 'name': item.field.name}
+            });
+            data.cellChart.cell.attribute = attribute;
         };
-        console.log(data);
+
         return data;
     }
 }

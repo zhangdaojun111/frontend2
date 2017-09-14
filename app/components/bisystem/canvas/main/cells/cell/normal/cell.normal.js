@@ -24,6 +24,13 @@ let config = {
             this.normalChart = echartsService;
         },
 
+        updateChart() {
+            //重新渲染echarts
+            const option = this.normalChart.lineBarOption(this.data.cellChart);
+            this.normalChart.myChart.setOption(option);
+            this.normalChart.myChart.resize();
+        },
+
         /**
          * 初始化pie图表数据
          */
@@ -76,7 +83,7 @@ let config = {
                 const layouts = {
                     chart_id: this.data.cellChart.cell.chart_id,
                     floor: this.data.floor,
-                    view_id: this.data.cellChart.viewId,
+                    view_id: this.data.viewId,
                     layout_id:  this.data.cellChart.cell.layout_id,
                     xOld: this.data.xOld,
                     row_id:0,
@@ -93,10 +100,7 @@ let config = {
                     if (res[0]['data']['data']['xAxis'].length > 0 && res[0]['data']['data']['yAxis'].length > 0) {
                         this.data.cellChart['chart']['data']['xAxis'] = res[0]['data']['data']['xAxis'];
                         this.data.cellChart['chart']['data']['yAxis'] = res[0]['data']['data']['yAxis'];
-                        //重新渲染echarts
-                        const option = this.normalChart.lineBarOption(this.data.cellChart);
-                        this.normalChart.myChart.setOption(option);
-                        this.normalChart.myChart.resize();
+                        this.actions.updateChart();
                     }
                 } else {
                     msgbox.alert(res[0]['error']);
@@ -137,5 +141,27 @@ export class CellNormalComponent extends CellBaseComponent {
     constructor(data,event) {
         super(config,data,event);
         this.actions.initNormal();
+    }
+
+    /**
+     * 当原始数据改变时，同步this.data
+     * @param data
+     * @constructor
+     */
+    UpdateOriginal(data) {
+        this.data.cellChart.cell.attribute = data.attribute;
+        this.data.cellChart.cell.select = data.select;
+        let xAxis = [];
+        this.data.cellChart.cell.select.forEach(item => {
+            let val = JSON.parse(item);
+            if (val.select) {
+                xAxis.push(val.name);
+            }
+        });
+        this.data.cellChart['chart']['data']['xAxis'] = xAxis;
+        this.data.cellChart['chart']['data']['yAxis'] = data.yAxis;
+        console.log(this.data.cellChart['chart']['data']['yAxis']);
+        console.log(this.data.cellChart['chart']['data']['xAxis'])
+        // this.actions.updateChart()
     }
 }
