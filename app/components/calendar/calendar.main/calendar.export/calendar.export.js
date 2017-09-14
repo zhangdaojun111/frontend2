@@ -31,7 +31,7 @@ let config = {
         },
     },
     afterRender: function() {
-        PMAPI.subscribe(PMENUM.open_iframe_params, params => {
+        PMAPI.getIframeParams(window.config.key).then(params => {
             let _this = this;
             _this.data.cancelFields = JSON.stringify(params.data.cancelFields);
             _this.el.on('click', '.export-btn', function () {
