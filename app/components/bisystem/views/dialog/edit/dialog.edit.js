@@ -77,6 +77,7 @@ export let config = {
                 return ;
             }
             let data = {
+
                 folder_id:'',
                 parent_table_id:'',
                 id: this.data.view ? this.data.view.id :'',
