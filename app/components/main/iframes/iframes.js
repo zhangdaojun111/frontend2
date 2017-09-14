@@ -90,7 +90,7 @@ export const IframeInstance = new Component({
                 // }, 500);
 
                 originIframe.on('load', function () {
-                    PMAPI.sendToChild(originIframe[0], {
+                    PMAPI.sendToIframe(originIframe[0], {
                         type: PMENUM.open_iframe_data,
                         data: {
                             iframe: 'load'
@@ -174,7 +174,7 @@ export const IframeInstance = new Component({
                 this.data.focus.tab.removeClass('focus');
                 this.data.focus.iframe.hide();
 
-                PMAPI.sendToChild(this.data.focus.iframe.find('iframe')[0], {
+                PMAPI.sendToIframe(this.data.focus.iframe.find('iframe')[0], {
                     type: PMENUM.iframe_silent
                 })
             }
@@ -182,7 +182,7 @@ export const IframeInstance = new Component({
             this.data.focus.iframe.show();
             this.data.focus.tab.addClass('focus');
 
-            PMAPI.sendToChild(this.data.focus.iframe.find('iframe')[0], {
+            PMAPI.sendToIframe(this.data.focus.iframe.find('iframe')[0], {
                 type: PMENUM.iframe_active
             })
         },

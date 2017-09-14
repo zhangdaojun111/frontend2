@@ -86,7 +86,7 @@ window.addEventListener('message', function (event) {
                     modal: true,
                     close: function () {
                         if (dialogHash[data.key]) {
-                            PMAPI.sendToParent({
+                            PMAPI.sendToSelf({
                                 type: PMENUM.close_dialog,
                                 key: data.key,
                                 data: {
@@ -109,18 +109,18 @@ window.addEventListener('message', function (event) {
                     element: element.appendTo(document.body),
                     params: params
                 };
-                element.one('load', () => {
-                    PMAPI.sendToChild(element[0], {
-                        type: PMENUM.open_iframe_params,
-                        data: params
-                    });
-                });
+                // element.one('load', () => {
+                //     PMAPI.sendToIframe(element[0], {
+                //         type: PMENUM.open_iframe_params,
+                //         data: params
+                //     });
+                // });
                 dialogHash[data.key].element.erdsDialog(_.defaultsDeep(data.frame, {
                     modal: true,
                     maxable: true,
                     close: function () {
                         if (dialogHash[data.key]) {
-                            PMAPI.sendToParent({
+                            PMAPI.sendToSelf({
                                 type: PMENUM.close_dialog,
                                 key: data.key,
                                 data: {
@@ -130,6 +130,7 @@ window.addEventListener('message', function (event) {
                         }
                     }
                 }));
+
                 break;
             case PMENUM.close_dialog:
                 if (dialogHash[data.key].comp) {
@@ -140,8 +141,9 @@ window.addEventListener('message', function (event) {
                     // 弹出框是iframe
                     // 清除iframe中适用的localstorage
                     Storage.clear(data.key);
+                    dialogHash[data.key].element.erdsDialog('destroy').remove();
                 }
-                PMAPI.sendToChild(dialogHash[data.key].iframe, {
+                PMAPI.sendToIframe(dialogHash[data.key].iframe, {
                     type: PMENUM.recieve_data,
                     key: data.key,
                     data: data.data
@@ -154,7 +156,7 @@ window.addEventListener('message', function (event) {
                 break;
 
             case PMENUM.get_param_from_root:
-                PMAPI.sendToChild(dialogHash[data.key].element[0], {
+                PMAPI.sendToIframe(dialogHash[data.key].element[0], {
                     type: PMENUM.send_param_to_iframe,
                     data: dialogHash[data.key].params
                 });
@@ -271,7 +273,7 @@ export const PMAPI = {
      * @param iframe
      * @param msg
      */
-    sendToChild: function (iframe, msg) {
+    sendToIframe: function (iframe, msg) {
         if (iframe.postMessage) {
             iframe.postMessage(msg, location.origin);
         }
@@ -288,7 +290,7 @@ export const PMAPI = {
      */
     sendToAllChildren: function (msg) {
         for (let i = 0; i < window.frames.length; i++) {
-            this.sendToChild(window.frames[i], msg);
+            this.sendToIframe(window.frames[i], msg);
         }
         return this;
     },
@@ -304,6 +306,27 @@ export const PMAPI = {
     },
 
     /**
+     * 将消息发送
+     * @param msg 需要发送的消息
+     * @param target 接受消息的window对象
+     * @returns {PMAPI}
+     */
+    sendToTarget: function (msg, target = 'root') {
+        let frame = null;
+        if (target === 'root') {
+            frame = PMAPI.getRoot();
+        } else if (target === 'self') {
+            frame = window;
+        } else if (target === 'parent') {
+            frame = window.parent;
+        } else {
+            frame = target;
+        }
+        PMAPI.sendToIframe(frame, msg)
+        return this;
+    },
+
+    /**
      * 根据url，在父级打开一个iframe的弹出框
      * @param url
      * @frame 对话框设置，包括大小，标题等，例：{
@@ -313,17 +336,17 @@ export const PMAPI = {
      *      }
      * @return Promise
      */
-    openDialogByIframe: function (url, frame, params) {
+    openDialogByIframe: function (url, frame, params, target = 'root') {
         return new Promise(function (resolve) {
             let key = PMAPI._getKey();
             dialogWaitHash[key] = resolve;
-            PMAPI.sendToParent({
+            PMAPI.sendToTarget({
                 type: PMENUM.open_iframe_dialog,
                 key: key,
                 url: url,
                 frame: frame,
                 params: params
-            });
+            }, target);
         });
     },
 
