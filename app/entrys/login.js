@@ -145,7 +145,7 @@ function getLoginController() {
         //动态查找记录的密码
         findPasswordByInput(){
             //查找缓存中是否有当前用户密码
-            if(this.username_value !== ''){
+            // if(this.username_value !== ''){
                 // let password = window.localStorage.getItem(this.username_value);
                 let info = window.localStorage.getItem('password_info') || {};
                 info = JSON.parse(info);
@@ -164,7 +164,7 @@ function getLoginController() {
                     this.$rememberPwCheck.prop('checked',false);
                     this.password_value = '';
                 }
-            }
+            // }
         },
 
         //初始化公司名称

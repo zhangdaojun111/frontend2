@@ -22,7 +22,7 @@ _.defaultsDeep(AsideInstance.data, {
 IframeInstance.render($('#content'));
 HeaderInstance.render($('#header'));
 AsideInstance.render($('#aside'));
-// Storage.clearAll();
+Storage.clearAll();
 
 let body = $('body');
 body.find('.component-loading-cover').remove();
