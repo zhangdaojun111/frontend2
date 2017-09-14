@@ -61,7 +61,6 @@ let config = {
 
     },
     firstAfterRender() {
-
         Mediator.subscribe('bi:aside:update',(res) => {
             if (res['type'] == 'new') {
                 window.config.charts.push(res['data']);
