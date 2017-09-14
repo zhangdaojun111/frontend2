@@ -56,15 +56,16 @@ function getLoginController() {
             //记住密码和忘记密码
             this.$rememberPwCheck.on('click', (event) => {
                 that.isRememberKey = event.target.checked;
-                if(that.isRememberKey === false){
-                    if(that.username_value !== ''){
-                        //缓存中查找并清除当前用户密码
-                        // window.localStorage.removeItem(this.username_value);
-                        let info = window.localStorage.getItem('password_info');
-                        delete info[that.username_value];
-                        window.localStorage.setItem('password_info',info);
-                    }
-                }
+                //是否启用checkbox的勾选清除缓存（启用则取消下面代码的屏蔽）
+                // if(that.isRememberKey === false){
+                //     if(that.username_value !== ''){
+                //         //缓存中查找并清除当前用户密码
+                //         // window.localStorage.removeItem(this.username_value);
+                //         let info = window.localStorage.getItem('password_info');
+                //         delete info[that.username_value];
+                //         window.localStorage.setItem('password_info',info);
+                //     }
+                // }
             });
 
             //展示或关闭版本信息
@@ -74,8 +75,6 @@ function getLoginController() {
 
             //登录按钮
             this.$loginBtn.on('click', () => {
-                // this.username = this.$usernameInput.val();
-                // this.password = this.$passwordInput.val();
                 that.userLogin(that.username_value,that.password_value);   //根据用户名和密码登录
             });
             //注册按钮
@@ -98,7 +97,7 @@ function getLoginController() {
 
             //监听用户名输出框
             this.$usernameInput.on('input',_.debounce(() => {
-                that.username_value = this.$usernameInput.val();
+                that.username_value = that.$usernameInput.val();
                 that.findPasswordByInput();
             },100));
 
@@ -142,29 +141,25 @@ function getLoginController() {
                 }
             })
         },
-        //动态查找记录的密码
+        //根据用户名输入动态查找缓存记录的用户密码
         findPasswordByInput(){
-            //查找缓存中是否有当前用户密码
-            // if(this.username_value !== ''){
-                // let password = window.localStorage.getItem(this.username_value);
-                let info = window.localStorage.getItem('password_info') || {};
-                info = JSON.parse(info);
-                let password = '';
-                if(info.hasOwnProperty(this.username_value)){
-                    password = info[this.username_value];
-                    if(password !== undefined && password !== ''){
-                        this.isRememberKey = true;
-                        this.$passwordInput.val(password);
-                        this.$rememberPwCheck.prop('checked',true);
-                        this.password_value = password;
-                    }
-                }else{
-                    this.isRememberKey = false;
-                    this.$passwordInput.val('');
-                    this.$rememberPwCheck.prop('checked',false);
-                    this.password_value = '';
+            let info = window.localStorage.getItem('password_info') || {};
+            info = JSON.parse(info);
+            let password = '';
+            if(info.hasOwnProperty(this.username_value)){
+                password = info[this.username_value];
+                if(password !== undefined && password !== ''){
+                    this.isRememberKey = true;
+                    this.$passwordInput.val(password);
+                    this.$rememberPwCheck.prop('checked',true);
+                    this.password_value = password;
                 }
-            // }
+            }else{
+                this.isRememberKey = false;
+                this.$passwordInput.val('');
+                this.$rememberPwCheck.prop('checked',false);
+                this.password_value = '';
+            }
         },
 
         //初始化公司名称
@@ -216,7 +211,6 @@ function getLoginController() {
         },
         infoInit:function () {
             let storage = window.localStorage;
-            // let username = storage.getItem("former_username");  //获取最后一个登陆用户名
             let info = storage.getItem("password_info") || {};
             info = JSON.parse(info);
             let username = '';
@@ -227,12 +221,11 @@ function getLoginController() {
             if(username !== '' && username !== undefined){
                 this.username_value = username;
                 this.$usernameInput.val(this.username_value);
-                // let password = storage.getItem(this.username_value);    //根据用户名查找是否保存密码
                 let password = undefined;
                 if(info[this.username_value]){
                     password = info[this.username_value];
                 }
-                if(password !== undefined && password !== null){
+                if(password !== undefined && password !== ''){
                     this.password_value = password;
                     this.isRememberKey = true;
                     this.$passwordInput.val(password);
@@ -271,14 +264,11 @@ function getLoginController() {
             replyMsg.done((result) => {
                 if(result.success === 1){
                     //登录成功，设置缓存信息，跳转至index页面
-                    // window.localStorage.setItem("former_username",this.username_value);
                     let info = JSON.parse(window.localStorage.getItem('password_info')) || {};
                     info['former_username'] = this.username_value;
                     if(that.$rememberPwCheck.prop("checked") === true){
-                        // window.localStorage.setItem(this.username_value,this.password_value);
                         info[that.username_value] = that.password_value;
                     }else{
-                        // window.localStorage.removeItem(this.username_value);
                         delete info[that.username_value];
                     }
                     info = JSON.stringify(info);
