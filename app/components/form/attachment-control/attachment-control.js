@@ -73,6 +73,7 @@ let config = {
                 for (let file of files) {
                     this.actions.controlUploadingForFile(file);
                 }
+                this.el.find('.selecting-file').val(null);
             }
         }
     ],
