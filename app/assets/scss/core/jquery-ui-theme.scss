@@ -11,7 +11,6 @@
     border-radius: 0;
 }
 .ui-dialog {
-    top: 0 !important;
     padding: 0;
     .ui-dialog-titlebar {
         padding: 0;
@@ -63,6 +62,10 @@
 
     &.ui-dialog-shadow{
         box-shadow: 0px 0px 5px rgba(0,0,0,0.4);
+    }
+
+    &.ui-dialog-maximize{
+        top: 0 !important;
     }
 }
 
