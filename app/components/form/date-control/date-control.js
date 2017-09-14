@@ -71,7 +71,7 @@ let config = {
         if(this.data.isCalendar || this.data.isAgGrid) {
             this.el.find('.ui-history').css('visibility','hidden');
         }
-        
+
         if (this.data.is_view) {
             this.el.find('.ui-width').attr('disabled', true);
             this.el.find('.component-date-control').css('pointer-events','none');
