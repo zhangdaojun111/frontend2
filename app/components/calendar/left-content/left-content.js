@@ -113,7 +113,6 @@ let config = {
                     customSize: true,
                 },
             ).then(data => {
-                this.events.refresh();
             });
         },
 
@@ -199,9 +198,8 @@ let config = {
 };
 
 class Leftcontent extends Component {
-    constructor(data,events) {
+    constructor(data) {
         config.data.calendarTreeData = data;
-        config.events.refresh = events;
         super(config);
     }
 }

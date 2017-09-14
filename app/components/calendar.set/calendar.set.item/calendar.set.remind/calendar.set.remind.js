@@ -256,7 +256,8 @@ let config = {
             this.el.find('.remind-time-sms').val(this.data.sms.remind_time);
             this.el.find('.remind-time-email').val(this.data.email.remind_time);
         });
-    }
+    },
+
 };
 
 class CalendarSetRemindMethod extends Component {
