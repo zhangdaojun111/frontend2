@@ -52,6 +52,7 @@ let config = {
         base_buildin_dfield: '',
         fieldContent: null,
         rowData:[],
+        footerData:[{myfooter: '合计'}],
         //iframe弹窗key
         key: '',
         // 提醒颜色
@@ -198,7 +199,13 @@ let config = {
         //是否显示提示
         isShowTips: true,
         //是否第一次创建编辑表头
-        firstCreateEditCol: true
+        firstCreateEditCol: true,
+        //第一次获取二维表数据
+        firstReportTable: true,
+        //二维表项目名称
+        project: '',
+        //二维表改变的值
+        cellChangeValue: {},
     },
     //生成的表头数据
     columnDefs: [],
@@ -228,13 +235,17 @@ let config = {
                 columnDefs.unshift( dgcService.in_process_state );
             }
             //添加选择列
-            columnDefs.unshift(
-                dgcService.selectCol
-            );
+            if( this.data.viewMode != 'reportTable2' ){
+                columnDefs.unshift(
+                    dgcService.selectCol
+                );
+            }
             //添加序号列
-            let number = dgcService.numberCol;
-            number['headerCellTemplate'] = this.actions.resetPreference();
-            columnDefs.unshift(number);
+            if( this.data.viewMode != 'reportTable2' ){
+                let number = dgcService.numberCol;
+                number['headerCellTemplate'] = this.actions.resetPreference();
+                columnDefs.unshift(number);
+            }
             //添加操作列
             let operate = dgcService.operationCol;
             //操作展示方式
@@ -249,7 +260,9 @@ let config = {
             }
 
             columnDefs.unshift( dgcService.groupCol );
-            columnDefs.push(operate)
+            if( this.data.viewMode != 'reportTable2' ){
+                columnDefs.push(operate)
+            }
             return columnDefs;
         },
         getArr: function (i, n, column, len, data, otherCol , edit) {
@@ -258,7 +271,7 @@ let config = {
             } else {
                 for (let col of column) {
                     if (data.header[n] == col['headerName'] && col['children']) {
-                        this.actions.getArr(i, n + 1, col['children'], len, data, otherCol);
+                        this.actions.getArr(i, n + 1, col['children'], len, data, otherCol,edit);
                     }
                 }
             }
@@ -290,6 +303,10 @@ let config = {
                         right:'header-style-r',left:'header-style-l',center:''
                     }
                     let headClass = headerStyleObj[fieldTypeService.textAline(data.data["real_type"])];
+
+                    if( this.data.viewMode == 'reportTable2' ){
+                        headClass = '';
+                    }
 
                     //添加表头提醒
                     if( this.data.headerColor[data.data["field"]] != undefined ){
@@ -359,7 +376,7 @@ let config = {
                         obj['cellStyle'] = {'font-style': 'normal'};
                         obj['cellStyle']['overflow'] = "visible";
                     }
-                    let width = data.data["width"];
+                    let width = data.data["width"] || 100;
                     if (this.data.colWidth && this.data.colWidth[data.data["field"]]) {
                         width = this.data.colWidth[data.data["field"]];
                     }
@@ -369,10 +386,16 @@ let config = {
                             obj['cellStyle']['background'] = "rgba(255,0,0,0.5)";
                         }
                     }
+                    if( this.data.viewMode == 'reportTable2' && data.data.is_today ){
+                        obj['cellStyle']['background'] = "rgba(250,235,180,0.9)";
+                    }
+                    if( this.data.viewMode == 'reportTable2' && data.data.field == 'num' ){
+                        obj['sort'] = "asc";
+                    }
                     //编辑模式用
                     if( edit ){
                         obj['cellStyle'] = {'font-style': 'normal','background':'#EBEBEB'};
-                        this.actions.setEditableCol( obj );
+                        obj = this.actions.setEditableCol( obj );
                     }
                     column.push(obj);
                 }
@@ -567,6 +590,14 @@ let config = {
                 bgStyle = ' style = "display: block;padding: 0 8px;height: 100%;background:' + color+';text-align:' + textAline + ';"';
             }
 
+            if( this.data.viewMode == 'reportTable2' ){
+                textAline = 'right';
+                if( params.colDef.colId == 'num' || params.colDef.colId == "title" ){
+                    textAline = 'center';
+                }
+                bgStyle = ' style = "display: block;padding: 0 8px;height: 100%;background:' + color+';text-align:' + textAline + ';"';
+            }
+
             //前端表达式值计算
             if (colDef.dinput_type == fieldTypeService.SURFACE_EXPRESSION) {
                 let exp = colDef.field_content.update_exp;
@@ -695,6 +726,11 @@ let config = {
                         sHtml = '<span' + bgStyle + '><span>' + params.value + '</span></span>';
                     }
                 }
+            }
+
+            //二维表特殊字段处理
+            if( params.colDef.field_content.is_report_table_entry ){
+                sHtml = '<span' + bgStyle + '><a class="ag-text-style" id="reportTable2" title="二维表">' + params.value + '<a/></span>';
             }
 
             //分组无数据时容错
@@ -902,6 +938,10 @@ let config = {
             let obj2 = {
                 table_id: this.data.tableId
             }
+            if( this.data.viewMode == 'reportTable2' ){
+                obj2['is_report'] = 1;
+                obj2['project'] = this.data.project;
+            }
             let preferenceData = dataTableService.getPreferences(obj1);
             let headerData = dataTableService.getColumnList(obj2);
             let sheetData = dataTableService.getSheetPage( obj2 );
@@ -916,6 +956,13 @@ let config = {
         },
         //设置表头数据
         setHeaderData: function ( res ) {
+            if( res[0].is_report == 1 && this.data.firstReportTable ){
+                //二维表
+                this.data.viewMode = 'reportTable2';
+                this.actions.getHeaderData();
+                this.data.firstReportTable = false;
+                return;
+            }
             dgcService.setPreference( res[0],this.data );
             this.data.myGroup = (res[0]['group'] != undefined) ? JSON.parse(res[0]['group'].group) : [];
             this.data.fieldsData = res[1].rows || [];
@@ -1070,7 +1117,7 @@ let config = {
         //请求表格数据
         getGridData: function (refresh) {
             //在途数据
-            if( this.data.viewMode == 'in_process' ){
+            if( this.data.viewMode == 'in_process' || this.data.viewMode == 'reportTable2' ){
                 this.actions.getInprocessData(refresh);
                 return;
             }
@@ -1323,6 +1370,10 @@ let config = {
                     }
                 }
             }
+            //二维表
+            if( this.data.viewMode == 'reportTable2' ){
+                json['is_report'] = 1;
+            }
             if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
                 json['rows'] = 99999;
                 json['first'] = 0;
@@ -1476,7 +1527,7 @@ let config = {
             //     this.append(new fastSearch(d), this.el.find('.fast-search-con'))
             // }
             //渲染分页
-            let noPagination = ['in_process','viewFromCorrespondence','editFromCorrespondence','newFormCount']
+            let noPagination = ['in_process','viewFromCorrespondence','editFromCorrespondence','newFormCount','reportTable2']
             if( noPagination.indexOf( this.data.viewMode ) == -1 ){
                 this.data.pagination = true;
                 let paginationData = {
@@ -1626,6 +1677,20 @@ let config = {
             //分组样式
             if( this.data.groupCheck && !param["data"].children && this.groupGridCom.data.group && this.groupGridCom.data.group.length != 0 && param["data"].myfooter == undefined ){
                 return {background:'#E6F7FF'};
+            }
+            //二维表样式
+            //二维表单不可编辑区域上色
+            if(param["data"] && param["data"]["can_edit"] == 0 && this.data.viewMode == 'reportTable2'){
+                if(param["data"]["num"] == ""){
+                    return;
+                }
+                if(param["data"]["num"].length <= 2){
+                    return {background:'rgba(250,235,180,0.9)',fontWeight:'bold'};
+                }else if(param["data"]["num"].length <= 4){
+                    return {background:'rgba(250,235,180,0.6)',fontWeight:'bold'};
+                }else{
+                    return {background:'rgba(250,235,180,0.3)',fontWeight:'bold'};
+                }
             }
         },
         //创建sheet分页数据
@@ -1785,7 +1850,7 @@ let config = {
                     let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
 
                     let title = '新增'
-                    this.actions.openSourceDataGrid( url,title );
+                    this.actions.openSelfIframe( url,title );
                 } )
             }
             //在途刷新
@@ -1812,7 +1877,11 @@ let config = {
                     if( this.data.firstCreateEditCol ){
                         this.data.firstCreateEditCol = false;
                         //创建编辑模式表头
-                        FormService.getStaticData({table_id: this.data.tableId}).then( res=>{
+                        let j = {table_id: this.data.tableId}
+                        if( this.data.viewMode == 'reportTable2' ){
+                            j['is_report'] = 1;
+                        }
+                        FormService.getStaticData(j).then( res=>{
                             for( let d of res.data ){
                                 this.data.colControlData[d.dfield] = d;
                             }
@@ -1825,11 +1894,19 @@ let config = {
                     }
                 } )
                 this.el.find( '.edit-btn-cancel' ).on( 'click',()=>{
-                    this.actions.onEditSave(true);
+                    if( this.data.viewMode == 'reportTable2' ){
+                        this.actions.onEditSave2(true);
+                    }else {
+                        this.actions.onEditSave(true);
+                    }
                 } )
                 this.el.find( '.edit-btn-save' ).on( 'click',()=>{
                     //保存
-                    this.actions.onEditSave();
+                    if( this.data.viewMode == 'reportTable2' ){
+                        this.actions.onEditSave2();
+                    }else {
+                        this.actions.onEditSave();
+                    }
                 } )
             }
             //点击这里
@@ -1944,6 +2021,61 @@ let config = {
                 } )
                 HTTP.flush();
             }
+        },
+        onCellValueChanged: function (event) {
+            if(!this.data.cellChangeValue[event['colDef']['colId']]) {
+                let obj = {};
+                obj[event['data']['_id']] = event['newValue'];
+                this.data.cellChangeValue[event['colDef']['colId']] = obj;
+            }else{
+                this.data.cellChangeValue[event['colDef']['colId']][event['data']['_id']]=event['newValue'];
+            }
+        },
+        //二维表保存
+        onEditSave2: function (cancel) {
+            this.agGrid.gridOptions.api.stopEditing(false);
+            setTimeout( ()=>{
+                this.data.editRowTotal = 0;
+                for( let k in this.data.cellChangeValue ){
+                    this.data.editRowTotal++;
+                    break;
+                }
+                if( cancel ){
+                    if( this.data.editRowTotal > 0 ){
+                        msgBox.confirm( '数据已经修改，是否取消？' ).then( r=>{
+                            if( r ){
+                                this.actions.toogleEdit();
+                                this.actions.getGridData();
+                            }
+                        } )
+                    }else {
+                        this.actions.toogleEdit();
+                    }
+                    return;
+                }
+                //保存
+                let json = {
+                    table_id: this.data.tableId,
+                    data: JSON.stringify(this.data.cellChangeValue),
+                    project:this.data.project,
+                    parent_table_id:this.data.parentTableId || "",
+                    parent_real_id:this.data.parentRealId || "",
+                    rowId:this.data.parentRealId || "",
+                    is_filter:this.data.parentTableId?1:"",
+                    is_report:1,
+                    tableType:this.data.parentTableId?'count':"",
+                    // fieldId:this.fieldId1 || ""
+                };
+                dataTableService.refreshReport(json).then(res=>{
+                    if(res.success){
+                        this.rowData = res.rows;
+                        this.data.cellChangeValue={};
+                        this.actions.getGridData();
+                        msgBox.showTips( '保存成功' );
+                        this.actions.toogleEdit();
+                    }
+                });
+            },500 )
         },
         saveEdit(targetRow,ids){
             let json = dgcService.abjustTargetRow(targetRow,ids);
@@ -2360,6 +2492,14 @@ let config = {
             if( !data.data || this.data.isEditable || data.data.myfooter || this.data.doubleClick ){
                 return;
             }
+            if(this.data.viewMode == 'reportTable2'){
+                if(data.data.can_edit == 1){
+                    data.column.cellEditor = "";
+                }
+                else{
+                    data.column.cellEditor = true;
+                }
+            }
             console.log( "onCellClicked数据" )
             console.log( data )
             //分组重新渲染序号
@@ -2575,6 +2715,57 @@ let config = {
                 let winTitle = this.data.tableName + '->' + obj.tableName;
                 this.actions.openSourceDataGrid( url,winTitle );
             }
+            //二维表数据穿透
+            if( data.event.target.id == 'reportTable2' ){
+                //查找对应列的colId
+                if(data.value == 0){
+                    return
+                }
+                let current_colId = data.colDef.colId;
+                let val = data.value;
+                let real_colId = '';
+                let project = '';
+                for(let k in data.data){
+                    if(val == data.data[k] && current_colId != k){
+                        real_colId = k;
+                        break;
+                    }
+                }
+                //查询信息
+                let cols = data.columnApi._columnController.getAllGridColumns()
+                let break_num = 0;
+                let data_colDef;
+                for(let i = 0;i<cols.length;i++){
+                    //查找对应项目名称
+                    if(cols[i].colDef.headerName == "项目名称"){
+                        project = data.data[cols[i].colId];
+                        break_num++;
+                    }
+                    //查找对应列所有信息
+                    if(cols[i].colId == real_colId){
+                        data_colDef = JSON.parse(JSON.stringify(cols[i]['colDef']));
+                        break_num++;
+                    }
+                    if(break_num == 2){
+                        break;
+                    }
+                }
+                console.log( "二维表数据穿透" )
+                let obj = {
+                    tableId: data_colDef.source_table_id,
+                    tableName: data_colDef.source_table_name,
+                    parentTableId: this.data.tableId,
+                    tableType: '',
+                    rowId: data.data._id,
+                    parentRealId: data.data._id,
+                    fieldId: data_colDef.field_content.count_field,
+                    project: project,
+                    viewMode: 'reportTable2'
+                }
+                let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
+                let winTitle = this.data.tableName + '->' + obj.tableName;
+                this.actions.openSourceDataGrid( url,winTitle );
+            }
             //点击操作列
             if( data.colDef.headerName == "操作" ){
                 this.actions.gridHandle( data )
@@ -2619,11 +2810,13 @@ let config = {
                     temp_id: data.data.temp_id || '',
                     record_id: data.data.record_id || '',
                     btnType: btnType,
-                    is_view:1
+                    is_view:1,
+                    in_process: (this.data.viewMode == 'in_process' || data["data"]["status"] == 2) ? 1 : 0,
+                    is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                 };
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
-                this.actions.openSourceDataGrid( url,title );
+                this.actions.openSelfIframe( url,title );
             }
             if( data.event.srcElement.className == 'gridEdit' ){
                 this.actions.viewOrEditPerm( 'edit' );
@@ -2635,10 +2828,13 @@ let config = {
                     parent_temp_id: this.data.parentTempId,
                     parent_record_id: this.data.parentRecordId,
                     real_id: data.data._id,
-                    btnType: 'edit' };
+                    btnType: 'edit',
+                    in_process: (this.data.viewMode == 'in_process' || data["data"]["status"] == 2) ? 1 : 0,
+                    is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
+                };
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '编辑'
-                this.actions.openSourceDataGrid( url,title );
+                this.actions.openSelfIframe( url,title );
             }
             if( data.event.srcElement.className == 'gridHistory' ){
                 console.log( '历史' )
@@ -2746,14 +2942,16 @@ let config = {
                 temp_id: data.data.temp_id || '',
                 record_id: data.data.record_id || '',
                 btnType: 'view',
-                is_view:1
+                is_view:1,
+                in_process: (this.data.viewMode == 'in_process' || data["data"]["status"] == 2) ? 1 : 0,
+                is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
             };
             if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
                 obj.btnType = 'none';
             }
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
             let title = '查看'
-            this.actions.openSourceDataGrid( url,title );
+            this.actions.openSelfIframe( url,title );
         },
         //设置失效
         setInvalid: function () {
@@ -2782,6 +2980,19 @@ let config = {
                     this.actions.returnBatchData( data.ids );
                     this.actions.getGridData();
                 }
+            } )
+        },
+        //打开局部的弹窗
+        openSelfIframe: function ( url,title,w,h ) {
+            PMAPI.openDialogToSelfByIframe( url,{
+                    width: w || 1400,
+                    height: h || 800,
+                    title: title,
+                    modal:true,
+                    defaultMax: true,
+                    // customSize: true
+            } ).then( (data)=>{
+
             } )
         },
         //返回批量工作流导入后数据
@@ -2848,6 +3059,7 @@ let config = {
             onSortChanged: this.actions.onSortChanged,
             onDragStopped: this.actions.onDragStopped,
             onCellClicked: this.actions.onCellClicked,
+            onCellValueChanged: this.actions.onCellValueChanged,
             onRowDoubleClicked: this.actions.onRowDoubleClicked,
             setRowStyle: this.actions.setRowStyle,
             rowDataChanged: this.actions.rowDataChanged,
