@@ -68,7 +68,6 @@ let config = {
             if (!this.data.singleMode) {
                 this.data.headerComponents.data.menus[this.currentViewId].actions.focus();
             }
-            ;
             this.data.cells = new CanvasCellsComponent(this.currentViewId);
             this.data.cells.render(this.el.find('.cells-container'));
         },
@@ -96,7 +95,7 @@ let config = {
          */
         destroyCanvasCells() {
             this.data.cells.destroySelf();
-            this.el.find('.component-bi-canvas-main').append("<div class='cells-container client'></div>")
+            this.el.find('.component-bi-canvas-main').append("<div class='cells-container client "+ this.data.editMode +"'></div>")
         }
     },
     afterRender() {
