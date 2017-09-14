@@ -61,7 +61,7 @@ let config ={
                 $listParent.append($li);
             }
             //添加清除历史记录按钮
-            $("<li class='delete-all-history'>清除所有搜索记录</li>>").appendTo($listParent);
+            $("<li class='delete-all-history'>清除所有搜索记录</li>").appendTo($listParent);
         },
         //监听用户输入，设置搜索内容，在历史记录中查找匹配内容
         setSearchContent:function (event) {
