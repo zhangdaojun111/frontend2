@@ -197,8 +197,7 @@ let config = {
         },
     ],
     afterRender: function() {
-
-        PMAPI.subscribe(PMENUM.open_iframe_params, params => {
+        PMAPI.getIframeParams(window.config.key).then(params => {
             this.data.emailStatus = params.data.emailStatus;
             this.data.smsStatus = params.data.smsStatus;
             this.data.emailAddressList = params.data.emailAddressList;
