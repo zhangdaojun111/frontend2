@@ -19,16 +19,17 @@ let config = {
         xOld: [], //保存历史数据x轴字段
     },
     actions: {
+
         echartsInit() {
             let echartsService = new EchartsService(this.data);
             this.normalChart = echartsService;
         },
 
-        updateChart() {
+        updateChart(data) {
             //重新渲染echarts
-            const option = this.normalChart.lineBarOption(this.data.cellChart);
-            this.normalChart.myChart.setOption(option);
-            this.normalChart.myChart.resize();
+            const option = this.normalChart.lineBarOption(data);
+            console.log(option);
+            this.normalChart.myChart.setOption(option,true);
         },
 
         /**
@@ -100,7 +101,7 @@ let config = {
                     if (res[0]['data']['data']['xAxis'].length > 0 && res[0]['data']['data']['yAxis'].length > 0) {
                         this.data.cellChart['chart']['data']['xAxis'] = res[0]['data']['data']['xAxis'];
                         this.data.cellChart['chart']['data']['yAxis'] = res[0]['data']['data']['yAxis'];
-                        this.actions.updateChart();
+                        this.actions.updateChart(this.data.cellChart);
                     }
                 } else {
                     msgbox.alert(res[0]['error']);
@@ -134,6 +135,9 @@ let config = {
     },
     firstAfterRender() {
         this.actions.echartsInit();
+    },
+    beforeDestory() {
+
     }
 }
 
@@ -158,10 +162,10 @@ export class CellNormalComponent extends CellBaseComponent {
                 xAxis.push(val.name);
             }
         });
+        let cellChart = _.cloneDeep()
         this.data.cellChart['chart']['data']['xAxis'] = xAxis;
         this.data.cellChart['chart']['data']['yAxis'] = data.yAxis;
-        console.log(this.data.cellChart['chart']['data']['yAxis']);
-        console.log(this.data.cellChart['chart']['data']['xAxis'])
-        // this.actions.updateChart()
+        let data = _.cloneDeep(this.data.cellChart);
+        this.actions.updateChart()
     }
 }

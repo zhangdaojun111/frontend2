@@ -55,7 +55,6 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     lineBarOption(cellChart) {
-        console.log(cellChart);
         let cellOption = cellChart['chart'];
         let ySelectedGroup = cellChart['chart']['ySelectedGroup'];
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {

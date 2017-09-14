@@ -59,13 +59,6 @@ let config = {
                     if (res['success'] !== 1) {
                         msgbox.showTips(res['error']);
                     } else {
-                        originalData.yAxis = [];
-                         data.attribute.map((item,index) => {
-                            let val = JSON.parse(item);
-                            if (val.selected) {
-                                originalData.yAxis.push(yAxis[index])
-                            }
-                        });
 
                         this.trigger('onUpdateOriginal', originalData);
                     };
