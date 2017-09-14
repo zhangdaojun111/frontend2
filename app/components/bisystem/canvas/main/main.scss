@@ -43,19 +43,11 @@ $active-color: #1caeff;
     &.manage {
         margin: 0 0 0 250px;
     }
-
-    .editpage {
+    //编辑按钮
+    .to-edit-page {
         position: fixed;
         bottom: 10px;
-        z-index: 99999;
-        text-align: center;
-        right: 25px;
-    }
-    //单页 多页 按钮跳转
-    .switch-button {
-        position: fixed;
-        bottom: 10px;
-        z-index: 10;
+        z-index: 199;
         text-align: center;
         right: 25px;
         .mat-fab {
@@ -75,14 +67,12 @@ $active-color: #1caeff;
             color: #337ab7;
         }
     }
-    .singlepage {
-        right: 90px;
-    }
     .cells-container {
         position: absolute;
         width: 100%;
         height: calc(100% - 51px);
         overflow: auto;
+        z-index: 100;
         &.client {
             background: $canvasCellsBg;
             .cells {

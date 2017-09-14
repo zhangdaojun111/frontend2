@@ -21,9 +21,9 @@ let config = {
         // 编辑模式
         {
             event: 'click',
-            selector: '.editpage',
+            selector: '.to-edit-page',
             callback: function (context, event) {
-
+                //编辑模式Iframe
                 PMAPI.openDialogByIframe(
                     '/bi/manager/',
                     {
@@ -32,7 +32,6 @@ let config = {
                         customSize: true
                     }
                 ).then((data) => {
-
                         location.reload();
                     }
                 );
