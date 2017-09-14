@@ -1125,7 +1125,7 @@ let config = {
                 this.actions.getNewFormCountData(refresh);
                 return;
             }
-            if( this.data.viewMode == 'keyword' ){
+            if( this.data.viewMode != 'normal' ){
                 this.data.firstGetFooterData = false;
             }
             let postData = this.actions.createPostData();
