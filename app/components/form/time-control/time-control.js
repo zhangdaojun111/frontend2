@@ -104,7 +104,7 @@ let config = {
         this.el.find('.ui-width').css('width', this.data.width);
         this.el.find('.time').css('width', this.data.width);
         //修改历史
-        if (this.data.history) {
+        if ( !this.data.isAgGrid && this.data.history) {
             this.el.find('.ui-history').css('visibility', 'visible');
         }
         //查看模式/编辑模式
