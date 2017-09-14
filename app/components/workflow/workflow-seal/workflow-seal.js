@@ -56,7 +56,6 @@ let config = {
          */
         delImg(stmp){
             let msg = $(stmp).attr("id");
-            console.log(msg);
             Mediator.publish("workflow:delImg",{"file_id":msg});
             Mediator.publish("workflow:getStamp");
         },
