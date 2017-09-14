@@ -2473,6 +2473,9 @@ let config = {
         },
         //触发排序事件
         onSortChanged: function ($event) {
+            if( this.data.frontendSort ){
+                this.agGrid.actions.refreshView();
+            }
             if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' || this.data.frontendSort ){
                 return;
             }
