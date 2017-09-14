@@ -104,7 +104,7 @@ let config = {
         this.el.find('.ui-width').css('width', this.data.width);
         this.el.find('.time').css('width', this.data.width);
         //修改历史
-        if (this.data.history) {
+        if ( !this.data.isAgGrid && this.data.history) {
             this.el.find('.ui-history').css('visibility', 'visible');
         }
         //查看模式/编辑模式
@@ -213,9 +213,11 @@ let config = {
         this.el.find('.timeInput').on('input', _.debounce(function () {
             _this.actions.keyup();
         }, 200));
-        _.debounce(function () {
-            _this.events.changeValue(_this.data)
-        }, 200)();
+        if(!_this.data.isAgGrid){
+            _.debounce(function () {
+                _this.events.changeValue(_this.data)
+            }, 200)();
+        }
 
     },
     beforeDestory: function () {
