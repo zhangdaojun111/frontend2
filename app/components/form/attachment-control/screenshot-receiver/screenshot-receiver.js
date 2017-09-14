@@ -6,6 +6,34 @@ import template from './screenshot-receiver.html'
 import Component from "../../../../lib/component";
 import './screenshot-receiver.scss';
 
+let css = `
+.screenshot {
+  max-width: 500px;
+  min-height: 250px;
+  background: white;
+  border: 1px solid #ccc;
+}
+
+.paste-tip {
+  height: 40px;
+  line-height: 40px;
+  font-size: 30px;
+  color: gray;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  text-align: center;
+  padding: 110px 0;
+}
+
+.screenshot-image {
+  height: 100%;
+  width: 100%;
+}
+`;
+
 export const screenShotConfig={
     template:template,
     binds:[
@@ -32,21 +60,27 @@ export const screenShotConfig={
                     return;
                 }
                 this.data.imageEle.remove();
-                t.el.find('.paste-tip').css('display','block');
+                this.el.find('.paste-tip').css('display','block');
                 this.data.file = '';
             }
         }
     ],
     data:{
         file:'',
+        css:css.replace(/(\n)/g, '')
     },
     afterRender:function () {
+        this.data.style = $('<style type="text/css"></style>').text(this.data.css).appendTo($("head"));
         let t = this;
         this.el.on('paste',(event)=>{
+            console.log('paste');
+            console.dir(event);
+            console.dir(this.data.file);
             if(this.data.file != ''){
                 return;
             }
             var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+            console.dir(items);
             for (let index in items) {
                 var item = items[index];
                 if (item.kind === 'file') {
@@ -65,6 +99,9 @@ export const screenShotConfig={
                 }
             }
         });
+    },
+    beforeDestory:function () {
+        this.data.style.remove();
     }
 }
 
