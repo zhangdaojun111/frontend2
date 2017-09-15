@@ -140,7 +140,6 @@ export class CanvasOriginalDataComponent extends Component {
      */
     static handleOriginalData(originalData) {
         let data = _.cloneDeep(originalData);
-
         // 如果select有数据就用select的数据 select = xAxis
         if (data.cellChart.cell.select.length  === 0) {
             data.cellChart.cell.select = data.cellChart.chart.data.xAxis.map(name => {
