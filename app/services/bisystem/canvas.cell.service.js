@@ -86,7 +86,7 @@ export const canvasCellService = {
             url: '/bi/set_new_bi_deep/',
             data: data,
             // contentType: "application/json; charset=utf-8",
-            method:'get',
+            method:'post',
             traditional: true
         });
         return new Promise((resolve, reject) => {

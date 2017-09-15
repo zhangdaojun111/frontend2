@@ -16,9 +16,14 @@ export class CellBaseComponent extends Component {
      * @param data = 原始数据数据,container = 原始数据放置容器
      */
     showCellDataSource(data = null,container) {
+        let me = this;
         let dataSource = new CanvasOriginalDataComponent(data, {
             onUpdateOriginal: (data) => {
-                this.UpdateOriginal(data)
+                this.updateOriginal(data)
+            },
+            onUpdateDeepOriginal: async function(name){
+                let res = await me.updateOriginalDeep(name);
+                this.actions.updateOriginal(res);
             }
         });
         this.append(dataSource,container);
@@ -28,5 +33,11 @@ export class CellBaseComponent extends Component {
      * 当原始数据改变时，更新画布块数据
      * @data 需要更新的数据
      */
-    UpdateOriginal(data) {}
+    updateOriginal(data) {}
+
+    /**
+     * 当原始数据下穿动作
+     * @name 下穿x轴字段名称
+     */
+    updateOriginalDeep(name) {}
 }

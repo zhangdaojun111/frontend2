@@ -21,9 +21,11 @@ let config = {
          */
         addCell() {
             const layout = {
+                attribute:[],
                 layout_id: '',
                 chart_id: '',
                 name: '',
+                select:[],
                 size: {
                     left: 100,
                     top: 100,

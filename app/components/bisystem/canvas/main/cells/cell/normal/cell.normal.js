@@ -19,9 +19,54 @@ let config = {
         xOld: [], //保存历史数据x轴字段
     },
     actions: {
+        /**
+         * 当有原始数据保存的时候，优先处理原始数据
+         */
+        handleOriginal() {
+            let cellChart = _.cloneDeep(this.data.cellChart);
+            let [xAxis,yAxisRemoveDataIndex] = [[],[]];
+            console.log(this.data.cellChart.cell);
+            this.data.cellChart.cell.select.forEach((item,index) => {
+                console.log(item);
+                let val = JSON.parse(item);
+                if (val.select) {
+                    xAxis.push(val.name);
+                } else {
+                    yAxisRemoveDataIndex.push(index);
+                }
+            });
+            let yAxis = [];
+            console.log(xAxis);
+            this.data.cellChart.cell.attribute.map((item,index) => {
+                if (JSON.parse(item).selected) {
+                    yAxis.push(cellChart['chart']['data']['yAxis'][index])
+                };
+            });
 
+            yAxis.forEach((item) => {
+                let itemData = [];
+                item.data.forEach((val,index,arrays) => {
+                    let isRemove = yAxisRemoveDataIndex.toString().indexOf(index) ;
+                    if (isRemove === -1) {
+                        itemData.push(val)
+                    }
+                });
+                item.data = itemData;
+            });
+            cellChart['chart']['data']['xAxis'] = xAxis;
+            cellChart['chart']['data']['yAxis'] = yAxis;
+            return cellChart;
+        },
         echartsInit() {
-            let echartsService = new EchartsService(this.data);
+            let chartData;
+            if (this.data.cellChart.cell.attribute.length > 0 || this.data.cellChart.cell.select.length > 0) {
+                let cellChart = this.actions.handleOriginal();
+                console.log(cellChart);
+                chartData = _.cloneDeep(this.data);
+                chartData.cellChart = cellChart;
+            };
+            console.log(chartData);
+            let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.normalChart = echartsService;
         },
 
@@ -101,11 +146,13 @@ let config = {
                     if (res[0]['data']['data']['xAxis'].length > 0 && res[0]['data']['data']['yAxis'].length > 0) {
                         this.data.cellChart['chart']['data']['xAxis'] = res[0]['data']['data']['xAxis'];
                         this.data.cellChart['chart']['data']['yAxis'] = res[0]['data']['data']['yAxis'];
+                        this.data.cellChart['cell']['attribute'] = [];
+                        this.data.cellChart['cell']['select'] = [];
                         this.actions.updateChart(this.data.cellChart);
                     }
                 } else {
                     msgbox.alert(res[0]['error']);
-                }
+                };
 
             } else {
                 if (next) {
@@ -150,29 +197,20 @@ export class CellNormalComponent extends CellBaseComponent {
     /**
      * 当原始数据改变时，同步this.data
      * @param data
-     * @constructor
      */
-    UpdateOriginal(data) {
+    updateOriginal(data) {
         this.data.cellChart.cell.attribute = data.attribute;
         this.data.cellChart.cell.select = data.select;
-        let xAxis = [];
-        this.data.cellChart.cell.select.forEach(item => {
-            let val = JSON.parse(item);
-            if (val.select) {
-                xAxis.push(val.name);
-            }
-        });
-        this.data.cellChart['chart']['data']['xAxis'] = xAxis;
-        let yAxis = [];
-        data.attribute.map((item,index) => {
-            if (JSON.parse(item).selected) {
-                yAxis.push(this.data.cellChart['chart']['data']['yAxis'][index])
-            };
-        });
-        let cellChart = _.cloneDeep(this.data.cellChart);
-        cellChart['chart']['data']['yAxis'] = yAxis;
-        console.log('==================');
-        console.log(cellChart);
+        let cellChart = this.actions.handleOriginal();
         this.actions.updateChart(cellChart);
+    }
+
+    /**
+     * 当原始数据点击下穿时，更新画布块数据
+     * @param data
+     */
+    async updateOriginalDeep(name) {
+       let res = await this.actions.CanvasDeep(name);
+       return Promise.resolve(this.data);
     }
 }
