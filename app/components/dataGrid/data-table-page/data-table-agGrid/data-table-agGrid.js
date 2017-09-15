@@ -2480,7 +2480,7 @@ let config = {
                 setTimeout( ()=>{
                     this.hideLoading();
                     this.data.showTabs( 1 );
-                },200 )
+                },500 )
             }
             if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' || this.data.frontendSort ){
                 return;
