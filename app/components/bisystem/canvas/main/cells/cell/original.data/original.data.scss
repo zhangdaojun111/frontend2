@@ -7,16 +7,16 @@
 }
 
 .origin-data-wrap {
-    height: calc(100% - 26px);
+    height: calc(100%);
     overflow: hidden;
     position: absolute;
-    top: 26px;
+    top: 0;
     left: 0;
     background: rgba(255, 255, 255, .9);
     .bi-origin-data-close {
         position: absolute;
-        top: 5px;
-        right: 15px;
+        top: 10px;
+        right: 10px;
         height: 16px;
         width: 16px;
         text-align: center;
