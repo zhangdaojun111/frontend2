@@ -155,24 +155,29 @@ export class CellNormalComponent extends CellBaseComponent {
     UpdateOriginal(data) {
         this.data.cellChart.cell.attribute = data.attribute;
         this.data.cellChart.cell.select = data.select;
+        let cellChart = _.cloneDeep(this.data.cellChart);
         let xAxis = [];
-        this.data.cellChart.cell.select.forEach(item => {
+        this.data.cellChart.cell.select.forEach((item,index) => {
             let val = JSON.parse(item);
             if (val.select) {
                 xAxis.push(val.name);
+            } else {
+                // 过滤y轴与x轴没有被选择相同索引的数据
+                cellChart['chart']['data']['yAxis'].forEach(y => {
+                    y.data.splice(index, 1)
+                })
             }
         });
-        this.data.cellChart['chart']['data']['xAxis'] = xAxis;
         let yAxis = [];
         data.attribute.map((item,index) => {
             if (JSON.parse(item).selected) {
                 yAxis.push(this.data.cellChart['chart']['data']['yAxis'][index])
             };
         });
-        let cellChart = _.cloneDeep(this.data.cellChart);
+        cellChart['chart']['data']['xAxis'] = xAxis;
         cellChart['chart']['data']['yAxis'] = yAxis;
         console.log('==================');
-        console.log(cellChart);
+        console.log(cellChart['chart']['data']['yAxis']);
         this.actions.updateChart(cellChart);
     }
 }
