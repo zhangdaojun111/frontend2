@@ -167,8 +167,8 @@ let systemMessageUtil = {
         let systemMessage = new SystemMessage();
         systemMessage.render(this.el);
         this.el.erdsDialog({
-            width: 1298,
-            height: 575,
+            width: 1200,
+            height: 580,
             modal: true,
             title: '消息提醒',
             close: function () {

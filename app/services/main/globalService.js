@@ -22,7 +22,7 @@ export const GlobalService = {
     },
     getOnlineColumnDefs:function () {       //获取在线人员列表表头
         return [
-            _.defaultsDeep({headerName: '序号', width: 60}, dgcService.numberCol),
+            _.defaultsDeep({headerName: '序号', width: 40}, dgcService.numberCol),
             {
                 headerName: '姓名',
                 field: 'name',
@@ -35,7 +35,7 @@ export const GlobalService = {
             {
                 headerName: '是否在职',
                 field: 'is_active',
-                width: 80,
+                width: 110,
                 suppressMenu: true,
                 tooltipField: 'is_active',
                 cellStyle: {'text-align': 'center'},
@@ -44,7 +44,7 @@ export const GlobalService = {
             {
                 headerName: '用户类型',
                 field: 'is_superuser',
-                width: 80,
+                width: 108,
                 suppressMenu: true,
                 tooltipField: 'is_superuser',
                 cellStyle: {'text-align': 'center'},
@@ -63,7 +63,7 @@ export const GlobalService = {
             {
                 headerName: '登录IP',
                 field: 'login_ip',
-                width: 120,
+                width: 140,
                 suppressMenu: true,
                 tooltipField: 'login_ip',
                 cellStyle: {'text-align': 'center'},
@@ -90,7 +90,7 @@ export const GlobalService = {
             {
                 headerName: 'app版本',
                 field: 'version',
-                width: 150,
+                width: 190,
                 suppressMenu: true,
                 tooltipField: 'version',
                 cellStyle: {'text-align': 'center'},
@@ -99,7 +99,7 @@ export const GlobalService = {
             {
                 headerName: 'Session失效时间',
                 field: 'expire',
-                width: 120,
+                width: 140,
                 suppressMenu: true,
                 tooltipField: 'expire',
                 cellStyle: {'text-align': 'center'},

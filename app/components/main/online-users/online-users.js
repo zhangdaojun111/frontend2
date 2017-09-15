@@ -82,8 +82,8 @@ export const OnlineDisplay = {
         component.render(this.el);
         this.el.erdsDialog({
             title: '在线用户',
-            width: 1082,
-            height: 575,
+            width: 1200,
+            height: 580,
             modal: true,
             close: function() {
                 $(this).erdsDialog('destroy');
