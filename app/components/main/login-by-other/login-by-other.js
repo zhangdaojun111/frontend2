@@ -110,7 +110,7 @@ export default {
             height: 500,
             modal: true,
             close: function() {
-                $(this).dialog('destroy');
+                $(this).erdsDialog('destroy');
                 component.destroySelf();
             }
         });
