@@ -51,7 +51,7 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
             console.log($(this));
             this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
             this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "ui-icon-newwin");
-            this._addClass($(this.uiDialog[0]), "ui-dialog-maximize");
+            // this._addClass($(this.uiDialog[0]), "ui-dialog-maximize");
             $(this.uiDialogTitlebarFull[0].firstChild).attr('title','还原');
         }
     },
@@ -64,7 +64,7 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
         if (this.uiDialogTitlebarFull) {
             this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "ui-icon-newwin");
             this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
-            this._removeClass($(this.uiDialog[0]), "ui-dialog-maximize");
+            // this._removeClass($(this.uiDialog[0]), "ui-dialog-maximize");
             $(this.uiDialogTitlebarFull[0].firstChild).attr('title','全屏');
         }
     },

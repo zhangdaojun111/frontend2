@@ -26,6 +26,7 @@
             float: none;
             color: #666;
             font-weight: normal;
+            font-size: 12px;
         }
         .ui-dialog-titlebar-close, .ui-dialog-titlebar-full {
             outline: none;
@@ -62,10 +63,6 @@
 
     &.ui-dialog-shadow{
         box-shadow: 0px 0px 5px rgba(0,0,0,0.4);
-    }
-
-    &.ui-dialog-maximize{
-        top: 0 !important;
     }
 }
 

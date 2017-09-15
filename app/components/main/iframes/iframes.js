@@ -6,7 +6,7 @@ import template from './iframe.html';
 import Mediator from '../../../lib/mediator';
 import './iframe.scss';
 import {PMAPI, PMENUM} from '../../../lib/postmsg';
-import {SaveView} from "./save-view/save-view"
+import {SaveView} from "./new-save-view/new-save-view"
 import {TabService} from "../../../services/main/tabService"
 
 // let IframeOnClick = {
@@ -72,6 +72,7 @@ export const IframeInstance = new Component({
         tabWidth:150,            //单个tabs长度，默认150（需和scss同步修改），空间不足以后自适应宽度
         minTabWidth:100,         //用于估算小屏设备最大tabs数量
         closeHistory:[],         //用于保存历史关闭记录，记录最近5个
+        saveViewOpen:false,
     },
     actions: {
         openIframe: function (id, url, name) {
@@ -444,6 +445,19 @@ export const IframeInstance = new Component({
                 let name = "搜索结果";
                 this.actions.openIframe(id,url,name);
             }
+        },
+        showViewSave:function () {
+            if(this.data.saveViewOpen === false){
+                this.el.find('.view-save-component').show();
+                this.data.saveViewOpen = true;
+            }else{
+                this.el.find('.view-save-component').hide();
+                this.data.saveViewOpen = false;
+            }
+        },
+        closeSaveViewPage:function () {
+            this.el.find('.view-save-component').hide();
+            this.data.saveViewOpen = false;
         }
     },
     binds:[
@@ -464,14 +478,14 @@ export const IframeInstance = new Component({
                 return false;
             },
         },
-        {
-            event:'click',
-            selector:'.view-save',
-            callback:function () {
-                let temp_arr = _.defaultsDeep([],this.data.sort);
-                SaveView.show(temp_arr);
-            }
-        },
+        // {
+        //     event:'click',
+        //     selector:'.view-save',
+        //     callback:function () {
+        //         let temp_arr = _.defaultsDeep([],this.data.sort);
+        //         SaveView.show(temp_arr);
+        //     }
+        // },
         {
             event:'mouseenter',
             selector:'.popup-icon',
@@ -507,6 +521,13 @@ export const IframeInstance = new Component({
                 this.actions.hideTabsPopup();
             }
         },
+        {
+            event:'click',
+            selector:'.view-save',
+            callback:function (target,event) {
+                this.actions.showViewSave();
+            }
+        }
     ],
     afterRender: function () {
         this.data.tabs = this.el.find('.tabs');
@@ -519,6 +540,10 @@ export const IframeInstance = new Component({
             that.actions.setTabsCount();
             that.actions.adaptTabWidth();
         });
+
+        //初始化保存视图组件
+        let saveView = new SaveView(this.data.sort,this.actions.closeSaveViewPage);
+        saveView.render(this.el.find('.view-save-component'));
 
         // this.el.on('click', '.tabs .item .close', function () {
         //     let id = $(this).attr('iframeid');

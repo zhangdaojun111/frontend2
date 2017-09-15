@@ -77,8 +77,15 @@
                 }
                 .single-select-group {
                     display: inline-block;
+                    height: 18px;
+                    line-height: 18px;
                     input{
                         cursor: pointer;
+                        vertical-align:middle;
+                        margin-top:-2px;
+                        margin-bottom:1px;
+                        width: 16px;
+                        height: 16px;
                     }
                 }
 
