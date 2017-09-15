@@ -6,7 +6,7 @@
 import template from './view-video.html';
 let css = `
     .videoList {
-    width: 20%;
+    width: 30%;
     height: 100%;
     float: left;
     margin-left: 14px;
@@ -26,12 +26,28 @@ let ViewVideo = {
     data: {
         css: css.replace(/(\n)/g, ''),
     },
+    binds:[
+        {
+            event:'click',
+            selector:'.select-video',
+            callback:function (event) {
+                if(id == this.data.currentVideoId){
+                    return;
+                }
+                let id = event.id;
+                let video = $(this.el.find('video'))[0];
+                video.pause();
+                this.el.find('video').find('source').attr('src',`../download_attachment/?file_id=${id}&download=0&dinput_type=${this.data.dinput_type}`);
+                video.load();
+                video.play();
+            }
+        }
+    ],
     actions:{
 
     },
     afterRender(){
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
-
         //没啥用的代码 写着玩的
         // let _this=this;
         // this.data.video=this.el.find('video').get(0);

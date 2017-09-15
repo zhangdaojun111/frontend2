@@ -20,7 +20,6 @@ let config = {
     actions: {
         getFilterMenu: function (keyValue, subMenu) {
             CalendarSetService.filterMenu(keyValue, subMenu).then(res => {
-                console.log(res);
                 let filterMenu = res['menu'];
                 let calendarSetItem = new CalendarSettingItem();
                 filterMenu.forEach(item => {
@@ -46,7 +45,8 @@ let config = {
                 this.el.find('.calendar-setting-items').removeClass('hide-menu');
                 this.el.find('.calendar-setting-item').removeClass('hide');
             }
-        }
+        },
+
     },
     firstAfterRender: function () {
 
@@ -85,6 +85,7 @@ let config = {
             calendarSetItem.data.menuItem = item;
             this.append(calendarSetItem, this.el.find('.setting-content'));
         });
+
         Mediator.on('calendar-set-left:calendar-set', data => {
             this.el.find('.form-title').html('【' + data.label + '】');
             this.el.find('.calendar-setting-item-content').empty();
