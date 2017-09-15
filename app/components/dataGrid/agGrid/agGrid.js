@@ -70,7 +70,7 @@ let config = {
                 rowData: this.data.rowData,
                 floatingFilter: this.data.floatingFilter,
                 suppressFilterButton: true,
-                animateRows: false,
+                animateRows: true,
                 suppressMultiSort: true,
                 enableColResize: true,
                 enableSorting: true,

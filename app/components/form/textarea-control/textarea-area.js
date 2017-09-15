@@ -19,7 +19,7 @@ let config={
     ],
     afterRender(){
         let _this=this;
-        this.el.find('input').on('input',_.debounce(function(){
+        this.el.find('.textArea').on('input',_.debounce(function(){
             _this.data.value=$(this).val();
             _this.events.changeValue(_this.data);
         },300));
