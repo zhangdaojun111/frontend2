@@ -65,6 +65,13 @@ export const screenShotConfig={
                 }
             }
         });
+
+        //弹窗button位置不随横向滚动条滚动
+        t.el.find(".screenshot").parents().scroll(function () {
+           // console.log("滚啦")
+            let scrollLeft =  t.el.find(".screenshot").parents().scrollLeft();
+            t.el.find(".btn-save-rechoose").css('margin-right',-scrollLeft + 'px')
+        })
     }
 }
 
