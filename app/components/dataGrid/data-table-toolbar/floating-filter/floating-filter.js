@@ -103,7 +103,7 @@ let config = {
         },
         //解决汉字搜索第一次传空' '的问题
         keyupSearch: function($event,oInput,col_field,colInfo,searchType,searchOldValue,searchValue) {
-            let keyWord = colInfo == 'number' ? Number(oInput.value) : oInput;
+            let keyWord = colInfo == 'number' ? Number(oInput) : oInput;
             let searchOperate = colInfo == 'number' ? 'EQUALS' : 'CONTAINS';
             if( oInput == "" ){
                 keyWord = oInput;
