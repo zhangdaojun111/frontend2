@@ -162,10 +162,10 @@ export class CellNormalComponent extends CellBaseComponent {
                 xAxis.push(val.name);
             }
         });
-        let cellChart = _.cloneDeep()
-        this.data.cellChart['chart']['data']['xAxis'] = xAxis;
-        this.data.cellChart['chart']['data']['yAxis'] = data.yAxis;
-        let data = _.cloneDeep(this.data.cellChart);
-        this.actions.updateChart()
+        // let cellChart = _.cloneDeep()
+        // this.data.cellChart['chart']['data']['xAxis'] = xAxis;
+        // this.data.cellChart['chart']['data']['yAxis'] = data.yAxis;
+        // let data = _.cloneDeep(this.data.cellChart);
+        // this.actions.updateChart()
     }
 }
