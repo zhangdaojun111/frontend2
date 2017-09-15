@@ -12,6 +12,10 @@
     .ui-btn-box {
         margin-left: -20px;
     }
+    .df-input-radio-wrapper {
+        width: 12px;
+        height: 12px;
+    }
 }
 .form-version-table-user, .form-version-table-department, .form-default {
     font-size: 12px;
@@ -42,12 +46,6 @@
         border: 1px solid #ddd;
         -webkit-appearance: none;
         padding: 0 0 0 10px;
-    }
-
-    .df-input-radio-wrapper {
-        width: 12px;
-        height: 12px;
-        top: 0;
     }
 
 }

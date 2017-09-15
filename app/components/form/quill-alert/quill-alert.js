@@ -1392,6 +1392,7 @@ let QuillAlert = {
             theme: 'snow'
         });
         this.data.quill.pasteHTML(this.data.value);
+
     },
     beforeDestory() {
         this.data.quill = null;
