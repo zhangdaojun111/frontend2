@@ -105,7 +105,6 @@ let config = {
 
             //获取被点击的视图名称
             let name = event.currentTarget.attributes.view_id.value;
-            console.log(name);
             let tabIdList = [];
             for ( let k of this.data.favoriteList){
                 if ( k.name === name){

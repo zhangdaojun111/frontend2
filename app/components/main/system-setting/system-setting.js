@@ -130,7 +130,7 @@ let config = {
                     that.actions.saveSortResult();
                 }
             }).disableSelection();
-            
+
             this.el.find('.sortable-box:first').droppable({
                 accept:".sort-item",
             });
