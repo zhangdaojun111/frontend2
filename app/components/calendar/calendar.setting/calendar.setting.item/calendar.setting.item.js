@@ -16,11 +16,25 @@ let config = {
             $('.component-setting-menu').css({'padding-left': '20px'});
         }
     },
+    binds: [
+        // {
+        //     event: 'click',
+        //     selector: '.menu-item-title',
+        //     callback: function (temp = this) {
+        //         console.log(11);
+        //         // if($(temp).is(".has-hide")){
+        //         //     $(temp).removeClass('has-hide');
+        //         // }else{
+        //         //     $(temp).addClass('has-hide');
+        //         // }
+        //     }
+        // }
+    ],
     afterRender: function () {
         let _this = this;
-        if(this.data.menuItem['items']) {
+        if (this.data.menuItem['items']) {
             this.data.menuItem['items'].forEach(item => {
-                if(item['items']) {
+                if (item['items']) {
                     let component = new CalendarSettingItem();
                     component.actions.addTest();
                     component.data.menuItem = item;
