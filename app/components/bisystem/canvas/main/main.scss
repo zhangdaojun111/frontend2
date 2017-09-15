@@ -50,7 +50,7 @@ $active-color: #1caeff;
     .to-edit-page {
         position: fixed;
         bottom: 10px;
-        z-index: 199;
+        z-index: 99;
         text-align: center;
         right: 25px;
         .mat-fab {
@@ -75,7 +75,7 @@ $active-color: #1caeff;
         width: 100%;
         height: calc(100% - 51px);
         overflow: auto;
-        z-index: 100;
+        z-index: 90;
         &.client {
             background: $canvasCellsBg;
             .cells {
