@@ -3097,6 +3097,7 @@ let config = {
         if( this.data.viewMode == 'deleteHanding' ){
             PMAPI.getIframeParams(window.config.key).then((res) => {
                 this.data.deleteHandingData = res.data.obj.deleteHandingData || [];
+                this.actions.getHeaderData();
             })
         }
         this.actions.getHeaderData();
