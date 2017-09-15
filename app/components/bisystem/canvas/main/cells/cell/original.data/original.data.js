@@ -187,7 +187,6 @@ export class CanvasOriginalDataComponent extends Component {
                 return value;
             });
         }
-
         // 如果attribute有数据就用attribute的数据 attribute = yAxis
         if (data.cellChart.cell.attribute.length === 0) {
             data.cellChart.cell.attribute = data.cellChart.chart.yAxis.map(item => {
