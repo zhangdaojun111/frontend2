@@ -569,5 +569,4 @@ class LineBarEditor extends Base {
         super(config, data, event);
     }
 }
-
 export {LineBarEditor}
