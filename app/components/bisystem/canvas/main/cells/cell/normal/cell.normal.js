@@ -178,7 +178,6 @@ export class CellNormalComponent extends CellBaseComponent {
         cellChart['chart']['data']['yAxis'] = yAxis;
         console.log('==================');
         console.log(cellChart['chart']['data']['yAxis']);
-
         this.actions.updateChart(cellChart);
     }
 }
