@@ -107,10 +107,10 @@ let config = {
                 optionHtmlFour = `<option value="exact">等于</option>
                                   <option value="$ne">不等于</option>`;
             switch (type) {
-                case "datetime": this.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlTwo); break;
-                case "text": this.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlOne); break;
-                case "number": this.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlThree); break
-                case "person": this.inputNextObject.parent().find('.condition-search-select.relation').html(optionHtmlFour); break
+                case "datetime": this.el.find('.condition-search-select.relation').html(optionHtmlTwo); break;
+                case "text": this.el.find('.condition-search-select.relation').html(optionHtmlOne); break;
+                case "number": this.el.find('.condition-search-select.relation').html(optionHtmlThree); break
+                case "person": this.el.find('.condition-search-select.relation').html(optionHtmlFour); break
             }
         },
         delete: function() {
