@@ -10,6 +10,9 @@ export const CalendarTimeService = {
         let time = y + "-" + m;
         return this.moment(time,"YYYY-MM").daysInMonth();
     },
+    getDayDate: function () {
+        return this.moment().format('YYYY-MM-DD');
+    },
 
     getYear: function () {
         return this.moment().year();

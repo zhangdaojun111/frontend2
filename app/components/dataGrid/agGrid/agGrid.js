@@ -58,6 +58,8 @@ let config = {
         setRowStyle:function (param) {
         },
         rowDataChanged:function ($event) {
+        },
+        onCellValueChanged:function ($event) {
         }
     },
     gridOptions: GridOptions,
@@ -88,6 +90,7 @@ let config = {
                 onRowDataChanged: this.data.rowDataChanged,
                 //双击查看
                 onCellClicked: this.data.onCellClicked,
+                onCellValueChanged: this.data.onCellValueChanged,
                 //行双击
                 onRowDoubleClicked: this.data.onRowDoubleClicked,
                 //分组
@@ -147,7 +150,6 @@ let config = {
                 this.data.footerData = json.footerData;
                 this.gridOptions.api.setPinnedBottomRowData( json.footerData );
             }
-            // this.agGrid.gridOptions.api.redrawRows();
         },
         //宽度自适应
         autoWidth: function () {
@@ -159,7 +161,11 @@ let config = {
                 }
             }
             this.gridOptions.columnApi.autoSizeColumns( arr );
-        }
+        },
+        //刷新序号
+        refreshView: function () {
+            this.gridOptions.api.redrawRows();
+        },
     },
     afterRender: function (){
         this.actions.createGridOptions();

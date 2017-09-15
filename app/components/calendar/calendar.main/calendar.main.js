@@ -574,12 +574,16 @@ let config = {
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
+
+        // 是否请求工作流数据
         let approve = 'approve';
         for( let a of this.data.cancel_fields ){
             if( approve.indexOf( a ) === 0 ){
                 this.data.isShowWorkflowData = false;
             }
         }
+
+        // 订阅工作流数据
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.data.workflowData = data;
             //this.hideLoading();
@@ -587,6 +591,7 @@ let config = {
             this.actions.workflowMission();
         });
 
+        // 切换主视图
         Mediator.on('Calendar: changeMainView', data => {
             this.data.calendarContent = data.calendarContent;
             if(data.calendarContent === 'month') {
@@ -611,6 +616,8 @@ let config = {
                 }
             }
         });
+
+        // 刷新或导出
         Mediator.on('Calendar: tool', data => {
             if(data.toolMethod === 'refresh') {
                 this.data.cancel_fields = data['data'];
@@ -637,6 +644,7 @@ let config = {
                         width: '400',
                         height: '460',
                         title: '导出',
+                        modal: true,
                     },{
                         cancelFields: this.data.cancel_fields,
                     }).then(data => {
@@ -646,6 +654,7 @@ let config = {
 
         });
 
+        // 根据当前视图修改日期
         Mediator.on('Calendar: changeDate', data => {
             if(data === 'pre') {
                 if(this.data.calendarContent === 'month') {
@@ -672,6 +681,7 @@ let config = {
             }
         });
 
+        // 日程视图下根据所选日期获取日程数据
         let that = this;
         Mediator.on('calendarSchedule: date', data => {
             that.actions.getCalendarData({
@@ -684,6 +694,7 @@ let config = {
             that.data.scheduleEnd = data.to_date;
         });
 
+        // 获取左侧日历树中不显示数据
         Mediator.on('calendar-left:unshowData', data => {
             if(data['data']) {
                 this.data.isShowArr = data['data'];
@@ -713,6 +724,8 @@ let config = {
                 }
             }
         });
+
+        // 根据左侧日历树状态选择是否显示工作流数据
         Mediator.on('calendar-left:approveData', data => {
             if(data.data) {
                 this.data.isShowWorkflowData = true;
@@ -721,9 +734,7 @@ let config = {
             }
         });
 
-        /**
-         * 日历提醒的全局搜索
-         */
+        // 日历提醒全局搜索
         Mediator.on('Calendar: globalSearch', data => {
             if(data !== '') {
                 this.actions.search(data);
@@ -742,9 +753,7 @@ let config = {
             }
         });
 
-        /**
-         * 常用查询
-         */
+        // 根据左侧日历树是否选择常用查询过滤提醒数据
         Mediator.on('CalendarSelected: Search', data => {
             if(data) {
                 let json = {
@@ -762,6 +771,7 @@ let config = {
             }
         });
 
+        // 首页可修改字段修改后更新当前视图数据
         Mediator.on('CalendarRemindTask: changeData', data => {
             let params = data;
             params['from_date'] = this.data.from_date;
@@ -781,6 +791,7 @@ let config = {
             })
         });
 
+        // 可拖动提醒
         Mediator.on('CalendarDrag: dragRemind', data => {
             data['from_date'] = this.data.from_date;
             data['to_date'] = this.data.to_date;
