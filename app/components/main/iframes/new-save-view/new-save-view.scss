@@ -4,6 +4,8 @@
         width: 100%;
         border: solid 1px #e4e4e4;
         color: black;
+        max-height: 365px;
+        overflow: auto;
         .drop-up-box{
             position: relative;
             height: 20px;

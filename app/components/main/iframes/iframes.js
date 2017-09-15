@@ -72,6 +72,8 @@ export const IframeInstance = new Component({
         tabWidth:150,            //单个tabs长度，默认150（需和scss同步修改），空间不足以后自适应宽度
         minTabWidth:100,         //用于估算小屏设备最大tabs数量
         closeHistory:[],         //用于保存历史关闭记录，记录最近5个
+        tabsControlOpen:false,   //标签控制界面标记
+        saveViewOpen:false       //保存视图界面标记
     },
     actions: {
         openIframe: function (id, url, name) {
@@ -207,12 +209,18 @@ export const IframeInstance = new Component({
             }
         },
         showTabsPopup:function () {
-            this.actions.initTabList(this.data.closeHistory);
-            this.el.find('.tab-list').show();
-            this.el.find('.popup-icon').addClass('mouse-enter-icon');
-            // window.clearTimeout(this.data.timer);
-            //保证tabs控制面板和保存视图面板互斥打开
-            this.el.find('.view-save-component').hide();
+            if(this.data.tabsControlOpen === false){
+                this.actions.initTabList(this.data.closeHistory);
+                this.el.find('.tab-list').show();
+                this.el.find('.popup-icon').addClass('mouse-enter-icon');
+                //保证tabs控制面板和保存视图面板互斥打开
+                this.el.find('.view-save-component').hide();
+                this.data.tabsControlOpen = true;
+            }else{
+                this.el.find('.tab-list').hide();
+                this.el.find('.popup-icon').removeClass('mouse-enter-icon');
+                this.data.tabsControlOpen = false;
+            }
         },
         removeTimeOut:function () {
             window.clearTimeout(this.data.timer);
@@ -224,11 +232,13 @@ export const IframeInstance = new Component({
             this.data.timer = window.setTimeout(() => {
                 this.el.find('.tab-list').hide();
                 this.el.find('.popup-icon').removeClass('mouse-enter-icon');
+                this.data.tabsControlOpen = false;
             }, 500);
         },
         hideTabsPopupImmediately(){
             this.el.find('.tab-list').hide();
             this.el.find('.popup-icon').removeClass('mouse-enter-icon');
+            this.data.tabsControlOpen = false;
         },
         initTabList:function (data) {
             let $parent = this.el.find('.tabs-ul');
@@ -453,10 +463,18 @@ export const IframeInstance = new Component({
             }
         },
         showViewSave:function () {
-            this.el.find('.view-save-component').show();
-            this.data.saveViewOpen = true;
-            //保证保存视图页面和标签控制页面互斥打开
-            this.el.find('.tab-list').hide();
+            if(this.data.saveViewOpen === false){
+                this.el.find('.view-save-component').show();
+                this.data.saveViewOpen = true;
+                //保证保存视图页面和标签控制页面互斥打开
+                this.el.find('.tab-list').hide();
+            }else{
+                this.el.find('.view-save-component').hide();
+                this.data.saveViewOpen = false;
+                //调用子组件方法，清空input，切换至普通模式
+                this.saveView.actions.resetComponent();
+            }
+
         },
         closeSaveViewPage:function () {
             this.el.find('.view-save-component').hide();
@@ -465,6 +483,9 @@ export const IframeInstance = new Component({
         hideSaveViewPage:function () {
             this.data.timer = window.setTimeout(() => {
                 this.el.find('.view-save-component').hide();
+                //调用子组件方法，清空input，切换为正常模式
+                this.saveView.actions.resetComponent();
+                this.data.saveViewOpen = false;
             }, 500);
         }
     },
@@ -494,13 +515,6 @@ export const IframeInstance = new Component({
         //         SaveView.show(temp_arr);
         //     }
         // },
-        {
-            event:'click',
-            selector:'.popup-icon',
-            callback:function () {
-                this.actions.showTabsPopup();       //打开标签控制页面
-            }
-        },
         // {
         //     event:'mouseleave',
         //     selector:'.popup-icon',
@@ -508,6 +522,13 @@ export const IframeInstance = new Component({
         //         this.actions.resetIcon();
         //     }
         // },
+        {
+            event:'click',
+            selector:'.popup-icon',
+            callback:function () {
+                this.actions.showTabsPopup();       //打开标签控制页面
+            }
+        },
         {
             event:'mouseenter',
             selector:'.view-popup',
@@ -519,7 +540,6 @@ export const IframeInstance = new Component({
             event:'click',
             selector:'.tab-list',
             callback:function (target,event) {
-                console.log(event);
                 this.actions.controlTabs(event);
             }
         },
@@ -556,7 +576,7 @@ export const IframeInstance = new Component({
             event:'mouseleave',
             selector:'.view-save-group',
             callback:function () {
-                this.actions.hideSaveViewPage();       //鼠标离开延迟隐藏标签控制页面
+                // this.actions.hideSaveViewPage();       //鼠标离开延迟隐藏视图保存页面
             }
         },
     ],
@@ -573,8 +593,8 @@ export const IframeInstance = new Component({
         });
 
         //初始化保存视图组件
-        let saveView = new SaveView(this.data.sort,this.actions.closeSaveViewPage);
-        saveView.render(this.el.find('.view-save-component'));
+        this.saveView = new SaveView(this.data.sort,this.actions.closeSaveViewPage);
+        this.saveView.render(this.el.find('.view-save-component'));
 
         // this.el.on('click', '.tabs .item .close', function () {
         //     let id = $(this).attr('iframeid');

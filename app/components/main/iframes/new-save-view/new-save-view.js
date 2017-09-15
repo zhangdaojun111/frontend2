@@ -214,10 +214,17 @@ let config = {
             this.el.find('.edit-modal').hide();
             this.el.find('.delete-icon').hide();
         },
-        // //点击三角按钮关闭保存视图界面
-        // closeSaveView:function () {
-        //
-        // }
+        //点击三角按钮关闭保存视图界面
+        closeSaveViewImmediately:function () {
+            this.actions.resetComponent();
+            this.actions.closeSaveView();
+        },
+        //清空input，切换为正常模式
+        resetComponent:function () {
+            console.log("do reset");
+            this.el.find('.save-view-name').val('');
+            this.actions.showNormalModal();
+        }
     },
     binds:[
         {
@@ -259,7 +266,7 @@ let config = {
             event:'click',
             selector:'.drop-up-view-icon',
             callback:function () {
-                this.actions.closeSaveView();
+                this.actions.closeSaveViewImmediately();
             }
         }
     ],
