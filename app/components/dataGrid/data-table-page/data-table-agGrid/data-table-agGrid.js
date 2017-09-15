@@ -2474,7 +2474,13 @@ let config = {
         //触发排序事件
         onSortChanged: function ($event) {
             if( this.data.frontendSort ){
+                this.data.showTabs( 0 );
+                this.showLoading();
                 this.agGrid.actions.refreshView();
+                setTimeout( ()=>{
+                    this.hideLoading();
+                    this.data.showTabs( 1 );
+                },200 )
             }
             if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' || this.data.frontendSort ){
                 return;
