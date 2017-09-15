@@ -27,16 +27,38 @@ let config = {
          * 获取原始数据改变的数据
          */
         getChangeData() {
+            let [isEmptyY,isEmptyX] = [true,true];
             return  {
                 attribute: this.data.cellChart.cell.attribute.map(item =>{
+                        if (item.selected) {
+                            isEmptyY = false;
+                        }
                         return JSON.stringify({selected: item.selected})
                 }),
-                select: this.data.cellChart.cell.select.map(item => JSON.stringify(item))
+                select: this.data.cellChart.cell.select.map(item => {
+                    if (item.select) {
+                        isEmptyX = false
+                    }
+                    return JSON.stringify(item);
+                }),
+                isEmptyY: isEmptyY,
+                isEmptyX: isEmptyX,
             };
         },
+
+        /**
+         * 当下穿数据时更新数据
+         */
+        updateOriginal(data) {
+            let originalData = CanvasOriginalDataComponent.handleOriginalData(data);
+            this.data = originalData;
+            this.reload();
+        }
     },
     data: {
         selectAllX: true,
+        floor:0,
+        xAxis: []
     },
     binds:[
         { // 点击关闭原始数据
@@ -46,24 +68,35 @@ let config = {
                 let data = this.actions.getChangeData();
                 let originalData = {
                     view_id: this.data.viewId,
-                    floor: 0,
+                    floor: this.data.floor,
                     layout_id: this.data.cellChart.cell.layout_id,
                     chart_id: this.data.cellChart.cell.chart_id,
-                    xAxis:[],
+                    xAxis:this.data.xAxis,
                     select: data.select,
                     attribute: data.attribute
                 };
-                let yAxis = _.cloneDeep(this.data.cellChart.chart.data.yAxis);
+                console.log(data);
+                if (data.isEmptyY || data.isEmptyX) {
+                    msgbox.alert('至少选择一条x轴和y轴数据')
+                } else {
+                    canvasCellService.saveOriginalData(originalData).then(res => {
+                        if (res['success'] !== 1) {
+                            msgbox.showTips(res['error']);
+                        } else {
 
-                canvasCellService.saveOriginalData(originalData).then(res => {
-                    if (res['success'] !== 1) {
-                        msgbox.showTips(res['error']);
-                    } else {
-
-                        this.trigger('onUpdateOriginal', originalData);
-                    };
-                    this.destroySelf();
-                });
+                            this.trigger('onUpdateOriginal', originalData);
+                        };
+                        this.destroySelf();
+                    });
+                }
+            }
+        },
+        { // 点击下穿原始数据
+            event:'click',
+            selector:'.tr-body a',
+            callback:function (context) {
+                let name = $(context).text();
+                this.trigger('onUpdateDeepOriginal', name);
             }
         },
         {// 选择y轴字段
