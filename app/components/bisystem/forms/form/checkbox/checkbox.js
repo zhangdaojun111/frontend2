@@ -21,7 +21,7 @@ let config = {
             let list = [];
             this.data.list.map(checkbox => {
                 list.push(JSON.parse(checkbox.value))
-                this.el.find('input').attr('checked', true);
+                this.el.find('input').prop('checked', true);
             });
             this.data.value = list;
         },

@@ -75,6 +75,23 @@ export const canvasCellService = {
         return new Promise((resolve, reject) => {
             resolve(res);
         })
-    }
+    },
+
+    /**
+     * 保存原始数据到服务器
+     * @param data = 保存数据到服务器
+     */
+    async saveOriginalData(data) {
+        const res = await HTTP.ajaxImmediately({
+            url: '/bi/set_new_bi_deep/',
+            data: data,
+            // contentType: "application/json; charset=utf-8",
+            method:'get',
+            traditional: true
+        });
+        return new Promise((resolve, reject) => {
+            resolve(res);
+        })
+    },
 }
 

@@ -409,7 +409,7 @@ let config = {
                 defaultValue: [],
                 list: [
                     {
-                        value:1, name: '默认展示y轴数据'
+                        value:1, name: '是否显示某一Y轴字段'
                     }
                 ],
                 type: 'checkbox',

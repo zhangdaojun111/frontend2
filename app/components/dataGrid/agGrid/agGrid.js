@@ -58,6 +58,8 @@ let config = {
         setRowStyle:function (param) {
         },
         rowDataChanged:function ($event) {
+        },
+        onCellValueChanged:function ($event) {
         }
     },
     gridOptions: GridOptions,
@@ -88,6 +90,7 @@ let config = {
                 onRowDataChanged: this.data.rowDataChanged,
                 //双击查看
                 onCellClicked: this.data.onCellClicked,
+                onCellValueChanged: this.data.onCellValueChanged,
                 //行双击
                 onRowDoubleClicked: this.data.onRowDoubleClicked,
                 //分组

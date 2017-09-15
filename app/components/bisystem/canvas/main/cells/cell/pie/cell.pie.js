@@ -1,7 +1,7 @@
 /**
  * Created by birdyy on 2017/7/31.
  */
-import {BiBaseComponent} from '../../../../../bi.base.component';
+import {CellBaseComponent} from '../base';
 import template from './cell.pie.html';
 import {EchartsService} from '../../../../../../../services/bisystem/echart.server';
 import Mediator from '../../../../../../../lib/mediator';
@@ -27,6 +27,10 @@ let config = {
          * 初始化pie图表数据
          */
         initPie() {
+            this.data.cellChart = {
+                cell: this.data.cell,
+                chart: this.data.chart
+            };
             this.data.id += this.componentId;
             this.data.deeps = this.data.cellChart.chart.deeps.length;
             this.data.floor = this.data.cellChart.cell.is_deep == 1 ? this.data.cellChart.cell.deep.floor : 0;
@@ -70,7 +74,7 @@ let config = {
                 const layouts = {
                     chart_id: this.data.cellChart.cell.chart_id,
                     floor: this.data.floor,
-                    view_id: this.data.cellChart.viewId,
+                    view_id: this.data.viewId,
                     layout_id:  this.data.cellChart.cell.layout_id,
                     xOld: this.data.xOld,
                     row_id:0,
@@ -126,10 +130,9 @@ let config = {
     }
 }
 
-export class CellPieComponent extends BiBaseComponent {
-    constructor(cellChart) {
-        config.data.cellChart = cellChart ? cellChart : null;
-        super(config);
+export class CellPieComponent extends CellBaseComponent {
+    constructor(data,event) {
+        super(config,data,event);
         this.actions.initPie();
     }
 }

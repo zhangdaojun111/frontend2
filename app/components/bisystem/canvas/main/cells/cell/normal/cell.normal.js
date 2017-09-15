@@ -1,7 +1,7 @@
 /**
  * Created by birdyy on 2017/7/31.
  */
-import {BiBaseComponent} from '../../../../../bi.base.component';
+import {CellBaseComponent} from '../base';
 import template from './cell.normal.html';
 import './cell.normal.scss';
 
@@ -19,15 +19,27 @@ let config = {
         xOld: [], //保存历史数据x轴字段
     },
     actions: {
+
         echartsInit() {
             let echartsService = new EchartsService(this.data);
             this.normalChart = echartsService;
+        },
+
+        updateChart(data) {
+            //重新渲染echarts
+            const option = this.normalChart.lineBarOption(data);
+            console.log(option);
+            this.normalChart.myChart.setOption(option,true);
         },
 
         /**
          * 初始化pie图表数据
          */
         initNormal() {
+            this.data.cellChart = {
+                cell: this.data.cell,
+                chart: this.data.chart
+            };
             this.data.id += this.componentId;
             this.data.deeps = this.data.cellChart.chart.deeps.length;
             this.data.floor = this.data.cellChart.cell.is_deep == 1 ? this.data.cellChart.cell.deep.floor : 0;
@@ -72,7 +84,7 @@ let config = {
                 const layouts = {
                     chart_id: this.data.cellChart.cell.chart_id,
                     floor: this.data.floor,
-                    view_id: this.data.cellChart.viewId,
+                    view_id: this.data.viewId,
                     layout_id:  this.data.cellChart.cell.layout_id,
                     xOld: this.data.xOld,
                     row_id:0,
@@ -89,10 +101,7 @@ let config = {
                     if (res[0]['data']['data']['xAxis'].length > 0 && res[0]['data']['data']['yAxis'].length > 0) {
                         this.data.cellChart['chart']['data']['xAxis'] = res[0]['data']['data']['xAxis'];
                         this.data.cellChart['chart']['data']['yAxis'] = res[0]['data']['data']['yAxis'];
-                        //重新渲染echarts
-                        const option = this.normalChart.lineBarOption(this.data.cellChart);
-                        this.normalChart.myChart.setOption(option);
-                        this.normalChart.myChart.resize();
+                        this.actions.updateChart(this.data.cellChart);
                     }
                 } else {
                     msgbox.alert(res[0]['error']);
@@ -125,14 +134,45 @@ let config = {
 
     },
     firstAfterRender() {
-        this.actions.echartsInit()
+        this.actions.echartsInit();
+    },
+    beforeDestory() {
+
     }
 }
 
-export class CellNormalComponent extends BiBaseComponent {
-    constructor(cellChart) {
-        config.data.cellChart = cellChart ? cellChart : null;
-        super(config);
+export class CellNormalComponent extends CellBaseComponent {
+    constructor(data,event) {
+        super(config,data,event);
         this.actions.initNormal();
+    }
+
+    /**
+     * 当原始数据改变时，同步this.data
+     * @param data
+     * @constructor
+     */
+    UpdateOriginal(data) {
+        this.data.cellChart.cell.attribute = data.attribute;
+        this.data.cellChart.cell.select = data.select;
+        let xAxis = [];
+        this.data.cellChart.cell.select.forEach(item => {
+            let val = JSON.parse(item);
+            if (val.select) {
+                xAxis.push(val.name);
+            }
+        });
+        this.data.cellChart['chart']['data']['xAxis'] = xAxis;
+        let yAxis = [];
+        data.attribute.map((item,index) => {
+            if (JSON.parse(item).selected) {
+                yAxis.push(this.data.cellChart['chart']['data']['yAxis'][index])
+            };
+        });
+        let cellChart = _.cloneDeep(this.data.cellChart);
+        cellChart['chart']['data']['yAxis'] = yAxis;
+        console.log('==================');
+        console.log(cellChart);
+        this.actions.updateChart(cellChart);
     }
 }

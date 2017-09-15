@@ -1087,8 +1087,11 @@ let config = {
                         }
                         //如果有字段的负责性，再开始下面的逻辑
                         let data = this.data.data[dfield];
+                        // console.log('dd  ',data)
                         if (this.data.data[dfield]["required_perm"] == 1) {
                             let data = this.data.data[dfield];
+
+
                             //针对多选下拉框，只要包含就可以
                             if (value instanceof Array) {
                                 data["be_control_condition"] = value.indexOf(key) != -1 ? 0 : 1;

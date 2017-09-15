@@ -77,6 +77,9 @@
                 }
                 .single-select-group {
                     display: inline-block;
+                    input{
+                        cursor: pointer;
+                    }
                 }
 
                 .name-list {

@@ -71,13 +71,13 @@ export let config = {
         //添加样式
         $(`<style>${this.data.css}</style>`).appendTo(this.el);
         this.el.on('click','.ok',()=>{
-            console.log(this.data,123);
             this.data.name = this.el.find('.inp-val').val();
             if(this.el.find('.inp-val').val() === ""){
                 this.el.find('.error-tip').show();
                 return ;
             }
             let data = {
+
                 folder_id:'',
                 parent_table_id:'',
                 id: this.data.view ? this.data.view.id :'',
@@ -87,6 +87,7 @@ export let config = {
                 type: PMENUM.close_dialog,
                 key: this.key,
                 data: data
+
             });
 
         }).on('click','.cancel',()=>{
@@ -94,9 +95,15 @@ export let config = {
                 type: PMENUM.close_dialog,
                 key: this.key,
                 data: {}
+
             });
         })
     },
+    binds:[
+        {
+
+        }
+    ],
     beforeDestory: function () {
     }
 };

@@ -1,4 +1,6 @@
 .wrap-wrap {
+    font-size: 12px;
+    font-family: '微软雅黑';
     display: flex;
     flex-direction: column;
     width: 850px;
@@ -17,6 +19,8 @@
             color: rgb(153, 153, 153);
         }
         .select {
+            font-size: 12px;
+            font-family: '微软雅黑';
             height: 30px;
             border: 1px solid #ddd;
             background: #0088ff;
@@ -55,6 +59,7 @@
 
             a {
                 display: block;
+                font-size: 12px;
                 width: 100%;
                 height: 30px;
                 line-height: 30px;
@@ -105,6 +110,8 @@
         }
     }
     .confirm {
+        font-size: 12px;
+        font-family: '微软雅黑';
         flex: 0 0 30px;
         border: none;
         background: rgba(0, 136, 255, 1);
