@@ -24,10 +24,10 @@ export const progressConfig = {
             selector:'.cancel-upload',
             callback: function (event) {
                 let id = event.attributes.itemid.value;
-                 this.el.find('#'+id).remove();
-                PMAPI.sendToParent({
+                this.el.find('#'+id).remove();
+                PMAPI.sendToSelf({
                     type:PMENUM.send_data_to_iframe,
-                    key:this.data.lordKey,
+                    key:this.key,
                     data:{
                         originalField:this.data.originalField,
                         type:'cancel_uploading',
@@ -35,7 +35,7 @@ export const progressConfig = {
                     }
                 });
                 if($(this.el.find('.process-item')).length == 0){
-                    PMAPI.sendToParent({
+                    PMAPI.sendToSelf({
                         type: PMENUM.close_dialog,
                         key: this.key,
                         data: {
