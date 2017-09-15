@@ -16,6 +16,7 @@
         select {
             width: calc(100% - 10px);
             margin: 0px 5px;
+            cursor:pointer ;
             height: 30px;
             border: 1px solid #ddd;
         }
@@ -38,6 +39,7 @@
             }
         }
         .set-color {
+            cursor: pointer;
             vertical-align: middle;
         }
     }

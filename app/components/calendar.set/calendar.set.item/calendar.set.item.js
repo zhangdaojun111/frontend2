@@ -183,22 +183,28 @@ let config = {
 
         editableTrue:function(){
             this.el.find(".editor-items").attr("disabled", false);
-            this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
-            this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
-            this.el.find('td').removeClass('unclick');
-            this.el.find(".set-remind-method").removeClass('unclick');
-            this.el.find('input').removeClass('unclick');
+            // this.el.find('td').removeClass('unclick');
+            // this.el.find(".set-remind-method").removeClass('unclick');
+            // this.el.find('input').removeClass('unclick');
             this.data.staus = true;
         },
 
         editableFalse:function(){
             this.el.find(".editor-items").attr("disabled", true);
-            this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
-            this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
-            this.el.find("td").addClass('unclick');
-            this.el.find(".set-remind-method").addClass('unclick');
-            this.el.find('input').addClass('unclick');
+            // this.el.find("td").addClass('unclick');
+            // this.el.find(".set-remind-method").addClass('unclick');
+            // this.el.find('input').addClass('unclick');
             this.data.staus = false;
+        },
+
+        editable:function(){
+            this.data.multiSelectMenu.data.editable = true;
+            this.data.singleSelectMenu.data.editable = true;
+            this.data.multiSelectMenu.reload();
+            this.data.singleSelectMenu.reload();
+            this.data.multiSelectMenu.bindEvents();
+            this.data.singleSelectMenu.bindEvents();
+            this.actions.editableTrue();
         }
     },
     binds: [
@@ -266,6 +272,7 @@ let config = {
 
         this.data.multiSelectMenu = new AutoSelect(select_item_data);
         this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
+
         //代表字段下拉单选组件数据
         let single_item_data = {
             'list': this.data.dropdownForRes,
@@ -284,35 +291,20 @@ let config = {
 
         this.data.singleSelectMenu = new AutoSelect(single_item_data);
         this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
-        //是否可编辑
-        Mediator.on('calendar-set:editor', data => {
-            this.data.singleSelectMenu.destroySelf();
-            this.data.multiSelectMenu.destroySelf();
-            if (data.data === 1) {
-                select_item_data.editable = true;
-                this.data.multiSelectMenu = new AutoSelect(select_item_data);
-                single_item_data.editable = true;
-                this.data.singleSelectMenu = new AutoSelect(single_item_data);
-                this.actions.editableTrue();
-            } else {
-                select_item_data.editable = false;
-                single_item_data.editable = false;
-                this.data.multiSelectMenu = new AutoSelect(select_item_data);
-                this.data.singleSelectMenu = new AutoSelect(single_item_data);
-                this.actions.editableFalse();
-            }
-        });
 
         this.actions.checkChangeTextSelected();
         if(!this.data.rowSetData['email']['email_status'] && !this.data.rowSetData['sms']['sms_status']) {
             this.el.find('.set-remind-method').html('设置提醒方式');
         }
+
+
         this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text;
         this.el.find('.preview-text').text(this.data.preViewText);
         this.el.find('.set-color').attr("value", this.data.rowSetData.color);
+        this.actions.editableFalse();
     },
     beforeDestory: function () {
-        Mediator.removeAll('calendar-set:editor');
+        // Mediator.removeAll('calendar-set:editor');
     }
 };
 

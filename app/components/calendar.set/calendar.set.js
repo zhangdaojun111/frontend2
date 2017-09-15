@@ -356,7 +356,10 @@ let config = {
             callback: function (temp = this) {
                 this.el.find(".hide-btns").css("visibility", "visible");
                 $(temp).addClass("disabled");
-                Mediator.emit('calendar-set:editor', {data: 1});
+                for (let obj of this.data.childComponents) {
+                    obj.actions.editable();
+                }
+                // Mediator.emit('calendar-set:editor', {data: 1});
             }
         },
         {
@@ -367,7 +370,6 @@ let config = {
                 this.el.find(".set-btn").removeClass("disabled");
                 this.el.find('.set-items').empty();
                 this.actions.getSetting(this.data.tableId);
-                Mediator.emit('calendar-set:editor', {data: -1});
             }
         },
         {
