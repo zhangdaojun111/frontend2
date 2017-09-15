@@ -172,7 +172,7 @@ let systemMessageUtil = {
             modal: true,
             title: '消息提醒',
             close: function () {
-                $(this).dialog('destroy');
+                $(this).erdsDialog('destroy');
                 systemMessage.destroySelf();
             }
         })
