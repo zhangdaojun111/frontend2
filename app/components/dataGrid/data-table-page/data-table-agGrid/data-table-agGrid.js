@@ -1182,7 +1182,6 @@ let config = {
                 let currentPage = parseInt( Number( this.data.first )/Number( this.data.rows ) );
                 this.pagination.actions.setPagination( this.data.total,currentPage + 1 );
             }
-            console.log( '请求数据返回get_table_data' );
             this.actions.sortWay();
             //编辑模式原始数据
             if( this.el.find( '.edit-btn' )[0] ){
