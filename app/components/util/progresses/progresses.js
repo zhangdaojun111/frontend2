@@ -11,7 +11,7 @@ export const progressConfig = {
             event: 'click',
             selector: '.button',
             callback: function () {
-                PMAPI.sendToParent({
+                PMAPI.sendToSelf({
                     type: PMENUM.close_dialog,
                     key: this.key,
                     data: {
@@ -63,10 +63,21 @@ export const progressConfig = {
             this.el.find('#'+i).find('.progress-liquid').css('width',n+'%');
         },
         finish:function (i) {
-            this.el.find('#'+i).find('.cancel-upload').css('display','none');
-            this.el.find('#'+i).find('.progress-bottle').css('display','none');
+            this.el.find('#'+i).find('.cancel-upload').remove();
+            this.el.find('#'+i).find('.progress-bottle').remove();
             let text = this.el.find('#'+i).find('.progress-msg').text() + "传输完成!";
             this.el.find('#'+i).find('.progress-msg').text(text);
+            setTimeout(()=>{
+                if($(this.el.find('.process-bottle')).length == 0){
+                    PMAPI.sendToSelf({
+                        type: PMENUM.close_dialog,
+                        key: this.key,
+                        data: {
+                            confirm: true
+                        }
+                    })
+                }
+            },2000);
         },
         error:function ({msg:msg,index:i}) {
             this.el.find('#'+i).find('.progress-bottle').css('display','none');
