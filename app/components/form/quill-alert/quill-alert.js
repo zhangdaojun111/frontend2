@@ -943,7 +943,8 @@ let css = `
   transform: translateY(-10px);
 }
 .ql-snow .ql-formats {
-  display: inline-block;
+  //display: inline-block;
+  float: left;
   vertical-align: middle;
 }
 .ql-snow .ql-formats:after {
@@ -1257,7 +1258,7 @@ let css = `
   padding: 8px;
 }
 .ql-toolbar.ql-snow .ql-formats {
-  margin-right: 15px;
+  //margin-right: 15px;
 }
 .ql-toolbar.ql-snow .ql-picker-label {
   border: 1px solid transparent;
