@@ -1,0 +1,59 @@
+<div class="origin-data-wrap">
+    <a href="javascript:;" class="bi-origin-data-close" title="关闭"><i class="red-remove-icon"></i></a>
+    <div class="bi-tabs">
+        <span class="cur">原始数据</span>
+    </div>
+    <div class="origin-data">
+        <div class="content">
+            <table>
+                <thead>
+                <tr class="td-checkbox">
+                    <th class="selectAllX">
+                        <label class="custom-checkbox z-checkbox">
+                            {{#if selectAllX}}
+                            <input type="checkbox" checked="checked"  name="">
+                            {{else}}
+                            <input type="checkbox"  name="">
+                            {{/if}}
+                        </label>
+                    </th>
+                    <th>{{cellChart.chart.xAxis.name}}</th>
+                    {{#each cellChart.cell.attribute}}
+                    <th class="selectY" data-y-index="{{@index}}">
+                            <span>
+                                <label class="custom-checkbox z-checkbox">
+                                {{#if selected}}
+                                <input type="checkbox" checked="checked"  name="">
+                                {{else}}
+                                <input type="checkbox"  name="">
+                                {{/if}}
+                                </label>
+                                {{name}}</span>
+                    </th>
+                    {{/each}}
+                </tr>
+                </thead>
+                <tbody>
+                {{#each cellChart.cell.select}}
+                <tr class="tr-body">
+                    <td>
+                        <label class="custom-checkbox z-checkbox">
+                            {{#if select}}
+                            <input type="checkbox" checked="checked" name="">
+                            {{else}}
+                            <input type="checkbox" name="">
+                            {{/if}}
+                        </label>
+                    </td>
+                    <td><a href="javascript:;">{{name}}</a></td>
+                    {{#each @root.chart.data.yAxis}}
+                    <td>
+                        {{original_each_yAxis data @../index}}</td>
+                    {{/each}}
+                </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

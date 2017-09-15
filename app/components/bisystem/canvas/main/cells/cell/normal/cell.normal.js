@@ -25,9 +25,7 @@ let config = {
         handleOriginal() {
             let cellChart = _.cloneDeep(this.data.cellChart);
             let [xAxis,yAxisRemoveDataIndex] = [[],[]];
-            console.log(this.data.cellChart.cell);
             this.data.cellChart.cell.select.forEach((item,index) => {
-                console.log(item);
                 let val = JSON.parse(item);
                 if (val.select) {
                     xAxis.push(val.name);
@@ -36,7 +34,6 @@ let config = {
                 }
             });
             let yAxis = [];
-            console.log(xAxis);
             this.data.cellChart.cell.attribute.map((item,index) => {
                 if (JSON.parse(item).selected) {
                     yAxis.push(cellChart['chart']['data']['yAxis'][index])
@@ -59,13 +56,13 @@ let config = {
         },
         echartsInit() {
             let chartData;
-            if (this.data.cellChart.cell.attribute.length > 0 || this.data.cellChart.cell.select.length > 0) {
-                let cellChart = this.actions.handleOriginal();
-                console.log(cellChart);
-                chartData = _.cloneDeep(this.data);
-                chartData.cellChart = cellChart;
-            };
-            console.log(chartData);
+            if (window.config.bi_user === 'client') { // 如果是客户模式下，优先渲染原始数据
+                if (this.data.cellChart.cell.attribute.length > 0 || this.data.cellChart.cell.select.length > 0) {
+                    let cellChart = this.actions.handleOriginal();
+                    chartData = _.cloneDeep(this.data);
+                    chartData.cellChart = cellChart;
+                };
+            }
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.normalChart = echartsService;
         },
