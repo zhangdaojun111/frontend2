@@ -15,6 +15,7 @@
     }
 }
 .form-version-table-user, .form-version-table-department, .form-default {
+    font-size: 12px;
     margin: 10px;
     background: #FFFFFF;
     tr td:first-child {
@@ -38,6 +39,8 @@
         height: 24px;
     }
     .textArea {
+
+        line-height: 26px;
         height: 26px;
         width: 232px !important;
         border: 1px solid #ddd;
@@ -69,5 +72,6 @@
     display: table;
     margin: 0 auto;
     background-color: #FFF;
+    width: 100%;
 }
 
