@@ -112,14 +112,14 @@
                     right:50px;
                     top:30px;
                     .basic-ul{
-                        //.drop-up-icon{
-                        //    width: 16px;
-                        //    height: 16px;
-                        //    margin-left: 67px;
-                        //    display: inline-block;
-                        //    background-image: url("./../../../assets/images/framework/drop-up-icon.png");
-                        //    cursor: pointer;
-                        //}
+                        .drop-up-icon{
+                            width: 16px;
+                            height: 16px;
+                            margin-left: 67px;
+                            display: inline-block;
+                            background-image: url("./../../../assets/images/framework/drop-up-icon.png");
+                            cursor: pointer;
+                        }
                         .close-tab,.close-all-tabs{
                             text-align: left;
                             text-indent: 10px;

@@ -72,7 +72,6 @@ export const IframeInstance = new Component({
         tabWidth:150,            //单个tabs长度，默认150（需和scss同步修改），空间不足以后自适应宽度
         minTabWidth:100,         //用于估算小屏设备最大tabs数量
         closeHistory:[],         //用于保存历史关闭记录，记录最近5个
-        saveViewOpen:false,
     },
     actions: {
         openIframe: function (id, url, name) {
@@ -211,18 +210,25 @@ export const IframeInstance = new Component({
             this.actions.initTabList(this.data.closeHistory);
             this.el.find('.tab-list').show();
             this.el.find('.popup-icon').addClass('mouse-enter-icon');
-            window.clearTimeout(this.data.timer)
+            // window.clearTimeout(this.data.timer);
+            //保证tabs控制面板和保存视图面板互斥打开
+            this.el.find('.view-save-component').hide();
         },
         removeTimeOut:function () {
             window.clearTimeout(this.data.timer);
         },
-        resetIcon:function () {
-            this.el.find('.popup-icon').removeClass('mouse-enter-icon');
-        },
+        // resetIcon:function () {
+        //     this.el.find('.popup-icon').removeClass('mouse-enter-icon');
+        // },
         hideTabsPopup(){
             this.data.timer = window.setTimeout(() => {
                 this.el.find('.tab-list').hide();
+                this.el.find('.popup-icon').removeClass('mouse-enter-icon');
             }, 500);
+        },
+        hideTabsPopupImmediately(){
+            this.el.find('.tab-list').hide();
+            this.el.find('.popup-icon').removeClass('mouse-enter-icon');
         },
         initTabList:function (data) {
             let $parent = this.el.find('.tabs-ul');
@@ -447,17 +453,19 @@ export const IframeInstance = new Component({
             }
         },
         showViewSave:function () {
-            if(this.data.saveViewOpen === false){
-                this.el.find('.view-save-component').show();
-                this.data.saveViewOpen = true;
-            }else{
-                this.el.find('.view-save-component').hide();
-                this.data.saveViewOpen = false;
-            }
+            this.el.find('.view-save-component').show();
+            this.data.saveViewOpen = true;
+            //保证保存视图页面和标签控制页面互斥打开
+            this.el.find('.tab-list').hide();
         },
         closeSaveViewPage:function () {
             this.el.find('.view-save-component').hide();
             this.data.saveViewOpen = false;
+        },
+        hideSaveViewPage:function () {
+            this.data.timer = window.setTimeout(() => {
+                this.el.find('.view-save-component').hide();
+            }, 500);
         }
     },
     binds:[
@@ -487,30 +495,31 @@ export const IframeInstance = new Component({
         //     }
         // },
         {
-            event:'mouseenter',
+            event:'click',
             selector:'.popup-icon',
             callback:function () {
-                this.actions.showTabsPopup();
+                this.actions.showTabsPopup();       //打开标签控制页面
             }
         },
-        {
-            event:'mouseleave',
-            selector:'.popup-icon',
-            callback:function () {
-                this.actions.resetIcon();
-            }
-        },
+        // {
+        //     event:'mouseleave',
+        //     selector:'.popup-icon',
+        //     callback:function () {
+        //         this.actions.resetIcon();
+        //     }
+        // },
         {
             event:'mouseenter',
             selector:'.view-popup',
             callback:function () {
-                this.actions.removeTimeOut();
+                this.actions.removeTimeOut();       //取消隐藏标签控制页面
             }
         },
         {
             event:'click',
             selector:'.tab-list',
             callback:function (target,event) {
+                console.log(event);
                 this.actions.controlTabs(event);
             }
         },
@@ -518,16 +527,38 @@ export const IframeInstance = new Component({
             event:'mouseleave',
             selector:'.view-popup',
             callback:function () {
-                this.actions.hideTabsPopup();
+                this.actions.hideTabsPopup();       //鼠标离开延迟隐藏标签控制页面
+            }
+        },
+        {
+            event:'click',
+            selector:'.drop-up-icon',
+            callback:function (target,event) {
+                this.actions.hideTabsPopupImmediately();        //点击三角立刻关闭标签控制页面
+                event.stopPropagation();
             }
         },
         {
             event:'click',
             selector:'.view-save',
             callback:function (target,event) {
-                this.actions.showViewSave();
+                this.actions.showViewSave();            //打开保存视图页面
             }
-        }
+        },
+        {
+            event:'mouseenter',
+            selector:'.view-save-group',
+            callback:function () {
+                this.actions.removeTimeOut();       //取消隐藏视图保存页面
+            }
+        },
+        {
+            event:'mouseleave',
+            selector:'.view-save-group',
+            callback:function () {
+                this.actions.hideSaveViewPage();       //鼠标离开延迟隐藏标签控制页面
+            }
+        },
     ],
     afterRender: function () {
         this.data.tabs = this.el.find('.tabs');

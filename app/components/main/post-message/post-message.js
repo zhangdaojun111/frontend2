@@ -250,7 +250,7 @@ let postMessageUtil = {
     hide: function () {
         this.el.erdsDialog('close');
     }
-}
+};
 
 export {postMessageUtil};
 // postMessageUtil.show();

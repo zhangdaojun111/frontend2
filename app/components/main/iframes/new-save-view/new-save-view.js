@@ -63,10 +63,16 @@ let config = {
                 msgbox.alert("视图配置不能为空");
                 return;
             }
+
+            let name = this.el.find('.save-view-name').val();
+            if(name === ''){
+                msgbox.alert("视图名称不能为空");
+                return;
+            }
+
             let favorlist = {};
             let list = [];
             let idList = [];
-            let name = this.el.find('.save-view-name').val();
 
             for (let k in this.data.currentIframesList){
                 list.push({ 'id':this.data.currentIframesList[k],
@@ -251,7 +257,7 @@ let config = {
         },
         {
             event:'click',
-            selector:'.drop-up-icon',
+            selector:'.drop-up-view-icon',
             callback:function () {
                 this.actions.closeSaveView();
             }
