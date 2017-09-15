@@ -47,7 +47,10 @@ html.bi, body.bi {
     .tabs-menu-active-icon {
         @include icon;
         background: url('../../../assets/images/bisystem/tabs_menu_active.png') no-repeat;
-
+    }
+    .original-data-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/original_data.png') no-repeat;
     }
 }
 
