@@ -21,9 +21,9 @@ $active-color: #1caeff;
             }
             .nav-tabs {
                 width: calc(100%);
-                background-color: #FFFFFF;
                 a {
                     color: #666666;
+                    background: #FFFFFF;
                 }
             }
         }
@@ -32,32 +32,12 @@ $active-color: #1caeff;
                 background-color: #374157;
             }
             .nav-tabs {
-                width: calc(100% - 555px);
-                background-color: #3e4a63;
+                width: calc(100% - 600px);
                 a {
+                    background: #3e4a63;
                     color: #f0f0f0;
                     border-left: 1px solid #556574;
                 }
-            }
-        }
-    }
-    .views-btn-group {
-        float: right;
-        margin-right: 10px;
-        a {
-            text-decoration: none;
-            padding: 0 25px;
-            position: relative;
-            display: inline-block;
-            outline: none;
-            line-height: 50px;
-            height: 50px;
-            margin-right: -3px;
-            color: #ffffff;
-            background-color: #3e4a63;
-            border-left: solid 1px #556574;
-            &:hover {
-                background-color: #374157;
             }
         }
     }

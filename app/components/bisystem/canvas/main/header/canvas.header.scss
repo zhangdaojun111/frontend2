@@ -1,12 +1,32 @@
 .nav-tabs {
-    float: left;
+    position: absolute;
     height: 50px;
     white-space: nowrap;
-    width: calc(100% - 555px);
-    overflow-x: auto;
-    overflow-y: hidden;
-    background-color: #374157;
+    width: calc(100% - 600px);
+    overflow: auto;
+    background: transparent;
     div {
+        height: 100%;
         display: inline-block;
+    }
+}
+.views-btn-group {
+    position: absolute;
+    right: 0;
+    width: 600px;
+    text-align: right;
+    a {
+        text-decoration: none;
+        padding: 0 25px;
+        display: inline-block;
+        outline: none;
+        line-height: 50px;
+        color: #ffffff;
+        background: #3e4a63;
+        border-left: solid 1px #556574;
+        margin-right: -3px;
+        &:hover {
+            background: #374157;
+        }
     }
 }
