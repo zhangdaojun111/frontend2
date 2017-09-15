@@ -2,26 +2,11 @@
     float: left;
     height: 50px;
     white-space: nowrap;
-    border-bottom: solid 1px #eeeeee;
-    width: calc(100% - 400px);
+    width: calc(100% - 555px);
     overflow-x: auto;
     overflow-y: hidden;
     background-color: #374157;
     div {
         display: inline-block;
-    }
-    a {
-        text-decoration: none;
-        padding: 0 25px;
-        display: inline-block;
-        outline: none;
-        line-height: 46px;
-        box-sizing: border-box;
-        border-right: solid 1px #556574;
-        color: #ffffff;
-        border-bottom: 4px solid transparent;
-        &.active {
-            border-bottom-color: #00bcd4;
-        }
     }
 }
