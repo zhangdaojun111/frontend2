@@ -43,7 +43,7 @@ let config = {
             $parent.find('.list-item').remove();
             for(let k of this.data.favoriteList){
                 let $container = $("<li class='list-item'>");
-                let $span = $("<span class='list-name'>");
+                let $span = $(`<span class='list-name' title='${k.name}'>`);
                 $span.html(k.name);
                 $container.attr("view_id",k.name);
                 let $deleteIcon = $("<i class='delete-icon icon-framework-delete'>");
@@ -93,8 +93,10 @@ let config = {
 
             let that = this;
             TabService.saveFavoriteItem(favorlist).done((result) => {
+                console.log(result);
                 if(result.success === 1){
-                    msgbox.alert("保存成功");
+                    // msgbox.alert("保存成功");
+                    msgbox.showTips("保存成功");
                     _.remove(that.data.favoriteList,function (n) {
                         return n.name === name;
                     });
