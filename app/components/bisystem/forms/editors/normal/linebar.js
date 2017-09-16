@@ -22,9 +22,7 @@ let config = {
                 let double = this.formItems['double'].data.value[0] ? true : false;
                 yAxis0.forEach(yAxis => {
                     if (yAxis.field) {
-                        let val = _.cloneDeep(yAxis);
-                        val['name'] = val.field.name;
-                        data.push(val);
+                        data.push(yAxis.field);
                     }
                 });
 
@@ -32,9 +30,7 @@ let config = {
                 if (double) {
                     yAxis1.forEach(yAxis => {
                         if (yAxis.field) {
-                            let val = _.cloneDeep(yAxis);
-                            val['name'] = val.field.name;
-                            data.push(val);
+                            data.push(yAxis.field);
                         }
                     });
                 };
@@ -167,6 +163,18 @@ let config = {
                     yAxis.push(item);
                 });
             };
+
+
+            let ySelectedGroup = [];
+            data.ySelectedGroup.forEach(item => {
+                for (let y of yAxis){
+                    if (item.id === y.field.id) {
+                        ySelectedGroup.push(y);
+                        break;
+                    }
+                }
+            });
+
             let chart = {
                 advancedDataTemplates: [],
                 assortment: 'normal',
@@ -186,7 +194,7 @@ let config = {
                 yAxis: yAxis,
                 yHorizontal: data.yHorizontal[0] ? true : false,
                 yHorizontalColumns: data.yHorizontalColumns[0] ? {marginBottom:data.marginBottomx} : {},
-                ySelectedGroup: data.defaultY[0] ? data.ySelectedGroup : [],
+                ySelectedGroup: data.defaultY[0] ? ySelectedGroup : [],
             };
             if (data.chartAssignment == 1) {
                 chart['chartGroup'] = data.chartGroup;
@@ -262,7 +270,7 @@ let config = {
             } else {
                 this.formItems['deeps'].setValue(chart['deeps']);
             };
-        }
+        },
     },
     data: {
         options: [
@@ -336,6 +344,7 @@ let config = {
                         } else {
                             this.formItems['yAxis1'].el.hide();
                         };
+                        this.actions.updateYSelectedGroup();
                     }
                 }
             },

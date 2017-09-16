@@ -221,7 +221,7 @@ export class EchartsService {
         if (Array.isArray(ySelectedGroup) && ySelectedGroup.length > 0) {
             legend.map(name => {
                 for (let val of ySelectedGroup) {
-                    if (val.name === name) {
+                    if (val.field.name === name) {
                         linebarOption['legend']['selected'][name] = true;
                         break;
                     } else {
