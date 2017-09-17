@@ -70,7 +70,6 @@ let config = {
         updateChart(data) {
             //重新渲染echarts
             const option = this.normalChart.lineBarOption(data);
-            console.log(option);
             this.normalChart.myChart.setOption(option,true);
         },
 

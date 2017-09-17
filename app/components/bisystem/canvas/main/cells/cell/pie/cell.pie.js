@@ -18,9 +18,59 @@ let config = {
         xOld: [], //保存历史数据x轴字段
     },
     actions: {
+        /**
+         * 当有原始数据保存的时候，优先处理原始数据
+         */
+        handleOriginal() {
+            let cellChart = _.cloneDeep(this.data.cellChart);
+            let [xAxis,yAxisRemoveDataIndex] = [[],[]];
+            this.data.cellChart.cell.select.forEach((item,index) => {
+                let val = JSON.parse(item);
+                if (val.select) {
+                    xAxis.push(val.name);
+                } else {
+                    yAxisRemoveDataIndex.push(index);
+                }
+            });
+            let yAxis = [];
+            this.data.cellChart.cell.attribute.map((item,index) => {
+                if (JSON.parse(item).selected) {
+                    yAxis.push(cellChart['chart']['data']['yAxis'][index])
+                };
+            });
+
+            yAxis.forEach((item) => {
+                let itemData = [];
+                item.data.forEach((val,index,arrays) => {
+                    let isRemove = yAxisRemoveDataIndex.toString().indexOf(index) ;
+                    if (isRemove === -1) {
+                        itemData.push(val)
+                    }
+                });
+                item.data = itemData;
+            });
+            cellChart['chart']['data']['xAxis'] = xAxis;
+            cellChart['chart']['data']['yAxis'] = yAxis;
+            return cellChart;
+        },
+
         echartsInit() {
-            let echartsService = new EchartsService(this.data);
+            let chartData;
+            if (window.config.bi_user === 'client') { // 如果是客户模式下，优先渲染原始数据
+                if (this.data.cellChart.cell.attribute.length > 0 || this.data.cellChart.cell.select.length > 0) {
+                    let cellChart = this.actions.handleOriginal();
+                    chartData = _.cloneDeep(this.data);
+                    chartData.cellChart = cellChart;
+                };
+            }
+            let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.pieChart = echartsService;
+        },
+
+        updateChart(data) {
+            //重新渲染echarts
+            const option = this.pieChart.pieOption(data);
+            this.pieChart.myChart.setOption(option,true);
         },
 
         /**
@@ -91,10 +141,9 @@ let config = {
                     if (res[0]['data']['data']['xAxis'].length > 0 && res[0]['data']['data']['yAxis'].length > 0) {
                         this.data.cellChart['chart']['data']['xAxis'] = res[0]['data']['data']['xAxis'];
                         this.data.cellChart['chart']['data']['yAxis'] = res[0]['data']['data']['yAxis'];
-                        //重新渲染echarts
-                        const option = this.pieChart.pieOption(this.data.cellChart);
-                        this.pieChart.myChart.setOption(option);
-                        this.pieChart.myChart.resize();
+                        this.data.cellChart['cell']['attribute'] = [];
+                        this.data.cellChart['cell']['select'] = [];
+                        this.actions.updateChart(this.data.cellChart);
                     }
                 } else {
                     msgbox.alert(res[0]['error']);
@@ -134,5 +183,25 @@ export class CellPieComponent extends CellBaseComponent {
     constructor(data,event) {
         super(config,data,event);
         this.actions.initPie();
+    }
+
+    /**
+     * 当原始数据改变时，同步this.data
+     * @param data
+     */
+    updateOriginal(data) {
+        this.data.cellChart.cell.attribute = data.attribute;
+        this.data.cellChart.cell.select = data.select;
+        let cellChart = this.actions.handleOriginal();
+        this.actions.updateChart(cellChart);
+    }
+
+    /**
+     * 当原始数据点击下穿时，更新画布块数据
+     * @param data
+     */
+    async updateOriginalDeep(name) {
+        let res = await this.actions.CanvasDeep(name);
+        return Promise.resolve(this.data);
     }
 }

@@ -77,7 +77,6 @@ let config = {
                     select: data.select,
                     attribute: data.attribute
                 };
-
                 if (data.isEmptyY || data.isEmptyX) {
                     msgbox.alert('至少选择一条x轴和y轴数据')
                 } else {
@@ -188,6 +187,8 @@ export class CanvasOriginalDataComponent extends Component {
      * 处理折线柱状图的原始数据
      */
     static handleLineBarOriginalData(data) {
+        console.log('xxxxxxxxxxxxxxxxxxx');
+        console.log(data);
         // 如果select有数据就用select的数据 select = xAxis
         if (data.cellChart.cell.select.length  === 0) {
             data.cellChart.cell.select = data.cellChart.chart.data.xAxis.map(name => {
@@ -220,6 +221,21 @@ export class CanvasOriginalDataComponent extends Component {
      * 处理饼图图的原始数据
      */
     static handlePieOriginalData(data) {
-        return {}
+        // 如果select有数据就用select的数据 select = xAxis
+        if (data.cellChart.cell.select.length  === 0) {
+            data.cellChart.cell.select = data.cellChart.chart.data.xAxis.map(name => {
+                return {'name': name, 'select': true}
+            });
+        } else {
+            data.cellChart.cell.select = data.cellChart.cell.select.map(item => {
+                let value = JSON.parse(item);
+                if (!value.select) {
+                    data.selectAllX = false;
+                };
+                return value;
+            });
+        };
+        //如果attribute有数据就用attribute的数据 attribute = yAxis
+        data.cellChart.cell.attribute = [{'selected': true, 'name': data.cellChart.chart.pieType.value === 1 ? data.cellChart.chart.xAxis.name : data.cellChart.chart.yAxis.name}];
     }
 }

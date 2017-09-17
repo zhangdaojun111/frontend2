@@ -153,8 +153,7 @@ let config = {
 
         this.actions.getCellLayout();
     },
-    beforeDestory() {
-    }
+    beforeDestory() {}
 };
 
 export class CanvasCellsComponent extends Component {
