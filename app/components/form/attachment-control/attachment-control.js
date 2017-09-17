@@ -63,12 +63,10 @@ let config = {
                     if (!res.file) {
                         return;
                     }
-                    let key = (new URL(document.URL)).searchParams.get('key');
                     let name = res.file.name;
                     let fileId = name.split('.')[0]+"-"+new Date().getTime();
                     let toolbox = msgBox.showProgress({
                         files:[{id:fileId,name:name}],
-                        lordKey:key,
                         originalField:this.data.id
                     });
                     this.actions.controlUploadingForFile(res.file,fileId,toolbox);
@@ -85,7 +83,9 @@ let config = {
                     let fileId = name.split('.')[0]+"-"+new Date().getTime();
                     fileArray.push({id:fileId,name:name});
                 }
-                let toolbox = msgBox.showProgress({files:fileArray,originalField:this.data.id});
+                let toolbox = msgBox.showProgress({
+                    files:fileArray,
+                    originalField:this.data.id});
                 for(let i = 0, length = files.length;i < length; i++){
                     this.actions.controlUploadingForFile(files[i],fileArray[i].id,toolbox);
                 }
