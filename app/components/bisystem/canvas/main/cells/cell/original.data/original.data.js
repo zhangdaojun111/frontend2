@@ -223,23 +223,14 @@ export class CanvasOriginalDataComponent extends Component {
      * 处理折线柱状图分组的原始数据
      */
     static handleLineBarGroupOriginalData(data) {
-        console.log('xxxxxxxxxxxxxxxxxxx');
+        console.log('=======================');
         console.log(data);
         data.template = groupTemplate;
-
+        let selectedGroups = []; //已选择分组信息
         // 如果select有数据就用select的数据 select = xAxis
         if (data.cellChart.cell.select.length  === 0) {
-            data.cellChart.cell.select = data.cellChart.chart.data.xAxis.map(name => {
-                return {'name': name, 'select': true}
-            });
+
         } else {
-            data.cellChart.cell.select = data.cellChart.cell.select.map(item => {
-                let value = JSON.parse(item);
-                if (!value.select) {
-                    data.selectAllX = false;
-                };
-                return value;
-            });
         };
         // 如果attribute有数据就用attribute的数据 attribute = yAxis
         data.cellChart.cell.attribute = data.cellChart.chart.yAxis.map(item => {
