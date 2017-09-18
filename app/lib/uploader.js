@@ -229,8 +229,8 @@ class Uploader {
     _transmitData(name,code){
         let that =this;
         let onComplete = this.settings['onCompleted'];
-        this.settings['options']['success'] = function () {
-            onComplete({fileId:that.getFileId(name,code)});
+        this.settings['options']['success'] = function (res) {
+            onComplete(res,{fileId:that.getFileId(name,code)});
         };
         let onError = this.settings['onError'];
         this.settings['options']['error'] = function (msg) {
