@@ -9,6 +9,7 @@ import './original.data.scss';
 import handlebars from 'handlebars';
 import {canvasCellService} from '../../../../../../../services/bisystem/canvas.cell.service';
 import msgbox from '../../../../../../../lib/msgbox';
+import {CanvasOriginalAdvancedComponent} from './advanced/original.advanced';
 
 // 自定义original_each_yAxis helper
 handlebars.registerHelper('original_each_yAxis', function(data,index, options) {
@@ -54,6 +55,18 @@ let config = {
             let originalData = CanvasOriginalDataComponent.handleOriginalData(data);
             this.data = originalData;
             this.reload();
+        },
+
+        /**
+         * 新增高级字段
+         */
+        addAdvancedList(){
+            let that = this;
+            this.el.find('.add-advanced-list').click( function () {
+                $(this).closest('.list').hide();
+                let originForm = new CanvasOriginalAdvancedComponent();
+                that.append(originForm,$(this).closest('.origin-data'));
+            })
         }
     },
     data: {
@@ -156,6 +169,9 @@ let config = {
         },
     ],
     afterRender() {
+        //新增高级字段
+        this.actions.addAdvancedList();
+
     },
     firstAfterRender() {},
     beforeDestory() {}

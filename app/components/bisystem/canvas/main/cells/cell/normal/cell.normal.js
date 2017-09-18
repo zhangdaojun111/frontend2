@@ -57,15 +57,12 @@ let config = {
         echartsInit() {
             let chartData;
             if (window.config.bi_user === 'client') { // 如果是客户模式下，优先渲染原始数据
-                // 当attribute or select　等于空时　代表全选
-                console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-                console.log(this.data.cellChart.cell.attribute.length > 0 && this.data.cellChart.cell.select.length > 0);
-                if (this.data.cellChart.cell.attribute.length > 0 && this.data.cellChart.cell.select.length > 0) {
+                if (this.data.cellChart.cell.attribute.length > 0 || this.data.cellChart.cell.select.length > 0) {
                     let cellChart = this.actions.handleOriginal();
                     chartData = _.cloneDeep(this.data);
                     chartData.cellChart = cellChart;
                 };
-            };
+            }
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.normalChart = echartsService;
         },

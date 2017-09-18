@@ -4,10 +4,8 @@
  */
 import Component from '../../../../../../../../lib/component';
 import template from './original.advanced.html';
-import './original.data.scss';
 import handlebars from 'handlebars';
 import msgbox from '../../../../../../../../lib/msgbox';
-
 
 let config = {
     template: template,
@@ -17,6 +15,21 @@ let config = {
 
     },
     binds:[
+        { //保存
+            event:'click',
+            selector:'.submit-area submit',
+            callback:function () {
+
+            }
+        },
+
+        {//返回
+            event:'click',
+            selector:'.submit-area button:last-child',
+            callback:function () {
+
+            }
+        },
     ],
     afterRender() {
     },
@@ -26,6 +39,6 @@ let config = {
 
 export class CanvasOriginalAdvancedComponent extends Component {
     constructor(data,events) {
-        super(config,originalData,events);
+        super(config,data,events);
     }
 }

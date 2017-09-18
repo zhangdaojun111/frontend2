@@ -31,7 +31,6 @@
             font-size: 12px;
             background: #3b8cff;
             color: #fff;
-            cursor: pointer;
         }
     }
     .origin-data {
@@ -43,9 +42,9 @@
         border: 1px solid #EEEEEE;
         .content {
             .custom-checkbox {
-                input {
-                    bottom: 4px;
-                }
+               input{
+                   bottom: 4px;
+               }
             }
             table {
                 width: 100%;
