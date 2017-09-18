@@ -215,6 +215,7 @@ let config = {
             this.el.find('.normal-modal').show();
             this.el.find('.edit-modal').hide();
             this.el.find('.delete-icon').hide();
+            this.el.find('.save-view-name').val('');
         },
         //点击三角按钮关闭保存视图界面
         closeSaveViewImmediately:function () {
@@ -223,7 +224,6 @@ let config = {
         },
         //清空input，切换为正常模式
         resetComponent:function () {
-            console.log("do reset");
             this.el.find('.save-view-name').val('');
             this.actions.showNormalModal();
         }
@@ -234,7 +234,7 @@ let config = {
             selector:'.save-view-btn',
             callback: _.debounce( function () {
                 this.actions.saveFavorite();
-            },100)
+            },150)
         },
         {
             event:'click',

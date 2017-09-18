@@ -72,9 +72,10 @@
     .save-view-list{
         width: 100%;
         color: black;
-        max-height: 300px;
+        max-height: 303px;
         overflow-y: auto;
         overflow-x: hidden;
+        padding-bottom: 3px;
         .list-item{
             box-sizing: border-box;
             width: 260px;
@@ -86,7 +87,7 @@
             cursor: pointer;
             .list-name{
                 position:relative;
-                width:150px;
+                width:200px;
                 text-overflow:ellipsis;
                 white-space:nowrap;
                 overflow:hidden;
