@@ -180,6 +180,7 @@ let config = {
                     layout_id: this.data.cell.layout_id,
                     xOld: {},
                     row_id:0,
+                    deep_clear: 1,
                     deep_info: {}
                 };
                 this.actions.dragChartData({
