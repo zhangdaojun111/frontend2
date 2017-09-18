@@ -53,7 +53,6 @@ let config = {
             cellChart['chart']['data']['yAxis'] = yAxis;
             return cellChart;
         },
-
         echartsInit() {
             let chartData;
             if (window.config.bi_user === 'client') { // 如果是客户模式下，优先渲染原始数据
@@ -72,7 +71,6 @@ let config = {
             const option = this.pieChart.pieOption(data);
             this.pieChart.myChart.setOption(option,true);
         },
-
         /**
          * 初始化pie图表数据
          */

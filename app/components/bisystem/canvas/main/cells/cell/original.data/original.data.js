@@ -242,10 +242,21 @@ export class CanvasOriginalDataComponent extends Component {
         console.log('=======================');
         console.log(data);
         data.template = groupTemplate;
-        let selectedGroups = []; //已选择分组信息
+        let groupNames = data.cellChart.chart.data.yAxis.map(item => item.ename); //已选择分组信息
+        let selectGroupNames = Array.from(new Set(groupNames));
+        let selects = [];
         // 如果select有数据就用select的数据 select = xAxis
         if (data.cellChart.cell.select.length  === 0) {
-
+            data.cellChart.chart.data.yAxis.forEach(item => {
+                if (selectGroupNames.toString().indexOf (item.ename)) {
+                    selects.push({
+                        ename: item.ename,
+                        xAxis: [],
+                        yAxis:item.data
+                    })
+                };
+            });
+            console.log(selects);
         } else {
         };
         // 如果attribute有数据就用attribute的数据 attribute = yAxis

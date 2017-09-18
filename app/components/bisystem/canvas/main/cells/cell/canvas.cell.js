@@ -130,12 +130,14 @@ let config = {
             this.actions.loadCellChart(res[0]);
         },
     },
+
     data: {
         chart: null,
         isIcon :true,
         cellComponent:'',
         cellMaxZindex:1
     },
+
     binds: [
         // 拖拽start画布mousedown触发
         {
