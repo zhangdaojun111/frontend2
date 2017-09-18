@@ -213,9 +213,10 @@ export const IframeInstance = new Component({
                 this.actions.initTabList(this.data.closeHistory);
                 this.el.find('.tab-list').show();
                 this.el.find('.popup-icon').addClass('mouse-enter-icon');
+                this.data.tabsControlOpen = true;
                 //保证tabs控制面板和保存视图面板互斥打开
                 this.el.find('.view-save-component').hide();
-                this.data.tabsControlOpen = true;
+                this.data.saveViewOpen = false;
             }else{
                 this.el.find('.tab-list').hide();
                 this.el.find('.popup-icon').removeClass('mouse-enter-icon');
@@ -468,6 +469,7 @@ export const IframeInstance = new Component({
                 this.data.saveViewOpen = true;
                 //保证保存视图页面和标签控制页面互斥打开
                 this.el.find('.tab-list').hide();
+                this.data.tabsControlOpen = false;
             }else{
                 this.el.find('.view-save-component').hide();
                 this.data.saveViewOpen = false;
@@ -526,6 +528,7 @@ export const IframeInstance = new Component({
             event:'click',
             selector:'.popup-icon',
             callback:function () {
+                console.log("open tabs");
                 this.actions.showTabsPopup();       //打开标签控制页面
             }
         },
@@ -562,6 +565,7 @@ export const IframeInstance = new Component({
             event:'click',
             selector:'.view-save',
             callback:function (target,event) {
+                console.log("open save view");
                 this.actions.showViewSave();            //打开保存视图页面
             }
         },
