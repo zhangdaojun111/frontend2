@@ -910,8 +910,10 @@ let config = {
         //必填性改变
         requiredChange(_this) {
             if (_this.data.value === '') {
+                console.log("kong")
                 _this.el.find('#requiredLogo').removeClass().addClass('required');
             } else {
+                console.log('非空')
                 _this.el.find('#requiredLogo').removeClass().addClass('required2');
             }
         },
