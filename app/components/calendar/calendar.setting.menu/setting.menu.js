@@ -15,19 +15,10 @@ let config = {
         type: 'full'
     },
     actions: {
-        search: function (text) {
-            this.data.text = text;
-            if (text === '') {
-                this.data.list = this.originData;
-            } else {
-                this.data.list = searchData(this.originData, text);
-            }
-            this.actions.renderMenuList();
-        },
         renderMenuList: function () {
             this.destroyChildren();
-            this.data.list.forEach((data,index) => {
-               data.display = false;
+            this.data.list.forEach((data) => {
+               data.display = true;
                 let component = new FullMenuItem(_.defaultsDeep({}, data, {
                     root: true,
                     offset: 0,
@@ -40,19 +31,11 @@ let config = {
     },
 
     binds: [
-        {
-            event: 'input',
-            selector: 'label.search input:text',
-            callback: _.debounce(function(context) {
-                this.actions.search(context.value);
-            }, 1000)
-        }
     ],
 
     afterRender: function () {
         this.$root = this.el.find('.root');
         this.actions.renderMenuList();
-        // this.el.find('.search input:text').focus();
     },
     firstAfterRender: function() {
         this.originData = _.cloneDeep(this.data.list);
