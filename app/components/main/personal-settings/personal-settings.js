@@ -12,7 +12,7 @@ import {UserInfoService} from '../../../services/main/userInfoService';
 import msgbox from '../../../lib/msgbox';
 import {AvatarSet} from './set-avatar/set-avatar';
 import {agentSetting} from './set-agent/set-agent';
-import OtherLogin from "../login-by-other/login-by-other";
+import {LoginByOther} from "../login-by-other/login-by-other";
 import Mediator from '../../../lib/mediator';
 import {PMAPI} from '../../../lib/postmsg';
 import userInfoDisplay from './user-info-display/user-info-display';
@@ -150,7 +150,7 @@ let config = {
             })
         },
         otherLogin:function () {
-            OtherLogin.show();
+            LoginByOther.show();
         },
         initAvatar:function () {
             let src = this.data.avatar;

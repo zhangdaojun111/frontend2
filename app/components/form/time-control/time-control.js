@@ -104,9 +104,13 @@ let config = {
         this.el.find('.ui-width').css('width', this.data.width);
         this.el.find('.time').css('width', this.data.width);
         //修改历史
-        if ( !this.data.isAgGrid && this.data.history) {
-            this.el.find('.ui-history').css('visibility', 'visible');
+        if(! this.data.isCalendar && !this.data.isAgGrid && this.data.history){
+            this.el.find('.ui-history').css('visibility','visible');
         }
+        if(this.data.isCalendar || this.data.isAgGrid) {
+            this.el.find('.ui-history').css('visibility','hidden');
+        }
+
         //查看模式/编辑模式
         if (this.data.is_view) {
             this.el.find('.ui-width').attr('disabled', true);

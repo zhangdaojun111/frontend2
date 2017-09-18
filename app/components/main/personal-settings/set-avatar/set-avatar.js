@@ -168,11 +168,16 @@ let config = {
             return image;
         },
         saveAvatar:function () {
+            if(this.data.avatarSrc === ''){
+                msgbox.alert('头像不能设置为空');
+                return;
+            }
             this.showLoading();
             //向后台传递头像数据
             UserInfoService.saveAvatar(this.data.avatarSrc).done((result) => {
                 //根据结果处理后续工作
                 if(result.success === 1){
+                    console.log(result);
                     //向父窗口传递头像数据并设置
                     window.config.sysConfig.userInfo.avatar = this.data.avatarSrc;
                     Mediator.emit("personal:setAvatar");
@@ -201,13 +206,13 @@ let config = {
             selector:'span.save-avatar',
             callback:_.debounce(function(){
                 this.actions.saveAvatar();
-            },300)
+            },150)
         },
         {
             event:'click',
             selector:'span.set-cancel',
             callback:function () {
-                this.el.dialog('close');
+                AvatarSet.hide();
             }
         }
     ],

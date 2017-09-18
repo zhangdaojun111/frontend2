@@ -80,6 +80,7 @@ let config = {
         },
     ],
     afterRender: function () {
+        console.log("after render");
         let calendarSetItem = new CalendarSettingItem();
         this.data.menu.forEach(item => {
             calendarSetItem.data.menuItem = item;
@@ -92,6 +93,7 @@ let config = {
         });
     },
     beforeDestory: function () {
+        console.log("asdasd");
         Mediator.removeAll('calendar-set-left:calendar-set');
     }
 };
