@@ -947,12 +947,12 @@ let config = {
             let sheetData = dataTableService.getSheetPage( obj2 );
             let tableOperate = dataTableService.getTableOperation( obj2 );
             let prepareParmas = dataTableService.getPrepareParmas( obj2 );
-
             Promise.all([preferenceData, headerData, sheetData,tableOperate,prepareParmas]).then((res)=> {
-                this.actions.setHeaderData( res );
+                this.actions.setHeaderData( res )
+                this.actions.getGridData();
             })
             //请求表单数据
-            this.actions.getGridData();
+            // this.actions.getGridData();
         },
         //设置表头数据
         setHeaderData: function ( res ) {
