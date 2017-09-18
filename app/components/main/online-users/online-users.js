@@ -86,12 +86,12 @@ export const OnlineDisplay = {
             height: 575,
             modal: true,
             close: function() {
-                $(this).dialog('destroy');
+                $(this).erdsDialog('destroy');
                 component.destroySelf();
             }
         });
     },
     hide:function () {
-        this.el.dialog('close');
+        this.el.erdsDialog('close');
     }
 };
