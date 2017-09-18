@@ -1,6 +1,7 @@
 @import "../../../../assets/scss/core/base";
 
 .import-con {
+    font-size: 12px !important;
     .import-table {
         width: 98%;
         display: block;
@@ -39,7 +40,7 @@
                 font-size: 12px;
             }
             select {
-                font-size: 12px;
+                //font-size: 12px;
                 height: 22px;
                 border-color: #e4e4e4;
                 width: 40px;
@@ -100,8 +101,8 @@
                     cursor: pointer;
                     .radio-out {
                         display: inline-block;
-                        width: 13px;
-                        height: 13px;
+                        width: 14px;
+                        height: 14px;
                         border: 1px solid #d3d3d3;
                         border-radius: 100%;
                         position: relative;
@@ -109,8 +110,8 @@
                         .radio-in {
                             display: inline-block;
                             visibility: hidden;
-                            width: 9px;
-                            height: 9px;
+                            width: 10px;
+                            height: 10px;
                             position: relative;
                             left: 2px;
                             top: -1px;

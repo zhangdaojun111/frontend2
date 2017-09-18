@@ -38,7 +38,7 @@ let css = `
     top: 50px;
     left: 180px;
 }
-.uid-name-group > .name{
+.uid-name-group > .uid-name{
     height: 50px;
     line-height: 50px;
     margin-top: 5px;
@@ -100,16 +100,16 @@ let userInfoDisplay = {
         userName:''
     },
     actions:{
-        displayTargetInfo:function (data) {
-            this.el.find('.department-info').val(data.user_department);
-            this.el.find('.email-info').val(data.user_email);
-            this.el.find('.position-info').val(data.user_job);
-            this.el.find('.phone-info').val(data.user_tel);
-            this.el.find('.name').html(this.data.userName);
-            if(data.avatar === ""){
+        displayTargetInfo:function () {
+            this.el.find('.uid-department-info').val(this.data.userInfo.user_department);
+            this.el.find('.uid-email-info').val(this.data.userInfo.user_email);
+            this.el.find('.uid-position-info').val(this.data.userInfo.user_job);
+            this.el.find('.uid-phone-info').val(this.data.userInfo.user_tel);
+            this.el.find('.uid-name').html(this.data.userName);
+            if(this.data.userInfo.avatar === ""){
                 this.data.avatar = "";
             }else{
-                this.data.avatar = "/mobile/get_file/?file_id=" + data.avatar + "&download=0";
+                this.data.avatar = "/mobile/get_file/?file_id=" + this.data.userInfo.avatar + "&download=0";
             }
             this.actions.initInfo();
         },
@@ -131,7 +131,7 @@ let userInfoDisplay = {
     },
     binds:[],
     afterRender:function () {
-        this.actions.displayTargetInfo(this.data.userInfo);
+        this.actions.displayTargetInfo();
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
     },
     beforeDestory:function () {

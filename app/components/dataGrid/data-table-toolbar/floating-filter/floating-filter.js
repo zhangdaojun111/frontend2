@@ -5,10 +5,9 @@
 import Component from "../../../../lib/component";
 import template from './floating-filter.html';
 import DateTimeControl from "../../../form/datetime-control/datetime-control";
-import DateControl from "../../../form/date-control/date-control";
+import DateControl from "../grid-data-control/grid-data-control";
 import TimeControl from "../../../form/time-control/time-control";
 import agGrid from "../../agGrid/agGrid";
-
 let config = {
     template: template,
     data: {
@@ -25,22 +24,43 @@ let config = {
                     this.eGui.style.paddingTop = '5px';
                     if( colInfo == 'none' ){
                         this.eGui.innerHTML = '<input disabled type="text"/>';
-                    } else if( colInfo == 'date' ){
-                        let dateControl = new DateControl({value: ''},{changeValue:function(data){
+                        this.eFilterInput = this.eGui.querySelector('input');
+                        this.eFilterInput.className = 'filter-input filter-input-' + searchFiled;
+                        this.eGui.style.height = '25px';
+                        this.eFilterInput.style.width = '80%';
+                        this.eFilterInput.style.height = '15px';
+                        this.eFilterInput.style.lineHeight = '20px';
+                        this.eFilterInput.style.color = 'rgb(85,85,85)';
+                        this.eFilterInput.style.border = '1px solid #E4E4E4';
+                        this.eFilterInput.style.marginBottom = '5px';
+                        this.eFilterInput.style.borderRadius = '2px';
+                        this.eFilterInput.style.textIndent = '5px';
+                    } else if( colInfo == 'date' ){ // 使用年月日插件
+                        let dateControl = new DateControl({value: '', isAgGrid: true},{changeValue:function(data){
                             That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                         }});
                         dateControl.render($(this.eGui));
                         this.eFilterInput = this.eGui.querySelector('input');
                         this.eFilterInput.className += (' filter-input-' + searchFiled);
-                    }else if( colInfo  == 'time' ){
-                        let timeControl = new TimeControl({value: ''},{changeValue:function(data){
+                        this.eFilterInput.addEventListener( 'input', _.debounce(()=> {
+                            if(this.eFilterInput.value == ''){
+                                That.actions.keyupSearch(null,this.eFilterInput.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
+                            }
+                        },1000 ))
+                    }else if( colInfo  == 'time' ){  //使用时间插件
+                        let timeControl = new TimeControl({value: '', isAgGrid: true},{changeValue:function(data){
                             That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                         }});
                         timeControl.render($(this.eGui));
                         this.eFilterInput = this.eGui.querySelector('input');
                         this.eFilterInput.className += (' filter-input-' + searchFiled);
-                    }else if( colInfo  == 'datetime' ){
-                        let dateTimeControl = new DateTimeControl({value: ''},{changeValue:function(data){
+                        this.eFilterInput.addEventListener( 'input', _.debounce(  ($event)=> {
+                            if(this.eFilterInput.value == ''){
+                                That.actions.keyupSearch(null,this.eFilterInput.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
+                            }
+                        },1000 ))
+                    }else if( colInfo  == 'datetime' ){ //使用年月日时分秒插件
+                        let dateTimeControl = new DateTimeControl({value: '', isAgGrid: true},{changeValue:function(data){
                             setTimeout(()=>{
                                 That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                             },1000)
@@ -48,9 +68,11 @@ let config = {
                         dateTimeControl.render($(this.eGui));
                         this.eFilterInput = this.eGui.querySelector('input');
                         this.eFilterInput.className += (' filter-input-' + searchFiled);
-                        // this.eFilterInput.addEventListener( 'input', _.debounce(  ($event)=> {
-                        //     That.actions.keyupSearch(null,this.eFilterInput.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
-                        // },1000 ))
+                        this.eFilterInput.addEventListener( 'input', _.debounce(  ($event)=> {
+                            if(this.eFilterInput.value == ''){
+                                That.actions.keyupSearch(null,this.eFilterInput.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
+                            }
+                        },1000 ))
                     }else {
                         this.eGui.innerHTML = '<input type="text"/>';
                         this.eFilterInput = this.eGui.querySelector('input');
@@ -81,7 +103,7 @@ let config = {
         },
         //解决汉字搜索第一次传空' '的问题
         keyupSearch: function($event,oInput,col_field,colInfo,searchType,searchOldValue,searchValue) {
-            let keyWord = colInfo == 'number' ? Number(oInput.value) : oInput;
+            let keyWord = colInfo == 'number' ? Number(oInput) : oInput;
             let searchOperate = colInfo == 'number' ? 'EQUALS' : 'CONTAINS';
             if( oInput == "" ){
                 keyWord = oInput;

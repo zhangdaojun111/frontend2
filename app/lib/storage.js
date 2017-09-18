@@ -100,6 +100,9 @@ export const Storage = {
      */
     clearAll:function () {
         for(let key of Object.keys(window.localStorage)){
+            if(key.indexOf('find_password')!=0){
+                continue;
+            }
             if(key.indexOf('iframedialog')!=0){
                 delete window.localStorage[key];
             } else {

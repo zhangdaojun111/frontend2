@@ -22,10 +22,12 @@ let config = {
         title: 'calendar',
         calendarMainComponent: {},
         keyValue: '',
+        cancelFields: []
     },
     actions: {
         getCalendarTreeData: function () {
             CalendarService.getCalendarTreeData().then(res => {
+                this.data.cancelFields = res['cancel_fields'];
                 this.el.find('.left-content').empty();
                 this.append(new LeftContent(res), this.el.find('.left-content'));
                 Mediator.emit('Calendar: tool', {toolMethod: 'refresh', data: res['cancel_fields']});
@@ -33,6 +35,7 @@ let config = {
         }
     },
     firstAfterRender: function () {
+        // 获取当前日期
         let year = CalendarTimeService.getYear(),
             month = CalendarTimeService.getMonth(),
             week = CalendarTimeService.getWeek(),
@@ -51,49 +54,56 @@ let config = {
             this.el.find('#open-new-window').hide();
         }
         CalendarService.getCalendarTreeData().then(res => {
+            this.cancelFields = res['cancel_fields'];
             this.append(new LeftContent(res), this.el.find('.left-content'));
             this.append(new CalendarMain(res['cancel_fields']), this.el.find('.main-content'));
         });
 
         this.el.on('click', '#monthView', () => {
+            // 切换月视图
             Mediator.emit('Calendar: changeMainView', {calendarContent: 'month',});
             $('#monthView').addClass('btn-checked');
             $('#weekView, #dayView').removeClass('btn-checked');
             $('#todayView, #schedule').removeClass('today-btn-checked');
         }).on('click', '#weekView', () => {
+            // 切换周视图
             Mediator.emit('Calendar: changeMainView', {calendarContent: 'week',});
             $('#weekView').addClass('btn-checked');
             $('#monthView, #dayView').removeClass('btn-checked');
             $('#todayView, #schedule').removeClass('today-btn-checked');
         }).on('click', '#dayView', () => {
+            // 切换日视图
+            Mediator.emit('Calendar: changeMainView', {calendarContent: 'day',});
             $('#dayView').addClass('btn-checked');
             $('#monthView, #weekView').removeClass('btn-checked');
             $('#todayView, #schedule').removeClass('today-btn-checked');
-            Mediator.emit('Calendar: changeMainView', {calendarContent: 'day',});
         }).on('click', '#todayView', () => {
+            // 切换到今日
+            Mediator.emit('Calendar: changeMainView', {calendarContent: 'today',});
             $('#todayView').addClass('today-btn-checked');
             $('#schedule').removeClass('today-btn-checked');
             $('#monthView, #weekView, #dayView').removeClass('btn-checked');
-            Mediator.emit('Calendar: changeMainView', {calendarContent: 'today',});
         }).on('click', '#schedule', () => {
+            // 切换到日程视图
+            Mediator.emit('Calendar: changeMainView', {calendarContent: 'schedule',});
             $('#schedule').addClass('today-btn-checked');
             $('#todayView').removeClass('today-btn-checked');
             $('#monthView, #weekView, #dayView').removeClass('btn-checked');
-            Mediator.emit('Calendar: changeMainView', {calendarContent: 'schedule',});
         }).on('click', '#refresh', () => {
             this.actions.getCalendarTreeData();
-            //Mediator.emit('Calendar: tool', {toolMethod: 'refresh'});
         }).on('click', '#export', () => {
             Mediator.emit('Calendar: tool', {toolMethod: 'export'});
             // PMAPI.openDialogByIframe(
             //     '/iframe/calendarExport/',
             //     {
-            //         title: '导出',
             //         width: '400',
             //         height: '460',
-            //         modal: true,
-            //     },
-            // );
+            //         title: '导出',
+            //     },{
+            //         cancelFields: this.data.cancelFields,
+            //     }).then(data => {
+            //     console.log(data);
+            // });
         }).on('click', '.pre-date', () => {
             Mediator.emit('Calendar: changeDate', 'pre');
         }).on('click', '.next-date', () => {

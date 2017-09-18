@@ -145,7 +145,10 @@ export const dgcService = {
     //创建footer数据
     createFooterData: function (res) {
         let arr = [];
-        let obj = res.rows[0] || {};
+        let obj = {};
+        if( res&&res.rows&&res.rows[0] ){
+            obj = res.rows[0];
+        }
         obj["myfooter"] = '合计';
         arr.push(obj);
         let footerData = arr;
@@ -415,7 +418,8 @@ export const dgcService = {
             in_process: ['float-search-btn','refresh-btn','grid-new-window'],
             keyword: ['keyword-tips','custom-column-btn','grid-new-window'],
             deleteHanding: ['delete-tips','grid-del-btn','custom-column-btn'],
-            newFormCount: ['custom-column-btn','custom-column-btn'],
+            newFormCount: ['custom-column-btn'],
+            reportTable2: ['new-form-btn','refresh-btn','edit-btn','custom-column-btn','grid-auto-width'],
         }
         return obj[viewMode];
     },
@@ -494,7 +498,7 @@ export const dgcService = {
         if (res['pageSize'] && res['pageSize'].pageSize) {
             data.rows = res['pageSize'].pageSize;
         }
-        if (res['ignoreFields']) {
+        if (res['ignoreFields']&&res['ignoreFields']['ignoreFields']) {
             data.ignoreFields = JSON.parse(res['ignoreFields']['ignoreFields']);
         } else {
             // this.data.hideColumn = ['f1','f2','f3','f4']
@@ -525,6 +529,8 @@ export const dgcService = {
     //根据偏好返回agGrid sate
     calcColumnState: function (data,agGrid,defaultArr) {
         let gridState = agGrid.gridOptions.columnApi.getColumnState();
+        // console.log('gridState')
+        // console.log(gridState)
         let indexedGridState = {};
         for(let state of gridState) {
             indexedGridState[state['colId']] = state;
@@ -586,9 +592,15 @@ export const dgcService = {
                 d['width'] = data.operateColWidth;
             }
         }
+        let new_arr = []
+        for( let d of arr ){
+            if( d.colId!=undefined ){
+                new_arr.push( d );
+            }
+        }
         // console.log( "状态" )
-        // console.log( arr )
-        agGrid.gridOptions.columnApi.setColumnState( arr );
+        // console.log( new_arr )
+        agGrid.gridOptions.columnApi.setColumnState( new_arr );
     },
     //判断Object是否相等
     checkObejctNotEqual(obj1,obj2){
