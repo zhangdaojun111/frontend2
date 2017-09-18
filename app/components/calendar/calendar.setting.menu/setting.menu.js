@@ -15,18 +15,9 @@ let config = {
         type: 'full'
     },
     actions: {
-        search: function (text) {
-            this.data.text = text;
-            if (text === '') {
-                this.data.list = this.originData;
-            } else {
-                this.data.list = searchData(this.originData, text);
-            }
-            this.actions.renderMenuList();
-        },
         renderMenuList: function () {
             this.destroyChildren();
-            this.data.list.forEach((data,index) => {
+            this.data.list.forEach((data) => {
                data.display = false;
                 let component = new FullMenuItem(_.defaultsDeep({}, data, {
                     root: true,
@@ -40,13 +31,6 @@ let config = {
     },
 
     binds: [
-        {
-            event: 'input',
-            selector: 'label.search input:text',
-            callback: _.debounce(function(context) {
-                this.actions.search(context.value);
-            }, 1000)
-        }
     ],
 
     afterRender: function () {
