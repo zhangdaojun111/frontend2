@@ -2534,7 +2534,23 @@ let config = {
 
             //视频字段
             if(data.colDef.real_type == fieldTypeService.VIDEO_TYPE && data.event.srcElement.id == 'file_view'){
-                    })}
+                let json = {
+                    file_ids:JSON.stringify(data.value),
+                    dinput_type:data.colDef.dinput_type
+                };
+                dataTableService.getAttachmentList( json ).then( res => {
+                    ViewVideo.data.rows = res.rows;
+                    ViewVideo.data.dinput_type = data.colDef.dinput_type;
+                    ViewVideo.data.currentVideoId = data.value[0];
+                    ViewVideo.data.videoSrc = `/download_attachment/?file_id=${data.value[0]}&download=0&dinput_type=${data.colDef.dinput_type}`;
+                    PMAPI.openDialogByComponent(ViewVideo, {
+                        width: 1000,
+                        height: 600,
+                        title: '视频播放器'
+                    })
+                });
+                HTTP.flush();
+            }
             //图片查看
             if( data.colDef.real_type == fieldTypeService.IMAGE_TYPE ){
                 let json = {};
