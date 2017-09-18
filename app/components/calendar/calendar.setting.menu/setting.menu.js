@@ -18,7 +18,7 @@ let config = {
         renderMenuList: function () {
             this.destroyChildren();
             this.data.list.forEach((data) => {
-               data.display = false;
+               data.display = true;
                 let component = new FullMenuItem(_.defaultsDeep({}, data, {
                     root: true,
                     offset: 0,
@@ -36,7 +36,6 @@ let config = {
     afterRender: function () {
         this.$root = this.el.find('.root');
         this.actions.renderMenuList();
-        // this.el.find('.search input:text').focus();
     },
     firstAfterRender: function() {
         this.originData = _.cloneDeep(this.data.list);

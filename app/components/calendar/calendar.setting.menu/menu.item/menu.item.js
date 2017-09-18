@@ -16,21 +16,20 @@ let config = {
     actions: {
         showChildrenAtFull: function () {
             this.childlist.show();
-            this.iconWrap.removeClass('ui-state-focus').addClass('ui-state-active');
+            // this.iconWrap.removeClass('ui-state-focus').addClass('ui-state-active');
             this.icon.removeClass('ui-icon-caret-1-e').addClass('ui-icon-caret-1-s');
             this.data.display = true;
-            this.findBrothers().forEach((brother) => {
-                brother.actions.hideChildrenAtFull();
-            });
+            // this.findBrothers().forEach((brother) => {
+            //     brother.actions.hideChildrenAtFull();
+            // });
         },
         hideChildrenAtFull: function () {
             this.childlist.hide();
-            this.iconWrap.removeClass('ui-state-active').addClass('ui-state-focus');
+            // this.iconWrap.removeClass('ui-state-active').addClass('ui-state-focus');
             this.icon.removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-e');
             this.data.display = false;
         },
         onItemClickAtFull: function (event) {
-            console.log(this.data.display);
             if (this.data.items && this.data.items.length) {
                 if (this.data.type === 'full') {
                     if (this.data.display === true) {
@@ -61,7 +60,6 @@ let config = {
         },
     ],
     afterRender: function () {
-        this.ownCheckbox = this.el.find('> .menu-full-item .custom-checkbox input:checkbox');
         // 子菜单
         this.childlist = this.el.find('> .childlist');
         // 自己
@@ -69,23 +67,10 @@ let config = {
         this.iconWrap = this.el.find('> .menu-full-item > .row > .icon');
         this.icon = this.iconWrap.find('> .ui-icon');
         this.row.addClass(this.data.type);
-        let that = this;
-        if (this.data.type === 'full') {
-            this.el.off('mouseenter');
-            this.el.off('mouseleave');
-        }
-
-        if (_.isUndefined(this.data.items)) {
-            if (this.data.table_id && this.data.table_id !== '' && this.data.table_id !== "0") {
-                this.data.key = this.data.table_id;
-            }else{
-                this.data.key = this.data.ts_name;
-            }
-            this.ownCheckbox.addClass('leaf').attr('key', this.data.key);
-        }
-
+        this.icon.removeClass('ui-icon-caret-1-e').addClass('ui-icon-caret-1-s');
         if (this.data.items) {
             this.data.items.forEach((data) => {
+                data.display = true;
                 let newData = _.defaultsDeep({}, data, {
                     root: false,
                     offset: this.data.offset + 20,
@@ -93,11 +78,7 @@ let config = {
                     type: this.data.type
                 });
 
-                let component = new FullMenuItem(newData, {
-                    onSubCheckboxChange: function (value) {
-                        that.actions.checkChildrenChecked();
-                    }
-                });
+                let component = new FullMenuItem(newData);
                 this.append(component, this.childlist, 'li');
             });
         }
@@ -112,11 +93,7 @@ let config = {
                 })
             }
         }
-        if(this.data.display){
-            this.actions.showChildrenAtFull();
-        }else{
-            this.actions.hideChildrenAtFull();
-        }
+
     }
 }
 
