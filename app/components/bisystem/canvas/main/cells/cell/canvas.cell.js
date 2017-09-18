@@ -125,7 +125,8 @@ let config = {
             this.data['chart'] = res[0]['data'];
             this.data['cell'].chart_id = chart.chart_id;
             this.data['cell']['is_deep'] = 0;
-            this.trigger('onUpdateLayout', {componentId: this.componentId,cell:this.data.cell});
+            console.log(Boolean(this.data.cell.layout_id));
+            this.trigger('onUpdateLayout', {componentId: this.componentId,cell:this.data.cell, deep_clear: this.data.cell.layout_id ? "1" : "0"});
             this.data.biUser = true;
             this.actions.loadCellChart(res[0]);
         },
@@ -180,7 +181,6 @@ let config = {
                     layout_id: this.data.cell.layout_id,
                     xOld: {},
                     row_id:0,
-                    deep_clear: 1,
                     deep_info: {}
                 };
                 this.actions.dragChartData({
