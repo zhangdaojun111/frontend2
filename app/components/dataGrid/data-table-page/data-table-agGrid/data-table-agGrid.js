@@ -947,13 +947,12 @@ let config = {
             let sheetData = dataTableService.getSheetPage( obj2 );
             let tableOperate = dataTableService.getTableOperation( obj2 );
             let prepareParmas = dataTableService.getPrepareParmas( obj2 );
-
             Promise.all([preferenceData, headerData, sheetData,tableOperate,prepareParmas]).then((res)=> {
-                this.actions.setHeaderData( res );
-                //请求表单数据
+                this.actions.setHeaderData( res )
                 this.actions.getGridData();
-            });
-
+            })
+            //请求表单数据
+            // this.actions.getGridData();
         },
         //设置表头数据
         setHeaderData: function ( res ) {
@@ -1183,7 +1182,6 @@ let config = {
                 let currentPage = parseInt( Number( this.data.first )/Number( this.data.rows ) );
                 this.pagination.actions.setPagination( this.data.total,currentPage + 1 );
             }
-            console.log( '请求数据返回get_table_data' );
             this.actions.sortWay();
             //编辑模式原始数据
             if( this.el.find( '.edit-btn' )[0] ){
@@ -2474,6 +2472,9 @@ let config = {
         },
         //触发排序事件
         onSortChanged: function ($event) {
+            if( this.data.frontendSort ){
+                this.agGrid.actions.refreshView();
+            }
             if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' || this.data.frontendSort ){
                 return;
             }
@@ -3096,6 +3097,7 @@ let config = {
         if( this.data.viewMode == 'deleteHanding' ){
             PMAPI.getIframeParams(window.config.key).then((res) => {
                 this.data.deleteHandingData = res.data.obj.deleteHandingData || [];
+                this.actions.getHeaderData();
             })
         }
         this.actions.getHeaderData();
