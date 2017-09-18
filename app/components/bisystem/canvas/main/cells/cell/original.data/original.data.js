@@ -186,12 +186,10 @@ export class CanvasOriginalDataComponent extends Component {
      * 处理折线柱状图的原始数据
      */
     static handleLineBarOriginalData(data) {
-        console.log('xxxxxxxxxxxxxxxxxxx');
-        console.log(data);
-
         //　如果是分组　使用分组模版
         if (data.cellChart.chart.chartGroup['id']) {
-            data.template = groupTemplate
+            CanvasOriginalDataComponent.handleLineBarGroupOriginalData(data)
+            return false;
         };
         // 如果select有数据就用select的数据 select = xAxis
         if (data.cellChart.cell.select.length  === 0) {
@@ -206,7 +204,7 @@ export class CanvasOriginalDataComponent extends Component {
                 };
                 return value;
             });
-        }
+        };
         // 如果attribute有数据就用attribute的数据 attribute = yAxis
         if (data.cellChart.cell.attribute.length === 0) {
             data.cellChart.cell.attribute = data.cellChart.chart.yAxis.map(item => {
@@ -219,6 +217,35 @@ export class CanvasOriginalDataComponent extends Component {
             });
             data.cellChart.cell.attribute = attribute;
         };
+    }
+
+    /**
+     * 处理折线柱状图分组的原始数据
+     */
+    static handleLineBarGroupOriginalData(data) {
+        console.log('xxxxxxxxxxxxxxxxxxx');
+        console.log(data);
+        data.template = groupTemplate;
+
+        // 如果select有数据就用select的数据 select = xAxis
+        if (data.cellChart.cell.select.length  === 0) {
+            data.cellChart.cell.select = data.cellChart.chart.data.xAxis.map(name => {
+                return {'name': name, 'select': true}
+            });
+        } else {
+            data.cellChart.cell.select = data.cellChart.cell.select.map(item => {
+                let value = JSON.parse(item);
+                if (!value.select) {
+                    data.selectAllX = false;
+                };
+                return value;
+            });
+        };
+        // 如果attribute有数据就用attribute的数据 attribute = yAxis
+        data.cellChart.cell.attribute = data.cellChart.chart.yAxis.map(item => {
+            return {'selected': true, 'name': item.field.name}
+        });
+        data.cellChart.cell.attribute.unshift({'selected': true, 'name': data.cellChart.chart.xAxis.name});
     }
 
     /**
