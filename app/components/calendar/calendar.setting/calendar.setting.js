@@ -83,18 +83,6 @@ let config = {
                 }
             }
         },
-        {
-            event: 'click',
-            selector: '.menu-item-title',
-            callback: function (temp = this) {
-                console.log(11);
-                if($(temp).is(".has-hide")){
-                    $(temp).removeClass('has-hide');
-                }else{
-                    $(temp).addClass('has-hide');
-                }
-            }
-        }
     ],
     afterRender: function () {
         // let calendarSetItem = new CalendarSettingItem();

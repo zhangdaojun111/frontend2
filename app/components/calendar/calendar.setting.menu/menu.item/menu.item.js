@@ -30,6 +30,7 @@ let config = {
             this.data.display = false;
         },
         onItemClickAtFull: function (event) {
+            console.log(this.data.display);
             if (this.data.items && this.data.items.length) {
                 if (this.data.type === 'full') {
                     if (this.data.display === true) {
@@ -47,89 +48,6 @@ let config = {
                     });
             }
         },
-        showChildrenAtMini: function () {
-            // window.clearTimeout(this.data.timer);
-            if (this.childlist.length) {
-                this.childlist.show();
-                let height = this.childlist.height();
-                let position = this.childlist.offset();
-                let screenHeight = $('body').height();
-                if ((position.top + height) > screenHeight) {
-                    this.childlist.removeClass('top').addClass('bottom');
-                } else {
-                    this.childlist.removeClass('bottom').addClass('top');
-                }
-            }
-        },
-        hideChildrenAtMini: function () {
-            // window.clearTimeout(this.data.timer);
-            // this.data.timer = window.setTimeout(() => {
-            this.childlist.hide();
-            // }, 500)
-        },
-        onItemClickAtMini: function () {
-            if (_.isUndefined(this.data.items)) {
-                let key;
-                if (this.data.table_id && this.data.table_id !== '' && this.data.table_id !== "0") {
-                    key = this.data.table_id;
-                }else{
-                    key = this.data.ts_name;
-                }
-                Mediator.emit('menu:item:openiframe', {
-                    id: key,
-                    name: this.data.label,
-                    url: this.data.url
-                });
-            }
-        },
-        onCheckboxChange: function (context, event) {
-            let value = context.checked;
-            this.actions.setCheckboxValue(value);
-            this.trigger('onSubCheckboxChange', value);
-        },
-        setCheckboxValue: function (value) {
-            if (this.ownCheckbox.length) {
-                this.ownCheckbox[0].checked = value;
-            }
-            this.subComponents.forEach((comp) => {
-                comp.actions.setCheckboxValue(value);
-            })
-        },
-        setCheckboxValueSelf: function (value) {
-            if (this.ownCheckbox.length) {
-                this.ownCheckbox[0].checked = value;
-            }
-        },
-        checkChildrenChecked: function () {
-            let allCheckbox = this.el.find('.childlist input:checkbox');
-            let allChecked = this.el.find('.childlist input:checked');
-            if (allCheckbox.length === allChecked.length) {
-                this.actions.setCheckboxValueSelf(true);
-            } else {
-                this.actions.setCheckboxValueSelf(false);
-            }
-        },
-        setToFull: function () {
-            this.data.type = 'full';
-            this.cancelEvents();
-            this.bindEvents();
-            this.el.off('mouseenter');
-            this.el.off('mouseleave');
-        },
-        setToMini: function () {
-            this.data.type = 'mini';
-            this.cancelEvents();
-            this.bindEvents();
-            this.actions.hideChildrenAtFull();
-            let offset = 30;
-            if (this.data.items) {
-                offset = 10;
-            }
-            this.row.css({
-                'padding-left': offset + 'px',
-                'padding-right': '20px'
-            })
-        }
     },
     binds: [
         {
@@ -140,31 +58,7 @@ let config = {
                     this.actions.onItemClickAtFull(event);
                 }
             }
-        }, {
-            event: 'mouseenter',
-            selector: null,
-            callback: function () {
-                this.actions.showChildrenAtMini();
-            }
-        }, {
-            event: 'mouseleave',
-            selector: null,
-            callback: function () {
-                this.actions.hideChildrenAtMini();
-            }
-        }, {
-            event: 'click',
-            selector: '> .menu-full-item > .row.mini',
-            callback: function () {
-                this.actions.onItemClickAtMini();
-            }
-        }, {
-            event: 'click',
-            selector: '> .menu-full-item > .row.setItemTitle',
-            callback: function (context, event) {
-                this.actions.onCheckboxChange(context, event);
-            }
-        }
+        },
     ],
     afterRender: function () {
         this.ownCheckbox = this.el.find('> .menu-full-item .custom-checkbox input:checkbox');
@@ -187,9 +81,6 @@ let config = {
             }else{
                 this.data.key = this.data.ts_name;
             }
-            // if (window.config.commonUse.data.indexOf(this.data.key) !== -1) {
-            //     this.actions.onCheckboxChange({checked: true});
-            // }
             this.ownCheckbox.addClass('leaf').attr('key', this.data.key);
         }
 
@@ -221,10 +112,10 @@ let config = {
                 })
             }
         }
-        if (this.data.expandChild) {
-            // this.data.expandChild = true;
-            this.childlist.show();
-            // this.actions.showChildrenAtFull();
+        if(this.data.display){
+            this.actions.showChildrenAtFull();
+        }else{
+            this.actions.hideChildrenAtFull();
         }
     }
 }

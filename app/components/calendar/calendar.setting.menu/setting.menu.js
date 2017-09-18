@@ -24,61 +24,10 @@ let config = {
             }
             this.actions.renderMenuList();
         },
-        hide: function() {
-            this.el.hide();
-        },
-        show: function() {
-            this.el.show();
-            this.actions.countHeight();
-        },
-        countHeight: function() {
-            $(window).trigger('resize.menu');
-        },
-        setSizeToFull: function () {
-            this.el.removeClass('mini');
-            this.data.type = 'full';
-            let allChildren = this.findAllChildren();
-            allChildren.forEach((item) => {
-                item.actions.setToFull();
-            });
-            this.actions.countHeight();
-        },
-        setSizeToMini: function () {
-            this.el.addClass('mini');
-            this.data.type = 'mini';
-            let allChildren = this.findAllChildren();
-            allChildren.forEach((item) => {
-                item.actions.setToMini();
-            });
-            this.actions.countHeight();
-        },
-        startEditModel: function () {
-            this.el.find('.custom-checkbox').show();
-            this.el.find('.search').addClass('edit');
-            this.el.find('.menu-full').addClass('edit');
-            this.el.find('.menu-full-item > .row.full').addClass('edit');
-            this.actions.countHeight();
-        },
-        cancelEditModel: function () {
-            this.el.find('.custom-checkbox').hide();
-            this.el.find('.search').removeClass('edit');
-            this.el.find('.menu-full').removeClass('edit');
-            this.el.find('.menu-full-item > .row.full').removeClass('edit');
-            this.actions.countHeight();
-        },
-        getSelected: function () {
-            let choosed = this.el.find('input:checkbox:checked.leaf[key]');
-            let res = Array.from(choosed).map((item) => {
-                return $(item).attr('key');
-            });
-            _.remove(res, function (i) {
-                return i === '0';
-            });
-            return res;
-        },
         renderMenuList: function () {
             this.destroyChildren();
-            this.data.list.forEach((data) => {
+            this.data.list.forEach((data,index) => {
+               data.display = false;
                 let component = new FullMenuItem(_.defaultsDeep({}, data, {
                     root: true,
                     offset: 0,
@@ -104,7 +53,6 @@ let config = {
         this.$root = this.el.find('.root');
         this.actions.renderMenuList();
         // this.el.find('.search input:text').focus();
-        this.actions.countHeight();
     },
     firstAfterRender: function() {
         this.originData = _.cloneDeep(this.data.list);
