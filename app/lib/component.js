@@ -27,7 +27,6 @@ class Component {
     constructor(config, data, events) {
         $.extend(true, this, defaultConfig, config, {data: data||{}, events: events||{}})
         let that = this;
-        console.log(this);
         function scan(obj) {
             for(let name in obj) {
                 let item = obj[name];

@@ -232,6 +232,7 @@ export class CanvasOriginalDataComponent extends Component {
             });
         } else {
             data.cellChart.cell.select = data.cellChart.cell.select.map(item => {
+                console.log(item);
                 let value = JSON.parse(item);
                 if (!value.select) {
                     data.selectAllX = false;
