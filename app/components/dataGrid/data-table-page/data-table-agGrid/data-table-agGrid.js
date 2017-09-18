@@ -950,9 +950,10 @@ let config = {
 
             Promise.all([preferenceData, headerData, sheetData,tableOperate,prepareParmas]).then((res)=> {
                 this.actions.setHeaderData( res );
-            })
-            //请求表单数据
-            this.actions.getGridData();
+                //请求表单数据
+                this.actions.getGridData();
+            });
+
         },
         //设置表头数据
         setHeaderData: function ( res ) {
