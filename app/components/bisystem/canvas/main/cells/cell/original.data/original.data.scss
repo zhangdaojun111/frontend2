@@ -5,6 +5,7 @@
     border-collapse: collapse;
     overflow: hidden;
 }
+
 .origin-data-wrap {
     height: calc(100%);
     overflow: hidden;
@@ -30,6 +31,7 @@
             font-size: 12px;
             background: #3b8cff;
             color: #fff;
+            cursor: pointer;
         }
     }
     .origin-data {
@@ -41,13 +43,16 @@
         border: 1px solid #EEEEEE;
         .content {
             .custom-checkbox {
-                height: 21px;
+                input {
+                    bottom: 4px;
+                }
             }
             table {
                 width: 100%;
                 text-align: center;
                 border-collapse: collapse;
                 table-layout: fixed;
+                font-size: 12px;
                 th {
                     font-weight: bold;
                     text-align: center;
@@ -55,7 +60,6 @@
                     @include th-td;
                 }
                 td {
-                    font-size: 12px;
                     @include th-td;
                     a {
                         text-decoration: none;
@@ -71,7 +75,7 @@
                 tr:nth-child(2n+3) {
                     background-color: #FAFBFD;
                 }
-                th:nth-child(1) {
+                .selectAllX {
                     width: 60px;
                 }
                 .sort {
@@ -95,3 +99,5 @@
         }
     }
 }
+
+@import "original.linebar.group.data";

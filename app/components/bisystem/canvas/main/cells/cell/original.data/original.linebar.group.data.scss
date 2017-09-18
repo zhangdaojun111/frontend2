@@ -1,0 +1,111 @@
+.origin-data-wrap {
+    width: 100%;
+    .bi-tabs {
+        display: block;
+        .cur1 {
+            background: #FFFFFF;
+            color: #666666;
+        }
+        .cur2 {
+            background: #3b8cff;
+            color: #FFFFFF;
+        }
+    }
+    .origin-data {
+        .list {
+            display: none;
+            button {
+                display: none;
+                background: #3b8cff;
+                border: none;
+                color: #fff;
+                width: 120px;
+                height: 36px;
+                margin: 10px 0;
+                cursor: pointer;
+                outline: none;
+            }
+        }
+
+        .form {
+            padding-top: 40px;
+            font-size: 12px;
+            li {
+                margin-bottom: 20px;
+                label {
+                    display: block;
+                    overflow: hidden;
+                    span {
+                        float: left;
+                        width: 130px;
+                        line-height: 34px;
+                        text-align: center;
+                        font-weight: bold;
+                    }
+                    .normal {
+                        float: left;
+                        box-sizing: border-box;
+                        width: 210px;
+                        height: 34px;
+                        margin-right: 20px;
+                        border: 1px solid #ddd;
+                        text-indent: 5px;
+                    }
+                    p {
+                        float: left;
+                        line-height: 34px;
+                        color: red;
+                        margin: 0;
+                        font-weight: bold;
+                    }
+                    b {
+                        font-weight: normal;
+                        vertical-align: bottom;
+                        display: inline-block;
+                        line-height: 34px;
+                    }
+                }
+                .values {
+                    padding-left: 130px;
+                    p {
+                        display: inline-block;
+                        label {
+                            background: #f5f5f5;
+                            padding: 6px 10px;
+                            margin-right: 5px;
+                            cursor: pointer;
+                            line-height: 20px;
+                            input {
+                                float: left;
+                                margin-top: 4px;
+                                margin-right: 5px;
+                            }
+                        }
+                    }
+                }
+            }
+            .submit-area {
+                clear: both;
+                overflow: hidden;
+                text-align: center;
+                padding: 20px 0;
+                button {
+                    width: 80px;
+                    height: 40px;
+                    border-radius: 3px;
+                    background: #eee;
+                    color: #999;
+                    border: 0 none;
+                    letter-spacing: 2px;
+                    outline: none;
+                    cursor: pointer;
+                    margin: 0 10px;
+                }
+                .submit {
+                    background: #3b8cff;
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
