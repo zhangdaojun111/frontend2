@@ -188,6 +188,7 @@ export class CanvasOriginalDataComponent extends Component {
     static handleLineBarOriginalData(data) {
         console.log('xxxxxxxxxxxxxxxxxxx');
         console.log(data);
+
         //　如果是分组　使用分组模版
         if (data.cellChart.chart.chartGroup['id']) {
             data.template = groupTemplate
