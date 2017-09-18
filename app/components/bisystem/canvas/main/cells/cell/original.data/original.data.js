@@ -4,8 +4,7 @@
  */
 import Component from '../../../../../../../lib/component';
 import template from './original.data.html';
-import linebarHtml from './original.linebar.data.html';
-import pieHtml from './original.pie.data.html';
+import groupTemplate from './original.linebar.group.data.html';
 import './original.data.scss';
 import handlebars from 'handlebars';
 import {canvasCellService} from '../../../../../../../services/bisystem/canvas.cell.service';
@@ -165,6 +164,7 @@ let config = {
 export class CanvasOriginalDataComponent extends Component {
     constructor(data,events) {
         let originalData = CanvasOriginalDataComponent.handleOriginalData(data);
+        config.template = originalData.template ? originalData.template : template;
         super(config,originalData,events);
     }
 
@@ -174,7 +174,6 @@ export class CanvasOriginalDataComponent extends Component {
      */
     static handleOriginalData(originalData) {
         let data = _.cloneDeep(originalData);
-        data.template = data.cellChart.chart.assortment === 'normal' ? linebarHtml : pieHtml;
         if (data.cellChart.chart.assortment === 'normal') {
             CanvasOriginalDataComponent.handleLineBarOriginalData(data)
         } else {
@@ -189,6 +188,11 @@ export class CanvasOriginalDataComponent extends Component {
     static handleLineBarOriginalData(data) {
         console.log('xxxxxxxxxxxxxxxxxxx');
         console.log(data);
+
+        //　如果是分组　使用分组模版
+        if (data.cellChart.chart.chartGroup['id']) {
+            data.template = groupTemplate
+        };
         // 如果select有数据就用select的数据 select = xAxis
         if (data.cellChart.cell.select.length  === 0) {
             data.cellChart.cell.select = data.cellChart.chart.data.xAxis.map(name => {
@@ -228,6 +232,7 @@ export class CanvasOriginalDataComponent extends Component {
             });
         } else {
             data.cellChart.cell.select = data.cellChart.cell.select.map(item => {
+                console.log(item);
                 let value = JSON.parse(item);
                 if (!value.select) {
                     data.selectAllX = false;

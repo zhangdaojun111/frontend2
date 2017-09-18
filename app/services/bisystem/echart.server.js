@@ -77,7 +77,16 @@ export class EchartsService {
         let maxYTextNum; // y轴数字toSting().length最大字数
 
         yAxis.forEach((y,i) => {
+            console.log(y);
             legend.push(y[nameType]);
+            if (nameType === 'new_name') {
+                for (let ySelectItem of ySelectedGroup) {
+                    if (ySelectItem.field.dfield === y.dfield) {
+                        ySelectItem.field.name = y['new_name'];
+                        break;
+                    };
+                }
+            };
             let yTextNum = [];
             y['data'].forEach(val => {
                 if (val) {

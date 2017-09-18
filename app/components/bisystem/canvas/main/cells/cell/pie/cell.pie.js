@@ -62,7 +62,7 @@ let config = {
                     chartData = _.cloneDeep(this.data);
                     chartData.cellChart = cellChart;
                 };
-            }
+            };
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.pieChart = echartsService;
         },
