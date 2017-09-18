@@ -55,7 +55,7 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
         }
     },
     _minimizeWindow: function () {
-        // this._removeClass($(this.uiDialog[0]), "ui-dialog-maximize");
+        this._removeClass($(this.uiDialog[0]), "ui-dialog-maximize");
         this.option('width', this.options.originWidth);
         this.option('height', this.options.originHeight);
         this.option('position', {my: "center", at: "center", of: window});
