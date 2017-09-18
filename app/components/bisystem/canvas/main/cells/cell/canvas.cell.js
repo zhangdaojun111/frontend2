@@ -130,6 +130,7 @@ let config = {
             this.actions.loadCellChart(res[0]);
         },
     },
+
     data: {
         chart: null,
         isIcon :true,
