@@ -172,7 +172,7 @@ export const attachmentListConfig = {
     afterRender:function () {
         this.data.style = $('<style type="text/css"></style>').text(this.data.css).appendTo($("head"));
         this.el.find('.table').addClass('table-striped').addClass('table-bordered');
-        HTTP.postImmediately('/query_attachment_list/',{
+        HTTP.post('query_attachment_list',{
             file_ids:JSON.stringify(this.data.fileIds),
             dinput_type:this.data.dinput_type
         }).then(res=>{
@@ -210,7 +210,8 @@ export const attachmentListConfig = {
                     this.el.find('.attachment-list-anchor').append(ele);
                 }
             }
-        })
+        });
+        HTTP.flush();
     },
     beforeDestroy:function () {
         this.data.style.remove();

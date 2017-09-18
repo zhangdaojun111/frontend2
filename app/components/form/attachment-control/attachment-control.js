@@ -97,6 +97,14 @@ let config = {
                                 }
                             }
                         }
+                        if(this.data.rows){
+                            for(let item of this.data.rows){
+                                if(file.name == item.file_name && md5 == item.file_md5){
+                                    msgBox.showTips('文件已上传');
+                                    return;
+                                }
+                            }
+                        }
                         if(!toolbox){
                             toolbox = msgBox.showProgress({
                                 files:fileArray,
@@ -199,6 +207,14 @@ let config = {
             }
             let id = data.id;
             this.data.attachmentQueueItemComps[id].actions.cancelUploading();
+        });
+        FormService.getAttachment({
+            file_ids:JSON.stringify(this.data.value),
+            dinput_type:this.data.dinput_type
+        }).then(res=>{
+            if(res.success){
+                this.data.rows = res.rows;
+            }
         })
     },
     beforeDestroy:function () {
