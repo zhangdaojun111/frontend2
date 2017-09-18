@@ -78,11 +78,13 @@ export class EchartsService {
         yAxis.forEach((y,i) => {
             legend.push(y[nameType]);
             if (nameType === 'new_name') {
-                for (let ySelectItem of ySelectedGroup) {
-                    if (ySelectItem.field.dfield === y.dfield) {
-                        ySelectItem.field.name = y['new_name'];
-                        break;
-                    };
+                if (Array.isArray(ySelectedGroup) && ySelectedGroup.length > 0) {
+                    for (let ySelectItem of ySelectedGroup) {
+                        if (ySelectItem.field.dfield === y.dfield) {
+                            ySelectItem.field.name = y['new_name'];
+                            break;
+                        };
+                    }
                 }
             };
             let yTextNum = [];

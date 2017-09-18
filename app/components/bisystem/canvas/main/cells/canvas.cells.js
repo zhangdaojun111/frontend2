@@ -25,11 +25,13 @@ let config = {
 
                 onUpdateLayout:(data) => {
                     this.data.cells[data.componentId].data.cell = data.cell;
+                    if (data['deep_clear']) {
+                        this.data.cells[data.componentId].data.cell.deep_clear = data.deep_clear;
+                    }
                 },
 
                 onRemoveLayout:(componentId) => {
                     delete this.data.cells[componentId];
-                    console.log(this.data.cells);
                 },
             });
             this.append(cell, this.el.find('.cells'));

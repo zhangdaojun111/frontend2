@@ -26,6 +26,7 @@ let config = {
                 chart_id: '',
                 name: '',
                 select:[],
+                deep_clear: "0",
                 size: {
                     left: 100,
                     top: 100,
