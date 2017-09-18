@@ -71,7 +71,6 @@ let config = {
             const option = this.pieChart.pieOption(data);
             this.pieChart.myChart.setOption(option,true);
         },
-
         /**
          * 初始化pie图表数据
          */
