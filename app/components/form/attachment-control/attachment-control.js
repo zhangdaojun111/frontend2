@@ -56,7 +56,7 @@ let config = {
             callback: function () {
                 PMAPI.openDialogByComponent(screenShotConfig, {
                     width: 500,
-                    height: 320,
+                    height: 330,
                     title: "选择截图"
                 }).then(res => {
                     if (!res.file) {

@@ -2533,7 +2533,7 @@ let config = {
                 let file_dinput_type = data.colDef.real_type;
                ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids[0]}&download=0&dinput_type=${file_dinput_type}`;
                     PMAPI.openDialogByComponent(ViewVideo, {
-                        width: 1000,
+                        width: 900,
                         height: 600,
                         title: '视频播放器'
                     })
@@ -2553,8 +2553,8 @@ let config = {
                     PictureAttachment.data.rows=obj.imgData.rows;
                     PMAPI.openDialogByComponent(PictureAttachment,{
                         title:'图片附件',
-                        width: 1234,
-                        height:800
+                        width: 900,
+                        height:600
                     })
                 })
                 HTTP.flush();
@@ -2620,8 +2620,8 @@ let config = {
                         AttachmentList.data.dinput_type=dinput_type;
                         AttachmentList.data.is_view=1;
                         PMAPI.openDialogByComponent(AttachmentList,{
-                            width: 1234,
-                            height: 876,
+                            width: 900,
+                            height: 600,
                             title: '附件列表'
                         })
                     })
