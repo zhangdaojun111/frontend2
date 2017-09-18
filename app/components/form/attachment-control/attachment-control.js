@@ -12,6 +12,7 @@ import {FormService} from '../../../services/formService/formService';
 import ThumbnailList from "./thumbnail-list/thumbnail-list";
 import {Storage} from "../../../lib/storage";
 import Mediator from "../../../lib/mediator";
+import browserMD5File from 'browser-md5-file';
 
 let config = {
     template: template,
@@ -83,18 +84,34 @@ let config = {
                     let fileId = name.split('.')[0]+"-"+new Date().getTime();
                     fileArray.push({id:fileId,name:name});
                 }
-                let toolbox = msgBox.showProgress({
-                    files:fileArray,
-                    originalField:this.data.id});
+                let toolbox;
                 for(let i = 0, length = files.length;i < length; i++){
-                    this.actions.controlUploadingForFile(files[i],fileArray[i].id,toolbox);
+                    let file = files[i];
+                    let fileItem = fileArray[i];
+                    browserMD5File(file, (err,md5)=>{
+                        if(this.data.queue){
+                            for(let item of this.data.queue){
+                                if(file.name == item.file.name && md5 == item.md5){
+                                    msgBox.showTips('文件已上传');
+                                    return;
+                                }
+                            }
+                        }
+                        if(!toolbox){
+                            toolbox = msgBox.showProgress({
+                                files:fileArray,
+                                originalField:this.data.id});
+                        }
+                        this.actions.controlUploadingForFile(file,fileItem.id,toolbox);
+                    });
                 }
                 this.el.find('.selecting-file').val(null);
             }
         }
     ],
     data: {
-        attachmentQueueItemComps:{}
+        attachmentQueueItemComps:{},
+        queue:[]
     },
     actions: {
         controlUploadingForFile: function (file,i,toolbox) {
@@ -120,6 +137,7 @@ let config = {
                         if (event.event == 'delete') {
                             ele.remove();
                             if (event.data != undefined) {
+                                this.data.queue.splice(this.data.queue.indexOf(event.data),1);
                                 this.data.value.splice(this.data.value.indexOf(event.data.fileId), 1);
                                 this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
                                 if (this.data['thumbnailListComponent']) {
@@ -134,6 +152,7 @@ let config = {
                         if (event.event == 'finished') {
                             this.data.value = this.data.value == '' ? [] : this.data.value;
                             this.data.value.push(event.data.fileId);
+                            this.data.queue.push(event.data);
                             this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
                             this.trigger('changeValue', this.data);
                             let obj = {};
@@ -175,13 +194,10 @@ let config = {
             })
         }
         Mediator.subscribe('getDataFromOtherFrame:'+this.data.id,(data)=>{
-            console.log("get data from progress dialog");
-            console.dir(data);
             if(data.type != 'cancel_uploading'){
                 return;
             }
             let id = data.id;
-            console.dir(this.data.attachmentQueueItemComps);
             this.data.attachmentQueueItemComps[id].actions.cancelUploading();
         })
     },
