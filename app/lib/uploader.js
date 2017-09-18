@@ -179,15 +179,13 @@ class Uploader {
             cache: false,
             processData: false,
             contentType: false,
-            timeout: 60000,
-            success:onCompleted,
-            error: onError?onError:(function (error) {
-                console.dir(error);
-            })
+            timeout: 60000
         };
 
         this.settings['options'] = _.defaultsDeep(options,defaultOptions);
         this.settings['onProgress'] = onprogress;
+        this.settings['onCompleted'] = onCompleted;
+        this.settings['onError'] = onError;
         let keys = Object.keys(this.fileList);
         //如果内存CPU开销大的话要改为一个一个文件上传的串行模式
         for(let name of keys){
@@ -214,6 +212,12 @@ class Uploader {
     }
 
     _transmitData(name,code){
+        this.settings['options']['success'] = function () {
+            this.settings['onCompleted']({fileId:code+'-'+name});
+        };
+        this.settings['options']['error'] = function (msg) {
+            this.settings['onError']({fileId:code+'-'+name,msg:msg})
+        };
         let fileItem = this.fileList[name][code];
         if(fileItem['state']!='on'){
             if(fileItem['state']=='pre-delete'){
@@ -240,13 +244,17 @@ class Uploader {
             this.formData.set(fileField, fileItem.file.slice(startIndex, startIndex + packSize));
             this.settings['options']['xhr']=function () {
                 var myXhr = $.ajaxSettings.xhr();
+                let total = startIndex+event['total'];
+                let loaded = startIndex+(event['loaded']||event['position']);
                 if(myXhr.upload){
                     myXhr.upload.addEventListener('progress',(event)=>{
                         onprogress(_.defaultsDeep({
+                            fileId:code+"-"+name,
                             code:code,
                             name:name,
-                            total:startIndex+event['total'],
-                            loaded:startIndex+(event['loaded']||event['position'])
+                            total:total,
+                            loaded:loaded,
+                            progress: Max.ceil(loaded*100/total)
                         },event));
                     },false);
                     return myXhr;
@@ -257,7 +265,12 @@ class Uploader {
                 var myXhr = $.ajaxSettings.xhr();
                 if(myXhr.upload){
                     myXhr.upload.addEventListener('progress',(event)=>{
-                        onprogress(_.defaultsDeep({code:code,name:name},event));
+                        onprogress(_.defaultsDeep({
+                            fileId:code+"-"+name,
+                            code:code,
+                            name:name,
+                            progress:Max.ceil((event['loaded']||event['position'])*100/event['total'])
+                        },event));
                     },false);
                     return myXhr;
                 }
