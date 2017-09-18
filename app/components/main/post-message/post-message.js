@@ -76,9 +76,9 @@ let config = {
                 callback: (order, node) => {
                     this.actions._selectNode(order, node);
                 },
-                isSearch: false,
+                isSearch: true,
                 treeType: "MULTI_SELECT",
-                treeName: "post-message-depatment-tree"
+                treeName: "post-message-depatment-tree",
             });
             let $container = this.el.find(".tree");
             treeView.render($container);

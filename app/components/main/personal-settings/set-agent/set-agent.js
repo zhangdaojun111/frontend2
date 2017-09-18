@@ -57,10 +57,12 @@ let config = {
                     this.actions.selectNode(event,node);
                 },
                 treeType:"MULTI_SELECT",
-                treeName:"workflow-tree"
+                treeName:"workflow-tree",
+                isSearch:true
             });
             let $container = this.el.find("div.work-tree");
             treeView.render($container);
+            this.el.find('.flex-between > .txt').html("流程搜索");
         },
         formatOriginData:function (nodes) {
             for(let i = 0; i < nodes.length; i++){
