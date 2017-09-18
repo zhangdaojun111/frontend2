@@ -5,7 +5,44 @@
     </div>
     <div class="origin-data">
         <div class="content">
-            123
+            <table>
+                <thead>
+                <tr class="td-checkbox">
+                    <th class="selectAllX">
+                        <label class="custom-checkbox z-checkbox">
+                            {{#if selectAllX}}
+                            <input type="checkbox" checked="checked"  name="">
+                            {{else}}
+                            <input type="checkbox"  name="">
+                            {{/if}}
+                        </label>
+                    </th>
+                    <th>{{cellChart.chart.chartGroup.name}}</th>
+                    {{#each cellChart.cell.attribute}}
+                    <th class="selectY" data-y-index="{{@index}}">
+                            <span>{{name}}</span>
+                    </th>
+                    {{/each}}
+                </tr>
+                </thead>
+                <tbody>
+                {{#each cellChart.cell.select}}
+                <tr class="tr-body">
+                    <td>
+                        <label class="custom-checkbox z-checkbox">
+                            {{#if select}}
+                            <input type="checkbox" checked="checked" name="">
+                            {{else}}
+                            <input type="checkbox" name="">
+                            {{/if}}
+                        </label>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {{/each}}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
