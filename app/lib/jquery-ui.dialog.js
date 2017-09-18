@@ -51,7 +51,7 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
             this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
             this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "ui-icon-newwin");
             $(this.uiDialogTitlebarFull[0].firstChild).attr('title','还原');
-            // this._addClass($(this.uiDialog[0]), "ui-dialog-maximize");
+            this._addClass($(this.uiDialog[0]), "ui-dialog-maximize");
         }
     },
     _minimizeWindow: function () {
