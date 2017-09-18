@@ -30,8 +30,7 @@ let config = {
         imgY:0,
         DragX:0,        //用于记录裁剪图片时的起点，需要通过两次比例处理
         DragY:0,        //用于记录裁剪图片时的起点
-        scale:1,
-        component:null,
+        scale:1,        //初始化图片时的放缩比例（缩放到350*350的框中）
         dragResult:{            //拖动结束后和数据
             coords:null,
             proportion:1,
@@ -41,6 +40,7 @@ let config = {
     },
 
     actions:{
+        //用户上传本地图片
         getPic(event){
             this.data.status = true;
             let file = event.target.files[0];
@@ -70,6 +70,7 @@ let config = {
                 that.actions.setImageProportion(picSrc);
             };
         },
+        //将原始图片按比例缩放，按较长边缩放至350px，居中显示
         setImageProportion:function (src) {
             this.data._img = new Image();
             this.data._img.src = src;
@@ -92,6 +93,7 @@ let config = {
                 that.actions.displayPostImage();
             }
         },
+        //设置裁剪框的初始位置（居中）
         setJcropPosition:function () {
             this.data.JPosition.Jx = (this.data.imgW - 64)/2;
             this.data.JPosition.Jy = (this.data.imgH - 64)/2;
@@ -100,6 +102,7 @@ let config = {
             this.data.DragX = this.data.JPosition.Jx / this.data.scale;
             this.data.DragY = this.data.JPosition.Jy / this.data.scale;
         },
+        //展示用户上传的图片
         displayPostImage(){
             let $parent = this.el.find(".avatar-container");
             $parent.empty();
@@ -130,6 +133,7 @@ let config = {
                 jcropApi.setSelect([that.data.JPosition.Jx,that.data.JPosition.Jy,that.data.JPosition.Jx2,that.data.JPosition.Jy2]);
             });
         },
+        //将裁剪框中的图片展示到圆形结果框中
         initResultImgData:function () {
             this.data.imgData.src = this.data._img.src;
             this.data.imgData.width =  this.data.imgW;
@@ -137,6 +141,7 @@ let config = {
             this.data.imgData.left = this.data.imgX;
             this.data.imgData.top = this.data.imgY;
         },
+        //拖动时更新圆形结果框中的图片
         updateCoords:function (c) {
             this.data.dragResult.coords = c;
             this.data.dragResult.proportion = (c.x2 - c.x)/64;
@@ -145,14 +150,15 @@ let config = {
             this.data.DragY = c.y / this.data.scale;
             this.actions.printSquare();
         },
+        //根据比例缩放图片，作为最终使用图片
         resizeImg:function (c,p) {
-            //根据比例缩放图片，作为最终使用图片
             this.data.imgData.src = this.data._img.src;
             this.data.imgData.width = this.data.imgW/p + "px";
             this.data.imgData.height = this.data.imgH/p + "px";
             this.data.imgData.left = 0 -  c.x/p + "px";
             this.data.imgData.top = 0 - c.y/p + "px";
         },
+        //在正方形画布上展示结果
         printSquare(){
             let pic = this.el.find('img.pic_set')[0];
             let canvasS = this.el.find('.avatar-result-square')[0];
@@ -162,11 +168,13 @@ let config = {
             ctx.drawImage(pic,this.data.DragX,this.data.DragY,d,d,0,0,64,64);
             this.data.avatarSrc = this.actions.convertCanvasToImage(canvasS).src;
         },
+        //画布结果转化为base64数据
         convertCanvasToImage(canvas){
             let image = new Image();
             image.src = canvas.toDataURL("image/png");
             return image;
         },
+        //保存头像
         saveAvatar:function () {
             if(this.data.avatarSrc === ''){
                 msgbox.alert('头像不能设置为空');

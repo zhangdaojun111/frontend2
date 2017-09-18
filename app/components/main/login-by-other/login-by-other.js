@@ -21,6 +21,7 @@ let config = {
         _otherId:''
     },
     actions:{
+        //获取用户名单列表
         getData:function () {
             UserInfoService.getAllUsersInfo().done((result) => {
                 let tempData = [];
@@ -58,6 +59,7 @@ let config = {
             });
             autoSelect.render($wrap);
         },
+        //向后台发送他人登录请求
         loginOtherAccount:function () {
             let userId = this.data._otherId;
             userId = userId.trim();
@@ -73,9 +75,6 @@ let config = {
                 })
             }
         },
-        cancel:function () {
-            this.el.dialog('close');
-        }
     },
     binds:[
         {
