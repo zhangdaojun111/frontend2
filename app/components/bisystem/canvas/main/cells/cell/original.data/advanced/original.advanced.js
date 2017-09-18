@@ -15,19 +15,41 @@ let config = {
 
     },
     binds:[
-        { //保存
+        {  //保存
             event:'click',
             selector:'.submit-area submit',
             callback:function () {
 
             }
         },
-
-        {//返回
+        { //返回
             event:'click',
             selector:'.submit-area button:last-child',
             callback:function () {
 
+            }
+        },
+        { //附加字段命名
+            event:'input',
+            selector:'input[type=text]',
+            callback:function (context) {
+                let val = $(context).val();
+                if(val.length>=2){
+                    $(context).siblings('p').html('');
+                }else{
+                    $(context).siblings('p').html('必须输入附加字段命名(至少2个)');
+                }
+            }
+        },
+        { //字段模块
+            event:'change',
+            selector:'select',
+            callback:function (context) {
+               if(context.value !== ''){
+                   $(context).siblings('p').html('');
+               }else{
+                   $(context).siblings('p').html('必须输入附加字段模板');
+               }
             }
         },
     ],
