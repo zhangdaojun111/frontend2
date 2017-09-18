@@ -52,6 +52,7 @@ let config = {
                }
             }
         },
+
     ],
     afterRender() {
     },
