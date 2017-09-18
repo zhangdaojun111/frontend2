@@ -1,0 +1,60 @@
+@import "../calendar";
+.menu-full {
+    //width: 200px;
+    height: 100%;
+    //overflow-x: auto;
+    //overflow-y: auto;
+    //user-select:none;
+    //display: inline-block;
+    //float: left;
+    //position: relative;
+    //border: 1px solid $boder-color;
+    li {
+        list-style-type: none;
+    }
+    .root {
+        padding-left: 10px;
+        .menu-full-item {
+            .row {
+                padding: 0px;
+                cursor: pointer;
+                &:hover {
+                    background-color: rgba(228, 228, 228, 1);
+                }
+                .icon {
+                    width: 16px;
+                    height: 16px;
+                    float: left;
+                    margin-right: 5px;
+                    border: 0 none;
+                    background-color: transparent;
+                    line-height: 26px;
+                    &.lv1 {
+                        margin-top: 5px;
+                        background: url("../../../assets/images/calendar/calendar-setItemtitle.png");
+                    }
+                    &.arrow {
+                        margin-right: 4px;
+                    }
+                    &.child {
+                        margin-top: 5px;
+                        background: url("../../../assets/images/calendar/calendar-setItem.png");
+                    }
+                }
+                .name{
+                    word-break: normal;
+                    white-space: pre;
+                    color: #999999;
+                    margin: 0px;
+                    line-height: 26px;
+                }
+                .ui-state-active ~p{
+                    color: #999999;
+                }
+            }
+        }
+        .childlist {
+            padding-left: 3px;
+        }
+    }
+}
