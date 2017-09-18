@@ -161,6 +161,21 @@ class Uploader {
         }
     }
 
+    getProgressParams(name){
+        let array = [];
+        for(let code of Object.keys(this.fileList[name])){
+            array.push({
+                id:this.getFileId(name,code),
+                name:this.fileList[name][code].filename
+            });
+        }
+        return {files:array,originalField:name};
+    }
+
+    getFileId(name,code){
+        return name+"-"+code;
+    }
+
     /**
      * 上传所有文件
      * @param url 上传地址
@@ -212,11 +227,14 @@ class Uploader {
     }
 
     _transmitData(name,code){
+        let that =this;
+        let onComplete = this.settings['onCompleted'];
         this.settings['options']['success'] = function () {
-            this.settings['onCompleted']({fileId:code+'-'+name});
+            onComplete({fileId:that.getFileId(name,code)});
         };
+        let onError = this.settings['onError'];
         this.settings['options']['error'] = function (msg) {
-            this.settings['onError']({fileId:code+'-'+name,msg:msg})
+            onError({fileId:that.getFileId(name,code),msg:msg})
         };
         let fileItem = this.fileList[name][code];
         if(fileItem['state']!='on'){
@@ -249,12 +267,12 @@ class Uploader {
                 if(myXhr.upload){
                     myXhr.upload.addEventListener('progress',(event)=>{
                         onprogress(_.defaultsDeep({
-                            fileId:code+"-"+name,
+                            fileId:that.getFileId(name,code),
                             code:code,
                             name:name,
                             total:total,
                             loaded:loaded,
-                            progress: Max.ceil(loaded*100/total)
+                            progress: Math.ceil(loaded*100/total)
                         },event));
                     },false);
                     return myXhr;
@@ -266,10 +284,10 @@ class Uploader {
                 if(myXhr.upload){
                     myXhr.upload.addEventListener('progress',(event)=>{
                         onprogress(_.defaultsDeep({
-                            fileId:code+"-"+name,
+                            fileId:that.getFileId(name,code),
                             code:code,
                             name:name,
-                            progress:Max.ceil((event['loaded']||event['position'])*100/event['total'])
+                            progress:Math.ceil((event['loaded']||event['position'])*100/event['total'])
                         },event));
                     },false);
                     return myXhr;
