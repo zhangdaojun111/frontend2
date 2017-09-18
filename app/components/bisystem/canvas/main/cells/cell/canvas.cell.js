@@ -137,6 +137,7 @@ let config = {
         cellComponent:'',
         cellMaxZindex:1
     },
+
     binds: [
         // 拖拽start画布mousedown触发
         {
