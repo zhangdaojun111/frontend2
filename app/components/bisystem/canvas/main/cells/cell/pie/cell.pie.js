@@ -67,7 +67,6 @@ let config = {
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.pieChart = echartsService;
         },
-
         updateChart(data) {
             //重新渲染echarts
             const option = this.pieChart.pieOption(data);
