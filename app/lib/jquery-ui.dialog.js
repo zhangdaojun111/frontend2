@@ -40,7 +40,6 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
     _maximizeWindow: function () {
         let width = Math.max(400, document.documentElement.clientWidth);
         let height = Math.max(400, document.documentElement.clientHeight);
-        console.log(height);
         this.options.originHeight = this.options.height;
         this.options.originWidth = this.options.width;
         this.option('width', width);
@@ -52,9 +51,11 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
             this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
             this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "ui-icon-newwin");
             $(this.uiDialogTitlebarFull[0].firstChild).attr('title','还原');
+            // this._addClass($(this.uiDialog[0]), "ui-dialog-maximize");
         }
     },
     _minimizeWindow: function () {
+        // this._removeClass($(this.uiDialog[0]), "ui-dialog-maximize");
         this.option('width', this.options.originWidth);
         this.option('height', this.options.originHeight);
         this.option('position', {my: "center", at: "center", of: window});
