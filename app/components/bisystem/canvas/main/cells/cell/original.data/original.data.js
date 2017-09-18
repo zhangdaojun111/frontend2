@@ -22,6 +22,12 @@ handlebars.registerHelper('original_data_title', function(index, options) {
     // return data['field'] ? data['field']['name'] : data['name'];
 });
 
+// 自定义分组original_data_title helper
+handlebars.registerHelper('original_group_data', function(data, options) {
+    return data ? data : '暂无数据';
+    // return data['field'] ? data['field']['name'] : data['name'];
+});
+
 let config = {
     template: template,
     actions: {
@@ -30,22 +36,38 @@ let config = {
          */
         getChangeData() {
             let [isEmptyY,isEmptyX] = [true,true];
-            return  {
-                attribute: this.data.cellChart.cell.attribute.map(item =>{
+            if (this.data.cellChart.chart.chartGroup && this.data.cellChart.chart.chartGroup['id']) { // 折柱图分组
+                return  {
+                    attribute: null,
+                    select: this.data.cellChart.cell.select.map(item => {
+                        if (item.select) {
+                            isEmptyX = false
+                        } else {
+                            this.data.hideGroup.push(item);
+                        }
+                        return JSON.stringify({'ename':item.ename, 'selected': item.select});
+                    }),
+                    isEmptyX: isEmptyX,
+                };
+
+            } else {
+                return  {
+                    attribute: this.data.cellChart.cell.attribute.map(item =>{
                         if (item.selected) {
                             isEmptyY = false;
                         }
                         return JSON.stringify({selected: item.selected})
-                }),
-                select: this.data.cellChart.cell.select.map(item => {
-                    if (item.select) {
-                        isEmptyX = false
-                    }
-                    return JSON.stringify(item);
-                }),
-                isEmptyY: isEmptyY,
-                isEmptyX: isEmptyX,
-            };
+                    }),
+                    select: this.data.cellChart.cell.select.map(item => {
+                        if (item.select) {
+                            isEmptyX = false
+                        }
+                        return JSON.stringify(item);
+                    }),
+                    isEmptyY: isEmptyY,
+                    isEmptyX: isEmptyX,
+                };
+            }
         },
 
         /**
@@ -72,7 +94,8 @@ let config = {
     data: {
         selectAllX: true,
         floor:0,
-        xAxis: []
+        xAxis: [],
+        hideGroup: [], //需要隐藏的分组列表
     },
     binds:[
         { // 点击关闭原始数据
@@ -89,19 +112,27 @@ let config = {
                     select: data.select,
                     attribute: data.attribute
                 };
-                if (data.isEmptyY || data.isEmptyX) {
-                    msgbox.alert('至少选择一条x轴和y轴数据')
-                } else {
-                    canvasCellService.saveOriginalData(originalData).then(res => {
-                        if (res['success'] !== 1) {
-                            msgbox.showTips(res['error']);
-                        } else {
 
-                            this.trigger('onUpdateOriginal', originalData);
-                        };
-                        this.destroySelf();
-                    });
-                }
+                if (this.data.cellChart.chart.chartGroup && this.data.cellChart.chart.chartGroup['id']) {
+                    if (data.isEmptyX) {
+                        msgbox.alert('至少选择一条分组数据');
+                        return false;
+                    }
+                } else {
+                    if (data.isEmptyY || data.isEmptyX) {
+                        msgbox.alert('至少选择一条x轴和y轴数据');
+                        return false;
+                    };
+                };
+
+                canvasCellService.saveOriginalData(originalData).then(res => {
+                    if (res['success'] !== 1) {
+                        msgbox.showTips(res['error']);
+                    } else {
+                        this.trigger('onUpdateOriginal', this.data.cellChart.chart.chartGroup && this.data.cellChart.chart.chartGroup['id'] ? {hideGroup:this.data.hideGroup,originalData: originalData}: originalData);
+                    };
+                    this.destroySelf();
+                });
             }
         },
         { // 点击下穿原始数据
@@ -122,7 +153,8 @@ let config = {
                     this.data.cellChart.cell.attribute[index].selected = true;
                 } else {
                     this.data.cellChart.cell.attribute[index].selected = false;
-                }
+                };
+                return false;
             }
         },
         { // 选择所有x轴字段
@@ -160,11 +192,21 @@ let config = {
                             selectAll = false;
                             break;
                         }
-                    }
+                    };
                     if (selectAll) {
                         $('.selectAllX input').prop('checked', true);
                     };
                 }
+            }
+        },
+        { // 点击下穿排序
+            event:'click',
+            selector:'.selectY',
+            callback:function (context) {
+                let index = $(context).attr('data-y-index');
+                alert(index);
+                $(context).find('i').addClass('active').siblings('th').removeClass('active');
+                return false;
             }
         },
     ],
@@ -239,26 +281,32 @@ export class CanvasOriginalDataComponent extends Component {
      * 处理折线柱状图分组的原始数据
      */
     static handleLineBarGroupOriginalData(data) {
-        console.log('=======================');
-        console.log(data);
         data.template = groupTemplate;
-        let groupNames = data.cellChart.chart.data.yAxis.map(item => item.ename); //已选择分组信息
-        let selectGroupNames = Array.from(new Set(groupNames));
-        let selects = [];
-        // 如果select有数据就用select的数据 select = xAxis
-        if (data.cellChart.cell.select.length  === 0) {
-            data.cellChart.chart.data.yAxis.forEach(item => {
-                if (selectGroupNames.toString().indexOf (item.ename)) {
-                    selects.push({
-                        ename: item.ename,
-                        xAxis: [],
-                        yAxis:item.data
-                    })
+        let groups = data.cellChart.chart.data.yAxis.map(item => item.ename); //已选择分组信息
+        groups = Array.from(new Set(groups)).map(name => {
+            return {ename: name, xAxis: data.cellChart.chart.data.xAxis, yAxis:[],select: true}
+        });
+
+        groups.forEach(item => {
+            data.cellChart.chart.data.yAxis.forEach(y => {
+                if (y.ename === item.ename) {
+                    item['yAxis'].push(y)
                 };
-            });
-            console.log(selects);
-        } else {
+            })
+        });
+
+        // 如果select有数据就用select的数据 select = xAxis
+        if (data.cellChart.cell.select.length > 0) {
+            data.cellChart.cell.select.forEach((item,index) => {
+                groups[index].select = JSON.parse(item).selected;
+                if (!JSON.parse(item).selected) {
+                    data.selectAllX = false;
+                };
+            })
+
         };
+
+        data.cellChart.cell.select = groups;
         // 如果attribute有数据就用attribute的数据 attribute = yAxis
         data.cellChart.cell.attribute = data.cellChart.chart.yAxis.map(item => {
             return {'selected': true, 'name': item.field.name}
@@ -287,5 +335,8 @@ export class CanvasOriginalDataComponent extends Component {
         };
         //如果attribute有数据就用attribute的数据 attribute = yAxis
         data.cellChart.cell.attribute = [{'selected': true, 'name': data.cellChart.chart.pieType.value === 1 ? data.cellChart.chart.xAxis.name : data.cellChart.chart.yAxis.name}];
+        if (data.cellChart.chart.pieType.value === 1) {
+            data.cellChart.pieSingle = true;
+        }
     }
 }

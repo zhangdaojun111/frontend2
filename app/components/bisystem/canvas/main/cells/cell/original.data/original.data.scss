@@ -13,6 +13,16 @@
     top: 0;
     left: 0;
     background: rgba(255, 255, 255, .9);
+    .bi-icon-down {
+        display:inline-block;
+        border:solid 4px transparent;
+        border-top-color:#666666;
+    }
+    .bi-icon-up {
+        display:inline-block;
+        border:solid 4px transparent;
+        border-bottom-color:#666666;
+    }
     .bi-origin-data-close {
         position: absolute;
         top: 10px;
@@ -59,6 +69,7 @@
                     @include th-td;
                 }
                 td {
+                    vertical-align: middle;
                     @include th-td;
                     a {
                         text-decoration: none;
@@ -76,6 +87,28 @@
                 }
                 .selectAllX {
                     width: 60px;
+                }
+                .selectY {
+                    b{
+                        cursor:pointer;
+                    }
+                    .bi-icon-down {
+                        position: relative;
+                        top:5px;
+                        left:-11px;
+                        &.active{
+                            border-top-color: #0088ff;
+                        }
+                    }
+
+                    .bi-icon-up {
+                        position: relative;
+                        top:-5px;
+                        &.active{
+                            border-bottom-color: #0088ff;
+                        }
+
+                    }
                 }
                 .sort {
                     width: 10px;

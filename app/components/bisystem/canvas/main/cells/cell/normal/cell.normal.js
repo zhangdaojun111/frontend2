@@ -54,15 +54,35 @@ let config = {
             cellChart['chart']['data']['yAxis'] = yAxis;
             return cellChart;
         },
+
+
         echartsInit() {
             let chartData;
             if (window.config.bi_user === 'client') { // 如果是客户模式下，优先渲染原始数据
                 // 当attribute or select　等于空时　代表全选
-                if (this.data.cellChart.cell.attribute.length > 0 && this.data.cellChart.cell.select.length > 0) {
-                    let cellChart = this.actions.handleOriginal();
+
+                if (this.data.cellChart.chart.chartGroup.id && this.data.cellChart.cell.select.length > 0) {
                     chartData = _.cloneDeep(this.data);
-                    chartData.cellChart = cellChart;
-                };
+                    let ename = [];
+                    chartData.cellChart.cell.select.map(item => {
+                        if (!JSON.parse(item).selected) {
+                            ename.push(JSON.parse(item).ename)
+                        };
+                    });
+                    let groups = chartData.cellChart.chart.data.yAxis.filter((item,index,items) => {
+                        return ename.toString().indexOf(item.ename) === -1;
+                    });
+
+                    chartData.cellChart.chart.data.yAxis = groups;
+
+                } else {
+                    if (this.data.cellChart.cell.attribute.length > 0 && this.data.cellChart.cell.select.length > 0) {
+                        let cellChart = this.actions.handleOriginal();
+                        chartData = _.cloneDeep(this.data);
+                        chartData.cellChart = cellChart;
+                    };
+                }
+
             };
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.normalChart = echartsService;
@@ -196,9 +216,26 @@ export class CellNormalComponent extends CellBaseComponent {
      * @param data
      */
     updateOriginal(data) {
-        this.data.cellChart.cell.attribute = data.attribute;
-        this.data.cellChart.cell.select = data.select;
-        let cellChart = this.actions.handleOriginal();
+        let cellChart;
+        if (data.hideGroup) {
+            this.data.cellChart.cell.attribute = null;
+            this.data.cellChart.cell.select = data.originalData.select;
+            cellChart = _.cloneDeep(this.data.cellChart);
+
+            if (data.hideGroup.length > 0) {
+                let ename = data.hideGroup.map(item => item.ename);
+                let groups = cellChart.chart.data.yAxis.filter((item,index,items) => {
+                    return ename.toString().indexOf(item.ename) === -1;
+                });
+
+                cellChart.chart.data.yAxis = groups;
+            }
+
+        } else {
+            this.data.cellChart.cell.attribute = data.attribute;
+            this.data.cellChart.cell.select = data.select;
+            cellChart = this.actions.handleOriginal();
+        }
         this.actions.updateChart(cellChart);
     }
 
