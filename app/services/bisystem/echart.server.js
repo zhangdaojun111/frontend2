@@ -75,7 +75,6 @@ export class EchartsService {
         let secondMaxTextYnum = [];
         let maxXnum = [];
         let maxYTextNum; // y轴数字toSting().length最大字数
-
         yAxis.forEach((y,i) => {
             console.log(y);
             legend.push(y[nameType]);
