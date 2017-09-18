@@ -78,7 +78,7 @@ export default {
                     data:{type:'update',msg:items}
                 })
             },
-            finish:function ({fileOrder:index}) {
+            finish:function ({fileId:index}) {
                 PMAPI.sendToSelf({
                     type:PMENUM.send_data_to_dialog_component,
                     key:key,

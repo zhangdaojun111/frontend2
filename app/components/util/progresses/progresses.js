@@ -59,7 +59,7 @@ export const progressConfig = {
                     this.actions.error(data.msg);
             }
         },
-        update:function({fileOrder:i,progress:n}) {
+        update:function({fileId:i,progress:n}) {
             this.el.find('#'+i).find('.progress-liquid').css('width',n+'%');
         },
         finish:function (i) {
@@ -79,7 +79,7 @@ export const progressConfig = {
                 }
             },2000);
         },
-        error:function ({msg:msg,index:i}) {
+        error:function ({msg:msg,fileId:i}) {
             this.el.find('#'+i).find('.progress-bottle').css('display','none');
             let text = this.el.find('#'+i).find('.progress-msg').text() + ": "+msg;
             this.el.find('#'+i).find('.progress-msg').text(text).css('color','red');
