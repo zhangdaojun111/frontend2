@@ -269,7 +269,7 @@ export const IframeInstance = new Component({
             }else if(name === '关闭其他标签'){
                 this.actions.closeOtherIframes();
                 this.actions.initTabList(this.data.closeHistory);
-            }else{
+            }else if(event.target.className.includes('tab-item')){
                 //打开历史记录标签
                 let name = event.target.attributes.item_name.value;
                 let id = event.target.attributes.item_id.value;

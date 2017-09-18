@@ -40,6 +40,7 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
     _maximizeWindow: function () {
         let width = Math.max(400, document.documentElement.clientWidth);
         let height = Math.max(400, document.documentElement.clientHeight);
+        console.log(height);
         this.options.originHeight = this.options.height;
         this.options.originWidth = this.options.width;
         this.option('width', width);

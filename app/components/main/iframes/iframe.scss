@@ -114,11 +114,13 @@
                     top:30px;
                     .basic-ul{
                         .drop-up-icon{
-                            width: 16px;
+                            width: 32px;
                             height: 16px;
-                            margin-left: 67px;
+                            margin-left: 59px;
                             display: inline-block;
-                            background-image: url("./../../../assets/images/framework/drop-up-icon.png");
+                            background-image: url("./../../../assets/images/framework/drop-up-icon.png") ;
+                            background-repeat: no-repeat;
+                            background-position: 8px;
                             cursor: pointer;
                         }
                         .close-tab,.close-all-tabs{
