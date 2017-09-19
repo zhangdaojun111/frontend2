@@ -9,9 +9,12 @@
 .form-version-table-user, .form-version-table-department{
     font-size: 12px;
     width: 100%!important;
-
     .ui-btn-box {
         margin-left: -20px;
+    }
+    .df-input-radio-wrapper {
+        width: 12px;
+        height: 12px;
     }
 }
 .form-version-table-user, .form-version-table-department, .form-default {
@@ -39,26 +42,17 @@
         height: 24px;
     }
     .textArea {
-
-        line-height: 26px;
-        height: 26px;
-        width: 232px !important;
+        width: 242px !important;
         border: 1px solid #ddd;
         -webkit-appearance: none;
         padding: 0 0 0 10px;
-    }
-
-    .df-input-radio-wrapper {
-        width: 12px;
-        height: 12px;
-        top: 0;
     }
 
 }
 
 //默认表单样式
 .form-default {
-    .dynamic-form-input, .textArea {
+    .dynamic-form-input {
         width: 242px !important;
         height: 24px;
     }

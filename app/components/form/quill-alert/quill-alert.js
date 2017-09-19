@@ -4,6 +4,7 @@
  */
 
 import template from './quill-alert.html';
+
 let css = `
 .form-rich-editor .editor{
         height: 300px;
@@ -943,7 +944,8 @@ let css = `
   transform: translateY(-10px);
 }
 .ql-snow .ql-formats {
-  display: inline-block;
+  //display: inline-block;
+  float: left;
   vertical-align: middle;
 }
 .ql-snow .ql-formats:after {
@@ -1257,7 +1259,7 @@ let css = `
   padding: 8px;
 }
 .ql-toolbar.ql-snow .ql-formats {
-  margin-right: 15px;
+  //margin-right: 15px;
 }
 .ql-toolbar.ql-snow .ql-picker-label {
   border: 1px solid transparent;
@@ -1349,13 +1351,14 @@ let css = `
   border: 1px solid #ccc;
 }
 `;
-css = css.replace(/(\n)/g, '');
+
 
 let QuillAlert = {
     template: template.replace(/(\")/g, '\''),
-    data:{
-        value:'',
-        toolbarOption : [
+    data: {
+        css: css.replace(/(\n)/g, ''),
+        value: '',
+        toolbarOption: [
             ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
             ['link', 'image'],
             ['blockquote', 'code-block'],
@@ -1378,7 +1381,8 @@ let QuillAlert = {
 
         ]
     },
-    afterRender(){
+    afterRender() {
+        this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
         let editorDom = this.el.find('.content .editor');
         this.data.quill = new Quill(editorDom[0], {
             modules: {
@@ -1388,8 +1392,9 @@ let QuillAlert = {
             theme: 'snow'
         });
         this.data.quill.pasteHTML(this.data.value);
+
     },
-    beforeDestory(){
+    beforeDestory() {
         this.data.quill = null;
     }
 }
