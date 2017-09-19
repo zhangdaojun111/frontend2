@@ -54,7 +54,7 @@ let css = `
     right: 15px;
 }
    .left{
-   width: 40px;
+    width: 40px;
     height: 40px;
     background: inherit;
     background-color: rgba(255, 255, 255, 1);
@@ -86,7 +86,7 @@ let css = `
     text-align: left;
      }
 .right{
-background-color: rgba(250, 250, 250, 1);
+    background-color: rgba(250, 250, 250, 1);
     box-sizing: border-box;
     border-width: 1px;
     border-style: solid;
@@ -118,9 +118,55 @@ background-color: rgba(250, 250, 250, 1);
     font-size: 12px;
     text-align: left;
 }
+#isFilter{
+    margin-top: 13px;
+    margin-left: 13px;
+    position: relative;
+    width: 12px;
+    height: 12px;
+}
+#columns{
+    margin-top: 13px;
+    margin-left: 13px;
+    position: relative;
+    width: 12px;
+    height: 12px;
+}
+#attachment{
+    margin-top: 13px;
+    margin-left: 13px;
+    position: relative;
+    width: 12px;
+    height: 12px;
+}
 .export-input{
     margin-top: 13px;
     margin-left: 13px;
+    position: relative;
+    width: 12px;
+    height: 12px;
+}
+.export-input:before {
+    position: absolute;
+    width: 12px;
+    content: ' ';
+    height: 12px;
+    left: 0px;
+    top: 0px;
+    background-color: #fff;
+    border: 1px solid #d7d7d7;
+    cursor: pointer;
+}
+.export-input-check:after {
+    position: absolute;
+    width: 8px;
+    content: ' ';
+    height: 8px;
+    left: 3px;
+    top: 3px;
+    background-color: #0088ff;
+    cursor: pointer;
+}
 }
 #last{
    border-bottom:1px;
@@ -199,11 +245,16 @@ let exportSetting = {
     },
     afterRender: function () {
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
+        this.el.find('#isFilter').addClass('export-input-check');
+        this.el.find('#columns').addClass('export-input-check');
         this.el.on( 'click','#isFilter',()=>{
+            this.el.find('#isFilter').toggleClass('export-input-check');
             this.actions.changeState( 'isFilter' );
         } ).on( 'click','#columns',()=>{
+            this.el.find('#columns').toggleClass('export-input-check');
             this.actions.changeState( 'custom' );
         } ).on( 'click','#attachment',()=>{
+            this.el.find('#attachment').toggleClass('export-input-check');
             this.actions.changeState( 'attachment' );
         } ).on( 'click','.export-btn',()=>{
             PMAPI.sendToParent( {
