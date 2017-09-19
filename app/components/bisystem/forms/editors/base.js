@@ -13,7 +13,7 @@ import msgbox from "../../../../lib/msgbox";
 import {ChartFormService} from '../../../../services/bisystem/chart.form.service';
 import Mediator from '../../../../lib/mediator';
 import {router} from '../../bi.manage.router';
-
+import {AdvancedCompute} from '../form/advanced.compute/advanced.compute';
 
 let formItemTypes = {
     'text': Text,
@@ -25,7 +25,8 @@ let formItemTypes = {
     'button': Button,
     'table_single': TableSingle,
     'deep': Deep,
-    'yAxis': YaXis
+    'yAxis': YaXis,
+    'advancedCompute': AdvancedCompute
 }
 
 class Base extends Component {

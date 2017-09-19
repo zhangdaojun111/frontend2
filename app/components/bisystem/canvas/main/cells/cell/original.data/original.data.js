@@ -239,7 +239,6 @@ export class CanvasOriginalDataComponent extends Component {
         }
         return data;
     }
-
     /**
      * 处理折线柱状图的原始数据
      */
