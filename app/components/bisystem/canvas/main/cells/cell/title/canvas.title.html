@@ -1,5 +1,5 @@
 <h3 class="title">
-    {{#if isIcon}}
+    {{#if icon}}
     <img src="{{imgUrl}}?file_id={{icon}}">
     {{else}}
     <i class="title-left"></i>
@@ -8,18 +8,17 @@
     <span class="icon-group">
         {{#if isDeep}}
             <a href="javascript:;" class="back-floor-btn" title="上一层"><i class="view-back-icon"></i></a>
-
         {{/if}}
-        {{#if biUser}}
+
+        {{#if editMode}}
             {{#if newCell}}
-                {{#if isEdit}}
-                <a href="javascript:;" title="富文本编辑器" class="edit-title"><i class="edit-icon"></i></a>
-                {{/if}}
                 <a href="#/forms/{{chart.data.assortment}}/{{chart.data.chartName.id}}?&viewId={{viewId}}" title="编辑"><i class="edit-icon"></i></a>
             {{/if}}
         <a href="javascript:;" class="del-cell-btn" title="删除"><i class="remove-icon"></i></a>
         {{else}}
-         <button href="javascript:;" class="back-floor-btn-data" title="数据">数据</button>
+            {{#if isDeep}}
+            <a href="javascript:;" class="original-data-btn" title="原始数据"><i class="original-data-icon"></i></a>
+            {{/if}}
         {{/if}}
     </span>
 </h3>

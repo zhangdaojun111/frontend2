@@ -1,4 +1,4 @@
-import {BiBaseComponent} from '../../bi.base.component';
+import Component from '../../../../lib/component';
 
 import { AsideChartService } from "../../../../services/bisystem/bi.chart.del.service";
 import template from "./charts.html";
@@ -45,7 +45,7 @@ let config = {
                 data.chart_id = this.data.id;
                 AsideChartService.delChart(data).then((res)=>{
                     if (res['success']){
-                        Mediator.emit('bi:aside:del', this.data);
+                        this.trigger('onDelete',this.data);
                         this.destroySelf();
                     }else{
                         msgbox.alert(res['error'])
@@ -95,11 +95,11 @@ let config = {
 };
 
 
-export class ChartsComponent extends BiBaseComponent{
-    constructor(charts) {
+export class ChartsComponent extends Component{
+    constructor(charts,events) {
         config.data = charts? charts : null;
         config.data.imgUrl = window.config.img_url;
         config.data.isIcon = charts['icon']? true:false;
-        super(config);
+        super(config,charts,events);
     }
 }

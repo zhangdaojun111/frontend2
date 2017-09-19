@@ -121,6 +121,10 @@ let config = {
             this.bindEvents();
             this.el.off('mouseenter');
             this.el.off('mouseleave');
+            this.row.css({
+                'padding-left': this.data.fullOffsetLeft + 'px',
+                'padding-right': '0'
+            });
         },
         setToMini: function () {
             this.data.type = 'mini';
@@ -134,7 +138,7 @@ let config = {
             this.row.css({
                 'padding-left': offset + 'px',
                 'padding-right': '20px'
-            })
+            });
         }
     },
     binds: [
@@ -222,8 +226,9 @@ let config = {
                 if (this.data.items) {
                     offset = this.data.offset - 20;
                 }
+                this.data.fullOffsetLeft = offset + 20;
                 this.row.css({
-                    'padding-left': offset + 20 + 'px'
+                    'padding-left':  this.data.fullOffsetLeft + 'px'
                 })
             }
         }

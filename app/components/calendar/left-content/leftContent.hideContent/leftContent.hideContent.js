@@ -13,6 +13,9 @@ let config = {
     data: {},
     actions: {},
     binds: [
+        /**
+         * 显示提醒
+         */
         {
             event: 'click',
             selector: '.show-type-button',
