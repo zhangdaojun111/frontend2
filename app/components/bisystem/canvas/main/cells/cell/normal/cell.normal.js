@@ -92,7 +92,6 @@ let config = {
             const option = this.normalChart.lineBarOption(data);
             this.normalChart.myChart.setOption(option,true);
         },
-
         /**
          * 初始化pie图表数据
          */
