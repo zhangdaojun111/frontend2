@@ -430,9 +430,13 @@ export default {
 
     },
     create(elem){
-        let component = new ApprovalWorkflow();
-        let el = $(elem);
-        component.render(el);
+        return new Promise(function(resolve, reject){
+            let component = new ApprovalWorkflow();
+            let el = $(elem);
+            component.render(el);
+            resolve(component);
+        })
+
     },
 
 };
