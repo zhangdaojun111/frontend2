@@ -3,9 +3,33 @@
  */
 import template from './progresses.html';
 
+let css=`
+.process-item {
+    margin:5px;
+}
+.progress-msg {
+    width:100px;
+    display: inline-block;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+.progress-msg .progress-text {
+    
+}
+.progress-bottle {
+    margin:0 5px;
+}
+.cancel-upload {
+    margin:0 2px;
+}
+`;
+
 export const progressConfig = {
     template:template,
-    data:{},
+    data:{
+        css:css.replace(/(\n)/g, ''),
+    },
     binds:[
         {
             event: 'click',
@@ -64,9 +88,7 @@ export const progressConfig = {
         },
         finish:function (i) {
             this.el.find('#'+i).find('.cancel-upload').remove();
-            this.el.find('#'+i).find('.progress-bottle').remove();
-            let text = this.el.find('#'+i).find('.progress-msg').text() + "传输完成!";
-            this.el.find('#'+i).find('.progress-msg').text(text);
+            this.el.find('#'+i).find('.progress-bottle').html('传输完成').css('background-color','');
             setTimeout(()=>{
                 if($(this.el.find('.process-bottle')).length == 0){
                     PMAPI.sendToSelf({
@@ -86,10 +108,13 @@ export const progressConfig = {
         }
     },
     afterRender:function () {
+        this.data.style = $('<style type="text/css"></style>').text(this.data.css).appendTo($("head"));
         for(let i=0,length=this.data.files.length;i < length;i++){
             $(this.el.find('.process-item')[i]).attr('id',this.data.files[i].id);
             $(this.el.find('.cancel-upload')[i]).attr('itemid',this.data.files[i].id);
         }
-
+    },
+    beforeDestroy:function () {
+        this.data.style.remove();
     }
 }

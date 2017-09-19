@@ -1,13 +1,18 @@
 <div class="component-progress">
-    {{#each files}}
-    <div class="process-item">
-        <div class="progress-msg" style="display: inline-block">{{this.name}}</div>
-        <div class="progress-bottle" style="display: inline-block;width: 150px;background-color:#a9a9a9">
-            <div class="progress-liquid" style="width: 1%;height:10px;background-color:#0e7aef"></div>
+    <div class="progresses">
+        {{#each files}}
+        <div class="process-item">
+            <div class="progress-msg">
+                {{this.name}}
+                <!--<span class="progress-text">{{this.name}}</span>-->
+            </div>
+            <div class="progress-bottle" style="display: inline-block;width: 150px;background-color:#a9a9a9">
+                <div class="progress-liquid" style="width: 1%;height:10px;background-color:#0e7aef"></div>
+            </div>
+            <div class="cancel-upload" style="display: inline-block;cursor: pointer">取消上传</div>
         </div>
-        <div class="cancel-upload" style="display: inline-block">取消上传</div>
+        {{/each}}
     </div>
-    {{/each}}
     <div class="button">
         <button>确定</button>
     </div>

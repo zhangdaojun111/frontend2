@@ -60,10 +60,10 @@ export default {
      */
     showProgress: function (data) {
         let key = PMAPI._getKey();
-        progressConfig.data = data;
-        PMAPI.openDialogByComponentWithKey(progressConfig,key,{
-            width:400,
-            height:200,
+        let width = data.files.length*18+60;
+        PMAPI.openDialogByComponentWithKey(_.defaultsDeep({},{data:data},progressConfig),key,{
+            width:350,
+            height:width,
             title:'查看上传进度'
         });
 
