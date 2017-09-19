@@ -7,13 +7,9 @@
   min-width: 980px;
   .add-img {
     width: 248px;
-    height: 148px;
+    max-height: 150px;
     z-index: 106;
   }
-  //.ui-myformtable{
-  //  position: relative;
-  //  background: #fff;
-  //}
 }
 btn-div{
   height: 24px;
@@ -37,7 +33,7 @@ btn-div{
     height: 40px;
     align-items: center;
     background: #e4e4e4;
-    z-index: 50;
+    z-index: 110;
   }
   .left{
     display: flex;

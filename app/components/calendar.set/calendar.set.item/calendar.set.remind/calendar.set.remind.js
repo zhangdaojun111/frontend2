@@ -197,8 +197,7 @@ let config = {
         },
     ],
     afterRender: function() {
-
-        PMAPI.subscribe(PMENUM.open_iframe_params, params => {
+        PMAPI.getIframeParams(window.config.key).then(params => {
             this.data.emailStatus = params.data.emailStatus;
             this.data.smsStatus = params.data.smsStatus;
             this.data.emailAddressList = params.data.emailAddressList;
@@ -257,7 +256,8 @@ let config = {
             this.el.find('.remind-time-sms').val(this.data.sms.remind_time);
             this.el.find('.remind-time-email').val(this.data.email.remind_time);
         });
-    }
+    },
+
 };
 
 class CalendarSetRemindMethod extends Component {

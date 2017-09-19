@@ -163,3 +163,9 @@
     display: none;
   }
 }
+
+@media print{
+  .detail-form .form-print-position{
+    position: relative !important;
+  }
+}

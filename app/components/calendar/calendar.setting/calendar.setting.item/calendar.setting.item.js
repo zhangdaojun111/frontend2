@@ -14,11 +14,25 @@ let config = {
     data: {
         menuItem: {}
     },
-    actions: {},
+    actions: {
+        addTest: function () {
+            $('.component-setting-menu').css({'padding-left': '20px'});
+        }
+    },
     afterRender: function () {
-        this.data.menuItem['items'].forEach(item => {
-            this.append(new CalendarSetingItemChild(item), this.el.find('.menu-item'));
-        });
+        let _this = this;
+        if (this.data.menuItem['items']) {
+            this.data.menuItem['items'].forEach(item => {
+                if (item['items']) {
+                    let component = new CalendarSettingItem();
+                    component.actions.addTest();
+                    component.data.menuItem = item;
+                    this.append(component, this.el.find('.menu-item'));
+                } else {
+                    _this.append(new CalendarSetingItemChild(item), this.el.find('.menu-item'));
+                }
+            });
+        }
     }
 };
 
