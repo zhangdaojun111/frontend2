@@ -63,6 +63,7 @@ let config = {
             };
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.pieChart = echartsService;
+            this.trigger('onUpdateChartDeepTitle',this.data);
         },
 
         updateChart(data) {

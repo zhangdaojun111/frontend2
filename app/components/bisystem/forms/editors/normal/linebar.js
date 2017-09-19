@@ -418,6 +418,14 @@ let config = {
                 events: {}
             },
             {
+                label: '高级数据',
+                name: 'advancedDataTemplates',
+                defaultValue: [],
+                type: 'advancedCompute',
+                events: {
+                }
+            },
+            {
                 label: '更多设置',
                 name: 'defaultY',
                 defaultValue: [],
