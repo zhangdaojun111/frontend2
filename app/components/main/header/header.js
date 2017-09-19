@@ -20,17 +20,23 @@ let config = {
         // imVisible: window.config.sysConfig.logic_config.use_im.toString() === "1",
     },
     actions: {
-        //将菜单尺寸设为正常模式
+        /**
+         * 将菜单尺寸设为正常模式
+         */
         setSizeToFull: function () {
             this.el.removeClass('mini');
             this.el.find('.fold').removeClass('refold');
         },
-        //将菜单尺寸设为迷你模式
+        /**
+         * 将菜单尺寸设为迷你模式
+         */
         setSizeToMini: function () {
             this.el.addClass('mini');
             this.el.find('.fold').addClass('refold');
         },
-        //打开bi窗口
+        /**
+         * 打开bi窗口
+         */
         openBiIframe: function () {
             Mediator.emit('menu:item:openiframe', {
                 id: 'bi',
@@ -38,7 +44,9 @@ let config = {
                 url: window.config.sysConfig.bi_index
             });
         },
-        //打开日历窗口
+        /**
+         * 打开日历窗口
+         */
         openCalendarIframe: function () {
             Mediator.emit('menu:item:openiframe', {
                 id: 'calendar',
@@ -49,20 +57,28 @@ let config = {
         // openHome: function () {
         //     msgbox.alert("打开首页按钮预留");
         // },
-        //在线人数页面显示
+        /**
+         * 在线人数页面显示
+         */
         goOnlineNumber: function () {
             OnlineDisplay.show();
         },
-        //系统设置界面显示
+        /**
+         * 系统设置界面显示
+         */
         goSystemSetting: function () {
             SysSetting.show();
         },
-        //刷新在线人数提示
+        /**
+         * 刷新在线人数提示
+         */
         refreshOnlineNum: function (data) {
             let title = "在线人数：" + data.online_user_num;
             this.el.find('a.online-num').attr("title",title);
         },
-        //有未读的消息显示红点提醒
+        /**
+         * 有未读的消息显示红点提醒
+         */
         displayMessageUnread: function (data) {
             let badge = parseInt(data.badge);
             if (_.isNaN(badge)) {
@@ -74,21 +90,29 @@ let config = {
                 this.el.find('.icon.message').removeClass('unread');
             }
         },
-        //消息提醒界面显示
+        /**
+         * 消息提醒界面显示
+         */
         openMessageDialog: function () {
             systemMessageUtil.show();
         },
-        //全局搜索框组件初始化
+        /**
+         * 全局搜索框组件初始化
+         */
         initGlobalSearch:function () {
             let component = new GlobalSearch();
             let $container = this.el.find(".global-search");
             component.render($container);
         },
-        //打开消息推送界面
+        /**
+         * 打开消息推送界面
+         */
         openPostMessageDialog: function () {
             postMessageUtil.show();
         },
-        //显示单条推送消息
+        /**
+         * 显示单条推送消息
+         */
         onSocketNotice: function (data = {}) {
             systemMessageUtil.showMessageDetail('推送消息', data.title, data.content, true);
         }

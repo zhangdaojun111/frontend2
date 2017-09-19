@@ -24,7 +24,9 @@ let config ={
         globalSearchOpen:"1",       //是否允许使用全局搜索
     },
     actions:{
-        //获取用户历史搜索记录数据，初始化记录列表
+        /**
+         * 获取用户历史搜索记录数据，初始化记录列表
+         */
         getData:function () {
             let that = this;
             UserInfoService.getSearchHistory().done((result) => {
@@ -38,7 +40,9 @@ let config ={
                 console.log("get search history failed",err);
             });
         },
-        //根据数据更新历史记录列表
+        /**
+         * 根据数据更新历史记录列表
+         */
         initList:function () {
             let $listParent = this.el.find('.history-list');
             let temp = this.data.historyList;
@@ -63,12 +67,16 @@ let config ={
             //添加清除历史记录按钮
             $("<li class='delete-all-history'>清除所有搜索记录</li>").appendTo($listParent);
         },
-        //监听用户输入，设置搜索内容，在历史记录中查找匹配内容
+        /**
+         * 监听用户输入，设置搜索内容，在历史记录中查找匹配内容
+         */
         setSearchContent:function (event) {
             this.data.searchContent = event.target.value;
             this.actions.filterHistory(event.target.value);
         },
-        //历史记录中过滤显示匹配内容
+        /**
+         * 历史记录中过滤显示匹配内容
+         */
         filterHistory:function (str) {
             let $list = this.el.find('.history-list');
             if(str !== ''){
@@ -82,7 +90,9 @@ let config ={
                 }
             }
         },
-        //根据用户权限，通知搜索组件执行搜索并显示结果或提示用户全局搜索功能未开启
+        /**
+         * 根据用户权限，通知搜索组件执行搜索并显示结果或提示用户全局搜索功能未开启
+         */
         doSearch:function () {
             if(this.data.globalSearchOpen === "1"){
                 let content = this.data.searchContent;
@@ -101,7 +111,9 @@ let config ={
                 msgbox.showTips("全局检索功能未开启，" + '<br>' + "请联系管理员。");
             }
         },
-        //添加搜索记录
+        /**
+         * 添加搜索记录
+         */
         addSearchHistory(){
             let content = this.data.searchContent;
             if(content && content !== ""){
@@ -129,7 +141,9 @@ let config ={
                 console.log("historyList save failed",err);
             })
         },
-        //手动删除一条历史记录
+        /**
+         * 手动删除一条历史记录
+         */
         deleteOneRecord:function (content) {
             _.remove(this.data.historyList,function (k) {
                 return k.content === content;
@@ -138,7 +152,9 @@ let config ={
             UserInfoService.saveGlobalSearchHistory(this.data.historyList);
             this.actions.initList();
         },
-        //点击历史记录根据事件对象进行查询或删除该条记录
+        /**
+         * 点击历史记录根据事件对象进行查询或删除该条记录
+         */
         dealRecordClick:function (event) {
             let operate = '';
             if((event.target.attributes).hasOwnProperty('operate')){
@@ -153,7 +169,9 @@ let config ={
                 this.actions.doSearch();
             }
         },
-        //确认清除所有历史记录？
+        /**
+         * 确认清除所有历史记录？
+         */
         isDeleteAllHistory:function () {
             msgbox.confirm("确定清除所有检索历史？").then((result) => {
                 if (result === true) {
@@ -163,7 +181,9 @@ let config ={
                 }
             })
         },
-        //清除所有历史记录
+        /**
+         * 清除所有历史记录
+         */
         deleteAllHistory:function () {
             this.data.historyList.length = 0;
             this.actions.initList();
@@ -172,7 +192,9 @@ let config ={
                     msgbox.alert("成功清除历史搜索记录！")
                 })
         },
-        //显示历史搜索记录
+        /**
+         * 显示历史搜索记录
+         */
         showHistoryList:function () {
             // this.el.find('.search-content').val('');
             if(this.data.historyList.length > 0){
@@ -180,20 +202,26 @@ let config ={
                 // this.el.find("input.search-content").removeAttr("placeholder");
             }
         },
-        //隐藏历史记录
+        /**
+         * 隐藏历史记录
+         */
         hideHistoryList:function () {
             this.el.find("div.history-display").hide();
             // if(this.el.find("input.search-content").val() === ''){
             //     this.el.find("input.search-content").attr("placeholder","请输入要搜索的内容...");
             // }
         },
-        //鼠标hover历史记录，样式设置，保证与键盘操作同步
+        /**
+         * 鼠标hover历史记录，样式设置，保证与键盘操作同步
+         */
         setItemHover:function (event) {
             this.el.find('.record-item').removeClass('item-selected');
             $(event.currentTarget).addClass('item-selected');
             this.data.selectNum = event.currentTarget.attributes.data_index.value;
         },
-        //键盘绑定监听
+        /**
+         * 键盘绑定监听
+         */
         myKeyDown:function (event) {
             if(event.keyCode === 13){       //回车，进行搜索
                 let content_first = this.el.find('.search-content').val();
@@ -228,7 +256,9 @@ let config ={
 
             }
         },
-        //指向清除所有历史记录时，取消所有历史记录样式
+        /**
+         * 指向清除所有历史记录时，取消所有历史记录样式
+         */
         allItemBlur:function () {
             this.el.find('.record-item').removeClass('item-selected');
         }

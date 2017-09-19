@@ -19,7 +19,9 @@ let config = {
         randomCode:''
     },
     actions:{
-        //根据url获取初始数据,username和random_code
+        /**
+         * 根据url获取初始数据,username和random_code
+         */
         getInitData:function () {
             this.data.randomCode = this.actions.getUrlPara('random_code');
             this.data.username = this.actions.getUrlPara('username');
@@ -34,7 +36,11 @@ let config = {
                 }
             })
         },
-        //参数解析函数
+        /**
+         * 参数解析函数
+         * @param key
+         * @returns {null}
+         */
         getUrlPara(key){
             let reg = new RegExp('(^|&)' + key + '=([^&]*)(&|$)', 'i');
             let r = window.location.search.substr(1).match(reg);
@@ -43,12 +49,18 @@ let config = {
             }
             return null
         },
-        //验证密码合法性0-9 a-z A-Z
+        /**
+         * 验证密码合法性0-9 a-z A-Z
+         * @param pw
+         * @returns {boolean}
+         */
         checkLegal:function(pw){
             let reg = /^[a-z0-9]+$/i;
             return reg.test(pw);
         },
-        //验证密码合法性，重置用户密码
+        /**
+         * 验证密码合法性，重置用户密码
+         */
         resetUserPassword:function () {
             let res = this.actions.checkPasswordLegal();
             if(!res){
@@ -72,7 +84,10 @@ let config = {
                 }
             })
         },
-        //验证两次输入的密码合法性
+        /**
+         * 验证两次输入的密码合法性
+         * @returns {boolean}
+         */
         checkPasswordLegal:function () {
             let new_pw = this.el.find('.new-pw').val();
             let new_pw_confirm = this.el.find('.new-pw-confirm').val();
