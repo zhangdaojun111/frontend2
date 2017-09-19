@@ -92,19 +92,18 @@ let config = {
             favorlist['name'] = name;
             favorlist['list'] = JSON.stringify(list);
             favorlist['query_type'] = 'save';
-            //检查name是否已存在，存在则先删除该条记录，保证新加记录在最前面
-            for(let k of this.data.favoriteList){
-                if(k.name === name){
-                    await this.actions.deleteViewByName(name);
-                    break;
-                }
+
+            let temp = this.data.favoriteList.find(function (n) {
+                return n.name === name;
+            });
+
+            if(temp){
+                await this.actions.deleteViewByName(name);
             }
 
             let that = this;
             TabService.saveFavoriteItem(favorlist).done((result) => {
-                console.log(result);
                 if(result.success === 1){
-                    // msgbox.alert("保存成功");
                     msgbox.showTips("保存成功");
                     _.remove(that.data.favoriteList,function (n) {
                         return n.name === name;
@@ -217,18 +216,23 @@ let config = {
          * 用于删除重复名字的视图
          * @param name
          */
-        deleteViewByName:function(name){
+         deleteViewByName:async function(name){
             let favorlist = {};
             favorlist['name'] = name;
             favorlist['query_type'] = 'delete';
-
+            let res;
+            let promise = new Promise((resolve, reject) => {
+                res = resolve;
+            });
             TabService.deleteFavoriteItem(favorlist).done((result) => {
                 if(result.success === 1){
                     _.remove(this.data.favoriteList,function (n) {
                         return n.name === name;
                     });
+                    res(true);
                 }
-            })
+            });
+            return promise;
         },
         /**
          * 进入编辑模式
