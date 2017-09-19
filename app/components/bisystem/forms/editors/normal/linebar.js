@@ -22,7 +22,7 @@ let config = {
                 let double = this.formItems['double'].data.value[0] ? true : false;
                 yAxis0.forEach(yAxis => {
                     if (yAxis.field) {
-                        data.push(yAxis.field)
+                        data.push(yAxis.field);
                     }
                 });
 
@@ -30,10 +30,11 @@ let config = {
                 if (double) {
                     yAxis1.forEach(yAxis => {
                         if (yAxis.field) {
-                            data.push(yAxis.field)
+                            data.push(yAxis.field);
                         }
                     });
                 };
+
                 this.formItems['double'].clearErrorMsg();
                 // 当是编辑模式下,需要先渲染完y轴在执行默认展示y轴数据
                 if(this.data.id) {
@@ -162,6 +163,18 @@ let config = {
                     yAxis.push(item);
                 });
             };
+
+
+            let ySelectedGroup = [];
+            data.ySelectedGroup.forEach(item => {
+                for (let y of yAxis){
+                    if (item.id === y.field.id) {
+                        ySelectedGroup.push(y);
+                        break;
+                    }
+                }
+            });
+
             let chart = {
                 advancedDataTemplates: [],
                 assortment: 'normal',
@@ -181,14 +194,14 @@ let config = {
                 yAxis: yAxis,
                 yHorizontal: data.yHorizontal[0] ? true : false,
                 yHorizontalColumns: data.yHorizontalColumns[0] ? {marginBottom:data.marginBottomx} : {},
-                ySelectedGroup: data.defaultY[0] ? data.ySelectedGroup : [],
+                ySelectedGroup: data.defaultY[0] ? ySelectedGroup : [],
             };
             if (data.chartAssignment == 1) {
                 chart['chartGroup'] = data.chartGroup;
             } else {
                 chart['deeps'] = data.deeps
             };
-
+            console.log(chart);
             let pass = true; // 判断表单是否验证通过
 
             for (let key of Object.keys(this.formItems)) {
@@ -244,7 +257,7 @@ let config = {
             };
             this.formItems['defaultY'].setValue(chart['ySelectedGroup'] && chart['ySelectedGroup'].length > 0 ? 1 : 0);
             this.formItems['ySelectedGroup'].setList(data['yAxis'].map(y => y.field));
-            this.formItems['ySelectedGroup'].setValue(chart['ySelectedGroup']);
+            this.formItems['ySelectedGroup'].setValue(chart['ySelectedGroup'].map(item => item.field));
             this.formItems['yHorizontal'].setValue(chart['yHorizontal'] ? 1 : 0);
             this.formItems['yHorizontalColumns'].setValue(chart['yHorizontalColumns']['marginBottom'] ? 1 : 0);
             this.formItems['marginBottomx'].setValue(chart['yHorizontalColumns']['marginBottom'] ? chart['yHorizontalColumns']['marginBottom'] : '');
@@ -257,7 +270,7 @@ let config = {
             } else {
                 this.formItems['deeps'].setValue(chart['deeps']);
             };
-        }
+        },
     },
     data: {
         options: [
@@ -331,6 +344,7 @@ let config = {
                         } else {
                             this.formItems['yAxis1'].el.hide();
                         };
+                        this.actions.updateYSelectedGroup();
                     }
                 }
             },
@@ -409,7 +423,7 @@ let config = {
                 defaultValue: [],
                 list: [
                     {
-                        value:1, name: '默认展示y轴数据'
+                        value:1, name: '是否显示某一Y轴字段'
                     }
                 ],
                 type: 'checkbox',
@@ -564,5 +578,4 @@ class LineBarEditor extends Base {
         super(config, data, event);
     }
 }
-
 export {LineBarEditor}

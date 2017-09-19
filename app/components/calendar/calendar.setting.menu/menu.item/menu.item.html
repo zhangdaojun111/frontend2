@@ -1,0 +1,27 @@
+
+<div class="menu-full-item">
+    {{#if searchDisplay}}
+    <div class="row clearfix" title={{label}}>
+        {{#if root}}
+        <!--{{#if folder_icon}}-->
+        <!--<div class="icon lv1"></div>-->
+        <!--{{else}}-->
+        <div class="icon lv1"></div>
+        <!--{{/if}}-->
+        {{else if items}}
+        <div class="ui-state-focus icon arrow">
+            <div class="ui-icon ui-icon-caret-1-e"></div>
+        </div>
+        {{else}}
+        <div class="icon child"></div>
+        {{/if}}
+        <span class="setItemTitle"></span>
+        <p class="name">{{label}}</p>
+    </div>
+    {{/if}}
+</div>
+{{#if items}}
+<ul class="childlist">
+</ul>
+{{/if}}
+

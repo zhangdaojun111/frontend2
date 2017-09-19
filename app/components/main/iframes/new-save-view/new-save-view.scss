@@ -1,0 +1,111 @@
+.save-view-component{
+    width: 100%;
+    .drop-up-box{
+        position: relative;
+        height: 20px;
+        .drop-up-view-icon{
+            position: absolute;
+            width: 32px;
+            height: 16px;
+            top: 2px;
+            left: 114px;
+            cursor: pointer;
+            background-image: url("../../../../assets/images/framework/drop-up-icon.png");
+            background-repeat: no-repeat;
+            background-position: 8px;
+        }
+    }
+    .normal-modal{
+        color: black;
+        position: relative;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 25px;
+        padding-right: 15px;
+        border-bottom: solid 1px #e4e4e4;
+        .edit-icon{
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-image: url("../../../../assets/images/framework/icon-framework-editview.png");
+            top:12px;
+            right: 15px;
+            cursor: pointer;
+        }
+    }
+    .edit-modal{
+        color: black;
+        display: none;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 25px;
+        padding-right: 15px;
+        border-bottom: solid 1px #e4e4e4;
+        position: relative;
+
+        .save-view-name{
+            width: 160px;
+            height: 20px;
+            border: solid 1px #e4e4e4;
+            outline: none;
+            text-indent: 5px;
+        }
+
+        .save-view-btn{
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-image: url("../../../../assets/images/framework/icon-framework-saveview.png");
+            top:12px;
+            right: 42px;
+            cursor: pointer;
+        }
+
+        .cancel-edit-modal{
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-image: url("../../../../assets/images/framework/icon-framework-normal-modal.png");
+            top:12px;
+            right: 15px;
+            cursor: pointer;
+        }
+    }
+    .save-view-list{
+        width: 100%;
+        color: black;
+        max-height: 303px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-bottom: 3px;
+        .list-item{
+            box-sizing: border-box;
+            width: 260px;
+            height: 30px;
+            padding-left: 25px;
+            padding-right: 15px;
+            position: relative;
+            line-height: 30px;
+            cursor: pointer;
+            .list-name{
+                position:relative;
+                width:200px;
+                text-overflow:ellipsis;
+                white-space:nowrap;
+                overflow:hidden;
+                display: inline-block;
+            }
+            .delete-icon{
+                width: 16px;
+                height: 16px;
+                position: absolute;
+                top:7px;
+                right: 15px;
+                cursor: pointer;
+            }
+            &:hover{
+                background-color: rgba(242,242,242,1);
+            }
+        }
+    }
+}
