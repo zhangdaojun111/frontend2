@@ -61,19 +61,19 @@ let config = {
                 case "datetime":
                     // inputType = 'datetime-local'; break;
                     this.el.find('.condition-search-input').remove();
-                    let dateTimeControl = new DateTimeControl({value: ''},{changeValue:function(data){}});
+                    let dateTimeControl = new DateTimeControl({value: '', isAgGrid: true},{changeValue:function(data){}});
                     dateTimeControl.render(this.el.find('.condition-search-value'));
                     break;
                 case "date":
                     // inputType = 'datetime-local'; break;
                     this.el.find('.condition-search-input').remove();
-                    let dateControl = new DateControl({value: ''},{changeValue:function(data){}});
+                    let dateControl = new DateControl({value: '', isAgGrid: true},{changeValue:function(data){}});
                     dateControl.render(this.el.find('.condition-search-value'));
                     break;
                 case "time":
                     // inputType = 'datetime-local'; break;
                     this.el.find('.condition-search-input').remove();
-                    let timeControl = new TimeControl({value: ''},{changeValue:function(data){}});
+                    let timeControl = new TimeControl({value: '', isAgGrid: true},{changeValue:function(data){}});
                     timeControl.render(this.el.find('.condition-search-value'));
                     break;
                 case "text":
