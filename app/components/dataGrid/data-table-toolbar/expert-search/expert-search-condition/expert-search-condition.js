@@ -4,7 +4,7 @@ import template from './expert-search-condition.html';
 import '../expert-search.scss';
 import expertItem from './expert-search-item/expert-search-item';
 import DateTimeControl from "../../../../form/datetime-control/datetime-control";
-import DateControl from "../../../../form/date-control/date-control";
+import DateControl from "../../grid-data-control/grid-data-control";
 import TimeControl from "../../../../form/time-control/time-control";
 import expertSearch from '../expert-search';
 let config = {
