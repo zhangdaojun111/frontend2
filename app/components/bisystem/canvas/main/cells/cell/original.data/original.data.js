@@ -199,16 +199,16 @@ let config = {
                 }
             }
         },
-        { // 点击下穿排序
-            event:'click',
-            selector:'.selectY',
-            callback:function (context) {
-                let index = $(context).attr('data-y-index');
-                alert(index);
-                $(context).find('i').addClass('active').siblings('th').removeClass('active');
-                return false;
-            }
-        },
+        // { // 点击下穿排序
+        //     event:'click',
+        //     selector:'.selectY',
+        //     callback:function (context) {
+        //         let index = $(context).attr('data-y-index');
+        //         alert(index);
+        //         $(context).find('i').addClass('active').siblings('th').removeClass('active');
+        //         return false;
+        //     }
+        // },
     ],
     afterRender() {
         //新增高级字段
