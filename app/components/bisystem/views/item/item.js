@@ -29,7 +29,7 @@ let config = {
                         this.trigger('onDelete',this.data);
                         this.destroySelf();
                     }else{
-                        alert(res['error']);
+                        msgbox.alert(res['error']);
                     }
                 });
             }

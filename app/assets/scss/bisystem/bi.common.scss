@@ -52,6 +52,13 @@ html.bi, body.bi {
         @include icon;
         background: url('../../../assets/images/bisystem/original_data.png') no-repeat;
     }
+    @media print {
+        body * {
+            visibility: visible !important;
+            overflow: auto !important;
+            position: static !important;
+        }
+    }
 }
 
 @mixin chart-com {
@@ -183,7 +190,6 @@ html.bi, body.bi {
         @include form-btn;
     }
 }
-
 
 
 
