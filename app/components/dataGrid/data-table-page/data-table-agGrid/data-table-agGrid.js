@@ -947,13 +947,12 @@ let config = {
             let sheetData = dataTableService.getSheetPage( obj2 );
             let tableOperate = dataTableService.getTableOperation( obj2 );
             let prepareParmas = dataTableService.getPrepareParmas( obj2 );
-            HTTP.flush();
             Promise.all([preferenceData, headerData, sheetData,tableOperate,prepareParmas]).then((res)=> {
                 this.actions.setHeaderData( res )
-                this.actions.getGridData();
+                //this.actions.getGridData();
             })
             //请求表单数据
-            // this.actions.getGridData();
+            this.actions.getGridData();
         },
         //设置表头数据
         setHeaderData: function ( res ) {
@@ -3098,7 +3097,7 @@ let config = {
         if( this.data.viewMode == 'deleteHanding' ){
             PMAPI.getIframeParams(window.config.key).then((res) => {
                 this.data.deleteHandingData = res.data.obj.deleteHandingData || [];
-                //this.actions.getHeaderData();
+                this.actions.getHeaderData();
             })
         }
         this.actions.getHeaderData();
