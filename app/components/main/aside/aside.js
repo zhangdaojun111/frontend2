@@ -11,7 +11,7 @@ import {AvatarSet} from '../personal-settings/set-avatar/set-avatar';
 // import {commonuse} from '../commonuse/commonuse';
 // import {Uploader} from "../../../lib/uploader";
 
-
+//预处理window.config.menu数据用于生成全部菜单
 function presetMenuData(menu, leaf) {
     let res;
     if (leaf !== true) {
@@ -27,17 +27,18 @@ function presetMenuData(menu, leaf) {
     });
     return res;
 }
-
+//预处理window.config.commonUse数据用于生成常用菜单
 function presetCommonMenuData(menu, commonData) {
     let menuData = _.defaultsDeep([], menu);
     let commonKeys = commonData.data;
-
+    //递归设置该选项及其所有祖宗选项为常用
     function setUsed(item) {
         item.commonUsed = true;
         if (item.parent) {
             setUsed(item.parent);
         }
     }
+    //遍历全部菜单，为每个选项设置父节点引用，根据commonKeys将常用选项及其父节点设置常用属性为true
     function step_one(menu, parent) {
         menu.forEach((item) => {
             item.parent = parent;
@@ -58,6 +59,7 @@ function presetCommonMenuData(menu, commonData) {
             }
         })
     };
+    //遍历全部菜单，删除父节点引用，被设为常用的选项加入res，用于生成常用菜单
     function setp_two(menu) {
         let res = [];
         menu.forEach((item) => {
@@ -79,6 +81,7 @@ let config = {
     template: template,
     data: {},
     actions: {
+        //正常模式显示菜单
         setSizeToFull: function() {
             this.el.removeClass('mini');
             if (this.data.menuType === 'all') {
@@ -87,6 +90,7 @@ let config = {
                 this.commonMenu.actions.setSizeToFull();
             }
         },
+        //迷你模式显示菜单
         setSizeToMini: function() {
             this.el.addClass('mini');
             if (this.data.menuType === 'all') {
@@ -95,6 +99,7 @@ let config = {
                 this.commonMenu.actions.setSizeToMini();
             }
         },
+        //展示全部菜单
         showAllMenu: function () {
             if (!this.allMenu) {
                 this.allMenu = new MenuComponent({list: presetMenuData(window.config.menu)});
@@ -107,13 +112,14 @@ let config = {
             this.allBtn.addClass('active');
             this.commonBtn.removeClass('active');
             this.data.menuType = 'all';
-
+            //0表示当前处于全部菜单状态，1表示当前处于常用菜单状态
             HTTP.postImmediately('/user_preference/', {
                 action: "save",
                 pre_type: "8",
                 content: "0"
             });
         },
+        //展示常用菜单
         showCommonMenu: function (reload) {
             if (!this.commonMenu) {
                 this.commonMenu = new MenuComponent({list: presetCommonMenuData(window.config.menu, window.config.commonUse)});
@@ -139,6 +145,7 @@ let config = {
                 });
             }
         },
+        //频道监听发起工作流
         openWorkflowIframe: function () {
             Mediator.emit('menu:item:openiframe', {
                 id: 'start-workflow',
@@ -146,9 +153,11 @@ let config = {
                 url: window.config.sysConfig.create_wf
             });
         },
+        //打开个人信息设置页面
         showInfoSet:function () {
             PersonSetting.show();
         },
+        //设置用户头像
         initAvatar:function () {
             let src = this.data.avatar;
             if(src !== ''){
@@ -164,6 +173,7 @@ let config = {
                 this.el.find('.avatar').addClass('default-avatar');
             }
         },
+        //用户登出
         logout: function () {
             HTTP.getImmediately('/logout/').then((res) => {
                 if (res.success === 1) {
@@ -174,6 +184,7 @@ let config = {
         /**
          * 编辑常用菜单
          */
+        //进入常用菜单编辑模式
         startEditModel: function () {
             this.el.find('.tabs').hide();
             this.el.find('.edit-model-title').show();
@@ -181,12 +192,14 @@ let config = {
             this.actions.showAllMenu();
             this.allMenu.actions.startEditModel();
         },
+        //退出常用菜单编辑模式
         cancelEditModel: function () {
             this.el.find('.tabs').show();
             this.el.find('.edit-model-title').hide();
             this.el.find('.menu').removeClass('edit');
             this.allMenu.actions.cancelEditModel();
         },
+        //修改后重置用户头像
         resetAvatar:function(){
             let $img = this.el.find("img.set-info");
             if($img.length === 0){
@@ -197,6 +210,7 @@ let config = {
                 $img.attr("src",window.config.sysConfig.userInfo.avatar);
             }
         },
+        //保存常用菜单
         saveCommonuse: function (choosed) {
             HTTP.postImmediately('/user_preference/', {
                 action: "save",
@@ -215,6 +229,7 @@ let config = {
         onImageError: function () {
 
         },
+        //提醒用户是否关闭当前开启的代理功能
         checkAgent:function () {
             let isOpenAgent = window.config.sysConfig.is_open_agent;
             if(isOpenAgent === true){

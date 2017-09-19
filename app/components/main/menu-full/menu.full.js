@@ -3,6 +3,7 @@ import template from './menu.full.html';
 import './menu.full.scss';
 import {FullMenuItem} from './item/item';
 
+//搜索框菜单过滤函数
 function searchData(menu, text) {
     let res = _.cloneDeep(menu);
     
@@ -41,6 +42,7 @@ let config = {
         type: 'full'
     },
     actions: {
+        //根据搜索框内容过滤菜单
         search: function (text) {
             this.data.text = text;
             if (text === '') {
@@ -60,6 +62,7 @@ let config = {
         countHeight: function() {
             $(window).trigger('resize.menu');
         },
+        //正常模式下的菜单显示
         setSizeToFull: function () {
             this.el.removeClass('mini');
             this.data.type = 'full';
@@ -69,6 +72,7 @@ let config = {
             });
             this.actions.countHeight();
         },
+        //迷你模式下的菜单显示
         setSizeToMini: function () {
             this.el.addClass('mini');
             this.data.type = 'mini';
@@ -78,6 +82,7 @@ let config = {
             });
             this.actions.countHeight();
         },
+        //开启编辑模式后的菜单显示
         startEditModel: function () {
             this.el.find('.custom-checkbox').show();
             this.el.find('.search').addClass('edit');
@@ -85,6 +90,7 @@ let config = {
             this.el.find('.menu-full-item > .row.full').addClass('edit');
             this.actions.countHeight();
         },
+        //退出编辑模式后的菜单显示
         cancelEditModel: function () {
             this.el.find('.custom-checkbox').hide();
             this.el.find('.search').removeClass('edit');
@@ -92,6 +98,7 @@ let config = {
             this.el.find('.menu-full-item > .row.full').removeClass('edit');
             this.actions.countHeight();
         },
+        //获取被勾选的常用item
         getSelected: function () {
             let choosed = this.el.find('input:checkbox:checked.leaf[key]');
             let res = Array.from(choosed).map((item) => {
@@ -102,6 +109,7 @@ let config = {
             });
             return res;
         },
+        //根据菜单数据创建item，形成树形菜单
         renderMenuList: function () {
             this.destroyChildren();
             this.data.list.forEach((data) => {

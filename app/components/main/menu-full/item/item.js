@@ -11,6 +11,7 @@ let config = {
     },
 
     actions: {
+        //正常模式下显示孩子菜单
         showChildrenAtFull: function () {
             this.childlist.show();
             this.iconWrap.removeClass('ui-state-focus').addClass('ui-state-active');
@@ -20,12 +21,14 @@ let config = {
                 brother.actions.hideChildrenAtFull();
             });
         },
+        //隐藏孩子菜单
         hideChildrenAtFull: function () {
             this.childlist.hide();
             this.iconWrap.removeClass('ui-state-active').addClass('ui-state-focus');
             this.icon.removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-e');
             this.data.display = false;
         },
+        //正常模式下点击item，显示其下孩子菜单或打开对应iframe（编辑模式下点击不打开iframe）
         onItemClickAtFull: function (event) {
             if (this.data.items && this.data.items.length) {
                 if (this.data.type === 'full') {
@@ -53,6 +56,7 @@ let config = {
                 });
             }
         },
+        //迷你菜单模式下
         showChildrenAtMini: function () {
             // window.clearTimeout(this.data.timer);
             if (this.childlist.length) {

@@ -58,10 +58,10 @@ let maxIframeCount = 15;
 export const IframeInstance = new Component({
     template: template,
     data: {
-        hash: {},
-        count: 0,
-        sort: [],
-        focus: null,
+        hash: {},                //实时保存当前打开的iframes的相关信息
+        count: 0,                //iframes的数量
+        sort: [],                //经排序后的iframs的id
+        focus: null,             //当前焦点iframe
         hideFlag:false,
         openingTabsList:[],      //记录未关闭的tabs的id
         timeList:{},             //记录tabs的时间戳
@@ -231,6 +231,7 @@ export const IframeInstance = new Component({
                 this.data.tabsControlOpen = false;
             }
         },
+        //取消面板延迟隐藏
         removeTimeOut:function () {
             window.clearTimeout(this.data.timer);
         },
@@ -576,7 +577,6 @@ export const IframeInstance = new Component({
             event:'click',
             selector:'.view-save',
             callback:function (target,event) {
-                console.log("open save view");
                 this.actions.showViewSave();            //打开保存视图页面
             }
         },
