@@ -62,6 +62,29 @@ let config = {
             callback:function () {
                 this.trigger('changeFile',{event:'delete'});
             }
+        }, {
+            event:'click',
+            selector:'.file-name',
+            callback:function () {
+                let fileId = this.data._controlItem['fileId'];
+                let src = '/download_attachment/?file_id='+fileId+'&download=0';
+                console.log(src);
+                if(this.data.file.type.indexOf('image') != -1) {
+                    let ele = $('<img src="'+src+'">');
+                    this.el.find('.imgwrapper').append(ele);
+                    this.el.find('.my-mask').show();
+                } else if (this.data.file.type == 'video/mp4') {
+                    let ele = $('<video width="400" controls><source src="'+src+'" type="video/mp4">您的浏览器不支持HTML5</video>');
+                    this.el.find('.imgwrapper').append(ele);
+                    this.el.find('.my-mask').show();
+                }
+            }
+        }, {
+            event:'click',
+            selector:'.mask-div',
+            callback:function () {
+                this.el.find('.my-mask').hide();
+            }
         }
     ],
     data:{

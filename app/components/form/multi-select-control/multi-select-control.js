@@ -120,10 +120,6 @@ let config={
             let moreSelectdata=FormService.createSelectJson(data2,true,2);
             oneSelectdata.onSelect=function(data){
                 if(_this.data.isInit || data.length == 0 || _this.data.isReloading){
-                    if(!_this.data.isInit){
-                        _this.data.value='';
-                        _.debounce(function(){_this.events.changeValue(_this.data)},200)();
-                    }
                     return;
                 }
                 _this.data.isReloading=true;
@@ -131,10 +127,6 @@ let config={
             };
             moreSelectdata.onSelect=function(data){
                 if(_this.data.isInit || data.length == 0 || _this.data.isReloading){
-                    if(!_this.data.isInit){
-                        _this.data.value='';
-                        _.debounce(function(){_this.events.changeValue(_this.data)},200)();
-                    }
                     return;
                 }
                 let arr=[];
@@ -146,7 +138,6 @@ let config={
 
             if(hasValue){
                 for(let i in this.data.sMuiltValue){
-                    console.log('this.data.sMuiltValue   ',this.data.sMuiltValue)
                     moreSelectdata.choosed.push({
                         name:this.data.sMuiltValue[i],
                         id:this.data.sMuiltValue[i],
