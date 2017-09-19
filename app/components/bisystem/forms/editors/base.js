@@ -14,6 +14,7 @@ import {ChartFormService} from '../../../../services/bisystem/chart.form.service
 import Mediator from '../../../../lib/mediator';
 import {router} from '../../bi.manage.router';
 import {AdvancedCompute} from '../form/advanced.compute/advanced.compute';
+import {Textarea} from '../form/textarea/textarea';
 
 let formItemTypes = {
     'text': Text,
@@ -26,7 +27,8 @@ let formItemTypes = {
     'table_single': TableSingle,
     'deep': Deep,
     'yAxis': YaXis,
-    'advancedCompute': AdvancedCompute
+    'advancedCompute': AdvancedCompute,
+    'textarea': Textarea
 }
 
 class Base extends Component {
