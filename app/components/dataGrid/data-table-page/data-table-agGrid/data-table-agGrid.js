@@ -949,10 +949,10 @@ let config = {
             let prepareParmas = dataTableService.getPrepareParmas( obj2 );
             Promise.all([preferenceData, headerData, sheetData,tableOperate,prepareParmas]).then((res)=> {
                 this.actions.setHeaderData( res )
-                this.actions.getGridData();
+                // this.actions.getGridData();
             })
             //请求表单数据
-            // this.actions.getGridData();
+            this.actions.getGridData();
         },
         //设置表头数据
         setHeaderData: function ( res ) {
@@ -3091,7 +3091,7 @@ let config = {
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
 
         //渲染cache数据
-        if( window.config.data_cached == 1 ){
+        if( window.config.data_cached == 1 && this.data.viewMode == 'normal' ){
             console.log( '加载cache数据' )
             this.actions.renderCacheData( window.config.cached_data )
             return;
