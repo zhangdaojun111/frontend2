@@ -20,7 +20,19 @@
         }
     }
 }
+
 .form-group-chart {
+    .remove-y-btn {
+        position: absolute;
+        right: 5px;
+        top: -20px;
+        color: red;
+        text-decoration: none;
+        font-size: 12px;
+        i {
+            vertical-align: middle;
+        }
+    }
     .form-chart-autocomplete {
         @include msg-show;
     }
@@ -38,7 +50,7 @@
             span {
                 display: none;
             }
-            .error-msg{
+            .error-msg {
                 top: -2px;
             }
         }

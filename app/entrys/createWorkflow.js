@@ -87,13 +87,13 @@ Mediator.subscribe('workflow:choose', (msg)=> {
                 autoSaving();
             }
         })
-        $(window).on('focus',function(){
-            clearInterval(timer);
-            autoSaving();
-        });
-        $(window).on('blur',function(){
-            clearInterval(timer);
-        });
+        // $(window).on('focus',function(){
+        //     clearInterval(timer);
+        //     autoSaving();
+        // });
+        // $(window).on('blur',function(){
+        //     clearInterval(timer);
+        // });
     });
 
 });

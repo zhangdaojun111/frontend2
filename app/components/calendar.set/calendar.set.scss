@@ -42,10 +42,9 @@
             width: 100%;
             display: table;
             .table-set-checkbox{
-                width: 9% !important;
             }
-            .table-set-multile{
-                width:16% !important;
+            span.table-set-multile{
+                width:16%;
             }
             .set-table-head{
                 width: 9%;
@@ -83,7 +82,6 @@
         .calendar-setting-content{
             height:100%;
         }
-
 
     }
 

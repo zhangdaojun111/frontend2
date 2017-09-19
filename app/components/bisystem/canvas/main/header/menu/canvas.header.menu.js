@@ -4,17 +4,18 @@
  */
 import Component from '../../../../../../lib/component';
 import template from './canvas.header.menu.html';
-
+import './canvas.header.menu.scss';
 
 let config = {
     template: template,
     data: {
         id: '',
-        name: ''
+        name: '',
     },
     actions: {
         focus(){
             this.el.find('a').addClass('active');
+            this.el.find('i').addClass('tabs-menu-active-icon');
             let brothers = this.findBrothers();
             brothers.forEach((item) => {
                 item.actions.blur();
@@ -23,6 +24,7 @@ let config = {
         },
         blur(){
             this.el.find('a').removeClass('active');
+            this.el.find('i').removeClass('tabs-menu-active-icon');
             this.data.isCurrent = false;
         }
     },

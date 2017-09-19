@@ -75,9 +75,18 @@ export class EchartsService {
         let secondMaxTextYnum = [];
         let maxXnum = [];
         let maxYTextNum; // y轴数字toSting().length最大字数
-
         yAxis.forEach((y,i) => {
             legend.push(y[nameType]);
+            if (nameType === 'new_name') {
+                if (Array.isArray(ySelectedGroup) && ySelectedGroup.length > 0) {
+                    for (let ySelectItem of ySelectedGroup) {
+                        if (ySelectItem.field.dfield === y.dfield) {
+                            ySelectItem.field.name = y['new_name'];
+                            break;
+                        };
+                    }
+                }
+            };
             let yTextNum = [];
             y['data'].forEach(val => {
                 if (val) {
@@ -221,7 +230,7 @@ export class EchartsService {
         if (Array.isArray(ySelectedGroup) && ySelectedGroup.length > 0) {
             legend.map(name => {
                 for (let val of ySelectedGroup) {
-                    if (val.name === name) {
+                    if (val.field.name === name) {
                         linebarOption['legend']['selected'][name] = true;
                         break;
                     } else {
