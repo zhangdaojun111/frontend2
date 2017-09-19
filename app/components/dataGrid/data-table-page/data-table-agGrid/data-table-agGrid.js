@@ -949,10 +949,10 @@ let config = {
             let prepareParmas = dataTableService.getPrepareParmas( obj2 );
             Promise.all([preferenceData, headerData, sheetData,tableOperate,prepareParmas]).then((res)=> {
                 this.actions.setHeaderData( res )
-                this.actions.getGridData();
+                // this.actions.getGridData();
             })
             //请求表单数据
-            // this.actions.getGridData();
+            this.actions.getGridData();
         },
         //设置表头数据
         setHeaderData: function ( res ) {
@@ -1358,6 +1358,11 @@ let config = {
                 is_filter: this.data.filterParam.is_filter,
                 filter: []
             }
+            for( let k in json ){
+                if( json[k] == 'undefined' ){
+                    json[k] = '';
+                }
+            }
             if( this.data.viewMode == 'in_process' ){
                 let ids = [];
                 for( let d of this.data.rowData ){
@@ -1381,7 +1386,8 @@ let config = {
             if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
                 json['rows'] = 99999;
                 json['first'] = 0;
-                json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                // json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                json['is_temp'] = 0;
             }
             if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild'||this.data.viewMode == 'child' ){
                 json["childInfo"]= {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
@@ -2543,11 +2549,11 @@ let config = {
                     ViewVideo.data.dinput_type = data.colDef.dinput_type;
                     ViewVideo.data.currentVideoId = data.value[0];
                     ViewVideo.data.videoSrc = `/download_attachment/?file_id=${data.value[0]}&download=0&dinput_type=${data.colDef.dinput_type}`;
-                     PMAPI.openDialogByComponent(ViewVideo, {
-                         width: 1000,
-                         height: 600,
-                         title: '视频播放器'
-                     })
+                    PMAPI.openDialogByComponent(ViewVideo, {
+                        width: 1000,
+                        height: 600,
+                        title: '视频播放器'
+                    })
                 });
                 HTTP.flush();
             }
@@ -2566,8 +2572,8 @@ let config = {
                     PictureAttachment.data.rows=obj.imgData.rows;
                     PMAPI.openDialogByComponent(PictureAttachment,{
                         title:'图片附件',
-                        width: 1234,
-                        height:800
+                        width: 900,
+                        height:600
                     })
                 })
                 HTTP.flush();
@@ -2633,8 +2639,8 @@ let config = {
                         AttachmentList.data.dinput_type=dinput_type;
                         AttachmentList.data.is_view=1;
                         PMAPI.openDialogByComponent(AttachmentList,{
-                            width: 1234,
-                            height: 876,
+                            width: 900,
+                            height: 600,
                             title: '附件列表'
                         })
                     })
@@ -3085,7 +3091,7 @@ let config = {
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
 
         //渲染cache数据
-        if( window.config.data_cached == 1 ){
+        if( window.config.data_cached == 1 && this.data.viewMode == 'normal' ){
             console.log( '加载cache数据' )
             this.actions.renderCacheData( window.config.cached_data )
             return;
