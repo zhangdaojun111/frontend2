@@ -10,6 +10,7 @@ import Mediator from '../../../lib/mediator';
 import CalendarSettingItem from './calendar.setting.item/calendar.setting.item';
 import CalendarSet from '../../calendar.set/calendar.set';
 import {CalendarSetService} from "../../../services/calendar/calendar.set.service"
+import {SettingMenuComponent} from '../calendar.setting.menu/setting.menu';
 
 let config = {
     template: template,
@@ -20,13 +21,14 @@ let config = {
     actions: {
         getFilterMenu: function (keyValue, subMenu) {
             CalendarSetService.filterMenu(keyValue, subMenu).then(res => {
-                console.log(res);
                 let filterMenu = res['menu'];
-                let calendarSetItem = new CalendarSettingItem();
-                filterMenu.forEach(item => {
-                    calendarSetItem.data.menuItem = item;
-                    this.append(calendarSetItem, this.el.find('.setting-content'));
-                });
+                // let calendarSetItem = new CalendarSettingItem();
+                // filterMenu.forEach(item => {
+                //     calendarSetItem.data.menuItem = item;
+                //     this.append(calendarSetItem, this.el.find('.setting-content'));
+                // });
+                let settingMenuComponent = new SettingMenuComponent({list: filterMenu});
+                this.append(settingMenuComponent, this.el.find('.setting-content'));
             })
         },
         /**
@@ -46,7 +48,8 @@ let config = {
                 this.el.find('.calendar-setting-items').removeClass('hide-menu');
                 this.el.find('.calendar-setting-item').removeClass('hide');
             }
-        }
+        },
+
     },
     firstAfterRender: function () {
 
@@ -70,21 +73,25 @@ let config = {
                     this.actions.getFilterMenu(keyValue, subMenu);
 
                 } else {
-                    let calendarSetItem = new CalendarSettingItem();
-                    this.data.menu.forEach(item => {
-                        calendarSetItem.data.menuItem = item;
-                        this.append(calendarSetItem, this.el.find('.setting-content'));
-                    });
+                    // let calendarSetItem = new CalendarSettingItem();
+                    // this.data.menu.forEach(item => {
+                    //     calendarSetItem.data.menuItem = item;
+                    //     this.append(calendarSetItem, this.el.find('.setting-content'));
+                    // });
+                    let settingMenuComponent = new SettingMenuComponent({list: this.data.menu});
+                    this.append(settingMenuComponent, this.el.find('.setting-content'));
                 }
             }
         },
     ],
     afterRender: function () {
-        let calendarSetItem = new CalendarSettingItem();
-        this.data.menu.forEach(item => {
-            calendarSetItem.data.menuItem = item;
-            this.append(calendarSetItem, this.el.find('.setting-content'));
-        });
+        // let calendarSetItem = new CalendarSettingItem();
+        // this.data.menu.forEach(item => {
+        //     calendarSetItem.data.menuItem = item;
+        //     this.append(calendarSetItem, this.el.find('.setting-content'));
+        // });
+        let settingMenuComponent = new SettingMenuComponent({list: this.data.menu});
+        this.append(settingMenuComponent, this.el.find('.setting-content'));
         Mediator.on('calendar-set-left:calendar-set', data => {
             this.el.find('.form-title').html('【' + data.label + '】');
             this.el.find('.calendar-setting-item-content').empty();
