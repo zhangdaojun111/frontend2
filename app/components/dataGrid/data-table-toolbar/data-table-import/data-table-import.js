@@ -214,10 +214,13 @@ let config = {
             });
         } )
         this.el.on('click','.radio-container', function(){
-            if($(this).parent('td').attr('name') == 1){
-                $(this).parent('td').attr('name', 0)
-            } else {
-                $(this).parent('td').attr('name', 1)
+            if(!$(this).find('.radio-in').hasClass('active')){
+                debugger
+                if($(this).parent('td').attr('name') == 1){
+                    $(this).parent('td').attr('name', 0)
+                } else {
+                    $(this).parent('td').attr('name', 1)
+                }
             }
             $(this).parent().find('.radio-in').removeClass('active');
             $(this).find('.radio-in').addClass('active');

@@ -31,6 +31,7 @@ let config = {
                 this.el.find('.left-content').empty();
                 this.append(new LeftContent(res), this.el.find('.left-content'));
                 Mediator.emit('Calendar: tool', {toolMethod: 'refresh', data: res['cancel_fields']});
+                this.hideLoading();
             });
         }
     },
@@ -50,6 +51,7 @@ let config = {
         this.data.chooseDate = CalendarTimeService.formatDate(year, month, day);
     },
     afterRender: function() {
+        this.showLoading();
         if(window === window.parent) {
             this.el.find('#open-new-window').hide();
         }
@@ -57,6 +59,7 @@ let config = {
             this.cancelFields = res['cancel_fields'];
             this.append(new LeftContent(res), this.el.find('.left-content'));
             this.append(new CalendarMain(res['cancel_fields']), this.el.find('.main-content'));
+            this.hideLoading();
         });
 
         this.el.on('click', '#monthView', () => {
@@ -90,6 +93,7 @@ let config = {
             $('#todayView').removeClass('today-btn-checked');
             $('#monthView, #weekView, #dayView').removeClass('btn-checked');
         }).on('click', '#refresh', () => {
+            this.showLoading();
             this.actions.getCalendarTreeData();
         }).on('click', '#export', () => {
             Mediator.emit('Calendar: tool', {toolMethod: 'export'});
