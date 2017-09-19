@@ -225,7 +225,6 @@ export class CanvasOriginalDataComponent extends Component {
         config.template = originalData.template ? originalData.template : template;
         super(config,originalData,events);
     }
-
     /**
      * 处理初始化数据 用于组装需要的数据格式
      * @param originalData = 初始化data传递过来的参数
