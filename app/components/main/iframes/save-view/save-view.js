@@ -106,7 +106,6 @@ let config = {
             let tabIdList = [];
             for ( let k of this.data.favoriteList){
                 if ( k.name === name){
-                    console.log(k.list);
                     tabIdList = k.list;
                     break;
                 }
@@ -204,8 +203,9 @@ let config = {
             event:'click',
             selector:'.save-btn',
             callback: _.debounce( function () {
+                console.log('click');
                 this.actions.saveFavorite();
-            },100)
+            },1000)
         },
         {
             event:'click',

@@ -71,12 +71,14 @@ let config = {
                 }
             }
         },
+        //迷你菜单下隐藏子菜单
         hideChildrenAtMini: function () {
             // window.clearTimeout(this.data.timer);
             // this.data.timer = window.setTimeout(() => {
                 this.childlist.hide();
             // }, 500)
         },
+        //迷你菜单下点击item打开iframe
         onItemClickAtMini: function () {
             if (_.isUndefined(this.data.items)) {
                 let key;
@@ -92,11 +94,13 @@ let config = {
                 });
             }
         },
+        //编辑模式勾选checkbox
         onCheckboxChange: function (context, event) {
             let value = context.checked;
             this.actions.setCheckboxValue(value);
             this.trigger('onSubCheckboxChange', value);
         },
+        //设置checkbox的值
         setCheckboxValue: function (value) {
             if (this.ownCheckbox.length) {
                 this.ownCheckbox[0].checked = value;
@@ -105,11 +109,13 @@ let config = {
                 comp.actions.setCheckboxValue(value);
             })
         },
+        //设置点击的item的checkbox的值
         setCheckboxValueSelf: function (value) {
             if (this.ownCheckbox.length) {
                 this.ownCheckbox[0].checked = value;
             }
         },
+        //设置点击的item的子菜单checkbox的值
         checkChildrenChecked: function () {
             let allCheckbox = this.el.find('.childlist input:checkbox');
             let allChecked = this.el.find('.childlist input:checked');
@@ -119,6 +125,7 @@ let config = {
                 this.actions.setCheckboxValueSelf(false);
             }
         },
+        //正常模式的item显示
         setToFull: function () {
             this.data.type = 'full';
             this.cancelEvents();
@@ -130,6 +137,7 @@ let config = {
                 'padding-right': '0'
             });
         },
+        //迷你模式的item显示
         setToMini: function () {
             this.data.type = 'mini';
             this.cancelEvents();

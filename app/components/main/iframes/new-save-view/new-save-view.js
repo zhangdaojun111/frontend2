@@ -55,7 +55,7 @@ let config = {
             }
         },
         //将当前打开的标签组合保存为视图（不保存bi和日历）
-        saveFavorite:function () {
+        saveFavorite:async function () {
             //过滤List中的bi和日历
             _.remove(this.data.currentIframesList,function (n) {
                 return (n === "bi" || n === 'calendar');
@@ -88,7 +88,7 @@ let config = {
             //检查name是否已存在，存在则先删除该条记录，保证新加记录在最前面
             for(let k of this.data.favoriteList){
                 if(k.name === name){
-                    this.actions.deleteViewByName(name);
+                    await this.actions.deleteViewByName(name);
                     break;
                 }
             }
@@ -240,7 +240,7 @@ let config = {
             selector:'.save-view-btn',
             callback: _.debounce( function () {
                 this.actions.saveFavorite();
-            },150)
+            },500)
         },
         {
             event:'click',
