@@ -5,12 +5,25 @@
 
 import template from './view-video.html';
 let css = `
-    .videoList {
-    width: 30%;
+ .videoList {
+    width: 35%;
     height: 100%;
     float: left;
     margin-left: 14px;
     overflow-y: scroll;
+}
+.select-video div{
+    line-height: 40px;
+    border-bottom: 1px solid #F2F2F2;
+}
+.select-video a{
+    position: absolute;
+    top: 4px;
+    right:0;
+    outline-style:none;
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 10px;
 }
 .videoContain {
     position: relative;

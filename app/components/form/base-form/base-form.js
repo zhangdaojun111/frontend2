@@ -1045,11 +1045,8 @@ let config = {
             }
             //重新获取动态数据 （temp_id会变）
             let res = await FormService.getDynamicDataImmediately(json);
-            console.log('res   ',res)
             for (let key in res.data) {
                 this.data.data[key] = Object.assign({}, this.data.data[key], res.data[key]);
-                 // console.log("this.data.data[key]  ",this.data.data[key])
-                 // console.log("res.data[key]  ",res.data[key])
                 if (this.data.childComponent[key]) {
                     this.data.childComponent[key].data = Object.assign({}, this.data.childComponent[key].data, res.data[key]);
                     this.data.childComponent[key].reload();
@@ -1061,6 +1058,7 @@ let config = {
                 this.data.btnType = 'new';
             }
             this.actions.addBtn();
+            this.actions.triggerControl();
             this.data.isBtnClick=false;
         },
         //修改可修改性
