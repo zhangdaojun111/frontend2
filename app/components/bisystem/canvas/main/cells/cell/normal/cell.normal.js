@@ -87,7 +87,6 @@ let config = {
             this.normalChart = echartsService;
             this.trigger('onUpdateChartDeepTitle',this.data);
         },
-
         updateChart(data) {
             //重新渲染echarts
             const option = this.normalChart.lineBarOption(data);
