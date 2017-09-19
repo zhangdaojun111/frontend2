@@ -893,14 +893,14 @@ let config = {
                     this.actions.openSelfIframe( url,'编辑' )
                 }
                 if( $event.event.srcElement.id == 'view' ){
-                    let obj = {
+                    let json = {
                         table_id: this.data.tableId,
                         btnType: 'view',
                         real_id: $event.data._id,
                         is_view: 1
                     }
-                    let url = dgcService.returnIframeUrl( '/form/index/',obj );
-                    this.actions.openSelfIframe( url,'查看' )
+                    let u = dgcService.returnIframeUrl( '/form/index/',json );
+                    this.actions.openSelfIframe( u,'查看' )
                 }
                 if( $event.event.srcElement.id == 'jurisdiction' ){
                     this.data.userPerm.id = $event.data['_id'];
