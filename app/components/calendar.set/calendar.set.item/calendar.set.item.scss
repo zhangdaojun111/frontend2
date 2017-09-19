@@ -16,12 +16,14 @@
         select {
             width: calc(100% - 10px);
             margin: 0px 5px;
+            cursor:pointer ;
             height: 30px;
             border: 1px solid #ddd;
         }
         .z-checkbox{
             vertical-align: middle;
             font-weight: lighter;
+            overflow: visible;
             .z-checkbox-input{
                 bottom: 6px;
                 right: 2px;
@@ -38,6 +40,7 @@
             }
         }
         .set-color {
+            cursor: pointer;
             vertical-align: middle;
         }
     }
@@ -63,7 +66,7 @@
         }
     }
     .multi-select-item{
-        width:calc(16% - 10px) !important;
+        width:calc(16% - 10px);
         margin: 0px 5px;
         .popup {
             width: 100%;

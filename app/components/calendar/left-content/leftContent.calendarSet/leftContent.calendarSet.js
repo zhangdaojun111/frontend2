@@ -22,6 +22,9 @@ let config = {
     events: {
         /**
          *日历树组件回掉函数  参数data格式：{type:,data:}
+         * type:'remind-checkbox' 提醒checkbox发生选择。
+         * type:'unshowData' 提醒子树发生选择，unshowData发生改变。
+         * type:'hideData' 隐藏日历树。
          */
         checkBoxCheck: function (data) {
             if (data.type === "remind-checkbox") {
@@ -44,6 +47,24 @@ let config = {
                 Mediator.emit('calendar-left:unshowData', {data: this.data.cancel_fields});
                 let preference = {"content": this.data.cancel_fields};
                 CalendarService.getCalendarPreference(preference);
+            }
+            if (data.type === "hideData") {
+                let hide_table_id = data.data;
+                let hide_table_name = '';
+                this.actions.remindShow();
+                for (let j = 0; j < this.data.rows.length; j++) {
+                    if (hide_table_id === this.data.rows[j].table_id) {
+                        hide_table_name = this.data.rows[j].table_name;
+                    }
+                }
+                this.data.hide_table = {'tableName': hide_table_name, 'table_Id': hide_table_id};
+                this.data.hide_item_table.push(hide_table_id);
+                this.data.hide_tables.push(this.data.hide_table);
+                let preferenceHide = {"content": this.data.hide_item_table};
+                let preference = {"content": this.data.cancel_fields, contentHide: preferenceHide};
+                CalendarService.getCalendarPreference(preference);
+                Mediator.emit('calendar-left:hideRemindType', {data: this.data.hide_table});
+                this.data.hide_table = {'tableName': "", 'table_Id': ''}
             }
         }
     },
@@ -212,9 +233,9 @@ let config = {
             if(this.el.find(".label-select-all-show").length === 0){
                 this.el.find(".checkbox_a3").addClass('label-select-all-checked');
             }
-            this.el.find("#select-all-block-" + data.data).show();
-            this.el.find("#select-all-block-" + data.data).find(".select-head").addClass('label-select-all-show label-select-all-checked');
-            this.el.find("#select-all-block-" + data.data).find(".select-label-children").removeClass("unchecked");
+            this.el.find(".select-all-block-" + data.data).show();
+            this.el.find(".select-all-block-" + data.data).find(".select-head").addClass('label-select-all-show label-select-all-checked');
+            this.el.find(".select-all-block-" + data.data).find(".select-label-children").removeClass("unchecked");
             for (let i = 0; i < this.data.hide_tables.length; i++) {
                 if (this.data.hide_tables[i].table_Id === data.data) {
                     this.data.hide_tables.splice(i, 1);
@@ -255,13 +276,13 @@ let config = {
                 this.actions.approve_label(checkbox_a2);
             }
         },
-        {
-            event: 'click',
-            selector: '.hide-type-group',
-            callback: function (temp = this) {
-                this.actions.hide_group($(temp));
-            }
-        }
+        // {
+        //     event: 'click',
+        //     selector: '.hide-type-group',
+        //     callback: function (temp = this) {
+        //         this.actions.hide_group($(temp));
+        //     }
+        // }
     ],
 
     afterRender: function () {
