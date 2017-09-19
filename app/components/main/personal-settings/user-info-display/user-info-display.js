@@ -100,6 +100,7 @@ let userInfoDisplay = {
         userName:''
     },
     actions:{
+        //展示用户基本信息
         displayTargetInfo:function () {
             this.el.find('.uid-department-info').val(this.data.userInfo.user_department);
             this.el.find('.uid-email-info').val(this.data.userInfo.user_email);
@@ -113,8 +114,8 @@ let userInfoDisplay = {
             }
             this.actions.initInfo();
         },
+        // 初始化，检测用户头像路径返回值，没有则显示默认头像
         initInfo:function () {
-            // 初始化，检测用户头像路径返回值，没有则显示默认头像
             let src = this.data.avatar;
             if(src !== ''){
                 let $img = $("<img>").addClass("uid-user-avatar").attr('src',src);
