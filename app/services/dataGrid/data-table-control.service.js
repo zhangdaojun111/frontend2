@@ -145,7 +145,10 @@ export const dgcService = {
     //创建footer数据
     createFooterData: function (res) {
         let arr = [];
-        let obj = res.rows[0] || {};
+        let obj = {};
+        if( res&&res.rows&&res.rows[0] ){
+            obj = res.rows[0];
+        }
         obj["myfooter"] = '合计';
         arr.push(obj);
         let footerData = arr;

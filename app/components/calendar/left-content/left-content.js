@@ -112,7 +112,8 @@ let config = {
                     modal: true,
                     customSize: true,
                 },
-            );
+            ).then(data => {
+            });
         },
 
         /**
@@ -133,6 +134,10 @@ let config = {
             });
         }
     },
+    events:{
+        refresh:null,
+    },
+
     binds: [
         {
             event: 'click',

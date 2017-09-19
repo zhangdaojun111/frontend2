@@ -188,7 +188,7 @@ let config = {
                 this.data.childComponents.push(calendarSetItem);
                 this.append(calendarSetItem, this.el.find('.set-items'));
             });
-            this.hideLoading();
+            // this.hideLoading();
         },
 
         /**
@@ -356,7 +356,9 @@ let config = {
             callback: function (temp = this) {
                 this.el.find(".hide-btns").css("visibility", "visible");
                 $(temp).addClass("disabled");
-                Mediator.emit('calendar-set:editor', {data: 1});
+                for (let obj of this.data.childComponents) {
+                    obj.actions.editable();
+                }
             }
         },
         {
@@ -367,7 +369,6 @@ let config = {
                 this.el.find(".set-btn").removeClass("disabled");
                 this.el.find('.set-items').empty();
                 this.actions.getSetting(this.data.tableId);
-                Mediator.emit('calendar-set:editor', {data: -1});
             }
         },
         {
@@ -423,7 +424,6 @@ let config = {
         });
 
         Mediator.on('calendar-set-left:calendar-set', data => {
-            this.showLoading();
             this.data.tableId = data.table_id;
             this.actions.getColumnListData(data.table_id);
         });

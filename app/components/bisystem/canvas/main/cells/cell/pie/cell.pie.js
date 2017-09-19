@@ -38,11 +38,10 @@ let config = {
                     yAxis.push(cellChart['chart']['data']['yAxis'][index])
                 };
             });
-
             yAxis.forEach((item) => {
                 let itemData = [];
                 item.data.forEach((val,index,arrays) => {
-                    let isRemove = yAxisRemoveDataIndex.toString().indexOf(index) ;
+                    let isRemove = yAxisRemoveDataIndex.indexOf(index);
                     if (isRemove === -1) {
                         itemData.push(val)
                     }
@@ -56,12 +55,12 @@ let config = {
         echartsInit() {
             let chartData;
             if (window.config.bi_user === 'client') { // 如果是客户模式下，优先渲染原始数据
-                if (this.data.cellChart.cell.attribute.length > 0 || this.data.cellChart.cell.select.length > 0) {
+                if (this.data.cellChart.cell.attribute.length > 0 && this.data.cellChart.cell.select.length > 0) {
                     let cellChart = this.actions.handleOriginal();
                     chartData = _.cloneDeep(this.data);
                     chartData.cellChart = cellChart;
                 };
-            }
+            };
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.pieChart = echartsService;
         },
@@ -142,6 +141,7 @@ let config = {
                         this.data.cellChart['cell']['attribute'] = [];
                         this.data.cellChart['cell']['select'] = [];
                         this.actions.updateChart(this.data.cellChart);
+                        this.trigger('onUpdateChartDeepTitle',this.data);
                     }
                 } else {
                     msgbox.alert(res[0]['error']);
@@ -153,6 +153,7 @@ let config = {
                 };
                 return false;
             }
+
         }
     },
     afterRender() {

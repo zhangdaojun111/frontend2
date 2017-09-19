@@ -1,6 +1,10 @@
 /**
-* 容器的大小
-*/
+ 引用公共样式
+ */
+@import "../core/reset.scss";
+@import "../core/jquery-ui-theme.scss";
+@import "../core/param.scss";
+@import "../core/common.scss";
 
 @mixin icon {
     display: inline-block;
@@ -51,6 +55,13 @@ html.bi, body.bi {
     .original-data-icon {
         @include icon;
         background: url('../../../assets/images/bisystem/original_data.png') no-repeat;
+    }
+    @media print {
+        body * {
+            visibility: visible !important;
+            overflow: auto !important;
+            position: static !important;
+        }
     }
 }
 
@@ -183,7 +194,6 @@ html.bi, body.bi {
         @include form-btn;
     }
 }
-
 
 
 

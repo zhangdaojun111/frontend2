@@ -43,10 +43,10 @@ let config = {
             yAxis.forEach((item) => {
                 let itemData = [];
                 item.data.forEach((val,index,arrays) => {
-                    let isRemove = yAxisRemoveDataIndex.toString().indexOf(index) ;
+                    let isRemove = yAxisRemoveDataIndex.indexOf(index);
                     if (isRemove === -1) {
                         itemData.push(val)
-                    }
+                    };
                 });
                 item.data = itemData;
             });
@@ -59,8 +59,8 @@ let config = {
         echartsInit() {
             let chartData;
             if (window.config.bi_user === 'client') { // 如果是客户模式下，优先渲染原始数据
-                // 当attribute or select　等于空时　代表全选
 
+                // 当attribute or select　等于空时　代表全选
                 if (this.data.cellChart.chart.chartGroup.id && this.data.cellChart.cell.select.length > 0) {
                     chartData = _.cloneDeep(this.data);
                     let ename = [];
@@ -82,10 +82,10 @@ let config = {
                         chartData.cellChart = cellChart;
                     };
                 }
-
             };
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.normalChart = echartsService;
+            this.trigger('onUpdateChartDeepTitle',this.data);
         },
 
         updateChart(data) {
@@ -166,6 +166,7 @@ let config = {
                         this.data.cellChart['cell']['attribute'] = [];
                         this.data.cellChart['cell']['select'] = [];
                         this.actions.updateChart(this.data.cellChart);
+                        this.trigger('onUpdateChartDeepTitle',this.data);
                     }
                 } else {
                     msgbox.alert(res[0]['error']);
