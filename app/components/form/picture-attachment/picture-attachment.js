@@ -20,20 +20,21 @@ let css = `.imgList {
     position: relative;
 }
 .imgList div {
-    height: 40px;
+    //height: 40px;
     line-height: 40px;
     border-bottom: 1px solid #F2F2F2;
 }
 .imgList div a {
-    position: relative;
+    position: absolute;
     top: 4px;
+    right:0;
     outline-style:none;
     display: inline-block;
     margin-left: 5px;
 }
 .select-img a{
-    margin-right: 20px;
-    float: right;
+    margin-right: 10px;
+   // float: right;
 }
 .imgContain {
     position: relative;

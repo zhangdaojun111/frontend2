@@ -154,7 +154,16 @@ let config = {
                 }
             }
             Mediator.emit('CalendarSelected: Search', obj);
-        }
+        },
+        /**
+         *隐藏日历树
+         */
+        hide_group: function () {
+            this.el.find(".select-head").removeClass("label-select-all-show");
+            this.events.checkbox({type: 'unshowData', staus: true, data: this.data.items});
+            this.el.find(".select-all").hide();
+            this.events.checkbox({type: 'hideData', data: this.data.dataitem.table_id});
+        },
     },
     events: {},
     binds: [
@@ -226,6 +235,13 @@ let config = {
                 this.actions.selectLabelShow($(temp));
             }
         },
+        {
+            event: 'click',
+            selector: '.hide-type-group',
+            callback: function () {
+                this.actions.hide_group();
+            }
+        }
     ],
 
     afterRender: function () {

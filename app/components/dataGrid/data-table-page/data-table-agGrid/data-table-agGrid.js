@@ -947,12 +947,12 @@ let config = {
             let sheetData = dataTableService.getSheetPage( obj2 );
             let tableOperate = dataTableService.getTableOperation( obj2 );
             let prepareParmas = dataTableService.getPrepareParmas( obj2 );
-
             Promise.all([preferenceData, headerData, sheetData,tableOperate,prepareParmas]).then((res)=> {
-                this.actions.setHeaderData( res );
+                this.actions.setHeaderData( res )
+                this.actions.getGridData();
             })
             //请求表单数据
-            this.actions.getGridData();
+            // this.actions.getGridData();
         },
         //设置表头数据
         setHeaderData: function ( res ) {
@@ -2543,11 +2543,11 @@ let config = {
                     ViewVideo.data.dinput_type = data.colDef.dinput_type;
                     ViewVideo.data.currentVideoId = data.value[0];
                     ViewVideo.data.videoSrc = `/download_attachment/?file_id=${data.value[0]}&download=0&dinput_type=${data.colDef.dinput_type}`;
-                     PMAPI.openDialogByComponent(ViewVideo, {
-                         width: 1000,
-                         height: 600,
-                         title: '视频播放器'
-                     })
+                    PMAPI.openDialogByComponent(ViewVideo, {
+                        width: 1000,
+                        height: 600,
+                        title: '视频播放器'
+                    })
                 });
                 HTTP.flush();
             }
@@ -2566,8 +2566,8 @@ let config = {
                     PictureAttachment.data.rows=obj.imgData.rows;
                     PMAPI.openDialogByComponent(PictureAttachment,{
                         title:'图片附件',
-                        width: 1234,
-                        height:800
+                        width: 900,
+                        height:600
                     })
                 })
                 HTTP.flush();
@@ -2633,8 +2633,8 @@ let config = {
                         AttachmentList.data.dinput_type=dinput_type;
                         AttachmentList.data.is_view=1;
                         PMAPI.openDialogByComponent(AttachmentList,{
-                            width: 1234,
-                            height: 876,
+                            width: 900,
+                            height: 600,
                             title: '附件列表'
                         })
                     })
@@ -3097,6 +3097,7 @@ let config = {
         if( this.data.viewMode == 'deleteHanding' ){
             PMAPI.getIframeParams(window.config.key).then((res) => {
                 this.data.deleteHandingData = res.data.obj.deleteHandingData || [];
+                this.actions.getHeaderData();
             })
         }
         this.actions.getHeaderData();
