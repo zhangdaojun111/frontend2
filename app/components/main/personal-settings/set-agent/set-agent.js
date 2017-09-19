@@ -13,6 +13,7 @@ import {UserInfoService} from "../../../../services/main/userInfoService"
 import msgbox from "../../../../lib/msgbox";
 import TreeView from "../../../../components/util/tree/tree";
 import {AutoSelect} from '../../../../components/util/autoSelect/autoSelect';
+import '../../../../assets/scss/core/common.scss';
 
 
 let config = {

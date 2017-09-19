@@ -74,21 +74,23 @@
 
                 .switch-prompt{
                     display: inline-block;
-                    margin-top: 20px;
-                    margin-left: 25px;
+                    float: left;
+                    margin: 20px 10px 0 25px;
                     color: black;
                 }
                 .single-select-group {
                     display: inline-block;
-                    height: 18px;
-                    line-height: 18px;
-                    input{
-                        cursor: pointer;
-                        vertical-align:middle;
-                        margin-top:-2px;
-                        margin-bottom:1px;
-                        width: 16px;
-                        height: 16px;
+                    height: 16px;
+                    line-height: 16px;
+                    box-sizing: border-box;
+                    margin-top: 17px;
+                    .custom-radio {
+                        float: left;
+                        margin-right: 3px;
+                    }
+                    .select-prompt{
+                        float: left;
+                        margin-right: 10px;
                     }
                 }
 
