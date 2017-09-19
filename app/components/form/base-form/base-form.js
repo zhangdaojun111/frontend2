@@ -1670,5 +1670,4 @@ class BaseForm extends Component {
     }
 
 }
-
 export default BaseForm

@@ -57,10 +57,20 @@ let ViewVideo = {
         }
     ],
     actions:{
-
+        //设置背景色
+        setBackground(){
+            this.el.find('.select-video').each((index,obj)=>{
+                let color=obj.id == this.data.currentVideoId ? '#F2F2F2' : '#fff';
+                $(obj).css('background-color',color);
+                $(obj).on('click',function () {
+                    $(this).css('background-color','#F2F2F2').siblings().css('background-color','#fff');
+                })
+            });
+        },
     },
     afterRender(){
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
+        this.actions.setBackground();
         //没啥用的代码 写着玩的
         // let _this=this;
         // this.data.video=this.el.find('video').get(0);
