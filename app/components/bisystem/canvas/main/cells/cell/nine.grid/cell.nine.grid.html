@@ -5,7 +5,7 @@
                 {{#each this}}
                 <div><span>{{@this}}</span></div>
                 {{/each}}
-                <div><span>{{enumerateyAxis @index}}</span></div>
+                <div><span>{{enumerateyAxis @root.yAxis @index}}</span></div>
             </li>
              {{/each}}
             <li>
@@ -18,7 +18,7 @@
 
     <ul class="legend">
         {{#each legend}}
-        <li><label>{{this}}</label><span>{{enumerateLegend @index}}</span></li>
+        <li><label>{{this}}</label><span>{{enumerateLegend @root.grids @index}}</span></li>
         {{/each}}
     </ul>
 

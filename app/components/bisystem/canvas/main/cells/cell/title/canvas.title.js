@@ -25,6 +25,24 @@ let config = {
                 this.el.find('.title').addClass('no-title');
             };
             this.reload();
+        },
+
+        /**
+         * 设置下穿title
+         * @param data = 下穿title数据
+         */
+        setDeepTitle(data) {
+            let title = '';
+            if (data.xOld.length > 0) {
+                data.xOld.map((item,index,items) => {
+                    if (index === items.length -1) {
+                        title += `${item.name}:${item.xName}`
+                    } else {
+                        title += `${item.name}:${item.xName}/`
+                    };
+                });
+            };
+            this.el.find('.deep-title').html(title ? '('+title+')': title)
         }
     },
     binds:[

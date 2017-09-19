@@ -96,6 +96,8 @@ let config = {
         floor:0,
         xAxis: [],
         hideGroup: [], //需要隐藏的分组列表
+        showSortArrow: true, // 是否显示排序箭头
+        ySort: {}, //排序字段
     },
     binds:[
         { // 点击关闭原始数据
@@ -199,16 +201,15 @@ let config = {
                 }
             }
         },
-        // { // 点击下穿排序
-        //     event:'click',
-        //     selector:'.selectY',
-        //     callback:function (context) {
-        //         let index = $(context).attr('data-y-index');
-        //         alert(index);
-        //         $(context).find('i').addClass('active').siblings('th').removeClass('active');
-        //         return false;
-        //     }
-        // },
+        { // 点击下穿排序
+            event:'click',
+            selector:'.selectY span',
+            callback:function (context) {
+                let index = $(context).closest('th').attr('data-y-index');
+                console.log(this.data.cell);
+                return false;
+            }
+        },
     ],
     afterRender() {
         //新增高级字段
@@ -324,7 +325,6 @@ export class CanvasOriginalDataComponent extends Component {
             });
         } else {
             data.cellChart.cell.select = data.cellChart.cell.select.map(item => {
-                console.log(item);
                 let value = JSON.parse(item);
                 if (!value.select) {
                     data.selectAllX = false;
@@ -335,7 +335,7 @@ export class CanvasOriginalDataComponent extends Component {
         //如果attribute有数据就用attribute的数据 attribute = yAxis
         data.cellChart.cell.attribute = [{'selected': true, 'name': data.cellChart.chart.pieType.value === 1 ? data.cellChart.chart.xAxis.name : data.cellChart.chart.yAxis.name}];
         if (data.cellChart.chart.pieType.value === 1) {
-            data.cellChart.pieSingle = true;
+            data.showSortArrow = false;
         }
     }
 }

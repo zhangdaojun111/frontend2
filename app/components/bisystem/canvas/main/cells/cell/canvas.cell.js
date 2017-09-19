@@ -66,7 +66,11 @@ let config = {
             };
             if (chart['data']['assortment']) {
                 this.cellTitle.actions.setValue(chart,this.data.currentViewId);
-                this.data.cellComponent = new cellTypes[chart['data']['assortment']](data);
+                this.data.cellComponent = new cellTypes[chart['data']['assortment']](data, {
+                    onUpdateChartDeepTitle: (data) => {
+                        this.cellTitle.actions.setDeepTitle(data)
+                    }
+                });
                 let cellContainer = this.el.find('.cell-chart');
                 this.data.cellComponent.render(cellContainer);
                 this.cellChart = this.data.cellComponent;
