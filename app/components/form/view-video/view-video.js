@@ -6,7 +6,7 @@
 import template from './view-video.html';
 let css = `
     .videoList {
-    width: 30%;
+    width: 20%;
     height: 100%;
     float: left;
     margin-left: 14px;
@@ -19,6 +19,27 @@ let css = `
     border: 1px solid #d4d4d4;
     float: left;
     overflow: hidden;
+}
+.video-file-name {
+    display: inline-block;
+    width:80%;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    cursor:pointer;
+}
+.video-file-name:hover .video-file-tips {
+    visibility:visible;
+}
+
+.video-file-name .video-file-tips {
+    visibility:hidden;
+    background-color:lightskyblue;
+    text-align:center;
+    padding:5px 2px;
+    border-radius:6px;
+    position:absolute;
+    z-index:1;
 }
 `;
 let ViewVideo = {
