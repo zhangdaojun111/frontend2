@@ -1,10 +1,12 @@
 <h3 class="title">
-    {{#if icon}}
-    <img src="{{imgUrl}}?file_id={{icon}}">
-    {{else}}
-    <i class="title-left"></i>
-    {{/if}}
-    {{title}}<b class="deep-title"></b>
+    <span class="title-tips">
+        {{#if icon}}
+        <img src="{{imgUrl}}?file_id={{icon}}">
+        {{else}}
+        <i class="title-left"></i>
+        {{/if}}
+        {{title}}<b class="deep-title"></b>
+    </span>
     <span class="icon-group">
         {{#if isDeep}}
             <a href="javascript:;" class="back-floor-btn" title="上一层"><i class="view-back-icon"></i></a>
