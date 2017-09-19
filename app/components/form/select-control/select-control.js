@@ -46,12 +46,13 @@ let config={
         if(!this.data.be_control_condition) {
             let el=this.el.find('.dropdown');
             let data=FormService.createSelectJson(this.data);
-            console.log('data  ',data)
             data.onSelect=function(data){
                 if(_this.data.isInit || !data || data.length == 0 ){
                     console.log('但是没触发onselect');
-                    _this.data.value='';
-                    _.debounce(function(){_this.events.changeValue(_this.data)},200)();
+                    if(!_this.data.isInit){
+                        _this.data.value='';
+                        _.debounce(function(){_this.events.changeValue(_this.data)},200)();
+                    }
                     return;
                 }
                 _this.data.value=data[0]['id'];

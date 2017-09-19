@@ -2,4 +2,11 @@
     .editor {
         height: 300px;
     }
+
+    .ql-toolbar.ql-snow .ql-formats {
+        margin-right: 0;
+    }
+    .ql-snow .ql-formats {
+        float: left;
+    }
 }

@@ -34,8 +34,6 @@ let FormEntrys = {
         this.buildId = config.id || '';//快捷添加的key
         this.btnType = config.btnType || 'new';//按钮
         this.viewMode=config.viewMode || '0';//aggrid权限
-
-        console.log('isView  ',config.is_view)
     }
     ,
     //静态数据里是否有这个key

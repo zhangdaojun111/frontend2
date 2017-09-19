@@ -910,10 +910,8 @@ let config = {
         //必填性改变
         requiredChange(_this) {
             if (_this.data.value === '') {
-                console.log("kong")
                 _this.el.find('#requiredLogo').removeClass().addClass('required');
             } else {
-                console.log('非空')
                 _this.el.find('#requiredLogo').removeClass().addClass('required2');
             }
         },
@@ -1047,8 +1045,11 @@ let config = {
             }
             //重新获取动态数据 （temp_id会变）
             let res = await FormService.getDynamicDataImmediately(json);
+            console.log('res   ',res)
             for (let key in res.data) {
                 this.data.data[key] = Object.assign({}, this.data.data[key], res.data[key]);
+                 // console.log("this.data.data[key]  ",this.data.data[key])
+                 // console.log("res.data[key]  ",res.data[key])
                 if (this.data.childComponent[key]) {
                     this.data.childComponent[key].data = Object.assign({}, this.data.childComponent[key].data, res.data[key]);
                     this.data.childComponent[key].reload();
