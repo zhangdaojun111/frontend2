@@ -77,6 +77,7 @@ export let config = {
                 return ;
             }
             let data = {
+
                 folder_id:'',
                 parent_table_id:'',
                 id: this.data.view ? this.data.view.id :'',
@@ -86,6 +87,7 @@ export let config = {
                 type: PMENUM.close_dialog,
                 key: this.key,
                 data: data
+
             });
 
         }).on('click','.cancel',()=>{
@@ -93,9 +95,15 @@ export let config = {
                 type: PMENUM.close_dialog,
                 key: this.key,
                 data: {}
+
             });
         })
     },
+    binds:[
+        {
+
+        }
+    ],
     beforeDestory: function () {
     }
 };
