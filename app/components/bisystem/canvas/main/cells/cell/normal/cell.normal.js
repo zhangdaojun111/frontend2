@@ -83,7 +83,6 @@ let config = {
                     };
                 }
             };
-
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.normalChart = echartsService;
             this.trigger('onUpdateChartDeepTitle',this.data);
