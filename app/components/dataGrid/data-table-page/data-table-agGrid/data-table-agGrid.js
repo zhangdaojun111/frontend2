@@ -2550,7 +2550,7 @@ let config = {
                     ViewVideo.data.currentVideoId = data.value[0];
                     ViewVideo.data.videoSrc = `/download_attachment/?file_id=${data.value[0]}&download=0&dinput_type=${data.colDef.dinput_type}`;
                     PMAPI.openDialogByComponent(ViewVideo, {
-                        width: 1000,
+                        width: 900,
                         height: 600,
                         title: '视频播放器'
                     })

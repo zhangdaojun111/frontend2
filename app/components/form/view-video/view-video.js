@@ -5,12 +5,25 @@
 
 import template from './view-video.html';
 let css = `
-    .videoList {
-    width: 20%;
+ .videoList {
+    width: 35%;
     height: 100%;
     float: left;
     margin-left: 14px;
     overflow-y: scroll;
+}
+.select-video div{
+    line-height: 40px;
+    border-bottom: 1px solid #F2F2F2;
+}
+.select-video a{
+    position: absolute;
+    top: 4px;
+    right:0;
+    outline-style:none;
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 10px;
 }
 .videoContain {
     position: relative;
@@ -19,27 +32,6 @@ let css = `
     border: 1px solid #d4d4d4;
     float: left;
     overflow: hidden;
-}
-.video-file-name {
-    display: inline-block;
-    width:80%;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    cursor:pointer;
-}
-.video-file-name:hover .video-file-tips {
-    visibility:visible;
-}
-
-.video-file-name .video-file-tips {
-    visibility:hidden;
-    background-color:lightskyblue;
-    text-align:center;
-    padding:5px 2px;
-    border-radius:6px;
-    position:absolute;
-    z-index:1;
 }
 `;
 let ViewVideo = {
@@ -65,10 +57,20 @@ let ViewVideo = {
         }
     ],
     actions:{
-
+        //设置背景色
+        setBackground(){
+            this.el.find('.select-video').each((index,obj)=>{
+                let color=obj.id == this.data.currentVideoId ? '#F2F2F2' : '#fff';
+                $(obj).css('background-color',color);
+                $(obj).on('click',function () {
+                    $(this).css('background-color','#F2F2F2').siblings().css('background-color','#fff');
+                })
+            });
+        },
     },
     afterRender(){
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
+        this.actions.setBackground();
         //没啥用的代码 写着玩的
         // let _this=this;
         // this.data.video=this.el.find('video').get(0);
