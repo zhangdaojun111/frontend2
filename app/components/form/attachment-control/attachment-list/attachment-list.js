@@ -4,7 +4,6 @@
 import template from './attachment-list.html';
 
 let css=`
-    
         .attachment-list{
       //  width:100%;
         //height:100%;       
@@ -125,13 +124,14 @@ export const attachmentListConfig = {
     },
     actions:{
         deleteItem:function (item) {
-            HTTP.postImmediately('/delete_attachment/',{
+            HTTP.post('delete_attachment',{
                 file_ids:JSON.stringify([item['file_id']]),
                 dinput_type:this.data.dinput_type
             }).then(res=>{
                 if(res.success){
                 }
-            })
+            });
+            HTTP.flush();
 
             let index = _.findIndex(this.data.attachmentList,item);
             this.data.attachmentList.splice(index,1);
@@ -172,7 +172,7 @@ export const attachmentListConfig = {
     afterRender:function () {
         this.data.style = $('<style type="text/css"></style>').text(this.data.css).appendTo($("head"));
         this.el.find('.table').addClass('table-striped').addClass('table-bordered');
-        HTTP.postImmediately('/query_attachment_list/',{
+        HTTP.post('query_attachment_list',{
             file_ids:JSON.stringify(this.data.fileIds),
             dinput_type:this.data.dinput_type
         }).then(res=>{
@@ -186,8 +186,7 @@ export const attachmentListConfig = {
                     let fileTd = $('<td>'+row.file_name+'</td>');
                     ele.append(fileTd);
                     let controlersTd = $('<td></td>');
-                    let downloadCon = $('<a>下载</a>');
-                    downloadCon.attr('href','/download_attachment/?file_id='+row.file_id+'&download=1&dinput_type='+this.data.dinput_type);
+                    let downloadCon = $('<a href="/download_attachment/?file_id='+row.file_id+'&download=1&dinput_type='+this.data.dinput_type+'">下载</a>');
                     controlersTd.append(downloadCon);
                     let viewCon = $('<a>预览</a>');
                     controlersTd.append(viewCon);
@@ -210,7 +209,8 @@ export const attachmentListConfig = {
                     this.el.find('.attachment-list-anchor').append(ele);
                 }
             }
-        })
+        });
+        HTTP.flush();
     },
     beforeDestroy:function () {
         this.data.style.remove();

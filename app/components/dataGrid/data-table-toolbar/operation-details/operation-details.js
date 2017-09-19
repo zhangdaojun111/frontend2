@@ -46,8 +46,9 @@ let config = {
             } ).then( (data)=>{
             } )
         },
+        //加载工作流组件
         openWorkFlow: function(index){
-            let data = this.dataInfo[index];
+            let data = this.data.dataInfo[index];
             let obj = {
                 form_id: data["form_id"],
                 record_id: data["id"],

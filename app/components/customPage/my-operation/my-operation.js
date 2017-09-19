@@ -49,12 +49,13 @@ let config = {
         //创建表头
         createColumnDefs: function () {
             this.floatingFilterCom = new FloatingFilter();
+            //创建表头
             let columnData = [
                 {headerName: '操作类型', width: 100,field:'operation_type',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('none', 'operation_type', this.data.searchValue, this.data.searchOldValue),
                     floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},
                 {headerName: '操作目标', width: 100,field:'obj_name', floatingFilterComponent: this.floatingFilterCom.actions.createFilter('text', 'obj_name', this.data.searchValue, this.data.searchOldValue),
                     floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},
-                {headerName: '操作时间', width: 100,field:'create_time',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('datetime', 'create_time', this.data.searchValue, this.data.searchOldValue),
+                {headerName: '操作时间', minWidth: 160,field:'create_time',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('datetime', 'create_time', this.data.searchValue, this.data.searchOldValue),
                     floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},
                 {headerName: '级联结果', width: 100,field:'cache_result',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('none' , 'cache_result', this.data.searchValue, this.data.searchOldValue),
                     floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},

@@ -947,12 +947,12 @@ let config = {
             let sheetData = dataTableService.getSheetPage( obj2 );
             let tableOperate = dataTableService.getTableOperation( obj2 );
             let prepareParmas = dataTableService.getPrepareParmas( obj2 );
-
             Promise.all([preferenceData, headerData, sheetData,tableOperate,prepareParmas]).then((res)=> {
-                this.actions.setHeaderData( res );
+                this.actions.setHeaderData( res )
+                this.actions.getGridData();
             })
             //请求表单数据
-            this.actions.getGridData();
+            // this.actions.getGridData();
         },
         //设置表头数据
         setHeaderData: function ( res ) {
@@ -1125,6 +1125,9 @@ let config = {
                 this.actions.getNewFormCountData(refresh);
                 return;
             }
+            if( this.data.viewMode != 'normal' ){
+                this.data.firstGetFooterData = false;
+            }
             let postData = this.actions.createPostData();
             let post_arr = [];
             let body = dataTableService.getTableData( postData );
@@ -1179,7 +1182,6 @@ let config = {
                 let currentPage = parseInt( Number( this.data.first )/Number( this.data.rows ) );
                 this.pagination.actions.setPagination( this.data.total,currentPage + 1 );
             }
-            console.log( '请求数据返回get_table_data' );
             this.actions.sortWay();
             //编辑模式原始数据
             if( this.el.find( '.edit-btn' )[0] ){
@@ -1202,6 +1204,8 @@ let config = {
                 //赋值
                 try {
                     this.agGrid.actions.setGridData(d);
+                    this.data.showTabs(1);
+                    this.hideLoading();
                 }catch(e){}
 
             } )
@@ -1406,7 +1410,7 @@ let config = {
                     _id: this.data.rowId
                 }
             }
-            if( this.data.viewMode == 'keyword-tips' ){
+            if( this.data.viewMode == 'keyword' ){
                 json['keyWord'] = this.data.keyword;
             }
             if( this.data.viewMode == 'deleteHanding' ){
@@ -1555,12 +1559,10 @@ let config = {
                 this.actions.getExpertSearchData();
             }
             this.data.firstRender = false;
-            this.data.showTabs(1);
-            //显示提示
-            if( this.data.gridTips!='' ){
-                this.el.find( '.grid-tips' )[0].style.display = 'flex';
+            if( this.data.viewMode != 'normal' ){
+                this.data.showTabs(1);
+                try{this.hideLoading()}catch(e){}
             }
-            this.hideLoading()
         },
         //触发导出
         onExport: function () {
@@ -2470,6 +2472,9 @@ let config = {
         },
         //触发排序事件
         onSortChanged: function ($event) {
+            if( this.data.frontendSort ){
+                this.agGrid.actions.refreshView();
+            }
             if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' || this.data.frontendSort ){
                 return;
             }
@@ -2529,14 +2534,22 @@ let config = {
 
             //视频字段
             if(data.colDef.real_type == fieldTypeService.VIDEO_TYPE && data.event.srcElement.id == 'file_view'){
-               let fieldids = data['value'];
-                let file_dinput_type = data.colDef.real_type;
-               ViewVideo.data.videoSrc=`/download_attachment/?file_id=${fieldids[0]}&download=0&dinput_type=${file_dinput_type}`;
+                let json = {
+                    file_ids:JSON.stringify(data.value),
+                    dinput_type:data.colDef.dinput_type
+                };
+                dataTableService.getAttachmentList( json ).then( res => {
+                    ViewVideo.data.rows = res.rows;
+                    ViewVideo.data.dinput_type = data.colDef.dinput_type;
+                    ViewVideo.data.currentVideoId = data.value[0];
+                    ViewVideo.data.videoSrc = `/download_attachment/?file_id=${data.value[0]}&download=0&dinput_type=${data.colDef.dinput_type}`;
                     PMAPI.openDialogByComponent(ViewVideo, {
                         width: 1000,
                         height: 600,
                         title: '视频播放器'
                     })
+                });
+                HTTP.flush();
             }
             //图片查看
             if( data.colDef.real_type == fieldTypeService.IMAGE_TYPE ){
@@ -2553,8 +2566,8 @@ let config = {
                     PictureAttachment.data.rows=obj.imgData.rows;
                     PMAPI.openDialogByComponent(PictureAttachment,{
                         title:'图片附件',
-                        width: 1234,
-                        height:800
+                        width: 900,
+                        height:600
                     })
                 })
                 HTTP.flush();
@@ -2620,8 +2633,8 @@ let config = {
                         AttachmentList.data.dinput_type=dinput_type;
                         AttachmentList.data.is_view=1;
                         PMAPI.openDialogByComponent(AttachmentList,{
-                            width: 1234,
-                            height: 876,
+                            width: 900,
+                            height: 600,
                             title: '附件列表'
                         })
                     })
@@ -3084,6 +3097,7 @@ let config = {
         if( this.data.viewMode == 'deleteHanding' ){
             PMAPI.getIframeParams(window.config.key).then((res) => {
                 this.data.deleteHandingData = res.data.obj.deleteHandingData || [];
+                this.actions.getHeaderData();
             })
         }
         this.actions.getHeaderData();
