@@ -1,6 +1,10 @@
 /**
-* 容器的大小
-*/
+ 引用公共样式
+ */
+@import "../core/reset.scss";
+@import "../core/jquery-ui-theme.scss";
+@import "../core/param.scss";
+@import "../core/common.scss";
 
 @mixin icon {
     display: inline-block;
