@@ -125,7 +125,7 @@ let config = {
                                     }
                                 }
                                 this.events.changeValue(this.data);
-                                this.actions.playQueueItems();
+                                this.actions._playQueueItems();
                             }
                         }
                         if (event.event == 'finished') {
@@ -149,9 +149,10 @@ let config = {
             this.el.find('.upload-process-queue').prepend(ele);
             item.render(ele);
             this.data.queueItemEles.unshift(ele);
-            this.actions.playQueueItems();
+            this.actions._playQueueItems();
         },
-        playQueueItems:function () {
+        //调整上传文件条目，仅显示3条
+        _playQueueItems:function () {
             if(this.data.queueItemEles.length > 3){
                 this.el.find('.ellipses').css('display','block');
                 for(let i=3,length = this.data.queueItemEles.length; i <length;i++){
