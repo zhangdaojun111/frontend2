@@ -1358,6 +1358,11 @@ let config = {
                 is_filter: this.data.filterParam.is_filter,
                 filter: []
             }
+            for( let k in json ){
+                if( json[k] == 'undefined' ){
+                    json[k] = '';
+                }
+            }
             if( this.data.viewMode == 'in_process' ){
                 let ids = [];
                 for( let d of this.data.rowData ){
@@ -1381,7 +1386,8 @@ let config = {
             if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
                 json['rows'] = 99999;
                 json['first'] = 0;
-                json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                // json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                json['is_temp'] = 0;
             }
             if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild'||this.data.viewMode == 'child' ){
                 json["childInfo"]= {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
@@ -3085,7 +3091,7 @@ let config = {
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
 
         //渲染cache数据
-        if( window.config.data_cached == 1 ){
+        if( window.config.data_cached == 1 && this.data.viewMode == 'normal' ){
             console.log( '加载cache数据' )
             this.actions.renderCacheData( window.config.cached_data )
             return;
