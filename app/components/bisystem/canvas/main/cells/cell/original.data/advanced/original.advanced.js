@@ -7,12 +7,16 @@ import template from './original.advanced.html';
 import handlebars from 'handlebars';
 import msgbox from '../../../../../../../../lib/msgbox';
 
+// 自定义original_each_yAxis helper
+handlebars.registerHelper('original_advanced_group_name', function(name,data, options) {
+    return name + data;
+});
+
 let config = {
     template: template,
     actions: {
     },
     data: {
-
     },
     binds:[
         {  //保存
@@ -41,20 +45,9 @@ let config = {
                 }
             }
         },
-        { //字段模块
-            event:'change',
-            selector:'select',
-            callback:function (context) {
-               if(context.value !== ''){
-                   $(context).siblings('p').html('');
-               }else{
-                   $(context).siblings('p').html('必须输入附加字段模板');
-               }
-            }
-        },
-
     ],
     afterRender() {
+        console.log(this.data);
     },
     firstAfterRender() {},
     beforeDestory() {}

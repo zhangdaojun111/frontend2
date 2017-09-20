@@ -83,12 +83,8 @@ let config = {
          * 新增高级字段
          */
         addAdvancedList(){
-            let that = this;
-            this.el.find('.add-advanced-list').click( function () {
-                $(this).closest('.list').hide();
-                let originForm = new CanvasOriginalAdvancedComponent();
-                that.append(originForm,$(this).closest('.origin-data'));
-            })
+            let originForm = new CanvasOriginalAdvancedComponent(this.data.chart);
+            this.append(originForm,this.el.find('.origin-data'));
         }
     },
     data: {
@@ -215,13 +211,26 @@ let config = {
             selector:'.bi-tabs span',
             callback:function (context) {
                 $(context).addClass('cur').siblings('span').removeClass('cur');
+                let index = $(context).index();
+                let curTab = this.el.find('.origin-data .content').eq(index);
+                curTab.show().siblings('.content').hide();
+                if (index === 1) {
+                    this.el.find('.origin-data .form').hide();
+                };
+            }
+        },
+        { // 显示高级计算form
+            event:'click',
+            selector:'.add-advanced-btn',
+            callback:function (context) {
+                this.el.find('.origin-data .form').show();
+                this.el.find('.origin-data .advanced-list').hide();
             }
         },
     ],
     afterRender() {
         //新增高级字段
         this.actions.addAdvancedList();
-
     },
     firstAfterRender() {},
     beforeDestory() {}
