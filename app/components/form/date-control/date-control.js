@@ -60,6 +60,23 @@ let config = {
                 this.events.emitHistory(this.data)
             }
         },
+        {
+            event: 'click',
+            selector: '.date_yy-mm-dd',
+            callback: function () {
+                let _this = this;
+                let e = new Date();
+                let year = e.getFullYear();
+                let month = (e.getMonth() + 101 + "").slice(1);
+                let day = (e.getDate() + 100 + "").slice(1);
+                let str = year + "-" + month + "-" + day;
+                if (_this.data.value) {
+                   // _this.el.find(".date_yy-mm-dd").val(_this.data.value);
+                } else {
+                    _this.el.find(".date_yy-mm-dd").val(str);
+                }
+            }
+        },
     ],
     afterRender() {
         let _this = this;
@@ -106,7 +123,8 @@ let config = {
             changeMonth: true,
             dateFormat: "yy-mm-dd",
             defaultDate: new Date(_this.data.value),
-            showOn: 'button',//设置触发选择器为button
+            showOn: 'both',//设置触发选择器为button/focus
+
             //buttonImage:"../../../assets/images/form/icon-rili.png",
             buttonImage: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAAbElEQVQ4y6VT0QoAIQibR9/qP+XP7p68h7C0cxDEYsrYEpLo4IlIM2OFA4CxPqqqrKKIc35Ewgrng0IL1WGfhZPHDCPbsMPRQitGM6NP393THlyBJOacJImb45qyhasq/4oxirMSbbtI0v3OL3+8d/U3+COTAAAAAElFTkSuQmCC",
             buttonImageOnly: true,
@@ -162,24 +180,72 @@ let config = {
                     console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', 'date-control');
                 }
             },
-            // onClose: function(timeText) {
-            //     let _timeText = $.trim(timeText);
-            //     let  re =/^(\d{4})-(\d{2})-(\d{2})$/
-            //     if(re.test(_timeText))
-            //     {
-            //         let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3);
-            //         if((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()))//判断日期逻辑
-            //         {
-            //             _this.data.value = _timeText;
-            //             _.debounce(function () {
-            //                 _this.events.changeValue(_this.data)
-            //               //  debugger;
-            //             }, 200)();
-            //        }
-            //     }else{
-            //         console.log("日期格式有问题")
-            //     }
-            // },
+            onClose: function(selectTime) {
+                let _selectTime = $.trim(selectTime);
+                let _selectTime1 = _selectTime;
+                let  re =/^(\d{4})-(\d{2})-(\d{2})$/;
+                if(re.test(_selectTime ))
+                {
+                    let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3);
+                    if((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3)))//判断日期逻辑
+                    {
+                        //  _this.onSelect(_selectTime);
+                        if(!_this.data.isAgGrid){
+                            _this.data.value = _selectTime.replace(/\//g, "-");
+                            _.debounce(function () {
+                                _this.events.changeValue(_this.data)
+                            }, 200)();
+                        }
+                        if (_this.data.value.length > 19) {
+                            _this.data.value = '';
+                        }
+                        let _val = '';
+                        if (_selectTime) {
+                            _val = _selectTime.substring(0, 10);
+                        }
+                        let currentTime = new Date().getTime();
+                        _selectTime = new Date(_val).getTime();
+                        //timeType 是否可以选择之前的日期，before:只能选择之前的日期，after：只能选择之后的，all：可以选择全部
+                        if (_this.data['timeType']) {
+                            if (_this.data['timeType'] == 'after') {
+                                if (_selectTime < currentTime) {
+                                    if(!_this.data.isAgGrid){
+                                        _this.data.value = "请选择";
+                                        _.debounce(function () {
+                                            _this.events.changeValue(_this.data)
+                                        }, 200)();
+                                    }
+                                }
+                            } else if (_this.data['timeType'] == 'before') {
+                                if (_selectTime > currentTime) {
+                                    if(!_this.data.isAgGrid){
+                                        _this.data.value = "请选择";
+                                        _.debounce(function () {
+                                            _this.events.changeValue(_this.data)
+                                        }, 200)();
+                                    }
+                                }
+                            } else if (_this.data['timeType'] == 'all') {
+                                if(!_this.data.isAgGrid){
+                                    _this.data.value = _selectTime1;
+                                    _.debounce(function () {
+                                        _this.events.changeValue(_this.data)
+                                    }, 200)();
+                                }
+                            }
+                        } else {
+                            console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', 'datetime-control');
+                        }
+                    }
+                }else{
+                    if(!_this.data.isAgGrid && (_this.data['timeType'] == 'before' || _this.data['timeType'] == 'after')){
+                        _this.data.value = "请选择";
+                        _.debounce(function () {
+                            _this.events.changeValue(_this.data)
+                        }, 200)();
+                    }
+                }
+            },
         });
 
         _this.el.find('.date_yy-mm-dd').on('input', _.debounce(function () {
