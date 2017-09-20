@@ -1,6 +1,7 @@
 .ui-songrid-box {
     height: 480px;
-    width: 1000px;
+    width: 100%;
+    min-width: 1000px;
     max-height: 500px;
     border: 1px solid #ddd;
     overflow: auto;
