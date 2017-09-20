@@ -11,8 +11,15 @@
   .delete-file{
     width:50px;
     display: inline-block;
-    color:darkgrey;
+    color:blue;
     cursor: pointer;
+  }
+
+  .preview {
+    width:50px;
+    display: inline-block;
+    color:blue;
+    cursor:pointer;
   }
 
   .keep-on-attaching{
@@ -46,7 +53,6 @@
   .file-name{
     width: 150px;
     display: inline-block;
-    cursor: pointer;
   }
 
   #process-num{

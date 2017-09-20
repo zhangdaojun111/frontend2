@@ -64,7 +64,7 @@ let config = {
             }
         }, {
             event:'click',
-            selector:'.file-name',
+            selector:'.preview',
             callback:function () {
                 if(this.el.find('.preview-contain').is(":visible")){
                     this.el.find('.preview-contain').hide();
@@ -125,6 +125,10 @@ let config = {
                 this.el.find('.pause-attaching').css('display','none');
                 this.el.find('.cancel-attaching').css('display','none');
                 this.el.find('.delete-file').css('display','inline');
+                this.el.find('.preview').css('display','inline');
+                if(this.data.file.type.indexOf('image') == -1 && this.data.file.type != 'video/mp4'){
+                    this.el.find('.preview').css({'color':'grey','cursor':'auto'});
+                }
             }
         },
         cancelUploading:function () {
