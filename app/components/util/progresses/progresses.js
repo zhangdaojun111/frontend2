@@ -15,7 +15,7 @@ let css=`
     text-overflow: ellipsis; 
 }
 .progress-msg .progress-text {
-    
+    margin:0 5px;
 }
 .progress-bottle {
     margin:0 5px;

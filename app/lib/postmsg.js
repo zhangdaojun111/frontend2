@@ -409,7 +409,7 @@ export const PMAPI = {
         return new Promise(function (resolve) {
             let key = PMAPI._getKey();
             dialogWaitHash[key] = resolve;
-            PMAPI.sendToSelf({
+            PMAPI.sendToParent({
                 type: PMENUM.open_component_dialog,
                 key: key,
                 component: PMAPI.serializeComponent(componentConfig),
