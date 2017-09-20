@@ -7,7 +7,7 @@ import template from './original.advanced.html';
 import handlebars from 'handlebars';
 import msgbox from '../../../../../../../../lib/msgbox';
 
-// 自定义original_each_yAxis helper
+// 自定义高级计算content组合字段 helper
 handlebars.registerHelper('original_advanced_group_name', function(name,data, options) {
     return name + data;
 });
