@@ -262,18 +262,18 @@ class Uploader {
             this.formData.set(fileField, fileItem.file.slice(startIndex, startIndex + packSize));
             this.settings['options']['xhr']=function () {
                 var myXhr = $.ajaxSettings.xhr();
-                let total = startIndex+event['total'];
-                let loaded = startIndex+(event['loaded']||event['position']);
                 if(myXhr.upload){
                     myXhr.upload.addEventListener('progress',(event)=>{
-                        onprogress(_.defaultsDeep({
+                        let total = startIndex+event['total'];
+                        let loaded = startIndex+(event['loaded']||event['position']);
+                        onprogress({
                             fileId:that.getFileId(name,code),
                             code:code,
                             name:name,
                             total:total,
                             loaded:loaded,
                             progress: Math.ceil(loaded*100/total)
-                        },event));
+                        });
                     },false);
                     return myXhr;
                 }
@@ -283,12 +283,12 @@ class Uploader {
                 var myXhr = $.ajaxSettings.xhr();
                 if(myXhr.upload){
                     myXhr.upload.addEventListener('progress',(event)=>{
-                        onprogress(_.defaultsDeep({
+                        onprogress({
                             fileId:that.getFileId(name,code),
                             code:code,
                             name:name,
                             progress:Math.ceil((event['loaded']||event['position'])*100/event['total'])
-                        },event));
+                        });
                     },false);
                     return myXhr;
                 }
