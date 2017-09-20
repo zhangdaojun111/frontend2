@@ -83,9 +83,37 @@ let config = {
          * 新增高级字段
          */
         addAdvancedList(){
-            let originForm = new CanvasOriginalAdvancedComponent(this.data.chart);
+            let originForm = new CanvasOriginalAdvancedComponent(this.data.chart, {
+                // 返回高级计算列表tab
+                onBackAdvancedList: ()=> {
+                    this.actions.backAdvancedList(1);
+                },
+
+                // 保存高级计算数据
+                onSaveAdvancedData: (data) => {
+                    canvasCellService.saveAdvancedData(data).then(res => {
+                        if (res['success'] === 1) {
+                            this.actions.backAdvancedList(1);
+                        }
+                    })
+                }
+            });
             this.append(originForm,this.el.find('.origin-data'));
+        },
+        /**
+         * 返回高级字段列表tab
+         * @param num 1 = 高级字段列表tab ,2 = 高级字段form tab
+         */
+        backAdvancedList(num) {
+            if (num === 1) {
+                this.el.find('.origin-data .form').hide();
+                this.el.find('.origin-data .advanced-list').show();
+            } else {
+                this.el.find('.origin-data .form').show();
+                this.el.find('.origin-data .advanced-list').hide();
+            };
         }
+
     },
     data: {
         selectAllX: true,
@@ -214,21 +242,22 @@ let config = {
                 let index = $(context).index();
                 let curTab = this.el.find('.origin-data .content').eq(index);
                 curTab.show().siblings('.content').hide();
-                if (index === 1) {
-                    this.el.find('.origin-data .form').hide();
-                };
+                this.el.find('.origin-data .form').hide();
             }
         },
         { // 显示高级计算form
             event:'click',
             selector:'.add-advanced-btn',
             callback:function (context) {
-                this.el.find('.origin-data .form').show();
-                this.el.find('.origin-data .advanced-list').hide();
+                this.actions.backAdvancedList(2);
             }
         },
     ],
     afterRender() {
+        canvasCellService.getAdvancedListData(this.data.chart.chartName.id).then(res => {
+            console.log(res);
+        })
+
         //新增高级字段
         this.actions.addAdvancedList();
     },

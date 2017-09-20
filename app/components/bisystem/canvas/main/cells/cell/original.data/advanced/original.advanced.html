@@ -1,19 +1,19 @@
 <div class="content form">
     <form class="pristine">
         <ul>
-            <li>
+            <li class="advanced-name">
                 <label>
                     <span>附加字段命名： </span>
-                    <input type="text" class="normal">
-                    <p>必须输入附加字段命名(至少2个)</p>
+                    <input type="text" class="normal" value="{{name}}">
                 </label>
+                <p class="error">必须输入附加字段命名(至少2个)</p>
             </li>
             <li>
                 <label>
                     <span>附加字段模板：</span>
                     <select class="normal">
                         {{#each advancedDataTemplates}}
-                        <option value="{{id}}">{{name}}</option>
+                        <option value="{{advanced_compute this}}">{{name}}</option>
                         {{/each}}
                     </select>
                 </label>
@@ -24,13 +24,15 @@
                     <b>{{chartGroup.name}}</b>
                 </label>
             </li>
-            <li>
+            <li class="advanced-values">
+
                 <div class="values">
+                    <div class="error">请至少选择一个字段</div>
                     {{#each data.yAxis}}
                     <p>
                         <label>
                             <b class="custom-checkbox">
-                                <input type="checkbox" class="checkbox" value="2017-05-22">
+                                <input type="checkbox" class="checkbox" value="{{ename}}">
                             </b>
                             {{original_advanced_group_name @root.chartGroup.name ename}}
                         </label>
