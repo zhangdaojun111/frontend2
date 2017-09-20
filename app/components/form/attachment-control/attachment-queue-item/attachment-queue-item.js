@@ -56,7 +56,7 @@ let config = {
                 this.el.find('.re-uploading').css('display','none');
                 this.actions.restartUploading();
             }
-        },{
+        }, {
             event:'click',
             selector:'.cancel-attaching',
             callback:function () {
@@ -66,24 +66,31 @@ let config = {
             event:'click',
             selector:'.file-name',
             callback:function () {
-                let fileId = this.data._controlItem['fileId'];
-                let src = '/download_attachment/?file_id='+fileId+'&download=0';
-                console.log(src);
-                if(this.data.file.type.indexOf('image') != -1) {
-                    let ele = $('<img src="'+src+'">');
-                    this.el.find('.imgwrapper').append(ele);
-                    this.el.find('.my-mask').show();
-                } else if (this.data.file.type == 'video/mp4') {
-                    let ele = $('<video width="400" controls><source src="'+src+'" type="video/mp4">您的浏览器不支持HTML5</video>');
-                    this.el.find('.imgwrapper').append(ele);
-                    this.el.find('.my-mask').show();
+                if(this.el.find('.preview-contain').is(":visible")){
+                    this.el.find('.preview-contain').hide();
+                } else {
+                    if(this.data._controlItem.process != 100){
+                        msgbox.showTips('数据上传未完成！');
+                        return;
+                    }
+                    let fileId = this.data._controlItem['fileId'];
+                    let src = '/download_attachment/?file_id='+fileId+'&download=0&dinput_type='+this.data.real_type;
+                    if(this.data.file.type.indexOf('image') != -1) {
+                        this.el.find('.preview-contain').show();
+                        let ele = $('<img src="'+src+'">');
+                        this.el.find('.preview-anchor').empty().append(ele);
+                    } else if (this.data.file.type == 'video/mp4') {
+                        this.el.find('.preview-contain').show();
+                        let ele = $('<video width="400" controls><source src="'+src+'" type="video/mp4">您的浏览器不支持HTML5</video>');
+                        this.el.find('.preview-anchor').empty().append(ele);
+                    }
                 }
             }
         }, {
             event:'click',
-            selector:'.mask-div',
-            callback:function () {
-                this.el.find('.my-mask').hide();
+            selector:'.hide-preview',
+            callback: function () {
+                this.el.find('.preview-contain').hide();
             }
         }
     ],
