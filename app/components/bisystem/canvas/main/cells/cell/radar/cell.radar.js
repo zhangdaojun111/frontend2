@@ -18,7 +18,8 @@ let config = {
             if (cellChart['data']['rows']) {
                 if (cellChart['data']['rows'].length > 0) {
                     let isDraw = true;
-                    for (let row of cellChart['data']['rows']) { // 判断雷达图是否含有非数字
+                    for (let row of cellChart['' +
+                    'data']['rows']) { // 判断雷达图是否含有非数字
                         for (let num of row) {
                             if (isNaN(Number(num))) {
                                 isDraw = false;
