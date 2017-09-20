@@ -210,6 +210,13 @@ let config = {
                 return false;
             }
         },
+        { // 分组和高级计算tab切换
+            event:'click',
+            selector:'.bi-tabs span',
+            callback:function (context) {
+                $(context).addClass('cur').siblings('span').removeClass('cur');
+            }
+        },
     ],
     afterRender() {
         //新增高级字段

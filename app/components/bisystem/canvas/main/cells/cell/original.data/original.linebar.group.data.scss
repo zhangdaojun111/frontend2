@@ -1,16 +1,4 @@
 .origin-data-wrap {
-    width: 100%;
-    .bi-tabs {
-        display: block;
-        .cur1 {
-            background: #FFFFFF;
-            color: #666666;
-        }
-        .cur2 {
-            background: #3b8cff;
-            color: #FFFFFF;
-        }
-    }
     .origin-data {
         .list {
             button {
@@ -24,7 +12,6 @@
                 outline: none;
             }
         }
-
         .form {
             padding-top: 40px;
             font-size: 12px;
