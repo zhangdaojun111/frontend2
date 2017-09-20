@@ -120,8 +120,6 @@ let config={
             let moreSelectdata=FormService.createSelectJson(data2,true,2);
             oneSelectdata.onSelect=function(data){
                 if(_this.data.isInit || data.length == 0 || _this.data.isReloading){
-                    _this.data.value='';
-                    _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                     return;
                 }
                 _this.data.isReloading=true;
@@ -129,8 +127,6 @@ let config={
             };
             moreSelectdata.onSelect=function(data){
                 if(_this.data.isInit || data.length == 0 || _this.data.isReloading){
-                    _this.data.value='';
-                    _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                     return;
                 }
                 let arr=[];
@@ -243,16 +239,18 @@ let config={
                 let data=FormService.createSelectJson(this.data,true,1);
                 data.onSelect=function(){
                     if(_this.data.isInit || !_this.data.childSelect || _this.data.childSelect.data.choosed.length == 0 ){
-                        _this.data.value='';
-                        _.debounce(function(){_this.events.changeValue(_this.data)},200)();
+                        if(!_this.data.isInit){
+                            _this.data.value='';
+                            _.debounce(function(){_this.events.changeValue(_this.data)},200)();
+                        }
                         return;
                     }
                     _this.actions.setValue();
                     if(_this.data.isSys){
                         _.debounce(function(){_this.events.userSysOptions(_this.data)},200)();
                     }
-
                     _.debounce(function(){_this.events.changeValue(_this.data)},200)();
+
                 };
                 let autoSelect=new AutoSelect(data);
                 this.data.childSelect=autoSelect;
