@@ -20,6 +20,7 @@ let config = {
         items: [],                 //日历树中filedID
     },
     actions: {
+
         /**
          *加载子checkbox选中状态
          */
@@ -33,19 +34,19 @@ let config = {
                 this.el.find(filed_id).css({backgroundColor: color});
             });
         },
+
         /**
          *隐藏子checkbox
          */
         selectLabelShow: function (temp) {
             if (!temp.hasClass('hide-check-group')) {
-                temp.addClass("hide-check-group");
-                temp.parent(".calendar-select-table").nextAll('.checkbox-group').hide();
+                temp.addClass("hide-check-group").closest(".calendar-select-table").nextAll('.checkbox-group').hide();
             }
             else {
-                temp.removeClass("hide-check-group");
-                temp.parent(".calendar-select-table").nextAll('.checkbox-group').show();
+                temp.removeClass("hide-check-group").closest(".calendar-select-table").nextAll('.checkbox-group').show();
             }
         },
+
         /**
          *父checkbox发生选择
          */
@@ -60,7 +61,7 @@ let config = {
                 temp.addClass("label-select-all-checked");
                 this.el.find(".select-label-children").removeClass('unchecked');
                 let isAllGroupChecked = true;
-                this.el.parent().find(".label-select-all-show").each(function () {
+                this.el.closest().find(".label-select-all-show").each(function () {
                     if (!$(this).is('.label-select-all-checked')) {
                         isAllGroupChecked = false;
                     }
@@ -70,6 +71,7 @@ let config = {
                 }
             }
         },
+
         /**
          *子checkbox发生选择
          */
@@ -89,7 +91,7 @@ let config = {
                 if (isAllChecked) {
                     this.el.find(".select-head").addClass('label-select-all-checked');
                     let isAllGroupChecked = true;
-                    this.el.parent().find('.label-select-all-show').each(function () {
+                    this.el.closest().find('.label-select-all-show').each(function () {
                         if (!$(this).is('.label-select-all-checked')) {
                             isAllGroupChecked = false;
                         }
@@ -106,6 +108,7 @@ let config = {
                 this.events.checkbox({type: 'remind-checkbox', data: -1});
             }
         },
+
         /**
          *页面判断隐藏项和父checkbox的状态
          */
@@ -130,6 +133,7 @@ let config = {
                 this.el.find(".select-head").addClass("label-select-all-checked");
             }
         },
+
         /**
          *常用功能查询
          * 参数：日历树ID,searchValue
@@ -155,6 +159,7 @@ let config = {
             }
             Mediator.emit('CalendarSelected: Search', obj);
         },
+
         /**
          *隐藏日历树
          */
@@ -170,8 +175,8 @@ let config = {
         {
             event: 'mouseleave',
             selector: '.float-button-group',
-            callback: function (temp = this) {
-                $(temp).css("display", "none");
+            callback: function (context) {
+                $(context).css("display", "none");
             }
         },
         {
@@ -187,15 +192,15 @@ let config = {
         {
             event: 'click',
             selector: '.select-head',
-            callback: function (temp = this) {
-                this.actions.selectHead($(temp));
+            callback: function (context) {
+                this.actions.selectHead($(context));
             }
         },
         {
             event: 'click',
             selector: '.select-label-children',
-            callback: function (temp = this) {
-                this.actions.selectLabelChildren($(temp));
+            callback: function (context) {
+                this.actions.selectLabelChildren($(context));
             }
         },
         {
@@ -224,15 +229,15 @@ let config = {
         {
             event: 'click',
             selector: '.search-function-children',
-            callback: function (temp = this) {
-                this.actions.goSearch($(temp).parent(".search-function").attr("class").split(" ")[1], $(temp).attr("class").split(" ")[1]);
+            callback: function (context) {
+                this.actions.goSearch($(context).closest(".search-function").attr("class").split(" ")[1], $(context).attr("class").split(" ")[1]);
             }
         },
         {
             event: 'click',
             selector: '.select-label-show',
-            callback: function (temp = this) {
-                this.actions.selectLabelShow($(temp));
+            callback: function (context) {
+                this.actions.selectLabelShow($(context));
             }
         },
         {

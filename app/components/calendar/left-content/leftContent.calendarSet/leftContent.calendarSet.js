@@ -21,7 +21,8 @@ let config = {
     },
     events: {
         /**
-         *日历树组件回掉函数  参数data格式：{type:,data:}
+         *日历树组件回掉函数
+         * 参数data格式：{type:,data:}
          * type:'remind-checkbox' 提醒checkbox发生选择。
          * type:'unshowData' 提醒子树发生选择，unshowData发生改变。
          * type:'hideData' 隐藏日历树。
@@ -135,7 +136,7 @@ let config = {
             hide_type_id = "#select-all-block-" + hide_type_id[2];
             this.el.find(hide_type_id + " .select-head").removeClass("label-select-all-show");
             let that = this;
-            temp.parent(".float-button-group").next(".checkbox-group").find(".select-label-children").each(function () {
+            temp.closest(".float-button-group").next(".checkbox-group").find(".select-label-children").each(function () {
                 let filedId = $(this).attr("id").split("-")[2];
                 if (that.data.cancel_fields.indexOf(filedId) === -1) {
                     that.data.cancel_fields.push(filedId);
@@ -264,8 +265,8 @@ let config = {
         {
             event: 'click',
             selector: '.checkbox_a3',
-            callback: function (temp = this) {
-                this.actions.checkbox_a3($(temp));
+            callback: function (context) {
+                this.actions.checkbox_a3($(context));
             }
         },
         {

@@ -37,16 +37,14 @@ let config = {
         hideLeftMenu: function (isHide) {
             if (isHide) {
                 this.data.isHide = false;
-                this.el.find('.setting-content').addClass('hide');
+                this.el.find('.setting-content,.calendar-setting-item').addClass('hide');
                 this.el.find('.search').addClass('hide-search');
                 this.el.find('.calendar-setting-items').addClass('hide-menu');
-                this.el.find('.calendar-setting-item').addClass('hide');
             } else {
                 this.data.isHide = true;
-                this.el.find('.setting-content').removeClass('hide');
+                this.el.find('.setting-content,.calendar-setting-item').removeClass('hide');
                 this.el.find('.search').removeClass('hide-search');
                 this.el.find('.calendar-setting-items').removeClass('hide-menu');
-                this.el.find('.calendar-setting-item').removeClass('hide');
             }
         },
 
