@@ -1058,6 +1058,7 @@ let config = {
                 this.data.btnType = 'new';
             }
             this.actions.addBtn();
+            this.actions.triggerControl();
             this.data.isBtnClick=false;
         },
         //修改可修改性
@@ -1669,5 +1670,4 @@ class BaseForm extends Component {
     }
 
 }
-
 export default BaseForm
