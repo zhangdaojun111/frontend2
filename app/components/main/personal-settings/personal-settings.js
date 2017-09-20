@@ -160,23 +160,28 @@ let config = {
             let newPw = this.el.find("input.new-pw").val();
             let confirmNewPw = this.el.find("input.confirm-new-pw").val();
 
-            let data = {
-                username:this.data.username,
-                originalpwd: originPw,
-                newpwd: newPw,
-                newpwdagain:confirmNewPw
-            };
+            let result = this.actions.checkPasswordLegal(originPw,newPw,confirmNewPw);
+            if(result === true){
+                let data = {
+                    username:this.data.username,
+                    originalpwd: originPw,
+                    newpwd: newPw,
+                    newpwdagain:confirmNewPw
+                };
 
-            UserInfoService.modifyPassword(data).done((result) => {
-                if(result.success === 1){
-                    msgbox.alert("密码修改成功！");
-                    PersonSetting.hide();
-                }else{
-                    msgbox.alert(result.error)
-                }
-            }).fail((err) => {
-                console.log(err);
-            })
+                UserInfoService.modifyPassword(data).done((result) => {
+                    if(result.success === 1){
+                        msgbox.alert("密码修改成功！");
+                        PersonSetting.hide();
+                    }else{
+                        msgbox.alert(result.error)
+                    }
+                }).fail((err) => {
+                    console.log(err);
+                })
+            }else{
+
+            }
         },
         /**
          * 显示他人登录界面
@@ -207,6 +212,45 @@ let config = {
             }else{
                 $img.attr("src",window.config.sysConfig.userInfo.avatar);
             }
+        },
+        /**
+         *  检查用户密码输入合法性
+         * @param originPw
+         * @param newPw
+         * @param confirmNewPw
+         */
+        checkPasswordLegal:function (originPw,newPw,confirmNewPw) {
+            if(originPw === newPw){
+                msgbox.alert('新旧密码一致，请修改');
+                return false;
+            }
+            if(this.actions.checkLegalChar(newPw) === false){
+                msgbox.alert('密码中不能包含特殊字符，请修改');
+                return false;
+            }
+
+            if(this.actions.checkPwLength(newPw) === false){
+                msgbox.alert('密码长度必须是6-16位，请修改');
+                return false;
+            }
+            return true;
+        },
+        /**
+         * 验证密码合法性0-9 a-z A-Z
+         * @param pw
+         * @returns {boolean}
+         */
+        checkLegalChar:function(pw){
+            let reg = /^[a-z0-9]+$/i;
+            return reg.test(pw);
+        },
+        /**
+         * 验证密码长度
+         * @param pw
+         */
+        checkPwLength:function (pw) {
+            let reg = /^[a-z0-9]{6,16}$/i;
+            return reg.test(pw);
         },
         // getTargetInfo:function () {
         //     UserInfoService.getUserInfoByName(this.data.targetUserName).done((result) => {
@@ -302,7 +346,7 @@ let config = {
             event:'input',
             selector:'.new-pw',
             callback:function(){
-                this.actions.isLegal();         //监听旧密码的输入
+                this.actions.isLegal();         //监听新密码的输入
             }
         }
     ],

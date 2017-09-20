@@ -54,8 +54,16 @@ let config = {
          * @param pw
          * @returns {boolean}
          */
-        checkLegal:function(pw){
+        checkLegalChar:function(pw){
             let reg = /^[a-z0-9]+$/i;
+            return reg.test(pw);
+        },
+        /**
+         * 验证密码长度
+         * @param pw
+         */
+        checkPwLength:function (pw) {
+            let reg = /^[a-z0-9]{6,16}$/i;
             return reg.test(pw);
         },
         /**
@@ -95,8 +103,12 @@ let config = {
                 msgbox.alert('请输入新密码');
                 return false;
             }
-            if(this.actions.checkLegal(new_pw) === false){
-                msgbox.alert('新密码包含不合法的字符！');
+            if(this.actions.checkLegalChar(new_pw) === false){
+                msgbox.alert('新密码包含非法字符，请修改');
+                return false;
+            }
+            if(this.actions.checkPwLength(new_pw) === false){
+                msgbox.alert('新密码长度必须为6-16位，请修改');
                 return false;
             }
             if(new_pw_confirm === ''){
@@ -104,9 +116,9 @@ let config = {
                 return false;
             }
             if(new_pw !== new_pw_confirm){
-                msgbox.alert('两次密码输入不一致！请重新输入！');
-                this.el.find('.new-pw').val('');
-                this.el.find('.new-pw-confirm').val('');
+                msgbox.alert('两次密码输入不一致！请修改！');
+                // this.el.find('.new-pw').val('');
+                // this.el.find('.new-pw-confirm').val('');
                 return false;
             }
             this.data.password = new_pw;
