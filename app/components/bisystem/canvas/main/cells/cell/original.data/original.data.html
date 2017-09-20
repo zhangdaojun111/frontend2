@@ -19,7 +19,7 @@
                         </th>
                         <th>{{cellChart.chart.xAxis.name}}</th>
                         {{#each cellChart.cell.attribute}}
-                        <th class="selectY" data-y-index="{{@index}}" data-y-sort="{{@root.ySort}}">
+                        <th class="selectY" data-y-index="{{@index}}">
                             <label class="custom-checkbox z-checkbox">
                                 {{#if selected}}
                                 <input type="checkbox" checked="checked"  name="">
@@ -27,7 +27,7 @@
                                 <input type="checkbox"  name="">
                                 {{/if}}
                             </label>
-                            <span>
+                            <span data-type="">
                                 {{name}}
                                 {{#if @root.showSortArrow}}
                                 <i class="bi-icon-up"></i>

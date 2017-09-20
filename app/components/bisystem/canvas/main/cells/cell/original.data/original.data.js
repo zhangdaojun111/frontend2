@@ -121,7 +121,6 @@ let config = {
         xAxis: [],
         hideGroup: [], //需要隐藏的分组列表
         showSortArrow: true, // 是否显示排序箭头
-        ySort: {}, //排序字段
     },
     binds:[
         { // 点击关闭原始数据
@@ -229,8 +228,25 @@ let config = {
             event:'click',
             selector:'.selectY span',
             callback:function (context) {
+                $(context).closest('th').siblings('th').find('>span').data('sort','');
+                $(context).closest('th').siblings('th').find('>span i').removeClass('active');
                 let index = $(context).closest('th').attr('data-y-index');
-                console.log(this.data.cell);
+                let type = $(context).data('type');
+                if (type === 'desc') {
+                    $(context).find('.bi-icon-up').addClass('active').siblings('i').removeClass('active');
+                    $(context).data('type','asc');
+                } else if (type === 'asc') {
+                    $(context).find('i').removeClass('active');
+                    $(context).data('type','');
+                } else {
+                    $(context).find('.bi-icon-down').addClass('active').siblings('i').removeClass('active');
+                    $(context).data('type','desc');
+                };
+                let sort = {
+                    field:this.data.cellChart.chart.yAxis[index].field,
+                    type:$(context).data('type')
+                };
+                this.trigger('onDeepSort', sort);
                 return false;
             }
         },
