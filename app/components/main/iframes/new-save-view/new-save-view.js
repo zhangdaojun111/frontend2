@@ -93,6 +93,7 @@ let config = {
             favorlist['list'] = JSON.stringify(list);
             favorlist['query_type'] = 'save';
 
+            //为保证重名覆盖的视图在列表最上方，先删除已存在视图，重新保存
             let temp = this.data.favoriteList.find(function (n) {
                 return n.name === name;
             });
@@ -216,7 +217,7 @@ let config = {
          * 用于删除重复名字的视图
          * @param name
          */
-         deleteViewByName:async function(name){
+         deleteViewByName:function(name){
             let favorlist = {};
             favorlist['name'] = name;
             favorlist['query_type'] = 'delete';
