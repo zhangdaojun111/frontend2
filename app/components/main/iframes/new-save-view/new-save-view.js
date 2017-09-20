@@ -6,8 +6,8 @@ import Component from '../../../../lib/component';
 import 'jquery-ui/themes/base/base.css';
 import 'jquery-ui/themes/base/theme.css';
 import 'jquery-ui/ui/widgets/dialog.js';
-import './save-view.scss';
-import template from './save-view.html';
+import './new-save-view.scss';
+import template from './new-save-view.html';
 import {TabService} from "../../../../services/main/tabService"
 import Mediator from "../../../../lib/mediator"
 import msgbox from "../../../../lib/msgbox";
@@ -40,13 +40,13 @@ let config = {
         },
         //根据当前视图数据渲染视图列表
         initList:function () {
-            let $parent = this.el.find('.view-list');
-            $parent.empty();
+            let $parent = this.el.find('.save-view-list');
+            $parent.find('.list-item').remove();
             for(let k of this.data.favoriteList){
-                let $container = $("<div class='list-item'>");
-                let $span = $("<span class='list-name'>");
+                let $container = $("<li class='list-item'>");
+                let $span = $(`<span class='list-name' title='${k.name}'>`);
                 $span.html(k.name);
-                $span.attr("view_id",k.name);
+                $container.attr("view_id",k.name);
                 let $deleteIcon = $("<i class='delete-icon icon-framework-delete'>");
                 $deleteIcon.attr("view_id",k.name);
                 $container.append($span);
@@ -65,15 +65,21 @@ let config = {
                 msgbox.alert("视图配置不能为空");
                 return;
             }
+
+            let name = this.el.find('.save-view-name').val();
+            if(name === ''){
+                msgbox.alert("视图名称不能为空");
+                return;
+            }
+
             let favorlist = {};
             let list = [];
             let idList = [];
-            let name = this.el.find('.view-name').val();
 
             for (let k in this.data.currentIframesList){
                 list.push({ 'id':this.data.currentIframesList[k],
-                            'table_id':this.data.currentIframesList[k],
-                            'ts_name':""});
+                    'table_id':this.data.currentIframesList[k],
+                    'ts_name':""});
                 idList.push(this.data.currentIframesList[k]);
             }
             favorlist['name'] = name;
@@ -89,8 +95,10 @@ let config = {
 
             let that = this;
             TabService.saveFavoriteItem(favorlist).done((result) => {
+                console.log(result);
                 if(result.success === 1){
-                    msgbox.alert("保存成功");
+                    // msgbox.alert("保存成功");
+                    msgbox.showTips("保存成功");
                     _.remove(that.data.favoriteList,function (n) {
                         return n.name === name;
                     });
@@ -101,6 +109,11 @@ let config = {
         },
         //点击某个视图后展示该视图包含的tabs
         displayView:function (event) {
+            if(event.target.className.includes('delete-icon')){
+                this.actions.deleteView(event);
+                return;
+            }
+
             //获取被点击的视图名称
             let name = event.currentTarget.attributes.view_id.value;
             let tabIdList = [];
@@ -136,9 +149,9 @@ let config = {
                 //         return n === 'calendar'
                 //     })
                 // }
+                this.data.newHash.length = 0;
                 this.actions.findTabInfo(menu,tabIdList);  //查找各tab的url和name
                 Mediator.emit('saveview:displayview',this.data.newHash);
-                SaveView.hide();
             }
         },
         //根据id查找tabs的url和name
@@ -196,19 +209,42 @@ let config = {
                     });
                 }
             })
+        },
+        //进入编辑模式
+        showEditModal:function () {
+            this.el.find('.normal-modal').hide();
+            this.el.find('.edit-modal').show();
+            this.el.find('.delete-icon').show();
+        },
+        //进入正常模式
+        showNormalModal:function () {
+            this.el.find('.normal-modal').show();
+            this.el.find('.edit-modal').hide();
+            this.el.find('.delete-icon').hide();
+            this.el.find('.save-view-name').val('');
+        },
+        //点击三角按钮关闭保存视图界面
+        closeSaveViewImmediately:function () {
+            this.actions.resetComponent();
+            this.actions.closeSaveView();
+        },
+        //清空input，切换为正常模式
+        resetComponent:function () {
+            this.el.find('.save-view-name').val('');
+            this.actions.showNormalModal();
         }
     },
     binds:[
         {
             event:'click',
-            selector:'.save-btn',
+            selector:'.save-view-btn',
             callback: _.debounce( function () {
                 this.actions.saveFavorite();
-            },100)
+            },150)
         },
         {
             event:'click',
-            selector:'span.list-name',
+            selector:'.list-item',
             callback:function (target,event) {
                 this.actions.displayView(event);
             }
@@ -218,6 +254,27 @@ let config = {
             selector:'i.delete-icon',
             callback:function (target,event) {
                 this.actions.deleteView(event);
+            }
+        },
+        {
+            event:'click',
+            selector:'.edit-icon',
+            callback:function () {
+                this.actions.showEditModal();
+            }
+        },
+        {
+            event:'click',
+            selector:'.cancel-edit-modal',
+            callback:function () {
+                this.actions.showNormalModal();
+            }
+        },
+        {
+            event:'click',
+            selector:'.drop-up-view-icon',
+            callback:function () {
+                this.actions.closeSaveViewImmediately();
             }
         }
     ],
@@ -237,31 +294,33 @@ let config = {
 };
 
 
-class SaveViewController extends Component {
-    constructor(data){
+class SaveView extends Component {
+    constructor(data,callback){
         super(config);
         this.data.currentIframesList = data;
+        this.actions.closeSaveView = callback;
     }
 }
 
-export const SaveView = {
-    el:null,
-    show: function (data) {
-        let component = new SaveViewController(data);
-        this.el = $('<div id="save-view">').appendTo(document.body);
-        component.render(this.el);
-        this.el.erdsDialog({
-            title: '保存视图',
-            width: 280,
-            modal:true,
-            height: 380,
-            close: function() {
-                $(this).erdsDialog('destroy');
-                component.destroySelf();
-            }
-        });
-    },
-    hide:function () {
-        this.el.erdsDialog('close');
-    }
-};
+export {SaveView};
+// export const SaveView = {
+//     el:null,
+//     show: function (data) {
+//         let component = new SaveViewController(data);
+//         this.el = $('<div id="save-view">').appendTo(document.body);
+//         component.render(this.el);
+//         this.el.erdsDialog({
+//             title: '保存视图',
+//             width: 280,
+//             modal:true,
+//             height: 380,
+//             close: function() {
+//                 $(this).erdsDialog('destroy');
+//                 component.destroySelf();
+//             }
+//         });
+//     },
+//     hide:function () {
+//         this.el.erdsDialog('close');
+//     }
+// };

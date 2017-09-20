@@ -21,11 +21,19 @@ let config = {
         _otherId:''
     },
     actions:{
+        //获取用户名单列表
         getData:function () {
             UserInfoService.getAllUsersInfo().done((result) => {
+                let tempData = [];
                 if(result.success === 1){
                     this.data.userData = result.rows;
-                    this.actions.initList();
+                    for (let row of this.data.userData){
+                        if(row.name && row.name.trim() !== '' && row.id && row.id.trim() !== ''){
+                            row.py = row.f7_p.join(',');
+                            tempData.push(row);
+                        }
+                    }
+                    this.actions.initList(tempData);
                 }else{
                     console.log("获取数据失败",result);
                 }
@@ -33,11 +41,12 @@ let config = {
                 console.log("获取数据失败",err);
             })
         },
-        initList:function () {          //使用组件绘制下拉框
+        //使用组件绘制下拉框
+        initList:function (tempData) {
             let $wrap = this.el.find('.user-list');
             let that = this;
             let autoSelect = new AutoSelect({
-                list: this.data.userData,
+                list: tempData,
                 multiSelect: false,
                 editable: true,
                 onSelect: function (choosed) {
@@ -50,6 +59,7 @@ let config = {
             });
             autoSelect.render($wrap);
         },
+        //向后台发送他人登录请求
         loginOtherAccount:function () {
             let userId = this.data._otherId;
             userId = userId.trim();
@@ -65,9 +75,6 @@ let config = {
                 })
             }
         },
-        cancel:function () {
-            this.el.dialog('close');
-        }
     },
     binds:[
         {
@@ -75,13 +82,13 @@ let config = {
             selector:'.confirm-btn',
             callback:_.debounce(function(){
                 this.actions.loginOtherAccount();
-            },500)
+            },100)
         },
         {
             event:'click',
             selector:'.cancel-btn',
             callback:function () {
-                this.actions.cancel();
+                LoginByOther.hide();
             }
         }
     ],
@@ -99,12 +106,13 @@ class LoginOther extends Component{
     }
 }
 
-export default {
+export const LoginByOther =  {
+    el:null,
     show: function() {
         let component = new LoginOther();
-        let el = $('<div class="login-by-other">').appendTo(document.body);
-        component.render(el);
-        el.erdsDialog({
+        this.el = $('<div class="login-by-other">').appendTo(document.body);
+        component.render(this.el);
+        this.el.erdsDialog({
             title: '他人登录',
             width: 400,
             height: 500,
@@ -114,5 +122,8 @@ export default {
                 component.destroySelf();
             }
         });
+    },
+    hide:function () {
+        this.el.erdsDialog('close');
     }
-}
+};
