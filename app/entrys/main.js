@@ -28,3 +28,4 @@ let body = $('body');
 body.find('.component-loading-cover').remove();
 body.find('.component-loading-box').remove();
 body.removeClass('component-loading-effect');
+

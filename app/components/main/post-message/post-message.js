@@ -76,9 +76,9 @@ let config = {
                 callback: (order, node) => {
                     this.actions._selectNode(order, node);
                 },
-                isSearch: false,
+                isSearch: true,
                 treeType: "MULTI_SELECT",
-                treeName: "post-message-depatment-tree"
+                treeName: "post-message-depatment-tree",
             });
             let $container = this.el.find(".tree");
             treeView.render($container);
@@ -250,7 +250,7 @@ let postMessageUtil = {
     hide: function () {
         this.el.erdsDialog('close');
     }
-}
+};
 
 export {postMessageUtil};
 // postMessageUtil.show();
