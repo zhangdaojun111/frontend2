@@ -21,7 +21,7 @@ let config = {
             let list = [];
             this.data.list.map(checkbox => {
                 list.push(JSON.parse(checkbox.value))
-                this.el.find('input').attr('checked', true);
+                this.el.find('input').prop('checked', true);
             });
             this.data.value = list;
         },
@@ -74,7 +74,7 @@ class Checkbox extends Base {
             this.data.list.forEach((l,index) => {
                 for (let choosed of this.data.value) {
                     if (choosed.id === JSON.parse(l.value).id) {
-                        this.el.find('input[type=checkbox]').eq(index).attr('checked',true);
+                        this.el.find('input[type=checkbox]').eq(index).prop('checked',true);
                         break;
                     }
                 }

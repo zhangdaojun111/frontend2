@@ -1,6 +1,6 @@
 $grid-bg: #FAFAFA;
 $border-color: #eee;
-$grid-color: #666;
+
 @mixin dis-flex {
     display: flex;
     flex-direction: column;
@@ -95,7 +95,7 @@ $grid-color: #666;
                 flex-grow: 1;
                 flex-direction: row;
                 border-right: solid 1px $border-color;
-                color: $grid-color;
+                color: #666666;
                 font-weight: bold;
             }
             span {

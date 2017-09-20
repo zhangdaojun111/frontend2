@@ -4,14 +4,15 @@
 import Component from '../../../../../lib/component';
 import template from './canvas.header.html';
 import {CanvasHeaderMenuComponent} from './menu/canvas.header.menu';
+import './canvas.header.scss';
 
 let config = {
     template: template,
     data: {
         id: '',
         name: '',
-        views: window.config.bi_views,
-        editMode: window.config.bi_user === 'manager',
+        views: [],
+        editMode: window.config.bi_user === 'manager'? window.config.bi_user : false,
         menus: {}
     },
     actions: {
@@ -20,9 +21,12 @@ let config = {
          */
         addCell() {
             const layout = {
+                attribute:[],
                 layout_id: '',
                 chart_id: '',
                 name: '',
+                select:[],
+                deep_clear: "0",
                 size: {
                     left: 100,
                     top: 100,
@@ -56,6 +60,7 @@ let config = {
         },
     ],
     afterRender() {
+        this.data.views = window.config.bi_views;
         // 渲染header视图列表
         this.data.views.forEach(viewData => {
             let menu = new CanvasHeaderMenuComponent(viewData);
@@ -64,7 +69,6 @@ let config = {
         })
     }
 };
-
 export class CanvasHeaderComponent extends Component {
     constructor(data, events) {
         super(config, data, events);

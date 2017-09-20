@@ -1,5 +1,5 @@
 import {HTTP} from '../../lib/http';
-import alert from '../../lib/msgbox';
+import msgbox from '../../lib/msgbox';
 
 export const FormService = {
     //子表内置父表的id集合（前端填充）tableid : ids
@@ -480,7 +480,7 @@ export const FormService = {
         HTTP.flush();
         return res;
     },
-    uploadAttachment(url, json, processCallback, successCallback) {
+    uploadAttachment(url, json, processCallback, successCallback,errorCallback) {
         HTTP.ajaxImmediately({
             type: "POST",
             url: url,
@@ -496,7 +496,10 @@ export const FormService = {
                 successCallback(data);
             },
             error: function (error) {
-                alert(error);
+                msgbox.alert(error);
+                if(errorCallback){
+                    errorCallback(error);
+                }
             },
             async: true,
             cache: false,

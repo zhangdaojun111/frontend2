@@ -93,6 +93,11 @@ let config = {
                 })
             }
         }
+        if (this.data.expandChild) {
+            // this.data.expandChild = true;
+            this.childlist.show();
+            // this.actions.showChildrenAtFull();
+        }
 
     }
 }

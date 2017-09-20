@@ -5,41 +5,48 @@
     width:50px;
     display: inline-block;
     color:darkgrey;
+    cursor: pointer;
   }
 
   .delete-file{
     width:50px;
     display: inline-block;
     color:darkgrey;
+    cursor: pointer;
   }
 
   .keep-on-attaching{
     width:50px;
     display: inline-block;
     color:darkgrey;
+    cursor: pointer;
   }
 
   .pause-attaching{
     width:50px;
     display: inline-block;
     color:darkgrey;
+    cursor:pointer;
   }
 
   .re-uploading{
     width:50px;
     display: inline-block;
     color:darkgrey;
+    cursor: pointer;
   }
 
   .cancel-attaching{
     width:50px;
     display: inline-block;
     color:darkgrey;
+    cursor: pointer;
   }
 
   .file-name{
     width: 150px;
     display: inline-block;
+    cursor: pointer;
   }
 
   #process-num{
@@ -47,7 +54,6 @@
     display: inline-block;
     color:darkgrey;
   }
-
 
   .loader {
     display: inline-block;
@@ -62,6 +68,31 @@
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+  }
+
+  .my-mask{
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+  }
+  .mask-div{
+    position: absolute;
+    z-index: 2;
+    background: black;
+    height: 100%;
+    width: 100%;
+    opacity: 0.3;
+  }
+  .img-pre{
+    vertical-align: middle;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 10;
+    max-height:80%;
   }
 }
 

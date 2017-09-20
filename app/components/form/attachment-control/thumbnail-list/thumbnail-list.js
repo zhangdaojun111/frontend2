@@ -143,7 +143,10 @@ let config = {
             let imgEle = $('<img class="thumbnail-'+i+'" style="width: 50px;height: 50px;padding: 5px">');
             this.el.find('.thumbnail-anchor').append(imgEle);
             imgEle.on('click',(event)=>{
-                let src = "/download_attachment/?file_id='+fileId+'&download=0";
+                if(!this.data.items[this.data.currentIndex+i]){
+                    return;
+                }
+                let src = '/download_attachment/?file_id='+Object.keys(this.data.items[this.data.currentIndex+i])[0]+'&download=0';
                 this.el.find('.preview').attr('src',src).css('display','block');
                 event.stopPropagation();
                 $(document).click((event2)=>{
