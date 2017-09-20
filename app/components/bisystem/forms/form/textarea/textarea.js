@@ -5,12 +5,33 @@ let config = {
     template: template,
     data: {
         category: 'text', // 设置input type 输入框类型 number date
-        placeholder: ''
+        placeholder: '请输入'
     },
     actions: {
+        /**
+         * 输入监听
+         * @param value
+         */
+        onInput: function (value) {
+            this.data.value = value;
+            this.trigger('onChange', value);
+            if (value) {
+                this.clearErrorMsg();
+            };
+        },
     },
-    binds: [],
+    binds: [
+        {
+            event: 'input',
+            selector: 'textarea',
+            callback: function (context) {
+                this.actions.onInput(context.value);
+            }
+        }
+    ],
     afterRender(){
+        this.$textarea = this.el.find('textarea');
+        this.$label = this.el.find('label');
     }
 }
 
@@ -21,9 +42,10 @@ class Textarea extends Base {
 
     /**
      * 设置value
-     * @param value = Textarea输入框值
      */
     setValue(value) {
+        this.data.value = value;
+        this.$textarea.val(value);
     }
 }
 
