@@ -127,5 +127,22 @@ export const canvasCellService = {
         })
     },
 
+    /**
+     * 删除高级计算item
+     * @param item = {"chart_id":0,"id":""}
+
+     */
+    async removeAdvancedItemData(data) {
+        const res = await HTTP.ajaxImmediately({
+            url: '/bi/new_del_compute_field/',
+            data: data,
+            // contentType: "application/json; charset=utf-8",
+            traditional: true
+        });
+        return new Promise((resolve, reject) => {
+            resolve(res);
+        })
+    },
+
 }
 

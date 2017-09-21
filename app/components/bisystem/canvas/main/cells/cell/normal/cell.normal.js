@@ -276,6 +276,18 @@ export class CellNormalComponent extends CellBaseComponent {
             'is_deep': window.config.bi_user === 'manager' ? 1 : 0
         };
         const res = await this.normalChart.getDeepData(data);
-        console.log(res);
+        if (res[0]['success'] === 1) {
+            if (res[0]['data']['data']['xAxis'].length > 0 && res[0]['data']['data']['yAxis'].length > 0) {
+                this.data.cellChart['chart']['data']['xAxis'] = res[0]['data']['data']['xAxis'];
+                this.data.cellChart['chart']['data']['yAxis'] = res[0]['data']['data']['yAxis'];
+                this.data.cellChart['cell']['attribute'] = [];
+                this.data.cellChart['cell']['select'] = [];
+                this.actions.updateChart(this.data.cellChart);
+                this.trigger('onUpdateChartDeepTitle',this.data);
+            }
+        } else {
+            msgbox.alert(res[0]['error']);
+        };
+        return Promise.resolve(this.data);
     }
 }

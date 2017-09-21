@@ -19,7 +19,7 @@
                         </th>
                         <th>{{cellChart.chart.xAxis.name}}</th>
                         {{#each cellChart.cell.attribute}}
-                        <th class="selectY" data-y-index="{{@index}}">
+                        <th class="selectY {{@root.canSortDeep}}" data-y-index="{{@index}}">
                             <label class="custom-checkbox z-checkbox">
                                 {{#if selected}}
                                 <input type="checkbox" checked="checked"  name="">
@@ -27,11 +27,11 @@
                                 <input type="checkbox"  name="">
                                 {{/if}}
                             </label>
-                            <span data-type="">
+                            <span data-type="{{@root.sortType}}">
                                 {{name}}
                                 {{#if @root.showSortArrow}}
-                                <i class="bi-icon-up"></i>
-                                <i class="bi-icon-down"></i>
+                                <i class="bi-icon-up {{original_deep_equal @root.sortType 'asc'}}"></i>
+                                <i class="bi-icon-down {{original_deep_equal @root.sortType 'desc'}}"></i>
                                 {{/if}}
                             </span>
 

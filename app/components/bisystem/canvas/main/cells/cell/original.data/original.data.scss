@@ -73,6 +73,9 @@
                         th {
                             font-weight: bold;
                             @include th-td;
+                            span {
+                                cursor: pointer;
+                            }
                         }
                     }
                 }

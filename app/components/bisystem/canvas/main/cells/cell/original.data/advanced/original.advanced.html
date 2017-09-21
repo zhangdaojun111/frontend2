@@ -13,7 +13,7 @@
                     <span>附加字段模板：</span>
                     <select class="normal">
                         {{#each advancedDataTemplates}}
-                        <option value="{{advanced_compute this}}">{{name}}</option>
+                        <option value="{{advanced_compute this}}" {{advanced_compute_select this @root.compute_model}}>{{name}}</option>
                         {{/each}}
                     </select>
                 </label>
@@ -32,7 +32,7 @@
                     <p>
                         <label>
                             <b class="custom-checkbox">
-                                <input type="checkbox" class="checkbox" value="{{ename}}">
+                                <input type="checkbox" class="checkbox" value="{{ename}}" {{advanced_compute_checked ename @root.content}}>
                             </b>
                             {{original_advanced_group_name @root.chartGroup.name ename}}
                         </label>

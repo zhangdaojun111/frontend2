@@ -28,8 +28,9 @@ export class CellBaseComponent extends Component {
                 this.actions.updateOriginal(res);
             },
 
-            onDeepSort: function(sort) {
-                me.deepSort(sort);
+            onDeepSort: async function(sort) {
+               let res = await me.deepSort(sort);
+               this.actions.updateOriginal(res);
             }
         });
         this.append(dataSource,container);

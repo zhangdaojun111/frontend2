@@ -10,6 +10,8 @@ import handlebars from 'handlebars';
 import {canvasCellService} from '../../../../../../../services/bisystem/canvas.cell.service';
 import msgbox from '../../../../../../../lib/msgbox';
 import {CanvasOriginalAdvancedComponent} from './advanced/original.advanced';
+import {CanvasOriginalAdvancedItemComponent} from './advanced/item/original.advanced.item';
+
 
 // 自定义original_each_yAxis helper
 handlebars.registerHelper('original_each_yAxis', function(data,index, options) {
@@ -22,10 +24,15 @@ handlebars.registerHelper('original_data_title', function(index, options) {
     // return data['field'] ? data['field']['name'] : data['name'];
 });
 
-// 自定义分组original_data_title helper
+// 自定义分组original_group_data helper
 handlebars.registerHelper('original_group_data', function(data, options) {
     return data ? data : '暂无数据';
     // return data['field'] ? data['field']['name'] : data['name'];
+});
+
+// 自定义分组original_deep_equal helper
+handlebars.registerHelper('original_deep_equal', function(val1, val2, options) {
+    return val1 === val2 ? 'active' : '';
 });
 
 let config = {
@@ -75,7 +82,7 @@ let config = {
          */
         updateOriginal(data) {
             let originalData = CanvasOriginalDataComponent.handleOriginalData(data);
-            this.data = originalData;
+            Object.assign(this.data, originalData);
             this.reload();
         },
 
@@ -94,24 +101,70 @@ let config = {
                     canvasCellService.saveAdvancedData(data).then(res => {
                         if (res['success'] === 1) {
                             this.actions.backAdvancedList(1);
+                            this.actions.makeAdvancedItem(res['data'], data.id ? true : false);
                         }
                     })
                 }
             });
             this.append(originForm,this.el.find('.origin-data'));
+            this.data.originalAdvancedSetting = originForm;
         },
+
         /**
          * 返回高级字段列表tab
          * @param num 1 = 高级字段列表tab ,2 = 高级字段form tab
          */
-        backAdvancedList(num) {
+        backAdvancedList(num,isEditMode = false) {
             if (num === 1) {
                 this.el.find('.origin-data .form').hide();
                 this.el.find('.origin-data .advanced-list').show();
             } else {
+                if (!isEditMode) {
+                    this.data.originalAdvancedSetting.actions.reset();
+                };
                 this.el.find('.origin-data .form').show();
                 this.el.find('.origin-data .advanced-list').hide();
             };
+        },
+        /**
+         *高级计算item 实例化
+         */
+        makeAdvancedItem(itemData, editMode = false) {
+            itemData['itemId'] = itemData.id;
+            if (editMode) {
+                this.data.originalAdvancedItems[itemData['itemId']].actions.update(itemData);
+            } else {
+                let comp = new CanvasOriginalAdvancedItemComponent(Object.assign(itemData,this.data), {
+                    onEditItem: (data) => {
+                        let item = {
+                            itemId: data.itemId,
+                            name: data.name,
+                            compute_model:data.compute_model,
+                            content:data.content
+                        };
+                        this.data.originalAdvancedSetting.actions.setValue(item);
+                        this.actions.backAdvancedList(2, true);
+                    }
+                });
+                this.append(comp, this.el.find('.advanced-list table tbody'), 'tr');
+                this.data.originalAdvancedItems[itemData['itemId']] = comp;
+            };
+        },
+        /**
+         * 获取高级计算保存的item
+         */
+        getAdvancedList() {
+            if (Object.keys(this.data.originalAdvancedItems).length === 0) {
+                canvasCellService.getAdvancedListData({'chart_id': this.data.chart.chartName.id}).then(res => {
+                    if (res['success'] === 1) {
+                        res['data'].forEach(item => {
+                            this.actions.makeAdvancedItem(item);
+                        })
+                    } else {
+                        msgbox.alert(res['error'])
+                    };
+                });
+            }
         }
 
     },
@@ -121,6 +174,9 @@ let config = {
         xAxis: [],
         hideGroup: [], //需要隐藏的分组列表
         showSortArrow: true, // 是否显示排序箭头
+        sortType: '', // 排序类型
+        canSortDeep: 'sort-deep', // 判断点击原始数据是否可以排序
+        originalAdvancedItems: {} //用来保存高级计算items list
     },
     binds:[
         { // 点击关闭原始数据
@@ -226,25 +282,21 @@ let config = {
         },
         { // 点击下穿排序
             event:'click',
-            selector:'.selectY span',
+            selector:'.sort-deep span',
             callback:function (context) {
-                $(context).closest('th').siblings('th').find('>span').data('sort','');
-                $(context).closest('th').siblings('th').find('>span i').removeClass('active');
                 let index = $(context).closest('th').attr('data-y-index');
                 let type = $(context).data('type');
                 if (type === 'desc') {
-                    $(context).find('.bi-icon-up').addClass('active').siblings('i').removeClass('active');
-                    $(context).data('type','asc');
+                    this.data.sortType = 'asc';
                 } else if (type === 'asc') {
-                    $(context).find('i').removeClass('active');
-                    $(context).data('type','');
+                    this.data.sortType = '';
                 } else {
-                    $(context).find('.bi-icon-down').addClass('active').siblings('i').removeClass('active');
-                    $(context).data('type','desc');
+                    this.data.sortType = 'desc';
                 };
+                let field = this.data.cellChart.chart.assortment === 'pie'? this.data.cellChart.chart.yAxis : this.data.cellChart.chart.yAxis[index].field;
                 let sort = {
-                    field:this.data.cellChart.chart.yAxis[index].field,
-                    type:$(context).data('type')
+                    field:field,
+                    type:this.data.sortType
                 };
                 this.trigger('onDeepSort', sort);
                 return false;
@@ -254,6 +306,7 @@ let config = {
             event:'click',
             selector:'.bi-tabs span',
             callback:function (context) {
+                this.actions.getAdvancedList();
                 $(context).addClass('cur').siblings('span').removeClass('cur');
                 let index = $(context).index();
                 let curTab = this.el.find('.origin-data .content').eq(index);
@@ -270,12 +323,10 @@ let config = {
         },
     ],
     afterRender() {
-        canvasCellService.getAdvancedListData(this.data.chart.chartName.id).then(res => {
-            console.log(res);
-        })
-
-        //新增高级字段
-        this.actions.addAdvancedList();
+        if (this.data.cellChart.chart.chartGroup && this.data.cellChart.chart.chartGroup['id']) {
+            // 新增高级字段
+            this.actions.addAdvancedList();
+        }
     },
     firstAfterRender() {},
     beforeDestory() {}
@@ -396,6 +447,7 @@ export class CanvasOriginalDataComponent extends Component {
         data.cellChart.cell.attribute = [{'selected': true, 'name': data.cellChart.chart.pieType.value === 1 ? data.cellChart.chart.xAxis.name : data.cellChart.chart.yAxis.name}];
         if (data.cellChart.chart.pieType.value === 1) {
             data.showSortArrow = false;
-        }
+            data.canSortDeep = '';// 判断点击原始数据是否可以排序
+        };
     }
 }
