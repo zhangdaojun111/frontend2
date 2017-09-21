@@ -50,6 +50,10 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     ApprovalHeader.showheader(res.record_info);
     WorkflowRecord.showRecord(res.record_info);
     let current_node_arr = res.record_info.current_node.split('、');
+    console.log( "---" )
+    console.log( res.record_info.current_node )
+    console.log( current_node_arr )
+    console.log( "---" )
     if(current_node_arr.indexOf(window.config.name)==-1){
         $('#approval-workflow').find('.for-hide').hide();
     };
@@ -88,7 +92,6 @@ Mediator.subscribe('workFlow:record_info', (res) => {
             }
             $('#add-home #addFollowerList').html(nameArr);
             let current_node_arr = res.record_info.current_node.split('、');
-            // if(nameArr.indexOf(window.config.name)>-1&&window.config.name!=res.record_info.current_node){
             if(nameArr.indexOf(window.config.name)>-1&&current_node_arr.indexOf(window.config.name)==-1){
                 $('#approval-workflow').find('.for-hide').hide();
                 $('#approval-workflow').find('#re-app').hide();
