@@ -64,9 +64,7 @@ let config = {
                 let min = (e.getMinutes() + 100 + "").slice(1);
                 let sec = (e.getSeconds() + 100 + "").slice(1);
                 let str = year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;
-                if (_this.data.value) {
-                   // _this.el.find(".datetime").val(_this.data.value);
-                } else {
+                if (!_this.data.value || (_this.data.value == '请选择')) {
                     _this.el.find(".datetime").val(str);
                 }
             }

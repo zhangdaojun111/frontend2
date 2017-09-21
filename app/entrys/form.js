@@ -392,9 +392,19 @@ let FormEntrys = {
         console.timeEnd('获取表单数据的时间');
         console.time('form创建时间');
         //处理数据
-        let data = this.mergeFormData(res[0], res[1]);
+        try{
+            let data = this.mergeFormData(res[0], res[1]);
+        }catch (e){
+            console.log(e)
+        }
+
         //检查表单类型
-        let template = await this.checkFormType(data, res);
+        try{
+            let template = await this.checkFormType(data, res);
+        }catch (e){
+            console.log(e)
+        }
+
         //发送审批记录
         Mediator.publish('workFlow:record_info', data);
         let formData = {
@@ -404,7 +414,13 @@ let FormEntrys = {
         let formBase = new FormBase(formData);
         this.childForm[this.tableId] = formBase;
         let $newWrap = this.el.find('.form-print-position');
-        formBase.render($newWrap);
+
+        try{
+            formBase.render($newWrap);
+        }catch (e){
+            console.log(e)
+        }
+
         //通知父框架表单刷新完毕
         Mediator.publish('form:formAlreadyCreate', 'success');
         console.timeEnd('form创建时间');
