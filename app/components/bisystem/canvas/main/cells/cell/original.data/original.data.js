@@ -85,7 +85,6 @@ let config = {
             Object.assign(this.data, originalData);
             this.reload();
         },
-
         /**
          * 新增高级字段
          */
