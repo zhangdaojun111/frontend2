@@ -806,7 +806,7 @@ let config = {
                 return '';
             }
             if( this.data.viewMode == 'in_process' ){
-                return '<div class="ui-link" style="text-align: center;"><a class="gridView" style="color:#337ab7;">查看</a></div>';
+                return '<div style="text-align: center;"><a class="gridView" style="color:#337ab7;">查看</a></div>';
             }
             if (params.data.group || Object.is(params.data.group, '') || Object.is(params.data.group, 0)) {
                 return '';
@@ -821,7 +821,7 @@ let config = {
             } catch (e) {
                 rowStatus = 0;
             }
-            let str = '<div class="ui-link" style="text-align:center;"><a class="gridView" style="color:#337ab7;">查看</a>';
+            let str = '<div style="text-align:center;"><a class="gridView" style="color:#337ab7;">查看</a>';
             if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data' || this.data.viewMode == 'deleteHanding') {
                 if (this.data.isFixed || rowStatus == 2 || this.data.permission.cell_edit == 0) {
                     str += ' | <span style="color: darkgrey;">编辑</span>';
@@ -1110,6 +1110,7 @@ let config = {
                 this.actions.sortWay();
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
+                    this.el.find( '.icon-aggrid-refresh' ).removeClass('refresh-rotate');
                 }
             })
             HTTP.flush();
@@ -1450,7 +1451,7 @@ let config = {
             }
             if( this.data.groupCheck ){
                 json['is_group'] = 1;
-                json['group_fields'] = JSON.stringify( this.data.myGroup.fields );
+                json['group_fields'] = JSON.stringify( this.data.myGroup );
                 json['tableType'] = 'group';
             }
             //排序
@@ -1518,8 +1519,8 @@ let config = {
                     tableId: this.data.tableId,
                     gridoptions: this.agGrid.gridOptions,
                     fields: this.data.myGroup.length == 0 ? this.data.groupFields : this.actions.deleteGroup(this.data.groupFields),
-                    myGroup:  this.actions.setMyGroup(this.data.myGroup.fields),
-                    groupFields: this.data.myGroup.fields,
+                    myGroup:  this.actions.setMyGroup(this.data.myGroup),
+                    groupFields: this.data.myGroup,
                     close: this.actions.calcGroup
                 }
                 this.groupGridCom = new groupGrid(groupLit);
@@ -1604,7 +1605,7 @@ let config = {
         //分组触发
         onGroupChange: function (group) {
             this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , true)
-            this.data.myGroup.fields = group;
+            this.data.myGroup = group;
             this.actions.getGridData();
         },
         //列宽改变
@@ -1629,9 +1630,9 @@ let config = {
                 field.push(data[j]);
             }
             if(this.data.myGroup.length != 0) {
-                for (let k = 0; k < this.data.myGroup.fields.length; k++) {
+                for (let k = 0; k < this.data.myGroup.length; k++) {
                     for (let i = 0; i < field.length; i++) {
-                        if (this.data.myGroup.fields[k] == field[i].field) {
+                        if (this.data.myGroup[k] == field[i].field) {
                             field.splice(i, 1);
                         }
                     }
@@ -1864,7 +1865,8 @@ let config = {
             //在途刷新
             if( this.el.find( '.refresh-btn' )[0] ){
                 this.el.find( '.refresh-btn' ).on( 'click',()=>{
-                    this.actions.getInprocessData();
+                    this.el.find( '.icon-aggrid-refresh' ).addClass('refresh-rotate');
+                    this.actions.getInprocessData(true);
                 } )
             }
             //对应关系保存
@@ -2316,7 +2318,7 @@ let config = {
                 this.el.find('.group-btn').find('span').html('数据');
                 this.el.find( '.group-panel' ).eq(0).animate( { 'right':this.data.isShowCustomPanel?'200px':'0px' } );
                 this.data.groupCheck = !this.data.groupCheck;
-                this.actions.onGroupChange(this.data.myGroup.fields)
+                this.actions.onGroupChange(this.data.myGroup)
             } else {
                 this.data.closePanel = true;
                 this.el.find('.group-btn').find('span').html('分组');
@@ -2528,7 +2530,7 @@ let config = {
             this.col_id=data.data._id;
             this.colDef=arr;
             //行选择
-            if(data.colDef.headerName != "操作"){
+            if(data.colDef.headerName != "操作" && !this.data.editMode){
                 dgcService.rowClickSelect( data )
             }
 
@@ -3003,6 +3005,7 @@ let config = {
         },
         //打开局部的弹窗
         openSelfIframe: function ( url,title,w,h ) {
+            this.actions.setInvalid();
             PMAPI.openDialogToSelfByIframe( url,{
                     width: w || 1400,
                     height: h || 800,
