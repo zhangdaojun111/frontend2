@@ -20,7 +20,7 @@ let config = {
     data: {
         columnDefs : [],
         rowData : [],
-        footerData: [],
+        footerData: [{myfooter: '合计'}],
         cssTheme: 'ag-bootstrap',
         floatingFilter: false,
         //不需要分页
