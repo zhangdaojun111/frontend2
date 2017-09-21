@@ -1110,6 +1110,7 @@ let config = {
                 this.actions.sortWay();
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
+                    this.el.find( '.icon-aggrid-refresh' ).removeClass('refresh-rotate');
                 }
             })
             HTTP.flush();
@@ -1864,7 +1865,8 @@ let config = {
             //在途刷新
             if( this.el.find( '.refresh-btn' )[0] ){
                 this.el.find( '.refresh-btn' ).on( 'click',()=>{
-                    this.actions.getInprocessData();
+                    this.el.find( '.icon-aggrid-refresh' ).addClass('refresh-rotate');
+                    this.actions.getInprocessData(true);
                 } )
             }
             //对应关系保存
