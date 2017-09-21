@@ -19,10 +19,25 @@ $active-color: #1caeff;
                 background-color: #FFFFFF;
             }
             .nav-tabs {
-                width: calc(100%);
+                width: calc(100% - 110px);
                 a {
                     color: #666666;
                     background: #FFFFFF;
+                }
+            }
+            .new-window{
+                display: inline-block;
+                width: 100px;
+                line-height: 50px;
+                position: absolute;
+                right: 6px;
+                float: right;
+                text-align: center;
+                text-decoration: none;
+                color: $active-color;
+                font-size: 12px;
+                .new-window-icon{
+                    vertical-align: middle;
                 }
             }
         }

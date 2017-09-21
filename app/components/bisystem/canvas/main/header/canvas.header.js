@@ -16,7 +16,7 @@ let config = {
         name: '',
         views: [],
         editMode: window.config.bi_user === 'manager'? window.config.bi_user : false,
-        menus: {}
+        menus: {},
     },
     actions: {
         /**
@@ -71,7 +71,8 @@ let config = {
                 formData.append('file',$(context)[0].files[0]);
                 canvasCellService.importData(formData).then((res)=>{
                     if (res['success'] === 1) {
-                        msgbox.alert('上传成功');
+                        // msgbox.alert('上传成功');
+                        location.reload();
                     } else {
                         msgbox.alert(res['error']);
                     }
@@ -80,6 +81,12 @@ let config = {
         },
     ],
     afterRender() {
+
+        //新窗口隐藏新窗口图标
+        if(window === window.parent){
+            this.el.find('.new-window').hide();
+        }
+
         this.data.views = window.config.bi_views;
         // 渲染header视图列表
         this.data.views.forEach(viewData => {

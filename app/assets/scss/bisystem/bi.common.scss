@@ -57,6 +57,10 @@ html.bi, body.bi {
         @include icon;
         background: url('../../../assets/images/bisystem/save.png') no-repeat;
     }
+    .new-window-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/new-window.png') no-repeat;
+    }
     @media print {
         body * {
             visibility: visible !important;
