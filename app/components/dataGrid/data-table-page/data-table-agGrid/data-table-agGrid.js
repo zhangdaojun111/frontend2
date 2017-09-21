@@ -1860,6 +1860,8 @@ let config = {
                     let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
 
                     let title = '新增'
+                    console.log("*******8************")
+                    console.log(url);
                     this.actions.openSelfIframe( url,title );
                 } )
             }
