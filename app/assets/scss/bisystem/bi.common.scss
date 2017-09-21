@@ -1,10 +1,7 @@
 /**
  引用公共样式
  */
-@import "../core/reset.scss";
-@import "../core/jquery-ui-theme.scss";
-@import "../core/param.scss";
-@import "../core/common.scss";
+@import "../core/base";
 
 @mixin icon {
     display: inline-block;
@@ -55,6 +52,10 @@ html.bi, body.bi {
     .original-data-icon {
         @include icon;
         background: url('../../../assets/images/bisystem/original_data.png') no-repeat;
+    }
+    .save-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/save.png') no-repeat;
     }
     @media print {
         body * {

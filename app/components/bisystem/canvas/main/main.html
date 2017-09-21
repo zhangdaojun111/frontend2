@@ -6,8 +6,8 @@
     <!--<div class="switch-button singlepage"><a class="mat-fab btn-single" title="单页" href="javascript:;">单页</a></div>-->
     <!--<div class="switch-button multiplepage"><a class="mat-fab btn-multip" title="多页" href="javascript:;">多页</a></div>-->
     <!--{{else}}-->
-    {{#if editModeDialog}}
+    {{#unless editMode}}
     <div class="to-edit-page"><a class="mat-fab bi-manage-btn" title="编辑" href="javascript:;">编辑</a></div>
-    {{/if}}
+    {{/unless}}
     <!--{{/if}}-->
 </div>

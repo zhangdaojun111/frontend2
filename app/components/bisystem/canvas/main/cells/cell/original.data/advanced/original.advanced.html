@@ -1,36 +1,43 @@
 <div class="content form">
     <form class="pristine">
         <ul>
-            <li>
+            <li class="advanced-name">
                 <label>
                     <span>附加字段命名： </span>
-                    <input type="text" class="normal">
-                    <p>必须输入附加字段命名(至少2个)</p>
+                    <input type="text" class="normal" value="{{name}}">
                 </label>
+                <p class="error">必须输入附加字段命名(至少2个)</p>
             </li>
             <li>
                 <label>
                     <span>附加字段模板：</span>
                     <select class="normal">
-                        <option value="" selected></option>
-                        <option value="分组模板">分组模板</option>
+                        {{#each advancedDataTemplates}}
+                        <option value="{{advanced_compute this}}" {{advanced_compute_select this @root.compute_model}}>{{name}}</option>
+                        {{/each}}
                     </select>
-                    <p>必须输入附加字段模板</p>
                 </label>
             </li>
             <li>
                 <label>
                     <span>筛选数据：</span>
-                    <b>创建时间</b>
+                    <b>{{chartGroup.name}}</b>
                 </label>
             </li>
-            <li>
+            <li class="advanced-values">
+
                 <div class="values">
+                    <div class="error">请至少选择一个字段</div>
+                    {{#each data.yAxis}}
                     <p>
                         <label>
-                            <input type="checkbox" class="checkbox" value="2017-05-22">创建时间2017-05-22 16:50:11
+                            <b class="custom-checkbox">
+                                <input type="checkbox" class="checkbox" value="{{ename}}" {{advanced_compute_checked ename @root.content}}>
+                            </b>
+                            {{original_advanced_group_name @root.chartGroup.name ename}}
                         </label>
                     </p>
+                    {{/each}}
                 </div>
             </li>
         </ul>

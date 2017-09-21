@@ -7,7 +7,6 @@
 import '../../assets/scss/bisystem/bi.common.scss';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
-
 import Component from '../../lib/component';
 
 export class BiBaseComponent extends Component{

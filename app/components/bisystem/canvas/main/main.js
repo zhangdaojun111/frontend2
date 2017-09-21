@@ -5,7 +5,7 @@ import {CanvasCellsComponent} from './cells/canvas.cells';
 import {CanvasHeaderComponent} from './header/canvas.header';
 import {canvasCellService} from '../../../../services/bisystem/canvas.cell.service';
 import msgbox from '../../../../lib/msgbox';
-import {PMAPI, PMENUM} from "../../../../lib/postmsg";
+import {PMAPI} from "../../../../lib/postmsg";
 
 let config = {
     template: template,
@@ -15,7 +15,6 @@ let config = {
         headerComponents: {},
         editMode: window.config.bi_user === 'manager' ? window.config.bi_user : false,
         singleMode: window.location.href.indexOf('single') !== -1,
-        editModeDialog: true,
     },
     binds: [
         // 编辑模式
@@ -104,6 +103,7 @@ let config = {
         //根据判断是否单行模式加载header
         this.actions.headLoad();
         this.hideLoading();
+        console.log(window.config.bi_user);
     },
     beforeDestory:function () {
 
@@ -112,9 +112,6 @@ let config = {
 
 export class CanvasMain extends Component {
     constructor(data, events) {
-        if (window.location.href.indexOf('key') !== -1) {
-            config.data.editModeDialog = false;
-        }
         super(config, data, events);
     }
 }

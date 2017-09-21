@@ -1,6 +1,6 @@
-import template from './text.html';
+import template from './textarea.html';
 import {Base} from '../base';
-import './text.scss'
+import './textarea.scss'
 let config = {
     template: template,
     data: {
@@ -23,31 +23,30 @@ let config = {
     binds: [
         {
             event: 'input',
-            selector: 'input',
+            selector: 'textarea',
             callback: function (context) {
                 this.actions.onInput(context.value);
             }
         }
     ],
     afterRender(){
-        this.$input = this.el.find('input');
+        this.$textarea = this.el.find('textarea');
         this.$label = this.el.find('label');
     }
 }
 
-class Text extends Base {
+class Textarea extends Base {
     constructor(data, event) {
         super(config, data, event)
     }
 
     /**
      * 设置value
-     * @param value = input输入框值
      */
     setValue(value) {
         this.data.value = value;
-        this.$input.val(value);
+        this.$textarea.val(value);
     }
 }
 
-export {Text}
+export {Textarea}

@@ -1,0 +1,9 @@
+@media print {
+    .bi {
+        .component-bi-canvas-main {
+            .views-header {
+                display:none;
+            }
+        }
+    }
+}
