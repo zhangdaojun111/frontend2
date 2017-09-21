@@ -81,7 +81,6 @@ let config = {
          */
         updateOriginal(data) {
             let originalData = CanvasOriginalDataComponent.handleOriginalData(data);
-            console.log(this.data);
             Object.assign(this.data, originalData);
             this.reload();
         },
