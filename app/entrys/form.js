@@ -34,6 +34,9 @@ let FormEntrys = {
         this.buildId = config.id || '';//快捷添加的key
         this.btnType = config.btnType || 'new';//按钮
         this.viewMode=config.viewMode || '0';//aggrid权限
+
+
+        console.log(config);
     }
     ,
     //静态数据里是否有这个key
@@ -392,13 +395,9 @@ let FormEntrys = {
         console.timeEnd('获取表单数据的时间');
         console.time('form创建时间');
         //处理数据
-
             let data = this.mergeFormData(res[0], res[1]);
-
-
         //检查表单类型
             let template = await this.checkFormType(data, res);
-
         //发送审批记录
         Mediator.publish('workFlow:record_info', data);
         let formData = {
@@ -408,11 +407,7 @@ let FormEntrys = {
         let formBase = new FormBase(formData);
         this.childForm[this.tableId] = formBase;
         let $newWrap = this.el.find('.form-print-position');
-
-
-            formBase.render($newWrap);
-
-
+        formBase.render($newWrap);
         //通知父框架表单刷新完毕
         Mediator.publish('form:formAlreadyCreate', 'success');
         console.timeEnd('form创建时间');
