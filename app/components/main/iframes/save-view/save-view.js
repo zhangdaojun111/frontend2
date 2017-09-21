@@ -20,6 +20,7 @@ let config = {
         newHash:[],                 //按配置打开iframes
     },
     actions:{
+        //获取用户保存的视图（tabs组合）数据
         getUserViewList:function () {
             let that = this;
             TabService.getFavoriteList().done((result) => {
@@ -37,7 +38,7 @@ let config = {
                 that.actions.initList();
             })
         },
-
+        //根据当前视图数据渲染视图列表
         initList:function () {
             let $parent = this.el.find('.view-list');
             $parent.empty();
@@ -53,6 +54,7 @@ let config = {
                 $parent.append($container);
             }
         },
+        //将当前打开的标签组合保存为视图（不保存bi和日历）
         saveFavorite:function () {
             //过滤List中的bi和日历
             _.remove(this.data.currentIframesList,function (n) {
@@ -97,6 +99,7 @@ let config = {
                 }
             })
         },
+        //点击某个视图后展示该视图包含的tabs
         displayView:function (event) {
             //获取被点击的视图名称
             let name = event.currentTarget.attributes.view_id.value;
@@ -138,6 +141,7 @@ let config = {
                 SaveView.hide();
             }
         },
+        //根据id查找tabs的url和name
         findTabInfo:function (nodes,targetList) {
             for( let i=0; i < nodes.length; i++){
                 if(targetList.includes(nodes[i].ts_name ) || targetList.includes(nodes[i].table_id )){
@@ -162,6 +166,7 @@ let config = {
                 }
             }
         },
+        //根据点击事件删除视图
         deleteView:function (event) {
             let name = event.currentTarget.attributes.view_id.value;
             let favorlist = {};
@@ -178,6 +183,7 @@ let config = {
                 }
             })
         },
+        //用于删除重复名字的视图
         deleteViewByName:function(name){
             let favorlist = {};
             favorlist['name'] = name;

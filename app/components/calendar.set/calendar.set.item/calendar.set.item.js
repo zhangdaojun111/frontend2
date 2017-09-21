@@ -184,26 +184,23 @@ let config = {
                 }
             });
         },
+
         /**
          * 进入编辑状态
          */
         editableTrue:function(){
             this.el.find(".editor-items").attr("disabled", false);
-            // this.el.find('td').removeClass('unclick');
-            // this.el.find(".set-remind-method").removeClass('unclick');
-            // this.el.find('input').removeClass('unclick');
             this.data.staus = true;
         },
+
         /**
          * 非编辑状态
          */
         editableFalse:function(){
             this.el.find(".editor-items").attr("disabled", true);
-            // this.el.find("td").addClass('unclick');
-            // this.el.find(".set-remind-method").addClass('unclick');
-            // this.el.find('input').addClass('unclick');
             this.data.staus = false;
         },
+
         /**
          * 编辑
          */
@@ -263,6 +260,7 @@ let config = {
     afterRender: function () {
         this.data.staus = false;
         let _this = this;
+
         /**
          *附加显示字段下拉多选组件数据
          */
@@ -283,6 +281,7 @@ let config = {
 
         this.data.multiSelectMenu = new AutoSelect(select_item_data);
         this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
+
         /**
          *
          * 代表字段下拉单选组件数据

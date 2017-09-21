@@ -43,6 +43,9 @@ let config = {
     },
 
     actions: {
+        /**
+         * 保存提醒设置
+         */
         checkRemindStatus:function () {
             if( ( this.data.smsStatus === '1' && this.data.smsReciver.length === 0 ) || ( this.data.emailStatus === '1' && this.data.emailReciver.length === 0 ) ){
                 MSG.alert( "已开启提醒的收件人不能为空" );
@@ -90,7 +93,12 @@ let config = {
                 data: {sms: this.data.sms, email: this.data.email},
             });
         },
-        
+        /**
+         * 下拉多选数据
+         * @param dataSelected
+         * @param dataList
+         * @returns {Array}
+         */
         checkSelectedReciver: function (dataSelected, dataList) {
             let res = [];
             for(let d of dataList) {

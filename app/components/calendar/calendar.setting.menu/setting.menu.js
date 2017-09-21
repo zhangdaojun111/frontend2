@@ -19,7 +19,7 @@ let config = {
          * 加载左侧设置菜单栏
          */
         renderMenuList: function () {
-            this.destroyChildren();
+            //this.destroyChildren();
             this.data.list.forEach((data) => {
                 data.display = true;
                 let component = new FullMenuItem(_.defaultsDeep({}, data, {
@@ -33,15 +33,15 @@ let config = {
         }
     },
 
-    binds: [],
+    binds: [
+    ],
 
     afterRender: function () {
         this.$root = this.el.find('.root');
         this.actions.renderMenuList();
     },
-
-    firstAfterRender: function () {
-        this.originData = _.cloneDeep(this.data.list);
+    firstAfterRender: function() {
+        // this.originData = _.cloneDeep(this.data.list);
         // $(window).on('resize.menu', () => {
         //     let menu = this.el.find('.menu-full');
         //     menu.css({
@@ -52,14 +52,13 @@ let config = {
         //     });
         // });
     },
-
     beforeDestory: () => {
-        $(window).off('resize.menu')
+        // $(window).off('resize.menu')
     }
 }
 
 class SettingMenuComponent extends Component {
-    constructor(data) {
+    constructor(data){
         super(config, data);
     }
 }

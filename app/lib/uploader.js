@@ -168,8 +168,9 @@ class Uploader {
      * @param onprogress 进程回调
      *              function(event){} event.name,event.code,event.loaded,event.total
      * @param onCompleted 结束回调
+     * @param onError 报错回调
      */
-    upload(url, options, onprogress,onCompleted){
+    upload(url, options, onprogress,onCompleted,onError){
         let defaultOptions = {
             type: 'POST',
             url: url,
@@ -180,9 +181,9 @@ class Uploader {
             contentType: false,
             timeout: 60000,
             success:onCompleted,
-            error: function (error) {
+            error: onError?onError:(function (error) {
                 console.dir(error);
-            }
+            })
         };
 
         this.settings['options'] = _.defaultsDeep(options,defaultOptions);

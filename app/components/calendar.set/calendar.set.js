@@ -242,6 +242,7 @@ let config = {
                 }
             }
             CalendarSetService.resetCalendar(tableId, this.data.allRows).then(res => {
+                console.log(res);
                 if (res['success'] === 1) {
                     MSG.alert('重置成功');
                     setTimeout(() => {
@@ -356,6 +357,7 @@ let config = {
             callback: function (temp = this) {
                 this.el.find(".hide-btns").css("visibility", "visible");
                 $(temp).addClass("disabled");
+                $('.reset-btn').addClass("disabled").attr('disable','false');
                 for (let obj of this.data.childComponents) {
                     obj.actions.editable();
                 }
@@ -386,7 +388,6 @@ let config = {
                 for (let obj of this.data.childComponents) {
                     newAllRowsData.push(obj.data.rowSetData);
                 }
-                console.log(newAllRowsData);
                 this.actions.saveSetting(this.data.tableId, newAllRowsData);
             }
         }

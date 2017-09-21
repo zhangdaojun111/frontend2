@@ -118,7 +118,9 @@ let config = {
             else {
                 checkbox_a2.addClass("workflow_checked");
                 this.el.find(".checkbox_a2").attr("checked", true);
-                this.data.cancel_fields.splice($.inArray('approve', this.data.cancel_fields), 1);
+                console.log(this.data.cancel_fields);
+                _.pull(this.data.cancel_fields, 'approve');
+                console.log(this.data.cancel_fields);
                 Mediator.emit('calendar-left:approveData', {data: true});
             }
             Mediator.emit('calendar-left:unshowData', {data: this.data.cancel_fields});
@@ -129,36 +131,36 @@ let config = {
         /**
          *隐藏日历树
          */
-        hide_group: function (temp) {
-            let hide_type_id = temp.attr("id").split('-');
-            let hide_table_name = "";
-            let hide_table_id = hide_type_id[2];
-            hide_type_id = "#select-all-block-" + hide_type_id[2];
-            this.el.find(hide_type_id + " .select-head").removeClass("label-select-all-show");
-            let that = this;
-            temp.closest(".float-button-group").next(".checkbox-group").find(".select-label-children").each(function () {
-                let filedId = $(this).attr("id").split("-")[2];
-                if (that.data.cancel_fields.indexOf(filedId) === -1) {
-                    that.data.cancel_fields.push(filedId);
-                }
-            });
-            this.el.find(hide_type_id).hide();
-            this.actions.remindShow();
-            for (let j = 0; j < this.data.rows.length; j++) {
-                if (hide_table_id === this.data.rows[j].table_id) {
-                    hide_table_name = this.data.rows[j].table_name;
-                }
-            }
-            this.data.hide_table = {'tableName': hide_table_name, 'table_Id': hide_table_id};
-            this.data.hide_item_table.push(hide_table_id);
-            this.data.hide_tables.push(this.data.hide_table);
-            let preferenceHide = {"content": this.data.hide_item_table};
-            let preference = {"content": this.data.cancel_fields, contentHide: preferenceHide};
-            CalendarService.getCalendarPreference(preference);
-            Mediator.emit('calendar-left:hideRemindType', {data: this.data.hide_table});
-            Mediator.emit('calendar-left:unshowData', {data: this.data.cancel_fields});
-            this.data.hide_table = {'tableName': "", 'table_Id': ''}
-        },
+        // hide_group: function (temp) {
+        //     let hide_type_id = temp.attr("id").split('-');
+        //     let hide_table_name = "";
+        //     let hide_table_id = hide_type_id[2];
+        //     hide_type_id = "#select-all-block-" + hide_type_id[2];
+        //     this.el.find(hide_type_id + " .select-head").removeClass("label-select-all-show");
+        //     let that = this;
+        //     temp.closest(".float-button-group").next(".checkbox-group").find(".select-label-children").each(function () {
+        //         let filedId = $(this).attr("id").split("-")[2];
+        //         if (that.data.cancel_fields.indexOf(filedId) === -1) {
+        //             that.data.cancel_fields.push(filedId);
+        //         }
+        //     });
+        //     this.el.find(hide_type_id).hide();
+        //     this.actions.remindShow();
+        //     for (let j = 0; j < this.data.rows.length; j++) {
+        //         if (hide_table_id === this.data.rows[j].table_id) {
+        //             hide_table_name = this.data.rows[j].table_name;
+        //         }
+        //     }
+        //     this.data.hide_table = {'tableName': hide_table_name, 'table_Id': hide_table_id};
+        //     this.data.hide_item_table.push(hide_table_id);
+        //     this.data.hide_tables.push(this.data.hide_table);
+        //     let preferenceHide = {"content": this.data.hide_item_table};
+        //     let preference = {"content": this.data.cancel_fields, contentHide: preferenceHide};
+        //     CalendarService.getCalendarPreference(preference);
+        //     Mediator.emit('calendar-left:hideRemindType', {data: this.data.hide_table});
+        //     Mediator.emit('calendar-left:unshowData', {data: this.data.cancel_fields});
+        //     this.data.hide_table = {'tableName': "", 'table_Id': ''}
+        // },
 
         /**
          *隐藏日历树后，提醒选择状态

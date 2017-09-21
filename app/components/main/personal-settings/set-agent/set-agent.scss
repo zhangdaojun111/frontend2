@@ -31,8 +31,11 @@
                         line-height: 25px;
                     }
                     .treeview{
-                        padding: 10px 0 0 10px;
+                        padding-top: 5px;
                     }
+                    //.search-in-tree-hd{
+                    //    display: none;
+                    //}
                 }
             }
         }
@@ -71,14 +74,23 @@
 
                 .switch-prompt{
                     display: inline-block;
-                    margin-top: 20px;
-                    margin-left: 25px;
+                    float: left;
+                    margin: 20px 10px 0 25px;
                     color: black;
                 }
                 .single-select-group {
                     display: inline-block;
-                    input{
-                        cursor: pointer;
+                    height: 16px;
+                    line-height: 16px;
+                    box-sizing: border-box;
+                    margin-top: 17px;
+                    .custom-radio {
+                        float: left;
+                        margin-right: 3px;
+                    }
+                    .select-prompt{
+                        float: left;
+                        margin-right: 10px;
                     }
                 }
 

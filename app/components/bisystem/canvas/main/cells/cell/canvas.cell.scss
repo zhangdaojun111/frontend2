@@ -1,9 +1,9 @@
-$cellTitleSize: 14px;
+
 .cell {
     position: absolute;
     box-shadow: 0 1px 5px #ddd;
     background: #ffffff;
-    font-size: $cellTitleSize;
+    font-size: 14px;
     box-sizing: border-box;
     .bread-crumb-nav {
         position: relative;
@@ -12,9 +12,6 @@ $cellTitleSize: 14px;
         height: 20px;
         line-height: 20px;
         padding: 5px 10px;
-        .icon-back {
-            //display: none;
-        }
         .icon-group {
             position: absolute;
             right: 10px;
