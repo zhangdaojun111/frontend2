@@ -461,7 +461,7 @@ let config = {
             if (data[dfield].hasOwnProperty("options")) {
                 options = data[dfield]["options"];
             }
-            if (data[dfield].hasOwnProperty("group")) {
+            else if (data[dfield].hasOwnProperty("group")) {
                 options = data[dfield]["group"];
             }
             for (let key in options) {
@@ -633,7 +633,7 @@ let config = {
                 new_data[d] = old_data[d];
             }
             for (let key in new_data) {
-                if (this.data.data[key].effect && this.data.data[key].effect.length > 0) {
+                if (this.data.data[key].effect && this.data.data[key].effect.length > 0 && (this.data.data[key]['options'] || this.data.data[key]['group'])) {
                     new_data[key] = this.actions.getTextByOptionID(key, new_data[key]);
                 }
             }
