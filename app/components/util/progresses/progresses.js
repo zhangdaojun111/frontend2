@@ -8,14 +8,13 @@ let css=`
     margin:5px;
 }
 .progress-msg {
-    width:100px;
+    margin:0 2px;
+    width:150px;
     display: inline-block;
     white-space: nowrap; 
     overflow: hidden;
     text-overflow: ellipsis; 
-}
-.progress-msg .progress-text {
-    margin:0 5px;
+    vertical-align: text-bottom;
 }
 .progress-bottle {
     margin:0 5px;
@@ -32,18 +31,18 @@ export const progressConfig = {
     },
     binds:[
         {
-            event: 'click',
-            selector: '.button',
-            callback: function () {
-                PMAPI.sendToSelf({
-                    type: PMENUM.close_dialog,
-                    key: this.key,
-                    data: {
-                        confirm: true
-                    }
-                })
-            }
-        },{
+        //     event: 'click',
+        //     selector: '.button',
+        //     callback: function () {
+        //         PMAPI.sendToSelf({
+        //             type: PMENUM.close_dialog,
+        //             key: this.key,
+        //             data: {
+        //                 confirm: true
+        //             }
+        //         })
+        //     }
+        // },{
             event: 'click',
             selector:'.cancel-upload',
             callback: function (event) {
@@ -84,22 +83,22 @@ export const progressConfig = {
             }
         },
         update:function({fileId:i,progress:n}) {
-            this.el.find('#'+i).find('.progress-liquid').css('width',n+'%');
+            this.el.find('#'+i).find('.progress-liquid').css('width',n+'%').text(n+'%');
         },
         finish:function (i) {
             this.el.find('#'+i).find('.cancel-upload').remove();
             this.el.find('#'+i).find('.progress-bottle').html('传输完成').css('background-color','');
-            setTimeout(()=>{
-                if($(this.el.find('.process-bottle')).length == 0){
-                    PMAPI.sendToSelf({
-                        type: PMENUM.close_dialog,
-                        key: this.key,
-                        data: {
-                            confirm: true
-                        }
-                    })
-                }
-            },2000);
+            // setTimeout(()=>{
+            //     if($(this.el.find('.process-bottle')).length == 0){
+            //         PMAPI.sendToSelf({
+            //             type: PMENUM.close_dialog,
+            //             key: this.key,
+            //             data: {
+            //                 confirm: true
+            //             }
+            //         })
+            //     }
+            // },2000);
         },
         error:function ({msg:msg,fileId:i}) {
             this.el.find('#'+i).find('.progress-bottle').css('display','none');
