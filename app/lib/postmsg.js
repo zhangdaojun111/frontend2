@@ -285,11 +285,11 @@ export const PMAPI = {
     },
 
     /**
-     * 将消息发送给调用的父组件
+     * 将消息发送给调用的父组件,新框架如果是在非主框架上打开的话，关闭应该采用此方法
      * @param data
      */
     sendToRealParent: function (data) {
-        this.parent.postMessage(data, location.origin);
+        window.parent.postMessage(data, location.origin);
         return this;
     },
 

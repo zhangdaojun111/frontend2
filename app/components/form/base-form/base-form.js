@@ -1016,13 +1016,13 @@ let config = {
                 MSG.alert('保存成功')
                 Mediator.publish('updateForm:success:' + this.data.tableId, true);
                 if (this.data.isAddBuild && !this.flowId) {
-                    PMAPI.sendToParent({
+                    PMAPI.sendToRealParent({
                         type: PMENUM.close_dialog,
                         key: this.data.key,
                         data: {new_option: res.new_option},
                     });
                 } else {
-                    PMAPI.sendToParent({
+                    PMAPI.sendToRealParent({
                         type: PMENUM.close_dialog,
                         key: this.data.key,
                         data: 'success',
