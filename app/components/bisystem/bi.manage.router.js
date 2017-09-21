@@ -19,7 +19,6 @@ const BiAppRouter = Backbone.Router.extend({
         'forms/:chart/:id':'routerFormDynamicComponent',
         '':'routerViewsComponent',
     },
-
     routerViewsComponent(id) {
         if (canvasComponent) {
             canvasComponent.actions.destroyCanvasCells();

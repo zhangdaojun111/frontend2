@@ -4,6 +4,9 @@
 import Component from '../../../../../lib/component';
 import template from './canvas.header.html';
 import {CanvasHeaderMenuComponent} from './menu/canvas.header.menu';
+import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
+import msgbox from '../../../../../lib/msgbox';
+
 import './canvas.header.scss';
 
 let config = {
@@ -38,6 +41,7 @@ let config = {
             this.trigger('onAddCell', layout);
         },
 
+
     },
     binds: [
         //保存画布块
@@ -56,6 +60,22 @@ let config = {
             callback: function (context, event) {
                 this.actions.addCell();
                 return false;
+            }
+        },
+        {
+            // 导入数据
+            event: 'change',
+            selector: '#form-data',
+            callback: function (context, event) {
+                let formData = new FormData();
+                formData.append('file',$(context)[0].files[0]);
+                canvasCellService.importData(formData).then((res)=>{
+                    if (res['success'] === 1) {
+                        msgbox.alert('上传成功');
+                    } else {
+                        msgbox.alert(res['error']);
+                    }
+                })
             }
         },
     ],
