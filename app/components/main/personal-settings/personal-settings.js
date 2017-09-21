@@ -12,7 +12,7 @@ import {UserInfoService} from '../../../services/main/userInfoService';
 import msgbox from '../../../lib/msgbox';
 import {AvatarSet} from './set-avatar/set-avatar';
 import {agentSetting} from './set-agent/set-agent';
-import OtherLogin from "../login-by-other/login-by-other";
+import {LoginByOther} from "../login-by-other/login-by-other";
 import Mediator from '../../../lib/mediator';
 import {PMAPI} from '../../../lib/postmsg';
 import userInfoDisplay from './user-info-display/user-info-display';
@@ -37,8 +37,8 @@ let config = {
         targetUserName:'',
     },
     actions:{
+        // 初始化，检测用户头像路径返回值，没有则显示默认头像
         initInfo:function () {
-            // 初始化，检测用户头像路径返回值，没有则显示默认头像
             let src = this.data.avatar;
             if(src !== ''){
                 let $img = $("<img>").addClass("user-avatar");
@@ -56,18 +56,22 @@ let config = {
         onImageError: function () {
 
         },
+        //打开头像设置界面
         setAvatar(){
             AvatarSet.show();
         },
+        //打开代理设置界面
         setAgent(){
             agentSetting.show();
         },
+        //切换到个人信息界面
         showPersonalInfo:function () {
             this.el.find("div.personal-info").show();
             this.el.find("div.modify-password").hide();
             this.el.find("div.show-personal-info").addClass("active");
             this.el.find("div.show-modify-password").removeClass("active");
         },
+        //切换到密码修改界面
         showModifyPassword:function () {
             this.el.find("div.personal-info").hide();
             this.el.find("div.modify-password").show();
@@ -80,9 +84,11 @@ let config = {
         //     this.el.find("div.personal-foot").hide();
         //     this.el.find("div.cancel-save").show();
         // },
+        //编辑email
         editEmail:function () {
             this.el.find("input.email-info").removeAttr("disabled").focus();
         },
+        //编辑tel
         editTel:function () {
             this.el.find("input.phone-info").removeAttr("disabled").focus();
         },
@@ -94,6 +100,7 @@ let config = {
         //     this.el.find("div.personal-foot").show();
         //     this.el.find("div.cancel-save").hide();
         // },
+        //保存编辑结果
         saveEdit:function () {
             this.data.user_email = this.el.find("input.email-info").val();
             this.data.user_phone = this.el.find("input.phone-info").val();
@@ -116,6 +123,7 @@ let config = {
                 console.log("修改失败",err);
             })
         },
+        //检测修改密码填写是否合法
         isLegal:function () {
             let newPw = this.el.find("input.new-pw").val();
             if(newPw !== ''){
@@ -126,6 +134,7 @@ let config = {
               this.el.find("span.ps-warn").show();
             }
         },
+        //修改密码
         modifyPassword:function () {
             let originPw = this.el.find("input.origin-pw").val();
             let newPw = this.el.find("input.new-pw").val();
@@ -149,18 +158,21 @@ let config = {
                 console.log(err);
             })
         },
+        //显示他人登录界面
         otherLogin:function () {
-            OtherLogin.show();
+            LoginByOther.show();
         },
-        initAvatar:function () {
-            let src = this.data.avatar;
-            this.el.find("img.user-avatar")
-                .attr("src",src)
-        },
+        // //初始化头像
+        // initAvatar:function () {
+        //     let src = this.data.avatar;
+        //     this.el.find("img.user-avatar")
+        //         .attr("src",src)
+        // },
         // clearLocalStorage:function(){
         //     window.localStorage.clear();
         //     $(window).attr("location","/login");
         // },
+        //根据监听到的频道信息重置头像
         resetAvatar:function () {
             let $img = this.el.find("img.user-avatar");
             if($img.length === 0){
@@ -271,7 +283,7 @@ let config = {
     ],
     afterRender:function () {
         this.actions.initInfo();
-        this.actions.initAvatar();
+        // this.actions.initAvatar();
     },
     firstAfterRender:function () {
         //窗口监听来自子窗口的设置头像的消息

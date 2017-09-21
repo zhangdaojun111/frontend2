@@ -1,4 +1,4 @@
-import {BiBaseComponent} from '../../bi.base.component';
+import Component from '../../../../lib/component';
 
 import template from "./item.html";
 import {ViewsService} from "../../../../services/bisystem/views.service";
@@ -7,6 +7,7 @@ import msgbox from "../../../../lib/msgbox";
 import Mediator from '../../../../lib/mediator';
 
 import {PMAPI} from "../../../../lib/postmsg";
+import './item.scss';
 
 let config = {
     template:template,
@@ -25,7 +26,7 @@ let config = {
                 data.view_id = this.data.id;
                 ViewsService.delData(data).then((res)=>{
                     if(res['success']===1){
-                        Mediator.publish('bi:views:update', {'view': 'remove', data: this.data});
+                        this.trigger('onDelete',this.data);
                         this.destroySelf();
                     }else{
                         alert(res['error']);
@@ -48,7 +49,7 @@ let config = {
                 ViewsService.update(res).then((val) => {
                     if(val['success']===1){
                         this.data = res;
-                        Mediator.publish("bi:views:update", this.data);
+                        this.trigger('onUpdate',this.data);
                         this.reload();
                     }else{
                         alert(val['error'])
@@ -75,14 +76,15 @@ let config = {
             }
         }
     ],
-    afterRender(){},
+    afterRender(){
+
+    },
     firstAfterRender(){}
 };
 
 
-export class ViewItemComponent extends BiBaseComponent{
-    constructor(item) {
-        config.data = item? item : null;
-        super(config);
+export class ViewItemComponent extends Component{
+    constructor(data,events) {
+        super(config,data,events);
     }
 }

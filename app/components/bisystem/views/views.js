@@ -1,4 +1,4 @@
-import {BiBaseComponent} from '../bi.base.component';
+import Component from '../../../lib/component';
 
 import {ViewItemComponent} from "./item/item";
 
@@ -15,6 +15,7 @@ let config = {
     data:{
         views:window.config.bi_views,
         chart_id:"",
+
     },
     actions:{
         /**
@@ -76,36 +77,34 @@ let config = {
     afterRender(){
         //渲染列表数据
         this.data.views.forEach((val,index) => {
-            let viewItemComponent = new ViewItemComponent(val);
+            let viewItemComponent = new ViewItemComponent(val,{
+                onDelete: (res)=>{
+                    let views = this.data.views;
+                    _.remove(views,function (val) {
+                        return res.id === val.id;
+                    });
+                    window.config.bi_views = views;
+                },
+                onUpdate: (res)=>{
+                    let views = this.data.views;
+                    _.filter(views,function (val){
+                        if(res.id === val.id){
+                            return val.name = res.name;
+                        }
+                    });
+                    window.config.bi_views = views;
+                },
+            });
             this.append(viewItemComponent,this.el.find('.view-list'));
         });
     },
-    firstAfterRender() {
-        Mediator.subscribe("bi:views:update", (res) => {
-            let views = this.data.views;
-            if (res.view === 'remove') {
-                for(let [index,view] of views.entries()) {
-                    if (res.data.id === view.id) {
-                        views.splice(index,1);
-                        break;
-                    }
-                }
-            }else{
-                for(let [index,view] of views.entries()) {
-                    if (res.id === view.id) {
-                        view.name = res.name;
-                        break;
-                    }
-                }
-            }
-            window.config.bi_views = views;
-        });
-    }
+    firstAfterRender() {},
+    beforeDestory() {}
 };
 
-export class ViewsEditComponent extends BiBaseComponent{
-    constructor() {
-        super(config)
+export class ViewsEditComponent extends Component{
+    constructor(data,events) {
+        super(config,data,events)
     }
 }
 
