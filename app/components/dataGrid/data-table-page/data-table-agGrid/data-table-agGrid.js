@@ -2528,7 +2528,7 @@ let config = {
             this.col_id=data.data._id;
             this.colDef=arr;
             //行选择
-            if(data.colDef.headerName != "操作"){
+            if(data.colDef.headerName != "操作" && !this.data.editMode){
                 dgcService.rowClickSelect( data )
             }
 
