@@ -2,7 +2,6 @@
  *@author chenli
  *@description 日期控件
  */
-
 import Component from '../../../lib/component'
 import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui-timepicker-addon';
@@ -11,11 +10,9 @@ import '../base-form/base-form.scss'
 import template from './date-control.html';
 import './date-control.scss';
 import msgbox from '../../../lib/msgbox';
-
 let config = {
     template: template,
     data:{
-
     },
     actions: {
         //时间日期输入错误提示，暂时先去掉
@@ -50,7 +47,6 @@ let config = {
         //         // this.el.find("#errorMessage").css("display","inline-block").text("时间格式不正确,正确格式为: 2017-09-01") ;
         //     }
         // }
-
     },
     binds: [
         {
@@ -64,54 +60,42 @@ let config = {
             event: 'click',
             selector: '.date_yy-mm-dd',
             callback: function () {
-                let _this = this;
+                debugger
                 let e = new Date();
                 let year = e.getFullYear();
                 let month = (e.getMonth() + 101 + "").slice(1);
                 let day = (e.getDate() + 100 + "").slice(1);
                 let str = year + "-" + month + "-" + day;
-                if (!_this.data.value || (_this.data.value == '请选择')) {
-                    _this.el.find(".date_yy-mm-dd").val(str);
+                if (!this.data.value || (this.data.value == '请选择')) {
+                    debugger
+                    this.el.find(".date_yy-mm-dd").val(str);
                 }
             }
         },
     ],
     afterRender() {
         let _this = this;
-        // $('img.ui-datepicker-trigger').click(function () {
-        //     let e = new Date();
-        //     let year = e.getFullYear();
-        //     let month = (e.getMonth() + 101 + "").slice(1);
-        //     let day = (e.getDate() + 100 + "").slice(1);
-        //     let str = year + "-" + month + "-" + day;
-        //     if (!_this.data.value || (_this.data.value == '请选择')) {
-        //         _this.el.find(".date_yy-mm-dd").val(str);
-        //     }
-        // })
         this.el.find('.ui-width').css('width', this.data.width);
-
         if(! this.data.isCalendar && !this.data.isAgGrid && this.data.history){
             this.el.find('.ui-history').css('visibility','visible');
         }
         if(this.data.isCalendar || this.data.isAgGrid) {
             this.el.find('.ui-history').css('visibility','hidden');
         }
-
         if (this.data.is_view) {
             this.el.find('.ui-width').attr('disabled', true);
             this.el.find('.component-date-control').css('pointer-events','none');
         } else {
             this.el.find('.ui-width').attr('disabled', false);
         }
-
         //回显
         if (_this.data.value) {
             _this.el.find(".date_yy-mm-dd").val(_this.data.value);
-        } else {
+        }
+        else {
             _this.el.find(".date_yy-mm-dd").val("年-月-日");
         }
         //控制到年月日
-
         _this.el.find(".date_yy-mm-dd").datepicker({
             monthNamesShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
             dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
@@ -132,7 +116,6 @@ let config = {
             dateFormat: "yy-mm-dd",
             defaultDate: new Date(_this.data.value),
             showOn: 'both',//设置触发选择器为button/focus
-
             //buttonImage:"../../../assets/images/form/icon-rili.png",
             buttonImage: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAAbElEQVQ4y6VT0QoAIQibR9/qP+XP7p68h7C0cxDEYsrYEpLo4IlIM2OFA4CxPqqqrKKIc35Ewgrng0IL1WGfhZPHDCPbsMPRQitGM6NP393THlyBJOacJImb45qyhasq/4oxirMSbbtI0v3OL3+8d/U3+COTAAAAAElFTkSuQmCC",
             buttonImageOnly: true,
@@ -141,11 +124,10 @@ let config = {
             onSelect: function (selectTime, text) {
                 _this.el.find("#errorMessage").css("display","none");
                 let selectTime1 = selectTime;
-                    _this.data.value = selectTime.replace(/\//g, "-");
-                    _.debounce(function () {
-                        _this.events.changeValue(_this.data)
-                    }, 200)();
-
+                _this.data.value = selectTime.replace(/\//g, "-");
+                _.debounce(function () {
+                    _this.events.changeValue(_this.data)
+                }, 200)();
                 if (_this.data.value.length > 10) {
                     _this.data.value = '';
                 }
@@ -160,29 +142,24 @@ let config = {
                     if (_this.data['timeType'] == 'after') {
                         if (selectTime < currentTime) {
                             msgbox.alert("所选日期不能早于当前日期！");
-
-                                _this.data.value = "请选择";
-                                _.debounce(function () {
-                                    _this.events.changeValue(_this.data)
-                                }, 200)();
-
+                            _this.data.value = "请选择";
+                            _.debounce(function () {
+                                _this.events.changeValue(_this.data)
+                            }, 200)();
                         }
                     } else if (_this.data['timeType'] == 'before') {
                         if (selectTime > currentTime) {
                             msgbox.alert("所选日期不能晚于当前日期！");
-
-                                _this.data.value = "请选择";
-                                _.debounce(function () {
-                                    _this.events.changeValue(_this.data)
-                                }, 200)();
-
-                        }
-                    } else if (_this.data['timeType'] == 'all') {
-                            _this.data.value = selectTime1.replace(/\//g, "-");
+                            _this.data.value = "请选择";
                             _.debounce(function () {
                                 _this.events.changeValue(_this.data)
                             }, 200)();
-
+                        }
+                    } else if (_this.data['timeType'] == 'all') {
+                        _this.data.value = selectTime1.replace(/\//g, "-");
+                        _.debounce(function () {
+                            _this.events.changeValue(_this.data)
+                        }, 200)();
                     }
                 } else {
                     console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', 'date-control');
@@ -255,20 +232,17 @@ let config = {
                 }
             },
         });
-
         // _this.el.find('.date_yy-mm-dd').on('input', _.debounce(function () {
         //     _this.actions.keyup();
         // }, 200));
-
     },
     beforeDestory: function () {
         this.el.off();
     }
 }
 export default class DateControl extends Component {
-
     constructor(data, events) {
-       // debugger;
+        // debugger;
         super(config, data, events);
     }
 }
