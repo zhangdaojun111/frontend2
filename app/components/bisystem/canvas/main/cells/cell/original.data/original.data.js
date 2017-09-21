@@ -76,12 +76,12 @@ let config = {
                 };
             }
         },
-
         /**
          * 当下穿数据时更新数据
          */
         updateOriginal(data) {
             let originalData = CanvasOriginalDataComponent.handleOriginalData(data);
+            console.log(this.data);
             Object.assign(this.data, originalData);
             this.reload();
         },
