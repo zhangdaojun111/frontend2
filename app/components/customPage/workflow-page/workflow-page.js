@@ -24,6 +24,7 @@ let config = {
         tableId: '',
         columnDefs: [],
         rowData:[],
+        footerData:[],
         fieldsData:[],
         rows: 100,
         total: 0,
@@ -195,6 +196,7 @@ let config = {
             let gridData = {
                 columnDefs: this.data.columnDefs,
                 rowData: this.data.rowData,
+                footerData: this.data.footerData,
                 fieldsData: this.data.fieldsData,
                 floatingFilter: true,
                 onColumnResized: this.actions.onColumnResized,
