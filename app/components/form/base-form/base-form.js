@@ -1038,6 +1038,7 @@ let config = {
 
         //转到编辑模式
         async changeToEdit() {
+            console.log('baseform 1041');
             let json = {
                 table_id: this.data.tableId,
                 real_id: this.data.realId,

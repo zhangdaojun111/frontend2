@@ -16,6 +16,7 @@ import {LoginByOther} from "../login-by-other/login-by-other";
 import Mediator from '../../../lib/mediator';
 import {PMAPI} from '../../../lib/postmsg';
 import userInfoDisplay from './user-info-display/user-info-display';
+import {PasswordInput} from "../../util/passwordInput/password-input"
 
 function getData(component_instance) {
     _.defaultsDeep(component_instance.data, {
@@ -35,6 +36,7 @@ let config = {
     template:template,
     data:{
         targetUserName:'',
+        isCapsLock:false,
     },
     actions:{
         /**
@@ -78,6 +80,10 @@ let config = {
             this.el.find("div.modify-password").hide();
             this.el.find("div.show-personal-info").addClass("active");
             this.el.find("div.show-modify-password").removeClass("active");
+            //清空密码界面的input
+            this.old_pswInput.actions.resetInput();
+            this.new_pswInput.actions.resetInput();
+            this.confirm_new_pswInput.actions.resetInput();
         },
         /**
          * 切换到密码修改界面
@@ -140,26 +146,12 @@ let config = {
             })
         },
         /**
-         * 检测修改密码填写是否合法
-         */
-        isLegal:function () {
-            let newPw = this.el.find("input.new-pw").val();
-            if(newPw !== ''){
-              this.el.find("button.confirm-btn").removeAttr("disabled");
-              this.el.find("span.ps-warn").hide();
-            }else{
-              this.el.find("button.confirm-btn").attr("disabled",true);
-              this.el.find("span.ps-warn").show();
-            }
-        },
-        /**
          * 修改密码
          */
         modifyPassword:function () {
-            let originPw = this.el.find("input.origin-pw").val();
-            let newPw = this.el.find("input.new-pw").val();
-            let confirmNewPw = this.el.find("input.confirm-new-pw").val();
-
+            let originPw = this.old_pswInput.data.password_value;
+            let newPw = this.new_pswInput.data.password_value;
+            let confirmNewPw = this.confirm_new_pswInput.data.password_value;
             let result = this.actions.checkPasswordLegal(originPw,newPw,confirmNewPw);
             if(result === true){
                 let data = {
@@ -174,7 +166,7 @@ let config = {
                         msgbox.alert("密码修改成功！");
                         PersonSetting.hide();
                     }else{
-                        msgbox.alert(result.error)
+                        msgbox.alert(result.error);
                     }
                 }).fail((err) => {
                     console.log(err);
@@ -199,7 +191,22 @@ let config = {
         //     window.localStorage.clear();
         //     $(window).attr("location","/login");
         // },
+        initPasswordPage:function () {
+            //初始化旧密码框
+            let $wrap1 = this.el.find('.old-pw-group');
+            this.old_pswInput = new PasswordInput({title:'旧密码'});
+            this.old_pswInput.render($wrap1);
 
+            //初始化新密码框
+            let $wrap2 = this.el.find('.new-pw-group');
+            this.new_pswInput = new PasswordInput({title:'新密码',rule:'(密码长度限制在6-16位)'});
+            this.new_pswInput.render($wrap2);
+
+            //初始化确认新密码框
+            let $wrap3 = this.el.find('.confirm-new-pw-group');
+            this.confirm_new_pswInput = new PasswordInput({title:'确认新密码'});
+            this.confirm_new_pswInput.render($wrap3);
+        },
         /**
          * 根据监听到的频道信息重置头像
          */
@@ -220,37 +227,17 @@ let config = {
          * @param confirmNewPw
          */
         checkPasswordLegal:function (originPw,newPw,confirmNewPw) {
-            if(originPw === newPw){
-                msgbox.alert('新旧密码一致，请修改');
-                return false;
-            }
-            if(this.actions.checkLegalChar(newPw) === false){
-                msgbox.alert('密码中不能包含特殊字符，请修改');
+            if(!(this.old_pswInput.data.isLegal && this.new_pswInput.data.isLegal && this.confirm_new_pswInput.data.isLegal)){
+                msgbox.alert('密码填写有误，请按提示进行修改');
                 return false;
             }
 
-            if(this.actions.checkPwLength(newPw) === false){
-                msgbox.alert('密码长度必须是6-16位，请修改');
+            if(originPw === newPw){
+                msgbox.alert('新旧密码一致，请修改');
+                // this.el.find('.save-password-warning').val('新旧密码一致，请修改');
                 return false;
             }
             return true;
-        },
-        /**
-         * 验证密码合法性0-9 a-z A-Z
-         * @param pw
-         * @returns {boolean}
-         */
-        checkLegalChar:function(pw){
-            let reg = /^[a-z0-9]+$/i;
-            return reg.test(pw);
-        },
-        /**
-         * 验证密码长度
-         * @param pw
-         */
-        checkPwLength:function (pw) {
-            let reg = /^[a-z0-9]{6,16}$/i;
-            return reg.test(pw);
         },
         // getTargetInfo:function () {
         //     UserInfoService.getUserInfoByName(this.data.targetUserName).done((result) => {
@@ -342,16 +329,11 @@ let config = {
             callback:_.debounce(function(){             //修改密码确认
                 this.actions.modifyPassword();
             },500),
-        },{
-            event:'input',
-            selector:'.new-pw',
-            callback:function(){
-                this.actions.isLegal();         //监听新密码的输入
-            }
         }
     ],
     afterRender:function () {
         this.actions.initInfo();
+        this.actions.initPasswordPage();
         // this.actions.initAvatar();
     },
     firstAfterRender:function () {
