@@ -73,12 +73,21 @@ let config = {
                 if (!_this.data.value || (_this.data.value == '请选择')) {
                     _this.el.find(".date_yy-mm-dd").val(str);
                 }
-
             }
         },
     ],
     afterRender() {
         let _this = this;
+        // $('img.ui-datepicker-trigger').click(function () {
+        //     let e = new Date();
+        //     let year = e.getFullYear();
+        //     let month = (e.getMonth() + 101 + "").slice(1);
+        //     let day = (e.getDate() + 100 + "").slice(1);
+        //     let str = year + "-" + month + "-" + day;
+        //     if (!_this.data.value || (_this.data.value == '请选择')) {
+        //         _this.el.find(".date_yy-mm-dd").val(str);
+        //     }
+        // })
         this.el.find('.ui-width').css('width', this.data.width);
 
         if(! this.data.isCalendar && !this.data.isAgGrid && this.data.history){
