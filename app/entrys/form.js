@@ -372,11 +372,11 @@ let FormEntrys = {
         let html = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"><div class="form-print-position"></div></div>`).prependTo(this.el);
         let res;
         //如果不处于工作流中
-        // if (!this.fromWorkFlow) {
-        //     //获取表单的form_id
-        //     res = await  FormService.getPrepareParmas({table_id: this.tableId});
-        //     this.findFormIdAndFlowId(res);
-        // }
+        if (!this.fromWorkFlow) {
+            //获取表单的form_id
+            res = await  FormService.getPrepareParmas({table_id: this.tableId});
+            this.findFormIdAndFlowId(res);
+        }
         let json = this.createPostJson();
         res = await FormService.getFormData(json);
         //将表单名称发送给工作流
