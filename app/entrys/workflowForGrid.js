@@ -48,7 +48,8 @@ const workflowForGrid={
         Mediator.subscribe('workFlow:record_info', (res) => {
             ApprovalHeader.showheader(res.record_info);
             WorkflowRecord.showRecord(res.record_info);
-            if(res.record_info.current_node!=window.config.name){
+            let current_node_arr = res.record_info.current_node.split('、');
+            if(current_node_arr.indexOf(window.config.name)==-1){
                 $('#approval-workflow').find('.for-hide').hide();
             };
             if(res.record_info.status==="已驳回到发起人"&&res.record_info.start_handler===window.config.name){
