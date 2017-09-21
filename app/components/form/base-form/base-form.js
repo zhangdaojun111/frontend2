@@ -939,22 +939,6 @@ let config = {
                 }
             }
         },
-        //拼接其他字段
-        montageOtherFields(formDataNew) {
-            data = {};
-            for (let key in this.data.dataOfOtherFields) {
-                data[key] = this.data.dataOfOtherFields[key];
-            }
-            for (let key in data) {
-                if (key == "temp_id" && !data["temp_id"]) {
-                    continue;
-                }
-                data[key] = data[key];
-            }
-            data['temp_id'] = data['temp_id'];
-            //如果有其他字段的数据，这里是拼this.data.formData
-            formDataNew = formDataNew.concat(this.data.formDataOfOtherFields);
-        },
         //快捷添加后回显
         addNewItem(data) {
             let dfield = this.data['quikAddDfield'];
@@ -984,9 +968,6 @@ let config = {
             let data = this.actions.handleFormData(formValue);
             let formDataNew = this.data.oldData;
             //如果有其他字段的数据，这里是拼approvedFormData
-            if (this.data.hasOtherFields == '1') {
-                this.actions.montageOtherFields(formDataNew);
-            }
             this.actions.checkDateType(formValue);
             console.log('cc  ',formValue)
             let obj_new = this.actions.createCacheData(formDataNew, data, true, this);
