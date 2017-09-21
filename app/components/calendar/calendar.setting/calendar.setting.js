@@ -17,6 +17,7 @@ let config = {
     data: {
         menu: [],
         isHide: true,
+        calendarSet: []
     },
     actions: {
         getFilterMenu: function (keyValue, subMenu) {
@@ -93,10 +94,11 @@ let config = {
         Mediator.on('calendar-set-left:calendar-set', data => {
             this.el.find('.form-title').html('【' + data.label + '】');
             this.el.find('.calendar-setting-item-content').empty();
-            this.append(new CalendarSet(data.data), this.el.find('.calendar-setting-item-content'));
+            this.append(new CalendarSet(data.table_id), this.el.find('.calendar-setting-item-content'));
         });
     },
     beforeDestory: function () {
+        debugger;
         Mediator.removeAll('calendar-set-left:calendar-set');
     }
 };
