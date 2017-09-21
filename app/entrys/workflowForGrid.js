@@ -80,7 +80,8 @@ const workflowForGrid={
                         nameArr.push(`<span class="selectSpan">${users.rows[focus[i]].name}</span>`);
                     }
                     $('#add-home #addFollowerList').html(nameArr);
-                    if(nameArr.indexOf(window.config.name)>-1&&window.config.name!=res.record_info.current_node){
+                    let current_node_arr = res.record_info.current_node.split('、');
+                    if(nameArr.indexOf(window.config.name)>-1&&current_node_arr.indexOf(window.config.name)==-1){
                         $('#approval-workflow').find('.for-hide').hide();
                         $('#approval-workflow').find('#re-app').hide();
                     };
