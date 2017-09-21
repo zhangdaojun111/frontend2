@@ -35,6 +35,7 @@ let config = {
             let isShift = e.shiftKey || (keyCode === 16 ) || false;
             if(((keyCode >= 65 && keyCode <= 90 ) && !isShift) || (( keyCode >= 97 && keyCode <= 122 ) && isShift)){
                 $capitalTip.show();
+                this.actions.setBubblePopup();
                 this.data.isCapsLockOpen = true;
             } else{
                 this.data.isCapsLockOpen = false;
@@ -53,6 +54,7 @@ let config = {
                     $capitalTip.hide();
                 } else {
                     this.data.isCapsLockOpen = true;
+                    this.actions.setBubblePopup();
                     $capitalTip.show();
                 }
             }
@@ -108,23 +110,10 @@ let config = {
             this.el.find('.set-password-input').val('');
             this.el.find('.input-password-warning').html('');
             this.el.find('.caps-lock-tips').hide();
+        },
+        setBubblePopup:function () {
+            
         }
-        // setBubblePopup:function () {
-        //     this.el.find('.set-password-input').tooltip({
-        //         position: {
-        //             my: "center bottom-20",
-        //             at: "center top",
-        //             using: function( position, feedback ) {
-        //                 $( this ).css( position );
-        //                 $( "<div>" )
-        //                     .addClass( "arrow" )
-        //                     .addClass( feedback.vertical )
-        //                     .addClass( feedback.horizontal )
-        //                     .appendTo( this );
-        //             }
-        //         }
-        //     });
-        // }
     },
     binds:[
         {
