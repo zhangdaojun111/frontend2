@@ -2528,7 +2528,7 @@ let config = {
             this.col_id=data.data._id;
             this.colDef=arr;
             //行选择
-            if(data.colDef.headerName != "操作"){
+            if(data.colDef.headerName != "操作" && !this.data.editMode){
                 dgcService.rowClickSelect( data )
             }
 
@@ -3003,6 +3003,7 @@ let config = {
         },
         //打开局部的弹窗
         openSelfIframe: function ( url,title,w,h ) {
+            this.actions.setInvalid();
             PMAPI.openDialogToSelfByIframe( url,{
                     width: w || 1400,
                     height: h || 800,
