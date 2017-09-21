@@ -67,7 +67,7 @@ let config = {
                 return;
             }
             console.log('过来楼');
-            this.data.isBtnClick=true;
+            this.data.isBtnClick=false;
             this.actions.onSubmit();
         }
     }, {
@@ -969,7 +969,6 @@ let config = {
             let formDataNew = this.data.oldData;
             //如果有其他字段的数据，这里是拼approvedFormData
             this.actions.checkDateType(formValue);
-            console.log('cc  ',formValue)
             let obj_new = this.actions.createCacheData(formDataNew, data, true, this);
             let obj_old = this.actions.createCacheData(formDataNew, data, false, this);
             this.actions.changeValueForChildTable(data);
