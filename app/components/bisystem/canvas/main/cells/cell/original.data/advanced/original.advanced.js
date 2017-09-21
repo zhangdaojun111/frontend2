@@ -61,6 +61,7 @@ let config = {
         content: [], // 选中的高级计算字段列表,
         compute_model: null, //高级计算模版
     },
+
     binds:[
         {  //保存高级计算
             event:'click',
