@@ -127,9 +127,11 @@ let config = {
         },
     ],
     afterRender() {
-        this.data.compute_model = JSON.stringify({
-            'id': this.data.advancedDataTemplates[0].id, 'name': this.data.advancedDataTemplates[0].name
-        });
+        if (this.data.advancedDataTemplates[0]) {
+            this.data.compute_model = JSON.stringify({
+                'id': this.data.advancedDataTemplates[0].id, 'name': this.data.advancedDataTemplates[0].name
+            });
+        };
     },
     firstAfterRender() {},
     beforeDestory() {}
