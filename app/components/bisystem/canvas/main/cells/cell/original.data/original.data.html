@@ -30,8 +30,8 @@
                             <span data-type="{{@root.sortType}}">
                                 {{name}}
                                 {{#if @root.showSortArrow}}
-                                <i class="bi-icon-up {{original_deep_equal @root.sortType 'asc'}}"></i>
-                                <i class="bi-icon-down {{original_deep_equal @root.sortType 'desc'}}"></i>
+                                <i class="bi-icon-up {{original_deep_equal @root.sortType 'asc' name @root.field.name}}"></i>
+                                <i class="bi-icon-down {{original_deep_equal @root.sortType 'desc' name @root.field.name}}"></i>
                                 {{/if}}
                             </span>
 

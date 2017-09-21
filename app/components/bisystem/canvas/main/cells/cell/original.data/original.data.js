@@ -31,8 +31,8 @@ handlebars.registerHelper('original_group_data', function(data, options) {
 });
 
 // 自定义分组original_deep_equal helper
-handlebars.registerHelper('original_deep_equal', function(val1, val2, options) {
-    return val1 === val2 ? 'active' : '';
+handlebars.registerHelper('original_deep_equal', function(val1, val2, val3,val4, options) {
+    return val1 === val2 && val3 === val4 ? 'active' : '';
 });
 
 let config = {
@@ -297,6 +297,7 @@ let config = {
                     field:field,
                     type:this.data.sortType
                 };
+                this.data.field = field;
                 this.trigger('onDeepSort', sort);
                 return false;
             }
@@ -327,7 +328,8 @@ let config = {
             this.actions.addAdvancedList();
         }
     },
-    firstAfterRender() {},
+    firstAfterRender() {
+    },
     beforeDestory() {}
 };
 
@@ -347,7 +349,9 @@ export class CanvasOriginalDataComponent extends Component {
             CanvasOriginalDataComponent.handleLineBarOriginalData(data)
         } else {
             CanvasOriginalDataComponent.handlePieOriginalData(data)
-        }
+        };
+        // data.sortType = JSON.parse(data.cell.sort).type;
+        // data.field = JSON.parse(data.cell.sort).field;
         return data;
     }
     /**
