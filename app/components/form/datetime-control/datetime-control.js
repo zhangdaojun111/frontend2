@@ -54,7 +54,6 @@ let config = {
             event: 'click',
             selector: '.datetime',
             callback: function () {
-                debugger
                 let e = new Date();
                 let year = e.getFullYear();
                 let month = (e.getMonth() + 101 + "").slice(1);
@@ -64,7 +63,6 @@ let config = {
                 let sec = (e.getSeconds() + 100 + "").slice(1);
                 let str = year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;
                 if (!this.data.value || (this.data.value == '请选择')) {
-                    debugger
                     this.el.find(".datetime").val(str);
                 }
             }

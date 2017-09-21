@@ -60,14 +60,12 @@ let config = {
             event: 'click',
             selector: '.date_yy-mm-dd',
             callback: function () {
-                debugger
                 let e = new Date();
                 let year = e.getFullYear();
                 let month = (e.getMonth() + 101 + "").slice(1);
                 let day = (e.getDate() + 100 + "").slice(1);
                 let str = year + "-" + month + "-" + day;
                 if (!this.data.value || (this.data.value == '请选择')) {
-                    debugger
                     this.el.find(".date_yy-mm-dd").val(str);
                 }
             }
