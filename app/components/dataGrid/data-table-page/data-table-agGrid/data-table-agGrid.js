@@ -1853,7 +1853,9 @@ let config = {
                         parent_real_id: this.data.parentRealId,
                         parent_temp_id: this.data.parentTempId,
                         parent_record_id: this.data.parentRecordId,
-                        btnType: 'new'
+                        btnType: 'new',
+                        form_id:this.data.formId,
+                        flow_id:this.data.flowId,
                     };
                     let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
 
@@ -2832,6 +2834,8 @@ let config = {
                     is_view:1,
                     in_process: (this.data.viewMode == 'in_process' || data["data"]["status"] == 2) ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
+                    form_id:this.data.formId,
+                    flow_id:this.data.flowId,
                 };
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
@@ -2850,6 +2854,8 @@ let config = {
                     btnType: 'edit',
                     in_process: (this.data.viewMode == 'in_process' || data["data"]["status"] == 2) ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
+                    form_id:this.data.formId,
+                    flow_id:this.data.flowId,
                 };
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '编辑'
@@ -2964,6 +2970,8 @@ let config = {
                 is_view:1,
                 in_process: (this.data.viewMode == 'in_process' || data["data"]["status"] == 2) ? 1 : 0,
                 is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
+                form_id:this.data.formId,
+                flow_id:this.data.flowId,
             };
             if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
                 obj.btnType = 'none';
