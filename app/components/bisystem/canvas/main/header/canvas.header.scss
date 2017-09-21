@@ -2,7 +2,7 @@
     position: absolute;
     height: 50px;
     white-space: nowrap;
-    width: calc(100% - 600px);
+    width: calc(100% - 400px);
     overflow: auto;
     background: transparent;
     div {
@@ -13,20 +13,27 @@
 .views-btn-group {
     position: absolute;
     right: 0;
-    width: 600px;
+    width: 400px;
     text-align: right;
-    a {
+    white-space: nowrap;
+    a,label {
         text-decoration: none;
-        padding: 0 25px;
         display: inline-block;
         outline: none;
         line-height: 50px;
         color: #ffffff;
         background: #3e4a63;
         border-left: solid 1px #556574;
-        margin-right: -3px;
+        box-sizing: border-box;
+        width: 100px;
+        text-align: center;
+        height: 100%;
+        float: left;
         &:hover {
             background: #374157;
         }
+    }
+    input[type='file']{
+        display: none;
     }
 }

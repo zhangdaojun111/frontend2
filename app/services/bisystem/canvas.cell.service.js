@@ -128,6 +128,23 @@ export const canvasCellService = {
     },
 
     /**
+     * 导入数据
+     * @param formData
+     */
+    async importData(data) {
+        const res = await HTTP.ajaxImmediately({
+            url: '/bi/import_bi_setting/',
+            data: data,
+            method: 'post',
+            processData: false,
+            contentType: false
+        });
+        return new Promise((resolve, reject) => {
+            resolve(res);
+        })
+    },
+
+    /**
      * 删除高级计算item
      * @param item = {"chart_id":0,"id":""}
 
