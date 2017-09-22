@@ -43,6 +43,9 @@ let config = {
     },
 
     actions: {
+        /**
+         * 保存提醒设置
+         */
         checkRemindStatus:function () {
             if( ( this.data.smsStatus === '1' && this.data.smsReciver.length === 0 ) || ( this.data.emailStatus === '1' && this.data.emailReciver.length === 0 ) ){
                 MSG.alert( "已开启提醒的收件人不能为空" );
@@ -90,7 +93,12 @@ let config = {
                 data: {sms: this.data.sms, email: this.data.email},
             });
         },
-        
+        /**
+         * 下拉多选数据
+         * @param dataSelected
+         * @param dataList
+         * @returns {Array}
+         */
         checkSelectedReciver: function (dataSelected, dataList) {
             let res = [];
             for(let d of dataList) {
@@ -176,10 +184,6 @@ let config = {
             callback:function(){
                 this.data.smsRemindTime = this.el.find('.remind-time-sms').val();
                 this.data.emailRemindTime = this.el.find('.remind-time-email').val();
-                // this.data.smsReciver = this.data.smsReceiverAutoSelect.data.choosed;
-                // this.data.smsCopyPeople = this.data.smsCopyPeopleAutoSelect.data.choosed;
-                // this.data.emailReciver = this.data.emailReceiverAutoSelect.data.choosed;
-                // this.data.emailCopyPeople = this.data.emailCopyPeopleAutoSelect.data.choosed;
                 this.data.smsReceiverAutoSelect.data.choosed.forEach(item => {
                     this.data.smsReciver.push(item['id']);
                 });

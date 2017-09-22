@@ -62,7 +62,9 @@ Mediator.publish('workflow:getKey', obj.key);
             isAddBuild: obj.isAddBuild,
             id: obj.id,
             key: obj.key,
-            action: action
+            action: action,
+            form_id:obj.form_id,
+            flow_id:obj.flow_id,
         });
         setTimeout(()=>{
             cache_old= FormEntrys.getFormValue(obj.table_id,true);
@@ -131,7 +133,7 @@ Mediator.subscribe('workflow:submit', (res) => {
             return workflowService.addUpdateTableData(postData);
         })().then(res => {
             if (res.success === 1) {
-                msgBox.alert(`${res.error}`);
+                msgBox.showTips(`${res.error}`);
                 PMAPI.sendToParent({
                     type: PMENUM.close_dialog,
                     key: obj.key,
