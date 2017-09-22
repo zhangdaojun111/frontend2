@@ -242,6 +242,7 @@ let config = {
                 }
             }
             CalendarSetService.resetCalendar(tableId, this.data.allRows).then(res => {
+                console.log(res);
                 if (res['success'] === 1) {
                     MSG.alert('重置成功');
                     setTimeout(() => {
@@ -356,6 +357,7 @@ let config = {
             callback: function (temp = this) {
                 this.el.find(".hide-btns").css("visibility", "visible");
                 $(temp).addClass("disabled");
+                $('.reset-btn').addClass("disabled").attr('disable','false');
                 for (let obj of this.data.childComponents) {
                     obj.actions.editable();
                 }
@@ -386,7 +388,6 @@ let config = {
                 for (let obj of this.data.childComponents) {
                     newAllRowsData.push(obj.data.rowSetData);
                 }
-                console.log(newAllRowsData);
                 this.actions.saveSetting(this.data.tableId, newAllRowsData);
             }
         }
@@ -396,10 +397,10 @@ let config = {
         // this.el.find('iframe').css("width", "100%");
 
         // 用于在系统的其他地方打开日历设置
-        if (window.config.table_id) {
-            this.data.tableId = window.config.table_id;
-            this.actions.getColumnListData(this.data.tableId);
-        }
+        // if (window.config.table_id) {
+        //     this.data.tableId = window.config.table_id;
+        //     this.actions.getColumnListData(this.data.tableId);
+        // }
 
         // 获取设置提醒方式中的可用的人员信息
         UserInfoService.getAllUsersInfo().then(user => {
@@ -422,16 +423,8 @@ let config = {
                 }
             }
         });
-
-        Mediator.on('calendar-set-left:calendar-set', data => {
-            this.data.tableId = data.table_id;
-            this.actions.getColumnListData(data.table_id);
-        });
-
+        this.actions.getColumnListData(this.data.tableId);
     },
-    beforeDestory: function () {
-        Mediator.removeAll('calendar-set-left:calendar-set');
-    }
 };
 
 class CalendarSet extends Component {
