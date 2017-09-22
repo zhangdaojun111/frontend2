@@ -179,14 +179,6 @@ window.addEventListener('message', function (event) {
                 break;
 
             case PMENUM.send_data_to_iframe:
-                PMAPI.sendToChild(dialogHash[data.key].element[0], {
-                    type: PMENUM.get_data,
-                    key: data.key,
-                    data: data.data
-                });
-                break;
-
-            case PMENUM.get_data:
                 Mediator.publish('getDataFromOtherFrame:'+data.data.originalField,data.data);
                 break;
 
@@ -429,7 +421,7 @@ export const PMAPI = {
     openDialogByComponentWithKey: function (componentConfig, key, frame) {
         return new Promise(function (resolve) {
             dialogWaitHash[key] = resolve;
-            PMAPI.sendToParent({
+            PMAPI.sendToSelf({
                 type: PMENUM.open_component_dialog,
                 key: key,
                 component: PMAPI.serializeComponent(componentConfig),
@@ -522,7 +514,7 @@ export const PMAPI = {
                 let args = obj[key]['Arguments'] || "";
                 let source = obj[key]['Source'];
                 let fstr = "function " + obj[key]['Function'] + "(" + args + "){" + source + "}";
-                let f = new Function('$', '_', 'PMAPI', 'PMENUM', 'HTTP', 'Storage','Quill', "return " + fstr)($, _, PMAPI, PMENUM, HTTP, Storage, Quill);
+                let f = new Function('$', '_', 'PMAPI', 'PMENUM', 'HTTP', 'Storage','Quill', "Mediator","return " + fstr)($, _, PMAPI, PMENUM, HTTP, Storage, Quill,Mediator);
                 obj[key] = f;
             } else if (obj[key] instanceof Object) {
                 PMAPI._createFuncs(obj[key]);

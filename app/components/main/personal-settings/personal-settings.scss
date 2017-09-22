@@ -129,7 +129,7 @@ $sub_color: #0088ff;
             }
         }
         .personal-info{
-            margin-top: 40px;
+            margin-top: 20px;
             .department-group,.position-group{
                 height: 50px;
                 margin-left: 130px;
@@ -169,26 +169,30 @@ $sub_color: #0088ff;
 
         .modify-password{
             display: none;
-            margin-top: 40px;
+            margin-top: 20px;
 
             .old-pw-group{
-                margin-top: 30px;
-                margin-left: 60px;
+                //margin-top: 15px;
+                margin-left: 100px;
             }
             .new-pw-group{
-                margin-left: 60px;
+                margin-left: 100px;
                 margin-top: 15px;
             }
             .confirm-new-pw-group{
-                margin-left: 36px;
+                margin-left: 76px;
                 margin-top: 15px;
             }
-            .save-password-warning{
-                color: red;
+            .password-rule-prompt{
                 display: block;
-                margin-top: 40px;
-                margin-left: 310px;
+                margin: 30px 0 0 260px;
             }
+            //.save-password-warning{
+            //    color: red;
+            //    display: block;
+            //    margin-top: 40px;
+            //    margin-left: 310px;
+            //}
             button{
                 width: 100px;
                 height: 35px;

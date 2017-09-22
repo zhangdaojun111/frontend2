@@ -60,10 +60,10 @@ export default {
      */
     showProgress: function (data) {
         let key = PMAPI._getKey();
-        progressConfig.data = data;
-        PMAPI.openDialogByComponentWithKey(progressConfig,key,{
-            width:400,
-            height:200,
+        let width = data.files.length*24+30;
+        PMAPI.openDialogByComponentWithKey(_.defaultsDeep({},{data:data},progressConfig),key,{
+            width:410,
+            height:width,
             title:'查看上传进度'
         });
 
@@ -72,14 +72,14 @@ export default {
              * @param item 上传进度百分比数组[20,30,20]
              **/
             update:function (items) {
-                PMAPI.sendToParent({
+                PMAPI.sendToSelf({
                     type:PMENUM.send_data_to_dialog_component,
                     key:key,
                     data:{type:'update',msg:items}
                 })
             },
-            finish:function ({fileOrder:index}) {
-                PMAPI.sendToParent({
+            finish:function ({fileId:index}) {
+                PMAPI.sendToSelf({
                     type:PMENUM.send_data_to_dialog_component,
                     key:key,
                     data:{type:'finish',msg:index}
@@ -90,7 +90,7 @@ export default {
              * @param msgData {fileId:filename_time,msg:'....'}
              */
             showError:function (msgData) {
-                PMAPI.sendToParent({
+                PMAPI.sendToSelf({
                     type:PMENUM.send_data_to_dialog_component,
                     key:key,
                     data:{type:'error',msg:msgData}
