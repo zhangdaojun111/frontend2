@@ -13,32 +13,6 @@ let FormEntrys = {
     isloadWorkflow: false,
     dataa:{},
     init(config = {}) {
-<<<<<<< HEAD
-        this.tableId = config.table_id || '';
-        this.parentRealId = config.parent_real_id || '';
-        this.parentTempId = config.parent_temp_id || '';
-        this.realId = config.real_id || '';
-        this.parentTableId = config.parent_table_id || '';
-        this.parentRecordId = config.parent_record_id || '';
-        this.isView = config.is_view || 0;//查看模式
-        this.isBatch = config.is_batch || 0;//是否是批量工作流
-        this.inProcess = config.in_process || 0; //是否在途
-        this.recordId = config.record_id || '';
-        this.action = config.action || '';//暂时
-        this.el = config.el || '';//form的外层dom
-        this.reloadDraftData = config.reload_draft_data || 0;//工作流接口用到
-        this.formId = config.form_id || '';//表单ID
-        this.fromWorkFlow = config.from_workflow || 0;//是否来自工作流
-        this.flowId = config.flow_id || '';//流程ID
-        this.fieldId = config.field_Id || '';//字段ID
-        this.key = config.key || '';//iframe的key
-        this.fromApprove = config.from_approve || '';//是否来自审批
-        this.isAddBuild = config.isAddBuild || 0;//是否是快捷添加内置
-        this.buildId = config.id || '';//快捷添加的key
-        this.btnType = config.btnType || 'new';//按钮
-        this.viewMode=config.viewMode || '0';//aggrid权限
-        this.inProcess=config.inProcess || '0';//是否查询临时数据
-=======
         this.data={}
         this.data.tableId = config.table_id || '';
         this.data.parentRealId = config.parent_real_id || '';
@@ -63,7 +37,6 @@ let FormEntrys = {
         this.data.btnType = config.btnType || 'new';//按钮
         this.data.viewMode=config.viewMode || '0';//aggrid权限
         this.data.inProcess=config.inProcess || '0';//是否查询临时数据
->>>>>>> b83768ccfb15666864ba654763fff00f0c9a15f1
         console.log(config);
     }
     ,
@@ -355,10 +328,7 @@ let FormEntrys = {
     //转到编辑模式
     changeToEdit(tableId) {
         this.childForm[tableId].data.isOtherChangeEdit = true;//如果是外部模块的转编辑模式
-<<<<<<< HEAD
        // this.childForm[tableId].data.inProcess = isTemp;//如果是外部模块的转编辑模式
-=======
->>>>>>> b83768ccfb15666864ba654763fff00f0c9a15f1
         this.childForm[tableId].actions.changeToEdit();
     },
 
