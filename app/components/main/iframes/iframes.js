@@ -611,7 +611,6 @@ export const IframeInstance = new Component({
             event:'click',
             selector:'.popup-icon',
             callback:function () {
-                console.log("open tabs");
                 this.actions.showTabsPopup();       //打开标签控制页面
             }
         },
@@ -662,7 +661,7 @@ export const IframeInstance = new Component({
             event:'mouseleave',
             selector:'.view-save-group',
             callback:function () {
-                this.actions.hideSaveViewPage();       //鼠标离开延迟隐藏视图保存页面
+                // this.actions.hideSaveViewPage();       //鼠标离开延迟隐藏视图保存页面
             }
         },
     ],

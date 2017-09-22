@@ -199,7 +199,7 @@ let config = {
 
             //初始化新密码框
             let $wrap2 = this.el.find('.new-pw-group');
-            this.new_pswInput = new PasswordInput({title:'新密码：',rule:'(密码长度限制在6-16位)'});
+            this.new_pswInput = new PasswordInput({title:'新密码：'});
             this.new_pswInput.render($wrap2);
 
             //初始化确认新密码框

@@ -1024,7 +1024,7 @@ let config = {
                 table_id: this.data.tableId,
                 real_id: this.data.realId,
                 is_view: 0,
-            }
+            };
             //重新获取动态数据 （temp_id会变）
             let res = await FormService.getDynamicDataImmediately(json);
             for (let key in res.data) {
