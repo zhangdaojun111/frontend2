@@ -80,19 +80,13 @@
                 border: 1px solid #dddddd;
                 padding-left: 10px;
                 .popup {
-                    width: 100%;
                     ul{
                         li {
-                            margin-left: 0px;
                             list-style-type: none;
                             label{
                                 text-align: left;
-                                overflow:hidden;
                             }
                         }
-                    }
-                    button{
-                        width:100%;
                     }
                 }
             }
@@ -111,11 +105,6 @@
     .set-ok{
         float: right;
         margin-top: 20px;
-        //width: 50px;
-        //line-height: 20px;
-        //background-color: #3d83cc;
-        //border: 0px;
-        //color: white;
         cursor: pointer;
         width: 90px;
         height: 30px;
