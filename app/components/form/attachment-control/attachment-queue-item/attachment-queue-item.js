@@ -113,7 +113,7 @@ let config = {
             }
             if(this.data.toolbox){
                 this.data.toolbox.update({
-                    fileOrder:this.data.fileOrder,
+                    fileId:this.data.fileOrder,
                     progress:this.data._controlItem.process,
                 });
             }
@@ -208,7 +208,7 @@ let config = {
                         } else {
                             this.actions.updateProcess(1);
                             if(this.data.toolbox){
-                                this.data.toolbox.finish({fileOrder:this.data.fileOrder});
+                                this.data.toolbox.finish({fileId:this.data.fileOrder});
                             }
                             this.data._controlItem.uploadingState = 'finished';
                             this.data._controlItem['fileId'] = res.file_id;
@@ -218,7 +218,7 @@ let config = {
                     } else {
                         this.data._controlItem.uploadingState = 'failed';
                         if(this.data.toolbox){
-                            this.data.toolbox.showError({fileOrder:this.data.fileOrder,msg:"传输中断"});
+                            this.data.toolbox.showError({fileId:this.data.fileOrder,msg:"传输中断"});
                         } else {
                             msgbox.alert('传输中断！');
                         }

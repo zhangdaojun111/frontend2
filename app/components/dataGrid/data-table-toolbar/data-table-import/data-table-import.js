@@ -123,11 +123,19 @@ let config = {
             }
             this.uploader.appendData( json )
             let That = this;
-            this.uploader.upload('/upload_data/',{},(event)=>{
-                console.log('name:'+event.name+',code:'+event.code);
-                console.log(' position:'+(event.loaded||event.position) +",total:"+event.total);
-            },(res)=>{
+            let toolbox = {
+                update:function () {},
+                finish:function (res) {},
+                showError:function () {}
+            }
+            //只有在文件大小大于1MB的时候才会显示进度条
+            if(Object.values(this.data.fileData)[0].file.size >= 1000000){
+                let progressParams = this.uploader.getProgressParams(this.data.key);
+                toolbox = msgBox.showProgress(progressParams);
+            }
+            this.uploader.upload('/upload_data/',{}, toolbox.update,(res)=>{
                 if( res.success ){
+                    toolbox.finish(res);
                     msgBox.showTips( res.error );
                     if( this.data.isBatch ){
                         let ids = res.ids || [];
@@ -170,7 +178,7 @@ let config = {
                     }
                 }
                 this.actions.fileTip();
-            })
+            },toolbox.showError);
         },
         //改变文件提示
         fileTip: function () {
