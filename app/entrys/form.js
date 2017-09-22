@@ -200,7 +200,14 @@ let FormEntrys = {
         staticData.el = this.el;
         staticData.colDef=this.colDef;
         staticData.col_id=this.col_id;
+        staticData.fromWorkFlow=this.fromWorkFlow;
         staticData.viewMode=this.viewMode;
+        staticData.reloadDraftData=this.reloadDraftData;
+        staticData.fromApprove=this.fromApprove;
+        staticData.fromFocus=this.fromFocus;
+        staticData.fieldId=this.fieldId;
+        staticData.isView=this.isView;
+        staticData.inProcess=this.inProcess;
         return staticData;
     },
     //处理字段数据
@@ -341,8 +348,9 @@ let FormEntrys = {
     },
 
     //转到编辑模式
-    changeToEdit(tableId) {
+    changeToEdit(tableId,isTemp) {
         this.childForm[tableId].data.isOtherChangeEdit = true;//如果是外部模块的转编辑模式
+        this.childForm[tableId].data.inProcess = isTemp;//如果是外部模块的转编辑模式
         this.childForm[tableId].actions.changeToEdit();
     },
 
