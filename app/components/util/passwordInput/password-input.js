@@ -14,9 +14,11 @@ let config = {
     template:template,
     data:{
         password_value:'',
-        isLegal:false,
-        isCapsLockOpen:false,
-        checkChar:true,
+        isLegal:false,                  //密码输入是否合法（长度，非法字符，非空）
+        isCapsLockOpen:false,           //是否开启了大写锁定
+        checkChar:true,                 //是否检测字符非法
+        fakerPsw:false,                 //是否显示密码框中的眼睛
+        pswDisplay:false,               //密码是否可见（显示为真实值）
     },
     actions:{
         /**
@@ -124,6 +126,16 @@ let config = {
             this.el.find('.input-password-warning').html('');
             this.el.find('.caps-lock-tips').hide();
         },
+        setPswDisplay:function () {
+            if(this.data.pswDisplay === false){
+                this.data.pswDisplay = true;
+                this.el.find('.set-password-input').attr('type','text');
+
+            }else{
+                this.data.pswDisplay = false;
+                this.el.find('.set-password-input').attr('type','password');
+            }
+        }
     },
     binds:[
         {
@@ -153,6 +165,13 @@ let config = {
                 this.actions.checkPswLegal();
             }
         },
+        {
+            event:'click',
+            selector:'.faker_password',
+            callback:function () {
+                this.actions.setPswDisplay();
+            }
+        }
     ],
     afterRender:function () {
         this.actions.initPswInput();
