@@ -67,7 +67,7 @@ let config = {
                 return;
             }
             console.log('过来楼');
-            this.data.isBtnClick=false;
+            this.data.isBtnClick=true;
             this.actions.onSubmit();
         }
     }, {
@@ -963,6 +963,7 @@ let config = {
             let {error, errorMsg} = this.actions.validForm(this.data.data, formValue);
             if (error) {
                 MSG.alert(errorMsg);
+                this.data.isBtnClick=false;
                 return;
             }
             let data = this.actions.handleFormData(formValue);
