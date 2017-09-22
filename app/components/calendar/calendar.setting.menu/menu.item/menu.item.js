@@ -14,6 +14,9 @@ let config = {
     },
 
     actions: {
+        /**
+         * 显示菜单
+         */
         showChildrenAtFull: function () {
             this.childlist.show();
             // this.iconWrap.removeClass('ui-state-focus').addClass('ui-state-active');
@@ -23,12 +26,19 @@ let config = {
             //     brother.actions.hideChildrenAtFull();
             // });
         },
+        /**
+         * 隐藏菜单
+         */
         hideChildrenAtFull: function () {
             this.childlist.hide();
             // this.iconWrap.removeClass('ui-state-active').addClass('ui-state-focus');
             this.icon.removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-e');
             this.data.display = false;
         },
+        /**
+         * 点击菜单
+         * @param event
+         */
         onItemClickAtFull: function (event) {
             if (this.data.items && this.data.items.length) {
                 if (this.data.type === 'full') {
@@ -77,7 +87,6 @@ let config = {
                     searchDisplay: true,
                     type: this.data.type
                 });
-
                 let component = new FullMenuItem(newData);
                 this.append(component, this.childlist, 'li');
             });

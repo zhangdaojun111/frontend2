@@ -21,7 +21,9 @@ let config = {
         _otherId:''
     },
     actions:{
-        //获取用户名单列表
+        /**
+         * 获取用户名单列表
+         */
         getData:function () {
             UserInfoService.getAllUsersInfo().done((result) => {
                 let tempData = [];
@@ -41,7 +43,10 @@ let config = {
                 console.log("获取数据失败",err);
             })
         },
-        //使用组件绘制下拉框
+        /**
+         * 使用组件绘制下拉框
+         * @param tempData
+         */
         initList:function (tempData) {
             let $wrap = this.el.find('.user-list');
             let that = this;
@@ -59,7 +64,9 @@ let config = {
             });
             autoSelect.render($wrap);
         },
-        //向后台发送他人登录请求
+        /**
+         * 向后台发送他人登录请求
+         */
         loginOtherAccount:function () {
             let userId = this.data._otherId;
             userId = userId.trim();

@@ -36,7 +36,7 @@ import SettingPrint from '../setting-print/setting-print'
 import Songrid from '../songrid-control/songrid-control';
 import Correspondence from '../correspondence-control/correspondence-control';
 import ContractControl from "../contract-control/contract-control";
-
+let index=0;
 let config = {
     template: '',
     data: {
@@ -461,7 +461,7 @@ let config = {
             if (data[dfield].hasOwnProperty("options")) {
                 options = data[dfield]["options"];
             }
-            if (data[dfield].hasOwnProperty("group")) {
+            else if (data[dfield].hasOwnProperty("group")) {
                 options = data[dfield]["group"];
             }
             for (let key in options) {
@@ -633,7 +633,7 @@ let config = {
                 new_data[d] = old_data[d];
             }
             for (let key in new_data) {
-                if (this.data.data[key].effect && this.data.data[key].effect.length > 0) {
+                if (this.data.data[key].effect && this.data.data[key].effect.length > 0 && (this.data.data[key]['options'] || this.data.data[key]['group'])) {
                     new_data[key] = this.actions.getTextByOptionID(key, new_data[key]);
                 }
             }
@@ -939,22 +939,6 @@ let config = {
                 }
             }
         },
-        //拼接其他字段
-        montageOtherFields(formDataNew) {
-            data = {};
-            for (let key in this.data.dataOfOtherFields) {
-                data[key] = this.data.dataOfOtherFields[key];
-            }
-            for (let key in data) {
-                if (key == "temp_id" && !data["temp_id"]) {
-                    continue;
-                }
-                data[key] = data[key];
-            }
-            data['temp_id'] = data['temp_id'];
-            //如果有其他字段的数据，这里是拼this.data.formData
-            formDataNew = formDataNew.concat(this.data.formDataOfOtherFields);
-        },
         //快捷添加后回显
         addNewItem(data) {
             let dfield = this.data['quikAddDfield'];
@@ -979,16 +963,13 @@ let config = {
             let {error, errorMsg} = this.actions.validForm(this.data.data, formValue);
             if (error) {
                 MSG.alert(errorMsg);
+                this.data.isBtnClick=false;
                 return;
             }
             let data = this.actions.handleFormData(formValue);
             let formDataNew = this.data.oldData;
             //如果有其他字段的数据，这里是拼approvedFormData
-            if (this.data.hasOtherFields == '1') {
-                this.actions.montageOtherFields(formDataNew);
-            }
             this.actions.checkDateType(formValue);
-            console.log('cc  ',formValue)
             let obj_new = this.actions.createCacheData(formDataNew, data, true, this);
             let obj_old = this.actions.createCacheData(formDataNew, data, false, this);
             this.actions.changeValueForChildTable(data);
@@ -1016,13 +997,13 @@ let config = {
                 MSG.alert('保存成功')
                 Mediator.publish('updateForm:success:' + this.data.tableId, true);
                 if (this.data.isAddBuild && !this.flowId) {
-                    PMAPI.sendToParent({
+                    PMAPI.sendToRealParent({
                         type: PMENUM.close_dialog,
                         key: this.data.key,
                         data: {new_option: res.new_option},
                     });
                 } else {
-                    PMAPI.sendToParent({
+                    PMAPI.sendToRealParent({
                         type: PMENUM.close_dialog,
                         key: this.data.key,
                         data: 'success',
@@ -1038,11 +1019,12 @@ let config = {
 
         //转到编辑模式
         async changeToEdit() {
+            console.log('baseform 1041');
             let json = {
                 table_id: this.data.tableId,
                 real_id: this.data.realId,
                 is_view: 0,
-            }
+            };
             //重新获取动态数据 （temp_id会变）
             let res = await FormService.getDynamicDataImmediately(json);
             for (let key in res.data) {

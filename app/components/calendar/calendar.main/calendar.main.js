@@ -767,7 +767,6 @@ let config = {
                 } else {
                     this.actions.getCalendarData(json);
                 }
-
             }
         });
 
