@@ -116,9 +116,7 @@ let config = {
          */
         removeTips:function () {
             this.el.find('.input-password-warning').html('');
-            if(this.data.isCapsLockOpen === true){
-                window.clearTimeout(this.data.timer);
-            }
+            window.clearTimeout(this.data.timer);
         },
         /**
          * 切换到用户信息显示页面时，重置所有input框的内容
@@ -143,6 +141,7 @@ let config = {
                 this.el.find('.set-password-input').attr('type','password');
                 this.el.find('.default-faker-password').removeClass('display-password');
             }
+            this.el.find('.set-password-input').focus();
             // if(this.data.isCapsLockOpen === true){
             //     this.el.find('.caps-lock-tips').show();
             // }
@@ -182,8 +181,9 @@ let config = {
             event:'blur',
             selector:'.set-password-input',
             callback:function (target,event) {          //input框失去焦点时，设置密码值以及检测密码是否合法
-                console.log(event);
-                this.actions.checkPswLegal();
+                this.data.timer = window.setTimeout(() => {
+                    this.data.timer = this.actions.checkPswLegal();
+                }, 200);
             }
         },
         {
