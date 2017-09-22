@@ -34,8 +34,7 @@ let FormEntrys = {
         this.buildId = config.id || '';//快捷添加的key
         this.btnType = config.btnType || 'new';//按钮
         this.viewMode=config.viewMode || '0';//aggrid权限
-
-
+        this.inProcess=config.inProcess || '0';//是否查询临时数据
         console.log(config);
     }
     ,
@@ -147,7 +146,7 @@ let FormEntrys = {
             }
         }
         //如果是临时表，传temp_id，否则是real_id
-        if (!this.action) {
+        if (!this.inProcess || !this.isBatch) {
             json["real_id"] = this.realId;
         } else {
             json["temp_id"] = this.realId;
