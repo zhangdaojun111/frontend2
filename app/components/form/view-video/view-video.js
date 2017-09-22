@@ -25,6 +25,15 @@ let css = `
     margin-left: 5px;
     margin-right: 10px;
 }
+.video-file-name {
+    display: inline-block;
+    width:80%;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    cursor:pointer;
+}
+
 .videoContain {
     position: relative;
     width: 100%;
@@ -32,7 +41,7 @@ let css = `
     border: 1px solid #d4d4d4;
     float: left;
     overflow: hidden;
-}
+
 `;
 let ViewVideo = {
     template: template.replace(/\"/g, '\''),

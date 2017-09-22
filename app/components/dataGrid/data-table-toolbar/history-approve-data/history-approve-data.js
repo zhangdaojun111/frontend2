@@ -1,3 +1,6 @@
+/**
+ * Created by zhr
+ */
 import Component from "../../../../lib/component";
 import template from './history-approve-data.html';
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
@@ -71,7 +74,7 @@ let config = {
                     _this.actions.renderExaTable();
                 }
                 if(_this.triggerWorkRecords && _this.triggerWorkRecords.length > 0){
-                    // _this.actions.renderStrTable();
+                    _this.actions.renderStrTable();
                 }
 
             })
@@ -93,7 +96,6 @@ let config = {
                     $(this).find('.img').removeClass('active')
                     $(this).attr('title','false')
                 }
-
             })
         }
     },

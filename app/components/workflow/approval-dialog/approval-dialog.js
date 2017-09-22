@@ -52,9 +52,9 @@ let config = {
     },
     afterRender: function() {
         Mediator.subscribe('approval:rejToAny', (id) => {
-            if(id.length==21){
+            if(id.length === 21){
                 id=id.slice(5);
-            }else if(id.length==19){
+            }else if(id.length === 19){
                 id=id.slice(3);
             }
             PMAPI.sendToParent({
@@ -71,6 +71,9 @@ let config = {
             WorkFlow.rejectNode(this);
         });
     },
+    beforeDestory: function () {
+        Mediator.removeAll('approval:rejToAny');
+    }
 };
 class ApprovalDialog extends Component{
     constructor (data){

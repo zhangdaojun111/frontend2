@@ -6,6 +6,7 @@
 import Component from "../../../lib/component";
 import template from './left-content.html';
 import './left-content.scss';
+import 'jquery-ui/ui/widgets/tooltip';
 import LeftContentHide from './leftContent.hideContent/leftContent.hideContent';
 import Mediator from '../../../lib/mediator';
 import {PMAPI} from '../../../lib/postmsg';
@@ -32,16 +33,11 @@ let config = {
         contentHide: function (temp) {
             if (temp.is(".display-all-content")) {
                 temp.removeClass("display-all-content");
-                this.el.find(".item-content").show();
-                this.el.find(".item-content").css("height", "calc(33.3% - 45px)");
+                this.el.find(".item-content").show().css("height", "calc(33.3% - 45px)");
             } else {
-                this.el.find(".item-title").removeClass("display-all-content");
-                this.el.find(".item-title-2").removeClass("display-all-content");
-                temp.addClass("display-all-content");
-                this.el.find(".item-content").hide();
-                this.el.find(".item-content-2").hide();
-                temp.next(".item-content").show();
-                temp.next().css({height: 'calc(100% - 135px)'});
+                this.el.find(".item-title,.item-title-2").removeClass("display-all-content");
+                this.el.find(".item-content,.item-content-2").hide();
+                temp.addClass("display-all-content").next(".item-content").show().css({height: 'calc(100% - 135px)'});
             }
         },
         /**
@@ -50,17 +46,14 @@ let config = {
         hideClass: function (temp) {
             if (temp.is(".display-all-content")) {
                 temp.removeClass("display-all-content");
-                this.el.find(".item-content").css("height", "calc(33.3% - 45px)");
                 this.el.find(".item-content-2").hide();
-                this.el.find(".item-content").show();
+                this.el.find(".item-content").css("height", "calc(33.3% - 45px)").show();
             } else {
                 this.el.find(".item-title").removeClass("display-all-content");
                 temp.addClass("display-all-content");
                 this.el.find(".item-content").hide();
-                this.el.find(".item-content-2").show();
-                this.el.find(".item-content-1").show();
-                this.el.find(".item-content-1").css("height", "calc(33.3% - 45px)");
-                this.el.find(".item-content-2").css({height: 'calc(66.6% - 90px)'});
+                this.el.find(".item-content-2").show().css({height: 'calc(66.6% - 90px)'});
+                this.el.find(".item-content-1").show().css("height", "calc(33.3% - 45px)");
             }
         },
         /**
@@ -71,8 +64,7 @@ let config = {
             this.el.find(".item-title-1").addClass("display-all-content");
             this.el.find(".item-content").hide();
             this.el.find(".item-content-2").hide();
-            this.el.find(".item-content-1").show();
-            this.el.find(".item-content-1").css({height: 'calc(100% - 135px)'});
+            this.el.find(".item-content-1").show().css({height: 'calc(100% - 135px)'});
         },
         /**
          * 将日历树隐藏table数据格式处理成：[{'tableName': "", 'table_Id': ''},...]
@@ -142,16 +134,16 @@ let config = {
         {
             event: 'click',
             selector: '.hide-con',
-            callback: function (temp = this) {
-                temp = $(temp).parents('.item-title');
-                this.actions.contentHide(temp);
+            callback: function (context) {
+                context = $(context).closest('.item-title');
+                this.actions.contentHide(context);
             }
         },
         {
             event: 'click',
             selector: '.hide-con-2',
-            callback: function (temp = this) {
-                this.actions.hideClass($(temp).parents('.item-title-2'));
+            callback: function (context) {
+                this.actions.hideClass($(context).closest('.item-title-2'));
             }
         },
         {
@@ -170,6 +162,7 @@ let config = {
         },
     ],
     afterRender: function () {
+        this.el.tooltip();
         this.el.css({"height": "100%", "width": "100%"});
         this.actions.getCalendarTreeData();
         this.append(new LeftContentCalendarSet(this.data.calendarTreeData), this.el.find('.left-calendar-set'));

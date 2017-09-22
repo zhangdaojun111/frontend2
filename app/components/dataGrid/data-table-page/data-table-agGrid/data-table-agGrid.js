@@ -1110,6 +1110,7 @@ let config = {
                 this.actions.sortWay();
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
+                    this.el.find( '.icon-aggrid-refresh' ).removeClass('refresh-rotate');
                 }
             })
             HTTP.flush();
@@ -1868,7 +1869,8 @@ let config = {
             //在途刷新
             if( this.el.find( '.refresh-btn' )[0] ){
                 this.el.find( '.refresh-btn' ).on( 'click',()=>{
-                    this.actions.getInprocessData();
+                    this.el.find( '.icon-aggrid-refresh' ).addClass('refresh-rotate');
+                    this.actions.getInprocessData(true);
                 } )
             }
             //对应关系保存
@@ -2532,7 +2534,7 @@ let config = {
             this.col_id=data.data._id;
             this.colDef=arr;
             //行选择
-            if(data.colDef.headerName != "操作"){
+            if(data.colDef.headerName != "操作" && !this.data.editMode){
                 dgcService.rowClickSelect( data )
             }
 
@@ -3013,6 +3015,7 @@ let config = {
         },
         //打开局部的弹窗
         openSelfIframe: function ( url,title,w,h ) {
+            this.actions.setInvalid();
             PMAPI.openDialogToSelfByIframe( url,{
                     width: w || 1400,
                     height: h || 800,

@@ -84,9 +84,41 @@ let config = {
         }
 
     },
+    binds:[
+        //拖动进入.task-item排序
+        {
+            event:'dragenter',
+            selector:'.task-item',
+            callback:function(context,event){
+                this.actions.dragEnter(event,context);
+            }
+        },
+        //拖动离开.task-list
+        {
+            event:'dragleave',
+            selector:'.task-list',
+            callback:function(context,event){
+                this.actions.dragLeave(event);
+            }
+        },
+        {
+            event:'dragover',
+            selector:'.task-list',
+            callback:function(context,event){
+                this.actions.dragOver(event);
+            }
+        },
+        //拖动放在.task-list内
+        {
+            event:'drop',
+            selector:'.task-list',
+            callback:function(context,event){
+                this.actions.dragDrop(event);
+            }
+        },
+
+    ],
     afterRender: function() {
-        let that = this;
-        //let drag_Postion = null;
 
         // 不同视图下添加样式
         if (this.data.type === 'day') {
@@ -108,17 +140,6 @@ let config = {
                 this.append(new CalendarRemindTaskItem({data:item, type: this.data.type}), this.el.find('.task-list'));
             });
         }
-
-        // 日历提醒的拖动设置
-        this.el.on('dragenter', '.task-item',function(event){
-            that.actions.dragEnter(event,this);
-        }).on('dragleave', '.task-list',(event) => {
-            that.actions.dragLeave(event);
-        }).on('dragover', '.task-list',(event) => {
-            that.actions.dragOver(event);
-        }).on('drop','.task-list',(event) => {
-            that.actions.dragDrop(event);
-        });
     }
 };
 
