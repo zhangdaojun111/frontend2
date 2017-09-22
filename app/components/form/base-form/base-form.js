@@ -963,13 +963,13 @@ let config = {
             let {error, errorMsg} = this.actions.validForm(this.data.data, formValue);
             if (error) {
                 MSG.alert(errorMsg);
+                this.data.isBtnClick=false;
                 return;
             }
             let data = this.actions.handleFormData(formValue);
             let formDataNew = this.data.oldData;
             //如果有其他字段的数据，这里是拼approvedFormData
             this.actions.checkDateType(formValue);
-            console.log('cc  ',formValue)
             let obj_new = this.actions.createCacheData(formDataNew, data, true, this);
             let obj_old = this.actions.createCacheData(formDataNew, data, false, this);
             this.actions.changeValueForChildTable(data);
