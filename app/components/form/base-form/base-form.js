@@ -993,9 +993,6 @@ let config = {
                 json['buildin_id'] = this.data.buildId;
             }
             let res = await FormService.saveAddpageData(json);
-            console.log("*************************************")
-            console.log(res)
-            console.log(res.succ)
             if (res.succ == 1) {
                 MSG.alert('保存成功')
                 Mediator.publish('updateForm:success:' + this.data.tableId, true);
@@ -1006,7 +1003,6 @@ let config = {
                         data: {new_option: res.new_option},
                     });
                 } else {
-                    console.log('关了吗')
                     PMAPI.sendToRealParent({
                         type: PMENUM.close_dialog,
                         key: this.data.key,
@@ -1014,7 +1010,6 @@ let config = {
                     });
                 }
             } else {
-                console.log('没关啊')
                 MSG.alert(res.error);
             }
             this.data.isBtnClick=false;
