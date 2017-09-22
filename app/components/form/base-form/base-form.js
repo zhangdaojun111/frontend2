@@ -1089,6 +1089,7 @@ let config = {
 
         //转到编辑模式
         async changeToEdit() {
+            this.data.isView=0;
             let json = this.actions.createPostJson();
             //重新获取动态数据 （temp_id会变）
             let res = await FormService.getDynamicDataImmediately(json);
