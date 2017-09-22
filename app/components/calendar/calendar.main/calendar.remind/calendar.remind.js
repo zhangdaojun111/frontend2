@@ -58,17 +58,32 @@ let CalendarRemind = {
     actions: {
 
     },
+    binds:[
+        {
+            event:'click',
+            selector:'.open-form',
+            callback:function () {
+                PMAPI.openDialogByIframe(
+                    `/calendar_mgr/create/?table_id=${this.data.remindTableId}&real_id=${this.data.remindRealId}`,
+                    {
+                        width: "1700",
+                        height: '800',
+                        title: '表单'
+                    });
+            }
+        }
+    ],
     afterRender: function() {
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
-        this.el.on('click', '.open-form', () => {
-            PMAPI.openDialogByIframe(
-                `/calendar_mgr/create/?table_id=${this.data.remindTableId}&real_id=${this.data.remindRealId}`,
-                {
-                    width: "1700",
-                    height: '800',
-                    title: '表单'
-                });
-        })
+        // this.el.on('click', '.open-form', () => {
+        //     PMAPI.openDialogByIframe(
+        //         `/calendar_mgr/create/?table_id=${this.data.remindTableId}&real_id=${this.data.remindRealId}`,
+        //         {
+        //             width: "1700",
+        //             height: '800',
+        //             title: '表单'
+        //         });
+        // })
     },
     beforeDestory: function () {
         this.data.style.remove();

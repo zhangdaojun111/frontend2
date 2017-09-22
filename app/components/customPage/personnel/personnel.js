@@ -797,6 +797,7 @@ let config = {
         },
         onSortChanged: function ($event) {
             if( this.data.frontendSort ){
+                this.agGrid.actions.refreshView();
                 return;
             }
             let data = this.agGrid.gridOptions.api.getSortModel()[0];
