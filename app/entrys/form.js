@@ -20,6 +20,7 @@ let FormEntrys = {
         this.parentRecordId = config.parent_record_id || '';
         this.isView = config.is_view || 0;//查看模式
         this.isBatch = config.is_batch || 0;//是否是批量工作流
+        this.inProcess = config.in_process || 0; //是否在途
         this.recordId = config.record_id || '';
         this.action = config.action || '';//暂时
         this.el = config.el || '';//form的外层dom
@@ -147,7 +148,7 @@ let FormEntrys = {
             }
         }
         //如果是临时表，传temp_id，否则是real_id
-        if (!this.action) {
+        if (!this.inProcess || !this.isBatch) {
             json["real_id"] = this.realId;
         } else {
             json["temp_id"] = this.realId;
