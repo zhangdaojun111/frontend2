@@ -24,6 +24,7 @@ let config = {
         tableId: '',
         columnDefs: [],
         rowData:[],
+        footerData:[],
         fieldsData:[],
         rows: 100,
         total: 0,
@@ -195,6 +196,7 @@ let config = {
             let gridData = {
                 columnDefs: this.data.columnDefs,
                 rowData: this.data.rowData,
+                footerData: this.data.footerData,
                 fieldsData: this.data.fieldsData,
                 floatingFilter: true,
                 onColumnResized: this.actions.onColumnResized,
@@ -621,6 +623,7 @@ let config = {
         },
         onSortChanged: function ($event) {
             if( this.data.frontendSort ){
+                this.agGrid.actions.refreshView();
                 return;
             }
             let data = this.agGrid.gridOptions.api.getSortModel()[0];
@@ -712,7 +715,7 @@ let config = {
                 height: 800,
                 title: title,
                 modal:true,
-                defaultMax: defaultMax,
+                // defaultMax: defaultMax,
                 customSize: defaultMax
             } ).then( (data)=>{
             } )
