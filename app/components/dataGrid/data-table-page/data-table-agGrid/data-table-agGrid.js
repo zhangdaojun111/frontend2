@@ -1139,7 +1139,10 @@ let config = {
                 post_arr.push( footer )
             }
             Promise.all(post_arr).then((res)=> {
-                this.actions.setGridData( res );
+                let time = this.data.firstRender ? 100 : 0;
+                setTimeout( ()=>{
+                    this.actions.setGridData( res );
+                },time )
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
                 }
