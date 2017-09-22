@@ -147,6 +147,14 @@ let config = {
             }
             this.el.find('.set-password-input').focus();    //点击眼睛后强制input获取焦点并取消延迟执行的blur事件
         },
+        /**
+         * 父组件设置密码组件的值
+         * @param psw
+         */
+        setPswByParent:function (psw) {
+            this.data.password_value = psw;
+            this.el.find('.set-password-input').val(psw);
+        }
     },
     binds:[
         {
@@ -185,13 +193,6 @@ let config = {
                 this.actions.setPswDisplay();
             }
         },
-        {
-            event:'blur',
-            selector:'.default-faker-password',
-            callback:function (target,event) {          //input框失去焦点时，设置密码值以及检测密码是否合法
-                this.actions.delayHideTips();
-            }
-        },
     ],
     afterRender:function () {
         this.actions.initPswInput();
@@ -208,12 +209,14 @@ let config = {
  *      rule:密码框后方文字（填写说明）
  *      checkChar:是否检测非法字符（默认检测）
  *      fakerPsw:是否显示密码框中的眼睛（默认显示）
+ *
  * }
  */
 
 class PasswordInput extends Component {
-    constructor(data){
+    constructor(data,callback){
         super(config,data);
+        this.setValue = callback;
     }
 }
 

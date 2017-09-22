@@ -9,6 +9,7 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import {LoginService} from '../services/login/loginService';
 import {md5} from '../services/login/md5';
 import msgBox from '../lib/msgbox';
+import {PasswordInput} from "../components/util/passwordInput/password-input"
 
 function getLoginController() {
     return {
@@ -32,7 +33,7 @@ function getLoginController() {
         $findPwBtn:$('.find-pw-group'),             //忘记密码
         $closeIcon:$('.close-icon'),                //找回密码面板关闭按钮
         $usernameInput:$('input[name=username]'),   //用户名输入框
-        $passwordInput:$('input[name=password]'),   //密码输入框
+        // $passwordInput:$('input[name=password]'),   //密码输入框
         $whitePanel:$('.white-panel'),              //正面面板
         $oppositePanel:$('.opposite-panel'),        //反面面板
         $submitFindPw:$('.submit-find-account'),    //查找密码提交按钮
@@ -55,6 +56,11 @@ function getLoginController() {
                 that.systemName = that.$loginMainTitle.val();
                 that.resetSysName(that.systemName);
             });
+
+            //初始化密码输入框组件
+            let $wrap = $('.password-component');
+            this.passwordInputComp = new PasswordInput({checkChar:false},this.setPasswordValue);
+            this.passwordInputComp.render($wrap);
 
             //记住密码和忘记密码
             this.$rememberPwCheck.on('click', (event) => {
@@ -82,6 +88,7 @@ function getLoginController() {
              * 登录按钮
              */
             this.$loginBtn.on('click', () => {
+                that.password_value = that.passwordInputComp.data.password_value;
                 that.userLogin(that.username_value,that.password_value);   //根据用户名和密码登录
             });
 
@@ -117,13 +124,6 @@ function getLoginController() {
                 that.username_value = that.$usernameInput.val();
                 that.findPasswordByInput();
             },100));
-
-            /**
-             * 监听密码输入框
-             */
-            this.$passwordInput.on('input',(() => {
-                that.password_value = that.$passwordInput.val();
-            }));
 
             /**
              * 密码找回页面提交按钮
@@ -181,13 +181,13 @@ function getLoginController() {
                 password = info[this.username_value];
                 if(password !== undefined && password !== ''){
                     this.isRememberKey = true;
-                    this.$passwordInput.val(password);
+                    this.passwordInputComp.actions.setPswByParent(password);
                     this.$rememberPwCheck.prop('checked',true);
                     this.password_value = password;
                 }
             }else{
                 this.isRememberKey = false;
-                this.$passwordInput.val('');
+                this.passwordInputComp.actions.setPswByParent('');
                 this.$rememberPwCheck.prop('checked',false);
                 this.password_value = '';
             }
@@ -267,7 +267,7 @@ function getLoginController() {
                 if(password !== undefined && password !== ''){
                     this.password_value = password;
                     this.isRememberKey = true;
-                    this.$passwordInput.val(password);
+                    this.passwordInputComp.actions.setPswByParent(password);
                     this.$rememberPwCheck.prop("checked",true);
                 }
             }
@@ -300,6 +300,8 @@ function getLoginController() {
          * 用户登录
          */
         userLogin:function (username,password) {
+            console.log(username,password);
+            debugger;
             let data = {
                 username:username,
                 password:md5(password)
@@ -326,6 +328,9 @@ function getLoginController() {
                 console.log("登录失败",err.statusText);
             })
         },
+        setPasswordValue:function (value) {
+            this.password_value = value;
+        }
     };
 }
 
