@@ -16,8 +16,6 @@ import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
 import WorkFlowGrid from '../components/workflow/workflow-grid/workflow-grid';
 import ApprovalHeader from '../components/workflow/approval-header/approval-header';
 import ApprovalWorkflow from '../components/workflow/approval-workflow/approval-workflow';
-import WorkflowAddFollow from '../components/workflow/workflow-addFollow/workflow-addFollow/workflow-addFollow';
-import WorkflowAddSigner from '../components/workflow/workflow-addFollow/workflow-addSigner/workflow-addSigner';
 import FormEntrys from './form';
 import TreeView from '../components/util/tree/tree';
 import msgBox from '../lib/msgbox';
@@ -33,11 +31,15 @@ const workflowForGrid={
         obj.table_id=para.table_id;
         obj.form_id=para.form_id;
         obj.flow_id=para.flow_id;
-        ApprovalWorkflow.create(para.el);
-        this.create();
+        var self=this;
+        ApprovalWorkflow.create(para.el).then(function (component) {
+            self.create();
+            setTimeout(()=>component.hideLoading(),1000)
+        });
+
     },
     create(){
-        WorkflowAddFollow.showAdd();
+        $('#addFollower').hide();
         WorkFlowForm.showForm();
         
         let nameArr=[],focus=[],is_view,tree=[],staff=[];
@@ -46,7 +48,8 @@ const workflowForGrid={
         Mediator.subscribe('workFlow:record_info', (res) => {
             ApprovalHeader.showheader(res.record_info);
             WorkflowRecord.showRecord(res.record_info);
-            if(res.record_info.current_node!=window.config.name){
+            let current_node_arr = res.record_info.current_node.split('、');
+            if(current_node_arr.indexOf(window.config.name)==-1){
                 $('#approval-workflow').find('.for-hide').hide();
             };
             if(res.record_info.status==="已驳回到发起人"&&res.record_info.start_handler===window.config.name){
@@ -71,107 +74,6 @@ const workflowForGrid={
                         focus.push(a[i][j]);
                     }
                 }
-                if(focus.length>0){
-                    let dept=[];
-                    (async function () {
-                        return workflowService.getWorkflowInfo({url: '/get_all_users/'});
-                    })().then(users => {
-                        let idArr=[];
-                        for(var i in focus){
-                            idArr.push(users.rows[focus[i]].id);
-                            dept.push(users.rows[focus[i]].department);
-                        }
-                        Mediator.publish('workflow:idArr', idArr);
-                        dept=_.uniq(dept);
-                    }).then(()=>{
-                        (async function () {
-                            return workflowService.getStuffInfo({url: '/get_department_tree/'});
-                        })().then(res=>{
-                            tree=res.data.department_tree;
-                            staff=res.data.department2user;
-                            function recur(data) {
-                                for (let item of data){
-                                    item.nodes=item.children;
-                                    for(let i in dept){
-                                        if(item.text.indexOf(dept[i])!==-1){
-                                            item.state={};
-                                            item.state.checked=true;
-                                            item.state.selected=true;
-                                            for(var k in staff){
-                                                if(k==item.id){
-                                                    Mediator.publish('workflow:checkDeptAlready', staff[k]);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if(item.children.length!==0){
-                                        recur(item.children);
-                                    }
-                                }
-                            }
-                            recur(tree);
-                            var treeComp2 = new TreeView(tree,{
-                                callback: function (event,selectedNode) {
-                                    if(event==='select'){
-                                        for(var k in staff){
-                                            if(k==selectedNode.id){
-                                                Mediator.publish('workflow:checkDept', staff[k]);
-                                            }
-                                        }
-                                    }else{
-                                        for(var k in staff){
-                                            if(k==selectedNode.id){
-                                                Mediator.publish('workflow:unCheckDept', staff[k]);
-                                            }
-                                        }
-                                    }
-                                },
-                                treeType:'MULTI_SELECT',
-                                isSearch: true,
-                                withButtons:true
-                                });
-                            treeComp2.render($('#treeMulti'));
-                        });
-                    })
-                }else{
-                    (async function () {
-                        return workflowService.getStuffInfo({url: '/get_department_tree/'});
-                    })().then(res=>{
-                        tree=res.data.department_tree;
-                        staff=res.data.department2user;
-                        function recur(data) {
-                            for (let item of data){
-                                item.nodes=item.children;
-                                if(item.children.length!==0){
-                                    recur(item.children);
-                                }
-                            }
-                        }
-                        recur(tree);
-                        var treeComp2 = new TreeView(tree,{
-                            callback: function (event,selectedNode) {
-                                if(event==='select'){
-                                    for(var k in staff){
-                                        if(k==selectedNode.id){
-                                            Mediator.publish('workflow:checkDept', staff[k]);
-                                        }
-                                    }
-                                }else{
-                                    for(var k in staff){
-                                        if(k==selectedNode.id){
-                                            Mediator.publish('workflow:unCheckDept', staff[k]);
-                                        }
-                                    }
-                                }
-                            },
-                            treeType:'MULTI_SELECT',
-                            isSearch: true,
-                            withButtons:true
-                            });
-                        treeComp2.render($('#treeMulti'));
-                    });
-                }
-            
                 (async function () {
                     return workflowService.getWorkflowInfo({url: '/get_all_users/'});
                 })().then(users => {
@@ -179,7 +81,8 @@ const workflowForGrid={
                         nameArr.push(`<span class="selectSpan">${users.rows[focus[i]].name}</span>`);
                     }
                     $('#add-home #addFollowerList').html(nameArr);
-                    if(nameArr.indexOf(window.config.name)>-1&&window.config.name!=res.record_info.current_node){
+                    let current_node_arr = res.record_info.current_node.split('、');
+                    if(nameArr.indexOf(window.config.name)>-1&&current_node_arr.indexOf(window.config.name)==-1){
                         $('#approval-workflow').find('.for-hide').hide();
                         $('#approval-workflow').find('#re-app').hide();
                     };
@@ -195,9 +98,9 @@ const workflowForGrid={
                 }
             }
         });
-        
+
         FormEntrys.createForm({
-            el: '#place-form',
+            el: $('#place-form'),
             form_id: obj.form_id,
             record_id: obj.record_id,
             is_view: is_view,

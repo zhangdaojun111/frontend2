@@ -39,6 +39,19 @@ html.bi, body.bi {
         background: url('../../../assets/images/bisystem/bi_view_back.png') no-repeat;
 
     }
+    .tabs-menu-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/tabs_menu.png') no-repeat;
+
+    }
+    .tabs-menu-active-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/tabs_menu_active.png') no-repeat;
+    }
+    .original-data-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/original_data.png') no-repeat;
+    }
 }
 
 @mixin chart-com {
@@ -52,8 +65,37 @@ html.bi, body.bi {
     height: 16px;
 }
 
+/*
+* form字段列名显示
+*/
+@mixin form-clo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    span {
+        margin: 8px;
+        border: 1px solid #e4e4e4;
+        padding: 10px 24px;
+        background: #F2F2F2;
+    }
+}
+
+/*
+ * form按钮
+ */
+@mixin form-btn {
+    padding: 8px 40px;
+    background: #0E7AEF;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    color: #ffffff;
+    outline: none;
+    font-size: 12px;
+}
+
 /**
-* 保存/确定 按钮
+* 保存按钮
 */
 @mixin save-btn {
     display: inline-block;
@@ -133,7 +175,13 @@ html.bi, body.bi {
             }
         }
     }
-    @import "charts.test";
+    .form-chart-clo {
+        @include form-clo;
+    }
+
+    .save-btn {
+        @include form-btn;
+    }
 }
 
 

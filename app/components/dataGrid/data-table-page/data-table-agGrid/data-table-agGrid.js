@@ -806,7 +806,7 @@ let config = {
                 return '';
             }
             if( this.data.viewMode == 'in_process' ){
-                return '<div class="ui-link" style="text-align: center;"><a class="gridView" style="color:#337ab7;">查看</a></div>';
+                return '<div style="text-align: center;"><a class="gridView" style="color:#337ab7;">查看</a></div>';
             }
             if (params.data.group || Object.is(params.data.group, '') || Object.is(params.data.group, 0)) {
                 return '';
@@ -821,7 +821,7 @@ let config = {
             } catch (e) {
                 rowStatus = 0;
             }
-            let str = '<div class="ui-link" style="text-align:center;"><a class="gridView" style="color:#337ab7;">查看</a>';
+            let str = '<div style="text-align:center;"><a class="gridView" style="color:#337ab7;">查看</a>';
             if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data' || this.data.viewMode == 'deleteHanding') {
                 if (this.data.isFixed || rowStatus == 2 || this.data.permission.cell_edit == 0) {
                     str += ' | <span style="color: darkgrey;">编辑</span>';
@@ -947,9 +947,9 @@ let config = {
             let sheetData = dataTableService.getSheetPage( obj2 );
             let tableOperate = dataTableService.getTableOperation( obj2 );
             let prepareParmas = dataTableService.getPrepareParmas( obj2 );
-
             Promise.all([preferenceData, headerData, sheetData,tableOperate,prepareParmas]).then((res)=> {
-                this.actions.setHeaderData( res );
+                this.actions.setHeaderData( res )
+                //this.actions.getGridData();
             })
             //请求表单数据
             this.actions.getGridData();
@@ -1110,6 +1110,7 @@ let config = {
                 this.actions.sortWay();
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
+                    this.el.find( '.icon-aggrid-refresh' ).removeClass('refresh-rotate');
                 }
             })
             HTTP.flush();
@@ -1182,7 +1183,6 @@ let config = {
                 let currentPage = parseInt( Number( this.data.first )/Number( this.data.rows ) );
                 this.pagination.actions.setPagination( this.data.total,currentPage + 1 );
             }
-            console.log( '请求数据返回get_table_data' );
             this.actions.sortWay();
             //编辑模式原始数据
             if( this.el.find( '.edit-btn' )[0] ){
@@ -1359,6 +1359,11 @@ let config = {
                 is_filter: this.data.filterParam.is_filter,
                 filter: []
             }
+            for( let k in json ){
+                if( json[k] == 'undefined' ){
+                    json[k] = '';
+                }
+            }
             if( this.data.viewMode == 'in_process' ){
                 let ids = [];
                 for( let d of this.data.rowData ){
@@ -1382,7 +1387,8 @@ let config = {
             if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
                 json['rows'] = 99999;
                 json['first'] = 0;
-                json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                // json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                json['is_temp'] = 0;
             }
             if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild'||this.data.viewMode == 'child' ){
                 json["childInfo"]= {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
@@ -1445,7 +1451,7 @@ let config = {
             }
             if( this.data.groupCheck ){
                 json['is_group'] = 1;
-                json['group_fields'] = JSON.stringify( this.data.myGroup.fields );
+                json['group_fields'] = JSON.stringify( this.data.myGroup );
                 json['tableType'] = 'group';
             }
             //排序
@@ -1513,8 +1519,8 @@ let config = {
                     tableId: this.data.tableId,
                     gridoptions: this.agGrid.gridOptions,
                     fields: this.data.myGroup.length == 0 ? this.data.groupFields : this.actions.deleteGroup(this.data.groupFields),
-                    myGroup:  this.actions.setMyGroup(this.data.myGroup.fields),
-                    groupFields: this.data.myGroup.fields,
+                    myGroup:  this.actions.setMyGroup(this.data.myGroup),
+                    groupFields: this.data.myGroup,
                     close: this.actions.calcGroup
                 }
                 this.groupGridCom = new groupGrid(groupLit);
@@ -1599,7 +1605,7 @@ let config = {
         //分组触发
         onGroupChange: function (group) {
             this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , true)
-            this.data.myGroup.fields = group;
+            this.data.myGroup = group;
             this.actions.getGridData();
         },
         //列宽改变
@@ -1624,9 +1630,9 @@ let config = {
                 field.push(data[j]);
             }
             if(this.data.myGroup.length != 0) {
-                for (let k = 0; k < this.data.myGroup.fields.length; k++) {
+                for (let k = 0; k < this.data.myGroup.length; k++) {
                     for (let i = 0; i < field.length; i++) {
-                        if (this.data.myGroup.fields[k] == field[i].field) {
+                        if (this.data.myGroup[k] == field[i].field) {
                             field.splice(i, 1);
                         }
                     }
@@ -1859,7 +1865,8 @@ let config = {
             //在途刷新
             if( this.el.find( '.refresh-btn' )[0] ){
                 this.el.find( '.refresh-btn' ).on( 'click',()=>{
-                    this.actions.getInprocessData();
+                    this.el.find( '.icon-aggrid-refresh' ).addClass('refresh-rotate');
+                    this.actions.getInprocessData(true);
                 } )
             }
             //对应关系保存
@@ -2311,7 +2318,7 @@ let config = {
                 this.el.find('.group-btn').find('span').html('数据');
                 this.el.find( '.group-panel' ).eq(0).animate( { 'right':this.data.isShowCustomPanel?'200px':'0px' } );
                 this.data.groupCheck = !this.data.groupCheck;
-                this.actions.onGroupChange(this.data.myGroup.fields)
+                this.actions.onGroupChange(this.data.myGroup)
             } else {
                 this.data.closePanel = true;
                 this.el.find('.group-btn').find('span').html('分组');
@@ -2523,7 +2530,7 @@ let config = {
             this.col_id=data.data._id;
             this.colDef=arr;
             //行选择
-            if(data.colDef.headerName != "操作"){
+            if(data.colDef.headerName != "操作" && !this.data.editMode){
                 dgcService.rowClickSelect( data )
             }
 
@@ -2544,11 +2551,11 @@ let config = {
                     ViewVideo.data.dinput_type = data.colDef.dinput_type;
                     ViewVideo.data.currentVideoId = data.value[0];
                     ViewVideo.data.videoSrc = `/download_attachment/?file_id=${data.value[0]}&download=0&dinput_type=${data.colDef.dinput_type}`;
-                     PMAPI.openDialogByComponent(ViewVideo, {
-                         width: 1000,
-                         height: 600,
-                         title: '视频播放器'
-                     })
+                    PMAPI.openDialogByComponent(ViewVideo, {
+                        width: 900,
+                        height: 600,
+                        title: '视频播放器'
+                    })
                 });
                 HTTP.flush();
             }
@@ -2567,8 +2574,8 @@ let config = {
                     PictureAttachment.data.rows=obj.imgData.rows;
                     PMAPI.openDialogByComponent(PictureAttachment,{
                         title:'图片附件',
-                        width: 1234,
-                        height:800
+                        width: 900,
+                        height:600
                     })
                 })
                 HTTP.flush();
@@ -2634,8 +2641,8 @@ let config = {
                         AttachmentList.data.dinput_type=dinput_type;
                         AttachmentList.data.is_view=1;
                         PMAPI.openDialogByComponent(AttachmentList,{
-                            width: 1234,
-                            height: 876,
+                            width: 900,
+                            height: 600,
                             title: '附件列表'
                         })
                     })
@@ -2998,6 +3005,7 @@ let config = {
         },
         //打开局部的弹窗
         openSelfIframe: function ( url,title,w,h ) {
+            this.actions.setInvalid();
             PMAPI.openDialogToSelfByIframe( url,{
                     width: w || 1400,
                     height: h || 800,
@@ -3086,7 +3094,7 @@ let config = {
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
 
         //渲染cache数据
-        if( window.config.data_cached == 1 ){
+        if( window.config.data_cached == 1 && this.data.viewMode == 'normal' ){
             console.log( '加载cache数据' )
             this.actions.renderCacheData( window.config.cached_data )
             return;
@@ -3098,6 +3106,7 @@ let config = {
         if( this.data.viewMode == 'deleteHanding' ){
             PMAPI.getIframeParams(window.config.key).then((res) => {
                 this.data.deleteHandingData = res.data.obj.deleteHandingData || [];
+                this.actions.getHeaderData();
             })
         }
         this.actions.getHeaderData();

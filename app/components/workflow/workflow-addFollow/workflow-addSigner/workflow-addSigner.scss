@@ -73,6 +73,14 @@
                                 left: 50%;
                                 margin-top: -6.5px;
                                 margin-left: -6.5px;
+                                &:before{
+                                    width: 11px;
+                                    height: 11px;
+                                }
+                                &:after{
+                                    width: 9px;
+                                    height: 9px;
+                                }
                             }
                         }
                         &:nth-child(2){
@@ -165,8 +173,16 @@
             position: relative;
             input{
                 position: absolute;
-                top:0;
+                top: 1px;
                 left: 0;
+                &:before{
+                    width: 11px;
+                    height: 11px;
+                }
+                &:after{
+                    width: 9px;
+                    height: 9px;
+                }
             }
         }
     }

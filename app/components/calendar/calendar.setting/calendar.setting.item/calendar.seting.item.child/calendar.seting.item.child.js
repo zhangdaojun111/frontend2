@@ -19,6 +19,7 @@ let config = {
             event: 'click',
             selector: '.component-item-child',
             callback: function () {
+                debugger;
                 Mediator.emit(
                     'calendar-set-left:calendar-set',
                     {

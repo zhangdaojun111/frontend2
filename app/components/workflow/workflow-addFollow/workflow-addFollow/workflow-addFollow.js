@@ -52,6 +52,7 @@ let config={
         });
         //部门选择
         Mediator.subscribe('workflow:checkDept', (res)=> {
+            console.log('ss');
             let arr = [];
             let checked=this.el.find('#staffMulti .search-check-row');
             let len = checked.length;
@@ -118,6 +119,7 @@ let config={
         });
         //注册SelectedStaff组件
         Mediator.subscribe('workflow:pubCheck', (res)=> {
+            console.log(res);
             this.append(new SelectedStaff(res), this.el.find('#selected'));
             this.data.total++;
             this.action.addtotal(this.data.total);

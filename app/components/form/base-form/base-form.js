@@ -1038,6 +1038,7 @@ let config = {
 
         //转到编辑模式
         async changeToEdit() {
+            console.log('baseform 1041');
             let json = {
                 table_id: this.data.tableId,
                 real_id: this.data.realId,
@@ -1058,6 +1059,7 @@ let config = {
                 this.data.btnType = 'new';
             }
             this.actions.addBtn();
+            this.actions.triggerControl();
             this.data.isBtnClick=false;
         },
         //修改可修改性
@@ -1422,7 +1424,7 @@ let config = {
             }
             let _this = this;
             PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${data.value}&parentTableId=${data.tableId}&parentTempId=${data.temp_id}&recordId=${data.record_id}&viewMode=${this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`, {
-                width: 800,
+                width: 1550,
                 height: 600,
                 title: `对应关系`,
                 modal: true
@@ -1669,5 +1671,4 @@ class BaseForm extends Component {
     }
 
 }
-
 export default BaseForm

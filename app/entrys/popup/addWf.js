@@ -24,6 +24,7 @@ AddWf.showDom().then(function (component) {
 
 let serchStr = location.search.slice(1);
 let obj = {}, is_view = 0,cache_old;
+let action;
 serchStr.split('&').forEach(res => {
     let arr = res.split('=');
     obj[arr[0]] = arr[1];
@@ -34,7 +35,10 @@ if (obj.btnType === 'view'||obj.btnType ==="none") {
     $('#subAddworkflow').hide();
     is_view = 1;
 }
-
+//判断工作流是否处于在途状态或者在批量工作流中打开forn
+if(obj.in_process == 1 || obj.is_batch == 1){
+    action = 1;
+}
 
 Mediator.publish('workflow:getKey', obj.key);
 (async function () {
@@ -57,7 +61,8 @@ Mediator.publish('workflow:getKey', obj.key);
             real_id: obj.real_id,
             isAddBuild: obj.isAddBuild,
             id: obj.id,
-            key: obj.key
+            key: obj.key,
+            action: action
         });
         setTimeout(()=>{
             cache_old= FormEntrys.getFormValue(obj.table_id,true);
@@ -94,7 +99,8 @@ Mediator.subscribe('workflow:getflows', (res) => {
         real_id: obj.real_id,
         isAddBuild: obj.isAddBuild,
         id: obj.id,
-        key: obj.key
+        key: obj.key,
+        action: action
     });
     setTimeout(()=>{
         cache_old= FormEntrys.getFormValue(obj.table_id,true);
@@ -125,7 +131,7 @@ Mediator.subscribe('workflow:submit', (res) => {
             return workflowService.addUpdateTableData(postData);
         })().then(res => {
             if (res.success === 1) {
-                msgBox.alert(`${res.error}`);
+                msgBox.showTips(`${res.error}`);
                 PMAPI.sendToParent({
                     type: PMENUM.close_dialog,
                     key: obj.key,
