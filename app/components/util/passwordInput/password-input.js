@@ -130,7 +130,6 @@ let config = {
             if(this.data.pswDisplay === false){
                 this.data.pswDisplay = true;
                 this.el.find('.set-password-input').attr('type','text');
-
             }else{
                 this.data.pswDisplay = false;
                 this.el.find('.set-password-input').attr('type','password');
