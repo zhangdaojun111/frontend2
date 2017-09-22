@@ -350,7 +350,7 @@ let FormEntrys = {
     //转到编辑模式
     changeToEdit(tableId,isTemp) {
         this.childForm[tableId].data.isOtherChangeEdit = true;//如果是外部模块的转编辑模式
-        this.childForm[tableId].data.inProcess = isTemp;//如果是外部模块的转编辑模式
+      //  this.childForm[tableId].data.inProcess = isTemp;//如果是外部模块的转编辑模式
         this.childForm[tableId].actions.changeToEdit();
     },
 
