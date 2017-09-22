@@ -15,7 +15,6 @@ let config = {
     data: {
         dataitem: [],              //日历树数据
         cancel_fields: [],         //取消选中数组
-        hide_item_table: [],       //隐藏table数据
         rows: [],
         items: [],                 //日历树中filedID
     },
@@ -114,10 +113,6 @@ let config = {
          */
         showFirst: function () {
             let IsChecked = true;
-            if (this.data.hide_item_table.indexOf(this.data.dataitem.table_id) !== -1) {
-                this.el.find(".select-head").removeClass("label-select-all-show");
-                this.el.find(".select-all").hide();
-            }
             let items_Id = this.data.dataitem.items.map((item) => {
                 return item.field_id;
             });
@@ -132,6 +127,7 @@ let config = {
             if (IsChecked) {
                 this.el.find(".select-head").addClass("label-select-all-checked");
             }
+            this.actions.loadDataHtml(this.data.dataitem);
         },
 
         /**
@@ -166,8 +162,8 @@ let config = {
         hide_group: function () {
             this.el.find(".select-head").removeClass("label-select-all-show");
             this.events.checkbox({type: 'unshowData', staus: true, data: this.data.items});
-            this.el.find(".select-all").hide();
-            this.events.checkbox({type: 'hideData', data: this.data.dataitem.table_id});
+            this.events.checkbox({type: 'hideData', data: this.data.dataitem});
+            this.destroySelf();
         },
     },
     events: {},
@@ -175,8 +171,9 @@ let config = {
         {
             event: 'mouseleave',
             selector: '.float-button-group',
-            callback: function (context) {
-                $(context).css("display", "none");
+            callback: function () {
+                this.el.find(".float-button-group").hide();
+                this.el.find(".search-function").css("display", "none");
             }
         },
         {
@@ -230,7 +227,7 @@ let config = {
             event: 'click',
             selector: '.search-function-children',
             callback: function (context) {
-                this.actions.goSearch($(context).closest(".search-function").attr("class").split(" ")[1], $(context).attr("class").split(" ")[1]);
+                this.actions.goSearch(this.data.dataitem.table_id, $(context).attr("class").split(" ")[1]);
             }
         },
         {
@@ -246,19 +243,21 @@ let config = {
             callback: function () {
                 this.actions.hide_group();
             }
+        },
+        {
+            event:'mouseleave',
+            selector:'.float-button-group-hide',
+            callback:function () {
+                this.el.find(".float-button-group").hide();
+                this.el.find(".search-function").css("display", "none");
+            }
         }
     ],
 
     afterRender: function () {
-        let that = this;
-        $(document).mouseover(function () {
-            that.el.find(".float-button-group").hide();
-            that.el.find(".search-function").css("display", "none");
-        });
     },
     firstAfterRender: function () {
         this.actions.showFirst();
-        this.actions.loadDataHtml(this.data.dataitem);
     },
 }
 
@@ -267,7 +266,6 @@ class LeftContentSelect extends Component {
         config.data.dataitem = data;
         config.data.dataitem.searchValue = 0;
         config.data.cancel_fields = cancel_fields;
-        config.data.hide_item_table = hide_item_table;
         config.data.rows = rows;
         config.events.checkbox = event;
         super(config);

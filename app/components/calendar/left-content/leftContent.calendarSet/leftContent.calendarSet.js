@@ -50,14 +50,9 @@ let config = {
                 CalendarService.getCalendarPreference(preference);
             }
             if (data.type === "hideData") {
-                let hide_table_id = data.data;
-                let hide_table_name = '';
+                let hide_table_id = data.data.table_id;
+                let hide_table_name = data.data.table_name;
                 this.actions.remindShow();
-                for (let j = 0; j < this.data.rows.length; j++) {
-                    if (hide_table_id === this.data.rows[j].table_id) {
-                        hide_table_name = this.data.rows[j].table_name;
-                    }
-                }
                 this.data.hide_table = {'tableName': hide_table_name, 'table_Id': hide_table_id};
                 this.data.hide_item_table.push(hide_table_id);
                 this.data.hide_tables.push(this.data.hide_table);
@@ -118,49 +113,13 @@ let config = {
             else {
                 checkbox_a2.addClass("workflow_checked");
                 this.el.find(".checkbox_a2").attr("checked", true);
-                console.log(this.data.cancel_fields);
                 _.pull(this.data.cancel_fields, 'approve');
-                console.log(this.data.cancel_fields);
                 Mediator.emit('calendar-left:approveData', {data: true});
             }
             Mediator.emit('calendar-left:unshowData', {data: this.data.cancel_fields});
             let preference = {"content": this.data.cancel_fields};
             CalendarService.getCalendarPreference(preference);
         },
-
-        /**
-         *隐藏日历树
-         */
-        // hide_group: function (temp) {
-        //     let hide_type_id = temp.attr("id").split('-');
-        //     let hide_table_name = "";
-        //     let hide_table_id = hide_type_id[2];
-        //     hide_type_id = "#select-all-block-" + hide_type_id[2];
-        //     this.el.find(hide_type_id + " .select-head").removeClass("label-select-all-show");
-        //     let that = this;
-        //     temp.closest(".float-button-group").next(".checkbox-group").find(".select-label-children").each(function () {
-        //         let filedId = $(this).attr("id").split("-")[2];
-        //         if (that.data.cancel_fields.indexOf(filedId) === -1) {
-        //             that.data.cancel_fields.push(filedId);
-        //         }
-        //     });
-        //     this.el.find(hide_type_id).hide();
-        //     this.actions.remindShow();
-        //     for (let j = 0; j < this.data.rows.length; j++) {
-        //         if (hide_table_id === this.data.rows[j].table_id) {
-        //             hide_table_name = this.data.rows[j].table_name;
-        //         }
-        //     }
-        //     this.data.hide_table = {'tableName': hide_table_name, 'table_Id': hide_table_id};
-        //     this.data.hide_item_table.push(hide_table_id);
-        //     this.data.hide_tables.push(this.data.hide_table);
-        //     let preferenceHide = {"content": this.data.hide_item_table};
-        //     let preference = {"content": this.data.cancel_fields, contentHide: preferenceHide};
-        //     CalendarService.getCalendarPreference(preference);
-        //     Mediator.emit('calendar-left:hideRemindType', {data: this.data.hide_table});
-        //     Mediator.emit('calendar-left:unshowData', {data: this.data.cancel_fields});
-        //     this.data.hide_table = {'tableName': "", 'table_Id': ''}
-        // },
 
         /**
          *隐藏日历树后，提醒选择状态
@@ -200,8 +159,10 @@ let config = {
                 this.data.hide_table = {'tableName': "", 'table_Id': ''};
             }
             this.data.calendarTreeData.rows.forEach((data) => {
-                this.append(new LeftContentSelect(data, this.data.calendarTreeData.cancel_fields, this.data.hide_item_table, this.data.rows,
-                    this.events.checkBoxCheck), this.el.find('.remind-group'));
+                if(!this.data.hide_item_table.includes(data.table_id)){
+                    this.append(new LeftContentSelect(data, this.data.calendarTreeData.cancel_fields, this.data.hide_item_table, this.data.rows,
+                        this.events.checkBoxCheck), this.el.find('.remind-group'));
+                }
             });
             this.actions.approveRemindShow();
         },
@@ -236,9 +197,6 @@ let config = {
             if(this.el.find(".label-select-all-show").length === 0){
                 this.el.find(".checkbox_a3").addClass('label-select-all-checked');
             }
-            this.el.find(".select-all-block-" + data.data).show();
-            this.el.find(".select-all-block-" + data.data).find(".select-head").addClass('label-select-all-show label-select-all-checked');
-            this.el.find(".select-all-block-" + data.data).find(".select-label-children").removeClass("unchecked");
             for (let i = 0; i < this.data.hide_tables.length; i++) {
                 if (this.data.hide_tables[i].table_Id === data.data) {
                     this.data.hide_tables.splice(i, 1);
@@ -246,8 +204,10 @@ let config = {
                     break;
                 }
             }
+            let row = {};
             for (let i = 0; i < this.data.rows.length; i++) {
                 if (this.data.rows[i].table_id === data.data) {
+                    row = this.data.rows[i];
                     for (let j = 0; j < this.data.rows[i].items.length; j++) {
                         if (this.data.cancel_fields.indexOf(this.data.rows[i].items[j].field_id) !== -1) {
                             this.data.cancel_fields.splice(this.data.cancel_fields.indexOf(this.data.rows[i].items[j].field_id), 1);
@@ -256,6 +216,8 @@ let config = {
                     break;
                 }
             }
+            this.append(new LeftContentSelect(row, this.data.cancel_fields, this.data.hide_item_table, this.data.rows,
+                this.events.checkBoxCheck), this.el.find('.remind-group'));
             let preferenceHide = {"content": this.data.hide_item_table};
             let preference = {"content": this.data.cancel_fields, contentHide: preferenceHide};
             CalendarService.getCalendarPreference(preference);
@@ -279,20 +241,13 @@ let config = {
                 this.actions.approve_label(checkbox_a2);
             }
         },
-        // {
-        //     event: 'click',
-        //     selector: '.hide-type-group',
-        //     callback: function (temp = this) {
-        //         this.actions.hide_group($(temp));
-        //     }
-        // }
     ],
 
     afterRender: function () {
         this.el.css({"height": "100%", "width": "100%"});
         this.actions.getCalendarTreeData();
         Mediator.on('calendar-left:showRemindType', data => {
-            this.actions.showRemindType(data)
+            this.actions.showRemindType(data);
         });
     },
 

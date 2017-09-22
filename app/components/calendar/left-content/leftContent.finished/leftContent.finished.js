@@ -28,7 +28,6 @@ let config = {
         }
     },
     events: {
-        // onChange:function(){},
     },
     binds: [
         {
