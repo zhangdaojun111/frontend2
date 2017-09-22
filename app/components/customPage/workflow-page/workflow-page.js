@@ -715,7 +715,7 @@ let config = {
                 height: 800,
                 title: title,
                 modal:true,
-                defaultMax: defaultMax,
+                // defaultMax: defaultMax,
                 customSize: defaultMax
             } ).then( (data)=>{
             } )

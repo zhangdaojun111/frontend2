@@ -133,18 +133,22 @@ let SettingPrint = {
                         if(res.succ == 1){
                             let isFrame=false;
                             $('iframe').each((index,obj)=>{
+                                $(obj.contentDocument).find('iframe').each((index,iframe)=> {
+                                    if (iframe.src.indexOf(_this.data.key) != -1) {
+                                        iframe.focus();
+                                        $(iframe.contentDocument).find('title').text(_this.data.myContent);
+                                        iframe.contentWindow.print();
+                                        isFrame = true;
+                                    }
+                                })
                                 if(obj.src.indexOf(_this.data.key) != -1){
                                     obj.focus();
-                                    $(obj.contentDocument).find('title').text(_this.data.myContent)
+                                    $(obj.contentDocument).find('title').text(_this.data.myContent);
                                     obj.contentWindow.print();
-                                    isFrame=true;
-                                };
+                                    isFrame = true;
+                                }
                             })
-                            if(!isFrame){
-                                $('title').text(_this.data.myContent);
-                                window.print();
-                                $('title').text(t);
-                            }
+
                         }else{
                             _this.data.printTitles=tempPrintTitles;
                         }

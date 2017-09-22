@@ -29,3 +29,6 @@ body.find('.component-loading-cover').remove();
 body.find('.component-loading-box').remove();
 body.removeClass('component-loading-effect');
 
+let head = $('head');
+head.find('title').html(window.config.sysConfig.logic_config.sap_login_system_name);
+

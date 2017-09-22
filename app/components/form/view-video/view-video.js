@@ -80,6 +80,9 @@ let ViewVideo = {
     afterRender(){
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
         this.actions.setBackground();
+        for(let item of this.data.rows){
+             this.el.find('#'+item.file_id).find('.video-file-name').attr('title',item.file_name);
+        }
         //没啥用的代码 写着玩的
         // let _this=this;
         // this.data.video=this.el.find('video').get(0);
