@@ -10,6 +10,11 @@ const handlers = {
 
 export const GlobalService = {
     http:HTTP,
+    /**
+     * 发送全局搜索请求
+     * @param data
+     * @returns {*|Deffered}
+     */
     sendSearch:function (data) {
         let url = '/search_full_text/';
         let body =  Utils.formatParams(data);
@@ -20,7 +25,11 @@ export const GlobalService = {
             type:'post'
         })
     },
-    getOnlineColumnDefs:function () {       //获取在线人员列表表头
+    /**
+     * 获取在线人员列表表头
+     * @returns {[null,null,null,null,null,null,null,null,null,null]}
+     */
+    getOnlineColumnDefs:function () {
         return [
             _.defaultsDeep({headerName: '序号', width: 40}, dgcService.numberCol),
             {
@@ -107,7 +116,12 @@ export const GlobalService = {
             }
         ];
     },
-    getOnlineUserData:function (_param) {         //获取在线人员列表数据
+    /**
+     * 获取在线人员列表数据
+     * @param _param
+     * @returns {*|Deffered}
+     */
+    getOnlineUserData:function (_param) {
         let param = _.defaultsDeep(_param, {
             rows: 10,
             first:0,
