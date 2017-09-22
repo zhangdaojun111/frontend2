@@ -46,8 +46,6 @@ let config = {
             event: 'click',
             selector: '.ui-datepicker-current',
             callback: function () {
-                this.el.find("#errorMessage").css("display", "none");
-
                 //增加0
                 function p(s) {
                     return s < 10 ? '0' + s : s;
@@ -152,7 +150,7 @@ let config = {
         }
 
         this.el.on("click", '.timeInput', function () {
-            time.css('display', 'block');
+            time.css({'display': 'block','position':'absolute'});
             if (_this.data.value) {
                 timeInput.val(_this.data.value);
             } else {

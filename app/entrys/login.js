@@ -39,12 +39,15 @@ function getLoginController() {
         $mobileDownload:$('.mobile-download-btn'),  //移动下载按钮
         $selfServiceUpdate:$('.self-service-update'),   //自助更新按钮
 
-
-        //检测浏览器是否可用
+        /**
+         * 检测浏览器是否可用
+         */
         browser_check: function (){
             return LoginService.support();    //检测浏览器
         },
-        //初始化登录表单控件
+        /**
+         * 初始化登录表单控件
+         */
         formInit:function () {
             let that = this;
             //系统名称改变
@@ -68,44 +71,63 @@ function getLoginController() {
                 // }
             });
 
-            //展示或关闭版本信息
+            /**
+             * 展示或关闭版本信息
+             */
             this.$updateGroup.on('click', () => {
                 that.$versionTable.toggle();
             });
 
-            //登录按钮
+            /**
+             * 登录按钮
+             */
             this.$loginBtn.on('click', () => {
                 that.userLogin(that.username_value,that.password_value);   //根据用户名和密码登录
             });
-            //注册按钮
+
+            /**
+             * 注册按钮
+             */
             this.$registerBtn.on('click', () => {
                 $(window).attr('location','/register_index');
             });
-            //忘记密码，找回密码入口
+
+            /**
+             * 忘记密码，找回密码入口
+             */
             this.$findPwBtn.on('click', () => {
                 that.$whitePanel.hide();
                 that.$oppositePanel.fadeIn();
                 that.isOpposite = true;
             });
 
-            //反面面板关闭返回正面面板
+            /**
+             * 反面面板关闭返回正面面板
+             */
             this.$closeIcon.on('click', () => {
                 that.$whitePanel.fadeIn();
                 that.$oppositePanel.hide();
                 that.isOpposite = false;
             });
 
-            //监听用户名输出框
+            /**
+             * 监听用户名输出框
+             */
             this.$usernameInput.on('input',_.debounce(() => {
                 that.username_value = that.$usernameInput.val();
                 that.findPasswordByInput();
             },100));
 
-            //监听密码输入框
+            /**
+             * 监听密码输入框
+             */
             this.$passwordInput.on('input',(() => {
                 that.password_value = that.$passwordInput.val();
             }));
-            //密码找回页面提交按钮
+
+            /**
+             * 密码找回页面提交按钮
+             */
             this.$submitFindPw.on('click', _.throttle(() => {
                 let userName = $('.account-input').val();
                 let result = LoginService.findPassword(userName);
@@ -120,17 +142,23 @@ function getLoginController() {
                 })
             },4000));
 
-            //自助更新
+            /**
+             * 自助更新
+             */
             this.$selfServiceUpdate.on('click',function () {
                 console.log('打开自助更新页面');
             });
 
-            //移动下载
+            /**
+             * 移动下载
+             */
             this.$mobileDownload.on('click',function () {
                 console.log('打开移动下载页面');
             });
 
-            //键盘绑定
+            /**
+             * 键盘绑定
+             */
             $(document).keypress((event) => {
                 if(event.keyCode === 13){
                     if(that.isOpposite === false){
@@ -141,7 +169,10 @@ function getLoginController() {
                 }
             })
         },
-        //根据用户名输入动态查找缓存记录的用户密码
+
+        /**
+         * 根据用户名输入动态查找缓存记录的用户密码
+         */
         findPasswordByInput(){
             let info = window.localStorage.getItem('password_info') || {};
             info = JSON.parse(info);
@@ -162,12 +193,17 @@ function getLoginController() {
             }
         },
 
-        //初始化公司名称
+        /**
+         * 初始化公司名称
+         */
         sysNameInit:function () {
            this.systemName = this.versionInfo.sap_login_system_name;
            this.resetSysName(this.systemName);
         },
-        //初始化表格中的版本信息
+
+        /**
+         * 初始化表格中的版本信息
+         */
         versionInit:function () {
             let info = this.versionInfo.rows;
             let $table = $('.version-table');
@@ -209,6 +245,9 @@ function getLoginController() {
                 $(".default-hide").toggle();
             })
         },
+        /**
+         * 根据缓存数据初始化用户名称和密码框
+         */
         infoInit:function () {
             let storage = window.localStorage;
             let info = storage.getItem("password_info") || {};
@@ -233,7 +272,10 @@ function getLoginController() {
                 }
             }
         },
-        //自适应调整系统名称字体大小
+
+        /**
+         * 自适应调整系统名称字体大小
+         */
         resetSysName:function (systemName) {
             // if(systemName !== undefined){
             //     //如果系统名大于10个字(需换行)后字体自适应
@@ -253,7 +295,10 @@ function getLoginController() {
             this.$companyInfo.html(systemName);
             $(document).find("title").html(systemName);
         },
-        //用户登录
+
+        /**
+         * 用户登录
+         */
         userLogin:function (username,password) {
             let data = {
                 username:username,
@@ -284,7 +329,9 @@ function getLoginController() {
     };
 }
 
-//检查是否是在子窗口中打开，如果是则父窗口跳转至登录页面
+/**
+ * 检查是否是在子窗口中打开，如果是则父窗口跳转至登录页面
+ */
 if(window.hasOwnProperty("parent") && window.parent !== window){
     $(window.parent).attr('location','/login');
 }

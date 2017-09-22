@@ -62,9 +62,15 @@ Mediator.publish('workflow:getKey', obj.key);
             isAddBuild: obj.isAddBuild,
             id: obj.id,
             key: obj.key,
+<<<<<<< HEAD
             in_process: obj.in_process,
             is_batch: obj.is_batch,
             action: action
+=======
+            action: action,
+            form_id:obj.form_id,
+            flow_id:obj.flow_id,
+>>>>>>> df5a4ff4b96c75d65357bea180400bf0671075eb
         });
         setTimeout(()=>{
             cache_old= FormEntrys.getFormValue(obj.table_id,true);
