@@ -71,6 +71,7 @@ let config = {
         checkPswLegal:function () {
             this.data.password_value = this.el.find('.set-password-input').val();
             this.el.find('.caps-lock-tips').hide();
+
             //密码不能为空
             if(this.data.password_value === ''){
                 this.el.find('.input-password-warning').html('密码不能为空，请修改');
@@ -115,6 +116,9 @@ let config = {
          */
         removeTips:function () {
             this.el.find('.input-password-warning').html('');
+            if(this.data.isCapsLockOpen === true){
+                window.clearTimeout(this.data.timer);
+            }
         },
         /**
          * 切换到用户信息显示页面时，重置所有input框的内容
@@ -126,23 +130,39 @@ let config = {
             this.el.find('.input-password-warning').html('');
             this.el.find('.caps-lock-tips').hide();
         },
+        /**
+         * 点击眼睛后隐藏密码或显示密码
+         */
         setPswDisplay:function () {
             if(this.data.pswDisplay === false){
                 this.data.pswDisplay = true;
                 this.el.find('.set-password-input').attr('type','text');
-
+                this.el.find('.default-faker-password').addClass('display-password');
             }else{
                 this.data.pswDisplay = false;
                 this.el.find('.set-password-input').attr('type','password');
+                this.el.find('.default-faker-password').removeClass('display-password');
             }
-        }
+            // if(this.data.isCapsLockOpen === true){
+            //     this.el.find('.caps-lock-tips').show();
+            // }
+        },
+        /**
+         * 延迟去掉大小写锁定提醒
+         */
+        // delayHideTips:function(){
+        //     let that = this;
+        //     this.data.timer = window.setTimeout(() => {
+        //         that.el.find('.caps-lock-tips').hide();
+        //     },200);
+        // }
     },
     binds:[
         {
             event:'focus',
             selector:'.set-password-input',
             callback:function(target,event){
-                this.actions.removeTips(event);         //监听旧密码的输入,大小写判定
+                this.actions.removeTips(event);         //监听密码的输入,大小写判定
             }
         },
         {
@@ -162,16 +182,24 @@ let config = {
             event:'blur',
             selector:'.set-password-input',
             callback:function (target,event) {          //input框失去焦点时，设置密码值以及检测密码是否合法
+                console.log(event);
                 this.actions.checkPswLegal();
             }
         },
         {
             event:'click',
-            selector:'.faker_password',
-            callback:function () {
+            selector:'.default-faker-password',
+            callback:function (target,event) {
                 this.actions.setPswDisplay();
             }
-        }
+        },
+        {
+            event:'blur',
+            selector:'.default-faker-password',
+            callback:function (target,event) {          //input框失去焦点时，设置密码值以及检测密码是否合法
+                this.actions.delayHideTips();
+            }
+        },
     ],
     afterRender:function () {
         this.actions.initPswInput();

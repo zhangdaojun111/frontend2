@@ -611,7 +611,6 @@ export const IframeInstance = new Component({
             event:'click',
             selector:'.popup-icon',
             callback:function () {
-                console.log("open tabs");
                 this.actions.showTabsPopup();       //打开标签控制页面
             }
         },
