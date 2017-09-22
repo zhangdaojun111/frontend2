@@ -136,7 +136,7 @@ Mediator.subscribe('workflow:submit', (res) => {
         })().then(res => {
             if (res.success === 1) {
                 msgBox.showTips(`${res.error}`);
-                PMAPI.sendToParent({
+                PMAPI.sendToRealParent({
                     type: PMENUM.close_dialog,
                     key: obj.key,
                     data: {
