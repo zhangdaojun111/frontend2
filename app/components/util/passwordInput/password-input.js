@@ -19,6 +19,9 @@ let config = {
         checkChar:true,
     },
     actions:{
+        /**
+         * 初始化input前方的title和后方的输入规则
+         */
         initPswInput:function () {
             this.el.find('.password-title').html(this.data.title);
             this.el.find('.password-rule').html(this.data.rule);
@@ -35,7 +38,6 @@ let config = {
 
             if((( keyCode >= 65 && keyCode <= 90 ) && !isShift ) || (( keyCode >= 97 && keyCode <= 122 ) && isShift )){
                 $capitalTip.show();
-                this.actions.setBubblePopup();
                 this.data.isCapsLockOpen = true;
             } else{
                 this.data.isCapsLockOpen = false;
@@ -57,7 +59,6 @@ let config = {
                     $capitalTip.hide();
                 } else {
                     this.data.isCapsLockOpen = true;
-                    this.actions.setBubblePopup();
                     $capitalTip.show();
                 }
             }
