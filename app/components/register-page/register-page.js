@@ -20,25 +20,33 @@ let config ={
         telephone:'',       //用于保存电话
     },
     actions:{
-        //显示投资人注册页面
+        /**
+         * 显示投资人注册页面
+         */
         showInvestorsLogin:function () {
             this.el.find('div.investors-btn').addClass('active');
             this.el.find('div.manager-btn').removeClass('active');
             this.el.find('div.page-2').hide();
             this.data.status = 0;
         },
-        //显示管理员注册页面
+        /**
+         * 显示管理员注册页面
+         */
         showManagerLogin:function () {
             this.el.find('div.investors-btn').removeClass('active');
             this.el.find('div.manager-btn').addClass('active');
             this.el.find('div.page-2').show();
             this.data.status = 1;
         },
-        //跳转到登录页面
+        /**
+         * 跳转到登录页面
+         */
         toLoginPage:function () {
             $(window).attr('location','/login');
         },
-        //点击注册后，判断注册种类
+        /**
+         * 点击注册后，判断注册种类
+         */
         postRegister:function () {
             if(this.data.status === 0){
                 this.actions.doInvestorsRegister();
@@ -46,7 +54,9 @@ let config ={
                 this.actions.doManagerRegister();
             }
         },
-        //获取注册验证码
+        /**
+         * 获取注册验证码
+         */
         getVerificationCode:function (event) {
             if(this.data.timer === 60){
                 let json = {
@@ -82,7 +92,9 @@ let config ={
                 that.actions.getVerificationCode(event);
             },1000)
         },
-        //进行投资人注册，验证注册信息后向后台发送注册数据
+        /**
+         * 进行投资人注册，验证注册信息后向后台发送注册数据
+         */
         doInvestorsRegister:function () {
             let username = this.el.find('input.username').val();
             let password = this.el.find('input.password').val();
@@ -134,7 +146,9 @@ let config ={
                 msgbox.alert("注册失败");
             })
         },
-        //用户输入时对表格内容进行检查
+        /**
+         * 用户输入时对表格内容进行检查
+         */
         checkForm:function (event,tip,type) {
             if(event.target.required === false){
                 event.target.style.borderColor = 'rgba(169,169,169,0.5)';
@@ -222,7 +236,9 @@ let config ={
                 }
             }
         },
-        //单独检测验证码输入
+        /**
+         * 单独检测验证码输入
+         */
         checkVerification:function (event,tip,type) {
             let value = event.target.value.trim();
             if(value !== ''){
@@ -233,17 +249,23 @@ let config ={
                 this.el.find('p.verification-p').html(tip);
             }
         },
-        //正则检查电话
+        /**
+         * 正则检查电话
+         */
         checkTel:function (tel) {
             let reg =/^1[3|7|5|8]\d{9}$/;
             return reg.test(tel);
         },
-        //正则检查email
+        /**
+         * 正则检查email
+         */
         checkEmail:function (email) {
             let reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
             return reg.test(email);
         },
-        //管理员注册，向后台发送注册请求
+        /**
+         * 管理员注册，向后台发送注册请求
+         */
         doManagerRegister:function () {
             msgbox.alert("管理员注册暂未开放");
         }
@@ -307,9 +329,9 @@ let config ={
         },
         {
             event:'blur',
-            selector:'input.name',                                          //检查姓名格式
+            selector:'input.name',
             callback:function (target,event) {
-                this.actions.checkForm(event,"请填写姓名","name");
+                this.actions.checkForm(event,"请填写姓名","name");           //检查姓名格式
             }
         },
         {

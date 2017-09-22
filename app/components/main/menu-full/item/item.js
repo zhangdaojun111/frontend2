@@ -11,6 +11,9 @@ let config = {
     },
 
     actions: {
+        /**
+         * 正常模式下显示孩子菜单
+         */
         showChildrenAtFull: function () {
             this.childlist.show();
             this.iconWrap.removeClass('ui-state-focus').addClass('ui-state-active');
@@ -20,12 +23,19 @@ let config = {
                 brother.actions.hideChildrenAtFull();
             });
         },
+        /**
+         * 隐藏孩子菜单
+         */
         hideChildrenAtFull: function () {
             this.childlist.hide();
             this.iconWrap.removeClass('ui-state-active').addClass('ui-state-focus');
             this.icon.removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-e');
             this.data.display = false;
         },
+        /**
+         * 正常模式下点击item，显示其下孩子菜单或打开对应iframe（编辑模式下点击不打开iframe）
+         * @param event
+         */
         onItemClickAtFull: function (event) {
             if (this.data.items && this.data.items.length) {
                 if (this.data.type === 'full') {
@@ -53,6 +63,9 @@ let config = {
                 });
             }
         },
+        /**
+         * 迷你菜单模式下
+         */
         showChildrenAtMini: function () {
             // window.clearTimeout(this.data.timer);
             if (this.childlist.length) {
@@ -67,12 +80,18 @@ let config = {
                 }
             }
         },
+        /**
+         * 迷你菜单下隐藏子菜单
+         */
         hideChildrenAtMini: function () {
             // window.clearTimeout(this.data.timer);
             // this.data.timer = window.setTimeout(() => {
                 this.childlist.hide();
             // }, 500)
         },
+        /**
+         * 迷你菜单下点击item打开iframe
+         */
         onItemClickAtMini: function () {
             if (_.isUndefined(this.data.items)) {
                 let key;
@@ -88,11 +107,20 @@ let config = {
                 });
             }
         },
+        /**
+         * 编辑模式勾选checkbox
+         * @param context
+         * @param event
+         */
         onCheckboxChange: function (context, event) {
             let value = context.checked;
             this.actions.setCheckboxValue(value);
             this.trigger('onSubCheckboxChange', value);
         },
+        /**
+         * 设置checkbox的值
+         * @param value
+         */
         setCheckboxValue: function (value) {
             if (this.ownCheckbox.length) {
                 this.ownCheckbox[0].checked = value;
@@ -101,11 +129,18 @@ let config = {
                 comp.actions.setCheckboxValue(value);
             })
         },
+        /**
+         * 设置点击的item的checkbox的值
+         * @param value
+         */
         setCheckboxValueSelf: function (value) {
             if (this.ownCheckbox.length) {
                 this.ownCheckbox[0].checked = value;
             }
         },
+        /**
+         * 设置点击的item的子菜单checkbox的值
+         */
         checkChildrenChecked: function () {
             let allCheckbox = this.el.find('.childlist input:checkbox');
             let allChecked = this.el.find('.childlist input:checked');
@@ -115,6 +150,9 @@ let config = {
                 this.actions.setCheckboxValueSelf(false);
             }
         },
+        /**
+         * 正常模式的item显示
+         */
         setToFull: function () {
             this.data.type = 'full';
             this.cancelEvents();
@@ -126,6 +164,9 @@ let config = {
                 'padding-right': '0'
             });
         },
+        /**
+         * 迷你模式的item显示
+         */
         setToMini: function () {
             this.data.type = 'mini';
             this.cancelEvents();
