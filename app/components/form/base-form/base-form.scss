@@ -12,6 +12,9 @@
     input, textarea, select{
         font-family: '微软雅黑';
     }
+    input:disabled,textarea:disabled,.auto-select-component.disabled input.result{
+        color: #666666!important;
+    }
     .ui-history {
         margin-left: 5px;
         vertical-align: middle;
@@ -260,7 +263,7 @@
         -moz-box-shadow: none;
         -webkit-box-shadow: none;
         box-shadow: none;
-        color: #666666;
+       // color: #666666;
         cursor: pointer;
     }
 }
