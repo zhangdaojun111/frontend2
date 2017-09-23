@@ -1078,10 +1078,16 @@ let config = {
                 }
             }
             //如果是临时表，传temp_id，否则是real_id
-            if (!this.data.inProcess || !this.data.isBatch) {
-                json["real_id"] = this.data.realId;
-            } else {
+            // if (!this.data.inProcess || !this.data.isBatch) {
+            //     json["real_id"] = this.data.realId;
+            // } else {
+            //     json["temp_id"] = this.data.realId;
+            // }
+
+            if (this.data.inProcess==1 || this.data.isBatch==1) {
                 json["temp_id"] = this.data.realId;
+            } else {
+                json["real_id"] = this.data.realId;
             }
             return json;
         },
@@ -1695,7 +1701,10 @@ let config = {
         if (this.data.btnType != 'none') {
             this.actions.addBtn();
         }
-
+        // if (this.data.isView == 1) {
+        //     debugger
+        //     this.el.find('.ui-width').css('color','#666666');
+        // }
         //默认表单样式
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
