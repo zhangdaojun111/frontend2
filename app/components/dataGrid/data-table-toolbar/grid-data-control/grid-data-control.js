@@ -64,9 +64,9 @@ let config = {
     afterRender() {
         let _this = this;
         this.el.find('.ui-width').css('width', this.data.width);
-        if(!this.data.isCalendar && this.data.history){
-            this.el.find('.ui-history').css('visibility','visible');
-        }
+        // if(!this.data.isCalendar && this.data.history){
+        //     this.el.find('.ui-history').css('visibility','visible');
+        // }
         if (this.data.is_view) {
             this.el.find('.ui-width').attr('disabled', true);
             this.el.find('.component-date-control').css('pointer-events','none');
