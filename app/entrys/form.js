@@ -36,7 +36,7 @@ let FormEntrys = {
         this.data.buildId = config.id || '';//快捷添加的key
         this.data.btnType = config.btnType || 'new';//按钮
         this.data.viewMode=config.viewMode || '0';//aggrid权限
-        this.data.inProcess=config.inProcess || '0';//是否查询临时数据
+        this.data.inProcess=config.in_process || '0';//是否查询临时数据
         console.log(config);
     }
     ,
@@ -148,10 +148,10 @@ let FormEntrys = {
             }
         }
         //如果是临时表，传temp_id，否则是real_id
-        if (!this.data.inProcess || !this.data.isBatch) {
-            json["real_id"] = this.data.realId;
+        if (this.data.inProcess==1 || this.data.isBatch==1) {
+           json["temp_id"] = this.data.realId;
         } else {
-            json["temp_id"] = this.data.realId;
+            json["real_id"] = this.data.realId;
         }
         return json;
     },
@@ -326,9 +326,11 @@ let FormEntrys = {
     },
 
     //转到编辑模式
+
     changeToEdit(tableId) {
         this.childForm[tableId].data.isOtherChangeEdit = true;//如果是外部模块的转编辑模式
        // this.childForm[tableId].data.inProcess = isTemp;//如果是外部模块的转编辑模式
+
         this.childForm[tableId].actions.changeToEdit();
     },
 
