@@ -1,5 +1,12 @@
 <div class="comment">
-    <div class="editor">
+    <div class="content ql-editor">
         {{{comment.rows.[0].[0]}}}
+    </div>
+    <div class="editor">
+        <div class="quill" id="comment{{componentId}}"></div>
+        <p class="save-rich">
+            <a href="javascript:;" class="save-rich-btn">确定</a>
+            <a href="javascript:;" class="cancel-rich-btn">取消</a>
+        </p>
     </div>
 </div>
