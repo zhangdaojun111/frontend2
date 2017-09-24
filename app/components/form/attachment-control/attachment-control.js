@@ -65,7 +65,7 @@ let config = {
                         return;
                     }
                     let name = res.file.name;
-                    let fileId = name.split('.')[0]+"-"+new Date().getTime();
+                    let fileId = new Date().getTime();
                     let toolbox = msgBox.showProgress({
                         files:[{id:fileId,name:name}],
                         originalField:this.data.id
@@ -81,7 +81,7 @@ let config = {
                 let fileArray = [];
                 for (let file of files) {
                     let name = file.name;
-                    let fileId = name.split('.')[0]+"-"+new Date().getTime();
+                    let fileId = new Date().getTime();
                     fileArray.push({id:fileId,name:name});
                 }
                 let toolbox;
