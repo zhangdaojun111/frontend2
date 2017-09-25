@@ -17,6 +17,8 @@ let config = {
         views: [],
         editMode: window.config.bi_user === 'manager'? window.config.bi_user : false,
         menus: {},
+        isAdmin: window.config.is_admin,
+        isSelf: window.config.bi_views.self,
     },
     actions: {
         /**
