@@ -34,10 +34,11 @@
             text-align: center;
             line-height: 70px;
             right: calc(50% - 100px);
-            top: 45px;
+            top: 65px;
             box-shadow: 0 0 5px #ccc;
             z-index: 100;
             font-size:14px;
+            background: rgba(255, 255, 255, 0.7);
             .query-tips-delete {
                 position: absolute;
                 display: block;
