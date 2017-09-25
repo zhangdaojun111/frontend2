@@ -26,7 +26,6 @@ const BiAppRouter = Backbone.Router.extend({
             canvasComponent = new CanvasMain();
             canvasComponent.render($('#route-outlet'));
         };
-
         canvasComponent.actions.switchViewId(id);
     },
     routerViewsEditComponent() {
@@ -37,8 +36,6 @@ const BiAppRouter = Backbone.Router.extend({
             viewsManage = new ViewsEditComponent();
             viewsManage.render($('#route-outlet'));
         }
-
-
     },
     routerFormEntryComponent() {
         let form = new FormEntryComponent();
