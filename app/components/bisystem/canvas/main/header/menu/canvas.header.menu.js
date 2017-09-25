@@ -38,6 +38,7 @@ let config = {
         }
     ],
     afterRender() {
+        console.log(this.data.isCurrent);
         if (this.data.isCurrent) {
             this.el.find('a').addClass('active');
         }

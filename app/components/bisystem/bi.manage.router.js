@@ -7,6 +7,7 @@ import {ViewsEditComponent} from "./views/views";
 import {FormEntryComponent} from './forms/entry/entry';
 import {componentsJson} from './forms/entry/loadFormChart.json';
 
+// 增加backbone router 路由钩子 主要用于自动保存用户画布块布局
 Backbone.Router.prototype.before =function () { };
 Backbone.Router.prototype.after =function () { };
 Backbone.Router.prototype.route =function (route,name,callback)
@@ -39,6 +40,7 @@ let viewsManage;
 const BiAppRouter = Backbone.Router.extend({
     before: function() {
         if (canvasComponent) {
+            console.log(canvasComponent.data);
             canvasComponent.data.headerComponents.trigger('onSaveCanvas');
         }
     },
