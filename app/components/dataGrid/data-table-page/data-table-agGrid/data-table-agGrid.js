@@ -37,7 +37,6 @@ import QuillAlert from "../../../form/quill-alert/quill-alert";
 let config = {
     template: template,
     data: {
-        fristGet:true,
         tableId: '',
         formId: '',
         tableType: '',
@@ -150,6 +149,8 @@ let config = {
         inProcessFooter: false,
         //是否有分页
         pagination: false,
+        //对应关系首次加载
+        fristGetCorrespondence:true,
         //对应关系增加的数据
         correspondenceAddList: [],
         //对应关系减少的数据
@@ -1143,9 +1144,9 @@ let config = {
                 let time = this.data.firstRender ? 100 : 0;
                 setTimeout( ()=>{
                     this.actions.setGridData( res );
-                    if(this.data.fristGet && this.data.viewMode == 'viewFromCorrespondence'){
+                    if(this.data.fristGetCorrespondence && this.data.viewMode == 'viewFromCorrespondence'){
                         this.actions.checkCorrespondence();
-                        this.data.fristGet = false;
+                        this.data.fristGetCorrespondence = false;
                     }
                 },time )
                 if(refresh){
