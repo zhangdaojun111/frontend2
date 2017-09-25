@@ -11,31 +11,32 @@ let FormEntrys = {
     childForm: {},
     isloadCustomTableForm: false,
     isloadWorkflow: false,
+    dataa:{},
     init(config = {}) {
-        this.tableId = config.table_id || '';
-        this.parentRealId = config.parent_real_id || '';
-        this.parentTempId = config.parent_temp_id || '';
-        this.realId = config.real_id || '';
-        this.parentTableId = config.parent_table_id || '';
-        this.parentRecordId = config.parent_record_id || '';
-        this.isView = config.is_view || 0;//查看模式
-        this.isBatch = config.is_batch || 0;//是否是批量工作流
-        this.recordId = config.record_id || '';
-        this.action = config.action || '';//暂时
-        this.el = config.el || '';//form的外层dom
-        this.reloadDraftData = config.reload_draft_data || 0;//工作流接口用到
-        this.formId = config.form_id || '';//表单ID
-        this.fromWorkFlow = config.from_workflow || 0;//是否来自工作流
-        this.flowId = config.flow_id || '';//流程ID
-        this.fieldId = config.field_Id || '';//字段ID
-        this.key = config.key || '';//iframe的key
-        this.fromApprove = config.from_approve || '';//是否来自审批
-        this.isAddBuild = config.isAddBuild || 0;//是否是快捷添加内置
-        this.buildId = config.id || '';//快捷添加的key
-        this.btnType = config.btnType || 'new';//按钮
-        this.viewMode=config.viewMode || '0';//aggrid权限
-
-
+        this.data={}
+        this.data.tableId = config.table_id || '';
+        this.data.parentRealId = config.parent_real_id || '';
+        this.data.parentTempId = config.parent_temp_id || '';
+        this.data.realId = config.real_id || '';
+        this.data.parentTableId = config.parent_table_id || '';
+        this.data.parentRecordId = config.parent_record_id || '';
+        this.data.isView = config.is_view || 0;//查看模式
+        this.data.isBatch = config.is_batch || 0;//是否是批量工作流
+        this.data.recordId = config.record_id || '';
+        this.data.action = config.action || '';//暂时
+        this.data.el = config.el || '';//form的外层dom
+        this.data.reloadDraftData = config.reload_draft_data || 0;//工作流接口用到
+        this.data.formId = config.form_id || '';//表单ID
+        this.data.fromWorkFlow = config.from_workflow || 0;//是否来自工作流
+        this.data.flowId = config.flow_id || '';//流程ID
+        this.data.fieldId = config.field_Id || '';//字段ID
+        this.data.key = config.key || '';//iframe的key
+        this.data.fromApprove = config.from_approve || '';//是否来自审批
+        this.data.isAddBuild = config.isAddBuild || 0;//是否是快捷添加内置
+        this.data.buildId = config.id || '';//快捷添加的key
+        this.data.btnType = config.btnType || 'new';//按钮
+        this.data.viewMode=config.viewMode || '0';//aggrid权限
+        this.data.inProcess=config.in_process || '0';//是否查询临时数据
         console.log(config);
     }
     ,
@@ -52,59 +53,59 @@ let FormEntrys = {
     //找到加载表单数据的formId和加载节点的flowId
     findFormIdAndFlowId(res) {
         if (res["data"] && res["data"]["flow_data"].length != 0) {
-            if (this.flowId) {
+            if (this.data.flowId) {
                 let selectItems = res["data"]["flow_data"];
                 for (let item of selectItems) {
-                    if (item["flow_id"] == this.flowId) {
-                        this.formId = item["form_id"];
+                    if (item["flow_id"] == this.data.flowId) {
+                        this.data.formId = item["form_id"];
                     }
                 }
             } else {
                 //默认的form_id和flow_id取第一个select
-                this.formId = res["data"]["flow_data"][0]["form_id"];
-                this.flowId = res["data"]["flow_data"][0]["flow_id"];
+                this.data.formId = res["data"]["flow_data"][0]["form_id"];
+                this.data.flowId = res["data"]["flow_data"][0]["flow_id"];
                 //循环一遍，查看是否有默认值，如果有，则form_id和flow_id改变
                 for (let d of res["data"]["flow_data"]) {
                     if (d["selected"] == 1) {
-                        this.formId = d["form_id"];
-                        this.flowId = d["flow_id"];
+                        this.data.formId = d["form_id"];
+                        this.data.flowId = d["flow_id"];
                     }
                 }
             }
         }
         if (res["data"] && res["data"]["form_id"] != 0) {
-            this.formId = res["data"]["form_id"];
-            this.isloadCustomTableForm = true;
+            this.data.formId = res["data"]["form_id"];
+            this.data.isloadCustomTableForm = true;
         } else {
-            this.isloadWorkflow = true;
+            this.data.isloadWorkflow = true;
         }
     },
     //拼装发送json
     createPostJson() {
         let json;
         //如果是发起工作流
-        if (this.fromWorkFlow && this.realId == '') {
+        if (this.data.fromWorkFlow && this.data.realId == '') {
             json = {
-                form_id: this.formId,
-                record_id: this.recordId,
-                reload_draft_data: this.reloadDraftData,
-                from_workflow: this.fromWorkFlow,
-                table_id: this.tableId
+                form_id: this.data.formId,
+                record_id: this.data.recordId,
+                reload_draft_data: this.data.reloadDraftData,
+                from_workflow: this.data.fromWorkFlow,
+                table_id: this.data.tableId
             }
 
-            this.isloadWorkflow = true;
-        } else if (this.fromApprove && this.realId == '') {//审批流程
+            this.data.isloadWorkflow = true;
+        } else if (this.data.fromApprove && this.data.realId == '') {//审批流程
             json = {
-                form_id: this.formId,
-                record_id: this.recordId,
-                is_view: this.isView,
-                from_approve: this.fromApprove,
-                from_focus: this.fromFocus,
-                table_id: this.tableId
+                form_id: this.data.formId,
+                record_id: this.data.recordId,
+                is_view: this.data.isView,
+                from_approve: this.data.fromApprove,
+                from_focus: this.data.fromFocus,
+                table_id: this.data.tableId
             }
 
 
-            this.isloadWorkflow = true;
+            this.data.isloadWorkflow = true;
         }
         else {
             json = this.pickJson();
@@ -114,43 +115,43 @@ let FormEntrys = {
     //非工作流请求json
     pickJson() {
         let json = {};
-        if (this.fieldId !== "") {
+        if (this.data.fieldId !== "") {
             //加载单元格数据
             json = {
-                field_id: this.fieldId,
-                is_view: this.isView,
-                parent_table_id: this.parentTableId || "",
-                parent_real_id: this.parentRealId || "",
-                parent_temp_id: this.parentTempId || ""
+                field_id: this.data.fieldId,
+                is_view: this.data.isView,
+                parent_table_id: this.data.parentTableId || "",
+                parent_real_id: this.data.parentRealId || "",
+                parent_temp_id: this.data.parentTempId || ""
             }
         } else {
             //加载表单中所有数据，当有form_id时，不要为table_id赋值，保证缓存的可复用性
-            if (this.formId) {
+            if (this.data.formId) {
                 json = {
-                    form_id: this.formId,
-                    table_id: this.tableId,
-                    is_view: this.isView,
-                    parent_table_id: this.parentTableId || "",
-                    parent_real_id: this.parentRealId || "",
-                    parent_temp_id: this.parentTempId || ""
+                    form_id: this.data.formId,
+                    table_id: this.data.tableId,
+                    is_view: this.data.isView,
+                    parent_table_id: this.data.parentTableId || "",
+                    parent_real_id: this.data.parentRealId || "",
+                    parent_temp_id: this.data.parentTempId || ""
                 }
-                this.isloadCustomTableForm = true;
+                this.data.isloadCustomTableForm = true;
             } else {
                 json = {
                     form_id: "",
-                    table_id: this.tableId,
-                    is_view: this.isView,
-                    parent_table_id: this.parentTableId || "",
-                    parent_real_id: this.parentRealId || "",
-                    parent_temp_id: this.parentTempId || ""
+                    table_id: this.data.tableId,
+                    is_view: this.data.isView,
+                    parent_table_id: this.data.parentTableId || "",
+                    parent_real_id: this.data.parentRealId || "",
+                    parent_temp_id: this.data.parentTempId || ""
                 }
             }
         }
         //如果是临时表，传temp_id，否则是real_id
-        if (!this.action) {
-            json["real_id"] = this.realId;
+        if (this.data.inProcess==1 || this.data.isBatch==1) {
+           json["temp_id"] = this.data.realId;
         } else {
-            json["temp_id"] = this.realId;
+            json["real_id"] = this.data.realId;
         }
         return json;
     },
@@ -174,7 +175,7 @@ let FormEntrys = {
         staticData["frontend_cal_parent_2_child"] = dynamicData["frontend_cal_parent_2_child"];
         staticData["error"] = dynamicData["error"];
         let data = {};
-        if (!this.formId || staticData['form_id'] == this.formId) {
+        if (!this.data.formId || staticData['form_id'] == this.data.formId) {
             this.parseRes(staticData);
         }
         staticData.formData = staticData.data;
@@ -183,24 +184,8 @@ let FormEntrys = {
         }
         staticData.data = data;
         //将外部模块的值赋值给baseForm
-        staticData.parentTableId = this.parentTableId;
-        staticData.parentRealId = this.parentRealId;
-        staticData.parentTempId = this.parentTempId;
-        staticData.parentRecordId = this.parentRecordId;
-        staticData.recordId = this.recordId;
-        staticData.tableId = staticData['table_id'] || this.tableId;
-        staticData.formId = this.formId;
-        staticData.realId = this.realId;
-        staticData.flowId = this.flowId;
-        staticData.isBatch = this.isBatch;
-        staticData.key = this.key;
-        staticData.btnType = this.btnType;
-        staticData.isAddBuild = this.isAddBuild;
-        staticData.buildId = this.buildId;
-        staticData.el = this.el;
-        staticData.colDef=this.colDef;
-        staticData.col_id=this.col_id;
-        staticData.viewMode=this.viewMode;
+        _.defaultsDeep(staticData,this.data)
+        staticData.tableId = staticData['table_id'] || this.data.tableId;
         return staticData;
     },
     //处理字段数据
@@ -288,35 +273,35 @@ let FormEntrys = {
                 //加载各个公司定制的系统表
                 cosnole.log('加载公司定制系统表');
             } catch (e) {
-                console.error(`加载${ company }定制的系统表，table_id为：${ this.tableId }的表单失败`);
+                console.error(`加载${ company }定制的系统表，table_id为：${ this.data.tableId }的表单失败`);
                 console.error(e);
             }
         } else if (customTableFormExists) {
             try {
                 //加载系统定制的系统表
                 console.log('加载系统定制表');
-                sys_type == "normal" ? sys_type = this.tableId : sys_type;
+                sys_type == "normal" ? sys_type = this.data.tableId : sys_type;
                 html = await CreateForm.creatSysTable(sys_type, data);
             } catch (e) {
-                console.error(`加载系统表，table_id为${ this.tableId }的表单失败`);
+                console.error(`加载系统表，table_id为${ this.data.tableId }的表单失败`);
                 console.error(e);
             }
-        } else if (this.formId !== "") {
+        } else if (this.data.formId !== "") {
             if (isloadCustom) {
                 try {
                     //加载定制表单
                     console.log('加载定制表单')
                 } catch (e) {
-                    console.error(`加载${ company }的定制表单，form_id为：${ this.formId }的表单失败`);
+                    console.error(`加载${ company }的定制表单，form_id为：${ this.data.formId }的表单失败`);
                     console.error(e);
                 }
-            } else if (this.isloadCustomTableForm || this.isloadWorkflow) {
+            } else if (this.data.isloadCustomTableForm || this.data.isloadWorkflow) {
                 try {
                     //加载个人制作的表单
                     console.log('加载个人制作表单');
                     html = res[2]['data']['content'];
                 } catch (e) {
-                    console.error(`加载${ company }的个人制作的表单，form_id为：${ this.formId }的表单失败`);
+                    console.error(`加载${ company }的个人制作的表单，form_id为：${ this.data.formId }的表单失败`);
                     console.error(e);
                 }
             } else {
@@ -341,8 +326,11 @@ let FormEntrys = {
     },
 
     //转到编辑模式
+
     changeToEdit(tableId) {
         this.childForm[tableId].data.isOtherChangeEdit = true;//如果是外部模块的转编辑模式
+       // this.childForm[tableId].data.inProcess = isTemp;//如果是外部模块的转编辑模式
+
         this.childForm[tableId].actions.changeToEdit();
     },
 
@@ -369,7 +357,7 @@ let FormEntrys = {
         this.init(config);
         // let $wrap = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"></div>`).prependTo(this.el);
         // let html = $(`<div class="center-wrap"></div>`).appendTo($wrap);
-        let html = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"><div class="form-print-position"></div></div>`).prependTo(this.el);
+        let html = $(`<div data-id="form-${this.data.tableId}" style="" class="table-wrap wrap detail-form"><div class="form-print-position"></div></div>`).prependTo(this.data.el);
         let res;
         //如果不处于工作流中
         // if (!this.fromWorkFlow) {
@@ -377,16 +365,20 @@ let FormEntrys = {
         //     res = await  FormService.getPrepareParmas({table_id: this.tableId});
         //     this.findFormIdAndFlowId(res);
         // }
-        if (!this.formId) {
+        if (!this.data.formId) {
             //获取表单的form_id
-            res = await  FormService.getPrepareParmas({table_id: this.tableId});
+            res = await  FormService.getPrepareParmas({table_id: this.data.tableId});
             this.findFormIdAndFlowId(res);
         }
         let json = this.createPostJson();
         res = await FormService.getFormData(json);
-        //将表单名称发送给工作流
 
+       // console.log("*******************")
+       // console.log(res)
+       // debugger;
+        //将表单名称发送给工作流
         Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
+
         console.timeEnd('获取表单数据的时间');
         console.time('form创建时间');
         //处理数据
@@ -400,12 +392,18 @@ let FormEntrys = {
             data: data,
         }
         let formBase = new FormBase(formData);
-        this.childForm[this.tableId] = formBase;
-        let $newWrap = this.el.find('.form-print-position');
+        this.childForm[this.data.tableId] = formBase;
+        let $newWrap = this.data.el.find('.form-print-position');
         formBase.render($newWrap);
         //通知父框架表单刷新完毕
+
         Mediator.publish('form:formAlreadyCreate', 'success');
         console.timeEnd('form创建时间');
+
+        //给工作流传表单初始数据
+        let valueChange = this.getFormValue(this.data.tableId, false)
+        Mediator.publish('workFlow:formValueChange', 'valueChange');
+
     },
 
     //审批删除时重置表单可编辑性
@@ -427,6 +425,7 @@ let FormEntrys = {
             return;
         }
         return this.childForm[tableId].actions.getFormValue(isCheck);
+        debugger
     },
 
 
