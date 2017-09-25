@@ -781,7 +781,7 @@ let config = {
                                 dataTableService.getPreferences( obj ).then( res=>{
                                     dgcService.setPreference( res,this.data );
                                     //初始化偏好隐藏系统默认列
-                                    if( res.ignoreFields == null && this.data.haveSystemsFields ){
+                                    if( res.is_report == 0 && res.ignoreFields.ignoreFields == null && this.data.haveSystemsFields ){
                                         this.data.ignoreFields = ['f1','f2','f3','f4'];
                                     }
                                     //创建表头
@@ -995,7 +995,7 @@ let config = {
             this.agGrid.actions.setGridData(d);
 
             //第一次加载隐藏默认列
-            if( res[0].ignoreFields == null && this.data.haveSystemsFields ){
+            if( res[0].is_report == 0 && res[0].ignoreFields.ignoreFields == null && this.data.haveSystemsFields ){
                 this.data.ignoreFields = ['f1','f2','f3','f4'];
             }
             //创建sheet分页
