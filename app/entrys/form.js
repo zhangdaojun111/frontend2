@@ -373,9 +373,6 @@ let FormEntrys = {
         let json = this.createPostJson();
         res = await FormService.getFormData(json);
 
-       console.log("*******************")
-       console.log(res)
-       debugger;
         //将表单名称发送给工作流
         Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
 
