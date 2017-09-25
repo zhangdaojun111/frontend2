@@ -144,6 +144,8 @@ let config = {
             _this.actions.keyup();
         }, 200));
         this.el.find('.ui-width').css('width', this.data.width);
+        console.log('input contraol');
+        console.log(this.data.is_view);
         if (this.data.is_view) {
             this.el.find('.ui-width').attr('disabled', true);
         } else {
