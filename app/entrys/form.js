@@ -399,7 +399,7 @@ let FormEntrys = {
 
         //给工作流传表单初始数据
         let valueChange = this.getFormValue(this.data.tableId, false)
-        Mediator.publish('workFlow:formValueChange', 'valueChange');
+        Mediator.publish('workFlow:formValueChange', valueChange);
 
     },
 
