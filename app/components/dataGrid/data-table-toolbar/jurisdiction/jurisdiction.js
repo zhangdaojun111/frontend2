@@ -31,6 +31,7 @@ let config = {
     ],
     actions: {
         afterGetMsg:function() {
+            //引用选择插件
             let _this = this;
             let selectData = {
                 list: this.data.selectAry,

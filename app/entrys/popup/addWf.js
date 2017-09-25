@@ -62,6 +62,8 @@ Mediator.publish('workflow:getKey', obj.key);
             isAddBuild: obj.isAddBuild,
             id: obj.id,
             key: obj.key,
+            in_process: obj.in_process,
+            is_batch: obj.is_batch,
             action: action,
             form_id:obj.form_id,
             flow_id:obj.flow_id,
@@ -102,6 +104,8 @@ Mediator.subscribe('workflow:getflows', (res) => {
         isAddBuild: obj.isAddBuild,
         id: obj.id,
         key: obj.key,
+        in_process: obj.in_process,
+        is_batch: obj.is_batch,
         action: action
     });
     setTimeout(()=>{
@@ -134,7 +138,7 @@ Mediator.subscribe('workflow:submit', (res) => {
         })().then(res => {
             if (res.success === 1) {
                 msgBox.showTips(`${res.error}`);
-                PMAPI.sendToParent({
+                PMAPI.sendToRealParent({
                     type: PMENUM.close_dialog,
                     key: obj.key,
                     data: {

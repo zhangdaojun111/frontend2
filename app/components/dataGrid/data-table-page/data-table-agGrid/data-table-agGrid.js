@@ -37,6 +37,7 @@ import QuillAlert from "../../../form/quill-alert/quill-alert";
 let config = {
     template: template,
     data: {
+        fristGet:true,
         tableId: '',
         formId: '',
         tableType: '',
@@ -1139,7 +1140,14 @@ let config = {
                 post_arr.push( footer )
             }
             Promise.all(post_arr).then((res)=> {
-                this.actions.setGridData( res );
+                let time = this.data.firstRender ? 100 : 0;
+                setTimeout( ()=>{
+                    this.actions.setGridData( res );
+                },time )
+                if(this.data.fristGet){
+                    this.actions.checkCorrespondence();
+                    this.data.fristGet = false;
+                }
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
                 }

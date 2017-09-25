@@ -23,7 +23,6 @@ import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-
 import {PMAPI,PMENUM} from '../lib/postmsg';
 import jsplumb from 'jsplumb';
 
-
 ApprovalWorkflow.showDom().then(function (component) {
     WorkFlowGrid.showGrid();
     WorkFlowForm.showForm();
@@ -39,12 +38,14 @@ ApprovalWorkflow.showDom().then(function (component) {
     });
     setTimeout(()=> component.hideLoading(),1000)
 });
+
 let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[],agorfo=true,is_batch=0;
 serchStr.split('&').forEach(res => {
     let arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
 is_view=obj.btnType==='view'?1:0;
+
 //订阅form data
 Mediator.subscribe('workFlow:record_info', (res) => {
     ApprovalHeader.showheader(res.record_info);
@@ -65,6 +66,21 @@ Mediator.subscribe('workFlow:record_info', (res) => {
         $('#approval-workflow').find('.for-hide').hide();
         $('#approval-workflow').find('#re-app').show();
     };
+
+    // zj
+    // (async function () {
+    //     return workflowService.getWorkflowInfo({url: '/get_all_users/'});
+    // })().then(users => {
+    //     for(let i in focus){
+    //         nameArr.push(`<span class="selectSpan">${users.rows[focus[i]].name}</span>`);
+    //     }
+    //     $('#add-home #addFollowerList').html(nameArr);
+    //     if(nameArr.indexOf(window.config.name)>-1&&window.config.name!=res.record_info.current_node){
+    //         $('#approval-workflow').find('.for-hide').hide();
+    //         $('#approval-workflow').find('#re-app').hide();
+    //     };
+    // })
+
     //审批工作流
     (async function () {
         return workflowService.getWorkflowInfo({
