@@ -4,6 +4,17 @@
 import template from './progresses.html';
 
 let css=`
+.component-progress {
+    height:90%;
+    position:relative;
+}
+.progresses {
+    margin:auto;
+    text-align:center;
+    position:absolute;
+    top:50%;
+    transform: translateY(-50%);
+}
 .process-item {
     margin:5px;
 }
@@ -94,22 +105,27 @@ export const progressConfig = {
         finish:function (i) {
             this.el.find('#'+i).find('.cancel-upload').remove();
             this.el.find('#'+i).find('.progress-bottle').html('传输完成').css('background-color','');
-            // setTimeout(()=>{
-            //     if($(this.el.find('.process-bottle')).length == 0){
-            //         PMAPI.sendToSelf({
-            //             type: PMENUM.close_dialog,
-            //             key: this.key,
-            //             data: {
-            //                 confirm: true
-            //             }
-            //         })
-            //     }
-            // },2000);
+            this.actions.closeDialogDelay();
         },
         error:function ({msg:msg,fileId:i}) {
             this.el.find('#'+i).find('.progress-bottle').css('display','none');
             let text = this.el.find('#'+i).find('.progress-msg').text() + ": "+msg;
-            this.el.find('#'+i).find('.progress-msg').text(text).css('color','red');
+            this.el.find('#'+i).find('.progress-msg').text(text).css({'color':'red','overflow':'visible','width':'380px','margin':'auto'});
+            this.el.find('#'+i).find('.cancel-upload').css('display','none');
+            this.actions.closeDialogDelay();
+        },
+        closeDialogDelay:function () {
+            setTimeout(()=>{
+                if($(this.el.find('.process-bottle')).length == 0){
+                PMAPI.sendToSelf({
+                    type: PMENUM.close_dialog,
+                    key: this.key,
+                    data: {
+                        confirm: true
+                    }
+                })
+            }
+        },2000);
         }
     },
     afterRender:function () {
