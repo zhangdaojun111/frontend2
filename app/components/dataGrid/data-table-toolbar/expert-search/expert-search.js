@@ -416,6 +416,11 @@ let config = {
             let height = 450 - parseInt(this.el.find('.common-search').css('height'));
             this.el.find('.condition-search').css('height',`${height}px`);
         },
+        showAddBtn:function() {
+            let length = this.el.find('.condition-search-item').length;
+            this.el.find('.condition-search-item').find('.condition-search-add').css('display','none')
+            this.el.find('.condition-search-item').eq(length-1).find('.condition-search-add').css('display','inline-block')
+        },
         // 接受父组件传数据过来后
         afterGetMsg:function() {
             if(this.data.commonQuery.length == 0){
@@ -434,9 +439,7 @@ let config = {
                 let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
                 this.append(epCondition, this.el.find('.condition-search-container'));
                 this.data.searchInputAry.push(epCondition.data);
-                let length = this.el.find('.condition-search-item').length;
-                this.el.find('.condition-search-item').find('.condition-search-add').css('display','none')
-                this.el.find('.condition-search-item').eq(length-1).find('.condition-search-add').css('display','inline-block')
+                this.actions.showAddBtn();
             }).on('click','.condition-search-choice.left-choice',function(){
                 if($(this).hasClass('active')) {
                     $(this).removeClass('active');
