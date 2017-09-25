@@ -8,8 +8,10 @@ let css=`
     margin:5px;
 }
 .progress-msg {
+    font-family: '微软雅黑';
+    font-size: 12px;
     margin:0 2px;
-    width:150px;
+    width:140px;
     display: inline-block;
     white-space: nowrap; 
     overflow: hidden;
@@ -17,9 +19,13 @@ let css=`
     vertical-align: text-bottom;
 }
 .progress-bottle {
+    font-family: '微软雅黑';
+    font-size: 12px;
     margin:0 5px;
 }
 .cancel-upload {
+    font-family: '微软雅黑';
+    font-size: 12px;
     margin:0 2px;
 }
 `;
