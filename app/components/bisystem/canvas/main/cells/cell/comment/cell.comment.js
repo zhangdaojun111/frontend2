@@ -7,7 +7,8 @@ import template from './cell.comment.html';
 import "./cell.comment.scss";
 import Mediator from '../../../../../../../lib/mediator';
 import Quill from 'quill';
-
+import {ViewsService} from '../../../../../../../services/bisystem/views.service';
+import msgbox from '../../../../../../../lib/msgbox';
 
 let config = {
     template: template,
@@ -16,7 +17,9 @@ let config = {
     },
     actions:{
         showQuill() {
+            this.data.quill.container.firstChild.innerHTML = this.data.comment.rows[0][0];
             this.el.find('.editor').show();
+            this.el.find('.comment-ql-content').hide();
         }
     },
     binds:[
@@ -31,8 +34,26 @@ let config = {
             event: 'click',
             selector: '.save-rich-btn',
             callback: function (context,event) {
+                $(context).prop('disabled',true);
+                this.data.quill.blur();
                 let quillContent = this.data.quill.container.firstChild.innerHTML;
-                console.log(quillContent);
+                const data = {
+                    content: quillContent,
+                    field_id: this.data.chart.columns.dfield,
+                    row_id: this.data.chart.data.rows['0']['1'],
+                    table_id: this.data.chart.source.id
+                };
+                ViewsService.saveRichText(data).then((res)=>{
+                   $(context).prop('disabled',true);
+                   if(res['success']===1){
+                       $(context).prop('disabled',false);
+                       this.el.find('.editor').hide();
+                       this.data.comment.rows[0][0] = data.content;
+                       this.reload();
+                   } else {
+                       msgbox.alert(res['error']);
+                   }
+                });
                 return false;
             }
         },
@@ -43,6 +64,7 @@ let config = {
                 this.el.find('.editor').hide();
                 this.data.quill.blur();
                 this.data.quill.container.firstChild.innerHTML = '';
+                this.el.find('.comment-ql-content').show();
                 return false;
             }
         },
