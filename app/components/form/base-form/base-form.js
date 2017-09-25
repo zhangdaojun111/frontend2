@@ -1017,15 +1017,86 @@ let config = {
             delete FormService.idsInChildTableToParent[this.data.tableId];
         },
 
+        createPostJson() {
+            let json;
+            //如果是发起工作流
+            if (this.data.fromWorkFlow && this.data.realId == '') {
+                json = {
+                    form_id: this.data.formId,
+                    record_id: this.data.recordId,
+                    reload_draft_data: this.data.reloadDraftData,
+                    from_workflow: this.data.fromWorkFlow,
+                    table_id: this.data.tableId
+                }
+            } else if (this.data.fromApprove && this.data.realId == '') {//审批流程
+                json = {
+                    form_id: this.data.formId,
+                    record_id: this.data.recordId,
+                    is_view: this.data.isView,
+                    from_approve: this.data.fromApprove,
+                    from_focus: this.data.fromFocus,
+                    table_id: this.data.tableId
+                }
+            }
+            else {
+                json = this.actions.pickJson();
+            }
+            return json;
+        },
+        //非工作流请求json
+        pickJson() {
+            let json = {};
+            if (this.data.fieldId !== "") {
+                //加载单元格数据
+                json = {
+                    field_id: this.data.fieldId,
+                    is_view: this.data.isView,
+                    parent_table_id: this.data.parentTableId || "",
+                    parent_real_id: this.data.parentRealId || "",
+                    parent_temp_id: this.data.parentTempId || ""
+                }
+            } else {
+                //加载表单中所有数据，当有form_id时，不要为table_id赋值，保证缓存的可复用性
+                if (this.data.formId) {
+                    json = {
+                        form_id: this.data.formId,
+                        table_id: this.data.tableId,
+                        is_view: this.data.isView,
+                        parent_table_id: this.data.parentTableId || "",
+                        parent_real_id: this.data.parentRealId || "",
+                        parent_temp_id: this.data.parentTempId || ""
+                    }
+                } else {
+                    json = {
+                        form_id: "",
+                        table_id: this.data.tableId,
+                        is_view: this.data.isView,
+                        parent_table_id: this.data.parentTableId || "",
+                        parent_real_id: this.data.parentRealId || "",
+                        parent_temp_id: this.data.parentTempId || ""
+                    }
+                }
+            }
+            //如果是临时表，传temp_id，否则是real_id
+            // if (!this.data.inProcess || !this.data.isBatch) {
+            //     json["real_id"] = this.data.realId;
+            // } else {
+            //     json["temp_id"] = this.data.realId;
+            // }
+
+            if (this.data.inProcess==1 || this.data.isBatch==1) {
+                json["temp_id"] = this.data.realId;
+            } else {
+                json["real_id"] = this.data.realId;
+            }
+            return json;
+        },
+
+
         //转到编辑模式
-        async changeToEdit() {
-            console.log('baseform 1041');
-            let json = {
-                table_id: this.data.tableId,
-                real_id: this.data.realId,
-                is_view: 0,
-            };
-            //重新获取动态数据 （temp_id会变）
+        async changeToEdit() { //重新获取动态数据 （temp_id会变）
+            this.data.isView=0;
+            let json = this.actions.createPostJson();
             let res = await FormService.getDynamicDataImmediately(json);
             for (let key in res.data) {
                 this.data.data[key] = Object.assign({}, this.data.data[key], res.data[key]);
@@ -1457,7 +1528,7 @@ let config = {
                 if (single.data('width')) {
                     data[key]['width'] = single.data('width') + 'px';
                 } else {
-                    data[key]['width'] = '234px';
+                  //  data[key]['width'] = '234px';
                 }
                 //数据填充后，根据修改条件对不同框进行只读操作
                 setTimeout(() => {
@@ -1630,7 +1701,10 @@ let config = {
         if (this.data.btnType != 'none') {
             this.actions.addBtn();
         }
-
+        // if (this.data.isView == 1) {
+        //     debugger
+        //     this.el.find('.ui-width').css('color','#666666');
+        // }
         //默认表单样式
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
