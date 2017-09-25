@@ -1701,10 +1701,7 @@ let config = {
         if (this.data.btnType != 'none') {
             this.actions.addBtn();
         }
-        // if (this.data.isView == 1) {
-        //     debugger
-        //     this.el.find('.ui-width').css('color','#666666');
-        // }
+
         //默认表单样式
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
