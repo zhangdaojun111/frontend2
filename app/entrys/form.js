@@ -382,8 +382,12 @@ let FormEntrys = {
         //创建请求
         let json = this.createPostJson();
         res = await FormService.getFormData(json);
+
+       console.log("*******************")
+       console.log(res)
+       debugger;
         //将表单名称发送给工作流
-        Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
+		  Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
         console.timeEnd('获取表单数据的时间');
         console.time('form创建时间');
         //处理static,dynamic数据
@@ -401,8 +405,14 @@ let FormEntrys = {
         let $newWrap = this.data.el.find('.form-print-position');
         formBase.render($newWrap);
         //通知父框架表单刷新完毕
+
         Mediator.publish('form:formAlreadyCreate', 'success');
         console.timeEnd('form创建时间');
+
+        //给工作流传表单初始数据
+        let valueChange = this.getFormValue(this.data.tableId, false)
+        Mediator.publish('workFlow:formValueChange', 'valueChange');
+
     },
 
     //审批删除时重置表单可编辑性
@@ -427,6 +437,7 @@ let FormEntrys = {
             return;
         }
         return this.childForm[tableId].actions.getFormValue(isCheck);
+        debugger
     },
 }
 export default FormEntrys
