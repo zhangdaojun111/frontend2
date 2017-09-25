@@ -367,6 +367,7 @@ let config = {
         },
 
         //审批数据是删除情况不可编辑
+        //暂时无用
         editDelWork(res) {
             if (res && res == this.formId) {
                 for (let key in this.data.data) {
@@ -384,8 +385,6 @@ let config = {
             }
             this.data.baseIdsLocalDict[originalData["dfield"]] = val;
             if (this.data.base_fields.sort().toString() == this.data.baseIdsLocal.sort().toString()) {
-                //告诉外围现在正在读取默认值
-                // this.wfService.isReadDefaultData.next(true);
                 //请求默认值
                 let json = {
                     flow_id: this.data.flowId || "",
@@ -434,12 +433,11 @@ let config = {
                         }
                     }
                 }
-                //告诉外围现在正在读取默认值
-                // this.wfService.isReadDefaultData.next(false);
             }
         },
 
         //主动触发一遍所有事件
+        //二次确认挂有关系的数据的准确性
         triggerControl: function () {
             let data = this.data.data;
             for (let key in data) {
@@ -476,6 +474,7 @@ let config = {
         },
 
         //替换表达式中的字段
+        //暂时无用
         replaceSymbol(data) {
             let reg = /\@f\d+\@/g;
             let items = data.match(reg);
@@ -608,6 +607,7 @@ let config = {
         /**
          *  表达式主要方法
          *  此data结构为{val: 自身的value,effect: [] 被影响的dfield集合}
+         *  暂时只有后端表达式计算，以后需要加上前端表达式判断
          */
         async calcExpression(data) {
             // let send_exps = [];
@@ -615,7 +615,9 @@ let config = {
                 return;
             }
             let fields = {};
+            //不需要的字段
             let continue_key = FormService.continue_key;
+            //需要的字段
             let need_key = FormService.need_key;
             for (let f in this.data.data) {
                 if (continue_key.indexOf(f) != -1) {
@@ -637,6 +639,7 @@ let config = {
             }
             for (let key in new_data) {
                 if (this.data.data[key].effect && this.data.data[key].effect.length > 0 && (this.data.data[key]['options'] || this.data.data[key]['group'])) {
+                    //需要传递text值
                     new_data[key] = this.actions.getTextByOptionID(key, new_data[key]);
                 }
             }
@@ -782,7 +785,8 @@ let config = {
             }
         },
 
-        //创建表单数据格式
+        //创建表单数据格式 形如{dfield:value}
+        //@param data为当前表单最新的数据，isCheck 是否执行表单校验
         createFormValue(data, isCheck) {
             let formValue = {};
             for (let key in data) {
@@ -805,6 +809,7 @@ let config = {
         },
 
         //判断一下日期的类型，并且进行限制
+        //当数据不符格式限制时，要将对应表单值设为空
         checkDateType(data) {
             for (let i in this.data.data) {
                 if (this.data.data[i]['type'] == 'Date') {
