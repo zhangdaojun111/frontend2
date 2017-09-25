@@ -382,10 +382,6 @@ let FormEntrys = {
         //创建请求
         let json = this.createPostJson();
         res = await FormService.getFormData(json);
-
-       console.log("*******************")
-       console.log(res)
-       debugger;
         //将表单名称发送给工作流
 		  Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
         console.timeEnd('获取表单数据的时间');
@@ -407,6 +403,7 @@ let FormEntrys = {
         //通知父框架表单刷新完毕
 
         Mediator.publish('form:formAlreadyCreate', 'success');
+        Mediator.publish('form:formAlreadyCreate'+this.tableId, 'success');
         console.timeEnd('form创建时间');
 
         //给工作流传表单初始数据

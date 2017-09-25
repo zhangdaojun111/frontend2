@@ -1393,8 +1393,10 @@ let config = {
                 title: `选择器`,
                 modal: true
             }).then((res) => {
-                _this.actions.setFormValue(data.dfield, res.value, res.label);
-                _this.actions.checkValue(data);
+                if(res.value){
+                    _this.actions.setFormValue(data.dfield, res.value, res.label);
+                    _this.actions.checkValue(data);
+                }
             });
         },
 
