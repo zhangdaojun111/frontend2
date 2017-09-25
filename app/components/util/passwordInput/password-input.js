@@ -154,6 +154,11 @@ let config = {
         setPswByParent:function (psw) {
             this.data.password_value = psw;
             this.el.find('.set-password-input').val(psw);
+        },
+        sendPawToParent:function () {
+            console.log('do send');
+            let password = this.el.find('.set-password-input').val();
+            this.setValue(password);
         }
     },
     binds:[
@@ -193,6 +198,13 @@ let config = {
                 this.actions.setPswDisplay();
             }
         },
+        {
+            event:'input',
+            selector:'.set-password-input',
+            callback:function(){
+                this.actions.sendPawToParent();
+            }
+        }
     ],
     afterRender:function () {
         this.actions.initPswInput();
