@@ -36,7 +36,7 @@ import SettingPrint from '../setting-print/setting-print'
 import Songrid from '../songrid-control/songrid-control';
 import Correspondence from '../correspondence-control/correspondence-control';
 import ContractControl from "../contract-control/contract-control";
-let index=0;
+let index = 0;
 let config = {
     template: '',
     data: {
@@ -62,22 +62,22 @@ let config = {
         event: 'click',
         selector: '.save',
         callback: function () {
-            if(this.data.isBtnClick){
+            if (this.data.isBtnClick) {
                 console.log('有没有阻止呢？');
                 return;
             }
             console.log('过来楼');
-            this.data.isBtnClick=true;
+            this.data.isBtnClick = true;
             this.actions.onSubmit();
         }
     }, {
         event: 'click',
         selector: '.changeEdit',
         callback: function () {
-            if(this.data.isBtnClick){
+            if (this.data.isBtnClick) {
                 return;
             }
-            this.data.isBtnClick=true;
+            this.data.isBtnClick = true;
             this.actions.changeToEdit();
         }
     }],
@@ -803,58 +803,58 @@ let config = {
 
         //判断一下日期的类型，并且进行限制
         checkDateType(data) {
-            for(let i in this.data.data){
-              if(this.data.data[i]['type'] == 'Date'){
-                  let temp = this.data.data[i];
-                  let dfield = this.data.data[i]['dfield'];//f8
-                    if(temp['timeType'] == 'after'){
+            for (let i in this.data.data) {
+                if (this.data.data[i]['type'] == 'Date') {
+                    let temp = this.data.data[i];
+                    let dfield = this.data.data[i]['dfield'];//f8
+                    if (temp['timeType'] == 'after') {
                         let vals = data[dfield].split("-");
                         //let vals = val.split("-");//[2011,11,11];
                         let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
+                        let dates = [myData.getFullYear(), myData.getMonth() + 1, myData.getDate()];
+                        for (let i = 0; i < 3; i++) {
+                            if (vals[i] < dates[i]) {
+                                data[dfield] = '';
                             }
                         }
-                    }else if(this.data.data[i]['type'] == 'before') {
+                    } else if (this.data.data[i]['type'] == 'before') {
                         let vals = data[dfield].split("-");
                         //let vals = val.split("-");//[2011,11,11];
                         let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
+                        let dates = [myData.getFullYear(), myData.getMonth() + 1, myData.getDate()];
+                        for (let i = 0; i < 3; i++) {
+                            if (vals[i] < dates[i]) {
+                                data[dfield] = '';
                             }
                         }
                     }
                 }
-                if(this.data.data[i]['type'] == 'Datetime'){
+                if (this.data.data[i]['type'] == 'Datetime') {
                     let temp = this.data.data[i];
                     let dfield = this.data.data[i]['dfield'];//f8
-                    if(temp['timeType'] == 'after'){
+                    if (temp['timeType'] == 'after') {
                         let vals = data[dfield].split(" ")[0].split("-");
                         //let vals = val.split("-");//[2011,11,11];
                         let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
+                        let dates = [myData.getFullYear(), myData.getMonth() + 1, myData.getDate()];
+                        for (let i = 0; i < 3; i++) {
+                            if (vals[i] < dates[i]) {
+                                data[dfield] = '';
                             }
                         }
-                    }else if(this.data.data[i]['type'] == 'before') {
+                    } else if (this.data.data[i]['type'] == 'before') {
                         let vals = data[dfield].split(" ")[0].split("-");
                         //let vals = val.split("-");//[2011,11,11];
                         let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
+                        let dates = [myData.getFullYear(), myData.getMonth() + 1, myData.getDate()];
+                        for (let i = 0; i < 3; i++) {
+                            if (vals[i] < dates[i]) {
+                                data[dfield] = '';
                             }
                         }
                     }
-               }
-             }
+                }
+            }
         },
 
         //统计功能
@@ -963,7 +963,7 @@ let config = {
             let {error, errorMsg} = this.actions.validForm(this.data.data, formValue);
             if (error) {
                 MSG.alert(errorMsg);
-                this.data.isBtnClick=false;
+                this.data.isBtnClick = false;
                 return;
             }
             let data = this.actions.handleFormData(formValue);
@@ -1012,7 +1012,7 @@ let config = {
             } else {
                 MSG.alert(res.error);
             }
-            this.data.isBtnClick=false;
+            this.data.isBtnClick = false;
             //清空子表内置父表的ids
             delete FormService.idsInChildTableToParent[this.data.tableId];
         },
@@ -1084,7 +1084,8 @@ let config = {
             //     json["temp_id"] = this.data.realId;
             // }
 
-            if (this.data.inProcess==1 || this.data.isBatch==1) {
+
+            if (this.data.inProcess == 1 || this.data.isBatch == 1) {
                 json["temp_id"] = this.data.realId;
             } else {
                 json["real_id"] = this.data.realId;
@@ -1093,9 +1094,23 @@ let config = {
         },
 
 
+        checkCustomTable(){
+            if (this.data.custom_table_form_exists) {
+                if (this.data.table_name == '人员信息') {
+                    for (let key in this.data.data) {
+                        if (this.data.data[key].label == '用户名') {
+                            this.data.data[key].is_view = 1;
+                            this.data.childComponent[key].data.is_view = 1;
+                            this.data.childComponent[key].reload();
+                        }
+                    }
+                }
+            }
+        },
+
         //转到编辑模式
         async changeToEdit() { //重新获取动态数据 （temp_id会变）
-            this.data.isView=0;
+            this.data.isView = 0;
             let json = this.actions.createPostJson();
             let res = await FormService.getDynamicDataImmediately(json);
             for (let key in res.data) {
@@ -1111,8 +1126,9 @@ let config = {
                 this.data.btnType = 'new';
             }
             this.actions.addBtn();
+            this.actions.checkCustomTable();
             this.actions.triggerControl();
-            this.data.isBtnClick=false;
+            this.data.isBtnClick = false;
         },
         //修改可修改性
         reviseCondition: function (editConditionDict, value) {
@@ -1528,7 +1544,8 @@ let config = {
                 if (single.data('width')) {
                     data[key]['width'] = single.data('width') + 'px';
                 } else {
-                  //  data[key]['width'] = '234px';
+
+                      data[key]['width'] = '240px';
                 }
                 //数据填充后，根据修改条件对不同框进行只读操作
                 setTimeout(() => {
