@@ -274,6 +274,15 @@ let config = {
                         }
                     })
             }
+        },
+        /**
+         * 检测系统名称长度，调整ERDS logo位置
+         */
+        checkSysName:function () {
+            let lenght = this.data.systemName.length;
+            if(lenght > 8){
+                this.el.find('.erds-logo').css('padding-top','10px');
+            }
         }
     },
     binds: [
@@ -341,6 +350,8 @@ let config = {
         }
         //此处检查用户是否开启代理，并做提醒
         this.actions.checkAgent();
+        //检测系统名称名字长度，长于8则修改ERDS logo的padding
+        this.actions.checkSysName();
     },
     firstAfterRender: function() {
         Mediator.on('aside:size', (order) => {
