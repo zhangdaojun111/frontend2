@@ -56,7 +56,6 @@ let config = {
                 toolbar: toolbarOptions
             }
         });
-        this.data.quill.getSelection();
     },
     firstAfterRender(){}
 };

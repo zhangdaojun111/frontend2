@@ -57,7 +57,13 @@ let config = {
         async getCellLayout() {
             const res = await canvasCellService.getCellLayout({view_id: this.data.currentViewId});
             if (res['success'] === 1) {
-                this.actions.loadCellChart(res['data']['data']);
+                try {
+                    this.actions.loadCellChart(res['data']['data']);
+                } catch (e){
+
+                } finally {
+
+                };
             } else {
                 msgbox.alert(res['error'])
             }
@@ -98,7 +104,8 @@ let config = {
                     layout_id: val.layout_id,
                     xOld: val.is_deep == 0 ? {} : userMode === 'client' ? val.deep['xOld'] : {},
                     row_id: 0,
-                    deep_info: deep_info
+                    deep_info: deep_info,
+                    sort: val.sort
                 }));
             });
 

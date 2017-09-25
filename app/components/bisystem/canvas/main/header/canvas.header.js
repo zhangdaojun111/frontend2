@@ -85,7 +85,7 @@ let config = {
         //新窗口隐藏新窗口图标
         if(window === window.parent){
             this.el.find('.new-window').hide();
-        }
+        };
 
         this.data.views = window.config.bi_views;
         // 渲染header视图列表
