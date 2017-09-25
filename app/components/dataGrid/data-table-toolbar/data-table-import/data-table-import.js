@@ -33,29 +33,29 @@ let config = {
         prepareWorkflowData: function () {
             FormService.getPrepareParmas({table_id: this.data.tableId}).then( res=>{
                 let workflow = this.el.find( '.workflow' );
-                if( res.data.flow_data.length != 0 ){
-                    this.data.formId = res.data.form_id;
-                    this.data.workflowList = res.data.flow_data;
-                    let html = '';
-                    try{this.data.flowId = this.data.workflowList[0]['flow_id'] || '';}catch(e){}
-                    for( let d of this.data.workflowList ){
-                        html+= '<option value='+ d.flow_id + '>' + d.flow_name + '</option>';
-                        if( d.selected == 1 ){
-                            this.data.flowId = d.flow_id;
-                        }
-                    }
-                    let choose = this.el.find( '.chooseFlow' )
-                    choose[0].innerHTML = html;
-                    choose.eq(0).val(this.data.flowId);
-                    workflow[0].style.display = 'block';
-                    workflow[1].style.display = 'block';
-                    workflow[2].style.display = 'block';
-                    this.actions.drawFlowChart();
-                }else {
-                    workflow[0].outerHTML = '';
-                    workflow[1].outerHTML = '';
-                    workflow[2].outerHTML = '';
-                }
+                // if( res.data.flow_data.length != 0 ){
+                //     this.data.formId = res.data.form_id;
+                //     this.data.workflowList = res.data.flow_data;
+                //     let html = '';
+                //     try{this.data.flowId = this.data.workflowList[0]['flow_id'] || '';}catch(e){}
+                //     for( let d of this.data.workflowList ){
+                //         html+= '<option value='+ d.flow_id + '>' + d.flow_name + '</option>';
+                //         if( d.selected == 1 ){
+                //             this.data.flowId = d.flow_id;
+                //         }
+                //     }
+                //     let choose = this.el.find( '.chooseFlow' )
+                //     choose[0].innerHTML = html;
+                //     choose.eq(0).val(this.data.flowId);
+                //     workflow[0].style.display = 'block';
+                //     workflow[1].style.display = 'block';
+                //     workflow[2].style.display = 'block';
+                //     this.actions.drawFlowChart();
+                // }else {
+                //     workflow[0].outerHTML = '';
+                //     workflow[1].outerHTML = '';
+                //     workflow[2].outerHTML = '';
+                // }
                 //执行脚本
                 if( res["data"]["upload_exec_file_remark"] ){
                     this.el.find( '.uploadRemark' ).show();

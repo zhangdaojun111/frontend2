@@ -62,6 +62,7 @@ let config = {
         //设置表头
         this.agGrid = new agGrid({
             columnDefs: GlobalService.getOnlineColumnDefs(),
+            footerData:[]
         });
         this.agGrid.render(gridRoot);
         this.pagination = new dataPagination({

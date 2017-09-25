@@ -972,7 +972,7 @@ let config = {
             this.data.namespace = res[1].namespace;
             this.data.headerColor = dgcService.createHeaderStyle( this.data.tableId,res[1].field_color );
             //获取表的表单工作流参数
-            this.actions.setPrepareParmas( res[4] );
+            // this.actions.setPrepareParmas( res[4] );
             //初始化按钮
             this.actions.renderBtn();
             //创建高级查询需要字段数据
@@ -1143,11 +1143,11 @@ let config = {
                 let time = this.data.firstRender ? 100 : 0;
                 setTimeout( ()=>{
                     this.actions.setGridData( res );
+                    if(this.data.fristGet && this.data.viewMode == 'viewFromCorrespondence'){
+                        this.actions.checkCorrespondence();
+                        this.data.fristGet = false;
+                    }
                 },time )
-                if(this.data.fristGet){
-                    this.actions.checkCorrespondence();
-                    this.data.fristGet = false;
-                }
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
                 }
