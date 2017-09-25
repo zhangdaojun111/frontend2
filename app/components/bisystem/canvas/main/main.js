@@ -104,9 +104,7 @@ let config = {
         this.actions.headLoad();
         this.hideLoading();
     },
-    beforeDestory:function () {
-
-    }
+    beforeDestory:function () {}
 };
 
 export class CanvasMain extends Component {

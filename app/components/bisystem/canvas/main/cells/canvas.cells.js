@@ -146,9 +146,9 @@ let config = {
             };
             canvasCellService.saveCellLayout(data).then(res => {
                 if (res['success'] === 1) {
-                    msgbox.alert('保存成功');
+                    msgbox.showTips('保存成功');
                 } else {
-                    msgbox.alert(res['error']);
+                    msgbox.showTips(res['error']);
                 }
             });
         }
