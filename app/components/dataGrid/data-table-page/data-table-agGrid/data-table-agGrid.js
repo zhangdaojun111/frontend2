@@ -1578,6 +1578,10 @@ let config = {
                 this.data.showTabs(1);
                 try{this.hideLoading()}catch(e){}
             }
+            //新窗口右边提示
+            if( this.data.gridTips ){
+                this.el.find( '.grid-tips' )[0].style.display = 'flex';
+            }
         },
         //触发导出
         onExport: function () {
