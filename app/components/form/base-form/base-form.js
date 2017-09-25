@@ -36,7 +36,6 @@ import SettingPrint from '../setting-print/setting-print'
 import Songrid from '../songrid-control/songrid-control';
 import Correspondence from '../correspondence-control/correspondence-control';
 import ContractControl from "../contract-control/contract-control";
-let index = 0;
 let config = {
     template: '',
     data: {
@@ -52,6 +51,7 @@ let config = {
         myUseFields: {},
         //所有选择对应的选项
         optionsToItem: {},
+        //流程Id
         flowId: '',
         //本地存储默认值数据的dict，{ dfield: value }
         baseIdsLocalDict: {},
@@ -61,18 +61,18 @@ let config = {
     binds: [{
         event: 'click',
         selector: '.save',
+        //阻止表单数据提交之前多次提交
         callback: function () {
             if (this.data.isBtnClick) {
-                console.log('有没有阻止呢？');
                 return;
             }
-            console.log('过来楼');
             this.data.isBtnClick = true;
             this.actions.onSubmit();
         }
     }, {
         event: 'click',
         selector: '.changeEdit',
+        //阻止用户连续快速切换编辑模式
         callback: function () {
             if (this.data.isBtnClick) {
                 return;
@@ -125,7 +125,9 @@ let config = {
         //给子表统计赋值
         async setCountData() {
             let res = await FormService.getCountData({
+                //传给后台当前表单所有控件的值
                 data: this.actions.createFormValue(this.data.data),
+                //传子表id
                 child_table_id: this.data.sonTableId
             });
             //给统计赋值
@@ -135,11 +137,12 @@ let config = {
         },
 
         //给外部提供formValue格式数据
+        //@param isCheck判断是否需要执行表单校验
         getFormValue(isCheck) {
             return isCheck ? this.actions.createFormValue(this.data.data, true) : this.actions.createFormValue(this.data.data);
         },
 
-        //根据dfield查找类型
+        //根据dfield查找控件类型
         findTypeByDfield(dfield) {
             let type = '';
             for (let obj of this.data.formData) {
@@ -163,6 +166,7 @@ let config = {
         },
 
         //创建cache数据
+        //@param formData原始表单数据,val当前表单数据,isNew 是否是cacheNew
         createCacheData(formData, val, isNew, com) {
             let obj = {};
             for (let key in formData) {
@@ -251,6 +255,7 @@ let config = {
         },
 
         //提交检查
+        //@param allData全部控件属性,formvalue 表单值格式
         validForm(allData, formValue) {
             let error = false;
             let errorMsg = "";
@@ -332,8 +337,6 @@ let config = {
                 if (val != "" && !$.isEmptyObject(data["func"])) {
                     for (let r in data["func"]) {
                         let flag = FormService[r](val);
-                        console.log(data);
-                        console.log(flag);
                         if (!flag) {
                             error = true;
                             errorMsg = data["func"][r];
@@ -967,11 +970,11 @@ let config = {
                 return;
             }
             let data = this.actions.handleFormData(formValue);
-            let formDataNew = this.data.oldData;
+            let formDataOld = this.data.oldData;
             //如果有其他字段的数据，这里是拼approvedFormData
             this.actions.checkDateType(formValue);
-            let obj_new = this.actions.createCacheData(formDataNew, data, true, this);
-            let obj_old = this.actions.createCacheData(formDataNew, data, false, this);
+            let obj_new = this.actions.createCacheData(formDataOld, data, true, this);
+            let obj_old = this.actions.createCacheData(formDataOld, data, false, this);
             this.actions.changeValueForChildTable(data);
             let json = {
                 data: JSON.stringify(data),
@@ -1093,9 +1096,12 @@ let config = {
         },
 
         checkCustomTable(){
+            console.log(this.data.custom_table_form_exists);
             if (this.data.custom_table_form_exists) {
+                console.log(this.data.table_name);
                 if (this.data.table_name == '人员信息') {
                     for (let key in this.data.data) {
+                        console.log(this.data.data[key].label);
                         if (this.data.data[key].label == '用户名') {
                             this.data.data[key].is_view = 1;
                             this.data.childComponent[key].data.is_view = 1;
@@ -1709,6 +1715,7 @@ let config = {
     },
     afterRender() {
         this.actions.createFormControl();
+        this.actions.checkCustomTable();
         this.actions.triggerControl();
         this.actions.changeOptions();
         this.actions.setDataFromParent();
