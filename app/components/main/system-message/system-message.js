@@ -160,7 +160,8 @@ let config = {
         //设置表格表头信息
         this.agGrid = new agGrid({
             columnDefs: systemMessageService.getColumnDefs(),
-            onCellClicked: that.actions.onCellClicked
+            onCellClicked: that.actions.onCellClicked,
+            footerData:[]
         });
         this.agGrid.render(gridDom);
         this.pagination = new dataPagination({
