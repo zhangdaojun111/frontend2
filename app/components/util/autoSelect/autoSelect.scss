@@ -77,10 +77,10 @@
                 height: 30px;
                 line-height: 30px;
                 cursor: pointer;
-                &:hover {
-                    background: #ddd;
-                }
-                &.selected{
+                //&:hover {
+                //    background: #ddd;
+                //}
+                &.hovered{
                     background: #ddd;
                 }
                 .custom-checkbox {
