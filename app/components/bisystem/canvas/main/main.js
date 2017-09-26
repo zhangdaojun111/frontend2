@@ -70,6 +70,8 @@ let config = {
             }
             this.data.cells = new CanvasCellsComponent(this.currentViewId);
             this.data.cells.render(this.el.find('.cells-container'));
+
+            this.data.headerComponents.actions.canSaveViews(viewId);
         },
 
         /**
