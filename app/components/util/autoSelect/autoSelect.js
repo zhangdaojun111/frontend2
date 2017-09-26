@@ -67,17 +67,17 @@ let config = {
             this.actions.renderChoosed();
         },
         onInput: function (input) {
-            this.el.find('ul li').removeClass('hovered').removeClass('visible');
+            this.el.find('ul li').removeClass('hovered').removeClass('match-visible');
             let value = _.trim(input.val());
             input.val(value);
             if (value === '') {
-                this.listWrap.find('li').addClass('visible').show();
+                this.listWrap.find('li').addClass('match-visible').show();
                 this.data.focusItem = this.el.find('ul li:first-child').addClass('hovered');
             } else {
                 this.listWrap.find('li').hide();
-                this.listWrap.find(`li[data-name*=${value}]`).addClass('visible').show();
-                this.listWrap.find(`li[data-py*=${value}]`).addClass('visible').show();
-                let $matchItems = this.el.find('li.visible');
+                this.listWrap.find(`li[data-name*=${value}]`).addClass('match-visible').show();
+                this.listWrap.find(`li[data-py*=${value}]`).addClass('match-visible').show();
+                let $matchItems = this.el.find('li.match-visible');
                 if($matchItems.length > 0){
                     this.data.focusItem = $matchItems.eq(0).addClass('hovered');
                 }
@@ -154,7 +154,7 @@ let config = {
                 if(keyCode === 13){
                     that.actions.setCheckBoxByKeyboard();
                 }else if(keyCode === 40){
-                    let $next = that.data.focusItem.nextAll('.visible');
+                    let $next = that.data.focusItem.nextAll('.match-visible');
                     if($next.length > 0){
                         that.data.focusItem.removeClass('hovered');
                         that.data.focusItem = $next.eq(0);
@@ -164,7 +164,7 @@ let config = {
                         that.el.find('.auto-select-ul').scrollTop(scrollTop);
                     }
                 }else if(keyCode === 38){
-                    let $prev = that.data.focusItem.prevAll('.visible');
+                    let $prev = that.data.focusItem.prevAll('.match-visible');
                     if($prev.length > 0){
                         that.data.focusItem.removeClass('hovered');
                         that.data.focusItem = $prev.eq(0);
@@ -234,7 +234,7 @@ let config = {
             selector: '.result,.triangle',
             callback: function () {
                 if (this.data.isSelectBoxDisplayed) {
-                    this.actions.hideSelectBox();
+                    // this.actions.hideSelectBox();
                 } else {
                     this.actions.showSelectBox();
                 }
