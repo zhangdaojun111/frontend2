@@ -114,8 +114,8 @@ let css = `
         align-items:center;
         justify-content: center;
     }
-    .closeImg:hover{
-        background-color:darkred;
+    .rotate-button li{
+        padding:5px 15px;
     }
     `;
 let AttachmentList = {
@@ -221,13 +221,13 @@ let AttachmentList = {
             _this.data.imgStartX = _this.el.find('.img-pre').position().left;
             _this.data.imgStartY = _this.el.find('.img-pre').position().top;
         })
-        this.el.on('click', '.narrow', function () {
+        this.el.on('click','.zoom-out',function () {
             _this.data.imgScale -= 0.1;
             _this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + _this.data.rotateNo + "deg) scale(" + _this.data.imgScale + ")");
-        }).on('click', '.enlarge', function () {
+        }).on('click', '.zoom-in', function () {
             _this.data.imgScale += 0.1;
             _this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + _this.data.rotateNo + "deg) scale(" + _this.data.imgScale + ")");
-        }).on('click', '.counterclockwise', function (event) {
+        }).on('click', '.rotate', function (event) {
             _this.data.rotateNo -= 90;
             _this.data.imgScale = 1;
             $(event.target).parent().parent().find(".img-pre").css({
@@ -235,7 +235,7 @@ let AttachmentList = {
                 "top": "50%",
                 "left": "50%"
             });
-        })
+        }).on('click','')
     },
     beforeDestory() {
         this.data.style.remove();
