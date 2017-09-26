@@ -3090,6 +3090,10 @@ let config = {
             this.actions.firstFooterCommonFilterId(data.advanced_query);
             this.actions.createPostData();
             this.actions.setExpertSearchData( data.advanced_query )
+            try {
+                this.data.showTabs(1);
+                this.hideLoading();
+            }catch(e){}
         }
     },
     afterRender: function () {
