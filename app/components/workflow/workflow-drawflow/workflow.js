@@ -98,9 +98,9 @@ let config = {
                         myTitle = __this[handlerType] + text;
                         if (value['handler_relation']) {
                             text = value['handler_relation'] == 0 ? '临时(会签)' : '临时(并行)';
-                            condition = value['multi_handlers'];
                         }
                         if (value['multi_handlers']) {
+                            condition = value['multi_handlers'];
                             myTitle = value['multi_handlers'];
                         }
                     }
