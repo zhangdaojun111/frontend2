@@ -15,8 +15,6 @@ let config = {
          * @param chart 初始数据
          */
         setValue(chart,viewId){
-            console.log('1111111111111111');
-            console.log(chart);
             this.data.viewId = viewId ? viewId : '';
             this.data.userSelf = chart['data']['self'] == 1 ? true : false;
             this.data.chart = chart;
