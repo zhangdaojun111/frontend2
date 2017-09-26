@@ -59,11 +59,9 @@ let config={
             for(let i =0;i<len; i++){
                 arr.push($(checked[i]).data('id'))
             }
-            console.log(res);
-            console.log("000000000000000000000000000");
             $.each(res,(i,val)=>{
                 if(val){
-                val.id=i;
+                    val.id=i;
                     if(checked.length===0){
                         this.append(new SelectStaff(val), this.el.find('#staffMulti'));
                     }else if(arr.indexOf(i)===-1){
