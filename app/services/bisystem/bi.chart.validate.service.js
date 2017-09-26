@@ -53,8 +53,6 @@ let formChartValidateService = {
         return result;
     }
 
-
-
 };
 export {formChartValidateService}
 
