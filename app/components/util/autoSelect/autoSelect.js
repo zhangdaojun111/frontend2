@@ -28,7 +28,8 @@ let config = {
         width: 0,                       // 为0表示显示默认宽度240
         editable: true,                 // 是否可编辑
         onSelect: null,                  // 选择时的事件
-        placeholder: ''
+        placeholder: '',
+        focusItem:null,                 //记录键鼠当前指向的item
     },
     actions: {
         selectItem: function (item) {
@@ -79,11 +80,18 @@ let config = {
         showSelectBox: function () {
             this.listWrap.show();
             this.data.isSelectBoxDisplayed = true;
+            //设置搜索框焦点
+            this.el.find('.auto-select-text').focus();
+            //第一个备选项设置光标，并设置当前焦点dom
+            this.data.focusItem = this.el.find("ul li:first-child").addClass('selected');
+            //开始监听键盘
+            this.actions.startListenKeyboard();
         },
         hideSelectBox: function () {
             if (this.listWrap) {
                 this.listWrap.hide();
                 this.data.isSelectBoxDisplayed = false;
+                this.actions.stopListenKeyboard();
             }
         },
         getValue: function () {
@@ -128,6 +136,29 @@ let config = {
                 this.data.choosed = this.data.list;
             }
             this.actions.renderChoosed();
+        },
+        /**
+         * 开始监听上下回车键
+         */
+        startListenKeyboard(){
+            console.log("aaaaa");
+            this.el.on('keydown','.auto-select-text',function (event) {
+                console.log("dsdasdsa",event);
+                let keyCode = event.keyCode;
+                if(keyCode === 13){
+                    console.log('select');
+                }else if(keyCode === 40){
+                    console.log('40');
+                }else if(keyCode === 38){
+                    console.log('38');
+                }
+            })
+        },
+        /**
+         * 停止监听键盘
+         */
+        stopListenKeyboard(){
+
         }
     },
     binds:[
@@ -170,7 +201,7 @@ let config = {
             event: 'mouseleave.visible',
             selector: '',
             callback: function () {
-                this.actions.hideSelectBox();
+                // this.actions.hideSelectBox();
             }
         }
     ],

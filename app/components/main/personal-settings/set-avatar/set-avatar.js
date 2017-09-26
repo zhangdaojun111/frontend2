@@ -256,7 +256,7 @@ let config = {
         this.avatar = window.config.sysConfig.userInfo.avatar;
     },
     beforeDestory:function () {
-
+        // Mediator.removeAll("personal:setAvatar");
     }
 };
 

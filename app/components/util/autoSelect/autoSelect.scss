@@ -80,6 +80,9 @@
                 &:hover {
                     background: #ddd;
                 }
+                &.selected{
+                    background: #ddd;
+                }
                 .custom-checkbox {
                     display: block;
                     cursor: pointer;
