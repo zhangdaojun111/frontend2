@@ -122,13 +122,13 @@ export const IframeInstance = new Component({
         sendOpenRequest:function (id) {
             if (id !== 'search-result'){
                 //向后台发送请求记录
-                TabService.onOpenTab(id).done((result) => {
-                    if(result.success === 1){
-                        // console.log("post open record success");
-                    }else{
-                        console.log("post open record failed")
-                    }
-                });
+                // TabService.onOpenTab(id).done((result) => {
+                //     if(result.success === 1){
+                //         // console.log("post open record success");
+                //     }else{
+                //         console.log("post open record failed")
+                //     }
+                // });
             }
         },
         /**

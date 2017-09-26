@@ -13,6 +13,7 @@ import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import msgBox from '../../../../lib/msgbox';
 import agGrid from "../../agGrid/agGrid";
 import {dataTableService} from "../../../../services/dataGrid/data-table.service";
+import {TabService} from "../../../../services/main/tabService"
 import {workflowService} from "../../../../services/workflow/workflow.service";
 import {FormService} from "../../../../services/formService/formService";
 import {dgcService} from "../../../../services/dataGrid/data-table-control.service";
@@ -37,7 +38,6 @@ import QuillAlert from "../../../form/quill-alert/quill-alert";
 let config = {
     template: template,
     data: {
-        fristGet:true,
         tableId: '',
         formId: '',
         tableType: '',
@@ -150,6 +150,8 @@ let config = {
         inProcessFooter: false,
         //是否有分页
         pagination: false,
+        //对应关系首次加载
+        fristGetCorrespondence:true,
         //对应关系增加的数据
         correspondenceAddList: [],
         //对应关系减少的数据
@@ -780,7 +782,7 @@ let config = {
                                 dataTableService.getPreferences( obj ).then( res=>{
                                     dgcService.setPreference( res,this.data );
                                     //初始化偏好隐藏系统默认列
-                                    if( res.ignoreFields == null && this.data.haveSystemsFields ){
+                                    if( res.is_report == 0 && res.ignoreFields.ignoreFields == null && this.data.haveSystemsFields ){
                                         this.data.ignoreFields = ['f1','f2','f3','f4'];
                                     }
                                     //创建表头
@@ -994,7 +996,7 @@ let config = {
             this.agGrid.actions.setGridData(d);
 
             //第一次加载隐藏默认列
-            if( res[0].ignoreFields == null && this.data.haveSystemsFields ){
+            if( res[0].is_report == 0 && res[0].ignoreFields.ignoreFields == null && this.data.haveSystemsFields ){
                 this.data.ignoreFields = ['f1','f2','f3','f4'];
             }
             //创建sheet分页
@@ -1143,11 +1145,11 @@ let config = {
                 let time = this.data.firstRender ? 100 : 0;
                 setTimeout( ()=>{
                     this.actions.setGridData( res );
+                    if(this.data.fristGetCorrespondence && this.data.viewMode == 'viewFromCorrespondence'){
+                        this.actions.checkCorrespondence();
+                        this.data.fristGetCorrespondence = false;
+                    }
                 },time )
-                if(this.data.fristGet){
-                    this.actions.checkCorrespondence();
-                    this.data.fristGet = false;
-                }
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
                 }
@@ -1578,6 +1580,10 @@ let config = {
                 this.data.showTabs(1);
                 try{this.hideLoading()}catch(e){}
             }
+            //新窗口右边提示
+            if( this.data.gridTips ){
+                this.el.find( '.grid-tips' )[0].style.display = 'flex';
+            }
         },
         //触发导出
         onExport: function () {
@@ -1868,9 +1874,7 @@ let config = {
                     };
                     let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
 
-                    let title = '新增'
-                    console.log("*******8************")
-                    console.log(url);
+                    let title = '新增';
                     this.actions.openSelfIframe( url,title );
                 } )
             }
@@ -3023,7 +3027,6 @@ let config = {
         },
         //打开局部的弹窗
         openSelfIframe: function ( url,title,w,h ) {
-            this.actions.setInvalid();
             PMAPI.openDialogToSelfByIframe( url,{
                     width: w || 1400,
                     height: h || 800,
@@ -3032,7 +3035,10 @@ let config = {
                     defaultMax: true,
                     // customSize: true
             } ).then( (data)=>{
-
+                console.log( "+++++++++++++++++" )
+                console.log( "+++++++++++++++++" )
+                console.log( data )
+                this.actions.setInvalid();
             } )
         },
         //返回批量工作流导入后数据
@@ -3084,9 +3090,21 @@ let config = {
             this.actions.firstFooterCommonFilterId(data.advanced_query);
             this.actions.createPostData();
             this.actions.setExpertSearchData( data.advanced_query )
+            try {
+                this.data.showTabs(1);
+                this.hideLoading();
+            }catch(e){}
         }
     },
     afterRender: function () {
+        //发送表单tableId（订阅刷新数据用
+        TabService.onOpenTab( this.data.tableId ).done((result) => {
+            if(result.success === 1){
+                // console.log("post open record success");
+            }else{
+                console.log("post open record failed")
+            }
+        });
         this.showLoading();
         try{dgcService.accuracy = window.config.sysConfig.accuracy || 1000;}catch(e){}
         let gridData = {
