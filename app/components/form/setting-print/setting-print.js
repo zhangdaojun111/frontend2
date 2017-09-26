@@ -29,12 +29,13 @@ let css = `
     padding: 4px;
     text-indent: 6px;
     cursor: pointer;
-    height: 17px;
+    height: 17px; 
     line-height: 17px;
 }
 .global-search-history a {
     height: 17px;
     line-height: 17px;
+    margin-top: 2px;
 }
 .global-search-history .active {
     background: #c5e1ff;
