@@ -66,6 +66,7 @@ $sub_color: #0088ff;
                 float: left;
                 cursor: pointer;
                 border-radius: 50%;
+                border: solid 2px #E4E4E4;
                 overflow: hidden;
                 &.default_avatar{
                     background-image: url("../../../assets/images/framework/default_avatar_64.png");
