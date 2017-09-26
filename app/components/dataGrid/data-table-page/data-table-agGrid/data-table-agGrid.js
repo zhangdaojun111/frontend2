@@ -210,7 +210,7 @@ let config = {
         //二维表项目名称
         project: '',
         //二维表改变的值
-        cellChangeValue: {},
+        cellChangeValue: {}
     },
     //生成的表头数据
     columnDefs: [],
@@ -2274,6 +2274,10 @@ let config = {
                         this.data.batchIdList = arr;
                         this.actions.returnBatchData( this.data.batchIdList );
                     }
+                    //表单的子表操作重新请求数据
+                    if( this.data.viewMode == 'EditChild' ){
+                        this.actions.getGridData( true );
+                    }
                 }else {
                     if( res.queryParams ){
                         msgBox.confirm( res.error + '是否前往处理？' ).then( r=>{
@@ -3049,6 +3053,9 @@ let config = {
                     // customSize: true
             } ).then( (data)=>{
                 this.actions.setInvalid();
+                if( this.data.viewMode == 'EditChild' && data == 'success' ){
+                    this.actions.getGridData( true );
+                }
             } )
         },
         //返回批量工作流导入后数据
