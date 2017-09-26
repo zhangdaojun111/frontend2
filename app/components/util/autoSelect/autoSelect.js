@@ -104,6 +104,7 @@ let config = {
         },
         hideSelectBox: function () {
             if (this.listWrap) {
+                this.actions.resetAutoSelect();
                 this.listWrap.hide();
                 this.data.isSelectBoxDisplayed = false;
                 this.actions.stopListenKeyboard();
@@ -218,6 +219,13 @@ let config = {
         },
         setMouseMove:function () {
             this.data.mouseActive = true;
+        },
+        /**
+         * 退出时重置组件
+         */
+        resetAutoSelect:function () {
+            this.el.find('.auto-select-text').val('');
+            this.el.find('ul li').addClass('match-visible').show();
         }
     },
     binds:[
