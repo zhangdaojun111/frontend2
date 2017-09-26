@@ -79,7 +79,7 @@ let config = {
         }
         if (this.data.is_view) {
             this.el.find('.ui-width').attr('disabled', true);
-            this.el.find('.component-date-control').css('pointer-events','none');
+            this.el.find('.datetime-control').css('pointer-events','none');
         } else {
             this.el.find('.ui-width').attr('disabled', false);
         }
