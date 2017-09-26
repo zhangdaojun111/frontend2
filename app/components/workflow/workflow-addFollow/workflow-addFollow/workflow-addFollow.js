@@ -59,12 +59,16 @@ let config={
             for(let i =0;i<len; i++){
                 arr.push($(checked[i]).data('id'))
             }
+            console.log(res);
+            console.log("000000000000000000000000000");
             $.each(res,(i,val)=>{
+                if(val){
                 val.id=i;
-                if(checked.length===0){
-                    this.append(new SelectStaff(val), this.el.find('#staffMulti'));
-                }else if(arr.indexOf(i)===-1){
-                    this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+                    if(checked.length===0){
+                        this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+                    }else if(arr.indexOf(i)===-1){
+                        this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+                    }
                 }
             });
         });
@@ -119,7 +123,6 @@ let config={
         });
         //注册SelectedStaff组件
         Mediator.subscribe('workflow:pubCheck', (res)=> {
-            console.log(res);
             this.append(new SelectedStaff(res), this.el.find('#selected'));
             this.data.total++;
             this.action.addtotal(this.data.total);
