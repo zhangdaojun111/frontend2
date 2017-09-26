@@ -1525,6 +1525,7 @@ let config = {
                     }
                 }
             }
+            //处理文本区回车符
             if (data.type == 'Textarea') {
                 for (let key in history) {
                     history[key]['new_value'] = history[key]['new_value'].replace(/\n/g, ";");
