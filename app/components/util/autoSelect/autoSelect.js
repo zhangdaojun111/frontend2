@@ -77,7 +77,6 @@ let config = {
                 this.listWrap.find('li').hide();
                 this.listWrap.find(`li[data-name*=${value}]`).addClass('visible').show();
                 this.listWrap.find(`li[data-py*=${value}]`).addClass('visible').show();
-                // let $matchItems = this.el.find("ul li:visible");
                 let $matchItems = this.el.find('li.visible');
                 if($matchItems.length > 0){
                     this.data.focusItem = $matchItems.eq(0).addClass('hovered');
@@ -89,8 +88,8 @@ let config = {
             this.data.isSelectBoxDisplayed = true;
             //设置搜索框焦点
             this.el.find('.auto-select-text').focus();
+            this.el.find('.auto-select-ul').scrollTop(0);
             //第一个备选项设置光标，并设置当前焦点dom
-            this.el.find('ul li').removeClass('hovered');
             this.data.focusItem = this.el.find("ul li:first-child").addClass('hovered');
             //开始监听键盘
             this.actions.startListenKeyboard();
@@ -156,11 +155,13 @@ let config = {
                     that.actions.setCheckBoxByKeyboard();
                 }else if(keyCode === 40){
                     let $next = that.data.focusItem.nextAll('.visible');
-                    console.log($next);
                     if($next.length > 0){
                         that.data.focusItem.removeClass('hovered');
                         that.data.focusItem = $next.eq(0);
                         that.data.focusItem.addClass('hovered');
+                        let index = that.data.focusItem.index();
+                        let scrollTop = Math.max(0,(index-2) * 30);
+                        that.el.find('.auto-select-ul').scrollTop(scrollTop);
                     }
                 }else if(keyCode === 38){
                     let $prev = that.data.focusItem.prevAll('.visible');
@@ -168,6 +169,9 @@ let config = {
                         that.data.focusItem.removeClass('hovered');
                         that.data.focusItem = $prev.eq(0);
                         that.data.focusItem.addClass('hovered');
+                        let index = that.data.focusItem.index();
+                        let scrollTop = Math.max(0,(index-2) * 30);
+                        that.el.find('.auto-select-ul').scrollTop(scrollTop);
                     }
                 }
             })
@@ -239,7 +243,7 @@ let config = {
             event: 'mouseleave.visible',
             selector: '',
             callback: function () {
-                // this.actions.hideSelectBox();
+                this.actions.hideSelectBox();
             }
         },
         {
