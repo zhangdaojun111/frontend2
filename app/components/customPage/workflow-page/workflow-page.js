@@ -515,9 +515,14 @@ let config = {
             }
             if( this.data.filterParam['common_filter_id'] ){
                 json['filter'] = json['filter'] || [];
-                for( let a of this.data.filterParam.expertFilter ){
-                    json['filter'].push( a );
+                //这个顺序要保证是先高级查询，再搜索的
+                let len = this.data.filterParam.expertFilter.length - 1;
+                for(let i = len; i>=0; i--){
+                    json['filter'].unshift(this.data.filterParam.expertFilter[i]);
                 }
+                // for( let a of this.data.filterParam.expertFilter ){
+                //     json['filter'].push( a );
+                // }
                 if( this.data.filterParam['common_filter_id'] != '临时高级查询' ){
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
