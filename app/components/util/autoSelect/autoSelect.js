@@ -30,6 +30,7 @@ let config = {
         onSelect: null,                  // 选择时的事件
         placeholder: '',
         focusItem:null,                 //记录键鼠当前指向的item
+        mouseActive:false,              //标记鼠标是否在移动
     },
     actions: {
         selectItem: function (item) {
@@ -67,12 +68,17 @@ let config = {
             this.actions.renderChoosed();
         },
         onInput: function (input) {
+            // this.data.mouseActive = false;
             this.el.find('ul li').removeClass('hovered').removeClass('match-visible');
             let value = _.trim(input.val());
             input.val(value);
             if (value === '') {
                 this.listWrap.find('li').addClass('match-visible').show();
-                this.data.focusItem = this.el.find('ul li:first-child').addClass('hovered');
+                // this.data.focusItem = this.el.find('ul li:first-child').addClass('hovered');
+                let index = this.data.focusItem.index();
+                let scrollTop = Math.max(0,(index-2) * 30);
+                this.el.find('.auto-select-ul').scrollTop(scrollTop);
+                this.data.focusItem.addClass('hovered');
             } else {
                 this.listWrap.find('li').hide();
                 this.listWrap.find(`li[data-name*=${value}]`).addClass('match-visible').show();
@@ -80,6 +86,7 @@ let config = {
                 let $matchItems = this.el.find('li.match-visible');
                 if($matchItems.length > 0){
                     this.data.focusItem = $matchItems.eq(0).addClass('hovered');
+                    this.el.find('.auto-select-ul').scrollTop(0);
                 }
             }
         },
@@ -96,10 +103,12 @@ let config = {
             this.actions.startListenKeyboard();
         },
         hideSelectBox: function () {
-            if (this.listWrap) {
-                this.listWrap.hide();
-                this.data.isSelectBoxDisplayed = false;
-                this.actions.stopListenKeyboard();
+            if(this.data.mouseActive === true){
+                if (this.listWrap) {
+                    this.listWrap.hide();
+                    this.data.isSelectBoxDisplayed = false;
+                    this.actions.stopListenKeyboard();
+                }
             }
         },
         getValue: function () {
@@ -151,10 +160,12 @@ let config = {
         startListenKeyboard:function(){
             let that = this;
             this.el.on('keydown','.auto-select-component',function (event) {
+                that.data.mouseActive = false;
                 let keyCode = event.keyCode;
                 if(keyCode === 13){
                     that.actions.setCheckBoxByKeyboard();
                 }else if(keyCode === 40){
+                    // that.data.mouseActive = false;
                     let $next = that.data.focusItem.nextAll('.match-visible');
                     if($next.length > 0){
                         that.data.focusItem.removeClass('hovered');
@@ -165,6 +176,7 @@ let config = {
                         that.el.find('.auto-select-ul').scrollTop(scrollTop);
                     }
                 }else if(keyCode === 38){
+                    // that.data.mouseActive = false;
                     let $prev = that.data.focusItem.prevAll('.match-visible');
                     if($prev.length > 0){
                         that.data.focusItem.removeClass('hovered');
@@ -187,9 +199,12 @@ let config = {
          * 鼠标指向某条li，做样式处理和记录当前焦点
          */
         setMouseHover:function (event) {
-            this.el.find('li').removeClass('hovered');
-            this.data.focusItem = $(event.currentTarget);
-            this.data.focusItem.addClass('hovered');
+            console.log(this.data.mouseActive);
+            if(this.data.mouseActive === true){
+                this.el.find('li').removeClass('hovered');
+                this.data.focusItem = $(event.currentTarget);
+                this.data.focusItem.addClass('hovered');
+            }
         },
         /**
          * 键盘监听设置当前选中项的checkbox
@@ -202,6 +217,9 @@ let config = {
                 $checkbox.prop('checked',true);
             }
             this.actions.selectItem(this.data.focusItem);
+        },
+        setMouseMove:function () {
+            this.data.mouseActive = true;
         }
     },
     binds:[
@@ -216,7 +234,7 @@ let config = {
             selector: 'input.auto-select-text',
             callback: _.debounce(function (context) {
                 this.actions.onInput($(context));
-            }, 1000)
+            }, 500)
         },{
             event: 'click',
             selector: '.choosed .item',
@@ -235,14 +253,14 @@ let config = {
             selector: '.result,.triangle',
             callback: function () {
                 if (this.data.isSelectBoxDisplayed) {
-                    // this.actions.hideSelectBox();
+                    this.actions.hideSelectBox();
                 } else {
                     this.actions.showSelectBox();
                 }
             }
         },{
             event: 'mouseleave.visible',
-            selector: '',
+            selector: '.auto-select-component',
             callback: function () {
                 this.actions.hideSelectBox();
             }
@@ -252,6 +270,13 @@ let config = {
             selector:'li',
             callback:function (target,event) {
                 this.actions.setMouseHover(event);
+            }
+        },
+        {
+            event:'mousemove',
+            selector:'.auto-select-component',
+            callback:function(){
+                this.actions.setMouseMove();
             }
         }
     ],
