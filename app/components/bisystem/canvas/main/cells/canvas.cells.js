@@ -152,7 +152,6 @@ let config = {
                 }
             });
         }
-
     },
     binds: [],
 
