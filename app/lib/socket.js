@@ -1,5 +1,5 @@
 import Mediator from './mediator';
-
+import {PMAPI, PMENUM} from './postmsg'
 let SocketMgr = {
 
     socket: null,
