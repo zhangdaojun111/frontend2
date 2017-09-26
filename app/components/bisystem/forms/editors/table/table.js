@@ -285,7 +285,7 @@ let config = {
                         let columnNum = parseInt(value);
                         if (columnNum !== NaN) {
                             let num = this.formItems['table_single'].actions.setColumns(this.formItems['choosed'].data.list, columnNum);
-                            this.formItems['columnNum'].setValue(num);
+                            this.formItems['columnNum'].setValue(num > 0 ? num : 1);
                         }
                     },100)
                 }
