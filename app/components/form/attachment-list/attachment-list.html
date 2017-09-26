@@ -12,7 +12,7 @@
             <td>{{ this.file_name }}</td>
             <td>
                 <a style="color: blue;"
-                   href="/download_attachment/?file_id={{this.file_id}}&download=1&dinput_type={{dinput_type}}">下载</a>
+                   href="/download_attachment/?file_id={{file_id}}&download=1&dinput_type={{dinput_type}}">下载</a>
                 {{#if this.isPreview}}
                 {{#if this.isImg}}
                 <a style="color:blue;" class="ui-href pre" data-id="{{this.file_id}}" href="javascript:;">预览</a>
@@ -38,11 +38,18 @@
     <div class="my-mask" style="display: none">
         <div class="mask-div"></div>
         <div class="imgwrapper"><img class="img-pre" alt=""></div>
-        <ul class="rotate-button">
+        <ul class="operator-buttons">
+            <li class="save">
+                <a class='download-url' style="color: blue;">
+                    <img src="../../../assets/images/form/icon_save.png">
+                </a>
+            </li>
             <li class="zoom-out"><img src="../../../assets/images/form/icon_zoom_out.png"></li>
+            <li class="scale"></li>
             <li class="zoom-in"><img src="../../../assets/images/form/icon_zoom_in.png"></li>
+            <li class="resize"><img src="../../../assets/images/form/icon_resize.png"></li>
             <li class="rotate"><img src="../../../assets/images/form/icon_rotate.png"></li>
         </ul>
-        <div class="closeImg"></div>
+        <div class="closeImg"><img src="../../../assets/images/form/icon_off.png"></div>
     </div>
 </div>
