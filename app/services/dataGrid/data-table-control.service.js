@@ -536,6 +536,10 @@ export const dgcService = {
             indexedGridState[state['colId']] = state;
         }
         for( let w in data.colWidth ){
+            if( w == 'number' ){
+                indexedGridState[w]['width'] = 40;
+                continue;
+            }
             if( indexedGridState[w] ){
                 indexedGridState[w]['width'] = data.colWidth[w];
             }
