@@ -915,7 +915,7 @@ let config = {
         renderBtn: function () {
             let btnGroup = dgcService.gridBtn( this.data.viewMode );
             let btns = this.el.find( '.dataGrid-btn-group' )[0].querySelectorAll('a');
-            let html = ''
+            let html = '';
             for( let btn of btns ){
                 let name = btn.className;
                 if( btnGroup.indexOf( name )!=-1 && ( this.data.permission[dgcService.permission2btn[name]] || dgcService.permission2btn[name] == 'especial' ) ){
@@ -980,7 +980,7 @@ let config = {
             this.data.namespace = res[1].namespace;
             this.data.headerColor = dgcService.createHeaderStyle( this.data.tableId,res[1].field_color );
             //获取表的表单工作流参数
-            this.actions.setPrepareParmas( res[4] );
+            // this.actions.setPrepareParmas( res[4] );
             //初始化按钮
             this.actions.renderBtn();
             //创建高级查询需要字段数据
@@ -1860,7 +1860,8 @@ let config = {
                     fieldId: this.data.fieldId,
                     source_field_dfield: this.data.source_field_dfield,
                     base_buildin_dfield: this.data.base_buildin_dfield,
-                    gridTips: this.data.gridTips
+                    gridTips: this.data.gridTips,
+                    isNewWindow: true
                 }
                 let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', url_obj);
                 this.el.find('.grid-new-window')[0].href = url;
