@@ -319,7 +319,12 @@ let FormEntrys = {
                 try {
                     //加载个人制作的表单
                     console.log('加载个人制作表单');
-                    html = res[2]['data']['content'];
+                    if(res[2]['data']['content']){
+                        html = res[2]['data']['content'];
+                    }else{
+                        html = CreateForm.formDefaultVersion(res[0].data);
+                    }
+
                 } catch (e) {
                     console.error(`加载${ company }的个人制作的表单，form_id为：${ this.formId }的表单失败`);
                     console.error(e);
