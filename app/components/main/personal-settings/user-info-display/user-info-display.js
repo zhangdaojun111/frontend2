@@ -16,7 +16,8 @@ let css = `
 .uid-avatar-box {
     width: 64px;
     height: 64px;
-    top: 40px;
+    border: solid 2px #E4E4E4;
+    top: 38px;
     left: 100px;
     float: left;
     clear: both;

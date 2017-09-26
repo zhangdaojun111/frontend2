@@ -195,6 +195,8 @@ let config = {
         //显示tabs
         showTabs:function (opacity) {
         },
+        //是否为新窗口打开
+        isNewWindow: false,
         //左侧提示
         gridTips: '',
         //是否为双击
@@ -208,7 +210,7 @@ let config = {
         //二维表项目名称
         project: '',
         //二维表改变的值
-        cellChangeValue: {},
+        cellChangeValue: {}
     },
     //生成的表头数据
     columnDefs: [],
@@ -913,12 +915,16 @@ let config = {
         renderBtn: function () {
             let btnGroup = dgcService.gridBtn( this.data.viewMode );
             let btns = this.el.find( '.dataGrid-btn-group' )[0].querySelectorAll('a');
-            let html = ''
+            let html = '';
             for( let btn of btns ){
                 let name = btn.className;
                 if( btnGroup.indexOf( name )!=-1 && ( this.data.permission[dgcService.permission2btn[name]] || dgcService.permission2btn[name] == 'especial' ) ){
                     //工作流表无编辑模式
                     if( name == 'edit-btn' && this.data.flowId != '' ){
+                        continue;
+                    }
+                    //新窗口
+                    if( name == 'grid-new-window' && this.data.isNewWindow ){
                         continue;
                     }
                     html+=btn.outerHTML;
@@ -1441,15 +1447,23 @@ let config = {
             }
             if( this.data.filterParam['common_filter_id'] ){
                 json['filter'] = json['filter'] || [];
-                for( let a of this.data.filterParam.expertFilter ){
-                    json['filter'].push( a );
+                //这个顺序要保证是先高级查询，再搜索的
+                let len = this.data.filterParam.expertFilter.length - 1;
+                for(let i = len; i>=0; i--){
+                    json['filter'].unshift(this.data.filterParam.expertFilter[i]);
                 }
+                // for( let a of this.data.filterParam.expertFilter ){
+                //     json['filter'].push( a );
+                // }
                 if( this.data.filterParam['common_filter_id'] != '临时高级查询' ){
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
                 if( this.data.filterParam.filter.length == 0 && this.data.filterParam.fastFilter.length == 0 ){
-                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span>加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;</div>`;
+                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span><span class="title">加载常用查询&lt;<span class="text">${this.data.filterParam['common_filter_name']}</span>&gt;</span></div>`;
                     this.el.find('.btn-nav-con').append(dom);
+                    setTimeout(()=>{
+                        this.el.find('.query-tips').css('display','none');
+                    },5000)
                     this.el.find('.query-tips-delete').on('click', ()=> {
                         this.el.find('.query-tips').css('display','none');
                     })
@@ -1854,7 +1868,8 @@ let config = {
                     fieldId: this.data.fieldId,
                     source_field_dfield: this.data.source_field_dfield,
                     base_buildin_dfield: this.data.base_buildin_dfield,
-                    gridTips: this.data.gridTips
+                    gridTips: this.data.gridTips,
+                    isNewWindow: true
                 }
                 let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', url_obj);
                 this.el.find('.grid-new-window')[0].href = url;
@@ -2176,6 +2191,7 @@ let config = {
                     if(res.type == 'temporaryQuery') {
                         if(res.addNameAry.length == 0){
                             // this.actions.getExpertSearchData(res.addNameAry);
+                            debugger
                             this.actions.postExpertSearch(res.value,res.id,res.name);
                         }
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);
@@ -2202,6 +2218,7 @@ let config = {
             this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
                 if($(this).val() == '常用查询') {
                     _this.actions.postExpertSearch([],'');
+                    _this.el.find('.query-tips').css('display','none');
                 } else if($(this).val() == '临时高级查询') {
                     _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
                 } else {
@@ -2260,6 +2277,10 @@ let config = {
                         }
                         this.data.batchIdList = arr;
                         this.actions.returnBatchData( this.data.batchIdList );
+                    }
+                    //表单的子表操作重新请求数据
+                    if( this.data.viewMode == 'EditChild' ){
+                        this.actions.getGridData( true );
                     }
                 }else {
                     if( res.queryParams ){
@@ -3035,10 +3056,10 @@ let config = {
                     defaultMax: true,
                     // customSize: true
             } ).then( (data)=>{
-                console.log( "+++++++++++++++++" )
-                console.log( "+++++++++++++++++" )
-                console.log( data )
                 this.actions.setInvalid();
+                if( this.data.viewMode == 'EditChild' && data == 'success' ){
+                    this.actions.getGridData( true );
+                }
             } )
         },
         //返回批量工作流导入后数据
