@@ -90,6 +90,7 @@ let config = {
             this.el.find('.auto-select-text').focus();
             this.el.find('.auto-select-ul').scrollTop(0);
             //第一个备选项设置光标，并设置当前焦点dom
+            this.el.find("ul li").removeClass('hovered');
             this.data.focusItem = this.el.find("ul li:first-child").addClass('hovered');
             //开始监听键盘
             this.actions.startListenKeyboard();
@@ -234,7 +235,7 @@ let config = {
             selector: '.result,.triangle',
             callback: function () {
                 if (this.data.isSelectBoxDisplayed) {
-                    this.actions.hideSelectBox();
+                    // this.actions.hideSelectBox();
                 } else {
                     this.actions.showSelectBox();
                 }
