@@ -34,7 +34,7 @@ let config={
             }
             PMAPI.openDialogByComponent(SettingPrint, {
                 width: 400,
-                height: 180,
+                height: 210,
                 title: '自定义页眉',
                 modal: true
             })

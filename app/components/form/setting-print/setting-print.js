@@ -42,7 +42,14 @@ let css = `
 }
 .global-search-input{
     color: black;
+    height: 26px;
     font-size: 12px;
+}
+.global-search-history .oneSelect{
+    height: 25px;
+}
+.global-search-history .global-search-history-list{
+    height: 17px;
 }
 .J-print-btn{
  position: absolute;
@@ -54,13 +61,14 @@ let css = `
  line-height: 31px;
  color: #fff;
  border-radius:4px;
+ cursor: pointer;
  }
  .J-print-btn.cancel{
-    right:100px;
+    left:100px;
     background: #ddd;
  }
  .J-print-btn.confirm{
-    left:100px;
+    right:100px;
     background: #0088ff;
  }
 `;
