@@ -51,6 +51,7 @@ let css = `
     color: black;
     height: 26px;
     font-size: 12px;
+    text-indent: 5px;
 }
 .global-search-history .oneSelect{
     height: 25px;
