@@ -13,6 +13,7 @@ import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import msgBox from '../../../../lib/msgbox';
 import agGrid from "../../agGrid/agGrid";
 import {dataTableService} from "../../../../services/dataGrid/data-table.service";
+import {TabService} from "../../../../services/main/tabService"
 import {workflowService} from "../../../../services/workflow/workflow.service";
 import {FormService} from "../../../../services/formService/formService";
 import {dgcService} from "../../../../services/dataGrid/data-table-control.service";
@@ -973,7 +974,7 @@ let config = {
             this.data.namespace = res[1].namespace;
             this.data.headerColor = dgcService.createHeaderStyle( this.data.tableId,res[1].field_color );
             //获取表的表单工作流参数
-            this.actions.setPrepareParmas( res[4] );
+            // this.actions.setPrepareParmas( res[4] );
             //初始化按钮
             this.actions.renderBtn();
             //创建高级查询需要字段数据
@@ -1873,9 +1874,7 @@ let config = {
                     };
                     let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
 
-                    let title = '新增'
-                    console.log("*******8************")
-                    console.log(url);
+                    let title = '新增';
                     this.actions.openSelfIframe( url,title );
                 } )
             }
@@ -3028,7 +3027,6 @@ let config = {
         },
         //打开局部的弹窗
         openSelfIframe: function ( url,title,w,h ) {
-            this.actions.setInvalid();
             PMAPI.openDialogToSelfByIframe( url,{
                     width: w || 1400,
                     height: h || 800,
@@ -3037,7 +3035,10 @@ let config = {
                     defaultMax: true,
                     // customSize: true
             } ).then( (data)=>{
-
+                console.log( "+++++++++++++++++" )
+                console.log( "+++++++++++++++++" )
+                console.log( data )
+                this.actions.setInvalid();
             } )
         },
         //返回批量工作流导入后数据
@@ -3092,6 +3093,14 @@ let config = {
         }
     },
     afterRender: function () {
+        //发送表单tableId（订阅刷新数据用
+        TabService.onOpenTab( this.data.tableId ).done((result) => {
+            if(result.success === 1){
+                // console.log("post open record success");
+            }else{
+                console.log("post open record failed")
+            }
+        });
         this.showLoading();
         try{dgcService.accuracy = window.config.sysConfig.accuracy || 1000;}catch(e){}
         let gridData = {
