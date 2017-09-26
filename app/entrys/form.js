@@ -20,6 +20,7 @@ let FormEntrys = {
         this.parentRecordId = config.parent_record_id || '';
         this.isView = config.is_view || 0;//查看模式
         this.isBatch = config.is_batch || 0;//是否是批量工作流
+        this.isProcess = config.is_process || 0;//是否zaitu
         this.recordId = config.record_id || '';
         this.action = config.action || '';//暂时
         this.el = config.el || '';//form的外层dom

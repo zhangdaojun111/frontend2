@@ -24,11 +24,12 @@ AddWf.showDom().then(function (component) {
 
 let serchStr = location.search.slice(1);
 let obj = {}, is_view = 0,cache_old;
-let action;
+let action = 0;
 serchStr.split('&').forEach(res => {
     let arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
+console.log(obj);
 // is_view = obj.btnType === 'view' ? 1 : 0;
 
 if (obj.btnType === 'view'||obj.btnType ==="none") {
@@ -59,10 +60,11 @@ Mediator.publish('workflow:getKey', obj.key);
             parent_record_id: obj.parent_record_id,
             btnType: obj.btnType,
             real_id: obj.real_id,
+            record_id: obj.record_id,
             isAddBuild: obj.isAddBuild,
             id: obj.id,
             key: obj.key,
-            action: action
+            action: action,
         });
         setTimeout(()=>{
             cache_old= FormEntrys.getFormValue(obj.table_id,true);
@@ -83,6 +85,9 @@ Mediator.subscribe('workflow:getflows', (res) => {
     obj.form_id = res.form_id;
     WorkFlow.createFlow({flow_id: res.flow_id, el: "#flow-node"});
     $('#place-form').html('');
+    console.log( "-----------------------" )
+    console.log( "-----------------------" )
+    console.log( obj )
     FormEntrys.createForm({
         el: $('#place-form'),
         form_id: res.form_id,
@@ -96,6 +101,8 @@ Mediator.subscribe('workflow:getflows', (res) => {
         parent_real_id: obj.parent_real_id,
         parent_temp_id: obj.parent_temp_id,
         parent_record_id: obj.parent_record_id,
+        record_id: obj.record_id,
+        is_process: obj.is_process,
         real_id: obj.real_id,
         isAddBuild: obj.isAddBuild,
         id: obj.id,
