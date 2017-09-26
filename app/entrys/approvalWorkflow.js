@@ -70,6 +70,9 @@ Mediator.subscribe('workFlow:record_info', (res) => {
             $('#approval-workflow').find('#re-app').show();
         }
     };
+    if(is_view){
+        $('#add-home').find('#addFollower').hide();
+    }
 
     // zj
     // (async function () {
