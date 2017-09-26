@@ -195,6 +195,8 @@ let config = {
         //显示tabs
         showTabs:function (opacity) {
         },
+        //是否为新窗口打开
+        isNewWindow: false,
         //左侧提示
         gridTips: '',
         //是否为双击
@@ -919,6 +921,10 @@ let config = {
                 if( btnGroup.indexOf( name )!=-1 && ( this.data.permission[dgcService.permission2btn[name]] || dgcService.permission2btn[name] == 'especial' ) ){
                     //工作流表无编辑模式
                     if( name == 'edit-btn' && this.data.flowId != '' ){
+                        continue;
+                    }
+                    //新窗口
+                    if( name == 'grid-new-window' && this.data.isNewWindow ){
                         continue;
                     }
                     html+=btn.outerHTML;
@@ -3035,9 +3041,6 @@ let config = {
                     defaultMax: true,
                     // customSize: true
             } ).then( (data)=>{
-                console.log( "+++++++++++++++++" )
-                console.log( "+++++++++++++++++" )
-                console.log( data )
                 this.actions.setInvalid();
             } )
         },
