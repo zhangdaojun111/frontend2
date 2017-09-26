@@ -103,12 +103,10 @@ let config = {
             this.actions.startListenKeyboard();
         },
         hideSelectBox: function () {
-            if(this.data.mouseActive === true){
-                if (this.listWrap) {
-                    this.listWrap.hide();
-                    this.data.isSelectBoxDisplayed = false;
-                    this.actions.stopListenKeyboard();
-                }
+            if (this.listWrap) {
+                this.listWrap.hide();
+                this.data.isSelectBoxDisplayed = false;
+                this.actions.stopListenKeyboard();
             }
         },
         getValue: function () {
@@ -262,7 +260,9 @@ let config = {
             event: 'mouseleave.visible',
             selector: '.auto-select-component',
             callback: function () {
-                this.actions.hideSelectBox();
+                if(this.data.mouseActive === true) {
+                    this.actions.hideSelectBox();
+                }
             }
         },
         {
