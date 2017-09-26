@@ -195,6 +195,8 @@ let config = {
         //显示tabs
         showTabs:function (opacity) {
         },
+        //是否为新窗口打开
+        isNewWindow: false,
         //左侧提示
         gridTips: '',
         //是否为双击
@@ -208,7 +210,7 @@ let config = {
         //二维表项目名称
         project: '',
         //二维表改变的值
-        cellChangeValue: {},
+        cellChangeValue: {}
     },
     //生成的表头数据
     columnDefs: [],
@@ -913,12 +915,16 @@ let config = {
         renderBtn: function () {
             let btnGroup = dgcService.gridBtn( this.data.viewMode );
             let btns = this.el.find( '.dataGrid-btn-group' )[0].querySelectorAll('a');
-            let html = ''
+            let html = '';
             for( let btn of btns ){
                 let name = btn.className;
                 if( btnGroup.indexOf( name )!=-1 && ( this.data.permission[dgcService.permission2btn[name]] || dgcService.permission2btn[name] == 'especial' ) ){
                     //工作流表无编辑模式
                     if( name == 'edit-btn' && this.data.flowId != '' ){
+                        continue;
+                    }
+                    //新窗口
+                    if( name == 'grid-new-window' && this.data.isNewWindow ){
                         continue;
                     }
                     html+=btn.outerHTML;
@@ -1862,7 +1868,8 @@ let config = {
                     fieldId: this.data.fieldId,
                     source_field_dfield: this.data.source_field_dfield,
                     base_buildin_dfield: this.data.base_buildin_dfield,
-                    gridTips: this.data.gridTips
+                    gridTips: this.data.gridTips,
+                    isNewWindow: true
                 }
                 let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', url_obj);
                 this.el.find('.grid-new-window')[0].href = url;
@@ -2270,6 +2277,10 @@ let config = {
                         }
                         this.data.batchIdList = arr;
                         this.actions.returnBatchData( this.data.batchIdList );
+                    }
+                    //表单的子表操作重新请求数据
+                    if( this.data.viewMode == 'EditChild' ){
+                        this.actions.getGridData( true );
                     }
                 }else {
                     if( res.queryParams ){
@@ -3045,10 +3056,10 @@ let config = {
                     defaultMax: true,
                     // customSize: true
             } ).then( (data)=>{
-                console.log( "+++++++++++++++++" )
-                console.log( "+++++++++++++++++" )
-                console.log( data )
                 this.actions.setInvalid();
+                if( this.data.viewMode == 'EditChild' && data == 'success' ){
+                    this.actions.getGridData( true );
+                }
             } )
         },
         //返回批量工作流导入后数据

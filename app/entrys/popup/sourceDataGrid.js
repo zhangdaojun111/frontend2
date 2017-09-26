@@ -21,7 +21,8 @@ $(document).ready(function(){
         correspondenceField: window.config.correspondenceField || '',
         keyword: window.config.keyword || '',
         gridTips: window.config.gridTips || '',
-        project: window.config.project || ''
+        project: window.config.project || '',
+        isNewWindow: window.config.isNewWindow || false
     }
     $( 'title' ).html( window.config.tableName || 'REDS' );
     let DataTableAgGrid=new dataTableAgGrid( json );
