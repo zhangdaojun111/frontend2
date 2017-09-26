@@ -1739,6 +1739,7 @@ let config = {
         let icon_selector = this.el.find(' .ui-selector').css('visibility');
         let icon_add = this.el.find(' .add-item').css('visibility');
         let icon_history = this.el.find(' .ui-history').css('visibility');
+
         if(icon_selector == 'hidden') {
             this.el.find(' .ui-selector').addClass('icon-fr')
         }
