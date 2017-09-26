@@ -79,7 +79,7 @@ let config = {
         }
         if (this.data.is_view) {
             this.el.find('.ui-width').attr('disabled', true);
-            this.el.find('.component-date-control').css('pointer-events','none');
+            this.el.find('.datetime-control').css('pointer-events','none');
         } else {
             this.el.find('.ui-width').attr('disabled', false);
         }
@@ -132,38 +132,41 @@ let config = {
                 let currentTime = new Date().getTime();
                 selectTime = new Date(_val).getTime();
                 //timeType 是否可以选择之前的日期，before:只能选择之前的日期，after：只能选择之后的，all：可以选择全部
-                if (_this.data['timeType']) {
-                    if (_this.data['timeType'] == 'after') {
-                        if (selectTime < currentTime) {
-                            msgbox.alert("所选日期不能早于当前日期！");
+                if(!_this.data.isAgGrid){
+                    if (_this.data['timeType']) {
+                        if (_this.data['timeType'] == 'after') {
+                            if (selectTime < currentTime) {
+                                msgbox.alert("所选日期不能早于当前日期！");
+                                if(!_this.data.isAgGrid){
+                                    _this.data.value = "请选择";
+                                    _.debounce(function () {
+                                        _this.events.changeValue(_this.data)
+                                    }, 200)();
+                                }
+                            }
+                        } else if (_this.data['timeType'] == 'before') {
+                            if (selectTime > currentTime) {
+                                msgbox.alert("所选日期不能晚于当前日期！");
+                                if(!_this.data.isAgGrid){
+                                    _this.data.value = "请选择";
+                                    _.debounce(function () {
+                                        _this.events.changeValue(_this.data)
+                                    }, 200)();
+                                }
+                            }
+                        } else if (_this.data['timeType'] == 'all') {
                             if(!_this.data.isAgGrid){
-                                _this.data.value = "请选择";
+                                _this.data.value = selectTime1.replace(/\//g, "-");
                                 _.debounce(function () {
                                     _this.events.changeValue(_this.data)
                                 }, 200)();
                             }
                         }
-                    } else if (_this.data['timeType'] == 'before') {
-                        if (selectTime > currentTime) {
-                            msgbox.alert("所选日期不能晚于当前日期！");
-                            if(!_this.data.isAgGrid){
-                                _this.data.value = "请选择";
-                                _.debounce(function () {
-                                    _this.events.changeValue(_this.data)
-                                }, 200)();
-                            }
-                        }
-                    } else if (_this.data['timeType'] == 'all') {
-                        if(!_this.data.isAgGrid){
-                            _this.data.value = selectTime1.replace(/\//g, "-");
-                            _.debounce(function () {
-                                _this.events.changeValue(_this.data)
-                            }, 200)();
-                        }
+                    } else {
+                        console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', 'datetime-control');
                     }
-                } else {
-                    console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', 'datetime-control');
                 }
+
             },
             onClose: function(selectTime) {
                 let _selectTime = $.trim(selectTime);
@@ -175,12 +178,10 @@ let config = {
                     if((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))&&(dateElement.getHours()==parseInt(RegExp.$4))&&(dateElement.getMinutes()==parseInt(RegExp.$5))&&(dateElement.getSeconds()==parseInt(RegExp.$6)))//判断日期逻辑
                     {
                         //  _this.onSelect(_selectTime);
-                        if(!_this.data.isAgGrid){
                             _this.data.value = _selectTime.replace(/\//g, "-");
                             _.debounce(function () {
                                 _this.events.changeValue(_this.data)
                             }, 200)();
-                        }
                         if (_this.data.value.length > 19) {
                             _this.data.value = '';
                         }
@@ -191,36 +192,39 @@ let config = {
                         let currentTime = new Date().getTime();
                         _selectTime = new Date(_val).getTime();
                         //timeType 是否可以选择之前的日期，before:只能选择之前的日期，after：只能选择之后的，all：可以选择全部
-                        if (_this.data['timeType']) {
-                            if (_this.data['timeType'] == 'after') {
-                                if (_selectTime < currentTime) {
+                        if(!_this.data.isAgGrid){
+                            if (_this.data['timeType']) {
+                                if (_this.data['timeType'] == 'after') {
+                                    if (_selectTime < currentTime) {
+                                        if(!_this.data.isAgGrid){
+                                            _this.data.value = "请选择";
+                                            _.debounce(function () {
+                                                _this.events.changeValue(_this.data)
+                                            }, 200)();
+                                        }
+                                    }
+                                } else if (_this.data['timeType'] == 'before') {
+                                    if (_selectTime > currentTime) {
+                                        if(!_this.data.isAgGrid){
+                                            _this.data.value = "请选择";
+                                            _.debounce(function () {
+                                                _this.events.changeValue(_this.data)
+                                            }, 200)();
+                                        }
+                                    }
+                                } else if (_this.data['timeType'] == 'all') {
                                     if(!_this.data.isAgGrid){
-                                        _this.data.value = "请选择";
+                                        _this.data.value = _selectTime1.replace(/\//g, "-");;
                                         _.debounce(function () {
                                             _this.events.changeValue(_this.data)
                                         }, 200)();
                                     }
                                 }
-                            } else if (_this.data['timeType'] == 'before') {
-                                if (_selectTime > currentTime) {
-                                    if(!_this.data.isAgGrid){
-                                        _this.data.value = "请选择";
-                                        _.debounce(function () {
-                                            _this.events.changeValue(_this.data)
-                                        }, 200)();
-                                    }
-                                }
-                            } else if (_this.data['timeType'] == 'all') {
-                                if(!_this.data.isAgGrid){
-                                    _this.data.value = _selectTime1.replace(/\//g, "-");;
-                                    _.debounce(function () {
-                                        _this.events.changeValue(_this.data)
-                                    }, 200)();
-                                }
+                            } else {
+                                console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', 'datetime-control');
                             }
-                        } else {
-                            console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', 'datetime-control');
                         }
+
                     }
                 }else{
                     if(!_this.data.isAgGrid && (_this.data['timeType'] == 'before' || _this.data['timeType'] == 'after')){
