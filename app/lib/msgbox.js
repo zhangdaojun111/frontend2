@@ -63,6 +63,9 @@ export default {
         // let height = data.files.length*24+30;
         let height = 170;
         let width = 400; //410
+        if(data.files.length == 0){
+            return;
+        }
         PMAPI.openDialogByComponentWithKey(_.defaultsDeep({},{data:data},progressConfig),key,{
             width:width,
             height:height,
