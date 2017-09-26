@@ -651,7 +651,7 @@ export const IframeInstance = new Component({
             event:'mouseleave',
             selector:'.view-save-group',
             callback:function () {
-                // this.actions.hideSaveViewPage();       //鼠标离开延迟隐藏视图保存页面
+                this.actions.hideSaveViewPage();       //鼠标离开延迟隐藏视图保存页面
             }
         },
     ],
