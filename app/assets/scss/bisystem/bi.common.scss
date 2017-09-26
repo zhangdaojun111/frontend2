@@ -73,6 +73,46 @@ html.bi, body.bi {
         @include icon;
         background: url('../../../assets/images/bisystem/wrong.png') no-repeat;
     }
+    .print-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/print.png') no-repeat;
+    }
+    .manager-edit-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/manager_edit.png') no-repeat;
+    }
+    .add-cell-icon {
+         @include icon;
+         background: url('../../../assets/images/bisystem/add_cell.png') no-repeat;
+    }
+    .export-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/export.png') no-repeat;
+    }
+    .import-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/import.png') no-repeat;
+    }
+    .print-line-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/print_line.png') no-repeat;
+    }
+    .edit-view-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/edit_view.png') no-repeat;
+    }
+    .file-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/file.png') no-repeat;
+    }
+    .new-chart-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/new-chart.png') no-repeat;
+    }
+    .search-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/search.png') no-repeat;
+    }
 }
 
 @mixin chart-com {

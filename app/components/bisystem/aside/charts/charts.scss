@@ -26,19 +26,9 @@ $font_size: 12px;
     li {
         position: relative;
     }
-    div:nth-child(even) {
-        li {
-            background-color: $li-even-bg;
-        }
-    }
-    div:nth-child(odd) {
-        li {
-            background-color: $li-odd-bg;
-        }
-    }
     div {
         li:hover {
-            background-color: $li-hover;
+            background-color: #444444;
         }
     }
     li {
@@ -54,7 +44,7 @@ $font_size: 12px;
                 float: left;
                 width: 160px;
                 margin-left: 3px;
-                color: #fff;
+                color: #999999;
                 line-height: 20px;
                 height: 20px;
                 word-break: break-all;
