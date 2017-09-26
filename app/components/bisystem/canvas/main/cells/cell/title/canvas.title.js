@@ -16,9 +16,11 @@ let config = {
          */
         setValue(chart,viewId){
             this.data.viewId = viewId ? viewId : '';
+            this.data.userSelf = chart['data']['self'] == 1 ? true : false;
             this.data.chart = chart;
             this.data.title = chart['data']['chartName']['name'];
             this.data.isDeep = chart['data']['assortment'] === 'normal' || chart['data']['assortment'] === 'pie' ? true : false;
+            this.data.richText = chart['data']['assortment'] === 'comment' ? true : false;
             this.data.newCell = true;
             this.data.icon = chart['data']['icon'];
             if (this.data.icon){

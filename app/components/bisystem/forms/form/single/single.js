@@ -21,6 +21,9 @@ let config = {
          * @param columns = 已选中字段 singleNum = 需要显示多少列
          */
         setColumns(choosed, singleNum) {
+            if (singleNum == 0) {
+                return false;
+            };
             let num = singleNum;
             let choosedNum = Math.ceil(choosed.length / num);
             let arr = [];

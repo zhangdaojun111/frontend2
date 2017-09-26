@@ -73,8 +73,20 @@ class Base extends Component {
      */
     async save(chart){
         let res = await ChartFormService.saveChart(JSON.stringify(chart));
+        this.el.find('.save-btn').each((index,val)=>{
+            if(index===0){
+                $(val).prop('disabled',true);
+            }
+        });
         if (res['success'] == 1) {
             msgbox.showTips('保存成功');
+            setTimeout( ()=> {
+                this.el.find('.save-btn').each((index,val)=>{
+                    if(index===0){
+                        $(val).prop('disabled',false);
+                    }
+                });
+            },5000);
             if (!chart['chartName']['id']) {
                 this.reload();
             } else {

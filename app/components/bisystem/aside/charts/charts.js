@@ -100,6 +100,7 @@ export class ChartsComponent extends Component{
         config.data = charts? charts : null;
         config.data.imgUrl = window.config.img_url;
         config.data.isIcon = charts['icon']? true:false;
+        config.data.userSelf = charts['self'] == 1 ? true : false;
         super(config,charts,events);
     }
 }

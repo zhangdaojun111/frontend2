@@ -27,11 +27,11 @@
                                 <input type="checkbox"  name="">
                                 {{/if}}
                             </label>
-                            <span data-type="{{@root.sortType}}">
+                            <span data-type="{{sort}}">
                                 {{name}}
                                 {{#if @root.showSortArrow}}
-                                <i class="bi-icon-up {{original_deep_equal @root.sortType 'asc'}}"></i>
-                                <i class="bi-icon-down {{original_deep_equal @root.sortType 'desc'}}"></i>
+                                <i class="bi-icon-up {{original_deep_equal sort 'asc'}}"></i>
+                                <i class="bi-icon-down {{original_deep_equal sort 'desc'}}"></i>
                                 {{/if}}
                             </span>
 

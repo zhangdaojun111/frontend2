@@ -90,7 +90,8 @@ let config = {
                     this.data.cell.size.left = ui.position.left;
                     this.data.cell.size.top = ui.position.top;
                     this.trigger('onUpdateLayout', {componentId: this.componentId,cell:this.data.cell});
-                }
+                },
+                cancel: "div.comment"
             };
 
             const resizeOption = {
@@ -154,13 +155,13 @@ let config = {
             }
         },
         // 拖拽end画布mouseup触发
-        {
-            event: 'mouseup',
-            selector: '.cell',
-            callback: function (context,event) {
-                // this.data.cell.size.zIndex = this.data.cellMaxZindex;
-            }
-        },
+        // {
+        //     event: 'mouseup',
+        //     selector: '.cell',
+        //     callback: function (context,event) {
+        //         // this.data.cell.size.zIndex = this.data.cellMaxZindex;
+        //     }
+        // },
         // html5原生拖拽，dragover需要ev.preventDefault
         {
             event: 'dragover',
@@ -216,6 +217,17 @@ let config = {
             selector: '.del-cell-btn',
             callback: function (context,event) {
                 this.actions.delCellLayout();
+                return false;
+            }
+        },
+        // 显示富文本编辑器
+        {
+            event: 'click',
+            selector: '.rich-text-btn',
+            callback: function (context,event) {
+                if (this.data.cellComponent.actions.showQuill) {
+                    this.data.cellComponent.actions.showQuill()
+                };
                 return false;
             }
         },

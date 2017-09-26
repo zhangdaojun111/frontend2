@@ -57,12 +57,13 @@ html.bi, body.bi {
         @include icon;
         background: url('../../../assets/images/bisystem/save.png') no-repeat;
     }
-    @media print {
-        body * {
-            visibility: visible !important;
-            overflow: auto !important;
-            position: static !important;
-        }
+    .new-window-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/new-window.png') no-repeat;
+    }
+    .rich-text-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/richtext.png') no-repeat;
     }
 }
 

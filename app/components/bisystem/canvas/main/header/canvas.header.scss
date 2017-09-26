@@ -16,6 +16,9 @@
     width: 400px;
     text-align: right;
     white-space: nowrap;
+    .views-btn-right{
+        float: right;
+    }
     a,label {
         text-decoration: none;
         display: inline-block;

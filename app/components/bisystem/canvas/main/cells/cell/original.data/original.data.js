@@ -31,7 +31,7 @@ handlebars.registerHelper('original_group_data', function(data, options) {
 });
 
 // 自定义分组original_deep_equal helper
-handlebars.registerHelper('original_deep_equal', function(val1, val2, options) {
+handlebars.registerHelper('original_deep_equal', function(val1, val2, val3,val4, options) {
     return val1 === val2 ? 'active' : '';
 });
 
@@ -82,6 +82,9 @@ let config = {
         updateOriginal(data) {
             let originalData = CanvasOriginalDataComponent.handleOriginalData(data);
             Object.assign(this.data, originalData);
+            if (this.data.attribute) {
+                this.data.cellChart.cell.attribute = this.data.attribute;
+            };
             this.reload();
         },
 
@@ -173,7 +176,6 @@ let config = {
         xAxis: [],
         hideGroup: [], //需要隐藏的分组列表
         showSortArrow: true, // 是否显示排序箭头
-        sortType: '', // 排序类型
         canSortDeep: 'sort-deep', // 判断点击原始数据是否可以排序
         originalAdvancedItems: {} //用来保存高级计算items list
     },
@@ -284,19 +286,26 @@ let config = {
             selector:'.sort-deep span',
             callback:function (context) {
                 let index = $(context).closest('th').attr('data-y-index');
-                let type = $(context).data('type');
-                if (type === 'desc') {
-                    this.data.sortType = 'asc';
-                } else if (type === 'asc') {
-                    this.data.sortType = '';
+                this.data.cellChart.cell.attribute.forEach((item, itemIndex) => {
+                    if (index != itemIndex) {
+                        item.sort = '';
+                    };
+                });
+                let sortType = this.data.cellChart.cell.attribute[index].sort;
+                if (sortType === 'desc') {
+                    sortType = 'asc';
+                } else if (sortType === 'asc') {
+                    sortType = '';
                 } else {
-                    this.data.sortType = 'desc';
+                    sortType = 'desc';
                 };
+                this.data.cellChart.cell.attribute[index].sort = sortType;
                 let field = this.data.cellChart.chart.assortment === 'pie'? this.data.cellChart.chart.yAxis : this.data.cellChart.chart.yAxis[index].field;
                 let sort = {
                     field:field,
-                    type:this.data.sortType
+                    type:sortType
                 };
+                this.data.attribute = this.data.cellChart.cell.attribute; // 这个主要用于当更新数据reload时，保存现在的状态
                 this.trigger('onDeepSort', sort);
                 return false;
             }
@@ -327,7 +336,8 @@ let config = {
             this.actions.addAdvancedList();
         }
     },
-    firstAfterRender() {},
+    firstAfterRender() {
+    },
     beforeDestory() {}
 };
 
@@ -347,7 +357,19 @@ export class CanvasOriginalDataComponent extends Component {
             CanvasOriginalDataComponent.handleLineBarOriginalData(data)
         } else {
             CanvasOriginalDataComponent.handlePieOriginalData(data)
-        }
+        };
+
+        // 判断排序情况
+        if (typeof data.cell.sort === 'string') {
+            let sort = JSON.parse(data.cell.sort);
+            data.cellChart.cell.attribute.forEach(item => {
+                if (item.name === sort.field.name) {
+                    item.sort = sort.type;
+                } else {
+                    item.sort = '';
+                };
+            });
+        };
         return data;
     }
     /**
