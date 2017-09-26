@@ -1,15 +1,15 @@
-<div class="clearfix">
+<div class="clearfix" style="display: flex; width: 100%">
     {{#if unvisible}}
     <a href="javascript:void(0);" class="info">权限受限</a>
     {{else if be_control_condition }}
     <a href="javascript:void(0);" class="info">被修改条件限制</a>
     {{else}}
-        <textarea class="ui-width textArea" style="padding-left: 0;" value="{{value}}"></textarea>
-        {{#if required}}
-            <div>
-                <span id="requiredLogo" class="{{requiredClass}}" ></span>
-            </div>
+        <textarea class="ui-width textArea"  value="{{value}}"></textarea>
+    <div style="float: left;display: flex;">
+       {{#if required}}
+        <span id="requiredLogo" class="{{requiredClass}}" ></span>
         {{/if}}
         <a href="javascript:void(0);" class="ui-history icon-history form-icon visible" title="修改历史"></a>
+    </div>
     {{/if}}
 </div>

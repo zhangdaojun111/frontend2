@@ -19,7 +19,10 @@ import jsplumb from 'jsplumb';
 import {PMAPI, PMENUM} from '../../lib/postmsg';
 AddWf.showDom().then(function (component) {
     WorkFlowForm.showForm();
-    setTimeout(()=>component.hideLoading(),1000)
+    Mediator.subscribe("form:formAlreadyCreate",()=>{
+        component.hideLoading();
+    });
+    // setTimeout(()=>component.hideLoading(),1000)
 });
 
 let serchStr = location.search.slice(1);

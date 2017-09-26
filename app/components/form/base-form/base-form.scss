@@ -111,6 +111,9 @@
     .visible{
         visibility: hidden;
     }
+    .icon-fr {
+        float: right;
+    }
     .dynamic-form-input-a, .dynamic-form-input-ac {
         display: inline-block;
         width: 50px;
@@ -252,7 +255,6 @@
     .upload-file, .shot-screen {
         width: 65px;
         height: 24px;
-        line-height: 24px;
         background: inherit;
         background-color: rgba(255, 255, 255, 1);
         box-sizing: border-box;
@@ -263,7 +265,6 @@
         -moz-box-shadow: none;
         -webkit-box-shadow: none;
         box-shadow: none;
-       // color: #666666;
         cursor: pointer;
     }
 }

@@ -27,17 +27,18 @@ let config = {
                     fileIds: this.data.value,
                     dinput_type: this.data.real_type
                 },attachmentListConfig.data);
-                PMAPI.openDialogByComponent(attachmentListConfig, {
+                Storage.init((new URL(document.URL)).searchParams.get('key'));
+                PMAPI.openDialogToSelfByComponent(attachmentListConfig, {
                     width: 700,
                     height: 500,
                     title: "浏览上传文件"
                 }).then(res=>{
-                    Storage.init((new URL(document.URL)).searchParams.get('key'));
                     let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
                     for(let file of deletedFiles){
                         this.data.value.splice(this.data.value.indexOf(file),1);
                     }
-                    this.trigger('changeValue',this.data);
+                this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
+                this.trigger('changeValue',this.data);
                 });
             }
         }, {
@@ -64,12 +65,12 @@ let config = {
                     if (!res.file) {
                         return;
                     }
-                    let name = res.file.name;
-                    let fileId = name.split('.')[0]+"-"+new Date().getTime();
-                    let toolbox = msgBox.showProgress({
-                        files:[{id:fileId,name:name}],
-                        originalField:this.data.id
-                    });
+                    let fileId = new Date().getTime();
+                    let toolbox ={
+                        update:function () {},
+                        finish:function () {},
+                        showError:function () {}
+                    };
                     this.actions.controlUploadingForFile(res.file,fileId,toolbox);
                 })
             }
@@ -81,10 +82,14 @@ let config = {
                 let fileArray = [];
                 for (let file of files) {
                     let name = file.name;
-                    let fileId = name.split('.')[0]+"-"+new Date().getTime();
+                    let fileId = new Date().getTime();
                     fileArray.push({id:fileId,name:name});
                 }
-                let toolbox;
+                let toolbox ={
+                    update:function () {},
+                    finish:function () {},
+                    showError:function () {}
+                };
                 for(let i = 0, length = files.length;i < length; i++){
                     let file = files[i];
                     let fileItem = fileArray[i];
@@ -105,14 +110,10 @@ let config = {
                                 }
                             }
                         }
-                        if(!toolbox){
-                            toolbox = msgBox.showProgress({
-                                files:fileArray,
-                                originalField:this.data.id});
-                        }
                         this.actions.controlUploadingForFile(file,fileItem.id,toolbox);
                     });
                 }
+                //清空文件选择器，不影响下一次选择
                 this.el.find('.selecting-file').val(null);
             }
         }
