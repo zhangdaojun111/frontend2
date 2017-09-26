@@ -144,12 +144,22 @@ let config = {
             _this.actions.keyup();
         }, 200));
         this.el.find('.ui-width').css('width', this.data.width);
+        console.log('input contraol');
+        console.log(this.data.is_view);
         if (this.data.is_view) {
             this.el.find('.ui-width').attr('disabled', true);
         } else {
             this.el.find('.ui-width').attr('disabled', false);
         }
+        //回显
+        if (_this.data.value) {
+            _this.el.find(".search").val(_this.data.value);
+        } else {
+            _this.el.find(".search").val('');
+        }
     },
+
+
     beforeDestory() {
         this.el.off();
     }
