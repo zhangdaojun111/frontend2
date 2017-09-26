@@ -145,7 +145,6 @@ let config = {
                 this.data.searchInputList.push(obj);
             }
             this.actions.checkedSubmitData(name)
-            debugger;
         },
         //展示常用查询
         showSearchData: function(data) {
