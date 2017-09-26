@@ -1094,6 +1094,7 @@ let config = {
             return json;
         },
 
+
         checkCustomTable(){
             console.log(this.data.custom_table_form_exists);
             if (this.data.custom_table_form_exists) {
@@ -1556,6 +1557,7 @@ let config = {
                 if (single.data('width')) {
                     data[key]['width'] = single.data('width') + 'px';
                 } else {
+
                       data[key]['width'] = '240px';
                 }
                 //数据填充后，根据修改条件对不同框进行只读操作
