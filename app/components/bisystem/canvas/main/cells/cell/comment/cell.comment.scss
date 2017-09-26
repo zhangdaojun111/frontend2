@@ -8,6 +8,7 @@
 }
 
 .comment {
+    user-select: text !important;
     .comment-ql-content {
         border: none;
     }
@@ -18,7 +19,6 @@
             height: calc(100% - 80px);
             overflow: auto;
             .ql-editor {
-                user-select: text;
                 img {
                     max-width: 100%;
                 }

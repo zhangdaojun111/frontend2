@@ -62,6 +62,7 @@ let config = {
         editMode: window.config.bi_user === 'manager' ? true : false, // 是否显示编辑，删除操作
         newCell: false, // 用来判断是否新建画布块
         imgUrl: window.config.img_url,
+        userSelf: true
     },
     afterRender() {},
     firstAfterRender() {},

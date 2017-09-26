@@ -23,7 +23,7 @@ let config = {
         }
     },
     binds:[
-        {// 当mousedown富文本编辑器时，获取焦点
+        {// 设置富文本编辑器，获取焦点
             event: 'click',
             selector: '.comment',
             callback: function (context,event) {

@@ -151,7 +151,7 @@ let config = {
             callback: function (context,event) {
                 this.trigger('onDrag',this.componentId);
                 $(context).css('zIndex', this.data.cellMaxZindex);
-                return false;
+                event.stopPropagation();
             }
         },
         // 拖拽end画布mouseup触发

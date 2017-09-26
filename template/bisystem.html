@@ -17,8 +17,8 @@
 <div id="route-outlet" class="bi-container"></div>
 </body>
 {% ifequal config.window_type 'develop'%}
-<script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
-<script type="text/javascript" src="http://localhost:8080/scripts/bi.js"></script>
+<script type="text/javascript" src="http://192.168.2.8:8080/scripts/vendors.js"></script>
+<script type="text/javascript" src="http://192.168.2.8:8080/scripts/bi.js"></script>
 {% else %}
 <link rel="stylesheet" href=" {{ "/client/static/css/vendors.css"|version }}" />
 <link rel="stylesheet" href=" {{ "/client/static/css/bi.css"|version }}" />
