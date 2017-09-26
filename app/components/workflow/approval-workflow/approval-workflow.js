@@ -310,7 +310,7 @@ let config={
                         height:620,
                         title:`添加关注人`,
                         modal:true
-                    }).then(res=>{
+                    },{users:this.data.focus_users}).then(res=>{
                         if(!res.onlyclose){
                             let nameArr=[],idArr=[],htmlStr=[];
                             for(var k in res){
@@ -320,6 +320,7 @@ let config={
                             }
                             this.el.find('#addFollowerList').html(htmlStr);
                             Mediator.publish('workflow:focus-users',idArr);
+                            this.data.focus_users = res;
                         }
                     })
                 });
@@ -330,7 +331,7 @@ let config={
                         height:620,
                         title:`添加关注人`,
                         modal:true
-                    }).then(res=>{
+                    },{users:this.data.focus_users}).then(res=>{
                         if(!res.onlyclose){
                             let nameArr=[],idArr=[],htmlStr=[];
                             for(var k in res){
@@ -340,6 +341,7 @@ let config={
                             }
                             this.el.find('#addFollowerList').html(htmlStr);
                             Mediator.publish('workflow:focus-users',idArr);
+                            this.data.focus_users = res;
                         }
                     })
                 });
