@@ -240,7 +240,6 @@ let config = {
 }
 export default class DateControl extends Component {
     constructor(data, events) {
-        // debugger;
         super(config, data, events);
     }
 }

@@ -1086,12 +1086,6 @@ let config = {
                 }
             }
             //如果是临时表，传temp_id，否则是real_id
-            // if (!this.data.inProcess || !this.data.isBatch) {
-            //     json["real_id"] = this.data.realId;
-            // } else {
-            //     json["temp_id"] = this.data.realId;
-            // }
-
             if (this.data.inProcess == 1 || this.data.isBatch == 1) {
                 json["temp_id"] = this.data.realId;
             } else {
@@ -1393,8 +1387,10 @@ let config = {
                 title: `选择器`,
                 modal: true
             }).then((res) => {
-                _this.actions.setFormValue(data.dfield, res.value, res.label);
-                _this.actions.checkValue(data);
+                if (res.value) {
+                    _this.actions.setFormValue(data.dfield, res.value, res.label);
+                    _this.actions.checkValue(data);
+                }
             });
         },
 
@@ -1527,6 +1523,13 @@ let config = {
                     if (_.isObject(history[key]['old_value'])) {
                         history[key]['old_value'] = history[key]['old_value']['-1'].replace(/\n/g, ";");
                     }
+                }
+            }
+            //处理文本区回车符
+            if (data.type == 'Textarea') {
+                for (let key in history) {
+                    history[key]['new_value'] = history[key]['new_value'].replace(/\n/g, ";");
+                    history[key]['old_value'] = history[key]['old_value'].replace(/\n/g, ";");
                 }
             }
             History.data.history_data = history;
