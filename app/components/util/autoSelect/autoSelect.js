@@ -234,7 +234,7 @@ let config = {
             selector: '.result,.triangle',
             callback: function () {
                 if (this.data.isSelectBoxDisplayed) {
-                    // this.actions.hideSelectBox();
+                    this.actions.hideSelectBox();
                 } else {
                     this.actions.showSelectBox();
                 }
