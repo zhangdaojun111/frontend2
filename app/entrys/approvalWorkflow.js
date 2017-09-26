@@ -64,7 +64,11 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     };
     if(res.record_info.status==="已撤回"&&res.record_info.start_handler===window.config.name){
         $('#approval-workflow').find('.for-hide').hide();
-        $('#approval-workflow').find('#re-app').show();
+        if(is_view){
+            $('#add-home').find('#addFollower').hide();
+        }else{
+            $('#approval-workflow').find('#re-app').show();
+        }
     };
 
     // zj
