@@ -29,6 +29,12 @@ let css = `
     padding: 4px;
     text-indent: 6px;
     cursor: pointer;
+    height: 17px;
+    line-height: 17px;
+}
+.global-search-history a {
+    height: 17px;
+    line-height: 17px;
 }
 .global-search-history .active {
     background: #c5e1ff;
@@ -64,11 +70,11 @@ let css = `
  cursor: pointer;
  }
  .J-print-btn.cancel{
-    left:100px;
+    right:100px;
     background: #ddd;
  }
  .J-print-btn.confirm{
-    right:100px;
+    left:100px;
     background: #0088ff;
  }
 `;
