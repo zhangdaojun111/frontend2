@@ -10,6 +10,7 @@ import {PMAPI} from '../../../../../../../lib/postmsg';
 let config = {
     template: template,
     actions: {
+
         /**
          * 设置canvas title 的值
          * @param chart 初始数据
