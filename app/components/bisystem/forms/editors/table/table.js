@@ -132,7 +132,6 @@ let config = {
                 }
             };
 
-
             if(pass) {
                 this.save(chart);
             }
@@ -274,17 +273,19 @@ let config = {
                 defaultValue: '1',
                 placeholder: '请输入默认显示单行为多少列',
                 type: 'text',
+                rules: [
+                    {
+                        errorMsg: '显示多少列数必须是大于0的整数',
+                        type: 'positiveInteger'
+                    }
+                ],
                 category: 'number',
                 events: {
                     onChange: _.debounce(function(value) {
                         let columnNum = parseInt(value);
                         if (columnNum !== NaN) {
                             let num = this.formItems['table_single'].actions.setColumns(this.formItems['choosed'].data.list, columnNum);
-                            if (num) {
-                                this.formItems['columnNum'].setValue(num);
-                            } else {
-                                msgbox.alert('显示多少列数必须是大于0的整数')
-                            }
+                            this.formItems['columnNum'].setValue(num);
                         }
                     },100)
                 }

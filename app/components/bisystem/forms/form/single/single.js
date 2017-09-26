@@ -22,7 +22,7 @@ let config = {
          */
         setColumns(choosed, singleNum) {
             if (singleNum == 0) {
-                return false;
+                return singleNum;
             };
             let num = singleNum;
             let choosedNum = Math.ceil(choosed.length / num);
