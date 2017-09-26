@@ -22,7 +22,7 @@ let config = {
     actions: {
         init(){
             //jsplumb initial config
-            this.showLoading();
+            // this.showLoading();
             this.data.jsPlumbInstance = jsPlumb.getInstance({
                 DragOptions: { cursor: 'pointer', zIndex: 2000 },
                 EndpointStyles: [{ fill: 'transparent' }, { fill: 'transparent' }],
@@ -54,6 +54,7 @@ let config = {
                         css = {},
                         attachment = "",
                         myTitle = '',
+                        condition='',
                         handlerType = "Handler_Type";
                     //具有handler_type属性的审批中或已审批的节点，需要title里面添加handler_type类型
                     if (value["handler_type"] && state != 0) {
@@ -75,6 +76,7 @@ let config = {
                             myTitle = text;
                             let arr = ["并行", "会签"];
                             if (arr.indexOf(text) == -1) {
+                                condition = value["info"];
                                 text = "条";
                             }
                             else {
@@ -98,6 +100,7 @@ let config = {
                             text = value['handler_relation'] == 0 ? '临时(会签)' : '临时(并行)';
                         }
                         if (value['multi_handlers']) {
+                            condition = value['multi_handlers'];
                             myTitle = value['multi_handlers'];
                         }
                     }
@@ -127,7 +130,7 @@ let config = {
                             class: styleClass,
                             startPoint: startPoint,
                             endPoint: endPoint,
-                            title: text,
+                            title: condition||text,
                             state: state,
                             canreject: can_reject,
                             eventname: event_name,//event_name,
@@ -239,7 +242,7 @@ let config = {
             });
             this.data.containerheight = __this.actions.getTheBestBottom() - __this.actions.getTheBestTop() + 100 + 'px';
             this.data.containerwidth = __this.actions.getTheBestRight() - __this.actions.getTheBestLeft() + 250 + 'px';
-            this.hideLoading();
+            // this.hideLoading();
         },
 
         //add mark points
@@ -355,7 +358,7 @@ let config = {
             container.style.height = h + 'px';
             container.style.marginTop = 0;
             container.style.margin = 0;
-            container.style.zIndex = '100';
+            container.style.zIndex = '111';
             container.style.overflow = 'auto';
             let ocloseSpan = document.createElement('span');
             ocloseSpan.className = 'closeSpan';

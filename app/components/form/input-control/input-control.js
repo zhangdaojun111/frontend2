@@ -149,7 +149,15 @@ let config = {
         } else {
             this.el.find('.ui-width').attr('disabled', false);
         }
+        //回显
+        if (_this.data.value) {
+            _this.el.find(".search").val(_this.data.value);
+        } else {
+            _this.el.find(".search").val('');
+        }
     },
+
+
     beforeDestory() {
         this.el.off();
     }

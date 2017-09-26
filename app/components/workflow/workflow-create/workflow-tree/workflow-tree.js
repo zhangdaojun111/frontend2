@@ -55,7 +55,6 @@ let config = {
         clickChild:function(e){
             //get current clicked node info
             let {formid,tableid}=$(e.target)[0].dataset;
-            console.log($(e)[0].text);
             Mediator.publish('workflow:choose', $(e.target)[0].dataset);
             let childValue = $(e.target).text();
             let rootNode = this.el.find('.J_select-Workflow');

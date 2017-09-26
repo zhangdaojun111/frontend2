@@ -3,14 +3,14 @@
 // import 'jquery-ui/themes/base/theme.css';
 import '../assets/scss/main.scss';
 import '../assets/scss/framework/framework-base.scss';
-import '../lib/socket';
+import {SocketMgr} from '../lib/socket';
 import '../assets/scss/framework/framework-base.scss'
 import {IframeInstance} from '../components/main/iframes/iframes';
 import {HeaderInstance} from '../components/main/header/header';
 import {AsideInstance} from '../components/main/aside/aside';
 import '../assets/scss/dataGrid/dataGrid-icon.scss';
 import {Storage} from "../lib/storage";
-
+SocketMgr.connect();
 _.defaultsDeep(AsideInstance.data, {
     systemName: window.config.sysConfig.logic_config.sap_login_system_name,
     avatar: window.config.sysConfig.userInfo.avatar,
@@ -28,3 +28,7 @@ let body = $('body');
 body.find('.component-loading-cover').remove();
 body.find('.component-loading-box').remove();
 body.removeClass('component-loading-effect');
+
+let head = $('head');
+head.find('title').html(window.config.sysConfig.logic_config.sap_login_system_name);
+

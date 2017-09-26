@@ -4,7 +4,7 @@ import template from './expert-search-condition.html';
 import '../expert-search.scss';
 import expertItem from './expert-search-item/expert-search-item';
 import DateTimeControl from "../../../../form/datetime-control/datetime-control";
-import DateControl from "../../../../form/date-control/date-control";
+import DateControl from "../../grid-data-control/grid-data-control";
 import TimeControl from "../../../../form/time-control/time-control";
 import expertSearch from '../expert-search';
 let config = {
@@ -13,7 +13,6 @@ let config = {
     inputNextObject: null,
     rendItemNum:0,
     ulChecked: true,
-    epSearch: {},
     data: {
         expertItemData: [],
         inputValue:'',
@@ -61,19 +60,19 @@ let config = {
                 case "datetime":
                     // inputType = 'datetime-local'; break;
                     this.el.find('.condition-search-input').remove();
-                    let dateTimeControl = new DateTimeControl({value: ''},{changeValue:function(data){}});
+                    let dateTimeControl = new DateTimeControl({value: '', isAgGrid: true},{changeValue:function(data){}});
                     dateTimeControl.render(this.el.find('.condition-search-value'));
                     break;
                 case "date":
                     // inputType = 'datetime-local'; break;
                     this.el.find('.condition-search-input').remove();
-                    let dateControl = new DateControl({value: ''},{changeValue:function(data){}});
+                    let dateControl = new DateControl({value: '', isAgGrid: true},{changeValue:function(data){}});
                     dateControl.render(this.el.find('.condition-search-value'));
                     break;
                 case "time":
                     // inputType = 'datetime-local'; break;
                     this.el.find('.condition-search-input').remove();
-                    let timeControl = new TimeControl({value: ''},{changeValue:function(data){}});
+                    let timeControl = new TimeControl({value: '', isAgGrid: true},{changeValue:function(data){}});
                     timeControl.render(this.el.find('.condition-search-value'));
                     break;
                 case "text":
@@ -119,7 +118,7 @@ let config = {
     },
     afterRender: function() {
         this.actions.rendItem();
-        // this.epSearch = new expertSearch.expertSearch ();
+        let epSearch = new expertSearch();
         this.ulChecked = true;
         // this.data.inputList = this.el.find('.condition-search-input').val();
         // debugger
@@ -149,6 +148,7 @@ let config = {
             _this.actions.setInputObject($(this),$(this).parent().parent().find('.condition-search-input'))
         }).on('click','.condition-search-delete',()=>{
             this.actions.delete();
+            // epSearch.actions.showAddBtn();
             let length = $('.condition-search-add').length;
             $('.condition-search-add').eq(length-1).css('display','inline-block');
         });

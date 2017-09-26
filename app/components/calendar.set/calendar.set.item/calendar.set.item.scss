@@ -48,20 +48,13 @@
         width: calc(12% - 10px);
         margin: 0px 5px;
         .popup {
-            width: 100%;
             ul{
-                //max-height: 300px;
                 li {
-                    margin-left: 0px;
                     list-style-type: none;
                     label{
                         text-align: left;
-                        overflow:hidden;
                     }
                 }
-            }
-            button{
-                width:100%;
             }
         }
     }
@@ -69,19 +62,13 @@
         width:calc(16% - 10px);
         margin: 0px 5px;
         .popup {
-            width: 100%;
             ul{
                 li {
-                    margin-left: 0px;
                     list-style-type: none;
                     label{
                         text-align: left;
-                        overflow:hidden;
                     }
                 }
-            }
-            button{
-                width:100%;
             }
         }
     }

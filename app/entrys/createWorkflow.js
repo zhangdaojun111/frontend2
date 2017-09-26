@@ -26,7 +26,9 @@ WorkFlowGrid.showGrid();
 ***订阅workflow choose事件，获取工作流info并发布getInfo,获取草稿
  */
 let wfObj,temp_ids=[];
-let timer ;
+let timer;
+let formSave = false;
+let formValue;
 Mediator.subscribe('workflow:choose', (msg)=> {
     $("#singleFlow").click();
     $("#submitWorkflow").show();
@@ -73,8 +75,13 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         // let timer;
         const autoSaving=function(){
             timer=setInterval(()=>{
-                intervalSave(FormEntrys.getFormValue(wfObj.tableid,false));
-            },30*1000);
+                let formNew = FormEntrys.getFormValue(wfObj.tableid,false);
+                let formNewStr = JSON.stringify(formNew);
+                if(formNewStr != formValue){
+                    formValue = formNewStr;
+                    intervalSave(FormEntrys.getFormValue(wfObj.tableid,false));
+                }
+            },15*1000);
         };
         clearInterval(timer);
         autoSaving();
@@ -87,13 +94,17 @@ Mediator.subscribe('workflow:choose', (msg)=> {
                 autoSaving();
             }
         })
-        $(window).on('focus',function(){
-            clearInterval(timer);
-            autoSaving();
-        });
-        $(window).on('blur',function(){
-            clearInterval(timer);
-        });
+        Mediator.subscribe('workFlow:formValueChange',(res)=>{
+            formValue = JSON.stringify(res);
+        })
+
+        // $(window).on('focus',function(){
+        //     clearInterval(timer);
+        //     autoSaving();
+        // });
+        // $(window).on('blur',function(){
+        //     clearInterval(timer);
+        // });
     });
 
 });

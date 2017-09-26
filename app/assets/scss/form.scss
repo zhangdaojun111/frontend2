@@ -7,6 +7,7 @@
 *form-version-table-department
 */
 .form-version-table-user, .form-version-table-department{
+    font-family: '微软雅黑';
     font-size: 12px;
     width: 100%!important;
     .ui-btn-box {
@@ -29,33 +30,17 @@
         width: 70% !important;
         background: #F8F8F8;
     }
-    .auto-select-component{
-        width: 244px !important;
-        height: 28px;
-        input.text,  input.result{
-            height: 28px;
-        }
 
-    }
-    .dynamic-form-input {
-        width: 242px !important;
-        height: 24px;
-    }
-    .textArea {
-        width: 242px !important;
-        border: 1px solid #ddd;
-        -webkit-appearance: none;
-        padding: 0 0 0 10px;
-    }
+    //.textArea {
+    //    border: 1px solid #ddd;
+    //    -webkit-appearance: none;
+    //    padding: 5px 0 0 10px;
+    //}
 
 }
 
 //默认表单样式
 .form-default {
-    .dynamic-form-input {
-        width: 242px !important;
-        height: 24px;
-    }
     .auto-select-component .choosed .item {
         margin: 2px 3px 0 0;
     }

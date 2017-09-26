@@ -302,7 +302,9 @@ let config = {
                 if( this.data.tableId == tableId ){
                     if( !this.data.onRefresh ){
                         this.data.onRefresh = true;
-                        this.actions.invalidTips();
+                        setTimeout( ()=>{
+                            this.actions.invalidTips();
+                        },500 )
                         setTimeout( ()=>{
                             this.data.onRefresh = false;
                         },500 )

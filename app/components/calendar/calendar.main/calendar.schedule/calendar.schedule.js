@@ -45,17 +45,26 @@ let config = {
         },
 
     },
+    binds:[
+        {
+            event:'click',
+            selector:'.ok-btn',
+            callback:function(){
+                this.actions.getSchedule(this.data.startDate, this.data.endDate);
+            }
+        }
+    ],
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
 
         this.data.scheduleDataList.forEach(item => {
             this.append(new CalendarScheduleItem({dayDate: item['dataTime'], dayScheduleList: item['data']}), this.el.find('.schedule-content'));
         });
-        let _this = this;
-        this.el.on('click', '.ok-btn', function () {
-            _this.actions.getSchedule(_this.data.startDate, _this.data.endDate);
-            //PMAPI.sendToParent({startDate: start, endDate: end});
-        });
+        // let _this = this;
+        // this.el.on('click', '.ok-btn', function () {
+        //     _this.actions.getSchedule(_this.data.startDate, _this.data.endDate);
+        //     //PMAPI.sendToParent({startDate: start, endDate: end});
+        // });
         let changeStartValue = (res) => {
             this.data.startDate = res.value;
             this.data.scheduleStart = this.data.startDate;

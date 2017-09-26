@@ -56,29 +56,27 @@ let config = {
          */
         delImg(stmp){
             let msg = $(stmp).attr("id");
-            console.log(msg);
             Mediator.publish("workflow:delImg",{"file_id":msg});
             Mediator.publish("workflow:getStamp");
         },
         /**
          * 创建一个图片的的dom的节点，定位在form中
-         * @param top 图片的定位的top
-         * @param left 图片的定位的left
+         * @param top 图片的定位的top百分比
+         * @param left 图片的定位的left百分比
          * @param width 图片的宽度
-         * @param height 图片的高度
          * @param id 图片的id
          */
-        createImg(top,left,width,height,id,H,L){
+        createImg(top,left,width,id){
             let viewLeft = left;
             let viewTop = top;
             let top1 = top+"%";
             let left1 = left+"%";
             let host = "http://"+window.location.host;
-            let html = `<div class='imgseal noprint' data-height=${height} data-width=${width} data-viewLeft=${viewLeft} data-viewTop=${viewTop} data-imgid=${id} style='top:${top1};left:${left1}'>
-                            <img  width=${width} height=${height} src='${host}/download_attachment/?file_id=${id}&download=0'/>
+            let html = `<div class='imgseal noprint'  data-width=${width} data-viewLeft=${viewLeft} data-viewTop=${viewTop} data-imgid=${id} style='top:${top1};left:${left1}'>
+                            <img  width=${width} style="max-height:150px" src='${host}/download_attachment/?file_id=${id}&download=0'/>
                                 <i class='J_del'>X</i>
                          </div>`;
-            html += `<img class="printS printimg" style="top:${H}px;left:${L}px;" width=${width} height=${height} src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
+            html += `<img class="printS printimg" style="top:${top1};left:${left1};max-height: 150px" width=${width} src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
             $('#place-form').find(".form-print-position").append(html);
         },
         /**
@@ -106,17 +104,14 @@ let config = {
             let leftout = ui.position.left > offsetleft;
             let topout = ui.position.top > offsettop;
             let bottomout = ui.position.top < offsettop+containerHeight;
-            let rightout = ui.position.left < offsetleft+containerWidth;
+            let rightout = ui.position.left < offsetleft+containerWidth-248;
             if(leftout && topout && bottomout && rightout){
                 let top = (ui.position.top-offsettop)/containerHeight;
                 let left = (ui.position.left-offsetleft)/containerWidth;
-                let H = ui.position.top-offsettop;
-                let L = ui.position.left-offsetleft+248;
                 top = top.toFixed(6)*100;
                 left = left.toFixed(6)*100;
-                this.actions.createImg(top,left,248,148,id,H,L);
+                this.actions.createImg(top,left,248,id);
             }
-            // this.actions.createImg(top,left,50,50,id);
             this.el.find(".signatureMock").css("visibility","hidden");
             $('.form-print-position').css("z-index",0);
         },

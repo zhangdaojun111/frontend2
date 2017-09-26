@@ -32,6 +32,12 @@ let config={
         if(this.data.history){
             this.el.find('.ui-history').css('visibility','visible');
         }
+        //回显
+        if (_this.data.value) {
+            _this.el.find(".textArea").val(_this.data.value);
+        } else {
+            _this.el.find(".textArea").val('');
+        }
     },
     beforeDestory(){
         this.el.find('input').off();

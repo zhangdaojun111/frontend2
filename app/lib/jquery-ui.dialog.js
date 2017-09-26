@@ -25,6 +25,7 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
     },
 
     _customWindow: function () {
+        this._removeClass($(this.uiDialog[0]), "ui-dialog-maximize");
         let width = Math.max(400, document.documentElement.clientWidth);
         let height = Math.max(400, document.documentElement.clientHeight - 180);
         this.option('width', width);
@@ -34,6 +35,7 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
         if (this.uiDialogTitlebarFull) {
             this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "ui-icon-newwin");
             this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
+            $(this.uiDialogTitlebarFull[0].firstChild).attr('title','全屏');
         }
     },
 
@@ -44,14 +46,18 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
         this.options.originWidth = this.options.width;
         this.option('width', width);
         this.option('height', height);
-        this.option('position', {my: "center", at: "center", of: window});
+        this.option('position', {my: "center top", at: "center top", of: window});
         this.fullScreen = true;
+
         if (this.uiDialogTitlebarFull) {
             this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
             this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "ui-icon-newwin");
+            $(this.uiDialogTitlebarFull[0].firstChild).attr('title','还原');
+            this._addClass($(this.uiDialog[0]), "ui-dialog-maximize");
         }
     },
     _minimizeWindow: function () {
+        this._removeClass($(this.uiDialog[0]), "ui-dialog-maximize");
         this.option('width', this.options.originWidth);
         this.option('height', this.options.originHeight);
         this.option('position', {my: "center", at: "center", of: window});
@@ -59,8 +65,8 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
         if (this.uiDialogTitlebarFull) {
             this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "ui-icon-newwin");
             this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
+            $(this.uiDialogTitlebarFull[0].firstChild).attr('title','全屏');
         }
-
     },
     _createTitlebar: function () {
         this._super();

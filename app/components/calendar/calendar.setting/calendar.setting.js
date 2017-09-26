@@ -17,6 +17,7 @@ let config = {
     data: {
         menu: [],
         isHide: true,
+        calendarSet: []
     },
     actions: {
         getFilterMenu: function (keyValue, subMenu) {
@@ -37,16 +38,14 @@ let config = {
         hideLeftMenu: function (isHide) {
             if (isHide) {
                 this.data.isHide = false;
-                this.el.find('.setting-content').addClass('hide');
+                this.el.find('.setting-content,.calendar-setting-item').addClass('hide');
                 this.el.find('.search').addClass('hide-search');
                 this.el.find('.calendar-setting-items').addClass('hide-menu');
-                this.el.find('.calendar-setting-item').addClass('hide');
             } else {
                 this.data.isHide = true;
-                this.el.find('.setting-content').removeClass('hide');
+                this.el.find('.setting-content,.calendar-setting-item').removeClass('hide');
                 this.el.find('.search').removeClass('hide-search');
                 this.el.find('.calendar-setting-items').removeClass('hide-menu');
-                this.el.find('.calendar-setting-item').removeClass('hide');
             }
         },
 
@@ -95,10 +94,11 @@ let config = {
         Mediator.on('calendar-set-left:calendar-set', data => {
             this.el.find('.form-title').html('【' + data.label + '】');
             this.el.find('.calendar-setting-item-content').empty();
-            this.append(new CalendarSet(data.data), this.el.find('.calendar-setting-item-content'));
+            this.append(new CalendarSet(data.table_id), this.el.find('.calendar-setting-item-content'));
         });
     },
     beforeDestory: function () {
+        debugger;
         Mediator.removeAll('calendar-set-left:calendar-set');
     }
 };
