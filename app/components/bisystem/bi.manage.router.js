@@ -40,8 +40,11 @@ let viewsManage;
 const BiAppRouter = Backbone.Router.extend({
     before: function() {
         if (canvasComponent) {
-            console.log(canvasComponent.data);
-            canvasComponent.data.headerComponents.trigger('onSaveCanvas');
+            let canSaveView = canvasComponent.data.views.filter(item => item.id == canvasComponent.currentViewId);
+            console.log(canSaveView);
+            if (canSaveView[0].self == 1) {
+                canvasComponent.data.headerComponents.trigger('onSaveCanvas');
+            };
         }
     },
     routes: {

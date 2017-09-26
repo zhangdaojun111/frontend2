@@ -146,7 +146,7 @@ let config = {
             };
             canvasCellService.saveCellLayout(data).then(res => {
                 if (res['success'] === 1) {
-                    msgbox.showTips('保存成功');
+                    msgbox.showTips('保存视图信息成功');
                 } else {
                     msgbox.showTips(res['error']);
                 }
