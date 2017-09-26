@@ -39,13 +39,13 @@ let config = {
             if (data.xOld.length > 0) {
                 data.xOld.map((item,index,items) => {
                     if (index === items.length -1) {
-                        title += `${item.name}:${item.xName}`
+                        title += ` ${item.name}:${item.xName}`
                     } else {
-                        title += `${item.name}:${item.xName}/`
+                        title += ` ${item.name}:${item.xName} /`
                     };
                 });
             };
-            this.el.find('.deep-title').html(title ? '('+title+')': title)
+            this.el.find('.deep-title').html(title ? '/ '+title : title)
         }
     },
     binds:[

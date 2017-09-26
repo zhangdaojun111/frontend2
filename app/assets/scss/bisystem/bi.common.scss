@@ -65,6 +65,14 @@ html.bi, body.bi {
         @include icon;
         background: url('../../../assets/images/bisystem/richtext.png') no-repeat;
     }
+    .right-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/right.png') no-repeat;
+    }
+    .wrong-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/wrong.png') no-repeat;
+    }
 }
 
 @mixin chart-com {
