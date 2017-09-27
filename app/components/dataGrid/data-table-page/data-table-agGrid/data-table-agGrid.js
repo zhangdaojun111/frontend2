@@ -1851,7 +1851,6 @@ let config = {
                         isBatch: this.data.viewMode == 'createBatch'?1:0,
                         isSuperUser: window.config.is_superuser || 0
                     }
-                    this.actions.setInvalid();
                     let url = dgcService.returnIframeUrl( '/iframe/dataImport/',json );
                     let winTitle = '导入数据';
                     this.actions.openSourceDataGrid( url,winTitle,600,650 );
@@ -2046,7 +2045,6 @@ let config = {
                             for( let o of this.data.saveEditObjArr ){
                                 saveArr.push( dataTableService.saveEditFormData( o ) )
                             }
-                            this.actions.setInvalid();
                             Promise.all(saveArr).then((res)=> {
                                 let j = 0;
                                 let wrong = 0;
@@ -2062,11 +2060,11 @@ let config = {
                                 if( wrong > 0 ){
                                     let err = wrong + '条数据保存失败，失败原因：' + errorText;
                                     msgBox.alert( err );
-                                    this.actions.getGridData();
                                 }else {
                                     msgBox.showTips( '执行成功！' )
                                     this.actions.toogleEdit();
                                 }
+                                this.actions.timeDelayRefresh();
                             })
                             HTTP.flush();
                         }
@@ -2274,7 +2272,6 @@ let config = {
             if( type == 1 ){
                 json['abandon_validate'] = 1;
             }
-            this.actions.setInvalid();
             dataTableService.delTableData( json ).then( res=>{
                 if( res.succ ){
                     msgBox.showTips( '删除成功' )
@@ -2290,10 +2287,8 @@ let config = {
                         this.data.batchIdList = arr;
                         this.actions.returnBatchData( this.data.batchIdList );
                     }
-                    //表单的子表操作重新请求数据
-                    if( this.data.viewMode == 'EditChild' ){
-                        this.actions.getGridData( true );
-                    }
+                    //延时刷新数据
+                    this.actions.timeDelayRefresh();
                 }else {
                     if( res.queryParams ){
                         msgBox.confirm( res.error + '是否前往处理？' ).then( r=>{
@@ -3048,10 +3043,6 @@ let config = {
         openSourceDataGrid: function ( url,title,w,h ) {
             //暂时刷新方法
             let defaultMax = false;
-            if( url.indexOf( '/iframe/addWf/' ) != -1 ){
-                this.actions.setInvalid();
-                defaultMax = true;
-            }
             PMAPI.openDialogByIframe( url,{
                 width: w || 1400,
                 height: h || 800,
@@ -3065,6 +3056,9 @@ let config = {
                     this.actions.returnBatchData( data.ids );
                     this.actions.getGridData();
                 }
+                if( data.type == 'export' ){
+                    this.actions.timeDelayRefresh();
+                }
             } )
         },
         //打开局部的弹窗
@@ -3077,11 +3071,15 @@ let config = {
                     defaultMax: true,
                     // customSize: true
             } ).then( (data)=>{
-                this.actions.setInvalid();
-                if( this.data.viewMode == 'EditChild' && data == 'success' ){
-                    this.actions.getGridData( true );
+                if( data == 'success' ){
+                    this.actions.timeDelayRefresh();
                 }
             } )
+        },
+        //延时刷新
+        timeDelayRefresh: function(){
+            this.actions.setInvalid();
+            this.pagination.actions.timeDelayRefresh();
         },
         //返回批量工作流导入后数据
         returnBatchData: function (ids) {
