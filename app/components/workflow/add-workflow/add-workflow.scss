@@ -12,6 +12,10 @@
             margin-bottom: 30px;
         }
     }
+    .hide{
+        visibility: hidden;
+        height: 0;
+    }
 }
 #app-workflow {
     .workflow-foot .workflow-box{
