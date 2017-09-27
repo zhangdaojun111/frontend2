@@ -13,6 +13,7 @@ let config = {
     template:template,
     data:{},
     actions:{
+
         /**
          * 删除视图
          * @returns {Promise.<void>}
