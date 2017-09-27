@@ -981,7 +981,7 @@ let config = {
             this.data.namespace = res[1].namespace;
             this.data.headerColor = dgcService.createHeaderStyle( this.data.tableId,res[1].field_color );
             //获取表的表单工作流参数
-            this.actions.setPrepareParmas( res[4] );
+            // this.actions.setPrepareParmas( res[4] );
             //初始化按钮
             this.actions.renderBtn();
             //创建高级查询需要字段数据
@@ -2554,6 +2554,11 @@ let config = {
             if( !data.data || this.data.isEditable || data.data.myfooter || this.data.doubleClick ){
                 return;
             }
+            //防止双击和单击的误操作
+            this.data.doubleClick = true;
+            setTimeout( ()=>{
+                this.data.doubleClick = false;
+            },200 )
             if(this.data.viewMode == 'reportTable2'){
                 if(data.data.can_edit == 1){
                     data.column.cellEditor = "";
@@ -2864,9 +2869,6 @@ let config = {
             console.log( data )
             console.log( this.data.namespace )
             if( data.event.srcElement.className == 'gridView' ){
-                if(this.data.viewMode == 'in_process' || data["data"]["status"] === 2) {
-                    msgBox.alert("数据正在审批，无法操作");
-                }
                 this.actions.viewOrEditPerm( 'view' );
                 console.log( '查看' )
                 let btnType = 'view';
@@ -3004,10 +3006,6 @@ let config = {
         onRowDoubleClicked: function (data) {
             console.log( "行双击查看" )
             console.log( data )
-            this.data.doubleClick = true;
-            setTimeout( ()=>{
-                this.data.doubleClick = false;
-            },500 )
             this.actions.viewOrEditPerm( 'view' );
             //屏蔽分组行
             if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0)||this.data.editMode||data.data.myfooter ){
