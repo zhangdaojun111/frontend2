@@ -64,6 +64,7 @@ let config = {
          * @param viewId
          */
         switchViewId: function (viewId) {
+            // 如果router没有传viewId 则默认用bi_views第一个
             this.currentViewId = viewId ? viewId.toString() : window.config.bi_views[0].id;
             if (!this.data.singleMode) {
                 this.data.headerComponents.data.menus[this.currentViewId].actions.focus();
@@ -71,7 +72,7 @@ let config = {
             this.data.cells = new CanvasCellsComponent(this.currentViewId);
             this.data.cells.render(this.el.find('.cells-container'));
 
-            this.data.headerComponents.actions.canSaveViews(viewId);
+            this.data.headerComponents.actions.canSaveViews(this.currentViewId);
         },
 
         /**

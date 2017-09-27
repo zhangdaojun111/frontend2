@@ -51,7 +51,7 @@ let config = {
         canSaveViews(viewId) {
             let biViews = window.config.bi_views;
             let isSelf = _.result(_.find(biViews,{'id':parseInt(viewId)}),'self');
-            if(isSelf===1){
+            if(isSelf==1){
                 this.el.find('.canSaveView').show();
             }else{
                 this.el.find('.canSaveView').hide();
