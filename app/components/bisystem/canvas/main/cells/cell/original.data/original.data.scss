@@ -1,7 +1,8 @@
 @mixin th-td {
-    border-right: 1px solid #EEEEEE;
-    border-bottom: 1px solid #EEEEEE;
-    line-height: 35px;
+    border-right: 1px solid #e4e4e4;
+    border-bottom: 1px solid #e4e4e4;
+    line-height: 30px;
+    font-size:12px;
     overflow: hidden;
 }
 
@@ -55,11 +56,7 @@
         overflow-y: scroll;
         border: 1px solid #EEEEEE;
         .content {
-            .custom-checkbox {
-                input {
-                    bottom: 4px;
-                }
-            }
+            width:100%;
             table {
                 width: 100%;
                 text-align: center;
@@ -69,10 +66,19 @@
                 font-size: 12px;
                 thead {
                     tr {
-                        background: #F5F5F5;
                         th {
                             font-weight: bold;
                             @include th-td;
+                            color: #000;
+                            stroke: none;
+                            fill: #000;
+                            background: #f2f2f2;
+                            border-color:#e4e4e4;
+                            label {
+                                line-height:1;
+                                position:relative;
+                                top:3px;
+                            }
                             span {
                                 cursor: pointer;
                             }
@@ -84,11 +90,16 @@
                         background-color: #FEFEFE;
                     }
                     > tr:nth-child(even) {
-                        background-color: #FAFBFD;
+                        background-color: #f2f2f2;
                     }
                     td {
                         vertical-align: middle;
                         @include th-td;
+                        label {
+                            line-height:1;
+                            position:relative;
+                            top:3px;
+                        }
                         a {
                             text-decoration: none;
                             color: #5B95E7;
@@ -99,13 +110,18 @@
                         table {
                             td {
                                 border-right: 0;
-                                border-bottom: 1px solid #EEEEEE;
+                                border-bottom: 1px solid #e4e4e4;
                             }
                             tr:last-child {
                                 td {
                                     border: 0;
                                 }
                             }
+                        }
+                    }
+                    &.origin-group-tbody {
+                        > tr:nth-child(even) {
+                            background:#fefefe;
                         }
                     }
                 }

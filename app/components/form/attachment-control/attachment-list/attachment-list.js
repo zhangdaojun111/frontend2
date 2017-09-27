@@ -31,6 +31,7 @@ let css=`
       width: 30%;
     }
     .attachment-list .table-bordered  tbody  tr  td a{
+        cursor: pointer;
         text-decoration: none;
          margin-right: 25px;
          color:#0088FF;       

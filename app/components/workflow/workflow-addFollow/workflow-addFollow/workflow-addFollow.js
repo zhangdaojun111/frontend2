@@ -52,6 +52,7 @@ let config={
         });
         //部门选择
         Mediator.subscribe('workflow:checkDept', (res)=> {
+            console.log('ss');
             let arr = [];
             let checked=this.el.find('#staffMulti .search-check-row');
             let len = checked.length;
@@ -59,11 +60,13 @@ let config={
                 arr.push($(checked[i]).data('id'))
             }
             $.each(res,(i,val)=>{
-                val.id=i;
-                if(checked.length===0){
-                    this.append(new SelectStaff(val), this.el.find('#staffMulti'));
-                }else if(arr.indexOf(i)===-1){
-                    this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+                if(val){
+                    val.id=i;
+                    if(checked.length===0){
+                        this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+                    }else if(arr.indexOf(i)===-1){
+                        this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+                    }
                 }
             });
         });

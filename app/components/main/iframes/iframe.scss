@@ -48,22 +48,37 @@
                     top: 6px;
                 }
             }
-            .view-save{
-                width: 49px;
+            .view-save-group{
+                width: 50px;
                 height: 100%;
                 border-left: solid 1px #d7d7d7;
                 background-color: #e4e4e4;
                 float: right;
-                cursor: pointer;
-                .view-icon{
-                    width: 16px;
-                    height: 16px;
-                    display: inline-block;
-                    background-image: url("../../../assets/images/framework/view-icon.png");
-                    background-repeat: no-repeat;
-                    margin:7px 0 0 17px;
+                .view-save{
+                    cursor: pointer;
+                    height: 30px;
+                    .view-icon{
+                        width: 16px;
+                        height: 16px;
+                        display: inline-block;
+                        background-image: url("../../../assets/images/framework/view-icon.png");
+                        background-repeat: no-repeat;
+                        margin:7px 0 0 17px;
+                    }
+                }
+                .view-save-component{
+                    display: none;
+                    position: absolute;
+                    top: 30px;
+                    right: 2px;
+                    background-color: #FFF;
+                    width: 260px;
+                    height: auto;
+                    margin-top: -1px;
+                    border: solid 1px #e4e4e4;
                 }
             }
+
             .view-popup{
                 width: 30px;
                 border: none;
@@ -98,14 +113,16 @@
                     right:50px;
                     top:30px;
                     .basic-ul{
-                        //.drop-up-icon{
-                        //    width: 16px;
-                        //    height: 16px;
-                        //    margin-left: 67px;
-                        //    display: inline-block;
-                        //    background-image: url("./../../../assets/images/framework/drop-up-icon.png");
-                        //    cursor: pointer;
-                        //}
+                        .drop-up-icon{
+                            width: 32px;
+                            height: 16px;
+                            margin-left: 59px;
+                            display: inline-block;
+                            background-image: url("./../../../assets/images/framework/drop-up-icon.png") ;
+                            background-repeat: no-repeat;
+                            background-position: 8px;
+                            cursor: pointer;
+                        }
                         .close-tab,.close-all-tabs{
                             text-align: left;
                             text-indent: 10px;

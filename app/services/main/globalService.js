@@ -10,6 +10,11 @@ const handlers = {
 
 export const GlobalService = {
     http:HTTP,
+    /**
+     * 发送全局搜索请求
+     * @param data
+     * @returns {*|Deffered}
+     */
     sendSearch:function (data) {
         let url = '/search_full_text/';
         let body =  Utils.formatParams(data);
@@ -20,9 +25,13 @@ export const GlobalService = {
             type:'post'
         })
     },
-    getOnlineColumnDefs:function () {       //获取在线人员列表表头
+    /**
+     * 获取在线人员列表表头
+     * @returns {[null,null,null,null,null,null,null,null,null,null]}
+     */
+    getOnlineColumnDefs:function () {
         return [
-            _.defaultsDeep({headerName: '序号', width: 60}, dgcService.numberCol),
+            _.defaultsDeep({headerName: '序号', width: 40}, dgcService.numberCol),
             {
                 headerName: '姓名',
                 field: 'name',
@@ -35,7 +44,7 @@ export const GlobalService = {
             {
                 headerName: '是否在职',
                 field: 'is_active',
-                width: 80,
+                width: 110,
                 suppressMenu: true,
                 tooltipField: 'is_active',
                 cellStyle: {'text-align': 'center'},
@@ -44,7 +53,7 @@ export const GlobalService = {
             {
                 headerName: '用户类型',
                 field: 'is_superuser',
-                width: 80,
+                width: 108,
                 suppressMenu: true,
                 tooltipField: 'is_superuser',
                 cellStyle: {'text-align': 'center'},
@@ -63,7 +72,7 @@ export const GlobalService = {
             {
                 headerName: '登录IP',
                 field: 'login_ip',
-                width: 120,
+                width: 140,
                 suppressMenu: true,
                 tooltipField: 'login_ip',
                 cellStyle: {'text-align': 'center'},
@@ -90,7 +99,7 @@ export const GlobalService = {
             {
                 headerName: 'app版本',
                 field: 'version',
-                width: 150,
+                width: 190,
                 suppressMenu: true,
                 tooltipField: 'version',
                 cellStyle: {'text-align': 'center'},
@@ -99,7 +108,7 @@ export const GlobalService = {
             {
                 headerName: 'Session失效时间',
                 field: 'expire',
-                width: 120,
+                width: 140,
                 suppressMenu: true,
                 tooltipField: 'expire',
                 cellStyle: {'text-align': 'center'},
@@ -107,7 +116,12 @@ export const GlobalService = {
             }
         ];
     },
-    getOnlineUserData:function (_param) {         //获取在线人员列表数据
+    /**
+     * 获取在线人员列表数据
+     * @param _param
+     * @returns {*|Deffered}
+     */
+    getOnlineUserData:function (_param) {
         let param = _.defaultsDeep(_param, {
             rows: 10,
             first:0,

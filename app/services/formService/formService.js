@@ -1,5 +1,5 @@
 import {HTTP} from '../../lib/http';
-import alert from '../../lib/msgbox';
+import msgbox from '../../lib/msgbox';
 
 export const FormService = {
     //子表内置父表的id集合（前端填充）tableid : ids
@@ -455,7 +455,8 @@ export const FormService = {
         let res;
         if (json['form_id']) {
             res = Promise.all([this.getStaticDataImmediately(json), this.getDynamicData(json), this.getFormContent({form_id: json['form_id']})]);
-        } else {
+        }
+        else {
             res = Promise.all([this.getStaticDataImmediately(json), this.getDynamicData(json)]);
         }
         HTTP.flush();
@@ -480,7 +481,7 @@ export const FormService = {
         HTTP.flush();
         return res;
     },
-    uploadAttachment(url, json, processCallback, successCallback) {
+    uploadAttachment(url, json, processCallback, successCallback,errorCallback) {
         HTTP.ajaxImmediately({
             type: "POST",
             url: url,
@@ -496,7 +497,10 @@ export const FormService = {
                 successCallback(data);
             },
             error: function (error) {
-                alert(error);
+                msgbox.alert(error);
+                if(errorCallback){
+                    errorCallback(error);
+                }
             },
             async: true,
             cache: false,
@@ -509,10 +513,14 @@ export const FormService = {
         return HTTP.postImmediately('/delete_attachment/', json);
     },
     getAttachment(json) {
-        return HTTP.postImmediately('/query_attachment_list/', json);
+        let res = HTTP.post('query_attachment_list', json);
+        HTTP.flush();
+        return res;
     },
     getThumbnails(json) {
-        return HTTP.postImmediately('/get_thumbnails/', json);
+        let res = HTTP.post('get_thumbnails', json);
+        HTTP.flush();
+        return res;
     },
 
     //重新拼装下拉框格式

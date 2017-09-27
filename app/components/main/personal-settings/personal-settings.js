@@ -12,10 +12,11 @@ import {UserInfoService} from '../../../services/main/userInfoService';
 import msgbox from '../../../lib/msgbox';
 import {AvatarSet} from './set-avatar/set-avatar';
 import {agentSetting} from './set-agent/set-agent';
-import OtherLogin from "../login-by-other/login-by-other";
+import {LoginByOther} from "../login-by-other/login-by-other";
 import Mediator from '../../../lib/mediator';
 import {PMAPI} from '../../../lib/postmsg';
 import userInfoDisplay from './user-info-display/user-info-display';
+import {PasswordInput} from "../../util/passwordInput/password-input"
 
 function getData(component_instance) {
     _.defaultsDeep(component_instance.data, {
@@ -35,10 +36,13 @@ let config = {
     template:template,
     data:{
         targetUserName:'',
+        isCapsLock:false,
     },
     actions:{
+        /**
+         * 初始化，检测用户头像路径返回值，没有则显示默认头像
+         */
         initInfo:function () {
-            // 初始化，检测用户头像路径返回值，没有则显示默认头像
             let src = this.data.avatar;
             if(src !== ''){
                 let $img = $("<img>").addClass("user-avatar");
@@ -56,18 +60,34 @@ let config = {
         onImageError: function () {
 
         },
+        /**
+         * 打开头像设置界面
+         */
         setAvatar(){
             AvatarSet.show();
         },
+        /**
+         * 打开代理设置界面
+         */
         setAgent(){
             agentSetting.show();
         },
+        /**
+         * 切换到个人信息界面
+         */
         showPersonalInfo:function () {
             this.el.find("div.personal-info").show();
             this.el.find("div.modify-password").hide();
             this.el.find("div.show-personal-info").addClass("active");
             this.el.find("div.show-modify-password").removeClass("active");
+            //清空密码界面的input
+            this.old_pswInput.actions.resetInput();
+            this.new_pswInput.actions.resetInput();
+            this.confirm_new_pswInput.actions.resetInput();
         },
+        /**
+         * 切换到密码修改界面
+         */
         showModifyPassword:function () {
             this.el.find("div.personal-info").hide();
             this.el.find("div.modify-password").show();
@@ -80,9 +100,15 @@ let config = {
         //     this.el.find("div.personal-foot").hide();
         //     this.el.find("div.cancel-save").show();
         // },
+        /**
+         * 编辑email
+         */
         editEmail:function () {
             this.el.find("input.email-info").removeAttr("disabled").focus();
         },
+        /**
+         * 编辑tel
+         */
         editTel:function () {
             this.el.find("input.phone-info").removeAttr("disabled").focus();
         },
@@ -94,6 +120,9 @@ let config = {
         //     this.el.find("div.personal-foot").show();
         //     this.el.find("div.cancel-save").hide();
         // },
+        /**
+         * 保存编辑结果
+         */
         saveEdit:function () {
             this.data.user_email = this.el.find("input.email-info").val();
             this.data.user_phone = this.el.find("input.phone-info").val();
@@ -116,51 +145,71 @@ let config = {
                 console.log("修改失败",err);
             })
         },
-        isLegal:function () {
-            let newPw = this.el.find("input.new-pw").val();
-            if(newPw !== ''){
-              this.el.find("button.confirm-btn").removeAttr("disabled");
-              this.el.find("span.ps-warn").hide();
+        /**
+         * 修改密码
+         */
+        modifyPassword:function () {
+            let originPw = this.old_pswInput.data.password_value;
+            let newPw = this.new_pswInput.data.password_value;
+            let confirmNewPw = this.confirm_new_pswInput.data.password_value;
+            let result = this.actions.checkPasswordLegal(originPw,newPw,confirmNewPw);
+            if(result === true){
+                let data = {
+                    username:this.data.username,
+                    originalpwd: originPw,
+                    newpwd: newPw,
+                    newpwdagain:confirmNewPw
+                };
+
+                UserInfoService.modifyPassword(data).done((result) => {
+                    if(result.success === 1){
+                        msgbox.alert("密码修改成功！");
+                        PersonSetting.hide();
+                    }else{
+                        msgbox.alert(result.error);
+                    }
+                }).fail((err) => {
+                    console.log(err);
+                })
             }else{
-              this.el.find("button.confirm-btn").attr("disabled",true);
-              this.el.find("span.ps-warn").show();
+
             }
         },
-        modifyPassword:function () {
-            let originPw = this.el.find("input.origin-pw").val();
-            let newPw = this.el.find("input.new-pw").val();
-            let confirmNewPw = this.el.find("input.confirm-new-pw").val();
-
-            let data = {
-                username:this.data.username,
-                originalpwd: originPw,
-                newpwd: newPw,
-                newpwdagain:confirmNewPw
-            };
-
-            UserInfoService.modifyPassword(data).done((result) => {
-                if(result.success === 1){
-                    msgbox.alert("密码修改成功！");
-                    PersonSetting.hide();
-                }else{
-                    msgbox.alert(result.error)
-                }
-            }).fail((err) => {
-                console.log(err);
-            })
-        },
+        /**
+         * 显示他人登录界面
+         */
         otherLogin:function () {
-            OtherLogin.show();
+            LoginByOther.show();
         },
-        initAvatar:function () {
-            let src = this.data.avatar;
-            this.el.find("img.user-avatar")
-                .attr("src",src)
-        },
+        // //初始化头像
+        // initAvatar:function () {
+        //     let src = this.data.avatar;
+        //     this.el.find("img.user-avatar")
+        //         .attr("src",src)
+        // },
         // clearLocalStorage:function(){
         //     window.localStorage.clear();
         //     $(window).attr("location","/login");
         // },
+        initPasswordPage:function () {
+            //初始化旧密码框
+            let $wrap1 = this.el.find('.old-pw-group');
+            this.old_pswInput = new PasswordInput({title:'旧密码：',checkChar:false});
+            this.old_pswInput.render($wrap1);
+
+            //初始化新密码框
+            let $wrap2 = this.el.find('.new-pw-group');
+            this.new_pswInput = new PasswordInput({title:'新密码：'});
+            this.new_pswInput.render($wrap2);
+
+            //初始化确认新密码框
+            let $wrap3 = this.el.find('.confirm-new-pw-group');
+            this.confirm_new_pswInput = new PasswordInput({title:'确认新密码：'});
+            this.confirm_new_pswInput.render($wrap3);
+        },
+        /**
+         * 根据监听到的频道信息重置头像
+         */
         resetAvatar:function () {
             let $img = this.el.find("img.user-avatar");
             if($img.length === 0){
@@ -170,6 +219,25 @@ let config = {
             }else{
                 $img.attr("src",window.config.sysConfig.userInfo.avatar);
             }
+        },
+        /**
+         *  检查用户密码输入合法性
+         * @param originPw
+         * @param newPw
+         * @param confirmNewPw
+         */
+        checkPasswordLegal:function (originPw,newPw,confirmNewPw) {
+            if(!(this.old_pswInput.data.isLegal && this.new_pswInput.data.isLegal && this.confirm_new_pswInput.data.isLegal)){
+                msgbox.alert('密码填写有误，请按提示进行修改');
+                return false;
+            }
+
+            if(originPw === newPw){
+                msgbox.alert('新旧密码一致，请修改');
+                // this.el.find('.save-password-warning').val('新旧密码一致，请修改');
+                return false;
+            }
+            return true;
         },
         // getTargetInfo:function () {
         //     UserInfoService.getUserInfoByName(this.data.targetUserName).done((result) => {
@@ -261,17 +329,12 @@ let config = {
             callback:_.debounce(function(){             //修改密码确认
                 this.actions.modifyPassword();
             },500),
-        },{
-            event:'input',
-            selector:'.new-pw',
-            callback:function(){
-                this.actions.isLegal();         //监听旧密码的输入
-            }
         }
     ],
     afterRender:function () {
         this.actions.initInfo();
-        this.actions.initAvatar();
+        this.actions.initPasswordPage();
+        // this.actions.initAvatar();
     },
     firstAfterRender:function () {
         //窗口监听来自子窗口的设置头像的消息
@@ -280,7 +343,7 @@ let config = {
         })
     },
     beforeDestory:function () {
-        Mediator.removeAll("personal:setAvatar");
+        // Mediator.removeAll("personal:setAvatar");
     }
 };
 

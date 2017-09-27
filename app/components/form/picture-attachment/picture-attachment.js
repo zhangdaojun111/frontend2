@@ -24,17 +24,14 @@ let css = `.imgList {
     line-height: 40px;
     border-bottom: 1px solid #F2F2F2;
 }
-.imgList div a {
+.select-img a{
     position: absolute;
     top: 4px;
     right:0;
     outline-style:none;
     display: inline-block;
     margin-left: 5px;
-}
-.select-img a{
     margin-right: 10px;
-   // float: right;
 }
 .imgContain {
     position: relative;

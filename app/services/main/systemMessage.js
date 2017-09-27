@@ -59,7 +59,7 @@ export const systemMessageService = {
     columnDefs: [],
     getColumnDefs: function () {
         return [
-            _.defaultsDeep({headerName: '序号', width: 60}, dgcService.numberCol),
+            _.defaultsDeep({headerName: '序号', width: 40}, dgcService.numberCol),
             dgcService.selectCol,
             // {
             //     headerCellTemplate: function (data) {
@@ -83,7 +83,7 @@ export const systemMessageService = {
             }, {
                 headerName: '发布者',
                 field: 'publisher',
-                width: 100,
+                width: 80,
                 suppressMenu: true,
                 tooltipField: 'publisher',
                 cellStyle: {'text-align': 'center'},
@@ -91,27 +91,27 @@ export const systemMessageService = {
             }, {
                 headerName: '消息标题',
                 field: 'title',
-                width: 180,
+                width: 140,
                 suppressMenu: true,
                 tooltipField: 'title',
                 cellStyle: {'text-align': 'center'}
             }, {
                 headerName: '消息类型',
-                field: 'msg_type_text',
-                width: 80,
+                field: 'msg_type',
+                width: 100,
                 suppressMenu: true,
                 tooltipField: 'msg_type_text',
                 cellStyle: {'text-align': 'center'},
                 suppressSorting: true
             }, {
-                width:475,
+                width:458,
                 headerName: '消息内容',
                 field: 'msg_content',
                 suppressMenu: true,
                 tooltipField: 'msg_content',
                 cellStyle: {'text-align': 'center'}
             }, {
-                width:180,
+                width:160,
                 headerName: '发布时间',
                 field: 'create_time',
                 suppressMenu: true,

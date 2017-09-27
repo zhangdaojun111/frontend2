@@ -24,6 +24,7 @@ let config = {
         tableName:'',
         columnDefs: [],
         rowData:[],
+        footerData:[],
         fieldsData:[],
         //定制列（列宽）
         colWidth: {},
@@ -101,6 +102,7 @@ let config = {
                 let gridData = {
                     columnDefs: this.data.columnDefs,
                     rowData: this.data.rowData,
+                    footerData: this.data.footerData,
                     fieldsData: this.data.fieldsData,
                     onColumnResized: this.actions.onColumnResized,
                     onSortChanged: this.actions.onSortChanged,
@@ -207,6 +209,7 @@ let config = {
             let That = this;
             this.el.find( '.departmentSratch' ).on( 'input',_.debounce( ()=>{
                 That.agGrid.gridOptions.api.setQuickFilter( That.el.find( '.departmentSratch' )[0].value );
+                That.agGrid.actions.refreshView();
             },1000 ) )
             //导出
             if( this.el.find( '.grid-export-btn' )[0] ){

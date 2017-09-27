@@ -11,6 +11,8 @@ import {attachmentListConfig} from "./attachment-list/attachment-list";
 import {FormService} from '../../../services/formService/formService';
 import ThumbnailList from "./thumbnail-list/thumbnail-list";
 import {Storage} from "../../../lib/storage";
+import Mediator from "../../../lib/mediator";
+import browserMD5File from 'browser-md5-file';
 
 let config = {
     template: template,
@@ -25,17 +27,18 @@ let config = {
                     fileIds: this.data.value,
                     dinput_type: this.data.real_type
                 },attachmentListConfig.data);
-                PMAPI.openDialogByComponent(attachmentListConfig, {
+                Storage.init((new URL(document.URL)).searchParams.get('key'));
+                PMAPI.openDialogToSelfByComponent(attachmentListConfig, {
                     width: 700,
                     height: 500,
                     title: "浏览上传文件"
                 }).then(res=>{
-                    Storage.init((new URL(document.URL)).searchParams.get('key'));
                     let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
                     for(let file of deletedFiles){
                         this.data.value.splice(this.data.value.indexOf(file),1);
                     }
-                    this.trigger('changeValue',this.data);
+                this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
+                this.trigger('changeValue',this.data);
                 });
             }
         }, {
@@ -56,13 +59,19 @@ let config = {
             callback: function () {
                 PMAPI.openDialogByComponent(screenShotConfig, {
                     width: 500,
-                    height: 330,
+                    height: 300,
                     title: "选择截图"
                 }).then(res => {
                     if (!res.file) {
                         return;
                     }
-                    this.actions.controlUploadingForFile(res.file);
+                    let fileId = new Date().getTime();
+                    let toolbox ={
+                        update:function () {},
+                        finish:function () {},
+                        showError:function () {}
+                    };
+                    this.actions.controlUploadingForFile(res.file,fileId,toolbox);
                 })
             }
         }, {
@@ -70,28 +79,51 @@ let config = {
             selector: '.selecting-file',
             callback: function (event) {
                 let files = event.files;
+                let fileArray = [];
                 for (let file of files) {
-                    this.actions.controlUploadingForFile(file);
+                    let name = file.name;
+                    let fileId = new Date().getTime();
+                    fileArray.push({id:fileId,name:name});
                 }
+                let toolbox ={
+                    update:function () {},
+                    finish:function () {},
+                    showError:function () {}
+                };
+                for(let i = 0, length = files.length;i < length; i++){
+                    let file = files[i];
+                    let fileItem = fileArray[i];
+                    browserMD5File(file, (err,md5)=>{
+                        if(this.data.queue){
+                            for(let item of this.data.queue){
+                                if(file.name == item.file.name && md5 == item.md5){
+                                    msgBox.showTips('文件已上传');
+                                    return;
+                                }
+                            }
+                        }
+                        if(this.data.rows){
+                            for(let item of this.data.rows){
+                                if(file.name == item.file_name && md5 == item.file_md5){
+                                    msgBox.showTips('文件已上传');
+                                    return;
+                                }
+                            }
+                        }
+                        this.actions.controlUploadingForFile(file,fileItem.id,toolbox);
+                    });
+                }
+                //清空文件选择器，不影响下一次选择
                 this.el.find('.selecting-file').val(null);
-            }
-        }, {
-            event: 'click',
-            selector:'.ellipses',
-            callback: function () {
-                this.el.find('.ellipses').css('display','none');
-                for(let i=3,length = this.data.queueItemEles.length; i <length;i++){
-                    this.data.queueItemEles[i].css('display','block');
-                }
             }
         }
     ],
     data: {
-        queue: [],
-        queueItemEles:[]
+        attachmentQueueItemComps:{},
+        queue:[]
     },
     actions: {
-        controlUploadingForFile: function (file) {
+        controlUploadingForFile: function (file,i,toolbox) {
             if (file.size > 100 * 1024 * 1024) {
                 msgBox.alert(file.name + ' 文件过大，无法上传，请确保上传文件大小小于100MB');
                 return;
@@ -108,14 +140,13 @@ let config = {
                 }
             }
             let ele = $('<div></div>');
-            let item = new AttachmentQueueItem({file: file, real_type: this.data.real_type},
+            let item = new AttachmentQueueItem({file: file, real_type: this.data.real_type, fileOrder:i, toolbox:toolbox},
                 {
                     changeFile: event => {
                         if (event.event == 'delete') {
                             ele.remove();
-                            this.data.queueItemEles.splice(this.data.queueItemEles.indexOf(ele),1);
                             if (event.data != undefined) {
-                                this.data.queue.splice(this.data.queue.indexOf(event.data), 1);
+                                this.data.queue.splice(this.data.queue.indexOf(event.data),1);
                                 this.data.value.splice(this.data.value.indexOf(event.data.fileId), 1);
                                 this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
                                 if (this.data['thumbnailListComponent']) {
@@ -125,13 +156,12 @@ let config = {
                                     }
                                 }
                                 this.events.changeValue(this.data);
-                                this.actions._playQueueItems();
                             }
                         }
                         if (event.event == 'finished') {
-                            this.data.queue.push(event.data);
                             this.data.value = this.data.value == '' ? [] : this.data.value;
                             this.data.value.push(event.data.fileId);
+                            this.data.queue.push(event.data);
                             this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
                             this.trigger('changeValue', this.data);
                             let obj = {};
@@ -146,27 +176,9 @@ let config = {
                         }
                     }
                 });
-            this.el.find('.upload-process-queue').prepend(ele);
+            this.el.find('.upload-process-queue').append(ele);
             item.render(ele);
-            this.data.queueItemEles.unshift(ele);
-            this.actions._playQueueItems();
-        },
-        //调整上传文件条目，仅显示3条
-        _playQueueItems:function () {
-            if(this.data.queueItemEles.length > 3){
-                this.el.find('.ellipses').css('display','block');
-                for(let i=3,length = this.data.queueItemEles.length; i <length;i++){
-                    this.data.queueItemEles[i].css('display','none');
-                }
-            } else {
-                this.el.find('.ellipses').css('display','none');
-            }
-            for(let i=0;i<3;i++){
-                if(!this.data.queueItemEles[i]){
-                    break;
-                }
-                this.data.queueItemEles[i].css('display','block');
-            }
+            this.data.attachmentQueueItemComps[i]=item;
         }
     },
     afterRender: function () {
@@ -176,7 +188,7 @@ let config = {
         } else if (this.data.dinput_type == 23) {
             this.el.find('.upload-file').val('上传图片');
         }
-        if ((this.data.dinput_type == 33 || this.data.dinput_type == 23)&&this.data.value.length != 0) {
+        if ((this.data.dinput_type == 33 || this.data.dinput_type == 2) && this.data.value.length != 0) {
             FormService.getThumbnails({
                 file_ids: JSON.stringify(this.data.value)
             }).then(res => {
@@ -190,6 +202,24 @@ let config = {
                 }
             })
         }
+        Mediator.subscribe('getDataFromOtherFrame:'+this.data.id,(data)=>{
+            if(data.type != 'cancel_uploading'){
+                return;
+            }
+            let id = data.id;
+            this.data.attachmentQueueItemComps[id].actions.cancelUploading();
+        });
+        FormService.getAttachment({
+            file_ids:JSON.stringify(this.data.value),
+            dinput_type:this.data.dinput_type
+        }).then(res=>{
+            if(res.success){
+                this.data.rows = res.rows;
+            }
+        })
+    },
+    beforeDestroy:function () {
+        Mediator.remove('getDataFromOtherFrame:'+this.data.id);
     }
 };
 export default class AttachmentControl extends Component {

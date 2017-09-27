@@ -56,11 +56,41 @@ let config = {
                 this.el.find('.re-uploading').css('display','none');
                 this.actions.restartUploading();
             }
-        },{
+        }, {
             event:'click',
             selector:'.cancel-attaching',
             callback:function () {
-                this.trigger('changeFile',{event:'delete'});
+                this.actions.cancelUploading();
+            }
+        }, {
+            event:'click',
+            selector:'.preview',
+            callback:function () {
+                if(this.el.find('.preview-contain').is(":visible")){
+                    this.el.find('.preview-contain').hide();
+                } else {
+                    if(this.data._controlItem.process != 100){
+                        msgbox.showTips('数据上传未完成！');
+                        return;
+                    }
+                    let fileId = this.data._controlItem['fileId'];
+                    let src = '/download_attachment/?file_id='+fileId+'&download=0&dinput_type='+this.data.real_type;
+                    if(this.data.file.type.indexOf('image') != -1) {
+                        this.el.find('.preview-contain').show();
+                        let ele = $('<img src="'+src+'">');
+                        this.el.find('.preview-anchor').empty().append(ele);
+                    } else if (this.data.file.type == 'video/mp4') {
+                        this.el.find('.preview-contain').show();
+                        let ele = $('<video width="400" controls><source src="'+src+'" type="video/mp4">您的浏览器不支持HTML5</video>');
+                        this.el.find('.preview-anchor').empty().append(ele);
+                    }
+                }
+            }
+        }, {
+            event:'click',
+            selector:'.hide-preview',
+            callback: function () {
+                this.el.find('.preview-contain').hide();
             }
         }
     ],
@@ -81,15 +111,29 @@ let config = {
             if(this.data._controlItem.process > 100){
                return;
             }
+            if(this.data.toolbox){
+                this.data.toolbox.update({
+                    fileId:this.data.fileOrder,
+                    progress:this.data._controlItem.process,
+                });
+            }
             this.el.find('#process-num').text(this.data._controlItem.process+'%');
             if(this.data._controlItem.process == 100){
                 this.el.find('.loader').css('display','none');
                 this.el.find('.processing').css('display','none');
-               this.el.find('.keep-on-attaching').css('display','none');
-               this.el.find('.pause-attaching').css('display','none');
-               this.el.find('.cancel-attaching').css('display','none');
-               this.el.find('.delete-file').css('display','inline');
+                this.el.find('.keep-on-attaching').css('display','none');
+                this.el.find('.pause-attaching').css('display','none');
+                this.el.find('.cancel-attaching').css('display','none');
+                this.el.find('.delete-file').css('display','inline');
+                this.el.find('.preview').css('display','inline');
+                if(this.data.file.type.indexOf('image') == -1 && this.data.file.type != 'video/mp4'){
+                    this.el.find('.preview').css({'color':'grey','cursor':'auto'});
+                }
             }
+        },
+        cancelUploading:function () {
+            this.data._controlItem.uploadingState = 'canceled';
+            this.trigger('changeFile',{event:'delete'});
         },
         processEvent(event){
             var position = event.loaded || event.position;
@@ -155,6 +199,7 @@ let config = {
                 formData.append('per_size', item.pack_size);
                 formData.append('content_type', item.file.type);
                 formData.append('dinput_type', this.data.real_type);
+                let errorCallback = this.data.toolbox?this.data.toolbox.showError:undefined;
                 FormService.uploadAttachment(item.url, formData, this.actions.processEvent, (res) => {
                     if (res.success) {
                         if (item.index < item.chunks - 1) {
@@ -162,6 +207,9 @@ let config = {
                             this.actions.transData(item);
                         } else {
                             this.actions.updateProcess(1);
+                            if(this.data.toolbox){
+                                this.data.toolbox.finish({fileId:this.data.fileOrder});
+                            }
                             this.data._controlItem.uploadingState = 'finished';
                             this.data._controlItem['fileId'] = res.file_id;
                             this.data._controlItem['thumbnail'] = res.thumbnail;
@@ -169,10 +217,14 @@ let config = {
                         }
                     } else {
                         this.data._controlItem.uploadingState = 'failed';
-                        msgbox.alert('传输中断！');
+                        if(this.data.toolbox){
+                            this.data.toolbox.showError({fileId:this.data.fileOrder,msg:"传输中断"});
+                        } else {
+                            msgbox.alert('传输中断！');
+                        }
                         this.actions.showReuploadingButton();
                     }
-                });
+                },errorCallback);
             }
         }
     },

@@ -1,5 +1,6 @@
 <div class="attachment-queue-item">
     <div class="loader" style="width: 10px"></div>
+    <div class="preview" style="display: none">预览</div>
     <div class="delete-file" style="display: none">删除</div>
     <div class="processing">上传中</div>
     <div class="keep-on-attaching" style="display: none">继续上传</div>
@@ -8,4 +9,9 @@
     <div class="cancel-attaching" style="display: none">取消上传</div>
     <div id="process-num">0%</div>
     <div class="file-name"><strong>{{file.name}}({{fileSize}})</strong></div>
+    <div class="preview-contain" style="display: none">
+        <button class="hide-preview">收起</button>
+        <div class="preview-anchor"></div>
+    </div>
+
 </div>

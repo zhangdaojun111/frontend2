@@ -48,7 +48,7 @@ let config = {
             if (res['name']) {
                 ViewsService.update(res).then((val) => {
                     if(val['success']===1){
-                        this.data = res;
+                        this.data = val.data;
                         this.trigger('onUpdate',this.data);
                         this.reload();
                     }else{

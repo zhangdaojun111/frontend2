@@ -91,8 +91,8 @@
 	.checkbox{
 		background: url('../../../../assets/images/util/tree/icon_checkbox_no.png') center/20px 20px no-repeat;
 		display: inline-block;
-		width: 20px;
-		height: 20px;
+		width: 16px;
+		height: 16px;
 	}
 	.checkbox.checked{
 		background: url('../../../../assets/images/util/tree/icon_checkbox_yes.png') center/20px 20px no-repeat;
@@ -126,6 +126,9 @@
   }
 
 #treeMulti,.search-main-m{
+	.buttons-in-tree{
+		position: sticky;
+	}
 	.search-in-tree-hd{
 		position: sticky;
 		top: 0;
@@ -165,8 +168,18 @@
 					position: absolute;
 					top: 50%;
 					left: 50%;
-					margin-top: -6.5px;
-					margin-left: -6.5px;
+					margin-top: -8px;
+					margin-left: -8px;
+					height: 16px;
+					width: 16px;
+					&:before{
+						width: 14px;
+						height: 14px;
+					}
+					&:after{
+						width: 12px;
+						height: 12px;
+					}
 				}
 			}
 			&:nth-child(2),&:nth-child(3){
@@ -218,8 +231,8 @@
 					position: absolute;
 					top: 50%;
 					left: 50%;
-					margin-top: -10px;
-					margin-left: -10px;
+					margin-top: -8px;
+					margin-left: -8px;
 				}
 			}
 			&:nth-child(2){

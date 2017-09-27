@@ -10,7 +10,10 @@ export const LoginService = {
     password_value:'',
     userName:'',
 
-    //检查当前浏览器是否为chrome
+    /**
+     * 检查当前浏览器是否为chrome
+     * @returns {boolean}
+     */
     support:function () {
         let browser = this.currentBrowser();
         if (!browser['chrome']){
@@ -18,7 +21,10 @@ export const LoginService = {
         }
         return this.needDownload;
     },
-    //获取浏览器信息
+    /**
+     * 获取浏览器信息
+     * @returns {{}}
+     */
     currentBrowser:function(){
         let Browser = {
         };
@@ -31,12 +37,21 @@ export const LoginService = {
                         (s = ua.match(/version\/([\d.]+).*safari/)) ? Browser['safari'] = s[1] : 0;
         return Browser;
     },
+    /**
+     * 获取版本信息
+     * @returns {*|Deffered}
+     */
     getVersionInfo:function () {
         return this.http.postImmediately({
             type:'post',
             url:'/get_revision_info/',
         })
     },
+    /**
+     * 向后台发送账号、密码请求登录
+     * @param data
+     * @returns {*|Deffered}
+     */
     userLoginVerification:function (data) {
         //登录
         let body = this.utils.formatParams(data);
@@ -46,6 +61,11 @@ export const LoginService = {
             data:body
         });
     },
+    /**
+     * 根据用户名找回密码
+     * @param username
+     * @returns {*|Deffered}
+     */
     findPassword:function (username) {
         //找回密码
         let url = '/validate_username/';

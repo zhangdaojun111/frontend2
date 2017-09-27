@@ -1,5 +1,5 @@
 /**
- * Created by zhaohaoran
+ * Created by zhr
  */
 import Component from "../../../../../lib/component";
 import template from './history-approve-StrTable.html';
@@ -16,9 +16,9 @@ let config = {
     },
     afterRender: function() {
         if(this.data.history_data){
-            // this.data.trigger_work_records[0].data.forEach((item)=>{
-            //     this.append(new strikeItem(item), this.el.find('.history-table-body.strike'));
-            // })
+            this.data.trigger_work_records[0].data.forEach((item)=>{
+                this.append(new strikeItem(item), this.el.find('.history-table-body.strike'));
+            })
         }
     }
 }

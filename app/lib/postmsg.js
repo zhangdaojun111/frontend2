@@ -7,6 +7,9 @@ import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import msgbox from './msgbox';
 import {Storage} from "./storage";
+import {Progresses} from "../components/util/progresses/progresses";
+import Mediator from "./mediator";
+
 
 /**
  * 父级页面，需要根据key来保存消息来源iframe或component的对象和打开的iframe或component的dom
@@ -45,7 +48,10 @@ export const PMENUM = {
     get_param_from_root: '9',        // 来自子框架的消息，需要获取iframe的参数
     send_param_to_iframe: '10',       // 来组主框架的消息，向iframe发送参数
     workflow_approve_msg: '11',
-    show_tips: '12'
+    show_tips: '12',
+    send_data_to_dialog_component: '13', //向子componentDialog发消息，需和openDialogByComponentWithKey结合使用，便于获得dialog的key
+    send_data_to_iframe:'14',
+    get_data:'15'
 }
 
 /**
@@ -165,6 +171,17 @@ window.addEventListener('message', function (event) {
             case PMENUM.show_tips:
                 msgbox._showTips(data.data);
                 break;
+
+            case PMENUM.send_data_to_dialog_component:
+                if(dialogHash[data.key] && dialogHash[data.key].comp){
+                    dialogHash[data.key].comp.actions.updateData(data.data);
+                }
+                break;
+
+            case PMENUM.send_data_to_iframe:
+                Mediator.publish('getDataFromOtherFrame:'+data.data.originalField,data.data);
+                break;
+
             default:
                 console.log('postmsg listener: unsupported message');
         }
@@ -260,11 +277,11 @@ export const PMAPI = {
     },
 
     /**
-     * 将消息发送给调用的父组件
+     * 将消息发送给调用的父组件,新框架如果是在非主框架上打开的话，关闭应该采用此方法
      * @param data
      */
     sendToRealParent: function (data) {
-        this.parent.postMessage(data, location.origin);
+        window.parent.postMessage(data, location.origin);
         return this;
     },
 
@@ -401,6 +418,19 @@ export const PMAPI = {
         });
     },
 
+    openDialogByComponentWithKey: function (componentConfig, key, frame) {
+        return new Promise(function (resolve) {
+            dialogWaitHash[key] = resolve;
+            PMAPI.sendToSelf({
+                type: PMENUM.open_component_dialog,
+                key: key,
+                component: PMAPI.serializeComponent(componentConfig),
+                frame: frame
+            }, location.origin);
+        });
+    },
+
+
     /**
      * 本方法同上，唯一区别是在本框架打开
      * @frame 对话框设置，包括大小，标题等，例：{
@@ -484,7 +514,7 @@ export const PMAPI = {
                 let args = obj[key]['Arguments'] || "";
                 let source = obj[key]['Source'];
                 let fstr = "function " + obj[key]['Function'] + "(" + args + "){" + source + "}";
-                let f = new Function('$', '_', 'PMAPI', 'PMENUM', 'HTTP', 'Storage','Quill', "return " + fstr)($, _, PMAPI, PMENUM, HTTP, Storage, Quill);
+                let f = new Function('$', '_', 'PMAPI', 'PMENUM', 'HTTP', 'Storage','Quill', "Mediator","return " + fstr)($, _, PMAPI, PMENUM, HTTP, Storage, Quill,Mediator);
                 obj[key] = f;
             } else if (obj[key] instanceof Object) {
                 PMAPI._createFuncs(obj[key]);

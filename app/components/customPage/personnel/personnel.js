@@ -326,15 +326,23 @@ let config = {
             }
             if( this.data.filterParam['common_filter_id'] ){
                 json['filter'] = json['filter'] || [];
-                for( let a of this.data.filterParam.expertFilter ){
-                    json['filter'].push( a );
+                //这个顺序要保证是先高级查询，再搜索的
+                let len = this.data.filterParam.expertFilter.length - 1;
+                for(let i = len; i>=0; i--){
+                    json['filter'].unshift(this.data.filterParam.expertFilter[i]);
                 }
+                // for( let a of this.data.filterParam.expertFilter ){
+                //     json['filter'].push( a );
+                // }
                 if( this.data.filterParam['common_filter_id'] != '临时高级查询' ){
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
                 if( this.data.filterParam.filter.length == 0 ){
-                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span>加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;</div>`;
-                    this.el.find('.btn-nav').append(dom);
+                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span><span class="title">加载常用查询&lt;<span class="text">${this.data.filterParam['common_filter_name']}</span>&gt;</span></div>`;
+                    this.el.find('.btn-nav-con').append(dom);
+                    setTimeout(()=>{
+                        this.el.find('.query-tips').css('display','none');
+                    },5000)
                     this.el.find('.query-tips-delete').on('click', ()=> {
                         this.el.find('.query-tips').css('display','none');
                     })
@@ -606,6 +614,7 @@ let config = {
             _this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
                 if($(this).val() == '常用查询') {
                     _this.actions.postExpertSearch([],'');
+                    _this.el.find('.query-tips').css('display','none');
                 } else if($(this).val() == '临时高级查询') {
                     _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
                 } else {
@@ -797,6 +806,7 @@ let config = {
         },
         onSortChanged: function ($event) {
             if( this.data.frontendSort ){
+                this.agGrid.actions.refreshView();
                 return;
             }
             let data = this.agGrid.gridOptions.api.getSortModel()[0];
@@ -893,14 +903,14 @@ let config = {
                     this.actions.openSelfIframe( url,'编辑' )
                 }
                 if( $event.event.srcElement.id == 'view' ){
-                    let obj = {
+                    let json = {
                         table_id: this.data.tableId,
                         btnType: 'view',
                         real_id: $event.data._id,
                         is_view: 1
                     }
-                    let url = dgcService.returnIframeUrl( '/form/index/',obj );
-                    this.actions.openSelfIframe( url,'查看' )
+                    let u = dgcService.returnIframeUrl( '/form/index/',json );
+                    this.actions.openSelfIframe( u,'查看' )
                 }
                 if( $event.event.srcElement.id == 'jurisdiction' ){
                     this.data.userPerm.id = $event.data['_id'];

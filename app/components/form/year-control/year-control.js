@@ -32,8 +32,10 @@ let config={
             let data=FormService.createSelectJson(this.data);
             data.onSelect=function(data){
                 if(_this.data.isInit || !data || data.length == 0 ){
-                    _this.data.value='';
-                    _.debounce(function(){_this.events.changeValue(_this.data)},200)();
+                    if(!_this.data.isInit){
+                        _this.data.value='';
+                        _.debounce(function(){_this.events.changeValue(_this.data)},200)();
+                    }
                     return;
                 }
                 _this.data.value=data[0]['id'];

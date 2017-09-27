@@ -1,5 +1,5 @@
 import Mediator from './mediator';
-
+import {PMAPI, PMENUM} from './postmsg'
 let SocketMgr = {
 
     socket: null,
@@ -16,7 +16,15 @@ let SocketMgr = {
             let data = JSON.parse(event.data);
             let info = data.info || {};
             info.typeName = data.type;
-            Mediator.emit('socket:' + data.type, data.info);
+            Mediator.emit('socket:' + data.type, info);
+            if (info.typeName === 'offline') {
+                location.href = '/login';
+                return;
+            }
+            PMAPI.sendToAllChildren({
+                type: PMENUM[info.typeName],
+                data: info
+            });
         };
         this.socket.onclose = function (event) {
             SocketMgr.connect();
@@ -31,7 +39,9 @@ let SocketMgr = {
     }
 
 }
-SocketMgr.connect();
+
+export {SocketMgr};
+// SocketMgr.connect();
 // window.setTimeout(function () {
 //     SocketMgr.socket.send(JSON.stringify({
 //         "test": 1,

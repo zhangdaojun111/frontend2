@@ -114,7 +114,6 @@ export const CalendarSetService = {
         let params = {
             table_id: tableId,
         };
-
         let res = HTTP.get(systemBuildInFieldUrl, params).then(res => {
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;

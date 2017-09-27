@@ -28,8 +28,10 @@ export class CellTableComponent extends CellBaseComponent {
 
     static init(cellChart) {
         if (cellChart['chart']['single'] === 1) {
-            CellTableComponent.singleTable(cellChart);
-        };
+            if (cellChart['chart']['data']['rows'][0]) {
+                CellTableComponent.singleTable(cellChart);
+            }
+        }
         return cellChart
     }
 

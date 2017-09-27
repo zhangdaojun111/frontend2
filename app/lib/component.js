@@ -156,7 +156,6 @@ class Component {
         count--;
 
         this.beforeDestory && this.beforeDestory();
-
         if (this.el) {
             this.el.off();
             this.el.remove();
@@ -164,7 +163,6 @@ class Component {
         for (let name in this) {
             this[name] = null;
         }
-
         return this;
     }
 

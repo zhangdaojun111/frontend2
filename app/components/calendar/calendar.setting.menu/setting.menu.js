@@ -15,6 +15,9 @@ let config = {
         type: 'full'
     },
     actions: {
+        /**
+         * 加载左侧设置菜单栏
+         */
         renderMenuList: function () {
             //this.destroyChildren();
             this.data.list.forEach((data) => {

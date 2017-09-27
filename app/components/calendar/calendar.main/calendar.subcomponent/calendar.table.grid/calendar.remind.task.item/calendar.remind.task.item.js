@@ -81,6 +81,7 @@ let config = {
          * 打开工作流
          */
         openWorkflow: function () {
+            console.log(111);
             this.el.find('.task-show-text').html(this.data.remindTaskItemData['data']['name']);
             this.el.on('click', '.task-show-text', () => {
                 console.log(this.data.remindTaskItemData);
@@ -99,13 +100,13 @@ let config = {
         {
             event:'click',
             selector:'.task-state-icon',
-            callback:function (temp = this) {
+            callback:function (context) {
                 event.stopPropagation();
-                if(!$(temp).is(".options-show")){
+                if(!$(context).is(".options-show")){
                     this.el.parents(".calendar-main-content").find(".select-options").hide();
                     this.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
                     this.el.find(".select-options").show();
-                    $(temp).addClass("options-show");
+                    $(context).addClass("options-show");
                     if(this.el.find(".task-item").parent().position().top > 60){
                         let task_list = this.el.find(".task-item").parents(".task-list");
                         task_list.scrollTop(task_list.scrollTop()+35);
@@ -113,7 +114,7 @@ let config = {
                 }
                 else{
                     this.el.find(".select-options").hide();
-                    $(temp).removeClass("options-show");
+                    $(context).removeClass("options-show");
                 }
             }
         },
@@ -133,19 +134,18 @@ let config = {
                 this.actions.changSelectValue(sValue, sLabel);
             }
         },
-        // {
-        //     event:'dragstart',
-        //     selector:'.task-item',
-        //     callback:function(ev){
-        //         console.log(ev.Event());
-        //         if(this.data.type === 'month' && this.data.remindTaskItemData['isDrag'] !== 0) {
-        //             let event = ev.originalEvent;
-        //             $(temp).addClass("task-item-draggable");
-        //             event.dataTransfer.setData("Text",JSON.stringify(this.data.remindTaskItemData));
-        //             return true;
-        //         }
-        //     }
-        // }
+        {
+            event:'dragstart',
+            selector:'.task-item',
+            callback:function(context,event){
+                if(this.data.type === 'month' && this.data.remindTaskItemData['isDrag'] !== 0) {
+                    let ev = event.originalEvent;
+                    $(context).addClass("task-item-draggable");
+                    ev.dataTransfer.setData("Text",JSON.stringify(this.data.remindTaskItemData));
+                    return true;
+                }
+            }
+        }
     ],
     afterRender: function() {
         this.el.addClass("comment-task-item");
@@ -178,14 +178,14 @@ let config = {
             this.actions.openWorkflow();
         }
 
-        this.el.on('dragstart','.task-item',function(ev){
-            if(that.data.type === 'month' && that.data.remindTaskItemData['isDrag'] !== 0) {
-                let event = ev.originalEvent;
-                $(this).addClass("task-item-draggable");
-                event.dataTransfer.setData("Text",JSON.stringify(that.data.remindTaskItemData));
-                return true;
-            }
-        });
+        // this.el.on('dragstart','.task-item',function(ev){
+        //     if(that.data.type === 'month' && that.data.remindTaskItemData['isDrag'] !== 0) {
+        //         let event = ev.originalEvent;
+        //         $(this).addClass("task-item-draggable");
+        //         event.dataTransfer.setData("Text",JSON.stringify(that.data.remindTaskItemData));
+        //         return true;
+        //     }
+        // });
         $(document).click(function(){
             that.el.parents(".calendar-main-content").find(".select-options").hide();
             that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");

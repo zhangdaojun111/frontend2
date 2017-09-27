@@ -41,7 +41,7 @@ let config = {
                 let viewTop = imgNode[i].dataset.viewtop;
                 let viewLeft = imgNode[i].dataset.viewleft;
                 let width = imgNode[i].dataset.width;
-                let height = imgNode[i].dataset.height;
+                let height = imgNode[i].clientHeight;
                 let obj = {
                     "height":height,
                     "width":width,
@@ -65,15 +65,8 @@ let config = {
             for (let i=0;i<len;i++){
                 let left = imgInfo[i].viewLeft+"%";
                 let top = imgInfo[i].viewTop+"%";
-                let container = $(".form-print-position")[0];
-                //容器的宽高
-                let containerHeight = container.clientHeight/100;
-                let containerWidth = container.clientWidth/100;
-                let left1 = parseFloat(left)*containerWidth+248;
-                let top1 = parseFloat(top)*containerHeight;
                 html += `<img class="oldImg noprint" src="http://${host}/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`;
-                html += `<img class="printimg printS" src="http://${host}/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left1}px;top:${top1}px;height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`;
-
+                html += `<img class="printimg printS" src="http://${host}/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`;
             }
             this.el.find(".form-print-position").append(html);
         },
@@ -81,13 +74,13 @@ let config = {
          * 隐藏原来的图片
          */
         hideImg(){
-            this.el.find(".oldImg").css("display","none");
+            this.el.find(".oldImg").hide();
         },
         /**
          * 显示原来的图片
          */
         showImg(){
-            this.el.find(".oldImg").css("display","block");
+            this.el.find(".oldImg").show();
         },
         /**
          * 收缩和展开form表单

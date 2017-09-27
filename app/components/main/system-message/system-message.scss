@@ -2,7 +2,7 @@
     padding: 10px 10px 0 10px;
     .grid {
         height: 485px;
-        width: 1271px;
+        width: 1175px;
         position: relative;
         //margin: 10px 0 10px 0;
         border: double #e4e4e4;
@@ -20,6 +20,7 @@
     .pagination {
         height: 40px;
         clear: none;
+        margin-top: 5px;
         //.p-left select,.p-left > span:nth-child(1),.p-left > span:nth-child(3){
         //   display: none;
         //}
@@ -36,7 +37,7 @@
         height: 30px;
         float: right;
         margin-right: 20px;
-        margin-top: 5px;
+        margin-top: 10px;
         .markRead,.batchApprove,.batchDelete{
             width: 60px;
             height: 24px;

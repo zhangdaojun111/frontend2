@@ -124,7 +124,7 @@ let config={
         })
         this.el.on('click','[name="addUser"]',function(){
             __this.data.sigh_user_id=this.value;
-            __this.el.find('#subAdder').removeAttr('disabled');
+            // __this.el.find('#subAdder').removeAttr('disabled');
         });
         this.el.on('click','#subAdder',function(){
             let o={};

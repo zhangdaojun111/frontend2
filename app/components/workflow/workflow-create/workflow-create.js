@@ -49,7 +49,6 @@ let config = {
                 }
             }
             let parents = el.parents('div')[0];
-            console.log(el);
             parents.remove();
             this.actions.init();
         },
