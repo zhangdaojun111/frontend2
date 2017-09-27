@@ -27,6 +27,7 @@ let config = {
                 ViewsService.delData(data).then((res)=>{
                     if(res['success']===1){
                         this.trigger('onDelete',this.data);
+                        msgbox.showTips('删除成功');
                         this.destroySelf();
                     }else{
                         msgbox.alert(res['error']);

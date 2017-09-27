@@ -80,6 +80,9 @@ let config = {
          * 当下穿数据时更新数据
          */
         updateOriginal(data) {
+            if (this.data.sort) {
+                data.cellChart.cell.sort = JSON.stringify(this.data.sort)
+            };
             let originalData = CanvasOriginalDataComponent.handleOriginalData(data);
             Object.assign(this.data, originalData);
             if (this.data.attribute) {
@@ -305,6 +308,7 @@ let config = {
                     field:field,
                     type:sortType
                 };
+                this.data.sort = sort;
                 this.data.attribute = this.data.cellChart.cell.attribute; // 这个主要用于当更新数据reload时，保存现在的状态
                 this.trigger('onDeepSort', sort);
                 return false;
