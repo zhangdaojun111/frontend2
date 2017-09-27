@@ -1725,7 +1725,9 @@ let config = {
     },
     afterRender() {
         this.actions.createFormControl();
-        this.actions.checkCustomTable();
+        if(this.data.is_view == 1){
+            this.actions.checkCustomTable();
+        }
         this.actions.triggerControl();
         this.actions.changeOptions();
         this.actions.setDataFromParent();

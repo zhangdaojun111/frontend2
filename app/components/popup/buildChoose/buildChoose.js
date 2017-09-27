@@ -51,6 +51,7 @@ let config = {
             _this.data.isCreatingForm=true;
             _this.data.selected = {value: $(this).data('value'), label: $(this).html()};
             FormEntry.destoryForm(_this.data.source_table_id);
+            _this.el.find('.ui-section').empty();
             FormEntry.createForm({
                 table_id: _this.data.source_table_id,
                 form_id: '',

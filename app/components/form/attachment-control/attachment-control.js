@@ -116,11 +116,21 @@ let config = {
                 //清空文件选择器，不影响下一次选择
                 this.el.find('.selecting-file').val(null);
             }
+        }, {
+            event: 'click',
+            selector:'.ellipses',
+            callback: function () {
+                this.el.find('.ellipses').css('display','none');
+                for(let i=3,length = this.data.queueItemEles.length; i <length;i++){
+                    this.data.queueItemEles[i].css('display','block');
+                }
+            }
         }
     ],
     data: {
         attachmentQueueItemComps:{},
-        queue:[]
+        queue:[],
+        queueItemEles:[]
     },
     actions: {
         controlUploadingForFile: function (file,i,toolbox) {
@@ -145,6 +155,7 @@ let config = {
                     changeFile: event => {
                         if (event.event == 'delete') {
                             ele.remove();
+                            this.data.queueItemEles.splice(this.data.queueItemEles.indexOf(ele),1);
                             if (event.data != undefined) {
                                 this.data.queue.splice(this.data.queue.indexOf(event.data),1);
                                 this.data.value.splice(this.data.value.indexOf(event.data.fileId), 1);
@@ -156,9 +167,11 @@ let config = {
                                     }
                                 }
                                 this.events.changeValue(this.data);
+                                this.actions._playQueueItems();
                             }
                         }
                         if (event.event == 'finished') {
+                            this.data.queue.push(event.data);
                             this.data.value = this.data.value == '' ? [] : this.data.value;
                             this.data.value.push(event.data.fileId);
                             this.data.queue.push(event.data);
@@ -176,9 +189,27 @@ let config = {
                         }
                     }
                 });
-            this.el.find('.upload-process-queue').append(ele);
+            this.el.find('.upload-process-queue').prepend(ele);
             item.render(ele);
-            this.data.attachmentQueueItemComps[i]=item;
+            this.data.queueItemEles.unshift(ele);
+            this.actions._playQueueItems();
+        },
+        //调整上传文件条目，仅显示3条
+        _playQueueItems:function () {
+            if(this.data.queueItemEles.length > 3){
+                this.el.find('.ellipses').css('display','block');
+                for(let i=3,length = this.data.queueItemEles.length; i <length;i++){
+                    this.data.queueItemEles[i].css('display','none');
+                }
+            } else {
+                this.el.find('.ellipses').css('display','none');
+            }
+            for(let i=0;i<3;i++){
+                if(!this.data.queueItemEles[i]){
+                    break;
+                }
+                this.data.queueItemEles[i].css('display','block');
+            }
         }
     },
     afterRender: function () {
