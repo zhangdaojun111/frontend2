@@ -46,7 +46,7 @@ $font_size: 12px;
     }
     //新建编辑按钮
     .user {
-        padding: 0px 20px 10px;
+        padding: 0 20px 10px;
         display: inline-block;
         a {
             display: block;
@@ -97,7 +97,7 @@ $font_size: 12px;
             }
         }
         .charts {
-            height: calc(100% - 68px);
+            height: 100%;
             overflow: auto;
             border-top: 1px solid rgba(68, 68, 68, 1);
             box-sizing: border-box;

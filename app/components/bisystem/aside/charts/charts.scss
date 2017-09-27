@@ -76,12 +76,11 @@ $font_size: 12px;
 
 .hide_meun {
     position: absolute;
-    left: 132px;
-    top: 0px;
+    left: 254px;
+    top: 0;
     z-index: 99;
     width: 112px;
     display: none;
-    overflow: hidden;
     .btn_box {
         padding: 8px 0;
         background-color: #ffffff;
@@ -90,7 +89,6 @@ $font_size: 12px;
             text-decoration: none;
             color: #000000;
             display: block;
-            width: 100%;
             cursor: pointer;
             outline: none;
             border: none;
@@ -101,6 +99,9 @@ $font_size: 12px;
             text-align: start;
             transition: all .3s;
             background-color: #ffffff;
+        }
+        button {
+            width: 100%;
         }
         .menuitem:hover {
             background-color: rgba(240, 240, 240, 0.87);

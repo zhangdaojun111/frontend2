@@ -21,8 +21,9 @@ let config = {
             this.el.find('.hide_meun').fadeIn('normal');
             this.el.siblings().find('.hide_meun').fadeOut('normal');
             let top = this.el.offset().top;
+            this.el.find('.hide_meun').css('top',top);
             if(top>872){
-                this.el.find('.hide_meun').css('top',-64);
+                this.el.find('.hide_meun').css('top',top-64);
             }
             event.stopPropagation();
             //点击消失
@@ -72,7 +73,7 @@ let config = {
         },
         {
             event:'click',
-            selector:'li .btn_del',
+            selector:'.btn_del',
             callback: function () {
                 this.actions.confirmDel();
             }
