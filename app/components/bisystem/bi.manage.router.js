@@ -40,8 +40,8 @@ let viewsManage;
 const BiAppRouter = Backbone.Router.extend({
     before: function() {
         if (canvasComponent) {
-            let canSaveView = canvasComponent.data.views.filter(item => item.id == canvasComponent.currentViewId);
-            if (canSaveView[0].self == 1) {
+            let canSaveView = window.config.bi_views.filter(item => item.id == canvasComponent.data.currentViewId);
+            if (canSaveView[0] && canSaveView[0].self == 1) {
                 canvasComponent.data.headerComponents.trigger('onSaveCanvas');
             };
         }
@@ -54,6 +54,7 @@ const BiAppRouter = Backbone.Router.extend({
         'forms/:chart/:id':'routerFormDynamicComponent',
         '':'routerViewsComponent',
     },
+
     routerViewsComponent(id) {
         if (canvasComponent) {
             canvasComponent.actions.destroyCanvasCells();

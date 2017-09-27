@@ -1,4 +1,11 @@
 <div class="component-bi-canvas-main">
     <header class="views-header clearfix {{editMode}}"></header>
-    <div class="cells-container client {{editMode}}"></div>
+    {{#if isViewEmpty}}
+        <div class="empty-view">
+            <img src="../../../../assets/images/framework/search-result-nothing.png" alt="">
+            <p>没有可用视图，请先点击右上角的编辑创建视图</p>
+        </div>
+    {{else}}
+        <div class="cells-container client {{editMode}}"></div>
+    {{/if}}
 </div>

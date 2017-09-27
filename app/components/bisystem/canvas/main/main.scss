@@ -77,6 +77,17 @@
             }
         }
     }
+    .empty-view {
+        position: absolute;
+        text-align: center;
+        height: 100%;
+        width:100%;
+        background: #ffffff;
+        z-index: 91;
+        p {
+            color:#666666;
+        }
+    }
 }
 
 

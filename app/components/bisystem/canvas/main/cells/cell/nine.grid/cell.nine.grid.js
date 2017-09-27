@@ -12,7 +12,7 @@ handlebars.registerHelper('enumerateyAxis', function(yAxis,index, options) {
 });
 
 handlebars.registerHelper('enumerateLegend', function(grids,index, options) {
-    let items = grids.join(',')
+    let items = grids.join(',');
     let arr = items.split(',');
     return arr[index]
 });
@@ -26,34 +26,12 @@ let config = {
         grids: [], // 九宫图数据
         legend: []
     },
-    actions: {
-        /**
-         * 主题颜色切换
-         */
-        themeChange(){
-            let theme = this.data.chart.theme;
-            if (theme == 'green'){
-                this.el.find('.grid li:last-child div').css('background','#f1c888');
-                this.el.find('.grid li div:last-child').css('background','#33b6ac');
-            }else if(theme == 'grayBlue'){
-                this.el.find('.grid li:last-child div').css('background','#5b95e8');
-                this.el.find('.grid li div:last-child').css('background','#646c9e');
-            }
-        }
-    },
+    actions: {},
     afterRender() {},
-    firstAfterRender() {
-        this.actions.themeChange();
-    }
-}
+    firstAfterRender() {}
+};
 
 export class CellNineGridComponent extends CellBaseComponent {
-    // constructor(cellChart) {
-    //     config.data.cellChart = cellChart ? cellChart : null;
-    //     config.actions.init(cellChart);
-    //     super(config);
-    // }
-
     constructor(data,event) {
         let cellChart = CellNineGridComponent.init(data);
         super(config,cellChart,event);
@@ -66,7 +44,7 @@ export class CellNineGridComponent extends CellBaseComponent {
    static init(cellChart) {
         if (cellChart['chart']['data']['rows'].length === 0) {
             return false;
-        };
+        }
         let nineType = parseInt(cellChart['chart']['type']);
         let grids = cellChart['chart']['data']['rows'][0];
         let types = [];
