@@ -1033,9 +1033,10 @@ let config = {
             console.log(this.data.flowId, );
             for( let d of this.data.prepareParmas["flow_data"] ){
                 if( d.selected == 1 ){
-                    this.data.addNewFlowId = d.flow_id;
+                    this.data.flowId = d.flow_id;
                 }
             }
+            console.log(this.data.flowId);
         },
         //请求新增表单统计数据
         getNewFormCountData: function () {
@@ -2867,7 +2868,7 @@ let config = {
                 console.log("+++++++++++++++++++++++++")
                 console.log("+++++++++++++++++++++++++")
                 console.log("+++++++++++++++++++++++++")
-                console.log(data.data.record_id)
+                console.log(data.data.flow_id);
                 let obj = {
                     table_id: this.data.tableId,
                     parent_table_id: this.data.parentTableId,
@@ -2882,9 +2883,8 @@ let config = {
                     in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                     form_id:this.data.formId,
-                    flow_id:this.data.flowId,
+                    flow_id:data.data.flowId || '',
                 };
-                console.log(obj);
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
                 this.actions.openSelfIframe( url,title );
@@ -2903,7 +2903,7 @@ let config = {
                     in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                     form_id:this.data.formId,
-                    flow_id:this.data.flowId,
+                    flow_id:data.data.flowId || '',
                 };
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '编辑'
@@ -3019,7 +3019,7 @@ let config = {
                 in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                 is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                 form_id:this.data.formId,
-                flow_id:this.data.flowId,
+                flow_id:data.data.flowId || '',
             };
             console.log(obj);
             if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){

@@ -19,10 +19,7 @@ import jsplumb from 'jsplumb';
 import {PMAPI, PMENUM} from '../../lib/postmsg';
 AddWf.showDom().then(function (component) {
     WorkFlowForm.showForm();
-    Mediator.subscribe("form:formAlreadyCreate",()=>{
-        component.hideLoading();
-    });
-    // setTimeout(()=>component.hideLoading(),1000)
+    setTimeout(()=>component.hideLoading(),1000)
 });
 
 let serchStr = location.search.slice(1);
@@ -41,10 +38,6 @@ if (obj.btnType === 'view'||obj.btnType ==="none") {
 //判断工作流是否处于在途状态或者在批量工作流中打开forn
 if(obj.in_process == 1 || obj.is_batch == 1){
     action = 1;
-}
-if(obj.in_process ==1){
-    $("#add-wf").find('.J_lc').hide();
-    $("#add-wf").find('#print').addClass('addPrint');
 }
 
 Mediator.publish('workflow:getKey', obj.key);
@@ -69,11 +62,7 @@ Mediator.publish('workflow:getKey', obj.key);
             isAddBuild: obj.isAddBuild,
             id: obj.id,
             key: obj.key,
-            in_process: obj.in_process,
-            is_batch: obj.is_batch,
-            action: action,
-            form_id:obj.form_id,
-            flow_id:obj.flow_id,
+            action: action
         });
         setTimeout(()=>{
             cache_old= FormEntrys.getFormValue(obj.table_id,true);
@@ -92,13 +81,7 @@ Mediator.subscribe('workflow:getflows', (res) => {
     }
     obj.flow_id = res.flow_id;
     obj.form_id = res.form_id;
-    console.log(obj.record_id);
-    console.log(111111111111111111111);
-    WorkFlow.createFlow({
-        flow_id: res.flow_id,
-        el: "#flow-node",
-        record_id:obj.record_id,
-    });
+    WorkFlow.createFlow({flow_id: res.flow_id, el: "#flow-node"});
     $('#place-form').html('');
     FormEntrys.createForm({
         el: $('#place-form'),
@@ -114,13 +97,9 @@ Mediator.subscribe('workflow:getflows', (res) => {
         parent_temp_id: obj.parent_temp_id,
         parent_record_id: obj.parent_record_id,
         real_id: obj.real_id,
-        record_id: obj.record_id,
-        in_process: obj.in_process,
         isAddBuild: obj.isAddBuild,
         id: obj.id,
         key: obj.key,
-        in_process: obj.in_process,
-        is_batch: obj.is_batch,
         action: action
     });
     setTimeout(()=>{
@@ -152,8 +131,8 @@ Mediator.subscribe('workflow:submit', (res) => {
             return workflowService.addUpdateTableData(postData);
         })().then(res => {
             if (res.success === 1) {
-                msgBox.showTips(`${res.error}`);
-                PMAPI.sendToRealParent({
+                msgBox.alert(`${res.error}`);
+                PMAPI.sendToParent({
                     type: PMENUM.close_dialog,
                     key: obj.key,
                     data: {
