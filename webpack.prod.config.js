@@ -189,6 +189,12 @@ module.exports = {
                 quality: '60'
             }
         }),
-        new OptimizeCssAssetsPlugin()
+        new OptimizeCssAssetsPlugin({
+
+            cssProcessorOptions: {
+                // 避免 cssnano 重新计算 z-index
+                safe: true
+            },
+        })
     ]
 }
