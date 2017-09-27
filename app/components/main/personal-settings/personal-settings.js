@@ -343,7 +343,7 @@ let config = {
         })
     },
     beforeDestory:function () {
-
+        // Mediator.removeAll("personal:setAvatar");
     }
 };
 

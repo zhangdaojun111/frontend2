@@ -94,7 +94,7 @@ let config = {
                 if( this.data.refreshOnTheWay ){
                     this.actions.getInProcessNum();
                     this.data.refreshOnTheWay = false;
-                    msgBox.showTips( '表：《' + this.data.tableName + '》在途数据失效。'  );
+                    // msgBox.showTips( '表：《' + this.data.tableName + '》在途数据失效。'  );
                     setTimeout( ()=>{
                         this.data.refreshOnTheWay = true;
                     },200 )

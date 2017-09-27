@@ -104,7 +104,6 @@ class Uploader {
         } else {
             delete this.fileList[name][code];
         }
-        console.dir(this.fileList);
     }
 
     /**
@@ -309,6 +308,10 @@ class Uploader {
                 }
             } else {
                 fileItem['state']='on';
+                this.settings['options']['error'](res.error);
+                if(!res.warning_msg){
+                    delete this.fileList[name][code];
+                }
             }
         });
 

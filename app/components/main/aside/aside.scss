@@ -18,7 +18,7 @@
                     //background-image: url("../../../assets/images/framework/default_avatar_32.png");
                 }
                 .default-avatar{
-                    background-image: url("../../../assets/images/framework/default_avatar_32.png");
+                    background-image: url("../../../assets/images/framework/default_avatar_40.png");
                 }
                 .u-name, .u-role {
                     display: none;
@@ -73,11 +73,11 @@
         }
 
         .wrap {
-            height: 42px;
+            height: 44px;
         }
 
         .s-uinfo {
-            padding: 12px 14px;
+            padding: 13px 14px;
             margin-top: 1px;
             background-color: $aside-top-bg;
             .avatar {
@@ -89,7 +89,7 @@
                 cursor: pointer;
                 margin-right: 10px;
                 background-color: #FFFFFF;
-                border: solid 1px #E4E4E4;
+                border: solid 2px #E4E4E4;
                 img {
                     display: block;
                     width: 100%;
@@ -97,7 +97,7 @@
                 }
             }
             .default-avatar{
-                background-image: url("../../../assets/images/framework/default_avatar_32.png");
+                background-image: url("../../../assets/images/framework/default_avatar_40.png");
             }
             .u-name, .u-role {
                 font-size: 12px;
@@ -117,7 +117,7 @@
                 width: 16px;
                 height: 16px;
                 margin-right: 10px;
-                margin-top: 13px;
+                margin-top: 14px;
                 cursor: pointer;
                 i{
                     width: 100%;

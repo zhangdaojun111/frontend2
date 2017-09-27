@@ -37,7 +37,7 @@ let config={
     afterRender(){
         let config={
             tableId:this.data.value,
-            parentTableId:this.data.tableId,
+            parentTableId:this.data.parent_table_id,
             parentTempId:this.data.temp_id,
             rowId:this.data.parent_temp_id || '',
             tableType:'child',

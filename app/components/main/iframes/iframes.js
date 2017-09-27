@@ -122,13 +122,13 @@ export const IframeInstance = new Component({
         sendOpenRequest:function (id) {
             if (id !== 'search-result'){
                 //向后台发送请求记录
-                TabService.onOpenTab(id).done((result) => {
-                    if(result.success === 1){
-                        // console.log("post open record success");
-                    }else{
-                        console.log("post open record failed")
-                    }
-                });
+                // TabService.onOpenTab(id).done((result) => {
+                //     if(result.success === 1){
+                //         // console.log("post open record success");
+                //     }else{
+                //         console.log("post open record failed")
+                //     }
+                // });
             }
         },
         /**
@@ -497,16 +497,6 @@ export const IframeInstance = new Component({
             }
         },
         /**
-         * 向子iframes发送信息
-         * @param info
-         */
-        sendMsgToIframes: function (info) {
-            PMAPI.sendToAllChildren({
-                type: PMENUM[info.typeName],
-                data: info
-            });
-        },
-        /**
          * 打开全局搜索界面或通过变更url更新全局搜索界面的内容
          * @param data
          */
@@ -661,7 +651,7 @@ export const IframeInstance = new Component({
             event:'mouseleave',
             selector:'.view-save-group',
             callback:function () {
-                // this.actions.hideSaveViewPage();       //鼠标离开延迟隐藏视图保存页面
+                this.actions.hideSaveViewPage();       //鼠标离开延迟隐藏视图保存页面
             }
         },
     ],
@@ -709,10 +699,10 @@ export const IframeInstance = new Component({
             }
         });
 
-        Mediator.on('socket:table_invalid', this.actions.sendMsgToIframes);
-        Mediator.on('socket:data_invalid', this.actions.sendMsgToIframes);
-        Mediator.on('socket:one_the_way_invalid', this.actions.sendMsgToIframes);
-        Mediator.on('socket:workflow_approve_msg', this.actions.sendMsgToIframes);
+        // Mediator.on('socket:table_invalid', this.actions.sendMsgToIframes);
+        // Mediator.on('socket:data_invalid', this.actions.sendMsgToIframes);
+        // Mediator.on('socket:one_the_way_invalid', this.actions.sendMsgToIframes);
+        // Mediator.on('socket:workflow_approve_msg', this.actions.sendMsgToIframes);
 
         Mediator.on('saveview:displayview', (data) => {
             this.actions.closeAllIframes();  //先关闭所有标签，再打开view中的标签

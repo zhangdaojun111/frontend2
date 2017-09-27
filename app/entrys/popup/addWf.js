@@ -40,6 +40,13 @@ if(obj.in_process == 1 || obj.is_batch == 1){
     action = 1;
 }
 
+
+if(obj.is_view == 1 && obj.in_process == 0){
+    $("#add-wf").find('.J_hide').addClass('hide');
+    $("#add-wf").find('#print').addClass('addPrint');
+}
+
+
 Mediator.publish('workflow:getKey', obj.key);
 (async function () {
     return workflowService.getPrepareParams({table_id: obj.table_id});
@@ -62,11 +69,7 @@ Mediator.publish('workflow:getKey', obj.key);
             isAddBuild: obj.isAddBuild,
             id: obj.id,
             key: obj.key,
-            in_process: obj.in_process,
-            is_batch: obj.is_batch,
-            action: action,
-            form_id:obj.form_id,
-            flow_id:obj.flow_id,
+            action: action
         });
         setTimeout(()=>{
             cache_old= FormEntrys.getFormValue(obj.table_id,true);
@@ -83,9 +86,22 @@ Mediator.subscribe('workflow:getflows', (res) => {
         $('#toEdit').hide();
         $('#addFollower').hide();
     }
-    obj.flow_id = res.flow_id;
-    obj.form_id = res.form_id;
-    WorkFlow.createFlow({flow_id: res.flow_id, el: "#flow-node"});
+    if(obj.in_process == 1){
+        WorkFlow.createFlow({
+            flow_id: obj.flow_id,
+            el: "#flow-node",
+            record_id:obj.record_id,
+        });
+        Mediator.publish("workflow:hideselect",obj.flow_id);
+    }else{
+        WorkFlow.createFlow({
+            flow_id: res.flow_id,
+            el: "#flow-node",
+            record_id:obj.record_id,
+        });
+        obj.flow_id = res.flow_id;
+        obj.form_id = res.form_id;
+    }
     $('#place-form').html('');
     FormEntrys.createForm({
         el: $('#place-form'),
@@ -101,11 +117,11 @@ Mediator.subscribe('workflow:getflows', (res) => {
         parent_temp_id: obj.parent_temp_id,
         parent_record_id: obj.parent_record_id,
         real_id: obj.real_id,
+        in_process: obj.in_process,
+        record_id: obj.record_id,
         isAddBuild: obj.isAddBuild,
         id: obj.id,
         key: obj.key,
-        in_process: obj.in_process,
-        is_batch: obj.is_batch,
         action: action
     });
     setTimeout(()=>{
@@ -137,8 +153,8 @@ Mediator.subscribe('workflow:submit', (res) => {
             return workflowService.addUpdateTableData(postData);
         })().then(res => {
             if (res.success === 1) {
-                msgBox.showTips(`${res.error}`);
-                PMAPI.sendToRealParent({
+                msgBox.alert(`${res.error}`);
+                PMAPI.sendToParent({
                     type: PMENUM.close_dialog,
                     key: obj.key,
                     data: {
@@ -153,5 +169,7 @@ Mediator.subscribe('workflow:submit', (res) => {
     }
 }),
 Mediator.subscribe('workflow:changeToEdit',(res)=>{
+    $("#add-wf").find('.J_hide').removeClass('hide');
+    $("#add-wf").find('#print').removeClass('addPrint');
     FormEntrys.changeToEdit(res);
 })

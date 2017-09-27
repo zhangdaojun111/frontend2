@@ -8,22 +8,33 @@ import {CreateForm} from "../components/form/createFormVersionTable/createForm"
 
 
 let FormEntrys = {
+    //存储所有创建的baseForm组件
     childForm: {},
+    //是否是系统表
     isloadCustomTableForm: false,
+    //是否加载工作流
     isloadWorkflow: false,
-    dataa:{},
+    //存储其它模块传来的数据
+    data: {},
+    //初始化配置数据
     init(config = {}) {
-        this.data={}
+        this.data = {}
+        //表名
         this.data.tableId = config.table_id || '';
+        //父表真实字段
         this.data.parentRealId = config.parent_real_id || '';
+        //父表临时字段
         this.data.parentTempId = config.parent_temp_id || '';
+        //数据id
         this.data.realId = config.real_id || '';
+        //父表表名
         this.data.parentTableId = config.parent_table_id || '';
         this.data.parentRecordId = config.parent_record_id || '';
-        this.data.isView = config.is_view || 0;//查看模式
+        //可编辑（0）or不可编辑（1）
+        this.data.isView = config.is_view || 0;
         this.data.isBatch = config.is_batch || 0;//是否是批量工作流
+        this.data.inProcess = config.in_process || 0;//是否是在途
         this.data.recordId = config.record_id || '';
-        this.data.action = config.action || '';//暂时
         this.data.el = config.el || '';//form的外层dom
         this.data.reloadDraftData = config.reload_draft_data || 0;//工作流接口用到
         this.data.formId = config.form_id || '';//表单ID
@@ -35,8 +46,8 @@ let FormEntrys = {
         this.data.isAddBuild = config.isAddBuild || 0;//是否是快捷添加内置
         this.data.buildId = config.id || '';//快捷添加的key
         this.data.btnType = config.btnType || 'new';//按钮
-        this.data.viewMode=config.viewMode || '0';//aggrid权限
-        this.data.inProcess=config.in_process || '0';//是否查询临时数据
+        this.data.viewMode = config.viewMode || '0';//aggrid权限
+        this.data.inProcess = config.in_process || '0';//是否查询临时数据
         console.log(config);
     }
     ,
@@ -92,7 +103,6 @@ let FormEntrys = {
                 from_workflow: this.data.fromWorkFlow,
                 table_id: this.data.tableId
             }
-
             this.data.isloadWorkflow = true;
         } else if (this.data.fromApprove && this.data.realId == '') {//审批流程
             json = {
@@ -103,12 +113,24 @@ let FormEntrys = {
                 from_focus: this.data.fromFocus,
                 table_id: this.data.tableId
             }
-
-
             this.data.isloadWorkflow = true;
         }
         else {
             json = this.pickJson();
+        }
+        if( this.data.inProcess == 1 ){
+            console.log( "__________________________" )
+            console.log( "__________________________" )
+            console.log( "__________________________" )
+            console.log( this.data.inProcess )
+            json = {
+                form_id: this.data.formId,
+                record_id: this.data.recordId,
+                is_view: this.data.isView,
+                from_approve: 1,
+                from_focus: 0,
+                table_id: this.data.tableId
+            }
         }
         return json;
     },
@@ -137,6 +159,7 @@ let FormEntrys = {
                 }
                 this.data.isloadCustomTableForm = true;
             } else {
+                //默认表单数据
                 json = {
                     form_id: "",
                     table_id: this.data.tableId,
@@ -147,15 +170,15 @@ let FormEntrys = {
                 }
             }
         }
-        //如果是临时表，传temp_id，否则是real_id
-        if (this.data.inProcess==1 || this.data.isBatch==1) {
-           json["temp_id"] = this.data.realId;
+        //如果是临时表(在途，批量工作流)，传temp_id，否则是real_id
+        if (this.data.inProcess == 1 || this.data.isBatch == 1) {
+            json["temp_id"] = this.data.realId;
         } else {
             json["real_id"] = this.data.realId;
         }
         return json;
     },
-    //merge static和dynamic数据
+    //merge static和dynamic数据,将dynamic中的动态数据 替换掉static中的静态数据，保证数据正确
     mergeFormData(staticData, dynamicData) {
         for (let dfield in dynamicData["data"]) {
             if (this.hasKeyInFormDataStatic(dfield, staticData)) {
@@ -178,17 +201,19 @@ let FormEntrys = {
         if (!this.data.formId || staticData['form_id'] == this.data.formId) {
             this.parseRes(staticData);
         }
+        //存储初始表单数据
         staticData.formData = staticData.data;
+        //转换存储格式，用dfield当做key来存储data
         for (let obj of staticData.data) {
             data[obj.dfield] = obj;
         }
         staticData.data = data;
         //将外部模块的值赋值给baseForm
-        _.defaultsDeep(staticData,this.data)
+        _.defaultsDeep(staticData, this.data)
         staticData.tableId = staticData['table_id'] || this.data.tableId;
         return staticData;
     },
-    //处理字段数据
+    //处理字段数据,换了个变量名
     parseRes(res) {
         if (res !== null) {
             let formData = res["data"];
@@ -250,6 +275,7 @@ let FormEntrys = {
             delete this.childForm[tableID];
         }
     },
+    //检查所要打开的表单类型
     async checkFormType(data, res) {
         //获取公司名称
         let company = data["company_name"];
@@ -299,7 +325,12 @@ let FormEntrys = {
                 try {
                     //加载个人制作的表单
                     console.log('加载个人制作表单');
-                    html = res[2]['data']['content'];
+                    if(res[2]['data']['content']){
+                        html = res[2]['data']['content'];
+                    }else{
+                        html = CreateForm.formDefaultVersion(res[0].data);
+                    }
+
                 } catch (e) {
                     console.error(`加载${ company }的个人制作的表单，form_id为：${ this.data.formId }的表单失败`);
                     console.error(e);
@@ -329,8 +360,6 @@ let FormEntrys = {
 
     changeToEdit(tableId) {
         this.childForm[tableId].data.isOtherChangeEdit = true;//如果是外部模块的转编辑模式
-       // this.childForm[tableId].data.inProcess = isTemp;//如果是外部模块的转编辑模式
-
         this.childForm[tableId].actions.changeToEdit();
     },
 
@@ -370,17 +399,16 @@ let FormEntrys = {
             res = await  FormService.getPrepareParmas({table_id: this.data.tableId});
             this.findFormIdAndFlowId(res);
         }
+        //创建请求
         let json = this.createPostJson();
-        res = await FormService.getFormData(json);
-        //将表单名称发送给工作流
-
-        Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
+        res = await FormService.getFormData(json);   //将表单名称发送给工作流
+		  Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
         console.timeEnd('获取表单数据的时间');
         console.time('form创建时间');
-        //处理数据
-            let data = this.mergeFormData(res[0], res[1]);
+        //处理static,dynamic数据
+        let data = this.mergeFormData(res[0], res[1]);
         //检查表单类型
-            let template = await this.checkFormType(data, res);
+        let template = await this.checkFormType(data, res);
         //发送审批记录
         Mediator.publish('workFlow:record_info', data);
         let formData = {
@@ -392,16 +420,25 @@ let FormEntrys = {
         let $newWrap = this.data.el.find('.form-print-position');
         formBase.render($newWrap);
         //通知父框架表单刷新完毕
+
         Mediator.publish('form:formAlreadyCreate', 'success');
+        Mediator.publish('form:formAlreadyCreate'+this.tableId, 'success');
         console.timeEnd('form创建时间');
+
+        //给工作流传表单初始数据
+        let valueChange = this.getFormValue(this.data.tableId, false)
+        Mediator.publish('workFlow:formValueChange', valueChange);
+
     },
 
     //审批删除时重置表单可编辑性
+    //暂时无用
     editDelWorkFlow(tableId, formId) {
         this.childForm[tableId].actions.editDelWork(formId);
     },
 
     //接收关注人信息
+    //暂时无用
     setUserIdList(tableId, data) {
         if (!this.childForm[tableId]) {
             return;
@@ -409,14 +446,14 @@ let FormEntrys = {
         this.childForm[tableId].data.focus_users = data;
     },
 
-    //获取表单数据
-    getFormValue(tableId,isCheck) {
+    //对外部模块提供获取表单数据接口
+    //@param tableId表名 isCheck是否需要baseform执行表单数据验证
+    getFormValue(tableId, isCheck) {
         if (!this.childForm[tableId]) {
             return;
         }
         return this.childForm[tableId].actions.getFormValue(isCheck);
+        debugger
     },
-
-
 }
 export default FormEntrys

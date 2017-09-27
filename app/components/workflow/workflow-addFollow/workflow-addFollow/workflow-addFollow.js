@@ -60,11 +60,13 @@ let config={
                 arr.push($(checked[i]).data('id'))
             }
             $.each(res,(i,val)=>{
-                val.id=i;
-                if(checked.length===0){
-                    this.append(new SelectStaff(val), this.el.find('#staffMulti'));
-                }else if(arr.indexOf(i)===-1){
-                    this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+                if(val){
+                    val.id=i;
+                    if(checked.length===0){
+                        this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+                    }else if(arr.indexOf(i)===-1){
+                        this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+                    }
                 }
             });
         });
@@ -119,7 +121,6 @@ let config={
         });
         //注册SelectedStaff组件
         Mediator.subscribe('workflow:pubCheck', (res)=> {
-            console.log(res);
             this.append(new SelectedStaff(res), this.el.find('#selected'));
             this.data.total++;
             this.action.addtotal(this.data.total);

@@ -310,6 +310,10 @@ function getLoginController() {
          */
         userLogin:function (username,password) {
             // console.log(username,password);
+            if(password === ''){
+                $(".warn-info").html('密码不能为空');
+                return;
+            }
             let data = {
                 username:username,
                 password:md5(password)
