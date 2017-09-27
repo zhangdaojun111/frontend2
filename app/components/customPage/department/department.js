@@ -279,6 +279,10 @@ let config = {
                 this.data.isShowCustomPanel = false;
                 this.actions.changeAgGridWidth(true);
             } )
+            //新窗口显示隐藏
+            if( this.data.isNewWindow ){
+                this.el.find( '.grid-new-window' )[0].style.display = 'none';
+            }
         },
         //定制列事件
         calcCustomColumn: function () {
