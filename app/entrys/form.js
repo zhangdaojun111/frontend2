@@ -403,8 +403,13 @@ let FormEntrys = {
         //创建请求
         let json = this.createPostJson();
         res = await FormService.getFormData(json);   //将表单名称发送给工作流
-
-        if(res[1]['error'] == '您没有数据查看权限') {
+        console.log("***********************************")
+        console.log(res)
+        console.log(res[1])
+        if(res[1]['error'] == '您没有数据查看权限' || res[1]['error'] == '您没有查看该条数据的权限'  ) {
+            debugger
+            this.el.append('<p style="font-size:20px">您没有数据查看权限</p>')
+            debugger
             return false;
         }
         Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
