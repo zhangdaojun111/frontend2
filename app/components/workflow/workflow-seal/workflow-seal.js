@@ -181,12 +181,11 @@ class WorkflowSeal extends Component{
 }
 export default {
     showheader(data){
-        let host = window.location.origin;
         let len = data.file_ids.length;
         let obj = new Array();
         for(let i=0;i<len;i++){
             let url = {};
-            url['url']= `${host}/download_attachment/?file_id=${data.file_ids[i]}&download=0`,
+            url['url']= `/download_attachment/?file_id=${data.file_ids[i]}&download=0`,
                 url["id"]=data.file_ids[i];
             obj.push(url);
         }
