@@ -156,9 +156,10 @@ let FormEntrys = {
             }
         }
         //如果是临时表(在途，批量工作流)，传temp_id，否则是real_id
-        if (this.data.inProcess == 1 || this.data.isBatch == 1) {
+        if (this.data.inProcess == 1 || this.data.isBatch == 1 ) {
             json["temp_id"] = this.data.realId;
-        } else {
+        }
+        else {
             json["real_id"] = this.data.realId;
         }
         return json;
@@ -197,6 +198,7 @@ let FormEntrys = {
         _.defaultsDeep(staticData, this.data)
         staticData.tableId = staticData['table_id'] || this.data.tableId;
         return staticData;
+
     },
     //处理字段数据,换了个变量名
     parseRes(res) {
@@ -433,7 +435,6 @@ let FormEntrys = {
             return;
         }
         return this.childForm[tableId].actions.getFormValue(isCheck);
-        debugger
     },
 }
 export default FormEntrys
