@@ -190,10 +190,11 @@ let config = {
             })
         },
         /**
-         * 停止监听键盘
+         * 停止监听键盘和鼠标移动
          */
         stopListenKeyboard:function(){
             this.el.off('keydown');
+            this.el.off('mousemove');
         },
         /**
          * 鼠标指向某条li，做样式处理和记录当前焦点
@@ -218,7 +219,10 @@ let config = {
             this.actions.selectItem(this.data.focusItem);
         },
         startListenMouseMove:function () {
-            this.data.mouseActive = true;
+            let that = this;
+            this.el.on('mousemove','.auto-select-component',function () {
+                that.data.mouseActive = true;
+            });
         },
         /**
          * 退出时重置组件
