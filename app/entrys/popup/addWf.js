@@ -43,7 +43,12 @@ if(obj.in_process == 1 || obj.is_batch == 1){
     action = 1;
 }
 if(obj.in_process ==1){
-    $("#add-wf").find('.J_lc').hide();
+    // $("#add-wf").find('.J_lc').hide();
+    // $("#add-wf").find('#print').addClass('addPrint');
+}
+
+if(obj.is_view == 1 && obj.in_process == 0){
+    $("#add-wf").find('.J_hide').addClass('hide');
     $("#add-wf").find('#print').addClass('addPrint');
 }
 
@@ -90,15 +95,22 @@ Mediator.subscribe('workflow:getflows', (res) => {
         $('#toEdit').hide();
         $('#addFollower').hide();
     }
-    obj.flow_id = res.flow_id;
-    obj.form_id = res.form_id;
-    console.log(obj.record_id);
-    console.log(111111111111111111111);
-    WorkFlow.createFlow({
-        flow_id: res.flow_id,
-        el: "#flow-node",
-        record_id:obj.record_id,
-    });
+    if(obj.in_process == 1){
+        WorkFlow.createFlow({
+            flow_id: obj.flow_id,
+            el: "#flow-node",
+            record_id:obj.record_id,
+        });
+        Mediator.publish("workflow:hideselect",obj.flow_id);
+    }else{
+        WorkFlow.createFlow({
+            flow_id: res.flow_id,
+            el: "#flow-node",
+            record_id:obj.record_id,
+        });
+        obj.flow_id = res.flow_id;
+        obj.form_id = res.form_id;
+    }
     $('#place-form').html('');
     FormEntrys.createForm({
         el: $('#place-form'),
@@ -166,5 +178,7 @@ Mediator.subscribe('workflow:submit', (res) => {
     }
 }),
 Mediator.subscribe('workflow:changeToEdit',(res)=>{
+    $("#add-wf").find('.J_hide').removeClass('hide');
+    $("#add-wf").find('#print').removeClass('addPrint');
     FormEntrys.changeToEdit(res);
 })

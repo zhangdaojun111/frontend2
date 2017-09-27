@@ -74,6 +74,16 @@ let config={
             this.data.workflowData=msg.data[0];
             WorkFlow.show(msg.data[0],'#drawflow');
         });
+        Mediator.subscribe('workflow:hideselect',(res)=>{
+            let sel = this.el.find('#wf-select option');
+            let sellen = sel.length;
+            for(let i=0;i<sellen;i++){
+                if($(sel[i]).attr('data-flow_id') == res){
+                    $(sel[i]).attr("selected",true);
+                    this.el.find('#wf-select').attr('disabled','disabled');
+                }
+            }
+        })
         Mediator.subscribe('workflow:getParams', (res)=> {
             let htmlStr=``;
             for(let i in res){
