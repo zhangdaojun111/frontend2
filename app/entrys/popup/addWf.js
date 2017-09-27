@@ -118,6 +118,7 @@ Mediator.subscribe('workflow:getflows', (res) => {
         parent_record_id: obj.parent_record_id,
         real_id: obj.real_id,
         in_process: obj.in_process,
+        record_id: obj.record_id,
         isAddBuild: obj.isAddBuild,
         id: obj.id,
         key: obj.key,
