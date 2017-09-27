@@ -1125,6 +1125,7 @@ let config = {
                 }
             }
             if (this.data.isOtherChangeEdit) {
+
                 this.data.btnType = 'none';
             } else {
                 this.data.btnType = 'new';

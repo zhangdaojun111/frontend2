@@ -293,7 +293,6 @@ let FormEntrys = {
         let sys_type = data["sys_type"];
         //审批中的提示信息
         let record_tip = data["record_tip"];
-
         let html = '';
         //加载表单
         if (companyCustomTableFormExists) {
@@ -404,7 +403,11 @@ let FormEntrys = {
         //创建请求
         let json = this.createPostJson();
         res = await FormService.getFormData(json);   //将表单名称发送给工作流
-		  Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
+        
+        if(res[1]['error'] == '您没有数据查看权限') {
+            return false;
+        }
+        Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
         console.timeEnd('获取表单数据的时间');
         console.time('form创建时间');
         //处理static,dynamic数据
@@ -421,16 +424,15 @@ let FormEntrys = {
         this.childForm[this.data.tableId] = formBase;
         let $newWrap = this.data.el.find('.form-print-position');
         formBase.render($newWrap);
+
         //通知父框架表单刷新完毕
 
         Mediator.publish('form:formAlreadyCreate', 'success');
         Mediator.publish('form:formAlreadyCreate'+this.tableId, 'success');
         console.timeEnd('form创建时间');
-
         //给工作流传表单初始数据
         let valueChange = this.getFormValue(this.data.tableId, false)
         Mediator.publish('workFlow:formValueChange', valueChange);
-
     },
 
     //审批删除时重置表单可编辑性
