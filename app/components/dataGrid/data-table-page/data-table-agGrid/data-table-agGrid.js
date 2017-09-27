@@ -981,7 +981,7 @@ let config = {
             this.data.namespace = res[1].namespace;
             this.data.headerColor = dgcService.createHeaderStyle( this.data.tableId,res[1].field_color );
             //获取表的表单工作流参数
-            // this.actions.setPrepareParmas( res[4] );
+            this.actions.setPrepareParmas( res[4] );
             //初始化按钮
             this.actions.renderBtn();
             //创建高级查询需要字段数据
@@ -2893,8 +2893,11 @@ let config = {
                     in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                     form_id:this.data.formId,
-                    flow_id:data.data.flowId || '',
+                    flow_id:data.data.flow_id || '',
                 };
+                console.log(data);
+                console.log("+++++++++++++++++++++++++++++++");
+                console.log(obj);
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
                 this.actions.openSelfIframe( url,title );
@@ -2913,7 +2916,7 @@ let config = {
                     in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                     form_id:this.data.formId,
-                    flow_id:data.data.flowId || '',
+                    flow_id:data.data.flow_id || '',
                 };
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '编辑'
@@ -3025,7 +3028,7 @@ let config = {
                 in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                 is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                 form_id:this.data.formId,
-                flow_id:data.data.flowId || '',
+                flow_id:data.data.flow_id || '',
             };
             console.log(obj);
             if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
