@@ -42,6 +42,10 @@ if (obj.btnType === 'view'||obj.btnType ==="none") {
 if(obj.in_process == 1 || obj.is_batch == 1){
     action = 1;
 }
+if(obj.in_process ==1){
+    $("#add-wf").find('.J_lc').hide();
+    $("#add-wf").find('#print').addClass('addPrint');
+}
 
 Mediator.publish('workflow:getKey', obj.key);
 (async function () {
@@ -88,7 +92,13 @@ Mediator.subscribe('workflow:getflows', (res) => {
     }
     obj.flow_id = res.flow_id;
     obj.form_id = res.form_id;
-    WorkFlow.createFlow({flow_id: res.flow_id, el: "#flow-node"});
+    console.log(obj.record_id);
+    console.log(111111111111111111111);
+    WorkFlow.createFlow({
+        flow_id: res.flow_id,
+        el: "#flow-node",
+        record_id:obj.record_id,
+    });
     $('#place-form').html('');
     FormEntrys.createForm({
         el: $('#place-form'),
@@ -104,6 +114,8 @@ Mediator.subscribe('workflow:getflows', (res) => {
         parent_temp_id: obj.parent_temp_id,
         parent_record_id: obj.parent_record_id,
         real_id: obj.real_id,
+        record_id: obj.record_id,
+        in_process: obj.in_process,
         isAddBuild: obj.isAddBuild,
         id: obj.id,
         key: obj.key,
