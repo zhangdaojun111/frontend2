@@ -71,12 +71,12 @@ let config = {
             let viewTop = top;
             let top1 = top+"%";
             let left1 = left+"%";
-            let host = "http://"+window.location.host;
+
             let html = `<div class='imgseal noprint'  data-width=${width} data-viewLeft=${viewLeft} data-viewTop=${viewTop} data-imgid=${id} style='top:${top1};left:${left1}'>
-                            <img  width=${width} style="max-height:150px" src='${host}/download_attachment/?file_id=${id}&download=0'/>
+                            <img  width=${width} style="max-height:150px" src='/download_attachment/?file_id=${id}&download=0'/>
                                 <i class='J_del'>X</i>
                          </div>`;
-            html += `<img class="printS printimg" style="top:${top1};left:${left1};max-height: 150px" width=${width} src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
+            html += `<img class="printS printimg" style="top:${top1};left:${left1};max-height: 150px" width=${width} src='/download_attachment/?file_id=${id}&download=0'/>`;
             $('#place-form').find(".form-print-position").append(html);
         },
         /**
