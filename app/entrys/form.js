@@ -33,6 +33,7 @@ let FormEntrys = {
         //可编辑（0）or不可编辑（1）
         this.data.isView = config.is_view || 0;
         this.data.isBatch = config.is_batch || 0;//是否是批量工作流
+        this.data.inProcess = config.in_process || 0;//是否是在途
         this.data.recordId = config.record_id || '';
         this.data.el = config.el || '';//form的外层dom
         this.data.reloadDraftData = config.reload_draft_data || 0;//工作流接口用到
@@ -116,6 +117,20 @@ let FormEntrys = {
         }
         else {
             json = this.pickJson();
+        }
+        if( this.data.inProcess == 1 ){
+            console.log( "__________________________" )
+            console.log( "__________________________" )
+            console.log( "__________________________" )
+            console.log( this.data.inProcess )
+            json = {
+                form_id: this.data.formId,
+                record_id: this.data.recordId,
+                is_view: this.data.isView,
+                from_approve: 1,
+                from_focus: 0,
+                table_id: this.data.tableId
+            }
         }
         return json;
     },

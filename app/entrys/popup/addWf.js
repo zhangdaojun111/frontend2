@@ -19,10 +19,7 @@ import jsplumb from 'jsplumb';
 import {PMAPI, PMENUM} from '../../lib/postmsg';
 AddWf.showDom().then(function (component) {
     WorkFlowForm.showForm();
-    Mediator.subscribe("form:formAlreadyCreate",()=>{
-        component.hideLoading();
-    });
-    // setTimeout(()=>component.hideLoading(),1000)
+    setTimeout(()=>component.hideLoading(),1000)
 });
 
 let serchStr = location.search.slice(1);
@@ -42,15 +39,13 @@ if (obj.btnType === 'view'||obj.btnType ==="none") {
 if(obj.in_process == 1 || obj.is_batch == 1){
     action = 1;
 }
-if(obj.in_process ==1){
-    // $("#add-wf").find('.J_lc').hide();
-    // $("#add-wf").find('#print').addClass('addPrint');
-}
+
 
 if(obj.is_view == 1 && obj.in_process == 0){
     $("#add-wf").find('.J_hide').addClass('hide');
     $("#add-wf").find('#print').addClass('addPrint');
 }
+
 
 Mediator.publish('workflow:getKey', obj.key);
 (async function () {
@@ -74,11 +69,7 @@ Mediator.publish('workflow:getKey', obj.key);
             isAddBuild: obj.isAddBuild,
             id: obj.id,
             key: obj.key,
-            in_process: obj.in_process,
-            is_batch: obj.is_batch,
-            action: action,
-            form_id:obj.form_id,
-            flow_id:obj.flow_id,
+            action: action
         });
         setTimeout(()=>{
             cache_old= FormEntrys.getFormValue(obj.table_id,true);
@@ -129,8 +120,6 @@ Mediator.subscribe('workflow:getflows', (res) => {
         isAddBuild: obj.isAddBuild,
         id: obj.id,
         key: obj.key,
-        in_process: obj.in_process,
-        is_batch: obj.is_batch,
         action: action
     });
     setTimeout(()=>{
@@ -162,8 +151,8 @@ Mediator.subscribe('workflow:submit', (res) => {
             return workflowService.addUpdateTableData(postData);
         })().then(res => {
             if (res.success === 1) {
-                msgBox.showTips(`${res.error}`);
-                PMAPI.sendToRealParent({
+                msgBox.alert(`${res.error}`);
+                PMAPI.sendToParent({
                     type: PMENUM.close_dialog,
                     key: obj.key,
                     data: {
