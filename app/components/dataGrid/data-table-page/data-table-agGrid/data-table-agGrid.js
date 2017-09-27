@@ -1028,11 +1028,13 @@ let config = {
             this.data.customOperateList = this.data.prepareParmas["operation_data"] || [];
             this.data.rowOperation = this.data.prepareParmas['row_operation'] || [];
             try{this.data.flowId = res["data"]["flow_data"][0]["flow_id"] || "";}catch(e){}
+            console.log(this.data.flowId, );
             for( let d of this.data.prepareParmas["flow_data"] ){
                 if( d.selected == 1 ){
                     this.data.flowId = d.flow_id;
                 }
             }
+            console.log(this.data.flowId);
         },
         //请求新增表单统计数据
         getNewFormCountData: function () {
@@ -2852,6 +2854,9 @@ let config = {
             console.log( data )
             console.log( this.data.namespace )
             if( data.event.srcElement.className == 'gridView' ){
+                if(this.data.viewMode == 'in_process' || data["data"]["status"] === 2) {
+                    msgBox.alert("数据正在审批，无法操作");
+                }
                 this.actions.viewOrEditPerm( 'view' );
                 console.log( '查看' )
                 let btnType = 'view';
