@@ -210,7 +210,9 @@ let config = {
         //二维表项目名称
         project: '',
         //二维表改变的值
-        cellChangeValue: {}
+        cellChangeValue: {},
+
+        addNewFlowId: ''
     },
     //生成的表头数据
     columnDefs: [],
@@ -1031,10 +1033,9 @@ let config = {
             console.log(this.data.flowId, );
             for( let d of this.data.prepareParmas["flow_data"] ){
                 if( d.selected == 1 ){
-                    this.data.flowId = d.flow_id;
+                    this.data.addNewFlowId = d.flow_id;
                 }
             }
-            console.log(this.data.flowId);
         },
         //请求新增表单统计数据
         getNewFormCountData: function () {
@@ -1887,7 +1888,7 @@ let config = {
                         parent_record_id: this.data.parentRecordId,
                         btnType: 'new',
                         form_id:this.data.formId,
-                        flow_id:this.data.flowId,
+                        flow_id:this.data.addNewFlowId,
                     };
                     let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
 
