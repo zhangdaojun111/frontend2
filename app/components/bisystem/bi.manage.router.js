@@ -46,6 +46,7 @@ const BiAppRouter = Backbone.Router.extend({
             };
         }
     },
+
     routes: {
         'views/edit':"routerViewsEditComponent",
         'canvas/:id':'routerViewsComponent',
