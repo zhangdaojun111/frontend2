@@ -30,6 +30,9 @@
         text-align: center;
         height: 100%;
         float: left;
+        i {
+            vertical-align: middle;
+        }
     }
     input[type='file'] {
         display: none;
