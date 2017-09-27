@@ -67,7 +67,7 @@ let config = {
                 btnType: 'none'
             })
             if(!r2){
-                _this.el.find('.ui-section').append('<p style="font-size:20px">您没有查看权限</p>')
+                _this.el.find('.ui-section').append('<p style="font-size:20px">您没有数据查看权限</p>')
             }
         })
         //搜索结果过滤
