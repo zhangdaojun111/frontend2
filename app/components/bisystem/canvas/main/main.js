@@ -15,6 +15,7 @@ let config = {
         headerComponents: {},
         editMode: window.config.bi_user === 'manager' ? window.config.bi_user : false,
         singleMode: window.location.href.indexOf('single') !== -1,
+        isViewEmpty: false,
     },
     binds: [
         // 编辑模式
@@ -65,14 +66,17 @@ let config = {
          */
         switchViewId: function (viewId) {
             // 如果router没有传viewId 则默认用bi_views第一个
-            this.currentViewId = viewId ? viewId.toString() : window.config.bi_views[0].id;
-            if (!this.data.singleMode) {
-                this.data.headerComponents.data.menus[this.currentViewId].actions.focus();
-            }
-            this.data.cells = new CanvasCellsComponent(this.currentViewId);
-            this.data.cells.render(this.el.find('.cells-container'));
+            this.data.currentViewId = viewId ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
+            if (this.data.currentViewId) {
+                if (!this.data.singleMode) {
+                    this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
+                }
+                this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
+                this.data.cells.render(this.el.find('.cells-container'));
 
-            this.data.headerComponents.actions.canSaveViews(this.currentViewId);
+                this.data.headerComponents.actions.canSaveViews(this.data.currentViewId);
+            };
+
         },
 
         /**
@@ -112,6 +116,7 @@ let config = {
 
 export class CanvasMain extends Component {
     constructor(data, events) {
+        config.data.isViewEmpty = window.config.bi_views[0] ? false : true;
         super(config, data, events);
     }
 }
