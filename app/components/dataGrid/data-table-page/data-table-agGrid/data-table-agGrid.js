@@ -1004,6 +1004,11 @@ let config = {
             //第一次加载隐藏默认列
             if( res[0].is_report == 0 && res[0].ignoreFields.ignoreFields == null && this.data.haveSystemsFields ){
                 this.data.ignoreFields = ['f1','f2','f3','f4'];
+                dataTableService.savePreference({
+                    action: 'ignoreFields',
+                    table_id: this.data.tableId,
+                    ignoreFields: JSON.stringify( this.data.ignoreFields  )
+                });
             }
             //创建sheet分页
             this.actions.createSheetTabs( res[2] )
