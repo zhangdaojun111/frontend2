@@ -69,12 +69,15 @@ let config = {
         rendSearchItem: function(){
             this.data.searchInputAry = [];
             let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
-            this.append(epCondition, this.el.find('.condition-search-container'));
+            let dom = document.createElement('div');
+            dom.className = 'condition-search-choice';
+            this.append(epCondition, $(dom));
+            $(dom).appendTo(this.el.find('.condition-search-container'));
+            // this.append(epCondition, this.el.find('.condition-search-container'));
             this.data.searchInputAry.push(epCondition.data);
             this.el.find('.condition-search-item').css({'paddingLeft':'83px','borderTop':'1px solid #e4e4e4'});
             this.el.find('.condition-search-select.radio').css('display','none');
             this.el.find('.condition-search-delete').css('visibility','hidden');
-            this.el.find('.condition-search-add').css('display','inline-block');
             this.el.find('.left-choice').addClass('active');
             this.el.find('.right-choice').addClass('active');
         },
@@ -438,12 +441,14 @@ let config = {
             this.itemDeleteChecked = false;
             this.isEdit = false;
             let _this = this;
-            this.el.on('click','.condition-search-add',()=> {
+            this.el.on('click','.condition-search-add',function() {
                 // this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
-                let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
-                this.append(epCondition, this.el.find('.condition-search-container'));
-                this.data.searchInputAry.push(epCondition.data);
-                // this.actions.showAddBtn();
+                let epCondition = new expertCondition({expertItemData:_this.data.fieldsData});
+                let Dom = document.createElement('div');
+                Dom.className = 'condition-search-choice';
+                _this.append(epCondition, $(Dom));
+                $(this).parent().parent().parent('.condition-search-choice').after($(Dom));
+                // _this.data.searchInputAry.push(epCondition.data);
             }).on('click','.condition-search-choice.left-choice',function(){
                 if($(this).hasClass('active')) {
                     $(this).removeClass('active');
