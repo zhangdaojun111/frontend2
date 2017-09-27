@@ -20,7 +20,9 @@ let config = {
         newHash:[],                 //按配置打开iframes
     },
     actions:{
-        //获取用户保存的视图（tabs组合）数据
+        /**
+         * 获取用户保存的视图（tabs组合）数据
+         */
         getUserViewList:function () {
             let that = this;
             TabService.getFavoriteList().done((result) => {
@@ -38,7 +40,9 @@ let config = {
                 that.actions.initList();
             })
         },
-        //根据当前视图数据渲染视图列表
+        /**
+         * 根据当前视图数据渲染视图列表
+         */
         initList:function () {
             let $parent = this.el.find('.save-view-list');
             $parent.find('.list-item').remove();
@@ -54,8 +58,11 @@ let config = {
                 $parent.append($container);
             }
         },
-        //将当前打开的标签组合保存为视图（不保存bi和日历）
-        saveFavorite:function () {
+        /**
+         * 将当前打开的标签组合保存为视图（不保存bi和日历）
+         * @returns {Promise.<void>}
+         */
+        saveFavorite:async function () {
             //过滤List中的bi和日历
             _.remove(this.data.currentIframesList,function (n) {
                 return (n === "bi" || n === 'calendar');
@@ -85,19 +92,19 @@ let config = {
             favorlist['name'] = name;
             favorlist['list'] = JSON.stringify(list);
             favorlist['query_type'] = 'save';
-            //检查name是否已存在，存在则先删除该条记录，保证新加记录在最前面
-            for(let k of this.data.favoriteList){
-                if(k.name === name){
-                    this.actions.deleteViewByName(name);
-                    break;
-                }
+
+            //为保证重名覆盖的视图在列表最上方，先删除已存在视图，重新保存
+            let temp = this.data.favoriteList.find(function (n) {
+                return n.name === name;
+            });
+
+            if(temp){
+                await this.actions.deleteViewByName(name);
             }
 
             let that = this;
             TabService.saveFavoriteItem(favorlist).done((result) => {
-                console.log(result);
                 if(result.success === 1){
-                    // msgbox.alert("保存成功");
                     msgbox.showTips("保存成功");
                     _.remove(that.data.favoriteList,function (n) {
                         return n.name === name;
@@ -107,7 +114,10 @@ let config = {
                 }
             })
         },
-        //点击某个视图后展示该视图包含的tabs
+        /**
+         * 点击某个视图后展示该视图包含的tabs
+         * @param event
+         */
         displayView:function (event) {
             if(event.target.className.includes('delete-icon')){
                 this.actions.deleteView(event);
@@ -154,7 +164,11 @@ let config = {
                 Mediator.emit('saveview:displayview',this.data.newHash);
             }
         },
-        //根据id查找tabs的url和name
+        /**
+         * 根据id查找tabs的url和name
+         * @param nodes
+         * @param targetList
+         */
         findTabInfo:function (nodes,targetList) {
             for( let i=0; i < nodes.length; i++){
                 if(targetList.includes(nodes[i].ts_name ) || targetList.includes(nodes[i].table_id )){
@@ -179,7 +193,10 @@ let config = {
                 }
             }
         },
-        //根据点击事件删除视图
+        /**
+         * 根据点击事件删除视图
+         * @param event
+         */
         deleteView:function (event) {
             let name = event.currentTarget.attributes.view_id.value;
             let favorlist = {};
@@ -196,39 +213,55 @@ let config = {
                 }
             })
         },
-        //用于删除重复名字的视图
-        deleteViewByName:function(name){
+        /**
+         * 用于删除重复名字的视图
+         * @param name
+         */
+         deleteViewByName:function(name){
             let favorlist = {};
             favorlist['name'] = name;
             favorlist['query_type'] = 'delete';
-
+            let res;
+            let promise = new Promise((resolve, reject) => {
+                res = resolve;
+            });
             TabService.deleteFavoriteItem(favorlist).done((result) => {
                 if(result.success === 1){
                     _.remove(this.data.favoriteList,function (n) {
                         return n.name === name;
                     });
+                    res(true);
                 }
-            })
+            });
+            return promise;
         },
-        //进入编辑模式
+        /**
+         * 进入编辑模式
+         */
         showEditModal:function () {
             this.el.find('.normal-modal').hide();
             this.el.find('.edit-modal').show();
             this.el.find('.delete-icon').show();
         },
-        //进入正常模式
+        /**
+         * 进入正常模式
+         */
         showNormalModal:function () {
             this.el.find('.normal-modal').show();
             this.el.find('.edit-modal').hide();
             this.el.find('.delete-icon').hide();
             this.el.find('.save-view-name').val('');
         },
-        //点击三角按钮关闭保存视图界面
+        /**
+         * 点击三角按钮关闭保存视图界面
+         */
         closeSaveViewImmediately:function () {
             this.actions.resetComponent();
             this.actions.closeSaveView();
         },
-        //清空input，切换为正常模式
+        /**
+         * 清空input，切换为正常模式
+         */
         resetComponent:function () {
             this.el.find('.save-view-name').val('');
             this.actions.showNormalModal();
@@ -240,7 +273,7 @@ let config = {
             selector:'.save-view-btn',
             callback: _.debounce( function () {
                 this.actions.saveFavorite();
-            },150)
+            },500)
         },
         {
             event:'click',

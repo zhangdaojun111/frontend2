@@ -25,19 +25,9 @@ let config = {
                     modal: true,
                     customSize: true,
                 });
-            // viewDialogConfig.data.view = this.data;
-            // const res = PMAPI.openDialogByComponent(viewDialogConfig,{
-            //     width: 348,
-            //     height: 217,
-            //     title: '编辑视图'
-            // });
-            // if (res['name']) {
-            // }
-            // return false;
         }
     },
     events: {
-        // onChange:function(){},
     },
     binds: [
         {

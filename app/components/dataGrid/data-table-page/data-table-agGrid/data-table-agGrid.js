@@ -13,6 +13,7 @@ import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import msgBox from '../../../../lib/msgbox';
 import agGrid from "../../agGrid/agGrid";
 import {dataTableService} from "../../../../services/dataGrid/data-table.service";
+import {TabService} from "../../../../services/main/tabService"
 import {workflowService} from "../../../../services/workflow/workflow.service";
 import {FormService} from "../../../../services/formService/formService";
 import {dgcService} from "../../../../services/dataGrid/data-table-control.service";
@@ -149,6 +150,8 @@ let config = {
         inProcessFooter: false,
         //是否有分页
         pagination: false,
+        //对应关系首次加载
+        fristGetCorrespondence:true,
         //对应关系增加的数据
         correspondenceAddList: [],
         //对应关系减少的数据
@@ -192,6 +195,8 @@ let config = {
         //显示tabs
         showTabs:function (opacity) {
         },
+        //是否为新窗口打开
+        isNewWindow: false,
         //左侧提示
         gridTips: '',
         //是否为双击
@@ -205,7 +210,7 @@ let config = {
         //二维表项目名称
         project: '',
         //二维表改变的值
-        cellChangeValue: {},
+        cellChangeValue: {}
     },
     //生成的表头数据
     columnDefs: [],
@@ -779,7 +784,7 @@ let config = {
                                 dataTableService.getPreferences( obj ).then( res=>{
                                     dgcService.setPreference( res,this.data );
                                     //初始化偏好隐藏系统默认列
-                                    if( res.ignoreFields == null && this.data.haveSystemsFields ){
+                                    if( res.is_report == 0 && res.ignoreFields.ignoreFields == null && this.data.haveSystemsFields ){
                                         this.data.ignoreFields = ['f1','f2','f3','f4'];
                                     }
                                     //创建表头
@@ -910,12 +915,16 @@ let config = {
         renderBtn: function () {
             let btnGroup = dgcService.gridBtn( this.data.viewMode );
             let btns = this.el.find( '.dataGrid-btn-group' )[0].querySelectorAll('a');
-            let html = ''
+            let html = '';
             for( let btn of btns ){
                 let name = btn.className;
                 if( btnGroup.indexOf( name )!=-1 && ( this.data.permission[dgcService.permission2btn[name]] || dgcService.permission2btn[name] == 'especial' ) ){
                     //工作流表无编辑模式
                     if( name == 'edit-btn' && this.data.flowId != '' ){
+                        continue;
+                    }
+                    //新窗口
+                    if( name == 'grid-new-window' && this.data.isNewWindow ){
                         continue;
                     }
                     html+=btn.outerHTML;
@@ -993,7 +1002,7 @@ let config = {
             this.agGrid.actions.setGridData(d);
 
             //第一次加载隐藏默认列
-            if( res[0].ignoreFields == null && this.data.haveSystemsFields ){
+            if( res[0].is_report == 0 && res[0].ignoreFields.ignoreFields == null && this.data.haveSystemsFields ){
                 this.data.ignoreFields = ['f1','f2','f3','f4'];
             }
             //创建sheet分页
@@ -1110,6 +1119,7 @@ let config = {
                 this.actions.sortWay();
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
+                    this.el.find( '.icon-aggrid-refresh' ).removeClass('refresh-rotate');
                 }
             })
             HTTP.flush();
@@ -1138,7 +1148,14 @@ let config = {
                 post_arr.push( footer )
             }
             Promise.all(post_arr).then((res)=> {
-                this.actions.setGridData( res );
+                let time = this.data.firstRender ? 100 : 0;
+                setTimeout( ()=>{
+                    this.actions.setGridData( res );
+                    if(this.data.fristGetCorrespondence && this.data.viewMode == 'viewFromCorrespondence'){
+                        this.actions.checkCorrespondence();
+                        this.data.fristGetCorrespondence = false;
+                    }
+                },time )
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
                 }
@@ -1430,15 +1447,23 @@ let config = {
             }
             if( this.data.filterParam['common_filter_id'] ){
                 json['filter'] = json['filter'] || [];
-                for( let a of this.data.filterParam.expertFilter ){
-                    json['filter'].push( a );
+                //这个顺序要保证是先高级查询，再搜索的
+                let len = this.data.filterParam.expertFilter.length - 1;
+                for(let i = len; i>=0; i--){
+                    json['filter'].unshift(this.data.filterParam.expertFilter[i]);
                 }
+                // for( let a of this.data.filterParam.expertFilter ){
+                //     json['filter'].push( a );
+                // }
                 if( this.data.filterParam['common_filter_id'] != '临时高级查询' ){
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
                 if( this.data.filterParam.filter.length == 0 && this.data.filterParam.fastFilter.length == 0 ){
-                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span>加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;</div>`;
+                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span><span class="title">加载常用查询&lt;<span class="text">${this.data.filterParam['common_filter_name']}</span>&gt;</span></div>`;
                     this.el.find('.btn-nav-con').append(dom);
+                    setTimeout(()=>{
+                        this.el.find('.query-tips').css('display','none');
+                    },5000)
                     this.el.find('.query-tips-delete').on('click', ()=> {
                         this.el.find('.query-tips').css('display','none');
                     })
@@ -1568,6 +1593,10 @@ let config = {
             if( this.data.viewMode != 'normal' ){
                 this.data.showTabs(1);
                 try{this.hideLoading()}catch(e){}
+            }
+            //新窗口右边提示
+            if( this.data.gridTips ){
+                this.el.find( '.grid-tips' )[0].style.display = 'flex';
             }
         },
         //触发导出
@@ -1839,7 +1868,8 @@ let config = {
                     fieldId: this.data.fieldId,
                     source_field_dfield: this.data.source_field_dfield,
                     base_buildin_dfield: this.data.base_buildin_dfield,
-                    gridTips: this.data.gridTips
+                    gridTips: this.data.gridTips,
+                    isNewWindow: true
                 }
                 let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', url_obj);
                 this.el.find('.grid-new-window')[0].href = url;
@@ -1853,18 +1883,21 @@ let config = {
                         parent_real_id: this.data.parentRealId,
                         parent_temp_id: this.data.parentTempId,
                         parent_record_id: this.data.parentRecordId,
-                        btnType: 'new'
+                        btnType: 'new',
+                        form_id:this.data.formId,
+                        flow_id:this.data.flowId,
                     };
                     let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
 
-                    let title = '新增'
+                    let title = '新增';
                     this.actions.openSelfIframe( url,title );
                 } )
             }
             //在途刷新
             if( this.el.find( '.refresh-btn' )[0] ){
                 this.el.find( '.refresh-btn' ).on( 'click',()=>{
-                    this.actions.getInprocessData();
+                    this.el.find( '.icon-aggrid-refresh' ).addClass('refresh-rotate');
+                    this.actions.getInprocessData(true);
                 } )
             }
             //对应关系保存
@@ -2158,6 +2191,7 @@ let config = {
                     if(res.type == 'temporaryQuery') {
                         if(res.addNameAry.length == 0){
                             // this.actions.getExpertSearchData(res.addNameAry);
+                            debugger
                             this.actions.postExpertSearch(res.value,res.id,res.name);
                         }
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);
@@ -2184,6 +2218,7 @@ let config = {
             this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
                 if($(this).val() == '常用查询') {
                     _this.actions.postExpertSearch([],'');
+                    _this.el.find('.query-tips').css('display','none');
                 } else if($(this).val() == '临时高级查询') {
                     _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
                 } else {
@@ -2242,6 +2277,10 @@ let config = {
                         }
                         this.data.batchIdList = arr;
                         this.actions.returnBatchData( this.data.batchIdList );
+                    }
+                    //表单的子表操作重新请求数据
+                    if( this.data.viewMode == 'EditChild' ){
+                        this.actions.getGridData( true );
                     }
                 }else {
                     if( res.queryParams ){
@@ -2528,7 +2567,7 @@ let config = {
             this.col_id=data.data._id;
             this.colDef=arr;
             //行选择
-            if(data.colDef.headerName != "操作"){
+            if(data.colDef.headerName != "操作" && !this.data.editMode){
                 dgcService.rowClickSelect( data )
             }
 
@@ -2836,6 +2875,8 @@ let config = {
                     is_view:1,
                     in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
+                    form_id:this.data.formId,
+                    flow_id:this.data.flowId,
                 };
                 console.log(obj);
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
@@ -2855,6 +2896,8 @@ let config = {
                     btnType: 'edit',
                     in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
+                    form_id:this.data.formId,
+                    flow_id:this.data.flowId,
                 };
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '编辑'
@@ -2969,6 +3012,8 @@ let config = {
                 is_view:1,
                 in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                 is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
+                form_id:this.data.formId,
+                flow_id:this.data.flowId,
             };
             console.log(obj);
             if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
@@ -3017,7 +3062,10 @@ let config = {
                     defaultMax: true,
                     // customSize: true
             } ).then( (data)=>{
-
+                this.actions.setInvalid();
+                if( this.data.viewMode == 'EditChild' && data == 'success' ){
+                    this.actions.getGridData( true );
+                }
             } )
         },
         //返回批量工作流导入后数据
@@ -3069,9 +3117,21 @@ let config = {
             this.actions.firstFooterCommonFilterId(data.advanced_query);
             this.actions.createPostData();
             this.actions.setExpertSearchData( data.advanced_query )
+            try {
+                this.data.showTabs(1);
+                this.hideLoading();
+            }catch(e){}
         }
     },
     afterRender: function () {
+        //发送表单tableId（订阅刷新数据用
+        TabService.onOpenTab( this.data.tableId ).done((result) => {
+            if(result.success === 1){
+                // console.log("post open record success");
+            }else{
+                console.log("post open record failed")
+            }
+        });
         this.showLoading();
         try{dgcService.accuracy = window.config.sysConfig.accuracy || 1000;}catch(e){}
         let gridData = {

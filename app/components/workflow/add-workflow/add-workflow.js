@@ -34,9 +34,33 @@ let config={
             }
             PMAPI.openDialogByComponent(SettingPrint, {
                 width: 400,
-                height: 180,
+                height: 210,
                 title: '自定义页眉',
                 modal: true
+            })
+        },
+        openAddFollower() {
+            PMAPI.openDialogByIframe(`/iframe/addfocus/`, {
+                width: 800,
+                height: 620,
+                title: `添加关注人`,
+                modal: true
+            },{
+                users:this.data.user
+            }).then(res => {
+                if (!res.onlyclose) {
+                    let nameArr = [],
+                        idArr = [],
+                        htmlStr = [];
+                    for (var k in res) {
+                        nameArr.push(res[k]);
+                        htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
+                        idArr.push(k);
+                    }
+                    this.el.find('#addFollowerList').html(htmlStr);
+                    Mediator.publish('workflow:focus-users', idArr);
+                    this.data.user=res;
+                }
             })
         }
     },
@@ -67,7 +91,7 @@ let config={
                 o.form_id=_this.el.find('#wf-select option[data-default="1"]').data('form_id');
                 this.el.find('#wf-select option[data-default="1"]').attr("selected",true);
                 Mediator.publish('workflow:getflows', o);
-            };
+            }
             this.el.find('#wf-select').on('change',()=>{
                 let o={};
                 o.flow_id=this.el.find('#wf-select option:selected').data('flow_id');
@@ -84,34 +108,38 @@ let config={
             $(el.target).hide();
             this.el.find("#subAddworkflow").show();
             this.el.find("#addFollower").show();
-        });
-        this.el.find('#print').on('click',()=>{
+        }).on('click', '#print', () => {
             this.actions.printSetting();
+        }).on('click', '#addFollower', () => {
+            this.actions.openAddFollower();
+            // PMAPI.openDialogByIframe(`/iframe/addfocus/`, {
+            //     width: 800,
+            //     height: 620,
+            //     title: `添加关注人`,
+            //     modal: true
+            // },{
+            //     users:this.data.user
+            // }).then(res => {
+            //     if (!res.onlyclose) {
+            //         let nameArr = [],
+            //             idArr = [],
+            //             htmlStr = [];
+            //         for (var k in res) {
+            //             nameArr.push(res[k]);
+            //             htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
+            //             idArr.push(k);
+            //         }
+            //         this.el.find('#addFollowerList').html(htmlStr);
+            //         Mediator.publish('workflow:focus-users', idArr);
+            //         this.data.user=res;
+            //     }
+            // })
         });
-        this.el.on('click', '#addFollower', () => {
-            PMAPI.openDialogByIframe(`/iframe/addfocus/`, {
-                width: 800,
-                height: 620,
-                title: `添加关注人`,
-                modal: true
-            },{
-                users:this.data.user
-            }).then(res => {
-                if (!res.onlyclose) {
-                    let nameArr = [],
-                        idArr = [],
-                        htmlStr = [];
-                    for (var k in res) {
-                        nameArr.push(res[k]);
-                        htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
-                        idArr.push(k);
-                    }
-                    this.el.find('#addFollowerList').html(htmlStr);
-                    Mediator.publish('workflow:focus-users', idArr);
-                    this.data.user=res;
-                }
-            })
-        });
+    },
+    beforeDestory: function () {
+        Mediator.removeAll('workflow:getKey');
+        Mediator.removeAll('workflow:gotWorkflowInfo');
+        Mediator.removeAll('workflow:getParams');
     }
 };
 class AddWorkflow extends Component{

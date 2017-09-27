@@ -16,7 +16,7 @@ export const Storage = {
     },
 
     init(key){
-       Storage['iframe_key'] = key;
+        Storage['iframe_key'] = key;
     },
 
     /**
@@ -62,7 +62,6 @@ export const Storage = {
     getItem:function (itemTag,section){
         if(window.localStorage[Storage['iframe_key']]){
             let obj = JSON.parse(window.localStorage[Storage['iframe_key']])[section];
-            console.dir(JSON.parse(window.localStorage[Storage['iframe_key']]));
             if(obj == undefined){
                 return null;
             }
@@ -100,14 +99,14 @@ export const Storage = {
      */
     clearAll:function () {
         for(let key of Object.keys(window.localStorage)){
-            if(key.indexOf('find_password')!=0){
+            if(key.indexOf('password_info')!=-1){
                 continue;
             }
-            if(key.indexOf('iframedialog')!=0){
+            if(key.indexOf('iframedialog')!=-1){
                 delete window.localStorage[key];
             } else {
                 for(let section of Object.values(Storage.SECTION)){
-                    if(key.indexOf(section)!=0){
+                    if(key.indexOf(section)!=-1){
                         delete window.localStorage[key];
                     }
                 }

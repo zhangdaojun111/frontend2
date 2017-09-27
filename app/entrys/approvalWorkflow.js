@@ -23,7 +23,6 @@ import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-
 import {PMAPI,PMENUM} from '../lib/postmsg';
 import jsplumb from 'jsplumb';
 
-
 ApprovalWorkflow.showDom().then(function (component) {
     WorkFlowGrid.showGrid();
     WorkFlowForm.showForm();
@@ -39,27 +38,56 @@ ApprovalWorkflow.showDom().then(function (component) {
     });
     setTimeout(()=> component.hideLoading(),1000)
 });
+
 let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[],agorfo=true,is_batch=0;
 serchStr.split('&').forEach(res => {
     let arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
 is_view=obj.btnType==='view'?1:0;
+
 //订阅form data
 Mediator.subscribe('workFlow:record_info', (res) => {
     ApprovalHeader.showheader(res.record_info);
     WorkflowRecord.showRecord(res.record_info);
-    if(res.record_info.current_node!==window.config.name){
+    let current_node_arr = res.record_info.current_node.split('、');
+    console.log( "---" )
+    console.log( res.record_info.current_node )
+    console.log( current_node_arr )
+    console.log( "---" )
+    if(current_node_arr.indexOf(window.config.name)==-1){
         $('#approval-workflow').find('.for-hide').hide();
     };
     if(res.record_info.status==="已驳回到发起人"&&res.record_info.start_handler===window.config.name){
         $('#approval-workflow').find('.for-hide').hide();
-        $('#approval-workflow').find('#re-app').show();
+        if(!is_view){
+            $('#approval-workflow').find('#re-app').show();
+        }
     };
     if(res.record_info.status==="已撤回"&&res.record_info.start_handler===window.config.name){
         $('#approval-workflow').find('.for-hide').hide();
-        $('#approval-workflow').find('#re-app').show();
+        if(!is_view){
+            $('#approval-workflow').find('#re-app').show();
+        }
     };
+    if(is_view){
+        $('#add-home').find('#addFollower').hide();
+    }
+
+    // zj
+    // (async function () {
+    //     return workflowService.getWorkflowInfo({url: '/get_all_users/'});
+    // })().then(users => {
+    //     for(let i in focus){
+    //         nameArr.push(`<span class="selectSpan">${users.rows[focus[i]].name}</span>`);
+    //     }
+    //     $('#add-home #addFollowerList').html(nameArr);
+    //     if(nameArr.indexOf(window.config.name)>-1&&window.config.name!=res.record_info.current_node){
+    //         $('#approval-workflow').find('.for-hide').hide();
+    //         $('#approval-workflow').find('#re-app').hide();
+    //     };
+    // })
+
     //审批工作流
     (async function () {
         return workflowService.getWorkflowInfo({
@@ -86,7 +114,8 @@ Mediator.subscribe('workFlow:record_info', (res) => {
                 nameArr.push(`<span class="selectSpan">${users.rows[focus[i]].name}</span>`);
             }
             $('#add-home #addFollowerList').html(nameArr);
-            if(nameArr.indexOf(window.config.name)>-1&&window.config.name!=res.record_info.current_node){
+            let current_node_arr = res.record_info.current_node.split('、');
+            if(nameArr.indexOf(window.config.name)>-1&&current_node_arr.indexOf(window.config.name)==-1){
                 $('#approval-workflow').find('.for-hide').hide();
                 $('#approval-workflow').find('#re-app').hide();
             };

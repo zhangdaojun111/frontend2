@@ -126,6 +126,9 @@
   }
 
 #treeMulti,.search-main-m{
+	.buttons-in-tree{
+		position: sticky;
+	}
 	.search-in-tree-hd{
 		position: sticky;
 		top: 0;

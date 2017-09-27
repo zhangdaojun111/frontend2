@@ -97,7 +97,7 @@ export const systemMessageService = {
                 cellStyle: {'text-align': 'center'}
             }, {
                 headerName: '消息类型',
-                field: 'msg_type_text',
+                field: 'msg_type',
                 width: 100,
                 suppressMenu: true,
                 tooltipField: 'msg_type_text',

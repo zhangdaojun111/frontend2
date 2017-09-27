@@ -33,7 +33,7 @@ btn-div{
     height: 40px;
     align-items: center;
     background: #e4e4e4;
-    z-index: 110;
+    z-index: 50;
   }
   .left{
     display: flex;
@@ -179,12 +179,11 @@ btn-div{
     position: absolute;
     width: 100%;
     padding: 10px;
-    //overflow-y: scroll;
-    overflow-x:auto;
     top:57px;
     bottom: 0;
     left: 0;
     right: 0;
+    overflow: auto;
   }
   .workflow-grid{
     display: none;

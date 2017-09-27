@@ -13,7 +13,6 @@ let config = {
     inputNextObject: null,
     rendItemNum:0,
     ulChecked: true,
-    epSearch: {},
     data: {
         expertItemData: [],
         inputValue:'',
@@ -119,7 +118,7 @@ let config = {
     },
     afterRender: function() {
         this.actions.rendItem();
-        // this.epSearch = new expertSearch.expertSearch ();
+        let epSearch = new expertSearch();
         this.ulChecked = true;
         // this.data.inputList = this.el.find('.condition-search-input').val();
         // debugger
@@ -149,6 +148,7 @@ let config = {
             _this.actions.setInputObject($(this),$(this).parent().parent().find('.condition-search-input'))
         }).on('click','.condition-search-delete',()=>{
             this.actions.delete();
+            // epSearch.actions.showAddBtn();
             let length = $('.condition-search-add').length;
             $('.condition-search-add').eq(length-1).css('display','inline-block');
         });

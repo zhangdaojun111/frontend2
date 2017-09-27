@@ -455,7 +455,8 @@ export const FormService = {
         let res;
         if (json['form_id']) {
             res = Promise.all([this.getStaticDataImmediately(json), this.getDynamicData(json), this.getFormContent({form_id: json['form_id']})]);
-        } else {
+        }
+        else {
             res = Promise.all([this.getStaticDataImmediately(json), this.getDynamicData(json)]);
         }
         HTTP.flush();
@@ -512,10 +513,14 @@ export const FormService = {
         return HTTP.postImmediately('/delete_attachment/', json);
     },
     getAttachment(json) {
-        return HTTP.postImmediately('/query_attachment_list/', json);
+        let res = HTTP.post('query_attachment_list', json);
+        HTTP.flush();
+        return res;
     },
     getThumbnails(json) {
-        return HTTP.postImmediately('/get_thumbnails/', json);
+        let res = HTTP.post('get_thumbnails', json);
+        HTTP.flush();
+        return res;
     },
 
     //重新拼装下拉框格式

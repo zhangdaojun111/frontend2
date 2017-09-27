@@ -28,7 +28,9 @@ let config = {
     },
 
     actions:{
-        //获取用户代理设置信息
+        /**
+         * 获取用户代理设置信息
+         */
         initData:function () {
             let that = this;
             UserInfoService.getAgentData().done((result) => {
@@ -52,7 +54,9 @@ let config = {
                 }
             })
         },
-        //初始化代理流程列表
+        /**
+         * 初始化代理流程列表
+         */
         initWorkflow:function () {
             this.actions.formatOriginData(this.data.formatData);
             let treeView = new TreeView(this.data.formatData,{
@@ -67,7 +71,10 @@ let config = {
             treeView.render($container);
             this.el.find('.flex-between > .txt').html("流程搜索");
         },
-        //格式化代理流程数据，使用tree组件进行展示
+        /**
+         * 格式化代理流程数据，使用tree组件进行展示
+         * @param nodes
+         */
         formatOriginData:function (nodes) {
             for(let i = 0; i < nodes.length; i++){
                 const node = nodes[i];
@@ -93,7 +100,9 @@ let config = {
                 }
             }
         },
-        //初始化代理人列表
+        /**
+         * 初始化代理人列表
+         */
         initAgentList:function () {
             let $wrap = this.el.find('.name-list');
             let tempData = [];
@@ -122,7 +131,9 @@ let config = {
             this.data.atSelect = autoSelect;
             autoSelect.render($wrap);
         },
-        //初始化代理开关
+        /**
+         * 初始化代理开关
+         */
         initSwitch:function () {
             if(this.data.isOpen === 1){
                 this.el.find('.open-radio').attr("checked",true);
@@ -130,7 +141,11 @@ let config = {
                 this.el.find('.close-radio').attr("checked",true);
             }
         },
-        //仅保存被选中的具体工作流（叶子）节点的id，以是否具备group属性判断该节点是否为叶子节点
+        /**
+         * 仅保存被选中的具体工作流（叶子）节点的id，以是否具备group属性判断该节点是否为叶子节点
+         * @param event
+         * @param node
+         */
         selectNode:function (event,node) {
             if(event === 'select'){
                 if(node.group && node.nodes && node.nodes.length > 0){
@@ -146,7 +161,10 @@ let config = {
                 }
             }
         },
-        //节点被勾选时，进行遍历处理
+        /**
+         * 节点被勾选时，进行遍历处理
+         * @param nodes
+         */
         addNodes:function (nodes) {
             for(let i=0; i<nodes.length; i++){
                 if(!nodes[i].group){
@@ -159,7 +177,10 @@ let config = {
                 }
             }
         },
-        //节点去掉勾选时，进行遍历处理
+        /**
+         * 节点去掉勾选时，进行遍历处理
+         * @param nodes
+         */
         removeNodes:function (nodes) {
             for(let i=0; i<nodes.length; i++){
                 if(!nodes[i].group){
@@ -172,7 +193,10 @@ let config = {
                 }
             }
         },
-        //设置代理人信息
+        /**
+         * 设置代理人信息
+         * @param agent
+         */
         setAgentId:function (agent) {
             if(agent.length > 0){
                 this.data.selectedAgent = agent[0];
@@ -180,15 +204,23 @@ let config = {
                 this.data.selectedAgent = {};
             }
         },
-        //关闭代理开关
+        /**
+         * 关闭代理开关
+         * @param event
+         */
         closeSwitch:function (event) {
             this.data.isOpen = 0;
         },
-        //打开代理开关
+        /**
+         * 打开代理开关
+         * @param event
+         */
         openSwitch:function (event) {
             this.data.isOpen = 1;
         },
-        //保存代理设置
+        /**
+         * 保存代理设置
+         */
         saveAgent:function () {
             //保存代理前进行逻辑判断
             if(Object.keys(this.data.selectedAgent).length === 0 || this.data.selectedAgent.id === ''){

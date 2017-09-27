@@ -13,12 +13,17 @@ import WorkflowSeal from '../workflow-seal/workflow-seal';
 import {workflowService} from '../../../services/workflow/workflow.service';
 import msgBox from '../../../lib/msgbox';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
+
+import WorkFlowForm from '../workflow-form/workflow-form';
+import WorkFlowGrid from '../workflow-grid/workflow-grid';
+
 let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[];;
 serchStr.split('&').forEach(res => {
     let arr = res.split('=');
     obj[arr[0]] = arr[1];
 });
 is_view=obj.btnType==='view'?1:0;
+
 let config={
     template: template,
     data:{
@@ -30,6 +35,8 @@ let config={
         workflowData:null,
         sigh_user_id:'',
         nodeflowSize:1,
+        wfDetail: {},
+        focus: [],
     },
     actions:{
 
@@ -294,15 +301,81 @@ let config={
                     });
                 }
             })
+        },
+        workflowFocused: function (res) {
+            if(res.length>0){
+                this.el.on('click','#addFollower',()=>{
+                    PMAPI.openDialogByIframe(`/iframe/addfocus/?${res}`,{
+                        width:800,
+                        height:620,
+                        title:`添加关注人`,
+                        modal:true
+                    },{users:this.data.focus_users}).then(res=>{
+                        if(!res.onlyclose){
+                            let nameArr=[],idArr=[],htmlStr=[];
+                            for(var k in res){
+                                nameArr.push(res[k]);
+                                htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
+                                idArr.push(k);
+                            }
+                            this.el.find('#addFollowerList').html(htmlStr);
+                            Mediator.publish('workflow:focus-users',idArr);
+                            this.data.focus_users = res;
+                        }
+                    })
+                });
+            }else{
+                this.el.on('click','#addFollower',()=>{
+                    PMAPI.openDialogByIframe(`/iframe/addfocus/`,{
+                        width:800,
+                        height:620,
+                        title:`添加关注人`,
+                        modal:true
+                    },{users:this.data.focus_users}).then(res=>{
+                        if(!res.onlyclose){
+                            let nameArr=[],idArr=[],htmlStr=[];
+                            for(var k in res){
+                                nameArr.push(res[k]);
+                                htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
+                                idArr.push(k);
+                            }
+                            this.el.find('#addFollowerList').html(htmlStr);
+                            Mediator.publish('workflow:focus-users',idArr);
+                            this.data.focus_users = res;
+                        }
+                    })
+                });
+            }
         }
     },
     afterRender(){
         this.showLoading();
         let __this=this;
+
+        // workflowService.getWorkflowInfo({
+        //     url: '/get_workflow_info/',
+        //     data: {
+        //         flow_id: obj.flow_id,
+        //         record_id: obj.record_id
+        //     }
+        // }).then(res => {
+        //     let a=res.data[0]['updateuser2focususer'];
+        //     for(let i in a){
+        //         for(let j in a[i]){
+        //             this.data.focus.push(a[i][j]);
+        //         }
+        //     }
+        //     this.actions.workflowFocused(this.data.focus);
+        //     let wffComponent = new WorkFlowForm();
+        //     wffComponent.actions.addImg(res);
+        //     this.data.workflowData=res.data[0];
+        //     WorkFlow.show(res.data[0],'#drawflow');
+        // }); //zj
+
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             this.data.workflowData=msg.data[0];
             WorkFlow.show(msg.data[0],'#drawflow');
-        });
+        }); // zj
 
         this.el.on('click','.gz',()=>{
             let signature = $(".signature");
@@ -365,50 +438,13 @@ let config={
                 this.el.find("#workflow-grid").show();
                 this.el.find("#workflow-form").hide();
             }
-        })
-        Mediator.subscribe("workflow:focused", (res) => {
-            if(res.length>0){
-                this.el.on('click','#addFollower',()=>{
-                    PMAPI.openDialogByIframe(`/iframe/addfocus/?${res}`,{
-                        width:800,
-                        height:620,
-                        title:`添加关注人`,
-                        modal:true
-                    }).then(res=>{
-                        if(!res.onlyclose){
-                            let nameArr=[],idArr=[],htmlStr=[];
-                            for(var k in res){
-                                nameArr.push(res[k]);
-                                htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
-                                idArr.push(k);
-                            }
-                            this.el.find('#addFollowerList').html(htmlStr);
-                            Mediator.publish('workflow:focus-users',idArr);
-                        }
-                    })
-                });
-            }else{
-                this.el.on('click','#addFollower',()=>{
-                    PMAPI.openDialogByIframe(`/iframe/addfocus/`,{
-                        width:800,
-                        height:620,
-                        title:`添加关注人`,
-                        modal:true
-                    }).then(res=>{
-                        if(!res.onlyclose){
-                            let nameArr=[],idArr=[],htmlStr=[];
-                            for(var k in res){
-                                nameArr.push(res[k]);
-                                htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
-                                idArr.push(k);
-                            }
-                            this.el.find('#addFollowerList').html(htmlStr);
-                            Mediator.publish('workflow:focus-users',idArr);
-                        }
-                    })
-                });
-            }
         });
+
+        // zj
+        Mediator.subscribe("workflow:focused", (res) => {
+            this.actions.workflowFocused(res);
+        });
+
     }
 };
 class ApprovalWorkflow extends Component{

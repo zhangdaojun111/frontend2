@@ -15,6 +15,10 @@ import {HTTP} from '../../../lib/http';
 let config = {
     template: template,
     actions: {
+        /**
+         * 根据参数（页码）向后台发送请求，获取渲染该页所需数据
+         * @param _param
+         */
         loadData: function (_param) {
             _param = _param || {};
             let param = _.defaultsDeep(_param, {
@@ -31,6 +35,9 @@ let config = {
                 this.hideLoading();
             });
         },
+        /**
+         * 将选中信息标记为已读状态
+         */
         markRead: function () {
             msgbox.confirm('是否将选中的消息标为已读？').then((res) => {
                 if (res) {
@@ -42,6 +49,11 @@ let config = {
                 }
             });
         },
+        /**
+         * 向后台发送信息状态更新，并通过获取数据刷新页面
+         * @param ids
+         * @private
+         */
         _postReadData: function (ids) {
             HTTP.postImmediately('/remark_or_del_msg/', {
                 checkIds: ids
@@ -51,6 +63,9 @@ let config = {
                 }
             });
         },
+        /**
+         * 批量审批，符合勾选规则后跳至工作流页面，审批完成后，刷新数据
+         */
         batchApprove: function () {
             let rows = this.agGrid.gridOptions.api.getSelectedRows();
 
@@ -84,6 +99,9 @@ let config = {
                 }
             });
         },
+        /**
+         * 批量删除，请求后台删除成功后，刷新页面
+         */
         batchDelete: function () {
             msgbox.confirm('是否批量删除选中的消息？').then((res) => {
                 if (res) {
@@ -103,12 +121,21 @@ let config = {
                 }
             });
         },
+        /**
+         * 分页组件监听页码改变后，根据页码请求数据
+         * @param data
+         */
         onPaginationChanged: function (data) {
             this.actions.loadData(data);
         },
+        /**
+         * 选择信息查看详细内容，信息类型不同，采用不同方式展示
+         * @param $event
+         */
         onCellClicked: function ($event) {
             let data = $event.data;
-            if (data.msg_type === 3 || data.msg_type === 0) {
+            if (data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
+                data.handle_status_text === '已驳回' || data.handle_status_text === '已完成') {
                 if(data.handle_status_text === '待审批'){
                     data.url += "&btnType=edit";
                 }else if(data.handle_status_text === '已取消'){
@@ -130,9 +157,11 @@ let config = {
     afterRender: function () {
         let gridDom = this.el.find('.grid');
         let that = this;
+        //设置表格表头信息
         this.agGrid = new agGrid({
             columnDefs: systemMessageService.getColumnDefs(),
-            onCellClicked: that.actions.onCellClicked
+            onCellClicked: that.actions.onCellClicked,
+            footerData:[]
         });
         this.agGrid.render(gridDom);
         this.pagination = new dataPagination({
@@ -180,6 +209,13 @@ let systemMessageUtil = {
     hide: function () {
 
     },
+    /**
+     * 显示单条信息详细内容
+     * @param dialogTitle
+     * @param msgTitle
+     * @param msgContent
+     * @param speak
+     */
     showMessageDetail: function (dialogTitle, msgTitle, msgContent, speak = false) {
         let html = `
             <div class="component-msg-detail">

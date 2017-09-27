@@ -72,4 +72,15 @@
     #edit, .form-setting-textarea .button , .ql-toolbar, .ui-btn-box button, .countView, .info, .upload-file, .shot-screen, .shot-screen, .refresh {
         display: none;
     }
+    .data-table-agGrid-con {
+        .custom-columns-panel {
+            display: none;
+        }
+        .group-panel {
+            display: none;
+        }
+        .ag-header-viewport {
+            height: 31px;
+        }
+    }
 }

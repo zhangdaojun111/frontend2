@@ -21,7 +21,10 @@ let config = {
         // test_data:{"total": 15, "rows": [{"employee_id": -1, "name": "\u5c39\u624d\u534e", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 86378, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e343", "login_time": "2017-09-04 12:53:26"}, {"employee_id": -1, "name": "\u718a\u5c0f\u6d9b", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80606, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e34b", "login_time": "2017-09-04 09:55:15"}, {"employee_id": -1, "name": "\u5f90\u8273", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 85533, "login_ip": "192.168.2.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e34f", "login_time": "2017-09-04 11:54:42"}, {"employee_id": -1, "name": "\u6768\u6653\u5ddd", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 82247, "login_ip": "192.168.2.21", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e370", "login_time": "2017-09-04 10:19:37"}, {"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"}], "success": 1, "error": ""}
     },
     actions:{
-        //获取在线人数信息
+        /**
+         * 获取在线人数信息
+         * @param _param
+         */
         loadData:function (_param) {
             component.showLoading();
             _param = _param || {};
@@ -46,7 +49,10 @@ let config = {
                 }
             });
         },
-        //页数改变时，根据页码重新查询数据
+        /**
+         * 页数改变时，根据页码重新查询数据
+         * @param data
+         */
         onPaginationChanged:function (data) {
             this.actions.loadData(data);
         },
@@ -56,6 +62,7 @@ let config = {
         //设置表头
         this.agGrid = new agGrid({
             columnDefs: GlobalService.getOnlineColumnDefs(),
+            footerData:[]
         });
         this.agGrid.render(gridRoot);
         this.pagination = new dataPagination({
