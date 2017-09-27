@@ -86,6 +86,7 @@ let css = `
         position: absolute;
         right:20px;
         top:20px;
+        cursor: pointer;
     }
     .mask-div{
         position: absolute;
@@ -131,12 +132,18 @@ let css = `
         position: absolute;
         left: 20px;
         top: 50%;
+        cursor: pointer;
     }
     .next {
         z-index: 10;
         position: absolute;
         right: 20px;
         top: 50%;
+        cursor: pointer;
+    }
+    .closeImg {
+        z-index: 10;
+        cursor: pointer;
     }
     `;
 let AttachmentList = {
