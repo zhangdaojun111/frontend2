@@ -786,9 +786,8 @@ let config = {
                                 dataTableService.getPreferences( obj ).then( res=>{
                                     dgcService.setPreference( res,this.data );
                                     //初始化偏好隐藏系统默认列
-                                    if( res.is_report == 0 && res.ignoreFields.ignoreFields == null && this.data.haveSystemsFields ){
-                                        this.data.ignoreFields = ['f1','f2','f3','f4'];
-                                    }
+                                    this.actions.hideSysCols( res );
+                                    HTTP.flush();
                                     //创建表头
                                     this.columnDefs = this.actions.createHeaderColumnDefs();
                                     this.agGrid.gridOptions.api.setColumnDefs( this.columnDefs );
@@ -1004,11 +1003,9 @@ let config = {
             this.agGrid.actions.setGridData(d);
 
             //第一次加载隐藏默认列
-            if( res[0].is_report == 0 && res[0].ignoreFields.ignoreFields == null && this.data.haveSystemsFields ){
-                this.data.ignoreFields = ['f1','f2','f3','f4'];
-            }
+            this.actions.hideSysCols( res[0] );
             //创建sheet分页
-            this.actions.createSheetTabs( res[2] )
+            this.actions.createSheetTabs( res[2] );
 
             // this.actions.getGridData();
             //按钮点击事件
@@ -1023,6 +1020,17 @@ let config = {
             this.data.tableOperationData = temp;
             //渲染其他组件
             this.actions.renderAgGrid();
+        },
+        //隐藏系统字段
+        hideSysCols: function ( res ) {
+            if( res.is_report == 0 && res.ignoreFields.ignoreFields == null && this.data.haveSystemsFields ){
+                this.data.ignoreFields = ['f1','f2','f3','f4'];
+                dataTableService.savePreference({
+                    action: 'ignoreFields',
+                    table_id: this.data.tableId,
+                    ignoreFields: JSON.stringify( this.data.ignoreFields  )
+                });
+            }
         },
         //设置表表单、工作流数据
         setPrepareParmas: function (res) {
@@ -2546,6 +2554,11 @@ let config = {
             if( !data.data || this.data.isEditable || data.data.myfooter || this.data.doubleClick ){
                 return;
             }
+            //防止双击和单击的误操作
+            this.data.doubleClick = true;
+            setTimeout( ()=>{
+                this.data.doubleClick = false;
+            },200 )
             if(this.data.viewMode == 'reportTable2'){
                 if(data.data.can_edit == 1){
                     data.column.cellEditor = "";
@@ -2855,7 +2868,7 @@ let config = {
             console.log( "操作" )
             console.log( data )
             console.log( this.data.namespace )
-            if( data.event.srcElement.className === 'gridView' ){
+            if( data.event.srcElement.className == 'gridView' ){
                 this.actions.viewOrEditPerm( 'view' );
                 console.log( '查看' )
                 let btnType = 'view';
@@ -2996,10 +3009,6 @@ let config = {
         onRowDoubleClicked: function (data) {
             console.log( "行双击查看" )
             console.log( data )
-            this.data.doubleClick = true;
-            setTimeout( ()=>{
-                this.data.doubleClick = false;
-            },500 )
             this.actions.viewOrEditPerm( 'view' );
             //屏蔽分组行
             if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0)||this.data.editMode||data.data.myfooter ){
