@@ -2837,6 +2837,7 @@ let config = {
                     in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                 };
+                console.log(obj);
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
                 this.actions.openSelfIframe( url,title );
@@ -2966,9 +2967,10 @@ let config = {
                 record_id: data.data.record_id || '',
                 btnType: 'view',
                 is_view:1,
-                in_process: (this.data.viewMode == 'in_process' || data["data"]["status"] == 2) ? 1 : 0,
+                in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                 is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
             };
+            console.log(obj);
             if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
                 obj.btnType = 'none';
             }
