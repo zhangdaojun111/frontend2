@@ -5,6 +5,7 @@ let config = {
     template: template,
     data: {
         category: 'text', // 设置input type 输入框类型 number date
+        placeholder: '请输入'
     },
     actions: {
         /**

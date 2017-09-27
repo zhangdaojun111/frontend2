@@ -1,24 +1,24 @@
 <div class="bi-nine-grid">
-        <ul class="grid">
-            {{#each grids}}
+        <ul class="grid grid-theme-{{chart.theme}}">
             <li>
-                {{#each this}}
-                <div><span>{{@this}}</span></div>
-                {{/each}}
-                <div><span>{{enumerateyAxis @index}}</span></div>
-            </li>
-             {{/each}}
-            <li>
+                <div><span></span></div>
                 {{#each xAxis}}
                 <div><span>{{this}}</span></div>
                 {{/each}}
-                <div><span></span></div>
             </li>
+            {{#each grids}}
+            <li>
+                <div><span>{{enumerateyAxis @root.yAxis @index}}</span></div>
+                {{#each this}}
+                <div><span>{{@this}}</span></div>
+                {{/each}}
+            </li>
+            {{/each}}
     </ul>
 
-    <ul class="legend">
+    <ul class="legend legend-type-{{chart.type}}">
         {{#each legend}}
-        <li><label>{{this}}</label><span>{{enumerateLegend @index}}</span></li>
+        <li><label>{{this}}：</label><span>{{enumerateLegend @root.grids @index}}</span></li>
         {{/each}}
     </ul>
 

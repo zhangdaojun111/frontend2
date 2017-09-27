@@ -13,7 +13,8 @@ import msgbox from "../../../../lib/msgbox";
 import {ChartFormService} from '../../../../services/bisystem/chart.form.service';
 import Mediator from '../../../../lib/mediator';
 import {router} from '../../bi.manage.router';
-
+import {AdvancedCompute} from '../form/advanced.compute/advanced.compute';
+import {Textarea} from '../form/textarea/textarea';
 
 let formItemTypes = {
     'text': Text,
@@ -25,7 +26,9 @@ let formItemTypes = {
     'button': Button,
     'table_single': TableSingle,
     'deep': Deep,
-    'yAxis': YaXis
+    'yAxis': YaXis,
+    'advancedCompute': AdvancedCompute,
+    'textarea': Textarea
 }
 
 class Base extends Component {
@@ -70,8 +73,20 @@ class Base extends Component {
      */
     async save(chart){
         let res = await ChartFormService.saveChart(JSON.stringify(chart));
+        this.el.find('.save-btn').each((index,val)=>{
+            if(index===0){
+                $(val).prop('disabled',true);
+            }
+        });
         if (res['success'] == 1) {
             msgbox.showTips('保存成功');
+            setTimeout( ()=> {
+                this.el.find('.save-btn').each((index,val)=>{
+                    if(index===0){
+                        $(val).prop('disabled',false);
+                    }
+                });
+            },5000);
             if (!chart['chartName']['id']) {
                 this.reload();
             } else {
