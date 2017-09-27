@@ -50,6 +50,11 @@ $sub_color:#0088ff;
                 background-color: #FFFFFF;
                 position: absolute;
             }
+
+            &.post-local-image{
+                background-image: url("../../../../assets/images/framework/post-local-image.png");
+                border:solid 1px #bfbfbf;
+            }
             //.drag-able{
             //    width: 60px;
             //    height: 60px;
@@ -70,7 +75,7 @@ $sub_color:#0088ff;
         margin-top: 20px;
         margin-left: 230px;
         border-radius: 50%;
-        border: solid 1px black;
+        border: solid 1px #bfbfbf;
         overflow: hidden;
         .avatar-result-square{
             background-color: #FFFFFF;
