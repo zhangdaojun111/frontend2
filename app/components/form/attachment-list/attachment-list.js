@@ -126,6 +126,18 @@ let css = `
         font-size:20px;
         color:white;
     }
+    .previous {
+        z-index: 10;
+        position: absolute;
+        left: 20px;
+        top: 50%;
+    }
+    .next {
+        z-index: 10;
+        position: absolute;
+        right: 20px;
+        top: 50%;
+    }
     `;
 let AttachmentList = {
     template: template.replace(/\"/g, '\''),
@@ -134,6 +146,9 @@ let AttachmentList = {
         dragStart: false,
         rotateNo: 0,
         imgScale: 1,
+        currentIndex:0,
+        firstPreviewableIndex:0,
+        lastPreviewableIndex:0,
         list: [],
         dinput_type: '',
         fileIds: '',
@@ -148,24 +163,10 @@ let AttachmentList = {
             event:'click',
             selector:'.pre',
             callback:function (event) {
-                this.el.find('.my-mask').show();
-                this.data.rotateNo = 0;
-                this.data.imgScale = 1;
-                this.el.find('.img-pre').css("height", $(window).height() * 0.7 + 'px');
-                this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + "," + this.data.imgScale + ")");
-                this.el.find('.img-pre').get(0).src = "/download_attachment/?file_id=" + event.dataset.id + "&download=0&dinput_type=" + this.data.dinput_type;
-                $(document).on("mousewheel DOMMouseScroll", (e) => {
-                    let delta = (e.originalEvent['wheelDelta'] && (e.originalEvent['wheelDelta'] > 0 ? 1 : -1)) ||
-                        (e.originalEvent['detail'] && (e.originalEvent['detail'] > 0 ? -1 : 1));
-                    if (delta > 0) {
-                        this.data.imgScale += 0.1;
-                        this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + ")");
-                    } else if (delta < 0) {
-                        this.imgScale -= 0.1;
-                        this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + ")");
-                    }
-                });
-                this.el.find(".save").attr('id',event.dataset.id);
+                let id = event.dataset.id;
+                this.actions._loadPreview(id);
+                this.data.currentIndex = this.actions._getCurrentIndex(id);
+                this.actions._updateSwiftButtons(this.data.currentIndex);
             }
         }, {
             //删除
@@ -280,6 +281,53 @@ let AttachmentList = {
                 this.data.rotateNo = 0;
                 this.actions._updatePreview();
             }
+        }, {
+            event: 'click',
+            selector:'.previous',
+            callback:function () {
+                //找到前一个可浏览的文件的索引
+                let i = this.data.currentIndex - 1;
+                for(;i >=0; i--){
+                    let type = this.data.list[i].file_name.split('.').pop();
+                    if(this.data.preview_file.includes(type)){
+                        break;
+                    }
+                }
+                if(i < 0 ){ //前面没有可浏览文件
+                    this.el.find('.previous').hide();
+                    this.firstPreviewableIndex = this.data.currentIndex;
+                    return;
+                } else {
+                    this.data.currentIndex--;
+                }
+
+                this.actions._loadPreview(this.data.list[this.data.currentIndex].file_id);
+                this.actions._updateSwiftButtons(this.data.currentIndex);
+            }
+        }, {
+            event: 'click',
+            selector:'.next',
+            callback:function () {
+                //找到前一个可浏览的文件的索引
+                let i = this.data.currentIndex + 1;
+                let length = this.data.list.length;
+                for(;i < length; i++){
+                    let type = this.data.list[i].file_name.split('.').pop();
+                    if(this.data.preview_file.includes(type)){
+                        break;
+                    }
+                }
+                if(i >= length){ //后面没有可浏览文件
+                    this.el.find('.next').hide();
+                    this.firstPreviewableIndex = this.data.currentIndex;
+                    return;
+                } else {
+                    this.data.currentIndex++;
+                }
+
+                this.actions._loadPreview(this.data.list[i].file_id);
+                this.actions._updateSwiftButtons(i);
+            }
         }
     ],
     actions: {
@@ -293,11 +341,55 @@ let AttachmentList = {
         _updatePreview() {
             this.el.find(".img-pre").css('transform','translate(-50%,-50%) rotate(' + this.data.rotateNo + 'deg) scale(' + this.data.imgScale + ')');
             this.actions._uploadScale();
+        },
+        _loadPreview(id){
+            this.el.find('.my-mask').show();
+            this.data.rotateNo = 0;
+            this.data.imgScale = 1;
+            this.el.find('.img-pre').css("height", $(window).height() * 0.7 + 'px');
+            this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + "," + this.data.imgScale + ")");
+            this.el.find('.img-pre').get(0).src = "/download_attachment/?file_id=" + id + "&download=0&dinput_type=" + this.data.dinput_type;
+            $(document).on("mousewheel DOMMouseScroll", (e) => {
+                let delta = (e.originalEvent['wheelDelta'] && (e.originalEvent['wheelDelta'] > 0 ? 1 : -1)) ||
+                    (e.originalEvent['detail'] && (e.originalEvent['detail'] > 0 ? -1 : 1));
+            if (delta > 0) {
+                this.data.imgScale += 0.1;
+                this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + ")");
+            } else if (delta < 0) {
+                this.imgScale -= 0.1;
+                this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + ")");
+            }
+        });
+            this.el.find(".save").attr('id',id);
+        },
+        _getCurrentIndex(id){
+            let i = 0;
+            for(let length = this.data.list.length; i < length; i++){
+                if(id == this.data.list[i]['file_id'])
+                {
+                    console.log(i);
+                    break;
+                }
+            }
+            return i;
+        },
+        _updateSwiftButtons(i){
+            if(i == 0){
+                this.el.find('.previous').hide();
+            } else {
+                this.el.find('.previous').show();
+            }
+            if(i == this.data.list.length - 1){
+                this.el.find('.next').hide();
+            } else {
+                this.el.find('.next').show();
+            }
         }
     },
     afterRender() {
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
         this.actions._uploadScale();
+        this.data.lastPreviewableIndex = this.data.list.length - 1;
     },
     beforeDestory() {
         this.data.style.remove();
