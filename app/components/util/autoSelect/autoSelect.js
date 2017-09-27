@@ -101,6 +101,7 @@ let config = {
             this.data.focusItem = this.el.find("ul li:first-child").addClass('hovered');
             //开始监听键盘
             this.actions.startListenKeyboard();
+            this.actions.startListenMouseMove();
         },
         hideSelectBox: function () {
             if (this.listWrap) {
@@ -198,7 +199,6 @@ let config = {
          * 鼠标指向某条li，做样式处理和记录当前焦点
          */
         setMouseHover:function (event) {
-            console.log(this.data.mouseActive);
             if(this.data.mouseActive === true){
                 this.el.find('li').removeClass('hovered');
                 this.data.focusItem = $(event.currentTarget);
@@ -217,7 +217,7 @@ let config = {
             }
             this.actions.selectItem(this.data.focusItem);
         },
-        setMouseMove:function () {
+        startListenMouseMove:function () {
             this.data.mouseActive = true;
         },
         /**
@@ -278,13 +278,6 @@ let config = {
             selector:'li',
             callback:function (target,event) {
                 this.actions.setMouseHover(event);
-            }
-        },
-        {
-            event:'mousemove',
-            selector:'.auto-select-component',
-            callback:function(){
-                this.actions.setMouseMove();
             }
         }
     ],
