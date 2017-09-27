@@ -80,9 +80,9 @@ let config={
             for(let i=0;i<sellen;i++){
                 if($(sel[i]).attr('data-flow_id') == res){
                     $(sel[i]).attr("selected",true);
-                    this.el.find('#wf-select').attr('disabled','disabled');
                 }
             }
+            this.el.find('#wf-select').attr('disabled','disabled');
         })
         Mediator.subscribe('workflow:getParams', (res)=> {
             let htmlStr=``;
