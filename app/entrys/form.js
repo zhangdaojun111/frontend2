@@ -403,7 +403,7 @@ let FormEntrys = {
         //创建请求
         let json = this.createPostJson();
         res = await FormService.getFormData(json);   //将表单名称发送给工作流
-        
+
         if(res[1]['error'] == '您没有数据查看权限') {
             return false;
         }

@@ -22,7 +22,7 @@ let config = {
         let _this = this;
         FormService.getStaticData({field_id: this.data.fieldId}).then(res => {
             _this.data = Object.assign({}, _this.data, res['data'][0]);
-            let res =  FormEntry.createForm({
+            let r1 =  FormEntry.createForm({
                 table_id: _this.data.source_table_id,
                 form_id: '',
                 is_view: 1,
@@ -33,7 +33,7 @@ let config = {
                 el: _this.el.find('.ui-section'),
                 btnType:'none',
             })
-           if(!res){
+           if(!r1){
                _this.el.find('.ui-section').append('<p style="font-size:20px">您没有查看权限</p>')
             }
 
@@ -55,7 +55,7 @@ let config = {
             _this.data.isCreatingForm=true;
             _this.data.selected = {value: $(this).data('value'), label: $(this).html()};
             FormEntry.destoryForm(_this.data.source_table_id);
-            let res =  FormEntry.createForm({
+            let r2 =  FormEntry.createForm({
                 table_id: _this.data.source_table_id,
                 form_id: '',
                 is_view: 1,
@@ -66,7 +66,7 @@ let config = {
                 el: _this.el.find('.ui-section'),
                 btnType: 'none'
             })
-            if(!res){
+            if(!r2){
                 _this.el.find('.ui-section').append('<p style="font-size:20px">您没有查看权限</p>')
             }
         })
