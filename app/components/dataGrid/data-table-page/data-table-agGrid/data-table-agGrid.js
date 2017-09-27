@@ -2855,10 +2855,7 @@ let config = {
             console.log( "操作" )
             console.log( data )
             console.log( this.data.namespace )
-            if( data.event.srcElement.className == 'gridView' ){
-                if(this.data.viewMode == 'in_process' || data["data"]["status"] === 2) {
-                    msgBox.alert("数据正在审批，无法操作");
-                }
+            if( data.event.srcElement.className === 'gridView' ){
                 this.actions.viewOrEditPerm( 'view' );
                 console.log( '查看' )
                 let btnType = 'view';
@@ -2883,8 +2880,11 @@ let config = {
                     in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                     form_id:this.data.formId,
-                    flow_id:data.data.flowId || '',
+                    flow_id:data.data.flow_id || '',
                 };
+                console.log(data);
+                console.log("+++++++++++++++++++++++++++++++");
+                console.log(obj);
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
                 this.actions.openSelfIframe( url,title );
@@ -2903,7 +2903,7 @@ let config = {
                     in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                     form_id:this.data.formId,
-                    flow_id:data.data.flowId || '',
+                    flow_id:data.data.flow_id || '',
                 };
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '编辑'
@@ -3019,7 +3019,7 @@ let config = {
                 in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                 is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                 form_id:this.data.formId,
-                flow_id:data.data.flowId || '',
+                flow_id:data.data.flow_id || '',
             };
             console.log(obj);
             if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
