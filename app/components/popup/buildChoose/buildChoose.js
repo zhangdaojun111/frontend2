@@ -34,7 +34,7 @@ let config = {
                 btnType:'none',
             })
            if(!r1){
-               _this.el.find('.ui-section').append('<p style="font-size:20px">您没有查看权限</p>')
+               _this.el.find('.ui-section').append('<p style="font-size:20px">您没有数据查看权限</p>')
             }
 
             for (let i = 0, len = _this.data['options'].length; i < len; i++) {
