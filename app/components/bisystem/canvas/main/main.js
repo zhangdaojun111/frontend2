@@ -74,7 +74,7 @@ let config = {
                 this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
                 this.data.cells.render(this.el.find('.cells-container'));
 
-                this.data.headerComponents.actions.canSaveViews(this.data.currentViewId);
+               // this.data.headerComponents.actions.canSaveViews(this.data.currentViewId);
             };
 
         },
