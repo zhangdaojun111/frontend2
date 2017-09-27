@@ -828,7 +828,7 @@ let config = {
                 rowStatus = 0;
             }
             let str = '<div style="text-align:center;"><a class="gridView" style="color:#337ab7;">查看</a>';
-            if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data' || this.data.viewMode == 'deleteHanding') {
+            if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data' || this.data.viewMode == 'EditChild' || this.data.viewMode == 'deleteHanding') {
                 if (this.data.isFixed || rowStatus == 2 || this.data.permission.cell_edit == 0) {
                     str += ' | <span style="color: darkgrey;">编辑</span>';
                     str += ' | <a style="color: darkgrey;">历史</a>';
@@ -2257,13 +2257,18 @@ let config = {
             let json = {
                 table_id:this.data.tableId,
                 temp_ids:JSON.stringify([]),
-                real_ids:JSON.stringify( this.data.deletedIds ),
+                real_ids:JSON.stringify([]),
                 is_batch: this.data.viewMode == 'createBatch'?1:0,
                 flow_id: this.data.flowId,
                 parent_table_id: this.data.parentTableId,
                 parent_temp_id: this.data.parentTempId,
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
+            }
+            if( this.data.viewMode == 'EditChild' ){
+                json['temp_ids'] = JSON.stringify( this.data.deletedIds )
+            }else {
+                json['real_ids'] = JSON.stringify( this.data.deletedIds )
             }
             if( json.is_batch == 1 ){
                 json.temp_ids = json.real_ids;
