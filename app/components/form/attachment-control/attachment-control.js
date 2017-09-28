@@ -221,20 +221,21 @@ let config = {
             this.el.find('.upload-file').val('上传视频');
         } else if (this.data.dinput_type == 23) {
             this.el.find('.upload-file').val('上传图片');
-        }
-        if ((this.data.dinput_type == 33 || this.data.dinput_type == 2) && this.data.value.length != 0) {
-            FormService.getThumbnails({
-                file_ids: JSON.stringify(this.data.value)
-            }).then(res => {
-                if (!res.success) {
-                    console.log(res.error)
-                }
-                if (res.rows.length != 0) {
-                    let comp = new ThumbnailList(res.rows);
-                    comp.render(this.el.find('.thumbnail-list-anchor'));
-                    this.data['thumbnailListComponent'] = comp;
-                }
-            })
+            if(this.data.value.length != 0){
+                FormService.getThumbnails({
+                    file_ids: JSON.stringify(this.data.value)
+                }).then(res => {
+                    if (!res.success) {
+                        console.log(res.error);
+                        return;
+                    }
+                    if (res.rows.length != 0) {
+                        let comp = new ThumbnailList(res.rows);
+                        comp.render(this.el.find('.thumbnail-list-anchor'));
+                        this.data['thumbnailListComponent'] = comp;
+                    }
+                })
+            }
         }
         Mediator.subscribe('getDataFromOtherFrame:'+this.data.id,(data)=>{
             if(data.type != 'cancel_uploading'){
