@@ -20,6 +20,7 @@ let config = {
          * @param _param
          */
         loadData: function (_param) {
+            console.log("do loadData");
             _param = _param || {};
             let param = _.defaultsDeep(_param, {
                 rows: this.pagination.data.rows,
@@ -50,16 +51,18 @@ let config = {
             });
         },
         /**
-         * 向后台发送信息状态更新，并通过获取数据刷新页面
+         * 向后台发送信息阅读状态，审批通过获取数据刷新页面
          * @param ids
+         * @param type
          * @private
          */
         _postReadData: function (ids) {
-            this.showLoading();
+            // this.showLoading();
             HTTP.postImmediately('/remark_or_del_msg/', {
                 checkIds: ids
-            }).then((res) => {
-                this.hideLoading();
+            })
+                .then((res) => {
+                // this.hideLoading();
                 if (res.success === 1) {
                     this.actions.loadData();
                 }
@@ -135,7 +138,6 @@ let config = {
          * @param $event
          */
         onCellClicked: function ($event) {
-            console.log($event);
             if($event.colDef.headerName === '操作'){
                 let data = $event.data;
                 if (data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
@@ -155,12 +157,14 @@ let config = {
                 } else {
                     systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
                 }
-                $event.node.data.is_read = 0;
-                // this.actions._postReadData(JSON.stringify([data.id]));
-            }
-        },
-        refreshData:function () {
 
+                //查看通过前端自己刷新，审批通过loadData刷新
+                // if($event.event.srcElement.className.includes()){
+                    $event.node.data.is_read = 1;
+                    this.agGrid.actions.refreshView();
+                    this.actions._postReadData(JSON.stringify([data.id]));
+                // }
+            }
         }
     },
     afterRender: function () {

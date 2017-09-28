@@ -40,11 +40,11 @@ const handlers = {
         headerCell.on('click', () => {
             if (headerCell.data('selected') === '1') {
                 data.api.deselectAll();
-                headerCell.find("span[ref=eText]").html('全选')
+                headerCell.find("span[ref=eText]").html('全选');
                 headerCell.data('selected', '0')
             } else {
                 data.api.selectAll();
-                headerCell.find("span[ref=eText]").html('反选')
+                headerCell.find("span[ref=eText]").html('反选');
                 headerCell.data('selected', '1')
             }
         })
@@ -56,10 +56,10 @@ const handlers = {
     operatorRender:function (data) {
         if(data.value === '待审批'){
             //返回审批按钮
-            return `<div><a href=javascript:void(0); class="ui-link" data-type="approve" title="审批">审批</a></div>`;
+            return `<div><a href=javascript:void(0); class="ui-link approve" data-type="approve" title="审批">审批</a></div>`;
         }else{
             //返回查看按钮
-            return `<a href=javascript:void(0); class="ui-link" data-type="view" title="查看">查看</a>`;
+            return `<a href=javascript:void(0); class="ui-link view" data-type="view" title="查看">查看</a>`;
         }
     }
 };
