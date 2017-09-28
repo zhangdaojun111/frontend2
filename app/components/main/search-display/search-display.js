@@ -195,16 +195,16 @@ let config = {
          * 向后台请求第一轮搜索，数据和附件均搜索
          */
         sendSearch:function () {
-            // this.showLoading();
-            console.log('do search');
-            msgbox.showLoadingSelf();
-            setTimeout(function () {
-                msgbox.hideLoadingSelf();
-                msgbox.showLoadingRoot();
-            },5000);
-            setTimeout(function () {
-               msgbox.hideLoadingRoot();
-            },8000);
+            this.showLoading();
+
+            // msgbox.showLoadingSelf();
+            // setTimeout(function () {
+            //     msgbox.hideLoadingSelf();
+            //     msgbox.showLoadingRoot();
+            // },5000);
+            // setTimeout(function () {
+            //    msgbox.hideLoadingRoot();
+            // },8000);
 
             let searchData = {
                 keyword:this.data.searchText,            //搜索文字

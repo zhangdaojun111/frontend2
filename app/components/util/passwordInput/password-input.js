@@ -10,7 +10,6 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import template from './password-input.html';
 import './password-input.scss';
 
-
 let config = {
     template:template,
     data:{
@@ -29,7 +28,9 @@ let config = {
             if(this.data.title !== undefined && this.data.title !== ''){
                 this.el.find('.password-title').html(this.data.title);
             }
-            // this.el.find('.password-rule').html(this.data.rule);
+            if(this.data.rule !== undefined && this.data.rule !== ''){
+                this.el.find('.password-rule').html(this.data.rule);
+            }
             if(this.data.fakerPsw === false){
                 this.el.find('.default-faker-password').hide();
             }
