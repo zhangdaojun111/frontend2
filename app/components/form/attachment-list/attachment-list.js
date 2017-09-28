@@ -160,7 +160,6 @@ let AttachmentList = {
         dinput_type: '',
         fileIds: '',
         is_view: '',
-        isFormAbout: '',
         fileGroup: [],
         preview_file: ["gif", "jpg", "jpeg", "png", "txt", "pdf", "lua", "sql", "rm", "rmvb", "wmv", "mp4", "3gp", "mkv", "avi"],
     },
@@ -180,25 +179,39 @@ let AttachmentList = {
             event: 'click',
             selector: '.del',
             callback: function (event) {
-                let _this = this;
-                let fielIds = $(event.target).attr('id');
-                HTTP.post('delete_attachment', {
-                    file_ids: JSON.stringify([fielIds]),
-                    dinput_type: this.data.dinput_type
-                }).then(res => {
-                    _this.data.list = res["rows"];
-                    for (let i = 0, len = _this.data.list.length; i < len; i++) {
-                        if (_this.data.list[i]["file_id"] == fielIds) {
-                            _this.data.list.splice(i, 1);
-                            break;
-                        }
+                let fielIds = $(event).attr('data-id');
+                //如果直接用delete_attachment删除此文件，而并没有提交表单，那么下次访问将看到file_id但是没有任何文件名和文件的脏数据
+                // let _this = this;
+                // HTTP.post('delete_attachment', {
+                //     file_ids: JSON.stringify([fielIds]),
+                //     dinput_type: this.data.dinput_type
+                // }).then(res => {
+                //     _this.data.list = res["rows"];
+                //     for (let i = 0, len = _this.data.list.length; i < len; i++) {
+                //         if (_this.data.list[i]["file_id"] == fielIds) {
+                //             _this.data.list.splice(i, 1);
+                //             break;
+                //         }
+                //     }
+                //     _this.reload();
+                // });
+                // HTTP.flush();
+                for (let i = 0, len = this.data.list.length; i < len; i++) {
+                    if (this.data.list[i]["file_id"] == fielIds) {
+                        this.data.list.splice(i, 1);
+                        break;
                     }
-                    // this.wfService.sendDelFile(fileId);
-                    // this.wfService.sendDelQQimg(fileId);
-                    // this.emitDelAttachmentIds.emit(fileId);
-                    _this.reload();
-                });
-                HTTP.flush();
+                }
+
+                this.el.find('#'+fielIds).remove();
+                let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
+                if(deletedFiles == undefined){
+                    deletedFiles = [];
+                }
+                deletedFiles.push(fielIds);
+                Storage.init((new URL(document.URL)).searchParams.get('key'));
+                Storage.setItem(deletedFiles,'deletedItem-'+this.data.control_id,Storage.SECTION.FORM);
+
             }
         }, {
             event: 'click',

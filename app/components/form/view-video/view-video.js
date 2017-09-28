@@ -16,10 +16,19 @@ let css = `
     line-height: 40px;
     border-bottom: 1px solid #F2F2F2;
 }
-.select-video a{
+.select-video .download-button{
     position: absolute;
     top: 4px;
-    right:0;
+    right:0px;
+    outline-style:none;
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.select-video .delete-button {
+    position: absolute;
+    top: 4px;
+    right:26px;
     outline-style:none;
     display: inline-block;
     margin-left: 5px;
@@ -27,7 +36,7 @@ let css = `
 }
 .video-file-name {
     display: inline-block;
-    width:80%;
+    width:75%;
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
@@ -62,6 +71,25 @@ let ViewVideo = {
                 this.el.find('video').find('source').attr('src',`../download_attachment/?file_id=${id}&download=0&dinput_type=${this.data.dinput_type}`);
                 video.load();
                 video.play();
+            }
+        },{
+            event:'click',
+            selector:'.delete-button',
+            callback:function (event) {
+                let fileId = $(event).attr('file-id');
+                this.el.find('#'+fileId).remove();
+                let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
+                if(deletedFiles == undefined){
+                    deletedFiles = [];
+                }
+                if(this.el.find('video').find('source').attr('src').indexOf(fileId)!=-1){
+                    let video = $(this.el.find('video'))[0];
+                    video.pause();
+                }
+                deletedFiles.push(fileId);
+                Storage.init((new URL(document.URL)).searchParams.get('key'));
+                Storage.setItem(deletedFiles,'deletedItem-'+this.data.control_id,Storage.SECTION.FORM);
+
             }
         }
     ],
