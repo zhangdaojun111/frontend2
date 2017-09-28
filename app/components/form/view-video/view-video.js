@@ -22,8 +22,8 @@ let css = `
     right:0px;
     outline-style:none;
     display: inline-block;
-    margin-left: 5px;
-    margin-right: 5px;
+    margin-left: 3px;
+    margin-right: 6px;
 }
 .select-video .delete-button {
     position: absolute;
@@ -31,8 +31,8 @@ let css = `
     right:26px;
     outline-style:none;
     display: inline-block;
-    margin-left: 5px;
-    margin-right: 10px;
+    margin-left: 6px;
+    margin-right: 3px;
 }
 .video-file-name {
     display: inline-block;

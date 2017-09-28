@@ -257,6 +257,7 @@ let config = {
                         data["isPreview"] = false;
                     }
                 }
+                this.el.find('.view-attached-list').css('cursor','pointer');
             this.el.on('click','.view-attached-list',()=>{
                     if(this.data.real_type == 9 || this.data.real_type == 23){
                         let obj={
@@ -281,8 +282,8 @@ let config = {
                             control_id:this.data.id
                         }
                         PMAPI.openDialogToSelfByComponent(_.defaultsDeep({},{data:obj},ViewVideo), {
-                            width: 900,
-                            height: 600,
+                            width: 780,
+                            height: 500,
                             title: '视频播放器'
                         }).then(res=>{
                             this.actions._updateDeleted(res);
