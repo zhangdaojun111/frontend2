@@ -61,6 +61,7 @@ let config = {
                 checkIds: ids
             }).then((res) => {
                 this.hideLoading();
+
                 if (res.success === 1) {
                     this.actions.loadData();
                 }
