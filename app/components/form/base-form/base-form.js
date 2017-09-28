@@ -1125,6 +1125,7 @@ let config = {
                 }
             }
             if (this.data.isOtherChangeEdit) {
+
                 this.data.btnType = 'none';
             } else {
                 this.data.btnType = 'new';
@@ -1739,20 +1740,7 @@ let config = {
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
         }
-        //选择器、快捷添加内置字段、修改历史icon隐藏时位置右移
-        let icon_selector = this.el.find(' .ui-selector').css('visibility');
-        let icon_add = this.el.find(' .add-item').css('visibility');
-        let icon_history = this.el.find(' .ui-history').css('visibility');
 
-        if(icon_selector == 'hidden') {
-            this.el.find(' .ui-selector').addClass('icon-fr')
-        }
-        if(icon_add == 'hidden') {
-            this.el.find(' .add-item').addClass('icon-fr')
-        }
-        if(icon_history == 'hidden') {
-            this.el.find(' .ui-history').addClass('icon-fr')
-        }
     },
     beforeDestory() {
         this.el.off();
