@@ -93,5 +93,73 @@ export const canvasCellService = {
             resolve(res);
         })
     },
+
+    /**
+     * 保存高级计算到服务器
+     * @param data = 保存数据到服务器
+     */
+    async saveAdvancedData(data) {
+        const res = await HTTP.ajaxImmediately({
+            url: '/bi/new_create_compute_field/',
+            data: data,
+            // contentType: "application/json; charset=utf-8",
+            method:'post',
+            traditional: true
+        });
+        return new Promise((resolve, reject) => {
+            resolve(res);
+        })
+    },
+
+    /**
+     * 获取高级计算字段列表
+     * @param data
+     */
+    async getAdvancedListData(data) {
+        const res = await HTTP.ajaxImmediately({
+            url: '/bi/new_get_compute_field/',
+            data: data,
+            // contentType: "application/json; charset=utf-8",
+            traditional: true
+        });
+        return new Promise((resolve, reject) => {
+            resolve(res);
+        })
+    },
+
+    /**
+     * 导入数据
+     * @param formData
+     */
+    async importData(data) {
+        const res = await HTTP.ajaxImmediately({
+            url: '/bi/import_bi_setting/',
+            data: data,
+            method: 'post',
+            processData: false,
+            contentType: false
+        });
+        return new Promise((resolve, reject) => {
+            resolve(res);
+        })
+    },
+
+    /**
+     * 删除高级计算item
+     * @param item = {"chart_id":0,"id":""}
+
+     */
+    async removeAdvancedItemData(data) {
+        const res = await HTTP.ajaxImmediately({
+            url: '/bi/new_del_compute_field/',
+            data: data,
+            // contentType: "application/json; charset=utf-8",
+            traditional: true
+        });
+        return new Promise((resolve, reject) => {
+            resolve(res);
+        })
+    },
+
 }
 

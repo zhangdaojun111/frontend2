@@ -36,7 +36,6 @@ import SettingPrint from '../setting-print/setting-print'
 import Songrid from '../songrid-control/songrid-control';
 import Correspondence from '../correspondence-control/correspondence-control';
 import ContractControl from "../contract-control/contract-control";
-let index=0;
 let config = {
     template: '',
     data: {
@@ -52,6 +51,7 @@ let config = {
         myUseFields: {},
         //所有选择对应的选项
         optionsToItem: {},
+        //流程Id
         flowId: '',
         //本地存储默认值数据的dict，{ dfield: value }
         baseIdsLocalDict: {},
@@ -61,23 +61,23 @@ let config = {
     binds: [{
         event: 'click',
         selector: '.save',
+        //阻止表单数据提交之前多次提交
         callback: function () {
-            if(this.data.isBtnClick){
-                console.log('有没有阻止呢？');
+            if (this.data.isBtnClick) {
                 return;
             }
-            console.log('过来楼');
-            this.data.isBtnClick=true;
+            this.data.isBtnClick = true;
             this.actions.onSubmit();
         }
     }, {
         event: 'click',
         selector: '.changeEdit',
+        //阻止用户连续快速切换编辑模式
         callback: function () {
-            if(this.data.isBtnClick){
+            if (this.data.isBtnClick) {
                 return;
             }
-            this.data.isBtnClick=true;
+            this.data.isBtnClick = true;
             this.actions.changeToEdit();
         }
     }],
@@ -125,7 +125,9 @@ let config = {
         //给子表统计赋值
         async setCountData() {
             let res = await FormService.getCountData({
+                //传给后台当前表单所有控件的值
                 data: this.actions.createFormValue(this.data.data),
+                //传子表id
                 child_table_id: this.data.sonTableId
             });
             //给统计赋值
@@ -135,11 +137,12 @@ let config = {
         },
 
         //给外部提供formValue格式数据
+        //@param isCheck判断是否需要执行表单校验
         getFormValue(isCheck) {
             return isCheck ? this.actions.createFormValue(this.data.data, true) : this.actions.createFormValue(this.data.data);
         },
 
-        //根据dfield查找类型
+        //根据dfield查找控件类型
         findTypeByDfield(dfield) {
             let type = '';
             for (let obj of this.data.formData) {
@@ -163,6 +166,7 @@ let config = {
         },
 
         //创建cache数据
+        //@param formData原始表单数据,val当前表单数据,isNew 是否是cacheNew
         createCacheData(formData, val, isNew, com) {
             let obj = {};
             for (let key in formData) {
@@ -251,6 +255,7 @@ let config = {
         },
 
         //提交检查
+        //@param allData全部控件属性,formvalue 表单值格式
         validForm(allData, formValue) {
             let error = false;
             let errorMsg = "";
@@ -332,8 +337,6 @@ let config = {
                 if (val != "" && !$.isEmptyObject(data["func"])) {
                     for (let r in data["func"]) {
                         let flag = FormService[r](val);
-                        console.log(data);
-                        console.log(flag);
                         if (!flag) {
                             error = true;
                             errorMsg = data["func"][r];
@@ -364,6 +367,7 @@ let config = {
         },
 
         //审批数据是删除情况不可编辑
+        //暂时无用
         editDelWork(res) {
             if (res && res == this.formId) {
                 for (let key in this.data.data) {
@@ -381,8 +385,6 @@ let config = {
             }
             this.data.baseIdsLocalDict[originalData["dfield"]] = val;
             if (this.data.base_fields.sort().toString() == this.data.baseIdsLocal.sort().toString()) {
-                //告诉外围现在正在读取默认值
-                // this.wfService.isReadDefaultData.next(true);
                 //请求默认值
                 let json = {
                     flow_id: this.data.flowId || "",
@@ -431,12 +433,11 @@ let config = {
                         }
                     }
                 }
-                //告诉外围现在正在读取默认值
-                // this.wfService.isReadDefaultData.next(false);
             }
         },
 
         //主动触发一遍所有事件
+        //二次确认挂有关系的数据的准确性
         triggerControl: function () {
             let data = this.data.data;
             for (let key in data) {
@@ -473,6 +474,7 @@ let config = {
         },
 
         //替换表达式中的字段
+        //暂时无用
         replaceSymbol(data) {
             let reg = /\@f\d+\@/g;
             let items = data.match(reg);
@@ -605,6 +607,7 @@ let config = {
         /**
          *  表达式主要方法
          *  此data结构为{val: 自身的value,effect: [] 被影响的dfield集合}
+         *  暂时只有后端表达式计算，以后需要加上前端表达式判断
          */
         async calcExpression(data) {
             // let send_exps = [];
@@ -612,7 +615,9 @@ let config = {
                 return;
             }
             let fields = {};
+            //不需要的字段
             let continue_key = FormService.continue_key;
+            //需要的字段
             let need_key = FormService.need_key;
             for (let f in this.data.data) {
                 if (continue_key.indexOf(f) != -1) {
@@ -634,6 +639,7 @@ let config = {
             }
             for (let key in new_data) {
                 if (this.data.data[key].effect && this.data.data[key].effect.length > 0 && (this.data.data[key]['options'] || this.data.data[key]['group'])) {
+                    //需要传递text值
                     new_data[key] = this.actions.getTextByOptionID(key, new_data[key]);
                 }
             }
@@ -779,7 +785,8 @@ let config = {
             }
         },
 
-        //创建表单数据格式
+        //创建表单数据格式 形如{dfield:value}
+        //@param data为当前表单最新的数据，isCheck 是否执行表单校验
         createFormValue(data, isCheck) {
             let formValue = {};
             for (let key in data) {
@@ -802,59 +809,60 @@ let config = {
         },
 
         //判断一下日期的类型，并且进行限制
+        //当数据不符格式限制时，要将对应表单值设为空
         checkDateType(data) {
-            for(let i in this.data.data){
-              if(this.data.data[i]['type'] == 'Date'){
-                  let temp = this.data.data[i];
-                  let dfield = this.data.data[i]['dfield'];//f8
-                    if(temp['timeType'] == 'after'){
+            for (let i in this.data.data) {
+                if (this.data.data[i]['type'] == 'Date') {
+                    let temp = this.data.data[i];
+                    let dfield = this.data.data[i]['dfield'];//f8
+                    if (temp['timeType'] == 'after') {
                         let vals = data[dfield].split("-");
                         //let vals = val.split("-");//[2011,11,11];
                         let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
+                        let dates = [myData.getFullYear(), myData.getMonth() + 1, myData.getDate()];
+                        for (let i = 0; i < 3; i++) {
+                            if (vals[i] < dates[i]) {
+                                data[dfield] = '';
                             }
                         }
-                    }else if(this.data.data[i]['type'] == 'before') {
+                    } else if (this.data.data[i]['type'] == 'before') {
                         let vals = data[dfield].split("-");
                         //let vals = val.split("-");//[2011,11,11];
                         let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
+                        let dates = [myData.getFullYear(), myData.getMonth() + 1, myData.getDate()];
+                        for (let i = 0; i < 3; i++) {
+                            if (vals[i] < dates[i]) {
+                                data[dfield] = '';
                             }
                         }
                     }
                 }
-                if(this.data.data[i]['type'] == 'Datetime'){
+                if (this.data.data[i]['type'] == 'Datetime') {
                     let temp = this.data.data[i];
                     let dfield = this.data.data[i]['dfield'];//f8
-                    if(temp['timeType'] == 'after'){
+                    if (temp['timeType'] == 'after') {
                         let vals = data[dfield].split(" ")[0].split("-");
                         //let vals = val.split("-");//[2011,11,11];
                         let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
+                        let dates = [myData.getFullYear(), myData.getMonth() + 1, myData.getDate()];
+                        for (let i = 0; i < 3; i++) {
+                            if (vals[i] < dates[i]) {
+                                data[dfield] = '';
                             }
                         }
-                    }else if(this.data.data[i]['type'] == 'before') {
+                    } else if (this.data.data[i]['type'] == 'before') {
                         let vals = data[dfield].split(" ")[0].split("-");
                         //let vals = val.split("-");//[2011,11,11];
                         let myData = new Date();
-                        let dates = [myData.getFullYear(),myData.getMonth()+1,myData.getDate()];
-                        for(let i = 0;i<3;i++){
-                            if(vals[i]<dates[i]){
-                                data[dfield]='';
+                        let dates = [myData.getFullYear(), myData.getMonth() + 1, myData.getDate()];
+                        for (let i = 0; i < 3; i++) {
+                            if (vals[i] < dates[i]) {
+                                data[dfield] = '';
                             }
                         }
                     }
-               }
-             }
+                }
+            }
         },
 
         //统计功能
@@ -963,15 +971,15 @@ let config = {
             let {error, errorMsg} = this.actions.validForm(this.data.data, formValue);
             if (error) {
                 MSG.alert(errorMsg);
-                this.data.isBtnClick=false;
+                this.data.isBtnClick = false;
                 return;
             }
             let data = this.actions.handleFormData(formValue);
-            let formDataNew = this.data.oldData;
+            let formDataOld = this.data.oldData;
             //如果有其他字段的数据，这里是拼approvedFormData
             this.actions.checkDateType(formValue);
-            let obj_new = this.actions.createCacheData(formDataNew, data, true, this);
-            let obj_old = this.actions.createCacheData(formDataNew, data, false, this);
+            let obj_new = this.actions.createCacheData(formDataOld, data, true, this);
+            let obj_old = this.actions.createCacheData(formDataOld, data, false, this);
             this.actions.changeValueForChildTable(data);
             let json = {
                 data: JSON.stringify(data),
@@ -1012,7 +1020,7 @@ let config = {
             } else {
                 MSG.alert(res.error);
             }
-            this.data.isBtnClick=false;
+            this.data.isBtnClick = false;
             //清空子表内置父表的ids
             delete FormService.idsInChildTableToParent[this.data.tableId];
         },
@@ -1078,13 +1086,7 @@ let config = {
                 }
             }
             //如果是临时表，传temp_id，否则是real_id
-            // if (!this.data.inProcess || !this.data.isBatch) {
-            //     json["real_id"] = this.data.realId;
-            // } else {
-            //     json["temp_id"] = this.data.realId;
-            // }
-
-            if (this.data.inProcess==1 || this.data.isBatch==1) {
+            if (this.data.inProcess == 1 || this.data.isBatch == 1) {
                 json["temp_id"] = this.data.realId;
             } else {
                 json["real_id"] = this.data.realId;
@@ -1093,9 +1095,26 @@ let config = {
         },
 
 
+        checkCustomTable(){
+            console.log(this.data.custom_table_form_exists);
+            if (this.data.custom_table_form_exists) {
+                console.log(this.data.table_name);
+                if (this.data.table_name == '人员信息') {
+                    for (let key in this.data.data) {
+                        console.log(this.data.data[key].label);
+                        if (this.data.data[key].label == '用户名') {
+                            this.data.data[key].is_view = 1;
+                            this.data.childComponent[key].data.is_view = 1;
+                            this.data.childComponent[key].reload();
+                        }
+                    }
+                }
+            }
+        },
+
         //转到编辑模式
         async changeToEdit() { //重新获取动态数据 （temp_id会变）
-            this.data.isView=0;
+            this.data.isView = 0;
             let json = this.actions.createPostJson();
             let res = await FormService.getDynamicDataImmediately(json);
             for (let key in res.data) {
@@ -1111,8 +1130,9 @@ let config = {
                 this.data.btnType = 'new';
             }
             this.actions.addBtn();
+            this.actions.checkCustomTable();
             this.actions.triggerControl();
-            this.data.isBtnClick=false;
+            this.data.isBtnClick = false;
         },
         //修改可修改性
         reviseCondition: function (editConditionDict, value) {
@@ -1368,8 +1388,10 @@ let config = {
                 title: `选择器`,
                 modal: true
             }).then((res) => {
-                _this.actions.setFormValue(data.dfield, res.value, res.label);
-                _this.actions.checkValue(data);
+                if (res.value) {
+                    _this.actions.setFormValue(data.dfield, res.value, res.label);
+                    _this.actions.checkValue(data);
+                }
             });
         },
 
@@ -1504,6 +1526,13 @@ let config = {
                     }
                 }
             }
+            //处理文本区回车符
+            if (data.type == 'Textarea') {
+                for (let key in history) {
+                    history[key]['new_value'] = history[key]['new_value'].replace(/\n/g, ";");
+                    history[key]['old_value'] = history[key]['old_value'].replace(/\n/g, ";");
+                }
+            }
             History.data.history_data = history;
             PMAPI.openDialogByComponent(History, {
                 width: 800,
@@ -1528,7 +1557,8 @@ let config = {
                 if (single.data('width')) {
                     data[key]['width'] = single.data('width') + 'px';
                 } else {
-                  //  data[key]['width'] = '234px';
+
+                      data[key]['width'] = '240px';
                 }
                 //数据填充后，根据修改条件对不同框进行只读操作
                 setTimeout(() => {
@@ -1695,19 +1725,33 @@ let config = {
     },
     afterRender() {
         this.actions.createFormControl();
+        if(this.data.is_view == 1){
+            this.actions.checkCustomTable();
+        }
         this.actions.triggerControl();
         this.actions.changeOptions();
         this.actions.setDataFromParent();
         if (this.data.btnType != 'none') {
             this.actions.addBtn();
         }
-        // if (this.data.isView == 1) {
-        //     debugger
-        //     this.el.find('.ui-width').css('color','#666666');
-        // }
+
         //默认表单样式
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
+        }
+        //选择器、快捷添加内置字段、修改历史icon隐藏时位置右移
+        let icon_selector = this.el.find(' .ui-selector').css('visibility');
+        let icon_add = this.el.find(' .add-item').css('visibility');
+        let icon_history = this.el.find(' .ui-history').css('visibility');
+
+        if(icon_selector == 'hidden') {
+            this.el.find(' .ui-selector').addClass('icon-fr')
+        }
+        if(icon_add == 'hidden') {
+            this.el.find(' .add-item').addClass('icon-fr')
+        }
+        if(icon_history == 'hidden') {
+            this.el.find(' .ui-history').addClass('icon-fr')
         }
     },
     beforeDestory() {

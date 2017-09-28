@@ -1,13 +1,11 @@
 <div class="component-bi-canvas-main">
     <header class="views-header clearfix {{editMode}}"></header>
-    <div class="cells-container client {{editMode}}"></div>
-    <!--右下角编辑按钮-->
-    <!--{{#if editMode}}-->
-    <!--<div class="switch-button singlepage"><a class="mat-fab btn-single" title="单页" href="javascript:;">单页</a></div>-->
-    <!--<div class="switch-button multiplepage"><a class="mat-fab btn-multip" title="多页" href="javascript:;">多页</a></div>-->
-    <!--{{else}}-->
-    {{#if editModeDialog}}
-    <div class="to-edit-page"><a class="mat-fab bi-manage-btn" title="编辑" href="javascript:;">编辑</a></div>
+    {{#if isViewEmpty}}
+        <div class="empty-view">
+            <img src="../../../../assets/images/framework/search-result-nothing.png" alt="">
+            <p>没有可用视图，请先点击右上角的编辑创建视图</p>
+        </div>
+    {{else}}
+        <div class="cells-container client {{editMode}}"></div>
     {{/if}}
-    <!--{{/if}}-->
 </div>

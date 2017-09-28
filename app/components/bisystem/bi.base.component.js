@@ -3,14 +3,10 @@
  * name: bi基础类
  * desc: 用来扩展component
  */
-import '../../assets/scss/core/reset.scss';
-import '../../assets/scss/core/common.scss';
-import '../../assets/scss/core/jquery-ui-theme.scss';
-import '../../assets/scss/core/base.scss';
+
+import '../../assets/scss/bisystem/bi.common.scss';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
-import '../../assets/scss/bisystem/bi.common.scss';
-import Quill from 'quill';
 import Component from '../../lib/component';
 
 export class BiBaseComponent extends Component{

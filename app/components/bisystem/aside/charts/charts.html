@@ -4,12 +4,16 @@
         <img width="16" height="16" src="{{imgUrl}}?file_id={{icon}}">
         {{/if}}
         <span class="item">{{name}}</span>
+        {{#if userSelf}}
         <i class="btn_ripple fa fa-ellipsis-v">∶</i>
+        {{/if}}
     </p>
-    <div class="hide_meun">
-        <div class="btn_box">
-            <button class="menuitem btn_del"><span>删除</span></button>
-            <a href="#/forms/{{assortment}}/{{id}}" class="menuitem btn_change"><span>编辑</span></a>
-        </div>
-    </div>
 </li>
+{{#if userSelf}}
+<div class="hide_meun">
+    <div class="btn_box">
+        <button class="menuitem btn_del"><span>删除</span></button>
+        <a  href="#/forms/{{assortment}}/{{id}}" class="menuitem btn_change"><span>编辑</span></a>
+    </div>
+</div>
+{{/if}}

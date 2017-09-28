@@ -189,6 +189,10 @@ module.exports = {
                 quality: '60'
             }
         }),
-        new OptimizeCssAssetsPlugin()
+        new OptimizeCssAssetsPlugin({
+            cssProcessorOptions: {
+                safe: true
+            }
+        })
     ]
 }

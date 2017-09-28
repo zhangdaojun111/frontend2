@@ -15,6 +15,9 @@ import template from './buildChoose.html';
 
 let config = {
     template: template,
+    data:{
+        isCreatingForm:false,
+    },
     afterRender() {
         let _this = this;
         FormService.getStaticData({field_id: this.data.fieldId}).then(res => {
@@ -42,8 +45,13 @@ let config = {
         HTTP.flush();
         //改变表单
         _this.el.on('click', 'a.choose-aside-a', function () {
+            if(_this.data.isCreatingForm){
+                return;
+            }
+            _this.data.isCreatingForm=true;
             _this.data.selected = {value: $(this).data('value'), label: $(this).html()};
             FormEntry.destoryForm(_this.data.source_table_id);
+            _this.el.find('.ui-section').empty();
             FormEntry.createForm({
                 table_id: _this.data.source_table_id,
                 form_id: '',
@@ -74,6 +82,11 @@ let config = {
                 data: _this.data.selected
             })
         });
+        Mediator.subscribe('form:formAlreadyCreate'+this.data.source_table_id,res=>{
+            if(res=='success'){
+                _this.data.isCreatingForm=false;
+            }
+        })
     }
 }
 

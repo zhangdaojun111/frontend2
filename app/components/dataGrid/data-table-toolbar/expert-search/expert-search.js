@@ -119,6 +119,8 @@ let config = {
 
                 if(this.el.find('.condition-search-box-input').eq(i).attr('title') == 'number') {
                     obj['cond']['keyword'] = parseInt(this.el.find('.condition-search-value').find('input').eq(i).val());
+                } else if(this.el.find('.condition-search-box-input').eq(i).attr('title') == 'date') {
+                    obj['cond']['keyword'] = $.trim(this.el.find('.condition-search-value').find('input').eq(i).val());
                 } else {
                     obj['cond']['keyword'] = this.el.find('.condition-search-value').find('input').eq(i).val();
                 }
