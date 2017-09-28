@@ -87,6 +87,7 @@ let css = `
         right:20px;
         top:20px;
         cursor: pointer;
+        z-index: 10;
     }
     .mask-div{
         position: absolute;
@@ -139,10 +140,6 @@ let css = `
         position: absolute;
         right: 20px;
         top: 50%;
-        cursor: pointer;
-    }
-    .closeImg {
-        z-index: 10;
         cursor: pointer;
     }
     `;
@@ -215,7 +212,7 @@ let AttachmentList = {
             }
         }, {
             event: 'click',
-            selector: '.mask-div,.closeImg',
+            selector: '.closeImg',
             callback: function () {
                 this.el.find('.my-mask').hide();
                 this.data.dragStart = false;
