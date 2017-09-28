@@ -5,7 +5,6 @@
 import '../../assets/scss/main.scss';
 import 'jquery-ui/ui/widgets/button.js';
 import 'jquery-ui/ui/widgets/dialog.js';
-
 import {HTTP} from '../../lib/http';
 import Mediator from '../../lib/mediator';
 import {workflowService} from '../../services/workflow/workflow.service';
@@ -21,7 +20,6 @@ AddWf.showDom().then(function (component) {
     WorkFlowForm.showForm();
     setTimeout(()=>component.hideLoading(),1000)
 });
-
 let serchStr = location.search.slice(1);
 let obj = {}, is_view = 0,cache_old;
 let action;
@@ -30,23 +28,19 @@ serchStr.split('&').forEach(res => {
     obj[arr[0]] = arr[1];
 });
 // is_view = obj.btnType === 'view' ? 1 : 0;
-
 if (obj.btnType === 'view'||obj.btnType ==="none") {
     $('#subAddworkflow').hide();
     is_view = 1;
 }
 //判断工作流是否处于在途状态或者在批量工作流中打开forn
 if(obj.in_process == 1 || obj.is_batch == 1){
+    $("#add-wf").find('.J_hide').addClass('hide');
     action = 1;
 }
-
-
 if(obj.is_view == 1 && obj.in_process == 0){
     $("#add-wf").find('.J_hide').addClass('hide');
     $("#add-wf").find('#print').addClass('addPrint');
 }
-
-
 Mediator.publish('workflow:getKey', obj.key);
 (async function () {
     return workflowService.getPrepareParams({table_id: obj.table_id});
@@ -122,7 +116,8 @@ Mediator.subscribe('workflow:getflows', (res) => {
         isAddBuild: obj.isAddBuild,
         id: obj.id,
         key: obj.key,
-        action: action
+        action: action,
+        is_batch: obj.is_batch
     });
     setTimeout(()=>{
         cache_old= FormEntrys.getFormValue(obj.table_id,true);
@@ -169,7 +164,7 @@ Mediator.subscribe('workflow:submit', (res) => {
     }
 }),
 Mediator.subscribe('workflow:changeToEdit',(res)=>{
-    $("#add-wf").find('.J_hide').removeClass('hide');
+    //$("#add-wf").find('.J_hide').removeClass('hide');
     $("#add-wf").find('#print').removeClass('addPrint');
     FormEntrys.changeToEdit(res);
 })
