@@ -19,6 +19,15 @@ import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-
 import {PMAPI,PMENUM} from '../lib/postmsg';
 import jsplumb from 'jsplumb';
 
+let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[],agorfo=true,is_batch=0;
+serchStr.split('&').forEach(res => {
+    let arr = res.split('=');
+    obj[arr[0]] = arr[1];
+});
+is_view=obj.btnType==='view'?1:0;
+
+console.log(obj);
+
 ApprovalWorkflow.showDom().then(function (component) {
     WorkFlowGrid.showGrid();
     WorkFlowForm.showForm();
@@ -34,13 +43,6 @@ ApprovalWorkflow.showDom().then(function (component) {
     });
     setTimeout(()=> component.hideLoading(),1000)
 });
-
-let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[],agorfo=true,is_batch=0;
-serchStr.split('&').forEach(res => {
-    let arr = res.split('=');
-    obj[arr[0]] = arr[1];
-});
-is_view=obj.btnType==='view'?1:0;
 
 //订阅form data
 Mediator.subscribe('workFlow:record_info', (res) => {

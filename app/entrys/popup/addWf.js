@@ -40,7 +40,6 @@ if(obj.in_process == 1 || obj.is_batch == 1){
     $("#add-wf").find('.J_hide').addClass('hide');
     action = 1;
 }
-
 if(obj.is_view == 1 && obj.in_process == 0){
     $("#add-wf").find('.J_hide').addClass('hide');
     $("#add-wf").find('#print').addClass('addPrint');
@@ -77,6 +76,7 @@ Mediator.publish('workflow:getKey', obj.key);
         Mediator.publish('workflow:getParams', res.data.flow_data);
     }
 });
+
 Mediator.subscribe('workflow:getflows', (res) => {
     if (obj.btnType === 'view') {
         $('#toEdit').show();
@@ -121,7 +121,8 @@ Mediator.subscribe('workflow:getflows', (res) => {
         isAddBuild: obj.isAddBuild,
         id: obj.id,
         key: obj.key,
-        action: action
+        action: action,
+        is_batch: obj.is_batch
     });
     setTimeout(()=>{
         cache_old= FormEntrys.getFormValue(obj.table_id,true);
