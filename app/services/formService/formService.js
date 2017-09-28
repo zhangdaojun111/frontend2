@@ -2,14 +2,6 @@ import {HTTP} from '../../lib/http';
 import msgbox from '../../lib/msgbox';
 
 export const FormService = {
-    //子表内置父表的id集合（前端填充）tableid : ids
-    idsInChildTableToParent: {},
-    //父表的this.form.value
-    frontendParentFormValue: [],
-    //父表子表关系
-    frontendRelation: [],
-    //父表的this.newData
-    frontendParentNewData: {},
 
     selectObj: {'select': 'options', 'radio': 'group', 'multi-select': 'options'},
     continue_key: ["parent_real_id", "parent_table_id", "parent_temp_id", "real_id", "table_id", "temp_id"],

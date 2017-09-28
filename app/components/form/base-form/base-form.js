@@ -87,15 +87,17 @@ let config = {
         setDataFromParent() {
             //待跟aggrid协定
             // if(!this.globalService.fromSongridControl){return false;}
-            if (this.data.parent_table_id !== "" && FormService.frontendRelation[this.data.parent_table_id] && FormServicefrontendRelation[this.data.parent_table_id][this.data.tableId]) {
+            if (this.data.parentTableId !== "" && window.top.frontendRelation[this.data.parentTableId] && window.top.frontendRelation[this.data.parentTableId][this.data.tableId]) {
                 //父子表对应的kv关系
-                let kvDict = FormService.frontendRelation[this.data.parent_table_id][this.data.tableId]["pdfield_2_cdfield"];
+                let kvDict = window.top.frontendRelation[this.data.parentTableId][this.data.tableId]["pdfield_2_cdfield"];
                 //父表的this.form.value
-                let formDataFromParent = FormService.frontendParentFormValue[this.data.parent_table_id];
+                let formDataFromParent = window.top.frontendParentFormValue[this.data.parentTableId];
                 //组装子表所需列表或表单中内置或相关的父表中数据
-                let parentData = FormService.packageParentDataForChildData(kvDict, formDataFromParent, this.data.parent_table_id);
+                let parentData = FormService.packageParentDataForChildData(kvDict, formDataFromParent, this.data.parentTableId);
+                console.log('parentData');
+                console.log(parentData);
                 //子表的this.newData
-                let newDataFromSongrid = FormService.frontendParentNewData[this.data.tableId];
+                let newDataFromSongrid = window.top.frontendParentNewData[this.data.tableId];
                 //循环给子表赋值
                 for (let key in kvDict) {
                     let val = parentData[key];
@@ -106,7 +108,7 @@ let config = {
                         this.data.idsOfSonDataByParent.push(songridDfield);
                         let dinput_type = newDataFromSongrid[songridDfield]["dinput_type"] || "";
                         let options = [{value: val, label: val}];
-                        if (FIELD_TYPE_MAPPING.SELECT_LIST.indexOf(dinput_type) != -1) {
+                        if (FIELD_TYPE_MAPPING.SELECT_TYPE.indexOf(dinput_type) != -1) {
                             let options = [{value: val, label: val}];
                             this.data.data[songridDfield]["options"] = options;
                         }
@@ -114,10 +116,24 @@ let config = {
                         this.actions.triggerSingleControl(songridDfield);
                     }
                 }
-                if (FormService.idsInChildTableToParent.hasOwnProperty(this.data.tableId)) {
-                    FormService.idsInChildTableToParent[this.data.tableId].concat(this.data.idsOfSonDataByParent);
+                if (window.top.idsInChildTableToParent.hasOwnProperty(this.data.tableId)) {
+                    window.top.idsInChildTableToParent[this.data.tableId].concat(this.data.idsOfSonDataByParent);
                 } else {
-                    FormService.idsInChildTableToParent[this.data.tableId] = JSON.parse(JSON.stringify(this.data.idsOfSonDataByParent));
+                    window.top.idsInChildTableToParent[this.data.tableId] = JSON.parse(JSON.stringify(this.data.idsOfSonDataByParent));
+                }
+            }
+        },
+
+        //主动触发指定字段的所有事件
+        triggerSingleControl(key) {
+            let val = this.data.data[key]["value"];
+            if(val != "" || !$.isEmptyObject(val)) {
+                if($.isArray(val)){
+                    if(val.length != 0){
+                        this.actions.checkValue(this.data.data[key]);
+                    }
+                }else{
+                    this.actions.checkValue(this.data.data[key]);
                 }
             }
         },
@@ -159,7 +175,7 @@ let config = {
                 let type = this.actions.findTypeByDfield(key);
                 let val = data[key];
                 let parentTempId = data["parent_temp_id"];
-                if ((FormService.idsInChildTableToParent[this.data.tableId] && FormService.idsInChildTableToParent[this.data.tableId].indexOf(key) != -1 ) && val != "" && parentTempId != "" && (type == 'Buildin' || type == 'Select')) {
+                if ((window.top.idsInChildTableToParent[this.data.tableId] && FormService.window.top[this.data.tableId].indexOf(key) != -1 ) && val != "" && parentTempId != "" && (type == 'Buildin' || type == 'Select')) {
                     data[key] = data["parent_temp_id"];
                 }
             }
@@ -499,7 +515,7 @@ let config = {
                     //枚举类型 or 各种内置
                     v = this.actions.getTextByOptionID(item, itemData['value']);
                 }
-                if (FIELD_TYPE_MAPPING.NUMBER_TYPE_LIST.indexOf(type) != -1) {
+                if (FIELD_TYPE_MAPPING.NUMBER_TYPE.indexOf(type) != -1) {
                     //整数或者小数
                     v = v === "" ? 0 : v;
                 } else {
@@ -532,7 +548,7 @@ let config = {
                 if (data["real_type"] == 11) {
                     this.actions.setFormValue(f, result);
                 } else {
-                    if (FIELD_TYPE_MAPPING.NUMBER_TYPE_LIST.indexOf(data["real_type"]) != -1) {
+                    if (FIELD_TYPE_MAPPING.NUMBER_TYPE.indexOf(data["real_type"]) != -1) {
                         let reg = /^((-?\d+.?\d*)[Ee]{1}([+-]?\d+))$/;
                         if (reg.test(data.value)) {
                             data.value = data.value + "(不支持科学计数法！无法保存！)"
@@ -547,7 +563,7 @@ let config = {
                     this.actions.setFormValue(f, result);
 
                     //数据溢出出现科学计数法时
-                    if (FIELD_TYPE_MAPPING.NUMBER_TYPE_LIST.indexOf(data["real_type"]) != -1) {
+                    if (FIELD_TYPE_MAPPING.NUMBER_TYPE.indexOf(data["real_type"]) != -1) {
                         let reg = /^((-?\d+.?\d*)[Ee]{1}([+-]?\d+))$/;
                         if (reg.test(data.value)) {
                             data.value = data.value + "(不支持科学计数法！无法保存！)"
@@ -926,7 +942,7 @@ let config = {
         //赋值
         setFormValue(dfield, value) {
             let data = this.data.data[dfield];
-            if (data) {
+            if (data  && this.data.childComponent[dfield]) {
                 let childComponet = this.data.childComponent[dfield];
                 childComponet.data["value"] = data["value"] = value;
                 childComponet.reload();
@@ -1251,6 +1267,9 @@ let config = {
             if (data.required) {
                 this.actions.requiredChange(this.data.childComponent[data.dfield]);
             }
+            if(this.data["frontend_cal_parent_2_child"]){
+                window.top.frontendParentFormValue[this.data.tableId]=this.actions.createFormValue(this.data.data);
+            }
         },
         //添加按钮组
         addBtn() {
@@ -1383,11 +1402,13 @@ let config = {
         //打开选择器
         selectChoose(data) {
             let _this = this;
-            PMAPI.openDialogByIframe(`/iframe/choose?fieldId=${data.id}`, {
+            PMAPI.openDialogByIframe(`/iframe/choose?fieldId=${data.id}&key=${this.data.key}`, {
                 width: 900,
                 height: 600,
                 title: `选择器`,
                 modal: true
+            },{
+                data:data
             }).then((res) => {
                 if (res.value) {
                     _this.actions.setFormValue(data.dfield, res.value, res.label);
@@ -1485,7 +1506,7 @@ let config = {
                 }
             }
             // 保存父表数据
-            FormService.frontendParentFormValue[_this.tableId] = _this.actions.createFormValue(_this.data.data);
+            window.top.frontendParentFormValue[_this.tableId] = _this.actions.createFormValue(_this.data.data);
         },
 
         //打开对应关系弹窗
@@ -1751,9 +1772,25 @@ class BaseForm extends Component {
     constructor(formData) {
         config.template = formData.template;
         //存父子表关系
-        FormService.frontendRelation[formData.data.tableId] = formData.data["frontend_cal_parent_2_child"];
+        if(!window.top.frontendRelation){
+            window.top.frontendRelation={};
+        }
+        if(!window.top.frontendParentNewData){
+            window.top.frontendParentNewData={};
+        }
+        if(!window.top.isSonGridDataNeedParentTepmId){
+            window.top.isSonGridDataNeedParentTepmId='';
+        }
+        if(!window.top.idsInChildTableToParent){
+            window.top.idsInChildTableToParent={};
+        }
+        if(!window.top.frontendParentFormValue){
+            window.top.frontendParentFormValue={};
+        }
+        window.top.frontendRelation[formData.data.tableId] = formData.data["frontend_cal_parent_2_child"];
         //存父表的newData
-        FormService.frontendParentNewData[formData.data.tableId] = formData.data.data;
+        window.top.frontendParentNewData[formData.data.tableId] = formData.data.data;
+        window.top.isSonGridDataNeedParentTepmId=formData.data.data['temp_id']['value'] || '';
         super(config, formData.data);
     }
 
