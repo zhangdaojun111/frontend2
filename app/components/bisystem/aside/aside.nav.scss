@@ -97,7 +97,7 @@ $font_size: 12px;
             }
         }
         .charts {
-            height: 100%;
+            height: calc(100% - 48px);
             overflow: auto;
             border-top: 1px solid rgba(68, 68, 68, 1);
             box-sizing: border-box;

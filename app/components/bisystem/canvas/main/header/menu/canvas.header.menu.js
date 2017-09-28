@@ -20,7 +20,6 @@ let config = {
             brothers.forEach((item) => {
                 item.actions.blur();
             });
-            this.data.isCurrent = true;
         },
         blur(){
             this.el.find('a').removeClass('active');
@@ -29,20 +28,8 @@ let config = {
         }
     },
 
-    binds: [
-        {
-            event: 'click',
-            selector: '',
-            callback: function () {
-                this.actions.focus();
-            }
-        }
-    ],
-    afterRender() {
-        if (this.data.isCurrent) {
-            this.el.find('a').addClass('active');
-        }
-    }
+    binds: [],
+    afterRender() {}
 };
 
 export class CanvasHeaderMenuComponent extends Component {
