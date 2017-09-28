@@ -1,0 +1,54 @@
+.form-chart-advanced-compute{
+    .advanced-compute-list{
+        padding-top:20px;
+        table {
+            width:100%;
+            border:solid 1px #e4e4e4;
+            thead {
+                th{
+                    border-right: solid 1px #e4e4e4;
+                    padding: 10px;
+                    background-color: #f2f2f2;
+                    white-space: nowrap;
+                    text-align: left;
+                }
+            }
+            tbody {
+                td {
+                    vertical-align: top;
+                    border-top:solid 1px #e4e4e4;
+                    border-right: solid 1px #e4e4e4;
+                    padding:10px;
+                    .form-chart-wrapper{
+                        padding-left:0;
+                    }
+                    textarea,input {
+                        margin: 0;
+                        width:100%;
+                        height:100%;
+                        border:none;
+                        outline:none;
+                    }
+                    textarea {
+                        width:calc(100% - 4px);
+                        height:150px;
+                        resize:none;
+                    }
+                    .code-height-auto {
+                        height: 20px;
+                    }
+                }
+            }
+        }
+        .add-item-btn {
+            margin-top:10px;
+            display:inline-block;
+            background:rgba(255, 255, 255, 1);
+            border:solid 1px rgba(215, 215, 215, 1);
+            border-radius:4px;
+            padding:5px 15px;
+            text-decoration:none;
+            color:#666666;
+        }
+    }
+}

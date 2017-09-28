@@ -5,7 +5,7 @@ import {CanvasCellsComponent} from './cells/canvas.cells';
 import {CanvasHeaderComponent} from './header/canvas.header';
 import {canvasCellService} from '../../../../services/bisystem/canvas.cell.service';
 import msgbox from '../../../../lib/msgbox';
-import {PMAPI, PMENUM} from "../../../../lib/postmsg";
+import {PMAPI} from "../../../../lib/postmsg";
 
 let config = {
     template: template,
@@ -15,7 +15,7 @@ let config = {
         headerComponents: {},
         editMode: window.config.bi_user === 'manager' ? window.config.bi_user : false,
         singleMode: window.location.href.indexOf('single') !== -1,
-        editModeDialog: true,
+        isViewEmpty: false,
     },
     binds: [
         // 编辑模式
@@ -65,12 +65,18 @@ let config = {
          * @param viewId
          */
         switchViewId: function (viewId) {
-            this.currentViewId = viewId ? viewId.toString() : window.config.bi_views[0].id;
-            if (!this.data.singleMode) {
-                this.data.headerComponents.data.menus[this.currentViewId].actions.focus();
-            }
-            this.data.cells = new CanvasCellsComponent(this.currentViewId);
-            this.data.cells.render(this.el.find('.cells-container'));
+            // 如果router没有传viewId 则默认用bi_views第一个
+            this.data.currentViewId = viewId ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
+            if (this.data.currentViewId) {
+                if (!this.data.singleMode) {
+                    this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
+                }
+                this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
+                this.data.cells.render(this.el.find('.cells-container'));
+
+               // this.data.headerComponents.actions.canSaveViews(this.data.currentViewId);
+            };
+
         },
 
         /**
@@ -105,16 +111,12 @@ let config = {
         this.actions.headLoad();
         this.hideLoading();
     },
-    beforeDestory:function () {
-
-    }
+    beforeDestory:function () {}
 };
 
 export class CanvasMain extends Component {
     constructor(data, events) {
-        if (window.location.href.indexOf('key') !== -1) {
-            config.data.editModeDialog = false;
-        }
+        config.data.isViewEmpty = window.config.bi_views[0] ? false : true;
         super(config, data, events);
     }
 }

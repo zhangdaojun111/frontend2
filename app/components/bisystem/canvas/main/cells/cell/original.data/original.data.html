@@ -1,10 +1,10 @@
 <div class="origin-data-wrap">
-    <a href="javascript:;" class="bi-origin-data-close" title="关闭"><i class="red-remove-icon"></i></a>
+    <a href="javascript:;" class="bi-origin-data-close" title="关闭"><i class="right-icon"></i></a>
     <div class="bi-tabs">
         <span class="cur">原始数据</span>
     </div>
     <div class="origin-data">
-        <div class="content">
+        <div class="content origin-data-wrapper">
             <table>
                 <thead>
                     <tr class="td-checkbox">
@@ -19,17 +19,22 @@
                         </th>
                         <th>{{cellChart.chart.xAxis.name}}</th>
                         {{#each cellChart.cell.attribute}}
-                        <th class="selectY" data-y-index="{{@index}}">
-                            <span>
-                                <label class="custom-checkbox z-checkbox">
+                        <th class="selectY {{@root.canSortDeep}}" data-y-index="{{@index}}">
+                            <label class="custom-checkbox z-checkbox">
                                 {{#if selected}}
                                 <input type="checkbox" checked="checked"  name="">
                                 {{else}}
                                 <input type="checkbox"  name="">
                                 {{/if}}
-                                </label>
+                            </label>
+                            <span data-type="{{sort}}">
                                 {{name}}
+                                {{#if @root.showSortArrow}}
+                                <i class="bi-icon-up {{original_deep_equal sort 'asc'}}"></i>
+                                <i class="bi-icon-down {{original_deep_equal sort 'desc'}}"></i>
+                                {{/if}}
                             </span>
+
                         </th>
                         {{/each}}
                 </tr>

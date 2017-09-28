@@ -66,7 +66,11 @@ let config = {
             };
             if (chart['data']['assortment']) {
                 this.cellTitle.actions.setValue(chart,this.data.currentViewId);
-                this.data.cellComponent = new cellTypes[chart['data']['assortment']](data);
+                this.data.cellComponent = new cellTypes[chart['data']['assortment']](data, {
+                    onUpdateChartDeepTitle: (data) => {
+                        this.cellTitle.actions.setDeepTitle(data)
+                    }
+                });
                 let cellContainer = this.el.find('.cell-chart');
                 this.data.cellComponent.render(cellContainer);
                 this.cellChart = this.data.cellComponent;
@@ -86,7 +90,8 @@ let config = {
                     this.data.cell.size.left = ui.position.left;
                     this.data.cell.size.top = ui.position.top;
                     this.trigger('onUpdateLayout', {componentId: this.componentId,cell:this.data.cell});
-                }
+                },
+                cancel: "div.comment"
             };
 
             const resizeOption = {
@@ -146,17 +151,17 @@ let config = {
             callback: function (context,event) {
                 this.trigger('onDrag',this.componentId);
                 $(context).css('zIndex', this.data.cellMaxZindex);
-                return false;
+                event.stopPropagation();
             }
         },
         // 拖拽end画布mouseup触发
-        {
-            event: 'mouseup',
-            selector: '.cell',
-            callback: function (context,event) {
-                // this.data.cell.size.zIndex = this.data.cellMaxZindex;
-            }
-        },
+        // {
+        //     event: 'mouseup',
+        //     selector: '.cell',
+        //     callback: function (context,event) {
+        //         // this.data.cell.size.zIndex = this.data.cellMaxZindex;
+        //     }
+        // },
         // html5原生拖拽，dragover需要ev.preventDefault
         {
             event: 'dragover',
@@ -212,6 +217,17 @@ let config = {
             selector: '.del-cell-btn',
             callback: function (context,event) {
                 this.actions.delCellLayout();
+                return false;
+            }
+        },
+        // 显示富文本编辑器
+        {
+            event: 'click',
+            selector: '.rich-text-btn',
+            callback: function (context,event) {
+                if (this.data.cellComponent.actions.showQuill) {
+                    this.data.cellComponent.actions.showQuill()
+                };
                 return false;
             }
         },

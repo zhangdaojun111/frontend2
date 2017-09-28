@@ -1,31 +1,10 @@
 <div class="origin-data-wrap">
-    <a href="javascript:;" class="bi-origin-data-close" title="关闭"><i class="red-remove-icon"></i></a>
+    <a href="javascript:;" class="bi-origin-data-close" title="关闭"><i class="right-icon"></i></a>
     <div class="bi-tabs">
         <span class="cur">原始数据</span>
+        <span>高级计算</span>
     </div>
     <div class="origin-data ">
-        <!--<div class="content list">-->
-            <!--<table>-->
-                <!--<thead>-->
-                <!--<tr>-->
-                    <!--<th>高级字段名称</th>-->
-                    <!--<th>所用模板</th>-->
-                    <!--<th>操作</th>-->
-                <!--</tr>-->
-                <!--</thead>-->
-                <!--<tbody>-->
-                <!--<tr>-->
-                    <!--<td>分组01</td>-->
-                    <!--<td>分组模板</td>-->
-                    <!--<td>-->
-                        <!--<a href="javascript:;">编辑</a>-->
-                        <!--<a href="javascript:;">删除</a>-->
-                    <!--</td>-->
-                <!--</tr>-->
-                <!--</tbody>-->
-            <!--</table>-->
-            <!--<button type="button" class="add-advanced-list">新增高级字段</button>-->
-        <!--</div>-->
         <div class="content">
             <table>
             <thead>
@@ -45,7 +24,7 @@
                 {{/each}}
             </tr>
             </thead>
-            <tbody>
+            <tbody class="origin-group-tbody">
             {{#each cellChart.cell.select}}
             <tr class="tr-body">
                 <td>
@@ -89,6 +68,22 @@
             {{/each}}
             </tbody>
         </table>
+        </div>
+        <div class="content advanced-list">
+            <table>
+                <thead>
+                <tr>
+                    <th>高级字段名称</th>
+                    <th>所用模板</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each advancedItems}}
+                {{/each}}
+                </tbody>
+            </table>
+            <button type="button" class="add-advanced-btn">新增高级字段</button>
         </div>
     </div>
 </div>
