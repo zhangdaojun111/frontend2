@@ -1167,6 +1167,9 @@ let config = {
                         this.actions.checkCorrespondence();
                         this.data.fristGetCorrespondence = false;
                     }
+                    if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' ){
+                        this.actions.checkCorrespondence( true );
+                    }
                 },time )
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
@@ -1314,13 +1317,20 @@ let config = {
             });
         },
         //显示勾选项
-        checkCorrespondence: function () {
+        checkCorrespondence: function (setData) {
             let title = this.el.find( '.correspondence-check span' )[0].innerHTML;
             let obj = {
-                rowData: title == '仅显示勾选项'?this.data.correspondenceSelectedData:this.data.rowData
+                rowData: title == '仅显示勾选项'?this.data.correspondenceSelectedData : this.data.rowData
+            }
+            if( setData ){
+                obj = {
+                    rowData: title == '仅显示勾选项'?this.data.rowData : this.data.correspondenceSelectedData
+                }
             }
             this.agGrid.actions.setGridData( obj );
-            this.el.find( '.correspondence-check span' )[0].innerHTML = title == '仅显示勾选项'?'显示全部':'仅显示勾选项';
+            if( !setData ){
+                this.el.find( '.correspondence-check span' )[0].innerHTML = title == '仅显示勾选项'?'显示全部':'仅显示勾选项';
+            }
             this.actions.setCorrespondenceSelect();
         },
         //行选择时触发
@@ -1415,8 +1425,7 @@ let config = {
             if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
                 json['rows'] = 99999;
                 json['first'] = 0;
-                // json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
-                json['is_temp'] = 0;
+                json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
             }
             if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild'||this.data.viewMode == 'child' ){
                 json["childInfo"]= {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
