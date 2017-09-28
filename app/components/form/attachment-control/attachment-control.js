@@ -34,11 +34,14 @@ let config = {
                     title: "浏览上传文件"
                 }).then(res=>{
                     let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
+                    if(!deletedFiles){
+                        return;
+                    }
                     for(let file of deletedFiles){
                         this.data.value.splice(this.data.value.indexOf(file),1);
                     }
-                this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
-                this.trigger('changeValue',this.data);
+                    this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
+                    this.trigger('changeValue',this.data);
                 });
             }
         }, {
