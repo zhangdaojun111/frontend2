@@ -2985,15 +2985,15 @@ let config = {
             // this.actions.openSourceDataGrid( url,title );
         },
         //行级操作
-        doRowOperation: function (ro,$event) {
+        doRowOperation: function (r,$event) {
             if( r['frontend_addr'] !== ''){
                 //执行前端操作
-                // this.rowOperationFrontend({
-                //     rowId:this.realId,
-                //     table_id:this.pageId,
-                //     frontendAddress:r['frontend_addr'],
-                //     row_op_id:r['row_op_id']
-                // });
+                this.actions.rowOperationFrontend({
+                    rowId:$event.data['_id'],
+                    table_id:this.data.tableId,
+                    frontendAddress:r['frontend_addr'],
+                    row_op_id:r['row_op_id']
+                });
             }else if( r['pyscript_addr'] !== '' ){
                 //执行后端操作
                 let data = {
@@ -3008,6 +3008,28 @@ let config = {
                         msgBox.alert( '发送请求失败！错误是' + res['error'] );
                     }
                 } )
+            }
+        },
+        //行级操作前端操作
+        rowOperationFrontend: function (data) {
+            let customRowId = data['rowId'];
+            let customTableId = data['table_id'];
+            let row_op_id = data['row_op_id'];
+            /*
+             配置的前端地址格式——操作名（fun）:后台地址
+             eg——execute:data/customize_router/?plugin_name=ServerPackageInfo.py
+             */
+            let fun=data['frontendAddress'].split(':')[0];
+            let params=data['frontendAddress'].split(':')[1];
+
+            switch( fun ){
+                //行级操作-BI
+                case 'bi':{
+                    params = [customTableId,customRowId,row_op_id,this.data.rowData,this.data.fieldsData];
+                    console.log( '行级BI参数' )
+                    console.log( params )
+                    break;
+                }
             }
         },
         //行双击
