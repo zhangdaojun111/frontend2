@@ -92,13 +92,13 @@ let config = {
                 }
             });
             if(this.el.find('.child-menu div').length>0){
+                this.el.find('.nav-tabs-select').show();
                 this.el.find('.child-menu div').each((index,val)=>{
                     childWidth +=$(val).width();
                     if(childWidth < navTabsWidth){
                         $(val).appendTo(this.el.find('.nav-tabs'));
                     }
                 });
-                this.el.find('.nav-tabs-select').show();
             }else {
                 this.el.find('.nav-tabs-select').hide();
             }
@@ -160,7 +160,7 @@ let config = {
             selector:'.nav-tabs-select',
             callback: function (context,event) {
                 event.stopPropagation();
-                this.el.find('.child-menu').show();
+                this.el.find('.child-menu').css('visibility','visible');
             }
         },
     ],
@@ -194,7 +194,7 @@ let config = {
         });
         //点击更多目录框外 隐藏显示框
         $(document.body).bind('click.menu',()=>{
-           this.el.find('.child-menu').hide();
+            this.el.find('.child-menu').css('visibility','hidden');
         })
     },
     beforeDestory(){
