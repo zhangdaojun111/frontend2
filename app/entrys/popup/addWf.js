@@ -37,10 +37,12 @@ if(obj.in_process == 1 || obj.is_batch == 1){
     $("#add-wf").find('.J_hide').addClass('hide');
     action = 1;
 }
+
 if(obj.is_view == 1 && obj.in_process == 0){
     $("#add-wf").find('.J_hide').addClass('hide');
     $("#add-wf").find('#print').addClass('addPrint');
 }
+
 Mediator.publish('workflow:getKey', obj.key);
 (async function () {
     return workflowService.getPrepareParams({table_id: obj.table_id});
