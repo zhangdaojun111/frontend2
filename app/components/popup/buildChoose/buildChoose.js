@@ -21,10 +21,6 @@ let config = {
     afterRender() {
         let _this = this;
         FormService.getStaticData({field_id: this.data.fieldId}).then(res => {
-        // PMAPI.getIframeParams(window.config.key).then((res) => {
-        //     console.log("---------------  ",res)
-        //     this.data['options'] = res.data['options'];
-
             if(res.error == '您没有数据查看权限') {
                 _this.el.find('.ui-section').append('<p style="font-size:20px">您没有数据查看权限</p>')
             }
