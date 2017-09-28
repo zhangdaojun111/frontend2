@@ -20,6 +20,7 @@ let config = {
          * @param _param
          */
         loadData: function (_param) {
+            console.log('do loadData');
             _param = _param || {};
             let param = _.defaultsDeep(_param, {
                 rows: this.pagination.data.rows,
@@ -55,9 +56,11 @@ let config = {
          * @private
          */
         _postReadData: function (ids) {
+            this.showLoading();
             HTTP.postImmediately('/remark_or_del_msg/', {
                 checkIds: ids
             }).then((res) => {
+                this.hideLoading();
                 if (res.success === 1) {
                     this.actions.loadData();
                 }
@@ -133,25 +136,27 @@ let config = {
          * @param $event
          */
         onCellClicked: function ($event) {
-            let data = $event.data;
-            if (data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
-                data.handle_status_text === '已驳回' || data.handle_status_text === '已完成') {
-                if(data.handle_status_text === '待审批'){
-                    data.url += "&btnType=edit";
-                }else if(data.handle_status_text === '已取消'){
-                    data.url += "&btnType=view";
-                }
+            if($event.colDef.headerName === '操作'){
+                let data = $event.data;
+                if (data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
+                    data.handle_status_text === '已驳回' || data.handle_status_text === '已完成') {
+                    if(data.handle_status_text === '待审批'){
+                        data.url += "&btnType=edit";
+                    }else if(data.handle_status_text === '已取消'){
+                        data.url += "&btnType=view";
+                    }
 
-                PMAPI.openDialogByIframe(data.url, {
-                    width: 1200,
-                    height: 500,
-                    title: data.msg_type_text,
-                    customSize:true
-                })
-            } else {
-                systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
+                    PMAPI.openDialogByIframe(data.url, {
+                        width: 1200,
+                        height: 500,
+                        title: data.msg_type_text,
+                        customSize:true
+                    })
+                } else {
+                    systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
+                }
+                this.actions._postReadData(JSON.stringify([data.id]));
             }
-            this.actions._postReadData(JSON.stringify([data.id]));
         }
     },
     afterRender: function () {
