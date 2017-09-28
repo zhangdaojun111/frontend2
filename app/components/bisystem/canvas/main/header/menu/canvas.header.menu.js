@@ -16,24 +16,13 @@ let config = {
         focus(){
             this.el.find('a').addClass('active');
             this.el.find('i').addClass('tabs-menu-active-icon');
-            let brothers = this.findBrothers();
-            brothers.forEach((item) => {
-                item.actions.blur();
-            });
             //发送通知给canvas.header组件 删除隐藏的更多目录框的选中状态
             this.trigger('onClearActive');
-            this.data.isCurrent = true;
         },
-        blur(){
-            this.el.find('a').removeClass('active');
-            this.el.find('i').removeClass('tabs-menu-active-icon');
-            this.data.isCurrent = false;
-        }
     },
 
     binds: [],
-    afterRender() {
-    }
+    afterRender() {}
 };
 
 export class CanvasHeaderMenuComponent extends Component {

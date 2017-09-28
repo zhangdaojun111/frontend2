@@ -62,13 +62,14 @@ let config = {
          */
         hideMoreMenu(){
             let childWidth = 0;
-            let parentWidth = this.el.find('.nav-tabs').width();
-            this.el.find('.nav-tabs-select').css('left',parentWidth);
-            this.el.find('.child-menu').css('left',parentWidth);
-            this.el.find('.nav-tabs a').each((index,val)=>{
+            let navTabsWidth = this.el.find('.nav-tabs').width();
+            this.el.find('.nav-tabs-select').css('left',navTabsWidth);
+            this.el.find('.child-menu').css('left',navTabsWidth);
+            this.el.find('.nav-tabs div').each((index,val)=>{
                 childWidth += $(val).outerWidth();
-                if(childWidth > parentWidth){
-                    $(val).parent().appendTo(this.el.find('.child-menu'));
+                if(childWidth > navTabsWidth){
+                    this.el.find('.nav-tabs-select').show();
+                    $(val).appendTo(this.el.find('.child-menu'));
                 }
             });
         },
@@ -77,26 +78,48 @@ let config = {
          */
         windowChange(){
             let childWidth = 0;
-            let parentWidth = this.el.find('.nav-tabs').width();
-            this.el.find('.nav-tabs-select').css('left',parentWidth);
-            this.el.find('.child-menu').css('left',parentWidth);
+            let navTabsWidth = this.el.find('.nav-tabs').width();
+            this.el.find('.nav-tabs-select').css('left',navTabsWidth);
+            this.el.find('.child-menu').css('left',navTabsWidth);
             this.el.find('.nav-tabs div').each((index,val)=>{
                 childWidth += $(val).width();
-                if(childWidth > parentWidth){
-                    if(this.el.find('.child-menu div').length!==0){
+                if(childWidth > navTabsWidth){
+                    if(this.el.find('.child-menu div').length>0){
                         this.el.find('.child-menu div:first-child').before($(val));
                     }else {
                         $(val).appendTo(this.el.find('.child-menu'));
                     }
                 }
             });
-            this.el.find('.child-menu div').each((index,val)=>{
-                childWidth +=$(val).width();
-                if(childWidth < parentWidth){
-                    $(val).appendTo(this.el.find('.nav-tabs'));
+            if(this.el.find('.child-menu div').length>0){
+                this.el.find('.child-menu div').each((index,val)=>{
+                    childWidth +=$(val).width();
+                    if(childWidth < navTabsWidth){
+                        $(val).appendTo(this.el.find('.nav-tabs'));
+                    }
+                });
+                this.el.find('.nav-tabs-select').show();
+            }else {
+                this.el.find('.nav-tabs-select').hide();
+            }
+
+        },
+        /**
+         * 未选中的所有目录取消选中状态
+         * @param menuId 选中的目录id
+         */
+        hideBrothers(menuId){
+            this.findAllChildren().forEach((item)=>{
+                if(item.data.id == menuId){
+                    item.el.find('a').addClass('active');
+                    item.el.find('i').addClass('tabs-menu-active-icon');
+                }else{
+                    item.el.find('a').removeClass('active');
+                    item.el.find('i').removeClass('tabs-menu-active-icon');
                 }
-            })
+            });
         }
+
     },
     binds: [
         { //保存画布块
@@ -136,30 +159,28 @@ let config = {
             event:'click',
             selector:'.nav-tabs-select',
             callback: function (context,event) {
-                this.el.find('.child-menu').show();
                 event.stopPropagation();
+                this.el.find('.child-menu').show();
             }
         },
     ],
     afterRender() {
-
         //新窗口隐藏新窗口图标
         if(window === window.parent){
             this.el.find('.new-window').hide();
         }
-
         this.data.views = window.config.bi_views;
         // 渲染header视图列表
         this.data.views.forEach(viewData => {
             let menu = new CanvasHeaderMenuComponent(viewData,{
                 onClearActive:()=>{
-                    console.log('do a test');
-
+                    this.actions.hideBrothers(viewData.id);
                 }
             });
             this.append(menu, this.el.find('.nav-tabs'));
             this.data.menus[viewData.id] = menu;
         });
+
 
         //第一次渲染之后隐藏多的目录
         this.actions.hideMoreMenu();
@@ -167,18 +188,22 @@ let config = {
     },
     firstAfterRender(){
         //当窗口大小改变时 更多目录框的显示随之改变
+
         $(window).resize(()=> {
             this.actions.windowChange();
         });
-
         //点击更多目录框外 隐藏显示框
         $(document.body).bind('click.menu',()=>{
            this.el.find('.child-menu').hide();
         })
     },
     beforeDestory(){
+
         //当destory时销毁全局document.body click事件
         $(document.body).off('click.menu');
+
+        //当destory时销毁全局window resize
+        $(window).off('resize');
     }
 };
 export class CanvasHeaderComponent extends Component {
