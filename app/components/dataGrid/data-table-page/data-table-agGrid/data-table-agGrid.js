@@ -2274,12 +2274,7 @@ let config = {
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
             }
-            if( this.data.viewMode == 'EditChild' ){
-                json['temp_ids'] = JSON.stringify( this.data.deletedIds )
-            }else {
-                json['real_ids'] = JSON.stringify( this.data.deletedIds )
-            }
-            if( json.is_batch == 1 ){
+            if( json.is_batch == 1 || this.data.viewMode == 'EditChild' ){
                 json.temp_ids = json.real_ids;
                 json['real_ids'] = JSON.stringify([]);
             }
