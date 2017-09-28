@@ -25,6 +25,7 @@ let config = {
                 _this.el.find('.ui-section').append('<p style="font-size:20px">您没有数据查看权限</p>')
             }
            _this.data = Object.assign({}, _this.data, res['data'][0]);
+            console.log(res['data'][0])
             let r1 = FormEntry.createForm({
                 table_id: _this.data.source_table_id,
                 form_id: '',
