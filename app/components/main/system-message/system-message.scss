@@ -28,6 +28,9 @@
         border: double #e4e4e4;
         .ag-body-viewport{
             .grid-cell-info{
+                .ui-link{
+                    outline: none;
+                }
                 &.already-read-icon{
                     color: #31fc38;
                 }

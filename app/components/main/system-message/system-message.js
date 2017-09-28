@@ -20,7 +20,6 @@ let config = {
          * @param _param
          */
         loadData: function (_param) {
-            console.log('do loadData');
             _param = _param || {};
             let param = _.defaultsDeep(_param, {
                 rows: this.pagination.data.rows,
@@ -61,7 +60,6 @@ let config = {
                 checkIds: ids
             }).then((res) => {
                 this.hideLoading();
-
                 if (res.success === 1) {
                     this.actions.loadData();
                 }
@@ -137,6 +135,7 @@ let config = {
          * @param $event
          */
         onCellClicked: function ($event) {
+            console.log($event);
             if($event.colDef.headerName === '操作'){
                 let data = $event.data;
                 if (data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
@@ -156,8 +155,12 @@ let config = {
                 } else {
                     systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
                 }
-                this.actions._postReadData(JSON.stringify([data.id]));
+                $event.node.data.is_read = 0;
+                // this.actions._postReadData(JSON.stringify([data.id]));
             }
+        },
+        refreshData:function () {
+
         }
     },
     afterRender: function () {

@@ -26,11 +26,12 @@ let config = {
          * 初始化input前方的title和后方的输入规则
          */
         initPswInput:function () {
-            if(this.data.title !== ''){
+            if(this.data.title !== undefined &&  this.data.title !== ''){
                 this.el.find('.password-title').html(this.data.title);
             }
             // this.el.find('.password-rule').html(this.data.rule);
             if(this.data.fakerPsw === false){
+                console.log("do hide faker");
                 this.el.find('.default-faker-password').hide();
             }
         },
