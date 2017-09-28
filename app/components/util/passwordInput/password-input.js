@@ -95,7 +95,7 @@ let config = {
             }
 
             if(this.actions.checkPwLength(this.data.password_value) === false){
-                this.el.find('.input-password-warning').html('密码长度必须为6-16位，请修改');
+                this.el.find('.input-password-warning').html('密码长度必须为6-20位，请修改');
                 this.data.isLegal = false;
                 return;
             }
@@ -116,7 +116,7 @@ let config = {
          */
         checkPwLength:function (pw) {
             let length = pw.length;
-            return (length >=6 && length <= 16 )
+            return (length >=6 && length <= 20 )
         },
         /**
          * input获取焦点时隐藏密码不合法的提醒
