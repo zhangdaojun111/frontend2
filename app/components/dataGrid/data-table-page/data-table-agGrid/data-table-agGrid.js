@@ -210,7 +210,9 @@ let config = {
         //二维表项目名称
         project: '',
         //二维表改变的值
-        cellChangeValue: {}
+        cellChangeValue: {},
+
+        addNewFlowId: ''
     },
     //生成的表头数据
     columnDefs: [],
@@ -784,9 +786,8 @@ let config = {
                                 dataTableService.getPreferences( obj ).then( res=>{
                                     dgcService.setPreference( res,this.data );
                                     //初始化偏好隐藏系统默认列
-                                    if( res.is_report == 0 && res.ignoreFields.ignoreFields == null && this.data.haveSystemsFields ){
-                                        this.data.ignoreFields = ['f1','f2','f3','f4'];
-                                    }
+                                    this.actions.hideSysCols( res );
+                                    HTTP.flush();
                                     //创建表头
                                     this.columnDefs = this.actions.createHeaderColumnDefs();
                                     this.agGrid.gridOptions.api.setColumnDefs( this.columnDefs );
@@ -1002,11 +1003,9 @@ let config = {
             this.agGrid.actions.setGridData(d);
 
             //第一次加载隐藏默认列
-            if( res[0].is_report == 0 && res[0].ignoreFields.ignoreFields == null && this.data.haveSystemsFields ){
-                this.data.ignoreFields = ['f1','f2','f3','f4'];
-            }
+            this.actions.hideSysCols( res[0] );
             //创建sheet分页
-            this.actions.createSheetTabs( res[2] )
+            this.actions.createSheetTabs( res[2] );
 
             // this.actions.getGridData();
             //按钮点击事件
@@ -1022,17 +1021,30 @@ let config = {
             //渲染其他组件
             this.actions.renderAgGrid();
         },
+        //隐藏系统字段
+        hideSysCols: function ( res ) {
+            if( res.is_report == 0 && res.ignoreFields.ignoreFields == null && this.data.haveSystemsFields ){
+                this.data.ignoreFields = ['f1','f2','f3','f4'];
+                dataTableService.savePreference({
+                    action: 'ignoreFields',
+                    table_id: this.data.tableId,
+                    ignoreFields: JSON.stringify( this.data.ignoreFields  )
+                });
+            }
+        },
         //设置表表单、工作流数据
         setPrepareParmas: function (res) {
             this.data.prepareParmas = res.data;
             this.data.customOperateList = this.data.prepareParmas["operation_data"] || [];
             this.data.rowOperation = this.data.prepareParmas['row_operation'] || [];
             try{this.data.flowId = res["data"]["flow_data"][0]["flow_id"] || "";}catch(e){}
+            console.log(this.data.flowId, );
             for( let d of this.data.prepareParmas["flow_data"] ){
                 if( d.selected == 1 ){
                     this.data.flowId = d.flow_id;
                 }
             }
+            console.log(this.data.flowId);
         },
         //请求新增表单统计数据
         getNewFormCountData: function () {
@@ -1885,7 +1897,7 @@ let config = {
                         parent_record_id: this.data.parentRecordId,
                         btnType: 'new',
                         form_id:this.data.formId,
-                        flow_id:this.data.flowId,
+                        flow_id:this.data.addNewFlowId,
                     };
                     let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
 
@@ -2542,6 +2554,11 @@ let config = {
             if( !data.data || this.data.isEditable || data.data.myfooter || this.data.doubleClick ){
                 return;
             }
+            //防止双击和单击的误操作
+            this.data.doubleClick = true;
+            setTimeout( ()=>{
+                this.data.doubleClick = false;
+            },200 )
             if(this.data.viewMode == 'reportTable2'){
                 if(data.data.can_edit == 1){
                     data.column.cellEditor = "";
@@ -2858,6 +2875,10 @@ let config = {
                 if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
                     btnType = 'none';
                 }
+                console.log("+++++++++++++++++++++++++")
+                console.log("+++++++++++++++++++++++++")
+                console.log("+++++++++++++++++++++++++")
+                console.log(data.data.flow_id);
                 let obj = {
                     table_id: this.data.tableId,
                     parent_table_id: this.data.parentTableId,
@@ -2872,8 +2893,11 @@ let config = {
                     in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                     form_id:this.data.formId,
-                    flow_id:this.data.flowId,
+                    flow_id:data.data.flow_id || '',
                 };
+                console.log(data);
+                console.log("+++++++++++++++++++++++++++++++");
+                console.log(obj);
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
                 this.actions.openSelfIframe( url,title );
@@ -2892,7 +2916,7 @@ let config = {
                     in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                     form_id:this.data.formId,
-                    flow_id:this.data.flowId,
+                    flow_id:data.data.flow_id || '',
                 };
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '编辑'
@@ -2985,10 +3009,6 @@ let config = {
         onRowDoubleClicked: function (data) {
             console.log( "行双击查看" )
             console.log( data )
-            this.data.doubleClick = true;
-            setTimeout( ()=>{
-                this.data.doubleClick = false;
-            },500 )
             this.actions.viewOrEditPerm( 'view' );
             //屏蔽分组行
             if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0)||this.data.editMode||data.data.myfooter ){
@@ -3005,11 +3025,12 @@ let config = {
                 record_id: data.data.record_id || '',
                 btnType: 'view',
                 is_view:1,
-                in_process: (this.data.viewMode == 'in_process' || data["data"]["status"] == 2) ? 1 : 0,
+                in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                 is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                 form_id:this.data.formId,
-                flow_id:this.data.flowId,
+                flow_id:data.data.flow_id || '',
             };
+            console.log(obj);
             if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
                 obj.btnType = 'none';
             }

@@ -66,7 +66,7 @@ let config = {
          */
         switchViewId: function (viewId) {
             // 如果router没有传viewId 则默认用bi_views第一个
-            this.data.currentViewId = viewId ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
+            this.data.currentViewId = viewId && this.data.headerComponents.data.menus[viewId] ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
             if (this.data.currentViewId) {
                 if (!this.data.singleMode) {
                     this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();

@@ -17,7 +17,6 @@ let config = {
          * 隐藏删除/编辑
          */
         fadeOI(event) {
-            let flag = true;
             this.el.find('.hide_meun').fadeIn('normal');
             this.el.siblings().find('.hide_meun').fadeOut('normal');
             let top = this.el.offset().top;
@@ -26,13 +25,6 @@ let config = {
                 this.el.find('.hide_meun').css('top',top-64);
             }
             event.stopPropagation();
-            //点击消失
-            $(document).bind('click',()=>{
-                if (flag){
-                    this.el.find('.hide_meun').fadeOut('normal');
-                    flag = false;
-                }
-            })
         },
         /**
          * 是否删除
@@ -93,6 +85,16 @@ let config = {
             return true;
         });
     },
+    firstAfterRender() {
+        //点击编辑删除隐藏
+        $(document.body).bind('click.charts',()=>{
+            this.el.find('.hide_meun').fadeOut('normal');
+        });
+    },
+    beforeDestory() {
+        //当destory时销毁全局document.body click事件
+        $(document.body).off('click.charts');
+    }
 };
 
 
