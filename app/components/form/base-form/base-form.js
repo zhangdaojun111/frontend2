@@ -1383,11 +1383,11 @@ let config = {
         //打开选择器
         selectChoose(data) {
             let _this = this;
-            PMAPI.openDialogByIframe(`/iframe/choose?fieldId=${data.id}`, {
+            PMAPI.openDialogByIframe(`/iframe/choose?fieldId=${data.id}&key=${this.key}`,{
                 width: 900,
                 height: 600,
                 title: `选择器`,
-                modal: true
+                modal: true,
             }).then((res) => {
                 if (res.value) {
                     _this.actions.setFormValue(data.dfield, res.value, res.label);
