@@ -31,20 +31,8 @@ let config = {
         }
     },
 
-    binds: [
-        {
-            event: 'click',
-            selector: '',
-            callback: function (context,event) {
-                this.actions.focus();
-                return false;
-            }
-        }
-    ],
+    binds: [],
     afterRender() {
-        // if (this.data.isCurrent) {
-        //     this.el.find('a').addClass('active');
-        // }
     }
 };
 
