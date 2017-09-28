@@ -69,12 +69,17 @@ let config = {
         rendSearchItem: function(){
             this.data.searchInputAry = [];
             let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
-            this.append(epCondition, this.el.find('.condition-search-container'));
+            let dom = document.createElement('div');
+            dom.className = 'condition-search-choice';
+            this.append(epCondition, $(dom));
+            $(dom).appendTo(this.el.find('.condition-search-container'));
+            // this.append(epCondition, this.el.find('.condition-search-container'));
             this.data.searchInputAry.push(epCondition.data);
-            this.el.find('.condition-search-item').css({'paddingLeft':'83px','borderTop':'1px solid #e4e4e4'});
+            this.el.find('.condition-search-item').css({'paddingLeft':'84px','borderTop':'1px solid #e4e4e4'});
             this.el.find('.condition-search-select.radio').css('display','none');
             this.el.find('.condition-search-delete').css('visibility','hidden');
-            this.el.find('.condition-search-add').css('display','inline-block');
+            this.el.find('.left-choice').addClass('active');
+            this.el.find('.right-choice').addClass('active');
         },
         //获取高级查询数据
         getExpertSearchData: function () {
@@ -118,7 +123,9 @@ let config = {
                 //由于选择一个常用查询后 改变其查询值 new一个组件时push到数组的值是不会发生变化的
 
                 if(this.el.find('.condition-search-box-input').eq(i).attr('title') == 'number') {
-                    obj['cond']['keyword'] = parseInt(this.el.find('.condition-search-value').find('input').eq(i).val());
+                    obj['cond']['keyword'] = Number(this.el.find('.condition-search-value').find('input').eq(i).val());
+                } else if(this.el.find('.condition-search-box-input').eq(i).attr('title') == 'date') {
+                    obj['cond']['keyword'] = $.trim(this.el.find('.condition-search-value').find('input').eq(i).val());
                 } else {
                     obj['cond']['keyword'] = this.el.find('.condition-search-value').find('input').eq(i).val();
                 }
@@ -218,7 +225,7 @@ let config = {
                             this.el.find('.condition-search-input').eq(index).val(value);
                             break;
                         case "number":
-                            this.el.find('.condition-search-value').eq(index).html(`<input class="condition-search-input" type="text">`);
+                            this.el.find('.condition-search-value').eq(index).html(`<input class="condition-search-input" type="number">`);
                             this.el.find('.condition-search-input').eq(index).val(value);
                             break;
                         case "person":
@@ -416,11 +423,11 @@ let config = {
             let height = 450 - parseInt(this.el.find('.common-search').css('height'));
             this.el.find('.condition-search').css('height',`${height}px`);
         },
-        showAddBtn:function() {
-            let length = this.el.find('.condition-search-item').length;
-            this.el.find('.condition-search-item').find('.condition-search-add').css('display','none')
-            this.el.find('.condition-search-item').eq(length-1).find('.condition-search-add').css('display','inline-block')
-        },
+        // showAddBtn:function() {
+        //     let length = this.el.find('.condition-search-item').length;
+        //     this.el.find('.condition-search-item').find('.condition-search-add').css('display','none')
+        //     this.el.find('.condition-search-item').eq(length-1).find('.condition-search-add').css('display','inline-block')
+        // },
         // 接受父组件传数据过来后
         afterGetMsg:function() {
             if(this.data.commonQuery.length == 0){
@@ -434,12 +441,14 @@ let config = {
             this.itemDeleteChecked = false;
             this.isEdit = false;
             let _this = this;
-            this.el.on('click','.condition-search-add',()=> {
+            this.el.on('click','.condition-search-add',function() {
                 // this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
-                let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
-                this.append(epCondition, this.el.find('.condition-search-container'));
-                this.data.searchInputAry.push(epCondition.data);
-                this.actions.showAddBtn();
+                let epCondition = new expertCondition({expertItemData:_this.data.fieldsData});
+                let Dom = document.createElement('div');
+                Dom.className = 'condition-search-choice';
+                _this.append(epCondition, $(Dom));
+                $(this).parent().parent().parent('.condition-search-choice').after($(Dom));
+                // _this.data.searchInputAry.push(epCondition.data);
             }).on('click','.condition-search-choice.left-choice',function(){
                 if($(this).hasClass('active')) {
                     $(this).removeClass('active');

@@ -4,12 +4,14 @@
     {{else if be_control_condition }}
     <p class="info">被修改条件限制</p>
     {{else}}
-    <input type="text" class="ui-calendar ui-width dynamic-form-input date_yy-mm-dd"  placeholder="年-月-日" value="{{value}}"/>
+    <div class="date-control" style="display: inline-block">
+        <input type="text" class="ui-calendar ui-width dynamic-form-input date_yy-mm-dd"  placeholder="年-月-日" value="{{value}}"/>
+    </div>
     <span id="errorMessage"></span>
     {{#if required}}
-    <span id="requiredLogo" class="{{requiredClass}}"></span>
+    <span id="requiredLogo" class="{{requiredClass}}" style="position:relative;left:-18px"></span>
     {{/if}}
-    <a href="javascript:void(0);" class="ui-history icon-history form-icon visible" style="position: relative; left: -18px"
+    <a href="javascript:void(0);" class="ui-history icon-history form-icon visible" style="position: relative; left: -12px"
        title="修改历史"></a>
     {{/if}}
 </div>

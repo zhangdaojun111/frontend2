@@ -13,6 +13,7 @@ let config = {
     template:template,
     data:{},
     actions:{
+
         /**
          * 删除视图
          * @returns {Promise.<void>}
@@ -27,9 +28,10 @@ let config = {
                 ViewsService.delData(data).then((res)=>{
                     if(res['success']===1){
                         this.trigger('onDelete',this.data);
+                        msgbox.showTips('删除成功');
                         this.destroySelf();
                     }else{
-                        alert(res['error']);
+                        msgbox.alert(res['error']);
                     }
                 });
             }
@@ -48,7 +50,7 @@ let config = {
             if (res['name']) {
                 ViewsService.update(res).then((val) => {
                     if(val['success']===1){
-                        this.data = res;
+                        this.data = val.data;
                         this.trigger('onUpdate',this.data);
                         this.reload();
                     }else{

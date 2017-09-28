@@ -195,6 +195,8 @@ let config = {
         //显示tabs
         showTabs:function (opacity) {
         },
+        //是否为新窗口打开
+        isNewWindow: false,
         //左侧提示
         gridTips: '',
         //是否为双击
@@ -209,6 +211,8 @@ let config = {
         project: '',
         //二维表改变的值
         cellChangeValue: {},
+
+        addNewFlowId: ''
     },
     //生成的表头数据
     columnDefs: [],
@@ -782,9 +786,8 @@ let config = {
                                 dataTableService.getPreferences( obj ).then( res=>{
                                     dgcService.setPreference( res,this.data );
                                     //初始化偏好隐藏系统默认列
-                                    if( res.is_report == 0 && res.ignoreFields.ignoreFields == null && this.data.haveSystemsFields ){
-                                        this.data.ignoreFields = ['f1','f2','f3','f4'];
-                                    }
+                                    this.actions.hideSysCols( res );
+                                    HTTP.flush();
                                     //创建表头
                                     this.columnDefs = this.actions.createHeaderColumnDefs();
                                     this.agGrid.gridOptions.api.setColumnDefs( this.columnDefs );
@@ -825,7 +828,7 @@ let config = {
                 rowStatus = 0;
             }
             let str = '<div style="text-align:center;"><a class="gridView" style="color:#337ab7;">查看</a>';
-            if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data' || this.data.viewMode == 'deleteHanding') {
+            if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data' || this.data.viewMode == 'EditChild' || this.data.viewMode == 'deleteHanding') {
                 if (this.data.isFixed || rowStatus == 2 || this.data.permission.cell_edit == 0) {
                     str += ' | <span style="color: darkgrey;">编辑</span>';
                     str += ' | <a style="color: darkgrey;">历史</a>';
@@ -913,12 +916,16 @@ let config = {
         renderBtn: function () {
             let btnGroup = dgcService.gridBtn( this.data.viewMode );
             let btns = this.el.find( '.dataGrid-btn-group' )[0].querySelectorAll('a');
-            let html = ''
+            let html = '';
             for( let btn of btns ){
                 let name = btn.className;
                 if( btnGroup.indexOf( name )!=-1 && ( this.data.permission[dgcService.permission2btn[name]] || dgcService.permission2btn[name] == 'especial' ) ){
                     //工作流表无编辑模式
                     if( name == 'edit-btn' && this.data.flowId != '' ){
+                        continue;
+                    }
+                    //新窗口
+                    if( name == 'grid-new-window' && this.data.isNewWindow ){
                         continue;
                     }
                     html+=btn.outerHTML;
@@ -996,11 +1003,9 @@ let config = {
             this.agGrid.actions.setGridData(d);
 
             //第一次加载隐藏默认列
-            if( res[0].is_report == 0 && res[0].ignoreFields.ignoreFields == null && this.data.haveSystemsFields ){
-                this.data.ignoreFields = ['f1','f2','f3','f4'];
-            }
+            this.actions.hideSysCols( res[0] );
             //创建sheet分页
-            this.actions.createSheetTabs( res[2] )
+            this.actions.createSheetTabs( res[2] );
 
             // this.actions.getGridData();
             //按钮点击事件
@@ -1016,17 +1021,30 @@ let config = {
             //渲染其他组件
             this.actions.renderAgGrid();
         },
+        //隐藏系统字段
+        hideSysCols: function ( res ) {
+            if( res.is_report == 0 && res.ignoreFields.ignoreFields == null && this.data.haveSystemsFields ){
+                this.data.ignoreFields = ['f1','f2','f3','f4'];
+                dataTableService.savePreference({
+                    action: 'ignoreFields',
+                    table_id: this.data.tableId,
+                    ignoreFields: JSON.stringify( this.data.ignoreFields  )
+                });
+            }
+        },
         //设置表表单、工作流数据
         setPrepareParmas: function (res) {
             this.data.prepareParmas = res.data;
             this.data.customOperateList = this.data.prepareParmas["operation_data"] || [];
             this.data.rowOperation = this.data.prepareParmas['row_operation'] || [];
             try{this.data.flowId = res["data"]["flow_data"][0]["flow_id"] || "";}catch(e){}
+            console.log(this.data.flowId, );
             for( let d of this.data.prepareParmas["flow_data"] ){
                 if( d.selected == 1 ){
                     this.data.flowId = d.flow_id;
                 }
             }
+            console.log(this.data.flowId);
         },
         //请求新增表单统计数据
         getNewFormCountData: function () {
@@ -1148,6 +1166,9 @@ let config = {
                     if(this.data.fristGetCorrespondence && this.data.viewMode == 'viewFromCorrespondence'){
                         this.actions.checkCorrespondence();
                         this.data.fristGetCorrespondence = false;
+                    }
+                    if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' ){
+                        this.actions.checkCorrespondence( true );
                     }
                 },time )
                 if(refresh){
@@ -1296,13 +1317,20 @@ let config = {
             });
         },
         //显示勾选项
-        checkCorrespondence: function () {
+        checkCorrespondence: function (setData) {
             let title = this.el.find( '.correspondence-check span' )[0].innerHTML;
             let obj = {
-                rowData: title == '仅显示勾选项'?this.data.correspondenceSelectedData:this.data.rowData
+                rowData: title == '仅显示勾选项'?this.data.correspondenceSelectedData : this.data.rowData
+            }
+            if( setData ){
+                obj = {
+                    rowData: title == '仅显示勾选项'?this.data.rowData : this.data.correspondenceSelectedData
+                }
             }
             this.agGrid.actions.setGridData( obj );
-            this.el.find( '.correspondence-check span' )[0].innerHTML = title == '仅显示勾选项'?'显示全部':'仅显示勾选项';
+            if( !setData ){
+                this.el.find( '.correspondence-check span' )[0].innerHTML = title == '仅显示勾选项'?'显示全部':'仅显示勾选项';
+            }
             this.actions.setCorrespondenceSelect();
         },
         //行选择时触发
@@ -1397,8 +1425,7 @@ let config = {
             if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
                 json['rows'] = 99999;
                 json['first'] = 0;
-                // json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
-                json['is_temp'] = 0;
+                json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
             }
             if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild'||this.data.viewMode == 'child' ){
                 json["childInfo"]= {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
@@ -1441,15 +1468,23 @@ let config = {
             }
             if( this.data.filterParam['common_filter_id'] ){
                 json['filter'] = json['filter'] || [];
-                for( let a of this.data.filterParam.expertFilter ){
-                    json['filter'].push( a );
+                //这个顺序要保证是先高级查询，再搜索的
+                let len = this.data.filterParam.expertFilter.length - 1;
+                for(let i = len; i>=0; i--){
+                    json['filter'].unshift(this.data.filterParam.expertFilter[i]);
                 }
+                // for( let a of this.data.filterParam.expertFilter ){
+                //     json['filter'].push( a );
+                // }
                 if( this.data.filterParam['common_filter_id'] != '临时高级查询' ){
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
                 if( this.data.filterParam.filter.length == 0 && this.data.filterParam.fastFilter.length == 0 ){
-                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span>加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;</div>`;
+                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span><span class="title">加载常用查询&lt;<span class="text">${this.data.filterParam['common_filter_name']}</span>&gt;</span></div>`;
                     this.el.find('.btn-nav-con').append(dom);
+                    setTimeout(()=>{
+                        this.el.find('.query-tips').css('display','none');
+                    },5000)
                     this.el.find('.query-tips-delete').on('click', ()=> {
                         this.el.find('.query-tips').css('display','none');
                     })
@@ -1825,10 +1860,9 @@ let config = {
                         isBatch: this.data.viewMode == 'createBatch'?1:0,
                         isSuperUser: window.config.is_superuser || 0
                     }
-                    this.actions.setInvalid();
                     let url = dgcService.returnIframeUrl( '/iframe/dataImport/',json );
                     let winTitle = '导入数据';
-                    this.actions.openSourceDataGrid( url,winTitle,600,650 );
+                    this.actions.openDialog( url,winTitle,600,650 );
                 } )
             }
             //导出
@@ -1854,7 +1888,8 @@ let config = {
                     fieldId: this.data.fieldId,
                     source_field_dfield: this.data.source_field_dfield,
                     base_buildin_dfield: this.data.base_buildin_dfield,
-                    gridTips: this.data.gridTips
+                    gridTips: this.data.gridTips,
+                    isNewWindow: true
                 }
                 let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', url_obj);
                 this.el.find('.grid-new-window')[0].href = url;
@@ -1870,7 +1905,7 @@ let config = {
                         parent_record_id: this.data.parentRecordId,
                         btnType: 'new',
                         form_id:this.data.formId,
-                        flow_id:this.data.flowId,
+                        flow_id:this.data.addNewFlowId,
                     };
                     let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
 
@@ -2019,7 +2054,6 @@ let config = {
                             for( let o of this.data.saveEditObjArr ){
                                 saveArr.push( dataTableService.saveEditFormData( o ) )
                             }
-                            this.actions.setInvalid();
                             Promise.all(saveArr).then((res)=> {
                                 let j = 0;
                                 let wrong = 0;
@@ -2035,11 +2069,11 @@ let config = {
                                 if( wrong > 0 ){
                                     let err = wrong + '条数据保存失败，失败原因：' + errorText;
                                     msgBox.alert( err );
-                                    this.actions.getGridData();
                                 }else {
                                     msgBox.showTips( '执行成功！' )
                                     this.actions.toogleEdit();
                                 }
+                                this.actions.timeDelayRefresh();
                             })
                             HTTP.flush();
                         }
@@ -2176,6 +2210,7 @@ let config = {
                     if(res.type == 'temporaryQuery') {
                         if(res.addNameAry.length == 0){
                             // this.actions.getExpertSearchData(res.addNameAry);
+                            debugger
                             this.actions.postExpertSearch(res.value,res.id,res.name);
                         }
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);
@@ -2202,6 +2237,7 @@ let config = {
             this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
                 if($(this).val() == '常用查询') {
                     _this.actions.postExpertSearch([],'');
+                    _this.el.find('.query-tips').css('display','none');
                 } else if($(this).val() == '临时高级查询') {
                     _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
                 } else {
@@ -2238,14 +2274,13 @@ let config = {
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
             }
-            if( json.is_batch == 1 ){
+            if( json.is_batch == 1 || this.data.viewMode == 'EditChild' ){
                 json.temp_ids = json.real_ids;
                 json['real_ids'] = JSON.stringify([]);
             }
             if( type == 1 ){
                 json['abandon_validate'] = 1;
             }
-            this.actions.setInvalid();
             dataTableService.delTableData( json ).then( res=>{
                 if( res.succ ){
                     msgBox.showTips( '删除成功' )
@@ -2261,6 +2296,8 @@ let config = {
                         this.data.batchIdList = arr;
                         this.actions.returnBatchData( this.data.batchIdList );
                     }
+                    //延时刷新数据
+                    this.actions.timeDelayRefresh();
                 }else {
                     if( res.queryParams ){
                         msgBox.confirm( res.error + '是否前往处理？' ).then( r=>{
@@ -2521,6 +2558,11 @@ let config = {
             if( !data.data || this.data.isEditable || data.data.myfooter || this.data.doubleClick ){
                 return;
             }
+            //防止双击和单击的误操作
+            this.data.doubleClick = true;
+            setTimeout( ()=>{
+                this.data.doubleClick = false;
+            },200 )
             if(this.data.viewMode == 'reportTable2'){
                 if(data.data.can_edit == 1){
                     data.column.cellEditor = "";
@@ -2837,6 +2879,10 @@ let config = {
                 if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
                     btnType = 'none';
                 }
+                console.log("+++++++++++++++++++++++++")
+                console.log("+++++++++++++++++++++++++")
+                console.log("+++++++++++++++++++++++++")
+                console.log(data.data.flow_id);
                 let obj = {
                     table_id: this.data.tableId,
                     parent_table_id: this.data.parentTableId,
@@ -2848,11 +2894,14 @@ let config = {
                     record_id: data.data.record_id || '',
                     btnType: btnType,
                     is_view:1,
-                    in_process: (this.data.viewMode == 'in_process' || data["data"]["status"] == 2) ? 1 : 0,
+                    in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                     form_id:this.data.formId,
-                    flow_id:this.data.flowId,
+                    flow_id:data.data.flow_id || '',
                 };
+                console.log(data);
+                console.log("+++++++++++++++++++++++++++++++");
+                console.log(obj);
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
                 this.actions.openSelfIframe( url,title );
@@ -2867,11 +2916,12 @@ let config = {
                     parent_temp_id: this.data.parentTempId,
                     parent_record_id: this.data.parentRecordId,
                     real_id: data.data._id,
+                    temp_id: data.data.temp_id || '',
                     btnType: 'edit',
-                    in_process: (this.data.viewMode == 'in_process' || data["data"]["status"] == 2) ? 1 : 0,
+                    in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                     form_id:this.data.formId,
-                    flow_id:this.data.flowId,
+                    flow_id:data.data.flow_id || '',
                 };
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '编辑'
@@ -2935,15 +2985,15 @@ let config = {
             // this.actions.openSourceDataGrid( url,title );
         },
         //行级操作
-        doRowOperation: function (ro,$event) {
+        doRowOperation: function (r,$event) {
             if( r['frontend_addr'] !== ''){
                 //执行前端操作
-                // this.rowOperationFrontend({
-                //     rowId:this.realId,
-                //     table_id:this.pageId,
-                //     frontendAddress:r['frontend_addr'],
-                //     row_op_id:r['row_op_id']
-                // });
+                this.actions.rowOperationFrontend({
+                    rowId:$event.data['_id'],
+                    table_id:this.data.tableId,
+                    frontendAddress:r['frontend_addr'],
+                    row_op_id:r['row_op_id']
+                });
             }else if( r['pyscript_addr'] !== '' ){
                 //执行后端操作
                 let data = {
@@ -2960,14 +3010,32 @@ let config = {
                 } )
             }
         },
+        //行级操作前端操作
+        rowOperationFrontend: function (data) {
+            let customRowId = data['rowId'];
+            let customTableId = data['table_id'];
+            let row_op_id = data['row_op_id'];
+            /*
+             配置的前端地址格式——操作名（fun）:后台地址
+             eg——execute:data/customize_router/?plugin_name=ServerPackageInfo.py
+             */
+            let fun=data['frontendAddress'].split(':')[0];
+            let params=data['frontendAddress'].split(':')[1];
+
+            switch( fun ){
+                //行级操作-BI
+                case 'bi':{
+                    params = [customTableId,customRowId,row_op_id,this.data.rowData,this.data.fieldsData];
+                    console.log( '行级BI参数' )
+                    console.log( params )
+                    break;
+                }
+            }
+        },
         //行双击
         onRowDoubleClicked: function (data) {
             console.log( "行双击查看" )
             console.log( data )
-            this.data.doubleClick = true;
-            setTimeout( ()=>{
-                this.data.doubleClick = false;
-            },500 )
             this.actions.viewOrEditPerm( 'view' );
             //屏蔽分组行
             if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0)||this.data.editMode||data.data.myfooter ){
@@ -2984,11 +3052,12 @@ let config = {
                 record_id: data.data.record_id || '',
                 btnType: 'view',
                 is_view:1,
-                in_process: (this.data.viewMode == 'in_process' || data["data"]["status"] == 2) ? 1 : 0,
+                in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                 is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                 form_id:this.data.formId,
-                flow_id:this.data.flowId,
+                flow_id:data.data.flow_id || '',
             };
+            console.log(obj);
             if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
                 obj.btnType = 'none';
             }
@@ -3006,10 +3075,28 @@ let config = {
         openSourceDataGrid: function ( url,title,w,h ) {
             //暂时刷新方法
             let defaultMax = false;
-            if( url.indexOf( '/iframe/addWf/' ) != -1 ){
-                this.actions.setInvalid();
-                defaultMax = true;
-            }
+            PMAPI.openDialogByIframe( url,{
+                width: w || 1400,
+                height: h || 800,
+                title: title,
+                modal:true,
+                defaultMax: defaultMax,
+                customSize: defaultMax
+            } ).then( (data)=>{
+                //发送表单tableId（订阅刷新数据用）
+                TabService.onCloseTab( this.data.tableId,this.data.tableId ).done((result) => {
+                    if(result.success === 1){
+                        // console.log("post open record success");
+                    }else{
+                        console.log("post open record failed")
+                    }
+                });
+            } )
+        },
+        //打开弹窗
+        openDialog: function ( url,title,w,h ) {
+            //暂时刷新方法
+            let defaultMax = false;
             PMAPI.openDialogByIframe( url,{
                 width: w || 1400,
                 height: h || 800,
@@ -3022,6 +3109,8 @@ let config = {
                     this.data.batchIdList = data.ids;
                     this.actions.returnBatchData( data.ids );
                     this.actions.getGridData();
+                }else if( data.type == 'export' ){
+                    this.actions.timeDelayRefresh();
                 }
             } )
         },
@@ -3035,11 +3124,15 @@ let config = {
                     defaultMax: true,
                     // customSize: true
             } ).then( (data)=>{
-                console.log( "+++++++++++++++++" )
-                console.log( "+++++++++++++++++" )
-                console.log( data )
-                this.actions.setInvalid();
+                if( data == 'success' ){
+                    this.actions.timeDelayRefresh();
+                }
             } )
+        },
+        //延时刷新
+        timeDelayRefresh: function(){
+            this.actions.setInvalid();
+            this.pagination.actions.timeDelayRefresh();
         },
         //返回批量工作流导入后数据
         returnBatchData: function (ids) {

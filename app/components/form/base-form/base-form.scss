@@ -15,9 +15,13 @@
     input:disabled,textarea:disabled,.auto-select-component.disabled input.result{
         color: #666666!important;
     }
+    tr td:nth-child(even) {
+        background: #fafafa;
+    }
     .ui-history {
-        margin-left: 5px;
+        margin-left: 10px;
         vertical-align: middle;
+        display: inline-block;
     }
     span.required {
         display: inline-block;
@@ -27,6 +31,7 @@
         margin-left: 10px;
         background: url("../../../assets/images/form/icon_bitian.png");
         vertical-align: middle;
+       float: left;
     }
     span.required2 {
         display: inline-block;
@@ -36,6 +41,7 @@
         margin-left: 10px;
         background: url("../../../assets/images/form/icon_bitian_yes.png");
         vertical-align: middle;
+        float: left;
     }
     .form-control {
         display: flex;
@@ -110,6 +116,9 @@
     }
     .visible{
         visibility: hidden;
+    }
+    .icon-fl{
+        float: left;
     }
     .dynamic-form-input-a, .dynamic-form-input-ac {
         display: inline-block;
@@ -252,7 +261,6 @@
     .upload-file, .shot-screen {
         width: 65px;
         height: 24px;
-        line-height: 24px;
         background: inherit;
         background-color: rgba(255, 255, 255, 1);
         box-sizing: border-box;
@@ -263,7 +271,6 @@
         -moz-box-shadow: none;
         -webkit-box-shadow: none;
         box-shadow: none;
-       // color: #666666;
         cursor: pointer;
     }
 }

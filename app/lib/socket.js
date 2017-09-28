@@ -17,6 +17,10 @@ let SocketMgr = {
             let info = data.info || {};
             info.typeName = data.type;
             Mediator.emit('socket:' + data.type, info);
+            if (info.typeName === 'offline') {
+                location.href = '/login';
+                return;
+            }
             PMAPI.sendToAllChildren({
                 type: PMENUM[info.typeName],
                 data: info

@@ -103,6 +103,8 @@ let config = {
         specialFilter:{},
         //第一次设置数据
         firstSetData: true,
+        //是否为新窗口
+        isNewWindow: false
     },
     actions: {
         //获取表头数据
@@ -326,15 +328,23 @@ let config = {
             }
             if( this.data.filterParam['common_filter_id'] ){
                 json['filter'] = json['filter'] || [];
-                for( let a of this.data.filterParam.expertFilter ){
-                    json['filter'].push( a );
+                //这个顺序要保证是先高级查询，再搜索的
+                let len = this.data.filterParam.expertFilter.length - 1;
+                for(let i = len; i>=0; i--){
+                    json['filter'].unshift(this.data.filterParam.expertFilter[i]);
                 }
+                // for( let a of this.data.filterParam.expertFilter ){
+                //     json['filter'].push( a );
+                // }
                 if( this.data.filterParam['common_filter_id'] != '临时高级查询' ){
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
                 if( this.data.filterParam.filter.length == 0 ){
-                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span>加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;</div>`;
-                    this.el.find('.btn-nav').append(dom);
+                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span><span class="title">加载常用查询&lt;<span class="text">${this.data.filterParam['common_filter_name']}</span>&gt;</span></div>`;
+                    this.el.find('.btn-nav-con').append(dom);
+                    setTimeout(()=>{
+                        this.el.find('.query-tips').css('display','none');
+                    },5000)
                     this.el.find('.query-tips-delete').on('click', ()=> {
                         this.el.find('.query-tips').css('display','none');
                     })
@@ -529,6 +539,10 @@ let config = {
                 this.el.find( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
                 this.data.isAutoWidth = !this.data.isAutoWidth;
             } )
+            //新窗口显示隐藏
+            if( this.data.isNewWindow ){
+                this.el.find( '.grid-new-window' )[0].style.display = 'none';
+            }
         },
         //触发导出
         onExport: function () {
@@ -606,6 +620,7 @@ let config = {
             _this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
                 if($(this).val() == '常用查询') {
                     _this.actions.postExpertSearch([],'');
+                    _this.el.find('.query-tips').css('display','none');
                 } else if($(this).val() == '临时高级查询') {
                     _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
                 } else {

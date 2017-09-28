@@ -1,18 +1,7 @@
 .origin-data-wrap {
-    width: 100%;
-    .bi-tabs {
-        display: block;
-        .cur1 {
-            background: #FFFFFF;
-            color: #666666;
-        }
-        .cur2 {
-            background: #3b8cff;
-            color: #FFFFFF;
-        }
-    }
     .origin-data {
-        .list {
+        .advanced-list {
+            display:none;
             button {
                 background: #3b8cff;
                 border: none;
@@ -24,12 +13,21 @@
                 outline: none;
             }
         }
-
         .form {
+            display:none;
             padding-top: 40px;
             font-size: 12px;
             li {
                 margin-bottom: 20px;
+                .error {
+                    display:none;
+                    padding-left:130px;
+                    line-height: 34px;
+                    color: red;
+                    margin: 0;
+                    font-weight: bold;
+                    white-space: nowrap;
+                }
                 label {
                     display: block;
                     overflow: hidden;
@@ -49,13 +47,6 @@
                         border: 1px solid #ddd;
                         text-indent: 5px;
                     }
-                    p {
-                        float: left;
-                        line-height: 34px;
-                        color: red;
-                        margin: 0;
-                        font-weight: bold;
-                    }
                     b {
                         font-weight: normal;
                         vertical-align: bottom;
@@ -65,6 +56,10 @@
                 }
                 .values {
                     padding-left: 130px;
+                    .error{
+                        clear: both;
+                        padding-left:0;
+                    }
                     p {
                         display: inline-block;
                         label {

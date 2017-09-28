@@ -29,6 +29,13 @@ let css = `
     padding: 4px;
     text-indent: 6px;
     cursor: pointer;
+    height: 17px; 
+    line-height: 17px;
+}
+.global-search-history a {
+    height: 17px;
+    line-height: 17px;
+    margin-top: 2px;
 }
 .global-search-history .active {
     background: #c5e1ff;
@@ -42,7 +49,15 @@ let css = `
 }
 .global-search-input{
     color: black;
+    height: 26px;
     font-size: 12px;
+    text-indent: 5px;
+}
+.global-search-history .oneSelect{
+    height: 25px;
+}
+.global-search-history .global-search-history-list{
+    height: 17px;
 }
 .J-print-btn{
  position: absolute;
@@ -54,6 +69,7 @@ let css = `
  line-height: 31px;
  color: #fff;
  border-radius:4px;
+ cursor: pointer;
  }
  .J-print-btn.cancel{
     right:100px;

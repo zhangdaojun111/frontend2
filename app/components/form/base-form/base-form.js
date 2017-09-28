@@ -1125,6 +1125,7 @@ let config = {
                 }
             }
             if (this.data.isOtherChangeEdit) {
+
                 this.data.btnType = 'none';
             } else {
                 this.data.btnType = 'new';
@@ -1497,7 +1498,7 @@ let config = {
                 this.data.viewMode = 'viewFromCorrespondence';
             }
             let _this = this;
-            PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${data.value}&parentTableId=${data.tableId}&parentTempId=${data.temp_id}&recordId=${data.record_id}&viewMode=${this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`, {
+            PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${data.value}&parentTableId=${window.config.table_id}&parentTempId=${data.temp_id}&recordId=${data.record_id}&viewMode=${this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`, {
                 width: 1550,
                 height: 600,
                 title: `对应关系`,
@@ -1725,7 +1726,9 @@ let config = {
     },
     afterRender() {
         this.actions.createFormControl();
-        this.actions.checkCustomTable();
+        if(this.data.is_view == 1){
+            this.actions.checkCustomTable();
+        }
         this.actions.triggerControl();
         this.actions.changeOptions();
         this.actions.setDataFromParent();
@@ -1737,6 +1740,7 @@ let config = {
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
         }
+
     },
     beforeDestory() {
         this.el.off();

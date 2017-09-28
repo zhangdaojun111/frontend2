@@ -29,7 +29,7 @@ let config={
     afterRender(){
         let config={
             tableId:this.data.value,
-            parentTableId:this.data.tableId,
+            parentTableId:window.config.table_id,
             parentTempId:this.data.temp_id,
             rowId:this.data.parent_temp_id || '',
             viewMode:'viewFromCorrespondence',
