@@ -1862,7 +1862,7 @@ let config = {
                     }
                     let url = dgcService.returnIframeUrl( '/iframe/dataImport/',json );
                     let winTitle = '导入数据';
-                    this.actions.openSourceDataGrid( url,winTitle,600,650 );
+                    this.actions.openDialog( url,winTitle,600,650 );
                 } )
             }
             //导出
@@ -3065,12 +3065,33 @@ let config = {
                 defaultMax: defaultMax,
                 customSize: defaultMax
             } ).then( (data)=>{
+                //发送表单tableId（订阅刷新数据用）
+                TabService.onCloseTab( this.data.tableId,this.data.tableId ).done((result) => {
+                    if(result.success === 1){
+                        // console.log("post open record success");
+                    }else{
+                        console.log("post open record failed")
+                    }
+                });
+            } )
+        },
+        //打开弹窗
+        openDialog: function ( url,title,w,h ) {
+            //暂时刷新方法
+            let defaultMax = false;
+            PMAPI.openDialogByIframe( url,{
+                width: w || 1400,
+                height: h || 800,
+                title: title,
+                modal:true,
+                defaultMax: defaultMax,
+                customSize: defaultMax
+            } ).then( (data)=>{
                 if( data.type == "batch" ){
                     this.data.batchIdList = data.ids;
                     this.actions.returnBatchData( data.ids );
                     this.actions.getGridData();
-                }
-                if( data.type == 'export' ){
+                }else if( data.type == 'export' ){
                     this.actions.timeDelayRefresh();
                 }
             } )
