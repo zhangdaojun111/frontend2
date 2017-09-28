@@ -84,14 +84,14 @@ let config = {
             this.el.find('.nav-tabs div').each((index,val)=>{
                 childWidth += $(val).width();
                 if(childWidth > navTabsWidth){
-                    if(this.el.find('.child-menu div').length>0){
+                    if(this.el.find('.child-menu div').length){
                         this.el.find('.child-menu div:first-child').before($(val));
                     }else {
                         $(val).appendTo(this.el.find('.child-menu'));
                     }
                 }
             });
-            if(this.el.find('.child-menu div').length>0){
+            if(this.el.find('.child-menu div').length){
                 this.el.find('.nav-tabs-select').show();
                 this.el.find('.child-menu div').each((index,val)=>{
                     childWidth +=$(val).width();
@@ -99,10 +99,10 @@ let config = {
                         $(val).appendTo(this.el.find('.nav-tabs'));
                     }
                 });
-            }else {
+            }
+            if(this.el.find('.child-menu div').length===0){
                 this.el.find('.nav-tabs-select').hide();
             }
-
         },
         /**
          * 未选中的所有目录取消选中状态
