@@ -85,7 +85,6 @@ let config = {
         md5: md5,
         //子表填充父表的数据
         setDataFromParent() {
-            //待跟aggrid协定
             // if(!this.globalService.fromSongridControl){return false;}
             if (this.data.parentTableId !== "" && window.top.frontendRelation[this.data.parentTableId] && window.top.frontendRelation[this.data.parentTableId][this.data.tableId]) {
                 //父子表对应的kv关系
@@ -94,8 +93,6 @@ let config = {
                 let formDataFromParent = window.top.frontendParentFormValue[this.data.parentTableId];
                 //组装子表所需列表或表单中内置或相关的父表中数据
                 let parentData = FormService.packageParentDataForChildData(kvDict, formDataFromParent, this.data.parentTableId);
-                console.log('parentData');
-                console.log(parentData);
                 //子表的this.newData
                 let newDataFromSongrid = window.top.frontendParentNewData[this.data.tableId];
                 //循环给子表赋值
@@ -109,8 +106,9 @@ let config = {
                         let dinput_type = newDataFromSongrid[songridDfield]["dinput_type"] || "";
                         let options = [{value: val, label: val}];
                         if (FIELD_TYPE_MAPPING.SELECT_TYPE.indexOf(dinput_type) != -1) {
+                            console.log(1111);
                             let options = [{value: val, label: val}];
-                            this.data.data[songridDfield]["options"] = options;
+                            this.data.childComponent[songridDfield].data["options"] = this.data.data[songridDfield]["options"] = options;
                         }
                         this.actions.setFormValue(songridDfield, val);
                         this.actions.triggerSingleControl(songridDfield);
@@ -175,7 +173,7 @@ let config = {
                 let type = this.actions.findTypeByDfield(key);
                 let val = data[key];
                 let parentTempId = data["parent_temp_id"];
-                if ((window.top.idsInChildTableToParent[this.data.tableId] && FormService.window.top[this.data.tableId].indexOf(key) != -1 ) && val != "" && parentTempId != "" && (type == 'Buildin' || type == 'Select')) {
+                if ((window.top.idsInChildTableToParent[this.data.tableId] && window.top.idsInChildTableToParent[this.data.tableId].indexOf(key) != -1 ) && val != "" && parentTempId != "" && (type == 'Buildin' || type == 'Select')) {
                     data[key] = data["parent_temp_id"];
                 }
             }
@@ -422,18 +420,18 @@ let config = {
                             }
                             //如果是对应关系回显默认值
                             if (type == 'correspondence' && value != "") {
-                                this.data.childComponents[key].actions.correspondenceDefault(data['value']);
+                                this.data.childComponent[key].actions.correspondenceDefault(data['value']);
                             }
                             //如果是内联子表默认值
                             if (type == 'songrid') {
-                                this.data.childComponents[key].actions.songridDefault(data['value']);
+                                this.data.childComponent[key].actions.songridDefault(data['value']);
                             }
                             //如果是多级内置
                             if (type == 'multi-linkage') {
                                 if (value.length != 0) {
-                                    this.data.childComponents[key].actions.multiLinkageDefaultData(value);
+                                    this.data.childComponent[key].actions.multiLinkageDefaultData(value);
                                 } else {
-                                    this.data.childComponents[key].actions.multiLinkageDefaultData('none');
+                                    this.data.childComponent[key].actions.multiLinkageDefaultData('none');
                                 }
                             }
                             //如果是周期规则
@@ -443,7 +441,7 @@ let config = {
                             }
                             //如果是周期规则
                             if (type == 'setting-textarea') {
-                                this.data.childComponents[key].actions.loadSettingtextarea(value);
+                                this.data.childComponent[key].actions.loadSettingtextarea(value);
                             }
                             this.setFormValue(key, value);
                         }
@@ -1038,7 +1036,7 @@ let config = {
             }
             this.data.isBtnClick = false;
             //清空子表内置父表的ids
-            delete FormService.idsInChildTableToParent[this.data.tableId];
+            delete window.top.idsInChildTableToParent[this.data.tableId];
         },
 
         createPostJson() {

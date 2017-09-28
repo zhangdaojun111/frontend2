@@ -28,7 +28,7 @@ export const FormService = {
             //父表dfield已经填写的value
             let val;
             //父表的this.newData
-            let newDataFromParent = this.frontendParentNewData[frontendParentTableId];
+            let newDataFromParent = window.top.frontendParentNewData[frontendParentTableId];
             //父表类型
             if (newDataFromParent.hasOwnProperty(key)) {
                 let type = newDataFromParent[key]["type"];
