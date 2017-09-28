@@ -2266,7 +2266,7 @@ let config = {
             let json = {
                 table_id:this.data.tableId,
                 temp_ids:JSON.stringify([]),
-                real_ids:JSON.stringify([]),
+                real_ids:JSON.stringify( this.data.deletedIds ),
                 is_batch: this.data.viewMode == 'createBatch'?1:0,
                 flow_id: this.data.flowId,
                 parent_table_id: this.data.parentTableId,
