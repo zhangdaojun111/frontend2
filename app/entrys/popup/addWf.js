@@ -5,7 +5,6 @@
 import '../../assets/scss/main.scss';
 import 'jquery-ui/ui/widgets/button.js';
 import 'jquery-ui/ui/widgets/dialog.js';
-
 import {HTTP} from '../../lib/http';
 import Mediator from '../../lib/mediator';
 import {workflowService} from '../../services/workflow/workflow.service';
@@ -21,7 +20,6 @@ AddWf.showDom().then(function (component) {
     WorkFlowForm.showForm();
     setTimeout(()=>component.hideLoading(),1000)
 });
-
 let serchStr = location.search.slice(1);
 let obj = {}, is_view = 0,cache_old;
 let action;
@@ -30,7 +28,6 @@ serchStr.split('&').forEach(res => {
     obj[arr[0]] = arr[1];
 });
 // is_view = obj.btnType === 'view' ? 1 : 0;
-
 if (obj.btnType === 'view'||obj.btnType ==="none") {
     $('#subAddworkflow').hide();
     is_view = 1;
@@ -44,7 +41,6 @@ if(obj.is_view == 1 && obj.in_process == 0){
     $("#add-wf").find('.J_hide').addClass('hide');
     $("#add-wf").find('#print').addClass('addPrint');
 }
-
 Mediator.publish('workflow:getKey', obj.key);
 (async function () {
     return workflowService.getPrepareParams({table_id: obj.table_id});
@@ -76,7 +72,6 @@ Mediator.publish('workflow:getKey', obj.key);
         Mediator.publish('workflow:getParams', res.data.flow_data);
     }
 });
-
 Mediator.subscribe('workflow:getflows', (res) => {
     if (obj.btnType === 'view') {
         $('#toEdit').show();
