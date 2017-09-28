@@ -68,7 +68,7 @@ let ViewVideo = {
                 let id = event.id;
                 let video = $(this.el.find('video'))[0];
                 video.pause();
-                this.el.find('video').find('source').attr('src',`../download_attachment/?file_id=${id}&download=0&dinput_type=${this.data.dinput_type}`);
+                this.el.find('video').find('source').attr('src','/download_attachment/?file_id='+id+'&download=0&dinput_type='+this.data.dinput_type);
                 video.load();
                 video.play();
             }
@@ -111,7 +111,12 @@ let ViewVideo = {
         for(let item of this.data.rows){
             let ele = this.el.find('#'+item.file_id);
              ele.find('.video-file-name').attr('title',item.file_name);
-             ele.find('.video-url').attr('href',`../download_attachment/?file_id=${item.file_id}&download=1&dinput_type=${this.data.dinput_type}`);
+             ele.find('.download-button').attr('href','/download_attachment/?file_id='+item.file_id+'&download=1&dinput_type='+this.data.dinput_type);
+             if(this.data.is_view){
+                 this.el.find('.delete-button').hide();
+             } else {
+                 this.el.find('.delete-button').show();
+             }
         }
         //没啥用的代码 写着玩的
         // let _this=this;

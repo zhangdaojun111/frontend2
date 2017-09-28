@@ -19,11 +19,9 @@
                 <a  class="preview-url" style="color:blue;" class="ui-href" target="_blank">预览</a>
                 {{/if}}
                 {{else}}
-                    <a style="color: grey;">预览</a>&nbsp;&nbsp;
+                    <a style="color: grey;" class="ui-href pre">预览</a>
                 {{/if}}
-                {{#unless is_view}}
-                    <a style="color: blue;" class="del" data-id="{{this.file_id}}" href="javascript:void(0);">删除</a>
-                {{/unless}}
+                <a style="color: blue;" class="del" data-id="{{this.file_id}}" href="javascript:void(0);">删除</a>
             </td>
         </tr>
         {{/each}}

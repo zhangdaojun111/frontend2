@@ -408,10 +408,15 @@ let AttachmentList = {
         //给各个href赋值，解决dinput_type在引号中无法获得的问题
         for(let item of this.data.list){
             let ele =this.el.find('#'+item.file_id);
-            ele.find('.download-url').attr('href',`../download_attachment/?file_id=${item.file_id}&download=1&dinput_type=${this.data.dinput_type}`);
+            ele.find('.download-url').attr('href','/download_attachment/?file_id='+item.file_id+'&download=1&dinput_type='+this.data.dinput_type);
             let previewUrl = ele.find('.preview-url');
             if(previewUrl.length > 0){
-                previewUrl.attr('href',`../download_attachment/?file_id=${item.file_id}&download=0&dinput_type=${this.data.dinput_type}`);
+                previewUrl.attr('href','/download_attachment/?file_id='+item.file_id+'&download=0&dinput_type='+this.data.dinput_type);
+            }
+            if(this.data.is_view){
+                ele.find('.del').hide();
+            } else {
+                ele.find('.del').show();
             }
         }
         this.data.lastPreviewableIndex = this.data.list.length - 1;

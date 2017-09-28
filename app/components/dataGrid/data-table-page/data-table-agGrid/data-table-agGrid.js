@@ -2655,6 +2655,7 @@ let config = {
                     ViewVideo.data.rows = res.rows;
                     ViewVideo.data.dinput_type = data.colDef.dinput_type;
                     ViewVideo.data.currentVideoId = data.value[0];
+                    ViewVideo.data.is_view = true;
                     ViewVideo.data.videoSrc = `/download_attachment/?file_id=${data.value[0]}&download=0&dinput_type=${data.colDef.dinput_type}`;
                     PMAPI.openDialogByComponent(ViewVideo, {
                         width: 900,
@@ -2743,7 +2744,7 @@ let config = {
                         }
                         AttachmentList.data.list=list;
                         AttachmentList.data.dinput_type=dinput_type;
-                        AttachmentList.data.is_view=1;
+                        AttachmentList.data.is_view=true;
                         PMAPI.openDialogByComponent(AttachmentList,{
                             width: 900,
                             height: 600,
