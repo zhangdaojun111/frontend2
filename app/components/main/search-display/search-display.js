@@ -13,6 +13,7 @@ import {SingleDisplay} from './single-display/single-display'
 import {FileDisplay} from './file-display/file-display'
 import {GlobalService} from "../../../services/main/globalService"
 import dataPagination from "../../../components/dataGrid/data-table-toolbar/data-pagination/data-pagination";
+import msgbox from "../../../lib/msgbox";
 
 let config = {
     template:template,
@@ -194,7 +195,17 @@ let config = {
          * 向后台请求第一轮搜索，数据和附件均搜索
          */
         sendSearch:function () {
-            this.showLoading();
+            // this.showLoading();
+            console.log('do search');
+            msgbox.showLoadingSelf();
+            setTimeout(function () {
+                msgbox.hideLoadingSelf();
+                msgbox.showLoadingRoot();
+            },5000);
+            setTimeout(function () {
+               msgbox.hideLoadingRoot();
+            },8000);
+
             let searchData = {
                 keyword:this.data.searchText,            //搜索文字
                 rows:20 ,                               //每页显示的个数
