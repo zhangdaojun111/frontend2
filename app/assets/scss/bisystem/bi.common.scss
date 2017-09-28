@@ -113,6 +113,10 @@ html.bi, body.bi {
         @include icon;
         background: url('../../../assets/images/bisystem/search.png') no-repeat;
     }
+    .select-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/select.png') no-repeat;
+    }
 }
 
 @mixin chart-com {
