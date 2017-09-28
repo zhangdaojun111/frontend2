@@ -182,9 +182,12 @@ let config = {
                             this.trigger('changeValue', this.data);
                             let obj = {};
                             obj[event.data.fileId] = event.data.thumbnail;
+                            if(!event.data.thumbnail || event.data.thumbnail ==''){
+                                return;
+                            }
                             if (this.data['thumbnailListComponent']) {
                                 this.data['thumbnailListComponent'].actions.addItem(obj);
-                            } else if(this.data.dinput_type == 23 || this.data.dinput_type == 33) {
+                            } else if(this.data.dinput_type == 23) {
                                 let comp = new ThumbnailList([obj]);
                                 comp.render(this.el.find('.thumbnail-list-anchor'));
                                 this.data['thumbnailListComponent'] = comp;
