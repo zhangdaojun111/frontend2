@@ -27,6 +27,7 @@ let FormEntrys = {
         this.data.parentTempId = config.parent_temp_id || '';
         //数据id
         this.data.realId = config.real_id || '';
+        this.data.tempId = config.temp_id || '';
         //父表表名
         this.data.parentTableId = config.parent_table_id || '';
         this.data.parentRecordId = config.parent_record_id || '';
@@ -119,10 +120,6 @@ let FormEntrys = {
             json = this.pickJson();
         }
         if( this.data.inProcess == 1 ){
-            console.log( "__________________________" )
-            console.log( "__________________________" )
-            console.log( "__________________________" )
-            console.log( this.data.inProcess )
             json = {
                 form_id: this.data.formId,
                 record_id: this.data.recordId,
@@ -131,6 +128,11 @@ let FormEntrys = {
                 from_focus: 0,
                 table_id: this.data.tableId
             }
+        }
+        //如果有tempId优先传tempId
+        if( this.data.tempId ){
+            json['temp_id'] = this.data.tempId
+            json['real_id'] = ''
         }
         return json;
     },

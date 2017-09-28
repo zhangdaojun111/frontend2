@@ -103,6 +103,8 @@ let config = {
         specialFilter:{},
         //第一次设置数据
         firstSetData: true,
+        //是否为新窗口
+        isNewWindow: false
     },
     actions: {
         //获取表头数据
@@ -537,6 +539,10 @@ let config = {
                 this.el.find( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
                 this.data.isAutoWidth = !this.data.isAutoWidth;
             } )
+            //新窗口显示隐藏
+            if( this.data.isNewWindow ){
+                this.el.find( '.grid-new-window' )[0].style.display = 'none';
+            }
         },
         //触发导出
         onExport: function () {
