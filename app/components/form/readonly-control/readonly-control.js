@@ -109,10 +109,10 @@ let config = {
         this.el.find('.ui-width').css('width', this.data.width);
         //如果是统计字段有值 显示穿透查看
         if(this.data.dtype==10 && this.data.value){
-            this.el.find('.countView').css('visibility','visible');
+            this.el.find('.countView').css('visibility','visible').addClass('icon-fl');
         }
         if(this.data.history){
-            this.el.find('.ui-history').css('visibility','visible');
+            this.el.find('.ui-history').css('visibility','visible').addClass('icon-fl');
         }
     },
     beforeDestory() {

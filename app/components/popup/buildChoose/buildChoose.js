@@ -32,6 +32,7 @@ let config = {
                     break;
                 }
             }
+
             let r1 = FormEntry.createForm({
                 table_id: _this.data.source_table_id,
                 form_id: '',
@@ -46,12 +47,12 @@ let config = {
             if(!r1){
                 _this.el.find('.ui-section').append('<p style="font-size:20px">您没有数据查看权限</p>')
             }
-
-            for (let i = 0, len = _this.data['options'].length; i < len; i++) {
-                if (_this.data['options'][i]['value'] != '') {
-                    _this.el.find('ul').append(`<li><a class="choose-aside-a" href="javascript:void(0);" title="${_this.data['options'][i]['label']}" data-value="${_this.data['options'][i]['value']}">${_this.data['options'][i]['label']}</a></li>`)
+                for (let i = 0, len = _this.data['options'].length; i < len; i++) {
+                    if (_this.data['options'][i]['value'] != '' && _this.data['options'][i]['value']) {
+                        _this.el.find('ul').append(`<li><a class="choose-aside-a" href="javascript:void(0);" title="${_this.data['options'][i]['label']}" data-value="${_this.data['options'][i]['value']}">${_this.data['options'][i]['label']}</a></li>`)
+                    }
                 }
-            }
+
             let searchBar = new SearchBar({tableId: _this.data.source_table_id});
             _this.append(searchBar, _this.el.find('.search-bar'));
             _this.data.selected = {value: value, label: label};
