@@ -3,13 +3,9 @@ import '../assets/scss/main.scss';
 import 'jquery-ui/ui/widgets/button.js';
 import 'jquery-ui/ui/widgets/dialog.js';
 
-import {
-    HTTP
-} from '../lib/http';
+import {HTTP} from '../lib/http';
 import Mediator from '../lib/mediator';
-import {
-    workflowService
-} from '../services/workflow/workflow.service';
+import {workflowService} from '../services/workflow/workflow.service';
 import WorkFlowCreate from '../components/workflow/workflow-create/workflow-create';
 import WorkflowRecord from '../components/workflow/approval-record/approval-record';
 import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';

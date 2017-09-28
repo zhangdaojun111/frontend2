@@ -37,15 +37,14 @@ if (obj.btnType === 'view'||obj.btnType ==="none") {
 }
 //判断工作流是否处于在途状态或者在批量工作流中打开forn
 if(obj.in_process == 1 || obj.is_batch == 1){
+    $("#add-wf").find('.J_hide').addClass('hide');
     action = 1;
 }
-
 
 if(obj.is_view == 1 && obj.in_process == 0){
     $("#add-wf").find('.J_hide').addClass('hide');
     $("#add-wf").find('#print').addClass('addPrint');
 }
-
 
 Mediator.publish('workflow:getKey', obj.key);
 (async function () {
@@ -169,7 +168,7 @@ Mediator.subscribe('workflow:submit', (res) => {
     }
 }),
 Mediator.subscribe('workflow:changeToEdit',(res)=>{
-    $("#add-wf").find('.J_hide').removeClass('hide');
+    //$("#add-wf").find('.J_hide').removeClass('hide');
     $("#add-wf").find('#print').removeClass('addPrint');
     FormEntrys.changeToEdit(res);
 })
