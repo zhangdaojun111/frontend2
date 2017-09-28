@@ -20,12 +20,18 @@ let config = {
     },
     afterRender() {
         let _this = this;
-        FormService.getStaticData({field_id: this.data.fieldId}).then(res => {
-            if(res.error == '您没有数据查看权限') {
-                _this.el.find('.ui-section').append('<p style="font-size:20px">您没有数据查看权限</p>')
+        PMAPI.getIframeParams(window.config.key).then(res => {
+            _this.data = Object.assign({}, _this.data, res.data.data);
+            let real_id;
+            let value;
+            let label;
+            for (let index in _this.data.options) {
+                if (_this.data.options[index].value) {
+                    value = real_id = _this.data.options[index].value;
+                    label = _this.data['options'][index]['label']
+                    break;
+                }
             }
-           _this.data = Object.assign({}, _this.data, res['data'][0]);
-            console.log(res['data'][0])
             let r1 = FormEntry.createForm({
                 table_id: _this.data.source_table_id,
                 form_id: '',
@@ -33,7 +39,7 @@ let config = {
                 parent_table_id: '',
                 parent_real_id: '',
                 parent_temp_id: '',
-                real_id: _this.data['options'][1]['value'],
+                real_id: real_id,
                 el: _this.el.find('.ui-section'),
                 btnType:'none',
             })
@@ -48,7 +54,7 @@ let config = {
             }
             let searchBar = new SearchBar({tableId: _this.data.source_table_id});
             _this.append(searchBar, _this.el.find('.search-bar'));
-            _this.data.selected = {value: _this.data['options'][1]['value'], label: _this.data['options'][1]['label']};
+            _this.data.selected = {value: value, label: label};
         });
         HTTP.flush();
         //改变表单
