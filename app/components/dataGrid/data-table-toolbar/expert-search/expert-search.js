@@ -75,7 +75,7 @@ let config = {
             $(dom).appendTo(this.el.find('.condition-search-container'));
             // this.append(epCondition, this.el.find('.condition-search-container'));
             this.data.searchInputAry.push(epCondition.data);
-            this.el.find('.condition-search-item').css({'paddingLeft':'83px','borderTop':'1px solid #e4e4e4'});
+            this.el.find('.condition-search-item').css({'paddingLeft':'84px','borderTop':'1px solid #e4e4e4'});
             this.el.find('.condition-search-select.radio').css('display','none');
             this.el.find('.condition-search-delete').css('visibility','hidden');
             this.el.find('.left-choice').addClass('active');
