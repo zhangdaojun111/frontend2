@@ -50,16 +50,17 @@ function getLoginController() {
          * 初始化登录表单控件
          */
         formInit:function () {
+            //初始化密码输入框组件
+            let $wrap = $('.password-component');
+            this.passwordInputComp = new PasswordInput({checkChar:false},this.setPasswordValue);
+            this.passwordInputComp.render($wrap);
+            $(".login-content").show();
+
             //系统名称改变
             this.$loginMainTitle.on('change', () => {
                 this.systemName = this.$loginMainTitle.val();
                 this.resetSysName(this.systemName);
             });
-
-            //初始化密码输入框组件
-            let $wrap = $('.password-component');
-            this.passwordInputComp = new PasswordInput({checkChar:false},this.setPasswordValue);
-            this.passwordInputComp.render($wrap);
 
             //记住密码和忘记密码
             this.$rememberPwCheck.on('click', (event) => {
@@ -383,6 +384,5 @@ if( isNeedDownload === false){      //正常显示登录表单
     });
 }else{
     //显示浏览器下载提示,隐藏其余部分
-    $(".login-content").hide();
     $(".need-download").show();
 }
