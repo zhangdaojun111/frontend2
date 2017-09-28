@@ -28,6 +28,7 @@ let config = {
             this.data.isCurrent = false;
         }
     },
+
     binds: [
         {
             event: 'click',

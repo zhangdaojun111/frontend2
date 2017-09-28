@@ -2,7 +2,7 @@
     position: absolute;
     height: 50px;
     white-space: nowrap;
-    width: calc(100% - 600px);
+    width: calc(100% - 300px);
     overflow: auto;
     background: transparent;
     div {
@@ -10,23 +10,31 @@
         display: inline-block;
     }
 }
+
 .views-btn-group {
     position: absolute;
     right: 0;
-    width: 600px;
+    width: 300px;
     text-align: right;
+    white-space: nowrap;
+    .views-btn-right {
+        float: right;
+    }
     a {
         text-decoration: none;
-        padding: 0 25px;
         display: inline-block;
         outline: none;
         line-height: 50px;
-        color: #ffffff;
-        background: #3e4a63;
-        border-left: solid 1px #556574;
-        margin-right: -3px;
-        &:hover {
-            background: #374157;
+        box-sizing: border-box;
+        width: 60px;
+        text-align: center;
+        height: 100%;
+        float: left;
+        i {
+            vertical-align: middle;
         }
+    }
+    input[type='file'] {
+        display: none;
     }
 }
