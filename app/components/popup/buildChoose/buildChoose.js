@@ -21,8 +21,12 @@ let config = {
     afterRender() {
         let _this = this;
         FormService.getStaticData({field_id: this.data.fieldId}).then(res => {
-            _this.data = Object.assign({}, _this.data, res['data'][0]);
-            FormEntry.createForm({
+            if(res.error == '您没有数据查看权限') {
+                _this.el.find('.ui-section').append('<p style="font-size:20px">您没有数据查看权限</p>')
+            }
+           _this.data = Object.assign({}, _this.data, res['data'][0]);
+            console.log(res['data'][0])
+            let r1 = FormEntry.createForm({
                 table_id: _this.data.source_table_id,
                 form_id: '',
                 is_view: 1,
@@ -32,7 +36,11 @@ let config = {
                 real_id: _this.data['options'][1]['value'],
                 el: _this.el.find('.ui-section'),
                 btnType:'none',
-            });
+            })
+            if(!r1){
+                _this.el.find('.ui-section').append('<p style="font-size:20px">您没有数据查看权限</p>')
+            }
+
             for (let i = 0, len = _this.data['options'].length; i < len; i++) {
                 if (_this.data['options'][i]['value'] != '') {
                     _this.el.find('ul').append(`<li><a class="choose-aside-a" href="javascript:void(0);" title="${_this.data['options'][i]['label']}" data-value="${_this.data['options'][i]['value']}">${_this.data['options'][i]['label']}</a></li>`)
@@ -51,8 +59,7 @@ let config = {
             _this.data.isCreatingForm=true;
             _this.data.selected = {value: $(this).data('value'), label: $(this).html()};
             FormEntry.destoryForm(_this.data.source_table_id);
-            _this.el.find('.ui-section').empty();
-            FormEntry.createForm({
+            let r2 =  FormEntry.createForm({
                 table_id: _this.data.source_table_id,
                 form_id: '',
                 is_view: 1,
@@ -62,7 +69,10 @@ let config = {
                 real_id: $(this).data('value'),
                 el: _this.el.find('.ui-section'),
                 btnType: 'none'
-            });
+            })
+            if(!r2){
+                _this.el.find('.ui-section').append('<p style="font-size:20px">您没有数据查看权限</p>')
+            }
         })
         //搜索结果过滤
         Mediator.subscribe('form:chooseSelect', function (data) {

@@ -22,20 +22,13 @@
     font-size: 12px;
     margin: 10px;
     background: #FFFFFF;
-    tr td:first-child {
+    tr td:nth-child(odd) {
         width: 30% !important;
         background: #FFFFFF;
     }
-    tr td:last-child {
+    tr td:nth-child(even) {
         width: 70% !important;
-        background: #F8F8F8;
     }
-
-    //.textArea {
-    //    border: 1px solid #ddd;
-    //    -webkit-appearance: none;
-    //    padding: 5px 0 0 10px;
-    //}
 
 }
 

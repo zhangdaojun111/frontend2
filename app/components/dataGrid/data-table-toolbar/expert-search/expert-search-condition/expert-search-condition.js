@@ -149,8 +149,6 @@ let config = {
         }).on('click','.condition-search-delete',()=>{
             this.actions.delete();
             // epSearch.actions.showAddBtn();
-            let length = $('.condition-search-add').length;
-            $('.condition-search-add').eq(length-1).css('display','inline-block');
         });
     }
 }
