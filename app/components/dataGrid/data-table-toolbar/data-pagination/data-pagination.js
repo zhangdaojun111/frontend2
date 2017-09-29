@@ -282,6 +282,18 @@ let config = {
             }
             this.el.find( '.data-invalid' ).addClass('freshtip');
             this.data.myInvalid = false;
+        },
+        //延时刷新
+        timeDelayRefresh: function () {
+            if( !this.data.onRefresh ){
+                this.data.onRefresh = true;
+                setTimeout( ()=>{
+                    this.actions.invalidTips();
+                },500 )
+                setTimeout( ()=>{
+                    this.data.onRefresh = false;
+                },500 )
+            }
         }
     },
     afterRender: function (){
@@ -300,15 +312,7 @@ let config = {
             PMAPI.subscribe(PMENUM.data_invalid, (info) => {
                 let tableId = info.data.table_id;
                 if( this.data.tableId == tableId ){
-                    if( !this.data.onRefresh ){
-                        this.data.onRefresh = true;
-                        setTimeout( ()=>{
-                            this.actions.invalidTips();
-                        },500 )
-                        setTimeout( ()=>{
-                            this.data.onRefresh = false;
-                        },500 )
-                    }
+                    this.actions.timeDelayRefresh();
                 }
             })
         }

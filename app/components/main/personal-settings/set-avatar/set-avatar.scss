@@ -50,17 +50,11 @@ $sub_color:#0088ff;
                 background-color: #FFFFFF;
                 position: absolute;
             }
-            //.drag-able{
-            //    width: 60px;
-            //    height: 60px;
-            //    border: solid 1px black;
-            //    border-radius: 50%;
-            //    background-color: rgba(255, 255, 255, 0);
-            //    position: absolute;
-            //    left: 0;
-            //    top: 0;
-            //    z-index: 2;
-            //}
+
+            &.post-local-image{
+                background-image: url("../../../../assets/images/framework/post-local-image.png");
+                border:solid 1px #bfbfbf;
+            }
         }
     }
 
@@ -70,28 +64,12 @@ $sub_color:#0088ff;
         margin-top: 20px;
         margin-left: 230px;
         border-radius: 50%;
-        border: solid 1px black;
+        border: solid 1px #bfbfbf;
         overflow: hidden;
         .avatar-result-square{
             background-color: #FFFFFF;
         }
     }
-
-    //.drag-result{
-    //    width: 64px;
-    //    height: 64px;
-    //    margin-top: 20px;
-    //    margin-left: 230px;
-    //    overflow: hidden;
-    //    border: solid 1px black;
-    //    border-radius: 50%;
-    //    position: absolute;
-    //    .result-img{
-    //        top:0;
-    //        left:0;
-    //        position: absolute;
-    //    }
-    //}
 
     .bottom-box{
         color: white;
