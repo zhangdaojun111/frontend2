@@ -72,3 +72,9 @@ $font-color: #e4e4e4;
 
     }
 }
+
+@media print {
+    .bi-table {
+        overflow: hidden!important;
+    }
+}
